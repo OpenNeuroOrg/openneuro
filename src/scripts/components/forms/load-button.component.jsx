@@ -1,23 +1,25 @@
 import React from 'react'
 
-var loadButton = React.createClass({
+let LoadButton = React.createClass({
 	getInitialState: function () {
 		return {
 			loading: false
 		}
 	},
 	render: function () {
-		var loading = this.state.loading;
-		var text = this.props.text;
+		let loading = this.state.loading;
+		let text = this.props.text;
+		let faIcon = this.props.faIcon
 		return (
-			<div className="form-group">
-				<button onClick={this.signIn}>{text}</button> 
-			</div>
+				<button className="btn btn-primary" onClick={this.signIn} >
+					<i className={faIcon ? 'fa ' + faIcon : null} />
+					{text ? text : null}
+				</button> 
 		);
 	},
 	signIn: function () {
-		alert('yo!');
+		console.log('google yo!');
 	}
 });
 
-module.exports = loadButton;
+module.exports = LoadButton;

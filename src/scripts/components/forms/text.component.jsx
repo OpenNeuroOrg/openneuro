@@ -1,6 +1,6 @@
 import React from 'react'
 
-var Text = React.createClass({
+let Text = React.createClass({
 	propTypes: {
 		name: React.PropTypes.string
 	},
@@ -36,4 +36,4 @@ var Text = React.createClass({
 	}
 });
 
-module.exports = Text;
+export default Text;

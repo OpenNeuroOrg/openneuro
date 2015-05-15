@@ -9,9 +9,8 @@ var Signin = React.createClass({
 	render: function () {
 		return (
 			<form>
-				<Text placeholder="username" type="text"/>
-				<Text placeholder="password" type="password" />
-	    		<LoadButton text="sign in" />
+				<h2 class="">Sign in with Google</h2>
+	    		<LoadButton text=""  faIcon="fa-google" />
 			</form>
     	);
 		
@@ -24,4 +23,4 @@ var Signin = React.createClass({
 	}
 });
 
-module.exports = Signin;
+export default Signin;
