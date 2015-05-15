@@ -17,10 +17,10 @@ var Signin = React.createClass({
 		
 	},
 	handleSubmit: function () {
-		var url = 'http://www.reddit.com/.json';
-		request.get(url, function (res) {
-			console.log(res);
-		});
+		// var url = 'http://www.reddit.com/.json';
+		// request.get(url, function (res) {
+		// 	console.log(res);
+		// });
 	}
 });
 

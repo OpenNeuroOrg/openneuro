@@ -16,7 +16,6 @@ var Text = React.createClass({
 		let type = this.props.type;
 		let name = this.props.name;
 		let value = this.props.value;
-		console.log(props);
 		return (
 			<div className="form-group">
 				{ this.state.showLabel ? <label>{placeholder}</label> : null }
