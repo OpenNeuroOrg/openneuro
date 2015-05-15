@@ -21,22 +21,28 @@
 // project config ---------------------------------------------------------
 
     var p = {
-        jsx: './src/scripts/app.jsx',
-        scss: './src/sass/main.scss',
-        bundle: 'app.js',
-        distJs: 'dist/js',
-        distCss: 'dist/css'
+        jsx:            './src/scripts/app.jsx',
+        scss:           './src/sass/main.scss',
+        assets:         './src/assets/*',
+        fonts:         './src/sass/fonts/*',
+        bundle:         'app.js',
+
+        dist:           'dist',
+        distJs:         'dist/js',
+        distCss:        'dist/css',
+        distAssets:     'dist/assets',
+        distFonts:      'dist/fonts'
     };
 
 // primary tasks ----------------------------------------------------------
 
-    gulp.task('watch', ['clean'], function() {
-        gulp.start(['browserSync', 'watchTask', 'watchify', 'styles']);
+    gulp.task('watch', ['build'], function() {
+        gulp.start(['browserSync', 'watchTask', 'watchify', 'styles', 'copy']);
     });
 
     gulp.task('build', ['clean'], function() {
         process.env.NODE_ENV = 'production';
-        gulp.start(['browserify', 'styles']);
+        gulp.start(['browserify', 'styles', 'copy']);
     });
 
     gulp.task('default', function() {
@@ -57,6 +63,11 @@
                 baseDir: './'
             }
         });
+    });
+    gulp.task('copy', function () {
+        gulp.src('./index.html').pipe(gulp.dest(p.dist));
+        gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
+        gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
     });
 
     // watch for changes
