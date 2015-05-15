@@ -1,5 +1,5 @@
 import React from 'react'
-import pack from '../../package.json'
+import pack from '../../../package.json'
 
 let Mycomponent = React.createClass({
   render: function() {

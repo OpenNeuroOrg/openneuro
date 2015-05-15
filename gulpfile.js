@@ -1,7 +1,6 @@
 'use strict';
 
 // dependencies -----------------------------------------------------------
-
     var gulp = require('gulp'),
         changed = require('gulp-changed'),
         sass = require('gulp-sass'),
@@ -22,8 +21,8 @@
 // project config ---------------------------------------------------------
 
     var p = {
-        jsx: './scripts/app.jsx',
-        scss: 'styles/main.scss',
+        jsx: './src/scripts/app.jsx',
+        scss: './src/sass/main.scss',
         bundle: 'app.js',
         distJs: 'dist/js',
         distCss: 'dist/css'
