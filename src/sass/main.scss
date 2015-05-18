@@ -1,0 +1,12 @@
+@import "bootstrap";
+@import "font-awesome/_font-awesome";
+@import "forms";
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+body{
+	background:#eee;
+	padding-top: 70px; 
+}
+
