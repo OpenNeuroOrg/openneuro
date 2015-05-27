@@ -23,11 +23,13 @@
     var p = {
         jsx:            './src/scripts/app.jsx',
         scss:           './src/sass/main.scss',
+        libs:           './src/scripts/lib/*',
         assets:         './src/assets/*',
-        fonts:         './src/sass/fonts/*',
+        fonts:          './src/sass/fonts/*',
         bundle:         'app.js',
 
         dist:           'dist',
+        distLibs:       'dist/lib',
         distJs:         'dist/js',
         distCss:        'dist/css',
         distAssets:     'dist/assets',
@@ -36,13 +38,13 @@
 
 // primary tasks ----------------------------------------------------------
 
-    gulp.task('watch', ['build'], function() {
+    gulp.task('watch', ['clean'], function() {
         gulp.start(['browserSync', 'watchTask', 'watchify', 'styles', 'copy']);
     });
 
     gulp.task('build', ['clean'], function() {
         process.env.NODE_ENV = 'production';
-        gulp.start(['browserify', 'styles', 'copy']);
+        gulp.start(['browserSync', 'styles', 'copy']);
     });
 
     gulp.task('default', function() {
@@ -66,6 +68,7 @@
     });
     gulp.task('copy', function () {
         gulp.src('./index.html').pipe(gulp.dest(p.dist));
+        gulp.src(p.libs).pipe(gulp.dest(p.distLibs));
         gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
         gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
     });

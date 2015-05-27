@@ -9,7 +9,7 @@ var Signin = React.createClass({
 	render: function () {
 		return (
 			<form>
-				<h2 class="">Sign in with Google</h2>
+				<h2>Sign in with Google</h2>
 	    		<LoadButton text=""  faIcon="fa-google" />
 			</form>
     	);
