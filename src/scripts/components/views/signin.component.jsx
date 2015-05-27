@@ -2,18 +2,20 @@
 
 import React from 'react';
 import hello from '../../libs/hello';
+import Actions from '../../actions/Actions';
+import UserStore from '../../stores/userStore';
 
 var Signin = React.createClass({
 
 // life cycle events --------------------------------------------------
 
 	componentDidMount: function () {
-		hello.init({google: '197312322415-defuecdcn6gnbc8ieb75aph84o34ohrd.apps.googleusercontent.com'});
+		
 	},
 
 	render: function () {
 		return (
-			<form>
+			<div>
 				<h2>Sign in with Google</h2>
 	    		<button className="btn btn-primary" onClick={this._signIn} >
 					<i className="fa fa-google" />
@@ -21,28 +23,28 @@ var Signin = React.createClass({
 				</button>
 				<button className="btn btn-info" onClick={this._logToken} >Log Token</button>
 				<button className="btn btn-warning" onClick={this._signOut}>Sign Out</button>
-			</form>
+				<button className="btn btn-danger" onClick={this._testScitran}>Test Scitran</button>
+			</div>
     	);
 		
 	},
 
 // custom methods -----------------------------------------------------
 
-	_signIn: function () {
-		hello('google').login();
+	_signIn: function (e) {
+		Actions.signIn();
 	},
 
-	_signOut: function () {
-		hello('google').logout().then(function () {
-			console.log('signout success');
-		}, function (e) {
-			console.log('signout failure');
-			console.log(e);
-		});
+	_signOut: function (e) {
+		Actions.signOut();
 	},
 
-	_logToken: function () {
-		console.log(JSON.parse(window.localStorage.hello).google.access_token);
+	_logToken: function (e) {
+		Actions.logToken();
+	},
+
+	_testScitran: function (e) {
+		Actions.testScitran();
 	}
 
 });
