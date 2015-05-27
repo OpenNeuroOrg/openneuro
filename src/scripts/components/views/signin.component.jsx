@@ -1,26 +1,50 @@
-import React from 'react'
-import request from 'superagent'
+// dependencies -------------------------------------------------------
 
-import Text from'../forms/text.component.jsx'
-import Password from'../forms/password.component.jsx'
-import LoadButton from'../forms/load-button.component.jsx'
+import React from 'react';
+import hello from '../../libs/hello';
 
 var Signin = React.createClass({
+
+// life cycle events --------------------------------------------------
+
+	componentDidMount: function () {
+		hello.init({google: '197312322415-defuecdcn6gnbc8ieb75aph84o34ohrd.apps.googleusercontent.com'});
+	},
+
 	render: function () {
 		return (
 			<form>
 				<h2>Sign in with Google</h2>
-	    		<LoadButton text=""  faIcon="fa-google" />
+	    		<button className="btn btn-primary" onClick={this._signIn} >
+					<i className="fa fa-google" />
+					<span> Google</span>
+				</button>
+				<button className="btn btn-info" onClick={this._logToken} >Log Token</button>
+				<button className="btn btn-warning" onClick={this._signOut}>Sign Out</button>
 			</form>
     	);
 		
 	},
-	handleSubmit: function () {
-		// var url = 'http://www.reddit.com/.json';
-		// request.get(url, function (res) {
-		// 	console.log(res);
-		// });
+
+// custom methods -----------------------------------------------------
+
+	_signIn: function () {
+		hello('google').login();
+	},
+
+	_signOut: function () {
+		hello('google').logout().then(function () {
+			console.log('signout success');
+		}, function (e) {
+			console.log('signout failure');
+			console.log(e);
+		});
+	},
+
+	_logToken: function () {
+		console.log(JSON.parse(window.localStorage.hello).google.access_token);
 	}
+
 });
 
 export default Signin;
