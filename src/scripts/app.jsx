@@ -39,6 +39,7 @@ var routes = (
 
 		<Route name="home" handler={Home}/>
 		<Route name="signIn" handler={Signin}/>
+
 		<DefaultRoute handler={Home}/>
 
 	</Route>
