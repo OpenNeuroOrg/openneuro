@@ -20,6 +20,8 @@ var Navbar = React.createClass({
 						<ul className="nav navbar-nav">
 							<li><Link to="home">home</Link></li>
 							<li><Link to="signIn">sign</Link></li>
+							<li><Link to="addFiles">Dropzone</Link></li>
+							<li><Link to="upload">Upload</Link></li>
 						</ul>
 					</div>
 				</div>
