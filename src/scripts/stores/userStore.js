@@ -19,7 +19,7 @@ let UserStore = Reflux.createStore({
 	 * the store initializes.
 	 */
 	init: function () {
-		hello.init({google: config.auth.google.clientID});
+		hello.init({google: config.auth.google.clientID}); //, {redirect_uri: 'https://scitran.sqm.io/components/authentication/oauth2callback.html'});
 	},
 
 // Actions ---------------------------------------------------------------------------

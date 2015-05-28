@@ -1,21 +1,37 @@
-import React from 'react'
-import request from 'superagent'
+// dependencies -------------------------------------------------------
 
-import FS_upload from'../forms/fs_upload.component.jsx'
+import React from 'react'
+import DirUpload from'../forms/dirUpload.component.jsx';
+import DirTree from'../forms/dirTree.component.jsx';
 
 var Upload = React.createClass({
+
+// life cycle events --------------------------------------------------
+
+	getInitialState: function () {
+		return {
+			tree: []
+		};
+	},
+
 	render: function () {
+		let self = this;
+		let tree = this.state.tree;
 		return (
-			<FS_upload />
+			<div>
+				<DirUpload onChange={self._onChange} />
+				<DirTree tree={tree}/>
+			</div>
     	);
 		
 	},
-	handleSubmit: function () {
-		// var url = 'http://www.reddit.com/.json';
-		// request.get(url, function (res) {
-		// 	console.log(res);
-		// });
+
+// custom methods -----------------------------------------------------
+
+	_onChange (directory) {
+		this.setState({tree: directory})
 	}
+
 });
 
 export default Upload;
