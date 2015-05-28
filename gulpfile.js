@@ -1,6 +1,7 @@
 'use strict';
 
 // dependencies -----------------------------------------------------------
+
     var gulp = require('gulp'),
         changed = require('gulp-changed'),
         sass = require('gulp-sass'),
@@ -23,14 +24,12 @@
     var p = {
         jsx:            './src/scripts/app.jsx',
         scss:           './src/sass/main.scss',
-        libs:           './src/scripts/lib/*',
+        libs:           './src/scripts/libs/*',
         assets:         './src/assets/*',
         fonts:          './src/sass/fonts/*',
         bundle:         'app.js',
 
         dist:           'dist',
-        distLibs:       'dist/lib',
-        distJs:         'dist/js',
         distCss:        'dist/css',
         distAssets:     'dist/assets',
         distFonts:      'dist/fonts'
@@ -62,13 +61,14 @@
     gulp.task('browserSync', function() {
         browserSync({
             server: {
-                baseDir: './'
+                baseDir: './dist'
             }
         });
     });
+
+    // copy
     gulp.task('copy', function () {
         gulp.src('./index.html').pipe(gulp.dest(p.dist));
-        gulp.src(p.libs).pipe(gulp.dest(p.distLibs));
         gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
         gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
     });
@@ -81,7 +81,7 @@
                 .bundle()
                 .on('error', notify.onError())
                 .pipe(source(p.bundle))
-                .pipe(gulp.dest(p.distJs))
+                .pipe(gulp.dest(p.dist))
                 .pipe(reload({stream: true}));
         }
         bundler.transform(babelify).on('update', rebundle);
@@ -98,7 +98,7 @@
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(uglify())
             .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest(p.distJs));
+            .pipe(gulp.dest(p.dist));
     });
 
     // compile & minify scss
