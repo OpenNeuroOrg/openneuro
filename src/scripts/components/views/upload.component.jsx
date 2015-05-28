@@ -1,21 +1,21 @@
-import React from 'react'
-import request from 'superagent'
+// dependencies -------------------------------------------------------
 
-import FS_upload from'../forms/fs_upload.component.jsx'
+import React from 'react'
+import DirUpload from'../forms/dirUpload.component.jsx';
 
 var Upload = React.createClass({
+
+// life cycle events --------------------------------------------------
+
 	render: function () {
 		return (
-			<FS_upload />
+			<DirUpload />
     	);
 		
-	},
-	handleSubmit: function () {
-		// var url = 'http://www.reddit.com/.json';
-		// request.get(url, function (res) {
-		// 	console.log(res);
-		// });
 	}
+
+// custom methods -----------------------------------------------------
+
 });
 
 export default Upload;

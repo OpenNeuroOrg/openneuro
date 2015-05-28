@@ -42,7 +42,6 @@ let Upload = React.createClass({
         // build path from list
         for (let i = 0; i < pathList.length; i++) {
         	let path = pathList[i];
-        	console.log(path);
         	let pathParts = path.split('/');
         	var subObj = dirTree;
         	for (let j = 0; j < pathParts.length; j++) {

@@ -13,9 +13,7 @@ let RouteHandler = Router.RouteHandler;
 // views
 import Signin from './components/views/signin.component.jsx';
 import Home from './components/views/home.component.jsx';
-//gregs test
 import Upload from './components/views/upload.component.jsx';
-import Upload2 from './components/views/upload2.component.jsx';
 // partials
 import Navbar from './components/partials/navbar.component.jsx';
 
@@ -41,7 +39,6 @@ var routes = (
 		<Route name="home" handler={Home}/>
 		<Route name="signIn" handler={Signin}/>
 		<Route name="upload" handler={Upload}/>
-		<Route name="upload2" handler={Upload2}/>
 		<DefaultRoute handler={Home}/>
 	</Route>
 );
