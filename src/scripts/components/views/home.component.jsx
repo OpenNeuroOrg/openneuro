@@ -5,12 +5,9 @@ var Home = React.createClass({
 	render: function () {
 		return (
 			<div className="home">
-				hello home
+				<h1>Center for Reproducible Neuroscience</h1>
     		</div>
     	);
-	},
-	handleSubmit: function () {
-
 	}
 });
 
