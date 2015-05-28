@@ -54,19 +54,19 @@ let Upload = React.createClass({
         }
 
         // convert dirTree to array structure
-        function convert (obj) {
+        function objToArr (obj) {
 			var arr = [];
 			for (let key in obj) {
 				if (typeof obj[key] != 'object') {
 					arr.push({name: key, type: 'file', path: obj[key]})
 				} else {
-					arr.push({name: key, type: 'folder', children: convert(obj[key])});
+					arr.push({name: key, type: 'folder', children: objToArr(obj[key])});
 				}
 			}
 			return arr;
 		}
 
-		dirTree = convert(dirTree);
+		dirTree = objToArr(dirTree);
 
         // return tree
         return dirTree;
