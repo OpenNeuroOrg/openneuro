@@ -37,17 +37,17 @@
 
 // primary tasks ----------------------------------------------------------
 
-    gulp.task('watch', ['clean'], function() {
-        gulp.start(['browserSync', 'watchTask', 'watchify', 'styles', 'copy']);
-    });
-
     gulp.task('build', ['clean'], function() {
         process.env.NODE_ENV = 'production';
-        gulp.start(['browserSync', 'styles', 'copy']);
+        gulp.start(['styles', 'copy',]);
+    });
+    
+    gulp.task('watch', ['build'], function() {
+        gulp.start(['browserSync', 'watchTask', 'watchify', 'styles', 'copy' ]);
     });
 
-    gulp.task('default', function() {
-        console.log('Run "gulp watch or gulp build"');
+    gulp.task('default',['watch'], function() {
+        console.log('Running"');
     });
 
 // tasks ------------------------------------------------------------------
