@@ -22,7 +22,7 @@ let Upload = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_upload: function (e) {
-		Actions.signIn();
+		
 	}
 
 });
