@@ -1,5 +1,7 @@
 import React from 'react'
 import request from 'superagent'
+import jquery from '../../libs/jquery.min';
+import tree from '../../libs/jquery.tree';
 
 let FS_upload = React.createClass({
 //==========================================================================================================================
