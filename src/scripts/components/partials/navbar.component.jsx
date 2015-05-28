@@ -21,6 +21,7 @@ var Navbar = React.createClass({
 							<li><Link to="home">home</Link></li>
 							<li><Link to="signIn">sign</Link></li>
 							<li><Link to="upload">Upload</Link></li>
+							<li><Link to="upload2">Upload2</Link></li>
 						</ul>
 					</div>
 				</div>
