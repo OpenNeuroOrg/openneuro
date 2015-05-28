@@ -2,7 +2,6 @@
 
 import Reflux  from 'reflux';
 import Actions from '../actions/Actions';
-import hello   from '../libs/hello';
 import request from 'superagent';
 import config  from '../config';
 
