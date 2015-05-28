@@ -13,9 +13,7 @@ let RouteHandler = Router.RouteHandler;
 // views
 import Signin from './components/views/signin.component.jsx';
 import Home from './components/views/home.component.jsx';
-
-//gregs test files
-import Addfiles from './components/views/addfiles.component.jsx';
+//gregs test
 import Upload from './components/views/upload.component.jsx';
 // partials
 import Navbar from './components/partials/navbar.component.jsx';
@@ -39,13 +37,10 @@ var App = React.createClass({
 
 var routes = (
 	<Route name="app" path="/" handler={App}>
-
 		<Route name="home" handler={Home}/>
 		<Route name="signIn" handler={Signin}/>
-		<Route name="addFiles" handler={Addfiles}/>
 		<Route name="upload" handler={Upload}/>
 		<DefaultRoute handler={Home}/>
-
 	</Route>
 );
 
@@ -54,3 +49,4 @@ var routes = (
 Router.run(routes, function (Handler) {
 	React.render(<Handler/>, document.getElementById('main'));
 });
+
