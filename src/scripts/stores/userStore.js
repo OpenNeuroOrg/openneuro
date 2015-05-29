@@ -2,7 +2,6 @@
 
 import Reflux  from 'reflux';
 import Actions from '../actions/Actions';
-import hello   from '../libs/hello';
 import request from 'superagent';
 import config  from '../config';
 
@@ -19,7 +18,7 @@ let UserStore = Reflux.createStore({
 	 * the store initializes.
 	 */
 	init: function () {
-		hello.init({google: config.auth.google.clientID}); //, {redirect_uri: 'https://scitran.sqm.io/components/authentication/oauth2callback.html'});
+		hello.init({google: config.auth.google.clientID});
 	},
 
 // Actions ---------------------------------------------------------------------------
@@ -30,7 +29,7 @@ let UserStore = Reflux.createStore({
 	 * Initiates the google OAuth2 sign in flow.
 	 */
 	signIn: function () {
-		hello('google').login();
+		hello('google').login({scope: 'email,openid'});
 	},
 
 	/**
