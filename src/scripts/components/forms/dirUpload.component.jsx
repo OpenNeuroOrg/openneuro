@@ -14,7 +14,7 @@ let Upload = React.createClass({
 	render: function () {
 		let self = this;
 		return (
-			<input type="file" onChange={self._onFileSelect} />
+			<input type="file"  className="dirUpload-btn" onChange={self._onFileSelect} />
     	);
 	},
 

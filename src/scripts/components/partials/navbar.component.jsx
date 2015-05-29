@@ -15,11 +15,10 @@ let Navbar = React.createClass({
 						<span className="icon-bar"></span>
 						<span className="icon-bar"></span>
 						</button>
-						<a className="navbar-brand" href="#">CRN</a>
+						<Link to="home" className="navbar-brand"><img src="./assets/CRN-Logo-Placeholder.png" alt="Center for Reproducible Neuroscience Logo" title="Center for Reproducible Neuroscience Link To Home Page"/></Link>
 					</div>
 					<div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul className="nav navbar-nav">
-							<li><Link to="home">home</Link></li>
 							<li><Link to="signIn">sign in</Link></li>
 							<li><Link to="upload">upload</Link></li>
 						</ul>
