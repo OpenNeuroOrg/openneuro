@@ -20,17 +20,17 @@ let BSNavbar = React.createClass({
 			</Link>
 		);
 		return (
-		<Navbar fixedTop brand={brand} toggleNavKey={0}>
-			<CollapsibleNav eventKey={0}>
-				<Nav navbar right>
-					<DropdownButton className="user-menu" eventKey={1} title={<i className="fa fa-gear"> User Menu</i>}>
-						<MenuItem><Link to="upload">upload</Link></MenuItem>
-						<MenuItem divider />
-						<MenuItem><a onClick={this._signOut}>Sign Out</a></MenuItem>
-			        </DropdownButton>
-			    </Nav>
-		    </CollapsibleNav>
-		</Navbar>
+			<Navbar fixedTop brand={brand} toggleNavKey={0}>
+				<CollapsibleNav eventKey={0}>
+					<Nav navbar right>
+						<DropdownButton className="user-menu" eventKey={1} title={<i className="fa fa-gear"> User Menu</i>}>
+							<MenuItem><Link to="upload">upload</Link></MenuItem>
+							<MenuItem divider />
+							<MenuItem><a onClick={this._signOut}>Sign Out</a></MenuItem>
+				        </DropdownButton>
+				    </Nav>
+			    </CollapsibleNav>
+			</Navbar>
 	    );
 	},
 
