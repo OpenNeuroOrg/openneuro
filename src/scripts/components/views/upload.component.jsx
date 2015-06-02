@@ -3,11 +3,7 @@
 import React from 'react'
 import DirUpload from'../forms/dirUpload.component.jsx';
 import DirTree from'../forms/dirTree.component.jsx';
-
-import Alert from 'react-bootstrap/lib/Alert';
-import Accordion from 'react-bootstrap/lib/Accordion';
-import Panel from 'react-bootstrap/lib/Panel';
-import ProgressBar from 'react-bootstrap/lib/ProgressBar';
+import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
 
 
@@ -21,16 +17,31 @@ let Upload = React.createClass({
 		return {
 			tree: [],
 			dirName: '',
-			fakeProgress: 0
+			fakeProgress: 0,
+			alert: true
 		};
 	},
+
+	componentDidMount: function () {
+		let self = this;
+		setInterval(this._fakeProgress, 3000);
+		setTimeout(function () {
+			self.setState({alert: false});
+		}, 2000)
+	},
+
 	render: function () {
 		let self = this;
 		let tree = this.state.tree;
 		let dirName = this.state.dirName;
 		let fakeProgress = this.state.fakeProgress;
+		let showAlert = this.state.alert;
+		let alert = (
+			<Alert className="fadeInDown" bsStyle='danger'>
+				<strong>Holy danger!</strong> Best check yo self, youre not looking too good.
+			</Alert>
+		);
 		// Alert bsStyle: danger, warning, success, info
-		setInterval(self._fakeProgress, 3000);
 		return (
 			<div className="view container">
 				<DirUpload onChange={self._onChange} />
@@ -58,9 +69,7 @@ let Upload = React.createClass({
 					  	</ Accordion> 
 					 </div>
 					 : ''}
-				<Alert className="fadeInDown" bsStyle='danger'>
-					<strong>Holy danger!</strong> Best check yo self, youre not looking too good.
-				</Alert>
+					{showAlert ? alert : ''}
 			</div>
     	);
 	
