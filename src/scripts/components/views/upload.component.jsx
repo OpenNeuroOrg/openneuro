@@ -41,34 +41,35 @@ let Upload = React.createClass({
 				<strong>Holy danger!</strong> Best check yo self, youre not looking too good.
 			</Alert>
 		);
+		let dataView = (
+			<div className="dirDisplay">
+			   	<h3 className="clearfix">
+			   		<span className="dirName">
+				   		<i className="folderIcon fa fa-folder-open" /> 
+				   		{dirName}
+			   		</span> 
+				   	<div className=" validate-btn pull-right">
+				   		<button>
+				   			Validate 
+				   		</button>
+				   		<span>
+				   			Validating <i className="fa fa-circle-o-notch fa-spin" />
+				   		</span>
+				   	</div>
+			   	</h3>
+			   	<ProgressBar now={fakeProgress} />
+			   	<Accordion className="fileStructure">
+    				<Panel header={<i className="fa fa-chevron-down"> See File Structure</i> } eventKey='1'>
+				  		<DirTree tree={tree}/>
+				  	</Panel>
+			  	</ Accordion> 
+			 </div>
+		)
 		// Alert bsStyle: danger, warning, success, info
 		return (
 			<div className="view container">
 				<DirUpload onChange={self._onChange} />
-				   	{tree.length > 0 ? 
-				   	<div className="dirDisplay">
-					   	<h3 className="clearfix">
-					   		<span className="dirName">
-						   		<i className="folderIcon fa fa-folder-open" /> 
-						   		{dirName}
-					   		</span> 
-						   	<div className=" validate-btn pull-right">
-						   		<button>
-						   			Validate 
-						   		</button>
-						   		<span>
-						   			Validating <i className="fa fa-circle-o-notch fa-spin" />
-						   		</span>
-						   	</div>
-					   	</h3>
-					   	<ProgressBar now={fakeProgress} />
-					   	<Accordion className="fileStructure">
-		    				<Panel header={<i className="fa fa-chevron-down"> See File Structure</i> } eventKey='1'>
-						  		<DirTree tree={tree}/>
-						  	</Panel>
-					  	</ Accordion> 
-					 </div>
-					 : ''}
+				   	{tree.length > 0 ? dataView : ''}
 					{showAlert ? alert : ''}
 			</div>
     	);
