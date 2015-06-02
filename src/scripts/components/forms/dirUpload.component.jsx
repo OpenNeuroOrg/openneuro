@@ -31,7 +31,7 @@ let Upload = React.createClass({
 
 	_generateFileTree: function (files) {
 		let pathList = [];
-		var dirTree  = {};
+		let dirTree  = {};
 
 		// generate list of paths
 		for (let i = 0; i < files.length; i++) {
@@ -43,7 +43,7 @@ let Upload = React.createClass({
         for (let i = 0; i < pathList.length; i++) {
         	let path = pathList[i];
         	let pathParts = path.split('/');
-        	var subObj = dirTree;
+        	let subObj = dirTree;
         	for (let j = 0; j < pathParts.length; j++) {
         		let part = pathParts[j];
         		if (!subObj[part]) {
@@ -55,7 +55,7 @@ let Upload = React.createClass({
 
         // convert dirTree to array structure
         function objToArr (obj) {
-			var arr = [];
+			let arr = [];
 			for (let key in obj) {
 				if (typeof obj[key] != 'object') {
 					arr.push({name: key, type: 'file', path: obj[key]})
