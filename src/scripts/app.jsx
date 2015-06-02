@@ -12,7 +12,6 @@ let RouteHandler = Router.RouteHandler;
 
 // views
 import Signin from './components/views/signin.component.jsx';
-import Home from './components/views/home.component.jsx';
 import Upload from './components/views/upload.component.jsx';
 // partials
 import Navbar from './components/partials/navbar.component.jsx';
@@ -21,12 +20,11 @@ import Navbar from './components/partials/navbar.component.jsx';
 
 var App = React.createClass({
 	render: function () {
+		console.log(this.props)
 		return (
 			<div className="page">
-				<Navbar link={RouteLink} />
-				<div className="container">
-					<RouteHandler/>
-				</div>
+				<Navbar />
+				<RouteHandler />
 			</div>
 		)				
 	}
@@ -34,12 +32,14 @@ var App = React.createClass({
 
 // routes ----------------------------------------------------------------
 
+
+//TODO - set route to signin when user is not logged in. disable all other routes
+
 var routes = (
 	<Route name="app" path="/" handler={App}>
-		<Route name="home" handler={Home}/>
 		<Route name="signIn" handler={Signin}/>
 		<Route name="upload" handler={Upload}/>
-		<DefaultRoute handler={Home}/>
+		<DefaultRoute handler={Signin}/>
 	</Route>
 );
 

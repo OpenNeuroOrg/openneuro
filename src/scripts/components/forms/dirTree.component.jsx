@@ -11,9 +11,9 @@ let DirTree = React.createClass({
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map(function (item, index) {
 			return (
-				<li key={index} >{item.name}
-					<ul><DirTree tree={item.children} /></ul>
-				</li>
+					<li key={index} >{item.name}
+						<ul><DirTree tree={item.children} /></ul>
+					</li>
 			);
 		});
 		return (
@@ -26,3 +26,6 @@ let DirTree = React.createClass({
 });
 
 export default DirTree;
+
+
+

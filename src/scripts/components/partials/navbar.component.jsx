@@ -1,34 +1,54 @@
+// dependencies -------------------------------------------------------
 import React from 'react';
+import Router from 'react-router'
 
-let Navbar = React.createClass({
+import Navbar from 'react-bootstrap/lib/Navbar';
+import CollapsibleNav from 'react-bootstrap/lib/CollapsibleNav';
+import Nav from 'react-bootstrap/lib/Nav';
+import NavItem from 'react-bootstrap/lib/NavItem';
+import DropdownButton from 'react-bootstrap/lib/DropdownButton';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
+
+
+import Actions from '../../actions/Actions';
+import UserStore from '../../stores/userStore';
+
+
+let Link = Router.Link;
+
+// ------------------------------------------------------------
+
+
+// TODO - fix <Link /> Router props... ??
+
+let BSNavbar = React.createClass({
 	render: function () {
 		let self = this;
-		let Link = this.props.link;
-		//todo add toggler js for nav-collapse
 		return (
-			<nav className="navbar navbar-default navbar-fixed-top">
-				<div className="container">
-					<div className="navbar-header">
-						<button type="button" className="navbar-toggle collapsed" data-toggle="collapse">
-						<span className="sr-only">Toggle navigation</span>
-						<span className="icon-bar"></span>
-						<span className="icon-bar"></span>
-						<span className="icon-bar"></span>
-						</button>
-						<a className="navbar-brand" href="#">CRN</a>
-					</div>
-					<div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul className="nav navbar-nav">
-							<li><Link to="home">home</Link></li>
-							<li><Link to="signIn">sign in</Link></li>
-							<li><Link to="upload">upload</Link></li>
-						</ul>
-					</div>
-				</div>
-			</nav>
+		<Navbar fixedTop brand={<Link to="/" className="navbar-brand"><img src="./assets/CRN-Logo-Placeholder.png" alt="Center for Reproducible Neuroscience Logo" title="Center for Reproducible Neuroscience Link To Home Page"/></Link>} toggleNavKey={0}>
+			<CollapsibleNav eventKey={0}>
+				<Nav navbar right>
+					<DropdownButton className="user-menu" eventKey={1} title={<i className="fa fa-gear"> User Menu</i>}>
+						<MenuItem><Link to="upload">upload</Link></MenuItem>
+						<MenuItem divider />
+						<MenuItem><a onClick={this._signOut}>Sign Out</a></MenuItem>
+			        </DropdownButton>
+			    </Nav>
+		    </CollapsibleNav>
+		</Navbar>
 	    );
+	},
+
+// custom methods -----------------------------------------------------
+
+//TODO - hide user menu when signed out. Replace User Menu Text with <profile name>
+
+	_signOut: function (e) {
+		Actions.signOut();
 	}
 
 });
 
-export default Navbar;
+
+
+export default BSNavbar;
