@@ -1,31 +1,26 @@
-// dependencies -------------------------------------------------------
+// dependencies ------------------------------------------------------------------
+
 import React from 'react';
-import Router from 'react-router'
-
-import Navbar from 'react-bootstrap/lib/Navbar';
-import CollapsibleNav from 'react-bootstrap/lib/CollapsibleNav';
-import Nav from 'react-bootstrap/lib/Nav';
-import NavItem from 'react-bootstrap/lib/NavItem';
-import DropdownButton from 'react-bootstrap/lib/DropdownButton';
-import MenuItem from 'react-bootstrap/lib/MenuItem';
-
-
+import { Link } from 'react-router';
+import { Navbar, CollapsibleNav, Nav, NavItem, DropdownButton, MenuItem } from 'react-bootstrap';
 import Actions from '../../actions/Actions';
 import UserStore from '../../stores/userStore';
 
-
-let Link = Router.Link;
-
-// ------------------------------------------------------------
-
-
-// TODO - fix <Link /> Router props... ??
-
 let BSNavbar = React.createClass({
+
+// life cycle methods ------------------------------------------------------------
+
 	render: function () {
 		let self = this;
+		let brand = (
+			<Link to="/" className="navbar-brand">
+				<img src="./assets/CRN-Logo-Placeholder.png"
+					 alt="Center for Reproducible Neuroscience Logo"
+					 title="Center for Reproducible Neuroscience Link To Home Page"/>
+			</Link>
+		);
 		return (
-		<Navbar fixedTop brand={<Link to="/" className="navbar-brand"><img src="./assets/CRN-Logo-Placeholder.png" alt="Center for Reproducible Neuroscience Logo" title="Center for Reproducible Neuroscience Link To Home Page"/></Link>} toggleNavKey={0}>
+		<Navbar fixedTop brand={brand} toggleNavKey={0}>
 			<CollapsibleNav eventKey={0}>
 				<Nav navbar right>
 					<DropdownButton className="user-menu" eventKey={1} title={<i className="fa fa-gear"> User Menu</i>}>
@@ -39,9 +34,9 @@ let BSNavbar = React.createClass({
 	    );
 	},
 
-// custom methods -----------------------------------------------------
+// custom methods ----------------------------------------------------------------
 
-//TODO - hide user menu when signed out. Replace User Menu Text with <profile name>
+	//TODO - hide user menu when signed out. Replace User Menu Text with <profile name>
 
 	_signOut: function (e) {
 		Actions.signOut();

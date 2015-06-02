@@ -2,11 +2,7 @@
 
 import React from 'react'
 import Router from 'react-router'
-
-let DefaultRoute = Router.DefaultRoute;
-let RouteLink    = Router.Link;
-let Route        = Router.Route;
-let RouteHandler = Router.RouteHandler;
+let { DefaultRoute, RouteLink, Route, RouteHandler } = Router;
 
 // components ------------------------------------------------------------
 
@@ -20,7 +16,6 @@ import Navbar from './components/partials/navbar.component.jsx';
 
 var App = React.createClass({
 	render: function () {
-		console.log(this.props)
 		return (
 			<div className="page">
 				<Navbar />
