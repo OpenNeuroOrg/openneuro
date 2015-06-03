@@ -4,11 +4,11 @@ import React from 'react'
 import Router from 'react-router'
 let { DefaultRoute, RouteLink, Route, RouteHandler } = Router;
 
-// components ------------------------------------------------------------
-
 // views
 import Signin from './components/views/signin.component.jsx';
 import Upload from './components/views/upload.component.jsx';
+import Home from './components/views/home.component.jsx';
+
 // partials
 import Navbar from './components/partials/navbar.component.jsx';
 
@@ -34,6 +34,7 @@ var routes = (
 	<Route name="app" path="/" handler={App}>
 		<Route name="signIn" handler={Signin}/>
 		<Route name="upload" handler={Upload}/>
+		<Route name="home" handler={Home}/>
 		<DefaultRoute handler={Signin}/>
 	</Route>
 );

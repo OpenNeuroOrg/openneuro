@@ -13,7 +13,7 @@ let BSNavbar = React.createClass({
 	render: function () {
 		let self = this;
 		let brand = (
-			<Link to="/" className="navbar-brand">
+			<Link to="home" className="navbar-brand">
 				<img src="./assets/CRN-Logo-Placeholder.png"
 					 alt="Center for Reproducible Neuroscience Logo"
 					 title="Center for Reproducible Neuroscience Link To Home Page"/>
@@ -24,9 +24,9 @@ let BSNavbar = React.createClass({
 				<CollapsibleNav eventKey={0}>
 					<Nav navbar right>
 						<DropdownButton className="user-menu" eventKey={1} title={<i className="fa fa-gear"> User Menu</i>}>
-							<MenuItem><Link to="upload">upload</Link></MenuItem>
+							<li><Link to="upload">upload</Link></li>
 							<MenuItem divider />
-							<MenuItem><a onClick={this._signOut}>Sign Out</a></MenuItem>
+							<li><a onClick={this._signOut}>Sign Out</a></li>
 				        </DropdownButton>
 				    </Nav>
 			    </CollapsibleNav>
