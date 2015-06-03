@@ -22,7 +22,6 @@ var Signin = React.createClass({
 						<i className="fa fa-google" />
 						<span> Google</span>
 					</button>
-					<button className="btn-basic" onClick={this._signOut}>Sign Out</button>
 					<div className="footer">
 						<button className="btn-admin" onClick={this._logToken} >Log Token</button>
 						<button className="btn-admin" onClick={this._testScitran}>Test Scitran</button>
@@ -37,10 +36,6 @@ var Signin = React.createClass({
 
 	_signIn: function (e) {
 		Actions.signIn();
-	},
-
-	_signOut: function (e) {
-		Actions.signOut();
 	},
 
 	_logToken: function (e) {

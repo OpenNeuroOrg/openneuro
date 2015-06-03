@@ -18,27 +18,43 @@ let UserStore = Reflux.createStore({
 	 * the store initializes.
 	 */
 	init: function () {
-		let self = this;
 		hello.init({google: config.auth.google.clientID});
+		this.checkUser();
+	},
+
+	getInitialState: function () {
+		return {token: this._token, user: this._user};
+	},
+
+// data ------------------------------------------------------------------------------
+
+	_token: null,
+	_user: null,
+
+// Actions ---------------------------------------------------------------------------
+
+	/**
+	 * Check User
+	 *
+	 * Checks if the user has an active sessions and
+	 * if they do instatiates their session data.
+	 */
+	checkUser: function () {
+		let self = this;
 		var googleAuth = hello('google').getAuthResponse();
 
-		// this._user = {};
-		this._token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
+		var token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
 
-		if (this._token) {
+		if (token) {
 			hello('google').api('/me').then(function (profile) {
 				self._user = profile;
+				self._token = token;
+				self.trigger({token: self._token, user: self._user});
 			});
 		} else {
 			this._user = {};
 		}
 	},
-
-	getInitialState: function () {
-		return {token: this._token, data: this._user};
-	},
-
-// Actions ---------------------------------------------------------------------------
 
 	/**
 	 * Log In
@@ -51,11 +67,11 @@ let UserStore = Reflux.createStore({
 			self._token = res.authResponse.access_token;
 			hello(res.network).api('/me').then(function (profile) {
 				self._user = profile;
-				self.trigger({token: self._token, data: self._user});
+				self.trigger({token: self._token, user: self._user});
 			});
 			// console.log('signin success');
 		}, function () {
-			console.log('signin failure');
+			// signin failure
 		});
 	},
 
@@ -69,20 +85,11 @@ let UserStore = Reflux.createStore({
 		let self = this;
 		hello('google').logout().then(function () {
 			self._token = null;
-			self.trigger({token: self._token});
+			self._user = {null};
+			self.trigger({token: self._token, user: self._user});
 		}, function (e) {
-			console.log('signout failure');
-			console.log(e);
+			// signout failure
 		});
-	},
-
-	/**
-	 * Is Logged In
-	 *
-	 * Return a boolean representing if the user is logged in.
-	 */
-	isLoggedIn: function () {
-		return !!this._token;
 	},
 
 	/**
