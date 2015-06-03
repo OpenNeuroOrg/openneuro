@@ -18,7 +18,24 @@ let UserStore = Reflux.createStore({
 	 * the store initializes.
 	 */
 	init: function () {
+		let self = this;
 		hello.init({google: config.auth.google.clientID});
+		var googleAuth = hello('google').getAuthResponse();
+
+		// this._user = {};
+		this._token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
+
+		if (this._token) {
+			hello('google').api('/me').then(function (profile) {
+				self._user = profile;
+			});
+		} else {
+			this._user = {};
+		}
+	},
+
+	getInitialState: function () {
+		return {token: this._token, data: this._user};
 	},
 
 // Actions ---------------------------------------------------------------------------
@@ -29,8 +46,14 @@ let UserStore = Reflux.createStore({
 	 * Initiates the google OAuth2 sign in flow.
 	 */
 	signIn: function () {
-		hello('google').login({scope: 'email,openid'}, function () {
-			console.log('signin success');
+		let self = this;
+		hello('google').login({scope: 'email,openid'}, function (res) {
+			self._token = res.authResponse.access_token;
+			hello(res.network).api('/me').then(function (profile) {
+				self._user = profile;
+				self.trigger({token: self._token, data: self._user});
+			});
+			// console.log('signin success');
 		}, function () {
 			console.log('signin failure');
 		});
@@ -43,12 +66,23 @@ let UserStore = Reflux.createStore({
 	 * OAuth2 session.
 	 */
 	signOut: function () {
+		let self = this;
 		hello('google').logout().then(function () {
-			console.log('signout success');
+			self._token = null;
+			self.trigger({token: self._token});
 		}, function (e) {
 			console.log('signout failure');
 			console.log(e);
 		});
+	},
+
+	/**
+	 * Is Logged In
+	 *
+	 * Return a boolean representing if the user is logged in.
+	 */
+	isLoggedIn: function () {
+		return !!this._token;
 	},
 
 	/**
@@ -57,7 +91,7 @@ let UserStore = Reflux.createStore({
 	 * Logs the current google access token stored in local storage.
 	 */
 	logToken: function () {
-		console.log(JSON.parse(window.localStorage.hello).google.access_token);
+		console.log(this._token);
 	},
 
 	/**
@@ -70,7 +104,7 @@ let UserStore = Reflux.createStore({
 	testScitran: function () {
 		console.log('test scitran');
 		request.get('https://scitran.sqm.io/api/users/self')
-			.set('Authorization', JSON.parse(window.localStorage.hello).google.access_token)
+			.set('Authorization', this._token)
 			.end(function (err, res) {
 				console.log(res.body);
 			});
