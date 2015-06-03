@@ -29,7 +29,11 @@ let UserStore = Reflux.createStore({
 	 * Initiates the google OAuth2 sign in flow.
 	 */
 	signIn: function () {
-		hello('google').login({scope: 'email,openid'});
+		hello('google').login({scope: 'email,openid'}, function () {
+			console.log('signin success');
+		}, function () {
+			console.log('signin failure');
+		});
 	},
 
 	/**
