@@ -1,17 +1,15 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react';
-import hello from '../../libs/hello';
 import Actions from '../../actions/Actions';
 import UserStore from '../../stores/userStore';
+import {Navigation} from 'react-router';
 
 var Signin = React.createClass({
 
-// life cycle events --------------------------------------------------
+	mixins: [Navigation],
 
-	componentDidMount: function () {
-		
-	},
+// life cycle events --------------------------------------------------
 
 	render: function () {
 		return (
@@ -22,7 +20,6 @@ var Signin = React.createClass({
 						<i className="fa fa-google" />
 						<span> Google</span>
 					</button>
-					<button className="btn-basic" onClick={this._signOut}>Sign Out</button>
 					<div className="footer">
 						<button className="btn-admin" onClick={this._logToken} >Log Token</button>
 						<button className="btn-admin" onClick={this._testScitran}>Test Scitran</button>
@@ -35,19 +32,15 @@ var Signin = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_signIn: function (e) {
-		Actions.signIn();
+	_signIn: function () {
+		Actions.signIn(this.transitionTo);
 	},
 
-	_signOut: function (e) {
-		Actions.signOut();
-	},
-
-	_logToken: function (e) {
+	_logToken: function () {
 		Actions.logToken();
 	},
 
-	_testScitran: function (e) {
+	_testScitran: function () {
 		Actions.testScitran();
 	}
 

@@ -2,17 +2,13 @@
 
 import React from 'react'
 import Router from 'react-router'
-
-let DefaultRoute = Router.DefaultRoute;
-let RouteLink    = Router.Link;
-let Route        = Router.Route;
-let RouteHandler = Router.RouteHandler;
-
-// components ------------------------------------------------------------
-
+let { DefaultRoute, RouteLink, Route, RouteHandler } = Router;
+import requireAuth from './utils/requireAuth';
 // views
 import Signin from './components/views/signin.component.jsx';
 import Upload from './components/views/upload.component.jsx';
+import Home from './components/views/home.component.jsx';
+
 // partials
 import Navbar from './components/partials/navbar.component.jsx';
 
@@ -20,7 +16,6 @@ import Navbar from './components/partials/navbar.component.jsx';
 
 var App = React.createClass({
 	render: function () {
-		console.log(this.props)
 		return (
 			<div className="page">
 				<Navbar />
@@ -32,13 +27,13 @@ var App = React.createClass({
 
 // routes ----------------------------------------------------------------
 
-
-//TODO - set route to signin when user is not logged in. disable all other routes
+Upload = requireAuth(Upload);
 
 var routes = (
 	<Route name="app" path="/" handler={App}>
 		<Route name="signIn" handler={Signin}/>
 		<Route name="upload" handler={Upload}/>
+		<Route name="home" handler={Home}/>
 		<DefaultRoute handler={Signin}/>
 	</Route>
 );

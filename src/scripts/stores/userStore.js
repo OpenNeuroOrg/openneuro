@@ -19,17 +19,61 @@ let UserStore = Reflux.createStore({
 	 */
 	init: function () {
 		hello.init({google: config.auth.google.clientID});
+		this.checkUser();
 	},
 
+	getInitialState: function () {
+		return {token: this._token, user: this._user};
+	},
+
+// data ------------------------------------------------------------------------------
+
+	_token: window.localStorage.hello ? JSON.parse(window.localStorage.hello).google.access_token : null,
+	_user: null,
+
 // Actions ---------------------------------------------------------------------------
+
+	/**
+	 * Check User
+	 *
+	 * Checks if the user has an active sessions and
+	 * if they do instatiates their session data.
+	 */
+	checkUser: function () {
+		let self = this;
+		var googleAuth = hello('google').getAuthResponse();
+
+		var token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
+
+		if (token) {
+			hello('google').api('/me').then(function (profile) {
+				self._user = profile;
+				self._token = token;
+				self.trigger({token: self._token, user: self._user});
+			});
+		} else {
+			this._user = {};
+		}
+	},
 
 	/**
 	 * Log In
 	 *
 	 * Initiates the google OAuth2 sign in flow.
 	 */
-	signIn: function () {
-		hello('google').login({scope: 'email,openid'});
+	signIn: function (transitionTo) {
+		let self = this;
+		hello('google').login({scope: 'email,openid'}, function (res) {
+			self._token = res.authResponse.access_token;
+			hello(res.network).api('/me').then(function (profile) {
+				self._user = profile;
+				self.trigger({token: self._token, user: self._user});
+				transitionTo('upload');
+			});
+			// console.log('signin success');
+		}, function () {
+			// signin failure
+		});
 	},
 
 	/**
@@ -38,12 +82,15 @@ let UserStore = Reflux.createStore({
 	 * Signs the user out by destroying the current
 	 * OAuth2 session.
 	 */
-	signOut: function () {
+	signOut: function (transitionTo) {
+		let self = this;
 		hello('google').logout().then(function () {
-			console.log('signout success');
+			self._token = null;
+			self._user = {null};
+			self.trigger({token: self._token, user: self._user});
+			transitionTo('home');
 		}, function (e) {
-			console.log('signout failure');
-			console.log(e);
+			// signout failure
 		});
 	},
 
@@ -53,7 +100,7 @@ let UserStore = Reflux.createStore({
 	 * Logs the current google access token stored in local storage.
 	 */
 	logToken: function () {
-		console.log(JSON.parse(window.localStorage.hello).google.access_token);
+		console.log(this._token);
 	},
 
 	/**
@@ -66,7 +113,7 @@ let UserStore = Reflux.createStore({
 	testScitran: function () {
 		console.log('test scitran');
 		request.get('https://scitran.sqm.io/api/users/self')
-			.set('Authorization', JSON.parse(window.localStorage.hello).google.access_token)
+			.set('Authorization', this._token)
 			.end(function (err, res) {
 				console.log(res.body);
 			});
