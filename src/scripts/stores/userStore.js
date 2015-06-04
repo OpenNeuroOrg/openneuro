@@ -33,6 +33,16 @@ let UserStore = Reflux.createStore({
 
 // Actions ---------------------------------------------------------------------------
 
+	updateState: function () {
+		this.trigger({token: this._token, user: this._user});
+	},
+
+	clearState: function () {
+		this._token = null;
+		this._user = null;
+		this.updateState();
+	},
+	
 	/**
 	 * Check User
 	 *
@@ -49,10 +59,12 @@ let UserStore = Reflux.createStore({
 			hello('google').api('/me').then(function (profile) {
 				self._user = profile;
 				self._token = token;
-				self.trigger({token: self._token, user: self._user});
+				self.updateState();
+			}, function (res) {
+				self.clearState();
 			});
 		} else {
-			this._user = {};
+			this.clearState();
 		}
 	},
 
@@ -67,7 +79,7 @@ let UserStore = Reflux.createStore({
 			self._token = res.authResponse.access_token;
 			hello(res.network).api('/me').then(function (profile) {
 				self._user = profile;
-				self.trigger({token: self._token, user: self._user});
+				self.updateState();
 				transitionTo('upload');
 			});
 			// console.log('signin success');
@@ -87,7 +99,7 @@ let UserStore = Reflux.createStore({
 		hello('google').logout().then(function () {
 			self._token = null;
 			self._user = {null};
-			self.trigger({token: self._token, user: self._user});
+			self.updateState();
 			transitionTo('home');
 		}, function (e) {
 			// signout failure
