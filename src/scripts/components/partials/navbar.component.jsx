@@ -2,24 +2,18 @@
 
 import React from 'react';
 import Reflux from 'reflux';
-import { Link } from 'react-router';
+import { Link, Navigation } from 'react-router';
 import { Navbar, CollapsibleNav, Nav, NavItem, DropdownButton, MenuItem } from 'react-bootstrap';
 import Actions from '../../actions/Actions';
 import userStore from '../../stores/userStore';
 
+// component setup ---------------------------------------------------------------
+
 let BSNavbar = React.createClass({
 
-	mixins: [Reflux.connect(userStore)],
+	mixins: [Reflux.connect(userStore), Navigation],
 
 // life cycle methods ------------------------------------------------------------
-
-	getInitialState () {
-
-	},
-
-	componentDidMount () {
-
-	},
 
 	render: function () {
 		let self = this;
@@ -52,10 +46,8 @@ let BSNavbar = React.createClass({
 
 // custom methods ----------------------------------------------------------------
 
-	//TODO - hide user menu when signed out. Replace User Menu Text with <profile name>
-
-	_signOut: function (e) {
-		Actions.signOut();
+	_signOut: function () {
+		Actions.signOut(this.transitionTo);
 	}
 
 });

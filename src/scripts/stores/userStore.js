@@ -61,13 +61,14 @@ let UserStore = Reflux.createStore({
 	 *
 	 * Initiates the google OAuth2 sign in flow.
 	 */
-	signIn: function () {
+	signIn: function (transitionTo) {
 		let self = this;
 		hello('google').login({scope: 'email,openid'}, function (res) {
 			self._token = res.authResponse.access_token;
 			hello(res.network).api('/me').then(function (profile) {
 				self._user = profile;
 				self.trigger({token: self._token, user: self._user});
+				transitionTo('upload');
 			});
 			// console.log('signin success');
 		}, function () {
@@ -81,12 +82,13 @@ let UserStore = Reflux.createStore({
 	 * Signs the user out by destroying the current
 	 * OAuth2 session.
 	 */
-	signOut: function () {
+	signOut: function (transitionTo) {
 		let self = this;
 		hello('google').logout().then(function () {
 			self._token = null;
 			self._user = {null};
 			self.trigger({token: self._token, user: self._user});
+			transitionTo('home');
 		}, function (e) {
 			// signout failure
 		});
