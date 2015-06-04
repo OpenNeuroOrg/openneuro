@@ -3,7 +3,7 @@
 import React from 'react'
 import Router from 'react-router'
 let { DefaultRoute, RouteLink, Route, RouteHandler } = Router;
-
+import requireAuth from './utils/requireAuth';
 // views
 import Signin from './components/views/signin.component.jsx';
 import Upload from './components/views/upload.component.jsx';
@@ -27,8 +27,7 @@ var App = React.createClass({
 
 // routes ----------------------------------------------------------------
 
-
-//TODO - set route to signin when user is not logged in. disable all other routes
+Upload = requireAuth(Upload);
 
 var routes = (
 	<Route name="app" path="/" handler={App}>

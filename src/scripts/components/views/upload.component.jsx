@@ -4,9 +4,8 @@ import React from 'react'
 import DirUpload from'../forms/dirUpload.component.jsx';
 import DirTree from'../forms/dirTree.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
-import requireAuth from '../../utils/requireAuth';
 
-let Upload = requireAuth( React.createClass({
+let Upload = React.createClass({
 
 // life cycle events --------------------------------------------------
 
@@ -93,7 +92,7 @@ let Upload = requireAuth( React.createClass({
 		});
 	}
 
-}));
+});
 
 
 export default Upload;
