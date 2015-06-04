@@ -4,33 +4,26 @@ import React from 'react'
 import DirUpload from'../forms/dirUpload.component.jsx';
 import DirTree from'../forms/dirTree.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
+import requireAuth from '../../utils/requireAuth';
 
-
-
-let adder = 0;
-
-let Upload = React.createClass({
+let Upload = requireAuth( React.createClass({
 
 // life cycle events --------------------------------------------------
 
-	getInitialState: function () {
+	getInitialState () {
 		return {
 			tree: [],
 			dirName: '',
 			fakeProgress: 0,
-			alert: true
+			alert: false
 		};
 	},
 
-	componentDidMount: function () {
+	componentDidMount () {
 		let self = this;
-		setInterval(this._fakeProgress, 3000);
-		setTimeout(function () {
-			self.setState({alert: false});
-		}, 2000)
 	},
 
-	render: function () {
+	render () {
 		let self = this;
 		let tree = this.state.tree;
 		let dirName = this.state.dirName;
@@ -64,13 +57,13 @@ let Upload = React.createClass({
 				  	</Panel>
 			  	</ Accordion> 
 			 </div>
-		)
+		);
 		// Alert bsStyle: danger, warning, success, info
 		return (
 			<div className="view container">
 				<DirUpload onChange={self._onChange} />
-				   	{tree.length > 0 ? dataView : ''}
-					{showAlert ? alert : ''}
+				   	{tree.length > 0 ? dataView : null}
+					{showAlert ? alert : null}
 			</div>
     	);
 	
@@ -79,21 +72,28 @@ let Upload = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_onChange (directory) {
+		let self = this;
 		this.setState({
 			tree: directory,
 			dirName: directory[0].name,
-			fakeProgress: 0
-		})
+			fakeProgress: 0,
+			alert: true
+		});
+		setInterval(this._fakeProgress, 3000);
+		setTimeout(function () {
+			self.setState({alert: false});
+		}, 4000);
 	},
-	_fakeProgress(){
+
+	_fakeProgress () {
 		let self= this;
 		
-		 this.setState({
-		    	fakeProgress: adder++,
-		 })
+		this.setState({
+	    	fakeProgress: self.state.fakeProgress + 1,
+		});
 	}
 
-});
+}));
 
 
 export default Upload;

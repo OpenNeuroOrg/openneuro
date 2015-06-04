@@ -28,7 +28,7 @@ let UserStore = Reflux.createStore({
 
 // data ------------------------------------------------------------------------------
 
-	_token: null,
+	_token: window.localStorage.hello ? JSON.parse(window.localStorage.hello).google.access_token : null,
 	_user: null,
 
 // Actions ---------------------------------------------------------------------------

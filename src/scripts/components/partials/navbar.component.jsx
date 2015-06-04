@@ -19,6 +19,19 @@ let BSNavbar = React.createClass({
 		let self = this;
 		let isLoggedIn = !!this.state.token;
 		let username = this.state.user ? this.state.user.displayName : 'user-menu';
+		let thumbnail = this.state.user ? this.state.user.thumbnail : null;
+
+		if (this.state.user) {
+			let title = (<i className="fa fa-gear"> {username}<img src={thumbnail} /></i>);
+			var usermenu = (
+				<DropdownButton className="user-menu" eventKey={1} title={title}>
+					<li><Link to="upload">upload</Link></li>
+					<MenuItem divider />
+					<li><a onClick={this._signOut}>Sign Out</a></li>
+		        </DropdownButton>
+			);
+		}
+
 		let brand = (
 			<Link to="home" className="navbar-brand">
 				<img src="./assets/CRN-Logo-Placeholder.png"
@@ -26,13 +39,7 @@ let BSNavbar = React.createClass({
 					 title="Center for Reproducible Neuroscience Link To Home Page"/>
 			</Link>
 		);
-		let usermenu = (
-			<DropdownButton className="user-menu" eventKey={1} title={<i className="fa fa-gear"> {username}</i>}>
-				<li><Link to="upload">upload</Link></li>
-				<MenuItem divider />
-				{isLoggedIn ? <li><a onClick={this._signOut}>Sign Out</a></li> : usermenu}
-	        </DropdownButton>
-		);
+
 		return (
 			<Navbar fixedTop brand={brand} toggleNavKey={0}>
 				<CollapsibleNav eventKey={0}>
