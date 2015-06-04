@@ -25,10 +25,7 @@ let DirTree = React.createClass({
 	
 	_logFile (item, e) {
 		e.stopPropagation();
-		//console.log(item);
 		if (item.type !== 'folder') {
-			var f = item;
-			//console.log(f);
 			var reader = new FileReader();
 			reader.onloadend = function (evt) {
 				if (evt.target.readyState == FileReader.DONE) {
@@ -36,7 +33,7 @@ let DirTree = React.createClass({
 					console.log(evt.target.result);
 				}
 			};
-			reader.readAsBinaryString(f);
+			reader.readAsBinaryString(item);
 		}
 	}
 

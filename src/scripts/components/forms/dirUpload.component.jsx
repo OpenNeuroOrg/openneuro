@@ -26,20 +26,6 @@ let Upload = React.createClass({
 
 	_onFileSelect: function (e) {
 		let files = e.target.files;
-
-	/////////////////////////////////////////////////////////////////////
-		var f = files[5];
-		//console.log(f);
-		var reader = new FileReader();
-		reader.onloadend = function (evt) {
-		//	if (evt.target.readyState == FileReader.DONE) {
-				//console.log(evt);
-				//console.log(evt.target.result);
-		//	}
-		};
-		reader.readAsBinaryString(f);
-	/////////////////////////////////////////////////////////////////////
-
 		this.props.onChange(this._generateFileTree(files));
 	},
 
@@ -81,7 +67,6 @@ let Upload = React.createClass({
 		}
 
 		dirTree = objToArr(dirTree);
-		console.log(dirTree);
 
         // return tree
         return dirTree;
