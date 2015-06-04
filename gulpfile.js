@@ -39,10 +39,10 @@
 
     gulp.task('build', ['clean'], function() {
         process.env.NODE_ENV = 'production';
-        gulp.start(['styles', 'copy',]);
+        gulp.start(['styles', 'copy', 'browserify']);
     });
     
-    gulp.task('watch', ['build'], function() {
+    gulp.task('watch', [], function() {
         gulp.start(['browserSync', 'watchTask', 'watchify', 'styles', 'copy' ]);
     });
 
