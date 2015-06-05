@@ -4,7 +4,7 @@
 
 input.dirUpload-btn{
   color: transparent;
-  width: 230px;
+  width: 100%;
   margin: 20px auto 0;
 
 
@@ -13,7 +13,8 @@ input.dirUpload-btn{
     color: transparent;
   }
   &::before {
-    content: 'Select a bids data set';
+    font-family: FontAwesome;
+    content: '\f0c5 \0020 Select a bids data set';
     display: inline-block;
     background: transparent;
     border-radius: 2px;
@@ -30,6 +31,7 @@ input.dirUpload-btn{
     width: auto;
     border:1px solid $primary;
     text-transform: uppercase;
+    width: 100%;
   }
   &:hover::before,
   &:active::before  {

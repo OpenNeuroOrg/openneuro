@@ -60,9 +60,13 @@ let Upload = React.createClass({
 		// Alert bsStyle: danger, warning, success, info
 		return (
 			<div className="view container">
-				<DirUpload onChange={self._onChange} />
-				   	{tree.length > 0 ? dataView : null}
-					{showAlert ? alert : null}
+				<div className="row">
+					<div className="col-sm-12 col-md-offset-4 col-md-4">
+						<DirUpload onChange={self._onChange} />
+					</div>
+				</div>
+			   	{tree.length > 0 ? dataView : null}
+				{showAlert ? alert : null}
 			</div>
     	);
 	
