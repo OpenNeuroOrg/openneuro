@@ -1,17 +1,21 @@
+// dependencies ----------------------------------------------------------
+
 import React from 'react'
-import request from 'superagent'
+
 
 var Home = React.createClass({
+
+// life cycle methods ----------------------------------------------------
+
 	render: function () {
 		return (
-			<div className="home">
-				hello home
-    		</div>
-    	);
-	},
-	handleSubmit: function () {
-
+			<div className="container">
+				<h1>Center for Reproducible Neuroscience</h1>
+			</div>
+		)				
 	}
+	
 });
 
 export default Home;
+

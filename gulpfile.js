@@ -1,6 +1,7 @@
 'use strict';
 
 // dependencies -----------------------------------------------------------
+
     var gulp = require('gulp'),
         changed = require('gulp-changed'),
         sass = require('gulp-sass'),
@@ -23,12 +24,12 @@
     var p = {
         jsx:            './src/scripts/app.jsx',
         scss:           './src/sass/main.scss',
+        libs:           './src/scripts/libs/*',
         assets:         './src/assets/*',
-        fonts:         './src/sass/fonts/*',
+        fonts:          './src/sass/fonts/*',
         bundle:         'app.js',
 
         dist:           'dist',
-        distJs:         'dist/js',
         distCss:        'dist/css',
         distAssets:     'dist/assets',
         distFonts:      'dist/fonts'
@@ -36,17 +37,17 @@
 
 // primary tasks ----------------------------------------------------------
 
-    gulp.task('watch', ['build'], function() {
-        gulp.start(['browserSync', 'watchTask', 'watchify', 'styles', 'copy']);
-    });
-
     gulp.task('build', ['clean'], function() {
         process.env.NODE_ENV = 'production';
-        gulp.start(['browserify', 'styles', 'copy']);
+        gulp.start(['styles', 'copy', 'browserify']);
+    });
+    
+    gulp.task('watch', [], function() {
+        gulp.start(['browserSync', 'watchTask', 'watchify', 'styles', 'copy' ]);
     });
 
-    gulp.task('default', function() {
-        console.log('Run "gulp watch or gulp build"');
+    gulp.task('default',['watch'], function() {
+        console.log('Running"');
     });
 
 // tasks ------------------------------------------------------------------
@@ -60,10 +61,12 @@
     gulp.task('browserSync', function() {
         browserSync({
             server: {
-                baseDir: './'
+                baseDir: './dist'
             }
         });
     });
+
+    // copy
     gulp.task('copy', function () {
         gulp.src('./index.html').pipe(gulp.dest(p.dist));
         gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
@@ -78,7 +81,7 @@
                 .bundle()
                 .on('error', notify.onError())
                 .pipe(source(p.bundle))
-                .pipe(gulp.dest(p.distJs))
+                .pipe(gulp.dest(p.dist))
                 .pipe(reload({stream: true}));
         }
         bundler.transform(babelify).on('update', rebundle);
@@ -95,7 +98,7 @@
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(uglify())
             .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest(p.distJs));
+            .pipe(gulp.dest(p.dist));
     });
 
     // compile & minify scss

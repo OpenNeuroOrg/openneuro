@@ -1,26 +1,49 @@
-import React from 'react'
-import request from 'superagent'
+// dependencies -------------------------------------------------------
 
-import Text from'../forms/text.component.jsx'
-import Password from'../forms/password.component.jsx'
-import LoadButton from'../forms/load-button.component.jsx'
+import React from 'react';
+import Actions from '../../actions/Actions';
+import UserStore from '../../stores/userStore';
+import {Navigation} from 'react-router';
 
 var Signin = React.createClass({
+
+	mixins: [Navigation],
+
+// life cycle events --------------------------------------------------
+
 	render: function () {
 		return (
-			<form>
-				<h2 class="">Sign in with Google</h2>
-	    		<LoadButton text=""  faIcon="fa-google" />
-			</form>
+			<div className="view container">
+				<div className="signInBlock col-sm-12 col-md-6 col-md-offset-3">
+					<h2>Login</h2>
+		    		<button className="btn-basic" onClick={this._signIn} >
+						<i className="fa fa-google" />
+						<span> Google</span>
+					</button>
+					<div className="footer">
+						<button className="btn-admin" onClick={this._logToken} >Log Token</button>
+						<button className="btn-admin" onClick={this._testScitran}>Test Scitran</button>
+					</div>
+				</div>
+			</div>
     	);
 		
 	},
-	handleSubmit: function () {
-		// var url = 'http://www.reddit.com/.json';
-		// request.get(url, function (res) {
-		// 	console.log(res);
-		// });
+
+// custom methods -----------------------------------------------------
+
+	_signIn: function () {
+		Actions.signIn(this.transitionTo);
+	},
+
+	_logToken: function () {
+		Actions.logToken();
+	},
+
+	_testScitran: function () {
+		Actions.testScitran();
 	}
+
 });
 
 export default Signin;

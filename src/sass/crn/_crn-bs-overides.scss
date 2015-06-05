@@ -1,0 +1,148 @@
+
+// Scaffolding ================================================================
+
+body {
+  background: $white;
+  padding-top: 75px;
+  font-family: $font-family-cabin;
+}
+
+.view.container{
+  margin: 20px auto;
+}
+
+
+// Type ================================================================
+
+a {
+  color: $primary;
+  cursor: pointer;
+}
+a:active,
+a:hover,
+a:focus{
+  cursor: pointer;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family:$font-family-ssp;
+  font-weight: 400;
+}
+
+//navbar // ================================================================
+
+.navbar-brand {
+  height: 75px;
+}
+
+//buttons // ================================================================
+
+.btn-basic{
+  background: transparent;
+  border-radius: 2px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 12pt;
+  color:$primary;
+  text-align: center;
+  padding:10px 50px;
+  width: 100%;
+  border:1px solid $primary;
+  text-transform: uppercase;
+  margin: 0 0 10px;
+
+  &:hover,
+  &:active {
+    border-color:lighten($primary, 10%);
+    background: #fafafa;
+    color:lighten($primary, 10%);
+  }
+}
+
+
+//Alerts // ================================================================
+.alert{
+  overflow: hidden;
+  position: fixed;
+  left: 0;
+  right:0;
+  top:0;
+  z-index: 1100;
+  margin: 0;
+  border-radius:0;
+  background-color: rgba(0, 0, 0, 0.80);
+  color: #D0D0D0;
+  font-weight: 100;
+  &.alert-danger{
+    border-bottom: 1px solid $brand-danger;
+    strong{
+      color: $brand-danger;
+      font-weight: 700;
+      font-family: 'Source Sans Pro', sans-serif;
+    }
+  }
+  &.alert-warning{
+    border-bottom: 1px solid $brand-warning;
+    strong{    
+      color: $brand-warning;
+      font-weight: 700;
+      font-family: 'Source Sans Pro', sans-serif;
+    }
+  }
+  &.alert-success{
+    border-bottom: 1px solid $brand-success;
+    strong{    
+      color: $brand-success;
+      font-weight: 700;
+      font-family: 'Source Sans Pro', sans-serif;
+    }
+  }
+  &.alert-info{
+    border-bottom: 1px solid $brand-info;
+    strong{
+      color: $brand-info;
+      font-weight: 700;
+      font-family: 'Source Sans Pro', sans-serif;
+    }
+  }
+}
+
+//form // ================================================================
+
+.form-group {
+	position: relative;
+	width: 300px;
+	margin: 20px auto;
+}
+
+.form-group label {
+	position: absolute;
+	top: 3px;
+	left: 5px;
+	font-size: 10px;
+	color: #777;
+	//display: none;
+}
+.form-group input {
+	width: 100%;
+	height: 50px;
+	font-size: 22px;
+	font-weight: lighter;
+	font-family: helvetica;
+	padding: 0px 10px;
+	border: none;
+	background: rgba(255,255,255,1);
+}
+
+.form-group textarea {
+	width: 100%;
+	min-height: 200px;
+	font-size: 22px;
+	font-weight: lighter;
+	font-family: helvetica;
+	padding: 15px 10px;
+	border: none;
+	background: rgba(255,255,255,1);
+}
