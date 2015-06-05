@@ -1,0 +1,31 @@
+//Colors
+$white: #fff;
+$black: #000;
+$stanfordRed:#8c1515; //link color
+$coral:#eb472c;
+$salmon:#ec7764;
+
+$rock:#5f574f;
+$stone:#928b81;
+$driftwood:#b6b1a9;
+$misty:#dad7cb;
+
+$ocean:#00505c;
+$algae:#175e54;
+$sky:#007c92;
+$turquise:#009b76;
+$night:#012a30; //body copy
+
+$primary: $stanfordRed;
+
+//BS overrides
+$brand-primary:         $primary;
+$brand-success:         #24C85E !default;
+$brand-info:            #24C8C8 !default;
+$brand-warning:         #C88E24 !default;
+$brand-danger:          #C82424 !default;
+
+//ssp weights:300, 400, 700 - italic 300, 400 , 700
+//Cabin weights:400 - italic 400 
+$font-family-ssp: 'Source Sans Pro', sans-serif;
+$font-family-cabin: 'Cabin', sans-serif;
