@@ -12,9 +12,9 @@ let DirTree = React.createClass({
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map(function (item, index) {
 			return (
-					<li key={index} onClick={self._logFile.bind(null, item)}>{item.name}
-						<ul><DirTree tree={item.children} /></ul>
-					</li>
+				<li key={index} onClick={self._logFile.bind(null, item)}>{item.name}
+					<ul><DirTree tree={item.children} /></ul>
+				</li>
 			);
 		});
 		return (
