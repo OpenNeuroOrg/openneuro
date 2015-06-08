@@ -21,7 +21,9 @@ let Validator = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_validate: function () {
-        validate.BIDS(this.props.list);
+        validate.BIDS(this.props.list, function (errors) {
+            console.log(errors);
+        });
 	}
 
 });

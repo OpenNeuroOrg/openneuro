@@ -4,6 +4,7 @@ import React     from 'react'
 import DirUpload from '../forms/dirUpload.component.jsx';
 import DirTree   from '../forms/dirTree.component.jsx';
 import Validator from '../forms/validator.component.jsx';
+import validate  from '../../utils/validate';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
 let Upload = React.createClass({
@@ -44,7 +45,7 @@ let Upload = React.createClass({
 				   		{dirName}
 			   		</span> 
 				   	<div className=" validate-btn pull-right">
-						<Validator list={list} />
+						<button onClick={self._validate}>Validate</button>
 				   		<span>
 				   			Validating <i className="fa fa-circle-o-notch fa-spin" />
 				   		</span>
@@ -96,6 +97,12 @@ let Upload = React.createClass({
 		this.setState({
 	    	fakeProgress: self.state.fakeProgress + 1,
 		});
+	},
+
+	_validate: function () {
+        validate.BIDS(this.state.list, function (errors) {
+            console.log(errors);
+        });
 	}
 
 });
