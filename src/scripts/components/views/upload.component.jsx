@@ -13,7 +13,7 @@ let Upload = React.createClass({
 	getInitialState () {
 		return {
 			tree: [],
-			list: [],
+			list: {},
 			dirName: '',
 			fakeProgress: 0,
 			alert: false
@@ -44,7 +44,7 @@ let Upload = React.createClass({
 				   		{dirName}
 			   		</span> 
 				   	<div className=" validate-btn pull-right">
-						<Validator tree={tree} list={list} />
+						<Validator list={list} />
 				   		<span>
 				   			Validating <i className="fa fa-circle-o-notch fa-spin" />
 				   		</span>
