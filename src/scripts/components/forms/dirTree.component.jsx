@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react';
+import React     from 'react';
+import fileUtils from '../../utils/files';
 
 let DirTree = React.createClass({
 
@@ -26,14 +27,9 @@ let DirTree = React.createClass({
 	_logFile (item, e) {
 		e.stopPropagation();
 		if (item.type !== 'folder') {
-			var reader = new FileReader();
-			reader.onloadend = function (evt) {
-				if (evt.target.readyState == FileReader.DONE) {
-					//console.log(evt);
-					console.log(evt.target.result);
-				}
-			};
-			reader.readAsBinaryString(item);
+			fileUtils.read(item, function (res) {
+				console.log(res);
+			});
 		}
 	}
 
