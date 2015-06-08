@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React     from 'react';
-import fileUtils from '../../utils/files';
+import validate from '../../utils/validate';
 
 let Validator = React.createClass({
 
@@ -20,30 +20,8 @@ let Validator = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_validate: function (e) {
-        for (let key in this.props.list) {
-            let file = this.props.list[key];
-
-            // validate tsv
-            if (file.name && file.name.indexOf('.tsv') > -1) {
-                //console.log(file.name);
-            }
-
-            // validate json
-            if (file.name && file.name.indexOf('.json') > -1) {
-                fileUtils.read(file, function (contents) {
-                    //console.log(contents);
-                    try {
-                        JSON.parse(contents);
-                    }
-                    catch (err) {
-                        console.log(err);
-                        console.log('file: ' + file.name);
-                        console.log('error: ' + err.message);
-                    }
-                });
-            }
-        }
+	_validate: function () {
+        validate.BIDS(this.props.list);
 	}
 
 });

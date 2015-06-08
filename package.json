@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Granze/react-starterify",
   "dependencies": {
+    "jshint": "^2.8.0",
     "react": "^0.13.0",
     "react-bootstrap": "^0.23.0",
     "react-router": "^0.13.3",
