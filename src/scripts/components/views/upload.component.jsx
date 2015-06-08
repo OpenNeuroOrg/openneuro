@@ -1,8 +1,9 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
-import DirUpload from'../forms/dirUpload.component.jsx';
-import DirTree from'../forms/dirTree.component.jsx';
+import React     from 'react'
+import DirUpload from '../forms/dirUpload.component.jsx';
+import DirTree   from '../forms/dirTree.component.jsx';
+import Validator from '../forms/validator.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
 let Upload = React.createClass({
@@ -12,6 +13,7 @@ let Upload = React.createClass({
 	getInitialState () {
 		return {
 			tree: [],
+			list: [],
 			dirName: '',
 			fakeProgress: 0,
 			alert: false
@@ -25,6 +27,7 @@ let Upload = React.createClass({
 	render () {
 		let self = this;
 		let tree = this.state.tree;
+		let list = this.state.list;
 		let dirName = this.state.dirName;
 		let fakeProgress = this.state.fakeProgress;
 		let showAlert = this.state.alert;
@@ -41,9 +44,7 @@ let Upload = React.createClass({
 				   		{dirName}
 			   		</span> 
 				   	<div className=" validate-btn pull-right">
-				   		<button>
-				   			Validate 
-				   		</button>
+						<Validator tree={tree} list={list} />
 				   		<span>
 				   			Validating <i className="fa fa-circle-o-notch fa-spin" />
 				   		</span>
@@ -74,11 +75,12 @@ let Upload = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_onChange (directory) {
+	_onChange (files) {
 		let self = this;
 		this.setState({
-			tree: directory,
-			dirName: directory[0].name,
+			tree: files.tree,
+			list: files.list,
+			dirName: files.tree[0].name,
 			fakeProgress: 0,
 			alert: true
 		});

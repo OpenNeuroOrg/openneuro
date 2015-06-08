@@ -69,7 +69,7 @@ let Upload = React.createClass({
 		dirTree = objToArr(dirTree);
 
         // return tree
-        return dirTree;
+        return {tree: dirTree, list: files};
 	}
 
 });
