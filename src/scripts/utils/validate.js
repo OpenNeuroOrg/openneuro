@@ -16,11 +16,6 @@ export default validate;
 // implementations ----------------------------------------------------------------
 
 function BIDS (fileList, callback) {
-    for (let key in fileList) {
-        let file = fileList[key];
-
-        
-    }
     let errors = [];
     async.forEachOf(fileList, function (file, key, cb) {
 
