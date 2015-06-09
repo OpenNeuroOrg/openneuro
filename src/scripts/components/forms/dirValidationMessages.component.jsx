@@ -5,6 +5,7 @@ import { Accordion, Panel } from 'react-bootstrap';
 let DirValidationMessages = React.createClass({
 	// life cycle events --------------------------------------------------
 	render: function () {
+		console.log(this.props.errors);
 		let allErrorsArray = [
 			{
 				errors: [

@@ -15,6 +15,7 @@ let Upload = React.createClass({
 		return {
 			tree: [],
 			list: {},
+			errors: [],
 			dirName: '',
 			fakeProgress: 0,
 			alert: false
@@ -29,6 +30,7 @@ let Upload = React.createClass({
 		let self = this;
 		let tree = this.state.tree;
 		let list = this.state.list;
+		let errors = this.state.errors;
 		let dirName = this.state.dirName;
 		let fakeProgress = this.state.fakeProgress;
 		let showAlert = this.state.alert;
@@ -60,7 +62,7 @@ let Upload = React.createClass({
 				  	</ Accordion> 
 				</div>
 				<div className="col-xs-6"> 
-					<DirValidationMessages />
+					<DirValidationMessages errors={errors} />
 				</div>
 			</div>
 		);
@@ -105,8 +107,9 @@ let Upload = React.createClass({
 	},
 
 	_validate: function () {
+		let self = this;
         validate.BIDS(this.state.list, function (errors) {
-            console.log(errors);
+            self.setState({errors: errors});
         });
 	}
 
