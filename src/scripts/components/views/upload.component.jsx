@@ -1,8 +1,9 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
-import DirUpload from'../forms/dirUpload.component.jsx';
-import DirTree from'../forms/dirTree.component.jsx';
+import React     from 'react'
+import DirUpload from '../forms/dirUpload.component.jsx';
+import DirTree   from '../forms/dirTree.component.jsx';
+import validate  from '../../utils/validate';
 import DirValidationMessages from '../forms/dirValidationMessages.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
@@ -13,6 +14,8 @@ let Upload = React.createClass({
 	getInitialState () {
 		return {
 			tree: [],
+			list: {},
+			errors: [],
 			dirName: '',
 			fakeProgress: 0,
 			alert: false
@@ -26,6 +29,8 @@ let Upload = React.createClass({
 	render () {
 		let self = this;
 		let tree = this.state.tree;
+		let list = this.state.list;
+		let errors = this.state.errors;
 		let dirName = this.state.dirName;
 		let fakeProgress = this.state.fakeProgress;
 		let showAlert = this.state.alert;
@@ -43,9 +48,7 @@ let Upload = React.createClass({
 					   		{dirName}
 				   		</span> 
 					   	<div className=" validate-btn pull-right">
-					   		<button>
-					   			Validate 
-					   		</button>
+							<button onClick={self._validate}>Validate</button>
 					   		<span>
 					   			Validating <i className="fa fa-circle-o-notch fa-spin" />
 					   		</span>
@@ -59,7 +62,7 @@ let Upload = React.createClass({
 				  	</ Accordion> 
 				</div>
 				<div className="col-xs-6"> 
-					<DirValidationMessages />
+					<DirValidationMessages errors={errors} />
 				</div>
 			</div>
 		);
@@ -80,11 +83,12 @@ let Upload = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_onChange (directory) {
+	_onChange (files) {
 		let self = this;
 		this.setState({
-			tree: directory,
-			dirName: directory[0].name,
+			tree: files.tree,
+			list: files.list,
+			dirName: files.tree[0].name,
 			fakeProgress: 0,
 			alert: true
 		});
@@ -100,6 +104,13 @@ let Upload = React.createClass({
 		this.setState({
 	    	fakeProgress: self.state.fakeProgress + 1,
 		});
+	},
+
+	_validate: function () {
+		let self = this;
+        validate.BIDS(this.state.list, function (errors) {
+            self.setState({errors: errors});
+        });
 	}
 
 });

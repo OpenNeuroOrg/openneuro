@@ -37,9 +37,14 @@ let UserStore = Reflux.createStore({
 		this.trigger({token: this._token, user: this._user});
 	},
 
+	/**
+	 * Clear State
+	 *
+	 */
 	clearState: function () {
 		this._token = null;
 		this._user = null;
+		delete window.localStorage.hello;
 		this.updateState();
 	},
 	
