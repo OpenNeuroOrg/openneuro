@@ -3,7 +3,6 @@
 import React     from 'react'
 import DirUpload from '../forms/dirUpload.component.jsx';
 import DirTree   from '../forms/dirTree.component.jsx';
-import Validator from '../forms/validator.component.jsx';
 import validate  from '../../utils/validate';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 

@@ -22,7 +22,10 @@ function BIDS (fileList, callback) {
 
         // validate tsv
         if (file.name && file.name.indexOf('.tsv') > -1) {
-            return cb();
+            validate.TSV(file, function () {
+                cb();
+            });
+            return;
         }
 
         // validate json
@@ -57,6 +60,12 @@ function JSON (file, callback) {
 
 function TSV (file, callback) {
     fileUtils.read(file, function (contents) {
-        console.log(contents);
+        let rows = contents.split('\n');
+        // console.log(rows[0]);
+        // console.log(rows.length);
+        // async.each(rows, function (row) {
+        //     console.log(row.split('\t').length);
+        // })
+        callback();
     });
 }
