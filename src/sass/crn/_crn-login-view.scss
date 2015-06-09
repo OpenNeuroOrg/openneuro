@@ -1,8 +1,8 @@
 //sign in block
 
 .signInBlock{
- border:1px solid #eee;
- border-radius:18px;
+ border:1px solid #ccc;
+ border-radius:2px;
    h2{
       margin: 10px 0px 15px -3px;
       text-transform: uppercase;
@@ -10,16 +10,16 @@
       font-size: 18px;
    }
    .footer{
-    border-top:1px solid #eee;
+    border-top:1px solid #ccc;
     margin: 10px -15px 0;
       .btn-admin{
         padding: 10px;
         background: none;
         color:#aaa;
-        border:1px solid #eee;
-        border-left:none;
+        border-left:1px solid #ccc;
         &:first-child{
-          border-radius: 0 0 0 18px;
+          border-radius: 0 0 0 2px;
+          border-left:0;
         }
       }
     }

@@ -1,8 +1,21 @@
 
 // Scaffolding ================================================================
-
+html,body{
+  min-height: 100%;
+}
 body {
-  background: $white;
+   background-image:
+    radial-gradient(
+      circle at 50% 5px,
+      #fefefe,
+      #b9b9b9
+    );
+
+    // repeating-radial-gradient(
+    //   circle at 0 0, 
+    //   #fff,
+    //   #f4f4f4 50px
+    // );
   padding-top: 75px;
   font-family: $font-family-cabin;
 }
@@ -30,7 +43,9 @@ h1,h2,h3,h4,h5,h6{
 }
 
 //navbar // ================================================================
-
+.navbar-default{
+  background: rgba($white, 0.9);
+}
 .navbar-brand {
   height: 75px;
 }

@@ -5,7 +5,9 @@
 input.dirUpload-btn{
   color: transparent;
   width: 100%;
-  margin: 20px auto 0;
+  margin: 0 0 50px;
+  padding: 0;
+  height: 44px;
 
 
   &::-webkit-file-upload-button {
@@ -27,7 +29,7 @@ input.dirUpload-btn{
     color:$primary;
     text-align: center;
     padding:10px 15px;
-    margin:0 0 15px;
+    margin:0;
     width: auto;
     border:1px solid $primary;
     text-transform: uppercase;
@@ -53,6 +55,7 @@ input.dirUpload-btn{
   padding: 15px;
   display: block;
   border: 1px solid #eee;
+  background: rgba($white, 0.8);
   h3{
     margin-top: 0;
     color: $stanfordRed;
@@ -84,18 +87,21 @@ input.dirUpload-btn{
     }
   }
   .fileStructure{
-    margin-bottom: 0;
+    margin: 0 -15px;
+    border: none;
     .panel-default{
+        background:none;
         border: none;
         box-shadow: none;
         padding: 0;
+        border-radius:0;
       .panel-heading{
+          border:none;
           background-color: rgba(0, 0, 0, 0);
           border-color: rgba(0, 0, 0, 0);
           box-shadow: none;
           padding: 10px 15px 0;
-          margin: 20px -15px 0;
-          border-top: 1px solid #eee;
+          margin: 20px 0 0;
           
           .panel-title{
              font-size: 10px;
@@ -119,6 +125,7 @@ input.dirUpload-btn{
 
 //Progress bar
 .progress{
+  background: #dedede;
   border-radius:0;
   height: 12px;
   margin:0;
