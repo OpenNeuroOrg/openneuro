@@ -8,7 +8,8 @@ import fileUtils from './files';
 
 let validate = {
     BIDS,
-    JSON
+    JSON,
+    TSV
 };
 
 export default validate;
@@ -21,7 +22,6 @@ function BIDS (fileList, callback) {
 
         // validate tsv
         if (file.name && file.name.indexOf('.tsv') > -1) {
-            //console.log(file.name);
             return cb();
         }
 
@@ -52,5 +52,11 @@ function JSON (file, callback) {
         } else {
             callback(null);
         }
+    });
+}
+
+function TSV (file, callback) {
+    fileUtils.read(file, function (contents) {
+        console.log(contents);
     });
 }
