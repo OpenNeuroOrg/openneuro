@@ -4,6 +4,7 @@ import React     from 'react'
 import DirUpload from '../forms/dirUpload.component.jsx';
 import DirTree   from '../forms/dirTree.component.jsx';
 import validate  from '../../utils/validate';
+import DirValidationMessages from '../forms/dirValidationMessages.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
 let Upload = React.createClass({
@@ -37,26 +38,31 @@ let Upload = React.createClass({
 			</Alert>
 		);
 		let dataView = (
-			<div className="dirDisplay">
-			   	<h3 className="clearfix">
-			   		<span className="dirName">
-				   		<i className="folderIcon fa fa-folder-open" /> 
-				   		{dirName}
-			   		</span> 
-				   	<div className=" validate-btn pull-right">
-						<button onClick={self._validate}>Validate</button>
-				   		<span>
-				   			Validating <i className="fa fa-circle-o-notch fa-spin" />
-				   		</span>
-				   	</div>
-			   	</h3>
-			   	<ProgressBar now={fakeProgress} />
-			   	<Accordion className="fileStructure">
-    				<Panel header={<i className="fa fa-chevron-down"> See File Structure</i> } eventKey='1'>
-				  		<DirTree tree={tree}/>
-				  	</Panel>
-			  	</ Accordion> 
-			 </div>
+			<div className="row">
+				<div className="dirDisplay col-xs-6">
+				   	<h3 className="clearfix">
+				   		<span className="dirName">
+					   		<i className="folderIcon fa fa-folder-open" /> 
+					   		{dirName}
+				   		</span> 
+					   	<div className=" validate-btn pull-right">
+							<button onClick={self._validate}>Validate</button>
+					   		<span>
+					   			Validating <i className="fa fa-circle-o-notch fa-spin" />
+					   		</span>
+					   	</div>
+				   	</h3>
+				   	<ProgressBar now={fakeProgress} />
+				   	<Accordion className="fileStructure">
+	    				<Panel header={<i className="fa fa-chevron-down"> See File Structure</i> } eventKey='1'>
+					  		<DirTree tree={tree}/>
+					  	</Panel>
+				  	</ Accordion> 
+				</div>
+				<div className="col-xs-6"> 
+					<DirValidationMessages />
+				</div>
+			</div>
 		);
 		// Alert bsStyle: danger, warning, success, info
 		return (
