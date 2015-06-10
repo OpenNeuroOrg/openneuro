@@ -13,6 +13,7 @@
 //component specific
 @import "crn/_crn-login-view";
 @import "crn/_crn-upload-view";
+@import "crn/_crn-upload-validation";
 //==========================================================================
 
 //navbar // ================================================================
@@ -91,11 +92,102 @@
   }
 }
 
+
+//validaton upload
+.panel-group {
+
+
+.validation-error.panel{
+    border-radius:2px;
+    border: 1px solid #EEE;
+    background:transparent;
+    .panel-heading{
+      background:rgba($white,0.5);
+      .file-header{
+        a{
+          display: block;
+          margin: -10px -15px;
+          padding: 10px;
+          background: darken($brand-danger, 10%);
+          font-size: 20px;
+          font-weight: 700;
+          &:hover,
+          &:focus{
+            text-decoration: none;
+            background: darken($brand-danger, 10%);
+          }
+          strong{
+          color: $white;
+          font-size: 20px;
+          font-weight: 700;
+          font-family: 'Source Sans Pro', sans-serif;
+          
+
+          }
+          span.label{
+              border-radius: 0;
+              padding: 9px 5px;
+              font-size: 12px;
+          }
+        &.collapsed{
+          background: $brand-danger;
+          &:hover,
+          &:focus{
+            text-decoration: none;
+            background: darken($brand-danger, 10%);
+          }
+        }
+      }
+      }
+    }
+   .panel-body{
+    padding: 0 15px;
+    .e_o0,
+    .e_o1{
+      background:rgba($white, 0.7);
+      .error-meta{
+        display: block;
+        padding: 5px 10px;
+        margin: 0 -10px;
+        color: $black;
+         font-size: 16px;
+        p{
+            font-family: 'Andale Mono', AndaleMono, monospace;
+            font-size: 12px;
+            margin: 0;
+        }
+        &:nth-child(even){
+          background:rgba($black, 0.1);
+        }
+        label{
+          color: lighten($sky, 5%);
+          font-weight: 700;
+          font-family: 'Source Sans Pro', sans-serif;
+          display: block;
+        }
+      }
+      .col-xs-12{
+        padding:0 10px;
+       > h4{
+          border-bottom: 1px solid $brand-danger;
+//          background-color: rgba($white, 0.3);
+          background: lighten($brand-danger, 20%);
+          margin: 0px -10px 0;
+          padding: 10px;
+          color:$black;
+       }
+      }
+    }
+      
+    }
+  }
+
+
+
+}
 .fadeInDown{
   @include fadeInDown();
 }
 .fadeInUp{
   @include fadeInUp();
 }
-
-
