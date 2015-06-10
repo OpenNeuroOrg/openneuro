@@ -15,49 +15,30 @@ let DirValidationMessages = React.createClass({
 // life cycle events ------------------------------------------------------
 
 	render: function () {
-		let allErrorsArray = this.props.errors;
-		let errorBadge = '';
-		let allErrors = allErrorsArray.map(function (item, index) {	
-			let header = <span className="file-header"><strong>File:</strong> {item.file.name}<span className="label label-danger pull-right">{item.errors.length -1} {item.errors.length >0 ? "ERRORS" : "ERROR"}</span></span>
-			let error = item.errors.map(function (error, index) {
-				if(error){
-					return(
-						<div key={index} className={("e_o"+index % 2) + " row"}>
-							<div className="col-xs-12">
-								<h4>Error: {index + 1}</h4>
-								<span className="error-meta">
-									<label>Path: </label>
-									<p>{item.file.webkitRelativePath}</p>
-								</span>
-								<span className="error-meta">
-									<label>Line: {error.line} Character: {error.character}</label>
-									<p>{error.evidence}</p>
-								</span>
-								<span className="error-meta">
-									<label>Reason: </label>
-									<p>{error.reason}</p>
-								</span>
-								<span className="error-meta">
-								<p>{(item.file.size / 1000) + " KB"} | {item.file.type}</p>
-								</span>
-							</div>
-						</div>
-					);
-				}else{
-					return null;
-				}
+		let errors = this.props.errors;
+		let issues = errors.map(function (issue, index) {
+			// issue header
+			let header = (
+				<span className="file-header">
+					<strong>File:</strong> {issue.file.name}
+					<span className="label label-danger pull-right">
+						{issue.errors.length -1} {issue.errors.length > 0 ? "ERRORS" : "ERROR"}
+					</span>
+				</span>
+			);
+			// issue sub-errors
+			let subErrors = issue.errors.map(function (error, index2) {
+				return error ? <Error file={issue.file} error={error} index={index2} key={index2} /> : null;
 			});
+			// issue panel
 			return (
-				<Panel key={index}  header={header} className="validation-error" eventKey={index}>
-					{error}
-				</Panel>	
+				<Panel key={index} header={header} className="validation-error" eventKey={index}>
+					{subErrors}
+				</Panel>
 			);
 		});
-		return (
-			<Accordion>
-			  	{allErrors}
-			</Accordion>
-    	);
+
+		return <Accordion>{issues}</Accordion>
 	},
 
 // custom methods ---------------------------------------------------------
