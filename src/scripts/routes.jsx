@@ -1,0 +1,27 @@
+// dependencies ----------------------------------------------------------
+
+import React from 'react';
+import {DefaultRoute, Route} from 'react-router';
+import requireAuth from './utils/requireAuth';
+
+// views
+import App from './components/app.jsx';
+import Signin from './components/views/signin.component.jsx';
+import Upload from './components/views/upload.component.jsx';
+import Home   from './components/views/home.component.jsx';
+
+// routes ----------------------------------------------------------------
+
+Upload = requireAuth(Upload);
+
+let routes = (
+	<Route name="app" path="/" handler={App}>
+		<Route name="signIn" handler={Signin}/>
+		<Route name="upload" handler={Upload}/>
+		<Route name="home" handler={Home}/>
+		<DefaultRoute handler={Signin}/>
+	</Route>
+);
+
+export default routes;
+
