@@ -23,7 +23,7 @@
 
     var p = {
         html:           './src/index.html',
-        jsx:            './src/scripts/app.jsx',
+        jsx:            './src/scripts/client.jsx',
         scss:           './src/sass/main.scss',
         libs:           './src/scripts/libs/*',
         assets:         './src/assets/*',

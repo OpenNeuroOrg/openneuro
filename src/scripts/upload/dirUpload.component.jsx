@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react';
-import fileUtils from '../../utils/files';
+import fileUtils from '../utils/files';
 
 let Upload = React.createClass({
 

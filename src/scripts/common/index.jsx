@@ -1,11 +1,7 @@
 // dependencies ----------------------------------------------------------
 
-import React from 'react'
-import Router from 'react-router'
-let { DefaultRoute, RouteLink, Route, RouteHandler } = Router;
-
-
-// partials
+import React from 'react';
+import {RouteHandler} from 'react-router';
 import Navbar from './partials/navbar.component.jsx';
 
 // parent view -----------------------------------------------------------
