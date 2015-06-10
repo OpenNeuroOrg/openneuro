@@ -1,7 +1,7 @@
 // dependencies ----------------------------------------------------
 
 import React from 'react';
-import userStore from '../stores/userStore';
+import userStore from '../user/user.store.js';
 
 // require auth ----------------------------------------------------
 

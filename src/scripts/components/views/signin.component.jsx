@@ -1,8 +1,8 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react';
-import Actions from '../../actions/Actions';
-import UserStore from '../../stores/userStore';
+import Actions from '../../user/user.actions.js';
+import UserStore from '../../user/user.store.js';
 import {Navigation} from 'react-router';
 
 var Signin = React.createClass({
