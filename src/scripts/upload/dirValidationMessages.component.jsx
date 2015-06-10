@@ -1,78 +1,20 @@
-// dependencies -------------------------------------------------------
+// dependencies -----------------------------------------------------------
+
 import React from 'react'
 import { Accordion, Panel } from 'react-bootstrap';
+import Error from './error.component.jsx';
+
+// component setup --------------------------------------------------------
 
 let DirValidationMessages = React.createClass({
-	// life cycle events --------------------------------------------------
+
+	propType: {
+		errors: React.PropTypes.array
+	},
+
+// life cycle events ------------------------------------------------------
+
 	render: function () {
-		//// //[
-		// // 	{
-		// // 		errors: [
-		// // 			{
-		// // 				a: '}',
-		// // 				b: '',
-		// // 				c: undefined,
-		// // 				character: 60,
-		// // 				code: 'W116',
-		// // 				d: undefined,
-		// // 				evidence: '{"repetition_time": 5.0, "echo_time": 0.005, "flip_angle": 90',
-		// // 				id: '(error)',
-		// // 				line: 1,
-		// // 				raw: 'Expected "{a}" and instead saw "{b}".',
-		// // 				reason: 'Expected "}" and instead saw "".',
-		// // 				scope: '(main)',
-		// // 			}
-		// // 		],
-		// // 		file: {
-		// // 			lastModified: 1433788237000,
-		// // 			lastModifiedDate: 'Mon Jun 08 2015 11:30:37 GMT-0700 (PDT)',
-		// // 			name: 'task001_bold.json',
-		// // 			size: 61,
-		// // 			type: 'application/json',
-		// // 			webkitRelativePath: 'ds114_invalid/task001_bold.json',
-		// // 		}
-		// // 	},
-		// // 	{
-		// // 		errors: [
-		// // 			{
-		// // 				a: '}',
-		// // 				b: '',
-		// // 				c: undefined,
-		// // 				character: 60,
-		// // 				code: 'W116',
-		// // 				d: undefined,
-		// // 				evidence: '{"repetition_time": 5.0, "echo_time": 0.005, "flip_angle": 90',
-		// // 				id: '(error)',
-		// // 				line: 1,
-		// // 				raw: 'Expected "{a}" and instead saw "{b}".',
-		// // 				reason: 'Expected "}" and instead saw "".',
-		// // 				scope: '(main)',
-		// // 			},
-		// // 			{
-		// // 				a: '}',
-		// // 				b: '',
-		// // 				c: undefined,
-		// // 				character: 60,
-		// // 				code: 'W116',
-		// // 				d: undefined,
-		// // 				evidence: '{"repetition_time": 5.0, "echo_time": 0.005, "flip_angle": 90',
-		// // 				id: '(error)',
-		// // 				line: 1,
-		// // 				raw: 'Expected "{a}" and instead saw "{b}".',
-		// // 				reason: 'Expected "}" and instead saw "".',
-		// // 				scope: '(main)',
-		// // 			}
-		// // 		],
-		// // 		file: {
-		// // 			lastModified: 1433788237000,
-		// // 			lastModifiedDate: 'Mon Jun 08 2015 11:30:37 GMT-0700 (PDT)',
-		// // 			name: 'task001_bold.json',
-		// // 			size: 61,
-		// // 			type: 'application/json',
-		// // 			webkitRelativePath: 'ds114_invalid/task001_bold.json',
-		// // 		}
-		// // 	}		
-		// // ];
 		let allErrorsArray = this.props.errors;
 		let errorBadge = '';
 		let allErrors = allErrorsArray.map(function (item, index) {	
@@ -117,7 +59,9 @@ let DirValidationMessages = React.createClass({
 			</Accordion>
     	);
 	},
-	// custom methods -----------------------------------------------------
+
+// custom methods ---------------------------------------------------------
+
 });
 
 export default DirValidationMessages;
