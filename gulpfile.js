@@ -22,6 +22,7 @@
 // project config ---------------------------------------------------------
 
     var p = {
+        html:           './src/index.html',
         jsx:            './src/scripts/app.jsx',
         scss:           './src/sass/main.scss',
         libs:           './src/scripts/libs/*',
@@ -68,7 +69,7 @@
 
     // copy
     gulp.task('copy', function () {
-        gulp.src('./index.html').pipe(gulp.dest(p.dist));
+        gulp.src(p.html).pipe(gulp.dest(p.dist));
         gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
         gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
     });

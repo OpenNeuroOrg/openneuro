@@ -14,16 +14,18 @@ import Navbar from './components/partials/navbar.component.jsx';
 
 // parent view -----------------------------------------------------------
 
-var App = React.createClass({
-	render: function () {
-		return (
-			<div className="page">
-				<Navbar />
-				<RouteHandler />
-			</div>
-		)				
-	}
-});
+import App from './components/app.jsx';
+
+// var App = React.createClass({
+// 	render: function () {
+// 		return (
+// 			<div className="page">
+// 				<Navbar />
+// 				<RouteHandler />
+// 			</div>
+// 		)				
+// 	}
+// });
 
 // routes ----------------------------------------------------------------
 
