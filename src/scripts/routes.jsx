@@ -7,7 +7,7 @@ import requireAuth from './utils/requireAuth';
 // views
 import App    from './components/app.jsx';
 import Signin from './user/signin.component.jsx';
-import Upload from './components/views/upload.component.jsx';
+import Upload from './upload/upload.component.jsx';
 import Home   from './components/views/home.component.jsx';
 
 // routes ----------------------------------------------------------------
