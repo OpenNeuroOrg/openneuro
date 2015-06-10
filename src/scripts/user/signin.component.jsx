@@ -1,8 +1,8 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react';
-import Actions from '../../user/user.actions.js';
-import UserStore from '../../user/user.store.js';
+import React        from 'react';
+import Actions      from './user.actions.js';
+import UserStore    from './user.store.js';
 import {Navigation} from 'react-router';
 
 var Signin = React.createClass({
@@ -27,7 +27,6 @@ var Signin = React.createClass({
 				</div>
 			</div>
     	);
-		
 	},
 
 // custom methods -----------------------------------------------------
