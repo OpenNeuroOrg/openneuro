@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/Granze/react-starterify",
   "dependencies": {
+    "BIDS-Validator": "git://github.com/Squishymedia/BIDS-Validator.git",
     "async": "^1.2.1",
     "jshint": "^2.8.0",
     "react": "^0.13.0",
