@@ -13,13 +13,17 @@
     border-top:1px solid #ccc;
     margin: 10px -15px 0;
       .btn-admin{
+        border:none;
         padding: 10px;
         background: none;
         color:#aaa;
         border-left:1px solid #ccc;
         &:first-child{
           border-radius: 0 0 0 2px;
-          border-left:0;
+          border-left:none;
+        }
+        &:last-child{
+          border-right:1px solid #ccc;
         }
       }
     }
