@@ -3,11 +3,11 @@
 import React     from 'react'
 import DirUpload from './dirUpload.component.jsx';
 import DirTree   from './dirTree.component.jsx';
-import validate  from 'BIDS-Validator';
+import validate  from '../../../../BIDS-Validator';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
-let Upload = React.createClass({
+class Upload extends React.Component {
 
 // life cycle events --------------------------------------------------
 
@@ -20,11 +20,11 @@ let Upload = React.createClass({
 			fakeProgress: 0,
 			alert: false
 		};
-	},
+	}
 
 	componentDidMount () {
 		let self = this;
-	},
+	}
 
 	render () {
 		let self = this;
@@ -79,7 +79,7 @@ let Upload = React.createClass({
 			</div>
     	);
 	
-	},
+	}
 
 // custom methods -----------------------------------------------------
 
@@ -96,7 +96,7 @@ let Upload = React.createClass({
 		setTimeout(function () {
 			self.setState({alert: false});
 		}, 4000);
-	},
+	}
 
 	_fakeProgress () {
 		let self= this;
@@ -104,16 +104,16 @@ let Upload = React.createClass({
 		this.setState({
 	    	fakeProgress: self.state.fakeProgress + 1,
 		});
-	},
+	}
 
-	_validate: function () {
+	_validate () {
 		let self = this;
         validate.BIDS(this.state.list, function (errors) {
             self.setState({errors: errors});
         });
 	}
 
-});
+}
 
 
 export default Upload;
