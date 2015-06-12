@@ -7,7 +7,7 @@ import validate  from '../../../../BIDS-Validator';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
-class Upload extends React.Component {
+let Upload = React.createClass({
 
 // life cycle events --------------------------------------------------
 
@@ -20,11 +20,11 @@ class Upload extends React.Component {
 			fakeProgress: 0,
 			alert: false
 		};
-	}
+	},
 
 	componentDidMount () {
 		let self = this;
-	}
+	},
 
 	render () {
 		let self = this;
@@ -79,7 +79,7 @@ class Upload extends React.Component {
 			</div>
     	);
 	
-	}
+	},
 
 // custom methods -----------------------------------------------------
 
@@ -96,7 +96,7 @@ class Upload extends React.Component {
 		setTimeout(function () {
 			self.setState({alert: false});
 		}, 4000);
-	}
+	},
 
 	_fakeProgress () {
 		let self= this;
@@ -104,16 +104,16 @@ class Upload extends React.Component {
 		this.setState({
 	    	fakeProgress: self.state.fakeProgress + 1,
 		});
-	}
+	},
 
-	_validate () {
+	_validate: function () {
 		let self = this;
         validate.BIDS(this.state.list, function (errors) {
             self.setState({errors: errors});
         });
 	}
 
-}
+});
 
 
 export default Upload;
