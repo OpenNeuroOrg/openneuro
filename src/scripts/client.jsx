@@ -5,9 +5,10 @@ import Router          from 'react-router';
 import routes          from './routes.jsx';
 import RouterContainer from './utils/router-container';
 
-// intialize routes -----------------------------------------------------
+// intialize router -----------------------------------------------------
 
 var router = Router.create({routes});
+
 RouterContainer.set(router);
 
 router.run(function (Handler) {

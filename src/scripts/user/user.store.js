@@ -4,7 +4,7 @@ import Reflux  from 'reflux';
 import Actions from './user.actions.js';
 import request from 'superagent';
 import config  from '../config';
-import RouterContainer from '../utils/router-container';
+import router  from '../utils/router-container';
 
 let UserStore = Reflux.createStore({
 
@@ -86,7 +86,7 @@ let UserStore = Reflux.createStore({
 			hello(res.network).api('/me').then(function (profile) {
 				self._user = profile;
 				self.updateState();
-				RouterContainer.get().transitionTo('upload');
+				router.transitionTo('upload');
 			});
 			// console.log('signin success');
 		}, function () {
@@ -106,7 +106,7 @@ let UserStore = Reflux.createStore({
 			self._token = null;
 			self._user = {null};
 			self.updateState();
-			RouterContainer.get().transitionTo('home');
+			router.transitionTo('home');
 		}, function (e) {
 			// signout failure
 		});
