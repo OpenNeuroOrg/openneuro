@@ -1,7 +1,7 @@
 // dependencies ----------------------------------------------------------------------
 
 import Reflux  from 'reflux';
-import Actions from '../actions/Actions';
+import Actions from './user.actions.js';
 import request from 'superagent';
 import config  from '../config';
 

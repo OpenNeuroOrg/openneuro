@@ -4,8 +4,8 @@ import React from 'react';
 import Reflux from 'reflux';
 import { Link, Navigation } from 'react-router';
 import { Navbar, CollapsibleNav, Nav, NavItem, DropdownButton, MenuItem } from 'react-bootstrap';
-import Actions from '../../actions/Actions';
-import userStore from '../../stores/userStore';
+import Actions   from '../../user/user.actions.js';
+import userStore from '../../user/user.store.js';
 
 // component setup ---------------------------------------------------------------
 

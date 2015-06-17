@@ -22,8 +22,10 @@
 // project config ---------------------------------------------------------
 
     var p = {
-        jsx:            './src/scripts/app.jsx',
-        scss:           './src/sass/main.scss',
+        html:           './src/index.html',
+        jsx:            './src/scripts/client.jsx',
+        scss:           './src/sass/*/*.scss',
+        scssmain:       './src/sass/main.scss',
         libs:           './src/scripts/libs/*',
         assets:         './src/assets/*',
         fonts:          './src/sass/fonts/*',
@@ -68,7 +70,7 @@
 
     // copy
     gulp.task('copy', function () {
-        gulp.src('./index.html').pipe(gulp.dest(p.dist));
+        gulp.src(p.html).pipe(gulp.dest(p.dist));
         gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
         gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
     });
@@ -103,7 +105,7 @@
 
     // compile & minify scss
     gulp.task('styles', function() {
-        return gulp.src(p.scss)
+        return gulp.src(p.scssmain)
             .pipe(changed(p.distCss))
             .pipe(sass({errLogToConsole: true}))
             .on('error', notify.onError())
@@ -115,5 +117,6 @@
 
     // watch styles
     gulp.task('watchTask', function() {
+        gulp.watch(p.scssmain, ['styles']);
         gulp.watch(p.scss, ['styles']);
     });

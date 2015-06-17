@@ -1,10 +1,10 @@
 // dependencies -------------------------------------------------------
 
 import React     from 'react'
-import DirUpload from '../forms/dirUpload.component.jsx';
-import DirTree   from '../forms/dirTree.component.jsx';
-import validate  from '../../utils/validate';
-import DirValidationMessages from '../forms/dirValidationMessages.component.jsx';
+import DirUpload from './dirUpload.component.jsx';
+import DirTree   from './dirTree.component.jsx';
+import validate  from 'BIDS-Validator';
+import DirValidationMessages from './dirValidationMessages.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
 let Upload = React.createClass({
