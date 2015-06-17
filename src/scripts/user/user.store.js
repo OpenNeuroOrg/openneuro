@@ -4,6 +4,7 @@ import Reflux  from 'reflux';
 import Actions from './user.actions.js';
 import request from 'superagent';
 import config  from '../config';
+import RouterContainer from '../utils/router-container';
 
 let UserStore = Reflux.createStore({
 
@@ -78,14 +79,14 @@ let UserStore = Reflux.createStore({
 	 *
 	 * Initiates the google OAuth2 sign in flow.
 	 */
-	signIn: function (transitionTo) {
+	signIn: function () {
 		let self = this;
 		hello('google').login({scope: 'email,openid'}, function (res) {
 			self._token = res.authResponse.access_token;
 			hello(res.network).api('/me').then(function (profile) {
 				self._user = profile;
 				self.updateState();
-				transitionTo('upload');
+				RouterContainer.get().transitionTo('upload');
 			});
 			// console.log('signin success');
 		}, function () {
@@ -99,13 +100,13 @@ let UserStore = Reflux.createStore({
 	 * Signs the user out by destroying the current
 	 * OAuth2 session.
 	 */
-	signOut: function (transitionTo) {
+	signOut: function () {
 		let self = this;
 		hello('google').logout().then(function () {
 			self._token = null;
 			self._user = {null};
 			self.updateState();
-			transitionTo('home');
+			RouterContainer.get().transitionTo('home');
 		}, function (e) {
 			// signout failure
 		});
