@@ -7,7 +7,7 @@ import RouterContainer from './utils/router-container';
 
 // intialize router -----------------------------------------------------
 
-var router = Router.create({routes});
+let router = Router.create({routes});
 
 RouterContainer.set(router);
 
