@@ -5,19 +5,16 @@ import {NotFoundRoute, DefaultRoute, Route} from 'react-router';
 import requireAuth from './utils/requireAuth';
 
 // views
-import Index    from './common/index.jsx';
+import Index  from './common/index.jsx';
 import Signin from './user/signin.component.jsx';
 import Upload from './upload/upload.component.jsx';
 import Home   from './common/views/home.component.jsx';
 
-var Redirect = React.createClass({
-  statics: {
-    willTransitionTo: function (transition) {
-      transition.redirect('signIn');
-    }
-  },
-  render: function () {}
-});
+class Redirect extends React.Component {
+	static willTransitionTo(transition) {
+		transition.redirect('home');
+	}
+}
 
 // routes ----------------------------------------------------------------
 
