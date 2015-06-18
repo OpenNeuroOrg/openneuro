@@ -9,7 +9,7 @@ var requireAuth = (Component) => {
 	return class Authenticated extends React.Component {
 		static willTransitionTo(transition) {
 			if (!userStore._token) { // if not logged in
-				transition.redirect('/signin', {});
+				transition.redirect('signIn', {});
 			}
 		}
 		render () {
