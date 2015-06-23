@@ -3,7 +3,7 @@
 import React     from 'react'
 import DirUpload from './dirUpload.component.jsx';
 import DirTree   from './dirTree.component.jsx';
-import validate  from 'BIDS-Validator';
+import validate  from '/Users/gregorynoack/Sites/SQM/CRN/bidslint';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
