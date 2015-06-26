@@ -4,6 +4,7 @@ import React     from 'react'
 import DirUpload from './dirUpload.component.jsx';
 import DirTree   from './dirTree.component.jsx';
 import validate  from 'bids-validator';
+import scitran   from '../utils/scitran';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
@@ -49,6 +50,7 @@ let Upload = React.createClass({
 				   		</span> 
 					   	<div className=" validate-btn pull-right">
 							<button onClick={self._validate}>Validate</button>
+							<button onClick={self._upload}>Upload</button>
 					   		<span>
 					   			Validating <i className="fa fa-circle-o-notch fa-spin" />
 					   		</span>
@@ -111,6 +113,10 @@ let Upload = React.createClass({
         validate.BIDS(this.state.list, function (errors) {
             self.setState({errors: errors});
         });
+	},
+
+	_upload () {
+		scitran.upload(this.state.tree);
 	}
 
 });
