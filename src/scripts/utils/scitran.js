@@ -1,3 +1,6 @@
+import request   from 'superagent';
+import userStore from '../user/user.store.js';
+
 // public API ---------------------------------------------------------------------
 
 let scitran = {
@@ -44,4 +47,11 @@ function upload (filelist) {
     }
 }
 
-function createProject (groupName, projectName) {}
+function createProject (groupName, projectName) {
+    var url = 'https://scitran.sqm.io/' + 
+    request.get('https://scitran.sqm.io/api/users/self')
+            .set('Authorization', this._token)
+            .end(function (err, res) {
+                console.log(res.body);
+            });
+}
