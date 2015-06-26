@@ -22,7 +22,7 @@ let DirValidationMessages = React.createClass({
 				<span className="file-header">
 					<strong>File:</strong> {issue.file.name}
 					<span className="label label-danger pull-right">
-						{issue.errors.length -1} {issue.errors.length > 0 ? "ERRORS" : "ERROR"}
+						{issue.errors.length} {issue.errors.length > 1 ? "ERRORS" : "ERROR"}
 					</span>
 				</span>
 			);
