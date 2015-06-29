@@ -13,17 +13,6 @@ let UserStore = Reflux.createStore({
 
 	listenables: Actions,
 
-	/**
-	 * Init
-	 *
-	 * Initializes hello.js with the google client ID when
-	 * the store initializes.
-	 */
-	init: function () {
-		hello.init({google: config.auth.google.clientID});
-		this.checkUser();
-	},
-
 	getInitialState: function () {
 		return {token: this._token, user: this._user};
 	},
@@ -37,6 +26,17 @@ let UserStore = Reflux.createStore({
 
 	updateState: function () {
 		this.trigger({token: this._token, user: this._user});
+	},
+
+	/**
+	 * Initialize OAuth
+	 *
+	 * Initializes the OAuth libarary (hello.js) and checks
+	 * if a user is currently logged in.
+	 */
+	initOAuth: function () {
+		hello.init({google: config.auth.google.clientID});
+		this.checkUser();
 	},
 
 	/**
