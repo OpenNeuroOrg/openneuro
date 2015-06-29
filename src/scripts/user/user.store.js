@@ -2,8 +2,6 @@
 
 import Reflux  from 'reflux';
 import Actions from './user.actions.js';
-// import request from 'superagent';
-import request from '../utils/request';
 import config  from '../config';
 import router  from '../utils/router-container';
 
@@ -122,25 +120,6 @@ let UserStore = Reflux.createStore({
 		console.log(this._token);
 	},
 
-	/**
-	 * Test Scitran
-	 *
-	 * Generates a get request to the users/self endpoint of
-	 * the scitran API in order to test if authenticated
-	 * requests are working.
-	 */
-	testScitran: function () {
-		console.log('test scitran');
-		// request.get('https://scitran.sqm.io/api/users/self')
-		// 	.set('Authorization', this._token)
-		// 	.end(function (err, res) {
-		// 		console.log(res.body);
-		// 	});
-		request.get('users/self')
-			.end(function (err, res) {
-				console.log(res.body);
-			});
-	}
 });
 
 export default UserStore;

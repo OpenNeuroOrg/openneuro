@@ -1,15 +1,27 @@
-import request   from 'superagent';
+import request   from './request';
 import userStore from '../user/user.store.js';
 
 // public API ---------------------------------------------------------------------
 
 let scitran = {
+    verifyUser,
 	upload
 };
 
 export default scitran;
 
 // implementations ----------------------------------------------------------------
+
+/**
+ * Verify User
+ *
+ * Checks if the currently logged in users
+ * in in the scitran system and returns a
+ * user object.
+ */
+function verifyUser (callback) {
+    request.get('users/self', callback);
+}
 
 /**
  * Upload

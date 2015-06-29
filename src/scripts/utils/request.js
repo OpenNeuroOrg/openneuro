@@ -1,22 +1,39 @@
+/**
+ * Request
+ *
+ * A wrapper for the superagent request library.
+ * Provides a place for global request settings
+ * and response handling.
+ */
+
 import request   from 'superagent';
 import config    from '../config';
 import userStore from '../user/user.store.js';
 
-export default {
+var Request = {
 
-	get (path) {
-		console.log(userStore);
-		return ( 
-			request.get(config.scitranUrl + path)
-				.set('Authorization', userStore._token)
-		);
+	get (path, callback) {
+		let self = this;
+		request.get(config.scitranUrl + path)
+			.set('Authorization', userStore._token)
+			.end(function (err, res) {
+				self.handlResponse(err, res, callback);
+			});
 	},
 
-	post (path) {
-		return ( 
-			request.post(config.scitranUrl + path)
-				.set('Authorization', userStore._token)
-		);
+	post (path, callback) {
+		let self = this;
+		request.post(config.scitranUrl + path)
+			.set('Authorization', userStore._token)
+			.end(function (err, res) {
+				self.handlResponse(err, res, callback);
+			});
+	},
+
+	handlResponse (err, res, callback) {
+		callback(err, res);
 	}
 
-}
+};
+
+export default Request;

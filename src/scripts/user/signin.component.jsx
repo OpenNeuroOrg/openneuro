@@ -4,6 +4,7 @@ import React        from 'react';
 import Actions      from './user.actions.js';
 import UserStore    from './user.store.js';
 import {Navigation} from 'react-router';
+import scitran      from '../utils/scitran';
 
 var Signin = React.createClass({
 
@@ -40,7 +41,9 @@ var Signin = React.createClass({
 	},
 
 	_testScitran: function () {
-		Actions.testScitran();
+		scitran.verifyUser(function (err, res) {
+			console.log(res);
+		});
 	}
 
 });
