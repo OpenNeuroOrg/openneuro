@@ -21,10 +21,11 @@ var Request = {
 			});
 	},
 
-	post (path, callback) {
+	post (path, body, callback) {
 		let self = this;
 		request.post(config.scitranUrl + path)
 			.set('Authorization', userStore._token)
+			.send(body)
 			.end(function (err, res) {
 				self.handlResponse(err, res, callback);
 			});
