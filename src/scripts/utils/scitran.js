@@ -5,6 +5,11 @@ import userStore from '../user/user.store.js';
 
 let scitran = {
     verifyUser,
+    createProject,
+    createSubject,
+    createSession,
+    createModality,
+    createAcquisition,
 	upload
 };
 
@@ -24,46 +29,113 @@ function verifyUser (callback) {
 }
 
 /**
- * Upload
+ * Create Project
  *
+ * Takes a group name and a project name and
+ * generates a request to make a project in scitran.
  */
-function upload (filelist) {
-    console.log('create project: ' + filelist[0].name);
-    for (var i = 0; i < filelist[0].children.length; i++) {
-        var subject = filelist[0].children[i];
-        if (subject.children && subject.children.length > 0) {
-            console.log('create subject: ' + subject.name);
-            for (var j = 0; j < subject.children.length; j++) {
-                var session = subject.children[j];
-                if (session.children && session.children.length > 0) {
-                    console.log('create session: ' + session.name);
-                    for (var k = 0; k < session.children.length; k++) {
-                        var modality = session.children[k];
-                        if (modality.children && modality.children.length > 0) {
-                            console.log('create modality: ' + modality.name);
-                            for (var l = 0; l < modality.children.length; l++) {
-                                var aquisition = modality.children[l]
-                                console.log('upload aquisition: ' + aquisition.name);
-                            }
-                        } else {
-                            console.log('upload session file: ' + modality.name)
-                        }
-                    }
-                } else {
-                    console.log('upload subject file: ' + session.name);
-                }
-            }
-        } else {
-            console.log('upload top level file: ' + subject.name);
-        }
-    }
+function createProject (groupName, projectName, callback) {
+    console.log('create project: ' + projectName);
+    let body = {name: projectName};
+    request.post('groups/' + groupName + '/projects', body, callback);
 }
 
-function createProject (groupName, projectName) {
-    var url = 'https://scitran.sqm.io/' + 
-    request.get('https://scitran.sqm.io/api/users/self')
-            .set('Authorization', this._token)
-            .end(function (err, res) {
-                console.log(res.body);
-            });
+/**
+ * Create Subject
+ *
+ */
+function createSubject (projectId, subjectName, callback) {
+    console.log('create subject: ' + subjectName);
+    let body = {label: subjectName};
+    request.post('projects/' + projectId + '/sessions', body, callback);
+}
+
+/**
+ * Create Session
+ *
+ */
+function createSession (sessionName, callback) {
+    console.log('create session: ' + sessionName);
+    callback();
+}
+
+/**
+ * Create Modality
+ *
+ */
+function createModality (sessionId, modalityName, callback) {
+    console.log('create modality: ' + modalityName);
+    let body = {label: modalityName};
+    request.post('sessions/' + sessionId + '/acquisitions', body, callback);
+}
+
+/**
+ * Create Acquisition
+ *
+ */
+function createAcquisition (acquisitionName, callback) {
+    console.log('create acquisition: ' + acquisitionName);
+    callback();
+}
+
+/**
+ * Upload
+ *
+ * Takes an entire bids filelist and upload recurses
+ * through and uploads all the files.
+ *
+ * TODO
+ *    - Check if we should call filelist filetree for 
+ *    consistency
+ *    - Determine how to upload in between scitran levels
+ *    - Break anonymous functions out in to named functions
+ *    that call on another to do away with deep hard to
+ *    read nesting.
+ */
+function upload (filelist) {
+    let groupName = 'SquishyRoles';
+    scitran.createProject(groupName, filelist[0].name, function (err, res) {
+        let projectId = res.body._id;
+        
+        for (var i = 0; i < filelist[0].children.length; i++) {
+            var subject = filelist[0].children[i];
+            if (subject.children && subject.children.length > 0) {
+                
+                scitran.createSubject(projectId, subject.name, function (err, res) {
+                    let subjectId = res.body._id;
+
+                    for (var j = 0; j < subject.children.length; j++) {
+                        var session = subject.children[j];
+                        if (session.children && session.children.length > 0) {
+
+                            scitran.createSession(session.name, function () {
+                                for (var k = 0; k < session.children.length; k++) {
+                                    var modality = session.children[k];
+                                    if (modality.children && modality.children.length > 0) {
+
+                                        scitran.createModality(subjectId, modality.name, function () {
+                                            for (var l = 0; l < modality.children.length; l++) {
+                                                var acquisition = modality.children[l]
+                                                console.log('upload acquisition: ' + acquisition.name);
+                                            } 
+                                        });
+                                    } else {
+                                        console.log('upload session file: ' + modality.name)
+                                    }
+                                }
+                            });
+                                
+                        } else {
+                            console.log('upload subject file: ' + session.name);
+                        }
+                    }
+
+                });
+                    
+            } else {
+                console.log('upload top level file: ' + subject.name);
+            }
+        }
+
+    });
 }
