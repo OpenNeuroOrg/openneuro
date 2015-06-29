@@ -83,6 +83,10 @@ let Upload = React.createClass({
 	
 	},
 
+	componentWillUnmount () {
+		clearInterval(this.progressInterval);
+	},
+
 // custom methods -----------------------------------------------------
 
 	_onChange (files) {
@@ -94,7 +98,7 @@ let Upload = React.createClass({
 			fakeProgress: 0,
 			alert: true
 		});
-		setInterval(this._fakeProgress, 3000);
+		this.progressInterval = setInterval(this._fakeProgress, 3000);
 		setTimeout(function () {
 			self.setState({alert: false});
 		}, 4000);
