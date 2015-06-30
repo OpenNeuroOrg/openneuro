@@ -27,6 +27,7 @@
   "dependencies": {
     "async": "^1.2.1",
     "bids-validator": "^0.1.3",
+    "es6-react-mixins": "^0.1.6",
     "jshint": "^2.8.0",
     "react": "^0.13.0",
     "react-bootstrap": "^0.23.0",
