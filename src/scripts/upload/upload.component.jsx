@@ -6,7 +6,7 @@ import DirTree   from './dirTree.component.jsx';
 import validate  from 'bids-validator';
 import scitran   from '../utils/scitran';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
-import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
+import { Accordion, Panel } from 'react-bootstrap';
 
 let Upload = React.createClass({
 
@@ -18,7 +18,6 @@ let Upload = React.createClass({
 			list: {},
 			errors: [],
 			dirName: '',
-			fakeProgress: 0,
 			alert: false
 		};
 	},
@@ -33,59 +32,53 @@ let Upload = React.createClass({
 		let list = this.state.list;
 		let errors = this.state.errors;
 		let dirName = this.state.dirName;
-		let fakeProgress = this.state.fakeProgress;
-		let showAlert = this.state.alert;
-		let alert = (
-			<Alert className="fadeInDown" bsStyle='danger'>
-				<strong>Holy danger!</strong> Best check yo self, youre not looking too good.
-			</Alert>
-		);
-		let dataView = (
-			<div className="row">
-				<div className="dirDisplay col-xs-6">
-				   	<h3 className="clearfix">
-				   		<span className="dirName">
-					   		<i className="folderIcon fa fa-folder-open" /> 
-					   		{dirName}
-				   		</span> 
-					   	<div className=" validate-btn pull-right">
-							<button onClick={self._validate}>Validate</button>
-							<button onClick={self._upload}>Upload</button>
-					   		<span>
-					   			Validating <i className="fa fa-circle-o-notch fa-spin" />
-					   		</span>
-					   	</div>
-				   	</h3>
-				   	<ProgressBar now={fakeProgress} />
-				   	<Accordion className="fileStructure">
-	    				<Panel header={<i className="fa fa-chevron-down"> See File Structure</i> } eventKey='1'>
-					  		<DirTree tree={tree}/>
-					  	</Panel>
-				  	</ Accordion> 
-				</div>
-				<div className="col-xs-6"> 
-					<DirValidationMessages errors={errors} />
-				</div>
+		
+		let dirValidBtns = (
+			<div className="validate-buttons">
+				<button onClick={self._validate.bind(null, list)}>Validate</button>
+				<button onClick={self._upload}>Upload</button>
+		   		<span>
+		   			Validating <i className="fa fa-circle-o-notch fa-spin" />
+		   		</span>
 			</div>
 		);
-		// Alert bsStyle: danger, warning, success, info
+
+		let dirHeader = (
+			<h3 className="clearfix">
+		   		<span className="dirName">
+			   		<i className="folderIcon fa fa-folder-open" /> 
+			   		{dirName}
+		   		</span> 
+			</h3>
+		);
+
+		let dirMeta = (
+			<span>
+				{dirValidBtns}
+				{dirHeader}
+				<span>Fix the {errors.length} Errors and Validate your Dataset Again to Continue</span>
+			   	<Accordion className="fileStructure">
+    				<Panel header={<i className="fa fa-chevron-down"> See File Structure</i> } eventKey='1'>
+				  		<DirTree tree={tree}/>
+				  	</Panel>
+			  	</Accordion>
+			</span>
+		);
 		return (
-			<div className="view container">
-				<div className="row">
-					<div className="col-sm-12 col-md-offset-4 col-md-4">
-						<DirUpload onChange={self._onChange} />
-					</div>
+			<div className="col-xs-12">
+				<div className="upload-wrap">
+					<DirUpload onChange={self._onChange} />
+					{tree.length > 0 ? dirMeta : null}
 				</div>
-			   	{tree.length > 0 ? dataView : null}
-				{showAlert ? alert : null}
+				<div className="error-wrap">
+					{tree.length > 0 ? <DirValidationMessages errors={errors} /> : null}
+				</div>
 			</div>
     	);
 	
 	},
 
-	componentWillUnmount () {
-		clearInterval(this.progressInterval);
-	},
+
 
 // custom methods -----------------------------------------------------
 
@@ -95,26 +88,14 @@ let Upload = React.createClass({
 			tree: files.tree,
 			list: files.list,
 			dirName: files.tree[0].name,
-			fakeProgress: 0,
-			alert: true
 		});
-		this.progressInterval = setInterval(this._fakeProgress, 3000);
-		setTimeout(function () {
-			self.setState({alert: false});
-		}, 4000);
+
+		this._validate(files.list);
 	},
 
-	_fakeProgress () {
-		let self= this;
-		
-		this.setState({
-	    	fakeProgress: self.state.fakeProgress + 1,
-		});
-	},
-
-	_validate: function () {
+	_validate: function (fileList) {
 		let self = this;
-        validate.BIDS(this.state.list, function (errors) {
+        validate.BIDS(fileList, function (errors) {
             self.setState({errors: errors});
         });
 	},

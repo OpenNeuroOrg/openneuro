@@ -85,7 +85,7 @@ let UserStore = Reflux.createStore({
 			hello(res.network).api('/me').then(function (profile) {
 				self._user = profile;
 				self.updateState();
-				router.transitionTo('upload');
+				router.transitionTo('dashboard');
 			});
 			// console.log('signin success');
 		}, function () {

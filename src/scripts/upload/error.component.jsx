@@ -14,6 +14,7 @@ let Error = React.createClass({
 // life cycle events --------------------------------------------------
 
 	render: function () {
+		let self = this;
 		let file  = this.props.file;
 		let error = this.props.error;
 		let index = this.props.index;
@@ -26,7 +27,12 @@ let Error = React.createClass({
 						<p>{file.webkitRelativePath}</p>
 					</span>
 					<span className="error-meta">
-						<label>Line: {error.line} Character: {error.character}</label>
+						<label>
+						{error.line !== null && error.character === null ? 'Line: '+ error.line: null} 
+						{error.line === null && error.character !== null ? 'Character: '+ error.character: null}
+						{error.line !== null && error.character !== null ? 'Line: '+ error.line + ' Character: '+ error.character: null}
+						{error.line === null && error.character === null ? 'Evidence: ': null}
+						</label>
 						<p>{error.evidence}</p>
 					</span>
 					<span className="error-meta">

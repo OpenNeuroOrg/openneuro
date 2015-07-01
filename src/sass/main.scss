@@ -23,3 +23,73 @@
 .fadeInUp{
   @include fadeInUp();
 }
+.full-col{
+	padding:0;
+	.navbar{
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 0;
+	}
+}
+.main-col{
+	padding:0;
+	.navbar{
+		position: fixed;
+		width: 66.66667%;
+		top: 0;
+		left: 0;
+	}
+}
+.tools-col{
+	padding:0;
+	.upload-wrap{
+		position: fixed;
+		top: 0;
+		right: 0;
+		width: 33.33333%;
+		z-index: 1100;
+		background-color: #FFF;
+	}
+	.error-wrap{
+		height: 100%;
+		overflow: hidden;
+		overflow-y: scroll;
+		position: fixed;
+		width: 33.33333%;
+		padding: 150px 0 100px;
+		right: 0;
+	}
+}
+.left-nav{
+	padding:0;
+	.left-nav-slider{
+		background-color: #C2C2C2;
+		display: block;
+		height: 100%;
+		padding: 0;
+		z-index: 1100;
+		position: relative;
+		width: 300px;
+		overflow: hidden;
+		transition: all 0.5s ease;
+		ul{
+			padding:0;
+			margin: 0;
+			list-style: none;
+			width: 300px;
+
+		}
+	}
+	.closed{
+		.left-nav-slider{
+			width: 30px;
+		}
+	}
+}
+
+
+
+
+
+
