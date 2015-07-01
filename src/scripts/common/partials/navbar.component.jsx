@@ -29,7 +29,6 @@ let BSNavbar = React.createClass({
 						<li role="presentation" className="dropdown-header">{username}</li>
 						<li role="presentation" className="dropdown-header">{email}</li>
 						<li><a onClick={this._signOut} className="btn-basic">Sign Out</a></li>
-						<li className="useradmin-upload"><Link to="upload"><i className="fa fa-upload" /> Upload</Link></li>
 			        </DropdownButton>
 		        </span>
 			);
@@ -44,13 +43,18 @@ let BSNavbar = React.createClass({
 		);
 
 		return (
-			<Navbar fixedTop brand={brand} toggleNavKey={0}>
-				<CollapsibleNav eventKey={0}>
-					<Nav navbar right className="useradmin-nav">
-						{isLoggedIn ? usermenu : <li><Link to="signIn">Sign In</Link></li>}
-				    </Nav>
-			    </CollapsibleNav>
-			</Navbar>
+			<nav role="navigation" className="navbar navbar-default" toggleNavKey={0}>
+				<div className="container">
+					<div className="navbar-header">
+						{brand}
+				    </div>
+				    <CollapsibleNav eventKey={0}>
+							<Nav navbar right className="useradmin-nav">
+								{isLoggedIn ? usermenu : <li><Link to="signIn">Sign In</Link></li>}
+						    </Nav>
+					</CollapsibleNav>
+				</div>
+		    </nav>
 	    );
 	},
 

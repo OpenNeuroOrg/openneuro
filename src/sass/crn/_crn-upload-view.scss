@@ -16,7 +16,7 @@ input.dirUpload-btn{
   }
   &::before {
     font-family: FontAwesome;
-    content: '\f0c5 \0020 Select a bids data set';
+    content: '\f0c5 \0020 Validate';
     display: inline-block;
     background: transparent;
     border-radius: 2px;
@@ -67,24 +67,6 @@ input.dirUpload-btn{
       margin-right: 10px;
 
     }
-    .validate-btn{
-      display: inline-block;
-      button, span{
-        font-size: 12px;
-        border: 1px solid $stanfordRed;
-        padding: 7px 10px;
-        margin: 0;
-        border-radius: 0;
-        background-color:transparent;
-        color:$stanfordRed;
-      }
-      span{
-        border: none;
-        i{
-          margin-left: 5px;
-        }
-      }
-    }
   }
   .fileStructure{
     margin: 0 -15px;
@@ -118,6 +100,24 @@ input.dirUpload-btn{
             color:#5c5c5c;
           }
       }
+    }
+  }
+}
+.validate-buttons{
+  display: inline-block;
+  button, span{
+    font-size: 12px;
+    border: 1px solid $stanfordRed;
+    padding: 7px 10px;
+    margin: 0;
+    border-radius: 0;
+    background-color:transparent;
+    color:$stanfordRed;
+  }
+  span{
+    border: none;
+    i{
+      margin-left: 5px;
     }
   }
 }

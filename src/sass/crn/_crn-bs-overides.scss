@@ -4,24 +4,17 @@ html,body{
   min-height: 100%;
 }
 body {
-   background-image:
-    radial-gradient(
-      circle at 50% 5px,
-      #fefefe,
-      #ccc
-    );
-
-    // repeating-radial-gradient(
-    //   circle at 0 0, 
-    //   #fff,
-    //   #f4f4f4 50px
-    // );
   padding-top: 75px;
   font-family: $font-family-cabin;
-}
 
+}
+.container{
+  width: 100%;
+}
 .view.container{
-  margin: 20px auto;
+  width: 100%;
+  margin:0;
+  padding: 0;
 }
 
 

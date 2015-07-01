@@ -8,6 +8,7 @@ import requireAuth from './utils/requireAuth';
 import Index  from './common/index.jsx';
 import Signin from './user/signin.component.jsx';
 import Upload from './upload/upload.component.jsx';
+import Dashboard from './dashboard/dashboard.component.jsx';
 import Home   from './common/views/home.component.jsx';
 
 class Redirect extends React.Component {
@@ -19,10 +20,12 @@ class Redirect extends React.Component {
 // routes ----------------------------------------------------------------
 
 Upload = requireAuth(Upload);
+Dashboard = requireAuth(Dashboard);
 
 let routes = (
 	<Route name="app" path="/" handler={Index}>
 		<Route name="signIn" path="sign-in" handler={Signin}/>
+		<Route name="dashboard" path="dashboard"  handler={Dashboard}/>
 		<Route name="upload" path="upload"  handler={Upload}/>
 		<Route name="home"   path="home"    handler={Home}/>
 		<DefaultRoute handler={Signin}/>

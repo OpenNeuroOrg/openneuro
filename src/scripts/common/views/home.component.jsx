@@ -9,8 +9,10 @@ var Home = React.createClass({
 
 	render: function () {
 		return (
-			<div className="container">
-				<h1>Center for Reproducible Neuroscience</h1>
+			<div className="view container">
+				<div className="row">
+					<h1>Center for Reproducible Neuroscience</h1>
+				</div>
 			</div>
 		)				
 	}
