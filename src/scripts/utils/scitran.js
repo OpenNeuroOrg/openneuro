@@ -1,5 +1,7 @@
 import request   from './request';
-import userStore from '../user/user.store.js';
+import userStore from '../user/user.store';
+import files     from './files';
+import MD5       from 'MD5';
 
 // public API ---------------------------------------------------------------------
 
@@ -78,6 +80,14 @@ function createAcquisition (acquisitionName, callback) {
     callback();
 }
 
+function uploadFile (level, id, file) {
+    files.read(file, function (contents) {
+        let url = level + '/' + id + '/file/' + file.name;
+        request.upload(url, MD5(contents), contents, file.name);
+    });
+    // request.post(level + '/' + id + '/file/' + file.name);
+}
+
 /**
  * Upload
  *
@@ -133,7 +143,8 @@ function upload (filelist) {
                 });
                     
             } else {
-                console.log('upload top level file: ' + subject.name);
+                uploadFile('projects', projectId, subject);
+                // console.log('upload top level file: ' + subject.name);
             }
         }
 
