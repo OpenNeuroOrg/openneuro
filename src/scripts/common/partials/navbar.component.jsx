@@ -1,19 +1,20 @@
 // dependencies ------------------------------------------------------------------
 
-import React from 'react';
-import Reflux from 'reflux';
-import { Link, Navigation } from 'react-router';
-import { Navbar, CollapsibleNav, Nav, NavItem, DropdownButton, MenuItem } from 'react-bootstrap';
+import React     from 'react';
+import Reflux    from 'reflux';
+import {Link}    from 'react-router';
 import Actions   from '../../user/user.actions.js';
 import userStore from '../../user/user.store.js';
+import {CollapsibleNav, Nav, DropdownButton} from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
 
 let BSNavbar = React.createClass({
 
-	mixins: [Reflux.connect(userStore), Navigation],
+	mixins: [Reflux.connect(userStore)],
 
 // life cycle methods ------------------------------------------------------------
+
 	render: function () {
 		let self = this;
 		let isLoggedIn = !!this.state.token;
@@ -61,7 +62,7 @@ let BSNavbar = React.createClass({
 // custom methods ----------------------------------------------------------------
 
 	_signOut: function () {
-		Actions.signOut(this.transitionTo);
+		Actions.signOut();
 	}
 
 });

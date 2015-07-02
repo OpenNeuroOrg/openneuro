@@ -2,12 +2,13 @@
 
 import React from 'react'
 
+// component setup -------------------------------------------------------
 
-var Home = React.createClass({
+class Home extends React.Component {
 
 // life cycle methods ----------------------------------------------------
 
-	render: function () {
+	render () {
 		return (
 			<div className="view container">
 				<div className="row">
@@ -17,7 +18,7 @@ var Home = React.createClass({
 		)				
 	}
 	
-});
+}
 
 export default Home;
 

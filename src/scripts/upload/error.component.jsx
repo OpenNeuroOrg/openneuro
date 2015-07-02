@@ -4,20 +4,22 @@ import React from 'react';
 
 // component setup ----------------------------------------------------
 
-let Error = React.createClass({
-
-	propTypes: {
-		file: React.PropTypes.object,
-		error: React.PropTypes.object
-	},
+class Error extends React.Component {
 
 // life cycle events --------------------------------------------------
 
-	render: function () {
+	render () {
 		let self = this;
 		let file  = this.props.file;
 		let error = this.props.error;
 		let index = this.props.index;
+
+		// build error location string
+		let errLocation = '';
+		if (error.line)        {errLocation += 'Line: ' + error.line + ' ';}
+		if (error.character)   {errLocation += 'Character: ' + error.character + '';}
+		if (errLocation == '') {errLocation  = 'Evidence: ';}
+
 		return (
 			<div className="row">
 				<div className="col-xs-12">
@@ -28,10 +30,7 @@ let Error = React.createClass({
 					</span>
 					<span className="error-meta">
 						<label>
-						{error.line !== null && error.character === null ? 'Line: '+ error.line: null} 
-						{error.line === null && error.character !== null ? 'Character: '+ error.character: null}
-						{error.line !== null && error.character !== null ? 'Line: '+ error.line + ' Character: '+ error.character: null}
-						{error.line === null && error.character === null ? 'Evidence: ': null}
+							{errLocation}
 						</label>
 						<p>{error.evidence}</p>
 					</span>
@@ -40,7 +39,7 @@ let Error = React.createClass({
 						<p>{error.reason}</p>
 					</span>
 					<span className="error-meta">
-					<p>{(file.size / 1000) + " KB"} | {file.type}</p>
+						<p>{(file.size / 1000) + " KB"} | {file.type}</p>
 					</span>
 				</div>
 			</div>
@@ -49,9 +48,11 @@ let Error = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-});
+}
+
+Error.propTypes = {
+	file: React.PropTypes.object,
+	error: React.PropTypes.object
+};
 
 export default Error;
-
-
-
