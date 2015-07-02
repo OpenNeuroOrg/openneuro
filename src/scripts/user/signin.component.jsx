@@ -3,16 +3,13 @@
 import React        from 'react';
 import Actions      from './user.actions.js';
 import UserStore    from './user.store.js';
-import {Navigation} from 'react-router';
 import scitran      from '../utils/scitran';
 
-var Signin = React.createClass({
-
-	mixins: [Navigation],
+class Signin extends React.Component {
 
 // life cycle events --------------------------------------------------
 
-	render: function () {
+	render () {
 		return (
 			<div className="signInBlock col-sm-12">
 				<h2>Login</h2>
@@ -26,24 +23,24 @@ var Signin = React.createClass({
 				</div>
 			</div>
     	);
-	},
+	}
 
 // custom methods -----------------------------------------------------
 
-	_signIn: function () {
-		Actions.signIn(this.transitionTo);
-	},
+	_signIn () {
+		Actions.signIn();
+	}
 
-	_logToken: function () {
+	_logToken () {
 		Actions.logToken();
-	},
+	}
 
-	_testScitran: function () {
+	_testScitran () {
 		scitran.verifyUser(function (err, res) {
 			console.log(res);
 		});
 	}
 
-});
+}
 
 export default Signin;

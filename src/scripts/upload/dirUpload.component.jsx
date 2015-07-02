@@ -3,34 +3,35 @@
 import React from 'react';
 import fileUtils from '../utils/files';
 
-let Upload = React.createClass({
+class Upload extends React.Component {
 
 // life cycle events --------------------------------------------------
 
-	componentDidMount: function () {
-		this.getDOMNode().setAttribute('webkitdirectory', true);
-		this.getDOMNode().setAttribute('directory', true);
-	},
+	componentDidMount () {
+		React.findDOMNode(this).setAttribute('webkitdirectory', true);
+		React.findDOMNode(this).setAttribute('directory', true);
+	}
 
-	render: function () {
-		let self = this;
+	render () {
 		return (
-			<input type="file"  className="dirUpload-btn" onChange={self._onFileSelect} />
+			<input type="file"  className="dirUpload-btn" onChange={this._onFileSelect.bind(this)} />
     	);
-	},
+	}
 
 // custom methods -----------------------------------------------------
 
-	_onChange: function (e) {
+	_onChange (e) {
 		this.props.onChange(e);
-	},
-
-	_onFileSelect: function (e) {
-		let files   = e.target.files;
-        let dirTree = fileUtils.generateTree(files);
-		this.props.onChange({tree: dirTree, list: files});
 	}
 
-});
+	_onFileSelect (e) {
+		if (e.target) {
+			let files   = e.target.files;
+	        let dirTree = fileUtils.generateTree(files);
+			this.props.onChange({tree: dirTree, list: files});
+		}
+	}
+
+}
 
 export default Upload;

@@ -1,14 +1,13 @@
 // dependencies -------------------------------------------------------
 
-import React     from 'react'
-import Upload from '../upload/upload.component.jsx';
+import React      from 'react'
 import LeftNavbar from '../common/partials/leftNavbar.component.jsx';
-import { Alert, Accordion, Panel, ProgressBar } from 'react-bootstrap';
 
-let Dashboard = React.createClass({
+class Dashboard extends React.Component {
 
 // life cycle events --------------------------------------------------
-	render: function () {
+
+	render () {
 		// Alert bsStyle: danger, warning, success, info
 		return (
 			<div className="view container">
@@ -21,13 +20,11 @@ let Dashboard = React.createClass({
 			</div>
     	);
 	
-	},
-
-
+	}
 
 // custom methods -----------------------------------------------------
 
-});
+}
 
 export default Dashboard;
 

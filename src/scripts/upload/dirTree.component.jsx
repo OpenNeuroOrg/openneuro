@@ -3,11 +3,11 @@
 import React     from 'react';
 import fileUtils from '../utils/files';
 
-let DirTree = React.createClass({
+class DirTree extends React.Component {
 
 // life cycle events --------------------------------------------------
 
-	render: function () {
+	render () {
 		let self = this;
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map(function (item, index) {
@@ -20,7 +20,7 @@ let DirTree = React.createClass({
 		return (
 			<div>{nodes}</div>
     	);
-	},
+	}
 
 // custom methods -----------------------------------------------------
 	
@@ -33,7 +33,7 @@ let DirTree = React.createClass({
 		}
 	}
 
-});
+}
 
 export default DirTree;
 

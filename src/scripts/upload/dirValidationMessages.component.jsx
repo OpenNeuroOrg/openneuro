@@ -6,15 +6,11 @@ import Error from './error.component.jsx';
 
 // component setup --------------------------------------------------------
 
-let DirValidationMessages = React.createClass({
-
-	propType: {
-		errors: React.PropTypes.array
-	},
+class DirValidationMessages extends React.Component {
 
 // life cycle events ------------------------------------------------------
 
-	render: function () {
+	render () {
 		let errors = this.props.errors;
 		let issues = errors.map(function (issue, index) {
 			// issue header
@@ -39,10 +35,14 @@ let DirValidationMessages = React.createClass({
 		});
 
 		return <Accordion>{issues}</Accordion>
-	},
+	}
 
 // custom methods ---------------------------------------------------------
 
-});
+}
+
+DirValidationMessages.propTypes = {
+	errors: React.PropTypes.array
+};
 
 export default DirValidationMessages;

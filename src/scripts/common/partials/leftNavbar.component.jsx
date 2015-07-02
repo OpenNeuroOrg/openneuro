@@ -1,42 +1,42 @@
 // dependencies ------------------------------------------------------------------
 
 import React from 'react';
+import {Link} from 'react-router';
 
-import { Link, Navigation } from 'react-router';
 // component setup ---------------------------------------------------------------
 
-var LeftNavbar = React.createClass({
+class LeftNavbar extends React.Component {
+
+	constructor (props) {
+		super(props);
+		this.state = {showNav: false};
+	}
+
 // life cycle methods ------------------------------------------------------------
 
-	getInitialState () {
-		return {
-			toggleNav:'closed',
-		}
-
-	},
-
-	render: function() {
+	render () {
 		return (
-			<span className={this.state.toggleNav}>
+			<span className={this.state.showNav ? 'closed' : null}>
 				<span className="left-nav-slider">
-					<ul><li className="useradmin-upload"><Link to="dashboard"><i className="fa fa-dashboard" /> dashboard</Link></li></ul>
-					<span onClick={this._toggleNav}>
-					{this.state.toggleNav === 'closed'? 'open »' : 'close «'} </span>
+					<ul>
+						<li className="useradmin-upload">
+							<Link to="dashboard"><i className="fa fa-dashboard" /> dashboard</Link>
+						</li>
+					</ul>
+					<span onClick={this._toggleNav.bind(this)}>
+						{this.state.showNav ? 'open »' : 'close «'}
+					</span>
 				</span>
 			</span>
 	    )
-	},
+	}
 
 // custom methods ----------------------------------------------------------------
-	_toggleNav: function(){
-		if(this.state.toggleNav === 'closed'){
-			this.setState({toggleNav: 'open'});
-		}else{
-			this.setState({toggleNav: 'closed'});
-		}
+	
+	_toggleNav () {
+		this.setState({showNav: !this.state.showNav});
 	}
-});
 
-
+}
 
 export default LeftNavbar;
