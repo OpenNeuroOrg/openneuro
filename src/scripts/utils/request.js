@@ -1,3 +1,7 @@
+import request   from 'superagent';
+import config    from '../config';
+import userStore from '../user/user.store.js';
+
 /**
  * Request
  *
@@ -5,11 +9,6 @@
  * Provides a place for global request settings
  * and response handling.
  */
-
-import request   from 'superagent';
-import config    from '../config';
-import userStore from '../user/user.store.js';
-
 var Request = {
 
 	get (path, callback) {
@@ -47,10 +46,23 @@ var Request = {
 
 };
 
+/**
+ * Handle Response
+ *
+ * A generic response handler used to intercept
+ * responses before returning them to the main
+ * callback.
+ */
 function handleResponse (err, res, callback) {
 	callback(err, res);
 }
 
+/**
+ * Normalize Options
+ *
+ * Takes a request options object and
+ * normalizes it so requests won't fail.
+ */
 function normalizeOptions (options) {
 	if (!options.headers) {options.headers = {};}
 	return options;
