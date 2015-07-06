@@ -21,35 +21,39 @@ var Request = {
 			});
 	},
 
-	post (path, body, callback) {
+	post (path, options, callback) {
+		options = normalizeOptions(options);
 		let self = this;
 		request.post(config.scitranUrl + path)
 			.set('Authorization', userStore._token)
-			.send(body)
+			.set(options.headers)
+			.send(options.body)
 			.end(function (err, res) {
-				self.handleResponse(err, res, callback);
+				handleResponse(err, res, callback);
 			});
 	},
 
-	upload (path, MD5, dataURL, fileName) {
+	put (path, options, callback) {
+		options = normalizeOptions(options);
+		let self = this;
 		request.put(config.scitranUrl + path)
 			.set('Authorization', userStore._token)
-			.set('Content-Type', 'application/octet-stream')
-			.set('Content-MD5', MD5)
-			.send(dataURL)
-			//.attach('--data-binary', dataURL)
+			.set(options.headers)
+			.send(options.body)
 			.end(function (err, res) {
-				console.log('//////////////////////////////////////////////////')
-				console.log(err);
-				console.log(res);
+				handleResponse(err, res, callback);
 			});
-
-	},
-
-	handleResponse (err, res, callback) {
-		callback(err, res);
 	}
 
 };
+
+function handleResponse (err, res, callback) {
+	callback(err, res);
+}
+
+function normalizeOptions (options) {
+	if (!options.headers) {options.headers = {};}
+	return options;
+}
 
 export default Request;
