@@ -39,7 +39,7 @@ function verifyUser (callback) {
 function createProject (groupName, projectName, callback) {
     console.log('create project: ' + projectName);
     let body = {name: projectName};
-    request.post('groups/' + groupName + '/projects', body, callback);
+    request.post('groups/' + groupName + '/projects', {body: body}, callback);
 }
 
 /**
@@ -49,7 +49,7 @@ function createProject (groupName, projectName, callback) {
 function createSubject (projectId, subjectName, callback) {
     console.log('create subject: ' + subjectName);
     let body = {label: subjectName};
-    request.post('projects/' + projectId + '/sessions', body, callback);
+    request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
 
 /**
@@ -68,7 +68,7 @@ function createSession (sessionName, callback) {
 function createModality (sessionId, modalityName, callback) {
     console.log('create modality: ' + modalityName);
     let body = {label: modalityName};
-    request.post('sessions/' + sessionId + '/acquisitions', body, callback);
+    request.post('sessions/' + sessionId + '/acquisitions', {body: body}, callback);
 }
 
 /**
@@ -83,9 +83,17 @@ function createAcquisition (acquisitionName, callback) {
 function uploadFile (level, id, file) {
     files.read(file, function (contents) {
         let url = level + '/' + id + '/file/' + file.name;
-        request.upload(url, MD5(contents), contents, file.name);
+        request.put(url, {
+            headers: {
+                'Content-Type': 'application/octet-stream',
+                'Content-MD5': MD5(contents)
+            },
+            body: contents
+        }, function (err, res) {
+            console.log(err);
+            console.log(res);
+        });
     });
-    // request.post(level + '/' + id + '/file/' + file.name);
 }
 
 /**
@@ -98,55 +106,54 @@ function uploadFile (level, id, file) {
  *    - Check if we should call filelist filetree for 
  *    consistency
  *    - Determine how to upload in between scitran levels
- *    - Break anonymous functions out in to named functions
- *    that call on another to do away with deep hard to
- *    read nesting.
  */
 function upload (filelist) {
     let groupName = 'SquishyRoles';
     scitran.createProject(groupName, filelist[0].name, function (err, res) {
         let projectId = res.body._id;
-        
-        for (var i = 0; i < filelist[0].children.length; i++) {
-            var subject = filelist[0].children[i];
-            if (subject.children && subject.children.length > 0) {
-                
-                scitran.createSubject(projectId, subject.name, function (err, res) {
-                    let subjectId = res.body._id;
-
-                    for (var j = 0; j < subject.children.length; j++) {
-                        var session = subject.children[j];
-                        if (session.children && session.children.length > 0) {
-
-                            scitran.createSession(session.name, function () {
-                                for (var k = 0; k < session.children.length; k++) {
-                                    var modality = session.children[k];
-                                    if (modality.children && modality.children.length > 0) {
-
-                                        scitran.createModality(subjectId, modality.name, function () {
-                                            for (var l = 0; l < modality.children.length; l++) {
-                                                var acquisition = modality.children[l]
-                                                console.log('upload acquisition: ' + acquisition.name);
-                                            } 
-                                        });
-                                    } else {
-                                        console.log('upload session file: ' + modality.name)
-                                    }
-                                }
-                            });
-                                
-                        } else {
-                            console.log('upload subject file: ' + session.name);
-                        }
-                    }
-
-                });
-                    
-            } else {
-                uploadFile('projects', projectId, subject);
-                // console.log('upload top level file: ' + subject.name);
-            }
-        }
-
+        uploadSubjects(filelist[0].children, projectId);
     });
+}
+
+function uploadSubjects (subjects, projectId) {
+    for (let subject of subjects) {
+        if (subject.children && subject.children.length > 0) {
+            scitran.createSubject(projectId, subject.name, function (err, res) {
+                let subjectId = res.body._id;
+                uploadSessions(subject.children, subjectId);
+            });
+        } else {
+            uploadFile('projects', projectId, subject);
+        }
+    }
+}
+
+function uploadSessions (sessions, subjectId) {
+    for (let session of sessions) {
+        if (session.children && session.children.length > 0) {
+            scitran.createSession(session.name, function () {
+                uploadModalities(session.children, subjectId);
+            }); 
+        } else {
+            console.log('upload subject file: ' + session.name);
+        }
+    }
+}
+
+function uploadModalities (modalities, subjectId) {
+    for (let modality of modalities) {
+        if (modality.children && modality.children.length > 0) {
+            scitran.createModality(subjectId, modality.name, function () {
+                uploadAquisitions(modality.children);
+            });
+        } else {
+            console.log('upload session file: ' + modality.name)
+        }
+    }
+}
+
+function uploadAquisitions (acquisitions) {
+    for (let acquisition of acquisitions) {
+        console.log('upload acquisition: ' + acquisition.name);
+    }
 }
