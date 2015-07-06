@@ -2,7 +2,6 @@
 
 let fileUtils = {
 	read,
-    readAsDataURL,
 	generateTree
 };
 
@@ -26,14 +25,6 @@ function read (file, callback) {
 		}
 	};
 	reader.readAsBinaryString(file);
-}
-
-function readAsDataURL (file, callback) {
-    var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function (e) {
-        callback(e.target.result);
-    }
 }
 
 /**
