@@ -1,3 +1,7 @@
+import request   from 'superagent';
+import config    from '../config';
+import userStore from '../user/user.store.js';
+
 /**
  * Request
  *
@@ -5,11 +9,6 @@
  * Provides a place for global request settings
  * and response handling.
  */
-
-import request   from 'superagent';
-import config    from '../config';
-import userStore from '../user/user.store.js';
-
 var Request = {
 
 	get (path, callback) {
@@ -21,20 +20,52 @@ var Request = {
 			});
 	},
 
-	post (path, body, callback) {
+	post (path, options, callback) {
+		options = normalizeOptions(options);
 		let self = this;
 		request.post(config.scitranUrl + path)
 			.set('Authorization', userStore._token)
-			.send(body)
+			.set(options.headers)
+			.send(options.body)
 			.end(function (err, res) {
-				self.handlResponse(err, res, callback);
+				handleResponse(err, res, callback);
 			});
 	},
 
-	handlResponse (err, res, callback) {
-		callback(err, res);
+	put (path, options, callback) {
+		options = normalizeOptions(options);
+		let self = this;
+		request.put(config.scitranUrl + path)
+			.set('Authorization', userStore._token)
+			.set(options.headers)
+			.send(options.body)
+			.end(function (err, res) {
+				handleResponse(err, res, callback);
+			});
 	}
 
 };
+
+/**
+ * Handle Response
+ *
+ * A generic response handler used to intercept
+ * responses before returning them to the main
+ * callback.
+ */
+function handleResponse (err, res, callback) {
+	callback(err, res);
+}
+
+/**
+ * Normalize Options
+ *
+ * Takes a request options object and
+ * normalizes it so requests won't fail.
+ */
+function normalizeOptions (options) {
+	if (!options.headers) {options.headers = {};}
+	return options;
+}
 
 export default Request;
