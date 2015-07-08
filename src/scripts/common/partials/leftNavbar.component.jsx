@@ -16,15 +16,18 @@ class LeftNavbar extends React.Component {
 
 	render () {
 		return (
-			<span className={this.state.showNav ? 'closed' : null}>
+			<span className={this.state.showNav ? 'open' : null}>
 				<span className="left-nav-slider">
 					<ul>
-						<li className="useradmin-upload">
-							<Link to="dashboard"><i className="fa fa-dashboard" /> dashboard</Link>
+						<li className="left-nav-home">
+							<Link to="home"><i className="fa fa-home" /><span className="link-name">home</span></Link>
+						</li>
+						<li className="left-nav-dashboard">
+							<Link to="dashboard"><i className="fa fa-dashboard" /><span className="link-name">dashboard</span></Link>
 						</li>
 					</ul>
-					<span onClick={this._toggleNav.bind(this)}>
-						{this.state.showNav ? 'open »' : 'close «'}
+					<span className="show-nav-btn" onClick={this._toggleNav.bind(this)}>
+						{this.state.showNav ?  'close «' : 'open »'}
 					</span>
 				</span>
 			</span>

@@ -13,12 +13,15 @@ class DirValidationMessages extends React.Component {
 	render () {
 		let errors = this.props.errors;
 		let issues = errors.map(function (issue, index) {
+			let filesize = issue.file.size / 1000 + ' KB';
+			let filetype = issue.file.type;
 			// issue header
 			let header = (
 				<span className="file-header">
-					<strong>File:</strong> {issue.file.name}
-					<span className="label label-danger pull-right">
-						{issue.errors.length} {issue.errors.length > 1 ? "ERRORS" : "ERROR"}
+					{issue.file.name}
+					<span className="pull-right">
+						{issue.errors.length} 
+						<i className="fa fa-exclamation-circle"></i> 
 					</span>
 				</span>
 			);
@@ -28,7 +31,14 @@ class DirValidationMessages extends React.Component {
 			});
 			// issue panel
 			return (
-				<Panel key={index} header={header} className="validation-error" eventKey={index}>
+				<Panel key={index} header={header} className="validation-error fadeInUpBig" eventKey={index}>
+					<span className="em-head clearfix">
+						<strong className="em-header pull-left">Path to local file:</strong>
+						<strong className="em-header pull-right">{filesize} | {filetype}</strong>
+					</span>
+					<span className="e-meta file-path">{issue.file.webkitRelativePath}</span>
+					
+					
 					{subErrors}
 				</Panel>
 			);

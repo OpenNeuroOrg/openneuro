@@ -10,10 +10,9 @@ class Home extends React.Component {
 
 	render () {
 		return (
-			<div className="view container">
-				<div className="row">
-					<h1>Center for Reproducible Neuroscience</h1>
-				</div>
+
+			<div className="fadeIn inner-route">
+				<h1>Center for Reproducible Neuroscience</h1>
 			</div>
 		)				
 	}
