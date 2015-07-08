@@ -18,7 +18,7 @@ class DirTree extends React.Component {
 			);
 		});
 		return (
-			<div>{nodes}</div>
+			<ul>{nodes}</ul>
     	);
 	}
 

@@ -21,28 +21,21 @@ class Error extends React.Component {
 		if (errLocation == '') {errLocation  = 'Evidence: ';}
 
 		return (
-			<div className="row">
-				<div className="col-xs-12">
-					<h4>Error: {index + 1}</h4>
-					<span className="error-meta">
-						<label>Path: </label>
-						<p>{file.webkitRelativePath}</p>
-					</span>
-					<span className="error-meta">
+			
+				<div className="em-body">
+					<h4 className="em-header">Error: {index + 1}</h4>
+					<span className="e-meta">
 						<label>
 							{errLocation}
 						</label>
 						<p>{error.evidence}</p>
 					</span>
-					<span className="error-meta">
+					<span className="e-meta">
 						<label>Reason: </label>
 						<p>{error.reason}</p>
 					</span>
-					<span className="error-meta">
-						<p>{(file.size / 1000) + " KB"} | {file.type}</p>
-					</span>
 				</div>
-			</div>
+			
     	);
 	}
 

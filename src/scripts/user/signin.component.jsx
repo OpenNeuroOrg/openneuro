@@ -11,9 +11,9 @@ class Signin extends React.Component {
 
 	render () {
 		return (
-			<div className="signInBlock col-sm-12">
+			<div className="signInBlock fadeIn inner-route">
 				<h2>Login</h2>
-	    		<button className="btn-basic" onClick={this._signIn} >
+	    		<button className="btn-blue" onClick={this._signIn} >
 					<i className="fa fa-google" />
 					<span> Google</span>
 				</button>
