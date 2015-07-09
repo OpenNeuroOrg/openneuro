@@ -107,71 +107,109 @@ h1,h2,h3,h4,h5,h6{
 	right: 0;
 	box-shadow: inset 0 0 11px rgba(0, 0, 0, 0.6);
     &.btn-null{
-      .btn{
-		background: rgba(0, 0, 0, 0.28);
-		box-shadow: none;
-		outline: none;
-		border: none;
-		border-radius: 0;
-		height: 30%;
-		padding: 0;
-		margin: 0;
-		width: 30%;
-		text-align: center;
-		margin-left: 70%;
-		color:#fff;
-		.caret{
-			display: none;
-		}
+		.btn{
+			background: rgba(0, 0, 0, 0);
+			box-shadow: none;
+			outline: none;
+			border: none;
+			border-radius: 0;
+			height: 100%;
+			padding: 0;
+			margin: 0;
+			width: 100%;
+			text-align: center;
+			margin:0;
+			color:#fff;
+			
+			.caret{
+				display: none;
+			}
+			i{
+				top: 0;
+				right: 0;
+				position: absolute;
+				padding: 0;
+				background-color: rgba(0, 0, 0, 0.28);
+									  width: 30%;
+  height: 30%;
+  line-height: 25px;
+  transition: all 0.3s ease;
 
-      &.active,
-      &:active{
-		background: rgba(0, 0, 0, 0.28);
-		box-shadow: none;
-		outline: none;
-		border: none;
-      }
-      &:hover,
-      &:focus{
-		background: rgba(0, 0, 0, 0.28);
-		box-shadow: none;
-		outline: none;
-		border: none;
-      }
-    }
-    &.open{
-      .btn{
-		background: rgba(0, 0, 0, 0.28);
-		box-shadow: none;
-		outline: none;
-		border: none;
-      }
-    }
-    }
-  .dropdown-toggle{
-    padding: 25px 15px;
-  }
-  .dropdown-menu{
-    background-color:$white;
-    padding: 20px 20px 0;
-    margin: 20px 0 0;
-    border-radius: 0;
-    box-shadow: 1px 2px 4px -3px rgba(0, 0, 0, 0.7);
-    border-color: #F4F4F4;
-    .dropdown-header{
-      width: 100%;
-      text-align: center;
-      padding: 10px 0;
-    }
-    .sign-out{
-		width: auto;
-		margin: 0;
-		font-size: 12px;
-		border: none;
-		text-align: left;
-		padding: 0;
-    }
-  }
+			}
+
+			&.active,
+			&:active,
+			&:hover,
+			&:focus{
+				i{
+					transition: all 0.3s ease;
+					background-color: rgba(0, 0, 0, 0.28);
+										  width: 100%;
+  height: 100%;
+  line-height: 75px;
+				}
+			}
+		}
+		&.open{
+			.btn{
+				background: rgba(0, 0, 0, 0.28);
+				box-shadow: none;
+				outline: none;
+				border: none;
+			}
+		}
+	}
+	.dropdown-toggle{
+		padding: 25px 15px;
+	}
+	.dropdown-menu{
+		background-color:$white;
+		padding:20px 15px 0;
+		margin: 2px 8px 0 0;
+		border-radius: 0;
+		box-shadow: 1px 2px 4px -3px rgba(0, 0, 0, 0.7);
+		border-color: #F4F4F4;
+		.dropdown-header{
+			width: 100%;
+			text-align: center;
+			padding: 10px 0;
+		}
+		img{
+			width: 100px;
+			margin: 0 auto;
+			display: block;
+		}
+		.um-sign-out{
+			width: auto;
+			margin: 0;
+			display: block;
+			text-align:center;
+			font-size: 12px;
+			border: none;
+			padding: 0;
+			color:$primary;
+		}
+		li.um-icon {
+			font-size: 20px;
+			background-color: rgba(0, 0, 0, 0);
+			margin: 2px 0 10px;
+			padding: 0;
+			float: left;
+			a{
+				display: inline;
+				padding: 3px;
+				margin: 0;
+				background-color: rgba(0, 0, 0, 0);
+				color:#888;
+				&:hover{
+					color: $primary;
+				}
+				&.active{
+					color: darken(#888, 5%);
+				}
+			}
+		}
+	}
 }
 
 
@@ -416,6 +454,7 @@ body,
 		font-size: 12px;
 		text-align: center;
 		margin: 5px 0;
+		display: cursor;
 	}
 	.left-nav-slider{
 		z-index: 1200;
@@ -461,6 +500,7 @@ body,
 					top: -5px;
 				}
 				&:hover{
+					text-decoration: none;
 					background:rgba(0,0,0,0.05);
 				}
 				&.active{
@@ -525,6 +565,7 @@ body,
 						color:$stanfordRed;
 						font-family: $font-family-ssp;
 						font-weight:400;
+						 text-decoration: none;
 						&:hover{
 							text-decoration: none;
 							background:lighten( $salmon, 5%);
@@ -562,7 +603,7 @@ body,
 						}
 						.message{
 							text-align: center;
-							width: 270px;
+							width: 90%;
 							margin: 10px auto;
 							display: block;
 							font-size: 15px;
@@ -589,7 +630,7 @@ body,
 						  }
 						  &::before {
 						    font-family: FontAwesome;
-						    content: '\f07b \0020 Validate';
+						    content: '\f093 \0020 Upload';
 						    display: inline-block;
 						    background-color:$sky;
 						    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
@@ -677,7 +718,12 @@ body,
 								font-size: 10px;
 								color:#aaa;
 								a{
+									text-decoration: none;
 									color:#5c5c5c;
+									&:hover{
+										  text-decoration: none;
+										  color:$night;
+									}
 								}
 							}
 						}
@@ -715,6 +761,7 @@ body,
 							color:lighten($primary,10%);
 							background:#dedede;
 							border-bottom: 1px solid #BBB;
+							text-decoration: none;
 							.pull-right{
 								color: #808080;
 								i{
@@ -742,6 +789,7 @@ body,
 							}
 							&:hover{
 								color:lighten($primary,10%);
+								text-decoration: none;
 								background:#d9d9d9;
 								i{
 									&:after{
@@ -834,11 +882,6 @@ body,
 .tools-col .upload-accordion .upload-panel .panel-collapse .panel-body .validating.ua-body{
 	.upload-wrap {
 		box-shadow:0 2px 6px rgba(0, 0, 0, 0.2);
-		input.dirUpload-btn{
-			&::before {
-				content: '\f07b \0020 Re-validate';
-			}
-		}
 	}
 }
 

@@ -19,9 +19,6 @@ class LeftNavbar extends React.Component {
 			<span className={this.state.showNav ? 'open' : null}>
 				<span className="left-nav-slider">
 					<ul>
-						<li className="left-nav-home">
-							<Link to="home"><i className="fa fa-home" /><span className="link-name">home</span></Link>
-						</li>
 						<li className="left-nav-dashboard">
 							<Link to="dashboard"><i className="fa fa-dashboard" /><span className="link-name">dashboard</span></Link>
 						</li>
