@@ -25,15 +25,15 @@ class Error extends React.Component {
 				<div className="em-body">
 					<h4 className="em-header">Error: {index + 1}</h4>
 					<span className="e-meta">
+						<label>Reason: </label>
+						<p>{error.reason}</p>
+					</span>
+					<span className="e-meta">
 						<label>
 							{errLocation}
 						</label>
 						<p>{error.evidence}</p>
-					</span>
-					<span className="e-meta">
-						<label>Reason: </label>
-						<p>{error.reason}</p>
-					</span>
+					</span>				
 				</div>
 			
     	);

@@ -37,12 +37,10 @@ let Upload = React.createClass({
 		let errors = this.state.errors;
 		let dirName = this.state.dirName;
 		let totalErrors = self.state.totalErrors;
-		
-		
-
-		let uploadBtn = (
+				
+		let uploading = (
 			<div className="validate-buttons">
-				<button onClick={self._upload} className="btn-blue">Upload</button>
+				<button onClick={self._upload} className="btn-blue"><i className=""></i> Upload</button>
 			</div>
 		);
 
@@ -51,6 +49,7 @@ let Upload = React.createClass({
 				Validation and Jobs
 			</h2>
 		);
+
 		let dirNameWrap = (
 			<h3 className="dir-name">
 		   		<i className="folderIcon fa fa-folder-open" /> 
@@ -61,12 +60,15 @@ let Upload = React.createClass({
 		let uploadMeta = (
 			<span>
 				{dirNameWrap}
-				<span className="message">Fix the <strong>{totalErrors} Errors</strong> and Validate your Dataset Again to Continue</span>
+				<span className="message fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} Errors</strong> and upload your dataset again. <a href="#">Click to view details on BIDS specification</a>.</span>
 			</span>
 		);
+		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset. <a href="#">Click to view details on BIDS specification</a>.</span>;
+
 		let errorHeador =(
 			<div className="fadeInUpBig errors-header">{totalErrors} Errors in {errors.length} files</div>
 		);
+
 		let uploadFileStructure = (
 			<Accordion className="fileStructure fadeInUpBig">
 				<Panel header='See File Structure' eventKey='1'>
@@ -74,18 +76,20 @@ let Upload = React.createClass({
 			  	</Panel>
 		  	</Accordion>
 		);
+
 		return (
 			<div className="right-sidebar">
 				<div className="upload-nav">{uploadNavHeader}</div>
 					<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
-					<Panel className="upload-panel" header='Select and Validate' eventKey='1'>
+					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
 							
 						<div className={this.state.validating ? 'ua-body validating' : 'ua-body'}>
 							<div className="upload-wrap">
 								<span className={this.state.uploadState ? 'upload' : null }>
 									<DirUpload onChange={self._onChange} />
-									{errors.length === 0 ? uploadBtn : null}
-									{tree.length > 0 ? uploadMeta : null}
+									{!this.state.uploadState && errors.length === 0 ? initialMessage : null }
+									<br/><button onClick={self._upload}>scitran</button>
+									{tree.length > 0 && errors.length > 0 ? uploadMeta : null}
 								</span>
 							</div>
 							<div className="error-wrap">
@@ -101,9 +105,10 @@ let Upload = React.createClass({
 	
 	},
 
-
-
 // custom methods -----------------------------------------------------
+
+//need to add after upload is ready {errors.length === 0 ? uploading : null}
+
 	_onChange (files) {
 		let self = this;
 		this.setState({
@@ -121,15 +126,15 @@ let Upload = React.createClass({
 	_validate: function (fileList) {
 		let self = this;
         validate.BIDS(fileList, function (errors) {
+        	let adderTotalErrors = 0;
             self.setState({errors: errors});
-            if(errors.length === 0){
+			for(let i = 0; i< errors.length; i++){
+				adderTotalErrors  += errors[i].errors.length;
+			}
+			self.setState({totalErrors: adderTotalErrors});
+			if(errors.length === 0){
 				self.setState({uploadState: !self.state.uploadState});
 			}
-			
-			for(let i = 0; i< errors.length; i++){
-				self.setState({totalErrors: self.state.totalErrors += errors[i].errors.length});
-			}
-			
         });
 
 

@@ -34,8 +34,10 @@ let BSNavbar = React.createClass({
 					<DropdownButton className="user-menu btn-null" eventKey={1} title={gear}>
 						<img src={thumbnail} alt={username} className="userMenuThumb" /> 
 						<li role="presentation" className="dropdown-header">{username}</li>
+						
+						<li><a onClick={this._signOut} className="um-sign-out">Sign Out</a></li>
 						<li role="separator" className="divider"></li>
-						<li><a onClick={this._signOut} className="sign-out">Sign Out</a></li>
+						<li className="um-icon"><Link to="dashboard"><i className="fa fa-dashboard" /></Link></li>
 			        </DropdownButton>
 		        </span>
 			);
@@ -56,7 +58,12 @@ let BSNavbar = React.createClass({
 						{brand}
 				    </div>
 				    <CollapsibleNav eventKey={0}>
-							<Nav navbar right className="useradmin-nav">
+							<Nav navbar className="useradmin-nav">
+								<li><Link className="home link" to="home">Home</Link></li>
+								<li><Link className="about link" to="home">About</Link></li>
+								<li><Link className="other link" to="dashboard">Other</Link></li>
+						    </Nav>
+						    <Nav navbar right className="useradmin-nav">
 								{isLoggedIn ? usermenu : <li><Link className="sign-in" to="signIn">Sign In</Link></li>}
 						    </Nav>
 					</CollapsibleNav>

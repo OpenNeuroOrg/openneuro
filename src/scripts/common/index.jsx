@@ -23,9 +23,11 @@ var App = React.createClass({
 	render () {
 		let showSidebar = this.isActive('dashboard');
 		let sidebar;
+		let leftnav;
 
 		if (showSidebar) {
 			sidebar = <div className="col-xs-4 tools-col fadeIn"><Upload /></div>;
+			leftnav = <div className="left-nav"><LeftNavbar /></div>
 		}
 
 		return (
@@ -34,9 +36,7 @@ var App = React.createClass({
 					<Navbar/>
 					<div className="main view container">
 						<div className="col-xs-12 route-wrapper">
-							<div className="left-nav">
-								<LeftNavbar />
-							</div>
+							{leftnav}
 							<RouteHandler/>
 						</div>
 					</div>
