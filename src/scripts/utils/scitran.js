@@ -1,7 +1,7 @@
 import request   from './request';
 import userStore from '../user/user.store';
 import files     from './files';
-import MD5       from 'MD5';
+import MD5       from './md5';
 
 // public API ---------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ function verifyUser (callback) {
  * generates a request to make a project in scitran.
  */
 function createProject (groupName, projectName, callback) {
-    console.log('create project: ' + projectName);
+    // console.log('create project: ' + projectName);
     let body = {name: projectName};
     request.post('groups/' + groupName + '/projects', {body: body}, callback);
 }
@@ -47,7 +47,7 @@ function createProject (groupName, projectName, callback) {
  *
  */
 function createSubject (projectId, subjectName, callback) {
-    console.log('create subject: ' + subjectName);
+    // console.log('create subject: ' + subjectName);
     let body = {label: subjectName, subject_code: 'subject'};
     request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
@@ -57,7 +57,7 @@ function createSubject (projectId, subjectName, callback) {
  *
  */
 function createSession (projectId, sessionName, callback) {
-    console.log('create session: ' + sessionName);
+    // console.log('create session: ' + sessionName);
     let body = {label: sessionName, subject_code: 'session'};
     request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
@@ -67,8 +67,8 @@ function createSession (projectId, sessionName, callback) {
  *
  */
 function createModality (sessionId, modalityName, callback) {
-    console.log('create modality: ' + modalityName);
-    let body = {label: modalityName};
+    // console.log('create modality: ' + modalityName);
+    let body = {label: modalityName, datatype: 'modality'};
     // body can have datatype field equal to an arbitrary string
     request.post('sessions/' + sessionId + '/acquisitions', {body: body}, callback);
 }
@@ -78,24 +78,31 @@ function createModality (sessionId, modalityName, callback) {
  *
  */
 function createAcquisition (acquisitionName, callback) {
-    console.log('create acquisition: ' + acquisitionName);
+    // console.log('create acquisition: ' + acquisitionName);
     callback();
 }
 
 function uploadFile (level, id, file) {
-    files.read(file, function (contents) {
-        let url = level + '/' + id + '/file/' + file.name;
-        request.put(url, {
-            headers: {
-                'Content-Type': 'application/octet-stream',
-                'Content-MD5': MD5(contents)
-            },
-            body: contents
-        }, function (err, res) {
-            console.log(err);
-            console.log(res);
+    // if (file.name.indexOf('.nii') == -1) {
+        MD5(file, function (hash) {
+            files.readAsArrayBuffer(file, function (buffer) {
+                console.log('upload');
+                console.log(buffer);
+                console.log(hash);
+                let url = level + '/' + id + '/file/' + file.name;
+                request.put(url, {
+                    headers: {
+                        'Content-Type': 'application/octet-stream',
+                        'Content-MD5': hash
+                    },
+                    body: buffer
+                }, function (err, res) {
+                    console.log(err);
+                    console.log(res);
+                });
+            });
         });
-    });
+    // }
 }
 
 /**
@@ -137,7 +144,8 @@ function uploadSessions (sessions, projectId, subjectId) {
                 uploadModalities(session.children, subjectId);
             }); 
         } else {
-            console.log('upload subject file: ' + session.name);
+            // needs tag to assosiate with being uploaded to subject level
+            uploadFile('sessions', subjectId, session);
         }
     }
 }
@@ -145,17 +153,20 @@ function uploadSessions (sessions, projectId, subjectId) {
 function uploadModalities (modalities, subjectId) {
     for (let modality of modalities) {
         if (modality.children && modality.children.length > 0) {
-            scitran.createModality(subjectId, modality.name, function () {
-                uploadAquisitions(modality.children);
+            scitran.createModality(subjectId, modality.name, function (err, res) {
+                let modalityId = res.body._id;
+                uploadAquisitions(modality.children, modalityId);
             });
         } else {
-            console.log('upload session file: ' + modality.name)
+            // needs tag to associate with being upload to session level
+            uploadFile('sessions', subjectId, modality);
         }
     }
 }
 
-function uploadAquisitions (acquisitions) {
+function uploadAquisitions (acquisitions, modalityId) {
     for (let acquisition of acquisitions) {
-        console.log('upload acquisition: ' + acquisition.name);
+        // console.log('upload acquisition: ' + acquisition.name);
+        uploadFile('acquisitions', modalityId, acquisition);
     }
 }

@@ -2,6 +2,7 @@
 
 let fileUtils = {
 	read,
+    readAsArrayBuffer,
 	generateTree
 };
 
@@ -24,7 +25,17 @@ function read (file, callback) {
 			callback(e.target.result);
 		}
 	};
-	reader.readAsBinaryString(file);
+	reader.readAsText(file);
+}
+
+function readAsArrayBuffer (file, callback) {
+    var reader = new FileReader();
+    reader.onloadend = function (e) {
+        if (e.target.readyState == FileReader.DONE) {
+            callback(e.target.result);
+        }
+    };
+    reader.readAsArrayBuffer(file);
 }
 
 /**
