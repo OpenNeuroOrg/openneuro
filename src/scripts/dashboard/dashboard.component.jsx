@@ -36,7 +36,7 @@ class Dashboard extends React.Component {
 			</div>
 		)
 		let notificationsTab = (
-			<div className="dash-tab-content notifications">
+			<div className="dash-tab-content notifications fadeIn">
 				<h2>My Notifications</h2>
 				<PanelGroup activeKey={this.state.activeKey} accordion>
 					<Panel header={notificatonheader} eventKey='1'>
@@ -54,7 +54,7 @@ class Dashboard extends React.Component {
 		)
 
 		let datasetsTab = (
-			<div className="dash-tab-content datasets">
+			<div className="dash-tab-content datasets fadeIn">
 				<h2>My Datasets</h2>
 				<PanelGroup activeKey={this.state.activeKey} accordion>
 					<Panel header={datasetheader} eventKey='1'>
@@ -71,7 +71,11 @@ class Dashboard extends React.Component {
 			</div>
 		)
 
-		let jobsTab = <div>jobs</div>
+		let jobsTab = (
+			<div className="dash-tab-content notifications fadeIn">
+				<h2>My Jobs</h2>
+			</div>
+		);
 		return (
 	
 				<div className="fadeIn inner-route dashboard">
