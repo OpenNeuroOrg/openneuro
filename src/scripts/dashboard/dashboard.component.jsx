@@ -26,13 +26,13 @@ class Dashboard extends React.Component {
 		let datasetheader =(
 			<div className="header clearfix">
 				<h4 className="dataset">fake header text</h4>
-				<div className="date">6/10/15</div>
+				<div className="date">6/10/15 <span className="time-passed">now</span></div>
 			</div>
 		)
 		let notificatonheader =(
 			<div className="header clearfix unread">
 				<h4 className="dataset">fake header text</h4>
-				<div className="date">6/10/15</div>
+				<div className="date">6/10/15 <span className="time-passed">now</span></div>
 			</div>
 		)
 		let notificationsTab = (

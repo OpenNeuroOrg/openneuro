@@ -988,6 +988,10 @@ body,
 						color: #909090;
 						font-size: 10px;
 						padding-top: 5px;
+						.time-passed{
+							margin-left: 10px;
+							text-transform: uppercase;
+						}
 					}
 					&:after {
 						clear: both;
