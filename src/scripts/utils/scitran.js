@@ -48,8 +48,7 @@ function createProject (groupName, projectName, callback) {
  */
 function createSubject (projectId, subjectName, callback) {
     console.log('create subject: ' + subjectName);
-    let body = {label: subjectName};
-    // body can have subject_code field equal to arbitrary string
+    let body = {label: subjectName, subject_code: 'subject'};
     request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
 
@@ -57,9 +56,10 @@ function createSubject (projectId, subjectName, callback) {
  * Create Session
  *
  */
-function createSession (sessionName, callback) {
+function createSession (projectId, sessionName, callback) {
     console.log('create session: ' + sessionName);
-    callback();
+    let body = {label: sessionName, subject_code: 'session'};
+    request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
 
 /**
@@ -122,7 +122,7 @@ function uploadSubjects (subjects, projectId) {
         if (subject.children && subject.children.length > 0) {
             scitran.createSubject(projectId, subject.name, function (err, res) {
                 let subjectId = res.body._id;
-                uploadSessions(subject.children, subjectId);
+                uploadSessions(subject.children, projectId, subjectId);
             });
         } else {
             uploadFile('projects', projectId, subject);
@@ -130,10 +130,10 @@ function uploadSubjects (subjects, projectId) {
     }
 }
 
-function uploadSessions (sessions, subjectId) {
+function uploadSessions (sessions, projectId, subjectId) {
     for (let session of sessions) {
         if (session.children && session.children.length > 0) {
-            scitran.createSession(session.name, function () {
+            scitran.createSession(projectId, session.name, function () {
                 uploadModalities(session.children, subjectId);
             }); 
         } else {
