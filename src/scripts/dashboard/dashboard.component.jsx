@@ -73,7 +73,7 @@ class Dashboard extends React.Component {
 
 		let jobsTab = (
 			<div className="dash-tab-content notifications fadeIn">
-				<h2>My Jobs</h2>
+				<h2>My Jobs Results</h2>
 			</div>
 		);
 		return (
@@ -81,8 +81,8 @@ class Dashboard extends React.Component {
 				<div className="fadeIn inner-route dashboard">
 				<ul className="nav nav-pills dash-tab-link">
 					<li className={this.state.notifications ? 'active' : null} onClick={this._notifications.bind(this)}><a className="btn-blue">Notifications<span className="unread-badge">2</span></a></li>
-					<li className={this.state.datasets ? 'active' : null} onClick={this._datasets.bind(this)}><a className="btn-blue">Datasets</a></li>
-					<li className={this.state.jobs ? 'active' : null} onClick={this._jobs.bind(this)}><a className="btn-blue">Jobs</a></li>
+					<li className={this.state.datasets ? 'active' : null} onClick={this._datasets.bind(this)}><a className="btn-blue">My Datasets</a></li>
+					<li className={this.state.jobs ? 'active' : null} onClick={this._jobs.bind(this)}><a className="btn-blue">My Results</a></li>
 					
 					<li className="navbar-right"><a href="#"><i className="fa fa-refresh"></i></a></li>
 					<li className="navbar-right"><a href="#"><i className="fa fa-search"></i></a></li>
