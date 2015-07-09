@@ -49,6 +49,7 @@ function createProject (groupName, projectName, callback) {
 function createSubject (projectId, subjectName, callback) {
     console.log('create subject: ' + subjectName);
     let body = {label: subjectName};
+    // body can have subject_code field equal to arbitrary string
     request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
 
@@ -68,6 +69,7 @@ function createSession (sessionName, callback) {
 function createModality (sessionId, modalityName, callback) {
     console.log('create modality: ' + modalityName);
     let body = {label: modalityName};
+    // body can have datatype field equal to an arbitrary string
     request.post('sessions/' + sessionId + '/acquisitions', {body: body}, callback);
 }
 
