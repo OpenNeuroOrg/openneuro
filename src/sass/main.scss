@@ -438,6 +438,7 @@ body,
 		position: fixed;
 		width: 66.66667%;
 		left: 0;	
+		padding-bottom: 100px;	
 	}
 }
 
@@ -570,16 +571,19 @@ body,
 							text-decoration: none;
 							background:lighten( $salmon, 5%);
 						}
-						&:after{
-							content: '\f077';
+						&:before{
+							content: '\f068';
 							font-family: FontAwesome;
 							color: lighten($primary,10%);
-							float: right;
 							font-weight: 300;
+							margin-right:5px;
+							font-size: 10px;
+							top: -3px;
+							position: relative;
 						}
 						&.collapsed{
-							&:after{
-								content: '\f078';							 				
+							&:before{
+								content: '\f067';							 				
 							}
 						}
 					}
@@ -762,29 +766,29 @@ body,
 							background:#dedede;
 							border-bottom: 1px solid #BBB;
 							text-decoration: none;
+							&:before{
+								content: '\f068';
+								font-family: FontAwesome;
+								font-size: 6px;
+								margin-right: 5px;
+								color:lighten($primary,10%);
+								top: -1px;
+								position: relative;
+							}
 							.pull-right{
 								color: #808080;
 								i{
 									margin-left:2px;
-									&:after{
-										content: '\f077';
-										font-family: FontAwesome;
-										font-size: 10px;
-										margin-left: 5px;
-										color:lighten($primary,10%);
-									}
 								}
 							}
 					 		&.collapsed{
 								background:#e0e0e0;
 								color:$primary;
+								&:before{
+									color:$primary;
+									content: '\f067';							 				
+								}
 								.pull-right{
-									i{
-										&:after{
-											color:$primary;
-											content: '\f078';							 				
-										}
-									}
 								}
 							}
 							&:hover{
@@ -885,6 +889,167 @@ body,
 	}
 }
 
+
+//main-col dashboard page
+.dashboard{
+	.nav.nav-pills>li{
+		margin-right: 10px;
+		a{
+			transition: background 0.3s ease;
+		  	padding: 6px 20px;
+		  	font-size: 10px;
+		  	border-radius: 2px;
+		  	.unread-badge{
+				background: #77E6A3;
+				position: absolute;
+				top: -10px;
+				right: -6px;
+				padding: 4px 0 0;
+				border-radius: 10px;
+				font-size: 9px;
+				line-height: 9px;
+				text-align: center;
+				width: 17px;
+				height: 17px;
+		  	}
+			&:hover{
+				background:$sky;
+				color:#fff;
+			}
+		}
+		&.active{
+			a.btn-blue{
+				background:$ocean;
+		  		border:1px solid $ocean;
+		  		box-shadow:inset 0 0 2px rgba(0,0,0,0.4);
+		  	}
+		}
+		&.navbar-right{
+			a{
+				color:$night;
+				padding:5px;
+				background:none;
+				&:hover{
+					background:none;
+					color:$primary;
+
+				}
+			}
+			.dropdown-menu{
+				border-radius: 0;
+				border: none;
+				box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+			}
+		}
+	}
+	.dash-tab-content{
+		box-shadow: 1px 0px 3px 0px rgba(0, 0, 0, 0.3);
+		padding: 0;
+		margin: 20px 0;
+		h2{
+			margin: 0;
+			padding: 20px;
+			font-size: 30px;
+			text-transform: uppercase;
+			font-weight: 100;
+			border-bottom: 1px solid #E1E1E1;
+
+		}
+		.panel-group .panel+.panel{
+			margin: 0;
+		}
+		.panel{
+			border-radius: 0;
+			border: none;
+			border-bottom:1px solid #e1e1e1;
+			box-shadow: none;
+			background:#f8f8f8;
+			.panel-heading{
+				padding: 0;
+				background-color: rgba(0, 0, 0, 0);
+				a{
+					display: block;
+					padding: 10px 20px;
+					color:lighten($primary,10%);
+					background:transparent;
+					h4{
+						border: none;
+						width: 50%;
+						float: left;
+						margin: 0;
+						font-size: 15px;
+					&:before{
+						font-family: FontAwesome;
+						content: '\f068';
+						margin-right:5px;
+						color:$primary;
+						font-size: 8px;
+						top: -2px;
+						position: relative;
+					}
+					}
+					.date{
+						float: left;
+						margin: 0;
+						text-align: right;
+						width: 50%;
+						color: #909090;
+						font-size: 10px;
+						padding-top: 5px;
+						.time-passed{
+							margin-left: 10px;
+							text-transform: uppercase;
+						}
+					}
+					&:after {
+						clear: both;
+					}
+					&:before, 
+					&:after {
+						content: " ";
+						display: table;
+					}
+
+					&.collapsed{
+						background:#fff;
+						transition: background 1s ease;
+						color:$primary;
+						h4:before{
+							content:'\f067';
+						}
+						&:hover{
+							background:#fafafa;
+							color:lighten($primary,10%);
+						}
+					}
+				}
+			}
+			.panel-collapse {
+				.panel-body{
+					border:none;
+					background:transparent;
+					padding: 0 ;
+					.inner{
+						padding:10px 20px;
+						border-top: 1px solid #ddd;
+					}
+				}
+			}
+		}
+	}
+	.notifications{
+		.panel{
+			a{
+				border-left:8px solid transparent;
+			}
+			.unread{
+				a{
+					border-color:#77e6a3;
+				}
+			}
+		}
+	}
+}
 
 
 
