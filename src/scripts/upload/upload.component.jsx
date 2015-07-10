@@ -44,22 +44,12 @@ let Upload = React.createClass({
 			</div>
 		);
 
-		let uploadNavHeader = (
-			<h2>
-				Validation and Jobs
-			</h2>
-		);
-
-		let dirNameWrap = (
-			<h3 className="dir-name">
-		   		<i className="folderIcon fa fa-folder-open" /> 
-		   		{dirName}
-			</h3>
-		);
-
 		let uploadMeta = (
 			<span>
-				{dirNameWrap}
+				<h3 className="dir-name">
+			   		<i className="folderIcon fa fa-folder-open" /> 
+			   		{dirName}
+				</h3>
 				<span className="message fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} Errors</strong> and upload your dataset again. <a href="#">Click to view details on BIDS specification</a>.</span>
 			</span>
 		);
@@ -79,7 +69,7 @@ let Upload = React.createClass({
 
 		return (
 			<div className="right-sidebar">
-				<div className="upload-nav">{uploadNavHeader}</div>
+				<div className="upload-nav"><h2>Validation and Jobs</h2></div>
 					<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
 							
