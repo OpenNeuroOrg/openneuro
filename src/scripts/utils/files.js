@@ -1,42 +1,12 @@
 // public API ---------------------------------------------------------------------
 
 let fileUtils = {
-	read,
-    readAsArrayBuffer,
 	generateTree
 };
 
 export default fileUtils;
 
 // implementations ----------------------------------------------------------------
-
-/**
- * Read
- *
- * A helper method for reading file contents.
- * Takes a file object and a callback and calls
- * the callback with the binary contents of the
- * file as the only argument.
- */
-function read (file, callback) {
-	var reader = new FileReader();
-	reader.onloadend = function (e) {
-		if (e.target.readyState == FileReader.DONE) {
-			callback(e.target.result);
-		}
-	};
-	reader.readAsText(file);
-}
-
-function readAsArrayBuffer (file, callback) {
-    var reader = new FileReader();
-    reader.onloadend = function (e) {
-        if (e.target.readyState == FileReader.DONE) {
-            callback(e.target.result);
-        }
-    };
-    reader.readAsArrayBuffer(file);
-}
 
 /**
  * Generate Tree

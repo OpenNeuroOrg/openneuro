@@ -1,7 +1,6 @@
 import request   from './request';
+import uploads   from './upload';
 import userStore from '../user/user.store';
-import files     from './files';
-import MD5       from './md5';
 
 // public API ---------------------------------------------------------------------
 
@@ -12,7 +11,7 @@ let scitran = {
     createSession,
     createModality,
     createAcquisition,
-	upload
+	upload,
 };
 
 export default scitran;
@@ -83,26 +82,8 @@ function createAcquisition (acquisitionName, callback) {
 }
 
 function uploadFile (level, id, file) {
-    // if (file.name.indexOf('.nii') == -1) {
-        MD5(file, function (hash) {
-            files.readAsArrayBuffer(file, function (buffer) {
-                console.log('upload');
-                console.log(buffer);
-                console.log(hash);
-                let url = level + '/' + id + '/file/' + file.name;
-                request.put(url, {
-                    headers: {
-                        'Content-Type': 'application/octet-stream',
-                        'Content-MD5': hash
-                    },
-                    body: buffer
-                }, function (err, res) {
-                    console.log(err);
-                    console.log(res);
-                });
-            });
-        });
-    // }
+    let url = level + '/' + id + '/file/' + file.name;
+    uploads.add({url: url, file: file});
 }
 
 /**

@@ -2,8 +2,8 @@
  * MD5
  *
  * Takes a file and callsback with a MD5
- * hash. Spawns a web worker to keep
- * hasing off of the UI thread.
+ * hash and a file array buffer. Spawns a web worker to keep
+ * hashing off of the UI thread.
  */
 export default function (file, callback) {
 
