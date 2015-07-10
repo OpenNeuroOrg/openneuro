@@ -45,7 +45,7 @@
     });
     
     gulp.task('watch', [], function() {
-        gulp.start(['browserSync', 'watchTask', 'watchify', 'styles', 'copy' ]);
+        gulp.start(['browserSync', 'watchTask', 'watchify', 'watchify2', 'styles', 'copy' ]);
     });
 
     gulp.task('default',['watch'], function() {
@@ -82,6 +82,21 @@
                 .bundle()
                 .on('error', notify.onError())
                 .pipe(source(p.bundle))
+                .pipe(gulp.dest(p.dist))
+                .pipe(reload({stream: true}));
+        }
+        bundler.transform(babelify).on('update', rebundle);
+        return rebundle();
+    });
+
+    // watch for changes
+    gulp.task('watchify2', function() {
+        var bundler = watchify(browserify('./src/scripts/utils/md5worker.js', watchify.args));
+        function rebundle() {
+            return bundler
+                .bundle()
+                .on('error', notify.onError())
+                .pipe(source('md5worker.js'))
                 .pipe(gulp.dest(p.dist))
                 .pipe(reload({stream: true}));
         }
