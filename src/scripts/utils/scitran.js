@@ -10,7 +10,6 @@ let scitran = {
     createSubject,
     createSession,
     createModality,
-    createAcquisition,
 	upload,
 };
 
@@ -36,7 +35,6 @@ function verifyUser (callback) {
  * generates a request to make a project in scitran.
  */
 function createProject (groupName, projectName, callback) {
-    // console.log('create project: ' + projectName);
     let body = {name: projectName};
     request.post('groups/' + groupName + '/projects', {body: body}, callback);
 }
@@ -46,7 +44,6 @@ function createProject (groupName, projectName, callback) {
  *
  */
 function createSubject (projectId, subjectName, callback) {
-    // console.log('create subject: ' + subjectName);
     let body = {label: subjectName, subject_code: 'subject'};
     request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
@@ -56,7 +53,6 @@ function createSubject (projectId, subjectName, callback) {
  *
  */
 function createSession (projectId, sessionName, callback) {
-    // console.log('create session: ' + sessionName);
     let body = {label: sessionName, subject_code: 'session'};
     request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
@@ -66,21 +62,15 @@ function createSession (projectId, sessionName, callback) {
  *
  */
 function createModality (sessionId, modalityName, callback) {
-    // console.log('create modality: ' + modalityName);
     let body = {label: modalityName, datatype: 'modality'};
-    // body can have datatype field equal to an arbitrary string
     request.post('sessions/' + sessionId + '/acquisitions', {body: body}, callback);
 }
 
 /**
- * Create Acquisition
+ * Upload File
  *
+ * Pushed upload details into an upload queue.
  */
-function createAcquisition (acquisitionName, callback) {
-    // console.log('create acquisition: ' + acquisitionName);
-    callback();
-}
-
 function uploadFile (level, id, file, tag) {
     let url = level + '/' + id + '/file/' + file.name;
     uploads.add({url: url, file: file, tag: tag});
@@ -89,19 +79,14 @@ function uploadFile (level, id, file, tag) {
 /**
  * Upload
  *
- * Takes an entire bids filelist and upload recurses
+ * Takes an entire bids file tree and upload recurses
  * through and uploads all the files.
- *
- * TODO
- *    - Check if we should call filelist filetree for 
- *    consistency
- *    - Determine how to upload in between scitran levels
  */
-function upload (filelist) {
+function upload (fileTree) {
     let groupName = 'SquishyRoles';
-    scitran.createProject(groupName, filelist[0].name, function (err, res) {
+    scitran.createProject(groupName, fileTree[0].name, function (err, res) {
         let projectId = res.body._id;
-        uploadSubjects(filelist[0].children, projectId);
+        uploadSubjects(fileTree[0].children, projectId);
     });
 }
 
@@ -147,7 +132,6 @@ function uploadModalities (modalities, subjectId) {
 
 function uploadAquisitions (acquisitions, modalityId) {
     for (let acquisition of acquisitions) {
-        // console.log('upload acquisition: ' + acquisition.name);
         uploadFile('acquisitions', modalityId, acquisition, 'modality');
     }
 }
