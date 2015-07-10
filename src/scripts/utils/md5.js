@@ -10,7 +10,7 @@ export default function (file, callback) {
 	var worker = new Worker('md5worker.js');
 	worker.postMessage(file);
 	worker.onmessage = function (e) {
-		console.log(e.data);
+		callback(e.data);
 	};
 
 }
