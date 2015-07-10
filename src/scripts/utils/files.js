@@ -1,31 +1,12 @@
 // public API ---------------------------------------------------------------------
 
 let fileUtils = {
-	read,
 	generateTree
 };
 
 export default fileUtils;
 
 // implementations ----------------------------------------------------------------
-
-/**
- * Read
- *
- * A helper method for reading file contents.
- * Takes a file object and a callback and calls
- * the callback with the binary contents of the
- * file as the only argument.
- */
-function read (file, callback) {
-	var reader = new FileReader();
-	reader.onloadend = function (e) {
-		if (e.target.readyState == FileReader.DONE) {
-			callback(e.target.result);
-		}
-	};
-	reader.readAsBinaryString(file);
-}
 
 /**
  * Generate Tree
@@ -42,6 +23,7 @@ function generateTree (files) {
     // generate list of paths
 	for (let i = 0; i < files.length; i++) {
 		let file = files[i];
+        if (blacklist.indexOf(file.name) > -1) {continue;}
         pathList[file.webkitRelativePath] = file;
     }
 
@@ -77,3 +59,7 @@ function generateTree (files) {
     // return tree
     return dirTree;
 }
+
+let blacklist = [
+    '.DS_Store'
+];

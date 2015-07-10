@@ -1,7 +1,6 @@
 import request   from './request';
+import uploads   from './upload';
 import userStore from '../user/user.store';
-import files     from './files';
-import MD5       from 'MD5';
 
 // public API ---------------------------------------------------------------------
 
@@ -11,8 +10,7 @@ let scitran = {
     createSubject,
     createSession,
     createModality,
-    createAcquisition,
-	upload
+	upload,
 };
 
 export default scitran;
@@ -37,7 +35,6 @@ function verifyUser (callback) {
  * generates a request to make a project in scitran.
  */
 function createProject (groupName, projectName, callback) {
-    console.log('create project: ' + projectName);
     let body = {name: projectName};
     request.post('groups/' + groupName + '/projects', {body: body}, callback);
 }
@@ -47,8 +44,7 @@ function createProject (groupName, projectName, callback) {
  *
  */
 function createSubject (projectId, subjectName, callback) {
-    console.log('create subject: ' + subjectName);
-    let body = {label: subjectName};
+    let body = {label: subjectName, subject_code: 'subject'};
     request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
 
@@ -56,9 +52,9 @@ function createSubject (projectId, subjectName, callback) {
  * Create Session
  *
  */
-function createSession (sessionName, callback) {
-    console.log('create session: ' + sessionName);
-    callback();
+function createSession (projectId, sessionName, callback) {
+    let body = {label: sessionName, subject_code: 'session'};
+    request.post('projects/' + projectId + '/sessions', {body: body}, callback);
 }
 
 /**
@@ -66,52 +62,31 @@ function createSession (sessionName, callback) {
  *
  */
 function createModality (sessionId, modalityName, callback) {
-    console.log('create modality: ' + modalityName);
-    let body = {label: modalityName};
+    let body = {label: modalityName, datatype: 'modality'};
     request.post('sessions/' + sessionId + '/acquisitions', {body: body}, callback);
 }
 
 /**
- * Create Acquisition
+ * Upload File
  *
+ * Pushed upload details into an upload queue.
  */
-function createAcquisition (acquisitionName, callback) {
-    console.log('create acquisition: ' + acquisitionName);
-    callback();
-}
-
-function uploadFile (level, id, file) {
-    files.read(file, function (contents) {
-        let url = level + '/' + id + '/file/' + file.name;
-        request.put(url, {
-            headers: {
-                'Content-Type': 'application/octet-stream',
-                'Content-MD5': MD5(contents)
-            },
-            body: contents
-        }, function (err, res) {
-            console.log(err);
-            console.log(res);
-        });
-    });
+function uploadFile (level, id, file, tag) {
+    let url = level + '/' + id + '/file/' + file.name;
+    uploads.add({url: url, file: file, tag: tag});
 }
 
 /**
  * Upload
  *
- * Takes an entire bids filelist and upload recurses
+ * Takes an entire bids file tree and upload recurses
  * through and uploads all the files.
- *
- * TODO
- *    - Check if we should call filelist filetree for 
- *    consistency
- *    - Determine how to upload in between scitran levels
  */
-function upload (filelist) {
+function upload (fileTree) {
     let groupName = 'SquishyRoles';
-    scitran.createProject(groupName, filelist[0].name, function (err, res) {
+    scitran.createProject(groupName, fileTree[0].name, function (err, res) {
         let projectId = res.body._id;
-        uploadSubjects(filelist[0].children, projectId);
+        uploadSubjects(fileTree[0].children, projectId);
     });
 }
 
@@ -120,22 +95,23 @@ function uploadSubjects (subjects, projectId) {
         if (subject.children && subject.children.length > 0) {
             scitran.createSubject(projectId, subject.name, function (err, res) {
                 let subjectId = res.body._id;
-                uploadSessions(subject.children, subjectId);
+                uploadSessions(subject.children, projectId, subjectId);
             });
         } else {
-            uploadFile('projects', projectId, subject);
+            uploadFile('projects', projectId, subject, 'project');
         }
     }
 }
 
-function uploadSessions (sessions, subjectId) {
+function uploadSessions (sessions, projectId, subjectId) {
     for (let session of sessions) {
         if (session.children && session.children.length > 0) {
-            scitran.createSession(session.name, function () {
+            scitran.createSession(projectId, session.name, function () {
                 uploadModalities(session.children, subjectId);
             }); 
         } else {
-            console.log('upload subject file: ' + session.name);
+            // needs tag to assosiate with being uploaded to subject level
+            uploadFile('sessions', subjectId, session, 'subject');
         }
     }
 }
@@ -143,17 +119,19 @@ function uploadSessions (sessions, subjectId) {
 function uploadModalities (modalities, subjectId) {
     for (let modality of modalities) {
         if (modality.children && modality.children.length > 0) {
-            scitran.createModality(subjectId, modality.name, function () {
-                uploadAquisitions(modality.children);
+            scitran.createModality(subjectId, modality.name, function (err, res) {
+                let modalityId = res.body._id;
+                uploadAquisitions(modality.children, modalityId);
             });
         } else {
-            console.log('upload session file: ' + modality.name)
+            // needs tag to associate with being upload to session level
+            uploadFile('sessions', subjectId, modality, 'session');
         }
     }
 }
 
-function uploadAquisitions (acquisitions) {
+function uploadAquisitions (acquisitions, modalityId) {
     for (let acquisition of acquisitions) {
-        console.log('upload acquisition: ' + acquisition.name);
+        uploadFile('acquisitions', modalityId, acquisition, 'modality');
     }
 }
