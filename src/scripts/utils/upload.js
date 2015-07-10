@@ -43,7 +43,6 @@ let upload = {
         });
 	}
 
-
 };
 
 export default upload;
