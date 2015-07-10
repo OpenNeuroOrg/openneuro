@@ -81,9 +81,9 @@ function createAcquisition (acquisitionName, callback) {
     callback();
 }
 
-function uploadFile (level, id, file) {
+function uploadFile (level, id, file, tag) {
     let url = level + '/' + id + '/file/' + file.name;
-    uploads.add({url: url, file: file});
+    uploads.add({url: url, file: file, tag: tag});
 }
 
 /**
@@ -113,7 +113,7 @@ function uploadSubjects (subjects, projectId) {
                 uploadSessions(subject.children, projectId, subjectId);
             });
         } else {
-            uploadFile('projects', projectId, subject);
+            uploadFile('projects', projectId, subject, 'project');
         }
     }
 }
@@ -126,7 +126,7 @@ function uploadSessions (sessions, projectId, subjectId) {
             }); 
         } else {
             // needs tag to assosiate with being uploaded to subject level
-            uploadFile('sessions', subjectId, session);
+            uploadFile('sessions', subjectId, session, 'subject');
         }
     }
 }
@@ -140,7 +140,7 @@ function uploadModalities (modalities, subjectId) {
             });
         } else {
             // needs tag to associate with being upload to session level
-            uploadFile('sessions', subjectId, modality);
+            uploadFile('sessions', subjectId, modality, 'session');
         }
     }
 }
@@ -148,6 +148,6 @@ function uploadModalities (modalities, subjectId) {
 function uploadAquisitions (acquisitions, modalityId) {
     for (let acquisition of acquisitions) {
         // console.log('upload acquisition: ' + acquisition.name);
-        uploadFile('acquisitions', modalityId, acquisition);
+        uploadFile('acquisitions', modalityId, acquisition, 'modality');
     }
 }

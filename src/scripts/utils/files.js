@@ -24,7 +24,6 @@ function generateTree (files) {
 	for (let i = 0; i < files.length; i++) {
 		let file = files[i];
         if (blacklist.indexOf(file.name) > -1) {continue;}
-        console.log(file.name);
         pathList[file.webkitRelativePath] = file;
     }
 

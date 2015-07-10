@@ -30,6 +30,9 @@ let upload = {
                 'Content-Type': 'application/octet-stream',
                 'Content-MD5': req.hash
             },
+            query: {
+            	tags: JSON.stringify([req.tag])
+            },
             body: req.buffer
         }, function (err, res) {
         	self.activeRequests--;
