@@ -5,7 +5,7 @@ let upload = {
 
 	queue: [],
 	activeRequests: 0,
-	maxRequests: 1,
+	maxRequests: 2,
 
 	add (req) {
 		let self = this;
@@ -22,8 +22,6 @@ let upload = {
 	},
 
 	start (req) {
-		console.log('request start');
-
 		let self = this;
 		self.activeRequests++;
 
@@ -34,7 +32,6 @@ let upload = {
             },
             body: req.buffer
         }, function (err, res) {
-        	console.log('request end');
         	self.activeRequests--;
         	if (self.queue.length > 0 && self.maxRequests >= self.activeRequests) {
         		self.start(self.queue[0]);

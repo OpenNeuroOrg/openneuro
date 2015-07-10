@@ -23,6 +23,8 @@ function generateTree (files) {
     // generate list of paths
 	for (let i = 0; i < files.length; i++) {
 		let file = files[i];
+        if (blacklist.indexOf(file.name) > -1) {continue;}
+        console.log(file.name);
         pathList[file.webkitRelativePath] = file;
     }
 
@@ -58,3 +60,7 @@ function generateTree (files) {
     // return tree
     return dirTree;
 }
+
+let blacklist = [
+    '.DS_Store'
+];
