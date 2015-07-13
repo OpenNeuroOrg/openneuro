@@ -38,6 +38,7 @@ var Request = {
 		request.put(config.scitranUrl + path)
 			.set('Authorization', userStore._token)
 			.set(options.headers)
+			.query(options.query)
 			.send(options.body)
 			.end(function (err, res) {
 				handleResponse(err, res, callback);
@@ -65,6 +66,7 @@ function handleResponse (err, res, callback) {
  */
 function normalizeOptions (options) {
 	if (!options.headers) {options.headers = {};}
+	if (!options.query)   {options.query   = {};}
 	return options;
 }
 

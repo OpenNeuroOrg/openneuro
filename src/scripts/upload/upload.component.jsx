@@ -47,10 +47,14 @@ let Upload = React.createClass({
 		let uploadMeta = (
 			<span>
 				<h3 className="dir-name">
-		   		<i className="folderIcon fa fa-folder-open" /> 
-		   		{dirName}
+					<i className="folderIcon fa fa-folder-open" /> 
+			   		{dirName}
 				</h3>
-				<span className="message fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} Errors</strong> and upload your dataset again.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>
+				<span className="message fadeIn">
+					Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} Errors</strong> and upload your dataset again.
+					<br/> 
+					<small><a href="#">Click to view details on BIDS specification</a></small>
+				</span>
 			</span>
 		);
 		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>;	
