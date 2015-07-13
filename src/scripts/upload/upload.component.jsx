@@ -37,49 +37,45 @@ let Upload = React.createClass({
 		let errors = this.state.errors;
 		let dirName = this.state.dirName;
 		let totalErrors = self.state.totalErrors;
-				
+		
 		let uploading = (
 			<div className="validate-buttons">
 				<button onClick={self._upload} className="btn-blue"><i className=""></i> Upload</button>
 			</div>
 		);
 
-		let uploadNavHeader = (
-			<h2>
-				My Tasks
-			</h2>
-		);
-
-		let dirNameWrap = (
-			<h3 className="dir-name">
-		   		<i className="folderIcon fa fa-folder-open" /> 
-		   		{dirName}
-			</h3>
-		);
-
 		let uploadMeta = (
 			<span>
-				{dirNameWrap}
+				<h3 className="dir-name">
+		   		<i className="folderIcon fa fa-folder-open" /> 
+		   		{dirName}
+				</h3>
 				<span className="message fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} Errors</strong> and upload your dataset again.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>
 			</span>
 		);
-		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>;
-
-		let errorHeador =(
+		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>;	
+		let errorHeader =(
 			<div className="fadeInUpBig errors-header">{totalErrors} Errors in {errors.length} files</div>
 		);
 
+		//Error Log and File Tree Structure
+		let errorLog = JSON.stringify(errors);
+		let errorURL = "data:application/octet-stream;charset=utf-8,"+dirName+'_Errors'+encodeURIComponent(errorLog);
+		let errorsFilename = dirName+"_errors.json"
 		let uploadFileStructure = (
-			<Accordion className="fileStructure fadeInUpBig">
-				<Panel header='See File Structure' eventKey='1'>
-			  		<DirTree tree={tree}/>
-			  	</Panel>
-		  	</Accordion>
+			<div>
+				<a download={errorsFilename} className="error-log fadeInUpBig" target="_blank" href={errorURL}>Download JSON error log for {dirName}</a>
+				<Accordion className="fileStructure fadeInUpBig">
+					<Panel header="See File Structure" eventKey='1'>
+				  		<DirTree tree={tree}/>
+				  	</Panel>
+			  	</Accordion>
+		  	</div>
 		);
 
 		return (
 			<div className="right-sidebar">
-				<div className="upload-nav">{uploadNavHeader}</div>
+				<div className="upload-nav"><h2>My Tasks</h2></div>
 					<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
 							
@@ -94,7 +90,7 @@ let Upload = React.createClass({
 							</div>
 							<div className="error-wrap">
 								{this.state.fileStructure ? uploadFileStructure : null}
-								{tree.length > 0 ? errorHeador : null}
+								{tree.length > 0 ? errorHeader : null}
 								{tree.length > 0 ? <DirValidationMessages errors={errors} /> : null}
 							</div>
 						</div>
@@ -128,6 +124,7 @@ let Upload = React.createClass({
         validate.BIDS(fileList, function (errors) {
         	let adderTotalErrors = 0;
             self.setState({errors: errors});
+
 			for(let i = 0; i< errors.length; i++){
 				adderTotalErrors  += errors[i].errors.length;
 			}
