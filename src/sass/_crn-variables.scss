@@ -17,6 +17,7 @@ $turquoise:#009b76;
 $night:#012a30; //body copy
 
 $primary: $stanfordRed;
+$primaryHover: lighten($primary,15%);
 
 //BS overrides
 $brand-primary:         $primary;

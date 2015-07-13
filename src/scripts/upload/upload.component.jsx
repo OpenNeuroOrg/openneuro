@@ -46,7 +46,7 @@ let Upload = React.createClass({
 
 		let uploadNavHeader = (
 			<h2>
-				Validation and Jobs
+				My Tasks
 			</h2>
 		);
 
@@ -60,10 +60,10 @@ let Upload = React.createClass({
 		let uploadMeta = (
 			<span>
 				{dirNameWrap}
-				<span className="message fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} Errors</strong> and upload your dataset again. <a href="#">Click to view details on BIDS specification</a>.</span>
+				<span className="message fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} Errors</strong> and upload your dataset again.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>
 			</span>
 		);
-		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset. <a href="#">Click to view details on BIDS specification</a>.</span>;
+		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>;
 
 		let errorHeador =(
 			<div className="fadeInUpBig errors-header">{totalErrors} Errors in {errors.length} files</div>

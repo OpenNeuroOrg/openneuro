@@ -40,6 +40,10 @@ a {
   color: $primary;
   cursor: pointer;
 }
+a:hover, a:focus {
+	color:lighten($primary , 15%);
+	text-decoration:none;
+}
 a:active,
 a:hover,
 a:focus{
@@ -234,9 +238,9 @@ h1,h2,h3,h4,h5,h6{
 
 	&:hover,
 	&:active {
-		border-color:lighten($primary, 10%);
+		border-color:$primaryHover;
 		background: #fafafa;
-		color:lighten($primary, 10%);
+		color:$primaryHover;
 	}
 }
 .btn-admin{
@@ -455,7 +459,7 @@ body,
 		font-size: 12px;
 		text-align: center;
 		margin: 5px 0;
-		display: cursor;
+		cursor:pointer;
 	}
 	.left-nav-slider{
 		z-index: 1200;
@@ -562,28 +566,31 @@ body,
 						font-size: 21px;
 						display: block;
 						padding: 18px;
-						background: $salmon;
-						color:$stanfordRed;
+						background: $stanfordRed;
+						color:$misty;
 						font-family: $font-family-ssp;
 						font-weight:400;
 						 text-decoration: none;
 						&:hover{
 							text-decoration: none;
-							background:lighten( $salmon, 5%);
+							background:lighten( $stanfordRed, 5%);
 						}
-						&:before{
-							content: '\f068';
+						&:after{
+							content: '\f077';
 							font-family: FontAwesome;
-							color: lighten($primary,10%);
+							color: $misty;
 							font-weight: 300;
 							margin-right:5px;
 							font-size: 10px;
 							top: -3px;
 							position: relative;
+							float: right;
+							padding-top: 9px;
+
 						}
 						&.collapsed{
-							&:before{
-								content: '\f067';							 				
+							&:after{
+								content: '\f078';							 				
 							}
 						}
 					}
@@ -613,9 +620,8 @@ body,
 							font-size: 15px;
 							text-transform:uppercase;
 							font-weight: 600;
-							strong{
-								color: $salmon;
-							}
+							color: $salmon;
+							max-width: 400px;
 						}
 						//custom upload input //dirUpload button
 						input.dirUpload-btn{
@@ -684,8 +690,8 @@ body,
 				overflow-y: scroll;
 				.errors-header{
 					padding: 10px;
-					background-color: #FFEDED;
-					color: #AE0000;
+					background-color:#fff;
+					color:  $salmon;
 					text-align: center;
 					text-transform: uppercase;
 					font-weight: 700;
@@ -762,42 +768,46 @@ body,
 							display: block;
 							padding: 10px;
 							font-size: 12px;
-							color:lighten($primary,10%);
+							color:$primaryHover;
 							background:#dedede;
 							border-bottom: 1px solid #BBB;
 							text-decoration: none;
-							&:before{
-								content: '\f068';
-								font-family: FontAwesome;
-								font-size: 6px;
-								margin-right: 5px;
-								color:lighten($primary,10%);
-								top: -1px;
-								position: relative;
-							}
 							.pull-right{
 								color: #808080;
 								i{
 									margin-left:2px;
+									&:after{
+										content: 'Hide';
+										font-size: 10px;
+										text-transform: uppercase;
+										margin-left: 5px;
+										color:$primaryHover;
+										position: relative;
+									}
 								}
 							}
 					 		&.collapsed{
 								background:#e0e0e0;
 								color:$primary;
 								&:before{
-									color:$primary;
-									content: '\f067';							 				
+						 				
 								}
 								.pull-right{
+									i{
+										&:after{
+											color:$primary;
+											content: 'View';	
+										}
+									}
 								}
 							}
 							&:hover{
-								color:lighten($primary,10%);
+								color:$primaryHover;
 								text-decoration: none;
 								background:#d9d9d9;
 								i{
 									&:after{
-										color:$primary;
+										color:$primaryHover;
 									}
 								}
 							}
@@ -897,7 +907,7 @@ body,
 		a{
 			transition: background 0.3s ease;
 		  	padding: 6px 20px;
-		  	font-size: 10px;
+		  	font-size: 12px;
 		  	border-radius: 2px;
 		  	.unread-badge{
 				background: #77E6A3;
@@ -911,16 +921,17 @@ body,
 				text-align: center;
 				width: 17px;
 				height: 17px;
+				color:$ocean;
+				font-weight: 600;
 		  	}
 			&:hover{
 				background:$sky;
 				color:#fff;
 			}
-		}
-		&.active{
-			a.btn-blue{
+			&.active.btn-blue{
 				background:$ocean;
 		  		border:1px solid $ocean;
+		  		color:#fff;
 		  		box-shadow:inset 0 0 2px rgba(0,0,0,0.4);
 		  	}
 		}
@@ -929,6 +940,8 @@ body,
 				color:$night;
 				padding:5px;
 				background:none;
+				font-size: 12px;
+				text-transform: uppercase;
 				&:hover{
 					background:none;
 					color:$primary;
@@ -970,7 +983,7 @@ body,
 				a{
 					display: block;
 					padding: 10px 20px;
-					color:lighten($primary,10%);
+					color:$primaryHover;
 					background:transparent;
 					h4{
 						border: none;
@@ -978,15 +991,6 @@ body,
 						float: left;
 						margin: 0;
 						font-size: 15px;
-					&:before{
-						font-family: FontAwesome;
-						content: '\f068';
-						margin-right:5px;
-						color:$primary;
-						font-size: 8px;
-						top: -2px;
-						position: relative;
-					}
 					}
 					.date{
 						float: left;
@@ -999,6 +1003,14 @@ body,
 						.time-passed{
 							margin-left: 10px;
 							text-transform: uppercase;
+							&:after{
+								content: 'Hide';
+								margin-left:10px;
+								color:$primary;
+								font-size: 10px;
+								position: relative;
+								float: right;
+							}
 						}
 					}
 					&:after {
@@ -1014,12 +1026,15 @@ body,
 						background:#fff;
 						transition: background 1s ease;
 						color:$primary;
-						h4:before{
-							content:'\f067';
+						.date .time-passed:after{
+							content:'View';
 						}
 						&:hover{
 							background:#fafafa;
-							color:lighten($primary,10%);
+							color:$primaryHover;
+							.date .time-passed:after{
+								color:$primaryHover;
+							}
 						}
 					}
 				}
