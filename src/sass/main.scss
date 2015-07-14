@@ -551,6 +551,8 @@ body,
 	}
 	.upload-accordion{
 		margin-top: 74px;
+		border-bottom: 2px solid rgba(0,0,0,0.63);
+		background:transparent;
 		.upload-panel {
 			border-radius: 0;
 			border: none;
@@ -601,6 +603,7 @@ body,
 				.panel-body{
 				 	padding: 0;
 					.upload-wrap{
+						position:relative;
 						padding:20px  0;
 						background:#f3f3f3;
 						border-bottom:1px solid #bbb;
@@ -620,8 +623,11 @@ body,
 							font-size: 15px;
 							text-transform:uppercase;
 							font-weight: 600;
-							color: $salmon;
+							color: $rock;
 							max-width: 400px;
+							&.error{
+								color:$coral;
+							}
 						}
 						//custom upload input //dirUpload button
 						input.dirUpload-btn{
@@ -686,30 +692,13 @@ body,
 
 			//Error Wrap in accordion in sidebar
 			.error-wrap{
+				position:relative;
 				overflow:hidden;
 				overflow-y: scroll;
-					a.error-log{
-						border:none;
-						background-color: rgba(0, 0, 0, 0);
-						border-color: rgba(0, 0, 0, 0);
-						box-shadow: none;
-						margin: 0;
-						padding: 5px;
-						text-align: center;
-						border-radius: 0;
-						background-color: #EEE;   
-						font-size: 10px;
-						text-align: center;
-						display: block;
-						color:$primary;
-						&:hover{
-							color: $primaryHover;
-						}
-					}
 				.errors-header{
 					padding: 10px;
-					background-color:#fff;
-					color:  $salmon;
+					background-color:#F3F3F3;
+					color:  $coral;
 					text-align: center;
 					text-transform: uppercase;
 					font-weight: 700;
@@ -717,6 +706,23 @@ body,
 					border-left: 0;
 					border-right: 0;
 					z-index: 1400;
+				}
+				a.error-log{
+					border:none;
+					border-color: rgba(0, 0, 0, 0);
+					box-shadow: none;
+					margin: 0;
+					padding: 5px;
+					text-align: center;
+					border-radius: 0;
+					font-size: 10px;
+					text-align: center;
+					display: block;
+					color:$primary;
+					background-color: transparent;
+					&:hover{
+						color: $primaryHover;
+					}
 				}
 				.panel-group{
 					margin-bottom: 30px;
@@ -734,14 +740,13 @@ body,
 						border-radius:0;
 						.panel-heading{
 							border:none;
-							background-color: rgba(0, 0, 0, 0);
 							border-color: rgba(0, 0, 0, 0);
 							box-shadow: none;
 							margin: 0;
 							padding: 5px 0;
 							text-align: center;
 							border-radius: 0;
-							background-color: #EEE;     
+							background-color: transparent;     
 							.panel-title{
 								font-size: 10px;
 								color:#aaa;
@@ -787,7 +792,7 @@ body,
 							padding: 10px;
 							font-size: 12px;
 							color:$primaryHover;
-							background:#dedede;
+							background:lighten($salmon, 25%);
 							border-bottom: 1px solid #BBB;
 							text-decoration: none;
 							.pull-right{
@@ -805,7 +810,7 @@ body,
 								}
 							}
 					 		&.collapsed{
-								background:#e0e0e0;
+								background:lighten($salmon, 30%);
 								color:$primary;
 								&:before{
 						 				
@@ -822,7 +827,7 @@ body,
 							&:hover{
 								color:$primaryHover;
 								text-decoration: none;
-								background:#d9d9d9;
+								background:lighten($salmon, 25%);
 								i{
 									&:after{
 										color:$primaryHover;
@@ -895,8 +900,8 @@ body,
 				}
 			}
 		}
-		//when upload is ready
-		.validate-buttons{
+		//when errors are present ready
+		.no-errors-warnings{
 			display: none;
 		}
 	}	
@@ -906,7 +911,7 @@ body,
 	input.dirUpload-btn{
 		display: none;
 	}
-	.validate-buttons{
+	.no-errors-warnings{
 		display: block;
 	}
 }
