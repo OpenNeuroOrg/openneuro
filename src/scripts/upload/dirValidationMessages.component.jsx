@@ -20,8 +20,7 @@ class DirValidationMessages extends React.Component {
 				<span className="file-header">
 					{issue.file.name}
 					<span className="pull-right">
-						{issue.errors.length} 
-						<i className="fa fa-exclamation-circle"></i> 
+						{issue.errors.length} Error
 					</span>
 				</span>
 			);
@@ -31,14 +30,12 @@ class DirValidationMessages extends React.Component {
 			});
 			// issue panel
 			return (
-				<Panel key={index} header={header} className="validation-error fadeInUpBig" eventKey={index}>
+				<Panel key={index} header={header} className="validation-error fadeIn" eventKey={index}>
 					<span className="em-head clearfix">
 						<strong className="em-header pull-left">Path to local file:</strong>
 						<strong className="em-header pull-right">{filesize} | {filetype}</strong>
 					</span>
 					<span className="e-meta file-path">{issue.file.webkitRelativePath}</span>
-					
-					
 					{subErrors}
 				</Panel>
 			);
