@@ -1,16 +1,14 @@
 // dependencies -------------------------------------------------------
 
-import React      from 'react'
+import React               from 'react'
 import {PanelGroup, Panel} from 'react-bootstrap';
 
 class Jobs extends React.Component {
 
 // life cycle events --------------------------------------------------
-	render () {
-		// Alert bsStyle: danger, warning, success, info
 
+	render () {
 		return (
-			
 			<div className="dash-tab-content notifications fadeIn">
 				<h2>My Jobs Results</h2>
 				<PanelGroup accordion>
@@ -26,10 +24,8 @@ class Jobs extends React.Component {
 					</Panel>
 				</PanelGroup>
 			</div>
-		
     	);
-	
-	};
+	}
 
 // custom methods -----------------------------------------------------
 }
