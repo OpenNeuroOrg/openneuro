@@ -117,9 +117,9 @@ let Upload = React.createClass({
 
 		let validationMessages =(
 			<Accordion className="validation-messages" accordion>
-					{errors.length > 0 ? errorsWrap : null}
-					{warnings.length > 0 ? warningWrap : null}
-				</Accordion>
+				{errors.length > 0 ? errorsWrap : null}
+				{warnings.length > 0 ? warningWrap : null}
+			</Accordion>
 		)
 
 
@@ -146,6 +146,7 @@ let Upload = React.createClass({
 
 	_onChange (files) {
 		let self = this;
+
 		this.setState({
 			tree: files.tree,
 			list: files.list,
@@ -154,38 +155,31 @@ let Upload = React.createClass({
 		});
 
 		this._validate(files.list);
-
 	},
-	_validate: function (fileList) {
+
+	_validate (fileList) {
 		let self = this;
 
         validate.BIDS(fileList, function (errors, warnings) {
-        	console.log(warnings)
-        	let adderTotalErrors = 0;  
-        	let adderTotlalWarnings = 0;    
-        	//Set errors and warnings
-			self.setState({errors: errors});   
-			self.setState({warnings: warnings});    
+        	errors   = errors   ? errors   : [];
+        	warnings = warnings ? warnings : [];
 
-            //get warning totals
-            for(let i = 0; i< warnings.length; i++){
-            	adderTotlalWarnings  += warnings[i].errors.length;
-			}
- 			//get error totals
-			for(let i = 0; i< errors.length; i++){
-            	adderTotalErrors  += errors[i].errors.length;
-			}
+        	let totalErrors = 0;  
+        	let totlalWarnings = 0;
+			for (let error   of errors)   {totalErrors    += error.errors.length;}
+            for (let warning of warnings) {totlalWarnings += warning.errors.length;}
 
-			self.setState({totalErrors: adderTotalErrors});
-			self.setState({totalWarnings: adderTotlalWarnings});
-			if(errors.length === 0){
-				self.setState({
-					uploadState: !self.state.uploadState
-				});
+			self.setState({
+				errors: errors,
+				totalErrors: totalErrors,
+				warnings: warnings,
+				totalWarnings: totlalWarnings
+			});
+
+			if (errors.length === 0) {
+				self.setState({uploadState: !self.state.uploadState});
 			}
         });
-
-
 	},
 
 	_upload () {
