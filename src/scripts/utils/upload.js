@@ -35,6 +35,7 @@ let upload = {
             },
             body: req.buffer
         }, function (err, res) {
+        	req.progress();
         	self.activeRequests--;
         	if (self.queue.length > 0 && self.maxRequests >= self.activeRequests) {
         		self.start(self.queue[0]);

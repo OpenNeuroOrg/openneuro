@@ -7,7 +7,7 @@ import validate  from 'bids-validator';
 import scitran   from '../utils/scitran';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import WarningValidationMessages from './warningValidationMessages.component.jsx';
-import { PanelGroup, Accordion, Panel } from 'react-bootstrap';
+import {PanelGroup, Accordion, Panel, ProgressBar} from 'react-bootstrap';
 
 let Upload = React.createClass({
 
@@ -25,6 +25,7 @@ let Upload = React.createClass({
 			validating: false,
 			totalErrors: 0,
 			totalWarnings: 0,
+			progress: {total: 0, completed: 0}
 		};
 	},
 
@@ -54,6 +55,8 @@ let Upload = React.createClass({
 				<span>
 					{errorLink}
 					<Accordion className="fileStructure fadeIn">
+						<span onClick={this._upload}>temp upload</span>
+						<ProgressBar now={this.state.progress.completed / this.state.progress.total * 100} label='%(percent)s%' />
 						<Panel header="See File Structure" eventKey='1'>
 					  		<DirTree tree={tree}/>
 					  	</Panel>
@@ -183,7 +186,23 @@ let Upload = React.createClass({
 	},
 
 	_upload () {
-		scitran.upload(this.state.tree);
+		let self = this;
+		let count = 0;
+
+		function countTree (tree) {
+			for (let item of tree) {
+				count++
+				if (item.children) {
+					countTree(item.children);
+				}
+			}
+		}
+
+		countTree(this.state.tree);
+
+		scitran.upload(this.state.tree, count, function (progress) {
+			self.setState({progress: progress});
+		});
 	}
 
 });
