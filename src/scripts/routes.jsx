@@ -9,9 +9,9 @@ import Index         from './common/index.jsx';
 import Signin        from './user/signin.component.jsx';
 import Upload        from './upload/upload.component.jsx';
 import Dashboard     from './dashboard/dashboard.component.jsx';
-import Notifications from './dashboard/notifications.dashboard.component.jsx';
-import Datasets      from './dashboard/datasets.dashboard.component.jsx';
-import Jobs          from './dashboard/jobs.dashboard.component.jsx';
+import Notifications from './dashboard/notifications.component.jsx';
+import Datasets      from './dashboard/datasets.component.jsx';
+import Jobs          from './dashboard/jobs.component.jsx';
 import Home          from './common/views/home.component.jsx';
 
 // redirects -------------------------------------------------------------
