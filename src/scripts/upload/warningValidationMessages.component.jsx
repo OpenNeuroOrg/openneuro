@@ -6,13 +6,13 @@ import Error from './error.component.jsx';
 
 // component setup --------------------------------------------------------
 
-class DirValidationMessages extends React.Component {
+class warningValidationMessages extends React.Component {
 
 // life cycle events ------------------------------------------------------
 
 	render () {
-		let errors = this.props.errors;
-		let issues = errors.map(function (issue, index) {
+		let warnings = this.props.warnings;
+		let issues = warnings.map(function (issue, index) {
 			let filesize = issue.file.size / 1000 + ' KB';
 			let filetype = issue.file.type;
 			// issue header
@@ -20,7 +20,8 @@ class DirValidationMessages extends React.Component {
 				<span className="file-header">
 					{issue.file.name}
 					<span className="pull-right">
-						{issue.errors.length} Error
+						{issue.errors.length} 
+						<i className="fa fa-exclamation-circle"></i> 
 					</span>
 				</span>
 			);
@@ -48,8 +49,8 @@ class DirValidationMessages extends React.Component {
 
 }
 
-DirValidationMessages.propTypes = {
-	errors: React.PropTypes.array
+warningValidationMessages.propTypes = {
+	warnings: React.PropTypes.array
 };
 
-export default DirValidationMessages;
+export default warningValidationMessages;
