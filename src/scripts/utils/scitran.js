@@ -2,20 +2,13 @@ import request   from './request';
 import uploads   from './upload';
 import userStore from '../user/user.store';
 
-// public API ---------------------------------------------------------------------
-
-// let scitran = {
-//     verifyUser,
-//     createProject,
-//     createSubject,
-//     createSession,
-//     createModality,
-// 	upload,
-// };
-
+/**
+ * Scitran
+ *
+ * A library for interactions with the
+ * scitran service.
+ */
 export default  {
-
-// implementations ----------------------------------------------------------------
 
     /**
      * Verify User
@@ -146,6 +139,12 @@ export default  {
         for (let acquisition of acquisitions) {
             this.uploadFile('acquisitions', modalityId, acquisition, 'modality');
         }
+    },
+
+    getProjects (callback) {
+        request.get('projects', function (err, res) {
+            callback(res.body);
+        });
     }
 
 };
