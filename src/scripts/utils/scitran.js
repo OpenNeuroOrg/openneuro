@@ -2,20 +2,13 @@ import request   from './request';
 import uploads   from './upload';
 import userStore from '../user/user.store';
 
-// public API ---------------------------------------------------------------------
-
-// let scitran = {
-//     verifyUser,
-//     createProject,
-//     createSubject,
-//     createSession,
-//     createModality,
-// 	upload,
-// };
-
+/**
+ * Scitran
+ *
+ * A library for interactions with the
+ * scitran service.
+ */
 export default  {
-
-// implementations ----------------------------------------------------------------
 
     /**
      * Verify User
