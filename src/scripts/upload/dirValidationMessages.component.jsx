@@ -11,7 +11,7 @@ class DirValidationMessages extends React.Component {
 // life cycle events ------------------------------------------------------
 
 	render () {
-		let errors = this.props.errors;
+		let errors = this.props.issues;
 		let issues = errors.map(function (issue, index) {
 			let filesize = issue.file.size / 1000 + ' KB';
 			let filetype = issue.file.type;
@@ -49,7 +49,7 @@ class DirValidationMessages extends React.Component {
 }
 
 DirValidationMessages.propTypes = {
-	errors: React.PropTypes.array
+	issues: React.PropTypes.array
 };
 
 export default DirValidationMessages;
