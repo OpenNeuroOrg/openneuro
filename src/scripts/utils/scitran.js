@@ -139,6 +139,12 @@ export default  {
         for (let acquisition of acquisitions) {
             this.uploadFile('acquisitions', modalityId, acquisition, 'modality');
         }
+    },
+
+    getProjects (callback) {
+        request.get('projects', function (err, res) {
+            callback(res.body);
+        });
     }
 
 };
