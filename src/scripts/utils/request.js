@@ -13,11 +13,11 @@ var Request = {
 
 	get (path, callback) {
 		let self = this;
-		hello('google').login({force: false}).then(function() {
+		hello('google').login({scope: 'email,openid', force: false}).then(function() {
 			request.get(config.scitranUrl + path)
 				.set('Authorization', userStore._token)
 				.end(function (err, res) {
-					self.handlResponse(err, res, callback);
+					handleResponse(err, res, callback);
 				});
 		});
 	},
@@ -26,7 +26,7 @@ var Request = {
 		var google = hello('google');
 		options = normalizeOptions(options);
 		let self = this;
-		hello('google').login({force: false}).then(function() {
+		hello('google').login({scope: 'email,openid', force: false}).then(function() {
 			request.post(config.scitranUrl + path)
 				.set('Authorization', userStore._token)
 				.set(options.headers)
@@ -40,7 +40,7 @@ var Request = {
 	put (path, options, callback) {
 		options = normalizeOptions(options);
 		let self = this;
-		hello('google').login({force: false}).then(function() {
+		hello('google').login({scope: 'email,openid', force: false}).then(function() {
 			request.put(config.scitranUrl + path)
 				.set('Authorization', userStore._token)
 				.set(options.headers)
