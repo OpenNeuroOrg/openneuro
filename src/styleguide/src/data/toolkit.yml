@@ -1,0 +1,24 @@
+colors:
+  primary:
+    White: "#fff"
+    Black: "#000"
+    Primary: "#8c1515"
+    Misty: "#dad7cb"
+    Ocean: "#00505c"
+    Sky: "#007c92"
+    Night: "#012a30"
+  secondary:
+    Coral: "#eb472c"
+    Salmon: "#ec7764"
+    Rock: "#5f574f"
+    Stone: "#928b81"
+    Driftwood: "#b6b1a9"
+    Algae: "#175e54"
+    Turquoise: "#009b76"
+  gray:
+    Light Gray: "#bbb"
+  alerts:
+    Success: "#24C85E"
+    Info: "#24C8C8"
+    Warning: "#F7BA4B"
+    Danger: "#C82424"
