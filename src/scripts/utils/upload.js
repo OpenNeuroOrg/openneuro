@@ -1,5 +1,8 @@
 import request from './request';
+import superagent from 'superagent';
 import MD5     from './md5';
+import config    from '../config';
+import userStore from '../user/user.store.js';
 
 let upload = {
 
@@ -7,12 +10,17 @@ let upload = {
 	activeRequests: 0,
 	maxRequests: 2,
 
+	/**
+	 * Add
+	 *
+	 * Takes a file request object, generates
+	 * an MD5 hash and then sends it into the
+	 * upload queue.
+	 */
 	add (req) {
 		let self = this;
 	    MD5(req.file, function (data) {
-	    	delete req.file;
-	    	req.hash   = data.hash,
-	    	req.buffer = data.buffer;
+	    	req.hash   = data.hash;
 			if (self.maxRequests >= self.activeRequests) {
 				self.start(req)
 			} else {
@@ -21,6 +29,12 @@ let upload = {
 	    });
 	},
 
+	/**
+	 * Start
+	 *
+	 * Takes a request object and starts an
+	 * upload request. 
+	 */
 	start (req) {
 		let self = this;
 		self.activeRequests++;
@@ -33,7 +47,7 @@ let upload = {
             query: {
             	tags: JSON.stringify([req.tag])
             },
-            body: req.buffer
+            body: req.file
         }, function (err, res) {
         	req.progress();
         	self.activeRequests--;
