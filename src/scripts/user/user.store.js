@@ -61,12 +61,14 @@ let UserStore = Reflux.createStore({
 		var token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
 
 		if (token) {
-			hello('google').api('/me').then(function (profile) {
-				self._user = profile;
-				self._token = token;
-				self.updateState();
-			}, function (res) {
-				self.clearState();
+			hello('google').login({force: false}).then(function() {
+				hello('google').api('/me').then(function (profile) {
+					self._user = profile;
+					self._token = token;
+					self.updateState();
+				}, function (res) {
+					self.clearState();
+				});
 			});
 		} else {
 			this.clearState();
