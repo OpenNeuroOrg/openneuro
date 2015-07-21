@@ -1,7 +1,8 @@
 // public API ---------------------------------------------------------------------
 
 let fileUtils = {
-	generateTree
+	generateTree,
+    countTree
 };
 
 export default fileUtils;
@@ -58,6 +59,24 @@ function generateTree (files) {
 
     // return tree
     return dirTree;
+}
+
+/**
+ * Count Tree
+ *
+ * Takes a BIDS tree object and returns
+ * a total count of files and folders.
+ */
+function countTree (tree) {
+    let count = 0;
+    function recurse (tree) {
+        for (let item of tree) {
+            count++
+            if (item.children) {recurse(item.children);}
+        }
+    }
+    recurse(tree);
+    return count;
 }
 
 let blacklist = [
