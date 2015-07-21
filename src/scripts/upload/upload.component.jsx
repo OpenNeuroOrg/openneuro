@@ -5,6 +5,7 @@ import DirUpload from './dirUpload.component.jsx';
 import DirTree   from './dirTree.component.jsx';
 import validate  from 'bids-validator';
 import scitran   from '../utils/scitran';
+import files     from '../utils/files';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import WarningValidationMessages from './warningValidationMessages.component.jsx';
 import {PanelGroup, Accordion, Panel, ProgressBar} from 'react-bootstrap';
@@ -52,16 +53,16 @@ let Upload = React.createClass({
 		
 		// Visual representation of directory Tree 
 		let uploadFileStructure = (
-				<span>
-					{errorLink}
-					<Accordion className="fileStructure fadeIn">
-						<span onClick={this._upload}>temp upload</span>
-						<ProgressBar now={this.state.progress.completed / this.state.progress.total * 100} label='%(percent)s%' />
-						<Panel header="See File Structure" eventKey='1'>
-					  		<DirTree tree={tree}/>
-					  	</Panel>
-				  	</Accordion>
-				 </span>
+			<span>
+				{errorLink}
+				<Accordion className="fileStructure fadeIn">
+					<span onClick={this._upload}>temp upload</span>
+					<ProgressBar now={this.state.progress.completed / this.state.progress.total * 100} label='%(percent)s%' />
+					<Panel header="See File Structure" eventKey='1'>
+				  		<DirTree tree={tree}/>
+				  	</Panel>
+			  	</Accordion>
+			 </span>
 		);
 		//messages
 		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>;
@@ -80,7 +81,7 @@ let Upload = React.createClass({
 		);
 		//if errors
 		let uploadMeta = (
-			<span>
+			<span style={{border: '1px solid blue'}}>
 				<h3 className="dir-name">
 					<i className="folderIcon fa fa-folder-open" /> 
 			   		{dirName}
@@ -92,17 +93,7 @@ let Upload = React.createClass({
 				</span>
 			</span>
 		);
-		//Buttons, messages, and conditional depending on state
-		let uploadHeader =(
-			<div className="upload-wrap">
-				<span className={this.state.uploadState ? 'upload' : null }>
-					<DirUpload onChange={self._onChange} />
-					{!this.state.uploadState && errors.length === 0 ? initialMessage : null }
-					{errors.length === 0 ? withWarnings : null}
-					{tree.length > 0 && errors.length > 0 ? uploadMeta : null}
-				</span>
-			</div>
-		);
+
 		//errors
 		let errorHeader = <span>{totalErrors} Errors in {errors.length} files</span>;
 		let errorsWrap = (
@@ -132,7 +123,17 @@ let Upload = React.createClass({
 					<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
 						<div className={this.state.validating ? 'ua-body validating' : 'ua-body'}>
-							{uploadHeader}
+							
+							{/* Upload Header */}
+							<div className="upload-wrap">
+								<span className={this.state.uploadState ? 'upload' : null }>
+									<DirUpload onChange={self._onChange} />
+									{!this.state.uploadState && errors.length === 0 ? initialMessage : null }
+									{errors.length === 0 ? withWarnings : null}
+									{tree.length > 0 && errors.length > 0 ? uploadMeta : null}
+								</span>
+							</div>
+							
 							{tree.length > 0 ? validationMessages : null}
 							{tree.length > 0 ? uploadFileStructure : null}
 						</div>
@@ -145,8 +146,12 @@ let Upload = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-//need to add after upload is ready 
-
+	/**
+	 * On Change
+	 *
+	 * On file select this adds files to the state
+	 * and starts validation.
+	 */
 	_onChange (files) {
 		let self = this;
 
@@ -160,6 +165,12 @@ let Upload = React.createClass({
 		this._validate(files.list);
 	},
 
+	/**
+	 * Validate
+	 *
+	 * Takes a filelist, runs BIDS validation checks
+	 * against it, and sets any errors to the state.
+	 */
 	_validate (fileList) {
 		let self = this;
 
@@ -185,20 +196,16 @@ let Upload = React.createClass({
         });
 	},
 
+	/**
+	 * Upload
+	 *
+	 * Uploads currently selected and triggers
+	 * a progress event every time a file or folder
+	 * finishes.
+	 */
 	_upload () {
 		let self = this;
-		let count = 0;
-
-		function countTree (tree) {
-			for (let item of tree) {
-				count++
-				if (item.children) {
-					countTree(item.children);
-				}
-			}
-		}
-
-		countTree(this.state.tree);
+		let count = files.countTree(this.state.tree);
 
 		scitran.upload(this.state.tree, count, function (progress) {
 			self.setState({progress: progress});
