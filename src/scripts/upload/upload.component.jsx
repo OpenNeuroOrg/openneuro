@@ -43,6 +43,7 @@ let Upload = React.createClass({
 		let dirName = this.state.dirName;
 		let totalErrors = self.state.totalErrors;
 		let totalWarnings = self.state.totalWarnings;
+		let progress = this.state.progress.total > 0 ? this.state.progress.completed / this.state.progress.total * 100 : 0;
 
 		//Error Log
 		let errors_waringings = errors.concat(warnings);
@@ -56,8 +57,8 @@ let Upload = React.createClass({
 			<span>
 				{errorLink}
 				<Accordion className="fileStructure fadeIn">
-					<span onClick={this._upload}>temp upload</span>
-					<ProgressBar now={this.state.progress.completed / this.state.progress.total * 100} label='%(percent)s%' />
+					<button onClick={this._upload}>temp upload</button>
+					<ProgressBar now={progress} label='%(percent)s%' />
 					<Panel header="See File Structure" eventKey='1'>
 				  		<DirTree tree={tree}/>
 				  	</Panel>
