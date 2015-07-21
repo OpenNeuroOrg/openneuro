@@ -5,9 +5,10 @@ import DirUpload from './dirUpload.component.jsx';
 import DirTree   from './dirTree.component.jsx';
 import validate  from 'bids-validator';
 import scitran   from '../utils/scitran';
+import files     from '../utils/files';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import WarningValidationMessages from './warningValidationMessages.component.jsx';
-import { PanelGroup, Accordion, Panel } from 'react-bootstrap';
+import {PanelGroup, Accordion, Panel, ProgressBar} from 'react-bootstrap';
 
 let Upload = React.createClass({
 
@@ -25,6 +26,7 @@ let Upload = React.createClass({
 			validating: false,
 			totalErrors: 0,
 			totalWarnings: 0,
+			progress: {total: 0, completed: 0}
 		};
 	},
 
@@ -41,6 +43,7 @@ let Upload = React.createClass({
 		let dirName = this.state.dirName;
 		let totalErrors = self.state.totalErrors;
 		let totalWarnings = self.state.totalWarnings;
+		let progress = this.state.progress.total > 0 ? this.state.progress.completed / this.state.progress.total * 100 : 0;
 
 		//Error Log
 		let errors_waringings = errors.concat(warnings);
@@ -51,14 +54,16 @@ let Upload = React.createClass({
 		
 		// Visual representation of directory Tree 
 		let uploadFileStructure = (
-				<span>
-					{errorLink}
-					<Accordion className="fileStructure fadeIn">
-						<Panel header="See File Structure" eventKey='1'>
-					  		<DirTree tree={tree}/>
-					  	</Panel>
-				  	</Accordion>
-				 </span>
+			<span>
+				{errorLink}
+				<Accordion className="fileStructure fadeIn">
+					<button onClick={this._upload}>temp upload</button>
+					<ProgressBar now={progress} label='%(percent)s%' />
+					<Panel header="See File Structure" eventKey='1'>
+				  		<DirTree tree={tree}/>
+				  	</Panel>
+			  	</Accordion>
+			 </span>
 		);
 		//messages
 		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>;
@@ -77,7 +82,7 @@ let Upload = React.createClass({
 		);
 		//if errors
 		let uploadMeta = (
-			<span>
+			<span style={{border: '1px solid blue'}}>
 				<h3 className="dir-name">
 					<i className="folderIcon fa fa-folder-open" /> 
 			   		{dirName}
@@ -89,17 +94,7 @@ let Upload = React.createClass({
 				</span>
 			</span>
 		);
-		//Buttons, messages, and conditional depending on state
-		let uploadHeader =(
-			<div className="upload-wrap">
-				<span className={this.state.uploadState ? 'upload' : null }>
-					<DirUpload onChange={self._onChange} />
-					{!this.state.uploadState && errors.length === 0 ? initialMessage : null }
-					{errors.length === 0 ? withWarnings : null}
-					{tree.length > 0 && errors.length > 0 ? uploadMeta : null}
-				</span>
-			</div>
-		);
+
 		//errors
 		let errorHeader = <span>{totalErrors} Errors in {errors.length} files</span>;
 		let errorsWrap = (
@@ -117,9 +112,9 @@ let Upload = React.createClass({
 
 		let validationMessages =(
 			<Accordion className="validation-messages" accordion>
-					{errors.length > 0 ? errorsWrap : null}
-					{warnings.length > 0 ? warningWrap : null}
-				</Accordion>
+				{errors.length > 0 ? errorsWrap : null}
+				{warnings.length > 0 ? warningWrap : null}
+			</Accordion>
 		)
 
 
@@ -129,7 +124,17 @@ let Upload = React.createClass({
 					<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
 						<div className={this.state.validating ? 'ua-body validating' : 'ua-body'}>
-							{uploadHeader}
+							
+							{/* Upload Header */}
+							<div className="upload-wrap">
+								<span className={this.state.uploadState ? 'upload' : null }>
+									<DirUpload onChange={self._onChange} />
+									{!this.state.uploadState && errors.length === 0 ? initialMessage : null }
+									{errors.length === 0 ? withWarnings : null}
+									{tree.length > 0 && errors.length > 0 ? uploadMeta : null}
+								</span>
+							</div>
+							
 							{tree.length > 0 ? validationMessages : null}
 							{tree.length > 0 ? uploadFileStructure : null}
 						</div>
@@ -142,10 +147,15 @@ let Upload = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-//need to add after upload is ready 
-
+	/**
+	 * On Change
+	 *
+	 * On file select this adds files to the state
+	 * and starts validation.
+	 */
 	_onChange (files) {
 		let self = this;
+
 		this.setState({
 			tree: files.tree,
 			list: files.list,
@@ -154,42 +164,53 @@ let Upload = React.createClass({
 		});
 
 		this._validate(files.list);
-
 	},
-	_validate: function (fileList) {
+
+	/**
+	 * Validate
+	 *
+	 * Takes a filelist, runs BIDS validation checks
+	 * against it, and sets any errors to the state.
+	 */
+	_validate (fileList) {
 		let self = this;
 
         validate.BIDS(fileList, function (errors, warnings) {
-        	console.log(warnings)
-        	let adderTotalErrors = 0;  
-        	let adderTotlalWarnings = 0;    
-        	//Set errors and warnings
-			self.setState({errors: errors});   
-			self.setState({warnings: warnings});    
+        	errors   = errors   ? errors   : [];
+        	warnings = warnings ? warnings : [];
 
-            //get warning totals
-            for(let i = 0; i< warnings.length; i++){
-            	adderTotlalWarnings  += warnings[i].errors.length;
-			}
- 			//get error totals
-			for(let i = 0; i< errors.length; i++){
-            	adderTotalErrors  += errors[i].errors.length;
-			}
+        	let totalErrors = 0;  
+        	let totlalWarnings = 0;
+			for (let error   of errors)   {totalErrors    += error.errors.length;}
+            for (let warning of warnings) {totlalWarnings += warning.errors.length;}
 
-			self.setState({totalErrors: adderTotalErrors});
-			self.setState({totalWarnings: adderTotlalWarnings});
-			if(errors.length === 0){
-				self.setState({
-					uploadState: !self.state.uploadState
-				});
+			self.setState({
+				errors: errors,
+				totalErrors: totalErrors,
+				warnings: warnings,
+				totalWarnings: totlalWarnings
+			});
+
+			if (errors.length === 0) {
+				self.setState({uploadState: !self.state.uploadState});
 			}
         });
-
-
 	},
 
+	/**
+	 * Upload
+	 *
+	 * Uploads currently selected and triggers
+	 * a progress event every time a file or folder
+	 * finishes.
+	 */
 	_upload () {
-		scitran.upload(this.state.tree);
+		let self = this;
+		let count = files.countTree(this.state.tree);
+
+		scitran.upload(this.state.tree, count, function (progress) {
+			self.setState({progress: progress});
+		});
 	}
 
 });

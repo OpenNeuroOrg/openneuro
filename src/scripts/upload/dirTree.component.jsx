@@ -12,7 +12,7 @@ class DirTree extends React.Component {
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map(function (item, index) {
 			return (
-				<li key={index} onClick={self._logFile.bind(null, item)}>{item.name}
+				<li key={index}>{item.name}
 					<ul><DirTree tree={item.children} /></ul>
 				</li>
 			);
@@ -20,17 +20,6 @@ class DirTree extends React.Component {
 		return (
 			<ul>{nodes}</ul>
     	);
-	}
-
-// custom methods -----------------------------------------------------
-	
-	_logFile (item, e) {
-		e.stopPropagation();
-		if (item.type !== 'folder') {
-			fileUtils.read(item, function (res) {
-				console.log(res);
-			});
-		}
 	}
 
 }
