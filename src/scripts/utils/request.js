@@ -13,36 +13,43 @@ var Request = {
 
 	get (path, callback) {
 		let self = this;
-		request.get(config.scitranUrl + path)
-			.set('Authorization', userStore._token)
-			.end(function (err, res) {
-				self.handlResponse(err, res, callback);
-			});
+		hello('google').login({scope: 'email,openid', force: false}).then(function() {
+			request.get(config.scitranUrl + path)
+				.set('Authorization', userStore._token)
+				.end(function (err, res) {
+					handleResponse(err, res, callback);
+				});
+		});
 	},
 
 	post (path, options, callback) {
+		var google = hello('google');
 		options = normalizeOptions(options);
 		let self = this;
-		request.post(config.scitranUrl + path)
-			.set('Authorization', userStore._token)
-			.set(options.headers)
-			.send(options.body)
-			.end(function (err, res) {
-				handleResponse(err, res, callback);
-			});
+		hello('google').login({scope: 'email,openid', force: false}).then(function() {
+			request.post(config.scitranUrl + path)
+				.set('Authorization', userStore._token)
+				.set(options.headers)
+				.send(options.body)
+				.end(function (err, res) {
+					handleResponse(err, res, callback);
+				});
+		});
 	},
 
 	put (path, options, callback) {
 		options = normalizeOptions(options);
 		let self = this;
-		request.put(config.scitranUrl + path)
-			.set('Authorization', userStore._token)
-			.set(options.headers)
-			.query(options.query)
-			.send(options.body)
-			.end(function (err, res) {
-				handleResponse(err, res, callback);
-			});
+		hello('google').login({scope: 'email,openid', force: false}).then(function() {
+			request.put(config.scitranUrl + path)
+				.set('Authorization', userStore._token)
+				.set(options.headers)
+				.query(options.query)
+				.send(options.body)
+				.end(function (err, res) {
+					handleResponse(err, res, callback);
+				});
+		});
 	}
 
 };

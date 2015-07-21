@@ -5,7 +5,9 @@
 // Always required _properties if not importing all animate/animate.scss  
 @import "animate/_properties";                                            
 // single animations                                                      
-@import "animate/_fading-entrances/fading-entrances.scss";                
+@import "animate/_fading-entrances/fading-entrances.scss";      
+@import "animate/_sliding-entrances/sliding-entrances.scss";   
+@import "animate/_attention-seekers/attention-seekers.scss";                
 //==========================================================================
 //crn ======================================================================
 @import "./_crn-variables";
@@ -39,6 +41,10 @@ body {
 a {
   color: $primary;
   cursor: pointer;
+}
+a:hover, a:focus {
+	color:lighten($primary , 15%);
+	text-decoration:none;
 }
 a:active,
 a:hover,
@@ -130,23 +136,24 @@ h1,h2,h3,h4,h5,h6{
 				position: absolute;
 				padding: 0;
 				background-color: rgba(0, 0, 0, 0.28);
-									  width: 30%;
-  height: 30%;
-  line-height: 25px;
-  transition: all 0.3s ease;
+				width: 30%;
+				height: 30%;
+				line-height: 25px;
+				transition: all 0.3s ease;
 
 			}
 
 			&.active,
 			&:active,
 			&:hover,
+			&.hover
 			&:focus{
 				i{
 					transition: all 0.3s ease;
 					background-color: rgba(0, 0, 0, 0.28);
-										  width: 100%;
-  height: 100%;
-  line-height: 75px;
+					width: 100%;
+					height: 100%;
+					line-height: 75px;
 				}
 			}
 		}
@@ -233,10 +240,12 @@ h1,h2,h3,h4,h5,h6{
 	margin: 0 0 10px;
 
 	&:hover,
-	&:active {
-		border-color:lighten($primary, 10%);
+	&:active,
+	&.hover,
+	&.active {
+		border-color:$primaryHover;
 		background: #fafafa;
-		color:lighten($primary, 10%);
+		color:$primaryHover;
 	}
 }
 .btn-admin{
@@ -245,7 +254,9 @@ h1,h2,h3,h4,h5,h6{
 	color: #777;
 	border-radius: 2px;
 	&:hover,
-	&:active {
+	&:active,
+	&.hover,
+	&.active  {
 		border-color:#aaa;
 		background: #e0e0e0;
 		color:#666;
@@ -274,9 +285,12 @@ h1,h2,h3,h4,h5,h6{
 	text-transform: uppercase;
 	transition: all 0.3s ease-out;
 	&:hover,
-	&:active  {
+	&:active,
+	&.hover,
+	&.active  {
 		background: darken($sky, 10%);
 		transition: all 0.3s ease-out;
+		color:#fff;
 	}
 }
 
@@ -352,9 +366,11 @@ h1,h2,h3,h4,h5,h6{
 	padding: 0px 10px;
 	border: none;
 	background: rgba(255,255,255,1);
+	border-radius:2px;
+	box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
 }
 
-.form-group textarea {
+textarea {
 	width: 100%;
 	min-height: 200px;
 	font-size: 22px;
@@ -363,6 +379,8 @@ h1,h2,h3,h4,h5,h6{
 	padding: 15px 10px;
 	border: none;
 	background: rgba(255,255,255,1);
+	border-radius:2px;
+	box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
 }
 
 // annimations ================================================================ 
@@ -390,6 +408,13 @@ h1,h2,h3,h4,h5,h6{
 }
 .fadeIn{
 	@include fadeIn();
+}
+
+.slideInRight{
+	@include slideInRight();
+}
+.bounce{
+	@include bounce();
 }
 
 
@@ -455,7 +480,7 @@ body,
 		font-size: 12px;
 		text-align: center;
 		margin: 5px 0;
-		display: cursor;
+		cursor:pointer;
 	}
 	.left-nav-slider{
 		z-index: 1200;
@@ -528,200 +553,176 @@ body,
 // right sidebar tools col
 .tools-col{
 	padding:0;
-	.upload-nav{
-		z-index: 1300;
-		margin: 0;
-		background-color: $rock;
-		height: 75px;
-		font-size: 30px;
-		line-height: 33px;
-		padding: 18px 20px;
-		color: $white;
-		position: fixed;
-		top: 0;
-		right: 0;
-		width: 33.33333%;
-  		h2{
-  			margin: 0;
-  		}
-	}
-	.upload-accordion{
-		margin-top: 74px;
-		border-bottom: 2px solid rgba(0,0,0,0.63);
-		background:transparent;
-		.upload-panel {
-			border-radius: 0;
-			border: none;
-			> .panel-heading{
-			 	padding: 0;
-				z-index: 1400;
-				text-transform: uppercase;
-				background-color: rgba(0, 0, 0, 0);
-				padding: 0;
-				h4{
-					margin: 0;
-					a{
-						font-size: 21px;
-						display: block;
-						padding: 18px;
-						background: $salmon;
-						color:$stanfordRed;
-						font-family: $font-family-ssp;
-						font-weight:400;
-						 text-decoration: none;
-						&:hover{
-							text-decoration: none;
-							background:lighten( $salmon, 5%);
-						}
-						&:before{
-							content: '\f068';
-							font-family: FontAwesome;
-							color: lighten($primary,10%);
-							font-weight: 300;
-							margin-right:5px;
-							font-size: 10px;
-							top: -3px;
-							position: relative;
-						}
-						&.collapsed{
-							&:before{
-								content: '\f067';							 				
-							}
-						}
-					}
-				}
+	overflow: hidden;
+  	overflow-y: scroll;
+	.right-sidebar{
+		.message{
+			text-align: center;
+			width: 90%;
+			margin: 10px auto;
+			display: block;
+			font-size: 15px;
+			text-transform:uppercase;
+			font-weight: 600;
+			color: $rock;
+			max-width: 400px;
+			&.error{
+				color:$coral;
 			}
-			.panel-collapse{
-				background:#f3f3f3;
-				.panel-body{
+		}
+		.dir-name{
+				text-align: center;
+				font-size: 21px;
+				i{
+					margin-right: 10px;
+				}
+		}
+		.uploadbar{
+			display: none;
+			margin-top: 75px;
+			position:relative;
+			padding:20px 20px 30px;
+			background:#f3f3f3;
+			border-bottom:1px solid #bbb;
+			z-index: 1000;
+
+			
+		}
+		.upload-nav{
+			z-index: 1300;
+			margin: 0;
+			background-color: $rock;
+			height: 75px;
+			font-size: 30px;
+			line-height: 33px;
+			padding: 18px 20px;
+			color: $white;
+			position: fixed;
+			top: 0;
+			right: 0;
+			width: 33.33333%;
+	  		h2{
+	  			margin: 0;
+	  		}
+		}
+		.upload-accordion{
+			display: block;
+			margin-top: 0;
+			margin-bottom: 0; 
+			border-bottom: 1px solid #bbb;
+			background:transparent;
+			.upload-panel {
+				border-radius: 0;
+				border: none;
+				> .panel-heading{
 				 	padding: 0;
-					.upload-wrap{
-						position:relative;
-						padding:20px  0;
-						background:#f3f3f3;
-						border-bottom:1px solid #bbb;
-						z-index: 1000;
-						.dir-name{
-							text-align: center;
-							font-size: 21px;
-							i{
-								margin-right: 10px;
-							}
-						}
-						.message{
-							text-align: center;
-							width: 90%;
-							margin: 10px auto;
-							display: block;
-							font-size: 15px;
-							text-transform:uppercase;
-							font-weight: 600;
-							color: $rock;
-							max-width: 400px;
-							&.error{
-								color:$coral;
-							}
-						}
-						//custom upload input //dirUpload button
-						input.dirUpload-btn{
-						  color: transparent;
-						  width: 160px;
-						  margin: 0;
-						  padding: 0;
-						  height: 50px;
-						  display: block;
-						  margin: 0 auto;
-
-
-						  &::-webkit-file-upload-button {
-						    visibility: hidden;
-						    color: transparent;
-						  }
-						  &::before {
-						    font-family: FontAwesome;
-						    content: '\f093 \0020 Upload';
-						    display: inline-block;
-						    background-color:$sky;
-						    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
-						    box-shadow:$btn-shadow;
-						    border-radius: 2px;
-						    outline: none;
-						    white-space: nowrap;
-						    -webkit-user-select: none;
-						    cursor: pointer;
-						    font-weight: 300;
-						    font-size: 12pt;
-						    color:$white;
-						    text-align: center;
-						    padding:13px 15px;
-						    margin:0;
-						    width: 100%;
-						    border:1px solid lighten($sky, 8%);
-						    text-transform: uppercase;
-						    transition: all 0.3s ease-out;
-						  }
-						  &:hover::before,
-						  &:active::before  {
-						    background: darken($sky, 10%);
-						    transition: all 0.3s ease-out;
-						  }
-
-						  &[type="file"]:focus {
-						    outline:none;
-						  }
-						}
-
-						.validate-buttons{
-							width: 160px;
-							margin: 0 auto;
-						}
-					}
-				}
-			}
-			.validating .error-wrap{
-				height: 300px;
-			}
-
-
-			//Error Wrap in accordion in sidebar
-			.error-wrap{
-				position:relative;
-				overflow:hidden;
-				overflow-y: scroll;
-				.errors-header{
-					padding: 10px;
-					background-color:#F3F3F3;
-					color:  $coral;
-					text-align: center;
+					z-index: 1299;
 					text-transform: uppercase;
-					font-weight: 700;
-					border: 1px solid #BBB;
-					border-left: 0;
-					border-right: 0;
-					z-index: 1400;
-				}
-				a.error-log{
-					border:none;
-					border-color: rgba(0, 0, 0, 0);
-					box-shadow: none;
-					margin: 0;
-					padding: 5px;
-					text-align: center;
-					border-radius: 0;
-					font-size: 10px;
-					text-align: center;
-					display: block;
-					color:$primary;
-					background-color: transparent;
-					&:hover{
-						color: $primaryHover;
+					background-color: rgba(0, 0, 0, 0);
+					padding: 0;
+					margin-top: 75px;
+					position: relative;
+					h4{
+						margin: 0;
+						a{
+							font-size: 21px;
+							display: block;
+							padding: 18px;
+							background: $stanfordRed;
+							color:$misty;
+							font-family: $font-family-ssp;
+							font-weight:400;
+							 text-decoration: none;
+							&:hover{
+								text-decoration: none;
+								background:lighten( $stanfordRed, 5%);
+							}
+							&:after{
+								content: '\f077';
+								font-family: FontAwesome;
+								color: $misty;
+								font-weight: 300;
+								margin-right:5px;
+								font-size: 10px;
+								top: -3px;
+								position: relative;
+								float: right;
+								padding-top: 9px;
+
+							}
+							&.collapsed{
+								&:after{
+									content: '\f078';							 				
+								}
+							}
+						}
 					}
 				}
-				.panel-group{
-					margin-bottom: 30px;
-				}
+				.panel-collapse{
+					background:#f3f3f3;
+					z-index: 1200;
+					position: relative;
+					.panel-body{
+					 	padding: 0;
+						.upload-wrap{
+							position:relative;
+							padding:20px  0;
+							background:#f3f3f3;
+							border-bottom:1px solid #bbb;
+							z-index: 1000;
+							//custom upload input //dirUpload button
+							input.dirUpload-btn{
+							  color: transparent;
+							  width: 160px;
+							  margin: 0;
+							  padding: 0;
+							  height: 50px;
+							  display: block;
+							  margin: 0 auto;
+							  &::-webkit-file-upload-button {
+							    visibility: hidden;
+							    color: transparent;
+							  }
+							  &::before {
+							    font-family: FontAwesome;
+							    content: '\f093 \0020 Upload';
+							    display: inline-block;
+							    background-color:$sky;
+							    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
+							    box-shadow:$btn-shadow;
+							    border-radius: 2px;
+							    outline: none;
+							    white-space: nowrap;
+							    -webkit-user-select: none;
+							    cursor: pointer;
+							    font-weight: 300;
+							    font-size: 12pt;
+							    color:$white;
+							    text-align: center;
+							    padding:13px 15px;
+							    margin:0;
+							    width: 100%;
+							    border:1px solid lighten($sky, 8%);
+							    text-transform: uppercase;
+							    transition: all 0.3s ease-out;
+							  }
+							  &:hover::before,
+							  &:active::before  {
+							    background: darken($sky, 10%);
+							    transition: all 0.3s ease-out;
+							  }
 
-				//dirDisplay Bids data upload display
+							  &[type="file"]:focus {
+							    outline:none;
+							  }
+							}
+							.validate-buttons{
+								width: 160px;
+								margin: 0 auto;
+							}
+						}
+					}
+				}
 				.fileStructure.panel-group{
 					margin: 0;
 					border: none;
@@ -773,144 +774,222 @@ body,
 						}
 					}
 				}
-				//Error body and meta
-				.validation-error.panel{
-					border-radius: 0;
+				a.error-log{
+					border:none;
+					border-color: rgba(0, 0, 0, 0);
+					box-shadow: none;
 					margin: 0;
-					border: 0;
-					.panel-heading {
-						padding:0;
-						a{
-							display: block;
-							padding: 10px;
-							font-size: 12px;
-							color:$primaryHover;
-							background:lighten($salmon, 25%);
-							border-bottom: 1px solid #BBB;
-							text-decoration: none;
-							&:before{
-								content: '\f068';
-								font-family: FontAwesome;
-								font-size: 6px;
-								margin-right: 5px;
-								color:lighten($primary,10%);
-								top: -1px;
-								position: relative;
-							}
-							.pull-right{
-								color: #808080;
-								i{
-									margin-left:2px;
-								}
-							}
-					 		&.collapsed{
-								background:lighten($salmon, 30%);
-								color:$primary;
-								&:before{
-									color:$primary;
-									content: '\f067';							 				
-								}
-								.pull-right{
-								}
-							}
-							&:hover{
-								color:lighten($primary,10%);
-								text-decoration: none;
+					padding: 5px;
+					text-align: center;
+					border-radius: 0;
+					font-size: 10px;
+					text-align: center;
+					display: block;
+					color:$primary;
+					background-color: transparent;
+					&:hover{
+						color: $primaryHover;
+					}
+				}
+				//Error Wrap in accordion in sidebar
+				.validation-messages{
+					margin-bottom: 0;
+					min-height: 85px;
+					.warning-wrap,
+					.error-wrap{
+						margin:0;
+						position:relative;
+						.panel-heading{
+								z-index: 1400;
+								margin-top: 0;
+								border: none;
+								padding:0;
+							a{
+								padding: 10px;
+								display: block;
 								background:lighten($salmon, 25%);
-								i{
+								color:$primaryHover;
+								text-align: center;
+								text-transform: uppercase;
+								font-weight: 700;
+								margin: 0;
+								border-bottom: 1px solid #FDA394;
+								&:after{
+									font-family: FontAwesome;
+									font-size: 10px;
+									margin-left: 10px;
+									content: '\f078';
+									position: relative;
+									top: -2px;
+								}
+								&.collapsed{
 									&:after{
-										color:$primary;
+										content: '\f077';
 									}
 								}
 							}
 						}
-					}
-
-					.panel-body{
-						border: none;
-						border-bottom: 1px solid #BBB;
-						.em-head{
-							display: block;
-							margin:0;
-							padding: 10px 10px 0;
-							.em-header{
-								font-size: 12px;
-								text-transform: uppercase;
-								font-weight: 700;
-								color: $rock;
-								margin-bottom: 2px;
-								&.pull-right{
+						.panel-body{
+							border-top:none;
+						}
+						.panel-group{
+							margin-bottom: 0;
+						}
+						//Error body and meta
+						.validation-error.panel{
+							border-radius: 0;
+							margin: 0;
+							border: 0;
+							.panel-heading {
+								padding:0;
+								a{
+									display: block;
+									padding: 10px;
+									font-size: 12px;
+									color:  $coral;
+									background-color:#efefef;
+									border-bottom: 1px solid #BBB;
+									text-decoration: none;
+									text-align: left;
+									text-transform: initial;
+									&:after{
+										content:'';
+									}
+									.pull-right{
+										color: #808080;
+										i{
+											margin-left:2px;
+											&:after{
+												content: 'Hide';
+												font-size: 10px;
+												text-transform: uppercase;
+												margin-left: 5px;
+												color:$coral;
+												position: relative;
+											}
+										}
+									}
+							 		&.collapsed{
+										color:  $coral;
+										background-color:#F3F3F3;
+										&:before{
+								 				
+										}
+										.pull-right{
+											i{
+												&:after{
+													color:$coral;
+													content: 'View';	
+												}
+											}
+										}
+									}
+									&:hover{
+										color:$coral;
+										text-decoration: none;
+										background-color:#efefef;
+										i{
+											&:after{
+												color:$coral;
+											}
+										}
+									}
+								}
+							}
+							.panel-body{
+								border: none;
+								border-bottom: 1px solid #BBB;
+								.em-head{
+									display: block;
+									margin:0;
+									padding: 10px 10px 0;
+									.em-header{
+										font-size: 12px;
+										text-transform: uppercase;
+										font-weight: 700;
+										color: $rock;
+										margin-bottom: 2px;
+										&.pull-right{
+											font-size: 10px;
+											text-transform: normal;
+										}
+									}
+									.e-meta{
+										color:$rock;
+										font-size: 10px;
+										word-break: break-word;
+										display: block;
+									}
+								}
+								.file-path{
+									border-bottom: 1px solid #DDD;
+									font-size: 12px;
+									margin: 0;
+									padding: 0 10px 10px;
+									color:$rock;
 									font-size: 10px;
-									text-transform: normal;
+									word-break: break-word;
+									display: block;
 								}
-							}
-							.e-meta{
-								color:$rock;
-								font-size: 10px;
-								word-break: break-word;
-								display: block;
-							}
-						}
-						.file-path{
-							border-bottom: 1px solid #DDD;
-							font-size: 12px;
-							margin: 0;
-							padding: 0 10px 10px;
-							color:$rock;
-							font-size: 10px;
-							word-break: break-word;
-							display: block;
-						}
-						.em-body{
-							border-bottom:1px solid #ddd;
-							margin: 0;
-							padding:0 10px;
-							.em-header{
-								color: $coral;
-								margin: 0;
-								padding: 3px 0 5px 0;
-							}
-							.e-meta{
-								label{
-									color:$sky;
-									font-size: 12px;
-									text-transform: uppercase;
+								.em-body{
+									border-bottom:1px solid #ddd;
+									margin: 0;
+									padding:0 10px;
+									.em-header{
+										color: $coral;
+										margin: 0;
+										padding: 3px 0 5px 0;
+									}
+									.e-meta{
+										label{
+											color:$sky;
+											font-size: 12px;
+											text-transform: uppercase;
+										}
+										p{
+											color:#3b3b3b;
+											font-size: 12px;
+										}
+									}
 								}
-								p{
-									color:#3b3b3b;
-									font-size: 12px;
+								.em-body:last-child{
+									border:none;
 								}
 							}
 						}
-						.em-body:last-child{
-							border:none;
+					}
+				}
+				.validation-messages{
+					.warning-wrap{
+						.panel-heading{
+							a{
+								background: #FFEFDB;
+								color: #DF7600;
+								border-bottom: 1px solid #E0A75A;
+							}
 						}
 					}
 				}
 			}
+		}	
+	}
+	//UPLOAD display
+	.uploading.right-sidebar{
+		.uploadbar{
+			display: block;
 		}
-		//when errors are present ready
-		.no-errors-warnings{
+		.upload-accordion{
 			display: none;
 		}
-	}	
-}
-
-.tools-col .upload-accordion .upload-panel .panel-collapse .panel-body .ua-body .upload{
-	input.dirUpload-btn{
-		display: none;
-	}
-	.no-errors-warnings{
-		display: block;
+		.message{
+			&.error{
+				color:$coral;
+			}
+		}
+		.dir-name{
+		}
 	}
 }
-
-.tools-col .upload-accordion .upload-panel .panel-collapse .panel-body .validating.ua-body{
-	.upload-wrap {
-		box-shadow:0 2px 6px rgba(0, 0, 0, 0.2);
-	}
-}
-
 
 //main-col dashboard page
 .dashboard{
@@ -919,7 +998,7 @@ body,
 		a{
 			transition: background 0.3s ease;
 		  	padding: 6px 20px;
-		  	font-size: 10px;
+		  	font-size: 12px;
 		  	border-radius: 2px;
 		  	.unread-badge{
 				background: #77E6A3;
@@ -933,16 +1012,17 @@ body,
 				text-align: center;
 				width: 17px;
 				height: 17px;
+				color:$ocean;
+				font-weight: 600;
 		  	}
 			&:hover{
 				background:$sky;
 				color:#fff;
 			}
-		}
-		&.active{
-			a.btn-blue{
+			&.active.btn-blue{
 				background:$ocean;
 		  		border:1px solid $ocean;
+		  		color:#fff;
 		  		box-shadow:inset 0 0 2px rgba(0,0,0,0.4);
 		  	}
 		}
@@ -951,6 +1031,8 @@ body,
 				color:$night;
 				padding:5px;
 				background:none;
+				font-size: 12px;
+				text-transform: uppercase;
 				&:hover{
 					background:none;
 					color:$primary;
@@ -992,7 +1074,7 @@ body,
 				a{
 					display: block;
 					padding: 10px 20px;
-					color:lighten($primary,10%);
+					color:$primaryHover;
 					background:transparent;
 					h4{
 						border: none;
@@ -1000,15 +1082,6 @@ body,
 						float: left;
 						margin: 0;
 						font-size: 15px;
-					&:before{
-						font-family: FontAwesome;
-						content: '\f068';
-						margin-right:5px;
-						color:$primary;
-						font-size: 8px;
-						top: -2px;
-						position: relative;
-					}
 					}
 					.date{
 						float: left;
@@ -1021,6 +1094,14 @@ body,
 						.time-passed{
 							margin-left: 10px;
 							text-transform: uppercase;
+							&:after{
+								content: 'Hide';
+								margin-left:10px;
+								color:$primary;
+								font-size: 10px;
+								position: relative;
+								float: right;
+							}
 						}
 					}
 					&:after {
@@ -1036,12 +1117,15 @@ body,
 						background:#fff;
 						transition: background 1s ease;
 						color:$primary;
-						h4:before{
-							content:'\f067';
+						.date .time-passed:after{
+							content:'View';
 						}
 						&:hover{
 							background:#fafafa;
-							color:lighten($primary,10%);
+							color:$primaryHover;
+							.date .time-passed:after{
+								color:$primaryHover;
+							}
 						}
 					}
 				}
@@ -1091,24 +1175,16 @@ body,
 }
 
 
-//Progress bar
-.progress{
-  background: #dedede;
-  border-radius:0;
-  height: 12px;
-  margin:0;
-}
-.progress-bar{
-  max-width: 100%;
-  background:rgba(0, 0, 0, 0.70);
-}
-
-
-
-
-
-
-
+		.progress{
+		  background: #dedede;
+		  border-radius:0;
+		  height: 12px;
+		  margin:0;
+		}
+		.progress-bar{
+		  max-width: 100%;
+		  background:rgba(0, 0, 0, 0.70);
+		}
 
 
 
