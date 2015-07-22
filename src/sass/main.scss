@@ -60,7 +60,7 @@ h1,h2,h3,h4,h5,h6{
 //navbar // ================================================================
 .navbar-default{
   background: #3B3B3B;
-  color:#dad7cb;
+  color:$misty;
   margin: 0;
   padding: 0;
   border-radius:0;
@@ -534,7 +534,7 @@ body,
 					@include gradient-vertical($start-color: $ocean, $end-color:lighten($ocean, 5%), $start-percent: 40%, $end-percent: 100%);
 					box-shadow:inset 0 0 5px rgba(0,0,0,0.5);
 
-					color:#dad7cb;
+					color:$misty;
 					i{
 						border-right:1px solid darken(#00505c, 5%);
 					}
@@ -591,12 +591,12 @@ body,
 		.upload-nav{
 			z-index: 1300;
 			margin: 0;
-			background-color: $rock;
+			background-color: $primary;
 			height: 75px;
 			font-size: 30px;
 			line-height: 33px;
 			padding: 18px 20px;
-			color: $white;
+			color: $misty;
 			position: fixed;
 			top: 0;
 			right: 0;
@@ -628,14 +628,15 @@ body,
 							font-size: 21px;
 							display: block;
 							padding: 18px;
-							background: $stanfordRed;
+							background-color: $ocean;
+							@include gradient-vertical($start-color: $ocean, $end-color:lighten($ocean, 5%), $start-percent: 40%, $end-percent: 100%);
 							color:$misty;
 							font-family: $font-family-ssp;
 							font-weight:400;
 							 text-decoration: none;
 							&:hover{
 								text-decoration: none;
-								background:lighten( $stanfordRed, 5%);
+								background:lighten($ocean, 5%);
 							}
 							&:after{
 								content: '\f077';
@@ -982,13 +983,84 @@ body,
 			display: none;
 		}
 		.message{
-			&.error{
-				color:$coral;
-			}
+			text-align: left;
+			color: $turquoise;
+			text-transform: lowercase;
+			font-size: 12px;
+			margin: 5px 0;
+
 		}
 		.dir-name{
+			text-align: left;
+			margin-top: 0;
 		}
 	}
+}
+//dataset loading icon spinner 
+.loading-wrap{
+	padding: 50px 0;
+	text-align: center;
+	position:relative;
+	span{
+		text-transform: uppercase;
+		margin-top: 5px;
+		display: block;
+		font-size:12px;
+		color: $turquoise;
+	}
+
+
+
+.spinner,
+.spinnerinner {
+  position: relative;
+  border: 4px solid $turquoise;
+  border-color: transparent $turquoise;
+  margin: auto;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
+   width: 45px;
+ height: 45px;
+ padding: 0;
+  margin: 0;
+}
+
+
+
+.spinner {
+ animation: spin 4s linear 0s infinite normal;
+margin: 0 auto;
+}
+
+.spinnerinner{
+  border-width: 2px;
+  margin: 21%;
+  padding: 0;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  width: 60%;
+  height: 60%;
+   animation: innerspin  1s linear 0s infinite normal;
+}
+
+}
+
+@keyframes  spin {
+from { -webkit-transform: rotate(0) }
+to { -webkit-transform: rotate(360deg) }
+}
+@keyframes  innerspin {
+from { -webkit-transform: rotate(0) }
+to { -webkit-transform: rotate(360deg) }
 }
 
 //main-col dashboard page
@@ -1175,16 +1247,18 @@ body,
 }
 
 
-		.progress{
-		  background: #dedede;
-		  border-radius:0;
-		  height: 12px;
-		  margin:0;
-		}
-		.progress-bar{
-		  max-width: 100%;
-		  background:rgba(0, 0, 0, 0.70);
-		}
+.progress{
+	background: #dedede;
+	border-radius:0;
+	height: 12px;
+	margin:0;
+}
+.progress-bar{
+	max-width: 100%;
+	background:$turquoise;
+}
+
+
 
 
 
