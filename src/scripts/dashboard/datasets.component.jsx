@@ -34,7 +34,7 @@ class Datasets extends React.Component {
 				</div>
 			);
 			return (
-				<Panel header={datasetheader} eventKey={index} key={index}>
+				<Panel className="fadeIn" header={datasetheader} eventKey={index} key={index}>
 					<div className="inner">
 						test
 					</div>
@@ -42,13 +42,19 @@ class Datasets extends React.Component {
 			);
 		});
 
-		let spinner = <i className="fa fa-spin fa-circle-o-notch"></i>;
+		let spinner = (
+			<div className="loading-wrap fadeIn">
+				<div className="spinner">
+					<div className="spinnerinner"></div>
+				</div>
+				<span>Loading</span>
+			</div>
+		);
 
 		return (
 			<div className="dash-tab-content datasets fadeIn">
 				<h2>My Datasets</h2>
-				<PanelGroup accordion className="fadeIn">
-					
+				<PanelGroup accordion>
 					{this.state.loading ? spinner : datasets}
 				</PanelGroup>
 			</div>

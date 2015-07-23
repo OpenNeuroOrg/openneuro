@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React     from 'react'
+import pluralize from 'pluralize'
 import DirUpload from './dirUpload.component.jsx';
 import DirTree   from './dirTree.component.jsx';
 import validate  from 'bids-validator';
@@ -42,6 +43,10 @@ let Upload = React.createClass({
 		let dirName = this.state.dirName;
 		let totalErrors = self.state.totalErrors;
 		let totalWarnings = self.state.totalWarnings;
+		let warningCount = pluralize('Warning', totalWarnings);
+		let errorCount = pluralize('Error', totalErrors);
+		let warningFilesCount = pluralize('File', warnings.length);
+		let errorFilesCount = pluralize('File', errors.length);
 		let progress = this.state.progress.total > 0 ? this.state.progress.completed / this.state.progress.total * 100 : 0;
 		//Error Log
 		let errors_waringings = errors.concat(warnings);
@@ -50,14 +55,14 @@ let Upload = React.createClass({
 		let errorsFilename = dirName+"_errors.json"
 		let errorLink = <a download={errorsFilename} className="error-log" target="_blank" href={errorURL}>Download error log for {dirName}</a>;
 		//errors
-		let errorHeader = <span>{totalErrors} Errors in {errors.length} files</span>;
+		let errorHeader = <span>{totalErrors} {errorCount} in {errors.length} {errorFilesCount}</span>;
 		let errorsWrap = (
 			<Panel className="fadeInDown upload-panel error-wrap" header={errorHeader}  eventKey='1'>
 				<DirValidationMessages issues={errors} /> 
 			</Panel>
 		);
 		//warnings
-		let warningHeader = <span>{totalWarnings} Warnings in {warnings.length} files</span>;
+		let warningHeader = <span>{totalWarnings} {warningCount} in {warnings.length} {warningFilesCount}</span>;
 		let warningWrap = (
 			<Panel className="fadeInDown upload-panel warning-wrap" header={warningHeader}  eventKey='2'>
 				<DirValidationMessages issues={warnings} />
@@ -83,13 +88,13 @@ let Upload = React.createClass({
 		);
 		//messages
 		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>;
-		let warningsMessage = <span className="message error fadeIn">We found {totalWarnings} Warnings in your dataset. Proceed with this dataset by clicking continue or fix the issues and upload again.</span>;
+		let warningsMessage = <span className="message error fadeIn">We found {totalWarnings} {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and upload again.</span>;
 		let errorMessage = (
-			<span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} Errors</strong> and upload your dataset again.<br/> 
+			<span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} {errorCount}</strong> and upload your dataset again.<br/> 
 				<small><a href="#">Click to view details on BIDS specification</a></small>
 			</span>
 		);
-		let uploadingMessage = <span className="message fadeIn">Uploading <i className="fa fa-circle-o-notch fa-spin"></i></span>;
+		let uploadingMessage = <span className="message fadeIn">Uploading {Math.floor(progress)}%</span>;
 	 	//buttons 
 		let withWarningsBtn = (
 			<div className="validate-buttons">
