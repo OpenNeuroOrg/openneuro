@@ -1,36 +1,39 @@
 // dependencies -------------------------------------------------------
 
-import React               from 'react';
-import {PanelGroup, Panel} from 'react-bootstrap';
-import scitran             from '../utils/scitran';
-
+import React               	from 'react';
+import moment              	from 'moment';
+import {PanelGroup, Panel}	from 'react-bootstrap';
+import scitran             	from '../utils/scitran';
+	
 class Datasets extends React.Component {
-
+		
 	constructor () {
 		super();
 		this.state = {
 			loading: false,
 			datasets: []
 		};
+		
 	}
+
 
 // life cycle events --------------------------------------------------
 	
-	componentDidMount () {
+	componentDidMount() {
 		let self = this;
 		self.setState({loading: true})
 		scitran.getProjects(function (datasets) {
 			self.setState({datasets: datasets, loading: false});
 		});
 	}
-
-	render () {
-		
+	render() {
 		let datasets = this.state.datasets.map(function (dataset, index) {
+			let dateAdded = moment(dataset.timestamp, moment.ISO_8601).format('L');
+			let timeago = moment(dateAdded).fromNow(true)
 			let datasetheader =(
 				<div className="header clearfix">
 					<h4 className="dataset">{dataset.name}</h4>
-					<div className="date">{dataset.timestamp}<span className="time-passed">now</span></div>
+					<div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
 				</div>
 			);
 			return (
@@ -54,7 +57,7 @@ class Datasets extends React.Component {
 		return (
 			<div className="dash-tab-content datasets fadeIn">
 				<h2>My Datasets</h2>
-				<PanelGroup accordion>
+    			<PanelGroup accordion>
 					{this.state.loading ? spinner : datasets}
 				</PanelGroup>
 			</div>
@@ -62,8 +65,7 @@ class Datasets extends React.Component {
 	}
 
 // custom methods -----------------------------------------------------
-
-}
+};
 
 export default Datasets;
 

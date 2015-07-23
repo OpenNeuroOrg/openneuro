@@ -1163,7 +1163,7 @@ to { -webkit-transform: rotate(360deg) }
 						color: #909090;
 						font-size: 10px;
 						padding-top: 5px;
-						.time-passed{
+						.time-ago{
 							margin-left: 10px;
 							text-transform: uppercase;
 							&:after{
@@ -1189,13 +1189,13 @@ to { -webkit-transform: rotate(360deg) }
 						background:#fff;
 						transition: background 1s ease;
 						color:$primary;
-						.date .time-passed:after{
+						.date .time-ago:after{
 							content:'View';
 						}
 						&:hover{
 							background:#fafafa;
 							color:$primaryHover;
-							.date .time-passed:after{
+							.date .time-ago:after{
 								color:$primaryHover;
 							}
 						}
