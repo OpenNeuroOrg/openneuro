@@ -28,8 +28,8 @@ class Datasets extends React.Component {
 	}
 	render() {
 		let datasets = this.state.datasets.map(function (dataset, index) {
-			let dateAdded = moment(dataset.timestamp, moment.ISO_8601).format('L');
-			let timeago = moment(dateAdded).fromNow(true)
+			let dateAdded = moment(dataset.timestamp).format('L');
+			let timeago = moment(dataset.timestamp).fromNow(true)
 			let datasetheader =(
 				<div className="header clearfix">
 					<h4 className="dataset">{dataset.name}</h4>
