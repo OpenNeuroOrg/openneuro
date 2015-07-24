@@ -15,12 +15,20 @@ let BSNavbar = React.createClass({
 
 // life cycle methods ------------------------------------------------------------
 
+
 	render: function () {
 		let self = this;
 		let isLoggedIn = !!this.state.token;
+
+
 		let username = this.state.user ? this.state.user.displayName : 'user-menu';
-		let thumbnail = this.state.user ? this.state.user.picture : null;
 		let email = this.state.user ? this.state.user.email : null;
+		//Possible fix Need ZM to confirm 
+		if(this.state.user){
+			var userThumb = this.state.user.picture;
+			var userThumbReplace = userThumb.replace("sz=50", "sz=200");
+		}
+		let thumbnail = this.state.user ? userThumbReplace : null;
 		if (this.state.user) {
 			let gear = (<i className="fa fa-gear" />);
 			var usermenu = (
@@ -60,11 +68,10 @@ let BSNavbar = React.createClass({
 				    <CollapsibleNav eventKey={0}>
 							<Nav navbar className="useradmin-nav">
 								<li><Link className="home link" to="home">Home</Link></li>
-								<li><Link className="about link" to="home">About</Link></li>
-								<li><Link className="other link" to="dashboard">Other</Link></li>
+								<li><Link className="dashboard link" to="dashboard">Dashboard</Link></li>
 						    </Nav>
 						    <Nav navbar right className="useradmin-nav">
-								{isLoggedIn ? usermenu : <li><Link className="sign-in" to="signIn">Sign In</Link></li>}
+								{isLoggedIn ? usermenu : <li><Link className="sign-in link" to="signIn">Sign In</Link></li>}
 						    </Nav>
 					</CollapsibleNav>
 				</div>
