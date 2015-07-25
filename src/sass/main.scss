@@ -67,26 +67,32 @@ h1,h2,h3,h4,h5,h6{
   border:none;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
   z-index: 1300;
+  .navbar-nav>li>{
+		a.link {
+			border: 1px solid transparent;
+			padding:10px;
+			color:$misty;
+			margin: 17px 0;
+			border-radius: 2px;
+			transition: border 0.5s ease;
+			margin-left: 10px;
+			&:hover{
+				color:$stone;
+				border-color:$stone;
+			}
+			&.active{
+				color:$misty;
+				border-color:$misty;
+			}
+		}
+	}
 }
 .navbar-brand {
   height: 75px;
 }
+
 .navbar-right.useradmin-nav{
     margin: 0;
-    .sign-in{
-    	border: 1px solid transparent;
-    	padding:10px;
-    	color:$misty;
-		margin: 17px 0;
-		border-radius: 2px;
-		transition: border 0.5s ease;
-    	&:hover,
-    	&.active{
-    		color:$misty;
-    		border-color:$misty;
-    	}
-
-    }
     .username{
 		margin: 15px 75px 0 0;
 		text-align: right;
@@ -296,49 +302,50 @@ h1,h2,h3,h4,h5,h6{
 
 //Alerts // ================================================================
 .alert{
-  overflow: hidden;
-  position: fixed;
-  left: 0;
-  right:0;
-  top:0;
-  z-index: 1100;
-  margin: 0;
-  border-radius:0;
-  background-color: rgba(0, 0, 0, 0.80);
-  color: #D0D0D0;
-  font-weight: 100;
-  &.alert-danger{
-    border-bottom: 1px solid $brand-danger;
-    strong{
-      color: $brand-danger;
-      font-weight: 700;
-      font-family: 'Source Sans Pro', sans-serif;
-    }
-  }
-  &.alert-warning{
-    border-bottom: 1px solid $brand-warning;
-    strong{    
-      color: $brand-warning;
-      font-weight: 700;
-      font-family: 'Source Sans Pro', sans-serif;
-    }
-  }
-  &.alert-success{
-    border-bottom: 1px solid $brand-success;
-    strong{    
-      color: $brand-success;
-      font-weight: 700;
-      font-family: 'Source Sans Pro', sans-serif;
-    }
-  }
-  &.alert-info{
-    border-bottom: 1px solid $brand-info;
-    strong{
-      color: $brand-info;
-      font-weight: 700;
-      font-family: 'Source Sans Pro', sans-serif;
-    }
-  }
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	right:0;
+	top:0;
+	z-index: 1800;
+	margin: 0;
+	border-radius:0;
+	background-color: rgba(0, 0, 0, 0.80);
+	color: #D0D0D0;
+	font-weight: 100;
+	border:none;
+	&.alert-danger{
+		border-bottom: 1px solid $brand-danger;
+		strong{
+		  color: $brand-danger;
+		  font-weight: 700;
+		  font-family: 'Source Sans Pro', sans-serif;
+		}
+	}
+	&.alert-warning{
+		border-bottom: 1px solid $brand-warning;
+		strong{    
+		  color: $brand-warning;
+		  font-weight: 700;
+		  font-family: 'Source Sans Pro', sans-serif;
+		}
+	}
+	&.alert-success{
+		border-bottom: 1px solid $brand-success;
+		strong{    
+		  color: $brand-success;
+		  font-weight: 700;
+		  font-family: 'Source Sans Pro', sans-serif;
+		}
+	}
+	&.alert-info{
+		border-bottom: 1px solid $brand-info;
+		strong{
+		  color: $brand-info;
+		  font-weight: 700;
+		  font-family: 'Source Sans Pro', sans-serif;
+		}
+	}
 }
 
 //form // ================================================================
@@ -686,7 +693,7 @@ body,
 							  }
 							  &::before {
 							    font-family: FontAwesome;
-							    content: '\f093 \0020 Upload';
+							    content: 'Upload';
 							    display: inline-block;
 							    background-color:$sky;
 							    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
@@ -720,6 +727,18 @@ body,
 							.validate-buttons{
 								width: 160px;
 								margin: 0 auto;
+							}
+							.warning-btn-group{
+								width: 330px;
+								display: block;
+								margin: 0 auto;
+								.validate-buttons,
+								input.dirUpload-btn{
+									float:left;
+								}
+								input.dirUpload-btn{
+									margin: 0 10px 0 0;
+								}
 							}
 						}
 					}
@@ -819,13 +838,13 @@ body,
 									font-family: FontAwesome;
 									font-size: 10px;
 									margin-left: 10px;
-									content: '\f078';
+									content: '\f077';
 									position: relative;
 									top: -2px;
 								}
 								&.collapsed{
 									&:after{
-										content: '\f077';
+										content: '\f078';
 									}
 								}
 							}

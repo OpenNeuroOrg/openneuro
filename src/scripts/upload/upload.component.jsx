@@ -1,9 +1,10 @@
 // dependencies -------------------------------------------------------
 
-import React     from 'react'
-import pluralize from 'pluralize'
+import React     from 'react';
+import pluralize from 'pluralize';
 import DirUpload from './dirUpload.component.jsx';
 import DirTree   from './dirTree.component.jsx';
+import UploadAlert   from '../common/partials/alert.component.jsx';
 import validate  from 'bids-validator';
 import scitran   from '../utils/scitran';
 import files     from '../utils/files';
@@ -80,7 +81,7 @@ let Upload = React.createClass({
 			<span>
 				{errorLink}
 				<Accordion className="fileStructure fadeIn">
-					<Panel header="See File Structure" eventKey='1'>
+					<Panel header="View File Structure" eventKey='1'>
 				  		<DirTree tree={tree}/>
 				  	</Panel>
 			  	</Accordion>
@@ -111,10 +112,10 @@ let Upload = React.createClass({
 			</span>
 		)
 		let buttons = (
-			<span>
+			<div className="warning-btn-group clearfix" role="group" aria-label="...">
 				<DirUpload onChange={self._onChange} />
-				{tree.length > 0 && errors.length === 0 && warnings.length > 0? withWarningsBtn: null}
-			</span>
+				 {withWarningsBtn}
+			</div>
 		);
 		let dirHeader = (
 			<h3 className="dir-name">
@@ -136,8 +137,8 @@ let Upload = React.createClass({
 				<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
 					<div>
 						<div className="upload-wrap">
-								{buttons}
-								{dirHeader}
+								{tree.length > 0 && errors.length === 0 && warnings.length > 0 ? buttons : <DirUpload onChange={self._onChange} /> }
+								{tree.length > 0 ? dirHeader : null}
 								{messages}
 						</div>
 						{tree.length > 0 ? validationMessages : null}
@@ -151,11 +152,11 @@ let Upload = React.createClass({
 				<div className="upload-nav">
 					<h2>My Tasks</h2>
 				</div>
+				{this.state.alert ? <UploadAlert /> : null}
 				{uploadAccordion}
 				{progress_upload}
 			</div>
     	);
-	
 	},
 
 // custom methods -----------------------------------------------------
@@ -230,7 +231,20 @@ let Upload = React.createClass({
 				uploadState: true
 			});
 			 if(progress.total === progress.completed){
-				console.log('upload complete')
+				self.setState({
+					tree: [],
+					list: {},
+					errors: [],
+					warnings: [],
+					dirName: '',
+					alert: true,
+					uploadState: false,
+					validating: false,
+					totalErrors: 0,
+					totalWarnings: 0,
+					progress: {total: 0, completed: 0}
+				});
+				setTimeout(function(){ self.setState({alert: false}) }, 3000);
 			}
 		});
 	}
