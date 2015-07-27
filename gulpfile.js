@@ -24,12 +24,14 @@
     var p = {
         html:           './src/index.html',
         jsx:            './src/scripts/client.jsx',
+        md5worker:      './src/scripts/utils/md5worker.js',
         scss:           './src/sass/*/*.scss',
         scssmain:       './src/sass/main.scss',
         libs:           './src/scripts/libs/*',
         assets:         './src/assets/*',
         fonts:          './src/sass/fonts/*',
-        bundle:         'app.js',
+        bundle:         'app.min.js',
+        md5bundle:      'md5worker.min.js',
 
         dist:           'dist',
         distCss:        'dist/css',
@@ -41,11 +43,11 @@
 
     gulp.task('build', ['clean'], function() {
         process.env.NODE_ENV = 'production';
-        gulp.start(['styles', 'copy', 'browserify']);
+        gulp.start(['styles', 'copy', 'buildApp', 'buildMD5Worker']);
     });
     
     gulp.task('watch', [], function() {
-        gulp.start(['browserSync', 'watchTask', 'watchify', 'watchify2', 'styles', 'copy' ]);
+        gulp.start(['browserSync', 'watchStyles', 'watchApp', 'watchMD5Worker', 'styles', 'copy' ]);
     });
 
     gulp.task('default',['watch'], function() {
@@ -75,7 +77,7 @@
     });
 
     // watch for changes
-    gulp.task('watchify', function() {
+    gulp.task('watchApp', function() {
         var bundler = watchify(browserify(p.jsx, watchify.args));
         function rebundle() {
             return bundler
@@ -90,13 +92,13 @@
     });
 
     // watch for changes
-    gulp.task('watchify2', function() {
-        var bundler = watchify(browserify('./src/scripts/utils/md5worker.js', watchify.args));
+    gulp.task('watchMD5Worker', function() {
+        var bundler = watchify(browserify(p.md5worker, watchify.args));
         function rebundle() {
             return bundler
                 .bundle()
                 .on('error', notify.onError())
-                .pipe(source('md5worker.js'))
+                .pipe(source(p.md5bundle))
                 .pipe(gulp.dest(p.dist))
                 .pipe(reload({stream: true}));
         }
@@ -105,11 +107,24 @@
     });
 
     // bundle js
-    gulp.task('browserify', function() {
+    gulp.task('buildApp', function() {
         browserify(p.jsx)
             .transform(babelify)
             .bundle()
             .pipe(source(p.bundle))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(uglify())
+            .pipe(sourcemaps.write('./'))
+            .pipe(gulp.dest(p.dist));
+    });
+
+    // bundle md5 worker
+    gulp.task('buildMD5Worker', function() {
+        browserify(p.md5worker)
+            .transform(babelify)
+            .bundle()
+            .pipe(source(p.md5bundle))
             .pipe(buffer())
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(uglify())
@@ -123,14 +138,13 @@
             .pipe(changed(p.distCss))
             .pipe(sass({errLogToConsole: true}))
             .on('error', notify.onError())
-            .pipe(autoprefixer('last 1 version'))
             .pipe(csso())
             .pipe(gulp.dest(p.distCss))
             .pipe(reload({stream: true}));
     });
 
     // watch styles
-    gulp.task('watchTask', function() {
+    gulp.task('watchStyles', function() {
         gulp.watch(p.scssmain, ['styles']);
         gulp.watch(p.scss, ['styles']);
     });
