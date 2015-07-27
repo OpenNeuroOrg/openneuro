@@ -26,7 +26,9 @@ class Datasets extends React.Component {
 			self.setState({datasets: datasets, loading: false});
 		});
 	}
+
 	render() {
+		let self = this;
 		let datasets = this.state.datasets.map(function (dataset, index) {
 			let dateAdded = moment(dataset.timestamp).format('L');
 			let timeago = moment(dataset.timestamp).fromNow(true)
@@ -39,6 +41,7 @@ class Datasets extends React.Component {
 			return (
 				<Panel className="fadeIn" header={datasetheader} eventKey={index} key={index}>
 					<div className="inner">
+						<button onClick={self.deleteProject.bind(self, dataset)}>Delete</button>
 						test
 					</div>
 				</Panel>
@@ -65,6 +68,23 @@ class Datasets extends React.Component {
 	}
 
 // custom methods -----------------------------------------------------
+
+	deleteProject(dataset) {
+		let self = this;
+
+		
+		scitran.deleteDataset(dataset._id, function () {
+			// update state
+			for (var i = 0; i < self.state.datasets.length; i++) {
+				if (dataset._id === self.state.datasets[i]._id) {
+					let datasets = self.state.datasets;
+					datasets.splice(i, 1);
+					self.setState({datasets: datasets});
+				}
+			}
+		});
+	}
+
 };
 
 export default Datasets;
