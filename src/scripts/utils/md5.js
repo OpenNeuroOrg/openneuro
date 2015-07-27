@@ -7,7 +7,7 @@
  */
 export default function (file, callback) {
 
-	var worker = new Worker('md5worker.js');
+	var worker = new Worker('md5worker.min.js');
 	worker.postMessage(file);
 	worker.onmessage = function (e) {
 		callback(e.data);
