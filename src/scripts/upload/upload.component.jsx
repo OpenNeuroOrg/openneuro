@@ -167,17 +167,17 @@ let Upload = React.createClass({
 	 * On file select this adds files to the state
 	 * and starts validation.
 	 */
-	_onChange (files) {
+	_onChange (selectedFiles) {
 		let self = this;
 
 		this.setState({
-			tree: files.tree,
-			list: files.list,
-			dirName: files.tree[0].name,
+			tree: selectedFiles.tree,
+			list: selectedFiles.list,
+			dirName: selectedFiles.tree[0].name,
 			validating: !self.state.validating,
 		});
 
-		this._validate(files.list);
+		this._validate(selectedFiles);
 	},
 
 	/**
@@ -186,10 +186,10 @@ let Upload = React.createClass({
 	 * Takes a filelist, runs BIDS validation checks
 	 * against it, and sets any errors to the state.
 	 */
-	_validate (fileList) {
+	_validate (selectedFiles) {
 		let self = this;
 
-        validate.BIDS(fileList, function (errors, warnings) {
+        validate.BIDS(selectedFiles.list, function (errors, warnings) {
         	errors   = errors   ? errors   : [];
         	warnings = warnings ? warnings : [];
 
@@ -207,7 +207,7 @@ let Upload = React.createClass({
 
 			if (errors.length === 0) {
 				if (warnings.length === 0) {
-					self._upload();
+					self._upload(selectedFiles);
 					self.setState({uploadState: true});
 				}
 			}
@@ -221,11 +221,12 @@ let Upload = React.createClass({
 	 * a progress event every time a file or folder
 	 * finishes.
 	 */
-	_upload () {
+	_upload (selectedFiles) {
 		let self = this;
-		let count = files.countTree(this.state.tree);
+		let fileTree = selectedFiles ? selectedFiles.tree : this.state.tree;
+		let count = files.countTree(fileTree);
 
-		scitran.upload(this.state.tree, count, function (progress) {
+		scitran.upload(fileTree, count, function (progress) {
 			self.setState({
 				progress: progress,
 				uploadState: true
