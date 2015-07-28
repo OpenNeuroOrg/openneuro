@@ -5,6 +5,7 @@ import moment               from 'moment';
 import {PanelGroup, Panel}  from 'react-bootstrap';
 import scitran              from '../utils/scitran';
 import Paginator            from '../common/partials/paginator.component.jsx';
+import Spinner              from '../common/partials/spinner.component.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
@@ -33,14 +34,6 @@ let Datasets = React.createClass({
 
         let self = this;
         let datasets = this.state.datasets;
-        let spinner = (
-            <div className="loading-wrap fadeIn">
-                <div className="spinner">
-                    <div className="spinnerinner"></div>
-                </div>
-                <span>Loading</span>
-            </div>
-        );   
 
         if(datasets.length > 0){
             var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
@@ -71,7 +64,7 @@ let Datasets = React.createClass({
         	<div className="dash-tab-content datasets ">
                 <h2>My Datasets</h2>
                 <PanelGroup accordion> 
-                    {this.state.loading ? spinner : Results} 
+                    {this.state.loading ? <Spinner /> : Results} 
                 </ PanelGroup>
                 </div>
                 <Paginator
@@ -79,8 +72,6 @@ let Datasets = React.createClass({
                     pagesTotal={pagesTotal}
                     pageRangeDisplayed={5}
                     activePageRangeDisplayed={0}
-                    prevLabel="«"                            
-                    nextLabel="»" 
                     containerClass="pagination"
                     onPageSelect={this.onPageSelect} />
              </div>
@@ -91,8 +82,6 @@ let Datasets = React.createClass({
 
 	deleteProject(dataset) {
 		let self = this;
-
-		
 		scitran.deleteDataset(dataset._id, function () {
 			// update state
 			for (var i = 0; i < self.state.datasets.length; i++) {
