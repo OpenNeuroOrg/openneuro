@@ -23,7 +23,7 @@ class DirValidationMessages extends React.Component {
 				<span className="file-header">
 					{issue.file.name}
 					<span className="pull-right">
-						View {issue.errors.length} {errorCount}
+						 {issue.errors.length} {errorCount}
 					</span>
 				</span>
 			);

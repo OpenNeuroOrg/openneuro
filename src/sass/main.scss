@@ -876,18 +876,18 @@ body,
 										content:'';
 									}
 									.pull-right{
-										color: #808080;
-										i{
-											margin-left:2px;
-											&:after{
-												content: 'Hide';
-												font-size: 10px;
-												text-transform: uppercase;
-												margin-left: 5px;
-												color:$coral;
-												position: relative;
-											}
+										font-size: 10px;
+										text-transform: uppercase;
+										color:#888;
+										margin-top: 3px;
+
+										&:before{
+											color:$coral;
+											content: 'Hide\00a0';
+											margin-right: 0 ;
+											position: relative;
 										}
+									
 									}
 							 		&.collapsed{
 										color:  $coral;
@@ -896,12 +896,11 @@ body,
 								 				
 										}
 										.pull-right{
-											i{
-												&:after{
-													color:$coral;
-													content: 'View';	
-												}
+											
+											&:before{
+												content: 'View\00a0';	
 											}
+										
 										}
 									}
 									&:hover{
