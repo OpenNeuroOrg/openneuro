@@ -1,6 +1,7 @@
 import request   from './request';
 import uploads   from './upload';
 import userStore from '../user/user.store';
+import async     from 'async';
 
 /**
  * Scitran
@@ -20,6 +21,8 @@ export default  {
     verifyUser (callback) {
         request.get('users/self', callback);
     },
+
+// Create ---------------------------------------------------------------------------------
 
     /**
      * Create Project
@@ -141,9 +144,48 @@ export default  {
         }
     },
 
+// Read -----------------------------------------------------------------------------------
+
     getProjects (callback) {
         request.get('projects', function (err, res) {
             callback(res.body);
+        });
+    },
+
+    getSessions (projectId, callback) {
+        request.get('projects/' + projectId + '/sessions', function (err, res) {
+            callback(res.body);
+        });
+    },
+
+    getAcquisitions (sessionId, callback) {
+        request.get('sessions/' + sessionId + '/acquisitions', function (err, res) {
+            callback(res.body);
+        });
+    },
+
+// Delete ---------------------------------------------------------------------------------
+
+    deleteContainer (type, id, callback) {
+        request.del(type + '/' + id, function (err, res) {
+            callback();
+        });
+    },
+
+    deleteDataset (projectId, callback) {
+        let self = this;
+        this.getSessions(projectId, function (sessions) {
+            async.each(sessions, function (session, cb) {
+                self.getAcquisitions(session._id, function (acquisitions) {
+                    async.each(acquisitions, function (acquisition, cb1) {
+                        self.deleteContainer('acquisitions', acquisition._id, cb1);
+                    }, function () {
+                        self.deleteContainer('sessions', session._id, cb);
+                    });
+                });
+            }, function () {
+                self.deleteContainer('projects', projectId, callback);
+            });
         });
     }
 

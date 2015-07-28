@@ -50,6 +50,14 @@ var Request = {
 					handleResponse(err, res, callback);
 				});
 		});
+	},
+
+	del (path, callback) {
+		request.del(config.scitranUrl + path)
+			.set('Authorization', userStore._token)
+			.end(function (err, res) {
+				handleResponse(err, res, callback);
+			});
 	}
 
 };

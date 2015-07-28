@@ -52,8 +52,8 @@ let Upload = React.createClass({
 		let progress = this.state.progress.total > 0 ? this.state.progress.completed / this.state.progress.total * 100 : 0;
 		//Error Log
 		let errors_waringings = errors.concat(warnings);
-		let errorLog = JSON.stringify(errors_waringings);
-		let errorURL = "data:application/octet-stream;charset=utf-8,"+dirName+'_Errors'+encodeURIComponent(errorLog);
+		let errorLog = JSON.stringify(errors_waringings, null, "  ");
+		let errorURL = "data:application/octet-stream;charset=utf-8,"+encodeURIComponent(errorLog);
 		let errorsFilename = dirName+"_errors.json"
 		let errorLink = <a download={errorsFilename} className="error-log" target="_blank" href={errorURL}>Download error log for {dirName}</a>;
 		//errors
