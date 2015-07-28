@@ -9,112 +9,107 @@ import Spinner              from '../common/partials/spinner.component.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
-let Datasets = React.createClass({
+export default class Datasets extends React.Component {
 
-   getInitialState: function(){
-	    return {
+    constructor() {
+        super();
+	    this.state = {
             loading: false,
             datasets: [],
             resultsPerPage: 30,
-            _page: 0
+            page: 0
         };
-    },
+    }
 
 // life cycle events -------------------------------------------------------------------------
 
-    componentDidMount: function() {
+    componentDidMount() {
         let self = this;
         self.setState({loading: true})
         scitran.getProjects(function (datasets) {
             self.setState({datasets: datasets,  loading: false});
         });
-    },
+    }
 
-    render: function() {
-
+    render() {
         let self = this;
         let datasets = this.state.datasets;
 
-        if(datasets.length > 0){
+        if (datasets.length > 0) {
             var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
-            // paginate the full set of results in this.props.results
-            let paginatedResults = this.paginate(datasets, this.state.resultsPerPage, this.state._page);     
+            let paginatedResults = this.paginate(datasets, this.state.resultsPerPage, this.state.page);   
+
             // map results
             var Results = paginatedResults.map(function (dataset, index){       
                 let dateAdded = moment(dataset.timestamp).format('L');
-                let timeago = moment(dataset.timestamp).fromNow(true)
-                let datasetheader =(
-                <div className="header clearfix">
-                    <h4 className="dataset">{dataset.name}</h4>
-                    <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
-                </div>
-                );
-                return (
-                <Panel className="fadeIn" header={datasetheader} eventKey={dataset._id} key={index}>
-                    <div className="inner">
-                        {dataset.name} - {index} <button onClick={self.deleteProject.bind(self, dataset)}>delete</button>
+                let timeago   = moment(dataset.timestamp).fromNow(true)
+                
+                let datasetheader = (
+                    <div className="header clearfix">
+                        <h4 className="dataset">{dataset.name}</h4>
+                        <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
-                </Panel>
+                );
+                
+                return (
+                    <Panel className="fadeIn" header={datasetheader} eventKey={dataset._id} key={index}>
+                        <div className="inner">
+                            {dataset.name} - {index} <button onClick={self.deleteProject.bind(self, dataset)}>delete</button>
+                            {dataset.isDeleting ? <Spinner text={"deleting " + dataset.name} /> : null}
+                        </div>
+                    </Panel>
                 );
             });
         }
 
         return (
         	<div className="fadeIn">
-        	<div className="dash-tab-content datasets ">
-                <h2>My Datasets</h2>
-                <PanelGroup accordion> 
-                    {this.state.loading ? <Spinner /> : Results} 
-                </ PanelGroup>
+            	<div className="dash-tab-content datasets ">
+                    <h2>My Datasets</h2>
+                    <PanelGroup accordion> 
+                        {this.state.loading ? <Spinner /> : Results} 
+                    </ PanelGroup>
                 </div>
                 <Paginator
-                    page={this.state._page}
+                    page={this.state.page}
                     pagesTotal={pagesTotal}
                     pageRangeDisplayed={5}
-                    activePageRangeDisplayed={0}
-                    containerClass="pagination"
-                    onPageSelect={this.onPageSelect} />
-             </div>
+                    onPageSelect={this.onPageSelect.bind(self)} />
+            </div>
         );
-    },
+    }
 
 // custom methods ----------------------------------------------------------------------------
 
 	deleteProject(dataset) {
-		let self = this;
+		let self = this,
+            datasets = this.state.datasets,
+            datasetIndex;
+        for (var i = 0; i < self.state.datasets.length; i++) {
+            if (dataset._id === self.state.datasets[i]._id) {
+                datasets[i].isDeleting = true;
+                self.setState({datasets: datasets});
+                datasetIndex = i;
+            }
+        }
 		scitran.deleteDataset(dataset._id, function () {
-			// update state
-			for (var i = 0; i < self.state.datasets.length; i++) {
-				if (dataset._id === self.state.datasets[i]._id) {
-					let datasets = self.state.datasets;
-					datasets.splice(i, 1);
-					self.setState({datasets: datasets});
-				}
-			}
+            datasets.splice(datasetIndex, 1);
+            self.setState({datasets: datasets});
 		});
-	},
+	}
 
-    paginate: function(data, perPage, _page){
-        // if we got no data -> return empty array
-        if(data.length < 1) return null;
-        // define _page
-        var _page = (_page) ? _page : this.state._page;
-        // define the start
-        var start = (_page * perPage);
-        var end = start + perPage;
-
-        // only get the last data in there
+    paginate(data, perPage, page) {
+        if (data.length < 1) return null;
+        let page = (page) ? page : this.state.page;
+        let start = (page * perPage);
+        let end = start + perPage;
         var retArr = data.slice(start, end);
-        // return the array
         return retArr;
-    },
-
-    onPageSelect: function(_page, clickEvent){
-        // change _page state
-        let pageNumber = Number(_page);
-        this.setState({ _page: pageNumber });
     }
 
-});
+    onPageSelect(page, e) {
+        let pageNumber = Number(page);
+        this.setState({ page: pageNumber });
+    }
 
-export default Datasets;
+}
