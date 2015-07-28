@@ -40,7 +40,8 @@ let Datasets = React.createClass({
                 </div>
                 <span>Loading</span>
             </div>
-        );      
+        );   
+
         if(datasets.length > 0){
             var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
             // paginate the full set of results in this.props.results
@@ -58,23 +59,22 @@ let Datasets = React.createClass({
                 return (
                 <Panel className="fadeIn" header={datasetheader} eventKey={dataset._id} key={index}>
                     <div className="inner">
-                        {dataset.name} - {index}
+                        {dataset.name} - {index} <button onClick={self.deleteProject.bind(self, dataset)}>delete</button>
                     </div>
                 </Panel>
                 );
             });
         }
-         // display it
+
         return (
         	<div className="fadeIn">
         	<div className="dash-tab-content datasets ">
-             
                 <h2>My Datasets</h2>
                 <PanelGroup accordion> 
                     {this.state.loading ? spinner : Results} 
                 </ PanelGroup>
-                    </div>
-                                                    <Paginator
+                </div>
+                <Paginator
                     page={this.state._page}
                     pagesTotal={pagesTotal}
                     pageRangeDisplayed={5}
@@ -118,14 +118,14 @@ let Datasets = React.createClass({
         var retArr = data.slice(start, end);
         // return the array
         return retArr;
-   },
+    },
 
-
-  onPageSelect: function(_page, clickEvent){
+    onPageSelect: function(_page, clickEvent){
         // change _page state
         let pageNumber = Number(_page);
         this.setState({ _page: pageNumber });
-   }
+    }
+
 });
 
 export default Datasets;
