@@ -27,6 +27,7 @@ export default class Datasets extends React.Component {
         let self = this;
         self.setState({loading: true})
         scitran.getProjects(function (datasets) {
+            datasets.reverse();
             self.setState({datasets: datasets,  loading: false});
         });
     }
