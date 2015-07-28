@@ -4,7 +4,7 @@ import React from 'react';
 
 // component setup ---------------------------------------------------------------------------
 
-class Paginator extends React.Component {
+export default class Paginator extends React.Component {
 
 // life cycle events -------------------------------------------------------------------------
 
@@ -157,6 +157,3 @@ Paginator.defaultProps = {
     breakLabel:               "...",
     containerClass:           "pagination"
 };
-
-
-module.exports = Paginator;
