@@ -14,11 +14,17 @@ export default class Spinner extends React.Component {
                 <div className="spinner">
                     <div className="spinnerinner"></div>
                 </div>
-                <span>Loading</span>
+                <span>{this.props.text}</span>
             </div>
         );
     }
 
 }
 
-// export default Spinner;
+Spinner.propTypes = {
+    text: React.PropTypes.string
+};
+
+Spinner.defaultProps = {
+    text: 'Loading'
+};
