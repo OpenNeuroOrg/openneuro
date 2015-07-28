@@ -9,7 +9,7 @@ export default class Spinner extends React.Component {
 // life cycle events -------------------------------------------------------------------------
 
     render() {
-        return (
+        let spinner = (
             <div className="loading-wrap fadeIn">
                 <div className="spinner">
                     <div className="spinnerinner"></div>
@@ -17,14 +17,17 @@ export default class Spinner extends React.Component {
                 <span>{this.props.text}</span>
             </div>
         );
+        return this.props.active ? spinner : null;
     }
 
 }
 
 Spinner.propTypes = {
-    text: React.PropTypes.string
+    text:   React.PropTypes.string,
+    active: React.PropTypes.bool
 };
 
 Spinner.defaultProps = {
-    text: 'Loading'
+    text:   'Loading',
+    active: false
 };

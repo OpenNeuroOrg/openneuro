@@ -55,7 +55,7 @@ export default class Datasets extends React.Component {
                     <Panel className="fadeIn" header={datasetheader} eventKey={dataset._id} key={index}>
                         <div className="inner">
                             {dataset.name} - {index} <button onClick={self.deleteProject.bind(self, dataset)}>delete</button>
-                            {dataset.isDeleting ? <Spinner text={"deleting " + dataset.name} /> : null}
+                            <Spinner text={"deleting " + dataset.name} active={dataset.isDeleting} />
                         </div>
                     </Panel>
                 );
