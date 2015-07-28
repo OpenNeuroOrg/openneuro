@@ -58,6 +58,14 @@ var Request = {
 
 };
 
+/**
+ * Handle Request
+ *
+ * A generic request handler used to intercept
+ * requests before they request out. Ensures
+ * a user auth token in not exprired and normalizes
+ * options.
+ */
 function handleRequest (path, options, callback) {
 	options = normalizeOptions(options);
 	var google = hello('google');
