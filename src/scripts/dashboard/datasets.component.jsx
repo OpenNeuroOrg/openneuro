@@ -83,11 +83,13 @@ export default class Datasets extends React.Component {
                         {this.state.loading ? <Spinner /> : Results} 
                     </ PanelGroup>
                 </div>
-                <Paginator
-                    page={this.state.page}
-                    pagesTotal={pagesTotal}
-                    pageRangeDisplayed={5}
-                    onPageSelect={this.onPageSelect.bind(self)} />
+                <div className="pager-wrapper">
+                	<Paginator
+	                    page={this.state.page}
+	                    pagesTotal={pagesTotal}
+	                    pageRangeDisplayed={5}
+	                    onPageSelect={this.onPageSelect.bind(self)} />
+            	</div>
             </div>
         );
     }

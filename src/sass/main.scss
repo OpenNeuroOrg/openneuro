@@ -57,6 +57,39 @@ h1,h2,h3,h4,h5,h6{
   font-weight: 400;
 }
 
+// Pagination Pager // ================================================================
+.pager-wrapper{
+	text-align:center;
+	.pagination>li{
+		a,
+		span{
+			transition: all 0.3s ease-out;
+			color:$sky;
+		}
+		
+		&:first-child>,
+		&:last-child>{
+			a,
+			span{
+				border-radius:0;
+			}
+		}
+		&.active{
+			a,
+			span{
+				background: darken($sky, 10%);
+				transition: all 0.3s ease-out;
+				color:#fff;
+				&:hover{
+					background: darken($sky, 10%);
+					transition: all 0.3s ease-out;
+					color:#fff;
+				}
+			}
+		}
+	}
+}
+
 //navbar // ================================================================
 .navbar-default{
   background: #3B3B3B;
@@ -1069,7 +1102,7 @@ body,
 }
 //dataset loading icon spinner 
 .loading-wrap{
-	padding: 50px 0;
+	padding: 0;
 	text-align: center;
 	position:relative;
 	span{
