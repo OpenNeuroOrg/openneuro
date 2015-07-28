@@ -80,14 +80,16 @@ export default class Datasets extends React.Component {
             	<div className="dash-tab-content datasets ">
                     <h2>My Datasets</h2>
                     <PanelGroup accordion> 
-                        {this.state.loading ? <Spinner /> : Results} 
+                        {this.state.loading ? <Spinner active={true} /> : Results} 
                     </ PanelGroup>
                 </div>
-                <Paginator
-                    page={this.state.page}
-                    pagesTotal={pagesTotal}
-                    pageRangeDisplayed={5}
-                    onPageSelect={this.onPageSelect.bind(self)} />
+                <div className="pager-wrapper">
+                	<Paginator
+	                    page={this.state.page}
+	                    pagesTotal={pagesTotal}
+	                    pageRangeDisplayed={5}
+	                    onPageSelect={this.onPageSelect.bind(self)} />
+            	</div>
             </div>
         );
     }
