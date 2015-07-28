@@ -303,10 +303,10 @@ h1,h2,h3,h4,h5,h6{
 //Alerts // ================================================================
 .alert{
 	overflow: hidden;
-	position: absolute;
-	left: 0;
+	position: fixed;
 	right:0;
 	top:0;
+	right: 0;
 	z-index: 1800;
 	margin: 0;
 	border-radius:0;
@@ -314,6 +314,8 @@ h1,h2,h3,h4,h5,h6{
 	color: #D0D0D0;
 	font-weight: 100;
 	border:none;
+    width: 33.33333%;
+    font-size: 26px;
 	&.alert-danger{
 		border-bottom: 1px solid $brand-danger;
 		strong{
@@ -346,6 +348,27 @@ h1,h2,h3,h4,h5,h6{
 		  font-family: 'Source Sans Pro', sans-serif;
 		}
 	}
+
+
+	.alert-left{
+		width: 90%;
+		float: left;
+	}
+	.alert-right{
+		width: 10%;
+		float: left;
+		&.dismiss-button-x{
+			background: none;
+		    border: none;
+		    box-shadow: none;
+		    font-size: 21px;
+		    cursor: pointer;
+		    &:hover{
+		    	color:$brand-success;
+		    }
+		}
+	}
+
 }
 
 //form // ================================================================
@@ -693,7 +716,7 @@ body,
 							  }
 							  &::before {
 							    font-family: FontAwesome;
-							    content: 'Upload';
+							    content: 'Select Folder';
 							    display: inline-block;
 							    background-color:$sky;
 							    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
@@ -876,18 +899,18 @@ body,
 										content:'';
 									}
 									.pull-right{
-										color: #808080;
-										i{
-											margin-left:2px;
-											&:after{
-												content: 'Hide';
-												font-size: 10px;
-												text-transform: uppercase;
-												margin-left: 5px;
-												color:$coral;
-												position: relative;
-											}
+										font-size: 10px;
+										text-transform: uppercase;
+										color:#888;
+										margin-top: 3px;
+
+										&:before{
+											color:$coral;
+											content: 'Hide\00a0';
+											margin-right: 0 ;
+											position: relative;
 										}
+									
 									}
 							 		&.collapsed{
 										color:  $coral;
@@ -896,12 +919,11 @@ body,
 								 				
 										}
 										.pull-right{
-											i{
-												&:after{
-													color:$coral;
-													content: 'View';	
-												}
+											
+											&:before{
+												content: 'View\00a0';	
 											}
+										
 										}
 									}
 									&:hover{
