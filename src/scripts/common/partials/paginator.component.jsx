@@ -86,7 +86,11 @@ export default class Paginator extends React.Component {
         var pageArr = [];
 
         if (this.props.pagesTotal <= this.props.pageRangeDisplayed) {
-            return Array((this.props.pagesTotal - 1));
+            let arr = [];
+            for (let i = 0; i < this.props.pagesTotal; i++) {
+                arr.push(i);
+            }
+            return arr;
         } else {
 
             // shortcut all
