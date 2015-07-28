@@ -12,8 +12,7 @@ import userStore from '../user/user.store.js';
 var Request = {
 
 	get (path, callback) {
-		let self = this;
-		hello('google').login({scope: 'email,openid', force: false}).then(function() {
+		handleRequest(path, {}, function (path, options) {
 			request.get(config.scitranUrl + path)
 				.set('Authorization', userStore._token)
 				.end(function (err, res) {
@@ -23,10 +22,7 @@ var Request = {
 	},
 
 	post (path, options, callback) {
-		var google = hello('google');
-		options = normalizeOptions(options);
-		let self = this;
-		hello('google').login({scope: 'email,openid', force: false}).then(function() {
+		handleRequest(path, options, function (path, options) {
 			request.post(config.scitranUrl + path)
 				.set('Authorization', userStore._token)
 				.set(options.headers)
@@ -38,9 +34,7 @@ var Request = {
 	},
 
 	put (path, options, callback) {
-		options = normalizeOptions(options);
-		let self = this;
-		hello('google').login({scope: 'email,openid', force: false}).then(function() {
+		handleRequest(path, options, function (path, options) {
 			request.put(config.scitranUrl + path)
 				.set('Authorization', userStore._token)
 				.set(options.headers)
@@ -53,14 +47,24 @@ var Request = {
 	},
 
 	del (path, callback) {
-		request.del(config.scitranUrl + path)
-			.set('Authorization', userStore._token)
-			.end(function (err, res) {
-				handleResponse(err, res, callback);
-			});
+		handleRequest(path, {}, function (path, options) {
+			request.del(config.scitranUrl + path)
+				.set('Authorization', userStore._token)
+				.end(function (err, res) {
+					handleResponse(err, res, callback);
+				});
+		});
 	}
 
 };
+
+function handleRequest (path, options, callback) {
+	options = normalizeOptions(options);
+	var google = hello('google');
+	hello('google').login({scope: 'email,openid', force: false}).then(function() {
+		callback(path, options);
+	});
+}
 
 /**
  * Handle Response
