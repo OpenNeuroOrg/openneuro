@@ -231,7 +231,7 @@ h1,h2,h3,h4,h5,h6{
 
 .btn-basic{
 	background: transparent;
-	border-radius: 2px;
+	border-radius: 1px;
 	outline: none;
 	white-space: nowrap;
 	cursor: pointer;
@@ -266,6 +266,36 @@ h1,h2,h3,h4,h5,h6{
 		border-color:#aaa;
 		background: #e0e0e0;
 		color:#666;
+	}
+
+	&:focus{
+		border: none;
+		box-shadow: none;
+		outline: none !important;
+	}
+
+	&.delete{
+		color: $primary;
+		border-color: $primary;
+		background:none;
+		&:hover{
+			color: $primaryHover;
+			border-color: $primaryHover;
+		}
+	}
+	&.cancel{
+		background:none;
+		border:none;
+	}
+	&.warning{
+		border: none;
+	    color: $primary;
+	    background:none;
+	    padding: 6px 0;
+	    &:hover{
+	    	color: $primaryHover;
+	    }
+	    i{margin-left:6px;}
 	}
 }
 .btn-blue{
@@ -1248,9 +1278,27 @@ to { -webkit-transform: rotate(360deg) }
 					border:none;
 					background:transparent;
 					padding: 0 ;
+					
 					.inner{
+						min-height: 50px;
 						padding:10px 20px;
 						border-top: 1px solid #ddd;
+					}
+					.footer{
+							height: 50px;
+							border-top:1px solid #ddd;
+							margin:0;
+							padding: 10px 20px;
+							text-align: right;
+							.delete-text{
+								vertical-align: middle;
+								display: block;
+								text-align: right;
+								font-size: 13px;
+								text-transform: uppercase;
+								margin-top: 5px;
+								
+							}
 					}
 				}
 			}

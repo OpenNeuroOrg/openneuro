@@ -17,7 +17,7 @@ export default class Datasets extends React.Component {
             loading: false,
             datasets: [],
             resultsPerPage: 30,
-            page: 0
+            page: 0,
         };
     }
 
@@ -50,12 +50,25 @@ export default class Datasets extends React.Component {
                         <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
                 );
-                
+                let hideDeleteBtn = (
+                	<div className="btn-group fadeInRight" role="group" >
+                		<button className="btn btn-admin cancel" onClick={self._dismissDelete.bind(self, dataset)}>Cancel</button>
+                		<button className="btn btn-admin delete" onClick={self.deleteProject.bind(self, dataset)}>Yes Delete!</button>
+                	</div>
+                )
+                let viewdeleteBtn = (
+                	<div className=" fadeIn" >
+                		 <button className="btn btn-admin warning" onClick={self._showDelete.bind(self, dataset)}>Delete this dataset <i className="fa fa-trash-o"></i> </button>
+                	</div>
+                )
                 return (
                     <Panel className="fadeIn" header={datasetheader} eventKey={dataset._id} key={index}>
                         <div className="inner">
-                            {dataset.name} - {index} <button onClick={self.deleteProject.bind(self, dataset)}>delete</button>
+                        	This is some text
                             <Spinner text={"deleting " + dataset.name} active={dataset.isDeleting} />
+                        </div>
+                        <div className="footer delete-data">
+                            {dataset.showDeleteBtn ? hideDeleteBtn : viewdeleteBtn}
                         </div>
                     </Panel>
                 );
@@ -94,7 +107,9 @@ export default class Datasets extends React.Component {
         }
 		scitran.deleteDataset(dataset._id, function () {
             datasets.splice(datasetIndex, 1);
-            self.setState({datasets: datasets});
+            self.setState({
+            	datasets: datasets, 
+            });
 		});
 	}
 
@@ -110,6 +125,32 @@ export default class Datasets extends React.Component {
     onPageSelect(page, e) {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
+    }
+    _showDelete(dataset){
+    	let self = this,
+    		datasets = this.state.datasets,
+  			datasetIndex;
+        for (var i = 0; i < self.state.datasets.length; i++) {
+            if (dataset._id === self.state.datasets[i]._id) {
+                datasets[i].showDeleteBtn = true;
+                self.setState({datasets: datasets});
+                datasetIndex = i;
+            }else{
+            	datasets[i].showDeleteBtn = false;
+            }
+        }
+    }
+    _dismissDelete(dataset){
+    	let self = this,
+    		datasets = this.state.datasets,
+  			datasetIndex;
+        for (var i = 0; i < self.state.datasets.length; i++) {
+            if (dataset._id === self.state.datasets[i]._id) {
+                datasets[i].showDeleteBtn = false;
+                self.setState({datasets: datasets});
+                datasetIndex = i;
+            }
+        }
     }
 
 }
