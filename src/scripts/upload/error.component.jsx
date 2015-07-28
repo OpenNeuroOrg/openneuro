@@ -23,7 +23,7 @@ class Error extends React.Component {
 		return (
 			
 				<div className="em-body">
-					<h4 className="em-header">Error: {index + 1}</h4>
+					<h4 className="em-header">{this.props.issueType}: {index + 1}</h4>
 					<span className="e-meta">
 						<label>Reason: </label>
 						<p>{error.reason}</p>
@@ -45,7 +45,8 @@ class Error extends React.Component {
 
 Error.propTypes = {
 	file: React.PropTypes.object,
-	error: React.PropTypes.object
+	error: React.PropTypes.object,
+	issueType: React.PropTypes.string.isRequired
 };
 
 export default Error;

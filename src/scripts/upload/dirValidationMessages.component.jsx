@@ -13,25 +13,26 @@ class DirValidationMessages extends React.Component {
 // life cycle events ------------------------------------------------------
 	
 	render () {
+		let self = this;
 		let errors = this.props.issues;
 		let issues = errors.map(function (issue, index) {
 			let filesize = issue.file.size / 1000 + ' KB';
 			let filetype = issue.file.type;
-			let errorCount = pluralize('Error', issue.errors.length);
+			let issueCount = pluralize(self.props.issueType, issue.errors.length);
 			// issue header
-			let header = (
-				<span className="file-header">
-					{issue.file.name}
-					<span className="pull-right">
-						 {issue.errors.length} {errorCount}
+				let header = (
+					<span className="file-header">
+						{issue.file.name}
+						<span className="pull-right">
+							 {issue.errors.length} {issueCount}
+						</span>
 					</span>
-				</span>
-			);
+				);
 
 
 			// issue sub-errors
 			let subErrors = issue.errors.map(function (error, index2) {
-				return error ? <Error file={issue.file} error={error} index={index2} key={index2} /> : null;
+				return error ? <Error issueType={self.props.issueType} file={issue.file} error={error} index={index2} key={index2} /> : null;
 			});
 			// issue panel
 			return (
@@ -54,7 +55,9 @@ class DirValidationMessages extends React.Component {
 }
 
 DirValidationMessages.propTypes = {
-	issues: React.PropTypes.array
+	issues: React.PropTypes.array.isRequired,
+	issueType: React.PropTypes.string.isRequired
 };
+
 
 export default DirValidationMessages;

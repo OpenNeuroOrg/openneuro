@@ -9,7 +9,7 @@ import validate  from 'bids-validator';
 import scitran   from '../utils/scitran';
 import files     from '../utils/files';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
-import {PanelGroup, Accordion, Panel, ProgressBar} from 'react-bootstrap';
+import {PanelGroup, Accordion, Panel, ProgressBar, Alert} from 'react-bootstrap';
 
 let Upload = React.createClass({
 
@@ -44,6 +44,7 @@ let Upload = React.createClass({
 		let dirName = this.state.dirName;
 		let totalErrors = self.state.totalErrors;
 		let totalWarnings = self.state.totalWarnings;
+
 		let warningCount = pluralize('Warning', totalWarnings);
 		let errorCount = pluralize('Error', totalErrors);
 		let warningFilesCount = pluralize('File', warnings.length);
@@ -59,14 +60,14 @@ let Upload = React.createClass({
 		let errorHeader = <span>{totalErrors} {errorCount} in {errors.length} {errorFilesCount}</span>;
 		let errorsWrap = (
 			<Panel className="fadeInDown upload-panel error-wrap" header={errorHeader}  eventKey='1'>
-				<DirValidationMessages issues={errors} /> 
+				<DirValidationMessages issues={errors} issueType="Error"/> 
 			</Panel>
 		);
 		//warnings
 		let warningHeader = <span>{totalWarnings} {warningCount} in {warnings.length} {warningFilesCount}</span>;
 		let warningWrap = (
 			<Panel className="fadeInDown upload-panel warning-wrap" header={warningHeader}  eventKey='2'>
-				<DirValidationMessages issues={warnings} />
+				<DirValidationMessages issues={warnings} issueType="Warning" />
 			</Panel>
 		);
 		// validations errors and warning wraps
@@ -88,11 +89,11 @@ let Upload = React.createClass({
 			 </span>
 		);
 		//messages
-		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="#">Click to view details on BIDS specification</a></small></span>;
-		let warningsMessage = <span className="message error fadeIn">We found {totalWarnings} {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and upload again.</span>;
+		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small></span>;
+		let warningsMessage = <span className="message error fadeIn">We found {totalWarnings} {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
 		let errorMessage = (
 			<span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} {errorCount}</strong> and upload your dataset again.<br/> 
-				<small><a href="#">Click to view details on BIDS specification</a></small>
+				<small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small>
 			</span>
 		);
 		let uploadingMessage = <span className="message fadeIn">Uploading {Math.floor(progress)}%</span>;
@@ -147,12 +148,17 @@ let Upload = React.createClass({
 				</Panel>
 			</PanelGroup>
 		);
+		let alert=(
+			<Alert className="fadeInDown clearfix" bsStyle='success'>
+				<div className="alert-left"><strong>Success!</strong> Your Dataset has been added and saved to your Dashboard. </div> <button className="alert-right dismiss-button-x" onClick={this._closeAlert}> <i className="fa fa-times"></i> </button>
+			</Alert>
+		);
 		return (
 			<div className={this.state.uploadState ? 'right-sidebar uploading' : 'right-sidebar'}>
 				<div className="upload-nav">
 					<h2>My Tasks</h2>
 				</div>
-				{this.state.alert ? <UploadAlert /> : null}
+				{this.state.alert ? alert : null}
 				{uploadAccordion}
 				{progress_upload}
 			</div>
@@ -169,14 +175,12 @@ let Upload = React.createClass({
 	 */
 	_onChange (selectedFiles) {
 		let self = this;
-
 		this.setState({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
 			dirName: selectedFiles.tree[0].name,
 			validating: !self.state.validating,
 		});
-
 		this._validate(selectedFiles);
 	},
 
@@ -245,9 +249,13 @@ let Upload = React.createClass({
 					totalWarnings: 0,
 					progress: {total: 0, completed: 0}
 				});
-				setTimeout(function(){ self.setState({alert: false}) }, 3000);
 			}
 		});
+	},
+
+	_closeAlert () {
+		let self = this;
+		self.setState({alert: false});
 	}
 
 });
