@@ -68,7 +68,7 @@ let BSNavbar = React.createClass({
 				    <CollapsibleNav eventKey={0}>
 							<Nav navbar className="useradmin-nav">
 								<li><Link className="home link" to="home">Home</Link></li>
-								<li><Link className="dashboard link" to="dashboard">Dashboard</Link></li>
+								{isLoggedIn ? <li><Link className="dashboard link" to="dashboard">Dashboard</Link></li> : null}
 						    </Nav>
 						    <Nav navbar right className="useradmin-nav">
 								{isLoggedIn ? usermenu : <li><Link className="sign-in link" to="signIn">Sign In</Link></li>}
