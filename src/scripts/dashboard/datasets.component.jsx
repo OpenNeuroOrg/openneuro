@@ -51,7 +51,7 @@ export default class Datasets extends React.Component {
                     </div>
                 );
                 let hideDeleteBtn = (
-                	<div className="btn-group slideInRight" role="group" >
+                	<div className="btn-group slideInRightFast" role="group" >
                 		<button className="btn btn-admin cancel" onClick={self._dismissDelete.bind(self, dataset)}>Cancel</button>
                 		<button className="btn btn-admin delete" onClick={self.deleteProject.bind(self, dataset)}>Yes Delete!</button>
                 	</div>

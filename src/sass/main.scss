@@ -8,7 +8,7 @@
 @import "animate/_fading-entrances/fading-entrances.scss";      
 @import "animate/_sliding-entrances/sliding-entrances.scss";   
 @import "animate/_attention-seekers/attention-seekers.scss";  
-@import "animate/_slideing-entrances/slideing-entrances.scss";                
+@import "animate/_sliding-entrances/sliding-entrances.scss";                
 //==========================================================================
 //crn ======================================================================
 @import "./_crn-variables";
@@ -513,7 +513,9 @@ textarea {
 .slideInRight{
 	@include slideInRight();
 }
-
+.slideInRightFast{
+	@include slideInRightFast();
+}
 
 
 
