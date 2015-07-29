@@ -46,7 +46,7 @@ let routes = (
 		</Route>
 		<Route name="upload" path="upload"  handler={Upload}/>
 		<Route name="home"   path="home"    handler={Home}/>
-		<DefaultRoute handler={Signin}/>
+		<DefaultRoute handler={RedirectHome}/>
 		<NotFoundRoute handler={RedirectHome}/>	
 
 	</Route>
