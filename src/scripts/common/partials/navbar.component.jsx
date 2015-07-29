@@ -20,18 +20,20 @@ let BSNavbar = React.createClass({
 		let self = this;
 		let isLoggedIn = !!this.state.token;
 
-
-		let username = this.state.user ? this.state.user.displayName : 'user-menu';
-		let email = this.state.user ? this.state.user.email : null;
-		//Possible fix Need ZM to confirm 
-		if(this.state.user){
-			var userThumb = this.state.user.picture;
-			var userThumbReplace = userThumb.replace("sz=50", "sz=200");
-		}
-		let thumbnail = this.state.user ? userThumbReplace : null;
+		//generate user menu
+		let usermenu;
 		if (this.state.user) {
+
+			let username = this.state.user.displayName;
+			let email   = this.state.user.email;
+
+			let thumbnail;
+			if (this.state.user.picture) {
+				thumbnail = this.state.user.picture.replace("sz=50", "sz=200");
+			}
+
 			let gear = (<i className="fa fa-gear" />);
-			var usermenu = (
+			usermenu = (
 				<span>
 					<span className="username">
 						<span className="greeting">Hello</span> 
@@ -42,7 +44,6 @@ let BSNavbar = React.createClass({
 					<DropdownButton className="user-menu btn-null" eventKey={1} title={gear}>
 						<img src={thumbnail} alt={username} className="userMenuThumb" /> 
 						<li role="presentation" className="dropdown-header">{username}</li>
-						
 						<li><a onClick={this._signOut} className="um-sign-out">Sign Out</a></li>
 						<li role="separator" className="divider"></li>
 						<li className="um-icon"><Link to="dashboard"><i className="fa fa-dashboard" /></Link></li>
@@ -51,6 +52,7 @@ let BSNavbar = React.createClass({
 			);
 		}
 
+		// generate brand
 		let brand = (
 			<Link to="home" className="navbar-brand">
 				<img src="./assets/CRN-Logo-Placeholder.png"
