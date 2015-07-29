@@ -677,7 +677,6 @@ body,
 				}
 		}
 		.uploadbar{
-			display: none;
 			margin-top: 75px;
 			position:relative;
 			padding:20px 20px 30px;
@@ -1086,12 +1085,7 @@ body,
 	}
 	//UPLOAD display
 	.uploading.right-sidebar{
-		.uploadbar{
-			display: block;
-		}
-		.upload-accordion{
-			display: none;
-		}
+
 		.message{
 			text-align: left;
 			color: $turquoise;
