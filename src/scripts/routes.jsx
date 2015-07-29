@@ -44,7 +44,6 @@ let routes = (
 			<Route name="jobs" path="jobs" handler={Jobs}/>
 			<NotFoundRoute handler={RedirectNotifications}/>	
 		</Route>
-		<Route name="upload" path="upload"  handler={Upload}/>
 		<Route name="home"   path="/"    handler={Home}/>
 		<DefaultRoute handler={RedirectHome}/>
 		<NotFoundRoute handler={RedirectHome}/>	
