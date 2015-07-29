@@ -1,10 +1,33 @@
-@include keyframes(slideInRight) {
+@include keyframes(slideInRightFast) {
 	0% {
   	opacity: 0;
   	@include transform(translateX(2000px));
   }
 	100% {
   	@include transform(translateX(0));
+  }
+}
+
+@mixin slideInRightFast($count: $countDefault, $duration: $durationDefault, $delay: $delayDefault, $function: $functionDefault, $fill: $fillDefault, $visibility: $visibilityDefault) {
+  @include animation-name(slideInRightFast);
+  @include count($count);
+  @include duration($duration: 0.25s);
+  @include delay($delay: 0.1s);
+  @include function($function);
+  @include fill-mode($fill);
+  @include visibility($visibility);
+}
+
+
+
+
+@include keyframes(slideInRight) {
+  0% {
+    opacity: 0;
+    @include transform(translateX(2000px));
+  }
+  100% {
+    @include transform(translateX(0));
   }
 }
 
