@@ -51,7 +51,7 @@ export default class Datasets extends React.Component {
                     </div>
                 );
                 let hideDeleteBtn = (
-                	<div className="btn-group fadeInRight" role="group" >
+                	<div className="btn-group slideInRight" role="group" >
                 		<button className="btn btn-admin cancel" onClick={self._dismissDelete.bind(self, dataset)}>Cancel</button>
                 		<button className="btn btn-admin delete" onClick={self.deleteProject.bind(self, dataset)}>Yes Delete!</button>
                 	</div>
@@ -63,14 +63,12 @@ export default class Datasets extends React.Component {
                 )
                 return (
                     <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={index}>
-                        <div className="inner col-xs-10">
+                        <div className="inner">
                         	This is some text
-                        </div>
-                        <div className="inner-right col-xs-2 delete-data">
-                            {dataset.showDeleteBtn ? hideDeleteBtn : viewdeleteBtn}
-                        </div>
-                         <div className="col-xs-12">
                         	<Spinner text={"deleting " + dataset.name} active={dataset.isDeleting} />
+                        </div>
+                        <div className="inner-right delete-data">
+                            {dataset.showDeleteBtn ? hideDeleteBtn : viewdeleteBtn}
                         </div>
                     </Panel>
                 );

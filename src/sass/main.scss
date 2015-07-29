@@ -7,7 +7,8 @@
 // single animations                                                      
 @import "animate/_fading-entrances/fading-entrances.scss";      
 @import "animate/_sliding-entrances/sliding-entrances.scss";   
-@import "animate/_attention-seekers/attention-seekers.scss";                
+@import "animate/_attention-seekers/attention-seekers.scss";  
+@import "animate/_slideing-entrances/slideing-entrances.scss";                
 //==========================================================================
 //crn ======================================================================
 @import "./_crn-variables";
@@ -507,6 +508,10 @@ textarea {
 }
 .bounce{
 	@include bounce();
+}
+
+.slideInRight{
+	@include slideInRight();
 }
 
 
