@@ -1,16 +1,17 @@
 // dependencies -------------------------------------------------------
 
-import React     from 'react';
-import pluralize from 'pluralize';
-import DirUpload from './dirUpload.component.jsx';
-import DirTree   from './dirTree.component.jsx';
-import UploadAlert   from '../common/partials/alert.component.jsx';
-import validate  from 'bids-validator';
-import scitran   from '../utils/scitran';
-import files     from '../utils/files';
+import React       from 'react';
+import pluralize   from 'pluralize';
+import DirUpload   from './dirUpload.component.jsx';
+import DirTree     from './dirTree.component.jsx';
+import UploadAlert from '../common/partials/alert.component.jsx';
+import validate    from 'bids-validator';
+import scitran     from '../utils/scitran';
+import files       from '../utils/files';
+import Progress    from './progress.component.jsx';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import ValidationResults from './validationResults.component.jsx';
-import {PanelGroup, Accordion, Panel, ProgressBar, Alert} from 'react-bootstrap';
+import {PanelGroup, Accordion, Panel, Alert} from 'react-bootstrap';
 
 let Upload = React.createClass({
 
@@ -50,7 +51,6 @@ let Upload = React.createClass({
 		let errorCount = pluralize('Error', totalErrors);
 		let warningFilesCount = pluralize('File', warnings.length);
 		let errorFilesCount = pluralize('File', errors.length);
-		let progress = this.state.progress.total > 0 ? Math.floor(this.state.progress.completed / this.state.progress.total * 100) : 0;
 
 		let errorsFilename = dirName+"_errors.json"
 		let errorLink = (
@@ -136,19 +136,6 @@ let Upload = React.createClass({
 			</PanelGroup>
 		);
 
-		let currentFiless = this.state.progress.currentFiles.map(function (file, index) {
-			return <div key={index}>{file}</div>;
-		});
-
-		let progress_upload = (
-			<div className="uploadbar">
-				{dirHeader}
-				<span className="message fadeIn">Uploading {progress}%</span>
-				<ProgressBar active now={progress} />
-				{currentFiless}
-			</div>
-		);
-
 		let alert;
 		if (this.state.alert) {
 			alert = (
@@ -164,7 +151,7 @@ let Upload = React.createClass({
 					<h2>My Tasks</h2>
 				</div>
 				{alert}
-				{this.state.uploading ? progress_upload : uploadAccordion}
+				{this.state.uploading ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
 			</div>
     	);
 	},
@@ -246,10 +233,11 @@ let Upload = React.createClass({
 	},
 
 	/**
-	 * Reset State
+	 * Upload Complete
 	 *
 	 * Resets the componenent state to its
-	 * initial state.
+	 * initial state. And creates an upload
+	 * complete alert.
 	 */
 	_uploadComplete () {
 		let initialState = this.getInitialState();
