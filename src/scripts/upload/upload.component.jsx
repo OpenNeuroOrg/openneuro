@@ -54,8 +54,6 @@ let Upload = React.createClass({
 		let errorFilesCount = pluralize('File', errors.length);
 		let progress = this.state.progress.total > 0 ? Math.floor(this.state.progress.completed / this.state.progress.total * 100) : 0;
 
-// downloadable error log ----------------------------------------------------------------------------------------------------------
-
 		let errorsFilename = dirName+"_errors.json"
 		let errorLink = (
 			<a download={dirName + "_errors.json"} className="error-log" target="_blank" href={this._generateErrorLog(errors, warnings)}>
@@ -63,15 +61,11 @@ let Upload = React.createClass({
 			</a>
 		);
 
-// errors and warnings ----------------------------------------------------------------------------------------------------------------------------
-
 		// validations errors and warning wraps
 		let validationMessages;
 		if (tree.length > 0) {
 			validationMessages = <ValidationResults errors={errors} warnings={warnings} />
 		}
-
-// file tree display -------------------------------------------------------------------------------------------------------------------
 
 		let uploadFileStructure;
 		if (tree.length > 0) {
@@ -87,8 +81,6 @@ let Upload = React.createClass({
 			);
 		}
 
-// verbal messages ----------------------------------------------------------------------------------------------------------------------
-
 		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small></span>;
 		let warningsMessage = <span className="message error fadeIn">We found {totalWarnings} {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
 		let errorMessage = (
@@ -97,10 +89,7 @@ let Upload = React.createClass({
 			</span>
 		);
 
-// element groups -------------------------------------------------------------------------------------------------------------------------
-
-		
-
+		// select, upload & continue btns
 		let buttons;
 		if (tree.length > 0 && errors.length === 0 && warnings.length > 0) {
 			buttons = (
@@ -133,13 +122,6 @@ let Upload = React.createClass({
 			</span>
 		);
 
-		let dirInfo = (
-			<div>
-				{validationMessages}
-				{uploadFileStructure}
-			</div>
-		);
-
 		let uploadAccordion = (
 			<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 				<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
@@ -149,13 +131,12 @@ let Upload = React.createClass({
 							{dirHeader}
 							{messages}
 						</div>
-						{dirInfo}
+						{validationMessages}
+						{uploadFileStructure}
 					</div>
 				</Panel>
 			</PanelGroup>
 		);
-
-// --------------------------------------------------------------------------------------------------------------
 
 		let progress_upload = (
 			<div className="uploadbar">
@@ -301,8 +282,3 @@ let Upload = React.createClass({
 
 
 export default Upload;
-
-
-
-
-
