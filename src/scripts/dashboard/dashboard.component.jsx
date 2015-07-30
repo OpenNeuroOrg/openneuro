@@ -16,11 +16,20 @@ class Dashboard extends React.Component {
 					<li><Link to="notifications" className="btn-blue">Notifications<span className="unread-badge">2</span></Link></li>
 					<li><Link to="datasets" className="btn-blue">My Datasets</Link></li>
 					<li><Link to="jobs" className="btn-blue">My Results</Link></li>
-					<li className="navbar-right"><a href="#"><i className="fa fa-refresh"></i></a></li>
-					<li className="navbar-right"><a href="#"><i className="fa fa-search"></i></a></li>
-					<DropdownButton eventKey={4} title='filters' navItem={true} className="navbar-right">
-						<MenuItem eventKey='4.0'>By title</MenuItem>
-					</DropdownButton>
+					{
+					/*
+						*
+						*
+						* possible filtering for later use 
+						* - already styled and resembles comps
+						*
+						<li className="navbar-right"><a href="#"><i className="fa fa-refresh"></i></a></li>
+						<li className="navbar-right"><a href="#"><i className="fa fa-search"></i></a></li>
+						<DropdownButton eventKey={4} title='filters' navItem={true} className="navbar-right">
+							<MenuItem eventKey='4.0'>By title</MenuItem>
+						</DropdownButton>
+					*/
+					}
 				</ul>
 				<div>
 					<RouteHandler/>
