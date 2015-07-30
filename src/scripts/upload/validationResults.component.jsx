@@ -21,7 +21,7 @@ export default class ValidationResults extends React.Component {
 			let totalErrors = this._countIssues(errors);
 			let errorHeader = <span>{totalErrors} {pluralize('error', totalErrors)} in {errors.length} {pluralize('error', errors.length)}</span>;
 			errorsWrap = (
-				<Panel className="fadeInDown upload-panel error-wrap" header={errorHeader}  eventKey='1'>
+				<Panel className="fadeIn upload-panel error-wrap" header={errorHeader}  eventKey='1'>
 					<DirValidationMessages issues={errors} issueType="Error"/> 
 				</Panel>
 			);
@@ -33,7 +33,7 @@ export default class ValidationResults extends React.Component {
 			let totalWarnings = this._countIssues(warnings);
 			let warningHeader = <span>{totalWarnings} {pluralize('warning', totalWarnings)} in {warnings.length} {pluralize('warning', warnings.length)}</span>;
 			warningWrap = (
-				<Panel className="fadeInDown upload-panel warning-wrap" header={warningHeader}  eventKey='2'>
+				<Panel className="fadeIn upload-panel warning-wrap" header={warningHeader}  eventKey='2'>
 					<DirValidationMessages issues={warnings} issueType="Warning" />
 				</Panel>
 			);
