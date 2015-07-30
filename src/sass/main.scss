@@ -378,7 +378,7 @@ h1,h2,h3,h4,h5,h6{
 	font-weight: 100;
 	border:none;
     width: 33.33333%;
-    font-size: 26px;
+    font-size: 18px;
 	&.alert-danger{
 		border-bottom: 1px solid $brand-danger;
 		strong{
@@ -414,18 +414,19 @@ h1,h2,h3,h4,h5,h6{
 
 
 	.alert-left{
-		width: 90%;
+		width: 75%;
 		float: left;
 	}
 	.alert-right{
-		width: 10%;
+		width: 25%;
 		float: left;
 		&.dismiss-button-x{
 			background: none;
 		    border: none;
 		    box-shadow: none;
-		    font-size: 21px;
+		    font-size: 16px;
 		    cursor: pointer;
+		    text-align: right;
 		    &:hover{
 		    	color:$brand-success;
 		    }
