@@ -47,7 +47,7 @@ class DirValidationMessages extends React.Component {
 			);
 		});
 
-		return <Accordion>{issues}</Accordion>
+		return <Accordion>{issues}</Accordion>;
 	}
 
 // custom methods ---------------------------------------------------------
