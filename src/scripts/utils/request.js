@@ -1,6 +1,8 @@
 import request   from 'superagent';
 import config    from '../config';
 
+hello.init({google: config.auth.google.clientID});
+
 /**
  * Request
  *
