@@ -34,7 +34,6 @@ let Upload = React.createClass({
 		};
 	},
 
-
 	componentDidMount () {
 		let self = this;
 	},
