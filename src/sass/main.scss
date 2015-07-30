@@ -650,6 +650,29 @@ body,
 	}
 }
 
+
+@-webkit-keyframes dot{
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+@keyframes dot {
+	0% {
+		opacity: 0;
+	}
+	50% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
 // right sidebar tools col
 .tools-col{
 	padding:0;
@@ -684,7 +707,35 @@ body,
 			background:#f3f3f3;
 			border-bottom:1px solid #bbb;
 			z-index: 1000;
-
+			.uploadFiles-wrap{
+				margin:0;
+				.uploadFiles{
+					color: $rock;
+					margin: 10px 0 0;
+					padding: 4px;
+					.one,
+					.two, 
+					.three {
+						opacity: 0;
+						font-size: 20px;
+						line-height: 10px;
+						-webkit-animation: dot 1.3s infinite;
+						animation: dot 1.3s infinite;
+					}
+					.one {
+						-webkit-animation-delay: 0.0s;
+						animation-delay: 0.0s;
+					}
+					.two {
+						-webkit-animation-delay: 0.2s;
+						animation-delay: 0.2s;
+					}
+					.three {
+						-webkit-animation-delay: 0.3s;
+						animation-delay: 0.3s;
+					}
+				}
+			}
 			
 		}
 		.upload-nav{
