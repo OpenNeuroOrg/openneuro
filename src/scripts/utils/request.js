@@ -1,6 +1,5 @@
 import request   from 'superagent';
 import config    from '../config';
-import userStore from '../user/user.store.js';
 
 /**
  * Request
@@ -14,7 +13,7 @@ var Request = {
 	get (path, callback) {
 		handleRequest(path, {}, function (path, options) {
 			request.get(config.scitranUrl + path)
-				.set('Authorization', userStore._token)
+				.set(options.headers)
 				.end(function (err, res) {
 					handleResponse(err, res, callback);
 				});
@@ -24,7 +23,6 @@ var Request = {
 	post (path, options, callback) {
 		handleRequest(path, options, function (path, options) {
 			request.post(config.scitranUrl + path)
-				.set('Authorization', userStore._token)
 				.set(options.headers)
 				.send(options.body)
 				.end(function (err, res) {
@@ -36,7 +34,6 @@ var Request = {
 	put (path, options, callback) {
 		handleRequest(path, options, function (path, options) {
 			request.put(config.scitranUrl + path)
-				.set('Authorization', userStore._token)
 				.set(options.headers)
 				.query(options.query)
 				.send(options.body)
@@ -49,7 +46,7 @@ var Request = {
 	del (path, callback) {
 		handleRequest(path, {}, function (path, options) {
 			request.del(config.scitranUrl + path)
-				.set('Authorization', userStore._token)
+				.set(options.headers)
 				.end(function (err, res) {
 					handleResponse(err, res, callback);
 				});
@@ -63,13 +60,14 @@ var Request = {
  *
  * A generic request handler used to intercept
  * requests before they request out. Ensures
- * a user auth token in not exprired and normalizes
- * options.
+ * access_token isn't expired sets it as the
+ * Authorization header.
  */
 function handleRequest (path, options, callback) {
 	options = normalizeOptions(options);
 	var google = hello('google');
-	hello('google').login({scope: 'email,openid', force: false}).then(function() {
+	hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
+		options.headers.Authorization = res.authResponse.access_token;
 		callback(path, options);
 	});
 }
