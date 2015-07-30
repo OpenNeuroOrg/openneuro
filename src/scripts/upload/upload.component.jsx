@@ -28,7 +28,7 @@ let Upload = React.createClass({
 			validating: false,
 			totalErrors: 0,
 			totalWarnings: 0,
-			progress: {total: 0, completed: 0}
+			progress: {total: 0, completed: 0, currentFiles: []}
 		};
 	},
 
@@ -38,8 +38,7 @@ let Upload = React.createClass({
 
 	render () {
 
-// short references ----------------------------------------------------------------------------------------------------------------
-
+		// short references
 		let self = this;
 		let tree = this.state.tree;
 		let errors = this.state.errors;
@@ -47,7 +46,6 @@ let Upload = React.createClass({
 		let dirName = this.state.dirName;
 		let totalErrors = this.state.totalErrors;
 		let totalWarnings = this.state.totalWarnings;
-
 		let warningCount = pluralize('Warning', totalWarnings);
 		let errorCount = pluralize('Error', totalErrors);
 		let warningFilesCount = pluralize('File', warnings.length);
@@ -138,11 +136,16 @@ let Upload = React.createClass({
 			</PanelGroup>
 		);
 
+		let currentFiless = this.state.progress.currentFiles.map(function (file, index) {
+			return <div key={index}>{file}</div>;
+		});
+
 		let progress_upload = (
 			<div className="uploadbar">
 				{dirHeader}
 				<span className="message fadeIn">Uploading {progress}%</span>
 				<ProgressBar active now={progress} />
+				{currentFiless}
 			</div>
 		);
 
@@ -273,6 +276,9 @@ let Upload = React.createClass({
 	 */
 	_generateErrorLog (errors, warnings) {
 		let issues = errors.concat(warnings);
+		for (let issue of issues) {
+			issue.file.path = issue.file.webkitRelativePath;
+		}
 		let errorLog = JSON.stringify(issues, null, "  ");
 		let errorURL = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(errorLog);
 		return errorURL;
