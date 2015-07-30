@@ -32,7 +32,9 @@ export default  {
      */
     createProject (groupName, projectName, callback) {
         let body = {name: projectName};
-        request.post('groups/' + groupName + '/projects', {body: body}, callback);
+        request.post('groups/' + groupName + '/projects', {body: body}, function (err, res) {
+            callback(err, res, projectName)
+        });
     },
 
     /**
@@ -69,27 +71,38 @@ export default  {
      */
     uploadFile (level, id, file, tag) {
         let url = level + '/' + id + '/file/' + file.name;
-        uploads.add({url: url, file: file, tag: tag, progress: this.progress});
+        uploads.add({url: url, file: file, tag: tag, progressStart: this.progressStart, progressEnd: this.progressEnd});
     },
+
+    currentFiles: [],
 
     /**
      * Upload
      *
-     * Takes an entire bids file tree and upload recurses
-     * through and uploads all the files.
+     * Takes an entire bids file tree and and file count
+     * and recurses through and uploads all the files.
+     * Additionally takes a progress callback that gets
+     * updated at the start and end of every file or
+     * folder upload request.
      */
     upload (fileTree, count, progress) {
         let self = this;
         self.completed = 0;
         self.count = count;
-        self.progress = function () {
+        self.progressStart = function (filename) {
+            self.currentFiles.push(filename);
+            progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
+        }
+        self.progressEnd = function (filename) {
+            let index = self.currentFiles.indexOf(filename);
+            self.currentFiles.splice(index, 1);
             self.completed++;
-            progress({total: self.count, completed: self.completed});
+            progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
         }
         let groupName = 'SquishyRoles';
         self.createProject(groupName, fileTree[0].name, function (err, res) {
             let projectId = res.body._id;
-            self.progress();
+            self.progressEnd();
             self.uploadSubjects(fileTree[0].children, projectId);
         });
     },
@@ -98,8 +111,9 @@ export default  {
         let self = this;
         for (let subject of subjects) {
             if (subject.children && subject.children.length > 0) {
-                self.createSubject(projectId, subject.name, function (err, res) {
-                    self.progress();
+                self.progressStart(subject.name);
+                self.createSubject(projectId, subject.name, function (err, res, name) {
+                    self.progressEnd(res.req._data.name);
                     let subjectId = res.body._id;
                     self.uploadSessions(subject.children, projectId, subjectId);
                 });
@@ -113,8 +127,9 @@ export default  {
         let self = this;
         for (let session of sessions) {
             if (session.children && session.children.length > 0) {
-                self.createSession(projectId, session.name, function () {
-                    self.progress();
+                self.progressStart(session.name);
+                self.createSession(projectId, session.name, function (err, res, name) {
+                    self.progressEnd(res.req._data.name);
                     self.uploadModalities(session.children, subjectId);
                 }); 
             } else {
@@ -127,8 +142,9 @@ export default  {
         let self = this;
         for (let modality of modalities) {
             if (modality.children && modality.children.length > 0) {
-                self.createModality(subjectId, modality.name, function (err, res) {
-                    self.progress();
+                self.progressStart(modality.name);
+                self.createModality(subjectId, modality.name, function (err, res, name) {
+                    self.progressEnd(res.req._data.name);
                     let modalityId = res.body._id;
                     self.uploadAquisitions(modality.children, modalityId);
                 });

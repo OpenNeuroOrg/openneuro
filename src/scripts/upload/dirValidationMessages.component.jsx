@@ -1,8 +1,8 @@
 // dependencies -----------------------------------------------------------
 
-import React from 'react'
+import React from 'react';
 import { Accordion, Panel } from 'react-bootstrap';
-import pluralize from 'pluralize'
+import pluralize from 'pluralize';
 import Error from './error.component.jsx';
 
 
@@ -14,20 +14,20 @@ class DirValidationMessages extends React.Component {
 	
 	render () {
 		let self = this;
-		let errors = this.props.issues;
-		let issues = errors.map(function (issue, index) {
+		let issueFiles = this.props.issues;
+		let issues = issueFiles.map(function (issue, index) {
 			let filesize = issue.file.size / 1000 + ' KB';
 			let filetype = issue.file.type;
 			let issueCount = pluralize(self.props.issueType, issue.errors.length);
-			// issue header
-				let header = (
-					<span className="file-header">
-						{issue.file.name}
-						<span className="pull-right">
-							 {issue.errors.length} {issueCount}
-						</span>
+
+			let header = (
+				<span className="file-header">
+					{issue.file.name}
+					<span className="pull-right">
+						 {issue.errors.length} {issueCount}
 					</span>
-				);
+				</span>
+			);
 
 
 			// issue sub-errors
@@ -47,7 +47,7 @@ class DirValidationMessages extends React.Component {
 			);
 		});
 
-		return <Accordion>{issues}</Accordion>
+		return <Accordion>{issues}</Accordion>;
 	}
 
 // custom methods ---------------------------------------------------------

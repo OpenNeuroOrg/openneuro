@@ -38,7 +38,7 @@ let upload = {
 	start (req) {
 		let self = this;
 		self.activeRequests++;
-
+		req.progressStart(req.file.name);
 		request.put(req.url, {
             headers: {
                 'Content-Type': 'application/octet-stream',
@@ -49,7 +49,7 @@ let upload = {
             },
             body: req.file
         }, function (err, res) {
-        	req.progress();
+        	req.progressEnd(res.req._data.name);
         	self.activeRequests--;
         	if (self.queue.length > 0 && self.maxRequests >= self.activeRequests) {
         		self.start(self.queue[0]);

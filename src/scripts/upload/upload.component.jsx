@@ -1,15 +1,17 @@
 // dependencies -------------------------------------------------------
 
-import React     from 'react';
-import pluralize from 'pluralize';
-import DirUpload from './dirUpload.component.jsx';
-import DirTree   from './dirTree.component.jsx';
-import UploadAlert   from '../common/partials/alert.component.jsx';
-import validate  from 'bids-validator';
-import scitran   from '../utils/scitran';
-import files     from '../utils/files';
+import React       from 'react';
+import pluralize   from 'pluralize';
+import DirUpload   from './dirUpload.component.jsx';
+import DirTree     from './dirTree.component.jsx';
+import UploadAlert from '../common/partials/alert.component.jsx';
+import validate    from 'bids-validator';
+import scitran     from '../utils/scitran';
+import files       from '../utils/files';
+import Progress    from './progress.component.jsx';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
-import {PanelGroup, Accordion, Panel, ProgressBar, Alert} from 'react-bootstrap';
+import ValidationResults from './validationResults.component.jsx';
+import {PanelGroup, Accordion, Panel, Alert} from 'react-bootstrap';
 
 let Upload = React.createClass({
 
@@ -23,11 +25,11 @@ let Upload = React.createClass({
 			warnings: [],
 			dirName: '',
 			alert: false,
-			uploadState: false,
+			uploading: false,
 			validating: false,
 			totalErrors: 0,
 			totalWarnings: 0,
-			progress: {total: 0, completed: 0}
+			progress: {total: 0, completed: 0, currentFiles: []}
 		};
 	},
 
@@ -36,59 +38,47 @@ let Upload = React.createClass({
 	},
 
 	render () {
+
+		// short references
 		let self = this;
 		let tree = this.state.tree;
-		let list = this.state.list;
 		let errors = this.state.errors;
 		let warnings = this.state.warnings;
 		let dirName = this.state.dirName;
-		let totalErrors = self.state.totalErrors;
-		let totalWarnings = self.state.totalWarnings;
-
+		let totalErrors = this.state.totalErrors;
+		let totalWarnings = this.state.totalWarnings;
 		let warningCount = pluralize('Warning', totalWarnings);
 		let errorCount = pluralize('Error', totalErrors);
 		let warningFilesCount = pluralize('File', warnings.length);
 		let errorFilesCount = pluralize('File', errors.length);
-		let progress = this.state.progress.total > 0 ? this.state.progress.completed / this.state.progress.total * 100 : 0;
-		//Error Log
-		let errors_waringings = errors.concat(warnings);
-		let errorLog = JSON.stringify(errors_waringings, null, "  ");
-		let errorURL = "data:application/octet-stream;charset=utf-8,"+encodeURIComponent(errorLog);
+
 		let errorsFilename = dirName+"_errors.json"
-		let errorLink = <a download={errorsFilename} className="error-log" target="_blank" href={errorURL}>Download error log for {dirName}</a>;
-		//errors
-		let errorHeader = <span>{totalErrors} {errorCount} in {errors.length} {errorFilesCount}</span>;
-		let errorsWrap = (
-			<Panel className="fadeInDown upload-panel error-wrap" header={errorHeader}  eventKey='1'>
-				<DirValidationMessages issues={errors} issueType="Error"/> 
-			</Panel>
+		let errorLink = (
+			<a download={dirName + "_errors.json"} className="error-log" target="_blank" href={this._generateErrorLog(errors, warnings)}>
+				Download error log for {dirName}
+			</a>
 		);
-		//warnings
-		let warningHeader = <span>{totalWarnings} {warningCount} in {warnings.length} {warningFilesCount}</span>;
-		let warningWrap = (
-			<Panel className="fadeInDown upload-panel warning-wrap" header={warningHeader}  eventKey='2'>
-				<DirValidationMessages issues={warnings} issueType="Warning" />
-			</Panel>
-		);
+
 		// validations errors and warning wraps
-		let validationMessages =(
-			<Accordion className="validation-messages" accordion>
-				{errors.length > 0 ? errorsWrap : null}
-				{warnings.length > 0 ? warningWrap : null}
-			</Accordion>
-		)
-		// Visual representation of directory Tree 
-		let uploadFileStructure = (
-			<span>
-				{errorLink}
-				<Accordion className="fileStructure fadeIn">
-					<Panel header="View File Structure" eventKey='1'>
-				  		<DirTree tree={tree}/>
-				  	</Panel>
-			  	</Accordion>
-			 </span>
-		);
-		//messages
+		let validationMessages;
+		if (tree.length > 0) {
+			validationMessages = <ValidationResults errors={errors} warnings={warnings} />
+		}
+
+		let uploadFileStructure;
+		if (tree.length > 0) {
+			uploadFileStructure = (
+				<span>
+					{errorLink}
+					<Accordion className="fileStructure fadeIn">
+						<Panel header="View File Structure" eventKey='1'>
+					  		<DirTree tree={tree}/>
+					  	</Panel>
+				  	</Accordion>
+				 </span>
+			);
+		}
+
 		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small></span>;
 		let warningsMessage = <span className="message error fadeIn">We found {totalWarnings} {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
 		let errorMessage = (
@@ -96,41 +86,38 @@ let Upload = React.createClass({
 				<small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small>
 			</span>
 		);
-		let uploadingMessage = <span className="message fadeIn">Uploading {Math.floor(progress)}%</span>;
-	 	//buttons 
-		let withWarningsBtn = (
-			<div className="validate-buttons">
-				<button onClick={this._upload} className="continueWarning btn-blue">Continue</button>
-			</div>
-		);
 
-		// Main Elements
+		// select, upload & continue btns
+		let buttons;
+		if (tree.length > 0 && errors.length === 0 && warnings.length > 0) {
+			buttons = (
+				<div className="warning-btn-group clearfix">
+					<DirUpload onChange={self._onChange} />
+					<div className="validate-buttons">
+						<button onClick={this._upload.bind(this, null)} className="continueWarning btn-blue">Continue</button>
+					</div>
+				</div>
+			);
+		} else {
+			buttons = <DirUpload onChange={self._onChange} />;
+		}
+
+		let dirHeader;
+		if (tree.length > 0) {
+			dirHeader = (
+				<h3 className="dir-name">
+					<i className="folderIcon fa fa-folder-open" /> 
+					{dirName}
+				</h3>
+			);
+		}
+
 		let messages = (
 			<span>
-				{!this.state.uploadState && tree.length === 0 && errors.length === 0 ? initialMessage : null }
+				{!this.state.uploading && tree.length === 0 && errors.length === 0 ? initialMessage : null }
 				{tree.length > 0 && errors.length === 0 && warnings.length > 0 ? warningsMessage : null}
 				{tree.length > 0 && errors.length > 0 ? errorMessage : null}
 			</span>
-		)
-		let buttons = (
-			<div className="warning-btn-group clearfix" role="group" aria-label="...">
-				<DirUpload onChange={self._onChange} />
-				 {withWarningsBtn}
-			</div>
-		);
-		let dirHeader = (
-			<h3 className="dir-name">
-				<i className="folderIcon fa fa-folder-open" /> 
-				{dirName}
-			</h3>
-		);
-		
-		let progress_upload = (
-			<div className="uploadbar">
-				{dirHeader}
-				{uploadingMessage}
-				<ProgressBar active now={progress} />
-			</div>
 		);
 
 		let uploadAccordion = (
@@ -138,29 +125,33 @@ let Upload = React.createClass({
 				<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
 					<div>
 						<div className="upload-wrap">
-								{tree.length > 0 && errors.length === 0 && warnings.length > 0 ? buttons : <DirUpload onChange={self._onChange} /> }
-								{tree.length > 0 ? dirHeader : null}
-								{messages}
+							{buttons}
+							{dirHeader}
+							{messages}
 						</div>
-						{tree.length > 0 ? validationMessages : null}
-						{tree.length > 0 ? uploadFileStructure : null}
+						{validationMessages}
+						{uploadFileStructure}
 					</div>
 				</Panel>
 			</PanelGroup>
 		);
-		let alert=(
-			<Alert className="fadeInDown clearfix" bsStyle='success'>
-				<div className="alert-left"><strong>Success!</strong> Your Dataset has been added and saved to your Dashboard. </div> <button className="alert-right dismiss-button-x" onClick={this._closeAlert}> <i className="fa fa-times"></i> </button>
-			</Alert>
-		);
+
+		let alert;
+		if (this.state.alert) {
+			alert = (
+				<Alert className="fadeInDown clearfix" bsStyle='success'>
+					<div className="alert-left"><strong>Success!</strong> Your Dataset has been added and saved to your Dashboard. </div> <button className="alert-right dismiss-button-x" onClick={this._closeAlert}> <i className="fa fa-times"></i> </button>
+				</Alert>
+			);
+		}
+
 		return (
-			<div className={this.state.uploadState ? 'right-sidebar uploading' : 'right-sidebar'}>
+			<div className={this.state.uploading ? 'right-sidebar uploading' : 'right-sidebar'}>
 				<div className="upload-nav">
 					<h2>My Tasks</h2>
 				</div>
-				{this.state.alert ? alert : null}
-				{uploadAccordion}
-				{progress_upload}
+				{alert}
+				{this.state.uploading ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
 			</div>
     	);
 	},
@@ -212,7 +203,7 @@ let Upload = React.createClass({
 			if (errors.length === 0) {
 				if (warnings.length === 0) {
 					self._upload(selectedFiles);
-					self.setState({uploadState: true});
+					self.setState({uploading: true});
 				}
 			}
         });
@@ -233,37 +224,55 @@ let Upload = React.createClass({
 		scitran.upload(fileTree, count, function (progress) {
 			self.setState({
 				progress: progress,
-				uploadState: true
+				uploading: true
 			});
-			 if(progress.total === progress.completed){
-				self.setState({
-					tree: [],
-					list: {},
-					errors: [],
-					warnings: [],
-					dirName: '',
-					alert: true,
-					uploadState: false,
-					validating: false,
-					totalErrors: 0,
-					totalWarnings: 0,
-					progress: {total: 0, completed: 0}
-				});
+			if (progress.total === progress.completed) {
+				self._uploadComplete();
 			}
 		});
 	},
 
+	/**
+	 * Upload Complete
+	 *
+	 * Resets the componenent state to its
+	 * initial state. And creates an upload
+	 * complete alert.
+	 */
+	_uploadComplete () {
+		let initialState = this.getInitialState();
+		initialState.alert = true;
+		this.replaceState(initialState);
+	},
+
+	/**
+	 * Close Alert
+	 *
+	 * Closes the upload finished alert.
+	 */
 	_closeAlert () {
 		let self = this;
 		self.setState({alert: false});
+	},
+
+	/**
+	 * Generate Error Log
+	 *
+	 * Takes an array of errors and an array of
+	 * warnings and returns a pretty printed
+	 * JSON data url of the contents.
+	 */
+	_generateErrorLog (errors, warnings) {
+		let issues = errors.concat(warnings);
+		for (let issue of issues) {
+			issue.file.path = issue.file.webkitRelativePath;
+		}
+		let errorLog = JSON.stringify(issues, null, "  ");
+		let errorURL = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(errorLog);
+		return errorURL;
 	}
 
 });
 
 
 export default Upload;
-
-
-
-
-
