@@ -13,6 +13,7 @@ import DirValidationMessages from './dirValidationMessages.component.jsx';
 import ValidationResults from './validationResults.component.jsx';
 import {PanelGroup, Accordion, Panel, Alert} from 'react-bootstrap';
 
+
 let Upload = React.createClass({
 
 // life cycle events --------------------------------------------------
@@ -32,6 +33,7 @@ let Upload = React.createClass({
 			progress: {total: 0, completed: 0, currentFiles: []}
 		};
 	},
+
 
 	componentDidMount () {
 		let self = this;
