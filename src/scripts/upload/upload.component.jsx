@@ -141,7 +141,10 @@ let Upload = React.createClass({
 
 	_onChange (selectedFiles) {Actions.onChange(selectedFiles);},
 
-	_upload (selectedFiles) {Actions.upload(selectedFiles);},
+	_upload (selectedFiles) {
+		let fileTree = selectedFiles ? selectedFiles.tree : this.state.tree;
+		Actions.upload(fileTree);
+	},
 
 	_closeAlert () {
 		let self = this;

@@ -1,10 +1,10 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux  from 'reflux';
-import Actions from './upload.actions.js';
-import scitran from '../utils/scitran';
-import files   from '../utils/files';
-import validate    from 'bids-validator';
+import Reflux   from 'reflux';
+import Actions  from './upload.actions.js';
+import scitran  from '../utils/scitran';
+import files    from '../utils/files';
+import validate from 'bids-validator';
 
 let UploadStore = Reflux.createStore({
 
@@ -87,9 +87,8 @@ let UploadStore = Reflux.createStore({
 	 * a progress event every time a file or folder
 	 * finishes.
 	 */
-	upload (selectedFiles) {
+	upload (fileTree) {
 		let self = this;
-		let fileTree = selectedFiles ? selectedFiles.tree : this.state.tree;
 		let count = files.countTree(fileTree);
 
 		scitran.upload(fileTree, count, function (progress) {
