@@ -26,7 +26,7 @@
   "homepage": "https://github.com/Granze/react-starterify",
   "dependencies": {
     "async": "^1.2.1",
-    "bids-validator": "^0.2.0",
+    "bids-validator": "^0.2.2",
     "es6-react-mixins": "^0.1.6",
     "jshint": "^2.8.0",
     "moment": "^2.10.3",
