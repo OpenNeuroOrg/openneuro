@@ -5,6 +5,7 @@ import Reflux      from 'reflux';
 import pluralize   from 'pluralize';
 import DirUpload   from './dirUpload.component.jsx';
 import DirTree     from './dirTree.component.jsx';
+import ErrorLink   from './errorLink.component.jsx';
 import UploadAlert from '../common/partials/alert.component.jsx';
 import Progress    from './progress.component.jsx';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
@@ -39,13 +40,6 @@ let Upload = React.createClass({
 		let warningFilesCount = pluralize('File', warnings.length);
 		let errorFilesCount = pluralize('File', errors.length);
 
-		let errorsFilename = dirName+"_errors.json"
-		let errorLink = (
-			<a download={dirName + "_errors.json"} className="error-log" target="_blank" href={this._generateErrorLog(errors, warnings)}>
-				Download error log for {dirName}
-			</a>
-		);
-
 		// validations errors and warning wraps
 		let validationMessages;
 		if (tree.length > 0) {
@@ -56,7 +50,7 @@ let Upload = React.createClass({
 		if (tree.length > 0) {
 			uploadFileStructure = (
 				<span>
-					{errorLink}
+					<ErrorLink dirName={dirName} errors={errors} warnings={warnings} />
 					<Accordion className="fileStructure fadeIn">
 						<Panel header="View File Structure" eventKey='1'>
 					  		<DirTree tree={tree}/>
@@ -152,23 +146,6 @@ let Upload = React.createClass({
 	_closeAlert () {
 		let self = this;
 		self.setState({alert: false});
-	},
-
-	/**
-	 * Generate Error Log
-	 *
-	 * Takes an array of errors and an array of
-	 * warnings and returns a pretty printed
-	 * JSON data url of the contents.
-	 */
-	_generateErrorLog (errors, warnings) {
-		let issues = errors.concat(warnings);
-		for (let issue of issues) {
-			issue.file.path = issue.file.webkitRelativePath;
-		}
-		let errorLog = JSON.stringify(issues, null, "  ");
-		let errorURL = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(errorLog);
-		return errorURL;
 	}
 
 });
