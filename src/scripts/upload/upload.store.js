@@ -28,7 +28,11 @@ let UploadStore = Reflux.createStore({
 		};
 	},
 
-// Actions ---------------------------------------------------------------------------
+// data ------------------------------------------------------------------------------
+
+	uploading: false,
+
+// actions ---------------------------------------------------------------------------
 
 	/**
 	 * On Change
@@ -73,7 +77,7 @@ let UploadStore = Reflux.createStore({
 
 			if (errors.length === 0) {
 				if (warnings.length === 0) {
-					self.upload(selectedFiles);
+					self.upload(selectedFiles.tree);
 					self.trigger({uploading: true});
 				}
 			}
@@ -96,6 +100,8 @@ let UploadStore = Reflux.createStore({
 				progress: progress,
 				uploading: true
 			});
+			self.uploading = true;
+			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
 				self.uploadComplete();
 			}
@@ -111,6 +117,8 @@ let UploadStore = Reflux.createStore({
 	 */
 	uploadComplete () {
 		let initialState = this.getInitialState();
+		this.uploading = false;
+		window.onbeforeunload = function() {};
 		initialState.alert = true;
 		this.trigger(initialState);
 	},
