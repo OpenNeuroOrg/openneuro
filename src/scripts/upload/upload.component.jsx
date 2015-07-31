@@ -6,9 +6,6 @@ import pluralize   from 'pluralize';
 import DirUpload   from './dirUpload.component.jsx';
 import DirTree     from './dirTree.component.jsx';
 import UploadAlert from '../common/partials/alert.component.jsx';
-import validate    from 'bids-validator';
-import scitran     from '../utils/scitran';
-import files       from '../utils/files';
 import Progress    from './progress.component.jsx';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import ValidationResults from './validationResults.component.jsx';
@@ -22,10 +19,6 @@ let Upload = React.createClass({
 	mixins: [Reflux.connect(UploadStore)],
 
 // life cycle events --------------------------------------------------
-
-	getInitialState () {
-
-	},
 
 	componentDidMount () {
 		let self = this;
@@ -152,91 +145,10 @@ let Upload = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	/**
-	 * On Change
-	 *
-	 * On file select this adds files to the state
-	 * and starts validation.
-	 */
-	_onChange (selectedFiles) {
-		Actions.onChange(selectedFiles);
-	},
+	_onChange (selectedFiles) {Actions.onChange(selectedFiles);},
 
-	/**
-	 * Validate
-	 *
-	 * Takes a filelist, runs BIDS validation checks
-	 * against it, and sets any errors to the state.
-	 */
-	_validate (selectedFiles) {
-		let self = this;
+	_upload (selectedFiles) {Actions.upload(selectedFiles);},
 
-        validate.BIDS(selectedFiles.list, function (errors, warnings) {
-        	errors   = errors   ? errors   : [];
-        	warnings = warnings ? warnings : [];
-
-        	let totalErrors = 0;  
-        	let totlalWarnings = 0;
-			for (let error   of errors)   {totalErrors    += error.errors.length;}
-            for (let warning of warnings) {totlalWarnings += warning.errors.length;}
-
-			self.setState({
-				errors: errors,
-				totalErrors: totalErrors,
-				warnings: warnings,
-				totalWarnings: totlalWarnings
-			});
-
-			if (errors.length === 0) {
-				if (warnings.length === 0) {
-					self._upload(selectedFiles);
-					self.setState({uploading: true});
-				}
-			}
-        });
-	},
-
-	/**
-	 * Upload
-	 *
-	 * Uploads currently selected and triggers
-	 * a progress event every time a file or folder
-	 * finishes.
-	 */
-	_upload (selectedFiles) {
-		let self = this;
-		let fileTree = selectedFiles ? selectedFiles.tree : this.state.tree;
-		let count = files.countTree(fileTree);
-
-		scitran.upload(fileTree, count, function (progress) {
-			self.setState({
-				progress: progress,
-				uploading: true
-			});
-			if (progress.total === progress.completed) {
-				self._uploadComplete();
-			}
-		});
-	},
-
-	/**
-	 * Upload Complete
-	 *
-	 * Resets the componenent state to its
-	 * initial state. And creates an upload
-	 * complete alert.
-	 */
-	_uploadComplete () {
-		let initialState = this.getInitialState();
-		initialState.alert = true;
-		this.replaceState(initialState);
-	},
-
-	/**
-	 * Close Alert
-	 *
-	 * Closes the upload finished alert.
-	 */
 	_closeAlert () {
 		let self = this;
 		self.setState({alert: false});
