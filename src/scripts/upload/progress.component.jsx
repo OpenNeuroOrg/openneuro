@@ -13,7 +13,14 @@ export default class UploadProgress extends React.Component {
 		let progress = this.props.progress.total > 0 ? Math.floor(this.props.progress.completed / this.props.progress.total * 100) : 0;
 
 		let currentFiles = this.props.progress.currentFiles.map(function (file, index) {
-			return <div key={index}>{file}</div>;
+			return (
+				<div className="uploadFiles" key={index}>
+					{file}
+					<span className="one">.</span>
+					<span className="two">.</span>
+					<span className="three">.</span>​
+				</div>
+			);
 		});
 
 		return (
@@ -21,7 +28,9 @@ export default class UploadProgress extends React.Component {
 				{this.props.header}
 				<span className="message fadeIn">Uploading {progress}%</span>
 				<ProgressBar active now={progress} />
-				{currentFiles}
+				<div className="uploadFiles-wrap">
+					{currentFiles}
+				</div>
 			</div>
 		);
 	}
