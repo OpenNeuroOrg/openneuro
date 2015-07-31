@@ -20,17 +20,18 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			dirName: '',
 			alert: false,
-			uploading: false,
+			uploading: this.uploading,
 			validating: false,
 			totalErrors: 0,
 			totalWarnings: 0,
-			progress: {total: 0, completed: 0, currentFiles: []}
+			progress: this.progress
 		};
 	},
 
-// data ------------------------------------------------------------------------------
+// persistent data -------------------------------------------------------------------
 
 	uploading: false,
+	progress: {total: 0, completed: 0, currentFiles: []},
 
 // actions ---------------------------------------------------------------------------
 
@@ -100,6 +101,7 @@ let UploadStore = Reflux.createStore({
 				progress: progress,
 				uploading: true
 			});
+			self.progress = progress;
 			self.uploading = true;
 			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
@@ -116,8 +118,9 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		let initialState = this.getInitialState();
 		this.uploading = false;
+		this.progress  = {total: 0, completed: 0, currentFiles: []};
+		let initialState = this.getInitialState();
 		window.onbeforeunload = function() {};
 		initialState.alert = true;
 		this.trigger(initialState);
