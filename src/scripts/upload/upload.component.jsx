@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React       from 'react';
+import Reflux      from 'reflux';
 import pluralize   from 'pluralize';
 import DirUpload   from './dirUpload.component.jsx';
 import DirTree     from './dirTree.component.jsx';
@@ -12,26 +13,18 @@ import Progress    from './progress.component.jsx';
 import DirValidationMessages from './dirValidationMessages.component.jsx';
 import ValidationResults from './validationResults.component.jsx';
 import {PanelGroup, Accordion, Panel, Alert} from 'react-bootstrap';
+import Actions      from './upload.actions.js';
+import UploadStore  from './upload.store.js';
 
 
 let Upload = React.createClass({
 
+	mixins: [Reflux.connect(UploadStore)],
+
 // life cycle events --------------------------------------------------
 
 	getInitialState () {
-		return {
-			tree: [],
-			list: {},
-			errors: [],
-			warnings: [],
-			dirName: '',
-			alert: false,
-			uploading: false,
-			validating: false,
-			totalErrors: 0,
-			totalWarnings: 0,
-			progress: {total: 0, completed: 0, currentFiles: []}
-		};
+
 	},
 
 	componentDidMount () {
@@ -166,14 +159,7 @@ let Upload = React.createClass({
 	 * and starts validation.
 	 */
 	_onChange (selectedFiles) {
-		let self = this;
-		this.setState({
-			tree: selectedFiles.tree,
-			list: selectedFiles.list,
-			dirName: selectedFiles.tree[0].name,
-			validating: !self.state.validating,
-		});
-		this._validate(selectedFiles);
+		Actions.onChange(selectedFiles);
 	},
 
 	/**
