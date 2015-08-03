@@ -95,11 +95,9 @@ let UploadStore = Reflux.createStore({
 				warnings: warnings
 			});
 
-			if (errors.length === 0) {
-				if (warnings.length === 0) {
-					self.upload(selectedFiles.tree);
-					self.update({uploading: true});
-				}
+			if (errors.length === 0 && warnings.length === 0) {
+				self.upload(selectedFiles.tree);
+				self.update({uploading: true});
 			}
         });
 	},
