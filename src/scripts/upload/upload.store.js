@@ -4,7 +4,7 @@ import Reflux   from 'reflux';
 import Actions  from './upload.actions.js';
 import scitran  from '../utils/scitran';
 import files    from '../utils/files';
-import validate from '../../../../bids-validator';
+import validate from 'bids-validator';
 
 // store setup -----------------------------------------------------------------------
 
