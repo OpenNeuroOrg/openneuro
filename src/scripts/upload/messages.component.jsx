@@ -37,9 +37,9 @@ export default class Messages extends React.Component {
 
 		return (
 			<span>
-				{errors === 'Invalid' ? notBIDSMessage : null}
-				{!uploading && errors.length === 0 && warnings.length === 0 ? initialMessage : null }
-				{errors.length   === 0 && warnings.length > 0 ? warningsMessage : null}
+				{errors === 'Invalid'                                                ? notBIDSMessage : null}
+				{!uploading && errors.length === 0 && warnings.length === 0          ? initialMessage : null }
+				{errors.length   === 0 && warnings.length > 0                        ? warningsMessage : null}
 				{warnings.length === 0 && errors.length > 0 && errors !== 'Invalid'  ? errorMessage : null}
 			</span>
     	);
