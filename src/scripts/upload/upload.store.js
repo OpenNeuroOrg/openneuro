@@ -62,7 +62,6 @@ let UploadStore = Reflux.createStore({
 	 * and starts validation.
 	 */
 	onChange (selectedFiles) {
-		console.log(selectedFiles);
 		this.update({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
