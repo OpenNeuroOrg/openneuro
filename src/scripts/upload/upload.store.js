@@ -4,7 +4,7 @@ import Reflux   from 'reflux';
 import Actions  from './upload.actions.js';
 import scitran  from '../utils/scitran';
 import files    from '../utils/files';
-import validate from '../../../../bids-validator';
+import validate from 'bids-validator';
 
 let UploadStore = Reflux.createStore({
 
@@ -13,25 +13,29 @@ let UploadStore = Reflux.createStore({
 	listenables: Actions,
 
 	getInitialState: function () {
-		return {
-			tree: [],
-			list: {},
-			errors: [],
-			warnings: [],
-			dirName: '',
-			alert: false,
-			uploading: this.uploading,
-			validating: false,
-			totalErrors: 0,
-			totalWarnings: 0,
-			progress: this.progress
-		};
+		return this.data;
 	},
 
-// persistent data -------------------------------------------------------------------
+// state data ------------------------------------------------------------------------
 
-	uploading: false,
-	progress: {total: 0, completed: 0, currentFiles: []},
+	data: {
+		tree: [],
+		list: {},
+		errors: [],
+		warnings: [],
+		dirName: '',
+		alert: false,
+		uploading: false,
+		validating: false,
+		totalErrors: 0,
+		totalWarnings: 0,
+		progress: {total: 0, completed: 0, currentFiles: []},
+	},
+
+	update: function (data) {
+		for (let prop in data) {this.data[prop] = data[prop];}
+		this.trigger(this.data);
+	},
 
 // actions ---------------------------------------------------------------------------
 
@@ -42,7 +46,7 @@ let UploadStore = Reflux.createStore({
 	 * and starts validation.
 	 */
 	onChange (selectedFiles) {
-		this.trigger({
+		this.update({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
 			dirName: selectedFiles.tree[0].name,
@@ -63,7 +67,7 @@ let UploadStore = Reflux.createStore({
         validate.BIDS(selectedFiles.list, function (errors, warnings) {
         	
         	if (errors === 'Invalid') {
-        		console.log('here');
+        		self.update({errors: 'Invalid'});
         		return;
         	}
 
@@ -75,7 +79,7 @@ let UploadStore = Reflux.createStore({
 			for (let error   of errors)   {totalErrors    += error.errors.length;}
             for (let warning of warnings) {totlalWarnings += warning.errors.length;}
 
-			self.trigger({
+			self.update({
 				errors: errors,
 				totalErrors: totalErrors,
 				warnings: warnings,
@@ -85,7 +89,7 @@ let UploadStore = Reflux.createStore({
 			if (errors.length === 0) {
 				if (warnings.length === 0) {
 					self.upload(selectedFiles.tree);
-					self.trigger({uploading: true});
+					self.update({uploading: true});
 				}
 			}
         });
@@ -103,12 +107,7 @@ let UploadStore = Reflux.createStore({
 		let count = files.countTree(fileTree);
 
 		scitran.upload(fileTree, count, function (progress) {
-			self.trigger({
-				progress: progress,
-				uploading: true
-			});
-			self.progress = progress;
-			self.uploading = true;
+			self.update({progress: progress, uploading: true});
 			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
 				self.uploadComplete();
@@ -124,12 +123,20 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		this.uploading = false;
-		this.progress  = {total: 0, completed: 0, currentFiles: []};
-		let initialState = this.getInitialState();
+		this.update({
+			tree: [],
+			list: {},
+			errors: [],
+			warnings: [],
+			dirName: '',
+			alert: true,
+			uploading: false,
+			validating: false,
+			totalErrors: 0,
+			totalWarnings: 0,
+			progress: {total: 0, completed: 0, currentFiles: []},
+		});
 		window.onbeforeunload = function() {};
-		initialState.alert = true;
-		this.trigger(initialState);
 	},
 
 });
