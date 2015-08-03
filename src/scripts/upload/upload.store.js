@@ -4,7 +4,7 @@ import Reflux   from 'reflux';
 import Actions  from './upload.actions.js';
 import scitran  from '../utils/scitran';
 import files    from '../utils/files';
-import validate from 'bids-validator';
+import validate from '../../../../bids-validator';
 
 let UploadStore = Reflux.createStore({
 
@@ -61,6 +61,12 @@ let UploadStore = Reflux.createStore({
 		let self = this;
 
         validate.BIDS(selectedFiles.list, function (errors, warnings) {
+        	
+        	if (errors === 'Invalid') {
+        		console.log('here');
+        		return;
+        	}
+
         	errors   = errors   ? errors   : [];
         	warnings = warnings ? warnings : [];
 
