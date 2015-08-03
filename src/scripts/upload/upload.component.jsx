@@ -3,18 +3,16 @@
 import React       from 'react';
 import Reflux      from 'reflux';
 import pluralize   from 'pluralize';
-import DirUpload   from './dirUpload.component.jsx';
-import DirTree     from './dirTree.component.jsx';
-import ErrorLink   from './errorLink.component.jsx';
-import UploadAlert from '../common/partials/alert.component.jsx';
-import Progress    from './progress.component.jsx';
-import DirValidationMessages from './dirValidationMessages.component.jsx';
-import ValidationResults from './validationResults.component.jsx';
-import {PanelGroup, Accordion, Panel, Alert} from 'react-bootstrap';
-import Actions      from './upload.actions.js';
-import UploadStore  from './upload.store.js';
-
-import Messages     from './messages.component.jsx';
+import Alert       from './upload.alert.jsx';
+import FileSelect  from './upload.file-select.jsx';
+import FileTree    from './upload.file-tree.jsx';
+import ErrorLink   from './upload.error-link.jsx';
+import Progress    from './upload.progress.jsx';
+import Results     from './upload.validation-results.jsx';
+import Actions     from './upload.actions.js';
+import UploadStore from './upload.store.js';
+import Messages    from './upload.messages.jsx';
+import {PanelGroup, Accordion, Panel} from 'react-bootstrap';
 
 
 let Upload = React.createClass({
@@ -35,7 +33,7 @@ let Upload = React.createClass({
 		// validations errors and warning wraps
 		let validationMessages;
 		if (tree.length > 0 && errors !== 'Invalid') {
-			validationMessages = <ValidationResults errors={errors} warnings={warnings} />
+			validationMessages = <Results errors={errors} warnings={warnings} />
 		}
 
 		let uploadFileStructure;
@@ -45,7 +43,7 @@ let Upload = React.createClass({
 					{errors !== 'Invalid' ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 					<Accordion className="fileStructure fadeIn">
 						<Panel header="View File Structure" eventKey='1'>
-					  		<DirTree tree={tree}/>
+					  		<FileTree tree={tree}/>
 					  	</Panel>
 				  	</Accordion>
 				 </span>
@@ -57,14 +55,14 @@ let Upload = React.createClass({
 		if (tree.length > 0 && errors.length === 0 && warnings.length > 0) {
 			buttons = (
 				<div className="warning-btn-group clearfix">
-					<DirUpload onChange={self._onChange} />
+					<FileSelect onChange={self._onChange} />
 					<div className="validate-buttons">
 						<button onClick={this._upload.bind(this, null)} className="continueWarning btn-blue">Continue</button>
 					</div>
 				</div>
 			);
 		} else {
-			buttons = <DirUpload onChange={self._onChange} />;
+			buttons = <FileSelect onChange={self._onChange} />;
 		}
 
 		let dirHeader;
@@ -93,21 +91,12 @@ let Upload = React.createClass({
 			</PanelGroup>
 		);
 
-		let alert;
-		if (this.state.alert) {
-			alert = (
-				<Alert className="fadeInDown clearfix" bsStyle='success'>
-					<div className="alert-left"><strong>Success!</strong> Your Dataset has been added and saved to your Dashboard. </div> <button className="alert-right dismiss-button-x" onClick={this._closeAlert}> <i className="fa fa-times"></i> </button>
-				</Alert>
-			);
-		}
-
 		return (
 			<div className={this.state.uploading ? 'right-sidebar uploading' : 'right-sidebar'}>
 				<div className="upload-nav">
 					<h2>My Tasks</h2>
 				</div>
-				{alert}
+				{this.state.alert     ? <Alert onClose={this._closeAlert} /> : null}
 				{this.state.uploading ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
 			</div>
     	);

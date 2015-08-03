@@ -3,7 +3,7 @@
 import React from 'react';
 import pluralize from 'pluralize';
 import {Accordion, Panel} from 'react-bootstrap';
-import DirValidationMessages from './dirValidationMessages.component.jsx';
+import Issues from './upload.validation-results.issues.jsx';
 
 // component setup --------------------------------------------------------
 
@@ -22,7 +22,7 @@ export default class ValidationResults extends React.Component {
 			let errorHeader = <span>{totalErrors} {pluralize('error', totalErrors)} in {errors.length} {pluralize('error', errors.length)}</span>;
 			errorsWrap = (
 				<Panel className="fadeIn upload-panel error-wrap" header={errorHeader}  eventKey='1'>
-					<DirValidationMessages issues={errors} issueType="Error"/> 
+					<Issues issues={errors} issueType="Error"/> 
 				</Panel>
 			);
 		}
@@ -34,7 +34,7 @@ export default class ValidationResults extends React.Component {
 			let warningHeader = <span>{totalWarnings} {pluralize('warning', totalWarnings)} in {warnings.length} {pluralize('warning', warnings.length)}</span>;
 			warningWrap = (
 				<Panel className="fadeIn upload-panel warning-wrap" header={warningHeader}  eventKey='2'>
-					<DirValidationMessages issues={warnings} issueType="Warning" />
+					<Issues issues={warnings} issueType="Warning" />
 				</Panel>
 			);
 		}

@@ -3,7 +3,7 @@
 import React     from 'react';
 import fileUtils from '../utils/files';
 
-class DirTree extends React.Component {
+class FileTree extends React.Component {
 
 // life cycle events --------------------------------------------------
 
@@ -13,7 +13,7 @@ class DirTree extends React.Component {
 		let nodes = tree.map(function (item, index) {
 			return (
 				<li key={index}>{item.name}
-					<ul><DirTree tree={item.children} /></ul>
+					<ul><FileTree tree={item.children} /></ul>
 				</li>
 			);
 		});
@@ -24,7 +24,7 @@ class DirTree extends React.Component {
 
 }
 
-export default DirTree;
+export default FileTree;
 
 
 

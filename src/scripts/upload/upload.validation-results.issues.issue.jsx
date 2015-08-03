@@ -4,7 +4,7 @@ import React from 'react';
 
 // component setup ----------------------------------------------------
 
-class Error extends React.Component {
+export default class Issue extends React.Component {
 
 // life cycle events --------------------------------------------------
 
@@ -43,10 +43,8 @@ class Error extends React.Component {
 
 }
 
-Error.propTypes = {
+Issue.propTypes = {
 	file: React.PropTypes.object,
 	error: React.PropTypes.object,
-	issueType: React.PropTypes.string.isRequired
+	type: React.PropTypes.string.isRequired
 };
-
-export default Error;

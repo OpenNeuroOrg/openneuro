@@ -45,12 +45,4 @@ export default class Messages extends React.Component {
     	);
 	}
 
-// custom methods -----------------------------------------------------
-
 }
-
-// Messages.props = {
-// 	fileSelected: ,
-// 	errors: [],
-// 	warnings: []
-// }
