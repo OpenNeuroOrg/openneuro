@@ -34,7 +34,7 @@ let Upload = React.createClass({
 
 		// validations errors and warning wraps
 		let validationMessages;
-		if (tree.length > 0) {
+		if (tree.length > 0 && errors !== 'Invalid') {
 			validationMessages = <ValidationResults errors={errors} warnings={warnings} />
 		}
 
@@ -42,7 +42,7 @@ let Upload = React.createClass({
 		if (tree.length > 0) {
 			uploadFileStructure = (
 				<span>
-					<ErrorLink dirName={dirName} errors={errors} warnings={warnings} />
+					{errors !== 'Invalid' ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 					<Accordion className="fileStructure fadeIn">
 						<Panel header="View File Structure" eventKey='1'>
 					  		<DirTree tree={tree}/>
@@ -84,7 +84,7 @@ let Upload = React.createClass({
 						<div className="upload-wrap">
 							{buttons}
 							{dirHeader}
-							<Messages errors={errors} warnings={warnings} tree={tree} uploading={this.state.uploading}/>
+							<Messages errors={errors} warnings={warnings} uploading={this.state.uploading}/>
 						</div>
 						{validationMessages}
 						{uploadFileStructure}
