@@ -47,8 +47,6 @@ let UploadStore = Reflux.createStore({
 			alert: false,
 			uploading: false,
 			validating: false,
-			totalErrors: 0,
-			totalWarnings: 0,
 			progress: {total: 0, completed: 0, currentFiles: []},
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -92,16 +90,9 @@ let UploadStore = Reflux.createStore({
         	errors   = errors   ? errors   : [];
         	warnings = warnings ? warnings : [];
 
-        	let totalErrors = 0;  
-        	let totlalWarnings = 0;
-			for (let error   of errors)   {totalErrors    += error.errors.length;}
-            for (let warning of warnings) {totlalWarnings += warning.errors.length;}
-
 			self.update({
 				errors: errors,
-				totalErrors: totalErrors,
-				warnings: warnings,
-				totalWarnings: totlalWarnings
+				warnings: warnings
 			});
 
 			if (errors.length === 0) {

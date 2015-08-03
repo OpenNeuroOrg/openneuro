@@ -14,6 +14,8 @@ import {PanelGroup, Accordion, Panel, Alert} from 'react-bootstrap';
 import Actions      from './upload.actions.js';
 import UploadStore  from './upload.store.js';
 
+import Messages     from './messages.component.jsx';
+
 
 let Upload = React.createClass({
 
@@ -29,12 +31,6 @@ let Upload = React.createClass({
 		let errors = this.state.errors;
 		let warnings = this.state.warnings;
 		let dirName = this.state.dirName;
-		let totalErrors = this.state.totalErrors;
-		let totalWarnings = this.state.totalWarnings;
-		let warningCount = pluralize('Warning', totalWarnings);
-		let errorCount = pluralize('Error', totalErrors);
-		let warningFilesCount = pluralize('File', warnings.length);
-		let errorFilesCount = pluralize('File', errors.length);
 
 		// validations errors and warning wraps
 		let validationMessages;
@@ -55,15 +51,6 @@ let Upload = React.createClass({
 				 </span>
 			);
 		}
-
-		let notBIDSMessage = <span className="message error fadeIn">This does not appear to be a BIDS dataset. <a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></span>;
-		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small></span>;
-		let warningsMessage = <span className="message error fadeIn">We found {totalWarnings} {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
-		let errorMessage = (
-			<span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{totalErrors} {errorCount}</strong> and upload your dataset again.<br/> 
-				<small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small>
-			</span>
-		);
 
 		// select, upload & continue btns
 		let buttons;
@@ -90,15 +77,6 @@ let Upload = React.createClass({
 			);
 		}
 
-		let messages = (
-			<span>
-				{this.state.errors == 'Invalid' ? notBIDSMessage : null}
-				{!this.state.uploading && tree.length === 0 && errors.length === 0 ? initialMessage : null }
-				{tree.length > 0 && errors.length === 0 && warnings.length > 0 ? warningsMessage : null}
-				{tree.length > 0 && errors.length > 0 ? errorMessage : null}
-			</span>
-		);
-
 		let uploadAccordion = (
 			<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 				<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
@@ -106,7 +84,7 @@ let Upload = React.createClass({
 						<div className="upload-wrap">
 							{buttons}
 							{dirHeader}
-							{messages}
+							<Messages errors={errors} warnings={warnings} tree={tree} uploading={this.state.uploading}/>
 						</div>
 						{validationMessages}
 						{uploadFileStructure}
