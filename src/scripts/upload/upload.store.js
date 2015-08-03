@@ -6,32 +6,52 @@ import scitran  from '../utils/scitran';
 import files    from '../utils/files';
 import validate from 'bids-validator';
 
-let UploadStore = Reflux.createStore({
-
 // store setup -----------------------------------------------------------------------
+
+let UploadStore = Reflux.createStore({
 
 	listenables: Actions,
 
+	init: function () {
+		this.setInitialState();
+	},
+
 	getInitialState: function () {
-		return {
+		return this.data;
+	},
+
+// state data ------------------------------------------------------------------------
+
+	data: {},
+
+	update: function (data) {
+		for (let prop in data) {this.data[prop] = data[prop];}
+		this.trigger(this.data);
+	},
+
+	/**
+	 * Set Initial State
+	 *
+	 * Sets the state to the data object defined
+	 * inside the function. Also takes a diffs object
+	 * which will set the state to the initial state
+	 * with any differences passed.
+	 */
+	setInitialState: function (diffs) {
+		let data = {
 			tree: [],
 			list: {},
 			errors: [],
 			warnings: [],
 			dirName: '',
 			alert: false,
-			uploading: this.uploading,
+			uploading: false,
 			validating: false,
-			totalErrors: 0,
-			totalWarnings: 0,
-			progress: this.progress
+			progress: {total: 0, completed: 0, currentFiles: []},
 		};
+		for (let prop in diffs) {data[prop] = diffs[prop];}
+		this.update(data);
 	},
-
-// persistent data -------------------------------------------------------------------
-
-	uploading: false,
-	progress: {total: 0, completed: 0, currentFiles: []},
 
 // actions ---------------------------------------------------------------------------
 
@@ -42,7 +62,7 @@ let UploadStore = Reflux.createStore({
 	 * and starts validation.
 	 */
 	onChange (selectedFiles) {
-		this.trigger({
+		this.update({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
 			dirName: selectedFiles.tree[0].name,
@@ -61,26 +81,23 @@ let UploadStore = Reflux.createStore({
 		let self = this;
 
         validate.BIDS(selectedFiles.list, function (errors, warnings) {
+        	
+        	if (errors === 'Invalid') {
+        		self.update({errors: 'Invalid'});
+        		// return;
+        	}
+
         	errors   = errors   ? errors   : [];
         	warnings = warnings ? warnings : [];
 
-        	let totalErrors = 0;  
-        	let totlalWarnings = 0;
-			for (let error   of errors)   {totalErrors    += error.errors.length;}
-            for (let warning of warnings) {totlalWarnings += warning.errors.length;}
-
-			self.trigger({
+			self.update({
 				errors: errors,
-				totalErrors: totalErrors,
-				warnings: warnings,
-				totalWarnings: totlalWarnings
+				warnings: warnings
 			});
 
-			if (errors.length === 0) {
-				if (warnings.length === 0) {
-					self.upload(selectedFiles.tree);
-					self.trigger({uploading: true});
-				}
+			if (errors.length === 0 && warnings.length === 0) {
+				self.upload(selectedFiles.tree);
+				self.update({uploading: true});
 			}
         });
 	},
@@ -97,12 +114,7 @@ let UploadStore = Reflux.createStore({
 		let count = files.countTree(fileTree);
 
 		scitran.upload(fileTree, count, function (progress) {
-			self.trigger({
-				progress: progress,
-				uploading: true
-			});
-			self.progress = progress;
-			self.uploading = true;
+			self.update({progress: progress, uploading: true});
 			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
 				self.uploadComplete();
@@ -118,13 +130,19 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		this.uploading = false;
-		this.progress  = {total: 0, completed: 0, currentFiles: []};
-		let initialState = this.getInitialState();
+		this.setInitialState({alert: true});
 		window.onbeforeunload = function() {};
-		initialState.alert = true;
-		this.trigger(initialState);
 	},
+
+
+	/**
+	 * Close Alert
+	 *
+	 */
+	closeAlert () {
+		let self = this;
+		self.setInitialState({alert: false});
+	}
 
 });
 

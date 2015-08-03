@@ -3,12 +3,12 @@
 import React from 'react';
 import { Accordion, Panel } from 'react-bootstrap';
 import pluralize from 'pluralize';
-import Error from './error.component.jsx';
+import Issue from './upload.validation-results.issues.issue.jsx';
 
 
 // component setup --------------------------------------------------------
 
-class DirValidationMessages extends React.Component {
+class Issues extends React.Component {
 
 // life cycle events ------------------------------------------------------
 	
@@ -32,7 +32,7 @@ class DirValidationMessages extends React.Component {
 
 			// issue sub-errors
 			let subErrors = issue.errors.map(function (error, index2) {
-				return error ? <Error issueType={self.props.issueType} file={issue.file} error={error} index={index2} key={index2} /> : null;
+				return error ? <Issue type={self.props.issueType} file={issue.file} error={error} index={index2} key={index2} /> : null;
 			});
 			// issue panel
 			return (
@@ -54,10 +54,10 @@ class DirValidationMessages extends React.Component {
 
 }
 
-DirValidationMessages.propTypes = {
+Issues.propTypes = {
 	issues: React.PropTypes.array.isRequired,
 	issueType: React.PropTypes.string.isRequired
 };
 
 
-export default DirValidationMessages;
+export default Issues;
