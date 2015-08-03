@@ -4,7 +4,8 @@ var Actions = Reflux.createActions([
 	'onChange',
 	'validate',
 	'upload',
-	'uploadComplete'
+	'uploadComplete',
+	'closeAlert'
 ]);
 
 export default Actions;

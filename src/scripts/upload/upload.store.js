@@ -6,11 +6,15 @@ import scitran  from '../utils/scitran';
 import files    from '../utils/files';
 import validate from 'bids-validator';
 
-let UploadStore = Reflux.createStore({
-
 // store setup -----------------------------------------------------------------------
 
+let UploadStore = Reflux.createStore({
+
 	listenables: Actions,
+
+	init: function () {
+		this.setInitialState();
+	},
 
 	getInitialState: function () {
 		return this.data;
@@ -18,23 +22,37 @@ let UploadStore = Reflux.createStore({
 
 // state data ------------------------------------------------------------------------
 
-	data: {
-		tree: [],
-		list: {},
-		errors: [],
-		warnings: [],
-		dirName: '',
-		alert: false,
-		uploading: false,
-		validating: false,
-		totalErrors: 0,
-		totalWarnings: 0,
-		progress: {total: 0, completed: 0, currentFiles: []},
-	},
+	data: {},
 
 	update: function (data) {
 		for (let prop in data) {this.data[prop] = data[prop];}
 		this.trigger(this.data);
+	},
+
+	/**
+	 * Set Initial State
+	 *
+	 * Sets the state to the data object defined
+	 * inside the function. Also takes a diffs object
+	 * which will set the state to the initial state
+	 * with any differences passed.
+	 */
+	setInitialState: function (diffs) {
+		let data = {
+			tree: [],
+			list: {},
+			errors: [],
+			warnings: [],
+			dirName: '',
+			alert: false,
+			uploading: false,
+			validating: false,
+			totalErrors: 0,
+			totalWarnings: 0,
+			progress: {total: 0, completed: 0, currentFiles: []},
+		};
+		for (let prop in diffs) {data[prop] = diffs[prop];}
+		this.update(data);
 	},
 
 // actions ---------------------------------------------------------------------------
@@ -123,21 +141,19 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		this.update({
-			tree: [],
-			list: {},
-			errors: [],
-			warnings: [],
-			dirName: '',
-			alert: true,
-			uploading: false,
-			validating: false,
-			totalErrors: 0,
-			totalWarnings: 0,
-			progress: {total: 0, completed: 0, currentFiles: []},
-		});
+		this.setInitialState({alert: true});
 		window.onbeforeunload = function() {};
 	},
+
+
+	/**
+	 * Close Alert
+	 *
+	 */
+	closeAlert () {
+		let self = this;
+		self.setInitialState({alert: false});
+	}
 
 });
 

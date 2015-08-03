@@ -21,10 +21,6 @@ let Upload = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-	componentDidMount () {
-		let self = this;
-	},
-
 	render () {
 
 		// short references
@@ -60,6 +56,7 @@ let Upload = React.createClass({
 			);
 		}
 
+		let notBIDSMessage = <span className="message error fadeIn">This does not appear to be a BIDS dataset. <a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></span>;
 		let initialMessage = <span className="message fadeIn">Upload a BIDS dataset.<br/> <small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small></span>;
 		let warningsMessage = <span className="message error fadeIn">We found {totalWarnings} {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
 		let errorMessage = (
@@ -95,6 +92,7 @@ let Upload = React.createClass({
 
 		let messages = (
 			<span>
+				{this.state.errors == 'Invalid' ? notBIDSMessage : null}
 				{!this.state.uploading && tree.length === 0 && errors.length === 0 ? initialMessage : null }
 				{tree.length > 0 && errors.length === 0 && warnings.length > 0 ? warningsMessage : null}
 				{tree.length > 0 && errors.length > 0 ? errorMessage : null}
@@ -139,17 +137,14 @@ let Upload = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_onChange (selectedFiles) {Actions.onChange(selectedFiles);},
+	_onChange: Actions.onChange,
 
 	_upload (selectedFiles) {
 		let fileTree = selectedFiles ? selectedFiles.tree : this.state.tree;
 		Actions.upload(fileTree);
 	},
 
-	_closeAlert () {
-		let self = this;
-		self.setState({alert: false});
-	}
+	_closeAlert: Actions.closeAlert
 
 });
 
