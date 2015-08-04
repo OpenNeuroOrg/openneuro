@@ -12,6 +12,7 @@ import Results     from './upload.validation-results.jsx';
 import Actions     from './upload.actions.js';
 import UploadStore from './upload.store.js';
 import Messages    from './upload.messages.jsx';
+import Input       from '../common/forms/input.component.jsx';
 import {PanelGroup, Accordion, Panel} from 'react-bootstrap';
 
 
@@ -70,7 +71,7 @@ let Upload = React.createClass({
 			dirHeader = (
 				<h3 className="dir-name">
 					<i className="folderIcon fa fa-folder-open" />
-					<input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
+					<Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
 					{dirName}
 				</h3>
 			);
