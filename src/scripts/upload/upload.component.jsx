@@ -53,7 +53,7 @@ let Upload = React.createClass({
 
 		// select, upload & continue btns
 		let buttons;
-		if (tree.length > 0 && errors.length === 0 && warnings.length > 0) {
+		if (this.state.status === 'files-selected' && errors.length === 0) {
 			buttons = (
 				<div className="warning-btn-group clearfix">
 					<FileSelect onChange={self._onChange} />
@@ -66,13 +66,14 @@ let Upload = React.createClass({
 			buttons = <FileSelect onChange={self._onChange} />;
 		}
 
+		let dirInput = <Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />;
+
 		let dirHeader;
 		if (tree.length > 0) {
 			dirHeader = (
 				<h3 className="dir-name">
 					<i className="folderIcon fa fa-folder-open" />
-					<Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
-					{dirName}
+					{this.state.status === 'uploading' || errors.length > 0 ? dirName : dirInput}
 				</h3>
 			);
 		}
@@ -84,7 +85,7 @@ let Upload = React.createClass({
 						<div className="upload-wrap">
 							{buttons}
 							{dirHeader}
-							<Messages errors={errors} warnings={warnings} uploading={this.state.uploading}/>
+							<Messages errors={errors} warnings={warnings} uploadStatus={this.state.status}/>
 						</div>
 						{validationMessages}
 						{uploadFileStructure}
@@ -94,12 +95,12 @@ let Upload = React.createClass({
 		);
 
 		return (
-			<div className={this.state.uploading ? 'right-sidebar uploading' : 'right-sidebar'}>
+			<div className={this.state.status === 'uploading' ? 'right-sidebar uploading' : 'right-sidebar'}>
 				<div className="upload-nav">
 					<h2>My Tasks</h2>
 				</div>
 				{this.state.alert     ? <Alert onClose={this._closeAlert} /> : null}
-				{this.state.uploading ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
+				{this.state.status === 'uploading' ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
 			</div>
     	);
 	},

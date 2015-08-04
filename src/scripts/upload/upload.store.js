@@ -45,8 +45,7 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			dirName: '',
 			alert: false,
-			uploading: false,
-			validating: false,
+			status: 'not-started', // files-selected || uploading
 			progress: {total: 0, completed: 0, currentFiles: []},
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -65,8 +64,7 @@ let UploadStore = Reflux.createStore({
 		this.update({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
-			dirName: selectedFiles.tree[0].name,
-			validating: true,
+			dirName: selectedFiles.tree[0].name
 		});
 		this.validate(selectedFiles);
 	},
@@ -91,13 +89,16 @@ let UploadStore = Reflux.createStore({
 
 			self.update({
 				errors: errors,
-				warnings: warnings
+				warnings: warnings,
+				status: 'files-selected'
 			});
 
-			if (errors.length === 0 && warnings.length === 0) {
-				self.upload(selectedFiles.tree);
-				self.update({uploading: true});
-			}
+
+
+			// if (errors.length === 0 && warnings.length === 0) {
+			// 	self.upload(selectedFiles.tree);
+			// 	self.update({uploading: true});
+			// }
         });
 	},
 
@@ -114,6 +115,8 @@ let UploadStore = Reflux.createStore({
 		
 		let self = this;
 		let count = files.countTree(fileTree);
+
+		this.update({status: 'uploading'});
 
 		scitran.upload(fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});
@@ -142,7 +145,7 @@ let UploadStore = Reflux.createStore({
 	 *
 	 */
 	closeAlert () {
-		this.setInitialState({alert: false});
+		this.update({alert: false});
 	},
 
 	/**

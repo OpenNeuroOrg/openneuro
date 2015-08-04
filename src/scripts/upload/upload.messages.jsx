@@ -12,7 +12,7 @@ export default class Messages extends React.Component {
 		// short references
 		let errors    = this.props.errors,
 		    warnings  = this.props.warnings,
-		    uploading = this.props.uploading;
+		    uploading = this.props.uploadStatus === 'uploading';
 
 		// counts
 		let totalErrors = 0;  
@@ -34,11 +34,13 @@ export default class Messages extends React.Component {
 				<small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small>
 			</span>
 		);
+		let changeName = <span className="message fadeIn">You can rename your dataset. Select 'continue' to continue.</span>
 
 		return (
 			<span>
 				{errors === 'Invalid'                                                ? notBIDSMessage : null}
-				{!uploading && errors.length === 0 && warnings.length === 0          ? initialMessage : null }
+				{this.props.uploadStatus === 'files-selected' && errors.length === 0 ? changeName : null}
+				{this.props.uploadStatus  === 'not-started'                          ? initialMessage : null }
 				{errors.length   === 0 && warnings.length > 0                        ? warningsMessage : null}
 				{warnings.length === 0 && errors.length > 0 && errors !== 'Invalid'  ? errorMessage : null}
 			</span>
