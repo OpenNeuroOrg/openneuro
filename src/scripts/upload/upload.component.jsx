@@ -41,7 +41,7 @@ let Upload = React.createClass({
 		if (tree.length > 0) {
 			uploadFileStructure = (
 				<span>
-					{errors !== 'Invalid' ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
+					{errors.length > 0 && errors !== 'Invalid' || warnings.length > 0 ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 					<Accordion className="fileStructure fadeIn">
 						<Panel header="View File Structure" eventKey='1'>
 					  		<FileTree tree={tree}/>
@@ -73,7 +73,7 @@ let Upload = React.createClass({
 			dirHeader = (
 				<h3 className="dir-name">
 					<i className="folderIcon fa fa-folder-open" />
-					{this.state.status === 'uploading' || errors.length > 0 ? dirName : dirInput}
+					{this.state.status === 'uploading' || this.state.status === 'validating' || errors.length > 0 ? dirName : dirInput}
 				</h3>
 			);
 		}

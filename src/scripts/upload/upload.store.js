@@ -45,7 +45,7 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			dirName: '',
 			alert: false,
-			status: 'not-started', // files-selected || uploading
+			status: 'not-started', // files-selected || validating || uploading
 			progress: {total: 0, completed: 0, currentFiles: []},
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -61,10 +61,11 @@ let UploadStore = Reflux.createStore({
 	 * and starts validation.
 	 */
 	onChange (selectedFiles) {
-		this.update({
+		this.setInitialState({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
-			dirName: selectedFiles.tree[0].name
+			dirName: selectedFiles.tree[0].name,
+			status: 'validating'
 		});
 		this.validate(selectedFiles);
 	},

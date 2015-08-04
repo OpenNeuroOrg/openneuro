@@ -2,6 +2,7 @@
 
 import React     from 'react';
 import pluralize from 'pluralize';
+import Spinner   from '../common/partials/spinner.component.jsx';
 
 export default class Messages extends React.Component {
 
@@ -38,6 +39,7 @@ export default class Messages extends React.Component {
 
 		return (
 			<span>
+				<Spinner text="validating" active={this.props.uploadStatus === 'validating'}/>
 				{errors === 'Invalid'                                                ? notBIDSMessage : null}
 				{this.props.uploadStatus === 'files-selected' && errors.length === 0 ? changeName : null}
 				{this.props.uploadStatus  === 'not-started'                          ? initialMessage : null }
