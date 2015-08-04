@@ -84,7 +84,6 @@ let UploadStore = Reflux.createStore({
         	
         	if (errors === 'Invalid') {
         		self.update({errors: 'Invalid'});
-        		// return;
         	}
 
         	errors   = errors   ? errors   : [];
@@ -110,6 +109,9 @@ let UploadStore = Reflux.createStore({
 	 * finishes.
 	 */
 	upload (fileTree) {
+		// rename dirName before upload
+		fileTree[0].name = this.data.dirName;
+		
 		let self = this;
 		let count = files.countTree(fileTree);
 
@@ -140,9 +142,17 @@ let UploadStore = Reflux.createStore({
 	 *
 	 */
 	closeAlert () {
-		let self = this;
-		self.setInitialState({alert: false});
-	}
+		this.setInitialState({alert: false});
+	},
+
+	/**
+	 * Update Directory Name
+	 *
+	 * Sets the directory name to the passed value.
+	 */
+	updateDirName(value) {
+		this.update({dirName: value});
+	},
 
 });
 

@@ -69,7 +69,8 @@ let Upload = React.createClass({
 		if (tree.length > 0) {
 			dirHeader = (
 				<h3 className="dir-name">
-					<i className="folderIcon fa fa-folder-open" /> 
+					<i className="folderIcon fa fa-folder-open" />
+					<input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
 					{dirName}
 				</h3>
 			);
@@ -105,6 +106,10 @@ let Upload = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_onChange: Actions.onChange,
+
+	_updateDirName(e) {
+		Actions.updateDirName(e.target.value);
+	},
 
 	_upload (selectedFiles) {
 		let fileTree = selectedFiles ? selectedFiles.tree : this.state.tree;
