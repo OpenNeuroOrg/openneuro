@@ -35,7 +35,7 @@ export default class Messages extends React.Component {
 				<small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small>
 			</span>
 		);
-		let changeName = <span className="message fadeIn">You can rename your dataset. Select 'continue' to continue.</span>
+		let changeName = <span className="message fadeIn">You can rename your dataset before uploading. Select "continue" to proceed with uploading.</span>
 
 		return (
 			<span>
