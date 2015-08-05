@@ -47,7 +47,7 @@ export default class Datasets extends React.Component {
                 let timeago   = moment(dataset.timestamp).fromNow(true)
                 
                 let datasetheader = (
-                    <div className="header clearfix">
+                    <div className="header clearfix" onClick={self.loadDataTree.bind(self, dataset)}>
                         <h4 className="dataset">{dataset.name}</h4>
                         <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
@@ -66,12 +66,8 @@ export default class Datasets extends React.Component {
                 return (
                     <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={index}>
                         <div className="inner">
-                        	This is some text
-                            <FileTree tree={self.state.dataset} />
-                        	<Spinner text={"deleting " + dataset.name} active={dataset.isDeleting} />
-                        </div>
-                        <div className="inner-right">
-                            <button className="btn" onClick={self._logFullDataset.bind(self, dataset)}>Log Datset</button>
+                            {!dataset.isLoading ? <FileTree tree={dataset.tree} /> : null}
+                        	<Spinner text={dataset.loadingAction + ' ' + dataset.name} active={dataset.isLoading} />
                         </div>
                         <div className="inner-right delete-data">
                             {dataset.showDeleteBtn ? hideDeleteBtn : viewdeleteBtn}
@@ -107,8 +103,9 @@ export default class Datasets extends React.Component {
             datasets = this.state.datasets,
             datasetIndex;
         for (var i = 0; i < self.state.datasets.length; i++) {
-            if (dataset._id === self.state.datasets[i]._id) {
-                datasets[i].isDeleting = true;
+            if (dataset._id === datasets[i]._id) {
+                datasets[i].isLoading = true;
+                datasets[i].loadingAction = 'deleting';
                 self.setState({datasets: datasets});
                 datasetIndex = i;
             }
@@ -121,12 +118,22 @@ export default class Datasets extends React.Component {
 		});
 	}
 
-    _logFullDataset(dataset) {
+    loadDataTree(dataset) {
         let self = this;
-        scitran.getBIDSDataset(dataset._id, function (dataset) {
-            self.setState({dataset: [dataset]});
-            console.log(dataset);
-        });
+        let datasets = this.state.datasets;
+        for (let i = 0; i < datasets.length; i++) {
+            if (dataset._id === datasets[i]._id && !datasets[i].tree) {
+                datasets[i].isLoading = true;
+                datasets[i].loadingAction = 'loading';
+                self.setState({datasets: datasets});
+                scitran.getBIDSDataset(dataset._id, function (tree) {
+                    datasets[i].tree = [tree];
+                    datasets[i].isLoading = false;
+                    datasets[i].loadingAction = null;
+                    self.setState({datasets: datasets});
+                });
+            }
+        }
     }
 
     paginate(data, perPage, page) {
