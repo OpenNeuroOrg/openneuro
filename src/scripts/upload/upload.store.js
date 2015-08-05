@@ -44,9 +44,9 @@ let UploadStore = Reflux.createStore({
 			errors: [],
 			warnings: [],
 			dirName: '',
+			changeName: false,
 			alert: false,
-			uploading: false,
-			validating: false,
+			uploadStatus: 'not-started', // files-selected || validating || uploading
 			progress: {total: 0, completed: 0, currentFiles: []},
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -62,11 +62,11 @@ let UploadStore = Reflux.createStore({
 	 * and starts validation.
 	 */
 	onChange (selectedFiles) {
-		this.update({
+		this.setInitialState({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
 			dirName: selectedFiles.tree[0].name,
-			validating: true,
+			uploadStatus: 'validating'
 		});
 		this.validate(selectedFiles);
 	},
@@ -84,7 +84,6 @@ let UploadStore = Reflux.createStore({
         	
         	if (errors === 'Invalid') {
         		self.update({errors: 'Invalid'});
-        		// return;
         	}
 
         	errors   = errors   ? errors   : [];
@@ -92,13 +91,16 @@ let UploadStore = Reflux.createStore({
 
 			self.update({
 				errors: errors,
-				warnings: warnings
+				warnings: warnings,
+				uploadStatus: 'files-selected'
 			});
 
-			if (errors.length === 0 && warnings.length === 0) {
-				self.upload(selectedFiles.tree);
-				self.update({uploading: true});
-			}
+
+
+			// if (errors.length === 0 && warnings.length === 0) {
+			// 	self.upload(selectedFiles.tree);
+			// 	self.update({uploading: true});
+			// }
         });
 	},
 
@@ -110,8 +112,13 @@ let UploadStore = Reflux.createStore({
 	 * finishes.
 	 */
 	upload (fileTree) {
+		// rename dirName before upload
+		fileTree[0].name = this.data.dirName;
+		
 		let self = this;
 		let count = files.countTree(fileTree);
+
+		this.update({uploadStatus: 'uploading'});
 
 		scitran.upload(fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});
@@ -140,9 +147,27 @@ let UploadStore = Reflux.createStore({
 	 *
 	 */
 	closeAlert () {
-		let self = this;
-		self.setInitialState({alert: false});
-	}
+		this.update({alert: false});
+	},
+
+	/**
+	 * Toggle Name Input
+	 *
+	 * Toggles the visibility of the dir name chnage
+	 * field.
+	 */
+	toggleNameInput() {
+		this.update({changeName: !this.data.changeName});
+	},
+
+	/**
+	 * Update Directory Name
+	 *
+	 * Sets the directory name to the passed value.
+	 */
+	updateDirName(value) {
+		this.update({dirName: value});
+	},
 
 });
 

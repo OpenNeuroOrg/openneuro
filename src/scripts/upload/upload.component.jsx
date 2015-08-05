@@ -12,6 +12,7 @@ import Results     from './upload.validation-results.jsx';
 import Actions     from './upload.actions.js';
 import UploadStore from './upload.store.js';
 import Messages    from './upload.messages.jsx';
+import Input       from '../common/forms/input.component.jsx';
 import {PanelGroup, Accordion, Panel} from 'react-bootstrap';
 
 
@@ -40,7 +41,7 @@ let Upload = React.createClass({
 		if (tree.length > 0) {
 			uploadFileStructure = (
 				<span>
-					{errors !== 'Invalid' ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
+					{errors.length > 0 && errors !== 'Invalid' || warnings.length > 0 ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 					<Accordion className="fileStructure fadeIn">
 						<Panel header="View File Structure" eventKey='1'>
 					  		<FileTree tree={tree}/>
@@ -52,7 +53,7 @@ let Upload = React.createClass({
 
 		// select, upload & continue btns
 		let buttons;
-		if (tree.length > 0 && errors.length === 0 && warnings.length > 0) {
+		if (this.state.uploadStatus === 'files-selected' && errors.length === 0) {
 			buttons = (
 				<div className="warning-btn-group clearfix">
 					<FileSelect onChange={self._onChange} />
@@ -65,12 +66,14 @@ let Upload = React.createClass({
 			buttons = <FileSelect onChange={self._onChange} />;
 		}
 
+
 		let dirHeader;
+		let dirInput = this.state.changeName ? <Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} /> : <span>{dirName}<button onClick={this._toggleNameInput}>click to change name</button></span>;
 		if (tree.length > 0) {
 			dirHeader = (
 				<h3 className="dir-name">
-					<i className="folderIcon fa fa-folder-open" /> 
-					{dirName}
+					<i className="folderIcon fa fa-folder-open" />
+					{this.state.uploadStatus === 'uploading' || this.state.uploadStatus === 'validating' || errors.length > 0 ? dirName : dirInput}
 				</h3>
 			);
 		}
@@ -82,7 +85,7 @@ let Upload = React.createClass({
 						<div className="upload-wrap">
 							{buttons}
 							{dirHeader}
-							<Messages errors={errors} warnings={warnings} uploading={this.state.uploading}/>
+							<Messages errors={errors} warnings={warnings} uploadStatus={this.state.uploadStatus}/>
 						</div>
 						{validationMessages}
 						{uploadFileStructure}
@@ -92,12 +95,12 @@ let Upload = React.createClass({
 		);
 
 		return (
-			<div className={this.state.uploading ? 'right-sidebar uploading' : 'right-sidebar'}>
+			<div className={this.state.uploadStatus === 'uploading' ? 'right-sidebar uploading' : 'right-sidebar'}>
 				<div className="upload-nav">
 					<h2>My Tasks</h2>
 				</div>
 				{this.state.alert     ? <Alert onClose={this._closeAlert} /> : null}
-				{this.state.uploading ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
+				{this.state.uploadStatus === 'uploading' ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
 			</div>
     	);
 	},
@@ -106,12 +109,18 @@ let Upload = React.createClass({
 
 	_onChange: Actions.onChange,
 
+	_updateDirName(e) {
+		Actions.updateDirName(e.target.value);
+	},
+
 	_upload (selectedFiles) {
 		let fileTree = selectedFiles ? selectedFiles.tree : this.state.tree;
 		Actions.upload(fileTree);
 	},
 
-	_closeAlert: Actions.closeAlert
+	_closeAlert: Actions.closeAlert,
+
+	_toggleNameInput: Actions.toggleNameInput
 
 });
 

@@ -1,11 +1,10 @@
 {
-  "name": "react-starterify",
+  "name": "CRN",
   "version": "0.0.9",
   "description": "React JS application skeleton using Browserify and other awesome tools",
   "main": "app.js",
   "repository": {
-    "type": "git",
-    "url": "https://github.com/Granze/react-starterify"
+    "type": "git"
   },
   "keywords": [
     "gulp",
@@ -18,15 +17,10 @@
     "6to5",
     "babel"
   ],
-  "author": "Maurizio Mangione",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Granze/react-starterify/issues"
-  },
-  "homepage": "https://github.com/Granze/react-starterify",
+  "author": "Squishymedia",
   "dependencies": {
     "async": "^1.2.1",
-    "bids-validator": "^0.3.0",
+    "bids-validator": "^0.3.2",
     "es6-react-mixins": "^0.1.6",
     "jshint": "^2.8.0",
     "moment": "^2.10.3",
