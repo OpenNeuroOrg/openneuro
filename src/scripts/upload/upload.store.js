@@ -44,6 +44,7 @@ let UploadStore = Reflux.createStore({
 			errors: [],
 			warnings: [],
 			dirName: '',
+			changeName: false,
 			alert: false,
 			status: 'not-started', // files-selected || validating || uploading
 			progress: {total: 0, completed: 0, currentFiles: []},
@@ -147,6 +148,16 @@ let UploadStore = Reflux.createStore({
 	 */
 	closeAlert () {
 		this.update({alert: false});
+	},
+
+	/**
+	 * Toggle Name Input
+	 *
+	 * Toggles the visibility of the dir name chnage
+	 * field.
+	 */
+	toggleNameInput() {
+		this.update({changeName: !this.data.changeName});
 	},
 
 	/**
