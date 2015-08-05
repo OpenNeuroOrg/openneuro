@@ -187,6 +187,7 @@ export default  {
                 if (session.subject_code === 'subject') {
                     request.get('sessions/' + session._id, function (err, res) {
                         session.children = res.body.files;
+                        session.name = session.label;
                         subjects.push(session);
                         cb();
                     })
@@ -206,6 +207,7 @@ export default  {
                 if (session.subject_code === subjectId) {
                     request.get('sessions/' + session._id, function (err, res) {
                         session.children = res.body.files;
+                        session.name = session.label;
                         sessions.push(session);
                         cb();
                     })
@@ -228,6 +230,7 @@ export default  {
         let self = this;
         let dataset = {};
         request.get('projects/' + projectId, function (err, res) {
+            for (let file of res.body.files) {file.name = file.filename;}
             dataset.name = res.body.name;
             dataset.type = 'folder';
             dataset.children = res.body.files;
@@ -241,7 +244,9 @@ export default  {
                                 session.children = session.children.concat(modalities);
                                 async.each(modalities, function (modality, cb2) {
                                     request.get('acquisitions/' + modality._id, function (err, res) {
+                                        for (let file of res.body.files) {file.name = file.filename;}
                                         modality.children = res.body.files;
+                                        modality.name = modality.label;
                                         cb2();
                                     });
                                 }, cb1);

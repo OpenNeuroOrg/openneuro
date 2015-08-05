@@ -6,6 +6,7 @@ import {PanelGroup, Panel}  from 'react-bootstrap';
 import scitran              from '../utils/scitran';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
+import FileTree             from '../upload/upload.file-tree.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
@@ -66,6 +67,7 @@ export default class Datasets extends React.Component {
                     <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={index}>
                         <div className="inner">
                         	This is some text
+                            <FileTree tree={self.state.dataset} />
                         	<Spinner text={"deleting " + dataset.name} active={dataset.isDeleting} />
                         </div>
                         <div className="inner-right">
@@ -120,7 +122,9 @@ export default class Datasets extends React.Component {
 	}
 
     _logFullDataset(dataset) {
+        let self = this;
         scitran.getBIDSDataset(dataset._id, function (dataset) {
+            self.setState({dataset: [dataset]});
             console.log(dataset);
         });
     }
