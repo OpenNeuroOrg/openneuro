@@ -253,7 +253,7 @@ export default  {
                             });
                         }, cb);
                     });
-                }, function () {callback(dataset)});
+                }, function () {callback([dataset])});
             });
         });
     },

@@ -127,7 +127,7 @@ export default class Datasets extends React.Component {
                 datasets[i].loadingAction = 'loading';
                 self.setState({datasets: datasets});
                 scitran.getBIDSDataset(dataset._id, function (tree) {
-                    datasets[i].tree = [tree];
+                    datasets[i].tree = tree;
                     datasets[i].isLoading = false;
                     datasets[i].loadingAction = null;
                     self.setState({datasets: datasets});
