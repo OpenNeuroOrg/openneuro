@@ -50,8 +50,8 @@ export default  {
      * Create Session
      *
      */
-    createSession (projectId, sessionName, callback) {
-        let body = {label: sessionName, subject_code: 'session'};
+    createSession (projectId, subjectId, sessionName, callback) {
+        let body = {label: sessionName, subject_code: subjectId};
         request.post('projects/' + projectId + '/sessions', {body: body}, callback);
     },
 
@@ -128,7 +128,7 @@ export default  {
         for (let session of sessions) {
             if (session.children && session.children.length > 0) {
                 self.progressStart(session.name);
-                self.createSession(projectId, session.name, function (err, res, name) {
+                self.createSession(projectId, subjectId, session.name, function (err, res, name) {
                     self.progressEnd(res.req._data.name);
                     self.uploadModalities(session.children, subjectId);
                 }); 
