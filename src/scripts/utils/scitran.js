@@ -130,7 +130,7 @@ export default  {
                 self.progressStart(session.name);
                 self.createSession(projectId, subjectId, session.name, function (err, res, name) {
                     self.progressEnd(res.req._data.name);
-                    self.uploadModalities(session.children, subjectId);
+                    self.uploadModalities(session.children, res.body._id);
                 }); 
             } else {
                 self.uploadFile('sessions', subjectId, session, 'subject');
@@ -177,6 +177,59 @@ export default  {
     getAcquisitions (sessionId, callback) {
         request.get('sessions/' + sessionId + '/acquisitions', function (err, res) {
             callback(res.body);
+        });
+    },
+
+    getBIDSSubjects (projectId, callback) {
+        request.get('projects/' + projectId + '/sessions', function (err, res) {
+            let subjects = [];
+            for (let session of res.body) {
+                if (session.subject_code === 'subject') {
+                    subjects.push(session);
+                }
+            }
+            callback(subjects);
+        });
+    },
+
+    getBIDSSessions (projectId, subjectId, callback) {
+        request.get('projects/' + projectId + '/sessions', function (err, res) {
+            let sessions = [];
+            for (let session of res.body) {
+                if (session.subject_code === subjectId) {
+                    sessions.push(session);
+                }
+            }
+            callback(sessions);
+        });
+    },
+
+    getBIDSModalities (sessionId, callback) {
+        request.get('sessions/' + sessionId + '/acquisitions', function (err, res) {
+            callback(res.body);
+        });
+    },
+
+    getBIDSDataset (projectId, callback) {
+        let self = this;
+        let dataset = {};
+        request.get('projects/' + projectId, function (err, res) {
+            dataset.name = res.body.name;
+            dataset.type = 'folder';
+            self.getBIDSSubjects(res.body._id, function (subjects) {
+                dataset.children = subjects;
+                async.each(subjects, function (subject, cb) {
+                    self.getBIDSSessions(projectId, subject._id, function (sessions) {
+                        subject.children = sessions;
+                        async.each(sessions, function (session, cb1) {
+                            self.getBIDSModalities(session._id, function (modalities) {
+                                session.children = modalities;
+                                cb1();
+                            });
+                        }, cb);
+                    });
+                }, function () {callback(dataset)});
+            });
         });
     },
 

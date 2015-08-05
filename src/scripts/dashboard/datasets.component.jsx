@@ -68,6 +68,9 @@ export default class Datasets extends React.Component {
                         	This is some text
                         	<Spinner text={"deleting " + dataset.name} active={dataset.isDeleting} />
                         </div>
+                        <div className="inner-right">
+                            <button className="btn" onClick={self._logFullDataset.bind(self, dataset)}>Log Datset</button>
+                        </div>
                         <div className="inner-right delete-data">
                             {dataset.showDeleteBtn ? hideDeleteBtn : viewdeleteBtn}
                         </div>
@@ -116,6 +119,12 @@ export default class Datasets extends React.Component {
 		});
 	}
 
+    _logFullDataset(dataset) {
+        scitran.getBIDSDataset(dataset._id, function (dataset) {
+            console.log(dataset);
+        });
+    }
+
     paginate(data, perPage, page) {
         if (data.length < 1) return null;
         let page = (page) ? page : this.state.page;
@@ -129,6 +138,7 @@ export default class Datasets extends React.Component {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
     }
+
     _showDelete(dataset){
     	let self = this,
     		datasets = this.state.datasets,
@@ -143,6 +153,7 @@ export default class Datasets extends React.Component {
             }
         }
     }
+    
     _dismissDelete(dataset){
     	let self = this,
     		datasets = this.state.datasets,
