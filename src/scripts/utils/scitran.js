@@ -181,26 +181,40 @@ export default  {
     },
 
     getBIDSSubjects (projectId, callback) {
-        request.get('projects/' + projectId + '/sessions', function (err, res) {
+        this.getSessions(projectId, function (sessions) {
             let subjects = [];
-            for (let session of res.body) {
+            async.each(sessions, function (session, cb) {
                 if (session.subject_code === 'subject') {
-                    subjects.push(session);
+                    request.get('sessions/' + session._id, function (err, res) {
+                        session.children = res.body.files;
+                        subjects.push(session);
+                        cb();
+                    })
+                } else {
+                    cb();
                 }
-            }
-            callback(subjects);
+            }, function () {
+                callback(subjects);
+            });
         });
     },
 
     getBIDSSessions (projectId, subjectId, callback) {
-        request.get('projects/' + projectId + '/sessions', function (err, res) {
+        this.getSessions(projectId, function (sciSessions) {
             let sessions = [];
-            for (let session of res.body) {
+            async.each(sciSessions, function (session, cb) {
                 if (session.subject_code === subjectId) {
-                    sessions.push(session);
+                    request.get('sessions/' + session._id, function (err, res) {
+                        session.children = res.body.files;
+                        sessions.push(session);
+                        cb();
+                    })
+                } else {
+                    cb();
                 }
-            }
-            callback(sessions);
+            }, function () {
+                callback(sessions);
+            });
         });
     },
 
@@ -216,15 +230,21 @@ export default  {
         request.get('projects/' + projectId, function (err, res) {
             dataset.name = res.body.name;
             dataset.type = 'folder';
+            dataset.children = res.body.files;
             self.getBIDSSubjects(res.body._id, function (subjects) {
-                dataset.children = subjects;
+                dataset.children = dataset.children.concat(subjects);
                 async.each(subjects, function (subject, cb) {
                     self.getBIDSSessions(projectId, subject._id, function (sessions) {
-                        subject.children = sessions;
+                        subject.children = subject.children.concat(sessions);
                         async.each(sessions, function (session, cb1) {
                             self.getBIDSModalities(session._id, function (modalities) {
-                                session.children = modalities;
-                                cb1();
+                                session.children = session.children.concat(modalities);
+                                async.each(modalities, function (modality, cb2) {
+                                    request.get('acquisitions/' + modality._id, function (err, res) {
+                                        modality.children = res.body.files;
+                                        cb2();
+                                    });
+                                }, cb1);
                             });
                         }, cb);
                     });
