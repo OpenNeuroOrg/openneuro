@@ -11,6 +11,17 @@ import async     from 'async';
  */
 export default  {
 
+// User Management ------------------------------------------------------------------------
+
+    /**
+     * Get Users
+     *
+     * Gets a list of all users
+     */
+    getUsers (callback) {
+        request.get('users', callback);
+    },
+    
     /**
      * Verify User
      *
@@ -21,6 +32,25 @@ export default  {
     verifyUser (callback) {
         request.get('users/self', callback);
     },
+
+    /**
+     * Add User
+     *
+     * Takes an email, first name, and last name
+     * add adds the user.
+     */
+    addUser (userData, callback) {
+        request.post('users', {body: userData}, callback);
+    },
+
+    /**
+     * Remove User
+     *
+     * Takes a userId and removes the user.
+     */
+     removeUser (userId, callback) {
+        request.del('users/' + userId, callback);
+     },
 
 // Create ---------------------------------------------------------------------------------
 

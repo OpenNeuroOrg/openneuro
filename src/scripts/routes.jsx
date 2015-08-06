@@ -7,6 +7,7 @@ import requireAuth from './utils/requireAuth';
 // views
 import Index         from './common/index.jsx';
 import Signin        from './user/signin.component.jsx';
+import Admin         from './user/user.admin.jsx';
 import Upload        from './upload/upload.component.jsx';
 import Dashboard     from './dashboard/dashboard.component.jsx';
 import Notifications from './dashboard/notifications.component.jsx';
@@ -31,13 +32,15 @@ class RedirectNotifications extends React.Component {
 // routes ----------------------------------------------------------------
 
 // authenticated routes
-Upload = requireAuth(Upload);
+Upload    = requireAuth(Upload);
 Dashboard = requireAuth(Dashboard);
+Admin     = requireAuth(Admin);
 
 let routes = (
 	<Route name="app" path="/" handler={Index}>
 		
 		<Route name="signIn" path="sign-in" handler={Signin}/>
+		<Route name="admin" path="admin" handler={Admin}/>
 		<Route name="dashboard" path="dashboard"  handler={Dashboard} >
 			<Route name="notifications" path="notifications" handler={Notifications}/>
 			<Route name="datasets" path="datasets" handler={Datasets}/>
