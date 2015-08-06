@@ -100,10 +100,30 @@ export default  {
             progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
         }
         let groupName = 'SquishyRoles';
-        self.createProject(groupName, fileTree[0].name, function (err, res) {
-            let projectId = res.body._id;
-            self.progressEnd();
-            self.uploadSubjects(fileTree[0].children, projectId);
+        
+        let existingProjectId = null;
+        this.getProjects(function (projects) {
+            for (let project of projects) {
+                if (project.name === fileTree[0].name) {
+                    existingProjectId = project._id;
+                }
+            }
+
+            if (existingProjectId) {
+                self.getBIDSDataset(existingProjectId, function (oldDataset) {
+                    let newDataset = fileTree[0];
+                    let oldDataset = oldDataset[0];
+                    self.progressEnd();
+                    self.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
+                });
+            } else {
+                self.createProject(groupName, fileTree[0].name, function (err, res) {
+                    let projectId = res.body._id;
+                    self.progressEnd();
+                    self.uploadSubjects(fileTree[0].children, projectId);
+                });
+            }
+
         });
     },
 
@@ -123,6 +143,26 @@ export default  {
         }
     },
 
+    resumeSubjects (newSubjects, oldSubjects, projectId) {
+        let subjectsUploads = [];
+        for (let i = 0; i < newSubjects.length; i++) {
+            let newSubject = newSubjects[i];
+            let oldSubject = oldSubjects[i];
+            if (oldSubject && oldSubject.name === newSubject.name) {
+                this.progressStart(newSubject.name);
+                this.progressEnd(newSubject.name);
+                if (newSubject.type === 'folder') {
+                    this.resumeSessions(newSubject.children, oldSubject.children, projectId, oldSubject._id);
+                }
+            } else {
+                subjectsUploads.push(newSubject);
+            }
+        }
+        if (subjectsUploads > 0) {
+            this.uploadSubjects(subjectsUploads, projectId);
+        }
+    },
+
     uploadSessions (sessions, projectId, subjectId) {
         let self = this;
         for (let session of sessions) {
@@ -138,6 +178,26 @@ export default  {
         }
     },
 
+    resumeSessions (newSessions, oldSessions, projectId, subjectId) {
+        let sessionUploads = [];
+        for (let i = 0; i < newSessions.length; i++) {
+            let newSession = newSessions[i];
+            let oldSession = oldSessions[i];
+            if (oldSession && oldSession.name === newSession.name) {
+                this.progressStart(newSession.name);
+                this.progressEnd(newSession.name);
+                if (newSession.type === 'folder') {
+                    this.resumeModalities(newSession.children, oldSession.children, subjectId);
+                }
+            } else {
+                sessionUploads.push(newSession);
+            }
+        }
+        if (sessionUploads.length > 0) {
+            this.uploadSessions(sessionUploads, projectId, subjectId);
+        }
+    },
+
     uploadModalities (modalities, subjectId) {
         let self = this;
         for (let modality of modalities) {
@@ -146,7 +206,7 @@ export default  {
                 self.createModality(subjectId, modality.name, function (err, res, name) {
                     self.progressEnd(res.req._data.name);
                     let modalityId = res.body._id;
-                    self.uploadAquisitions(modality.children, modalityId);
+                    self.uploadAcquisitions(modality.children, modalityId);
                 });
             } else {
                 self.uploadFile('sessions', subjectId, modality, 'session');
@@ -154,9 +214,46 @@ export default  {
         }
     },
 
-    uploadAquisitions (acquisitions, modalityId) {
+    resumeModalities (newModalities, oldModalities, subjectId) {
+        let modalityUploads = [];
+        for (let i = 0; i < newModalities.length; i++) {
+            let newModality = newModalities[i];
+            let oldModality = oldModalities[i];
+            if (oldModality && oldModality.name === newModality.name) {
+                this.progressStart(newModality.name);
+                this.progressEnd(newModality.name);
+                if (newModality.type === 'folder') {
+                    this.resumeAcquisitions(newModality.children, oldModality.children, oldModality._id);
+                }
+            } else {
+                modalityUploads.push(newModality);
+            }
+        }
+        if (modalityUploads.length > 0) {
+            this.uploadModalities(modalityUploads, subjectId);
+        }
+    },
+
+    uploadAcquisitions (acquisitions, modalityId) {
         for (let acquisition of acquisitions) {
             this.uploadFile('acquisitions', modalityId, acquisition, 'modality');
+        }
+    },
+
+    resumeAcquisitions (newAcquisitions, oldAcquisitions, modalityId) {
+        let acquisitionUploads = [];
+        for (let i = 0; i < newAcquisitions.length; i++) {
+            let newAcquisition = newAcquisitions[i];
+            let oldAcquisition = oldAcquisitions[i];
+            if (oldAcquisition && oldAcquisition.name == newAcquisition.name) {
+                this.progressStart(newAcquisition.name);
+                this.progressEnd(newAcquisition.name);
+            } else {
+                acquisitionUploads.push(newAcquisition);
+            }
+        }
+        if (acquisitionUploads.length > 0) {
+            this.uploadAcquisitions(acquisitionUploads, modalityId);
         }
     },
 
