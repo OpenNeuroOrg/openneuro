@@ -14,7 +14,8 @@ export default class Paginator extends React.Component {
             breakLabel = this.props.breakLabel;
 
         // generate page buttons
-        let Pages = this.createPageArr().map(function(p, i) {
+        let pageArr = this.createPageArr();
+        let Pages   = pageArr.map(function(p, i) {
             if (p == 'break') return ( <li key={'pgn'+ p +'-'+ i}><span>{breakLabel}</span></li> );
 
             // display page number
@@ -62,8 +63,8 @@ export default class Paginator extends React.Component {
         return (
             <ul className={this.props.containerClass}>
                 {prevBtn}
-                {Pages}
-                {nextBtn}
+                {pageArr.length > 1 ? Pages   : null}
+                {pageArr.length > 1 ? nextBtn : null}
             </ul>
         );
     }
@@ -153,7 +154,7 @@ Paginator.propTypes = {
 
 Paginator.defaultProps = {
     page:                     0,
-    pagesTotal:               10,
+    pagesTotal:               0,
     pageRangeDisplayed:       1,
     activePageRangeDisplayed: 1,
     prevLabel:                "«",
