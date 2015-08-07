@@ -52,7 +52,11 @@ export default  {
      * Takes a userId and removes the user.
      */
      removeUser (userId, callback) {
-        request.del('users/' + userId, callback);
+        request.del('users/' + userId, function (err, res) {
+            request.del('groups/' + userId, function (err, res) {
+                callback(err, res);
+            });
+        });
      },
 
 // Create ---------------------------------------------------------------------------------
