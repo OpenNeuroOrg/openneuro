@@ -34,7 +34,7 @@ export default class AddUser extends React.Component {
 		let users = this.state.users.map(function (user, index) {
 			return (
 				<div key={index}>
-					<span>{user._id}</span><button onClick={self._removeUser.bind(self, user._id)}>remove</button>
+					<span>{user._id}</span><button onClick={self._removeUser.bind(self, user._id, index)}>remove</button>
 				</div>
 			);
 		});
@@ -61,8 +61,11 @@ export default class AddUser extends React.Component {
 	 * name and adds the user as a user.
 	 */
 	_addUser () {
+		let self = this;
 		scitran.addUser(this.state.newUser, function (err, res) {
-
+			let users = self.state.users;
+			users.push(self.state.newUser);
+			self.setState({users: users, newUser: {_id: '', firstname: '', lastname: ''}});
 		});
 	}
 
@@ -71,9 +74,12 @@ export default class AddUser extends React.Component {
 	 *
 	 * Takes a userId and removes the user.
 	 */
-	_removeUser (userId) {
+	_removeUser (userId, index) {
+		let self = this;
 		scitran.removeUser(userId, function (err, res) {
-			
+			let users = self.state.users;
+			users.splice(index, 1);
+			self.setState({users: users});
 		});
 	}
 
