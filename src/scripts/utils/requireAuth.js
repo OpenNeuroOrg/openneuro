@@ -8,7 +8,7 @@ import userStore from '../user/user.store.js';
 var requireAuth = (Component) => {
 	return class Authenticated extends React.Component {
 		static willTransitionTo(transition) {
-			if (!userStore._token) { // if not logged in
+			if (!userStore.data.token) { // if not logged in
 				transition.redirect('signIn', {});
 			}
 		}

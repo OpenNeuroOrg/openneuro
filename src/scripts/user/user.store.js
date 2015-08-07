@@ -12,20 +12,42 @@ let UserStore = Reflux.createStore({
 
 	listenables: Actions,
 
+	init: function () {
+		this.setInitialState();
+	},
+
 	getInitialState: function () {
-		return {token: this._token, user: this._user};
+		return this.data;
+		// return {token: this._token, user: this._user};
 	},
 
 // data ------------------------------------------------------------------------------
 
-	_token: window.localStorage.hello ? JSON.parse(window.localStorage.hello).google.access_token : null,
-	_user: null,
+	data: {},
+
+	update: function (data) {
+		for (let prop in data) {this.data[prop] = data[prop];}
+		this.trigger(this.data);
+	},
+
+	/**
+	 * Set Initial State
+	 *
+	 * Sets the state to the data object defined
+	 * inside the function. Also takes a diffs object
+	 * which will set the state to the initial state
+	 * with any differences passed.
+	 */
+	setInitialState: function (diffs) {
+		let data = {
+			token: null,
+			user: null
+		};
+		for (let prop in diffs) {data[prop] = diffs[prop];}
+		this.update(data);
+	},
 
 // Actions ---------------------------------------------------------------------------
-
-	updateState: function () {
-		this.trigger({token: this._token, user: this._user});
-	},
 
 	/**
 	 * Initialize OAuth
@@ -36,17 +58,6 @@ let UserStore = Reflux.createStore({
 	initOAuth: function () {
 		hello.init({google: config.auth.google.clientID});
 		this.checkUser();
-	},
-
-	/**
-	 * Clear State
-	 *
-	 */
-	clearState: function () {
-		this._token = null;
-		this._user = null;
-		delete window.localStorage.hello;
-		this.updateState();
 	},
 	
 	/**
@@ -64,15 +75,13 @@ let UserStore = Reflux.createStore({
 		if (token) {
 			hello('google').login({force: false}).then(function() {
 				hello('google').api('/me').then(function (profile) {
-					self._user = profile;
-					self._token = token;
-					self.updateState();
+					self.update({user: profile, token: token});
 				}, function (res) {
-					self.clearState();
+					self.setInitialState();
 				});
 			});
 		} else {
-			this.clearState();
+			this.setInitialState();
 		}
 	},
 
@@ -107,13 +116,11 @@ let UserStore = Reflux.createStore({
 	signIn: function () {
 		let self = this;
 		hello('google').login({scope: 'email,openid'}, function (res) {
-			self._token = res.authResponse.access_token;
+			self.update({token: res.authResponse.access_token});
 			hello(res.network).api('/me').then(function (profile) {
-				self._user = profile;
-				self.updateState();
+				self.update({user: profile});
 				router.transitionTo('dashboard');
 			});
-			// console.log('signin success');
 		}, function () {
 			// signin failure
 		});
@@ -128,9 +135,7 @@ let UserStore = Reflux.createStore({
 	signOut: function () {
 		let self = this;
 		hello('google').logout().then(function () {
-			self._token = null;
-			self._user = {null};
-			self.updateState();
+			self.setInitialState();
 			router.transitionTo('home');
 		}, function (e) {
 			// signout failure
