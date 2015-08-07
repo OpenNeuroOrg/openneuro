@@ -40,7 +40,7 @@ let UserStore = Reflux.createStore({
 	 */
 	setInitialState: function (diffs) {
 		let data = {
-			token: null,
+			token: window.localStorage.hello ? JSON.parse(window.localStorage.hello).google.access_token : null,
 			user: null
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -74,8 +74,9 @@ let UserStore = Reflux.createStore({
 
 		if (token) {
 			hello('google').login({force: false}).then(function() {
+				self.update({token: token});
 				hello('google').api('/me').then(function (profile) {
-					self.update({user: profile, token: token});
+					self.update({user: profile});
 				}, function (res) {
 					self.setInitialState();
 				});
