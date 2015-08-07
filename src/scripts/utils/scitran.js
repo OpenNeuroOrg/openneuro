@@ -40,7 +40,10 @@ export default  {
      * add adds the user.
      */
     addUser (userData, callback) {
-        request.post('users', {body: userData}, callback);
+        let self = this;
+        request.post('users', {body: userData}, function (err, res) {
+            self.createGroup(userData._id, userData._id, callback);
+        });
     },
 
     /**
@@ -53,6 +56,21 @@ export default  {
      },
 
 // Create ---------------------------------------------------------------------------------
+
+    /**
+     * Create Group
+     *
+     * Takes a groupName and a userId and
+     * creates a group with that user as the
+     * admin.
+     */
+    createGroup (groupName, userId, callback) {
+        let body = {
+            _id: groupName,
+            roles: [{access: 'admin', _id: userId}]
+        };
+        request.post('groups', {body: body}, callback);
+    },
 
     /**
      * Create Project
