@@ -14,7 +14,7 @@ var Request = {
 
 	get (path, callback) {
 		handleRequest(path, {}, function (path, options) {
-			request.get(config.scitranUrl + path)
+			request.get(config.scitran.url + path)
 				.set(options.headers)
 				.end(function (err, res) {
 					handleResponse(err, res, callback);
@@ -24,7 +24,7 @@ var Request = {
 
 	post (path, options, callback) {
 		handleRequest(path, options, function (path, options) {
-			request.post(config.scitranUrl + path)
+			request.post(config.scitran.url + path)
 				.set(options.headers)
 				.send(options.body)
 				.end(function (err, res) {
@@ -35,7 +35,7 @@ var Request = {
 
 	put (path, options, callback) {
 		handleRequest(path, options, function (path, options) {
-			request.put(config.scitranUrl + path)
+			request.put(config.scitran.url + path)
 				.set(options.headers)
 				.query(options.query)
 				.send(options.body)
@@ -47,7 +47,7 @@ var Request = {
 
 	del (path, callback) {
 		handleRequest(path, {}, function (path, options) {
-			request.del(config.scitranUrl + path)
+			request.del(config.scitran.url + path)
 				.set(options.headers)
 				.end(function (err, res) {
 					handleResponse(err, res, callback);

@@ -2,6 +2,7 @@ import request   from './request';
 import uploads   from './upload';
 import userStore from '../user/user.store';
 import async     from 'async';
+import config    from '../config';
 
 /**
  * Scitran
@@ -127,9 +128,9 @@ export default  {
             let index = self.currentFiles.indexOf(filename);
             self.currentFiles.splice(index, 1);
             self.completed++;
+            // console.log({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
             progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
         }
-        let groupName = 'SquishyRoles';
         
         let existingProjectId = null;
         this.getProjects(function (projects) {
@@ -147,7 +148,7 @@ export default  {
                     self.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
                 });
             } else {
-                self.createProject(groupName, fileTree[0].name, function (err, res) {
+                self.createProject(config.scitran.group, fileTree[0].name, function (err, res) {
                     let projectId = res.body._id;
                     self.progressEnd();
                     self.uploadSubjects(fileTree[0].children, projectId);
@@ -159,9 +160,7 @@ export default  {
 
     uploadSubjects (subjects, projectId) {
         let self = this;
-        console.log(subjects);
         for (let subject of subjects) {
-            console.log(subject);
             if (subject.children && subject.children.length > 0) {
                 self.progressStart(subject.name);
                 self.createSubject(projectId, subject.name, function (err, res, name) {
@@ -170,14 +169,13 @@ export default  {
                     self.uploadSessions(subject.children, projectId, subjectId);
                 });
             } else {
-                console.log('here');
                 self.uploadFile('projects', projectId, subject, 'project');
             }
         }
     },
 
     resumeSubjects (newSubjects, oldSubjects, projectId) {
-        let subjectsUploads = [];
+        let subjectUploads = [];
         for (let i = 0; i < newSubjects.length; i++) {
             let newSubject = newSubjects[i];
             let oldSubject = this.contains(oldSubjects, newSubject);
@@ -188,12 +186,11 @@ export default  {
                     this.resumeSessions(newSubject.children, oldSubject.children, projectId, oldSubject._id);
                 }
             } else {
-                subjectsUploads.push(newSubject);
+                subjectUploads.push(newSubject);
             }
         }
-        if (subjectsUploads > 0) {
-            console.log(subjectsUploads)
-            this.uploadSubjects(subjectsUploads, projectId);
+        if (subjectUploads.length > 0) {
+            this.uploadSubjects(subjectUploads, projectId);
         }
     },
 
