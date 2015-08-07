@@ -133,7 +133,7 @@ export default  {
      * updated at the start and end of every file or
      * folder upload request.
      */
-    upload (fileTree, count, progress) {
+    upload (userId, fileTree, count, progress) {
         let self = this;
         self.completed = 0;
         self.count = count;
@@ -165,7 +165,7 @@ export default  {
                     self.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
                 });
             } else {
-                self.createProject(config.scitran.group, fileTree[0].name, function (err, res) {
+                self.createProject(userId, fileTree[0].name, function (err, res) {
                     let projectId = res.body._id;
                     self.progressEnd();
                     self.uploadSubjects(fileTree[0].children, projectId);
