@@ -22,14 +22,14 @@ let BSNavbar = React.createClass({
 
 		//generate user menu
 		let usermenu;
-		if (this.state.user) {
+		if (this.state.google) {
 
-			let username = this.state.user.displayName;
-			let email   = this.state.user.email;
+			let username = this.state.google.displayName;
+			let email   = this.state.google.email;
 
 			let thumbnail;
-			if (this.state.user.picture) {
-				thumbnail = this.state.user.picture.replace("sz=50", "sz=200");
+			if (this.state.google.picture) {
+				thumbnail = this.state.google.picture.replace("sz=50", "sz=200");
 			}
 
 			let gear = (<i className="fa fa-gear" />);

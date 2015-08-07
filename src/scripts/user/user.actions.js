@@ -6,9 +6,7 @@ var Actions = Reflux.createActions([
 	'signOut',
 	'logToken',
 	'testScitran',
-	'initOAuth',
-	'addUser',
-	'removeUser'
+	'initOAuth'
 ]);
 
 export default Actions;

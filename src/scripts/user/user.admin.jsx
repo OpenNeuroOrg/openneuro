@@ -54,12 +54,27 @@ export default class AddUser extends React.Component {
 
 // custom methods -----------------------------------------------------
 
+	/**
+	 * Add User
+	 *
+	 * Takes a gmail address and a first and last
+	 * name and adds the user as a user.
+	 */
 	_addUser () {
-		Actions.addUser(this.state.newUser);
+		scitran.addUser(this.state.newUser, function (err, res) {
+
+		});
 	}
 
+	/**
+	 * Remove User
+	 *
+	 * Takes a userId and removes the user.
+	 */
 	_removeUser (userId) {
-		Actions.removeUser(userId);
+		scitran.removeUser(userId, function (err, res) {
+			
+		});
 	}
 
 	_inputChange (e) {

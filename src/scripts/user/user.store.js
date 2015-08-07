@@ -41,7 +41,8 @@ let UserStore = Reflux.createStore({
 	setInitialState: function (diffs) {
 		let data = {
 			token: window.localStorage.hello ? JSON.parse(window.localStorage.hello).google.access_token : null,
-			user: null
+			google: null,
+			scitran: window.sessionStorage.scitranUser ? JSON.parse(window.sessionStorage.scitranUser) : null
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -76,7 +77,11 @@ let UserStore = Reflux.createStore({
 			hello('google').login({force: false}).then(function() {
 				self.update({token: token});
 				hello('google').api('/me').then(function (profile) {
-					self.update({user: profile});
+					self.update({google: profile});
+					scitran.verifyUser(function (err, res) {
+						window.sessionStorage.scitranUser = JSON.stringify(res.body);
+						self.update({scitran: res.body});
+					});
 				}, function (res) {
 					self.setInitialState();
 				});
@@ -84,29 +89,6 @@ let UserStore = Reflux.createStore({
 		} else {
 			this.setInitialState();
 		}
-	},
-
-	/**
-	 * Add User
-	 *
-	 * Takes a gmail address and a first and last
-	 * name and adds the user as a user.
-	 */
-	addUser: function (userData) {
-		scitran.addUser(userData, function (err, res) {
-
-		});
-	},
-
-	/**
-	 * Remove User
-	 *
-	 * Takes a userId and removes the user.
-	 */
-	removeUser: function (userId) {
-		scitran.removeUser(userId, function (err, res) {
-			
-		});
 	},
 
 	/**
@@ -119,7 +101,11 @@ let UserStore = Reflux.createStore({
 		hello('google').login({scope: 'email,openid'}, function (res) {
 			self.update({token: res.authResponse.access_token});
 			hello(res.network).api('/me').then(function (profile) {
-				self.update({user: profile});
+				self.update({google: profile});
+				scitran.verifyUser(function (err, res) {
+					window.sessionStorage.scitranUser = JSON.stringify(res.body);
+					self.update({scitran: res.body});
+				});
 				router.transitionTo('dashboard');
 			});
 		}, function () {
@@ -137,6 +123,7 @@ let UserStore = Reflux.createStore({
 		let self = this;
 		hello('google').logout().then(function () {
 			self.setInitialState();
+			window.sessionStorage.scitranUser = null;
 			router.transitionTo('home');
 		}, function (e) {
 			// signout failure
