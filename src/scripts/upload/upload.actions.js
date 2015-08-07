@@ -7,7 +7,8 @@ var Actions = Reflux.createActions([
 	'uploadComplete',
 	'closeAlert',
 	'updateDirName',
-	'toggleNameInput'
+	'toggleNameInput',
+	'checkExists'
 ]);
 
 export default Actions;

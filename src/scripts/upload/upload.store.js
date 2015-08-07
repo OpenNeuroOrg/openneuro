@@ -95,14 +95,35 @@ let UploadStore = Reflux.createStore({
 				warnings: warnings,
 				uploadStatus: 'files-selected'
 			});
-
-
-
-			// if (errors.length === 0 && warnings.length === 0) {
-			// 	self.upload(selectedFiles.tree);
-			// 	self.update({uploading: true});
-			// }
         });
+	},
+
+	checkExists (fileTree) {
+		// rename dirName before upload
+		fileTree[0].name = this.data.dirName;
+
+		if (this.data.uploadStatus === 'dataset-exists') {
+			this.upload(fileTree);
+			return;
+		}
+
+		let self = this;
+		let userId = userStore.data.scitran._id;
+		scitran.getProjects(function (projects) {
+			let existingProjectId;
+			for (let project of projects) {
+                if (project.name === fileTree[0].name && project.group === userId) {
+                    existingProjectId = project._id;
+                    break;
+                }
+            }
+
+            if (existingProjectId) {
+				self.update({uploadStatus: 'dataset-exists'});
+            } else {
+            	self.upload(fileTree);
+            }
+		});
 	},
 
 	/**
@@ -113,8 +134,6 @@ let UploadStore = Reflux.createStore({
 	 * finishes.
 	 */
 	upload (fileTree) {
-		// rename dirName before upload
-		fileTree[0].name = this.data.dirName;
 		
 		let self = this;
 		let count = files.countTree(fileTree);

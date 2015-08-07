@@ -33,12 +33,15 @@ export default class Messages extends React.Component {
 		let warningsMessage = <span className="message error fadeIn">We found {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
 		let errorMessage    = <span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and upload your dataset again.<br/> {specLink}</span>;
 		let noErrorMessage  = <span className="message fadeIn">Proceed with this datset by clicking continue or select a different folder.</span>;
+		let resumeMessage   = <span className="message fadeIn">You have already uploaded a dataset with this name. Click continue if you are trying to resume an unfinished upload.</span>;
 
 		let message;
 		if (errors === 'Invalid') {
 			message = notBIDSMessage;
 		} else if (this.props.uploadStatus === 'not-started') {
 			message = initialMessage;
+		} else if (this.props.uploadStatus === 'dataset-exists') {
+			message = resumeMessage;
 		} else if (errors.length > 0) {
 			message = errorMessage;
 		}  else if (warnings.length > 0) {

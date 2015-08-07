@@ -25,16 +25,17 @@ let Upload = React.createClass({
 	render () {
 
 		// short references
-		let self = this;
-		let tree = this.state.tree;
-		let errors = this.state.errors;
-		let warnings = this.state.warnings;
-		let dirName = this.state.dirName;
+		let self         = this;
+		let tree         = this.state.tree;
+		let errors       = this.state.errors;
+		let warnings     = this.state.warnings;
+		let dirName      = this.state.dirName;
+		let uploadStatus = this.state.uploadStatus;
 
 		// validations errors and warning wraps
 		let validationMessages;
-		if (tree.length > 0 && errors !== 'Invalid') {
-			validationMessages = <Results errors={errors} warnings={warnings} />
+		if (tree.length > 0 && errors !== 'Invalid' & uploadStatus !== 'dataset-exists') {
+			validationMessages = <Results errors={errors} warnings={warnings} />;
 		}
 
 		let uploadFileStructure;
@@ -53,7 +54,7 @@ let Upload = React.createClass({
 
 		// select, upload & continue btns
 		let buttons;
-		if (this.state.uploadStatus === 'files-selected' && errors.length === 0) {
+		if ((uploadStatus === 'files-selected' || uploadStatus === 'dataset-exists') && errors.length === 0) {
 			buttons = (
 				<div className="warning-btn-group clearfix">
 					<FileSelect onChange={self._onChange} />
@@ -73,7 +74,7 @@ let Upload = React.createClass({
 			dirHeader = (
 				<h3 className="dir-name">
 					<i className="folderIcon fa fa-folder-open" />
-					{this.state.uploadStatus === 'uploading' || this.state.uploadStatus === 'validating' || errors.length > 0 ? dirName : dirInput}
+					{uploadStatus === 'uploading' || uploadStatus === 'validating' || uploadStatus === 'dataset-exists' || errors.length > 0 ? dirName : dirInput}
 				</h3>
 			);
 		}
@@ -85,7 +86,7 @@ let Upload = React.createClass({
 						<div className="upload-wrap">
 							{buttons}
 							{dirHeader}
-							<Messages errors={errors} warnings={warnings} uploadStatus={this.state.uploadStatus}/>
+							<Messages errors={errors} warnings={warnings} uploadStatus={uploadStatus}/>
 						</div>
 						{validationMessages}
 						{uploadFileStructure}
@@ -95,12 +96,12 @@ let Upload = React.createClass({
 		);
 
 		return (
-			<div className={this.state.uploadStatus === 'uploading' ? 'right-sidebar uploading' : 'right-sidebar'}>
+			<div className={uploadStatus === 'uploading' ? 'right-sidebar uploading' : 'right-sidebar'}>
 				<div className="upload-nav">
 					<h2>My Tasks</h2>
 				</div>
 				{this.state.alert     ? <Alert onClose={this._closeAlert} /> : null}
-				{this.state.uploadStatus === 'uploading' ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
+				{uploadStatus === 'uploading' ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
 			</div>
     	);
 	},
@@ -115,7 +116,7 @@ let Upload = React.createClass({
 
 	_upload (selectedFiles) {
 		let fileTree = selectedFiles ? selectedFiles.tree : this.state.tree;
-		Actions.upload(fileTree);
+		Actions.checkExists(fileTree);
 	},
 
 	_closeAlert: Actions.closeAlert,

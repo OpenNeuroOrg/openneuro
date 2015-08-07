@@ -145,15 +145,15 @@ export default  {
             let index = self.currentFiles.indexOf(filename);
             self.currentFiles.splice(index, 1);
             self.completed++;
-            // console.log({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
             progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
         }
         
         let existingProjectId = null;
         this.getProjects(function (projects) {
             for (let project of projects) {
-                if (project.name === fileTree[0].name) {
+                if (project.name === fileTree[0].name && project.group === userId) {
                     existingProjectId = project._id;
+                    break;
                 }
             }
 
