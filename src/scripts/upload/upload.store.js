@@ -47,7 +47,7 @@ let UploadStore = Reflux.createStore({
 			dirName: '',
 			changeName: false,
 			alert: false,
-			uploadStatus: 'not-started', // files-selected || validating || uploading
+			uploadStatus: 'not-started',
 			progress: {total: 0, completed: 0, currentFiles: []},
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}

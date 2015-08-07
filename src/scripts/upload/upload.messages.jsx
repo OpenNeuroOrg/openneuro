@@ -11,9 +11,10 @@ export default class Messages extends React.Component {
 	render () {
 
 		// short references
-		let errors    = this.props.errors,
-		    warnings  = this.props.warnings,
-		    uploading = this.props.uploadStatus === 'uploading';
+		let errors       = this.props.errors,
+		    warnings     = this.props.warnings,
+		    uploadStatus = this.props.uploadStatus,
+		    uploading    = this.props.uploadStatus === 'uploading';
 
 		// counts
 		let totalErrors = 0;  
@@ -38,21 +39,21 @@ export default class Messages extends React.Component {
 		let message;
 		if (errors === 'Invalid') {
 			message = notBIDSMessage;
-		} else if (this.props.uploadStatus === 'not-started') {
+		} else if (uploadStatus === 'not-started') {
 			message = initialMessage;
-		} else if (this.props.uploadStatus === 'dataset-exists') {
+		} else if (uploadStatus === 'dataset-exists') {
 			message = resumeMessage;
 		} else if (errors.length > 0) {
 			message = errorMessage;
 		}  else if (warnings.length > 0) {
 			message = warningsMessage;
-		} else if (this.props.uploadStatus === 'files-selected') {
+		} else if (uploadStatus === 'files-selected') {
 			message = noErrorMessage;
 		}
 
 		return (
 			<span>
-				<Spinner text="validating" active={this.props.uploadStatus === 'validating'}/>
+				<Spinner text="validating" active={uploadStatus === 'validating'}/>
 				{message}
 			</span>
     	);

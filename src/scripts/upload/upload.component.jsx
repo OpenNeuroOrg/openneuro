@@ -67,7 +67,6 @@ let Upload = React.createClass({
 			buttons = <FileSelect onChange={self._onChange} />;
 		}
 
-
 		let dirHeader;
 		let dirInput = this.state.changeName ? <Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} /> : <span>{dirName}<button onClick={this._toggleNameInput}>click to change name</button></span>;
 		if (tree.length > 0) {

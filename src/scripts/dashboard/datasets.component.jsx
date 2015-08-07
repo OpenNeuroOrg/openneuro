@@ -77,6 +77,17 @@ export default class Datasets extends React.Component {
             });
         }
 
+        let pager;
+        if (datasets.length > this.state.resultsPerPage) {
+            pager = (
+                <Paginator
+                    page={this.state.page}
+                    pagesTotal={pagesTotal}
+                    pageRangeDisplayed={5}
+                    onPageSelect={this.onPageSelect.bind(self)} />
+            );
+        }
+
         return (
         	<div className="fadeIn">
             	<div className="dash-tab-content datasets ">
@@ -86,11 +97,7 @@ export default class Datasets extends React.Component {
                     </ PanelGroup>
                 </div>
                 <div className="pager-wrapper">
-                	<Paginator
-	                    page={this.state.page}
-	                    pagesTotal={pagesTotal}
-	                    pageRangeDisplayed={5}
-	                    onPageSelect={this.onPageSelect.bind(self)} />
+                	{pager}
             	</div>
             </div>
         );
