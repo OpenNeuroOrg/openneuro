@@ -1,6 +1,5 @@
 import request   from './request';
 import uploads   from './upload';
-import userStore from '../user/user.store';
 import async     from 'async';
 import config    from '../config';
 
