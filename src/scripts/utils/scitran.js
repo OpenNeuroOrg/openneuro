@@ -159,7 +159,9 @@ export default  {
 
     uploadSubjects (subjects, projectId) {
         let self = this;
+        console.log(subjects);
         for (let subject of subjects) {
+            console.log(subject);
             if (subject.children && subject.children.length > 0) {
                 self.progressStart(subject.name);
                 self.createSubject(projectId, subject.name, function (err, res, name) {
@@ -168,6 +170,7 @@ export default  {
                     self.uploadSessions(subject.children, projectId, subjectId);
                 });
             } else {
+                console.log('here');
                 self.uploadFile('projects', projectId, subject, 'project');
             }
         }
@@ -177,8 +180,8 @@ export default  {
         let subjectsUploads = [];
         for (let i = 0; i < newSubjects.length; i++) {
             let newSubject = newSubjects[i];
-            let oldSubject = oldSubjects[i];
-            if (oldSubject && oldSubject.name === newSubject.name) {
+            let oldSubject = this.contains(oldSubjects, newSubject);
+            if (oldSubject) {
                 this.progressStart(newSubject.name);
                 this.progressEnd(newSubject.name);
                 if (newSubject.type === 'folder') {
@@ -189,6 +192,7 @@ export default  {
             }
         }
         if (subjectsUploads > 0) {
+            console.log(subjectsUploads)
             this.uploadSubjects(subjectsUploads, projectId);
         }
     },
@@ -212,12 +216,12 @@ export default  {
         let sessionUploads = [];
         for (let i = 0; i < newSessions.length; i++) {
             let newSession = newSessions[i];
-            let oldSession = oldSessions[i];
-            if (oldSession && oldSession.name === newSession.name) {
+            let oldSession = this.contains(oldSessions, newSession);
+            if (oldSession) {
                 this.progressStart(newSession.name);
                 this.progressEnd(newSession.name);
                 if (newSession.type === 'folder') {
-                    this.resumeModalities(newSession.children, oldSession.children, subjectId);
+                    this.resumeModalities(newSession.children, oldSession.children, oldSession._id);
                 }
             } else {
                 sessionUploads.push(newSession);
@@ -248,8 +252,8 @@ export default  {
         let modalityUploads = [];
         for (let i = 0; i < newModalities.length; i++) {
             let newModality = newModalities[i];
-            let oldModality = oldModalities[i];
-            if (oldModality && oldModality.name === newModality.name) {
+            let oldModality = this.contains(oldModalities, newModality);
+            if (oldModality) {
                 this.progressStart(newModality.name);
                 this.progressEnd(newModality.name);
                 if (newModality.type === 'folder') {
@@ -274,8 +278,8 @@ export default  {
         let acquisitionUploads = [];
         for (let i = 0; i < newAcquisitions.length; i++) {
             let newAcquisition = newAcquisitions[i];
-            let oldAcquisition = oldAcquisitions[i];
-            if (oldAcquisition && oldAcquisition.name == newAcquisition.name) {
+            let oldAcquisition = this.contains(oldAcquisitions, newAcquisition);
+            if (oldAcquisition) {
                 this.progressStart(newAcquisition.name);
                 this.progressEnd(newAcquisition.name);
             } else {
@@ -285,6 +289,17 @@ export default  {
         if (acquisitionUploads.length > 0) {
             this.uploadAcquisitions(acquisitionUploads, modalityId);
         }
+    },
+
+    contains (arr, elem) {
+        let match = null;
+        for (let i = 0; i < arr.length; i++) {
+            let arrayElem = arr[i];
+            if (arrayElem.name === elem.name) {
+                match = arrayElem;
+            }
+        }
+        return match;
     },
 
 // Read -----------------------------------------------------------------------------------
