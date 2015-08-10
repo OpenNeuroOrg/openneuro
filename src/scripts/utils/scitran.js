@@ -2,6 +2,7 @@ import request   from './request';
 import uploads   from './upload';
 import async     from 'async';
 import config    from '../config';
+import uploadActions from '../upload/upload.actions';
 
 /**
  * Scitran
@@ -144,7 +145,7 @@ export default  {
      */
     handleUploadResponse (err, res, callback) {
         if (err) {
-            console.log(err);
+            uploadActions.uploadError();
         } else {
             callback(err, res);
         }

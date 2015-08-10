@@ -46,7 +46,8 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			dirName: '',
 			changeName: false,
-			alert: false,
+			alert: null,
+			alertMessage: '',
 			uploadStatus: 'not-started',
 			progress: {total: 0, completed: 0, currentFiles: []},
 		};
@@ -157,10 +158,18 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		this.setInitialState({alert: true});
+		this.setInitialState({alert: 'Success', alertMessage: 'Your Dataset has been added and saved to your Dashboard.'});
 		window.onbeforeunload = function() {};
 	},
 
+	/**
+	 * Upload Error
+	 *
+	 */
+	uploadError () {
+		this.setInitialState({alert: 'Error', alertMessage: 'There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site administrator.'});
+		window.onbeforeunload = function() {};
+	},
 
 	/**
 	 * Close Alert
