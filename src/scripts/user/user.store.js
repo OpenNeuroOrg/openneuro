@@ -5,7 +5,7 @@ import Actions from './user.actions.js';
 import config  from '../config';
 import router  from '../utils/router-container';
 import scitran from '../utils/scitran';
-// import uploadStore from '../upload/upload.store';
+import upload  from '../upload/upload.actions';
 
 let UserStore = Reflux.createStore({
 
@@ -129,6 +129,7 @@ let UserStore = Reflux.createStore({
 		if (signout) {
 			hello('google').logout().then(function () {
 				self.setInitialState();
+				upload.setInitialState();
 				window.sessionStorage.scitranUser = null;
 				router.transitionTo('signIn');
 			}, function (e) {
