@@ -83,9 +83,10 @@ export default  {
      * generates a request to make a project in scitran.
      */
     createProject (groupName, projectName, callback) {
+        let self = this;
         let body = {name: projectName};
         request.post('groups/' + groupName + '/projects', {body: body}, function (err, res) {
-            callback(err, res, projectName)
+            self.handleUploadResponse(err, res, callback);
         });
     },
 
@@ -94,8 +95,11 @@ export default  {
      *
      */
     createSubject (projectId, subjectName, callback) {
+        let self = this;
         let body = {label: subjectName, subject_code: 'subject'};
-        request.post('projects/' + projectId + '/sessions', {body: body}, callback);
+        request.post('projects/' + projectId + '/sessions', {body: body}, function (err, res) {
+            self.handleUploadResponse(err, res, callback);
+        });
     },
 
     /**
@@ -103,8 +107,11 @@ export default  {
      *
      */
     createSession (projectId, subjectId, sessionName, callback) {
+        let self = this;
         let body = {label: sessionName, subject_code: subjectId};
-        request.post('projects/' + projectId + '/sessions', {body: body}, callback);
+        request.post('projects/' + projectId + '/sessions', {body: body}, function (err, res) {
+            self.handleUploadResponse(err, res, callback);
+        });
     },
 
     /**
@@ -112,8 +119,11 @@ export default  {
      *
      */
     createModality (sessionId, modalityName, callback) {
+        let self = this;
         let body = {label: modalityName, datatype: 'modality'};
-        request.post('sessions/' + sessionId + '/acquisitions', {body: body}, callback);
+        request.post('sessions/' + sessionId + '/acquisitions', {body: body}, function (err, res) {
+            self.handleUploadResponse(err, res, callback);
+        });
     },
 
     /**
@@ -124,6 +134,20 @@ export default  {
     uploadFile (level, id, file, tag) {
         let url = level + '/' + id + '/file/' + file.name;
         uploads.add({url: url, file: file, tag: tag, progressStart: this.progressStart, progressEnd: this.progressEnd});
+    },
+
+    /**
+     * Handle Upload Response
+     *
+     * A generic response handler for all upload
+     * related request.
+     */
+    handleUploadResponse (err, res, callback) {
+        if (err) {
+            console.log(err);
+        } else {
+            callback(err, res);
+        }
     },
 
     currentFiles: [],
