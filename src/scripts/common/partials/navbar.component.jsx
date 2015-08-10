@@ -1,10 +1,11 @@
 // dependencies ------------------------------------------------------------------
 
-import React     from 'react';
-import Reflux    from 'reflux';
-import {Link}    from 'react-router';
-import Actions   from '../../user/user.actions.js';
-import userStore from '../../user/user.store.js';
+import React       from 'react';
+import Reflux      from 'reflux';
+import {Link}      from 'react-router';
+import Actions     from '../../user/user.actions.js';
+import userStore   from '../../user/user.store.js';
+import uploadStore from '../../upload/upload.store.js';
 import {CollapsibleNav, Nav, DropdownButton} from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
@@ -84,7 +85,7 @@ let BSNavbar = React.createClass({
 // custom methods ----------------------------------------------------------------
 
 	_signOut: function () {
-		Actions.signOut();
+		Actions.signOut(uploadStore.data.uploadStatus);
 	}
 
 });
