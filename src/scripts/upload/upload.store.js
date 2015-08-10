@@ -3,6 +3,7 @@
 import Reflux   from 'reflux';
 import Actions  from './upload.actions.js';
 import scitran  from '../utils/scitran';
+import upload   from './upload';
 import files    from '../utils/files';
 import validate from 'bids-validator';
 import userStore from '../user/user.store';
@@ -141,7 +142,7 @@ let UploadStore = Reflux.createStore({
 
 		this.update({uploadStatus: 'uploading'});
 
-		scitran.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
+		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});
 			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
