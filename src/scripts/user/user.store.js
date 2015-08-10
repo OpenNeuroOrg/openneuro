@@ -120,21 +120,13 @@ let UserStore = Reflux.createStore({
 	 * Signs the user out by destroying the current
 	 * OAuth2 session.
 	 */
-	signOut: function (uploading) {
+	signOut: function (uploadStatus) {
 		let self = this;
-		uploading = uploading === 'uploading';
-		if (uploading) {
-			var signout = confirm("You are currently uploading files. Signing out of this site will cancel the upload process. Are you sure you want to sign out?");
-			if (signout) {
-				hello('google').logout().then(function () {
-					self.setInitialState();
-					window.sessionStorage.scitranUser = null;
-					router.transitionTo('signIn');
-				}, function (e) {
-					// signout failure
-				});
-			}
-		} else {
+		let signout = true;
+		if (uploadStatus === 'uploading') {
+			signout = confirm("You are currently uploading files. Signing out of this site will cancel the upload process. Are you sure you want to sign out?");
+		}
+		if (signout) {
 			hello('google').logout().then(function () {
 				self.setInitialState();
 				window.sessionStorage.scitranUser = null;
@@ -143,7 +135,6 @@ let UserStore = Reflux.createStore({
 				// signout failure
 			});
 		}
-		
 	},
 
 	/**
