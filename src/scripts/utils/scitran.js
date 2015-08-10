@@ -116,7 +116,6 @@ export default  {
         request.post('sessions/' + sessionId + '/acquisitions', {body: body}, callback);
     },
 
-  
 // Read -----------------------------------------------------------------------------------
 
     /**
