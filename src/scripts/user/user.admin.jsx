@@ -32,6 +32,7 @@ export default class AddUser extends React.Component {
 	render () {
 		let self = this;
 		let users = this.state.users.map(function (user, index) {
+			console.log(user)
 			return (
 				<div key={index}>
 					<span>{user._id}</span><button onClick={self._removeUser.bind(self, user._id, index)}>remove</button>

@@ -21,18 +21,22 @@ var App = React.createClass({
 	},
 
 	render () {
-		let showSidebar = this.isActive('dashboard');
+		let showUpload = this.isActive('dashboard');
+		let showLeftNav = !this.isActive('signIn');
 		let sidebar;
 		let leftnav;
 
-		if (showSidebar) {
+		if (showUpload) {
 			sidebar = <div className="col-xs-4 tools-col fadeIn"><Upload /></div>;
+		}
+
+		if (showLeftNav) {
 			leftnav = <div className="left-nav"><LeftNavbar /></div>
 		}
 
 		return (
 			<div className="page">
-				<div className={showSidebar ? 'col-xs-8 main-col' : 'full-col'}>
+				<div className={showUpload ? 'col-xs-8 main-col' : 'full-col'}>
 					<Navbar/>
 					<div className="main view container">
 						<div className="col-xs-12 route-wrapper">

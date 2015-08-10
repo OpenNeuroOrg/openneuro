@@ -124,7 +124,7 @@ let UserStore = Reflux.createStore({
 		hello('google').logout().then(function () {
 			self.setInitialState();
 			window.sessionStorage.scitranUser = null;
-			router.transitionTo('home');
+			router.transitionTo('signIn');
 		}, function (e) {
 			// signout failure
 		});
