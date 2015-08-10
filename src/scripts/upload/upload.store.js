@@ -5,6 +5,7 @@ import Actions  from './upload.actions.js';
 import scitran  from '../utils/scitran';
 import files    from '../utils/files';
 import validate from 'bids-validator';
+import userStore from '../user/user.store';
 
 // store setup -----------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ let UploadStore = Reflux.createStore({
 			dirName: '',
 			changeName: false,
 			alert: false,
-			uploadStatus: 'not-started', // files-selected || validating || uploading
+			uploadStatus: 'not-started',
 			progress: {total: 0, completed: 0, currentFiles: []},
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -94,14 +95,35 @@ let UploadStore = Reflux.createStore({
 				warnings: warnings,
 				uploadStatus: 'files-selected'
 			});
-
-
-
-			// if (errors.length === 0 && warnings.length === 0) {
-			// 	self.upload(selectedFiles.tree);
-			// 	self.update({uploading: true});
-			// }
         });
+	},
+
+	checkExists (fileTree) {
+		// rename dirName before upload
+		fileTree[0].name = this.data.dirName;
+
+		if (this.data.uploadStatus === 'dataset-exists') {
+			this.upload(fileTree);
+			return;
+		}
+
+		let self = this;
+		let userId = userStore.data.scitran._id;
+		scitran.getProjects(function (projects) {
+			let existingProjectId;
+			for (let project of projects) {
+                if (project.name === fileTree[0].name && project.group === userId) {
+                    existingProjectId = project._id;
+                    break;
+                }
+            }
+
+            if (existingProjectId) {
+				self.update({uploadStatus: 'dataset-exists'});
+            } else {
+            	self.upload(fileTree);
+            }
+		});
 	},
 
 	/**
@@ -112,15 +134,13 @@ let UploadStore = Reflux.createStore({
 	 * finishes.
 	 */
 	upload (fileTree) {
-		// rename dirName before upload
-		fileTree[0].name = this.data.dirName;
 		
 		let self = this;
 		let count = files.countTree(fileTree);
 
 		this.update({uploadStatus: 'uploading'});
 
-		scitran.upload(fileTree, count, function (progress) {
+		scitran.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});
 			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {

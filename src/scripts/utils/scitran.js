@@ -1,7 +1,7 @@
 import request   from './request';
 import uploads   from './upload';
-import userStore from '../user/user.store';
 import async     from 'async';
+import config    from '../config';
 
 /**
  * Scitran
@@ -11,6 +11,17 @@ import async     from 'async';
  */
 export default  {
 
+// User Management ------------------------------------------------------------------------
+
+    /**
+     * Get Users
+     *
+     * Gets a list of all users
+     */
+    getUsers (callback) {
+        request.get('users', callback);
+    },
+    
     /**
      * Verify User
      *
@@ -22,7 +33,48 @@ export default  {
         request.get('users/self', callback);
     },
 
+    /**
+     * Add User
+     *
+     * Takes an email, first name, and last name
+     * add adds the user.
+     */
+    addUser (userData, callback) {
+        let self = this;
+        request.post('users', {body: userData}, function (err, res) {
+            self.createGroup(userData._id, userData._id, callback);
+        });
+    },
+
+    /**
+     * Remove User
+     *
+     * Takes a userId and removes the user.
+     */
+     removeUser (userId, callback) {
+        request.del('users/' + userId, function (err, res) {
+            request.del('groups/' + userId, function (err, res) {
+                callback(err, res);
+            });
+        });
+     },
+
 // Create ---------------------------------------------------------------------------------
+
+    /**
+     * Create Group
+     *
+     * Takes a groupName and a userId and
+     * creates a group with that user as the
+     * admin.
+     */
+    createGroup (groupName, userId, callback) {
+        let body = {
+            _id: groupName,
+            roles: [{access: 'admin', _id: userId}]
+        };
+        request.post('groups', {body: body}, callback);
+    },
 
     /**
      * Create Project
@@ -85,7 +137,7 @@ export default  {
      * updated at the start and end of every file or
      * folder upload request.
      */
-    upload (fileTree, count, progress) {
+    upload (userId, fileTree, count, progress) {
         let self = this;
         self.completed = 0;
         self.count = count;
@@ -99,11 +151,31 @@ export default  {
             self.completed++;
             progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
         }
-        let groupName = 'SquishyRoles';
-        self.createProject(groupName, fileTree[0].name, function (err, res) {
-            let projectId = res.body._id;
-            self.progressEnd();
-            self.uploadSubjects(fileTree[0].children, projectId);
+        
+        let existingProjectId = null;
+        this.getProjects(function (projects) {
+            for (let project of projects) {
+                if (project.name === fileTree[0].name && project.group === userId) {
+                    existingProjectId = project._id;
+                    break;
+                }
+            }
+
+            if (existingProjectId) {
+                self.getBIDSDataset(existingProjectId, function (oldDataset) {
+                    let newDataset = fileTree[0];
+                    let oldDataset = oldDataset[0];
+                    self.progressEnd();
+                    self.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
+                });
+            } else {
+                self.createProject(userId, fileTree[0].name, function (err, res) {
+                    let projectId = res.body._id;
+                    self.progressEnd();
+                    self.uploadSubjects(fileTree[0].children, projectId);
+                });
+            }
+
         });
     },
 
@@ -123,6 +195,26 @@ export default  {
         }
     },
 
+    resumeSubjects (newSubjects, oldSubjects, projectId) {
+        let subjectUploads = [];
+        for (let i = 0; i < newSubjects.length; i++) {
+            let newSubject = newSubjects[i];
+            let oldSubject = this.contains(oldSubjects, newSubject);
+            if (oldSubject) {
+                this.progressStart(newSubject.name);
+                this.progressEnd(newSubject.name);
+                if (newSubject.type === 'folder') {
+                    this.resumeSessions(newSubject.children, oldSubject.children, projectId, oldSubject._id);
+                }
+            } else {
+                subjectUploads.push(newSubject);
+            }
+        }
+        if (subjectUploads.length > 0) {
+            this.uploadSubjects(subjectUploads, projectId);
+        }
+    },
+
     uploadSessions (sessions, projectId, subjectId) {
         let self = this;
         for (let session of sessions) {
@@ -130,11 +222,31 @@ export default  {
                 self.progressStart(session.name);
                 self.createSession(projectId, subjectId, session.name, function (err, res, name) {
                     self.progressEnd(res.req._data.name);
-                    self.uploadModalities(session.children, subjectId);
+                    self.uploadModalities(session.children, res.body._id);
                 }); 
             } else {
                 self.uploadFile('sessions', subjectId, session, 'subject');
             }
+        }
+    },
+
+    resumeSessions (newSessions, oldSessions, projectId, subjectId) {
+        let sessionUploads = [];
+        for (let i = 0; i < newSessions.length; i++) {
+            let newSession = newSessions[i];
+            let oldSession = this.contains(oldSessions, newSession);
+            if (oldSession) {
+                this.progressStart(newSession.name);
+                this.progressEnd(newSession.name);
+                if (newSession.type === 'folder') {
+                    this.resumeModalities(newSession.children, oldSession.children, oldSession._id);
+                }
+            } else {
+                sessionUploads.push(newSession);
+            }
+        }
+        if (sessionUploads.length > 0) {
+            this.uploadSessions(sessionUploads, projectId, subjectId);
         }
     },
 
@@ -146,7 +258,7 @@ export default  {
                 self.createModality(subjectId, modality.name, function (err, res, name) {
                     self.progressEnd(res.req._data.name);
                     let modalityId = res.body._id;
-                    self.uploadAquisitions(modality.children, modalityId);
+                    self.uploadAcquisitions(modality.children, modalityId);
                 });
             } else {
                 self.uploadFile('sessions', subjectId, modality, 'session');
@@ -154,10 +266,58 @@ export default  {
         }
     },
 
-    uploadAquisitions (acquisitions, modalityId) {
+    resumeModalities (newModalities, oldModalities, subjectId) {
+        let modalityUploads = [];
+        for (let i = 0; i < newModalities.length; i++) {
+            let newModality = newModalities[i];
+            let oldModality = this.contains(oldModalities, newModality);
+            if (oldModality) {
+                this.progressStart(newModality.name);
+                this.progressEnd(newModality.name);
+                if (newModality.type === 'folder') {
+                    this.resumeAcquisitions(newModality.children, oldModality.children, oldModality._id);
+                }
+            } else {
+                modalityUploads.push(newModality);
+            }
+        }
+        if (modalityUploads.length > 0) {
+            this.uploadModalities(modalityUploads, subjectId);
+        }
+    },
+
+    uploadAcquisitions (acquisitions, modalityId) {
         for (let acquisition of acquisitions) {
             this.uploadFile('acquisitions', modalityId, acquisition, 'modality');
         }
+    },
+
+    resumeAcquisitions (newAcquisitions, oldAcquisitions, modalityId) {
+        let acquisitionUploads = [];
+        for (let i = 0; i < newAcquisitions.length; i++) {
+            let newAcquisition = newAcquisitions[i];
+            let oldAcquisition = this.contains(oldAcquisitions, newAcquisition);
+            if (oldAcquisition) {
+                this.progressStart(newAcquisition.name);
+                this.progressEnd(newAcquisition.name);
+            } else {
+                acquisitionUploads.push(newAcquisition);
+            }
+        }
+        if (acquisitionUploads.length > 0) {
+            this.uploadAcquisitions(acquisitionUploads, modalityId);
+        }
+    },
+
+    contains (arr, elem) {
+        let match = null;
+        for (let i = 0; i < arr.length; i++) {
+            let arrayElem = arr[i];
+            if (arrayElem.name === elem.name) {
+                match = arrayElem;
+            }
+        }
+        return match;
     },
 
 // Read -----------------------------------------------------------------------------------
@@ -177,6 +337,84 @@ export default  {
     getAcquisitions (sessionId, callback) {
         request.get('sessions/' + sessionId + '/acquisitions', function (err, res) {
             callback(res.body);
+        });
+    },
+
+    getBIDSSubjects (projectId, callback) {
+        this.getSessions(projectId, function (sessions) {
+            let subjects = [];
+            async.each(sessions, function (session, cb) {
+                if (session.subject_code === 'subject') {
+                    request.get('sessions/' + session._id, function (err, res) {
+                        session.children = res.body.files;
+                        session.name = session.label;
+                        subjects.push(session);
+                        cb();
+                    })
+                } else {
+                    cb();
+                }
+            }, function () {
+                callback(subjects);
+            });
+        });
+    },
+
+    getBIDSSessions (projectId, subjectId, callback) {
+        this.getSessions(projectId, function (sciSessions) {
+            let sessions = [];
+            async.each(sciSessions, function (session, cb) {
+                if (session.subject_code === subjectId) {
+                    request.get('sessions/' + session._id, function (err, res) {
+                        session.children = res.body.files;
+                        session.name = session.label;
+                        sessions.push(session);
+                        cb();
+                    })
+                } else {
+                    cb();
+                }
+            }, function () {
+                callback(sessions);
+            });
+        });
+    },
+
+    getBIDSModalities (sessionId, callback) {
+        request.get('sessions/' + sessionId + '/acquisitions', function (err, res) {
+            callback(res.body);
+        });
+    },
+
+    getBIDSDataset (projectId, callback) {
+        let self = this;
+        let dataset = {};
+        request.get('projects/' + projectId, function (err, res) {
+            for (let file of res.body.files) {file.name = file.filename;}
+            dataset.name = res.body.name;
+            dataset.type = 'folder';
+            dataset.children = res.body.files;
+            self.getBIDSSubjects(res.body._id, function (subjects) {
+                dataset.children = dataset.children.concat(subjects);
+                async.each(subjects, function (subject, cb) {
+                    self.getBIDSSessions(projectId, subject._id, function (sessions) {
+                        subject.children = subject.children.concat(sessions);
+                        async.each(sessions, function (session, cb1) {
+                            self.getBIDSModalities(session._id, function (modalities) {
+                                session.children = session.children.concat(modalities);
+                                async.each(modalities, function (modality, cb2) {
+                                    request.get('acquisitions/' + modality._id, function (err, res) {
+                                        for (let file of res.body.files) {file.name = file.filename;}
+                                        modality.children = res.body.files;
+                                        modality.name = modality.label;
+                                        cb2();
+                                    });
+                                }, cb1);
+                            });
+                        }, cb);
+                    });
+                }, function () {callback([dataset])});
+            });
         });
     },
 

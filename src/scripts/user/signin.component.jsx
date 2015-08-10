@@ -3,9 +3,8 @@
 import React        from 'react';
 import Actions      from './user.actions.js';
 import UserStore    from './user.store.js';
-import scitran      from '../utils/scitran';
 
-class Signin extends React.Component {
+export default class Signin extends React.Component {
 
 // life cycle events --------------------------------------------------
 
@@ -17,10 +16,6 @@ class Signin extends React.Component {
 					<i className="fa fa-google" />
 					<span> Google</span>
 				</button>
-				<div className="footer">
-					<button className="btn-admin" onClick={this._logToken} >Log Token</button>
-					<button className="btn-admin" onClick={this._testScitran}>Test Scitran</button>
-				</div>
 			</div>
     	);
 	}
@@ -30,17 +25,4 @@ class Signin extends React.Component {
 	_signIn () {
 		Actions.signIn();
 	}
-
-	_logToken () {
-		Actions.logToken();
-	}
-
-	_testScitran () {
-		scitran.verifyUser(function (err, res) {
-			console.log(res);
-		});
-	}
-
 }
-
-export default Signin;
