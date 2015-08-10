@@ -8,7 +8,8 @@ var Actions = Reflux.createActions([
 	'closeAlert',
 	'updateDirName',
 	'toggleNameInput',
-	'checkExists'
+	'checkExists',
+	'setInitialState'
 ]);
 
 export default Actions;

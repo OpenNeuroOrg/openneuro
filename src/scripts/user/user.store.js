@@ -5,6 +5,7 @@ import Actions from './user.actions.js';
 import config  from '../config';
 import router  from '../utils/router-container';
 import scitran from '../utils/scitran';
+import upload  from '../upload/upload.actions';
 
 let UserStore = Reflux.createStore({
 
@@ -119,15 +120,22 @@ let UserStore = Reflux.createStore({
 	 * Signs the user out by destroying the current
 	 * OAuth2 session.
 	 */
-	signOut: function () {
+	signOut: function (uploadStatus) {
 		let self = this;
-		hello('google').logout().then(function () {
-			self.setInitialState();
-			window.sessionStorage.scitranUser = null;
-			router.transitionTo('home');
-		}, function (e) {
-			// signout failure
-		});
+		let signout = true;
+		if (uploadStatus === 'uploading') {
+			signout = confirm("You are currently uploading files. Signing out of this site will cancel the upload process. Are you sure you want to sign out?");
+		}
+		if (signout) {
+			hello('google').logout().then(function () {
+				self.setInitialState();
+				upload.setInitialState();
+				window.sessionStorage.scitranUser = null;
+				router.transitionTo('signIn');
+			}, function (e) {
+				// signout failure
+			});
+		}
 	},
 
 	/**
