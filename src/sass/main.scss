@@ -1320,6 +1320,9 @@ to { -webkit-transform: rotate(360deg) }
 		.panel-group .panel+.panel{
 			margin: 0;
 		}
+		p.no-datasets{
+			padding:20px;
+		}
 		.panel{
 			border-radius: 0;
 			border: none;
