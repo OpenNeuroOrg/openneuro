@@ -3,6 +3,7 @@
 import Reflux   from 'reflux';
 import Actions  from './upload.actions.js';
 import scitran  from '../utils/scitran';
+import upload   from './upload';
 import files    from '../utils/files';
 import validate from 'bids-validator';
 import userStore from '../user/user.store';
@@ -46,7 +47,8 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			dirName: '',
 			changeName: false,
-			alert: false,
+			alert: null,
+			alertMessage: '',
 			uploadStatus: 'not-started',
 			progress: {total: 0, completed: 0, currentFiles: []},
 		};
@@ -140,7 +142,7 @@ let UploadStore = Reflux.createStore({
 
 		this.update({uploadStatus: 'uploading'});
 
-		scitran.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
+		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});
 			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
@@ -157,10 +159,18 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		this.setInitialState({alert: true});
+		this.setInitialState({alert: 'Success', alertMessage: 'Your Dataset has been added and saved to your Dashboard.'});
 		window.onbeforeunload = function() {};
 	},
 
+	/**
+	 * Upload Error
+	 *
+	 */
+	uploadError () {
+		this.setInitialState({alert: 'Error', alertMessage: 'There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site administrator.'});
+		window.onbeforeunload = function() {};
+	},
 
 	/**
 	 * Close Alert

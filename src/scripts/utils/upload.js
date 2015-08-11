@@ -1,8 +1,9 @@
-import request from './request';
-import superagent from 'superagent';
-import MD5     from './md5';
-import config    from '../config';
-import userStore from '../user/user.store.js';
+import request       from './request';
+import superagent    from 'superagent';
+import MD5           from './md5';
+import config        from '../config';
+import userStore     from '../user/user.store.js';
+import uploadActions from '../upload/upload.actions.js';
 
 let upload = {
 
@@ -49,11 +50,15 @@ let upload = {
             },
             body: req.file
         }, function (err, res) {
-        	req.progressEnd(res.req._data.name);
-        	self.activeRequests--;
-        	if (self.queue.length > 0 && self.maxRequests >= self.activeRequests) {
-        		self.start(self.queue[0]);
-        		self.queue.shift();
+        	if (err) {
+        		uploadActions.uploadError();
+        	} else {
+        		req.progressEnd(res.req._data.name);
+	        	self.activeRequests--;
+	        	if (self.queue.length > 0 && self.maxRequests >= self.activeRequests) {
+	        		self.start(self.queue[0]);
+	        		self.queue.shift();
+	        	}
         	}
         });
 	}

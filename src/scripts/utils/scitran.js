@@ -1,7 +1,5 @@
-import request   from './request';
-import uploads   from './upload';
-import async     from 'async';
-import config    from '../config';
+import request from './request';
+import async   from 'async';
 
 /**
  * Scitran
@@ -83,10 +81,9 @@ export default  {
      * generates a request to make a project in scitran.
      */
     createProject (groupName, projectName, callback) {
+        let self = this;
         let body = {name: projectName};
-        request.post('groups/' + groupName + '/projects', {body: body}, function (err, res) {
-            callback(err, res, projectName)
-        });
+        request.post('groups/' + groupName + '/projects', {body: body}, callback);
     },
 
     /**
@@ -94,6 +91,7 @@ export default  {
      *
      */
     createSubject (projectId, subjectName, callback) {
+        let self = this;
         let body = {label: subjectName, subject_code: 'subject'};
         request.post('projects/' + projectId + '/sessions', {body: body}, callback);
     },
@@ -103,6 +101,7 @@ export default  {
      *
      */
     createSession (projectId, subjectId, sessionName, callback) {
+        let self = this;
         let body = {label: sessionName, subject_code: subjectId};
         request.post('projects/' + projectId + '/sessions', {body: body}, callback);
     },
@@ -112,228 +111,37 @@ export default  {
      *
      */
     createModality (sessionId, modalityName, callback) {
+        let self = this;
         let body = {label: modalityName, datatype: 'modality'};
         request.post('sessions/' + sessionId + '/acquisitions', {body: body}, callback);
     },
 
-    /**
-     * Upload File
-     *
-     * Pushed upload details into an upload queue.
-     */
-    uploadFile (level, id, file, tag) {
-        let url = level + '/' + id + '/file/' + file.name;
-        uploads.add({url: url, file: file, tag: tag, progressStart: this.progressStart, progressEnd: this.progressEnd});
-    },
-
-    currentFiles: [],
-
-    /**
-     * Upload
-     *
-     * Takes an entire bids file tree and and file count
-     * and recurses through and uploads all the files.
-     * Additionally takes a progress callback that gets
-     * updated at the start and end of every file or
-     * folder upload request.
-     */
-    upload (userId, fileTree, count, progress) {
-        let self = this;
-        self.completed = 0;
-        self.count = count;
-        self.progressStart = function (filename) {
-            self.currentFiles.push(filename);
-            progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
-        }
-        self.progressEnd = function (filename) {
-            let index = self.currentFiles.indexOf(filename);
-            self.currentFiles.splice(index, 1);
-            self.completed++;
-            progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
-        }
-        
-        let existingProjectId = null;
-        this.getProjects(function (projects) {
-            for (let project of projects) {
-                if (project.name === fileTree[0].name && project.group === userId) {
-                    existingProjectId = project._id;
-                    break;
-                }
-            }
-
-            if (existingProjectId) {
-                self.getBIDSDataset(existingProjectId, function (oldDataset) {
-                    let newDataset = fileTree[0];
-                    let oldDataset = oldDataset[0];
-                    self.progressEnd();
-                    self.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
-                });
-            } else {
-                self.createProject(userId, fileTree[0].name, function (err, res) {
-                    let projectId = res.body._id;
-                    self.progressEnd();
-                    self.uploadSubjects(fileTree[0].children, projectId);
-                });
-            }
-
-        });
-    },
-
-    uploadSubjects (subjects, projectId) {
-        let self = this;
-        for (let subject of subjects) {
-            if (subject.children && subject.children.length > 0) {
-                self.progressStart(subject.name);
-                self.createSubject(projectId, subject.name, function (err, res, name) {
-                    self.progressEnd(res.req._data.name);
-                    let subjectId = res.body._id;
-                    self.uploadSessions(subject.children, projectId, subjectId);
-                });
-            } else {
-                self.uploadFile('projects', projectId, subject, 'project');
-            }
-        }
-    },
-
-    resumeSubjects (newSubjects, oldSubjects, projectId) {
-        let subjectUploads = [];
-        for (let i = 0; i < newSubjects.length; i++) {
-            let newSubject = newSubjects[i];
-            let oldSubject = this.contains(oldSubjects, newSubject);
-            if (oldSubject) {
-                this.progressStart(newSubject.name);
-                this.progressEnd(newSubject.name);
-                if (newSubject.type === 'folder') {
-                    this.resumeSessions(newSubject.children, oldSubject.children, projectId, oldSubject._id);
-                }
-            } else {
-                subjectUploads.push(newSubject);
-            }
-        }
-        if (subjectUploads.length > 0) {
-            this.uploadSubjects(subjectUploads, projectId);
-        }
-    },
-
-    uploadSessions (sessions, projectId, subjectId) {
-        let self = this;
-        for (let session of sessions) {
-            if (session.children && session.children.length > 0) {
-                self.progressStart(session.name);
-                self.createSession(projectId, subjectId, session.name, function (err, res, name) {
-                    self.progressEnd(res.req._data.name);
-                    self.uploadModalities(session.children, res.body._id);
-                }); 
-            } else {
-                self.uploadFile('sessions', subjectId, session, 'subject');
-            }
-        }
-    },
-
-    resumeSessions (newSessions, oldSessions, projectId, subjectId) {
-        let sessionUploads = [];
-        for (let i = 0; i < newSessions.length; i++) {
-            let newSession = newSessions[i];
-            let oldSession = this.contains(oldSessions, newSession);
-            if (oldSession) {
-                this.progressStart(newSession.name);
-                this.progressEnd(newSession.name);
-                if (newSession.type === 'folder') {
-                    this.resumeModalities(newSession.children, oldSession.children, oldSession._id);
-                }
-            } else {
-                sessionUploads.push(newSession);
-            }
-        }
-        if (sessionUploads.length > 0) {
-            this.uploadSessions(sessionUploads, projectId, subjectId);
-        }
-    },
-
-    uploadModalities (modalities, subjectId) {
-        let self = this;
-        for (let modality of modalities) {
-            if (modality.children && modality.children.length > 0) {
-                self.progressStart(modality.name);
-                self.createModality(subjectId, modality.name, function (err, res, name) {
-                    self.progressEnd(res.req._data.name);
-                    let modalityId = res.body._id;
-                    self.uploadAcquisitions(modality.children, modalityId);
-                });
-            } else {
-                self.uploadFile('sessions', subjectId, modality, 'session');
-            }
-        }
-    },
-
-    resumeModalities (newModalities, oldModalities, subjectId) {
-        let modalityUploads = [];
-        for (let i = 0; i < newModalities.length; i++) {
-            let newModality = newModalities[i];
-            let oldModality = this.contains(oldModalities, newModality);
-            if (oldModality) {
-                this.progressStart(newModality.name);
-                this.progressEnd(newModality.name);
-                if (newModality.type === 'folder') {
-                    this.resumeAcquisitions(newModality.children, oldModality.children, oldModality._id);
-                }
-            } else {
-                modalityUploads.push(newModality);
-            }
-        }
-        if (modalityUploads.length > 0) {
-            this.uploadModalities(modalityUploads, subjectId);
-        }
-    },
-
-    uploadAcquisitions (acquisitions, modalityId) {
-        for (let acquisition of acquisitions) {
-            this.uploadFile('acquisitions', modalityId, acquisition, 'modality');
-        }
-    },
-
-    resumeAcquisitions (newAcquisitions, oldAcquisitions, modalityId) {
-        let acquisitionUploads = [];
-        for (let i = 0; i < newAcquisitions.length; i++) {
-            let newAcquisition = newAcquisitions[i];
-            let oldAcquisition = this.contains(oldAcquisitions, newAcquisition);
-            if (oldAcquisition) {
-                this.progressStart(newAcquisition.name);
-                this.progressEnd(newAcquisition.name);
-            } else {
-                acquisitionUploads.push(newAcquisition);
-            }
-        }
-        if (acquisitionUploads.length > 0) {
-            this.uploadAcquisitions(acquisitionUploads, modalityId);
-        }
-    },
-
-    contains (arr, elem) {
-        let match = null;
-        for (let i = 0; i < arr.length; i++) {
-            let arrayElem = arr[i];
-            if (arrayElem.name === elem.name) {
-                match = arrayElem;
-            }
-        }
-        return match;
-    },
-
 // Read -----------------------------------------------------------------------------------
 
+    /**
+     * Get Projects
+     *
+     */
     getProjects (callback) {
         request.get('projects', function (err, res) {
             callback(res.body);
         });
     },
 
+    /**
+     * Get Sessions
+     *
+     */
     getSessions (projectId, callback) {
         request.get('projects/' + projectId + '/sessions', function (err, res) {
             callback(res.body);
         });
     },
 
+    /**
+     * Get Acquisitions
+     *
+     */
     getAcquisitions (sessionId, callback) {
         request.get('sessions/' + sessionId + '/acquisitions', function (err, res) {
             callback(res.body);
@@ -420,6 +228,10 @@ export default  {
 
 // Delete ---------------------------------------------------------------------------------
 
+    /**
+     * Delete Container
+     *
+     */
     deleteContainer (type, id, callback) {
         request.del(type + '/' + id, function (err, res) {
             callback();

@@ -99,7 +99,7 @@ let Upload = React.createClass({
 				<div className="upload-nav">
 					<h2>My Tasks</h2>
 				</div>
-				{this.state.alert     ? <Alert onClose={this._closeAlert} /> : null}
+				{this.state.alert     ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
 				{uploadStatus === 'uploading' ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
 			</div>
     	);
