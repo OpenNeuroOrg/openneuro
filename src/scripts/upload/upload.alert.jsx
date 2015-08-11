@@ -11,9 +11,20 @@ export default class UploadAlert extends React.Component {
 // life cycle methods ------------------------------------------------------------
 
 	render() {
+		let type = this.props.type;
+		let bsStyle;
+		if (type === 'Error') {bsStyle = 'danger';}
+		if (type === 'Success') {bsStyle = 'success';}
+
 		return (
-			<Alert className="fadeInDown clearfix" bsStyle='success'>
-				<div className="alert-left"><strong>Success!</strong> Your Dataset has been added and saved to your Dashboard. </div> <button className="alert-right dismiss-button-x" onClick={this.props.onClose}> <i className="fa fa-times"></i> </button>
+			<Alert className="fadeInDown clearfix" bsStyle={bsStyle}>
+				<div className="alert-left">
+					<strong>{type}! </strong>
+					{this.props.message}
+				</div>
+				<button className="alert-right dismiss-button-x" onClick={this.props.onClose}>
+					<i className="fa fa-times"></i>
+				</button>
 			</Alert>
 	    );
 	}

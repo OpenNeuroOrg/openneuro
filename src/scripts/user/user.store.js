@@ -19,7 +19,6 @@ let UserStore = Reflux.createStore({
 
 	getInitialState: function () {
 		return this.data;
-		// return {token: this._token, user: this._user};
 	},
 
 // data ------------------------------------------------------------------------------
@@ -136,15 +135,6 @@ let UserStore = Reflux.createStore({
 				// signout failure
 			});
 		}
-	},
-
-	/**
-	 * Log Token
-	 *
-	 * Logs the current google access token stored in local storage.
-	 */
-	logToken: function () {
-		console.log(this._token);
 	},
 
 });
