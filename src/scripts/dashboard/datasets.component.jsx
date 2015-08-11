@@ -77,12 +77,14 @@ export default class Datasets extends React.Component {
             });
         }
 
+        let noDatasets = "You don't have any datsets.";
         return (
         	<div className="fadeIn">
             	<div className="dash-tab-content datasets ">
                     <h2>My Datasets</h2>
                     <PanelGroup accordion> 
-                        {this.state.loading ? <Spinner active={true} /> : Results} 
+                        {this.state.loading ? <Spinner active={true} /> : Results}
+                        {datasets.length === 0 ? <p>{noDatasets}</p> : null}
                     </ PanelGroup>
                 </div>
                 <div className="pager-wrapper">
