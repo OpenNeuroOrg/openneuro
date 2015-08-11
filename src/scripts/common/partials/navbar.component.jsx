@@ -16,7 +16,6 @@ let BSNavbar = React.createClass({
 
 // life cycle methods ------------------------------------------------------------
 
-
 	render: function () {
 		let self = this;
 		let isLoggedIn = !!this.state.token;
@@ -35,27 +34,29 @@ let BSNavbar = React.createClass({
 
 			let gear = (<i className="fa fa-gear" />);
 			usermenu = (
-				<span>
-					<span className="username">
-						<span className="greeting">Hello</span> 
-						<br/>
-						{username}
-					</span>
-					<img src={thumbnail} alt={username} className="userImgThumb" /> 
-					<DropdownButton className="user-menu btn-null" eventKey={1} title={gear}>
-						<img src={thumbnail} alt={username} className="userMenuThumb" /> 
-						<li role="presentation" className="dropdown-header">{username}</li>
-						<li><a onClick={this._signOut} className="um-sign-out">Sign Out</a></li>
-						<li role="separator" className="divider"></li>
-						<li className="um-icon"><Link to="dashboard"><i className="fa fa-dashboard" /></Link></li>
-			        </DropdownButton>
-		        </span>
+				<Nav navbar right className="useradmin-nav">
+					<span>
+						<span className="username">
+							<span className="greeting">Hello</span> 
+							<br/>
+							{username}
+						</span>
+						<img src={thumbnail} alt={username} className="userImgThumb" /> 
+						<DropdownButton className="user-menu btn-null" eventKey={1} title={gear}>
+							<img src={thumbnail} alt={username} className="userMenuThumb" /> 
+							<li role="presentation" className="dropdown-header">{username}</li>
+							<li><a onClick={this._signOut} className="um-sign-out">Sign Out</a></li>
+							<li role="separator" className="divider"></li>
+							{/* styled dropdown icons ==== <li className="um-icon"><Link to="dashboard"><i className="fa fa-search" /></Link></li>*/}
+				        </DropdownButton>
+			        </span>
+		        </Nav>
 			);
 		}
 
 		// generate brand
 		let brand = (
-			<Link to="home" className="navbar-brand">
+			<Link to="dashboard" className="navbar-brand">
 				<img src="./assets/CRN-Logo-Placeholder.png"
 					 alt="Center for Reproducible Neuroscience Logo"
 					 title="Center for Reproducible Neuroscience Link To Home Page"/>
@@ -70,12 +71,8 @@ let BSNavbar = React.createClass({
 				    </div>
 				    <CollapsibleNav eventKey={0}>
 							<Nav navbar className="useradmin-nav">
-								<li><Link className="home link" to="home">Home</Link></li>
-								{isLoggedIn ? <li><Link className="dashboard link" to="dashboard">Dashboard</Link></li> : null}
 						    </Nav>
-						    <Nav navbar right className="useradmin-nav">
-								{isLoggedIn ? usermenu : <li><Link className="sign-in link" to="signIn">Sign In</Link></li>}
-						    </Nav>
+						    {isLoggedIn ? usermenu : null}
 					</CollapsibleNav>
 				</div>
 		    </nav>

@@ -439,7 +439,7 @@ h1,h2,h3,h4,h5,h6{
 
 .form-group {
 	position: relative;
-	width: 300px;
+	//width: 300px;
 	margin: 20px auto;
 }
 
@@ -699,6 +699,35 @@ body,
 				i{
 					margin-right: 10px;
 				}
+			&.has-input{
+				width: 330px;
+				margin: 10px auto;
+				max-width: 100%;
+				label.add-name{
+					float: left;
+					width: 10%;
+					text-align: right;
+					padding: 11px 0;
+					i{}
+				}
+				.form-group{
+					float: left;
+					width: 90%;
+					margin: 0;
+				}
+				button{
+					font-size: 12px;
+					background-color: rgba(0, 0, 0, 0);
+					border: none;
+					color: $primary;
+					margin: 0 0 0 20px;
+					vertical-align: middle;
+					height: 30px;
+					&:hover{
+						color: $primaryHover;
+					}
+				}
+			}
 		}
 		.uploadbar{
 			margin-top: 75px;
@@ -713,6 +742,7 @@ body,
 					color: $rock;
 					margin: 0;
 					padding: 4px;
+					font-size:12px;
 					.one,
 					.two, 
 					.three {
@@ -1290,6 +1320,9 @@ to { -webkit-transform: rotate(360deg) }
 		.panel-group .panel+.panel{
 			margin: 0;
 		}
+		p.no-datasets{
+			padding:20px;
+		}
 		.panel{
 			border-radius: 0;
 			border: none;
@@ -1447,6 +1480,102 @@ to { -webkit-transform: rotate(360deg) }
 	max-width: 100%;
 	background:$turquoise;
 }
+
+
+
+
+// userCard admin
+.admin{	
+	.add-user{
+		padding-left:0;
+	}
+	.users-card{
+		box-shadow: 1px 0 3px 0 rgba(0,0,0,.3);
+	    margin: 20px 0;
+	}
+	.users-card{
+		h2{
+		    margin: 0 -15px;
+		    padding: 20px;
+		    font-size: 30px;
+		    text-transform: uppercase;
+		    font-weight: 100;
+		    border-bottom: 1px solid #E1E1E1;
+		}
+		.user-panel{
+			margin: 0 -15px;
+			border-radius: 0;
+			border: none;
+			border-bottom: 1px solid #E1E1E1;
+			box-shadow: none;
+			padding: 0;
+		}
+		.user-col{
+			padding:0;
+			h3{
+				margin: 0;
+				padding: 10px 15px;
+				font-size: 15px;
+				.badge{
+					font-weight: 100;
+					text-align: right;
+					color: #909090;
+					font-size: 10px;
+					background-color: rgba(0, 0, 0, 0);
+				}
+				button.btn{
+					padding:0;
+				}
+			}
+			&.middle{
+				text-align: center;
+			}
+			&.last{
+				overflow:hidden;
+				h3{
+					text-align: right;
+					padding:0;
+				}
+				
+				
+				&.delete-data{
+					vertical-align: middle;
+					display: block;
+					text-align: right;
+					font-size: 13px;
+					text-transform: uppercase;
+					margin-top: 5px;
+					overflow:hidden;
+				}
+				.btn-admin.warning{
+					padding: 10px 15px;
+				}
+				.btn-admin.delete{
+					border: none;
+				    color: $white;
+				    background-color: $brand-danger;
+				   	padding: 10px 15px;
+				    &:hover{
+				    	background:darken($brand-danger, 10%)
+				    }
+				}
+				.btn-admin.cancel{
+					padding: 10px 15px;
+				}
+			}	
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
 
 
 

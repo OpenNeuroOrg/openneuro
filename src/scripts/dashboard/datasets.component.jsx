@@ -84,7 +84,7 @@ export default class Datasets extends React.Component {
                     <h2>My Datasets</h2>
                     <PanelGroup accordion> 
                         {this.state.loading ? <Spinner active={true} /> : Results}
-                        {datasets.length === 0 ? <p>{noDatasets}</p> : null}
+                        {datasets.length === 0 ? <p className="no-datasets">{noDatasets}</p> : null}
                     </ PanelGroup>
                 </div>
                 <div className="pager-wrapper">

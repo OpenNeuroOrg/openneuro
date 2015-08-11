@@ -13,13 +13,12 @@ import Dashboard     from './dashboard/dashboard.component.jsx';
 import Notifications from './dashboard/notifications.component.jsx';
 import Datasets      from './dashboard/datasets.component.jsx';
 import Jobs          from './dashboard/jobs.component.jsx';
-import Home          from './common/views/home.component.jsx';
 
 // redirects -------------------------------------------------------------
 
-class RedirectHome extends React.Component {
+class RedirectDashboard extends React.Component {
 	static willTransitionTo(transition) {
-		transition.redirect('home');
+		transition.redirect('dashboard');
 	}
 }
 
@@ -47,9 +46,8 @@ let routes = (
 			<Route name="jobs" path="jobs" handler={Jobs}/>
 			<NotFoundRoute handler={RedirectNotifications}/>	
 		</Route>
-		<Route name="home"   path="/"    handler={Home}/>
-		<DefaultRoute handler={RedirectHome}/>
-		<NotFoundRoute handler={RedirectHome}/>	
+		<DefaultRoute handler={RedirectDashboard}/>
+		<NotFoundRoute handler={RedirectDashboard}/>	
 
 	</Route>
 );

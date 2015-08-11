@@ -68,12 +68,31 @@ let Upload = React.createClass({
 		}
 
 		let dirHeader;
-		let dirInput = this.state.changeName ? <Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} /> : <span>{dirName}<button onClick={this._toggleNameInput}>click to change name</button></span>;
+		let nameandlabel =(
+			<span>
+				<label><i className="folderIcon fa fa-folder-open" /></label>
+				{dirName}
+			</span>
+		);
+		let inputandlabel =(
+			<span>
+				<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
+				<Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
+			</span>
+		);
+		let dirInput = (
+			<span>
+				
+				{this.state.changeName ? inputandlabel : <span>{nameandlabel}<button onClick={this._toggleNameInput}>click to change name</button></span>}
+			</span>
+		);
+
+
 		if (tree.length > 0) {
 			dirHeader = (
-				<h3 className="dir-name">
-					<i className="folderIcon fa fa-folder-open" />
-					{uploadStatus === 'uploading' || uploadStatus === 'validating' || uploadStatus === 'dataset-exists' || errors.length > 0 ? dirName : dirInput}
+				<h3 className={uploadStatus === 'files-selected' && errors.length === 0 ? "dir-name has-input clearfix" : "dir-name"}>
+					
+					{uploadStatus === 'uploading' || uploadStatus === 'validating' || uploadStatus === 'dataset-exists' || errors.length > 0 ? nameandlabel : dirInput}
 				</h3>
 			);
 		}
