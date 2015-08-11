@@ -30,7 +30,7 @@ class LeftNavbar extends React.Component {
 					<ul>
 						<li className="left-nav-dashboard">
 							<Link to="dashboard"><i className="fa fa-dashboard" /><span className="link-name">dashboard</span></Link>
-							{ userStore.data.scitran.wheel ? adminLink : null }
+							{userStore.data.scitran && userStore.data.scitran.wheel ? adminLink : null }
 						</li>
 					</ul>
 					<span className="show-nav-btn" onClick={this._toggleNav.bind(this)}>

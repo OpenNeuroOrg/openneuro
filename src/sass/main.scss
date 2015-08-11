@@ -699,6 +699,35 @@ body,
 				i{
 					margin-right: 10px;
 				}
+			&.has-input{
+				width: 330px;
+				margin: 10px auto;
+				max-width: 100%;
+				label.add-name{
+					float: left;
+					width: 10%;
+					text-align: right;
+					padding: 11px 0;
+					i{}
+				}
+				.form-group{
+					float: left;
+					width: 90%;
+					margin: 0;
+				}
+				button{
+					font-size: 12px;
+					background-color: rgba(0, 0, 0, 0);
+					border: none;
+					color: $primary;
+					margin: 0 0 0 20px;
+					vertical-align: middle;
+					height: 30px;
+					&:hover{
+						color: $primaryHover;
+					}
+				}
+			}
 		}
 		.uploadbar{
 			margin-top: 75px;

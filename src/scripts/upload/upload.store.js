@@ -159,7 +159,7 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		this.setInitialState({alert: 'Success', alertMessage: 'Your Dataset has been added and saved to your Dashboard.'});
+		this.setInitialState({alert: 'Success', alertMessage: 'Your dataset has been added and saved to your dashboard.'});
 		window.onbeforeunload = function() {};
 	},
 

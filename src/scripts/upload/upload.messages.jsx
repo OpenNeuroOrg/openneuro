@@ -28,8 +28,8 @@ export default class Messages extends React.Component {
 			errorCount   = totalErrors   + ' ' + pluralize('Error', totalErrors);
 		}
 		// messages
-		let specLink        = <small><a href="http://bids.neuroimaging.io" target="_blank">Click to view details on BIDS specification</a></small>;
-		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset. {specLink}</span>;
+		let specLink        = <span>Click to view details on <a href="http://bids.neuroimaging.io" target="_blank">BIDS specification</a>.</span>;
+		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset.<br/> {specLink}</span>;
 		let initialMessage  = <span className="message fadeIn">Upload a BIDS dataset.<br/> {specLink}</span>;
 		let warningsMessage = <span className="message error fadeIn">We found {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
 		let errorMessage    = <span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and upload your dataset again.<br/> {specLink}</span>;
