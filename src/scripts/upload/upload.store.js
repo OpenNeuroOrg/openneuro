@@ -147,7 +147,7 @@ let UploadStore = Reflux.createStore({
 	 * finishes.
 	 */
 	upload (fileTree) {
-		console.log(fileTree);
+		fileTree[0].name = this.data.dirName;
 		
 		let self = this;
 		let count = files.countTree(fileTree);
