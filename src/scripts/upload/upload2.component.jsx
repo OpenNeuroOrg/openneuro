@@ -21,19 +21,57 @@ let Upload = React.createClass({
 
 	render () {
 
-		let activeKey = this.state.activeKey;
+	// short references ----------------------------
 
-		let trace = {
-		};
+		let activeKey    = this.state.activeKey;
+		let uploadStatus = this.state.uploadStatus;
+		let dirName      = this.state.dirName;
 
-		let dirHeader = (
-			<span>
-				<label><i className="folderIcon fa fa-folder-open" /></label>
-				{this.state.dirName}
-			</span>
+	// panels --------------------------------------
+
+		let select = (
+			<Panel header="Select" eventKey="1">
+				<div className="upload-wrap">
+					<Select />
+				</div>
+			</Panel>
 		);
 
-		let uploadStatus = this.state.uploadStatus;
+		let rename;
+		if (this.state.showRename) {
+			rename = (
+				<Panel header="Name" eventKey="2">
+					<div className="upload-wrap">
+						<Rename />
+					</div>
+				</Panel>
+			);
+		}
+
+		let issues;
+		if (this.state.showIssues) {
+			issues = (
+				<Panel header="Issues" eventKey="3">
+					<div className="upload-wrap">
+						<Issues />
+					</div>
+				</Panel>
+			);
+		}
+
+		let progress;
+		if (this.state.showProgress) {
+			progress = (
+				<Panel header="Upload" eventKey="4">
+					<div className="upload-wrap">
+						<Progress progress={this.state.progress} name={dirName} /> 
+					</div>
+				</Panel>
+			);
+		}
+
+	// main template -------------------------------
+
 		return (
 			<div className='right-sidebar'>
 				<div className="upload-nav">
@@ -42,22 +80,14 @@ let Upload = React.createClass({
 				<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
 						<PanelGroup activeKey={activeKey}  onSelect={this.handleSelect} accordion >
-							<Panel header="Select" eventKey="1"><div className="upload-wrap">
-								<Select />
-							</div></Panel>
-							{this.state.showRename ? <Panel header="Name" eventKey="2"><div className="upload-wrap">
-															<Rename />
-														</div></Panel> : null}
-							{this.state.showIssues ? <Panel header="Issues" eventKey="3"><div className="upload-wrap">
-															<Issues />
-														</div></Panel> : null}
-							{this.state.showProgress ? <Panel header="Upload" eventKey="4"><div className="upload-wrap">
-															<Progress progress={this.state.progress} header={dirHeader} /> 
-														</div></Panel> : null}
+							{select}
+							{rename}
+							{issues}
+							{progress}
 						</PanelGroup>
 					</Panel>
 				</PanelGroup>
-				{this.state.alert     ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
+				{this.state.alert ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
 			</div>
     	);
 	},
@@ -66,9 +96,7 @@ let Upload = React.createClass({
 
 	_closeAlert: Actions.closeAlert,
 
-	  handleSelect(activeKey) {
-    this.setState({ activeKey });
-  },
+	handleSelect: Actions.selectPanel,
 
 });
 

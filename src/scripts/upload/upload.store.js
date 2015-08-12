@@ -147,6 +147,7 @@ let UploadStore = Reflux.createStore({
 	 * finishes.
 	 */
 	upload (fileTree) {
+		console.log(fileTree);
 		
 		let self = this;
 		let count = files.countTree(fileTree);
@@ -209,6 +210,16 @@ let UploadStore = Reflux.createStore({
 	updateDirName(value) {
 		this.update({dirName: value});
 	},
+
+	/**
+	 * Select Panel
+	 *
+	 * Sets the state to open the selected panel
+	 * in the upload accordion.
+	 */
+	 selectPanel(activeKey) {
+	 	this.update({activeKey});
+	 }
 
 });
 
