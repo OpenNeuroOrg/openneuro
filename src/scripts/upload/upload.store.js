@@ -69,9 +69,10 @@ let UploadStore = Reflux.createStore({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
 			dirName: selectedFiles.tree[0].name,
-			uploadStatus: 'validating'
+			uploadStatus: 'files-selected',
+			showRename: true
 		});
-		this.validate(selectedFiles);
+		// this.validate(selectedFiles);
 	},
 
 	/**
@@ -82,8 +83,8 @@ let UploadStore = Reflux.createStore({
 	 */
 	validate (selectedFiles) {
 		let self = this;
-
-        validate.BIDS(selectedFiles.list, function (errors, warnings) {
+		self.update({uploadStatus: 'validating', showIssues: true});
+        validate.BIDS(selectedFiles, function (errors, warnings) {
         	
         	if (errors === 'Invalid') {
         		self.update({errors: 'Invalid'});
@@ -95,7 +96,7 @@ let UploadStore = Reflux.createStore({
 			self.update({
 				errors: errors,
 				warnings: warnings,
-				uploadStatus: 'files-selected'
+				uploadStatus: 'validated'
 			});
         });
 	},
@@ -140,7 +141,7 @@ let UploadStore = Reflux.createStore({
 		let self = this;
 		let count = files.countTree(fileTree);
 
-		this.update({uploadStatus: 'uploading'});
+		this.update({uploadStatus: 'uploading', showProgress: true});
 
 		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});
@@ -159,7 +160,8 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		this.setInitialState({alert: 'Success', alertMessage: 'Your dataset has been added and saved to your dashboard.'});
+		this.update({showSuccess: true});
+		// this.setInitialState({alert: 'Success', alertMessage: 'Your dataset has been added and saved to your dashboard.'});
 		window.onbeforeunload = function() {};
 	},
 
