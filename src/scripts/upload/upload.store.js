@@ -104,6 +104,10 @@ let UploadStore = Reflux.createStore({
 				warnings: warnings,
 				uploadStatus: 'validated'
 			});
+
+			if (errors.length === 0 && warnings.length === 0) {
+	        	self.upload(self.data.tree);
+	        }
         });
 	},
 
@@ -166,8 +170,7 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		this.update({showSuccess: true});
-		// this.setInitialState({alert: 'Success', alertMessage: 'Your dataset has been added and saved to your dashboard.'});
+		this.setInitialState({alert: 'Success', alertMessage: 'Your dataset has been added and saved to your dashboard.'});
 		window.onbeforeunload = function() {};
 	},
 

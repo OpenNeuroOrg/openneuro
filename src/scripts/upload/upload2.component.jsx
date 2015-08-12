@@ -20,11 +20,10 @@ let Upload = React.createClass({
 // life cycle events --------------------------------------------------
 
 	render () {
-		
+
 		let activeKey = this.state.activeKey;
 
 		let trace = {
-			border: '1px solid #CCC'
 		};
 
 		let dirHeader = (
@@ -43,24 +42,22 @@ let Upload = React.createClass({
 				<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
 						<PanelGroup activeKey={activeKey}  onSelect={this.handleSelect} accordion >
-							{true ? <Panel header="Select" eventKey="1"><div className="upload-wrap" style={trace}>
-															<Select />
-														</div></Panel> : null}
-							{this.state.showRename ? <Panel header="Name" eventKey="2"><div className="upload-wrap" style={trace}>
+							<Panel header="Select" eventKey="1"><div className="upload-wrap">
+								<Select />
+							</div></Panel>
+							{this.state.showRename ? <Panel header="Name" eventKey="2"><div className="upload-wrap">
 															<Rename />
 														</div></Panel> : null}
-							{this.state.showIssues ? <Panel header="Issues" eventKey="3"><div className="upload-wrap" style={trace}>
+							{this.state.showIssues ? <Panel header="Issues" eventKey="3"><div className="upload-wrap">
 															<Issues />
 														</div></Panel> : null}
-							{this.state.showProgress ? <Panel header="Upload" eventKey="4"><div className="upload-wrap" style={trace}>
+							{this.state.showProgress ? <Panel header="Upload" eventKey="4"><div className="upload-wrap">
 															<Progress progress={this.state.progress} header={dirHeader} /> 
 														</div></Panel> : null}
-							{this.state.showSuccess ? <div className="upload-wrap" style={trace}>
-															{this.state.alert     ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
-														</div> : null}
 						</PanelGroup>
 					</Panel>
 				</PanelGroup>
+				{this.state.alert     ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
 			</div>
     	);
 	},
