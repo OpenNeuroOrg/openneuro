@@ -11,7 +11,10 @@ let Select = React.createClass({
 	render () {
 
 		return (
-			<FileSelect onChange={this._onChange}/>
+			<div>
+				<span className="message fadeIn">Select a BIDS dataset to upload.</span>
+				<FileSelect onChange={this._onChange}/>
+			</div>
     	);
 	},
 

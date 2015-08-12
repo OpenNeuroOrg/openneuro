@@ -47,6 +47,11 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			dirName: '',
 			changeName: false,
+			showRename: false,
+			showIssues: false,
+			showProgress: false,
+			showSuccess: false,
+			activeKey: '1',
 			alert: null,
 			alertMessage: '',
 			uploadStatus: 'not-started',
@@ -70,7 +75,8 @@ let UploadStore = Reflux.createStore({
 			list: selectedFiles.list,
 			dirName: selectedFiles.tree[0].name,
 			uploadStatus: 'files-selected',
-			showRename: true
+			showRename: true,
+			activeKey: '2'
 		});
 		// this.validate(selectedFiles);
 	},
@@ -83,7 +89,7 @@ let UploadStore = Reflux.createStore({
 	 */
 	validate (selectedFiles) {
 		let self = this;
-		self.update({uploadStatus: 'validating', showIssues: true});
+		self.update({uploadStatus: 'validating', showIssues: true, activeKey: '3'});
         validate.BIDS(selectedFiles, function (errors, warnings) {
         	
         	if (errors === 'Invalid') {
@@ -141,7 +147,7 @@ let UploadStore = Reflux.createStore({
 		let self = this;
 		let count = files.countTree(fileTree);
 
-		this.update({uploadStatus: 'uploading', showProgress: true});
+		this.update({uploadStatus: 'uploading', showProgress: true, activeKey: '4'});
 
 		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});

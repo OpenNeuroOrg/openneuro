@@ -13,13 +13,16 @@ let Rename = React.createClass({
 // life cycle events --------------------------------------------------
 
 	render () {
-		let dirName      = this.state.dirName;
+		let dirName = this.state.dirName;
 
 		return (
 			<div>
-				<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
-				<Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
-				<button onClick={this._validate.bind(null, this.state.list)}>Continue</button>
+				<span className="message fadeIn">Rename you dataset if you would like to.</span>
+				<div className="dir-name has-input clearfix">
+					<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
+					<Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
+				</div>
+				<button className="btn-blue" onClick={this._validate.bind(null, this.state.list)}>Continue</button>
 			</div>
     	);
 	},

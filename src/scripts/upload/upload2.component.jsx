@@ -20,6 +20,8 @@ let Upload = React.createClass({
 // life cycle events --------------------------------------------------
 
 	render () {
+		
+		let activeKey = this.state.activeKey;
 
 		let trace = {
 			border: '1px solid #CCC'
@@ -40,23 +42,23 @@ let Upload = React.createClass({
 				</div>
 				<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
-						<div>
-							{true ? <div className="upload-wrap" style={trace}>
+						<PanelGroup activeKey={activeKey}  onSelect={this.handleSelect} accordion >
+							{true ? <Panel header="Select" eventKey="1"><div className="upload-wrap" style={trace}>
 															<Select />
-														</div> : null}
-							{this.state.showRename ? <div className="upload-wrap" style={trace}>
+														</div></Panel> : null}
+							{this.state.showRename ? <Panel header="Name" eventKey="2"><div className="upload-wrap" style={trace}>
 															<Rename />
-														</div> : null}
-							{this.state.showIssues ? <div className="upload-wrap" style={trace}>
+														</div></Panel> : null}
+							{this.state.showIssues ? <Panel header="Issues" eventKey="3"><div className="upload-wrap" style={trace}>
 															<Issues />
-														</div> : null}
-							{this.state.showProgress ? <div className="upload-wrap" style={trace}>
+														</div></Panel> : null}
+							{this.state.showProgress ? <Panel header="Upload" eventKey="4"><div className="upload-wrap" style={trace}>
 															<Progress progress={this.state.progress} header={dirHeader} /> 
-														</div> : null}
+														</div></Panel> : null}
 							{this.state.showSuccess ? <div className="upload-wrap" style={trace}>
 															{this.state.alert     ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
 														</div> : null}
-						</div>
+						</PanelGroup>
 					</Panel>
 				</PanelGroup>
 			</div>
@@ -65,7 +67,11 @@ let Upload = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_closeAlert: Actions.closeAlert
+	_closeAlert: Actions.closeAlert,
+
+	  handleSelect(activeKey) {
+    this.setState({ activeKey });
+  },
 
 });
 
