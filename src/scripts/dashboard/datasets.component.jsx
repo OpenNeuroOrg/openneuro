@@ -77,7 +77,7 @@ export default class Datasets extends React.Component {
             });
         }
 
-        let noDatasets = "You don't have any datsets.";
+        let noDatasets = "You don't have any datasets.";
         return (
         	<div className="fadeIn">
             	<div className="dash-tab-content datasets ">
