@@ -37,9 +37,9 @@ let Issues = React.createClass({
 
 		// messages
 		let specLink        = <span>Click to view details on <a href="http://bids.neuroimaging.io" target="_blank">BIDS specification</a>.</span>;
-		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset.<br/> {specLink}</span>;
+		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset.</span>;
 		let warningsMessage = <span className="message error fadeIn">We found {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
-		let errorMessage    = <span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and upload your dataset again.<br/> {specLink}</span>;
+		let errorMessage    = <span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and select your folder again.</span>;
 		let noErrorMessage  = <span className="message fadeIn">Proceed with this dataset by clicking continue or select a different folder.</span>;
 		let resumeMessage   = <span className="message fadeIn">You have already uploaded a dataset with this name. Click continue if you are trying to resume an unfinished upload.</span>;
 
@@ -65,6 +65,7 @@ let Issues = React.createClass({
 				<Results errors={errors} warnings={warnings} />
 				{errors.length > 0 && errors !== 'Invalid' || warnings.length > 0 ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 				{errors.length === 0 ? <button className="btn-blue" onClick={this._upload.bind(null, tree)}>Continue</button> : null}
+				{specLink}
 			</div>
 		);
 

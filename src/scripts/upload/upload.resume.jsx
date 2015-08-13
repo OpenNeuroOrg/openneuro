@@ -14,8 +14,8 @@ let Resume = React.createClass({
 	render () {
 		return (
 			<div>
-				<span className="message fadeIn">You have already uploaded a dataset with this name. Click "resume" if you are trying to resume an unfinished upload.</span>
-				<button className="btn-blue" onClick={this._upload.bind(null, this.state.tree)}>Resume</button>
+				<span className="message fadeIn">You have already uploaded a dataset with this name. Click "continue" if you are trying to resume an unfinished upload or choose another name.</span>
+				<button className="btn-blue" onClick={this._upload.bind(null, this.state.tree)}>Continue</button>
 			</div>
     	);
 	},

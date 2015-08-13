@@ -20,7 +20,7 @@ let Rename = React.createClass({
 
 		return (
 			<div>
-				<span className="message fadeIn">Rename you dataset if you would like to.</span>
+				<span className="message fadeIn">Rename your dataset (optional)</span>
 				<div className="dir-name has-input clearfix">
 					<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
 					<Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />

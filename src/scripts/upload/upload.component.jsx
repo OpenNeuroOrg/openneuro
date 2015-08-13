@@ -31,7 +31,7 @@ let Upload = React.createClass({
 	// panels --------------------------------------
 
 		let select = (
-			<Panel header="Select" eventKey="1">
+			<Panel header="Select Folder" eventKey="1">
 				<div className="upload-wrap">
 					<Select />
 				</div>
@@ -41,7 +41,7 @@ let Upload = React.createClass({
 		let rename;
 		if (this.state.showRename) {
 			rename = (
-				<Panel header="Name" eventKey="2">
+				<Panel header="Choose Name" eventKey="2">
 					<div className="upload-wrap">
 						<Rename />
 					</div>
