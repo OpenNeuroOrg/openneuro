@@ -17,7 +17,7 @@ export default class UploadAlert extends React.Component {
 		if (type === 'Success') {bsStyle = 'success';}
 
 		return (
-			<Alert className="fadeInDown clearfix" bsStyle={bsStyle}>
+			<Alert className="fadeInUp clearfix" bsStyle={bsStyle}>
 				<div className="alert-left">
 					<strong>{type}! </strong>
 					{this.props.message}

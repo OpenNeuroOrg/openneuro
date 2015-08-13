@@ -10,7 +10,8 @@ var Actions = Reflux.createActions([
 	'updateDirName',
 	'toggleNameInput',
 	'checkExists',
-	'setInitialState'
+	'setInitialState',
+	'selectPanel'
 ]);
 
 export default Actions;

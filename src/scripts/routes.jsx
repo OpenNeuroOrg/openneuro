@@ -8,7 +8,6 @@ import requireAuth from './utils/requireAuth';
 import Index         from './common/index.jsx';
 import Signin        from './user/signin.component.jsx';
 import Admin         from './user/user.admin.jsx';
-import Upload        from './upload/upload.component.jsx';
 import Dashboard     from './dashboard/dashboard.component.jsx';
 import Notifications from './dashboard/notifications.component.jsx';
 import Datasets      from './dashboard/datasets.component.jsx';
@@ -31,7 +30,6 @@ class RedirectNotifications extends React.Component {
 // routes ----------------------------------------------------------------
 
 // authenticated routes
-Upload    = requireAuth(Upload);
 Dashboard = requireAuth(Dashboard);
 Admin     = requireAuth(Admin, 'admin');
 

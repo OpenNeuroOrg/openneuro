@@ -2,18 +2,16 @@
 
 import React       from 'react';
 import Reflux      from 'reflux';
-import pluralize   from 'pluralize';
-import Alert       from './upload.alert.jsx';
-import FileSelect  from './upload.file-select.jsx';
-import FileTree    from './upload.file-tree.jsx';
-import ErrorLink   from './upload.error-link.jsx';
-import Progress    from './upload.progress.jsx';
-import Results     from './upload.validation-results.jsx';
 import Actions     from './upload.actions.js';
 import UploadStore from './upload.store.js';
-import Messages    from './upload.messages.jsx';
-import Input       from '../common/forms/input.component.jsx';
 import {PanelGroup, Accordion, Panel} from 'react-bootstrap';
+
+import Select   from './upload.select.jsx';
+import Rename   from './upload.rename.jsx';
+import Issues   from './upload.issues.jsx';
+import Resume   from './upload.resume.jsx';
+import Progress from './upload.progress.jsx';
+import Alert    from './upload.alert.jsx';
 
 
 let Upload = React.createClass({
@@ -24,122 +22,97 @@ let Upload = React.createClass({
 
 	render () {
 
-		// short references
-		let self         = this;
-		let tree         = this.state.tree;
-		let errors       = this.state.errors;
-		let warnings     = this.state.warnings;
-		let dirName      = this.state.dirName;
+	// short references ----------------------------
+
+		let activeKey    = this.state.activeKey;
 		let uploadStatus = this.state.uploadStatus;
+		let dirName      = this.state.dirName;
 
-		// validations errors and warning wraps
-		let validationMessages;
-		if (tree.length > 0 && errors !== 'Invalid' & uploadStatus !== 'dataset-exists') {
-			validationMessages = <Results errors={errors} warnings={warnings} />;
-		}
+	// panels --------------------------------------
 
-		let uploadFileStructure;
-		if (tree.length > 0) {
-			uploadFileStructure = (
-				<span>
-					{errors.length > 0 && errors !== 'Invalid' || warnings.length > 0 ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
-					<Accordion className="fileStructure fadeIn">
-						<Panel header="View File Structure" eventKey='1'>
-					  		<FileTree tree={tree}/>
-					  	</Panel>
-				  	</Accordion>
-				 </span>
-			);
-		}
-
-		// select, upload & continue btns
-		let buttons;
-		if ((uploadStatus === 'files-selected' || uploadStatus === 'dataset-exists') && errors.length === 0) {
-			buttons = (
-				<div className="warning-btn-group clearfix">
-					<FileSelect onChange={self._onChange} />
-					<div className="validate-buttons">
-						<button onClick={this._upload.bind(this, null)} className="continueWarning btn-blue">Continue</button>
-					</div>
-				</div>
-			);
-		} else {
-			buttons = <FileSelect onChange={self._onChange} />;
-		}
-
-		let dirHeader;
-		let nameandlabel =(
-			<span>
-				<label><i className="folderIcon fa fa-folder-open" /></label>
-				{dirName}
-			</span>
-		);
-		let inputandlabel =(
-			<span>
-				<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
-				<Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
-			</span>
-		);
-		let dirInput = (
-			<span>
-				
-				{this.state.changeName ? inputandlabel : <span>{nameandlabel}<button onClick={this._toggleNameInput}>click to change name</button></span>}
-			</span>
-		);
-
-
-		if (tree.length > 0) {
-			dirHeader = (
-				<h3 className={uploadStatus === 'files-selected' && errors.length === 0 ? "dir-name has-input clearfix" : "dir-name"}>
-					
-					{uploadStatus === 'uploading' || uploadStatus === 'validating' || uploadStatus === 'dataset-exists' || errors.length > 0 ? nameandlabel : dirInput}
-				</h3>
-			);
-		}
-
-		let uploadAccordion = (
-			<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
-				<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
-					<div>
-						<div className="upload-wrap">
-							{buttons}
-							{dirHeader}
-							<Messages errors={errors} warnings={warnings} uploadStatus={uploadStatus}/>
-						</div>
-						{validationMessages}
-						{uploadFileStructure}
+		let select;
+		if (this.state.showSelect) {
+			select = (
+				<Panel header="Select Folder" eventKey="1" className="upload-step">
+					<div className="upload-wrap">
+						<Select />
 					</div>
 				</Panel>
-			</PanelGroup>
-		);
+			);
+		}
+
+		let rename;
+		if (this.state.showRename) {
+			rename = (
+				<Panel header="Choose Name" eventKey="2" className="upload-step">
+					<div className="upload-wrap">
+						<Rename />
+					</div>
+				</Panel>
+			);
+		}
+
+		let issues;
+		if (this.state.showIssues) {
+			issues = (
+				<Panel header="Issues" eventKey="3" className="upload-step">
+					<div className="upload-wrap">
+						<Issues />
+					</div>
+				</Panel>
+			);
+		}
+
+		let resume;
+		if (this.state.showResume) {
+			resume = (
+				<Panel header="Resume" eventKey="4" className="upload-step">
+					<div className="upload-wrap">
+						<Resume />
+					</div>
+				</Panel>
+			)
+		}
+
+		let progress;
+		if (this.state.showProgress) {
+			progress = (
+				<Panel header="Upload" eventKey="5" className="upload-step">
+					<div className="upload-wrap">
+						<Progress progress={this.state.progress} name={dirName} /> 
+					</div>
+				</Panel>
+			);
+		}
+
+	// main template -------------------------------
 
 		return (
-			<div className={uploadStatus === 'uploading' ? 'right-sidebar uploading' : 'right-sidebar'}>
+			<div className='right-sidebar'>
 				<div className="upload-nav">
 					<h2>My Tasks</h2>
 				</div>
-				{this.state.alert     ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
-				{uploadStatus === 'uploading' ? <Progress progress={this.state.progress} header={dirHeader} /> : uploadAccordion}
+				<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
+					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
+						<PanelGroup className="upload-steps" activeKey={activeKey}  onSelect={this.handleSelect} accordion >
+							{select}
+							{rename}
+							{issues}
+							{resume}
+							{progress}
+						</PanelGroup>
+					</Panel>
+				</PanelGroup>
+				{this.state.alert ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
 			</div>
     	);
 	},
 
 // custom methods -----------------------------------------------------
 
-	_onChange: Actions.onChange,
-
-	_updateDirName(e) {
-		Actions.updateDirName(e.target.value);
-	},
-
-	_upload (selectedFiles) {
-		let fileTree = selectedFiles ? selectedFiles.tree : this.state.tree;
-		Actions.checkExists(fileTree);
-	},
-
 	_closeAlert: Actions.closeAlert,
 
-	_toggleNameInput: Actions.toggleNameInput
+	handleSelect: Actions.selectPanel,
 
 });
 

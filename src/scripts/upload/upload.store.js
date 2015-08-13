@@ -47,6 +47,13 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			dirName: '',
 			changeName: false,
+			showSelect: true,
+			showRename: false,
+			showIssues: false,
+			showResume: false,
+			showProgress: false,
+			showSuccess: false,
+			activeKey: '1',
 			alert: null,
 			alertMessage: '',
 			uploadStatus: 'not-started',
@@ -69,9 +76,11 @@ let UploadStore = Reflux.createStore({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
 			dirName: selectedFiles.tree[0].name,
-			uploadStatus: 'validating'
+			uploadStatus: 'files-selected',
+			showRename: true,
+			activeKey: '2'
 		});
-		this.validate(selectedFiles);
+		// this.validate(selectedFiles);
 	},
 
 	/**
@@ -82,8 +91,8 @@ let UploadStore = Reflux.createStore({
 	 */
 	validate (selectedFiles) {
 		let self = this;
-
-        validate.BIDS(selectedFiles.list, function (errors, warnings) {
+		self.update({uploadStatus: 'validating', showIssues: true, activeKey: '3'});
+        validate.BIDS(selectedFiles, function (errors, warnings) {
         	
         	if (errors === 'Invalid') {
         		self.update({errors: 'Invalid'});
@@ -95,8 +104,12 @@ let UploadStore = Reflux.createStore({
 			self.update({
 				errors: errors,
 				warnings: warnings,
-				uploadStatus: 'files-selected'
+				uploadStatus: 'validated'
 			});
+
+			if (errors.length === 0 && warnings.length === 0) {
+	        	self.upload(self.data.tree);
+	        }
         });
 	},
 
@@ -121,7 +134,7 @@ let UploadStore = Reflux.createStore({
             }
 
             if (existingProjectId) {
-				self.update({uploadStatus: 'dataset-exists'});
+				self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: '4'});
             } else {
             	self.upload(fileTree);
             }
@@ -136,11 +149,20 @@ let UploadStore = Reflux.createStore({
 	 * finishes.
 	 */
 	upload (fileTree) {
+		fileTree[0].name = this.data.dirName;
 		
 		let self = this;
 		let count = files.countTree(fileTree);
 
-		this.update({uploadStatus: 'uploading'});
+		this.update({
+			uploadStatus: 'uploading',
+			showSelect: false,
+			showRename: false,
+			showIssues: false,
+			showResume: false,
+			showProgress: true,
+			activeKey: '5'
+		});
 
 		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});
@@ -198,6 +220,16 @@ let UploadStore = Reflux.createStore({
 	updateDirName(value) {
 		this.update({dirName: value});
 	},
+
+	/**
+	 * Select Panel
+	 *
+	 * Sets the state to open the selected panel
+	 * in the upload accordion.
+	 */
+	 selectPanel(activeKey) {
+	 	this.update({activeKey});
+	 }
 
 });
 
