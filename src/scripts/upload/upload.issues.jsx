@@ -77,7 +77,7 @@ let Issues = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_upload: Actions.upload
+	_upload: Actions.checkExists
 
 });
 

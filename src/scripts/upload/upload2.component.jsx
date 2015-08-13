@@ -9,6 +9,7 @@ import {PanelGroup, Accordion, Panel} from 'react-bootstrap';
 import Select   from './upload.select.jsx';
 import Rename   from './upload.rename.jsx';
 import Issues   from './upload.issues.jsx';
+import Resume   from './upload.resume.jsx';
 import Progress from './upload.progress.jsx';
 import Alert    from './upload.alert.jsx';
 
@@ -59,10 +60,21 @@ let Upload = React.createClass({
 			);
 		}
 
+		let resume;
+		if (this.state.showResume) {
+			resume = (
+				<Panel header="Resume" eventKey="4">
+					<div className="upload-wrap">
+						<Resume />
+					</div>
+				</Panel>
+			)
+		}
+
 		let progress;
 		if (this.state.showProgress) {
 			progress = (
-				<Panel header="Upload" eventKey="4">
+				<Panel header="Upload" eventKey="5">
 					<div className="upload-wrap">
 						<Progress progress={this.state.progress} name={dirName} /> 
 					</div>
@@ -83,6 +95,7 @@ let Upload = React.createClass({
 							{select}
 							{rename}
 							{issues}
+							{resume}
 							{progress}
 						</PanelGroup>
 					</Panel>

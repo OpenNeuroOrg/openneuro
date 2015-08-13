@@ -49,6 +49,7 @@ let UploadStore = Reflux.createStore({
 			changeName: false,
 			showRename: false,
 			showIssues: false,
+			showResume: false,
 			showProgress: false,
 			showSuccess: false,
 			activeKey: '1',
@@ -132,7 +133,7 @@ let UploadStore = Reflux.createStore({
             }
 
             if (existingProjectId) {
-				self.update({uploadStatus: 'dataset-exists'});
+				self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: '4'});
             } else {
             	self.upload(fileTree);
             }
@@ -152,7 +153,7 @@ let UploadStore = Reflux.createStore({
 		let self = this;
 		let count = files.countTree(fileTree);
 
-		this.update({uploadStatus: 'uploading', showProgress: true, activeKey: '4'});
+		this.update({uploadStatus: 'uploading', showProgress: true, activeKey: '5'});
 
 		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});
