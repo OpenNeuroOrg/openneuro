@@ -47,6 +47,7 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			dirName: '',
 			changeName: false,
+			showSelect: true,
 			showRename: false,
 			showIssues: false,
 			showResume: false,
@@ -153,7 +154,15 @@ let UploadStore = Reflux.createStore({
 		let self = this;
 		let count = files.countTree(fileTree);
 
-		this.update({uploadStatus: 'uploading', showProgress: true, activeKey: '5'});
+		this.update({
+			uploadStatus: 'uploading',
+			showSelect: false,
+			showRename: false,
+			showIssues: false,
+			showResume: false,
+			showProgress: true,
+			activeKey: '5'
+		});
 
 		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});

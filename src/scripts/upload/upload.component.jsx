@@ -30,13 +30,16 @@ let Upload = React.createClass({
 
 	// panels --------------------------------------
 
-		let select = (
-			<Panel header="Select Folder" eventKey="1">
-				<div className="upload-wrap">
-					<Select />
-				</div>
-			</Panel>
-		);
+		let select;
+		if (this.state.showSelect) {
+			select = (
+				<Panel header="Select Folder" eventKey="1">
+					<div className="upload-wrap">
+						<Select />
+					</div>
+				</Panel>
+			);
+		}
 
 		let rename;
 		if (this.state.showRename) {
