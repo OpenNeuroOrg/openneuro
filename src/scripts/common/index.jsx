@@ -4,7 +4,7 @@ import React from 'react';
 import {RouteHandler, State} from 'react-router';
 import Navbar from './partials/navbar.component.jsx';
 import Actions from '../user/user.actions.js';
-import Upload from '../upload/upload2.component.jsx';
+import Upload from '../upload/upload.component.jsx';
 import LeftNavbar from './partials/leftNavbar.component.jsx';
 import mixin from 'es6-react-mixins';
 
