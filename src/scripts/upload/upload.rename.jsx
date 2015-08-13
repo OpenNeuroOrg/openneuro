@@ -26,7 +26,7 @@ let Rename = React.createClass({
 					<Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
 				</div>
 				<Accordion className="fileStructure fadeIn">
-					<Panel header="View File Structure" eventKey='1'>
+					<Panel header="File Structure" eventKey='1'>
 				  		<FileTree tree={tree}/>
 				  	</Panel>
 			  	</Accordion>

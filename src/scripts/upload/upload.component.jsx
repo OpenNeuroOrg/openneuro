@@ -33,7 +33,7 @@ let Upload = React.createClass({
 		let select;
 		if (this.state.showSelect) {
 			select = (
-				<Panel header="Select Folder" eventKey="1">
+				<Panel header="Select Folder" eventKey="1" className="upload-step">
 					<div className="upload-wrap">
 						<Select />
 					</div>
@@ -44,7 +44,7 @@ let Upload = React.createClass({
 		let rename;
 		if (this.state.showRename) {
 			rename = (
-				<Panel header="Choose Name" eventKey="2">
+				<Panel header="Choose Name" eventKey="2" className="upload-step">
 					<div className="upload-wrap">
 						<Rename />
 					</div>
@@ -55,7 +55,7 @@ let Upload = React.createClass({
 		let issues;
 		if (this.state.showIssues) {
 			issues = (
-				<Panel header="Issues" eventKey="3">
+				<Panel header="Issues" eventKey="3" className="upload-step">
 					<div className="upload-wrap">
 						<Issues />
 					</div>
@@ -66,7 +66,7 @@ let Upload = React.createClass({
 		let resume;
 		if (this.state.showResume) {
 			resume = (
-				<Panel header="Resume" eventKey="4">
+				<Panel header="Resume" eventKey="4" className="upload-step">
 					<div className="upload-wrap">
 						<Resume />
 					</div>
@@ -77,7 +77,7 @@ let Upload = React.createClass({
 		let progress;
 		if (this.state.showProgress) {
 			progress = (
-				<Panel header="Upload" eventKey="5">
+				<Panel header="Upload" eventKey="5" className="upload-step">
 					<div className="upload-wrap">
 						<Progress progress={this.state.progress} name={dirName} /> 
 					</div>
@@ -94,7 +94,7 @@ let Upload = React.createClass({
 				</div>
 				<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
-						<PanelGroup activeKey={activeKey}  onSelect={this.handleSelect} accordion >
+						<PanelGroup className="upload-steps" activeKey={activeKey}  onSelect={this.handleSelect} accordion >
 							{select}
 							{rename}
 							{issues}

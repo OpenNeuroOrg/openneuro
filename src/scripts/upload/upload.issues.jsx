@@ -36,7 +36,7 @@ let Issues = React.createClass({
 		}
 
 		// messages
-		let specLink        = <span>Click to view details on <a href="http://bids.neuroimaging.io" target="_blank">BIDS specification</a>.</span>;
+		let specLink        = <span className="bids-link">Click to view details on <a href="http://bids.neuroimaging.io" target="_blank">BIDS specification</a>.</span>;
 		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset.</span>;
 		let warningsMessage = <span className="message error fadeIn">We found {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
 		let errorMessage    = <span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and select your folder again.</span>;
