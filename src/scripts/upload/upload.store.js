@@ -53,7 +53,7 @@ let UploadStore = Reflux.createStore({
 			showResume: false,
 			showProgress: false,
 			showSuccess: false,
-			activeKey: '1',
+			activeKey: 1,
 			alert: null,
 			alertMessage: '',
 			uploadStatus: 'not-started',
@@ -71,6 +71,39 @@ let UploadStore = Reflux.createStore({
 	 * On file select this adds files to the state
 	 * and starts validation.
 	 */
+	onReset () {
+		this.setInitialState({
+			tree: [],
+			list: {},
+			errors: [],
+			warnings: [],
+			dirName: '',
+			changeName: false,
+			showSelect: true,
+			showRename: false,
+			showIssues: false,
+			showResume: false,
+			showProgress: false,
+			showSuccess: false,
+			activeKey: 1,
+			alert: null,
+			alertMessage: '',
+			uploadStatus: 'not-started',
+			progress: {total: 0, completed: 0, currentFiles: []},
+		});
+		// this.validate(selectedFiles);
+	},
+
+	renameTabLink () {
+		this.update({activeKey: 2});
+	},
+
+	/**
+	 * On Change
+	 *
+	 * On file select this adds files to the state
+	 * and starts validation.
+	 */
 	onChange (selectedFiles) {
 		this.setInitialState({
 			tree: selectedFiles.tree,
@@ -78,7 +111,7 @@ let UploadStore = Reflux.createStore({
 			dirName: selectedFiles.tree[0].name,
 			uploadStatus: 'files-selected',
 			showRename: true,
-			activeKey: '2'
+			activeKey: 2
 		});
 		// this.validate(selectedFiles);
 	},
@@ -91,7 +124,7 @@ let UploadStore = Reflux.createStore({
 	 */
 	validate (selectedFiles) {
 		let self = this;
-		self.update({uploadStatus: 'validating', showIssues: true, activeKey: '3'});
+		self.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
         validate.BIDS(selectedFiles, function (errors, warnings) {
         	
         	if (errors === 'Invalid') {
@@ -134,7 +167,7 @@ let UploadStore = Reflux.createStore({
             }
 
             if (existingProjectId) {
-				self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: '4'});
+				self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: 4});
             } else {
             	self.upload(fileTree);
             }
@@ -161,7 +194,7 @@ let UploadStore = Reflux.createStore({
 			showIssues: false,
 			showResume: false,
 			showProgress: true,
-			activeKey: '5'
+			activeKey: 5
 		});
 
 		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {

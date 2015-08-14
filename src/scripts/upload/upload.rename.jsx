@@ -16,17 +16,18 @@ let Rename = React.createClass({
 
 	render () {
 		let dirName = this.state.dirName,
-			tree    = this.state.tree;
+			tree    = this.state.tree,
+			fileStuctureDirName = dirName + " File Structure";
 
 		return (
 			<div>
 				<span className="message fadeIn">Rename your dataset (optional)</span>
-				<div className="dir-name has-input clearfix">
+				<div className="dir-name has-input clearfix fadeIn">
 					<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
 					<Input type="text" placeholder="dataset name" value={dirName} onChange={this._updateDirName} />
 				</div>
 				<Accordion className="fileStructure fadeIn">
-					<Panel header="File Structure" eventKey='1'>
+					<Panel header={fileStuctureDirName} eventKey='1'>
 				  		<FileTree tree={tree}/>
 				  	</Panel>
 			  	</Accordion>

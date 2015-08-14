@@ -34,13 +34,13 @@ let Issues = React.createClass({
 			warningCount = totalWarnings + ' ' + pluralize('Warning', totalWarnings);
 			errorCount   = totalErrors   + ' ' + pluralize('Error', totalErrors);
 		}
-
+		let uploadResetLink = <span className="upload-reset-link" onClick={this._onReset}>select your folder again</span>
 		// messages
 		let specLink        = <span className="bids-link">Click to view details on <a href="http://bids.neuroimaging.io" target="_blank">BIDS specification</a>.</span>;
-		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset.</span>;
-		let warningsMessage = <span className="message error fadeIn">We found {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and select your folder again.</span>;
-		let errorMessage    = <span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and select your folder again.</span>;
-		let noErrorMessage  = <span className="message fadeIn">Proceed with this dataset by clicking continue or select a different folder.</span>;
+		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset. {uploadResetLink}</span>;
+		let warningsMessage = <span className="message error fadeIn">We found {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and {uploadResetLink}.</span>;
+		let errorMessage    = <span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and {uploadResetLink}.</span>;
+		let noErrorMessage  = <span className="message fadeIn">Proceed with this dataset by clicking continue or {uploadResetLink}.</span>;
 		let resumeMessage   = <span className="message fadeIn">You have already uploaded a dataset with this name. Click continue if you are trying to resume an unfinished upload.</span>;
 
 		// determine message
@@ -63,8 +63,8 @@ let Issues = React.createClass({
 			<div>
 				{message}
 				<Results errors={errors} warnings={warnings} />
-				{errors.length > 0 && errors !== 'Invalid' || warnings.length > 0 ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 				{errors.length === 0 ? <button className="btn-blue" onClick={this._upload.bind(null, tree)}>Continue</button> : null}
+				{errors.length > 0 && errors !== 'Invalid' || warnings.length > 0 ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 				{specLink}
 			</div>
 		);
@@ -78,7 +78,8 @@ let Issues = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_upload: Actions.checkExists
+	_upload: Actions.checkExists,
+	_onReset: Actions.onReset
 
 });
 
