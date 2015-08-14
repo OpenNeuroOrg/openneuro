@@ -1079,11 +1079,11 @@ body,
 .activeTab-3,
 .activeTab-4,
 .activeTab-5{
-	height: 43px;
+	height: 45px;
 	width: 20%;
-	background:#CDCDCD;
+	background:#BFBFBF;
 	transition:margin-left 0.3s ease;
-    margin-top: -37px;
+    margin-top: -40px;
     border-bottom: 5px solid $sky;
 }
 
@@ -1117,10 +1117,11 @@ ul.upload-steps{
 		a{
 			border-radius: 0;
 			background-color: transparent;
-			color: $ocean;
+			color: lighten($ocean, 10%);
+			font-size: 14px;
 			&:hover{
 				background-color:transparent;
-				color:lighten($ocean, 10%);
+				color:$ocean;
 			}
 		}
 	}
