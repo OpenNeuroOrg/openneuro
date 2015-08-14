@@ -129,7 +129,7 @@ let UserStore = Reflux.createStore({
 			hello('google').logout().then(function () {
 				self.setInitialState();
 				upload.setInitialState();
-				window.sessionStorage.scitranUser = null;
+				delete window.sessionStorage.scitranUser;
 				router.transitionTo('signIn');
 			}, function (e) {
 				// signout failure
