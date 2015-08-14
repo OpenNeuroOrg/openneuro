@@ -10,7 +10,9 @@ export default class UploadProgress extends React.Component {
 // life cycle events ------------------------------------------------------
 	
 	render () {
-		let progress = this.props.progress.total > 0 ? Math.floor(this.props.progress.completed / this.props.progress.total * 100) : 0;
+		let completed = this.props.progress.completed;
+		let total     = this.props.progress.total;
+		let progress  = total > 0 ? Math.floor(completed / total * 100) : 0;
 
 		let currentFiles = this.props.progress.currentFiles.map(function (file, index) {
 			return (
@@ -28,7 +30,7 @@ export default class UploadProgress extends React.Component {
 				<span className="upload-dirname">
 					<label><i className="folderIcon fa fa-folder-open" /></label>
 					{this.props.name}
-					<span className="message fadeIn"> {progress}%</span>
+					<span className="message fadeIn"> {completed}/{total} files complete</span>
 
 				</span>
 				
