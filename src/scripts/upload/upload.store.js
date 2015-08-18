@@ -1,11 +1,12 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux   from 'reflux';
-import Actions  from './upload.actions.js';
-import scitran  from '../utils/scitran';
-import upload   from './upload';
-import files    from '../utils/files';
-import validate from 'bids-validator';
+import React     from 'react';
+import Reflux    from 'reflux';
+import Actions   from './upload.actions.js';
+import scitran   from '../utils/scitran';
+import upload    from './upload';
+import files     from '../utils/files';
+import validate  from 'bids-validator';
 import userStore from '../user/user.store';
 
 // store setup -----------------------------------------------------------------------
@@ -45,6 +46,7 @@ let UploadStore = Reflux.createStore({
 			list: {},
 			errors: [],
 			warnings: [],
+			refs: {},
 			dirName: '',
 			changeName: false,
 			showSelect: true,
@@ -65,16 +67,6 @@ let UploadStore = Reflux.createStore({
 	},
 
 // actions ---------------------------------------------------------------------------
-
-	/**
-	 * On Reset - 
-	 *
-	 * triggered by the choose folder again link located
-	 * in messages
-	 */
-	onReset () {
-		this.setInitialState();
-	},
 
 	renameTabLink () {
 		this.update({activeKey: 2});
@@ -193,6 +185,9 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
+		console.log(this.data.refs);
+		// console.log(React.findDOMNode(this.data.refs.fileSelect));
+		// React.findDOMNode(this.data.refs.fileSelect).value = null;
 		this.setInitialState({alert: 'Success', alertMessage: 'Your dataset has been added and saved to your dashboard.'});
 		window.onbeforeunload = function() {};
 	},
@@ -239,9 +234,19 @@ let UploadStore = Reflux.createStore({
 	 * Sets the state to open the selected panel
 	 * in the upload accordion.
 	 */
-	 selectPanel(activeKey) {
-	 	this.update({activeKey});
-	 }
+	selectPanel(activeKey) {
+		this.update({activeKey});
+	},
+
+	/**
+	 * Set Refs
+	 *
+	 * Takes a react refs and store them.
+	 */
+	setRefs(refs) {
+		this.update({refs: refs});
+		console.log(this.data.refs);
+	}
 
 });
 
