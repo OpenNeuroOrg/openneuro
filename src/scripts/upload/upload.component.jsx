@@ -27,15 +27,17 @@ let Upload = React.createClass({
 		let activeKey    = this.state.activeKey;
 		let uploadStatus = this.state.uploadStatus;
 		let dirName      = this.state.dirName;
+		let disabledTab = this.state.disabledTab;
 
 	// panels --------------------------------------
 		let activeBar = "activeTab-" +activeKey;
 		let activePane = "upload-wrap activePane-" +activeKey;
 
+
 		let select;
 		if (this.state.showSelect) {
 			select = (
-				<TabPane eventKey={1} tab='1: Select'  className="upload-step">
+				<TabPane eventKey={1} tab='1: Select'  className="upload-step" disabled={disabledTab}>
 					<div className={activePane}>
 						<Select  />
 					</div>
@@ -46,7 +48,7 @@ let Upload = React.createClass({
 		let rename;
 		if (this.state.showRename) {
 			rename = (
-				<TabPane eventKey={2} tab='2: Rename'  className="upload-step">
+				<TabPane eventKey={2} tab='2: Rename'  className="upload-step" disabled={disabledTab}>
 					<div className={activePane}>
 						<Rename />
 					</div>
@@ -57,7 +59,7 @@ let Upload = React.createClass({
 		let issues;
 		if (this.state.showIssues) {
 			issues = (
-				<TabPane eventKey={3} tab='3: Issues'  className="upload-step">
+				<TabPane eventKey={3} tab='3: Issues'  className="upload-step" disabled={disabledTab}>
 					<div className={activePane}>
 						<Issues />
 					</div>
@@ -68,7 +70,7 @@ let Upload = React.createClass({
 		let resume;
 		if (this.state.showResume) {
 			resume = (
-				<TabPane eventKey={4} tab='4: Resume'  className="upload-step">
+				<TabPane eventKey={4} tab='4: Resume'  className="upload-step" disabled={disabledTab}>
 					<div className={activePane}>
 						<Resume />
 					</div>
@@ -79,7 +81,7 @@ let Upload = React.createClass({
 		let progress;
 		if (this.state.showProgress) {
 			progress = (
-				<TabPane eventKey={5} tab='5: Progress'  className="upload-step">
+				<TabPane eventKey={5} tab='5: Progress'  className="upload-step step5" >
 					<div className={activePane}>
 						<Progress progress={this.state.progress} name={dirName} /> 
 					</div>

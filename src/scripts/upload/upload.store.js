@@ -55,6 +55,7 @@ let UploadStore = Reflux.createStore({
 			showSuccess: false,
 			activeKey: 1,
 			alert: null,
+			disabledTab: false,
 			alertMessage: '',
 			uploadStatus: 'not-started',
 			progress: {total: 0, completed: 0, currentFiles: []},
@@ -66,32 +67,13 @@ let UploadStore = Reflux.createStore({
 // actions ---------------------------------------------------------------------------
 
 	/**
-	 * On Change
+	 * On Reset - 
 	 *
-	 * On file select this adds files to the state
-	 * and starts validation.
+	 * triggered by the choose folder again link located
+	 * in messages
 	 */
 	onReset () {
-		this.setInitialState({
-			tree: [],
-			list: {},
-			errors: [],
-			warnings: [],
-			dirName: '',
-			changeName: false,
-			showSelect: true,
-			showRename: false,
-			showIssues: false,
-			showResume: false,
-			showProgress: false,
-			showSuccess: false,
-			activeKey: 1,
-			alert: null,
-			alertMessage: '',
-			uploadStatus: 'not-started',
-			progress: {total: 0, completed: 0, currentFiles: []},
-		});
-		// this.validate(selectedFiles);
+		this.setInitialState();
 	},
 
 	renameTabLink () {
@@ -189,11 +171,8 @@ let UploadStore = Reflux.createStore({
 
 		this.update({
 			uploadStatus: 'uploading',
-			showSelect: false,
-			showRename: false,
-			showIssues: false,
-			showResume: false,
 			showProgress: true,
+			disabledTab: true,
 			activeKey: 5
 		});
 

@@ -19,11 +19,10 @@ export default class Issue extends React.Component {
 		if (error.line)        {errLocation += 'Line: ' + error.line + ' ';}
 		if (error.character)   {errLocation += 'Character: ' + error.character + '';}
 		if (errLocation == '') {errLocation  = 'Evidence: ';}
-
 		return (
 			
 				<div className="em-body">
-					<h4 className="em-header">{this.props.issueType}: {index + 1}</h4>
+					<h4 className="em-header">{this.props.type}: {index + 1}</h4>
 					<span className="e-meta">
 						<label>Reason: </label>
 						<p>{error.reason}</p>
