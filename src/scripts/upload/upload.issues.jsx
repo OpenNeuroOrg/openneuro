@@ -79,7 +79,10 @@ let Issues = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_upload: Actions.checkExists,
-	_onReset: Actions.setInitialState
+	
+	_onReset: function () {
+		Actions.selectPanel(1);
+	}
 
 });
 

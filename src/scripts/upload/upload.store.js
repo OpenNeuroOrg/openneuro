@@ -80,6 +80,7 @@ let UploadStore = Reflux.createStore({
 	 */
 	onChange (selectedFiles) {
 		this.setInitialState({
+			refs: this.data.refs,
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
 			dirName: selectedFiles.tree[0].name,
@@ -167,7 +168,7 @@ let UploadStore = Reflux.createStore({
 			disabledTab: true,
 			activeKey: 5
 		});
-
+		
 		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
 			self.update({progress: progress, uploading: true});
 			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
@@ -185,9 +186,7 @@ let UploadStore = Reflux.createStore({
 	 * complete alert.
 	 */
 	uploadComplete () {
-		console.log(this.data.refs);
-		// console.log(React.findDOMNode(this.data.refs.fileSelect));
-		// React.findDOMNode(this.data.refs.fileSelect).value = null;
+		React.findDOMNode(this.data.refs.fileSelect).value = null; // clear file input
 		this.setInitialState({alert: 'Success', alertMessage: 'Your dataset has been added and saved to your dashboard.'});
 		window.onbeforeunload = function() {};
 	},
@@ -245,7 +244,6 @@ let UploadStore = Reflux.createStore({
 	 */
 	setRefs(refs) {
 		this.update({refs: refs});
-		console.log(this.data.refs);
 	}
 
 });
