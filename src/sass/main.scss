@@ -375,7 +375,7 @@ h1,h2,h3,h4,h5,h6{
 .form-group label {
 	position: absolute;
 	top: 3px;
-	left: 5px;
+	right: 5px;
 	font-size: 10px;
 	color: #777;
 	//display: none;
@@ -1098,7 +1098,7 @@ body,
 	margin-left:60%;
 }
 .activeTab-5{
-	margin-left:0%;
+	margin-left:80%;
 }
 
 ul.upload-steps{
@@ -1113,15 +1113,31 @@ ul.upload-steps{
 	    width: 20%;
 	    text-align: center;
 	    font-size: 12px;
+
 	
 		a{
 			border-radius: 0;
 			background-color: transparent;
 			color: lighten($ocean, 10%);
 			font-size: 14px;
+			border-right:1px solid rgba(0,0,0,0.1);
 			&:hover{
 				background-color:transparent;
 				color:$ocean;
+			}
+		}
+
+	}
+	li.upload-step.active.step5{
+		float: right;
+	}
+	li.upload-step.disabled{
+		a{
+			cursor: default;
+			color:#787878;
+			&:hover{
+				background-color:transparent;
+				color:#787878;
 			}
 		}
 	}
