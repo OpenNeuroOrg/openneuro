@@ -62,7 +62,7 @@ let Issues = React.createClass({
 		let results = (
 			<div>
 				{message}
-				<Results errors={errors} warnings={warnings} />
+				{errors !== 'Invalid' ? <Results errors={errors} warnings={warnings} /> : null}
 				{errors.length === 0 ? <button className="btn-blue" onClick={this._upload.bind(null, tree)}>Continue</button> : null}
 				{errors.length > 0 && errors !== 'Invalid' || warnings.length > 0 ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 				{specLink}
