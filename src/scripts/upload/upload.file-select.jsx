@@ -14,14 +14,14 @@ class Upload extends React.Component {
 
 	render () {
 		return (
-			<input type="file"  className="dirUpload-btn" onChange={this._onFileSelect.bind(this)} />
+			<input type="file"  className="dirUpload-btn" onChange={this._onFileSelect.bind(this)} ref="fileSelect"/>
     	);
 	}
 
 // custom methods -----------------------------------------------------
 
-	_onChange (e) {
-		this.props.onChange(e);
+	_clearInput () {
+		this.refs.fileSelect.getDOMNode().value = null;
 	}
 
 	_onFileSelect (e) {
@@ -30,6 +30,7 @@ class Upload extends React.Component {
 	        let dirTree = fileUtils.generateTree(files);
 			this.props.onChange({tree: dirTree, list: files});
 		}
+		this._clearInput();
 	}
 
 }
