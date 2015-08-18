@@ -2,7 +2,6 @@ import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
 	'onChange',
-	'onReset',
 	'renameTabLink',
 	'validate',
 	'upload',
@@ -13,7 +12,8 @@ var Actions = Reflux.createActions([
 	'toggleNameInput',
 	'checkExists',
 	'setInitialState',
-	'selectPanel'
+	'selectPanel',
+	'setRefs'
 ]);
 
 export default Actions;
