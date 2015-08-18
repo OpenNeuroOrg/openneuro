@@ -25,8 +25,6 @@ let Resume = React.createClass({
 	_upload: Actions.upload,
 	_renameTabLink: Actions.renameTabLink
 
-
-
 });
 
 
