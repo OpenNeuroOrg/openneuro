@@ -35,15 +35,19 @@ export default class Datasets extends React.Component {
     }
 
     render() {
-        let self = this;
+        let self     = this;
         let datasets = this.state.datasets;
+        let results;
 
-        if (datasets.length > 0) {
+        if (datasets.length === 0) {
+            let noDatasets = "You don't have any datasets.";
+            results = <p className="no-datasets">{noDatasets}</p>;
+        } else {
             var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
             let paginatedResults = this.paginate(datasets, this.state.resultsPerPage, this.state.page);   
 
             // map results
-            var Results = paginatedResults.map(function (dataset, index){       
+            results = paginatedResults.map(function (dataset, index){       
                 let dateAdded = moment(dataset.timestamp).format('L');
                 let timeago   = moment(dataset.timestamp).fromNow(true)
                 
@@ -68,14 +72,12 @@ export default class Datasets extends React.Component {
             });
         }
 
-        let noDatasets = "You don't have any datasets.";
         return (
         	<div className="fadeIn">
             	<div className="dash-tab-content datasets ">
                     <h2>My Datasets</h2>
                     <PanelGroup accordion> 
-                        {this.state.loading ? <Spinner active={true} /> : Results}
-                        {datasets.length === 0 ? <p className="no-datasets">{noDatasets}</p> : null}
+                        {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>
                 </div>
                 <div className="pager-wrapper">

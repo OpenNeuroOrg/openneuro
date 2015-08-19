@@ -184,7 +184,10 @@ let UploadStore = Reflux.createStore({
 	uploadComplete () {
 		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
 		if (fileSelect) {fileSelect.value = null;} // clear file input
-		this.setInitialState({alert: 'Success', alertMessage: 'Your dataset has been added and saved to your dashboard.'});
+		this.setInitialState({
+			alert: 'Success',
+			alertMessage: this.data.dirName + ' has been added and saved to your dashboard.'
+		});
 		window.onbeforeunload = function() {};
 	},
 
