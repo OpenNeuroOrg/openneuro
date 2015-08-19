@@ -27,11 +27,13 @@ let Upload = React.createClass({
 		let activeKey    = this.state.activeKey;
 		let uploadStatus = this.state.uploadStatus;
 		let dirName      = this.state.dirName;
-		let disabledTab = this.state.disabledTab;
+		let disabledTab  = this.state.disabledTab;
+		let totalTabs    = this.state.showResume ? 5 : 4;
 
 	// panels --------------------------------------
-		let activeBar = "activeTab-" +activeKey;
-		let activePane = "upload-wrap activePane-" +activeKey;
+		let activeBar = "activeTab-" + activeKey;
+		if (activeKey === 5 && totalTabs < 5) {activeBar = 'activeTab-4'}
+		let activePane = "upload-wrap activePane-" + activeKey;
 
 
 		let select;
@@ -81,7 +83,7 @@ let Upload = React.createClass({
 		let progress;
 		if (this.state.showProgress) {
 			progress = (
-				<TabPane eventKey={5} tab='5: Progress'  className="upload-step step5" >
+				<TabPane eventKey={5} tab={totalTabs + ': Progress'}  className="upload-step" >
 					<div className={activePane}>
 						<Progress progress={this.state.progress} name={dirName} /> 
 					</div>
