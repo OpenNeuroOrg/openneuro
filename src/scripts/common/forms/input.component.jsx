@@ -9,7 +9,7 @@ let Input = React.createClass({
 // life cycle events --------------------------------------------------
 
 	getInitialState() {
-		return {value: this.props.initialValue}
+		return {value: this.props.initialValue ? this.props.initialValue : ''}
 	},
 
 	render() {
