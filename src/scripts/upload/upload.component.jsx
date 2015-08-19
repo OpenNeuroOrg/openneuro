@@ -27,17 +27,23 @@ let Upload = React.createClass({
 		let activeKey    = this.state.activeKey;
 		let uploadStatus = this.state.uploadStatus;
 		let dirName      = this.state.dirName;
-		let disabledTab = this.state.disabledTab;
+		let disabledTab  = this.state.disabledTab;
+
+	// conditional variables -----------------------
+
+		let totalTabs    = this.state.showResume ? 5 : 4;
+		let activeBar = "activeTab-" + activeKey;
+		if (activeKey === 5 && totalTabs < 5) {activeBar = 'activeTab-4'}
+		let activePane = "upload-wrap activePane-" + activeKey;
 
 	// panels --------------------------------------
-		let activeBar = "activeTab-" +activeKey;
-		let activePane = "upload-wrap activePane-" +activeKey;
 
 
 		let select;
 		if (this.state.showSelect) {
+			let tabName = <span><span>1:</span><span> Select</span></span>;
 			select = (
-				<TabPane eventKey={1} tab='1: Select'  className="upload-step" disabled={disabledTab}>
+				<TabPane eventKey={1} tab={tabName}  className="upload-step" disabled={disabledTab}>
 					<div className={activePane}>
 						<Select  />
 					</div>
@@ -47,8 +53,9 @@ let Upload = React.createClass({
 
 		let rename;
 		if (this.state.showRename) {
+			let tabName = <span><span>2:</span><span> Rename</span></span>;
 			rename = (
-				<TabPane eventKey={2} tab='2: Rename'  className="upload-step" disabled={disabledTab}>
+				<TabPane eventKey={2} tab={tabName}  className="upload-step" disabled={disabledTab}>
 					<div className={activePane}>
 						<Rename />
 					</div>
@@ -58,8 +65,9 @@ let Upload = React.createClass({
 
 		let issues;
 		if (this.state.showIssues) {
+			let tabName = <span><span>3:</span><span> Issues</span></span>;
 			issues = (
-				<TabPane eventKey={3} tab='3: Issues'  className="upload-step" disabled={disabledTab}>
+				<TabPane eventKey={3} tab={tabName}  className="upload-step" disabled={disabledTab}>
 					<div className={activePane}>
 						<Issues />
 					</div>
@@ -69,8 +77,9 @@ let Upload = React.createClass({
 
 		let resume;
 		if (this.state.showResume) {
+			let tabName = <span><span>4:</span><span> Resume</span></span>;
 			resume = (
-				<TabPane eventKey={4} tab='4: Resume'  className="upload-step" disabled={disabledTab}>
+				<TabPane eventKey={4} tab={tabName}  className="upload-step" disabled={disabledTab}>
 					<div className={activePane}>
 						<Resume />
 					</div>
@@ -80,15 +89,15 @@ let Upload = React.createClass({
 
 		let progress;
 		if (this.state.showProgress) {
+			let tabName = <span><span>{totalTabs + ':'}</span><span> Progress</span></span>;
 			progress = (
-				<TabPane eventKey={5} tab='5: Progress'  className="upload-step step5" >
+				<TabPane eventKey={5} tab={tabName}  className="upload-step" >
 					<div className={activePane}>
 						<Progress progress={this.state.progress} name={dirName} /> 
 					</div>
 				</TabPane>
 			);
 		}
-
 
 	// main template -------------------------------
 
@@ -99,7 +108,7 @@ let Upload = React.createClass({
 				</div>
 				<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
-						<TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={this.handleSelect}>
+						<TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={this._selectTab}>
 							<div className={activeBar}></div>
 							{select}
 							{rename}
@@ -117,7 +126,8 @@ let Upload = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_closeAlert: Actions.closeAlert,
-	handleSelect: Actions.selectPanel,
+
+	_selectTab: Actions.selectTab,
 
 });
 

@@ -34,7 +34,7 @@ let Issues = React.createClass({
 			warningCount = totalWarnings + ' ' + pluralize('Warning', totalWarnings);
 			errorCount   = totalErrors   + ' ' + pluralize('Error', totalErrors);
 		}
-		let uploadResetLink = <span className="upload-reset-link" onClick={this._onReset}>select your folder again</span>
+		let uploadResetLink = <span className="upload-reset-link" onClick={this._reset}>select your folder again</span>
 		// messages
 		let specLink        = <span className="bids-link">Click to view details on <a href="http://bids.neuroimaging.io" target="_blank">BIDS specification</a></span>;
 		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset. {uploadResetLink}</span>;
@@ -62,7 +62,7 @@ let Issues = React.createClass({
 		let results = (
 			<div>
 				{message}
-				<Results errors={errors} warnings={warnings} />
+				{errors !== 'Invalid' ? <Results errors={errors} warnings={warnings} /> : null}
 				{errors.length === 0 ? <button className="btn-blue" onClick={this._upload.bind(null, tree)}>Continue</button> : null}
 				{errors.length > 0 && errors !== 'Invalid' || warnings.length > 0 ? <ErrorLink dirName={dirName} errors={errors} warnings={warnings} /> : null}
 				{specLink}
@@ -79,7 +79,10 @@ let Issues = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_upload: Actions.checkExists,
-	_onReset: Actions.onReset
+	
+	_reset: function () {
+		Actions.selectTab(1);
+	}
 
 });
 

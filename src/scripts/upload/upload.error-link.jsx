@@ -20,26 +20,27 @@ export default class ErrorLink extends React.Component {
 // custom methods ---------------------------------------------------------
 
 	/**
-	 * Call Error FN for both errors and warnings 
+	 * Generate Error Log 
 	 *
-	 * 
+	 * Takes an array of errors and an array of 
+	 * warnings and returns text error log encoded
+	 * as a url.
 	 */
-
 	_generateErrorLog (errors, warnings) {
-		let issueString = this.errorLog (errors, 'Error');
-		issueString += this.errorLog (warnings, 'Warning');
-		let errorURL = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(issueString);
+		let issueString = this._generateIssueLog(errors, 'Error');
+		issueString    += this._generateIssueLog(warnings, 'Warning');
+		let errorURL    = "data:application/octet-stream;charset=utf-8," + encodeURIComponent(issueString);
 		return errorURL;
-
 	}
-		/**
-	 * Generate Error Log
+
+	/**
+	 * Generate Issue Log
 	 *
-	 * Takes an array of errors and an array of
-	 * warnings and returns a string to a
-	 * txt data url of the contents.
+	 * Takes an array of issues and a string of the
+	 * issue type and return a human readable log
+	 * of the issues as a string.
 	 */	
-	errorLog (issues, type) {
+	_generateIssueLog (issues, type) {
 		let issueString = '';
 		let endLine = '======================================================';
 		for (var i = 0; i < issues.length; i++) {
@@ -54,8 +55,6 @@ export default class ErrorLink extends React.Component {
     		}
     		issueString += '\n' + endLine +'\n\n\n';
     	}
-
-		// let errorLog = JSON.stringify(issues, null, "  ");
 		return issueString;
 	}
 }

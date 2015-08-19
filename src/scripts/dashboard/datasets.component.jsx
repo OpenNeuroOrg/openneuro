@@ -7,6 +7,7 @@ import scitran              from '../utils/scitran';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
 import FileTree             from '../upload/upload.file-tree.jsx';
+import WarnButton           from '../common/forms/warn-button.component.jsx'; 
 
 // component setup ---------------------------------------------------------------------------
 
@@ -34,15 +35,19 @@ export default class Datasets extends React.Component {
     }
 
     render() {
-        let self = this;
+        let self     = this;
         let datasets = this.state.datasets;
+        let results;
 
-        if (datasets.length > 0) {
+        if (datasets.length === 0) {
+            let noDatasets = "You don't have any datasets.";
+            results = <p className="no-datasets">{noDatasets}</p>;
+        } else {
             var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
             let paginatedResults = this.paginate(datasets, this.state.resultsPerPage, this.state.page);   
 
             // map results
-            var Results = paginatedResults.map(function (dataset, index){       
+            results = paginatedResults.map(function (dataset, index){       
                 let dateAdded = moment(dataset.timestamp).format('L');
                 let timeago   = moment(dataset.timestamp).fromNow(true)
                 
@@ -52,17 +57,7 @@ export default class Datasets extends React.Component {
                         <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
                 );
-                let hideDeleteBtn = (
-                	<div className="btn-group slideInRightFast" role="group" >
-                		<button className="btn btn-admin cancel" onClick={self._dismissDelete.bind(self, dataset)}>Cancel</button>
-                		<button className="btn btn-admin delete" onClick={self.deleteProject.bind(self, dataset)}>Yes Delete!</button>
-                	</div>
-                )
-                let viewdeleteBtn = (
-                	<div className=" fadeIn" >
-                		 <button className="btn btn-admin warning" onClick={self._showDelete.bind(self, dataset)}>Delete this dataset <i className="fa fa-trash-o"></i> </button>
-                	</div>
-                )
+
                 return (
                     <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={index}>
                         <div className="inner">
@@ -70,21 +65,19 @@ export default class Datasets extends React.Component {
                         	<Spinner text={dataset.loadingAction + ' ' + dataset.name} active={dataset.isLoading} />
                         </div>
                         <div className="inner-right delete-data">
-                            {dataset.showDeleteBtn ? hideDeleteBtn : viewdeleteBtn}
+                            <WarnButton message="Delete this dataset" action={self.deleteProject.bind(self, dataset)} />
                         </div>
                     </Panel>
                 );
             });
         }
 
-        let noDatasets = "You don't have any datasets.";
         return (
         	<div className="fadeIn">
             	<div className="dash-tab-content datasets ">
                     <h2>My Datasets</h2>
                     <PanelGroup accordion> 
-                        {this.state.loading ? <Spinner active={true} /> : Results}
-                        {datasets.length === 0 ? <p className="no-datasets">{noDatasets}</p> : null}
+                        {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>
                 </div>
                 <div className="pager-wrapper">
@@ -150,34 +143,6 @@ export default class Datasets extends React.Component {
     onPageSelect(page, e) {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
-    }
-
-    _showDelete(dataset){
-    	let self = this,
-    		datasets = this.state.datasets,
-  			datasetIndex;
-        for (var i = 0; i < self.state.datasets.length; i++) {
-            if (dataset._id === self.state.datasets[i]._id) {
-                datasets[i].showDeleteBtn = true;
-                self.setState({datasets: datasets});
-                datasetIndex = i;
-            }else{
-            	datasets[i].showDeleteBtn = false;
-            }
-        }
-    }
-    
-    _dismissDelete(dataset){
-    	let self = this,
-    		datasets = this.state.datasets,
-  			datasetIndex;
-        for (var i = 0; i < self.state.datasets.length; i++) {
-            if (dataset._id === self.state.datasets[i]._id) {
-                datasets[i].showDeleteBtn = false;
-                self.setState({datasets: datasets});
-                datasetIndex = i;
-            }
-        }
     }
 
 }

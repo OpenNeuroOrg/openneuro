@@ -4,37 +4,37 @@ import React from 'react'
 
 // component setup ----------------------------------------------------
 
-export default class Input extends React.Component {
+let Input = React.createClass({
 
 // life cycle events --------------------------------------------------
-	
+
+	getInitialState() {
+		return {value: this.props.initialValue ? this.props.initialValue : ''}
+	},
+
 	render() {
 		let placeholder = this.props.placeholder;
 		let type = this.props.type;
 		let name = this.props.name;
-		let value = this.props.value;
+		let value = this.state.value;
 		return (
 			<div className="form-group">
-				{ value.length > 0 ? <label>{placeholder}</label> : null }
-				<input type={type} name={name} placeholder={placeholder} value={value} onChange={this.handleChange.bind(this)} />
+				{value.length > 0 ? <label>{placeholder}</label> : null}
+				<input type={type} name={name} placeholder={placeholder} value={value} onChange={this.handleChange} />
 			</div>
 		);
-	}
+	},
 
 // custom methods -----------------------------------------------------
 
 	handleChange(event) {
-		this.props.onChange(event);
+		this.setState({value: event.target.value});
+
+		if (this.props.onChange) {
+			this.props.onChange(event);
+		}
 	}
-}
 
-// props --------------------------------------------------------------
+});
 
-Input.propTypes = {
-	name: React.PropTypes.string
-};
-
-
-Input.props = {
-	name: ''
-};
+export default Input;
