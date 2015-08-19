@@ -14,7 +14,7 @@ let Resume = React.createClass({
 	render () {
 		return (
 			<div>
-				<span className="message fadeIn error">You have already uploaded a dataset with this name. Click continue to resume an unfinished upload or <span className="rename-tab-link" onClick={this._renameTabLink}>choose another name.</span></span>
+				<span className="message fadeIn error">You have already uploaded a dataset with this name. Click continue to resume an unfinished upload or <span className="rename-tab-link" onClick={this._rename}>choose another name.</span></span>
 				<button className="btn-blue" onClick={this._upload.bind(null, this.state.tree)}>Continue</button>
 			</div>
     	);
@@ -23,7 +23,10 @@ let Resume = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_upload: Actions.upload,
-	_renameTabLink: Actions.renameTabLink
+	
+	_rename: function () {
+		Actions.selectTab(2);
+	}
 
 });
 

@@ -2,7 +2,6 @@ import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
 	'onChange',
-	'renameTabLink',
 	'validate',
 	'upload',
 	'uploadComplete',

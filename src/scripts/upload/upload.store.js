@@ -68,10 +68,6 @@ let UploadStore = Reflux.createStore({
 
 // actions ---------------------------------------------------------------------------
 
-	renameTabLink () {
-		this.update({activeKey: 2});
-	},
-
 	/**
 	 * On Change
 	 *
