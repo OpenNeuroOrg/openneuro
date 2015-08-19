@@ -37,7 +37,7 @@ let Issues = React.createClass({
 		let uploadResetLink = <span className="upload-reset-link" onClick={this._reset}>select your folder again</span>
 		// messages
 		let specLink        = <span className="bids-link">Click to view details on <a href="http://bids.neuroimaging.io" target="_blank">BIDS specification</a></span>;
-		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset. {uploadResetLink}</span>;
+		let notBIDSMessage  = <span className="message error fadeIn">This does not appear to be a BIDS dataset. <span className="upload-reset-link" onClick={this._reset}>Select a new folder</span> and try again.</span>;
 		let warningsMessage = <span className="message error fadeIn">We found {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and {uploadResetLink}.</span>;
 		let errorMessage    = <span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and {uploadResetLink}.</span>;
 		let noErrorMessage  = <span className="message fadeIn">Proceed with this dataset by clicking continue or {uploadResetLink}.</span>;
