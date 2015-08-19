@@ -640,7 +640,7 @@ body,
 		    z-index: 1800;
 		    margin: 0;
 		    border-radius: 0;
-		    background-color: rgba(0,0,0,.8);
+		    background-color: rgba(0,0,0,.82);
 		    color: #D0D0D0;
 		    font-weight: 100;
 		    border: none;
@@ -669,6 +669,12 @@ body,
 				  color: $brand-success;
 				  font-weight: 700;
 				  font-family: 'Source Sans Pro', sans-serif;
+				}
+				a {
+					color: $brand-warning;
+					&:hover {
+						color: lighten($brand-warning, 10%);
+					}
 				}
 			}
 			&.alert-info{
