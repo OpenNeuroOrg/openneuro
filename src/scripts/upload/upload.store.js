@@ -8,6 +8,7 @@ import upload    from './upload';
 import files     from '../utils/files';
 import validate  from 'bids-validator';
 import userStore from '../user/user.store';
+import {Link}    from 'react-router';
 
 // store setup -----------------------------------------------------------------------
 
@@ -184,9 +185,14 @@ let UploadStore = Reflux.createStore({
 	uploadComplete () {
 		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
 		if (fileSelect) {fileSelect.value = null;} // clear file input
+
+		let message = (
+			<span><a href="#/dashboard/datasets">{this.data.dirName}</a> has been added and saved to your dashboard.</span>
+		);
+
 		this.setInitialState({
 			alert: 'Success',
-			alertMessage: this.data.dirName + ' has been added and saved to your dashboard.'
+			alertMessage: message
 		});
 		window.onbeforeunload = function() {};
 	},
