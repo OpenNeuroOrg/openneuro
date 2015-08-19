@@ -7,6 +7,7 @@ import scitran              from '../utils/scitran';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
 import FileTree             from '../upload/upload.file-tree.jsx';
+import WarnButton           from '../common/forms/warn-button.component.jsx'; 
 
 // component setup ---------------------------------------------------------------------------
 
@@ -52,17 +53,17 @@ export default class Datasets extends React.Component {
                         <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
                 );
-                let hideDeleteBtn = (
-                	<div className="btn-group slideInRightFast" role="group" >
-                		<button className="btn btn-admin cancel" onClick={self._dismissDelete.bind(self, dataset)}>Cancel</button>
-                		<button className="btn btn-admin delete" onClick={self.deleteProject.bind(self, dataset)}>Yes Delete!</button>
-                	</div>
-                )
-                let viewdeleteBtn = (
-                	<div className=" fadeIn" >
-                		 <button className="btn btn-admin warning" onClick={self._showDelete.bind(self, dataset)}>Delete this dataset <i className="fa fa-trash-o"></i> </button>
-                	</div>
-                )
+                // let hideDeleteBtn = (
+                // 	<div className="btn-group slideInRightFast" role="group" >
+                // 		<button className="btn btn-admin cancel" onClick={self._dismissDelete.bind(self, dataset)}>Cancel</button>
+                // 		<button className="btn btn-admin delete" onClick={self.deleteProject.bind(self, dataset)}>Yes Delete!</button>
+                // 	</div>
+                // )
+                // let viewdeleteBtn = (
+                // 	<div className=" fadeIn" >
+                // 		 <button className="btn btn-admin warning" onClick={self._showDelete.bind(self, dataset)}>Delete this dataset <i className="fa fa-trash-o"></i> </button>
+                // 	</div>
+                // )
                 return (
                     <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={index}>
                         <div className="inner">
@@ -70,7 +71,7 @@ export default class Datasets extends React.Component {
                         	<Spinner text={dataset.loadingAction + ' ' + dataset.name} active={dataset.isLoading} />
                         </div>
                         <div className="inner-right delete-data">
-                            {dataset.showDeleteBtn ? hideDeleteBtn : viewdeleteBtn}
+                            <WarnButton message="Delete this dataset" action={self.deleteProject.bind(self, dataset)} />
                         </div>
                     </Panel>
                 );

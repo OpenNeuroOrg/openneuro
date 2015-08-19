@@ -6,7 +6,7 @@ import UserStore from './user.store.js';
 import Input     from '../common/forms/input.component.jsx';
 import {Panel}   from 'react-bootstrap';
 import scitran   from '../utils/scitran';
-import Delete    from '../common/forms/delete.component.jsx'; 
+import Delete    from '../common/forms/warn-button.component.jsx'; 
 
 export default class AddUser extends React.Component {
 
@@ -55,7 +55,7 @@ export default class AddUser extends React.Component {
 	                    <h3 className="user-email">{user._id}</h3>
                     </div>
                     <div className="col-sm-4 user-col last">
-	                    <h3 className="user-delete"><Delete action={self._removeUser.bind(self, user._id, index)}/></h3>
+	                    <h3 className="user-delete"><Delete message="Delete this User" action={self._removeUser.bind(self, user._id, index)}/></h3>
                     </div>
                 </div>
 			);
