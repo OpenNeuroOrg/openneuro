@@ -70,22 +70,30 @@ let UserStore = Reflux.createStore({
 	checkUser: function () {
 		let self = this;
 		var googleAuth = hello('google').getAuthResponse();
-
 		var token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
 
+
+		if (!this.online(googleAuth)) {
+			self.update({token: null});
+			router.transitionTo('signIn');
+		}
+
 		if (token) {
-			hello('google').login({force: false}).then(function() {
+			hello('google').login({force: false}).then(function(authRes) {
 				self.update({token: token});
 				hello('google').api('/me').then(function (profile) {
 					self.update({google: profile});
 					scitran.verifyUser(function (err, res) {
 						window.sessionStorage.scitranUser = JSON.stringify(res.body);
 						self.update({scitran: res.body});
+						if (!authRes.unchanged) {
+							router.transitionTo('dashboard');
+						}
 					});
 				}, function (res) {
 					self.setInitialState();
 				});
-			});
+			}, self.clearAuth);
 		} else {
 			this.setInitialState();
 		}
@@ -136,6 +144,21 @@ let UserStore = Reflux.createStore({
 			});
 		}
 	},
+
+	clearAuth: function () {
+		delete window.localStorage.hello;
+		delete window.sessionStorage.scitranUser;
+		this.setInitialState({
+			token: null,
+			google: null,
+			scitran: null
+		});
+	},
+
+	online: function (session) {
+		var currentTime = (new Date()).getTime() / 1000;
+		return session && session.access_token && session.expires > currentTime;
+	}
 
 });
 
