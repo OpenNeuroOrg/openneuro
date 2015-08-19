@@ -12,7 +12,7 @@ var Actions = Reflux.createActions([
 	'toggleNameInput',
 	'checkExists',
 	'setInitialState',
-	'selectPanel',
+	'selectTab',
 	'setRefs'
 ]);
 

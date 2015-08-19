@@ -28,12 +28,15 @@ let Upload = React.createClass({
 		let uploadStatus = this.state.uploadStatus;
 		let dirName      = this.state.dirName;
 		let disabledTab  = this.state.disabledTab;
-		let totalTabs    = this.state.showResume ? 5 : 4;
 
-	// panels --------------------------------------
+	// conditional variables -----------------------
+
+		let totalTabs    = this.state.showResume ? 5 : 4;
 		let activeBar = "activeTab-" + activeKey;
 		if (activeKey === 5 && totalTabs < 5) {activeBar = 'activeTab-4'}
 		let activePane = "upload-wrap activePane-" + activeKey;
+
+	// panels --------------------------------------
 
 
 		let select;
@@ -91,7 +94,6 @@ let Upload = React.createClass({
 			);
 		}
 
-
 	// main template -------------------------------
 
 		return (
@@ -101,7 +103,7 @@ let Upload = React.createClass({
 				</div>
 				<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
 					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
-						<TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={this.handleSelect}>
+						<TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={this._selectTab}>
 							<div className={activeBar}></div>
 							{select}
 							{rename}
@@ -119,7 +121,8 @@ let Upload = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_closeAlert: Actions.closeAlert,
-	handleSelect: Actions.selectPanel,
+
+	_selectTab: Actions.selectTab,
 
 });
 

@@ -229,12 +229,12 @@ let UploadStore = Reflux.createStore({
 	},
 
 	/**
-	 * Select Panel
+	 * Select Tab
 	 *
-	 * Sets the state to open the selected panel
-	 * in the upload accordion.
+	 * Sets the state to open the selected tab
+	 * in the upload menu.
 	 */
-	selectPanel(activeKey) {
+	selectTab(activeKey) {
 		this.update({activeKey});
 	},
 
