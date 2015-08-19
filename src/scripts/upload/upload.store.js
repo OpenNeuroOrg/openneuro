@@ -112,7 +112,7 @@ let UploadStore = Reflux.createStore({
 			});
 
 			if (errors.length === 0 && warnings.length === 0) {
-	        	self.upload(self.data.tree);
+	        	self.checkExists(self.data.tree);
 	        }
         });
 	},
@@ -221,7 +221,10 @@ let UploadStore = Reflux.createStore({
 	 * Sets the directory name to the passed value.
 	 */
 	updateDirName(value) {
-		this.update({dirName: value});
+		this.update({
+			dirName: value,
+			showResume: false
+		});
 	},
 
 	/**
