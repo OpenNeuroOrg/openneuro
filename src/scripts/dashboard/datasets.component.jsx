@@ -64,9 +64,9 @@ export default class Datasets extends React.Component {
                         <div className="inner">
                             {!dataset.isLoading ? <FileTree tree={dataset.tree} /> : null}
                         	<Spinner text={dataset.loadingAction + ' ' + dataset.name} active={dataset.isLoading} />
+                            <Link to="dataset" params={{datasetId: dataset._id}}>dataset page</Link>
                         </div>
                         <div className="inner-right delete-data">
-                            <Link to="dataset" params={{datasetId: dataset._id}}>dataset page</Link>
                             <WarnButton message="Delete this dataset" action={self.deleteProject.bind(self, dataset)} />
                         </div>
                     </Panel>

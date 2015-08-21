@@ -15,7 +15,7 @@ export default class Dataset extends mixin(State) {
 		super();
 		this.state = {
 			loading: false,
-			dataset: []
+			dataset: null
 		};
 	}
 
@@ -29,14 +29,23 @@ export default class Dataset extends mixin(State) {
 	}
 
 	render () {
-		let dataset = this.state.dataset;
 		let loading = this.state.loading;
-		
+		let dataset = this.state.dataset;
+
+		let content;
+		if (dataset) {
+			content = (
+				<div>
+					<h1>{dataset[0].name}</h1>
+					<FileTree tree={dataset} />
+				</div>
+			);
+		}
+
 		return (
 			<div>
             	<Spinner text="loading" active={loading} />
-            	<h1>{dataset[0] ? dataset[0].name : null}</h1>
-				<FileTree tree={dataset} />
+            	{content}
 			</div>
     	);
 	}
