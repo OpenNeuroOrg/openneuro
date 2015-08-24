@@ -7,7 +7,8 @@ import Actions from '../user/user.actions.js';
 import Upload from '../upload/upload.component.jsx';
 import LeftNavbar from './partials/leftNavbar.component.jsx';
 import mixin from 'es6-react-mixins';
-
+import bowser  		 from 'bowser';
+import Happybrowser  from './partials/happybrowser.jsx';
 // component setup -----------------------------------------------------------
 
 var App = React.createClass({
@@ -36,6 +37,7 @@ var App = React.createClass({
 
 		return (
 			<div className="page">
+				{bowser.chrome? <Happybrowser /> : null }
 				<div className={showUpload ? 'col-xs-8 main-col' : 'full-col'}>
 					<Navbar/>
 					<div className="main view container">
