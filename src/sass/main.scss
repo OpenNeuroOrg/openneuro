@@ -780,8 +780,11 @@ body,
 				}
 			}
 			a {
+	 
 					color: $brand-warning;
+	 
 					&:hover {
+	 
 						color: lighten($brand-warning, 10%);
 	 
 				}
@@ -1170,6 +1173,10 @@ body,
 	transition:margin-left 0.3s ease;
     margin-top: -60px;
     border-bottom: 5px solid $sky;
+	@media (max-width: 1428px) {
+		margin-top: -60px;
+		height: 65px;
+	}
 }
 
 
@@ -1209,6 +1216,9 @@ ul.upload-steps{
 			&:hover{
 				background-color:transparent;
 				color:$ocean;
+			}
+			@media (max-width: 1428px) {
+				span {display: block;}	 
 			}
 		}
 
