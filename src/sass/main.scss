@@ -13,6 +13,85 @@
 //crn ======================================================================
 @import "./_crn-variables";
 //component specific
+
+
+
+
+//happybrowser styles
+
+
+.clearfix:before, .clearfix:after { content: " "; display: table; } .clearfix:after { clear: both; }
+/* * For IE 6/7 only * Include this rule to trigger hasLayout and contain floats. */
+.clearfix { *zoom: 1; }
+.hbMarkup{
+	position: absolute;
+	z-index: 900000;
+	background: #f0f0f0;
+	width: 100%;
+	overflow: hidden;
+	padding: 0;
+    bottom: 0;
+    border-top: 1px solid #DDD;
+}
+.hb-wrap{
+	min-width: 960px;
+}
+
+.hb-text{
+	width: 80%;
+	float: left;
+}
+.hb-upgrade{
+	width: 20%;
+	float: left;
+}
+
+.hb-text p,
+.hb-text img{
+	float: left;
+	width:70px;
+}
+
+.hb-text p{
+	margin: 2% 0 0 20px;
+	width: 60%;
+	min-width: 580px;
+	max-width: 800px;
+	color: #505050;
+	font-size: 16px;
+	font-family: sans-serif;
+}
+
+
+.hb-img-wrap{
+	float: right;
+	padding: 0 10px;
+	border: 2px solid #f0f0f0;
+	border-top:none;
+}
+.hb-img-wrap:hover{
+	border-color:#ddd;
+}
+
+.hb-dismiss{
+	height: 100px;
+	text-align: center;
+	padding: 0 30px 0;
+	line-height: 100px;
+	font-size: 20px;
+	font-family: sans-serif;
+	border-left: 2px solid #DDD;
+	color: #555;
+	margin-right: 0;
+}
+.hb-dismiss:hover{
+	cursor: pointer;
+	color:#000;
+	background: #fff;
+}
+
+
+
 //==========================================================================
 
 $btn-shadow:1px 1px 3px -1px rgba(0,0,0,0.7);
@@ -640,7 +719,7 @@ body,
 		    z-index: 1800;
 		    margin: 0;
 		    border-radius: 0;
-		    background-color: rgba(0,0,0,.82);
+		    background-color: rgba(0,0,0,.8);
 		    color: #D0D0D0;
 		    font-weight: 100;
 		    border: none;
@@ -669,12 +748,6 @@ body,
 				  color: $brand-success;
 				  font-weight: 700;
 				  font-family: 'Source Sans Pro', sans-serif;
-				}
-				a {
-					color: $brand-warning;
-					&:hover {
-						color: lighten($brand-warning, 10%);
-					}
 				}
 			}
 			&.alert-info{
@@ -706,7 +779,16 @@ body,
 				    }
 				}
 			}
-
+			a {
+	 
+					color: $brand-warning;
+	 
+					&:hover {
+	 
+						color: lighten($brand-warning, 10%);
+	 
+				}
+			}
 		}
 
 		.dir-name{
@@ -1085,16 +1167,16 @@ body,
 .activeTab-3,
 .activeTab-4,
 .activeTab-5{
-	height: 45px;
+	height: 65px;
 	width: 20%;
 	background:#BFBFBF;
 	transition:margin-left 0.3s ease;
-    margin-top: -40px;
+    margin-top: -60px;
     border-bottom: 5px solid $sky;
-    @media (max-width: 1428px) {
-	    margin-top: -60px;
-    	height: 65px;
-    }
+	@media (max-width: 1428px) {
+		margin-top: -60px;
+		height: 65px;
+	}
 }
 
 
@@ -1136,7 +1218,7 @@ ul.upload-steps{
 				color:$ocean;
 			}
 			@media (max-width: 1428px) {
-				span {display: block;}
+				span {display: block;}	 
 			}
 		}
 
@@ -1750,8 +1832,6 @@ to { -webkit-transform: rotate(360deg) }
 		}
 	}
 }
-
-
 
 
 
