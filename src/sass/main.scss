@@ -718,7 +718,7 @@ body,
 		    z-index: 1800;
 		    margin: 0;
 		    border-radius: 0;
-		    background-color: rgba(0,0,0,.82);
+		    background-color: rgba(0,0,0,.8);
 		    color: #D0D0D0;
 		    font-weight: 100;
 		    border: none;
@@ -747,12 +747,6 @@ body,
 				  color: $brand-success;
 				  font-weight: 700;
 				  font-family: 'Source Sans Pro', sans-serif;
-				}
-				a {
-					color: $brand-warning;
-					&:hover {
-						color: lighten($brand-warning, 10%);
-					}
 				}
 			}
 			&.alert-info{
@@ -1169,10 +1163,6 @@ body,
 	transition:margin-left 0.3s ease;
     margin-top: -40px;
     border-bottom: 5px solid $sky;
-    @media (max-width: 1428px) {
-	    margin-top: -60px;
-    	height: 65px;
-    }
 }
 
 
@@ -1212,9 +1202,6 @@ ul.upload-steps{
 			&:hover{
 				background-color:transparent;
 				color:$ocean;
-			}
-			@media (max-width: 1428px) {
-				span {display: block;}
 			}
 		}
 
