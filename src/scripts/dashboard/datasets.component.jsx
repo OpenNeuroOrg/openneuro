@@ -62,12 +62,18 @@ export default class Datasets extends React.Component {
                 return (
                     <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={index}>
                         <div className="inner">
-                            {!dataset.isLoading ? <FileTree tree={dataset.tree} /> : null}
+                            {!dataset.isLoading ? "area for future content" : null}
                         	<Spinner text={dataset.loadingAction + ' ' + dataset.name} active={dataset.isLoading} />
-                            <Link to="dataset" params={{datasetId: dataset._id}}>dataset page</Link>
                         </div>
-                        <div className="inner-right delete-data">
-                            <WarnButton message="Delete this dataset" action={self.deleteProject.bind(self, dataset)} />
+                        <div className="inner-right">
+                            <div className="row">
+                                <div className="col-xs-6 left">
+                                    <Link to="dataset" params={{datasetId: dataset._id}}>View dataset page »</Link>
+                                </div>
+                                <div className="col-xs-6 right  delete-data">
+                                    <WarnButton message="Delete this dataset" action={self.deleteProject.bind(self, dataset)} />
+                                </div>
+                            </div>
                         </div>
                     </Panel>
                 );

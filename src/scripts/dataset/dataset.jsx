@@ -6,6 +6,7 @@ import mixin    from 'es6-react-mixins';
 import scitran  from '../utils/scitran';
 import FileTree from '../upload/upload.file-tree.jsx';
 import Spinner  from '../common/partials/spinner.component.jsx';
+import {Accordion, Panel} from 'react-bootstrap';
 
 export default class Dataset extends mixin(State) {
 
@@ -37,13 +38,17 @@ export default class Dataset extends mixin(State) {
 			content = (
 				<div>
 					<h1>{dataset[0].name}</h1>
-					<FileTree tree={dataset} />
+					<Accordion className="fileStructure fadeIn">
+						<Panel header={dataset[0].name} eventKey='1'>
+					  		<FileTree tree={dataset} />
+					  	</Panel>
+			  		</Accordion>
 				</div>
 			);
 		}
 
 		return (
-			<div>
+			<div className="fadeIn inner-route dataset">
             	<Spinner text="loading" active={loading} />
             	{content}
 			</div>

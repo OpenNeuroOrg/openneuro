@@ -1336,6 +1336,7 @@ ul.upload-steps{
 		}
 	}
 }
+
 .upload-wrap{
 	position:relative;
 	background:#f3f3f3;
@@ -1669,10 +1670,18 @@ to { -webkit-transform: rotate(360deg) }
 						border-top: 1px solid #ddd;
 					}
 					.inner-right{
-							height: 50px;
-							border-top:1px solid #ddd;
-							margin:0;
-							padding:0;
+						height: 50px;
+						border-top:1px solid #ddd;
+						margin:0;
+						padding:0;
+						
+						.left{
+							a{
+								padding: 16px 20px;
+								display: block;
+							}
+						}
+						.right {
 							text-align: right;
 							&.delete-data{
 								vertical-align: middle;
@@ -1680,12 +1689,11 @@ to { -webkit-transform: rotate(360deg) }
 								text-align: right;
 								font-size: 13px;
 								text-transform: uppercase;
-								margin-top: 5px;
 								overflow:hidden;
 								
 							}
 							.btn-admin.warning{
-								    padding: 16px 20px;
+								    padding: 16px 20px ;
 							}
 							.btn-admin.delete{
 								border: none;
@@ -1699,6 +1707,7 @@ to { -webkit-transform: rotate(360deg) }
 							.btn-admin.cancel{
 								    height: 50px;
 							}
+						}
 					}
 				}
 			}
@@ -1840,8 +1849,26 @@ to { -webkit-transform: rotate(360deg) }
 
 
 
-
-
+// dataset dataset view
+.dataset .fileStructure.panel-group {
+	.panel-collapse{
+		.panel-body{
+			padding:0;
+			>ul{
+				overflow: visible;
+			    height: auto;
+			    padding: 10px;
+			    margin: 0;
+			}
+		}
+	}
+	.panel-default .panel-heading{
+		text-align: left;
+		.panel-title a{
+			font-size: 13px;
+		}
+	}
+}
 
 
 
