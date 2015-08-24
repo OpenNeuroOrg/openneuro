@@ -779,7 +779,13 @@ body,
 				    }
 				}
 			}
-
+			a {
+					color: $brand-warning;
+					&:hover {
+						color: lighten($brand-warning, 10%);
+	 
+				}
+			}
 		}
 
 		.dir-name{
