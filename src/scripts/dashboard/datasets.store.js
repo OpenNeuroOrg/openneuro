@@ -38,7 +38,10 @@ let UploadStore = Reflux.createStore({
 	 */
 	setInitialState: function (diffs) {
 		let data = {
-
+			loading: false,
+            datasets: [],
+            resultsPerPage: 30,
+            page: 0
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -46,7 +49,14 @@ let UploadStore = Reflux.createStore({
 
 // actions ---------------------------------------------------------------------------
 
-
+	getDatasets: function () {
+		let self = this;
+        self.update({loading: true});
+        scitran.getProjects(function (datasets) {
+            datasets.reverse();
+            self.update({datasets: datasets,  loading: false});
+        });
+    }
 
 });
 

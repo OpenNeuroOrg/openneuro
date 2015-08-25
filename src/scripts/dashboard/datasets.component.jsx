@@ -21,22 +21,8 @@ let Datasets = React.createClass({
 
 // life cycle events -------------------------------------------------------------------------
 
-    getInitialState() {
-        return {
-            loading: false,
-            datasets: [],
-            resultsPerPage: 30,
-            page: 0,
-        };
-    },
-
     componentDidMount() {
-        let self = this;
-        self.setState({loading: true})
-        scitran.getProjects(function (datasets) {
-            datasets.reverse();
-            self.setState({datasets: datasets,  loading: false});
-        });
+        Actions.getDatasets();
     },
 
     render() {
