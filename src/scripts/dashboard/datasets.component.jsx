@@ -1,6 +1,9 @@
 // dependencies ------------------------------------------------------------------------------
 
 import React                from 'react';
+import Reflux               from 'reflux';
+import Actions              from './datasets.actions.js';
+import DatasetsStore        from './datasets.store.js';
 import {Link}               from 'react-router';
 import moment               from 'moment';
 import {PanelGroup, Panel}  from 'react-bootstrap';
@@ -12,19 +15,20 @@ import WarnButton           from '../common/forms/warn-button.component.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
-export default class Datasets extends React.Component {
+let Datasets = React.createClass({
+    
+    mixins: [Reflux.connect(DatasetsStore)],
 
-    constructor() {
-        super();
-	    this.state = {
+// life cycle events -------------------------------------------------------------------------
+
+    getInitialState() {
+        return {
             loading: false,
             datasets: [],
             resultsPerPage: 30,
             page: 0,
         };
-    }
-
-// life cycle events -------------------------------------------------------------------------
+    },
 
     componentDidMount() {
         let self = this;
@@ -33,7 +37,7 @@ export default class Datasets extends React.Component {
             datasets.reverse();
             self.setState({datasets: datasets,  loading: false});
         });
-    }
+    },
 
     render() {
         let self     = this;
@@ -53,7 +57,7 @@ export default class Datasets extends React.Component {
                 let timeago   = moment(dataset.timestamp).fromNow(true)
                 
                 let datasetheader = (
-                    <div className="header clearfix" onClick={self.loadDataTree.bind(self, dataset)}>
+                    <div className="header clearfix" onClick={self.loadDataTree.bind(null, dataset)}>
                         <h4 className="dataset">{dataset.name}</h4>
                         <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
@@ -71,7 +75,7 @@ export default class Datasets extends React.Component {
                                     <Link to="dataset" params={{datasetId: dataset._id}}>View dataset page »</Link>
                                 </div>
                                 <div className="col-xs-6 right  delete-data">
-                                    <WarnButton message="Delete this dataset" action={self.deleteProject.bind(self, dataset)} />
+                                    <WarnButton message="Delete this dataset" action={self.deleteProject.bind(null, dataset)} />
                                 </div>
                             </div>
                         </div>
@@ -93,11 +97,11 @@ export default class Datasets extends React.Component {
 	                    page={this.state.page}
 	                    pagesTotal={pagesTotal}
 	                    pageRangeDisplayed={5}
-	                    onPageSelect={this.onPageSelect.bind(self)} />
+	                    onPageSelect={this.onPageSelect} />
             	</div>
             </div>
         );
-    }
+    },
 
 // custom methods ----------------------------------------------------------------------------
 
@@ -119,7 +123,7 @@ export default class Datasets extends React.Component {
             	datasets: datasets, 
             });
 		});
-	}
+	},
 
     loadDataTree(dataset) {
         let self = this;
@@ -137,7 +141,7 @@ export default class Datasets extends React.Component {
                 });
             }
         }
-    }
+    },
 
     paginate(data, perPage, page) {
         if (data.length < 1) return null;
@@ -146,11 +150,13 @@ export default class Datasets extends React.Component {
         let end = start + perPage;
         var retArr = data.slice(start, end);
         return retArr;
-    }
+    },
 
     onPageSelect(page, e) {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
     }
 
-}
+});
+
+export default Datasets;
