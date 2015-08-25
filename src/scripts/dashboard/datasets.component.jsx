@@ -57,7 +57,7 @@ let Datasets = React.createClass({
                 let timeago   = moment(dataset.timestamp).fromNow(true)
                 
                 let datasetheader = (
-                    <div className="header clearfix" onClick={self.loadDataTree.bind(null, dataset)}>
+                    <div className="header clearfix">
                         <h4 className="dataset">{dataset.name}</h4>
                         <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
@@ -66,8 +66,7 @@ let Datasets = React.createClass({
                 return (
                     <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={dataset._id}>
                         <div className="inner">
-                            {!dataset.isLoading ? "area for future content" : null}
-                        	<Spinner text={dataset.loadingAction + ' ' + dataset.name} active={dataset.isLoading} />
+                            area for future content
                         </div>
                         <div className="inner-right">
                             <div className="row">
@@ -124,24 +123,6 @@ let Datasets = React.createClass({
             });
 		});
 	},
-
-    loadDataTree(dataset) {
-        let self = this;
-        let datasets = this.state.datasets;
-        for (let i = 0; i < datasets.length; i++) {
-            if (dataset._id === datasets[i]._id && !datasets[i].tree) {
-                datasets[i].isLoading = true;
-                datasets[i].loadingAction = 'loading';
-                self.setState({datasets: datasets});
-                scitran.getBIDSDataset(dataset._id, function (tree) {
-                    datasets[i].tree = tree;
-                    datasets[i].isLoading = false;
-                    datasets[i].loadingAction = null;
-                    self.setState({datasets: datasets});
-                });
-            }
-        }
-    },
 
     paginate(data, perPage, page) {
         if (data.length < 1) return null;
