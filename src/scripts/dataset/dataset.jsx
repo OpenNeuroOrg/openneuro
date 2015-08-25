@@ -16,7 +16,8 @@ export default class Dataset extends mixin(State) {
 		super();
 		this.state = {
 			loading: false,
-			dataset: null
+			dataset: null,
+			notFound: false
 		};
 	}
 
@@ -24,14 +25,19 @@ export default class Dataset extends mixin(State) {
 		let self = this;
 		let params = this.getParams();
 		self.setState({loading: true});
-		scitran.getBIDSDataset(params.datasetId, function (dataset) {
-			self.setState({dataset: dataset, loading: false});
+		scitran.getBIDSDataset(params.datasetId, function (res) {
+			if (res.status === 404) {
+				self.setState({notFound: true, loading: false});
+			} else {
+				self.setState({dataset: res, loading: false});
+			}
 		});
 	}
 
 	render () {
-		let loading = this.state.loading;
-		let dataset = this.state.dataset;
+		let loading  = this.state.loading;
+		let dataset  = this.state.dataset;
+		let notFound = this.state.notFound;
 
 		let content;
 		if (dataset) {
@@ -43,6 +49,12 @@ export default class Dataset extends mixin(State) {
 					  		<FileTree tree={dataset} />
 					  	</Panel>
 			  		</Accordion>
+				</div>
+			);
+		} else if (notFound) {
+			content = (
+				<div>
+					<h1>Dataset not found.</h1>
 				</div>
 			);
 		}
