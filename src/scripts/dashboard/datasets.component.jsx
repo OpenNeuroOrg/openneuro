@@ -48,7 +48,7 @@ export default class Datasets extends React.Component {
             let paginatedResults = this.paginate(datasets, this.state.resultsPerPage, this.state.page);   
 
             // map results
-            results = paginatedResults.map(function (dataset, index){       
+            results = paginatedResults.map(function (dataset, index){
                 let dateAdded = moment(dataset.timestamp).format('L');
                 let timeago   = moment(dataset.timestamp).fromNow(true)
                 
@@ -60,7 +60,7 @@ export default class Datasets extends React.Component {
                 );
 
                 return (
-                    <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={index}>
+                    <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={dataset._id}>
                         <div className="inner">
                             {!dataset.isLoading ? "area for future content" : null}
                         	<Spinner text={dataset.loadingAction + ' ' + dataset.name} active={dataset.isLoading} />
