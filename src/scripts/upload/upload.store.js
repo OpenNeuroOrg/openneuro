@@ -1,14 +1,15 @@
 // dependencies ----------------------------------------------------------------------
 
-import React     from 'react';
-import Reflux    from 'reflux';
-import Actions   from './upload.actions.js';
-import scitran   from '../utils/scitran';
-import upload    from './upload';
-import files     from '../utils/files';
-import validate  from 'bids-validator';
-import userStore from '../user/user.store';
-import {Link}    from 'react-router';
+import React         from 'react';
+import Reflux        from 'reflux';
+import Actions       from './upload.actions.js';
+import scitran       from '../utils/scitran';
+import upload        from './upload';
+import files         from '../utils/files';
+import validate      from 'bids-validator';
+import userStore     from '../user/user.store';
+import datasetsStore from '../dashboard/datasets.store';
+import {Link}        from 'react-router';
 
 // store setup -----------------------------------------------------------------------
 
@@ -189,6 +190,8 @@ let UploadStore = Reflux.createStore({
 		let message = (
 			<span><a href="#/dashboard/datasets">{this.data.dirName}</a> has been added and saved to your dashboard.</span>
 		);
+
+		datasetsStore.getDatasets();
 
 		this.setInitialState({
 			alert: 'Success',
