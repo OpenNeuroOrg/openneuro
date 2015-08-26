@@ -22,7 +22,7 @@ var App = React.createClass({
 	},
 
 	render () {
-		let showUpload = !this.isActive('signIn') && !this.isActive('admin');
+		let showUpload = this.isActive('dashboard');
 		let showLeftNav = !this.isActive('signIn');
 		let sidebar;
 		let leftnav;

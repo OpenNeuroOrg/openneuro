@@ -2,8 +2,6 @@
 
 import React                from 'react';
 import Reflux               from 'reflux';
-import Actions              from './datasets.actions.js';
-import DatasetsStore        from './datasets.store.js';
 import {Link}               from 'react-router';
 import moment               from 'moment';
 import {PanelGroup, Panel}  from 'react-bootstrap';
@@ -38,7 +36,7 @@ let Datasets = React.createClass({
         let results;
 
         if (datasets.length === 0) {
-            let noDatasets = "You don't have any datasets.";
+            let noDatasets = "There are no datasets.";
             results = <p className="no-datasets">{noDatasets}</p>;
         } else {
             var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
@@ -66,9 +64,6 @@ let Datasets = React.createClass({
                                 <div className="col-xs-6 left">
                                     <Link to="dataset" params={{datasetId: dataset._id}}>View dataset page »</Link>
                                 </div>
-                                <div className="col-xs-6 right  delete-data">
-                                    <WarnButton message="Delete this dataset" action={self.deleteProject.bind(null, dataset)} />
-                                </div>
                             </div>
                         </div>
                     </Panel>
@@ -79,7 +74,7 @@ let Datasets = React.createClass({
         return (
         	<div className="fadeIn">
             	<div className="dash-tab-content datasets ">
-                    <h2>My Datasets</h2>
+                    <h2>Datasets</h2>
                     <PanelGroup accordion> 
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>
@@ -106,26 +101,6 @@ let Datasets = React.createClass({
             self.setState({datasets: datasets,  loading: false});
         });
     },
-
-	deleteProject(dataset) {
-		let self = this,
-            datasets = this.state.datasets,
-            datasetIndex;
-        for (var i = 0; i < self.state.datasets.length; i++) {
-            if (dataset._id === datasets[i]._id) {
-                datasets[i].isLoading = true;
-                datasets[i].loadingAction = 'deleting';
-                self.setState({datasets: datasets});
-                datasetIndex = i;
-            }
-        }
-		scitran.deleteDataset(dataset._id, function () {
-            datasets.splice(datasetIndex, 1);
-            self.setState({
-            	datasets: datasets, 
-            });
-		});
-	},
 
     paginate(data, perPage, page) {
         if (data.length < 1) return null;

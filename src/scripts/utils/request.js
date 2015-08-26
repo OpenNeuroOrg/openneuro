@@ -77,10 +77,14 @@ var Request = {
 function handleRequest (path, options, callback) {
 	options = normalizeOptions(options);
 	var google = hello('google');
-	hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
-		if (options.auth) {options.headers.Authorization = res.authResponse.access_token;}
+	if (options.auth) {
+		hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
+			options.headers.Authorization = res.authResponse.access_token;
+			callback(path, options);
+		});
+	} else {
 		callback(path, options);
-	});
+	}
 }
 
 /**
