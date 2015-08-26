@@ -5,14 +5,15 @@ import {NotFoundRoute, DefaultRoute, Route} from 'react-router';
 import requireAuth from './utils/requireAuth';
 
 // views
-import Index         from './common/index.jsx';
-import Signin        from './user/signin.component.jsx';
-import Admin         from './user/user.admin.jsx';
-import Dashboard     from './dashboard/dashboard.component.jsx';
-import Notifications from './dashboard/notifications.component.jsx';
-import Datasets      from './dashboard/datasets.component.jsx';
-import Dataset       from './dataset/dataset.jsx';
-import Jobs          from './dashboard/jobs.component.jsx';
+import Index          from './common/index.jsx';
+import Signin         from './user/signin.component.jsx';
+import Admin          from './user/user.admin.jsx';
+import Dashboard      from './dashboard/dashboard.component.jsx';
+import Notifications  from './dashboard/notifications.component.jsx';
+import Datasets       from './dashboard/datasets.component.jsx';
+import PublicDatasets from './dashboard/public-datasets.jsx';
+import Dataset        from './dataset/dataset.jsx';
+import Jobs           from './dashboard/jobs.component.jsx';
 
 // redirects -------------------------------------------------------------
 
@@ -44,7 +45,8 @@ let routes = (
 			<Route name="notifications" path="notifications" handler={Notifications}/>
 			<Route name="datasets" path="datasets" handler={Datasets}/>
 			<Route name="jobs" path="jobs" handler={Jobs}/>
-			<NotFoundRoute handler={RedirectNotifications}/>	
+			<Route name="public" path="public" handler={PublicDatasets}/>
+			<NotFoundRoute handler={RedirectNotifications}/>
 		</Route>
 		<Route name="dataset" path="dataset/:datasetId" handler={Dataset} />
 		<DefaultRoute handler={RedirectDashboard}/>
