@@ -13,7 +13,7 @@ hello.init({google: config.auth.google.clientID});
 var Request = {
 
 	get (path, options, callback) {
-		handleRequest(path, {}, function (path, options) {
+		handleRequest(path, options, function (path, options) {
 			request.get(config.scitran.url + path)
 				.set(options.headers)
 				.end(function (err, res) {
@@ -64,12 +64,21 @@ var Request = {
  * requests before they request out. Ensures
  * access_token isn't expired sets it as the
  * Authorization header.
+ *
+ * Available options
+ *   - headers: An object with keys set to the header name
+ *   and values set to the corresponding header value.
+ *   - query: An object with keys set to url query parameters
+ *   and values set to the corresponding query values.
+ *   - body: A http request body.
+ *   - auth: A boolean determining whether the access token
+ *   should be supplied with the request.
  */
 function handleRequest (path, options, callback) {
 	options = normalizeOptions(options);
 	var google = hello('google');
 	hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
-		options.headers.Authorization = res.authResponse.access_token;
+		if (options.auth) {options.headers.Authorization = res.authResponse.access_token;}
 		callback(path, options);
 	});
 }
@@ -94,6 +103,7 @@ function handleResponse (err, res, callback) {
 function normalizeOptions (options) {
 	if (!options.headers) {options.headers = {};}
 	if (!options.query)   {options.query   = {};}
+	if (!options.hasOwnProperty('auth')) {options.auth = true;}
 	return options;
 }
 
