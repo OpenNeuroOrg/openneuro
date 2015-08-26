@@ -1676,12 +1676,14 @@ to { -webkit-transform: rotate(360deg) }
 						padding:0;
 						
 						.left{
+							padding-left:0;
 							a{
 								padding: 16px 20px;
 								display: block;
 							}
 						}
 						.right {
+							padding-right:0;
 							text-align: right;
 							&.delete-data{
 								vertical-align: middle;

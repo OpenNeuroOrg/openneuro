@@ -66,7 +66,7 @@ export default class Datasets extends React.Component {
                         	<Spinner text={dataset.loadingAction + ' ' + dataset.name} active={dataset.isLoading} />
                         </div>
                         <div className="inner-right">
-                            <div className="row">
+                            <div>
                                 <div className="col-xs-6 left">
                                     <Link to="dataset" params={{datasetId: dataset._id}}>View dataset page »</Link>
                                 </div>
