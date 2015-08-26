@@ -254,6 +254,14 @@ export default  {
                 self.deleteContainer('projects', projectId, callback);
             });
         });
+    },
+
+// Delete ---------------------------------------------------------------------------------
+
+    updateProject (projectId, body, callback) {
+        request.put('projects/' + projectId, body, function (err, res) {
+            callback(err, res);
+        });
     }
 
 };
