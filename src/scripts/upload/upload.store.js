@@ -167,11 +167,11 @@ let UploadStore = Reflux.createStore({
 			activeKey: 5
 		});
 		
-		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress) {
+		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress, projectId) {
 			self.update({progress: progress, uploading: true});
 			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
-				self.uploadComplete();
+				self.uploadComplete(projectId);
 			}
 		});
 	},
@@ -183,12 +183,12 @@ let UploadStore = Reflux.createStore({
 	 * initial state. And creates an upload
 	 * complete alert.
 	 */
-	uploadComplete () {
+	uploadComplete (projectId) {
 		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
 		if (fileSelect) {fileSelect.value = null;} // clear file input
 
 		let message = (
-			<span><a href="#/dashboard/datasets">{this.data.dirName}</a> has been added and saved to your dashboard.</span>
+			<span><a href={"#/dataset/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>
 		);
 
 		datasetsStore.getDatasets();
