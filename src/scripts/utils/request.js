@@ -77,7 +77,7 @@ var Request = {
 function handleRequest (path, options, callback) {
 	options = normalizeOptions(options);
 	var google = hello('google');
-	if (options.auth) {
+	if (options.auth && hasCredentials()) {
 		hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
 			options.headers.Authorization = res.authResponse.access_token;
 			callback(path, options);
@@ -109,6 +109,11 @@ function normalizeOptions (options) {
 	if (!options.query)   {options.query   = {};}
 	if (!options.hasOwnProperty('auth')) {options.auth = true;}
 	return options;
+}
+
+function hasCredentials () {
+	return !!(JSON.parse(window.localStorage.hello).google.access_token);
+	// return true;
 }
 
 export default Request;

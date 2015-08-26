@@ -75,7 +75,7 @@ let UserStore = Reflux.createStore({
 
 		if (!this.online(googleAuth)) {
 			self.update({token: null});
-			router.transitionTo('signIn');
+			// router.transitionTo('signIn');
 		}
 
 		if (token) {
