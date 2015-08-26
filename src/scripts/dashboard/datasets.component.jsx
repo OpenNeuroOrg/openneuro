@@ -1,6 +1,9 @@
 // dependencies ------------------------------------------------------------------------------
 
 import React                from 'react';
+import Reflux               from 'reflux';
+import Actions              from './datasets.actions.js';
+import DatasetsStore        from './datasets.store.js';
 import {Link}               from 'react-router';
 import moment               from 'moment';
 import {PanelGroup, Panel}  from 'react-bootstrap';
@@ -12,28 +15,15 @@ import WarnButton           from '../common/forms/warn-button.component.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
-export default class Datasets extends React.Component {
-
-    constructor() {
-        super();
-	    this.state = {
-            loading: false,
-            datasets: [],
-            resultsPerPage: 30,
-            page: 0,
-        };
-    }
+let Datasets = React.createClass({
+    
+    mixins: [Reflux.connect(DatasetsStore)],
 
 // life cycle events -------------------------------------------------------------------------
 
     componentDidMount() {
-        let self = this;
-        self.setState({loading: true})
-        scitran.getProjects(function (datasets) {
-            datasets.reverse();
-            self.setState({datasets: datasets,  loading: false});
-        });
-    }
+        Actions.getDatasets();
+    },
 
     render() {
         let self     = this;
@@ -48,22 +38,21 @@ export default class Datasets extends React.Component {
             let paginatedResults = this.paginate(datasets, this.state.resultsPerPage, this.state.page);   
 
             // map results
-            results = paginatedResults.map(function (dataset, index){       
+            results = paginatedResults.map(function (dataset, index){
                 let dateAdded = moment(dataset.timestamp).format('L');
                 let timeago   = moment(dataset.timestamp).fromNow(true)
                 
                 let datasetheader = (
-                    <div className="header clearfix" onClick={self.loadDataTree.bind(self, dataset)}>
+                    <div className="header clearfix">
                         <h4 className="dataset">{dataset.name}</h4>
                         <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
                 );
 
                 return (
-                    <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={index}>
+                    <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={dataset._id}>
                         <div className="inner">
-                            {!dataset.isLoading ? "area for future content" : null}
-                        	<Spinner text={dataset.loadingAction + ' ' + dataset.name} active={dataset.isLoading} />
+                            area for future content
                         </div>
                         <div className="inner-right">
                             <div>
@@ -71,7 +60,7 @@ export default class Datasets extends React.Component {
                                     <Link to="dataset" params={{datasetId: dataset._id}}>View dataset page »</Link>
                                 </div>
                                 <div className="col-xs-6 right  delete-data">
-                                    <WarnButton message="Delete this dataset" action={self.deleteProject.bind(self, dataset)} />
+                                    <WarnButton message="Delete this dataset" action={self.deleteProject.bind(null, dataset)} />
                                 </div>
                             </div>
                         </div>
@@ -93,11 +82,11 @@ export default class Datasets extends React.Component {
 	                    page={this.state.page}
 	                    pagesTotal={pagesTotal}
 	                    pageRangeDisplayed={5}
-	                    onPageSelect={this.onPageSelect.bind(self)} />
+	                    onPageSelect={this.onPageSelect} />
             	</div>
             </div>
         );
-    }
+    },
 
 // custom methods ----------------------------------------------------------------------------
 
@@ -119,25 +108,7 @@ export default class Datasets extends React.Component {
             	datasets: datasets, 
             });
 		});
-	}
-
-    loadDataTree(dataset) {
-        let self = this;
-        let datasets = this.state.datasets;
-        for (let i = 0; i < datasets.length; i++) {
-            if (dataset._id === datasets[i]._id && !datasets[i].tree) {
-                datasets[i].isLoading = true;
-                datasets[i].loadingAction = 'loading';
-                self.setState({datasets: datasets});
-                scitran.getBIDSDataset(dataset._id, function (tree) {
-                    datasets[i].tree = tree;
-                    datasets[i].isLoading = false;
-                    datasets[i].loadingAction = null;
-                    self.setState({datasets: datasets});
-                });
-            }
-        }
-    }
+	},
 
     paginate(data, perPage, page) {
         if (data.length < 1) return null;
@@ -146,11 +117,13 @@ export default class Datasets extends React.Component {
         let end = start + perPage;
         var retArr = data.slice(start, end);
         return retArr;
-    }
+    },
 
     onPageSelect(page, e) {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
     }
 
-}
+});
+
+export default Datasets;

@@ -48,10 +48,11 @@ export default class ErrorLink extends React.Component {
     		for (var j = 0; j < issues[i].errors.length; j++) {
         		var issue = issues[i].errors[j];
         		issueString += '\tType:\t\t' + type + '\n';
-        		 if (!issue) {continue;}
-        		 issueString += '\tReason:\t\t' + issue.reason + '\n' +
-        		 				'\t@Line:\t\t' + issue.line + ' character: ' + issue.character + '\n'+
-        		 				'\tEvidence:\t' + issue.evidence + '\n\n';	 				
+        		if (!issue) {continue;}
+        		if (issue.reason)    {issueString += '\tReason:\t\t' + issue.reason + '\n';}
+        		if (issue.line)      {issueString += '\tLine:\t\t' + issue.line + '\n';}
+        		if (issue.character) {issueString += '\tCharacter:\t' + issue.character + '\n';}
+        		if (issue.evidence)  {issueString += '\tEvidence:\t' + issue.evidence + '\n\n';}			
     		}
     		issueString += '\n' + endLine +'\n\n\n';
     	}

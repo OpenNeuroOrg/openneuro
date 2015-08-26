@@ -18,23 +18,22 @@ export default class Issue extends React.Component {
 		let errLocation = '';
 		if (error.line)        {errLocation += 'Line: ' + error.line + ' ';}
 		if (error.character)   {errLocation += 'Character: ' + error.character + '';}
-		if (errLocation == '') {errLocation  = 'Evidence: ';}
+		if (errLocation == '' && error.evidence) {errLocation  = 'Evidence: ';}
+
 		return (
-			
-				<div className="em-body">
-					<h4 className="em-header">{this.props.type}: {index + 1}</h4>
-					<span className="e-meta">
-						<label>Reason: </label>
-						<p>{error.reason}</p>
-					</span>
-					<span className="e-meta">
-						<label>
-							{errLocation}
-						</label>
-						<p>{error.evidence}</p>
-					</span>				
-				</div>
-			
+			<div className="em-body">
+				<h4 className="em-header">{this.props.type}: {index + 1}</h4>
+				<span className="e-meta">
+					<label>Reason: </label>
+					<p>{error.reason}</p>
+				</span>
+				<span className="e-meta">
+					<label>
+						{errLocation}
+					</label>
+					<p>{error.evidence}</p>
+				</span>				
+			</div>
     	);
 	}
 

@@ -198,6 +198,7 @@ export default  {
         let self = this;
         let dataset = {};
         request.get('projects/' + projectId, function (err, res) {
+            if (res.status !== 200) {return callback(res);}
             for (let file of res.body.files) {file.name = file.filename;}
             dataset.name = res.body.name;
             dataset.type = 'folder';

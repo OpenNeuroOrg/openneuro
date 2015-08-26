@@ -5,6 +5,18 @@ import actions from './upload.actions';
 export default {
 
     /**
+     * Current Files
+     *
+     * An array of file names that are currently being uploaded.
+     */
+    currentFiles: [],
+
+    /**
+     * Current Project Id
+     */
+    currentProjectId: null,
+
+    /**
      * Handle Upload Response
      *
      * A generic response handler for all upload
@@ -29,13 +41,6 @@ export default {
     },
 
     /**
-     * Current Files
-     *
-     * An array of file names that are currently being uploaded.
-     */
-    currentFiles: [],
-
-    /**
      * Upload
      *
      * Takes an entire bids file tree and and file count
@@ -48,6 +53,7 @@ export default {
         let self = this;
         self.completed = 0;
         self.count = count;
+        self.currentProjectId = null;
         self.progressStart = function (filename) {
             self.currentFiles.push(filename);
             progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
@@ -56,7 +62,7 @@ export default {
             let index = self.currentFiles.indexOf(filename);
             self.currentFiles.splice(index, 1);
             self.completed++;
-            progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
+            progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles}, self.currentProjectId);
         }
         
         let existingProjectId = null;
@@ -94,6 +100,7 @@ export default {
      */
     uploadSubjects (subjects, projectId) {
         let self = this;
+        self.currentProjectId = projectId;
         for (let subject of subjects) {
             if (subject.children && subject.children.length > 0) {
                 self.progressStart(subject.name);
