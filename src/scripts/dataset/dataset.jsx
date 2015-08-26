@@ -21,7 +21,7 @@ export default class Dataset extends mixin(State) {
 		};
 	}
 
-	componentDidMount () {
+	componentDidMount() {
 		let self = this;
 		let params = this.getParams();
 		self.setState({loading: true});
@@ -34,16 +34,18 @@ export default class Dataset extends mixin(State) {
 		});
 	}
 
-	render () {
-		let loading  = this.state.loading;
-		let dataset  = this.state.dataset;
-		let notFound = this.state.notFound;
+	render() {
+		let datasetId = this.getParams().datasetId;
+		let loading   = this.state.loading;
+		let dataset   = this.state.dataset;
+		let notFound  = this.state.notFound;
 
 		let content;
 		if (dataset) {
 			content = (
 				<div>
 					<h1>{dataset[0].name}</h1>
+					<button onClick={this._publish.bind(this, datasetId)}>Make Public</button>
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={dataset[0].name} eventKey='1'>
 					  		<FileTree tree={dataset} />
@@ -67,4 +69,12 @@ export default class Dataset extends mixin(State) {
     	);
 	}
 
+// custon methods -----------------------------------------------------
+
+	_publish(datasetId) {
+		scitran.updateProject(datasetId, {body: {public: true}}, function (err, res) {
+			console.log(err);
+			console.log(res);
+		});
+	}
 }
