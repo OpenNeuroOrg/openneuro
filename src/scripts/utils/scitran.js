@@ -17,7 +17,7 @@ export default  {
      * Gets a list of all users
      */
     getUsers (callback) {
-        request.get('users', callback);
+        request.get('users', {}, callback);
     },
     
     /**
@@ -28,7 +28,7 @@ export default  {
      * user object.
      */
     verifyUser (callback) {
-        request.get('users/self', callback);
+        request.get('users/self', {}, callback);
     },
 
     /**
@@ -123,7 +123,7 @@ export default  {
      *
      */
     getProjects (callback) {
-        request.get('projects', function (err, res) {
+        request.get('projects', {}, function (err, res) {
             callback(res.body);
         });
     },
@@ -133,7 +133,7 @@ export default  {
      *
      */
     getSessions (projectId, callback) {
-        request.get('projects/' + projectId + '/sessions', function (err, res) {
+        request.get('projects/' + projectId + '/sessions', {}, function (err, res) {
             callback(res.body);
         });
     },
@@ -143,7 +143,7 @@ export default  {
      *
      */
     getAcquisitions (sessionId, callback) {
-        request.get('sessions/' + sessionId + '/acquisitions', function (err, res) {
+        request.get('sessions/' + sessionId + '/acquisitions', {}, function (err, res) {
             callback(res.body);
         });
     },
@@ -153,7 +153,7 @@ export default  {
             let subjects = [];
             async.each(sessions, function (session, cb) {
                 if (session.subject_code === 'subject') {
-                    request.get('sessions/' + session._id, function (err, res) {
+                    request.get('sessions/' + session._id, {}, function (err, res) {
                         session.children = res.body.files;
                         session.name = session.label;
                         subjects.push(session);
@@ -173,7 +173,7 @@ export default  {
             let sessions = [];
             async.each(sciSessions, function (session, cb) {
                 if (session.subject_code === subjectId) {
-                    request.get('sessions/' + session._id, function (err, res) {
+                    request.get('sessions/' + session._id, {}, function (err, res) {
                         session.children = res.body.files;
                         session.name = session.label;
                         sessions.push(session);
@@ -189,7 +189,7 @@ export default  {
     },
 
     getBIDSModalities (sessionId, callback) {
-        request.get('sessions/' + sessionId + '/acquisitions', function (err, res) {
+        request.get('sessions/' + sessionId + '/acquisitions', {}, function (err, res) {
             callback(res.body);
         });
     },
@@ -197,7 +197,7 @@ export default  {
     getBIDSDataset (projectId, callback) {
         let self = this;
         let dataset = {};
-        request.get('projects/' + projectId, function (err, res) {
+        request.get('projects/' + projectId, {}, function (err, res) {
             if (res.status !== 200) {return callback(res);}
             for (let file of res.body.files) {file.name = file.filename;}
             dataset.name = res.body.name;
@@ -212,7 +212,7 @@ export default  {
                             self.getBIDSModalities(session._id, function (modalities) {
                                 session.children = session.children.concat(modalities);
                                 async.each(modalities, function (modality, cb2) {
-                                    request.get('acquisitions/' + modality._id, function (err, res) {
+                                    request.get('acquisitions/' + modality._id, {}, function (err, res) {
                                         for (let file of res.body.files) {file.name = file.filename;}
                                         modality.children = res.body.files;
                                         modality.name = modality.label;

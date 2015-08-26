@@ -12,7 +12,7 @@ hello.init({google: config.auth.google.clientID});
  */
 var Request = {
 
-	get (path, callback) {
+	get (path, options, callback) {
 		handleRequest(path, {}, function (path, options) {
 			request.get(config.scitran.url + path)
 				.set(options.headers)
