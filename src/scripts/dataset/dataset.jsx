@@ -8,6 +8,7 @@ import FileTree   from '../upload/upload.file-tree.jsx';
 import Spinner    from '../common/partials/spinner.component.jsx';
 import userStore  from '../user/user.store';
 import WarnButton from '../common/forms/warn-button.component.jsx'; 
+import router     from '../utils/router-container';
 import {Accordion, Panel} from 'react-bootstrap';
 
 export default class Dataset extends mixin(State) {
@@ -34,9 +35,11 @@ export default class Dataset extends mixin(State) {
 		let status    = this.state.status;
 		let userOwns  = this._userOwns(dataset);
 
-		let publishBtn;
+		let publishBtn,
+			deleteBtn;
 		if (userOwns && !dataset[0].public) {
 			publishBtn = <WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset[0]._id)} />;
+            deleteBtn  = <WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset[0]._id)} />;
 		}
 
 		let content;
@@ -45,6 +48,7 @@ export default class Dataset extends mixin(State) {
 				<div>
 					<h1>{dataset[0].name}</h1>
 					{publishBtn}
+					{deleteBtn}
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={dataset[0].name} eventKey='1'>
 					  		<FileTree tree={dataset} />
@@ -93,6 +97,13 @@ export default class Dataset extends mixin(State) {
 				dataset[0].public = true;
 				self.setState({dataset});
 			}
+		});
+	}
+
+	_deleteDataset(datasetId) {
+		let self = this;
+		scitran.deleteDataset(datasetId, function () {
+            router.transitionTo('dashboard');
 		});
 	}
 

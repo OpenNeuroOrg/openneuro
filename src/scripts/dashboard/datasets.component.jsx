@@ -7,11 +7,8 @@ import DatasetsStore        from './datasets.store.js';
 import {Link}               from 'react-router';
 import moment               from 'moment';
 import {PanelGroup, Panel}  from 'react-bootstrap';
-import scitran              from '../utils/scitran';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
-import FileTree             from '../upload/upload.file-tree.jsx';
-import WarnButton           from '../common/forms/warn-button.component.jsx'; 
 
 // component setup ---------------------------------------------------------------------------
 
@@ -59,9 +56,6 @@ let Datasets = React.createClass({
                                 <div className="col-xs-6 left">
                                     <Link to="dataset" params={{datasetId: dataset._id}}>View dataset page »</Link>
                                 </div>
-                                <div className="col-xs-6 right  delete-data">
-                                    <WarnButton message="Delete this dataset" action={self.deleteProject.bind(null, dataset)} />
-                                </div>
                             </div>
                         </div>
                     </Panel>
@@ -89,26 +83,6 @@ let Datasets = React.createClass({
     },
 
 // custom methods ----------------------------------------------------------------------------
-
-	deleteProject(dataset) {
-		let self = this,
-            datasets = this.state.datasets,
-            datasetIndex;
-        for (var i = 0; i < self.state.datasets.length; i++) {
-            if (dataset._id === datasets[i]._id) {
-                datasets[i].isLoading = true;
-                datasets[i].loadingAction = 'deleting';
-                self.setState({datasets: datasets});
-                datasetIndex = i;
-            }
-        }
-		scitran.deleteDataset(dataset._id, function () {
-            datasets.splice(datasetIndex, 1);
-            self.setState({
-            	datasets: datasets, 
-            });
-		});
-	},
 
     paginate(data, perPage, page) {
         if (data.length < 1) return null;
