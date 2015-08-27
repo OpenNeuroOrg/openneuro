@@ -50,6 +50,7 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			refs: {},
 			dirName: '',
+			nameError: null,
 			changeName: false,
 			showSelect: true,
 			showRename: false,
@@ -77,16 +78,21 @@ let UploadStore = Reflux.createStore({
 	 * and starts validation.
 	 */
 	onChange (selectedFiles) {
+		let dirName = selectedFiles.tree[0].name,
+		    nameError = null;
+		if (dirName.length > 32) {
+			nameError = 'Names must be 32 characters or less';
+		}
 		this.setInitialState({
 			refs: this.data.refs,
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
-			dirName: selectedFiles.tree[0].name,
+			dirName: dirName,
+			nameError: nameError,
 			uploadStatus: 'files-selected',
 			showRename: true,
 			activeKey: 2
 		});
-		// this.validate(selectedFiles);
 	},
 
 	/**
@@ -233,9 +239,17 @@ let UploadStore = Reflux.createStore({
 	 * Sets the directory name to the passed value.
 	 */
 	updateDirName(value) {
+		let nameError = this.data.nameError;
+		if (value.length > 32) {
+			nameError = 'Names must be 32 characters or less';
+		} else {
+			nameError = null;
+		}
+
 		this.update({
 			dirName: value,
-			showResume: false
+			showResume: false,
+			nameError: nameError
 		});
 	},
 
