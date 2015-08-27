@@ -1,15 +1,16 @@
 // dependencies -------------------------------------------------------
 
-import React      from 'react';
-import {State}    from 'react-router';
-import mixin      from 'es6-react-mixins';
-import scitran    from '../utils/scitran';
-import FileTree   from '../upload/upload.file-tree.jsx';
-import Spinner    from '../common/partials/spinner.component.jsx';
-import userStore  from '../user/user.store';
-import WarnButton from '../common/forms/warn-button.component.jsx'; 
-import router     from '../utils/router-container';
-import {Link}     from 'react-router';
+import React       from 'react';
+import {State}     from 'react-router';
+import mixin       from 'es6-react-mixins';
+import scitran     from '../utils/scitran';
+import FileTree    from '../upload/upload.file-tree.jsx';
+import Spinner     from '../common/partials/spinner.component.jsx';
+import ClickToEdit from '../common/forms/click-to-edit.jsx';
+import WarnButton  from '../common/forms/warn-button.component.jsx'; 
+import userStore   from '../user/user.store';
+import router      from '../utils/router-container';
+import {Link}      from 'react-router';
 import {Accordion, Panel} from 'react-bootstrap';
 
 export default class Dataset extends mixin(State) {
@@ -36,13 +37,56 @@ export default class Dataset extends mixin(State) {
 		let status    = this.state.status;
 		let userOwns  = this._userOwns(dataset);
 
+		let description = {
+		    "Name": "The mother of all experiments",
+		    "License": "CC0",
+		    "Authors": ["Ramon y Cajal"],
+		    "Acknowledgements": "say here what are your acknowledgments",
+		    "HowToAcknowledge": "say here how you would like to be acknowledged",
+		    "Funding": "list your funding sources",
+		    "ReferencesAndLinks": "a paper / resource to be cited when using the data"
+		};
+
+		let descriptors = (
+			<div>
+				<div key="Name">
+					<label>Name</label><br />
+					<ClickToEdit value={description['Name']} />
+				</div>
+				<div key="License">
+					<label>License</label><br />
+					<ClickToEdit value={description['License']} />
+				</div>
+				<div key="Authors">
+					<label>Authors</label><br />
+					<ClickToEdit value={description['Authors']} />
+				</div>
+				<div key="Acknowledgements">
+					<label>Acknowledgements</label><br />
+					<ClickToEdit value={description['Acknowledgements']} />
+				</div>
+				<div key="How To Acknowledge">
+					<label>How To Acknowledge</label><br />
+					<ClickToEdit value={description['HowToAcknowledge']} />
+				</div>
+				<div key="Funding">
+					<label>Funding</label><br />
+					<ClickToEdit value={description['Funding']} />
+				</div>
+				<div key="References And Links">
+					<label>References And Links</label><br />
+					<ClickToEdit value={description['ReferencesAndLinks']} />
+				</div>
+			</div>
+		);
+
+
 		let tools;
 		if (userOwns && !dataset[0].public) {
 			tools = (
 				<div>
 					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset[0]._id)} />
 		            <WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset[0]._id)} />
-		            <Link to="dataset-edit" params={{datasetId: dataset[0]._id}}>Edit dataset</Link>
 		        </div>
             );
 		}
@@ -53,6 +97,7 @@ export default class Dataset extends mixin(State) {
 				<div>
 					<h1>{dataset[0].name}</h1>
 					{tools}
+					<div className="well">{descriptors}</div>
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={dataset[0].name} eventKey='1'>
 					  		<FileTree tree={dataset} />
