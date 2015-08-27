@@ -73,9 +73,8 @@ let UserStore = Reflux.createStore({
 		var token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
 
 
-		if (!this.online(googleAuth)) {
+		if (!this.loggedIn()) {
 			self.update({token: null});
-			// router.transitionTo('signIn');
 		}
 
 		if (token) {
@@ -135,9 +134,8 @@ let UserStore = Reflux.createStore({
 		}
 		if (signout) {
 			hello('google').logout().then(function () {
-				self.setInitialState();
 				upload.setInitialState();
-				delete window.sessionStorage.scitranUser;
+				self.clearAuth();
 				router.transitionTo('signIn');
 			}, function (e) {
 				// signout failure
@@ -155,7 +153,8 @@ let UserStore = Reflux.createStore({
 		});
 	},
 
-	online: function (session) {
+	loggedIn: function (session) {
+		var session = hello('google').getAuthResponse();
 		var currentTime = (new Date()).getTime() / 1000;
 		return session && session.access_token && session.expires > currentTime;
 	}

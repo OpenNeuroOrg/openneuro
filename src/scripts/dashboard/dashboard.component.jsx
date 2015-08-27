@@ -16,7 +16,6 @@ class Dashboard extends React.Component {
 					<li><Link to="notifications" className="btn-blue">Notifications<span className="unread-badge">2</span></Link></li>
 					<li><Link to="datasets" className="btn-blue">My Datasets</Link></li>
 					<li><Link to="jobs" className="btn-blue">My Results</Link></li>
-					<li><Link to="public" className="btn-blue">Public Datasets</Link></li>
 					{
 					/*
 						*

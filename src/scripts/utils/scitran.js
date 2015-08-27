@@ -200,8 +200,12 @@ export default  {
         request.get('projects/' + projectId, {}, function (err, res) {
             if (res.status !== 200) {return callback(res);}
             for (let file of res.body.files) {file.name = file.filename;}
-            dataset.name = res.body.name;
-            dataset.type = 'folder';
+            dataset = {
+                _id: res.body._id,
+                name: res.body.name,
+                type: 'folder',
+                permissions: res.body.permissions
+            };
             dataset.children = res.body.files;
             self.getBIDSSubjects(res.body._id, function (subjects) {
                 dataset.children = dataset.children.concat(subjects);
