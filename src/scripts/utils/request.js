@@ -112,8 +112,9 @@ function normalizeOptions (options) {
 }
 
 function hasCredentials () {
-	return !!(JSON.parse(window.localStorage.hello).google.access_token);
-	// return true;
+	var session = hello('google').getAuthResponse();
+	var currentTime = (new Date()).getTime() / 1000;
+	return session && session.access_token && session.expires > currentTime;
 }
 
 export default Request;

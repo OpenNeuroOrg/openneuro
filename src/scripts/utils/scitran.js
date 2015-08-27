@@ -204,7 +204,8 @@ export default  {
                 _id: res.body._id,
                 name: res.body.name,
                 type: 'folder',
-                permissions: res.body.permissions
+                permissions: res.body.permissions,
+                public: res.body.public
             };
             dataset.children = res.body.files;
             self.getBIDSSubjects(res.body._id, function (subjects) {

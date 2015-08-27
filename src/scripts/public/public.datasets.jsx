@@ -9,7 +9,6 @@ import request              from '../utils/request';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
 import FileTree             from '../upload/upload.file-tree.jsx';
-import WarnButton           from '../common/forms/warn-button.component.jsx'; 
 
 // component setup ---------------------------------------------------------------------------
 

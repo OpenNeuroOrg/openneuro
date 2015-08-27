@@ -1,12 +1,13 @@
 // dependencies -------------------------------------------------------
 
-import React     from 'react';
-import {State}   from 'react-router';
-import mixin     from 'es6-react-mixins';
-import scitran   from '../utils/scitran';
-import FileTree  from '../upload/upload.file-tree.jsx';
-import Spinner   from '../common/partials/spinner.component.jsx';
-import userStore from '../user/user.store';
+import React      from 'react';
+import {State}    from 'react-router';
+import mixin      from 'es6-react-mixins';
+import scitran    from '../utils/scitran';
+import FileTree   from '../upload/upload.file-tree.jsx';
+import Spinner    from '../common/partials/spinner.component.jsx';
+import userStore  from '../user/user.store';
+import WarnButton from '../common/forms/warn-button.component.jsx'; 
 import {Accordion, Panel} from 'react-bootstrap';
 
 export default class Dataset extends mixin(State) {
@@ -18,7 +19,7 @@ export default class Dataset extends mixin(State) {
 		this.state = {
 			loading: false,
 			dataset: null,
-			notFound: false
+			status: null
 		};
 	}
 
@@ -27,8 +28,8 @@ export default class Dataset extends mixin(State) {
 		let params = this.getParams();
 		self.setState({loading: true});
 		scitran.getBIDSDataset(params.datasetId, function (res) {
-			if (res.status === 404) {
-				self.setState({notFound: true, loading: false});
+			if (res.status === 404 || res.status === 403) {
+				self.setState({status: res.status, loading: false});
 			} else {
 				self.setState({dataset: res, loading: false});
 			}
@@ -38,12 +39,12 @@ export default class Dataset extends mixin(State) {
 	render() {
 		let loading   = this.state.loading;
 		let dataset   = this.state.dataset;
-		let notFound  = this.state.notFound;
+		let status    = this.state.status;
 		let userOwns  = this._userOwns(dataset);
 
 		let publishBtn;
-		if (userOwns) {
-			publishBtn = <button onClick={this._publish.bind(this, dataset._id)}>Make Public</button>;
+		if (userOwns && !dataset[0].public) {
+			publishBtn = <WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset[0]._id)} />;
 		}
 
 		let content;
@@ -59,10 +60,13 @@ export default class Dataset extends mixin(State) {
 			  		</Accordion>
 				</div>
 			);
-		} else if (notFound) {
+		} else {
+			let message;
+			if (status === 404) {message = 'Dataset not found.';}
+			if (status === 403) {message = 'You are not authorized to view this dataset.';}
 			content = (
 				<div>
-					<h1>Dataset not found.</h1>
+					<h1>{message}</h1>
 				</div>
 			);
 		}
@@ -78,9 +82,13 @@ export default class Dataset extends mixin(State) {
 // custon methods -----------------------------------------------------
 
 	_publish(datasetId) {
+		let self = this;
 		scitran.updateProject(datasetId, {body: {public: true}}, function (err, res) {
-			console.log(err);
-			console.log(res);
+			if (!err) {
+				let dataset = self.state.dataset;
+				dataset[0].public = true;
+				self.setState({dataset});
+			}
 		});
 	}
 
