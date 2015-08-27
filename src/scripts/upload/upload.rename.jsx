@@ -15,14 +15,16 @@ let Rename = React.createClass({
 // life cycle events --------------------------------------------------
 
 	render () {
-		let dirName = this.state.dirName,
-			tree    = this.state.tree,
+		let dirName   = this.state.dirName,
+			nameError = this.state.nameError,
+			tree      = this.state.tree,
 			fileStuctureDirName = dirName + " File Structure";
 
 		return (
 			<div>
 				<span className="message fadeIn">Rename your dataset (optional)</span>
 				<div className="dir-name has-input clearfix fadeIn">
+					{nameError ? <span>{nameError}</span> : null}
 					<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
 					<Input type="text" placeholder="dataset name" initialValue={dirName} onChange={this._updateDirName} />
 				</div>
@@ -31,7 +33,7 @@ let Rename = React.createClass({
 				  		<FileTree tree={tree}/>
 				  	</Panel>
 			  	</Accordion>
-				<button className="btn-blue" onClick={this._validate.bind(null, this.state.list)}>Continue</button>
+				<button className="btn-blue" disabled={nameError} onClick={this._validate.bind(null, this.state.list)}>Continue</button>
 			</div>
     	);
 	},
