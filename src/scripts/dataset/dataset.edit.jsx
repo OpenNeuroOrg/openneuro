@@ -36,23 +36,12 @@ export default class Dataset extends mixin(State) {
 		let status    = this.state.status;
 		let userOwns  = this._userOwns(dataset);
 
-		let tools;
-		if (userOwns && !dataset[0].public) {
-			tools = (
-				<div>
-					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset[0]._id)} />
-		            <WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset[0]._id)} />
-		            <Link to="dataset-edit" params={{datasetId: dataset[0]._id}}>Edit dataset</Link>
-		        </div>
-            );
-		}
-
 		let content;
 		if (dataset) {
 			content = (
 				<div>
 					<h1>{dataset[0].name}</h1>
-					{tools}
+					<Link to="dataset" params={{datasetId: dataset[0]._id}}>View dataset</Link>
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={dataset[0].name} eventKey='1'>
 					  		<FileTree tree={dataset} />
