@@ -27,8 +27,13 @@ export default class Dataset extends mixin(State) {
 	}
 
 	componentDidMount() {
+		console.log('here');
 		let params = this.getParams();
 		this._loadDataset(params.datasetId);
+	}
+
+	componentShouldUpdate() {
+		console.log('should update');
 	}
 
 	render() {
@@ -47,35 +52,41 @@ export default class Dataset extends mixin(State) {
 		    "ReferencesAndLinks": "a paper / resource to be cited when using the data"
 		};
 
+		let README = "README file is plain text and can follow any format you would like";
+
 		let descriptors = (
 			<div>
-				<div key="Name">
+				<div>
 					<label>Name</label><br />
-					<ClickToEdit value={description['Name']} />
+					<ClickToEdit value={description['Name']} editable={userOwns} />
 				</div>
-				<div key="License">
+				<div>
 					<label>License</label><br />
-					<ClickToEdit value={description['License']} />
+					<ClickToEdit value={description['License']} editable={userOwns} />
 				</div>
-				<div key="Authors">
+				<div>
 					<label>Authors</label><br />
-					<ClickToEdit value={description['Authors']} />
+					<ClickToEdit value={description['Authors']} editable={userOwns} type="array" />
 				</div>
-				<div key="Acknowledgements">
+				<div>
 					<label>Acknowledgements</label><br />
-					<ClickToEdit value={description['Acknowledgements']} />
+					<ClickToEdit value={description['Acknowledgements']} editable={userOwns} type="textarea" />
 				</div>
-				<div key="How To Acknowledge">
+				<div>
 					<label>How To Acknowledge</label><br />
-					<ClickToEdit value={description['HowToAcknowledge']} />
+					<ClickToEdit value={description['HowToAcknowledge']} editable={userOwns} type="textarea" />
 				</div>
-				<div key="Funding">
+				<div>
 					<label>Funding</label><br />
-					<ClickToEdit value={description['Funding']} />
+					<ClickToEdit value={description['Funding']} editable={userOwns} type="textarea" />
 				</div>
-				<div key="References And Links">
+				<div>
 					<label>References And Links</label><br />
-					<ClickToEdit value={description['ReferencesAndLinks']} />
+					<ClickToEdit value={description['ReferencesAndLinks']} editable={userOwns}  type="textarea" />
+				</div>
+				<div>
+					<label>README</label><br />
+					<ClickToEdit value={README} editable={userOwns} type="textarea" />
 				</div>
 			</div>
 		);

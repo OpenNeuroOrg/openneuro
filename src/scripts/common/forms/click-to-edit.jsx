@@ -4,7 +4,18 @@ import React from 'react';
 
 let ClickToEdit = React.createClass({
 
+	propTypes: {
+		type: React.PropTypes.string,
+	},
+
 // life cycle events --------------------------------------------------
+
+	getDefaultProps () {
+		return {
+			type: 'input',
+			editable: true
+		};
+	},
 
 	getInitialState() {
 		return {
@@ -13,14 +24,37 @@ let ClickToEdit = React.createClass({
 		}
 	},
 
-
 	render() {
 		let value = this.state.value;
 
-		let display = <div><div>{value}</div><button onClick={this._edit}>click to edit</button></div>;
-		let edit   = (
+		let input;
+		switch (this.props.type) {
+			case "input":
+				input = <input value={value} onChange={this._handleChange} />;
+				break;
+			case "textarea":
+				input = <textarea value={value} onChange={this._handleChange}></textarea>;
+				break;
+			case "array":
+				input = <div>array input</div>;
+				break;
+		}
+
+		let editBtn;
+		if (this.props.editable) {
+			editBtn = <button onClick={this._edit}>click to edit</button>;
+		}
+
+		let display = (
 			<div>
-				<textarea value={value} onChange={this._handleChange}></textarea>
+				<div>{value}</div>
+				{editBtn}
+			</div>
+		);
+
+		let edit = (
+			<div>
+				{input}
 				<button onClick={this._display}>save</button>
 				<button onClick={this._cancel}>cancel</button>
 			</div>
