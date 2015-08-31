@@ -1,26 +1,21 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react';
+import React      from 'react';
+import ArrayInput from './array-input.jsx';
 
 let ClickToEdit = React.createClass({
-
-	propTypes: {
-		type: React.PropTypes.string,
-	},
 
 // life cycle events --------------------------------------------------
 
 	getDefaultProps () {
 		return {
-			type: 'input',
 			editable: true
 		};
 	},
 
 	getInitialState() {
 		return {
-			value: this.props.value ? this.props.value : '',
-			initialValue: this.props.value ? this.props.value : ''
+			value: this.props.value ? this.props.value : ''
 		}
 	},
 
@@ -28,15 +23,16 @@ let ClickToEdit = React.createClass({
 		let value = this.state.value;
 
 		let input;
-		switch (this.props.type) {
-			case "input":
-				input = <input value={value} onChange={this._handleChange} />;
-				break;
-			case "textarea":
+		switch (typeof value) {
+			case "string":
 				input = <textarea value={value} onChange={this._handleChange}></textarea>;
 				break;
-			case "array":
-				input = <div>array input</div>;
+			case "object":
+				input = (
+					<div>
+						<ArrayInput value={value} />
+					</div>
+				);
 				break;
 		}
 
@@ -55,14 +51,17 @@ let ClickToEdit = React.createClass({
 		let edit = (
 			<div>
 				{input}
-				<button onClick={this._display}>save</button>
+				<button onClick={this._save}>save</button>
 				<button onClick={this._cancel}>cancel</button>
 			</div>
 		);
 
 		return (
 			<div>
-				{this.state.edit ? edit : display}
+				<label>{this.props.label}</label><br />
+				<div>
+					{this.state.edit ? edit : display}
+				</div>
 			</div>
     	);
 	},
@@ -79,14 +78,17 @@ let ClickToEdit = React.createClass({
 
 	_handleChange(event) {
 		this.setState({value: event.target.value});
+	},
 
+	_save() {
+		this._display();
 		if (this.props.onChange) {
-			this.props.onChange(event);
+			this.props.onChange(this.state.value);
 		}
 	},
 
 	_cancel() {
-		this.setState({edit: false, value: this.state.initialValue});
+		this.setState({edit: false, value: this.props.value});
 	}
 
 });
