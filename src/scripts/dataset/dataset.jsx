@@ -22,7 +22,16 @@ export default class Dataset extends mixin(State) {
 		this.state = {
 			loading: false,
 			dataset: null,
-			status: null
+			status: null,
+			description: {
+			    "Name": "The mother of all experiments",
+			    "License": "CC0",
+			    "Authors": ["Ramon y Cajal", "Harry Truman"],
+			    "Acknowledgements": "say here what are your acknowledgments",
+			    "HowToAcknowledge": "say here how you would like to be acknowledged",
+			    "Funding": "list your funding sources",
+			    "ReferencesAndLinks": "a paper / resource to be cited when using the data"
+			}
 		};
 	}
 
@@ -42,52 +51,26 @@ export default class Dataset extends mixin(State) {
 		let status    = this.state.status;
 		let userOwns  = this._userOwns(dataset);
 
-		let description = {
-		    "Name": "The mother of all experiments",
-		    "License": "CC0",
-		    "Authors": ["Ramon y Cajal"],
-		    "Acknowledgements": "say here what are your acknowledgments",
-		    "HowToAcknowledge": "say here how you would like to be acknowledged",
-		    "Funding": "list your funding sources",
-		    "ReferencesAndLinks": "a paper / resource to be cited when using the data"
-		};
+		let description = this.state.description;
 
 		let README = "README file is plain text and can follow any format you would like";
 
+		let items = []
+		for (let key in this.state.description) {
+			items.push(
+				<ClickToEdit value={description[key]}
+					key={key}
+					label={key}
+					editable={userOwns}
+					onChange={this._updateDescription.bind(this, key)} />
+			);
+		}
+
 		let descriptors = (
 			<div>
-				<div>
-					<label>Name</label><br />
-					<ClickToEdit value={description['Name']} editable={userOwns} />
-				</div>
-				<div>
-					<label>License</label><br />
-					<ClickToEdit value={description['License']} editable={userOwns} />
-				</div>
-				<div>
-					<label>Authors</label><br />
-					<ClickToEdit value={description['Authors']} editable={userOwns} type="array" />
-				</div>
-				<div>
-					<label>Acknowledgements</label><br />
-					<ClickToEdit value={description['Acknowledgements']} editable={userOwns} type="textarea" />
-				</div>
-				<div>
-					<label>How To Acknowledge</label><br />
-					<ClickToEdit value={description['HowToAcknowledge']} editable={userOwns} type="textarea" />
-				</div>
-				<div>
-					<label>Funding</label><br />
-					<ClickToEdit value={description['Funding']} editable={userOwns} type="textarea" />
-				</div>
-				<div>
-					<label>References And Links</label><br />
-					<ClickToEdit value={description['ReferencesAndLinks']} editable={userOwns}  type="textarea" />
-				</div>
-				<div>
-					<label>README</label><br />
-					<ClickToEdit value={README} editable={userOwns} type="textarea" />
-				</div>
+				{items}
+				<ClickToEdit value={README} editable={userOwns} />
+				<button onClick={function() {console.log(description)}}>testdatachanges</button>
 			</div>
 		);
 
@@ -136,6 +119,12 @@ export default class Dataset extends mixin(State) {
 	}
 
 // custon methods -----------------------------------------------------
+
+	_updateDescription(key, value) {
+		let description = this.state.description;
+		description[key] = value;
+		this.setState({description: description})
+	}
 
 	_loadDataset(datasetId) {
 		let self = this;
