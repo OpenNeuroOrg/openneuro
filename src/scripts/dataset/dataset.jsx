@@ -26,14 +26,14 @@ export default class Dataset extends mixin(State) {
 		};
 	}
 
-	componentDidMount() {
-		console.log('here');
+	componentWillReceiveProps() {
 		let params = this.getParams();
 		this._loadDataset(params.datasetId);
 	}
 
-	componentShouldUpdate() {
-		console.log('should update');
+	componentDidMount() {
+		let params = this.getParams();
+		this._loadDataset(params.datasetId);
 	}
 
 	render() {
@@ -139,7 +139,7 @@ export default class Dataset extends mixin(State) {
 
 	_loadDataset(datasetId) {
 		let self = this;
-		self.setState({loading: true});
+		self.setState({loading: true, dataset: null});
 		scitran.getBIDSDataset(datasetId, function (res) {
 			if (res.status === 404 || res.status === 403) {
 				self.setState({status: res.status, loading: false});
