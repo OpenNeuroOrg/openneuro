@@ -40,7 +40,7 @@ let upload = {
 		let self = this;
 		self.activeRequests++;
 		req.progressStart(req.file.name);
-		request.put(req.url, {
+		request.post(req.url, {
             headers: {
                 'Content-Type': 'application/octet-stream',
                 'Content-MD5': req.hash
