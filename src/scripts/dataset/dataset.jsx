@@ -5,13 +5,14 @@ import Reflux       from 'reflux';
 import {State}      from 'react-router';
 import FileTree     from '../upload/upload.file-tree.jsx';
 import Spinner      from '../common/partials/spinner.component.jsx';
-import WarnButton   from '../common/forms/warn-button.component.jsx';
 import {Link}       from 'react-router';
 import {Accordion, Panel} from 'react-bootstrap';
 
 import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
 import Metadata     from './dataset.metadata.jsx';
+import Tools        from './dataset.tools.jsx';
+import Statuses     from './dataset.statuses.jsx';
 
 let Dataset = React.createClass({
 
@@ -21,12 +22,12 @@ let Dataset = React.createClass({
 
 	componentWillReceiveProps() {
 		let params = this.getParams();
-		this._loadDataset(params.datasetId);
+		Actions.loadDataset(params.datasetId);
 	},
 
 	componentDidMount() {
 		let params = this.getParams();
-		this._loadDataset(params.datasetId);
+		Actions.loadDataset(params.datasetId);
 	},
 
 	render() {
@@ -36,20 +37,9 @@ let Dataset = React.createClass({
 		let userOwns   = this.state.userOwns;
 
 		let tools;
-		if (userOwns && !dataset[0].public) {
-			tools = (
-				<div>
-					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset[0]._id)} />
-		            <WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset[0]._id)} />
-		        </div>
-            );
+		if (dataset && userOwns && !dataset[0].public) {
+			tools = <Tools datasetId={dataset[0]._id} />
 		}
-
-		let statuses = (
-			<div>
-				{dataset && dataset[0].status && dataset[0].status.uploadIncomplete ? <span>incomplete <i className="fa fa-warning"></i></span> : null}
-			</div>
-		)
 
 		let content;
 		if (dataset) {
@@ -57,7 +47,7 @@ let Dataset = React.createClass({
 				<div>
 					<h1>{dataset[0].name}</h1>
 					{tools}
-					{statuses}
+					<Statuses />
 					<Metadata />
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={dataset[0].name} eventKey='1'>
@@ -83,15 +73,7 @@ let Dataset = React.createClass({
             	{content}
 			</div>
     	);
-	},
-
-// custon methods -----------------------------------------------------
-
-	_loadDataset: Actions.loadDataset,
-
-	_publish: Actions.publish,
-
-	_deleteDataset: Actions.deleteDataset
+	}
 
 });
 

@@ -15,9 +15,7 @@ let Metadata = React.createClass({
 	render() {
 
 		let userOwns   = this.state.userOwns;
-
 		let description = this.state.description;
-
 		let README = "README file is plain text and can follow any format you would like";
 
 		let items = [];
