@@ -10,6 +10,7 @@ import ClickToEdit from '../common/forms/click-to-edit.jsx';
 import WarnButton  from '../common/forms/warn-button.component.jsx'; 
 import userStore   from '../user/user.store';
 import router      from '../utils/router-container';
+import dataUtils   from '../utils/dataUtils';
 import {Link}      from 'react-router';
 import {Accordion, Panel} from 'react-bootstrap';
 
@@ -46,10 +47,14 @@ export default class Dataset extends mixin(State) {
 	}
 
 	render() {
-		let loading   = this.state.loading;
-		let dataset   = this.state.dataset;
-		let status    = this.state.status;
-		let userOwns  = this._userOwns(dataset);
+		let loading    = this.state.loading;
+		let dataset    = this.state.dataset;
+		let status     = this.state.status;
+		let userOwns   = this._userOwns(dataset);
+
+		if (dataset) {
+			dataset[0].status = dataUtils.parseStatus(dataset[0].notes);
+		}
 
 		let description = this.state.description;
 
@@ -74,7 +79,6 @@ export default class Dataset extends mixin(State) {
 			</div>
 		);
 
-
 		let tools;
 		if (userOwns && !dataset[0].public) {
 			tools = (
@@ -85,12 +89,19 @@ export default class Dataset extends mixin(State) {
             );
 		}
 
+		let statuses = (
+			<div>
+				{dataset && dataset[0].status && dataset[0].status.uploadIncomplete ? <span>incomplete <i className="fa fa-warning"></i></span> : null}
+			</div>
+		)
+
 		let content;
 		if (dataset) {
 			content = (
 				<div>
 					<h1>{dataset[0].name}</h1>
 					{tools}
+					{statuses}
 					<div className="well">{descriptors}</div>
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={dataset[0].name} eventKey='1'>

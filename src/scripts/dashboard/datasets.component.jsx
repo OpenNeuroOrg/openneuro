@@ -9,6 +9,7 @@ import moment               from 'moment';
 import {PanelGroup, Panel}  from 'react-bootstrap';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
+import dataUtils            from '../utils/dataUtils';
 
 // component setup ---------------------------------------------------------------------------
 
@@ -38,7 +39,7 @@ let Datasets = React.createClass({
             results = paginatedResults.map(function (dataset, index){
                 let dateAdded  = moment(dataset.timestamp).format('L');
                 let timeago    = moment(dataset.timestamp).fromNow(true);
-                let status     = self._parseStatus(dataset.notes);
+                let status     = dataUtils.parseStatus(dataset.notes);
                 let incomplete = status.uploadIncomplete ? <span>incomplete <i className="fa fa-warning"></i></span> : null;
                 
                 let datasetheader = (
@@ -98,18 +99,6 @@ let Datasets = React.createClass({
     _onPageSelect(page, e) {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
-    },
-
-    _parseStatus(notes) {
-        let status = {};
-        if (notes) {
-            for (let note of notes) {
-                if (note.author === 'uploadStatus' && note.text === 'incomplete') {
-                    status['uploadIncomplete'] = true;
-                }
-            }
-        }
-        return status;
     }
 
 });
