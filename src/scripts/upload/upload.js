@@ -85,15 +85,11 @@ export default {
                     self.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
                 });
             } else {
-                let body = {
-                    name: fileTree[0].name
-                };
+                let body = {name: fileTree[0].name};
                 scitran.createProject(userId,  body, function (err, res) {
                     let projectId = res.body._id;
-                    let body2 = {
-                        notes: [{author: 'uploadStatus', text: 'incomplete'}]
-                    };
-                    scitran.updateProject(projectId, body2, function (err1, res1) {
+                    body = {notes: [{author: 'uploadStatus', text: 'incomplete'}]};
+                    scitran.updateProject(projectId, body, function () {
                         self.handleUploadResponse(err, res, function () {
                             self.uploadSubjects(fileTree[0].children, projectId);
                         });
