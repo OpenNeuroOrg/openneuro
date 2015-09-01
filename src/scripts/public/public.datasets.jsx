@@ -2,24 +2,31 @@
 
 import React                from 'react';
 import Reflux               from 'reflux';
-import Actions              from './datasets.actions.js';
-import DatasetsStore        from './datasets.store.js';
 import {Link}               from 'react-router';
 import moment               from 'moment';
 import {PanelGroup, Panel}  from 'react-bootstrap';
+import request              from '../utils/request';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
+import FileTree             from '../upload/upload.file-tree.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
 let Datasets = React.createClass({
-    
-    mixins: [Reflux.connect(DatasetsStore)],
 
 // life cycle events -------------------------------------------------------------------------
 
+    getInitialState() {
+        return {
+            loading: false,
+            datasets: [],
+            resultsPerPage: 30,
+            page: 0
+        }
+    },
+    
     componentDidMount() {
-        Actions.getDatasets();
+        this._getDatasets();
     },
 
     render() {
@@ -28,7 +35,7 @@ let Datasets = React.createClass({
         let results;
 
         if (datasets.length === 0) {
-            let noDatasets = "You don't have any datasets.";
+            let noDatasets = "There are no datasets.";
             results = <p className="no-datasets">{noDatasets}</p>;
         } else {
             var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
@@ -66,7 +73,7 @@ let Datasets = React.createClass({
         return (
         	<div className="fadeIn">
             	<div className="dash-tab-content datasets ">
-                    <h2>My Datasets</h2>
+                    <h2>Datasets</h2>
                     <PanelGroup accordion> 
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>
@@ -83,6 +90,16 @@ let Datasets = React.createClass({
     },
 
 // custom methods ----------------------------------------------------------------------------
+    
+    _getDatasets() {
+        let self = this;
+        self.setState({loading: true});
+        request.get('projects', {auth: false}, function (err, res) {
+            let datasets = res.body;
+            datasets.reverse();
+            self.setState({datasets: datasets,  loading: false});
+        });
+    },
 
     paginate(data, perPage, page) {
         if (data.length < 1) return null;

@@ -1,9 +1,10 @@
 // dependencies ----------------------------------------------------------------------
 
-import React     from 'react';
-import Reflux    from 'reflux';
-import Actions   from './datasets.actions.js';
-import scitran   from '../utils/scitran';
+import React      from 'react';
+import Reflux     from 'reflux';
+import Actions    from './datasets.actions.js';
+import scitran    from '../utils/scitran';
+import userStore  from '../user/user.store.js';
 
 // store setup -----------------------------------------------------------------------
 
@@ -53,8 +54,15 @@ let UploadStore = Reflux.createStore({
 		let self = this;
         self.update({loading: true});
         scitran.getProjects(function (datasets) {
+        	let results = [];
             datasets.reverse();
-            self.update({datasets: datasets,  loading: false});
+            for (let dataset of datasets) {
+            	// if user created dataset
+                if (dataset.group === userStore.data.scitran._id) {
+                	results.push(dataset);
+                }
+            }
+            self.update({datasets: results,  loading: false});
         });
     }
 

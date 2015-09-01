@@ -32,7 +32,7 @@ export default class WarnButton extends React.Component {
 
         let viewdeleteBtn = (
         	<div className=" fadeIn" >
-        		 <button className="btn btn-admin warning" onClick={this.toggleDelete.bind(this)}>{message}<i className="fa fa-trash-o"></i> </button>
+        		 <button className="btn btn-admin warning" onClick={this.toggleDelete.bind(this)}>{message}<i className={'fa ' + this.props.icon}></i> </button>
         	</div>
         );
 
@@ -52,11 +52,13 @@ export default class WarnButton extends React.Component {
 WarnButton.propTypes = {
 	message: React.PropTypes.string,
 	cancel:  React.PropTypes.string,
-	confirm: React.PropTypes.string
+	confirm: React.PropTypes.string,
+	icon:    React.PropTypes.string
 };
 
 WarnButton.defaultProps = {
 	message: 'Delete',
 	cancel:  'Cancel',
-	confirm: 'Yes Delete!'
+	confirm: 'Yes Delete!',
+	icon:    'fa-trash-o'
 };

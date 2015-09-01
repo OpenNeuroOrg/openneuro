@@ -1,11 +1,14 @@
 // dependencies -------------------------------------------------------
 
-import React    from 'react';
-import {State}  from 'react-router';
-import mixin    from 'es6-react-mixins';
-import scitran  from '../utils/scitran';
-import FileTree from '../upload/upload.file-tree.jsx';
-import Spinner  from '../common/partials/spinner.component.jsx';
+import React      from 'react';
+import {State}    from 'react-router';
+import mixin      from 'es6-react-mixins';
+import scitran    from '../utils/scitran';
+import FileTree   from '../upload/upload.file-tree.jsx';
+import Spinner    from '../common/partials/spinner.component.jsx';
+import userStore  from '../user/user.store';
+import WarnButton from '../common/forms/warn-button.component.jsx'; 
+import router     from '../utils/router-container';
 import {Accordion, Panel} from 'react-bootstrap';
 
 export default class Dataset extends mixin(State) {
@@ -17,33 +20,35 @@ export default class Dataset extends mixin(State) {
 		this.state = {
 			loading: false,
 			dataset: null,
-			notFound: false
+			status: null
 		};
 	}
 
-	componentDidMount () {
-		let self = this;
+	componentDidMount() {
 		let params = this.getParams();
-		self.setState({loading: true});
-		scitran.getBIDSDataset(params.datasetId, function (res) {
-			if (res.status === 404) {
-				self.setState({notFound: true, loading: false});
-			} else {
-				self.setState({dataset: res, loading: false});
-			}
-		});
+		this._loadDataset(params.datasetId);
 	}
 
-	render () {
-		let loading  = this.state.loading;
-		let dataset  = this.state.dataset;
-		let notFound = this.state.notFound;
+	render() {
+		let loading   = this.state.loading;
+		let dataset   = this.state.dataset;
+		let status    = this.state.status;
+		let userOwns  = this._userOwns(dataset);
+
+		let publishBtn,
+			deleteBtn;
+		if (userOwns && !dataset[0].public) {
+			publishBtn = <WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset[0]._id)} />;
+            deleteBtn  = <WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset[0]._id)} />;
+		}
 
 		let content;
 		if (dataset) {
 			content = (
 				<div>
 					<h1>{dataset[0].name}</h1>
+					{publishBtn}
+					{deleteBtn}
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={dataset[0].name} eventKey='1'>
 					  		<FileTree tree={dataset} />
@@ -51,10 +56,13 @@ export default class Dataset extends mixin(State) {
 			  		</Accordion>
 				</div>
 			);
-		} else if (notFound) {
+		} else {
+			let message;
+			if (status === 404) {message = 'Dataset not found.';}
+			if (status === 403) {message = 'You are not authorized to view this dataset.';}
 			content = (
 				<div>
-					<h1>Dataset not found.</h1>
+					<h1>{message}</h1>
 				</div>
 			);
 		}
@@ -67,4 +75,46 @@ export default class Dataset extends mixin(State) {
     	);
 	}
 
+// custon methods -----------------------------------------------------
+
+	_loadDataset(datasetId) {
+		let self = this;
+		self.setState({loading: true});
+		scitran.getBIDSDataset(datasetId, function (res) {
+			if (res.status === 404 || res.status === 403) {
+				self.setState({status: res.status, loading: false});
+			} else {
+				self.setState({dataset: res, loading: false});
+			}
+		});
+	}
+
+	_publish(datasetId) {
+		let self = this;
+		scitran.updateProject(datasetId, {body: {public: true}}, function (err, res) {
+			if (!err) {
+				let dataset = self.state.dataset;
+				dataset[0].public = true;
+				self.setState({dataset});
+			}
+		});
+	}
+
+	_deleteDataset(datasetId) {
+		let self = this;
+		scitran.deleteDataset(datasetId, function () {
+            router.transitionTo('dashboard');
+		});
+	}
+
+	_userOwns(dataset) {
+		let userOwns = false
+		if (dataset && dataset[0].permissions)
+		for (let user of dataset[0].permissions) {
+			if (userStore.data.scitran._id === user._id) {
+				userOwns = true;
+			}
+		}
+		return userOwns;
+	}
 }
