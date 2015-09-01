@@ -9,14 +9,13 @@ let ClickToEdit = React.createClass({
 
 	getDefaultProps () {
 		return {
-			editable: true
+			editable: true,
+			value: ''
 		};
 	},
 
 	getInitialState() {
-		return {
-			value: this.props.value ? this.props.value : ''
-		}
+		return {value: this.props.value};
 	},
 
 	render() {
@@ -62,6 +61,7 @@ let ClickToEdit = React.createClass({
 				<div>
 					{this.state.edit ? edit : display}
 				</div>
+				<br />
 			</div>
     	);
 	},
