@@ -75,6 +75,7 @@ export default {
             }
 
             if (existingProjectId) {
+                self.currentProjectId = existingProjectId;
                 scitran.getBIDSDataset(existingProjectId, function (oldDataset) {
                     let newDataset = fileTree[0];
                     let oldDataset = oldDataset[0];
@@ -82,11 +83,19 @@ export default {
                     self.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
                 });
             } else {
-                scitran.createProject(userId, fileTree[0].name, function (err, res) {
-                    self.handleUploadResponse(err, res, function () {
-                        let projectId = res.body._id;
-                        self.progressEnd();
-                        self.uploadSubjects(fileTree[0].children, projectId);
+                let body = {
+                    name: fileTree[0].name
+                };
+                scitran.createProject(userId,  body, function (err, res) {
+                    let projectId = res.body._id;
+                    let body2 = {
+                        notes: [{author: 'uploadStatus', text: 'incomplete'}]
+                    };
+                    scitran.updateProject(projectId, body2, function (err1, res1) {
+                        self.handleUploadResponse(err, res, function () {
+                            self.progressEnd();
+                            self.uploadSubjects(fileTree[0].children, projectId);
+                        });
                     });
                 });
             }

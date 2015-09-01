@@ -177,7 +177,10 @@ let UploadStore = Reflux.createStore({
 			self.update({progress: progress, uploading: true});
 			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
-				self.uploadComplete(projectId);
+				let body = {notes: [{author: 'uploadStatus', text: 'complete'}]};
+                scitran.updateProject(projectId, body, function (err1, res1) {
+					self.uploadComplete(projectId);
+                });
 			}
 		});
 	},

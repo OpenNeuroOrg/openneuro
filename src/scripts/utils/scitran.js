@@ -80,8 +80,7 @@ export default  {
      * Takes a group name and a project name and
      * generates a request to make a project in scitran.
      */
-    createProject (groupName, projectName, callback) {
-        let body = {name: projectName};
+    createProject (groupName, body, callback) {
         request.post('groups/' + groupName + '/projects', {body: body}, callback);
     },
 
@@ -201,7 +200,8 @@ export default  {
                 name: res.body.name,
                 type: 'folder',
                 permissions: res.body.permissions,
-                public: res.body.public
+                public: res.body.public,
+                notes: res.body.notes
             };
             dataset.children = res.body.files;
             self.getBIDSSubjects(res.body._id, function (subjects) {
@@ -257,10 +257,10 @@ export default  {
         });
     },
 
-// Delete ---------------------------------------------------------------------------------
+// Update ---------------------------------------------------------------------------------
 
     updateProject (projectId, body, callback) {
-        request.put('projects/' + projectId, body, function (err, res) {
+        request.put('projects/' + projectId, {body}, function (err, res) {
             callback(err, res);
         });
     }
