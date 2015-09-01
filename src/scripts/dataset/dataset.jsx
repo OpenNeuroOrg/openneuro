@@ -1,50 +1,38 @@
 // dependencies -------------------------------------------------------
 
-import React       from 'react';
-import {State}     from 'react-router';
-import mixin       from 'es6-react-mixins';
-import scitran     from '../utils/scitran';
-import FileTree    from '../upload/upload.file-tree.jsx';
-import Spinner     from '../common/partials/spinner.component.jsx';
-import ClickToEdit from '../common/forms/click-to-edit.jsx';
-import WarnButton  from '../common/forms/warn-button.component.jsx'; 
-import userStore   from '../user/user.store';
-import router      from '../utils/router-container';
-import dataUtils   from '../utils/dataUtils';
-import {Link}      from 'react-router';
+import React        from 'react';
+import Reflux       from 'reflux';
+import {State}      from 'react-router';
+import mixin        from 'es6-react-mixins';
+import scitran      from '../utils/scitran';
+import FileTree     from '../upload/upload.file-tree.jsx';
+import Spinner      from '../common/partials/spinner.component.jsx';
+import ClickToEdit  from '../common/forms/click-to-edit.jsx';
+import WarnButton   from '../common/forms/warn-button.component.jsx'; 
+import userStore    from '../user/user.store';
+import router       from '../utils/router-container';
+import dataUtils    from '../utils/dataUtils';
+import {Link}       from 'react-router';
 import {Accordion, Panel} from 'react-bootstrap';
 
-export default class Dataset extends mixin(State) {
+import datasetStore from './dataset.store';
+import Actions      from './dataset.actions.js';
+
+let Dataset = React.createClass({
+
+    mixins: [State, Reflux.connect(datasetStore)],
 
 // life cycle events --------------------------------------------------
-
-	constructor() {
-		super();
-		this.state = {
-			loading: false,
-			dataset: null,
-			status: null,
-			description: {
-			    "Name": "The mother of all experiments",
-			    "License": "CC0",
-			    "Authors": ["Ramon y Cajal", "Harry Truman"],
-			    "Acknowledgements": "say here what are your acknowledgments",
-			    "HowToAcknowledge": "say here how you would like to be acknowledged",
-			    "Funding": "list your funding sources",
-			    "ReferencesAndLinks": "a paper / resource to be cited when using the data"
-			}
-		};
-	}
 
 	componentWillReceiveProps() {
 		let params = this.getParams();
 		this._loadDataset(params.datasetId);
-	}
+	},
 
 	componentDidMount() {
 		let params = this.getParams();
 		this._loadDataset(params.datasetId);
-	}
+	},
 
 	render() {
 		let loading    = this.state.loading;
@@ -60,7 +48,7 @@ export default class Dataset extends mixin(State) {
 
 		let README = "README file is plain text and can follow any format you would like";
 
-		let items = []
+		let items = [];
 		for (let key in this.state.description) {
 			items.push(
 				<ClickToEdit value={description[key]}
@@ -127,45 +115,17 @@ export default class Dataset extends mixin(State) {
             	{content}
 			</div>
     	);
-	}
+	},
 
 // custon methods -----------------------------------------------------
 
-	_updateDescription(key, value) {
-		let description = this.state.description;
-		description[key] = value;
-		this.setState({description: description})
-	}
+	_updateDescription: Actions.updateDescription,
 
-	_loadDataset(datasetId) {
-		let self = this;
-		self.setState({loading: true, dataset: null});
-		scitran.getBIDSDataset(datasetId, function (res) {
-			if (res.status === 404 || res.status === 403) {
-				self.setState({status: res.status, loading: false});
-			} else {
-				self.setState({dataset: res, loading: false});
-			}
-		});
-	}
+	_loadDataset: Actions.loadDataset,
 
-	_publish(datasetId) {
-		let self = this;
-		scitran.updateProject(datasetId, {body: {public: true}}, function (err, res) {
-			if (!err) {
-				let dataset = self.state.dataset;
-				dataset[0].public = true;
-				self.setState({dataset});
-			}
-		});
-	}
+	_publish: Actions.publish,
 
-	_deleteDataset(datasetId) {
-		let self = this;
-		scitran.deleteDataset(datasetId, function () {
-            router.transitionTo('dashboard');
-		});
-	}
+	_deleteDataset: Actions.deleteDataset,
 
 	_userOwns(dataset) {
 		let userOwns = false
@@ -177,4 +137,7 @@ export default class Dataset extends mixin(State) {
 		}
 		return userOwns;
 	}
-}
+
+});
+
+export default Dataset;
