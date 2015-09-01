@@ -23,6 +23,8 @@ export default {
      * related requests.
      */
     handleUploadResponse (err, res, callback) {
+        let name = res.req._data.name;
+        this.progressEnd(name);
         if (err) {
             actions.uploadError();
         } else {
@@ -93,7 +95,6 @@ export default {
                     };
                     scitran.updateProject(projectId, body2, function (err1, res1) {
                         self.handleUploadResponse(err, res, function () {
-                            self.progressEnd();
                             self.uploadSubjects(fileTree[0].children, projectId);
                         });
                     });
@@ -115,7 +116,6 @@ export default {
                 self.progressStart(subject.name);
                 scitran.createSubject(projectId, subject.name, function (err, res, name) {
                     self.handleUploadResponse(err, res, function () {
-                        self.progressEnd(res.req._data.name);
                         let subjectId = res.body._id;
                         self.uploadSessions(subject.children, projectId, subjectId);
                     });
@@ -161,7 +161,6 @@ export default {
                 self.progressStart(session.name);
                 scitran.createSession(projectId, subjectId, session.name, function (err, res, name) {
                     self.handleUploadResponse(err, res, function () {
-                        self.progressEnd(res.req._data.name);
                         self.uploadModalities(session.children, res.body._id);
                     });
                 }); 
@@ -206,7 +205,6 @@ export default {
                 self.progressStart(modality.name);
                 scitran.createModality(subjectId, modality.name, function (err, res, name) {
                     self.handleUploadResponse(err, res, function () {
-                        self.progressEnd(res.req._data.name);
                         let modalityId = res.body._id;
                         self.uploadAcquisitions(modality.children, modalityId);
                     });
