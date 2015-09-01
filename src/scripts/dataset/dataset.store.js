@@ -1,9 +1,11 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux  from 'reflux';
-import Actions from './dataset.actions.js';
-import scitran from '../utils/scitran';
-import router  from '../utils/router-container';
+import Reflux    from 'reflux';
+import Actions   from './dataset.actions.js';
+import scitran   from '../utils/scitran';
+import router    from '../utils/router-container';
+import userStore from '../user/user.store';
+import dataUtils from '../utils/dataUtils';
 
 let UserStore = Reflux.createStore({
 
@@ -40,6 +42,7 @@ let UserStore = Reflux.createStore({
 		let data = {
 			loading: false,
 			dataset: null,
+			userOwns: false,
 			status: null,
 			description: {
 			    "Name": "The mother of all experiments",
@@ -70,7 +73,11 @@ let UserStore = Reflux.createStore({
 			if (res.status === 404 || res.status === 403) {
 				self.update({status: res.status, loading: false});
 			} else {
-				self.update({dataset: res, loading: false});
+				let userOwns = self._userOwns(res);
+				if (res[0].notes) {
+					res[0].status = dataUtils.parseStatus(res[0].notes)
+				}
+				self.update({dataset: res, loading: false, userOwns: userOwns});
 			}
 		});
 	},
@@ -92,6 +99,19 @@ let UserStore = Reflux.createStore({
             router.transitionTo('dashboard');
 		});
 	},
+
+// helpers ---------------------------------------------------------------------------
+
+	_userOwns(dataset) {
+		let userOwns = false
+		if (dataset && dataset[0].permissions)
+		for (let user of dataset[0].permissions) {
+			if (userStore.data.scitran._id === user._id) {
+				userOwns = true;
+			}
+		}
+		return userOwns;
+	}
 
 });
 
