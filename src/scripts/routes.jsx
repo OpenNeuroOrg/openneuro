@@ -13,7 +13,6 @@ import Notifications  from './dashboard/notifications.component.jsx';
 import Datasets       from './dashboard/datasets.component.jsx';
 import PublicDatasets from './public/public.datasets.jsx';
 import Dataset        from './dataset/dataset.jsx';
-import DatasetEdit    from './dataset/dataset.edit.jsx';
 import Jobs           from './dashboard/jobs.component.jsx';
 
 // redirects -------------------------------------------------------------
@@ -49,7 +48,6 @@ let routes = (
 		</Route>
 		<Route name="public" path="public" handler={PublicDatasets}/>
 		<Route name="dataset" path="dataset/:datasetId" handler={Dataset} />
-		<Route name="dataset-edit" path="dataset/:datasetId/edit" handler={DatasetEdit} />
 		<DefaultRoute handler={RedirectDashboard}/>
 		<NotFoundRoute handler={RedirectDashboard}/>	
 	</Route>
