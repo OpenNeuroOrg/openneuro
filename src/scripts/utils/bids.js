@@ -100,6 +100,7 @@ export default  {
             type: 'folder',
             permissions: project.permissions,
             public: project.public,
+            notes: project.notes,
             children: project.files,
             description: this.formatDescription(project.notes),
             status: this.formatStatus(project.notes),

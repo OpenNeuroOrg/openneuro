@@ -2,6 +2,7 @@
 
 import React      from 'react';
 import ArrayInput from './array-input.jsx';
+import Spinner    from '../partials/spinner.component.jsx';
 
 let ClickToEdit = React.createClass({
 
@@ -15,7 +16,10 @@ let ClickToEdit = React.createClass({
 	},
 
 	getInitialState() {
-		return {value: this.props.value};
+		return {
+			value: this.props.value,
+			loading: false
+		};
 	},
 
 	render() {
@@ -52,6 +56,7 @@ let ClickToEdit = React.createClass({
 				{input}
 				<button onClick={this._save}>save</button>
 				<button onClick={this._cancel}>cancel</button>
+				<Spinner active={this.state.loading} />
 			</div>
 		);
 
@@ -81,9 +86,12 @@ let ClickToEdit = React.createClass({
 	},
 
 	_save() {
-		this._display();
+		let self = this;
+		this.setState({loading: true});
 		if (this.props.onChange) {
-			this.props.onChange(this.state.value);
+			this.props.onChange(this.state.value, () => {
+				self.setState({loading: false, edit: false});
+			});
 		}
 	},
 
