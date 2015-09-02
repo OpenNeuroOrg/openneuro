@@ -28,7 +28,6 @@ let Metadata = React.createClass({
 		let descriptors = (
 			<div>
 				{items}
-				<button onClick={this._saveDescription.bind(null, description)}>testdatachanges</button>
 			</div>
 		);
 
@@ -38,8 +37,6 @@ let Metadata = React.createClass({
 	},
 
 // custon methods -----------------------------------------------------
-
-	_saveDescription: Actions.saveDescription,
 
 	_updateDescription: Actions.updateDescription,
 
