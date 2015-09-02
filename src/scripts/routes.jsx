@@ -34,7 +34,6 @@ class RedirectNotifications extends React.Component {
 // authenticated routes
 Dashboard   = requireAuth(Dashboard);
 Admin       = requireAuth(Admin, 'admin');
-DatasetEdit = requireAuth(DatasetEdit);
 
 let routes = (
 	<Route name="app" path="/" handler={Index}>
