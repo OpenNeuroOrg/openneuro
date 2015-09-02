@@ -14,7 +14,7 @@ let Metadata = React.createClass({
 
 	render() {
 		let userOwns   = this.state.userOwns;
-		let description = this.state.dataset[0].description;
+		let description = this.state.dataset ? this.state.dataset[0].description : null;
 		let README = "README file is plain text and can follow any format you would like";
 		
 		let items = [];
