@@ -5,7 +5,6 @@ import Actions   from './dataset.actions.js';
 import scitran   from '../utils/scitran';
 import router    from '../utils/router-container';
 import userStore from '../user/user.store';
-import dataUtils from '../utils/dataUtils';
 
 let UserStore = Reflux.createStore({
 
@@ -45,13 +44,13 @@ let UserStore = Reflux.createStore({
 			userOwns: false,
 			status: null,
 			description: {
-			    "Name": "The mother of all experiments",
-			    "License": "CC0",
-			    "Authors": ["Ramon y Cajal", "Harry Truman"],
-			    "Acknowledgements": "say here what are your acknowledgments",
-			    "HowToAcknowledge": "say here how you would like to be acknowledged",
-			    "Funding": "list your funding sources",
-			    "ReferencesAndLinks": "a paper / resource to be cited when using the data"
+			    "Name": "",
+			    "License": "",
+			    "Authors": [],
+			    "Acknowledgements": "",
+			    "HowToAcknowledge": "",
+			    "Funding": "",
+			    "ReferencesAndLinks": ""
 			}
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -87,9 +86,6 @@ let UserStore = Reflux.createStore({
 				self.update({status: res.status, loading: false});
 			} else {
 				let userOwns = self._userOwns(res);
-				if (res[0].notes) {
-					res[0].status = dataUtils.parseStatus(res[0].notes)
-				}
 				self.update({dataset: res, loading: false, userOwns: userOwns});
 			}
 		});

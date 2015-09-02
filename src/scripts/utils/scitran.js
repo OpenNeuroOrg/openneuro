@@ -194,16 +194,8 @@ export default  {
         let dataset = {};
         request.get('projects/' + projectId, {}, function (err, res) {
             if (res.status !== 200) {return callback(res);}
-            for (let file of res.body.files) {file.name = file.filename;}
-            dataset = {
-                _id: res.body._id,
-                name: res.body.name,
-                type: 'folder',
-                permissions: res.body.permissions,
-                public: res.body.public,
-                notes: res.body.notes
-            };
-            dataset.children = res.body.files;
+            let project = res.body;
+            dataset = self.formatDataset(project);
             self.getBIDSSubjects(res.body._id, function (subjects) {
                 dataset.children = dataset.children.concat(subjects);
                 async.each(subjects, function (subject, cb) {
@@ -226,6 +218,56 @@ export default  {
                 }, function () {callback([dataset])});
             });
         });
+    },
+
+    formatDataset (project) {
+        for (let file of project.files) {file.name = file.filename;}
+        let dataset = {
+            _id: project._id,
+            name: project.name,
+            type: 'folder',
+            permissions: project.permissions,
+            public: project.public,
+            children: project.files,
+            description: this.formatDescription(project.notes),
+            status: this.formatStatus(project.notes),
+        };
+
+        return dataset;
+    },
+
+    formatDescription (notes) {
+        let description = {
+            "Name": "",
+            "License": "",
+            "Authors": [],
+            "Acknowledgements": "",
+            "HowToAcknowledge": "",
+            "Funding": "",
+            "ReferencesAndLinks": ""
+        };
+
+        if (notes) {
+            for (let note of notes) {
+                if (note.author === 'description') {
+                    description = JSON.parse(note.text);
+                }
+            }
+        }
+
+        return description;
+    },
+
+    formatStatus (notes) {
+        let status = {};
+        if (notes) {
+            for (let note of notes) {
+                if (note.author === 'uploadStatus' && note.text === 'incomplete') {
+                    status['uploadIncomplete'] = true;
+                }
+            }
+        }
+        return status;
     },
 
 // Delete ---------------------------------------------------------------------------------
