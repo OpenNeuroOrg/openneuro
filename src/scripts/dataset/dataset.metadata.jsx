@@ -17,6 +17,7 @@ let Metadata = React.createClass({
 		let userOwns   = this.state.userOwns;
 		let description = this.state.description;
 		let README = "README file is plain text and can follow any format you would like";
+		console.log(this.state.dataset);
 
 		let items = [];
 		for (let key in this.state.description) {
@@ -33,7 +34,7 @@ let Metadata = React.createClass({
 			<div>
 				{items}
 				<ClickToEdit value={README} editable={userOwns} />
-				<button onClick={function() {console.log(description)}}>testdatachanges</button>
+				<button onClick={this._saveDescription.bind(null, description)}>testdatachanges</button>
 			</div>
 		);
 
@@ -43,6 +44,8 @@ let Metadata = React.createClass({
 	},
 
 // custon methods -----------------------------------------------------
+
+	_saveDescription: Actions.saveDescription,
 
 	_updateDescription: Actions.updateDescription,
 

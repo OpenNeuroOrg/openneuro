@@ -61,9 +61,22 @@ let UserStore = Reflux.createStore({
 // Actions ---------------------------------------------------------------------------
 
 	updateDescription(key, value) {
-		let description = this.state.description;
+		let description = this.data.description;
 		description[key] = value;
 		this.update({description: description})
+	},
+
+	saveDescription(description) {
+		let notes = this.data.dataset[0].notes;
+		notes.push({
+			author: 'description',
+			text: JSON.stringify(description)
+		});
+		console.log(notes);
+		scitran.updateProject(this.data.dataset[0]._id, {notes: notes}, function (err, res) {
+			console.log(err);
+			console.log(res);
+		});
 	},
 
 	loadDataset(datasetId) {
@@ -86,7 +99,7 @@ let UserStore = Reflux.createStore({
 		let self = this;
 		scitran.updateProject(datasetId, {body: {public: true}}, function (err, res) {
 			if (!err) {
-				let dataset = self.state.dataset;
+				let dataset = self.data.dataset;
 				dataset[0].public = true;
 				self.update({dataset});
 			}
