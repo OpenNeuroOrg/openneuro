@@ -28,7 +28,6 @@ let Metadata = React.createClass({
 		let descriptors = (
 			<div>
 				{items}
-				<ClickToEdit value={README} editable={userOwns} />
 				<button onClick={this._saveDescription.bind(null, description)}>testdatachanges</button>
 			</div>
 		);
