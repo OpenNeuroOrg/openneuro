@@ -3,6 +3,7 @@
 import Reflux    from 'reflux';
 import Actions   from './dataset.actions.js';
 import scitran   from '../utils/scitran';
+import bids      from '../utils/bids';
 import router    from '../utils/router-container';
 import userStore from '../user/user.store';
 
@@ -73,7 +74,7 @@ let UserStore = Reflux.createStore({
 	loadDataset(datasetId) {
 		let self = this;
 		self.update({loading: true, dataset: null});
-		scitran.getBIDSDataset(datasetId, function (res) {
+		bids.getBIDSDataset(datasetId, function (res) {
 			if (res.status === 404 || res.status === 403) {
 				self.update({status: res.status, loading: false});
 			} else {
@@ -96,7 +97,7 @@ let UserStore = Reflux.createStore({
 
 	deleteDataset(datasetId) {
 		let self = this;
-		scitran.deleteDataset(datasetId, function () {
+		bids.deleteDataset(datasetId, function () {
             router.transitionTo('dashboard');
 		});
 	},
