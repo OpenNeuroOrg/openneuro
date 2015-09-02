@@ -42,7 +42,6 @@ let UserStore = Reflux.createStore({
 		let data = {
 			loading: false,
 			dataset: null,
-			userOwns: false,
 			status: null
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -53,16 +52,16 @@ let UserStore = Reflux.createStore({
 
 	updateDescription(key, value, callback) {
 		let dataset = this.data.dataset;
-		let description = dataset[0].description;
+		let description = dataset.description;
 		description[key] = value;
-		dataset[0].description = description;
+		dataset.description = description;
 		this.saveDescription(description, callback);
 		this.update({dataset: dataset});
 	},
 
 	saveDescription(description, callback) {
 		let self = this;
-		let notes = this.data.dataset[0].notes;
+		let notes = this.data.dataset.notes;
 		let hasDescription = false;
 		for (let note of notes) {
 			if (note.author === 'description') {
@@ -76,7 +75,7 @@ let UserStore = Reflux.createStore({
 				text: JSON.stringify(description)
 			});
 		}
-		scitran.updateProject(this.data.dataset[0]._id, {notes: notes}, function (err, res) {
+		scitran.updateProject(this.data.dataset._id, {notes: notes}, function (err, res) {
 			callback();
 		});
 	},
@@ -84,12 +83,11 @@ let UserStore = Reflux.createStore({
 	loadDataset(datasetId) {
 		let self = this;
 		self.update({loading: true, dataset: null});
-		bids.getBIDSDataset(datasetId, function (res) {
+		bids.getDataset(datasetId, function (res) {
 			if (res.status === 404 || res.status === 403) {
 				self.update({status: res.status, loading: false});
 			} else {
-				let userOwns = self._userOwns(res);
-				self.update({dataset: res, loading: false, userOwns: userOwns});
+				self.update({dataset: res, loading: false});
 			}
 		});
 	},
@@ -99,7 +97,7 @@ let UserStore = Reflux.createStore({
 		scitran.updateProject(datasetId, {body: {public: true}}, function (err, res) {
 			if (!err) {
 				let dataset = self.data.dataset;
-				dataset[0].public = true;
+				dataset.public = true;
 				self.update({dataset});
 			}
 		});
@@ -110,19 +108,6 @@ let UserStore = Reflux.createStore({
 		bids.deleteDataset(datasetId, function () {
             router.transitionTo('dashboard');
 		});
-	},
-
-// helpers ---------------------------------------------------------------------------
-
-	_userOwns(dataset) {
-		let userOwns = false
-		if (dataset && dataset[0].permissions)
-		for (let user of dataset[0].permissions) {
-			if (userStore.data.scitran._id === user._id) {
-				userOwns = true;
-			}
-		}
-		return userOwns;
 	}
 
 });

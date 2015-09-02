@@ -37,21 +37,21 @@ let Dataset = React.createClass({
 		let userOwns   = this.state.userOwns;
 
 		let tools;
-		if (dataset && userOwns && !dataset[0].public) {
-			tools = <Tools datasetId={dataset[0]._id} />
+		if (dataset && userOwns && !dataset.public) {
+			tools = <Tools datasetId={dataset._id} />
 		}
 
 		let content;
 		if (dataset) {
 			content = (
 				<div>
-					<h1>{dataset[0].name}</h1>
+					<h1>{dataset.name}</h1>
 					{tools}
-					<Statuses />
-					<Metadata />
+					<Statuses dataset={dataset}/>
+					<Metadata dataset={dataset}/>
 					<Accordion className="fileStructure fadeIn">
-						<Panel header={dataset[0].name} eventKey='1'>
-					  		<FileTree tree={dataset} />
+						<Panel header={dataset.name} eventKey='1'>
+					  		<FileTree tree={[dataset]} />
 					  	</Panel>
 			  		</Accordion>
 				</div>

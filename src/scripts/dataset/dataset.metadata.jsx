@@ -1,20 +1,17 @@
 // dependencies -------------------------------------------------------
 
 import React        from 'react';
-import Reflux       from 'reflux';
-import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 
 let Metadata = React.createClass({
 
-    mixins: [Reflux.connect(datasetStore)],
-
 // life cycle events --------------------------------------------------
 
 	render() {
-		let userOwns   = this.state.userOwns;
-		let description = this.state.dataset ? this.state.dataset[0].description : null;
+		let dataset     = this.props.dataset;
+		let userOwns    = dataset ? dataset.userOwns : null;
+		let description = dataset ? dataset.description : null;
 		let README = "README file is plain text and can follow any format you would like";
 		
 		let items = [];

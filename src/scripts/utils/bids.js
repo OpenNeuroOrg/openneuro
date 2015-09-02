@@ -1,5 +1,6 @@
-import async   from 'async';
-import scitran from './scitran';
+import async     from 'async';
+import scitran   from './scitran';
+import userStore from '../user/user.store';
 
 /**
  * Scitran
@@ -18,7 +19,7 @@ export default  {
      * subjects after they are separated out
      * of scitran sessions.
      */
-    getBIDSSubjects (projectId, callback) {
+    getSubjects (projectId, callback) {
         scitran.getSessions(projectId, (sessions) => {
             let subjects = [];
             async.each(sessions, (session, cb) => {
@@ -38,7 +39,7 @@ export default  {
         });
     },
 
-    getBIDSSessions (projectId, subjectId, callback) {
+    getSessions (projectId, subjectId, callback) {
         scitran.getSessions(projectId, (sciSessions) => {
             let sessions = [];
             async.each(sciSessions, (session, cb) => {
@@ -58,23 +59,23 @@ export default  {
         });
     },
 
-    getBIDSModalities: scitran.getAcquisitions,
+    getModalities: scitran.getAcquisitions,
 
 
-    getBIDSDataset (projectId, callback) {
+    getDataset (projectId, callback) {
         let self = this;
         let dataset = {};
         scitran.getProject(projectId, (res) => {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
             dataset = self.formatDataset(project);
-            self.getBIDSSubjects(res.body._id, (subjects) => {
+            self.getSubjects(res.body._id, (subjects) => {
                 dataset.children = dataset.children.concat(subjects);
                 async.each(subjects, (subject, cb) => {
-                    self.getBIDSSessions(projectId, subject._id, (sessions) => {
+                    self.getSessions(projectId, subject._id, (sessions) => {
                         subject.children = subject.children.concat(sessions);
                         async.each(sessions, (session, cb1) => {
-                            self.getBIDSModalities(session._id, (modalities) => {
+                            self.getModalities(session._id, (modalities) => {
                                 session.children = session.children.concat(modalities);
                                 async.each(modalities, (modality, cb2) => {
                                     scitran.getAcquisition(modality._id, (res) => {
@@ -87,7 +88,7 @@ export default  {
                             });
                         }, cb);
                     });
-                }, () => {callback([dataset])});
+                }, () => {callback(dataset)});
             });
         });
     },
@@ -104,11 +105,34 @@ export default  {
             children: project.files,
             description: this.formatDescription(project.notes),
             status: this.formatStatus(project.notes),
+            userOwns: this.userOwns(project)
         };
 
         return dataset;
     },
 
+// Delete ---------------------------------------------------------------------------------
+
+    deleteDataset (projectId, callback) {
+        let self = this;
+        scitran.getSessions(projectId, (sessions) => {
+            async.each(sessions, (session, cb) => {
+                scitran.getAcquisitions(session._id, (acquisitions) => {
+                    async.each(acquisitions, (acquisition, cb1) => {
+                        scitran.deleteContainer('acquisitions', acquisition._id, cb1);
+                    }, () => {
+                        scitran.deleteContainer('sessions', session._id, cb);
+                    });
+                });
+            }, () => {
+                scitran.deleteContainer('projects', projectId, callback);
+            });
+        });
+    },
+
+// Dataset Format Helpers -----------------------------------------------------------------
+
+    
     formatDescription (notes) {
         let description = {
             "Name": "",
@@ -143,23 +167,15 @@ export default  {
         return status;
     },
 
-// Delete ---------------------------------------------------------------------------------
-
-    deleteDataset (projectId, callback) {
-        let self = this;
-        scitran.getSessions(projectId, (sessions) => {
-            async.each(sessions, (session, cb) => {
-                scitran.getAcquisitions(session._id, (acquisitions) => {
-                    async.each(acquisitions, (acquisition, cb1) => {
-                        scitran.deleteContainer('acquisitions', acquisition._id, cb1);
-                    }, () => {
-                        scitran.deleteContainer('sessions', session._id, cb);
-                    });
-                });
-            }, () => {
-                scitran.deleteContainer('projects', projectId, callback);
-            });
-        });
-    }
+    userOwns(dataset) {
+        let userOwns = false
+        if (dataset && dataset.permissions)
+        for (let user of dataset.permissions) {
+            if (userStore.data.scitran._id === user._id) {
+                userOwns = true;
+            }
+        }
+        return userOwns;
+    },
 
 };

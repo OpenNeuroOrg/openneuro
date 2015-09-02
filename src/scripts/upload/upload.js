@@ -1,4 +1,5 @@
 import scitran from '../utils/scitran';
+import bids    from '../utils/bids';
 import uploads from '../utils/upload';
 import actions from './upload.actions';
 
@@ -78,7 +79,7 @@ export default {
 
             if (existingProjectId) {
                 self.currentProjectId = existingProjectId;
-                scitran.getBIDSDataset(existingProjectId, function (oldDataset) {
+                bids.getDataset(existingProjectId, function (oldDataset) {
                     let newDataset = fileTree[0];
                     let oldDataset = oldDataset[0];
                     self.progressEnd();
