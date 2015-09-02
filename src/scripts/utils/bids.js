@@ -13,9 +13,9 @@ export default  {
 // Read -----------------------------------------------------------------------------------
 
     /**
-     * Get BIDS Subjects
+     * Get Subjects
      *
-     * Takes a projectId and return all BIDS
+     * Takes a projectId and returns all BIDS
      * subjects after they are separated out
      * of scitran sessions.
      */
@@ -39,6 +39,13 @@ export default  {
         });
     },
 
+    /**
+     * Get Sessions
+     *
+     * Takes a projectId and a subjectId and
+     * returns all BIDS sessions after they
+     * are separated out of scitran sessions.
+     */
     getSessions (projectId, subjectId, callback) {
         scitran.getSessions(projectId, (sciSessions) => {
             let sessions = [];
@@ -59,9 +66,19 @@ export default  {
         });
     },
 
+    /**
+     * Get Modalities
+     *
+     * Get all BIDS modalidalities for a session.
+     */
     getModalities: scitran.getAcquisitions,
 
-
+    /**
+     * Get Dataset
+     *
+     * Takes a projectId and returns a full
+     * nested BIDS dataset.
+     */
     getDataset (projectId, callback) {
         let self = this;
         let dataset = {};
@@ -93,24 +110,6 @@ export default  {
         });
     },
 
-    formatDataset (project) {
-        for (let file of project.files) {file.name = file.filename;}
-        let dataset = {
-            _id: project._id,
-            name: project.name,
-            type: 'folder',
-            permissions: project.permissions,
-            public: project.public,
-            notes: project.notes,
-            children: project.files,
-            description: this.formatDescription(project.notes),
-            status: this.formatStatus(project.notes),
-            userOwns: this.userOwns(project)
-        };
-
-        return dataset;
-    },
-
 // Delete ---------------------------------------------------------------------------------
 
     deleteDataset (projectId, callback) {
@@ -132,7 +131,38 @@ export default  {
 
 // Dataset Format Helpers -----------------------------------------------------------------
 
+    /**
+     * Format Dataset
+     *
+     * Takes a scitran project and returns
+     * a formatted top level container of a
+     * BIDS datset.
+     */
+    formatDataset (project) {
+        for (let file of project.files) {file.name = file.filename;}
+        let dataset = {
+            _id: project._id,
+            name: project.name,
+            type: 'folder',
+            permissions: project.permissions,
+            public: project.public,
+            notes: project.notes,
+            children: project.files,
+            description: this.formatDescription(project.notes),
+            status: this.formatStatus(project.notes),
+            userOwns: this.userOwns(project)
+        };
+
+        return dataset;
+    },
     
+    /**
+     * formatDescription
+     *
+     * Takes a notes array and returns
+     * a BIDS description object if the is
+     * a description note.
+     */
     formatDescription (notes) {
         let description = {
             "Name": "",
@@ -155,6 +185,13 @@ export default  {
         return description;
     },
 
+    /**
+     * Format Status
+     *
+     * Takes a notes array and returns
+     * a dataset status object corresponding
+     * to any statuses set in the notes.
+     */
     formatStatus (notes) {
         let status = {};
         if (notes) {
@@ -167,10 +204,17 @@ export default  {
         return status;
     },
 
-    userOwns(dataset) {
+    /**
+     * userOwns
+     *
+     * Takes a project and returns a boolean
+     * representing whether the current user
+     * is the owner of that datset.
+     */
+    userOwns(project) {
         let userOwns = false
-        if (dataset && dataset.permissions)
-        for (let user of dataset.permissions) {
+        if (project && project.permissions)
+        for (let user of project.permissions) {
             if (userStore.data.scitran._id === user._id) {
                 userOwns = true;
             }
