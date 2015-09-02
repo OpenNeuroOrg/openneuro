@@ -42,16 +42,7 @@ let UserStore = Reflux.createStore({
 			loading: false,
 			dataset: null,
 			userOwns: false,
-			status: null,
-			description: {
-			    "Name": "",
-			    "License": "",
-			    "Authors": [],
-			    "Acknowledgements": "",
-			    "HowToAcknowledge": "",
-			    "Funding": "",
-			    "ReferencesAndLinks": ""
-			}
+			status: null
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -60,9 +51,10 @@ let UserStore = Reflux.createStore({
 // Actions ---------------------------------------------------------------------------
 
 	updateDescription(key, value) {
-		let description = this.data.description;
+		let description = this.data.dataset[0].description;
 		description[key] = value;
-		this.update({description: description})
+		dataset[0].description = description;
+		this.update({dataset: dataset})
 	},
 
 	saveDescription(description) {
