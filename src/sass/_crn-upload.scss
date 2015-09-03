@@ -12,6 +12,7 @@
 
 .tasks-col .no-chrome-overlay{
     right: 0;
+    background: #000;
     background-color: rgba(16, 0, 0, 0.65);
     position: fixed;
     height: 100%;
@@ -19,10 +20,11 @@
     width: 33.3333%;
     padding:100px 20px;
     text-align: center;
-    color: #FFF;
+    color: $white;
     font-size: 80px;
     line-height: 80px;
     text-transform:uppercase;
+    text-shadow: 1px 2px 2px #000;
 }
 
 .tasks-col{
@@ -31,7 +33,6 @@
 			text-align: center;
 			width: 100%;
 			font-size: 15px;
-			text-transform:uppercase;
 			font-weight: 600;
 			color: $rock;
 			max-width: 400px;
@@ -445,7 +446,7 @@
 											}
 											.e-meta{
 												label{
-													color:$sky;
+													color:$black;
 													font-size: 12px;
 													text-transform: uppercase;
 												}
