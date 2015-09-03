@@ -1,0 +1,162 @@
+//buttons // ================================================================
+.btn-basic{
+	background: transparent;
+	border-radius: 1px;
+	outline: none;
+	white-space: nowrap;
+	cursor: pointer;
+	font-weight: 400;
+	font-size: 12pt;
+	color:$primary;
+	text-align: center;
+	padding:10px 50px;
+	width: 100%;
+	border:1px solid $primary;
+	text-transform: uppercase;
+	margin: 0 0 10px;
+
+	&:hover,
+	&:active,
+	&.hover,
+	&.active {
+		border-color:$primaryHover;
+		background: #fafafa;
+		color:$primaryHover;
+	}
+}
+.btn-admin{
+	background: none;
+	border: 1px solid #BBB;
+	color: #777;
+	border-radius: 2px;
+	&:hover,
+	&:active,
+	&.hover,
+	&.active  {
+		border-color:#aaa;
+		background: #e0e0e0;
+		color:#666;
+	}
+
+	&:focus{
+		border: none;
+		box-shadow: none;
+		outline: none !important;
+	}
+
+	&.delete{
+		color: $primary;
+		border-color: $primary;
+		background:none;
+		&:hover{
+			color: $primaryHover;
+			border-color: $primaryHover;
+		}
+	}
+	&.cancel{
+		background:none;
+		border:none;
+	}
+	&.warning{
+		border: none;
+	    color: $primary;
+	    background:none;
+	    &:hover{
+	    	color: $primaryHover;
+	    }
+	    i{margin-left:6px;}
+	}
+}
+.btn-blue{
+	font-family: FontAwesome;
+	content: '\f07b \0020 Validate';
+	display: inline-block;
+	background-color:$sky;
+	@include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
+	box-shadow:1px 1px 3px -1px rgba(0,0,0,0.7);
+	border-radius: 2px;
+	outline: none;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	cursor: pointer;
+	font-weight: 300;
+	font-size: 12pt;
+	color:$white;
+	text-align: center;
+	padding:13px 15px;
+	margin:0;
+	width: 100%;
+	border:1px solid lighten($sky, 8%);
+	text-transform: uppercase;
+	transition: all 0.3s ease-out;
+	&:hover,
+	&:active,
+	&.hover,
+	&.active  {
+		background: darken($sky, 10%);
+		transition: all 0.3s ease-out;
+		color:#fff;
+	}
+}
+
+
+//form // ================================================================
+
+.form-group {
+	position: relative;
+	//width: 300px;
+	margin: 20px auto;
+}
+
+.form-group label {
+	position: absolute;
+	top: 3px;
+	right: 5px;
+	font-size: 10px;
+	color: #777;
+	//display: none;
+}
+.form-group input {
+	width: 100%;
+	height: 50px;
+	font-size: 22px;
+	font-weight: lighter;
+	font-family: helvetica;
+	padding: 0px 10px;
+	border: none;
+	background: rgba(255,255,255,1);
+	border-radius:2px;
+	box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
+}
+
+textarea {
+	width: 100%;
+	min-height: 200px;
+	font-size: 22px;
+	font-weight: lighter;
+	font-family: helvetica;
+	padding: 15px 10px;
+	border: none;
+	background: rgba(255,255,255,1);
+	border-radius:2px;
+	box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
+}
+
+
+
+//progress bar ========================
+
+
+
+
+.progress{
+	background: #dedede;
+	border-radius:0;
+	height: 12px;
+	margin:0;
+}
+.progress-bar{
+	max-width: 100%;
+	background:$turquoise;
+}
+

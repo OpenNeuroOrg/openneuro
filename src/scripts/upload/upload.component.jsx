@@ -103,7 +103,7 @@ let Upload = React.createClass({
 
 		return (
 			<div className='right-sidebar'>
-				<div className="upload-nav">
+				<div className="rightsidebar-header">
 					<h2>My Tasks</h2>
 				</div>
 				<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>

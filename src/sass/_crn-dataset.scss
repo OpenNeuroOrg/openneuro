@@ -1,0 +1,23 @@
+// dataset dataset view
+.dataset .fileStructure.panel-group {
+	.panel-collapse{
+		.panel-body{
+			padding:0;
+			>ul{
+				overflow: visible;
+			    height: auto;
+			    padding: 10px;
+			    margin: 0;
+			}
+		}
+	}
+	.panel-default .panel-heading{
+		text-align: left;
+		.panel-title a{
+			font-size: 13px;
+		}
+	}
+}
+
+
+
