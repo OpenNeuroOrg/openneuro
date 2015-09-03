@@ -35,6 +35,7 @@ let ArrayInput = React.createClass({
 		let value = this.props.value;
 		value.push(input);
 		this.props.onChange({target: {value: value}});
+		this.refs.input.getDOMNode().value = '';
 	},
 
 	_remove(index) {
