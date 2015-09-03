@@ -1,0 +1,62 @@
+.container{
+  width: 100%;
+}
+.view.container{
+  width: 100%;
+  margin:0;
+  padding: 0;
+}
+.main.view.container{
+	padding-top:75px;
+}
+
+html,
+body,
+#main,
+.page,
+.full-col,
+.main-col,
+.view.container,
+.route-wrapper{
+	height:100%;
+}
+
+.route-wrapper{
+	padding: 0;
+	margin: 0;
+	padding-left: 55px;
+	.inner-route{
+		padding:20px 30px;
+	}
+}
+.full-col{
+	padding:0;
+	.navbar{
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 0;
+		z-index: 1300;
+	}
+}
+.main-col{
+	padding:0;
+	.navbar{
+		position: fixed;
+		width: 66.66667%;
+		top: 0;
+		left: 0;
+	}
+	.route-wrapper{
+		border-right: 5px solid #B5B5B5;
+		overflow-y: scroll;
+		position: fixed;
+		width: 66.66667%;
+		left: 0;	
+		padding-bottom: 100px;	
+	}
+}
+.tasks-col{
+	padding:0;
+}
+
