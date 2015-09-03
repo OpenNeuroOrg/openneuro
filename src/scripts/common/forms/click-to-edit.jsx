@@ -18,6 +18,7 @@ let ClickToEdit = React.createClass({
 	getInitialState() {
 		return {
 			value: this.props.value,
+			initialValue: JSON.stringify(this.props.value),
 			loading: false
 		};
 	},
@@ -33,7 +34,7 @@ let ClickToEdit = React.createClass({
 			case "object":
 				input = (
 					<div>
-						<ArrayInput value={value} />
+						<ArrayInput value={value} onChange={this._handleChange} />
 					</div>
 				);
 				break;
@@ -90,13 +91,15 @@ let ClickToEdit = React.createClass({
 		this.setState({loading: true});
 		if (this.props.onChange) {
 			this.props.onChange(this.state.value, () => {
-				self.setState({loading: false, edit: false});
+				let initialValue = JSON.stringify(this.state.value);
+				self.setState({loading: false, edit: false, initialValue: initialValue});
 			});
 		}
 	},
 
 	_cancel() {
-		this.setState({edit: false, value: this.props.value});
+		let value = JSON.parse(this.state.initialValue);
+		this.setState({edit: false, value: value});
 	}
 
 });

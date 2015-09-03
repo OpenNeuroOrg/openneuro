@@ -12,13 +12,6 @@ let ArrayInput = React.createClass({
 		return {value: []};
 	},
 
-	getInitialState() {
-		return {
-			value: this.props.value,
-			input: ''
-		};
-	},
-
 	render() {
 		let items = this.props.value.map((item, index) => {
 			return <div key={index}>{item} <button onClick={this._remove.bind(null, index)}>x</button></div>
@@ -29,7 +22,7 @@ let ArrayInput = React.createClass({
 				<div>
 					{items}
 				</div>
-				<input type="text" onChange={this._handleInput} />
+				<input type="text" ref="input"/>
 				<button onClick={this._add}>add</button>
 			</div>
 		)
@@ -37,18 +30,15 @@ let ArrayInput = React.createClass({
 
 // custon methods -----------------------------------------------------
 
-	_handleInput(e) {
-		this.setState({input: e.target.value});
-	},
-
 	_add() {
-		let input = this.state.input;
-		let value = this.state.value.push(input);
-		this.setState({value: value, input: ''});
+		let input = this.refs.input.getDOMNode().value;
+		let value = this.props.value;
+		value.push(input);
+		this.props.onChange({target: {value: value}});
 	},
 
 	_remove(index) {
-		let array = this.state.value;
+		let array = this.props.value;
 		array.splice(index, 1);
 		this.setState({value: array});
 	}
