@@ -39,7 +39,7 @@ export default  {
      */
     addUser (userData, callback) {
         let self = this;
-        request.post('users', {body: userData}, function (err, res) {
+        request.post('users', {body: userData}, (err, res) => {
             self.createGroup(userData._id, userData._id, callback);
         });
     },
@@ -50,8 +50,8 @@ export default  {
      * Takes a userId and removes the user.
      */
      removeUser (userId, callback) {
-        request.del('users/' + userId, function (err, res) {
-            request.del('groups/' + userId, function (err, res) {
+        request.del('users/' + userId, (err, res) => {
+            request.del('groups/' + userId, (err, res) => {
                 callback(err, res);
             });
         });
@@ -80,9 +80,7 @@ export default  {
      * Takes a group name and a project name and
      * generates a request to make a project in scitran.
      */
-    createProject (groupName, projectName, callback) {
-        let self = this;
-        let body = {name: projectName};
+    createProject (groupName, body, callback) {
         request.post('groups/' + groupName + '/projects', {body: body}, callback);
     },
 
@@ -91,7 +89,6 @@ export default  {
      *
      */
     createSubject (projectId, subjectName, callback) {
-        let self = this;
         let body = {label: subjectName, subject_code: 'subject'};
         request.post('projects/' + projectId + '/sessions', {body: body}, callback);
     },
@@ -101,7 +98,6 @@ export default  {
      *
      */
     createSession (projectId, subjectId, sessionName, callback) {
-        let self = this;
         let body = {label: sessionName, subject_code: subjectId};
         request.post('projects/' + projectId + '/sessions', {body: body}, callback);
     },
@@ -111,7 +107,6 @@ export default  {
      *
      */
     createModality (sessionId, modalityName, callback) {
-        let self = this;
         let body = {label: modalityName, datatype: 'modality'};
         request.post('sessions/' + sessionId + '/acquisitions', {body: body}, callback);
     },
@@ -123,8 +118,18 @@ export default  {
      *
      */
     getProjects (callback) {
-        request.get('projects', {}, function (err, res) {
+        request.get('projects', {}, (err, res) => {
             callback(res.body);
+        });
+    },
+
+    /**
+     * Get Project
+     *
+     */
+    getProject (projectId, callback) {
+        request.get('projects/' + projectId, {}, (err, res) => {
+            callback(res);
         });
     },
 
@@ -133,7 +138,17 @@ export default  {
      *
      */
     getSessions (projectId, callback) {
-        request.get('projects/' + projectId + '/sessions', {}, function (err, res) {
+        request.get('projects/' + projectId + '/sessions', {}, (err, res) => {
+            callback(res.body);
+        });
+    },
+
+    /**
+     * Get Session
+     *
+     */
+    getSession (sessionId, callback) {
+        request.get('sessions/' + sessionId, {}, (err, res) => {
             callback(res.body);
         });
     },
@@ -143,92 +158,18 @@ export default  {
      *
      */
     getAcquisitions (sessionId, callback) {
-        request.get('sessions/' + sessionId + '/acquisitions', {}, function (err, res) {
+        request.get('sessions/' + sessionId + '/acquisitions', {}, (err, res) => {
             callback(res.body);
         });
     },
 
-    getBIDSSubjects (projectId, callback) {
-        this.getSessions(projectId, function (sessions) {
-            let subjects = [];
-            async.each(sessions, function (session, cb) {
-                if (session.subject_code === 'subject') {
-                    request.get('sessions/' + session._id, {}, function (err, res) {
-                        session.children = res.body.files;
-                        session.name = session.label;
-                        subjects.push(session);
-                        cb();
-                    })
-                } else {
-                    cb();
-                }
-            }, function () {
-                callback(subjects);
-            });
-        });
-    },
-
-    getBIDSSessions (projectId, subjectId, callback) {
-        this.getSessions(projectId, function (sciSessions) {
-            let sessions = [];
-            async.each(sciSessions, function (session, cb) {
-                if (session.subject_code === subjectId) {
-                    request.get('sessions/' + session._id, {}, function (err, res) {
-                        session.children = res.body.files;
-                        session.name = session.label;
-                        sessions.push(session);
-                        cb();
-                    })
-                } else {
-                    cb();
-                }
-            }, function () {
-                callback(sessions);
-            });
-        });
-    },
-
-    getBIDSModalities (sessionId, callback) {
-        request.get('sessions/' + sessionId + '/acquisitions', {}, function (err, res) {
+    /**
+     * Get Acquisition
+     *
+     */
+    getAcquisition (acquisitionId, callback) {
+        request.get('acquisitions/' + acquisitionId, {}, (err, res) => {
             callback(res.body);
-        });
-    },
-
-    getBIDSDataset (projectId, callback) {
-        let self = this;
-        let dataset = {};
-        request.get('projects/' + projectId, {}, function (err, res) {
-            if (res.status !== 200) {return callback(res);}
-            for (let file of res.body.files) {file.name = file.filename;}
-            dataset = {
-                _id: res.body._id,
-                name: res.body.name,
-                type: 'folder',
-                permissions: res.body.permissions,
-                public: res.body.public
-            };
-            dataset.children = res.body.files;
-            self.getBIDSSubjects(res.body._id, function (subjects) {
-                dataset.children = dataset.children.concat(subjects);
-                async.each(subjects, function (subject, cb) {
-                    self.getBIDSSessions(projectId, subject._id, function (sessions) {
-                        subject.children = subject.children.concat(sessions);
-                        async.each(sessions, function (session, cb1) {
-                            self.getBIDSModalities(session._id, function (modalities) {
-                                session.children = session.children.concat(modalities);
-                                async.each(modalities, function (modality, cb2) {
-                                    request.get('acquisitions/' + modality._id, {}, function (err, res) {
-                                        for (let file of res.body.files) {file.name = file.filename;}
-                                        modality.children = res.body.files;
-                                        modality.name = modality.label;
-                                        cb2();
-                                    });
-                                }, cb1);
-                            });
-                        }, cb);
-                    });
-                }, function () {callback([dataset])});
-            });
         });
     },
 
@@ -239,33 +180,48 @@ export default  {
      *
      */
     deleteContainer (type, id, callback) {
-        request.del(type + '/' + id, function (err, res) {
+        request.del(type + '/' + id, (err, res) => {
             callback();
         });
     },
 
-    deleteDataset (projectId, callback) {
-        let self = this;
-        this.getSessions(projectId, function (sessions) {
-            async.each(sessions, function (session, cb) {
-                self.getAcquisitions(session._id, function (acquisitions) {
-                    async.each(acquisitions, function (acquisition, cb1) {
-                        self.deleteContainer('acquisitions', acquisition._id, cb1);
-                    }, function () {
-                        self.deleteContainer('sessions', session._id, cb);
-                    });
-                });
-            }, function () {
-                self.deleteContainer('projects', projectId, callback);
-            });
+// Update ---------------------------------------------------------------------------------
+
+    /**
+     * Update Project
+     *
+     */
+    updateProject (projectId, body, callback) {
+        request.put('projects/' + projectId, {body}, (err, res) => {
+            callback(err, res);
         });
     },
 
-// Delete ---------------------------------------------------------------------------------
-
-    updateProject (projectId, body, callback) {
-        request.put('projects/' + projectId, body, function (err, res) {
-            callback(err, res);
+    /**
+     * Update Note
+     *
+     * Takes a projectId and a note object and
+     * upserts the note.
+     */
+    updateNote (projectId, newNote, callback) {
+        this.getProject(projectId, (res) => {
+            let notes = [];
+            let currentNotes = res.body.notes ? res.body.notes : [];
+            let noteExists   = false;
+            for (let currentNote of currentNotes) {
+                if (currentNote.author === newNote.author) {
+                    noteExists = true;
+                    notes.push(newNote);
+                } else {
+                    notes.push(currentNote);
+                }
+            }
+            if (!noteExists) {
+                notes.push(newNote);
+            }
+            this.updateProject(projectId, {notes: notes}, (err, res) => {
+                callback(res);
+            });
         });
     }
 

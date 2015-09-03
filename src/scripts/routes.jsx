@@ -32,13 +32,11 @@ class RedirectNotifications extends React.Component {
 // routes ----------------------------------------------------------------
 
 // authenticated routes
-Dashboard = requireAuth(Dashboard);
-Admin     = requireAuth(Admin, 'admin');
-// Dataset   = requireAuth(Dataset);
+Dashboard   = requireAuth(Dashboard);
+Admin       = requireAuth(Admin, 'admin');
 
 let routes = (
 	<Route name="app" path="/" handler={Index}>
-		
 		<Route name="signIn" path="sign-in" handler={Signin}/>
 		<Route name="admin" path="admin" handler={Admin}/>
 		<Route name="dashboard" path="dashboard"  handler={Dashboard} >
@@ -51,7 +49,6 @@ let routes = (
 		<Route name="dataset" path="dataset/:datasetId" handler={Dataset} />
 		<DefaultRoute handler={RedirectDashboard}/>
 		<NotFoundRoute handler={RedirectDashboard}/>	
-
 	</Route>
 );
 

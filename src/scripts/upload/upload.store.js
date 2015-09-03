@@ -50,6 +50,7 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 			refs: {},
 			dirName: '',
+			nameError: null,
 			changeName: false,
 			showSelect: true,
 			showRename: false,
@@ -77,16 +78,21 @@ let UploadStore = Reflux.createStore({
 	 * and starts validation.
 	 */
 	onChange (selectedFiles) {
+		let dirName = selectedFiles.tree[0].name,
+		    nameError = null;
+		if (dirName.length > 32) {
+			nameError = 'Names must be 32 characters or less';
+		}
 		this.setInitialState({
 			refs: this.data.refs,
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
-			dirName: selectedFiles.tree[0].name,
+			dirName: dirName,
+			nameError: nameError,
 			uploadStatus: 'files-selected',
 			showRename: true,
 			activeKey: 2
 		});
-		// this.validate(selectedFiles);
 	},
 
 	/**
@@ -156,8 +162,6 @@ let UploadStore = Reflux.createStore({
 	 */
 	upload (fileTree) {
 		fileTree[0].name = this.data.dirName;
-		
-		let self = this;
 		let count = files.countTree(fileTree);
 
 		this.update({
@@ -167,11 +171,14 @@ let UploadStore = Reflux.createStore({
 			activeKey: 5
 		});
 		
-		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress, projectId) {
-			self.update({progress: progress, uploading: true});
-			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
+		upload.upload(userStore.data.scitran._id, fileTree, count, (progress, projectId) => {
+			this.update({progress: progress, uploading: true});
+			window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
-				self.uploadComplete(projectId);
+				let note = {author: 'uploadStatus', text: 'complete'};
+                scitran.updateNote(projectId, note, (res) => {
+					this.uploadComplete(projectId);
+                });
 			}
 		});
 	},
@@ -233,9 +240,17 @@ let UploadStore = Reflux.createStore({
 	 * Sets the directory name to the passed value.
 	 */
 	updateDirName(value) {
+		let nameError = this.data.nameError;
+		if (value.length > 32) {
+			nameError = 'Names must be 32 characters or less';
+		} else {
+			nameError = null;
+		}
+
 		this.update({
 			dirName: value,
-			showResume: false
+			showResume: false,
+			nameError: nameError
 		});
 	},
 

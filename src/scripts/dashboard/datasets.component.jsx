@@ -32,17 +32,19 @@ let Datasets = React.createClass({
             results = <p className="no-datasets">{noDatasets}</p>;
         } else {
             var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
-            let paginatedResults = this.paginate(datasets, this.state.resultsPerPage, this.state.page);   
+            let paginatedResults = this._paginate(datasets, this.state.resultsPerPage, this.state.page);   
 
             // map results
             results = paginatedResults.map(function (dataset, index){
-                let dateAdded = moment(dataset.timestamp).format('L');
-                let timeago   = moment(dataset.timestamp).fromNow(true)
+                let dateAdded  = moment(dataset.timestamp).format('L');
+                let timeago    = moment(dataset.timestamp).fromNow(true);
+                let status     = dataset.status;
+                let incomplete = status.uploadIncomplete ? <span>incomplete <i className="fa fa-warning"></i></span> : null;
                 
                 let datasetheader = (
                     <div className="header clearfix">
                         <h4 className="dataset">{dataset.name}</h4>
-                        <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
+                        <div className="date">{incomplete}{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
                 );
 
@@ -76,7 +78,7 @@ let Datasets = React.createClass({
 	                    page={this.state.page}
 	                    pagesTotal={pagesTotal}
 	                    pageRangeDisplayed={5}
-	                    onPageSelect={this.onPageSelect} />
+	                    onPageSelect={this._onPageSelect} />
             	</div>
             </div>
         );
@@ -84,7 +86,7 @@ let Datasets = React.createClass({
 
 // custom methods ----------------------------------------------------------------------------
 
-    paginate(data, perPage, page) {
+    _paginate(data, perPage, page) {
         if (data.length < 1) return null;
         let page = (page) ? page : this.state.page;
         let start = (page * perPage);
@@ -93,7 +95,7 @@ let Datasets = React.createClass({
         return retArr;
     },
 
-    onPageSelect(page, e) {
+    _onPageSelect(page, e) {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
     }
