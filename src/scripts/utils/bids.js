@@ -74,6 +74,29 @@ export default  {
     getModalities: scitran.getAcquisitions,
 
     /**
+     * Get Datasets
+     *
+     * Returns a list of datasets including any
+     * derived statuses and notes on each. Only returns
+     * the top level 'project' container.
+     */
+    getDatasets (callback) {
+        let self = this;
+        scitran.getProjects(function (projects) {
+            let results = [];
+            projects.reverse();
+            for (let project of projects) {
+                if (project.group === userStore.data.scitran._id) {
+                    let dataset = self.formatDataset(project);
+                    results.push(dataset);
+                }
+            }
+            callback(results);
+        });
+    },
+
+
+    /**
      * Get Dataset
      *
      * Takes a projectId and returns a full
@@ -136,7 +159,7 @@ export default  {
      *
      * Takes a scitran project and returns
      * a formatted top level container of a
-     * BIDS datset.
+     * BIDS dataset.
      */
     formatDataset (project) {
         for (let file of project.files) {file.name = file.filename;}
@@ -209,7 +232,7 @@ export default  {
      *
      * Takes a project and returns a boolean
      * representing whether the current user
-     * is the owner of that datset.
+     * is the owner of that dataset.
      */
     userOwns(project) {
         let userOwns = false
