@@ -34,10 +34,9 @@ let Dataset = React.createClass({
 		let loading    = this.state.loading;
 		let dataset    = this.state.dataset;
 		let status     = this.state.status;
-		let userOwns   = this.state.userOwns;
 
 		let tools;
-		if (dataset && userOwns && !dataset.public) {
+		if (dataset && dataset.userOwns && !dataset.public) {
 			tools = <Tools datasetId={dataset._id} />
 		}
 
