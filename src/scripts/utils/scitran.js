@@ -187,9 +187,41 @@ export default  {
 
 // Update ---------------------------------------------------------------------------------
 
+    /**
+     * Update Project
+     *
+     */
     updateProject (projectId, body, callback) {
         request.put('projects/' + projectId, {body}, (err, res) => {
             callback(err, res);
+        });
+    },
+
+    /**
+     * Update Note
+     *
+     * Takes a projectId and a note object and
+     * upserts the note.
+     */
+    updateNote (projectId, newNote, callback) {
+        this.getProject(projectId, (res) => {
+            let notes = [];
+            let currentNotes = res.body.notes ? res.body.notes : [];
+            let noteExists   = false;
+            for (let currentNote of currentNotes) {
+                if (currentNote.author === newNote.author) {
+                    noteExists = true;
+                    notes.push(newNote);
+                } else {
+                    notes.push(currentNote);
+                }
+            }
+            if (!noteExists) {
+                notes.push(newNote);
+            }
+            this.updateProject(projectId, {notes: notes}, (err, res) => {
+                callback(res);
+            });
         });
     }
 

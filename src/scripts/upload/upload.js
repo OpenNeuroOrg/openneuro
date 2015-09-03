@@ -53,23 +53,22 @@ export default {
      * folder upload request.
      */
     upload (userId, fileTree, count, progress) {
-        let self = this;
-        self.completed = 0;
-        self.count = count;
-        self.currentProjectId = null;
-        self.progressStart = function (filename) {
-            self.currentFiles.push(filename);
-            progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles});
+        this.completed = 0;
+        this.count = count;
+        this.currentProjectId = null;
+        this.progressStart = (filename) => {
+            this.currentFiles.push(filename);
+            progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles});
         }
-        self.progressEnd = function (filename) {
-            let index = self.currentFiles.indexOf(filename);
-            self.currentFiles.splice(index, 1);
-            self.completed++;
-            progress({total: self.count, completed: self.completed, currentFiles: self.currentFiles}, self.currentProjectId);
+        this.progressEnd = (filename) => {
+            let index = this.currentFiles.indexOf(filename);
+            this.currentFiles.splice(index, 1);
+            this.completed++;
+            progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles}, this.currentProjectId);
         }
         
         let existingProjectId = null;
-        scitran.getProjects(function (projects) {
+        scitran.getProjects((projects) => {
             for (let project of projects) {
                 if (project.name === fileTree[0].name && project.group === userId) {
                     existingProjectId = project._id;
@@ -78,20 +77,20 @@ export default {
             }
 
             if (existingProjectId) {
-                self.currentProjectId = existingProjectId;
-                bids.getDataset(existingProjectId, function (oldDataset) {
+                this.currentProjectId = existingProjectId;
+                bids.getDataset(existingProjectId, (oldDataset) => {
                     let newDataset = fileTree[0];
-                    self.progressEnd();
-                    self.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
+                    this.progressEnd();
+                    this.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
                 });
             } else {
                 let body = {name: fileTree[0].name};
-                scitran.createProject(userId,  body, function (err, res) {
+                scitran.createProject(userId,  body, (err, res) => {
                     let projectId = res.body._id;
-                    body = {notes: [{author: 'uploadStatus', text: 'incomplete'}]};
-                    scitran.updateProject(projectId, body, function () {
-                        self.handleUploadResponse(err, res, function () {
-                            self.uploadSubjects(fileTree[0].children, projectId);
+                    let note = {author: 'uploadStatus', text: 'incomplete'};
+                    scitran.updateNote(projectId, note, (res1) => {
+                        this.handleUploadResponse(err, res, () => {
+                            this.uploadSubjects(fileTree[0].children, projectId);
                         });
                     });
                 });

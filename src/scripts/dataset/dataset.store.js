@@ -60,22 +60,11 @@ let UserStore = Reflux.createStore({
 	},
 
 	saveDescription(description, callback) {
-		let self = this;
-		let notes = this.data.dataset.notes;
-		let hasDescription = false;
-		for (let note of notes) {
-			if (note.author === 'description') {
-				hasDescription = true;
-				note.text = JSON.stringify(description);
-			}
-		}
-		if (!hasDescription) {
-			notes.push({
-				author: 'description',
-				text: JSON.stringify(description)
-			});
-		}
-		scitran.updateProject(this.data.dataset._id, {notes: notes}, (err, res) => {
+		let note = {
+			author: 'description',
+			text: JSON.stringify(description)
+		};
+		scitran.updateNote(this.data.dataset._id, note, (err, res) => {
 			callback();
 		});
 	},

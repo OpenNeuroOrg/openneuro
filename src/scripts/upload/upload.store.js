@@ -162,8 +162,6 @@ let UploadStore = Reflux.createStore({
 	 */
 	upload (fileTree) {
 		fileTree[0].name = this.data.dirName;
-		
-		let self = this;
 		let count = files.countTree(fileTree);
 
 		this.update({
@@ -173,13 +171,13 @@ let UploadStore = Reflux.createStore({
 			activeKey: 5
 		});
 		
-		upload.upload(userStore.data.scitran._id, fileTree, count, function (progress, projectId) {
-			self.update({progress: progress, uploading: true});
-			window.onbeforeunload = function() {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
+		upload.upload(userStore.data.scitran._id, fileTree, count, (progress, projectId) => {
+			this.update({progress: progress, uploading: true});
+			window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
-				let body = {notes: [{author: 'uploadStatus', text: 'complete'}]};
-                scitran.updateProject(projectId, body, function (err1, res1) {
-					self.uploadComplete(projectId);
+				let note = {author: 'uploadStatus', text: 'complete'};
+                scitran.updateNote(projectId, note, (res) => {
+					this.uploadComplete(projectId);
                 });
 			}
 		});
