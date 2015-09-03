@@ -28,7 +28,7 @@ var App = React.createClass({
 		let leftnav;
 		let sidebarNoChrome;
 
-		if(bowser.chrome){
+		if(!bowser.chrome){
 			sidebarNoChrome = <div className="no-chrome-overlay">Chrome only feature</div>;
 		}
 
@@ -42,7 +42,7 @@ var App = React.createClass({
 
 		return (
 			<div className="page">
-				{bowser.chrome ?  <Happybrowser /> : null }
+				{!bowser.chrome ?  <Happybrowser /> : null }
 				<div className={showUpload ? 'col-xs-8 main-col' : 'full-col'}>
 					<Navbar/>
 					<div className="main view container">
