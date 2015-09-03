@@ -1,3 +1,4 @@
+
 'use strict';
 
 // dependencies -----------------------------------------------------------
@@ -25,7 +26,7 @@
         html:           './src/index.html',
         jsx:            './src/scripts/client.jsx',
         md5worker:      './src/scripts/utils/md5worker.js',
-        scss:           './src/sass/*/*.scss',
+        scss:           './src/sass/**/*.scss',
         scssmain:       './src/sass/main.scss',
         libs:           './src/scripts/libs/*',
         assets:         './src/assets/*',
