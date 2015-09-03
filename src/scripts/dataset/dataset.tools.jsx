@@ -5,6 +5,7 @@ import Reflux       from 'reflux';
 import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
 import WarnButton   from '../common/forms/warn-button.component.jsx';
+import Share        from './dataset.tools.share.jsx';
 
 let Tools = React.createClass({
 
@@ -13,11 +14,12 @@ let Tools = React.createClass({
 // life cycle events --------------------------------------------------
 
 	render() {
-		let datasetId = this.props.datasetId;
+		let dataset = this.props.dataset;
 		return (
 			<div className="well">
-				<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, datasetId)} />
-	            <WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, datasetId)} />
+				<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset._id)} />
+	            <WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
+	            <Share dataset={dataset} />
 	        </div>
     	);
 	},

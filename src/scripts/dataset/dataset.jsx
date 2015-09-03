@@ -37,7 +37,7 @@ let Dataset = React.createClass({
 
 		let tools;
 		if (dataset && dataset.userOwns && !dataset.public) {
-			tools = <Tools datasetId={dataset._id} />
+			tools = <Tools dataset={dataset} />
 		}
 
 		let content;
