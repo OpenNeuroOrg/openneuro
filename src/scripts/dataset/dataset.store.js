@@ -75,26 +75,25 @@ let UserStore = Reflux.createStore({
 				text: JSON.stringify(description)
 			});
 		}
-		scitran.updateProject(this.data.dataset._id, {notes: notes}, function (err, res) {
+		scitran.updateProject(this.data.dataset._id, {notes: notes}, (err, res) => {
 			callback();
 		});
 	},
 
 	loadDataset(datasetId) {
-		let self = this;
-		self.update({loading: true, dataset: null});
-		bids.getDataset(datasetId, function (res) {
+		this.update({loading: true, dataset: null});
+		bids.getDataset(datasetId, (res) => {
 			if (res.status === 404 || res.status === 403) {
-				self.update({status: res.status, loading: false});
+				this.update({status: res.status, loading: false});
 			} else {
-				self.update({dataset: res, loading: false});
+				this.update({dataset: res, loading: false});
 			}
 		});
 	},
 
 	publish(datasetId) {
 		let self = this;
-		scitran.updateProject(datasetId, {body: {public: true}}, function (err, res) {
+		scitran.updateProject(datasetId, {body: {public: true}}, (err, res) => {
 			if (!err) {
 				let dataset = self.data.dataset;
 				dataset.public = true;
@@ -104,8 +103,7 @@ let UserStore = Reflux.createStore({
 	},
 
 	deleteDataset(datasetId) {
-		let self = this;
-		bids.deleteDataset(datasetId, function () {
+		bids.deleteDataset(datasetId, () => {
             router.transitionTo('dashboard');
 		});
 	}

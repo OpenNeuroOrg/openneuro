@@ -81,13 +81,12 @@ export default  {
      * the top level 'project' container.
      */
     getDatasets (callback) {
-        let self = this;
-        scitran.getProjects(function (projects) {
+        scitran.getProjects((projects) => {
             let results = [];
             projects.reverse();
             for (let project of projects) {
                 if (project.group === userStore.data.scitran._id) {
-                    let dataset = self.formatDataset(project);
+                    let dataset = this.formatDataset(project);
                     results.push(dataset);
                 }
             }
@@ -103,19 +102,18 @@ export default  {
      * nested BIDS dataset.
      */
     getDataset (projectId, callback) {
-        let self = this;
         let dataset = {};
         scitran.getProject(projectId, (res) => {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
-            dataset = self.formatDataset(project);
-            self.getSubjects(res.body._id, (subjects) => {
+            dataset = this.formatDataset(project);
+            this.getSubjects(res.body._id, (subjects) => {
                 dataset.children = dataset.children.concat(subjects);
                 async.each(subjects, (subject, cb) => {
-                    self.getSessions(projectId, subject._id, (sessions) => {
+                    this.getSessions(projectId, subject._id, (sessions) => {
                         subject.children = subject.children.concat(sessions);
                         async.each(sessions, (session, cb1) => {
-                            self.getModalities(session._id, (modalities) => {
+                            this.getModalities(session._id, (modalities) => {
                                 session.children = session.children.concat(modalities);
                                 async.each(modalities, (modality, cb2) => {
                                     scitran.getAcquisition(modality._id, (res) => {
