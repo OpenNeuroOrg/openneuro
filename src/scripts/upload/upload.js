@@ -81,7 +81,6 @@ export default {
                 self.currentProjectId = existingProjectId;
                 bids.getDataset(existingProjectId, function (oldDataset) {
                     let newDataset = fileTree[0];
-                    let oldDataset = oldDataset[0];
                     self.progressEnd();
                     self.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
                 });
