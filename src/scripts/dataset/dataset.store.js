@@ -83,8 +83,6 @@ let UserStore = Reflux.createStore({
 	publish(datasetId) {
 		let self = this;
 		scitran.updateProject(datasetId, {public: true}, (err, res) => {
-			console.log(err);
-			console.log(res);
 			if (!err) {
 				let dataset = self.data.dataset;
 				dataset.public = true;
