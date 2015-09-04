@@ -1,6 +1,14 @@
 
 // userCard admin
 .admin{	
+	.form-group label {
+		position: absolute;
+		top: 3px;
+		right: 5px;
+		font-size: 10px;
+		color: #777;
+		//display: none;
+	}
 	.add-user{
 		padding-left:0;
 	}

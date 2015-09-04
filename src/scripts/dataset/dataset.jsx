@@ -31,10 +31,9 @@ let Dataset = React.createClass({
 	},
 
 	render() {
-		let loading    = this.state.loading;
-		let dataset    = this.state.dataset;
-		let status     = this.state.status;
-
+		let loading    	= this.state.loading;
+		let dataset    	= this.state.dataset;
+		let status     	= this.state.status;
 		let tools;
 		if (dataset && dataset.userOwns && !dataset.public) {
 			tools = <Tools datasetId={dataset._id} />
@@ -42,14 +41,23 @@ let Dataset = React.createClass({
 
 		let content;
 		if (dataset) {
+			let fsHeader 	= dataset.name + " File Structure";
+			let myDatasetsLink = <Link to="datasets">My Datasets</Link>;
+			let PublicDatasetsLink = <Link to="public">Public Datasets</Link>;
 			content = (
-				<div>
-					<h1>{dataset.name}</h1>
-					{tools}
-					<Statuses dataset={dataset}/>
-					<Metadata dataset={dataset}/>
+				<div className="fadeIn">
+					<ol className="breadcrumb">
+						<li>{dataset.public && !dataset.userOwns ? PublicDatasetsLink : myDatasetsLink}</li>
+						<li className="active">{dataset.name}</li>
+					</ol>
+					
+					<div  className="card clearfix">
+						<h1 className="clearfix"><span className="dataset-name">{dataset.name}</span> <Statuses dataset={dataset}/></h1>
+						{tools}
+						<Metadata dataset={dataset}/>
+					</div>
 					<Accordion className="fileStructure fadeIn">
-						<Panel header={dataset.name} eventKey='1'>
+						<Panel header={fsHeader} eventKey='1'>
 					  		<FileTree tree={[dataset]} />
 					  	</Panel>
 			  		</Accordion>

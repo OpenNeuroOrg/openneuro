@@ -15,10 +15,14 @@ let Tools = React.createClass({
 	render() {
 		let datasetId = this.props.datasetId;
 		return (
-			<div className="well">
-				<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, datasetId)} />
-	            <WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, datasetId)} />
-	        </div>
+			<ul className="nav nav-pills tools">
+				<li role="presentation" >
+					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, datasetId)} />
+	            </li>
+	            <li role="presentation" >
+	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, datasetId)} />
+	            </li>
+	        </ul>
     	);
 	},
 

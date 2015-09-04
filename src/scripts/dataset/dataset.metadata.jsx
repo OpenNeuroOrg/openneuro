@@ -17,22 +17,31 @@ let Metadata = React.createClass({
 		let items = [];
 		for (let key in description) {
 			items.push(
-				<ClickToEdit value={description[key]}
-					key={key}
-					label={key}
-					editable={userOwns}
-					onChange={this._updateDescription.bind(this, key)} />
+				<div className="description-item" key={key}>
+					<ClickToEdit value={description[key]}
+						label={key}
+						editable={userOwns}
+						onChange={this._updateDescription.bind(this, key)} />
+					</div>
 			);
 		}
 
 		let descriptors = (
 			<div>
-				{items}
+				<div className="dataset-descriptions col-xs-5">
+					{items}
+				</div>
+				<div className="dataset-readme col-xs-7">
+					{README}
+				</div>
 			</div>
 		);
 
 		return (
-			<div className="well">{descriptors}</div>
+			<div>
+				
+				{descriptors}
+			</div>
     	);
 	},
 

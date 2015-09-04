@@ -1,23 +1,181 @@
 // dataset dataset view
-.dataset .fileStructure.panel-group {
-	.panel-collapse{
-		.panel-body{
-			padding:0;
-			>ul{
-				overflow: visible;
-			    height: auto;
-			    padding: 10px;
-			    margin: 0;
+.dataset {
+	.fileStructure.panel-group {
+		.panel-collapse{
+			.panel-body{
+				padding:0;
+				>ul{
+					overflow: visible;
+				    height: auto;
+				    padding: 10px;
+				    margin: 0;
+				}
+			}
+		}
+		.panel-default .panel-heading{
+			text-align: left;
+			.panel-title a{
+				font-size: 13px;
 			}
 		}
 	}
-	.panel-default .panel-heading{
-		text-align: left;
-		.panel-title a{
-			font-size: 13px;
+	
+
+	.card{
+		box-shadow: 1px 0 3px 0 rgba(0,0,0,.3);
+		padding: 0;
+		margin: 20px 0;
+	}
+	.dataset-descriptions{
+		background-color: #F7F7F7;
+		padding: 0;
+		box-shadow: inset -8px 0px 13px -13px rgba(0, 0, 0, 0.5);
+	}
+	.description-item{
+		padding: 20px;
+		border-bottom:1px solid #eee;
+		border-right:1px solid #eee;
+				&:last-child{
+			border-bottom:none;
+		}
+	}
+	.dataset-readme{
+	    padding: 20px;
+	}
+	h1{
+		margin: 0;
+		padding: 20px;
+		font-size: 30px;
+		text-transform: uppercase;
+		font-weight: 100;
+		border-bottom: 1px solid #E1E1E1;
+		.dataset-name{
+			float: left;
+		}
+		.nav.nav-pills{
+			float: left;
+			.dataset-status{
+				background: none;
+				color: #676767;
+				font-size: 14px;
+				font-family: $font-family-cabin;
+				font-weight: 300;
+				padding: 0;
+				margin: 3px 0 0 15px;
+				text-align: center;
+				display: block;
+				width: 100%;
+				i.fa{
+					display: block;
+				}
+			
+				&.ds-primary{
+					background:none;
+					color:$brand-warning;
+				}
+				&.ds-success{
+					background:none;
+					color:$brand-success;
+				}
+				&.ds-info{
+					background:none;
+					color:$brand-info;
+				}
+				&.ds-warning{
+					background:none;
+					color:$brand-warning;
+				}			
+				&.ds-danger{
+					background:none;
+					color:$brand-danger;
+				}
+			}
+		}
+	}
+	.tools.nav.nav-pills{
+		padding: 0 20px 0;
+		margin: 0;
+		border-bottom:1px solid #E1E1E1;
+		li {
+			overflow: hidden;
+			button{
+					padding:10px 12px;
+				}
+			}
+	}
+	.form-group {
+		margin: 0;
+		label{
+		    font-size: 18px;
+		    color: #424242;
+		    line-height: 21px;
+		    padding: 0;
+		}
+	
+		input {}
+	}
+
+	textarea,
+	textarea.form-control {
+		min-height: 50px;
+	}
+	.cte-display{
+		min-height: 50px;
+	    font-size: 20px;
+	    color: #565656;
+	    font-weight: 100;
+	    font-family: $font-family-ssp;
+	    span{
+	    	display: block;
+	    }
+	}
+	.btn-wrapper{
+		margin-top: 10px;
+		text-align: right;
+
+	}
+	.cte-edit{
+		.btn.add{
+			margin: 5px 0;
+			background-color: #E5E5E5;
+		}
+	}
+	.cte-edit-button{
+		border: none;
+		background-color: rgba(0, 0, 0, 0);
+		color: $ocean;
+		padding: 0px;
+		margin: -5px 0 0 10px;
+		span{
+			font-size: 10px;
+			font-family: sans-serif;
+			text-transform: uppercase;
+		}
+		i{
+			font-size: 12px;
+			margin-top: -2px;
+		}
+	}
+
+	.cte-remove-button{
+		padding: 0;
+		margin-top: -5px;
+	}
+	.cte-array-items {
+		margin-bottom: 10px;
+		background:#f4f4f4;
+		border:1px solid #ddd;
+		.cte-array-item{
+			padding:10px;
+			&:nth-child(odd){
+				background:#eee;
+			}
+	
 		}
 	}
 }
+
+
 
 
 

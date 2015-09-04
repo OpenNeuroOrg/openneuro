@@ -14,16 +14,16 @@ let ArrayInput = React.createClass({
 
 	render() {
 		let items = this.props.value.map((item, index) => {
-			return <div key={index}>{item} <button onClick={this._remove.bind(null, index)}>x</button></div>
+			return <div key={index} className="cte-array-item">{item} <button className="cte-remove-button btn btn-admin warning" onClick={this._remove.bind(null, index)}><i className="fa fa-times"></i></button></div>
 		});
 
 		return (
 			<div>
-				<div>
+				<div className="cte-array-items">
 					{items}
 				</div>
 				<input type="text" ref="input"/>
-				<button onClick={this._add}>add</button>
+				<button className="btn btn-admin add" onClick={this._add}>add</button>
 			</div>
 		)
 	},
