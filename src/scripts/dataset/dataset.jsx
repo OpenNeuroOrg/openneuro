@@ -51,9 +51,15 @@ let Dataset = React.createClass({
 						<li className="active">{dataset.name}</li>
 					</ol>
 					
-					<div  className="card clearfix">
-						<h1 className="clearfix"><span className="dataset-name">{dataset.name}</span> <Statuses dataset={dataset}/></h1>
-						{tools}
+					<div  className="clearfix">
+						<div className="row">
+							<div className="col-xs-6">
+								<h1 className="clearfix"><span className="dataset-name">{dataset.name}</span> <Statuses dataset={dataset}/></h1>
+							</div>
+							<div className="col-xs-6">
+								{tools}
+							</div>
+						</div>
 						<Metadata dataset={dataset}/>
 					</div>
 					<Accordion className="fileStructure fadeIn">

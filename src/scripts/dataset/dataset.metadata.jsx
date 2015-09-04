@@ -28,12 +28,13 @@ let Metadata = React.createClass({
 
 		let descriptors = (
 			<div>
-				<div className="dataset-descriptions col-xs-5">
-					{items}
-				</div>
-				<div className="dataset-readme col-xs-7">
+				<div className="dataset-readme col-xs-6">
 					{README}
 				</div>
+				<div className="dataset-descriptions col-xs-6">
+					{items}
+				</div>
+				
 			</div>
 		);
 
