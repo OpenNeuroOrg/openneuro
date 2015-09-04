@@ -126,7 +126,9 @@
 	    font-weight: 100;
 	    font-family: $font-family-ssp;
 	    span{
-	    	display: block;
+			display: block;
+			padding: 10px 0;
+			border-bottom: 1px solid #EEE;
 	    }
 	}
 	.btn-wrapper{
