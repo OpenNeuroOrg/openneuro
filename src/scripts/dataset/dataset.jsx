@@ -51,7 +51,7 @@ let Dataset = React.createClass({
 						<li className="active">{dataset.name}</li>
 					</ol>
 					
-					<div  className="card clearfix">
+					<div  className="clearfix">
 						<h1 className="clearfix"><span className="dataset-name">{dataset.name}</span> <Statuses dataset={dataset}/></h1>
 						{tools}
 						<Metadata dataset={dataset}/>
