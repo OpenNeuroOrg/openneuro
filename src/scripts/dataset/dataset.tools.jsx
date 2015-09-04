@@ -6,6 +6,7 @@ import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
 import WarnButton   from '../common/forms/warn-button.component.jsx';
 import Share        from './dataset.tools.share.jsx';
+import {Modal}      from 'react-bootstrap';
 
 let Tools = React.createClass({
 
@@ -18,14 +19,21 @@ let Tools = React.createClass({
 		return (
 			<ul className="nav nav-pills tools">
 				<li role="presentation" >
-					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, datasetId)} />
+					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset._id)} />
 	            </li>
 	            <li role="presentation" >
-	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, datasetId)} />
+	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
 	            </li>
 	            <li role="presentation" >
-	            	<Share dataset={dataset} />
+	            	<button>share</button>
 	            </li>
+	            <Modal>
+	            	<Modal.Header closeButton>
+	            	</Modal.Header>
+	            	<Modal.Body>
+	            		<Share dataset={dataset} />
+	            	</Modal.Body>
+	            </Modal>
 	        </ul>
     	);
 	},
@@ -39,3 +47,5 @@ let Tools = React.createClass({
 });
 
 export default Tools;
+
+// <Share dataset={dataset} />
