@@ -1,9 +1,10 @@
 // dependencies -------------------------------------------------------
 
-import React   from 'react';
-import Actions from './dataset.actions.js';
-import bids    from '../utils/bids';
-import scitran from '../utils/scitran';
+import React     from 'react';
+import Actions   from './dataset.actions.js';
+import bids      from '../utils/bids';
+import scitran   from '../utils/scitran';
+import Typeahead from '../common/forms/typeahead.jsx';
 
 export default class Share extends React.Component {
 
@@ -14,7 +15,8 @@ export default class Share extends React.Component {
 		this.state = {
 			edit: false,
 			users: [],
-			results: []
+			input: '',
+			select: ''
 		};
 	}
 
@@ -35,22 +37,15 @@ export default class Share extends React.Component {
 			);
 		});
 
-		let typeAheadResults = this.state.results.map((result) => {
-			return (<li key={result} onClick={this._select.bind(this, result)}>{result}</li>);
-		});
-
 		let button;
 		let edit;
 		if (this.state.edit) {
 			button = <button onClick={this._toggleEdit.bind(this)}>done</button>
 			edit = (
 				<div>
-					<div className="typeahead">
-						<input ref="input" onChange={this._handleChange.bind(this)}/>
-						<ul className="typeahead-results">{typeAheadResults}</ul>
-					</div>
-					<select ref="select">
-						<option value="" selected disabled>select permissions</option>
+					<Typeahead options={this.state.users} filter={this._filter} format={'_id'} onChange={this._typeaheadChange.bind(this)} value={this.state.input}/>
+					<select onChange={this._selectChange.bind(this)} value={this.state.select}>
+						<option value="" disabled>access level</option>
 						<option value="ro">Read only</option>
 						<option value="rw">Read write</option>
 						<option value="admin">Admin</option>
@@ -73,41 +68,38 @@ export default class Share extends React.Component {
 
 // custon methods -----------------------------------------------------
 
-	_handleChange(e) {
-		let value = e.target.value;
-		let users = this.state.users;
-		let results = [];
-		for (let user of users) {
-			if (user._id.indexOf(value) > -1) {
-				results.push(user._id);
-			} else if (user.firstname.indexOf(value) > -1) {
-				results.push(user._id);
-			} else if (user.lastname.indexOf(value) > -1) {
-				results.push(user._id);
-			}
-		}
-		this.setState({results});
-	}
-
-	_select(result) {
-		this.refs.input.getDOMNode().value = result;
-		this.setState({results: []});
-	}
-
 	_toggleEdit() {
 		this.setState({edit: !this.state.edit});
 	}
 
+	_filter(option, value) {
+		if (option._id.indexOf(value) > -1) {
+			return true;
+		} else if (option.firstname.indexOf(value) > -1) {
+			return true;
+		} else if (option.lastname.indexOf(value) > -1) {
+			return true;
+		}
+		return false;
+	}
+
+	_typeaheadChange (input) {
+		this.setState({input});
+	}
+
+	_selectChange (e) {
+		let select = e.target.value;
+		this.setState({select});
+	}
+
 	_addUser() {
 		let role = {
-			_id: this.refs.input.getDOMNode().value,
-			access: this.refs.select.getDOMNode().value
+			_id: this.state.input,
+			access: this.state.select
 		};
 		bids.addPermission(this.props.dataset._id, role, (err, res) => {
-
+			this.setState({input: '', select: ''});
 		});
-		this.refs.input.getDOMNode().value = '';
-		this.refs.select.getDOMNode().value = '';
 	}
 
 	_removeUser(userId) {
