@@ -47,5 +47,3 @@ let Tools = React.createClass({
 });
 
 export default Tools;
-
-// <Share dataset={dataset} />
