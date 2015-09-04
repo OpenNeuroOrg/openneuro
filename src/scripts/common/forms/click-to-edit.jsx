@@ -29,11 +29,11 @@ let ClickToEdit = React.createClass({
 		let input;
 		switch (typeof value) {
 			case "string":
-				input = <textarea value={value} onChange={this._handleChange}></textarea>;
+				input = <textarea className="form-control" value={value} onChange={this._handleChange}></textarea>;
 				break;
 			case "object":
 				input = (
-					<div>
+					<div className="cte-edit-array">
 						<ArrayInput value={value} onChange={this._handleChange} />
 					</div>
 				);
@@ -42,32 +42,32 @@ let ClickToEdit = React.createClass({
 
 		let editBtn;
 		if (this.props.editable) {
-			editBtn = <button onClick={this._edit}>click to edit</button>;
+			editBtn = <button onClick={this._edit} className="cte-edit-button btn btn-admin fadeIn"><span>edit </span><i className="fa fa-pencil"></i></button>;
 		}
 
 		let display = (
-			<div>
-				<div>{value}</div>
-				{editBtn}
+			<div className="cte-display">
+				<div className="fadeIn">{value}</div>
 			</div>
 		);
 
 		let edit = (
-			<div>
+			<div className="cte-edit fadeIn">
 				{input}
-				<button onClick={this._save}>save</button>
-				<button onClick={this._cancel}>cancel</button>
+				<div className="btn-wrapper">
+					<button className="cte-cancel-btn btn btn-admin cancel" onClick={this._cancel}>cancel</button>
+					<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._save}>save</button>
+					</div>
 				<Spinner active={this.state.loading} />
 			</div>
 		);
 
 		return (
-			<div>
-				<label>{this.props.label}</label><br />
+			<div className="form-group" >
+				<label>{this.props.label} {!this.state.edit ? editBtn : null}</label>
 				<div>
 					{this.state.edit ? edit : display}
 				</div>
-				<br />
 			</div>
     	);
 	},

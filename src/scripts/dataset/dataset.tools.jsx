@@ -16,11 +16,17 @@ let Tools = React.createClass({
 	render() {
 		let dataset = this.props.dataset;
 		return (
-			<div className="well">
-				<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset._id)} />
-	            <WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
-	            <Share dataset={dataset} />
-	        </div>
+			<ul className="nav nav-pills tools">
+				<li role="presentation" >
+					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, datasetId)} />
+	            </li>
+	            <li role="presentation" >
+	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, datasetId)} />
+	            </li>
+	            <li role="presentation" >
+	            	<Share dataset={dataset} />
+	            </li>
+	        </ul>
     	);
 	},
 
