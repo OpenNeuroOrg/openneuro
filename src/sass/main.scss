@@ -47,10 +47,26 @@
 .slideInRight{@include slideInRight();}
 .slideInRightFast{@include slideInRightFast();}
 
+.typeahead {
+	position: relative;
 
+	.typeahead-results {
+		position: absolute;
+		background: #FFF;
+		list-style: none;
+		padding: 0;
 
+		li {
+			border-top: 1px solid #CCC;
+			padding: 10px;
+			cursor: pointer;
 
-
+			&:first-child {border: none;}
+			&:hover {background: #EEE;}
+			&:active {background: #DDD;}
+		}
+	}
+}
 
 
 
