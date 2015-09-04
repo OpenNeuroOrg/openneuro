@@ -42,7 +42,7 @@ let UserStore = Reflux.createStore({
 		let data = {
 			token: window.localStorage.hello ? JSON.parse(window.localStorage.hello).google.access_token : null,
 			google: null,
-			scitran: window.sessionStorage.scitranUser ? JSON.parse(window.sessionStorage.scitranUser) : null
+			scitran: window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser) : null
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -83,7 +83,7 @@ let UserStore = Reflux.createStore({
 				hello('google').api('/me').then(function (profile) {
 					self.update({google: profile});
 					scitran.verifyUser(function (err, res) {
-						window.sessionStorage.scitranUser = JSON.stringify(res.body);
+						window.localStorage.scitranUser = JSON.stringify(res.body);
 						self.update({scitran: res.body});
 						if (!authRes.unchanged) {
 							router.transitionTo('dashboard');
@@ -110,7 +110,7 @@ let UserStore = Reflux.createStore({
 			hello(res.network).api('/me').then(function (profile) {
 				self.update({google: profile});
 				scitran.verifyUser(function (err, res) {
-					window.sessionStorage.scitranUser = JSON.stringify(res.body);
+					window.localStorage.scitranUser = JSON.stringify(res.body);
 					self.update({scitran: res.body});
 				});
 				router.transitionTo('dashboard');
@@ -145,7 +145,7 @@ let UserStore = Reflux.createStore({
 
 	clearAuth: function () {
 		delete window.localStorage.hello;
-		delete window.sessionStorage.scitranUser;
+		delete window.localStorage.scitranUser;
 		this.setInitialState({
 			token: null,
 			google: null,
