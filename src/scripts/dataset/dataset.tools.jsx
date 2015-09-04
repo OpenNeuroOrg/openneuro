@@ -17,7 +17,7 @@ let Tools = React.createClass({
 	render() {
 		let dataset = this.props.dataset;
 		return (
-			<ul className="nav nav-pills tools">
+			<ul className="nav nav-pills tools clearfix">
 				<li role="presentation" >
 					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset._id)} />
 	            </li>
