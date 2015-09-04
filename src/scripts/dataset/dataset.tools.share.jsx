@@ -15,6 +15,7 @@ export default class Share extends React.Component {
 		this.state = {
 			edit: false,
 			users: [],
+			permissions: [],
 			input: '',
 			select: ''
 		};
@@ -22,14 +23,13 @@ export default class Share extends React.Component {
 
 	componentDidMount() {
 		scitran.getUsers((err, res) => {
-			this.setState({users: res.body});
+			this.setState({users: res.body, permissions: this.props.dataset.permissions});
 		});
 	}
 
 	render() {
-		let dataset = this.props.dataset;
 
-		let permissions = this.props.dataset.permissions.map((user) => {
+		let permissions = this.state.permissions.map((user) => {
 			let deleteBtn;
 			if (this.state.edit) {deleteBtn = <button onClick={this._removeUser.bind(this, user._id)}>x</button>;}
 			return (
@@ -98,13 +98,21 @@ export default class Share extends React.Component {
 			access: this.state.select
 		};
 		bids.addPermission(this.props.dataset._id, role, (err, res) => {
-			this.setState({input: '', select: ''});
+			let permissions = this.state.permissions;
+			permissions.push(role);
+			this.setState({input: '', select: '', permissions: permissions});
 		});
 	}
 
 	_removeUser(userId) {
 		bids.removePermission(this.props.dataset._id, userId, (err, res) => {
-
+			let index;
+			let permissions = this.state.permissions;
+			for (let i = 0; i < permissions.length; i++) {
+				if (permissions[i]._id === userId) {index = i;}
+			}
+			permissions.splice(index, 1);
+			this.setState({permissions});
 		});
 	}
 
