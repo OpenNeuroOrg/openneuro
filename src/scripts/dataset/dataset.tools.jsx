@@ -14,6 +14,12 @@ let Tools = React.createClass({
 
 // life cycle events --------------------------------------------------
 
+	getInitialState() {
+		return {
+			showModal: false
+		};
+	},
+
 	render() {
 		let dataset = this.props.dataset;
 		return (
@@ -25,10 +31,11 @@ let Tools = React.createClass({
 	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
 	            </li>
 	            <li role="presentation" >
-	            	<button>share</button>
+	            	<button onClick={this._showModal}>share</button>
 	            </li>
-	            <Modal>
+	            <Modal show={this.state.showModal} onHide={this._hideModal}>
 	            	<Modal.Header closeButton>
+	            		<Modal.Title>Share Dataset</Modal.Title>
 	            	</Modal.Header>
 	            	<Modal.Body>
 	            		<Share dataset={dataset} />
@@ -42,7 +49,15 @@ let Tools = React.createClass({
 
 	_publish: Actions.publish,
 
-	_deleteDataset: Actions.deleteDataset
+	_deleteDataset: Actions.deleteDataset,
+
+	_showModal() {
+		this.setState({showModal: true});
+	},
+
+	_hideModal() {
+		this.setState({showModal: false});
+	}
 
 });
 

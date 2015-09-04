@@ -47,6 +47,9 @@
 .slideInRight{@include slideInRight();}
 .slideInRightFast{@include slideInRightFast();}
 
+
+// ZACK ADDED ME --- PUT ME SOMEWHERE BETTER -----------------------------------
+
 .typeahead {
 	position: relative;
 
@@ -68,7 +71,11 @@
 	}
 }
 
+.modal, .modal-backdrop {
+	z-index: 1500;
+}
 
+// ZACK ADDED ME --- PUT ME SOMEWHERE BETTER -----------------------------------
 
 
 

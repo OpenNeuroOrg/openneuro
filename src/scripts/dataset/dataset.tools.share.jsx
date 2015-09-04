@@ -13,7 +13,7 @@ export default class Share extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			edit: false,
+			edit: true,
 			users: [],
 			permissions: [],
 			input: '',
@@ -30,18 +30,18 @@ export default class Share extends React.Component {
 	render() {
 
 		let permissions = this.state.permissions.map((user) => {
-			let deleteBtn;
-			if (this.state.edit) {deleteBtn = <button onClick={this._removeUser.bind(this, user._id)}>x</button>;}
 			return (
-				<div key={user._id}>{user._id} <span>{user.access}</span>{deleteBtn}</div>
+				<div key={user._id}>{user._id} <span>{user.access}</span>
+					<button onClick={this._removeUser.bind(this, user._id)}>x</button>
+				</div>
 			);
 		});
 
-		let button;
-		let edit;
-		if (this.state.edit) {
-			button = <button onClick={this._toggleEdit.bind(this)}>done</button>
-			edit = (
+		return (
+			<div>
+				<div>Members</div>
+				{permissions}
+				<div>Add Member</div>
 				<div>
 					<Typeahead options={this.state.users} filter={this._filter} format={'_id'} onChange={this._typeaheadChange.bind(this)} value={this.state.input}/>
 					<select onChange={this._selectChange.bind(this)} value={this.state.select}>
@@ -52,16 +52,6 @@ export default class Share extends React.Component {
 					</select>
 					<button onClick={this._addUser.bind(this)}>add</button>
 				</div>
-			);
-		} else {
-			button = <button onClick={this._toggleEdit.bind(this)}>edit</button>
-		}
-
-		return (
-			<div>
-				<div>Members {button}</div>
-				{permissions}
-				{edit}
 			</div>
     	);
 	}
