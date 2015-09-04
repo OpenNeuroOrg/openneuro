@@ -93,6 +93,10 @@ export default class Share extends React.Component {
 	}
 
 	_addUser() {
+		if (this.state.input.length < 1 || this.state.select.length < 1) {
+			// please enter an email and access level
+			return;
+		}
 		let role = {
 			_id: this.state.input,
 			access: this.state.select
