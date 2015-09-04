@@ -4,6 +4,8 @@ import React from 'react';
 
 // component setup ----------------------------------------------------
 
+let clickListener;
+
 export default class Typeahead extends React.Component {
 	
 	constructor() {
@@ -11,6 +13,15 @@ export default class Typeahead extends React.Component {
 		this.state = {
 			results: []
 		};
+	}
+
+	componentDidMount() {
+		clickListener = this._onDocumentClick.bind(this);
+		window.addEventListener('mousedown', clickListener);
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener('mousedown', clickListener);
 	}
 
 // life cycle events --------------------------------------------------
@@ -21,7 +32,7 @@ export default class Typeahead extends React.Component {
 		});
 
 		return (
-			<div className="typeahead">
+			<div className="typeahead" onMouseDown={this.onMouseDown.bind(this)} onMouseUp={this.onMouseUp.bind(this)}>
 				<input onChange={this._handleInput.bind(this)} value={this.props.value}/>
 				<ul className="typeahead-results">{results}</ul>
 			</div>
@@ -44,7 +55,8 @@ export default class Typeahead extends React.Component {
 		this.setState({results});
 	}
 
-	_select(result) {
+	_select(result, e) {
+		e.stopPropagation();
 		this.props.onChange(result);
 		this.setState({results: []});
 	}
@@ -61,6 +73,20 @@ export default class Typeahead extends React.Component {
 			}
 		}
 		return obj;
+	}
+
+	_onDocumentClick() {
+		if (!this.insideClick) {
+			this.setState({results: []});
+		}
+	}
+
+	onMouseDown() {
+		this.insideClick = true;
+	}
+
+	onMouseUp() {
+		this.insideClick = false;
 	}
 
 }
