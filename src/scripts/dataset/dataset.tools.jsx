@@ -22,6 +22,7 @@ let Tools = React.createClass({
 
 	render() {
 		let dataset = this.props.dataset;
+		let users   = this.props.users;
 		return (
 			<ul className="nav nav-pills tools clearfix">
 				<li role="presentation" >
@@ -38,7 +39,7 @@ let Tools = React.createClass({
 	            		<Modal.Title>Share Dataset</Modal.Title>
 	            	</Modal.Header>
 	            	<Modal.Body>
-	            		<Share dataset={dataset} />
+	            		<Share dataset={dataset} users={users} />
 	            	</Modal.Body>
 	            </Modal>
 	        </ul>

@@ -22,9 +22,7 @@ export default class Share extends React.Component {
 	}
 
 	componentDidMount() {
-		scitran.getUsers((err, res) => {
-			this.setState({users: res.body, permissions: this.props.dataset.permissions});
-		});
+		this.setState({users: this.props.users, permissions: this.props.dataset.permissions});
 	}
 
 	render() {

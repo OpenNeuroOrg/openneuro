@@ -42,7 +42,8 @@ let UserStore = Reflux.createStore({
 		let data = {
 			loading: false,
 			dataset: null,
-			status: null
+			status: null,
+			users: []
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -71,12 +72,19 @@ let UserStore = Reflux.createStore({
 
 	loadDataset(datasetId) {
 		this.update({loading: true, dataset: null});
+		this.loadUsers();
 		bids.getDataset(datasetId, (res) => {
 			if (res.status === 404 || res.status === 403) {
 				this.update({status: res.status, loading: false});
 			} else {
 				this.update({dataset: res, loading: false});
 			}
+		});
+	},
+
+	loadUsers() {
+		scitran.getUsers((err, res) => {
+			this.update({users: res.body});
 		});
 	},
 
