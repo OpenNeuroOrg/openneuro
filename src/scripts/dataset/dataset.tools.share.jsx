@@ -1,7 +1,8 @@
 // dependencies -------------------------------------------------------
 
-import React        from 'react';
-import Actions      from './dataset.actions.js';
+import React   from 'react';
+import Actions from './dataset.actions.js';
+import bids    from '../utils/bids';
 
 export default class Share extends React.Component {
 
@@ -17,9 +18,12 @@ export default class Share extends React.Component {
 	render() {
 		let dataset = this.props.dataset;
 
-		let permissions = this.props.dataset.permissions.map(function (user) {
+
+		let permissions = this.props.dataset.permissions.map((user) => {
+			let deleteBtn;
+			if (this.state.edit) {deleteBtn = <button onClick={this._removeUser.bind(this, user._id)}>x</button>;}
 			return (
-				<div key={user._id}>{user._id} <span>{user.access}</span></div>
+				<div key={user._id}>{user._id} <span>{user.access}</span>{deleteBtn}</div>
 			);
 		});
 
@@ -47,8 +51,8 @@ export default class Share extends React.Component {
 		return (
 			<div>
 				<div>Members {button}</div>
-				{edit}
 				{permissions}
+				{edit}
 			</div>
     	);
 	}
@@ -63,10 +67,18 @@ export default class Share extends React.Component {
 		let role = {
 			_id: this.refs.input.getDOMNode().value,
 			access: this.refs.select.getDOMNode().value
-		}
-		console.log(role);
+		};
+		bids.addPermission(this.props.dataset._id, role, (err, res) => {
+			
+		});
 		this.refs.input.getDOMNode().value = '';
 		this.refs.select.getDOMNode().value = '';
+	}
+
+	_removeUser(userId) {
+		bids.removePermission(this.props.dataset._id, userId, (err, res) => {
+
+		});
 	}
 
 }
