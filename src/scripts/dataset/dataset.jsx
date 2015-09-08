@@ -54,7 +54,10 @@ let Dataset = React.createClass({
 					<div  className="clearfix">
 						<div className="row">
 							<div className="col-xs-6">
-								<h1 className="clearfix"><span className="dataset-name">{dataset.name}</span> <Statuses dataset={dataset}/></h1>
+								<h1 className="clearfix">
+									<span className="dataset-name">{dataset.name}</span> 
+									<Statuses dataset={dataset}/>
+								</h1>
 							</div>
 							<div className="col-xs-6">
 								{tools}
