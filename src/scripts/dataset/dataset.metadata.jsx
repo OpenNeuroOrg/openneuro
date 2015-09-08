@@ -26,7 +26,7 @@ let Metadata = React.createClass({
 						label={key}
 						editable={userOwns}
 						onChange={this._updateDescription.bind(this, key)} />
-					</div>
+				</div>
 			);
 		}
 
@@ -49,7 +49,6 @@ let Metadata = React.createClass({
 
 		return (
 			<div>
-				
 				{descriptors}
 			</div>
     	);

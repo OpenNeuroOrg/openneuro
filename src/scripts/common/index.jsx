@@ -11,22 +11,33 @@ import bowser  		 from 'bowser';
 import Happybrowser  from './partials/happybrowser.jsx';
 // component setup -----------------------------------------------------------
 
-var App = React.createClass({
+let App = React.createClass({
 
 	mixins: [State],
 
 // life cycle methods --------------------------------------------------------
+	
+	getInitialState() {
+		return { toggleSidebarbar: true };
+	},
 
 	componentDidMount () {
 		Actions.initOAuth();
 	},
 
 	render () {
-		let showUpload = this.isActive('dashboard');
+		let showUpload = this.isActive('dashboard') && this.state.toggleSidebarbar;
 		let showLeftNav = !this.isActive('signIn');
 		let sidebar;
 		let leftnav;
 		let sidebarNoChrome;
+		let close = <span><span className="sr-only">Close</span> »</span>;
+		let open = <span><span className="sr-only">Open</span> «</span>;
+		let toggleSidebar = (
+			<div className={this.state.toggleSidebarbar ? "open toggle-sidebar-wrap" : "toggle-sidebar-wrap"}>
+				<button title="toggle sidebar" className="btn" aria-label="toggle sidebar" onClick={this._toggleSidebar}>{this.state.toggleSidebarbar ? close : open}</button>
+			</div>
+		);
 
 		if(!bowser.chrome){
 			sidebarNoChrome = <div className="no-chrome-overlay">Chrome only feature</div>;
@@ -52,10 +63,17 @@ var App = React.createClass({
 						</div>
 					</div>
 				</div>
+				{toggleSidebar}
 				{sidebar}
 			</div> 
 		)				
-	}
+	},
+
+_toggleSidebar () {
+	this.setState({
+			toggleSidebarbar: !this.state.toggleSidebarbar
+	})
+}
 
 });
 

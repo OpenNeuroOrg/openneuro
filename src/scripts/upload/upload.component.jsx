@@ -106,18 +106,33 @@ let Upload = React.createClass({
 				<div className="rightsidebar-header">
 					<h2>My Tasks</h2>
 				</div>
-				<PanelGroup className="upload-accordion" defaultActiveKey='1' accordion>
-					<Panel className="upload-panel" header='Upload Dataset' eventKey='1'>
-						<TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={this._selectTab}>
-							<div className={activeBar}></div>
-							{select}
-							{rename}
-							{issues}
-							{resume}
-							{progress}
-						</TabbedArea>
-					</Panel>
-				</PanelGroup>
+				<div className="upload-wrap panel-group" defaultActiveKey='1'>
+					<div className="upload-panel panel panel-default" h>
+
+					    <div className="panel-heading">
+					      <h4 className="panel-title">
+					      	<a href="#" aria-expanded="true">Upload Dataset</a>
+					      </h4>
+					    </div>
+
+					    <div className="panel-collapse collapse in">
+					    	<div className="panel-body">
+					        	<div>
+
+									<TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={this._selectTab}>
+										<div className={activeBar}></div>
+										{select}
+										{rename}
+										{issues}
+										{resume}
+										{progress}
+									</TabbedArea>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 				{this.state.alert ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
 			</div>
     	);
