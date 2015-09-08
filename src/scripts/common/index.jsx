@@ -71,7 +71,7 @@ let App = React.createClass({
 
 _toggleSidebar () {
 	this.setState({
-			toggleSidebarbar: !this.state.toggleSidebarbar
+		toggleSidebarbar: !this.state.toggleSidebarbar
 	})
 }
 
