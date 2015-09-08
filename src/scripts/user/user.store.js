@@ -72,11 +72,6 @@ let UserStore = Reflux.createStore({
 		var googleAuth = hello('google').getAuthResponse();
 		var token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
 
-
-		if (!this.loggedIn()) {
-			self.update({token: null});
-		}
-
 		if (token) {
 			hello('google').login({force: false}).then(function(authRes) {
 				self.update({token: token});
@@ -85,9 +80,6 @@ let UserStore = Reflux.createStore({
 					scitran.verifyUser(function (err, res) {
 						window.localStorage.scitranUser = JSON.stringify(res.body);
 						self.update({scitran: res.body});
-						if (!authRes.unchanged) {
-							router.transitionTo('dashboard');
-						}
 					});
 				}, function (res) {
 					self.setInitialState();
@@ -153,7 +145,14 @@ let UserStore = Reflux.createStore({
 		});
 	},
 
-	loggedIn: function (session) {
+
+	hasToken: function () {
+		if (!window.localStorage.hello) {return false;}
+		let credentials = JSON.parse(window.localStorage.hello); 
+		return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
+	},
+
+	isTokenValid: function (session) {
 		var session = hello('google').getAuthResponse();
 		var currentTime = (new Date()).getTime() / 1000;
 		return session && session.access_token && session.expires > currentTime;

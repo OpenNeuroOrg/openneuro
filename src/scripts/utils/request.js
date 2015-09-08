@@ -77,7 +77,7 @@ var Request = {
 function handleRequest (path, options, callback) {
 	options = normalizeOptions(options);
 	var google = hello('google');
-	if (options.auth && hasCredentials()) {
+	if (options.auth && hasToken()) {
 		hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
 			options.headers.Authorization = res.authResponse.access_token;
 			callback(path, options);
@@ -111,10 +111,10 @@ function normalizeOptions (options) {
 	return options;
 }
 
-function hasCredentials () {
-	var session = hello('google').getAuthResponse();
-	var currentTime = (new Date()).getTime() / 1000;
-	return session && session.access_token && session.expires > currentTime;
+function hasToken () {
+	if (!window.localStorage.hello) {return false;}
+	let credentials = JSON.parse(window.localStorage.hello); 
+	return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
 }
 
 export default Request;
