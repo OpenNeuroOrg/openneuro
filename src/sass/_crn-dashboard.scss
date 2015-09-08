@@ -1,5 +1,6 @@
-//main-col dashboard page
-.dashboard{
+//Public and user dashboards
+.dashboard,
+.public-dashboard{
 	.nav.nav-pills>li{
 		margin-right: 10px;
 		a{
@@ -92,6 +93,12 @@
 						float: left;
 						margin: 0;
 						font-size: 15px;
+					}
+					.status{
+						padding: 0 0 0 10px;
+						.warning{
+							color: $brand-warning;
+						}
 					}
 					.date{
 						float: left;
