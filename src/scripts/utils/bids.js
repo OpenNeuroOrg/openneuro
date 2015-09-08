@@ -227,7 +227,8 @@ export default  {
             children: project.files,
             description: this.formatDescription(project.notes),
             status: this.formatStatus(project.notes),
-            userOwns: this.userOwns(project)
+            userOwns: this.userOwns(project),
+            access: this.userAccess(project)
         };
 
         return dataset;
@@ -290,13 +291,26 @@ export default  {
      */
     userOwns(project) {
         let userOwns = false
-        if (project && project.permissions)
-        for (let user of project.permissions) {
-            if (userStore.data.scitran._id === user._id) {
-                userOwns = true;
+        if (project && project.permissions) {
+            for (let user of project.permissions) {
+                if (userStore.data.scitran._id === user._id) {
+                    userOwns = true;
+                }
             }
         }
         return userOwns;
     },
+
+    userAccess(project) {
+        let access = null;
+        if (project && project.permissions) {
+            for (let user of project.permissions) {
+                if (userStore.data.scitran._id === user._id) {
+                    access = user.access;
+                }
+            }
+        }
+        return access;
+    }
 
 };
