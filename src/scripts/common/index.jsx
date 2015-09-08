@@ -33,18 +33,22 @@ let App = React.createClass({
 		let sidebarNoChrome;
 		let close = <span><span className="sr-only">Close</span> »</span>;
 		let open = <span><span className="sr-only">Open</span> «</span>;
-		let toggleSidebar = (
-			<div className={this.state.toggleSidebarbar ? "open toggle-sidebar-wrap" : "toggle-sidebar-wrap"}>
-				<button title="toggle sidebar" className="btn" aria-label="toggle sidebar" onClick={this._toggleSidebar}>{this.state.toggleSidebarbar ? close : open}</button>
-			</div>
-		);
+		let toggleSidebar;
+
+		if (this.isActive('dashboard')){
+			toggleSidebar = (
+				<div className={this.state.toggleSidebarbar ? "open toggle-sidebar-wrap" : "toggle-sidebar-wrap"}>
+					<button title="toggle sidebar" className="btn" aria-label="toggle sidebar" onClick={this._toggleSidebar}>{this.state.toggleSidebarbar ? close : open}</button>
+				</div>
+			);
+		}
 
 		if(!bowser.chrome){
 			sidebarNoChrome = <div className="no-chrome-overlay">Chrome only feature</div>;
 		}
 
 		if (showUpload) {
-			sidebar = <div className="col-xs-4 tasks-col fadeIn">{sidebarNoChrome}<Upload /></div>;
+			sidebar = <div className="col-xs-4 tasks-col fadeIn">{sidebarNoChrome}<Upload /></div>
 		}
 
 		if (showLeftNav) {
