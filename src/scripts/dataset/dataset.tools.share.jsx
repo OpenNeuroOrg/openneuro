@@ -14,6 +14,7 @@ export default class Share extends React.Component {
 		super();
 		this.state = {
 			edit: true,
+			error: null,
 			users: [],
 			permissions: [],
 			input: '',
@@ -29,18 +30,23 @@ export default class Share extends React.Component {
 
 		let permissions = this.state.permissions.map((user) => {
 			return (
-				<div key={user._id}>{user._id} <span>{user.access}</span>
-					<button onClick={this._removeUser.bind(this, user._id)}>x</button>
+				<div key={user._id} className="cte-array-item">{user._id} <span>{user.access}</span>
+					<button className="cte-remove-button btn btn-admin warning" onClick={this._removeUser.bind(this, user._id)}>
+						<i className="fa fa-times"></i>
+					</button>
 				</div>
 			);
 		});
 
 		return (
-			<div>
+			<div className="dataset">
 				<div>Members</div>
-				{permissions}
+				<div className="cte-array-items">
+					{permissions}
+				</div>
 				<div>Add Member</div>
 				<div>
+					<div className="text-danger">{this.state.error}</div>
 					<Typeahead options={this.state.users} filter={this._filter} format={'_id'} onChange={this._typeaheadChange.bind(this)} value={this.state.input}/>
 					<select onChange={this._selectChange.bind(this)} value={this.state.select}>
 						<option value="" disabled>access level</option>
@@ -82,7 +88,7 @@ export default class Share extends React.Component {
 
 	_addUser() {
 		if (this.state.input.length < 1 || this.state.select.length < 1) {
-			// please enter an email and access level
+			this.setState({error: 'You must enter an email address and select an access level.'});
 			return;
 		}
 		let role = {
@@ -92,7 +98,7 @@ export default class Share extends React.Component {
 		bids.addPermission(this.props.dataset._id, role, (err, res) => {
 			let permissions = this.state.permissions;
 			permissions.push(role);
-			this.setState({input: '', select: '', permissions: permissions});
+			this.setState({input: '', select: '', permissions: permissions, error: null});
 		});
 	}
 
