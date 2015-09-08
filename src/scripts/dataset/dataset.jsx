@@ -27,13 +27,19 @@ let Dataset = React.createClass({
 		Actions.loadDataset(params.datasetId);
 	},
 
+	componentWillUnmount() {
+		Actions.setInitialState();
+	},
+
 	render() {
-		let loading    	= this.state.loading;
-		let dataset    	= this.state.dataset;
-		let status     	= this.state.status;
+		let loading = this.state.loading;
+		let dataset = this.state.dataset;
+		let status  = this.state.status;
+		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin');
 		let tools;
-		if (dataset && dataset.userOwns && !dataset.public) {
-			tools = <Tools datasetId={dataset._id} />
+
+		if (dataset && canEdit && !dataset.public) {
+			tools = <Tools dataset={dataset} users={this.state.users}/>
 		}
 
 		let content;

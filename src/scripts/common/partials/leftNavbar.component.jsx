@@ -27,7 +27,7 @@ let LeftNavbar = React.createClass({
 				<span className="left-nav-slider">
 					<ul>
 						<li className="left-nav-dashboard">
-							{userStore.loggedIn() ? dashboardLink : null}
+							{userStore.hasToken() ? dashboardLink : null}
 							{this.state.scitran && this.state.scitran.wheel ? adminLink : null }
 							<Link to="public"><i className="fa fa-files-o" /><span className="link-name">browse datasets</span></Link>
 						</li>

@@ -5,6 +5,8 @@ import Reflux       from 'reflux';
 import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
 import WarnButton   from '../common/forms/warn-button.component.jsx';
+import Share        from './dataset.tools.share.jsx';
+import {Modal}      from 'react-bootstrap';
 
 let Tools = React.createClass({
 
@@ -12,16 +14,44 @@ let Tools = React.createClass({
 
 // life cycle events --------------------------------------------------
 
+	getInitialState() {
+		return {
+			showModal: false
+		};
+	},
+
+	componentDidMount() {
+		Actions.loadUsers();
+	},
+
 	render() {
-		let datasetId = this.props.datasetId;
+		let dataset = this.props.dataset;
+		let users   = this.props.users;
+		let publish;
+		if (!dataset.status.uploadIncomplete) {
+			publish = (
+				<li role="presentation" >
+					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset._id)} />
+	            </li>
+			);
+		}
 		return (
 			<ul className="nav nav-pills tools clearfix">
-				<li role="presentation" >
-					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, datasetId)} />
+				{publish}
+	            <li role="presentation" >
+	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
 	            </li>
 	            <li role="presentation" >
-	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, datasetId)} />
+	            	<button className="btn btn-admin warning"  onClick={this._showModal}>Share <i className="fa fa-users"></i></button>
 	            </li>
+	            <Modal show={this.state.showModal} onHide={this._hideModal}>
+	            	<Modal.Header closeButton>
+	            		<Modal.Title>Share Dataset</Modal.Title>
+	            	</Modal.Header>
+	            	<Modal.Body>
+	            		<Share dataset={dataset} users={users} />
+	            	</Modal.Body>
+	            </Modal>
 	        </ul>
     	);
 	},
@@ -30,7 +60,15 @@ let Tools = React.createClass({
 
 	_publish: Actions.publish,
 
-	_deleteDataset: Actions.deleteDataset
+	_deleteDataset: Actions.deleteDataset,
+
+	_showModal() {
+		this.setState({showModal: true});
+	},
+
+	_hideModal() {
+		this.setState({showModal: false});
+	}
 
 });
 

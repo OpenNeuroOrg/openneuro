@@ -48,11 +48,35 @@
 .slideInRightFast{@include slideInRightFast();}
 
 
+// ZACK ADDED ME --- PUT ME SOMEWHERE BETTER -----------------------------------
 
+.typeahead {
+	position: relative;
+	display: inline;
 
+	.typeahead-results {
+		position: absolute;
+		background: #FFF;
+		list-style: none;
+		padding: 0;
 
+		li {
+			border-top: 1px solid #CCC;
+			padding: 10px;
+			cursor: pointer;
 
+			&:first-child {border: none;}
+			&:hover {background: #EEE;}
+			&:active {background: #DDD;}
+		}
+	}
+}
 
+.modal, .modal-backdrop {
+	z-index: 1500;
+}
+
+// ZACK ADDED ME --- PUT ME SOMEWHERE BETTER -----------------------------------
 
 
 
