@@ -40,11 +40,12 @@ let Datasets = React.createClass({
                 let timeago    = moment(dataset.timestamp).fromNow(true);
                 let status     = dataset.status;
                 let incomplete = status.uploadIncomplete ? <span>incomplete <i className="fa fa-warning"></i></span> : null;
-                
+                let shared     = !dataset.userCreated ? <span>shared with me </span> : null;
+
                 let datasetheader = (
                     <div className="header clearfix">
                         <h4 className="dataset">{dataset.name}</h4>
-                        <div className="date">{incomplete}{dateAdded}<span className="time-ago">{timeago}</span></div>
+                        <div className="date">{shared}{incomplete}{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
                 );
 

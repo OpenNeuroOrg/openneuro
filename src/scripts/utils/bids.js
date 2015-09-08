@@ -228,6 +228,7 @@ export default  {
             description: this.formatDescription(project.notes),
             status: this.formatStatus(project.notes),
             userOwns: this.userOwns(project),
+            userCreated: this.userCreated(project),
             access: this.userAccess(project)
         };
 
@@ -283,7 +284,7 @@ export default  {
     },
 
     /**
-     * userOwns
+     * User Owns
      *
      * Takes a project and returns a boolean
      * representing whether the current user
@@ -301,6 +302,12 @@ export default  {
         return userOwns;
     },
 
+    /**
+     * User Access
+     *
+     * Takes a project and returns the level of access
+     * the current user has with that project.
+     */
     userAccess(project) {
         let access = null;
         if (project && project.permissions) {
@@ -311,6 +318,16 @@ export default  {
             }
         }
         return access;
-    }
+    },
+
+    /**
+     * User Created
+     *
+     * Takes project and returns boolean representing
+     * whether the current user created the project.
+     */
+     userCreated(project) {
+        return project.group === userStore.data.scitran._id;
+     }
 
 };
