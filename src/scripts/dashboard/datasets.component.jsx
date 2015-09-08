@@ -9,6 +9,7 @@ import moment               from 'moment';
 import {PanelGroup, Panel}  from 'react-bootstrap';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
+import TooltipTop           from '../common/partials/tooltip.component.jsx'
 
 // component setup ---------------------------------------------------------------------------
 
@@ -39,16 +40,19 @@ let Datasets = React.createClass({
                 let dateAdded  = moment(dataset.timestamp).format('L');
                 let timeago    = moment(dataset.timestamp).fromNow(true);
                 let status     = dataset.status;
-                let incomplete = status.uploadIncomplete ? <span>incomplete <i className="fa fa-warning"></i></span> : null;
-                let shared     = !dataset.userCreated ? <span>shared with me </span> : null;
+                let incomplete = status.uploadIncomplete ?  <TooltipTop tooltip='incomplete' ><span className='warning'><i className="fa fa-warning"></i></span></TooltipTop> : null;   
+                let shared     = !dataset.userCreated    ? <span>shared with me </span> : null;
+
 
                 let datasetheader = (
                     <div className="header clearfix">
-                        <h4 className="dataset">{dataset.name}</h4>
-                        <div className="date">{shared}{incomplete}{dateAdded}<span className="time-ago">{timeago}</span></div>
+                        <h4 className="dataset">
+                            {dataset.name} 
+                            <span className="status">{shared}{incomplete}</span>
+                        </h4>
+                        <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
                 );
-
                 return (
                     <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={dataset._id}>
                         <div className="inner">

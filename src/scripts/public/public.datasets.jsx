@@ -44,11 +44,13 @@ let Datasets = React.createClass({
             // map results
             results = paginatedResults.map(function (dataset, index){
                 let dateAdded = moment(dataset.timestamp).format('L');
-                let timeago   = moment(dataset.timestamp).fromNow(true)
+                let timeago   = moment(dataset.timestamp).fromNow(true);
                 
                 let datasetheader = (
                     <div className="header clearfix">
-                        <h4 className="dataset">{dataset.name}</h4>
+                        <h4 className="dataset">
+                            {dataset.name}
+                        </h4>
                         <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
                 );
@@ -71,8 +73,8 @@ let Datasets = React.createClass({
         }
 
         return (
-        	<div className="fadeIn">
-            	<div className="dash-tab-content datasets ">
+        	<div className="fadeIn inner-route public-dashboard">
+                <div className="dash-tab-content datasets ">
                     <h2>Datasets</h2>
                     <PanelGroup accordion> 
                         {this.state.loading ? <Spinner active={true} /> : results}

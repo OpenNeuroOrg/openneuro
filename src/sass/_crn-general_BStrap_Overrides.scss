@@ -193,3 +193,13 @@ textarea.form-control {
 	background:$turquoise;
 }
 
+
+.tooltip-inner{
+	border-radius:0;
+	background: rgba(0,0,0,0.8);
+	color:$white;
+	padding: 8px 12px;
+}
+.tooltip.top .tooltip-arrow{
+	border-top-color: rgba(0,0,0,0.8);
+}

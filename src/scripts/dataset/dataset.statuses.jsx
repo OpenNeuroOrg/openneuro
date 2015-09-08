@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React        from 'react';
+import TooltipTop   from '../common/partials/tooltip.component.jsx'
 
 let Statuses = React.createClass({
 
@@ -9,17 +10,18 @@ let Statuses = React.createClass({
 	render() {
 
 		let dataset = this.props.dataset;
-
+		let publicStatus = <TooltipTop tooltip='public' ><i className="fa fa-eye"></i></TooltipTop>;
+		let incompleteStatus = <TooltipTop tooltip='incomplete' ><i className="fa fa-warning"></i></TooltipTop> 
 		return (
 			<ul className="nav nav-pills">
 				<li>
 					<span className="dataset-status ds-info">
-						{dataset && dataset.status && dataset.public ? <span><i className="fa fa-eye"></i>public</span> : null}
+						{dataset && dataset.status && dataset.public ? {publicStatus} : null}
 					</span>
 				</li>
 				<li>
 					<span className="dataset-status ds-warning">
-						{dataset && dataset.status && dataset.status.uploadIncomplete ? <span><i className="fa fa-warning"></i>incomplete</span> : null}
+						{dataset && dataset.status && dataset.status.uploadIncomplete ? {incompleteStatus}: null}
 					</span>
 				</li>
 			</ul>
