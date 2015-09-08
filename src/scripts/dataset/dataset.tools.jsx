@@ -27,11 +27,17 @@ let Tools = React.createClass({
 	render() {
 		let dataset = this.props.dataset;
 		let users   = this.props.users;
-		return (
-			<ul className="nav nav-pills tools clearfix">
+		let publish;
+		if (!dataset.status.uploadIncomplete) {
+			publish = (
 				<li role="presentation" >
 					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset._id)} />
 	            </li>
+			);
+		}
+		return (
+			<ul className="nav nav-pills tools clearfix">
+				{publish}
 	            <li role="presentation" >
 	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
 	            </li>
