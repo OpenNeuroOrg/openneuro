@@ -3,11 +3,8 @@
 import React        from 'react';
 import Reflux       from 'reflux';
 import {State}      from 'react-router';
-import FileTree     from '../upload/upload.file-tree.jsx';
 import Spinner      from '../common/partials/spinner.component.jsx';
 import {Link}       from 'react-router';
-import {Accordion, Panel} from 'react-bootstrap';
-
 import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
 import Metadata     from './dataset.metadata.jsx';
@@ -41,7 +38,6 @@ let Dataset = React.createClass({
 
 		let content;
 		if (dataset) {
-			let fsHeader 	= dataset.name + " File Structure";
 			let myDatasetsLink = <Link to="datasets">My Datasets</Link>;
 			let PublicDatasetsLink = <Link to="public">Public Datasets</Link>;
 			content = (
@@ -65,11 +61,6 @@ let Dataset = React.createClass({
 						</div>
 						<Metadata dataset={dataset}/>
 					</div>
-					<Accordion className="fileStructure fadeIn">
-						<Panel header={fsHeader} eventKey='1'>
-					  		<FileTree tree={[dataset]} />
-					  	</Panel>
-			  		</Accordion>
 				</div>
 			);
 		} else {

@@ -3,6 +3,8 @@
 import React        from 'react';
 import Actions      from './dataset.actions.js';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
+import {Accordion, Panel} from 'react-bootstrap';
+import FileTree     from '../upload/upload.file-tree.jsx';
 
 let Metadata = React.createClass({
 
@@ -13,6 +15,8 @@ let Metadata = React.createClass({
 		let userOwns    = dataset ? dataset.userOwns : null;
 		let description = dataset ? dataset.description : null;
 		let README = "README file is plain text and can follow any format you would like";
+		let fsHeader 	= dataset.name + " File Structure";
+
 		
 		let items = [];
 		for (let key in description) {
@@ -30,6 +34,11 @@ let Metadata = React.createClass({
 			<div>
 				<div className="dataset-readme col-xs-6">
 					{README}
+					<Accordion className="fileStructure fadeIn">
+						<Panel header={fsHeader} eventKey='1'>
+					  		<FileTree tree={[dataset]} />
+					  	</Panel>
+			  		</Accordion>
 				</div>
 				<div className="dataset-descriptions col-xs-6">
 					{items}
