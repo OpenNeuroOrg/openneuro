@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
-import React        from 'react';
-import TooltipTop   from '../common/partials/tooltip.component.jsx'
+import React   from 'react';
+import Tooltip from '../common/partials/tooltip.component.jsx'
 
 let Statuses = React.createClass({
 
@@ -10,8 +10,8 @@ let Statuses = React.createClass({
 	render() {
 
 		let dataset = this.props.dataset;
-		let publicStatus = <TooltipTop tooltip='public' ><i className="fa fa-eye"></i></TooltipTop>;
-		let incompleteStatus = <TooltipTop tooltip='incomplete' ><i className="fa fa-warning"></i></TooltipTop> 
+		let publicStatus = <Tooltip tooltip='public' ><i className="fa fa-eye"></i></Tooltip>;
+		let incompleteStatus = <Tooltip tooltip='incomplete' ><i className="fa fa-warning"></i></Tooltip> 
 		return (
 			<ul className="nav nav-pills">
 				<li>
