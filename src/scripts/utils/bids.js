@@ -85,7 +85,7 @@ export default  {
             let results = [];
             projects.reverse();
             for (let project of projects) {
-                if (project.group === userStore.data.scitran._id) {
+                if (this.userOwns(project)) {
                     let dataset = this.formatDataset(project);
                     results.push(dataset);
                 }
@@ -191,7 +191,6 @@ export default  {
      * containers.
      */
     deleteDataset (projectId, callback) {
-        let self = this;
         scitran.getSessions(projectId, (sessions) => {
             async.each(sessions, (session, cb) => {
                 scitran.getAcquisitions(session._id, (acquisitions) => {
