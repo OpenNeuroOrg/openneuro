@@ -231,7 +231,7 @@
 	  			margin: 0;
 	  		}
 		}
-		.upload-accordion{
+		.upload-wrap{
 			display: block;
 			margin-top: 0;
 			margin-bottom: 0; 
@@ -250,7 +250,7 @@
 					position: relative;
 					h4{
 						margin: 0;
-						a{
+						
 							font-size: 21px;
 							display: block;
 							padding: 18px;
@@ -259,29 +259,6 @@
 							font-family: $font-family-ssp;
 							font-weight:400;
 							 text-decoration: none;
-							&:hover{
-								text-decoration: underline;
-								background-color: #f4f4f4;
-							}
-							&:after{
-								content: '\f077';
-								font-family: FontAwesome;
-								color: $ocean;
-								font-weight: 300;
-								margin-right:5px;
-								font-size: 10px;
-								top: -3px;
-								position: relative;
-								float: right;
-								padding-top: 9px;
-
-							}
-							&.collapsed{
-								&:after{
-									content: '\f078';							 				
-								}
-							}
-						}
 					}
 				}
 				.panel-collapse{

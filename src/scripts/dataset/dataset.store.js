@@ -101,7 +101,7 @@ let UserStore = Reflux.createStore({
 
 	deleteDataset(datasetId) {
 		bids.deleteDataset(datasetId, () => {
-            router.transitionTo('dashboard');
+            router.transitionTo('datasets');
 		});
 	}
 

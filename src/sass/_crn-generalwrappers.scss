@@ -63,3 +63,36 @@ body,
 	padding:0;
 }
 
+.toggle-sidebar-wrap{
+	position: absolute;
+    right: 0;
+    top: 83px;
+    z-index: 1299;
+    .btn{
+		border-radius: 0;
+		font-size: 40px;
+		color: $primary;
+		padding: 5px 12px 9px;
+		background: #B5B5B5;
+		font-family: $font-family-ssp;
+		line-height: 28px;
+		font-weight: 100;
+		&:hover{
+			color:#333;
+		}
+		&:focus,
+		&:active,
+		&:hover{
+			background: #B5B5B5;
+			outline: none;
+			box-shadow:none;
+
+		}
+    }
+    &.open{
+    	right: 33.33333%;
+    	margin-right: 5px;
+    }
+
+}
+
