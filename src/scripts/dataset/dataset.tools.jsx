@@ -32,7 +32,7 @@ let Tools = React.createClass({
 	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
 	            </li>
 	            <li role="presentation" >
-	            	<button onClick={this._showModal}>share</button>
+	            	<button className="btn btn-admin warning"  onClick={this._showModal}>Share <i className="fa fa-users"></i></button>
 	            </li>
 	            <Modal show={this.state.showModal} onHide={this._hideModal}>
 	            	<Modal.Header closeButton>
