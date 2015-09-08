@@ -11,7 +11,7 @@ let Statuses = React.createClass({
 
 		let dataset = this.props.dataset;
 		let publicStatus = <Tooltip tooltip='public' ><i className="fa fa-eye"></i></Tooltip>;
-		let incompleteStatus = <Tooltip tooltip='incomplete' ><i className="fa fa-warning"></i></Tooltip> 
+		let incompleteStatus = <Tooltip tooltip='incomplete' ><i className="fa fa-warning"></i></Tooltip>;
 		return (
 			<ul className="nav nav-pills">
 				<li>
