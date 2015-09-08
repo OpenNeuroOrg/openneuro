@@ -20,6 +20,10 @@ let Tools = React.createClass({
 		};
 	},
 
+	componentDidMount() {
+		Actions.loadUsers();
+	},
+
 	render() {
 		let dataset = this.props.dataset;
 		let users   = this.props.users;

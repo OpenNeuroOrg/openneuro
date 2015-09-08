@@ -4,8 +4,10 @@ var Actions = Reflux.createActions([
 	'updateDescription',
 	'saveDescription',
 	'loadDataset',
+	'loadUsers',
 	'publish',
-	'deleteDataset'
+	'deleteDataset',
+	'setInitialState'
 ]);
 
 export default Actions;

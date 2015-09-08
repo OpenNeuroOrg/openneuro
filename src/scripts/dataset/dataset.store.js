@@ -72,7 +72,7 @@ let UserStore = Reflux.createStore({
 
 	loadDataset(datasetId) {
 		this.update({loading: true, dataset: null});
-		this.loadUsers();
+		// this.loadUsers();
 		bids.getDataset(datasetId, (res) => {
 			if (res.status === 404 || res.status === 403) {
 				this.update({status: res.status, loading: false});

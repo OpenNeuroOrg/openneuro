@@ -30,6 +30,10 @@ let Dataset = React.createClass({
 		Actions.loadDataset(params.datasetId);
 	},
 
+	componentWillUnmount() {
+		Actions.setInitialState();
+	},
+
 	render() {
 		let loading    	= this.state.loading;
 		let dataset    	= this.state.dataset;
