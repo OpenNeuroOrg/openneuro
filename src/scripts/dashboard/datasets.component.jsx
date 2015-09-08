@@ -9,7 +9,7 @@ import moment               from 'moment';
 import {PanelGroup, Panel}  from 'react-bootstrap';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
-import TooltipTop           from '../common/partials/tooltip.component.jsx'
+import Tooltip              from '../common/partials/tooltip.component.jsx'
 
 // component setup ---------------------------------------------------------------------------
 
@@ -40,8 +40,8 @@ let Datasets = React.createClass({
                 let dateAdded  = moment(dataset.timestamp).format('L');
                 let timeago    = moment(dataset.timestamp).fromNow(true);
                 let status     = dataset.status;
-                let incomplete = status.uploadIncomplete ?  <TooltipTop tooltip='incomplete' ><span className='warning'><i className="fa fa-warning"></i></span></TooltipTop> : null;   
-                let shared     = !dataset.userCreated    ? <span>shared with me </span> : null;
+                let incomplete = status.uploadIncomplete ? <Tooltip tooltip='incomplete' ><span className='warning'><i className="fa fa-warning"></i></span></Tooltip> : null;   
+                let shared     = !dataset.userCreated    ? <Tooltip tooltip='shared with me' ><span className='text-info'><i className="fa fa-share"></i></span></Tooltip> : null;
 
 
                 let datasetheader = (
