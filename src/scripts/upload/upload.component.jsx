@@ -111,7 +111,7 @@ let Upload = React.createClass({
 
 					    <div className="panel-heading">
 					      <h4 className="panel-title">
-					      	<a href="#" aria-expanded="true">Upload Dataset</a>
+					      Upload Dataset
 					      </h4>
 					    </div>
 

@@ -250,7 +250,7 @@
 					position: relative;
 					h4{
 						margin: 0;
-						a{
+						
 							font-size: 21px;
 							display: block;
 							padding: 18px;
@@ -259,11 +259,6 @@
 							font-family: $font-family-ssp;
 							font-weight:400;
 							 text-decoration: none;
-							&:hover{
-								text-decoration: underline;
-								background-color: #f4f4f4;
-							}
-						}
 					}
 				}
 				.panel-collapse{
