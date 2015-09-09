@@ -347,6 +347,7 @@ export default  {
      * whether the current user created the project.
      */
      userCreated(project) {
+        if (!userStore.data.scitran) {return false;}
         return project.group === userStore.data.scitran._id;
      }
 

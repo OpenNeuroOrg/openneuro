@@ -52,42 +52,6 @@
 		}
 		.nav.nav-pills{
 			float: left;
-			.dataset-status{
-				background: none;
-				color: #676767;
-				font-size: 14px;
-				font-family: $font-family-cabin;
-				font-weight: 300;
-				padding: 0;
-				margin: 7px 0 0 15px;
-				text-align: center;
-				display: block;
-				width: 100%;
-				i.fa{
-					margin-right: 5px;
-				}
-			
-				&.ds-primary{
-					background:none;
-					color:$brand-warning;
-				}
-				&.ds-success{
-					background:none;
-					color:$brand-success;
-				}
-				&.ds-info{
-					background:none;
-					color:$brand-info;
-				}
-				&.ds-warning{
-					background:none;
-					color:$brand-warning;
-				}			
-				&.ds-danger{
-					background:none;
-					color:$brand-danger;
-				}
-			}
 		}
 	}
 	.tools.nav.nav-pills{
@@ -175,7 +139,39 @@
 	}
 }
 
+.dataset-status{
+	background: none;
+	color: #676767;
+	font-size: 14px;
+	font-family: $font-family-cabin;
+	font-weight: 300;
+	padding: 0;
+	margin: 7px 0 0 15px;
+	text-align: center;
+	display: inline;
+	width: 100%;
+	i.fa{
+		margin-right: 5px;
+	}
 
-
-
-
+	&.ds-primary{
+		background:none;
+		color:$brand-warning;
+	}
+	&.ds-success{
+		background:none;
+		color:$brand-success;
+	}
+	&.ds-info{
+		background:none;
+		color:$brand-info;
+	}
+	&.ds-warning{
+		background:none;
+		color:$brand-warning;
+	}			
+	&.ds-danger{
+		background:none;
+		color:$brand-danger;
+	}
+}
