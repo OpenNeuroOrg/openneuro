@@ -41,14 +41,15 @@ let Datasets = React.createClass({
                 let timeago    = moment(dataset.timestamp).fromNow(true);
                 let status     = dataset.status;
                 let incomplete = status.uploadIncomplete ? <Tooltip tooltip='incomplete' ><span className='text-warning'><i className="fa fa-warning"></i></span></Tooltip> : null;   
-                let shared     = !dataset.userCreated    ? <Tooltip tooltip='shared with me' ><span className='text-info'><i className="fa fa-user"></i></span></Tooltip> : null;
+                let shared     = !dataset.userCreated    ? <Tooltip tooltip='shared with me' ><span className='text-info'><i className="fa fa-user"></i></span></Tooltip> : null; 
+                let isPublic   = dataset.public          ? <Tooltip tooltip='public' ><span className='text-info'><i className="fa fa-eye"></i></span></Tooltip> : null;
 
 
                 let datasetheader = (
                     <div className="header clearfix">
                         <h4 className="dataset">
                             {dataset.name} 
-                            <span className="status">{shared}{incomplete}</span>
+                            <span className="status">{isPublic}{shared}{incomplete}</span>
                         </h4>
                         <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                     </div>
