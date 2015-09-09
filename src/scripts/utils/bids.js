@@ -226,6 +226,7 @@ export default  {
             notes: project.notes,
             children: project.files,
             description: this.formatDescription(project.notes),
+            README: this.formatREADME(project.notes),
             status: this.formatStatus(project.notes),
             userOwns: this.userOwns(project),
             userCreated: this.userCreated(project),
@@ -262,6 +263,25 @@ export default  {
         }
 
         return description;
+    },
+
+    /**
+     * Format README
+     *
+     * Takes a notes array and returns
+     * a README file if there is a
+     * README note.
+     */
+    formatREADME (notes) {
+        let README = '';
+        if (notes) {
+            for (let note of notes) {
+                if (note.author === 'README') {
+                    README = note.text;
+                }
+            }
+        }
+        return README;
     },
 
     /**

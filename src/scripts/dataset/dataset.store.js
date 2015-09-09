@@ -70,6 +70,15 @@ let UserStore = Reflux.createStore({
 		});
 	},
 
+	updateREADME(value, callback) {
+		let dataset = this.data.dataset;
+		let note = {
+			author: 'README',
+			text: value
+		};
+		scitran.updateNote(dataset._id, note, callback);
+	},
+
 	loadDataset(datasetId) {
 		this.update({loading: true, dataset: null});
 		// this.loadUsers();

@@ -14,10 +14,9 @@ let Metadata = React.createClass({
 		let dataset     = this.props.dataset;
 		let userOwns    = dataset ? dataset.userOwns : null;
 		let description = dataset ? dataset.description : null;
-		let README = "README file is plain text and can follow any format you would like";
+		let README      = dataset ? dataset.README : null;
 		let fsHeader 	= dataset.name + " File Structure";
 
-		
 		let items = [];
 		for (let key in description) {
 			items.push(
@@ -33,7 +32,10 @@ let Metadata = React.createClass({
 		let descriptors = (
 			<div>
 				<div className="dataset-readme col-xs-6">
-					{README}
+					<ClickToEdit value={README}
+						label="README"
+						editable={userOwns}
+						onChange={this._updateREADME} />
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={fsHeader} eventKey='1'>
 					  		<FileTree tree={[dataset]} />
@@ -57,6 +59,8 @@ let Metadata = React.createClass({
 // custon methods -----------------------------------------------------
 
 	_updateDescription: Actions.updateDescription,
+
+	_updateREADME: Actions.updateREADME,
 
 });
 
