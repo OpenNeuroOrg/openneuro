@@ -31,7 +31,7 @@ let Tools = React.createClass({
 		if (!dataset.status.uploadIncomplete) {
 			publish = (
 				<li role="presentation" >
-					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-share" action={this._publish.bind(this, dataset._id)} />
+					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-eye" action={this._publish.bind(this, dataset._id)} />
 	            </li>
 			);
 		}
@@ -42,7 +42,7 @@ let Tools = React.createClass({
 	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
 	            </li>
 	            <li role="presentation" >
-	            	<button className="btn btn-admin warning"  onClick={this._showModal}>Share <i className="fa fa-users"></i></button>
+	            	<button className="btn btn-admin warning"  onClick={this._showModal}>Share <i className="fa fa-user-plus"></i></button>
 	            </li>
 	            <Modal show={this.state.showModal} onHide={this._hideModal}>
 	            	<Modal.Header closeButton>
