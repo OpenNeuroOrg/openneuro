@@ -42,6 +42,10 @@
 			&.error{
 				color:$coral;
 			}
+			&.characterError{
+				padding:0 10px 5px;
+				text-align: center;
+			}
 			.upload-reset-link,
 			.rename-tab-link{
 				color:$primary;
@@ -142,16 +146,34 @@
 			    margin: 0 auto 0;
 			    max-width: 100%;
 				label.add-name{
-					float: left;
-					width: 10%;
-					text-align: right;
-					padding: 11px 0;
+				    float: left;
+				    width: 10%;
+				    text-align: right;
+				    padding: 10px 8px 11px;
+				    background-color: #FFF;
+				    margin: 0px 0px;
+				    box-shadow: inset 2px 0px 5px -1px rgba(0,0,0,.14);
 					i{}
 				}
 				.form-group{
 					float: left;
 					width: 90%;
 					margin: 0;
+					label{
+						position: absolute;
+						text-align: right;
+						width: 100%;
+						padding: 2px 2%;
+
+					}
+					input{
+						box-shadow: inset -2px 0px 5px -1px rgba(0,0,0,.14);
+						&:focus{
+							outline: none;
+							@include gradient-directional($start-color: #fff, $end-color: #fcfcfc, $deg: 85deg);
+							
+						}
+					}
 				}
 				button{
 					font-size: 12px;
@@ -529,6 +551,7 @@
 				color: lighten($ocean, 10%);
 				font-size: 14px;
 				border-right:1px solid rgba(0,0,0,0.1);
+				letter-spacing: 0;
 				&:hover{
 					background-color:transparent;
 					color:$ocean;

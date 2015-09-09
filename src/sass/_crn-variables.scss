@@ -33,3 +33,17 @@ $font-family-cabin: 'Cabin', sans-serif;
 
 
 $btn-shadow:1px 1px 3px -1px rgba(0,0,0,0.7);
+
+
+$text-primary:         $primary;
+$text-success:         #24C85E !default;
+$text-info:            #24C8C8 !default;
+$text-warning:         #F7BA4B !default;
+$text-danger:          #C82424 !default;
+
+
+.text-primary	{ color:  $primary;}
+.text-success	{ color:  $text-success;}
+.text-info		{ color:  $text-info;}
+.text-warning	{ color:  $text-warning;}
+.text-danger	{ color:  $text-danger;}
