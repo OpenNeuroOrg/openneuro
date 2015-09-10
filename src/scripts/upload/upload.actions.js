@@ -8,7 +8,6 @@ var Actions = Reflux.createActions([
 	'uploadError',
 	'closeAlert',
 	'updateDirName',
-	'toggleNameInput',
 	'checkExists',
 	'setInitialState',
 	'selectTab',

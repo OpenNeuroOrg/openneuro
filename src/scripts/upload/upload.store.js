@@ -225,16 +225,6 @@ let UploadStore = Reflux.createStore({
 	},
 
 	/**
-	 * Toggle Name Input
-	 *
-	 * Toggles the visibility of the dir name chnage
-	 * field.
-	 */
-	toggleNameInput() {
-		this.update({changeName: !this.data.changeName});
-	},
-
-	/**
 	 * Update Directory Name
 	 *
 	 * Sets the directory name to the passed value.
