@@ -220,6 +220,8 @@ export default  {
         let dataset = {
             _id: project._id,
             name: project.name,
+            group: project.group,
+            timestamp: project.timestamp,
             type: 'folder',
             permissions: project.permissions,
             public: project.public,

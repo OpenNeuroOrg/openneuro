@@ -10,6 +10,7 @@ import Actions      from './dataset.actions.js';
 import Metadata     from './dataset.metadata.jsx';
 import Tools        from './dataset.tools.jsx';
 import Statuses     from './dataset.statuses.jsx';
+import moment       from 'moment';
 
 let Dataset = React.createClass({
 
@@ -35,6 +36,8 @@ let Dataset = React.createClass({
 		let loading = this.state.loading;
 		let dataset = this.state.dataset;
 		let status  = this.state.status;
+		let dateAdded  = dataset ? moment(dataset.timestamp).format('L') : null;
+        let timeago    = dataset ? moment(dataset.timestamp).fromNow(true) : null;
 		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin');
 		let tools;
 
@@ -57,9 +60,10 @@ let Dataset = React.createClass({
 						<div className="row">
 							<div className="col-xs-6">
 								<h1 className="clearfix">
-									<span className="dataset-name">{dataset.name}</span> 
+									<span className="dataset-name">{dataset.name}</span>
 									<Statuses dataset={dataset}/>
 								</h1>
+								<h6>uploaded by {dataset.group} on {dateAdded} - {timeago} ago</h6>
 							</div>
 							<div className="col-xs-6">
 								{tools}
