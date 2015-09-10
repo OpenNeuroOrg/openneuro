@@ -233,7 +233,7 @@ let UploadStore = Reflux.createStore({
 		let error = this.data.nameError;
 		if (value.length > 32) {
 			error = 'Names must be 32 characters or less.';
-		} else if (value.length === 0) {
+		} else if (value.length === 0 || /^\s+$/.test(value)) {
 			error = 'Dataset must have a name.';
 		} else {
 			error = null;
