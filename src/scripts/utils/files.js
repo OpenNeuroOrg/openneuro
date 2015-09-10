@@ -1,3 +1,7 @@
+// dependencies -------------------------------------------------------------------
+
+import config from '../config';
+
 // public API ---------------------------------------------------------------------
 
 let fileUtils = {
@@ -24,7 +28,8 @@ function generateTree (files) {
     // generate list of paths
 	for (let i = 0; i < files.length; i++) {
 		let file = files[i];
-        if (blacklist.indexOf(file.name) > -1) {continue;}
+        // ignore blacklisted files
+        if (config.upload.blacklist.indexOf(file.name) > -1) {continue;}
         pathList[file.webkitRelativePath] = file;
     }
 
@@ -78,7 +83,3 @@ function countTree (tree) {
     recurse(tree);
     return count;
 }
-
-let blacklist = [
-    '.DS_Store'
-];

@@ -1,7 +1,6 @@
 import request       from './request';
 import superagent    from 'superagent';
 import MD5           from './md5';
-import config        from '../config';
 import userStore     from '../user/user.store.js';
 import uploadActions from '../upload/upload.actions.js';
 
