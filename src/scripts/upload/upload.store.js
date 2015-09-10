@@ -230,17 +230,19 @@ let UploadStore = Reflux.createStore({
 	 * Sets the directory name to the passed value.
 	 */
 	updateDirName(value) {
-		let nameError = this.data.nameError;
+		let error = this.data.nameError;
 		if (value.length > 32) {
-			nameError = 'Names must be 32 characters or less';
+			error = 'Names must be 32 characters or less.';
+		} else if (value.length === 0) {
+			error = 'Dataset must have a name.';
 		} else {
-			nameError = null;
+			error = null;
 		}
 
 		this.update({
 			dirName: value,
 			showResume: false,
-			nameError: nameError
+			nameError: error
 		});
 	},
 
