@@ -1,7 +1,8 @@
 // dependencies -------------------------------------------------------
 
-import React  from 'react';
-import upload from '../../utils/upload';
+import React   from 'react';
+import upload  from '../../utils/upload';
+import Actions from '../../dataset/dataset.actions';
 
 // component setup ----------------------------------------------------
 
@@ -10,12 +11,14 @@ let FileArrayInput = React.createClass({
 // life cycle events --------------------------------------------------
 
 	getDefaultProps () {
-		return {value: []};
+		return {
+			value: []
+		};
 	},
 
 	render() {
 		let items = this.props.value.map((item, index) => {
-			return <div key={index} className="cte-array-item">{item.name} <button className="cte-remove-button btn btn-admin warning" onClick={this._remove.bind(null, index)}><i className="fa fa-times"></i></button></div>
+			return <div key={index} className="cte-array-item">{item.name} <button className="cte-remove-button btn btn-admin warning" onClick={this._remove.bind(null, item.name, index)}><i className="fa fa-times"></i></button></div>
 		});
 
 		return (
@@ -35,10 +38,12 @@ let FileArrayInput = React.createClass({
 		if (this.props.onChange) {this.props.onChange(file);}
 	},
 
-	_remove(index) {
-		let array = this.props.value;
-		array.splice(index, 1);
-		this.setState({value: array});
+	_remove(filename, index) {
+		Actions.deleteDigitalDocument(filename, () => {
+			let array = this.props.value;
+			array.splice(index, 1);
+			this.setState({value: array});
+		});
 	}
 
 });

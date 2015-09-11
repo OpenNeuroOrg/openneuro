@@ -7,6 +7,7 @@ import bids      from '../utils/bids';
 import router    from '../utils/router-container';
 import userStore from '../user/user.store';
 import upload    from '../utils/upload';
+import request   from '../utils/request';
 
 let UserStore = Reflux.createStore({
 
@@ -66,10 +67,18 @@ let UserStore = Reflux.createStore({
 			url: 'projects/' + this.data.dataset._id + '/file/' + file.name,
 			file: file,
 			tag: 'attachment',
-			progressStart: () => {console.log('upload started');},
-			progressEnd: () => {console.log('upload complete');}
+			progressStart: () => {},
+			progressEnd: () => {this.loadDataset(this.data.dataset._id);}
 		};
 		upload.add(request);
+	},
+
+	deleteDigitalDocument(filename, callback) {
+		request.del('projects/' + this.data.dataset._id + '/file/' + filename, (err, res) => {
+			console.log(err);
+			console.log(res);
+			callback();
+		});
 	},
 
 	saveDescription(description, callback) {
