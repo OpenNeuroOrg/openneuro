@@ -15,7 +15,7 @@ let FileArrayInput = React.createClass({
 
 	render() {
 		let items = this.props.value.map((item, index) => {
-			return <div key={index} className="cte-array-item">{item} <button className="cte-remove-button btn btn-admin warning" onClick={this._remove.bind(null, index)}><i className="fa fa-times"></i></button></div>
+			return <div key={index} className="cte-array-item">{item.name} <button className="cte-remove-button btn btn-admin warning" onClick={this._remove.bind(null, index)}><i className="fa fa-times"></i></button></div>
 		});
 
 		return (

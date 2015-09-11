@@ -28,15 +28,22 @@ let ClickToEdit = React.createClass({
 		let value = this.state.value;
 		let type = this.props.type ? this.props.type : typeof value;
 		let input;
+		let display
 		switch (type) {
 			case "string":
 				input = <textarea className="form-control" value={value} onChange={this._handleChange}></textarea>;
+				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
 				break;
 			case "object":
-				input = <ArrayInput value={value} onChange={this._handleChange} />
+				input = <ArrayInput value={value} onChange={this._handleChange} />;
+				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
 				break;
 			case "fileArray":
-				input = <FileArrayInput value={value} onChange={this._handleFile} />
+				let list = value.map((file, index) => {
+					return <a href="http://example.com/files/myfile.pdf" target="_blank">{file.name}</a>
+				});
+				input = <FileArrayInput value={value} onChange={this._handleFile} />;
+				display = <div className="cte-display"><div className="fadeIn">{list}</div></div>;
 				break;
 		}
 
@@ -44,12 +51,6 @@ let ClickToEdit = React.createClass({
 		if (this.props.editable) {
 			editBtn = <button onClick={this._edit} className="cte-edit-button btn btn-admin fadeIn"><span>edit </span><i className="fa fa-pencil"></i></button>;
 		}
-
-		let display = (
-			<div className="cte-display">
-				<div className="fadeIn">{value}</div>
-			</div>
-		);
 
 		let edit = (
 			<div className="cte-edit fadeIn">

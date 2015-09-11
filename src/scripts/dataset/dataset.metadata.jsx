@@ -45,7 +45,7 @@ let Metadata = React.createClass({
 				<div className="dataset-descriptions col-xs-6">
 					{items}
 					<div className="description-item">
-						<ClickToEdit value={['https://openfmri.org/sites/default/files/fnins-06-00080.pdf', 'https://openfmri.org/sites/default/files/fnins-06-00080.pdf']}
+						<ClickToEdit value={dataset.attachments}
 							label="Digital Documents"
 							editable={userOwns}
 							onChange={this._updateDigitalDocuments}
