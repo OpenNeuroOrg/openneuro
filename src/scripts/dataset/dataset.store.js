@@ -6,6 +6,7 @@ import scitran   from '../utils/scitran';
 import bids      from '../utils/bids';
 import router    from '../utils/router-container';
 import userStore from '../user/user.store';
+import upload    from '../utils/upload';
 
 let UserStore = Reflux.createStore({
 
@@ -58,6 +59,17 @@ let UserStore = Reflux.createStore({
 		dataset.description = description;
 		this.saveDescription(description, callback);
 		this.update({dataset: dataset});
+	},
+
+	updateDigitalDocuments(file) {
+		let request = {
+			url: 'projects/' + this.data.dataset._id + '/file/' + file.name,
+			file: file,
+			tag: 'digitalDocument',
+			progressStart: () => {console.log('upload started');},
+			progressEnd: () => {console.log('upload complete');}
+		};
+		upload.add(request);
 	},
 
 	saveDescription(description, callback) {

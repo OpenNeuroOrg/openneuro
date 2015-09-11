@@ -1,10 +1,11 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
+import React  from 'react';
+import upload from '../../utils/upload';
 
 // component setup ----------------------------------------------------
 
-let ArrayInput = React.createClass({
+let FileArrayInput = React.createClass({
 
 // life cycle events --------------------------------------------------
 
@@ -22,20 +23,16 @@ let ArrayInput = React.createClass({
 				<div className="cte-array-items">
 					{items}
 				</div>
-				<input type="text" ref="input"/>
-				<button className="btn btn-admin add" onClick={this._add}>add</button>
+				<input type="file" onChange={this._handleChange}/>
 			</div>
 		)
 	},
 
 // custon methods -----------------------------------------------------
 
-	_add() {
-		let input = this.refs.input.getDOMNode().value;
-		let value = this.props.value;
-		value.push(input);
-		this.props.onChange({target: {value: value}});
-		this.refs.input.getDOMNode().value = '';
+	_handleChange(e) {
+		let file = e.target.files[0];
+		if (this.props.onChange) {this.props.onChange(file);}
 	},
 
 	_remove(index) {
@@ -46,4 +43,4 @@ let ArrayInput = React.createClass({
 
 });
 
-export default ArrayInput;
+export default FileArrayInput;

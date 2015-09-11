@@ -44,6 +44,13 @@ let Metadata = React.createClass({
 				</div>
 				<div className="dataset-descriptions col-xs-6">
 					{items}
+					<div className="description-item">
+						<ClickToEdit value={['https://openfmri.org/sites/default/files/fnins-06-00080.pdf', 'https://openfmri.org/sites/default/files/fnins-06-00080.pdf']}
+							label="Digital Documents"
+							editable={userOwns}
+							onChange={this._updateDigitalDocuments}
+							type="fileArray" />
+					</div>
 				</div>
 				
 			</div>
@@ -59,6 +66,8 @@ let Metadata = React.createClass({
 // custon methods -----------------------------------------------------
 
 	_updateDescription: Actions.updateDescription,
+
+	_updateDigitalDocuments: Actions.updateDigitalDocuments,
 
 	_updateREADME: Actions.updateREADME,
 

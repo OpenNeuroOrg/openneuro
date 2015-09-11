@@ -1,8 +1,9 @@
 // dependencies -------------------------------------------------------
 
-import React      from 'react';
-import ArrayInput from './array-input.jsx';
-import Spinner    from '../partials/spinner.component.jsx';
+import React          from 'react';
+import ArrayInput     from './array-input.jsx';
+import FileArrayInput from './file-array-input.jsx';
+import Spinner        from '../partials/spinner.component.jsx';
 
 let ClickToEdit = React.createClass({
 
@@ -25,18 +26,17 @@ let ClickToEdit = React.createClass({
 
 	render() {
 		let value = this.state.value;
-
+		let type = this.props.type ? this.props.type : typeof value;
 		let input;
-		switch (typeof value) {
+		switch (type) {
 			case "string":
 				input = <textarea className="form-control" value={value} onChange={this._handleChange}></textarea>;
 				break;
 			case "object":
-				input = (
-					<div className="cte-edit-array">
-						<ArrayInput value={value} onChange={this._handleChange} />
-					</div>
-				);
+				input = <ArrayInput value={value} onChange={this._handleChange} />
+				break;
+			case "fileArray":
+				input = <FileArrayInput value={value} onChange={this._handleFile} />
 				break;
 		}
 
@@ -80,6 +80,12 @@ let ClickToEdit = React.createClass({
 
 	_edit() {
 		this.setState({edit: true});
+	},
+
+	_handleFile(file) {
+		if (this.props.onChange) {
+			this.props.onChange(file);
+		}
 	},
 
 	_handleChange(event) {

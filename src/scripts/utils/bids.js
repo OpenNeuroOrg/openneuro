@@ -216,7 +216,10 @@ export default  {
      * BIDS dataset.
      */
     formatDataset (project) {
-        for (let file of project.files) {file.name = file.filename;}
+        for (let file of project.files) {
+            console.log(file);
+            file.name = file.filename;
+        }
         let dataset = {
             _id: project._id,
             name: project.name,
