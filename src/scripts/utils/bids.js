@@ -84,13 +84,16 @@ export default  {
         scitran.getProjects((projects) => {
             let results = [];
             projects.reverse();
-            for (let project of projects) {
+            async.each(projects, (project, cb) => {
                 if (this.userOwns(project)) {
-                    let dataset = this.formatDataset(project);
-                    results.push(dataset);
+                    this.formatDataset(project, (dataset) => {
+                        results.push(dataset);
+                        cb();
+                    });
+                } else {
+                    cb();
                 }
-            }
-            callback(results);
+            }, function () {callback(results);});
         });
     },
 
@@ -102,31 +105,31 @@ export default  {
      * nested BIDS dataset.
      */
     getDataset (projectId, callback) {
-        let dataset = {};
         scitran.getProject(projectId, (res) => {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
-            dataset = this.formatDataset(project);
-            this.getSubjects(res.body._id, (subjects) => {
-                dataset.children = dataset.children.concat(subjects);
-                async.each(subjects, (subject, cb) => {
-                    this.getSessions(projectId, subject._id, (sessions) => {
-                        subject.children = subject.children.concat(sessions);
-                        async.each(sessions, (session, cb1) => {
-                            this.getModalities(session._id, (modalities) => {
-                                session.children = session.children.concat(modalities);
-                                async.each(modalities, (modality, cb2) => {
-                                    scitran.getAcquisition(modality._id, (res) => {
-                                        for (let file of res.files) {file.name = file.filename;}
-                                        modality.children = res.files;
-                                        modality.name = modality.label;
-                                        cb2();
-                                    });
-                                }, cb1);
-                            });
-                        }, cb);
-                    });
-                }, () => {callback(dataset)});
+            this.formatDataset(project, (dataset) => {
+                this.getSubjects(res.body._id, (subjects) => {
+                    dataset.children = dataset.children.concat(subjects);
+                    async.each(subjects, (subject, cb) => {
+                        this.getSessions(projectId, subject._id, (sessions) => {
+                            subject.children = subject.children.concat(sessions);
+                            async.each(sessions, (session, cb1) => {
+                                this.getModalities(session._id, (modalities) => {
+                                    session.children = session.children.concat(modalities);
+                                    async.each(modalities, (modality, cb2) => {
+                                        scitran.getAcquisition(modality._id, (res) => {
+                                            for (let file of res.files) {file.name = file.filename;}
+                                            modality.children = res.files;
+                                            modality.name = modality.label;
+                                            cb2();
+                                        });
+                                    }, cb1);
+                                });
+                            }, cb);
+                        });
+                    }, () => {callback(dataset)});
+                });
             });
         });
     },
@@ -215,36 +218,45 @@ export default  {
      * a formatted top level container of a
      * BIDS dataset.
      */
-    formatDataset (project) {
+    formatDataset (project, callback) {
         let files = [], attachments = [];
-        for (let file of project.files) {
+        async.each(project.files, (file, cb) => {
             file.name = file.filename;
             if (file.tags.indexOf('attachment') > -1) {
-                attachments.push(file);
+                // create daturls for attachemnt downloads
+                scitran.getFile('projects', project._id, file.name, (err, res) => {
+                    let windowUrl = window.URL || window.webkitURL;
+                    let blob = new Blob([res.text], {type: file.mimetype});
+                    let dataUrl = windowUrl.createObjectURL(blob);
+                    file.dataUrl = dataUrl;
+                    attachments.push(file);
+                    cb();
+                });
             } else {
                 files.push(file);
+                cb();
             }
-        }
-        let dataset = {
-            _id: project._id,
-            name: project.name,
-            group: project.group,
-            timestamp: project.timestamp,
-            type: 'folder',
-            permissions: project.permissions,
-            public: project.public,
-            notes: project.notes,
-            children: files,
-            description: this.formatDescription(project.notes),
-            README: this.formatREADME(project.notes),
-            attachments: attachments,
-            status: this.formatStatus(project.notes),
-            userOwns: this.userOwns(project),
-            userCreated: this.userCreated(project),
-            access: this.userAccess(project)
-        };
-
-        return dataset;
+        }, () => {
+            let dataset = {
+                _id: project._id,
+                name: project.name,
+                group: project.group,
+                timestamp: project.timestamp,
+                type: 'folder',
+                permissions: project.permissions,
+                public: project.public,
+                notes: project.notes,
+                children: files,
+                description: this.formatDescription(project.notes),
+                README: this.formatREADME(project.notes),
+                attachments: attachments,
+                status: this.formatStatus(project.notes),
+                userOwns: this.userOwns(project),
+                userCreated: this.userCreated(project),
+                access: this.userAccess(project)
+            };
+            callback(dataset);
+        });
     },
     
     /**

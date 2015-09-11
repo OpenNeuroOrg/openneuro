@@ -173,6 +173,14 @@ export default  {
         });
     },
 
+    /**
+     * Get File
+     *
+     */
+    getFile (level, id, filename, callback) {
+        request.get(level + '/' + id + '/file/' + filename, {}, callback);
+    },
+
 // Delete ---------------------------------------------------------------------------------
 
     /**
