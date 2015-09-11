@@ -13,8 +13,7 @@ let ClickToEdit = React.createClass({
 	getDefaultProps () {
 		return {
 			editable: true,
-			value: '',
-			dataUrl: 'test'
+			value: ''
 		};
 	},
 
@@ -24,21 +23,6 @@ let ClickToEdit = React.createClass({
 			initialValue: JSON.stringify(this.props.value),
 			loading: false
 		};
-	},
-
-	componentDidMount() {
-		// if (this.props.type == 'fileArray') {
-  //               var windowUrl = window.URL || window.webkitURL;
-		// 	let projectId = '55e4b6999002f24d784b3f92';
-		// 	let mimetype = this.props.value[0].mimetype;
-		// 	console.log(this.props.value);
-		// 	let url = 'projects/' + projectId + '/file/' + this.props.value[0].name;
-		// 	this._downloadFile(url, (res) => {
-		// 		let blob = new Blob([res], {type: mimetype});
-		// 		let dataUrl = windowUrl.createObjectURL(blob);
-		// 		this.setState({dataUrl});
-		// 	});
-		// }
 	},
 
 	render() {
@@ -57,9 +41,7 @@ let ClickToEdit = React.createClass({
 				break;
 			case "fileArray":
 				let list = value.map((file, index) => {
-					let projectId = '55f1ea5f9002f248c3a7f195';
-					let url = 'projects/' + projectId + '/file/' + file.name;
-					return <a download={file.name} href={file.dataUrl} target="_blank">{file.name}</a>
+					return <span key={index}><a download={file.name} href={file.dataUrl} target="_blank">{file.name}</a></span>;
 				});
 				input = <FileArrayInput value={value} onChange={this._handleFile} />;
 				display = <div className="cte-display"><div className="fadeIn">{list}</div></div>;
@@ -106,12 +88,6 @@ let ClickToEdit = React.createClass({
 		if (this.props.onChange) {
 			this.props.onChange(file);
 		}
-	},
-
-	_downloadFile(url, callback) {
-		request.get(url, {}, function (err, res) {
-			callback(res.text);
-		});
 	},
 
 	_handleChange(event) {

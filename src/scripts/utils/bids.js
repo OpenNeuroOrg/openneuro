@@ -238,22 +238,22 @@ export default  {
             }
         }, () => {
             let dataset = {
-                _id: project._id,
-                name: project.name,
-                group: project.group,
-                timestamp: project.timestamp,
-                type: 'folder',
+                _id:         project._id,
+                name:        project.name,
+                group:       project.group,
+                timestamp:   project.timestamp,
+                type:        'folder',
                 permissions: project.permissions,
-                public: project.public,
-                notes: project.notes,
-                children: files,
+                public:      project.public,
+                notes:       project.notes,
+                children:    files,
                 description: this.formatDescription(project.notes),
-                README: this.formatREADME(project.notes),
+                README:      this.formatREADME(project.notes),
                 attachments: attachments,
-                status: this.formatStatus(project.notes),
-                userOwns: this.userOwns(project),
+                status:      this.formatStatus(project.notes),
+                userOwns:    this.userOwns(project),
                 userCreated: this.userCreated(project),
-                access: this.userAccess(project)
+                access:      this.userAccess(project)
             };
             callback(dataset);
         });
