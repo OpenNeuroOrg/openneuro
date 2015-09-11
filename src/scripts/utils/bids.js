@@ -216,9 +216,14 @@ export default  {
      * BIDS dataset.
      */
     formatDataset (project) {
+        let files = [], attachments = [];
         for (let file of project.files) {
-            console.log(file);
             file.name = file.filename;
+            if (file.tags.indexOf('attachment') > -1) {
+                attachments.push(file);
+            } else {
+                files.push(file);
+            }
         }
         let dataset = {
             _id: project._id,
@@ -227,9 +232,10 @@ export default  {
             permissions: project.permissions,
             public: project.public,
             notes: project.notes,
-            children: project.files,
+            children: files,
             description: this.formatDescription(project.notes),
             README: this.formatREADME(project.notes),
+            attachments: attachments,
             status: this.formatStatus(project.notes),
             userOwns: this.userOwns(project),
             userCreated: this.userCreated(project),

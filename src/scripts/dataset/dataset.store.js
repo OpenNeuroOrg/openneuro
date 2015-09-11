@@ -65,7 +65,7 @@ let UserStore = Reflux.createStore({
 		let request = {
 			url: 'projects/' + this.data.dataset._id + '/file/' + file.name,
 			file: file,
-			tag: 'digitalDocument',
+			tag: 'attachment',
 			progressStart: () => {console.log('upload started');},
 			progressEnd: () => {console.log('upload complete');}
 		};
