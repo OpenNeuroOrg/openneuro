@@ -84,16 +84,13 @@ export default  {
         scitran.getProjects((projects) => {
             let results = [];
             projects.reverse();
-            async.each(projects, (project, cb) => {
+            for (let project of projects) {
                 if (this.userOwns(project)) {
-                    this.formatDataset(project, (dataset) => {
-                        results.push(dataset);
-                        cb();
-                    });
-                } else {
-                    cb();
+                    let dataset = this.formatDataset(project);
+                    results.push(dataset);
                 }
-            }, function () {callback(results);});
+            }
+            callback(results);
         });
     },
 
@@ -108,7 +105,8 @@ export default  {
         scitran.getProject(projectId, (res) => {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
-            this.formatDataset(project, (dataset) => {
+            let dataset = this.formatDataset(project);
+            this.formatAttachements(dataset._id, dataset.attachments, (attachements) => {
                 this.getSubjects(res.body._id, (subjects) => {
                     dataset.children = dataset.children.concat(subjects);
                     async.each(subjects, (subject, cb) => {
@@ -220,43 +218,53 @@ export default  {
      */
     formatDataset (project, callback) {
         let files = [], attachments = [];
-        async.each(project.files, (file, cb) => {
+        for (let file of project.files) {
             file.name = file.filename;
             if (file.tags.indexOf('attachment') > -1) {
-                // create daturls for attachemnt downloads
-                scitran.getFile('projects', project._id, file.name, (err, res) => {
-                    let windowUrl = window.URL || window.webkitURL;
-                    let blob = new Blob([res.text], {type: file.mimetype});
-                    let dataUrl = windowUrl.createObjectURL(blob);
-                    file.dataUrl = dataUrl;
-                    attachments.push(file);
-                    cb();
-                });
+                attachments.push(file);
             } else {
                 files.push(file);
-                cb();
             }
-        }, () => {
-            let dataset = {
-                _id:         project._id,
-                name:        project.name,
-                group:       project.group,
-                timestamp:   project.timestamp,
-                type:        'folder',
-                permissions: project.permissions,
-                public:      project.public,
-                notes:       project.notes,
-                children:    files,
-                description: this.formatDescription(project.notes),
-                README:      this.formatREADME(project.notes),
-                attachments: attachments,
-                status:      this.formatStatus(project.notes),
-                userOwns:    this.userOwns(project),
-                userCreated: this.userCreated(project),
-                access:      this.userAccess(project)
-            };
-            callback(dataset);
-        });
+        }
+
+        let dataset = {
+            _id:         project._id,
+            name:        project.name,
+            group:       project.group,
+            timestamp:   project.timestamp,
+            type:        'folder',
+            permissions: project.permissions,
+            public:      project.public,
+            notes:       project.notes,
+            children:    files,
+            description: this.formatDescription(project.notes),
+            README:      this.formatREADME(project.notes),
+            attachments: attachments,
+            status:      this.formatStatus(project.notes),
+            userOwns:    this.userOwns(project),
+            userCreated: this.userCreated(project),
+            access:      this.userAccess(project)
+        };
+        return dataset;
+    },
+
+    /**
+     * Format Attachments
+     *
+     * Takes a project id and a list of attachments
+     * and generates data urls for each attachment.
+     */
+    formatAttachements(projectId, attachments, callback) {
+        async.each(attachments, (file, cb) => {
+            // create daturls for attachemnt downloads
+            scitran.getFile('projects', projectId, file.name, (err, res) => {
+                let windowUrl = window.URL || window.webkitURL;
+                let blob = new Blob([res.text], {type: file.mimetype});
+                let dataUrl = windowUrl.createObjectURL(blob);
+                file.dataUrl = dataUrl;
+                cb();
+            });
+        }, callback);
     },
     
     /**
