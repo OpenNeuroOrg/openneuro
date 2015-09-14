@@ -26,7 +26,7 @@ let FileArrayInput = React.createClass({
 		let items = this.props.value.map((item, index) => {
 			return (
 				<div key={index} className="cte-array-item">
-					{item.name}
+					<a href={item.dataUrl} download={item.name} target="_blank">{item.name}</a>
 					<button className="cte-remove-button btn btn-admin warning" onClick={this._remove.bind(null, item.name, index)}>
 						<i className="fa fa-times"></i>
 					</button>
