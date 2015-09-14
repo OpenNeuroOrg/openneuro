@@ -48,7 +48,8 @@ let Metadata = React.createClass({
 						<ClickToEdit value={dataset.attachments}
 							label="Digital Documents"
 							editable={userOwns}
-							onChange={this._updateDigitalDocuments}
+							onChange={this._updateAttachments}
+							onDelete={this._deleteAttachment}
 							type="fileArray" />
 					</div>
 				</div>
@@ -67,9 +68,11 @@ let Metadata = React.createClass({
 
 	_updateDescription: Actions.updateDescription,
 
-	_updateDigitalDocuments: Actions.updateDigitalDocuments,
+	_updateAttachments: Actions.updateAttachments,
 
 	_updateREADME: Actions.updateREADME,
+
+	_deleteAttachment: Actions.deleteAttachment,
 
 });
 

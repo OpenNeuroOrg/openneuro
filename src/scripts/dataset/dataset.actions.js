@@ -2,8 +2,8 @@ import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
 	'updateDescription',
-	'updateDigitalDocuments',
-	'deleteDigitalDocument',
+	'updateAttachments',
+	'deleteAttachment',
 	'updateREADME',
 	'saveDescription',
 	'loadDataset',

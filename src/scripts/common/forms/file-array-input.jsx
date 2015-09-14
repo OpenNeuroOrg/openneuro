@@ -46,11 +46,9 @@ let FileArrayInput = React.createClass({
 	},
 
 	_remove(filename, index) {
-		Actions.deleteDigitalDocument(filename, () => {
-			let array = this.props.value;
-			array.splice(index, 1);
-			this.setState({value: array});
-		});
+		if (this.props.onDelete) {
+			this.props.onDelete(filename, index);
+		}
 	}
 
 });

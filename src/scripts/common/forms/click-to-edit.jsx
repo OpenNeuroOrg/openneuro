@@ -43,7 +43,7 @@ let ClickToEdit = React.createClass({
 				let list = value.map((file, index) => {
 					return <span key={index}><a download={file.name} href={file.dataUrl} target="_blank">{file.name}</a></span>;
 				});
-				input = <FileArrayInput value={value} onChange={this._handleFile} />;
+				input = <FileArrayInput value={value} onChange={this._handleFile} onDelete={this._handleDelete} />;
 				display = <div className="cte-display"><div className="fadeIn">{list}</div></div>;
 				break;
 		}
@@ -84,14 +84,20 @@ let ClickToEdit = React.createClass({
 		this.setState({edit: true});
 	},
 
-	_handleFile(file) {
+	_handleFile(file, callback) {
 		if (this.props.onChange) {
-			this.props.onChange(file);
+			this.props.onChange(file, callback);
 		}
 	},
 
 	_handleChange(event) {
 		this.setState({value: event.target.value});
+	},
+
+	_handleDelete(filename, index) {
+		if (this.props.onDelete) {
+			this.props.onDelete(filename, index);
+		}
 	},
 
 	_save() {

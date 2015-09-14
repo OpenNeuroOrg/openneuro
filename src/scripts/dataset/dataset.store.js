@@ -62,7 +62,7 @@ let UserStore = Reflux.createStore({
 		this.update({dataset: dataset});
 	},
 
-	updateDigitalDocuments(file) {
+	updateAttachments(file) {
 		let request = {
 			url: 'projects/' + this.data.dataset._id + '/file/' + file.name,
 			file: file,
@@ -73,9 +73,11 @@ let UserStore = Reflux.createStore({
 		upload.add(request);
 	},
 
-	deleteDigitalDocument(filename, callback) {
+	deleteAttachment(filename, index) {
 		scitran.deleteFile('projects', this.data.dataset._id, filename, (err, res) => {
-			callback();
+			let dataset = this.data.dataset;
+			dataset.attachments.splice(index, 1);
+			this.update({dataset});
 		});
 	},
 
@@ -100,7 +102,6 @@ let UserStore = Reflux.createStore({
 
 	loadDataset(datasetId) {
 		this.update({loading: true, dataset: null});
-		// this.loadUsers();
 		bids.getDataset(datasetId, (res) => {
 			if (res.status === 404 || res.status === 403) {
 				this.update({status: res.status, loading: false});
