@@ -74,9 +74,7 @@ let UserStore = Reflux.createStore({
 	},
 
 	deleteDigitalDocument(filename, callback) {
-		request.del('projects/' + this.data.dataset._id + '/file/' + filename, (err, res) => {
-			console.log(err);
-			console.log(res);
+		scitran.deleteFile('projects', this.data.dataset._id, filename, (err, res) => {
 			callback();
 		});
 	},

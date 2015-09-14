@@ -193,6 +193,14 @@ export default  {
         });
     },
 
+    /**
+     * Delete File
+     *
+     */
+    deleteFile (level, containerId, filename, callback) {
+        request.del(level + '/' + containerId + '/file/' + filename, callback);
+    },
+
 // Update ---------------------------------------------------------------------------------
 
     /**
