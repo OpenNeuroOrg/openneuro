@@ -29,7 +29,20 @@ let ClickToEdit = React.createClass({
 		let value = this.state.value;
 		let type = this.props.type ? this.props.type : typeof value;
 		let input;
-		let display
+		let display;
+
+		let editBtn;
+		if (this.props.editable && !this.state.edit) {
+			editBtn = <button onClick={this._edit} className="cte-edit-button btn btn-admin fadeIn"><span>edit </span><i className="fa fa-pencil"></i></button>;
+		}
+
+		let buttons = (
+			<div className="btn-wrapper">
+				<button className="cte-cancel-btn btn btn-admin cancel" onClick={this._cancel}>cancel</button>
+				<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._save}>save</button>
+			</div>
+		);
+
 		switch (type) {
 			case "string":
 				input = <textarea className="form-control" value={value} onChange={this._handleChange}></textarea>;
@@ -40,33 +53,30 @@ let ClickToEdit = React.createClass({
 				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
 				break;
 			case "fileArray":
-				let list = value.map((file, index) => {
+				let list = this.props.value.map((file, index) => {
 					return <span key={index}><a download={file.name} href={file.dataUrl} target="_blank">{file.name}</a></span>;
 				});
-				input = <FileArrayInput value={value} onChange={this._handleFile} onDelete={this._handleDelete} />;
+				input = <FileArrayInput value={this.props.value} onChange={this._handleFile} onDelete={this._handleDelete} />;
 				display = <div className="cte-display"><div className="fadeIn">{list}</div></div>;
+				buttons = (
+					<div className="btn-wrapper">
+						<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._cancel}>done</button>
+					</div>
+				)
 				break;
-		}
-
-		let editBtn;
-		if (this.props.editable) {
-			editBtn = <button onClick={this._edit} className="cte-edit-button btn btn-admin fadeIn"><span>edit </span><i className="fa fa-pencil"></i></button>;
 		}
 
 		let edit = (
 			<div className="cte-edit fadeIn">
 				{input}
-				<div className="btn-wrapper">
-					<button className="cte-cancel-btn btn btn-admin cancel" onClick={this._cancel}>cancel</button>
-					<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._save}>save</button>
-					</div>
+				{buttons}
 				<Spinner active={this.state.loading} />
 			</div>
 		);
 
 		return (
 			<div className="form-group" >
-				<label>{this.props.label} {!this.state.edit ? editBtn : null}</label>
+				<label>{this.props.label} {editBtn}</label>
 				<div>
 					{this.state.edit ? edit : display}
 				</div>

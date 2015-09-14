@@ -62,13 +62,20 @@ let UserStore = Reflux.createStore({
 		this.update({dataset: dataset});
 	},
 
-	updateAttachments(file) {
+	uploadAttachment(file, callback) {
 		let request = {
 			url: 'projects/' + this.data.dataset._id + '/file/' + file.name,
 			file: file,
 			tag: 'attachment',
 			progressStart: () => {},
-			progressEnd: () => {this.loadDataset(this.data.dataset._id);}
+			progressEnd: () => {
+				bids.getDataset(this.data.dataset._id, (res) => {
+					let dataset = this.data.dataset;
+					dataset.attachments = res.attachments;
+					this.update({dataset: dataset});
+					callback();
+				});
+			}
 		};
 		upload.add(request);
 	},

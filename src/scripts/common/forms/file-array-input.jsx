@@ -2,7 +2,7 @@
 
 import React   from 'react';
 import upload  from '../../utils/upload';
-import Actions from '../../dataset/dataset.actions';
+import Spinner from '../../common/partials/spinner.component.jsx';
 
 // component setup ----------------------------------------------------
 
@@ -13,6 +13,12 @@ let FileArrayInput = React.createClass({
 	getDefaultProps () {
 		return {
 			value: []
+		};
+	},
+
+	getInitialState() {
+		return {
+			loading: false
 		};
 	},
 
@@ -30,10 +36,8 @@ let FileArrayInput = React.createClass({
 
 		return (
 			<div className="cte-edit-array">
-				<div className="cte-array-items">
-					{items}
-				</div>
-				<input type="file" onChange={this._handleChange}/>
+				<div className="cte-array-items">{items}</div>
+				{this.state.loading ? <Spinner active={true} /> : <input type="file" onChange={this._handleChange}/>}
 			</div>
 		)
 	},
@@ -42,7 +46,12 @@ let FileArrayInput = React.createClass({
 
 	_handleChange(e) {
 		let file = e.target.files[0];
-		if (this.props.onChange) {this.props.onChange(file);}
+		if (this.props.onChange) {
+			this.setState({loading: true});
+			this.props.onChange(file, () => {
+				this.setState({loading: false});
+			});
+		}
 	},
 
 	_remove(filename, index) {
