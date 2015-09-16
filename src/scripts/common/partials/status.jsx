@@ -14,7 +14,7 @@ export default class Status extends React.Component {
 				break;
 			case 'incomplete':
 				spanClass = 'dataset-status ds-warning';
-				tip       = 'incomplete';
+				tip       = 'Incomplete. Select your folder again and use the same name to resume upload.';
 				iconClass = 'fa fa-warning';
 				break;
 			case 'shared':
