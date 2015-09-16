@@ -7,8 +7,6 @@ import bids      from '../utils/bids';
 import router    from '../utils/router-container';
 import userStore from '../user/user.store';
 import upload    from '../utils/upload';
-import request   from '../utils/request';
-import config    from '../config';
 
 let UserStore = Reflux.createStore({
 
@@ -90,9 +88,9 @@ let UserStore = Reflux.createStore({
 	},
 
 	downloadAttachment(file) {
-		request.get('projects/' + this.data.dataset._id + '/file/' + file.name + '?ticket', {}, (err, res) => {
+		scitran.getDownloadTicket('projects', this.data.dataset._id, file.name, (err, res) => {
 			let ticket = res.body.ticket;
-			window.open(config.scitran.url + 'projects/' + this.data.dataset._id + '/file/' + file.name + '?ticket=' + ticket);
+			window.open(res.req.url + ticket);
 		});
 	},
 

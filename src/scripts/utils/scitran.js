@@ -174,11 +174,13 @@ export default  {
     },
 
     /**
-     * Get File
+     * Get Download Ticket
      *
      */
-    getFile (level, id, filename, callback) {
-        request.get(level + '/' + id + '/file/' + filename, {}, callback);
+    getDownloadTicket (level, id, filename, callback) {
+        request.get(level + '/' + id + '/file/' + filename, {
+            query: {ticket: ''}
+        }, callback);
     },
 
 // Delete ---------------------------------------------------------------------------------
