@@ -51,7 +51,73 @@ let UserStore = Reflux.createStore({
 	},
 
 // Actions ---------------------------------------------------------------------------
+	
+	// Dataset -----------------------------------------------------------------------
 
+	/**
+	 * Load Dataset
+	 *
+	 * Takes a datasetId and loads the dataset.
+	 */
+	loadDataset(datasetId) {
+		this.update({loading: true, dataset: null});
+		bids.getDataset(datasetId, (res) => {
+			if (res.status === 404 || res.status === 403) {
+				this.update({status: res.status, loading: false});
+			} else {
+				this.update({dataset: res, loading: false});
+			}
+		});
+	},
+
+	/**
+	 * Load Users
+	 *
+	 * Loads a list of all users.
+	 */
+	loadUsers() {
+		scitran.getUsers((err, res) => {
+			this.update({users: res.body});
+		});
+	},
+
+	/**
+	 * Publish
+	 *
+	 * Takes a datasetId and sets the datset to public.
+	 */
+	publish(datasetId) {
+		let self = this;
+		scitran.updateProject(datasetId, {public: true}, (err, res) => {
+			if (!err) {
+				let dataset = self.data.dataset;
+				dataset.public = true;
+				self.update({dataset});
+			}
+		});
+	},
+
+	/**
+	 * Delete Dataset
+	 *
+	 * Takes a datsetId, deletes the dataset, and returns the user
+	 * to the my datasets page.
+	 */
+	deleteDataset(datasetId) {
+		bids.deleteDataset(datasetId, () => {
+            router.transitionTo('datasets');
+		});
+	},
+	
+
+	// Metadata ----------------------------------------------------------------------
+	
+	/**
+	 * Update Description
+	 *
+	 * Takes a key and a value and updates the dataset
+	 * description JSON note accordingly.
+	 */
 	updateDescription(key, value, callback) {
 		let dataset = this.data.dataset;
 		let description = dataset.description;
@@ -61,6 +127,45 @@ let UserStore = Reflux.createStore({
 		this.update({dataset: dataset});
 	},
 
+	/**
+	 * Save Description
+	 *
+	 * Takes a description object and updates
+	 * the JSON description note.
+	 */
+	saveDescription(description, callback) {
+		let note = {
+			author: 'description',
+			text: JSON.stringify(description)
+		};
+		scitran.updateNote(this.data.dataset._id, note, (err, res) => {
+			callback();
+		});
+	},
+
+	/**
+	 * Update README
+	 *
+	 * Takes a values and updates the current
+	 * dataset README.
+	 */
+	updateREADME(value, callback) {
+		let dataset = this.data.dataset;
+		let note = {
+			author: 'README',
+			text: value
+		};
+		scitran.updateNote(dataset._id, note, callback);
+	},
+
+	// Attachments -------------------------------------------------------------------
+
+	/**
+	 * Upload Attachment
+	 *
+	 * Takes a file and a callback and uploads
+	 * the file to the current dataset.
+	 */
 	uploadAttachment(file, callback) {
 		let request = {
 			url: 'projects/' + this.data.dataset._id + '/file/' + file.name,
@@ -79,6 +184,12 @@ let UserStore = Reflux.createStore({
 		upload.add(request);
 	},
 
+	/**
+	 * Delete Attachment
+	 *
+	 * Takes a filename and index and deletes
+	 * the attachment from the current dataset.
+	 */
 	deleteAttachment(filename, index) {
 		scitran.deleteFile('projects', this.data.dataset._id, filename, (err, res) => {
 			let dataset = this.data.dataset;
@@ -87,65 +198,18 @@ let UserStore = Reflux.createStore({
 		});
 	},
 
-	downloadAttachment(file) {
-		scitran.getDownloadTicket('projects', this.data.dataset._id, file.name, (err, res) => {
+	/**
+	 * Download Attachment
+	 *
+	 * Takes a filename and starts a downloads
+	 * for the file within the current dataset.
+	 */
+	downloadAttachment(filename) {
+		scitran.getDownloadTicket('projects', this.data.dataset._id, filename, (err, res) => {
 			let ticket = res.body.ticket;
 			window.open(res.req.url + ticket);
 		});
 	},
-
-	saveDescription(description, callback) {
-		let note = {
-			author: 'description',
-			text: JSON.stringify(description)
-		};
-		scitran.updateNote(this.data.dataset._id, note, (err, res) => {
-			callback();
-		});
-	},
-
-	updateREADME(value, callback) {
-		let dataset = this.data.dataset;
-		let note = {
-			author: 'README',
-			text: value
-		};
-		scitran.updateNote(dataset._id, note, callback);
-	},
-
-	loadDataset(datasetId) {
-		this.update({loading: true, dataset: null});
-		bids.getDataset(datasetId, (res) => {
-			if (res.status === 404 || res.status === 403) {
-				this.update({status: res.status, loading: false});
-			} else {
-				this.update({dataset: res, loading: false});
-			}
-		});
-	},
-
-	loadUsers() {
-		scitran.getUsers((err, res) => {
-			this.update({users: res.body});
-		});
-	},
-
-	publish(datasetId) {
-		let self = this;
-		scitran.updateProject(datasetId, {public: true}, (err, res) => {
-			if (!err) {
-				let dataset = self.data.dataset;
-				dataset.public = true;
-				self.update({dataset});
-			}
-		});
-	},
-
-	deleteDataset(datasetId) {
-		bids.deleteDataset(datasetId, () => {
-            router.transitionTo('datasets');
-		});
-	}
 
 });
 
