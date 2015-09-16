@@ -266,7 +266,7 @@ export default  {
 
         if (notes) {
             for (let note of notes) {
-                if (note.author === 'description') {
+                if (note.author === 'dataset_description.json') {
                     description = JSON.parse(note.text);
                 }
             }

@@ -6,7 +6,8 @@ import config from '../config';
 
 let fileUtils = {
 	generateTree,
-    countTree
+    countTree,
+    read
 };
 
 export default fileUtils;
@@ -82,4 +83,22 @@ function countTree (tree) {
     }
     recurse(tree);
     return count;
+}
+
+/**
+ * Read
+ *
+ * A helper method for reading file contents.
+ * Takes a file object and a callback and calls
+ * the callback with the text contents of the
+ * file as the only argument.
+ */
+function read (file, callback) {
+    var reader = new FileReader();
+    reader.onloadend = function (e) {
+        if (e.target.readyState == FileReader.DONE) {
+            callback(e.target.result);
+        }
+    };
+    reader.readAsBinaryString(file);
 }

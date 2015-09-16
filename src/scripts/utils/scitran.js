@@ -222,25 +222,44 @@ export default  {
      * upserts the note.
      */
     updateNote (projectId, newNote, callback) {
-        this.getProject(projectId, (res) => {
+        let req = {projectId, newNote, callback};
+        if (this.noteRequests > 0) {
+            this.noteQueue.push(req);
+        } else {
+            this.noteRequest(req);
+        }
+    },
+
+    noteQueue: [],
+    noteRequests: 0,
+
+    noteRequest(req) {
+        this.noteRequests++;
+        this.getProject(req.projectId, (res) => {
             let notes = [];
             let currentNotes = res.body.notes ? res.body.notes : [];
             let noteExists   = false;
             for (let currentNote of currentNotes) {
-                if (currentNote.author === newNote.author) {
+                if (currentNote.author === req.newNote.author) {
                     noteExists = true;
-                    notes.push(newNote);
+                    notes.push(req.newNote);
                 } else {
                     notes.push(currentNote);
                 }
             }
             if (!noteExists) {
-                notes.push(newNote);
+                notes.push(req.newNote);
             }
-            this.updateProject(projectId, {notes: notes}, (err, res) => {
-                callback(res);
+            this.updateProject(req.projectId, {notes: notes}, (err, res) => {
+                if (req.callback) {req.callback(res);}
+                this.noteRequests--;
+                if (this.noteQueue.length > 0) {
+                    this.noteRequest(this.noteQueue[0]);
+                    this.noteQueue.shift();
+                }
             });
         });
     }
+
 
 };
