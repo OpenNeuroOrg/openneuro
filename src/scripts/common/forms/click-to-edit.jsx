@@ -54,7 +54,7 @@ let ClickToEdit = React.createClass({
 				break;
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {
-					return <span key={index}><a download={file.name} href={file.dataUrl} target="_blank">{file.name}</a></span>;
+					return <span key={index}><a onClick={this._download.bind(null, file)}>{file.name}</a></span>;
 				});
 				input = <FileArrayInput value={this.props.value} onChange={this._handleFile} onDelete={this._handleDelete} />;
 				display = <div className="cte-display"><div className="fadeIn">{list}</div></div>;
@@ -107,6 +107,12 @@ let ClickToEdit = React.createClass({
 	_handleDelete(filename, index) {
 		if (this.props.onDelete) {
 			this.props.onDelete(filename, index);
+		}
+	},
+
+	_download(file) {
+		if (this.props.onFileClick) {
+			this.props.onFileClick(file);
 		}
 	},
 

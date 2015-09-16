@@ -106,28 +106,26 @@ export default  {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
             let dataset = this.formatDataset(project);
-            this.formatAttachements(dataset._id, dataset.attachments, (attachements) => {
-                this.getSubjects(res.body._id, (subjects) => {
-                    dataset.children = dataset.children.concat(subjects);
-                    async.each(subjects, (subject, cb) => {
-                        this.getSessions(projectId, subject._id, (sessions) => {
-                            subject.children = subject.children.concat(sessions);
-                            async.each(sessions, (session, cb1) => {
-                                this.getModalities(session._id, (modalities) => {
-                                    session.children = session.children.concat(modalities);
-                                    async.each(modalities, (modality, cb2) => {
-                                        scitran.getAcquisition(modality._id, (res) => {
-                                            for (let file of res.files) {file.name = file.filename;}
-                                            modality.children = res.files;
-                                            modality.name = modality.label;
-                                            cb2();
-                                        });
-                                    }, cb1);
-                                });
-                            }, cb);
-                        });
-                    }, () => {callback(dataset)});
-                });
+            this.getSubjects(res.body._id, (subjects) => {
+                dataset.children = dataset.children.concat(subjects);
+                async.each(subjects, (subject, cb) => {
+                    this.getSessions(projectId, subject._id, (sessions) => {
+                        subject.children = subject.children.concat(sessions);
+                        async.each(sessions, (session, cb1) => {
+                            this.getModalities(session._id, (modalities) => {
+                                session.children = session.children.concat(modalities);
+                                async.each(modalities, (modality, cb2) => {
+                                    scitran.getAcquisition(modality._id, (res) => {
+                                        for (let file of res.files) {file.name = file.filename;}
+                                        modality.children = res.files;
+                                        modality.name = modality.label;
+                                        cb2();
+                                    });
+                                }, cb1);
+                            });
+                        }, cb);
+                    });
+                }, () => {callback(dataset)});
             });
         });
     },
@@ -246,25 +244,6 @@ export default  {
             access:      this.userAccess(project)
         };
         return dataset;
-    },
-
-    /**
-     * Format Attachments
-     *
-     * Takes a project id and a list of attachments
-     * and generates data urls for each attachment.
-     */
-    formatAttachements(projectId, attachments, callback) {
-        async.each(attachments, (file, cb) => {
-            // create daturls for attachemnt downloads
-            scitran.getFile('projects', projectId, file.name, (err, res) => {
-                let windowUrl = window.URL || window.webkitURL;
-                let blob = new Blob([res.text], {type: file.mimetype});
-                let dataUrl = windowUrl.createObjectURL(blob);
-                file.dataUrl = dataUrl;
-                cb();
-            });
-        }, callback);
     },
     
     /**

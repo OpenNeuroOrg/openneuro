@@ -50,6 +50,7 @@ let Metadata = React.createClass({
 							editable={userOwns}
 							onChange={this._uploadAttachment}
 							onDelete={this._deleteAttachment}
+							onFileClick={this._downloadAttachment}
 							type="fileArray" />
 					</div>
 				</div>
@@ -72,6 +73,8 @@ let Metadata = React.createClass({
 	_updateREADME: Actions.updateREADME,
 
 	_deleteAttachment: Actions.deleteAttachment,
+
+	_downloadAttachment: Actions.downloadAttachment
 
 });
 
