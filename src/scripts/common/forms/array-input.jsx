@@ -18,7 +18,7 @@ let ArrayInput = React.createClass({
 		});
 
 		return (
-			<div>
+			<div className="cte-edit-array">
 				<div className="cte-array-items">
 					{items}
 				</div>

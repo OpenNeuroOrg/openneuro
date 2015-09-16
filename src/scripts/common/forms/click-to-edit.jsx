@@ -1,8 +1,10 @@
 // dependencies -------------------------------------------------------
 
-import React      from 'react';
-import ArrayInput from './array-input.jsx';
-import Spinner    from '../partials/spinner.component.jsx';
+import React          from 'react';
+import ArrayInput     from './array-input.jsx';
+import FileArrayInput from './file-array-input.jsx';
+import Spinner        from '../partials/spinner.component.jsx';
+import request        from '../../utils/request';
 
 let ClickToEdit = React.createClass({
 
@@ -25,46 +27,60 @@ let ClickToEdit = React.createClass({
 
 	render() {
 		let value = this.state.value;
-
+		let type = this.props.type ? this.props.type : typeof value;
 		let input;
-		switch (typeof value) {
-			case "string":
-				input = <textarea className="form-control" value={value} onChange={this._handleChange}></textarea>;
-				break;
-			case "object":
-				input = (
-					<div className="cte-edit-array">
-						<ArrayInput value={value} onChange={this._handleChange} />
-					</div>
-				);
-				break;
-		}
+		let display;
 
 		let editBtn;
-		if (this.props.editable) {
+		if (this.props.editable && !this.state.edit) {
 			editBtn = <button onClick={this._edit} className="cte-edit-button btn btn-admin fadeIn"><span>edit </span><i className="fa fa-pencil"></i></button>;
 		}
 
-		let display = (
-			<div className="cte-display">
-				<div className="fadeIn">{value}</div>
+		let buttons = (
+			<div className="btn-wrapper">
+				<button className="cte-cancel-btn btn btn-admin cancel" onClick={this._cancel}>cancel</button>
+				<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._save}>save</button>
 			</div>
 		);
+
+		switch (type) {
+			case "string":
+				input = <textarea className="form-control" value={value} onChange={this._handleChange}></textarea>;
+				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
+				break;
+			case "object":
+				input = <ArrayInput value={value} onChange={this._handleChange} />;
+				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
+				break;
+			case "fileArray":
+				let list = this.props.value.map((file, index) => {
+					return <span key={index}><a onClick={this._download.bind(null, file.name)}>{file.name}</a></span>;
+				});
+				input = <FileArrayInput
+						value={this.props.value}
+						onChange={this._handleFile}
+						onDelete={this._handleDelete}
+						onFileClick={this._download}/>;
+				display = <div className="cte-display"><div className="fadeIn">{list}</div></div>;
+				buttons = (
+					<div className="btn-wrapper">
+						<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._cancel}>done</button>
+					</div>
+				)
+				break;
+		}
 
 		let edit = (
 			<div className="cte-edit fadeIn">
 				{input}
-				<div className="btn-wrapper">
-					<button className="cte-cancel-btn btn btn-admin cancel" onClick={this._cancel}>cancel</button>
-					<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._save}>save</button>
-					</div>
+				{buttons}
 				<Spinner active={this.state.loading} />
 			</div>
 		);
 
 		return (
 			<div className="form-group" >
-				<label>{this.props.label} {!this.state.edit ? editBtn : null}</label>
+				<label>{this.props.label} {editBtn}</label>
 				<div>
 					{this.state.edit ? edit : display}
 				</div>
@@ -82,8 +98,26 @@ let ClickToEdit = React.createClass({
 		this.setState({edit: true});
 	},
 
+	_handleFile(file, callback) {
+		if (this.props.onChange) {
+			this.props.onChange(file, callback);
+		}
+	},
+
 	_handleChange(event) {
 		this.setState({value: event.target.value});
+	},
+
+	_handleDelete(filename, index) {
+		if (this.props.onDelete) {
+			this.props.onDelete(filename, index);
+		}
+	},
+
+	_download(filename) {
+		if (this.props.onFileClick) {
+			this.props.onFileClick(filename);
+		}
 	},
 
 	_save() {

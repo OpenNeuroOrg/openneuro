@@ -83,6 +83,52 @@
 	textarea.form-control {
 		min-height: 50px;
 	}
+
+	input[type="file"]{
+		color: transparent;
+		// margin: 0 auto 30px;
+		padding: 0;
+		height: 50px;
+		display: block;
+		width: 100%;
+		max-width: 200px;
+		&::-webkit-file-upload-button {
+			visibility: hidden;
+			color: transparent;
+		}
+	  &::before {
+	    font-family: FontAwesome;
+	    content: 'add file';
+	    display: inline-block;
+	    background-color:$sky;
+	    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
+	    box-shadow:$btn-shadow;
+	    border-radius: 2px;
+	    outline: none;
+	    white-space: nowrap;
+	    -webkit-user-select: none;
+	    cursor: pointer;
+	    font-weight: 300;
+	    font-size: 12pt;
+	    color:$white;
+	    text-align: center;
+	    padding:13px 15px;
+	    margin:0;
+	    width: 100%;
+	    border:1px solid lighten($sky, 8%);
+	    text-transform: uppercase;
+	    transition: all 0.3s ease-out;
+	  }
+	  &:hover::before,
+	  &:active::before  {
+	    background: darken($sky, 10%);
+	    transition: all 0.3s ease-out;
+	  }
+
+	  &[type="file"]:focus {
+	    outline:none;
+	  }
+	}
 	.cte-display{
 	    font-size: 20px;
 	    color: #565656;

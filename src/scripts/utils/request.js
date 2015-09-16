@@ -16,6 +16,7 @@ var Request = {
 		handleRequest(path, options, function (path, options) {
 			request.get(config.scitran.url + path)
 				.set(options.headers)
+				.query(options.query)
 				.end(function (err, res) {
 					handleResponse(err, res, callback);
 				});
@@ -26,6 +27,7 @@ var Request = {
 		handleRequest(path, options, function (path, options) {
 			request.post(config.scitran.url + path)
 				.set(options.headers)
+				.query(options.query)
 				.send(options.body)
 				.end(function (err, res) {
 					handleResponse(err, res, callback);

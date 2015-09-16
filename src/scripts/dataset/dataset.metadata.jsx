@@ -44,8 +44,16 @@ let Metadata = React.createClass({
 				</div>
 				<div className="dataset-descriptions col-xs-6">
 					{items}
+					<div className="description-item">
+						<ClickToEdit value={dataset.attachments}
+							label="Digital Documents"
+							editable={userOwns}
+							onChange={this._uploadAttachment}
+							onDelete={this._deleteAttachment}
+							onFileClick={this._downloadAttachment}
+							type="fileArray" />
+					</div>
 				</div>
-				
 			</div>
 		);
 
@@ -60,7 +68,13 @@ let Metadata = React.createClass({
 
 	_updateDescription: Actions.updateDescription,
 
+	_uploadAttachment: Actions.uploadAttachment,
+
 	_updateREADME: Actions.updateREADME,
+
+	_deleteAttachment: Actions.deleteAttachment,
+
+	_downloadAttachment: Actions.downloadAttachment
 
 });
 

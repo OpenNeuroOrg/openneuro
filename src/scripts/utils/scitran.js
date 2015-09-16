@@ -173,6 +173,16 @@ export default  {
         });
     },
 
+    /**
+     * Get Download Ticket
+     *
+     */
+    getDownloadTicket (level, id, filename, callback) {
+        request.get(level + '/' + id + '/file/' + filename, {
+            query: {ticket: ''}
+        }, callback);
+    },
+
 // Delete ---------------------------------------------------------------------------------
 
     /**
@@ -183,6 +193,14 @@ export default  {
         request.del(type + '/' + id, (err, res) => {
             callback();
         });
+    },
+
+    /**
+     * Delete File
+     *
+     */
+    deleteFile (level, containerId, filename, callback) {
+        request.del(level + '/' + containerId + '/file/' + filename, callback);
     },
 
 // Update ---------------------------------------------------------------------------------

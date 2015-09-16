@@ -102,11 +102,10 @@ export default  {
      * nested BIDS dataset.
      */
     getDataset (projectId, callback) {
-        let dataset = {};
         scitran.getProject(projectId, (res) => {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
-            dataset = this.formatDataset(project);
+            let dataset = this.formatDataset(project);
             this.getSubjects(res.body._id, (subjects) => {
                 dataset.children = dataset.children.concat(subjects);
                 async.each(subjects, (subject, cb) => {
@@ -215,26 +214,35 @@ export default  {
      * a formatted top level container of a
      * BIDS dataset.
      */
-    formatDataset (project) {
-        for (let file of project.files) {file.name = file.filename;}
-        let dataset = {
-            _id: project._id,
-            name: project.name,
-            group: project.group,
-            timestamp: project.timestamp,
-            type: 'folder',
-            permissions: project.permissions,
-            public: project.public,
-            notes: project.notes,
-            children: project.files,
-            description: this.formatDescription(project.notes),
-            README: this.formatREADME(project.notes),
-            status: this.formatStatus(project.notes),
-            userOwns: this.userOwns(project),
-            userCreated: this.userCreated(project),
-            access: this.userAccess(project)
-        };
+    formatDataset (project, callback) {
+        let files = [], attachments = [];
+        for (let file of project.files) {
+            file.name = file.filename;
+            if (file.tags.indexOf('attachment') > -1) {
+                attachments.push(file);
+            } else {
+                files.push(file);
+            }
+        }
 
+        let dataset = {
+            _id:         project._id,
+            name:        project.name,
+            group:       project.group,
+            timestamp:   project.timestamp,
+            type:        'folder',
+            permissions: project.permissions,
+            public:      project.public,
+            notes:       project.notes,
+            children:    files,
+            description: this.formatDescription(project.notes),
+            README:      this.formatREADME(project.notes),
+            attachments: attachments,
+            status:      this.formatStatus(project.notes),
+            userOwns:    this.userOwns(project),
+            userCreated: this.userCreated(project),
+            access:      this.userAccess(project)
+        };
         return dataset;
     },
     
