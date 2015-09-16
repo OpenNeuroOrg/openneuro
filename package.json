@@ -20,7 +20,7 @@
   "author": "Squishymedia",
   "dependencies": {
     "async": "^1.2.1",
-    "bids-validator": "^0.3.2",
+    "bids-validator": "^0.3.4",
     "bowser": "^1.0.0",
     "es6-react-mixins": "^0.1.6",
     "jshint": "^2.8.0",

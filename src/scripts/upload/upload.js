@@ -2,6 +2,7 @@ import scitran from '../utils/scitran';
 import bids    from '../utils/bids';
 import uploads from '../utils/upload';
 import actions from './upload.actions';
+import files   from '../utils/files';
 
 export default {
 
@@ -116,7 +117,18 @@ export default {
                     });
                 });
             } else {
-                self.uploadFile('projects', projectId, subject, 'project');
+                if (subject.name === 'dataset_description.json' || subject.name === 'README') {
+                    files.read(subject, (contents) => {
+                        let note = {
+                            author: subject.name,
+                            text: contents
+                        };
+                        scitran.updateNote(projectId, note);
+                        self.progressEnd(subject.name);
+                    });
+                } else {
+                    self.uploadFile('projects', projectId, subject, 'project');
+                }
             }
         }
     },
