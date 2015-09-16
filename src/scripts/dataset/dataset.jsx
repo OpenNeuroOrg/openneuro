@@ -20,7 +20,9 @@ let Dataset = React.createClass({
 
 	componentWillReceiveProps() {
 		let params = this.getParams();
-		Actions.loadDataset(params.datasetId);
+		if (params.datasetId !== this.state.dataset._id) {
+			Actions.loadDataset(params.datasetId);
+		}
 	},
 
 	componentDidMount() {
