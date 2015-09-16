@@ -56,7 +56,11 @@ let ClickToEdit = React.createClass({
 				let list = this.props.value.map((file, index) => {
 					return <span key={index}><a onClick={this._download.bind(null, file.name)}>{file.name}</a></span>;
 				});
-				input = <FileArrayInput value={this.props.value} onChange={this._handleFile} onDelete={this._handleDelete} />;
+				input = <FileArrayInput
+						value={this.props.value}
+						onChange={this._handleFile}
+						onDelete={this._handleDelete}
+						onFileClick={this._download}/>;
 				display = <div className="cte-display"><div className="fadeIn">{list}</div></div>;
 				buttons = (
 					<div className="btn-wrapper">

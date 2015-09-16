@@ -26,7 +26,7 @@ let FileArrayInput = React.createClass({
 		let items = this.props.value.map((item, index) => {
 			return (
 				<div key={index} className="cte-array-item">
-					<a href={item.dataUrl} download={item.name} target="_blank">{item.name}</a>
+					<a onClick={this._fileClick.bind(null, item.name)}>{item.name}</a>
 					<button className="cte-remove-button btn btn-admin warning" onClick={this._remove.bind(null, item.name, index)}>
 						<i className="fa fa-times"></i>
 					</button>
@@ -57,6 +57,12 @@ let FileArrayInput = React.createClass({
 	_remove(filename, index) {
 		if (this.props.onDelete) {
 			this.props.onDelete(filename, index);
+		}
+	},
+
+	_fileClick(filename) {
+		if (this.props.onFileClick) {
+			this.props.onFileClick(filename);
 		}
 	}
 
