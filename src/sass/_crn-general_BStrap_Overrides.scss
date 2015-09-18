@@ -80,28 +80,27 @@
 	}
 
 	&.admin-blue{
-		background-color:$sky;
-		@include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
-		box-shadow:1px 1px 3px -1px rgba(0,0,0,0.7);
-		border-radius: 2px;
+		background: none;
+		box-shadow:none;
+		border-radius: 0;
 		outline: none;
 		white-space: nowrap;
 		-webkit-user-select: none;
 		cursor: pointer;
 		font-weight: 300;
-		color:$white;
+		color:$sky;
 		text-align: center;
 		margin:0;
-		border:1px solid lighten($sky, 8%);
+		border:none;
 		text-transform: uppercase;
 		transition: all 0.3s ease-out;
 		&:hover,
 		&:active,
 		&.hover,
 		&.active  {
-			background: darken($sky, 10%);
+			color: darken($sky, 10%);
 			transition: all 0.3s ease-out;
-			color:#fff;
+			background: #eee;
 		}
 	}
 }
