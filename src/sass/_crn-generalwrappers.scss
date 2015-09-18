@@ -51,7 +51,7 @@ body,
 		left: 0;
 	}
 	.route-wrapper{
-		border-right: 5px solid #B5B5B5;
+		border-right: 2px solid #ddd;
 		overflow-y: scroll;
 		position: fixed;
 		width: 66.66667%;
@@ -73,7 +73,7 @@ body,
 		font-size: 40px;
 		color: $primary;
 		padding: 5px 12px 9px;
-		background: #B5B5B5;
+		background: #ddd;
 		font-family: $font-family-ssp;
 		line-height: 28px;
 		font-weight: 100;
@@ -83,7 +83,7 @@ body,
 		&:focus,
 		&:active,
 		&:hover{
-			background: #B5B5B5;
+			background: #ddd;
 			outline: none;
 			box-shadow:none;
 
@@ -91,7 +91,7 @@ body,
     }
     &.open{
     	right: 33.33333%;
-    	margin-right: 5px;
+    	margin-right: 0;
     }
 
 }
