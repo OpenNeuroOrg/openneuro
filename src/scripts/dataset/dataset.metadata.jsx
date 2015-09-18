@@ -13,6 +13,7 @@ let Metadata = React.createClass({
 	render() {
 		let dataset     = this.props.dataset;
 		let userOwns    = dataset ? dataset.userOwns : null;
+		let canEdit     = userOwns && (dataset.access === 'rw' || dataset.access == 'admin');
 		let description = dataset ? dataset.description : null;
 		let README      = dataset ? dataset.README : null;
 		let fsHeader 	= dataset.name + " File Structure";
@@ -23,7 +24,7 @@ let Metadata = React.createClass({
 				<div className="description-item" key={key}>
 					<ClickToEdit value={description[key]}
 						label={key}
-						editable={userOwns}
+						editable={canEdit}
 						onChange={this._updateDescription.bind(this, key)} />
 				</div>
 			);
@@ -34,7 +35,7 @@ let Metadata = React.createClass({
 				<div className="dataset-readme col-xs-6">
 					<ClickToEdit value={README}
 						label="README"
-						editable={userOwns}
+						editable={canEdit}
 						onChange={this._updateREADME} />
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={fsHeader} eventKey='1'>
@@ -47,7 +48,7 @@ let Metadata = React.createClass({
 					<div className="description-item">
 						<ClickToEdit value={dataset.attachments}
 							label="Digital Documents"
-							editable={userOwns}
+							editable={canEdit}
 							onChange={this._uploadAttachment}
 							onDelete={this._deleteAttachment}
 							onFileClick={this._downloadAttachment}
