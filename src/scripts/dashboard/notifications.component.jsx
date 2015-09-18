@@ -2,6 +2,7 @@
 
 import React               from 'react'
 import {PanelGroup, Panel} from 'react-bootstrap';
+import {Link}               from 'react-router';
 
 class Notifications extends React.Component {
 
@@ -18,17 +19,20 @@ class Notifications extends React.Component {
 		return (
 			<div className="dash-tab-content datasets fadeIn">
 				<h2>My Notifications</h2>
-				<PanelGroup accordion>
-					<Panel header={notificatonheader} eventKey='1'>
-						<div className="inner">
-							Panel 1 content<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-						</div>
-					</Panel>
-					<Panel header={notificatonheader} eventKey='2'>
-						<div className="inner">
-							Panel 2 content<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-						</div>
-					</Panel>
+				<PanelGroup>
+                    <div className="fadeIn  panel panel-default">
+                        <div className="panel-heading">
+		                    <div className="header clearfix">
+		                        <Link to="notifications">
+		                            <h4 className="dataset">
+		                                dataset name
+		                                <span className="status">status</span>
+		                            </h4>
+		                            <div className="date">dateadded<span className="time-ago">timeago</span></div>
+		                        </Link>
+		                    </div>
+                        </div>
+                    </div>
 				</PanelGroup>
 			</div>
 	

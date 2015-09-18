@@ -6,7 +6,7 @@ import Actions              from './datasets.actions.js';
 import DatasetsStore        from './datasets.store.js';
 import {Link}               from 'react-router';
 import moment               from 'moment';
-import {PanelGroup, Panel}  from 'react-bootstrap';
+import {PanelGroup}  from 'react-bootstrap';
 import Paginator            from '../common/partials/paginator.component.jsx';
 import Spinner              from '../common/partials/spinner.component.jsx';
 import Status               from '../common/partials/status.jsx';
@@ -47,26 +47,21 @@ let Datasets = React.createClass({
 
                 let datasetheader = (
                     <div className="header clearfix">
-                        <h4 className="dataset">
-                            {dataset.name} 
-                            <span className="status">{isPublic}{shared}{incomplete}</span>
-                        </h4>
-                        <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
+                        <Link to="dataset" params={{datasetId: dataset._id}}>
+                            <h4 className="dataset">
+                                {dataset.name} 
+                                <span className="status">{isPublic}{shared}{incomplete}</span>
+                            </h4>
+                            <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
+                        </Link>
                     </div>
                 );
                 return (
-                    <Panel className="fadeIn " header={datasetheader} eventKey={dataset._id} key={dataset._id}>
-                        <div className="inner">
-                            area for future content
+                    <div className="fadeIn  panel panel-default">
+                        <div className="panel-heading">
+                            {datasetheader}
                         </div>
-                        <div className="inner-right">
-                            <div>
-                                <div className="col-xs-6 left">
-                                    <Link to="dataset" params={{datasetId: dataset._id}}>View dataset page »</Link>
-                                </div>
-                            </div>
-                        </div>
-                    </Panel>
+                    </div>
                 );
             });
         }
@@ -75,7 +70,7 @@ let Datasets = React.createClass({
         	<div className="fadeIn">
             	<div className="dash-tab-content datasets ">
                     <h2>My Datasets</h2>
-                    <PanelGroup accordion> 
+                    <PanelGroup> 
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>
                 </div>

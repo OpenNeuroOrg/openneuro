@@ -85,8 +85,9 @@
 				a{
 					display: block;
 					padding: 10px 20px;
-					color:$primaryHover;
-					background:transparent;
+					background:#fff;
+					transition: background 1s ease;
+					color:$primary;
 					h4{
 						border: none;
 						width: 50%;
@@ -112,6 +113,7 @@
 							margin-left: 10px;
 							text-transform: uppercase;
 							&:after{
+								width: 30px;
 								content: 'Hide';
 								margin-left:10px;
 								color:$primary;
@@ -130,19 +132,13 @@
 						display: table;
 					}
 
-					&.collapsed{
-						background:#fff;
-						transition: background 1s ease;
-						color:$primary;
+					&:hover{
+
+						background:#fafafa;
+						color:$primaryHover;
 						.date .time-ago:after{
 							content:'View';
-						}
-						&:hover{
-							background:#fafafa;
 							color:$primaryHover;
-							.date .time-ago:after{
-								color:$primaryHover;
-							}
 						}
 					}
 				}
