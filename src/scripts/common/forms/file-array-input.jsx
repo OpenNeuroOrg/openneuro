@@ -1,8 +1,9 @@
 // dependencies -------------------------------------------------------
 
-import React   from 'react';
-import upload  from '../../utils/upload';
-import Spinner from '../../common/partials/spinner.component.jsx';
+import React      from 'react';
+import upload     from '../../utils/upload';
+import Spinner    from '../../common/partials/spinner.component.jsx';
+import WarnButton from './warn-button.component.jsx';
 
 // component setup ----------------------------------------------------
 
@@ -27,9 +28,7 @@ let FileArrayInput = React.createClass({
 			return (
 				<div key={index} className="cte-array-item">
 					<a onClick={this._fileClick.bind(null, item.name)}>{item.name}</a>
-					<button className="cte-remove-button btn btn-admin warning" onClick={this._remove.bind(null, item.name, index)}>
-						<i className="fa fa-times"></i>
-					</button>
+					<WarnButton action={this._remove.bind(null, item.name, index)} />
 				</div>
 			);
 		});
