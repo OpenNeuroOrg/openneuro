@@ -112,15 +112,7 @@
 						.time-ago{
 							margin-left: 10px;
 							text-transform: uppercase;
-							&:after{
-								width: 30px;
-								content: 'Hide';
-								margin-left:10px;
-								color:$primary;
-								font-size: 10px;
-								position: relative;
-								float: right;
-							}
+
 						}
 					}
 					&:after {
@@ -136,10 +128,6 @@
 
 						background:#fafafa;
 						color:$primaryHover;
-						.date .time-ago:after{
-							content:'View';
-							color:$primaryHover;
-						}
 					}
 				}
 			}
