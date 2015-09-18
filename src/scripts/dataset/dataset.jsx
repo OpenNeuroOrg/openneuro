@@ -53,10 +53,10 @@ let Dataset = React.createClass({
 			let PublicDatasetsLink = <Link to="public">Public Datasets</Link>;
 			content = (
 				<div className="fadeIn">
-					<ol className="breadcrumb">
+					{/*<ol className="breadcrumb">
 						<li>{dataset.public && !dataset.userOwns ? PublicDatasetsLink : myDatasetsLink}</li>
 						<li className="active">{dataset.name}</li>
-					</ol>
+					</ol>*/}
 					
 					<div  className="clearfix">
 						<div className="row">
