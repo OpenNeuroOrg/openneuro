@@ -3,10 +3,10 @@ import scitran   from './scitran';
 import userStore from '../user/user.store';
 
 /**
- * Scitran
+ * BIDS
  *
  * A library for interactions with the
- * scitran service.
+ * scitran service through BIDS concepts.
  */
 export default  {
 
