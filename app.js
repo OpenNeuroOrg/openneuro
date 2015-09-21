@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 
 let router = express.Router();
 routes(router);
-app.use('/', router);
+app.use('/api/v1/', router);
 
 // start server ----------------------------------------------------
 
