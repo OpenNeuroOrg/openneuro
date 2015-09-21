@@ -18,7 +18,8 @@ function handleRequest(relURL, options, callback) {
 	let req = {
 		url: config.scitran.baseURL + relURL,
 		headers: {
-			"X-SciTran-Auth": config.scitran.secret
+			"X-SciTran-Auth": config.scitran.secret,
+			'User-Agent': 'SciTran Drone'
 		},
 		query: {},
 		json: {}
