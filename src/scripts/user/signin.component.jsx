@@ -22,6 +22,10 @@ export default class Signin extends React.Component {
 					<i className="fa fa-google" />
 					<span> Google</span>
 				</button>
+				<button className="btn-blue" onClick={this._signUp} >
+					<i className="fa fa-google" />
+					<span>Signup</span>
+				</button>
 			</div>
     	);
 	}
@@ -30,5 +34,9 @@ export default class Signin extends React.Component {
 
 	_signIn () {
 		Actions.signIn();
+	}
+
+	_signUp() {
+		Actions.signUp();
 	}
 }

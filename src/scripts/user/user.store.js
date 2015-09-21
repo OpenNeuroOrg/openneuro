@@ -5,6 +5,7 @@ import Actions from './user.actions.js';
 import config  from '../config';
 import router  from '../utils/router-container';
 import scitran from '../utils/scitran';
+import crn     from '../utils/crn';
 import upload  from '../upload/upload.actions';
 
 let UserStore = Reflux.createStore({
@@ -88,6 +89,22 @@ let UserStore = Reflux.createStore({
 		} else {
 			this.setInitialState();
 		}
+	},
+
+	signUp: function () {
+		hello('google').login({scope: 'email,openid'}, (res) => {
+			hello(res.network).api('/me').then((profile) => {
+				let user = {
+					email: profile.email,
+					firstName: profile.first_name,
+					lastName: profile.last_name
+				};
+				crn.createUser(user, (err, res) => {
+					console.log(err);
+					console.log(res);
+				});
+			});
+		});
 	},
 
 	/**
