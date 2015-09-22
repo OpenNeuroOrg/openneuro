@@ -19,7 +19,7 @@ function handleRequest(relURL, options, callback) {
 		url: config.scitran.baseURL + relURL,
 		headers: {
 			"X-SciTran-Auth": config.scitran.secret,
-			'User-Agent': 'SciTran Drone'
+			'User-Agent': 'SciTran Drone CRN Server'
 		},
 		query: {},
 		json: {}

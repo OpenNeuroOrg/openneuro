@@ -11,7 +11,7 @@ export default (router) => {
 		let firstName = req.body.hasOwnProperty('firstName') ? req.body.firstName : null;
 		let lastName  = req.body.hasOwnProperty('lastName')  ? req.body.lastName  : null;
 
-		request.post('users', {body: {email, firstName, lastName}}, (err, resp) => {
+		request.post('users', {body: {_id: email, firstname: firstName, lastname: lastName}}, (err, resp) => {
             
             if (!err) {
 				res.send(resp);
