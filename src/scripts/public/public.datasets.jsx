@@ -43,22 +43,18 @@ let Datasets = React.createClass({
             results = paginatedResults.map(function (dataset, index){
                 let dateAdded = moment(dataset.timestamp).format('L');
                 let timeago   = moment(dataset.timestamp).fromNow(true);
-                
-                let datasetheader = (
-                    <div className="header clearfix">
-                        <Link to="dataset" params={{datasetId: dataset._id}}>
-                            <h4 className="dataset">
-                               {dataset.name} 
-                            </h4>
-                            <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
-                        </Link>
-                    </div>
-                );
 
                 return (
-                    <div className="fadeIn  panel panel-default">
+                    <div className="fadeIn  panel panel-default" key={dataset._id}>
                         <div className="panel-heading">
-                            {datasetheader}
+                            <div className="header clearfix">
+                                <Link to="dataset" params={{datasetId: dataset._id}}>
+                                    <h4 className="dataset">
+                                       {dataset.name} 
+                                    </h4>
+                                    <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
+                                </Link>
+                            </div>
                         </div>
                     </div>
                 );
