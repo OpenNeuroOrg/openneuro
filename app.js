@@ -4,6 +4,7 @@ import express    from 'express';
 import config     from './config';
 import routes     from './routes';
 import bodyParser from 'body-parser';
+import morgan     from 'morgan';
 
 // configuration ---------------------------------------------------
 
@@ -14,6 +15,7 @@ app.use((req, res, next) => {
     res.type('application/json');
     next();
 });
+app.use(morgan('short'));
 app.use(bodyParser.json());
 
 // routing ---------------------------------------------------------
