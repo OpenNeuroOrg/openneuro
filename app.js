@@ -34,7 +34,7 @@ app.use(function(err, req, res, next) {
         if(err.http_code == 400){
             send.error = "there was something wrong with that request";
         }else if(err.http_code == 401){
-            send.error = "rou are not authorized to do that";
+            send.error = "you are not authorized to do that";
         }else if(err.http_code == 404){
             send.error = "that resource was not found";
         }else{

@@ -23,16 +23,10 @@ export default {
 		}
 
 		sanitize.req(req, newUserModel, (err, user) => {
-			if (err) {
-				err = new Error(err);
-				err.http_code = 400;
-				next(err);
-				return
-			} else {
-				scitran.createUser(user, (err, resp) => {
-					if (!err) {res.send(resp);}
-				});
-			}
+			if (err) {return next(err);}
+			scitran.createUser(user, (err, resp) => {
+				if (!err) {res.send(resp);}
+			});
 		});
 				
 	}
