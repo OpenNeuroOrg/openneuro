@@ -1,4 +1,5 @@
-import scitran from './libs/scitran';
+import scitran  from './libs/scitran';
+import sanitize from './libs/sanitize';
 
 /**
  * Users
@@ -13,13 +14,26 @@ export default {
 	 * Takes a gmail address as an '_id' and a first and last name and
 	 * creates a scitran user.
 	 */
-	create(req, res) {
-		let _id       = req.body.hasOwnProperty('_id')       ? req.body._id       : null;
-		let firstname = req.body.hasOwnProperty('firstname') ? req.body.firstname : null;
-		let lastname  = req.body.hasOwnProperty('lastname')  ? req.body.lastname  : null;
+	create(req, res, next) {
+		
+		let newUserModel = {
+			_id:       'string, required',
+			firstname: 'string, required',
+			lastname:  'string, required'
+		}
 
-		scitran.createUser({_id, firstname, lastname}, (err, resp) => {
-			if (!err) {res.send(resp);}
+		sanitize.req(req, newUserModel, (err, user) => {
+			if (err) {
+				err = new Error(err);
+				err.http_code = 400;
+				next(err);
+				return
+			} else {
+				scitran.createUser(user, (err, resp) => {
+					if (!err) {res.send(resp);}
+				});
+			}
 		});
+				
 	}
 }
