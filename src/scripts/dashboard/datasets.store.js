@@ -12,11 +12,11 @@ let UploadStore = Reflux.createStore({
 
 	listenables: Actions,
 
-	init: function () {
+	init() {
 		this.setInitialState();
 	},
 
-	getInitialState: function () {
+	getInitialState() {
 		return this.data;
 	},
 
@@ -24,7 +24,7 @@ let UploadStore = Reflux.createStore({
 
 	data: {},
 
-	update: function (data) {
+	update(data) {
 		for (let prop in data) {this.data[prop] = data[prop];}
 		this.trigger(this.data);
 	},
@@ -37,7 +37,7 @@ let UploadStore = Reflux.createStore({
 	 * which will set the state to the initial state
 	 * with any differences passed.
 	 */
-	setInitialState: function (diffs) {
+	setInitialState(diffs) {
 		let data = {
 			loading: false,
             datasets: [],
@@ -50,12 +50,12 @@ let UploadStore = Reflux.createStore({
 
 // actions ---------------------------------------------------------------------------
 
-	getDatasets: function () {
+	getDatasets(isPublic) {
 		let self = this;
         self.update({loading: true});
         bids.getDatasets(function (datasets) {
             self.update({datasets: datasets,  loading: false});
-        });
+        }, !isPublic);
     }
 
 });

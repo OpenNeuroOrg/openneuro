@@ -52,13 +52,13 @@ let Dataset = React.createClass({
 			let myDatasetsLink = <Link to="datasets">My Datasets</Link>;
 			let PublicDatasetsLink = <Link to="public">Public Datasets</Link>;
 			content = (
-				<div className="fadeIn">
+				<div className="fadeIn dashboard">
 					{/*<ol className="breadcrumb">
 						<li>{dataset.public && !dataset.userOwns ? PublicDatasetsLink : myDatasetsLink}</li>
 						<li className="active">{dataset.name}</li>
 					</ol>*/}
 					
-					<div  className="clearfix">
+					<div className="clearfix">
 						<div className="row">
 							<div className="col-xs-6">
 								<h1 className="clearfix">

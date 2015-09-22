@@ -1,31 +1,34 @@
 // dependencies ------------------------------------------------------------------------------
 
-import React                from 'react';
-import Reflux               from 'reflux';
-import Actions              from './datasets.actions.js';
-import DatasetsStore        from './datasets.store.js';
-import {Link}               from 'react-router';
-import moment               from 'moment';
+import React         from 'react';
+import Reflux        from 'reflux';
+import Actions       from './datasets.actions.js';
+import DatasetsStore from './datasets.store.js';
+import {State, Link} from 'react-router';
+import moment        from 'moment';
 import {PanelGroup}  from 'react-bootstrap';
-import Paginator            from '../common/partials/paginator.component.jsx';
-import Spinner              from '../common/partials/spinner.component.jsx';
-import Status               from '../common/partials/status.jsx';
+import Paginator     from '../common/partials/paginator.component.jsx';
+import Spinner       from '../common/partials/spinner.component.jsx';
+import Status        from '../common/partials/status.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
 let Datasets = React.createClass({
     
-    mixins: [Reflux.connect(DatasetsStore)],
+    mixins: [State, Reflux.connect(DatasetsStore)],
 
 // life cycle events -------------------------------------------------------------------------
 
     componentDidMount() {
-        Actions.getDatasets();
+        let isPublic = this.getPath().indexOf('dashboard') === -1;
+        this.setState({isPublic});
+        Actions.getDatasets(isPublic);
     },
 
     render() {
         let self     = this;
         let datasets = this.state.datasets;
+        let isPublic  = this.state.isPublic;
         let results;
 
         if (datasets.length === 0) {
@@ -37,12 +40,12 @@ let Datasets = React.createClass({
 
             // map results
             results = paginatedResults.map(function (dataset, index){
-                let dateAdded  = moment(dataset.timestamp).format('L');
-                let timeago    = moment(dataset.timestamp).fromNow(true);
-                let status     = dataset.status;
-                let incomplete = status.uploadIncomplete ? <Status type='incomplete' /> : null;   
-                let shared     = !dataset.userCreated    ? <Status type='shared' /> : null; 
-                let isPublic   = dataset.public          ? <Status type='public' /> : null;
+                let dateAdded    = moment(dataset.timestamp).format('L');
+                let timeago      = moment(dataset.timestamp).fromNow(true);
+                let status       = dataset.status;
+                let incomplete   = status.uploadIncomplete           ? <Status type='incomplete' /> : null;   
+                let shared       = !dataset.userCreated && !isPublic ? <Status type='shared' /> : null; 
+                let publicStatus = dataset.public && !isPublic       ? <Status type='public' /> : null;
 
                 return (
                     <div className="fadeIn  panel panel-default" key={dataset._id}>
@@ -51,7 +54,7 @@ let Datasets = React.createClass({
                                 <Link to="dataset" params={{datasetId: dataset._id}}>
                                     <h4 className="dataset">
                                         {dataset.name} 
-                                        <span className="status">{isPublic}{shared}{incomplete}</span>
+                                        <span className="status">{publicStatus}{shared}{incomplete}</span>
                                     </h4>
                                     <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                                 </Link>
@@ -63,9 +66,9 @@ let Datasets = React.createClass({
         }
 
         return (
-        	<div className="fadeIn">
+        	<div className={isPublic ? "fadeIn public-dashboard inner-route" : "fadeIn"}>
             	<div className="dash-tab-content datasets ">
-                    <h2>My Datasets</h2>
+                    <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
                     <PanelGroup> 
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>
