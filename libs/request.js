@@ -1,6 +1,12 @@
 import request from 'request';
-import config  from './config';
+import config  from '../config';
 
+/**
+ * Request
+ *
+ * A wrapper of npm 'request' to allow for
+ * genericizing request and response manipulations.
+ */
 export default {
 
 	post(url, options, callback) {
@@ -14,9 +20,14 @@ export default {
 
 }
 
-function handleRequest(relURL, options, callback) {
+/**
+ * Handle Request
+ *
+ * Processes all requests before they fire.
+ */
+function handleRequest(url, options, callback) {
 	let req = {
-		url: config.scitran.baseURL + relURL,
+		url: url,
 		headers: {
 			"X-SciTran-Auth": config.scitran.secret,
 			'User-Agent': 'SciTran Drone CRN Server'
@@ -30,10 +41,21 @@ function handleRequest(relURL, options, callback) {
 	callback(req);
 }
 
+/**
+ * Handle Response
+ *
+ * Process all responses before they return
+ * to the callback.
+ */
 function handleResponse(err, res, callback) {
 	callback(err, res);
 }
 
+/**
+ * Parse Options
+ *
+ * Normalized request options.
+ */
 function parseOptions(req, options) {
 	if (options.query)  {req.query = options.query;}
 	if (options.body)   {req.json = options.body;}

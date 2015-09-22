@@ -1,22 +1,13 @@
-import request from './request';
+// dependencies ------------------------------------
 
-export default (router) => {
-	
-	router.get('/', (req, res) => {
-		res.send('Hello World!');
-	});
+import users   from './users';
+import express from 'express';
+let router = express.Router();
 
-	router.post('/users', (req, res) => {
-		let email     = req.body.hasOwnProperty('email')     ? req.body.email     : null;
-		let firstName = req.body.hasOwnProperty('firstName') ? req.body.firstName : null;
-		let lastName  = req.body.hasOwnProperty('lastName')  ? req.body.lastName  : null;
+// users -------------------------------------------
 
-		request.post('users', {body: {_id: email, firstname: firstName, lastname: lastName}}, (err, resp) => {
-            
-            if (!err) {
-				res.send(resp);
-            }
-        });
-	});
+router.post('/users', users.create);
 
-}
+// export ------------------------------------------
+
+export default router;

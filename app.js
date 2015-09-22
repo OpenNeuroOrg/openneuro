@@ -16,9 +16,9 @@ app.use((req, res, next) => {
 });
 app.use(bodyParser.json());
 
-let router = express.Router();
-routes(router);
-app.use('/api/v1/', router);
+// routing ---------------------------------------------------------
+
+app.use('/api/v1/', routes);
 
 // start server ----------------------------------------------------
 
