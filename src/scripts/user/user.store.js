@@ -105,9 +105,9 @@ let UserStore = Reflux.createStore({
 				scitran.verifyUser((err, res) => {
 					if (res.status === 403) {
 						let user = {
-							email: profile.email,
-							firstName: profile.first_name,
-							lastName: profile.last_name
+							_id: profile.email,
+							firstname: profile.first_name,
+							lastname: profile.last_name
 						};
 						crn.createUser(user, (err, res) => {
 							scitran.verifyUser((err, res) => {
