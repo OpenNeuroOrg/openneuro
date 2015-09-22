@@ -1,14 +1,12 @@
 // dependencies ------------------------------------------------------------------------------
 
-import React                from 'react';
-import Reflux               from 'reflux';
-import {Link}               from 'react-router';
-import moment               from 'moment';
-import {PanelGroup}  from 'react-bootstrap';
-import request              from '../utils/request';
-import Paginator            from '../common/partials/paginator.component.jsx';
-import Spinner              from '../common/partials/spinner.component.jsx';
-import FileTree             from '../upload/upload.file-tree.jsx';
+import React        from 'react';
+import {Link}       from 'react-router';
+import moment       from 'moment';
+import {PanelGroup} from 'react-bootstrap';
+import BIDS         from '../utils/bids';
+import Paginator    from '../common/partials/paginator.component.jsx';
+import Spinner      from '../common/partials/spinner.component.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
@@ -89,13 +87,10 @@ let Datasets = React.createClass({
 // custom methods ----------------------------------------------------------------------------
     
     _getDatasets() {
-        let self = this;
-        self.setState({loading: true});
-        request.get('projects', {auth: false}, function (err, res) {
-            let datasets = res.body;
+        BIDS.getDatasets((datasets) => {
             datasets.reverse();
-            self.setState({datasets: datasets,  loading: false});
-        });
+            this.setState({datasets: datasets,  loading: false});
+        }, false);
     },
 
     paginate(data, perPage, page) {

@@ -118,8 +118,8 @@ export default  {
      * Get Projects
      *
      */
-    getProjects (callback) {
-        request.get(config.scitran.url + 'projects', {}, (err, res) => {
+    getProjects (authenticate, callback) {
+        request.get(config.scitran.url + 'projects', {auth: authenticate}, (err, res) => {
             callback(res.body);
         });
     },
