@@ -30,7 +30,7 @@ export default {
             _id: groupName,
             roles: [{access: 'admin', _id: userId}]
         };
-        request.post(config.scitran.url + 'groups', {body: body}, callback);
+        request.post(config.scitran.baseURL + 'groups', {body: body}, callback);
     }
 
 }
