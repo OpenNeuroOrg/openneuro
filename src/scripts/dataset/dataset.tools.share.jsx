@@ -44,7 +44,7 @@ export default class Share extends React.Component {
 				<div className="cte-array-items">
 					{permissions}
 				</div>
-				<h5 className="add-members">Add Member</h5>
+				<h5 className="add-members">Shared With</h5>
 				<div>
 					<div className="text-danger">{this.state.error}</div>
 					<Typeahead options={this.state.users} filter={this._filter} format={'_id'} onChange={this._typeaheadChange.bind(this)} value={this.state.input}/>

@@ -13,7 +13,7 @@
 .tasks-col .no-chrome-overlay{
     right: 0;
     background: #000;
-    background-color: rgba(16, 0, 0, 0.65);
+    background-color: rgba(0,0,0,0.85);
     position: fixed;
     height: 100%;
     z-index: 9000;
@@ -21,9 +21,8 @@
     padding:100px 20px;
     text-align: center;
     color: $white;
-    font-size: 80px;
-    line-height: 80px;
-    text-transform:uppercase;
+    font-size: 40px;
+    line-height: 50px;
     text-shadow: 1px 2px 2px #000;
 }
 

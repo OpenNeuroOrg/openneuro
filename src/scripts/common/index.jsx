@@ -46,7 +46,7 @@ let App = React.createClass({
 		}
 
 		if(!bowser.chrome){
-			sidebarNoChrome = <div className="no-chrome-overlay">Chrome only feature</div>;
+			sidebarNoChrome = <div className="no-chrome-overlay">Uploading the file structure of a BIDS datasets requires Chrome. Please switch browsers to use this feature</div>;
 		}
 
 		if (showUpload) {

@@ -26,7 +26,7 @@
 @import "./_crn-dashboard";
 @import "./_crn-file_structure";
 @import "./_crn-upload";
-@import "_crn-dataset";
+@import "./_crn-dataset";
 
 // annimations ================================================================ 
 @import "animate/_fading-entrances/fading-entrances.scss";      
@@ -86,7 +86,6 @@
 	z-index: 1500;
 }
 
-
 body.modal-open{
 	#main{
 		-webkit-filter: blur(5px);
@@ -96,18 +95,15 @@ body.modal-open{
 	    filter: blur(5px);
 	}
 }
+
 .modal-backdrop{
 	background:#fff;
 }
 
 .modal{
-
-&.fade{
-	&.in{@include slideInDown();}
-
-
-	
-}
+	&.fade{
+		&.in{@include slideInDown();}	
+	}
 	button.close{
 		color: rgba(0,0,0,0.6);
 		opacity: 1;
