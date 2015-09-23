@@ -3,6 +3,7 @@ import bids    from '../utils/bids';
 import uploads from '../utils/upload';
 import actions from './upload.actions';
 import files   from '../utils/files';
+import config  from '../config';
 
 export default {
 
@@ -40,7 +41,7 @@ export default {
      * Pushes upload details into an upload queue.
      */
     uploadFile (level, id, file, tag) {
-        let url = level + '/' + id + '/file/' + file.name;
+        let url = config.scitran.url +  level + '/' + id + '/file/' + file.name;
         uploads.add({url: url, file: file, tag: tag, progressStart: this.progressStart, progressEnd: this.progressEnd});
     },
 
@@ -69,7 +70,7 @@ export default {
         }
         
         let existingProjectId = null;
-        scitran.getProjects((projects) => {
+        scitran.getProjects(true, (projects) => {
             for (let project of projects) {
                 if (project.name === fileTree[0].name && project.group === userId) {
                     existingProjectId = project._id;
