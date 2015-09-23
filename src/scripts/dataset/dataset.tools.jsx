@@ -48,6 +48,7 @@ let Tools = React.createClass({
 	            	<Modal.Header closeButton>
 	            		<Modal.Title>Share Dataset</Modal.Title>
 	            	</Modal.Header>
+	            	<hr className="modal-inner" />
 	            	<Modal.Body>
 	            		<Share dataset={dataset} users={users} />
 	            	</Modal.Body>
