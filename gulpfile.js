@@ -48,7 +48,7 @@
     });
     
     gulp.task('watch', [], function() {
-        gulp.start(['browserSync', 'watchStyles', 'watchApp', 'watchMD5Worker', 'styles', 'copy' ]);
+        gulp.start(['watchStyles', 'watchApp', 'watchMD5Worker', 'styles', 'copy', 'browserSync']);
     });
 
     gulp.task('default',['watch'], function() {

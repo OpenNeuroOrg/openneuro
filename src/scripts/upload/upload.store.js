@@ -44,26 +44,27 @@ let UploadStore = Reflux.createStore({
 	 */
 	setInitialState: function (diffs) {
 		let data = {
-			tree: [],
-			list: {},
-			errors: [],
-			warnings: [],
-			refs: {},
-			dirName: '',
-			nameError: null,
+			activeKey: 1,
+			alert: null,
+			alertMessage: '',
 			changeName: false,
+			dirName: '',
+			disabledTab: false,
+			errors: [],
+			list: {},
+			nameError: null,
+			progress: {total: 0, completed: 0, currentFiles: []},
+			projectId: '',
+			refs: {},
 			showSelect: true,
 			showRename: false,
 			showIssues: false,
 			showResume: false,
 			showProgress: false,
 			showSuccess: false,
-			activeKey: 1,
-			alert: null,
-			disabledTab: false,
-			alertMessage: '',
+			tree: [],
 			uploadStatus: 'not-started',
-			progress: {total: 0, completed: 0, currentFiles: []},
+			warnings: [],
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -136,7 +137,7 @@ let UploadStore = Reflux.createStore({
 
 		let self = this;
 		let userId = userStore.data.scitran._id;
-		scitran.getProjects(function (projects) {
+		scitran.getProjects(true, function (projects) {
 			let existingProjectId;
 			for (let project of projects) {
                 if (project.name === fileTree[0].name && project.group === userId) {
@@ -172,7 +173,8 @@ let UploadStore = Reflux.createStore({
 		});
 		
 		upload.upload(userStore.data.scitran._id, fileTree, count, (progress, projectId) => {
-			this.update({progress: progress, uploading: true});
+			projectId = projectId ? projectId : this.data.projectId;
+			this.update({progress: progress, uploading: true, projectId: projectId});
 			window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
 				let note = {author: 'uploadStatus', text: 'complete'};

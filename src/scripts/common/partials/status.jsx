@@ -9,7 +9,7 @@ export default class Status extends React.Component {
 		switch(this.props.type) {
 			case 'public':
 				spanClass = 'dataset-status ds-info';
-				tip       = 'public';
+				tip       = 'Public';
 				iconClass = 'fa fa-eye';
 				break;
 			case 'incomplete':
@@ -19,9 +19,13 @@ export default class Status extends React.Component {
 				break;
 			case 'shared':
 				spanClass = 'dataset-status ds-info';
-				tip       = 'shared with me';
+				tip       = 'Shared with me.';
 				iconClass = 'fa fa-user';
 				break;
+			case 'inProgress':
+				spanClass = 'dataset-status ds-info';
+				tip       = 'Upload in progress.';
+				iconClass = 'fa fa-spin fa-circle-o-notch'
 		}
 
 		return (

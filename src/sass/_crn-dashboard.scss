@@ -94,13 +94,17 @@
 						float: left;
 						margin: 0;
 						font-size: 15px;
-					}
-					.status{
-						padding: 0 0 0 10px;
-						.warning{
-							color: $brand-warning;
+						
+						span, ul {
+							float: left;
+							display: block;
+						}
+
+						.nav.nav-pills > li {
+							margin: 0px;
 						}
 					}
+
 					.date{
 						float: left;
 						margin: 0;

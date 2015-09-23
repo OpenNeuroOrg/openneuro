@@ -9,7 +9,7 @@ import moment        from 'moment';
 import {PanelGroup}  from 'react-bootstrap';
 import Paginator     from '../common/partials/paginator.component.jsx';
 import Spinner       from '../common/partials/spinner.component.jsx';
-import Status        from '../common/partials/status.jsx';
+import Statuses      from '../dataset/dataset.statuses.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
@@ -42,10 +42,6 @@ let Datasets = React.createClass({
             results = paginatedResults.map(function (dataset, index){
                 let dateAdded    = moment(dataset.timestamp).format('L');
                 let timeago      = moment(dataset.timestamp).fromNow(true);
-                let status       = dataset.status;
-                let incomplete   = status.uploadIncomplete           ? <Status type='incomplete' /> : null;   
-                let shared       = !dataset.userCreated && !isPublic ? <Status type='shared' /> : null; 
-                let publicStatus = dataset.public && !isPublic       ? <Status type='public' /> : null;
 
                 return (
                     <div className="fadeIn  panel panel-default" key={dataset._id}>
@@ -54,7 +50,7 @@ let Datasets = React.createClass({
                                 <Link to="dataset" params={{datasetId: dataset._id}}>
                                     <h4 className="dataset">
                                         {dataset.name} 
-                                        <span className="status">{publicStatus}{shared}{incomplete}</span>
+                                        <Statuses dataset={dataset} />
                                     </h4>
                                     <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
                                 </Link>
