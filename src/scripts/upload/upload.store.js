@@ -214,7 +214,7 @@ let UploadStore = Reflux.createStore({
 	 *
 	 */
 	uploadError () {
-		this.setInitialState({alert: 'Error', alertMessage: 'There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site administrator.'});
+		this.setInitialState({alert: 'Error', alertMessage: <span>There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site <a  href="mailto:openfmri@gmail.com" target="_blank">administrator</a></span>});
 		window.onbeforeunload = function() {};
 	},
 

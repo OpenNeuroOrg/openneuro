@@ -66,13 +66,13 @@ body,
 .toggle-sidebar-wrap{
 	position: absolute;
     right: 0;
-    top: 83px;
+    top: 75px;
     z-index: 1299;
     .btn{
 		border-radius: 0;
-		font-size: 40px;
+		font-size: 25px;
 		color: $primary;
-		padding: 5px 12px 9px;
+		padding: 0 5px 3px;
 		background: #ddd;
 		font-family: $font-family-ssp;
 		line-height: 28px;

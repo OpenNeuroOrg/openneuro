@@ -40,21 +40,22 @@ export default class Share extends React.Component {
 
 		return (
 			<div className="dataset">
-				<div>Members</div>
+				<h5>Members</h5>
 				<div className="cte-array-items">
 					{permissions}
 				</div>
-				<div>Add Member</div>
+				<h5 className="add-members">Shared With</h5>
 				<div>
 					<div className="text-danger">{this.state.error}</div>
 					<Typeahead options={this.state.users} filter={this._filter} format={'_id'} onChange={this._typeaheadChange.bind(this)} value={this.state.input}/>
-					<select onChange={this._selectChange.bind(this)} value={this.state.select}>
+					<select className="selectBox-style" onChange={this._selectChange.bind(this)} value={this.state.select}>
 						<option value="" disabled>access level</option>
 						<option value="ro">Read only</option>
 						<option value="rw">Read write</option>
 						<option value="admin">Admin</option>
 					</select>
-					<button onClick={this._addUser.bind(this)}>add</button>
+					<span className="caret-down"></span>
+					<button className="btn-admin admin-blue" onClick={this._addUser.bind(this)}>add</button>
 				</div>
 			</div>
     	);

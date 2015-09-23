@@ -26,13 +26,14 @@
 @import "./_crn-dashboard";
 @import "./_crn-file_structure";
 @import "./_crn-upload";
-@import "_crn-dataset";
+@import "./_crn-dataset";
 
 // annimations ================================================================ 
 @import "animate/_fading-entrances/fading-entrances.scss";      
 @import "animate/_sliding-entrances/sliding-entrances.scss";   
 @import "animate/_attention-seekers/attention-seekers.scss";  
-@import "animate/_sliding-entrances/sliding-entrances.scss";       
+@import "animate/_sliding-entrances/sliding-entrances.scss";   
+@import "animate/_sliding-exits/sliding-exits.scss";       
 
 .fadeInDown{@include fadeInDown();}
 .fadeInDownBig{@include fadeInDownBig();}
@@ -53,16 +54,25 @@
 .typeahead {
 	position: relative;
 	display: inline;
+	input{
+		padding: 4px 10px;
+		margin: 5px 0;
+	}
 
 	.typeahead-results {
 		position: absolute;
 		background: #FFF;
 		list-style: none;
 		padding: 0;
+		box-shadow: 1px 1px 5px -2px rgba(0,0,0,0.4);
+		min-width: 300px;
+		max-height:300px;
+		overflow:hidden;
+		overflow-y: scroll;
 
 		li {
 			border-top: 1px solid #CCC;
-			padding: 10px;
+			padding: 15px;
 			cursor: pointer;
 
 			&:first-child {border: none;}
@@ -76,9 +86,107 @@
 	z-index: 1500;
 }
 
+body.modal-open{
+	#main{
+		-webkit-filter: blur(5px);
+	    -moz-filter: blur(5px);
+	    -o-filter: blur(5px);
+	    -ms-filter: blur(5px);
+	    filter: blur(5px);
+	}
+}
+
+.modal-backdrop{
+	background:rgba(0, 0, 0, 0.36);
+}
+
+.modal{
+	&.fade{
+		&.in{@include slideInDown();}	
+	}
+	button.close{
+		color: rgba(0,0,0,0.6);
+		opacity: 1;
+		&:hover{
+			color:rgba(0,0,0,0.4);
+		}
+	}
+
+	.modal-dialog{
+	    width: 100%;
+	    margin: 0;
+	    padding:0 0 20px;
+	    border-radius: 0;
+	    background-color: #fff;
+	    box-shadow:20px 0 8px rgba(0,0,0,0.5);
+		.modal-content{
+			border-radius: 0;
+			border: 0;
+			width: 100%;
+			box-shadow: none;
+			margin: 0 auto;
+			hr{
+				margin: 0;
+			}
+			.modal-header{
+				width: 700px;
+				margin: 0 auto;
+				border-bottom:none;
+				.modal-title{
+
+				}
+				button.close{
+					color: rgba(0,0,0,0.6);
+					opacity: 1;
+					&:hover{
+						color:rgba(0,0,0,0.4);
+					}
+				}
+			}
+			.modal-body {
+				width: 700px;
+				margin: 0 auto;
+				.add-members{
+					margin: 20px 0 0;
+					border-top: 1px solid #eee;
+					padding: 20px 0 0;
+				}
+			}
+		}
+
+	}
+}
+
 // ZACK ADDED ME --- PUT ME SOMEWHERE BETTER -----------------------------------
 
 
+.selectBox-style{
+	padding:5px 20px 5px 10px;
+	margin: 0 10px;
+	color:black;
+	border:none;
+	outline:none;
+	display: inline-block;
+	-webkit-appearance:none; 
+	cursor:pointer;
+	border: 1px solid #ccc;
+	border-radius:0;
+	background:#fff;
+}
 
-
+	.caret-down{
+		display: inline-block;
+		width: 0;
+		height: 0;
+		vertical-align: top;
+		border-top: 4px solid #000;
+		border-right: 4px solid rgba(0, 0, 0, 0);
+		border-left: 4px solid rgba(0, 0, 0, 0);
+		content: "";
+		position: relative;
+		margin-top: 20px;
+		margin-left: -22px;
+		margin-right: 10px;
+		width: 0;
+	}
 
