@@ -3,10 +3,10 @@ import scitran   from './scitran';
 import userStore from '../user/user.store';
 
 /**
- * Scitran
+ * BIDS
  *
  * A library for interactions with the
- * scitran service.
+ * scitran service through BIDS concepts.
  */
 export default  {
 
@@ -78,18 +78,24 @@ export default  {
      *
      * Returns a list of datasets including any
      * derived statuses and notes on each. Only returns
-     * the top level 'project' container.
+     * the top level 'project' container. Takes an optional
+     * boolean as second argument to specifiy if request
+     * is made with authentication. Defaults to true.
      */
-    getDatasets (callback) {
-        scitran.getProjects((projects) => {
+    getDatasets (callback, authenticate) {
+        if (authenticate === undefined) {authenticate = true;}
+        scitran.getProjects(authenticate, (projects) => {
             let results = [];
             projects.reverse();
+
+            // hide other user's projects from admins
             for (let project of projects) {
-                if (this.userOwns(project)) {
+                if (!authenticate || this.userOwns(project)) {
                     let dataset = this.formatDataset(project);
                     results.push(dataset);
                 }
             }
+
             callback(results);
         });
     },

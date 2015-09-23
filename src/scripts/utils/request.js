@@ -12,9 +12,9 @@ hello.init({google: config.auth.google.clientID});
  */
 var Request = {
 
-	get (path, options, callback) {
-		handleRequest(path, options, function (path, options) {
-			request.get(config.scitran.url + path)
+	get (url, options, callback) {
+		handleRequest(url, options, function (url, options) {
+			request.get(url)
 				.set(options.headers)
 				.query(options.query)
 				.end(function (err, res) {
@@ -23,21 +23,9 @@ var Request = {
 		});
 	},
 
-	post (path, options, callback) {
-		handleRequest(path, options, function (path, options) {
-			request.post(config.scitran.url + path)
-				.set(options.headers)
-				.query(options.query)
-				.send(options.body)
-				.end(function (err, res) {
-					handleResponse(err, res, callback);
-				});
-		});
-	},
-
-	put (path, options, callback) {
-		handleRequest(path, options, function (path, options) {
-			request.put(config.scitran.url + path)
+	post (url, options, callback) {
+		handleRequest(url, options, function (url, options) {
+			request.post(url)
 				.set(options.headers)
 				.query(options.query)
 				.send(options.body)
@@ -47,9 +35,21 @@ var Request = {
 		});
 	},
 
-	del (path, callback) {
-		handleRequest(path, {}, function (path, options) {
-			request.del(config.scitran.url + path)
+	put (url, options, callback) {
+		handleRequest(url, options, function (url, options) {
+			request.put(url)
+				.set(options.headers)
+				.query(options.query)
+				.send(options.body)
+				.end(function (err, res) {
+					handleResponse(err, res, callback);
+				});
+		});
+	},
+
+	del (url, callback) {
+		handleRequest(url, {}, function (url, options) {
+			request.del(url)
 				.set(options.headers)
 				.end(function (err, res) {
 					handleResponse(err, res, callback);
@@ -76,16 +76,16 @@ var Request = {
  *   - auth: A boolean determining whether the access token
  *   should be supplied with the request.
  */
-function handleRequest (path, options, callback) {
+function handleRequest (url, options, callback) {
 	options = normalizeOptions(options);
 	var google = hello('google');
-	if (options.auth && hasToken()) {
+	if (options.auth && hasToken() && url.indexOf('scitran') > -1) {
 		hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
 			options.headers.Authorization = res.authResponse.access_token;
-			callback(path, options);
+			callback(url, options);
 		});
 	} else {
-		callback(path, options);
+		callback(url, options);
 	}
 }
 

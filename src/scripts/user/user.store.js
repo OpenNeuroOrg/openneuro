@@ -5,6 +5,7 @@ import Actions from './user.actions.js';
 import config  from '../config';
 import router  from '../utils/router-container';
 import scitran from '../utils/scitran';
+import crn     from '../utils/crn';
 import upload  from '../upload/upload.actions';
 
 let UserStore = Reflux.createStore({
@@ -13,11 +14,11 @@ let UserStore = Reflux.createStore({
 
 	listenables: Actions,
 
-	init: function () {
+	init() {
 		this.setInitialState();
 	},
 
-	getInitialState: function () {
+	getInitialState() {
 		return this.data;
 	},
 
@@ -25,7 +26,7 @@ let UserStore = Reflux.createStore({
 
 	data: {},
 
-	update: function (data) {
+	update(data) {
 		for (let prop in data) {this.data[prop] = data[prop];}
 		this.trigger(this.data);
 	},
@@ -38,11 +39,12 @@ let UserStore = Reflux.createStore({
 	 * which will set the state to the initial state
 	 * with any differences passed.
 	 */
-	setInitialState: function (diffs) {
+	setInitialState(diffs) {
 		let data = {
 			token: window.localStorage.hello ? JSON.parse(window.localStorage.hello).google.access_token : null,
 			google: null,
-			scitran: window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser) : null
+			scitran: window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser) : null,
+			loading: false
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -56,7 +58,7 @@ let UserStore = Reflux.createStore({
 	 * Initializes the OAuth libarary (hello.js) and checks
 	 * if a user is currently logged in.
 	 */
-	initOAuth: function () {
+	initOAuth() {
 		hello.init({google: config.auth.google.clientID});
 		this.checkUser();
 	},
@@ -67,47 +69,61 @@ let UserStore = Reflux.createStore({
 	 * Checks if the user has an active sessions and
 	 * if they do instatiates their session data.
 	 */
-	checkUser: function () {
-		let self = this;
+	checkUser() {
 		var googleAuth = hello('google').getAuthResponse();
 		var token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
 
 		if (token) {
-			hello('google').login({force: false}).then(function(authRes) {
-				self.update({token: token});
-				hello('google').api('/me').then(function (profile) {
-					self.update({google: profile});
-					scitran.verifyUser(function (err, res) {
+			hello('google').login({force: false}).then((authRes) => {
+				this.update({token: token});
+				hello('google').api('/me').then((profile) => {
+					this.update({google: profile});
+					scitran.verifyUser((err, res) => {
 						window.localStorage.scitranUser = JSON.stringify(res.body);
-						self.update({scitran: res.body});
+						this.update({scitran: res.body});
 					});
-				}, function (res) {
-					self.setInitialState();
+				}, (res) => {
+					this.setInitialState();
 				});
-			}, self.clearAuth);
+			}, this.clearAuth);
 		} else {
 			this.setInitialState();
 		}
 	},
 
 	/**
-	 * Log In
+	 * Signin
 	 *
-	 * Initiates the google OAuth2 sign in flow.
+	 * Initiates the google OAuth2 sign in flow. Creates a new
+	 * user if the user doesn't already exist.
 	 */
-	signIn: function () {
-		let self = this;
-		hello('google').login({scope: 'email,openid'}, function (res) {
-			self.update({token: res.authResponse.access_token});
-			hello(res.network).api('/me').then(function (profile) {
-				self.update({google: profile});
-				scitran.verifyUser(function (err, res) {
-					window.localStorage.scitranUser = JSON.stringify(res.body);
-					self.update({scitran: res.body});
+	signIn() {
+		this.update({loading: true});
+		hello('google').login({scope: 'email,openid'}, (res) => {
+			this.update({token: res.authResponse.access_token});
+			hello(res.network).api('/me').then((profile) => {
+				scitran.verifyUser((err, res) => {
+					if (res.status === 403) {
+						let user = {
+							_id: profile.email,
+							firstname: profile.first_name,
+							lastname: profile.last_name
+						};
+						crn.createUser(user, (err, res) => {
+							scitran.verifyUser((err, res) => {
+								window.localStorage.scitranUser = JSON.stringify(res.body);
+								router.transitionTo('dashboard');
+								this.update({scitran: res.body, google: profile, loading: false});
+							});
+						});
+					} else {
+						window.localStorage.scitranUser = JSON.stringify(res.body);
+						router.transitionTo('dashboard');
+						this.update({scitran: res.body, google: profile, loading: false});
+					}
 				});
-				router.transitionTo('dashboard');
 			});
-		}, function () {
+		}, () => {
 			// signin failure
 		});
 	},
@@ -118,24 +134,31 @@ let UserStore = Reflux.createStore({
 	 * Signs the user out by destroying the current
 	 * OAuth2 session.
 	 */
-	signOut: function (uploadStatus) {
-		let self = this;
+	signOut(uploadStatus) {
 		let signout = true;
 		if (uploadStatus === 'uploading') {
 			signout = confirm("You are currently uploading files. Signing out of this site will cancel the upload process. Are you sure you want to sign out?");
 		}
 		if (signout) {
-			hello('google').logout().then(function () {
+			hello('google').logout().then(() => {
 				upload.setInitialState();
-				self.clearAuth();
+				this.clearAuth();
 				router.transitionTo('signIn');
-			}, function (e) {
+			}, (e) => {
 				// signout failure
 			});
 		}
 	},
 
-	clearAuth: function () {
+// helper methods --------------------------------------------------------------------
+
+	/**
+	 * Clear Authentication
+	 *
+	 * Clears all user related data from memory and
+	 * browser storage.
+	 */
+	clearAuth() {
 		delete window.localStorage.hello;
 		delete window.localStorage.scitranUser;
 		this.setInitialState({
@@ -145,14 +168,26 @@ let UserStore = Reflux.createStore({
 		});
 	},
 
-
-	hasToken: function () {
+	/**
+	 * Has Token
+	 *
+	 * Returns a boolean representing whether or not
+	 * the current session has an access token present
+	 * regardless of whether or not is is expired/valid.
+	 */
+	hasToken() {
 		if (!window.localStorage.hello) {return false;}
 		let credentials = JSON.parse(window.localStorage.hello); 
 		return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
 	},
 
-	isTokenValid: function (session) {
+	/**
+	 * Is Token Valid
+	 *
+	 * Returns a boolean representing whether or not the
+	 * current access token in valid.
+	 */
+	isTokenValid() {
 		var session = hello('google').getAuthResponse();
 		var currentTime = (new Date()).getTime() / 1000;
 		return session && session.access_token && session.expires > currentTime;

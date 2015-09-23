@@ -47,7 +47,7 @@ export default class AddUser extends React.Component {
 
 			return (
 
-			    <div className="fadeIn user-panel clearfix" key={index}>
+			    <div className="fadeIn user-panel clearfix" key={user._id}>
                     <div className="col-sm-4 user-col">
                     	<h3>{userName}</h3>
                     </div>
