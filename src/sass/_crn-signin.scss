@@ -11,35 +11,16 @@
 
 	.intro{
 	    display: block;
-	    overflow: hidden;
 	    width: 100%;
 	    height: 100%;
-		background: url(../assets/signin-bg.jpg) 0 0 no-repeat;
-		background-size: cover;
+	    .introBG{
+	    	background: url(../assets/signin-bg.jpg) 0 0 no-repeat;
+			background-size: cover;
+			min-height: 550px;
+		}
 		.intro-inner{
 			max-width:1800px;
 			margin:0 auto;
-		}
-		.intro-teasers{
-			height: 40%;
-			max-height: 350px;
-		    background-color: #fff;
-		    padding: 30px 0;
-		    position: absolute;
-		    bottom: 0;
-		    left: 0;
-		    right: 0;
-		    h4{
-				font-size: 22px;
-				line-height: 21px;
-				text-align: center;
-		    }
-		    img{
-		    margin: 0px auto 5px;
-				width: 50px;
-				height: auto;
-				display: block;
-		    }
 		}
 	}
 	@media(max-width:1200px){
@@ -47,18 +28,13 @@
 			max-height: auto;
 		}
 	}
-	@media(max-height:850px){
-		.intro{
-			overflow-y: scroll;
-			.intro-teasers{
-			    margin-top: 130px;
-			    position:relative;
-				height: auto;
-				max-height: 900000px;
-			}
-		}
-	}
 }
+		.more-info{
+			text-align: center;
+			font-size: 18px;
+			font-weight: 500;
+			margin: 20px 0 0;
+		}
 .sign-in {
 	.welcomeBlock{
 		padding: 30px;
@@ -82,9 +58,11 @@
 		text-align: center;
 		color:#fff;
 		.form{
-			display: flex;
-			justify-content: center;
-			button.btn-admin{
+		    text-align: center;
+		    width: 570px;
+		    margin: 0 auto;
+		    float: none;
+			.btn-admin{
 				margin: 10px;
 				width: 230px;
 				border-color: #fff;
@@ -93,9 +71,19 @@
 				font-size: 20px;
 				font-weight: 200;
 				font-family: helvetica neue, helvetica;
-				&:hover{
+				display: block;
+				float: left;
+				&:active,&:hover{
+					border:1px solid #fff;
 					background:rgba(0,0,0,0.4);
 				}
+			}
+			.conjunction{
+				float: left;
+				padding: 15px 10px;
+				line-height: 15px;
+				font-size: 15px;
+				margin: 10px 0 0;
 			}
 		}
 	}
