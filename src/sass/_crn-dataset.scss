@@ -196,6 +196,7 @@
 	text-align: center;
 	display: inline;
 	width: 100%;
+	position: relative;
 	i.fa{
 		margin-right: 5px;
 	}
@@ -219,5 +220,14 @@
 	&.ds-danger{
 		background:none;
 		color:$brand-danger;
+	}
+	input {
+		position: absolute;
+		top:0px;
+		left:0px;
+		bottom:0px;
+		right:0px;
+		opacity: 0;
+		height: auto !important;
 	}
 }

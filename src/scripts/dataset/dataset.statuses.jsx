@@ -16,7 +16,7 @@ let Statuses = React.createClass({
 		let uploading = dataset._id === this.state.projectId;
 
 		let publicStatus     = <li><Status type='public' /></li>;
-		let incompleteStatus = <li><Status type='incomplete' /></li>;
+		let incompleteStatus = <li><Status type='incomplete' dataset={dataset} /></li>;
 		let sharedWithStatus = <li><Status type='shared' /></li>;
 		let inProgress       = <li><Status type='inProgress' /></li>;
 		return (

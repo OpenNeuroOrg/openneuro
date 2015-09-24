@@ -21,9 +21,9 @@ class Upload extends React.Component {
 
 // custom methods -----------------------------------------------------
 
-	_click () {
+	_click (e) {
 		React.findDOMNode(this.refs.fileSelect).value = null;
-		if (this.props.onClick) {this.props.onClick();}
+		if (this.props.onClick) {this.props.onClick(e);}
 	}
 
 	_onFileSelect (e) {
