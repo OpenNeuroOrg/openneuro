@@ -1,15 +1,15 @@
 // dependencies ----------------------------------------------------------------------
 
-import React         from 'react';
-import Reflux        from 'reflux';
-import Actions       from './upload.actions.js';
-import scitran       from '../utils/scitran';
-import upload        from './upload';
-import files         from '../utils/files';
-import validate      from 'bids-validator';
-import userStore     from '../user/user.store';
-import datasetsStore from '../dashboard/datasets.store';
-import {Link}        from 'react-router';
+import React           from 'react';
+import Reflux          from 'reflux';
+import Actions         from './upload.actions.js';
+import scitran         from '../utils/scitran';
+import upload          from './upload';
+import files           from '../utils/files';
+import validate        from 'bids-validator';
+import userStore       from '../user/user.store';
+import datasetsActions from '../dashboard/datasets.actions';
+import {Link}          from 'react-router';
 
 // store setup -----------------------------------------------------------------------
 
@@ -171,10 +171,13 @@ let UploadStore = Reflux.createStore({
 			disabledTab: true,
 			activeKey: 5
 		});
+
+		let datasetsUpdated = false;
 		
 		upload.upload(userStore.data.scitran._id, fileTree, count, (progress, projectId) => {
 			projectId = projectId ? projectId : this.data.projectId;
 			this.update({progress: progress, uploading: true, projectId: projectId});
+			if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
 			window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
 				let note = {author: 'uploadStatus', text: 'complete'};
@@ -200,7 +203,7 @@ let UploadStore = Reflux.createStore({
 			<span><a href={"#/dataset/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>
 		);
 
-		datasetsStore.getDatasets();
+		datasetsActions.getDatasets();
 
 		this.setInitialState({
 			alert: 'Success',
