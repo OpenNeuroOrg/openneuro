@@ -101,8 +101,10 @@ let UploadStore = Reflux.createStore({
 	 *
 	 * Takes a filelist, runs BIDS validation checks
 	 * against it, and sets any errors to the state.
+	 * Takes an optional boolean parameter representing
+	 * whether this is already known as a resume.
 	 */
-	validate (selectedFiles) {
+	validate (selectedFiles, resuming) {
 		let self = this;
 		self.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
         validate.BIDS(selectedFiles, function (errors, warnings) {
@@ -121,12 +123,21 @@ let UploadStore = Reflux.createStore({
 			});
 
 			if (errors.length === 0 && warnings.length === 0) {
-	        	self.checkExists(self.data.tree);
+	        	self.checkExists(self.data.tree, resuming);
 	        }
         });
 	},
 
-	checkExists (fileTree) {
+	/**
+	 * Check Exists
+	 *
+	 * Takins a filetree and a boolean representing
+	 * whether this is a resumed upload. If it isn't
+	 * it check for existing dataset with the same name
+	 * and group.
+	 */
+	checkExists (fileTree, resuming) {
+
 		// rename dirName before upload
 		fileTree[0].name = this.data.dirName;
 
@@ -137,21 +148,25 @@ let UploadStore = Reflux.createStore({
 
 		let self = this;
 		let userId = userStore.data.scitran._id;
-		scitran.getProjects(true, function (projects) {
-			let existingProjectId;
-			for (let project of projects) {
-                if (project.name === fileTree[0].name && project.group === userId) {
-                    existingProjectId = project._id;
-                    break;
-                }
-            }
+		if (!resuming) {
+			scitran.getProjects(true, function (projects) {
+				let existingProjectId;
+				for (let project of projects) {
+	                if (project.name === fileTree[0].name && project.group === userId) {
+	                    existingProjectId = project._id;
+	                    break;
+	                }
+	            }
 
-            if (existingProjectId) {
-				self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: 4});
-            } else {
-            	self.upload(fileTree);
-            }
-		});
+	            if (existingProjectId) {
+					self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: 4});
+	            } else {
+	            	self.upload(fileTree);
+	            }
+			});
+		} else {
+			self.upload(fileTree);
+		}
 	},
 
 	/**

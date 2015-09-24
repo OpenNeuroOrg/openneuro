@@ -61,7 +61,7 @@ export default class Status extends React.Component {
 			showRename: true,
 			dirName: this.props.dataset.name
 		});
-		actions.validate(files.list);
+		actions.validate(files.list, true);
 	}
 
 }
