@@ -175,16 +175,20 @@ let UploadStore = Reflux.createStore({
 		let datasetsUpdated = false;
 		
 		upload.upload(userStore.data.scitran._id, fileTree, count, (progress, projectId) => {
-			projectId = projectId ? projectId : this.data.projectId;
-			this.update({progress: progress, uploading: true, projectId: projectId});
-			if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
-			window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
-			if (progress.total === progress.completed) {
-				let note = {author: 'uploadStatus', text: 'complete'};
-                scitran.updateNote(projectId, note, (res) => {
-					this.uploadComplete(projectId);
-                });
+			if (this.data.alert !== 'Error') {
+				projectId = projectId ? projectId : this.data.projectId;
+				this.update({progress: progress, uploading: true, projectId: projectId});
+				if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
+				window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
+				if (progress.total === progress.completed) {
+					let note = {author: 'uploadStatus', text: 'complete'};
+	                scitran.updateNote(projectId, note, (res) => {
+						this.uploadComplete(projectId);
+	                });
+				}
 			}
+		}, () => {
+			this.uploadError();
 		});
 	},
 
@@ -217,7 +221,10 @@ let UploadStore = Reflux.createStore({
 	 *
 	 */
 	uploadError () {
-		this.setInitialState({alert: 'Error', alertMessage: <span>There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site <a  href="mailto:openfmri@gmail.com" target="_blank">administrator</a></span>});
+		this.setInitialState({
+			alert: 'Error',
+			alertMessage: <span>There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site <a  href="mailto:openfmri@gmail.com" target="_blank">administrator</a></span>
+		});
 		window.onbeforeunload = function() {};
 	},
 

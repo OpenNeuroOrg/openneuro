@@ -179,6 +179,9 @@ let UserStore = Reflux.createStore({
 					this.update({dataset: dataset});
 					callback();
 				});
+			},
+			error: (err, req) => {
+
 			}
 		};
 		upload.add(request);

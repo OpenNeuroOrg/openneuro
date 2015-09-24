@@ -1,16 +1,19 @@
 // dependencies -------------------------------------------------------
 
 import React   from 'react';
+import Reflux  from 'reflux';
 import Status  from '../common/partials/status.jsx';
 import UploadStore   from '../upload/upload.store.js';
 
 let Statuses = React.createClass({
 
+	mixins: [Reflux.connect(UploadStore)],
+
 // life cycle events --------------------------------------------------
 
 	render() {
 		let dataset = this.props.dataset;
-		let uploading = dataset._id === UploadStore.data.projectId;
+		let uploading = dataset._id === this.state.projectId;
 
 		let publicStatus     = <li><Status type='public' /></li>;
 		let incompleteStatus = <li><Status type='incomplete' /></li>;
