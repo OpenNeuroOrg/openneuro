@@ -28,13 +28,14 @@ let App = React.createClass({
 	},
 
 	render () {
-		let showUpload = UserStore.hasToken() && this.state.toggleSidebarbar;
-		let showLeftNav = !this.isActive('signIn');
+		let showUpload 		= UserStore.hasToken() && this.state.toggleSidebarbar;
+		let showLeftNav 	= !this.isActive('signIn');
+		let is_front 		= this.isActive('signIn');
+		let close 			= <span><span className="sr-only">Close</span> »</span>;
+		let open 			= <span><span className="sr-only">Open</span> «</span>;
 		let sidebar;
 		let leftnav;
 		let sidebarNoChrome;
-		let close = <span><span className="sr-only">Close</span> »</span>;
-		let open = <span><span className="sr-only">Open</span> «</span>;
 		let toggleSidebar;
 
 		if (UserStore.hasToken()){
@@ -58,12 +59,12 @@ let App = React.createClass({
 		}
 
 		return (
-			<div className="page">
+			<div className={is_front ? "page is-front" : "page"}>
 				{!bowser.chrome ?  <Happybrowser /> : null }
 				<div className={showUpload ? 'col-xs-8 main-col' : 'full-col'}>
 					<Navbar/>
 					<div className="main view container">
-						<div className="col-xs-12 route-wrapper">
+						<div className={showLeftNav ? "route-wrapper" : null}>
 							{leftnav}
 							<RouteHandler/>
 						</div>
