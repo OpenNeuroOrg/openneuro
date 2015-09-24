@@ -7,6 +7,7 @@ import bids      from '../utils/bids';
 import router    from '../utils/router-container';
 import userStore from '../user/user.store';
 import upload    from '../utils/upload';
+import config    from '../config';
 
 let UserStore = Reflux.createStore({
 
@@ -168,7 +169,7 @@ let UserStore = Reflux.createStore({
 	 */
 	uploadAttachment(file, callback) {
 		let request = {
-			url: 'projects/' + this.data.dataset._id + '/file/' + file.name,
+			url: config.scitran.url + 'projects/' + this.data.dataset._id + '/file/' + file.name,
 			file: file,
 			tag: 'attachment',
 			progressStart: () => {},
