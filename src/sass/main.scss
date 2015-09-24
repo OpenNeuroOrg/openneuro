@@ -33,7 +33,8 @@
 @import "animate/_sliding-entrances/sliding-entrances.scss";   
 @import "animate/_attention-seekers/attention-seekers.scss";  
 @import "animate/_sliding-entrances/sliding-entrances.scss";   
-@import "animate/_sliding-exits/sliding-exits.scss";       
+@import "animate/_sliding-exits/sliding-exits.scss";  
+@import "animate/_flippers/flippers.scss";       
 
 .fadeInDown{@include fadeInDown();}
 .fadeInDownBig{@include fadeInDownBig();}
@@ -47,6 +48,7 @@
 .bounce{@include bounce();}
 .slideInRight{@include slideInRight();}
 .slideInRightFast{@include slideInRightFast();}
+.flipInX{@include flipInX();}
 
 
 // ZACK ADDED ME --- PUT ME SOMEWHERE BETTER -----------------------------------
