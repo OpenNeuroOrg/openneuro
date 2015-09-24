@@ -1,8 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React     from 'react';
-import fileUtils from '../utils/files';
-import Actions   from './upload.store';
+import fileUtils from '../../utils/files';
 
 class Upload extends React.Component {
 
@@ -11,20 +10,20 @@ class Upload extends React.Component {
 	componentDidMount () {
 		React.findDOMNode(this).setAttribute('webkitdirectory', true);
 		React.findDOMNode(this).setAttribute('directory', true);
-		Actions.setRefs(this.refs);
+		this._setRefs(this.refs);
 	}
 
 	render () {
 		return (
-			<input type="file"  className="dirUpload-btn" onClick={this._clearInput.bind(this)} onChange={this._onFileSelect.bind(this)} ref="fileSelect"/>
+			<input type="file"  className="dirUpload-btn" onClick={this._click.bind(this)} onChange={this._onFileSelect.bind(this)} ref="fileSelect"/>
     	);
 	}
 
 // custom methods -----------------------------------------------------
 
-	_clearInput () {
+	_click () {
 		React.findDOMNode(this.refs.fileSelect).value = null;
-		Actions.setInitialState();
+		if (this.props.onClick) {this.props.onClick();}
 	}
 
 	_onFileSelect (e) {
@@ -33,6 +32,12 @@ class Upload extends React.Component {
 	        let dirTree = fileUtils.generateTree(files);
 	        let results = {tree: dirTree, list: files};
 			this.props.onChange(results);
+		}
+	}
+
+	_setRefs (refs) {
+		if (this.props.setRefs) {
+			this.props.setRefs(refs);
 		}
 	}
 

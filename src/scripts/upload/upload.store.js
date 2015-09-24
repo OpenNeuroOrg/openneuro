@@ -43,6 +43,7 @@ let UploadStore = Reflux.createStore({
 	 * with any differences passed.
 	 */
 	setInitialState: function (diffs) {
+		console.log('set-initial-state');
 		let data = {
 			activeKey: 1,
 			alert: null,
@@ -221,6 +222,8 @@ let UploadStore = Reflux.createStore({
 	 *
 	 */
 	uploadError () {
+		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
+		if (fileSelect) {fileSelect.value = null;} // clear file input
 		this.setInitialState({
 			alert: 'Error',
 			alertMessage: <span>There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site <a  href="mailto:openfmri@gmail.com" target="_blank">administrator</a></span>
