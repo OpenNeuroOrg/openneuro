@@ -43,7 +43,6 @@ let UploadStore = Reflux.createStore({
 	 * with any differences passed.
 	 */
 	setInitialState: function (diffs) {
-		console.log('set-initial-state');
 		let data = {
 			activeKey: 1,
 			alert: null,
