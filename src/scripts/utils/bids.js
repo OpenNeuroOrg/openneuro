@@ -272,11 +272,17 @@ export default  {
         };
 
         if (notes) {
+            let descriptionString, authorsString;
             for (let note of notes) {
                 if (note.author === 'dataset_description.json') {
-                    description = JSON.parse(note.text);
+                    descriptionString = note.text;
+                }
+                if (note.author === 'authors') {
+                    authorsString = note.text;
                 }
             }
+            if (descriptionString) {description = JSON.parse(descriptionString);}
+            if (authorsString) {description.Authors = JSON.parse(authorsString);}
         }
 
         return description;

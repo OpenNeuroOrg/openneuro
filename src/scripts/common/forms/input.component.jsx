@@ -16,9 +16,9 @@ let Input = React.createClass({
 		let placeholder = this.props.placeholder;
 		let type = this.props.type;
 		let name = this.props.name;
-		let value = this.state.value;
+		let value = this.props.hasOwnProperty('value') ? this.props.value : this.state.value;
 		return (
-			<div className="form-group">
+			<div className="form-group float-label-input">
 				{value.length > 0 ? <label>{placeholder}</label> : null}
 				<input type={type} name={name} placeholder={placeholder} value={value} onChange={this.handleChange} />
 			</div>

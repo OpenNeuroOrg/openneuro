@@ -50,7 +50,9 @@ let ClickToEdit = React.createClass({
 				break;
 			case "object":
 				input = <ArrayInput value={value} onChange={this._handleChange} />;
-				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
+				display = value.map((item) => {
+					return <div className="cte-display" key={item.name}><div className="fadeIn"><span>{item.name} - {item.ORCIDID}</span></div></div>;
+				});
 				break;
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {

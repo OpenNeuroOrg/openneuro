@@ -41,7 +41,7 @@ let Metadata = React.createClass({
 				key:      'Authors',
 				label:    'Authors',
 				value:    description.Authors,
-				onChange: this._updateDescription.bind(this, 'Authors'),
+				onChange: this._updateDescription.bind(this, 'Authors')
 			},
 			{
 				key:      'Acknowledgements',
@@ -122,6 +122,8 @@ let Metadata = React.createClass({
 // custon methods -----------------------------------------------------
 
 	_updateDescription: Actions.updateDescription,
+
+	_updateAuthors: Actions.updateAuthors,
 
 	_uploadAttachment: Actions.uploadAttachment,
 
