@@ -12,7 +12,8 @@ let ArrayInput = React.createClass({
 	getInitialState () {
 		return {
 			name: '',
-			ORCIDID: ''
+			ORCIDID: '',
+			error: null
 		};
 	},
 
@@ -28,6 +29,7 @@ let ArrayInput = React.createClass({
 		return (
 			<div className="cte-edit-array">
 				<div className="cte-array-items">{items}</div>
+				<div className="text-danger">{this.state.error}</div>
 				<Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
 				<Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
 				<button className="btn btn-admin add" onClick={this._add}>add</button>
@@ -44,8 +46,15 @@ let ArrayInput = React.createClass({
 	},
 
 	_add() {
+		this.setState({error: null});
+
+		if (this.state.name.length < 1) {
+			this.setState({error: 'An author name is required.'});
+			return
+		}
+
 		let value = this.props.value;
-		value.push(this.state);
+		value.push({name: this.state.name, ORCIDID: this.state.ORCIDID});
 		this.props.onChange({target: {value: value}});
 		this.setState(this.getInitialState());
 	},
