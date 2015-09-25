@@ -35,7 +35,7 @@ let ArrayInput = React.createClass({
 		)
 	},
 
-// custon methods -----------------------------------------------------
+// custom methods -----------------------------------------------------
 
 	_handleChange(key, event) {
 		let state = {};
