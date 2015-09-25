@@ -33,18 +33,30 @@ let Metadata = React.createClass({
 		let descriptors = (
 			<div>
 				<div className="dataset-readme col-xs-6">
+
 					<ClickToEdit value={README}
 						label="README"
 						editable={canEdit}
 						onChange={this._updateREADME} />
+
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={fsHeader} eventKey='1'>
 					  		<FileTree tree={[dataset]} />
 					  	</Panel>
 			  		</Accordion>
+
 				</div>
 				<div className="dataset-descriptions col-xs-6">
+
+					<div className="description-item">
+						<ClickToEdit value={dataset.DOI}
+							label="DOI Number"
+							editable={canEdit}
+							onChange={this._updateNote.bind(this, 'DOI')} />
+					</div>
+
 					{items}
+
 					<div className="description-item">
 						<ClickToEdit value={dataset.attachments}
 							label="Digital Documents"
@@ -54,6 +66,7 @@ let Metadata = React.createClass({
 							onFileClick={this._downloadAttachment}
 							type="fileArray" />
 					</div>
+
 				</div>
 			</div>
 		);
@@ -75,7 +88,9 @@ let Metadata = React.createClass({
 
 	_deleteAttachment: Actions.deleteAttachment,
 
-	_downloadAttachment: Actions.downloadAttachment
+	_downloadAttachment: Actions.downloadAttachment,
+
+	_updateNote: Actions.updateNote
 
 });
 

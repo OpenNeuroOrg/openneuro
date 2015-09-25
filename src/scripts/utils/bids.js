@@ -233,6 +233,7 @@ export default  {
 
         let dataset = {
             _id:         project._id,
+            DOI:         this.formatDOI(project.notes),
             name:        project.name,
             group:       project.group,
             timestamp:   project.timestamp,
@@ -251,7 +252,7 @@ export default  {
         };
         return dataset;
     },
-    
+
     /**
      * formatDescription
      *
@@ -298,6 +299,25 @@ export default  {
             }
         }
         return README;
+    },
+
+    /**
+     * Format DOI
+     *
+     * Takes a notes array and returns
+     * a DOI number if there is a
+     * DOI note.
+     */
+    formatDOI(notes) {
+        let DOI = '';
+        if (notes) {
+            for (let note of notes) {
+                if (note.author === 'DOI') {
+                    DOI = note.text;
+                }
+            }
+        }
+        return DOI;
     },
 
     /**

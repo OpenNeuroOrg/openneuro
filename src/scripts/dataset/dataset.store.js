@@ -52,7 +52,7 @@ let UserStore = Reflux.createStore({
 	},
 
 // Actions ---------------------------------------------------------------------------
-	
+
 	// Dataset -----------------------------------------------------------------------
 
 	/**
@@ -109,10 +109,10 @@ let UserStore = Reflux.createStore({
             router.transitionTo('datasets');
 		});
 	},
-	
+
 
 	// Metadata ----------------------------------------------------------------------
-	
+
 	/**
 	 * Update Description
 	 *
@@ -158,6 +158,23 @@ let UserStore = Reflux.createStore({
 		};
 		scitran.updateNote(dataset._id, note, callback);
 	},
+
+	/**
+	 * Update Note
+	 *
+	 * Takes a name, value and callback and
+	 * upserts a corresponding note for the
+	 * current dataset.
+	 */
+	 updateNote(name, value, callback) {
+	 	let dataset = this.data.dataset;
+	 	let note = {
+	 		author: name,
+	 		text: value
+	 	};
+	 	scitran.updateNote(dataset._id, note, callback);
+	 },
+
 
 	// Attachments -------------------------------------------------------------------
 
