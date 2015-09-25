@@ -145,21 +145,6 @@ let UserStore = Reflux.createStore({
 	},
 
 	/**
-	 * Update README
-	 *
-	 * Takes a values and updates the current
-	 * dataset README.
-	 */
-	updateREADME(value, callback) {
-		let dataset = this.data.dataset;
-		let note = {
-			author: 'README',
-			text: value
-		};
-		scitran.updateNote(dataset._id, note, callback);
-	},
-
-	/**
 	 * Update Note
 	 *
 	 * Takes a name, value and callback and
