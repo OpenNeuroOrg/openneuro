@@ -40,6 +40,7 @@ let Metadata = React.createClass({
 			{
 				key:      'Authors',
 				label:    'Authors',
+				type:     'authors',
 				value:    description.Authors,
 				onChange: this._updateDescription.bind(this, 'Authors')
 			},

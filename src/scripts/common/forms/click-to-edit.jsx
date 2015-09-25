@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React          from 'react';
-import ArrayInput     from './array-input.jsx';
+import AuthorInput    from './author-input.jsx';
 import FileArrayInput from './file-array-input.jsx';
 import Spinner        from '../partials/spinner.component.jsx';
 import request        from '../../utils/request';
@@ -48,8 +48,8 @@ let ClickToEdit = React.createClass({
 				input = <textarea className="form-control" value={value} onChange={this._handleChange}></textarea>;
 				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
 				break;
-			case "object":
-				input = <ArrayInput value={value} onChange={this._handleChange} />;
+			case "authors":
+				input = <AuthorInput value={value} onChange={this._handleChange} />;
 				let items = value.map((item, index) => {
 					return <div className="fadeIn" key={index}><span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span></div>;
 				});
