@@ -50,20 +50,21 @@ let ClickToEdit = React.createClass({
 				break;
 			case "object":
 				input = <ArrayInput value={value} onChange={this._handleChange} />;
-				display = value.map((item) => {
-					return <div className="cte-display" key={item.name}><div className="fadeIn"><span>{item.name} - {item.ORCIDID}</span></div></div>;
+				let items = value.map((item, index) => {
+					return <div className="fadeIn" key={index}><span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span></div>;
 				});
+				display = <div className="cte-display">{items}</div>;
 				break;
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {
-					return <span key={index}><a onClick={this._download.bind(null, file.name)}>{file.name}</a></span>;
+					return <div className="fadeIn" key={file.name}><span><a onClick={this._download.bind(null, file.name)}>{file.name}</a></span></div>;
 				});
 				input = <FileArrayInput
 						value={this.props.value}
 						onChange={this._handleFile}
 						onDelete={this._handleDelete}
 						onFileClick={this._download}/>;
-				display = <div className="cte-display"><div className="fadeIn">{list}</div></div>;
+				display = <div className="cte-display">{list}</div>;
 				buttons = (
 					<div className="btn-wrapper">
 						<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._cancel}>done</button>
