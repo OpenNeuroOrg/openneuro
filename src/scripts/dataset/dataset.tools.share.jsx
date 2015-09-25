@@ -4,7 +4,7 @@ import React     from 'react';
 import Actions   from './dataset.actions.js';
 import bids      from '../utils/bids';
 import scitran   from '../utils/scitran';
-import Typeahead from '../common/forms/typeahead.jsx';
+import Input     from '../common/forms/input.component.jsx';
 
 export default class Share extends React.Component {
 
@@ -28,9 +28,15 @@ export default class Share extends React.Component {
 
 	render() {
 
+		let accessKey = {
+			admin: 'Administrator',
+			rw: 'Can edit',
+			ro: 'Can view'
+		};
+
 		let permissions = this.state.permissions.map((user) => {
 			return (
-				<div key={user._id} className="cte-array-item">{user._id} <span>{user.access}</span>
+				<div key={user._id} className="cte-array-item">{user._id} <span>- {accessKey[user.access]}</span>
 					<button className="cte-remove-button btn btn-admin warning" onClick={this._removeUser.bind(this, user._id)}>
 						<i className="fa fa-times"></i>
 					</button>
@@ -47,12 +53,12 @@ export default class Share extends React.Component {
 				<h5 className="add-members">Shared With</h5>
 				<div>
 					<div className="text-danger">{this.state.error}</div>
-					<Typeahead options={this.state.users} filter={this._filter} format={'_id'} onChange={this._typeaheadChange.bind(this)} value={this.state.input}/>
+					<Input value={this.state.input} onChange={this._inputChange.bind(this)} placeholder="user email" />
 					<select className="selectBox-style" onChange={this._selectChange.bind(this)} value={this.state.select}>
 						<option value="" disabled>access level</option>
-						<option value="ro">Read only</option>
-						<option value="rw">Read write</option>
-						<option value="admin">Admin</option>
+						<option value="ro">Can view</option>
+						<option value="rw">Can edit</option>
+						<option value="admin">Administrator</option>
 					</select>
 					<span className="caret-down"></span>
 					<button className="btn-admin admin-blue" onClick={this._addUser.bind(this)}>add</button>
@@ -67,19 +73,8 @@ export default class Share extends React.Component {
 		this.setState({edit: !this.state.edit});
 	}
 
-	_filter(option, value) {
-		if (option._id.indexOf(value) > -1) {
-			return true;
-		} else if (option.firstname.indexOf(value) > -1) {
-			return true;
-		} else if (option.lastname.indexOf(value) > -1) {
-			return true;
-		}
-		return false;
-	}
-
-	_typeaheadChange (input) {
-		this.setState({input});
+	_inputChange (e) {
+		this.setState({input: e.target.value});
 	}
 
 	_selectChange (e) {
@@ -88,10 +83,34 @@ export default class Share extends React.Component {
 	}
 
 	_addUser() {
+		this.setState({error: null});
+
+		// check name and access level are selected
 		if (this.state.input.length < 1 || this.state.select.length < 1) {
 			this.setState({error: 'You must enter an email address and select an access level.'});
 			return;
 		}
+
+		// check if user is already a member
+		let isMember = false;
+		for (let user of this.state.permissions) {
+			if (this.state.input === user._id) {isMember = true};
+		}
+		if (isMember) {
+			this.setState({error: 'That user is already a member of this dataset.'});
+		}
+
+		// check if user exists
+		let userExists = false;
+		for (let user of this.state.users) {
+			if (this.state.input === user._id) {userExists = true;}
+		}
+		if (!userExists) {
+			this.setState({error: 'A user does not exist with that email. Make sure you are entering the full email address of another user.'});
+			return;
+		}
+
+		// add member
 		let role = {
 			_id: this.state.input,
 			access: this.state.select
