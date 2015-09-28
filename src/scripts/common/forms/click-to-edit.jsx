@@ -57,7 +57,7 @@ let ClickToEdit = React.createClass({
 				break;
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {
-					return <div className="fadeIn" key={file.name}><span><a onClick={this._download.bind(null, file.name)}>{file.name}</a></span></div>;
+					return <div className="fadeIn" key={file.name}><span><a className="file-name-link" onClick={this._download.bind(null, file.name)}><i className="fa fa-download"></i> {file.name}</a></span></div>;
 				});
 				input = <FileArrayInput
 						value={this.props.value}
@@ -66,7 +66,7 @@ let ClickToEdit = React.createClass({
 						onFileClick={this._download}/>;
 				display = <div className="cte-display">{list}</div>;
 				buttons = (
-					<div className="btn-wrapper">
+					<div className="btn-wrapper clearfix">
 						<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._cancel}>done</button>
 					</div>
 				)
@@ -74,7 +74,7 @@ let ClickToEdit = React.createClass({
 		}
 
 		let edit = (
-			<div className="cte-edit fadeIn">
+			<div className="cte-edit fadeIn clearfix">
 				{input}
 				{buttons}
 				<Spinner active={this.state.loading} />

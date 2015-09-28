@@ -34,8 +34,13 @@
 		border-bottom:1px solid #eee;
 		border-right:1px solid #eee;
 		border-left:1px solid #eee;
-				&:first-child{
+		&:first-child{
 			border-top:1px solid #eee;
+		}
+		.file-name-link{
+			i{
+				font-size: 13px;
+			}
 		}
 	}
 	.dataset-readme{
@@ -176,11 +181,43 @@
 		background:#f4f4f4;
 		border:1px solid #ddd;
 		.cte-array-item{
+			overflow:hidden;
 			padding:10px;
+			a.file-name{
+				float: left;
+				padding:6px;
+			}
+			.btn-wrap{
+				float: right;
+			}
+			padding: 6px;
+			a.delete-Wrap{float: left;}
 			&:nth-child(odd){
 				background:#eee;
 			}
 	
+		}
+	}
+	.cte-edit-array{
+		.btn0-wrapper{
+			.btn-admin.admin-blue{
+				margin-top: 4px;
+			}
+		}
+		input[type="file"]{
+			float: left;
+			width: 85px;
+			height: 29px;
+			font-size: 15px;
+		    &:before{
+			    border-radius: 2px;
+			    padding: 7px;
+			    border: none;
+			    box-shadow: none;
+				width: 85px;
+				font-size: 13px;
+				height: 29px;
+			}
 		}
 	}
 }
