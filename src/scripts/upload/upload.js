@@ -29,7 +29,7 @@ export default {
         let name = res.req._data.name;
         this.progressEnd(name);
         if (err) {
-            actions.uploadError();
+            this.error(err, res.req);
         } else {
             callback(err, res);
         }
@@ -42,7 +42,7 @@ export default {
      */
     uploadFile (level, id, file, tag) {
         let url = config.scitran.url +  level + '/' + id + '/file/' + file.name;
-        uploads.add({url: url, file: file, tag: tag, progressStart: this.progressStart, progressEnd: this.progressEnd});
+        uploads.add({url: url, file: file, tag: tag, progressStart: this.progressStart, progressEnd: this.progressEnd, error: this.error});
     },
 
     /**
@@ -52,9 +52,9 @@ export default {
      * and recurses through and uploads all the files.
      * Additionally takes a progress callback that gets
      * updated at the start and end of every file or
-     * folder upload request.
+     * folder upload request and an error callback.
      */
-    upload (userId, fileTree, count, progress) {
+    upload (userId, fileTree, count, progress, error) {
         this.completed = 0;
         this.count = count;
         this.currentProjectId = null;
@@ -68,7 +68,9 @@ export default {
             this.completed++;
             progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles}, this.currentProjectId);
         }
-        
+        this.error = (err, req) => {
+            if (error) {error(err, req);}
+        }
         let existingProjectId = null;
         scitran.getProjects(true, (projects) => {
             for (let project of projects) {

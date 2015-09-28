@@ -101,8 +101,10 @@ let UploadStore = Reflux.createStore({
 	 *
 	 * Takes a filelist, runs BIDS validation checks
 	 * against it, and sets any errors to the state.
+	 * Takes an optional boolean parameter representing
+	 * whether this is already known as a resume.
 	 */
-	validate (selectedFiles) {
+	validate (selectedFiles, resuming) {
 		let self = this;
 		self.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
         validate.BIDS(selectedFiles, function (errors, warnings) {
@@ -121,12 +123,21 @@ let UploadStore = Reflux.createStore({
 			});
 
 			if (errors.length === 0 && warnings.length === 0) {
-	        	self.checkExists(self.data.tree);
+	        	self.checkExists(self.data.tree, resuming);
 	        }
         });
 	},
 
-	checkExists (fileTree) {
+	/**
+	 * Check Exists
+	 *
+	 * Takins a filetree and a boolean representing
+	 * whether this is a resumed upload. If it isn't
+	 * it check for existing dataset with the same name
+	 * and group.
+	 */
+	checkExists (fileTree, resuming) {
+
 		// rename dirName before upload
 		fileTree[0].name = this.data.dirName;
 
@@ -137,21 +148,25 @@ let UploadStore = Reflux.createStore({
 
 		let self = this;
 		let userId = userStore.data.scitran._id;
-		scitran.getProjects(true, function (projects) {
-			let existingProjectId;
-			for (let project of projects) {
-                if (project.name === fileTree[0].name && project.group === userId) {
-                    existingProjectId = project._id;
-                    break;
-                }
-            }
+		if (!resuming) {
+			scitran.getProjects(true, function (projects) {
+				let existingProjectId;
+				for (let project of projects) {
+	                if (project.name === fileTree[0].name && project.group === userId) {
+	                    existingProjectId = project._id;
+	                    break;
+	                }
+	            }
 
-            if (existingProjectId) {
-				self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: 4});
-            } else {
-            	self.upload(fileTree);
-            }
-		});
+	            if (existingProjectId) {
+					self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: 4});
+	            } else {
+	            	self.upload(fileTree);
+	            }
+			});
+		} else {
+			self.upload(fileTree);
+		}
 	},
 
 	/**
@@ -175,16 +190,20 @@ let UploadStore = Reflux.createStore({
 		let datasetsUpdated = false;
 		
 		upload.upload(userStore.data.scitran._id, fileTree, count, (progress, projectId) => {
-			projectId = projectId ? projectId : this.data.projectId;
-			this.update({progress: progress, uploading: true, projectId: projectId});
-			if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
-			window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
-			if (progress.total === progress.completed) {
-				let note = {author: 'uploadStatus', text: 'complete'};
-                scitran.updateNote(projectId, note, (res) => {
-					this.uploadComplete(projectId);
-                });
+			if (this.data.alert !== 'Error') {
+				projectId = projectId ? projectId : this.data.projectId;
+				this.update({progress: progress, uploading: true, projectId: projectId});
+				if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
+				window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
+				if (progress.total === progress.completed) {
+					let note = {author: 'uploadStatus', text: 'complete'};
+	                scitran.updateNote(projectId, note, (res) => {
+						this.uploadComplete(projectId);
+	                });
+				}
 			}
+		}, () => {
+			this.uploadError();
 		});
 	},
 
@@ -217,7 +236,12 @@ let UploadStore = Reflux.createStore({
 	 *
 	 */
 	uploadError () {
-		this.setInitialState({alert: 'Error', alertMessage: <span>There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site <a  href="mailto:openfmri@gmail.com" target="_blank">administrator</a></span>});
+		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
+		if (fileSelect) {fileSelect.value = null;} // clear file input
+		this.setInitialState({
+			alert: 'Error',
+			alertMessage: <span>There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site <a  href="mailto:openfmri@gmail.com" target="_blank">administrator</a></span>
+		});
 		window.onbeforeunload = function() {};
 	},
 

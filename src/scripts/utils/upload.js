@@ -49,7 +49,7 @@ let upload = {
             body: req.file
         }, function (err, res) {
         	if (err) {
-        		uploadActions.uploadError();
+        		req.error(err, req);
         	} else {
         		req.progressEnd(res.req._data.name);
 	        	self.activeRequests--;

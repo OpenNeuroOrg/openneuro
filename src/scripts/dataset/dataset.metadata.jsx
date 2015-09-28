@@ -18,17 +18,81 @@ let Metadata = React.createClass({
 		let README      = dataset ? dataset.README : null;
 		let fsHeader 	= dataset.name + " File Structure";
 
-		let items = [];
-		for (let key in description) {
-			items.push(
-				<div className="description-item" key={key}>
-					<ClickToEdit value={description[key]}
-						label={key}
+		let metatdata = [
+			{
+				key:      'DOI',
+				label:    'DOI Number',
+				value:    dataset.DOI,
+				onChange: this._updateNote.bind(this, 'DOI'),
+			},
+			{
+				key:      'Name',
+				label:    'Name',
+				value:    description.Name,
+				onChange: this._updateDescription.bind(this, 'Name'),
+			},
+			{
+				key:      'License',
+				label:    'License',
+				value:    description.License,
+				onChange: this._updateDescription.bind(this, 'License'),
+			},
+			{
+				key:      'Authors',
+				label:    'Authors',
+				type:     'authors',
+				value:    description.Authors,
+				onChange: this._updateDescription.bind(this, 'Authors')
+			},
+			{
+				key:      'Acknowledgements',
+				label:    'Acknowledgements',
+				value:    description.Acknowledgements,
+				onChange: this._updateDescription.bind(this, 'Acknowledgements'),
+			},
+			{
+				key:      'HowToAcknowledge',
+				label:    'How To Acknowledge',
+				value:    description.HowToAcknowledge,
+				onChange: this._updateDescription.bind(this, 'HowToAcknowledge'),
+			},
+			{
+				key:      'Funding',
+				label:    'Funding',
+				value:    description.Funding,
+				onChange: this._updateDescription.bind(this, 'Funding'),
+			},
+			{
+				key:      'ReferencesAndLinks',
+				label:    'References And Links',
+				value:    description.ReferencesAndLinks,
+				onChange: this._updateDescription.bind(this, 'ReferencesAndLinks'),
+			},
+			{
+				key:         'DigitalDocuments',
+				label:       'Digital Documents',
+				type:        'fileArray',
+				value:       dataset.attachments,
+				onChange:    this._uploadAttachment,
+				onDelete:    this._deleteAttachment,
+				onFileClick: this._downloadAttachment
+			},
+		];
+
+		let items = metatdata.map((item) => {
+			return (
+				<div className="description-item" key={item.key}>
+					<ClickToEdit
+						value={item.value}
+						label={item.label}
+						type={item.type}
 						editable={canEdit}
-						onChange={this._updateDescription.bind(this, key)} />
+						onChange={item.onChange}
+						onDelete={item.onDelete}
+						onFileClick={item.onFileClick} />
 				</div>
 			);
-		}
+		});
 
 		let descriptors = (
 			<div>
@@ -36,7 +100,7 @@ let Metadata = React.createClass({
 					<ClickToEdit value={README}
 						label="README"
 						editable={canEdit}
-						onChange={this._updateREADME} />
+						onChange={this._updateNote.bind(this, 'README')} />
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={fsHeader} eventKey='1'>
 					  		<FileTree tree={[dataset]} />
@@ -45,15 +109,6 @@ let Metadata = React.createClass({
 				</div>
 				<div className="dataset-descriptions col-xs-6">
 					{items}
-					<div className="description-item">
-						<ClickToEdit value={dataset.attachments}
-							label="Digital Documents"
-							editable={canEdit}
-							onChange={this._uploadAttachment}
-							onDelete={this._deleteAttachment}
-							onFileClick={this._downloadAttachment}
-							type="fileArray" />
-					</div>
 				</div>
 			</div>
 		);
@@ -69,13 +124,15 @@ let Metadata = React.createClass({
 
 	_updateDescription: Actions.updateDescription,
 
-	_uploadAttachment: Actions.uploadAttachment,
+	_updateAuthors: Actions.updateAuthors,
 
-	_updateREADME: Actions.updateREADME,
+	_uploadAttachment: Actions.uploadAttachment,
 
 	_deleteAttachment: Actions.deleteAttachment,
 
-	_downloadAttachment: Actions.downloadAttachment
+	_downloadAttachment: Actions.downloadAttachment,
+
+	_updateNote: Actions.updateNote
 
 });
 

@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React          from 'react';
-import ArrayInput     from './array-input.jsx';
+import AuthorInput    from './author-input.jsx';
 import FileArrayInput from './file-array-input.jsx';
 import Spinner        from '../partials/spinner.component.jsx';
 import request        from '../../utils/request';
@@ -48,20 +48,23 @@ let ClickToEdit = React.createClass({
 				input = <textarea className="form-control" value={value} onChange={this._handleChange}></textarea>;
 				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
 				break;
-			case "object":
-				input = <ArrayInput value={value} onChange={this._handleChange} />;
-				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
+			case "authors":
+				input = <AuthorInput value={value} onChange={this._handleChange} />;
+				let items = value.map((item, index) => {
+					return <div className="fadeIn" key={index}><span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span></div>;
+				});
+				display = <div className="cte-display">{items}</div>;
 				break;
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {
-					return <span key={index}><a onClick={this._download.bind(null, file.name)}>{file.name}</a></span>;
+					return <div className="fadeIn" key={file.name}><span><a onClick={this._download.bind(null, file.name)}>{file.name}</a></span></div>;
 				});
 				input = <FileArrayInput
 						value={this.props.value}
 						onChange={this._handleFile}
 						onDelete={this._handleDelete}
 						onFileClick={this._download}/>;
-				display = <div className="cte-display"><div className="fadeIn">{list}</div></div>;
+				display = <div className="cte-display">{list}</div>;
 				buttons = (
 					<div className="btn-wrapper">
 						<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._cancel}>done</button>
