@@ -27,15 +27,17 @@ let FileArrayInput = React.createClass({
 		let items = this.props.value.map((item, index) => {
 			return (
 				<div key={index} className="cte-array-item">
-					<a onClick={this._fileClick.bind(null, item.name)}>{item.name}</a>
-					<WarnButton action={this._remove.bind(null, item.name, index)} />
+					<a className="file-name" onClick={this._fileClick.bind(null, item.name)}>{item.name}</a>
+					<div className="btn-wrap">
+						<WarnButton action={this._remove.bind(null, item.name, index)} />
+					</div>
 				</div>
 			);
 		});
 
 		return (
 			<div className="cte-edit-array">
-				<div className="cte-array-items">{items}</div>
+				<div className="cte-array-items clearfix">{items}</div>
 				{this.state.loading ? <Spinner active={true} /> : <input type="file" onChange={this._handleChange}/>}
 			</div>
 		)
