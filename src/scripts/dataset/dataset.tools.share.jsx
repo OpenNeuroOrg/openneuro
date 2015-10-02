@@ -46,14 +46,14 @@ export default class Share extends React.Component {
 
 		return (
 			<div className="dataset">
-				<h5>Members</h5>
+				<h5>Dataset shared with:</h5>
 				<div className="cte-array-items">
 					{permissions}
 				</div>
-				<h5 className="add-members">Shared With</h5>
+				<h5 className="add-members">Enter a user's email address and select access level to share</h5>
 				<div>
 					<div className="text-danger">{this.state.error}</div>
-					<Input value={this.state.input} onChange={this._inputChange.bind(this)} placeholder="user email" />
+					<Input value={this.state.input} onChange={this._inputChange.bind(this)} />
 					<select className="selectBox-style" onChange={this._selectChange.bind(this)} value={this.state.select}>
 						<option value="" disabled>access level</option>
 						<option value="ro">Can view</option>
@@ -61,7 +61,7 @@ export default class Share extends React.Component {
 						<option value="admin">Administrator</option>
 					</select>
 					<span className="caret-down"></span>
-					<button className="btn-admin admin-blue" onClick={this._addUser.bind(this)}>add</button>
+					<button className="btn-admin admin-blue" onClick={this._addUser.bind(this)}>share</button>
 				</div>
 			</div>
     	);
@@ -87,7 +87,7 @@ export default class Share extends React.Component {
 
 		// check name and access level are selected
 		if (this.state.input.length < 1 || this.state.select.length < 1) {
-			this.setState({error: 'You must enter an email address and select an access level.'});
+			this.setState({error: 'You must enter a valid email address and select an access level'});
 			return;
 		}
 
@@ -97,7 +97,7 @@ export default class Share extends React.Component {
 			if (this.state.input === user._id) {isMember = true};
 		}
 		if (isMember) {
-			this.setState({error: 'That user is already a member of this dataset.'});
+			this.setState({error: 'This dataset is already shared with this user'});
 		}
 
 		// check if user exists
@@ -106,7 +106,7 @@ export default class Share extends React.Component {
 			if (this.state.input === user._id) {userExists = true;}
 		}
 		if (!userExists) {
-			this.setState({error: 'A user does not exist with that email. Make sure you are entering the full email address of another user.'});
+			this.setState({error: 'A user does not exist with that email. Make sure you enter a valid email address for a registered user'});
 			return;
 		}
 
