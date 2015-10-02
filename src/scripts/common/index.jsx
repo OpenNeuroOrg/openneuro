@@ -45,7 +45,7 @@ let App = React.createClass({
 			);
 		}
 
-		if(bowser.chrome && showUpload){
+		if(!bowser.chrome && showUpload){
 			sidebar = (
 				<div className="col-xs-4 tasks-col fadeIn no-chrome">
 					<div className="no-chrome-overlay">Uploading the file structure of a BIDS datasets requires Chrome. Please switch browsers to use this feature</div>
