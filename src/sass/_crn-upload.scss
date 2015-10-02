@@ -10,22 +10,33 @@
 	100% {opacity: 1;}
 }
 
-.tasks-col .no-chrome-overlay{
-    right: 0;
-    background: #000;
-    background-color: rgba(0,0,0,0.85);
-    position: fixed;
-    height: 100%;
-    z-index: 9000;
-    width: 33.3333%;
-    padding:100px 20px;
-    text-align: center;
-    color: $white;
-    font-size: 40px;
-    line-height: 50px;
-    text-shadow: 1px 2px 2px #000;
-}
+.tasks-col.no-chrome{
+	.right-sidebar{
+		-webkit-filter: blur(2px);
+	    -moz-filter: blur(2px);
+	    -o-filter: blur(2px);
+	    -ms-filter: blur(2px);
+	    filter: blur(2px);
+	}
 
+	.no-chrome-overlay{
+
+	    right: 0;
+	    background: #000;
+	    background-color: rgba(0,0,0,.7);
+	    position: fixed;
+	    height: 100%;
+	    z-index: 9000;
+	    width: 33.3333%;
+	    padding:100px 20px;
+	    text-align: center;
+	    color: #FBFBFB;
+	    font-size: 20px;
+	    line-height: 25px;
+	    text-shadow: 1px 1px 2px #000;
+	
+	}
+}
 .tasks-col{
 	.right-sidebar{
 		.message{

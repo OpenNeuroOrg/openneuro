@@ -219,7 +219,38 @@
 				height: 29px;
 			}
 		}
+
+
+		.form-inline{
+			.form-group {
+				width: 40%;
+				label{
+					position: absolute;
+				    font-size: 10px;
+				    top: -9px;
+				    background-color: #fff;
+				}
+				input{
+					font-size: 12px;
+					padding: 10px;
+					height: 35px;
+					width: 99%;
+					margin: 0 .5%;
+				}
+			}
+			.btn.btn-admin{
+				background-color: rgba(0, 0, 0, 0);
+				border: none;
+				width: 20%;
+				padding:0;
+				text-align: center;
+
+			}
+		}
 	}
+
+
+
 }
 
 .dataset-status{
