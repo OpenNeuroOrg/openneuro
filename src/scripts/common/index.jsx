@@ -35,7 +35,6 @@ let App = React.createClass({
 		let open 			= <span><span className="sr-only">Open</span> «</span>;
 		let sidebar;
 		let leftnav;
-		let sidebarNoChrome;
 		let toggleSidebar;
 
 		if (UserStore.hasToken()){
@@ -46,12 +45,15 @@ let App = React.createClass({
 			);
 		}
 
-		if(!bowser.chrome){
-			sidebarNoChrome = <div className="no-chrome-overlay">Uploading the file structure of a BIDS datasets requires Chrome. Please switch browsers to use this feature</div>;
-		}
-
-		if (showUpload) {
-			sidebar = <div className="col-xs-4 tasks-col fadeIn">{sidebarNoChrome}<Upload /></div>
+		if(bowser.chrome && showUpload){
+			sidebar = (
+				<div className="col-xs-4 tasks-col fadeIn no-chrome">
+					<div className="no-chrome-overlay">Uploading the file structure of a BIDS datasets requires Chrome. Please switch browsers to use this feature</div>
+					<Upload />
+				</div>
+			);
+		}else if(showUpload){
+			sidebar = <div className="col-xs-4 tasks-col fadeIn"><Upload /></div>
 		}
 
 		if (showLeftNav) {

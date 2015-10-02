@@ -30,9 +30,11 @@ let ArrayInput = React.createClass({
 			<div className="cte-edit-array">
 				<div className="cte-array-items">{items}</div>
 				<div className="text-danger">{this.state.error}</div>
-				<Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
-				<Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
-				<button className="btn btn-admin add" onClick={this._add}>add</button>
+				<div className="form-inline">
+					<Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
+					<Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
+					<button className="btn btn-admin add" onClick={this._add}>add</button>
+				</div>
 			</div>
 		)
 	},

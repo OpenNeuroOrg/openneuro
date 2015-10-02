@@ -77,11 +77,11 @@ let Dataset = React.createClass({
 			);
 		} else {
 			let message;
-			if (status === 404) {message = 'Dataset not found.';}
-			if (status === 403) {message = 'You are not authorized to view this dataset.';}
+			if (status === 404) {message = 'Dataset not found';}
+			if (status === 403) {message = 'You are not authorized to view this dataset';}
 			content = (
 				<div>
-					<h1>{message}</h1>
+					<h2 className="message-4">{message}</h2>
 				</div>
 			);
 		}
