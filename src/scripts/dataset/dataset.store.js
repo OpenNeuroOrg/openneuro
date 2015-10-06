@@ -103,11 +103,9 @@ let UserStore = Reflux.createStore({
 	 *
 	 */
 	downloadDataset() {
-		console.log('download datasetId');
 		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
-			console.log(res);
-			// let ticket = res.body.ticket;
-			// window.open(res.req.url + ticket);
+			let ticket = res.body.ticket;
+			window.open(res.req.url.split('?')[0] + '?ticket=' + ticket);
 		});
 	},
 

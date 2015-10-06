@@ -191,7 +191,12 @@ export default  {
     getBIDSDownloadTicket (projectId, callback) {
         request.post(config.scitran.url + 'download', {
             query: {format: 'bids'},
-            body: [{_id: projectId, level: 'project'}]
+            body: {
+                nodes:[
+                    {_id: projectId, level: 'project'}
+                ],
+                optional: false
+            }
         }, callback);
     },
 
