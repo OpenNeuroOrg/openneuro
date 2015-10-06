@@ -126,9 +126,27 @@ export default {
                             author: subject.name,
                             text: contents
                         };
-                        scitran.updateNote(projectId, note);
-                        self.progressEnd(subject.name);
+                        scitran.updateNote(projectId, note, () => {
+                            if (subject.name === 'dataset_description.json') {
+                                let description = JSON.parse(contents);
+                                let authors = [];
+                                for (let i = 0; i < description.Authors.length; i++) {
+                                    let author = description.Authors[i];
+                                    authors.push({name: author, ORCIDID: ''});
+                                }
+                                let authorsNote = {
+                                    author: 'authors',
+                                    text: JSON.stringify(authors)
+                                };
+                                scitran.updateNote(projectId, authorsNote, () => {
+                                    self.progressEnd(subject.name);
+                                });
+                            } else {
+                                self.progressEnd(subject.name);
+                            }
+                        });
                     });
+
                 } else {
                     self.uploadFile('projects', projectId, subject, 'project');
                 }
