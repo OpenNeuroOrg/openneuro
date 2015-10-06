@@ -100,6 +100,24 @@ export default  {
         });
     },
 
+    /**
+     * Get Metadata
+     *
+     */
+    getMetadata(project, callback) {
+        for (let file of project.files) {
+            if (file.name === 'README') {
+                // console.log('found README');
+            }
+            if (file.name === 'dataset_description.json') {
+                // console.log('found description');
+            }
+        }
+        scitran.getFile('projects', project._id, 'README', (err, res) => {
+            callback(res.text);
+        });
+    },
+
 
     /**
      * Get Dataset
@@ -112,26 +130,29 @@ export default  {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
             let dataset = this.formatDataset(project);
-            this.getSubjects(res.body._id, (subjects) => {
-                dataset.children = dataset.children.concat(subjects);
-                async.each(subjects, (subject, cb) => {
-                    this.getSessions(projectId, subject._id, (sessions) => {
-                        subject.children = subject.children.concat(sessions);
-                        async.each(sessions, (session, cb1) => {
-                            this.getModalities(session._id, (modalities) => {
-                                session.children = session.children.concat(modalities);
-                                async.each(modalities, (modality, cb2) => {
-                                    scitran.getAcquisition(modality._id, (res) => {
-                                        for (let file of res.files) {file.name = file.filename;}
-                                        modality.children = res.files;
-                                        modality.name = modality.label;
-                                        cb2();
-                                    });
-                                }, cb1);
-                            });
-                        }, cb);
-                    });
-                }, () => {callback(dataset)});
+            this.getMetadata(project, (README, description) => {
+                dataset.README = README;
+                this.getSubjects(res.body._id, (subjects) => {
+                    dataset.children = dataset.children.concat(subjects);
+                    async.each(subjects, (subject, cb) => {
+                        this.getSessions(projectId, subject._id, (sessions) => {
+                            subject.children = subject.children.concat(sessions);
+                            async.each(sessions, (session, cb1) => {
+                                this.getModalities(session._id, (modalities) => {
+                                    session.children = session.children.concat(modalities);
+                                    async.each(modalities, (modality, cb2) => {
+                                        scitran.getAcquisition(modality._id, (res) => {
+                                            for (let file of res.files) {file.name = file.filename;}
+                                            modality.children = res.files;
+                                            modality.name = modality.label;
+                                            cb2();
+                                        });
+                                    }, cb1);
+                                });
+                            }, cb);
+                        });
+                    }, () => {callback(dataset)});
+                });
             });
         });
     },
