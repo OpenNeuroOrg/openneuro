@@ -11,6 +11,7 @@ var Actions = Reflux.createActions([
 	'loadUsers',
 	'publish',
 	'deleteDataset',
+	'downloadDataset',
 	'setInitialState'
 ]);
 

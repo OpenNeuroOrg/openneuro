@@ -184,6 +184,17 @@ export default  {
         }, callback);
     },
 
+    /**
+     * Get BIDS Download Ticket
+     *
+     */
+    getBIDSDownloadTicket (projectId, callback) {
+        request.post(config.scitran.url + 'download', {
+            query: {format: 'bids'},
+            body: [{_id: projectId, level: 'project'}]
+        }, callback);
+    },
+
 // Delete ---------------------------------------------------------------------------------
 
     /**

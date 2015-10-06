@@ -37,6 +37,9 @@ let Tools = React.createClass({
 		}
 		return (
 			<ul className="nav nav-pills tools clearfix">
+				<li role="presentation">
+					<button className="btn btn-admin warning" onClick={this._downloadDataset}>Download</button>
+				</li>
 				{publish}
 	            <li role="presentation" >
 	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
@@ -69,7 +72,9 @@ let Tools = React.createClass({
 
 	_hideModal() {
 		this.setState({showModal: false});
-	}
+	},
+
+	_downloadDataset: Actions.downloadDataset
 
 });
 

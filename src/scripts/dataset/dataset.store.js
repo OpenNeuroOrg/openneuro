@@ -99,6 +99,19 @@ let UserStore = Reflux.createStore({
 	},
 
 	/**
+	 * Download Dataset
+	 *
+	 */
+	downloadDataset() {
+		console.log('download datasetId');
+		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
+			console.log(res);
+			// let ticket = res.body.ticket;
+			// window.open(res.req.url + ticket);
+		});
+	},
+
+	/**
 	 * Delete Dataset
 	 *
 	 * Takes a datsetId, deletes the dataset, and returns the user
