@@ -52,7 +52,7 @@ let Metadata = React.createClass({
 			},
 			{
 				key:      'HowToAcknowledge',
-				label:    'How To Acknowledge',
+				label:    'How to Acknowledge',
 				value:    description.HowToAcknowledge,
 				onChange: this._updateDescription.bind(this, 'HowToAcknowledge'),
 			},
@@ -64,7 +64,7 @@ let Metadata = React.createClass({
 			},
 			{
 				key:      'ReferencesAndLinks',
-				label:    'References And Links',
+				label:    'References and Links',
 				value:    description.ReferencesAndLinks,
 				onChange: this._updateDescription.bind(this, 'ReferencesAndLinks'),
 			},
