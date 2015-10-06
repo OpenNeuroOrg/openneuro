@@ -33,8 +33,8 @@ let ArrayInput = React.createClass({
 				<div className="form-inline">
 					<Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
 					<Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
-					<button className="btn btn-admin add" onClick={this._add}>add</button>
 				</div>
+				<button className="btn btn-admin add" onClick={this._add}>add</button>
 			</div>
 		)
 	},
@@ -65,6 +65,7 @@ let ArrayInput = React.createClass({
 		let array = this.props.value;
 		array.splice(index, 1);
 		this.setState({value: array});
+		this.props.onChange({target: {value: array}});
 	}
 
 });

@@ -250,6 +250,7 @@ export default  {
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
         };
+        dataset.authors = dataset.description.Authors;
         return dataset;
     },
 

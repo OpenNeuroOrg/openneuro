@@ -123,7 +123,7 @@ let UserStore = Reflux.createStore({
 		let dataset = this.data.dataset;
 		let description = dataset.description;
 		description[key] = value;
-		dataset.description = description;
+		if (key !== 'Authors'){description.Authors = dataset.authors;}
 		this.saveDescription(description, callback);
 		this.update({dataset: dataset});
 	},
