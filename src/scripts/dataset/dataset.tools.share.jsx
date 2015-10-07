@@ -99,6 +99,7 @@ export default class Share extends React.Component {
 		}
 		if (isMember) {
 			this.setState({error: 'This dataset is already shared with this user'});
+			return;
 		}
 
 		// check if user exists
