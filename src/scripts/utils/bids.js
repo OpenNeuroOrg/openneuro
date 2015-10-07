@@ -106,19 +106,35 @@ export default  {
      */
     getMetadata(project, callback) {
 
-        // NEED LOGIC TO HANDLE CASE WHERE README OR DESCRIPTION DON'T EXIST
+        // determine which metadata files are available
+        let metadataFiles = [],
+            metadata = {};
         for (let file of project.files) {
-            if (file.name === 'README') {
-                // console.log('found README');
+            if (file.filename === 'README') {
+                metadataFiles.push('README');
             }
-            if (file.name === 'dataset_description.json') {
-                // console.log('found description');
+            if (file.filename === 'dataset_description.json') {
+                metadataFiles.push('dataset_description.json');
             }
         }
-        scitran.getFile('projects', project._id, 'README', (err, README) => {
-            scitran.getFile('projects', project._id, 'dataset_description.json', (err, description) => {
-                callback(README.text, JSON.parse(description.text));
+
+        // load content of available metadata
+        async.each(metadataFiles, (filename, cb) => {
+            scitran.getFile('projects', project._id, filename, (err, file) => {
+                let contents;
+                try {
+                    contents = JSON.parse(file.text);
+                }
+                catch (err) {
+                    contents = file.text;
+                }
+                finally {
+                    metadata[filename] = contents;
+                }
+                cb();
             });
+        }, () => {
+            callback(metadata);
         });
     },
 
@@ -133,10 +149,9 @@ export default  {
         scitran.getProject(projectId, (res) => {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
-            this.getMetadata(project, (README, description) => {
-                let dataset = this.formatDataset(project, description);
-                dataset.README = README;
-                // dataset.description = description;
+            this.getMetadata(project, (metadata) => {
+                let dataset = this.formatDataset(project, metadata['dataset_description.json']);
+                dataset.README = metadata.README;
                 this.getSubjects(res.body._id, (subjects) => {
                     dataset.children = dataset.children.concat(subjects);
                     async.each(subjects, (subject, cb) => {

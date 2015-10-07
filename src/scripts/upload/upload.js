@@ -181,7 +181,7 @@ export default {
                     self.handleUploadResponse(err, res, function () {
                         self.uploadModalities(session.children, res.body._id);
                     });
-                }); 
+                });
             } else {
                 self.uploadFile('sessions', subjectId, session, 'subject');
             }
