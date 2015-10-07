@@ -105,6 +105,8 @@ export default  {
      *
      */
     getMetadata(project, callback) {
+
+        // NEED LOGIC TO HANDLE CASE WHERE README OR DESCRIPTION DON'T EXIST
         for (let file of project.files) {
             if (file.name === 'README') {
                 // console.log('found README');
@@ -113,8 +115,10 @@ export default  {
                 // console.log('found description');
             }
         }
-        scitran.getFile('projects', project._id, 'README', (err, res) => {
-            callback(res.text);
+        scitran.getFile('projects', project._id, 'README', (err, README) => {
+            scitran.getFile('projects', project._id, 'dataset_description.json', (err, description) => {
+                callback(README.text, JSON.parse(description.text));
+            });
         });
     },
 
@@ -129,9 +133,10 @@ export default  {
         scitran.getProject(projectId, (res) => {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
-            let dataset = this.formatDataset(project);
             this.getMetadata(project, (README, description) => {
+                let dataset = this.formatDataset(project, description);
                 dataset.README = README;
+                // dataset.description = description;
                 this.getSubjects(res.body._id, (subjects) => {
                     dataset.children = dataset.children.concat(subjects);
                     async.each(subjects, (subject, cb) => {
@@ -241,7 +246,7 @@ export default  {
      * a formatted top level container of a
      * BIDS dataset.
      */
-    formatDataset (project, callback) {
+    formatDataset (project, description) {
         let files = [], attachments = [];
         for (let file of project.files) {
             file.name = file.filename;
@@ -263,7 +268,7 @@ export default  {
             public:      project.public,
             notes:       project.notes,
             children:    files,
-            description: this.formatDescription(project.notes),
+            description: this.formatDescription(project.notes, description),
             README:      this.formatREADME(project.notes),
             attachments: attachments,
             status:      this.formatStatus(project.notes),
@@ -282,8 +287,8 @@ export default  {
      * a BIDS description object if the is
      * a description note.
      */
-    formatDescription (notes) {
-        let description = {
+    formatDescription (notes, description) {
+        let description = description ? description : {
             "Name": "",
             "License": "",
             "Authors": [],
@@ -294,16 +299,12 @@ export default  {
         };
 
         if (notes) {
-            let descriptionString, authorsString;
+            let authorsString;
             for (let note of notes) {
-                if (note.author === 'dataset_description.json') {
-                    descriptionString = note.text;
-                }
                 if (note.author === 'authors') {
                     authorsString = note.text;
                 }
             }
-            if (descriptionString) {description = JSON.parse(descriptionString);}
             if (authorsString) {description.Authors = JSON.parse(authorsString);}
         }
 

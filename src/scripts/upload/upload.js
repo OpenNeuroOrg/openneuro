@@ -120,36 +120,26 @@ export default {
                     });
                 });
             } else {
-                // if (subject.name === 'dataset_description.json' || subject.name === 'README') {
-                //     files.read(subject, (contents) => {
-                //         let note = {
-                //             author: subject.name,
-                //             text: contents
-                //         };
-                //         scitran.updateNote(projectId, note, () => {
-                //             if (subject.name === 'dataset_description.json') {
-                //                 let description = JSON.parse(contents);
-                //                 let authors = [];
-                //                 for (let i = 0; i < description.Authors.length; i++) {
-                //                     let author = description.Authors[i];
-                //                     authors.push({name: author, ORCIDID: ''});
-                //                 }
-                //                 let authorsNote = {
-                //                     author: 'authors',
-                //                     text: JSON.stringify(authors)
-                //                 };
-                //                 scitran.updateNote(projectId, authorsNote, () => {
-                //                     self.progressEnd(subject.name);
-                //                 });
-                //             } else {
-                //                 self.progressEnd(subject.name);
-                //             }
-                //         });
-                //     });
+                if (subject.name === 'dataset_description.json') {
+                    files.read(subject, (contents) => {
+                        let description = JSON.parse(contents);
+                        let authors = [];
+                        for (let i = 0; i < description.Authors.length; i++) {
+                            let author = description.Authors[i];
+                            authors.push({name: author, ORCIDID: ''});
+                        }
+                        let authorsNote = {
+                            author: 'authors',
+                            text: JSON.stringify(authors)
+                        };
+                        scitran.updateNote(projectId, authorsNote, () => {
+                            self.uploadFile('projects', projectId, subject, 'project');
+                        });
+                    });
 
-                // } else {
+                } else {
                     self.uploadFile('projects', projectId, subject, 'project');
-                // }
+                }
             }
         }
     },
