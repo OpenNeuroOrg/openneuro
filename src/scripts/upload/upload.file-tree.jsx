@@ -1,7 +1,6 @@
 // dependencies -------------------------------------------------------
 
 import React     from 'react';
-import fileUtils from '../utils/files';
 
 class FileTree extends React.Component {
 
