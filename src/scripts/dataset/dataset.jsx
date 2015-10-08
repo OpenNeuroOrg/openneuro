@@ -41,11 +41,6 @@ let Dataset = React.createClass({
 		let dateAdded  = dataset ? moment(dataset.timestamp).format('L') : null;
         let timeago    = dataset ? moment(dataset.timestamp).fromNow(true) : null;
 		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin');
-		let tools;
-
-		if (dataset && canEdit && !dataset.public) {
-			tools = <Tools dataset={dataset} users={this.state.users}/>
-		}
 
 		let content;
 		if (dataset) {
@@ -57,7 +52,6 @@ let Dataset = React.createClass({
 						<li>{dataset.public && !dataset.userOwns ? PublicDatasetsLink : myDatasetsLink}</li>
 						<li className="active">{dataset.name}</li>
 					</ol>*/}
-					
 					<div className="clearfix">
 						<div className="row">
 							<div className="col-xs-6">
@@ -68,7 +62,7 @@ let Dataset = React.createClass({
 								<h6>uploaded by {dataset.group} on {dateAdded} - {timeago} ago</h6>
 							</div>
 							<div className="col-xs-6">
-								{tools}
+								<Tools dataset={dataset} users={this.state.users} canEdit={dataset && canEdit && !dataset.public}/>
 							</div>
 						</div>
 						<Metadata dataset={dataset}/>
