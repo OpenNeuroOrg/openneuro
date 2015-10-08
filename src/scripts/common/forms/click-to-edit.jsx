@@ -45,15 +45,20 @@ let ClickToEdit = React.createClass({
 
 		switch (type) {
 			case "string":
-				input = <textarea className="form-control" value={value} onChange={this._handleChange}></textarea>;
+				input = <textarea className="form-control" value={value} onChange={this._handleChange.bind(null, type)}></textarea>;
 				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
 				break;
 			case "authors":
-				input = <AuthorInput value={value} onChange={this._handleChange} />;
+				input = <AuthorInput value={value} onChange={this._handleChange.bind(null, type)} />;
 				let items = value.map((item, index) => {
 					return <div className="fadeIn" key={index}><span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span></div>;
 				});
 				display = <div className="cte-display">{items}</div>;
+				buttons = (
+					<div className="btn-wrapper clearfix">
+						<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._cancel}>done</button>
+					</div>
+				);
 				break;
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {
@@ -75,8 +80,8 @@ let ClickToEdit = React.createClass({
 
 		let edit = (
 			<div className="cte-edit fadeIn clearfix">
-				{input}
-				{buttons}
+				{!this.state.loading ? input : null}
+				{!this.state.loading ? buttons : null}
 				<Spinner active={this.state.loading} />
 			</div>
 		);
@@ -107,8 +112,13 @@ let ClickToEdit = React.createClass({
 		}
 	},
 
-	_handleChange(event) {
-		this.setState({value: event.target.value});
+	_handleChange(type, event) {
+		let callback;
+		this.setState({value: event.target.value}, () => {
+			if (type === 'authors') {
+				this._save(type);
+			}
+		});
 	},
 
 	_handleDelete(filename, index) {
@@ -123,13 +133,14 @@ let ClickToEdit = React.createClass({
 		}
 	},
 
-	_save() {
+	_save(type) {
 		let self = this;
 		this.setState({loading: true});
+		let edit = type == 'authors' ? true : false;
 		if (this.props.onChange) {
 			this.props.onChange(this.state.value, () => {
 				let initialValue = JSON.stringify(this.state.value);
-				self.setState({loading: false, edit: false, initialValue: initialValue});
+				self.setState({loading: false, edit: edit, initialValue: initialValue});
 			});
 		}
 	},

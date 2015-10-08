@@ -2,6 +2,7 @@ import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
 	'updateDescription',
+	'updateREADME',
 	'uploadAttachment',
 	'deleteAttachment',
 	'downloadAttachment',
@@ -11,6 +12,7 @@ var Actions = Reflux.createActions([
 	'loadUsers',
 	'publish',
 	'deleteDataset',
+	'downloadDataset',
 	'setInitialState'
 ]);
 

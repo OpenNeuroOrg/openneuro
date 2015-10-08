@@ -100,7 +100,7 @@ let Metadata = React.createClass({
 					<ClickToEdit value={README}
 						label="README"
 						editable={canEdit}
-						onChange={this._updateNote.bind(this, 'README')} />
+						onChange={this._updateREADME} />
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={fsHeader} eventKey='1'>
 					  		<FileTree tree={[dataset]} />
@@ -132,7 +132,9 @@ let Metadata = React.createClass({
 
 	_downloadAttachment: Actions.downloadAttachment,
 
-	_updateNote: Actions.updateNote
+	_updateNote: Actions.updateNote,
+
+	_updateREADME: Actions.updateREADME
 
 });
 

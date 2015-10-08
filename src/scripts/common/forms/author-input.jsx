@@ -1,7 +1,8 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
-import Input from './input.component.jsx';
+import React      from 'react'
+import Input      from './input.component.jsx';
+import WarnButton from './warn-button.component.jsx';
 
 // component setup ----------------------------------------------------
 
@@ -23,7 +24,13 @@ let ArrayInput = React.createClass({
 
 	render() {
 		let items = this.props.value.map((item, index) => {
-			return <div key={index} className="cte-array-item">{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID} <button className="cte-remove-button btn btn-admin warning" onClick={this._remove.bind(null, index)}><i className="fa fa-times"></i></button></div>
+			return (
+				<div key={index} className="cte-array-item">{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}
+					<div className="btn-wrap">
+						<WarnButton message="Remove" confirm="Yes Remove!" action={this._remove.bind(null, index)}/>
+					</div>
+				</div>
+			);
 		});
 
 		return (
@@ -65,6 +72,7 @@ let ArrayInput = React.createClass({
 		let array = this.props.value;
 		array.splice(index, 1);
 		this.setState({value: array});
+		this.props.onChange({target: {value: array}});
 	}
 
 });

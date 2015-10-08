@@ -120,15 +120,23 @@ export default {
                     });
                 });
             } else {
-                if (subject.name === 'dataset_description.json' || subject.name === 'README') {
+                if (subject.name === 'dataset_description.json') {
                     files.read(subject, (contents) => {
-                        let note = {
-                            author: subject.name,
-                            text: contents
+                        let description = JSON.parse(contents);
+                        let authors = [];
+                        for (let i = 0; i < description.Authors.length; i++) {
+                            let author = description.Authors[i];
+                            authors.push({name: author, ORCIDID: ''});
+                        }
+                        let authorsNote = {
+                            author: 'authors',
+                            text: JSON.stringify(authors)
                         };
-                        scitran.updateNote(projectId, note);
-                        self.progressEnd(subject.name);
+                        scitran.updateNote(projectId, authorsNote, () => {
+                            self.uploadFile('projects', projectId, subject, 'project');
+                        });
                     });
+
                 } else {
                     self.uploadFile('projects', projectId, subject, 'project');
                 }
@@ -173,7 +181,7 @@ export default {
                     self.handleUploadResponse(err, res, function () {
                         self.uploadModalities(session.children, res.body._id);
                     });
-                }); 
+                });
             } else {
                 self.uploadFile('sessions', subjectId, session, 'subject');
             }

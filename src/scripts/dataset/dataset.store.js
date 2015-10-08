@@ -99,6 +99,17 @@ let UserStore = Reflux.createStore({
 	},
 
 	/**
+	 * Download Dataset
+	 *
+	 */
+	downloadDataset() {
+		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
+			let ticket = res.body.ticket;
+			window.open(res.req.url.split('?')[0] + '?ticket=' + ticket);
+		});
+	},
+
+	/**
 	 * Delete Dataset
 	 *
 	 * Takes a datsetId, deletes the dataset, and returns the user
@@ -123,7 +134,7 @@ let UserStore = Reflux.createStore({
 		let dataset = this.data.dataset;
 		let description = dataset.description;
 		description[key] = value;
-		dataset.description = description;
+		if (key !== 'Authors'){description.Authors = dataset.authors;}
 		this.saveDescription(description, callback);
 		this.update({dataset: dataset});
 	},
@@ -131,8 +142,8 @@ let UserStore = Reflux.createStore({
 	/**
 	 * Save Description
 	 *
-	 * Takes a description object and updates
-	 * the JSON description note.
+	 * Takes a description object and upserts
+	 * the JSON description file.
 	 */
 	saveDescription(description, callback) {
 		let datasetId = this.data.dataset._id;
@@ -146,13 +157,7 @@ let UserStore = Reflux.createStore({
 				authors.push(author.name);
 			}
 			description.Authors = authors;
-			let descriptionNote = {
-				author: 'dataset_description.json',
-				text: JSON.stringify(description)
-			};
-			scitran.updateNote(datasetId, descriptionNote, (err, res) => {
-				callback();
-			});
+			scitran.updateFileFromString('projects', datasetId, 'dataset_description.json', JSON.stringify(description), callback);
 		});
 	},
 
@@ -170,6 +175,13 @@ let UserStore = Reflux.createStore({
 	 		text: value
 	 	};
 	 	scitran.updateNote(dataset._id, note, callback);
+	 },
+
+	 /**
+	  * Update README
+	  */
+	 updateREADME(value, callback) {
+		scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, callback);
 	 },
 
 

@@ -100,6 +100,44 @@ export default  {
         });
     },
 
+    /**
+     * Get Metadata
+     *
+     */
+    getMetadata(project, callback) {
+
+        // determine which metadata files are available
+        let metadataFiles = [],
+            metadata = {};
+        for (let file of project.files) {
+            if (file.filename === 'README') {
+                metadataFiles.push('README');
+            }
+            if (file.filename === 'dataset_description.json') {
+                metadataFiles.push('dataset_description.json');
+            }
+        }
+
+        // load content of available metadata
+        async.each(metadataFiles, (filename, cb) => {
+            scitran.getFile('projects', project._id, filename, (err, file) => {
+                let contents;
+                try {
+                    contents = JSON.parse(file.text);
+                }
+                catch (err) {
+                    contents = file.text;
+                }
+                finally {
+                    metadata[filename] = contents;
+                }
+                cb();
+            });
+        }, () => {
+            callback(metadata);
+        });
+    },
+
 
     /**
      * Get Dataset
@@ -111,27 +149,30 @@ export default  {
         scitran.getProject(projectId, (res) => {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
-            let dataset = this.formatDataset(project);
-            this.getSubjects(res.body._id, (subjects) => {
-                dataset.children = dataset.children.concat(subjects);
-                async.each(subjects, (subject, cb) => {
-                    this.getSessions(projectId, subject._id, (sessions) => {
-                        subject.children = subject.children.concat(sessions);
-                        async.each(sessions, (session, cb1) => {
-                            this.getModalities(session._id, (modalities) => {
-                                session.children = session.children.concat(modalities);
-                                async.each(modalities, (modality, cb2) => {
-                                    scitran.getAcquisition(modality._id, (res) => {
-                                        for (let file of res.files) {file.name = file.filename;}
-                                        modality.children = res.files;
-                                        modality.name = modality.label;
-                                        cb2();
-                                    });
-                                }, cb1);
-                            });
-                        }, cb);
-                    });
-                }, () => {callback(dataset)});
+            this.getMetadata(project, (metadata) => {
+                let dataset = this.formatDataset(project, metadata['dataset_description.json']);
+                dataset.README = metadata.README;
+                this.getSubjects(res.body._id, (subjects) => {
+                    dataset.children = dataset.children.concat(subjects);
+                    async.each(subjects, (subject, cb) => {
+                        this.getSessions(projectId, subject._id, (sessions) => {
+                            subject.children = subject.children.concat(sessions);
+                            async.each(sessions, (session, cb1) => {
+                                this.getModalities(session._id, (modalities) => {
+                                    session.children = session.children.concat(modalities);
+                                    async.each(modalities, (modality, cb2) => {
+                                        scitran.getAcquisition(modality._id, (res) => {
+                                            for (let file of res.files) {file.name = file.filename;}
+                                            modality.children = res.files;
+                                            modality.name = modality.label;
+                                            cb2();
+                                        });
+                                    }, cb1);
+                                });
+                            }, cb);
+                        });
+                    }, () => {callback(dataset)});
+                });
             });
         });
     },
@@ -220,7 +261,7 @@ export default  {
      * a formatted top level container of a
      * BIDS dataset.
      */
-    formatDataset (project, callback) {
+    formatDataset (project, description) {
         let files = [], attachments = [];
         for (let file of project.files) {
             file.name = file.filename;
@@ -242,7 +283,7 @@ export default  {
             public:      project.public,
             notes:       project.notes,
             children:    files,
-            description: this.formatDescription(project.notes),
+            description: this.formatDescription(project.notes, description),
             README:      this.formatREADME(project.notes),
             attachments: attachments,
             status:      this.formatStatus(project.notes),
@@ -250,6 +291,7 @@ export default  {
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
         };
+        dataset.authors = dataset.description.Authors;
         return dataset;
     },
 
@@ -260,8 +302,8 @@ export default  {
      * a BIDS description object if the is
      * a description note.
      */
-    formatDescription (notes) {
-        let description = {
+    formatDescription (notes, description) {
+        let description = description ? description : {
             "Name": "",
             "License": "",
             "Authors": [],
@@ -272,16 +314,12 @@ export default  {
         };
 
         if (notes) {
-            let descriptionString, authorsString;
+            let authorsString;
             for (let note of notes) {
-                if (note.author === 'dataset_description.json') {
-                    descriptionString = note.text;
-                }
                 if (note.author === 'authors') {
                     authorsString = note.text;
                 }
             }
-            if (descriptionString) {description = JSON.parse(descriptionString);}
             if (authorsString) {description.Authors = JSON.parse(authorsString);}
         }
 

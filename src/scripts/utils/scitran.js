@@ -1,6 +1,7 @@
-import request from './request';
-import async   from 'async';
-import config  from '../config';
+import request  from './request';
+import async    from 'async';
+import config   from '../config';
+import SparkMD5 from 'spark-md5';
 
 /**
  * Scitran
@@ -175,12 +176,36 @@ export default  {
     },
 
     /**
+     * Get File
+     *
+     */
+    getFile (level, id, filename, callback) {
+        request.get(config.scitran.url + level + '/' + id + '/file/' + filename, {}, callback);
+    },
+
+    /**
      * Get Download Ticket
      *
      */
     getDownloadTicket (level, id, filename, callback) {
         request.get(config.scitran.url + level + '/' + id + '/file/' + filename, {
             query: {ticket: ''}
+        }, callback);
+    },
+
+    /**
+     * Get BIDS Download Ticket
+     *
+     */
+    getBIDSDownloadTicket (projectId, callback) {
+        request.post(config.scitran.url + 'download', {
+            query: {format: 'bids'},
+            body: {
+                nodes:[
+                    {_id: projectId, level: 'project'}
+                ],
+                optional: false
+            }
         }, callback);
     },
 
@@ -229,6 +254,19 @@ export default  {
         } else {
             this.noteRequest(req);
         }
+    },
+
+    /**
+     * Update File From String
+     *
+     */
+    updateFileFromString (level, id, filename, value, callback) {
+        let hash = SparkMD5.hash(value);
+        request.post(config.scitran.url + level + '/' + id + '/file/' + filename, {
+            body: value,
+            headers: {'Content-MD5': hash},
+            query: {force: true}
+        }, callback);
     },
 
     noteQueue: [],

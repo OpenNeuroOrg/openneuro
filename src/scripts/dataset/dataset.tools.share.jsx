@@ -1,10 +1,11 @@
 // dependencies -------------------------------------------------------
 
-import React     from 'react';
-import Actions   from './dataset.actions.js';
-import bids      from '../utils/bids';
-import scitran   from '../utils/scitran';
-import Input     from '../common/forms/input.component.jsx';
+import React      from 'react';
+import Actions    from './dataset.actions.js';
+import bids       from '../utils/bids';
+import scitran    from '../utils/scitran';
+import Input      from '../common/forms/input.component.jsx';
+import WarnButton from '../common/forms/warn-button.component.jsx';
 
 export default class Share extends React.Component {
 
@@ -37,9 +38,9 @@ export default class Share extends React.Component {
 		let permissions = this.state.permissions.map((user) => {
 			return (
 				<div key={user._id} className="cte-array-item">{user._id} <span>- {accessKey[user.access]}</span>
-					<button className="cte-remove-button btn btn-admin warning" onClick={this._removeUser.bind(this, user._id)}>
-						<i className="fa fa-times"></i>
-					</button>
+					<div className="btn-wrap">
+						<WarnButton message="Remove" confirm="Yes Remove!" action={this._removeUser.bind(this, user._id)}/>
+					</div>
 				</div>
 			);
 		});
@@ -98,6 +99,7 @@ export default class Share extends React.Component {
 		}
 		if (isMember) {
 			this.setState({error: 'This dataset is already shared with this user'});
+			return;
 		}
 
 		// check if user exists
