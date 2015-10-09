@@ -1,6 +1,7 @@
 import request  from './request';
 import async    from 'async';
 import config   from '../config';
+import md5      from './md5';
 import SparkMD5 from 'spark-md5';
 
 /**
@@ -21,7 +22,7 @@ export default  {
     getUsers (callback) {
         request.get(config.scitran.url + 'users', {}, callback);
     },
-    
+
     /**
      * Verify User
      *
@@ -254,6 +255,21 @@ export default  {
         } else {
             this.noteRequest(req);
         }
+    },
+
+    /**
+     * Update File
+     *
+     */
+    updateFile (level, id, file, callback) {
+        md5(file, (data) => {
+            let hash = data.hash;
+            request.post(config.scitran.url + level + '/' + id + '/file/' + file.name, {
+                body: file,
+                headers: {'Content-MD5': hash},
+                query: {force: true}
+            }, callback);
+        });
     },
 
     /**

@@ -152,18 +152,22 @@ export default  {
             this.getMetadata(project, (metadata) => {
                 let dataset = this.formatDataset(project, metadata['dataset_description.json']);
                 dataset.README = metadata.README;
-                this.getSubjects(res.body._id, (subjects) => {
+                this.getSubjects(projectId, (subjects) => {
+                    dataset.children = this.labelFile(dataset.children, projectId, 'projects');
                     dataset.children = dataset.children.concat(subjects);
                     async.each(subjects, (subject, cb) => {
                         this.getSessions(projectId, subject._id, (sessions) => {
+                            subject.children = this.labelFile(subject.children, subject._id, 'projects');
                             subject.children = subject.children.concat(sessions);
                             async.each(sessions, (session, cb1) => {
                                 this.getModalities(session._id, (modalities) => {
+                                    session.children = this.labelFile(session.children, session._id, 'sessions');
                                     session.children = session.children.concat(modalities);
                                     async.each(modalities, (modality, cb2) => {
                                         scitran.getAcquisition(modality._id, (res) => {
                                             for (let file of res.files) {file.name = file.filename;}
                                             modality.children = res.files;
+                                            modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
                                             modality.name = modality.label;
                                             cb2();
                                         });
@@ -253,6 +257,17 @@ export default  {
     },
 
 // Dataset Format Helpers -----------------------------------------------------------------
+
+    /**
+     * Label File
+     */
+    labelFile (items, parentId, parentContainer) {
+        for (let item of items) {
+            item.parentId = parentId;
+            item.parentContainer = parentContainer;
+        }
+        return items;
+    },
 
     /**
      * Format Dataset

@@ -9,6 +9,21 @@
 				    height: auto;
 				    padding: 10px;
 				    margin: 0;
+				    li {
+				    	input {
+				    		height: 20px;
+				    		width: auto;
+				    		display: inline-block;
+				    		&:before {
+				    			width: auto;
+				    			padding: 0px 5px;
+				    			font-size: 10px;
+				    		}
+
+				    		&.add-files:before {content: 'add files';}
+				    		&.update-file:before {content: 'update';}
+				    	}
+				    }
 				}
 			}
 		}
@@ -19,7 +34,7 @@
 			}
 		}
 	}
-	
+
 
 	.card{
 		box-shadow: 1px 0 3px 0 rgba(0,0,0,.3);

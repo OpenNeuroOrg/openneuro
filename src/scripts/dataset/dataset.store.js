@@ -168,21 +168,28 @@ let UserStore = Reflux.createStore({
 	 * upserts a corresponding note for the
 	 * current dataset.
 	 */
-	 updateNote(name, value, callback) {
+	updateNote(name, value, callback) {
 	 	let dataset = this.data.dataset;
 	 	let note = {
 	 		author: name,
 	 		text: value
 	 	};
 	 	scitran.updateNote(dataset._id, note, callback);
-	 },
+	},
+
+	/**
+	 * Update File
+	 */
+	updateFile(level, id, file, callback) {
+		scitran.updateFile(level, id, filename, file, callback);
+	},
 
 	 /**
 	  * Update README
 	  */
-	 updateREADME(value, callback) {
+	updateREADME(value, callback) {
 		scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, callback);
-	 },
+	},
 
 
 	// Attachments -------------------------------------------------------------------
