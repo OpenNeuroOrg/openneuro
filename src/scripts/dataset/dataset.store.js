@@ -178,13 +178,6 @@ let UserStore = Reflux.createStore({
 	 	scitran.updateNote(dataset._id, note, callback);
 	},
 
-	/**
-	 * Update File
-	 */
-	updateFile(level, id, file, callback) {
-		scitran.updateFile(level, id, filename, file, callback);
-	},
-
 	 /**
 	  * Update README
 	  */
@@ -263,6 +256,47 @@ let UserStore = Reflux.createStore({
 		let dataset = this.data.dataset;
 		let match = files.findInTree([dataset], folderId);
 		if (match) {match.showChildren = !match.showChildren;}
+		this.update({dataset});
+	},
+
+	/**
+	 * Update File
+	 */
+	updateFile(item, file) {
+		let id       = item.parentId,
+			level    = item.parentContainer,
+			filename = item.name;
+
+		if (filename !== file.name) {
+			this.updateFileState(item, {
+				error: 'You must replace a file with a file of the same name.'
+			});
+		} else {
+			scitran.updateFile(level, id, file, (err, res) => {
+				console.log(err);
+				console.log(res);
+			});
+		}
+	},
+
+	/**
+	 * Update File State
+	 *
+	 * Take a file object and changes to be
+	 * made and applies those changes by
+	 * updating the state of the file tree
+	 */
+	updateFileState(file, changes) {
+		let dataset = this.data.dataset;
+		let parent = files.findInTree([dataset], file.parentId);
+		let children = [];
+		for (let existingFile of parent.children) {
+			if (file.filename == existingFile.filename) {
+				for (let key in changes) {
+					existingFile[key] = changes[key];
+				}
+			}
+		}
 		this.update({dataset});
 	},
 

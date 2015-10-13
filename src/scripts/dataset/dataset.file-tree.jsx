@@ -23,9 +23,9 @@ class FileTree extends React.Component {
 				icon  = <i className="fa fa-file"></i>;
 				tools = (
 					<span>
-						{/*<div>error</div>*/}
+						<div>{item.error}</div>
 						<button onClick={this._deleteFile.bind(this, item)}>delete</button>
-						<input type="file" className="update-file" onChange={this._updateFile.bind(this, item.parentId, item.parentContainer, item.name)}/>
+						<input type="file" className="update-file" onChange={this._updateFile.bind(this, item)}/>
 					</span>
 				);
 			}
@@ -70,18 +70,7 @@ class FileTree extends React.Component {
 	/**
 	 * Update File
 	 */
-	_updateFile(id, level, filename, event) {
-		let file = event.target.files[0];
-		if (filename !== file.name) {
-			console.log(filename, file.name);
-			return;
-		} else {
-			actions.updateFile(level, id, file, (err, res) => {
-				console.log(err);
-				console.log(res);
-			});
-		}
-	}
+	_updateFile(item, event) {actions.updateFile(item, event.target.files[0]);}
 
 	/**
 	 * Delete File
