@@ -10,12 +10,12 @@ class FileTree extends React.Component {
 	render () {
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map((item, index) => {
+			if (!item.name && item.filename) {item.name = item.filename;}
 			let icon, tools;
 			if (item.children) {
 				icon  = <i className="fa fa-folder" onClick={this._toggleFolder.bind(this, item._id)}></i>;
 				tools = (
 					<span>
-						{!item.hasOwnProperty('status') ? <button>delete</button> : null}
 						<input type="file" className="add-files" onChange={this._addFile.bind(this, item)}/>
 					</span>
 				);
@@ -23,8 +23,8 @@ class FileTree extends React.Component {
 				icon  = <i className="fa fa-file"></i>;
 				tools = (
 					<span>
-						<div>error</div>
-						<button>delete</button>
+						{/*<div>error</div>*/}
+						<button onClick={this._deleteFile.bind(this, item)}>delete</button>
 						<input type="file" className="update-file" onChange={this._updateFile.bind(this, item.parentId, item.parentContainer, item.name)}/>
 					</span>
 				);
@@ -83,9 +83,11 @@ class FileTree extends React.Component {
 		}
 	}
 
+	/**
+	 * Delete File
+	 */
+	_deleteFile(file) {actions.deleteFile(file);}
+
 }
 
 export default FileTree;
-
-
-// <input type="file" onChange={this._handleFile.bind(this, item.parentId, item.parentContainer, item.name)}/>

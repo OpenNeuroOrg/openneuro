@@ -261,13 +261,27 @@ let UserStore = Reflux.createStore({
 	 */
 	toggleFolder(folderId) {
 		let dataset = this.data.dataset;
-		if (folderId === dataset._id) {
-			dataset.showChildren = !dataset.showChildren;
-		} else {
-			let match = files.findInTree(dataset.children, folderId);
-			if (match) {match.showChildren = !match.showChildren;}
-		}
+		let match = files.findInTree([dataset], folderId);
+		if (match) {match.showChildren = !match.showChildren;}
 		this.update({dataset});
+	},
+
+	/**
+	 * Delete File
+	 */
+	deleteFile(file) {
+		let dataset = this.data.dataset;
+		scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
+			let match = files.findInTree([dataset], file.parentId);
+			let children = [];
+			for (let existingFile of match.children) {
+				if (file.filename !== existingFile.filename) {
+					children.push(existingFile);
+				}
+			}
+			match.children = children;
+			this.update({dataset});
+		});
 	}
 
 });

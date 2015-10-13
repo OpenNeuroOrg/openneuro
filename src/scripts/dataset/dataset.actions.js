@@ -3,6 +3,7 @@ import Reflux from 'reflux';
 var Actions = Reflux.createActions([
 	'deleteAttachment',
 	'deleteDataset',
+	'deleteFile',
 	'downloadAttachment',
 	'downloadDataset',
 	'loadDataset',
