@@ -7,6 +7,7 @@ import config from '../config';
 let fileUtils = {
 	generateTree,
     countTree,
+    findInTree,
     read
 };
 
@@ -83,6 +84,26 @@ function countTree (tree) {
     }
     recurse(tree);
     return count;
+}
+
+/**
+ * Find In Tree
+ *
+ * Takes a file tree and an object id and
+ * returns the corresponding object from
+ * the tree.
+ */
+function findInTree (tree, id) {
+    let match, subTree;
+    for (let item of tree) {
+        if (item.children) {subTree = item.children;}
+        if (item._id == id) {
+            return item;
+        } else if (subTree) {
+            match = findInTree(subTree, id);
+            if (match) {return match;}
+        }
+    }
 }
 
 /**
