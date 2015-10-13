@@ -1,20 +1,21 @@
 import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
-	'updateDescription',
-	'updateREADME',
-	'uploadAttachment',
 	'deleteAttachment',
+	'deleteDataset',
 	'downloadAttachment',
-	'updateNote',
-	'updateFile',
-	'saveDescription',
+	'downloadDataset',
 	'loadDataset',
 	'loadUsers',
 	'publish',
-	'deleteDataset',
-	'downloadDataset',
-	'setInitialState'
+	'saveDescription',
+	'setInitialState',
+	'toggleFolder',
+	'uploadAttachment',
+	'updateDescription',
+	'updateNote',
+	'updateFile',
+	'updateREADME',
 ]);
 
 export default Actions;

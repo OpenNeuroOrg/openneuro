@@ -12,10 +12,9 @@ class FileTree extends React.Component {
 		let nodes = tree.map((item, index) => {
 			let icon, tools;
 			if (item.children) {
-				icon  = <i className="fa fa-folder"></i>;
+				icon  = <i className="fa fa-folder" onClick={this._toggleFolder.bind(this, item._id)}></i>;
 				tools = (
 					<span>
-						<button>rename</button>
 						{!item.hasOwnProperty('status') ? <button>delete</button> : null}
 						<input type="file" className="add-files" onChange={this._addFile.bind(this, item)}/>
 					</span>
@@ -33,7 +32,7 @@ class FileTree extends React.Component {
 
 			return (
 				<li key={index}>{icon} {item.name} {tools}
-					<ul><FileTree tree={item.children} /></ul>
+					{item.showChildren ? <ul><FileTree tree={item.children} /></ul> : null}
 				</li>
 			);
 		});
@@ -43,6 +42,11 @@ class FileTree extends React.Component {
 	}
 
 // custom methods -----------------------------------------------------
+
+	/**
+	 * Toggle Folder
+	 */
+	_toggleFolder(folderId) {actions.toggleFolder(folderId);}
 
 	/**
 	 * Add File

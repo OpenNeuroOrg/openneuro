@@ -8,6 +8,7 @@ import router    from '../utils/router-container';
 import userStore from '../user/user.store';
 import upload    from '../utils/upload';
 import config    from '../config';
+import files     from '../utils/files';
 
 let UserStore = Reflux.createStore({
 
@@ -247,6 +248,27 @@ let UserStore = Reflux.createStore({
 			window.open(res.req.url + ticket);
 		});
 	},
+
+	// File Structure ----------------------------------------------------------------
+
+	/**
+	 * Toggle Folder
+	 *
+	 * Takes the id of a container in the
+	 * current dataset and toggles its showChildren
+	 * boolean which determines whether container
+	 * children are shown in the tree hierarchy UI.
+	 */
+	toggleFolder(folderId) {
+		let dataset = this.data.dataset;
+		if (folderId === dataset._id) {
+			dataset.showChildren = !dataset.showChildren;
+		} else {
+			let match = files.findInTree(dataset.children, folderId);
+			if (match) {match.showChildren = !match.showChildren;}
+		}
+		this.update({dataset});
+	}
 
 });
 
