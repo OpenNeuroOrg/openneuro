@@ -2,7 +2,7 @@
 
 import React      from 'react';
 import Actions    from './user.actions.js';
-import UserStore  from './user.store.js';
+import userStore  from './user.store.js';
 import Input      from '../common/forms/input.component.jsx';
 import {Panel}    from 'react-bootstrap';
 import scitran    from '../utils/scitran';
@@ -44,6 +44,11 @@ export default class AddUser extends React.Component {
 				</div>
 	        );
 
+	        let adminToggle;
+	        if (user._id !== userStore.data.scitran._id) {
+	        	adminToggle = <WarnButton message="Toggle Admin Privileges" confirm="Toggle Admin" icon="fa-user-plus" action={this._toggleSuperUser.bind(this, user)}/>;
+	        }
+
 			return (
 
 			    <div className="fadeIn user-panel clearfix" key={user._id}>
@@ -56,7 +61,7 @@ export default class AddUser extends React.Component {
                     <div className="col-sm-4 user-col last">
 	                    <h3 className="user-delete">
 		                    <WarnButton message="Delete this User" action={this._removeUser.bind(this, user._id, index)}/>
-		                    <WarnButton message="Toggle Admin Privileges" confirm="Toggle Admin" icon="fa-user-plus" action={this._toggleSuperUser.bind(this, user)}/>
+		                    {adminToggle}
 	                    </h3>
                     </div>
                 </div>
