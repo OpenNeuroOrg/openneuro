@@ -1,12 +1,12 @@
 // dependencies -------------------------------------------------------
 
-import React     from 'react';
-import Actions   from './user.actions.js';
-import UserStore from './user.store.js';
-import Input     from '../common/forms/input.component.jsx';
-import {Panel}   from 'react-bootstrap';
-import scitran   from '../utils/scitran';
-import Delete    from '../common/forms/warn-button.component.jsx'; 
+import React      from 'react';
+import Actions    from './user.actions.js';
+import UserStore  from './user.store.js';
+import Input      from '../common/forms/input.component.jsx';
+import {Panel}    from 'react-bootstrap';
+import scitran    from '../utils/scitran';
+import WarnButton from '../common/forms/warn-button.component.jsx';
 
 export default class AddUser extends React.Component {
 
@@ -26,16 +26,14 @@ export default class AddUser extends React.Component {
 // life cycle events --------------------------------------------------
 
 	componentDidMount () {
-		let self = this;
-		scitran.getUsers(function (err, res) {
-			self.setState({users: res.body});
+		scitran.getUsers((err, res) => {
+			this.setState({users: res.body});
 		});
 	}
 
 	render () {
-		let self = this;
 		let showDeleteBtn = this.state.showDeleteBtn;
-		let users = this.state.users.map(function (user, index) {
+		let users = this.state.users.map((user, index) => {
 
 	        let userName = (
 				<div className="userName">
@@ -55,7 +53,10 @@ export default class AddUser extends React.Component {
 	                    <h3 className="user-email">{user._id}</h3>
                     </div>
                     <div className="col-sm-4 user-col last">
-	                    <h3 className="user-delete"><Delete message="Delete this User" action={self._removeUser.bind(self, user._id, index)}/></h3>
+	                    <h3 className="user-delete">
+		                    <WarnButton message="Delete this User" action={this._removeUser.bind(this, user._id, index)}/>
+		                    <WarnButton message="Toggle Admin Privileges" confirm="Toggle Admin" icon="fa-user-plus" action={this._toggleSuperUser.bind(this, user)}/>
+	                    </h3>
                     </div>
                 </div>
 			);
@@ -99,7 +100,7 @@ export default class AddUser extends React.Component {
 			users.push(self.state.newUser);
 			self.setState({users: users, newUser: {_id: '', firstname: '', lastname: ''}});
 		});
-	}        
+	}
 
 	/**
 	 * Remove User
@@ -119,6 +120,19 @@ export default class AddUser extends React.Component {
 		let newUser = this.state.newUser;
 		newUser[e.target.name] = e.target.value;
 		this.setState({newUser: newUser});
+	}
+
+	_toggleSuperUser (user, callback) {
+		scitran.updateUser(user._id, {wheel: !user.wheel}, (err, res) => {
+			let users = this.state.users;
+			for (let existingUser of this.state.users) {
+				if (existingUser._id === user._id) {
+					user.wheel = !user.wheel;
+				}
+			}
+			this.setState({users: users});
+			callback();
+		});
 	}
 
 }

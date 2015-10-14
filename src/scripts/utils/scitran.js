@@ -41,9 +41,19 @@ export default  {
      * add adds the user.
      */
     addUser (userData, callback) {
-        let self = this;
         request.post(config.scitran.url + 'users', {body: userData}, (err, res) => {
-            self.createGroup(userData._id, userData._id, callback);
+            this.createGroup(userData._id, userData._id, callback);
+        });
+    },
+
+    /**
+     * Update User
+     *
+     *
+     */
+    updateUser (userId, userData, callback) {
+        request.put(config.scitran.url + 'users/' + userId, {body: userData}, (err, res) => {
+            callback(err, res);
         });
     },
 
