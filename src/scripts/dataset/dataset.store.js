@@ -272,9 +272,9 @@ let UserStore = Reflux.createStore({
 				error: 'You must replace a file with a file of the same name.'
 			});
 		} else {
+			this.updateFileState(item, {error: null, loading: true});
 			scitran.updateFile(level, id, file, (err, res) => {
-				console.log(err);
-				console.log(res);
+				this.updateFileState(item, {loading: false});
 			});
 		}
 	},

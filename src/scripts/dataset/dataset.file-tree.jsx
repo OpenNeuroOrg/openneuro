@@ -11,7 +11,10 @@ class FileTree extends React.Component {
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map((item, index) => {
 			if (!item.name && item.filename) {item.name = item.filename;}
-			let icon, tools;
+			let icon, tools, loading;
+			if (item.loading) {
+				loading = <span><i className="fa fa-spin fa-circle-o-notch"></i></span>;
+			}
 			if (item.children) {
 				icon  = <i className="fa fa-folder" onClick={this._toggleFolder.bind(this, item._id)}></i>;
 				tools = (
@@ -26,6 +29,7 @@ class FileTree extends React.Component {
 						<div>{item.error}</div>
 						<button onClick={this._deleteFile.bind(this, item)}>delete</button>
 						<input type="file" className="update-file" onChange={this._updateFile.bind(this, item)}/>
+						{loading}
 					</span>
 				);
 			}
