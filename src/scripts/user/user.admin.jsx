@@ -19,7 +19,8 @@ export default class AddUser extends React.Component {
 				_id: '',
 				firstname: '',
 				lastname: ''
-			}
+			},
+			newUserError: ''
 		};
 	}
 
@@ -68,6 +69,7 @@ export default class AddUser extends React.Component {
 				<div>
 					<div className="col-sm-4 add-user">
 						<div>
+							{this.state.newUserError ? <div className="alert alert-danger">{this.state.newUserError}</div> : null}
 							<Input placeholder="gmail address" type='email' required value={this.state.newUser._id} name={'_id'}       onChange={this._inputChange.bind(this)} />
 							<Input placeholder="first name"    type="text" value={this.state.newUser.firstname}     name={'firstname'} onChange={this._inputChange.bind(this)} />
 							<Input placeholder="last name"     type="text" value={this.state.newUser.lastname}      name={'lastname'}  onChange={this._inputChange.bind(this)} />
@@ -95,11 +97,16 @@ export default class AddUser extends React.Component {
 	 */
 	_addUser () {
 		let self = this;
-		scitran.addUser(this.state.newUser, function (err, res) {
-			let users = self.state.users;
-			users.push(self.state.newUser);
-			self.setState({users: users, newUser: {_id: '', firstname: '', lastname: ''}});
-		});
+		if (!this.state.newUser._id || !this.state.newUser.firstname || !this.state.newUser.lastname) {
+			this.setState({newUserError: 'Email address, first name and last name are required.'});
+		} else {
+			this.setState({newUserError: ''});
+			scitran.addUser(this.state.newUser, function (err, res) {
+				let users = self.state.users;
+				users.push(self.state.newUser);
+				self.setState({users: users, newUser: {_id: '', firstname: '', lastname: ''}});
+			});
+		}
 	}
 
 	/**
