@@ -1,7 +1,8 @@
 // dependencies -------------------------------------------------------
 
-import React   from 'react';
-import actions from './dataset.actions';
+import React      from 'react';
+import actions    from './dataset.actions';
+import WarnButton from '../common/forms/warn-button.component.jsx';
 
 class FileTree extends React.Component {
 
@@ -41,7 +42,7 @@ class FileTree extends React.Component {
 				icon  = <i className="fa fa-file"></i>;
 				tools = (
 					<span>
-						<button onClick={this._deleteFile.bind(this, item)}>delete</button>
+						<WarnButton action={this._deleteFile.bind(this, item)} />
 						<input
 							type="file"
 							className="update-file"
@@ -53,7 +54,7 @@ class FileTree extends React.Component {
 			}
 
 			return (
-				<li key={index}>{icon} {item.name} {error} {tools} {loading}
+				<li key={item.name}>{icon} {item.name} {error} {tools} {loading}
 					{item.showChildren ? <ul><FileTree tree={item.children} /></ul> : null}
 				</li>
 			);
