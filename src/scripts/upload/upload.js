@@ -124,9 +124,11 @@ export default {
                     files.read(subject, (contents) => {
                         let description = JSON.parse(contents);
                         let authors = [];
-                        for (let i = 0; i < description.Authors.length; i++) {
-                            let author = description.Authors[i];
-                            authors.push({name: author, ORCIDID: ''});
+                        if (description.hasOwnProperty('Authors')) {
+                            for (let i = 0; i < description.Authors.length; i++) {
+                                let author = description.Authors[i];
+                                authors.push({name: author, ORCIDID: ''});
+                            }
                         }
                         let authorsNote = {
                             author: 'authors',

@@ -4,7 +4,7 @@ import React        from 'react';
 import Actions      from './dataset.actions.js';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 import {Accordion, Panel} from 'react-bootstrap';
-import FileTree     from '../upload/upload.file-tree.jsx';
+import FileTree     from './dataset.file-tree.jsx';
 
 let Metadata = React.createClass({
 

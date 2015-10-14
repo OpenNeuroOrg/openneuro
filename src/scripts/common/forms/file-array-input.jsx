@@ -1,7 +1,6 @@
 // dependencies -------------------------------------------------------
 
 import React      from 'react';
-import upload     from '../../utils/upload';
 import Spinner    from '../../common/partials/spinner.component.jsx';
 import WarnButton from './warn-button.component.jsx';
 

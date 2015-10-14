@@ -8,6 +8,7 @@ import router    from '../utils/router-container';
 import userStore from '../user/user.store';
 import upload    from '../utils/upload';
 import config    from '../config';
+import files     from '../utils/files';
 
 let UserStore = Reflux.createStore({
 
@@ -168,21 +169,21 @@ let UserStore = Reflux.createStore({
 	 * upserts a corresponding note for the
 	 * current dataset.
 	 */
-	 updateNote(name, value, callback) {
+	updateNote(name, value, callback) {
 	 	let dataset = this.data.dataset;
 	 	let note = {
 	 		author: name,
 	 		text: value
 	 	};
 	 	scitran.updateNote(dataset._id, note, callback);
-	 },
+	},
 
 	 /**
 	  * Update README
 	  */
-	 updateREADME(value, callback) {
+	updateREADME(value, callback) {
 		scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, callback);
-	 },
+	},
 
 
 	// Attachments -------------------------------------------------------------------
@@ -239,6 +240,122 @@ let UserStore = Reflux.createStore({
 			let ticket = res.body.ticket;
 			window.open(res.req.url + ticket);
 		});
+	},
+
+	// File Structure ----------------------------------------------------------------
+
+	/**
+	 * Add File
+	 */
+	addFile(container, file) {
+		let exists;
+		for (let existingFile of container.children) {
+			if (existingFile.name === file.name) {
+				exists = true;
+			}
+		}
+
+		if (exists) {
+			this.updateDirectoryState(container._id, {error: '"' + file.name + '" already exists in this directory.'});
+		} else {
+			this.updateDirectoryState(container._id, {loading: true});
+			scitran.updateFile(container.containerType, container._id, file, () => {
+				let children = container.children
+				children.unshift({
+					filename: file.name,
+					name: file.name,
+					parentContainer: container.containerType,
+					parentId: container._id
+				});
+				this.updateDirectoryState(container._id, {children: children, loading: false});
+			});
+		}
+	},
+
+	/**
+	 * Delete File
+	 */
+	deleteFile(file) {
+		let dataset = this.data.dataset;
+		scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
+			let match = files.findInTree([dataset], file.parentId);
+			let children = [];
+			for (let existingFile of match.children) {
+				if (file.filename !== existingFile.filename) {
+					children.push(existingFile);
+				}
+			}
+			match.children = children;
+			this.update({dataset});
+		});
+	},
+
+	/**
+	 * Update File
+	 */
+	updateFile(item, file) {
+		let id       = item.parentId,
+			level    = item.parentContainer,
+			filename = item.name;
+
+		if (filename !== file.name) {
+			this.updateFileState(item, {
+				error: 'You must replace a file with a file of the same name.'
+			});
+		} else {
+			this.updateFileState(item, {error: null, loading: true});
+			scitran.updateFile(level, id, file, (err, res) => {
+				this.updateFileState(item, {loading: false});
+			});
+		}
+	},
+
+	/**
+	 * Update Directory State
+	 *
+	 */
+	updateDirectoryState(directoryId, changes) {
+		let dataset = this.data.dataset;
+		let match = files.findInTree([dataset], directoryId);
+		if (match) {
+			for (let key in changes) {
+				match[key] = changes[key];
+			}
+		}
+		this.update({dataset});
+	},
+
+	/**
+	 * Update File State
+	 *
+	 * Take a file object and changes to be
+	 * made and applies those changes by
+	 * updating the state of the file tree
+	 */
+	updateFileState(file, changes) {
+		let dataset = this.data.dataset;
+		let parent = files.findInTree([dataset], file.parentId);
+		let children = [];
+		for (let existingFile of parent.children) {
+			if (file.filename == existingFile.filename) {
+				for (let key in changes) {
+					existingFile[key] = changes[key];
+				}
+			}
+		}
+		this.update({dataset});
+	},
+
+	/**
+	 * Toggle Folder
+	 *
+	 * Takes the id of a container in the
+	 * current dataset and toggles its showChildren
+	 * boolean which determines whether container
+	 * children are shown in the tree hierarchy UI.
+	 */
+	toggleFolder(directory) {
+		this.updateDirectoryState(directory._id, {showChildren: !directory.showChildren});
 	},
 
 });
