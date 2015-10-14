@@ -5,6 +5,7 @@ var Actions = Reflux.createActions([
 	'deleteAttachment',
 	'deleteDataset',
 	'deleteFile',
+	'dismissError',
 	'downloadAttachment',
 	'downloadDataset',
 	'loadDataset',

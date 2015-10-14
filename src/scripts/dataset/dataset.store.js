@@ -291,6 +291,17 @@ let UserStore = Reflux.createStore({
 	},
 
 	/**
+	 * Dismiss Error
+	 */
+	dismissError(item) {
+		if (item.children) {
+			this.updateDirectoryState(item._id, {error: ''});
+		} else {
+			this.updateFileState(item, {error: ''});
+		}
+	},
+
+	/**
 	 * Update File
 	 */
 	updateFile(item, file) {
