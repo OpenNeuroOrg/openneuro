@@ -245,18 +245,49 @@ let UserStore = Reflux.createStore({
 	// File Structure ----------------------------------------------------------------
 
 	/**
-	 * Toggle Folder
-	 *
-	 * Takes the id of a container in the
-	 * current dataset and toggles its showChildren
-	 * boolean which determines whether container
-	 * children are shown in the tree hierarchy UI.
+	 * Add File
 	 */
-	toggleFolder(folderId) {
+	addFile(container, file) {
+		let exists;
+		for (let existingFile of container.children) {
+			if (existingFile.name === file.name) {
+				exists = true;
+			}
+		}
+
+		if (exists) {
+			this.updateDirectoryState(container._id, {error: '"' + file.name + '" already exists in this directory.'});
+		} else {
+			this.updateDirectoryState(container._id, {loading: true});
+			scitran.updateFile(container.containerType, container._id, file, () => {
+				let children = container.children
+				children.unshift({
+					filename: file.name,
+					name: file.name,
+					parentContainer: container.containerType,
+					parentId: container._id
+				});
+				this.updateDirectoryState(container._id, {children: children, loading: false});
+			});
+		}
+	},
+
+	/**
+	 * Delete File
+	 */
+	deleteFile(file) {
 		let dataset = this.data.dataset;
-		let match = files.findInTree([dataset], folderId);
-		if (match) {match.showChildren = !match.showChildren;}
-		this.update({dataset});
+		scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
+			let match = files.findInTree([dataset], file.parentId);
+			let children = [];
+			for (let existingFile of match.children) {
+				if (file.filename !== existingFile.filename) {
+					children.push(existingFile);
+				}
+			}
+			match.children = children;
+			this.update({dataset});
+		});
 	},
 
 	/**
@@ -277,6 +308,21 @@ let UserStore = Reflux.createStore({
 				this.updateFileState(item, {loading: false});
 			});
 		}
+	},
+
+	/**
+	 * Update Directory State
+	 *
+	 */
+	updateDirectoryState(directoryId, changes) {
+		let dataset = this.data.dataset;
+		let match = files.findInTree([dataset], directoryId);
+		if (match) {
+			for (let key in changes) {
+				match[key] = changes[key];
+			}
+		}
+		this.update({dataset});
 	},
 
 	/**
@@ -301,22 +347,16 @@ let UserStore = Reflux.createStore({
 	},
 
 	/**
-	 * Delete File
+	 * Toggle Folder
+	 *
+	 * Takes the id of a container in the
+	 * current dataset and toggles its showChildren
+	 * boolean which determines whether container
+	 * children are shown in the tree hierarchy UI.
 	 */
-	deleteFile(file) {
-		let dataset = this.data.dataset;
-		scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
-			let match = files.findInTree([dataset], file.parentId);
-			let children = [];
-			for (let existingFile of match.children) {
-				if (file.filename !== existingFile.filename) {
-					children.push(existingFile);
-				}
-			}
-			match.children = children;
-			this.update({dataset});
-		});
-	}
+	toggleFolder(directory) {
+		this.updateDirectoryState(directory._id, {showChildren: !directory.showChildren});
+	},
 
 });
 
