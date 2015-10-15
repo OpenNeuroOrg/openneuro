@@ -65,6 +65,13 @@ let Datasets = React.createClass({
         	<div className={isPublic ? "fadeIn public-dashboard inner-route" : "fadeIn"}>
             	<div className="dash-tab-content datasets ">
                     <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
+                    <h5>
+                        <span>sort by: </span>
+                        <button onClick={this._sort.bind(this, 'name', '+')}>name ^</button>
+                        <button onClick={this._sort.bind(this, 'name', '-')}>name v</button>
+                        <button onClick={this._sort.bind(this, 'timestamp', '+')}>date ^</button>
+                        <button onClick={this._sort.bind(this, 'timestamp', '-')}>date v</button>
+                    </h5>
                     <PanelGroup>
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>
@@ -94,6 +101,10 @@ let Datasets = React.createClass({
     _onPageSelect(page, e) {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
+    },
+
+    _sort(value, direction) {
+        Actions.sort(value, direction);
     }
 
 });

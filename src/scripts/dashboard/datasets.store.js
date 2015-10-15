@@ -56,6 +56,37 @@ let UploadStore = Reflux.createStore({
         bids.getDatasets(function (datasets) {
             self.update({datasets: datasets,  loading: false});
         }, !isPublic);
+    },
+
+    /**
+     * Sort
+     *
+     */
+    sort(value, direction) {
+    	let datasets = this.data.datasets;
+    	datasets = datasets.sort((a, b) => {
+    		let aVal, bVal;
+
+    		// format comparison data
+    		if (value === 'name') {
+	    		aVal = a[value].toLowerCase();
+	    		bVal = b[value].toLowerCase();
+	    	} else if (value === 'timestamp') {
+	    		aVal = -Date.parse(a[value]);
+	    		bVal = -Date.parse(b[value]);
+	    	}
+
+	    	// sort
+    		if (direction == '+') {
+	    		if (aVal > bVal) {return 1;}
+	    		if (aVal < bVal) {return -1;}
+	    	} else if (direction == '-') {
+	    		if (aVal > bVal) {return -1;}
+	    		if (aVal < bVal) {return 1;}
+	    	}
+    		return 0;
+    	});
+    	this.update({datasets});
     }
 
 });

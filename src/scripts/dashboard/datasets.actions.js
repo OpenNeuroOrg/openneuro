@@ -1,7 +1,8 @@
 import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
-	'getDatasets'
+	'getDatasets',
+	'sort'
 ]);
 
 export default Actions;
