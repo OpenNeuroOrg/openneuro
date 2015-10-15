@@ -11,6 +11,7 @@ var Actions = Reflux.createActions([
 	'loadDataset',
 	'loadUsers',
 	'publish',
+	'reloadDataset',
 	'saveDescription',
 	'setInitialState',
 	'toggleFolder',

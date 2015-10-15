@@ -168,7 +168,6 @@ export default  {
                                     session.children = session.children.concat(modalities);
                                     async.each(modalities, (modality, cb2) => {
                                         scitran.getAcquisition(modality._id, (res) => {
-                                            for (let file of res.files) {file.name = file.filename;}
                                             modality.containerType = 'acquisitions';
                                             modality.children = res.files;
                                             modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
@@ -267,6 +266,7 @@ export default  {
      */
     labelFile (items, parentId, parentContainer) {
         for (let item of items) {
+            item.name = item.filename;
             item.parentId = parentId;
             item.parentContainer = parentContainer;
         }

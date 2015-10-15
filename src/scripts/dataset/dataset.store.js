@@ -73,6 +73,23 @@ let UserStore = Reflux.createStore({
 	},
 
 	/**
+	 * Reload Dataset
+	 *
+	 * Optionally takes a datasetId and only reloads
+	 * the dataset if that ID matches the current ID.
+	 * If no ID is passed it reloads the current ID.
+	 */
+	reloadDataset(datasetId) {
+		if (this.data.dataset) {
+			if (!datasetId) {
+				this.loadDataset(this.data.dataset._id);
+			}else if (this.data.dataset._id == datasetId) {
+				this.loadDataset(datasetId);
+			}
+		}
+	},
+
+	/**
 	 * Load Users
 	 *
 	 * Loads a list of all users.
