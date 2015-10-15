@@ -62,7 +62,7 @@ let UserStore = Reflux.createStore({
 		hello.init({google: config.auth.google.clientID});
 		this.checkUser();
 	},
-	
+
 	/**
 	 * Check User
 	 *
@@ -100,6 +100,10 @@ let UserStore = Reflux.createStore({
 	signIn() {
 		this.update({loading: true});
 		hello('google').login({scope: 'email,openid'}, (res) => {
+			if (res.error) {
+				this.update({loading: false});
+				return;
+			}
 			this.update({token: res.authResponse.access_token});
 			hello(res.network).api('/me').then((profile) => {
 				scitran.verifyUser((err, res) => {
