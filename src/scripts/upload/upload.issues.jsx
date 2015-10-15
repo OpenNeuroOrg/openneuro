@@ -6,7 +6,7 @@ import pluralize   from 'pluralize';
 import Actions     from './upload.actions.js';
 import UploadStore from './upload.store.js';
 import Results     from './upload.validation-results.jsx';
-import Spinner     from '../common/partials/spinner.component.jsx';
+import Spinner     from '../common/partials/spinner.jsx';
 import ErrorLink   from './upload.error-link.jsx';
 
 let Issues = React.createClass({

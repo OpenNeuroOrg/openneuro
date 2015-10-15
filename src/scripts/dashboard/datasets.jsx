@@ -7,14 +7,14 @@ import DatasetsStore from './datasets.store.js';
 import {State, Link} from 'react-router';
 import moment        from 'moment';
 import {PanelGroup}  from 'react-bootstrap';
-import Paginator     from '../common/partials/paginator.component.jsx';
-import Spinner       from '../common/partials/spinner.component.jsx';
+import Paginator     from '../common/partials/paginator.jsx';
+import Spinner       from '../common/partials/spinner.jsx';
 import Statuses      from '../dataset/dataset.statuses.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
 let Datasets = React.createClass({
-    
+
     mixins: [State, Reflux.connect(DatasetsStore)],
 
 // life cycle events -------------------------------------------------------------------------
@@ -36,7 +36,7 @@ let Datasets = React.createClass({
             results = <p className="no-datasets">{noDatasets}</p>;
         } else {
             var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
-            let paginatedResults = this._paginate(datasets, this.state.resultsPerPage, this.state.page);   
+            let paginatedResults = this._paginate(datasets, this.state.resultsPerPage, this.state.page);
 
             // map results
             results = paginatedResults.map(function (dataset, index){
@@ -49,7 +49,7 @@ let Datasets = React.createClass({
                             <div className="header clearfix">
                                 <Link to="dataset" params={{datasetId: dataset._id}}>
                                     <h4 className="dataset">
-                                        {dataset.name} 
+                                        {dataset.name}
                                         <Statuses dataset={dataset} />
                                     </h4>
                                     <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
@@ -65,7 +65,7 @@ let Datasets = React.createClass({
         	<div className={isPublic ? "fadeIn public-dashboard inner-route" : "fadeIn"}>
             	<div className="dash-tab-content datasets ">
                     <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
-                    <PanelGroup> 
+                    <PanelGroup>
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>
                 </div>

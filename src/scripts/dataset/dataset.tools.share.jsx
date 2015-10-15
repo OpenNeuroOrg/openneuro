@@ -4,8 +4,8 @@ import React      from 'react';
 import Actions    from './dataset.actions.js';
 import bids       from '../utils/bids';
 import scitran    from '../utils/scitran';
-import Input      from '../common/forms/input.component.jsx';
-import WarnButton from '../common/forms/warn-button.component.jsx';
+import Input      from '../common/forms/input.jsx';
+import WarnButton from '../common/forms/warn-button.jsx';
 
 export default class Share extends React.Component {
 

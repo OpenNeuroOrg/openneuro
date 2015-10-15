@@ -1,7 +1,7 @@
 // dependencies --------------------------------------------------------------
 
 import React      from 'react';
-import Tooltip    from './tooltip.component.jsx';
+import Tooltip    from './tooltip.jsx';
 import FileSelect from '../forms/file-select.jsx';
 import actions    from '../../upload/upload.actions';
 

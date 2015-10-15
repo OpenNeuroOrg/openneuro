@@ -1,8 +1,8 @@
 // dependencies -------------------------------------------------------
 
 import React      from 'react';
-import Spinner    from '../../common/partials/spinner.component.jsx';
-import WarnButton from './warn-button.component.jsx';
+import Spinner    from '../../common/partials/spinner.jsx';
+import WarnButton from './warn-button.jsx';
 
 // component setup ----------------------------------------------------
 

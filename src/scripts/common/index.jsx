@@ -1,10 +1,10 @@
 // dependencies --------------------------------------------------------------
 
 import React        from 'react';
-import Navbar       from './partials/navbar.component.jsx';
+import Navbar       from './partials/navbar.jsx';
 import Actions      from '../user/user.actions.js';
-import Upload       from '../upload/upload.component.jsx';
-import LeftNavbar   from './partials/leftNavbar.component.jsx';
+import Upload       from '../upload/upload.jsx';
+import LeftNavbar   from './partials/left-navbar.jsx';
 import mixin        from 'es6-react-mixins';
 import UserStore    from '../user/user.store';
 import bowser  		from 'bowser';
@@ -18,7 +18,7 @@ let App = React.createClass({
 	mixins: [State],
 
 // life cycle methods --------------------------------------------------------
-	
+
 	getInitialState() {
 		return {toggleSidebarbar: true};
 	},
@@ -74,8 +74,8 @@ let App = React.createClass({
 				</div>
 				{toggleSidebar}
 				{sidebar}
-			</div> 
-		)				
+			</div>
+		);
 	},
 
 // custom methods ------------------------------------------------------------

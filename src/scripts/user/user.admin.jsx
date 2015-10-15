@@ -3,10 +3,10 @@
 import React      from 'react';
 import Actions    from './user.actions.js';
 import userStore  from './user.store.js';
-import Input      from '../common/forms/input.component.jsx';
+import Input      from '../common/forms/input.jsx';
 import {Panel}    from 'react-bootstrap';
 import scitran    from '../utils/scitran';
-import WarnButton from '../common/forms/warn-button.component.jsx';
+import WarnButton from '../common/forms/warn-button.jsx';
 
 export default class AddUser extends React.Component {
 
