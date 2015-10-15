@@ -195,24 +195,43 @@ let UserStore = Reflux.createStore({
 	 * the file to the current dataset.
 	 */
 	uploadAttachment(file, callback) {
-		let request = {
-			url: config.scitran.url + 'projects/' + this.data.dataset._id + '/file/' + file.name,
-			file: file,
-			tag: 'attachment',
-			progressStart: () => {},
-			progressEnd: () => {
-				bids.getDataset(this.data.dataset._id, (res) => {
-					let dataset = this.data.dataset;
-					dataset.attachments = res.attachments;
-					this.update({dataset: dataset});
-					callback();
-				});
-			},
-			error: (err, req) => {
-
+		let attachmentExists, fileExists;
+		for (let attachment of this.data.dataset.attachments) {
+			if (attachment.name === file.name) {
+				attachmentExists = true;
 			}
-		};
-		upload.add(request);
+		}
+
+		for (let existingFile of this.data.dataset.children) {
+			if (existingFile.name === file.name) {
+				fileExists = true;
+			}
+		}
+
+		if (attachmentExists) {
+			callback({error: '"' + file.name + '" has already been uploaded. Multiple attachments with the same name are not allowed.'});
+		} else if (fileExists) {
+			callback({error: 'You cannot upload a file named "' + file.name + '" as an attachment because it already exists in the dataset.'});
+		} else {
+			let request = {
+				url: config.scitran.url + 'projects/' + this.data.dataset._id + '/file/' + file.name,
+				file: file,
+				tag: 'attachment',
+				progressStart: () => {},
+				progressEnd: () => {
+					bids.getDataset(this.data.dataset._id, (res) => {
+						let dataset = this.data.dataset;
+						dataset.attachments = res.attachments;
+						this.update({dataset: dataset});
+						callback();
+					});
+				},
+				error: (err, req) => {
+					callback({error: 'There was an error uploading your attachment. Please try again and contact the site administrator if the issue persists.'});
+				}
+			};
+			upload.add(request);
+		}
 	},
 
 	/**
