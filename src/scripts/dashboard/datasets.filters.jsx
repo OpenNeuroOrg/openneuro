@@ -20,10 +20,10 @@ export default class Filters extends React.Component {
 		if (!this.props.isPublic) {
 			filterButtons = (
 				<div>
-		            <span>show:</span>
-		            <button className={filters.indexOf('public') > -1 ? 'active' : null} onClick={this._filter.bind(this, 'public')}>public</button>
-		            <button className={filters.indexOf('incomplete') > -1 ? 'active' : null} onClick={this._filter.bind(this, 'incomplete')}>incomplete</button>
-		            <button className={filters.indexOf('shared') > -1 ? 'active' : null} onClick={this._filter.bind(this, 'shared')}>shared with me</button>
+		            <span>Show:</span>
+		            <button className={filters.indexOf('public') > -1 ? 'active' : null} onClick={this._filter.bind(this, 'public')}>Public</button>
+		            <button className={filters.indexOf('incomplete') > -1 ? 'active' : null} onClick={this._filter.bind(this, 'incomplete')}>Incomplete</button>
+		            <button className={filters.indexOf('shared') > -1 ? 'active' : null} onClick={this._filter.bind(this, 'shared')}>Shared with me</button>
 		        </div>
 		    );
 		}
@@ -31,9 +31,9 @@ export default class Filters extends React.Component {
 		return (
 			<div>
 				<div>
-		            <span>sort by: </span>
-		            <button onClick={this._sort.bind(this, 'name')}>name {value == 'name' ? icon : null}</button>
-		            <button onClick={this._sort.bind(this, 'timestamp')}>date {value == 'timestamp' ? icon : null}</button>
+		            <span>Sort By: </span>
+		            <button onClick={this._sort.bind(this, 'name')}>Name {value == 'name' ? icon : null}</button>
+		            <button onClick={this._sort.bind(this, 'timestamp')}>State {value == 'timestamp' ? icon : null}</button>
 		        </div>
 		        {filterButtons}
 	        </div>

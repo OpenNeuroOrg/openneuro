@@ -37,7 +37,7 @@ let Datasets = React.createClass({
             let noDatasets = "You don't have any datasets.";
             results = <p className="no-datasets">{noDatasets}</p>;
         } else if (visibleDatasets.length === 0) {
-            let noDatasets = "You don't have any datasets that match those filters.";
+            let noDatasets = "You don't have any datasets that match the selected filters.";
             results = <p className="no-datasets">{noDatasets}</p>;
         } else {
             var pagesTotal = Math.ceil(visibleDatasets.length / this.state.resultsPerPage);
