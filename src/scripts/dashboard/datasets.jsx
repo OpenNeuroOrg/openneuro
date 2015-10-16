@@ -7,14 +7,15 @@ import DatasetsStore from './datasets.store.js';
 import {State, Link} from 'react-router';
 import moment        from 'moment';
 import {PanelGroup}  from 'react-bootstrap';
-import Paginator     from '../common/partials/paginator.component.jsx';
-import Spinner       from '../common/partials/spinner.component.jsx';
+import Paginator     from '../common/partials/paginator.jsx';
+import Spinner       from '../common/partials/spinner.jsx';
 import Statuses      from '../dataset/dataset.statuses.jsx';
+import Filters       from './datasets.filters.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
 let Datasets = React.createClass({
-    
+
     mixins: [State, Reflux.connect(DatasetsStore)],
 
 // life cycle events -------------------------------------------------------------------------
@@ -28,15 +29,19 @@ let Datasets = React.createClass({
     render() {
         let self     = this;
         let datasets = this.state.datasets;
+        let visibleDatasets = this.state.visibleDatasets;
         let isPublic  = this.state.isPublic;
         let results;
 
         if (datasets.length === 0) {
             let noDatasets = "You don't have any datasets.";
             results = <p className="no-datasets">{noDatasets}</p>;
+        } else if (visibleDatasets.length === 0) {
+            let noDatasets = "You don't have any datasets that match the selected filters.";
+            results = <p className="no-datasets">{noDatasets}</p>;
         } else {
-            var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
-            let paginatedResults = this._paginate(datasets, this.state.resultsPerPage, this.state.page);   
+            var pagesTotal = Math.ceil(visibleDatasets.length / this.state.resultsPerPage);
+            let paginatedResults = this._paginate(visibleDatasets, this.state.resultsPerPage, this.state.page);
 
             // map results
             results = paginatedResults.map(function (dataset, index){
@@ -49,7 +54,7 @@ let Datasets = React.createClass({
                             <div className="header clearfix">
                                 <Link to="dataset" params={{datasetId: dataset._id}}>
                                     <h4 className="dataset">
-                                        {dataset.name} 
+                                        {dataset.name}
                                         <Statuses dataset={dataset} />
                                     </h4>
                                     <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
@@ -65,7 +70,8 @@ let Datasets = React.createClass({
         	<div className={isPublic ? "fadeIn public-dashboard inner-route" : "fadeIn"}>
             	<div className="dash-tab-content datasets ">
                     <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
-                    <PanelGroup> 
+                    <Filters sort={this.state.sort} filters={this.state.filters} isPublic={isPublic} />
+                    <PanelGroup>
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>
                 </div>
@@ -94,6 +100,10 @@ let Datasets = React.createClass({
     _onPageSelect(page, e) {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
+    },
+
+    _sort(value, direction) {
+        Actions.sort(value, direction);
     }
 
 });

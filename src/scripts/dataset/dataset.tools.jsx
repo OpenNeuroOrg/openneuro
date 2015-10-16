@@ -4,7 +4,7 @@ import React        from 'react';
 import Reflux       from 'reflux';
 import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
-import WarnButton   from '../common/forms/warn-button.component.jsx';
+import WarnButton   from '../common/forms/warn-button.jsx';
 import Share        from './dataset.tools.share.jsx';
 import {Modal}      from 'react-bootstrap';
 

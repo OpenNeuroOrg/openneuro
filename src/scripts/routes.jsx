@@ -6,13 +6,13 @@ import requireAuth from './utils/requireAuth';
 
 // views
 import Index          from './common/index.jsx';
-import Signin         from './user/signin.component.jsx';
+import Signin         from './user/signin.jsx';
 import Admin          from './user/user.admin.jsx';
-import Dashboard      from './dashboard/dashboard.component.jsx';
-import Notifications  from './dashboard/notifications.component.jsx';
-import Datasets       from './dashboard/datasets.component.jsx';
+import Dashboard      from './dashboard/dashboard.jsx';
+import Notifications  from './dashboard/notifications.jsx';
+import Datasets       from './dashboard/datasets.jsx';
 import Dataset        from './dataset/dataset.jsx';
-import Jobs           from './dashboard/jobs.component.jsx';
+import Jobs           from './dashboard/jobs.jsx';
 
 // redirects -------------------------------------------------------------
 
@@ -31,8 +31,8 @@ class RedirectNotifications extends React.Component {
 // routes ----------------------------------------------------------------
 
 // authenticated routes
-Dashboard   = requireAuth(Dashboard);
-Admin       = requireAuth(Admin, 'admin');
+Dashboard = requireAuth(Dashboard);
+Admin     = requireAuth(Admin, 'admin');
 
 let routes = (
 	<Route name="app" path="/" handler={Index}>
@@ -47,7 +47,7 @@ let routes = (
 		<Route name="public" path="public" handler={Datasets}/>
 		<Route name="dataset" path="dataset/:datasetId" handler={Dataset} />
 		<DefaultRoute handler={RedirectDashboard}/>
-		<NotFoundRoute handler={RedirectDashboard}/>	
+		<NotFoundRoute handler={RedirectDashboard}/>
 	</Route>
 );
 

@@ -2,7 +2,7 @@
 
 import React      from 'react';
 import actions    from './dataset.actions';
-import WarnButton from '../common/forms/warn-button.component.jsx';
+import WarnButton from '../common/forms/warn-button.jsx';
 
 class FileTree extends React.Component {
 

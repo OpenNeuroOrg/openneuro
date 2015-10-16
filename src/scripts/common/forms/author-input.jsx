@@ -1,8 +1,8 @@
 // dependencies -------------------------------------------------------
 
 import React      from 'react'
-import Input      from './input.component.jsx';
-import WarnButton from './warn-button.component.jsx';
+import Input      from './input.jsx';
+import WarnButton from './warn-button.jsx';
 
 // component setup ----------------------------------------------------
 

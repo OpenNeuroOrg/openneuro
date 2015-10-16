@@ -5,7 +5,7 @@ import Reflux    from 'reflux';
 import Actions   from './user.actions.js';
 import userStore from './user.store.js';
 import {Link} 	 from 'react-router';
-import Spinner   from '../common/partials/spinner.component.jsx';
+import Spinner   from '../common/partials/spinner.jsx';
 
 // component setup ----------------------------------------------------
 
@@ -14,7 +14,7 @@ let Signin = React.createClass({
     mixins: [Reflux.connect(userStore)],
 
 // life cycle events --------------------------------------------------
-	
+
 	statics: {
 		willTransitionTo(transition) {
 			if (userStore.data.token) {
@@ -62,7 +62,7 @@ let Signin = React.createClass({
 								<Spinner text="Signing in..." active={this.state.loading} />
 							</div>
 						</div>
-					</div>	
+					</div>
 					<div className="more-info col-xs-12">
 						View more information about <a href="http://reproducibility.stanford.edu/" target="_blank">Stanford Center for Reproducible Neuroscience</a> and <a href="http://bids.neuroimaging.io/" target="_blank">BIDS Specifications</a>
 					</div>

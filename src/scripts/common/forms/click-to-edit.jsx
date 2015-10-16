@@ -3,7 +3,7 @@
 import React          from 'react';
 import AuthorInput    from './author-input.jsx';
 import FileArrayInput from './file-array-input.jsx';
-import Spinner        from '../partials/spinner.component.jsx';
+import Spinner        from '../partials/spinner.jsx';
 import request        from '../../utils/request';
 
 let ClickToEdit = React.createClass({
