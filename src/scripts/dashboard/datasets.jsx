@@ -29,15 +29,19 @@ let Datasets = React.createClass({
     render() {
         let self     = this;
         let datasets = this.state.datasets;
+        let visibleDatasets = this.state.visibleDatasets;
         let isPublic  = this.state.isPublic;
         let results;
 
         if (datasets.length === 0) {
             let noDatasets = "You don't have any datasets.";
             results = <p className="no-datasets">{noDatasets}</p>;
+        } else if (visibleDatasets.length === 0) {
+            let noDatasets = "You don't have any datasets that match those filters.";
+            results = <p className="no-datasets">{noDatasets}</p>;
         } else {
-            var pagesTotal = Math.ceil(datasets.length / this.state.resultsPerPage);
-            let paginatedResults = this._paginate(datasets, this.state.resultsPerPage, this.state.page);
+            var pagesTotal = Math.ceil(visibleDatasets.length / this.state.resultsPerPage);
+            let paginatedResults = this._paginate(visibleDatasets, this.state.resultsPerPage, this.state.page);
 
             // map results
             results = paginatedResults.map(function (dataset, index){
@@ -66,7 +70,7 @@ let Datasets = React.createClass({
         	<div className={isPublic ? "fadeIn public-dashboard inner-route" : "fadeIn"}>
             	<div className="dash-tab-content datasets ">
                     <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
-                    <Filters sort={this.state.sort}/>
+                    <Filters sort={this.state.sort} filters={this.state.filters} isPublic={isPublic} />
                     <PanelGroup>
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>

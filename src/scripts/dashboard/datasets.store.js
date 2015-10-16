@@ -24,9 +24,11 @@ let UploadStore = Reflux.createStore({
 
 	data: {},
 
-	update(data) {
+	update(data, callback) {
 		for (let prop in data) {this.data[prop] = data[prop];}
-		this.trigger(this.data);
+		this.trigger(this.data, () => {
+			if (callback) {callback();}
+		});
 	},
 
 	/**
@@ -41,12 +43,14 @@ let UploadStore = Reflux.createStore({
 		let data = {
 			loading: false,
             datasets: [],
+            visibleDatasets: [],
             resultsPerPage: 30,
             page: 0,
             sort: {
             	value: 'timestamp',
             	direction: '+'
-            }
+            },
+            filters: []
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -54,13 +58,76 @@ let UploadStore = Reflux.createStore({
 
 // actions ---------------------------------------------------------------------------
 
+	/**
+	 * Get Datasets
+	 *
+	 * Takes a boolean representing whether the
+	 * request is for public datasets and gets
+	 * a list of datasets and sorts by the current
+	 * sort setting.
+	 */
 	getDatasets(isPublic) {
 		let self = this;
-        self.update({loading: true});
-        bids.getDatasets((datasets) => {
-            this.sort(null, null, datasets);
-        }, !isPublic);
+        self.update({
+        	loading: true,
+            sort: {
+            	value: 'timestamp',
+            	direction: '+'
+            },
+            filters: []
+        }, () => {
+	        bids.getDatasets((datasets) => {
+	            this.sort(null, null, datasets);
+	        }, !isPublic);
+	    });
     },
+
+    /**
+     * Filter
+     *
+     * Takes a value and toggles whether datasets
+     * with that value are shown.
+     */
+    filter(value) {
+
+    	// set filters
+    	let filters = this.data.filters;
+    	let index = filters.indexOf(value);
+    	if (index > -1) {
+    		filters.splice(index, 1);
+    	} else {
+    		filters.push(value);
+    	}
+
+    	// filter data
+    	let visibleDatasets = this.data.datasets;
+    	if (filters.length > 0) {
+    		let results = [];
+	    	for (let dataset of visibleDatasets) {
+
+	    		// public
+	    		if (filters.indexOf('public') > -1 && dataset.public) {
+	    			results.push(dataset);
+	    		}
+
+	    		// incomplete
+	    		if (filters.indexOf('incomplete') > -1 && dataset.status.uploadIncomplete) {
+	    			results.push(dataset);
+	    		}
+
+	    		// shared
+	    		if (filters.indexOf('shared') > -1 && dataset.sharedWithMe) {
+	    			results.push(dataset);
+	    		}
+
+	    	}
+	    	visibleDatasets = results;
+	    }
+
+    	// update state
+    	this.update({filters, visibleDatasets});
+    },
+
 
     /**
      * Sort
@@ -96,6 +163,7 @@ let UploadStore = Reflux.createStore({
     	});
     	this.update({
     		datasets,
+    		visibleDatasets: datasets,
     		sort: {
     			value,
     			direction

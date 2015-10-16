@@ -310,6 +310,7 @@ export default  {
             access:      this.userAccess(project)
         };
         dataset.authors = dataset.description.Authors;
+        dataset.sharedWithMe = dataset.userOwns && !dataset.userCreated;
         return dataset;
     },
 
