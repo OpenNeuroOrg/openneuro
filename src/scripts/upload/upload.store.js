@@ -9,6 +9,7 @@ import files           from '../utils/files';
 import validate        from 'bids-validator';
 import userStore       from '../user/user.store';
 import datasetsActions from '../dashboard/datasets.actions';
+import datasetActions  from '../dataset/dataset.actions';
 import {Link}          from 'react-router';
 
 // store setup -----------------------------------------------------------------------
@@ -108,7 +109,7 @@ let UploadStore = Reflux.createStore({
 		let self = this;
 		self.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
         validate.BIDS(selectedFiles, function (errors, warnings) {
-        	
+
         	if (errors === 'Invalid') {
         		self.update({errors: 'Invalid'});
         	}
@@ -188,7 +189,7 @@ let UploadStore = Reflux.createStore({
 		});
 
 		let datasetsUpdated = false;
-		
+
 		upload.upload(userStore.data.scitran._id, fileTree, count, (progress, projectId) => {
 			if (this.data.alert !== 'Error') {
 				projectId = projectId ? projectId : this.data.projectId;
@@ -222,7 +223,10 @@ let UploadStore = Reflux.createStore({
 			<span><a href={"#/dataset/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>
 		);
 
+		// refresh my datasets
 		datasetsActions.getDatasets();
+		// refresh current datset
+		datasetActions.reloadDataset(projectId);
 
 		this.setInitialState({
 			alert: 'Success',

@@ -20,7 +20,9 @@ class FileTree extends React.Component {
 			}
 
 			// inline error
-			if (item.error) {error = <div>{item.error}</div>;}
+			if (item.error) {
+				error = <div>{item.error} <span onClick={this._dismissError.bind(this, item)}><i className="fa fa-times"></i></span></div>;
+			}
 
 			// folders
 			if (item.children) {
@@ -67,24 +69,9 @@ class FileTree extends React.Component {
 // custom methods -----------------------------------------------------
 
 	/**
-	 * Toggle Folder
-	 */
-	_toggleFolder(folder) {actions.toggleFolder(folder);}
-
-	/**
 	 * Add File
 	 */
 	_addFile(container, event) {actions.addFile(container, event.target.files[0]);}
-
-	/**
-	 * Update File
-	 */
-	_updateFile(item, event) {actions.updateFile(item, event.target.files[0]);}
-
-	/**
-	 * Delete File
-	 */
-	_deleteFile(file) {actions.deleteFile(file);}
 
 	/**
 	 * Clear Input
@@ -92,6 +79,26 @@ class FileTree extends React.Component {
 	_clearInput(ref) {
 		React.findDOMNode(this.refs[ref]).value = null;
 	}
+
+	/**
+	 * Delete File
+	 */
+	_deleteFile(file) {actions.deleteFile(file);}
+
+	/**
+	 * Dismiss Error
+	 */
+	 _dismissError(item) {actions.dismissError(item);}
+
+	/**
+	 * Toggle Folder
+	 */
+	_toggleFolder(folder) {actions.toggleFolder(folder);}
+
+	/**
+	 * Update File
+	 */
+	_updateFile(item, event) {actions.updateFile(item, event.target.files[0]);}
 
 }
 

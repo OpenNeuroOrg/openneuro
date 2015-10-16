@@ -34,8 +34,19 @@ let FileArrayInput = React.createClass({
 			);
 		});
 
+		let error;
+		if (this.state.error) {
+			error = (
+				<div className="alert alert-danger">
+					<button className="close" onClick={this._dismissError}><span>&times;</span></button>
+					{this.state.error}
+				</div>
+			);
+		}
+
 		return (
 			<div className="cte-edit-array">
+				{error}
 				<div className="cte-array-items clearfix">{items}</div>
 				{this.state.loading ? <Spinner active={true} /> : <input type="file" onChange={this._handleChange}/>}
 			</div>
@@ -47,9 +58,10 @@ let FileArrayInput = React.createClass({
 	_handleChange(e) {
 		let file = e.target.files[0];
 		if (this.props.onChange) {
-			this.setState({loading: true});
-			this.props.onChange(file, () => {
-				this.setState({loading: false});
+			this.setState({loading: true, error: null});
+			this.props.onChange(file, (res) => {
+				let error = res ? res.error : null;
+				this.setState({loading: false, error: error});
 			});
 		}
 	},
@@ -64,6 +76,10 @@ let FileArrayInput = React.createClass({
 		if (this.props.onFileClick) {
 			this.props.onFileClick(filename);
 		}
+	},
+
+	_dismissError() {
+		this.setState({error: null});
 	}
 
 });

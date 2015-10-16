@@ -13,7 +13,7 @@ export default class Status extends React.Component {
 
 	render() {
 		let spanClass, tip, iconClass, click, fileSelect;
-		
+
 		switch(this.props.type) {
 			case 'public':
 				spanClass = 'dataset-status ds-info';
@@ -67,5 +67,5 @@ export default class Status extends React.Component {
 }
 
 Status.propTypes = {
-	type: React.PropTypes.string.isRequired	
+	type: React.PropTypes.string.isRequired
 };

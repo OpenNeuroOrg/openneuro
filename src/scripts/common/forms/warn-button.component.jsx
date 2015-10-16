@@ -7,7 +7,7 @@ export default class WarnButton extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			showDeleteBtn: false
+			showAction: false
 		};
 	}
 
@@ -18,33 +18,39 @@ export default class WarnButton extends React.Component {
 	}
 
 	render () {
-		let showDeleteBtn = this.state.showDeleteBtn;
+		let showAction = this.state.showAction;
 		let message       = this.props.message;
 		let cancel        = this.props.cancel;
 		let confirm       = this.props.confirm;
-			
-		let hideDeleteBtn = (
+
+		let viewAction = (
         	<div className="btn-group slideInRightFast" role="group" >
-        		<button className="btn btn-admin cancel" onClick={this.toggleDelete.bind(this)}>{cancel}</button>
-        		<button className="btn btn-admin delete" onClick={this.props.action}>{confirm}</button>
+        		<button className="btn btn-admin cancel" onClick={this.toggle.bind(this)}>{cancel}</button>
+        		<button className="btn btn-admin delete" onClick={this.toggle.bind(this, this.props.action)}>{confirm}</button>
         	</div>
         );
 
-        let viewdeleteBtn = (
+        let hideAction = (
         	<div className=" fadeIn" >
-        		 <button className="btn btn-admin warning" onClick={this.toggleDelete.bind(this)}>{message}<i className={'fa ' + this.props.icon}></i> </button>
+        		 <button className="btn btn-admin warning" onClick={this.toggle.bind(this)}>{message}<i className={'fa ' + this.props.icon}></i> </button>
         	</div>
         );
 
 		return (
-			<div>{showDeleteBtn ? hideDeleteBtn : viewdeleteBtn}</div>
+			<div>{showAction ? viewAction : hideAction}</div>
     	);
 	}
 
 // custom methods -----------------------------------------------------
 
-	toggleDelete() {
-		this.setState({showDeleteBtn: !this.state.showDeleteBtn});
+	toggle(action) {
+		if (typeof action === 'function') {
+			this.props.action(() => {
+				this.setState({showAction: !this.state.showAction});
+			});
+		} else {
+			this.setState({showAction: !this.state.showAction});
+		}
 	}
 
 }
