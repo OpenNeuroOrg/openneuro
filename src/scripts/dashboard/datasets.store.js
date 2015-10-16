@@ -42,7 +42,11 @@ let UploadStore = Reflux.createStore({
 			loading: false,
             datasets: [],
             resultsPerPage: 30,
-            page: 0
+            page: 0,
+            sort: {
+            	value: 'timestamp',
+            	direction: '+'
+            }
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -53,21 +57,25 @@ let UploadStore = Reflux.createStore({
 	getDatasets(isPublic) {
 		let self = this;
         self.update({loading: true});
-        bids.getDatasets(function (datasets) {
-            self.update({datasets: datasets,  loading: false});
+        bids.getDatasets((datasets) => {
+            this.sort(null, null, datasets);
         }, !isPublic);
     },
 
     /**
      * Sort
      *
+     * Takes a value and a direction (+ or -) and
+     * sorts the current datasets acordingly.
      */
-    sort(value, direction) {
-    	let datasets = this.data.datasets;
-    	datasets = datasets.sort((a, b) => {
-    		let aVal, bVal;
+    sort(value, direction, datasets) {
+    	value     = value     ? value     : this.data.sort.value;
+    	direction = direction ? direction : this.data.sort.direction;
+    	datasets  = datasets  ? datasets  : this.data.datasets;
+    	datasets  = datasets.sort((a, b) => {
 
     		// format comparison data
+    		let aVal, bVal;
     		if (value === 'name') {
 	    		aVal = a[value].toLowerCase();
 	    		bVal = b[value].toLowerCase();
@@ -86,7 +94,14 @@ let UploadStore = Reflux.createStore({
 	    	}
     		return 0;
     	});
-    	this.update({datasets});
+    	this.update({
+    		datasets,
+    		sort: {
+    			value,
+    			direction
+    		},
+    		loading: false
+    	});
     }
 
 });

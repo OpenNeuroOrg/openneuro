@@ -10,6 +10,7 @@ import {PanelGroup}  from 'react-bootstrap';
 import Paginator     from '../common/partials/paginator.jsx';
 import Spinner       from '../common/partials/spinner.jsx';
 import Statuses      from '../dataset/dataset.statuses.jsx';
+import Filters       from './datasets.filters.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
@@ -65,13 +66,7 @@ let Datasets = React.createClass({
         	<div className={isPublic ? "fadeIn public-dashboard inner-route" : "fadeIn"}>
             	<div className="dash-tab-content datasets ">
                     <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
-                    <h5>
-                        <span>sort by: </span>
-                        <button onClick={this._sort.bind(this, 'name', '+')}>name ^</button>
-                        <button onClick={this._sort.bind(this, 'name', '-')}>name v</button>
-                        <button onClick={this._sort.bind(this, 'timestamp', '+')}>date ^</button>
-                        <button onClick={this._sort.bind(this, 'timestamp', '-')}>date v</button>
-                    </h5>
+                    <Filters sort={this.state.sort}/>
                     <PanelGroup>
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>

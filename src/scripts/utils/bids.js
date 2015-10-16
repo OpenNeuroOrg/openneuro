@@ -86,7 +86,6 @@ export default  {
         if (authenticate === undefined) {authenticate = true;}
         scitran.getProjects(authenticate, (projects) => {
             let results = [];
-            projects.reverse();
 
             // hide other user's projects from admins
             for (let project of projects) {
