@@ -9,6 +9,15 @@ import config  from '../config';
  */
 export default {
 
+    /**
+     * Is Super User
+     */
+    isSuperUser(accessToken, callback) {
+        request.get(config.scitran.baseURL + 'users/self', {}, (err, res) => {
+            console.log(res);
+        });
+    },
+
 	/**
 	 * Create User
 	 */
