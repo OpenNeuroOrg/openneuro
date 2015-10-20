@@ -1,8 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React      from 'react';
-import Actions    from './user.actions.js';
-import userStore  from './user.store.js';
+import userStore  from '../user/user.store.js';
 import Input      from '../common/forms/input.jsx';
 import {Panel}    from 'react-bootstrap';
 import scitran    from '../utils/scitran';
@@ -69,7 +68,7 @@ export default class AddUser extends React.Component {
 		});
 
 		return (
-			<div className="fadeIn inner-route admin clearfix">
+			<div className="dash-tab-content fadeIn inner-route admin clearfix">
 				<h2>Add A New User</h2>
 				<div>
 					<div className="col-sm-4 add-user">
