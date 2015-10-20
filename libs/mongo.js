@@ -5,6 +5,12 @@ import config        from '../config';
 
 export default {
 
+	/**
+	 * DB
+	 *
+	 * A storage location for a the database instance.
+	 * Used to access the native mongo api.
+	 */
 	db: null,
 
 	/**

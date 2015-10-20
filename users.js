@@ -59,12 +59,25 @@ export default {
 		sanitize.req(req, models.blacklistUser, (err, user) => {
 			if (err) {return next(err);}
 
-			// check if request is made by a scitran super user
-
-			// write user to db
-			blacklist.insertOne(user, {w:1}, (err, item) => {
-				if (err) {return next(err);}
-				res.send(item);
+			scitran.isSuperUser(req.headers.authorization, (isSuperUser) => {
+				if (isSuperUser) {
+					blacklist.findOne({_id: user._id}).then((item) => {
+						if (item) {
+							let error = new Error("A user with that _id has already been blacklisted");
+							error.http_code = 409;
+							return next(error);
+						} else {
+							blacklist.insertOne(user, {w:1}, (err, item) => {
+								if (err) {return next(err);}
+								res.send(user);
+							});
+						}
+					});
+				} else {
+					let error = new Error("You must have admin privileges to blacklist a user");
+					error.http_code = 403;
+					return next(error);
+				}
 			});
 		});
 	},
@@ -77,16 +90,20 @@ export default {
 	 * Returns a list of blacklisted users.
 	 */
 	getBlacklist(req, res, next) {
-		scitran.isSuperUser(req.headers.authorization);
 		let blacklist = mongo.db.collection('blacklist');
-
-		// check if request is make by a scitran super user
-
-		// return blacklist
-		blacklist.find().toArray((err, docs) => {
-			if (err) {return next(err);}
-			res.send(docs);
+		scitran.isSuperUser(req.headers.authorization, (isSuperUser) => {
+			if (isSuperUser) {
+				blacklist.find().toArray((err, docs) => {
+					if (err) {return next(err);}
+					res.send(docs);
+				});
+			} else {
+				let error = new Error("You must have admin privileges to access the blacklist.");
+				error.http_code = 403;
+				return next(error);
+			}
 		});
+
 	}
 
 }
