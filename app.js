@@ -5,8 +5,11 @@ import config     from './config';
 import routes     from './routes';
 import bodyParser from 'body-parser';
 import morgan     from 'morgan';
+import mongo      from './libs/mongo';
 
 // configuration ---------------------------------------------------
+
+mongo.connect();
 
 let app = express();
 

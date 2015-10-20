@@ -9,6 +9,14 @@ import config  from '../config';
  */
 export default {
 
+	get(url, options, callback) {
+		handleRequest(url, options, (req) => {
+			request.get(req, (err, res) => {
+				handleResponse(err, res, callback);
+			});
+		});
+	},
+
 	post(url, options, callback) {
 		handleRequest(url, options, (req) => {
 			request.post(req, (err, res) => {
@@ -59,11 +67,10 @@ function handleResponse(err, res, callback) {
 function parseOptions(req, options) {
 	if (options.query)  {req.query = options.query;}
 	if (options.body)   {req.json = options.body;}
-	if (options.header) {
+	if (options.headers) {
 		for (let key in options.headers) {
 			req.headers[key] = options.headers[key];
 		}
 	}
-
 	return req;
 }

@@ -20,7 +20,12 @@ export default {
 				if (value === null) {
 					err.missing.push(prop);
 					continue;
-				} 
+				}
+			}
+
+			// null / not required
+			if (value === null) {
+				continue;
 			}
 
 			// isString
@@ -45,7 +50,7 @@ export default {
  * readable string.
  */
 function formatError(err) {
-	
+
 	if (err.missing.length === 0 && err.invalid.length === 0) {
 		return null;
 	}
