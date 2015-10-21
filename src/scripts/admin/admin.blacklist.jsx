@@ -6,8 +6,6 @@ import adminStore from './admin.store';
 import actions    from './admin.actions';
 import Input      from '../common/forms/input.jsx';
 import {Panel}    from 'react-bootstrap';
-import scitran    from '../utils/scitran';
-import crn        from '../utils/crn';
 import WarnButton from '../common/forms/warn-button.jsx';
 
 let Blacklist = React.createClass({
@@ -16,12 +14,12 @@ let Blacklist = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-	componentDidMount () {
+	componentDidMount() {
 		actions.getBlacklist();
 		actions.clearForm('blacklistForm');
 	},
 
-	render () {
+	render() {
 		let showDeleteBtn = this.state.showDeleteBtn;
 		let blacklistForm = this.state.blacklistForm
 		let users = this.state.blacklist.map((user, index) => {
@@ -41,7 +39,7 @@ let Blacklist = React.createClass({
                     </div>
                     <div className="col-sm-4 user-col last">
 	                    <h3 className="user-delete">
-		                    <WarnButton message="Unblock this User" confirm="Yes Unblock" />
+		                    <WarnButton message="Unblock this User" confirm="Yes Unblock" action={actions.unBlacklistUser.bind(this, user._id)} />
 	                    </h3>
                     </div>
                     <div>{user.note}</div>
@@ -55,13 +53,8 @@ let Blacklist = React.createClass({
 				<div>
 					<div className="col-sm-4 add-user">
 						<div>
-							{this._blacklistError()}
-							<Input placeholder="gmail address" type="text"  value={blacklistForm._id}       name={'_id'}       onChange={this._inputChange} />
-							<Input placeholder="first name"    type="text"  value={blacklistForm.firstname} name={'firstname'} onChange={this._inputChange} />
-							<Input placeholder="last name"     type="text"  value={blacklistForm.lastname}  name={'lastname'}  onChange={this._inputChange} />
-							<Input placeholder="note"          type="text"  value={blacklistForm.note}      name={'note'}      onChange={this._inputChange} />
-				    		<button className="btn-blue" onClick={actions.blacklistUser} >
-								<span>Add User</span>
+				    		<button className="btn-blue" onClick={actions.blacklistModal} >
+								<span>Blacklist a User</span>
 							</button>
 						</div>
 					</div>

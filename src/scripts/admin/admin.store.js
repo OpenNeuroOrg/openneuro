@@ -24,9 +24,9 @@ let UserStore = Reflux.createStore({
 
 	data: {},
 
-	update: function (data) {
+	update: function (data, callback) {
 		for (let prop in data) {this.data[prop] = data[prop];}
-		this.trigger(this.data);
+		this.trigger(this.data, callback);
 	},
 
 	/**
@@ -41,7 +41,8 @@ let UserStore = Reflux.createStore({
 		let data = {
 			users: [],
 			blacklist: [],
-			showDeleteBtn: false,
+			showBlacklistModal: false,
+			showUserModal: false,
 			newUserForm: {
 				_id: '',
 				firstname: '',
@@ -73,8 +74,50 @@ let UserStore = Reflux.createStore({
 			scitran.addUser(this.data.newUserForm, (err, res) => {
 				let users = this.data.users;
 				users.push(this.data.newUserForm);
-				this.update({users: users, newUserForm: {_id: '', firstname: '', lastname: ''}});
+				this.update({
+					users: users,
+					newUserForm: {
+						_id: '',
+						firstname: '',
+						lastname: ''
+					},
+					showUserModal: false
+				});
 			});
+		}
+	},
+
+	/**
+	 * Blacklist Submit
+	 *
+	 * Parses form for blacklisting a user.
+	 */
+	blacklistSubmit () {
+		let blacklistForm = this.data.blacklistForm;
+
+		if (!blacklistForm._id) {
+			this.update({blacklistError: 'Email address is required.'});
+		} else {
+			this.update({blacklistError: ''});
+
+			// check if blacklisted user is a current user
+			let userExists, userIndex;
+			for (let i = 0; i < this.data.users.length; i++) {
+				let user = this.data.users[i];
+				if (user._id === blacklistForm._id) {
+					userExists = true;
+					userIndex  = i;
+					break;
+				}
+			}
+
+			if (userExists) {
+				this.removeUser(blacklistForm._id, userIndex, () => {
+					this.blacklistUser(this.data.blacklistForm);
+				});
+			} else {
+				this.blacklistUser(this.data.blacklistForm);
+			}
 		}
 	},
 
@@ -82,19 +125,41 @@ let UserStore = Reflux.createStore({
 	 * Blacklist User
 	 *
 	 * Takes a gmail address and a first and last
-	 * name and adds the user as a user.
+	 * name and adds the user as a blacklisted user.
 	 */
-	blacklistUser () {
-		if (!this.data.blacklistForm._id) {
-			this.update({blacklistError: 'Email address is required.'});
-		} else {
-			this.update({blacklistError: ''});
-			crn.blacklistUser(this.data.blacklistForm, (err, res) => {
-				let blacklist = this.data.blacklist;
-				blacklist.push(this.data.blacklistForm);
-				this.update({blacklist: blacklist, blacklistForm: {_id: '', firstname: '', lastname: '', note: ''}});
+	blacklistUser(userInfo) {
+		crn.blacklistUser(userInfo, (err, res) => {
+			let blacklist = this.data.blacklist;
+			blacklist.push(userInfo);
+			this.update({
+				blacklist: blacklist,
+				blacklistForm: {
+					_id: '',
+					firstname: '',
+					lastname: '',
+					note: ''
+				},
+				showBlacklistModal: false
 			});
-		}
+		});
+	},
+
+	/**
+	 * Blacklist Modal
+	 *
+	 * Triggers a modal for blacklisting a user.
+	 * Prefills data if a user object is passesed.
+	 */
+	blacklistModal(user) {
+		this.update({
+			showBlacklistModal: true,
+			blacklistForm: {
+				_id:       user._id       ? user._id : '',
+				firstname: user.firstname ? user.firstname: '',
+				lastname:  user.lastname  ? user.lastname : '',
+				note: ''
+			}
+		});
 	},
 
 	/**
@@ -144,11 +209,12 @@ let UserStore = Reflux.createStore({
 	 *
 	 * Takes a userId and removes the user.
 	 */
-	removeUser (userId, index) {
+	removeUser (userId, index, callback) {
 		scitran.removeUser(userId, (err, res) => {
 			let users = this.data.users;
 			users.splice(index, 1);
 			this.update({users});
+			callback();
 		});
 	},
 
@@ -167,6 +233,23 @@ let UserStore = Reflux.createStore({
 			callback();
 		});
 	},
+
+	/**
+	 * Unblacklist User
+	 */
+	unBlacklistUser(userId) {
+		crn.unBlacklistUser(userId, (err, res) => {
+			let blacklist = this.data.blacklist;
+			for (let i = 0; i < blacklist.length; i++) {
+				let user = blacklist[i];
+				if (user._id === userId) {
+					blacklist.splice(i, 1);
+					break;
+				}
+			}
+			this.update({blacklist});
+		});
+	}
 
 });
 

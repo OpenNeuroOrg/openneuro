@@ -29,6 +29,13 @@ export default {
 	 */
 	blacklistUser(user, callback) {
 		request.post(config.crn.url + 'users/blacklist', {body: user}, callback);
+	},
+
+	/**
+	 * Un Blacklist
+	 */
+	unBlacklistUser(userId, callback) {
+		request.del(config.crn.url + 'users/blacklist/' + userId, callback);
 	}
 
 }

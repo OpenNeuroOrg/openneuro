@@ -6,9 +6,9 @@ import userStore  from '../user/user.store';
 import adminStore from './admin.store';
 import actions    from './admin.actions'
 import Input      from '../common/forms/input.jsx';
-import {Panel}    from 'react-bootstrap';
 import scitran    from '../utils/scitran';
 import WarnButton from '../common/forms/warn-button.jsx';
+import {Panel}    from 'react-bootstrap';
 
 let users = React.createClass({
 
@@ -22,16 +22,10 @@ let users = React.createClass({
 	},
 
 	render () {
-		let showDeleteBtn = this.state.showDeleteBtn;
 		let newUser = this.state.newUserForm;
 
 		let users = this.state.users.map((user, index) => {
 			let adminBadge = user.wheel === true ? 'Admin' : null;
-
-	        let adminToggle;
-	        if (user._id !== userStore.data.scitran._id) {
-	        	adminToggle = <WarnButton message="Toggle Admin Privileges" confirm="Toggle Admin" icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/>;
-	        }
 
 			return (
 			    <div className="fadeIn user-panel clearfix" key={user._id}>
@@ -47,12 +41,7 @@ let users = React.createClass({
                     <div className="col-sm-4 user-col middle">
 	                    <h3 className="user-email">{user._id}</h3>
                     </div>
-                    <div className="col-sm-4 user-col last">
-	                    <h3 className="user-delete">
-		                    <WarnButton message="Delete this User" action={actions.removeUser.bind(this, user._id, index)}/>
-		                    {adminToggle}
-	                    </h3>
-                    </div>
+                    {this._userTools(user, index)}
                 </div>
 			);
 		});
@@ -63,12 +52,7 @@ let users = React.createClass({
 				<div>
 					<div className="col-sm-4 add-user">
 						<div>
-							<h2>Add User</h2>
-							{this._newUserError()}
-							<Input placeholder="gmail address" type="text"  value={newUser._id}       name={'_id'}       onChange={this._inputChange} />
-							<Input placeholder="first name"    type="text"  value={newUser.firstname} name={'firstname'} onChange={this._inputChange} />
-							<Input placeholder="last name"     type="text"  value={newUser.lastname}  name={'lastname'}  onChange={this._inputChange} />
-				    		<button className="btn-blue" onClick={actions.addUser} >
+				    		<button className="btn-blue" onClick={this._userModal} >
 								<span>Add User</span>
 							</button>
 						</div>
@@ -83,11 +67,33 @@ let users = React.createClass({
 
 // custom methods -----------------------------------------------------
 
+	_userTools(user, index) {
+		if (user._id !== userStore.data.scitran._id) {
+			return (
+				<div className="col-sm-4 user-col last">
+	                <h3 className="user-delete">
+	                    <WarnButton message="Delete this User" action={this._removeUser.bind(this, user._id, index)}/>
+	                    <WarnButton message="Toggle Admin Privileges" confirm="Toggle Admin" icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/>
+	                    <button onClick={actions.blacklistModal.bind(this, user)}>Block User</button>
+	                </h3>
+	            </div>
+            );
+		}
+	},
+
+	_removeUser(userId, index) {
+		actions.removeUser(userId, index);
+	},
+
 	_newUserError() {
 		return this.state.newUserError ? <div className="alert alert-danger">{this.state.newUserError}</div> : null;
 	},
 
 	_inputChange(e) {actions.inputChange('newUserForm', e.target.name, e.target.value);},
+
+	_userModal() {
+		actions.update({showUserModal: true});
+	}
 
 });
 
