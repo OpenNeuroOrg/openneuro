@@ -134,19 +134,6 @@ let UserStore = Reflux.createStore({
 	},
 
 	/**
-	 * Clear Form
-	 */
-	clearForm(form) {
-		let formData = this.data[form];
-		for (let key in formData) {
-			formData[key] = '';
-		}
-		let data = {};
-		data[form] = formData;
-		this.update(data);
-	},
-
-	/**
 	 * Get Users
 	 */
 	getUsers() {
