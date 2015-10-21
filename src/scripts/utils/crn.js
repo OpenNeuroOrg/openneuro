@@ -15,6 +15,20 @@ export default {
 	 */
 	createUser(user, callback) {
 		request.post(config.crn.url + 'users', {body: user}, callback);
+	},
+
+	/**
+	 * Get Blacklist
+	 */
+	getBlacklist(callback) {
+		request.get(config.crn.url + 'users/blacklist', {}, callback);
+	},
+
+	/**
+	 * Blacklist User
+	 */
+	blacklistUser(user, callback) {
+		request.post(config.crn.url + 'users/blacklist', {body: user}, callback);
 	}
 
 }

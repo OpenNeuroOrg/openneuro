@@ -10,7 +10,7 @@ import Signin         from './user/signin.jsx';
 
 import Admin          from './admin/admin.jsx';
 import Users          from './admin/admin.users.jsx';
-import Blacklist      from './admin/admin.users.jsx';
+import Blacklist      from './admin/admin.blacklist.jsx';
 
 import Dashboard      from './dashboard/dashboard.jsx';
 import Notifications  from './dashboard/notifications.jsx';

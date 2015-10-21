@@ -2,36 +2,29 @@
 
 import React      from 'react';
 import Reflux     from 'reflux';
-import userStore  from '../user/user.store';
 import adminStore from './admin.store';
-import actions    from './admin.actions'
+import actions    from './admin.actions';
 import Input      from '../common/forms/input.jsx';
 import {Panel}    from 'react-bootstrap';
 import scitran    from '../utils/scitran';
+import crn        from '../utils/crn';
 import WarnButton from '../common/forms/warn-button.jsx';
 
-let users = React.createClass({
+let Blacklist = React.createClass({
 
 	mixins: [Reflux.connect(adminStore)],
 
 // life cycle events --------------------------------------------------
 
 	componentDidMount () {
-		actions.getUsers();
-		actions.clearForm('newUserForm');
+		actions.getBlacklist();
+		actions.clearForm('blacklistForm');
 	},
 
 	render () {
 		let showDeleteBtn = this.state.showDeleteBtn;
-		let newUser = this.state.newUserForm;
-
-		let users = this.state.users.map((user, index) => {
-			let adminBadge = user.wheel === true ? 'Admin' : null;
-
-	        let adminToggle;
-	        if (user._id !== userStore.data.scitran._id) {
-	        	adminToggle = <WarnButton message="Toggle Admin Privileges" confirm="Toggle Admin" icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/>;
-	        }
+		let blacklistForm = this.state.blacklistForm
+		let users = this.state.blacklist.map((user, index) => {
 
 			return (
 			    <div className="fadeIn user-panel clearfix" key={user._id}>
@@ -40,7 +33,6 @@ let users = React.createClass({
                     		<div className="userName">
 								<span>{user.firstname}</span> &nbsp;
 								<span>{user.lastname}</span>
-								<div className="badge">{adminBadge}</div>
 							</div>
                     	</h3>
                     </div>
@@ -49,26 +41,26 @@ let users = React.createClass({
                     </div>
                     <div className="col-sm-4 user-col last">
 	                    <h3 className="user-delete">
-		                    <WarnButton message="Delete this User" action={actions.removeUser.bind(this, user._id, index)}/>
-		                    {adminToggle}
+		                    <WarnButton message="Unblock this User" confirm="Yes Unblock" />
 	                    </h3>
                     </div>
+                    <div>{user.note}</div>
                 </div>
 			);
 		});
 
 		return (
 			<div className="dash-tab-content fadeIn inner-route admin clearfix">
-				<h2>Current Users</h2>
+				<h2>Blacklisted Users</h2>
 				<div>
 					<div className="col-sm-4 add-user">
 						<div>
-							<h2>Add User</h2>
-							{this._newUserError()}
-							<Input placeholder="gmail address" type="text"  value={newUser._id}       name={'_id'}       onChange={this._inputChange} />
-							<Input placeholder="first name"    type="text"  value={newUser.firstname} name={'firstname'} onChange={this._inputChange} />
-							<Input placeholder="last name"     type="text"  value={newUser.lastname}  name={'lastname'}  onChange={this._inputChange} />
-				    		<button className="btn-blue" onClick={actions.addUser} >
+							{this._blacklistError()}
+							<Input placeholder="gmail address" type="text"  value={blacklistForm._id}       name={'_id'}       onChange={this._inputChange} />
+							<Input placeholder="first name"    type="text"  value={blacklistForm.firstname} name={'firstname'} onChange={this._inputChange} />
+							<Input placeholder="last name"     type="text"  value={blacklistForm.lastname}  name={'lastname'}  onChange={this._inputChange} />
+							<Input placeholder="note"          type="text"  value={blacklistForm.note}      name={'note'}      onChange={this._inputChange} />
+				    		<button className="btn-blue" onClick={actions.blacklistUser} >
 								<span>Add User</span>
 							</button>
 						</div>
@@ -83,12 +75,12 @@ let users = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_newUserError() {
-		return this.state.newUserError ? <div className="alert alert-danger">{this.state.newUserError}</div> : null;
+	_blacklistError() {
+		return this.state.blacklistError ? <div className="alert alert-danger">{this.state.blacklistError}</div> : null;
 	},
 
-	_inputChange(e) {actions.inputChange('newUserForm', e.target.name, e.target.value);},
+	_inputChange (e) {actions.inputChange('blacklistForm', e.target.name, e.target.value);},
 
 });
 
-export default users;
+export default Blacklist;
