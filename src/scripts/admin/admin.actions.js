@@ -1,7 +1,6 @@
 import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
-	'addUser',
 	'blacklistSubmit',
 	'blacklistUser',
 	'blacklistModal',

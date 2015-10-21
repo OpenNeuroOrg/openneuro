@@ -43,11 +43,6 @@ let UserStore = Reflux.createStore({
 			blacklist: [],
 			showBlacklistModal: false,
 			showUserModal: false,
-			newUserForm: {
-				_id: '',
-				firstname: '',
-				lastname: ''
-			},
 			blacklistForm: {
 				_id: '',
 				firstname: '',
@@ -62,30 +57,6 @@ let UserStore = Reflux.createStore({
 	},
 
 // Actions ---------------------------------------------------------------------------
-
-	/**
-	 * Add User
-	 */
-	addUser(user, callback) {
-		if (!this.data.newUserForm._id || !this.data.newUserForm.firstname || !this.data.newUserForm.lastname) {
-			this.update({newUserError: 'Email address, first name and last name are required.'});
-		} else {
-			this.update({newUserError: ''});
-			scitran.addUser(this.data.newUserForm, (err, res) => {
-				let users = this.data.users;
-				users.push(this.data.newUserForm);
-				this.update({
-					users: users,
-					newUserForm: {
-						_id: '',
-						firstname: '',
-						lastname: ''
-					},
-					showUserModal: false
-				});
-			});
-		}
-	},
 
 	/**
 	 * Blacklist Submit

@@ -16,11 +16,6 @@ let users = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-	componentDidMount () {
-		actions.getUsers();
-		actions.clearForm('newUserForm');
-	},
-
 	render () {
 		let newUser = this.state.newUserForm;
 
@@ -50,14 +45,7 @@ let users = React.createClass({
 			<div className="dash-tab-content fadeIn inner-route admin clearfix">
 				<h2>Current Users</h2>
 				<div>
-					<div className="col-sm-4 add-user">
-						<div>
-				    		<button className="btn-blue" onClick={this._userModal} >
-								<span>Add User</span>
-							</button>
-						</div>
-					</div>
-					<div className="col-sm-8 users-card">
+					<div className="col-sm-12 users-card">
 						{users}
 					</div>
 				</div>
@@ -91,9 +79,6 @@ let users = React.createClass({
 
 	_inputChange(e) {actions.inputChange('newUserForm', e.target.name, e.target.value);},
 
-	_userModal() {
-		actions.update({showUserModal: true});
-	}
 
 });
 

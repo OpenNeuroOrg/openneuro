@@ -14,11 +14,6 @@ let Blacklist = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-	componentDidMount() {
-		actions.getBlacklist();
-		actions.clearForm('blacklistForm');
-	},
-
 	render() {
 		let showDeleteBtn = this.state.showDeleteBtn;
 		let blacklistForm = this.state.blacklistForm
