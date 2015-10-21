@@ -1,8 +1,8 @@
 // dependencies ------------------------------------------------------------
 
-import scitran  from './libs/scitran';
-import sanitize from './libs/sanitize';
-import mongo    from './libs/mongo';
+import scitran  from '../libs/scitran';
+import sanitize from '../libs/sanitize';
+import mongo    from '../libs/mongo';
 
 
 // models ------------------------------------------------------------------
@@ -104,6 +104,38 @@ export default {
 			}
 		});
 
+	},
+
+	// delete --------------------------------------------------------------
+
+	/**
+	 * UnBlacklist
+	 *
+	 * Takes a user id (email) as a url parameter
+	 * and removes the user from the blacklist
+	 * if they were blacklisted.
+	 */
+	unBlacklist(req, res, next) {
+		let userId = req.params.id;
+
+		let blacklist = mongo.db.collection('blacklist');
+		scitran.isSuperUser(req.headers.authorization, (isSuperUser) => {
+			if (isSuperUser) {
+				blacklist.findAndRemove({_id: userId}, [], (err, doc) => {
+					if (err) {return next(err);}
+					if (!doc.value) {
+						let error = new Error("A user with that id was not found");
+						error.http_code = 404;
+						return next(error);
+					}
+					res.send({message: "User " + userId + " has been un-blacklisted."});
+				});
+			} else {
+				let error = new Error("You must have admin privileges to update the blacklist.");
+				error.http_code = 403;
+				return next(error);
+			}
+		});
 	}
 
 }
