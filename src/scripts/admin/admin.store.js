@@ -172,7 +172,7 @@ let UserStore = Reflux.createStore({
 			let users = this.data.users;
 			users.splice(index, 1);
 			this.update({users});
-			callback();
+			if (callback) {callback();}
 		});
 	},
 

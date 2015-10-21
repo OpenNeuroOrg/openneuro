@@ -44,7 +44,8 @@ let UserStore = Reflux.createStore({
 			token: window.localStorage.hello ? JSON.parse(window.localStorage.hello).google.access_token : null,
 			google: null,
 			scitran: window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser) : null,
-			loading: false
+			loading: false,
+			signinError: ''
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
@@ -114,6 +115,14 @@ let UserStore = Reflux.createStore({
 							lastname: profile.last_name
 						};
 						crn.createUser(user, (err, res) => {
+							if (err) {
+								this.clearAuth();
+								this.update({
+									loading: false,
+									signinError: 'This user account has been blocked. If you believe this is by mistake please contact the site adminstrator.'
+								});
+								return;
+							}
 							scitran.verifyUser((err, res) => {
 								window.localStorage.scitranUser = JSON.stringify(res.body);
 								router.transitionTo('dashboard');
@@ -181,7 +190,7 @@ let UserStore = Reflux.createStore({
 	 */
 	hasToken() {
 		if (!window.localStorage.hello) {return false;}
-		let credentials = JSON.parse(window.localStorage.hello); 
+		let credentials = JSON.parse(window.localStorage.hello);
 		return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
 	},
 
