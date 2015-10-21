@@ -40,10 +40,19 @@ export default {
 	 * creates a scitran user.
 	 */
 	create(req, res, next) {
+		let blacklist = mongo.db.collection('blacklist');
 		sanitize.req(req, models.newUser, (err, user) => {
 			if (err) {return next(err);}
-			scitran.createUser(user, (err, resp) => {
-				if (!err) {res.send(resp);}
+			blacklist.findOne({_id: user._id}).then((item) => {
+				if (item) {
+					let error = new Error("This user email has been blacklisted and cannot be given an account");
+					error.http_code = 403;
+					return next(error);
+				} else {
+					scitran.createUser(user, (err, resp) => {
+						if (!err) {res.send(resp);}
+					});
+				}
 			});
 		});
 	},
