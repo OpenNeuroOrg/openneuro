@@ -62,7 +62,7 @@ let users = React.createClass({
 	                <h3 className="user-delete">
 	                    <WarnButton message="Delete this User" action={this._removeUser.bind(this, user._id, index)}/>
 	                    <WarnButton message="Toggle Admin Privileges" confirm="Toggle Admin" icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/>
-	                    <button onClick={actions.blacklistModal.bind(this, user)}>Block User</button>
+	                    <button className="btn btn-admin warning" onClick={actions.blacklistModal.bind(this, user)}>Block User</button>
 	                </h3>
 	            </div>
             );

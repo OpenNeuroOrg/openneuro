@@ -13,6 +13,7 @@ class Dashboard extends React.Component {
 	componentDidMount() {
 		actions.getBlacklist();
 		actions.getUsers();
+		actions.update({showBlacklistModal: false});
 	}
 
 	render () {
