@@ -103,7 +103,7 @@ let Metadata = React.createClass({
 						onChange={this._updateREADME} />
 					<Accordion className="fileStructure fadeIn">
 						<Panel header={fsHeader} eventKey='1'>
-					  		<FileTree tree={[dataset]} />
+					  		<FileTree tree={[dataset]} editable={canEdit}/>
 					  	</Panel>
 			  		</Accordion>
 				</div>

@@ -56,8 +56,8 @@ class FileTree extends React.Component {
 			}
 
 			return (
-				<li key={item.name}>{icon} {item.name} {error} {tools} {loading}
-					{item.showChildren ? <ul><FileTree tree={item.children} /></ul> : null}
+				<li key={item.name}>{icon} {item.name} {error} {this.props.editable ? tools : null} {loading}
+					{item.showChildren ? <ul><FileTree tree={item.children} editable={this.props.editable}/></ul> : null}
 				</li>
 			);
 		});

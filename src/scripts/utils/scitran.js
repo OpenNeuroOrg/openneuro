@@ -64,9 +64,7 @@ export default  {
      */
      removeUser (userId, callback) {
         request.del(config.scitran.url + 'users/' + userId, (err, res) => {
-            request.del(config.scitran.url + 'groups/' + userId, (err, res) => {
-                callback(err, res);
-            });
+            callback(err, res);
         });
      },
 

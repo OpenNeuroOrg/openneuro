@@ -45,6 +45,10 @@ let Signin = React.createClass({
 				</div>
 			)
 		}
+		let error;
+		if (this.state.signinError && !this.state.loading) {
+			error = <div className="alert alert-danger">{this.state.signinError}</div>;
+		}
 
 
 		return (
@@ -58,6 +62,7 @@ let Signin = React.createClass({
 							</div>
 							<div className="col-sm-12 signInBlock fadeIn">
 								<h2>Sign in with</h2>
+								{error}
 								{form}
 								<Spinner text="Signing in..." active={this.state.loading} />
 							</div>
