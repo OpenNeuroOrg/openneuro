@@ -20,7 +20,7 @@ class Dashboard extends React.Component {
 			<div className="fadeIn inner-route dashboard">
 				<ul className="nav nav-pills dash-tab-link">
 					<li><Link to="users" className="btn-blue">Users</Link></li>
-					<li><Link to="blacklist" className="btn-blue">Blacklist</Link></li>
+					<li><Link to="blacklist" className="btn-blue">Blocked Users</Link></li>
 				</ul>
 				<div>
 					<RouteHandler/>

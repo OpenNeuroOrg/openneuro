@@ -20,16 +20,16 @@ let BlacklistModal = React.createClass({
 		return (
 			<Modal show={this.state.showBlacklistModal} onHide={this._hide}>
             	<Modal.Header closeButton>
-            		<Modal.Title>Blacklist User</Modal.Title>
+            		<Modal.Title>Block a User</Modal.Title>
             	</Modal.Header>
             	<hr className="modal-inner" />
             	<Modal.Body>
             		<div>
 						{this._blacklistError()}
-						<Input placeholder="gmail address" type="text"  value={blacklistForm._id}       name={'_id'}       onChange={this._inputChange} />
-						<Input placeholder="first name"    type="text"  value={blacklistForm.firstname} name={'firstname'} onChange={this._inputChange} />
-						<Input placeholder="last name"     type="text"  value={blacklistForm.lastname}  name={'lastname'}  onChange={this._inputChange} />
-						<Input placeholder="note"          type="text"  value={blacklistForm.note}      name={'note'}      onChange={this._inputChange} />
+						<Input placeholder="Gmail Address" type="text"  value={blacklistForm._id}       name={'_id'}       onChange={this._inputChange} />
+						<Input placeholder="First Name"    type="text"  value={blacklistForm.firstname} name={'firstname'} onChange={this._inputChange} />
+						<Input placeholder="Last Name"     type="text"  value={blacklistForm.lastname}  name={'lastname'}  onChange={this._inputChange} />
+						<Input placeholder="Note"          type="textarea"  value={blacklistForm.note}      name={'note'}      onChange={this._inputChange} />
 			    		<button className="btn-blue" onClick={actions.blacklistSubmit} >
 							<span>Block User</span>
 						</button>

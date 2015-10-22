@@ -44,12 +44,12 @@ let Blacklist = React.createClass({
 
 		return (
 			<div className="dash-tab-content fadeIn inner-route admin clearfix">
-				<h2>Blacklisted Users</h2>
+				<h2>Blocked Users</h2>
 				<div>
 					<div className="col-sm-4 add-user">
 						<div>
 				    		<button className="btn-blue" onClick={actions.blacklistModal} >
-								<span>Blacklist a User</span>
+								<span>Block a User</span>
 							</button>
 						</div>
 					</div>

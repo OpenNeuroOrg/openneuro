@@ -42,14 +42,12 @@ let UserStore = Reflux.createStore({
 			users: [],
 			blacklist: [],
 			showBlacklistModal: false,
-			showUserModal: false,
 			blacklistForm: {
 				_id: '',
 				firstname: '',
 				lastname: '',
 				note: ''
 			},
-			newUserError: '',
 			blacklistError: ''
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -124,6 +122,7 @@ let UserStore = Reflux.createStore({
 	blacklistModal(user) {
 		this.update({
 			showBlacklistModal: true,
+			blacklistError: '',
 			blacklistForm: {
 				_id:       user._id       ? user._id : '',
 				firstname: user.firstname ? user.firstname: '',
@@ -135,6 +134,9 @@ let UserStore = Reflux.createStore({
 
 	/**
 	 * Get Users
+	 *
+	 * Retrieves a list of all users and saves it to the
+	 * admin store state.
 	 */
 	getUsers() {
 		scitran.getUsers((err, res) => {
@@ -144,6 +146,9 @@ let UserStore = Reflux.createStore({
 
 	/**
 	 * Get Blacklist
+	 *
+	 * Retrieves a list of all blacklisted users and saves
+	 * it to the admin store state.
 	 */
 	getBlacklist() {
 		crn.getBlacklist((err, res) => {
@@ -153,6 +158,9 @@ let UserStore = Reflux.createStore({
 
 	/**
 	 * Input Change
+	 *
+	 * Handles input change state management for
+	 * admin form data.
 	 */
 	inputChange (form, name, value) {
 		let formData = this.data[form];

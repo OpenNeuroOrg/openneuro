@@ -17,17 +17,28 @@ let Input = React.createClass({
 		let type = this.props.type;
 		let name = this.props.name;
 		let value = this.props.hasOwnProperty('value') ? this.props.value : this.state.value;
+
 		return (
 			<div className="form-group float-label-input">
 				{value.length > 0 ? <label>{placeholder}</label> : null}
-				<input type={type} name={name} placeholder={placeholder} value={value} onChange={this.handleChange} />
+				{this._input(type, name, placeholder, value)}
 			</div>
 		);
 	},
 
 // custom methods -----------------------------------------------------
 
-	handleChange(event) {
+	_input(type, name, placeholder, value) {
+		if (type === 'textarea') {
+			return (
+				<textarea name={name} placeholder={placeholder} value={value} onChange={this._handleChange}></textarea>
+			);
+		} else {
+			return <input type={type} name={name} placeholder={placeholder} value={value} onChange={this._handleChange} />;
+		}
+	},
+
+	_handleChange(event) {
 		this.setState({value: event.target.value});
 
 		if (this.props.onChange) {
