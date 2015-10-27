@@ -20,10 +20,10 @@ let Metadata = React.createClass({
 
 		let metatdata = [
 			{
-				key:      'DOI',
-				label:    'DOI Number',
-				value:    dataset.DOI,
-				onChange: this._updateNote.bind(this, 'DOI'),
+				key:      'DatasetDOI',
+				label:    'Dataset DOI',
+				value:    description.DatasetDOI,
+				onChange: this._updateDescription.bind(this, 'DatasetDOI'),
 			},
 			{
 				key:      'Name',
@@ -131,8 +131,6 @@ let Metadata = React.createClass({
 	_deleteAttachment: Actions.deleteAttachment,
 
 	_downloadAttachment: Actions.downloadAttachment,
-
-	_updateNote: Actions.updateNote,
 
 	_updateREADME: Actions.updateREADME
 
