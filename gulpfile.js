@@ -139,7 +139,7 @@
             .pipe(changed(p.distCss))
             .pipe(sass({errLogToConsole: true}))
             .on('error', notify.onError())
-            .pipe(csso())
+            // .pipe(csso())
             .pipe(gulp.dest(p.distCss))
             .pipe(reload({stream: true}));
     });
