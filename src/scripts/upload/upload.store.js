@@ -98,6 +98,18 @@ let UploadStore = Reflux.createStore({
 	},
 
 	/**
+	 * On Resume
+	 *
+	 * A file select on change handler for resuming
+	 * incomplete uploads.
+	 */
+	onResume (selectedFiles, originalName) {
+		let dirName = selectedFiles.tree[0].name,
+			nameError = null;
+		console.log(dirName === originalName);
+	},
+
+	/**
 	 * Validate
 	 *
 	 * Takes a filelist, runs BIDS validation checks
