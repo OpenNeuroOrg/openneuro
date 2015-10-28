@@ -29,7 +29,7 @@ class RedirectDashboard extends React.Component {
 
 class RedirectNotifications extends React.Component {
 	static willTransitionTo(transition) {
-		transition.redirect('notifications');
+		transition.redirect('datasets');
 	}
 }
 

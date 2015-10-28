@@ -58,14 +58,88 @@
 		box-shadow: 1px 0px 3px 0px rgba(0, 0, 0, 0.3);
 		padding: 0;
 		margin: 20px 0;
+		.header-wrap{
+			border-bottom: 1px solid #E1E1E1;
+		}
 		h2{
 			margin: 0;
 			padding: 20px;
 			font-size: 30px;
 			text-transform: uppercase;
 			font-weight: 100;
-			border-bottom: 1px solid #E1E1E1;
+			
+			width: 50%;
+			float: left;
+		}
+		.filters{
+			width: 50%;
+			float: left;
+			text-align: right;
+			padding: 25px 20px 0 0;
+			button{
+				border: none;
+				padding: 6px 11px;
+				margin: 0 5px;
+				color:#aaa;
+				background:none;
+				&:hover,
+				&:focus{
+					background:#f9f9f9;
+					outline: 0;
+				}
+				&:active,
+				&.active{
+					background:none;
+					color:$primary;
+					&.filter-shared{
+						color: $brand-info;
+					}
+					&.filter-public{
+						color: $brand-success;
+					}
+					&.filter-incomplete{
+						color: $brand-warning;
+					}
+				}
+				.filter-text{
+					visibility: hidden;
+					width: 1px;
+					position:absolute;
+					left: -99999em;
+				}
+			}
+		}
+		.sort{
+			padding: 5px 20px;
+			border-bottom: 1px solid #ddd;
+			background: #f9f9f9;
+			button{
+				padding: 0;
+				background: none;
+				border: none;
+				&:hover,
+				&:focus,
+				&:active{
+					outline:0;
+					color: $primary;
+				}
+				&.name{
+					float: left;
+				}
+				&.date{
+					float: right;
+				}
 
+				.fa{
+					position: relative;
+					line-height: 0;
+					top: 4px;
+					padding: 5px;
+					&.fa-sort-desc{
+						top:-2px;
+					}
+				}
+			}
 		}
 		.panel-group .panel+.panel{
 			margin: 0;
@@ -90,14 +164,29 @@
 					color:$primary;
 					h4{
 						border: none;
-						width: 50%;
+						width: 60%;
 						float: left;
 						margin: 0;
 						font-size: 15px;
 						
-						span, ul {
+						span.dataset-name{
 							float: left;
 							display: block;
+							width: 70%;
+						}
+						ul.nav-pills{
+							float: left;
+							display: block;
+							width: 30%;
+							border-right:1px solid #ddd;
+							border-left:1px solid #ddd;
+							padding: 5px;
+							text-align: center;
+							li{
+								float: none;
+								padding:0;
+								margin:0;
+							}
 						}
 
 						.nav.nav-pills > li {
@@ -109,7 +198,7 @@
 						float: left;
 						margin: 0;
 						text-align: right;
-						width: 50%;
+						width: 40%;
 						color: #909090;
 						font-size: 10px;
 						padding-top: 5px;
