@@ -158,21 +158,25 @@
 				background:#fff;
 				a{
 					display: block;
-					padding: 0;
-					
+					padding: 10px 20px;
 					transition: background 1s ease;
 					color:$primary;
 					width: 50%;
 					float: left;
 					h4{
 						border: none;
-						margin: 0;
+						margin: 0 0 10px;
 						font-size: 15px;
-						padding: 10px 20px;
+						padding: 0;
 						line-height: 15px;
 						
 					}
-				&:after {
+					p{
+						padding:0;
+						margin:0;
+						color: #aaa;
+					}
+					&:after {
 						clear: both;
 					}
 					&:before, 
@@ -184,6 +188,7 @@
 					&:hover{
 						color:$primaryHover;
 					}
+
 				}
 					
 					

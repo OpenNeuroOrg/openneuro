@@ -55,6 +55,7 @@ let Datasets = React.createClass({
                             <div className="header clearfix">
                                 <Link to="dataset" params={{datasetId: dataset._id}}>
                                     <h4 className="dataset-name">{dataset.name}</h4>
+                                    <p>This dataset was obtained from the OpenfMRI project...</p>
                                 </Link>
                                 <div className="meta-data-container">
                                     <Statuses dataset={dataset} />
