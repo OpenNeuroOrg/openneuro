@@ -11,6 +11,7 @@ import Paginator     from '../common/partials/paginator.jsx';
 import Spinner       from '../common/partials/spinner.jsx';
 import Statuses      from '../dataset/dataset.statuses.jsx';
 import Filters       from './datasets.filters.jsx';
+import Sort          from './datasets.sort.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
@@ -54,7 +55,7 @@ let Datasets = React.createClass({
                             <div className="header clearfix">
                                 <Link to="dataset" params={{datasetId: dataset._id}}>
                                     <h4 className="dataset">
-                                        {dataset.name}
+                                        <span className="dataset-name">{dataset.name}</span>
                                         <Statuses dataset={dataset} />
                                     </h4>
                                     <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
@@ -69,8 +70,13 @@ let Datasets = React.createClass({
         return (
         	<div className={isPublic ? "fadeIn public-dashboard inner-route" : "fadeIn"}>
             	<div className="dash-tab-content datasets ">
-                    <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
-                    <Filters sort={this.state.sort} filters={this.state.filters} isPublic={isPublic} />
+                    <div className="header-filter-sort clearfix">
+                        <div className="header-wrap clearfix">
+                            <h2>{this.props.isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
+                            <Filters filters={this.state.filters}  isPublic={isPublic} />
+                        </div>
+                        <Sort sort={this.state.sort}  />
+                    </div>
                     <PanelGroup>
                         {this.state.loading ? <Spinner active={true} /> : results}
                     </ PanelGroup>

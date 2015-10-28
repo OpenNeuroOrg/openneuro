@@ -1,4 +1,5 @@
 // dataset dataset view
+
 .dataset {
 	.fileStructure.panel-group {
 		.panel-collapse{
@@ -198,6 +199,11 @@
 		.cte-array-item{
 			overflow:hidden;
 			padding:10px;
+			.author-name{
+				float: left;
+				padding: 5px 0 5px 5px;
+				margin: 0;
+			}
 			a.file-name{
 				float: left;
 				padding:6px;
@@ -275,7 +281,7 @@
 	font-family: $font-family-cabin;
 	font-weight: 300;
 	padding: 0;
-	margin: 0 0 0 15px;
+	margin: 0;
 	text-align: center;
 	display: inline;
 	width: 100%;
@@ -286,7 +292,7 @@
 
 	&.ds-primary{
 		background:none;
-		color:$brand-warning;
+		color:$primary;
 	}
 	&.ds-success{
 		background:none;

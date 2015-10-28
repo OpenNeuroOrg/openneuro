@@ -34,7 +34,7 @@ let Tools = React.createClass({
 		if (!dataset.status.uploadIncomplete && this.props.canEdit) {
 			publish = (
 				<li role="presentation" >
-					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-eye" action={this._publish.bind(this, dataset._id)} />
+					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
 	            </li>
 			);
 		}

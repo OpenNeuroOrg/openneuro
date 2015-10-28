@@ -29,7 +29,8 @@ let LeftNavbar = React.createClass({
 						<li className="left-nav-dashboard">
 							{userStore.hasToken() ? dashboardLink : null}
 							{this.state.scitran && this.state.scitran.wheel ? adminLink : null }
-							<Link to="public"><i className="fa fa-files-o" /><span className="link-name">browse datasets</span></Link>
+							<Link to="public"><i className="fa fa-globe" /><span className="link-name">browse datasets</span></Link>
+							<a  href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><i className="fa fa-envelope-o" /><span className="link-name">contact</span></a>
 						</li>
 					</ul>
 					<span className="show-nav-btn" onClick={this._toggleNav}>

@@ -25,7 +25,7 @@ let ArrayInput = React.createClass({
 	render() {
 		let items = this.props.value.map((item, index) => {
 			return (
-				<div key={index} className="cte-array-item">{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}
+				<div key={index} className="cte-array-item"><span className="author-name">{item.name}</span> {item.ORCIDID ? '-' : null} {item.ORCIDID}
 					<div className="btn-wrap">
 						<WarnButton message="Remove" confirm="Yes Remove!" action={this._remove.bind(null, index)}/>
 					</div>
