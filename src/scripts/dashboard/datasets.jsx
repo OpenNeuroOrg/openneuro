@@ -54,12 +54,13 @@ let Datasets = React.createClass({
                         <div className="panel-heading">
                             <div className="header clearfix">
                                 <Link to="dataset" params={{datasetId: dataset._id}}>
-                                    <h4 className="dataset">
-                                        <span className="dataset-name">{dataset.name}</span>
-                                        <Statuses dataset={dataset} />
-                                    </h4>
-                                    <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
+                                    <h4 className="dataset-name">{dataset.name}</h4>
+                                    <p>This dataset was obtained from the OpenfMRI project...</p>
                                 </Link>
+                                <div className="meta-data-container">
+                                    <Statuses dataset={dataset} />
+                                    <div className="date">{dateAdded}<span className="time-ago">{timeago}</span></div>
+                                </div>
                             </div>
                         </div>
                     </div>
