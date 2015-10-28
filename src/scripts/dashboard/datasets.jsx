@@ -73,7 +73,7 @@ let Datasets = React.createClass({
             	<div className="dash-tab-content datasets ">
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
-                            <h2>{this.props.isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
+                            <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
                             <Filters filters={this.state.filters}  isPublic={isPublic} />
                         </div>
                         <Sort sort={this.state.sort}  />
