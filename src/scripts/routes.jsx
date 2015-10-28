@@ -49,8 +49,8 @@ let routes = (
 	<Route name="app" path="/" handler={Index}>
 		<Route name="signIn" path="sign-in" handler={Signin}/>
 		<Route name="dashboard" path="dashboard"  handler={Dashboard} >
-			<Route name="notifications" path="notifications" handler={Notifications}/>
 			<Route name="datasets" path="datasets" handler={Datasets}/>
+			<Route name="notifications" path="notifications" handler={Notifications}/>
 			<Route name="jobs" path="jobs" handler={Jobs}/>
 			<NotFoundRoute handler={RedirectNotifications}/>
 		</Route>

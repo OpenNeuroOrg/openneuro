@@ -26,29 +26,30 @@ export default class Status extends React.Component {
 				tip        = 'Click to select your folder again and resume the upload.';
 				title	  = 'Incomplete';
 				iconClass  = 'fa fa-warning';
-				fileSelect = <FileSelect  onClick={this._clickHandler}  onChange={this._onFileSelect.bind(this)} />;
+				fileSelect = <span className="file-wrap"><FileSelect  onClick={this._clickHandler}  onChange={this._onFileSelect.bind(this)} /></span>;
 				break;
 			case 'shared':
 				spanClass = 'dataset-status ds-info';
 				tip       = 'Shared with me.';
-				title	  = '';
+				title	  = 'Shared';
 				iconClass = 'fa fa-user';
 				break;
 			case 'inProgress':
 				spanClass = 'dataset-status ds-primary';
 				tip       = 'Upload in progress.';
-				title	  = '';
+				title	  = 'In progress';
 				iconClass = 'fa fa-spin fa-circle-o-notch'
 		}
 
 		return (
 			<span className={spanClass}>
 				<Tooltip tooltip={tip}>
-					<span className="icon-wrap">
-						<i className={iconClass}>
-							{fileSelect}
-						</i> 
-						{title} 
+					<span>
+						<span className="icon-wrap">
+							<i className={iconClass}></i> 
+							{title}
+						</span>
+						{fileSelect}
 					</span>
 				</Tooltip>
 			</span>
