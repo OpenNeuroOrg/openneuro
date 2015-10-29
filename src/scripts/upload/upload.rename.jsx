@@ -18,15 +18,33 @@ let Rename = React.createClass({
 		let dirName   = this.state.dirName,
 			nameError = this.state.nameError,
 			tree      = this.state.tree,
-			fileStuctureDirName = dirName + " File Structure";
+			fileStuctureDirName = dirName + " File Structure",
+			resumeNameConflict = this.state.resumeNameConflict,
+			renameResumeMessage;
+
+		if (resumeNameConflict) {
+			renameResumeMessage = (
+				<span className="message error characterError">You have selected "{this.state.selectedName}" and are trying to resume "{dirName}." Continue or <span className="upload-reset-link" onClick={this._cancel}>cancel</span>.</span>
+			);
+		}
+
+		let input;
+		if (this.state.showRenameInput) {
+			input = (
+				<div>
+					<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
+					<Input type="text" placeholder="dataset name" initialValue={dirName} onChange={this._updateDirName} />
+				</div>
+			);
+		}
 
 		return (
 			<div>
-				<span className="message fadeIn">Rename your dataset (optional)</span>
+				{!resumeNameConflict ? <span className="message fadeIn">Rename your dataset (optional)</span> : null}
 				<div className="dir-name has-input clearfix fadeIn">
 					{nameError ? <span className="message error characterError">{nameError}</span> : null}
-					<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
-					<Input type="text" placeholder="dataset name" initialValue={dirName} onChange={this._updateDirName} />
+					{renameResumeMessage}
+					{input}
 				</div>
 				<Accordion className="fileStructure fadeIn">
 					<Panel header={fileStuctureDirName} eventKey='1'>
@@ -44,7 +62,11 @@ let Rename = React.createClass({
 		Actions.updateDirName(e.target.value);
 	},
 
-	_validate: Actions.validate
+	_validate: Actions.validate,
+
+	_cancel: function () {
+		Actions.setInitialState();
+	}
 
 });
 

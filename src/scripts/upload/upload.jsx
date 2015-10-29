@@ -53,9 +53,9 @@ let Upload = React.createClass({
 
 		let rename;
 		if (this.state.showRename) {
-			let tabName = <span><span>2:</span><span> Rename</span></span>;
+			let tabName = this.state.resuming ? <span><span>2:</span><span> Resume</span></span> : <span><span>2:</span><span> Rename</span></span>;
 			rename = (
-				<TabPane eventKey={2} tab={tabName}  className="upload-step" disabled={disabledTab}>
+				<TabPane eventKey={2} tab={tabName}  className="upload-step" disabled={disabledTab || !this.state.renameEnabled}>
 					<div className={activePane}>
 						<Rename />
 					</div>

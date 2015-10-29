@@ -64,13 +64,6 @@ export default class Status extends React.Component {
 
 	_onFileSelect(files) {
 		actions.onResume(files, this.props.dataset.name);
-		// actions.setInitialState({
-		// 	list: files.list,
-		// 	tree: files.tree,
-		// 	showRename: true,
-		// 	dirName: this.props.dataset.name
-		// });
-		// actions.validate(files.list, true);
 	}
 
 }
