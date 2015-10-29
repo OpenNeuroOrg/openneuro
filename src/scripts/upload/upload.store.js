@@ -57,7 +57,6 @@ let UploadStore = Reflux.createStore({
 			progress: {total: 0, completed: 0, currentFiles: []},
 			projectId: '',
 			refs: {},
-			resumeNameConflict: false,
 			resuming: false,
 			selectedName: '',
 			showSelect: true,
@@ -111,9 +110,8 @@ let UploadStore = Reflux.createStore({
 	onResume (selectedFiles, originalName) {
 		let dirName = selectedFiles.tree[0].name,
 			renameEnabled = true,
-			resumeNameConflict, activeKey, callback;
+			activeKey, callback;
 		if (dirName !== originalName) {
-			resumeNameConflict = true;
 			activeKey = 2;
 		} else {
 			activeKey = 3;
@@ -125,7 +123,6 @@ let UploadStore = Reflux.createStore({
 			tree: selectedFiles.tree,
 			list: selectedFiles.list,
 			dirName: originalName,
-			resumeNameConflict: resumeNameConflict,
 			uploadStatus: 'files-selected',
 			showRename: true,
 			selectedName: dirName,
@@ -176,7 +173,7 @@ let UploadStore = Reflux.createStore({
 	 * it check for existing dataset with the same name
 	 * and group.
 	 */
-	checkExists (fileTree, resuming) {
+	checkExists (fileTree) {
 
 		// rename dirName before upload
 		fileTree[0].name = this.data.dirName;
