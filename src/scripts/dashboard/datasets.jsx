@@ -54,7 +54,7 @@ let Datasets = React.createClass({
                         <div className="panel-heading">
                             <div className="header clearfix">
                                 <Link to="dataset" params={{datasetId: dataset._id}}>
-                                    <h4 className="dataset-name">{dataset.name}</h4>
+                                    <h4 className="dataset-name">{dataset.name} - {dataset.creator.firstname} {dataset.creator.lastname}</h4>
                                     <p>This dataset was obtained from the OpenfMRI project...</p>
                                 </Link>
                                 <div className="meta-data-container">
@@ -73,7 +73,7 @@ let Datasets = React.createClass({
             	<div className="dash-tab-content datasets ">
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
-                            <h2>{this.props.isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
+                            <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
                             <Filters filters={this.state.filters}  isPublic={isPublic} />
                         </div>
                         <Sort sort={this.state.sort}  />

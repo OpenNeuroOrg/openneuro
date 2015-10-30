@@ -18,18 +18,35 @@ let Rename = React.createClass({
 		let dirName   = this.state.dirName,
 			nameError = this.state.nameError,
 			tree      = this.state.tree,
-			fileStuctureDirName = dirName + " File Structure";
+			resuming  = this.state.resuming,
+			renameResumeMessage;
 
-		return (
-			<div>
-				<span className="message fadeIn">Rename your dataset (optional)</span>
-				<div className="dir-name has-input clearfix fadeIn">
-					{nameError ? <span className="message error characterError">{nameError}</span> : null}
+		if (resuming) {
+			renameResumeMessage = (
+				<span className="message error characterError">You have selected "{this.state.selectedName}" and are trying to resume "{dirName}." Continue or <span className="upload-reset-link" onClick={this._cancel}>cancel</span>.</span>
+			);
+		}
+
+		let input;
+		if (this.state.showRenameInput) {
+			input = (
+				<div>
 					<label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
 					<Input type="text" placeholder="dataset name" initialValue={dirName} onChange={this._updateDirName} />
 				</div>
+			);
+		}
+
+		return (
+			<div>
+				{!resuming ? <span className="message fadeIn">Rename your dataset (optional)</span> : null}
+				<div className="dir-name has-input clearfix fadeIn">
+					{nameError ? <span className="message error characterError">{nameError}</span> : null}
+					{renameResumeMessage}
+					{input}
+				</div>
 				<Accordion className="fileStructure fadeIn">
-					<Panel header={fileStuctureDirName} eventKey='1'>
+					<Panel header={dirName + " File Structure"} eventKey='1'>
 				  		<FileTree tree={tree}/>
 				  	</Panel>
 			  	</Accordion>
@@ -44,7 +61,11 @@ let Rename = React.createClass({
 		Actions.updateDirName(e.target.value);
 	},
 
-	_validate: Actions.validate
+	_validate: Actions.validate,
+
+	_cancel: function () {
+		Actions.setInitialState();
+	}
 
 });
 

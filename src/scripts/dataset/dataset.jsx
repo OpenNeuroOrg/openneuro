@@ -59,7 +59,7 @@ let Dataset = React.createClass({
 									<span className="dataset-name">{dataset.name}</span>
 									<Statuses dataset={dataset}/>
 								</h1>
-								<h6>uploaded by {dataset.group} on {dateAdded} - {timeago} ago</h6>
+								<h6>uploaded by {dataset.creator.firstname} {dataset.creator.lastname} on {dateAdded} - {timeago} ago</h6>
 							</div>
 							<div className="col-xs-6">
 								<Tools dataset={dataset} users={this.state.users} canEdit={dataset && canEdit && !dataset.public}/>

@@ -30,9 +30,9 @@ let UploadStore = Reflux.createStore({
 
 	data: {},
 
-	update: function (data) {
+	update: function (data, callback) {
 		for (let prop in data) {this.data[prop] = data[prop];}
-		this.trigger(this.data);
+		this.trigger(this.data, callback);
 	},
 
 	/**
@@ -43,7 +43,7 @@ let UploadStore = Reflux.createStore({
 	 * which will set the state to the initial state
 	 * with any differences passed.
 	 */
-	setInitialState: function (diffs) {
+	setInitialState: function (diffs, callback) {
 		let data = {
 			activeKey: 1,
 			alert: null,
@@ -57,8 +57,12 @@ let UploadStore = Reflux.createStore({
 			progress: {total: 0, completed: 0, currentFiles: []},
 			projectId: '',
 			refs: {},
+			resuming: false,
+			selectedName: '',
 			showSelect: true,
 			showRename: false,
+			renameEnabled: true,
+			showRenameInput: true,
 			showIssues: false,
 			showResume: false,
 			showProgress: false,
@@ -68,7 +72,7 @@ let UploadStore = Reflux.createStore({
 			warnings: [],
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
-		this.update(data);
+		this.update(data, callback);
 	},
 
 // actions ---------------------------------------------------------------------------
@@ -98,6 +102,38 @@ let UploadStore = Reflux.createStore({
 	},
 
 	/**
+	 * On Resume
+	 *
+	 * A file select on change handler for resuming
+	 * incomplete uploads.
+	 */
+	onResume (selectedFiles, originalName) {
+		let dirName = selectedFiles.tree[0].name,
+			renameEnabled = true,
+			activeKey, callback;
+		if (dirName !== originalName) {
+			activeKey = 2;
+		} else {
+			activeKey = 3;
+			renameEnabled = false;
+			callback = () => {this.validate(selectedFiles.list);}
+		}
+		this.setInitialState({
+			refs: this.data.refs,
+			tree: selectedFiles.tree,
+			list: selectedFiles.list,
+			dirName: originalName,
+			uploadStatus: 'files-selected',
+			showRename: true,
+			selectedName: dirName,
+			renameEnabled: renameEnabled,
+			showRenameInput: false,
+			activeKey: activeKey,
+			resuming: true
+		}, callback);
+	},
+
+	/**
 	 * Validate
 	 *
 	 * Takes a filelist, runs BIDS validation checks
@@ -105,7 +141,7 @@ let UploadStore = Reflux.createStore({
 	 * Takes an optional boolean parameter representing
 	 * whether this is already known as a resume.
 	 */
-	validate (selectedFiles, resuming) {
+	validate (selectedFiles) {
 		let self = this;
 		self.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
         validate.BIDS(selectedFiles, {}, function (errors, warnings) {
@@ -124,7 +160,7 @@ let UploadStore = Reflux.createStore({
 			});
 
 			if (errors.length === 0 && warnings.length === 0) {
-	        	self.checkExists(self.data.tree, resuming);
+	        	self.checkExists(self.data.tree, false);
 	        }
         });
 	},
@@ -137,7 +173,7 @@ let UploadStore = Reflux.createStore({
 	 * it check for existing dataset with the same name
 	 * and group.
 	 */
-	checkExists (fileTree, resuming) {
+	checkExists (fileTree) {
 
 		// rename dirName before upload
 		fileTree[0].name = this.data.dirName;
@@ -149,7 +185,7 @@ let UploadStore = Reflux.createStore({
 
 		let self = this;
 		let userId = userStore.data.scitran._id;
-		if (!resuming) {
+		if (!this.data.resuming) {
 			scitran.getProjects(true, function (projects) {
 				let existingProjectId;
 				for (let project of projects) {
