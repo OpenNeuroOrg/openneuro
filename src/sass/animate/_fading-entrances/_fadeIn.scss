@@ -10,5 +10,5 @@
 	@include delay($delay);
 	@include function($function);
 	@include fill-mode($fill);
-	@include visibility($visibility);
+	//@include visibility($visibility);
 }

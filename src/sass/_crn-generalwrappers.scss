@@ -101,3 +101,11 @@ body,
 
 }
 
+.tooltip{
+	z-index:4000;
+}
+
+.tooltip-inner{
+	max-width:200px;
+	font-size:12px;
+}
