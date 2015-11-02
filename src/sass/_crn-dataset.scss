@@ -36,7 +36,41 @@
 		}
 	}
 
-
+	.status-container{
+		width: 100%;
+		float: none;
+		box-sizing: border-box;
+		padding:10px 20px;
+		ul{
+			list-style: none;
+			padding: 0;
+			margin: 0;
+			li{
+				display: inline-block;
+				float: right;
+				margin-right: 0;
+				margin-left: 15px;
+				width: auto;
+				text-align: right;
+				box-sizing: border-box;
+				.file-wrap{
+					input[type="file"].dirUpload-btn{
+						color: rgba(0, 0, 0, 0);
+						padding: 0;
+						height: 21px;
+						display: block;
+						width: 100%;
+						max-width: 80px;
+						float: right;
+							&:before{
+								font-size: 12px;
+								padding: 0;
+							}
+					}
+				}
+			}
+		}
+	}
 	.card{
 		box-shadow: 1px 0 3px 0 rgba(0,0,0,.3);
 		padding: 0;
@@ -64,7 +98,7 @@
 	}
 	h1{
 		margin: 0;
-		padding: 20px 0 0 0;
+		padding: 10px 0 0 0;
 		font-size: 30px;
 		text-transform: uppercase;
 		font-weight: 100;
@@ -75,18 +109,37 @@
 			float: left;
 		}
 	}
-	.tools.nav.nav-pills{
-		padding: 0 20px 0;
-		margin: 0;
-		text-align:right;
-		li {
-			overflow: hidden;
-			float: none;
-			display: inline-block;
-			button{
-					padding:10px 12px;
+	h6{
+		margin:5px 0 0;
+	}
+	.tools-wrap{
+		margin: -20px -20px 0 -20px;
+		background: $ocean;
+		padding: 0;
+		.tools{
+			padding: 0;
+			margin: 0;
+			display:block;
+			width: 100%;
+			.tool {
+				display: block;
+				float: left;
+				width:25%;
+				text-align: center;
+				vertical-align:middle;
+				overflow:hidden;
+				> button,
+				.fadeIn > button{
+					&:hover{
+						background: #006B7B;
+					}
 				}
-			}
+				button{
+						padding:7px 10px;
+						color: #fff;
+					}
+				}
+		}
 	}
 	.form-group {
 		margin: 0;
@@ -151,10 +204,11 @@
 	  }
 	}
 	.cte-display{
-	    font-size: 20px;
+	    font-size: 18px;
 	    color: #565656;
 	    font-weight: 100;
 	    font-family: $font-family-ssp;
+	    word-wrap: break-word;
 	    div{
 			padding: 10px 0;
 			border-bottom: 1px solid #EEE;

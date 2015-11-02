@@ -12,6 +12,7 @@ import Tools        from './dataset.tools.jsx';
 import Statuses     from './dataset.statuses.jsx';
 import moment       from 'moment';
 
+
 let Dataset = React.createClass({
 
     mixins: [State, Reflux.connect(datasetStore)],
@@ -48,22 +49,21 @@ let Dataset = React.createClass({
 			let PublicDatasetsLink = <Link to="public">Public Datasets</Link>;
 			content = (
 				<div className="fadeIn dashboard">
-					{/*<ol className="breadcrumb">
-						<li>{dataset.public && !dataset.userOwns ? PublicDatasetsLink : myDatasetsLink}</li>
-						<li className="active">{dataset.name}</li>
-					</ol>*/}
 					<div className="clearfix">
 						<div className="row">
+							<div className="tools-wrap">
+								<Tools dataset={dataset} users={this.state.users} canEdit={dataset && canEdit && !dataset.public}/>
+							</div>
 							<div className="col-xs-6">
 								<h1 className="clearfix">
 									<span className="dataset-name">{dataset.name}</span>
-									<Statuses dataset={dataset}/>
 								</h1>
 								<h6>uploaded by {dataset.creator.firstname} {dataset.creator.lastname} on {dateAdded} - {timeago} ago</h6>
 							</div>
 							<div className="col-xs-6">
-								<Tools dataset={dataset} users={this.state.users} canEdit={dataset && canEdit && !dataset.public}/>
+								<div className="status-container"><Statuses dataset={dataset}/></div>
 							</div>
+							
 						</div>
 						<Metadata dataset={dataset}/>
 					</div>

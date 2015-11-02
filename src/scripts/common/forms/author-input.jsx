@@ -40,7 +40,7 @@ let ArrayInput = React.createClass({
 				<div className="form-inline">
 					<Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
 					<Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
-					<button className="btn btn-admin add" onClick={this._add}>add</button>
+					<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._add}>add</button>
 				</div>
 			</div>
 		)

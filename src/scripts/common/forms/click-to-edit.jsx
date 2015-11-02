@@ -31,14 +31,8 @@ let ClickToEdit = React.createClass({
 		let input;
 		let display;
 
-		let editBtn;
-		if (this.props.editable && !this.state.edit) {
-			editBtn = <button onClick={this._edit} className="cte-edit-button btn btn-admin fadeIn"><span>edit </span><i className="fa fa-pencil"></i></button>;
-		}
-
 		let buttons = (
 			<div className="btn-wrapper">
-				<button className="cte-cancel-btn btn btn-admin cancel" onClick={this._cancel}>cancel</button>
 				<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._save}>save</button>
 			</div>
 		);
@@ -54,11 +48,7 @@ let ClickToEdit = React.createClass({
 					return <div className="fadeIn" key={index}><span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span></div>;
 				});
 				display = <div className="cte-display">{items}</div>;
-				buttons = (
-					<div className="btn-wrapper clearfix">
-						<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._cancel}>done</button>
-					</div>
-				);
+				buttons = null;
 				break;
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {
@@ -70,12 +60,16 @@ let ClickToEdit = React.createClass({
 						onDelete={this._handleDelete}
 						onFileClick={this._download}/>;
 				display = <div className="cte-display">{list}</div>;
-				buttons = (
-					<div className="btn-wrapper clearfix">
-						<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._cancel}>done</button>
-					</div>
-				)
+				buttons = null;
 				break;
+		}
+
+		let editText = <span><i className="fa fa-pencil"></i> Edit</span>;
+		let hideText = <span><i className="fa fa-times"></i> Hide</span>;
+
+		let editBtn;
+		if (this.props.editable) {
+			editBtn = <button onClick={this._toggleEdit} className="cte-edit-button btn btn-admin fadeIn" >{this.state.edit ? hideText : editText}</button>
 		}
 
 		let edit = (
@@ -102,8 +96,8 @@ let ClickToEdit = React.createClass({
 		this.setState({edit: false});
 	},
 
-	_edit() {
-		this.setState({edit: true});
+	_toggleEdit() {
+		this.setState({edit: !this.state.edit});
 	},
 
 	_handleFile(file, callback) {
