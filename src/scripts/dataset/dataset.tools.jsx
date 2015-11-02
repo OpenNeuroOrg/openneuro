@@ -33,24 +33,24 @@ let Tools = React.createClass({
 
 		if (!dataset.status.uploadIncomplete && this.props.canEdit) {
 			publish = (
-				<li role="presentation" >
+				<div role="presentation" className="tool" >
 					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
-	            </li>
+	            </div>
 			);
 		}
 
 		if (this.props.canEdit) {
 
 			del = (
-				<li role="presentation" >
+				<div role="presentation" className="tool" >
 	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
-	            </li>
+	            </div>
 			);
 
 			share = (
-	            <li role="presentation" >
-	            	<button className="btn btn-admin warning"  onClick={this._showModal}>Share <i className="fa fa-user-plus"></i></button>
-	            </li>
+	            <div role="presentation" className="tool" >
+	            	<button className="btn btn-admin warning"  onClick={this._showModal}><i className="fa fa-user-plus"></i> Share</button>
+	            </div>
 	        );
 
 			shareModal = (
@@ -67,15 +67,15 @@ let Tools = React.createClass({
 		}
 
 		return (
-			<ul className="nav nav-pills tools clearfix">
-				<li role="presentation">
-					<button className="btn btn-admin warning" onClick={this._downloadDataset}>Download</button>
-				</li>
+			<div className="tools clearfix">
+				<div role="presentation" className="tool">
+					<button className="btn btn-admin warning" onClick={this._downloadDataset}><i className="fa fa-download"></i> Download</button>
+				</div>
 				{publish}
 				{del}
 				{share}
 				{shareModal}
-	        </ul>
+	        </div>
     	);
 	},
 

@@ -67,76 +67,110 @@
 			font-size: 30px;
 			text-transform: uppercase;
 			font-weight: 100;
-			
-			width: 50%;
-			float: left;
 		}
-		.filters{
-			width: 50%;
-			float: left;
-			text-align: right;
-			padding: 25px 20px 0 0;
-			button{
-				border: none;
-				padding: 6px 11px;
-				margin: 0 5px;
-				color:#aaa;
-				background:none;
-				&:hover,
-				&:focus{
-					background:#f9f9f9;
-					outline: 0;
+		.filters-sort-wrap{
+			width: 100%;
+			float: none;
+			padding: 5px 20px;
+			background:#f9f9f9;
+			border-bottom:1px solid #ddd;
+			.filters{
+				width: 50%;
+				float: left;
+				text-align: right;
+				label{
+					margin: 0;
+					text-transform: uppercase;
+					font-size: 10px;
+					font-weight: 600;
+					color: #777;
+					text-align: right;
+					padding: 0;
+					
 				}
-				&:active,
-				&.active{
+				button{
+					border: none;
+					padding: 0px 6px;
+					margin: 0 5px;
+					color:#aaa;
 					background:none;
-					color:$primary;
-					&.filter-shared{
-						color: $brand-info;
+					&.filter-all{
+						text-transform: uppercase;
+						font-size: 12px;
+						font-weight: 600;
 					}
-					&.filter-public{
-						color: $brand-success;
+					&:hover,
+					&:focus{
+						outline: 0;
 					}
-					&.filter-incomplete{
-						color: $brand-warning;
+					&:active,
+					&.active,
+					&:hover{
+						background:none;
+						color:$primary;
+						&.filter-shared{
+							color: $brand-info;
+						}
+						&.filter-public{
+							color: $brand-success;
+						}
+						&.filter-incomplete{
+							color: $brand-warning;
+						}
 					}
-				}
-				.filter-text{
-					visibility: hidden;
-					width: 1px;
-					position:absolute;
-					left: -99999em;
+					.filter-text{
+						visibility: hidden;
+						width: 1px;
+						position:absolute;
+						left: -99999em;
+					}
 				}
 			}
-		}
-		.sort{
-			padding: 5px 20px;
-			border-bottom: 1px solid #ddd;
-			background: #f9f9f9;
-			button{
-				padding: 0;
-				background: none;
-				border: none;
-				&:hover,
-				&:focus,
-				&:active{
-					outline:0;
-					color: $primary;
+		
+			.sort{
+				width: 50%;
+				float: left;
+				padding:0;
+				label{
+					margin: 0;
+					text-transform: uppercase;
+					font-size: 10px;
+					font-weight: 600;
+					color: #777;
+					text-align: right;
+					padding: 0;				
 				}
-				&.name{
-					float: left;
-				}
-				&.date{
-					float: right;
-				}
+				a{
+					padding: 0;
+					background: none;
+					border: none;
+					color: #909090;
+					text-transform: uppercase;
+					font-size: 12px;
+					font-weight: 600;
+					text-align: left;
+					&:hover,
+					&:focus,
+					&:active,
+					&.active{
+						outline:0;
+						color: $primary;
+					}
+					&.name,
+					&.date{
+						width: 45px;
+						margin-left: 10px;
+					}
 
-				.fa{
-					position: relative;
-					line-height: 0;
-					top: 4px;
-					padding: 5px;
-					&.fa-sort-desc{
-						top:-2px;
+					.fa{
+						position: relative;
+						line-height: 0;
+						top: 2px;
+						padding: 0;
+						font-size: 10px;
+						&.fa-sort-desc{
+							top:-2px;
+						}
 					}
 				}
 			}
@@ -165,10 +199,10 @@
 					float: left;
 					h4{
 						border: none;
-						margin: 0 0 10px;
+						margin: 0 0 5px;
 						font-size: 15px;
 						padding: 0;
-						line-height: 15px;
+						line-height: 13px;
 						
 					}
 					p{
@@ -193,7 +227,7 @@
 					
 					
 
-					.meta-data-container{
+					.status-container{
 						width: 50%;
 						float: left;
 						box-sizing: border-box;
@@ -212,8 +246,8 @@
 								box-sizing: border-box;
 							}
 						}
-
-
+					}
+					.meta-container{
 						.date{
 							float: none;
 							margin: 0;
@@ -221,11 +255,15 @@
 							font-size: 10px;
 							padding:0;
 							line-height: 15px;
-							text-align: right;
+							text-align: left;
+							text-transform: uppercase;
+							.name{
+								color:#333;
+								text-transform: none;
+								font-size: 12px;
+							}
 							.time-ago{
-								margin-left: 10px;
-								text-transform: uppercase;
-
+								color:#333;
 							}
 						}
 					}

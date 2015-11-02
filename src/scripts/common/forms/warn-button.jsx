@@ -32,7 +32,7 @@ export default class WarnButton extends React.Component {
 
         let hideAction = (
         	<div className=" fadeIn" >
-        		 <button className="btn btn-admin warning" onClick={this.toggle.bind(this)}>{message}<i className={'fa ' + this.props.icon}></i> </button>
+        		 <button className="btn btn-admin warning" onClick={this.toggle.bind(this)}><i className={'fa ' + this.props.icon}></i>  {message}</button>
         	</div>
         );
 
