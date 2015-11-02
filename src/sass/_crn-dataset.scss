@@ -249,9 +249,12 @@
 		.cte-array-item{
 			overflow:hidden;
 			padding:10px;
-			.author-name{
+			.orcid-id,
+			.author-name,
+			.share-name,
+			.share-access{
 				float: left;
-				padding: 5px 0 5px 5px;
+				padding: 7px 0 5px 5px;
 				margin: 0;
 			}
 			a.file-name{
