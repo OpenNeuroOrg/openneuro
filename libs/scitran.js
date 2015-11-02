@@ -13,7 +13,7 @@ export default {
      * Is Super User
      */
     isSuperUser(accessToken, callback) {
-        request.get(config.scitran.baseURL + 'users/self', {
+        request.get(config.scitran.url + 'users/self', {
             headers: {
                 Authorization: accessToken
             }
@@ -26,7 +26,7 @@ export default {
 	 * Create User
 	 */
 	createUser(user, callback) {
-		request.post(config.scitran.baseURL + 'users', {body: user}, (err, res) => {
+		request.post(config.scitran.url + 'users', {body: user}, (err, res) => {
 			this.createGroup(user._id, user._id, callback);
 		});
 	},
@@ -43,7 +43,7 @@ export default {
             _id: groupName,
             roles: [{access: 'admin', _id: userId}]
         };
-        request.post(config.scitran.baseURL + 'groups', {body: body}, callback);
+        request.post(config.scitran.url + 'groups', {body: body}, callback);
     }
 
 }
