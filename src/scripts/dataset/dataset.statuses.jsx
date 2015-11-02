@@ -15,17 +15,17 @@ let Statuses = React.createClass({
 		let dataset = this.props.dataset;
 		let uploading = dataset._id === this.state.projectId;
 
-		let publicStatus     = <li className="clearfix"><Status type='public' /></li>;
-		let incompleteStatus = <li className="clearfix"><Status type='incomplete' dataset={dataset} /></li>;
-		let sharedWithStatus = <li className="clearfix"><Status type='shared' /></li>;
-		let inProgress       = <li className="clearfix"><Status type='inProgress' /></li>;
+		let publicStatus     = <span className="clearfix status"><Status type='public' /></span>;
+		let incompleteStatus = <span className="clearfix status"><Status type='incomplete' dataset={dataset} /></span>;
+		let sharedWithStatus = <span className="clearfix status"><Status type='shared' /></span>;
+		let inProgress       = <span className="clearfix status"><Status type='inProgress' /></span>;
 		return (
-			<ul className="clearfix">
+			<span className="clearfix status-wrap">
 				{dataset && dataset.status && dataset.public ? publicStatus : null}
 				{dataset && dataset.status && dataset.status.uploadIncomplete && !uploading ? incompleteStatus: null}
 				{dataset && dataset.userOwns && !dataset.userCreated ? sharedWithStatus: null}
 				{dataset && uploading ? inProgress : null}
-			</ul>
+			</span>
     	);
 	},
 
