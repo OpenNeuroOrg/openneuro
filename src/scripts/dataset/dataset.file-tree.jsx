@@ -11,7 +11,7 @@ class FileTree extends React.Component {
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map((item, index) => {
 			if (!item.name && item.filename) {item.name = item.filename;}
-			let typeIcon, tools, fileTools, error, loading, editBtn;
+			let typeIcon, typeIconOpen, tools, fileTools, error, loading, editBtn;
 
 			// loading animation
 			if (item.loading) {
@@ -26,7 +26,7 @@ class FileTree extends React.Component {
 			// folders
 			if (item.children) {
 				typeIcon  = <i className="fa fa-folder"></i>;
-				
+				typeIconOpen = <i className="fa fa-folder-open"></i>;
 				let editText = <span><i className="fa fa-pencil"></i> Edit</span>;
 				let hideText = <span><i className="fa fa-times"></i> Hide</span>;
 
@@ -66,7 +66,7 @@ class FileTree extends React.Component {
 			}
 
 			return (
-				<li key={item.name}>{typeIcon} {item.name} {error} {this.props.editable ? editBtn : null} {this.props.editable && item.showChildren ? tools : fileTools} {loading}
+				<li key={item.name}>{this.props.editable && item.showChildren ? typeIconOpen : typeIcon} {item.name} {error} {this.props.editable ? editBtn : null} {this.props.editable && item.showChildren ? tools : fileTools} {loading}
 					{item.showChildren ? <ul className="child-files"><FileTree tree={item.children} editable={this.props.editable}/></ul> : null}
 				</li>
 			);
