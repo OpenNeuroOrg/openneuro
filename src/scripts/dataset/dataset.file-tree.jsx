@@ -7,12 +7,11 @@ import WarnButton from '../common/forms/warn-button.jsx';
 class FileTree extends React.Component {
 
 // life cycle events --------------------------------------------------
-
 	render () {
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map((item, index) => {
 			if (!item.name && item.filename) {item.name = item.filename;}
-			let icon, tools, error, loading;
+			let typeIcon, tools, fileTools, error, loading, editBtn;
 
 			// loading animation
 			if (item.loading) {
@@ -26,9 +25,16 @@ class FileTree extends React.Component {
 
 			// folders
 			if (item.children) {
-				icon  = <i className="fa fa-folder" onClick={this._toggleFolder.bind(this, item)}></i>;
+				typeIcon  = <i className="fa fa-folder"></i>;
+				
+				let editText = <span><i className="fa fa-pencil"></i> Edit</span>;
+				let hideText = <span><i className="fa fa-times"></i> Hide</span>;
+
+				if (this.props.editable) {
+					editBtn = <button onClick={this._toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>
+				}
 				tools = (
-					<span>
+					<span> -
 						<input
 							type="file"
 							className="add-files"
@@ -40,24 +46,28 @@ class FileTree extends React.Component {
 			}
 
 			// files
-			else {
-				icon  = <i className="fa fa-file"></i>;
-				tools = (
-					<span>
-						<WarnButton action={this._deleteFile.bind(this, item)} />
-						<input
-							type="file"
-							className="update-file"
-							ref={item.name}
-							onChange={this._updateFile.bind(this, item)}
-							onClick={this._clearInput.bind(this, item.name)}/>
+			else if(this.props.editable) {
+				typeIcon  = <i className="fa fa-file"></i>;
+				fileTools = (
+					<span className="fileTreeEditFile"> -
+						<span className="delete-file">
+							<WarnButton action={this._deleteFile.bind(this, item)} />
+						</span>
+						<span className="edit-file">
+							<input
+								type="file"
+								className="update-file"
+								ref={item.name}
+								onChange={this._updateFile.bind(this, item)}
+								onClick={this._clearInput.bind(this, item.name)}/>
+						</span>
 					</span>
 				);
 			}
 
 			return (
-				<li key={item.name}>{icon} {item.name} {error} {this.props.editable ? tools : null} {loading}
-					{item.showChildren ? <ul><FileTree tree={item.children} editable={this.props.editable}/></ul> : null}
+				<li key={item.name}>{typeIcon} {item.name} {error} {this.props.editable ? editBtn : null} {this.props.editable && item.showChildren ? tools : fileTools} {loading}
+					{item.showChildren ? <ul className="child-files"><FileTree tree={item.children} editable={this.props.editable}/></ul> : null}
 				</li>
 			);
 		});
@@ -93,7 +103,9 @@ class FileTree extends React.Component {
 	/**
 	 * Toggle Folder
 	 */
-	_toggleFolder(folder) {actions.toggleFolder(folder);}
+	_toggleFolder(folder) {
+		actions.toggleFolder(folder);
+	}
 
 	/**
 	 * Update File

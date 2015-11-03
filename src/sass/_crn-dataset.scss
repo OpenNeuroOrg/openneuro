@@ -1,16 +1,37 @@
 // dataset dataset view
-
 .dataset {
 	.fileStructure.panel-group {
-		.panel-collapse{
+		.panel-default .panel-collapse{
 			.panel-body{
 				padding:0;
+				ul{
+					padding: 0;
+				}
 				>ul{
 					overflow: visible;
 				    height: auto;
 				    padding: 10px;
 				    margin: 0;
+
 				    li {
+						padding: 3px 0 3px 10px;
+						list-style: none;
+						margin: 2px;
+						.child-files{
+							margin-left: 5px;
+							border-left: 1px solid #999;
+
+							li:before {
+								content: '';
+								height: 7px;
+								width: 7px;
+								background: none;
+								border-bottom: 1px solid #999;
+								margin-left: -11px;
+								position: absolute;
+								margin-top: 3px;
+							}
+						}
 				    	input {
 				    		height: 20px;
 				    		width: auto;
@@ -22,9 +43,45 @@
 				    		}
 
 				    		&.add-files:before {content: 'add files';}
-				    		&.update-file:before {content: 'update';}
+				    		&.update-file:before {
+								content: 'update';
+								background: none;
+								color: $ocean;
+								border: none;
+								box-shadow: none;
+								
+							}
+							&.update-file:hover:before{
+									background: #eee;
+							}
 				    	}
 				    }
+				
+					.delete-file{
+						display: inline-block;
+						overflow: hidden;
+						button{
+							padding: 2px 5px;
+							margin: 0;
+							font-size: 11px;
+							line-height: 10px;
+							vertical-align: top;
+							&.delete{
+								margin-right: 5px;
+							}
+						}
+					}
+					.edit-file{
+						display: inline-block;
+					}
+					input:before {
+					    width: auto;
+					    padding: 0px 5px;
+					    font-size: 10px;
+					    height: 17px;
+					    padding: 1px 4px;
+					    margin: 0;
+					}
 				}
 			}
 		}
@@ -32,6 +89,7 @@
 			text-align: left;
 			.panel-title a{
 				font-size: 13px;
+				padding:0;
 			}
 		}
 	}
@@ -152,6 +210,13 @@
 	textarea,
 	textarea.form-control {
 		min-height: 50px;
+		font-size: 18px;
+	}
+	.dataset-readme {
+		textarea,
+		textarea.form-control {
+			min-height: 300px;
+		}
 	}
 
 	input[type="file"]{
