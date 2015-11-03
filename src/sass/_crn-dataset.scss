@@ -44,12 +44,16 @@
 
 				    		&.add-files:before {content: 'add a file';}
 				    		&.update-file:before {
-								content: 'update';
-								background: none;
-								color: $ocean;
-								border: none;
-								box-shadow: none;
-								
+							    content: 'change';
+							    border: none;
+							    box-shadow: none;
+							    padding: 2px 3px;
+							    height: 13px;
+							    font-size: 9px;
+							    margin: 0;
+							    line-height: 10px;
+							    vertical-align: middle;
+							    margin-top: -6px;
 							}
 							&.update-file:hover:before{
 									background: #eee;
@@ -68,6 +72,7 @@
 							line-height: 10px;
 							&.delete{
 								margin-right: 5px;
+								font-size: 10px;
 							}
 						}
 					}
