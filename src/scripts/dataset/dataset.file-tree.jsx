@@ -103,9 +103,7 @@ class FileTree extends React.Component {
 	/**
 	 * Toggle Folder
 	 */
-	_toggleFolder(folder) {
-		actions.toggleFolder(folder);
-	}
+	_toggleFolder(folder) {actions.toggleFolder(folder);}
 
 	/**
 	 * Update File
