@@ -4,6 +4,7 @@ import scitran  from '../libs/scitran';
 import sanitize from '../libs/sanitize';
 import mongo    from '../libs/mongo';
 
+let c = mongo.collections;
 
 // models ------------------------------------------------------------------
 
@@ -40,10 +41,9 @@ export default {
 	 * creates a scitran user.
 	 */
 	create(req, res, next) {
-		let blacklist = mongo.db.collection('blacklist');
 		sanitize.req(req, models.newUser, (err, user) => {
 			if (err) {return next(err);}
-			blacklist.findOne({_id: user._id}).then((item) => {
+			c.blacklist.findOne({_id: user._id}).then((item) => {
 				if (item) {
 					let error = new Error("This user email has been blacklisted and cannot be given an account");
 					error.http_code = 403;
@@ -64,28 +64,18 @@ export default {
 	 * lastname and note and sets the user info as blacklisted.
 	 */
 	blacklist(req, res, next) {
-		let blacklist = mongo.db.collection('blacklist');
 		sanitize.req(req, models.blacklistUser, (err, user) => {
 			if (err) {return next(err);}
-
-			scitran.isSuperUser(req.headers.authorization, (isSuperUser) => {
-				if (isSuperUser) {
-					blacklist.findOne({_id: user._id}).then((item) => {
-						if (item) {
-							let error = new Error("A user with that _id has already been blacklisted");
-							error.http_code = 409;
-							return next(error);
-						} else {
-							blacklist.insertOne(user, {w:1}, (err, item) => {
-								if (err) {return next(err);}
-								res.send(user);
-							});
-						}
-					});
-				} else {
-					let error = new Error("You must have admin privileges to blacklist a user");
-					error.http_code = 403;
+			c.blacklist.findOne({_id: user._id}).then((item) => {
+				if (item) {
+					let error = new Error("A user with that _id has already been blacklisted");
+					error.http_code = 409;
 					return next(error);
+				} else {
+					blacklist.insertOne(user, {w:1}, (err, item) => {
+						if (err) {return next(err);}
+						res.send(user);
+					});
 				}
 			});
 		});
@@ -99,20 +89,10 @@ export default {
 	 * Returns a list of blacklisted users.
 	 */
 	getBlacklist(req, res, next) {
-		let blacklist = mongo.db.collection('blacklist');
-		scitran.isSuperUser(req.headers.authorization, (isSuperUser) => {
-			if (isSuperUser) {
-				blacklist.find().toArray((err, docs) => {
-					if (err) {return next(err);}
-					res.send(docs);
-				});
-			} else {
-				let error = new Error("You must have admin privileges to access the blacklist.");
-				error.http_code = 403;
-				return next(error);
-			}
+		c.blacklist.find().toArray((err, docs) => {
+			if (err) {return next(err);}
+			res.send(docs);
 		});
-
 	},
 
 	// delete --------------------------------------------------------------
@@ -126,24 +106,14 @@ export default {
 	 */
 	unBlacklist(req, res, next) {
 		let userId = req.params.id;
-
-		let blacklist = mongo.db.collection('blacklist');
-		scitran.isSuperUser(req.headers.authorization, (isSuperUser) => {
-			if (isSuperUser) {
-				blacklist.findAndRemove({_id: userId}, [], (err, doc) => {
-					if (err) {return next(err);}
-					if (!doc.value) {
-						let error = new Error("A user with that id was not found");
-						error.http_code = 404;
-						return next(error);
-					}
-					res.send({message: "User " + userId + " has been un-blacklisted."});
-				});
-			} else {
-				let error = new Error("You must have admin privileges to update the blacklist.");
-				error.http_code = 403;
+		c.blacklist.findAndRemove({_id: userId}, [], (err, doc) => {
+			if (err) {return next(err);}
+			if (!doc.value) {
+				let error = new Error("A user with that id was not found");
+				error.http_code = 404;
 				return next(error);
 			}
+			res.send({message: "User " + userId + " has been un-blacklisted."});
 		});
 	}
 

@@ -14,9 +14,9 @@ let models = {
 // handlers ----------------------------------------------------------------
 
 /**
- * Users
+ * Jobs
  *
- * Handlers for user actions.
+ * Handlers for job actions.
  */
 export default {
 

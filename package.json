@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "test": "npm test",
-    "start": "babel-node app.js"
+    "start": "babel-node app.js",
+    "create-agave-client": "babel-node scripts/create-agave-client.js",
+    "get-agave-token": "babel-node scripts/get-agave-token.js"
   },
   "repository": {
     "type": "git",

@@ -22,6 +22,17 @@ export default {
         });
     },
 
+    /**
+     * Get User
+     */
+    getUser(accessToken, callback) {
+        request.get(config.scitran.url + 'users/self', {
+            headers: {
+                Authorization: accessToken
+            }
+        }, callback);
+    },
+
 	/**
 	 * Create User
 	 */

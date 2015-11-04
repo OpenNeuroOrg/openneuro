@@ -17,9 +17,9 @@ export default {
             headers: {
                 Authorization: 'Basic ' + new Buffer(config.agave.username + ':' + config.agave.password).toString('base64')
             },
-            query: {
+            body: {
                 clientName: 'crn_client',
-                description: 'crn_client'
+                description: 'crn_client_descr'
             }
         }, callback);
     },
