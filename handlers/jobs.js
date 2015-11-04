@@ -31,7 +31,9 @@ export default {
 	 *	Results
 	 */
 	results(req, res, next) {
-
+		console.log(req.path);
+		console.log(req.body);
+		res.send({});
 	}
 
 

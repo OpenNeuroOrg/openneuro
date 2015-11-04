@@ -18,21 +18,23 @@ export default {
                 Authorization: 'Basic ' + new Buffer(config.agave.username + ':' + config.agave.password).toString('base64')
             },
             body: {
-                clientName: 'crn_client',
-                description: 'crn_client_descr'
+                clientName: 'crn_client_app',
+                description: 'Agave client application for CRN interaction.'
             }
         }, callback);
     },
 
     getAuthToken(consumerKey, consumerSecret, callback) {
-        request.post(config.agave.url + 'token/v2', {
+        request.post(config.agave.url + 'token', {
             headers: {
                 Authorization: 'Basic ' + new Buffer(consumerKey + ':' + consumerSecret).toString('base64'),
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             query: {
-                username: config.agave.username,
-                password: config.agave.password
+                grant_type: 'client_credentials',
+            },
+            body: {
+                scope: 'PRODUCTION',
             }
         }, callback);
     },
