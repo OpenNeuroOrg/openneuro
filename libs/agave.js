@@ -18,8 +18,16 @@ export default {
                 Authorization: 'Basic ' + new Buffer(config.agave.username + ':' + config.agave.password).toString('base64')
             },
             body: {
-                clientName: 'crn_client_app',
+                clientName: 'crn_client_app2',
                 description: 'Agave client application for CRN interaction.'
+            }
+        }, callback);
+    },
+
+    listClients(callback) {
+        request.get(config.agave.url + 'clients/v2', {
+            headers: {
+                Authorization: 'Basic ' + new Buffer(config.agave.username + ':' + config.agave.password).toString('base64')
             }
         }, callback);
     },
@@ -42,11 +50,20 @@ export default {
     createJob(job, accessToken, callback) {
         request.post(config.agave.url + 'jobs/v2', {
             headers: {
-                Authorization: 'Bearer ' + accessToken
+                Authorization: 'Bearer ' + accessToken,
+                'Content-Type': 'application/json',
             },
             body: {
-                'content-type': 'application/json',
                 body: job
+            }
+        }, callback);
+    },
+
+    listJobs(accessToken, callback) {
+        request.get(config.agave.url + 'jobs/v2/', {
+            headers: {
+                Authorization: 'Bearer ' + accessToken,
+                'Content-Type': 'application/json',
             }
         }, callback);
     }

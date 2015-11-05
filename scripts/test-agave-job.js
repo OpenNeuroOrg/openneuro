@@ -1,5 +1,6 @@
 import agave  from '../libs/agave';
 import config from '../config';
+import fs     from 'fs';
 
 var jobfile = {
 	"name":"openfmri-agave-bids-test test-1446118141",
@@ -14,12 +15,12 @@ var jobfile = {
 	"archiveSystem": "docking.storage",
 	"archivePath": null,
 	"inputs": {
-		"bidsFile": "agave://openfmri-corral-storage/ds003_downsampled.tar"
+		"bidsFile": "agave://openfmri-corral-storage/ds003_downsampled.tar",
 	},
 	"parameters": {},
 	"notifications": [
 		{
-			"url":"http://requestbin.agaveapi.co/1edizul1?job_id=${JOB_ID}&status=${JOB_STATUS}",
+			"url":"http://scitran.sqm.io:8765/api/v1/jobs/results",
 			"event":"*",
 			"persistent":true
 		},
@@ -36,9 +37,13 @@ var jobfile = {
 	]
 };
 
-agave.createJob(jobfile, '6OWIFzQoNB1AJoPXo23l6LKnqq4a', (err, res) => {
+agave.createJob(jobfile, 'HUjFRiR0Buga8JohEZkY2LX4MhYa', (err, res) => {
 	console.log(err);
 	console.log(res.req.path);
+	// console.log(res.req);
 	console.log(res.statusCode);
 	console.log(res.body);
+	fs.writeFile('response.json', JSON.stringify(res), (err) => {
+		console.log('wrote file');
+	});
 });

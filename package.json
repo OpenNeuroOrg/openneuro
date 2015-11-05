@@ -7,8 +7,10 @@
     "test": "npm test",
     "start": "babel-node app.js",
     "create-agave-client": "babel-node scripts/create-agave-client.js",
+    "list-agave-clients": "babel-node scripts/list-agave-clients.js",
     "get-agave-token": "babel-node scripts/get-agave-token.js",
-    "test-agave-job": "babel-node scripts/test-agave-job.js"
+    "test-agave-job": "babel-node scripts/test-agave-job.js",
+    "list-agave-jobs": "babel-node scripts/list-agave-jobs.js"
   },
   "repository": {
     "type": "git",
