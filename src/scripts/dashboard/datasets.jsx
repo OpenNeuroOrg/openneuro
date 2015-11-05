@@ -55,7 +55,7 @@ let Datasets = React.createClass({
                                 <Link to="dataset" params={{datasetId: dataset._id}}>
                                     <h4 className="dataset-name">{dataset.name}</h4>
                                     <div className="meta-container">
-                                        <p className="date">uploaded by <span className="name">{dataset.creator.firstname} {dataset.creator.lastname}</span> on <span className="time-ago">{dateAdded} - {timeago}</span></p>
+                                        <p className="date">uploaded <span className="name">{!isPublic ? 'by ' + dataset.group : null}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
                                     </div>
                                 </Link>
                                 <div className="status-container">
