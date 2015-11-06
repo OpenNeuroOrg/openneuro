@@ -50,9 +50,6 @@ let Dataset = React.createClass({
 				<div className="fadeIn dashboard">
 					<div className="clearfix">
 						<div className="row">
-							<div className="tools-wrap">
-								<Tools dataset={dataset} users={this.state.users} canEdit={dataset && canEdit && !dataset.public}/>
-							</div>
 							<div className="col-xs-6">
 								<h1 className="clearfix">
 									<span className="dataset-name">{dataset.name}</span>
@@ -61,6 +58,9 @@ let Dataset = React.createClass({
 							</div>
 							<div className="col-xs-6">
 								<div className="status-container"><Statuses dataset={dataset}/></div>
+							</div>
+							<div className="col-xs-12 tools-wrap">
+								<Tools dataset={dataset} users={this.state.users} canEdit={dataset && canEdit && !dataset.public}/>
 							</div>
 						</div>
 						<Metadata dataset={dataset}/>

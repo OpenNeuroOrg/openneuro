@@ -6,6 +6,15 @@
 				padding:0;
 				ul{
 					padding: 0;
+					position:relative;
+					li{
+						position:relative;
+						 .cte-edit-button{
+						 	position:absolute;
+						 	top: 5px;
+						 	right:5px;
+						 }
+					}
 				}
 				>ul{
 					overflow: visible;
@@ -17,9 +26,22 @@
 						padding: 3px 0 3px 10px;
 						list-style: none;
 						margin: 2px;
+
 						.child-files{
 							margin-left: 5px;
 							border-left: 1px solid #999;
+							li{
+								background:#fff;
+								&:nth-child(odd){
+									background:#f9f9f9;
+								}
+								.message.error{
+									color:$coral;
+								}
+								.fa-times{
+									cursor: pointer;
+								}
+							}
 
 							li:before {
 								content: '';
@@ -35,25 +57,29 @@
 				    	input {
 				    		height: 20px;
 				    		width: auto;
-				    		display: inline-block;
+				    		display: block;
+				    		width: 60px;
 				    		&:before {
-				    			width: auto;
-				    			padding: 0px 5px;
-				    			font-size: 10px;
+			    			width: auto;
+			    			padding: 0px 5px;
+			    			font-size: 10px;
+				    		background: none;
+							color: $ocean;
+							border: none;
+							box-shadow: none;
 				    		}
+				    		&:hover:before{
+									background: #eee;
+							}
 
 				    		&.add-files:before {content: 'add a file';}
 				    		&.update-file:before {
-							    content: 'change';
-							    border: none;
-							    box-shadow: none;
-							    padding: 2px 3px;
-							    height: 13px;
-							    font-size: 9px;
-							    margin: 0;
-							    line-height: 10px;
-							    vertical-align: middle;
-							    margin-top: -6px;
+								content: 'update file';
+								background: none;
+								color: $ocean;
+								border: none;
+								box-shadow: none;
+								
 							}
 							&.update-file:hover:before{
 									background: #eee;
@@ -63,8 +89,7 @@
 				
 					.delete-file{
 						display: inline-block;
-						overflow: hidden;
-						height: 13px;
+						overflow:hidden;
 						button{
 							padding: 2px 5px;
 							margin: 0;
@@ -72,12 +97,20 @@
 							line-height: 10px;
 							&.delete{
 								margin-right: 5px;
-								font-size: 10px;
+							}
+							&.warning{
+								padding: 0;
 							}
 						}
 					}
 					.edit-file{
-						display: inline-block;
+						input{
+							width: 72px;
+							display: block;
+							&:before{
+								padding: 2px;
+							}
+						}
 					}
 					input:before {
 					    width: auto;
@@ -172,14 +205,15 @@
 		margin:5px 0 0;
 	}
 	.tools-wrap{
-		margin: -20px -15px 0 -15px;
-		background: $ocean;
-		padding: 0;
+		margin: 0;
+		
+		padding: 10px 15px;
 		.tools{
 			padding: 0;
 			margin: 0;
 			display:block;
 			width: 100%;
+			background: #eee;
 			.tool {
 				display: block;
 				float: left;
@@ -191,11 +225,14 @@
 				.fadeIn > button{
 					&:hover{
 						background: #006B7B;
+						color:#fff;
 					}
 				}
 				button{
 						padding:7px 10px;
-						color: #fff;
+						color: $ocean;
+						transition: all 0.1s ease;
+						border-radius:none;
 					}
 				}
 		}

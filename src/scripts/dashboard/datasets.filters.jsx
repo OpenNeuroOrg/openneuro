@@ -17,7 +17,7 @@ export default class Filters extends React.Component {
 		if (!this.props.isPublic) {
 			filterButtons = (
 				<div className="filters">
-		            <label>Showing</label>
+		            <label>Filter By:</label>
 		            <button className={filters.length === 0 ? 'active btn-filter filter-all' : 'btn-filter filter-all'} onClick={this._filter.bind(this, 'reset')}>All</button>
 		            <button className={filters.indexOf('public') > -1 ? 'active btn-filter filter-public' : 'btn-filter filter-public'} onClick={this._filter.bind(this, 'public')}><i className="fa fa-globe"></i> <span className="filter-text">Public</span></button>
 		            <button className={filters.indexOf('incomplete') > -1 ? 'active btn-filter filter-incomplete' : 'btn-filter filter-incomplete'} onClick={this._filter.bind(this, 'incomplete')}><i className="fa fa-warning"></i>  <span className="filter-text">Incomplete</span></button>
