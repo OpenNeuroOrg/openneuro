@@ -17,7 +17,7 @@
 	.left-nav-slider{
 		z-index: 1200;
 		background-color: #f1f1f1;
-		box-shadow: 6px 0 5px -5px rgba(0, 0, 0, 0.3);
+		border-right:1px solid #bbb;
 		display: block;
 		z-index: 1100;
 		position: relative;
@@ -79,6 +79,8 @@
 	}
 	.open{
 		.left-nav-slider{
+			box-shadow: 6px 0 5px -5px rgba(0, 0, 0, 0.3);
+			border:none;
 			width: 300px;
 		}
 	}

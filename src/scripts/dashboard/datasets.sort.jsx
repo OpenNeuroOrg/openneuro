@@ -15,8 +15,8 @@ export default class Sort extends React.Component {
 		let icon = direction == '+' ? <i className="fa fa-sort-asc"></i> : <i className="fa fa-sort-desc"></i>;
 		return (
 				<div className="sort clearfix">
-					<label>Sort</label>
-		            <a className={value == 'name' ? "btn-sort date active" : "btn-sort name"} onClick={this._sort.bind(this, 'name')}>Name {value == 'name' ? icon : null}</a>
+					<label>Sort by:</label>
+		            <a className={value == 'name' ? "btn-sort name active" : "btn-sort name"} onClick={this._sort.bind(this, 'name')}>Name {value == 'name' ? icon : null}</a>
 		            <a className={value == 'timestamp' ? "btn-sort date active" : "btn-sort date"} onClick={this._sort.bind(this, 'timestamp')}>Date {value == 'timestamp' ? icon : null}</a>
 		        </div>
 		);

@@ -20,7 +20,7 @@ class FileTree extends React.Component {
 
 			// inline error
 			if (item.error) {
-				error = <div>{item.error} <span onClick={this._dismissError.bind(this, item)}><i className="fa fa-times"></i></span></div>;
+				error = <div className="message error">{item.error} <span onClick={this._dismissError.bind(this, item)}><i className="fa fa-times"></i></span></div>;
 			}
 
 			// folders
@@ -34,14 +34,14 @@ class FileTree extends React.Component {
 					editBtn = <button onClick={this._toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>
 				}
 				tools = (
-					<span> -
+					<div>
 						<input
 							type="file"
 							className="add-files"
 							ref={item.name}
 							onChange={this._addFile.bind(this, item)}
 							onClick={this._clearInput.bind(this, item.name)}/>
-					</span>
+					</div>
 				);
 			}
 
@@ -66,13 +66,20 @@ class FileTree extends React.Component {
 			}
 
 			return (
-				<li key={item.name}>{this.props.editable && item.showChildren ? typeIconOpen : typeIcon} {item.name} {error} {this.props.editable ? editBtn : null} {this.props.editable && item.showChildren ? tools : fileTools} {loading}
+				<li className="clearfix" key={item.name}>
+					<span className="item-name">
+						{this.props.editable && item.showChildren ? typeIconOpen : typeIcon} {item.name} 
+					</span> 
+					{this.props.editable && item.showChildren ? tools : fileTools} 
+					{error}
+					{loading}
 					{item.showChildren ? <ul className="child-files"><FileTree tree={item.children} editable={this.props.editable}/></ul> : null}
+					{this.props.editable ? editBtn : null}
 				</li>
 			);
 		});
 		return (
-			<ul>{nodes}</ul>
+			<ul className="top-level-item">{nodes}</ul>
     	);
 	}
 

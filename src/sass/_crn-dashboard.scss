@@ -71,13 +71,16 @@
 		.filters-sort-wrap{
 			width: 100%;
 			float: none;
-			padding: 5px 20px;
+			padding: 0;
 			background:#f9f9f9;
 			border-bottom:1px solid #ddd;
 			.filters{
 				width: 50%;
 				float: left;
 				text-align: right;
+				padding: 0;
+				margin: 0;
+				position: relative;
 				label{
 					margin: 0;
 					text-transform: uppercase;
@@ -85,15 +88,22 @@
 					font-weight: 600;
 					color: #777;
 					text-align: right;
-					padding: 0;
+					padding: 0 10px 0 0;
 					
 				}
 				button{
-					border: none;
-					padding: 0px 6px;
-					margin: 0 5px;
+					margin: 0;
 					color:#aaa;
+					border-radius:0;
 					background:none;
+						border: 1px solid #C2C2C2;
+					    border-width: 0 0 0 1px;
+					    padding:5px;
+					    text-align: center;
+					    display: inline-block;
+					    width: 65px;
+					        height: 30px;
+					        transition: all 0.3s ease;
 					&.filter-all{
 						text-transform: uppercase;
 						font-size: 12px;
@@ -106,7 +116,7 @@
 					&:active,
 					&.active,
 					&:hover{
-						background:none;
+						background:#eee;
 						color:$primary;
 						&.filter-shared{
 							color: $brand-info;
@@ -130,7 +140,9 @@
 			.sort{
 				width: 50%;
 				float: left;
-				padding:0;
+			    padding: 0;
+			    margin: 0;
+			    position: relative;
 				label{
 					margin: 0;
 					text-transform: uppercase;
@@ -138,28 +150,38 @@
 					font-weight: 600;
 					color: #777;
 					text-align: right;
-					padding: 0;				
+					padding: 0 10px 0 20px;				
 				}
 				a{
 					padding: 0;
 					background: none;
-					border: none;
 					color: #909090;
 					text-transform: uppercase;
 					font-size: 12px;
 					font-weight: 600;
 					text-align: left;
+					    height: 30px;
+					    transition: all 0.3s ease;
 					&:hover,
 					&:focus,
 					&:active,
 					&.active{
 						outline:0;
+						background: #eee;
 						color: $primary;
+						box-sizing: border-box;
 					}
 					&.name,
 					&.date{
-						width: 45px;
-						margin-left: 10px;
+					    border: 1px solid #C2C2C2;
+					    border-width: 0 1px;
+					    padding:5px;
+					    text-align: center;
+					    display: inline-block;
+					    width: 65px;
+					}
+					&.date{
+						border-width:0 1px 0 0;
 					}
 
 					.fa{
