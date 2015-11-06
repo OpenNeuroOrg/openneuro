@@ -5,7 +5,7 @@ import fs     from 'fs';
 var jobfile = {
 	"name":"openfmri-agave-bids-test test-1446118141",
 	"appId": "openfmri-agave-bids-test-0.2.0",
-	// "batchQueue": "default",
+	"batchQueue": "normal",
 	"executionSystem": "openfmri-stampede.tacc.utexas.edu",
 	"maxRunTime": "01:00:00",
 	"memoryPerNode": "1GB",
@@ -17,27 +17,30 @@ var jobfile = {
 	"inputs": {
 		"bidsFile": "agave://openfmri-corral-storage/ds003_downsampled.tar",
 	},
-	"parameters": {},
+	"parameters": {
+		slurmQueue: 'test'
+	},
 	"notifications": [
 		{
 			"url":"http://scitran.sqm.io:8765/api/v1/jobs/results",
 			"event":"*",
 			"persistent":true
 		},
-		// {
-		// 	"url":"zack@squishymedia.com",
-		// 	"event":"FINISHED",
-		// 	"persistent":false
-		// },
-		// {
-		// 	"url":"zack@squishymedia.com",
-		// 	"event":"FAILED",
-		// 	"persistent":false
-		// }
-	]
+		{
+			"url":"zack@squishymedia.com",
+			"event":"FINISHED",
+			"persistent":false
+		},
+		{
+			"url":"zack@squishymedia.com",
+			"event":"FAILED",
+			"persistent":false
+		}
+	],
+	json: true
 };
 
-agave.createJob(jobfile, 'HUjFRiR0Buga8JohEZkY2LX4MhYa', (err, res) => {
+agave.createJob(jobfile, 'fZBnwG54ECtDHBsIss0eu_ic_UYa', (err, res) => {
 	console.log(err);
 	console.log(res.req.path);
 	// console.log(res.req);

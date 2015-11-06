@@ -77,5 +77,69 @@ export default {
 		res.send({});
 	}
 
+	/**
+	 * Example Result
+		{
+		    id: '463956452580453915-e0bd34dffff8de6-0001-007',
+		    name: 'openfmri-agave-bids-test test-1446118141',
+		    owner: 'oesteban',
+		    appId: 'openfmri-agave-bids-test-0.2.0',
+		    executionSystem: 'openfmri-stampede.tacc.utexas.edu',
+		    batchQueue: 'normal',
+		    nodeCount: 1,
+		    processorsPerNode: 1,
+		    memoryPerNode: 1,
+		    maxRunTime: '01:00:00',
+		    archive: true,
+		    retries: 0,
+		    localId: '6008509',
+		    created: '2015-11-06T12:12:43.000-06:00',
+		    archivePath: 'oesteban/archive/jobs/job-463956452580453915-e0bd34dffff8de6-0001-007',
+		    archiveSystem: 'docking.storage',
+		    outputPath: '/scratch/03763/oesteban/oesteban/job-463956452580453915-e0bd34dffff8de6-0001-007-openfmri-agave-bids-test-test-1446118141',
+		    status: 'FINISHED',
+		    submitTime: '2015-11-06T12:13:36.000-06:00',
+		    startTime: null,
+		    endTime: '2015-11-06T12:28:33.000-06:00',
+		    inputs: {
+		        bidsFile: 'agave://openfmri-corral-storage/ds003_downsampled.tar'
+		    },
+		    parameters: {
+		        slurmQueue: 'test'
+		    },
+		    _links: {
+		        self: {
+		            href: 'https://api.tacc.utexas.edu/jobs/v2/463956452580453915-e0bd34dffff8de6-0001-007'
+		        },
+		        app: {
+		            href: 'https://api.tacc.utexas.edu/apps/v2/openfmri-agave-bids-test-0.2.0'
+		        },
+		        executionSystem: {
+		            href: 'https://api.tacc.utexas.edu/systems/v2/openfmri-stampede.tacc.utexas.edu'
+		        },
+		        archiveSystem: {
+		            href: 'https://api.tacc.utexas.edu/systems/v2/docking.storage'
+		        },
+		        archiveData: {
+		            href: 'https://api.tacc.utexas.edu/files/v2/listings/system/docking.storage/oesteban/archive/jobs/job-463956452580453915-e0bd34dffff8de6-0001-007'
+		        },
+		        owner: {
+		            href: 'https://api.tacc.utexas.edu/profiles/v2/oesteban'
+		        },
+		        permissions: {
+		            href: 'https://api.tacc.utexas.edu/jobs/v2/463956452580453915-e0bd34dffff8de6-0001-007/pems'
+		        },
+		        history: {
+		            href: 'https://api.tacc.utexas.edu/jobs/v2/463956452580453915-e0bd34dffff8de6-0001-007/history'
+		        },
+		        metadata: {
+		            href: 'https://api.tacc.utexas.edu/meta/v2/data/?q={"associationIds":"463956452580453915-e0bd34dffff8de6-0001-007"}'
+		        },
+		        notifications: {
+		            href: 'https://api.tacc.utexas.edu/notifications/v2/?associatedUuid=463956452580453915-e0bd34dffff8de6-0001-007'
+		        }
+		    }
+		}
+	 */
 
 }
