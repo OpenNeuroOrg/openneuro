@@ -12,7 +12,6 @@ import Tools        from './dataset.tools.jsx';
 import Statuses     from './dataset.statuses.jsx';
 import moment       from 'moment';
 
-
 let Dataset = React.createClass({
 
     mixins: [State, Reflux.connect(datasetStore)],
@@ -55,7 +54,7 @@ let Dataset = React.createClass({
 								<h1 className="clearfix">
 									<span className="dataset-name">{dataset.name}</span>
 								</h1>
-								<h6>uploaded by {dataset.creator.firstname} {dataset.creator.lastname} on {dateAdded} - {timeago} ago</h6>
+								<h6>uploaded {dataset.userOwns ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
 							</div>
 							<div className="col-xs-6">
 								<div className="status-container"><Statuses dataset={dataset}/></div>
