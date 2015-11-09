@@ -72,7 +72,7 @@ export default {
 					error.http_code = 409;
 					return next(error);
 				} else {
-					blacklist.insertOne(user, {w:1}, (err, item) => {
+					c.blacklist.insertOne(user, {w:1}, (err, item) => {
 						if (err) {return next(err);}
 						res.send(user);
 					});
