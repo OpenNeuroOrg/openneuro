@@ -101,11 +101,20 @@ let Metadata = React.createClass({
 						label="README"
 						editable={canEdit}
 						onChange={this._updateREADME} />
-					<Accordion className="fileStructure fadeIn">
-						<Panel header={fsHeader} eventKey='1'>
-					  		<FileTree tree={[dataset]} editable={canEdit}/>
-					  	</Panel>
-			  		</Accordion>
+					<div className="fileStructure fadeIn panel-group">
+						<div className="panel panel-default">
+							<div className="panel-heading" >
+								<h4 className="panel-title">
+									{fsHeader}
+								</h4>
+							</div>
+							<div className="panel-collapse" aria-expanded="false" >
+								<div className="panel-body">
+									<FileTree tree={[dataset]} editable={canEdit}/>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div className="dataset-descriptions col-xs-6">
 					{items}
