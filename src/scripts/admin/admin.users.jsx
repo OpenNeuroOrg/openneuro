@@ -20,7 +20,7 @@ let users = React.createClass({
 		let newUser = this.state.newUserForm;
 
 		let users = this.state.users.map((user, index) => {
-			let adminBadge = user.wheel === true ? 'Admin' : null;
+			let adminBadge = user.root === true ? 'Admin' : null;
 
 			return (
 			    <div className="fadeIn user-panel clearfix" key={user._id}>

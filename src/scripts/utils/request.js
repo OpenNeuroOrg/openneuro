@@ -51,6 +51,7 @@ var Request = {
 		handleRequest(url, {}, function (url, options) {
 			request.del(url)
 				.set(options.headers)
+				.query(options.query)
 				.end(function (err, res) {
 					handleResponse(err, res, callback);
 				});
@@ -80,6 +81,7 @@ function handleRequest (url, options, callback) {
 	options = normalizeOptions(options);
 	var google = hello('google');
 	if (options.auth && hasToken() && url.indexOf('scitran') > -1) {
+		if (window.localStorage.scitranUser && JSON.parse(window.localStorage.scitranUser).root) {options.query.root = true;}
 		hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
 			options.headers.Authorization = res.authResponse.access_token;
 			callback(url, options);
@@ -115,7 +117,7 @@ function normalizeOptions (options) {
 
 function hasToken () {
 	if (!window.localStorage.hello) {return false;}
-	let credentials = JSON.parse(window.localStorage.hello); 
+	let credentials = JSON.parse(window.localStorage.hello);
 	return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
 }
 
