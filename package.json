@@ -2,10 +2,10 @@
   "name": "crn-server",
   "version": "0.1.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "start": "babel-node app.js",
+    "start": "node index.js",
     "create-agave-client": "babel-node scripts/create-agave-client.js",
     "list-agave-clients": "babel-node scripts/list-agave-clients.js",
     "get-agave-token": "babel-node scripts/get-agave-token.js",
