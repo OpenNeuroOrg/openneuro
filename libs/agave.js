@@ -40,6 +40,8 @@ export default {
             },
             query: {
                 grant_type: 'client_credentials',
+                username: config.agave.username,
+                password: config.agave.password
             },
             body: {
                 scope: 'PRODUCTION',
