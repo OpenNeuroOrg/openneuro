@@ -27,8 +27,8 @@ class FileTree extends React.Component {
 			if (item.children) {
 				typeIcon  = <i className="fa fa-folder"></i>;
 				typeIconOpen = <i className="fa fa-folder-open"></i>;
-				let editText = <span><i className="fa fa-pencil"></i> Edit</span>;
-				let hideText = <span><i className="fa fa-times"></i> Hide</span>;
+				let editText = <span>View</span>;
+				let hideText = <span>Hide <i className="fa fa-times"></i></span>;
 
 				if (this.props.editable) {
 					editBtn = <button onClick={this._toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>

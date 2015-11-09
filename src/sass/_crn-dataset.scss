@@ -1,6 +1,6 @@
 // dataset dataset view
 .dataset {
-	.fileStructure.panel-group {
+	.fileStructure.panel-group{
 		.panel-default .panel-collapse{
 			.panel-body{
 				padding:0;
@@ -223,6 +223,8 @@
 				overflow:hidden;
 				> button,
 				.fadeIn > button{
+					width: 100%;
+					color: $ocean;
 					&:hover{
 						background: #006B7B;
 						color:#fff;
@@ -230,9 +232,9 @@
 				}
 				button{
 						padding:7px 10px;
-						color: $ocean;
 						transition: all 0.1s ease;
-						border-radius:none;
+						border-radius:0;
+				
 					}
 				}
 		}

@@ -34,7 +34,7 @@ let Tools = React.createClass({
 		if (!dataset.status.uploadIncomplete && this.props.canEdit) {
 			publish = (
 				<div role="presentation" className="tool" >
-					<WarnButton message="Make Public" confirm="Yes Make Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
+					<WarnButton message="Make Dataset Public" confirm="Yes Make Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
 	            </div>
 			);
 		}
@@ -43,13 +43,13 @@ let Tools = React.createClass({
 
 			del = (
 				<div role="presentation" className="tool" >
-	            	<WarnButton message="Delete this dataset" action={this._deleteDataset.bind(this, dataset._id)} />
+	            	<WarnButton message="Delete Dataset" action={this._deleteDataset.bind(this, dataset._id)} />
 	            </div>
 			);
 
 			share = (
 	            <div role="presentation" className="tool" >
-	            	<button className="btn btn-admin warning"  onClick={this._showModal}><i className="fa fa-user-plus"></i> Share</button>
+	            	<button className="btn btn-admin warning"  onClick={this._showModal}><i className="fa fa-user-plus"></i> Share Dataset</button>
 	            </div>
 	        );
 
@@ -69,7 +69,7 @@ let Tools = React.createClass({
 		return (
 			<div className="tools clearfix">
 				<div role="presentation" className="tool">
-					<button className="btn btn-admin warning" onClick={this._downloadDataset}><i className="fa fa-download"></i> Download</button>
+					<button className="btn btn-admin warning" onClick={this._downloadDataset}><i className="fa fa-download"></i> Download Dataset</button>
 				</div>
 				{publish}
 				{del}
