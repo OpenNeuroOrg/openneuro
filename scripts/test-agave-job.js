@@ -1,5 +1,4 @@
 import agave  from '../libs/agave';
-import config from '../config';
 import fs     from 'fs';
 
 var jobfile = {
@@ -40,7 +39,7 @@ var jobfile = {
 	json: true
 };
 
-agave.createJob(jobfile, '178514c154c25bd1e3b8e28e4089df5d', (err, res) => {
+agave.createJob(jobfile, (err, res) => {
 	console.log(err);
 	console.log(res.req.path);
 	// console.log(res.req);

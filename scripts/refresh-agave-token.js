@@ -1,6 +1,6 @@
 import agave  from '../libs/agave';
 
-agave.getAccessToken((err, res) => {
+agave.refreshAccessToken((err, res) => {
 	console.log(err);
 	console.log(res.req.path);
 	console.log(res.statusCode);

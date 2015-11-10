@@ -9,8 +9,10 @@
     "create-agave-client": "babel-node scripts/create-agave-client.js",
     "list-agave-clients": "babel-node scripts/list-agave-clients.js",
     "get-agave-token": "babel-node scripts/get-agave-token.js",
+    "refresh-agave-token": "babel-node scripts/refresh-agave-token.js",
     "test-agave-job": "babel-node scripts/test-agave-job.js",
-    "list-agave-jobs": "babel-node scripts/list-agave-jobs.js"
+    "list-agave-jobs": "babel-node scripts/list-agave-jobs.js",
+    "delete-agave-client": "babel-node scripts/delete-agave-client.js"
   },
   "repository": {
     "type": "git",

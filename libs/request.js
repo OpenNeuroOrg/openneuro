@@ -25,6 +25,14 @@ export default {
 		});
 	},
 
+	del(url, options, callback) {
+		handleRequest(url, options, (req) => {
+			request.del(req, (err, res) => {
+				handleResponse(err, res, callback);
+			});
+		});
+	}
+
 
 }
 
