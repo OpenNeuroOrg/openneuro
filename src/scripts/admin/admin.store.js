@@ -188,11 +188,11 @@ let UserStore = Reflux.createStore({
 	 * Toggle Super User
 	 */
 	toggleSuperUser (user, callback) {
-		scitran.updateUser(user._id, {wheel: !user.wheel}, (err, res) => {
+		scitran.updateUser(user._id, {root: !user.root}, (err, res) => {
 			let users = this.data.users;
 			for (let existingUser of users) {
 				if (existingUser._id === user._id) {
-					user.wheel = !user.wheel;
+					user.root = !user.root;
 				}
 			}
 			this.update({users: users});

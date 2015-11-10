@@ -28,7 +28,7 @@ let LeftNavbar = React.createClass({
 					<ul>
 						<li className="left-nav-dashboard">
 							{userStore.hasToken() ? dashboardLink : null}
-							{this.state.scitran && this.state.scitran.wheel ? adminLink : null }
+							{this.state.scitran && this.state.scitran.root ? adminLink : null }
 							<Link to="public"><i className="fa fa-globe" /><span className="link-name">Browse Publicly</span></Link>
 							<a  href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><i className="fa fa-envelope-o" /><span className="link-name">contact</span></a>
 						</li>
@@ -42,7 +42,7 @@ let LeftNavbar = React.createClass({
 	},
 
 // custom methods ----------------------------------------------------------------
-	
+
 	_toggleNav () {
 		this.setState({showNav: !this.state.showNav});
 	}

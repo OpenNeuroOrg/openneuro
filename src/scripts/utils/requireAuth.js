@@ -11,7 +11,7 @@ var requireAuth = (Component, role) => {
 			role = role ? role : 'user';
 			if (!userStore.data.token) { // if not logged in
 				transition.redirect('signIn', {});
-			} else if (role === 'admin' && (!userStore.data.scitran || !userStore.data.scitran.wheel)) {
+			} else if (role === 'admin' && (!userStore.data.scitran || !userStore.data.scitran.root)) {
 				transition.redirect('signIn', {});
 			}
 		}
