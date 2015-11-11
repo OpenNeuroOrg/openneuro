@@ -44,16 +44,18 @@ export default class ErrorLink extends React.Component {
 		let issueString = '';
 		let endLine = '======================================================';
 		for (var i = 0; i < issues.length; i++) {
-    		// issueString += 'File Path: ' + issues[i].file.webkitRelativePath + '\n\n';
-    		// for (var j = 0; j < issues[i].errors.length; j++) {
-      //   		var issue = issues[i].errors[j];
-      //   		issueString += '\tType:\t\t' + type + '\n';
-      //   		if (!issue) {continue;}
-      //   		if (issue.reason)    {issueString += '\tReason:\t\t' + issue.reason + '\n';}
-      //   		if (issue.line)      {issueString += '\tLine:\t\t' + issue.line + '\n';}
-      //   		if (issue.character) {issueString += '\tCharacter:\t' + issue.character + '\n';}
-      //   		if (issue.evidence)  {issueString += '\tEvidence:\t' + issue.evidence + '\n\n';}
-    		// }
+    		issueString += 'File Path: ' + issues[i].reason + '\n\n';
+    		for (var j = 0; j < issues[i].files.length; j++) {
+        		var file = issues[i].files[j];
+        		issueString += '\tType:\t\t' + type + '\n';
+        		if (!file) {continue;}
+        		if (file.file.name)    {issueString += '\tFile:\t\t' + file.file.name + '\n';}
+        		if (file.file.webkitRelativePath)    {issueString += '\tLocation:\t\t' + file.file.webkitRelativePath + '\n';}
+        		if (file.reason)    {issueString += '\tReason:\t\t' + file.reason + '\n';}
+        		if (file.line)      {issueString += '\tLine:\t\t' + file.line + '\n';}
+        		if (file.character) {issueString += '\tCharacter:\t' + file.character + '\n';}
+        		if (file.evidence)  {issueString += '\tEvidence:\t' + file.evidence + '\n\n';}
+    		}
     		issueString += '\n' + endLine +'\n\n\n';
     	}
 		return issueString;
