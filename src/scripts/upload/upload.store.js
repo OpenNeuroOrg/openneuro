@@ -278,6 +278,12 @@ let UploadStore = Reflux.createStore({
 	uploadError () {
 		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
 		if (fileSelect) {fileSelect.value = null;} // clear file input
+
+		// refresh my datasets
+		datasetsActions.getDatasets();
+		// refresh current datset
+		datasetActions.reloadDataset(this.data.projectId);
+
 		this.setInitialState({
 			alert: 'Error',
 			alertMessage: <span>There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site <a  href="mailto:openfmri@gmail.com?subject=Upload%20Error" target="_blank">administrator</a>.</span>
