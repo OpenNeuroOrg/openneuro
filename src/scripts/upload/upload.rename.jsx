@@ -23,7 +23,7 @@ let Rename = React.createClass({
 
 		if (resuming) {
 			renameResumeMessage = (
-				<span className="message error">You have selected "{this.state.selectedName}" and are trying to resume "{dirName}." Continue or <span className="upload-reset-link" onClick={this._cancel}>cancel</span>.</span>
+				<span className="message error">You have selected "{this.state.selectedName}" and are trying to resume "{dirName}." Continue if this is correct or <span className="upload-reset-link" onClick={this._cancel}>cancel</span>.</span>
 			);
 		}
 
