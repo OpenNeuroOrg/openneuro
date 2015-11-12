@@ -1,5 +1,6 @@
 // dependencies ----------------------------------------------------------------------
 
+import React           from 'react';
 import Reflux  from 'reflux';
 import Actions from './user.actions.js';
 import config  from '../config';
@@ -119,7 +120,7 @@ let UserStore = Reflux.createStore({
 								this.clearAuth();
 								this.update({
 									loading: false,
-									signinError: 'This user account has been blocked. If you believe this is by mistake please contact the site adminstrator.'
+									signinError: <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>
 								});
 								return;
 							}
