@@ -20,7 +20,7 @@ let users = React.createClass({
 		let newUser = this.state.newUserForm;
 
 		let users = this.state.users.map((user, index) => {
-			let adminBadge = user.root === true ? 'Admin' : null;
+			let adminBadge = user.root ? 'Admin' : null;
 
 			return (
 			    <div className="fadeIn user-panel clearfix" key={user._id}>
@@ -56,12 +56,14 @@ let users = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_userTools(user, index) {
+		let adminBtnTxt = user.root ? 'Remove Admin Privileges' : 'Make Admin';
+		let adminBtnConfirm = user.root ? 'Yes Remove Admin Privileges' : ' Yes Make Admin';
 		if (user._id !== userStore.data.scitran._id) {
 			return (
 				<div className="col-sm-4 user-col last">
 	                <h3 className="user-delete">
 	                    <WarnButton message="Delete this User" action={this._removeUser.bind(this, user._id, index)}/>
-	                    <WarnButton message="Toggle Admin Privileges" confirm="Toggle Admin" icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/>
+	                    <WarnButton message={adminBtnTxt} confirm={adminBtnConfirm} icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/>
 	                    <button className="btn btn-admin warning" onClick={actions.blacklistModal.bind(this, user)}>Block User</button>
 	                </h3>
 	            </div>

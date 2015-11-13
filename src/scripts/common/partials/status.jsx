@@ -23,20 +23,20 @@ export default class Status extends React.Component {
 				break;
 			case 'incomplete':
 				spanClass  = 'dataset-status ds-warning';
-				tip        = 'Click to select your folder again and resume the upload.';
+				tip        = 'Click to select your folder again and resume the upload';
 				title	  = 'Incomplete';
 				iconClass  = 'fa fa-warning';
 				fileSelect = <span className="file-wrap"><FileSelect  onClick={this._clickHandler}  onChange={this._onFileSelect.bind(this)} /></span>;
 				break;
 			case 'shared':
 				spanClass = 'dataset-status ds-info';
-				tip       = 'Shared with me.';
+				tip       = 'Shared with me';
 				title	  = 'Shared';
 				iconClass = 'fa fa-user';
 				break;
 			case 'inProgress':
 				spanClass = 'dataset-status ds-primary';
-				tip       = 'Upload in progress.';
+				tip       = 'Upload in progress';
 				title	  = 'In progress';
 				iconClass = 'fa fa-spin fa-circle-o-notch'
 		}
