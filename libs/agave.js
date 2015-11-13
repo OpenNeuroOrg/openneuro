@@ -120,6 +120,19 @@ export default {
         }
     },
 
+// Apps ---------------------------------------------------------------------------------------
+
+    listApps(callback) {
+        this.auth(() => {
+            request.get(config.agave.url + 'apps/v2', {
+                headers: {
+                    Authorization: 'Bearer ' + token.access,
+                    'Content-Type': 'application/json',
+                }
+            }, callback);
+        });
+    },
+
 // Job Management -----------------------------------------------------------------------------
 
     createJob(job, callback) {
