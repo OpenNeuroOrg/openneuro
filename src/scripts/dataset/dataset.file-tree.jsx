@@ -30,9 +30,9 @@ class FileTree extends React.Component {
 				let editText = <span>View</span>;
 				let hideText = <span>Hide <i className="fa fa-times"></i></span>;
 
-				if (this.props.editable) {
-					editBtn = <button onClick={this._toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>
-				}
+				
+				editBtn = <button onClick={this._toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>
+			
 				tools = (
 					<div>
 						<input
@@ -64,7 +64,6 @@ class FileTree extends React.Component {
 					</span>
 				);
 			}
-
 			return (
 				<li className="clearfix" key={item.name}>
 					<span className="item-name">
@@ -74,7 +73,7 @@ class FileTree extends React.Component {
 					{error}
 					{loading}
 					{item.showChildren ? <ul className="child-files"><FileTree tree={item.children} editable={this.props.editable}/></ul> : null}
-					{this.props.editable ? editBtn : null}
+					{editBtn}
 				</li>
 			);
 		});
