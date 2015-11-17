@@ -24,13 +24,13 @@ let Issues = React.createClass({
 		let dirName  = this.state.dirName;
 
 		// counts
-		let totalErrors = 0;  
+		let totalErrors = 0;
     	let totalWarnings = 0;
     	let warningCount,
     		errorCount;
     	if (errors !== 'Invalid') {
-			for (let error   of errors)   {totalErrors    += error.errors.length;}
-	        for (let warning of warnings) {totalWarnings  += warning.errors.length;}
+			totalErrors   = errors.length;
+	        totalWarnings = warnings.length;
 			warningCount = totalWarnings + ' ' + pluralize('Warning', totalWarnings);
 			errorCount   = totalErrors   + ' ' + pluralize('Error', totalErrors);
 		}
@@ -79,7 +79,7 @@ let Issues = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_upload: Actions.checkExists,
-	
+
 	_reset: function () {
 		Actions.selectTab(1);
 	}
