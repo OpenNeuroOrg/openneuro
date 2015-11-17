@@ -417,6 +417,9 @@ let datasetStore = Reflux.createStore({
 			appId: appId,
 			datasetId: this.data.dataset._id,
 			userId: userStore.data.scitran._id
+		}, (err, res) => {
+			console.log(err);
+			console.log(res);
 		});
 	}
 

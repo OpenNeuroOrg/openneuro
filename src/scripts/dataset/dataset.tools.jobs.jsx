@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React      from 'react';
-import Actions    from './dataset.actions.js';
+import actions    from './dataset.actions.js';
 import crn        from '../utils/crn';
 
 export default class Share extends React.Component {
@@ -18,6 +18,7 @@ export default class Share extends React.Component {
 
 	componentDidMount() {
 		crn.getApps((err, res) => {
+			console.log(res.body);
 			this.setState({apps: res.body});
 		});
 	}
@@ -37,7 +38,7 @@ export default class Share extends React.Component {
 						<option value="" disabled>Select a Task</option>
 						{options}
 					</select>
-					<button className="btn-admin admin-blue">Start</button>
+					<button className="btn-admin admin-blue" onClick={this._startJob.bind(this)}>Start</button>
 				</div>
 			</div>
     	);
@@ -47,6 +48,11 @@ export default class Share extends React.Component {
 
 	_selectApp(e) {
 		this.setState({selectedApp: e.target.value});
+	}
+
+	_startJob() {
+		console.log(this.state.selectedApp);
+		actions.startJob('test', this.state.selectedApp);
 	}
 
 }

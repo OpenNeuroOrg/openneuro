@@ -14,6 +14,7 @@ var Actions = Reflux.createActions([
 	'reloadDataset',
 	'saveDescription',
 	'setInitialState',
+	'startJob',
 	'toggleFolder',
 	'uploadAttachment',
 	'updateDescription',
