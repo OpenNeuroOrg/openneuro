@@ -18,7 +18,6 @@ export default class Share extends React.Component {
 
 	componentDidMount() {
 		crn.getApps((err, res) => {
-			console.log(res.body);
 			this.setState({apps: res.body});
 		});
 	}
@@ -54,5 +53,4 @@ export default class Share extends React.Component {
 		console.log(this.state.selectedApp);
 		actions.startJob('test', this.state.selectedApp);
 	}
-
 }
