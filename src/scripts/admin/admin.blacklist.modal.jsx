@@ -24,14 +24,14 @@ let BlacklistModal = React.createClass({
             	</Modal.Header>
             	<hr className="modal-inner" />
             	<Modal.Body>
-            		<div>
+            		<div className="blacklist-modal">
 						{this._blacklistError()}
 						<Input placeholder="Gmail Address" type="text"  value={blacklistForm._id}       name={'_id'}       onChange={this._inputChange} />
 						<Input placeholder="First Name"    type="text"  value={blacklistForm.firstname} name={'firstname'} onChange={this._inputChange} />
 						<Input placeholder="Last Name"     type="text"  value={blacklistForm.lastname}  name={'lastname'}  onChange={this._inputChange} />
 						<Input placeholder="Note"          type="textarea"  value={blacklistForm.note}      name={'note'}      onChange={this._inputChange} />
 			    		<button className="btn-blue" onClick={actions.blacklistSubmit} >
-							<span>Block User</span>
+							<span>Block</span>
 						</button>
 					</div>
             	</Modal.Body>
