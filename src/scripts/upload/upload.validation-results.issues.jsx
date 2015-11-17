@@ -22,11 +22,11 @@ class Issues extends React.Component {
 				<span className="file-header">
 					<h4 className="em-header clearfix">
 						<strong className="em-header pull-left">{this.props.issueType}: {index + 1}</strong>
-					</h4>
-					{issue.reason}
 					<span className="pull-right">
 						 {issue.files.length} {issueCount}
 					</span>
+					</h4>
+					{issue.reason}
 				</span>
 			);
 

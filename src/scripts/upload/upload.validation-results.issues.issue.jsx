@@ -16,28 +16,38 @@ export default class Issue extends React.Component {
 
 		// build error location string
 		let errLocation = '';
+		let  errorLocationMeta;
 		if (error.line)        {errLocation += 'Line: ' + error.line + ' ';}
 		if (error.character)   {errLocation += 'Character: ' + error.character + '';}
 		if (errLocation == '' && error.evidence) {errLocation  = 'Evidence: ';}
-
-		return (
-			<div className="em-body">
-				<h4 className="em-header clearfix">
-					<strong className="em-header pull-left">{error.file.name}</strong>
-					<strong className="em-header pull-right">{error.file.size / 1000} KB| {error.file.type}</strong>
-				</h4>
-				<span className="e-meta">
-					<label>Location: </label>
-					<p>{error.file.webkitRelativePath}</p>
-					<label>Reason: </label>
-					<p>{error.reason}</p>
-				</span>
+		if (errLocation){
+			errorLocationMeta = (
 				<span className="e-meta">
 					<label>
 						{errLocation}
 					</label>
 					<p>{error.evidence}</p>
 				</span>
+			);
+		}
+
+		return (
+			<div className="em-body">
+				<span className="e-meta">
+					<label>File Name:</label>
+					<p>{error.file.name}</p>
+				</span>
+				<span className="e-meta">
+					<label>File Metadata:</label>					
+					<p>{error.file.size / 1000} KB | {error.file.type}</p>
+				</span>
+				<span className="e-meta">
+					<label>Location: </label>
+					<p>{error.file.webkitRelativePath}</p>
+					<label>Reason: </label>
+					<p>{error.reason}</p>
+				</span>
+				{errorLocationMeta}
 			</div>
     	);
 	}

@@ -134,6 +134,34 @@
 }
 
 
+.btn-tab{
+    background: #f9f9f9 !important;
+    border:1px solid #eee;
+    box-shadow: 1px -1px 3px -1px rgba(0,0,0,0.1);
+    border-radius:0;
+    color:$ocean;
+    margin-left: -1px;
+    &.active{
+    	background: #fff !important;
+    	border-color:#eee;
+    	border-left: 1px solid #f6f6f6;
+    	border-bottom-color:#fff;
+
+    	color:$ocean;
+    	 box-shadow: 0px -1px 4px -2px rgba(0,0,0,0.3);
+
+    }
+    &:hover{
+    	background:#eee !important;
+    	color: $sky;
+    }
+    &.active:hover{
+    	background:#fff !important;
+    	color:$ocean;
+    	cursor: normal;
+    	outline:none;
+    }
+}
 //form // ================================================================
 
 .form-group {
