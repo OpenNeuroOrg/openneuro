@@ -16,12 +16,13 @@ let Blacklist = React.createClass({
 
 	render() {
 		let showDeleteBtn = this.state.showDeleteBtn;
-		let blacklistForm = this.state.blacklistForm
+		let blacklistForm = this.state.blacklistForm;
+		let noBlacklist = <div className="no-results">There are no blocked users</div>;
 		let users = this.state.blacklist.map((user, index) => {
 
 			return (
 			    <div className="fadeIn user-panel clearfix" key={user._id}>
-                    <div className="col-sm-4 user-col">
+                    <div className="col-sm-6 user-col">
                     	<h3>
                     		<div className="userName">
 								<span>{user.firstname}</span> &nbsp;
@@ -29,13 +30,15 @@ let Blacklist = React.createClass({
 							</div>
                     	</h3>
                     </div>
-                    <div className="col-sm-4 user-col middle">
+                    <div className="col-sm-6 user-col middle">
 	                    <h3 className="user-email">{user._id}</h3>
                     </div>
-                    <div className="col-sm-4 user-col last">
-	                    <h3 className="user-delete">
-		                    <WarnButton message="Unblock this User" confirm="Yes Unblock" action={actions.unBlacklistUser.bind(this, user._id)} />
-	                    </h3>
+                    <div className="col-sm-12 last tools-wrap">
+	                <div className="tools clearfix">
+	                    <div className="tool">
+		                    <WarnButton message="Unblock this User" className="btn btn-admin warning" confirm="Yes Unblock" action={actions.unBlacklistUser.bind(this, user._id)} />
+	                    </div>
+                    </div>
                     </div>
                     <div>{user.note}</div>
                 </div>
@@ -43,19 +46,15 @@ let Blacklist = React.createClass({
 		});
 
 		return (
-			<div className="dash-tab-content fadeIn inner-route admin clearfix">
+			<div className="dash-tab-content fadeIn inner-route admin blacklist clearfix">
 				<h2>Blocked Users</h2>
+				<button className="btn-blue" onClick={actions.blacklistModal} >
+					<span>Block a User</span>
+				</button>
 				<div>
-					<div className="col-sm-4 add-user">
-						<div>
-				    		<button className="btn-blue" onClick={actions.blacklistModal} >
-								<span>Block a User</span>
-							</button>
-						</div>
-					</div>
-					<div className="col-sm-8 users-card">
-						{users}
-					</div>
+				<div className="col-sm-12 users-card">
+					{this.state.blacklist.length == 0 ? noBlacklist : users}
+				</div>
 				</div>
 			</div>
     	);
