@@ -6,6 +6,7 @@ import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
 import WarnButton   from '../common/forms/warn-button.jsx';
 import Share        from './dataset.tools.share.jsx';
+import Jobs         from './dataset.tools.jobs.jsx';
 import {Modal}      from 'react-bootstrap';
 
 let Tools = React.createClass({
@@ -16,7 +17,8 @@ let Tools = React.createClass({
 
 	getInitialState() {
 		return {
-			showModal: false
+			showJobsModal: false,
+			showShareModal: false
 		};
 	},
 
@@ -29,7 +31,7 @@ let Tools = React.createClass({
 	render() {
 		let dataset = this.props.dataset;
 		let users   = this.props.users;
-		let publish, del, share, shareModal;
+		let publish, del, share, shareModal, jobs, jobModal;
 
 		if (!dataset.status.uploadIncomplete && this.props.canEdit) {
 			publish = (
@@ -49,12 +51,12 @@ let Tools = React.createClass({
 
 			share = (
 	            <div role="presentation" className="tool" >
-	            	<button className="btn btn-admin warning"  onClick={this._showModal}><i className="fa fa-user-plus"></i> Share Dataset</button>
+	            	<button className="btn btn-admin warning"  onClick={this._showModal.bind(null, 'Share')}><i className="fa fa-user-plus"></i> Share Dataset</button>
 	            </div>
 	        );
 
 			shareModal = (
-	            <Modal show={this.state.showModal} onHide={this._hideModal}>
+	            <Modal show={this.state.showShareModal} onHide={this._hideModal.bind(null, 'Share')}>
 	            	<Modal.Header closeButton>
 	            		<Modal.Title>Share Dataset</Modal.Title>
 	            	</Modal.Header>
@@ -64,6 +66,24 @@ let Tools = React.createClass({
 	            	</Modal.Body>
 	            </Modal>
 	        );
+
+	        jobs = (
+	        	<div role="presentation" className="tool" >
+	            	<button className="btn btn-admin warning"  onClick={this._showModal.bind(null, 'Jobs')}><i className="fa fa-tasks"></i> Run Analysis</button>
+	            </div>
+        	);
+
+        	jobModal = (
+        		<Modal show={this.state.showJobsModal} onHide={this._hideModal.bind(null, 'Jobs')}>
+        			<Modal.Header closeButton>
+        				<Modal.Title>Run Analysis</Modal.Title>
+        			</Modal.Header>
+        			<hr className="modal-inner" />
+        			<Modal.Body>
+        				<Jobs dataset={dataset} user={users} />
+        			</Modal.Body>
+        		</Modal>
+    		);
 		}
 
 		return (
@@ -75,6 +95,8 @@ let Tools = React.createClass({
 				{del}
 				{share}
 				{shareModal}
+				{jobs}
+				{jobModal}
 	        </div>
     	);
 	},
@@ -85,12 +107,16 @@ let Tools = React.createClass({
 
 	_deleteDataset: Actions.deleteDataset,
 
-	_showModal() {
-		this.setState({showModal: true});
+	_showModal(name) {
+		let updates = {};
+		updates['show' + name + 'Modal'] = true;
+		this.setState(updates);
 	},
 
-	_hideModal() {
-		this.setState({showModal: false});
+	_hideModal(name) {
+		let updates = {};
+		updates['show' + name + 'Modal'] = false;
+		this.setState(updates);
 	},
 
 	_downloadDataset: Actions.downloadDataset
