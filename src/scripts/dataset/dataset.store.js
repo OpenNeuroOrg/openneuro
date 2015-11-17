@@ -3,6 +3,7 @@
 import Reflux    from 'reflux';
 import Actions   from './dataset.actions.js';
 import scitran   from '../utils/scitran';
+import crn       from '../utils/crn';
 import bids      from '../utils/bids';
 import router    from '../utils/router-container';
 import userStore from '../user/user.store';
@@ -10,7 +11,7 @@ import upload    from '../utils/upload';
 import config    from '../config';
 import files     from '../utils/files';
 
-let UserStore = Reflux.createStore({
+let datasetStore = Reflux.createStore({
 
 // store setup -----------------------------------------------------------------------
 
@@ -405,6 +406,20 @@ let UserStore = Reflux.createStore({
 		this.updateDirectoryState(directory._id, {showChildren: !directory.showChildren});
 	},
 
+	// Jobs --------------------------------------------------------------------------
+
+	/**
+	 * Start Job
+	 */
+	startJob(appName, appId) {
+		crn.createJob({
+			name: appName,
+			appId: appId,
+			datasetId: this.data.dataset._id,
+			userId: userStore.data.scitran._id
+		});
+	}
+
 });
 
-export default UserStore;
+export default datasetStore;
