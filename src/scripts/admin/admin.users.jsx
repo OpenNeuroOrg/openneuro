@@ -56,8 +56,8 @@ let users = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_userTools(user, index) {
-		let adminBtnTxt = user.root ? 'Remove Admin Privileges' : 'Make Admin';
-		let adminBtnConfirm = user.root ? 'Yes Remove Admin Privileges' : ' Yes Make Admin';
+		let adminBtnTxt = user.root ? 'Remove Admin' : 'Make Admin';
+		let adminBtnConfirm = user.root ? 'Yes Remove Admin' : ' Yes Make Admin';
 		if (user._id !== userStore.data.scitran._id) {
 			return (
 				<div className="col-sm-12 last tools-wrap">
