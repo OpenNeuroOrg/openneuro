@@ -28,6 +28,16 @@ let models = {
 export default {
 
 	/**
+	 * List Apps
+	 */
+	listApps(req, res, next) {
+		agave.listApps((err, resp) => {
+			if (err) {return next(err);}
+			res.send(resp.body.result);
+		});
+	},
+
+	/**
 	 * Create Job
 	 */
 	create(req, res, next) {
@@ -37,34 +47,62 @@ export default {
 			let body = {
 				name: job.name,
 				appId: job.appId,
-				executionSystem: 'openfmri-stampede.tacc.utexas.edu',
-				maxRunTime: '01:00:00',
-				memoryPerNode: '1GB',
+				batchQueue: "normal",
+				executionSystem: "slurm-stampede.tacc.utexas.edu",
+				maxRunTime: "00:20:00",
+				memoryPerNode: "8GB",
 				nodeCount: 1,
-				processorsPerNode: 1,
+				processorsPerNode: 16,
 				archive: true,
-				archiveSystem: 'docking.storage',
+				archiveSystem: "openfmri-storage",
 				archivePath: null,
-				bidsFile: 'agave://openfmri-corral-storage/' + datasetId + '.tar',
-				notification: [
+				inputs: {
+					bidsFile: "agave://openfmri-storage/ds003_downsampled.tar"
+				},
+				parameters: {
+					num_cores_per_subject: 16,
+					num_subjects_at_once: 1,
+					write_all_outputs: false,
+					write_report: true,
+					slice_timing_correction: false,
+					start_idx: 0,
+					stop_idx: 0
+				},
+				notifications: [
 					{
-						url: 'http://scitran.sqm.io:8765/api/v1/jobs/results',
-						event: '*',
-						persistent: true
+						url:"http://scitran.sqm.io:8765/api/v1/jobs/results?job_id=${JOB_ID}&status=${JOB_STATUS}",
+						event:"*",
+						persistent:true
 					}
 				]
 			};
 
-			agave.createJob(body, (err, res) => {
+			agave.createJob(body, (err, resp) => {
 				if (err) {return next(err);}
 				c.jobs.insertOne({
 					name:      job.name,
+					status:    'started',
 					appId:     job.appId,
 					datasetId: job.datasetId,
 					userId:    job.userId,
-					response:  res.body
+					jobId:     resp.body.result.id,
+					response:  resp.body.result
+				}, () => {
+					res.send(resp.body);
 				});
 			});
+		});
+	},
+
+	/**
+	 * List Jobs
+	 */
+	listJobs(req, res, next) {
+		let datasetId = req.params.datasetId;
+		let user = req.user;
+		c.jobs.find({userId: user, datasetId: datasetId}).toArray((err, jobs) => {
+			if (err) {return next(err);}
+			res.send(jobs);
 		});
 	},
 

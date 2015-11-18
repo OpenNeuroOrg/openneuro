@@ -47,10 +47,22 @@ let routes = [
 	// jobs ----------------------------------------
 
 	{
+		method: 'get',
+		url: '/apps',
+		middleware: [auth.user],
+		handler: jobs.listApps
+	},
+	{
 		method: 'post',
 		url: '/jobs',
 		middleware: [auth.user],
 		handler: jobs.create
+	},
+	{
+		method: 'get',
+		url: '/jobs/:datasetId',
+		middleware: [auth.user],
+		handler: jobs.listDatasetJobs
 	},
 	{
 		method: 'post',

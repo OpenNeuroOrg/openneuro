@@ -17,14 +17,14 @@ export default {
 
 			// required
 			if (model[prop].indexOf('required') > -1) {
-				if (value === null) {
+				if (!value) {
 					err.missing.push(prop);
 					continue;
 				}
 			}
 
-			// null / not required
-			if (value === null) {
+			// not required
+			if (!value) {
 				continue;
 			}
 

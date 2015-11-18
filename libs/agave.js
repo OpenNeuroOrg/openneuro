@@ -86,7 +86,7 @@ export default {
             },
             query: {
                 grant_type: 'refresh_token',
-                refresh_token: tokens.refresh
+                refresh_token: token.refresh
             },
             body: {
                 scope: 'PRODUCTION'
@@ -128,6 +128,9 @@ export default {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json',
+                },
+                query: {
+                    privateOnly: true
                 }
             }, callback);
         });
