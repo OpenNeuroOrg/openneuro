@@ -1,8 +1,8 @@
 // dependencies -------------------------------------------------------
 
-import React      from 'react';
-import actions    from './dataset.actions.js';
-import crn        from '../utils/crn';
+import React   from 'react';
+import actions from './dataset.actions.js';
+import Spinner from '../common/partials/spinner.jsx';
 
 export default class JobMenu extends React.Component {
 
@@ -11,34 +11,32 @@ export default class JobMenu extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			selectedApp: '',
-			apps: []
+			loading: false,
+			selectedApp: ''
 		};
-	}
-
-	componentDidMount() {
-		crn.getApps((err, res) => {
-			this.setState({apps: res.body});
-		});
 	}
 
 	render() {
 
-		let options = this.state.apps.map((app) => {
+		let options = this.props.apps.map((app) => {
 			return <option key={app.id} value={app.id}>{app.label}</option>;
 		});
 
+		let form = (
+			<div>
+				<h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
+				<div className="text-danger">{this.state.error}</div>
+				<select value={this.state.selectedApp} onChange={this._selectApp.bind(this)}>
+					<option value="" disabled>Select a Task</option>
+					{options}
+				</select>
+				<button className="btn-admin admin-blue" onClick={this._startJob.bind(this)}>Start</button>
+			</div>
+		);
+
 		return (
 			<div className="dataset">
-				<h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
-				<div>
-					<div className="text-danger">{this.state.error}</div>
-					<select value={this.state.selectedApp} onChange={this._selectApp.bind(this)}>
-						<option value="" disabled>Select a Task</option>
-						{options}
-					</select>
-					<button className="btn-admin admin-blue" onClick={this._startJob.bind(this)}>Start</button>
-				</div>
+				{this.state.loading ? <Spinner active={true} text={'Starting ' + this.state.selectedApp}/> : form}
 			</div>
     	);
 	}
@@ -50,7 +48,9 @@ export default class JobMenu extends React.Component {
 	}
 
 	_startJob() {
-		console.log(this.state.selectedApp);
-		actions.startJob('test', this.state.selectedApp);
+		this.setState({loading: true});
+		actions.startJob('test', this.state.selectedApp, (err, res) => {
+			this.setState({loading: false});
+		});
 	}
 }

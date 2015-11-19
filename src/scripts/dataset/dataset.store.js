@@ -19,6 +19,9 @@ let datasetStore = Reflux.createStore({
 
 	init: function () {
 		this.setInitialState();
+		crn.getApps((err, res) => {
+			this.update({apps: res.body});
+		});
 	},
 
 	getInitialState: function () {
@@ -44,6 +47,7 @@ let datasetStore = Reflux.createStore({
 	 */
 	setInitialState: function (diffs) {
 		let data = {
+			app: [],
 			loading: false,
 			dataset: null,
 			status: null,
@@ -429,6 +433,7 @@ let datasetStore = Reflux.createStore({
 			datasetId: this.data.dataset._id,
 			userId: userStore.data.scitran._id
 		}, (err, res) => {
+			callback(err, res);
 			this.toggleModal('Jobs');
 		});
 	}

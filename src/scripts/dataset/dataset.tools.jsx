@@ -73,7 +73,7 @@ let Tools = React.createClass({
         			</Modal.Header>
         			<hr className="modal-inner" />
         			<Modal.Body>
-        				<Jobs dataset={dataset} user={users} />
+        				<Jobs dataset={dataset} apps={this.state.apps} />
         			</Modal.Body>
         		</Modal>
     		);

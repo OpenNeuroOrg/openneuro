@@ -14,7 +14,7 @@ export default class FileTree extends React.Component {
 				<li key={job._id}>
 					<div>name: {job.name}</div>
 					<div>application: {job.appId}</div>
-					<div>status: {job.status}</div>
+					<div>status: {job.agave.status}</div>
 					<div>created by {job.userId} at {job.agave.created}</div>
 					<div>id: {job._id}</div>
 					<div>agave job ID: {job.jobId}</div>
