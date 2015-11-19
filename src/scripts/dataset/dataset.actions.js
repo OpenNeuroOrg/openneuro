@@ -16,6 +16,7 @@ var Actions = Reflux.createActions([
 	'setInitialState',
 	'startJob',
 	'toggleFolder',
+	'toggleModal',
 	'uploadAttachment',
 	'updateDescription',
 	'updateNote',

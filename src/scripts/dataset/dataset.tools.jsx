@@ -3,7 +3,7 @@
 import React        from 'react';
 import Reflux       from 'reflux';
 import datasetStore from './dataset.store';
-import Actions      from './dataset.actions.js';
+import actions      from './dataset.actions.js';
 import WarnButton   from '../common/forms/warn-button.jsx';
 import Share        from './dataset.tools.share.jsx';
 import Jobs         from './dataset.tools.jobs.jsx';
@@ -15,21 +15,14 @@ let Tools = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-	getInitialState() {
-		return {
-			showJobsModal: false,
-			showShareModal: false
-		};
-	},
-
 	componentDidMount() {
 		if (this.props.canEdit) {
-			Actions.loadUsers();
+			actions.loadUsers();
 		}
 	},
 
 	render() {
-		let dataset = this.props.dataset;
+		let dataset = this.state.dataset;
 		let users   = this.props.users;
 		let publish, del, share, shareModal, jobs, jobModal;
 
@@ -51,12 +44,12 @@ let Tools = React.createClass({
 
 			share = (
 	            <div role="presentation" className="tool" >
-	            	<button className="btn btn-admin warning"  onClick={this._showModal.bind(null, 'Share')}><i className="fa fa-user-plus"></i> Share Dataset</button>
+	            	<button className="btn btn-admin warning"  onClick={actions.toggleModal.bind(null, 'Share')}><i className="fa fa-user-plus"></i> Share Dataset</button>
 	            </div>
 	        );
 
 			shareModal = (
-	            <Modal show={this.state.showShareModal} onHide={this._hideModal.bind(null, 'Share')}>
+	            <Modal show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')}>
 	            	<Modal.Header closeButton>
 	            		<Modal.Title>Share Dataset</Modal.Title>
 	            	</Modal.Header>
@@ -69,12 +62,12 @@ let Tools = React.createClass({
 
 	        jobs = (
 	        	<div role="presentation" className="tool" >
-	            	<button className="btn btn-admin warning"  onClick={this._showModal.bind(null, 'Jobs')}><i className="fa fa-tasks"></i> Run Analysis</button>
+	            	<button className="btn btn-admin warning"  onClick={actions.toggleModal.bind(null, 'Jobs')}><i className="fa fa-tasks"></i> Run Analysis</button>
 	            </div>
         	);
 
         	jobModal = (
-        		<Modal show={this.state.showJobsModal} onHide={this._hideModal.bind(null, 'Jobs')}>
+        		<Modal show={this.state.showJobsModal} onHide={actions.toggleModal.bind(null, 'Jobs')}>
         			<Modal.Header closeButton>
         				<Modal.Title>Run Analysis</Modal.Title>
         			</Modal.Header>
@@ -103,23 +96,11 @@ let Tools = React.createClass({
 
 // custon methods -----------------------------------------------------
 
-	_publish: Actions.publish,
+	_publish: actions.publish,
 
-	_deleteDataset: Actions.deleteDataset,
+	_deleteDataset: actions.deleteDataset,
 
-	_showModal(name) {
-		let updates = {};
-		updates['show' + name + 'Modal'] = true;
-		this.setState(updates);
-	},
-
-	_hideModal(name) {
-		let updates = {};
-		updates['show' + name + 'Modal'] = false;
-		this.setState(updates);
-	},
-
-	_downloadDataset: Actions.downloadDataset
+	_downloadDataset: actions.downloadDataset
 
 });
 

@@ -47,6 +47,8 @@ let datasetStore = Reflux.createStore({
 			loading: false,
 			dataset: null,
 			status: null,
+			showJobsModal: false,
+			showShareModal: false,
 			users: []
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -138,6 +140,15 @@ let datasetStore = Reflux.createStore({
 		bids.deleteDataset(datasetId, () => {
             router.transitionTo('datasets');
 		});
+	},
+
+	/**
+	 * Toggle Modal
+	 */
+	toggleModal(name) {
+		let updates = {};
+		updates['show' + name + 'Modal'] = !this.data['show' + name + 'Modal'];
+		this.update(updates);
 	},
 
 
@@ -411,15 +422,14 @@ let datasetStore = Reflux.createStore({
 	/**
 	 * Start Job
 	 */
-	startJob(appName, appId) {
+	startJob(appName, appId, callback) {
 		crn.createJob({
 			name: appName,
 			appId: appId,
 			datasetId: this.data.dataset._id,
 			userId: userStore.data.scitran._id
 		}, (err, res) => {
-			console.log(err);
-			console.log(res);
+			this.toggleModal('Jobs');
 		});
 	}
 
