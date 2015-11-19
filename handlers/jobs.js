@@ -70,7 +70,7 @@ export default {
 				},
 				notifications: [
 					{
-						url:"http://scitran.sqm.io:8765/api/v1/jobs/results?job_id=${JOB_ID}&status=${JOB_STATUS}",
+						url:"http://scitran.sqm.io:8765/api/v1/jobs/results",
 						event:"*",
 						persistent:true
 					}
@@ -81,12 +81,11 @@ export default {
 				if (err) {return next(err);}
 				c.jobs.insertOne({
 					name:      job.name,
-					status:    'started',
 					appId:     job.appId,
 					datasetId: job.datasetId,
 					userId:    job.userId,
 					jobId:     resp.body.result.id,
-					response:  resp.body.result
+					agave:     resp.body.result
 				}, () => {
 					res.send(resp.body);
 				});
@@ -97,7 +96,7 @@ export default {
 	/**
 	 * List Jobs
 	 */
-	listJobs(req, res, next) {
+	listDatasetJobs(req, res, next) {
 		let datasetId = req.params.datasetId;
 		let user = req.user;
 		c.jobs.find({userId: user, datasetId: datasetId}).toArray((err, jobs) => {
@@ -110,9 +109,10 @@ export default {
 	 *	Results
 	 */
 	results(req, res, next) {
-		console.log(req.path);
-		console.log(req.body);
-		res.send({});
+		c.jobs.updateOne({jobId: req.body.id}, {agave: req.body}, {}).then((err, result) => {
+			if (err) {res.send(err);}
+			else {res.send(result);}
+		});
 	}
 
 	/**
@@ -178,6 +178,6 @@ export default {
 		        }
 		    }
 		}
-	 */
+	*/
 
 }
