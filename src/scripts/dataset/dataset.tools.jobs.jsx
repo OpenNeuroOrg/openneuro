@@ -4,7 +4,7 @@ import React      from 'react';
 import actions    from './dataset.actions.js';
 import crn        from '../utils/crn';
 
-export default class Share extends React.Component {
+export default class JobMenu extends React.Component {
 
 // life cycle events --------------------------------------------------
 

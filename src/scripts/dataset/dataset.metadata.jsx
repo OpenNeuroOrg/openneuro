@@ -5,6 +5,7 @@ import Actions      from './dataset.actions.js';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 import {Accordion, Panel} from 'react-bootstrap';
 import FileTree     from './dataset.file-tree.jsx';
+import Jobs         from './dataset.jobs.jsx';
 
 let Metadata = React.createClass({
 
@@ -115,6 +116,22 @@ let Metadata = React.createClass({
 							</div>
 						</div>
 					</div>
+
+					<div className="fileStructure fadeIn panel-group">
+						<div className="panel panel-default">
+							<div className="panel-heading" >
+								<h4 className="panel-title">
+									Dataset Analysis
+								</h4>
+							</div>
+							<div className="panel-collapse" aria-expanded="false" >
+								<div className="panel-body">
+									<Jobs dataset={dataset}/>
+								</div>
+							</div>
+						</div>
+					</div>
+
 				</div>
 				<div className="dataset-descriptions col-xs-6">
 					{items}

@@ -1,5 +1,6 @@
 import async     from 'async';
 import scitran   from './scitran';
+import crn       from './crn';
 import userStore from '../user/user.store';
 
 /**
@@ -177,7 +178,12 @@ export default  {
                                 });
                             }, cb);
                         });
-                    }, () => {callback(dataset)});
+                    }, () => {
+                        crn.getDatasetJobs(projectId, (err, res) => {
+                            dataset.jobs = res.body;
+                            callback(dataset);
+                        });
+                    });
                 });
             });
         });

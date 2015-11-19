@@ -60,6 +60,13 @@ export default {
 	 */
 	createJob(options, callback) {
 		request.post(config.crn.url + 'jobs', {body: options}, callback);
+	},
+
+	/**
+	 * Get Dataset Jobs
+	 */
+	getDatasetJobs(datasetId, callback) {
+		request.get(config.crn.url + 'jobs/' + datasetId, {}, callback);
 	}
 
 }
