@@ -3,6 +3,7 @@
 import agave    from '../libs/agave';
 import sanitize from '../libs/sanitize';
 import mongo    from '../libs/mongo';
+import async    from 'async';
 
 let c = mongo.collections;
 
@@ -11,10 +12,11 @@ let c = mongo.collections;
 
 let models = {
 	job: {
-		name:      'string, required',
-		appId:     'string, required',
-		datasetId: 'string, required',
-		userId:    'string, required'
+		name:       'string, required',
+		appId:      'string, required',
+		datasetId:  'string, required',
+		userId:     'string, required',
+		parameters: 'object, required'
 	}
 }
 
@@ -33,7 +35,15 @@ export default {
 	listApps(req, res, next) {
 		agave.listApps((err, resp) => {
 			if (err) {return next(err);}
-			res.send(resp.body.result);
+			let apps = resp.body.result;
+			async.each(apps, (app, cb) => {
+				agave.getApp(app.id, (err, resp2) => {
+					app.parameters = resp2.body.result.parameters;
+					cb();
+				});
+			}, () => {
+				res.send(resp.body.result);
+			});
 		});
 	},
 
@@ -59,15 +69,7 @@ export default {
 				inputs: {
 					bidsFile: "agave://openfmri-storage/ds003_downsampled.tar"
 				},
-				parameters: {
-					num_cores_per_subject: 16,
-					num_subjects_at_once: 1,
-					write_all_outputs: false,
-					write_report: true,
-					slice_timing_correction: false,
-					start_idx: 0,
-					stop_idx: 0
-				},
+				parameters: job.parameters,
 				notifications: [
 					{
 						url:"http://scitran.sqm.io:8765/api/v1/jobs/results",

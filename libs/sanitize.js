@@ -35,6 +35,13 @@ export default {
 				}
 			}
 
+			// isObject
+			if (model[prop].indexOf('object') > -1) {
+				if (typeof value !== 'object') {
+					err.invalid.push(prop + ' must be an object.');
+				}
+			}
+
 			// if sanitary add value
 			res[prop] = value
 		}
