@@ -426,12 +426,13 @@ let datasetStore = Reflux.createStore({
 	/**
 	 * Start Job
 	 */
-	startJob(appName, appId, callback) {
+	startJob(appName, appId, parameters, callback) {
 		crn.createJob({
 			name: appName,
 			appId: appId,
 			datasetId: this.data.dataset._id,
-			userId: userStore.data.scitran._id
+			userId: userStore.data.scitran._id,
+			parameters: parameters
 		}, (err, res) => {
 			callback(err, res);
 			this.toggleModal('Jobs');
