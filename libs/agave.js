@@ -171,6 +171,28 @@ export default {
                 }
             }, callback);
         });
+    },
+
+    getJobOutput(jobId, callback) {
+        this.auth(() => {
+            request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings/out', {
+                headers: {
+                    Authorization: 'Bearer ' + token.access,
+                    'Content-Type': 'application/json',
+                }
+            }, callback);
+        });
+    },
+
+    getFile(path, callback) {
+        this.auth(() => {
+            request.get(path, {
+                headers: {
+                    Authorization: 'Bearer ' + token.access,
+                    'Content-Type': 'application/json'
+                }
+            }, callback);
+        });
     }
 
 }

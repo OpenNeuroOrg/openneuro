@@ -13,6 +13,8 @@
     "refresh-agave-token": "babel-node scripts/refresh-agave-token.js",
     "test-agave-job": "babel-node scripts/test-agave-job.js",
     "list-agave-jobs": "babel-node scripts/list-agave-jobs.js",
+    "list-job-output": "babel-node scripts/list-job-output.js",
+    "get-job-file": "babel-node scripts/get-job-file.js",
     "delete-agave-client": "babel-node scripts/delete-agave-client.js"
   },
   "repository": {

@@ -115,6 +115,19 @@ export default {
 			if (err) {res.send(err);}
 			else {res.send(result);}
 		});
+		if (req.body.status === 'FINISHED') {
+			agave.getJobOutput(res.body.id, (err, resp) => {
+				c.jobs.updateOne({jobId: req.body.id}, {$set: {agave: req.body, results: resp.body.result}}, {}).then((err, result) => {
+					if (err) {res.send(err);}
+					else {res.send(result);}
+				});
+			});
+		} else {
+			c.jobs.updateOne({jobId: req.body.id}, {$set: {agave: req.body}}, {}).then((err, result) => {
+				if (err) {res.send(err);}
+				else {res.send(result);}
+			});
+		}
 	}
 
 	/**
