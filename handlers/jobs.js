@@ -115,9 +115,9 @@ export default {
 			if (err) {res.send(err);}
 			else {res.send(result);}
 		});
-		console.log(res.body.status);
+		console.log(req.body.status);
 		if (req.body.status === 'FINISHED') {
-			agave.getJobOutput(res.body.id, (err, resp) => {
+			agave.getJobOutput(req.body.id, (err, resp) => {
 				console.log(resp.body.result);
 				c.jobs.updateOne({jobId: req.body.id}, {$set: {agave: req.body, results: resp.body.result}}, {}).then((err, result) => {
 					if (err) {res.send(err);}
