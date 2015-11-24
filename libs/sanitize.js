@@ -17,14 +17,14 @@ export default {
 
 			// required
 			if (model[prop].indexOf('required') > -1) {
-				if (value === null) {
+				if (!value) {
 					err.missing.push(prop);
 					continue;
 				}
 			}
 
-			// null / not required
-			if (value === null) {
+			// not required
+			if (!value) {
 				continue;
 			}
 
@@ -32,6 +32,13 @@ export default {
 			if (model[prop].indexOf('string') > -1) {
 				if (typeof value !== 'string') {
 					err.invalid.push(prop + ' must be a string.');
+				}
+			}
+
+			// isObject
+			if (model[prop].indexOf('object') > -1) {
+				if (typeof value !== 'object') {
+					err.invalid.push(prop + ' must be an object.');
 				}
 			}
 

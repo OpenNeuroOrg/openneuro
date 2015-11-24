@@ -14,6 +14,19 @@ export default {
 	db: null,
 
 	/**
+	 * Collections
+	 *
+	 * A list of all mongo collections and a simplified
+	 * interface for accessing them. Collections start
+	 * out null an are initialized after mongo connects.
+	 */
+	collections: {
+		blacklist: null,
+		validationQueue: null,
+		jobs: null
+	},
+
+	/**
 	 * Connect
 	 *
 	 * Makes a connection to mongodb and creates an accessible
@@ -23,9 +36,14 @@ export default {
 		MongoClient.connect(config.mongo.url, (err, db) => {
 			if (err) {
 				console.log(err);
+				process.exit();
+			} else {
+				this.db = db;
+				for (let collectionName in this.collections) {
+					this.collections[collectionName] = this.db.collection(collectionName);
+				}
+				console.log('db connected');
 			}
-			this.db = db;
-			console.log('db connected');
 		});
 	}
 }

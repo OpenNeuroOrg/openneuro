@@ -1,5 +1,5 @@
-import request from 'request';
 import config  from '../config';
+import request from 'request';
 
 /**
  * Request
@@ -25,6 +25,14 @@ export default {
 		});
 	},
 
+	del(url, options, callback) {
+		handleRequest(url, options, (req) => {
+			request.del(req, (err, res) => {
+				handleResponse(err, res, callback);
+			});
+		});
+	}
+
 
 }
 
@@ -36,11 +44,8 @@ export default {
 function handleRequest(url, options, callback) {
 	let req = {
 		url: url,
-		headers: {
-			"X-SciTran-Auth": config.scitran.secret,
-			'User-Agent': 'SciTran Drone CRN Server'
-		},
-		query: {},
+		headers: {},
+		qs: {},
 		json: {}
 	};
 
@@ -62,11 +67,17 @@ function handleResponse(err, res, callback) {
 /**
  * Parse Options
  *
- * Normalized request options.
+ * Normalizes request options.
  */
 function parseOptions(req, options) {
-	if (options.query)  {req.query = options.query;}
+	if (options.query)  {req.qs = options.query;}
 	if (options.body)   {req.json = options.body;}
+	if (req.url.indexOf(config.scitran.url) > -1) {
+		req.headers = {
+			"X-SciTran-Auth": config.scitran.secret,
+			'User-Agent': 'SciTran Drone CRN Server'
+		};
+	}
 	if (options.headers) {
 		for (let key in options.headers) {
 			req.headers[key] = options.headers[key];

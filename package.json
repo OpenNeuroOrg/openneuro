@@ -2,10 +2,18 @@
   "name": "crn-server",
   "version": "0.1.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "start": "babel-node app.js"
+    "start": "node index.js",
+    "create-agave-client": "babel-node scripts/create-agave-client.js",
+    "list-agave-clients": "babel-node scripts/list-agave-clients.js",
+    "list-agave-apps": "babel-node scripts/list-agave-apps.js",
+    "get-agave-token": "babel-node scripts/get-agave-token.js",
+    "refresh-agave-token": "babel-node scripts/refresh-agave-token.js",
+    "test-agave-job": "babel-node scripts/test-agave-job.js",
+    "list-agave-jobs": "babel-node scripts/list-agave-jobs.js",
+    "delete-agave-client": "babel-node scripts/delete-agave-client.js"
   },
   "repository": {
     "type": "git",
@@ -14,6 +22,7 @@
   "author": "Squishymedia",
   "license": " ",
   "dependencies": {
+    "async": "^1.5.0",
     "babel": "^5.8.23",
     "body-parser": "^1.14.0",
     "express": "^4.13.3",
