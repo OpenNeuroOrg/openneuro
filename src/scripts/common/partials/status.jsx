@@ -17,7 +17,7 @@ export default class Status extends React.Component {
 		switch(this.props.type) {
 			case 'public':
 				spanClass = 'dataset-status ds-success';
-				tip       = 'This is viewable to all visitors';
+				tip       = 'Viewable to all visitors';
 				title	  = 'Public';
 				iconClass = 'fa fa-globe';
 				break;
