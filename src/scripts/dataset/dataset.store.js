@@ -128,9 +128,13 @@ let datasetStore = Reflux.createStore({
 	 *
 	 */
 	downloadDataset() {
+		// open download window as synchronous action from click to avoid throwing popup blockers
+		window.open('', 'bids-download');
 		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
 			let ticket = res.body.ticket;
-			window.open(res.req.url.split('?')[0] + '?ticket=' + ticket);
+			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'bids-download');
+			// close download window on next cycle
+			setTimeout(() => {downloadWindow.close();});
 		});
 	},
 
