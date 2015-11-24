@@ -111,7 +111,7 @@ export default {
 	 *	Results
 	 */
 	results(req, res, next) {
-		c.jobs.updateOne({jobId: req.body.id}, {agave: req.body}, {}).then((err, result) => {
+		c.jobs.updateOne({jobId: req.body.id}, {$set: {agave: req.body}}, {}).then((err, result) => {
 			if (err) {res.send(err);}
 			else {res.send(result);}
 		});
