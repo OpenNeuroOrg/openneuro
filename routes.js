@@ -69,6 +69,18 @@ let routes = [
 		url: '/jobs/results',
 		middleware: [],
 		handler: jobs.results
+	},
+	{
+		method: 'get',
+		url: '/download-ticket',
+		middleware: [auth.optional],
+		handler: jobs.getDownloadTicket
+	},
+	{
+		method: 'get',
+		url: '/download-results',
+		middleware: [],
+		handler: jobs.downloadResults
 	}
 
 ];

@@ -55,6 +55,14 @@ export default {
             roles: [{access: 'admin', _id: userId}]
         };
         request.post(config.scitran.url + 'groups', {body: body}, callback);
-    }
+    },
+
+    /**
+     * Get Project
+     *
+     */
+    getProject (projectId, callback) {
+        request.get(config.scitran.url + 'projects/' + projectId, {}, callback);
+    },
 
 }

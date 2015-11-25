@@ -41,5 +41,23 @@ export default {
 				return next();
 			}
 		});
-	}
+	},
+
+	/**
+	 * Optional
+	 *
+	 * If a request has a valid access token it will
+	 * append the user id to the req object. Will
+	 * not throw an error. Used for requests that may
+	 * work with varying levels of access.
+	 */
+	 optional(req, res, next) {
+	 	scitran.getUser(req.headers.authorization, (err, resp) => {
+			if (resp.body && resp.body._id) {
+				req.user = resp.body._id;
+			}
+			return next();
+		});
+	 }
+
 }

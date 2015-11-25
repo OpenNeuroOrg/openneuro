@@ -2,6 +2,7 @@
 
 import agave    from '../libs/agave';
 import sanitize from '../libs/sanitize';
+import scitran  from '../libs/scitran';
 import mongo    from '../libs/mongo';
 import async    from 'async';
 
@@ -96,7 +97,7 @@ export default {
 	},
 
 	/**
-	 * List Jobs
+	 *  List Jobs
 	 */
 	listDatasetJobs(req, res, next) {
 		let datasetId = req.params.datasetId;
@@ -124,6 +125,71 @@ export default {
 				else {res.send(result);}
 			});
 		}
+	},
+
+	// getDownloadTicket(jobId, filename)
+		// get job by id
+			// check datasetId
+				// getdataset from scitran
+					// check if user has permissions on dataset
+						// if no
+							// throw error
+						// if yes
+							// create download token
+								/*{
+									id: objectId,
+									userId: userId,
+									jobId: jobId,
+									filename: filename
+								}*/
+
+	getDownloadTicket(req, res, next) {
+		let jobId    = req.query.jobId,
+			fileName = req.query.fileName;
+		c.jobs.findOne({jobId}, {}, (err, job) => {
+			if (err){return next(err);}
+			// need error if file not found.
+			scitran.getProject(job.datasetId, (err, resp) => {
+				let hasPermission;
+				if (!req.user) {
+					hasPermission = false;
+				} else {
+					for (let permission of resp.body.permissions) {
+						if (req.user === permission._id) {
+							hasPermission = true;
+							break;
+						}
+					}
+				}
+				if (resp.body.public || hasPermission) {
+					// Create and return token
+					console.log('generate token');
+				} else {
+					let error = new Error("You do not have permission to access this file.");
+					error.http_code = 403;
+					return next(error);
+				}
+			});
+		});
+	},
+
+	// getFile(jobId, filename, token)
+		// find token that matches {tokenId, userId, filename}
+			// if not found
+				// throw error
+			// if found
+				// proxy file request from agave
+
+	downloadResults(req, res, next) {
+		let path = req.query.path;
+
+		agave.getFile(path, (err, resp) => {
+			let filePath = resp.request.uri.path.split('/');
+			let filename = filePath[filePath.length -1];
+			res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+			res.setHeader('Content-type', resp.headers['content-type']);
+			res.send(resp.body);
+		});
 	}
 
 }

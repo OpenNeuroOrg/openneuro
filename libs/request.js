@@ -72,7 +72,7 @@ function handleResponse(err, res, callback) {
 function parseOptions(req, options) {
 	if (options.query)  {req.qs = options.query;}
 	if (options.body)   {req.json = options.body;}
-	if (req.url.indexOf(config.scitran.url) > -1) {
+	if (req.url && req.url.indexOf(config.scitran.url) > -1) {
 		req.headers = {
 			"X-SciTran-Auth": config.scitran.secret,
 			'User-Agent': 'SciTran Drone CRN Server'
