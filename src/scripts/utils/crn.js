@@ -67,6 +67,13 @@ export default {
 	 */
 	getDatasetJobs(datasetId, callback) {
 		request.get(config.crn.url + 'jobs/' + datasetId, {}, callback);
+	},
+
+	/**
+	 * Get Result Download Ticket
+	 */
+	getResultDownloadTicket(path, callback) {
+		request.get('http://localhost:8765/api/v1/' + 'download-results', {query: {path: path}}, callback);
 	}
 
 }

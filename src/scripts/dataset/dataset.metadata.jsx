@@ -1,13 +1,17 @@
 // dependencies -------------------------------------------------------
 
 import React        from 'react';
+import Reflux       from 'reflux';
 import Actions      from './dataset.actions.js';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 import {Accordion, Panel} from 'react-bootstrap';
 import FileTree     from './dataset.file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
+import datasetStore from './dataset.store';
 
 let Metadata = React.createClass({
+
+    mixins: [Reflux.connect(datasetStore)],
 
 // life cycle events --------------------------------------------------
 
@@ -94,7 +98,6 @@ let Metadata = React.createClass({
 				</div>
 			);
 		});
-
 		let descriptors = (
 			<div>
 				<div className="dataset-readme col-xs-6">
@@ -126,7 +129,7 @@ let Metadata = React.createClass({
 							</div>
 							<div className="panel-collapse" aria-expanded="false" >
 								<div className="panel-body">
-									<Jobs dataset={dataset}/>
+									<Jobs jobs={this.state.jobs}/>
 								</div>
 							</div>
 						</div>

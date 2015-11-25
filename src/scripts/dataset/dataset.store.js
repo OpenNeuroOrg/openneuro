@@ -47,12 +47,14 @@ let datasetStore = Reflux.createStore({
 	 */
 	setInitialState: function (diffs) {
 		let data = {
-			app: [],
-			loading: false,
+			apps: [],
 			dataset: null,
-			status: null,
+			loading: false,
+			loadingJobs: false,
+			jobs: [],
 			showJobsModal: false,
 			showShareModal: false,
+			status: null,
 			users: []
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -77,6 +79,7 @@ let datasetStore = Reflux.createStore({
 				this.update({dataset: res, loading: false});
 			}
 		});
+		this.loadJobs(datasetId);
 	},
 
 	/**
@@ -105,6 +108,16 @@ let datasetStore = Reflux.createStore({
 		scitran.getUsers((err, res) => {
 			this.update({users: res.body});
 		});
+	},
+
+	/**
+	 * Load Jobs
+	 */
+	loadJobs(projectId) {
+		this.update({loadingJobs: true})
+		crn.getDatasetJobs(projectId, (err, res) => {
+            this.update({jobs: res.body, loadingJobs: false});
+        });
 	},
 
 	/**
@@ -441,7 +454,24 @@ let datasetStore = Reflux.createStore({
 			callback(err, res);
 			this.toggleModal('Jobs');
 		});
-	}
+	},
+
+	/**
+	 * Download Result
+	 */
+	downloadResult(path) {
+		console.log(path);
+		// open download window as synchronous action from click to avoid throwing popup blockers
+		// window.open('', 'bids-result');
+		crn.getResultDownloadTicket(path, (err, res) => {
+			console.log(res);
+		// 	let ticket = res.body.ticket;
+		// 	console.log(ticket);
+			// let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'bids-result');
+			// // close download window on next cycle
+			// setTimeout(() => {downloadWindow.close();});
+		});
+	},
 
 });
 
