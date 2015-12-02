@@ -60,7 +60,7 @@ let Dataset = React.createClass({
 								<div className="status-container"><Statuses dataset={dataset}/></div>
 							</div>
 							<div className="col-xs-12 tools-wrap">
-								<Tools dataset={dataset} users={this.state.users} canEdit={dataset && canEdit && !dataset.public}/>
+								<Tools users={this.state.users} canEdit={dataset && canEdit && !dataset.public}/>
 							</div>
 						</div>
 						<Metadata dataset={dataset}/>

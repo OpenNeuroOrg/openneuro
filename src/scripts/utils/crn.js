@@ -9,6 +9,8 @@ import config  from '../config';
  */
 export default {
 
+// Users -----------------------------------------------------------------------------------
+
 	/**
 	 * Create User
 	 *
@@ -36,6 +38,42 @@ export default {
 	 */
 	unBlacklistUser(userId, callback) {
 		request.del(config.crn.url + 'users/blacklist/' + userId, callback);
+	},
+
+// Jobs ------------------------------------------------------------------------------------
+
+	/**
+	 * Get Apps
+	 *
+	 * Returns a list of available apps that
+	 * can be run on AGAVE
+	 */
+	getApps(callback) {
+		request.get(config.crn.url + 'apps', {}, callback);
+	},
+
+	/**
+	 * Create Job
+	 *
+	 * Takes an options object with a name, appId
+	 * datasetId and userId and starts a Job.
+	 */
+	createJob(options, callback) {
+		request.post(config.crn.url + 'jobs', {body: options}, callback);
+	},
+
+	/**
+	 * Get Dataset Jobs
+	 */
+	getDatasetJobs(datasetId, callback) {
+		request.get(config.crn.url + 'jobs/' + datasetId, {}, callback);
+	},
+
+	/**
+	 * Get Result Download Ticket
+	 */
+	getResultDownloadTicket(jobId, fileName, callback) {
+		request.get(config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '/ticket', {}, callback);
 	}
 
 }

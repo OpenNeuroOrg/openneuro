@@ -3,6 +3,7 @@
 import Reflux    from 'reflux';
 import Actions   from './dataset.actions.js';
 import scitran   from '../utils/scitran';
+import crn       from '../utils/crn';
 import bids      from '../utils/bids';
 import router    from '../utils/router-container';
 import userStore from '../user/user.store';
@@ -10,7 +11,7 @@ import upload    from '../utils/upload';
 import config    from '../config';
 import files     from '../utils/files';
 
-let UserStore = Reflux.createStore({
+let datasetStore = Reflux.createStore({
 
 // store setup -----------------------------------------------------------------------
 
@@ -18,6 +19,9 @@ let UserStore = Reflux.createStore({
 
 	init: function () {
 		this.setInitialState();
+		crn.getApps((err, res) => {
+			this.update({apps: res.body});
+		});
 	},
 
 	getInitialState: function () {
@@ -43,8 +47,13 @@ let UserStore = Reflux.createStore({
 	 */
 	setInitialState: function (diffs) {
 		let data = {
-			loading: false,
+			apps: [],
 			dataset: null,
+			loading: false,
+			loadingJobs: false,
+			jobs: [],
+			showJobsModal: false,
+			showShareModal: false,
 			status: null,
 			users: []
 		};
@@ -70,6 +79,7 @@ let UserStore = Reflux.createStore({
 				this.update({dataset: res, loading: false});
 			}
 		});
+		this.loadJobs(datasetId);
 	},
 
 	/**
@@ -101,6 +111,16 @@ let UserStore = Reflux.createStore({
 	},
 
 	/**
+	 * Load Jobs
+	 */
+	loadJobs(projectId) {
+		this.update({loadingJobs: true})
+		crn.getDatasetJobs(projectId, (err, res) => {
+            this.update({jobs: res.body, loadingJobs: false});
+        });
+	},
+
+	/**
 	 * Publish
 	 *
 	 * Takes a datasetId and sets the datset to public.
@@ -121,9 +141,13 @@ let UserStore = Reflux.createStore({
 	 *
 	 */
 	downloadDataset() {
+		// open download window as synchronous action from click to avoid throwing popup blockers
+		window.open('', 'bids-download');
 		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
 			let ticket = res.body.ticket;
-			window.open(res.req.url.split('?')[0] + '?ticket=' + ticket);
+			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'bids-download');
+			// close download window on next cycle
+			setTimeout(() => {downloadWindow.close();});
 		});
 	},
 
@@ -137,6 +161,15 @@ let UserStore = Reflux.createStore({
 		bids.deleteDataset(datasetId, () => {
             router.transitionTo('datasets');
 		});
+	},
+
+	/**
+	 * Toggle Modal
+	 */
+	toggleModal(name) {
+		let updates = {};
+		updates['show' + name + 'Modal'] = !this.data['show' + name + 'Modal'];
+		this.update(updates);
 	},
 
 
@@ -405,6 +438,38 @@ let UserStore = Reflux.createStore({
 		this.updateDirectoryState(directory._id, {showChildren: !directory.showChildren});
 	},
 
+	// Jobs --------------------------------------------------------------------------
+
+	/**
+	 * Start Job
+	 */
+	startJob(appName, appId, parameters, callback) {
+		crn.createJob({
+			name: appName,
+			appId: appId,
+			datasetId: this.data.dataset._id,
+			userId: userStore.data.scitran._id,
+			parameters: parameters
+		}, (err, res) => {
+			callback(err, res);
+			this.toggleModal('Jobs');
+		});
+	},
+
+	/**
+	 * Download Result
+	 */
+	downloadResult(jobId, fileName) {
+		// open download window as synchronous action from click to avoid throwing popup blockers
+		window.open('', 'bids-result');
+		crn.getResultDownloadTicket(jobId, fileName, (err, res) => {
+			let ticket = res.body._id;
+			let downloadWindow = window.open(config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket, 'bids-result');
+			// close download window after 3 seconds
+			setTimeout(() => {downloadWindow.close();}, 3000);
+		});
+	},
+
 });
 
-export default UserStore;
+export default datasetStore;
