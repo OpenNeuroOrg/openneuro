@@ -66,7 +66,7 @@ let routes = [
 	},
 	{
 		method: 'post',
-		url: '/jobs/results',
+		url: '/jobs/:jobId/results',
 		middleware: [],
 		handler: jobs.results
 	},
