@@ -73,7 +73,7 @@ export default {
 	 * Get Result Download Ticket
 	 */
 	getResultDownloadTicket(jobId, fileName, callback) {
-		request.get('http://localhost:8765/api/v1/jobs/' + jobId + '/results/' + fileName + '/ticket', {}, callback);
+		request.get(config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '/ticket', {}, callback);
 	}
 
 }
