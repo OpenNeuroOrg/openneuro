@@ -459,17 +459,14 @@ let datasetStore = Reflux.createStore({
 	/**
 	 * Download Result
 	 */
-	downloadResult(path) {
-		console.log(path);
+	downloadResult(jobId, fileName) {
 		// open download window as synchronous action from click to avoid throwing popup blockers
-		// window.open('', 'bids-result');
-		crn.getResultDownloadTicket(path, (err, res) => {
-			console.log(res);
-		// 	let ticket = res.body.ticket;
-		// 	console.log(ticket);
-			// let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'bids-result');
-			// // close download window on next cycle
-			// setTimeout(() => {downloadWindow.close();});
+		window.open('', 'bids-result');
+		crn.getResultDownloadTicket(jobId, fileName, (err, res) => {
+			let ticket = res.body._id;
+			let downloadWindow = window.open('http://localhost:8765/api/v1/' + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket, 'bids-result');
+			// close download window after 3 seconds
+			setTimeout(() => {downloadWindow.close();}, 3000);
 		});
 	},
 

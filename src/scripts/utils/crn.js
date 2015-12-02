@@ -72,8 +72,8 @@ export default {
 	/**
 	 * Get Result Download Ticket
 	 */
-	getResultDownloadTicket(path, callback) {
-		request.get('http://localhost:8765/api/v1/' + 'download-results', {query: {path: path}}, callback);
+	getResultDownloadTicket(jobId, fileName, callback) {
+		request.get('http://localhost:8765/api/v1/jobs/' + jobId + '/results/' + fileName + '/ticket', {}, callback);
 	}
 
 }

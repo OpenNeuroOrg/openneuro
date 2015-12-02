@@ -14,7 +14,7 @@ export default class FileTree extends React.Component {
 			if (job.results) {
 				results = job.results.map((result, index) => {
 					return (
-						<a href={"http://localhost:8765/api/v1/download-results?path=" + result._links.self.href}>{result.name}</a>
+						<a key={index} onClick={this._downloadResult.bind(this, job.jobId, result.name)}>{result.name}</a>
 					);
 				});
 			}
@@ -38,8 +38,8 @@ export default class FileTree extends React.Component {
 
 // custom methods -----------------------------------------------------
 
-	_downloadResult(href) {
-		actions.downloadResult(href);
+	_downloadResult(jobId, fileName) {
+		actions.downloadResult(jobId, fileName);
 	}
 
 }
