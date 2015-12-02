@@ -74,7 +74,7 @@ export default {
 				parameters: job.parameters,
 				notifications: [
 					{
-						url:"http://scitran.sqm.io:8765/api/v1/jobs/results",
+						url:"http://scitran.sqm.io:8765/api/v1/jobs/${JOB_ID}/results",
 						event:"*",
 						persistent:true
 					}
@@ -113,15 +113,16 @@ export default {
 	 *	Results
 	 */
 	results(req, res, next) {
+		let jobId = req.params.jobId;
 		if (req.body.status === 'FINISHED') {
 			agave.getJobOutput(req.body.id, (err, resp) => {
-				c.jobs.updateOne({jobId: req.body.id}, {$set: {agave: req.body, results: resp.body.result}}, {}).then((err, result) => {
+				c.jobs.updateOne({jobId}, {$set: {agave: req.body, results: resp.body.result}}, {}).then((err, result) => {
 					if (err) {res.send(err);}
 					else {res.send(result);}
 				});
 			});
 		} else {
-			c.jobs.updateOne({jobId: req.body.id}, {$set: {agave: req.body}}, {}).then((err, result) => {
+			c.jobs.updateOne({jobId}, {$set: {agave: req.body}}, {}).then((err, result) => {
 				if (err) {res.send(err);}
 				else {res.send(result);}
 			});
