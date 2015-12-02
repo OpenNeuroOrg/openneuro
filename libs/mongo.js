@@ -23,7 +23,8 @@ export default {
 	collections: {
 		blacklist: null,
 		validationQueue: null,
-		jobs: null
+		jobs: null,
+		tickets: null,
 	},
 
 	/**

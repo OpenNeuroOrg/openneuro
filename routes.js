@@ -72,13 +72,13 @@ let routes = [
 	},
 	{
 		method: 'get',
-		url: '/download-ticket',
+		url: '/jobs/:jobId/results/:fileName/ticket',
 		middleware: [auth.optional],
 		handler: jobs.getDownloadTicket
 	},
 	{
 		method: 'get',
-		url: '/download-results',
+		url: '/jobs/:jobId/results/:fileName',
 		middleware: [],
 		handler: jobs.downloadResults
 	}

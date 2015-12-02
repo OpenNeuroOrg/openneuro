@@ -1,10 +1,11 @@
 // dependencies ------------------------------------------------------------
 
-import agave    from '../libs/agave';
-import sanitize from '../libs/sanitize';
-import scitran  from '../libs/scitran';
-import mongo    from '../libs/mongo';
-import async    from 'async';
+import agave      from '../libs/agave';
+import sanitize   from '../libs/sanitize';
+import scitran    from '../libs/scitran';
+import mongo      from '../libs/mongo';
+import async      from 'async';
+import {ObjectID} from 'mongodb';
 
 let c = mongo.collections;
 
@@ -127,28 +128,19 @@ export default {
 		}
 	},
 
-	// getDownloadTicket(jobId, filename)
-		// get job by id
-			// check datasetId
-				// getdataset from scitran
-					// check if user has permissions on dataset
-						// if no
-							// throw error
-						// if yes
-							// create download token
-								/*{
-									id: objectId,
-									userId: userId,
-									jobId: jobId,
-									filename: filename
-								}*/
-
+	/**
+	 * Get Download Ticket
+	 */
 	getDownloadTicket(req, res, next) {
-		let jobId    = req.query.jobId,
-			fileName = req.query.fileName;
+		let jobId    = req.params.jobId,
+			fileName = req.params.fileName;
 		c.jobs.findOne({jobId}, {}, (err, job) => {
 			if (err){return next(err);}
-			// need error if file not found.
+			if (!job) {
+				let error = new Error("Could not find job.");
+				error.http_code = 404;
+				return next(error);
+			}
 			scitran.getProject(job.datasetId, (err, resp) => {
 				let hasPermission;
 				if (!req.user) {
@@ -162,8 +154,20 @@ export default {
 					}
 				}
 				if (resp.body.public || hasPermission) {
+					let ticket = {
+						type: 'download',
+						userId: req.user,
+						jobId: jobId,
+						fileName: fileName,
+						created: new Date()
+					};
 					// Create and return token
-					console.log('generate token');
+					c.tickets.insertOne(ticket, (err, result) => {
+						if (err) {return next(err);}
+						c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60}, (err, index) => {
+							res.send(ticket);
+						});
+					});
 				} else {
 					let error = new Error("You do not have permission to access this file.");
 					error.http_code = 403;
@@ -173,23 +177,36 @@ export default {
 		});
 	},
 
-	// getFile(jobId, filename, token)
-		// find token that matches {tokenId, userId, filename}
-			// if not found
-				// throw error
-			// if found
-				// proxy file request from agave
-
+	/**
+	 * Download Results
+	 */
 	downloadResults(req, res, next) {
-		let path = req.query.path;
+		let ticket   = req.query.ticket,
+			fileName = req.params.fileName,
+			jobId    = req.params.jobId;
 
-		agave.getFile(path, (err, resp) => {
-			let filePath = resp.request.uri.path.split('/');
-			let filename = filePath[filePath.length -1];
-			res.setHeader('Content-disposition', 'attachment; filename=' + filename);
-			res.setHeader('Content-type', resp.headers['content-type']);
-			res.send(resp.body);
+		if (!ticket) {
+			let error = new Error("No download ticket query parameter found.");
+			error.http_code = 400;
+			return next(error);
+		}
+
+		c.tickets.findOne({_id: ObjectID(ticket), type: 'download', fileName: fileName, jobId: jobId}, {}, (err, result) => {
+			if (err) {return next(err);}
+			if (!result) {
+				let error = new Error("Download ticket was not found or expired");
+				error.http_code = 401;
+				return next(error);
+			}
+			let path = 'https://api.tacc.utexas.edu/jobs/v2/' + req.params.jobId + '/outputs/media/out/' + req.params.fileName;
+
+			agave.getFile(path, (err, resp) => {
+				res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+				res.setHeader('Content-type', resp.headers['content-type']);
+				res.send(resp.body);
+			});
 		});
+
 	}
 
 }
