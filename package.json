@@ -15,7 +15,8 @@
     "list-agave-jobs": "babel-node scripts/list-agave-jobs.js",
     "list-job-output": "babel-node scripts/list-job-output.js",
     "get-job-file": "babel-node scripts/get-job-file.js",
-    "delete-agave-client": "babel-node scripts/delete-agave-client.js"
+    "delete-agave-client": "babel-node scripts/delete-agave-client.js",
+    "get-agave-job": "babel-node scripts/get-agave-job.js"
   },
   "repository": {
     "type": "git",

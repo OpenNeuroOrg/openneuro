@@ -173,6 +173,17 @@ export default {
         });
     },
 
+    getJob(jobId, callback) {
+        this.auth(() => {
+            request.get(config.agave.url + 'jobs/v2/' + jobId, {
+                headers: {
+                    Authorization: 'Bearer ' + token.access,
+                    'Content-Type': 'application/json'
+                }
+            }, callback);
+        });
+    },
+
     getJobOutput(jobId, callback) {
         this.auth(() => {
             request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings/out', {
