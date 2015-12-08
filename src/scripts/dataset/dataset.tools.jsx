@@ -16,31 +16,33 @@ let Tools = React.createClass({
 // life cycle events --------------------------------------------------
 
 	componentDidMount() {
-		if (this.props.canEdit) {
+		let dataset = this.state.dataset;
+		if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
 			actions.loadUsers();
 		}
 	},
 
 	render() {
 		let dataset = this.state.dataset;
-		let users   = this.props.users;
+		let users   = this.state.users;
 		let publish, del, share, shareModal, jobs, jobModal;
 
-		if (!dataset.status.uploadIncomplete && this.props.canEdit) {
-			publish = (
-				<div role="presentation" className="tool" >
-					<WarnButton message="Make Dataset Public" confirm="Yes Make Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
-	            </div>
-			);
-		}
+		if (dataset.access === 'admin') {
+			if (!dataset.public) {
+				del = (
+					<div role="presentation" className="tool" >
+		            	<WarnButton message="Delete Dataset" action={this._deleteDataset.bind(this, dataset._id)} />
+		            </div>
+				);
+			}
 
-		if (this.props.canEdit) {
-
-			del = (
-				<div role="presentation" className="tool" >
-	            	<WarnButton message="Delete Dataset" action={this._deleteDataset.bind(this, dataset._id)} />
-	            </div>
-			);
+			if (!dataset.status.uploadIncomplete && !dataset.public) {
+				publish = (
+					<div role="presentation" className="tool" >
+						<WarnButton message="Make Dataset Public" confirm="Yes Make Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
+		            </div>
+				);
+			}
 
 			share = (
 	            <div role="presentation" className="tool" >
@@ -59,7 +61,9 @@ let Tools = React.createClass({
 	            	</Modal.Body>
 	            </Modal>
 	        );
+		}
 
+		if (dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.public) {
 	        jobs = (
 	        	<div role="presentation" className="tool" >
 	            	<button className="btn btn-admin warning"  onClick={actions.toggleModal.bind(null, 'Jobs')}><i className="fa fa-tasks"></i> Run Analysis</button>
