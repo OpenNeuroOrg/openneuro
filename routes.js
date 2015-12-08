@@ -49,7 +49,7 @@ let routes = [
 	{
 		method: 'get',
 		url: '/apps',
-		middleware: [auth.user],
+		middleware: [],
 		handler: jobs.listApps
 	},
 	{
