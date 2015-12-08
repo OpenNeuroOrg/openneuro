@@ -31,12 +31,6 @@ let Metadata = React.createClass({
 				onChange: this._updateDescription.bind(this, 'DatasetDOI'),
 			},
 			{
-				key:      'Name',
-				label:    'Name',
-				value:    description.Name,
-				onChange: this._updateDescription.bind(this, 'Name'),
-			},
-			{
 				key:      'License',
 				label:    'License',
 				value:    description.License,

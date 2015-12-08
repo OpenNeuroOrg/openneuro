@@ -174,6 +174,12 @@ let datasetStore = Reflux.createStore({
 
 	// Metadata ----------------------------------------------------------------------
 
+	updateName(value, callback) {
+		scitran.updateProject(this.data.dataset._id, {name: value}, () => {
+			this.updateDescription('Name', value, callback);
+		});
+	},
+
 	/**
 	 * Update Description
 	 *
