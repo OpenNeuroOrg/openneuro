@@ -80,8 +80,7 @@ var Request = {
 function handleRequest (url, options, callback) {
 	options = normalizeOptions(options);
 	var google = hello('google');
-	// if (options.auth && hasToken() && url.indexOf('scitran') > -1) {
-	if (options.auth && hasToken() && (url.indexOf('scitran') > -1 || url.indexOf('localhost'))) { // local testing only
+	if (options.auth && hasToken() && (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)) {
 		if (window.localStorage.scitranUser && JSON.parse(window.localStorage.scitranUser).root) {options.query.root = true;}
 		hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
 			options.headers.Authorization = res.authResponse.access_token;
