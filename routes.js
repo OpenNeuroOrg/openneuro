@@ -65,6 +65,12 @@ let routes = [
 		handler: jobs.listDatasetJobs
 	},
 	{
+		method: 'delete',
+		url: '/jobs/:datasetId',
+		middleware: [auth.user],
+		handler: jobs.deleteDatasetJobs
+	},
+	{
 		method: 'post',
 		url: '/jobs/:jobId/results',
 		middleware: [],

@@ -208,6 +208,46 @@ export default {
 			});
 		});
 
+	},
+
+	/**
+	 * Delete Dataset Jobs
+	 *
+	 * Takes a dataset ID url parameter and deletes all jobs for that dataset.
+	 */
+	deleteDatasetJobs(req, res, next) {
+		let datasetId = req.params.datasetId;
+
+		scitran.getProject(datasetId, (err, resp) => {
+			if (resp.statusCode == 404) {
+				let error = new Error("No dataset found");
+				error.http_code = 404;
+				return next(error);
+			}
+
+			let hasPermission;
+			if (!req.user) {
+				hasPermission = false;
+			} else {
+				for (let permission of resp.body.permissions) {
+					if (req.user === permission._id && permission.access === 'admin') {
+						hasPermission = true;
+						break;
+					}
+				}
+			}
+			if (!resp.body.public && hasPermission) {
+				c.jobs.deleteMany({datasetId}, [], (err, doc) => {
+					if (err) {return next(err);}
+					res.send({message: doc.result.n + " job(s) have been deleted for dataset " + datasetId});
+				});
+			} else {
+				let message = resp.body.public ? "You don't have permission to delete results from public datasets" : "You don't have permission to delete jobs from this dataset.";
+				let error = new Error(message);
+				error.http_code = 403;
+				return next(error);
+			}
+		});
 	}
 
 }
