@@ -96,9 +96,9 @@ let UploadStore = Reflux.createStore({
     	if (value === 'reset') {
     		filters = [];
     	} else if (index > -1) {
-    		filters.splice(index, 1);
+    		filters = [];
     	} else {
-    		filters.push(value);
+    		filters = [value];
     	}
 
     	// filter data
