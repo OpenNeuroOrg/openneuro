@@ -122,9 +122,7 @@ let Metadata = React.createClass({
 								</h4>
 							</div>
 							<div className="panel-collapse" aria-expanded="false" >
-								<div className="panel-body">
-									<Jobs jobs={this.state.jobs}/>
-								</div>
+								<Jobs />
 							</div>
 						</div>
 					</div>

@@ -19,9 +19,7 @@ let datasetStore = Reflux.createStore({
 
 	init: function () {
 		this.setInitialState();
-		crn.getApps((err, res) => {
-			this.update({apps: res.body});
-		});
+		this.loadApps();
 	},
 
 	getInitialState: function () {
@@ -50,6 +48,7 @@ let datasetStore = Reflux.createStore({
 			apps: [],
 			dataset: null,
 			loading: false,
+			loadingApps: false,
 			loadingJobs: false,
 			jobs: [],
 			showJobsModal: false,
@@ -114,10 +113,20 @@ let datasetStore = Reflux.createStore({
 	 * Load Jobs
 	 */
 	loadJobs(projectId) {
-		this.update({loadingJobs: true})
+		this.update({loadingJobs: true});
 		crn.getDatasetJobs(projectId, (err, res) => {
             this.update({jobs: res.body, loadingJobs: false});
         });
+	},
+
+	/**
+	 * Load Apps
+	 */
+	loadApps() {
+		this.update({loadingApps: true});
+		crn.getApps((err, res) => {
+			this.update({apps: res.body, loadingApps: false});
+		});
 	},
 
 	/**
@@ -461,6 +470,7 @@ let datasetStore = Reflux.createStore({
 		}, (err, res) => {
 			callback(err, res);
 			this.toggleModal('Jobs');
+			this.loadJobs(this.data.dataset._id);
 		});
 	},
 

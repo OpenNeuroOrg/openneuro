@@ -23,6 +23,8 @@ export default class JobMenu extends React.Component {
 			return <option key={app.id} value={app.id}>{app.label}</option>;
 		});
 
+		let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedApp;
+
 		let form = (
 			<div>
 				<h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
@@ -41,7 +43,7 @@ export default class JobMenu extends React.Component {
 
 		return (
 			<div className="dataset">
-				{this.state.loading ? <Spinner active={true} text={'Starting ' + this.state.selectedApp}/> : form}
+				{this.state.loading || this.props.loadingApps ? <Spinner active={true} text={loadingText}/> : form}
 			</div>
     	);
 	}
