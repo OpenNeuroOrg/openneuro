@@ -94,7 +94,7 @@ export default {
                     let note = {author: 'uploadStatus', text: 'incomplete'};
                     scitran.updateNote(projectId, note, (res1) => {
                         this.handleUploadResponse(err, res, () => {
-                            this.uploadSubjects(fileTree[0].children, projectId);
+                            this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId);
                         });
                     });
                 });
@@ -107,7 +107,7 @@ export default {
      * Upload Subjects
      *
      */
-    uploadSubjects (subjects, projectId) {
+    uploadSubjects (datasetName, subjects, projectId) {
         let self = this;
         self.currentProjectId = projectId;
         for (let subject of subjects) {
@@ -123,6 +123,7 @@ export default {
                 if (subject.name === 'dataset_description.json') {
                     files.read(subject, (contents) => {
                         let description = JSON.parse(contents);
+                        description.Name = datasetName;
                         let authors = [];
                         if (description.hasOwnProperty('Authors')) {
                             for (let i = 0; i < description.Authors.length; i++) {
@@ -135,7 +136,11 @@ export default {
                             text: JSON.stringify(authors)
                         };
                         scitran.updateNote(projectId, authorsNote, () => {
-                            self.uploadFile('projects', projectId, subject, 'project');
+                            let file = {
+                                name: subject.name,
+                                data: JSON.stringify(description)
+                            };
+                            self.uploadFile('projects', projectId, file, 'project');
                         });
                     });
 

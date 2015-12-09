@@ -5,28 +5,34 @@ self.addEventListener("message", function(e) {
 
         let file = e.data;
 
-        let blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,    
-            chunkSize = 2097152, // Read in chunks of 2MB     
+        // immediately hash files that have already been read
+        if (file.data) {
+            postMessage({hash: SparkMD5.hash(file.data)});
+            return;
+        }
+
+        let blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
+            chunkSize = 2097152, // Read in chunks of 2MB
             chunks = Math.ceil(file.size / chunkSize),
-            currentChunk = 0,   
+            currentChunk = 0,
             spark = new SparkMD5.ArrayBuffer(),
             fileReader = new FileReader();
 
-        fileReader.onload = function (e) {   
+        fileReader.onload = function (e) {
             spark.append(e.target.result);
             currentChunk++;
-       
-            if (currentChunk < chunks) {   
+
+            if (currentChunk < chunks) {
                 loadNext();
             } else {
                 let hash = spark.end();
                 postMessage({hash});
             }
-       
+
         };
-       
+
         fileReader.onerror = function (e) {
-           postMessage(e);   
+           postMessage(e);
         };
 
         function loadNext() {
