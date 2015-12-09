@@ -32,7 +32,7 @@ let Dataset = React.createClass({
 	},
 
 	componentWillUnmount() {
-		Actions.setInitialState();
+		Actions.setInitialState({apps: this.state.apps});
 	},
 
 	render() {
