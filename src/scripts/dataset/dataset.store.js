@@ -468,8 +468,7 @@ let datasetStore = Reflux.createStore({
 			userId: userStore.data.scitran._id,
 			parameters: parameters
 		}, (err, res) => {
-			callback(err, res);
-			this.toggleModal('Jobs');
+			callback({message: "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."});
 			this.loadJobs(this.data.dataset._id);
 		});
 	},
