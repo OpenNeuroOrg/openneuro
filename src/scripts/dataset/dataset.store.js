@@ -19,9 +19,7 @@ let datasetStore = Reflux.createStore({
 
 	init: function () {
 		this.setInitialState();
-		crn.getApps((err, res) => {
-			this.update({apps: res.body});
-		});
+		this.loadApps();
 	},
 
 	getInitialState: function () {
@@ -50,6 +48,7 @@ let datasetStore = Reflux.createStore({
 			apps: [],
 			dataset: null,
 			loading: false,
+			loadingApps: false,
 			loadingJobs: false,
 			jobs: [],
 			showJobsModal: false,
@@ -114,10 +113,20 @@ let datasetStore = Reflux.createStore({
 	 * Load Jobs
 	 */
 	loadJobs(projectId) {
-		this.update({loadingJobs: true})
+		this.update({loadingJobs: true});
 		crn.getDatasetJobs(projectId, (err, res) => {
             this.update({jobs: res.body, loadingJobs: false});
         });
+	},
+
+	/**
+	 * Load Apps
+	 */
+	loadApps() {
+		this.update({loadingApps: true});
+		crn.getApps((err, res) => {
+			this.update({apps: res.body, loadingApps: false});
+		});
 	},
 
 	/**
@@ -146,7 +155,6 @@ let datasetStore = Reflux.createStore({
 		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
 			let ticket = res.body.ticket;
 			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'bids-download');
-			// close download window on next cycle
 			setTimeout(() => {downloadWindow.close();});
 		});
 	},
@@ -174,6 +182,12 @@ let datasetStore = Reflux.createStore({
 
 
 	// Metadata ----------------------------------------------------------------------
+
+	updateName(value, callback) {
+		scitran.updateProject(this.data.dataset._id, {name: value}, () => {
+			this.updateDescription('Name', value, callback);
+		});
+	},
 
 	/**
 	 * Update Description
@@ -305,9 +319,12 @@ let datasetStore = Reflux.createStore({
 	 * for the file within the current dataset.
 	 */
 	downloadAttachment(filename) {
+		// open download window as synchronous action from click to avoid throwing popup blockers
+		window.open('', 'attachment-download');
 		scitran.getDownloadTicket('projects', this.data.dataset._id, filename, (err, res) => {
 			let ticket = res.body.ticket;
-			window.open(res.req.url + ticket);
+			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'attachment-download');
+			setTimeout(() => {downloadWindow.close();});
 		});
 	},
 
@@ -451,8 +468,8 @@ let datasetStore = Reflux.createStore({
 			userId: userStore.data.scitran._id,
 			parameters: parameters
 		}, (err, res) => {
-			callback(err, res);
-			this.toggleModal('Jobs');
+			callback({message: "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."});
+			this.loadJobs(this.data.dataset._id);
 		});
 	},
 

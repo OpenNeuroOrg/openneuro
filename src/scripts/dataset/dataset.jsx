@@ -11,6 +11,7 @@ import Metadata     from './dataset.metadata.jsx';
 import Tools        from './dataset.tools.jsx';
 import Statuses     from './dataset.statuses.jsx';
 import moment       from 'moment';
+import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 
 let Dataset = React.createClass({
 
@@ -31,7 +32,7 @@ let Dataset = React.createClass({
 	},
 
 	componentWillUnmount() {
-		Actions.setInitialState();
+		Actions.setInitialState({apps: this.state.apps});
 	},
 
 	render() {
@@ -52,7 +53,11 @@ let Dataset = React.createClass({
 						<div className="row">
 							<div className="col-xs-6">
 								<h1 className="clearfix">
-									<span className="dataset-name">{dataset.name}</span>
+									<ClickToEdit
+										value={dataset.name}
+										label={false}
+										editable={canEdit}
+										onChange={Actions.updateName}/>
 								</h1>
 								<h6>uploaded {dataset.userOwns ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
 							</div>
@@ -60,7 +65,7 @@ let Dataset = React.createClass({
 								<div className="status-container"><Statuses dataset={dataset}/></div>
 							</div>
 							<div className="col-xs-12 tools-wrap">
-								<Tools users={this.state.users} canEdit={dataset && canEdit && !dataset.public}/>
+								<Tools />
 							</div>
 						</div>
 						<Metadata dataset={dataset}/>

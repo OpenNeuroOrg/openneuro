@@ -13,7 +13,8 @@ export default class JobMenu extends React.Component {
 		this.state = {
 			loading: false,
 			parameters: [],
-			selectedApp: ''
+			selectedApp: '',
+			message: null
 		};
 	}
 
@@ -22,6 +23,8 @@ export default class JobMenu extends React.Component {
 		let options = this.props.apps.map((app) => {
 			return <option key={app.id} value={app.id}>{app.label}</option>;
 		});
+
+		let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedApp;
 
 		let form = (
 			<div>
@@ -39,12 +42,33 @@ export default class JobMenu extends React.Component {
 			</div>
 		);
 
+		let message = (
+			<div>
+				<h5>{this.state.message}</h5>
+				<button onClick={actions.toggleModal.bind(this,'Jobs')}>OK</button>
+			</div>
+		);
+
+		let body;
+		if (this.state.loading || this.props.loadingApps) {
+			body = <Spinner active={true} text={loadingText}/>;
+		} else if (this.state.message) {
+			body = message;
+		} else {
+			body = form;
+		}
+
 		return (
 			<div className="dataset">
-				{this.state.loading ? <Spinner active={true} text={'Starting ' + this.state.selectedApp}/> : form}
+				{body}
 			</div>
     	);
 	}
+
+	// return is
+		// loading
+		// form
+		// message
 
 // custom methods -----------------------------------------------------
 
@@ -152,8 +176,8 @@ export default class JobMenu extends React.Component {
 			parameters[parameter.id] = parameter.value;
 		}
 		this.setState({loading: true});
-		actions.startJob('test', this.state.selectedApp, parameters, (err, res) => {
-			this.setState({loading: false});
+		actions.startJob('test', this.state.selectedApp, parameters, (res) => {
+			this.setState({loading: false, message: res.message});
 		});
 	}
 }

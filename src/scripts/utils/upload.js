@@ -17,13 +17,12 @@ let upload = {
 	 * upload queue.
 	 */
 	add (req) {
-		let self = this;
-	    MD5(req.file, function (data) {
+	    MD5(req.file, (data) => {
 	    	req.hash   = data.hash;
-			if (self.maxRequests >= self.activeRequests) {
-				self.start(req)
+			if (this.maxRequests >= this.activeRequests) {
+				this.start(req)
 			} else {
-				self.queue.push(req);
+				this.queue.push(req);
 			}
 	    });
 	},
@@ -32,7 +31,7 @@ let upload = {
 	 * Start
 	 *
 	 * Takes a request object and starts an
-	 * upload request. 
+	 * upload request.
 	 */
 	start (req) {
 		let self = this;
@@ -46,7 +45,7 @@ let upload = {
             query: {
             	tags: JSON.stringify([req.tag])
             },
-            body: req.file
+            body: req.file.data ? req.file.data : req.file
         }, function (err, res) {
         	if (err) {
         		req.error(err, req);

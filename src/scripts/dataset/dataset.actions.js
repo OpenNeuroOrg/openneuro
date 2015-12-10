@@ -20,6 +20,7 @@ var Actions = Reflux.createActions([
 	'toggleModal',
 	'uploadAttachment',
 	'updateDescription',
+	'updateName',
 	'updateNote',
 	'updateFile',
 	'updateREADME',

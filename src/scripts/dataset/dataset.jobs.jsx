@@ -1,15 +1,20 @@
 // dependencies -------------------------------------------------------
 
-import React      from 'react';
-import actions    from './dataset.actions';
-import WarnButton from '../common/forms/warn-button.jsx';
+import React        from 'react';
+import Reflux       from 'reflux';
+import datasetStore from './dataset.store';
+import actions      from './dataset.actions';
+import WarnButton   from '../common/forms/warn-button.jsx';
+import Spinner      from '../common/partials/spinner.jsx';
 
-export default class FileTree extends React.Component {
+let Jobs = React.createClass({
+
+    mixins: [Reflux.connect(datasetStore)],
 
 // life cycle events --------------------------------------------------
 
 	render () {
-		let jobs = this.props.jobs.map((job) => {
+		let jobs = this.state.jobs.map((job) => {
 			let results;
 			if (job.results) {
 				results = job.results.map((result, index) => {
@@ -32,9 +37,13 @@ export default class FileTree extends React.Component {
 			);
 		});
 		return (
-			<ul className="top-level-item">{jobs}</ul>
+			<div className="panel-body">
+				<ul className="top-level-item">
+					{this.state.loadingJobs ? <Spinner active={true} /> : jobs}
+				</ul>
+			</div>
     	);
-	}
+	},
 
 // custom methods -----------------------------------------------------
 
@@ -42,4 +51,6 @@ export default class FileTree extends React.Component {
 		actions.downloadResult(jobId, fileName);
 	}
 
-}
+});
+
+export default Jobs;

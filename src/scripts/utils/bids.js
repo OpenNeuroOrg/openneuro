@@ -259,7 +259,9 @@ export default  {
                     });
                 });
             }, () => {
-                scitran.deleteContainer('projects', projectId, callback);
+                crn.deleteDatasetJobs(projectId, (err, res) => {
+                    scitran.deleteContainer('projects', projectId, callback);
+                });
             });
         });
     },

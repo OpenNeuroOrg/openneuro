@@ -74,6 +74,13 @@ export default {
 	 */
 	getResultDownloadTicket(jobId, fileName, callback) {
 		request.get(config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '/ticket', {}, callback);
+	},
+
+	/**
+	 * Delete Dataset Jobs
+	 */
+	deleteDatasetJobs(datasetId, callback) {
+		request.del(config.crn.url + 'jobs/' + datasetId, callback);
 	}
 
 }
