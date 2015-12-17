@@ -318,8 +318,7 @@ export default  {
             public:      project.public,
             notes:       project.notes,
             children:    files,
-            description: this.formatDescription(project.notes, description),
-            README:      this.formatREADME(project.notes),
+            description: this.formatDescription(project.metadata, description),
             attachments: attachments,
             status:      this.formatStatus(project.metadata),
             userOwns:    this.userOwns(project),
@@ -335,11 +334,8 @@ export default  {
     /**
      * formatDescription
      *
-     * Takes a notes array and returns
-     * a BIDS description object if the is
-     * a description note.
      */
-    formatDescription (notes, description) {
+    formatDescription (metadata, description) {
         let description = description ? description : {
             "Name": "",
             "License": "",
@@ -351,36 +347,11 @@ export default  {
             "DatasetDOI": ""
         };
 
-        if (notes) {
-            let authorsString;
-            for (let note of notes) {
-                if (note.author === 'authors') {
-                    authorsString = note.text;
-                }
-            }
-            if (authorsString) {description.Authors = JSON.parse(authorsString);}
+        if (metadata && metadata.authors) {
+            description.Authors = metadata.authors;
         }
 
         return description;
-    },
-
-    /**
-     * Format README
-     *
-     * Takes a notes array and returns
-     * a README file if there is a
-     * README note.
-     */
-    formatREADME (notes) {
-        let README = '';
-        if (notes) {
-            for (let note of notes) {
-                if (note.author === 'README') {
-                    README = note.text;
-                }
-            }
-        }
-        return README;
     },
 
     /**

@@ -135,18 +135,14 @@ export default {
                                 authors.push({name: author, ORCIDID: ''});
                             }
                         }
-                        let authorsNote = {
-                            author: 'authors',
-                            text: JSON.stringify(authors)
-                        };
-                        // scitran.updateNote(projectId, authorsNote, () => {
+                        scitran.updateProject(projectId, {metadata: {authors}}, (err, res) => {
                             // let file = {
                             //     name: subject.name,
                             //     data: JSON.stringify(description)
                             // };
                             let file = subject;
                             self.uploadFile('projects', projectId, file, 'project');
-                        // });
+                        });
                     });
 
                 } else {
