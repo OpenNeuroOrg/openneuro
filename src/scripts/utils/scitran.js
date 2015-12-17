@@ -107,12 +107,12 @@ export default  {
             body: {
                 project: projectId,
                 label: subjectName,
-                metadata: {
-                    parentContainerType: 'projects',
-                    parentId: projectId
-                }
             }
-        }, callback);
+        }, (err, res) => {
+            this.addTag('sessions', res.body._id, 'subject', (err1, res1) => {
+                callback(err,res);
+            });
+        });
     },
 
     /**
@@ -134,7 +134,11 @@ export default  {
                     parentId: subjectId
                 }
             }
-        }, callback);
+        }, (err, res) => {
+            this.addTag('sessions', res.body._id, 'subjectId-' + subjectId, (err1, res1) => {
+                callback(err,res);
+            });
+        });
     },
 
     /**
@@ -159,7 +163,7 @@ export default  {
      */
     addTag (containerType, containerId, tag, callback) {
         request.post(config.scitran.url + containerType + '/' + containerId + '/tags', {
-            body: {value: 'incomplete'}
+            body: {value: tag}
         }, callback);
     },
 

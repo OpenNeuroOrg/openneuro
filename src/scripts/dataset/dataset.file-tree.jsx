@@ -30,9 +30,9 @@ class FileTree extends React.Component {
 				let editText = <span>View</span>;
 				let hideText = <span>Hide <i className="fa fa-times"></i></span>;
 
-				
+
 				editBtn = <button onClick={this._toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>
-			
+
 				tools = (
 					<div>
 						<input

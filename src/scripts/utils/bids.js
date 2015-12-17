@@ -24,7 +24,7 @@ export default  {
         scitran.getSessions(projectId, (sessions) => {
             let subjects = [];
             async.each(sessions, (session, cb) => {
-                if (session.subject_code === 'subject') {
+                if (session.tags.indexOf('subject') > -1) {
                     scitran.getSession(session._id, (res) => {
                         session.children = res.files;
                         session.name = session.label;
@@ -51,7 +51,13 @@ export default  {
         scitran.getSessions(projectId, (sciSessions) => {
             let sessions = [];
             async.each(sciSessions, (session, cb) => {
-                if (session.subject_code === subjectId) {
+                let sesSubjectId;
+                for (let tag of session.tags) {
+                    if (tag.indexOf('subjectId-') > -1) {
+                        sesSubjectId = tag.replace('subjectId-', '');
+                    }
+                }
+                if (sesSubjectId === subjectId) {
                     scitran.getSession(session._id, (res) => {
                         session.children = res.files;
                         session.name = session.label;
@@ -131,7 +137,6 @@ export default  {
                     contents = file.text;
                 }
                 finally {
-                    console.log(contents);
                     metadata[filename] = contents;
                 }
                 cb();
@@ -275,8 +280,8 @@ export default  {
      * Label File
      */
     labelFile (items, parentId, parentContainer) {
+        items = items ? items : [];
         for (let item of items) {
-            item.name = item.filename;
             item.parentId = parentId;
             item.parentContainer = parentContainer;
         }
