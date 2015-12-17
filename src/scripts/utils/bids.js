@@ -109,12 +109,14 @@ export default  {
         // determine which metadata files are available
         let metadataFiles = [],
             metadata = {};
-        for (let file of project.files) {
-            if (file.filename === 'README') {
-                metadataFiles.push('README');
-            }
-            if (file.filename === 'dataset_description.json') {
-                metadataFiles.push('dataset_description.json');
+        if (project.files) {
+            for (let file of project.files) {
+                if (file.filename === 'README') {
+                    metadataFiles.push('README');
+                }
+                if (file.filename === 'dataset_description.json') {
+                    metadataFiles.push('dataset_description.json');
+                }
             }
         }
 
@@ -288,19 +290,21 @@ export default  {
      * BIDS dataset.
      */
     formatDataset (project, description, users) {
+
         let files = [], attachments = [];
-        for (let file of project.files) {
-            file.name = file.filename;
-            if (file.tags.indexOf('attachment') > -1) {
-                attachments.push(file);
-            } else {
-                files.push(file);
+        if (project.files) {
+            for (let file of project.files) {
+                if (file.tags && file.tags.indexOf('attachment') > -1) {
+                    attachments.push(file);
+                } else {
+                    files.push(file);
+                }
             }
         }
 
         let dataset = {
             _id:         project._id,
-            name:        project.name,
+            name:        project.label,
             group:       project.group,
             timestamp:   project.timestamp,
             type:        'folder',
@@ -311,7 +315,7 @@ export default  {
             description: this.formatDescription(project.notes, description),
             README:      this.formatREADME(project.notes),
             attachments: attachments,
-            status:      this.formatStatus(project.notes),
+            status:      this.formatStatus(project.metadata),
             userOwns:    this.userOwns(project),
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
@@ -376,15 +380,15 @@ export default  {
     /**
      * Format Status
      *
-     * Takes a notes array and returns
+     * Takes a metadata object and returns
      * a dataset status object corresponding
      * to any statuses set in the notes.
      */
-    formatStatus (notes) {
+    formatStatus (metadata) {
         let status = {};
-        if (notes) {
-            for (let note of notes) {
-                if (note.author === 'uploadStatus' && note.text === 'incomplete') {
+        if (metadata) {
+            for (let key in metadata) {
+                if (key === 'status' && metadata[key] === 'incomplete') {
                     status['uploadIncomplete'] = true;
                 }
             }

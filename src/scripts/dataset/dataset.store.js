@@ -19,7 +19,7 @@ let datasetStore = Reflux.createStore({
 
 	init: function () {
 		this.setInitialState();
-		this.loadApps();
+		// this.loadApps();
 	},
 
 	getInitialState: function () {
@@ -278,9 +278,9 @@ let datasetStore = Reflux.createStore({
 			callback({error: 'You cannot upload a file named "' + file.name + '" as an attachment because it already exists in the dataset.'});
 		} else {
 			let request = {
-				url: config.scitran.url + 'projects/' + this.data.dataset._id + '/file/' + file.name,
+				url: config.scitran.url + 'projects/' + this.data.dataset._id + '/files',
 				file: file,
-				tag: 'attachment',
+				tags: ['attachment'],
 				progressStart: () => {},
 				progressEnd: () => {
 					bids.getDataset(this.data.dataset._id, (res) => {

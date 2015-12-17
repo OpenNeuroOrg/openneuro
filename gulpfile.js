@@ -25,7 +25,6 @@
     var p = {
         html:           './src/index.html',
         jsx:            './src/scripts/client.jsx',
-        md5worker:      './src/scripts/utils/md5worker.js',
         scss:           './src/sass/**/*.scss',
         scssmain:       './src/sass/main.scss',
         libs:           './src/scripts/libs/*',
@@ -44,11 +43,11 @@
 
     gulp.task('build', ['clean'], function() {
         process.env.NODE_ENV = 'production';
-        gulp.start(['styles', 'copy', 'buildApp', 'buildMD5Worker']);
+        gulp.start(['styles', 'copy', 'buildApp']);
     });
-    
+
     gulp.task('watch', [], function() {
-        gulp.start(['watchStyles', 'watchApp', 'watchMD5Worker', 'styles', 'copy', 'browserSync']);
+        gulp.start(['watchStyles', 'watchApp', 'styles', 'copy', 'browserSync']);
     });
 
     gulp.task('default',['watch'], function() {
@@ -92,40 +91,12 @@
         return rebundle();
     });
 
-    // watch for changes
-    gulp.task('watchMD5Worker', function() {
-        var bundler = watchify(browserify(p.md5worker, watchify.args));
-        function rebundle() {
-            return bundler
-                .bundle()
-                .on('error', notify.onError())
-                .pipe(source(p.md5bundle))
-                .pipe(gulp.dest(p.dist))
-                .pipe(reload({stream: true}));
-        }
-        bundler.transform(babelify).on('update', rebundle);
-        return rebundle();
-    });
-
     // bundle js
     gulp.task('buildApp', function() {
         browserify(p.jsx)
             .transform(babelify)
             .bundle()
             .pipe(source(p.bundle))
-            .pipe(buffer())
-            .pipe(sourcemaps.init({loadMaps: true}))
-            .pipe(uglify())
-            .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest(p.dist));
-    });
-
-    // bundle md5 worker
-    gulp.task('buildMD5Worker', function() {
-        browserify(p.md5worker)
-            .transform(babelify)
-            .bundle()
-            .pipe(source(p.md5bundle))
             .pipe(buffer())
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(uglify())

@@ -189,7 +189,7 @@ let UploadStore = Reflux.createStore({
 			scitran.getProjects(true, function (projects) {
 				let existingProjectId;
 				for (let project of projects) {
-	                if (project.name === fileTree[0].name && project.group === userId) {
+	                if (project.label === fileTree[0].name && project.group === userId) {
 	                    existingProjectId = project._id;
 	                    break;
 	                }

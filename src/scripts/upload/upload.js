@@ -41,8 +41,8 @@ export default {
      * Pushes upload details into an upload queue.
      */
     uploadFile (level, id, file, tag) {
-        let url = config.scitran.url +  level + '/' + id + '/file/' + file.name;
-        uploads.add({url: url, file: file, tag: tag, progressStart: this.progressStart, progressEnd: this.progressEnd, error: this.error});
+        let url = config.scitran.url +  level + '/' + id + '/files';
+        uploads.add({url: url, file: file, tags: [tag], progressStart: this.progressStart, progressEnd: this.progressEnd, error: this.error});
     },
 
     /**
@@ -74,7 +74,7 @@ export default {
         let existingProjectId = null;
         scitran.getProjects(true, (projects) => {
             for (let project of projects) {
-                if (project.name === fileTree[0].name && project.group === userId) {
+                if (project.label === fileTree[0].name && project.group === userId) {
                     existingProjectId = project._id;
                     break;
                 }
@@ -85,21 +85,25 @@ export default {
                 bids.getDataset(existingProjectId, (oldDataset) => {
                     let newDataset = fileTree[0];
                     this.progressEnd();
-                    this.resumeSubjects(newDataset.children, oldDataset.children, existingProjectId);
+                    this.resumeSubjects(newDataset.children, oldDataset.children, newDataset.name, existingProjectId);
                 });
             } else {
-                let body = {name: fileTree[0].name};
-                scitran.createProject(userId,  body, (err, res) => {
-                    let projectId = res.body._id;
-                    let note = {author: 'uploadStatus', text: 'incomplete'};
-                    scitran.updateNote(projectId, note, (res1) => {
-                        this.handleUploadResponse(err, res, () => {
+                let body = {
+                    label: fileTree[0].name,
+                    group: userId,
+                    metadata: {
+                        uploadStatus: 'incomplete'
+                    }
+                };
+                scitran.createProject(body, (err, res) => {
+                    this.handleUploadResponse(err, res, () => {
+                        let projectId = res.body._id;
+                        scitran.addTag('projects', projectId, 'incomplete', (err, res) => {
                             this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId);
                         });
                     });
                 });
             }
-
         });
     },
 
@@ -135,13 +139,14 @@ export default {
                             author: 'authors',
                             text: JSON.stringify(authors)
                         };
-                        scitran.updateNote(projectId, authorsNote, () => {
-                            let file = {
-                                name: subject.name,
-                                data: JSON.stringify(description)
-                            };
+                        // scitran.updateNote(projectId, authorsNote, () => {
+                            // let file = {
+                            //     name: subject.name,
+                            //     data: JSON.stringify(description)
+                            // };
+                            let file = subject;
                             self.uploadFile('projects', projectId, file, 'project');
-                        });
+                        // });
                     });
 
                 } else {
@@ -155,7 +160,7 @@ export default {
      * Resume Subjects
      *
      */
-    resumeSubjects (newSubjects, oldSubjects, projectId) {
+    resumeSubjects (newSubjects, oldSubjects, datasetName, projectId) {
         let subjectUploads = [];
         for (let i = 0; i < newSubjects.length; i++) {
             let newSubject = newSubjects[i];
@@ -171,7 +176,7 @@ export default {
             }
         }
         if (subjectUploads.length > 0) {
-            this.uploadSubjects(subjectUploads, projectId);
+            this.uploadSubjects(datasetName, subjectUploads, projectId);
         }
     },
 

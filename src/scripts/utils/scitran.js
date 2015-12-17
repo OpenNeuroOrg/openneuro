@@ -1,8 +1,6 @@
 import request  from './request';
 import async    from 'async';
 import config   from '../config';
-import md5      from './md5';
-import SparkMD5 from 'spark-md5';
 
 /**
  * Scitran
@@ -88,38 +86,81 @@ export default  {
     /**
      * Create Project
      *
-     * Takes a group name and a project name and
+     * Takes a request body and
      * generates a request to make a project in scitran.
      */
-    createProject (groupName, body, callback) {
-        request.post(config.scitran.url + 'groups/' + groupName + '/projects', {body: body}, callback);
+    createProject (body, callback) {
+        request.post(config.scitran.url + 'projects', {body: body}, callback);
     },
 
     /**
      * Create Subject
      *
      */
+    // createSubject (projectId, subjectName, callback) {
+    //     let body = {label: subjectName, subject_code: 'subject'};
+    //     request.post(config.scitran.url + 'projects/' + projectId + '/sessions', {body: body}, callback);
+    // },
+
     createSubject (projectId, subjectName, callback) {
-        let body = {label: subjectName, subject_code: 'subject'};
-        request.post(config.scitran.url + 'projects/' + projectId + '/sessions', {body: body}, callback);
+        request.post(config.scitran.url + 'sessions', {
+            body: {
+                project: projectId,
+                label: subjectName,
+                metadata: {
+                    parentContainerType: 'projects',
+                    parentId: projectId
+                }
+            }
+        }, callback);
     },
 
     /**
      * Create Session
      *
      */
+    // createSession (projectId, subjectId, sessionName, callback) {
+    //     let body = {label: sessionName, subject_code: subjectId};
+    //     request.post(config.scitran.url + 'projects/' + projectId + '/sessions', {body: body}, callback);
+    // },
+
     createSession (projectId, subjectId, sessionName, callback) {
-        let body = {label: sessionName, subject_code: subjectId};
-        request.post(config.scitran.url + 'projects/' + projectId + '/sessions', {body: body}, callback);
+        request.post(config.scitran.url + 'sessions', {
+            body: {
+                project: projectId,
+                label: sessionName,
+                metadata: {
+                    parentContainerType: 'sessions',
+                    parentId: subjectId
+                }
+            }
+        }, callback);
     },
 
     /**
      * Create Modality
      *
      */
+    // createModality (sessionId, modalityName, callback) {
+    //     let body = {label: modalityName, datatype: 'modality'};
+    //     request.post(config.scitran.url + 'sessions/' + sessionId + '/acquisitions', {body: body}, callback);
+    // },
     createModality (sessionId, modalityName, callback) {
-        let body = {label: modalityName, datatype: 'modality'};
-        request.post(config.scitran.url + 'sessions/' + sessionId + '/acquisitions', {body: body}, callback);
+        request.post(config.scitran.url + 'acquisitions', {
+            body: {
+                session: sessionId,
+                label: modalityName
+            }
+        }, callback);
+    },
+
+    /**
+     * Add Tag
+     */
+    addTag (containerType, containerId, tag, callback) {
+        request.post(config.scitran.url + containerType + '/' + containerId + '/tags', {
+            body: {value: 'incomplete'}
+        }, callback);
     },
 
 // Read -----------------------------------------------------------------------------------
@@ -197,7 +238,7 @@ export default  {
      *
      */
     getDownloadTicket (level, id, filename, callback) {
-        request.get(config.scitran.url + level + '/' + id + '/file/' + filename, {
+        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, {
             query: {ticket: ''}
         }, callback);
     },
@@ -235,7 +276,7 @@ export default  {
      *
      */
     deleteFile (level, containerId, filename, callback) {
-        request.del(config.scitran.url + level + '/' + containerId + '/file/' + filename, callback);
+        request.del(config.scitran.url + level + '/' + containerId + '/files/' + filename, callback);
     },
 
 // Update ---------------------------------------------------------------------------------
@@ -270,14 +311,10 @@ export default  {
      *
      */
     updateFile (level, id, file, callback) {
-        md5(file, (data) => {
-            let hash = data.hash;
-            request.post(config.scitran.url + level + '/' + id + '/file/' + file.name, {
-                body: file,
-                headers: {'Content-MD5': hash},
-                query: {force: true}
-            }, callback);
-        });
+        request.post(config.scitran.url + level + '/' + id + '/file/' + file.name, {
+            body: file,
+            query: {force: true}
+        }, callback);
     },
 
     /**
@@ -285,10 +322,8 @@ export default  {
      *
      */
     updateFileFromString (level, id, filename, value, callback) {
-        let hash = SparkMD5.hash(value);
         request.post(config.scitran.url + level + '/' + id + '/file/' + filename, {
             body: value,
-            headers: {'Content-MD5': hash},
             query: {force: true}
         }, callback);
     },
