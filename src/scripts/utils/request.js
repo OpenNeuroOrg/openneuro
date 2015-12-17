@@ -65,7 +65,6 @@ var Request = {
 					.set(options.headers)
 					.field('tags', options.fields.tags)
 					.attach('file', options.fields.file, options.fields.name)
-					// .send(options.fields.file)
 					.end((err, res) => {
 						handleResponse(err, res, callback);
 					});
