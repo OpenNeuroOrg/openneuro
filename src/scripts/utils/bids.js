@@ -111,10 +111,10 @@ export default  {
             metadata = {};
         if (project.files) {
             for (let file of project.files) {
-                if (file.filename === 'README') {
+                if (file.name === 'README') {
                     metadataFiles.push('README');
                 }
-                if (file.filename === 'dataset_description.json') {
+                if (file.name === 'dataset_description.json') {
                     metadataFiles.push('dataset_description.json');
                 }
             }
@@ -131,6 +131,7 @@ export default  {
                     contents = file.text;
                 }
                 finally {
+                    console.log(contents);
                     metadata[filename] = contents;
                 }
                 cb();

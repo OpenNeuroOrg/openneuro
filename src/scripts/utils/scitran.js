@@ -230,7 +230,7 @@ export default  {
      *
      */
     getFile (level, id, filename, callback) {
-        request.get(config.scitran.url + level + '/' + id + '/file/' + filename, {}, callback);
+        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, {}, callback);
     },
 
     /**
