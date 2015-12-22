@@ -136,11 +136,7 @@ export default {
                             }
                         }
                         scitran.updateProject(projectId, {metadata: {authors}}, (err, res) => {
-                            // let file = {
-                            //     name: subject.name,
-                            //     data: JSON.stringify(description)
-                            // };
-                            let file = subject;
+                            let file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
                             self.uploadFile('projects', projectId, file, 'project');
                         });
                     });

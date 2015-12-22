@@ -212,41 +212,21 @@ let datasetStore = Reflux.createStore({
 	 */
 	saveDescription(description, callback) {
 		let datasetId = this.data.dataset._id;
-		let authorsNote = {
-			author: 'authors',
-			text: JSON.stringify(description.Authors)
-		}
-		scitran.updateNote(datasetId, authorsNote, (err, res) => {
+		scitran.updateProject(datasetId, {metadata: {authors: description.Authors}}, (err, res) => {
 			let authors = [];
 			for (let author of description.Authors) {
 				authors.push(author.name);
 			}
 			description.Authors = authors;
-			scitran.updateFileFromString('projects', datasetId, 'dataset_description.json', JSON.stringify(description), callback);
+			scitran.updateFileFromString('projects', datasetId, 'dataset_description.json', JSON.stringify(description), 'application/json', ['project'], callback);
 		});
-	},
-
-	/**
-	 * Update Note
-	 *
-	 * Takes a name, value and callback and
-	 * upserts a corresponding note for the
-	 * current dataset.
-	 */
-	updateNote(name, value, callback) {
-	 	let dataset = this.data.dataset;
-	 	let note = {
-	 		author: name,
-	 		text: value
-	 	};
-	 	scitran.updateNote(dataset._id, note, callback);
 	},
 
 	 /**
 	  * Update README
 	  */
 	updateREADME(value, callback) {
-		scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, callback);
+		scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, '', [], callback);
 	},
 
 

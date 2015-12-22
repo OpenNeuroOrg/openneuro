@@ -60,23 +60,14 @@ var Request = {
 
 	upload (url, options, callback) {
 		handleRequest(url, options, function (url, options) {
-			if (typeof options.fields.file == 'string') {
-				request.post(url)
-					.set(options.headers)
-					.field('tags', options.fields.tags)
-					.attach('file', options.fields.file, options.fields.name)
-					.end((err, res) => {
-						handleResponse(err, res, callback);
-					});
-			} else {
-				request.post(url)
-					.set(options.headers)
-					.field('tags', options.fields.tags)
-					.attach('file', options.fields.file, options.fields.name)
-					.end((err, res) => {
-						handleResponse(err, res, callback);
-					});
-			}
+			request.post(url)
+				.query(options.query)
+				.set(options.headers)
+				.field('tags', options.fields.tags)
+				.attach('file', options.fields.file, options.fields.name)
+				.end((err, res) => {
+					handleResponse(err, res, callback);
+				});
 		});
 	}
 
