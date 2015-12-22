@@ -320,7 +320,7 @@ export default  {
             children:    files,
             description: this.formatDescription(project.metadata, description),
             attachments: attachments,
-            status:      this.formatStatus(project.metadata),
+            status:      this.formatStatus(project.tags),
             userOwns:    this.userOwns(project),
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
@@ -361,11 +361,11 @@ export default  {
      * a dataset status object corresponding
      * to any statuses set in the notes.
      */
-    formatStatus (metadata) {
+    formatStatus (tags) {
         let status = {};
-        if (metadata) {
-            for (let key in metadata) {
-                if (key === 'status' && metadata[key] === 'incomplete') {
+        if (tags) {
+            for (let tag of tags) {
+                if (tag === 'incomplete') {
                     status['uploadIncomplete'] = true;
                 }
             }

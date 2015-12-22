@@ -234,9 +234,9 @@ let UploadStore = Reflux.createStore({
 				window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 				if (progress.total === progress.completed) {
 					let note = {author: 'uploadStatus', text: 'complete'};
-	                scitran.updateNote(projectId, note, (res) => {
-						this.uploadComplete(projectId);
-	                });
+					scitran.removeTag('projects', projectId, 'incomplete', (err, res) => {
+                        this.uploadComplete(projectId);
+                    });
 				}
 			}
 		}, () => {

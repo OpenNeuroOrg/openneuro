@@ -98,11 +98,6 @@ export default  {
      * Create Subject
      *
      */
-    // createSubject (projectId, subjectName, callback) {
-    //     let body = {label: subjectName, subject_code: 'subject'};
-    //     request.post(config.scitran.url + 'projects/' + projectId + '/sessions', {body: body}, callback);
-    // },
-
     createSubject (projectId, subjectName, callback) {
         request.post(config.scitran.url + 'sessions', {
             body: {
@@ -120,11 +115,6 @@ export default  {
      * Create Session
      *
      */
-    // createSession (projectId, subjectId, sessionName, callback) {
-    //     let body = {label: sessionName, subject_code: subjectId};
-    //     request.post(config.scitran.url + 'projects/' + projectId + '/sessions', {body: body}, callback);
-    // },
-
     createSession (projectId, subjectId, sessionName, callback) {
         request.post(config.scitran.url + 'sessions', {
             body: {
@@ -146,10 +136,6 @@ export default  {
      * Create Modality
      *
      */
-    // createModality (sessionId, modalityName, callback) {
-    //     let body = {label: modalityName, datatype: 'modality'};
-    //     request.post(config.scitran.url + 'sessions/' + sessionId + '/acquisitions', {body: body}, callback);
-    // },
     createModality (sessionId, modalityName, callback) {
         request.post(config.scitran.url + 'acquisitions', {
             body: {
@@ -282,6 +268,13 @@ export default  {
      */
     deleteFile (level, containerId, filename, callback) {
         request.del(config.scitran.url + level + '/' + containerId + '/files/' + filename, callback);
+    },
+
+    /**
+     * Add Tag
+     */
+    removeTag (containerType, containerId, tag, callback) {
+        request.del(config.scitran.url + containerType + '/' + containerId + '/tags/' + tag, callback);
     },
 
 // Update ---------------------------------------------------------------------------------

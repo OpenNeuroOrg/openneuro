@@ -90,10 +90,7 @@ export default {
             } else {
                 let body = {
                     label: fileTree[0].name,
-                    group: userId,
-                    metadata: {
-                        uploadStatus: 'incomplete'
-                    }
+                    group: userId
                 };
                 scitran.createProject(body, (err, res) => {
                     this.handleUploadResponse(err, res, () => {
