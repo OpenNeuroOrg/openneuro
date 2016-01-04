@@ -103,12 +103,11 @@ export default  {
             body: {
                 project: projectId,
                 label: subjectName,
+                subject: {
+                    code: 'subject'
+                }
             }
-        }, (err, res) => {
-            this.addTag('sessions', res.body._id, 'subject', (err1, res1) => {
-                callback(err,res);
-            });
-        });
+        }, callback);
     },
 
     /**
@@ -120,16 +119,11 @@ export default  {
             body: {
                 project: projectId,
                 label: sessionName,
-                metadata: {
-                    parentContainerType: 'sessions',
-                    parentId: subjectId
+                subject: {
+                    code: subjectId
                 }
             }
-        }, (err, res) => {
-            this.addTag('sessions', res.body._id, 'subjectId-' + subjectId, (err1, res1) => {
-                callback(err,res);
-            });
-        });
+        }, callback);
     },
 
     /**
