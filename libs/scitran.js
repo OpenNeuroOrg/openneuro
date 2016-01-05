@@ -37,7 +37,15 @@ export default {
 	 * Create User
 	 */
 	createUser(user, callback) {
+        console.log('****************************');
+        console.log('user:');
+        console.log(user);
 		request.post(config.scitran.url + 'users', {body: user}, (err, res) => {
+            console.log('err:');
+            console.log(err);
+            console.log('res.body:');
+            console.log(res.body);
+            console.log('****************************');
 			this.createGroup(user._id, user._id, callback);
 		});
 	},

@@ -219,6 +219,11 @@ export default {
 		let datasetId = req.params.datasetId;
 
 		scitran.getProject(datasetId, (err, resp) => {
+			if (resp.statusCode == 400) {
+				let error = new Error("Bad request");
+				error.http_code = 400;
+				return next(error);
+			}
 			if (resp.statusCode == 404) {
 				let error = new Error("No dataset found");
 				error.http_code = 404;

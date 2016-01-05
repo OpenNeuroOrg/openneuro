@@ -30,7 +30,7 @@ export default {
                 Authorization: userAuth
             },
             body: {
-                clientName: 'crn_client_app',
+                clientName: 'crn_plab',
                 description: 'Agave client application for CRN interaction.'
             }
         }, callback);
