@@ -19,7 +19,7 @@ let datasetStore = Reflux.createStore({
 
 	init: function () {
 		this.setInitialState();
-		// this.loadApps();
+		this.loadApps();
 	},
 
 	getInitialState: function () {
