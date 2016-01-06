@@ -27,25 +27,35 @@ export default class JobMenu extends React.Component {
 		let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedApp;
 
 		let form = (
-			<div>
+			<div className="anaylsis-modal clearfix">
 				<h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
 				<div className="text-danger">{this.state.error}</div>
-				<select value={this.state.selectedApp} onChange={this._selectApp.bind(this)}>
-					<option value="" disabled>Select a Task</option>
-					{options}
-				</select>
-				<button onClick={this._restoreDefaultParameters.bind(this)}>Restore Default Parameters</button>
-				<div>
+				<div className="row">
+					<div className="col-xs-12">
+						<div className="col-xs-6 task-select">
+							<select value={this.state.selectedApp} onChange={this._selectApp.bind(this)}>
+								<option value="" disabled>Select a Task</option>
+								{options}
+							</select>
+						</div>
+						<div className="col-xs-6 default-reset">
+							<button className="btn-reset" onClick={this._restoreDefaultParameters.bind(this)}>Restore Default Parameters</button>
+						</div>
+					</div>
+				</div>
+				<div className="parameters form-horizontal">
 					{this._parameters()}
 				</div>
+				<div className="col-xs-12 modal-actions">
 				<button className="btn-admin admin-blue" onClick={this._startJob.bind(this)}>Start</button>
+				</div>
 			</div>
 		);
 
 		let message = (
 			<div>
 				<h5>{this.state.message}</h5>
-				<button onClick={actions.toggleModal.bind(this,'Jobs')}>OK</button>
+				<button className="btn-admin admin-blue" onClick={actions.toggleModal.bind(this,'Jobs')}>OK</button>
 			</div>
 		);
 
@@ -84,23 +94,29 @@ export default class JobMenu extends React.Component {
 			let input;
 			switch (parameter.type) {
 				case 'bool':
-					input = <input type="checkbox" checked={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
+					input = <span><input className="form-control checkbox" type="checkbox" id={"check-" + parameter.id} checked={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/><label htmlFor={"check-" + parameter.id} className="checkmark"><span></span></label></span>;
 					break;
 				case 'number':
-					input = <input value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
+					input = <input className="form-control" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
 					break;
 				case 'string':
-					input = <input value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
+					input = <input className="form-control" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
 					break;
 				case 'flag':
-					input = <input value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
+					input = <input className="form-control" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
 					break;
 			}
 			return (
-				<div key={parameter.id}>
-					<label>{parameter.label}</label><br />
-					<span>{parameter.description}</span><br />
-					{input}<br /><br />
+    			<div className="form-group" key={parameter.id}>
+					<label className="sr-only">{parameter.label}</label>
+					<div className="input-group">
+	      				<div className="input-group-addon">{parameter.label}</div>
+						<div className="clearfix">
+							{input}
+							<span className="help-text">{parameter.description}</span>
+						</div>
+					</div>
+					
 				</div>
 			);
 		});
