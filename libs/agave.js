@@ -1,5 +1,6 @@
 import request from './request';
 import config  from '../config';
+import fs      from 'fs';
 
 let userAuth   = 'Basic ' + new Buffer(config.agave.username + ':' + config.agave.password).toString('base64'),
     clientAuth = 'Basic ' + new Buffer(config.agave.consumerKey + ':' + config.agave.consumerSecret).toString('base64');
@@ -12,10 +13,10 @@ let token = {
 };
 
 /**
- * Scitran
+ * AGAVE
  *
  * A library for interactions with the
- * scitran API.
+ * AGAVE API.
  */
 export default {
 
@@ -30,8 +31,8 @@ export default {
                 Authorization: userAuth
             },
             body: {
-                clientName: 'crn_plab',
-                description: 'Agave client application for CRN interaction.'
+                clientName: config.agave.clientName,
+                description: config.agave.clientDescription
             }
         }, callback);
     },
@@ -67,11 +68,16 @@ export default {
                 scope: 'PRODUCTION',
             }
         }, (err, res) => {
-            token.access = res.body.access_token;
-            token.refresh = res.body.refresh_token;
-            token.created = Math.round((new Date).getTime() / 1000);
-            token.expiresIn = res.body.expires_in;
-            callback();
+            if (res.body.error == 'invalid_client') {
+                this.reCreateClient(callback);
+            } else {
+                token.access = res.body.access_token;
+                token.refresh = res.body.refresh_token;
+                token.created = Math.round((new Date).getTime() / 1000);
+                token.expiresIn = res.body.expires_in;
+                // callback = callback.bind(this);
+                callback();
+            }
         });
     },
 
@@ -92,11 +98,35 @@ export default {
                 scope: 'PRODUCTION'
             }
         }, (err, res) => {
-            token.access = res.body.access_token;
-            token.refresh = res.body.refresh_token;
-            token.created = Math.round((new Date).getTime() / 1000);
-            token.expiresIn = res.body.expires_in;
-            callback();
+            if (res.body.error == 'invalid_client') {
+                this.reCreateClient(callback);
+            } else {
+                token.access = res.body.access_token;
+                token.refresh = res.body.refresh_token;
+                token.created = Math.round((new Date).getTime() / 1000);
+                token.expiresIn = res.body.expires_in;
+                callback();
+            }
+        });
+    },
+
+    /**
+     * Recreate Client
+     */
+    reCreateClient(callback) {
+        console.log('Recreating AGAVE Client');
+        this.createClient((err, res) => {
+            if (res.body.status == 'error') {
+                console.log('Error Creating AGAVE Client');
+                console.log(res.body.message);
+            } else {
+                config.agave.consumerKey = res.body.result.consumerKey;
+                config.agave.consumerSecret = res.body.result.consumerSecret;
+                clientAuth = 'Basic ' + new Buffer(config.agave.consumerKey + ':' + config.agave.consumerSecret).toString('base64');
+                fs.writeFile('config.js', 'export default ' + JSON.stringify(config, null, 4) + ';', (err) => {
+                    this.getAccessToken(callback);
+                });
+            }
         });
     },
 
@@ -120,6 +150,24 @@ export default {
         }
     },
 
+// helpers ------------------------------------------------------------------------------------
+
+    /**
+     * Handle Response
+     *
+     * Takes the error, response, callback and original
+     * request for every non-auth request and attempts to
+     * recreate the agave client if a request throws an auth
+     * related errors.
+     */
+    handleResponse(err, res, callback, originalReq) {
+        if (res.statusCode === 403 || res.statusCode === 404) {
+            this.reCreateClient(originalReq);
+        } else {
+            callback(err, res);
+        }
+    },
+
 // Apps ---------------------------------------------------------------------------------------
 
     listApps(callback) {
@@ -132,7 +180,9 @@ export default {
                 query: {
                     privateOnly: true
                 }
-            }, callback);
+            }, (err, res) => {
+                this.handleResponse(err, res, callback, this.listApps.bind(this, callback));
+            });
         });
     },
 
@@ -143,7 +193,9 @@ export default {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json',
                 }
-            }, callback);
+            }, (err, res) => {
+                this.handleResponse(err, res, callback, this.getApp.bind(this, appId, callback));
+            });
         });
     },
 
@@ -158,7 +210,9 @@ export default {
                     'cache-control': 'no-cache'
                 },
                 body: job
-            }, callback);
+            }, (err, res) => {
+                this.handleResponse(err, res, callback, this.createJob.bind(this, job, callback));
+            });
         });
     },
 
@@ -169,7 +223,9 @@ export default {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json',
                 }
-            }, callback);
+            }, (err, res) => {
+                this.handleResponse(err, res, callback, this.listJobs.bind(this, callback));
+            });
         });
     },
 
@@ -180,7 +236,9 @@ export default {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json'
                 }
-            }, callback);
+            }, (err, res) => {
+                this.handleResponse(err, res, callback, this.getJob.bind(this, jobId, callback));
+            });
         });
     },
 
@@ -191,7 +249,9 @@ export default {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json',
                 }
-            }, callback);
+            }, (err, res) => {
+                this.handleResponse(err, res, callback, this.getJobOutput.bind(this, jobId, callback));
+            });
         });
     },
 
@@ -202,7 +262,9 @@ export default {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json'
                 }
-            }, callback);
+            }, (err, res) => {
+                this.handleResponse(err, res, callback, this.getFile.bind(this, path, callback));
+            });
         });
     }
 

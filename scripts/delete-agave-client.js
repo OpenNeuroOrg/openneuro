@@ -1,7 +1,7 @@
 import request from '../libs/request';
 import config  from '../config';
 
-request.del(config.agave.url + 'clients/v2/crn_client_app3', {
+request.del(config.agave.url + 'clients/v2/crn_plab_test', {
     headers: {
         Authorization: 'Basic ' + new Buffer(config.agave.username + ':' + config.agave.password).toString('base64')
     }
