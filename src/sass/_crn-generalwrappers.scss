@@ -34,7 +34,7 @@ body,
 	margin: 0;
 	padding-left: 55px;
 	.inner-route{
-		padding:20px 30px;
+		padding:20px 0;
 	}
 }
 .full-col{
@@ -100,41 +100,42 @@ body,
     }
 
 }
-	.tools-wrap{
+.admin-tools-wrap{
+	margin: 0;
+	
+	padding: 10px 15px;
+	.tools{
+		padding: 0;
 		margin: 0;
-		
-		padding: 10px 15px;
-		.tools{
-			padding: 0;
-			margin: 0;
-			display:block;
-			width: 100%;
-			background: #eee;
-			.tool {
-				display: block;
-				float: left;
-				width:20%;
-				text-align: center;
-				vertical-align:middle;
-				overflow:hidden;
-				> button,
-				.fadeIn > button{
-					width: 100%;
-					color: $ocean;
-					&:hover{
-						background: #006B7B;
-						color:#fff;
-					}
+		display:block;
+		width: 100%;
+		background: #eee;
+		.tool {
+			display: block;
+			float: left;
+			width:20%;
+			text-align: center;
+			vertical-align:middle;
+			overflow:hidden;
+			> button,
+			.fadeIn > button{
+				width: 100%;
+				color: $ocean;
+				&:hover{
+					background: #006B7B;
+					color:#fff;
 				}
-				button{
-						padding:7px 10px;
-						transition: all 0.1s ease;
-						border-radius:0;
-				
-					}
+			}
+			button{
+					padding:7px 10px;
+					transition: all 0.1s ease;
+					border-radius:0;
+			
 				}
-		}
+			}
 	}
+}
+
 .tooltip{
 	z-index:4000;
 }

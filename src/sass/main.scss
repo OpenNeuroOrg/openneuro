@@ -159,7 +159,6 @@ body.modal-open{
 	}
 }
 
-// ZACK ADDED ME --- PUT ME SOMEWHERE BETTER -----------------------------------
 
 
 .selectBox-style{
@@ -176,19 +175,30 @@ body.modal-open{
 	background:#fff;
 }
 
-	.caret-down{
-		display: inline-block;
-		width: 0;
-		height: 0;
-		vertical-align: top;
-		border-top: 4px solid #000;
-		border-right: 4px solid rgba(0, 0, 0, 0);
-		border-left: 4px solid rgba(0, 0, 0, 0);
-		content: "";
-		position: relative;
-		margin-top: 20px;
-		margin-left: -22px;
-		margin-right: 10px;
-		width: 0;
+.caret-down{
+	display: inline-block;
+	width: 0;
+	height: 0;
+	vertical-align: top;
+	border-top: 4px solid #000;
+	border-right: 4px solid rgba(0, 0, 0, 0);
+	border-left: 4px solid rgba(0, 0, 0, 0);
+	content: "";
+	position: relative;
+	margin-top: 20px;
+	margin-left: -22px;
+	margin-right: 10px;
+	width: 0;
+}
+
+.share-modal{
+	.selectBox-style{
+		margin-right: 0;
 	}
+	.caret-down{
+		margin-top: 29px;
+	}
+}
+
+
 

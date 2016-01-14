@@ -1,12 +1,16 @@
 // dependencies ------------------------------------------------------------------
 
-import React       from 'react';
-import Reflux      from 'reflux';
-import {Link}      from 'react-router';
-import Actions     from '../../user/user.actions.js';
-import userStore   from '../../user/user.store.js';
-import uploadStore from '../../upload/upload.store.js';
-import {CollapsibleNav, Nav, DropdownButton} from 'react-bootstrap';
+import React       		from 'react';
+import Reflux      		from 'reflux';
+import {Link}      		from 'react-router';
+import Actions     		from '../../user/user.actions.js';
+import userStore   		from '../../user/user.store.js';
+import uploadStore 		from '../../upload/upload.store.js';
+import Upload       	from '../../upload/upload.jsx';
+import {CollapsibleNav, 
+		Nav, 
+		DropdownButton, 
+		Modal} 			from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
 
@@ -21,13 +25,35 @@ let BSNavbar = React.createClass({
 		let isLoggedIn = !!this.state.token;
 
 		//generate user menu
-		let usermenu;
+		let usermenu, thumbnail, uploadBtn, uploadModal; 
 		if (this.state.google) {
 
 			let username = this.state.google.displayName;
 			let email   = this.state.google.email;
+			
+			
+			/*uploadDataset = (
+				<div className="col-xs-4 tasks-col fadeIn no-chrome">
+					<div className="no-chrome-overlay">Uploading the file structure of a <a className="message" href="http://bids.neuroimaging.io/" target="_blank">BIDS dataset</a> requires Chrome. Please switch your browser to use this feature.</div>
+					<Upload />
+				</div>
+				);*/
+			
+			let uploadDataset = <div className="tasks-col fadeIn"><Upload /></div>
+			uploadBtn = <button className="btn btn-blue"  onClick={Actions.toggleModal.bind(null, 'Upload')}>Upload Dataset</button>;
+			
+			uploadModal = (
+	            <Modal show={this.state.showUploadModal} onHide={Actions.toggleModal.bind(null, 'Upload')} className="upload-modal">
+	            	<Modal.Header closeButton>
+	            		<Modal.Title>Share Dataset</Modal.Title>
+	            	</Modal.Header>
+	            	<hr className="modal-inner" />
+	            	<Modal.Body>
+	            		{uploadDataset}
+	            	</Modal.Body>
+	            </Modal>
+	        );
 
-			let thumbnail;
 			if (this.state.google.picture) {
 				thumbnail = this.state.google.picture.replace("sz=50", "sz=200");
 			}
@@ -62,7 +88,6 @@ let BSNavbar = React.createClass({
 					 title="Center for Reproducible Neuroscience Link To Home Page"/>
 			</Link>
 		);
-
 		return (
 			<nav role="navigation" className="navbar navbar-default" toggleNavKey={0}>
 				<div className="container">
@@ -71,6 +96,8 @@ let BSNavbar = React.createClass({
 				    </div>
 				    <CollapsibleNav eventKey={0}>
 							<Nav navbar className="useradmin-nav">
+								{isLoggedIn ? uploadBtn : null}
+								{isLoggedIn ? uploadModal : null}
 						    </Nav>
 						    {isLoggedIn ? usermenu : null}
 					</CollapsibleNav>

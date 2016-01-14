@@ -33,7 +33,7 @@ let Blacklist = React.createClass({
                     <div className="col-sm-6 user-col middle">
 	                    <h3 className="user-email">{user._id}</h3>
                     </div>
-                    <div className="col-sm-12 last tools-wrap">
+                    <div className="col-sm-12 last admin-tools-wrap">
 	                <div className="tools clearfix">
 	                    <div className="tool">
 		                    <WarnButton message="Unblock this User" className="btn btn-admin warning" confirm="Yes Unblock" action={actions.unBlacklistUser.bind(this, user._id)} />

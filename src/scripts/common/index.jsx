@@ -19,16 +19,11 @@ let App = React.createClass({
 
 // life cycle methods --------------------------------------------------------
 
-	getInitialState() {
-		return {toggleSidebarbar: true};
-	},
-
 	componentDidMount () {
 		Actions.initOAuth();
 	},
 
 	render () {
-		let showUpload 		= UserStore.hasToken() && this.state.toggleSidebarbar;
 		let showLeftNav 	= !this.isActive('signIn');
 		let is_front 		= this.isActive('signIn');
 		let close 			= <span><span className="sr-only">Close</span> »</span>;
@@ -37,25 +32,6 @@ let App = React.createClass({
 		let leftnav;
 		let toggleSidebar;
 
-		if (UserStore.hasToken()){
-			toggleSidebar = (
-				<div className={this.state.toggleSidebarbar ? "open toggle-sidebar-wrap" : "toggle-sidebar-wrap"}>
-					<button title="toggle sidebar" className="btn" aria-label="toggle sidebar" onClick={this._toggleSidebar}>{this.state.toggleSidebarbar ? close : open}</button>
-				</div>
-			);
-		}
-
-		if(!bowser.chrome && showUpload){
-			sidebar = (
-				<div className="col-xs-4 tasks-col fadeIn no-chrome">
-					<div className="no-chrome-overlay">Uploading the file structure of a <a className="message" href="http://bids.neuroimaging.io/" target="_blank">BIDS dataset</a> requires Chrome. Please switch your browser to use this feature.</div>
-					<Upload />
-				</div>
-			);
-		}else if(showUpload){
-			sidebar = <div className="col-xs-4 tasks-col fadeIn"><Upload /></div>
-		}
-
 		if (showLeftNav) {
 			leftnav = <div className="left-nav"><LeftNavbar /></div>
 		}
@@ -63,7 +39,7 @@ let App = React.createClass({
 		return (
 			<div className={is_front ? "page is-front" : "page"}>
 				{!bowser.chrome ?  <Happybrowser /> : null }
-				<div className={showUpload ? 'col-xs-8 main-col' : 'full-col'}>
+				<div className="full-col">
 					<Navbar/>
 					<div className="main view container">
 						<div className={showLeftNav ? "route-wrapper" : null}>

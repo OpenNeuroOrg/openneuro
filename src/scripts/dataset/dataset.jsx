@@ -9,6 +9,7 @@ import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
 import Metadata     from './dataset.metadata.jsx';
 import Tools        from './dataset.tools.jsx';
+import Readme     from './dataset.readme.jsx';
 import Statuses     from './dataset.statuses.jsx';
 import moment       from 'moment';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
@@ -42,7 +43,6 @@ let Dataset = React.createClass({
 		let dateAdded  = dataset ? moment(dataset.timestamp).format('L') : null;
         let timeago    = dataset ? moment(dataset.timestamp).fromNow(true) : null;
 		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin');
-
 		let content;
 		if (dataset) {
 			let myDatasetsLink = <Link to="datasets">My Datasets</Link>;
@@ -50,25 +50,30 @@ let Dataset = React.createClass({
 			content = (
 				<div className="fadeIn dashboard">
 					<div className="clearfix">
-						<div className="row">
-							<div className="col-xs-6">
+					<div className="col-xs-12 dataset-tools-wrap">
+						<Tools />
+					</div>
+						<div className="col-xs-12">	
+							<div className="row">	
+								<div className="col-xs-5">
 								<h1 className="clearfix">
-									<ClickToEdit
-										value={dataset.name}
-										label={false}
-										editable={canEdit}
-										onChange={Actions.updateName}/>
-								</h1>
-								<h6>uploaded {dataset.userOwns ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
-							</div>
-							<div className="col-xs-6">
-								<div className="status-container"><Statuses dataset={dataset}/></div>
-							</div>
-							<div className="col-xs-12 tools-wrap">
-								<Tools />
+										<ClickToEdit
+											value={dataset.name}
+											label={false}
+											editable={canEdit}
+											onChange={Actions.updateName}/>
+									</h1>
+									<h6>uploaded {dataset.userOwns ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
+									<div className="status-container">
+										<Statuses dataset={dataset}/>
+									</div>
+									<Readme dataset={dataset}/>
+								</div>
+								<div className="col-xs-7">
+									<Metadata dataset={dataset}/>
+								</div>
 							</div>
 						</div>
-						<Metadata dataset={dataset}/>
 					</div>
 				</div>
 			);

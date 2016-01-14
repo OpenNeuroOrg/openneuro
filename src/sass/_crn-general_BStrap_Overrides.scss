@@ -43,14 +43,22 @@
 		box-shadow: none;
 		outline: none !important;
 	}
-
 	&.delete{
-		color: $primary;
-		border-color: $primary;
-		background:none;
+		border: none;
+	    color: $white;
+	    background-color: $brand-danger;
+	    &:hover{
+	    	color: $white;
+	    	background:darken($brand-danger, 10%)
+	    }
+	}
+	&.success{
+		border: none;
+	    color: $white;
+	    background-color: $brand-success;
 		&:hover{
 			color: $white;
-			border-color: $primaryHover;
+			border-color: lighten($brand-success, 10%);
 		}
 	}
 	&.cancel{
@@ -68,14 +76,7 @@
 	}
 	&.warning{
 	}
-	&.delete{
-		border: none;
-	    color: $white;
-	    background-color: $brand-danger;
-	    &:hover{
-	    	background:darken($brand-danger, 10%)
-	    }
-	}
+	
 	&.cancel{
 	}
 

@@ -1,13 +1,14 @@
 // dependencies -------------------------------------------------------
 
-import React        from 'react';
-import Reflux       from 'reflux';
-import datasetStore from './dataset.store';
-import actions      from './dataset.actions.js';
-import WarnButton   from '../common/forms/warn-button.jsx';
-import Share        from './dataset.tools.share.jsx';
-import Jobs         from './dataset.tools.jobs.jsx';
-import {Modal}      from 'react-bootstrap';
+import React        								from 'react';
+import Reflux       								from 'reflux';
+import datasetStore 								from './dataset.store';
+import actions      								from './dataset.actions.js';
+import WarnButton   								from '../common/forms/warn-button.jsx';
+import WarnButtonWithTip   							from '../common/forms/warn-button-withtip.jsx';
+import Share        								from './dataset.tools.share.jsx';
+import Jobs         								from './dataset.tools.jobs.jsx';
+import {OverlayTrigger, Tooltip, Modal}      		from 'react-bootstrap';
 
 let Tools = React.createClass({
 
@@ -26,12 +27,15 @@ let Tools = React.createClass({
 		let dataset = this.state.dataset;
 		let users   = this.state.users;
 		let publish, del, share, shareModal, jobs, jobModal;
-
+		let tooltipShare = <Tooltip>Share Dataset</Tooltip>;
+		let tooltipJobs = <Tooltip>Run Analysis</Tooltip>;
+		let tooltipDownload = <Tooltip>Download Dataset</Tooltip>;
+		
 		if (dataset.access === 'admin') {
 			if (!dataset.public) {
 				del = (
 					<div role="presentation" className="tool" >
-		            	<WarnButton message="Delete Dataset" action={this._deleteDataset.bind(this, dataset._id)} />
+		            		<WarnButtonWithTip message="" confirm="" tooltip="Delete Dataset" icon="fa-trash" action={this._deleteDataset.bind(this, dataset._id)} />
 		            </div>
 				);
 			}
@@ -39,19 +43,21 @@ let Tools = React.createClass({
 			if (!dataset.status.uploadIncomplete && !dataset.public) {
 				publish = (
 					<div role="presentation" className="tool" >
-						<WarnButton message="Make Dataset Public" confirm="Yes Make Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
+						<WarnButtonWithTip message="" confirm="" tooltip="Make Dataset Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
 		            </div>
 				);
 			}
 
 			share = (
 	            <div role="presentation" className="tool" >
-	            	<button className="btn btn-admin warning"  onClick={actions.toggleModal.bind(null, 'Share')}><i className="fa fa-user-plus"></i> Share Dataset</button>
+	            	<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltipShare}>
+	            		<button className="btn btn-admin warning"  onClick={actions.toggleModal.bind(null, 'Share')}><i className="fa fa-user-plus"></i></button>
+	            	</OverlayTrigger>
 	            </div>
 	        );
 
 			shareModal = (
-	            <Modal show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')}>
+	            <Modal show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')} className="share-modal">
 	            	<Modal.Header closeButton>
 	            		<Modal.Title>Share Dataset</Modal.Title>
 	            	</Modal.Header>
@@ -66,7 +72,9 @@ let Tools = React.createClass({
 		if (dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.public) {
 	        jobs = (
 	        	<div role="presentation" className="tool" >
-	            	<button className="btn btn-admin warning"  onClick={actions.toggleModal.bind(null, 'Jobs')}><i className="fa fa-tasks"></i> Run Analysis</button>
+	            	<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltipJobs}>
+	            		<button className="btn btn-admin warning"  onClick={actions.toggleModal.bind(null, 'Jobs')}><i className="fa fa-tasks"></i></button>
+	            	</OverlayTrigger>
 	            </div>
         	);
 
@@ -86,7 +94,9 @@ let Tools = React.createClass({
 		return (
 			<div className="tools clearfix">
 				<div role="presentation" className="tool">
-					<button className="btn btn-admin warning" onClick={this._downloadDataset}><i className="fa fa-download"></i> Download Dataset</button>
+					<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltipDownload}>
+						<button className="btn btn-admin warning" onClick={this._downloadDataset}><i className="fa fa-download"></i></button>
+					</OverlayTrigger>
 				</div>
 				{publish}
 				{del}

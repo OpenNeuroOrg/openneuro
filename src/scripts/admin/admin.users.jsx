@@ -60,7 +60,7 @@ let users = React.createClass({
 		let adminBtnConfirm = user.root ? 'Yes Remove Admin' : ' Yes Make Admin';
 		if (user._id !== userStore.data.scitran._id) {
 			return (
-				<div className="col-sm-12 last tools-wrap">
+				<div className="col-sm-12 last admin-tools-wrap">
 	                <div className="tools clearfix">
 	                    <div className="tool"><WarnButton className="btn btn-admin warning" message="Delete this User" action={this._removeUser.bind(this, user._id, index)}/></div>
 	                    <div className="tool"><WarnButton className="btn btn-admin warning" message={adminBtnTxt} confirm={adminBtnConfirm} icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/></div>
