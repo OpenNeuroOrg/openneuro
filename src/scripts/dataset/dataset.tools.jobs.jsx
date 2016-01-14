@@ -69,11 +69,6 @@ export default class JobMenu extends React.Component {
     	);
 	}
 
-	// return is
-		// loading
-		// form
-		// message
-
 // custom methods -----------------------------------------------------
 
 	/**
