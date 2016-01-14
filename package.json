@@ -4,19 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm test",
-    "start": "node index.js",
-    "create-agave-client": "babel-node scripts/create-agave-client.js",
-    "list-agave-clients": "babel-node scripts/list-agave-clients.js",
-    "list-agave-apps": "babel-node scripts/list-agave-apps.js",
-    "get-agave-token": "babel-node scripts/get-agave-token.js",
-    "refresh-agave-token": "babel-node scripts/refresh-agave-token.js",
-    "test-agave-job": "babel-node scripts/test-agave-job.js",
-    "list-agave-jobs": "babel-node scripts/list-agave-jobs.js",
-    "list-job-output": "babel-node scripts/list-job-output.js",
-    "get-job-file": "babel-node scripts/get-job-file.js",
-    "delete-agave-client": "babel-node scripts/delete-agave-client.js",
-    "get-agave-job": "babel-node scripts/get-agave-job.js"
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
