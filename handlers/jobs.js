@@ -82,7 +82,11 @@ export default {
 			};
 
 			agave.createJob(body, (err, resp) => {
-				if (err) {return next(err);}
+				if (resp.body.status == 'error') {
+					let error = new Error(resp.body.message);
+					error.http_code = 400;
+					return next(error);
+				}
 				c.jobs.insertOne({
 					name:      job.name,
 					appId:     job.appId,
