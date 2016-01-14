@@ -29,7 +29,6 @@ export default class JobMenu extends React.Component {
 		let form = (
 			<div className="anaylsis-modal clearfix">
 				<h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
-				<div className="text-danger">{this.state.error}</div>
 				<div className="row">
 					<div className="col-xs-12">
 						<div className="col-xs-6 task-select">
@@ -43,12 +42,7 @@ export default class JobMenu extends React.Component {
 						</div>
 					</div>
 				</div>
-				<div className="parameters form-horizontal">
-					{this._parameters()}
-				</div>
-				<div className="col-xs-12 modal-actions">
-				<button className="btn-admin admin-blue" onClick={this._startJob.bind(this)}>Start</button>
-				</div>
+				{this._parameters()}
 			</div>
 		);
 
@@ -107,16 +101,22 @@ export default class JobMenu extends React.Component {
 					break;
 			}
 			return (
-    			<div className="form-group" key={parameter.id}>
-					<label className="sr-only">{parameter.label}</label>
-					<div className="input-group">
-	      				<div className="input-group-addon">{parameter.label}</div>
-						<div className="clearfix">
-							{input}
-							<span className="help-text">{parameter.description}</span>
+				<div>
+					<div className="parameters form-horizontal">
+		    			<div className="form-group" key={parameter.id}>
+							<label className="sr-only">{parameter.label}</label>
+							<div className="input-group">
+			      				<div className="input-group-addon">{parameter.label}</div>
+								<div className="clearfix">
+									{input}
+									<span className="help-text">{parameter.description}</span>
+								</div>
+							</div>
 						</div>
 					</div>
-					
+					<div className="col-xs-12 modal-actions">
+						<button className="btn-admin admin-blue" onClick={this._startJob.bind(this)}>Start</button>
+					</div>
 				</div>
 			);
 		});
