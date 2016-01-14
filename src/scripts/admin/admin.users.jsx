@@ -62,17 +62,12 @@ let users = React.createClass({
 			return (
 				<div className="col-sm-12 last admin-tools-wrap">
 	                <div className="tools clearfix">
-	                    <div className="tool"><WarnButton className="btn btn-admin warning" message="Delete this User" action={this._removeUser.bind(this, user._id, index)}/></div>
 	                    <div className="tool"><WarnButton className="btn btn-admin warning" message={adminBtnTxt} confirm={adminBtnConfirm} icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/></div>
 	                    <div className="tool"><button className="btn btn-admin warning" onClick={actions.blacklistModal.bind(this, user)}>Block User</button></div>
 	                </div>
 	            </div>
             );
 		}
-	},
-
-	_removeUser(userId, index) {
-		actions.removeUser(userId, index);
 	},
 
 	_newUserError() {
