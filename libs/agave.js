@@ -161,7 +161,7 @@ export default {
      * related errors.
      */
     handleResponse(err, res, callback, originalReq) {
-        if (res.statusCode === 403 || res.statusCode === 404) {
+        if (res.body.error && res.body.error == 'invalid_client') {
             this.reCreateClient(originalReq);
         } else {
             callback(err, res);
