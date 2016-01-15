@@ -1,5 +1,4 @@
 import request       from './request';
-import MD5           from './md5';
 import userStore     from '../user/user.store.js';
 import uploadActions from '../upload/upload.actions.js';
 
@@ -17,14 +16,11 @@ let upload = {
 	 * upload queue.
 	 */
 	add (req) {
-	    MD5(req.file, (data) => {
-	    	req.hash   = data.hash;
-			if (this.maxRequests >= this.activeRequests) {
-				this.start(req)
-			} else {
-				this.queue.push(req);
-			}
-	    });
+		if (this.maxRequests >= this.activeRequests) {
+			this.start(req)
+		} else {
+			this.queue.push(req);
+		}
 	},
 
 	/**
@@ -34,27 +30,23 @@ let upload = {
 	 * upload request.
 	 */
 	start (req) {
-		let self = this;
-		self.activeRequests++;
+		this.activeRequests++;
 		req.progressStart(req.file.name);
-		request.post(req.url, {
-            headers: {
-                'Content-Type': 'application/octet-stream',
-                'Content-MD5': req.hash
-            },
-            query: {
-            	tags: JSON.stringify([req.tag])
-            },
-            body: req.file.data ? req.file.data : req.file
-        }, function (err, res) {
+		request.upload(req.url, {
+			fields: {
+				name: req.file.name,
+				tags: JSON.stringify(req.tags),
+				file: req.file.data ? req.file.data : req.file,
+			}
+		}, (err, res) => {
         	if (err) {
         		req.error(err, req);
         	} else {
-        		req.progressEnd(res.req._data.name);
-	        	self.activeRequests--;
-	        	if (self.queue.length > 0 && self.maxRequests >= self.activeRequests) {
-	        		self.start(self.queue[0]);
-	        		self.queue.shift();
+        		req.progressEnd(req.file.name);
+	        	this.activeRequests--;
+	        	if (this.queue.length > 0 && this.maxRequests >= this.activeRequests) {
+	        		this.start(this.queue[0]);
+	        		this.queue.shift();
 	        	}
         	}
         });

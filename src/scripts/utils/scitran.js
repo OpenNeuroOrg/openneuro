@@ -1,8 +1,7 @@
 import request  from './request';
 import async    from 'async';
 import config   from '../config';
-import md5      from './md5';
-import SparkMD5 from 'spark-md5';
+import files    from '../utils/files';
 
 /**
  * Scitran
@@ -88,11 +87,11 @@ export default  {
     /**
      * Create Project
      *
-     * Takes a group name and a project name and
+     * Takes a request body and
      * generates a request to make a project in scitran.
      */
-    createProject (groupName, body, callback) {
-        request.post(config.scitran.url + 'groups/' + groupName + '/projects', {body: body}, callback);
+    createProject (body, callback) {
+        request.post(config.scitran.url + 'projects', {body: body}, callback);
     },
 
     /**
@@ -100,8 +99,15 @@ export default  {
      *
      */
     createSubject (projectId, subjectName, callback) {
-        let body = {label: subjectName, subject_code: 'subject'};
-        request.post(config.scitran.url + 'projects/' + projectId + '/sessions', {body: body}, callback);
+        request.post(config.scitran.url + 'sessions', {
+            body: {
+                project: projectId,
+                label: subjectName,
+                subject: {
+                    code: 'subject'
+                }
+            }
+        }, callback);
     },
 
     /**
@@ -109,8 +115,15 @@ export default  {
      *
      */
     createSession (projectId, subjectId, sessionName, callback) {
-        let body = {label: sessionName, subject_code: subjectId};
-        request.post(config.scitran.url + 'projects/' + projectId + '/sessions', {body: body}, callback);
+        request.post(config.scitran.url + 'sessions', {
+            body: {
+                project: projectId,
+                label: sessionName,
+                subject: {
+                    code: subjectId
+                }
+            }
+        }, callback);
     },
 
     /**
@@ -118,8 +131,21 @@ export default  {
      *
      */
     createModality (sessionId, modalityName, callback) {
-        let body = {label: modalityName, datatype: 'modality'};
-        request.post(config.scitran.url + 'sessions/' + sessionId + '/acquisitions', {body: body}, callback);
+        request.post(config.scitran.url + 'acquisitions', {
+            body: {
+                session: sessionId,
+                label: modalityName
+            }
+        }, callback);
+    },
+
+    /**
+     * Add Tag
+     */
+    addTag (containerType, containerId, tag, callback) {
+        request.post(config.scitran.url + containerType + '/' + containerId + '/tags', {
+            body: {value: tag}
+        }, callback);
     },
 
 // Read -----------------------------------------------------------------------------------
@@ -189,7 +215,7 @@ export default  {
      *
      */
     getFile (level, id, filename, callback) {
-        request.get(config.scitran.url + level + '/' + id + '/file/' + filename, {}, callback);
+        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, {}, callback);
     },
 
     /**
@@ -197,7 +223,7 @@ export default  {
      *
      */
     getDownloadTicket (level, id, filename, callback) {
-        request.get(config.scitran.url + level + '/' + id + '/file/' + filename, {
+        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, {
             query: {ticket: ''}
         }, callback);
     },
@@ -235,7 +261,14 @@ export default  {
      *
      */
     deleteFile (level, containerId, filename, callback) {
-        request.del(config.scitran.url + level + '/' + containerId + '/file/' + filename, callback);
+        request.del(config.scitran.url + level + '/' + containerId + '/files/' + filename, callback);
+    },
+
+    /**
+     * Add Tag
+     */
+    removeTag (containerType, containerId, tag, callback) {
+        request.del(config.scitran.url + containerType + '/' + containerId + '/tags/' + tag, callback);
     },
 
 // Update ---------------------------------------------------------------------------------
@@ -251,78 +284,30 @@ export default  {
     },
 
     /**
-     * Update Note
-     *
-     * Takes a projectId and a note object and
-     * upserts the note.
-     */
-    updateNote (projectId, newNote, callback) {
-        let req = {projectId, newNote, callback};
-        if (this.noteRequests > 0) {
-            this.noteQueue.push(req);
-        } else {
-            this.noteRequest(req);
-        }
-    },
-
-    /**
      * Update File
      *
      */
     updateFile (level, id, file, callback) {
-        md5(file, (data) => {
-            let hash = data.hash;
-            request.post(config.scitran.url + level + '/' + id + '/file/' + file.name, {
-                body: file,
-                headers: {'Content-MD5': hash},
-                query: {force: true}
-            }, callback);
-        });
+        request.post(config.scitran.url + level + '/' + id + '/file/' + file.name, {
+            body: file,
+            query: {force: true}
+        }, callback);
     },
 
     /**
      * Update File From String
      *
      */
-    updateFileFromString (level, id, filename, value, callback) {
-        let hash = SparkMD5.hash(value);
-        request.post(config.scitran.url + level + '/' + id + '/file/' + filename, {
-            body: value,
-            headers: {'Content-MD5': hash},
+    updateFileFromString (level, id, filename, value, type, tags, callback) {
+        let file = new File([value], filename, {type: type});
+        request.upload(config.scitran.url + level + '/' + id + '/files', {
+            fields: {
+                tags: tags ? JSON.stringify(tags) : '[]',
+                file: file,
+                name: filename
+            },
             query: {force: true}
         }, callback);
     },
-
-    noteQueue: [],
-    noteRequests: 0,
-
-    noteRequest(req) {
-        this.noteRequests++;
-        this.getProject(req.projectId, (res) => {
-            let notes = [];
-            let currentNotes = res.body.notes ? res.body.notes : [];
-            let noteExists   = false;
-            for (let currentNote of currentNotes) {
-                if (currentNote.author === req.newNote.author) {
-                    noteExists = true;
-                    notes.push(req.newNote);
-                } else {
-                    notes.push(currentNote);
-                }
-            }
-            if (!noteExists) {
-                notes.push(req.newNote);
-            }
-            this.updateProject(req.projectId, {notes: notes}, (err, res) => {
-                if (req.callback) {req.callback(res);}
-                this.noteRequests--;
-                if (this.noteQueue.length > 0) {
-                    this.noteRequest(this.noteQueue[0]);
-                    this.noteQueue.shift();
-                }
-            });
-        });
-    }
-
 
 };

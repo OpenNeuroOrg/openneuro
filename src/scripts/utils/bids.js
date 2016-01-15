@@ -24,7 +24,7 @@ export default  {
         scitran.getSessions(projectId, (sessions) => {
             let subjects = [];
             async.each(sessions, (session, cb) => {
-                if (session.subject_code === 'subject') {
+                if (session.subject.code === 'subject') {
                     scitran.getSession(session._id, (res) => {
                         session.children = res.files;
                         session.name = session.label;
@@ -51,7 +51,7 @@ export default  {
         scitran.getSessions(projectId, (sciSessions) => {
             let sessions = [];
             async.each(sciSessions, (session, cb) => {
-                if (session.subject_code === subjectId) {
+                if (session.subject.code === subjectId) {
                     scitran.getSession(session._id, (res) => {
                         session.children = res.files;
                         session.name = session.label;
@@ -109,12 +109,14 @@ export default  {
         // determine which metadata files are available
         let metadataFiles = [],
             metadata = {};
-        for (let file of project.files) {
-            if (file.filename === 'README') {
-                metadataFiles.push('README');
-            }
-            if (file.filename === 'dataset_description.json') {
-                metadataFiles.push('dataset_description.json');
+        if (project.files) {
+            for (let file of project.files) {
+                if (file.name === 'README') {
+                    metadataFiles.push('README');
+                }
+                if (file.name === 'dataset_description.json') {
+                    metadataFiles.push('dataset_description.json');
+                }
             }
         }
 
@@ -272,8 +274,8 @@ export default  {
      * Label File
      */
     labelFile (items, parentId, parentContainer) {
+        items = items ? items : [];
         for (let item of items) {
-            item.name = item.filename;
             item.parentId = parentId;
             item.parentContainer = parentContainer;
         }
@@ -288,19 +290,21 @@ export default  {
      * BIDS dataset.
      */
     formatDataset (project, description, users) {
+
         let files = [], attachments = [];
-        for (let file of project.files) {
-            file.name = file.filename;
-            if (file.tags.indexOf('attachment') > -1) {
-                attachments.push(file);
-            } else {
-                files.push(file);
+        if (project.files) {
+            for (let file of project.files) {
+                if (file.tags && file.tags.indexOf('attachment') > -1) {
+                    attachments.push(file);
+                } else {
+                    files.push(file);
+                }
             }
         }
 
         let dataset = {
             _id:         project._id,
-            name:        project.name,
+            name:        project.label,
             group:       project.group,
             timestamp:   project.timestamp,
             type:        'folder',
@@ -308,10 +312,9 @@ export default  {
             public:      project.public,
             notes:       project.notes,
             children:    files,
-            description: this.formatDescription(project.notes, description),
-            README:      this.formatREADME(project.notes),
+            description: this.formatDescription(project.metadata, description),
             attachments: attachments,
-            status:      this.formatStatus(project.notes),
+            status:      this.formatStatus(project.tags),
             userOwns:    this.userOwns(project),
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
@@ -325,11 +328,8 @@ export default  {
     /**
      * formatDescription
      *
-     * Takes a notes array and returns
-     * a BIDS description object if the is
-     * a description note.
      */
-    formatDescription (notes, description) {
+    formatDescription (metadata, description) {
         let description = description ? description : {
             "Name": "",
             "License": "",
@@ -341,50 +341,25 @@ export default  {
             "DatasetDOI": ""
         };
 
-        if (notes) {
-            let authorsString;
-            for (let note of notes) {
-                if (note.author === 'authors') {
-                    authorsString = note.text;
-                }
-            }
-            if (authorsString) {description.Authors = JSON.parse(authorsString);}
+        if (metadata && metadata.authors) {
+            description.Authors = metadata.authors;
         }
 
         return description;
     },
 
     /**
-     * Format README
-     *
-     * Takes a notes array and returns
-     * a README file if there is a
-     * README note.
-     */
-    formatREADME (notes) {
-        let README = '';
-        if (notes) {
-            for (let note of notes) {
-                if (note.author === 'README') {
-                    README = note.text;
-                }
-            }
-        }
-        return README;
-    },
-
-    /**
      * Format Status
      *
-     * Takes a notes array and returns
+     * Takes a metadata object and returns
      * a dataset status object corresponding
      * to any statuses set in the notes.
      */
-    formatStatus (notes) {
+    formatStatus (tags) {
         let status = {};
-        if (notes) {
-            for (let note of notes) {
-                if (note.author === 'uploadStatus' && note.text === 'incomplete') {
+        if (tags) {
+            for (let tag of tags) {
+                if (tag === 'incomplete') {
                     status['uploadIncomplete'] = true;
                 }
             }

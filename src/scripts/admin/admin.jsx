@@ -18,12 +18,12 @@ class Dashboard extends React.Component {
 
 	render () {
 		return (
-			<div className="fadeIn inner-route dashboard">
-				<ul className="nav nav-pills dash-tab-link">
-					<li><Link to="users" className="btn-tab">Users</Link></li>
-					<li><Link to="blacklist" className="btn-tab">Blocked Users</Link></li>
-				</ul>
-				<div>
+			<div className="fadeIn inner-route dashboard clearfix">
+				<div className="col-xs-12">
+					<ul className="nav nav-pills dash-tab-link">
+						<li><Link to="users" className="btn-tab">Users</Link></li>
+						<li><Link to="blacklist" className="btn-tab">Blocked Users</Link></li>
+					</ul>
 					<RouteHandler/>
 				</div>
 				<BlacklistModal />

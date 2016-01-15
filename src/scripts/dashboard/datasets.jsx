@@ -33,8 +33,10 @@ let Datasets = React.createClass({
         let visibleDatasets = this.state.visibleDatasets;
         let isPublic  = this.state.isPublic;
         let results;
-
-        if (datasets.length === 0) {
+        if (datasets.length === 0 && isPublic) {
+            let noDatasets = "There are no public datasets.";
+            results = <p className="no-datasets">{noDatasets}</p>;
+        } else if (datasets.length === 0) {
             let noDatasets = "You don't have any datasets.";
             results = <p className="no-datasets">{noDatasets}</p>;
         } else if (visibleDatasets.length === 0) {
@@ -48,6 +50,7 @@ let Datasets = React.createClass({
             results = paginatedResults.map(function (dataset, index){
                 let dateAdded    = moment(dataset.timestamp).format('L');
                 let timeago      = moment(dataset.timestamp).fromNow(true);
+                let  statusContainer = <div className="status-container"><Statuses dataset={dataset} /></div>;
                 return (
                     <div className="fadeIn  panel panel-default" key={dataset._id}>
                         <div className="panel-heading">
@@ -58,26 +61,49 @@ let Datasets = React.createClass({
                                         <p className="date">uploaded <span className="name">{!isPublic ? 'by ' + dataset.group : null}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
                                     </div>
                                 </Link>
-                                <div className="status-container">
-                                    <Statuses dataset={dataset} />
-                                </div>
+                               {!isPublic ? statusContainer : null}
                             </div>
                         </div>
                     </div>
                 );
             });
         }
-
-        return (
-        	<div className={isPublic ? "fadeIn public-dashboard inner-route" : "fadeIn"}>
-            	<div className="dash-tab-content datasets ">
+        let isPublicDataset = (
+            <div className="fadeIn public-dashboard inner-route clearfix">
+                <div className="col-xs-12">
+                    <div className="dash-tab-content datasets">
+                        <div className="header-filter-sort clearfix">
+                            <div className="header-wrap clearfix">
+                                 <h2>Public Datasets</h2>
+                            </div>
+                            <div className="filters-sort-wrap clearfix">
+                                <Sort sort={this.state.sort}  />
+                            </div>
+                        </div>
+                        <PanelGroup>
+                            {this.state.loading ? <Spinner active={true} /> : results}
+                        </ PanelGroup>
+                    </div>
+                    <div className="pager-wrapper">
+                        <Paginator
+                            page={this.state.page}
+                            pagesTotal={pagesTotal}
+                            pageRangeDisplayed={5}
+                            onPageSelect={this._onPageSelect} />
+                    </div>
+                </div>
+            </div>
+        );
+        let isPrivateDataset = (
+            <div>
+                <div className="dash-tab-content datasets">
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
-                             <h2>{isPublic ? 'Public Datasets' : 'My Datasets'}</h2>
+                             <h2>My Datasets</h2>
                         </div>
                         <div className="filters-sort-wrap clearfix">
                             <Sort sort={this.state.sort}  />
-                            <Filters filters={this.state.filters}  isPublic={isPublic} />
+                            <Filters filters={this.state.filters} />
                         </div>
                     </div>
                     <PanelGroup>
@@ -85,12 +111,17 @@ let Datasets = React.createClass({
                     </ PanelGroup>
                 </div>
                 <div className="pager-wrapper">
-                	<Paginator
-	                    page={this.state.page}
-	                    pagesTotal={pagesTotal}
-	                    pageRangeDisplayed={5}
-	                    onPageSelect={this._onPageSelect} />
-            	</div>
+                    <Paginator
+                        page={this.state.page}
+                        pagesTotal={pagesTotal}
+                        pageRangeDisplayed={5}
+                        onPageSelect={this._onPageSelect} />
+                </div>
+            </div>
+        );
+        return (
+        	<div>
+               {isPublic ? isPublicDataset : isPrivateDataset}
             </div>
         );
     },

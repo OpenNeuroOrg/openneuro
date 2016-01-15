@@ -43,14 +43,22 @@
 		box-shadow: none;
 		outline: none !important;
 	}
-
 	&.delete{
-		color: $primary;
-		border-color: $primary;
-		background:none;
+		border: none;
+	    color: $white;
+	    background-color: $brand-danger;
+	    &:hover{
+	    	color: $white;
+	    	background:darken($brand-danger, 10%)
+	    }
+	}
+	&.success{
+		border: none;
+	    color: $white;
+	    background-color: $brand-success;
 		&:hover{
 			color: $white;
-			border-color: $primaryHover;
+			border-color: lighten($brand-success, 10%);
 		}
 	}
 	&.cancel{
@@ -68,14 +76,7 @@
 	}
 	&.warning{
 	}
-	&.delete{
-		border: none;
-	    color: $white;
-	    background-color: $brand-danger;
-	    &:hover{
-	    	background:darken($brand-danger, 10%)
-	    }
-	}
+	
 	&.cancel{
 	}
 
@@ -103,6 +104,11 @@
 			background: #eee;
 		}
 	}
+}
+.btn-reset{
+	@extend .btn-admin;
+	border:none;
+
 }
 .btn-blue{
 	background-color:$sky;
@@ -175,20 +181,29 @@
 	color: #777;
 	//display: none;
 }
-.form-group input {
-	width: 100%;
-	height: 50px;
-	font-size: 22px;
-	font-weight: lighter;
-	font-family: helvetica;
-	padding: 0px 10px;
-	border: none;
-	background: rgba(255,255,255,1);
-	border-radius:2px;
-	box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
-	&:focus{
-		outline: 1px solid rgba(229, 85, 85, 0.25);
+.form-group{
+ 	input {
+		width: 100%;
+		height: 50px;
+		font-size: 22px;
+		font-weight: lighter;
+		font-family: helvetica;
+		padding: 0px 10px;
+		border: none;
+		background: rgba(255,255,255,1);
+		border-radius:2px;
+		box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
+		&:focus{
+			outline: 1px solid rgba(229, 85, 85, 0.25);
 
+		}
+	}
+	.input-group-addon{
+		    border-radius: 0;
+		    background: none;
+		    box-shadow:none;
+		    border: none;
+		    text-transform: uppercase;
 	}
 }
 
@@ -208,6 +223,17 @@ textarea.form-control {
 		outline: 1px solid rgba(229, 85, 85, 0.25);
 		box-shadow:inset 0 0 1px 1px rgba(0,0,0,.14);
 	}
+}
+
+select {
+  width: 100%;
+  height: 40px;
+  border-radius:0;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  font-size: 16px;
+  text-indent: 5px;
+  color: #a5a5a5;
 }
 
 

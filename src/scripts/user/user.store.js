@@ -1,13 +1,13 @@
 // dependencies ----------------------------------------------------------------------
 
-import React           from 'react';
-import Reflux  from 'reflux';
-import Actions from './user.actions.js';
-import config  from '../config';
-import router  from '../utils/router-container';
-import scitran from '../utils/scitran';
-import crn     from '../utils/crn';
-import upload  from '../upload/upload.actions';
+import React        from 'react';
+import Reflux  		from 'reflux';
+import Actions 		from './user.actions.js';
+import config  		from '../config';
+import router  		from '../utils/router-container';
+import scitran 		from '../utils/scitran';
+import crn     		from '../utils/crn';
+import upload  		from '../upload/upload.actions';
 
 let UserStore = Reflux.createStore({
 
@@ -46,14 +46,24 @@ let UserStore = Reflux.createStore({
 			google: null,
 			scitran: window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser) : null,
 			loading: false,
-			signinError: ''
+			signinError: '',
+			showUploadModal: false
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data);
 	},
 
 // Actions ---------------------------------------------------------------------------
-
+		
+	/**
+	 * Toggle Modal
+	 */
+	toggleModal(name) {
+		let updates = {};
+		updates['show' + name + 'Modal'] = !this.data['show' + name + 'Modal'];
+		this.update(updates);
+	},
+	
 	/**
 	 * Initialize OAuth
 	 *

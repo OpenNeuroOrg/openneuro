@@ -4,12 +4,9 @@ import React        from 'react';
 import Reflux       from 'reflux';
 import Actions      from './dataset.actions.js';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
-import {Accordion, Panel} from 'react-bootstrap';
-import FileTree     from './dataset.file-tree.jsx';
-import Jobs         from './dataset.jobs.jsx';
 import datasetStore from './dataset.store';
 
-let Metadata = React.createClass({
+let MetaData = React.createClass({
 
     mixins: [Reflux.connect(datasetStore)],
 
@@ -21,8 +18,6 @@ let Metadata = React.createClass({
 		let canEdit     = userOwns && (dataset.access === 'rw' || dataset.access == 'admin');
 		let description = dataset ? dataset.description : null;
 		let README      = dataset ? dataset.README : null;
-		let fsHeader 	= dataset.name + " File Structure";
-
 		let metatdata = [
 			{
 				key:      'DatasetDOI',
@@ -78,7 +73,15 @@ let Metadata = React.createClass({
 			},
 		];
 
-		let items = metatdata.map((item) => {
+		let readme = (
+			<div className="description-item">
+				<ClickToEdit value={README}
+					label="README"
+					editable={canEdit}
+					onChange={this._updateREADME} />
+			</div>
+		);
+		let readmeItems = metatdata.map((item) => {
 			return (
 				<div className="description-item" key={item.key}>
 					<ClickToEdit
@@ -92,44 +95,12 @@ let Metadata = React.createClass({
 				</div>
 			);
 		});
+
 		let descriptors = (
 			<div>
-				<div className="dataset-readme col-xs-6">
-					<ClickToEdit value={README}
-						label="README"
-						editable={canEdit}
-						onChange={this._updateREADME} />
-					<div className="fileStructure fadeIn panel-group">
-						<div className="panel panel-default">
-							<div className="panel-heading" >
-								<h4 className="panel-title">
-									{fsHeader}
-								</h4>
-							</div>
-							<div className="panel-collapse" aria-expanded="false" >
-								<div className="panel-body">
-									<FileTree tree={[dataset]} editable={canEdit}/>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div className="fileStructure fadeIn panel-group">
-						<div className="panel panel-default">
-							<div className="panel-heading" >
-								<h4 className="panel-title">
-									Dataset Analysis
-								</h4>
-							</div>
-							<div className="panel-collapse" aria-expanded="false" >
-								<Jobs />
-							</div>
-						</div>
-					</div>
-
-				</div>
-				<div className="dataset-descriptions col-xs-6">
-					{items}
+				<div className="dataset-readme">
+						{readme}
+						{readmeItems}
 				</div>
 			</div>
 		);
@@ -157,4 +128,4 @@ let Metadata = React.createClass({
 
 });
 
-export default Metadata;
+export default MetaData;

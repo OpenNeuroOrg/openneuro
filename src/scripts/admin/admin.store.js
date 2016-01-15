@@ -117,7 +117,7 @@ let UserStore = Reflux.createStore({
 	 * Blacklist Modal
 	 *
 	 * Triggers a modal for blacklisting a user.
-	 * Prefills data if a user object is passesed.
+	 * Prefills data if a user object is passed.
 	 */
 	blacklistModal(user) {
 		this.update({

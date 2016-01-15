@@ -44,9 +44,10 @@ let ClickToEdit = React.createClass({
 				break;
 			case "authors":
 				input = <AuthorInput value={value} onChange={this._handleChange.bind(null, type)} />;
-				let items = value.map((item, index) => {
+
+				let items = value ? value.map((item, index) => {
 					return <div className="fadeIn" key={index}><span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span></div>;
-				});
+				}) : null;
 				display = <div className="cte-display">{items}</div>;
 				buttons = null;
 				break;

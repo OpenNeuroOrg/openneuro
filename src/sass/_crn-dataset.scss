@@ -1,10 +1,29 @@
 // dataset dataset view
 .dataset {
+
+	h3.metaheader{
+		font-size: 18px;
+		color: #424242;
+		line-height: 21px;
+		padding: 0;
+		display: inline-block;
+		max-width: 100%;
+		margin-bottom: 5px;
+		font-weight: bold;
+		font-family: 'Cabin', sans-serif;
+	}
 	.fileStructure.panel-group{
 		.panel-default{
 			.panel-heading .panel-title{
-				font-size: 15px;
-				color: #4c5664;
+				font-size: 18px;
+				color: #424242;
+				line-height: 21px;
+				padding: 0;
+				display: inline-block;
+				max-width: 100%;
+				margin-bottom: 5px;
+				font-weight: bold;
+				font-family: 'Cabin', sans-serif;
 			}
 			.panel-body{
 				padding:0;
@@ -172,17 +191,11 @@
 		padding: 0;
 		margin: 20px 0;
 	}
-	.dataset-descriptions{
-		padding: 0;
-	}
+
 	.description-item{
-		padding: 20px;
+		padding-bottom:20px;
+		margin-bottom: 20px;
 		border-bottom:1px solid #eee;
-		border-right:1px solid #eee;
-		border-left:1px solid #eee;
-		&:first-child{
-			border-top:1px solid #eee;
-		}
 		.file-name-link{
 			i{
 				font-size: 13px;
@@ -190,20 +203,25 @@
 		}
 	}
 	.dataset-readme{
-	    padding: 20px 20px 20px 0;
 	}
 	h1{
 		margin: 0;
-		padding: 10px 0 0 0;
-		font-size: 30px;
+		padding: 0;
 		text-transform: uppercase;
 		font-weight: 100;
-		.dataset-name{
-			float: left;
-		}
+		font-family: 'Cabin', sans-serif;
+		font-size: 16px;
+		line-height: 16px;
 		.nav.nav-pills{
 			float: left;
 		}
+		 .cte-display{
+		 	font-size: 30px;
+		 }
+		.cte-edit{    
+		 	margin: 10px 0;
+		}
+
 	}
 	h6{
 		margin:5px 0 0;
@@ -247,7 +265,7 @@
 		}
 	  &::before {
 	    font-family: FontAwesome;
-	    content: 'add file';
+	    content: 'add a file';
 	    display: inline-block;
 	    background-color:$sky;
 	    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
@@ -279,11 +297,12 @@
 	  }
 	}
 	.cte-display{
-	    font-size: 18px;
+	    font-size: 15px;
 	    color: #565656;
 	    font-weight: 100;
 	    font-family: $font-family-ssp;
 	    word-wrap: break-word;
+	    white-space: pre-wrap;
 	    div{
 			padding: 10px 0;
 			border-bottom: 1px solid #EEE;
@@ -512,3 +531,219 @@
 	  }
 	}
 }
+
+
+.anaylsis-modal{
+	.task-select{
+		border:1px solid #ccc;
+		padding:0;
+		select{
+			border:none;
+		}
+	}
+	.parameters{
+		margin-top: 10px;
+		.form-group{
+			padding: 13px 10px 14px 0;
+			&:nth-child(odd){
+				background: #f9f9f9;
+			}
+			.input-group{
+				width: 100%;
+			}
+			.input-group-addon{
+			    width: 150px;
+			    white-space: normal;
+			    text-align: left;
+			    vertical-align: top;
+			}
+			input{
+				height: 40px;
+				font-size: 16px;
+				float: none;
+				&.checkbox{
+				    box-shadow: none;
+				    padding: 0;
+				    margin: 0;
+				    height: auto;
+					height: 0; width: 0; 
+					display: none;
+					position: absolute;
+					left: -99999em;
+				}	
+			}
+			input[type='checkbox'] + label > {
+					position: relative;
+					display: flex;
+					margin: .6em 0;
+					align-items: center;
+					color: #9e9e9e;
+					transition: color 250ms cubic-bezier(.4,.0,.23,1);
+				}
+				input[type='checkbox'] + label > span{
+					display: block;
+					margin-right: 0;
+					width: auto;
+					height: auto;
+					background: rgba(0, 0, 0, 0);
+					border: 2px solid #9E9E9E;
+					border-radius: 1px;
+					cursor: pointer;
+					transition: all 250ms cubic-bezier(.4, 0, .23, 1);
+					padding: 8px;
+					position: relative;
+				}
+
+				input[type='checkbox'] + label > :hover, 
+				input[type='checkbox']:focus + label > {
+					color: #fff;
+				}
+				input[type='checkbox'] + label > :hover > span, 
+				input[type='checkbox']:focus + label > span{
+					background: rgba(255,255,255,.1);
+				}
+
+				input[type='checkbox']:checked + label > span{
+					border: 2px solid lighten($brand-success, 10%);
+					background: lighten($brand-success, 10%);
+					color:#fff;
+					animation: shrink-bounce 200ms cubic-bezier(.4,.0,.23,1);
+				}
+				input[type='checkbox']:checked + label > span:before{
+					content: "";
+					position: absolute;
+					top: .6em;
+					left: .2em;
+					border-right: 3px solid transparent;
+					border-bottom: 3px solid transparent;
+					transform: rotate(45deg);
+					transform-origin: 0% 100%;
+					animation: checkbox-check 125ms 250ms cubic-bezier(.4,.0,.23,1) forwards;
+				}
+			
+		}
+		.help-text{
+			font-size: 14px;
+			padding: 10px 10px;
+			display: block;
+			border: 1px solid #ddd;
+			margin:5px 0 0 0;
+			color: #999;
+			background: #eee;
+		}
+	}
+	.default-reset{
+		padding:10px;
+	}
+	
+	.modal-actions{
+		margin-top: 10px;
+		padding:0;
+		.admin-blue{
+		}
+	}
+}
+.dataset-tools-wrap{
+	margin: -20px 0 20px;
+    padding: 0;
+	
+	.tools{
+		padding: 0;
+		margin: 0;
+		display:block;
+		width: 100%;
+		background: #eee;
+		.tool {	
+			text-align: center;
+			width: 70px;
+			float: left;
+			display: block;
+			> button,
+			.fadeIn > button{
+				width: 100%;
+				color: $primary;
+				&:hover{
+					background: $primary;
+					color:#fff;
+				}
+			}
+			button{
+					padding:7px 10px;
+					transition: all 0.1s ease;
+					border-radius:0;
+			
+				}
+			}
+	}
+}
+
+@keyframes shrink-bounce{
+  0%{
+    transform: scale(1);
+  }
+  33%{    
+    transform: scale(.85);
+  }
+  100%{
+    transform: scale(1);    
+  }
+}
+@keyframes checkbox-check{
+  0%{
+    width: 0;
+    height: 0;
+    border-color: #212121;
+    transform: translate3d(0,0,0) rotate(45deg);
+  }
+  33%{
+    width: .2em;
+    height: 0;
+    transform: translate3d(0,0,0) rotate(45deg);
+  }
+  100%{    
+    width: .2em;
+    height: .5em;    
+    border-color: #212121;
+    transform: translate3d(0,-.5em,0) rotate(45deg);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.jobs-wrap.panel-group {
+	margin-bottom: 0;
+	margin:0;
+	.panel-collapse{
+		.panel-body{
+			border-top:none;
+		}
+	}	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

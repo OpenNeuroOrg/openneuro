@@ -4,6 +4,7 @@ var Actions = Reflux.createActions([
 	'checkUser',
 	'signIn',
 	'signOut',
+	'toggleModal',
 	'initOAuth'
 ]);
 

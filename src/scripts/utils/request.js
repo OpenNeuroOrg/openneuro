@@ -56,6 +56,19 @@ var Request = {
 					handleResponse(err, res, callback);
 				});
 		});
+	},
+
+	upload (url, options, callback) {
+		handleRequest(url, options, function (url, options) {
+			request.post(url)
+				.query(options.query)
+				.set(options.headers)
+				.field('tags', options.fields.tags)
+				.attach('file', options.fields.file, options.fields.name)
+				.end((err, res) => {
+					handleResponse(err, res, callback);
+				});
+		});
 	}
 
 };
