@@ -2,7 +2,6 @@
 
 import React        from 'react';
 import Reflux       from 'reflux';
-import Actions      from './dataset.actions.js';
 import FileTree     from './dataset.file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
 import datasetStore from './dataset.store';
@@ -47,20 +46,6 @@ let Metadata = React.createClass({
 			</div>
     	);
 	},
-
-// custon methods -----------------------------------------------------
-
-	_updateDescription: Actions.updateDescription,
-
-	_updateAuthors: Actions.updateAuthors,
-
-	_uploadAttachment: Actions.uploadAttachment,
-
-	_deleteAttachment: Actions.deleteAttachment,
-
-	_downloadAttachment: Actions.downloadAttachment,
-
-	_updateREADME: Actions.updateREADME
 
 });
 
