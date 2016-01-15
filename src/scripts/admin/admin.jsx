@@ -18,7 +18,7 @@ class Dashboard extends React.Component {
 
 	render () {
 		return (
-			<div className="fadeIn inner-route dashboard">
+			<div className="fadeIn inner-route dashboard clearfix">
 				<div className="col-xs-12">
 					<ul className="nav nav-pills dash-tab-link">
 						<li><Link to="users" className="btn-tab">Users</Link></li>

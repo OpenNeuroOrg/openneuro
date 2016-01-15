@@ -50,6 +50,7 @@ let Datasets = React.createClass({
             results = paginatedResults.map(function (dataset, index){
                 let dateAdded    = moment(dataset.timestamp).format('L');
                 let timeago      = moment(dataset.timestamp).fromNow(true);
+                let  statusContainer = <div className="status-container"><Statuses dataset={dataset} /></div>;
                 return (
                     <div className="fadeIn  panel panel-default" key={dataset._id}>
                         <div className="panel-heading">
@@ -60,9 +61,7 @@ let Datasets = React.createClass({
                                         <p className="date">uploaded <span className="name">{!isPublic ? 'by ' + dataset.group : null}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
                                     </div>
                                 </Link>
-                                <div className="status-container">
-                                    <Statuses dataset={dataset} />
-                                </div>
+                               {!isPublic ? statusContainer : null}
                             </div>
                         </div>
                     </div>
@@ -70,7 +69,7 @@ let Datasets = React.createClass({
             });
         }
         let isPublicDataset = (
-            <div className="fadeIn public-dashboard inner-route">
+            <div className="fadeIn public-dashboard inner-route clearfix">
                 <div className="col-xs-12">
                     <div className="dash-tab-content datasets">
                         <div className="header-filter-sort clearfix">

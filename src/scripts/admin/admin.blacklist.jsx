@@ -22,25 +22,26 @@ let Blacklist = React.createClass({
 
 			return (
 			    <div className="fadeIn user-panel clearfix" key={user._id}>
-                    <div className="col-sm-6 user-col">
+                    <div className="col-xs-5 user-col">
                     	<h3>
                     		<div className="userName">
 								<span>{user.firstname}</span> &nbsp;
 								<span>{user.lastname}</span>
 							</div>
                     	</h3>
+                    	<h3 className="user-email">{user._id}</h3>
                     </div>
-                    <div className="col-sm-6 user-col middle">
-	                    <h3 className="user-email">{user._id}</h3>
+                    <div className="col-xs-5 user-col">
+	                    <div>{user.note}</div>
                     </div>
-                    <div className="col-sm-12 last admin-tools-wrap">
+                    <div className="col-xs-2 last admin-tools-wrap">
 	                <div className="tools clearfix">
 	                    <div className="tool">
 		                    <WarnButton message="Unblock this User" className="btn btn-admin warning" confirm="Yes Unblock" action={actions.unBlacklistUser.bind(this, user._id)} />
 	                    </div>
                     </div>
                     </div>
-                    <div>{user.note}</div>
+                    
                 </div>
 			);
 		});
@@ -52,9 +53,14 @@ let Blacklist = React.createClass({
 					<span>Block a User</span>
 				</button>
 				<div>
-				<div className="col-sm-12 users-card">
-					{this.state.blacklist.length == 0 ? noBlacklist : users}
-				</div>
+					<div className="col-xs-12 users-card">
+						<div className="fadeIn user-panel-header clearfix" >
+							<div className="col-xs-5 user-col"><label>User</label></div>
+		                    <div className="col-xs-5 user-col"><label>Notes</label></div>
+		                    <div className="col-xs-2 user-col"><label>Actions</label></div>
+	                	</div>
+	                    {this.state.blacklist.length == 0 ? noBlacklist : users}
+					</div>
 				</div>
 			</div>
     	);

@@ -7,12 +7,13 @@ import Spinner      from '../common/partials/spinner.jsx';
 import {Link}       from 'react-router';
 import datasetStore from './dataset.store';
 import Actions      from './dataset.actions.js';
-import Metadata     from './dataset.metadata.jsx';
+import MetaData    	from './dataset.metadata.jsx';
 import Tools        from './dataset.tools.jsx';
-import Readme     from './dataset.readme.jsx';
 import Statuses     from './dataset.statuses.jsx';
 import moment       from 'moment';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
+import FileTree     from './dataset.file-tree.jsx';
+import Jobs         from './dataset.jobs.jsx';
 
 let Dataset = React.createClass({
 
@@ -67,10 +68,29 @@ let Dataset = React.createClass({
 									<div className="status-container">
 										<Statuses dataset={dataset}/>
 									</div>
-									<Readme dataset={dataset}/>
+									<MetaData dataset={dataset}/>
 								</div>
 								<div className="col-xs-7">
-									<Metadata dataset={dataset}/>
+									<div>
+										<div className="fadeIn col-xs-12">
+											<h3 className="metaheader">Analysis Run</h3>
+											<Jobs />
+										</div>
+										<div className="col-xs-12">
+											<div className="fileStructure fadeIn panel-group">
+												<div className="panel panel-default">
+													<div className="panel-heading" >
+														<h4 className="panel-title">Dataset File Tree</h4>
+													</div>
+													<div className="panel-collapse" aria-expanded="false" >
+														<div className="panel-body">
+															<FileTree tree={[dataset]} editable={canEdit}/>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

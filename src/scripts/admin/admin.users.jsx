@@ -24,7 +24,7 @@ let users = React.createClass({
 
 			return (
 			    <div className="fadeIn user-panel clearfix" key={user._id}>
-                    <div className="col-sm-6 user-col">
+                    <div className="col-sm-4 user-col">
                     	<h3>
                     		<div className="userName">
 								<span>{user.firstname}</span> &nbsp;
@@ -33,7 +33,7 @@ let users = React.createClass({
 							</div>
                     	</h3>
                     </div>
-                    <div className="col-sm-6 user-col middle">
+                    <div className="col-sm-4 user-col middle">
 	                    <h3 className="user-email">{user._id}</h3>
                     </div>
                     {this._userTools(user, index)}
@@ -46,6 +46,11 @@ let users = React.createClass({
 				<h2>Current Users</h2>
 				<div>
 					<div className="col-sm-12 users-card">
+							<div className="fadeIn user-panel-header clearfix" >
+							<div className="col-xs-5 user-col"><label>User</label></div>
+		                    <div className="col-xs-5 user-col"><label>Notes</label></div>
+		                    <div className="col-xs-2 user-col"><label>Actions</label></div>
+	                	</div>
 						{users}
 					</div>
 				</div>
@@ -60,7 +65,7 @@ let users = React.createClass({
 		let adminBtnConfirm = user.root ? 'Yes Remove Admin' : ' Yes Make Admin';
 		if (user._id !== userStore.data.scitran._id) {
 			return (
-				<div className="col-sm-12 last admin-tools-wrap">
+				<div className="col-sm-4 last admin-tools-wrap admin-tools-bar">
 	                <div className="tools clearfix">
 	                    <div className="tool"><WarnButton className="btn btn-admin warning" message={adminBtnTxt} confirm={adminBtnConfirm} icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/></div>
 	                    <div className="tool"><button className="btn btn-admin warning" onClick={actions.blacklistModal.bind(this, user)}>Block User</button></div>

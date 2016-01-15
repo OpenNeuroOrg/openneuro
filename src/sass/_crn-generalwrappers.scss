@@ -1,5 +1,6 @@
 body{
     letter-spacing: 0.03em;
+    background: #fafafa;
 }
 .container{
   width: 100%;
@@ -109,11 +110,7 @@ body,
 		margin: 0;
 		display:block;
 		width: 100%;
-		background: #eee;
 		.tool {
-			display: block;
-			float: left;
-			width:20%;
 			text-align: center;
 			vertical-align:middle;
 			overflow:hidden;
@@ -133,6 +130,14 @@ body,
 			
 				}
 			}
+	}
+}
+
+.admin-tools-wrap.admin-tools-bar{
+	.tool {
+		display: block;
+		float: left;
+		width:50%;
 	}
 }
 

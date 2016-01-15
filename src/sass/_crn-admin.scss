@@ -67,7 +67,8 @@
 		    font-weight: 100;
 		    border-bottom: 1px solid #E1E1E1;
 		}
-		.user-panel{
+		.user-panel,
+		.user-panel-header{
 			margin: 0 -15px;
 			border-radius: 0;
 			border: none;
@@ -75,11 +76,15 @@
 			box-shadow: none;
 			padding: 0;
 		}
+		.user-panel-header{border-top:none;}
 		.user-col{
-			padding:0;
+			padding: 10px 15px;
+			label{
+				font-weight:bold;
+				text-transform: uppercase;
+			}
 			h3{
 				margin: 0;
-				padding: 10px 15px;
 				font-size: 15px;
 				.badge{
 					font-weight: 100;
@@ -91,9 +96,6 @@
 				button.btn{
 					padding:0;
 				}
-			}
-			&.middle{
-				text-align: center;
 			}
 			&.last{
 				overflow:hidden;

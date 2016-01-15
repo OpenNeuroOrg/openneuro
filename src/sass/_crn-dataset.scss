@@ -265,7 +265,7 @@
 		}
 	  &::before {
 	    font-family: FontAwesome;
-	    content: 'add file';
+	    content: 'add a file';
 	    display: inline-block;
 	    background-color:$sky;
 	    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
@@ -661,9 +661,9 @@
 			> button,
 			.fadeIn > button{
 				width: 100%;
-				color: $ocean;
+				color: $primary;
 				&:hover{
-					background: #006B7B;
+					background: $primary;
 					color:#fff;
 				}
 			}
