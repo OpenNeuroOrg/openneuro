@@ -14,7 +14,8 @@ export default class JobMenu extends React.Component {
 			loading: false,
 			parameters: [],
 			selectedApp: '',
-			message: null
+			message: null,
+			error: false
 		};
 	}
 
@@ -48,6 +49,7 @@ export default class JobMenu extends React.Component {
 
 		let message = (
 			<div>
+				{this.state.error ? <h4 className="danger">Error</h4> : null}
 				<h5>{this.state.message}</h5>
 				<button className="btn-admin admin-blue" onClick={actions.toggleModal.bind(this,'Jobs')}>OK</button>
 			</div>
@@ -187,8 +189,15 @@ export default class JobMenu extends React.Component {
 			parameters[parameter.id] = parameter.value;
 		}
 		this.setState({loading: true});
-		actions.startJob('test', this.state.selectedApp, parameters, (res) => {
-			this.setState({loading: false, message: res.message});
+		actions.startJob('test', this.state.selectedApp, parameters, (err, res) => {
+			let message, error;
+			if (err) {
+				error   = true;
+				message = "There was an issue submitting your analysis. Please double check you inputs and try again. If the issue persists contact the site adminstrator.";
+			} else {
+				message = "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."
+			}
+			this.setState({loading: false, message: message, error: error});
 		});
 	}
 }

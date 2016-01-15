@@ -42,7 +42,6 @@ let Jobs = React.createClass({
 				</Panel>
 			);
 		});
-		console.log(jobs);
 		return (
 			<div>
 				<Accordion accordion className="jobs-wrap">
