@@ -1,14 +1,11 @@
 // dependencies --------------------------------------------------------------
 
 import React        from 'react';
-import Navbar       from './partials/navbar.jsx';
-import Actions      from '../user/user.actions.js';
-import Upload       from '../upload/upload.jsx';
-import LeftNavbar   from './partials/left-navbar.jsx';
-import mixin        from 'es6-react-mixins';
-import UserStore    from '../user/user.store';
+import Navbar       from './nav/navbar.jsx';
+import LeftNavbar   from './nav/left-navbar.jsx';
+import userActions  from './user/user.actions.js';
 import bowser  		from 'bowser';
-import Happybrowser from './partials/happybrowser.jsx';
+import Happybrowser from './common/partials/happybrowser.jsx';
 import {RouteHandler, State} from 'react-router';
 
 // component setup -----------------------------------------------------------
@@ -20,17 +17,13 @@ let App = React.createClass({
 // life cycle methods --------------------------------------------------------
 
 	componentDidMount () {
-		Actions.initOAuth();
+		userActions.initOAuth();
 	},
 
 	render () {
 		let showLeftNav 	= !this.isActive('signIn');
 		let is_front 		= this.isActive('signIn');
-		let close 			= <span><span className="sr-only">Close</span> »</span>;
-		let open 			= <span><span className="sr-only">Open</span> «</span>;
-		let sidebar;
 		let leftnav;
-		let toggleSidebar;
 
 		if (showLeftNav) {
 			leftnav = <div className="left-nav"><LeftNavbar /></div>
@@ -48,19 +41,12 @@ let App = React.createClass({
 						</div>
 					</div>
 				</div>
-				{toggleSidebar}
-				{sidebar}
 			</div>
 		);
 	},
 
 // custom methods ------------------------------------------------------------
 
-	_toggleSidebar () {
-		this.setState({
-			toggleSidebarbar: !this.state.toggleSidebarbar
-		})
-	}
 
 });
 

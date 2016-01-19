@@ -3,13 +3,14 @@
 import React       		from 'react';
 import Reflux      		from 'reflux';
 import {Link}      		from 'react-router';
-import Actions     		from '../../user/user.actions.js';
-import userStore   		from '../../user/user.store.js';
-import uploadStore 		from '../../upload/upload.store.js';
-import Upload       	from '../../upload/upload.jsx';
-import {CollapsibleNav, 
-		Nav, 
-		DropdownButton, 
+import Actions     		from '../user/user.actions.js';
+import userStore   		from '../user/user.store.js';
+import uploadStore 		from '../upload/upload.store.js';
+import Upload       	from '../upload/upload.jsx';
+import Progress       	from '../upload/upload.progress.jsx';
+import {CollapsibleNav,
+		Nav,
+		DropdownButton,
 		Modal} 			from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
@@ -25,23 +26,19 @@ let BSNavbar = React.createClass({
 		let isLoggedIn = !!this.state.token;
 
 		//generate user menu
-		let usermenu, thumbnail, uploadBtn, uploadModal; 
+		let usermenu, thumbnail, uploadBtn, uploadModal;
 		if (this.state.google) {
 
 			let username = this.state.google.displayName;
 			let email   = this.state.google.email;
-			
-			
-			/*uploadDataset = (
-				<div className="col-xs-4 tasks-col fadeIn no-chrome">
-					<div className="no-chrome-overlay">Uploading the file structure of a <a className="message" href="http://bids.neuroimaging.io/" target="_blank">BIDS dataset</a> requires Chrome. Please switch your browser to use this feature.</div>
-					<Upload />
+
+			uploadBtn = (
+				<div>
+					<button className="btn btn-blue"  onClick={Actions.toggleModal.bind(null, 'Upload')}>Upload Dataset {uploadStore.data.uploadStatus == 'uploading' ? 'true' : 'false'}</button>
+					<Progress />
 				</div>
-				);*/
-			
-			let uploadDataset = <div className="tasks-col fadeIn"><Upload /></div>
-			uploadBtn = <button className="btn btn-blue"  onClick={Actions.toggleModal.bind(null, 'Upload')}>Upload Dataset</button>;
-			
+			);
+
 			uploadModal = (
 	            <Modal show={this.state.showUploadModal} onHide={Actions.toggleModal.bind(null, 'Upload')} className="upload-modal">
 	            	<Modal.Header closeButton>
@@ -49,7 +46,7 @@ let BSNavbar = React.createClass({
 	            	</Modal.Header>
 	            	<hr className="modal-inner" />
 	            	<Modal.Body>
-	            		{uploadDataset}
+	            		<div className="tasks-col fadeIn"><Upload /></div>
 	            	</Modal.Body>
 	            </Modal>
 	        );
@@ -67,13 +64,13 @@ let BSNavbar = React.createClass({
 							{isLoggedIn ? uploadModal : null}
 						</div>
 						<span className="username">
-							<span className="greeting">Hello</span> 
+							<span className="greeting">Hello</span>
 							<br/>
 							{username}
 						</span>
-						<img src={thumbnail} alt={username} className="userImgThumb" /> 
+						<img src={thumbnail} alt={username} className="userImgThumb" />
 						<DropdownButton className="user-menu btn-null" eventKey={1} title={gear}>
-							<img src={thumbnail} alt={username} className="userMenuThumb" /> 
+							<img src={thumbnail} alt={username} className="userMenuThumb" />
 							<li role="presentation" className="dropdown-header">{username}</li>
 							<li><a onClick={this._signOut} className="um-sign-out">Sign Out</a></li>
 							<li role="separator" className="divider"></li>
