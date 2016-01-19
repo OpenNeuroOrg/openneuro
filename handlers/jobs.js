@@ -5,6 +5,7 @@ import sanitize   from '../libs/sanitize';
 import scitran    from '../libs/scitran';
 import mongo      from '../libs/mongo';
 import async      from 'async';
+import config     from '../config';
 import {ObjectID} from 'mongodb';
 
 let c = mongo.collections;
@@ -74,7 +75,7 @@ export default {
 				parameters: job.parameters,
 				notifications: [
 					{
-						url:"http://scitran.sqm.io:8765/api/v1/jobs/${JOB_ID}/results",
+						url: config.url + ':' + config.port + '/api/v1/jobs/${JOB_ID}/results',
 						event:"*",
 						persistent:true
 					}
