@@ -3,7 +3,8 @@
 import React       		from 'react';
 import Reflux      		from 'reflux';
 import {Link}      		from 'react-router';
-import Actions     		from '../user/user.actions.js';
+import Usermenu         from './navbar.usermenu.jsx';
+import UploadBtn        from './navbar.upload-button.jsx';
 import userStore   		from '../user/user.store.js';
 import uploadStore 		from '../upload/upload.store.js';
 import Upload       	from '../upload/upload.jsx';
@@ -22,60 +23,16 @@ let BSNavbar = React.createClass({
 // life cycle methods ------------------------------------------------------------
 
 	render: function () {
-		let self = this;
 		let isLoggedIn = !!this.state.token;
 
 		//generate user menu
-		let usermenu, thumbnail, uploadBtn, uploadModal;
+		let usermenu, uploadBtn, uploadModal;
 		if (this.state.google) {
-
-			let username = this.state.google.displayName;
-			let email   = this.state.google.email;
-
-			uploadBtn = (
-				<div>
-					<button className="btn btn-blue"  onClick={Actions.toggleModal.bind(null, 'Upload')}>Upload Dataset {uploadStore.data.uploadStatus == 'uploading' ? 'true' : 'false'}</button>
-					<Progress />
-				</div>
-			);
-
-			uploadModal = (
-	            <Modal show={this.state.showUploadModal} onHide={Actions.toggleModal.bind(null, 'Upload')} className="upload-modal">
-	            	<Modal.Header closeButton>
-	            		<Modal.Title>Upload Dataset</Modal.Title>
-	            	</Modal.Header>
-	            	<hr className="modal-inner" />
-	            	<Modal.Body>
-	            		<div className="tasks-col fadeIn"><Upload /></div>
-	            	</Modal.Body>
-	            </Modal>
-	        );
-
-			if (this.state.google.picture) {
-				thumbnail = this.state.google.picture.replace("sz=50", "sz=200");
-			}
-
-			let gear = (<i className="fa fa-gear" />);
 			usermenu = (
 				<Nav navbar right className="useradmin-nav clearfix">
 					<div className="clearfix">
-						<div className="upload-modal-wrap">
-					   		{isLoggedIn ? uploadBtn : null}
-							{isLoggedIn ? uploadModal : null}
-						</div>
-						<span className="username">
-							<span className="greeting">Hello</span>
-							<br/>
-							{username}
-						</span>
-						<img src={thumbnail} alt={username} className="userImgThumb" />
-						<DropdownButton className="user-menu btn-null" eventKey={1} title={gear}>
-							<img src={thumbnail} alt={username} className="userMenuThumb" />
-							<li role="presentation" className="dropdown-header">{username}</li>
-							<li><a onClick={this._signOut} className="um-sign-out">Sign Out</a></li>
-							<li role="separator" className="divider"></li>
-							{/* styled dropdown icons ==== <li className="um-icon"><Link to="dashboard"><i className="fa fa-search" /></Link></li>*/}
-				        </DropdownButton>
+						<UploadBtn />
+						<Usermenu />
 			        </div>
 		        </Nav>
 			);
@@ -104,10 +61,6 @@ let BSNavbar = React.createClass({
 	},
 
 // custom methods ----------------------------------------------------------------
-
-	_signOut: function () {
-		Actions.signOut(uploadStore.data.uploadStatus);
-	}
 
 });
 
