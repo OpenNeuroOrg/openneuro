@@ -1,6 +1,6 @@
 body{
     letter-spacing: 0.03em;
-    background: #fafafa;
+    
 }
 .container{
   width: 100%;
@@ -11,12 +11,20 @@ body{
   padding: 0;
 }
 .main.view.container{
-	padding-top:75px;
+	padding-top:85px;
 }
 
 .container.maxed{
     width: 90%;
     max-width: 1500px;
+}
+
+
+.inner-route{
+	background: #e5e5e5;
+	&.light{
+		background: #fff;
+	}
 }
 
 html,
@@ -46,6 +54,7 @@ body,
 		top: 0;
 		left: 0;
 		z-index: 1300;
+		border-top:10px solid $stanfordRed;
 	}
 }
 .main-col{
@@ -117,11 +126,6 @@ body,
 			> button,
 			.fadeIn > button{
 				width: 100%;
-				color: $ocean;
-				&:hover{
-					background: #006B7B;
-					color:#fff;
-				}
 			}
 			button{
 					padding:7px 10px;

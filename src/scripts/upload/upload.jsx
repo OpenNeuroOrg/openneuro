@@ -102,18 +102,9 @@ let Upload = React.createClass({
 	// main template -------------------------------
 
 		return (
-			<div className='right-sidebar'>
-				<div className="rightsidebar-header">
-					<h2>My Tasks</h2>
-				</div>
+			<div className='uploader'>
 				<div className="upload-wrap panel-group" defaultActiveKey='1'>
-					<div className="upload-panel panel panel-default" h>
-
-					    <div className="panel-heading">
-					      <h4 className="panel-title">
-					      Upload Dataset
-					      </h4>
-					    </div>
+					<div className="upload-panel panel panel-default">
 
 					    <div className="panel-collapse collapse in">
 					    	<div className="panel-body">

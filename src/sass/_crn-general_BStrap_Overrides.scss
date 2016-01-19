@@ -111,24 +111,22 @@
 
 }
 .btn-blue{
-	background-color:$sky;
-	@include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
-	box-shadow:1px 1px 3px -1px rgba(0,0,0,0.7);
-	border-radius: 2px;
-	outline: none;
-	white-space: nowrap;
-	-webkit-user-select: none;
-	cursor: pointer;
-	font-weight: 300;
-	font-size: 12pt;
-	color:$white;
-	text-align: center;
-	padding:13px 15px;
-	margin:0;
-	width: 100%;
-	border:1px solid lighten($sky, 8%);
-	text-transform: uppercase;
-	transition: all 0.3s ease-out;
+    background-color: #007c92;
+    border-radius: 0;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    font-weight: 300;
+    font-size: 12pt;
+    color: #fff;
+    text-align: center;
+    padding: 8px 13px;
+    margin: 0;
+    width: 100%;
+    text-transform: uppercase;
+    transition: all 0.3s ease-out;
+    border:none;
 	&:hover,
 	&:active,
 	&.hover,
@@ -141,29 +139,29 @@
 
 
 .btn-tab{
-    background: #f9f9f9 !important;
+    background: #f7f7f7 !important;
     border:1px solid #eee;
     box-shadow: 1px -1px 3px -1px rgba(0,0,0,0.1);
     border-radius:0;
-    color:$ocean;
-    margin-left: -1px;
+    color:$primary;
+    margin-left: 15px;
     &.active{
     	background: #fff !important;
-    	border-color:#eee;
+    	border-color:#fff;
     	border-left: 1px solid #f6f6f6;
     	border-bottom-color:#fff;
 
-    	color:$ocean;
-    	 box-shadow: 0px -1px 4px -2px rgba(0,0,0,0.3);
+    	color:$primary;
+    	 box-shadow: 0px -1px 1px -1px rgba(0,0,0,0.5);
 
     }
     &:hover{
-    	background:#eee !important;
+    	background:#fff !important;
     	color: $sky;
     }
     &.active:hover{
     	background:#fff !important;
-    	color:$ocean;
+    	color:$primary;
     	cursor: normal;
     	outline:none;
     }

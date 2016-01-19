@@ -43,8 +43,20 @@
 	
 	}
 }
+
+.upload-modal.modal.in{
+	.modal-dialog{
+		padding:0;
+	}
+	.modal-header{
+		background:#f3f3f3;
+	}
+	.modal-body{
+		padding:0;
+	}
+}
 .tasks-col{
-	.right-sidebar{
+	.uploader{
 		.message{
 			text-align: center;
 			width: 100%;
@@ -75,7 +87,7 @@
 		.alert{
 		    overflow: hidden;
 		    position: absolute;
-		    top: 75px;
+		    top: -60px;
 		    right: 0;
 		    z-index: 1800;
 		    margin: 0;
@@ -252,23 +264,6 @@
 				}
 			}
 		}
-		.rightsidebar-header{
-			z-index: 1300;
-			margin: 0;
-			background-color: $primary;
-			height: 75px;
-			font-size: 30px;
-			line-height: 33px;
-			padding: 18px 20px;
-			color: $misty;
-			position: fixed;
-			top: 0;
-			right: 0;
-			width: 33.33333%;
-	  		h2{
-	  			margin: 0;
-	  		}
-		}
 		.upload-wrap{
 			display: block;
 			margin-top: 0;
@@ -284,7 +279,6 @@
 					text-transform: uppercase;
 					background-color: rgba(0, 0, 0, 0);
 					padding: 0;
-					margin-top: 75px;
 					position: relative;
 					h4{
 						margin: 0;
@@ -539,11 +533,11 @@
 	.activeTab-3,
 	.activeTab-4,
 	.activeTab-5{
-		height: 65px;
+		height: 45px;
 		width: 20%;
 		background:#BFBFBF;
 		transition:margin-left 0.3s ease;
-	    margin-top: -60px;
+	    margin-top: -40px;
 	    border-bottom: 5px solid $sky;
 		@media (max-width: 1428px) {
 			margin-top: -60px;
@@ -659,27 +653,18 @@
 				color: transparent;
 			}
 		  &::before {
-		    font-family: FontAwesome;
+			@extend .btn-blue;
+			display: inline-block;
+			outline: none;
+			white-space: nowrap;
+			-webkit-user-select: none;
+			padding:13px 15px;
 		    content: 'Select Folder';
-		    display: inline-block;
-		    background-color:$sky;
-		    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
-		    box-shadow:$btn-shadow;
-		    border-radius: 2px;
 		    outline: none;
-		    white-space: nowrap;
-		    -webkit-user-select: none;
-		    cursor: pointer;
 		    font-weight: 300;
 		    font-size: 12pt;
-		    color:$white;
 		    text-align: center;
-		    padding:13px 15px;
-		    margin:0;
 		    width: 100%;
-		    border:1px solid lighten($sky, 8%);
-		    text-transform: uppercase;
-		    transition: all 0.3s ease-out;
 		  }
 		  &:hover::before,
 		  &:active::before  {

@@ -45,7 +45,7 @@ let BSNavbar = React.createClass({
 			uploadModal = (
 	            <Modal show={this.state.showUploadModal} onHide={Actions.toggleModal.bind(null, 'Upload')} className="upload-modal">
 	            	<Modal.Header closeButton>
-	            		<Modal.Title>Share Dataset</Modal.Title>
+	            		<Modal.Title>Upload Dataset</Modal.Title>
 	            	</Modal.Header>
 	            	<hr className="modal-inner" />
 	            	<Modal.Body>
@@ -60,8 +60,12 @@ let BSNavbar = React.createClass({
 
 			let gear = (<i className="fa fa-gear" />);
 			usermenu = (
-				<Nav navbar right className="useradmin-nav">
-					<span>
+				<Nav navbar right className="useradmin-nav clearfix">
+					<div className="clearfix">
+						<div className="upload-modal-wrap">
+					   		{isLoggedIn ? uploadBtn : null}
+							{isLoggedIn ? uploadModal : null}
+						</div>
 						<span className="username">
 							<span className="greeting">Hello</span> 
 							<br/>
@@ -75,7 +79,7 @@ let BSNavbar = React.createClass({
 							<li role="separator" className="divider"></li>
 							{/* styled dropdown icons ==== <li className="um-icon"><Link to="dashboard"><i className="fa fa-search" /></Link></li>*/}
 				        </DropdownButton>
-			        </span>
+			        </div>
 		        </Nav>
 			);
 		}
@@ -94,11 +98,7 @@ let BSNavbar = React.createClass({
 					<div className="navbar-header">
 						{brand}
 				    </div>
-				    <CollapsibleNav eventKey={0}>
-							<Nav navbar className="useradmin-nav">
-								{isLoggedIn ? uploadBtn : null}
-								{isLoggedIn ? uploadModal : null}
-						    </Nav>
+				    <CollapsibleNav className="clearfix" eventKey={0}>
 						    {isLoggedIn ? usermenu : null}
 					</CollapsibleNav>
 				</div>
