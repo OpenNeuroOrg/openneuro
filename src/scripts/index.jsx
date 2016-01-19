@@ -21,6 +21,14 @@ let App = React.createClass({
 	},
 
 	render () {
+
+		let pageClasses = ' ';
+		let routeGetter = this.getRoutes();
+		
+		for(var i = 0; i < routeGetter.length; i++){
+			pageClasses += routeGetter[i].name+' ';
+		}
+
 		let showLeftNav 	= !this.isActive('signIn');
 		let is_front 		= this.isActive('signIn');
 		let leftnav;
@@ -30,7 +38,7 @@ let App = React.createClass({
 		}
 
 		return (
-			<div className={is_front ? "page is-front" : "page"}>
+			<div className={is_front ? "page is-front" + pageClasses : "page" + pageClasses}>
 				{!bowser.chrome ?  <Happybrowser /> : null }
 				<div className="full-col">
 					<Navbar/>

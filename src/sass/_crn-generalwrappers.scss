@@ -21,7 +21,6 @@ body{
 
 
 .inner-route{
-	background: #e5e5e5;
 	&.light{
 		background: #fff;
 	}
@@ -38,6 +37,13 @@ body,
 	height:100%;
 }
 
+
+.page{
+	background: #e5e5e5;
+	&.dataset{
+		background:#fff;
+	}
+}
 .route-wrapper{
 	padding: 0;
 	margin: 0;
