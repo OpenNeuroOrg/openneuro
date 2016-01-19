@@ -5,7 +5,7 @@ import {NotFoundRoute, DefaultRoute, Route} from 'react-router';
 import requireAuth from './utils/requireAuth';
 
 // views
-import Index          from './common/index.jsx';
+import Index          from './index.jsx';
 import Signin         from './user/signin.jsx';
 
 import Admin          from './admin/admin.jsx';
