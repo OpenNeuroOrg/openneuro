@@ -12,7 +12,8 @@ var Actions = Reflux.createActions([
 	'checkExists',
 	'setInitialState',
 	'selectTab',
-	'setRefs'
+	'setRefs',
+	'toggleModal'
 ]);
 
 export default Actions;
