@@ -82,7 +82,11 @@ let UploadStore = Reflux.createStore({
 	 * Toggle Modal
 	 */
 	toggleModal () {
-		this.update({showModal: !this.data.showModal});
+		if (this.data.uploadStatus === 'uploading') {
+			this.update({showModal: !this.data.showModal});
+		} else {
+			this.setInitialState({showModal: !this.data.showModal});
+		}
 	},
 
 	/**
@@ -134,6 +138,7 @@ let UploadStore = Reflux.createStore({
 			dirName: originalName,
 			uploadStatus: 'files-selected',
 			showRename: true,
+			showModal: true,
 			selectedName: dirName,
 			renameEnabled: renameEnabled,
 			showRenameInput: false,

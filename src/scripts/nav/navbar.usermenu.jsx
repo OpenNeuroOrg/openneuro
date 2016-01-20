@@ -21,22 +21,18 @@ let Usermenu = React.createClass({
 
 		//generate user menu
 		let usermenu, thumbnail;
-		// if (this.state.google) {
 
-			let username = this.state.google.displayName;
-			let email   = this.state.google.email;
+		let username = this.state.google.displayName;
+		let email   = this.state.google.email;
 
-			if (this.state.google.picture) {
-				thumbnail = this.state.google.picture.replace("sz=50", "sz=200");
-			}
+		if (this.state.google.picture) {
+			thumbnail = this.state.google.picture.replace("sz=50", "sz=200");
+		}
 
-			let gear = (<i className="fa fa-gear" />);
-
-		// }
-
+		let gear = (<i className="fa fa-gear" />);
 
 		return (
-			<div className="clearfix">
+			<div className="clearfix" style={{float: 'left'}}>
 				<span className="username">
 					<span className="greeting">Hello</span>
 					<br/>
