@@ -1,34 +1,8 @@
 
-// userCard admin
-
-.blacklist-modal{
-	button.btn-blue{
-		background: none;
-	    box-shadow: none;
-	    border-radius: 0;
-	    outline: none;
-	    white-space: nowrap;
-	    -webkit-user-select: none;
-	    cursor: pointer;
-	    font-weight: 300;
-	    color: #007c92;
-	    text-align: center;
-	    margin: 0;
-	    border: none;
-	    text-transform: uppercase;
-	    transition: all 0.3s ease-out;
-		width: 100px;
-		margin: 0;
-		padding: 10px;
-		font-size: 12px;
-	    &:hover, &:active, &.hover, &.active {
-		    color: #00515f;
-		    transition: all 0.3s ease-out;
-		    background: #eee;
-		}
-	}
-}
 .admin{	
+	.panel-teasers-list{
+		padding-bottom:0;
+	}
 	.form-group label {
 		position: absolute;
 		top: 3px;
@@ -36,6 +10,9 @@
 		font-size: 10px;
 		color: #777;
 		//display: none;
+	}
+	h2{
+		padding:0 20px;
 	}
 	&.blacklist{
 		h2{
@@ -46,19 +23,19 @@
 		    width: 100px;
 		    padding: 10px;
 		    font-size: 12px;
-		    margin: 10px;
+		    margin: 0 10px;
 		}
 		.no-results{
-			margin:10px;
+			border-top: 1px solid #eee;
+			padding: 10px 15px;
+			margin: 0 -15px;
 		}
 	}
 	.add-user{
 		padding-left:0;
 	}
-	.users-card{
+	.users-panel-wrap{
 	    margin: 20px 0 0;
-	}
-	.users-card{
 		h2{
 		    margin: 0 -15px;
 		    padding: 20px;
@@ -76,7 +53,9 @@
 			box-shadow: none;
 			padding: 0;
 		}
-		.user-panel-header{border-top:none;}
+		.user-panel-header{
+			border-top:none;
+		}
 		.user-col{
 			padding: 10px 15px;
 			label{
