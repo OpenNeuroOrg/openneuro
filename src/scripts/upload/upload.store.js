@@ -228,6 +228,7 @@ let UploadStore = Reflux.createStore({
 
 		this.update({
 			uploadStatus: 'uploading',
+			showModal: false,
 			showProgress: true,
 			disabledTab: true,
 			activeKey: 5
