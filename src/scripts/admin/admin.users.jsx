@@ -42,10 +42,10 @@ let users = React.createClass({
 		});
 
 		return (
-			<div className="dash-tab-content fadeIn inner-route admin clearfix">
+			<div className="panel-teasers-list fadeIn inner-route admin-users clearfix">
 				<h2>Current Users</h2>
 				<div>
-					<div className="col-xs-12 users-card">
+					<div className="col-xs-12 users-panel-wrap">
 							<div className="fadeIn user-panel-header clearfix" >
 							<div className="col-xs-4 user-col"><label>User</label></div>
 		                    <div className="col-xs-4 user-col"><label>Notes</label></div>
@@ -65,7 +65,7 @@ let users = React.createClass({
 		let adminBtnConfirm = user.root ? 'Yes Remove Admin' : ' Yes Make Admin';
 		if (user._id !== userStore.data.scitran._id) {
 			return (
-				<div className="col-xs-4 last admin-tools-wrap admin-tools-bar">
+				<div className="col-xs-4 last admin-tools-bar">
 	                <div className="tools clearfix">
 	                    <div className="tool"><WarnButton className="btn btn-admin warning" message={adminBtnTxt} confirm={adminBtnConfirm} icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/></div>
 	                    <div className="tool"><button className="btn btn-admin warning" onClick={actions.blacklistModal.bind(this, user)}>Block User</button></div>

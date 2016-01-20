@@ -143,17 +143,17 @@
 		width: 100%;
 		float: none;
 		box-sizing: border-box;
-		padding:10px 20px;
+		padding:20px 0;
 		span.status-wrap{
 			padding: 0;
 			margin: 0;
 			.status{
 			 	display: inline-block;
 			 	width: 100px;
-			 	float: right;
-			 	margin-right: 0;
-			 	margin-left: 15px;
-			 	text-align: right;
+			 	float: left;
+			 	margin-left: 0;
+			 	margin-right: 15px;
+			 	text-align: left;
 			}
 			input[type="file"].dirUpload-btn{
 				color: rgba(0, 0, 0, 0);
@@ -623,20 +623,35 @@
 		display:block;
 		width: 100%;
 		background: #eee;
+
 		.tool {	
 			text-align: center;
 			width: 70px;
 			float: left;
 			display: block;
+			overflow:hidden;
 			> button,
 			.fadeIn > button{
 				width: 100%;
 			}
-			button{
+			.btn-admin{
 					padding:7px 10px;
 					transition: all 0.1s ease;
 					border-radius:0;
-			
+				&.cancel{
+					background: $brand-danger;
+					color:#fff;
+					&:hover{
+						background:darken($brand-danger, 10%);
+					}
+				}
+				&.success{
+					background: $brand-success;
+					color:#fff;
+					&:hover{
+						background:darken($brand-success, 10%);
+					}
+				}
 				}
 			}
 	}

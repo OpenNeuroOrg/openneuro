@@ -10,7 +10,7 @@
 	100% {opacity: 1;}
 }
 
-.tasks-col.no-chrome{
+.no-chrome{
 	.right-sidebar{
 		-webkit-filter: blur(2px);
 	    -moz-filter: blur(2px);
@@ -55,7 +55,8 @@
 		padding:0;
 	}
 }
-.tasks-col{
+
+
 	.uploader{
 		.message{
 			text-align: center;
@@ -736,4 +737,3 @@
 		}
 	}
 
-}

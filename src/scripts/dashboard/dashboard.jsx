@@ -11,15 +11,15 @@ class Dashboard extends React.Component {
 
 	render () {
 		return (
-			<div className="fadeIn inner-route dashboard clearfix">
+			<div className="fadeIn inner-route clearfix">
 				<div className="col-xs-12">
-					{/*
-					<ul className="nav nav-pills dash-tab-link">
+					
+					<ul className="nav nav-pills tabs">
 						<li><Link to="notifications" className="btn-tab">Notifications<span className="unread-badge">2</span></Link></li>
 						<li><Link to="datasets" className="btn-tab">My Datasets</Link></li>
 						<li><Link to="jobs" className="btn-tab">My Results</Link></li>
 					</ul>
-					*/}
+				
 					<RouteHandler/>
 				</div>
 			</div>
