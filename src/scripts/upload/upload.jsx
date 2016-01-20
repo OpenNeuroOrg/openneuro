@@ -93,7 +93,7 @@ let Upload = React.createClass({
 			progress = (
 				<TabPane eventKey={5} tab={tabName}  className="upload-step" >
 					<div className={activePane}>
-						<Progress />
+						<Progress progress={this.state.progress} name={this.state.dirName} />
 					</div>
 				</TabPane>
 			);
@@ -110,7 +110,7 @@ let Upload = React.createClass({
 					    	<div className="panel-body">
 					        	<div>
 
-									<TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={this._selectTab}>
+									<TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={Actions.selectTab}>
 										<div className={activeBar}></div>
 										{select}
 										{rename}
@@ -124,16 +124,12 @@ let Upload = React.createClass({
 						</div>
 					</div>
 				</div>
-				{this.state.alert ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={this._closeAlert} /> : null}
 			</div>
     	);
 	},
 
 // custom methods -----------------------------------------------------
 
-	_closeAlert: Actions.closeAlert,
-
-	_selectTab: Actions.selectTab,
 
 });
 

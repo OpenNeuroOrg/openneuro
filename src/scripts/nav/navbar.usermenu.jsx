@@ -31,6 +31,8 @@ let Usermenu = React.createClass({
 
 		let gear = (<i className="fa fa-gear" />);
 
+		// TEMPORARY INLINE STYLING BELOW
+		// MOVE TO STYLESHEET AND REMOVE THIS COMMENT
 		return (
 			<div className="clearfix" style={{float: 'left'}}>
 				<span className="username">

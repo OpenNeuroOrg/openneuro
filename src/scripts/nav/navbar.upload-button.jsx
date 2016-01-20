@@ -6,6 +6,7 @@ import {Link}      		from 'react-router';
 import Actions     		from '../upload/upload.actions.js';
 import uploadStore 		from '../upload/upload.store.js';
 import Upload       	from '../upload/upload.jsx';
+import Alert            from '../upload/upload.alert.jsx';
 import {ProgressBar,
 		Modal} 			from 'react-bootstrap';
 
@@ -52,6 +53,7 @@ let UploadBtn = React.createClass({
 			<div className="upload-modal-wrap">
 				{uploadBtn}
 				{uploadModal}
+				{this.state.alert ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={Actions.closeAlert} /> : null}
 			</div>
 	    );
 	},
