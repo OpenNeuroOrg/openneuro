@@ -56,7 +56,7 @@ let Dataset = React.createClass({
 					</div>
 						<div className="col-xs-12">	
 							<div className="row">	
-								<div className="col-xs-5">
+								<div className="col-xs-7">
 								<h1 className="clearfix">
 										<ClickToEdit
 											value={dataset.name}
@@ -70,7 +70,7 @@ let Dataset = React.createClass({
 									</div>
 									<MetaData dataset={dataset}/>
 								</div>
-								<div className="col-xs-7">
+								<div className="col-xs-5">
 									<div>
 										<div className="fadeIn col-xs-12">
 											<h3 className="metaheader">Analysis Run</h3>
@@ -109,7 +109,7 @@ let Dataset = React.createClass({
 		}
 
 		return (
-			<div className="fadeIn inner-route dataset">
+			<div className="fadeIn inner-route dataset light">
             	<Spinner text="loading" active={loading} />
             	{content}
 			</div>

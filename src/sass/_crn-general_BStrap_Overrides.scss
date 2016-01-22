@@ -9,11 +9,14 @@
 	font-size: 12pt;
 	color:$primary;
 	text-align: center;
-	padding:10px 50px;
+	padding: 8px 13px;
 	width: 100%;
 	border:1px solid $primary;
 	text-transform: uppercase;
 	margin: 0 0 10px;
+	-webkit-user-select: none;
+	transition: all 0.3s ease-out;
+
 
 	&:hover,
 	&:active,
@@ -24,11 +27,38 @@
 		color:$primaryHover;
 	}
 }
+
+.btn-blue{
+	@extend .btn-basic;
+    background-color: #007c92;
+    color: #fff;
+    margin: 0;
+    border:none;
+	&:hover,
+	&:active,
+	&.hover,
+	&.active  {
+		background: darken($sky, 10%);
+		transition: all 0.3s ease-out;
+		color:#fff;
+	}
+}
 .btn-admin{
 	background: none;
 	border: 1px solid #BBB;
 	color: #777;
-	border-radius: 2px;
+	border-radius: 0px;
+	box-shadow:none;
+	outline: none;
+	white-space: nowrap;
+	-webkit-user-select: none;
+	cursor: pointer;
+	font-weight: 300;
+	text-align: center;
+	text-transform: uppercase;
+	transition: all 0.3s ease-out;
+	margin:0;
+	padding: 6px 10px;
 	&:hover,
 	&:active,
 	&.hover,
@@ -36,6 +66,7 @@
 		border-color:#aaa;
 		background: #e0e0e0;
 		color:#666;
+		transition: all 0.3s ease-out;
 	}
 
 	&:focus{
@@ -75,126 +106,124 @@
 	    i{margin-left:6px;}
 	}
 	&.warning{
-	}
-	
+	}	
 	&.cancel{
 	}
-
-	&.admin-blue{
-		background: none;
-		box-shadow:none;
-		border-radius: 0;
-		outline: none;
-		white-space: nowrap;
-		-webkit-user-select: none;
-		cursor: pointer;
-		font-weight: 300;
-		color:$sky;
-		text-align: center;
-		margin:0;
-		border:none;
-		text-transform: uppercase;
-		transition: all 0.3s ease-out;
-		&:hover,
-		&:active,
-		&.hover,
-		&.active  {
-			color: darken($sky, 10%);
-			transition: all 0.3s ease-out;
-			background: #eee;
-		}
-	}
 }
-.btn-reset{
+
+.btn-admin-blue{
 	@extend .btn-admin;
+	color:$sky;
 	border:none;
-
-}
-.btn-blue{
-	background-color:$sky;
-	@include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
-	box-shadow:1px 1px 3px -1px rgba(0,0,0,0.7);
-	border-radius: 2px;
-	outline: none;
-	white-space: nowrap;
-	-webkit-user-select: none;
-	cursor: pointer;
-	font-weight: 300;
-	font-size: 12pt;
-	color:$white;
-	text-align: center;
-	padding:13px 15px;
-	margin:0;
-	width: 100%;
-	border:1px solid lighten($sky, 8%);
 	text-transform: uppercase;
 	transition: all 0.3s ease-out;
 	&:hover,
 	&:active,
 	&.hover,
 	&.active  {
-		background: darken($sky, 10%);
-		transition: all 0.3s ease-out;
-		color:#fff;
+		color: darken($sky, 10%);
+		background: #eee;
 	}
 }
-
-
+.btn-reset{
+	@extend .btn-admin;
+	border:none;
+}
+.btn-filter{
+	margin: 0;
+	color: #aaa;
+	border-radius: 0;
+	background: #fefefe;
+	border: 1px solid #C2C2C2;
+	border-width: 0 0 0 1px;
+	padding: 6px 23px;
+	text-align: center;
+	display: inline-block;
+	transition: all 0.3s ease;
+}
+.btn-sort{
+	padding: 7px 20px;
+	background: #fefefe;
+	color: #909090;
+	font-size: 12px;
+	font-weight: 600;
+	text-align: left;
+	transition: all 0.3s ease;
+	&:hover,
+	&:focus,
+	&:active,
+	&.active{
+		outline:0;
+		background: #eee;
+		color: $primary;
+		box-sizing: border-box;
+	}
+}
 .btn-tab{
-    background: #f9f9f9 !important;
+    background: #f7f7f7 !important;
     border:1px solid #eee;
     box-shadow: 1px -1px 3px -1px rgba(0,0,0,0.1);
     border-radius:0;
-    color:$ocean;
-    margin-left: -1px;
+    color:$primary;
+    margin-left: 15px;
     &.active{
     	background: #fff !important;
-    	border-color:#eee;
+    	border-color:#fff;
     	border-left: 1px solid #f6f6f6;
     	border-bottom-color:#fff;
 
-    	color:$ocean;
-    	 box-shadow: 0px -1px 4px -2px rgba(0,0,0,0.3);
+    	color:$primary;
+    	 box-shadow: 0px -1px 1px -1px rgba(0,0,0,0.5);
 
     }
     &:hover{
-    	background:#eee !important;
+    	background:#fff !important;
     	color: $sky;
     }
     &.active:hover{
     	background:#fff !important;
-    	color:$ocean;
+    	color:$primary;
     	cursor: normal;
     	outline:none;
     }
 }
 //form // ================================================================
 
-.form-group {
-	position: relative;
-	//width: 300px;
-	margin: 20px auto;
+.formField{
+	width: 100%;
+	height: auto;
+	font-size: 18px;
+	font-family: $font-family-ssp;
+	font-weight: lighter;
+	border: none;
+	background: rgba(255,255,255,1);
+	border-radius:2px;
+	box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
+	padding: 10px;
+	margin: 0;
+	&:focus{
+		outline: 1px solid rgba(0, 0, 0, 0.9);
+		box-shadow:none;
+	}
 }
 
-.form-group label {
-	font-size: 10px;
-	color: #777;
-	//display: none;
-}
-.form-group{
+
+.form-group {
+    position: relative;
+    margin: 10px auto;
+	label {
+		font-size: 10px;
+	    color: #777;
+	    right: 5px;
+	    top: 5px;
+	    text-transform: uppercase;
+	}
+
  	input {
-		width: 100%;
-		height: 50px;
-		font-size: 22px;
-		font-weight: lighter;
-		font-family: helvetica;
-		padding: 0px 10px;
-		border: none;
-		background: rgba(255,255,255,1);
-		border-radius:2px;
-		box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
+		@extend .formField;
 		&:focus{
-			outline: 1px solid rgba(229, 85, 85, 0.25);
+			box-shadow:none;
+			outline: 1px solid rgba(0, 0, 0, 0.9);
 
 		}
 	}
@@ -209,19 +238,11 @@
 
 textarea,
 textarea.form-control {
-	width: 100%;
 	min-height: 200px;
-	font-size: 22px;
-	font-weight: lighter;
-	font-family: helvetica;
-	padding: 15px 10px;
-	border: none;
-	background: rgba(255,255,255,1);
-	border-radius:2px;
-	box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
+	@extend .formField;
 	&:focus{
-		outline: 1px solid rgba(229, 85, 85, 0.25);
-		box-shadow:inset 0 0 1px 1px rgba(0,0,0,.14);
+		outline: 1px solid rgba(0, 0, 0, 0.9);
+		box-shadow:none;
 	}
 }
 

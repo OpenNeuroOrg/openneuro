@@ -1,6 +1,8 @@
 // dependencies -----------------------------------------------------------
 
 import React from 'react';
+import Reflux      from 'reflux';
+import UploadStore from './upload.store.js';
 import {ProgressBar} from 'react-bootstrap';
 
 // component setup --------------------------------------------------------
@@ -8,7 +10,7 @@ import {ProgressBar} from 'react-bootstrap';
 export default class UploadProgress extends React.Component {
 
 // life cycle events ------------------------------------------------------
-	
+
 	render () {
 		let completed = this.props.progress.completed;
 		let total     = this.props.progress.total;
@@ -29,11 +31,10 @@ export default class UploadProgress extends React.Component {
 			<div className="uploadProgress-block">
 				<span className="upload-dirname">
 					<label><i className="folderIcon fa fa-folder-open" /></label>
-					{this.props.name}
+					{this.props.dirName}
 					<span className="message fadeIn"> {completed}/{total} files complete</span>
 
 				</span>
-				
 				<ProgressBar active now={progress} />
 				<div className="uploadFiles-wrap">
 					{currentFiles}
@@ -41,9 +42,6 @@ export default class UploadProgress extends React.Component {
 			</div>
 		);
 	}
-
-// custom methods ---------------------------------------------------------
-
 
 }
 

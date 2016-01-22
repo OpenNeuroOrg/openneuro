@@ -69,9 +69,9 @@ let Datasets = React.createClass({
             });
         }
         let isPublicDataset = (
-            <div className="fadeIn public-dashboard inner-route clearfix">
+            <div className="fadeIn dashboard inner-route clearfix">
                 <div className="col-xs-12">
-                    <div className="dash-tab-content datasets">
+                    <div className="panel-teasers-list datasets datasets-public">
                         <div className="header-filter-sort clearfix">
                             <div className="header-wrap clearfix">
                                  <h2>Public Datasets</h2>
@@ -96,7 +96,7 @@ let Datasets = React.createClass({
         );
         let isPrivateDataset = (
             <div>
-                <div className="dash-tab-content datasets">
+                <div className="panel-teasers-list datasets datasets-private">
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
                              <h2>My Datasets</h2>

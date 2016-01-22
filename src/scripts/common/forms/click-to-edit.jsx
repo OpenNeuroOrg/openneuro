@@ -33,7 +33,7 @@ let ClickToEdit = React.createClass({
 
 		let buttons = (
 			<div className="btn-wrapper">
-				<button className="cte-save-btn btn btn-admin admin-blue " onClick={this._save}>save</button>
+				<button className="cte-save-btn btn-admin-blue" onClick={this._save}>save</button>
 			</div>
 		);
 

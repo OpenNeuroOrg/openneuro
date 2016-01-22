@@ -20,7 +20,7 @@ let Select = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-	_clearInput: Actions.setInitialState,
+	_clearInput: () => {Actions.setInitialState({showModal: true});},
 
 	_onChange: Actions.onChange,
 

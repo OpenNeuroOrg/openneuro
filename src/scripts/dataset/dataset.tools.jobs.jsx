@@ -51,7 +51,7 @@ export default class JobMenu extends React.Component {
 			<div>
 				{this.state.error ? <h4 className="danger">Error</h4> : null}
 				<h5>{this.state.message}</h5>
-				<button className="btn-admin admin-blue" onClick={actions.toggleModal.bind(this,'Jobs')}>OK</button>
+				<button className="btn-admin-blue" onClick={actions.toggleModal.bind(this,'Jobs')}>OK</button>
 			</div>
 		);
 
@@ -112,7 +112,7 @@ export default class JobMenu extends React.Component {
 						</div>
 					</div>
 					<div className="col-xs-12 modal-actions">
-						<button className="btn-admin admin-blue" onClick={this._startJob.bind(this)}>Start</button>
+						<button className="btn-admin-blue" onClick={this._startJob.bind(this)}>Start</button>
 					</div>
 				</div>
 			);

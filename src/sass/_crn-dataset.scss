@@ -83,30 +83,14 @@
 				    		display: block;
 				    		width: 60px;
 				    		&:before {
-			    			width: auto;
-			    			padding: 0px 5px;
-			    			font-size: 10px;
-				    		background: none;
-							color: $ocean;
-							border: none;
-							box-shadow: none;
+				    			width: auto;
+				    			font-size: 10px;
+					    		@extend .btn-admin;
+					    		@extend .admin-blue;
 				    		}
-				    		&:hover:before{
-									background: #eee;
-							}
 
 				    		&.add-files:before {content: 'add a file';}
-				    		&.update-file:before {
-								content: 'update file';
-								background: none;
-								color: $ocean;
-								border: none;
-								box-shadow: none;
-								
-							}
-							&.update-file:hover:before{
-									background: #eee;
-							}
+				    		&.update-file:before {content: 'update file';}
 				    	}
 				    }
 				
@@ -159,17 +143,17 @@
 		width: 100%;
 		float: none;
 		box-sizing: border-box;
-		padding:10px 20px;
+		padding:20px 0;
 		span.status-wrap{
 			padding: 0;
 			margin: 0;
 			.status{
 			 	display: inline-block;
 			 	width: 100px;
-			 	float: right;
-			 	margin-right: 0;
-			 	margin-left: 15px;
-			 	text-align: right;
+			 	float: left;
+			 	margin-left: 0;
+			 	margin-right: 15px;
+			 	text-align: left;
 			}
 			input[type="file"].dirUpload-btn{
 				color: rgba(0, 0, 0, 0);
@@ -322,7 +306,7 @@
 	.cte-edit-button{
 		border: none;
 		background-color: rgba(0, 0, 0, 0);
-		color: $ocean;
+		color: $primary;
 		padding: 0px;
 		margin: -5px 0 0 10px;
 		span{
@@ -333,6 +317,10 @@
 		i{
 			font-size: 12px;
 			margin-top: -2px;
+		}
+		&:hover{
+			background:none;
+			color:lighten($primary, 10%);
 		}
 	}
 
@@ -498,34 +486,16 @@
 			color: transparent;
 		}
 	  &::before {
-	    font-family: FontAwesome;
-	    content: 'resume';
-	    display: inline-block;
-	    background-color:$sky;
-	    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
-	    box-shadow:$btn-shadow;
-	    border-radius: 2px;
-	    outline: none;
-	    white-space: nowrap;
-	    -webkit-user-select: none;
-	    cursor: pointer;
-	    font-weight: 300;
-	    font-size: 10px;
-	    color:$white;
-	    text-align: center;
-	    padding:0;
-	    margin:0;
-	    width: 100%;
-	    border:1px solid lighten($sky, 8%);
-	    text-transform: uppercase;
-	    transition: all 0.3s ease-out;
-	  }
-	  &:hover::before,
-	  &:active::before  {
-	    background: darken($sky, 10%);
-	    transition: all 0.3s ease-out;
-	  }
+	    @extend .btn-blue;
+		content: 'resume';
+		display: inline-block;
+		outline: none;
+		white-space: nowrap;
+		-webkit-user-select: none;
+		font-size: 10px;
+		padding: 0;
 
+	  }
 	  &[type="file"]:focus {
 	    outline:none;
 	  }
@@ -653,25 +623,35 @@
 		display:block;
 		width: 100%;
 		background: #eee;
+
 		.tool {	
 			text-align: center;
 			width: 70px;
 			float: left;
 			display: block;
+			overflow:hidden;
 			> button,
 			.fadeIn > button{
 				width: 100%;
-				color: $primary;
-				&:hover{
-					background: $primary;
-					color:#fff;
-				}
 			}
-			button{
+			.btn-admin{
 					padding:7px 10px;
 					transition: all 0.1s ease;
 					border-radius:0;
-			
+				&.cancel{
+					background: $brand-danger;
+					color:#fff;
+					&:hover{
+						background:darken($brand-danger, 10%);
+					}
+				}
+				&.success{
+					background: $brand-success;
+					color:#fff;
+					&:hover{
+						background:darken($brand-success, 10%);
+					}
+				}
 				}
 			}
 	}

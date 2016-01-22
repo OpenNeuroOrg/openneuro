@@ -31,12 +31,26 @@
 .navbar-brand {
   height: 75px;
 }
+.useradmin-nav{
+	.btn.btn-blue{
+
+	}
+}
+
+
+.upload-modal-wrap{
+	    float: left;
+    margin: 17px 55px 17px 10px;
+}
 
 .navbar-right.useradmin-nav{
     margin: 0;
+
     .username{
 		margin: 15px 75px 0 0;
 		text-align: right;
+		    float: left;
+    text-align: right;
 		display: block;
 		.greeting{
 			 text-transform: uppercase;
