@@ -5,6 +5,7 @@ import sanitize   from '../libs/sanitize';
 import scitran    from '../libs/scitran';
 import mongo      from '../libs/mongo';
 import async      from 'async';
+import config     from '../config';
 import {ObjectID} from 'mongodb';
 
 let c = mongo.collections;
@@ -74,7 +75,7 @@ export default {
 				parameters: job.parameters,
 				notifications: [
 					{
-						url:"http://scitran.sqm.io:8765/api/v1/jobs/${JOB_ID}/results",
+						url: config.url + ':' + config.port + '/api/v1/jobs/${JOB_ID}/results',
 						event:"*",
 						persistent:true
 					}
@@ -82,7 +83,11 @@ export default {
 			};
 
 			agave.createJob(body, (err, resp) => {
-				if (err) {return next(err);}
+				if (resp.body.status == 'error') {
+					let error = new Error(resp.body.message);
+					error.http_code = 400;
+					return next(error);
+				}
 				c.jobs.insertOne({
 					name:      job.name,
 					appId:     job.appId,
@@ -219,6 +224,11 @@ export default {
 		let datasetId = req.params.datasetId;
 
 		scitran.getProject(datasetId, (err, resp) => {
+			if (resp.statusCode == 400) {
+				let error = new Error("Bad request");
+				error.http_code = 400;
+				return next(error);
+			}
 			if (resp.statusCode == 404) {
 				let error = new Error("No dataset found");
 				error.http_code = 404;

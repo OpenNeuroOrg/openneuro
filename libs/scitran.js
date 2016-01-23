@@ -37,9 +37,9 @@ export default {
 	 * Create User
 	 */
 	createUser(user, callback) {
-		request.post(config.scitran.url + 'users', {body: user}, (err, res) => {
-			this.createGroup(user._id, user._id, callback);
-		});
+	    request.post(config.scitran.url + 'users', {body: user}, (err, res) => {
+		this.createGroup(user._id, user._id, callback);
+            });
 	},
 
 	/**
@@ -52,9 +52,12 @@ export default {
     createGroup (groupName, userId, callback) {
         let body = {
             _id: groupName,
-            roles: [{access: 'admin', _id: userId}]
+	    name: groupName,
         };
-        request.post(config.scitran.url + 'groups', {body: body}, callback);
+	console.log(body);
+        request.post(config.scitran.url + 'groups', {body: body}, (err, res) => {
+            this.addRole('groups', groupName, {_id: groupName, access: 'admin', site: 'local'}, callback);
+        });
     },
 
     /**
@@ -64,5 +67,12 @@ export default {
     getProject (projectId, callback) {
         request.get(config.scitran.url + 'projects/' + projectId, {}, callback);
     },
+
+    /**
+     * Add Role
+     */
+    addRole(container, id, role, callback) {
+        request.post(config.scitran.url + container + '/' + id + '/roles', {body: role}, callback); 
+    }
 
 }
