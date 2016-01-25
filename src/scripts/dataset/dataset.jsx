@@ -73,7 +73,6 @@ let Dataset = React.createClass({
 								<div className="col-xs-5">
 									<div>
 										<div className="fadeIn col-xs-12">
-											<h3 className="metaheader">Analysis Run</h3>
 											<Jobs />
 										</div>
 										<div className="col-xs-12">

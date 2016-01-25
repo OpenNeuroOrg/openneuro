@@ -19,7 +19,6 @@ let Jobs = React.createClass({
 		let jobs = this.state.jobs.map((job) => {
 			let results;
 
-
 			if (job.results) {
 				results = job.results.map((result, index) => {
 					return (
@@ -42,8 +41,10 @@ let Jobs = React.createClass({
 				</Panel>
 			);
 		});
+		let header = <h3 className="metaheader">Analysis</h3>;
 		return (
 			<div>
+				{jobs.length === 0 ?  null : header }
 				<Accordion accordion className="jobs-wrap">
 					{this.state.loadingJobs ? <Spinner active={true} /> : jobs}
 				</Accordion>

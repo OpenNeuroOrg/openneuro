@@ -81,7 +81,7 @@
 				    		height: 20px;
 				    		width: auto;
 				    		display: block;
-				    		width: 60px;
+				    		width: 200px;
 				    		&:before {
 				    			width: auto;
 				    			font-size: 10px;
@@ -89,7 +89,7 @@
 					    		@extend .admin-blue;
 				    		}
 
-				    		&.add-files:before {content: 'add a file';}
+				    		&.add-files:before {content: 'add a file'; padding:1px 5px;}
 				    		&.update-file:before {content: 'update file';}
 				    	}
 				    }
@@ -638,6 +638,7 @@
 					padding:7px 10px;
 					transition: all 0.1s ease;
 					border-radius:0;
+					font-size: 18px;
 				&.cancel{
 					background: $brand-danger;
 					color:#fff;

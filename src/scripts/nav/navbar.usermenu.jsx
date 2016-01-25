@@ -34,7 +34,7 @@ let Usermenu = React.createClass({
 		// TEMPORARY INLINE STYLING BELOW
 		// MOVE TO STYLESHEET AND REMOVE THIS COMMENT
 		return (
-			<div className="clearfix" style={{float: 'left'}}>
+			<div className="clearfix user-wrap">
 				<span className="username">
 					<span className="greeting">Hello</span>
 					<br/>

@@ -26,14 +26,14 @@ let UploadBtn = React.createClass({
 
 		progress = (
 			<div>
-				Uploading...
+				<button className="btn btn-blue btn-view-progress"  onClick={Actions.toggleModal}>view progress</button>
 				<ProgressBar active now={progress} />
 			</div>
 		)
 
 		let uploadBtn = (
 			<div>
-				<button className="btn btn-blue"  onClick={Actions.toggleModal}>{uploadStore.data.uploadStatus == 'uploading' ? progress : 'Upload Dataset'}</button>
+				<button className="btn btn-blue"  onClick={Actions.toggleModal}>Upload Dataset</button>
 			</div>
 		);
 
@@ -50,12 +50,15 @@ let UploadBtn = React.createClass({
         );
 
 		return (
-			<div className="upload-modal-wrap">
-				{uploadBtn}
-				{uploadModal}
+			<span>
+				<div className="upload-btn-wrap">
+				{uploadStore.data.uploadStatus == 'uploading' ? progress : uploadBtn}
 				{this.state.alert ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={Actions.closeAlert} /> : null}
-			</div>
+				{uploadModal}
+				</div>
+			</span>
 	    );
+
 	},
 
 // custom methods ----------------------------------------------------------------
