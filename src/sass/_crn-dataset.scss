@@ -637,6 +637,9 @@
 			.fadeIn > button{
 				width: 100%;
 			}
+			.btn-group{
+				backface-visibility: initial;
+			}
 			.btn-admin{
 					padding:7px 10px;
 					transition: all 0.1s ease;
