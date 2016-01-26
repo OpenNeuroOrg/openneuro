@@ -1,6 +1,7 @@
 import config  from '../config';
 import fs      from 'fs';
 import async   from 'async';
+import tar     from 'tar-fs';
 
 /**
  * Files
@@ -55,5 +56,29 @@ export default {
                 callback(files_);
             });
         });
+    },
+
+    /**
+     * Save Symlinks
+     */
+    saveSymlinks (hash, body, callback) {
+        fs.writeFile('./persistent/temp/' + hash + '.tar', body, (err) => {
+            fs.createReadStream('./persistent/temp/' + hash + '.tar')
+                .pipe(tar.extract('./persistent/datasets/', {
+                    map: function (header) {
+                        let originalDirName = header.name.split('/')[0];
+                        header.name = header.name.replace(originalDirName, hash);
+                        return header;
+                    }
+                }))
+                .on('finish', () => {
+                    fs.unlink('./persistent/temp/' + hash + '.tar', () => {
+                        this.updateSymlinks('./persistent/datasets/' + hash, () => {
+                            callback(err, hash);
+                        });
+                    });
+                });
+        });
     }
+
 }
