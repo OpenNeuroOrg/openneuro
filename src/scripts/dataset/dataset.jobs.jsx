@@ -41,7 +41,7 @@ let Jobs = React.createClass({
 				</Panel>
 			);
 		});
-		let header = <h3 className="metaheader">Analysis</h3>;
+		let header = <h3 className="metaheader">Analyses</h3>;
 		return (
 			<div>
 				{jobs.length === 0 ?  null : header }
