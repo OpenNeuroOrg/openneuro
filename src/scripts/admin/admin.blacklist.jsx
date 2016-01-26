@@ -31,13 +31,13 @@ let Blacklist = React.createClass({
                     	</h3>
                     	<h3 className="user-email">{user._id}</h3>
                     </div>
-                    <div className="col-xs-5 user-col">
+                    <div className="col-xs-4 user-col">
 	                    <div>{user.note}</div>
                     </div>
-                    <div className="col-xs-2 last admin-tools-bar">
+                    <div className="col-xs-3 last admin-tools-bar">
 	                <div className="tools clearfix">
 	                    <div className="tool">
-		                    <WarnButton message="Unblock this User" className="btn btn-admin warning" confirm="Yes Unblock" action={actions.unBlacklistUser.bind(this, user._id)} />
+		                    <WarnButton message="Unblock User" className="btn btn-admin warning" confirm="Yes Unblock" action={actions.unBlacklistUser.bind(this, user._id)} />
 	                    </div>
                     </div>
                     </div>
@@ -56,8 +56,8 @@ let Blacklist = React.createClass({
 					<div className="col-xs-12 users-panel-wrap ">
 						<div className="fadeIn user-panel-header clearfix" >
 							<div className="col-xs-5 user-col"><label>User</label></div>
-		                    <div className="col-xs-5 user-col"><label>Notes</label></div>
-		                    <div className="col-xs-2 user-col"><label>Actions</label></div>
+		                    <div className="col-xs-4 user-col"><label>Notes</label></div>
+		                    <div className="col-xs-3 user-col"><label>Actions</label></div>
 	                	</div>
 	                    {this.state.blacklist.length == 0 ? noBlacklist : users}
 					</div>

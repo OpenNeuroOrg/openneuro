@@ -9,6 +9,7 @@ import userStore   		from '../user/user.store.js';
 import uploadStore 		from '../upload/upload.store.js';
 import Upload       	from '../upload/upload.jsx';
 import Progress       	from '../upload/upload.progress.jsx';
+import userActions   	from '../user/user.actions.js';
 import {CollapsibleNav,
 		Nav,
 		DropdownButton,
@@ -37,6 +38,14 @@ let BSNavbar = React.createClass({
 		        </Nav>
 			);
 		}
+		let signInGoogle = (
+			<div className="navbar-right signInNavBtn">
+				<button className="btn-blue" onClick={userActions.signIn} >
+					<i className="fa fa-google" />
+					<span> Sign in</span>
+				</button>
+			</div>
+		);
 
 		// generate brand
 		let brand = (
@@ -53,7 +62,7 @@ let BSNavbar = React.createClass({
 						{brand}
 				    </div>
 				    <CollapsibleNav className="clearfix" eventKey={0}>
-						    {isLoggedIn ? usermenu : null}
+						    {isLoggedIn ? usermenu : signInGoogle}
 					</CollapsibleNav>
 				</div>
 		    </nav>

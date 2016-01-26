@@ -37,7 +37,8 @@
 	&:hover,
 	&:active,
 	&.hover,
-	&.active  {
+	&.active,
+	&:focus  {
 		background: darken($sky, 10%);
 		transition: all 0.3s ease-out;
 		color:#fff;
@@ -267,21 +268,30 @@ select {
 .progress{
 	background: #dedede;
 	border-radius:0;
-	height: 12px;
+	height: 18px;
 	margin:0;
+	padding:0;
 }
 .progress-bar{
 	max-width: 100%;
 	background:$turquoise;
+	span span{
+    font-size: 10px;
+    line-height: 10px;
+    margin: 0;
+    text-align: left;
+    display: block;
+    padding: 5px 5px;
+	}
 }
 
 
 .tooltip-inner{
 	border-radius:0;
-	background: rgba(0,0,0,0.8);
+	background: rgba(0,0,0,0.9);
 	color:$white;
 	padding: 8px 12px;
 }
 .tooltip.top .tooltip-arrow{
-	border-top-color: rgba(0,0,0,0.8);
+	border-top-color: rgba(0,0,0,0.9);
 }

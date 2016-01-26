@@ -149,6 +149,18 @@ body,
 		float: left;
 		width:50%;
 		overflow: hidden;
+		button.btn-admin.warning{
+			padding:6px 0;
+		}
+	}
+}
+
+
+.admin-blacklist{
+	.admin-tools-bar{
+		.tool {
+			width:100%;
+		}
 	}
 }
 
