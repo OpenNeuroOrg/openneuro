@@ -642,20 +642,26 @@
 					transition: all 0.1s ease;
 					border-radius:0;
 					font-size: 18px;
-				&.cancel{
-					background: $brand-danger;
-					color:#fff;
-					&:hover{
-						background:darken($brand-danger, 10%);
+					&.cancel{
+						background: $brand-danger;
+						color:#fff;
+						font-size: 14px;
+						padding: 5px 8px;
+						margin: 5px 5px 5px 0;
+						&:hover{
+							background:darken($brand-danger, 10%);
+						}
 					}
-				}
-				&.success{
-					background: $brand-success;
-					color:#fff;
-					&:hover{
-						background:darken($brand-success, 10%);
+					&.success{
+						background: $brand-success;
+						color:#fff;
+						font-size: 14px;
+						padding: 5px 8px;
+						margin: 5px 0;
+						&:hover{
+							background:darken($brand-success, 10%);
+						}
 					}
-				}
 				}
 			}
 	}
