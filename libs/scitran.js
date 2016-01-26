@@ -2,8 +2,8 @@ import request from './request';
 import config  from '../config';
 import fs      from 'fs';
 import tar     from 'tar-fs';
-import async   from 'async';
 import crypto  from 'crypto';
+import files   from './files';
 
 /**
  * Scitran
@@ -116,7 +116,7 @@ export default {
                             }))
                             .on('finish',   () => {
                                 fs.unlink('./persistent/temp/' + hash + '.tar', () => {
-                                    updateSymlinks('./persistent/datasets/' + hash, () => {
+                                    files.updateSymlinks('./persistent/datasets/' + hash, () => {
                                         callback(err, res);
                                     });
                                 });
@@ -131,35 +131,35 @@ export default {
 }
 
 
-function updateSymlinks(dir, callback) {
-    getFiles(dir, (files) => {
-        async.each(files, (path, cb) => {
-            fs.readlink(path, (err, linkPath) => {
-                fs.unlink(path, () => {
-                    fs.symlink(config.scitran.fileStore + linkPath, path, cb);
-                });
-            });
-        }, callback);
-    });
-}
+// function updateSymlinks(dir, callback) {
+//     getFiles(dir, (files) => {
+//         async.each(files, (path, cb) => {
+//             fs.readlink(path, (err, linkPath) => {
+//                 fs.unlink(path, () => {
+//                     fs.symlink(config.scitran.fileStore + linkPath, path, cb);
+//                 });
+//             });
+//         }, callback);
+//     });
+// }
 
-function getFiles (dir, callback, files_) {
-    files_ = files_ || [];
-    fs.readdir(dir, (err, files) => {
-        async.each(files, (filename, cb) => {
-            let path = dir + '/' + filename;
-            fs.lstat(path, (err, stats) => {
-                if (stats.isSymbolicLink()) {
-                    files_.push(path);
-                    cb();
-                } else {
-                    getFiles(path, (files) => {
-                        cb();
-                    }, files_);
-                }
-            });
-        }, () => {
-            callback(files_);
-        });
-    });
-}
+// function getFiles (dir, callback, files_) {
+//     files_ = files_ || [];
+//     fs.readdir(dir, (err, files) => {
+//         async.each(files, (filename, cb) => {
+//             let path = dir + '/' + filename;
+//             fs.lstat(path, (err, stats) => {
+//                 if (stats.isSymbolicLink()) {
+//                     files_.push(path);
+//                     cb();
+//                 } else {
+//                     getFiles(path, (files) => {
+//                         cb();
+//                     }, files_);
+//                 }
+//             });
+//         }, () => {
+//             callback(files_);
+//         });
+//     });
+// }
