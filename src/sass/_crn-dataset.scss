@@ -638,6 +638,9 @@
 				width: 100%;
 			}
 			.btn-group{
+				-moz-backface-visibility: initial;
+				-ms-backface-visibility: initial;
+				-o-backface-visibility: initial;
 				backface-visibility: initial;
 			}
 			.btn-admin{
