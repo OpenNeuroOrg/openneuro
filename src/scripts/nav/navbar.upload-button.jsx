@@ -26,7 +26,7 @@ let UploadBtn = React.createClass({
 
 		progress = (
 			<div>
-				<button className="btn btn-blue btn-view-progress"  onClick={Actions.toggleModal}>view progress</button>
+				<button className="btn btn-blue btn-view-progress"  onClick={Actions.toggleModal}>view details</button>
 				<ProgressBar active now={progress} />
 			</div>
 		)
