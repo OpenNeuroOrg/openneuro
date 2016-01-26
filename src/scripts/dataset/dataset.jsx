@@ -54,37 +54,36 @@ let Dataset = React.createClass({
 					<div className="col-xs-12 dataset-tools-wrap">
 						<Tools />
 					</div>
-						<div className="col-xs-12">	
-							<div className="row">	
-								<div className="col-xs-7">
-								<h1 className="clearfix">
-										<ClickToEdit
-											value={dataset.name}
-											label={false}
-											editable={canEdit}
-											onChange={Actions.updateName}/>
-									</h1>
-									<h6>uploaded {dataset.userOwns ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
-									<div className="status-container">
-										<Statuses dataset={dataset}/>
-									</div>
-									<MetaData dataset={dataset}/>
+					<div className="col-xs-12 dataset-wrap">	
+						<div className="row">	
+							<div className="col-xs-7">
+							<h1 className="clearfix">
+									<ClickToEdit
+										value={dataset.name}
+										label={false}
+										editable={canEdit}
+										onChange={Actions.updateName}/>
+								</h1>
+								<h6>uploaded {dataset.userOwns ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
+								<div className="status-container">
+									<Statuses dataset={dataset}/>
 								</div>
-								<div className="col-xs-5">
-									<div>
-										<div className="fadeIn col-xs-12">
-											<Jobs />
-										</div>
-										<div className="col-xs-12">
-											<div className="fileStructure fadeIn panel-group">
-												<div className="panel panel-default">
-													<div className="panel-heading" >
-														<h4 className="panel-title">Dataset File Tree</h4>
-													</div>
-													<div className="panel-collapse" aria-expanded="false" >
-														<div className="panel-body">
-															<FileTree tree={[dataset]} editable={canEdit}/>
-														</div>
+								<MetaData dataset={dataset}/>
+							</div>
+							<div className="col-xs-5">
+								<div>
+									<div className="fadeIn col-xs-12">
+										<Jobs />
+									</div>
+									<div className="col-xs-12">
+										<div className="fileStructure fadeIn panel-group">
+											<div className="panel panel-default">
+												<div className="panel-heading" >
+													<h4 className="panel-title">Dataset File Tree</h4>
+												</div>
+												<div className="panel-collapse" aria-expanded="false" >
+													<div className="panel-body">
+														<FileTree tree={[dataset]} editable={canEdit}/>
 													</div>
 												</div>
 											</div>
@@ -93,6 +92,7 @@ let Dataset = React.createClass({
 								</div>
 							</div>
 						</div>
+					</div>
 					</div>
 				</div>
 			);
