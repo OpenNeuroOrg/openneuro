@@ -56,48 +56,52 @@ export default {
 	create(req, res, next) {
 		sanitize.req(req, models.job, (err, job) => {
 			if (err) {return next(err);}
+			scitran.downloadSymlinkDataset(job.datasetId, (err, hash) => {
 
-			let body = {
-				name: job.name,
-				appId: job.appId,
-				batchQueue: "normal",
-				executionSystem: "slurm-stampede.tacc.utexas.edu",
-				maxRunTime: "00:20:00",
-				memoryPerNode: "8GB",
-				nodeCount: 1,
-				processorsPerNode: 16,
-				archive: true,
-				archiveSystem: "openfmri-storage",
-				archivePath: null,
-				inputs: {
-					bidsFile: "agave://openfmri-storage/ds003_downsampled.tar"
-				},
-				parameters: job.parameters,
-				notifications: [
-					{
-						url: config.url + ':' + config.port + '/api/v1/jobs/${JOB_ID}/results',
-						event:"*",
-						persistent:true
+				let body = {
+					name: job.name,
+					appId: job.appId,
+					batchQueue: "normal",
+					executionSystem: "slurm-stampede.tacc.utexas.edu",
+					maxRunTime: "00:20:00",
+					memoryPerNode: "8GB",
+					nodeCount: 1,
+					processorsPerNode: 16,
+					archive: true,
+					archiveSystem: "openfmri-storage",
+					archivePath: null,
+					inputs: {
+						bidsFile: "agave://openfmri-storage/ds003_downsampled.tar"
+					},
+					parameters: job.parameters,
+					notifications: [
+						{
+							url: config.url + ':' + config.port + '/api/v1/jobs/${JOB_ID}/results',
+							event:"*",
+							persistent:true
+						}
+					]
+				};
+
+				agave.createJob(body, (err, resp) => {
+					if (resp.body.status == 'error') {
+						let error = new Error(resp.body.message);
+						error.http_code = 400;
+						return next(error);
 					}
-				]
-			};
-
-			agave.createJob(body, (err, resp) => {
-				if (resp.body.status == 'error') {
-					let error = new Error(resp.body.message);
-					error.http_code = 400;
-					return next(error);
-				}
-				c.jobs.insertOne({
-					name:      job.name,
-					appId:     job.appId,
-					datasetId: job.datasetId,
-					userId:    job.userId,
-					jobId:     resp.body.result.id,
-					agave:     resp.body.result
-				}, () => {
-					res.send(resp.body);
+					c.jobs.insertOne({
+						name:        job.name,
+						appId:       job.appId,
+						datasetId:   job.datasetId,
+						datasetHash: hash,
+						userId:      job.userId,
+						jobId:       resp.body.result.id,
+						agave:       resp.body.result
+					}, () => {
+						res.send(resp.body);
+					});
 				});
+
 			});
 		});
 	},

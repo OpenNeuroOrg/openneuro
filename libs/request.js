@@ -50,7 +50,6 @@ function handleRequest(url, options, callback) {
 	};
 
 	req = parseOptions(req, options);
-
 	callback(req);
 }
 
