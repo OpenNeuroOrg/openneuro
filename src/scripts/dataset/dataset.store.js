@@ -468,6 +468,14 @@ let datasetStore = Reflux.createStore({
 		});
 	},
 
+	// Snapshots ---------------------------------------------------------------------
+
+	createSnapshot() {
+		scitran.createSnapshot(this.data.dataset._id, (err, res) => {
+			console.log(err, res);
+		});
+	}
+
 });
 
 export default datasetStore;

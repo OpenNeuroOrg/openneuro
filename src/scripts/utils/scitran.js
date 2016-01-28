@@ -310,4 +310,30 @@ export default  {
         }, callback);
     },
 
+// Snapshots ------------------------------------------------------------------------------
+
+    createSnapshot (projectId, callback) {
+        request.post(config.scitran.url + 'snapshots', {
+            body: {project: projectId}
+        }, callback);
+    },
+
+    getSnapshots (callback) {
+        request.get(config.scitran.url + 'snapshots/projects', {}, callback);
+    },
+
+    getProjectSnapshots (projectId, callback) {
+        request.get(config.scitran.url + 'projects/' + projectId + '/snapshots', {}, callback);
+    },
+
+    deleteSnapshot (projectId, callback) {
+        request.del(config.scitran.url + 'snapshots/projects/' + projectId, {}, callback);
+    },
+
+    updateSnapshotPublic(projectId, value, callback) {
+        request.put(config.scitran.url + 'snapshots/projects/' + projectId + '/public', {
+            body: {value}
+        }, callback);
+    }
+
 };
