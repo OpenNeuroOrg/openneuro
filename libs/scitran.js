@@ -103,7 +103,7 @@ export default {
                 if (!err2) {
                     let hash = crypto.createHash('md5').update(res2.body).digest('hex');
                     fs.readdir('./persistent/datasets/', (err3, contents) => {
-                        if (contents.indexOf(hash) > -1) {
+                        if (contents && contents.indexOf(hash) > -1) {
                             callback(err, hash);
                         } else {
                             files.saveSymlinks(hash, res2.body, (err4) => {
