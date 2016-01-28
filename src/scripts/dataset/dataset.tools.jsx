@@ -26,7 +26,7 @@ let Tools = React.createClass({
 	render() {
 		let dataset = this.state.dataset;
 		let users   = this.state.users;
-		let publish, del, share, shareModal, jobs, jobModal;
+		let publish, del, share, shareModal, jobs, jobModal, snapshot;
 		let tooltipShare = <Tooltip>Share Dataset</Tooltip>;
 		let tooltipJobs = <Tooltip>Run Analysis</Tooltip>;
 		let tooltipDownload = <Tooltip>Download Dataset</Tooltip>;
@@ -44,6 +44,12 @@ let Tools = React.createClass({
 				publish = (
 					<div role="presentation" className="tool" >
 						<WarnButtonWithTip message="" confirm="" tooltip="Make Dataset Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
+		            </div>
+				);
+
+				snapshot = (
+					<div role="presentation" className="tool" >
+						<WarnButtonWithTip message="" confirm="" tooltip="Snapshot Dataset" icon="fa-camera-retro" action={this._snapshot.bind(this, dataset._id)} />
 		            </div>
 				);
 			}
@@ -104,11 +110,14 @@ let Tools = React.createClass({
 				{shareModal}
 				{jobs}
 				{jobModal}
+				{snapshot}
 	        </div>
     	);
 	},
 
 // custon methods -----------------------------------------------------
+
+	_snapshot: actions.createSnapshot,
 
 	_publish: actions.publish,
 

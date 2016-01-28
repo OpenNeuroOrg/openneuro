@@ -2,6 +2,7 @@ import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
 	'addFile',
+	'createSnapshot',
 	'deleteAttachment',
 	'deleteDataset',
 	'deleteFile',
