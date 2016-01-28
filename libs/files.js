@@ -62,9 +62,10 @@ export default {
      * Save Symlinks
      */
     saveSymlinks (hash, body, callback) {
-        fs.writeFile('./persistent/temp/' + hash + '.tar', body, (err) => {
-            fs.createReadStream('./persistent/temp/' + hash + '.tar')
-                .pipe(tar.extract('./persistent/datasets/', {
+        let persistentPath = __dirname + '/../persistent/';
+        fs.writeFile(persistentPath + 'temp/' + hash + '.tar', body, (err) => {
+            fs.createReadStream(persistentPath + 'temp/' + hash + '.tar')
+                .pipe(tar.extract(persistentPath + 'datasets/', {
                     map: function (header) {
                         let originalDirName = header.name.split('/')[0];
                         header.name = header.name.replace(originalDirName, hash);
@@ -72,8 +73,8 @@ export default {
                     }
                 }))
                 .on('finish', () => {
-                    fs.unlink('./persistent/temp/' + hash + '.tar', () => {
-                        this.updateSymlinks('./persistent/datasets/' + hash, () => {
+                    fs.unlink(persistentPath + 'temp/' + hash + '.tar', () => {
+                        this.updateSymlinks(persistentPath + 'datasets/' + hash, () => {
                             callback(err, hash);
                         });
                     });
