@@ -44,6 +44,7 @@ export default class JobMenu extends React.Component {
 					</div>
 				</div>
 				{this._parameters()}
+				{this._submit()}
 			</div>
 		);
 
@@ -71,7 +72,7 @@ export default class JobMenu extends React.Component {
     	);
 	}
 
-// custom methods -----------------------------------------------------
+// template methods ---------------------------------------------------
 
 	/**
 	 * Parameters
@@ -111,15 +112,24 @@ export default class JobMenu extends React.Component {
 							</div>
 						</div>
 					</div>
-					<div className="col-xs-12 modal-actions">
-						<button className="btn-admin-blue" onClick={this._startJob.bind(this)}>Start</button>
-					</div>
 				</div>
 			);
 		});
 
 		return parameters;
 	}
+
+	_submit() {
+		if (this.state.selectedApp) {
+			return (
+				<div className="col-xs-12 modal-actions">
+					<button className="btn-admin-blue" onClick={this._startJob.bind(this)}>Start</button>
+				</div>
+			)
+		}
+	}
+
+// actions ------------------------------------------------------------
 
 	/**
 	 * Update Parameter
