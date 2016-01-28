@@ -314,7 +314,7 @@ export default  {
 
     createSnapshot (projectId, callback) {
         request.post(config.scitran.url + 'snapshots', {
-            body: {project: projectId}
+            query: {project: projectId}
         }, callback);
     },
 
