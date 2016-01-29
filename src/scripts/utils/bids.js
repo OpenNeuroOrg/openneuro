@@ -20,7 +20,7 @@ export default  {
      * subjects after they are separated out
      * of scitran sessions.
      */
-    getSubjects (projectId, callback) {
+    getSubjects (projectId, callback, options) {
         scitran.getSessions(projectId, (sessions) => {
             let subjects = [];
             async.each(sessions, (session, cb) => {
@@ -30,7 +30,7 @@ export default  {
                         session.name = session.label;
                         subjects.push(session);
                         cb();
-                    });
+                    }, options);
                 } else {
                     cb();
                 }
@@ -47,7 +47,7 @@ export default  {
      * returns all BIDS sessions after they
      * are separated out of scitran sessions.
      */
-    getSessions (projectId, subjectId, callback) {
+    getSessions (projectId, subjectId, callback, options) {
         scitran.getSessions(projectId, (sciSessions) => {
             let sessions = [];
             async.each(sciSessions, (session, cb) => {
@@ -57,7 +57,7 @@ export default  {
                         session.name = session.label;
                         sessions.push(session);
                         cb();
-                    });
+                    }, options);
                 } else {
                     cb();
                 }
@@ -104,7 +104,24 @@ export default  {
      * Get Metadata
      *
      */
-    getMetadata(project, callback) {
+    getMetadata(project, callback, options) {
+
+        if (options && options.snapshot) {
+            /** TEMPORARY UNTIL SNAPSHOT FILE LOADING IS COMPLETE **/
+            callback({
+                "README": "SNAPSHOT TEST. This dataset was obtained from the OpenfMRI project (http://www.openfmri.org).\nAccession #: ds001\nDescription: Balloon Analog Risk Task\n\nPlease cite the following references if you use these data:\n\nSchonberg TS, Fox CR, Mumford JA, Congdon E, Trepel C, Poldrack RA (2012). Decreasing ventromedial prefrontal cortex activity during sequential risk-taking: An fMRI investigation of the Balloon Analogue Risk Task. Frontiers in Decision Neuroscience, 6:80 doi: 10.3389/fnins.2012.00080\n\n\nRelease history:\n7/10/2012: initial release\n\n3/21/2013: Updated release with QA information\n\nThis dataset is made available under the Public Domain Dedication and License \nv1.0, whose full text can be found at \nhttp://www.opendatacommons.org/licenses/pddl/1.0/. \nWe hope that all users will follow the ODC Attribution/Share-Alike \nCommunity Norms (http://www.opendatacommons.org/norms/odc-by-sa/); \nin particular, while not legally required, we hope that all users \nof the data will acknowledge the OpenfMRI project and NSF Grant \nOCI-1131441 (R. Poldrack, PI) in any publications.\n",
+                "dataset_description.json": {
+                    "License": "This dataset is made available under the Public Domain Dedication and License \nv1.0, whose full text can be found at \nhttp://www.opendatacommons.org/licenses/pddl/1.0/. \nWe hope that all users will follow the ODC Attribution/Share-Alike \nCommunity Norms (http://www.opendatacommons.org/norms/odc-by-sa/); \nin particular, while not legally required, we hope that all users \nof the data will acknowledge the OpenfMRI project and NSF Grant \nOCI-1131441 (R. Poldrack, PI) in any publications.",
+                    "Name": "Balloon Analog Risk Task",
+                    "ReferencesAndLinks": "Schonberg TS, Fox CR, Mumford JA, Congdon E, Trepel C, Poldrack RA (2012). Decreasing ventromedial prefrontal cortex activity during sequential risk-taking: An fMRI investigation of the Balloon Analogue Risk Task. Frontiers in Decision Neuroscience, 6:80 doi: 10.3389/fnins.2012.00080",
+                    "Authors": [
+                        "Zack"
+                    ]
+                }
+            });
+            /** TEMPORARY UNTIL SNAPSHOT FILE LOADING IS COMPLETE **/
+            return;
+        }
 
         // determine which metadata files are available
         let metadataFiles = [],
@@ -134,7 +151,7 @@ export default  {
                     metadata[filename] = contents;
                 }
                 cb();
-            });
+            }, options);
         }, () => {
             callback(metadata);
         });
@@ -147,7 +164,7 @@ export default  {
      * Takes a projectId and returns a full
      * nested BIDS dataset.
      */
-    getDataset (projectId, callback) {
+    getDataset (projectId, callback, options) {
         scitran.getProject(projectId, (res) => {
             if (res.status !== 200) {return callback(res);}
             let project = res.body;
@@ -175,20 +192,20 @@ export default  {
                                             modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
                                             modality.name = modality.label;
                                             cb2();
-                                        });
+                                        }, options);
                                     }, cb1);
-                                });
+                                }, options);
                             }, cb);
                         });
                     }, () => {
                         crn.getDatasetJobs(projectId, (err, res) => {
                             dataset.jobs = res.body;
                             callback(dataset);
-                        });
+                        }, options);
                     });
-                });
-            });
-        });
+                }, options);
+            }, options);
+        }, options);
     },
 
 // Update ---------------------------------------------------------------------------------

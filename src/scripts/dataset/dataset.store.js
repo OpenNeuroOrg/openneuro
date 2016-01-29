@@ -53,6 +53,7 @@ let datasetStore = Reflux.createStore({
 			jobs: [],
 			showJobsModal: false,
 			showShareModal: false,
+			snapshots: [],
 			status: null,
 			users: []
 		};
@@ -79,6 +80,23 @@ let datasetStore = Reflux.createStore({
 			}
 		});
 		this.loadJobs(datasetId);
+		this.loadSnapshots(datasetId);
+	},
+
+	/**
+	 * Load Snapshot
+	 *
+	 * Takes a snapshot ID and loads the snapshot.
+	 */
+	loadSnapshot(snapshotId) {
+		this.update({loading: true, dataset: null});
+		bids.getDataset(snapshotId, (res) => {
+			if (res.status === 404 || res.status === 403) {
+				this.update({status: res.status, loading: false});
+			} else {
+				this.update({dataset: res, loading: false});
+			}
+		}, {snapshot: true});
 	},
 
 	/**
@@ -222,9 +240,9 @@ let datasetStore = Reflux.createStore({
 		});
 	},
 
-	 /**
-	  * Update README
-	  */
+	/**
+	 * Update README
+	 */
 	updateREADME(value, callback) {
 		scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, '', [], callback);
 	},
@@ -473,6 +491,12 @@ let datasetStore = Reflux.createStore({
 	createSnapshot() {
 		scitran.createSnapshot(this.data.dataset._id, (err, res) => {
 			console.log(err, res);
+		});
+	},
+
+	loadSnapshots(datasetId) {
+		scitran.getProjectSnapshots(datasetId, (err, res) => {
+			this.update({snapshots: res.body});
 		});
 	}
 

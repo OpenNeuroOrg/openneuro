@@ -30,7 +30,8 @@ let Tools = React.createClass({
 		let tooltipShare = <Tooltip>Share Dataset</Tooltip>;
 		let tooltipJobs = <Tooltip>Run Analysis</Tooltip>;
 		let tooltipDownload = <Tooltip>Download Dataset</Tooltip>;
-		
+		let snapshots = this.state.snapshots;
+
 		if (dataset.access === 'admin') {
 			if (!dataset.public) {
 				del = (
@@ -97,6 +98,10 @@ let Tools = React.createClass({
     		);
 		}
 
+		let snapshotOptions = snapshots.map((snapshot) => {
+			return <option key={snapshot._id} value={snapshot._id}>{snapshot.created}</option>
+		})
+
 		return (
 			<div className="tools clearfix">
 				<div role="presentation" className="tool">
@@ -111,6 +116,12 @@ let Tools = React.createClass({
 				{jobs}
 				{jobModal}
 				{snapshot}
+				<div role="presentation" className="tool" >
+					<select onChange={this._selectSnapshot} defaultValue="">
+						<option value="" disabled>Select a snapshot</option>
+						{snapshotOptions}
+					</select>
+	            </div>
 	        </div>
     	);
 	},
@@ -118,6 +129,10 @@ let Tools = React.createClass({
 // custon methods -----------------------------------------------------
 
 	_snapshot: actions.createSnapshot,
+
+	_selectSnapshot: (e) => {
+		actions.loadSnapshot(e.target.value);
+	},
 
 	_publish: actions.publish,
 
