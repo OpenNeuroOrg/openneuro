@@ -164,8 +164,9 @@ export default  {
      * Get Project
      *
      */
-    getProject (projectId, callback) {
-        request.get(config.scitran.url + 'projects/' + projectId, {}, (err, res) => {
+    getProject (projectId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'projects/' + projectId, {}, (err, res) => {
             callback(res);
         });
     },
@@ -184,8 +185,9 @@ export default  {
      * Get Session
      *
      */
-    getSession (sessionId, callback) {
-        request.get(config.scitran.url + 'sessions/' + sessionId, {}, (err, res) => {
+    getSession (sessionId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'sessions/' + sessionId, {}, (err, res) => {
             callback(res.body);
         });
     },
@@ -194,8 +196,9 @@ export default  {
      * Get Acquisitions
      *
      */
-    getAcquisitions (sessionId, callback) {
-        request.get(config.scitran.url + 'sessions/' + sessionId + '/acquisitions', {}, (err, res) => {
+    getAcquisitions (sessionId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'sessions/' + sessionId + '/acquisitions', {}, (err, res) => {
             callback(res.body);
         });
     },
@@ -204,8 +207,9 @@ export default  {
      * Get Acquisition
      *
      */
-    getAcquisition (acquisitionId, callback) {
-        request.get(config.scitran.url + 'acquisitions/' + acquisitionId, {}, (err, res) => {
+    getAcquisition (acquisitionId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url  + modifier + 'acquisitions/' + acquisitionId, {}, (err, res) => {
             callback(res.body);
         });
     },
@@ -214,8 +218,9 @@ export default  {
      * Get File
      *
      */
-    getFile (level, id, filename, callback) {
-        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, {}, callback);
+    getFile (level, id, filename, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + level + '/' + id + '/files/' + filename, {}, callback);
     },
 
     /**
