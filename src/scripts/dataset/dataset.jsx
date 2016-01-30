@@ -1,19 +1,18 @@
 // dependencies -------------------------------------------------------
 
-import React        from 'react';
-import Reflux       from 'reflux';
-import {State}      from 'react-router';
-import Spinner      from '../common/partials/spinner.jsx';
-import {Link}       from 'react-router';
-import datasetStore from './dataset.store';
-import Actions      from './dataset.actions.js';
-import MetaData    	from './dataset.metadata.jsx';
-import Tools        from './dataset.tools.jsx';
-import Statuses     from './dataset.statuses.jsx';
-import moment       from 'moment';
-import ClickToEdit  from '../common/forms/click-to-edit.jsx';
-import FileTree     from './dataset.file-tree.jsx';
-import Jobs         from './dataset.jobs.jsx';
+import React         from 'react';
+import Reflux        from 'reflux';
+import Spinner       from '../common/partials/spinner.jsx';
+import {Link, State} from 'react-router';
+import datasetStore  from './dataset.store';
+import Actions       from './dataset.actions.js';
+import MetaData    	 from './dataset.metadata.jsx';
+import Tools         from './dataset.tools.jsx';
+import Statuses      from './dataset.statuses.jsx';
+import moment        from 'moment';
+import ClickToEdit   from '../common/forms/click-to-edit.jsx';
+import FileTree      from './dataset.file-tree.jsx';
+import Jobs          from './dataset.jobs.jsx';
 
 let Dataset = React.createClass({
 
@@ -23,14 +22,20 @@ let Dataset = React.createClass({
 
 	componentWillReceiveProps() {
 		let params = this.getParams();
-		if (this.state.dataset && params.datasetId !== this.state.dataset._id) {
+		if (params.datasetId && this.state.dataset && params.datasetId !== this.state.dataset._id) {
 			Actions.loadDataset(params.datasetId);
+		} else if (params.snapshotId) {
+			Actions.loadDataset(params.snapshotId, {snapshot: true});
 		}
 	},
 
 	componentDidMount() {
 		let params = this.getParams();
-		Actions.loadDataset(params.datasetId);
+		if (params.datasetId) {
+			Actions.loadDataset(params.datasetId);
+		} else if (params.snapshotId) {
+			Actions.loadDataset(params.snapshotId, {snapshot: true});
+		}
 	},
 
 	componentWillUnmount() {
@@ -54,8 +59,8 @@ let Dataset = React.createClass({
 					<div className="col-xs-12 dataset-tools-wrap">
 						<Tools />
 					</div>
-					<div className="col-xs-12 dataset-wrap">	
-						<div className="row">	
+					<div className="col-xs-12 dataset-wrap">
+						<div className="row">
 							<div className="col-xs-7">
 							<h1 className="clearfix">
 									<ClickToEdit

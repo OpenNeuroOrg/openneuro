@@ -338,6 +338,7 @@ export default  {
         };
         dataset.authors = dataset.description.Authors;
         dataset.sharedWithMe = dataset.userOwns && !dataset.userCreated;
+        if (project.original) {dataset.original = project.original}
 
         return dataset;
     },

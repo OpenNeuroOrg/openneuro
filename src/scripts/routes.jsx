@@ -61,6 +61,7 @@ let routes = (
 		</Route>
 		<Route name="public" path="public" handler={Datasets}/>
 		<Route name="dataset" path="dataset/:datasetId" handler={Dataset} />
+		<Route name="snapshot" path="snapshot/:snapshotId" handler={Dataset} />
 		<DefaultRoute handler={RedirectDashboard}/>
 		<NotFoundRoute handler={RedirectDashboard}/>
 	</Route>
