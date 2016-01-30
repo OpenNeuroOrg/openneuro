@@ -70,7 +70,7 @@ let datasetStore = Reflux.createStore({
 	 *
 	 * Takes a datasetId and loads the dataset.
 	 */
-	loadDataset(datasetId) {
+	loadDataset(datasetId, options) {
 		this.update({loading: true, dataset: null});
 		bids.getDataset(datasetId, (res) => {
 			if (res.status === 404 || res.status === 403) {
@@ -78,9 +78,11 @@ let datasetStore = Reflux.createStore({
 			} else {
 				this.update({dataset: res, loading: false});
 			}
-		});
-		this.loadJobs(datasetId);
-		this.loadSnapshots(datasetId);
+			// if (res.original) {datasetId = res.original;}
+			let originalId = res.original ? res.original : datasetId;
+			this.loadJobs(datasetId);
+			this.loadSnapshots(originalId, datasetId);
+		}, options);
 	},
 
 	/**
@@ -88,15 +90,12 @@ let datasetStore = Reflux.createStore({
 	 *
 	 * Takes a snapshot ID and loads the snapshot.
 	 */
-	loadSnapshot(snapshotId) {
-		this.update({loading: true, dataset: null});
-		bids.getDataset(snapshotId, (res) => {
-			if (res.status === 404 || res.status === 403) {
-				this.update({status: res.status, loading: false});
-			} else {
-				this.update({dataset: res, loading: false});
-			}
-		}, {snapshot: true});
+	loadSnapshot(created, snapshotId) {
+		if (created === 'original') {
+			router.transitionTo('dataset', {datasetId: snapshotId});
+		} else {
+			router.transitionTo('snapshot', {snapshotId: snapshotId});
+		}
 	},
 
 	/**
@@ -153,6 +152,10 @@ let datasetStore = Reflux.createStore({
 	 * Takes a datasetId and sets the datset to public.
 	 */
 	publish(datasetId) {
+		// scitran.updateSnapshotPublic(datasetId, true, (err, res) => {
+		// 	console.log(err);
+		// 	console.log(res);
+		// });
 		let self = this;
 		scitran.updateProject(datasetId, {public: true}, (err, res) => {
 			if (!err) {
@@ -496,6 +499,11 @@ let datasetStore = Reflux.createStore({
 
 	loadSnapshots(datasetId) {
 		scitran.getProjectSnapshots(datasetId, (err, res) => {
+			let snapshots = res.body;
+			snapshots.unshift({
+				created: 'original',
+				_id: datasetId
+			});
 			this.update({snapshots: res.body});
 		});
 	}

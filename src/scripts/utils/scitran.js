@@ -332,7 +332,7 @@ export default  {
     },
 
     deleteSnapshot (projectId, callback) {
-        request.del(config.scitran.url + 'snapshots/projects/' + projectId, {}, callback);
+        request.del(config.scitran.url + 'snapshots/projects/' + projectId, callback);
     },
 
     updateSnapshotPublic(projectId, value, callback) {

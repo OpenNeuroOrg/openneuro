@@ -99,7 +99,7 @@ let Tools = React.createClass({
 		}
 
 		let snapshotOptions = snapshots.map((snapshot) => {
-			return <option key={snapshot._id} value={snapshot._id}>{snapshot.created}</option>
+			return <option key={snapshot._id} value={JSON.stringify(snapshot)}>{snapshot.created}</option>
 		})
 
 		return (
@@ -131,7 +131,8 @@ let Tools = React.createClass({
 	_snapshot: actions.createSnapshot,
 
 	_selectSnapshot: (e) => {
-		actions.loadSnapshot(e.target.value);
+		let snapshot = JSON.parse(e.target.value);
+		actions.loadSnapshot(snapshot.created, snapshot._id);
 	},
 
 	_publish: actions.publish,
