@@ -1,13 +1,17 @@
 // dependencies --------------------------------------------------------------
 
-import React      from 'react';
-import Tooltip    from './tooltip.jsx';
-import FileSelect from '../forms/file-select.jsx';
-import actions    from '../../upload/upload.actions';
+import React       from 'react';
+import Reflux      from 'reflux';
+import Tooltip     from './tooltip.jsx';
+import FileSelect  from '../forms/file-select.jsx';
+import UploadStore from '../../upload/upload.store.js';
+import actions     from '../../upload/upload.actions';
 
 // component setup -----------------------------------------------------------
 
-export default class Status extends React.Component {
+let Status = React.createClass({
+
+	mixins: [Reflux.connect(UploadStore)],
 
 // lifecycle events ----------------------------------------------------------
 
@@ -26,7 +30,7 @@ export default class Status extends React.Component {
 				tip        = 'Click to select your folder again and resume the upload';
 				title	  = 'Incomplete';
 				iconClass  = 'fa fa-warning';
-				fileSelect = <span className="file-wrap"><FileSelect  onClick={this._clickHandler}  onChange={this._onFileSelect.bind(this)} /></span>;
+				fileSelect = <span className="file-wrap"><FileSelect  onClick={this._clickHandler}  onChange={this._onFileSelect} /></span>;
 				break;
 			case 'shared':
 				spanClass = 'dataset-status ds-info';
@@ -46,7 +50,7 @@ export default class Status extends React.Component {
 				<Tooltip tooltip={tip}>
 					<span>
 						<span className="icon-wrap">
-							<i className={iconClass}></i> 
+							<i className={iconClass}></i>
 							{title}
 						</span>
 						{fileSelect}
@@ -54,20 +58,29 @@ export default class Status extends React.Component {
 				</Tooltip>
 			</span>
 		);
-	}
+	},
 
 // custom methods ------------------------------------------------------------
 
 	_clickHandler(e) {
 		e.stopPropagation();
-	}
+		if (this.state.uploadStatus === 'uploading') {
+			e.preventDefault();
+			actions.createAlert({
+				type: 'Warning',
+				message: "You may only upload one dataset at a time. Please wait for the current upload to finish, then try resuming again."
+			});
+		}
+	},
 
 	_onFileSelect(files) {
 		actions.onResume(files, this.props.dataset.name);
 	}
 
-}
+});
 
-Status.propTypes = {
-	type: React.PropTypes.string.isRequired
-};
+// Status.propTypes = {
+// 	type: React.PropTypes.string.isRequired
+// };
+
+export default Status;

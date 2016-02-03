@@ -13,7 +13,8 @@ export default class UploadAlert extends React.Component {
 	render() {
 		let type = this.props.type;
 		let bsStyle;
-		if (type === 'Error') {bsStyle = 'danger';}
+		if (type === 'Warning') {bsStyle = 'warning';}
+		if (type === 'Error')   {bsStyle = 'danger';}
 		if (type === 'Success') {bsStyle = 'success';}
 
 		return (

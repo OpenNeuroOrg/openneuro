@@ -307,6 +307,13 @@ let UploadStore = Reflux.createStore({
 	},
 
 	/**
+	 * Create Alert
+	 */
+	createAlert (alert) {
+		this.update({alert: alert.type, alertMessage: alert.message});
+	},
+
+	/**
 	 * Close Alert
 	 *
 	 */
