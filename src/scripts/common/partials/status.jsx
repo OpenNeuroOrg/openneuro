@@ -68,7 +68,7 @@ let Status = React.createClass({
 			e.preventDefault();
 			actions.createAlert({
 				type: 'Warning',
-				message: "You may only upload one dataset at a time. Please wait for the current upload to finish, then retry resuming."
+				message: "You may only upload one dataset at a time. Please wait for the current upload to finish, then try resuming again."
 			});
 		}
 	},
