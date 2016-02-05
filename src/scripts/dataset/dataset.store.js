@@ -92,8 +92,8 @@ let datasetStore = Reflux.createStore({
 	 *
 	 * Takes a snapshot ID and loads the snapshot.
 	 */
-	loadSnapshot(created, snapshotId) {
-		if (created === 'original') {
+	loadSnapshot(isOriginal, snapshotId) {
+		if (isOriginal) {
 			router.transitionTo('dataset', {datasetId: snapshotId});
 		} else {
 			router.transitionTo('snapshot', {snapshotId: snapshotId});
@@ -185,6 +185,9 @@ let datasetStore = Reflux.createStore({
 			let ticket = res.body.ticket;
 			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'bids-download');
 			setTimeout(() => {downloadWindow.close();}, 1000);
+			let dataset = this.data.dataset;
+			dataset.downloads++;
+			this.update({dataset});
 		}, {snapshot: !!snapshot});
 	},
 

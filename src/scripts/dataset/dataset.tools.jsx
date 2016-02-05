@@ -136,7 +136,7 @@ let Tools = React.createClass({
 
 	_selectSnapshot: (e) => {
 		let snapshot = JSON.parse(e.target.value);
-		actions.loadSnapshot(snapshot.created, snapshot._id);
+		actions.loadSnapshot(snapshot.isOriginal, snapshot._id);
 	},
 
 	_publish: actions.publish,

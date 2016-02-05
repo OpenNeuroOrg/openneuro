@@ -69,7 +69,8 @@ let Dataset = React.createClass({
 											editable={canEdit}
 											onChange={Actions.updateName}/>
 									</h1>
-									<h6>uploaded {dataset.userOwns ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
+									<h6>uploaded {dataset.access ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
+									<h6>downloads: {dataset.downloads}</h6>
 									<div className="status-container">
 										<Statuses dataset={dataset}/>
 									</div>
