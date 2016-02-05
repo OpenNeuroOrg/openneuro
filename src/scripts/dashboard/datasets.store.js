@@ -78,7 +78,7 @@ let UploadStore = Reflux.createStore({
         }, () => {
 	        bids.getDatasets((datasets) => {
 	            this.sort(null, null, datasets);
-	        }, !isPublic);
+	        }, isPublic);
 	    });
     },
 

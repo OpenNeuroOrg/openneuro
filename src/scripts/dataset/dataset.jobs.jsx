@@ -22,8 +22,8 @@ let Jobs = React.createClass({
 			if (job.results) {
 				results = job.results.map((result, index) => {
 					return (
-						<li>
-							<a key={index} onClick={this._downloadResult.bind(this, job.jobId, result.name)}>
+						<li key={index}>
+							<a onClick={this._downloadResult.bind(this, job.jobId, result.name)}>
 								{result.name}
 							</a>
 						</li>

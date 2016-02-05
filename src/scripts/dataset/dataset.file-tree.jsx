@@ -10,7 +10,7 @@ class FileTree extends React.Component {
 	render () {
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map((item, index) => {
-			if (!item.name && item.filename) {item.name = item.filename;}
+			if (!item.label && item.filename) {item.label = item.filename;}
 			let typeIcon, typeIconOpen, tools, fileTools, error, loading, editBtn;
 
 			// loading animation
@@ -38,9 +38,9 @@ class FileTree extends React.Component {
 						<input
 							type="file"
 							className="add-files"
-							ref={item.name}
+							ref={item.label}
 							onChange={this._addFile.bind(this, item)}
-							onClick={this._clearInput.bind(this, item.name)}/>
+							onClick={this._clearInput.bind(this, item.label)}/>
 					</div>
 				);
 			}
@@ -57,19 +57,19 @@ class FileTree extends React.Component {
 							<input
 								type="file"
 								className="update-file"
-								ref={item.name}
+								ref={item.label}
 								onChange={this._updateFile.bind(this, item)}
-								onClick={this._clearInput.bind(this, item.name)}/>
+								onClick={this._clearInput.bind(this, item.label)}/>
 						</span>
 					</span>
 				);
 			}
 			return (
-				<li className="clearfix" key={item.name}>
+				<li className="clearfix" key={item.label ? item.label : item.name}>
 					<span className="item-name">
-						{this.props.editable && item.showChildren ? typeIconOpen : typeIcon} {item.name} 
-					</span> 
-					{this.props.editable && item.showChildren ? tools : fileTools} 
+						{this.props.editable && item.showChildren ? typeIconOpen : typeIcon} {item.label ? item.label : item.label}
+					</span>
+					{this.props.editable && item.showChildren ? tools : fileTools}
 					{error}
 					{loading}
 					{item.showChildren ? <ul className="child-files"><FileTree tree={item.children} editable={this.props.editable}/></ul> : null}

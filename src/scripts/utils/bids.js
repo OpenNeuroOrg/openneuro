@@ -37,7 +37,7 @@ export default  {
             }, () => {
                 callback(subjects);
             });
-        });
+        }, options);
     },
 
     /**
@@ -64,7 +64,7 @@ export default  {
             }, () => {
                 callback(sessions);
             });
-        });
+        }, options);
     },
 
     /**
@@ -83,14 +83,13 @@ export default  {
      * boolean as second argument to specifiy if request
      * is made with authentication. Defaults to true.
      */
-    getDatasets (callback, authenticate) {
-        if (authenticate === undefined) {authenticate = true;}
-        scitran.getProjects(authenticate, (projects) => {
+    getDatasets (callback, isPublic) {
+        scitran.getProjects({authenticate: !isPublic, snapshot: isPublic}, (projects) => {
             let results = [];
 
             // hide other user's projects from admins
             for (let project of projects) {
-                if (!authenticate || this.userOwns(project)) {
+                if (isPublic || this.userAccess(project)) {
                     let dataset = this.formatDataset(project, null);
                     results.push(dataset);
                 }
@@ -105,23 +104,6 @@ export default  {
      *
      */
     getMetadata(project, callback, options) {
-
-        if (options && options.snapshot) {
-            /** TEMPORARY UNTIL SNAPSHOT FILE LOADING IS COMPLETE **/
-            callback({
-                "README": "SNAPSHOT TEST. This dataset was obtained from the OpenfMRI project (http://www.openfmri.org).\nAccession #: ds001\nDescription: Balloon Analog Risk Task\n\nPlease cite the following references if you use these data:\n\nSchonberg TS, Fox CR, Mumford JA, Congdon E, Trepel C, Poldrack RA (2012). Decreasing ventromedial prefrontal cortex activity during sequential risk-taking: An fMRI investigation of the Balloon Analogue Risk Task. Frontiers in Decision Neuroscience, 6:80 doi: 10.3389/fnins.2012.00080\n\n\nRelease history:\n7/10/2012: initial release\n\n3/21/2013: Updated release with QA information\n\nThis dataset is made available under the Public Domain Dedication and License \nv1.0, whose full text can be found at \nhttp://www.opendatacommons.org/licenses/pddl/1.0/. \nWe hope that all users will follow the ODC Attribution/Share-Alike \nCommunity Norms (http://www.opendatacommons.org/norms/odc-by-sa/); \nin particular, while not legally required, we hope that all users \nof the data will acknowledge the OpenfMRI project and NSF Grant \nOCI-1131441 (R. Poldrack, PI) in any publications.\n",
-                "dataset_description.json": {
-                    "License": "This dataset is made available under the Public Domain Dedication and License \nv1.0, whose full text can be found at \nhttp://www.opendatacommons.org/licenses/pddl/1.0/. \nWe hope that all users will follow the ODC Attribution/Share-Alike \nCommunity Norms (http://www.opendatacommons.org/norms/odc-by-sa/); \nin particular, while not legally required, we hope that all users \nof the data will acknowledge the OpenfMRI project and NSF Grant \nOCI-1131441 (R. Poldrack, PI) in any publications.",
-                    "Name": "Balloon Analog Risk Task",
-                    "ReferencesAndLinks": "Schonberg TS, Fox CR, Mumford JA, Congdon E, Trepel C, Poldrack RA (2012). Decreasing ventromedial prefrontal cortex activity during sequential risk-taking: An fMRI investigation of the Balloon Analogue Risk Task. Frontiers in Decision Neuroscience, 6:80 doi: 10.3389/fnins.2012.00080",
-                    "Authors": [
-                        "Zack"
-                    ]
-                }
-            });
-            /** TEMPORARY UNTIL SNAPSHOT FILE LOADING IS COMPLETE **/
-            return;
-        }
 
         // determine which metadata files are available
         let metadataFiles = [],
@@ -196,7 +178,7 @@ export default  {
                                     }, cb1);
                                 }, options);
                             }, cb);
-                        });
+                        }, options);
                     }, () => {
                         crn.getDatasetJobs(projectId, (err, res) => {
                             dataset.jobs = res.body;
@@ -267,22 +249,26 @@ export default  {
      * after recursing and removing all sub
      * containers.
      */
-    deleteDataset (projectId, callback) {
-        scitran.getSessions(projectId, (sessions) => {
-            async.each(sessions, (session, cb) => {
-                scitran.getAcquisitions(session._id, (acquisitions) => {
-                    async.each(acquisitions, (acquisition, cb1) => {
-                        scitran.deleteContainer('acquisitions', acquisition._id, cb1);
-                    }, () => {
-                        scitran.deleteContainer('sessions', session._id, cb);
+    deleteDataset (projectId, callback, options) {
+        if (!options.snapshot) {
+            scitran.getSessions(projectId, (sessions) => {
+                async.each(sessions, (session, cb) => {
+                    scitran.getAcquisitions(session._id, (acquisitions) => {
+                        async.each(acquisitions, (acquisition, cb1) => {
+                            scitran.deleteContainer('acquisitions', acquisition._id, cb1);
+                        }, () => {
+                            scitran.deleteContainer('sessions', session._id, cb);
+                        });
+                    });
+                }, () => {
+                    crn.deleteDatasetJobs(projectId, (err, res) => {
+                        scitran.deleteContainer('projects', projectId, callback);
                     });
                 });
-            }, () => {
-                crn.deleteDatasetJobs(projectId, (err, res) => {
-                    scitran.deleteContainer('projects', projectId, callback);
-                });
             });
-        });
+        } else {
+            scitran.deleteSnapshot(projectId, callback);
+        }
     },
 
 // Dataset Format Helpers -----------------------------------------------------------------
@@ -320,19 +306,22 @@ export default  {
         }
 
         let dataset = {
+            /** same as original **/
             _id:         project._id,
-            name:        project.label,
+            label:       project.label,
             group:       project.group,
-            timestamp:   project.timestamp,
-            type:        'folder',
+            created:     project.created,
+            modified:    project.modified,
             permissions: project.permissions,
             public:      project.public,
-            notes:       project.notes,
+
+            /** modified for BIDS **/
+            type:        'folder',
             children:    files,
             description: this.formatDescription(project.metadata, description),
             attachments: attachments,
             status:      this.formatStatus(project.tags),
-            userOwns:    this.userOwns(project),
+            // userOwns:    this.userOwns(project),
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
         };
@@ -392,17 +381,17 @@ export default  {
      * representing whether the current user
      * is the owner of that dataset.
      */
-    userOwns(project) {
-        let userOwns = false
-        if (project && project.permissions) {
-            for (let user of project.permissions) {
-                if (userStore.data.scitran._id === user._id) {
-                    userOwns = true;
-                }
-            }
-        }
-        return userOwns;
-    },
+    // userOwns(project) {
+    //     let userOwns = false
+    //     if (project && project.permissions) {
+    //         for (let user of project.permissions) {
+    //             if (userStore.data.scitran._id === user._id) {
+    //                 userOwns = true;
+    //             }
+    //         }
+    //     }
+    //     return userOwns;
+    // },
 
     /**
      * User Access
