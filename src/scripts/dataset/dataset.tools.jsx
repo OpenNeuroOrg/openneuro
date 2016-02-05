@@ -110,7 +110,7 @@ let Tools = React.createClass({
 			<div className="tools clearfix">
 				<div role="presentation" className="tool">
 					<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltipDownload}>
-						<button className="btn btn-admin warning" onClick={this._downloadDataset}><i className="fa fa-download"></i></button>
+						<button className="btn btn-admin warning" onClick={this._downloadDataset.bind(this, null)}><i className="fa fa-download"></i></button>
 					</OverlayTrigger>
 				</div>
 				{publish}
