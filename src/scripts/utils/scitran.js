@@ -154,8 +154,9 @@ export default  {
      * Get Projects
      *
      */
-    getProjects (authenticate, callback) {
-        request.get(config.scitran.url + 'projects', {auth: authenticate}, (err, res) => {
+    getProjects (options, callback) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'projects', {auth: options.authenticate}, (err, res) => {
             callback(res.body);
         });
     },
@@ -175,8 +176,9 @@ export default  {
      * Get Sessions
      *
      */
-    getSessions (projectId, callback) {
-        request.get(config.scitran.url + 'projects/' + projectId + '/sessions', {}, (err, res) => {
+    getSessions (projectId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'projects/' + projectId + '/sessions', {}, (err, res) => {
             callback(res.body);
         });
     },
@@ -227,8 +229,9 @@ export default  {
      * Get Download Ticket
      *
      */
-    getDownloadTicket (level, id, filename, callback) {
-        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, {
+    getDownloadTicket (level, id, filename, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + level + '/' + id + '/files/' + filename, {
             query: {ticket: ''}
         }, callback);
     },
@@ -237,8 +240,9 @@ export default  {
      * Get BIDS Download Ticket
      *
      */
-    getBIDSDownloadTicket (projectId, callback) {
-        request.post(config.scitran.url + 'download', {
+    getBIDSDownloadTicket (projectId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.post(config.scitran.url + modifier + 'download', {
             query: {format: 'bids'},
             body: {
                 nodes:[
@@ -321,10 +325,6 @@ export default  {
         request.post(config.scitran.url + 'snapshots', {
             query: {project: projectId}
         }, callback);
-    },
-
-    getSnapshots (callback) {
-        request.get(config.scitran.url + 'snapshots/projects', {}, callback);
     },
 
     getProjectSnapshots (projectId, callback) {

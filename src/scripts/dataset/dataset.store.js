@@ -53,6 +53,7 @@ let datasetStore = Reflux.createStore({
 			jobs: [],
 			showJobsModal: false,
 			showShareModal: false,
+			snapshot: false,
 			snapshots: [],
 			status: null,
 			users: []
@@ -71,12 +72,13 @@ let datasetStore = Reflux.createStore({
 	 * Takes a datasetId and loads the dataset.
 	 */
 	loadDataset(datasetId, options) {
+		let snapshot = !!(options && options.snapshot)
 		this.update({loading: true, dataset: null});
 		bids.getDataset(datasetId, (res) => {
 			if (res.status === 404 || res.status === 403) {
-				this.update({status: res.status, loading: false});
+				this.update({status: res.status, loading: false, snapshot: snapshot});
 			} else {
-				this.update({dataset: res, loading: false});
+				this.update({dataset: res, loading: false, snapshot: snapshot});
 			}
 			// if (res.original) {datasetId = res.original;}
 			let originalId = res.original ? res.original : datasetId;
@@ -152,32 +154,38 @@ let datasetStore = Reflux.createStore({
 	 * Takes a datasetId and sets the datset to public.
 	 */
 	publish(datasetId) {
-		// scitran.updateSnapshotPublic(datasetId, true, (err, res) => {
-		// 	console.log(err);
-		// 	console.log(res);
-		// });
-		let self = this;
-		scitran.updateProject(datasetId, {public: true}, (err, res) => {
-			if (!err) {
-				let dataset = self.data.dataset;
-				dataset.public = true;
-				self.update({dataset});
-			}
-		});
+		if (this.data.snapshot) {
+			scitran.updateSnapshotPublic(datasetId, true, (err, res) => {
+				if (!err) {
+					let dataset = this.data.dataset;
+					dataset.public = true;
+				}
+			});
+		} else {
+			/** this should be removed eventually as only snapshots can be publish **/
+			scitran.updateProject(datasetId, {public: true}, (err, res) => {
+				if (!err) {
+					let dataset = this.data.dataset;
+					dataset.public = true;
+					this.update({dataset});
+				}
+			});
+			/** this should be removed eventually as only snapshots can be publish **/
+		}
 	},
 
 	/**
 	 * Download Dataset
 	 *
 	 */
-	downloadDataset() {
+	downloadDataset(snapshot) {
 		// open download window as synchronous action from click to avoid throwing popup blockers
 		window.open('', 'bids-download');
 		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
 			let ticket = res.body.ticket;
 			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'bids-download');
-			setTimeout(() => {downloadWindow.close();});
-		});
+			setTimeout(() => {downloadWindow.close();}, 1000);
+		}, {snapshot: !!snapshot});
 	},
 
 	/**
@@ -189,7 +197,7 @@ let datasetStore = Reflux.createStore({
 	deleteDataset(datasetId) {
 		bids.deleteDataset(datasetId, () => {
             router.transitionTo('datasets');
-		});
+		}, {snapshot: this.data.snapshot});
 	},
 
 	/**
@@ -319,14 +327,14 @@ let datasetStore = Reflux.createStore({
 	 * Takes a filename and starts a downloads
 	 * for the file within the current dataset.
 	 */
-	downloadAttachment(filename) {
+	downloadAttachment(filename, snapshot) {
 		// open download window as synchronous action from click to avoid throwing popup blockers
 		window.open('', 'attachment-download');
 		scitran.getDownloadTicket('projects', this.data.dataset._id, filename, (err, res) => {
 			let ticket = res.body.ticket;
 			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'attachment-download');
 			setTimeout(() => {downloadWindow.close();});
-		});
+		}, {snapshot: !!snapshot});
 	},
 
 	// File Structure ----------------------------------------------------------------
@@ -493,7 +501,7 @@ let datasetStore = Reflux.createStore({
 
 	createSnapshot() {
 		scitran.createSnapshot(this.data.dataset._id, (err, res) => {
-			console.log(err, res);
+			router.transitionTo('snapshot', {snapshotId: res.body._id});
 		});
 	},
 
@@ -501,7 +509,7 @@ let datasetStore = Reflux.createStore({
 		scitran.getProjectSnapshots(datasetId, (err, res) => {
 			let snapshots = res.body;
 			snapshots.unshift({
-				created: 'original',
+				isOriginal: true,
 				_id: datasetId
 			});
 			this.update({snapshots: res.body});

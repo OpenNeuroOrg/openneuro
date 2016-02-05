@@ -1,14 +1,15 @@
 // dependencies -------------------------------------------------------
 
-import React        								from 'react';
-import Reflux       								from 'reflux';
-import datasetStore 								from './dataset.store';
-import actions      								from './dataset.actions.js';
-import WarnButton   								from '../common/forms/warn-button.jsx';
-import WarnButtonWithTip   							from '../common/forms/warn-button-withtip.jsx';
-import Share        								from './dataset.tools.share.jsx';
-import Jobs         								from './dataset.tools.jobs.jsx';
-import {OverlayTrigger, Tooltip, Modal}      		from 'react-bootstrap';
+import React        					from 'react';
+import Reflux       					from 'reflux';
+import datasetStore 					from './dataset.store';
+import actions      					from './dataset.actions.js';
+import WarnButton   					from '../common/forms/warn-button.jsx';
+import WarnButtonWithTip   				from '../common/forms/warn-button-withtip.jsx';
+import Share        					from './dataset.tools.share.jsx';
+import Jobs         					from './dataset.tools.jobs.jsx';
+import {OverlayTrigger, Tooltip, Modal} from 'react-bootstrap';
+import moment                           from 'moment';
 
 let Tools = React.createClass({
 
@@ -99,7 +100,10 @@ let Tools = React.createClass({
 		}
 
 		let snapshotOptions = snapshots.map((snapshot) => {
-			return <option key={snapshot._id} value={JSON.stringify(snapshot)}>{snapshot.created}</option>
+			return (
+				<option key={snapshot._id} value={JSON.stringify(snapshot)}>
+						{snapshot.isOriginal ? 'original' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
+				</option>)
 		})
 
 		return (
