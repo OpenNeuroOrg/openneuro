@@ -80,7 +80,6 @@ let datasetStore = Reflux.createStore({
 			} else {
 				this.update({dataset: res, loading: false, snapshot: snapshot});
 			}
-			// if (res.original) {datasetId = res.original;}
 			let originalId = res.original ? res.original : datasetId;
 			this.loadJobs(datasetId);
 			this.loadSnapshots(originalId, datasetId);
@@ -93,10 +92,11 @@ let datasetStore = Reflux.createStore({
 	 * Takes a snapshot ID and loads the snapshot.
 	 */
 	loadSnapshot(isOriginal, snapshotId) {
+		let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
 		if (isOriginal) {
 			router.transitionTo('dataset', {datasetId: snapshotId});
 		} else {
-			router.transitionTo('snapshot', {snapshotId: snapshotId});
+			router.transitionTo('snapshot', {datasetId, snapshotId});
 		}
 	},
 

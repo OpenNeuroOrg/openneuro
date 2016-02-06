@@ -22,19 +22,19 @@ let Dataset = React.createClass({
 
 	componentWillReceiveProps() {
 		let params = this.getParams();
-		if (params.datasetId && this.state.dataset && params.datasetId !== this.state.dataset._id) {
-			Actions.loadDataset(params.datasetId);
-		} else if (params.snapshotId) {
+		if (params.snapshotId) {
 			Actions.loadDataset(params.snapshotId, {snapshot: true});
+		} else if (params.datasetId && this.state.dataset && params.datasetId !== this.state.dataset._id) {
+			Actions.loadDataset(params.datasetId);
 		}
 	},
 
 	componentDidMount() {
 		let params = this.getParams();
-		if (params.datasetId) {
-			Actions.loadDataset(params.datasetId);
-		} else if (params.snapshotId) {
+		if (params.snapshotId) {
 			Actions.loadDataset(params.snapshotId, {snapshot: true});
+		} else if (params.datasetId) {
+			Actions.loadDataset(params.datasetId);
 		}
 	},
 
