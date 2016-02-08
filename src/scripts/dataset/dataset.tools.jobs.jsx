@@ -22,9 +22,9 @@ export default class JobMenu extends React.Component {
 
 	render() {
 
-		let options = this.props.apps.map((app) => {
+		let options = this.props.apps ? this.props.apps.map((app) => {
 			return <option key={app.id} value={app.id}>{app.label}</option>;
-		});
+		}) : [];
 
 		let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedApp;
 
