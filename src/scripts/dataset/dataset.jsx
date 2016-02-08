@@ -48,7 +48,7 @@ let Dataset = React.createClass({
 		let status  = this.state.status;
 		let dateAdded  = dataset ? moment(dataset.created).format('L') : null;
         let timeago    = dataset ? moment(dataset.created).fromNow(true) : null;
-		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin');
+		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
 		let content;
 		if (dataset) {
 			let myDatasetsLink = <Link to="datasets">My Datasets</Link>;
@@ -74,7 +74,7 @@ let Dataset = React.createClass({
 									<div className="status-container">
 										<Statuses dataset={dataset}/>
 									</div>
-									<MetaData dataset={dataset}/>
+									<MetaData dataset={dataset} editable={canEdit} />
 								</div>
 								<div className="col-xs-5">
 									<div>

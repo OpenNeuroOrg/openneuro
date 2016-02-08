@@ -15,7 +15,7 @@ let MetaData = React.createClass({
 	render() {
 		let dataset     = this.props.dataset;
 		let userOwns    = dataset ? dataset.userOwns : null;
-		let canEdit     = userOwns && (dataset.access === 'rw' || dataset.access == 'admin');
+		let canEdit     = this.props.editable;
 		let description = dataset ? dataset.description : null;
 		let README      = dataset ? dataset.README : null;
 		let metatdata = [
