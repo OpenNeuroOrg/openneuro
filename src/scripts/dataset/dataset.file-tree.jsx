@@ -51,7 +51,7 @@ class FileTree extends React.Component {
 				fileTools = (
 					<span className="fileTreeEditFile"> -
 						<span className="delete-file">
-							<WarnButton action={this._deleteFile.bind(this, item)} />
+							<WarnButton message="Delete" cancel="Cancel" confirm="Yes Delete!" action={this._deleteFile.bind(this, item)} />
 						</span>
 						<span className="edit-file">
 							<input

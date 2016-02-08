@@ -37,11 +37,10 @@ let Blacklist = React.createClass({
                     <div className="col-xs-3 last admin-tools-bar">
 	                <div className="tools clearfix">
 	                    <div className="tool">
-		                    <WarnButton message="Unblock User" className="btn btn-admin warning" confirm="Yes Unblock" action={actions.unBlacklistUser.bind(this, user._id)} />
+		                    <WarnButton message="Unblock User" className="btn btn-admin warning" cancel="Cancel" confirm="Yes Unblock" action={actions.unBlacklistUser.bind(this, user._id)} />
 	                    </div>
                     </div>
                     </div>
-                    
                 </div>
 			);
 		});

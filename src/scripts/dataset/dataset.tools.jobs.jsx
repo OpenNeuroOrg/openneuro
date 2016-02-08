@@ -3,6 +3,7 @@
 import React   from 'react';
 import actions from './dataset.actions.js';
 import Spinner from '../common/partials/spinner.jsx';
+import {Modal} from 'react-bootstrap';
 
 export default class JobMenu extends React.Component {
 
@@ -66,9 +67,17 @@ export default class JobMenu extends React.Component {
 		}
 
 		return (
-			<div className="dataset">
-				{body}
-			</div>
+			<Modal show={this.props.show} onHide={this.props.onHide}>
+    			<Modal.Header closeButton>
+    				<Modal.Title>Run Analysis</Modal.Title>
+    			</Modal.Header>
+    			<hr className="modal-inner" />
+    			<Modal.Body>
+					<div className="dataset">
+						{body}
+					</div>
+    			</Modal.Body>
+    		</Modal>
     	);
 	}
 

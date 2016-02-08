@@ -4,7 +4,6 @@ import React        from 'react';
 import Reflux       from 'reflux';
 import datasetStore from './dataset.store';
 import actions      from './dataset.actions';
-import WarnButton   from '../common/forms/warn-button.jsx';
 import Spinner      from '../common/partials/spinner.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
 
