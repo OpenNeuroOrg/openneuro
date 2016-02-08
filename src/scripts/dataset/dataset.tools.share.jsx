@@ -45,13 +45,15 @@ export default class Share extends React.Component {
 			);
 		});
 
+		let instruction = "Enter a user's email address and select access level to share";
+
 		return (
 			<div className="dataset">
 				<h5>Dataset shared with:</h5>
 				<div className="cte-array-items">
 					{permissions}
 				</div>
-				<h5 className="add-members">Enter a user's email address and select access level to share</h5>
+				<h5 className="add-members">{instruction}</h5>
 				<div>
 					<div className="text-danger">{this.state.error}</div>
 					<Input value={this.state.input} onChange={this._inputChange.bind(this)} />
