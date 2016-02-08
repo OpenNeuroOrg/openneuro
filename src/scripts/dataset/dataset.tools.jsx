@@ -7,7 +7,6 @@ import actions      					from './dataset.actions.js';
 import WarnButton   					from '../common/forms/warn-button.jsx';
 import Share        					from './dataset.tools.share.jsx';
 import Jobs         					from './dataset.tools.jobs.jsx';
-import {OverlayTrigger, Tooltip, Modal} from 'react-bootstrap';
 import moment                           from 'moment';
 
 let Tools = React.createClass({
@@ -26,31 +25,27 @@ let Tools = React.createClass({
 	render() {
 		let dataset = this.state.dataset;
 		let users   = this.state.users;
-		let publish, del, share, shareModal, jobs, jobModal, snapshot;
-		let tooltipShare = <Tooltip>Share Dataset</Tooltip>;
-		let tooltipJobs = <Tooltip>Run Analysis</Tooltip>;
-		let tooltipDownload = <Tooltip>Download Dataset</Tooltip>;
 		let snapshots = this.state.snapshots;
 
 		let tools = [
 			{
 				tooltip: 'Download Dataset',
 				icon: 'fa-download',
-				action: this._downloadDataset.bind(this, this.state.snapshot),
+				action: actions.downloadDataset.bind(this, this.state.snapshot),
 				display: true,
 				warn: false
 			},
 			{
 				tooltip: 'Make Dataset Public',
 				icon: 'fa-globe',
-				action: this._publish.bind(this, dataset._id),
+				action: actions.publish.bind(this, dataset._id),
 				display: dataset.access == 'admin' && !dataset.public && !dataset.status.uploadIncomplete,
 				warn: true
 			},
 			{
 				tooltip: 'Delete Dataset',
 				icon: 'fa-trash',
-				action: this._deleteDataset.bind(this, dataset._id),
+				action: actions.deleteDataset.bind(this, dataset._id),
 				display: dataset.access == 'admin' && !dataset.public,
 				warn: true
 			},
@@ -71,7 +66,7 @@ let Tools = React.createClass({
 			{
 				tooltip: 'Create Snapshot',
 				icon: 'fa-camera-retro',
-				action: this._snapshot.bind(this, dataset._id),
+				action: actions.createSnapshot,
 				display: dataset.access == 'admin' && !dataset.public && !dataset.status.uploadIncomplete,
 				warn: true
 			},
@@ -114,18 +109,10 @@ let Tools = React.createClass({
 
 // custon methods -----------------------------------------------------
 
-	_snapshot: actions.createSnapshot,
-
 	_selectSnapshot: (e) => {
 		let snapshot = JSON.parse(e.target.value);
 		actions.loadSnapshot(snapshot.isOriginal, snapshot._id);
-	},
-
-	_publish: actions.publish,
-
-	_deleteDataset: actions.deleteDataset,
-
-	_downloadDataset: actions.downloadDataset
+	}
 
 });
 
