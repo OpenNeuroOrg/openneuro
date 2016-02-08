@@ -27,6 +27,15 @@ let Tools = React.createClass({
 		let users   = this.state.users;
 		let snapshots = this.state.snapshots;
 
+		// permission check shorthands
+		let isAdmin      = dataset.access === 'admin';
+		let isEditor     = dataset.access === 'rw';
+		let isViewer     = dataset.access === 'ro'
+		let isPublic     = !!dataset.public;
+		let isIncomplete = !!dataset.status.uploadIncomplete;
+		let isSnapshot   = !!dataset.original;
+
+
 		let tools = [
 			{
 				tooltip: 'Download Dataset',
@@ -39,35 +48,35 @@ let Tools = React.createClass({
 				tooltip: 'Make Dataset Public',
 				icon: 'fa-globe',
 				action: actions.publish.bind(this, dataset._id),
-				display: dataset.access == 'admin' && !dataset.public && !dataset.status.uploadIncomplete,
+				display: isAdmin && isSnapshot && !isPublic && !isIncomplete,
 				warn: true
 			},
 			{
 				tooltip: 'Delete Dataset',
 				icon: 'fa-trash',
 				action: actions.deleteDataset.bind(this, dataset._id),
-				display: dataset.access == 'admin' && !dataset.public,
+				display: isAdmin && !isPublic,
 				warn: true
 			},
 			{
 				tooltip: 'Share Dataset',
 				icon: 'fa-user-plus',
 				action: actions.toggleModal.bind(null, 'Share'),
-				display: dataset.access == 'admin',
+				display: isAdmin && !isSnapshot,
 				warn: false
 			},
 			{
 				tooltip: 'Run Analysis',
 				icon: 'fa-tasks',
 				action: actions.toggleModal.bind(null, 'Jobs'),
-				display: dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.public,
+				display: (isViewer || isEditor || isAdmin) && !isPublic,
 				warn: false
 			},
 			{
 				tooltip: 'Create Snapshot',
 				icon: 'fa-camera-retro',
 				action: actions.createSnapshot,
-				display: dataset.access == 'admin' && !dataset.public && !dataset.status.uploadIncomplete,
+				display: isAdmin && !isSnapshot && !isIncomplete,
 				warn: true
 			},
 		];
