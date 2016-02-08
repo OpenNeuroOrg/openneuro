@@ -64,10 +64,11 @@ class FileTree extends React.Component {
 					</span>
 				);
 			}
+
 			return (
 				<li className="clearfix" key={item.label ? item.label : item.name}>
 					<span className="item-name">
-						{this.props.editable && item.showChildren ? typeIconOpen : typeIcon} {item.label ? item.label : item.label}
+						{this.props.editable && item.showChildren ? typeIconOpen : typeIcon} {item.label ? item.label : item.name}
 					</span>
 					{this.props.editable && item.showChildren ? tools : fileTools}
 					{error}
