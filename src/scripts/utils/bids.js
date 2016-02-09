@@ -200,21 +200,7 @@ export default  {
      * already exist in the project.
      */
     addPermission(projectId, permission, callback) {
-        scitran.getProject(projectId, (res) => {
-            let exists = false;
-            let permissions = res.body.permissions;
-            for (let user of permissions) {
-                if (user._id === permission._id) {
-                    exists = true;
-                }
-            }
-            if (!exists) {
-                permissions.push(permission);
-                scitran.updateProject(projectId, {permissions}, callback);
-            } else {
-                callback();
-            }
-        });
+        scitran.addPermission('projects', projectId, permission, callback);
     },
 
     /**
@@ -224,20 +210,7 @@ export default  {
      * the user if they were a member of the project.
      */
     removePermission(projectId, userId, callback) {
-        scitran.getProject(projectId, (res) => {
-            let permissions = res.body.permissions;
-            let index;
-            for (let i = 0; i < permissions.length; i++) {
-                let user = permissions[i];
-                if (user._id === userId) {
-                    index = i;
-                }
-            }
-            if (index) {
-                permissions.splice(index, 1);
-                scitran.updateProject(projectId, {permissions}, callback);
-            }
-        });
+        scitran.removePermission('projects', projectId, userId, callback);
     },
 
 // Delete ---------------------------------------------------------------------------------

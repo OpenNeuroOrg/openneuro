@@ -23,8 +23,8 @@ let Tools = React.createClass({
 	},
 
 	render() {
-		let dataset = this.state.dataset;
-		let users   = this.state.users;
+		let dataset   = this.state.dataset;
+		let users     = this.state.users;
 		let snapshots = this.state.snapshots;
 
 		// permission check shorthands

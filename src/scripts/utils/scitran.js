@@ -148,6 +148,14 @@ export default  {
         }, callback);
     },
 
+    /**
+     * Add Permission
+     */
+    addPermission(container, id, permission, callback) {
+        permission.site = 'local'
+        request.post(config.scitran.url + container + '/' + id + '/permissions', {body: permission}, callback);
+    },
+
 // Read -----------------------------------------------------------------------------------
 
     /**
@@ -274,10 +282,17 @@ export default  {
     },
 
     /**
-     * Add Tag
+     * Remove Tag
      */
     removeTag (containerType, containerId, tag, callback) {
         request.del(config.scitran.url + containerType + '/' + containerId + '/tags/' + tag, callback);
+    },
+
+    /**
+     * Remove Permission
+     */
+    removePermission(container, id, userId, callback) {
+        request.del(config.scitran.url + container + '/' + id + '/permissions/local/' + userId, callback);
     },
 
 // Update ---------------------------------------------------------------------------------

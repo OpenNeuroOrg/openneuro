@@ -24,6 +24,10 @@ export default class Share extends React.Component {
 		};
 	}
 
+	componentWillReceiveProps() {
+		this.setState({users: this.props.users, permissions: this.props.dataset.permissions});
+	}
+
 	componentDidMount() {
 		this.setState({users: this.props.users, permissions: this.props.dataset.permissions});
 	}
