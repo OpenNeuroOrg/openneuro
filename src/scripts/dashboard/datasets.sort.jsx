@@ -16,8 +16,8 @@ export default class Sort extends React.Component {
 		return (
 				<div className="sort clearfix">
 					<label>Sort by:</label>
-		            <a className={value == 'name' ? "btn-sort name active" : "btn-sort name"} onClick={this._sort.bind(this, 'name')}>Name {value == 'name' ? icon : null}</a>
-		            <a className={value == 'timestamp' ? "btn-sort date active" : "btn-sort date"} onClick={this._sort.bind(this, 'timestamp')}>Date {value == 'timestamp' ? icon : null}</a>
+		            <a className={value == 'name' ? "btn-sort name active" : "btn-sort name"} onClick={this._sort.bind(this, 'label')}>Name {value == 'label' ? icon : null}</a>
+		            <a className={value == 'timestamp' ? "btn-sort date active" : "btn-sort date"} onClick={this._sort.bind(this, 'created')}>Date {value == 'created' ? icon : null}</a>
 		        </div>
 		);
 	}

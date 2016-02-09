@@ -71,7 +71,7 @@ let UploadStore = Reflux.createStore({
         self.update({
         	loading: true,
             sort: {
-            	value: 'timestamp',
+            	value: 'created',
             	direction: '+'
             },
             filters: []
@@ -145,10 +145,10 @@ let UploadStore = Reflux.createStore({
 
     		// format comparison data
     		let aVal, bVal;
-    		if (value === 'name') {
+    		if (value === 'label') {
 	    		aVal = a[value].toLowerCase();
 	    		bVal = b[value].toLowerCase();
-	    	} else if (value === 'timestamp') {
+	    	} else if (value === 'created') {
 	    		aVal = -Date.parse(a[value]);
 	    		bVal = -Date.parse(b[value]);
 	    	}
