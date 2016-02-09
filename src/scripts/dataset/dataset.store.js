@@ -75,6 +75,7 @@ let datasetStore = Reflux.createStore({
 		let snapshot = !!(options && options.snapshot)
 		this.update({loading: true, dataset: null});
 		bids.getDataset(datasetId, (res) => {
+			res.showChildren = true;
 			if (res.status === 404 || res.status === 403) {
 				this.update({status: res.status, loading: false, snapshot: snapshot});
 			} else {
