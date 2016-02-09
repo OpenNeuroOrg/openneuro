@@ -271,7 +271,7 @@ let UploadStore = Reflux.createStore({
 		if (fileSelect) {fileSelect.value = null;} // clear file input
 
 		let message = (
-			<span><a href={"#/dataset/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>
+			<span><a href={"#/datasets/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>
 		);
 
 		// refresh my datasets
