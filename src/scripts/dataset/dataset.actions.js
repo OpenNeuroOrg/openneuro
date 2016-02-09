@@ -9,6 +9,7 @@ var Actions = Reflux.createActions([
 	'dismissError',
 	'downloadAttachment',
 	'downloadDataset',
+	'downloadFile',
 	'downloadResult',
 	'loadDataset',
 	'loadSnapshot',

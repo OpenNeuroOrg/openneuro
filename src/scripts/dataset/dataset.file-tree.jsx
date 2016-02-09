@@ -46,7 +46,7 @@ class FileTree extends React.Component {
 			}
 
 			// files
-			else if(this.props.editable) {
+			else if (this.props.editable) {
 				typeIcon  = <i className="fa fa-file"></i>;
 				fileTools = (
 					<span className="fileTreeEditFile"> -
@@ -60,6 +60,9 @@ class FileTree extends React.Component {
 								ref={item.label}
 								onChange={this._updateFile.bind(this, item)}
 								onClick={this._clearInput.bind(this, item.label)}/>
+						</span>
+						<span>
+							<WarnButton icon="fa-download" action={this._downloadFile.bind(this, item)} warn={false} />
 						</span>
 					</span>
 				);
@@ -101,6 +104,13 @@ class FileTree extends React.Component {
 	 * Delete File
 	 */
 	_deleteFile(file) {actions.deleteFile(file);}
+
+	/**
+	 * Download File
+	 */
+	_downloadFile(file) {
+		actions.downloadFile(file);
+	}
 
 	/**
 	 * Dismiss Error
