@@ -72,7 +72,7 @@ export default {
             if (error) {error(err, req);}
         }
         let existingProjectId = null;
-        scitran.getProjects(true, (projects) => {
+        scitran.getProjects({authenticate: true}, (projects) => {
             for (let project of projects) {
                 if (project.label === fileTree[0].name && project.group === userId) {
                     existingProjectId = project._id;
