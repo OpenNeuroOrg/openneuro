@@ -59,7 +59,7 @@ let routes = (
 			<Route name="blacklist" path="blacklist" handler={Blacklist} />
 			<NotFoundRoute handler={RedirectUsers}/>
 		</Route>
-		<Route name="public" path="public" handler={Datasets}/>
+		<Route name="public" path="datasets" handler={Datasets}/>
 		<Route name="dataset" path="datasets/:datasetId" handler={Dataset} />
 		<Route name="snapshot" path="datasets/:datasetId/versions/:snapshotId" handler={Dataset} />
 		<DefaultRoute handler={RedirectDashboard}/>
