@@ -86,16 +86,30 @@ export default  {
     getDatasets (callback, isPublic) {
         scitran.getProjects({authenticate: !isPublic, snapshot: isPublic}, (projects) => {
             let results = [];
+            let publicResults = {}
 
-            // hide other user's projects from admins
+            // hide other user's projects from admins & filter snapshots to display newest of each dataset
             for (let project of projects) {
-                if (isPublic || this.userAccess(project)) {
+                if (isPublic) {
+                    let dataset = this.formatDataset(project, null);
+                    if (!publicResults.hasOwnProperty(project.original) || publicResults[project.original].snapshot_version < project.snapshot_version) {
+                        publicResults[project.original] = dataset;
+                    }
+                } else if (this.userAccess(project)) {
                     let dataset = this.formatDataset(project, null);
                     results.push(dataset);
                 }
             }
 
-            callback(results);
+            if (isPublic) {
+                let results = [];
+                for (let key in publicResults) {
+                    results.push(publicResults[key]);
+                }
+                callback(results);
+            } else {
+                callback(results);
+            }
         });
     },
 
@@ -347,25 +361,6 @@ export default  {
         }
         return status;
     },
-
-    /**
-     * User Owns
-     *
-     * Takes a project and returns a boolean
-     * representing whether the current user
-     * is the owner of that dataset.
-     */
-    // userOwns(project) {
-    //     let userOwns = false
-    //     if (project && project.permissions) {
-    //         for (let user of project.permissions) {
-    //             if (userStore.data.scitran._id === user._id) {
-    //                 userOwns = true;
-    //             }
-    //         }
-    //     }
-    //     return userOwns;
-    // },
 
     /**
      * User Access
