@@ -21,9 +21,11 @@ let Datasets = React.createClass({
 
 // life cycle events -------------------------------------------------------------------------
 
+    componentWillUnmount(){Actions.update({datasets:[]})},
+
     componentDidMount() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
-        this.setState({isPublic});
+        Actions.update({isPublic});
         Actions.getDatasets(isPublic);
     },
 
