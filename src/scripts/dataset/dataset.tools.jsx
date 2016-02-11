@@ -91,7 +91,6 @@ let Tools = React.createClass({
 			}
 		});
 
-
 		let snapshotOptions = snapshots.map((snapshot) => {
 			return (
 				<option key={snapshot._id} value={JSON.stringify(snapshot)}>

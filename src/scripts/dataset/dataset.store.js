@@ -491,18 +491,17 @@ let datasetStore = Reflux.createStore({
 	 * Start Job
 	 */
 	startJob(appName, appId, parameters, callback) {
-		console.log(parameters);
-		// crn.createJob({
-		// 	name: appName,
-		// 	appId: appId,
-		// 	datasetId: this.data.dataset._id,
-		// 	userId: userStore.data.scitran._id,
-		// 	parameters: parameters
-		// }, (err, res) => {
-		// 	callback(err, res);
-		// 	// callback(err, {message: "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."});
-		// 	this.loadJobs(this.data.dataset._id);
-		// });
+		crn.createJob({
+			name: appName,
+			appId: appId,
+			datasetId: this.data.dataset._id,
+			userId: userStore.data.scitran._id,
+			parameters: parameters
+		}, (err, res) => {
+			callback(err, res);
+			// callback(err, {message: "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."});
+			this.loadJobs(this.data.dataset._id);
+		});
 	},
 
 	/**
