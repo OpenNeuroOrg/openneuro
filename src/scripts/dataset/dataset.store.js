@@ -491,17 +491,18 @@ let datasetStore = Reflux.createStore({
 	 * Start Job
 	 */
 	startJob(appName, appId, parameters, callback) {
-		crn.createJob({
-			name: appName,
-			appId: appId,
-			datasetId: this.data.dataset._id,
-			userId: userStore.data.scitran._id,
-			parameters: parameters
-		}, (err, res) => {
-			callback(err, res);
-			// callback(err, {message: "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."});
-			this.loadJobs(this.data.dataset._id);
-		});
+		console.log(parameters);
+		// crn.createJob({
+		// 	name: appName,
+		// 	appId: appId,
+		// 	datasetId: this.data.dataset._id,
+		// 	userId: userStore.data.scitran._id,
+		// 	parameters: parameters
+		// }, (err, res) => {
+		// 	callback(err, res);
+		// 	// callback(err, {message: "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."});
+		// 	this.loadJobs(this.data.dataset._id);
+		// });
 	},
 
 	/**
@@ -528,12 +529,12 @@ let datasetStore = Reflux.createStore({
 
 	loadSnapshots(datasetId) {
 		scitran.getProjectSnapshots(datasetId, (err, res) => {
-			let snapshots = res.body;
+			let snapshots = !err && res.body ? res.body : [];
 			snapshots.unshift({
 				isOriginal: true,
 				_id: datasetId
 			});
-			this.update({snapshots: res.body});
+			this.update({snapshots: snapshots});
 		});
 	}
 
