@@ -16,7 +16,7 @@ let Jobs = React.createClass({
 	render () {
 
 		let jobs = this.state.jobs.map((job) => {
-			let results;
+			let results, parameters;
 
 			if (job.results) {
 				results = job.results.map((result, index) => {
@@ -29,6 +29,18 @@ let Jobs = React.createClass({
 					);
 				});
 			}
+
+			if (job.parameters) {
+				parameters = [];
+				for (let key in job.parameters) {
+					parameters.push(
+						<li key={key}>
+							<span>{key}</span>: <span>{job.parameters[key]}</span>
+						</li>
+					);
+				}
+			}
+
 			return (
 				<Panel className="fadeIn job-item" header={job.name}  key={job._id} eventKey={job._id}>
 					<h5>application: {job.appId}</h5>
@@ -36,6 +48,7 @@ let Jobs = React.createClass({
 					<p>created by {job.userId} at {job.agave.created}</p>
 					<p>id: {job._id}</p>
 					<p>agave job ID: {job.jobId}</p>
+					<ul>{parameters}</ul>
 					<ul className="results">{results}</ul>
 				</Panel>
 			);
