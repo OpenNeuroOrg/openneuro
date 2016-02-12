@@ -7,6 +7,7 @@ import mongo      from '../libs/mongo';
 import async      from 'async';
 import config     from '../config';
 import {ObjectID} from 'mongodb';
+import crypto     from 'crypto';
 
 let c = mongo.collections;
 
@@ -15,7 +16,6 @@ let c = mongo.collections;
 
 let models = {
 	job: {
-		name:       'string, required',
 		appId:      'string, required',
 		datasetId:  'string, required',
 		userId:     'string, required',
@@ -57,9 +57,10 @@ export default {
 		sanitize.req(req, models.job, (err, job) => {
 			if (err) {return next(err);}
 			scitran.downloadSymlinkDataset(job.datasetId, (err, hash) => {
-
+				let parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
+				let jobName = 'crn-automated-job'
 				let body = {
-					name: job.name,
+					name: jobName,
 					appId: job.appId,
 					batchQueue: "normal",
 					executionSystem: "slurm-stampede.tacc.utexas.edu",
@@ -83,25 +84,34 @@ export default {
 					]
 				};
 
-				agave.createJob(body, (err, resp) => {
-					if (resp.body.status == 'error') {
-						let error = new Error(resp.body.message);
-						error.http_code = 400;
+				c.jobs.findOne({appId: job.appId, datasetHash: hash, parametersHash: parametersHash}, {}, (err, existingJob) => {
+					if (err){return next(err);}
+					if (existingJob) {
+						let error = new Error("A job with the same dataset and parameters has already been run.");
+						error.http_code = 409;
 						return next(error);
 					}
-					c.jobs.insertOne({
-						name:        job.name,
-						appId:       job.appId,
-						datasetId:   job.datasetId,
-						datasetHash: hash,
-						userId:      job.userId,
-						jobId:       resp.body.result.id,
-						agave:       resp.body.result
-					}, () => {
-						res.send(resp.body);
+					agave.createJob(body, (err, resp) => {
+						if (resp.body.status == 'error') {
+							let error = new Error(resp.body.message);
+							error.http_code = 400;
+							return next(error);
+						}
+						c.jobs.insertOne({
+							name:           jobName,
+							appId:          job.appId,
+							datasetId:      job.datasetId,
+							datasetHash:    hash,
+							userId:         job.userId,
+							jobId:          resp.body.result.id,
+							agave:          resp.body.result,
+							parameters:     job.parameters,
+							parametersHash: parametersHash
+						}, () => {
+							res.send(resp.body);
+						});
 					});
 				});
-
 			});
 		});
 	},
