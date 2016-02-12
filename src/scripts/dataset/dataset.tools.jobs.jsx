@@ -108,7 +108,7 @@ export default class JobMenu extends React.Component {
 					break;
 			}
 			return (
-				<div>
+				<div key={parameter.id}>
 					<div className="parameters form-horizontal">
 		    			<div className="form-group" key={parameter.id}>
 							<label className="sr-only">{parameter.label}</label>
