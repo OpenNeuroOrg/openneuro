@@ -86,7 +86,7 @@ export default {
      * correct files in scitran's file store.
      */
     downloadSymlinkDataset(datasetId, callback) {
-        request.post(config.scitran.url + 'download', {
+        request.post(config.scitran.url + 'snapshots/download', {
             query: {format: 'bids', query: true},
             body: {
                 nodes: [
