@@ -36,12 +36,23 @@ export default class WarnButton extends React.Component {
         	</div>
         );
 
+        let link;
+        if (this.props.link) {
+        	link = (
+        		<div className=" fadeIn" >
+	        		<a className="btn btn-admin warning" href={this.props.link}>
+		        		<i className={'fa ' + this.props.icon}></i>  {message}
+	        		</a>
+	        	</div>
+	        );
+        }
+
         let button = showAction ? viewAction : hideAction;
 
         if (this.props.tooltip) {
         	return (
 				<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltip}>
-					{button}
+					{link ? link : button}
 				</OverlayTrigger>
         	);
         }
@@ -67,7 +78,8 @@ WarnButton.propTypes = {
 	message: React.PropTypes.string,
 	icon:    React.PropTypes.string,
 	warn:    React.PropTypes.bool,
-	tooltip: React.PropTypes.string
+	tooltip: React.PropTypes.string,
+	link:    React.PropTypes.string
 };
 
 WarnButton.defaultProps = {
