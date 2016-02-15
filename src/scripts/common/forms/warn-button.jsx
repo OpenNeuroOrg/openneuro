@@ -53,7 +53,7 @@ export default class WarnButton extends React.Component {
 
 	toggle(action) {
 		if (typeof action === 'function') {
-			this.props.action(() => {
+			action(() => {
 				this.setState({showAction: !this.state.showAction});
 			});
 		} else {
