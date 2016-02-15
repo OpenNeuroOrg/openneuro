@@ -61,7 +61,7 @@ let routes = [
 	{
 		method: 'get',
 		url: '/jobs/:datasetId',
-		middleware: [auth.user],
+		middleware: [auth.optional],
 		handler: jobs.listDatasetJobs
 	},
 	{

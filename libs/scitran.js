@@ -66,8 +66,9 @@ export default {
      * Get Project
      *
      */
-    getProject (projectId, callback) {
-        request.get(config.scitran.url + 'projects/' + projectId, {}, callback);
+    getProject (projectId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'projects/' + projectId, {}, callback);
     },
 
     /**

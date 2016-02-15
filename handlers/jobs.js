@@ -120,12 +120,35 @@ export default {
 	 *  List Jobs
 	 */
 	listDatasetJobs(req, res, next) {
+		let snapshot  = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
 		let datasetId = req.params.datasetId;
-		let user = req.user;
-		c.jobs.find({userId: user, datasetId: datasetId}).toArray((err, jobs) => {
-			if (err) {return next(err);}
-			res.send(jobs);
-		});
+		let user      = req.user;
+
+		scitran.getProject(datasetId, (err, resp) => {
+			if (resp.body.code && resp.body.code == 404) {
+				let error = new Error(resp.body.detail);
+				error.http_code = 404;
+				return next(error);
+			}
+
+			let hasAccess = !!resp.body.public;
+			if (resp.body.permissions && !hasAccess) {
+				for (let permission of resp.body.permissions) {
+					if (permission._id == user) {hasAccess = true; break;}
+				}
+				if (!hasAccess) {
+					let error = new Error('You do not have access to view jobs for this dataset.');
+					error.http_code = 404;
+					return next(error);
+				}
+			}
+
+			c.jobs.find({datasetId: datasetId}).toArray((err, jobs) => {
+				if (err) {return next(err);}
+				res.send(jobs);
+			});
+
+		}, {snapshot});
 	},
 
 	/**
