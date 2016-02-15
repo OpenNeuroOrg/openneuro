@@ -40,7 +40,7 @@ export default class WarnButton extends React.Component {
         if (this.props.link) {
         	link = (
         		<div className=" fadeIn" >
-	        		<a className="btn btn-admin warning" href={this.props.link}>
+	        		<a className="btn btn-admin warning" href={this.props.link} download>
 		        		<i className={'fa ' + this.props.icon}></i>  {message}
 	        		</a>
 	        	</div>
