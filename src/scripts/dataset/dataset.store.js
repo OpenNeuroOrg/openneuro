@@ -136,7 +136,7 @@ let datasetStore = Reflux.createStore({
 		this.update({loadingJobs: true});
 		crn.getDatasetJobs(projectId, (err, res) => {
             this.update({jobs: res.body, loadingJobs: false});
-        });
+        }, {snapshot: this.data.snapshot});
 	},
 
 	/**
