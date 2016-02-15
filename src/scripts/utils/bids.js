@@ -87,17 +87,18 @@ export default  {
         scitran.getProjects({authenticate: !isPublic, snapshot: isPublic}, (projects) => {
             let results = [];
             let publicResults = {}
-
             // hide other user's projects from admins & filter snapshots to display newest of each dataset
-            for (let project of projects) {
-                if (isPublic) {
-                    let dataset = this.formatDataset(project, null);
-                    if (!publicResults.hasOwnProperty(project.original) || publicResults[project.original].snapshot_version < project.snapshot_version) {
-                        publicResults[project.original] = dataset;
+            if (projects) {
+                for (let project of projects) {
+                    if (isPublic) {
+                        let dataset = this.formatDataset(project, null);
+                        if (!publicResults.hasOwnProperty(project.original) || publicResults[project.original].snapshot_version < project.snapshot_version) {
+                            publicResults[project.original] = dataset;
+                        }
+                    } else if (this.userAccess(project)) {
+                        let dataset = this.formatDataset(project, null);
+                        results.push(dataset);
                     }
-                } else if (this.userAccess(project)) {
-                    let dataset = this.formatDataset(project, null);
-                    results.push(dataset);
                 }
             }
 
