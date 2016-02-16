@@ -6,6 +6,7 @@ import datasetStore from './dataset.store';
 import actions      from './dataset.actions';
 import Spinner      from '../common/partials/spinner.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
+import WarnButton   from '../common/forms/warn-button.jsx';
 
 let Jobs = React.createClass({
 
@@ -22,6 +23,9 @@ let Jobs = React.createClass({
 				results = job.results.map((result, index) => {
 					return (
 						<li key={index}>
+							<WarnButton
+								icon="fa-download"
+								prepDownload={actions.getResultDownloadTicket.bind(this, job.jobId, result.name)} />
 							<a onClick={this._downloadResult.bind(this, job.jobId, result.name)}>
 								{result.name}
 							</a>
