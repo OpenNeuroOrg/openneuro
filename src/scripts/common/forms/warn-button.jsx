@@ -64,14 +64,13 @@ export default class WarnButton extends React.Component {
 // custom methods -----------------------------------------------------
 
 	toggle(action) {
-		if (this.state.showAction == false) {
-			if (this.props.prepDownload) {
-				this.props.prepDownload((link) => {
-					this.setState({showAction: true, link: link});
-				});
-				return;
-			}
+		if (this.state.showAction == false && this.props.prepDownload) {
+			this.props.prepDownload((link) => {
+				this.setState({showAction: true, link: link});
+			});
+			return;
 		}
+
 		if (typeof action === 'function') {
 			action(() => {
 				this.setState({showAction: !this.state.showAction});
