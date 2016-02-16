@@ -25,6 +25,7 @@ let Jobs = React.createClass({
 						<li key={index}>
 							<WarnButton
 								icon="fa-download"
+								tooltip="Download File"
 								prepDownload={actions.getResultDownloadTicket.bind(this, job.jobId, result.name)} />
 							<a onClick={this._downloadResult.bind(this, job.jobId, result.name)}>
 								{result.name}

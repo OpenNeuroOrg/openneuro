@@ -97,6 +97,7 @@ class FileTree extends React.Component {
 				<span>
 					<WarnButton
 						icon="fa-download"
+						tooltip="Download File"
 						prepDownload={actions.getFileDownloadTicket.bind(this, item)} />
 				</span>
 			);
