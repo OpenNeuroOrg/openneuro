@@ -40,10 +40,8 @@ let Tools = React.createClass({
 			{
 				tooltip: 'Download Dataset',
 				icon: 'fa-download',
-				action: actions.downloadDataset.bind(this, this.state.snapshot),
-				display: true,
-				warn: false,
-				link: dataset.downloadUrl
+				prepDownload: actions.getDatasetDownloadTicket.bind(this, this.state.snapshot),
+				display: true
 			},
 			{
 				tooltip: 'Make Dataset Public',
@@ -86,7 +84,13 @@ let Tools = React.createClass({
 			if (tool.display) {
 				return (
 					<div role="presentation" className="tool" key={index}>
-						<WarnButton tooltip={tool.tooltip} icon={tool.icon} action={tool.action} warn={tool.warn} link={tool.link} />
+						<WarnButton
+							tooltip={tool.tooltip}
+							icon={tool.icon}
+							prepDownload={tool.prepDownload}
+							action={tool.action}
+							warn={tool.warn}
+							link={tool.link} />
 		            </div>
 				);
 			}

@@ -193,6 +193,14 @@ let datasetStore = Reflux.createStore({
 		}, {snapshot: !!snapshot});
 	},
 
+	getDatasetDownloadTicket(snapshot, callback) {
+		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
+			let ticket = res.body.ticket;
+			let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
+			callback(downloadUrl);
+		}, {snapshot: !!snapshot});
+	},
+
 	/**
 	 * Delete Dataset
 	 *

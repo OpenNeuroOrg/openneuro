@@ -8,7 +8,8 @@ export default class WarnButton extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			showAction: false
+			showAction: false,
+			link: null
 		};
 	}
 
@@ -21,10 +22,21 @@ export default class WarnButton extends React.Component {
 		let confirm    = this.props.confirm;
 		let tooltip    = <Tooltip>{this.props.tooltip}</Tooltip>;
 
+		let link;
+		if (this.state.link) {
+			link = (
+				<a className="btn btn-admin success" onClick={this.toggle.bind(this)} href={this.state.link} download>
+	        		{confirm}
+	    		</a>
+	    	);
+		}
+
+		let confirmBtn = <button className={'btn btn-admin ' + (typeof this.props.tooltip == 'string' ? 'success' : 'delete')} onClick={this.toggle.bind(this, this.props.action)}>{confirm}</button>;
+
 		let viewAction = (
         	<div className="btn-group slideInRightFast" role="group" >
         		<button className="btn btn-admin cancel" onClick={this.toggle.bind(this)}>{cancel}</button>
-        		<button className={'btn btn-admin ' + (typeof this.props.tooltip == 'string' ? 'success' : 'delete')} onClick={this.toggle.bind(this, this.props.action)}>{confirm}</button>
+        		{link ? link : confirmBtn}
         	</div>
         );
 
@@ -36,23 +48,12 @@ export default class WarnButton extends React.Component {
         	</div>
         );
 
-        let link;
-        if (this.props.link) {
-        	link = (
-        		<div className=" fadeIn" >
-	        		<a className="btn btn-admin warning" href={this.props.link} download>
-		        		<i className={'fa ' + this.props.icon}></i>  {message}
-	        		</a>
-	        	</div>
-	        );
-        }
-
         let button = showAction ? viewAction : hideAction;
 
         if (this.props.tooltip) {
         	return (
 				<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltip}>
-					{link ? link : button}
+					{button}
 				</OverlayTrigger>
         	);
         }
@@ -63,6 +64,14 @@ export default class WarnButton extends React.Component {
 // custom methods -----------------------------------------------------
 
 	toggle(action) {
+		if (this.state.showAction == false) {
+			if (this.props.prepDownload) {
+				this.props.prepDownload((link) => {
+					this.setState({showAction: true, link: link});
+				});
+				return;
+			}
+		}
 		if (typeof action === 'function') {
 			action(() => {
 				this.setState({showAction: !this.state.showAction});
