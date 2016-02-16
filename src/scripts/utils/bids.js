@@ -197,12 +197,7 @@ export default  {
                     }, () => {
                         crn.getDatasetJobs(projectId, (err, res) => {
                             dataset.jobs = res.body;
-                            scitran.getBIDSDownloadTicket(projectId, (err, res) => {
-                                let ticket = res.body.ticket;
-                                let url    = res.req.url.split('?')[0] + '?ticket=' + ticket;
-                                dataset.downloadUrl = url;
-                                callback(dataset);
-                            }, options);
+                            callback(dataset);
                         }, options);
                     });
                 }, options);
