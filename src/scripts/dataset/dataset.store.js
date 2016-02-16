@@ -380,18 +380,16 @@ let datasetStore = Reflux.createStore({
 	},
 
 	/**
-	 * Download Attachment
+	 * Get File Download Ticket
 	 *
-	 * Takes a filename and starts a downloads
-	 * for the file within the current dataset.
+	 * Takes a filename and callsback with a
+	 * direct download url.
 	 */
-	downloadFile(file) {
-		// open download window as synchronous action from click to avoid throwing popup blockers
-		window.open('', 'file-download');
+	getFileDownloadTicket(file, callback) {
 		scitran.getDownloadTicket(file.parentContainer, file.parentId, file.name, (err, res) => {
 			let ticket = res.body.ticket;
-			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'file-download');
-			setTimeout(() => {downloadWindow.close();});
+			let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
+			callback(downloadUrl);
 		}, {snapshot: this.data.snapshot});
 	},
 
