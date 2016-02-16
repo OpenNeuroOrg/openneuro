@@ -70,7 +70,7 @@ let Tools = React.createClass({
 				tooltip: 'Run Analysis',
 				icon: 'fa-tasks',
 				action: actions.toggleModal.bind(null, 'Jobs'),
-				display: isPublic || (isViewer || isEditor || isAdmin) && !isIncomplete,
+				display: isPublic || (isViewer || isEditor || isAdmin) && !isIncomplete && isSnapshot,
 				warn: false
 			},
 			{
