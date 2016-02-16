@@ -5,6 +5,7 @@ import AuthorInput    from './author-input.jsx';
 import FileArrayInput from './file-array-input.jsx';
 import Spinner        from '../partials/spinner.jsx';
 import request        from '../../utils/request';
+import WarnButton     from './warn-button.jsx';
 
 let ClickToEdit = React.createClass({
 
@@ -53,7 +54,16 @@ let ClickToEdit = React.createClass({
 				break;
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {
-					return <div className="fadeIn" key={file.name}><span><a className="file-name-link" onClick={this._download.bind(null, file.name)}><i className="fa fa-download"></i> {file.name}</a></span></div>;
+					return (
+						<div className="fadeIn" key={file.name}>
+							<span>
+								<WarnButton
+									tooltip="Download Attachment"
+									icon="fa-download"
+									prepDownload={this._download.bind(null, file.name)} /> {file.name}
+							</span>
+						</div>
+					);
 				});
 				input = <FileArrayInput
 						value={this.props.value}
@@ -122,9 +132,9 @@ let ClickToEdit = React.createClass({
 		}
 	},
 
-	_download(filename) {
+	_download(filename, callback) {
 		if (this.props.onFileClick) {
-			this.props.onFileClick(filename);
+			this.props.onFileClick(filename, callback);
 		}
 	},
 

@@ -122,7 +122,7 @@ let MetaData = React.createClass({
 
 	_deleteAttachment: Actions.deleteAttachment,
 
-	_downloadAttachment: Actions.downloadAttachment,
+	_downloadAttachment: Actions.getAttachmentDownloadTicket,
 
 	_updateREADME: Actions.updateREADME
 

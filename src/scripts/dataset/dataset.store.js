@@ -176,23 +176,6 @@ let datasetStore = Reflux.createStore({
 		}
 	},
 
-	/**
-	 * Download Dataset
-	 *
-	 */
-	downloadDataset(snapshot) {
-		// open download window as synchronous action from click to avoid throwing popup blockers
-		window.open('', 'bids-download');
-		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
-			let ticket = res.body.ticket;
-			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'bids-download');
-			setTimeout(() => {downloadWindow.close();}, 1000);
-			let dataset = this.data.dataset;
-			dataset.downloads++;
-			this.update({dataset});
-		}, {snapshot: !!snapshot});
-	},
-
 	getDatasetDownloadTicket(snapshot, callback) {
 		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
 			let ticket = res.body.ticket;
@@ -335,19 +318,17 @@ let datasetStore = Reflux.createStore({
 	},
 
 	/**
-	 * Download Attachment
+	 * Get Attachment Download Ticket
 	 *
-	 * Takes a filename and starts a downloads
-	 * for the file within the current dataset.
+	 * Takes a filename and callsback with a direct
+	 * download url for an attachment.
 	 */
-	downloadAttachment(filename, snapshot) {
-		// open download window as synchronous action from click to avoid throwing popup blockers
-		window.open('', 'attachment-download');
+	getAttachmentDownloadTicket(filename, callback) {
 		scitran.getDownloadTicket('projects', this.data.dataset._id, filename, (err, res) => {
 			let ticket = res.body.ticket;
-			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'attachment-download');
-			setTimeout(() => {downloadWindow.close();});
-		}, {snapshot: !!snapshot});
+			let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
+			callback(downloadUrl);
+		}, {snapshot: !!this.data.snapshot});
 	},
 
 	// File Structure ----------------------------------------------------------------
