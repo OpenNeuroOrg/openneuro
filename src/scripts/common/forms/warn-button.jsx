@@ -9,7 +9,8 @@ export default class WarnButton extends React.Component {
 		super();
 		this.state = {
 			showAction: false,
-			link: null
+			link: null,
+			loading: false
 		};
 	}
 
@@ -49,11 +50,12 @@ export default class WarnButton extends React.Component {
         );
 
         let button = showAction ? viewAction : hideAction;
+        let loading = <span><i className="fa fa-spin fa-circle-o-notch"></i></span>;
 
         if (this.props.tooltip) {
         	return (
 				<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltip}>
-					{button}
+					{this.state.loading ? loading : button}
 				</OverlayTrigger>
         	);
         }
@@ -65,8 +67,9 @@ export default class WarnButton extends React.Component {
 
 	toggle(action) {
 		if (this.state.showAction == false && this.props.prepDownload) {
+			this.setState({loading: true});
 			this.props.prepDownload((link) => {
-				this.setState({showAction: true, link: link});
+				this.setState({showAction: true, link: link, loading: false});
 			});
 			return;
 		}
