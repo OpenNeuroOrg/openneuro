@@ -53,7 +53,7 @@ export default class JobMenu extends React.Component {
 			<div>
 				{this.state.error ? <h4 className="danger">Error</h4> : null}
 				<h5>{this.state.message}</h5>
-				<button className="btn-admin-blue" onClick={actions.toggleModal.bind(this,'Jobs')}>OK</button>
+				<button className="btn-admin-blue" onClick={this._hide.bind(this)}>OK</button>
 			</div>
 		);
 
@@ -67,7 +67,7 @@ export default class JobMenu extends React.Component {
 		}
 
 		return (
-			<Modal show={this.props.show} onHide={this.props.onHide}>
+			<Modal show={this.props.show} onHide={this._hide.bind(this)}>
     			<Modal.Header closeButton>
     				<Modal.Title>Run Analysis</Modal.Title>
     			</Modal.Header>
@@ -139,6 +139,20 @@ export default class JobMenu extends React.Component {
 	}
 
 // actions ------------------------------------------------------------
+
+	/**
+	 * Hide
+	 */
+	_hide() {
+		this.setState({
+			loading: false,
+			parameters: [],
+			selectedApp: '',
+			message: null,
+			error: false
+		});
+		this.props.onHide();
+	}
 
 	/**
 	 * Update Parameter
@@ -213,7 +227,7 @@ export default class JobMenu extends React.Component {
 			if (err) {
 				error   = true;
 				if (res.status === 409) {
-					message = "This analysis has already been run on this dataset with the same parameters. You can view the results in the 'jobs' section of the dataset page.";
+					message = "This analysis has already been run on this dataset with the same parameters. You can view the results in the 'Analyses' section of the dataset page.";
 				} else {
 					message = "There was an issue submitting your analysis. Please double check you inputs and try again. If the issue persists contact the site adminstrator.";
 				}
