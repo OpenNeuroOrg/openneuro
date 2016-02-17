@@ -1,15 +1,16 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux    from 'reflux';
-import Actions   from './dataset.actions.js';
-import scitran   from '../utils/scitran';
-import crn       from '../utils/crn';
-import bids      from '../utils/bids';
-import router    from '../utils/router-container';
-import userStore from '../user/user.store';
-import upload    from '../utils/upload';
-import config    from '../config';
-import files     from '../utils/files';
+import Reflux        from 'reflux';
+import Actions       from './dataset.actions.js';
+import notifications from '../notification/notification.actions';
+import scitran       from '../utils/scitran';
+import crn           from '../utils/crn';
+import bids          from '../utils/bids';
+import router        from '../utils/router-container';
+import userStore     from '../user/user.store';
+import upload        from '../utils/upload';
+import config        from '../config';
+import files         from '../utils/files';
 
 let datasetStore = Reflux.createStore({
 
@@ -506,7 +507,10 @@ let datasetStore = Reflux.createStore({
 
 	createSnapshot() {
 		if (this.data.dataset.authors.length < 1) {
-			console.log('You must list at least one author before creating a snapshot.');
+			notifications.createAlert({
+				type: 'Warning',
+				message: 'You must list at least one author before creating a snapshot.'
+			});
 		} else {
 			scitran.createSnapshot(this.data.dataset._id, (err, res) => {
 				router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
