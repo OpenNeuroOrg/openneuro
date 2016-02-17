@@ -245,7 +245,7 @@ export default {
 					error.http_code = 403;
 					return next(error);
 				}
-			});
+			}, {snapshot: true});
 		});
 	},
 
