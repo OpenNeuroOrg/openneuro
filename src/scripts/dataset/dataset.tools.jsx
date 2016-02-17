@@ -1,13 +1,14 @@
 // dependencies -------------------------------------------------------
 
-import React        					from 'react';
-import Reflux       					from 'reflux';
-import datasetStore 					from './dataset.store';
-import actions      					from './dataset.actions.js';
-import WarnButton   					from '../common/forms/warn-button.jsx';
-import Share        					from './dataset.tools.share.jsx';
-import Jobs         					from './dataset.tools.jobs.jsx';
-import moment                           from 'moment';
+import React        from 'react';
+import Reflux       from 'reflux';
+import datasetStore from './dataset.store';
+import actions      from './dataset.actions.js';
+import userActions  from '../user/user.store.js';
+import WarnButton   from '../common/forms/warn-button.jsx';
+import Share        from './dataset.tools.share.jsx';
+import Jobs         from './dataset.tools.jobs.jsx';
+import moment       from 'moment';
 
 let Tools = React.createClass({
 
@@ -30,7 +31,8 @@ let Tools = React.createClass({
 		// permission check shorthands
 		let isAdmin      = dataset.access === 'admin';
 		let isEditor     = dataset.access === 'rw';
-		let isViewer     = dataset.access === 'ro'
+		let isViewer     = dataset.access === 'ro';
+		let isSignedIn   = !!userActions.hasToken();
 		let isPublic     = !!dataset.public;
 		let isIncomplete = !!dataset.status.uploadIncomplete;
 		let isSnapshot   = !!dataset.original;
@@ -68,7 +70,7 @@ let Tools = React.createClass({
 				tooltip: 'Run Analysis',
 				icon: 'fa-tasks',
 				action: actions.toggleModal.bind(null, 'Jobs'),
-				display: isPublic || (isViewer || isEditor || isAdmin) && !isIncomplete && isSnapshot,
+				display: isSignedIn && !isIncomplete && isSnapshot,
 				warn: false
 			},
 			{
