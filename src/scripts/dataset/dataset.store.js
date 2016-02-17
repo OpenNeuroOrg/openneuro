@@ -487,7 +487,6 @@ let datasetStore = Reflux.createStore({
 			parameters: parameters
 		}, (err, res) => {
 			callback(err, res);
-			// callback(err, {message: "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."});
 			this.loadJobs(this.data.dataset._id);
 		});
 	},

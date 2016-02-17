@@ -227,12 +227,12 @@ export default class JobMenu extends React.Component {
 			if (err) {
 				error   = true;
 				if (res.status === 409) {
-					message = "This analysis has already been run on this dataset with the same parameters. You can view the results in the 'Analyses' section of the dataset page.";
+					message = "This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.";
 				} else {
 					message = "There was an issue submitting your analysis. Please double check you inputs and try again. If the issue persists contact the site adminstrator.";
 				}
 			} else {
-				message = "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."
+				message = "Your analysis has been submitted. Periodically check the Analyses section of this dataset to view the status and results."
 			}
 			this.setState({loading: false, message: message, error: error});
 		});
