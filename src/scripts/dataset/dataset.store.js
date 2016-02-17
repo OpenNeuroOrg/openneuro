@@ -505,15 +505,17 @@ let datasetStore = Reflux.createStore({
 
 	// Snapshots ---------------------------------------------------------------------
 
-	createSnapshot() {
+	createSnapshot(callback) {
 		if (this.data.dataset.authors.length < 1) {
 			notifications.createAlert({
 				type: 'Warning',
 				message: 'You must list at least one author before creating a snapshot.'
 			});
+			if (callback){callback()};
 		} else {
 			scitran.createSnapshot(this.data.dataset._id, (err, res) => {
 				router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
+				if (callback){callback()};
 			});
 		}
 	},
