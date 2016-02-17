@@ -54,7 +54,7 @@ let UserStore = Reflux.createStore({
 	},
 
 // Actions ---------------------------------------------------------------------------
-		
+
 	/**
 	 * Toggle Modal
 	 */
@@ -63,7 +63,7 @@ let UserStore = Reflux.createStore({
 		updates['show' + name + 'Modal'] = !this.data['show' + name + 'Modal'];
 		this.update(updates);
 	},
-	
+
 	/**
 	 * Initialize OAuth
 	 *

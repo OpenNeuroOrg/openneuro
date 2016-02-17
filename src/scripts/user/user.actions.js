@@ -5,7 +5,8 @@ var Actions = Reflux.createActions([
 	'signIn',
 	'signOut',
 	'toggleModal',
-	'initOAuth'
+	'initOAuth',
+	'hasToken'
 ]);
 
 export default Actions;
