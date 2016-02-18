@@ -27,9 +27,7 @@ let Jobs = React.createClass({
 								icon="fa-download"
 								tooltip="Download File"
 								prepDownload={actions.getResultDownloadTicket.bind(this, job.jobId, result.name)} />
-							<a onClick={this._downloadResult.bind(this, job.jobId, result.name)}>
-								{result.name}
-							</a>
+							<span>{result.name}</span>
 						</li>
 					);
 				});
