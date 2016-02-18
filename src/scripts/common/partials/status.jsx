@@ -1,11 +1,12 @@
 // dependencies --------------------------------------------------------------
 
-import React       from 'react';
-import Reflux      from 'reflux';
-import Tooltip     from './tooltip.jsx';
-import FileSelect  from '../forms/file-select.jsx';
-import UploadStore from '../../upload/upload.store.js';
-import actions     from '../../upload/upload.actions';
+import React         from 'react';
+import Reflux        from 'reflux';
+import Tooltip       from './tooltip.jsx';
+import FileSelect    from '../forms/file-select.jsx';
+import UploadStore   from '../../upload/upload.store.js';
+import actions       from '../../upload/upload.actions';
+import notifications from '../../notification/notification.actions';
 
 // component setup -----------------------------------------------------------
 
@@ -66,7 +67,7 @@ let Status = React.createClass({
 		e.stopPropagation();
 		if (this.state.uploadStatus === 'uploading') {
 			e.preventDefault();
-			actions.createAlert({
+			notifications.createAlert({
 				type: 'Warning',
 				message: "You may only upload one dataset at a time. Please wait for the current upload to finish, then try resuming again."
 			});
