@@ -5,7 +5,6 @@ import Reflux     from 'reflux';
 import adminStore from './admin.store';
 import actions    from './admin.actions';
 import Input      from '../common/forms/input.jsx';
-import WarnButton from '../common/forms/warn-button.jsx';
 import {Modal}    from 'react-bootstrap';
 
 let BlacklistModal = React.createClass({

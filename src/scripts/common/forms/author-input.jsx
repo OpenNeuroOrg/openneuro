@@ -27,7 +27,7 @@ let ArrayInput = React.createClass({
 			return (
 				<div key={index} className="cte-array-item"><span className="author-name">{item.name}</span> <span className="orcid-id">{item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
 					<div className="btn-wrap">
-						<WarnButton message="Remove" confirm="Yes Remove!" action={this._remove.bind(null, index)}/>
+						<WarnButton message="Remove" cancel="Cancel" confirm="Yes Remove!" action={this._remove.bind(null, index)}/>
 					</div>
 				</div>
 			);

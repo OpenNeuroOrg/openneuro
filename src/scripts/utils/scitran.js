@@ -148,14 +148,23 @@ export default  {
         }, callback);
     },
 
+    /**
+     * Add Permission
+     */
+    addPermission(container, id, permission, callback) {
+        permission.site = 'local'
+        request.post(config.scitran.url + container + '/' + id + '/permissions', {body: permission}, callback);
+    },
+
 // Read -----------------------------------------------------------------------------------
 
     /**
      * Get Projects
      *
      */
-    getProjects (authenticate, callback) {
-        request.get(config.scitran.url + 'projects', {auth: authenticate}, (err, res) => {
+    getProjects (options, callback) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'projects', {auth: options.authenticate}, (err, res) => {
             callback(res.body);
         });
     },
@@ -164,8 +173,9 @@ export default  {
      * Get Project
      *
      */
-    getProject (projectId, callback) {
-        request.get(config.scitran.url + 'projects/' + projectId, {}, (err, res) => {
+    getProject (projectId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'projects/' + projectId, {}, (err, res) => {
             callback(res);
         });
     },
@@ -174,8 +184,9 @@ export default  {
      * Get Sessions
      *
      */
-    getSessions (projectId, callback) {
-        request.get(config.scitran.url + 'projects/' + projectId + '/sessions', {}, (err, res) => {
+    getSessions (projectId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'projects/' + projectId + '/sessions', {}, (err, res) => {
             callback(res.body);
         });
     },
@@ -184,8 +195,9 @@ export default  {
      * Get Session
      *
      */
-    getSession (sessionId, callback) {
-        request.get(config.scitran.url + 'sessions/' + sessionId, {}, (err, res) => {
+    getSession (sessionId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'sessions/' + sessionId, {}, (err, res) => {
             callback(res.body);
         });
     },
@@ -194,8 +206,9 @@ export default  {
      * Get Acquisitions
      *
      */
-    getAcquisitions (sessionId, callback) {
-        request.get(config.scitran.url + 'sessions/' + sessionId + '/acquisitions', {}, (err, res) => {
+    getAcquisitions (sessionId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'sessions/' + sessionId + '/acquisitions', {}, (err, res) => {
             callback(res.body);
         });
     },
@@ -204,8 +217,9 @@ export default  {
      * Get Acquisition
      *
      */
-    getAcquisition (acquisitionId, callback) {
-        request.get(config.scitran.url + 'acquisitions/' + acquisitionId, {}, (err, res) => {
+    getAcquisition (acquisitionId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url  + modifier + 'acquisitions/' + acquisitionId, {}, (err, res) => {
             callback(res.body);
         });
     },
@@ -214,16 +228,18 @@ export default  {
      * Get File
      *
      */
-    getFile (level, id, filename, callback) {
-        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, {}, callback);
+    getFile (level, id, filename, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + level + '/' + id + '/files/' + filename, {}, callback);
     },
 
     /**
      * Get Download Ticket
      *
      */
-    getDownloadTicket (level, id, filename, callback) {
-        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, {
+    getDownloadTicket (level, id, filename, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + level + '/' + id + '/files/' + filename, {
             query: {ticket: ''}
         }, callback);
     },
@@ -232,8 +248,9 @@ export default  {
      * Get BIDS Download Ticket
      *
      */
-    getBIDSDownloadTicket (projectId, callback) {
-        request.post(config.scitran.url + 'download', {
+    getBIDSDownloadTicket (projectId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.post(config.scitran.url + modifier + 'download', {
             query: {format: 'bids'},
             body: {
                 nodes:[
@@ -265,10 +282,17 @@ export default  {
     },
 
     /**
-     * Add Tag
+     * Remove Tag
      */
     removeTag (containerType, containerId, tag, callback) {
         request.del(config.scitran.url + containerType + '/' + containerId + '/tags/' + tag, callback);
+    },
+
+    /**
+     * Remove Permission
+     */
+    removePermission(container, id, userId, callback) {
+        request.del(config.scitran.url + container + '/' + id + '/permissions/local/' + userId, callback);
     },
 
 // Update ---------------------------------------------------------------------------------
@@ -309,5 +333,27 @@ export default  {
             query: {force: true}
         }, callback);
     },
+
+// Snapshots ------------------------------------------------------------------------------
+
+    createSnapshot (projectId, callback) {
+        request.post(config.scitran.url + 'snapshots', {
+            query: {project: projectId}
+        }, callback);
+    },
+
+    getProjectSnapshots (projectId, callback) {
+        request.get(config.scitran.url + 'projects/' + projectId + '/snapshots', {}, callback);
+    },
+
+    deleteSnapshot (projectId, callback) {
+        request.del(config.scitran.url + 'snapshots/projects/' + projectId, callback);
+    },
+
+    updateSnapshotPublic(projectId, value, callback) {
+        request.put(config.scitran.url + 'snapshots/projects/' + projectId + '/public', {
+            body: {value}
+        }, callback);
+    }
 
 };

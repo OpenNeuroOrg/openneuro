@@ -11,8 +11,6 @@ import Rename   from './upload.rename.jsx';
 import Issues   from './upload.issues.jsx';
 import Resume   from './upload.resume.jsx';
 import Progress from './upload.progress.jsx';
-import Alert    from './upload.alert.jsx';
-
 
 let Upload = React.createClass({
 

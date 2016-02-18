@@ -3,6 +3,7 @@
 import React   from 'react';
 import actions from './dataset.actions.js';
 import Spinner from '../common/partials/spinner.jsx';
+import {Modal} from 'react-bootstrap';
 
 export default class JobMenu extends React.Component {
 
@@ -21,9 +22,9 @@ export default class JobMenu extends React.Component {
 
 	render() {
 
-		let options = this.props.apps.map((app) => {
+		let options = this.props.apps ? this.props.apps.map((app) => {
 			return <option key={app.id} value={app.id}>{app.label}</option>;
-		});
+		}) : [];
 
 		let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedApp;
 
@@ -52,7 +53,7 @@ export default class JobMenu extends React.Component {
 			<div>
 				{this.state.error ? <h4 className="danger">Error</h4> : null}
 				<h5>{this.state.message}</h5>
-				<button className="btn-admin-blue" onClick={actions.toggleModal.bind(this,'Jobs')}>OK</button>
+				<button className="btn-admin-blue" onClick={this._hide.bind(this)}>OK</button>
 			</div>
 		);
 
@@ -66,9 +67,17 @@ export default class JobMenu extends React.Component {
 		}
 
 		return (
-			<div className="dataset">
-				{body}
-			</div>
+			<Modal show={this.props.show} onHide={this._hide.bind(this)}>
+    			<Modal.Header closeButton>
+    				<Modal.Title>Run Analysis</Modal.Title>
+    			</Modal.Header>
+    			<hr className="modal-inner" />
+    			<Modal.Body>
+					<div className="dataset">
+						{body}
+					</div>
+    			</Modal.Body>
+    		</Modal>
     	);
 	}
 
@@ -99,7 +108,7 @@ export default class JobMenu extends React.Component {
 					break;
 			}
 			return (
-				<div>
+				<div key={parameter.id}>
 					<div className="parameters form-horizontal">
 		    			<div className="form-group" key={parameter.id}>
 							<label className="sr-only">{parameter.label}</label>
@@ -130,6 +139,20 @@ export default class JobMenu extends React.Component {
 	}
 
 // actions ------------------------------------------------------------
+
+	/**
+	 * Hide
+	 */
+	_hide() {
+		this.setState({
+			loading: false,
+			parameters: [],
+			selectedApp: '',
+			message: null,
+			error: false
+		});
+		this.props.onHide();
+	}
 
 	/**
 	 * Update Parameter
@@ -203,9 +226,13 @@ export default class JobMenu extends React.Component {
 			let message, error;
 			if (err) {
 				error   = true;
-				message = "There was an issue submitting your analysis. Please double check you inputs and try again. If the issue persists contact the site adminstrator.";
+				if (res.status === 409) {
+					message = "This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.";
+				} else {
+					message = "There was an issue submitting your analysis. Please double check you inputs and try again. If the issue persists contact the site adminstrator.";
+				}
 			} else {
-				message = "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."
+				message = "Your analysis has been submitted. Periodically check the Analyses section of this dataset to view the status and results."
 			}
 			this.setState({loading: false, message: message, error: error});
 		});

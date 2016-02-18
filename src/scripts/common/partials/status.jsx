@@ -74,13 +74,9 @@ let Status = React.createClass({
 	},
 
 	_onFileSelect(files) {
-		actions.onResume(files, this.props.dataset.name);
+		actions.onResume(files, this.props.dataset.label);
 	}
 
 });
-
-// Status.propTypes = {
-// 	type: React.PropTypes.string.isRequired
-// };
 
 export default Status;

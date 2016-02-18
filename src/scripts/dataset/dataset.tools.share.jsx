@@ -6,6 +6,7 @@ import bids       from '../utils/bids';
 import scitran    from '../utils/scitran';
 import Input      from '../common/forms/input.jsx';
 import WarnButton from '../common/forms/warn-button.jsx';
+import {Modal}    from 'react-bootstrap';
 
 export default class Share extends React.Component {
 
@@ -21,6 +22,10 @@ export default class Share extends React.Component {
 			input: '',
 			select: ''
 		};
+	}
+
+	componentWillReceiveProps() {
+		this.setState({users: this.props.users, permissions: this.props.dataset.permissions});
 	}
 
 	componentDidMount() {
@@ -39,32 +44,42 @@ export default class Share extends React.Component {
 			return (
 				<div key={user._id} className="cte-array-item"><span className="share-name">{user._id}</span> <span className="share-access">- {accessKey[user.access]}</span>
 					<div className="btn-wrap">
-						<WarnButton message="Remove" confirm="Yes Remove!" action={this._removeUser.bind(this, user._id)}/>
+						<WarnButton message="Remove" cancel="Cancel" confirm="Yes Remove!" action={this._removeUser.bind(this, user._id)}/>
 					</div>
 				</div>
 			);
 		});
 
+		let instruction = "Enter a user's email address and select access level to share";
+
 		return (
-			<div className="dataset">
-				<h5>Dataset shared with:</h5>
-				<div className="cte-array-items">
-					{permissions}
-				</div>
-				<h5 className="add-members">Enter a user's email address and select access level to share</h5>
-				<div>
-					<div className="text-danger">{this.state.error}</div>
-					<Input value={this.state.input} onChange={this._inputChange.bind(this)} />
-					<select className="selectBox-style" onChange={this._selectChange.bind(this)} value={this.state.select}>
-						<option value="" disabled>access level</option>
-						<option value="ro">Can view</option>
-						<option value="rw">Can edit</option>
-						<option value="admin">Administrator</option>
-					</select>
-					<span className="caret-down"></span>
-					<button className="btn-admin-blue" onClick={this._addUser.bind(this)}>share</button>
-				</div>
-			</div>
+            <Modal show={this.props.show} onHide={this.props.onHide} className="share-modal">
+				<Modal.Header closeButton>
+	        		<Modal.Title>Share Dataset</Modal.Title>
+	        	</Modal.Header>
+	        	<hr className="modal-inner" />
+	        	<Modal.Body>
+					<div className="dataset">
+						<h5>Dataset shared with:</h5>
+						<div className="cte-array-items">
+							{permissions}
+						</div>
+						<h5 className="add-members">{instruction}</h5>
+						<div>
+							<div className="text-danger">{this.state.error}</div>
+							<Input value={this.state.input} onChange={this._inputChange.bind(this)} />
+							<select className="selectBox-style" onChange={this._selectChange.bind(this)} value={this.state.select}>
+								<option value="" disabled>access level</option>
+								<option value="ro">Can view</option>
+								<option value="rw">Can edit</option>
+								<option value="admin">Administrator</option>
+							</select>
+							<span className="caret-down"></span>
+							<button className="btn-admin-blue" onClick={this._addUser.bind(this)}>share</button>
+						</div>
+					</div>
+				</Modal.Body>
+			</Modal>
     	);
 	}
 

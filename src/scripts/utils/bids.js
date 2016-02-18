@@ -20,7 +20,7 @@ export default  {
      * subjects after they are separated out
      * of scitran sessions.
      */
-    getSubjects (projectId, callback) {
+    getSubjects (projectId, callback, options) {
         scitran.getSessions(projectId, (sessions) => {
             let subjects = [];
             async.each(sessions, (session, cb) => {
@@ -30,14 +30,14 @@ export default  {
                         session.name = session.label;
                         subjects.push(session);
                         cb();
-                    });
+                    }, options);
                 } else {
                     cb();
                 }
             }, () => {
                 callback(subjects);
             });
-        });
+        }, options);
     },
 
     /**
@@ -47,7 +47,7 @@ export default  {
      * returns all BIDS sessions after they
      * are separated out of scitran sessions.
      */
-    getSessions (projectId, subjectId, callback) {
+    getSessions (projectId, subjectId, callback, options) {
         scitran.getSessions(projectId, (sciSessions) => {
             let sessions = [];
             async.each(sciSessions, (session, cb) => {
@@ -57,14 +57,14 @@ export default  {
                         session.name = session.label;
                         sessions.push(session);
                         cb();
-                    });
+                    }, options);
                 } else {
                     cb();
                 }
             }, () => {
                 callback(sessions);
             });
-        });
+        }, options);
     },
 
     /**
@@ -83,20 +83,36 @@ export default  {
      * boolean as second argument to specifiy if request
      * is made with authentication. Defaults to true.
      */
-    getDatasets (callback, authenticate) {
-        if (authenticate === undefined) {authenticate = true;}
-        scitran.getProjects(authenticate, (projects) => {
-            let results = [];
-
-            // hide other user's projects from admins
-            for (let project of projects) {
-                if (!authenticate || this.userOwns(project)) {
-                    let dataset = this.formatDataset(project, null);
-                    results.push(dataset);
+    getDatasets (callback, isPublic) {
+        scitran.getProjects({authenticate: !isPublic, snapshot: isPublic}, (projects) => {
+            scitran.getUsers((err, res) => {
+                let users = !err && res.body ? res.body : null;
+                let results = [];
+                let publicResults = {}
+                // hide other user's projects from admins & filter snapshots to display newest of each dataset
+                if (projects) {
+                    for (let project of projects) {
+                        let dataset = this.formatDataset(project, null, users);
+                        if (isPublic) {
+                            if (!publicResults.hasOwnProperty(project.original) || publicResults[project.original].snapshot_version < project.snapshot_version) {
+                                publicResults[project.original] = dataset;
+                            }
+                        } else if (this.userAccess(project)) {
+                            results.push(dataset);
+                        }
+                    }
                 }
-            }
 
-            callback(results);
+                if (isPublic) {
+                    let results = [];
+                    for (let key in publicResults) {
+                        results.push(publicResults[key]);
+                    }
+                    callback(results);
+                } else {
+                    callback(results);
+                }
+            });
         });
     },
 
@@ -104,7 +120,7 @@ export default  {
      * Get Metadata
      *
      */
-    getMetadata(project, callback) {
+    getMetadata(project, callback, options) {
 
         // determine which metadata files are available
         let metadataFiles = [],
@@ -134,7 +150,7 @@ export default  {
                     metadata[filename] = contents;
                 }
                 cb();
-            });
+            }, options);
         }, () => {
             callback(metadata);
         });
@@ -147,47 +163,50 @@ export default  {
      * Takes a projectId and returns a full
      * nested BIDS dataset.
      */
-    getDataset (projectId, callback) {
-        scitran.getProject(projectId, (res) => {
-            if (res.status !== 200) {return callback(res);}
-            let project = res.body;
-            this.getMetadata(project, (metadata) => {
-                let dataset = this.formatDataset(project, metadata['dataset_description.json']);
-                dataset.README = metadata.README;
-                this.getSubjects(projectId, (subjects) => {
-                    dataset.containerType = 'projects';
-                    dataset.children = this.labelFile(dataset.children, projectId, 'projects');
-                    dataset.children = dataset.children.concat(subjects);
-                    async.each(subjects, (subject, cb) => {
-                        this.getSessions(projectId, subject._id, (sessions) => {
-                            subject.containerType = 'sessions';
-                            subject.children = this.labelFile(subject.children, subject._id, 'sessions');
-                            subject.children = subject.children.concat(sessions);
-                            async.each(sessions, (session, cb1) => {
-                                this.getModalities(session._id, (modalities) => {
-                                    session.containerType = 'sessions';
-                                    session.children = this.labelFile(session.children, session._id, 'sessions');
-                                    session.children = session.children.concat(modalities);
-                                    async.each(modalities, (modality, cb2) => {
-                                        scitran.getAcquisition(modality._id, (res) => {
-                                            modality.containerType = 'acquisitions';
-                                            modality.children = res.files;
-                                            modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
-                                            modality.name = modality.label;
-                                            cb2();
-                                        });
-                                    }, cb1);
-                                });
-                            }, cb);
+    getDataset (projectId, callback, options) {
+        scitran.getUsers((err, res) => {
+            let users = !err && res.body ? res.body : null;
+            scitran.getProject(projectId, (res) => {
+                if (res.status !== 200) {return callback(res);}
+                let project = res.body;
+                this.getMetadata(project, (metadata) => {
+                    let dataset = this.formatDataset(project, metadata['dataset_description.json'], users);
+                    dataset.README = metadata.README;
+                    this.getSubjects(projectId, (subjects) => {
+                        dataset.containerType = 'projects';
+                        dataset.children = this.labelFile(dataset.children, projectId, 'projects');
+                        dataset.children = dataset.children.concat(subjects);
+                        async.each(subjects, (subject, cb) => {
+                            this.getSessions(projectId, subject._id, (sessions) => {
+                                subject.containerType = 'sessions';
+                                subject.children = this.labelFile(subject.children, subject._id, 'sessions');
+                                subject.children = subject.children.concat(sessions);
+                                async.each(sessions, (session, cb1) => {
+                                    this.getModalities(session._id, (modalities) => {
+                                        session.containerType = 'sessions';
+                                        session.children = this.labelFile(session.children, session._id, 'sessions');
+                                        session.children = session.children.concat(modalities);
+                                        async.each(modalities, (modality, cb2) => {
+                                            scitran.getAcquisition(modality._id, (res) => {
+                                                modality.containerType = 'acquisitions';
+                                                modality.children = res.files;
+                                                modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
+                                                modality.name = modality.label;
+                                                cb2();
+                                            }, options);
+                                        }, cb1);
+                                    }, options);
+                                }, cb);
+                            }, options);
+                        }, () => {
+                            crn.getDatasetJobs(projectId, (err, res) => {
+                                dataset.jobs = res.body;
+                                callback(dataset);
+                            }, options);
                         });
-                    }, () => {
-                        crn.getDatasetJobs(projectId, (err, res) => {
-                            dataset.jobs = res.body;
-                            callback(dataset);
-                        });
-                    });
-                });
-            });
+                    }, options);
+                }, options);
+            }, options);
         });
     },
 
@@ -201,21 +220,7 @@ export default  {
      * already exist in the project.
      */
     addPermission(projectId, permission, callback) {
-        scitran.getProject(projectId, (res) => {
-            let exists = false;
-            let permissions = res.body.permissions;
-            for (let user of permissions) {
-                if (user._id === permission._id) {
-                    exists = true;
-                }
-            }
-            if (!exists) {
-                permissions.push(permission);
-                scitran.updateProject(projectId, {permissions}, callback);
-            } else {
-                callback();
-            }
-        });
+        scitran.addPermission('projects', projectId, permission, callback);
     },
 
     /**
@@ -225,20 +230,7 @@ export default  {
      * the user if they were a member of the project.
      */
     removePermission(projectId, userId, callback) {
-        scitran.getProject(projectId, (res) => {
-            let permissions = res.body.permissions;
-            let index;
-            for (let i = 0; i < permissions.length; i++) {
-                let user = permissions[i];
-                if (user._id === userId) {
-                    index = i;
-                }
-            }
-            if (index) {
-                permissions.splice(index, 1);
-                scitran.updateProject(projectId, {permissions}, callback);
-            }
-        });
+        scitran.removePermission('projects', projectId, userId, callback);
     },
 
 // Delete ---------------------------------------------------------------------------------
@@ -250,25 +242,47 @@ export default  {
      * after recursing and removing all sub
      * containers.
      */
-    deleteDataset (projectId, callback) {
-        scitran.getSessions(projectId, (sessions) => {
-            async.each(sessions, (session, cb) => {
-                scitran.getAcquisitions(session._id, (acquisitions) => {
-                    async.each(acquisitions, (acquisition, cb1) => {
-                        scitran.deleteContainer('acquisitions', acquisition._id, cb1);
-                    }, () => {
-                        scitran.deleteContainer('sessions', session._id, cb);
+    deleteDataset (projectId, callback, options) {
+        if (!options.snapshot) {
+            scitran.getSessions(projectId, (sessions) => {
+                async.each(sessions, (session, cb) => {
+                    scitran.getAcquisitions(session._id, (acquisitions) => {
+                        async.each(acquisitions, (acquisition, cb1) => {
+                            scitran.deleteContainer('acquisitions', acquisition._id, cb1);
+                        }, () => {
+                            scitran.deleteContainer('sessions', session._id, cb);
+                        });
+                    });
+                }, () => {
+                    crn.deleteDatasetJobs(projectId, (err, res) => {
+                        scitran.deleteContainer('projects', projectId, callback);
                     });
                 });
-            }, () => {
-                crn.deleteDatasetJobs(projectId, (err, res) => {
-                    scitran.deleteContainer('projects', projectId, callback);
-                });
             });
-        });
+        } else {
+            scitran.deleteSnapshot(projectId, callback);
+        }
     },
 
 // Dataset Format Helpers -----------------------------------------------------------------
+
+    /**
+     * User
+     *
+     * Takes a dataset and users list and returns the
+     * user object of the uploader.
+     */
+    user (dataset, users, callback) {
+        if (users) {
+            for (let user of users) {
+                if (user._id === dataset.group) {
+                    return user;
+                }
+            }
+        } else {
+            return null;
+        }
+    },
 
     /**
      * Label File
@@ -303,24 +317,30 @@ export default  {
         }
 
         let dataset = {
+            /** same as original **/
             _id:         project._id,
-            name:        project.label,
+            label:       project.label,
             group:       project.group,
-            timestamp:   project.timestamp,
-            type:        'folder',
+            created:     project.created,
+            modified:    project.modified,
             permissions: project.permissions,
             public:      project.public,
-            notes:       project.notes,
+
+            /** modified for BIDS **/
+            type:        'folder',
+            downloads:   project.counter ? project.counter : 0,
             children:    files,
             description: this.formatDescription(project.metadata, description),
             attachments: attachments,
             status:      this.formatStatus(project.tags),
-            userOwns:    this.userOwns(project),
+            // userOwns:    this.userOwns(project),
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
         };
-        dataset.authors = dataset.description.Authors;
+        dataset.authors      = dataset.description.Authors;
         dataset.sharedWithMe = dataset.userOwns && !dataset.userCreated;
+        dataset.user         = this.user(dataset, users);
+        if (project.original) {dataset.original = project.original}
 
         return dataset;
     },
@@ -365,25 +385,6 @@ export default  {
             }
         }
         return status;
-    },
-
-    /**
-     * User Owns
-     *
-     * Takes a project and returns a boolean
-     * representing whether the current user
-     * is the owner of that dataset.
-     */
-    userOwns(project) {
-        let userOwns = false
-        if (project && project.permissions) {
-            for (let user of project.permissions) {
-                if (userStore.data.scitran._id === user._id) {
-                    userOwns = true;
-                }
-            }
-        }
-        return userOwns;
     },
 
     /**

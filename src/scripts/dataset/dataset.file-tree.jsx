@@ -10,7 +10,7 @@ class FileTree extends React.Component {
 	render () {
 		let tree = this.props.tree ? this.props.tree : [];
 		let nodes = tree.map((item, index) => {
-			if (!item.name && item.filename) {item.name = item.filename;}
+			if (!item.label && item.filename) {item.label = item.filename;}
 			let typeIcon, typeIconOpen, tools, fileTools, error, loading, editBtn;
 
 			// loading animation
@@ -20,7 +20,7 @@ class FileTree extends React.Component {
 
 			// inline error
 			if (item.error) {
-				error = <div className="message error">{item.error} <span onClick={this._dismissError.bind(this, item)}><i className="fa fa-times"></i></span></div>;
+				error = <div className="message error">{item.error} <span onClick={actions.dismissError.bind(this, item)}><i className="fa fa-times"></i></span></div>;
 			}
 
 			// folders
@@ -30,46 +30,15 @@ class FileTree extends React.Component {
 				let editText = <span>View</span>;
 				let hideText = <span>Hide <i className="fa fa-times"></i></span>;
 
-
-				editBtn = <button onClick={this._toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>
-
-				tools = (
-					<div>
-						<input
-							type="file"
-							className="add-files"
-							ref={item.name}
-							onChange={this._addFile.bind(this, item)}
-							onClick={this._clearInput.bind(this, item.name)}/>
-					</div>
-				);
+				editBtn = <button onClick={actions.toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>
 			}
 
-			// files
-			else if(this.props.editable) {
-				typeIcon  = <i className="fa fa-file"></i>;
-				fileTools = (
-					<span className="fileTreeEditFile"> -
-						<span className="delete-file">
-							<WarnButton action={this._deleteFile.bind(this, item)} />
-						</span>
-						<span className="edit-file">
-							<input
-								type="file"
-								className="update-file"
-								ref={item.name}
-								onChange={this._updateFile.bind(this, item)}
-								onClick={this._clearInput.bind(this, item.name)}/>
-						</span>
-					</span>
-				);
-			}
 			return (
-				<li className="clearfix" key={item.name}>
+				<li className="clearfix" key={item.label ? item.label : item.name}>
 					<span className="item-name">
-						{this.props.editable && item.showChildren ? typeIconOpen : typeIcon} {item.name} 
-					</span> 
-					{this.props.editable && item.showChildren ? tools : fileTools} 
+						{item.showChildren ? typeIconOpen : typeIcon} {item.label ? item.label : item.name}
+					</span>
+					{this._fileTools(item)}
 					{error}
 					{loading}
 					{item.showChildren ? <ul className="child-files"><FileTree tree={item.children} editable={this.props.editable}/></ul> : null}
@@ -77,9 +46,71 @@ class FileTree extends React.Component {
 				</li>
 			);
 		});
+
 		return (
 			<ul className="top-level-item">{nodes}</ul>
     	);
+	}
+
+// template methods ---------------------------------------------------
+
+	_fileTools(item) {
+
+		let deleteFile, editFile, addFile;
+		if (this.props.editable) {
+			if (item.children) {
+				addFile = (
+					<input
+						type="file"
+						className="add-files"
+						ref={item.label}
+						onChange={this._addFile.bind(this, item)}
+						onClick={this._clearInput.bind(this, item.label)}/>
+				);
+			} else {
+				deleteFile = (
+					<span className="delete-file">
+						<WarnButton
+							message="Delete"
+							cancel="Cancel"
+							confirm="Yes Delete!"
+							action={actions.deleteFile.bind(this, item)} />
+					</span>
+				);
+
+				editFile = (
+					<span className="edit-file">
+						<input
+							type="file"
+							className="update-file"
+							ref={item.label}
+							onChange={this._updateFile.bind(this, item)}
+							onClick={this._clearInput.bind(this, item.label)}/>
+					</span>
+				);
+			}
+		}
+
+		let downloadFile;
+		if (!item.children) {
+			downloadFile = (
+				<span>
+					<WarnButton
+						icon="fa-download"
+						tooltip="Download File"
+						prepDownload={actions.getFileDownloadTicket.bind(this, item)} />
+				</span>
+			);
+		}
+
+		return (
+			<span className="fileTreeEditFile">
+				{addFile}
+				{deleteFile}
+				{editFile}
+				{downloadFile}
+			</span>
+		);
 	}
 
 // custom methods -----------------------------------------------------
@@ -95,21 +126,6 @@ class FileTree extends React.Component {
 	_clearInput(ref) {
 		React.findDOMNode(this.refs[ref]).value = null;
 	}
-
-	/**
-	 * Delete File
-	 */
-	_deleteFile(file) {actions.deleteFile(file);}
-
-	/**
-	 * Dismiss Error
-	 */
-	 _dismissError(item) {actions.dismissError(item);}
-
-	/**
-	 * Toggle Folder
-	 */
-	_toggleFolder(folder) {actions.toggleFolder(folder);}
 
 	/**
 	 * Update File

@@ -3,6 +3,7 @@
 import React           from 'react';
 import Reflux          from 'reflux';
 import Actions         from './upload.actions.js';
+import notifications   from '../notification/notification.actions.js';
 import scitran         from '../utils/scitran';
 import upload          from './upload';
 import files           from '../utils/files';
@@ -46,8 +47,6 @@ let UploadStore = Reflux.createStore({
 	setInitialState: function (diffs, callback) {
 		let data = {
 			activeKey: 1,
-			alert: null,
-			alertMessage: '',
 			changeName: false,
 			dirName: '',
 			disabledTab: false,
@@ -242,17 +241,15 @@ let UploadStore = Reflux.createStore({
 		let datasetsUpdated = false;
 
 		upload.upload(userStore.data.scitran._id, fileTree, count, (progress, projectId) => {
-			if (this.data.alert !== 'Error') {
-				projectId = projectId ? projectId : this.data.projectId;
-				this.update({progress: progress, uploading: true, projectId: projectId});
-				if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
-				window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
-				if (progress.total === progress.completed) {
-					let note = {author: 'uploadStatus', text: 'complete'};
-					scitran.removeTag('projects', projectId, 'incomplete', (err, res) => {
-                        this.uploadComplete(projectId);
-                    });
-				}
+			projectId = projectId ? projectId : this.data.projectId;
+			this.update({progress: progress, uploading: true, projectId: projectId});
+			if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
+			window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
+			if (progress.total === progress.completed) {
+				let note = {author: 'uploadStatus', text: 'complete'};
+				scitran.removeTag('projects', projectId, 'incomplete', (err, res) => {
+                    this.uploadComplete(projectId);
+                });
 			}
 		}, () => {
 			this.uploadError();
@@ -271,7 +268,7 @@ let UploadStore = Reflux.createStore({
 		if (fileSelect) {fileSelect.value = null;} // clear file input
 
 		let message = (
-			<span><a href={"#/dataset/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>
+			<span><a href={"#/datasets/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>
 		);
 
 		// refresh my datasets
@@ -279,10 +276,11 @@ let UploadStore = Reflux.createStore({
 		// refresh current datset
 		datasetActions.reloadDataset(projectId);
 
-		this.setInitialState({
-			alert: 'Success',
-			alertMessage: message
+		notifications.createAlert({
+			type: 'Success',
+			message: message
 		});
+		this.setInitialState();
 		window.onbeforeunload = function() {};
 	},
 
@@ -299,26 +297,12 @@ let UploadStore = Reflux.createStore({
 		// refresh current datset
 		datasetActions.reloadDataset(this.data.projectId);
 
-		this.setInitialState({
-			alert: 'Error',
-			alertMessage: <span>There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site <a  href="mailto:openfmri@gmail.com?subject=Upload%20Error" target="_blank">administrator</a>.</span>
+		notifications.createAlert({
+			type: 'Error',
+			message: <span>There was an error uploading your dataset. Please refresh the page and try again. If the issue persists, contact the site <a  href="mailto:openfmri@gmail.com?subject=Upload%20Error" target="_blank">administrator</a>.</span>
 		});
+		this.setInitialState();
 		window.onbeforeunload = function() {};
-	},
-
-	/**
-	 * Create Alert
-	 */
-	createAlert (alert) {
-		this.update({alert: alert.type, alertMessage: alert.message});
-	},
-
-	/**
-	 * Close Alert
-	 *
-	 */
-	closeAlert () {
-		this.update({alert: false});
 	},
 
 	/**

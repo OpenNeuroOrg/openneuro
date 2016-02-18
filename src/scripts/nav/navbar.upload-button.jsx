@@ -6,7 +6,7 @@ import {Link}      		from 'react-router';
 import Actions     		from '../upload/upload.actions.js';
 import uploadStore 		from '../upload/upload.store.js';
 import Upload       	from '../upload/upload.jsx';
-import Alert            from '../upload/upload.alert.jsx';
+import Alert            from '../notification/notification.alert.jsx';
 import {ProgressBar,
 		Modal} 			from 'react-bootstrap';
 
@@ -53,7 +53,7 @@ let UploadBtn = React.createClass({
 			<span>
 				<div className="upload-btn-wrap">
 				{uploadStore.data.uploadStatus == 'uploading' ? progress : uploadBtn}
-				{this.state.alert ? <Alert type={this.state.alert} message={this.state.alertMessage} onClose={Actions.closeAlert} /> : null}
+				<Alert/>
 				{uploadModal}
 				</div>
 			</span>

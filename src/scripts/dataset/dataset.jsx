@@ -1,19 +1,18 @@
 // dependencies -------------------------------------------------------
 
-import React        from 'react';
-import Reflux       from 'reflux';
-import {State}      from 'react-router';
-import Spinner      from '../common/partials/spinner.jsx';
-import {Link}       from 'react-router';
-import datasetStore from './dataset.store';
-import Actions      from './dataset.actions.js';
-import MetaData    	from './dataset.metadata.jsx';
-import Tools        from './dataset.tools.jsx';
-import Statuses     from './dataset.statuses.jsx';
-import moment       from 'moment';
-import ClickToEdit  from '../common/forms/click-to-edit.jsx';
-import FileTree     from './dataset.file-tree.jsx';
-import Jobs         from './dataset.jobs.jsx';
+import React         from 'react';
+import Reflux        from 'reflux';
+import Spinner       from '../common/partials/spinner.jsx';
+import {Link, State} from 'react-router';
+import datasetStore  from './dataset.store';
+import Actions       from './dataset.actions.js';
+import MetaData    	 from './dataset.metadata.jsx';
+import Tools         from './dataset.tools.jsx';
+import Statuses      from './dataset.statuses.jsx';
+import moment        from 'moment';
+import ClickToEdit   from '../common/forms/click-to-edit.jsx';
+import FileTree      from './dataset.file-tree.jsx';
+import Jobs          from './dataset.jobs.jsx';
 
 let Dataset = React.createClass({
 
@@ -23,14 +22,20 @@ let Dataset = React.createClass({
 
 	componentWillReceiveProps() {
 		let params = this.getParams();
-		if (this.state.dataset && params.datasetId !== this.state.dataset._id) {
+		if (params.snapshotId) {
+			Actions.loadDataset(params.snapshotId, {snapshot: true});
+		} else if (params.datasetId && this.state.dataset && params.datasetId !== this.state.dataset._id) {
 			Actions.loadDataset(params.datasetId);
 		}
 	},
 
 	componentDidMount() {
 		let params = this.getParams();
-		Actions.loadDataset(params.datasetId);
+		if (params.snapshotId) {
+			Actions.loadDataset(params.snapshotId, {snapshot: true});
+		} else if (params.datasetId) {
+			Actions.loadDataset(params.datasetId);
+		}
 	},
 
 	componentWillUnmount() {
@@ -38,52 +43,74 @@ let Dataset = React.createClass({
 	},
 
 	render() {
-		let loading = this.state.loading;
-		let dataset = this.state.dataset;
-		let status  = this.state.status;
-		let dateAdded  = dataset ? moment(dataset.timestamp).format('L') : null;
-        let timeago    = dataset ? moment(dataset.timestamp).fromNow(true) : null;
-		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin');
+		let loading    = this.state.loading;
+		let dataset    = this.state.dataset;
+		let user       = dataset ? dataset.user : null;
+		let status     = this.state.status;
+		let dateAdded  = dataset ? moment(dataset.created).format('L') : null;
+        let timeago    = dataset ? moment(dataset.created).fromNow(true) : null;
+		let canEdit    = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
 		let content;
+
 		if (dataset) {
-			let myDatasetsLink = <Link to="datasets">My Datasets</Link>;
-			let PublicDatasetsLink = <Link to="public">Public Datasets</Link>;
+
+			let uploaded = 'uploaded ' + (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +  ' on ' + dateAdded + ' - ' + timeago + ' ago';
+
+			let authors;
+			if (dataset.authors.length > 0) {
+				authors = 'authored by ';
+				for (let i = 0; i < dataset.authors.length; i++) {
+					let author = dataset.authors[i];
+					authors += author.name;
+					if (dataset.authors.length > 1) {
+						if (i < dataset.authors.length - 2) {
+							authors += ', ';
+						} else if (i == dataset.authors.length -2) {
+							authors += ' and ';
+						}
+					}
+				}
+			}
+
 			content = (
 				<div className="fadeIn dashboard">
 					<div className="clearfix">
-					<div className="col-xs-12 dataset-tools-wrap">
-						<Tools />
-					</div>
-					<div className="col-xs-12 dataset-wrap">	
-						<div className="row">	
-							<div className="col-xs-7">
-							<h1 className="clearfix">
-									<ClickToEdit
-										value={dataset.name}
-										label={false}
-										editable={canEdit}
-										onChange={Actions.updateName}/>
-								</h1>
-								<h6>uploaded {dataset.userOwns ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
-								<div className="status-container">
-									<Statuses dataset={dataset}/>
-								</div>
-								<MetaData dataset={dataset}/>
-							</div>
-							<div className="col-xs-5">
-								<div>
-									<div className="fadeIn col-xs-12">
-										<Jobs />
+						<div className="col-xs-12 dataset-tools-wrap">
+							<Tools />
+						</div>
+						<div className="col-xs-12 dataset-wrap">
+							<div className="row">
+								<div className="col-xs-7">
+									<h1 className="clearfix">
+										<ClickToEdit
+											value={dataset.label}
+											label={false}
+											editable={canEdit}
+											onChange={Actions.updateName}/>
+									</h1>
+									<h6>{uploaded}</h6>
+									<h6>{authors}</h6>
+									<h6>downloads: {dataset.downloads}</h6>
+									<div className="status-container">
+										<Statuses dataset={dataset}/>
 									</div>
-									<div className="col-xs-12">
-										<div className="fileStructure fadeIn panel-group">
-											<div className="panel panel-default">
-												<div className="panel-heading" >
-													<h4 className="panel-title">Dataset File Tree</h4>
-												</div>
-												<div className="panel-collapse" aria-expanded="false" >
-													<div className="panel-body">
-														<FileTree tree={[dataset]} editable={canEdit}/>
+									<MetaData dataset={dataset} editable={canEdit} />
+								</div>
+								<div className="col-xs-5">
+									<div>
+										<div className="fadeIn col-xs-12">
+											<Jobs />
+										</div>
+										<div className="col-xs-12">
+											<div className="fileStructure fadeIn panel-group">
+												<div className="panel panel-default">
+													<div className="panel-heading" >
+														<h4 className="panel-title">Dataset File Tree</h4>
+													</div>
+													<div className="panel-collapse" aria-expanded="false" >
+														<div className="panel-body">
+															<FileTree tree={[dataset]} editable={canEdit}/>
+														</div>
 													</div>
 												</div>
 											</div>
@@ -92,7 +119,6 @@ let Dataset = React.createClass({
 								</div>
 							</div>
 						</div>
-					</div>
 					</div>
 				</div>
 			);

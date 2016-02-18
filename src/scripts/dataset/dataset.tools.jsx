@@ -1,14 +1,14 @@
 // dependencies -------------------------------------------------------
 
-import React        								from 'react';
-import Reflux       								from 'reflux';
-import datasetStore 								from './dataset.store';
-import actions      								from './dataset.actions.js';
-import WarnButton   								from '../common/forms/warn-button.jsx';
-import WarnButtonWithTip   							from '../common/forms/warn-button-withtip.jsx';
-import Share        								from './dataset.tools.share.jsx';
-import Jobs         								from './dataset.tools.jobs.jsx';
-import {OverlayTrigger, Tooltip, Modal}      		from 'react-bootstrap';
+import React        from 'react';
+import Reflux       from 'reflux';
+import datasetStore from './dataset.store';
+import actions      from './dataset.actions.js';
+import userStore    from '../user/user.store.js';
+import WarnButton   from '../common/forms/warn-button.jsx';
+import Share        from './dataset.tools.share.jsx';
+import Jobs         from './dataset.tools.jobs.jsx';
+import moment       from 'moment';
 
 let Tools = React.createClass({
 
@@ -24,97 +24,110 @@ let Tools = React.createClass({
 	},
 
 	render() {
-		let dataset = this.state.dataset;
-		let users   = this.state.users;
-		let publish, del, share, shareModal, jobs, jobModal;
-		let tooltipShare = <Tooltip>Share Dataset</Tooltip>;
-		let tooltipJobs = <Tooltip>Run Analysis</Tooltip>;
-		let tooltipDownload = <Tooltip>Download Dataset</Tooltip>;
-		
-		if (dataset.access === 'admin') {
-			if (!dataset.public) {
-				del = (
-					<div role="presentation" className="tool" >
-		            		<WarnButtonWithTip message="" confirm="" tooltip="Delete Dataset" icon="fa-trash" action={this._deleteDataset.bind(this, dataset._id)} />
+		let dataset   = this.state.dataset;
+		let users     = this.state.users;
+		let snapshots = this.state.snapshots;
+
+		// permission check shorthands
+		let isAdmin      = dataset.access === 'admin';
+		let isEditor     = dataset.access === 'rw';
+		let isViewer     = dataset.access === 'ro';
+		let isSignedIn   = !!userStore.hasToken();
+		let isPublic     = !!dataset.public;
+		let isIncomplete = !!dataset.status.uploadIncomplete;
+		let isSnapshot   = !!dataset.original;
+
+
+		let tools = [
+			{
+				tooltip: 'Download Dataset',
+				icon: 'fa-download',
+				prepDownload: actions.getDatasetDownloadTicket.bind(this, this.state.snapshot),
+				display: true
+			},
+			{
+				tooltip: 'Make Dataset Public',
+				icon: 'fa-globe',
+				action: actions.publish.bind(this, dataset._id),
+				display: isAdmin && isSnapshot && !isPublic && !isIncomplete,
+				warn: true
+			},
+			{
+				tooltip: 'Delete Dataset',
+				icon: 'fa-trash',
+				action: actions.deleteDataset.bind(this, dataset._id),
+				display: isAdmin && !isPublic,
+				warn: true
+			},
+			{
+				tooltip: 'Share Dataset',
+				icon: 'fa-user-plus',
+				action: actions.toggleModal.bind(null, 'Share'),
+				display: isAdmin && !isSnapshot,
+				warn: false
+			},
+			{
+				tooltip: 'Run Analysis',
+				icon: 'fa-tasks',
+				action: actions.toggleModal.bind(null, 'Jobs'),
+				display: isSignedIn && !isIncomplete && isSnapshot,
+				warn: false
+			},
+			{
+				tooltip: 'Create Snapshot',
+				icon: 'fa-camera-retro',
+				action: actions.createSnapshot,
+				display: isAdmin && !isSnapshot && !isIncomplete,
+				warn: true
+			},
+		];
+
+		tools = tools.map((tool, index) => {
+			if (tool.display) {
+				return (
+					<div role="presentation" className="tool" key={index}>
+						<WarnButton
+							tooltip={tool.tooltip}
+							icon={tool.icon}
+							prepDownload={tool.prepDownload}
+							action={tool.action}
+							warn={tool.warn}
+							link={tool.link} />
 		            </div>
 				);
 			}
+		});
 
-			if (!dataset.status.uploadIncomplete && !dataset.public) {
-				publish = (
-					<div role="presentation" className="tool" >
-						<WarnButtonWithTip message="" confirm="" tooltip="Make Dataset Public" icon="fa-globe" action={this._publish.bind(this, dataset._id)} />
-		            </div>
-				);
-			}
-
-			share = (
-	            <div role="presentation" className="tool" >
-	            	<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltipShare}>
-	            		<button className="btn btn-admin warning"  onClick={actions.toggleModal.bind(null, 'Share')}><i className="fa fa-user-plus"></i></button>
-	            	</OverlayTrigger>
-	            </div>
-	        );
-
-			shareModal = (
-	            <Modal show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')} className="share-modal">
-	            	<Modal.Header closeButton>
-	            		<Modal.Title>Share Dataset</Modal.Title>
-	            	</Modal.Header>
-	            	<hr className="modal-inner" />
-	            	<Modal.Body>
-	            		<Share dataset={dataset} users={users} />
-	            	</Modal.Body>
-	            </Modal>
-	        );
-		}
-
-		if (dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.public) {
-	        jobs = (
-	        	<div role="presentation" className="tool" >
-	            	<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltipJobs}>
-	            		<button className="btn btn-admin warning"  onClick={actions.toggleModal.bind(null, 'Jobs')}><i className="fa fa-tasks"></i></button>
-	            	</OverlayTrigger>
-	            </div>
-        	);
-
-        	jobModal = (
-        		<Modal show={this.state.showJobsModal} onHide={actions.toggleModal.bind(null, 'Jobs')}>
-        			<Modal.Header closeButton>
-        				<Modal.Title>Run Analysis</Modal.Title>
-        			</Modal.Header>
-        			<hr className="modal-inner" />
-        			<Modal.Body>
-        				<Jobs dataset={dataset} apps={this.state.apps} loadingApps={this.state.loadingApps} />
-        			</Modal.Body>
-        		</Modal>
-    		);
-		}
+		let snapshotOptions = snapshots.map((snapshot) => {
+			return (
+				<option key={snapshot._id} value={JSON.stringify(snapshot)}>
+					{snapshot.isOriginal ? 'original' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
+				</option>
+			)
+		});
 
 		return (
 			<div className="tools clearfix">
-				<div role="presentation" className="tool">
-					<OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltipDownload}>
-						<button className="btn btn-admin warning" onClick={this._downloadDataset}><i className="fa fa-download"></i></button>
-					</OverlayTrigger>
-				</div>
-				{publish}
-				{del}
-				{share}
-				{shareModal}
-				{jobs}
-				{jobModal}
+				{tools}
+				<Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')}/>
+				<Jobs dataset={dataset} apps={this.state.apps} loadingApps={this.state.loadingApps} show={this.state.showJobsModal} onHide={actions.toggleModal.bind(null, 'Jobs')} />
+
+				<div role="presentation" className="tool" >
+					<select onChange={this._selectSnapshot} defaultValue="">
+						<option value="" disabled>Select a snapshot</option>
+						{snapshotOptions}
+					</select>
+	            </div>
 	        </div>
     	);
 	},
 
 // custon methods -----------------------------------------------------
 
-	_publish: actions.publish,
-
-	_deleteDataset: actions.deleteDataset,
-
-	_downloadDataset: actions.downloadDataset
+	_selectSnapshot: (e) => {
+		let snapshot = JSON.parse(e.target.value);
+		actions.loadSnapshot(snapshot.isOriginal, snapshot._id);
+	}
 
 });
 

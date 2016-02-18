@@ -1,33 +1,42 @@
 // dependencies ------------------------------------------------------------------
 
-import React from 'react';
-import {Alert} from 'react-bootstrap';
+import React             from 'react';
+import Reflux            from 'reflux';
+import {Alert}           from 'react-bootstrap';
+import notificationStore from './notification.store';
+import actions           from './notification.actions';
 
 
 // component setup ---------------------------------------------------------------
 
-export default class UploadAlert extends React.Component {
+let alert = React.createClass({
+
+	mixins: [Reflux.connect(notificationStore)],
 
 // life cycle methods ------------------------------------------------------------
 
 	render() {
-		let type = this.props.type;
+		let type = this.state.alertType;
 		let bsStyle;
 		if (type === 'Warning') {bsStyle = 'warning';}
 		if (type === 'Error')   {bsStyle = 'danger';}
 		if (type === 'Success') {bsStyle = 'success';}
 
-		return (
+		let alert = (
 			<Alert className="fadeInUp clearfix" bsStyle={bsStyle}>
 				<div className="alert-left">
 					<strong>{type}! </strong>
-					{this.props.message}
+					{this.state.alertMessage}
 				</div>
-				<button className="alert-right dismiss-button-x" onClick={this.props.onClose}>
+				<button className="alert-right dismiss-button-x" onClick={actions.closeAlert}>
 					<i className="fa fa-times"></i>
 				</button>
 			</Alert>
-	    );
+		)
+
+		return this.state.showAlert ? alert : false;
 	}
 
-}
+});
+
+export default alert;

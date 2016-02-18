@@ -1,15 +1,16 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux    from 'reflux';
-import Actions   from './dataset.actions.js';
-import scitran   from '../utils/scitran';
-import crn       from '../utils/crn';
-import bids      from '../utils/bids';
-import router    from '../utils/router-container';
-import userStore from '../user/user.store';
-import upload    from '../utils/upload';
-import config    from '../config';
-import files     from '../utils/files';
+import Reflux        from 'reflux';
+import Actions       from './dataset.actions.js';
+import notifications from '../notification/notification.actions';
+import scitran       from '../utils/scitran';
+import crn           from '../utils/crn';
+import bids          from '../utils/bids';
+import router        from '../utils/router-container';
+import userStore     from '../user/user.store';
+import upload        from '../utils/upload';
+import config        from '../config';
+import files         from '../utils/files';
 
 let datasetStore = Reflux.createStore({
 
@@ -53,6 +54,8 @@ let datasetStore = Reflux.createStore({
 			jobs: [],
 			showJobsModal: false,
 			showShareModal: false,
+			snapshot: false,
+			snapshots: [],
 			status: null,
 			users: []
 		};
@@ -69,16 +72,34 @@ let datasetStore = Reflux.createStore({
 	 *
 	 * Takes a datasetId and loads the dataset.
 	 */
-	loadDataset(datasetId) {
+	loadDataset(datasetId, options) {
+		let snapshot = !!(options && options.snapshot)
 		this.update({loading: true, dataset: null});
 		bids.getDataset(datasetId, (res) => {
+			res.showChildren = true;
 			if (res.status === 404 || res.status === 403) {
-				this.update({status: res.status, loading: false});
+				this.update({status: res.status, loading: false, snapshot: snapshot});
 			} else {
-				this.update({dataset: res, loading: false});
+				this.update({dataset: res, loading: false, snapshot: snapshot});
 			}
-		});
-		this.loadJobs(datasetId);
+			let originalId = res.original ? res.original : datasetId;
+			this.loadJobs(datasetId);
+			this.loadSnapshots(originalId, datasetId);
+		}, options);
+	},
+
+	/**
+	 * Load Snapshot
+	 *
+	 * Takes a snapshot ID and loads the snapshot.
+	 */
+	loadSnapshot(isOriginal, snapshotId) {
+		let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
+		if (isOriginal) {
+			router.transitionTo('dataset', {datasetId: snapshotId});
+		} else {
+			router.transitionTo('snapshot', {datasetId, snapshotId});
+		}
 	},
 
 	/**
@@ -116,7 +137,7 @@ let datasetStore = Reflux.createStore({
 		this.update({loadingJobs: true});
 		crn.getDatasetJobs(projectId, (err, res) => {
             this.update({jobs: res.body, loadingJobs: false});
-        });
+        }, {snapshot: this.data.snapshot});
 	},
 
 	/**
@@ -134,29 +155,34 @@ let datasetStore = Reflux.createStore({
 	 *
 	 * Takes a datasetId and sets the datset to public.
 	 */
-	publish(datasetId) {
-		let self = this;
-		scitran.updateProject(datasetId, {public: true}, (err, res) => {
-			if (!err) {
-				let dataset = self.data.dataset;
-				dataset.public = true;
-				self.update({dataset});
-			}
-		});
+	publish(datasetId, callback) {
+		if (this.data.snapshot) {
+			scitran.updateSnapshotPublic(datasetId, true, (err, res) => {
+				if (!err) {
+					let dataset = this.data.dataset;
+					dataset.public = true;
+					callback();
+				}
+			});
+		} else {
+			/** this should be removed eventually as only snapshots can be publish **/
+			scitran.updateProject(datasetId, {public: true}, (err, res) => {
+				if (!err) {
+					let dataset = this.data.dataset;
+					dataset.public = true;
+					this.update({dataset});
+				}
+			});
+			/** this should be removed eventually as only snapshots can be publish **/
+		}
 	},
 
-	/**
-	 * Download Dataset
-	 *
-	 */
-	downloadDataset() {
-		// open download window as synchronous action from click to avoid throwing popup blockers
-		window.open('', 'bids-download');
+	getDatasetDownloadTicket(snapshot, callback) {
 		scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
 			let ticket = res.body.ticket;
-			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'bids-download');
-			setTimeout(() => {downloadWindow.close();});
-		});
+			let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
+			callback(downloadUrl);
+		}, {snapshot: !!snapshot});
 	},
 
 	/**
@@ -168,7 +194,7 @@ let datasetStore = Reflux.createStore({
 	deleteDataset(datasetId) {
 		bids.deleteDataset(datasetId, () => {
             router.transitionTo('datasets');
-		});
+		}, {snapshot: this.data.snapshot});
 	},
 
 	/**
@@ -184,7 +210,7 @@ let datasetStore = Reflux.createStore({
 	// Metadata ----------------------------------------------------------------------
 
 	updateName(value, callback) {
-		scitran.updateProject(this.data.dataset._id, {name: value}, () => {
+		scitran.updateProject(this.data.dataset._id, {label: value}, () => {
 			this.updateDescription('Name', value, callback);
 		});
 	},
@@ -222,9 +248,9 @@ let datasetStore = Reflux.createStore({
 		});
 	},
 
-	 /**
-	  * Update README
-	  */
+	/**
+	 * Update README
+	 */
 	updateREADME(value, callback) {
 		scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, '', [], callback);
 	},
@@ -293,19 +319,17 @@ let datasetStore = Reflux.createStore({
 	},
 
 	/**
-	 * Download Attachment
+	 * Get Attachment Download Ticket
 	 *
-	 * Takes a filename and starts a downloads
-	 * for the file within the current dataset.
+	 * Takes a filename and callsback with a direct
+	 * download url for an attachment.
 	 */
-	downloadAttachment(filename) {
-		// open download window as synchronous action from click to avoid throwing popup blockers
-		window.open('', 'attachment-download');
+	getAttachmentDownloadTicket(filename, callback) {
 		scitran.getDownloadTicket('projects', this.data.dataset._id, filename, (err, res) => {
 			let ticket = res.body.ticket;
-			let downloadWindow = window.open(res.req.url.split('?')[0] + '?ticket=' + ticket, 'attachment-download');
-			setTimeout(() => {downloadWindow.close();});
-		});
+			let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
+			callback(downloadUrl);
+		}, {snapshot: !!this.data.snapshot});
 	},
 
 	// File Structure ----------------------------------------------------------------
@@ -354,6 +378,20 @@ let datasetStore = Reflux.createStore({
 			match.children = children;
 			this.update({dataset});
 		});
+	},
+
+	/**
+	 * Get File Download Ticket
+	 *
+	 * Takes a filename and callsback with a
+	 * direct download url.
+	 */
+	getFileDownloadTicket(file, callback) {
+		scitran.getDownloadTicket(file.parentContainer, file.parentId, file.name, (err, res) => {
+			let ticket = res.body.ticket;
+			let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
+			callback(downloadUrl);
+		}, {snapshot: this.data.snapshot});
 	},
 
 	/**
@@ -449,24 +487,48 @@ let datasetStore = Reflux.createStore({
 			parameters: parameters
 		}, (err, res) => {
 			callback(err, res);
-			// callback(err, {message: "Your analysis has been submitted. Periodically check the analysis section of this dataset to view the status and results."});
 			this.loadJobs(this.data.dataset._id);
 		});
 	},
 
 	/**
-	 * Download Result
+	 * Get Result Download Ticket
 	 */
-	downloadResult(jobId, fileName) {
-		// open download window as synchronous action from click to avoid throwing popup blockers
-		window.open('', 'bids-result');
+	getResultDownloadTicket(jobId, fileName, callback) {
 		crn.getResultDownloadTicket(jobId, fileName, (err, res) => {
 			let ticket = res.body._id;
-			let downloadWindow = window.open(config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket, 'bids-result');
-			// close download window after 3 seconds
-			setTimeout(() => {downloadWindow.close();}, 3000);
+			let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
+			callback(downloadUrl);
 		});
 	},
+
+	// Snapshots ---------------------------------------------------------------------
+
+	createSnapshot(callback) {
+		if (this.data.dataset.authors.length < 1) {
+			notifications.createAlert({
+				type: 'Warning',
+				message: 'You must list at least one author before creating a snapshot.'
+			});
+			if (callback){callback()};
+		} else {
+			scitran.createSnapshot(this.data.dataset._id, (err, res) => {
+				router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
+				if (callback){callback()};
+			});
+		}
+	},
+
+	loadSnapshots(datasetId) {
+		scitran.getProjectSnapshots(datasetId, (err, res) => {
+			let snapshots = !err && res.body ? res.body : [];
+			snapshots.unshift({
+				isOriginal: true,
+				_id: datasetId
+			});
+			this.update({snapshots: snapshots});
+		});
+	}
 
 });
 
