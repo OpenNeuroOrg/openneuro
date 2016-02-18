@@ -26,7 +26,7 @@ export default class WarnButton extends React.Component {
 		let link;
 		if (this.state.link) {
 			link = (
-				<a className="btn btn-admin success" onClick={this.toggle.bind(this)} href={this.state.link} download>
+				<a className="btn btn-admin success" onClick={this.toggle.bind(this, this.props.action)} href={this.state.link} download>
 	        		{confirm}
 	    		</a>
 	    	);
