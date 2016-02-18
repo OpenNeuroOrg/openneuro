@@ -85,32 +85,34 @@ export default  {
      */
     getDatasets (callback, isPublic) {
         scitran.getProjects({authenticate: !isPublic, snapshot: isPublic}, (projects) => {
-            let results = [];
-            let publicResults = {}
-            // hide other user's projects from admins & filter snapshots to display newest of each dataset
-            if (projects) {
-                for (let project of projects) {
-                    if (isPublic) {
-                        let dataset = this.formatDataset(project, null);
-                        if (!publicResults.hasOwnProperty(project.original) || publicResults[project.original].snapshot_version < project.snapshot_version) {
-                            publicResults[project.original] = dataset;
+            scitran.getUsers((err, res) => {
+                let users = !err && res.body ? res.body : null;
+                let results = [];
+                let publicResults = {}
+                // hide other user's projects from admins & filter snapshots to display newest of each dataset
+                if (projects) {
+                    for (let project of projects) {
+                        let dataset = this.formatDataset(project, null, users);
+                        if (isPublic) {
+                            if (!publicResults.hasOwnProperty(project.original) || publicResults[project.original].snapshot_version < project.snapshot_version) {
+                                publicResults[project.original] = dataset;
+                            }
+                        } else if (this.userAccess(project)) {
+                            results.push(dataset);
                         }
-                    } else if (this.userAccess(project)) {
-                        let dataset = this.formatDataset(project, null);
-                        results.push(dataset);
                     }
                 }
-            }
 
-            if (isPublic) {
-                let results = [];
-                for (let key in publicResults) {
-                    results.push(publicResults[key]);
+                if (isPublic) {
+                    let results = [];
+                    for (let key in publicResults) {
+                        results.push(publicResults[key]);
+                    }
+                    callback(results);
+                } else {
+                    callback(results);
                 }
-                callback(results);
-            } else {
-                callback(results);
-            }
+            });
         });
     },
 
@@ -162,47 +164,50 @@ export default  {
      * nested BIDS dataset.
      */
     getDataset (projectId, callback, options) {
-        scitran.getProject(projectId, (res) => {
-            if (res.status !== 200) {return callback(res);}
-            let project = res.body;
-            this.getMetadata(project, (metadata) => {
-                let dataset = this.formatDataset(project, metadata['dataset_description.json']);
-                dataset.README = metadata.README;
-                this.getSubjects(projectId, (subjects) => {
-                    dataset.containerType = 'projects';
-                    dataset.children = this.labelFile(dataset.children, projectId, 'projects');
-                    dataset.children = dataset.children.concat(subjects);
-                    async.each(subjects, (subject, cb) => {
-                        this.getSessions(projectId, subject._id, (sessions) => {
-                            subject.containerType = 'sessions';
-                            subject.children = this.labelFile(subject.children, subject._id, 'sessions');
-                            subject.children = subject.children.concat(sessions);
-                            async.each(sessions, (session, cb1) => {
-                                this.getModalities(session._id, (modalities) => {
-                                    session.containerType = 'sessions';
-                                    session.children = this.labelFile(session.children, session._id, 'sessions');
-                                    session.children = session.children.concat(modalities);
-                                    async.each(modalities, (modality, cb2) => {
-                                        scitran.getAcquisition(modality._id, (res) => {
-                                            modality.containerType = 'acquisitions';
-                                            modality.children = res.files;
-                                            modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
-                                            modality.name = modality.label;
-                                            cb2();
-                                        }, options);
-                                    }, cb1);
-                                }, options);
-                            }, cb);
-                        }, options);
-                    }, () => {
-                        crn.getDatasetJobs(projectId, (err, res) => {
-                            dataset.jobs = res.body;
-                            callback(dataset);
-                        }, options);
-                    });
+        scitran.getUsers((err, res) => {
+            let users = !err && res.body ? res.body : null;
+            scitran.getProject(projectId, (res) => {
+                if (res.status !== 200) {return callback(res);}
+                let project = res.body;
+                this.getMetadata(project, (metadata) => {
+                    let dataset = this.formatDataset(project, metadata['dataset_description.json'], users);
+                    dataset.README = metadata.README;
+                    this.getSubjects(projectId, (subjects) => {
+                        dataset.containerType = 'projects';
+                        dataset.children = this.labelFile(dataset.children, projectId, 'projects');
+                        dataset.children = dataset.children.concat(subjects);
+                        async.each(subjects, (subject, cb) => {
+                            this.getSessions(projectId, subject._id, (sessions) => {
+                                subject.containerType = 'sessions';
+                                subject.children = this.labelFile(subject.children, subject._id, 'sessions');
+                                subject.children = subject.children.concat(sessions);
+                                async.each(sessions, (session, cb1) => {
+                                    this.getModalities(session._id, (modalities) => {
+                                        session.containerType = 'sessions';
+                                        session.children = this.labelFile(session.children, session._id, 'sessions');
+                                        session.children = session.children.concat(modalities);
+                                        async.each(modalities, (modality, cb2) => {
+                                            scitran.getAcquisition(modality._id, (res) => {
+                                                modality.containerType = 'acquisitions';
+                                                modality.children = res.files;
+                                                modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
+                                                modality.name = modality.label;
+                                                cb2();
+                                            }, options);
+                                        }, cb1);
+                                    }, options);
+                                }, cb);
+                            }, options);
+                        }, () => {
+                            crn.getDatasetJobs(projectId, (err, res) => {
+                                dataset.jobs = res.body;
+                                callback(dataset);
+                            }, options);
+                        });
+                    }, options);
                 }, options);
             }, options);
-        }, options);
+        });
     },
 
 // Update ---------------------------------------------------------------------------------
@@ -262,6 +267,24 @@ export default  {
 // Dataset Format Helpers -----------------------------------------------------------------
 
     /**
+     * User
+     *
+     * Takes a dataset and users list and returns the
+     * user object of the uploader.
+     */
+    user (dataset, users, callback) {
+        if (users) {
+            for (let user of users) {
+                if (user._id === dataset.group) {
+                    return user;
+                }
+            }
+        } else {
+            return null;
+        }
+    },
+
+    /**
      * Label File
      */
     labelFile (items, parentId, parentContainer) {
@@ -314,8 +337,9 @@ export default  {
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
         };
-        dataset.authors = dataset.description.Authors;
+        dataset.authors      = dataset.description.Authors;
         dataset.sharedWithMe = dataset.userOwns && !dataset.userCreated;
+        dataset.user         = this.user(dataset, users);
         if (project.original) {dataset.original = project.original}
 
         return dataset;

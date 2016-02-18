@@ -4,7 +4,7 @@ import React        from 'react';
 import Reflux       from 'reflux';
 import datasetStore from './dataset.store';
 import actions      from './dataset.actions.js';
-import userActions  from '../user/user.store.js';
+import userStore    from '../user/user.store.js';
 import WarnButton   from '../common/forms/warn-button.jsx';
 import Share        from './dataset.tools.share.jsx';
 import Jobs         from './dataset.tools.jobs.jsx';
@@ -32,7 +32,7 @@ let Tools = React.createClass({
 		let isAdmin      = dataset.access === 'admin';
 		let isEditor     = dataset.access === 'rw';
 		let isViewer     = dataset.access === 'ro';
-		let isSignedIn   = !!userActions.hasToken();
+		let isSignedIn   = !!userStore.hasToken();
 		let isPublic     = !!dataset.public;
 		let isIncomplete = !!dataset.status.uploadIncomplete;
 		let isSnapshot   = !!dataset.original;

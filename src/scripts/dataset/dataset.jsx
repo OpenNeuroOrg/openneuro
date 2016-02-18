@@ -43,16 +43,35 @@ let Dataset = React.createClass({
 	},
 
 	render() {
-		let loading = this.state.loading;
-		let dataset = this.state.dataset;
-		let status  = this.state.status;
+		let loading    = this.state.loading;
+		let dataset    = this.state.dataset;
+		let user       = dataset ? dataset.user : null;
+		let status     = this.state.status;
 		let dateAdded  = dataset ? moment(dataset.created).format('L') : null;
         let timeago    = dataset ? moment(dataset.created).fromNow(true) : null;
-		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
+		let canEdit    = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
 		let content;
+
 		if (dataset) {
-			let myDatasetsLink = <Link to="datasets">My Datasets</Link>;
-			let PublicDatasetsLink = <Link to="public">Public Datasets</Link>;
+
+			let uploaded = 'uploaded ' + (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +  ' on ' + dateAdded + ' - ' + timeago + ' ago';
+
+			let authors;
+			if (dataset.authors.length > 0) {
+				authors = 'authored by ';
+				for (let i = 0; i < dataset.authors.length; i++) {
+					let author = dataset.authors[i];
+					authors += author.name;
+					if (dataset.authors.length > 1) {
+						if (i < dataset.authors.length - 2) {
+							authors += ', ';
+						} else if (i == dataset.authors.length -2) {
+							authors += ' and ';
+						}
+					}
+				}
+			}
+
 			content = (
 				<div className="fadeIn dashboard">
 					<div className="clearfix">
@@ -69,7 +88,8 @@ let Dataset = React.createClass({
 											editable={canEdit}
 											onChange={Actions.updateName}/>
 									</h1>
-									<h6>uploaded {dataset.access ? 'by ' + dataset.group : null} on {dateAdded} - {timeago} ago</h6>
+									<h6>{uploaded}</h6>
+									<h6>{authors}</h6>
 									<h6>downloads: {dataset.downloads}</h6>
 									<div className="status-container">
 										<Statuses dataset={dataset}/>
