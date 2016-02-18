@@ -41,7 +41,9 @@ export default {
 			let apps = resp.body.result;
 			async.each(apps, (app, cb) => {
 				agave.getApp(app.id, (err, resp2) => {
+				    if (resp2.body && resp2.body.result && resp2.body.result.parameters) {
 					app.parameters = resp2.body.result.parameters;
+				    }
 					cb();
 				});
 			}, () => {
