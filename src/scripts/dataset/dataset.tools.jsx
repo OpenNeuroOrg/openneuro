@@ -43,6 +43,7 @@ let Tools = React.createClass({
 				tooltip: 'Download Dataset',
 				icon: 'fa-download',
 				prepDownload: actions.getDatasetDownloadTicket.bind(this, this.state.snapshot),
+				action: actions.incrementDownloadTicket,
 				display: true
 			},
 			{

@@ -186,6 +186,19 @@ let datasetStore = Reflux.createStore({
 	},
 
 	/**
+	 * Increment Download Count
+	 *
+	 * Increments download count (client side only) to
+	 * provide immediate download feedback.
+	 */
+	incrementDownloadTicket(callback) {
+		let dataset = this.data.dataset;
+		dataset.downloads++;
+		this.update({dataset});
+		callback();
+	},
+
+	/**
 	 * Delete Dataset
 	 *
 	 * Takes a datsetId, deletes the dataset, and returns the user

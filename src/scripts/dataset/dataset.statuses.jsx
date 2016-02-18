@@ -19,11 +19,12 @@ let Statuses = React.createClass({
 		let incompleteStatus = <span className="clearfix status"><Status type='incomplete' dataset={dataset} /></span>;
 		let sharedWithStatus = <span className="clearfix status"><Status type='shared' /></span>;
 		let inProgress       = <span className="clearfix status"><Status type='inProgress' /></span>;
+
 		return (
 			<span className="clearfix status-wrap">
 				{dataset && dataset.status && dataset.public ? publicStatus : null}
 				{dataset && dataset.status && dataset.status.uploadIncomplete && !uploading ? incompleteStatus: null}
-				{dataset && dataset.userOwns && !dataset.userCreated ? sharedWithStatus: null}
+				{dataset && dataset.access && !dataset.userCreated ? sharedWithStatus: null}
 				{dataset && uploading ? inProgress : null}
 			</span>
     	);
