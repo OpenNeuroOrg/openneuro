@@ -2,6 +2,7 @@
 
 import React                     from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
+import notifications             from '../../notification/notification.store.js';
 
 export default class WarnButton extends React.Component {
 
@@ -23,6 +24,17 @@ export default class WarnButton extends React.Component {
 		let confirm    = this.props.confirm;
 		let tooltip    = <Tooltip>{this.props.tooltip}</Tooltip>;
 
+		// check for bad validations and add disabled class
+		let disabled = false;
+		if (this.props.validations) {
+			for (let i = 0; i < this.props.validations.length; i++) {
+				let validation = this.props.validations[i];
+				if (validation.check) {
+					disabled = true;
+				}
+			}
+		}
+
 		let link;
 		if (this.state.link) {
 			link = (
@@ -42,8 +54,8 @@ export default class WarnButton extends React.Component {
         );
 
         let hideAction = (
-        	<div className=" fadeIn" >
-        		<button className="btn btn-admin warning" onClick={this.props.warn ? this.toggle.bind(this) : this.props.action}>
+        	<div className={'fadeIn' + (disabled ? ' disabled' : '')} >
+        		<button className="btn btn-admin warning" onClick={this.toggle.bind(this, this.props.action)}>
 	        		<i className={'fa ' + this.props.icon}></i>  {message}
         		</button>
         	</div>
@@ -66,12 +78,37 @@ export default class WarnButton extends React.Component {
 // custom methods -----------------------------------------------------
 
 	toggle(action) {
-		if (this.state.showAction == false && this.props.prepDownload) {
-			this.setState({loading: true});
-			this.props.prepDownload((link) => {
-				this.setState({showAction: true, link: link, loading: false});
-			});
-			return;
+
+		// initial click actions
+		if (this.state.showAction == false) {
+
+			// validate & warn
+			if (this.props.validations) {
+				for (let i = 0; i < this.props.validations.length; i++) {
+					let validation = this.props.validations[i];
+					if (validation.check) {
+						notifications.createAlert({type: 'Warning', message: validation.message});
+						return;
+					}
+				}
+			}
+
+			// generate download links
+			if (this.props.prepDownload) {
+				this.setState({loading: true});
+				this.props.prepDownload((link) => {
+					this.setState({showAction: true, link: link, loading: false});
+				});
+				return;
+			}
+
+			if (!this.props.warn) {
+				action();
+				return;
+			} else {
+				this.setState({showAction: true});
+				return;
+			}
 		}
 
 		if (typeof action === 'function') {
