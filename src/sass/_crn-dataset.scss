@@ -637,6 +637,9 @@
 			.fadeIn > button{
 				width: 100%;
 			}
+			.disabled > button{
+				color:$stone;
+			}
 			.btn-group{
 				-moz-backface-visibility: initial;
 				-ms-backface-visibility: initial;

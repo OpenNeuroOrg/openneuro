@@ -51,7 +51,13 @@ let Tools = React.createClass({
 				tooltip: 'Make Dataset Public',
 				icon: 'fa-globe',
 				action: actions.publish.bind(this, dataset._id, true),
-				display: isAdmin && isSnapshot && !isPublic && !isIncomplete,
+				display: isAdmin && !isPublic && !isIncomplete,
+				validations: [
+					{
+						check: !isSnapshot,
+						message: 'You can only publish dataset snapshots not originals.'
+					}
+				],
 				warn: true
 			},
 			{
@@ -79,7 +85,13 @@ let Tools = React.createClass({
 				tooltip: 'Run Analysis',
 				icon: 'fa-tasks',
 				action: actions.toggleModal.bind(null, 'Jobs'),
-				display: isSignedIn && !isIncomplete && isSnapshot,
+				display: isSignedIn && !isIncomplete,
+				validations: [
+					{
+						check: !isSnapshot,
+						message: 'You can only run analysis on dataset snapshots not originals.'
+					}
+				],
 				warn: false
 			},
 			{
@@ -101,7 +113,8 @@ let Tools = React.createClass({
 							prepDownload={tool.prepDownload}
 							action={tool.action}
 							warn={tool.warn}
-							link={tool.link} />
+							link={tool.link}
+							validations={tool.validations} />
 		            </div>
 				);
 			}
