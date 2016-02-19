@@ -155,26 +155,15 @@ let datasetStore = Reflux.createStore({
 	 *
 	 * Takes a datasetId and sets the datset to public.
 	 */
-	publish(datasetId, callback) {
-		if (this.data.snapshot) {
-			scitran.updateSnapshotPublic(datasetId, true, (err, res) => {
-				if (!err) {
-					let dataset = this.data.dataset;
-					dataset.public = true;
-					callback();
-				}
-			});
-		} else {
-			/** this should be removed eventually as only snapshots can be publish **/
-			scitran.updateProject(datasetId, {public: true}, (err, res) => {
-				if (!err) {
-					let dataset = this.data.dataset;
-					dataset.public = true;
-					this.update({dataset});
-				}
-			});
-			/** this should be removed eventually as only snapshots can be publish **/
-		}
+	publish(datasetId, value, callback) {
+		scitran.updateSnapshotPublic(datasetId, value, (err, res) => {
+			callback();
+			if (!err) {
+				let dataset = this.data.dataset;
+				dataset.public = value;
+				this.update({dataset});
+			}
+		});
 	},
 
 	getDatasetDownloadTicket(snapshot, callback) {
