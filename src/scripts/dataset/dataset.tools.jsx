@@ -99,7 +99,13 @@ let Tools = React.createClass({
 				icon: 'fa-camera-retro',
 				action: actions.createSnapshot,
 				display: isAdmin && !isSnapshot && !isIncomplete,
-				warn: true
+				warn: true,
+				validations: [
+					{
+						check: !dataset.authors || !(dataset.authors.length > 0),
+						message: 'You must list at least one author before creating a snapshot.'
+					}
+				],
 			},
 		];
 
