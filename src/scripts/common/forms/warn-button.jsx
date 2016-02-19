@@ -75,8 +75,9 @@ export default class WarnButton extends React.Component {
 		}
 
 		if (typeof action === 'function') {
+			this.setState({loading: true});
 			action(() => {
-				this.setState({showAction: !this.state.showAction});
+				this.setState({loading: false, showAction: !this.state.showAction});
 			});
 		} else {
 			this.setState({showAction: !this.state.showAction});

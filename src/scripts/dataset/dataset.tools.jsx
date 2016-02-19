@@ -36,6 +36,7 @@ let Tools = React.createClass({
 		let isPublic     = !!dataset.public;
 		let isIncomplete = !!dataset.status.uploadIncomplete;
 		let isSnapshot   = !!dataset.original;
+		let isSuperuser  = JSON.parse(window.localStorage.scitranUser).root;
 
 
 		let tools = [
@@ -49,8 +50,15 @@ let Tools = React.createClass({
 			{
 				tooltip: 'Make Dataset Public',
 				icon: 'fa-globe',
-				action: actions.publish.bind(this, dataset._id),
+				action: actions.publish.bind(this, dataset._id, true),
 				display: isAdmin && isSnapshot && !isPublic && !isIncomplete,
+				warn: true
+			},
+			{
+				tooltip: 'Un-Publish Dataset',
+				icon: 'fa-eye-slash',
+				action: actions.publish.bind(this, dataset._id, false),
+				display: isPublic && isSuperuser,
 				warn: true
 			},
 			{
