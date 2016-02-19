@@ -18,7 +18,7 @@ let models = {
 		_id:       'string, required',
 		firstname: 'string',
 		lastname:  'string',
-		note:      'required'
+		note:      'string'
 	}
 }
 
