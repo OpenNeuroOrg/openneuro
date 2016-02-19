@@ -55,7 +55,7 @@ let Tools = React.createClass({
 				warn: true
 			},
 			{
-				tooltip: 'Un-Publish Dataset',
+				tooltip: 'Unpublish Dataset',
 				icon: 'fa-eye-slash',
 				action: actions.publish.bind(this, dataset._id, false),
 				display: isPublic && isSuperuser,
