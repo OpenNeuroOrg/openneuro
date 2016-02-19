@@ -36,7 +36,7 @@ let Tools = React.createClass({
 		let isPublic     = !!dataset.public;
 		let isIncomplete = !!dataset.status.uploadIncomplete;
 		let isSnapshot   = !!dataset.original;
-		let isSuperuser  = JSON.parse(window.localStorage.scitranUser).root;
+		let isSuperuser  = window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser).root : null;
 
 
 		let tools = [
