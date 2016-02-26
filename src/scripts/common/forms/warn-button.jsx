@@ -47,22 +47,22 @@ export default class WarnButton extends React.Component {
 		let confirmBtn = <button className={'btn btn-admin ' + (typeof this.props.tooltip == 'string' ? 'success' : 'delete')} onClick={this.toggle.bind(this, this.props.action)}>{confirm}</button>;
 
 		let viewAction = (
-        	<div className="btn-group slideInRightFast" role="group" >
+        	<span className="btn-group slideInRightFast" role="group" >
         		<button className="btn btn-admin cancel" onClick={this.toggle.bind(this)}>{cancel}</button>
         		{link ? link : confirmBtn}
-        	</div>
+        	</span>
         );
 
         let hideAction = (
-        	<div className={'fadeIn' + (disabled ? ' disabled' : '')} >
+        	<span className={'fadeIn' + (disabled ? ' disabled' : '')} >
         		<button className="btn btn-admin warning" onClick={this.toggle.bind(this, this.props.action)}>
 	        		<i className={'fa ' + this.props.icon}></i>  {message}
         		</button>
-        	</div>
+        	</span>
         );
 
         let button = showAction ? viewAction : hideAction;
-        let loading = <span><i className="fa fa-spin fa-circle-o-notch"></i></span>;
+        let loading = <span className="warning-loading"><i className="fa fa-spin fa-circle-o-notch"></i></span>;
 
         if (this.props.tooltip) {
         	return (

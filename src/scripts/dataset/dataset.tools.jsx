@@ -82,19 +82,6 @@ let Tools = React.createClass({
 				warn: false
 			},
 			{
-				tooltip: 'Run Analysis',
-				icon: 'fa-tasks',
-				action: actions.toggleModal.bind(null, 'Jobs'),
-				display: isSignedIn && !isIncomplete,
-				validations: [
-					{
-						check: !isSnapshot,
-						message: 'You can only run analysis on dataset snapshots not originals.'
-					}
-				],
-				warn: false
-			},
-			{
 				tooltip: 'Create Snapshot',
 				icon: 'fa-camera-retro',
 				action: actions.createSnapshot,
@@ -108,6 +95,18 @@ let Tools = React.createClass({
 				],
 			},
 		];
+
+
+		let runAnalysis;
+		if (isSignedIn && !isIncomplete) {
+			runAnalysis = (
+				<div className="run-analysis">
+					<button className="btn-blue" onClick={actions.toggleModal.bind(null, 'Jobs')}>
+						<i className="fa fa-tasks"></i> Run Analysis
+					</button>
+	            </div>
+			);
+		}
 
 		tools = tools.map((tool, index) => {
 			if (tool.display) {
@@ -125,7 +124,7 @@ let Tools = React.createClass({
 				);
 			}
 		});
-
+		console.log(snapshots);
 		let snapshotOptions = snapshots.map((snapshot) => {
 			return (
 				<option key={snapshot._id} value={JSON.stringify(snapshot)}>
@@ -136,16 +135,18 @@ let Tools = React.createClass({
 
 		return (
 			<div className="tools clearfix">
+				<div role="presentation" className="snapshotSelect" >
+					<span>
+						<select onChange={this._selectSnapshot} defaultValue="">
+							<option value="" disabled>Select a snapshot</option>
+							{snapshotOptions}
+						</select>
+					</span>
+	            </div>
 				{tools}
+				{runAnalysis}
 				<Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')}/>
 				<Jobs dataset={dataset} apps={this.state.apps} loadingApps={this.state.loadingApps} show={this.state.showJobsModal} onHide={actions.toggleModal.bind(null, 'Jobs')} />
-
-				<div role="presentation" className="tool" >
-					<select onChange={this._selectSnapshot} defaultValue="">
-						<option value="" disabled>Select a snapshot</option>
-						{snapshotOptions}
-					</select>
-	            </div>
 	        </div>
     	);
 	},

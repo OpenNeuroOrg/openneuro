@@ -85,7 +85,10 @@
 	    		}
 		}
 		&.alert-danger{
-			color:$brand-danger;
+			strong{color:$brand-danger;}
+		}
+		&.alert-warning{
+			strong{color: $brand-warning;}
 		}
 	}
 }

@@ -15,7 +15,7 @@ class FileTree extends React.Component {
 
 			// loading animation
 			if (item.loading) {
-				loading = <span><i className="fa fa-spin fa-circle-o-notch"></i></span>;
+				loading = <span className="warning-loading"><i className="fa fa-spin fa-circle-o-notch"></i></span>;
 			}
 
 			// inline error
@@ -71,9 +71,8 @@ class FileTree extends React.Component {
 				deleteFile = (
 					<span className="delete-file">
 						<WarnButton
+							icon="fa-trash"
 							message="Delete"
-							cancel="Cancel"
-							confirm="Yes Delete!"
 							action={actions.deleteFile.bind(this, item)} />
 					</span>
 				);
@@ -94,22 +93,28 @@ class FileTree extends React.Component {
 		let downloadFile;
 		if (!item.children) {
 			downloadFile = (
-				<span>
+				<span className="download-file">
 					<WarnButton
 						icon="fa-download"
-						tooltip="Download File"
+						message="Download"
 						prepDownload={actions.getFileDownloadTicket.bind(this, item)} />
+				</span>
+			);
+		}
+		let fileTreeEditFile;
+		if (this.props.editable || !item.children) {
+			fileTreeEditFile =(
+				<span className="fileTreeEditFile">
+					{addFile}
+					{editFile}
+					{deleteFile}
+					{downloadFile}
 				</span>
 			);
 		}
 
 		return (
-			<span className="fileTreeEditFile">
-				{addFile}
-				{deleteFile}
-				{editFile}
-				{downloadFile}
-			</span>
+			<span>{fileTreeEditFile}</span>
 		);
 	}
 

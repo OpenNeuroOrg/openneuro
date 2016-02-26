@@ -1,4 +1,23 @@
-// dataset dataset view
+// // dataset dataset view
+// 	.tools{
+// 		padding: 0;
+// 		margin: 0;
+// 		display:block;
+// 		width: 100%;
+// 		background: rgba(217, 217, 217, 0.82);
+// 		border-bottom: 1px solid #ddd;
+
+// 		.tool {	
+// 			text-align: center;
+// 			width: 70px;
+// 			float: left;
+// 			display: block;
+// 			overflow:hidden;
+
+
+
+
+
 .dataset {
 
 	h3.metaheader{
@@ -39,6 +58,8 @@
 						 }
 					}
 				}
+
+
 				>ul{
 					overflow: visible;
 				    height: auto;
@@ -49,7 +70,6 @@
 						padding: 3px 0 3px 10px;
 						list-style: none;
 						margin: 2px;
-
 						.child-files{
 							margin-left: 5px;
 							border-left: 1px solid #999;
@@ -87,16 +107,49 @@
 				    			font-size: 10px;
 					    		@extend .btn-admin;
 					    		@extend .admin-blue;
+
+				    		}
+			    			&:focus,
+				    		&:active,
+				    		&:hover{
+				    			&:before {border:1px solid #bbb;}
 				    		}
 
 				    		&.add-files:before {content: 'add a file'; padding:1px 5px;}
 				    		&.update-file:before {content: 'update file';}
 				    	}
 				    }
-				
+					input:before {
+					    width: auto;
+					    padding: 0px 5px;
+					    font-size: 10px;
+					    height: 17px;
+					    padding: 1px 4px;
+					    margin: 0;
+					}
+				}
+
+				.fileTreeEditFile{
+					height: 20px;
+					float: none;
+					width: 100%;
+					display: block;
+					margin:5px 0 0px;
+					.delete-file,
+					.edit-file,
+					.download-file{
+						float: left;
+						display:block;
+						margin-right:5px;
+						width: 70px;
+						text-align: center;
+					}
 					.delete-file{
+						width: 50px;
 						display: inline-block;
 						overflow:hidden;
+						padding-top: 1px;
+						margin-left: 5px;
 						button{
 							padding: 2px 5px;
 							margin: 0;
@@ -107,10 +160,34 @@
 							}
 							&.warning{
 								padding: 0;
+							&.btn-admin i{margin-left:0;}	
 							}
+
+								&.cancel,
+								&.delete,
+								&.success{
+									background: $brand-danger;
+									color:#fff;
+									font-size: 13px;
+									padding: 2px;
+									width: 18px;
+									margin: 0 5px 0 0;
+									line-height: 10px;
+									&:hover{
+										background:darken($brand-danger, 10%);
+									}
+								}
+								&.delete,
+								&.success{
+									background: $brand-success;
+									&:hover{
+										background:darken($brand-success, 10%);
+									}
+								}
 						}
 					}
 					.edit-file{
+
 						input{
 							width: 72px;
 							display: block;
@@ -119,15 +196,51 @@
 							}
 						}
 					}
-					input:before {
-					    width: auto;
-					    padding: 0px 5px;
-					    font-size: 10px;
-					    height: 17px;
-					    padding: 1px 4px;
-					    margin: 0;
+					.download-file{
+					    text-align: left;
+					    margin-left: 5px;
+						float: left;
+						width: 90px;
+						display: inline-block;
+						overflow:hidden;
+						padding-top: 1px;
+						.warning-loading{
+							margin-top:0;
+							display: block;
+							float: left;
+						}
+						button,
+						a{
+							padding: 2px 5px;
+							margin: 0;
+							font-size: 11px;
+							line-height: 10px;
+								&.cancel,
+								&.success{
+									background: $brand-danger;
+									color:#fff;
+									font-size: 13px;
+									padding: 2px;
+									width: 18px;
+									margin: 0 5px 0 0;
+									line-height: 10px;
+									&:hover{
+										background:darken($brand-danger, 10%);
+									}
+								}
+								&.success{
+									background: $brand-success;
+									&:hover{
+										background:darken($brand-success, 10%);
+									}
+								}
+							&.btn-admin i{margin-left:0;}	
+						}
 					}
+
 				}
+
+
 			}
 		}
 		.panel-default .panel-heading{
@@ -271,6 +384,7 @@
 	    transition: all 0.3s ease-out;
 	  }
 	  &:hover::before,
+	  &:focus::before,
 	  &:active::before  {
 	    background: darken($sky, 10%);
 	    transition: all 0.3s ease-out;
@@ -283,7 +397,7 @@
 	.cte-display{
 	    font-size: 15px;
 	    color: #565656;
-	    font-weight: 100;
+	    font-weight: 400;
 	    font-family: $font-family-ssp;
 	    word-wrap: break-word;
 	    white-space: pre-wrap;
@@ -292,6 +406,45 @@
 			border-bottom: 1px solid #EEE;
 			&:last-child {border-bottom: none;}
 	    }
+	    .warning-loading{
+			font-size: 13px;
+			padding: 2px;
+			width: 18px;
+			margin: 0 5px 0 0;
+			line-height: 10px;
+	    }
+
+	    span.btn-group,
+	    span.fadeIn{
+			button,
+			a{
+				padding: 2px 5px;
+				margin: 0;
+				font-size: 11px;
+				line-height: 10px;
+					&.cancel,
+					&.success{
+						background: $brand-danger;
+						color:#fff;
+						font-size: 13px;
+						padding: 2px;
+						width: 18px;
+						margin: 0 5px 0 0;
+						line-height: 10px;
+						&:hover{
+							background:darken($brand-danger, 10%);
+						}
+					}
+					&.success{
+						background: $brand-success;
+						&:hover{
+							background:darken($brand-success, 10%);
+						}
+					}
+				&.btn-admin i{margin-left:0;}	
+			}
+		}
+
 	}
 	.btn-wrapper{
 		margin-top: 10px;
@@ -626,13 +779,69 @@
 		width: 100%;
 		background: rgba(217, 217, 217, 0.82);
 		border-bottom: 1px solid #ddd;
+		.run-analysis{
+			width: 100px;
+			width: 170px;
+			float: left;
+			border-left:1px solid #aaa;
 
+			.btn-blue{
+			    margin: 5px 5px 5px 10px;
+			    font-size: 15px;
+			    line-height: 18px;
+			    padding: 10px 15px 5px;
+				i{font-size:18px; line-height:16px;}
+				span{
+					margin-left: 5px;
+					position: relative;
+					top: -2px;
+				}
+			}
+		}
+		.snapshotSelect{
+			text-align: center;
+			padding:0 10px 0 5px;
+			float: left;
+			display: block;
+			overflow:hidden;
+			border-right:1px solid #aaa;
+			margin-right:5px;
+			span{
+				background: transparent;
+				border:1px solid #aaa;
+				display: block;
+				height: 30px;
+				margin: 7px 0;
+
+				select{
+					background: none;
+					border: 0;
+					min-width: 170px;
+					color: $ocean;
+					margin:0;
+					height: 30px;
+					font-size: 14px;	
+					text-transform: uppercase;
+					&:focus{
+						outline: none;
+						box-shadow:none;
+					}
+					option{
+						text-transform:initial;
+					}
+				}
+			}
+		}
 		.tool {	
 			text-align: center;
 			width: 70px;
 			float: left;
 			display: block;
 			overflow:hidden;
+			.warning-loading{
+				margin-top:10px;
+				display: block;
+			}
 			> button,
 			.fadeIn > button{
 				width: 100%;
@@ -646,27 +855,32 @@
 				-o-backface-visibility: initial;
 				backface-visibility: initial;
 			}
+
 			.btn-admin{
 					padding:7px 10px;
 					transition: all 0.1s ease;
 					border-radius:0;
 					font-size: 18px;
-					&.cancel{
+					i{
+						line-height: 30px;
+						margin-left: 0;
+					}
+					&.cancel,
+					&.success{
 						background: $brand-danger;
 						color:#fff;
 						font-size: 14px;
 						padding: 5px 8px;
-						margin: 5px 5px 5px 0;
+						margin: 7px 5px 5px 0;
 						&:hover{
 							background:darken($brand-danger, 10%);
+						}
+						i{
+							line-height: 15px;
 						}
 					}
 					&.success{
 						background: $brand-success;
-						color:#fff;
-						font-size: 14px;
-						padding: 5px 8px;
-						margin: 5px 0;
 						&:hover{
 							background:darken($brand-success, 10%);
 						}
@@ -726,21 +940,55 @@
 
 
 
-.jobs-wrap.panel-group {
-	margin-bottom: 0;
-	margin:0;
-	.panel-collapse{
-		.panel-body{
-			border-top:none;
+// .jobs-wrap.panel-group {
+// 	margin-bottom: 0;
+// 	margin:0;
+// 	.panel-collapse{
+// 		.panel-body{
+// 			border-top:none;
+// 		}
+// 	}	
+// }
+
+
+
+
+
+.analyses{
+	
+	.jobs-wrap{
+		.metaheader{}
+		.job{
+			border-radius: 0;
+			.panel-heading{
+				padding: 0;
+				
+				a{
+					@extend .clearfix;
+					padding:10px;
+					display: block;
+					background: lighten($misty, 10%);
+					.badge{
+						float: right;
+						background:none;
+						color:#999;
+						font-size: 12px
+					}
+					&:hover{
+						background:#eee;
+					}
+				}
+				.finished a .badge{color:$brand-success;}
+
+			}
+			.results{
+				.panel{
+					border-radius:0;
+				}
+			}
 		}
-	}	
+	}
 }
-
-
-
-
-
-
 
 
 
