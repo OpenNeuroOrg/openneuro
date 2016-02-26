@@ -27,12 +27,11 @@ let Signin = React.createClass({
 		let form;
 		if (!this.state.loading) {
 			form = (
-				<div>
+				<span>
 					<button className="btn-admin" onClick={Actions.signIn} >
-						<i className="fa fa-google" />
-						<span> Google</span>
+						<i className="fa fa-google" /> Sign in
 					</button>
-				</div>
+				</span>
 			)
 		}
 		let error;
@@ -45,19 +44,17 @@ let Signin = React.createClass({
 				<div className="intro">
 					<div className="introBG">
 						<div className="intro-inner fadeIn clearfix">
-							<div className="welcomeBlock flipInX">
+							<div className="clearfix welcomeBlock flipInX">
 								<h1>Welcome to CRN</h1>
 								<p>A free and open platform that enables the analysis and sharing of neuroimaging data</p>
-								<div className="clearfix signInBlock fadeIn">
-									<h2>Sign in</h2>
+								<span className="signInBlock fadeIn">
 									{error}
 									{form}
 									<Spinner text="Signing in..." active={this.state.loading} />
-								</div>
-								<div className="browse-publicly">
-									<h5>Or</h5>
+								</span>
+								<span className="browse-publicly">
 									<Link to="public"><span>Browse Publicly</span></Link>
-								</div>
+								</span>
 							</div>
 						</div>
 					</div>

@@ -60,17 +60,17 @@
 	    }
 	}
 	.signInBlock{
-		text-align: center;
-		color:#fff;
+		// text-align: center;
+		// color:#fff;
 		.btn-admin{
 			border:2px solid lighten($turquoise, 15%);
 			color: lighten($turquoise, 15%);
-			padding: 8px 5px;
+			padding: 5px 10px;
 			font-size: 20px;
-			font-weight: 200;
-			font-family: helvetica neue, helvetica;
-			width:230px;
-			margin: 20px 0;
+			//width:230px;
+			margin: 20px 0 10px;
+			font-family: $font-family-cabin;
+
 		&:active,&:hover, &:focus{
 				border:2px solid lighten($turquoise, 15%);
 				background:rgba(0,0,0,0.4);
@@ -79,14 +79,15 @@
 	}
 	.browse-publicly{
 		text-align: center;
-		h5{
-			font-size: 19px;
-			color: #fff;
-		}
+		font-size: 16px;
+		position:relative;
+		display: inline-block;
+		margin:0 0 0 15px;
+		border-left: 2px solid #fff;
+		padding:15px;
+		top: -1px;
 		a{
 			color: lighten($turquoise, 15%);
-			font-size: 20px;
-			font-weight: 200;
 			text-transform: uppercase;
 			&:hover{
 				text-decoration: underline;
