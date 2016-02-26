@@ -47,14 +47,14 @@ let Signin = React.createClass({
 							<div className="clearfix welcomeBlock flipInX">
 								<h1>Welcome to CRN</h1>
 								<p>A free and open platform that enables the analysis and sharing of neuroimaging data</p>
-								<span className="signInBlock fadeIn">
+								<div className="signInBlock fadeIn">
 									{error}
 									{form}
 									<Spinner text="Signing in..." active={this.state.loading} />
-								</span>
-								<span className="browse-publicly">
+								</div>
+								<div className="browse-publicly">
 									<Link to="public"><span>Browse Publicly</span></Link>
-								</span>
+								</div>
 							</div>
 						</div>
 					</div>

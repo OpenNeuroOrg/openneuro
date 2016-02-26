@@ -54,7 +54,7 @@
 			margin: 0 0 15px;
 	    }
 	    p{
-	    	font-size: 20px;
+	    	font-size: 22px;
 	    	font-weight: 100;
 	    	font-family: $font-family-ssp;
 	    }
@@ -67,13 +67,13 @@
 			color: lighten($turquoise, 15%);
 			padding: 5px 10px;
 			font-size: 20px;
-			//width:230px;
+			width:180px;
 			margin: 20px 0 10px;
 			font-family: $font-family-cabin;
 
 		&:active,&:hover, &:focus{
-				border:2px solid lighten($turquoise, 15%);
-				background:rgba(0,0,0,0.4);
+				border:2px solid darken($turquoise, 2%);
+				background:rgba(255,255,255,0.1);
 			}
 		}
 	}
@@ -82,8 +82,8 @@
 		font-size: 16px;
 		position:relative;
 		display: inline-block;
-		margin:0 0 0 15px;
-		border-left: 2px solid #fff;
+		margin:15px 0 0 ;
+		border-top: 2px solid #fff;
 		padding:15px;
 		top: -1px;
 		a{
