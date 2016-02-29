@@ -30,17 +30,16 @@ export default class JobMenu extends React.Component {
 
 		let form = (
 			<div className="anaylsis-modal clearfix">
-				<h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
-				<div className="row">
-					<div className="col-xs-12">
-						<div className="col-xs-6 task-select">
-							<select value={this.state.selectedApp} onChange={this._selectApp.bind(this)}>
-								<option value="" disabled>Select a Task</option>
-								{options}
-							</select>
-						</div>
-						<div className="col-xs-6 default-reset">
-							<button className="btn-reset" onClick={this._restoreDefaultParameters.bind(this)}>Restore Default Parameters</button>
+				<div>
+					<h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
+					<div className="row">
+						<div className="col-xs-12">
+							<div className="col-xs-6 task-select">
+								<select value={this.state.selectedApp} onChange={this._selectApp.bind(this)}>
+									<option value="" disabled>Select a Task</option>
+									{options}
+								</select>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -125,7 +124,21 @@ export default class JobMenu extends React.Component {
 			);
 		});
 
-		return parameters;
+		let reset;
+		if (parameters.length > 0) {
+			reset = (
+				<div className="default-reset">
+					<button className="btn-reset" onClick={this._restoreDefaultParameters.bind(this)}>Restore Default Parameters</button>
+				</div>
+			);
+		}
+
+		return (
+			<div>
+				{reset}
+				{parameters}
+			</div>
+		);
 	}
 
 	_submit() {
