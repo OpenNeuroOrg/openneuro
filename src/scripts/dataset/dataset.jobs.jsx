@@ -43,26 +43,31 @@ let Jobs = React.createClass({
 					);
 				}
 			}
-
+			let jobAccordionHeader = (<div className={job.agave.status.toLowerCase()}>{job.name}<span className="badge">{job.agave.status}</span></div>);
 			return (
-				<Panel className="fadeIn job-item" header={job.name}  key={job._id} eventKey={job._id}>
-					<h5>application: {job.appId}</h5>
-					<h5>status: {job.agave.status}</h5>
-					<p>created by {job.userId} at {job.agave.created}</p>
-					<p>id: {job._id}</p>
-					<p>agave job ID: {job.jobId}</p>
-					<ul>{parameters}</ul>
-					<ul className="results">{results}</ul>
+				<Panel className="job" header={jobAccordionHeader}  key={job._id} eventKey={job._id}>
+						<h5>application: {job.appId}</h5>
+						<p>created by {job.userId} at {job.agave.created}</p>
+						{/*
+						<p>id: {job._id}</p>
+						<p>agave job ID: {job.jobId}</p>
+						*/}
+						<ul>{parameters}</ul>
+					<Accordion accordion className="results">
+						<Panel className="fadeIn" header="Download Results"  key={job._id} eventKey={job._id}>
+							<ul>{results}</ul>
+						</Panel>
+					</Accordion>
 				</Panel>
 			);
 		});
 		let header = <h3 className="metaheader">Analyses</h3>;
 		return (
-			<div>
+			<div className="analyses">
 				{jobs.length === 0 ?  null : header }
-				<Accordion accordion className="jobs-wrap">
-					{this.state.loadingJobs ? <Spinner active={true} /> : jobs}
-				</Accordion>
+			<Accordion accordion className="jobs-wrap">
+				{this.state.loadingJobs ? <Spinner active={true} /> : jobs}
+			</Accordion>
 			</div>
     	);
 	},

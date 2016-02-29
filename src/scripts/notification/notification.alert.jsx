@@ -23,7 +23,7 @@ let alert = React.createClass({
 		if (type === 'Success') {bsStyle = 'success';}
 
 		let alert = (
-			<Alert className="fadeInUp clearfix" bsStyle={bsStyle}>
+			<Alert className="slideInLeft clearfix" bsStyle={bsStyle}>
 				<div className="alert-left">
 					<strong>{type}! </strong>
 					{this.state.alertMessage}

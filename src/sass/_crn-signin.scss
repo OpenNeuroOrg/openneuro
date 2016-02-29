@@ -16,7 +16,7 @@
 	    .introBG{
 	    	background: url(../assets/signin-bg.jpg) 0 0 no-repeat;
 			background-size: cover;
-			min-height: 550px;
+			min-height: 90%;
 			background-color: #1B3D43;
 		}
 		.intro-inner{
@@ -30,63 +30,69 @@
 		}
 	}
 }
-		.more-info{
-			text-align: center;
-			font-size: 18px;
-			font-weight: 500;
-			margin: 20px 0 0;
-		}
+.more-info{
+	text-align: center;
+	font-size: 18px;
+	font-weight: 500;
+	margin: 20px 0 0;
+}
 .sign-in {
 	.welcomeBlock{
-		padding: 30px;
-	    border: 2px solid #fff;
-	    border-radius:2px;
-	    border-radius: 2px;
-	   	margin:60px auto;
-	    position: relative;
-	    background:rgba(0,0,0,0.1);	   
-	    color:#fff;
-		width: 90%;
-		max-width: 700px;
+		padding: 70px;
+		position: relative;
+		color: #fff;
+		width: 60%;
+		min-width: 600px;
 		text-align: center;
+		background: rgba(0,0,0,0.4);
+		margin: 70px auto;
+		border: 2px solid #D4D4D4;
+		border-radius: 2px;
 	    h1{
 			letter-spacing: -1px;
 			font-size: 45px;
-			margin: 0;
+			margin: 0 0 15px;
+	    }
+	    p{
+	    	font-size: 22px;
+	    	font-weight: 100;
+	    	font-family: $font-family-ssp;
 	    }
 	}
 	.signInBlock{
-		text-align: center;
-		color:#fff;
-		.form{
-		    text-align: center;
-		    width: 570px;
-		    margin: 0 auto;
-		    float: none;
-			.btn-admin{
-				margin: 10px;
-				width: 230px;
-				border-color: #fff;
-				color: #fff;
-				padding: 8px 5px;
-				font-size: 20px;
-				font-weight: 200;
-				font-family: helvetica neue, helvetica;
-				display: block;
-				float: left;
-				&:active,&:hover{
-					border:1px solid #fff;
-					background:rgba(0,0,0,0.4);
-				}
-			}
-			.conjunction{
-				float: left;
-				padding: 15px 10px;
-				line-height: 15px;
-				font-size: 15px;
-				margin: 10px 0 0;
+		// text-align: center;
+		// color:#fff;
+		.btn-admin{
+			border:2px solid lighten($turquoise, 15%);
+			color: lighten($turquoise, 15%);
+			padding: 5px 10px;
+			font-size: 20px;
+			width:180px;
+			margin: 20px 0 10px;
+			font-family: $font-family-cabin;
+
+		&:active,&:hover, &:focus{
+				border:2px solid darken($turquoise, 2%);
+				background:rgba(255,255,255,0.1);
 			}
 		}
 	}
+	.browse-publicly{
+		text-align: center;
+		font-size: 16px;
+		position:relative;
+		display: inline-block;
+		margin:15px 0 0 ;
+		border-top: 2px solid #fff;
+		padding:15px;
+		top: -1px;
+		a{
+			color: lighten($turquoise, 15%);
+			text-transform: uppercase;
+			&:hover{
+				text-decoration: underline;
+			}
+		}
 
+	}
 }

@@ -24,25 +24,14 @@ let Signin = React.createClass({
 	},
 
 	render () {
-		let browse = (
-			<Link to="public" className="btn-admin">
-				<span>Browse Publicly</span>
-			</Link>
-		);
-		let google = (
-			<button className="btn-admin" onClick={Actions.signIn} >
-				<i className="fa fa-google" />
-				<span> Google</span>
-			</button>
-		);
 		let form;
 		if (!this.state.loading) {
 			form = (
-				<div className="form col-xs-12 clearfix">
-					{google}
-					 <span className="conjunction">or</span>
-					{browse}
-				</div>
+				<span>
+					<button className="btn-admin" onClick={Actions.signIn} >
+						<i className="fa fa-google" /> Sign in
+					</button>
+				</span>
 			)
 		}
 		let error;
@@ -50,21 +39,22 @@ let Signin = React.createClass({
 			error = <div className="alert alert-danger">{this.state.signinError}</div>;
 		}
 
-
 		return (
 			<div className="sign-in">
 				<div className="intro">
 					<div className="introBG">
 						<div className="intro-inner fadeIn clearfix">
-							<div className="welcomeBlock flipInX">
+							<div className="clearfix welcomeBlock flipInX">
 								<h1>Welcome to CRN</h1>
-								<h2>A free and open platform that enables the analysis and sharing of neuroimaging data</h2>
-							</div>
-							<div className="col-sm-12 signInBlock fadeIn">
-								<h2>Sign in with</h2>
-								{error}
-								{form}
-								<Spinner text="Signing in..." active={this.state.loading} />
+								<p>A free and open platform that enables the analysis and sharing of neuroimaging data</p>
+								<div className="signInBlock fadeIn">
+									{error}
+									{form}
+									<Spinner text="Signing in..." active={this.state.loading} />
+								</div>
+								<div className="browse-publicly">
+									<Link to="public"><span>Browse Publicly</span></Link>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -74,8 +64,7 @@ let Signin = React.createClass({
 				</div>
 			</div>
     	);
-	},
-
+	}
 });
 
 export default Signin;

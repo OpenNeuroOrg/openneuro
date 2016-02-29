@@ -8,7 +8,7 @@
 	z-index: 1300;
 	.show-nav-btn{
 		display: block;
-		width: 50px;
+		width: 60px;
 		font-size: 12px;
 		text-align: center;
 		margin: 5px 0;
@@ -25,13 +25,13 @@
 		height: 100%;
 		overflow: hidden;
 		transition: all 0.5s ease;
-		width: 55px;
+		width: 65px;
 		padding: 0;
 		ul{
 			padding:0;
 			margin: 0;
 			list-style: none;
-			width: 300px;
+			width: 360px;
 			a{
 				padding: 0px 7px 2px;
 				font-size: 38px;
@@ -44,13 +44,13 @@
 				transition: background 0.4s ease;
 				i{
 					border-right: 1px solid #bbb;
-					padding: 10px;
+					padding: 20px 10px 10px 2px;
 					width: 60px;
 					text-align: center;
-					font-size: 22px;
-					margin: -10px;
+					font-size: 32px;
+					margin: 0;
 					position: relative;
-					top: -4px;
+					height: 70px;
 				}
 				.link-name{
 					font-size: 19px;
@@ -83,7 +83,7 @@
 		.left-nav-slider{
 			box-shadow: 1px 1px 3px -1px rgba(0, 0, 0, 1);
 			border:none;
-			width: 300px;
+			width: 350px;
 		}
 	}
 }
