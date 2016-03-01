@@ -55,6 +55,7 @@ let datasetStore = Reflux.createStore({
 			showShareModal: false,
 			snapshot: false,
 			snapshots: [],
+			selectedSnapshot: '',
 			status: null,
 			users: []
 		};
@@ -79,7 +80,7 @@ let datasetStore = Reflux.createStore({
 			if (res.status === 404 || res.status === 403) {
 				this.update({status: res.status, loading: false, snapshot: snapshot});
 			} else {
-				this.update({dataset: res, loading: false, snapshot: snapshot});
+				this.update({dataset: res, loading: false, snapshot: snapshot, selectedSnapshot: datasetId});
 			}
 			let originalId = res.original ? res.original : datasetId;
 			this.loadJobs(datasetId);

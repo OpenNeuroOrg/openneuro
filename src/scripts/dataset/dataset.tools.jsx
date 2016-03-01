@@ -127,7 +127,7 @@ let Tools = React.createClass({
 
 		let snapshotOptions = snapshots.map((snapshot) => {
 			return (
-				<option key={snapshot._id} value={JSON.stringify(snapshot)}>
+				<option key={snapshot._id} value={snapshot._id}>
 					{snapshot.isOriginal ? 'original' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
 				</option>
 			)
@@ -137,7 +137,7 @@ let Tools = React.createClass({
 			<div className="tools clearfix">
 				<div role="presentation" className="snapshotSelect" >
 					<span>
-						<select onChange={this._selectSnapshot} defaultValue="">
+						<select value={this.props.selectedSnapshot} onChange={this._selectSnapshot}>
 							<option value="" disabled>Select a snapshot</option>
 							{snapshotOptions}
 						</select>
@@ -157,10 +157,17 @@ let Tools = React.createClass({
     	);
 	},
 
-// custon methods -----------------------------------------------------
+// custom methods -----------------------------------------------------
 
-	_selectSnapshot: (e) => {
-		let snapshot = JSON.parse(e.target.value);
+	_selectSnapshot(e) {
+		let snapshot;
+		let snapshotId = e.target.value;
+		for (let i = 0; i < this.state.snapshots.length; i++) {
+			if (this.state.snapshots[i]._id == snapshotId) {
+				snapshot = this.state.snapshots[i];
+				break;
+			}
+		}
 		actions.loadSnapshot(snapshot.isOriginal, snapshot._id);
 	}
 
