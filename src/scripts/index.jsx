@@ -7,6 +7,7 @@ import userActions  from './user/user.actions.js';
 import bowser  		from 'bowser';
 import Happybrowser from './common/partials/happybrowser.jsx';
 import {RouteHandler, State} from 'react-router';
+import "babel-polyfill";
 
 // component setup -----------------------------------------------------------
 
