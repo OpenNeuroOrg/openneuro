@@ -46,8 +46,10 @@ export default class JobMenu extends React.Component {
 
 		let message = (
 			<div>
-				{this.state.error ? <h4 className="danger">Error</h4> : null}
-				<h5>{this.state.message}</h5>
+				<div className={this.state.error ? 'alert alert-danger' : null}>
+					{this.state.error ? <h4 className="danger">Error</h4> : null}
+					<h5>{this.state.message}</h5>
+				</div>
 				<button className="btn-admin-blue" onClick={this._hide.bind(this)}>OK</button>
 			</div>
 		);
@@ -134,6 +136,9 @@ export default class JobMenu extends React.Component {
 								<option value="" disabled>Select a Snapshot</option>
 								{options}
 							</select>
+						</div>
+						<div className="col-xs-6 default-reset">
+							<button className="btn-reset" onClick={this._createSnapshot.bind(this)}>Create New Snapshot</button>
 						</div>
 					</div>
 				</div>
@@ -290,6 +295,28 @@ export default class JobMenu extends React.Component {
 	_selectSnapshot(e) {
 		let snapshotId = e.target.value;
 		this.setState({selectedSnapshot: snapshotId});
+	}
+
+	/**
+	 * Create Snapshot
+	 */
+	_createSnapshot() {
+		let datasetId = this.props.dataset.original ? this.props.dataset.original : this.props.dataset._id;
+		this.setState({loading: true});
+		actions.createSnapshot((res) => {
+			if (res.error) {
+				this.setState({
+					error: true,
+					message: res.error,
+					loading: false
+				});
+			} else {
+				this.setState({
+					selectedSnapshot: res,
+					loading: false
+				});
+			}
+		}, false);
 	}
 
 	/**

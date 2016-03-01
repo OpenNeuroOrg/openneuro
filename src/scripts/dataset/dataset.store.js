@@ -2,7 +2,6 @@
 
 import Reflux        from 'reflux';
 import Actions       from './dataset.actions.js';
-import notifications from '../notification/notification.actions';
 import scitran       from '../utils/scitran';
 import crn           from '../utils/crn';
 import bids          from '../utils/bids';
@@ -84,7 +83,7 @@ let datasetStore = Reflux.createStore({
 			}
 			let originalId = res.original ? res.original : datasetId;
 			this.loadJobs(datasetId);
-			this.loadSnapshots(originalId, datasetId);
+			this.loadSnapshots(originalId);
 		}, options);
 	},
 
@@ -505,14 +504,27 @@ let datasetStore = Reflux.createStore({
 
 	// Snapshots ---------------------------------------------------------------------
 
-	createSnapshot(callback) {
-		scitran.createSnapshot(this.data.dataset._id, (err, res) => {
-			router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
-			if (callback){callback()};
+	createSnapshot(callback, transition) {
+		let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
+		transition    = transition == undefined ? true : transition;
+
+		scitran.getProject(datasetId, (res) => {
+			if (res.body.metadata.authors && res.body.metadata.authors.length < 1) {
+				callback({error: 'Your dataset must list at least one author before creating a snapshot.'});
+			} else {
+				scitran.createSnapshot(datasetId, (err, res) => {
+					if (transition) {
+						router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
+					}
+					this.loadSnapshots(datasetId, () => {
+						if (callback){callback(res.body._id)};
+					});
+				});
+			}
 		});
 	},
 
-	loadSnapshots(datasetId) {
+	loadSnapshots(datasetId, callback) {
 		scitran.getProjectSnapshots(datasetId, (err, res) => {
 			let snapshots = !err && res.body ? res.body : [];
 			snapshots.unshift({
@@ -520,6 +532,7 @@ let datasetStore = Reflux.createStore({
 				_id: datasetId
 			});
 			this.update({snapshots: snapshots});
+			if (callback) {callback();}
 		});
 	}
 
