@@ -480,11 +480,10 @@ let datasetStore = Reflux.createStore({
 	/**
 	 * Start Job
 	 */
-	startJob(appName, appId, parameters, callback) {
+	startJob(datasetId, appId, parameters, callback) {
 		crn.createJob({
-			name: appName,
 			appId: appId,
-			datasetId: this.data.dataset._id,
+			datasetId: datasetId,
 			userId: userStore.data.scitran._id,
 			parameters: parameters
 		}, (err, res) => {

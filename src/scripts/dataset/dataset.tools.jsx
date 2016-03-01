@@ -146,7 +146,13 @@ let Tools = React.createClass({
 				{tools}
 				{runAnalysis}
 				<Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')}/>
-				<Jobs dataset={dataset} apps={this.state.apps} loadingApps={this.state.loadingApps} show={this.state.showJobsModal} onHide={actions.toggleModal.bind(null, 'Jobs')} />
+				<Jobs
+					dataset={dataset}
+					apps={this.state.apps}
+					loadingApps={this.state.loadingApps}
+					snapshots={snapshots}
+					show={this.state.showJobsModal}
+					onHide={actions.toggleModal.bind(null, 'Jobs')} />
 	        </div>
     	);
 	},
