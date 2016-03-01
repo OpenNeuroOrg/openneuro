@@ -128,7 +128,7 @@ export default class JobMenu extends React.Component {
 		}) : [];
 		return (
 			<div>
-				<h5>Choose an snapshot to run analysis on</h5>
+				<h5>Choose a snapshot to run analysis on</h5>
 				<div className="row">
 					<div className="col-xs-12">
 						<div className="col-xs-6 task-select">
