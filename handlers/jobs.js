@@ -115,7 +115,7 @@ export default {
 					]
 				};
 
-				c.jobs.findOne({appId: job.appId, datasetHash: hash, parametersHash: parametersHash}, {}, (err, existingJob) => {
+				c.jobs.findOne({appId: job.appId, datasetId: job.datasetId, datasetHash: hash, parametersHash: parametersHash}, {}, (err, existingJob) => {
 					if (err){return next(err);}
 					if (existingJob) {
 						let error = new Error("A job with the same dataset and parameters has already been run.");
@@ -162,14 +162,14 @@ export default {
 				return next(error);
 			}
 
-			let hasAccess = !!resp.body.public;
+			let hasAccess = !!resp.body.public || req.isSuperUser;
 			if (resp.body.permissions && !hasAccess) {
 				for (let permission of resp.body.permissions) {
 					if (permission._id == user) {hasAccess = true; break;}
 				}
 				if (!hasAccess) {
 					let error = new Error('You do not have access to view jobs for this dataset.');
-					error.http_code = 404;
+					error.http_code = 403;
 					return next(error);
 				}
 			}

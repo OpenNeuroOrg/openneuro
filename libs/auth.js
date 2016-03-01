@@ -20,6 +20,7 @@ export default {
 				res.status(401).send({error: 'You must have a valid access token.'});
 			} else {
 				req.user = resp.body._id;
+				req.isSuperUser = resp.body.root;
 				return next();
 			}
 		});
@@ -38,6 +39,7 @@ export default {
 				res.status(403).send({error: 'You must have admin privileges.'});
 			} else {
 				req.user = resp.body._id;
+				req.isSuperUser = resp.body.root;
 				return next();
 			}
 		});
@@ -55,6 +57,7 @@ export default {
 	 	scitran.getUser(req.headers.authorization, (err, resp) => {
 			if (resp.body && resp.body._id) {
 				req.user = resp.body._id;
+				req.isSuperUser = resp.body.root;
 			}
 			return next();
 		});
