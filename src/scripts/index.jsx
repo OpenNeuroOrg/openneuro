@@ -7,6 +7,7 @@ import userActions  from './user/user.actions.js';
 import bowser  		from 'bowser';
 import Happybrowser from './common/partials/happybrowser.jsx';
 import {RouteHandler, State} from 'react-router';
+import "babel-polyfill";
 
 // component setup -----------------------------------------------------------
 
@@ -23,10 +24,10 @@ let App = React.createClass({
 	render () {
 
 		let pageClasses = ' ';
-		let routeGetter = this.getRoutes();
-		
-		for(var i = 0; i < routeGetter.length; i++){
-			pageClasses += routeGetter[i].name+' ';
+		let routes = this.getRoutes();
+
+		for (let route of routes) {
+			pageClasses += route.name + ' ';
 		}
 
 		let showLeftNav 	= !this.isActive('signIn');
