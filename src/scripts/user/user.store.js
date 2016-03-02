@@ -9,6 +9,8 @@ import scitran 		from '../utils/scitran';
 import crn     		from '../utils/crn';
 import upload  		from '../upload/upload.actions';
 
+hello.init({google: config.auth.google.clientID});
+
 let UserStore = Reflux.createStore({
 
 // store setup -----------------------------------------------------------------------
@@ -86,7 +88,7 @@ let UserStore = Reflux.createStore({
 		var token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
 
 		if (token) {
-			hello('google').login({force: false}).then((authRes) => {
+			this.checkAuth((token) => {
 				this.update({token: token});
 				hello('google').api('/me').then((profile) => {
 					this.update({google: profile});
@@ -215,6 +217,43 @@ let UserStore = Reflux.createStore({
 		var session = hello('google').getAuthResponse();
 		var currentTime = (new Date()).getTime() / 1000;
 		return session && session.access_token && session.expires > currentTime;
+	},
+
+// request queue ---------------------------------------------------------------------
+
+	/**
+	 * Authentication Request Queuing
+	 *
+	 * Before any request we verify the status of the OAuth token.
+	 * To avoid multiple signin dialogues in the event the token
+	 * is expired all auth checking is queued to be performed
+	 * synchronously. The 'checkAuth' method is the primary method
+	 * to start the token check process.
+	 */
+
+	queue: [],
+
+	activeCheck: false,
+
+	checkAuth(successCallback, errorCallback) {
+		if (!this.activeCheck) {
+			this.startAuthCheck(successCallback, errorCallback);
+		} else {
+			let authReq = {successCallback, errorCallback};
+			this.queue.push(authReq);
+		}
+	},
+
+	startAuthCheck(successCallback, errorCallback) {
+		this.activeCheck = true;
+		hello('google').login({scope: 'email,openid', force: false}).then((res) => {
+			successCallback(res.authResponse.access_token);
+			this.activeCheck = false;
+			if (this.queue.length > 0) {
+				this.startAuthCheck(this.queue[0].successCallback, this.queue[0].errorCallback);
+				this.queue.shift();
+			}
+		}, errorCallback);
 	}
 
 });
