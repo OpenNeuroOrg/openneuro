@@ -1,7 +1,6 @@
-import request   from 'superagent';
-import config    from '../config';
-
-hello.init({google: config.auth.google.clientID});
+import request     from 'superagent';
+import config      from '../config';
+import userActions from '../user/user.actions.js';
 
 /**
  * Request
@@ -95,8 +94,8 @@ function handleRequest (url, options, callback) {
 	var google = hello('google');
 	if (options.auth && hasToken() && (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)) {
 		if (window.localStorage.scitranUser && JSON.parse(window.localStorage.scitranUser).root) {options.query.root = true;}
-		hello('google').login({scope: 'email,openid', force: false}).then(function(res) {
-			options.headers.Authorization = res.authResponse.access_token;
+		userActions.checkAuth((token) => {
+			options.headers.Authorization = token;
 			callback(url, options);
 		});
 	} else {
