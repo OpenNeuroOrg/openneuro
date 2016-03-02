@@ -246,7 +246,8 @@ let UserStore = Reflux.createStore({
 
 	startAuthCheck(successCallback, errorCallback) {
 		this.activeCheck = true;
-		hello('google').login({scope: 'email,openid', force: false}).then((res) => {
+		let currentAccount = window.localStorage.hasOwnProperty('scitranUser') ? JSON.parse(window.localStorage.scitranUser).email : '';
+		hello('google').login({scope: 'email,openid', force: false, login_hint: currentAccount}).then((res) => {
 			successCallback(res.authResponse.access_token);
 			this.activeCheck = false;
 			if (this.queue.length > 0) {
