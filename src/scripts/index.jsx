@@ -24,10 +24,10 @@ let App = React.createClass({
 	render () {
 
 		let pageClasses = ' ';
-		let routeGetter = this.getRoutes();
-		
-		for(var i = 0; i < routeGetter.length; i++){
-			pageClasses += routeGetter[i].name+' ';
+		let routes = this.getRoutes();
+
+		for (let route of routes) {
+			pageClasses += route.name + ' ';
 		}
 
 		let showLeftNav 	= !this.isActive('signIn');
