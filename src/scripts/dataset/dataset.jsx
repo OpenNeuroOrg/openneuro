@@ -76,7 +76,7 @@ let Dataset = React.createClass({
 				<div className="fadeIn dashboard">
 					<div className="clearfix">
 						<div className="col-xs-12 dataset-tools-wrap">
-							<Tools />
+							<Tools selectedSnapshot={this.state.selectedSnapshot} />
 						</div>
 						<div className="col-xs-12 dataset-wrap">
 							<div className="row">

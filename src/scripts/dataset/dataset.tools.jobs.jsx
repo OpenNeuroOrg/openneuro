@@ -4,6 +4,8 @@ import React   from 'react';
 import actions from './dataset.actions.js';
 import Spinner from '../common/partials/spinner.jsx';
 import {Modal} from 'react-bootstrap';
+import moment  from 'moment';
+
 
 export default class JobMenu extends React.Component {
 
@@ -15,35 +17,28 @@ export default class JobMenu extends React.Component {
 			loading: false,
 			parameters: [],
 			selectedApp: '',
+			selectedSnapshot: '',
 			message: null,
 			error: false
 		};
 	}
 
-	render() {
+	componentWillReceiveProps() {
+		this.props.snapshots.map((snapshot) => {
+			if (snapshot._id == this.props.dataset._id && snapshot.original) {
+				this.setState({selectedSnapshot: snapshot._id});
+			}
+		});
+	}
 
-		let options = this.props.apps ? this.props.apps.map((app) => {
-			return <option key={app.id} value={app.id}>{app.label}</option>;
-		}) : [];
+	render() {
 
 		let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedApp;
 
 		let form = (
 			<div className="anaylsis-modal clearfix">
-				<h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
-				<div className="row">
-					<div className="col-xs-12">
-						<div className="col-xs-6 task-select">
-							<select value={this.state.selectedApp} onChange={this._selectApp.bind(this)}>
-								<option value="" disabled>Select a Task</option>
-								{options}
-							</select>
-						</div>
-						<div className="col-xs-6 default-reset">
-							<button className="btn-reset" onClick={this._restoreDefaultParameters.bind(this)}>Restore Default Parameters</button>
-						</div>
-					</div>
-				</div>
+				{this._snapshots()}
+				{this._apps()}
 				{this._parameters()}
 				{this._submit()}
 			</div>
@@ -51,8 +46,10 @@ export default class JobMenu extends React.Component {
 
 		let message = (
 			<div>
-				{this.state.error ? <h4 className="danger">Error</h4> : null}
-				<h5>{this.state.message}</h5>
+				<div className={this.state.error ? 'alert alert-danger' : null}>
+					{this.state.error ? <h4 className="danger">Error</h4> : null}
+					<h5>{this.state.message}</h5>
+				</div>
 				<button className="btn-admin-blue" onClick={this._hide.bind(this)}>OK</button>
 			</div>
 		);
@@ -82,6 +79,72 @@ export default class JobMenu extends React.Component {
 	}
 
 // template methods ---------------------------------------------------
+
+	/**
+	 * Apps
+	 *
+	 * Returns a label and select box for selection an
+	 * analysis application.
+	 */
+	_apps() {
+		let options = this.props.apps ? this.props.apps.map((app) => {
+			return <option key={app.id} value={app.id}>{app.label}</option>;
+		}) : [];
+
+		if (this.state.selectedSnapshot) {
+			return (
+				<div>
+					<h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
+					<div className="row">
+						<div className="col-xs-12">
+							<div className="col-xs-6 task-select">
+								<select value={this.state.selectedApp} onChange={this._selectApp.bind(this)}>
+									<option value="" disabled>Select a Task</option>
+									{options}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			);
+		}
+	}
+
+	/**
+	 * Snapshots
+	 *
+	 * Returns a labeled select box for selecting a snapshot
+	 * to run analysis on.
+	 */
+	_snapshots() {
+		let options = this.props.snapshots ? this.props.snapshots.map((snapshot) => {
+			if (!snapshot.isOriginal) {
+				return (
+					<option key={snapshot._id} value={snapshot._id}>
+						{'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
+					</option>
+				);
+			}
+		}) : [];
+		return (
+			<div>
+				<h5>Choose a snapshot to run analysis on</h5>
+				<div className="row">
+					<div className="col-xs-12">
+						<div className="col-xs-6 task-select">
+							<select value={this.state.selectedSnapshot} onChange={this._selectSnapshot.bind(this)}>
+								<option value="" disabled>Select a Snapshot</option>
+								{options}
+							</select>
+						</div>
+						<div className="col-xs-6 default-reset">
+							<button className="btn-reset" onClick={this._createSnapshot.bind(this)}>Create New Snapshot</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
 
 	/**
 	 * Parameters
@@ -125,7 +188,21 @@ export default class JobMenu extends React.Component {
 			);
 		});
 
-		return parameters;
+		let reset;
+		if (parameters.length > 0) {
+			reset = (
+				<div className="default-reset">
+					<button className="btn-reset" onClick={this._restoreDefaultParameters.bind(this)}>Restore Default Parameters</button>
+				</div>
+			);
+		}
+
+		return (
+			<div>
+				{reset}
+				{parameters}
+			</div>
+		);
 	}
 
 	_submit() {
@@ -213,6 +290,36 @@ export default class JobMenu extends React.Component {
 	}
 
 	/**
+	 * Select Snapshot
+	 */
+	_selectSnapshot(e) {
+		let snapshotId = e.target.value;
+		this.setState({selectedSnapshot: snapshotId});
+	}
+
+	/**
+	 * Create Snapshot
+	 */
+	_createSnapshot() {
+		let datasetId = this.props.dataset.original ? this.props.dataset.original : this.props.dataset._id;
+		this.setState({loading: true});
+		actions.createSnapshot((res) => {
+			if (res.error) {
+				this.setState({
+					error: true,
+					message: res.error,
+					loading: false
+				});
+			} else {
+				this.setState({
+					selectedSnapshot: res,
+					loading: false
+				});
+			}
+		}, false);
+	}
+
+	/**
 	 * Start Job
 	 */
 	_startJob() {
@@ -222,7 +329,7 @@ export default class JobMenu extends React.Component {
 			parameters[parameter.id] = parameter.value;
 		}
 		this.setState({loading: true});
-		actions.startJob('test', this.state.selectedApp, parameters, (err, res) => {
+		actions.startJob(this.state.selectedSnapshot, this.state.selectedApp, parameters, (err, res) => {
 			let message, error;
 			if (err) {
 				error   = true;

@@ -127,7 +127,7 @@ let Tools = React.createClass({
 
 		let snapshotOptions = snapshots.map((snapshot) => {
 			return (
-				<option key={snapshot._id} value={JSON.stringify(snapshot)}>
+				<option key={snapshot._id} value={snapshot._id}>
 					{snapshot.isOriginal ? 'original' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
 				</option>
 			)
@@ -137,7 +137,7 @@ let Tools = React.createClass({
 			<div className="tools clearfix">
 				<div role="presentation" className="snapshotSelect" >
 					<span>
-						<select onChange={this._selectSnapshot} defaultValue="">
+						<select value={this.props.selectedSnapshot} onChange={this._selectSnapshot}>
 							<option value="" disabled>Select a snapshot</option>
 							{snapshotOptions}
 						</select>
@@ -146,15 +146,28 @@ let Tools = React.createClass({
 				{tools}
 				{runAnalysis}
 				<Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')}/>
-				<Jobs dataset={dataset} apps={this.state.apps} loadingApps={this.state.loadingApps} show={this.state.showJobsModal} onHide={actions.toggleModal.bind(null, 'Jobs')} />
+				<Jobs
+					dataset={dataset}
+					apps={this.state.apps}
+					loadingApps={this.state.loadingApps}
+					snapshots={snapshots}
+					show={this.state.showJobsModal}
+					onHide={actions.toggleModal.bind(null, 'Jobs')} />
 	        </div>
     	);
 	},
 
-// custon methods -----------------------------------------------------
+// custom methods -----------------------------------------------------
 
-	_selectSnapshot: (e) => {
-		let snapshot = JSON.parse(e.target.value);
+	_selectSnapshot(e) {
+		let snapshot;
+		let snapshotId = e.target.value;
+		for (let i = 0; i < this.state.snapshots.length; i++) {
+			if (this.state.snapshots[i]._id == snapshotId) {
+				snapshot = this.state.snapshots[i];
+				break;
+			}
+		}
 		actions.loadSnapshot(snapshot.isOriginal, snapshot._id);
 	}
 
