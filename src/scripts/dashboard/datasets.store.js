@@ -118,7 +118,7 @@ let UploadStore = Reflux.createStore({
 	    		}
 
 	    		// shared
-	    		if (filters.indexOf('shared') > -1 && dataset.sharedWithMe) {
+	    		if (filters.indexOf('shared') > -1 && dataset.access && !dataset.userCreated) {
 	    			results.push(dataset);
 	    		}
 
