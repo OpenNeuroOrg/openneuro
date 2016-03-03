@@ -82,9 +82,9 @@ class FileTree extends React.Component {
 						<input
 							type="file"
 							className="update-file"
-							ref={item.label}
+							ref={item.name}
 							onChange={this._updateFile.bind(this, item)}
-							onClick={this._clearInput.bind(this, item.label)}/>
+							onClick={this._clearInput.bind(this, item.name)}/>
 					</span>
 				);
 			}

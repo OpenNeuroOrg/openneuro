@@ -291,7 +291,7 @@ export default  {
     /**
      * Remove Permission
      */
-    removePermission(container, id, userId, callback) {
+    removePermission (container, id, userId, callback) {
         request.del(config.scitran.url + container + '/' + id + '/permissions/local/' + userId, callback);
     },
 
@@ -312,8 +312,12 @@ export default  {
      *
      */
     updateFile (level, id, file, callback) {
-        request.post(config.scitran.url + level + '/' + id + '/file/' + file.name, {
-            body: file,
+        request.upload(config.scitran.url + level + '/' + id + '/files', {
+            fields: {
+                tags: '[]',
+                file: file,
+                name: file.name
+            },
             query: {force: true}
         }, callback);
     },

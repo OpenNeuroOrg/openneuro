@@ -373,7 +373,7 @@ let datasetStore = Reflux.createStore({
 			let match = files.findInTree([dataset], file.parentId);
 			let children = [];
 			for (let existingFile of match.children) {
-				if (file.filename !== existingFile.filename) {
+				if (file.name !== existingFile.name) {
 					children.push(existingFile);
 				}
 			}
@@ -454,7 +454,7 @@ let datasetStore = Reflux.createStore({
 		let parent = files.findInTree([dataset], file.parentId);
 		let children = [];
 		for (let existingFile of parent.children) {
-			if (file.filename == existingFile.filename) {
+			if (file.name == existingFile.name) {
 				for (let key in changes) {
 					existingFile[key] = changes[key];
 				}
