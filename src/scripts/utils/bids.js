@@ -201,7 +201,13 @@ export default  {
                         }, () => {
                             crn.getDatasetJobs(projectId, (err, res) => {
                                 dataset.jobs = res.body;
-                                callback(dataset);
+                                this.usage(projectId, options, (usage) => {
+                                    if (usage) {
+                                        dataset.views = usage.views;
+                                        dataset.downloads = usage.downloads;
+                                    }
+                                    callback(dataset);
+                                });
                             }, options);
                         });
                     }, options);
@@ -393,7 +399,7 @@ export default  {
      * Takes a project and returns the level of access
      * the current user has with that project.
      */
-    userAccess(project) {
+    userAccess (project) {
         let access = null;
         if (project && project.permissions) {
             for (let user of project.permissions) {
@@ -411,9 +417,29 @@ export default  {
      * Takes project and returns boolean representing
      * whether the current user created the project.
      */
-     userCreated(project) {
+    userCreated (project) {
         if (!userStore.data.scitran) {return false;}
         return project.group === userStore.data.scitran._id;
-     }
+    },
+
+    /**
+     * Usage
+     * Takes a snapshotId and snapshot boolean and
+     * callsback view and download counts for snapshots.
+     */
+    usage (snapshotId, options, callback) {
+        if (options && options.snapshot) {
+            let usage = {};
+            scitran.getUsage(snapshotId, {type: 'view', count: true}, (err, res) => {
+                usage.views = res.body.count;
+                scitran.getUsage(snapshotId, {type: 'download', count: true}, (err1, res1) => {
+                    usage.downloads = res1.body.count;
+                    callback(usage);
+                });
+            })
+        } else {
+            callback();
+        }
+    }
 
 };

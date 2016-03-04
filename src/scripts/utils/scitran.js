@@ -358,6 +358,36 @@ export default  {
         request.put(config.scitran.url + 'snapshots/projects/' + projectId + '/public', {
             body: {value}
         }, callback);
+    },
+
+// usage analytics ------------------------------------------------------------------------
+
+    /**
+     * Track Usage
+     *
+     * - type ('view' or 'download')
+     */
+    trackUsage (snapshotId, type, callback) {
+        request.post(config.scitran.url + 'snapshots/projects/' + snapshotId + '/analytics', {
+            query: {type}
+        }, callback)
+    },
+
+    /**
+     * Get Usage Analytics
+     *
+     * options
+     * - type       ('view' or 'download')
+     * - user_id    (string)
+     * - start_date (date)
+     * - end_date   (date)
+     * - count      (boolean)
+     * - limit      (integer)
+     */
+    getUsage (snapshotId, options, callback) {
+        request.get(config.scitran.url + 'snapshots/projects/' + snapshotId + '/analytics', {
+            query: options
+        }, callback)
     }
 
 };

@@ -175,16 +175,19 @@ let datasetStore = Reflux.createStore({
 	},
 
 	/**
-	 * Increment Download Count
+	 * Track Download
 	 *
-	 * Increments download count (client side only) to
-	 * provide immediate download feedback.
+	 * Tracks download and increments download
+	 * count (client side only) to provide immediate
+	 * download feedback.
 	 */
-	incrementDownloadTicket(callback) {
-		let dataset = this.data.dataset;
-		dataset.downloads++;
-		this.update({dataset});
-		callback();
+	trackDownload(callback) {
+		scitran.trackUsage(this.data.dataset._id, 'download', (err, res) => {
+			let dataset = this.data.dataset;
+			dataset.downloads++;
+			this.update({dataset});
+			callback();
+		});
 	},
 
 	/**
@@ -535,6 +538,12 @@ let datasetStore = Reflux.createStore({
 			this.update({snapshots: snapshots});
 			if (callback) {callback();}
 		});
+	},
+
+	// usage analytics ---------------------------------------------------------------
+
+	trackView (snapshotId) {
+		scitran.trackUsage(snapshotId, 'view', (err, res) => {});
 	}
 
 });
