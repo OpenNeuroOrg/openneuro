@@ -23,6 +23,7 @@ let Dataset = React.createClass({
 	componentWillReceiveProps() {
 		let params = this.getParams();
 		if (params.snapshotId) {
+			Actions.trackView(params.snapshotId);
 			Actions.loadDataset(params.snapshotId, {snapshot: true});
 		} else if (params.datasetId && this.state.dataset && params.datasetId !== this.state.dataset._id) {
 			Actions.loadDataset(params.datasetId);
@@ -32,6 +33,7 @@ let Dataset = React.createClass({
 	componentDidMount() {
 		let params = this.getParams();
 		if (params.snapshotId) {
+			Actions.trackView(params.snapshotId);
 			Actions.loadDataset(params.snapshotId, {snapshot: true});
 		} else if (params.datasetId) {
 			Actions.loadDataset(params.datasetId);
@@ -90,6 +92,7 @@ let Dataset = React.createClass({
 									</h1>
 									<h6>{uploaded}</h6>
 									<h6>{authors}</h6>
+									{dataset.views ? <h6>views: {dataset.views}</h6> : null}
 									<h6>downloads: {dataset.downloads}</h6>
 									<div className="status-container">
 										<Statuses dataset={dataset}/>
