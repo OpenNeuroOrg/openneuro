@@ -72,6 +72,23 @@ export default {
     },
 
     /**
+     * Update Project
+     *
+     */
+    updateProject (projectId, body, callback) {
+        request.put(config.scitran.url + 'projects/' + projectId, {body}, (err, res) => {
+            callback(err, res);
+        });
+    },
+
+    /**
+     * Remove Tag
+     */
+    removeTag (containerType, containerId, tag, callback) {
+        request.del(config.scitran.url + containerType + '/' + containerId + '/tags/' + tag, {}, callback);
+    },
+
+    /**
      * Add Role
      */
     addRole(container, id, role, callback) {
@@ -86,8 +103,9 @@ export default {
      * file store and updates all symlinks to point to the
      * correct files in scitran's file store.
      */
-    downloadSymlinkDataset(datasetId, callback) {
-        request.post(config.scitran.url + 'snapshots/download', {
+    downloadSymlinkDataset(datasetId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.post(config.scitran.url + modifier + 'download', {
             query: {format: 'bids', query: true},
             body: {
                 nodes: [

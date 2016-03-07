@@ -1,10 +1,10 @@
 // dependencies ------------------------------------
 
-import express  from 'express';
-import users    from './handlers/users';
-import jobs     from './handlers/jobs';
-import datasets from './handlers/datasets';
-import auth     from './libs/auth';
+import express    from 'express';
+import users      from './handlers/users';
+import jobs       from './handlers/jobs';
+import validation from './handlers/validation';
+import auth       from './libs/auth';
 
 let routes = [
 
@@ -41,7 +41,7 @@ let routes = [
 		method: 'post',
 		url: '/datasets/:datasetId/validate',
 		middleware: [auth.user],
-		handler: datasets.validate
+		handler: validation.flag
 	},
 
 	// jobs ----------------------------------------

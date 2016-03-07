@@ -25,6 +25,14 @@ export default {
 		});
 	},
 
+	put (url, options, callback) {
+		handleRequest(url, options, (req) => {
+			request.put(req, (err, res) => {
+				handleResponse(err, res, callback);
+			});
+		});
+	},
+
 	del(url, options, callback) {
 		handleRequest(url, options, (req) => {
 			request.del(req, (err, res) => {
