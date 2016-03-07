@@ -9,6 +9,7 @@ import WarnButton   from '../common/forms/warn-button.jsx';
 import Share        from './dataset.tools.share.jsx';
 import Jobs         from './dataset.tools.jobs.jsx';
 import moment       from 'moment';
+import crn          from '../utils/crn';
 
 let Tools = React.createClass({
 
@@ -93,7 +94,7 @@ let Tools = React.createClass({
 						message: 'You must list at least one author before creating a snapshot.'
 					}
 				],
-			},
+			}
 		];
 
 

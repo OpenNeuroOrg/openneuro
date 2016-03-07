@@ -44,19 +44,27 @@ let Status = React.createClass({
 				tip       = 'Upload in progress';
 				title	  = 'In progress';
 				iconClass = 'fa fa-spin fa-circle-o-notch'
+				break;
+			case 'pendingValidation':
+				spanClass = 'dataset-status ds-warning';
+				tip       = 'Pending validation';
+				title	  = 'Pending validation';
+				iconClass = 'fa fa-hourglass-start';
 		}
 
 		return (
-			<span className={spanClass}>
-				<Tooltip tooltip={tip}>
-					<span>
-						<span className="icon-wrap">
-							<i className={iconClass}></i>
-							{title}
+			<span className="clearfix status">
+				<span className={spanClass}>
+					<Tooltip tooltip={tip}>
+						<span>
+							<span className="icon-wrap">
+								<i className={iconClass}></i>
+								{title}
+							</span>
+							{fileSelect}
 						</span>
-						{fileSelect}
-					</span>
-				</Tooltip>
+					</Tooltip>
+				</span>
 			</span>
 		);
 	},

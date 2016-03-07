@@ -333,6 +333,7 @@ export default  {
             public:      project.public,
 
             /** modified for BIDS **/
+            validation:  project.metadata ? project.metadata.validation : {},
             type:        'folder',
             downloads:   project.counter ? project.counter : 0,
             children:    files,
@@ -387,6 +388,9 @@ export default  {
             for (let tag of tags) {
                 if (tag === 'incomplete') {
                     status['uploadIncomplete'] = true;
+                }
+                if (tag == 'pendingValidation') {
+                    status['pendingValidation'] = true;
                 }
             }
         }

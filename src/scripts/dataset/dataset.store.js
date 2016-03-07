@@ -354,6 +354,7 @@ let datasetStore = Reflux.createStore({
 			this.updateDirectoryState(container._id, {error: '"' + file.name + '" already exists in this directory.'});
 		} else {
 			this.updateDirectoryState(container._id, {loading: true});
+			this.flagForValidation();
 			scitran.updateFile(container.containerType, container._id, file, () => {
 				let children = container.children
 				children.unshift({
@@ -372,6 +373,7 @@ let datasetStore = Reflux.createStore({
 	 */
 	deleteFile(file) {
 		let dataset = this.data.dataset;
+		this.flagForValidation();
 		scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
 			let match = files.findInTree([dataset], file.parentId);
 			let children = [];
@@ -382,6 +384,44 @@ let datasetStore = Reflux.createStore({
 			}
 			match.children = children;
 			this.update({dataset});
+		});
+	},
+
+	/**
+	 * Update File
+	 */
+	updateFile(item, file) {
+		let id       = item.parentId,
+			level    = item.parentContainer,
+			filename = item.name;
+
+		if (filename !== file.name) {
+			this.updateFileState(item, {
+				error: 'You must replace a file with a file of the same name.'
+			});
+		} else {
+			this.updateFileState(item, {error: null, loading: true});
+			this.flagForValidation();
+			scitran.updateFile(level, id, file, (err, res) => {
+				this.updateFileState(item, {loading: false});
+			});
+		}
+	},
+
+	/**
+	 * Flag For Validation
+	 *
+	 * Used after any modification. Flags the dataset
+	 * to be re-validated by a periodic server side
+	 * process and tags dataset as 'pending validation'
+	 */
+	flagForValidation() {
+		let dataset = this.data.dataset;
+		scitran.addTag('projects', dataset._id, 'pendingValidation', (err, res) => {
+			crn.flagForValidation(dataset._id, (err, res) => {
+				dataset.status.pendingValidation = true;
+				this.update({dataset});
+			});
 		});
 	},
 
@@ -407,26 +447,6 @@ let datasetStore = Reflux.createStore({
 			this.updateDirectoryState(item._id, {error: ''});
 		} else {
 			this.updateFileState(item, {error: ''});
-		}
-	},
-
-	/**
-	 * Update File
-	 */
-	updateFile(item, file) {
-		let id       = item.parentId,
-			level    = item.parentContainer,
-			filename = item.name;
-
-		if (filename !== file.name) {
-			this.updateFileState(item, {
-				error: 'You must replace a file with a file of the same name.'
-			});
-		} else {
-			this.updateFileState(item, {error: null, loading: true});
-			scitran.updateFile(level, id, file, (err, res) => {
-				this.updateFileState(item, {loading: false});
-			});
 		}
 	},
 
