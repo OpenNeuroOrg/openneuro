@@ -54,7 +54,7 @@ export default {
      * updated at the start and end of every file or
      * folder upload request and an error callback.
      */
-    upload (userId, fileTree, count, progress, error) {
+    upload (userId, fileTree, validation, count, progress, error) {
         this.completed = 0;
         this.count = count;
         this.currentProjectId = null;
@@ -96,7 +96,7 @@ export default {
                     this.handleUploadResponse(err, res, () => {
                         let projectId = res.body._id;
                         scitran.addTag('projects', projectId, 'incomplete', (err, res) => {
-                            this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId);
+                            this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId, validation);
                         });
                     });
                 });
@@ -108,7 +108,7 @@ export default {
      * Upload Subjects
      *
      */
-    uploadSubjects (datasetName, subjects, projectId) {
+    uploadSubjects (datasetName, subjects, projectId, validation) {
         let self = this;
         self.currentProjectId = projectId;
         for (let subject of subjects) {
@@ -132,7 +132,7 @@ export default {
                                 authors.push({name: author, ORCIDID: ''});
                             }
                         }
-                        scitran.updateProject(projectId, {metadata: {authors}}, (err, res) => {
+                        scitran.updateProject(projectId, {metadata: {authors, validation}}, (err, res) => {
                             let file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
                             self.uploadFile('projects', projectId, file, 'project');
                         });

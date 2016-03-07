@@ -37,10 +37,7 @@ export default class Issue extends React.Component {
 					<label>File Name:</label>
 					<p>{error.file.name}</p>
 				</span>
-				<span className="e-meta">
-					<label>File Metadata:</label>					
-					<p>{error.file.size / 1000} KB | {error.file.type}</p>
-				</span>
+				{this._fileMetadata(error.file)}
 				<span className="e-meta">
 					<label>Location: </label>
 					<p>{error.file.webkitRelativePath}</p>
@@ -53,6 +50,17 @@ export default class Issue extends React.Component {
 	}
 
 // custom methods -----------------------------------------------------
+
+	_fileMetadata(file) {
+		if (file.size) {
+			return (
+				<span className="e-meta">
+					<label>File Metadata:</label>
+					<p>{error.file.size / 1000} KB | {error.file.type}</p>
+				</span>
+			)
+		}
+	}
 
 }
 
