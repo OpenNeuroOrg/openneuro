@@ -333,7 +333,7 @@ export default  {
             public:      project.public,
 
             /** modified for BIDS **/
-            validation:  project.metadata.validation ? project.metadata.validation : {errors:[], warnings:[]},
+            validation:  project.metadata && project.metadata.validation ? project.metadata.validation : {errors:[], warnings:[]},
             type:        'folder',
             downloads:   project.counter ? project.counter : 0,
             children:    files,
