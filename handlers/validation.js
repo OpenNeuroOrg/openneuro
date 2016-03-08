@@ -48,7 +48,7 @@ export default {
 			if (datasets) {
 				for (let dataset of datasets) {
 					scitran.downloadSymlinkDataset(dataset._id, (err, hash) => {
-						validate.BIDS('./persistent/datasets/' + hash, {}, (errors, warnings) => {
+						validate.BIDS(config.location + '/persistent/datasets/' + hash, {}, (errors, warnings) => {
 							scitran.updateProject(dataset._id, {
 								metadata: {
 									validation: {errors, warnings}
