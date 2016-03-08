@@ -1,7 +1,7 @@
 export default {
 	"url": "http://127.0.0.1",
 	"port": 8111,
-	"location: "/srv/crn-server',
+	"location: "/srv/crn-server",
 	"headers": {
 		"Access-Control-Allow-Origin": "*",
 		"Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
