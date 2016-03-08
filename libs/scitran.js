@@ -117,6 +117,10 @@ export default {
                 optional: false
             }
         }, (err, res) => {
+            if (!res.body.ticket) {
+                callback({status: 404, message: "Dataset not found."});
+                return;
+            }
             let ticket = res.body.ticket;
             request.get(config.scitran.url + 'download', {query: {symlinks: true, ticket: ticket}}, (err2, res2) => {
                 if (!err2) {
