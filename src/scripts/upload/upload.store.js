@@ -239,8 +239,12 @@ let UploadStore = Reflux.createStore({
 		});
 
 		let datasetsUpdated = false;
+		let validation = {
+			errors: this.data.errors,
+			warnings: this.data.warnings
+		};
 
-		upload.upload(userStore.data.scitran._id, fileTree, count, (progress, projectId) => {
+		upload.upload(userStore.data.scitran._id, fileTree, validation, count, (progress, projectId) => {
 			projectId = projectId ? projectId : this.data.projectId;
 			this.update({progress: progress, uploading: true, projectId: projectId});
 			if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}

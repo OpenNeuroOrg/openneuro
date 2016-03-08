@@ -13,6 +13,7 @@ import moment        from 'moment';
 import ClickToEdit   from '../common/forms/click-to-edit.jsx';
 import FileTree      from './dataset.file-tree.jsx';
 import Jobs          from './dataset.jobs.jsx';
+import Results       from '../upload/upload.validation-results.jsx';
 
 let Dataset = React.createClass({
 
@@ -117,6 +118,7 @@ let Dataset = React.createClass({
 													</div>
 												</div>
 											</div>
+											<Results errors={dataset.validation.errors} warnings={dataset.validation.warnings} />
 										</div>
 									</div>
 								</div>

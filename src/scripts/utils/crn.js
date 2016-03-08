@@ -83,6 +83,15 @@ export default {
 	 */
 	deleteDatasetJobs(datasetId, callback) {
 		request.del(config.crn.url + 'jobs/' + datasetId, callback);
+	},
+
+// Validation ------------------------------------------------------------------------------
+
+	/**
+	 * Flag For Validation
+	 */
+	flagForValidation(datasetId, callback) {
+		request.post(config.crn.url + 'datasets/' + datasetId + '/validate', {}, callback);
 	}
 
 }
