@@ -45,22 +45,28 @@ export default {
 			if (err) {
 				/* HANDLE ERROR */
 			}
-			if (datasets) {
+			if (datasets && datasets.length > 0) {
 				for (let dataset of datasets) {
 					scitran.downloadSymlinkDataset(dataset._id, (err, hash) => {
-						validate.BIDS(config.location + '/persistent/datasets/' + hash, {}, (errors, warnings) => {
-							scitran.updateProject(dataset._id, {
-								metadata: {
-									validation: {errors, warnings}
-								}
-							}, (err, res) => {
-								c.validationQueue.findAndRemove({_id: dataset._id}, [], (err, doc) => {
-									scitran.removeTag('projects', dataset._id, 'pendingValidation', (err, res) => {
+						if (err && err.status == 404) {
+							// remove validation flag if dataset can no longer be found
+							c.validationQueue.findAndRemove({_id: dataset._id}, [], (err, doc) => {});
+						} else {
+							validate.BIDS(config.location + '/persistent/datasets/' + hash, {}, (errors, warnings) => {
+								scitran.updateProject(dataset._id, {
+									metadata: {
+										validation: {errors, warnings}
+									}
+								}, (err, res) => {
+									c.validationQueue.findAndRemove({_id: dataset._id}, [], (err, doc) => {
+										scitran.removeTag('projects', dataset._id, 'pendingValidation', (err, res) => {
+>>>>>>> e408287f386135006e835a0af6bc546b999f8819
 
+										});
 									});
 								});
 							});
-						});
+						}
 					});
 				}
 			}
