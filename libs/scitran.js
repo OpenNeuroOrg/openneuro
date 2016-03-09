@@ -82,6 +82,15 @@ export default {
     },
 
     /**
+     * Add Tag
+     */
+    addTag (containerType, containerId, tag, callback) {
+        request.post(config.scitran.url + containerType + '/' + containerId + '/tags', {
+            body: {value: tag}
+        }, callback);
+    },
+
+    /**
      * Remove Tag
      */
     removeTag (containerType, containerId, tag, callback) {

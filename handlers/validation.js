@@ -58,10 +58,13 @@ export default {
 										validation: {errors, warnings}
 									}
 								}, (err, res) => {
+									if (errors && errors.length > 0) {
+										scitran.addTag('projects', dataset._id, 'invalid', (err, res) => {});
+									} else {
+										scitran.removeTag('projects', dataset._id, 'invalid', (err, res) => {});
+									}
 									c.validationQueue.findAndRemove({_id: dataset._id}, [], (err, doc) => {
-										scitran.removeTag('projects', dataset._id, 'pendingValidation', (err, res) => {
-
-										});
+										scitran.removeTag('projects', dataset._id, 'pendingValidation', (err, res) => {});
 									});
 								});
 							});
