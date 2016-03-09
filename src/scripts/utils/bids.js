@@ -401,7 +401,7 @@ export default  {
             }
         }
         status['public'] = !!project.public;
-        status['shared'] = (project.group != userStore.data.scitran._id)  &&  !!userAccess;
+        status['shared'] = userStore.data.scitran && (project.group != userStore.data.scitran._id)  &&  !!userAccess;
         return status;
     },
 
