@@ -60,7 +60,6 @@ export default {
 								}, (err, res) => {
 									c.validationQueue.findAndRemove({_id: dataset._id}, [], (err, doc) => {
 										scitran.removeTag('projects', dataset._id, 'pendingValidation', (err, res) => {
->>>>>>> e408287f386135006e835a0af6bc546b999f8819
 
 										});
 									});
