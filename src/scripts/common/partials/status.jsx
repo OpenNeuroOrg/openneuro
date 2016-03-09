@@ -50,6 +50,12 @@ let Status = React.createClass({
 				tip       = 'Pending validation';
 				title	  = 'Pending validation';
 				iconClass = 'fa fa-hourglass-start';
+				break;
+			case 'invalid':
+				spanClass = 'dataset-status ds-danger';
+				tip       = 'Invalid';
+				title	  = 'Invalid';
+				iconClass = 'fa fa-ban';
 		}
 
 		return (

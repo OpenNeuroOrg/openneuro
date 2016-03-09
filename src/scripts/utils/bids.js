@@ -339,10 +339,10 @@ export default  {
             children:    files,
             description: this.formatDescription(project.metadata, description),
             attachments: attachments,
-            status:      this.formatStatus(project.tags),
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
         };
+        dataset.status       = this.formatStatus(project, dataset.access),
         dataset.authors      = dataset.description.Authors;
         dataset.user         = this.user(dataset, users);
         if (project.original) {dataset.original = project.original}
@@ -379,18 +379,29 @@ export default  {
      * a dataset status object corresponding
      * to any statuses set in the notes.
      */
-    formatStatus (tags) {
-        let status = {};
-        if (tags) {
-            for (let tag of tags) {
+    formatStatus (project, userAccess) {
+        let status = {
+            uploadIncomplete: false,
+            pendingValidation: false,
+            invalid: false,
+            public: false,
+            shared: false
+        };
+        if (project.tags) {
+            for (let tag of project.tags) {
                 if (tag === 'incomplete') {
                     status['uploadIncomplete'] = true;
                 }
                 if (tag == 'pendingValidation') {
                     status['pendingValidation'] = true;
                 }
+                if (tag == 'invalid') {
+                    status['invalid'] = true;
+                }
             }
         }
+        status['public'] = !!project.public;
+        status['shared'] = (project.group != userStore.data.scitran._id)  &&  !!userAccess;
         return status;
     },
 

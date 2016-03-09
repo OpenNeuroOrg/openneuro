@@ -20,14 +20,16 @@ let Statuses = React.createClass({
 		let sharedWithStatus  = <Status type='shared' />;
 		let inProgress        = <Status type='inProgress' />;
 		let pendingValidation = <Status type='pendingValidation' />;
+		let invalid           = <Status type='invalid' />;
 
 		return (
 			<span className="clearfix status-wrap">
 				{dataset && dataset.status && dataset.public ? publicStatus : null}
-				{dataset && dataset.status && dataset.status.uploadIncomplete && !uploading ? incompleteStatus: null}
-				{dataset && dataset.access && !dataset.userCreated ? sharedWithStatus: null}
+				{dataset && dataset.status && dataset.status.uploadIncomplete && !uploading ? incompleteStatus : null}
+				{dataset && dataset.status && dataset.status.shared ? sharedWithStatus : null}
 				{dataset && uploading ? inProgress : null}
 				{dataset && dataset.status && dataset.status.pendingValidation ? pendingValidation : null}
+				{dataset && dataset.status && dataset.status.invalid ? invalid : null}
 			</span>
     	);
 	},
