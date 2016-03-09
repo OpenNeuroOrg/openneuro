@@ -58,6 +58,8 @@ let Dataset = React.createClass({
 		if (dataset) {
 
 			let uploaded = 'uploaded ' + (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +  ' on ' + dateAdded + ' - ' + timeago + ' ago';
+			let errors = dataset.validation.errors;
+			let warnings = dataset.validation.warnings;
 
 			let authors;
 			if (dataset.authors.length > 0) {
@@ -103,6 +105,10 @@ let Dataset = React.createClass({
 								<div className="col-xs-5">
 									<div>
 										<div className="fadeIn col-xs-12">
+											<h3 className="metaheader">{errors.length > 0 || warnings.length > 0 ? 'Validation' : null}</h3>
+											<Results errors={dataset.validation.errors} warnings={dataset.validation.warnings} />
+										</div>
+										<div className="fadeIn col-xs-12">
 											<Jobs />
 										</div>
 										<div className="col-xs-12">
@@ -118,7 +124,6 @@ let Dataset = React.createClass({
 													</div>
 												</div>
 											</div>
-											<Results errors={dataset.validation.errors} warnings={dataset.validation.warnings} />
 										</div>
 									</div>
 								</div>

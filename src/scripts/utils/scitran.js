@@ -17,8 +17,10 @@ export default  {
      * Get Users
      *
      * Gets a list of all users
+     * Ignores request if public option is true.
      */
-    getUsers (callback) {
+    getUsers (callback, isPublic) {
+        if (isPublic) {callback(); return;}
         request.get(config.scitran.url + 'users', {}, callback);
     },
 
@@ -379,8 +381,8 @@ export default  {
      * options
      * - type       ('view' or 'download')
      * - user_id    (string)
-     * - start_date (date)
-     * - end_date   (date)
+     * - start_date (date) year-month-day
+     * - end_date   (date) year-month-day
      * - count      (boolean)
      * - limit      (integer)
      */

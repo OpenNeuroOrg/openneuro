@@ -83,10 +83,10 @@ export default  {
      * boolean as second argument to specifiy if request
      * is made with authentication. Defaults to true.
      */
-    getDatasets (callback, isPublic) {
+    getDatasets (callback, isPublic, isSignedOut) {
         scitran.getProjects({authenticate: !isPublic, snapshot: isPublic}, (projects) => {
             scitran.getUsers((err, res) => {
-                let users = !err && res.body ? res.body : null;
+                let users = !err && res && res.body ? res.body : null;
                 let results = [];
                 let publicResults = {}
                 // hide other user's projects from admins & filter snapshots to display newest of each dataset
@@ -112,7 +112,7 @@ export default  {
                 } else {
                     callback(results);
                 }
-            });
+            }, isSignedOut);
         });
     },
 
@@ -165,7 +165,7 @@ export default  {
      */
     getDataset (projectId, callback, options) {
         scitran.getUsers((err, res) => {
-            let users = !err && res.body ? res.body : null;
+            let users = !err && res && res.body ? res.body : null;
             scitran.getProject(projectId, (res) => {
                 if (res.status !== 200) {return callback(res);}
                 let project = res.body;
@@ -213,7 +213,7 @@ export default  {
                     }, options);
                 }, options);
             }, options);
-        });
+        }, options.isPublic);
     },
 
 // Update ---------------------------------------------------------------------------------
@@ -339,10 +339,10 @@ export default  {
             children:    files,
             description: this.formatDescription(project.metadata, description),
             attachments: attachments,
-            status:      this.formatStatus(project.tags),
             userCreated: this.userCreated(project),
             access:      this.userAccess(project)
         };
+        dataset.status       = this.formatStatus(project, dataset.access),
         dataset.authors      = dataset.description.Authors;
         dataset.user         = this.user(dataset, users);
         if (project.original) {dataset.original = project.original}
@@ -379,18 +379,29 @@ export default  {
      * a dataset status object corresponding
      * to any statuses set in the notes.
      */
-    formatStatus (tags) {
-        let status = {};
-        if (tags) {
-            for (let tag of tags) {
+    formatStatus (project, userAccess) {
+        let status = {
+            uploadIncomplete: false,
+            pendingValidation: false,
+            invalid: false,
+            public: false,
+            shared: false
+        };
+        if (project.tags) {
+            for (let tag of project.tags) {
                 if (tag === 'incomplete') {
                     status['uploadIncomplete'] = true;
                 }
                 if (tag == 'pendingValidation') {
                     status['pendingValidation'] = true;
                 }
+                if (tag == 'invalid') {
+                    status['invalid'] = true;
+                }
             }
         }
+        status['public'] = !!project.public;
+        status['shared'] = userStore.data.scitran && (project.group != userStore.data.scitran._id)  &&  !!userAccess;
         return status;
     },
 

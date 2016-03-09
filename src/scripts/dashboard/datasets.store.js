@@ -67,8 +67,8 @@ let UploadStore = Reflux.createStore({
 	 * sort setting.
 	 */
 	getDatasets(isPublic) {
-		let self = this;
-        self.update({
+		let isSignedOut = !userStore.data.token;
+        this.update({
         	loading: true,
             sort: {
             	value: 'created',
@@ -78,7 +78,7 @@ let UploadStore = Reflux.createStore({
         }, () => {
 	        bids.getDatasets((datasets) => {
 	            this.sort(null, null, datasets);
-	        }, isPublic);
+	        }, isPublic, isSignedOut);
 	    });
     },
 
