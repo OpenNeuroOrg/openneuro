@@ -379,8 +379,8 @@ export default  {
      * options
      * - type       ('view' or 'download')
      * - user_id    (string)
-     * - start_date (date)
-     * - end_date   (date)
+     * - start_date (date) year-month-day
+     * - end_date   (date) year-month-day
      * - count      (boolean)
      * - limit      (integer)
      */
