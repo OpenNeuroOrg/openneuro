@@ -83,7 +83,7 @@ export default  {
      * boolean as second argument to specifiy if request
      * is made with authentication. Defaults to true.
      */
-    getDatasets (callback, isPublic) {
+    getDatasets (callback, isPublic, isSignedOut) {
         scitran.getProjects({authenticate: !isPublic, snapshot: isPublic}, (projects) => {
             scitran.getUsers((err, res) => {
                 let users = !err && res && res.body ? res.body : null;
@@ -112,7 +112,7 @@ export default  {
                 } else {
                     callback(results);
                 }
-            }, isPublic);
+            }, isSignedOut);
         });
     },
 
