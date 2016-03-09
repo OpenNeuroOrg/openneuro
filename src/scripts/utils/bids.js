@@ -86,7 +86,7 @@ export default  {
     getDatasets (callback, isPublic) {
         scitran.getProjects({authenticate: !isPublic, snapshot: isPublic}, (projects) => {
             scitran.getUsers((err, res) => {
-                let users = !err && res.body ? res.body : null;
+                let users = !err && res && res.body ? res.body : null;
                 let results = [];
                 let publicResults = {}
                 // hide other user's projects from admins & filter snapshots to display newest of each dataset
@@ -112,7 +112,7 @@ export default  {
                 } else {
                     callback(results);
                 }
-            });
+            }, isPublic);
         });
     },
 
@@ -165,7 +165,7 @@ export default  {
      */
     getDataset (projectId, callback, options) {
         scitran.getUsers((err, res) => {
-            let users = !err && res.body ? res.body : null;
+            let users = !err && res && res.body ? res.body : null;
             scitran.getProject(projectId, (res) => {
                 if (res.status !== 200) {return callback(res);}
                 let project = res.body;
@@ -213,7 +213,7 @@ export default  {
                     }, options);
                 }, options);
             }, options);
-        });
+        }, options.isPublic);
     },
 
 // Update ---------------------------------------------------------------------------------

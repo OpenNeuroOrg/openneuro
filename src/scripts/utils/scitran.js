@@ -17,8 +17,10 @@ export default  {
      * Get Users
      *
      * Gets a list of all users
+     * Ignores request if public option is true.
      */
-    getUsers (callback) {
+    getUsers (callback, isPublic) {
+        if (isPublic) {callback(); return;}
         request.get(config.scitran.url + 'users', {}, callback);
     },
 
