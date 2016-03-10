@@ -62,36 +62,9 @@ export default {
 				let parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
 				let jobName = 'crn-automated-job'
 
-				/* qap body*/
-				// let body = {
-				// 	name: jobName,
-				// 	appId: job.appId,
-				// 	batchQueue: "normal",
-				// 	executionSystem: "slurm-stampede.tacc.utexas.edu",
-				// 	maxRunTime: "00:20:00",
-				// 	memoryPerNode: "8GB",
-				// 	nodeCount: 1,
-				// 	processorsPerNode: 16,
-				// 	archive: true,
-				// 	archiveSystem: "openfmri-storage",
-				// 	archivePath: null,
-				// 	inputs: {
-				// 		bidsFile: "agave://openfmri-storage/ds003_downsampled.tar"
-				// 	},
-				// 	parameters: job.parameters,
-				// 	notifications: [
-				// 		{
-				// 			url: config.url + ':' + config.port + '/api/v1/jobs/${JOB_ID}/results',
-				// 			event:"*",
-				// 			persistent:true
-				// 		}
-				// 	]
-				// };
-
-
 				let body = {
 					"name": jobName,
-					"appId": "mriqcp-0.1.0",
+					"appId": job.appId,
 					"batchQueue": "normal",
 					"executionSystem": "slurm-ls5.tacc.utexas.edu",
 					"maxRunTime": "04:00:00",
