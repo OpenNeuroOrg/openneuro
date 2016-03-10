@@ -23,7 +23,7 @@ let Status = React.createClass({
 			case 'public':
 				spanClass = 'dataset-status ds-success';
 				tip       = 'Viewable to all visitors';
-				title	  = 'Public';
+				title	  = 'Published';
 				iconClass = 'fa fa-globe';
 				break;
 			case 'incomplete':

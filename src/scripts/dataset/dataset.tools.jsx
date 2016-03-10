@@ -8,6 +8,7 @@ import userStore    from '../user/user.store.js';
 import WarnButton   from '../common/forms/warn-button.jsx';
 import Share        from './dataset.tools.share.jsx';
 import Jobs         from './dataset.tools.jobs.jsx';
+import Publish      from './dataset.tools.publish.jsx';
 import moment       from 'moment';
 import crn          from '../utils/crn';
 
@@ -49,17 +50,11 @@ let Tools = React.createClass({
 				display: true
 			},
 			{
-				tooltip: 'Make Dataset Public',
+				tooltip: 'Publish Dataset',
 				icon: 'fa-globe',
-				action: actions.publish.bind(this, dataset._id, true),
+				action: actions.toggleModal.bind(null, 'Publish'),
 				display: isAdmin && !isPublic && !isIncomplete,
-				validations: [
-					{
-						check: !isSnapshot,
-						message: 'You can only publish dataset snapshots not originals.'
-					}
-				],
-				warn: true
+				warn: false
 			},
 			{
 				tooltip: 'Unpublish Dataset',
@@ -129,7 +124,7 @@ let Tools = React.createClass({
 		let snapshotOptions = snapshots.map((snapshot) => {
 			return (
 				<option key={snapshot._id} value={snapshot._id}>
-					{snapshot.isOriginal ? 'original' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
+					{snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
 				</option>
 			)
 		});
@@ -154,6 +149,13 @@ let Tools = React.createClass({
 					snapshots={snapshots}
 					show={this.state.showJobsModal}
 					onHide={actions.toggleModal.bind(null, 'Jobs')} />
+				<Publish
+					dataset={dataset}
+					apps={this.state.apps}
+					loadingApps={this.state.loadingApps}
+					snapshots={snapshots}
+					show={this.state.showPublishModal}
+					onHide={actions.toggleModal.bind(null, 'Publish')} />
 	        </div>
     	);
 	},
