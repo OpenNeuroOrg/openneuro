@@ -149,11 +149,13 @@ let datasetStore = Reflux.createStore({
 	loadApps() {
 		this.update({loadingApps: true});
 		crn.getApps((err, res) => {
-			res.body.sort((a, b) => {
-				let aName = a.label.toUpperCase();
-				let bName = b.label.toUpperCase();
-				return (aName < bName) ? -1 : (aName > bName) ? 1 : 0;
-			});
+			if (res.body) {
+				res.body.sort((a, b) => {
+					let aName = a.label.toUpperCase();
+					let bName = b.label.toUpperCase();
+					return (aName < bName) ? -1 : (aName > bName) ? 1 : 0;
+				});
+			}
 			this.update({apps: res.body, loadingApps: false});
 		});
 	},
