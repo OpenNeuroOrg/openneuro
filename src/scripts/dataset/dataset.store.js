@@ -52,6 +52,7 @@ let datasetStore = Reflux.createStore({
 			loadingJobs: false,
 			jobs: [],
 			showJobsModal: false,
+			showPublishModal: false,
 			showShareModal: false,
 			snapshot: false,
 			snapshots: [],
@@ -155,15 +156,21 @@ let datasetStore = Reflux.createStore({
 	/**
 	 * Publish
 	 *
-	 * Takes a datasetId and sets the datset to public.
+	 * Takes a snapshotId, value and callback and sets the
+	 * datasets public status to the passed value.
 	 */
-	publish(datasetId, value, callback) {
-		scitran.updateSnapshotPublic(datasetId, value, (err, res) => {
-			callback();
+	publish(snapshotId, value, callback) {
+		scitran.updateSnapshotPublic(snapshotId, value, (err, res) => {
+			if (callback) {callback()};
 			if (!err) {
-				let dataset = this.data.dataset;
-				dataset.public = value;
-				this.update({dataset});
+				if (snapshotId === this.data.dataset._id) {
+					let dataset = this.data.dataset;
+					dataset.public = value;
+					this.update({dataset});
+				} else {
+					let datasetId = this.data.snapshot ? this.data.dataset.original : this.data.dataset._id;
+					router.transitionTo('snapshot', {datasetId, snapshotId});
+				}
 			}
 		});
 	},
@@ -553,6 +560,7 @@ let datasetStore = Reflux.createStore({
 	loadSnapshots(datasetId, callback) {
 		scitran.getProjectSnapshots(datasetId, (err, res) => {
 			let snapshots = !err && res.body ? res.body : [];
+			snapshots.reverse();
 			snapshots.unshift({
 				isOriginal: true,
 				_id: datasetId
