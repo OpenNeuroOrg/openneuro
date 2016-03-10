@@ -124,7 +124,7 @@ let Tools = React.createClass({
 		let snapshotOptions = snapshots.map((snapshot) => {
 			return (
 				<option key={snapshot._id} value={snapshot._id}>
-					{snapshot.isOriginal ? 'original' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
+					{snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
 				</option>
 			)
 		});
