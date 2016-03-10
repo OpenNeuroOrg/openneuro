@@ -88,7 +88,7 @@ export default class JobMenu extends React.Component {
 	 */
 	_apps() {
 		let options = this.props.apps ? this.props.apps.map((app) => {
-			return <option key={app.id} value={app.id}>{app.label + ' - ' + app.version}</option>;
+			return <option key={app.id} value={app.id}>{app.label + ' - v' + app.version}</option>;
 		}) : [];
 
 		if (this.state.selectedSnapshot) {
@@ -225,6 +225,7 @@ export default class JobMenu extends React.Component {
 			loading: false,
 			parameters: [],
 			selectedApp: '',
+			selectedSnapshot: '',
 			message: null,
 			error: false
 		});
