@@ -12,7 +12,7 @@ import userStore       from '../user/user.store';
 import datasetsActions from '../dashboard/datasets.actions';
 import datasetActions  from '../dataset/dataset.actions';
 import {Link}          from 'react-router';
-
+import bowser          from 'bowser';
 // store setup -----------------------------------------------------------------------
 
 let UploadStore = Reflux.createStore({
@@ -69,7 +69,7 @@ let UploadStore = Reflux.createStore({
 			showSuccess: false,
 			tree: [],
 			uploadStatus: 'not-started',
-			warnings: [],
+			warnings: []
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data, callback);
@@ -81,10 +81,20 @@ let UploadStore = Reflux.createStore({
 	 * Toggle Modal
 	 */
 	toggleModal () {
-		if (this.data.uploadStatus === 'uploading') {
-			this.update({showModal: !this.data.showModal});
-		} else {
-			this.setInitialState({showModal: !this.data.showModal});
+		if (!bowser.chrome) {
+			let chromeMessage = (
+				<span>This is a Google Chrome only feature. <a href="http://www.google.com/chrome/">Please consider using Chrome as your browser</a>.</span>
+			);
+			notifications.createAlert({
+				type: 'Error',
+				message: chromeMessage
+			});
+		}else{
+			if (this.data.uploadStatus === 'uploading') {
+				this.update({showModal: !this.data.showModal});
+			} else {
+				this.setInitialState({showModal: !this.data.showModal});
+			}
 		}
 	},
 
@@ -120,30 +130,30 @@ let UploadStore = Reflux.createStore({
 	 * incomplete uploads.
 	 */
 	onResume (selectedFiles, originalName) {
-		let dirName = selectedFiles.tree[0].name,
-			renameEnabled = true,
-			activeKey, callback;
-		if (dirName !== originalName) {
-			activeKey = 2;
-		} else {
-			activeKey = 3;
-			renameEnabled = false;
-			callback = () => {this.validate(selectedFiles.list);}
-		}
-		this.setInitialState({
-			refs: this.data.refs,
-			tree: selectedFiles.tree,
-			list: selectedFiles.list,
-			dirName: originalName,
-			uploadStatus: 'files-selected',
-			showRename: true,
-			showModal: true,
-			selectedName: dirName,
-			renameEnabled: renameEnabled,
-			showRenameInput: false,
-			activeKey: activeKey,
-			resuming: true
-		}, callback);
+			let dirName = selectedFiles.tree[0].name,
+				renameEnabled = true,
+				activeKey, callback;
+			if (dirName !== originalName) {
+				activeKey = 2;
+			} else {
+				activeKey = 3;
+				renameEnabled = false;
+				callback = () => {this.validate(selectedFiles.list);}
+			}
+			this.setInitialState({
+				refs: this.data.refs,
+				tree: selectedFiles.tree,
+				list: selectedFiles.list,
+				dirName: originalName,
+				uploadStatus: 'files-selected',
+				showRename: true,
+				showModal: true,
+				selectedName: dirName,
+				renameEnabled: renameEnabled,
+				showRenameInput: false,
+				activeKey: activeKey,
+				resuming: true
+			}, callback);
 	},
 
 	/**
