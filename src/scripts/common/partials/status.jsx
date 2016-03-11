@@ -7,7 +7,7 @@ import FileSelect    from '../forms/file-select.jsx';
 import UploadStore   from '../../upload/upload.store.js';
 import actions       from '../../upload/upload.actions';
 import notifications from '../../notification/notification.actions';
-
+import bowser        from 'bowser';
 // component setup -----------------------------------------------------------
 
 let Status = React.createClass({
@@ -31,7 +31,7 @@ let Status = React.createClass({
 				tip        = 'Click to select your folder again and resume the upload';
 				title	  = 'Incomplete';
 				iconClass  = 'fa fa-warning';
-				fileSelect = <span className="file-wrap"><FileSelect  onClick={this._clickHandler}  onChange={this._onFileSelect} /></span>;
+				fileSelect = <span className="file-wrap"><FileSelect resume={true} onClick={this._clickHandler}  onChange={this._onFileSelect} /></span>;
 				break;
 			case 'shared':
 				spanClass = 'dataset-status ds-info';
@@ -78,6 +78,17 @@ let Status = React.createClass({
 // custom methods ------------------------------------------------------------
 
 	_clickHandler(e) {
+		e.stopPropagation();
+		if (!bowser.chrome) {
+			let chromeMessage = (
+				<span>This is a Google Chrome only feature. <a href="http://www.google.com/chrome/">Please consider using Chrome as your browser</a>.</span>
+			);
+			e.preventDefault();
+			notifications.createAlert({
+				type: 'Error',
+				message: chromeMessage
+			});
+		}
 		e.stopPropagation();
 		if (this.state.uploadStatus === 'uploading') {
 			e.preventDefault();

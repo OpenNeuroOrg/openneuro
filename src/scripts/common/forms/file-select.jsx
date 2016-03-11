@@ -8,14 +8,18 @@ class Upload extends React.Component {
 // life cycle events --------------------------------------------------
 
 	componentDidMount () {
-		React.findDOMNode(this).setAttribute('webkitdirectory', true);
-		React.findDOMNode(this).setAttribute('directory', true);
+		this.refs.fileSelect.getDOMNode().setAttribute('webkitdirectory', true);
+		this.refs.fileSelect.getDOMNode().setAttribute('directory', true);
 		this._setRefs(this.refs);
 	}
 
 	render () {
+		let text = this.props.resume ? "Resume" : "Select folder";
 		return (
-			<input type="file"  className="dirUpload-btn" onClick={this._click.bind(this)} onChange={this._onFileSelect.bind(this)} ref="fileSelect"/>
+			<div className="fileupload-btn">
+				<span>{text}</span>
+				<input type="file"  className="dirUpload-btn" onClick={this._click.bind(this)} onChange={this._onFileSelect.bind(this)} ref="fileSelect"/>
+    		</div>
     	);
 	}
 

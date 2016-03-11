@@ -67,6 +67,9 @@
 	    color: #D9D9D9;
 	    .alert-left{
 	    	a{
+				text-decoration: underline;
+			}
+	    	a{
 	    		color: $brand-info; 
 	    		&:hover{
 	    			color:lighten($brand-info, 10%);
@@ -85,10 +88,32 @@
 	    		}
 		}
 		&.alert-danger{
+			color:$brand-danger;
 			strong{color:$brand-danger;}
+			a{
+				text-decoration: underline;
+			}
+			a,
+			.dismiss-button-x{	
+				color:$brand-danger;
+	    		&:hover{
+	    			color:lighten($brand-danger, 10%);
+	    		}
+	    	}
 		}
 		&.alert-warning{
+			color:$brand-warning;
 			strong{color: $brand-warning;}
+			a{
+				text-decoration: underline;
+			}
+			a,
+			.dismiss-button-x{	
+				color:$brand-warning;
+	    		&:hover{
+	    			color:lighten($brand-warning, 10%);
+	    		}
+	    	}
 		}
 	}
 }

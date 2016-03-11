@@ -60,12 +60,15 @@ class FileTree extends React.Component {
 		if (this.props.editable) {
 			if (item.children) {
 				addFile = (
-					<input
-						type="file"
-						className="add-files"
-						ref={item.label}
-						onChange={this._addFile.bind(this, item)}
-						onClick={this._clearInput.bind(this, item.label)}/>
+					<div className="edit-file">
+						<span>Add File</span>
+						<input
+							type="file"
+							className="add-files"
+							ref={item.label}
+							onChange={this._addFile.bind(this, item)}
+							onClick={this._clearInput.bind(this, item.label)}/>
+					</div>
 				);
 			} else {
 				deleteFile = (
@@ -78,14 +81,15 @@ class FileTree extends React.Component {
 				);
 
 				editFile = (
-					<span className="edit-file">
+					<div className="edit-file">
+						<span>Update file</span>
 						<input
 							type="file"
 							className="update-file"
 							ref={item.name}
 							onChange={this._updateFile.bind(this, item)}
 							onClick={this._clearInput.bind(this, item.name)}/>
-					</span>
+					</div>
 				);
 			}
 		}

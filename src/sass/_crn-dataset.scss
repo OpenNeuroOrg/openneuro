@@ -28,7 +28,6 @@
 		display: inline-block;
 		max-width: 100%;
 		margin-bottom: 5px;
-		font-weight: bold;
 		font-family: 'Cabin', sans-serif;
 	}
 	.fileStructure.panel-group{
@@ -41,7 +40,6 @@
 				display: inline-block;
 				max-width: 100%;
 				margin-bottom: 5px;
-				font-weight: bold;
 				font-family: 'Cabin', sans-serif;
 			}
 			.panel-body{
@@ -143,6 +141,7 @@
 						margin-right:5px;
 						width: 70px;
 						text-align: center;
+						padding:0;
 					}
 					.delete-file{
 						width: 50px;
@@ -186,16 +185,7 @@
 								}
 						}
 					}
-					.edit-file{
-
-						input{
-							width: 72px;
-							display: block;
-							&:before{
-								padding: 2px;
-							}
-						}
-					}
+					
 					.download-file{
 					    text-align: left;
 					    margin-left: 5px;
@@ -268,18 +258,10 @@
 			 	margin-right: 15px;
 			 	text-align: left;
 			}
-			input[type="file"].dirUpload-btn{
-				color: rgba(0, 0, 0, 0);
+			.fileupload-btn {
+				font-size: 10px;
 				padding: 0;
-				height: 21px;
-				display: block;
-				width: 100%;
-				max-width: 100px;
-					&:before{
-						font-size: 12px;
-						padding: 0;
-						content: 'resume';
-					}
+				margin: 0;
 			}
 		}
 	}
@@ -348,52 +330,6 @@
 		}
 	}
 
-	input[type="file"]{
-		color: transparent;
-		// margin: 0 auto 30px;
-		padding: 0;
-		height: 50px;
-		display: block;
-		width: 100%;
-		max-width: 200px;
-		&::-webkit-file-upload-button {
-			visibility: hidden;
-			color: transparent;
-		}
-	  &::before {
-	    font-family: FontAwesome;
-	    content: 'add a file';
-	    display: inline-block;
-	    background-color:$sky;
-	    @include gradient-vertical($start-color: lighten($sky, 8%), $end-color: $sky, $start-percent: 10%, $end-percent: 100%);
-	    box-shadow:$btn-shadow;
-	    border-radius: 2px;
-	    outline: none;
-	    white-space: nowrap;
-	    -webkit-user-select: none;
-	    cursor: pointer;
-	    font-weight: 300;
-	    font-size: 12pt;
-	    color:$white;
-	    text-align: center;
-	    padding:13px 15px;
-	    margin:0;
-	    width: 100%;
-	    border:1px solid lighten($sky, 8%);
-	    text-transform: uppercase;
-	    transition: all 0.3s ease-out;
-	  }
-	  &:hover::before,
-	  &:focus::before,
-	  &:active::before  {
-	    background: darken($sky, 10%);
-	    transition: all 0.3s ease-out;
-	  }
-
-	  &[type="file"]:focus {
-	    outline:none;
-	  }
-	}
 	.cte-display{
 	    font-size: 15px;
 	    color: #565656;
@@ -414,6 +350,13 @@
 			line-height: 10px;
 	    }
 
+
+	    .file-array-btn{
+			width: 50px;
+			overflow: hidden;
+			display: inline-block;
+			text-align:center;
+	    }
 	    span.btn-group,
 	    span.fadeIn{
 			button,
@@ -624,7 +567,11 @@
 		color:$brand-danger;
 	}
 	.file-wrap{
-
+			.fileupload-btn {
+				font-size: 10px;
+				padding: 0;
+				margin-top: 5px;
+			}
 	}
 	input {
 		color: transparent;
@@ -785,16 +732,20 @@
 			float: left;
 			border-left:1px solid #aaa;
 
-			.btn-blue{
-			    margin: 5px 5px 5px 10px;
-			    font-size: 15px;
-			    line-height: 18px;
-			    padding: 10px 15px 5px;
-				i{font-size:18px; line-height:16px;}
+			button.btn-blue{
+				margin: 0 5px 0 0;
+				padding: 11px 15px;
+
+				i{
+					font-size:18px; 
+					line-height:16px;
+				}
 				span{
 					margin-left: 5px;
 					position: relative;
 					top: -2px;
+					font-size: 14px !important;
+					line-height: 14px;
 				}
 			}
 		}
@@ -806,6 +757,7 @@
 			overflow:hidden;
 			border-right:1px solid #aaa;
 			margin-right:5px;
+			position:relative;
 			span{
 				background: transparent;
 				border:1px solid #aaa;
@@ -822,6 +774,9 @@
 					height: 30px;
 					font-size: 14px;	
 					text-transform: uppercase;
+					-webkit-appearance: none;
+					-moz-appearance: none;
+					filter: none;
 					&:focus{
 						outline: none;
 						box-shadow:none;
@@ -830,6 +785,15 @@
 						text-transform:initial;
 					}
 				}
+
+			}				
+			&:after{
+				font-family: FontAwesome;
+				content: '\f0d7';
+				position: absolute;
+				right: 15px;
+				top: 13px;
+				color:$primary;
 			}
 		}
 		.tool {	
@@ -857,7 +821,7 @@
 			}
 
 			.btn-admin{
-					padding:7px 10px;
+					padding:10px;
 					transition: all 0.1s ease;
 					border-radius:0;
 					font-size: 18px;
@@ -891,7 +855,7 @@
 }
 
 .dataset-wrap{
-	padding-top:50px;
+	padding-top:35px;
 }
 
 @keyframes shrink-bounce{

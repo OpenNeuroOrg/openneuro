@@ -635,65 +635,12 @@
 		}
 	}
 
-
+//upload in modal
 	.upload-wrap{
 		position:relative;
 		background:#f3f3f3;
 		//border-bottom:1px solid #bbb;
 		z-index: 1000;
-		//custom upload input //dirUpload button
-		input.dirUpload-btn{
-			color: transparent;
-			margin: 0 auto 30px;
-			padding: 0;
-			height: 50px;
-			display: block;
-			width: 100%;
-			max-width: 200px;
-			&::-webkit-file-upload-button {
-				visibility: hidden;
-				color: transparent;
-			}
-		  &::before {
-			@extend .btn-blue;
-			display: inline-block;
-			outline: none;
-			white-space: nowrap;
-			-webkit-user-select: none;
-			padding:13px 15px;
-		    content: 'Select Folder';
-		    outline: none;
-		    font-weight: 300;
-		    font-size: 12pt;
-		    text-align: center;
-		    width: 100%;
-		  }
-		  &:hover::before,
-		  &:active::before  {
-		    background: darken($sky, 10%);
-		    transition: all 0.3s ease-out;
-		  }
-
-		  &[type="file"]:focus {
-		    outline:none;
-		  }
-		}
-		.validate-buttons{
-			width: 160px;
-			margin: 0 auto;
-		}
-		.warning-btn-group{
-			width: 330px;
-			display: block;
-			margin: 0 auto;
-			.validate-buttons,
-			input.dirUpload-btn{
-				float:left;
-			}
-			input.dirUpload-btn{
-				margin: 0 10px 0 0;
-			}
-		}
 	}
 	a.error-log{
 		border:none;
