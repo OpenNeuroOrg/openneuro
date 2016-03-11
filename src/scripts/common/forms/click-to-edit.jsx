@@ -55,12 +55,15 @@ let ClickToEdit = React.createClass({
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {
 					return (
-						<div className="fadeIn" key={file.name}>
+						<div className="fadeIn file-array" key={file.name}>
 							<span>
-								<WarnButton
-									tooltip="Download Attachment"
-									icon="fa-download"
-									prepDownload={this._download.bind(null, file.name)} /> {file.name}
+								<span className="file-array-btn">
+									<WarnButton
+										tooltip="Download Attachment"
+										icon="fa-download"
+										prepDownload={this._download.bind(null, file.name)} /> 
+								</span>
+								{file.name}
 							</span>
 						</div>
 					);

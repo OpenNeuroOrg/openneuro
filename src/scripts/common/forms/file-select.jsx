@@ -14,8 +14,12 @@ class Upload extends React.Component {
 	}
 
 	render () {
+		let text = this.props.resume ? "Resume" : "Select folder";
 		return (
-			<input type="file"  className="dirUpload-btn" onClick={this._click.bind(this)} onChange={this._onFileSelect.bind(this)} ref="fileSelect"/>
+			<div className="fileupload-btn">
+				<span>{text}</span>
+				<input type="file"  className="dirUpload-btn" onClick={this._click.bind(this)} onChange={this._onFileSelect.bind(this)} ref="fileSelect"/>
+    		</div>
     	);
 	}
 

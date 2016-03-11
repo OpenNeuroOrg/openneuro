@@ -48,7 +48,7 @@ let FileArrayInput = React.createClass({
 			<div className="cte-edit-array">
 				{error}
 				<div className="cte-array-items clearfix">{items}</div>
-				{this.state.loading ? <Spinner active={true} /> : <input type="file" onChange={this._handleChange}/>}
+				{this.state.loading ? <Spinner active={true} /> : <div className="add-file"><span>Add a file</span><input type="file" onChange={this._handleChange}/></div>}
 			</div>
 		)
 	},

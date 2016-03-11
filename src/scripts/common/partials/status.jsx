@@ -31,7 +31,7 @@ let Status = React.createClass({
 				tip        = 'Click to select your folder again and resume the upload';
 				title	  = 'Incomplete';
 				iconClass  = 'fa fa-warning';
-				fileSelect = <span className="file-wrap"><FileSelect  onClick={this._clickHandler}  onChange={this._onFileSelect} /></span>;
+				fileSelect = <span className="file-wrap"><FileSelect resume={true} onClick={this._clickHandler}  onChange={this._onFileSelect} /></span>;
 				break;
 			case 'shared':
 				spanClass = 'dataset-status ds-info';

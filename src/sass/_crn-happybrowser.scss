@@ -2,7 +2,7 @@
 /* * For IE 6/7 only * Include this rule to trigger hasLayout and contain floats. */
 .clearfix { *zoom: 1; }
 .hbMarkup{
-	position: absolute;
+	position: fixed;
 	z-index: 900000;
 	background: #f0f0f0;
 	width: 100%;
