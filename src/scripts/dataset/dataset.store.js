@@ -139,7 +139,25 @@ let datasetStore = Reflux.createStore({
 	loadJobs(projectId) {
 		this.update({loadingJobs: true});
 		crn.getDatasetJobs(projectId, (err, res) => {
-            this.update({jobs: res.body, loadingJobs: false});
+			// sort jobs by app
+			let jobs = {};
+			for (let job of res.body) {
+				if (!jobs.hasOwnProperty(job.appId)) {
+					jobs[job.appId] = [job];
+				} else {
+					jobs[job.appId].push(job);
+				}
+			}
+			// convert jobs to array
+			let jobArray = [];
+			for (let job in jobs) {
+				jobArray.push({
+					appId: job,
+					runs: jobs[job]
+				});
+			}
+
+            this.update({jobs: jobArray, loadingJobs: false});
         }, {snapshot: this.data.snapshot});
 	},
 
