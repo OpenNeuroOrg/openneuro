@@ -19,7 +19,7 @@ let Jobs = React.createClass({
 
 		let jobs = this.state.jobs.map((job) => {
 			return (
-				<Panel className="job" header={job.appId}  key={job.appId} eventKey={job.appId}>
+				<Panel className="jobs" header={job.appId}  key={job.appId} eventKey={job.appId}>
 						{this._runs(job)}
 				</Panel>
 			);
@@ -42,13 +42,23 @@ let Jobs = React.createClass({
 		let runs = job.runs.map((run) => {
 			let results, parameters;
 
-			let jobAccordionHeader = (<div className={run.agave.status.toLowerCase()}><span className="badge">{run.agave.status}</span></div>);
+			let jobAccordionHeader = (
+				<div className={run.agave.status.toLowerCase()}>
+				 	<label>Status</label>
+					<span className="badge">{run.agave.status}</span>
+					<span className="meta">
+						<label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
+						<label> by </label><strong>{run.userId}</strong>
+					</span>
+				</div>
+			);
 
 			return (
 				<Panel className="job" header={jobAccordionHeader}  key={run._id} eventKey={run._id}>
-					<p>Run by {run.userId} on {moment(run.agave.created).format('L')}</p>
-					{this._parameters(run)}
-					{this._results(run)}
+					<span className="inner">
+						{this._parameters(run)}
+						{this._results(run)}
+					</span>
 				</Panel>
 			);
 		});
@@ -60,10 +70,11 @@ let Jobs = React.createClass({
 			let resultLinks = run.results.map((result, index) => {
 				return (
 					<li key={index}>
+						<span className="warning-btn-wrap">
 						<WarnButton
 							icon="fa-download"
-							tooltip="Download File"
 							prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result.name)} />
+						</span>
 						<span>{result.name}</span>
 					</li>
 				);

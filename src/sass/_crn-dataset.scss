@@ -718,16 +718,18 @@
     padding: 0;
     position: fixed;
     z-index: 1000;
+    height: 45px;
+    overflow: hidden;
 	
 	.tools{
 		padding: 0;
 		margin: 0;
 		display:block;
 		width: 100%;
-		background: rgba(217, 217, 217, 0.82);
+		background:#f2f2f2;
 		border-bottom: 1px solid #ddd;
 		.run-analysis{
-			width: 100px;
+			height: 45px;
 			width: 170px;
 			float: left;
 			border-left:1px solid #aaa;
@@ -768,7 +770,7 @@
 				select{
 					background: none;
 					border: 0;
-					min-width: 170px;
+					min-width: 230px;
 					color: $ocean;
 					margin:0;
 					height: 30px;
@@ -921,33 +923,134 @@
 .analyses{
 	
 	.jobs-wrap{
-		.metaheader{}
-		.job{
+		.jobs{	
 			border-radius: 0;
 			.panel-heading{
 				padding: 0;
 				
-				a{
+				.panel-title{
 					@extend .clearfix;
 					padding:10px;
 					display: block;
-					background: lighten($misty, 10%);
-					.badge{
-						float: right;
+					background: lighten(#eee, 10%);
+				}
+			}
+		}
+		.metaheader{}
+		.job{
+			margin-bottom: 10px;
+			border-radius: 0;
+			.panel-heading{
+				padding: 0;
+				background:none;
+				.panel-title{
+					@extend .clearfix;
+					padding:10px;
+					display: block;
+					background:none;
+					label{
+						margin: 0;
+						padding: 0 5px 0;
+						text-transform: uppercase;
+						font-size: 12px;
+					}
+					strong{
+						color:#666;
+					}
+					.meta{
 						background:none;
 						color:#999;
-						font-size: 12px
+						font-size: 12px;
+						label{
+							text-transform: none;
+						}
+
 					}
-					&:hover{
-						background:#eee;
+					.badge{
+						background:none;
+						color:#999;
+						font-size: 12px;
 					}
 				}
-				.finished a .badge{color:$brand-success;}
-
+				.finished .badge{color:$brand-success;}
+			}
+			.panel-body .inner{
+				margin:-15px;
+				display: block;
 			}
 			.results{
+				margin: 0;
 				.panel{
+					border:none;
+					border-top:1px solid #ccc;
 					border-radius:0;
+					.panel-heading .panel-title{
+						padding:0;
+						background:lighten($misty, 10%);
+						a{
+							padding:8px 15px;
+							display: block;
+							font-size: 14px;
+							&:after{
+									content: '\f0d8';
+									font-family:FontAwesome;
+									float: right;
+									font-size: 12px;
+									margin-top: 3px;
+								}
+							&.collapsed{
+								&:after{
+									content: '\f0d7';
+								}
+							}
+							}
+					}
+					ul{
+						padding: 0;
+					    list-style: none;
+					    li{
+					    	padding:0 0 10px;
+    				}
+					}
+					.warning-btn-wrap{
+						width: 55px;
+						text-align: center;
+						overflow: hidden;
+						display: inline-block;
+						line-height: 10px;
+						vertical-align: middle;
+						font-size: 14px;
+					}
+					.btn-admin{
+						 font-size: 14px;
+					    padding: 2px 4px;
+					    line-height: 14px;
+					    margin: 0 2px;
+						i{
+							margin-left: 0;
+						}
+						&.cancel,
+						&.success{
+							background: $brand-danger;
+							color:#fff;
+						    font-size: 14px;
+						    padding: 2px 4px;
+						    line-height: 14px;
+						    margin: 0 2px;
+							&:hover{
+								background:darken($brand-danger, 10%);
+							}
+							i{
+								line-height: 15px;
+							}
+						}
+						&.success{
+							background: $brand-success;
+							&:hover{
+								background:darken($brand-success, 10%);
+							}
+						}
+					}
 				}
 			}
 		}
