@@ -25,7 +25,7 @@ let ArrayInput = React.createClass({
 	render() {
 		let items = this.props.value.map((item, index) => {
 			return (
-				<Line key={index} index={index} item={item} onEdit={this._edit} remove={this._remove.bind(null, index)} />
+				<Author key={index} index={index} item={item} onEdit={this._edit} remove={this._remove.bind(null, index)} />
 			);
 		});
 
@@ -80,7 +80,14 @@ let ArrayInput = React.createClass({
 
 export default ArrayInput;
 
-let Line = React.createClass({
+
+/**
+ * Author
+ *
+ * Sub component of Author Input used to manage
+ * interactions on individual Authors.
+ */
+let Author = React.createClass({
 
 	getInitialState() {
 	    return {
