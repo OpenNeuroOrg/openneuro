@@ -149,6 +149,14 @@ export default {
 
 			c.jobs.find({datasetId: datasetId}).toArray((err, jobs) => {
 				if (err) {return next(err);}
+
+				// remove user ID on public requests
+				if (!user) {
+					for (let job of jobs) {
+						delete job.userId;
+					}
+				}
+
 				res.send(jobs);
 			});
 
