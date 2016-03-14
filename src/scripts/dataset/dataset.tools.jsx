@@ -37,6 +37,7 @@ let Tools = React.createClass({
 		let isSignedIn   = !!userStore.hasToken();
 		let isPublic     = !!dataset.public;
 		let isIncomplete = !!dataset.status.uploadIncomplete;
+		let isInvalid    = !!dataset.status.invalid;
 		let isSnapshot   = !!dataset.original;
 		let isSuperuser  = window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser).root : null;
 
@@ -46,7 +47,7 @@ let Tools = React.createClass({
 				icon: 'fa-download',
 				prepDownload: actions.getDatasetDownloadTicket.bind(this, this.state.snapshot),
 				action: actions.trackDownload,
-				display: true
+				display: !isIncomplete
 			},
 			{
 				tooltip: 'Publish Dataset',
@@ -73,7 +74,7 @@ let Tools = React.createClass({
 				tooltip: 'Share Dataset',
 				icon: 'fa-user-plus',
 				action: actions.toggleModal.bind(null, 'Share'),
-				display: isAdmin && !isSnapshot,
+				display: isAdmin && !isSnapshot && !isIncomplete,
 				warn: false
 			},
 			{
