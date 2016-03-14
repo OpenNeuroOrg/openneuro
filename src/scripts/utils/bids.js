@@ -213,7 +213,7 @@ export default  {
                     }, options);
                 }, options);
             }, options);
-        }, options.isPublic);
+        }, options && options.isPublic);
     },
 
 // Update ---------------------------------------------------------------------------------
