@@ -19,7 +19,7 @@ export default class Happybrowser extends React.Component {
 						
 						<div className="hb-text clearfix">
 							<img src="./assets/warning.jpg" alt="warning" /> 
-							<p>We have detected that your browser does not work with this technology. This site may not work as expected. <strong><a href="http://www.google.com/chrome/">Please consider using Chrome as your browser</a>.</strong></p>
+							<p>We have detected that your are using a browser other than Chrome. This site may not work as expected. <strong><a href="http://www.google.com/chrome/">Please consider using Chrome as your browser</a>.</strong></p>
 						</div>
 						<div className="hb-upgrade clearfix">
 							<div className="hb-img-wrap hb-dismiss" id="dismiss" onClick={this._dismiss.bind(this)}>
