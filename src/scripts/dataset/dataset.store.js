@@ -567,8 +567,11 @@ let datasetStore = Reflux.createStore({
 		transition    = transition == undefined ? true : transition;
 
 		scitran.getProject(datasetId, (res) => {
-			if (res.body.metadata.authors && res.body.metadata.authors.length < 1) {
+			let project = res.body;
+			if (project.metadata.authors && project.metadata.authors.length < 1) {
 				callback({error: 'Your dataset must list at least one author before creating a snapshot.'});
+			} else if (project.metadata.hasOwnProperty('validation') && project.metadata.validation.errors.length > 0) {
+				callback({error: 'You cannot snapshot an invalid dataset.'});
 			} else {
 				scitran.createSnapshot(datasetId, (err, res) => {
 					if (transition) {

@@ -37,9 +37,9 @@ let Tools = React.createClass({
 		let isSignedIn   = !!userStore.hasToken();
 		let isPublic     = !!dataset.public;
 		let isIncomplete = !!dataset.status.uploadIncomplete;
+		let isInvalid    = !!dataset.status.invalid;
 		let isSnapshot   = !!dataset.original;
 		let isSuperuser  = window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser).root : null;
-
 
 		let tools = [
 			{
@@ -47,7 +47,7 @@ let Tools = React.createClass({
 				icon: 'fa-download',
 				prepDownload: actions.getDatasetDownloadTicket.bind(this, this.state.snapshot),
 				action: actions.trackDownload,
-				display: true
+				display: !isIncomplete
 			},
 			{
 				tooltip: 'Publish Dataset',
@@ -67,14 +67,14 @@ let Tools = React.createClass({
 				tooltip: 'Delete Dataset',
 				icon: 'fa-trash',
 				action: actions.deleteDataset.bind(this, dataset._id),
-				display: isAdmin && !isPublic,
+				display: (isAdmin && !isPublic) || isSuperuser,
 				warn: true
 			},
 			{
 				tooltip: 'Share Dataset',
 				icon: 'fa-user-plus',
 				action: actions.toggleModal.bind(null, 'Share'),
-				display: isAdmin && !isSnapshot,
+				display: isAdmin && !isSnapshot && !isIncomplete,
 				warn: false
 			},
 			{
@@ -87,6 +87,10 @@ let Tools = React.createClass({
 					{
 						check: !dataset.authors || !(dataset.authors.length > 0),
 						message: 'You must list at least one author before creating a snapshot.'
+					},
+					{
+						check: isInvalid,
+						message: 'You cannot snapshot an invalid dataset.'
 					}
 				],
 			}

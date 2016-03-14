@@ -44,7 +44,7 @@ export default class WarnButton extends React.Component {
 	    	);
 		}
 
-		let confirmBtn = <button className={'btn btn-admin ' + (typeof this.props.tooltip == 'string' ? 'success' : 'delete')} onClick={this.toggle.bind(this, this.props.action)}>{confirm}</button>;
+		let confirmBtn = <button className={'btn btn-admin success'} onClick={this.toggle.bind(this, this.props.action)}>{confirm}</button>;
 
 		let viewAction = (
         	<span className="btn-group slideInRightFast" role="group" >
