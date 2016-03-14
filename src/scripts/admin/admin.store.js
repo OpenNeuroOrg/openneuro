@@ -196,7 +196,9 @@ let UserStore = Reflux.createStore({
 				}
 			}
 			this.update({users: users});
-			callback();
+			if(callback){
+				callback();
+			}
 		});
 	},
 

@@ -62,7 +62,7 @@ let users = React.createClass({
 
 	_userTools(user, index) {
 		
-		let adminIcon = user.root ? 'fa-circle' : 'fa-circle-o';
+		let adminIcon = user.root ? 'fa-check-square-o' : 'fa-square-o';
 		let adminBtnTxt = user.root ? 'Remove Admin' : 'Make Admin';
 
 		if (user._id !== userStore.data.scitran._id) {
@@ -70,15 +70,17 @@ let users = React.createClass({
 				<div className="col-xs-4 last admin-tools-bar">
 	                <div className="tools clearfix">
 	                    <div className="tool">
-		                    <WarnButton className="btn btn-admin" 
-		                    			message={adminBtnTxt} 
+    						<WarnButton className="btn btn-admin" 
+		                    			message='Admin' 
 		                    			icon={adminIcon}
 		                    			action={actions.toggleSuperUser.bind(this, user)}/>
 	                    </div>
 	                    <div className="tool">
-	                    	<button className="btn btn-admin warning" onClick={actions.blacklistModal.bind(this, user)}>
-	                    		<i className="fa fa-ban"></i> Block User
-	                    	</button>
+	                    	<WarnButton className="btn btn-admin" 
+		                    			message='Block' 
+		                    			icon='fa-ban'
+		                    			warn={false}
+		                    			action={actions.blacklistModal.bind(this, user)}/>
 	                    </div>
 	                </div>
 	            </div>
