@@ -14,6 +14,8 @@ export default class Issue extends React.Component {
 		let error = this.props.error;
 		let index = this.props.index;
 
+		let fileName = error.file && error.file.name ? error.file.name : error.file.relativePath.split('/')[error.file.relativePath.split('/').length - 1];
+
 		// build error location string
 		let errLocation = '';
 		let  errorLocationMeta;
@@ -30,12 +32,12 @@ export default class Issue extends React.Component {
 				</span>
 			);
 		}
-
+	
 		return (
 			<div className="em-body">
 				<span className="e-meta">
 					<label>File Name:</label>
-					<p>{error.file.name}</p>
+					<p>{fileName}</p>
 				</span>
 				{this._fileMetadata(error.file)}
 				<span className="e-meta">
