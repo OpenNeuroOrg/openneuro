@@ -147,10 +147,25 @@ body,
 	.tool {
 		display: block;
 		float: left;
-		width:50%;
+		width:auto;
+		margin: 3px 0 0 10px;
 		overflow: hidden;
 		button.btn-admin.warning{
 			padding:6px 0;
+		}
+		.btn-admin.warning i{
+			&.fa-ban,
+			&.fa-circle,
+			&.fa-circle-o{
+					font-size: 12px;
+					position: relative;
+					top: -1px;
+			}
+			
+			&.fa-ban{
+				top:0;
+				font-size: 14px;
+			}
 		}
 	}
 }

@@ -424,6 +424,7 @@
 		padding: 0;
 		margin-top: -5px;
 	}
+
 	.cte-array-items {
 		margin-bottom: 10px;
 		background:#f4f4f4;
@@ -453,12 +454,14 @@
 			}
 	
 		}
+		
 	}
 	.cte-edit-array{
 		.btn0-wrapper{
 			.btn-admin.admin-blue{
 				margin-top: 4px;
 			}
+
 		}
 		input[type="file"]{
 			float: left;
@@ -504,11 +507,13 @@
 				label{
 					position: absolute;
 				    font-size: 10px;
-				    top: -9px;
+				    line-height: 10px;
+				    top: 3px;
+				    padding:0;
 				    background-color: #fff;
 				}
 				input{
-					font-size: 12px;
+					font-size: 14px;
 					padding: 10px;
 					height: 35px;
 					width: 99%;
@@ -522,6 +527,11 @@
 				padding:0;
 				text-align: center;
 
+			}
+
+			.author-edit .btn.btn-admin {
+				width: 100%;
+				padding: 8px 10px;
 			}
 		}
 	}
@@ -930,9 +940,26 @@
 				
 				.panel-title{
 					@extend .clearfix;
-					padding:10px;
+					padding:0;
 					display: block;
 					background: lighten(#eee, 10%);
+					a{
+						padding:10px;
+						display: block;
+						font-size: 14px;
+						&:after{
+							content: '\f0d8';
+							font-family:FontAwesome;
+							float: right;
+							font-size: 12px;
+							margin-top: 3px;
+						}
+						&.collapsed{
+							&:after{
+								content: '\f0d7';
+							}
+						}
+					}
 				}
 			}
 		}
