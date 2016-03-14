@@ -61,9 +61,10 @@ let users = React.createClass({
 // custom methods -----------------------------------------------------
 
 	_userTools(user, index) {
+		
+		let adminIcon = user.root ? 'fa-circle' : 'fa-circle-o';
 		let adminBtnTxt = user.root ? 'Remove Admin' : 'Make Admin';
-		let confirm = <i className="fa fa-check"></i>;
-		let cancel = <i className="fa fa-times"></i>;
+
 		if (user._id !== userStore.data.scitran._id) {
 			return (
 				<div className="col-xs-4 last admin-tools-bar">
@@ -71,9 +72,7 @@ let users = React.createClass({
 	                    <div className="tool">
 		                    <WarnButton className="btn btn-admin" 
 		                    			message={adminBtnTxt} 
-		                    			cancel={cancel} 
-		                    			confirm={confirm} 
-		                    			icon="fa-user-plus" 
+		                    			icon={adminIcon}
 		                    			action={actions.toggleSuperUser.bind(this, user)}/>
 	                    </div>
 	                    <div className="tool">

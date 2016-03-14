@@ -153,6 +153,20 @@ body,
 		button.btn-admin.warning{
 			padding:6px 0;
 		}
+		.btn-admin.warning i{
+			&.fa-ban,
+			&.fa-circle,
+			&.fa-circle-o{
+					font-size: 12px;
+					position: relative;
+					top: -1px;
+			}
+			
+			&.fa-ban{
+				top:0;
+				font-size: 14px;
+			}
+		}
 	}
 }
 
