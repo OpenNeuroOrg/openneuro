@@ -116,10 +116,10 @@ let Author = React.createClass({
 				<div className="form-inline">
 					<Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
 					<Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
-					<div className="btn-wrap">
-						<WarnButton message="Save" warn={false} icon="fa-save" action={this._save}/>
+					<div className="btn-wrap author-edit">
+						<WarnButton message="Save" warn={false} icon="fa-check" action={this._save}/>
 					</div>
-					<div className="btn-wrap">
+					<div className="btn-wrap author-edit">
 						<WarnButton message="Cancel" warn={false} icon="fa-times" action={this._cancel}/>
 					</div>
 				</div>

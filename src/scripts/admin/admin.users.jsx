@@ -63,12 +63,24 @@ let users = React.createClass({
 	_userTools(user, index) {
 		let adminBtnTxt = user.root ? 'Remove Admin' : 'Make Admin';
 		let adminBtnConfirm = user.root ? 'Yes Remove Admin' : ' Yes Make Admin';
+
+		let confirm = <i className="fa fa-check"></i>;
+		let cancel = <i className="fa fa-times"></i>;
 		if (user._id !== userStore.data.scitran._id) {
 			return (
 				<div className="col-xs-4 last admin-tools-bar">
 	                <div className="tools clearfix">
-	                    <div className="tool"><WarnButton className="btn btn-admin warning" message={adminBtnTxt} cancel="Cancel" confirm={adminBtnConfirm} icon="fa-user-plus" action={actions.toggleSuperUser.bind(this, user)}/></div>
-	                    <div className="tool"><button className="btn btn-admin warning" onClick={actions.blacklistModal.bind(this, user)}>Block User</button></div>
+	                    <div className="tool">
+		                    <WarnButton className="btn btn-admin" 
+		                    			message={adminBtnTxt} 
+		                    			cancel={cancel} 
+		                    			confirm={confirm} 
+		                    			icon="fa-user-plus" 
+		                    			action={actions.toggleSuperUser.bind(this, user)}/>
+	                    </div>
+	                    <div className="tool">
+	                    	<button className="btn btn-admin warning" onClick={actions.blacklistModal.bind(this, user)}>Block User</button>
+	                    </div>
 	                </div>
 	            </div>
             );
