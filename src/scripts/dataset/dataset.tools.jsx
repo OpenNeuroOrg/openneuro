@@ -40,7 +40,6 @@ let Tools = React.createClass({
 		let isSnapshot   = !!dataset.original;
 		let isSuperuser  = window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser).root : null;
 
-
 		let tools = [
 			{
 				tooltip: 'Download Dataset',
@@ -67,7 +66,7 @@ let Tools = React.createClass({
 				tooltip: 'Delete Dataset',
 				icon: 'fa-trash',
 				action: actions.deleteDataset.bind(this, dataset._id),
-				display: isAdmin && !isPublic,
+				display: (isAdmin && !isPublic) || isSuperuser,
 				warn: true
 			},
 			{
