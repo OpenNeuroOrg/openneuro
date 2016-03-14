@@ -91,7 +91,7 @@ let Jobs = React.createClass({
 	},
 
 	_parameters(run) {
-		if (run.parameters) {
+		if (run.parameters && Object.keys(run.parameters).length > 0) {
 			let parameters = [];
 			for (let key in run.parameters) {
 				parameters.push(
