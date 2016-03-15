@@ -209,7 +209,8 @@ export default class JobMenu extends React.Component {
 		if (this.state.selectedApp) {
 			return (
 				<div className="col-xs-12 modal-actions">
-					<button className="btn-admin-blue" onClick={this._startJob.bind(this)}>Start</button>
+					<button className="btn-modal-submit" onClick={this._startJob.bind(this)}>Start</button>
+					<button className="btn-reset" onClick={this._hide.bind(this)}>close</button>
 				</div>
 			)
 		}
