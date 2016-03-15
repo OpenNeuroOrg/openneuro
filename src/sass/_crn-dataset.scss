@@ -676,9 +676,9 @@
 					height: 30px;
 					font-size: 14px;	
 					text-transform: uppercase;
-					-webkit-appearance: none;
-					-moz-appearance: none;
-					filter: none;
+					// -webkit-appearance: none;
+					// -moz-appearance: none;
+					// filter: none;
 					&:focus{
 						outline: none;
 						box-shadow:none;
@@ -689,14 +689,14 @@
 				}
 
 			}				
-			&:after{
-				font-family: FontAwesome;
-				content: '\f0d7';
-				position: absolute;
-				right: 15px;
-				top: 13px;
-				color:$primary;
-			}
+			// &:after{
+			// 	font-family: FontAwesome;
+			// 	content: '\f0d7';
+			// 	position: absolute;
+			// 	right: 15px;
+			// 	top: 13px;
+			// 	color:$primary;
+			// }
 		}
 		.tool {	
 			text-align: center;
@@ -751,6 +751,16 @@
 					}
 				}
 			}
+		.resume-upload-tool .fileupload-btn{
+			padding: 10px;
+			line-height: 23px;
+			font-size: 16px;
+			height: 45px;
+			width: 170px;
+			float: left;
+			border-left: 1px solid #aaa;
+			margin: 0;
+		}
 	}
 }
 

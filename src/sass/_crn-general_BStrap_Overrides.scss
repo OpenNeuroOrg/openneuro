@@ -265,6 +265,7 @@
 }
 .fileupload-btn{
 	@extend .btn-blue;
+	cursor:pointer;
     position: relative;
     overflow: hidden;
     margin: 0 auto 10px;
