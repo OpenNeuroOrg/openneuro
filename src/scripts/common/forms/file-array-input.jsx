@@ -28,7 +28,7 @@ let FileArrayInput = React.createClass({
 				<div key={index} className="cte-array-item">
 					<a className="file-name" onClick={this._fileClick.bind(null, item.name)}>{item.name}</a>
 					<div className="btn-wrap">
-						<WarnButton message="Delete" cancel="Cancel" confirm="Yes Delete!" action={this._remove.bind(null, item.name, index)} />
+						<WarnButton message="Delete" action={this._remove.bind(null, item.name, index)} />
 					</div>
 				</div>
 			);

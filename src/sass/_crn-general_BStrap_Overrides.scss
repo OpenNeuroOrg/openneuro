@@ -113,8 +113,6 @@
 	}
 	&.warning{
 	}	
-	&.cancel{
-	}
 }
 
 .btn-admin-blue{
@@ -219,9 +217,9 @@
 }
 
 .add-file{
+	@extend .btn-admin;
 	width: auto;
 	font-size: 10px;
-	@extend .btn-admin;
 	position:relative;
 	width: 72px;
 	display: block;
@@ -267,6 +265,50 @@
 		filter: alpha(opacity=0);
 	}
 }
+
+
+.btn-warn-component{
+	@extend .btn-admin;
+	padding:5px;
+	transition: all 0.1s ease;
+	border-radius:0;
+	font-size: 12px;
+	display:inline-block;
+	i{
+		line-height: 30px;
+		margin-left: 0;
+	}
+	&.cancel,
+	&.success{
+		background: $brand-danger;
+		color:#fff;
+		font-size: 14px;
+		padding: 5px 8px;
+		margin: 7px 5px 5px 0;
+		&:hover{
+			background:darken($brand-danger, 10%);
+		}
+		i{
+			line-height: 15px;
+		}
+	}
+	&.success{
+		background: $brand-success;
+		&:hover{
+			background:darken($brand-success, 10%);
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
 //form // ================================================================
 
 .formField{

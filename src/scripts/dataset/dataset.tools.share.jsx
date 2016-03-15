@@ -44,7 +44,7 @@ export default class Share extends React.Component {
 			return (
 				<div key={user._id} className="cte-array-item"><span className="share-name">{user._id}</span> <span className="share-access">- {accessKey[user.access]}</span>
 					<div className="btn-wrap">
-						<WarnButton message="Remove" cancel="Cancel" confirm="Yes Remove!" action={this._removeUser.bind(this, user._id)}/>
+						<WarnButton message="Remove" action={this._removeUser.bind(this, user._id)}/>
 					</div>
 				</div>
 			);

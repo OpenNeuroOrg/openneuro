@@ -101,9 +101,11 @@ let Author = React.createClass({
 		let item = this.props.item;
 
 		let view = (
-			<div className="cte-array-item"><span className="author-name">{item.name}</span> <span className="orcid-id">{item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
+			<div className="cte-array-item">
+				<span className="author-name">{item.name}</span> 
+				<span className="orcid-id">{item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
 				<div className="btn-wrap">
-					<WarnButton message="Remove" cancel="Cancel" confirm="Yes Remove!" action={this.props.remove}/>
+					<WarnButton message="Remove" icon="fa-times" action={this.props.remove}/>
 				</div>
 				<div className="btn-wrap">
 					<WarnButton message="Edit" warn={false} icon="fa-pencil" action={this._toggleEdit}/>
