@@ -124,15 +124,33 @@
 	&:hover,
 	&:active,
 	&.hover,
+	&:focus,
 	&.active  {
 		color: darken($sky, 10%);
 		background: #eee;
 	}
 }
+
+.btn-modal-submit{
+	@extend .btn-admin-blue;
+	border: 2px solid lighten($sky,5%);
+	
+	&:active,
+	&:focus{
+		border:2px solid $sky;
+	}
+}
+
+
+
 .btn-reset{
 	@extend .btn-admin;
 	border:none;
+	margin-left:2px;
+	padding:5px;
+	font-size:12px;
 }
+
 .btn-filter{
 	margin: 0;
 	color: #aaa;
@@ -299,8 +317,6 @@
 		}
 	}
 }
-
-
 
 
 

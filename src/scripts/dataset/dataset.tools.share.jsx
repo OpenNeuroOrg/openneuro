@@ -75,7 +75,8 @@ export default class Share extends React.Component {
 								<option value="admin">Administrator</option>
 							</select>
 							<span className="caret-down"></span>
-							<button className="btn-admin-blue" onClick={this._addUser.bind(this)}>share</button>
+							<button className="btn-modal-submit" onClick={this._addUser.bind(this)}>share</button>
+							<button className="btn-reset" onClick={this.props.onHide}>close</button>
 						</div>
 					</div>
 				</Modal.Body>
