@@ -17,7 +17,7 @@ export default class ValidationResults extends React.Component {
 
 		// errors
 		let errorsWrap;
-		if (errors.length > 0) {
+		if (errors.length > 0 && typeof errors !== 'string') {
 			let fileCount = this._countFiles(errors);
 			let errorHeader = <span>view {errors.length} {pluralize('error', errors.length)} in {fileCount} {pluralize('files', fileCount)}</span>;
 			errorsWrap = (
