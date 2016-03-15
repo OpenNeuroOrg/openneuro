@@ -40,7 +40,7 @@ let BSNavbar = React.createClass({
 		}
 		let signInGoogle = (
 			<div className="navbar-right signInNavBtn">
-				<button className="btn-blue" onClick={userActions.signIn} >
+				<button className="btn-blue" onClick={userActions.signIn.bind(null, {transition: false})} >
 					<i className="fa fa-google" />
 					<span> Sign in</span>
 				</button>

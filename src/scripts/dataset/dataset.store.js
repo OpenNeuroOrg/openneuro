@@ -115,7 +115,7 @@ let datasetStore = Reflux.createStore({
 	reloadDataset(datasetId) {
 		if (this.data.dataset) {
 			if (!datasetId) {
-				this.loadDataset(this.data.dataset._id);
+				this.loadDataset(this.data.dataset._id, {snapshot: this.data.snapshot});
 			}else if (this.data.dataset._id == datasetId) {
 				this.loadDataset(datasetId);
 			}

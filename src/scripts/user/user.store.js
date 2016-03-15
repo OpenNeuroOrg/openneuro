@@ -8,6 +8,8 @@ import router  		from '../utils/router-container';
 import scitran 		from '../utils/scitran';
 import crn     		from '../utils/crn';
 import upload  		from '../upload/upload.actions';
+import dashboardActions from '../dashboard/datasets.actions';
+import datasetActions from '../dataset/dataset.actions';
 
 hello.init({google: config.auth.google.clientID});
 
@@ -111,7 +113,8 @@ let UserStore = Reflux.createStore({
 	 * Initiates the google OAuth2 sign in flow. Creates a new
 	 * user if the user doesn't already exist.
 	 */
-	signIn() {
+	signIn(options) {
+		let transition = options.hasOwnProperty('transition') ? options.transition : true;
 		this.update({loading: true});
 		hello('google').login({scope: 'email,openid'}, (res) => {
 			if (res.error) {
@@ -137,21 +140,33 @@ let UserStore = Reflux.createStore({
 								return;
 							}
 							scitran.verifyUser((err, res) => {
-								window.localStorage.scitranUser = JSON.stringify(res.body);
-								router.transitionTo('dashboard');
-								this.update({scitran: res.body, google: profile, loading: false});
+								this.handleSignIn(transition, res.body, profile);
 							});
 						});
 					} else {
-						window.localStorage.scitranUser = JSON.stringify(res.body);
-						router.transitionTo('dashboard');
-						this.update({scitran: res.body, google: profile, loading: false});
+						this.handleSignIn(transition, res.body, profile);
 					}
 				});
 			});
 		}, () => {
 			// signin failure
 		});
+	},
+
+	/**
+	 * Handle Sign In
+	 *
+	 * Handles necessary action after a signin has been completed.
+	 */
+	handleSignIn(transition, scitranUser, googleProfile) {
+		window.localStorage.scitranUser = JSON.stringify(scitranUser);
+		this.update({scitran: scitranUser, google: googleProfile, loading: false});
+		if (transition) {
+			router.transitionTo('dashboard');
+		} else {
+			datasetActions.reloadDataset();
+			dashboardActions.getDatasets(true);
+		}
 	},
 
 	/**
