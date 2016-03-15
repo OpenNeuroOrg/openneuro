@@ -11,12 +11,18 @@ let Statuses = React.createClass({
 
 // life cycle events --------------------------------------------------
 
+	getDefaultProps() {
+	    return {
+	        actionable: false
+	    };
+	},
+
 	render() {
 		let dataset = this.props.dataset;
 		let uploading = dataset._id === this.state.projectId;
 
 		let publicStatus      = <Status type='public' />;
-		let incompleteStatus  = <Status type='incomplete' dataset={dataset} />;
+		let incompleteStatus  = <Status type='incomplete' dataset={dataset} actionable={this.props.actionable} />;
 		let sharedWithStatus  = <Status type='shared' />;
 		let inProgress        = <Status type='inProgress' />;
 		let pendingValidation = <Status type='pendingValidation' />;

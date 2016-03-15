@@ -54,7 +54,7 @@ let Datasets = React.createClass({
                 let fullname  = user ? user.firstname + ' ' + user.lastname : '';
                 let dateAdded = moment(dataset.created).format('L');
                 let timeago   = moment(dataset.created).fromNow(true);
-                let  statusContainer = <div className="status-container"><Statuses dataset={dataset} /></div>;
+                let  statusContainer = <div className="status-container"><Statuses dataset={dataset} actionable={true} /></div>;
                 return (
                     <div className="fadeIn  panel panel-default" key={dataset._id}>
                         <div className="panel-heading">
@@ -65,7 +65,7 @@ let Datasets = React.createClass({
                                         <p className="date">uploaded {user ? 'by ' : ''}<span className="name">{fullname}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
                                     </div>
                                 </Link>
-                               {!isPublic ? statusContainer : null}
+                                {!isPublic ? statusContainer : null}
                             </div>
                         </div>
                     </div>
