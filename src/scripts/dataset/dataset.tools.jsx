@@ -159,7 +159,7 @@ let Tools = React.createClass({
 	_resume(incomplete) {
 		if (incomplete) {
 			return (
-				<div className="run-analysis">
+				<div className="resume-upload-tool">
 					<FileSelect resume={true} onChange={this._onFileSelect} />
 	            </div>
 			);
