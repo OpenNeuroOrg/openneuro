@@ -11,6 +11,7 @@ import Jobs         from './dataset.tools.jobs.jsx';
 import Publish      from './dataset.tools.publish.jsx';
 import moment       from 'moment';
 import crn          from '../utils/crn';
+import FileSelect   from '../common/forms/file-select.jsx';
 
 let Tools = React.createClass({
 
@@ -96,18 +97,6 @@ let Tools = React.createClass({
 			}
 		];
 
-
-		let runAnalysis;
-		if (isSignedIn && !isIncomplete) {
-			runAnalysis = (
-				<div className="run-analysis">
-					<button className="btn-blue" onClick={actions.toggleModal.bind(null, 'Jobs')}>
-						<i className="fa fa-tasks"></i> Run Analysis
-					</button>
-	            </div>
-			);
-		}
-
 		tools = tools.map((tool, index) => {
 			if (tool.display) {
 				return (
@@ -144,7 +133,8 @@ let Tools = React.createClass({
 					</span>
 	            </div>
 				{tools}
-				{runAnalysis}
+				{this._runAnalysis(isSignedIn && !isIncomplete)}
+				{this._resume(isIncomplete)}
 				<Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')}/>
 				<Jobs
 					dataset={dataset}
@@ -162,6 +152,30 @@ let Tools = React.createClass({
 					onHide={actions.toggleModal.bind(null, 'Publish')} />
 	        </div>
     	);
+	},
+
+// template methods ---------------------------------------------------
+
+	_resume(incomplete) {
+		if (incomplete) {
+			return (
+				<div className="run-analysis">
+					<FileSelect resume={true} />
+	            </div>
+			);
+		}
+	},
+
+	_runAnalysis(display) {
+		if (display) {
+			return (
+				<div className="run-analysis">
+					<button className="btn-blue" onClick={actions.toggleModal.bind(null, 'Jobs')}>
+						<i className="fa fa-tasks"></i> Run Analysis
+					</button>
+	            </div>
+			);
+		}
 	},
 
 // custom methods -----------------------------------------------------
