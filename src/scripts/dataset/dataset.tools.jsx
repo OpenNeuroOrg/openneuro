@@ -91,7 +91,7 @@ let Tools = React.createClass({
 					},
 					{
 						check: isInvalid,
-						message: 'You cannot snapshot an invalid dataset.'
+						message: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.'
 					}
 				],
 			}
