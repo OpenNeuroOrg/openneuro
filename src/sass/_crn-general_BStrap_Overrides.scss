@@ -113,8 +113,6 @@
 	}
 	&.warning{
 	}	
-	&.cancel{
-	}
 }
 
 .btn-admin-blue{
@@ -126,15 +124,33 @@
 	&:hover,
 	&:active,
 	&.hover,
+	&:focus,
 	&.active  {
 		color: darken($sky, 10%);
 		background: #eee;
 	}
 }
+
+.btn-modal-submit{
+	@extend .btn-admin-blue;
+	border: 2px solid lighten($sky,5%);
+	
+	&:active,
+	&:focus{
+		border:2px solid $sky;
+	}
+}
+
+
+
 .btn-reset{
 	@extend .btn-admin;
 	border:none;
+	margin-left:2px;
+	padding:5px;
+	font-size:12px;
 }
+
 .btn-filter{
 	margin: 0;
 	color: #aaa;
@@ -196,32 +212,34 @@
 
 
 .edit-file{
-	width: auto;
-	font-size: 10px;
 	@extend .btn-admin;
 	@extend .admin-blue;
+	width: auto;
+	font-size: 10px;
 	position:relative;
-	width: 72px;
+	max-width: 70px;
 	display: block;
 	overflow: hidden;
+    margin: 0 auto 10px;
+    padding: 10px;
+    line-height: 16px;
 	input{
-
-		position: absolute;
-		top: 0;
-		right: 0;
-		margin: 0;
-		padding: 0;
-		font-size: 20px;
-		cursor: pointer;
-		opacity: 0;
-		filter: alpha(opacity=0);
+	    position: absolute;
+	    cursor: pointer;
+	    opacity: 0;
+	    filter: alpha(opacity=0);
+	    left: 0;
+	    right: 0;
+	    bottom: 0;
+	    top: 0;
+	    width: 100%;
 	}
 }
 
 .add-file{
+	@extend .btn-admin;
 	width: auto;
 	font-size: 10px;
-	@extend .btn-admin;
 	position:relative;
 	width: 72px;
 	display: block;
@@ -256,17 +274,59 @@
     font-size: 16px;
 
 	input.dirUpload-btn{
-		position: absolute;
-		top: 0;
-		right: 0;
-		margin: 0;
-		padding: 0;
-		font-size: 20px;
-		cursor: pointer;
-		opacity: 0;
-		filter: alpha(opacity=0);
+	    position: absolute;
+	    cursor: pointer;
+	    opacity: 0;
+	    filter: alpha(opacity=0);
+	    left: 0;
+	    right: 0;
+	    bottom: 0;
+	    top: 0;
+	    width: 100%;
 	}
 }
+
+
+.btn-warn-component{
+	@extend .btn-admin;
+	padding:5px;
+	transition: all 0.1s ease;
+	border-radius:0;
+	font-size: 12px;
+	display:inline-block;
+	i{
+		line-height: 30px;
+		margin-left: 0;
+	}
+	&.cancel,
+	&.success{
+		background: $brand-danger;
+		color:#fff;
+		font-size: 14px;
+		padding: 5px 8px;
+		margin: 7px 5px 5px 0;
+		&:hover{
+			background:darken($brand-danger, 10%);
+		}
+		i{
+			line-height: 15px;
+		}
+	}
+	&.success{
+		background: $brand-success;
+		&:hover{
+			background:darken($brand-success, 10%);
+		}
+	}
+}
+
+
+
+
+
+
+
+
 //form // ================================================================
 
 .formField{

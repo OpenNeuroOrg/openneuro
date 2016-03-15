@@ -115,7 +115,8 @@ export default class Publish extends React.Component {
 		if (this.state.selectedSnapshot) {
 			return (
 				<div className="col-xs-12 modal-actions">
-					<button className="btn-admin-blue" onClick={this._publish.bind(this)}>Publish</button>
+					<button className="btn-modal-submit" onClick={this._publish.bind(this)}>Publish</button>
+					<button className="btn-reset" onClick={this._hide.bind(this)}>close</button>
 				</div>
 			)
 		}

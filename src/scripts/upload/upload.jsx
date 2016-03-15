@@ -4,7 +4,7 @@ import React       from 'react';
 import Reflux      from 'reflux';
 import Actions     from './upload.actions.js';
 import UploadStore from './upload.store.js';
-import {TabbedArea, TabPane, PanelGroup, Accordion, Panel} from 'react-bootstrap';
+import {TabbedArea, TabPane} from 'react-bootstrap';
 
 import Select   from './upload.select.jsx';
 import Rename   from './upload.rename.jsx';
@@ -32,7 +32,7 @@ let Upload = React.createClass({
 		let totalTabs    = this.state.showResume ? 5 : 4;
 		let activeBar = "activeTab-" + activeKey;
 		if (activeKey === 5 && totalTabs < 5) {activeBar = 'activeTab-4'}
-		let activePane = "upload-wrap activePane-" + activeKey;
+		let activePane = "activePane-" + activeKey;
 
 	// panels --------------------------------------
 

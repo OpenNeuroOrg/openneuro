@@ -29,9 +29,12 @@ let BlacklistModal = React.createClass({
 						<Input placeholder="First Name"    type="text"  value={blacklistForm.firstname} name={'firstname'} onChange={this._inputChange} />
 						<Input placeholder="Last Name"     type="text"  value={blacklistForm.lastname}  name={'lastname'}  onChange={this._inputChange} />
 						<Input placeholder="Note"          type="textarea"  value={blacklistForm.note}      name={'note'}      onChange={this._inputChange} />
-			    		<button className="btn-admin-blue" onClick={actions.blacklistSubmit} >
+			    		<button className="btn-modal-submit" onClick={actions.blacklistSubmit} >
 							<span>Block</span>
 						</button>
+						<button className="btn-reset" onClick={this._hide}>close</button>
+			    		
+						
 					</div>
             	</Modal.Body>
             </Modal>

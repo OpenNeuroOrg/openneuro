@@ -38,24 +38,24 @@ export default class WarnButton extends React.Component {
 		let link;
 		if (this.state.link) {
 			link = (
-				<a className="btn btn-admin success" onClick={this.toggle.bind(this, this.props.action)} href={this.state.link} download>
+				<a className="btn-warn-component success" onClick={this.toggle.bind(this, this.props.action)} href={this.state.link} download>
 	        		{confirm}
 	    		</a>
 	    	);
 		}
 
-		let confirmBtn = <button className={'btn btn-admin success'} onClick={this.toggle.bind(this, this.props.action)}>{confirm}</button>;
+		let confirmBtn = <button className={'btn-warn-component success'} onClick={this.toggle.bind(this, this.props.action)}>{confirm}</button>;
 
 		let viewAction = (
         	<span className="btn-group slideInRightFast" role="group" >
-        		<button className="btn btn-admin cancel" onClick={this.toggle.bind(this)}>{cancel}</button>
+        		<button className="btn-warn-component cancel" onClick={this.toggle.bind(this)}>{cancel}</button>
         		{link ? link : confirmBtn}
         	</span>
         );
 
         let hideAction = (
         	<span className={'fadeIn' + (disabled ? ' disabled' : '')} >
-        		<button className="btn btn-admin warning" onClick={this.toggle.bind(this, this.props.action)}>
+        		<button className="btn-warn-component warning" onClick={this.toggle.bind(this, this.props.action)}>
 	        		<i className={'fa ' + this.props.icon}></i>  {message}
         		</button>
         	</span>

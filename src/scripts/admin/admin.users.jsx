@@ -70,14 +70,12 @@ let users = React.createClass({
 				<div className="col-xs-4 last admin-tools-bar">
 	                <div className="tools clearfix">
 	                    <div className="tool">
-    						<WarnButton className="btn btn-admin" 
-		                    			message='Admin' 
+    						<WarnButton message='Admin' 
 		                    			icon={adminIcon}
 		                    			action={actions.toggleSuperUser.bind(this, user)}/>
 	                    </div>
 	                    <div className="tool">
-	                    	<WarnButton className="btn btn-admin" 
-		                    			message='Block' 
+	                    	<WarnButton message='Block' 
 		                    			icon='fa-ban'
 		                    			warn={false}
 		                    			action={actions.blacklistModal.bind(this, user)}/>
