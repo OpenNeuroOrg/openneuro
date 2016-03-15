@@ -75,36 +75,7 @@
 								margin-top: 3px;
 							}
 						}
-				    	input {
-				    		height: 20px;
-				    		width: auto;
-				    		display: block;
-				    		width: 200px;
-				    		&:before {
-				    			width: auto;
-				    			font-size: 10px;
-					    		@extend .btn-admin;
-					    		@extend .admin-blue;
-
-				    		}
-			    			&:focus,
-				    		&:active,
-				    		&:hover{
-				    			&:before {border:1px solid #bbb;}
-				    		}
-
-				    		&.add-files:before {content: 'add a file'; padding:1px 5px;}
-				    		&.update-file:before {content: 'update file';}
-				    	}
 				    }
-					input:before {
-					    width: auto;
-					    padding: 0px 5px;
-					    font-size: 10px;
-					    height: 17px;
-					    padding: 1px 4px;
-					    margin: 0;
-					}
 				}
 
 				.fileTreeEditFile{

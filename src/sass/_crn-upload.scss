@@ -267,11 +267,9 @@
 			}
 		}
 		.upload-wrap{
-			display: block;
-			margin-top: 0;
-			margin-bottom: 0; 
-			border-bottom: 1px solid #ddd;
 			background:transparent;
+			position:relative;
+			z-index: 1000;
 			.upload-panel {
 				border-radius: 0;
 				border: none;
@@ -427,14 +425,6 @@
 				}
 			}
 		}
-	}
-
-//upload in modal
-	.upload-wrap{
-		position:relative;
-		background:#f3f3f3;
-		//border-bottom:1px solid #bbb;
-		z-index: 1000;
 	}
 	a.error-log{
 		border:none;
