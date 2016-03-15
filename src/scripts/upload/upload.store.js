@@ -197,7 +197,6 @@ let UploadStore = Reflux.createStore({
 	 * and group.
 	 */
 	checkExists (fileTree) {
-
 		// rename dirName before upload
 		fileTree[0].name = this.data.dirName;
 
@@ -209,7 +208,7 @@ let UploadStore = Reflux.createStore({
 		let self = this;
 		let userId = userStore.data.scitran._id;
 		if (!this.data.resuming) {
-			scitran.getProjects(true, function (projects) {
+			scitran.getProjects({}, function (projects) {
 				let existingProjectId;
 				for (let project of projects) {
 	                if (project.label === fileTree[0].name && project.group === userId) {
