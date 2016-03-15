@@ -1,16 +1,17 @@
 // dependencies -------------------------------------------------------
 
-import React        from 'react';
-import Reflux       from 'reflux';
-import datasetStore from './dataset.store';
-import actions      from './dataset.actions.js';
-import userStore    from '../user/user.store.js';
-import WarnButton   from '../common/forms/warn-button.jsx';
-import Share        from './dataset.tools.share.jsx';
-import Jobs         from './dataset.tools.jobs.jsx';
-import Publish      from './dataset.tools.publish.jsx';
-import moment       from 'moment';
-import crn          from '../utils/crn';
+import React          from 'react';
+import Reflux         from 'reflux';
+import moment         from 'moment';
+import WarnButton     from '../common/forms/warn-button.jsx';
+import Share          from './dataset.tools.share.jsx';
+import Jobs           from './dataset.tools.jobs.jsx';
+import Publish        from './dataset.tools.publish.jsx';
+import FileSelect     from '../common/forms/file-select.jsx';
+import datasetStore   from './dataset.store';
+import userStore      from '../user/user.store.js';
+import datasetActions from './dataset.actions.js';
+import uploadActions  from '../upload/upload.actions.js';
 
 let Tools = React.createClass({
 
@@ -21,7 +22,7 @@ let Tools = React.createClass({
 	componentDidMount() {
 		let dataset = this.state.dataset;
 		if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
-			actions.loadUsers();
+			datasetActions.loadUsers();
 		}
 	},
 
@@ -45,42 +46,42 @@ let Tools = React.createClass({
 			{
 				tooltip: 'Download Dataset',
 				icon: 'fa-download',
-				prepDownload: actions.getDatasetDownloadTicket.bind(this, this.state.snapshot),
-				action: actions.trackDownload,
+				prepDownload: datasetActions.getDatasetDownloadTicket.bind(this, this.state.snapshot),
+				action: datasetActions.trackDownload,
 				display: !isIncomplete
 			},
 			{
 				tooltip: 'Publish Dataset',
 				icon: 'fa-globe',
-				action: actions.toggleModal.bind(null, 'Publish'),
+				action: datasetActions.toggleModal.bind(null, 'Publish'),
 				display: isAdmin && !isPublic && !isIncomplete,
 				warn: false
 			},
 			{
 				tooltip: 'Unpublish Dataset',
 				icon: 'fa-eye-slash',
-				action: actions.publish.bind(this, dataset._id, false),
+				action: datasetActions.publish.bind(this, dataset._id, false),
 				display: isPublic && isSuperuser,
 				warn: true
 			},
 			{
 				tooltip: 'Delete Dataset',
 				icon: 'fa-trash',
-				action: actions.deleteDataset.bind(this, dataset._id),
+				action: datasetActions.deleteDataset.bind(this, dataset._id),
 				display: (isAdmin && !isPublic) || isSuperuser,
 				warn: true
 			},
 			{
 				tooltip: 'Share Dataset',
 				icon: 'fa-user-plus',
-				action: actions.toggleModal.bind(null, 'Share'),
+				action: datasetActions.toggleModal.bind(null, 'Share'),
 				display: isAdmin && !isSnapshot && !isIncomplete,
 				warn: false
 			},
 			{
 				tooltip: 'Create Snapshot',
 				icon: 'fa-camera-retro',
-				action: actions.createSnapshot,
+				action: datasetActions.createSnapshot,
 				display: isAdmin && !isSnapshot && !isIncomplete,
 				warn: true,
 				validations: [
@@ -95,18 +96,6 @@ let Tools = React.createClass({
 				],
 			}
 		];
-
-
-		let runAnalysis;
-		if (isSignedIn && !isIncomplete) {
-			runAnalysis = (
-				<div className="run-analysis">
-					<button className="btn-blue" onClick={actions.toggleModal.bind(null, 'Jobs')}>
-						<i className="fa fa-tasks"></i> Run Analysis
-					</button>
-	            </div>
-			);
-		}
 
 		tools = tools.map((tool, index) => {
 			if (tool.display) {
@@ -144,27 +133,56 @@ let Tools = React.createClass({
 					</span>
 	            </div>
 				{tools}
-				{runAnalysis}
-				<Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={actions.toggleModal.bind(null, 'Share')}/>
+				{this._runAnalysis(isSignedIn && !isIncomplete)}
+				{this._resume(isIncomplete)}
+				<Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={datasetActions.toggleModal.bind(null, 'Share')}/>
 				<Jobs
 					dataset={dataset}
 					apps={this.state.apps}
 					loadingApps={this.state.loadingApps}
 					snapshots={snapshots}
 					show={this.state.showJobsModal}
-					onHide={actions.toggleModal.bind(null, 'Jobs')} />
+					onHide={datasetActions.toggleModal.bind(null, 'Jobs')} />
 				<Publish
 					dataset={dataset}
 					apps={this.state.apps}
 					loadingApps={this.state.loadingApps}
 					snapshots={snapshots}
 					show={this.state.showPublishModal}
-					onHide={actions.toggleModal.bind(null, 'Publish')} />
+					onHide={datasetActions.toggleModal.bind(null, 'Publish')} />
 	        </div>
     	);
 	},
 
+// template methods ---------------------------------------------------
+
+	_resume(incomplete) {
+		if (incomplete) {
+			return (
+				<div className="run-analysis">
+					<FileSelect resume={true} onChange={this._onFileSelect} />
+	            </div>
+			);
+		}
+	},
+
+	_runAnalysis(display) {
+		if (display) {
+			return (
+				<div className="run-analysis">
+					<button className="btn-blue" onClick={datasetActions.toggleModal.bind(null, 'Jobs')}>
+						<i className="fa fa-tasks"></i> Run Analysis
+					</button>
+	            </div>
+			);
+		}
+	},
+
 // custom methods -----------------------------------------------------
+
+	_onFileSelect(files) {
+		uploadActions.onResume(files, this.state.dataset.label);
+	},
 
 	_selectSnapshot(e) {
 		let snapshot;
@@ -175,7 +193,7 @@ let Tools = React.createClass({
 				break;
 			}
 		}
-		actions.loadSnapshot(snapshot.isOriginal, snapshot._id);
+		datasetActions.loadSnapshot(snapshot.isOriginal, snapshot._id);
 	}
 
 });
