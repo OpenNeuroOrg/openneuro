@@ -17,7 +17,8 @@ let Status = React.createClass({
 // lifecycle events ----------------------------------------------------------
 
 	render() {
-		let spanClass, tip, iconClass, click, fileSelect, title;
+		let spanClass, tip, iconClass, click, fileSelect, title, ellipsis;
+
 
 		switch(this.props.type) {
 			case 'public':
@@ -48,14 +49,18 @@ let Status = React.createClass({
 			case 'pendingValidation':
 				spanClass = 'dataset-status ds-warning';
 				tip       = 'Pending validation';
-				title	  = 'Pending validation';
-				iconClass = 'fa fa-hourglass-start';
+				title	  = 'Validating';
+				iconClass = 'fa fa-clock-o';
 				break;
 			case 'invalid':
 				spanClass = 'dataset-status ds-danger';
 				tip       = 'Invalid';
 				title	  = 'Invalid';
-				iconClass = 'fa fa-ban';
+				iconClass = 'fa fa-exclamation-circle';
+		}
+
+		if(this.props.type == 'pendingValidation') {
+			ellipsis = (<span className="ellipsis-animation"><span className="one">.</span><span className="two">.</span><span className="three">.</span>​</span>);
 		}
 
 		return (
@@ -65,7 +70,7 @@ let Status = React.createClass({
 						<span>
 							<span className="icon-wrap">
 								<i className={iconClass}></i>
-								{title}
+								<span>{title}{ellipsis}</span>
 							</span>
 							{fileSelect}
 						</span>

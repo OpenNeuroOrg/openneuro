@@ -1,14 +1,4 @@
-// custome ellipsis ...
-@-webkit-keyframes dot{
-	0% {opacity: 0;}
-	50% {opacity: 0;}
-	100% {opacity: 1;}
-}
-@keyframes dot {
-	0% {opacity: 0;}
-	50% {opacity: 0;}
-	100% {opacity: 1;}
-}
+
 
 .no-chrome{
 	.right-sidebar{
@@ -223,7 +213,7 @@
 			margin-top: 0;
 			position:relative;
 			padding:0;
-			background:#f3f3f3;
+			
 			border-bottom:1px solid transparent;
 			z-index: 1000;
 			.upload-dirname{
@@ -237,33 +227,6 @@
 			}
 			.uploadFiles-wrap{
 				margin: 10px 0 0;
-				.uploadFiles{
-					color: $rock;
-					margin: 0;
-					padding: 4px;
-					font-size:12px;
-					.one,
-					.two, 
-					.three {
-						opacity: 0;
-						font-size: 20px;
-						line-height: 10px;
-						-webkit-animation: dot 1.3s infinite;
-						animation: dot 1.3s infinite;
-					}
-					.one {
-						-webkit-animation-delay: 0.0s;
-						animation-delay: 0.0s;
-					}
-					.two {
-						-webkit-animation-delay: 0.2s;
-						animation-delay: 0.2s;
-					}
-					.three {
-						-webkit-animation-delay: 0.3s;
-						animation-delay: 0.3s;
-					}
-				}
 			}
 		}
 		.upload-wrap{

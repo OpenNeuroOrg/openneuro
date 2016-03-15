@@ -18,7 +18,7 @@ export default class UploadProgress extends React.Component {
 
 		let currentFiles = this.props.progress.currentFiles.map(function (file, index) {
 			return (
-				<div className="uploadFiles" key={index}>
+				<div className="ellipsis-animation" key={index}>
 					{file}
 					<span className="one">.</span>
 					<span className="two">.</span>

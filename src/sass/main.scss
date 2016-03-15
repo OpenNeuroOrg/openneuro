@@ -52,6 +52,52 @@
 .flipInX{@include flipInX();}
 
 
+// custome ellipsis ...
+@-webkit-keyframes dot{
+	0% {opacity: 0;}
+	50% {opacity: 0;}
+	100% {opacity: 1;}
+}
+@keyframes dot {
+	0% {opacity: 0;}
+	50% {opacity: 0;}
+	100% {opacity: 1;}
+}
+.ellipsis-animation{
+	color: $rock;
+	margin: 0;
+	padding: 4px;
+	font-size:12px;
+	.one,
+	.two, 
+	.three {
+		opacity: 0;
+		font-size: 20px;
+		line-height: 10px;
+		-webkit-animation: dot 1.3s infinite;
+		animation: dot 1.3s infinite;
+	}
+	.one {
+		-webkit-animation-delay: 0.0s;
+		animation-delay: 0.0s;
+	}
+	.two {
+		-webkit-animation-delay: 0.2s;
+		animation-delay: 0.2s;
+	}
+	.three {
+		-webkit-animation-delay: 0.3s;
+		animation-delay: 0.3s;
+	}
+}
+.ds-danger .ellipsis-animation{
+	color: $brand-danger;
+}
+.ds-warning .ellipsis-animation{
+	color: $brand-warning;
+}
+
+
 // ZACK ADDED ME --- PUT ME SOMEWHERE BETTER -----------------------------------
 
 .typeahead {
