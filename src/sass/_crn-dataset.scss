@@ -630,13 +630,13 @@
 		border-bottom: 1px solid #ddd;
 		.run-analysis{
 			height: 45px;
-			width: 170px;
+			width: auto;
 			float: left;
 			border-left:1px solid #aaa;
 
 			button.btn-blue{
 				margin: 0 5px 0 0;
-				padding: 11px 15px;
+				padding: 11px 20px;
 
 				i{
 					font-size:18px; 
@@ -751,15 +751,20 @@
 					}
 				}
 			}
-		.resume-upload-tool .fileupload-btn{
-			padding: 10px;
-			line-height: 23px;
-			font-size: 16px;
-			height: 45px;
-			width: 170px;
+		.resume-upload-tool {
+			@extend .clearfix;
+			display: block;
 			float: left;
-			border-left: 1px solid #aaa;
-			margin: 0;
+			.fileupload-btn{
+				padding: 10px 25px;
+				line-height: 23px;
+				font-size: 16px;
+				height: 44px;
+				width: auto;
+				float: left;
+				border-left: 1px solid #aaa;
+				margin: 0;
+			}
 		}
 	}
 }
