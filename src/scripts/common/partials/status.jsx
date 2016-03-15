@@ -67,7 +67,7 @@ let Status = React.createClass({
 								<i className={iconClass}></i>
 								{title}
 							</span>
-							{fileSelect}
+							{this.props.actionable ? fileSelect : null}
 						</span>
 					</Tooltip>
 				</span>
