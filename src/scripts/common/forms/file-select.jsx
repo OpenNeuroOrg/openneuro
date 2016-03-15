@@ -22,7 +22,7 @@ let Upload = React.createClass({
 	render () {
 		let resumeIcon = <span><i className="fa fa-repeat"></i>&nbsp;</span>;
 		let icon = this.props.resume ? resumeIcon : null;
-		let text = this.props.resume ? "Resume" : "Select folder";
+		let text = this.props.resume ? "Resume upload" : "Select folder";
 
 		return (
 			<div className="fileupload-btn">
