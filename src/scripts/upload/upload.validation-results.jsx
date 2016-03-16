@@ -29,7 +29,7 @@ export default class ValidationResults extends React.Component {
 
 		//warnings
 		let warningWrap;
-		if (warnings.length > 0) {
+		if (warnings && warnings.length > 0) {
 			let fileCount = this._countFiles(warnings);
 			let warningHeader = <span>view {warnings.length} {pluralize('warning', warnings.length)} in {fileCount} {pluralize('files', fileCount)}</span>;
 			warningWrap = (
