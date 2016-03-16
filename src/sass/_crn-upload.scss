@@ -47,388 +47,395 @@
 }
 
 
-	.uploader{
-		.message{
-			text-align: center;
-			width: 100%;
-			font-size: 15px;
-			font-weight: 600;
-			color: $rock;
-			max-width: 400px;
-			margin: 0 auto;
-			display: block;
-			padding: 20px;
-			&.error{
-				color:$coral;
-			}
-			&.characterError{
-				padding:0 10px 5px;
-				text-align: center;
-			}
-			.upload-reset-link,
-			.rename-tab-link{
-				color:$primary;
-				cursor: pointer;
-				&:hover{
-					color:$primaryHover;
-				}
-			}
-		}
-		//Alerts // ================================================================
-		.alert{
-		    overflow: hidden;
-		    position: absolute;
-		    top: -60px;
-		    right: 0;
-		    z-index: 1800;
-		    margin: 0;
-		    border-radius: 0;
-		    background-color: rgba(0,0,0,.8);
-		    color: #D0D0D0;
-		    font-weight: 100;
-		    border: none;
-		    width: 100%;
-		    font-size: 18px;
-		    bottom: 0;
-			&.alert-danger{
-				border-bottom: 1px solid $brand-danger;
-				strong{
-				  color: $brand-danger;
-				  font-weight: 700;
-				  font-family: 'Source Sans Pro', sans-serif;
-				}
-			}
-			&.alert-warning{
-				border-bottom: 1px solid $brand-warning;
-				strong{    
-				  color: $brand-warning;
-				  font-weight: 700;
-				  font-family: 'Source Sans Pro', sans-serif;
-				}
-			}
-			&.alert-success{
-				border-bottom: 1px solid $brand-success;
-				strong{    
-				  color: $brand-success;
-				  font-weight: 700;
-				  font-family: 'Source Sans Pro', sans-serif;
-				}
-			}
-			&.alert-info{
-				border-bottom: 1px solid $brand-info;
-				strong{
-				  color: $brand-info;
-				  font-weight: 700;
-				  font-family: 'Source Sans Pro', sans-serif;
-				}
-			}
-
-
-			.alert-left{
-				width: 75%;
-				float: left;
-			}
-			.alert-right{
-				width: 25%;
-				float: left;
-				&.dismiss-button-x{
-					background: none;
-				    border: none;
-				    box-shadow: none;
-				    font-size: 16px;
-				    cursor: pointer;
-				    text-align: right;
-				    &:hover{
-				    	color:$brand-success;
-				    }
-				}
-			}
-			a {
-	 
-					color: $brand-warning;
-	 
-					&:hover {
-	 
-						color: lighten($brand-warning, 10%);
-	 
-				}
-			}
-		}
-		.dir-name{
-				text-align: center;
-				font-size: 21px;
-				i{
-					margin-right: 10px;
-				}
-			&.has-input{
-				width: 330px;
-			    margin: 0 auto 0;
-			    max-width: 100%;
-				label.add-name{
-				    float: left;
-				    width: 10%;
-				    height: 45px;
-				    text-align: right;
-				    padding: 10px 8px;
-				    background-color: #FFF;
-				    margin: 0px 0px;
-				    box-shadow: inset 2px 0px 5px -1px rgba(0,0,0,.14);
-					i{}
-				}
-				.form-group{
-					float: left;
-					width: 90%;
-					margin: 0;
-					label{
-						position: absolute;
-						text-align: right;
-						width: 100%;
-						padding: 2px 2%;
-
-					}
-					input{
-						box-shadow: inset -2px 0px 5px -1px rgba(0,0,0,.14);
-						&:focus{
-							outline: none;
-							@include gradient-directional($start-color: #fff, $end-color: #fcfcfc, $deg: 85deg);
-							
-						}
-					}
-				}
-				button{
-					font-size: 12px;
-					background-color: rgba(0, 0, 0, 0);
-					border: none;
-					color: $primary;
-					margin: 0 0 0 20px;
-					vertical-align: middle;
-					height: 30px;
-					&:hover{
-						color: $primaryHover;
-					}
-				}
-			}
-		}
-		.uploadProgress-block{
-			margin-top: 0;
-			position:relative;
-			padding:0;
-			
-			border-bottom:1px solid transparent;
-			z-index: 1000;
-			.upload-dirname{
-				text-align: center;
-				display: block;
-				width: 100%;
-				font-size: 21px;
-				label{
-					margin: 0 5px 0 0;
-				}
-			}
-			.uploadFiles-wrap{
-				margin: 10px 0 0;
-			}
-		}
-		.upload-wrap{
-			background:transparent;
-			position:relative;
-			z-index: 1000;
-			.upload-panel {
-				border-radius: 0;
-				border: none;
-				> .panel-heading{
-				 	padding: 0;
-					z-index: 1299;
-					text-transform: uppercase;
-					background-color: rgba(0, 0, 0, 0);
-					padding: 0;
-					position: relative;
-					h4{
-						margin: 0;
-						
-							font-size: 21px;
-							display: block;
-							padding: 18px;
-							background-color: #f4f4f4;
-							color:$ocean;
-							font-family: $font-family-ssp;
-							font-weight:400;
-							 text-decoration: none;
-					}
-				}
-				.panel-body{
-					padding:0;
-					background:#eee;
-				}
-		
-			}
-		}	
-	}
-
-
-	.activePane-2,
-	.activePane-3,
-	.activePane-4{
-		.btn-blue{
-			width: 100%;
-			max-width: 200px;
-			display: block;
-			margin:0 auto 30px;
-		}
-	}
-	.activePane-3{
-		.btn-blue{
-			margin:20px auto 0px;
-		}
-	}
-
-	.activePane-5{
-		padding:30px 50px; 
-	}
-	.activeTab-1,
-	.activeTab-2,
-	.activeTab-3,
-	.activeTab-4,
-	.activeTab-5{
-		height: 45px;
-		width: 20%;
-		background:#BFBFBF;
-		transition:margin-left 0.3s ease;
-	    margin-top: -40px;
-	    border-bottom: 5px solid $sky;
-		@media (max-width: 1428px) {
-			margin-top: -60px;
-			height: 65px;
-		}
-	}
-
-
-	.activeTab-2{
-		margin-left:20%;
-	}
-	.activeTab-3{
-		margin-left:40%;
-	}
-	.activeTab-4{
-		margin-left:60%;
-	}
-	.activeTab-5{
-		margin-left:80%;
-	}
-
-	ul.upload-steps{
-		margin: 0;
-		border: none;
-		background:#D7D7D7;
-		
-		li.upload-step,
-		li.upload-step.active{
-			border: none;
-		    margin: 0;
-		    width: 20%;
-		    text-align: center;
-		    font-size: 12px;
-
-		
-			a{
-				border-radius: 0;
-				background-color: transparent;
-				color: lighten($ocean, 10%);
-				font-size: 14px;
-				border-right:1px solid rgba(0,0,0,0.1);
-				letter-spacing: 0;
-				&:hover{
-					background-color:transparent;
-					color:$ocean;
-				}
-				@media (max-width: 1428px) {
-					span {display: block;}	 
-				}
-			}
-
-		}
-		li.upload-step.active.step5{
-			float: right;
-		}
-		li.upload-step.disabled{
-			a{
-				cursor: default;
-				color:#787878;
-				&:hover{
-					background-color:transparent;
-					color:#787878;
-				}
-			}
-		}
-
-		div.upload-step{
-			.panel-heading{
-				margin: 0;
-				padding: 0;
-				border: none;
-				border-radius: 0;
-				h4.panel-title a{
-				    padding: 10px;
-				    display: block;
-				    background-color: #666;
-				    color: $misty;
-				    border-bottom: 1px solid #666;
-				    transition: all 0.3s ease;
-				    &.collapsed{
-				    background-color: #eee;
-				    color: #666;
-				    border-bottom: 1px solid transparent;
-				    }
-				}
-			}
-			.tab-content{
-				padding: 10px 30px 20px;
-				.tab-pane{
-					border-top:none;
-				}
-			}
-		}
-	}
-	a.error-log{
-		border:none;
-		border-color: rgba(0, 0, 0, 0);
-		box-shadow: none;
-		margin: 20px 0;
-		text-align: center;
-		border-radius: 0;
-		font-size: 12px;
-		text-align: center;
-		display: block;
-		color:$primary;
-		background-color: transparent;
-		&:hover{
-			color: $primaryHover;
-		}
-	}
-	.bids-link{
+.uploader{
+	.message{
 		text-align: center;
 		width: 100%;
+		font-size: 15px;
+		font-weight: 600;
+		color: $rock;
+		max-width: 400px;
+		margin: 0 auto;
 		display: block;
-		margin: 10px 0;
-	    padding: 0;
-	    color: #686868;
+		padding: 20px;
+		&.error{
+			color:$coral;
+		}
+		&.characterError{
+			padding:0 10px 5px;
+			text-align: center;
+		}
+		.upload-reset-link,
+		.rename-tab-link{
+			color:$primary;
+			cursor: pointer;
+			&:hover{
+				color:$primaryHover;
+			}
+		}
+	}
+
+
+	// commenting out for now - it is hard to 
+	// tell if this was moved to a more generic file. 3/16/16 
+	// if there are no error I will delete this
+	// //Alerts // ================================================================
+	// .alert{
+	//     overflow: hidden;
+	//     position: absolute;
+	//     top: -60px;
+	//     right: 0;
+	//     z-index: 1800;
+	//     margin: 0;
+	//     border-radius: 0;
+	//     background-color: rgba(0,0,0,.8);
+	//     color: #D0D0D0;
+	//     font-weight: 100;
+	//     border: none;
+	//     width: 100%;
+	//     font-size: 18px;
+	//     bottom: 0;
+	// 	&.alert-danger{
+	// 		border-bottom: 1px solid $brand-danger;
+	// 		strong{
+	// 		  color: $brand-danger;
+	// 		  font-weight: 700;
+	// 		  font-family: 'Source Sans Pro', sans-serif;
+	// 		}
+	// 	}
+	// 	&.alert-warning{
+	// 		border-bottom: 1px solid $brand-warning;
+	// 		strong{    
+	// 		  color: $brand-warning;
+	// 		  font-weight: 700;
+	// 		  font-family: 'Source Sans Pro', sans-serif;
+	// 		}
+	// 	}
+	// 	&.alert-success{
+	// 		border-bottom: 1px solid $brand-success;
+	// 		strong{    
+	// 		  color: $brand-success;
+	// 		  font-weight: 700;
+	// 		  font-family: 'Source Sans Pro', sans-serif;
+	// 		}
+	// 	}
+	// 	&.alert-info{
+	// 		border-bottom: 1px solid $brand-info;
+	// 		strong{
+	// 		  color: $brand-info;
+	// 		  font-weight: 700;
+	// 		  font-family: 'Source Sans Pro', sans-serif;
+	// 		}
+	// 	}
+
+
+	// 	.alert-left{
+	// 		width: 75%;
+	// 		float: left;
+	// 	}
+	// 	.alert-right{
+	// 		width: 25%;
+	// 		float: left;
+	// 		&.dismiss-button-x{
+	// 			background: none;
+	// 		    border: none;
+	// 		    box-shadow: none;
+	// 		    font-size: 16px;
+	// 		    cursor: pointer;
+	// 		    text-align: right;
+	// 		    &:hover{
+	// 		    	color:$brand-success;
+	// 		    }
+	// 		}
+	// 	}
+	// 	a {
+ 
+	// 			color: $brand-warning;
+ 
+	// 			&:hover {
+ 
+	// 				color: lighten($brand-warning, 10%);
+ 
+	// 		}
+	// 	}
+	// }
+	// END
+	// Alerts // ================================================================
+	.dir-name{
+		text-align: center;
+		font-size: 21px;
+		i{
+			margin-right: 10px;
+		}
+		&.has-input{
+			width: 330px;
+		    margin: 0 auto 0;
+		    max-width: 100%;
+			label.add-name{
+			    float: left;
+			    width: 10%;
+			    height: 45px;
+			    text-align: right;
+			    padding: 10px 8px;
+			    background-color: #FFF;
+			    margin: 0px 0px;
+			    box-shadow: inset 2px 0px 5px -1px rgba(0,0,0,.14);
+				i{}
+			}
+			.form-group{
+				float: left;
+				width: 90%;
+				margin: 0;
+				label{
+					position: absolute;
+					text-align: right;
+					width: 100%;
+					padding: 2px 2%;
+
+				}
+				input{
+					box-shadow: inset -2px 0px 5px -1px rgba(0,0,0,.14);
+					&:focus{
+						outline: none;
+						@include gradient-directional($start-color: #fff, $end-color: #fcfcfc, $deg: 85deg);
+						
+					}
+				}
+			}
+			button{
+				font-size: 12px;
+				background-color: rgba(0, 0, 0, 0);
+				border: none;
+				color: $primary;
+				margin: 0 0 0 20px;
+				vertical-align: middle;
+				height: 30px;
+				&:hover{
+					color: $primaryHover;
+				}
+			}
+		}
+	}
+	.uploadProgress-block{
+		margin-top: 0;
+		position:relative;
+		padding:0;
+		
+		border-bottom:1px solid transparent;
+		z-index: 1000;
+		.upload-dirname{
+			text-align: center;
+			display: block;
+			width: 100%;
+			font-size: 21px;
+			label{
+				margin: 0 5px 0 0;
+			}
+		}
+		.uploadFiles-wrap{
+			margin: 10px 0 0;
+		}
+	}
+	.upload-wrap{
+		background:transparent;
+		position:relative;
+		z-index: 1000;
+		.upload-panel {
+			border-radius: 0;
+			border: none;
+			> .panel-heading{
+			 	padding: 0;
+				z-index: 1299;
+				text-transform: uppercase;
+				background-color: rgba(0, 0, 0, 0);
+				padding: 0;
+				position: relative;
+				h4{
+					margin: 0;
+					
+						font-size: 21px;
+						display: block;
+						padding: 18px;
+						background-color: #f4f4f4;
+						color:$ocean;
+						font-family: $font-family-ssp;
+						font-weight:400;
+						 text-decoration: none;
+				}
+			}
+			.panel-body{
+				padding:0;
+				background:#eee;
+			}
+	
+		}
+	}	
+}
+
+
+.activePane-2,
+.activePane-3,
+.activePane-4{
+	.btn-blue{
+		width: 100%;
+		max-width: 200px;
+		display: block;
+		margin:0 auto 30px;
+	}
+}
+.activePane-3{
+	.btn-blue{
+		margin:20px auto 0px;
+	}
+}
+
+.activePane-5{
+	padding:30px 50px; 
+}
+.activeTab-1,
+.activeTab-2,
+.activeTab-3,
+.activeTab-4,
+.activeTab-5{
+	height: 45px;
+	width: 20%;
+	background:#BFBFBF;
+	transition:margin-left 0.3s ease;
+    margin-top: -40px;
+    border-bottom: 5px solid $sky;
+	@media (max-width: 1428px) {
+		margin-top: -60px;
+		height: 65px;
+	}
+}
+
+
+.activeTab-2{
+	margin-left:20%;
+}
+.activeTab-3{
+	margin-left:40%;
+}
+.activeTab-4{
+	margin-left:60%;
+}
+.activeTab-5{
+	margin-left:80%;
+}
+
+ul.upload-steps{
+	margin: 0;
+	border: none;
+	background:#D7D7D7;
+	
+	li.upload-step,
+	li.upload-step.active{
+		border: none;
+	    margin: 0;
+	    width: 20%;
+	    text-align: center;
 	    font-size: 12px;
+
+	
+		a{
+			border-radius: 0;
+			background-color: transparent;
+			color: lighten($ocean, 10%);
+			font-size: 14px;
+			border-right:1px solid rgba(0,0,0,0.1);
+			letter-spacing: 0;
+			&:hover{
+				background-color:transparent;
+				color:$ocean;
+			}
+			@media (max-width: 1428px) {
+				span {display: block;}	 
+			}
+		}
+
+	}
+	li.upload-step.active.step5{
+		float: right;
+	}
+	li.upload-step.disabled{
+		a{
+			cursor: default;
+			color:#787878;
+			&:hover{
+				background-color:transparent;
+				color:#787878;
+			}
+		}
 	}
 
-	//UPLOAD display
-	.uploading.right-sidebar{
-
-		.message{
-			text-align: left;
-			color: $turquoise;
-			text-transform: lowercase;
-			font-size: 12px;
-			margin: 5px 0;
-
+	div.upload-step{
+		.panel-heading{
+			margin: 0;
+			padding: 0;
+			border: none;
+			border-radius: 0;
+			h4.panel-title a{
+			    padding: 10px;
+			    display: block;
+			    background-color: #666;
+			    color: $misty;
+			    border-bottom: 1px solid #666;
+			    transition: all 0.3s ease;
+			    &.collapsed{
+			    background-color: #eee;
+			    color: #666;
+			    border-bottom: 1px solid transparent;
+			    }
+			}
 		}
-		.dir-name{
-			text-align: left;
-			margin-top: 0;
+		.tab-content{
+			padding: 10px 30px 20px;
+			.tab-pane{
+				border-top:none;
+			}
 		}
 	}
+}
+a.error-log{
+	border:none;
+	border-color: rgba(0, 0, 0, 0);
+	box-shadow: none;
+	margin: 20px 0;
+	text-align: center;
+	border-radius: 0;
+	font-size: 12px;
+	text-align: center;
+	display: block;
+	color:$primary;
+	background-color: transparent;
+	&:hover{
+		color: $primaryHover;
+	}
+}
+.bids-link{
+	text-align: center;
+	width: 100%;
+	display: block;
+	margin: 10px 0;
+    padding: 0;
+    color: #686868;
+    font-size: 12px;
+}
+
+//UPLOAD display
+.uploading.right-sidebar{
+
+	.message{
+		text-align: left;
+		color: $turquoise;
+		text-transform: lowercase;
+		font-size: 12px;
+		margin: 5px 0;
+
+	}
+	.dir-name{
+		text-align: left;
+		margin-top: 0;
+	}
+}
 
