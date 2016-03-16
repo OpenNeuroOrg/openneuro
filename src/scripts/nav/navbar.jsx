@@ -10,6 +10,7 @@ import uploadStore 		from '../upload/upload.store.js';
 import Upload       	from '../upload/upload.jsx';
 import Progress       	from '../upload/upload.progress.jsx';
 import userActions   	from '../user/user.actions.js';
+import Alert            from '../notification/notification.alert.jsx';
 import {CollapsibleNav,
 		Nav,
 		DropdownButton,
@@ -24,12 +25,69 @@ let BSNavbar = React.createClass({
 // life cycle methods ------------------------------------------------------------
 
 	render: function () {
-		let isLoggedIn = !!this.state.token;
 
-		//generate user menu
-		let usermenu, uploadBtn, uploadModal;
-		if (this.state.google) {
-			usermenu = (
+		let isLoggedIn    = !!this.state.token;
+		let googleProfile = this.state.google;
+		let loading       = this.state.loading;
+		let routes        = this.props.routes;
+
+		return (
+			<nav role="navigation" className="navbar navbar-default" toggleNavKey={0}>
+				<div className="container">
+					<div className="navbar-header">
+						{this._brand()}
+				    </div>
+				    <CollapsibleNav className="clearfix" eventKey={0}>
+						    {isLoggedIn && !loading ? this._userMenu(googleProfile) : this._signIn(loading, routes)}
+					</CollapsibleNav>
+				</div>
+				<Alert/>
+		    </nav>
+	    );
+	},
+
+// template methods --------------------------------------------------------------
+
+	_brand() {
+		return (
+			<Link to="dashboard" className="navbar-brand">
+				<img src="./assets/CRN-Logo-Placeholder.png"
+					 alt="Center for Reproducible Neuroscience Logo"
+					 title="Center for Reproducible Neuroscience Link To Home Page"/>
+			</Link>
+		);
+	},
+
+	_signIn (loading, routes) {
+		let isSignInScreen = false;
+		for (let route of routes) {
+			if (route.name == 'signIn') {isSignInScreen = true;}
+		}
+
+		if (loading) {
+			return (
+				<div className="navbar-right signInNavBtn">
+					<button className="btn-blue" >
+						<i className="fa fa-spin fa-circle-o-notch" />
+						<span> Signing In</span>
+					</button>
+				</div>
+			);
+		} else {
+			return (
+				<div className="navbar-right signInNavBtn">
+					<button className="btn-blue" onClick={userActions.signIn.bind(null, {transition: isSignInScreen})} >
+						<i className="fa fa-google" />
+						<span> Sign in</span>
+					</button>
+				</div>
+			);
+		}
+	},
+
+	_userMenu(googleProfile) {
+		if (googleProfile) {
+			return (
 				<Nav navbar right className="useradmin-nav clearfix">
 					<div className="clearfix">
 						<UploadBtn />
@@ -38,38 +96,9 @@ let BSNavbar = React.createClass({
 		        </Nav>
 			);
 		}
-		let signInGoogle = (
-			<div className="navbar-right signInNavBtn">
-				<button className="btn-blue" onClick={userActions.signIn} >
-					<i className="fa fa-google" />
-					<span> Sign in</span>
-				</button>
-			</div>
-		);
+	}
 
-		// generate brand
-		let brand = (
-			<Link to="dashboard" className="navbar-brand">
-				<img src="./assets/CRN-Logo-Placeholder.png"
-					 alt="Center for Reproducible Neuroscience Logo"
-					 title="Center for Reproducible Neuroscience Link To Home Page"/>
-			</Link>
-		);
-		return (
-			<nav role="navigation" className="navbar navbar-default" toggleNavKey={0}>
-				<div className="container">
-					<div className="navbar-header">
-						{brand}
-				    </div>
-				    <CollapsibleNav className="clearfix" eventKey={0}>
-						    {isLoggedIn ? usermenu : signInGoogle}
-					</CollapsibleNav>
-				</div>
-		    </nav>
-	    );
-	},
-
-// custom methods ----------------------------------------------------------------
+// actions -----------------------------------------------------------------------
 
 });
 

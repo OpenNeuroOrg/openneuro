@@ -22,8 +22,13 @@ export default class Publish extends React.Component {
 
 	componentWillReceiveProps() {
 		this.props.snapshots.map((snapshot) => {
-			if (snapshot._id == this.props.dataset._id && snapshot.original) {
-				this.setState({selectedSnapshot: snapshot._id});
+			if (snapshot._id == this.props.dataset._id) {
+				if (snapshot.original) {
+					this.setState({selectedSnapshot: snapshot._id});
+				} else if (this.props.snapshots.length > 1) {
+					this.setState({selectedSnapshot: this.props.snapshots[1]._id});
+				}
+				return;
 			}
 		});
 	}
