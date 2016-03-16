@@ -26,7 +26,10 @@ let BSNavbar = React.createClass({
 
 	render: function () {
 
-		let isLoggedIn = !!this.state.token;
+		let isLoggedIn    = !!this.state.token;
+		let googleProfile = this.state.google;
+		let loading       = this.state.loading;
+		let routes        = this.props.routes;
 
 		return (
 			<nav role="navigation" className="navbar navbar-default" toggleNavKey={0}>
@@ -35,7 +38,7 @@ let BSNavbar = React.createClass({
 						{this._brand()}
 				    </div>
 				    <CollapsibleNav className="clearfix" eventKey={0}>
-						    {isLoggedIn && !this.state.loading ? this._userMenu(this.state.google) : this._signIn(this.state.loading)}
+						    {isLoggedIn && !loading ? this._userMenu(googleProfile) : this._signIn(loading, routes)}
 					</CollapsibleNav>
 				</div>
 				<Alert/>
@@ -55,7 +58,12 @@ let BSNavbar = React.createClass({
 		);
 	},
 
-	_signIn (loading) {
+	_signIn (loading, routes) {
+		let isSignInScreen = false;
+		for (let route of routes) {
+			if (route.name == 'signIn') {isSignInScreen = true;}
+		}
+
 		if (loading) {
 			return (
 				<div className="navbar-right signInNavBtn">
@@ -68,7 +76,7 @@ let BSNavbar = React.createClass({
 		} else {
 			return (
 				<div className="navbar-right signInNavBtn">
-					<button className="btn-blue" onClick={userActions.signIn.bind(null, {transition: false})} >
+					<button className="btn-blue" onClick={userActions.signIn.bind(null, {transition: isSignInScreen})} >
 						<i className="fa fa-google" />
 						<span> Sign in</span>
 					</button>
