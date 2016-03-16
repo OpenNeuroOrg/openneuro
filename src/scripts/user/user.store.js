@@ -137,7 +137,6 @@ let UserStore = Reflux.createStore({
 								this.clearAuth();
 								let message = <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>;
 								if (!transition) {
-									console.log('here');
 									notifications.createAlert({type: 'Error', message: message});
 								}
 								this.update({
