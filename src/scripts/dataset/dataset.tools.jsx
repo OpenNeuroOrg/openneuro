@@ -87,11 +87,13 @@ let Tools = React.createClass({
 				validations: [
 					{
 						check: !dataset.authors || !(dataset.authors.length > 0),
-						message: 'You must list at least one author before creating a snapshot.'
+						message: 'You must list at least one author before creating a snapshot.',
+						messageTimeout: 3500
 					},
 					{
 						check: isInvalid,
-						message: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.'
+						message: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.',
+						messageTimeout: 3500
 					}
 				],
 			}

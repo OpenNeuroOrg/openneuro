@@ -1,13 +1,16 @@
-//base =====================================================================
+//base ====================================================================
 @import "bootstrap";                                                      
-//font                                                                    
-@import "font-awesome/_font-awesome";                                     
-// Always required _properties if not importing all animate/animate.scss  
+ 
+// Always required /_properties if not importing all animate/animate.scss  
 @import "animate/_properties";                                            
         
-//==========================================================================
 
-//crn SASS ======================================================================
+//font  //=================================================================                                                              
+
+@import "font-awesome/_font-awesome";      
+
+
+//crn SASS =================================================================
 @import "./_crn-variables";
 @import "./_crn-generalwrappers";
 @import "_crn-typography";
@@ -28,7 +31,7 @@
 @import "./_crn-upload";
 @import "./_crn-dataset";
 
-// annimations ================================================================ 
+// annimations ============================================================
 @import "animate/_fading-entrances/fading-entrances.scss";      
 @import "animate/_sliding-entrances/sliding-entrances.scss";   
 @import "animate/_attention-seekers/attention-seekers.scss";  

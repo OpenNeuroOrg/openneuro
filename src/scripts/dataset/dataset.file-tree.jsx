@@ -61,7 +61,7 @@ class FileTree extends React.Component {
 			if (item.children) {
 				addFile = (
 					<div className="edit-file">
-						<span>Add File</span>
+						<span><i className="fa fa-plus"></i> Add File</span>
 						<input
 							type="file"
 							className="add-files"
@@ -82,7 +82,7 @@ class FileTree extends React.Component {
 
 				editFile = (
 					<div className="edit-file">
-						<span>Update file</span>
+						<span><i className="fa fa-file-o"></i> Update</span>
 						<input
 							type="file"
 							className="update-file"

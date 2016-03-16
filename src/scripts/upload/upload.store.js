@@ -291,7 +291,8 @@ let UploadStore = Reflux.createStore({
 
 		notifications.createAlert({
 			type: 'Success',
-			message: message
+			message: message,
+			messageTimeout: 4000
 		});
 		this.setInitialState();
 		window.onbeforeunload = function() {};

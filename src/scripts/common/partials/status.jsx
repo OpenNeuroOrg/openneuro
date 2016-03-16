@@ -25,7 +25,7 @@ class Status extends React.Component {
 				break;
 			case 'incomplete':
 				spanClass  = 'dataset-status ds-warning';
-				tip        = 'Click to select your folder again and resume the upload';
+				tip        = 'Click resume to try again';
 				title	  = 'Incomplete';
 				iconClass  = 'fa fa-warning';
 				fileSelect = <span className="file-wrap"><FileSelect resume={true} onChange={this._onFileSelect.bind(this)} /></span>;

@@ -40,6 +40,7 @@ let UploadStore = Reflux.createStore({
 			showAlert: false,
 			alertType: null,
 			alertMessage: '',
+			messageTimeout: null,
 		};
 		for (let prop in diffs) {data[prop] = diffs[prop];}
 		this.update(data, callback);
@@ -52,7 +53,10 @@ let UploadStore = Reflux.createStore({
 	 * Create Alert
 	 */
 	createAlert (alert) {
-		this.update({showAlert: true, alertType: alert.type, alertMessage: alert.message});
+		this.update({showAlert: true, alertType: alert.type, alertMessage: alert.message, messageTimeout: alert.messageTimeout});
+		if(alert.messageTimeout != null){
+			window.setTimeout(this.closeAlert, alert.messageTimeout);
+		}
 	},
 
 	/**
