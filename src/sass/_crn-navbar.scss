@@ -88,16 +88,16 @@
 	    		}
 		}
 		&.alert-danger{
-			color:$brand-danger;
-			strong{color:$brand-danger;}
+			color:lighten($brand-danger,10%);
+			strong{color:lighten($brand-danger,10%);}
 			a{
 				text-decoration: underline;
 			}
 			a,
 			.dismiss-button-x{	
-				color:$brand-danger;
+				color:lighten($brand-danger,10%);
 	    		&:hover{
-	    			color:lighten($brand-danger, 10%);
+	    			color:lighten($brand-danger, 2%);
 	    		}
 	    	}
 		}
