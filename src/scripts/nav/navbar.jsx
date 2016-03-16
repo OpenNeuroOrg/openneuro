@@ -10,6 +10,7 @@ import uploadStore 		from '../upload/upload.store.js';
 import Upload       	from '../upload/upload.jsx';
 import Progress       	from '../upload/upload.progress.jsx';
 import userActions   	from '../user/user.actions.js';
+import Alert            from '../notification/notification.alert.jsx';
 import {CollapsibleNav,
 		Nav,
 		DropdownButton,
@@ -65,6 +66,7 @@ let BSNavbar = React.createClass({
 						    {isLoggedIn ? usermenu : signInGoogle}
 					</CollapsibleNav>
 				</div>
+				<Alert/>
 		    </nav>
 	    );
 	},

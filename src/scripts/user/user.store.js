@@ -1,15 +1,16 @@
 // dependencies ----------------------------------------------------------------------
 
-import React        from 'react';
-import Reflux  		from 'reflux';
-import Actions 		from './user.actions.js';
-import config  		from '../config';
-import router  		from '../utils/router-container';
-import scitran 		from '../utils/scitran';
-import crn     		from '../utils/crn';
-import upload  		from '../upload/upload.actions';
+import React            from 'react';
+import Reflux  		    from 'reflux';
+import Actions 		    from './user.actions.js';
+import config  		    from '../config';
+import router  		    from '../utils/router-container';
+import scitran 		    from '../utils/scitran';
+import crn     		    from '../utils/crn';
+import upload  		    from '../upload/upload.actions';
 import dashboardActions from '../dashboard/datasets.actions';
-import datasetActions from '../dataset/dataset.actions';
+import datasetActions   from '../dataset/dataset.actions';
+import notifications    from '../notification/notification.actions';
 
 hello.init({google: config.auth.google.clientID});
 
@@ -132,10 +133,16 @@ let UserStore = Reflux.createStore({
 						};
 						crn.createUser(user, (err, res) => {
 							if (err) {
+									notifications.createAlert({type: 'Error', message: message});
 								this.clearAuth();
+								let message = <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>;
+								if (!transition) {
+									console.log('here');
+									notifications.createAlert({type: 'Error', message: message});
+								}
 								this.update({
 									loading: false,
-									signinError: <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>
+									signinError: message
 								});
 								return;
 							}

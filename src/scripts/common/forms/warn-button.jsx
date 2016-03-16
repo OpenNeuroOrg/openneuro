@@ -2,7 +2,7 @@
 
 import React                     from 'react';
 import {OverlayTrigger, Tooltip} from 'react-bootstrap';
-import notifications             from '../../notification/notification.store.js';
+import notifications             from '../../notification/notification.actions';
 
 export default class WarnButton extends React.Component {
 
