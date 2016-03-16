@@ -435,3 +435,68 @@ select {
 .tooltip.top .tooltip-arrow{
 	border-top-color: rgba(0,0,0,0.9);
 }
+
+//Alerts // ================================================================
+.navbar {
+	.alert{
+	    position: absolute;
+	    right: 15px;
+	    max-width: 600px;
+	    top: 80px;
+	    font-size: 14px;
+	    background: rgba(0, 0, 0, 0.8);
+	    border: none;
+	    padding: 10px 40px 10px 20px;
+	    color: #D9D9D9;
+	    .alert-left{
+	    	a{
+				text-decoration: underline;
+			}
+	    	a{
+	    		color: $brand-info; 
+	    		&:hover{
+	    			color:lighten($brand-info, 10%);
+	    		}
+	    	}
+	    }
+		.dismiss-button-x{
+		    position: absolute;
+		    top: 0;
+		    right: 0;
+		    background: none;
+		    border: none;
+		    color: $brand-info; 
+	    		&:hover{
+	    			color:lighten($brand-info, 10%);
+	    		}
+		}
+		&.alert-danger{
+			color:lighten($brand-danger,10%);
+			strong{color:lighten($brand-danger,10%);}
+			a{
+				text-decoration: underline;
+			}
+			a,
+			.dismiss-button-x{	
+				color:lighten($brand-danger,10%);
+	    		&:hover{
+	    			color:lighten($brand-danger, 2%);
+	    		}
+	    	}
+		}
+		&.alert-warning{
+			color:$brand-warning;
+			strong{color: $brand-warning;}
+			a{
+				text-decoration: underline;
+			}
+			a,
+			.dismiss-button-x{	
+				color:$brand-warning;
+	    		&:hover{
+	    			color:lighten($brand-warning, 10%);
+	    		}
+	    	}
+		}
+	}
+}

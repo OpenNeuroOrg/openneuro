@@ -115,7 +115,7 @@ let datasetStore = Reflux.createStore({
 	reloadDataset(datasetId) {
 		if (this.data.dataset) {
 			if (!datasetId) {
-				this.loadDataset(this.data.dataset._id);
+				this.loadDataset(this.data.dataset._id, {snapshot: this.data.snapshot});
 			}else if (this.data.dataset._id == datasetId) {
 				this.loadDataset(datasetId);
 			}
@@ -571,7 +571,7 @@ let datasetStore = Reflux.createStore({
 			if (project.metadata.authors && project.metadata.authors.length < 1) {
 				callback({error: 'Your dataset must list at least one author before creating a snapshot.'});
 			} else if (project.metadata.hasOwnProperty('validation') && project.metadata.validation.errors.length > 0) {
-				callback({error: 'You cannot snapshot an invalid dataset.'});
+				callback({error: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.'});
 			} else {
 				scitran.createSnapshot(datasetId, (err, res) => {
 					if (transition) {
