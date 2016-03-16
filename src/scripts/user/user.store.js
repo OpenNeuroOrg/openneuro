@@ -133,16 +133,16 @@ let UserStore = Reflux.createStore({
 						};
 						crn.createUser(user, (err, res) => {
 							if (err) {
-									notifications.createAlert({type: 'Error', message: message});
 								this.clearAuth();
 								let message = <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>;
 								if (!transition) {
 									notifications.createAlert({type: 'Error', message: message});
+								} else {
+									this.update({
+										loading: false,
+										signinError: message
+									});
 								}
-								this.update({
-									loading: false,
-									signinError: message
-								});
 								return;
 							}
 							scitran.verifyUser((err, res) => {
