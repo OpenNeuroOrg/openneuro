@@ -9,7 +9,11 @@ export default class ErrorLink extends React.Component {
 // life cycle events ------------------------------------------------------
 
 	render () {
-		let dataURL = this._generateErrorLog(this.props.errors, this.props.warnings);
+		let errors = this.props.errors;
+		let warnings = this.props.warnings;
+		if (errors === 'Invalid' || (errors.length < 1 && warnings.length < 1)) {return false;}
+
+		let dataURL = this._generateErrorLog(errors, warnings);
 		return (
 			<a download={this.props.dirName + "_errors.txt"} className="error-log" target="_blank" href={dataURL}>
 				Download error log for {this.props.dirName}

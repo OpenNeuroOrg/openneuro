@@ -587,14 +587,18 @@ let datasetStore = Reflux.createStore({
 
 	loadSnapshots(datasetId, callback) {
 		scitran.getProjectSnapshots(datasetId, (err, res) => {
-			let snapshots = !err && res.body ? res.body : [];
-			snapshots.reverse();
-			snapshots.unshift({
-				isOriginal: true,
-				_id: datasetId
+			scitran.getProject(datasetId, (res1) => {
+				let snapshots = !err && res.body ? res.body : [];
+				snapshots.reverse();
+				if (res1.statusCode !== 404 && res1.statusCode !== 403) {
+					snapshots.unshift({
+						isOriginal: true,
+						_id: datasetId
+					});
+				}
+				this.update({snapshots: snapshots});
+				if (callback) {callback();}
 			});
-			this.update({snapshots: snapshots});
-			if (callback) {callback();}
 		});
 	},
 

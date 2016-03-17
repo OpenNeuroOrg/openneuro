@@ -7,6 +7,7 @@ import scitran    from '../utils/scitran';
 import Input      from '../common/forms/input.jsx';
 import WarnButton from '../common/forms/warn-button.jsx';
 import {Modal}    from 'react-bootstrap';
+import userStore  from '../user/user.store';
 
 export default class Share extends React.Component {
 
@@ -34,22 +35,6 @@ export default class Share extends React.Component {
 
 	render() {
 
-		let accessKey = {
-			admin: 'Administrator',
-			rw: 'Can edit',
-			ro: 'Can view'
-		};
-
-		let permissions = this.state.permissions.map((user) => {
-			return (
-				<div key={user._id} className="cte-array-item"><span className="share-name">{user._id}</span> <span className="share-access">- {accessKey[user.access]}</span>
-					<div className="btn-wrap">
-						<WarnButton message="Remove" action={this._removeUser.bind(this, user._id)}/>
-					</div>
-				</div>
-			);
-		});
-
 		let instruction = "Enter a user's email address and select access level to share";
 
 		return (
@@ -61,9 +46,7 @@ export default class Share extends React.Component {
 	        	<Modal.Body>
 					<div className="dataset">
 						<h5>Dataset shared with:</h5>
-						<div className="cte-array-items">
-							{permissions}
-						</div>
+						<div className="cte-array-items">{this._permissions(this.state.permissions)}</div>
 						<h5 className="add-members">{instruction}</h5>
 						<div>
 							<div className="text-danger">{this.state.error}</div>
@@ -84,7 +67,28 @@ export default class Share extends React.Component {
     	);
 	}
 
-// custon methods -----------------------------------------------------
+// template methods ---------------------------------------------------
+
+	_permissions(permissions) {
+		let accessKey = {
+			admin: 'Administrator',
+			rw: 'Can edit',
+			ro: 'Can view'
+		};
+
+		return permissions.map((user) => {
+			let remove = userStore.data.google.email !== user._id ? <WarnButton message="Remove" action={this._removeUser.bind(this, user._id)}/> : null;
+			return (
+				<div key={user._id} className="cte-array-item"><span className="share-name">{user._id}</span> <span className="share-access">- {accessKey[user.access]}</span>
+					<div className="btn-wrap">
+						{remove}
+					</div>
+				</div>
+			);
+		});
+	}
+
+// custom methods -----------------------------------------------------
 
 	_toggleEdit() {
 		this.setState({edit: !this.state.edit});
