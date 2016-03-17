@@ -67,7 +67,12 @@ let Upload = React.createClass({
 			issues = (
 				<TabPane eventKey={3} tab={tabName}  className="upload-step" disabled={disabledTab}>
 					<div className={activePane}>
-						<Issues />
+						<Issues
+							tree={this.state.tree}
+							errors={this.state.errors}
+							warnings={this.state.warnings}
+							dirName={dirName}
+							uploadStatus={uploadStatus} />
 					</div>
 				</TabPane>
 			);
@@ -103,11 +108,9 @@ let Upload = React.createClass({
 			<div className='uploader'>
 				<div className="upload-wrap panel-group" defaultActiveKey='1'>
 					<div className="upload-panel panel panel-default">
-
 					    <div className="panel-collapse collapse in">
 					    	<div className="panel-body">
 					        	<div>
-
 									<TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={Actions.selectTab}>
 										<div className={activeBar}></div>
 										{select}
@@ -116,7 +119,6 @@ let Upload = React.createClass({
 										{resume}
 										{progress}
 									</TabbedArea>
-
 								</div>
 							</div>
 						</div>

@@ -106,6 +106,7 @@ let Dataset = React.createClass({
 									<div>
 										<div className="fadeIn col-xs-12">
 											<h3 className="metaheader">{errors.length > 0 || warnings.length > 0 ? 'Validation' : null}</h3>
+											<div>{errors === 'Invalid' ? "This does not appear to be a BIDS dataset" : null}</div>
 											<Results errors={dataset.validation.errors} warnings={dataset.validation.warnings} />
 										</div>
 										<div className="fadeIn col-xs-12">
