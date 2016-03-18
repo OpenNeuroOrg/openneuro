@@ -76,33 +76,25 @@ export default {
 	},
 
 	validateOne(req, res, next) {
-
 		// get project id
 		let datasetId = req.params.datasetId;
-		console.log('datasetId:' + datasetId);
 
 		scitran.downloadSymlinkDataset(datasetId, (err, hash) => {
-			console.log(err, hash);
-			if (err && err.status == 404) {
-				// remove validation flag if dataset can no longer be found
-				// c.validationQueue.findAndRemove({_id: dataset._id}, [], (err, doc) => {});
-			} else {
-				validate.BIDS('./persistent/datasets/' + hash, {}, (errors, warnings) => {
-					let validation = {errors, warnings};
-					scitran.updateProject(datasetId, {
-						metadata: {validation}
-					}, (err, res1) => {
-						scitran.removeTag('projects', datasetId, 'pendingValidation', (err, res2) => {
-							if (errors && errors.length > 0) {
-								scitran.addTag('projects', datasetId, 'invalid', (err, res3) => {res.send(validation)});
-							} else {
-								scitran.removeTag('projects', datasetId, 'invalid', (err, res4) => {res.send(validation)});
-							}
-						});
-
+			validate.BIDS('./persistent/datasets/' + hash, {}, (errors, warnings) => {
+				let validation = {errors, warnings};
+				scitran.updateProject(datasetId, {
+					metadata: {validation}
+				}, (err, res1) => {
+					scitran.removeTag('projects', datasetId, 'validating', (err, res2) => {
+						if (errors && errors.length > 0) {
+							scitran.addTag('projects', datasetId, 'invalid', (err, res3) => {res.send(validation)});
+						} else {
+							scitran.removeTag('projects', datasetId, 'invalid', (err, res4) => {res.send(validation)});
+						}
 					});
+
 				});
-			}
+			});
 		});
 	}
 
