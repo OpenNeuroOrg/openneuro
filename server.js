@@ -29,7 +29,7 @@ app.use('/api/v1/', routes);
 
 // cron jobs -------------------------------------------------------
 
-let validationCron = new cron.CronJob('*/15 * * * * *', validation.validate, null, true, 'America/Los_Angeles');
+// let validationCron = new cron.CronJob('*/15 * * * * *', validation.validate, null, true, 'America/Los_Angeles');
 
 // error handling --------------------------------------------------
 

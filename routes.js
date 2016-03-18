@@ -41,7 +41,7 @@ let routes = [
 		method: 'post',
 		url: '/datasets/:datasetId/validate',
 		middleware: [auth.user],
-		handler: validation.flag
+		handler: validation.validateOne
 	},
 
 	// jobs ----------------------------------------
