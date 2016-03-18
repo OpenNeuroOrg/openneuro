@@ -388,7 +388,6 @@ let datasetStore = Reflux.createStore({
 			this.updateDirectoryState(container._id, {error: '"' + file.name + '" already exists in this directory.'});
 		} else {
 			this.updateDirectoryState(container._id, {loading: true});
-			this.flagForValidation();
 			scitran.updateFile(container.containerType, container._id, file, () => {
 				let children = container.children
 				children.unshift({
@@ -397,6 +396,7 @@ let datasetStore = Reflux.createStore({
 					parentContainer: container.containerType,
 					parentId: container._id
 				});
+				this.revalidate();
 				this.updateDirectoryState(container._id, {children: children, loading: false});
 			});
 		}
@@ -407,7 +407,6 @@ let datasetStore = Reflux.createStore({
 	 */
 	deleteFile(file) {
 		let dataset = this.data.dataset;
-		this.flagForValidation();
 		scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
 			let match = files.findInTree([dataset], file.parentId);
 			let children = [];
@@ -417,6 +416,7 @@ let datasetStore = Reflux.createStore({
 				}
 			}
 			match.children = children;
+			this.revalidate();
 			this.update({dataset});
 		});
 	},
@@ -435,25 +435,29 @@ let datasetStore = Reflux.createStore({
 			});
 		} else {
 			this.updateFileState(item, {error: null, loading: true});
-			this.flagForValidation();
 			scitran.updateFile(level, id, file, (err, res) => {
+				this.revalidate();
 				this.updateFileState(item, {loading: false});
 			});
 		}
 	},
 
 	/**
-	 * Flag For Validation
+	 * Re Validate
 	 *
-	 * Used after any modification. Flags the dataset
-	 * to be re-validated by a periodic server side
-	 * process and tags dataset as 'pending validation'
+	 * Used after any modification and must be run
+	 * only after the modification is complete. Downloads
+	 * and validates the dataset server side. Updates status
+	 * tags and validation results on dataset.
 	 */
-	flagForValidation() {
+	revalidate() {
 		let dataset = this.data.dataset;
-		scitran.addTag('projects', dataset._id, 'pendingValidation', (err, res) => {
-			crn.flagForValidation(dataset._id, (err, res) => {
-				dataset.status.pendingValidation = true;
+		scitran.addTag('projects', dataset._id, 'validating', (err, res) => {
+			dataset.status.validating = true;
+			this.update({dataset});
+			crn.validate(dataset._id, (err, res) => {
+				dataset.status.validating = false;
+				dataset.validation = res.body;
 				this.update({dataset});
 			});
 		});
