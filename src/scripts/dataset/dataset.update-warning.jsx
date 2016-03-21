@@ -11,7 +11,9 @@ export default class Publish extends React.Component {
 
 	constructor() {
 		super();
-		this.state = {};
+		this.state = {
+			dontShowAgain: false
+		};
 	}
 
 	render() {
@@ -33,14 +35,16 @@ export default class Publish extends React.Component {
 	_body(currentUpdate) {
 		if (currentUpdate) {
 			return (
-				<div>
-					<div className="dataset">
-						Warning you are about to {currentUpdate.message}. This action will run validation again. As a result, your dataset could become invalid, Do you want to continue?
-					</div>
-					<input type="checkbox" /><label>Do not show me this message again</label>
-					<div className="col-xs-12 modal-actions">
-						<button className="btn-modal-submit" onClick={this._confirm.bind(this, currentUpdate.action)}>Confirm</button>
-						<button className="btn-reset" onClick={this._hide.bind(this)}>Cancel</button>
+				<div className="row">
+					<div className="col-xs-12">
+						<div className="dataset">
+							Warning you are about to {currentUpdate.message}. This action will run validation again. As a result, your dataset could become invalid, Do you want to continue?
+						</div>
+						<input type="checkbox" value={this.state.dontShowAgain} onChange={this._onChange.bind(this)} id="dontShowAgain" name="dontShowAgain"/><label htmlFor="dontShowAgain">Do not show me this message again.</label>
+						<div className="col-xs-12 modal-actions">
+							<button className="btn-modal-submit" onClick={this._confirm.bind(this, currentUpdate.action)}>Confirm</button>
+							<button className="btn-reset" onClick={this._hide.bind(this)}>Cancel</button>
+						</div>
 					</div>
 				</div>
 			);
@@ -54,7 +58,9 @@ export default class Publish extends React.Component {
 	 * Confirm
 	 */
 	_confirm(action) {
+		if (this.state.dontShowAgain) {actions.disableUpdateWarn()}
 		action();
+		this.setState({dontShowAgain: false});
 		this._hide();
 	}
 
@@ -63,6 +69,13 @@ export default class Publish extends React.Component {
 	 */
 	_hide() {
 		this.props.onHide();
+	}
+
+	/**
+	 * On Change
+	 */
+	_onChange() {
+		this.setState({dontShowAgain: !this.state.dontShowAgain});
 	}
 
 }

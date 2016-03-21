@@ -7,6 +7,7 @@ import crn           from '../utils/crn';
 import bids          from '../utils/bids';
 import router        from '../utils/router-container';
 import userStore     from '../user/user.store';
+import userActions   from '../user/user.actions';
 import upload        from '../utils/upload';
 import config        from '../config';
 import files         from '../utils/files';
@@ -382,13 +383,28 @@ let datasetStore = Reflux.createStore({
 	 * dataset modifications.
 	 */
 	updateWarn(type, file, action) {
-		this.update({
-			currentUpdate: {
-				message: type + ' ' + file.name,
-				action: action
-			},
-			showUpdateModal: true
+		userActions.getPreferences((preferences) => {
+			if (preferences.ignoreUpdateWarnings) {
+				action();
+			} else {
+				this.update({
+					currentUpdate: {
+						message: type + ' ' + file.name,
+						action: action
+					},
+					showUpdateModal: true
+				});
+			}
 		});
+	},
+
+	/**
+	 * Disable Update Warning
+	 *
+	 * Disables the update warning modal
+	 */
+	disableUpdateWarn(callback) {
+		userActions.updatePreferences({ignoreUpdateWarnings: true}, callback);
 	},
 
 	/**
@@ -456,7 +472,7 @@ let datasetStore = Reflux.createStore({
 				error: 'You must replace a file with a file of the same name.'
 			});
 		} else {
-			this.updateWanr('update', file, () => {
+			this.updateWarn('update', file, () => {
 				this.updateFileState(item, {error: null, loading: true});
 				scitran.updateFile(level, id, file, (err, res) => {
 					this.updateFileState(item, {loading: false});
@@ -480,8 +496,10 @@ let datasetStore = Reflux.createStore({
 			dataset.status.validating = true;
 			this.update({dataset});
 			crn.validate(dataset._id, (err, res) => {
+				let validation = res.body;
 				dataset.status.validating = false;
-				dataset.validation = res.body;
+				dataset.validation = validation;
+				dataset.status.invalid = validation.errors && (validation.errors == 'Invalid' || validation.errors.length > 0);
 				this.update({dataset});
 			});
 		});
