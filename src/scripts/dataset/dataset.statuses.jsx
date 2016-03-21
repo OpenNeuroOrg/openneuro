@@ -21,12 +21,12 @@ let Statuses = React.createClass({
 		let dataset = this.props.dataset;
 		let uploading = dataset._id === this.state.projectId;
 
-		let publicStatus      = <Status type='public' />;
-		let incompleteStatus  = <Status type='incomplete' dataset={dataset} actionable={this.props.actionable} />;
-		let sharedWithStatus  = <Status type='shared' />;
-		let inProgress        = <Status type='inProgress' />;
-		let pendingValidation = <Status type='pendingValidation' />;
-		let invalid           = <Status type='invalid' />;
+		let publicStatus     = <Status type='public' />;
+		let incompleteStatus = <Status type='incomplete' dataset={dataset} actionable={this.props.actionable} />;
+		let sharedWithStatus = <Status type='shared' />;
+		let inProgress       = <Status type='inProgress' />;
+		let validating       = <Status type='validating' />;
+		let invalid          = <Status type='invalid' />;
 
 		return (
 			<span className="clearfix status-wrap">
@@ -34,7 +34,7 @@ let Statuses = React.createClass({
 				{dataset && dataset.status && dataset.status.uploadIncomplete && !uploading ? incompleteStatus : null}
 				{dataset && dataset.status && dataset.status.shared ? sharedWithStatus : null}
 				{dataset && uploading ? inProgress : null}
-				{dataset && dataset.status && dataset.status.pendingValidation ? pendingValidation : null}
+				{dataset && dataset.status && dataset.status.validating ? validating : null}
 				{dataset && dataset.status && dataset.status.invalid ? invalid : null}
 			</span>
     	);

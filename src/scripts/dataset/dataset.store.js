@@ -7,6 +7,7 @@ import crn           from '../utils/crn';
 import bids          from '../utils/bids';
 import router        from '../utils/router-container';
 import userStore     from '../user/user.store';
+import userActions   from '../user/user.actions';
 import upload        from '../utils/upload';
 import config        from '../config';
 import files         from '../utils/files';
@@ -30,9 +31,9 @@ let datasetStore = Reflux.createStore({
 
 	data: {},
 
-	update: function (data) {
+	update: function (data, callback) {
 		for (let prop in data) {this.data[prop] = data[prop];}
-		this.trigger(this.data);
+		this.trigger(this.data, callback);
 	},
 
 	/**
@@ -46,6 +47,7 @@ let datasetStore = Reflux.createStore({
 	setInitialState: function (diffs) {
 		let data = {
 			apps: [],
+			currentUpdate: null,
 			dataset: null,
 			loading: false,
 			loadingApps: false,
@@ -54,6 +56,7 @@ let datasetStore = Reflux.createStore({
 			showJobsModal: false,
 			showPublishModal: false,
 			showShareModal: false,
+			showUpdateModal: false,
 			snapshot: false,
 			snapshots: [],
 			selectedSnapshot: '',
@@ -374,6 +377,37 @@ let datasetStore = Reflux.createStore({
 	// File Structure ----------------------------------------------------------------
 
 	/**
+	 * Update Warning
+	 *
+	 * Throws a modal to warn the user about consequences of
+	 * dataset modifications.
+	 */
+	updateWarn(type, file, action) {
+		userActions.getPreferences((preferences) => {
+			if (preferences.ignoreUpdateWarnings) {
+				action();
+			} else {
+				this.update({
+					currentUpdate: {
+						message: type + ' ' + file.name,
+						action: action
+					},
+					showUpdateModal: true
+				});
+			}
+		});
+	},
+
+	/**
+	 * Disable Update Warning
+	 *
+	 * Disables the update warning modal
+	 */
+	disableUpdateWarn(callback) {
+		userActions.updatePreferences({ignoreUpdateWarnings: true}, callback);
+	},
+
+	/**
 	 * Add File
 	 */
 	addFile(container, file) {
@@ -387,17 +421,19 @@ let datasetStore = Reflux.createStore({
 		if (exists) {
 			this.updateDirectoryState(container._id, {error: '"' + file.name + '" already exists in this directory.'});
 		} else {
-			this.updateDirectoryState(container._id, {loading: true});
-			this.flagForValidation();
-			scitran.updateFile(container.containerType, container._id, file, () => {
-				let children = container.children
-				children.unshift({
-					filename: file.name,
-					name: file.name,
-					parentContainer: container.containerType,
-					parentId: container._id
+			this.updateWarn('add', file, () => {
+				this.updateDirectoryState(container._id, {loading: true});
+				scitran.updateFile(container.containerType, container._id, file, () => {
+					let children = container.children
+					children.unshift({
+						filename: file.name,
+						name: file.name,
+						parentContainer: container.containerType,
+						parentId: container._id
+					});
+					this.updateDirectoryState(container._id, {children: children, loading: false});
+					this.revalidate();
 				});
-				this.updateDirectoryState(container._id, {children: children, loading: false});
 			});
 		}
 	},
@@ -406,18 +442,20 @@ let datasetStore = Reflux.createStore({
 	 * Delete File
 	 */
 	deleteFile(file) {
-		let dataset = this.data.dataset;
-		this.flagForValidation();
-		scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
-			let match = files.findInTree([dataset], file.parentId);
-			let children = [];
-			for (let existingFile of match.children) {
-				if (file.name !== existingFile.name) {
-					children.push(existingFile);
+		this.updateWarn('delete', file, () => {
+			let dataset = this.data.dataset;
+			scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
+				let match = files.findInTree([dataset], file.parentId);
+				let children = [];
+				for (let existingFile of match.children) {
+					if (file.name !== existingFile.name) {
+						children.push(existingFile);
+					}
 				}
-			}
-			match.children = children;
-			this.update({dataset});
+				match.children = children;
+				this.update({dataset});
+				this.revalidate();
+			});
 		});
 	},
 
@@ -434,26 +472,34 @@ let datasetStore = Reflux.createStore({
 				error: 'You must replace a file with a file of the same name.'
 			});
 		} else {
-			this.updateFileState(item, {error: null, loading: true});
-			this.flagForValidation();
-			scitran.updateFile(level, id, file, (err, res) => {
-				this.updateFileState(item, {loading: false});
+			this.updateWarn('update', file, () => {
+				this.updateFileState(item, {error: null, loading: true});
+				scitran.updateFile(level, id, file, (err, res) => {
+					this.updateFileState(item, {loading: false});
+					this.revalidate();
+				});
 			});
 		}
 	},
 
 	/**
-	 * Flag For Validation
+	 * Re Validate
 	 *
-	 * Used after any modification. Flags the dataset
-	 * to be re-validated by a periodic server side
-	 * process and tags dataset as 'pending validation'
+	 * Used after any modification and must be run
+	 * only after the modification is complete. Downloads
+	 * and validates the dataset server side. Updates status
+	 * tags and validation results on dataset.
 	 */
-	flagForValidation() {
+	revalidate() {
 		let dataset = this.data.dataset;
-		scitran.addTag('projects', dataset._id, 'pendingValidation', (err, res) => {
-			crn.flagForValidation(dataset._id, (err, res) => {
-				dataset.status.pendingValidation = true;
+		scitran.addTag('projects', dataset._id, 'validating', (err, res) => {
+			dataset.status.validating = true;
+			this.update({dataset});
+			crn.validate(dataset._id, (err, res) => {
+				let validation = res.body;
+				dataset.status.validating = false;
+				dataset.validation = validation;
+				dataset.status.invalid = validation.errors && (validation.errors == 'Invalid' || validation.errors.length > 0);
 				this.update({dataset});
 			});
 		});
@@ -488,7 +534,7 @@ let datasetStore = Reflux.createStore({
 	 * Update Directory State
 	 *
 	 */
-	updateDirectoryState(directoryId, changes) {
+	updateDirectoryState(directoryId, changes, callback) {
 		let dataset = this.data.dataset;
 		let match = files.findInTree([dataset], directoryId);
 		if (match) {
@@ -496,7 +542,7 @@ let datasetStore = Reflux.createStore({
 				match[key] = changes[key];
 			}
 		}
-		this.update({dataset});
+		this.update({dataset}, callback);
 	},
 
 	/**
@@ -506,7 +552,7 @@ let datasetStore = Reflux.createStore({
 	 * made and applies those changes by
 	 * updating the state of the file tree
 	 */
-	updateFileState(file, changes) {
+	updateFileState(file, changes, callback) {
 		let dataset = this.data.dataset;
 		let parent = files.findInTree([dataset], file.parentId);
 		let children = [];
@@ -517,7 +563,7 @@ let datasetStore = Reflux.createStore({
 				}
 			}
 		}
-		this.update({dataset});
+		this.update({dataset}, callback);
 	},
 
 	/**

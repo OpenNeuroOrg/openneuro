@@ -77,7 +77,7 @@ export default class Share extends React.Component {
 		};
 
 		return permissions.map((user) => {
-			let remove = userStore.data.google.email !== user._id ? <WarnButton message="Remove" action={this._removeUser.bind(this, user._id)}/> : null;
+			let remove = userStore.data.google && userStore.data.google.email !== user._id ? <WarnButton message="Remove" action={this._removeUser.bind(this, user._id)}/> : null;
 			return (
 				<div key={user._id} className="cte-array-item"><span className="share-name">{user._id}</span> <span className="share-access">- {accessKey[user.access]}</span>
 					<div className="btn-wrap">
