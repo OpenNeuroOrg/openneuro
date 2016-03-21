@@ -34,12 +34,6 @@ let routes = [
 		middleware: [auth.superuser],
 		handler: users.unBlacklist
 	},
-	{
-		method: 'put',
-		url: '/users/:userId/preferences',
-		middleware: [auth.user],
-		handler: users.updatePreferences
-	},
 
 	// validation ----------------------------------
 
