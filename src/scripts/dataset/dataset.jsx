@@ -83,7 +83,7 @@ let Dataset = React.createClass({
 								</div>
 								<div className="col-xs-5">
 									<div>
-										{this._validation(errors, warnings)}
+										{this._validation(errors, warnings, dataset.status.validating)}
 										<div className="fadeIn col-xs-12">
 											<Jobs />
 										</div>
@@ -164,7 +164,10 @@ let Dataset = React.createClass({
 		return <h6>{'uploaded ' + (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +  ' on ' + dateAdded + ' - ' + timeago + ' ago'}</h6>;
 	},
 
-	_validation(errors, warnings) {
+	_validation(errors, warnings, validating) {
+		if (validating) {
+			return <Spinner text="Validating" active={true} />;
+		}
 		if (errors.length > 0 || warnings.length > 0) {
 			let message;
 			if (errors === 'Invalid') {
