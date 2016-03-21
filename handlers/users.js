@@ -19,6 +19,9 @@ let models = {
 		firstname: 'string',
 		lastname:  'string',
 		note:      'string'
+	},
+	preferences: {
+		warnDatasetUpdates: 'boolean'
 	}
 }
 
@@ -92,6 +95,19 @@ export default {
 		c.blacklist.find().toArray((err, docs) => {
 			if (err) {return next(err);}
 			res.send(docs);
+		});
+	},
+
+	// update --------------------------------------------------------------
+
+	updatePreferences(req, res, next) {
+		let userId = req.params.userId;
+		sanitize.req(req, models.preferences, (err, preferences) => {
+			if (req.params.userId === req.user) {
+				c.userPreferences.updateOne({_id: userId}, {$set: preferences}, {upsert: true}).then((result) => {
+					res.send(result.result);
+				});
+			}
 		});
 	},
 
