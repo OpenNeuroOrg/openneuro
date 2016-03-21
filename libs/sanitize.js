@@ -24,7 +24,7 @@ export default {
 			}
 
 			// not required
-			if (!value) {
+			if (value === null || value === undefined) {
 				continue;
 			}
 
@@ -32,6 +32,13 @@ export default {
 			if (model[prop].indexOf('string') > -1) {
 				if (typeof value !== 'string') {
 					err.invalid.push(prop + ' must be a string.');
+				}
+			}
+
+			// isBoolean
+			if (model[prop].indexOf('boolean') > -1) {
+				if (typeof value !== 'boolean') {
+					err.invalid.push(prop + ' must be a boolean');
 				}
 			}
 
