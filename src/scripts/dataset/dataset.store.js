@@ -384,7 +384,7 @@ let datasetStore = Reflux.createStore({
 	 */
 	updateWarn(type, file, action) {
 		userActions.getPreferences((preferences) => {
-			if (preferences.ignoreUpdateWarnings) {
+			if (preferences && preferences.ignoreUpdateWarnings) {
 				action();
 			} else {
 				this.update({
