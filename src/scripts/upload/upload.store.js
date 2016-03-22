@@ -12,14 +12,21 @@ import userStore       from '../user/user.store';
 import datasetsActions from '../dashboard/datasets.actions';
 import datasetActions  from '../dataset/dataset.actions';
 import {Link}          from 'react-router';
+import favico         	from 'favico.js';
 import bowser          from 'bowser';
 // store setup -----------------------------------------------------------------------
 
-let UploadStore = Reflux.createStore({
+	var favicon = new favico();
+	
+	let UploadStore = Reflux.createStore({
+
+
 
 	listenables: Actions,
 
 	init: function () {
+		// Reset Favico incase timeout or issues
+		favicon.reset()
 		this.setInitialState();
 	},
 
@@ -227,7 +234,6 @@ let UploadStore = Reflux.createStore({
 			self.upload(fileTree);
 		}
 	},
-
 	/**
 	 * Upload
 	 *
@@ -264,6 +270,14 @@ let UploadStore = Reflux.createStore({
                     this.uploadComplete(projectId);
                 });
 			}
+
+
+			if(progress.total !== progress.completed){
+			
+			var image =document.getElementById('favicon_upload');
+			favicon.image(image);
+
+			}
 		}, () => {
 			this.uploadError();
 		});
@@ -284,6 +298,9 @@ let UploadStore = Reflux.createStore({
 			<span><a href={"#/datasets/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>
 		);
 
+		// Reset Favico on complete
+		favicon.reset()
+
 		// refresh my datasets
 		datasetsActions.getDatasets();
 		// refresh current datset
@@ -291,8 +308,7 @@ let UploadStore = Reflux.createStore({
 
 		notifications.createAlert({
 			type: 'Success',
-			message: message,
-			messageTimeout: 4000
+			message: message
 		});
 		this.setInitialState();
 		window.onbeforeunload = function() {};
