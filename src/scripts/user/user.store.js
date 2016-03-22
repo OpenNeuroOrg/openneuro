@@ -197,6 +197,30 @@ let UserStore = Reflux.createStore({
 		}
 	},
 
+	/**
+	 * Get Preferences
+	 *
+	 * Calls back with the current user's preferences.
+	 */
+	getPreferences(callback) {
+		callback(this.data.scitran.preferences);
+	},
+
+	/**
+	 * Update Preferences
+	 */
+	updatePreferences(preferences, callback) {
+		let scitranUser = this.data.scitran;
+		scitranUser.preferences = scitranUser.preferences ? scitranUser.preferences : {};
+		for (let key in preferences) {
+			scitranUser.preferences[key] = preferences[key];
+		}
+		scitran.updateUser(this.data.scitran._id, {preferences: preferences}, (err, res) => {
+			this.update({scitran: scitranUser});
+			if (callback) {callback(err, res);}
+		});
+	},
+
 // helper methods --------------------------------------------------------------------
 
 	/**

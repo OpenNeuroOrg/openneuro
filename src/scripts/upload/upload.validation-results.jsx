@@ -15,9 +15,11 @@ export default class ValidationResults extends React.Component {
 		let errors = this.props.errors;
 		let warnings = this.props.warnings;
 
+		if (errors === 'Invalid') {return false;}
+
 		// errors
 		let errorsWrap;
-		if (errors.length > 0 && typeof errors !== 'string') {
+		if (errors.length > 0) {
 			let fileCount = this._countFiles(errors);
 			let errorHeader = <span>view {errors.length} {pluralize('error', errors.length)} in {fileCount} {pluralize('files', fileCount)}</span>;
 			errorsWrap = (
@@ -29,7 +31,7 @@ export default class ValidationResults extends React.Component {
 
 		//warnings
 		let warningWrap;
-		if (warnings.length > 0) {
+		if (warnings && warnings.length > 0) {
 			let fileCount = this._countFiles(warnings);
 			let warningHeader = <span>view {warnings.length} {pluralize('warning', warnings.length)} in {fileCount} {pluralize('files', fileCount)}</span>;
 			warningWrap = (
@@ -57,11 +59,6 @@ export default class ValidationResults extends React.Component {
 	}
 
 }
-
-ValidationResults.propTypes = {
-	errors:   React.PropTypes.array,
-	warnings: React.PropTypes.array
-};
 
 ValidationResults.Props = {
 	errors:   [],

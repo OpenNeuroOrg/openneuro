@@ -42,9 +42,9 @@ class Status extends React.Component {
 				title	  = 'In progress';
 				iconClass = 'fa fa-spin fa-circle-o-notch'
 				break;
-			case 'pendingValidation':
+			case 'validating':
 				spanClass = 'dataset-status ds-warning';
-				tip       = 'Pending validation';
+				tip       = 'Validating';
 				title	  = 'Validating';
 				iconClass = 'fa fa-clock-o';
 				break;
@@ -55,7 +55,7 @@ class Status extends React.Component {
 				iconClass = 'fa fa-exclamation-circle';
 		}
 
-		if(this.props.type == 'pendingValidation') {
+		if(this.props.type == 'validating') {
 			ellipsis = (<span className="ellipsis-animation"><span className="one">.</span><span className="two">.</span><span className="three">.</span>​</span>);
 		}
 

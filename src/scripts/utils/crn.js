@@ -88,9 +88,9 @@ export default {
 // Validation ------------------------------------------------------------------------------
 
 	/**
-	 * Flag For Validation
+	 * Validate
 	 */
-	flagForValidation(datasetId, callback) {
+	validate(datasetId, callback) {
 		request.post(config.crn.url + 'datasets/' + datasetId + '/validate', {}, callback);
 	}
 
