@@ -20,7 +20,7 @@ export default class Publish extends React.Component {
 		return (
 			<Modal show={this.props.show} onHide={this._hide.bind(this)}>
     			<Modal.Header closeButton>
-    				<Modal.Title>Update</Modal.Title>
+    				<Modal.Title>Warning</Modal.Title>
     			</Modal.Header>
     			<hr className="modal-inner" />
 				<Modal.Body>
@@ -33,14 +33,32 @@ export default class Publish extends React.Component {
 // template methods ---------------------------------------------------
 
 	_body(currentUpdate) {
+		let dontShowAgainInput = (
+			<div className="parameters form-horizontal">
+				<div className="form-group">
+					<label className="sr-only">Do not show this message again</label>
+					<div className="input-group">
+						<div className="clearfix">
+							<span>
+								<input id="dontShowAgain" name="dontShowAgain" className="form-control checkbox" type="checkbox"  value={this.state.dontShowAgain} onChange={this._onChange.bind(this)} />
+								<label htmlFor="dontShowAgain" for="dontShowAgain" className="checkmark">
+									<span></span>
+								</label>
+							</span>
+							<span className="help-text">Do not show this message again. (for all warning related to modifications to any dataset)</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
 		if (currentUpdate) {
 			return (
-				<div className="row">
+				<div className="row update-modal">
 					<div className="col-xs-12">
 						<div className="dataset">
-							Warning you are about to {currentUpdate.message}. This action will run validation again. As a result, your dataset could become invalid, Do you want to continue?
+							<span className="text-danger">You are about to {currentUpdate.message}</span>. This action will run validation again. As a result, your dataset could become invalid, Do you want to continue?
 						</div>
-						<input type="checkbox" value={this.state.dontShowAgain} onChange={this._onChange.bind(this)} id="dontShowAgain" name="dontShowAgain"/><label htmlFor="dontShowAgain">Do not show me this message again.</label>
+						{dontShowAgainInput}
 						<div className="col-xs-12 modal-actions">
 							<button className="btn-modal-submit" onClick={this._confirm.bind(this, currentUpdate.action)}>Confirm</button>
 							<button className="btn-reset" onClick={this._hide.bind(this)}>Cancel</button>
