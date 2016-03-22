@@ -20,7 +20,7 @@ export default class Publish extends React.Component {
 		return (
 			<Modal show={this.props.show} onHide={this._hide.bind(this)}>
     			<Modal.Header closeButton>
-    				<Modal.Title>Update</Modal.Title>
+    				<Modal.Title>Warning</Modal.Title>
     			</Modal.Header>
     			<hr className="modal-inner" />
 				<Modal.Body>
@@ -38,7 +38,7 @@ export default class Publish extends React.Component {
 				<div className="row">
 					<div className="col-xs-12">
 						<div className="dataset">
-							Warning you are about to {currentUpdate.message}. This action will run validation again. As a result, your dataset could become invalid, Do you want to continue?
+							You are about to {currentUpdate.message}. This action will run validation again. As a result, your dataset could become invalid, Do you want to continue?
 						</div>
 						<input type="checkbox" value={this.state.dontShowAgain} onChange={this._onChange.bind(this)} id="dontShowAgain" name="dontShowAgain"/><label htmlFor="dontShowAgain">Do not show me this message again.</label>
 						<div className="col-xs-12 modal-actions">
