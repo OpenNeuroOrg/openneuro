@@ -33,7 +33,7 @@ class Status extends React.Component {
 			case 'shared':
 				spanClass 	= 'dataset-status ds-info';
 				tip       	= minimal ? 'Shared with me' : null;
-				title	  	= !minimal ? 'Shared' : null;
+				title	  	= !minimal ? 'Shared with me' : null;
 				iconClass 	= 'fa fa-user';
 				break;
 			case 'inProgress':
