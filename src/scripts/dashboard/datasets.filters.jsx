@@ -13,9 +13,9 @@ export default class Filters extends React.Component {
 	render() {
 
 		let filters  = this.props.filters;
-		let publicFilter = this._button('public', 'fa-globe', 'Public datasets');
-		let incompleteFilter = this._button('incomplete', 'fa-warning', 'Incomplete datasets');
-		let sharedFilter = this._button('shared', 'fa-user', 'Datasets shared with me');
+		let publicFilter = this._button('public', 'fa-globe', 'Public datasets', 'Public');
+		let incompleteFilter = this._button('incomplete', 'fa-warning', 'Incomplete datasets', 'Incomplete');
+		let sharedFilter = this._button('shared', 'fa-user', 'Datasets shared with me', 'Shared');
 
 		let filterButtons;
 		if (!this.props.isPublic) {
@@ -41,13 +41,13 @@ export default class Filters extends React.Component {
 	 * a tooltip message and returns the markup
 	 * for a filter button.
 	 */
-	_button(filter, icon, tip) {
+	_button(filter, icon, tip, label) {
 		let filters  = this.props.filters;
 		return (
 			<Tooltip tooltip={tip}>
 				<button className={filters.indexOf(filter) > -1 ? 'active btn-filter filter-' + filter : 'btn-filter filter-' + filter} onClick={this._filter.bind(this, filter)}>
 					<i className={'fa ' + icon}></i>
-					<span className="filter-text">{filter}</span>
+					<span className="filter-text">{label}</span>
 				</button>
 			</Tooltip>
 		);

@@ -13,7 +13,7 @@ let Statuses = React.createClass({
 
 	getDefaultProps() {
 	    return {
-	        actionable: false
+	        minimal: false
 	    };
 	},
 
@@ -21,11 +21,11 @@ let Statuses = React.createClass({
 		let dataset = this.props.dataset;
 		let uploading = dataset._id === this.state.projectId;
 
-		let publicStatus     = <Status type='public' />;
-		let incompleteStatus = <Status type='incomplete' dataset={dataset} actionable={this.props.actionable} />;
-		let sharedWithStatus = <Status type='shared' />;
-		let inProgress       = <Status type='inProgress' />;
-		let invalid          = <Status type='invalid' />;
+		let publicStatus     = <Status type='public' minimal={this.props.minimal} />;
+		let incompleteStatus = <Status type='incomplete' dataset={dataset} minimal={this.props.minimal} />;
+		let sharedWithStatus = <Status type='shared' minimal={this.props.minimal} />;
+		let inProgress       = <Status type='inProgress' minimal={this.props.minimal} />;
+		let invalid          = <Status type='invalid' minimal={this.props.minimal} />;
 
 		return (
 			<span className="clearfix status-wrap">

@@ -77,7 +77,7 @@ let Dataset = React.createClass({
 									{this._views(dataset.views)}
 									<h6>downloads: {dataset.downloads}</h6>
 									<div className="status-container">
-										<Statuses dataset={dataset} />
+										<Statuses dataset={dataset} minimal={false}/>
 									</div>
 									<MetaData dataset={dataset} editable={canEdit} />
 								</div>

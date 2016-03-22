@@ -235,10 +235,10 @@ body,
 					}
 				}
 				.filter-text{
-					visibility: hidden;
-					width: 1px;
-					position:absolute;
-					left: -99999em;
+				    font-size: 12px;
+				    font-weight: 600;
+				    margin-left: 5px;
+				    position: relative;
 				}
 			}
 		}
@@ -350,6 +350,18 @@ body,
 							width: auto;
 							text-align: right;
 							box-sizing: border-box;
+							.dataset-status i.fa{
+								margin: 0;
+							}
+						}
+					}
+					.file-wrap{
+						float: right;
+						margin: 0 0 0 10px;
+						.fileupload-btn {
+							font-size: 10px;
+							padding: 0 5px;
+							margin-top: 1px;
 						}
 					}
 				}
@@ -425,3 +437,4 @@ body,
 		}
 	}
 }
+

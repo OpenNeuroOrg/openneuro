@@ -54,7 +54,7 @@ let Datasets = React.createClass({
                 let fullname  = user ? user.firstname + ' ' + user.lastname : '';
                 let dateAdded = moment(dataset.created).format('L');
                 let timeago   = moment(dataset.created).fromNow(true);
-                let  statusContainer = <div className="status-container"><Statuses dataset={dataset} actionable={true} /></div>;
+                let  statusContainer = <div className="status-container"><Statuses dataset={dataset} minimal={true} /></div>;
                 return (
                     <div className="fadeIn  panel panel-default" key={dataset._id}>
                         <div className="panel-heading">

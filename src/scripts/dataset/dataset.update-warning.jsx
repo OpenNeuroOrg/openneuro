@@ -38,6 +38,7 @@ export default class Publish extends React.Component {
 				<div className="form-group">
 					<label className="sr-only">Do not show this message again</label>
 					<div className="input-group">
+					<div className="input-group-addon">Do not show this message again.</div>
 						<div className="clearfix">
 							<span>
 								<input id="dontShowAgain" name="dontShowAgain" className="form-control checkbox" type="checkbox"  value={this.state.dontShowAgain} onChange={this._onChange.bind(this)} />
@@ -45,7 +46,7 @@ export default class Publish extends React.Component {
 									<span></span>
 								</label>
 							</span>
-							<span className="help-text">Do not show this message again. (for all warning related to modifications to any dataset)</span>
+							<span className="help-text">This setting is for all warnings related to modifications to any dataset.</span>
 						</div>
 					</div>
 				</div>
