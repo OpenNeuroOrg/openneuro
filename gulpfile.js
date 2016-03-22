@@ -29,6 +29,8 @@
         scssmain:       './src/sass/main.scss',
         libs:           './src/scripts/libs/*',
         assets:         './src/assets/*',
+        favicon:        './src/favicon.ico',
+        faviconUpload:   './src/favicon-upload.png',
         fonts:          './src/sass/fonts/*',
         bundle:         'app.min.js',
         md5bundle:      'md5worker.min.js',
@@ -72,6 +74,8 @@
     // copy
     gulp.task('copy', function () {
         gulp.src(p.html).pipe(gulp.dest(p.dist));
+        gulp.src(p.favicon).pipe(gulp.dest(p.dist));
+        gulp.src(p.faviconUpload).pipe(gulp.dest(p.dist));
         gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
         gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
     });

@@ -32,7 +32,8 @@
     "react-router": "^0.13.3",
     "reflux": "^0.2.7",
     "spark-md5": "^1.0.0",
-    "superagent": "^1.0.0"
+    "superagent": "^1.0.0",
+    "favico.js": "git://github.com/ejci/favico.js#0.3.10"
   },
   "devDependencies": {
     "babelify": "^5.0.4",
