@@ -44,12 +44,6 @@ class Status extends React.Component {
 				title	  	= 'In progress';
 				iconClass 	= 'fa fa-spin fa-circle-o-notch'
 				break;
-			case 'validating':
-				spanClass 	= 'dataset-status ds-warning';
-				tip       	= minimal ? 'Validating' : null;
-				title	  	= !minimal ? 'Validating' : null;
-				iconClass 	= 'fa fa-clock-o';
-				break;
 			case 'invalid':
 				spanClass 	= 'dataset-status ds-danger';
 				tip       	= minimal ? 'Invalid' : null;
