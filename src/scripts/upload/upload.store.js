@@ -16,7 +16,6 @@ import favico          from 'favico.js';
 import bowser          from 'bowser';
 
 let favicon = new favico();
-let uploadingFavicon = document.getElementById('favicon_upload');
 
 // store setup -----------------------------------------------------------------------
 
@@ -261,7 +260,8 @@ let UploadStore = Reflux.createStore({
 
 		window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 		
-		if(progress.total !== progress.completed) {favicon.image(uploadingFavicon);} // set new favicon image
+		let uploadingFavicon = document.getElementById('favicon_upload');
+		favicon.image(uploadingFavicon); // set new favicon image
 
 		upload.upload(userStore.data.scitran._id, fileTree, validation, count, (progress, projectId) => {
 			projectId = projectId ? projectId : this.data.projectId;
