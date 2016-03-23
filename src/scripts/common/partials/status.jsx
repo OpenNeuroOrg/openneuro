@@ -55,35 +55,30 @@ class Status extends React.Component {
 				iconClass 	= 'fa fa-exclamation-circle';
 		}
 
+		let content = (
+			<span>
+				<span className="icon-wrap">
+					<i className={iconClass}></i>
+					{title}
+				</span>
+			</span>
+		)
+
 		let withTip = (
 			<Tooltip tooltip={tip}>
-				<span>
-					<span className="icon-wrap">
-						<i className={iconClass}></i>
-					</span>
-				</span>
+				{content}
 			</Tooltip>
 		);
 		if(this.props.type == 'incomplete'){
 			withoutTip = (
 				<Tooltip tooltip={tip}>
-					<span>
-						<span className="icon-wrap">
-							<i className={iconClass}></i>
-							{title}
-						</span>
-					</span>
+					{content}
 				</Tooltip>
 			)
 		}else{
 			withoutTip = (
 				<div>
-					<span>
-						<span className="icon-wrap">
-							<i className={iconClass}></i>
-							<span>{title}</span>
-						</span>
-					</span>
+					{content}
 				</div>
 			)
 		}
