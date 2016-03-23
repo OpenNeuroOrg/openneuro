@@ -30,7 +30,7 @@ class Status extends React.Component {
 				tip        	= 'Click resume to try again';
 				title	 	= 'Incomplete';
 				iconClass  	= 'fa fa-warning';
-				fileSelect 	= <span className="file-wrap clearfix"><FileSelect resume={true} onChange={this._onFileSelect.bind(this)} /></span>;
+				fileSelect 	= minimal ? <span className="file-wrap clearfix"><FileSelect resume={true} onChange={this._onFileSelect.bind(this)} /></span> : null;
 				break;
 			case 'shared':
 				spanClass 	= 'dataset-status ds-info';
@@ -65,7 +65,7 @@ class Status extends React.Component {
 
 		return (
 			<span>
-				{minimal ? fileSelect : null}
+				{fileSelect}
 				<span className="clearfix status">
 					<span className={spanClass}>
 					{tip ? withTip : withoutTip }
