@@ -110,6 +110,7 @@ body,
 
 .tooltip{
 	z-index:4000;
+	margin-left:13px;
 }
 
 .tooltip-inner{
@@ -350,9 +351,12 @@ body,
 							width: auto;
 							text-align: right;
 							box-sizing: border-box;
-							.dataset-status i.fa{
-								margin: 0;
-							}
+							.dataset-status {
+								width: 80px;
+								i.fa{
+										margin: 0;
+									}
+								}
 						}
 					}
 					.file-wrap{
