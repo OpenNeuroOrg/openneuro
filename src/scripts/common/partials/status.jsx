@@ -25,7 +25,7 @@ class Status extends React.Component {
 				break;
 			case 'incomplete':
 				spanClass  	= 'dataset-status ds-warning';
-				tip        	= minimal ? 'Click resume to try again' : 'Click resume to try again';
+				tip        	= 'Click resume to try again';
 				title	 	= 'Incomplete';
 				iconClass  	= 'fa fa-warning';
 				fileSelect 	= <span className="file-wrap clearfix"><FileSelect resume={true} onChange={this._onFileSelect.bind(this)} /></span>;
