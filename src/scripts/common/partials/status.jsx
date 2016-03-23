@@ -13,7 +13,7 @@ class Status extends React.Component {
 // lifecycle events ----------------------------------------------------------
 
 	render() {
-		let spanClass, tip, iconClass, click, fileSelect, title, withoutTip;
+		let spanClass, tip, iconClass, click, fileSelect, title;
 		let minimal = this.props.minimal;
 
 		switch(this.props.type) {
@@ -62,34 +62,17 @@ class Status extends React.Component {
 					{title}
 				</span>
 			</span>
-		)
-
-		let withTip = (
-			<Tooltip tooltip={tip}>
-				{content}
-			</Tooltip>
 		);
-		if(this.props.type == 'incomplete'){
-			withoutTip = (
-				<Tooltip tooltip={tip}>
-					{content}
-				</Tooltip>
-			)
-		}else{
-			withoutTip = (
-				<div>
-					{content}
-				</div>
-			)
-		}
-		
+
+		let withTip = <Tooltip tooltip={tip}>{content}</Tooltip>;
+		let withoutTip = <div>{content}</div>;
 
 		return (
 			<span>
 				{minimal ? fileSelect : null}
 				<span className="clearfix status">
 					<span className={spanClass}>
-					{minimal ? withTip : withoutTip }
+					{tip ? withTip : withoutTip }
 					</span>
 				</span>
 			</span>
