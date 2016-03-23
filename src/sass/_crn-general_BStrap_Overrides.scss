@@ -291,6 +291,8 @@
 				margin: 0 5px 0 0;
 				box-sizing: border-box;
 				line-height: 10px;
+				width: 18px;
+				height: 15px;
 				i{
 					margin:0;
 					line-height: 10px;
@@ -578,6 +580,9 @@ select {
 }
 .signInBlock,
 .modal {
+	.modal-actions{
+		padding:0;
+	}
 	.alert{
 		position: relative;
 	    top: 0;

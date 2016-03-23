@@ -15,7 +15,7 @@ export default class Filters extends React.Component {
 		let filters  = this.props.filters;
 		let publicFilter = this._button('public', 'fa-globe', 'Public datasets', 'Public');
 		let incompleteFilter = this._button('incomplete', 'fa-warning', 'Incomplete datasets', 'Incomplete');
-		let sharedFilter = this._button('shared', 'fa-user', 'Datasets shared with me', 'Shared');
+		let sharedFilter = this._button('shared', 'fa-user', 'Datasets shared with me', 'Shared with me');
 
 		let filterButtons;
 		if (!this.props.isPublic) {

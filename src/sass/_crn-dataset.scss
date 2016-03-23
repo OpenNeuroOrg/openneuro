@@ -884,8 +884,28 @@
 }
 
 .update-modal{
+	.modal-text{
+		font-size: 18px;
+	}
 	.parameters{ 
 		margin: 10px;
+		.form-group {
+			padding: 5px;
+			margin: 0 -15px;
+			.input-group{
+				.input-group-addon{
+					width: auto;
+					font-size: 12px;
+					margin: 5px 0 0;
+					padding: 0 0 0 13px;
+					float: left;
+					display: block;
+				}
+				label{
+					    float: left;
+				}
+			}
+		}
 	}
 }
 // 		.form-group{
