@@ -261,8 +261,7 @@ let UploadStore = Reflux.createStore({
 
 		window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 		
-		//replace favicon image if upload begins
-		if(progress.total !== progress.completed) {favicon.image(uploadingFavicon)};
+		if(progress.total !== progress.completed) {favicon.image(uploadingFavicon);} // set new favicon image
 
 		upload.upload(userStore.data.scitran._id, fileTree, validation, count, (progress, projectId) => {
 			projectId = projectId ? projectId : this.data.projectId;
@@ -291,7 +290,7 @@ let UploadStore = Reflux.createStore({
 		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
 		if (fileSelect) {fileSelect.value = null;} // clear file input
 
-		// Reset Favico on complete
+		// reset favicon
 		favicon.reset()
 		// refresh my datasets
 		datasetsActions.getDatasets();
@@ -314,7 +313,7 @@ let UploadStore = Reflux.createStore({
 		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
 		if (fileSelect) {fileSelect.value = null;} // clear file input
 
-		// Reset Favico on error
+		// reset favicon
 		favicon.reset()
 		// refresh my datasets
 		datasetsActions.getDatasets();
