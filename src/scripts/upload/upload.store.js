@@ -12,15 +12,14 @@ import userStore       from '../user/user.store';
 import datasetsActions from '../dashboard/datasets.actions';
 import datasetActions  from '../dataset/dataset.actions';
 import {Link}          from 'react-router';
-import favico         	from 'favico.js';
+import favico          from 'favico.js';
 import bowser          from 'bowser';
+
+let favicon = new favico();
+
 // store setup -----------------------------------------------------------------------
 
-	var favicon = new favico();
-	
-	let UploadStore = Reflux.createStore({
-
-
+let UploadStore = Reflux.createStore({
 
 	listenables: Actions,
 
@@ -259,24 +258,20 @@ import bowser          from 'bowser';
 			warnings: this.data.warnings
 		};
 
+		window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
+		
+		let uploadingFavicon = document.getElementById('favicon_upload');
+		favicon.image(uploadingFavicon); // set new favicon image
+
 		upload.upload(userStore.data.scitran._id, fileTree, validation, count, (progress, projectId) => {
 			projectId = projectId ? projectId : this.data.projectId;
 			this.update({progress: progress, uploading: true, projectId: projectId});
 			if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
-			window.onbeforeunload = () => {return "You are currently uploading files. Leaving this site will cancel the upload process.";};
 			if (progress.total === progress.completed) {
 				let note = {author: 'uploadStatus', text: 'complete'};
 				scitran.removeTag('projects', projectId, 'incomplete', (err, res) => {
                     this.uploadComplete(projectId);
                 });
-			}
-
-
-			if(progress.total !== progress.completed){
-			
-			var image =document.getElementById('favicon_upload');
-			favicon.image(image);
-
 			}
 		}, () => {
 			this.uploadError();
@@ -291,16 +286,12 @@ import bowser          from 'bowser';
 	 * complete alert.
 	 */
 	uploadComplete (projectId) {
+		let message = <span><a href={"#/datasets/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>;
 		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
 		if (fileSelect) {fileSelect.value = null;} // clear file input
 
-		let message = (
-			<span><a href={"#/datasets/" + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>
-		);
-
-		// Reset Favico on complete
+		// reset favicon
 		favicon.reset()
-
 		// refresh my datasets
 		datasetsActions.getDatasets();
 		// refresh current datset
@@ -322,6 +313,8 @@ import bowser          from 'bowser';
 		let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
 		if (fileSelect) {fileSelect.value = null;} // clear file input
 
+		// reset favicon
+		favicon.reset()
 		// refresh my datasets
 		datasetsActions.getDatasets();
 		// refresh current datset
