@@ -52,15 +52,13 @@ class Status extends React.Component {
 		}
 
 		let content = (
-			<span>
-				<span className="icon-wrap">
-					<i className={iconClass}></i>
-					{minimal ? null : title}
-				</span>
+			<span className="icon-wrap">
+				<i className={iconClass}></i>
+				{minimal ? null : title}
 			</span>
 		);
 
-		content = tip ? <Tooltip tooltip={tip}>{content}</Tooltip> : <div>{content}</div>;
+		if (tip) {content = <Tooltip tooltip={tip}>{content}</Tooltip>}
 
 		return (
 			<span>
