@@ -60,16 +60,13 @@ class Status extends React.Component {
 			</span>
 		);
 
-		let withTip = <Tooltip tooltip={tip}>{content}</Tooltip>;
-		let withoutTip = <div>{content}</div>;
+		content = tip ? <Tooltip tooltip={tip}>{content}</Tooltip> : <div>{content}</div>;
 
 		return (
 			<span>
 				{fileSelect}
 				<span className="clearfix status">
-					<span className={spanClass}>
-					{tip ? withTip : withoutTip }
-					</span>
+					<span className={spanClass}>{content}</span>
 				</span>
 			</span>
 		);
