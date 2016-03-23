@@ -136,7 +136,7 @@ let Dataset = React.createClass({
 	},
 
 	_fileTree(dataset, canEdit) {
-		if (!dataset.status.uploadIncomplete) {
+		if (!dataset.status.incomplete) {
 			return (
 				<div className="col-xs-12">
 					<div className="fileStructure fadeIn panel-group">

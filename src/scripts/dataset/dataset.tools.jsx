@@ -37,7 +37,7 @@ let Tools = React.createClass({
 		let isViewer     = dataset.access === 'ro';
 		let isSignedIn   = !!userStore.hasToken();
 		let isPublic     = !!dataset.public;
-		let isIncomplete = !!dataset.status.uploadIncomplete;
+		let isIncomplete = !!dataset.status.incomplete;
 		let isInvalid    = !!dataset.status.invalid;
 		let isSnapshot   = !!dataset.original;
 		let isSuperuser  = window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser).root : null;

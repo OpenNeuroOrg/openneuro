@@ -101,19 +101,20 @@ let UploadStore = Reflux.createStore({
     		filters = [value];
     	}
 
+
+
     	// filter data
     	let visibleDatasets = this.data.datasets;
     	if (filters.length > 0) {
     		let results = [];
 	    	for (let dataset of visibleDatasets) {
-
 	    		// public
 	    		if (filters.indexOf('public') > -1 && dataset.public) {
 	    			results.push(dataset);
 	    		}
 
 	    		// incomplete
-	    		if (filters.indexOf('incomplete') > -1 && dataset.status.uploadIncomplete) {
+	    		if (filters.indexOf('incomplete') > -1 && dataset.status.incomplete) {
 	    			results.push(dataset);
 	    		}
 
@@ -121,6 +122,11 @@ let UploadStore = Reflux.createStore({
 	    		if (filters.indexOf('shared') > -1 && dataset.access && !dataset.userCreated) {
 	    			results.push(dataset);
 	    		}
+	    		// invalid
+	    		if (filters.indexOf('invalid') > -1 && dataset.status.invalid) {
+	    			results.push(dataset);
+	    		}
+
 
 	    	}
 	    	visibleDatasets = results;

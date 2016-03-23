@@ -13,32 +13,26 @@ let Statuses = React.createClass({
 
 	getDefaultProps() {
 	    return {
-	        actionable: false
+	        minimal: false
 	    };
 	},
 
 	render() {
-		let dataset = this.props.dataset;
-		let uploading = dataset._id === this.state.projectId;
-
-		let publicStatus     = <Status type='public' />;
-		let incompleteStatus = <Status type='incomplete' dataset={dataset} actionable={this.props.actionable} />;
-		let sharedWithStatus = <Status type='shared' />;
-		let inProgress       = <Status type='inProgress' />;
-		let invalid          = <Status type='invalid' />;
+		let dataset   = this.props.dataset,
+			minimal   = this.props.minimal,
+			status    = dataset.status,
+			uploading = dataset._id === this.state.projectId;
 
 		return (
 			<span className="clearfix status-wrap">
-				{dataset && dataset.status && dataset.public ? publicStatus : null}
-				{dataset && dataset.status && dataset.status.uploadIncomplete && !uploading ? incompleteStatus : null}
-				{dataset && dataset.status && dataset.status.shared ? sharedWithStatus : null}
-				{dataset && uploading ? inProgress : null}
-				{dataset && dataset.status && dataset.status.invalid ? invalid : null}
+				<Status type='public'     minimal={minimal} display={dataset.public} />
+				<Status type='incomplete' minimal={minimal} display={status.incomplete && !uploading} dataset={dataset} />
+				<Status type='shared'     minimal={minimal} display={status.shared} />
+				<Status type='inProgress' minimal={minimal} display={uploading} />
+				<Status type='invalid'    minimal={minimal} display={status.invalid} />
 			</span>
     	);
-	},
-
-// custom methods -----------------------------------------------------
+	}
 
 });
 

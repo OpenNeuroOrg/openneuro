@@ -38,15 +38,17 @@ export default class Publish extends React.Component {
 				<div className="form-group">
 					<label className="sr-only">Do not show this message again</label>
 					<div className="input-group">
+					
 						<div className="clearfix">
 							<span>
 								<input id="dontShowAgain" name="dontShowAgain" className="form-control checkbox" type="checkbox"  value={this.state.dontShowAgain} onChange={this._onChange.bind(this)} />
 								<label htmlFor="dontShowAgain" for="dontShowAgain" className="checkmark">
 									<span></span>
 								</label>
+								<div className="input-group-addon">Do not show this message again.</div>
 							</span>
-							<span className="help-text">Do not show this message again. (for all warning related to modifications to any dataset)</span>
 						</div>
+
 					</div>
 				</div>
 			</div>
@@ -55,7 +57,7 @@ export default class Publish extends React.Component {
 			return (
 				<div className="row update-modal">
 					<div className="col-xs-12">
-						<div className="dataset">
+						<div className="modal-text">
 							<span className="text-danger">You are about to {currentUpdate.message}</span>. This action will run validation again. As a result, your dataset could become invalid, Do you want to continue?
 						</div>
 						{dontShowAgainInput}

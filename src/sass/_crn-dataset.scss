@@ -97,7 +97,6 @@
 			}
 		}
 	}
-
 	.status-container{
 		width: 100%;
 		float: none;
@@ -108,16 +107,11 @@
 			margin: 0;
 			.status{
 			 	display: inline-block;
-			 	width: 100px;
+			 	width: auto;
 			 	float: left;
 			 	margin-left: 0;
 			 	margin-right: 15px;
 			 	text-align: left;
-			}
-			.fileupload-btn {
-				font-size: 10px;
-				padding: 0;
-				margin: 0;
 			}
 		}
 	}
@@ -422,13 +416,6 @@
 	&.ds-danger{
 		background:none;
 		color:$brand-danger;
-	}
-	.file-wrap{
-			.fileupload-btn {
-				font-size: 10px;
-				padding: 0;
-				margin-top: 5px;
-			}
 	}
 	input {
 		color: transparent;
@@ -807,6 +794,7 @@
 		    color: #424242;
 		    line-height: 21px;
 		    padding: 0;
+		    margin: 0;
 		}
 		.input-group{
 			width: 100%;
@@ -896,23 +884,45 @@
 }
 
 .update-modal{
+	.modal-text{
+		font-size: 18px;
+	}
 	.parameters{ 
 		margin: 10px;
-		.form-group{
-			padding:5px;
-			input[type='checkbox'] + label > span{
-				top: 5px;
-				left: 10px;
-			}
-			.help-text{
-				float: right;
-				width: 90%;
-				margin: 0;
-				padding:5px 10px;
+		.form-group {
+			padding: 5px;
+			margin: 0 -15px;
+			.input-group{
+				.input-group-addon{
+					width: auto;
+					font-size: 12px;
+					margin: 5px 0 0;
+					padding: 0 0 0 13px;
+					float: left;
+					display: block;
+				}
+				label{
+					    float: left;
+				}
 			}
 		}
 	}
 }
+// 		.form-group{
+// 			padding:5px;
+// 			input[type='checkbox'] + label > span{
+// 				top: 5px;
+// 				left: 10px;
+// 			}
+// 			.help-text{
+// 				float: right;
+// 				width: 90%;
+// 				margin: 0;
+// 				padding:5px 10px;
+// 			}
+// 		}
+// 	
+
 
 
 
