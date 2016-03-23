@@ -13,6 +13,8 @@ class Status extends React.Component {
 // lifecycle events ----------------------------------------------------------
 
 	render() {
+		if (!this.props.display) {return false};
+
 		let spanClass, tip, iconClass, click, fileSelect, title;
 		let minimal = this.props.minimal;
 

@@ -21,24 +21,16 @@ let Statuses = React.createClass({
 		let dataset = this.props.dataset;
 		let uploading = dataset._id === this.state.projectId;
 
-		let publicStatus     = <Status type='public' minimal={this.props.minimal} />;
-		let incompleteStatus = <Status type='incomplete' dataset={dataset} minimal={this.props.minimal} />;
-		let sharedWithStatus = <Status type='shared' minimal={this.props.minimal} />;
-		let inProgress       = <Status type='inProgress' minimal={this.props.minimal} />;
-		let invalid          = <Status type='invalid' minimal={this.props.minimal} />;
-
 		return (
 			<span className="clearfix status-wrap">
-				{dataset.public ? publicStatus : null}
-				{dataset.status.uploadIncomplete && !uploading ? incompleteStatus : null}
-				{dataset.status.shared ? sharedWithStatus : null}
-				{uploading ? inProgress : null}
-				{dataset.status.invalid ? invalid : null}
+				<Status type='public' minimal={this.props.minimal} display={dataset.public} />
+				<Status type='incomplete' dataset={dataset} minimal={this.props.minimal} display={dataset.status.uploadIncomplete && !uploading} />
+				<Status type='shared' minimal={this.props.minimal} display={dataset.status.shared} />
+				<Status type='inProgress' minimal={this.props.minimal} display={uploading} />
+				<Status type='invalid' minimal={this.props.minimal} display={dataset.status.invalid} />
 			</span>
     	);
-	},
-
-// custom methods -----------------------------------------------------
+	}
 
 });
 
