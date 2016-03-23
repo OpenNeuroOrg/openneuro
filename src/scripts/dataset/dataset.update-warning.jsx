@@ -42,10 +42,10 @@ export default class Publish extends React.Component {
 						<div className="clearfix">
 							<span>
 								<input id="dontShowAgain" name="dontShowAgain" className="form-control checkbox" type="checkbox"  value={this.state.dontShowAgain} onChange={this._onChange.bind(this)} />
-								<label htmlFor="dontShowAgain" for="dontShowAgain" className="checkmark">
+								<label aria-invalid="true" htmlFor="dontShowAgain" for="dontShowAgain" className="checkmark">
 									<span></span>
 								</label>
-								<div className="input-group-addon">Do not show this message again.</div>
+								<div className="input-group-addon">Do not show this message again</div>
 							</span>
 						</div>
 
