@@ -113,7 +113,7 @@ let UploadStore = Reflux.createStore({
 	    		}
 
 	    		// incomplete
-	    		if (filters.indexOf('incomplete') > -1 && dataset.status.uploadIncomplete) {
+	    		if (filters.indexOf('incomplete') > -1 && dataset.status.incomplete) {
 	    			results.push(dataset);
 	    		}
 

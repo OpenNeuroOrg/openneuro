@@ -381,7 +381,7 @@ export default  {
      */
     formatStatus (project, userAccess) {
         let status = {
-            uploadIncomplete: false,
+            incomplete: false,
             validating: false,
             invalid: false,
             public: false,
@@ -390,7 +390,7 @@ export default  {
         if (project.tags) {
             for (let tag of project.tags) {
                 if (tag === 'incomplete') {
-                    status['uploadIncomplete'] = true;
+                    status['incomplete'] = true;
                 }
                 if (tag == 'validating') {
                     status['validating'] = true;

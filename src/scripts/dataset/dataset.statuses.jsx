@@ -26,7 +26,7 @@ let Statuses = React.createClass({
 		return (
 			<span className="clearfix status-wrap">
 				<Status type='public'     minimal={minimal} display={dataset.public} />
-				<Status type='incomplete' minimal={minimal} display={status.uploadIncomplete && !uploading} dataset={dataset} />
+				<Status type='incomplete' minimal={minimal} display={status.incomplete && !uploading} dataset={dataset} />
 				<Status type='shared'     minimal={minimal} display={status.shared} />
 				<Status type='inProgress' minimal={minimal} display={uploading} />
 				<Status type='invalid'    minimal={minimal} display={status.invalid} />
