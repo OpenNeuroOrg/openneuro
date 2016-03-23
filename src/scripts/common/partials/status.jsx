@@ -20,7 +20,7 @@ class Status extends React.Component {
 			case 'public':
 				spanClass 	= 'dataset-status ds-success';
 				tip       	= minimal ? 'Viewable to all visitors': null;
-				title	  	= !minimal ? 'Published' : null;
+				title	  	= 'Published';
 				iconClass 	= 'fa fa-globe';
 				break;
 			case 'incomplete':
@@ -33,13 +33,13 @@ class Status extends React.Component {
 			case 'shared':
 				spanClass 	= 'dataset-status ds-info';
 				tip       	= minimal ? 'Shared with me' : null;
-				title	  	= !minimal ? 'Shared with me' : null;
+				title	  	= 'Shared with me';
 				iconClass 	= 'fa fa-user';
 				break;
 			case 'inProgress':
 				spanClass 	= 'dataset-status ds-primary';
 				tip       	= minimal ? 'Upload in progress' : null;
-				title	  	= !minimal ? 'In progress' : null;
+				title	  	= 'In progress';
 				iconClass 	= 'fa fa-spin fa-circle-o-notch'
 				break;
 			case 'validating':
@@ -51,7 +51,7 @@ class Status extends React.Component {
 			case 'invalid':
 				spanClass 	= 'dataset-status ds-danger';
 				tip       	= minimal ? 'Invalid' : null;
-				title	  	= !minimal ? 'Invalid' : null;
+				title	  	= 'Invalid';
 				iconClass 	= 'fa fa-exclamation-circle';
 		}
 
