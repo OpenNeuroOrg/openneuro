@@ -232,7 +232,10 @@ body,
 						color: $brand-success;
 					}
 					&.filter-incomplete{
-						color: $brand-warning;
+						color: darken($brand-warning, 10%);
+					}
+					&.filter-invalid{
+						color: $brand-danger;
 					}
 				}
 				.filter-text{
