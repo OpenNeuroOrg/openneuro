@@ -29,11 +29,11 @@ let Statuses = React.createClass({
 
 		return (
 			<span className="clearfix status-wrap">
-				{dataset && dataset.status && dataset.public ? publicStatus : null}
-				{dataset && dataset.status && dataset.status.uploadIncomplete && !uploading ? incompleteStatus : null}
-				{dataset && dataset.status && dataset.status.shared ? sharedWithStatus : null}
-				{dataset && uploading ? inProgress : null}
-				{dataset && dataset.status && dataset.status.invalid ? invalid : null}
+				{dataset.public ? publicStatus : null}
+				{dataset.status.uploadIncomplete && !uploading ? incompleteStatus : null}
+				{dataset.status.shared ? sharedWithStatus : null}
+				{uploading ? inProgress : null}
+				{dataset.status.invalid ? invalid : null}
 			</span>
     	);
 	},
