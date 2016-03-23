@@ -61,7 +61,7 @@ class Status extends React.Component {
 			<span>
 				<span className="icon-wrap">
 					<i className={iconClass}></i>
-					{title}
+					{minimal ? null : title}
 				</span>
 			</span>
 		);
