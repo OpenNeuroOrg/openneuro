@@ -20,6 +20,19 @@ let MetaData = React.createClass({
 		let README      = dataset ? dataset.README : null;
 		let metatdata = [
 			{
+				key:      'Authors',
+				label:    'Authors',
+				type:     'authors',
+				value:    description.Authors,
+				onChange: this._updateDescription.bind(this, 'Authors')
+			},
+			{
+				key:      'README',
+				label:    'README',
+				value:    README,
+				onChange: this._updateREADME
+			},
+			{
 				key:      'DatasetDOI',
 				label:    'Dataset DOI',
 				value:    description.DatasetDOI,
@@ -30,13 +43,6 @@ let MetaData = React.createClass({
 				label:    'License',
 				value:    description.License,
 				onChange: this._updateDescription.bind(this, 'License'),
-			},
-			{
-				key:      'Authors',
-				label:    'Authors',
-				type:     'authors',
-				value:    description.Authors,
-				onChange: this._updateDescription.bind(this, 'Authors')
 			},
 			{
 				key:      'Acknowledgements',
@@ -73,14 +79,6 @@ let MetaData = React.createClass({
 			},
 		];
 
-		let readme = (
-			<div className="description-item">
-				<ClickToEdit value={README}
-					label="README"
-					editable={canEdit}
-					onChange={this._updateREADME} />
-			</div>
-		);
 		let readmeItems = metatdata.map((item) => {
 			return (
 				<div className="description-item" key={item.key}>
@@ -96,18 +94,9 @@ let MetaData = React.createClass({
 			);
 		});
 
-		let descriptors = (
-			<div>
-				<div className="dataset-readme">
-						{readme}
-						{readmeItems}
-				</div>
-			</div>
-		);
-
 		return (
-			<div>
-				{descriptors}
+			<div className="dataset-readme">
+				{readmeItems}
 			</div>
     	);
 	},
