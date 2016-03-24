@@ -22,58 +22,58 @@ let MetaData = React.createClass({
 				label:    'Authors',
 				type:     'authors',
 				value:    description.Authors,
-				onChange: this._updateDescription.bind(this, 'Authors')
+				onChange: actions.updateDescription.bind(this, 'Authors')
 			},
 			{
 				key:      'README',
 				label:    'README',
 				value:    dataset.README,
-				onChange: this._updateREADME
+				onChange: actions.updateREADME
 			},
 			{
 				key:      'DatasetDOI',
 				label:    'Dataset DOI',
 				value:    description.DatasetDOI,
-				onChange: this._updateDescription.bind(this, 'DatasetDOI'),
+				onChange: actions.updateDescription.bind(this, 'DatasetDOI'),
 			},
 			{
 				key:      'License',
 				label:    'License',
 				value:    description.License,
-				onChange: this._updateDescription.bind(this, 'License'),
+				onChange: actions.updateDescription.bind(this, 'License'),
 			},
 			{
 				key:      'Acknowledgements',
 				label:    'Acknowledgements',
 				value:    description.Acknowledgements,
-				onChange: this._updateDescription.bind(this, 'Acknowledgements'),
+				onChange: actions.updateDescription.bind(this, 'Acknowledgements'),
 			},
 			{
 				key:      'HowToAcknowledge',
 				label:    'How to Acknowledge',
 				value:    description.HowToAcknowledge,
-				onChange: this._updateDescription.bind(this, 'HowToAcknowledge'),
+				onChange: actions.updateDescription.bind(this, 'HowToAcknowledge'),
 			},
 			{
 				key:      'Funding',
 				label:    'Funding',
 				value:    description.Funding,
-				onChange: this._updateDescription.bind(this, 'Funding'),
+				onChange: actions.updateDescription.bind(this, 'Funding'),
 			},
 			{
 				key:      'ReferencesAndLinks',
 				label:    'References and Links',
 				value:    description.ReferencesAndLinks,
-				onChange: this._updateDescription.bind(this, 'ReferencesAndLinks'),
+				onChange: actions.updateDescription.bind(this, 'ReferencesAndLinks'),
 			},
 			{
 				key:         'DigitalDocuments',
 				label:       'Digital Documents',
 				type:        'fileArray',
 				value:       dataset.attachments,
-				onChange:    this._uploadAttachment,
-				onDelete:    this._deleteAttachment,
-				onFileClick: this._downloadAttachment
+				onChange:    actions.uploadAttachment,
+				onDelete:    actions.deleteAttachment,
+				onFileClick: actions.getAttachmentDownloadTicket
 			},
 		];
 
@@ -93,21 +93,7 @@ let MetaData = React.createClass({
 		});
 
 		return <div className="dataset-readme">{fields}</div>;
-	},
-
-// custon methods -----------------------------------------------------
-
-	_updateDescription: actions.updateDescription,
-
-	_updateAuthors: actions.updateAuthors,
-
-	_uploadAttachment: actions.uploadAttachment,
-
-	_deleteAttachment: actions.deleteAttachment,
-
-	_downloadAttachment: actions.getAttachmentDownloadTicket,
-
-	_updateREADME: actions.updateREADME
+	}
 
 });
 
