@@ -1,14 +1,10 @@
 // dependencies -------------------------------------------------------
 
 import React        from 'react';
-import Reflux       from 'reflux';
 import actions      from './dataset.actions.js';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
-import datasetStore from './dataset.store';
 
 let MetaData = React.createClass({
-
-    mixins: [Reflux.connect(datasetStore)],
 
 // life cycle events --------------------------------------------------
 
