@@ -104,7 +104,7 @@ let ClickToEdit = React.createClass({
     	);
 	},
 
-// custon methods -----------------------------------------------------
+// custom methods -----------------------------------------------------
 
 	_display() {
 		this.setState({edit: false});
