@@ -1,8 +1,105 @@
-//buttons // ================================================================
+
+
+// Wrapper tags ========================
+
+body{
+    letter-spacing: 0.03em;
+    
+}
+.container{
+  width: 100%;
+}
+.view.container{
+  width: 100%;
+  margin:0;
+  padding: 0;
+}
+.main.view.container{
+	padding-top:85px;
+}
+
+.container.maxed{
+    width: 90%;
+    max-width: 1500px;
+}
+
+
+.inner-route{
+	&.light{
+		background: #fff;
+	}
+	.message-4{
+		text-align: center;
+	}
+}
+
+html,
+body,
+#main,
+.page,
+.full-col,
+.view.container,
+.route-wrapper{
+	height:100%;
+}
+
+// Typeography ========================
+
+body {
+  font-family: $font-family-cabin;
+}
+a {
+  color: $primary;
+  cursor: pointer;
+}
+a:hover, a:focus {
+	color:lighten($primary , 15%);
+	text-decoration:none;
+}
+a:active,
+a:hover,
+a:focus{
+  cursor: pointer;
+}
+
+h1,h2,h3,h4,h5,h6{
+  font-family:$font-family-ssp;
+  font-weight: 400;
+}
+
+.href-font{
+	  font-family:$font-family-ssp;
+}
+
+.page{
+	background: #e5e5e5;
+	position: fixed;
+    width: 100%;
+    overflow-y: scroll;
+	&.dataset{
+		background:#fff;
+	}
+}
+.route-wrapper{
+	padding: 0;
+	margin: 0;
+	padding-left: 65px;
+	.inner-route{
+		padding:20px 0;
+	}
+}
+.full-col{
+	padding:0;
+}
+
+
+
+//buttons ========================
 
 .btn-group{
 	overflow:hidden;
 }
+
 .btn-basic{
 	background: transparent;
 	border-radius: 1px;
@@ -20,8 +117,6 @@
 	margin: 0 0 10px;
 	-webkit-user-select: none;
 	transition: all 0.3s ease-out;
-
-
 	&:hover,
 	&:active,
 	&.hover,
@@ -49,6 +144,7 @@
 		outline: none;
 	}
 }
+
 .btn-admin{
 	background: none;
 	border: 1px solid #BBB;
@@ -74,7 +170,6 @@
 		color:#666;
 		transition: all 0.3s ease-out;
 	}
-
 	&:focus{
 		border: none;
 		box-shadow: none;
@@ -111,8 +206,6 @@
 	    }
 	    i{margin-left:6px;}
 	}
-	&.warning{
-	}	
 }
 
 .btn-admin-blue{
@@ -134,14 +227,11 @@
 .btn-modal-submit{
 	@extend .btn-admin-blue;
 	border: 2px solid lighten($sky,5%);
-	
 	&:active,
 	&:focus{
 		border:2px solid $sky;
 	}
 }
-
-
 
 .btn-reset{
 	@extend .btn-admin;
@@ -163,6 +253,7 @@
 	display: inline-block;
 	transition: all 0.3s ease;
 }
+
 .btn-sort{
 	padding: 7px 20px;
 	background: #fefefe;
@@ -181,6 +272,7 @@
 		box-sizing: border-box;
 	}
 }
+
 .btn-tab{
     background: #f7f7f7 !important;
     border:1px solid #eee;
@@ -193,10 +285,8 @@
     	border-color:#fff;
     	border-left: 1px solid #f6f6f6;
     	border-bottom-color:#fff;
-
     	color:$primary;
-    	 box-shadow: 0px -1px 1px -1px rgba(0,0,0,0.5);
-
+    	box-shadow: 0px -1px 1px -1px rgba(0,0,0,0.5);
     }
     &:hover{
     	background:#fff !important;
@@ -242,6 +332,7 @@
 		}
 	}
 }
+
 .fileTreeEditFile{
 	.delete-file,
 	.download-file{
@@ -277,7 +368,6 @@
 				color:#666;
 				transition: all 0.3s ease-out;
 			}
-
 			&:focus{
 				box-shadow: none;
 				outline: none !important;
@@ -370,6 +460,7 @@
 		filter: alpha(opacity=0);
 	}
 }
+
 .fileupload-btn{
 	@extend .btn-blue;
 	cursor:pointer;
@@ -394,17 +485,7 @@
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-//form // ================================================================
+//form ========================
 
 .formField{
 	width: 100%;
@@ -435,7 +516,6 @@
 	    top: 5px;
 	    text-transform: uppercase;
 	}
-
  	input {
 		@extend .formField;
 		&:focus{
@@ -475,121 +555,32 @@ select {
 }
 
 
-
-//progress bar ========================
-
-
-
-
-.progress{
-	background: #dedede;
+.selectBox-style{
+	padding:5px 20px 5px 10px;
+	margin: 10px 10px 10px 0;
+	color:black;
+	border:none;
+	outline:none;
+	display: inline-block;
+	-webkit-appearance:none; 
+	cursor:pointer;
+	border: 1px solid #ccc;
 	border-radius:0;
-	height: 18px;
-	margin:0;
-	padding:0;
-}
-.progress-bar{
-	max-width: 100%;
-	background:$turquoise;
-	span span{
-    font-size: 10px;
-    line-height: 10px;
-    margin: 0;
-    text-align: left;
-    display: block;
-    padding: 5px 5px;
-	}
+	background:#fff;
 }
 
-
-.tooltip-inner{
-	border-radius:0;
-	background: rgba(0,0,0,0.9);
-	color:$white;
-	padding: 8px 12px;
+.caret-down{
+	display: inline-block;
+	width: 0;
+	height: 0;
+	vertical-align: top;
+	border-top: 4px solid #000;
+	border-right: 4px solid rgba(0, 0, 0, 0);
+	border-left: 4px solid rgba(0, 0, 0, 0);
+	content: "";
+	position: relative;
+	margin-top: 20px;
+	margin-left: -22px;
+	margin-right: 10px;
+	width: 0;
 }
-.tooltip.top .tooltip-arrow{
-	border-top-color: rgba(0,0,0,0.9);
-}
-
-//Alerts // ================================================================
-.alert{
-    font-size: 14px;
-    background: rgba(0, 0, 0, 0.8);
-    border: none;
-    padding: 10px 40px 10px 20px;
-    color: #D9D9D9;
-    .alert-left{
-    	a{
-			text-decoration: underline;
-		}
-    	a{
-    		color: $brand-info; 
-    		&:hover{
-    			color:lighten($brand-info, 10%);
-    		}
-    	}
-    }
-	.dismiss-button-x{
-	    position: absolute;
-	    top: 0;
-	    right: 0;
-	    background: none;
-	    border: none;
-	    color: $brand-info; 
-    		&:hover{
-    			color:lighten($brand-info, 10%);
-    		}
-	}
-	&.alert-danger{
-		color:lighten($brand-danger,10%);
-		strong{color:lighten($brand-danger,10%);}
-		a{
-			text-decoration: underline;
-		}
-		a,
-		.dismiss-button-x{	
-			color:lighten($brand-danger,10%);
-    		&:hover{
-    			color:lighten($brand-danger, 2%);
-    		}
-    	}
-	}
-	&.alert-warning{
-		color:$brand-warning;
-		strong{color: $brand-warning;}
-		a{
-			text-decoration: underline;
-		}
-		a,
-		.dismiss-button-x{	
-			color:$brand-warning;
-    		&:hover{
-    			color:lighten($brand-warning, 10%);
-    		}
-    	}
-	}
-}
-.navbar{
-	.alert{
-		position: absolute;
-		right: 15px;
-		max-width: 600px;
-		top: 80px;
-	}
-}
-.signInBlock,
-.modal {
-	.modal-actions{
-		padding:0;
-	}
-	.alert{
-		position: relative;
-	    top: 0;
-	    bottom: 0;
-	    right: 0;
-	    left: 0;
-	    max-width: 100%;
-	}
-}
-

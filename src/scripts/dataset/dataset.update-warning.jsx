@@ -58,7 +58,7 @@ export default class Publish extends React.Component {
 				<div className="row update-modal">
 					<div className="col-xs-12">
 						<div className="modal-text">
-							<span className="text-danger">You are about to {currentUpdate.message}</span>. This action will run validation again. As a result, your dataset could become invalid, Do you want to continue?
+							<span className="text-danger">You are about to {currentUpdate.message}</span>. This action will run validation again. As a result, your dataset could become invalid. Do you want to continue?
 						</div>
 						{dontShowAgainInput}
 						<div className="col-xs-12 modal-actions">

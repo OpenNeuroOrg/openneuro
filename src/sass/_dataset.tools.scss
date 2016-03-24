@@ -1,0 +1,141 @@
+
+.dataset-tools-wrap{
+	margin: -20px 0 20px;
+    padding: 0;
+    position: fixed;
+    z-index: 1000;
+    height: 45px;
+    overflow: hidden;
+	.tools{
+		padding: 0;
+		margin: 0;
+		display:block;
+		width: 100%;
+		background:#f2f2f2;
+		border-bottom: 1px solid #ddd;
+		.run-analysis{
+			height: 45px;
+			width: auto;
+			float: left;
+			border-left:1px solid #aaa;
+			button.btn-blue{
+				margin: 0 5px 0 0;
+				padding: 11px 20px;
+				i{
+					font-size:18px; 
+					line-height:16px;
+				}
+				span{
+					margin-left: 5px;
+					position: relative;
+					top: -2px;
+					font-size: 14px !important;
+					line-height: 14px;
+				}
+			}
+		}
+		.snapshotSelect{
+			text-align: center;
+			padding:0 10px 0 5px;
+			float: left;
+			display: block;
+			overflow:hidden;
+			border-right:1px solid #aaa;
+			margin-right:5px;
+			position:relative;
+			span{
+				background: transparent;
+				border:1px solid #aaa;
+				display: block;
+				height: 30px;
+				margin: 7px 0;
+				select{
+					background: none;
+					border: 0;
+					min-width: 230px;
+					color: $ocean;
+					margin:0;
+					height: 30px;
+					font-size: 14px;	
+					filter: none;
+					&:focus{
+						outline: none;
+						box-shadow:none;
+					}
+					option{
+						text-transform:initial;
+					}
+				}
+
+			}				
+		}
+		.tool {	
+			text-align: center;
+			width: 70px;
+			float: left;
+			display: block;
+			overflow:hidden;
+			.warning-loading{
+				margin-top:10px;
+				display: block;
+			}
+			> button,
+			.fadeIn > button{
+				width: 100%;
+			}
+			.disabled > button{
+				color:$stone;
+			}
+			.btn-group{
+				-moz-backface-visibility: initial;
+				-ms-backface-visibility: initial;
+				-o-backface-visibility: initial;
+				backface-visibility: initial;
+			}
+
+			.btn-warn-component{
+					font-size: 18px;
+					padding:7px 0px;
+					i{
+						line-height: 30px;
+						margin-left: 0;
+					}
+					&.cancel,
+					&.success{
+						background: $brand-danger;
+						color:#fff;
+						font-size: 14px;
+						padding: 5px 8px;
+						margin: 7px 5px 5px 0;
+						&:hover{
+							background:darken($brand-danger, 10%);
+						}
+						i{
+							line-height: 15px;
+						}
+					}
+					&.success{
+						background: $brand-success;
+						&:hover{
+							background:darken($brand-success, 10%);
+						}
+					}
+				}
+			}
+		.resume-upload-tool {
+			@extend .clearfix;
+			display: block;
+			float: left;
+			.fileupload-btn{
+				padding: 10px 25px;
+				line-height: 23px;
+				font-size: 16px;
+				height: 44px;
+				width: auto;
+				float: left;
+				border-left: 1px solid #aaa;
+				margin: 0;
+			}
+		}
+	}
+}

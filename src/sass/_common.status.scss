@@ -1,0 +1,88 @@
+.dataset .status-container{
+	width: 100%;
+	float: none;
+	box-sizing: border-box;
+	
+	span.status-wrap{
+		padding: 0;
+		margin: 0;
+		> span{
+			padding:20px 0 0;
+			display: block;
+			@extend .clearfix;
+		}
+		.status{
+		 	display: inline-block;
+		 	width: auto;
+		 	float: left;
+		 	margin-left: 0;
+		 	margin-right: 15px;
+		 	text-align: left;
+		}
+	}
+}
+
+.dataset-status{
+	background: none;
+	color: #676767;
+	font-size: 14px;
+	font-family: $font-family-cabin;
+	font-weight: 300;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	display: inline;
+	width: 100%;
+	position: relative;
+	i.fa{
+		margin-right: 5px;
+	}
+
+	&.ds-primary{
+		background:none;
+		color:$primary;
+	}
+	&.ds-success{
+		background:none;
+		color:$brand-success;
+	}
+	&.ds-info{
+		background:none;
+		color:$brand-info;
+	}
+	&.ds-warning{
+		background:none;
+		color:$brand-warning;
+	}			
+	&.ds-danger{
+		background:none;
+		color:$brand-danger;
+	}
+	input {
+		color: transparent;
+		// margin: 0 auto 30px;
+		padding: 0;
+		height: 20px;
+		display: block;
+		width: 100%;
+		max-width: 90px;
+		&::-webkit-file-upload-button {
+			visibility: hidden;
+			color: transparent;
+		}
+	  &::before {
+	    @extend .btn-blue;
+		content: 'resume';
+		display: inline-block;
+		outline: none;
+		white-space: nowrap;
+		-webkit-user-select: none;
+		font-size: 10px;
+		padding: 0;
+
+	  }
+	  &[type="file"]:focus {
+	    outline:none;
+	  }
+	}
+}
