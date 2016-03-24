@@ -16,7 +16,7 @@ let MetaData = React.createClass({
 		let dataset     = this.props.dataset;
 		let description = dataset.description;
 
-		let metatdata = [
+		let metadata = [
 			{
 				key:      'Authors',
 				label:    'Authors',
@@ -77,7 +77,7 @@ let MetaData = React.createClass({
 			},
 		];
 
-		let fields = metatdata.map((item) => {
+		let fields = metadata.map((item) => {
 			return (
 				<div className="description-item" key={item.key}>
 					<ClickToEdit
