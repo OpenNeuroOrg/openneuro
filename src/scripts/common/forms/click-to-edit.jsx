@@ -14,6 +14,7 @@ let ClickToEdit = React.createClass({
 	getDefaultProps () {
 		return {
 			editable: true,
+			type: 'string',
 			value: ''
 		};
 	},
@@ -28,7 +29,7 @@ let ClickToEdit = React.createClass({
 
 	render() {
 		let value = this.state.value;
-		let type = this.props.type ? this.props.type : typeof value;
+		let type = this.props.type;
 		let input;
 		let display;
 
