@@ -24,6 +24,9 @@ body{
 	&.light{
 		background: #fff;
 	}
+	.message-4{
+		text-align: center;
+	}
 }
 
 html,
@@ -193,8 +196,8 @@ body,
 		background:#f9f9f9;
 		border-bottom:1px solid #ddd;
 		.filters{
-			width: 50%;
-			float: left;
+			width: 600px;
+			float: right;
 			text-align: right;
 			padding: 0;
 			margin: 0;
@@ -248,7 +251,7 @@ body,
 		}
 	
 		.sort{
-			width: 50%;
+			width: 230px;
 			float: left;
 		    padding: 0;
 		    margin: 0;
