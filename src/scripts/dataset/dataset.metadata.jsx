@@ -79,7 +79,7 @@ let MetaData = React.createClass({
 			},
 		];
 
-		let readmeItems = metatdata.map((item) => {
+		let fields = metatdata.map((item) => {
 			return (
 				<div className="description-item" key={item.key}>
 					<ClickToEdit
@@ -94,11 +94,7 @@ let MetaData = React.createClass({
 			);
 		});
 
-		return (
-			<div className="dataset-readme">
-				{readmeItems}
-			</div>
-    	);
+		return <div className="dataset-readme">{fields}</div>;
 	},
 
 // custon methods -----------------------------------------------------
