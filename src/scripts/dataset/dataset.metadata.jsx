@@ -4,7 +4,7 @@ import React        from 'react';
 import actions      from './dataset.actions.js';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 
-let MetaData = React.createClass({
+export default class MetaData extends React.Component {
 
 // life cycle events --------------------------------------------------
 
@@ -91,6 +91,4 @@ let MetaData = React.createClass({
 		return <div className="dataset-readme">{fields}</div>;
 	}
 
-});
-
-export default MetaData;
+}
