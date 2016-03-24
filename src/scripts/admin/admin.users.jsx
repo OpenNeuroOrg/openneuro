@@ -42,7 +42,7 @@ let users = React.createClass({
 		});
 
 		return (
-			<div className="panel-teasers-list fadeIn inner-route admin-users clearfix">
+			<div className="dashboard-dataset-teasers fadeIn inner-route admin-users clearfix">
 				<h2>Current Users</h2>
 				<div>
 					<div className="col-xs-12 users-panel-wrap">
@@ -67,7 +67,7 @@ let users = React.createClass({
 
 		if (user._id !== userStore.data.scitran._id) {
 			return (
-				<div className="col-xs-4 last admin-tools-bar">
+				<div className="col-xs-4 last dataset-tools-wrap-admin">
 	                <div className="tools clearfix">
 	                    <div className="tool">
     						<WarnButton message='Admin' 

@@ -26,16 +26,16 @@ let LeftNavbar = React.createClass({
 			<span className={this.state.showNav ? 'open' : null}>
 				<span className="left-nav-slider">
 					<ul>
-						<li className="left-nav-dashboard">
+						<li className="link-dashboard">
 							{userStore.hasToken() ? dashboardLink : null}
 						</li>
-						<li className="left-nav-dashboard">
+						<li className="link-admin">
 							{this.state.scitran && this.state.scitran.root ? adminLink : null }
 						</li>
-						<li className="left-nav-dashboard">
+						<li className="link-public">
 							<Link to="public"><i className="fa fa-globe" /><span className="link-name">Browse Publicly</span></Link>
 						</li>
-						<li className="left-nav-dashboard">
+						<li className="link-contact">
 							<a  href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><i className="fa fa-envelope-o" /><span className="link-name">contact</span></a>
 						</li>
 					</ul>

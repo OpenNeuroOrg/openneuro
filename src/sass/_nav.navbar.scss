@@ -1,5 +1,22 @@
 //navbar // ================================================================
-.navbar-default{
+
+
+
+
+
+.full-col{
+	.navbar{
+		position: fixed;
+		width: 100%;
+		top: 0;
+		left: 0;
+		z-index: 1300;
+		border-top:10px solid $stanfordRed;
+	}
+}
+
+
+	.navbar-default{
   background: #3B3B3B;
   color:$misty;
   margin: 0;
@@ -30,11 +47,6 @@
 }
 .navbar-brand {
   height: 75px;
-}
-.useradmin-nav{
-	.btn.btn-blue{
-
-	}
 }
 
 .signInNavBtn{

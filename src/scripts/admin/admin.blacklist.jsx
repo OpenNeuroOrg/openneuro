@@ -34,7 +34,7 @@ let Blacklist = React.createClass({
                     <div className="col-xs-4 user-col">
 	                    <div>{user.note}</div>
                     </div>
-                    <div className="col-xs-3 last admin-tools-bar">
+                    <div className="col-xs-3 last dataset-tools-wrap-admin">
 	                <div className="tools clearfix">
 	                    <div className="tool">
 		                    <WarnButton message="Unblock User" action={actions.unBlacklistUser.bind(this, user._id)} />
@@ -46,7 +46,7 @@ let Blacklist = React.createClass({
 		});
 
 		return (
-			<div className="panel-teasers-list fadeIn inner-route admin-blacklist clearfix">
+			<div className="dashboard-dataset-teasers fadeIn inner-route admin-blacklist clearfix">
 				<h2>Blocked Users</h2>
 				<button className="btn-blue" onClick={actions.blacklistModal} >
 					<span>Block a User</span>
