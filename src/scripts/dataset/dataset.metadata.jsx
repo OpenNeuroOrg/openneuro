@@ -2,7 +2,7 @@
 
 import React        from 'react';
 import Reflux       from 'reflux';
-import Actions      from './dataset.actions.js';
+import actions      from './dataset.actions.js';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 import datasetStore from './dataset.store';
 
@@ -14,10 +14,8 @@ let MetaData = React.createClass({
 
 	render() {
 		let dataset     = this.props.dataset;
-		let userOwns    = dataset ? dataset.userOwns : null;
-		let canEdit     = this.props.editable;
-		let description = dataset ? dataset.description : null;
-		let README      = dataset ? dataset.README : null;
+		let description = dataset.description;
+
 		let metatdata = [
 			{
 				key:      'Authors',
@@ -29,7 +27,7 @@ let MetaData = React.createClass({
 			{
 				key:      'README',
 				label:    'README',
-				value:    README,
+				value:    dataset.README,
 				onChange: this._updateREADME
 			},
 			{
@@ -86,7 +84,7 @@ let MetaData = React.createClass({
 						value={item.value}
 						label={item.label}
 						type={item.type}
-						editable={canEdit}
+						editable={this.props.editable}
 						onChange={item.onChange}
 						onDelete={item.onDelete}
 						onFileClick={item.onFileClick} />
@@ -99,17 +97,17 @@ let MetaData = React.createClass({
 
 // custon methods -----------------------------------------------------
 
-	_updateDescription: Actions.updateDescription,
+	_updateDescription: actions.updateDescription,
 
-	_updateAuthors: Actions.updateAuthors,
+	_updateAuthors: actions.updateAuthors,
 
-	_uploadAttachment: Actions.uploadAttachment,
+	_uploadAttachment: actions.uploadAttachment,
 
-	_deleteAttachment: Actions.deleteAttachment,
+	_deleteAttachment: actions.deleteAttachment,
 
-	_downloadAttachment: Actions.getAttachmentDownloadTicket,
+	_downloadAttachment: actions.getAttachmentDownloadTicket,
 
-	_updateREADME: Actions.updateREADME
+	_updateREADME: actions.updateREADME
 
 });
 
