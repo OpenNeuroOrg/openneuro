@@ -29,28 +29,27 @@ let ClickToEdit = React.createClass({
 	render() {
 		let value = this.state.value;
 		let type = this.props.type;
-		let input;
-		let display;
-
-		let buttons = (
-			<div className="btn-wrapper">
-				<button className="cte-save-btn btn-admin-blue" onClick={this._save}>save</button>
-			</div>
-		);
+		let input, display;
 
 		switch (type) {
 			case "string":
-				input = <textarea className="form-control" value={value} onChange={this._handleChange.bind(null, type)}></textarea>;
 				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
+				input = (
+					<div>
+						<textarea className="form-control" value={value} onChange={this._handleChange.bind(null, type)}></textarea>
+						<div className="btn-wrapper">
+							<button className="cte-save-btn btn-admin-blue" onClick={this._save}>save</button>
+						</div>
+					</div>
+				);
 				break;
 			case "authors":
 				input = <AuthorInput value={value} onChange={this._handleChange.bind(null, type)} />;
 
-				let items = value ? value.map((item, index) => {
+				let items = value.map((item, index) => {
 					return <div className="fadeIn" key={index}><span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span></div>;
-				}) : null;
+				});
 				display = <div className="cte-display">{items}</div>;
-				buttons = null;
 				break;
 			case "fileArray":
 				let list = this.props.value.map((file, index) => {
@@ -61,7 +60,7 @@ let ClickToEdit = React.createClass({
 									<WarnButton
 										tooltip="Download Attachment"
 										icon="fa-download"
-										prepDownload={this._download.bind(null, file.name)} /> 
+										prepDownload={this._download.bind(null, file.name)} />
 								</span>
 								{file.name}
 							</span>
@@ -74,7 +73,6 @@ let ClickToEdit = React.createClass({
 						onDelete={this._handleDelete}
 						onFileClick={this._download}/>;
 				display = <div className="cte-display">{list}</div>;
-				buttons = null;
 				break;
 		}
 
@@ -89,7 +87,6 @@ let ClickToEdit = React.createClass({
 		let edit = (
 			<div className="cte-edit fadeIn clearfix">
 				{!this.state.loading ? input : null}
-				{!this.state.loading ? buttons : null}
 				<Spinner active={this.state.loading} />
 			</div>
 		);
@@ -103,7 +100,7 @@ let ClickToEdit = React.createClass({
 			</div>
     	);
 	},
-
+	
 // custom methods -----------------------------------------------------
 
 	_display() {
