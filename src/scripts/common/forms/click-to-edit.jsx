@@ -4,7 +4,6 @@ import React          from 'react';
 import AuthorInput    from './author-input.jsx';
 import FileArrayInput from './file-array-input.jsx';
 import Spinner        from '../partials/spinner.jsx';
-import request        from '../../utils/request';
 import WarnButton     from './warn-button.jsx';
 
 let ClickToEdit = React.createClass({
