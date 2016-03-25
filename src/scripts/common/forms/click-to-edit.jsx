@@ -22,8 +22,16 @@ let ClickToEdit = React.createClass({
 		return {
 			value: this.props.value,
 			initialValue: JSON.stringify(this.props.value),
-			loading: false
+			loading: false,
+			edit: false
 		};
+	},
+
+	componentWillReceiveProps(nextProps) {
+		// display edit when error is triggered
+	    if (nextProps.error) {
+	    	this.setState({edit: true});
+	    }
 	},
 
 	render() {
