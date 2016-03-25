@@ -76,14 +76,6 @@ let ClickToEdit = React.createClass({
 				break;
 		}
 
-		let editText = <span><i className="fa fa-pencil"></i> Edit</span>;
-		let hideText = <span><i className="fa fa-times"></i> Hide</span>;
-
-		let editBtn;
-		if (this.props.editable) {
-			editBtn = <button onClick={this._toggleEdit} className="cte-edit-button btn btn-admin fadeIn" >{this.state.edit ? hideText : editText}</button>
-		}
-
 		let edit = (
 			<div className="cte-edit fadeIn clearfix">
 				{!this.state.loading ? input : null}
@@ -93,14 +85,27 @@ let ClickToEdit = React.createClass({
 
 		return (
 			<div className="form-group" >
-				<label>{this.props.label} {editBtn}</label>
+				<label>{this.props.label} {this._editBtn()}</label>
 				<div>
 					{this.state.edit ? edit : display}
 				</div>
 			</div>
     	);
 	},
-	
+
+// template methods ---------------------------------------------------
+
+	_editBtn() {
+		let edit = this.state.edit;
+		if (this.props.editable) {
+			return (
+				<button onClick={this._toggleEdit} className="cte-edit-button btn btn-admin fadeIn" >
+					<span><i className={'fa fa-' + (edit ? 'times' : 'pencil')}></i> {edit ? 'Hide' : 'Edit'}</span>
+				</button>
+			);
+		}
+	},
+
 // custom methods -----------------------------------------------------
 
 	_display() {
