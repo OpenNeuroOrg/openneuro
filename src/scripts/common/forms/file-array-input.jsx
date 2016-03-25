@@ -27,12 +27,25 @@ let FileArrayInput = React.createClass({
 			<div className="cte-edit-array">
 				{this._error(this.state.error)}
 				<div className="cte-array-items clearfix">{this._fileList(this.props.value)}</div>
-				{this.state.loading ? <Spinner active={true} /> : <div className="add-file"><span>Add a file</span><input type="file" onChange={this._handleChange}/></div>}
+				{this._addFile(this.state.loading)}
 			</div>
 		)
 	},
 
 // template methods ---------------------------------------------------
+
+	_addFile(loading) {
+		if (loading) {
+			return <Spinner active={true} text="Uploading" />;
+		} else {
+			return (
+				<div className="add-file">
+					<span>Add a file</span>
+					<input type="file" onChange={this._handleChange}/>
+				</div>
+			);
+		}
+	},
 
 	_error(error) {
 		if (error) {
