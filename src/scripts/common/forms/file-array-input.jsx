@@ -26,7 +26,11 @@ let FileArrayInput = React.createClass({
 		let items = this.props.value.map((item, index) => {
 			return (
 				<div key={index} className="cte-array-item">
-					<a className="file-name" onClick={this._fileClick.bind(null, item.name)}>{item.name}</a>
+					<WarnButton
+						tooltip="Download Attachment"
+						icon="fa-download"
+						prepDownload={this._download.bind(null, item.name)} />
+					<span className="file-name">{item.name}</span>
 					<div className="btn-wrap">
 						<WarnButton message="Delete" action={this._remove.bind(null, item.name, index)} />
 					</div>
@@ -55,6 +59,12 @@ let FileArrayInput = React.createClass({
 
 // custon methods -----------------------------------------------------
 
+	_download(filename, callback) {
+		if (this.props.onFileClick) {
+			this.props.onFileClick(filename, callback);
+		}
+	},
+
 	_handleChange(e) {
 		let file = e.target.files[0];
 		if (this.props.onChange) {
@@ -69,12 +79,6 @@ let FileArrayInput = React.createClass({
 	_remove(filename, index) {
 		if (this.props.onDelete) {
 			this.props.onDelete(filename, index);
-		}
-	},
-
-	_fileClick(filename) {
-		if (this.props.onFileClick) {
-			this.props.onFileClick(filename);
 		}
 	},
 
