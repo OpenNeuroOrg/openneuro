@@ -26,7 +26,7 @@ let FileArrayInput = React.createClass({
 		return (
 			<div className="cte-edit-array">
 				{this._error(this.state.error)}
-				<div className="cte-array-items clearfix">{this._fileList(this.props.value)}</div>
+				{this._fileList(this.props.value)}
 				{this._addFile(this.state.loading)}
 			</div>
 		)
@@ -73,7 +73,7 @@ let FileArrayInput = React.createClass({
 				</div>
 			);
 		});
-		return list;
+		return <div className="cte-array-items clearfix">{list}</div>;
 	},
 
 // actions ------------------------------------------------------------
