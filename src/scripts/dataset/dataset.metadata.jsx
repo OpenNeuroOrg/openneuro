@@ -11,15 +11,17 @@ export default class MetaData extends React.Component {
 	render() {
 		let dataset     = this.props.dataset;
 		let description = dataset.description;
+		let issues      = this.props.issues;
 
 		let metadata = [
 			{
-				error:    'You must enter an author before creating a snapshot.',
+				error:    issues.authors,
 				key:      'Authors',
 				label:    'Authors',
 				type:     'authors',
 				value:    description.Authors,
-				onChange: actions.updateDescription.bind(this, 'Authors')
+				onChange: actions.updateDescription.bind(this, 'Authors'),
+				onDismissIssue: actions.dismissMetadataIssue.bind(this, 'authors')
 			},
 			{
 				key:      'README',
@@ -83,6 +85,7 @@ export default class MetaData extends React.Component {
 						label={item.label}
 						onChange={item.onChange}
 						onDelete={item.onDelete}
+						onDismissIssue={item.onDismissIssue}
 						onFileClick={item.onFileClick}
 						type={item.type}
 						value={item.value} />

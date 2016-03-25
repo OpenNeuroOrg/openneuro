@@ -53,6 +53,7 @@ let datasetStore = Reflux.createStore({
 			loadingApps: false,
 			loadingJobs: false,
 			jobs: [],
+			metadataIssues: {},
 			showJobsModal: false,
 			showPublishModal: false,
 			showShareModal: false,
@@ -265,11 +266,16 @@ let datasetStore = Reflux.createStore({
 	 */
 	updateDescription(key, value, callback) {
 		let dataset = this.data.dataset;
+		let metadataIssues = this.data.metadataIssues;
 		let description = dataset.description;
 		description[key] = value;
-		if (key !== 'Authors'){description.Authors = dataset.authors;}
+		if (key !== 'Authors') {
+			description.Authors = dataset.authors;
+		} else {
+			metadataIssues.authors = null;
+		}
 		this.saveDescription(description, callback);
-		this.update({dataset: dataset});
+		this.update({dataset, metadataIssues});
 	},
 
 	/**
@@ -297,6 +303,14 @@ let datasetStore = Reflux.createStore({
 		scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, '', [], callback);
 	},
 
+	/**
+	 * Dismiss Metadata Issue
+	 */
+	dismissMetadataIssue(key) {
+		let metadataIssues = this.data.metadataIssues;
+		metadataIssues[key] = null;
+		this.update({metadataIssues});
+	},
 
 	// Attachments -------------------------------------------------------------------
 
@@ -615,7 +629,11 @@ let datasetStore = Reflux.createStore({
 		scitran.getProject(datasetId, (res) => {
 			let project = res.body;
 			if (project.metadata.authors && project.metadata.authors.length < 1) {
-				callback({error: 'Your dataset must list at least one author before creating a snapshot.'});
+				let metadataIssues = this.data.metadataIssues;
+				let message = 'Your dataset must list at least one author before creating a snapshot.';
+				metadataIssues.authors = message;
+				this.update({metadataIssues});
+				callback({error: message});
 			} else if (project.metadata.hasOwnProperty('validation') && project.metadata.validation.errors.length > 0) {
 				callback({error: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.'});
 			} else {

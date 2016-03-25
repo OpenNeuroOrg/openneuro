@@ -8,6 +8,7 @@ var Actions = Reflux.createActions([
 	'deleteFile',
 	'disableUpdateWarn',
 	'dismissError',
+	'dismissMetadataIssue',
 	'flagForValidation',
 	'getAttachmentDownloadTicket',
 	'getDatasetDownloadTicket',
