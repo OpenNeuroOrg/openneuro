@@ -14,6 +14,7 @@ export default class MetaData extends React.Component {
 
 		let metadata = [
 			{
+				error:    'You must enter an author before creating a snapshot.',
 				key:      'Authors',
 				label:    'Authors',
 				type:     'authors',
@@ -77,13 +78,14 @@ export default class MetaData extends React.Component {
 			return (
 				<div className="description-item" key={item.key}>
 					<ClickToEdit
-						value={item.value}
-						label={item.label}
-						type={item.type}
 						editable={this.props.editable}
+						error={item.error}
+						label={item.label}
 						onChange={item.onChange}
 						onDelete={item.onDelete}
-						onFileClick={item.onFileClick} />
+						onFileClick={item.onFileClick}
+						type={item.type}
+						value={item.value} />
 				</div>
 			);
 		});

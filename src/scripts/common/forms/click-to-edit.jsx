@@ -22,6 +22,7 @@ let ClickToEdit = React.createClass({
 		return {
 			value: this.props.value,
 			initialValue: JSON.stringify(this.props.value),
+			error: this.props.error,
 			loading: false
 		};
 	},
@@ -67,6 +68,7 @@ let ClickToEdit = React.createClass({
 		return (
 			<div className="form-group" >
 				<label>{this.props.label} {this._editBtn()}</label>
+				{this._error(this.state.error)}
 				<div>
 					{this.state.edit ? edit : display}
 				</div>
@@ -98,6 +100,17 @@ let ClickToEdit = React.createClass({
 		}
 	},
 
+	_error(error) {
+		if (error) {
+			return (
+				<div className="alert alert-danger">
+					<button className="close" onClick={this._dismissError}><span>&times;</span></button>
+					{error}
+				</div>
+			);
+		}
+	},
+
 	_fileList(files) {
 		let list = files.map((file, index) => {
 			return (
@@ -118,6 +131,10 @@ let ClickToEdit = React.createClass({
 	},
 
 // custom methods -----------------------------------------------------
+
+	_dismissError() {
+		this.setState({error: null});
+	},
 
 	_display() {
 		this.setState({edit: false});
