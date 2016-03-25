@@ -45,34 +45,15 @@ let ClickToEdit = React.createClass({
 				break;
 			case "authors":
 				input = <AuthorInput value={value} onChange={this._handleChange.bind(null, type)} />;
-
-				let items = value.map((item, index) => {
-					return <div className="fadeIn" key={index}><span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span></div>;
-				});
-				display = <div className="cte-display">{items}</div>;
+				display = <div className="cte-display">{this._authorList(value)}</div>;
 				break;
 			case "fileArray":
-				let list = this.props.value.map((file, index) => {
-					return (
-						<div className="fadeIn file-array" key={file.name}>
-							<span>
-								<span className="file-array-btn">
-									<WarnButton
-										tooltip="Download Attachment"
-										icon="fa-download"
-										prepDownload={this._download.bind(null, file.name)} />
-								</span>
-								{file.name}
-							</span>
-						</div>
-					);
-				});
 				input = <FileArrayInput
-						value={this.props.value}
-						onChange={this._handleFile}
-						onDelete={this._handleDelete}
-						onFileClick={this._download}/>;
-				display = <div className="cte-display">{list}</div>;
+							value={this.props.value}
+							onChange={this._handleFile}
+							onDelete={this._handleDelete}
+							onFileClick={this._download}/>;
+				display = <div className="cte-display">{this._fileList(this.props.value)}</div>;
 				break;
 		}
 
@@ -95,6 +76,17 @@ let ClickToEdit = React.createClass({
 
 // template methods ---------------------------------------------------
 
+	_authorList(authors) {
+		let list = authors.map((item, index) => {
+			return (
+				<div className="fadeIn" key={index}>
+					<span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
+				</div>
+			);
+		});
+		return list;
+	},
+
 	_editBtn() {
 		let edit = this.state.edit;
 		if (this.props.editable) {
@@ -104,6 +96,25 @@ let ClickToEdit = React.createClass({
 				</button>
 			);
 		}
+	},
+
+	_fileList(files) {
+		let list = files.map((file, index) => {
+			return (
+				<div className="fadeIn file-array" key={file.name}>
+					<span>
+						<span className="file-array-btn">
+							<WarnButton
+								tooltip="Download Attachment"
+								icon="fa-download"
+								prepDownload={this._download.bind(null, file.name)} />
+						</span>
+						{file.name}
+					</span>
+				</div>
+			);
+		});
+		return list;
 	},
 
 // custom methods -----------------------------------------------------
