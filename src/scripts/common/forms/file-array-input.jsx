@@ -23,25 +23,10 @@ let FileArrayInput = React.createClass({
 	},
 
 	render() {
-		let items = this.props.value.map((item, index) => {
-			return (
-				<div key={index} className="cte-array-item">
-					<WarnButton
-						tooltip="Download Attachment"
-						icon="fa-download"
-						prepDownload={this._download.bind(null, item.name)} />
-					<span className="file-name">{item.name}</span>
-					<div className="btn-wrap">
-						<WarnButton message="Delete" action={this._remove.bind(null, item.name, index)} />
-					</div>
-				</div>
-			);
-		});
-
 		return (
 			<div className="cte-edit-array">
 				{this._error(this.state.error)}
-				<div className="cte-array-items clearfix">{items}</div>
+				<div className="cte-array-items clearfix">{this._fileList(this.props.value)}</div>
 				{this.state.loading ? <Spinner active={true} /> : <div className="add-file"><span>Add a file</span><input type="file" onChange={this._handleChange}/></div>}
 			</div>
 		)
@@ -58,6 +43,24 @@ let FileArrayInput = React.createClass({
 				</div>
 			);
 		}
+	},
+
+	_fileList(files) {
+		let list = files.map((file, index) => {
+			return (
+				<div key={index} className="cte-array-item">
+					<WarnButton
+						tooltip="Download Attachment"
+						icon="fa-download"
+						prepDownload={this._download.bind(null, file.name)} />
+					<span className="file-name">{file.name}</span>
+					<div className="btn-wrap">
+						<WarnButton message="Delete" action={this._remove.bind(null, file.name, index)} />
+					</div>
+				</div>
+			);
+		});
+		return list;
 	},
 
 // actions ------------------------------------------------------------
