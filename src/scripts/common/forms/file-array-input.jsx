@@ -38,26 +38,29 @@ let FileArrayInput = React.createClass({
 			);
 		});
 
-		let error;
-		if (this.state.error) {
-			error = (
-				<div className="alert alert-danger">
-					<button className="close" onClick={this._dismissError}><span>&times;</span></button>
-					{this.state.error}
-				</div>
-			);
-		}
-
 		return (
 			<div className="cte-edit-array">
-				{error}
+				{this._error(this.state.error)}
 				<div className="cte-array-items clearfix">{items}</div>
 				{this.state.loading ? <Spinner active={true} /> : <div className="add-file"><span>Add a file</span><input type="file" onChange={this._handleChange}/></div>}
 			</div>
 		)
 	},
 
-// custon methods -----------------------------------------------------
+// template methods ---------------------------------------------------
+
+	_error(error) {
+		if (error) {
+			return (
+				<div className="alert alert-danger">
+					<button className="close" onClick={this._dismissError}><span>&times;</span></button>
+					{this.state.error}
+				</div>
+			);
+		}
+	},
+
+// actions ------------------------------------------------------------
 
 	_download(filename, callback) {
 		if (this.props.onFileClick) {
