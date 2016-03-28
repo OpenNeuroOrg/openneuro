@@ -79,7 +79,7 @@ let Dataset = React.createClass({
 									<div className="status-container">
 										<Statuses dataset={dataset} />
 									</div>
-									<MetaData dataset={dataset} editable={canEdit} />
+									<MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
 								</div>
 								<div className="col-xs-5">
 									<div>

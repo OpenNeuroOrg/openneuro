@@ -17,6 +17,14 @@ export default class WarnButton extends React.Component {
 
 // life cycle events --------------------------------------------------
 
+	componentDidMount() {
+		this._mounted = true;
+	}
+
+	componentWillUnmount() {
+	    this._mounted = false;
+	}
+
 	render () {
 		let showAction = this.state.showAction;
 		let message    = this.props.message;
@@ -114,7 +122,9 @@ export default class WarnButton extends React.Component {
 		if (typeof action === 'function') {
 			this.setState({loading: true});
 			action(() => {
-				this.setState({loading: false, showAction: !this.state.showAction});
+				if (this._mounted) {
+					this.setState({loading: false, showAction: !this.state.showAction});
+				}
 			});
 		} else {
 			this.setState({showAction: !this.state.showAction});

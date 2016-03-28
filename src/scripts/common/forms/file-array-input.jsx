@@ -23,37 +23,66 @@ let FileArrayInput = React.createClass({
 	},
 
 	render() {
-		let items = this.props.value.map((item, index) => {
+		return (
+			<div className="cte-edit-array">
+				{this._error(this.state.error)}
+				{this._fileList(this.props.value)}
+				{this._addFile(this.state.loading)}
+			</div>
+		)
+	},
+
+// template methods ---------------------------------------------------
+
+	_addFile(loading) {
+		if (loading) {
+			return <Spinner active={true} text="Uploading" />;
+		} else {
 			return (
-				<div key={index} className="cte-array-item">
-					<a className="file-name" onClick={this._fileClick.bind(null, item.name)}>{item.name}</a>
-					<div className="btn-wrap">
-						<WarnButton message="Delete" action={this._remove.bind(null, item.name, index)} />
-					</div>
+				<div className="add-file">
+					<span>Add a file</span>
+					<input type="file" onChange={this._handleChange}/>
 				</div>
 			);
-		});
+		}
+	},
 
-		let error;
-		if (this.state.error) {
-			error = (
+	_error(error) {
+		if (error) {
+			return (
 				<div className="alert alert-danger">
 					<button className="close" onClick={this._dismissError}><span>&times;</span></button>
 					{this.state.error}
 				</div>
 			);
 		}
-
-		return (
-			<div className="cte-edit-array">
-				{error}
-				<div className="cte-array-items clearfix">{items}</div>
-				{this.state.loading ? <Spinner active={true} /> : <div className="add-file"><span>Add a file</span><input type="file" onChange={this._handleChange}/></div>}
-			</div>
-		)
 	},
 
-// custon methods -----------------------------------------------------
+	_fileList(files) {
+		let list = files.map((file, index) => {
+			return (
+				<div key={index} className="cte-array-item">
+					<WarnButton
+						tooltip="Download Attachment"
+						icon="fa-download"
+						prepDownload={this._download.bind(null, file.name)} />
+					<span className="file-name">{file.name}</span>
+					<div className="btn-wrap">
+						<WarnButton message="Delete" action={this._remove.bind(null, file.name, index)} />
+					</div>
+				</div>
+			);
+		});
+		return <div className="cte-array-items clearfix">{list}</div>;
+	},
+
+// actions ------------------------------------------------------------
+
+	_download(filename, callback) {
+		if (this.props.onFileClick) {
+			this.props.onFileClick(filename, callback);
+		}
+	},
 
 	_handleChange(e) {
 		let file = e.target.files[0];
@@ -69,12 +98,6 @@ let FileArrayInput = React.createClass({
 	_remove(filename, index) {
 		if (this.props.onDelete) {
 			this.props.onDelete(filename, index);
-		}
-	},
-
-	_fileClick(filename) {
-		if (this.props.onFileClick) {
-			this.props.onFileClick(filename);
 		}
 	},
 

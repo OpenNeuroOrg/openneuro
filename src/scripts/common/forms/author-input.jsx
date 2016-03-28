@@ -23,15 +23,9 @@ let ArrayInput = React.createClass({
 	},
 
 	render() {
-		let items = this.props.value.map((item, index) => {
-			return (
-				<Author key={index} index={index} item={item} onEdit={this._edit} remove={this._remove.bind(null, index)} />
-			);
-		});
-
 		return (
 			<div className="cte-edit-array">
-				<div className="cte-array-items">{items}</div>
+				{this._authorList(this.props.value)}
 				<div className="text-danger">{this.state.error}</div>
 				<div className="form-inline">
 					<Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
@@ -40,6 +34,19 @@ let ArrayInput = React.createClass({
 				</div>
 			</div>
 		)
+	},
+
+// template methods ---------------------------------------------------
+
+	_authorList(authors) {
+		if (authors && authors.length > 0) {
+			let list = authors.map((item, index) => {
+				return (
+					<Author key={index} index={index} item={item} onEdit={this._edit} remove={this._remove.bind(null, index)} />
+				);
+			});
+			return <div className="cte-array-items">{list}</div>;
+		}
 	},
 
 // custom methods -----------------------------------------------------

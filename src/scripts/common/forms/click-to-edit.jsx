@@ -4,7 +4,6 @@ import React          from 'react';
 import AuthorInput    from './author-input.jsx';
 import FileArrayInput from './file-array-input.jsx';
 import Spinner        from '../partials/spinner.jsx';
-import request        from '../../utils/request';
 import WarnButton     from './warn-button.jsx';
 
 let ClickToEdit = React.createClass({
@@ -14,6 +13,7 @@ let ClickToEdit = React.createClass({
 	getDefaultProps () {
 		return {
 			editable: true,
+			type: 'string',
 			value: ''
 		};
 	},
@@ -22,81 +22,60 @@ let ClickToEdit = React.createClass({
 		return {
 			value: this.props.value,
 			initialValue: JSON.stringify(this.props.value),
-			loading: false
+			loading: false,
+			edit: false
 		};
+	},
+
+	componentWillReceiveProps(nextProps) {
+		// display edit when error is triggered
+	    if (nextProps.error) {
+	    	this.setState({edit: true});
+	    }
 	},
 
 	render() {
 		let value = this.state.value;
-		let type = this.props.type ? this.props.type : typeof value;
-		let input;
-		let display;
-
-		let buttons = (
-			<div className="btn-wrapper">
-				<button className="cte-save-btn btn-admin-blue" onClick={this._save}>save</button>
-			</div>
-		);
+		let type = this.props.type;
+		let input, display;
 
 		switch (type) {
 			case "string":
-				input = <textarea className="form-control" value={value} onChange={this._handleChange.bind(null, type)}></textarea>;
 				display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
+				input = (
+					<div>
+						<textarea className="form-control" value={value} onChange={this._handleChange.bind(null, type)}></textarea>
+						<div className="btn-wrapper">
+							<button className="cte-save-btn btn-admin-blue" onClick={this._save}>save</button>
+						</div>
+					</div>
+				);
 				break;
 			case "authors":
 				input = <AuthorInput value={value} onChange={this._handleChange.bind(null, type)} />;
-
-				let items = value ? value.map((item, index) => {
-					return <div className="fadeIn" key={index}><span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span></div>;
-				}) : null;
-				display = <div className="cte-display">{items}</div>;
-				buttons = null;
+				display = <div className="cte-display">{this._authorList(value)}</div>;
 				break;
 			case "fileArray":
-				let list = this.props.value.map((file, index) => {
-					return (
-						<div className="fadeIn file-array" key={file.name}>
-							<span>
-								<span className="file-array-btn">
-									<WarnButton
-										tooltip="Download Attachment"
-										icon="fa-download"
-										prepDownload={this._download.bind(null, file.name)} /> 
-								</span>
-								{file.name}
-							</span>
-						</div>
-					);
-				});
 				input = <FileArrayInput
-						value={this.props.value}
-						onChange={this._handleFile}
-						onDelete={this._handleDelete}
-						onFileClick={this._download}/>;
-				display = <div className="cte-display">{list}</div>;
-				buttons = null;
+							value={this.props.value}
+							onChange={this._handleFile}
+							onDelete={this._handleDelete}
+							onFileClick={this._download}/>;
+				display = <div className="cte-display">{this._fileList(this.props.value)}</div>;
 				break;
-		}
-
-		let editText = <span><i className="fa fa-pencil"></i> Edit</span>;
-		let hideText = <span><i className="fa fa-times"></i> Hide</span>;
-
-		let editBtn;
-		if (this.props.editable) {
-			editBtn = <button onClick={this._toggleEdit} className="cte-edit-button btn btn-admin fadeIn" >{this.state.edit ? hideText : editText}</button>
 		}
 
 		let edit = (
 			<div className="cte-edit fadeIn clearfix">
 				{!this.state.loading ? input : null}
-				{!this.state.loading ? buttons : null}
 				<Spinner active={this.state.loading} />
 			</div>
 		);
 
 		return (
 			<div className="form-group" >
-				<label>{this.props.label} {editBtn}</label>
+				<label>{this.props.label} {this._editBtn()}</label>
+				{this._error(this.props.error)}
 				<div>
 					{this.state.edit ? edit : display}
 				</div>
@@ -104,7 +83,61 @@ let ClickToEdit = React.createClass({
     	);
 	},
 
-// custon methods -----------------------------------------------------
+// template methods ---------------------------------------------------
+
+	_authorList(authors) {
+		let list = authors.map((item, index) => {
+			return (
+				<div className="fadeIn" key={index}>
+					<span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
+				</div>
+			);
+		});
+		return list;
+	},
+
+	_editBtn() {
+		let edit = this.state.edit;
+		if (this.props.editable) {
+			return (
+				<button onClick={this._toggleEdit} className="cte-edit-button btn btn-admin fadeIn" >
+					<span><i className={'fa fa-' + (edit ? 'times' : 'pencil')}></i> {edit ? 'Hide' : 'Edit'}</span>
+				</button>
+			);
+		}
+	},
+
+	_error(error) {
+		if (error) {
+			return (
+				<div className="alert alert-danger">
+					<button className="close" onClick={this.props.onDismissIssue}><span>&times;</span></button>
+					{error}
+				</div>
+			);
+		}
+	},
+
+	_fileList(files) {
+		let list = files.map((file, index) => {
+			return (
+				<div className="fadeIn file-array" key={file.name}>
+					<span>
+						<span className="file-array-btn">
+							<WarnButton
+								tooltip="Download Attachment"
+								icon="fa-download"
+								prepDownload={this._download.bind(null, file.name)} />
+						</span>
+						{file.name}
+					</span>
+				</div>
+			);
+		});
+		return list;
+	},
+
+// custom methods -----------------------------------------------------
 
 	_display() {
 		this.setState({edit: false});
