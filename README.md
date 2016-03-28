@@ -17,4 +17,4 @@ __Install the dependencies:__
 
 __Run:__
 
-`npm start`
+`node index.js` or `npm start`
