@@ -21,7 +21,7 @@ export default {
 	/**
 	 * Validate
 	 */
-	validateOne(req, res, next) {
+	validate(req, res, next) {
 		// get project id
 		let datasetId = req.params.datasetId;
 
