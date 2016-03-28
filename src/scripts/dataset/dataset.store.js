@@ -9,7 +9,7 @@ import router        from '../utils/router-container';
 import userStore     from '../user/user.store';
 import userActions   from '../user/user.actions';
 import upload        from '../utils/upload';
-import config        from '../config';
+import config        from '../../../config';
 import files         from '../utils/files';
 
 let datasetStore = Reflux.createStore({

@@ -3,7 +3,7 @@ import bids    from '../utils/bids';
 import uploads from '../utils/upload';
 import actions from './upload.actions';
 import files   from '../utils/files';
-import config  from '../config';
+import config  from '../../../config';
 
 export default {
 

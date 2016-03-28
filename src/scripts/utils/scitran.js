@@ -1,6 +1,6 @@
 import request  from './request';
 import async    from 'async';
-import config   from '../config';
+import config   from '../../../config';
 import files    from '../utils/files';
 
 /**
