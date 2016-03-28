@@ -75,7 +75,6 @@ export default {
                 token.refresh = res.body.refresh_token;
                 token.created = Math.round((new Date).getTime() / 1000);
                 token.expiresIn = res.body.expires_in;
-                // callback = callback.bind(this);
                 callback();
             }
         });

@@ -6,7 +6,6 @@ import routes     from './routes';
 import bodyParser from 'body-parser';
 import morgan     from 'morgan';
 import mongo      from './libs/mongo';
-import cron       from 'cron';
 import validation from './handlers/validation'
 
 // configuration ---------------------------------------------------
@@ -26,10 +25,6 @@ app.use(bodyParser.json());
 // routing ---------------------------------------------------------
 
 app.use('/api/v1/', routes);
-
-// cron jobs -------------------------------------------------------
-
-// let validationCron = new cron.CronJob('*/15 * * * * *', validation.validate, null, true, 'America/Los_Angeles');
 
 // error handling --------------------------------------------------
 

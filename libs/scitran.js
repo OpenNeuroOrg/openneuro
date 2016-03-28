@@ -134,7 +134,7 @@ export default {
             request.get(config.scitran.url + 'download', {query: {symlinks: true, ticket: ticket}}, (err2, res2) => {
                 if (!err2) {
                     let hash = crypto.createHash('md5').update(res2.body).digest('hex');
-                    fs.readdir('./persistent/datasets/', (err3, contents) => {
+                    fs.readdir(config.location + '/persistent/datasets/', (err3, contents) => {
                         if (contents && contents.indexOf(hash) > -1) {
                             callback(err, hash);
                         } else {
