@@ -4,7 +4,7 @@
 
 __Requirements:__
 
-Node `v4.4.1 (LTS)` 
+Node `v4.4.1 (LTS)`  
 gulp-cli (`npm install -g gulp-cli`)
 
 __Configure:__
