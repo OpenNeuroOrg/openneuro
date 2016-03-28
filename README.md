@@ -2,8 +2,6 @@
 
 ## Usage
 
-****
-
 __Requirements:__
 
 Node `v4.4.1 (LTS)`
