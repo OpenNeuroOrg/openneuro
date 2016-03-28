@@ -6,10 +6,10 @@
 export default {
 
 	/**
-	 * BIDS Core
+	 * Scitran
 	 */
-	bidsCore: {
-		url: 'http://url/to/bids-core/api/'
+	scitran: {
+		url: 'http://url/to/scitran/api/'
 	},
 
 	/**
