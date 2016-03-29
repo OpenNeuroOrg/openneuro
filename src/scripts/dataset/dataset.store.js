@@ -597,15 +597,21 @@ let datasetStore = Reflux.createStore({
 	/**
 	 * Start Job
 	 */
-	startJob(datasetId, appId, parameters, callback) {
+	startJob(snapshotId, appId, parameters, callback) {
 		crn.createJob({
 			appId: appId,
-			datasetId: datasetId,
+			datasetId: snapshotId,
 			userId: userStore.data.scitran._id,
 			parameters: parameters
 		}, (err, res) => {
 			callback(err, res);
-			this.loadJobs(this.data.dataset._id);
+			this.update({showJobsModal: false});
+			if (snapshotId !== this.data.dataset._id) {
+				let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
+				router.transitionTo('snapshot', {datasetId, snapshotId});
+			} else {
+				this.loadJobs(snapshotId);
+			}
 		});
 	},
 
