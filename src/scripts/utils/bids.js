@@ -335,7 +335,6 @@ export default  {
             /** modified for BIDS **/
             validation:  project.metadata && project.metadata.validation ? project.metadata.validation : {errors:[], warnings:[]},
             type:        'folder',
-            downloads:   project.counter ? project.counter : 0,
             children:    files,
             description: this.formatDescription(project.metadata, description),
             attachments: attachments,
