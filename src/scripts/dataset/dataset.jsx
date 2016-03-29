@@ -15,6 +15,7 @@ import FileTree     from './dataset.file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
 import Results      from '../upload/upload.validation-results.jsx';
 import UpdateWarn   from './dataset.update-warning.jsx';
+import pluralize    from 'pluralize';
 
 let Dataset = React.createClass({
 
@@ -169,14 +170,21 @@ let Dataset = React.createClass({
 			return <Spinner text="Validating" active={true} />;
 		}
 		if (errors.length > 0 || warnings.length > 0) {
-			let message;
+			let errMessage, warnMessage;
 			if (errors === 'Invalid') {
-				message = <div>This does not appear to be a BIDS dataset</div>;
+				errMessage = "This does not appear to be a BIDS dataset";
+			} else {
+				if (errors.length > 0) {
+					errMessage = <span className="message error fadeIn">Your dataset is no longer valid. You must fix the <strong>{errors.length + ' ' + pluralize('Error', errors.length)}</strong> to use all of the site features.</span>;
+				}
+				if (warnings.length > 0) {
+					warnMessage = <span className="message error fadeIn">We found <strong>{warnings.length + ' ' + pluralize('Warning', warnings.length)}</strong> in your dataset. You are not required to fix warnings but doing so will make your dataset more BIDS compliant.</span>;
+				}
 			}
 			return (
 				<div className="fadeIn col-xs-12">
 					<h3 className="metaheader">Validation</h3>
-					{message}
+					<div>{errMessage} {warnMessage}</div><br />
 					<Results errors={errors} warnings={warnings} />
 				</div>
 			)
