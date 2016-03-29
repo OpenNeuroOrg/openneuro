@@ -23,7 +23,7 @@ export default class Filters extends React.Component {
 				<div className="filters">
 		            <label>Filter By:</label>
 		            <Tooltip tooltip="All datasets"><button className={filters.length === 0 ? 'active btn-filter filter-all' : 'btn-filter filter-all'} onClick={this._filter.bind(this, 'reset')}>All</button></Tooltip>
-		            {publicFilter}
+		            {/*publicFilter*/}
 		            {incompleteFilter}
 		            {sharedFilter}
 		            {invalidFilter}
