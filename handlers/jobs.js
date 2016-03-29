@@ -75,7 +75,7 @@ export default {
 					"archiveSystem": "openfmri-storage",
 					"archivePath": null,
 					"inputs": {
-						"bidsFile": "agave://crn-dev-storage/" + hash
+						"bidsFile": config.agave.storage + hash
 					},
 					"parameters": {
 					},

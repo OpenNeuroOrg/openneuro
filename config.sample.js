@@ -19,7 +19,8 @@ export default {
 		"clientName": "crn_plab",
 		"clientDescription": "Agave client application for CRN interaction.",
 		"consumerKey": "***************",
-		"consumerSecret": "***************"
+		"consumerSecret": "***************",
+		"storage": "agave://your-storage-system/"
 	},
 	"mongo": {
 		"url": "mongodb://localhost:27017/crn"
