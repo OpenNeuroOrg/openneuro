@@ -84,7 +84,14 @@ let Tools = React.createClass({
 				action: datasetActions.createSnapshot,
 				display: isAdmin && !isSnapshot && !isIncomplete,
 				warn: true,
-			}
+				validations: [
+					{
+						check: isInvalid,
+						message: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.',
+						messageTimeout: 5000
+					}
+				]
+			},
 		];
 
 		tools = tools.map((tool, index) => {
