@@ -178,7 +178,7 @@ let Dataset = React.createClass({
 					errMessage = <span className="message error fadeIn">Your dataset is no longer valid. You must fix the <strong>{errors.length + ' ' + pluralize('Error', errors.length)}</strong> to use all of the site features.</span>;
 				}
 				if (warnings.length > 0) {
-					warnMessage = <span className="message error fadeIn">We found <strong>{warnings.length + ' ' + pluralize('Warning', warnings.length)}</strong> in your dataset. You are not required to fix warnings but doing so will make your dataset more BIDS compliant.</span>;
+					warnMessage = <span className="message error fadeIn">We found <strong>{warnings.length + ' ' + pluralize('Warning', warnings.length)}</strong> in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant.</span>;
 				}
 			}
 			return (
