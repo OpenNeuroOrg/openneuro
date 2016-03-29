@@ -76,7 +76,7 @@ let Dataset = React.createClass({
 									{this._uploaded(dataset)}
 									{this._authors(dataset.authors)}
 									{this._views(dataset.views)}
-									<h6>downloads: {dataset.downloads}</h6>
+									{this._downloads(dataset.downloads)}
 									<div className="status-container">
 										<Statuses dataset={dataset} />
 									</div>
@@ -134,6 +134,10 @@ let Dataset = React.createClass({
 			}
 			return <h6>{authorString}</h6>;
 		}
+	},
+
+	_downloads(downloads) {
+		if (downloads) {return <h6>downloads: {downloads}</h6>;}
 	},
 
 	_fileTree(dataset, canEdit) {
