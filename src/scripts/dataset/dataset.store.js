@@ -605,12 +605,14 @@ let datasetStore = Reflux.createStore({
 			parameters: parameters
 		}, (err, res) => {
 			callback(err, res);
-			this.update({showJobsModal: false});
-			if (snapshotId !== this.data.dataset._id) {
-				let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
-				router.transitionTo('snapshot', {datasetId, snapshotId});
-			} else {
-				this.loadJobs(snapshotId);
+			if (!err) {
+				this.update({showJobsModal: false});
+				if (snapshotId !== this.data.dataset._id) {
+					let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
+					router.transitionTo('snapshot', {datasetId, snapshotId});
+				} else {
+					this.loadJobs(snapshotId);
+				}
 			}
 		});
 	},
