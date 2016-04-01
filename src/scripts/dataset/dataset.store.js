@@ -147,17 +147,23 @@ let datasetStore = Reflux.createStore({
 			let jobs = {};
 			for (let job of res.body) {
 				if (!jobs.hasOwnProperty(job.appId)) {
-					jobs[job.appId] = [job];
+					jobs[job.appId] = {
+						appLabel:   job.appLabel,
+						appVersion: job.appVersion,
+						runs: [job]
+					};
 				} else {
-					jobs[job.appId].push(job);
+					jobs[job.appId].runs.push(job);
 				}
 			}
 			// convert jobs to array
 			let jobArray = [];
 			for (let job in jobs) {
 				jobArray.push({
-					appId: job,
-					runs: jobs[job]
+					appId:      job,
+					appLabel:   jobs[job].appLabel,
+					appVersion: jobs[job].appVersion,
+					runs:       jobs[job].runs
 				});
 			}
 
@@ -597,22 +603,36 @@ let datasetStore = Reflux.createStore({
 	/**
 	 * Start Job
 	 */
-	startJob(snapshotId, appId, parameters, callback) {
+	startJob(snapshotId, app, parameters, callback) {
 		crn.createJob({
-			appId: appId,
+			appId: app.id,
+			appLabel: app.label,
+			appVersion: app.version,
 			datasetId: snapshotId,
+			executionSystem: app.executionSystem,
 			userId: userStore.data.scitran._id,
 			parameters: parameters
 		}, (err, res) => {
 			callback(err, res);
-			this.update({showJobsModal: false});
+			if (!err) {
+				if (snapshotId == this.data.dataset._id) {
+					this.loadJobs(snapshotId);
+				}
+			}
+		});
+	},
+
+	/**
+	 * Dismiss Job Modal
+	 */
+	dismissJobsModal(success, snapshotId) {
+		this.toggleModal('Jobs');
+		if (success) {
 			if (snapshotId !== this.data.dataset._id) {
 				let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
 				router.transitionTo('snapshot', {datasetId, snapshotId});
-			} else {
-				this.loadJobs(snapshotId);
 			}
-		});
+		}
 	},
 
 	/**

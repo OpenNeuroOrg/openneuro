@@ -19,7 +19,7 @@ let Jobs = React.createClass({
 
 		let jobs = this.state.jobs.map((job) => {
 			return (
-				<Panel className="jobs" header={job.appId}  key={job.appId} eventKey={job.appId}>
+				<Panel className="jobs" header={job.appLabel + ' - v' + job.appVersion}  key={job.appId} eventKey={job.appId}>
 						{this._runs(job)}
 				</Panel>
 			);

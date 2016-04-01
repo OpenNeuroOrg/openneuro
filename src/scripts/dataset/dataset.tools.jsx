@@ -139,7 +139,7 @@ let Tools = React.createClass({
 					loadingApps={this.state.loadingApps}
 					snapshots={snapshots}
 					show={this.state.showJobsModal}
-					onHide={datasetActions.toggleModal.bind(null, 'Jobs')} />
+					onHide={datasetActions.dismissJobsModal} />
 				<Publish
 					dataset={dataset}
 					apps={this.state.apps}
