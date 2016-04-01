@@ -16,7 +16,8 @@ export default class JobMenu extends React.Component {
 		this.state = {
 			loading: false,
 			parameters: [],
-			selectedApp: '',
+			selectedApp: {},
+			selectedAppID: '',
 			selectedSnapshot: '',
 			message: null,
 			error: false
@@ -38,7 +39,7 @@ export default class JobMenu extends React.Component {
 
 	render() {
 
-		let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedApp;
+		let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedAppID;
 
 		let form = (
 			<div className="anaylsis-modal clearfix">
@@ -103,7 +104,7 @@ export default class JobMenu extends React.Component {
 					<div className="row">
 						<div className="col-xs-12">
 							<div className="col-xs-6 task-select">
-								<select value={this.state.selectedApp} onChange={this._selectApp.bind(this)}>
+								<select value={this.state.selectedAppID} onChange={this._selectApp.bind(this)}>
 									<option value="" disabled>Select a Task</option>
 									{options}
 								</select>
@@ -211,7 +212,7 @@ export default class JobMenu extends React.Component {
 	}
 
 	_submit() {
-		if (this.state.selectedApp) {
+		if (this.state.selectedAppID) {
 			return (
 				<div className="col-xs-12 modal-actions">
 					<button className="btn-modal-submit" onClick={this._startJob.bind(this)}>Start</button>
@@ -230,7 +231,7 @@ export default class JobMenu extends React.Component {
 		this.setState({
 			loading: false,
 			parameters: [],
-			selectedApp: '',
+			selectedAppID: '',
 			selectedSnapshot: '',
 			message: null,
 			error: false
@@ -275,10 +276,12 @@ export default class JobMenu extends React.Component {
 	 * Select App
 	 */
 	_selectApp(e) {
-		let selectedApp = e.target.value;
+		let selectedApp;
+		let selectedAppID = e.target.value;
 		let parameters = [], parametersSpec = [];
 		for (let app of this.props.apps) {
-			if (app.id === selectedApp) {
+			if (app.id === selectedAppID) {
+				selectedApp = app;
 				parametersSpec = app.parameters;
 				break;
 			}
@@ -293,7 +296,7 @@ export default class JobMenu extends React.Component {
 				value:       parameter.value.default
 			});
 		}
-		this.setState({selectedApp, parameters});
+		this.setState({selectedApp, selectedAppID, parameters});
 	}
 
 	/**
@@ -336,6 +339,7 @@ export default class JobMenu extends React.Component {
 			parameters[parameter.id] = parameter.value;
 		}
 		this.setState({loading: true});
+
 		actions.startJob(this.state.selectedSnapshot, this.state.selectedApp, parameters, (err, res) => {
 			let message, error;
 			if (err) {

@@ -147,17 +147,23 @@ let datasetStore = Reflux.createStore({
 			let jobs = {};
 			for (let job of res.body) {
 				if (!jobs.hasOwnProperty(job.appId)) {
-					jobs[job.appId] = [job];
+					jobs[job.appId] = {
+						appLabel:   job.appLabel,
+						appVersion: job.appVersion,
+						runs: [job]
+					};
 				} else {
-					jobs[job.appId].push(job);
+					jobs[job.appId].runs.push(job);
 				}
 			}
 			// convert jobs to array
 			let jobArray = [];
 			for (let job in jobs) {
 				jobArray.push({
-					appId: job,
-					runs: jobs[job]
+					appId:      job,
+					appLabel:   jobs[job].appLabel,
+					appVersion: jobs[job].appVersion,
+					runs:       jobs[job].runs
 				});
 			}
 
@@ -597,9 +603,11 @@ let datasetStore = Reflux.createStore({
 	/**
 	 * Start Job
 	 */
-	startJob(snapshotId, appId, parameters, callback) {
+	startJob(snapshotId, app, parameters, callback) {
 		crn.createJob({
-			appId: appId,
+			appId: app.id,
+			appLabel: app.label,
+			appVersion: app.version,
 			datasetId: snapshotId,
 			userId: userStore.data.scitran._id,
 			parameters: parameters
