@@ -16,12 +16,13 @@ let c = mongo.collections;
 
 let models = {
 	job: {
-		appId:      'string, required',
-		appLabel:   'string, required',
-		appVersion: 'string, required',
-		datasetId:  'string, required',
-		userId:     'string, required',
-		parameters: 'object, required'
+		appId:           'string, required',
+		appLabel:        'string, required',
+		appVersion:      'string, required',
+		datasetId:       'string, required',
+		executionSystem: 'String, required',
+		userId:          'string, required',
+		parameters:      'object, required'
 	}
 }
 
@@ -68,7 +69,7 @@ export default {
 					"name": jobName,
 					"appId": job.appId,
 					"batchQueue": "normal",
-					"executionSystem": "slurm-ls5.tacc.utexas.edu",
+					"executionSystem": job.executionSystem,
 					"maxRunTime": "04:00:00",
 					"memoryPerNode": "4GB",
 					"nodeCount": 1,
@@ -98,6 +99,11 @@ export default {
 						return next(error);
 					}
 					agave.createJob(body, (err, resp) => {
+						if (!resp.body) {
+							let error = new Error('AGAVE did not return a job creation result.');
+							error.http_code = 500;
+							return next(error);
+						}
 						if (resp.body.status == 'error') {
 							let error = new Error(resp.body.message);
 							error.http_code = 400;
