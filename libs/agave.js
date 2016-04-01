@@ -241,7 +241,7 @@ export default {
         });
     },
 
-    getJobOutput(jobId, callback) {
+    getJobOutput(jobId, callback, attempt) {
         this.auth(() => {
             request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings/out', {
                 headers: {
@@ -249,7 +249,15 @@ export default {
                     'Content-Type': 'application/json',
                 }
             }, (err, res) => {
-                this.handleResponse(err, res, callback, this.getJobOutput.bind(this, jobId, callback));
+                this.handleResponse(err, res, callback, this.getJobOutput.bind(this, jobId, (err, res) => {
+                    attempt = attempt ? attempt : 1;
+                    if (!res.body.result && attempt < 6) {
+                        // if no results are found re-attempt request up to 5 times`
+                        this.getJobOutput.bind(this, jobId, callback, attempt);
+                    } else {
+                        callback(err, res);
+                    }
+                }), attempt);
             });
         });
     },
