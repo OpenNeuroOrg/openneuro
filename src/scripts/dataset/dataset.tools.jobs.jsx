@@ -228,6 +228,8 @@ export default class JobMenu extends React.Component {
 	 * Hide
 	 */
 	_hide() {
+		let success = !!this.state.message && !this.state.error;
+		this.props.onHide(success, this.state.selectedSnapshot);
 		this.setState({
 			loading: false,
 			parameters: [],
@@ -236,7 +238,6 @@ export default class JobMenu extends React.Component {
 			message: null,
 			error: false
 		});
-		this.props.onHide();
 	}
 
 	/**

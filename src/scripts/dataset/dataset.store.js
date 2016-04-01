@@ -614,15 +614,24 @@ let datasetStore = Reflux.createStore({
 		}, (err, res) => {
 			callback(err, res);
 			if (!err) {
-				this.update({showJobsModal: false});
-				if (snapshotId !== this.data.dataset._id) {
-					let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
-					router.transitionTo('snapshot', {datasetId, snapshotId});
-				} else {
+				if (snapshotId == this.data.dataset._id) {
 					this.loadJobs(snapshotId);
 				}
 			}
 		});
+	},
+
+	/**
+	 * Dismiss Job Modal
+	 */
+	dismissJobsModal(success, snapshotId) {
+		this.toggleModal('Jobs');
+		if (success) {
+			if (snapshotId !== this.data.dataset._id) {
+				let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
+				router.transitionTo('snapshot', {datasetId, snapshotId});
+			}
+		}
 	},
 
 	/**
