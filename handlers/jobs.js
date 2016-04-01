@@ -17,6 +17,8 @@ let c = mongo.collections;
 let models = {
 	job: {
 		appId:      'string, required',
+		appLabel:   'string, required',
+		appVersion: 'string, required',
 		datasetId:  'string, required',
 		userId:     'string, required',
 		parameters: 'object, required'
@@ -104,6 +106,8 @@ export default {
 						c.jobs.insertOne({
 							name:           jobName,
 							appId:          job.appId,
+							appLabel:       job.appLabel,
+							appVersion:     job.appVersion,
 							datasetId:      job.datasetId,
 							datasetHash:    hash,
 							userId:         job.userId,
