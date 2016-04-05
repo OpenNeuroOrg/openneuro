@@ -48,7 +48,7 @@ class FileTree extends React.Component {
 			);
 		});
 
-		return this.props.loading ? <Spinner active={true} /> : <ul className="top-level-item">{nodes}</ul>;
+		return <ul className="top-level-item">{this.props.loading ? <Spinner active={true} text="Loading Files" /> : nodes}</ul>;
 	}
 
 // template methods ---------------------------------------------------
