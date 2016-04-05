@@ -1,16 +1,16 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux        from 'reflux';
-import Actions       from './dataset.actions.js';
-import scitran       from '../utils/scitran';
-import crn           from '../utils/crn';
-import bids          from '../utils/bids';
-import router        from '../utils/router-container';
-import userStore     from '../user/user.store';
-import userActions   from '../user/user.actions';
-import upload        from '../utils/upload';
-import config        from '../../../config';
-import files         from '../utils/files';
+import Reflux      from 'reflux';
+import Actions     from './dataset.actions.js';
+import scitran     from '../utils/scitran';
+import crn         from '../utils/crn';
+import bids        from '../utils/bids';
+import router      from '../utils/router-container';
+import userStore   from '../user/user.store';
+import userActions from '../user/user.actions';
+import upload      from '../utils/upload';
+import config      from '../../../config';
+import files       from '../utils/files';
 
 let datasetStore = Reflux.createStore({
 
