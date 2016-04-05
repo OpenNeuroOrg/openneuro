@@ -1,16 +1,16 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux        from 'reflux';
-import Actions       from './dataset.actions.js';
-import scitran       from '../utils/scitran';
-import crn           from '../utils/crn';
-import bids          from '../utils/bids';
-import router        from '../utils/router-container';
-import userStore     from '../user/user.store';
-import userActions   from '../user/user.actions';
-import upload        from '../utils/upload';
-import config        from '../../../config';
-import files         from '../utils/files';
+import Reflux      from 'reflux';
+import Actions     from './dataset.actions.js';
+import scitran     from '../utils/scitran';
+import crn         from '../utils/crn';
+import bids        from '../utils/bids';
+import router      from '../utils/router-container';
+import userStore   from '../user/user.store';
+import userActions from '../user/user.actions';
+import upload      from '../utils/upload';
+import config      from '../../../config';
+import files       from '../utils/files';
 
 let datasetStore = Reflux.createStore({
 
@@ -49,9 +49,11 @@ let datasetStore = Reflux.createStore({
 			apps: [],
 			currentUpdate: null,
 			dataset: null,
+			datasetTree: null,
 			loading: false,
 			loadingApps: false,
 			loadingJobs: false,
+			loadingTree: false,
 			jobs: [],
 			metadataIssues: {},
 			showJobsModal: false,
@@ -83,7 +85,7 @@ let datasetStore = Reflux.createStore({
 		let snapshot = !!(options && options.snapshot)
 		this.update({loading: true, dataset: null});
 		bids.getDataset(datasetId, (res) => {
-			res.showChildren = true;
+			// res.showChildren = true;
 			if (res.status === 404 || res.status === 403) {
 				this.update({status: res.status, loading: false, snapshot: snapshot});
 			} else {
@@ -93,6 +95,16 @@ let datasetStore = Reflux.createStore({
 			this.loadJobs(datasetId);
 			this.loadSnapshots(originalId);
 		}, options);
+	},
+
+	/**
+	 * Load Dataset Tree
+	 */
+	loadDatasetTree(datasetId, options) {
+		this.update({loadingTree: true});
+		bids.getDatasetTree(this.data.dataset, (tree) => {
+			this.update({loadingTree: false, datasetTree: tree});
+		}, {snapshot: this.data.snapshot});
 	},
 
 	/**
@@ -260,7 +272,17 @@ let datasetStore = Reflux.createStore({
 
 	updateName(value, callback) {
 		scitran.updateProject(this.data.dataset._id, {label: value}, () => {
+			// update description
 			this.updateDescription('Name', value, callback);
+
+			// update filetree
+			let dataset     = this.data.dataset;
+			let datasetTree = this.data.datasetTree;
+			dataset.label = value;
+			if (datasetTree && datasetTree[0]) {
+				datasetTree[0].label = value;
+			}
+			this.update({dataset, datasetTree});
 		});
 	},
 
@@ -463,9 +485,9 @@ let datasetStore = Reflux.createStore({
 	 */
 	deleteFile(file) {
 		this.updateWarn('delete', file, () => {
-			let dataset = this.data.dataset;
+			let datasetTree = this.data.datasetTree;
 			scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
-				let match = files.findInTree([dataset], file.parentId);
+				let match = files.findInTree(datasetTree, file.parentId);
 				let children = [];
 				for (let existingFile of match.children) {
 					if (file.name !== existingFile.name) {
@@ -473,7 +495,7 @@ let datasetStore = Reflux.createStore({
 					}
 				}
 				match.children = children;
-				this.update({dataset});
+				this.update(datasetTree);
 				this.revalidate();
 			});
 		});
@@ -555,14 +577,14 @@ let datasetStore = Reflux.createStore({
 	 *
 	 */
 	updateDirectoryState(directoryId, changes, callback) {
-		let dataset = this.data.dataset;
-		let match = files.findInTree([dataset], directoryId);
+		let dataset = this.data.datasetTree;
+		let match = files.findInTree(dataset, directoryId);
 		if (match) {
 			for (let key in changes) {
 				match[key] = changes[key];
 			}
 		}
-		this.update({dataset}, callback);
+		this.update({datasetTree: dataset}, callback);
 	},
 
 	/**
@@ -595,7 +617,11 @@ let datasetStore = Reflux.createStore({
 	 * children are shown in the tree hierarchy UI.
 	 */
 	toggleFolder(directory) {
-		this.updateDirectoryState(directory._id, {showChildren: !directory.showChildren});
+		if (directory.label === this.data.dataset.label && !this.data.datasetTree) {
+			this.loadDatasetTree();
+		} else {
+			this.updateDirectoryState(directory._id, {showChildren: !directory.showChildren});
+		}
 	},
 
 	// Jobs --------------------------------------------------------------------------

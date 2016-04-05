@@ -33,6 +33,11 @@ export default  {
                 cb();
             }
         }, () => {
+            subjects.sort((a, b) => {
+                if (a.label < b.label) {return -1;}
+                else if (a.label > b.label) {return 1;}
+                else {return 0;}
+            });
             callback(subjects);
         });
     },
@@ -58,6 +63,11 @@ export default  {
                 cb();
             }
         }, () => {
+            sessions.sort((a, b) => {
+                if (a.label < b.label) {return -1;}
+                else if (a.label > b.label) {return 1;}
+                else {return 0;}
+            });
             callback(sessions);
         });
     },
@@ -167,50 +177,69 @@ export default  {
                 this.getMetadata(project, (metadata) => {
                     let dataset = this.formatDataset(project, metadata['dataset_description.json'], users);
                     dataset.README = metadata.README;
-                    scitran.getSessions(projectId, (scitranSessions) => {
-                        this.filterSubjects(scitranSessions, (subjects) => {
-                            dataset.containerType = 'projects';
-                            dataset.children = this.labelFile(dataset.children, projectId, 'projects');
-                            dataset.children = dataset.children.concat(subjects);
-                            async.each(subjects, (subject, cb) => {
-                                this.filterSessions(scitranSessions, subject._id, (sessions) => {
-                                    subject.containerType = 'sessions';
-                                    subject.children = this.labelFile(subject.children, subject._id, 'sessions');
-                                    subject.children = subject.children.concat(sessions);
-                                    async.each(sessions, (session, cb1) => {
-                                        this.getModalities(session._id, (modalities) => {
-                                            session.containerType = 'sessions';
-                                            session.children = this.labelFile(session.children, session._id, 'sessions');
-                                            session.children = session.children.concat(modalities);
-                                            async.each(modalities, (modality, cb2) => {
-                                                scitran.getAcquisition(modality._id, (res) => {
-                                                    modality.containerType = 'acquisitions';
-                                                    modality.children = res.files;
-                                                    modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
-                                                    modality.name = modality.label;
-                                                    cb2();
-                                                }, options);
-                                            }, cb1);
-                                        }, options);
-                                    }, cb);
-                                }, options);
-                            }, () => {
-                                crn.getDatasetJobs(projectId, (err, res) => {
-                                    dataset.jobs = res.body;
-                                    this.usage(projectId, options, (usage) => {
-                                        if (usage) {
-                                            dataset.views = usage.views;
-                                            dataset.downloads = usage.downloads;
-                                        }
-                                        callback(dataset);
-                                    });
-                                }, options);
-                            });
-                        }, options);
+                    crn.getDatasetJobs(projectId, (err, res) => {
+                        dataset.jobs = res.body;
+                        this.usage(projectId, options, (usage) => {
+                            if (usage) {
+                                dataset.views = usage.views;
+                                dataset.downloads = usage.downloads;
+                            }
+                            callback(dataset);
+                        });
                     }, options);
                 }, options);
             }, options);
         }, options && options.isPublic);
+    },
+
+    /**
+     * Get Dataset Tree
+     *
+     * Takes a projectId and returns the full
+     * dataset tree.
+     */
+    getDatasetTree (dataset, callback, options) {
+        dataset = {
+            _id: dataset._id,
+            label: dataset.label,
+            children: dataset.children,
+            showChildren: true,
+            containerType: dataset.containerType,
+            type: "folder"
+        };
+        let projectId = dataset._id
+        scitran.getSessions(projectId, (scitranSessions) => {
+            this.filterSubjects(scitranSessions, (subjects) => {
+                dataset.containerType = 'projects';
+                dataset.children = this.labelFile(dataset.children, projectId, 'projects');
+                dataset.children = dataset.children.concat(subjects);
+                async.each(subjects, (subject, cb) => {
+                    this.filterSessions(scitranSessions, subject._id, (sessions) => {
+                        subject.containerType = 'sessions';
+                        subject.children = this.labelFile(subject.children, subject._id, 'sessions');
+                        subject.children = subject.children.concat(sessions);
+                        async.each(sessions, (session, cb1) => {
+                            this.getModalities(session._id, (modalities) => {
+                                session.containerType = 'sessions';
+                                session.children = this.labelFile(session.children, session._id, 'sessions');
+                                session.children = session.children.concat(modalities);
+                                async.each(modalities, (modality, cb2) => {
+                                    scitran.getAcquisition(modality._id, (res) => {
+                                        modality.containerType = 'acquisitions';
+                                        modality.children = res.files;
+                                        modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
+                                        modality.name = modality.label;
+                                        cb2();
+                                    }, options);
+                                }, cb1);
+                            }, options);
+                        }, cb);
+                    }, options);
+                }, () => {
+                    callback([dataset]);
+                });
+            }, options);
+        }, options);
     },
 
 // Update ---------------------------------------------------------------------------------
@@ -292,6 +321,11 @@ export default  {
      */
     labelFile (items, parentId, parentContainer) {
         items = items ? items : [];
+        items.sort((a, b) => {
+            if (a.name < b.name) {return -1;}
+            else if (a.name > b.name) {return 1;}
+            else {return 0;}
+        });
         for (let item of items) {
             item.parentId = parentId;
             item.parentContainer = parentContainer;

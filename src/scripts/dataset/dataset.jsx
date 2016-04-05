@@ -48,8 +48,9 @@ let Dataset = React.createClass({
 	},
 
 	render() {
-		let dataset    = this.state.dataset;
-		let canEdit    = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
+		let dataset = this.state.dataset;
+		let tree    = this.state.datasetTree;
+		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
 		let content;
 
 		if (dataset) {
@@ -88,7 +89,7 @@ let Dataset = React.createClass({
 										<div className="fadeIn col-xs-12">
 											<Jobs />
 										</div>
-										{this._fileTree(dataset, canEdit)}
+										{this._fileTree(dataset, tree, canEdit)}
 									</div>
 								</div>
 							</div>
@@ -140,7 +141,8 @@ let Dataset = React.createClass({
 		if (downloads) {return <h6>downloads: {downloads}</h6>;}
 	},
 
-	_fileTree(dataset, canEdit) {
+	_fileTree(dataset, tree, canEdit) {
+		tree = tree ? tree : [dataset];
 		if (!dataset.status.incomplete) {
 			return (
 				<div className="col-xs-12">
@@ -151,7 +153,7 @@ let Dataset = React.createClass({
 							</div>
 							<div className="panel-collapse" aria-expanded="false" >
 								<div className="panel-body">
-									<FileTree tree={[dataset]} editable={canEdit}/>
+									<FileTree tree={tree} editable={canEdit} loading={this.state.loadingTree}/>
 								</div>
 							</div>
 						</div>

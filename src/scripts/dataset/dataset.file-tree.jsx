@@ -3,6 +3,7 @@
 import React      from 'react';
 import actions    from './dataset.actions';
 import WarnButton from '../common/forms/warn-button.jsx';
+import Spinner    from '../common/partials/spinner.jsx';
 
 class FileTree extends React.Component {
 
@@ -47,9 +48,7 @@ class FileTree extends React.Component {
 			);
 		});
 
-		return (
-			<ul className="top-level-item">{nodes}</ul>
-    	);
+		return <ul className="top-level-item">{this.props.loading ? <Spinner active={true} text="Loading Files" /> : nodes}</ul>;
 	}
 
 // template methods ---------------------------------------------------
