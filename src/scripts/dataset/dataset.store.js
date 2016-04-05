@@ -475,9 +475,9 @@ let datasetStore = Reflux.createStore({
 	 */
 	deleteFile(file) {
 		this.updateWarn('delete', file, () => {
-			let dataset = this.data.dataset;
+			let datasetTree = this.data.datasetTree;
 			scitran.deleteFile(file.parentContainer, file.parentId, file.name, (err, res) => {
-				let match = files.findInTree([dataset], file.parentId);
+				let match = files.findInTree(datasetTree, file.parentId);
 				let children = [];
 				for (let existingFile of match.children) {
 					if (file.name !== existingFile.name) {
@@ -485,7 +485,7 @@ let datasetStore = Reflux.createStore({
 					}
 				}
 				match.children = children;
-				this.update({dataset});
+				this.update(datasetTree);
 				this.revalidate();
 			});
 		});
