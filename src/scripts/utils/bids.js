@@ -33,6 +33,11 @@ export default  {
                 cb();
             }
         }, () => {
+            subjects.sort((a, b) => {
+                if (a.label < b.label) {return -1;}
+                else if (a.label > b.label) {return 1;}
+                else {return 0;}
+            });
             callback(subjects);
         });
     },
@@ -58,6 +63,11 @@ export default  {
                 cb();
             }
         }, () => {
+            sessions.sort((a, b) => {
+                if (a.label < b.label) {return -1;}
+                else if (a.label > b.label) {return 1;}
+                else {return 0;}
+            });
             callback(sessions);
         });
     },
@@ -311,6 +321,11 @@ export default  {
      */
     labelFile (items, parentId, parentContainer) {
         items = items ? items : [];
+        items.sort((a, b) => {
+            if (a.name < b.name) {return -1;}
+            else if (a.name > b.name) {return 1;}
+            else {return 0;}
+        });
         for (let item of items) {
             item.parentId = parentId;
             item.parentContainer = parentContainer;
