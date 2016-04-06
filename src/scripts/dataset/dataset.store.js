@@ -83,7 +83,7 @@ let datasetStore = Reflux.createStore({
 		options = options ? options : {};
 		options.isPublic = !userStore.data.token;
 		let snapshot = !!(options && options.snapshot)
-		this.update({loading: true, dataset: null});
+		this.update({loading: true, dataset: null, datasetTree: null});
 		bids.getDataset(datasetId, (res) => {
 			// res.showChildren = true;
 			if (res.status === 404 || res.status === 403) {
