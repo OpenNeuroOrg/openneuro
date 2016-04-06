@@ -104,7 +104,7 @@ export default {
 							error.http_code = 400;
 							return next(error);
 						}
-						if (resp.statusCode !== 200) {
+						if (resp.statusCode !== 200 && resp.statusCode !== 201) {
 							let error = new Error(resp.body ? resp.body : "AGAVE was unable to process this job submission.");
 							error.http_code = resp.statusCode ? resp.statusCode : 503;
 							return next(error);
