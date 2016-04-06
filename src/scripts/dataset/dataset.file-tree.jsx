@@ -57,7 +57,7 @@ class FileTree extends React.Component {
 
 		let deleteFile, editFile, addFile;
 		if (this.props.editable) {
-			if (item.children) {
+			if (item.children && item.showChildren) {
 				addFile = (
 					<div className="edit-file">
 						<span><i className="fa fa-plus"></i> Add File</span>
@@ -69,7 +69,7 @@ class FileTree extends React.Component {
 							onClick={this._clearInput.bind(this, item.label)}/>
 					</div>
 				);
-			} else {
+			} else if (!item.children) {
 				deleteFile = (
 					<span className="delete-file">
 						<WarnButton
@@ -104,21 +104,20 @@ class FileTree extends React.Component {
 				</span>
 			);
 		}
-		let fileTreeEditFile;
-		if (this.props.editable || !item.children) {
-			fileTreeEditFile =(
+
+		if (addFile || editFile || deleteFile || downloadFile) {
+			return (
+				<span>
 				<span className="fileTreeEditFile">
 					{addFile}
 					{editFile}
 					{deleteFile}
 					{downloadFile}
 				</span>
+				</span>
 			);
-		}
+		} else {return false;}
 
-		return (
-			<span>{fileTreeEditFile}</span>
-		);
 	}
 
 // custom methods -----------------------------------------------------
