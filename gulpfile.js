@@ -43,7 +43,7 @@
 
 // primary tasks ----------------------------------------------------------
 
-    gulp.task('build', ['clean'], function() {
+    gulp.task('build', [], function() {
         process.env.NODE_ENV = 'production';
         gulp.start(['styles', 'copy', 'buildApp']);
     });
