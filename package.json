@@ -21,7 +21,7 @@
   "dependencies": {
     "async": "^1.2.1",
     "babel-polyfill": "^6.6.1",
-    "bids-validator": "0.16.3",
+    "bids-validator": "0.16.6",
     "bowser": "^1.0.0",
     "es6-react-mixins": "^0.1.6",
     "jshint": "^2.8.0",
