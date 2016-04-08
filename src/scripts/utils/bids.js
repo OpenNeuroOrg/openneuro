@@ -97,7 +97,7 @@ export default  {
             scitran.getUsers((err, res) => {
                 let users = !err && res && res.body ? res.body : null;
                 let results = [];
-                let publicResults = {}
+                let publicResults = {};
                 // hide other user's projects from admins & filter snapshots to display newest of each dataset
                 if (projects) {
                     for (let project of projects) {
@@ -209,9 +209,9 @@ export default  {
             children: dataset.children,
             showChildren: true,
             containerType: dataset.containerType,
-            type: "folder"
+            type: 'folder'
         };
-        let projectId = dataset._id
+        let projectId = dataset._id;
         scitran.getSessions(projectId, (scitranSessions) => {
             this.filterSubjects(scitranSessions, (subjects) => {
                 dataset.containerType = 'projects';
@@ -290,7 +290,7 @@ export default  {
                         });
                     });
                 }, () => {
-                    crn.deleteDatasetJobs(projectId, (err, res) => {
+                    crn.deleteDatasetJobs(projectId, () => {
                         scitran.deleteContainer('projects', projectId, callback);
                     });
                 });
@@ -308,7 +308,7 @@ export default  {
      * Takes a dataset and users list and returns the
      * user object of the uploader.
      */
-    user (dataset, users, callback) {
+    user (dataset, users) {
         if (users) {
             for (let user of users) {
                 if (user._id === dataset.group) {
@@ -384,7 +384,7 @@ export default  {
         dataset.status       = this.formatStatus(project, dataset.access),
         dataset.authors      = dataset.description.Authors;
         dataset.user         = this.user(dataset, users);
-        if (project.original) {dataset.original = project.original}
+        if (project.original) {dataset.original = project.original;}
         return dataset;
     },
 
@@ -393,15 +393,15 @@ export default  {
      *
      */
     formatDescription (metadata, description) {
-        let description = description ? description : {
-            "Name": "",
-            "License": "",
-            "Authors": [],
-            "Acknowledgements": "",
-            "HowToAcknowledge": "",
-            "Funding": "",
-            "ReferencesAndLinks": "",
-            "DatasetDOI": ""
+        description = description ? description : {
+            'Name': '',
+            'License': '',
+            'Authors': [],
+            'Acknowledgements': '',
+            'HowToAcknowledge': '',
+            'Funding': '',
+            'ReferencesAndLinks': '',
+            'DatasetDOI': ''
         };
 
         if (metadata && metadata.authors) {
@@ -487,7 +487,7 @@ export default  {
                     usage.downloads = res1.body.count;
                     callback(usage);
                 });
-            })
+            });
         } else {
             callback();
         }
