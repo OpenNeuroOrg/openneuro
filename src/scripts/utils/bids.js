@@ -34,8 +34,10 @@ export default  {
             }
         }, () => {
             subjects.sort((a, b) => {
-                if (a.label < b.label) {return -1;}
-                else if (a.label > b.label) {return 1;}
+                let aLabel = a.label.toLowerCase();
+                let bLabel = b.label.toLowerCase();
+                if (aLabel < bLabel) {return -1;}
+                else if (aLabel > bLabel) {return 1;}
                 else {return 0;}
             });
             callback(subjects);
@@ -64,8 +66,10 @@ export default  {
             }
         }, () => {
             sessions.sort((a, b) => {
-                if (a.label < b.label) {return -1;}
-                else if (a.label > b.label) {return 1;}
+                let aLabel = a.label.toLowerCase();
+                let bLabel = b.label.toLowerCase();
+                if (aLabel < bLabel) {return -1;}
+                else if (aLabel > bLabel) {return 1;}
                 else {return 0;}
             });
             callback(sessions);
@@ -211,23 +215,23 @@ export default  {
         scitran.getSessions(projectId, (scitranSessions) => {
             this.filterSubjects(scitranSessions, (subjects) => {
                 dataset.containerType = 'projects';
-                dataset.children = this.labelFile(dataset.children, projectId, 'projects');
+                dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
                 dataset.children = dataset.children.concat(subjects);
                 async.each(subjects, (subject, cb) => {
                     this.filterSessions(scitranSessions, subject._id, (sessions) => {
                         subject.containerType = 'sessions';
-                        subject.children = this.labelFile(subject.children, subject._id, 'sessions');
+                        subject.children = this.formatFiles(subject.children, subject._id, 'sessions');
                         subject.children = subject.children.concat(sessions);
                         async.each(sessions, (session, cb1) => {
                             this.getModalities(session._id, (modalities) => {
                                 session.containerType = 'sessions';
-                                session.children = this.labelFile(session.children, session._id, 'sessions');
+                                session.children = this.formatFiles(session.children, session._id, 'sessions');
                                 session.children = session.children.concat(modalities);
                                 async.each(modalities, (modality, cb2) => {
                                     scitran.getAcquisition(modality._id, (res) => {
                                         modality.containerType = 'acquisitions';
                                         modality.children = res.files;
-                                        modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
+                                        modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
                                         modality.name = modality.label;
                                         cb2();
                                     }, options);
@@ -317,13 +321,18 @@ export default  {
     },
 
     /**
-     * Label File
+     * Format Files
+     *
+     * Sorts files alphabetically and adds parentId
+     * and container properties.
      */
-    labelFile (items, parentId, parentContainer) {
+    formatFiles (items, parentId, parentContainer) {
         items = items ? items : [];
         items.sort((a, b) => {
-            if (a.name < b.name) {return -1;}
-            else if (a.name > b.name) {return 1;}
+            let aName = a.name.toLowerCase();
+            let bName = b.name.toLowerCase();
+            if (aName < bName) {return -1;}
+            else if (aName > bName) {return 1;}
             else {return 0;}
         });
         for (let item of items) {
