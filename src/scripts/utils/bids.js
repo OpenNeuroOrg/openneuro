@@ -34,8 +34,10 @@ export default  {
             }
         }, () => {
             subjects.sort((a, b) => {
-                if (a.label < b.label) {return -1;}
-                else if (a.label > b.label) {return 1;}
+                let aLabel = a.label.toLowerCase();
+                let bLabel = b.label.toLowerCase();
+                if (aLabel < bLabel) {return -1;}
+                else if (aLabel > bLabel) {return 1;}
                 else {return 0;}
             });
             callback(subjects);
@@ -64,8 +66,10 @@ export default  {
             }
         }, () => {
             sessions.sort((a, b) => {
-                if (a.label < b.label) {return -1;}
-                else if (a.label > b.label) {return 1;}
+                let aLabel = a.label.toLowerCase();
+                let bLabel = b.label.toLowerCase();
+                if (aLabel < bLabel) {return -1;}
+                else if (aLabel > bLabel) {return 1;}
                 else {return 0;}
             });
             callback(sessions);
@@ -93,7 +97,7 @@ export default  {
             scitran.getUsers((err, res) => {
                 let users = !err && res && res.body ? res.body : null;
                 let results = [];
-                let publicResults = {}
+                let publicResults = {};
                 // hide other user's projects from admins & filter snapshots to display newest of each dataset
                 if (projects) {
                     for (let project of projects) {
@@ -205,29 +209,29 @@ export default  {
             children: dataset.children,
             showChildren: true,
             containerType: dataset.containerType,
-            type: "folder"
+            type: 'folder'
         };
-        let projectId = dataset._id
+        let projectId = dataset._id;
         scitran.getSessions(projectId, (scitranSessions) => {
             this.filterSubjects(scitranSessions, (subjects) => {
                 dataset.containerType = 'projects';
-                dataset.children = this.labelFile(dataset.children, projectId, 'projects');
+                dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
                 dataset.children = dataset.children.concat(subjects);
                 async.each(subjects, (subject, cb) => {
                     this.filterSessions(scitranSessions, subject._id, (sessions) => {
                         subject.containerType = 'sessions';
-                        subject.children = this.labelFile(subject.children, subject._id, 'sessions');
+                        subject.children = this.formatFiles(subject.children, subject._id, 'sessions');
                         subject.children = subject.children.concat(sessions);
                         async.each(sessions, (session, cb1) => {
                             this.getModalities(session._id, (modalities) => {
                                 session.containerType = 'sessions';
-                                session.children = this.labelFile(session.children, session._id, 'sessions');
+                                session.children = this.formatFiles(session.children, session._id, 'sessions');
                                 session.children = session.children.concat(modalities);
                                 async.each(modalities, (modality, cb2) => {
                                     scitran.getAcquisition(modality._id, (res) => {
                                         modality.containerType = 'acquisitions';
                                         modality.children = res.files;
-                                        modality.children = this.labelFile(modality.children, modality._id, 'acquisitions');
+                                        modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
                                         modality.name = modality.label;
                                         cb2();
                                     }, options);
@@ -286,7 +290,7 @@ export default  {
                         });
                     });
                 }, () => {
-                    crn.deleteDatasetJobs(projectId, (err, res) => {
+                    crn.deleteDatasetJobs(projectId, () => {
                         scitran.deleteContainer('projects', projectId, callback);
                     });
                 });
@@ -304,7 +308,7 @@ export default  {
      * Takes a dataset and users list and returns the
      * user object of the uploader.
      */
-    user (dataset, users, callback) {
+    user (dataset, users) {
         if (users) {
             for (let user of users) {
                 if (user._id === dataset.group) {
@@ -317,13 +321,18 @@ export default  {
     },
 
     /**
-     * Label File
+     * Format Files
+     *
+     * Sorts files alphabetically and adds parentId
+     * and container properties.
      */
-    labelFile (items, parentId, parentContainer) {
+    formatFiles (items, parentId, parentContainer) {
         items = items ? items : [];
         items.sort((a, b) => {
-            if (a.name < b.name) {return -1;}
-            else if (a.name > b.name) {return 1;}
+            let aName = a.name.toLowerCase();
+            let bName = b.name.toLowerCase();
+            if (aName < bName) {return -1;}
+            else if (aName > bName) {return 1;}
             else {return 0;}
         });
         for (let item of items) {
@@ -375,7 +384,7 @@ export default  {
         dataset.status       = this.formatStatus(project, dataset.access),
         dataset.authors      = dataset.description.Authors;
         dataset.user         = this.user(dataset, users);
-        if (project.original) {dataset.original = project.original}
+        if (project.original) {dataset.original = project.original;}
         return dataset;
     },
 
@@ -384,15 +393,15 @@ export default  {
      *
      */
     formatDescription (metadata, description) {
-        let description = description ? description : {
-            "Name": "",
-            "License": "",
-            "Authors": [],
-            "Acknowledgements": "",
-            "HowToAcknowledge": "",
-            "Funding": "",
-            "ReferencesAndLinks": "",
-            "DatasetDOI": ""
+        description = description ? description : {
+            'Name': '',
+            'License': '',
+            'Authors': [],
+            'Acknowledgements': '',
+            'HowToAcknowledge': '',
+            'Funding': '',
+            'ReferencesAndLinks': '',
+            'DatasetDOI': ''
         };
 
         if (metadata && metadata.authors) {
@@ -478,7 +487,7 @@ export default  {
                     usage.downloads = res1.body.count;
                     callback(usage);
                 });
-            })
+            });
         } else {
             callback();
         }
