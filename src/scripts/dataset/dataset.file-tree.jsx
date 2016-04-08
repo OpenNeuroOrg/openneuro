@@ -107,13 +107,11 @@ class FileTree extends React.Component {
 
 		if (addFile || editFile || deleteFile || downloadFile) {
 			return (
-				<span>
 				<span className="fileTreeEditFile">
 					{addFile}
 					{editFile}
 					{deleteFile}
 					{downloadFile}
-				</span>
 				</span>
 			);
 		} else {return false;}
