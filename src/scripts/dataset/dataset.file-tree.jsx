@@ -26,18 +26,13 @@ class FileTree extends React.Component {
 
 			// folders
 			if (item.children) {
-				typeIcon  = <i className="fa fa-folder"></i>;
-				typeIconOpen = <i className="fa fa-folder-open"></i>;
-				let editText = <span>View</span>;
-				let hideText = <span>Hide <i className="fa fa-times"></i></span>;
-
-				editBtn = <button onClick={actions.toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>
+				typeIcon  = <button className={"type-icon fa " + (item.showChildren ? "fa-folder-open" : "fa-folder")} onClick={actions.toggleFolder.bind(this, item)}></button>;
 			}
 
 			return (
 				<li className="clearfix" key={item.label ? item.label : item.name}>
 					<span className="item-name">
-						{item.showChildren ? typeIconOpen : typeIcon} {item.label ? item.label : item.name}
+						{typeIcon} {item.label ? item.label : item.name}
 					</span>
 					{this._fileTools(item)}
 					{error}
