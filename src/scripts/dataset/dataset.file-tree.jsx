@@ -19,11 +19,10 @@ class FileTree extends React.Component {
             return (
                 <li className="clearfix" key={name}>
                     <span className="item-name">
-                        {this._folderIcon(item)} {name}
+                        {this._folderIcon(item)} {this._fileLoading(item.loading)} {name}
                     </span>
                     {this._fileTools(item, editable)}
                     {this._error(item)}
-                    {this._fileLoading(item.loading)}
                     {this._children(item, editable)}
                 </li>
             );
