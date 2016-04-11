@@ -353,6 +353,8 @@ export default class JobMenu extends React.Component {
                 error   = true;
                 if (res.status === 409) {
                     message = 'This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.';
+                } else if (res.status === 503) {
+                    message = 'We are temporarily unable to process this analysis. Please try again later. If this issue persists, please contract the site administrator.';
                 } else {
                     message = 'There was an issue submitting your analysis. Double check your inputs and try again. If the issue persists, please contact the site administrator.';
                 }
