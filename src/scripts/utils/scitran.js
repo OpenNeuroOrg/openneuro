@@ -185,7 +185,9 @@ export default  {
      */
     getSessions (projectId, callback, options) {
         let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + 'projects/' + projectId + '/sessions', {}, (err, res) => {
+        request.get(config.scitran.url + modifier + 'projects/' + projectId + '/sessions', {
+            query: {public: true}
+        }, (err, res) => {
             callback(res.body);
         });
     },
@@ -207,7 +209,9 @@ export default  {
      */
     getAcquisitions (sessionId, callback, options) {
         let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + 'sessions/' + sessionId + '/acquisitions', {}, (err, res) => {
+        request.get(config.scitran.url + modifier + 'sessions/' + sessionId + '/acquisitions', {
+            query: {public: true}
+        }, (err, res) => {
             callback(res.body);
         });
     },
@@ -344,7 +348,9 @@ export default  {
     },
 
     getProjectSnapshots (projectId, callback) {
-        request.get(config.scitran.url + 'projects/' + projectId + '/snapshots', {}, callback);
+        request.get(config.scitran.url + 'projects/' + projectId + '/snapshots', {
+            query: {public: true}
+        }, callback);
     },
 
     deleteSnapshot (projectId, callback) {
