@@ -14,42 +14,54 @@ class FileTree extends React.Component {
         let tree     = this.props.tree;
 
         let nodes = tree.map((item) => {
-            if (!item.label && item.filename) {item.label = item.filename;}
-            let typeIcon, error, loading, editBtn;
-
-            // loading animation
-            if (item.loading) {
-                loading = <span className="warning-loading"><i className="fa fa-spin fa-circle-o-notch"></i></span>;
-            }
-
-            // inline error
-            if (item.error) {
-                error = <div className="message error">{item.error} <span onClick={actions.dismissError.bind(this, item)}><i className="fa fa-times"></i></span></div>;
-            }
-
-            // folders
-            if (item.children) {
-                typeIcon  = <button className={'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder')} onClick={actions.toggleFolder.bind(this, item)}></button>;
-            }
+            let name = item.label ? item.label : item.name;
 
             return (
-                <li className="clearfix" key={item.label ? item.label : item.name}>
+                <li className="clearfix" key={name}>
                     <span className="item-name">
-                        {typeIcon} {item.label ? item.label : item.name}
+                        {this._folderIcon(item)} {name}
                     </span>
                     {this._fileTools(item, editable)}
-                    {error}
-                    {loading}
-                    {item.showChildren ? <ul className="child-files"><FileTree tree={item.children} editable={editable}/></ul> : null}
-                    {editBtn}
+                    {this._error(item)}
+                    {this._fileLoading(item.loading)}
+                    {this._children(item, editable)}
                 </li>
             );
         });
 
-        return <ul className="top-level-item">{this.props.loading ? <Spinner active={true} text="Loading Files" /> : nodes}</ul>;
+        return (
+            <ul className="top-level-item">
+                {this.props.loading ? <Spinner active={true} text="Loading Files" /> : nodes}
+            </ul>
+        );
     }
 
 // template methods ---------------------------------------------------
+
+    _children(item, editable) {
+        if (item.showChildren) {
+            return <ul className="child-files"><FileTree tree={item.children} editable={editable}/></ul>;
+        }
+    }
+
+    _error(item) {
+        if (item.error) {
+            return (
+                <div className="message error">
+                    {item.error + ' '}
+                    <span onClick={actions.dismissError.bind(this, item)}>
+                        <i className="fa fa-times"></i>
+                    </span>
+                </div>
+            );
+        }
+    }
+
+    _fileLoading(loading) {
+        if (loading) {
+            return <span className="warning-loading"><i className="fa fa-spin fa-circle-o-notch"></i></span>;
+        }
+    }
 
     _fileTools(item, editable) {
 
@@ -114,6 +126,13 @@ class FileTree extends React.Component {
             );
         } else {return false;}
 
+    }
+
+    _folderIcon(item) {
+        if (item.children) {
+            let iconClass = 'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder');
+            return <button className={iconClass} onClick={actions.toggleFolder.bind(this, item)}></button>;
+        }
     }
 
 // custom methods -----------------------------------------------------
