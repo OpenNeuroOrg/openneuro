@@ -577,14 +577,14 @@ let datasetStore = Reflux.createStore({
      *
      */
     updateDirectoryState(directoryId, changes, callback) {
-        let dataset = this.data.datasetTree;
-        let match = files.findInTree(dataset, directoryId);
+        let datasetTree = this.data.datasetTree;
+        let match = files.findInTree(datasetTree, directoryId);
         if (match) {
             for (let key in changes) {
                 match[key] = changes[key];
             }
         }
-        this.update({datasetTree: dataset}, callback);
+        this.update({datasetTree}, callback);
     },
 
     /**
@@ -595,8 +595,8 @@ let datasetStore = Reflux.createStore({
      * updating the state of the file tree
      */
     updateFileState(file, changes, callback) {
-        let dataset = this.data.dataset;
-        let parent = files.findInTree([dataset], file.parentId);
+        let datasetTree = this.data.datasetTree;
+        let parent = files.findInTree(datasetTree, file.parentId);
         for (let existingFile of parent.children) {
             if (file.name == existingFile.name) {
                 for (let key in changes) {
@@ -604,7 +604,7 @@ let datasetStore = Reflux.createStore({
                 }
             }
         }
-        this.update({dataset}, callback);
+        this.update({datasetTree}, callback);
     },
 
     /**
