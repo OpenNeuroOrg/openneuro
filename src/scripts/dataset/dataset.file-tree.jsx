@@ -8,137 +8,163 @@ import Spinner    from '../common/partials/spinner.jsx';
 class FileTree extends React.Component {
 
 // life cycle events --------------------------------------------------
-	render () {
-		let tree = this.props.tree ? this.props.tree : [];
-		let nodes = tree.map((item, index) => {
-			if (!item.label && item.filename) {item.label = item.filename;}
-			let typeIcon, typeIconOpen, tools, fileTools, error, loading, editBtn;
 
-			// loading animation
-			if (item.loading) {
-				loading = <span className="warning-loading"><i className="fa fa-spin fa-circle-o-notch"></i></span>;
-			}
+    render () {
+        let editable = this.props.editable;
+        let tree     = this.props.tree;
 
-			// inline error
-			if (item.error) {
-				error = <div className="message error">{item.error} <span onClick={actions.dismissError.bind(this, item)}><i className="fa fa-times"></i></span></div>;
-			}
+        let nodes = tree.map((item) => {
+            let name = item.label ? item.label : item.name;
 
-			// folders
-			if (item.children) {
-				typeIcon  = <i className="fa fa-folder"></i>;
-				typeIconOpen = <i className="fa fa-folder-open"></i>;
-				let editText = <span>View</span>;
-				let hideText = <span>Hide <i className="fa fa-times"></i></span>;
+            return (
+                <li className="clearfix" key={name}>
+                    <span className="item-name">
+                        {this._folderIcon(item)} {this._fileLoading(item.loading)} {name}
+                    </span>
+                    {this._fileTools(item, editable)}
+                    {this._error(item)}
+                    {this._children(item, editable)}
+                </li>
+            );
+        });
 
-				editBtn = <button onClick={actions.toggleFolder.bind(this, item)} className="cte-edit-button btn btn-admin fadeIn" >{item.showChildren ? hideText : editText}</button>
-			}
-
-			return (
-				<li className="clearfix" key={item.label ? item.label : item.name}>
-					<span className="item-name">
-						{item.showChildren ? typeIconOpen : typeIcon} {item.label ? item.label : item.name}
-					</span>
-					{this._fileTools(item)}
-					{error}
-					{loading}
-					{item.showChildren ? <ul className="child-files"><FileTree tree={item.children} editable={this.props.editable}/></ul> : null}
-					{editBtn}
-				</li>
-			);
-		});
-
-		return <ul className="top-level-item">{this.props.loading ? <Spinner active={true} text="Loading Files" /> : nodes}</ul>;
-	}
+        return (
+            <ul className="top-level-item">
+                {this.props.loading ? <Spinner active={true} text="Loading Files" /> : nodes}
+            </ul>
+        );
+    }
 
 // template methods ---------------------------------------------------
 
-	_fileTools(item) {
+    _children(item, editable) {
+        if (item.showChildren) {
+            return <ul className="child-files"><FileTree tree={item.children} editable={editable}/></ul>;
+        }
+    }
 
-		let deleteFile, editFile, addFile;
-		if (this.props.editable) {
-			if (item.children && item.showChildren) {
-				addFile = (
-					<div className="edit-file">
-						<span><i className="fa fa-plus"></i> Add File</span>
-						<input
-							type="file"
-							className="add-files"
-							ref={item.label}
-							onChange={this._addFile.bind(this, item)}
-							onClick={this._clearInput.bind(this, item.label)}/>
-					</div>
-				);
-			} else if (!item.children) {
-				deleteFile = (
-					<span className="delete-file">
-						<WarnButton
-							icon="fa-trash"
-							message="Delete"
-							action={actions.deleteFile.bind(this, item)} />
-					</span>
-				);
+    _error(item) {
+        if (item.error) {
+            return (
+                <div className="message error">
+                    {item.error + ' '}
+                    <span onClick={actions.dismissError.bind(this, item)}>
+                        <i className="fa fa-times"></i>
+                    </span>
+                </div>
+            );
+        }
+    }
 
-				editFile = (
-					<div className="edit-file">
-						<span><i className="fa fa-file-o"></i> Update</span>
-						<input
-							type="file"
-							className="update-file"
-							ref={item.name}
-							onChange={this._updateFile.bind(this, item)}
-							onClick={this._clearInput.bind(this, item.name)}/>
-					</div>
-				);
-			}
-		}
+    _fileLoading(loading) {
+        if (loading) {
+            return <span className="warning-loading"><i className="fa fa-spin fa-circle-o-notch"></i></span>;
+        }
+    }
 
-		let downloadFile;
-		if (!item.children) {
-			downloadFile = (
-				<span className="download-file">
-					<WarnButton
-						icon="fa-download"
-						message="Download"
-						prepDownload={actions.getFileDownloadTicket.bind(this, item)} />
-				</span>
-			);
-		}
+    _fileTools(item, editable) {
 
-		if (addFile || editFile || deleteFile || downloadFile) {
-			return (
-				<span>
-				<span className="fileTreeEditFile">
-					{addFile}
-					{editFile}
-					{deleteFile}
-					{downloadFile}
-				</span>
-				</span>
-			);
-		} else {return false;}
+        let deleteFile, editFile, addFile;
+        if (editable) {
+            if (item.children && item.showChildren) {
+                addFile = (
+                    <div className="edit-file">
+                        <span><i className="fa fa-plus"></i> Add File</span>
+                        <input
+                            type="file"
+                            className="add-files"
+                            ref={item.label}
+                            onChange={this._addFile.bind(this, item)}
+                            onClick={this._clearInput.bind(this, item.label)}/>
+                    </div>
+                );
+            } else if (!item.children) {
+                deleteFile = (
+                    <span className="delete-file">
+                        <WarnButton
+                            icon="fa-trash"
+                            message="Delete"
+                            action={actions.deleteFile.bind(this, item)} />
+                    </span>
+                );
 
-	}
+                editFile = (
+                    <div className="edit-file">
+                        <span><i className="fa fa-file-o"></i> Update</span>
+                        <input
+                            type="file"
+                            className="update-file"
+                            ref={item.name}
+                            onChange={this._updateFile.bind(this, item)}
+                            onClick={this._clearInput.bind(this, item.name)}/>
+                    </div>
+                );
+            }
+        }
+
+        let downloadFile;
+        if (!item.children) {
+            downloadFile = (
+                <span className="download-file">
+                    <WarnButton
+                        icon="fa-download"
+                        message="Download"
+                        prepDownload={actions.getFileDownloadTicket.bind(this, item)} />
+                </span>
+            );
+        }
+
+        if (addFile || editFile || deleteFile || downloadFile) {
+            return (
+                <span className="fileTreeEditFile">
+                    {addFile}
+                    {editFile}
+                    {deleteFile}
+                    {downloadFile}
+                </span>
+            );
+        } else {return false;}
+
+    }
+
+    _folderIcon(item) {
+        if (item.children) {
+            let iconClass = 'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder');
+            return <button className={iconClass} onClick={actions.toggleFolder.bind(this, item)}></button>;
+        }
+    }
 
 // custom methods -----------------------------------------------------
 
-	/**
-	 * Add File
-	 */
-	_addFile(container, event) {actions.addFile(container, event.target.files[0]);}
+    /**
+     * Add File
+     */
+    _addFile(container, event) {actions.addFile(container, event.target.files[0]);}
 
-	/**
-	 * Clear Input
-	 */
-	_clearInput(ref) {
-		React.findDOMNode(this.refs[ref]).value = null;
-	}
+    /**
+     * Clear Input
+     */
+    _clearInput(ref) {
+        React.findDOMNode(this.refs[ref]).value = null;
+    }
 
-	/**
-	 * Update File
-	 */
-	_updateFile(item, event) {actions.updateFile(item, event.target.files[0]);}
+    /**
+     * Update File
+     */
+    _updateFile(item, event) {actions.updateFile(item, event.target.files[0]);}
 
 }
+
+FileTree.props = {
+    editable: false,
+    loading:  false,
+    tree:     []
+};
+
+FileTree.propTypes = {
+    editable: React.PropTypes.bool,
+    loading:  React.PropTypes.bool,
+    tree:     React.PropTypes.array
+};
 
 export default FileTree;

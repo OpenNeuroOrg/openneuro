@@ -72,6 +72,10 @@
 .dataset .dataset-wrap{
 	.fileStructure.panel-group{
 		.panel-default{
+			.type-icon {
+				background: none;
+				border: none;
+			}
 			.panel-heading .panel-title{
 				font-size: 18px;
 				color: #424242;
