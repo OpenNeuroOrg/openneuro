@@ -1,7 +1,5 @@
 import request  from './request';
-import async    from 'async';
 import config   from '../../../config';
-import files    from '../utils/files';
 
 /**
  * Scitran
@@ -42,15 +40,13 @@ export default  {
      * add adds the user.
      */
     addUser (userData, callback) {
-        request.post(config.scitran.url + 'users', {body: userData}, (err, res) => {
+        request.post(config.scitran.url + 'users', {body: userData}, () => {
             this.createGroup(userData._id, userData._id, callback);
         });
     },
 
     /**
      * Update User
-     *
-     *
      */
     updateUser (userId, userData, callback) {
         request.put(config.scitran.url + 'users/' + userId, {body: userData}, (err, res) => {
@@ -63,11 +59,11 @@ export default  {
      *
      * Takes a userId and removes the user.
      */
-     removeUser (userId, callback) {
+    removeUser (userId, callback) {
         request.del(config.scitran.url + 'users/' + userId, (err, res) => {
             callback(err, res);
         });
-     },
+    },
 
 // Create ---------------------------------------------------------------------------------
 
@@ -154,7 +150,7 @@ export default  {
      * Add Permission
      */
     addPermission(container, id, permission, callback) {
-        permission.site = 'local'
+        permission.site = 'local';
         request.post(config.scitran.url + container + '/' + id + '/permissions', {body: permission}, callback);
     },
 
@@ -271,9 +267,7 @@ export default  {
      *
      */
     deleteContainer (type, id, callback) {
-        request.del(config.scitran.url + type + '/' + id, (err, res) => {
-            callback();
-        });
+        request.del(config.scitran.url + type + '/' + id, callback);
     },
 
     /**
@@ -373,7 +367,7 @@ export default  {
     trackUsage (snapshotId, type, callback) {
         request.post(config.scitran.url + 'snapshots/projects/' + snapshotId + '/analytics', {
             query: {type}
-        }, callback)
+        }, callback);
     },
 
     /**
@@ -390,7 +384,7 @@ export default  {
     getUsage (snapshotId, options, callback) {
         request.get(config.scitran.url + 'snapshots/projects/' + snapshotId + '/analytics', {
             query: options
-        }, callback)
+        }, callback);
     }
 
 };
