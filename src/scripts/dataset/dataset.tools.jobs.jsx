@@ -131,6 +131,16 @@ export default class JobMenu extends React.Component {
                 );
             }
         }) : [];
+
+        let createSnapshot;
+        if (this.props.dataset.access === 'admin') {
+            createSnapshot = (
+                <div className="col-xs-6 default-reset">
+                    <button className="btn-reset" onClick={this._createSnapshot.bind(this)}>Create New Snapshot</button>
+                </div>
+            );
+        }
+
         return (
             <div>
                 <h5>Choose a snapshot to run analysis on</h5>
@@ -142,9 +152,7 @@ export default class JobMenu extends React.Component {
                                 {options}
                             </select>
                         </div>
-                        <div className="col-xs-6 default-reset">
-                            <button className="btn-reset" onClick={this._createSnapshot.bind(this)}>Create New Snapshot</button>
-                        </div>
+                        {createSnapshot}
                     </div>
                 </div>
             </div>
