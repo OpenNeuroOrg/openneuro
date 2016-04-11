@@ -94,42 +94,10 @@ let Tools = React.createClass({
             }
         ];
 
-        tools = tools.map((tool, index) => {
-            if (tool.display) {
-                return (
-                    <div role="presentation" className="tool" key={index}>
-                        <WarnButton
-                            tooltip={tool.tooltip}
-                            icon={tool.icon}
-                            prepDownload={tool.prepDownload}
-                            action={tool.action}
-                            warn={tool.warn}
-                            link={tool.link}
-                            validations={tool.validations} />
-                    </div>
-                );
-            }
-        });
-
-        let snapshotOptions = snapshots.map((snapshot) => {
-            return (
-                <option key={snapshot._id} value={snapshot._id}>
-                    {snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
-                </option>
-            );
-        });
-
         return (
             <div className="tools clearfix">
-                <div role="presentation" className="snapshotSelect" >
-                    <span>
-                        <select value={this.state.selectedSnapshot} onChange={this._selectSnapshot}>
-                            <option value="" disabled>Select a snapshot</option>
-                            {snapshotOptions}
-                        </select>
-                    </span>
-                </div>
-                {tools}
+                {this._snapshotSelect(snapshots)}
+                {this._tools(tools)}
                 {this._runAnalysis(isSignedIn && !isIncomplete)}
                 {this._resume(isIncomplete)}
                 <Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={datasetActions.toggleModal.bind(null, 'Share')}/>
@@ -173,6 +141,47 @@ let Tools = React.createClass({
                 </div>
             );
         }
+    },
+
+    _snapshotSelect(snapshots) {
+        let snapshotOptions = snapshots.map((snapshot) => {
+            return (
+                <option key={snapshot._id} value={snapshot._id}>
+                    {snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
+                </option>
+            );
+        });
+
+        return (
+            <div role="presentation" className="snapshotSelect" >
+                <span>
+                    <select value={this.state.selectedSnapshot} onChange={this._selectSnapshot}>
+                        <option value="" disabled>Select a snapshot</option>
+                        {snapshotOptions}
+                    </select>
+                </span>
+            </div>
+        );
+    },
+
+    _tools(toolConfig) {
+        let tools = toolConfig.map((tool, index) => {
+            if (tool.display) {
+                return (
+                    <div role="presentation" className="tool" key={index}>
+                        <WarnButton
+                            tooltip={tool.tooltip}
+                            icon={tool.icon}
+                            prepDownload={tool.prepDownload}
+                            action={tool.action}
+                            warn={tool.warn}
+                            link={tool.link}
+                            validations={tool.validations} />
+                    </div>
+                );
+            }
+        });
+        return tools;
     },
 
 // custom methods -----------------------------------------------------
