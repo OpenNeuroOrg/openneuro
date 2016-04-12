@@ -31,8 +31,9 @@ let Tools = React.createClass({
     },
 
     render() {
-        let dataset   = this.props.dataset,
-            snapshots = this.props.snapshots;
+        let dataset     = this.props.dataset,
+            snapshots   = this.props.snapshots,
+            isUploading = dataset._id === this.state.projectId;
 
         // permission check shorthands
         let isAdmin      = dataset.access === 'admin',
@@ -102,7 +103,7 @@ let Tools = React.createClass({
                 {this._snapshotSelect(snapshots)}
                 {this._tools(tools)}
                 {this._runAnalysis(isSignedIn && !isIncomplete)}
-                {this._resume(isIncomplete)}
+                {this._resume(isIncomplete, isUploading)}
                 <ToolModals />
             </div>
         );
@@ -110,8 +111,8 @@ let Tools = React.createClass({
 
 // template methods ---------------------------------------------------
 
-    _resume(incomplete) {
-        if (incomplete) {
+    _resume(incomplete, isUploading) {
+        if (incomplete && !isUploading) {
             return (
                 <div className="resume-upload-tool">
                     <FileSelect resume={true} onChange={this._onFileSelect} />
