@@ -176,7 +176,7 @@ export default {
     results(req, res) {
         let jobId = req.params.jobId;
         if (req.body.status === 'FINISHED') {
-            agave.getJobOutput(req.body.id, (err, resp) => {
+            agave.getJobResults(req.body.id, (err, resp) => {
                 c.jobs.updateOne({jobId}, {$set: {agave: req.body, results: resp.body.result}}, {}).then((err, result) => {
                     if (err) {res.send(err);}
                     else {res.send(result);}
