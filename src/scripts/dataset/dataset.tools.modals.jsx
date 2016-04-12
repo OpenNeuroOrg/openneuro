@@ -14,29 +14,30 @@ let ToolModals = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-    componentDidMount() {
-
-    },
-
     render() {
-        let dataset   = this.state.dataset,
-            users     = this.state.users,
-            snapshots = this.state.snapshots;
+        let apps             = this.state.apps,
+            dataset          = this.state.dataset,
+            loadingApps      = this.state.loadingApps,
+            users            = this.state.users,
+            showJobsModal    = this.state.showJobsModal,
+            showPublishModal = this.state.showPublishModal,
+            showShareModal   = this.state.showShareModal,
+            snapshots        = this.state.snapshots;
 
         return (
             <div>
-                <Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={datasetActions.toggleModal.bind(null, 'Share')}/>
+                <Share dataset={dataset} users={users} show={showShareModal} onHide={datasetActions.toggleModal.bind(null, 'Share')}/>
                 <Jobs
                     dataset={dataset}
-                    apps={this.state.apps}
-                    loadingApps={this.state.loadingApps}
+                    apps={apps}
+                    loadingApps={loadingApps}
                     snapshots={snapshots}
-                    show={this.state.showJobsModal}
+                    show={showJobsModal}
                     onHide={datasetActions.dismissJobsModal} />
                 <Publish
                     dataset={dataset}
                     snapshots={snapshots}
-                    show={this.state.showPublishModal}
+                    show={showPublishModal}
                     onHide={datasetActions.toggleModal.bind(null, 'Publish')} />
             </div>
         );
