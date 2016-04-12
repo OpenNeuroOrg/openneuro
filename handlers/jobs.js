@@ -176,10 +176,21 @@ export default {
     results(req, res) {
         let jobId = req.params.jobId;
         if (req.body.status === 'FINISHED') {
-            agave.getJobResults(req.body.id, (err, resp) => {
-                c.jobs.updateOne({jobId}, {$set: {agave: req.body, results: resp.body.result}}, {}).then((err, result) => {
-                    if (err) {res.send(err);}
-                    else {res.send(result);}
+            let results = [];
+            agave.getJobOutput(req.body.id, (err, resp) => {
+                let output = resp.body.result;
+                // get main output files
+                for (let file of output) {
+                    if ((file.name.indexOf('.err') || file.name.indexOf('.out')) && file.length > 0) {
+                        results.push(file);
+                    }
+                }
+                agave.getJobResults(req.body.id, (err, resp1) => {
+                    results = results.concat(resp1.body.result);
+                    c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
+                        if (err) {res.send(err);}
+                        else {res.send(result);}
+                    });
                 });
             });
         } else {
