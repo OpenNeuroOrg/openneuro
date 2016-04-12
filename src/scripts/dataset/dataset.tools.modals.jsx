@@ -19,26 +19,24 @@ let ToolModals = React.createClass({
             dataset          = this.state.dataset,
             loadingApps      = this.state.loadingApps,
             users            = this.state.users,
-            showJobsModal    = this.state.showJobsModal,
-            showPublishModal = this.state.showPublishModal,
-            showShareModal   = this.state.showShareModal,
+            modals           = this.state.modals,
             snapshots        = this.state.snapshots;
 
         return (
             <div>
-                <Share dataset={dataset} users={users} show={showShareModal} onHide={datasetActions.toggleModal.bind(null, 'Share')}/>
+                <Share dataset={dataset} users={users} show={modals.share} onHide={datasetActions.toggleModal.bind(null, 'share')}/>
                 <Jobs
                     dataset={dataset}
                     apps={apps}
                     loadingApps={loadingApps}
                     snapshots={snapshots}
-                    show={showJobsModal}
+                    show={modals.jobs}
                     onHide={datasetActions.dismissJobsModal} />
                 <Publish
                     dataset={dataset}
                     snapshots={snapshots}
-                    show={showPublishModal}
-                    onHide={datasetActions.toggleModal.bind(null, 'Publish')} />
+                    show={modals.publish}
+                    onHide={datasetActions.toggleModal.bind(null, 'publish')} />
             </div>
         );
     }

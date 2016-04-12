@@ -114,7 +114,7 @@ let Dataset = React.createClass({
 		return (
 			<div className="fadeIn inner-route dataset light">
             	{this.state.loading ? <Spinner active={true} /> : content}
-            	<UpdateWarn show={this.state.showUpdateModal} onHide={actions.toggleModal.bind(null, 'Update')} update={this.state.currentUpdate} />
+            	<UpdateWarn show={this.state.modals.update} onHide={actions.toggleModal.bind(null, 'update')} update={this.state.currentUpdate} />
 			</div>
     	);
 	},

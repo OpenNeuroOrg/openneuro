@@ -56,10 +56,12 @@ let datasetStore = Reflux.createStore({
             loadingTree: false,
             jobs: [],
             metadataIssues: {},
-            showJobsModal: false,
-            showPublishModal: false,
-            showShareModal: false,
-            showUpdateModal: false,
+            modals: {
+                jobs:    false,
+                publish: false,
+                share:   false,
+                update:  false
+            },
             snapshot: false,
             snapshots: [],
             selectedSnapshot: '',
@@ -262,9 +264,9 @@ let datasetStore = Reflux.createStore({
      * Toggle Modal
      */
     toggleModal(name) {
-        let updates = {};
-        updates['show' + name + 'Modal'] = !this.data['show' + name + 'Modal'];
-        this.update(updates);
+        let modals = this.data.modals;
+        modals[name] = !modals[name];
+        this.update({modals});
     },
 
 
@@ -651,7 +653,7 @@ let datasetStore = Reflux.createStore({
      * Dismiss Job Modal
      */
     dismissJobsModal(success, snapshotId) {
-        this.toggleModal('Jobs');
+        this.toggleModal('jobs');
         if (success) {
             if (snapshotId !== this.data.dataset._id) {
                 let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;

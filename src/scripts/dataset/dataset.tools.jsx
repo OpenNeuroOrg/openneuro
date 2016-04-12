@@ -57,7 +57,7 @@ let Tools = React.createClass({
             {
                 tooltip: 'Publish Dataset',
                 icon: 'fa-globe',
-                action: datasetActions.toggleModal.bind(null, 'Publish'),
+                action: datasetActions.toggleModal.bind(null, 'publish'),
                 display: isAdmin && !isPublic && !isIncomplete,
                 warn: false
             },
@@ -78,7 +78,7 @@ let Tools = React.createClass({
             {
                 tooltip: 'Share Dataset',
                 icon: 'fa-user-plus',
-                action: datasetActions.toggleModal.bind(null, 'Share'),
+                action: datasetActions.toggleModal.bind(null, 'share'),
                 display: isAdmin && !isSnapshot && !isIncomplete,
                 warn: false
             },
@@ -125,7 +125,7 @@ let Tools = React.createClass({
         if (display) {
             return (
                 <div className="run-analysis">
-                    <button className="btn-blue" onClick={datasetActions.toggleModal.bind(null, 'Jobs')}>
+                    <button className="btn-blue" onClick={datasetActions.toggleModal.bind(null, 'jobs')}>
                         <i className="fa fa-tasks"></i> Run Analysis
                     </button>
                 </div>
