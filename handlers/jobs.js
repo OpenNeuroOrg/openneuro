@@ -21,8 +21,9 @@ let models = {
         appVersion:      'string, required',
         datasetId:       'string, required',
         executionSystem: 'String, required',
-        userId:          'string, required',
-        parameters:      'object, required'
+        parameters:      'object, required',
+        snapshotId:      'string, required',
+        userId:          'string, required'
     }
 };
 
@@ -89,7 +90,13 @@ export default {
                     ]
                 };
 
-                c.jobs.findOne({appId: job.appId, datasetId: job.datasetId, datasetHash: hash, parametersHash: parametersHash}, {}, (err, existingJob) => {
+                c.jobs.findOne({
+                    appId: job.appId,
+                    datasetId: job.datasetId,
+                    datasetHash: hash,
+                    parametersHash: parametersHash,
+                    snapshotId: job.snapshotId
+                }, {}, (err, existingJob) => {
                     if (err){return next(err);}
                     if (existingJob) {
                         let error = new Error('A job with the same dataset and parameters has already been run.');
@@ -117,7 +124,8 @@ export default {
                             jobId:          resp.body.result.id,
                             agave:          resp.body.result,
                             parameters:     job.parameters,
-                            parametersHash: parametersHash
+                            parametersHash: parametersHash,
+                            snapshotId:     job.snapshotId
                         }, () => {
                             res.send(resp.body);
                         });
