@@ -15,12 +15,12 @@ let ToolModals = React.createClass({
 // life cycle events --------------------------------------------------
 
     render() {
-        let apps             = this.state.apps,
-            dataset          = this.state.dataset,
-            loadingApps      = this.state.loadingApps,
-            users            = this.state.users,
-            modals           = this.state.modals,
-            snapshots        = this.state.snapshots;
+        let apps        = this.state.apps,
+            dataset     = this.state.dataset,
+            loadingApps = this.state.loadingApps,
+            users       = this.state.users,
+            modals      = this.state.modals,
+            snapshots   = this.state.snapshots;
 
         return (
             <div>
