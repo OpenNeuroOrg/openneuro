@@ -4,32 +4,35 @@ import React          from 'react';
 import Reflux         from 'reflux';
 import moment         from 'moment';
 import WarnButton     from '../common/forms/warn-button.jsx';
-import Share          from './dataset.tools.share.jsx';
-import Jobs           from './dataset.tools.jobs.jsx';
-import Publish        from './dataset.tools.publish.jsx';
 import FileSelect     from '../common/forms/file-select.jsx';
-import datasetStore   from './dataset.store';
+import uploadStore    from '../upload/upload.store';
 import userStore      from '../user/user.store.js';
 import datasetActions from './dataset.actions.js';
 import uploadActions  from '../upload/upload.actions.js';
+import ToolModals     from './dataset.tools.modals.jsx';
 
 let Tools = React.createClass({
 
-    mixins: [Reflux.connect(datasetStore)],
+    mixins: [Reflux.connect(uploadStore)],
+
+    propTypes: {
+        dataset:   React.PropTypes.object.isRequired,
+        snapshots: React.PropTypes.array.isRequired,
+        selectedSnapshot: React.PropTypes.string.isRequired
+    },
 
 // life cycle events --------------------------------------------------
 
     componentDidMount() {
-        let dataset = this.state.dataset;
+        let dataset = this.props.dataset;
         if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
             datasetActions.loadUsers();
         }
     },
 
     render() {
-        let dataset   = this.state.dataset,
-            users     = this.state.users,
-            snapshots = this.state.snapshots;
+        let dataset   = this.props.dataset,
+            snapshots = this.props.snapshots;
 
         // permission check shorthands
         let isAdmin      = dataset.access === 'admin',
@@ -46,7 +49,7 @@ let Tools = React.createClass({
             {
                 tooltip: 'Download Dataset',
                 icon: 'fa-download',
-                prepDownload: datasetActions.getDatasetDownloadTicket.bind(this, this.state.snapshot),
+                prepDownload: datasetActions.getDatasetDownloadTicket,
                 action: datasetActions.trackDownload,
                 display: !isIncomplete
             },
@@ -100,21 +103,7 @@ let Tools = React.createClass({
                 {this._tools(tools)}
                 {this._runAnalysis(isSignedIn && !isIncomplete)}
                 {this._resume(isIncomplete)}
-                <Share dataset={dataset} users={users} show={this.state.showShareModal} onHide={datasetActions.toggleModal.bind(null, 'Share')}/>
-                <Jobs
-                    dataset={dataset}
-                    apps={this.state.apps}
-                    loadingApps={this.state.loadingApps}
-                    snapshots={snapshots}
-                    show={this.state.showJobsModal}
-                    onHide={datasetActions.dismissJobsModal} />
-                <Publish
-                    dataset={dataset}
-                    apps={this.state.apps}
-                    loadingApps={this.state.loadingApps}
-                    snapshots={snapshots}
-                    show={this.state.showPublishModal}
-                    onHide={datasetActions.toggleModal.bind(null, 'Publish')} />
+                <ToolModals />
             </div>
         );
     },
@@ -155,7 +144,7 @@ let Tools = React.createClass({
         return (
             <div role="presentation" className="snapshotSelect" >
                 <span>
-                    <select value={this.state.selectedSnapshot} onChange={this._selectSnapshot}>
+                    <select value={this.props.selectedSnapshot} onChange={this._selectSnapshot}>
                         <option value="" disabled>Select a snapshot</option>
                         {snapshotOptions}
                     </select>
@@ -187,15 +176,15 @@ let Tools = React.createClass({
 // custom methods -----------------------------------------------------
 
     _onFileSelect(files) {
-        uploadActions.onResume(files, this.state.dataset.label);
+        uploadActions.onResume(files, this.props.dataset.label);
     },
 
     _selectSnapshot(e) {
         let snapshot;
         let snapshotId = e.target.value;
-        for (let i = 0; i < this.state.snapshots.length; i++) {
-            if (this.state.snapshots[i]._id == snapshotId) {
-                snapshot = this.state.snapshots[i];
+        for (let i = 0; i < this.props.snapshots.length; i++) {
+            if (this.props.snapshots[i]._id == snapshotId) {
+                snapshot = this.props.snapshots[i];
                 break;
             }
         }

@@ -35,8 +35,6 @@ export default class Publish extends React.Component {
 
 	render() {
 
-		let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedApp;
-
 		let form = (
 			<div className="anaylsis-modal clearfix">
 				{this._snapshots()}
@@ -55,9 +53,7 @@ export default class Publish extends React.Component {
 		);
 
 		let body;
-		if (this.state.loading || this.props.loadingApps) {
-			body = <Spinner active={true} text={loadingText}/>;
-		} else if (this.state.message) {
+		if (this.state.message) {
 			body = message;
 		} else {
 			body = form;

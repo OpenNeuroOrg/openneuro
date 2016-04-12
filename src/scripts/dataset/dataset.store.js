@@ -222,12 +222,12 @@ let datasetStore = Reflux.createStore({
         });
     },
 
-    getDatasetDownloadTicket(snapshot, callback) {
+    getDatasetDownloadTicket(callback) {
         scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
             let ticket = res.body.ticket;
             let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
             callback(downloadUrl);
-        }, {snapshot: !!snapshot});
+        }, {snapshot: !!this.data.snapshot});
     },
 
     /**
