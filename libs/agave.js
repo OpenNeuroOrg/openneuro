@@ -241,7 +241,7 @@ export default {
         });
     },
 
-    getJobOutput(jobId, callback, attempt) {
+    getJobResults(jobId, callback, attempt) {
         this.auth(() => {
             request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings/out', {
                 headers: {
