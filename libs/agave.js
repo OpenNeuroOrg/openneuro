@@ -249,15 +249,7 @@ export default {
                     'Content-Type': 'application/json',
                 }
             }, (err, res) => {
-                this.handleResponse(err, res, callback, this.getJobOutput.bind(this, jobId, (err, res) => {
-                    attempt = attempt ? attempt : 1;
-                    if (!res.body.result && attempt < 6) {
-                        // if no results are found re-attempt request up to 5 times`
-                        this.getJobOutput.bind(this, jobId, callback, attempt);
-                    } else {
-                        callback(err, res);
-                    }
-                }), attempt);
+                this.handleResponse(err, res, callback, this.getJobOutput.bind(this, jobId, callback));
             });
         });
     },
