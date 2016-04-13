@@ -287,6 +287,10 @@ export default {
             let path = result.filePath;
 
             agave.getFile(path, (err, resp) => {
+                // rename main output files
+                if (fileName.indexOf('.err') > -1 || fileName.indexOf('.out') > -1) {
+                    fileName = 'main' + fileName.substr(fileName.length - 4);
+                }
                 res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
                 res.setHeader('Content-type', resp.headers['content-type']);
                 res.send(resp.body);
