@@ -74,7 +74,7 @@ let Jobs = React.createClass({
                         <span className="warning-btn-wrap">
                         <WarnButton
                             icon="fa-download"
-                            prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result.name)} />
+                            prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
                         </span>
                         <span>{result.name}</span>
                     </li>
