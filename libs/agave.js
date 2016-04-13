@@ -162,7 +162,7 @@ export default {
      * related errors.
      */
     handleResponse(err, res, callback, originalReq) {
-        if (res.body.error && res.body.error == 'invalid_client') {
+        if (res.body && res.body.error && res.body.error == 'invalid_client') {
             this.reCreateClient(originalReq);
         } else {
             callback(err, res);
