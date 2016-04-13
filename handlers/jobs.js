@@ -196,7 +196,7 @@ export default {
                     }
                 }
                 agave.getJobResults(req.body.id, (err, resp1) => {
-                    results = results.concat(resp1.body.result);
+                    if (resp1.body.result) {results = results.concat(resp1.body.result);}
                     results = results.length > 0 ? results : null;
                     c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
                         if (err) {res.send(err);}
