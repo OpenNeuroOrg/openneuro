@@ -1,3 +1,5 @@
+/*eslint no-console: ["error", { allow: ["log"] }] */
+
 import request from './request';
 import config  from '../config';
 import fs      from 'fs';
@@ -65,7 +67,7 @@ export default {
                 password: config.agave.password
             },
             body: {
-                scope: 'PRODUCTION',
+                scope: 'PRODUCTION'
             }
         }, (err, res) => {
             if (res.body.error == 'invalid_client') {
@@ -122,7 +124,7 @@ export default {
                 config.agave.consumerKey = res.body.result.consumerKey;
                 config.agave.consumerSecret = res.body.result.consumerSecret;
                 clientAuth = 'Basic ' + new Buffer(config.agave.consumerKey + ':' + config.agave.consumerSecret).toString('base64');
-                fs.writeFile('config.js', 'export default ' + JSON.stringify(config, null, 4) + ';', (err) => {
+                fs.writeFile('config.js', 'export default ' + JSON.stringify(config, null, 4) + ';', () => {
                     this.getAccessToken(callback);
                 });
             }
@@ -160,7 +162,7 @@ export default {
      * related errors.
      */
     handleResponse(err, res, callback, originalReq) {
-        if (res.body.error && res.body.error == 'invalid_client') {
+        if (res.body && res.body.error && res.body.error == 'invalid_client') {
             this.reCreateClient(originalReq);
         } else {
             callback(err, res);
@@ -174,7 +176,7 @@ export default {
             request.get(config.agave.url + 'apps/v2', {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 query: {
                     privateOnly: true
@@ -190,7 +192,7 @@ export default {
             request.get(config.agave.url + 'apps/v2/' + appId, {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 }
             }, (err, res) => {
                 this.handleResponse(err, res, callback, this.getApp.bind(this, appId, callback));
@@ -220,7 +222,7 @@ export default {
             request.get(config.agave.url + 'jobs/v2/', {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 }
             }, (err, res) => {
                 this.handleResponse(err, res, callback, this.listJobs.bind(this, callback));
@@ -241,23 +243,28 @@ export default {
         });
     },
 
-    getJobOutput(jobId, callback, attempt) {
+    getJobOutput(jobId, callback) {
+        this.auth(() => {
+            request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings', {
+                headers: {
+                    Authorization: 'Bearer ' + token.access,
+                    'Content-Type': 'application/json'
+                }
+            }, (err, res) => {
+                this.handleResponse(err, res, callback, this.getJobOutput.bind(this, jobId, callback));
+            });
+        });
+    },
+
+    getJobResults(jobId, callback) {
         this.auth(() => {
             request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings/out', {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 }
             }, (err, res) => {
-                this.handleResponse(err, res, callback, this.getJobOutput.bind(this, jobId, (err, res) => {
-                    attempt = attempt ? attempt : 1;
-                    if (!res.body.result && attempt < 6) {
-                        // if no results are found re-attempt request up to 5 times`
-                        this.getJobOutput.bind(this, jobId, callback, attempt);
-                    } else {
-                        callback(err, res);
-                    }
-                }), attempt);
+                this.handleResponse(err, res, callback, this.getJobResults.bind(this, jobId, callback));
             });
         });
     },
@@ -275,4 +282,4 @@ export default {
         });
     }
 
-}
+};
