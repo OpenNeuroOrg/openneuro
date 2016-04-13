@@ -179,7 +179,7 @@ export default {
     },
 
     /**
-     *    Results
+     * Results
      */
     results(req, res) {
         let jobId = req.params.jobId;
@@ -187,18 +187,17 @@ export default {
             let results = [];
             agave.getJobOutput(req.body.id, (err, resp) => {
                 let output = resp.body.result;
-		if (output) {
+                if (output) {
                     // get main output files
                     for (let file of output) {
                         if ((file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) && file.length > 0) {
-                            console.log(file.name, file.length);
                             results.push(file);
                         }
                     }
-		}
+                }
                 agave.getJobResults(req.body.id, (err, resp1) => {
                     results = results.concat(resp1.body.result);
-		    results = results.length > 0 ? results : null;
+                    results = results.length > 0 ? results : null;
                     c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
                         if (err) {res.send(err);}
                         else {res.send(result);}
@@ -218,7 +217,8 @@ export default {
      */
     getDownloadTicket(req, res, next) {
         let jobId    = req.params.jobId,
-            fileName = req.params.fileName;
+            filePath = req.query.filePath,
+            fileName = filePath.split('/')[filePath.split('/').length - 1];
         c.jobs.findOne({jobId}, {}, (err, job) => {
             if (err){return next(err);}
             if (!job) {
@@ -244,6 +244,7 @@ export default {
                         userId: req.user,
                         jobId: jobId,
                         fileName: fileName,
+                        filePath: filePath,
                         created: new Date()
                     };
                     // Create and return token
@@ -283,7 +284,7 @@ export default {
                 error.http_code = 401;
                 return next(error);
             }
-            let path = 'https://api.tacc.utexas.edu/jobs/v2/' + req.params.jobId + '/outputs/media/out/' + req.params.fileName;
+            let path = result.filePath;
 
             agave.getFile(path, (err, resp) => {
                 res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
