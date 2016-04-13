@@ -143,7 +143,11 @@ let UploadStore = Reflux.createStore({
         } else {
             activeKey = 3;
             renameEnabled = false;
-            callback = () => {this.validate(selectedFiles.list);};
+            callback = () => {
+                if (this.data.uploadStatus == 'files-selected') {
+                    this.validate(selectedFiles.list);
+                }
+            };
         }
         this.setInitialState({
             refs: this.data.refs,
