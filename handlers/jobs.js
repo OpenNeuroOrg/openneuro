@@ -62,7 +62,7 @@ export default {
     create(req, res, next) {
         sanitize.req(req, models.job, (err, job) => {
             if (err) {return next(err);}
-            scitran.downloadSymlinkDataset(job.datasetId, (err, hash) => {
+            scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
                 let parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
 
                 let body = {
@@ -139,11 +139,11 @@ export default {
      *  List Jobs
      */
     listDatasetJobs(req, res, next) {
-        let snapshot  = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
-        let datasetId = req.params.datasetId;
-        let user      = req.user;
+        let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
+        let snapshotId = req.params.datasetId;
+        let user       = req.user;
 
-        scitran.getProject(datasetId, (err, resp) => {
+        scitran.getProject(snapshotId, (err, resp) => {
             if (resp.body.code && resp.body.code == 404) {
                 let error = new Error(resp.body.detail);
                 error.http_code = 404;
@@ -162,7 +162,7 @@ export default {
                 }
             }
 
-            c.jobs.find({datasetId: datasetId}).toArray((err, jobs) => {
+            c.jobs.find({snapshotId}).toArray((err, jobs) => {
                 if (err) {return next(err);}
 
                 // remove user ID on public requests
@@ -187,14 +187,18 @@ export default {
             let results = [];
             agave.getJobOutput(req.body.id, (err, resp) => {
                 let output = resp.body.result;
-                // get main output files
-                for (let file of output) {
-                    if ((file.name.indexOf('.err') || file.name.indexOf('.out')) && file.length > 0) {
-                        results.push(file);
+		if (output) {
+                    // get main output files
+                    for (let file of output) {
+                        if ((file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) && file.length > 0) {
+                            console.log(file.name, file.length);
+                            results.push(file);
+                        }
                     }
-                }
+		}
                 agave.getJobResults(req.body.id, (err, resp1) => {
                     results = results.concat(resp1.body.result);
+		    results = results.length > 0 ? results : null;
                     c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
                         if (err) {res.send(err);}
                         else {res.send(result);}
