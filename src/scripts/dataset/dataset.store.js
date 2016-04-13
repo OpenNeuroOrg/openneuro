@@ -158,6 +158,12 @@ let datasetStore = Reflux.createStore({
             // sort jobs by app
             let jobs = {};
             for (let job of res.body) {
+                // rename main output file
+                for (let file of job.results) {
+                    if (file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) {
+                        file.name = 'main' + file.name.substr(file.name.length - 4);
+                    }
+                }
                 if (!jobs.hasOwnProperty(job.appId)) {
                     jobs[job.appId] = {
                         appLabel:   job.appLabel,
@@ -633,10 +639,11 @@ let datasetStore = Reflux.createStore({
             appId: app.id,
             appLabel: app.label,
             appVersion: app.version,
-            datasetId: snapshotId,
+            datasetId: this.data.dataset._id,
             executionSystem: app.executionSystem,
-            userId: userStore.data.scitran._id,
-            parameters: parameters
+            parameters: parameters,
+            snapshotId: snapshotId,
+            userId: userStore.data.scitran._id
         }, (err, res) => {
             callback(err, res);
             if (!err) {
@@ -663,9 +670,10 @@ let datasetStore = Reflux.createStore({
     /**
      * Get Result Download Ticket
      */
-    getResultDownloadTicket(jobId, fileName, callback) {
-        crn.getResultDownloadTicket(jobId, fileName, (err, res) => {
-            let ticket = res.body._id;
+    getResultDownloadTicket(jobId, filePath, callback) {
+        crn.getResultDownloadTicket(jobId, filePath, (err, res) => {
+            let ticket      = res.body._id;
+            let fileName    = filePath.split('/')[filePath.split('/').length - 1];
             let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
             callback(downloadUrl);
         });
