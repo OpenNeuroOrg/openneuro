@@ -22,6 +22,13 @@ let FileArrayInput = React.createClass({
         };
     },
 
+    propTypes: {
+        value: React.PropTypes.array,
+        onFileClick: React.PropTypes.func,
+        onChange: React.PropTypes.func,
+        onDelete: React.PropTypes.func
+    },
+
     render() {
         return (
             <div className="cte-edit-array">
@@ -29,7 +36,7 @@ let FileArrayInput = React.createClass({
                 {this._fileList(this.props.value)}
                 {this._addFile(this.state.loading)}
             </div>
-        )
+        );
     },
 
 // template methods ---------------------------------------------------

@@ -138,7 +138,13 @@ WarnButton.propTypes = {
     icon:    React.PropTypes.string,
     warn:    React.PropTypes.bool,
     tooltip: React.PropTypes.string,
-    link:    React.PropTypes.string
+    link:    React.PropTypes.string,
+    cancel: React.PropTypes.object,
+    confirm: React.PropTypes.object,
+    validations: React.PropTypes.array,
+    action: React.PropTypes.func,
+    prepDownload: React.PropTypes.func
+
 };
 
 WarnButton.defaultProps = {

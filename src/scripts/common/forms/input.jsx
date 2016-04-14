@@ -1,6 +1,6 @@
 // dependencies -------------------------------------------------------
 
-import React from 'react'
+import React from 'react';
 
 // component setup ----------------------------------------------------
 
@@ -9,7 +9,18 @@ let Input = React.createClass({
 // life cycle events --------------------------------------------------
 
     getInitialState() {
-        return {value: this.props.initialValue ? this.props.initialValue : ''}
+        return {
+            value: this.props.initialValue ? this.props.initialValue : ''
+        };
+    },
+
+    propTypes: {
+        initialValue: React.PropTypes.string,
+        placeholder: React.PropTypes.string,
+        name: React.PropTypes.string,
+        type: React.PropTypes.string,
+        value: React.PropTypes.string,
+        onChange: React.PropTypes.func
     },
 
     render() {

@@ -34,35 +34,47 @@ let ClickToEdit = React.createClass({
         }
     },
 
+    propTypes: {
+        value: React.PropTypes.any,
+        type: React.PropTypes.any,
+        label: React.PropTypes.any,
+        error: React.PropTypes.func,
+        editable: React.PropTypes.bool,
+        onDismissIssue: React.PropTypes.func,
+        onDelete: React.PropTypes.func,
+        onFileClick: React.PropTypes.func,
+        onChange: React.PropTypes.func
+    },
+
     render() {
         let value = this.state.value;
         let type = this.props.type;
         let input, display;
 
         switch (type) {
-            case "string":
-                display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
-                input = (
-                    <div>
-                        <textarea className="form-control" value={value} onChange={this._handleChange.bind(null, type)}></textarea>
-                        <div className="btn-wrapper">
-                            <button className="cte-save-btn btn-admin-blue" onClick={this._save}>save</button>
-                        </div>
+        case 'string':
+            display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
+            input = (
+                <div>
+                    <textarea className="form-control" value={value} onChange={this._handleChange.bind(null, type)}></textarea>
+                    <div className="btn-wrapper">
+                        <button className="cte-save-btn btn-admin-blue" onClick={this._save}>save</button>
                     </div>
-                );
-                break;
-            case "authors":
-                input = <AuthorInput value={value} onChange={this._handleChange.bind(null, type)} />;
-                display = <div className="cte-display">{this._authorList(value)}</div>;
-                break;
-            case "fileArray":
-                input = <FileArrayInput
-                            value={this.props.value}
-                            onChange={this._handleFile}
-                            onDelete={this._handleDelete}
-                            onFileClick={this._download}/>;
-                display = <div className="cte-display">{this._fileList(this.props.value)}</div>;
-                break;
+                </div>
+            );
+            break;
+        case 'authors':
+            input = <AuthorInput value={value} onChange={this._handleChange.bind(null, type)} />;
+            display = <div className="cte-display">{this._authorList(value)}</div>;
+            break;
+        case 'fileArray':
+            input = <FileArrayInput
+                        value={this.props.value}
+                        onChange={this._handleFile}
+                        onDelete={this._handleDelete}
+                        onFileClick={this._download}/>;
+            display = <div className="cte-display">{this._fileList(this.props.value)}</div>;
+            break;
         }
 
         let edit = (
@@ -119,7 +131,7 @@ let ClickToEdit = React.createClass({
     },
 
     _fileList(files) {
-        let list = files.map((file, index) => {
+        let list = files.map((file) => {
             return (
                 <div className="fadeIn file-array" key={file.name}>
                     <span>
@@ -154,7 +166,6 @@ let ClickToEdit = React.createClass({
     },
 
     _handleChange(type, event) {
-        let callback;
         this.setState({value: event.target.value}, () => {
             if (type === 'authors') {
                 this._save(type);

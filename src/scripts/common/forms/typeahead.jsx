@@ -36,7 +36,7 @@ export default class Typeahead extends React.Component {
                 <input onChange={this._handleInput.bind(this)} value={this.props.value}/>
                 <ul className="typeahead-results">{results}</ul>
             </div>
-        )
+        );
     }
 
 // custon methods -----------------------------------------------------
@@ -88,5 +88,13 @@ export default class Typeahead extends React.Component {
     onMouseUp() {
         this.insideClick = false;
     }
-
 }
+
+Typeahead.propTypes = {
+    value: React.PropTypes.array,
+    options: React.PropTypes.array,
+    filter: React.PropTypes.array,
+    formate: React.PropTypes.array,
+    onChange: React.PropTypes.func,
+    format: React.PropTypes.array
+};

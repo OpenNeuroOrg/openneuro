@@ -19,10 +19,17 @@ let Upload = React.createClass({
         this._setRefs(this.refs);
     },
 
+    propTypes: {
+        resume: React.PropTypes.bool,
+        onClick: React.PropTypes.func,
+        onChange: React.PropTypes.func,
+        setRefs: React.PropTypes.func
+    },
+
     render () {
         let resumeIcon = <span><i className="fa fa-repeat"></i>&nbsp;</span>;
         let icon = this.props.resume ? resumeIcon : null;
-        let text = this.props.resume ? "Resume" : "Select folder";
+        let text = this.props.resume ? 'Resume' : 'Select folder';
 
         return (
             <div className="fileupload-btn">
@@ -51,7 +58,7 @@ let Upload = React.createClass({
             e.preventDefault();
             notifications.createAlert({
                 type: 'Warning',
-                message: "You may only upload one dataset at a time. Please wait for the current upload to finish, then try resuming again."
+                message: 'You may only upload one dataset at a time. Please wait for the current upload to finish, then try resuming again.'
             });
         }
         if (this.props.onClick) {this.props.onClick(e);}
