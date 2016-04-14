@@ -149,6 +149,17 @@ let UserStore = Reflux.createStore({
 								this.handleSignIn(transition, res.body, profile);
 							});
 						});
+					} else if (res.status !== 200) {
+						this.clearAuth();
+						let message = 'We are currently experiencing issues. Please try again later.';
+						if (!transition) {
+							notifications.createAlert({type: 'Error', message: message});
+						} else {
+							this.update({
+								loading: false,
+								signinError: message
+							});
+						}
 					} else {
 						this.handleSignIn(transition, res.body, profile);
 					}
