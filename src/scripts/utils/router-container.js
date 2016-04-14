@@ -10,35 +10,35 @@ var _router = null;
 
 export default {
 
-	set (router) {
+    set (router) {
 
-		_router = router;
+        _router = router;
 
-		this.makePath = (to, params, query) => {
-			return router.makePath(to, params, query);
-		};
+        this.makePath = (to, params, query) => {
+            return router.makePath(to, params, query);
+        };
 
-		this.makeHref = (to, params, query) => {
-			return router.makeHref(to, params, query);
-		};
+        this.makeHref = (to, params, query) => {
+            return router.makeHref(to, params, query);
+        };
 
-		this.transitionTo = (to, params, query) => {
-			router.transitionTo(to, params, query);
-		};
+        this.transitionTo = (to, params, query) => {
+            router.transitionTo(to, params, query);
+        };
 
-		this.replaceWith = (to, params, query) => {
-			router.replaceWith(to, params, query);
-		};
+        this.replaceWith = (to, params, query) => {
+            router.replaceWith(to, params, query);
+        };
 
-		this.goBack = () => {
-			router.goBack();
-		};
+        this.goBack = () => {
+            router.goBack();
+        };
 
-		this.run = (render) => {
-			router.run(render);
-		};
-	},
+        this.run = (render) => {
+            router.run(render);
+        };
+    },
 
-	get: () => _router
+    get: () => _router
 
-}
+};

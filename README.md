@@ -22,3 +22,8 @@ run `gulp`
 __When you are done, create a production ready version of the JS bundle:__
 
 run `gulp build`
+
+
+__To run the linting command:__
+
+run `npm run lint path/to/file`

@@ -1,9 +1,9 @@
 // dependencies ---------------------------------------------------------
 
-import React           	from 'react';
-import Router          	from 'react-router';
-import routes          	from './routes.jsx';
-import RouterContainer 	from './utils/router-container';
+import React            from 'react';
+import Router           from 'react-router';
+import routes           from './routes.jsx';
+import RouterContainer  from './utils/router-container';
 
 
 // intialize router -----------------------------------------------------
@@ -13,6 +13,6 @@ let router = Router.create({routes});
 RouterContainer.set(router);
 
 router.run(function (Handler) {
-	React.render(<Handler/>, document.getElementById('main'));
+    React.render(<Handler/>, document.getElementById('main'));
 });
 
