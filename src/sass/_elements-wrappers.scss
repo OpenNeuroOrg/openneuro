@@ -171,7 +171,7 @@ h1,h2,h3,h4,h5,h6{
 		transition: all 0.3s ease-out;
 	}
 	&:focus{
-		border: none;
+		border-color:#aaa;
 		box-shadow: none;
 		outline: none !important;
 	}
@@ -252,6 +252,19 @@ h1,h2,h3,h4,h5,h6{
 	text-align: center;
 	display: inline-block;
 	transition: all 0.3s ease;
+}
+
+.btn-file-folder{
+	@extend .btn-admin;
+	border:none;
+	background:none;
+	margin-left:2px;
+	padding:2px 5px;
+	font-size:12px;
+	&:hover{
+		color:$primary;
+		background:none;
+	}
 }
 
 .btn-sort{
