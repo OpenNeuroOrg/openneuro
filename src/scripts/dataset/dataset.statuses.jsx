@@ -7,32 +7,37 @@ import UploadStore   from '../upload/upload.store.js';
 
 let Statuses = React.createClass({
 
-	mixins: [Reflux.connect(UploadStore)],
+    mixins: [Reflux.connect(UploadStore)],
 
 // life cycle events --------------------------------------------------
 
-	getDefaultProps() {
-	    return {
-	        minimal: false
-	    };
-	},
+    getDefaultProps() {
+        return {
+            minimal: false
+        };
+    },
 
-	render() {
-		let dataset   = this.props.dataset,
-			minimal   = this.props.minimal,
-			status    = dataset.status,
-			uploading = dataset._id === this.state.projectId;
+    propTypes: {
+        dataset: React.PropTypes.object,
+        minimal: React.PropTypes.bool
+    },
 
-		return (
-			<span className="clearfix status-wrap">
-				<Status type='public'     minimal={minimal} display={dataset.public} />
-				<Status type='incomplete' minimal={minimal} display={status.incomplete && !uploading} dataset={dataset} />
-				<Status type='shared'     minimal={minimal} display={status.shared} />
-				<Status type='inProgress' minimal={minimal} display={uploading} />
-				<Status type='invalid'    minimal={minimal} display={status.invalid} />
-			</span>
-    	);
-	}
+    render() {
+        let dataset   = this.props.dataset,
+            minimal   = this.props.minimal,
+            status    = dataset.status,
+            uploading = dataset._id === this.state.projectId;
+
+        return (
+            <span className="clearfix status-wrap">
+                <Status type='public'     minimal={minimal} display={dataset.public} />
+                <Status type='incomplete' minimal={minimal} display={status.incomplete && !uploading} dataset={dataset} />
+                <Status type='shared'     minimal={minimal} display={status.shared} />
+                <Status type='inProgress' minimal={minimal} display={uploading} />
+                <Status type='invalid'    minimal={minimal} display={status.invalid} />
+            </span>
+        );
+    }
 
 });
 

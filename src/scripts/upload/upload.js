@@ -1,7 +1,6 @@
 import scitran from '../utils/scitran';
 import bids    from '../utils/bids';
 import uploads from '../utils/upload';
-import actions from './upload.actions';
 import files   from '../utils/files';
 import config  from '../../../config';
 
@@ -61,16 +60,16 @@ export default {
         this.progressStart = (filename) => {
             this.currentFiles.push(filename);
             progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles});
-        }
+        };
         this.progressEnd = (filename) => {
             let index = this.currentFiles.indexOf(filename);
             this.currentFiles.splice(index, 1);
             this.completed++;
             progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles}, this.currentProjectId);
-        }
+        };
         this.error = (err, req) => {
             if (error) {error(err, req);}
-        }
+        };
         let existingProjectId = null;
         scitran.getProjects({authenticate: true}, (projects) => {
             for (let project of projects) {
@@ -95,7 +94,7 @@ export default {
                 scitran.createProject(body, (err, res) => {
                     this.handleUploadResponse(err, res, () => {
                         let projectId = res.body._id;
-                        scitran.addTag('projects', projectId, 'incomplete', (err, res) => {
+                        scitran.addTag('projects', projectId, 'incomplete', () => {
                             this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId, validation);
                         });
                     });
@@ -114,7 +113,7 @@ export default {
         for (let subject of subjects) {
             if (subject.children && subject.children.length > 0) {
                 self.progressStart(subject.name);
-                scitran.createSubject(projectId, subject.name, function (err, res, name) {
+                scitran.createSubject(projectId, subject.name, function (err, res) {
                     self.handleUploadResponse(err, res, function () {
                         let subjectId = res.body._id;
                         self.uploadSessions(subject.children, projectId, subjectId);
@@ -132,7 +131,7 @@ export default {
                                 authors.push({name: author, ORCIDID: ''});
                             }
                         }
-                        scitran.updateProject(projectId, {metadata: {authors, validation}}, (err, res) => {
+                        scitran.updateProject(projectId, {metadata: {authors, validation}}, () => {
                             let file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
                             self.uploadFile('projects', projectId, file, 'project');
                         });
@@ -178,7 +177,7 @@ export default {
         for (let session of sessions) {
             if (session.children && session.children.length > 0) {
                 self.progressStart(session.name);
-                scitran.createSession(projectId, subjectId, session.name, function (err, res, name) {
+                scitran.createSession(projectId, subjectId, session.name, function (err, res) {
                     self.handleUploadResponse(err, res, function () {
                         self.uploadModalities(session.children, res.body._id);
                     });
@@ -222,7 +221,7 @@ export default {
         for (let modality of modalities) {
             if (modality.children && modality.children.length > 0) {
                 self.progressStart(modality.name);
-                scitran.createModality(subjectId, modality.name, function (err, res, name) {
+                scitran.createModality(subjectId, modality.name, function (err, res) {
                     self.handleUploadResponse(err, res, function () {
                         let modalityId = res.body._id;
                         self.uploadAcquisitions(modality.children, modalityId);

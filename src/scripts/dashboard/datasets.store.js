@@ -1,6 +1,5 @@
 // dependencies ----------------------------------------------------------------------
 
-import React      from 'react';
 import Reflux     from 'reflux';
 import Actions    from './datasets.actions.js';
 import bids       from '../utils/bids';
@@ -10,76 +9,76 @@ import userStore  from '../user/user.store.js';
 
 let UploadStore = Reflux.createStore({
 
-	listenables: Actions,
+    listenables: Actions,
 
-	init() {
-		this.setInitialState();
-	},
+    init() {
+        this.setInitialState();
+    },
 
-	getInitialState() {
-		return this.data;
-	},
+    getInitialState() {
+        return this.data;
+    },
 
 // state data ------------------------------------------------------------------------
 
-	data: {},
+    data: {},
 
-	update(data, callback) {
-		for (let prop in data) {this.data[prop] = data[prop];}
-		this.trigger(this.data, () => {
-			if (callback) {callback();}
-		});
-	},
+    update(data, callback) {
+        for (let prop in data) {this.data[prop] = data[prop];}
+        this.trigger(this.data, () => {
+            if (callback) {callback();}
+        });
+    },
 
-	/**
-	 * Set Initial State
-	 *
-	 * Sets the state to the data object defined
-	 * inside the function. Also takes a diffs object
-	 * which will set the state to the initial state
-	 * with any differences passed.
-	 */
-	setInitialState(diffs) {
-		let data = {
-			loading: false,
+    /**
+     * Set Initial State
+     *
+     * Sets the state to the data object defined
+     * inside the function. Also takes a diffs object
+     * which will set the state to the initial state
+     * with any differences passed.
+     */
+    setInitialState(diffs) {
+        let data = {
+            loading: false,
             datasets: [],
             visibleDatasets: [],
             resultsPerPage: 30,
             page: 0,
             sort: {
-            	value: 'timestamp',
-            	direction: '+'
+                value: 'timestamp',
+                direction: '+'
             },
             filters: []
-		};
-		for (let prop in diffs) {data[prop] = diffs[prop];}
-		this.update(data);
-	},
+        };
+        for (let prop in diffs) {data[prop] = diffs[prop];}
+        this.update(data);
+    },
 
 // actions ---------------------------------------------------------------------------
 
-	/**
-	 * Get Datasets
-	 *
-	 * Takes a boolean representing whether the
-	 * request is for public datasets and gets
-	 * a list of datasets and sorts by the current
-	 * sort setting.
-	 */
-	getDatasets(isPublic) {
-		let isSignedOut = !userStore.data.token;
+    /**
+     * Get Datasets
+     *
+     * Takes a boolean representing whether the
+     * request is for public datasets and gets
+     * a list of datasets and sorts by the current
+     * sort setting.
+     */
+    getDatasets(isPublic) {
+        let isSignedOut = !userStore.data.token;
         this.update({
-        	loading: true,
+            loading: true,
             sort: {
-            	value: 'created',
-            	direction: '+'
+                value: 'created',
+                direction: '+'
             },
             filters: []
         }, () => {
-	        bids.getDatasets((datasets) => {
-	            this.sort(null, null, datasets);
-	        }, isPublic, isSignedOut);
-	    });
+            bids.getDatasets((datasets) => {
+                this.sort(null, null, datasets);
+            }, isPublic, isSignedOut);
+        });
     },
 
     /**
@@ -90,50 +89,50 @@ let UploadStore = Reflux.createStore({
      */
     filter(value) {
 
-    	// set filters
-    	let filters = this.data.filters;
-    	let index = filters.indexOf(value);
-    	if (value === 'reset') {
-    		filters = [];
-    	} else if (index > -1) {
-    		filters = [];
-    	} else {
-    		filters = [value];
-    	}
+        // set filters
+        let filters = this.data.filters;
+        let index = filters.indexOf(value);
+        if (value === 'reset') {
+            filters = [];
+        } else if (index > -1) {
+            filters = [];
+        } else {
+            filters = [value];
+        }
 
 
 
-    	// filter data
-    	let visibleDatasets = this.data.datasets;
-    	if (filters.length > 0) {
-    		let results = [];
-	    	for (let dataset of visibleDatasets) {
-	    		// public
-	    		if (filters.indexOf('public') > -1 && dataset.public) {
-	    			results.push(dataset);
-	    		}
+        // filter data
+        let visibleDatasets = this.data.datasets;
+        if (filters.length > 0) {
+            let results = [];
+            for (let dataset of visibleDatasets) {
+                // public
+                if (filters.indexOf('public') > -1 && dataset.public) {
+                    results.push(dataset);
+                }
 
-	    		// incomplete
-	    		if (filters.indexOf('incomplete') > -1 && dataset.status.incomplete) {
-	    			results.push(dataset);
-	    		}
+                // incomplete
+                if (filters.indexOf('incomplete') > -1 && dataset.status.incomplete) {
+                    results.push(dataset);
+                }
 
-	    		// shared
-	    		if (filters.indexOf('shared') > -1 && dataset.access && !dataset.userCreated) {
-	    			results.push(dataset);
-	    		}
-	    		// invalid
-	    		if (filters.indexOf('invalid') > -1 && dataset.status.invalid) {
-	    			results.push(dataset);
-	    		}
+                // shared
+                if (filters.indexOf('shared') > -1 && dataset.access && !dataset.userCreated) {
+                    results.push(dataset);
+                }
+                // invalid
+                if (filters.indexOf('invalid') > -1 && dataset.status.invalid) {
+                    results.push(dataset);
+                }
 
 
-	    	}
-	    	visibleDatasets = results;
-	    }
+            }
+            visibleDatasets = results;
+        }
 
-    	// update state
-    	this.update({filters, visibleDatasets});
+        // update state
+        this.update({filters, visibleDatasets});
     },
 
 
@@ -144,40 +143,40 @@ let UploadStore = Reflux.createStore({
      * sorts the current datasets acordingly.
      */
     sort(value, direction, datasets) {
-    	value     = value     ? value     : this.data.sort.value;
-    	direction = direction ? direction : this.data.sort.direction;
-    	datasets  = datasets  ? datasets  : this.data.datasets;
-    	datasets  = datasets.sort((a, b) => {
+        value     = value     ? value     : this.data.sort.value;
+        direction = direction ? direction : this.data.sort.direction;
+        datasets  = datasets  ? datasets  : this.data.datasets;
+        datasets  = datasets.sort((a, b) => {
 
-    		// format comparison data
-    		let aVal, bVal;
-    		if (value === 'label') {
-	    		aVal = a[value].toLowerCase();
-	    		bVal = b[value].toLowerCase();
-	    	} else if (value === 'created') {
-	    		aVal = -Date.parse(a[value]);
-	    		bVal = -Date.parse(b[value]);
-	    	}
+            // format comparison data
+            let aVal, bVal;
+            if (value === 'label') {
+                aVal = a[value].toLowerCase();
+                bVal = b[value].toLowerCase();
+            } else if (value === 'created') {
+                aVal = -Date.parse(a[value]);
+                bVal = -Date.parse(b[value]);
+            }
 
-	    	// sort
-    		if (direction == '+') {
-	    		if (aVal > bVal) {return 1;}
-	    		if (aVal < bVal) {return -1;}
-	    	} else if (direction == '-') {
-	    		if (aVal > bVal) {return -1;}
-	    		if (aVal < bVal) {return 1;}
-	    	}
-    		return 0;
-    	});
-    	this.update({
-    		datasets,
-    		visibleDatasets: datasets,
-    		sort: {
-    			value,
-    			direction
-    		},
-    		loading: false
-    	});
+            // sort
+            if (direction == '+') {
+                if (aVal > bVal) {return 1;}
+                if (aVal < bVal) {return -1;}
+            } else if (direction == '-') {
+                if (aVal > bVal) {return -1;}
+                if (aVal < bVal) {return 1;}
+            }
+            return 0;
+        });
+        this.update({
+            datasets,
+            visibleDatasets: datasets,
+            sort: {
+                value,
+                direction
+            },
+            loading: false
+        });
     }
 
 });

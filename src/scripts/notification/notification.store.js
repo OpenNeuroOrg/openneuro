@@ -1,6 +1,5 @@
 // dependencies ----------------------------------------------------------------------
 
-import React   from 'react';
 import Reflux  from 'reflux';
 import actions from './notification.actions.js';
 
@@ -8,64 +7,64 @@ import actions from './notification.actions.js';
 
 let UploadStore = Reflux.createStore({
 
-	listenables: actions,
+    listenables: actions,
 
-	init: function () {
-		this.setInitialState();
-	},
+    init: function () {
+        this.setInitialState();
+    },
 
-	getInitialState: function () {
-		return this.data;
-	},
+    getInitialState: function () {
+        return this.data;
+    },
 
 // state data ------------------------------------------------------------------------
 
-	data: {},
+    data: {},
 
-	update: function (data, callback) {
-		for (let prop in data) {this.data[prop] = data[prop];}
-		this.trigger(this.data, callback);
-	},
+    update: function (data, callback) {
+        for (let prop in data) {this.data[prop] = data[prop];}
+        this.trigger(this.data, callback);
+    },
 
-	/**
-	 * Set Initial State
-	 *
-	 * Sets the state to the data object defined
-	 * inside the function. Also takes a diffs object
-	 * which will set the state to the initial state
-	 * with any differences passed.
-	 */
-	setInitialState: function (diffs, callback) {
-		let data = {
-			showAlert: false,
-			alertType: null,
-			alertMessage: '',
-			messageTimeout: null,
-		};
-		for (let prop in diffs) {data[prop] = diffs[prop];}
-		this.update(data, callback);
-	},
+    /**
+     * Set Initial State
+     *
+     * Sets the state to the data object defined
+     * inside the function. Also takes a diffs object
+     * which will set the state to the initial state
+     * with any differences passed.
+     */
+    setInitialState: function (diffs, callback) {
+        let data = {
+            showAlert: false,
+            alertType: null,
+            alertMessage: '',
+            messageTimeout: null
+        };
+        for (let prop in diffs) {data[prop] = diffs[prop];}
+        this.update(data, callback);
+    },
 
 // actions ---------------------------------------------------------------------------
 
 
-	/**
-	 * Create Alert
-	 */
-	createAlert (alert) {
-		this.update({showAlert: true, alertType: alert.type, alertMessage: alert.message, messageTimeout: alert.messageTimeout});
-		if(alert.messageTimeout != null){
-			window.setTimeout(this.closeAlert, alert.messageTimeout);
-		}
-	},
+    /**
+     * Create Alert
+     */
+    createAlert (alert) {
+        this.update({showAlert: true, alertType: alert.type, alertMessage: alert.message, messageTimeout: alert.messageTimeout});
+        if(alert.messageTimeout != null){
+            window.setTimeout(this.closeAlert, alert.messageTimeout);
+        }
+    },
 
-	/**
-	 * Close Alert
-	 *
-	 */
-	closeAlert () {
-		this.setInitialState();
-	},
+    /**
+     * Close Alert
+     *
+     */
+    closeAlert () {
+        this.setInitialState();
+    }
 
 
 });

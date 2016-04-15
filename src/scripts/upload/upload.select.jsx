@@ -8,23 +8,23 @@ let Select = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-	render () {
+    render () {
 
-		return (
-			<div>
-				<span className="message fadeIn">Select a  <a href="http://bids.neuroimaging.io" target="_blank">BIDS dataset</a> to upload</span>
-				<FileSelect onClick={this._clearInput} onChange={this._onChange} setRefs={this._setRefs}/>
-			</div>
-    	);
-	},
+        return (
+            <div>
+                <span className="message fadeIn">Select a  <a href="http://bids.neuroimaging.io" target="_blank">BIDS dataset</a> to upload</span>
+                <FileSelect onClick={this._clearInput} onChange={this._onChange} setRefs={this._setRefs}/>
+            </div>
+        );
+    },
 
 // custom methods -----------------------------------------------------
 
-	_clearInput: () => {Actions.setInitialState({showModal: true});},
+    _clearInput: () => {Actions.setInitialState({showModal: true});},
 
-	_onChange: Actions.onChange,
+    _onChange: Actions.onChange,
 
-	_setRefs: Actions.setRefs
+    _setRefs: Actions.setRefs
 
 });
 

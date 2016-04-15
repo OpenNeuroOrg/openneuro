@@ -22,21 +22,21 @@ import Dataset        from './dataset/dataset.jsx';
 // redirects -------------------------------------------------------------
 
 class RedirectDashboard extends React.Component {
-	static willTransitionTo(transition) {
-		transition.redirect('dashboard');
-	}
+    static willTransitionTo(transition) {
+        transition.redirect('dashboard');
+    }
 }
 
 class RedirectNotifications extends React.Component {
-	static willTransitionTo(transition) {
-		transition.redirect('datasets');
-	}
+    static willTransitionTo(transition) {
+        transition.redirect('datasets');
+    }
 }
 
 class RedirectUsers extends React.Component {
-	static willTransitionTo(transition) {
-		transition.redirect('users');
-	}
+    static willTransitionTo(transition) {
+        transition.redirect('users');
+    }
 }
 
 // routes ----------------------------------------------------------------
@@ -46,25 +46,25 @@ Dashboard = requireAuth(Dashboard);
 Admin     = requireAuth(Admin, 'admin');
 
 let routes = (
-	<Route name="app" path="/" handler={Index}>
-		<Route name="signIn" path="sign-in" handler={Signin}/>
-		<Route name="dashboard" path="dashboard"  handler={Dashboard} >
-			<Route name="datasets" path="datasets" handler={Datasets}/>
-			<Route name="notifications" path="notifications" handler={Notifications}/>
-			<Route name="jobs" path="jobs" handler={Jobs}/>
-			<NotFoundRoute handler={RedirectNotifications}/>
-		</Route>
-		<Route name="admin" path="admin" handler={Admin} >
-			<Route name="users" path="users" handler={Users} />
-			<Route name="blacklist" path="blacklist" handler={Blacklist} />
-			<NotFoundRoute handler={RedirectUsers}/>
-		</Route>
-		<Route name="public" path="datasets" handler={Datasets}/>
-		<Route name="dataset" path="datasets/:datasetId" handler={Dataset} />
-		<Route name="snapshot" path="datasets/:datasetId/versions/:snapshotId" handler={Dataset} />
-		<DefaultRoute handler={RedirectDashboard}/>
-		<NotFoundRoute handler={RedirectDashboard}/>
-	</Route>
+    <Route name="app" path="/" handler={Index}>
+        <Route name="signIn" path="sign-in" handler={Signin}/>
+        <Route name="dashboard" path="dashboard"  handler={Dashboard} >
+            <Route name="datasets" path="datasets" handler={Datasets}/>
+            <Route name="notifications" path="notifications" handler={Notifications}/>
+            <Route name="jobs" path="jobs" handler={Jobs}/>
+            <NotFoundRoute handler={RedirectNotifications}/>
+        </Route>
+        <Route name="admin" path="admin" handler={Admin} >
+            <Route name="users" path="users" handler={Users} />
+            <Route name="blacklist" path="blacklist" handler={Blacklist} />
+            <NotFoundRoute handler={RedirectUsers}/>
+        </Route>
+        <Route name="public" path="datasets" handler={Datasets}/>
+        <Route name="dataset" path="datasets/:datasetId" handler={Dataset} />
+        <Route name="snapshot" path="datasets/:datasetId/versions/:snapshotId" handler={Dataset} />
+        <DefaultRoute handler={RedirectDashboard}/>
+        <NotFoundRoute handler={RedirectDashboard}/>
+    </Route>
 );
 
 export default routes;
