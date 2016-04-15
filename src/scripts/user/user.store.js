@@ -1,5 +1,3 @@
-/*global hello*/
-
 // dependencies ----------------------------------------------------------------------
 
 import React            from 'react';
@@ -13,6 +11,7 @@ import upload           from '../upload/upload.actions';
 import dashboardActions from '../dashboard/datasets.actions';
 import datasetActions   from '../dataset/dataset.actions';
 import notifications    from '../notification/notification.actions';
+import hello            from 'hellojs';
 
 hello.init({google: config.auth.google.clientID});
 
