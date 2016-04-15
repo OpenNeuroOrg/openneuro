@@ -1,5 +1,3 @@
-/*global hello*/
-
 // dependencies ----------------------------------------------------------------------
 
 import React            from 'react';
@@ -13,6 +11,7 @@ import upload           from '../upload/upload.actions';
 import dashboardActions from '../dashboard/datasets.actions';
 import datasetActions   from '../dataset/dataset.actions';
 import notifications    from '../notification/notification.actions';
+import hello            from 'hellojs';
 
 hello.init({google: config.auth.google.clientID});
 
@@ -151,6 +150,17 @@ let UserStore = Reflux.createStore({
                                 this.handleSignIn(transition, res.body, profile);
                             });
                         });
+                    } else if (res.status !== 200) {
+                        this.clearAuth();
+                        let message = 'We are currently experiencing issues. Please try again later.';
+                        if (!transition) {
+                            notifications.createAlert({type: 'Error', message: message});
+                        } else {
+                            this.update({
+                                loading: false,
+                                signinError: message
+                            });
+                        }
                     } else {
                         this.handleSignIn(transition, res.body, profile);
                     }
