@@ -16,7 +16,7 @@ let Usermenu = React.createClass({
 // life cycle methods ------------------------------------------------------------
 
     render: function () {
-        //generate user menu
+
         let thumbnail,
             username = this.state.google.displayName;
 
@@ -25,9 +25,6 @@ let Usermenu = React.createClass({
         }
 
         let gear = (<i className="fa fa-gear" />);
-
-        // TEMPORARY INLINE STYLING BELOW
-        // MOVE TO STYLESHEET AND REMOVE THIS COMMENT
         return (
             <div className="clearfix user-wrap">
                 <span className="username">
