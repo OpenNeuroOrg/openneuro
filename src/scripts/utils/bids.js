@@ -14,53 +14,20 @@ export default  {
 // Read -----------------------------------------------------------------------------------
 
     /**
-     * Filter Subjects
-     *
-     * Takes a list of scitran sessions and callsback
-     * with the BIDS subjects
-     */
-    filterSubjects (scitranSessions, callback, options) {
-        let subjects = [];
-        async.each(scitranSessions, (session, cb) => {
-            if (session.subject.code === 'subject') {
-                scitran.getSession(session._id, (res) => {
-                    session.children = res.files;
-                    session.name = session.label;
-                    subjects.push(session);
-                    cb();
-                }, options);
-            } else {
-                cb();
-            }
-        }, () => {
-            subjects.sort((a, b) => {
-                let aLabel = a.label.toLowerCase();
-                let bLabel = b.label.toLowerCase();
-                if (aLabel < bLabel) {return -1;}
-                else if (aLabel > bLabel) {return 1;}
-                else {return 0;}
-            });
-            callback(subjects);
-        });
-    },
-
-    /**
      * Filter Sessions
      *
      * Takes a list of scitran sessions and a subjectID
      * and calls back with a list of BIDS sessions in
      * that subject.
      */
-    filterSessions (scitranSessions, subjectId, callback, options) {
+    filterSessions (scitranSessions, subjectId, callback) {
         let sessions = [];
         async.each(scitranSessions, (session, cb) => {
             if (session.subject.code === subjectId) {
-                scitran.getSession(session._id, (res) => {
-                    session.children = res.files;
-                    session.name = session.label;
-                    sessions.push(session);
-                    cb();
-                }, options);
+                session.children = session.files;
+                session.name = session.label;
+                sessions.push(session);
+                cb();
             } else {
                 cb();
             }
@@ -213,7 +180,7 @@ export default  {
         };
         let projectId = dataset._id;
         scitran.getSessions(projectId, (scitranSessions) => {
-            this.filterSubjects(scitranSessions, (subjects) => {
+            this.filterSessions(scitranSessions, 'subject', (subjects) => {
                 dataset.containerType = 'projects';
                 dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
                 dataset.children = dataset.children.concat(subjects);
@@ -228,21 +195,19 @@ export default  {
                                 session.children = this.formatFiles(session.children, session._id, 'sessions');
                                 session.children = session.children.concat(modalities);
                                 async.each(modalities, (modality, cb2) => {
-                                    scitran.getAcquisition(modality._id, (res) => {
-                                        modality.containerType = 'acquisitions';
-                                        modality.children = res.files;
-                                        modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
-                                        modality.name = modality.label;
-                                        cb2();
-                                    }, options);
+                                    modality.containerType = 'acquisitions';
+                                    modality.children = modality.files;
+                                    modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
+                                    modality.name = modality.label;
+                                    cb2();
                                 }, cb1);
                             }, options);
                         }, cb);
-                    }, options);
+                    });
                 }, () => {
                     callback([dataset]);
                 });
-            }, options);
+            });
         }, options);
     },
 
