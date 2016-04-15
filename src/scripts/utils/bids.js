@@ -19,16 +19,14 @@ export default  {
      * Takes a list of scitran sessions and callsback
      * with the BIDS subjects
      */
-    filterSubjects (scitranSessions, callback, options) {
+    filterSubjects (scitranSessions, callback) {
         let subjects = [];
         async.each(scitranSessions, (session, cb) => {
             if (session.subject.code === 'subject') {
-                scitran.getSession(session._id, (res) => {
-                    session.children = res.files;
-                    session.name = session.label;
-                    subjects.push(session);
-                    cb();
-                }, options);
+                session.children = session.files;
+                session.name = session.label;
+                subjects.push(session);
+                cb();
             } else {
                 cb();
             }
@@ -51,16 +49,14 @@ export default  {
      * and calls back with a list of BIDS sessions in
      * that subject.
      */
-    filterSessions (scitranSessions, subjectId, callback, options) {
+    filterSessions (scitranSessions, subjectId, callback) {
         let sessions = [];
         async.each(scitranSessions, (session, cb) => {
             if (session.subject.code === subjectId) {
-                scitran.getSession(session._id, (res) => {
-                    session.children = res.files;
-                    session.name = session.label;
-                    sessions.push(session);
-                    cb();
-                }, options);
+                session.children = session.files;
+                session.name = session.label;
+                sessions.push(session);
+                cb();
             } else {
                 cb();
             }
@@ -228,21 +224,19 @@ export default  {
                                 session.children = this.formatFiles(session.children, session._id, 'sessions');
                                 session.children = session.children.concat(modalities);
                                 async.each(modalities, (modality, cb2) => {
-                                    scitran.getAcquisition(modality._id, (res) => {
-                                        modality.containerType = 'acquisitions';
-                                        modality.children = res.files;
-                                        modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
-                                        modality.name = modality.label;
-                                        cb2();
-                                    }, options);
+                                    modality.containerType = 'acquisitions';
+                                    modality.children = modality.files;
+                                    modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
+                                    modality.name = modality.label;
+                                    cb2();
                                 }, cb1);
                             }, options);
                         }, cb);
-                    }, options);
+                    });
                 }, () => {
                     callback([dataset]);
                 });
-            }, options);
+            });
         }, options);
     },
 
