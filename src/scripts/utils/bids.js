@@ -14,35 +14,6 @@ export default  {
 // Read -----------------------------------------------------------------------------------
 
     /**
-     * Filter Subjects
-     *
-     * Takes a list of scitran sessions and callsback
-     * with the BIDS subjects
-     */
-    filterSubjects (scitranSessions, callback) {
-        let subjects = [];
-        async.each(scitranSessions, (session, cb) => {
-            if (session.subject.code === 'subject') {
-                session.children = session.files;
-                session.name = session.label;
-                subjects.push(session);
-                cb();
-            } else {
-                cb();
-            }
-        }, () => {
-            subjects.sort((a, b) => {
-                let aLabel = a.label.toLowerCase();
-                let bLabel = b.label.toLowerCase();
-                if (aLabel < bLabel) {return -1;}
-                else if (aLabel > bLabel) {return 1;}
-                else {return 0;}
-            });
-            callback(subjects);
-        });
-    },
-
-    /**
      * Filter Sessions
      *
      * Takes a list of scitran sessions and a subjectID
@@ -209,7 +180,7 @@ export default  {
         };
         let projectId = dataset._id;
         scitran.getSessions(projectId, (scitranSessions) => {
-            this.filterSubjects(scitranSessions, (subjects) => {
+            this.filterSessions(scitranSessions, 'subject', (subjects) => {
                 dataset.containerType = 'projects';
                 dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
                 dataset.children = dataset.children.concat(subjects);
