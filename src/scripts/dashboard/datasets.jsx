@@ -21,7 +21,7 @@ let Datasets = React.createClass({
 
 // life cycle events -------------------------------------------------------------------------
 
-    componentWillUnmount(){Actions.update({datasets:[]})},
+    componentWillUnmount(){Actions.update({datasets:[]});},
 
     componentDidMount() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
@@ -30,26 +30,25 @@ let Datasets = React.createClass({
     },
 
     render() {
-        let self     = this;
         let datasets = this.state.datasets;
         let visibleDatasets = this.state.visibleDatasets;
         let isPublic  = this.state.isPublic;
         let results;
         if (datasets.length === 0 && isPublic) {
-            let noDatasets = "There are no public datasets.";
+            let noDatasets = 'There are no public datasets.';
             results = <p className="no-datasets">{noDatasets}</p>;
         } else if (datasets.length === 0) {
-            let noDatasets = "You don't have any datasets.";
+            let noDatasets = 'You don\'t have any datasets.';
             results = <p className="no-datasets">{noDatasets}</p>;
         } else if (visibleDatasets.length === 0) {
-            let noDatasets = "You don't have any datasets that match the selected filters.";
+            let noDatasets = 'You don\'t have any datasets that match the selected filters.';
             results = <p className="no-datasets">{noDatasets}</p>;
         } else {
             var pagesTotal = Math.ceil(visibleDatasets.length / this.state.resultsPerPage);
             let paginatedResults = this._paginate(visibleDatasets, this.state.resultsPerPage, this.state.page);
 
             // map results
-            results = paginatedResults.map(function (dataset, index){
+            results = paginatedResults.map(function (dataset){
                 let user      = dataset.user;
                 let fullname  = user ? user.firstname + ' ' + user.lastname : '';
                 let dateAdded = moment(dataset.created).format('L');
@@ -59,7 +58,7 @@ let Datasets = React.createClass({
                     <div className="fadeIn  panel panel-default" key={dataset._id}>
                         <div className="panel-heading">
                             <div className="header clearfix">
-                                <Link to={isPublic ? "snapshot" : "dataset"} params={isPublic ? {datasetId: dataset.original, snapshotId: dataset._id} : {datasetId: dataset._id}}>
+                                <Link to={isPublic ? 'snapshot' : 'dataset'} params={isPublic ? {datasetId: dataset.original, snapshotId: dataset._id} : {datasetId: dataset._id}}>
                                     <h4 className="dataset-name">{dataset.label}</h4>
                                     <div className="meta-container">
                                         <p className="date">uploaded {user ? 'by ' : ''}<span className="name">{fullname}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
@@ -124,7 +123,7 @@ let Datasets = React.createClass({
             </div>
         );
         return (
-        	<div>
+            <div>
                {isPublic ? isPublicDataset : isPrivateDataset}
             </div>
         );
@@ -134,14 +133,14 @@ let Datasets = React.createClass({
 
     _paginate(data, perPage, page) {
         if (data.length < 1) return null;
-        let page = (page) ? page : this.state.page;
+        (page) ? page : this.state.page;
         let start = (page * perPage);
         let end = start + perPage;
         var retArr = data.slice(start, end);
         return retArr;
     },
 
-    _onPageSelect(page, e) {
+    _onPageSelect(page) {
         let pageNumber = Number(page);
         this.setState({ page: pageNumber });
     },

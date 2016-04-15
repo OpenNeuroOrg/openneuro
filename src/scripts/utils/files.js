@@ -5,7 +5,7 @@ import config from '../../../config';
 // public API ---------------------------------------------------------------------
 
 let fileUtils = {
-	generateTree,
+    generateTree,
     countTree,
     findInTree,
     read
@@ -24,12 +24,12 @@ export default fileUtils;
  * directory.
  */
 function generateTree (files) {
-	let pathList = {};
-	let dirTree = {};
+    let pathList = {};
+    let dirTree = {};
 
     // generate list of paths
-	for (let i = 0; i < files.length; i++) {
-		let file = files[i];
+    for (let i = 0; i < files.length; i++) {
+        let file = files[i];
         // ignore blacklisted files
         if (config.upload.blacklist.indexOf(file.name) > -1) {continue;}
         pathList[file.webkitRelativePath] = file;
@@ -37,32 +37,32 @@ function generateTree (files) {
 
     // build path from list
     for (let key in pathList) {
-    	let path = key;
-    	let pathParts = path.split('/');
-    	let subObj = dirTree;
-    	for (let j = 0; j < pathParts.length; j++) {
-    		let part = pathParts[j];
-    		if (!subObj[part]) {
-    			subObj[part] = j < pathParts.length - 1 ? {} : pathList[key];
-    		}
-    		subObj = subObj[part];
-    	}
+        let path = key;
+        let pathParts = path.split('/');
+        let subObj = dirTree;
+        for (let j = 0; j < pathParts.length; j++) {
+            let part = pathParts[j];
+            if (!subObj[part]) {
+                subObj[part] = j < pathParts.length - 1 ? {} : pathList[key];
+            }
+            subObj = subObj[part];
+        }
     }
 
-	// convert dirTree to array structure
+    // convert dirTree to array structure
     function objToArr (obj) {
-    	let arr = [];
-    	for (let key in obj) {
-    		if (obj[key].webkitRelativePath && obj[key].webkitRelativePath.length > 0) {
-    			arr.push(obj[key]);
-    		} else {
-    			arr.push({name: key, type: 'folder', children: objToArr(obj[key])});
-    		}
-    	}
-    	return arr;
-	}
+        let arr = [];
+        for (let key in obj) {
+            if (obj[key].webkitRelativePath && obj[key].webkitRelativePath.length > 0) {
+                arr.push(obj[key]);
+            } else {
+                arr.push({name: key, type: 'folder', children: objToArr(obj[key])});
+            }
+        }
+        return arr;
+    }
 
-	dirTree = objToArr(dirTree);
+    dirTree = objToArr(dirTree);
 
     // return tree
     return dirTree;
@@ -78,7 +78,7 @@ function countTree (tree) {
     let count = 0;
     function recurse (tree) {
         for (let item of tree) {
-            count++
+            count++;
             if (item.children) {recurse(item.children);}
         }
     }
