@@ -43,9 +43,11 @@
 		    div{
 				padding: 0;
 				> span{
-					padding: 10px;
-					display: block;
-					border-bottom:1px solid #f0f0f0;
+				    padding: 10px 10px;
+				    display: block;
+				    border-bottom: 1px solid #E7E7E7;
+				    background: #F8F8F8;
+				    margin: 0 -10px -10px;
 				}
 				&:last-child {
 					> span{	border-bottom: none;}
