@@ -76,103 +76,110 @@ export default class Publish extends React.Component {
 
 // template methods ---------------------------------------------------
 
-	/**
-	 * Snapshots
-	 *
-	 * Returns a labeled select box for selecting a snapshot
-	 * to run analysis on.
-	 */
-	_snapshots() {
-		let options = this.props.snapshots ? this.props.snapshots.map((snapshot) => {
-			if (!snapshot.isOriginal) {
-				return (
-					<option key={snapshot._id} value={snapshot._id} disabled={snapshot.public}>
-						{'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'} {snapshot.public ? '- published' : null}
-					</option>
-				);
-			}
-		}) : [];
-		return (
-			<div>
-				<h5>Choose a snapshot to publish</h5>
-				<div className="row">
-					<div className="col-xs-12">
-						<div className="col-xs-6 task-select">
-							<select value={this.state.selectedSnapshot} onChange={this._selectSnapshot.bind(this)}>
-								<option value="" disabled>Select a Snapshot</option>
-								{options}
-							</select>
-						</div>
-						<div className="col-xs-6 default-reset">
-							<button className="btn-reset" onClick={this._createSnapshot.bind(this)}>Create New Snapshot</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
+    /**
+     * Snapshots
+     *
+     * Returns a labeled select box for selecting a snapshot
+     * to run analysis on.
+     */
+    _snapshots() {
+        let options = this.props.snapshots ? this.props.snapshots.map((snapshot) => {
+            if (!snapshot.isOriginal) {
+                return (
+                    <option key={snapshot._id} value={snapshot._id} disabled={snapshot.public}>
+                        {'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'} {snapshot.public ? '- published' : null}
+                    </option>
+                );
+            }
+        }) : [];
+        return (
+            <div>
+                <h5>Choose a snapshot to publish</h5>
+                <div className="row">
+                    <div className="col-xs-12">
+                        <div className="col-xs-6 task-select">
+                            <select value={this.state.selectedSnapshot} onChange={this._selectSnapshot.bind(this)}>
+                                <option value="" disabled>Select a Snapshot</option>
+                                {options}
+                            </select>
+                        </div>
+                        <div className="col-xs-6 default-reset">
+                            <button className="btn-reset" onClick={this._createSnapshot.bind(this)}>Create New Snapshot</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
-	_submit() {
-		if (this.state.selectedSnapshot) {
-			return (
-				<div className="col-xs-12 modal-actions">
-					<button className="btn-modal-submit" onClick={this._publish.bind(this)}>Publish</button>
-					<button className="btn-reset" onClick={this._hide.bind(this)}>close</button>
-				</div>
-			)
-		}
-	}
+    _submit() {
+        if (this.state.selectedSnapshot) {
+            return (
+                <div className="col-xs-12 modal-actions">
+                    <button className="btn-modal-submit" onClick={this._publish.bind(this)}>Publish</button>
+                    <button className="btn-reset" onClick={this._hide.bind(this)}>close</button>
+                </div>
+            );
+        }
+    }
 
 // actions ------------------------------------------------------------
 
-	/**
-	 * Hide
-	 */
-	_hide() {
-		this.setState({
-			loading: false,
-			selectedSnapshot: '',
-			message: null,
-			error: false
-		});
-		this.props.onHide();
-	}
+    /**
+     * Hide
+     */
+    _hide() {
+        this.setState({
+            loading: false,
+            selectedSnapshot: '',
+            message: null,
+            error: false
+        });
+        this.props.onHide();
+    }
 
-	/**
-	 * Select Snapshot
-	 */
-	_selectSnapshot(e) {
-		let snapshotId = e.target.value;
-		this.setState({selectedSnapshot: snapshotId});
-	}
+    /**
+     * Select Snapshot
+     */
+    _selectSnapshot(e) {
+        let snapshotId = e.target.value;
+        this.setState({selectedSnapshot: snapshotId});
+    }
 
-	/**
-	 * Create Snapshot
-	 */
-	_createSnapshot() {
-		let datasetId = this.props.dataset.original ? this.props.dataset.original : this.props.dataset._id;
-		this.setState({loading: true});
-		actions.createSnapshot((res) => {
-			if (res.error) {
-				this.setState({
-					error: true,
-					message: res.error,
-					loading: false
-				});
-			} else {
-				this.setState({
-					selectedSnapshot: res,
-					loading: false
-				});
-			}
-		}, false);
-	}
+    /**
+     * Create Snapshot
+     */
+    _createSnapshot() {
+        this.setState({loading: true});
+        actions.createSnapshot((res) => {
+            if (res.error) {
+                this.setState({
+                    error: true,
+                    message: res.error,
+                    loading: false
+                });
+            } else {
+                this.setState({
+                    selectedSnapshot: res,
+                    loading: false
+                });
+            }
+        }, false);
+    }
 
-	/**
-	 * Publish
-	 */
-	_publish() {
-		actions.publish(this.state.selectedSnapshot, true, this._hide.bind(this));
-	}
+    /**
+     * Publish
+     */
+    _publish() {
+        actions.publish(this.state.selectedSnapshot, true, this._hide.bind(this));
+    }
 
 }
+
+Publish.propTypes = {
+    snapshots: React.PropTypes.array,
+    dataset: React.PropTypes.object,
+    loadingApps: React.PropTypes.bool,
+    show: React.PropTypes.bool,
+    onHide: React.PropTypes.func
+};

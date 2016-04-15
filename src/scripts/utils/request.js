@@ -11,64 +11,64 @@ import userActions from '../user/user.actions.js';
  */
 var Request = {
 
-	get (url, options, callback) {
-		handleRequest(url, options, function (url, options) {
-			request.get(url)
-				.set(options.headers)
-				.query(options.query)
-				.end(function (err, res) {
-					handleResponse(err, res, callback);
-				});
-		});
-	},
+    get (url, options, callback) {
+        handleRequest(url, options, function (url, options) {
+            request.get(url)
+                .set(options.headers)
+                .query(options.query)
+                .end(function (err, res) {
+                    handleResponse(err, res, callback);
+                });
+        });
+    },
 
-	post (url, options, callback) {
-		handleRequest(url, options, function (url, options) {
-			request.post(url)
-				.set(options.headers)
-				.query(options.query)
-				.send(options.body)
-				.end(function (err, res) {
-					handleResponse(err, res, callback);
-				});
-		});
-	},
+    post (url, options, callback) {
+        handleRequest(url, options, function (url, options) {
+            request.post(url)
+                .set(options.headers)
+                .query(options.query)
+                .send(options.body)
+                .end(function (err, res) {
+                    handleResponse(err, res, callback);
+                });
+        });
+    },
 
-	put (url, options, callback) {
-		handleRequest(url, options, function (url, options) {
-			request.put(url)
-				.set(options.headers)
-				.query(options.query)
-				.send(options.body)
-				.end(function (err, res) {
-					handleResponse(err, res, callback);
-				});
-		});
-	},
+    put (url, options, callback) {
+        handleRequest(url, options, function (url, options) {
+            request.put(url)
+                .set(options.headers)
+                .query(options.query)
+                .send(options.body)
+                .end(function (err, res) {
+                    handleResponse(err, res, callback);
+                });
+        });
+    },
 
-	del (url, callback) {
-		handleRequest(url, {}, function (url, options) {
-			request.del(url)
-				.set(options.headers)
-				.query(options.query)
-				.end(function (err, res) {
-					handleResponse(err, res, callback);
-				});
-		});
-	},
+    del (url, callback) {
+        handleRequest(url, {}, function (url, options) {
+            request.del(url)
+                .set(options.headers)
+                .query(options.query)
+                .end(function (err, res) {
+                    handleResponse(err, res, callback);
+                });
+        });
+    },
 
-	upload (url, options, callback) {
-		handleRequest(url, options, function (url, options) {
-			request.post(url)
-				.query(options.query)
-				.set(options.headers)
-				.field('tags', options.fields.tags)
-				.attach('file', options.fields.file, options.fields.name)
-				.end((err, res) => {
-					handleResponse(err, res, callback);
-				});
-		});
-	}
+    upload (url, options, callback) {
+        handleRequest(url, options, function (url, options) {
+            request.post(url)
+                .query(options.query)
+                .set(options.headers)
+                .field('tags', options.fields.tags)
+                .attach('file', options.fields.file, options.fields.name)
+                .end((err, res) => {
+                    handleResponse(err, res, callback);
+                });
+        });
+    }
 
 };
 
@@ -90,17 +90,16 @@ var Request = {
  *   should be supplied with the request.
  */
 function handleRequest (url, options, callback) {
-	options = normalizeOptions(options);
-	var google = hello('google');
-	if (options.auth && hasToken() && (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)) {
-		if (window.localStorage.scitranUser && JSON.parse(window.localStorage.scitranUser).root) {options.query.root = true;}
-		userActions.checkAuth((token) => {
-			options.headers.Authorization = token;
-			callback(url, options);
-		});
-	} else {
-		callback(url, options);
-	}
+    options = normalizeOptions(options);
+    if (options.auth && hasToken() && (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)) {
+        if (window.localStorage.scitranUser && JSON.parse(window.localStorage.scitranUser).root) {options.query.root = true;}
+        userActions.checkAuth((token) => {
+            options.headers.Authorization = token;
+            callback(url, options);
+        });
+    } else {
+        callback(url, options);
+    }
 }
 
 /**
@@ -111,7 +110,7 @@ function handleRequest (url, options, callback) {
  * callback.
  */
 function handleResponse (err, res, callback) {
-	callback(err, res);
+    callback(err, res);
 }
 
 /**
@@ -121,16 +120,16 @@ function handleResponse (err, res, callback) {
  * normalizes it so requests won't fail.
  */
 function normalizeOptions (options) {
-	if (!options.headers) {options.headers = {};}
-	if (!options.query)   {options.query   = {};}
-	if (!options.hasOwnProperty('auth')) {options.auth = true;}
-	return options;
+    if (!options.headers) {options.headers = {};}
+    if (!options.query)   {options.query   = {};}
+    if (!options.hasOwnProperty('auth')) {options.auth = true;}
+    return options;
 }
 
 function hasToken () {
-	if (!window.localStorage.hello) {return false;}
-	let credentials = JSON.parse(window.localStorage.hello);
-	return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
+    if (!window.localStorage.hello) {return false;}
+    let credentials = JSON.parse(window.localStorage.hello);
+    return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
 }
 
 export default Request;

@@ -17,9 +17,9 @@ let Usermenu = React.createClass({
 
     render: function () {
 
-        let username = this.state.google.displayName;
+        let thumbnail,
+            username = this.state.google.displayName;
 
-        let thumbnail;
         if (this.state.google.picture) {
             thumbnail = this.state.google.picture.replace('sz=50', 'sz=200');
         }

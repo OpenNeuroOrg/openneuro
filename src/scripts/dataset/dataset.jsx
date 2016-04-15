@@ -6,7 +6,7 @@ import Spinner      from '../common/partials/spinner.jsx';
 import {State}      from 'react-router';
 import datasetStore from './dataset.store';
 import actions      from './dataset.actions.js';
-import MetaData    	from './dataset.metadata.jsx';
+import MetaData     from './dataset.metadata.jsx';
 import Tools        from './dataset.tools.jsx';
 import Statuses     from './dataset.statuses.jsx';
 import moment       from 'moment';
@@ -121,87 +121,87 @@ let Dataset = React.createClass({
 
 // template methods ---------------------------------------------------
 
-	_authors(authors) {
-		if (authors.length > 0) {
-			let authorString = 'authored by ';
-			for (let i = 0; i < authors.length; i++) {
-				let author = authors[i];
-				authorString += author.name;
-				if (authors.length > 1) {
-					if (i < authors.length - 2) {
-						authorString += ', ';
-					} else if (i == authors.length -2) {
-						authorString += ' and ';
-					}
-				}
-			}
-			return <h6>{authorString}</h6>;
-		}
-	},
+    _authors(authors) {
+        if (authors.length > 0) {
+            let authorString = 'authored by ';
+            for (let i = 0; i < authors.length; i++) {
+                let author = authors[i];
+                authorString += author.name;
+                if (authors.length > 1) {
+                    if (i < authors.length - 2) {
+                        authorString += ', ';
+                    } else if (i == authors.length -2) {
+                        authorString += ' and ';
+                    }
+                }
+            }
+            return <h6>{authorString}</h6>;
+        }
+    },
 
-	_downloads(downloads) {
-		if (downloads) {return <h6>downloads: {downloads}</h6>;}
-	},
+    _downloads(downloads) {
+        if (downloads) {return <h6>downloads: {downloads}</h6>;}
+    },
 
-	_fileTree(dataset, tree, canEdit) {
-		tree = tree ? tree : [dataset];
-		if (!dataset.status.incomplete) {
-			return (
-				<div className="col-xs-12">
-					<div className="fileStructure fadeIn panel-group">
-						<div className="panel panel-default">
-							<div className="panel-heading" >
-								<h4 className="panel-title">Dataset File Tree</h4>
-							</div>
-							<div className="panel-collapse" aria-expanded="false" >
-								<div className="panel-body">
-									<FileTree tree={tree} editable={canEdit} loading={this.state.loadingTree}/>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			);
-		}
-	},
+    _fileTree(dataset, tree, canEdit) {
+        tree = tree ? tree : [dataset];
+        if (!dataset.status.incomplete) {
+            return (
+                <div className="col-xs-12">
+                    <div className="fileStructure fadeIn panel-group">
+                        <div className="panel panel-default">
+                            <div className="panel-heading" >
+                                <h4 className="panel-title">Dataset File Tree</h4>
+                            </div>
+                            <div className="panel-collapse" aria-expanded="false" >
+                                <div className="panel-body">
+                                    <FileTree tree={tree} editable={canEdit} loading={this.state.loadingTree}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    },
 
-	_uploaded(dataset) {
-		let user        = dataset ? dataset.user : null;
-		let dateCreated = dataset.created;
-		let dateAdded  = moment(dateCreated).format('L');
+    _uploaded(dataset) {
+        let user        = dataset ? dataset.user : null;
+        let dateCreated = dataset.created;
+        let dateAdded  = moment(dateCreated).format('L');
         let timeago    = moment(dateCreated).fromNow(true);
-		return <h6>{'uploaded ' + (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +  ' on ' + dateAdded + ' - ' + timeago + ' ago'}</h6>;
-	},
+        return <h6>{'uploaded ' + (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +  ' on ' + dateAdded + ' - ' + timeago + ' ago'}</h6>;
+    },
 
-	_validation(errors, warnings, validating) {
-		if (validating) {
-			return <Spinner text="Validating" active={true} />;
-		}
-		if (errors.length > 0 || warnings.length > 0) {
-			let errMessage, warnMessage;
-			if (errors === 'Invalid') {
-				errMessage = "This does not appear to be a BIDS dataset";
-			} else {
-				if (errors.length > 0) {
-					errMessage = <span className="message error fadeIn">Your dataset is no longer valid. You must fix the <strong>{errors.length + ' ' + pluralize('Error', errors.length)}</strong> to use all of the site features.</span>;
-				}
-				if (warnings.length > 0) {
-					warnMessage = <span className="message error fadeIn">We found <strong>{warnings.length + ' ' + pluralize('Warning', warnings.length)}</strong> in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant.</span>;
-				}
-			}
-			return (
-				<div className="fadeIn col-xs-12">
-					<h3 className="metaheader">Validation</h3>
-					<div>{errMessage} {warnMessage}</div><br />
-					<Results errors={errors} warnings={warnings} />
-				</div>
-			)
-		}
-	},
+    _validation(errors, warnings, validating) {
+        if (validating) {
+            return <Spinner text="Validating" active={true} />;
+        }
+        if (errors.length > 0 || warnings.length > 0) {
+            let errMessage, warnMessage;
+            if (errors === 'Invalid') {
+                errMessage = 'This does not appear to be a BIDS dataset';
+            } else {
+                if (errors.length > 0) {
+                    errMessage = <span className="message error fadeIn">Your dataset is no longer valid. You must fix the <strong>{errors.length + ' ' + pluralize('Error', errors.length)}</strong> to use all of the site features.</span>;
+                }
+                if (warnings.length > 0) {
+                    warnMessage = <span className="message error fadeIn">We found <strong>{warnings.length + ' ' + pluralize('Warning', warnings.length)}</strong> in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant.</span>;
+                }
+            }
+            return (
+                <div className="fadeIn col-xs-12">
+                    <h3 className="metaheader">Validation</h3>
+                    <div>{errMessage} {warnMessage}</div><br />
+                    <Results errors={errors} warnings={warnings} />
+                </div>
+            );
+        }
+    },
 
-	_views(views) {
-		if (views) {return <h6>views: {views}</h6>;}
-	}
+    _views(views) {
+        if (views) {return <h6>views: {views}</h6>;}
+    }
 
 });
 

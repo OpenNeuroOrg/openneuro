@@ -12,14 +12,13 @@ class FileTree extends React.Component {
     render () {
         let editable = this.props.editable;
         let tree     = this.props.tree;
-
         let nodes = tree.map((item) => {
             let name = item.label ? item.label : item.name;
 
             return (
                 <li className="clearfix" key={name}>
                     <span className="item-name">
-                        {this._folderIcon(item)} {this._fileLoading(item.loading)} {name}
+                        {this._folderIcon(item)} {this._fileLoading(item.loading)}
                     </span>
                     {this._fileTools(item, editable)}
                     {this._error(item)}
@@ -128,9 +127,12 @@ class FileTree extends React.Component {
     }
 
     _folderIcon(item) {
+        let label = item.label ? item.label : item.name;
         if (item.children) {
             let iconClass = 'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder');
-            return <button className={iconClass} onClick={actions.toggleFolder.bind(this, item)}></button>;
+            return <button className="btn-file-folder" onClick={actions.toggleFolder.bind(this, item)}><i className={iconClass}></i> {label}</button>;
+        }else{
+            return label;
         }
     }
 

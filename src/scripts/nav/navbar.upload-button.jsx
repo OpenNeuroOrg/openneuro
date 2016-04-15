@@ -60,6 +60,4 @@ let UploadBtn = React.createClass({
 
 });
 
-
-
 export default UploadBtn;

@@ -74,11 +74,11 @@ export default class Paginator extends React.Component {
 
     onPageSelect(e) {
         // get the selected page
-         var thePage = e.currentTarget.getAttribute('data-page');
+        var thePage = e.currentTarget.getAttribute('data-page');
         // call props function
-         if(this.props.onPageSelect) this.props.onPageSelect(thePage, e);
+        if(this.props.onPageSelect) this.props.onPageSelect(thePage, e);
         // prevent Default
-         e.preventDefault();
+        e.preventDefault();
     }
 
 
@@ -118,7 +118,7 @@ export default class Paginator extends React.Component {
                 ) { currentI = i; }
 
                 // else add a break
-                else {currentI = 'break'};
+                else {currentI = 'break';}
 
 
                 // if we haven't just used a break and this one is too -> add the current I
@@ -157,8 +157,8 @@ Paginator.defaultProps = {
     pagesTotal:               0,
     pageRangeDisplayed:       1,
     activePageRangeDisplayed: 1,
-    prevLabel:                "«",
-    nextLabel:                "»",
-    breakLabel:               "...",
-    containerClass:           "pagination"
+    prevLabel:                '«',
+    nextLabel:                '»',
+    breakLabel:               '...',
+    containerClass:           'pagination'
 };

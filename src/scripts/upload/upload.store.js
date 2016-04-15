@@ -261,8 +261,9 @@ let UploadStore = Reflux.createStore({
             warnings: this.data.warnings
         };
 
-        window.onbeforeunload = () => {return 'You are currently uploading files. Leaving this site will cancel the upload process.';};
-
+        window.onbeforeunload = () => {
+            return 'You are currently uploading files. Leaving this site will cancel the upload process.';
+        };
         let uploadingFavicon = document.getElementById('favicon_upload');
         favicon.image(uploadingFavicon); // set new favicon image
 
