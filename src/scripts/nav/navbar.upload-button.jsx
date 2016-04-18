@@ -41,7 +41,7 @@ let UploadBtn = React.createClass({
                 </Modal.Header>
                 <hr className="modal-inner" />
                 <Modal.Body>
-                    <div className="tasks-col fadeIn"><Upload /></div>
+                    <div className="tasks-col fade-in"><Upload /></div>
                 </Modal.Body>
             </Modal>
         );

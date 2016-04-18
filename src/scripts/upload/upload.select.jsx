@@ -12,7 +12,7 @@ let Select = React.createClass({
 
         return (
             <div>
-                <span className="message fadeIn">Select a  <a href="http://bids.neuroimaging.io" target="_blank">BIDS dataset</a> to upload</span>
+                <span className="message fade-in">Select a  <a href="http://bids.neuroimaging.io" target="_blank">BIDS dataset</a> to upload</span>
                 <FileSelect onClick={this._clearInput} onChange={this._onChange} setRefs={this._setRefs}/>
             </div>
         );

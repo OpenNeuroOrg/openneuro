@@ -55,7 +55,7 @@ let Datasets = React.createClass({
                 let timeago   = moment(dataset.created).fromNow(true);
                 let  statusContainer = <div className="status-container"><Statuses dataset={dataset} minimal={true} /></div>;
                 return (
-                    <div className="fadeIn  panel panel-default" key={dataset._id}>
+                    <div className="fade-in  panel panel-default" key={dataset._id}>
                         <div className="panel-heading">
                             <div className="header clearfix">
                                 <Link to={isPublic ? 'snapshot' : 'dataset'} params={isPublic ? {datasetId: dataset.original, snapshotId: dataset._id} : {datasetId: dataset._id}}>
@@ -72,7 +72,7 @@ let Datasets = React.createClass({
             });
         }
         let isPublicDataset = (
-            <div className="fadeIn dashboard inner-route clearfix">
+            <div className="fade-in dashboard inner-route clearfix">
                 <div className="col-xs-12">
                     <div className="dashboard-dataset-teasers datasets datasets-public">
                         <div className="header-filter-sort clearfix">

@@ -70,7 +70,7 @@
 			color:$primary;
 			cursor: pointer;
 			&:hover{
-				color:$primaryHover;
+				color:$primary-hover;
 			}
 		}
 	}
@@ -177,7 +177,7 @@
 			    height: 45px;
 			    text-align: right;
 			    padding: 10px 8px;
-			    background-color: #FFF;
+			    background-color: $white;
 			    margin: 0px 0px;
 			    box-shadow: inset 2px 0px 5px -1px rgba(0,0,0,.14);
 				i{}
@@ -197,7 +197,7 @@
 					box-shadow: inset -2px 0px 5px -1px rgba(0,0,0,.14);
 					&:focus{
 						outline: none;
-						@include gradient-directional($start-color: #fff, $end-color: #fcfcfc, $deg: 85deg);
+						@include gradient-directional($start-color: $white, $end-color: #fcfcfc, $deg: 85deg);
 						
 					}
 				}
@@ -211,7 +211,7 @@
 				vertical-align: middle;
 				height: 30px;
 				&:hover{
-					color: $primaryHover;
+					color: $primary-hover;
 				}
 			}
 		}
@@ -409,7 +409,7 @@ a.error-log{
 	color:$primary;
 	background-color: transparent;
 	&:hover{
-		color: $primaryHover;
+		color: $primary-hover;
 	}
 }
 .bids-link{

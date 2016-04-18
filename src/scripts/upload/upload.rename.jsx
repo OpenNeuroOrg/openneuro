@@ -39,13 +39,13 @@ let Rename = React.createClass({
 
         return (
             <div>
-                {!resuming ? <span className="message fadeIn">Rename your dataset (optional)</span> : null}
-                <div className="dir-name has-input clearfix fadeIn">
+                {!resuming ? <span className="message fade-in">Rename your dataset (optional)</span> : null}
+                <div className="dir-name has-input clearfix fade-in">
                     {nameError ? <span className="message error characterError">{nameError}</span> : null}
                     {renameResumeMessage}
                     {input}
                 </div>
-                <Accordion className="fileStructure fadeIn">
+                <Accordion className="file-structure fade-in">
                     <Panel header={dirName + ' File Structure'} eventKey='1'>
                         <FileTree tree={tree}/>
                     </Panel>

@@ -49,7 +49,7 @@ export default class Share extends React.Component {
                         <div>
                             <div className="text-danger">{this.state.error}</div>
                             <Input value={this.state.input} onChange={this._inputChange.bind(this)} />
-                            <select className="selectBox-style" onChange={this._selectChange.bind(this)} value={this.state.select}>
+                            <select className="select-box-style" onChange={this._selectChange.bind(this)} value={this.state.select}>
                                 <option value="" disabled>access level</option>
                                 <option value="ro">Can view</option>
                                 <option value="rw">Can edit</option>

@@ -43,11 +43,11 @@ let Signin = React.createClass({
             <div className="sign-in">
                 <div className="intro">
                     <div className="introBG">
-                        <div className="intro-inner fadeIn clearfix">
-                            <div className="clearfix welcomeBlock flipInX">
+                        <div className="intro-inner fade-in clearfix">
+                            <div className="clearfix welcomeBlock flipin-x">
                                 <h1>Welcome to CRN</h1>
                                 <p>A free and open platform that enables the analysis and sharing of neuroimaging data</p>
-                                <div className="signInBlock fadeIn">
+                                <div className="sign-in-block fade-in">
                                     {error}
                                     {form}
                                     <Spinner text="Signing in..." active={this.state.loading} />

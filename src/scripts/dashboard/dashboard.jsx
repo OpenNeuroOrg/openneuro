@@ -10,7 +10,7 @@ class Dashboard extends React.Component {
 
     render () {
         return (
-            <div className="fadeIn inner-route clearfix">
+            <div className="fade-in inner-route clearfix">
                 <div className="col-xs-12">
                 
                     {/*

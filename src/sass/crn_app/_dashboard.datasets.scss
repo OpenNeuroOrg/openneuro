@@ -1,14 +1,14 @@
 // Dashboard Tabs ========================
 
-.tabs.nav.nav-pills>li{
-	a{
+.tabs.nav.nav-pills > li {
+	a {
 		transition: background 0.3s ease;
 	  	padding: 10px 20px;
 	  	font-size: 14px;
 	  	text-transform:uppercase;
 	  	border-radius: 0;
-	  	.unread-badge{
-			background: #77E6A3;
+	  	.unread-badge {
+			background: $notification-green;
 			position: absolute;
 			top: -10px;
 			right: -6px;
@@ -23,82 +23,82 @@
 			font-weight: 600;
 	  	}
 	}
-	&.navbar-right{
-		a{
+	&.navbar-right {
+		a {
 			color:$night;
 			padding:5px;
 			background:none;
 			font-size: 12px;
 			text-transform: uppercase;
-			&:hover{
+			&:hover {
 				background:none;
 				color:$primary;
 
 			}
 		}
-		.dropdown-menu{
+		.dropdown-menu {
 			border-radius: 0;
 			border: none;
-			box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+			box-shadow: 1px 1px 3px $transparent3;
 		}
 	}
 }
 
 // Dashboard sort and filter ========================
 
-.filters-sort-wrap{
+.filters-sort-wrap {
 	width: 100%;
 	float: none;
 	padding: 0;
-	background:#f9f9f9;
-	border-bottom:1px solid #ddd;
-	.filters{
+	background: $f9;
+	border-bottom:1px solid $ddd;
+	.filters {
 		width: 600px;
 		float: right;
 		text-align: right;
 		padding: 0;
 		margin: 0;
 		position: relative;
-		label{
+		label {
 			margin: 0;
 			text-transform: uppercase;
 			font-size: 10px;
 			font-weight: 600;
-			color: #777;
+			color: $c-77;
 			text-align: right;
 			padding: 0 10px 0 0;
 			
 		}
-		button{
+		button {
 			@extend .btn-filter;
-			&.filter-all{
+			&.filter-all {
 				//text-transform: uppercase;
 				font-size: 12px;
 				font-weight: 600;
 			}
 			&:hover,
-			&:focus{
+			&:focus {
 				outline: 0;
 			}
 			&:active,
 			&.active,
-			&:hover{
-				background:#eee;
+			&:hover {
+				background:$eee;
 				color:$primary;
-				&.filter-shared{
+				&.filter-shared {
 					color: $brand-info;
 				}
-				&.filter-public{
+				&.filter-public {
 					color: $brand-success;
 				}
-				&.filter-incomplete{
+				&.filter-incomplete {
 					color: darken($brand-warning, 10%);
 				}
-				&.filter-invalid{
+				&.filter-invalid {
 					color: $brand-danger;
 				}
 			}
-			.filter-text{
+			.filter-text {
 			    font-size: 12px;
 			    font-weight: 600;
 			    margin-left: 5px;
@@ -106,41 +106,41 @@
 			}
 		}
 	}
-	.sort{
+	.sort {
 		width: 230px;
 		float: left;
 	    padding: 0;
 	    margin: 0;
 	    position: relative;
-		label{
+		label {
 			margin: 0;
 			text-transform: uppercase;
 			font-size: 10px;
 			font-weight: 600;
-			color: #777;
+			color: $c-77;
 			text-align: right;
 			padding: 0 10px 0 20px;				
 		}
-		a{
+		a {
 			@extend .btn-sort;
 			&.name,
-			&.date{
-			    border: 1px solid #C2C2C2;
+			&.date {
+			    border: 1px solid $c2;
 			    border-width: 0 1px;
 			    text-align: center;
 			    display: inline-block;
 			}
-			&.date{
+			&.date {
 				border-width:0 1px 0 0;
 			}
 
-			.fa{
+			.fa {
 				position: relative;
 				line-height: 0;
 				top: 2px;
 				padding: 0;
 				font-size: 10px;
-				&.fa-sort-desc{
+				&.fa-sort-desc {
 					top:-2px;
 				}
 			}
@@ -150,81 +150,81 @@
 
 // Dashboard teaser layout for Datasets ========================
 
-.dashboard-dataset-teasers{
-	box-shadow:0px 0px 2px -1px rgba(0,0,0,1);
+.dashboard-dataset-teasers {
+	box-shadow:0 0 2px -1px rgba(0,0,0,1);
 	padding: 0;
-	margin: 0 0 20px 0;
+	margin: 0 0 20px;
 	position:relative;
 	z-index: 600;
-	background: #fff;
-	.header-wrap{
-		border-bottom: 1px solid #E1E1E1;
+	background: $white;
+	.header-wrap {
+		border-bottom: 1px solid $e1;
 	}
-	h2{
+	h2 {
 		margin: 0;
 		padding:20px;
 		font-size: 30px;
 		text-transform: uppercase;
 		font-weight: 100;
 	}
-	.panel-group .panel+.panel{
+	.panel-group .panel+.panel {
 		margin: 0;
 	}
-	p.no-datasets{
+	p.no-datasets {
 		padding:20px;
 	}
-	.panel{
+	.panel {
 		border-radius: 0;
 		border: none;
-		border-bottom:1px solid #e1e1e1;
+		border-bottom:1px solid $e1;
 		box-shadow: none;
-		background:#f8f8f8;
-		.panel-heading{
+		background:$f8;
+		.panel-heading {
 			padding: 0;
-			background:#fff;
-			a{
+			background:$white;
+			a {
 				display: block;
 				padding: 10px 20px;
 				transition: background 1s ease;
 				color:$primary;
 				width: 60%;
 				float: left;
-				h4{
+				h4 {
 					border: none;
 					margin: 0 0 5px;
 					font-size: 15px;
 					padding: 0;
 					line-height: 13px;
 				}
-				p{
+				p {
 					padding:0;
 					margin:0;
-					color: #aaa;
+					color: $aaa;
 				}
-				&:after {
+				&::after {
 					clear: both;
 				}
-				&:before, 
-				&:after {
+				&::before, 
+				&::after {
 					content: " ";
 					display: table;
 				}
 
-				&:hover{
-					color:$primaryHover;
+				&:hover {
+					color:$primary-hover;
 				}
 
 			}
-			.status-container{
+			.status-container {
 				width: 40%;
 				float: left;
 				box-sizing: border-box;
 				padding:10px 20px;
-				span.status-wrap{
+				span.status-wrap {
 					list-style: none;
 					padding: 0;
 					margin: 0;
-					span.status{
+					span.status {
 						display: inline-block;
 						float: right;
 						margin-right: 0;
@@ -234,13 +234,13 @@
 						box-sizing: border-box;
 						.dataset-status {
 							width: 80px;
-							i.fa{
+							i.fa {
 									margin: 0;
 								}
 							}
 					}
 				}
-				.file-wrap{
+				.file-wrap {
 					float: right;
 					margin: 0 0 0 10px;
 					.fileupload-btn {
@@ -250,45 +250,45 @@
 					}
 				}
 			}
-			.meta-container{
-				.date{
+			.meta-container {
+				.date {
 					float: none;
 					margin: 0;
-					color: #909090;
+					color: $c-90;
 					font-size: 10px;
 					padding:0;
 					line-height: 15px;
 					text-align: left;
 					text-transform: uppercase;
-					.name{
-						color:#333;
+					.name {
+						color: $c-33;
 						text-transform: none;
 						font-size: 12px;
 					}
-					.time-ago{
-						color:#333;
+					.time-ago {
+						color:$c-33;
 					}
 				}
 			}
 		}
 		.panel-collapse {
-			.panel-body{
+			.panel-body {
 				border:none;
 				background:transparent;
 				padding: 0 ;
-				.inner{
+				.inner {
 					min-height: 50px;
 					padding:10px 20px;
-					border-top: 1px solid #ddd;
+					border-top: 1px solid $ddd;
 				}
-				.inner-right{
+				.inner-right {
 					height: 50px;
-					border-top:1px solid #ddd;
+					border-top:1px solid $ddd;
 					margin:0;
 					padding:0;
-					.left{
+					.left {
 						padding-left:0;
-						a{
+						a {
 							padding: 16px 20px;
 							display: block;
 						}
@@ -296,7 +296,7 @@
 					.right {
 						padding-right:0;
 						text-align: right;
-						&.delete-data{
+						&.delete-data {
 							vertical-align: middle;
 							display: block;
 							text-align: right;
@@ -304,13 +304,13 @@
 							text-transform: uppercase;
 							overflow:hidden;
 						}
-						.btn-admin.warning{
+						.btn-admin.warning {
 							    padding: 16px 20px ;
 						}
-						.btn-admin.delete{
+						.btn-admin.delete {
 						    height: 50px;
 						}
-						.btn-admin.cancel{
+						.btn-admin.cancel {
 							    height: 50px;
 						}
 					}

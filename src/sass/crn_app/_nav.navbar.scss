@@ -11,7 +11,7 @@
 		top: 0;
 		left: 0;
 		z-index: 1300;
-		border-top:10px solid $stanfordRed;
+		border-top:10px solid $stanford-red;
 	}
 }
 
@@ -107,7 +107,7 @@
 			width: 100%;
 			text-align: center;
 			margin:0;
-			color:#fff;
+			color:$white;
 			position: absolute;
 			right: 0;
 			left: auto;

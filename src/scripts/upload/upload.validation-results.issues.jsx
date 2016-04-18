@@ -36,7 +36,7 @@ class Issues extends React.Component {
             });
             // issue panel
             return (
-                <Panel key={index} header={header} className="validation-error fadeIn" eventKey={index}>
+                <Panel key={index} header={header} className="validation-error fade-in" eventKey={index}>
                     {subErrors}
                 </Panel>
             );

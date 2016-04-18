@@ -23,7 +23,7 @@ export default class ValidationResults extends React.Component {
             let fileCount = this._countFiles(errors);
             let errorHeader = <span>view {errors.length} {pluralize('error', errors.length)} in {fileCount} {pluralize('files', fileCount)}</span>;
             errorsWrap = (
-                <Panel className="fadeIn upload-panel error-wrap" header={errorHeader}  eventKey='1'>
+                <Panel className="fade-in upload-panel error-wrap" header={errorHeader}  eventKey='1'>
                     <Issues issues={errors} issueType="Error"/>
                 </Panel>
             );
@@ -35,7 +35,7 @@ export default class ValidationResults extends React.Component {
             let fileCount = this._countFiles(warnings);
             let warningHeader = <span>view {warnings.length} {pluralize('warning', warnings.length)} in {fileCount} {pluralize('files', fileCount)}</span>;
             warningWrap = (
-                <Panel className="fadeIn upload-panel warning-wrap" header={warningHeader}  eventKey='2'>
+                <Panel className="fade-in upload-panel warning-wrap" header={warningHeader}  eventKey='2'>
                     <Issues issues={warnings} issueType="Warning" />
                 </Panel>
             );

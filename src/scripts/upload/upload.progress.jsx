@@ -30,7 +30,7 @@ export default class UploadProgress extends React.Component {
                 <span className="upload-dirname">
                     <label><i className="folderIcon fa fa-folder-open" /></label>
                     {this.props.name}
-                    <span className="message fadeIn"> {completed}/{total} files complete</span>
+                    <span className="message fade-in"> {completed}/{total} files complete</span>
 
                 </span>
                 <ProgressBar active now={progress} />

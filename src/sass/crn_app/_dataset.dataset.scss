@@ -1,46 +1,49 @@
 .dataset {
-	.dataset-wrap{
+	.dataset-wrap {
 		padding-top:35px;
-		h1{
+		h1 {
 			margin: 0 0 15px;
 			padding: 0;
 			text-transform: uppercase;
 			font-weight: 100;
 			font-family: 'Cabin', sans-serif;
 			font-size: 16px;
-			.nav.nav-pills{
+			.nav.nav-pills {
 				float: left;
 			}
 			 
 			 .form-group {
 				margin: 0;
-				.cte-display{
+				.cte-display {
 				 	font-size: 30px;
 				 }
-				.cte-edit{    
+				.cte-edit {    
 				 	margin: 10px 0;
 				}
 			}
 		}
-		h6{margin:5px 0 0;}
-		.dataset-readme{
+		h6 {margin:5px 0 0;}
+		.dataset-readme {
 			margin-top: 20px;
-			.description-item{
+			.description-item {
 				padding-bottom:10px;
 				margin-bottom: 10px;
 				//border-bottom:2px solid #eee;
 				.form-group {
 					margin: 0;
-					.cte-display{
-						border-bottom:1px solid #eee;
+					.cte-display {
+						border-bottom:1px solid $eee;
 						padding:10px;
 					}
-					.cte-edit{
-						border-bottom:1px solid #eee;
+					.cte-edit {
+						border-bottom:1px solid $eee;
+						.cte-edit-array {
+							margin-bottom: 10px;
+						}
 					}
-					label{
+					label {
 					    font-size: 18px;
-					    color: #424242;
+					    color: $c-42;
 					    line-height: 21px;
 					    padding: 0;
 					}
@@ -54,8 +57,8 @@
 					font-size: 10px;
 					padding-right: 5px;
 				}
-				.file-name-link{
-					i{
+				.file-name-link {
+					i {
 						font-size: 13px;
 					}
 				}

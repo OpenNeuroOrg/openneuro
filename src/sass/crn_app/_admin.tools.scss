@@ -1,0 +1,26 @@
+.dataset-tools-wrap-admin {
+
+    .tool {
+        display: block;
+        float: left;
+        width: auto;
+        margin: 3px 0 0 10px;
+        overflow: hidden;
+
+        .btn-admin.warning {
+            padding: 6px 0;
+
+            i {
+
+                &.fa-ban,
+                &.fa-check-square-o,
+                &.fa-square-o {
+                    font-size: 13px;
+                    position: relative;
+                    top: 0;
+                }
+
+            }
+        }
+    }
+}
