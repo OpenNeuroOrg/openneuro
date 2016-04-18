@@ -269,16 +269,14 @@ export default {
         });
     },
 
-    getFile(path, callback) {
+    getFile(path, res) {
         this.auth(() => {
-            request.get(path, {
+            request.getProxy(path, {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json'
                 }
-            }, (err, res) => {
-                this.handleResponse(err, res, callback, this.getFile.bind(this, path, callback));
-            });
+            }, res);
         });
     }
 
