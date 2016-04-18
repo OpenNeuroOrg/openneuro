@@ -25,6 +25,7 @@ let Usermenu = React.createClass({
         }
 
         let gear = (<i className="fa fa-gear" />);
+
         return (
             <div className="clearfix user-wrap">
                 <span className="username">
