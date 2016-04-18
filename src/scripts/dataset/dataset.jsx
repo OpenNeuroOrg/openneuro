@@ -23,101 +23,101 @@ let Dataset = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-	componentWillReceiveProps() {
-		let params = this.getParams();
-		if (params.snapshotId) {
-			actions.trackView(params.snapshotId);
-			actions.loadDataset(params.snapshotId, {snapshot: true});
-		} else if (params.datasetId && this.state.dataset && params.datasetId !== this.state.dataset._id) {
-			actions.loadDataset(params.datasetId);
-		}
-	},
+    componentWillReceiveProps() {
+        let params = this.getParams();
+        if (params.snapshotId) {
+            actions.trackView(params.snapshotId);
+            actions.loadDataset(params.snapshotId, {snapshot: true});
+        } else if (params.datasetId && this.state.dataset && params.datasetId !== this.state.dataset._id) {
+            actions.loadDataset(params.datasetId);
+        }
+    },
 
-	componentDidMount() {
-		let params = this.getParams();
-		if (params.snapshotId) {
-			actions.trackView(params.snapshotId);
-			actions.loadDataset(params.snapshotId, {snapshot: true});
-		} else if (params.datasetId) {
-			actions.loadDataset(params.datasetId);
-		}
-	},
+    componentDidMount() {
+        let params = this.getParams();
+        if (params.snapshotId) {
+            actions.trackView(params.snapshotId);
+            actions.loadDataset(params.snapshotId, {snapshot: true});
+        } else if (params.datasetId) {
+            actions.loadDataset(params.datasetId);
+        }
+    },
 
-	componentWillUnmount() {
-		actions.setInitialState({apps: this.state.apps});
-	},
+    componentWillUnmount() {
+        actions.setInitialState({apps: this.state.apps});
+    },
 
-	render() {
-		let dataset = this.state.dataset;
-		let tree    = this.state.datasetTree;
-		let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
-		let content;
+    render() {
+        let dataset = this.state.dataset;
+        let tree    = this.state.datasetTree;
+        let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
+        let content;
 
-		if (dataset) {
+        if (dataset) {
 
-			let errors = dataset.validation.errors;
-			let warnings = dataset.validation.warnings;
+            let errors = dataset.validation.errors;
+            let warnings = dataset.validation.warnings;
 
-			content = (
-				<div className="fadeIn dashboard">
-					<div className="clearfix">
-						<div className="col-xs-12 dataset-tools-wrap">
-							<Tools dataset={dataset}
-								   selectedSnapshot={this.state.selectedSnapshot}
-								   snapshots={this.state.snapshots} />
-						</div>
-						<div className="col-xs-12 dataset-wrap">
-							<div className="row">
-								<div className="col-xs-7">
-									<h1 className="clearfix">
-										<ClickToEdit
-											value={dataset.label}
-											label={false}
-											editable={canEdit}
-											onChange={actions.updateName}/>
-									</h1>
-									{this._uploaded(dataset)}
-									{this._authors(dataset.authors)}
-									{this._views(dataset.views)}
-									{this._downloads(dataset.downloads)}
-									<div className="status-container">
-										<Statuses dataset={dataset} />
-									</div>
-									<MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
-								</div>
-								<div className="col-xs-5">
-									<div>
-										{this._validation(errors, warnings, dataset.status.validating)}
-										<div className="fadeIn col-xs-12">
-											<Jobs />
-										</div>
-										{this._fileTree(dataset, tree, canEdit)}
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			);
-		} else {
-			let message;
-			let status = this.state.status;
-			if (status === 404) {message = 'Dataset not found';}
-			if (status === 403) {message = 'You are not authorized to view this dataset';}
-			content = (
-				<div>
-					<h2 className="message-4">{message}</h2>
-				</div>
-			);
-		}
+            content = (
+                <div className="fadeIn dashboard">
+                    <div className="clearfix">
+                        <div className="col-xs-12 dataset-tools-wrap">
+                            <Tools dataset={dataset}
+                                   selectedSnapshot={this.state.selectedSnapshot}
+                                   snapshots={this.state.snapshots} />
+                        </div>
+                        <div className="col-xs-12 dataset-wrap">
+                            <div className="row">
+                                <div className="col-xs-7">
+                                    <h1 className="clearfix">
+                                        <ClickToEdit
+                                            value={dataset.label}
+                                            label={false}
+                                            editable={canEdit}
+                                            onChange={actions.updateName}/>
+                                    </h1>
+                                    {this._uploaded(dataset)}
+                                    {this._authors(dataset.authors)}
+                                    {this._views(dataset.views)}
+                                    {this._downloads(dataset.downloads)}
+                                    <div className="status-container">
+                                        <Statuses dataset={dataset} />
+                                    </div>
+                                    <MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
+                                </div>
+                                <div className="col-xs-5">
+                                    <div>
+                                        {this._validation(errors, warnings, dataset.status.validating)}
+                                        <div className="fadeIn col-xs-12">
+                                            <Jobs />
+                                        </div>
+                                        {this._fileTree(dataset, tree, canEdit)}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        } else {
+            let message;
+            let status = this.state.status;
+            if (status === 404) {message = 'Dataset not found';}
+            if (status === 403) {message = 'You are not authorized to view this dataset';}
+            content = (
+                <div>
+                    <h2 className="message-4">{message}</h2>
+                </div>
+            );
+        }
 
-		return (
-			<div className="fadeIn inner-route dataset light">
-            	{this.state.loading ? <Spinner active={true} /> : content}
-            	<UpdateWarn show={this.state.modals.update} onHide={actions.toggleModal.bind(null, 'update')} update={this.state.currentUpdate} />
-			</div>
-    	);
-	},
+        return (
+            <div className="fadeIn inner-route dataset light">
+                {this.state.loading ? <Spinner active={true} /> : content}
+                <UpdateWarn show={this.state.modals.update} onHide={actions.toggleModal.bind(null, 'update')} update={this.state.currentUpdate} />
+            </div>
+        );
+    },
 
 // template methods ---------------------------------------------------
 

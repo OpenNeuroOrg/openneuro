@@ -2,7 +2,6 @@
 
 import React   from 'react';
 import actions from './dataset.actions.js';
-import Spinner from '../common/partials/spinner.jsx';
 import {Modal} from 'react-bootstrap';
 import moment  from 'moment';
 
@@ -10,69 +9,69 @@ export default class Publish extends React.Component {
 
 // life cycle events --------------------------------------------------
 
-	constructor() {
-		super();
-		this.state = {
-			loading: false,
-			selectedSnapshot: '',
-			message: null,
-			error: false
-		};
-	}
+    constructor() {
+        super();
+        this.state = {
+            loading: false,
+            selectedSnapshot: '',
+            message: null,
+            error: false
+        };
+    }
 
-	componentWillReceiveProps() {
-		this.props.snapshots.map((snapshot) => {
-			if (snapshot._id == this.props.dataset._id) {
-				if (snapshot.original) {
-					this.setState({selectedSnapshot: snapshot._id});
-				} else if (this.props.snapshots.length > 1) {
-					this.setState({selectedSnapshot: this.props.snapshots[1]._id});
-				}
-				return;
-			}
-		});
-	}
+    componentWillReceiveProps() {
+        this.props.snapshots.map((snapshot) => {
+            if (snapshot._id == this.props.dataset._id) {
+                if (snapshot.original) {
+                    this.setState({selectedSnapshot: snapshot._id});
+                } else if (this.props.snapshots.length > 1) {
+                    this.setState({selectedSnapshot: this.props.snapshots[1]._id});
+                }
+                return;
+            }
+        });
+    }
 
-	render() {
+    render() {
 
-		let form = (
-			<div className="anaylsis-modal clearfix">
-				{this._snapshots()}
-				{this._submit()}
-			</div>
-		);
+        let form = (
+            <div className="anaylsis-modal clearfix">
+                {this._snapshots()}
+                {this._submit()}
+            </div>
+        );
 
-		let message = (
-			<div>
-				<div className={this.state.error ? 'alert alert-danger' : null}>
-					{this.state.error ? <h4 className="danger">Error</h4> : null}
-					<h5>{this.state.message}</h5>
-				</div>
-				<button className="btn-admin-blue" onClick={this._hide.bind(this)}>OK</button>
-			</div>
-		);
+        let message = (
+            <div>
+                <div className={this.state.error ? 'alert alert-danger' : null}>
+                    {this.state.error ? <h4 className="danger">Error</h4> : null}
+                    <h5>{this.state.message}</h5>
+                </div>
+                <button className="btn-admin-blue" onClick={this._hide.bind(this)}>OK</button>
+            </div>
+        );
 
-		let body;
-		if (this.state.message) {
-			body = message;
-		} else {
-			body = form;
-		}
+        let body;
+        if (this.state.message) {
+            body = message;
+        } else {
+            body = form;
+        }
 
-		return (
-			<Modal show={this.props.show} onHide={this._hide.bind(this)}>
-    			<Modal.Header closeButton>
-    				<Modal.Title>Publish</Modal.Title>
-    			</Modal.Header>
-    			<hr className="modal-inner" />
-    			<Modal.Body>
-					<div className="dataset">
-						{body}
-					</div>
-    			</Modal.Body>
-    		</Modal>
-    	);
-	}
+        return (
+            <Modal show={this.props.show} onHide={this._hide.bind(this)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Publish</Modal.Title>
+                </Modal.Header>
+                <hr className="modal-inner" />
+                <Modal.Body>
+                    <div className="dataset">
+                        {body}
+                    </div>
+                </Modal.Body>
+            </Modal>
+        );
+    }
 
 // template methods ---------------------------------------------------
 
