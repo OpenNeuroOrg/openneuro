@@ -70,21 +70,22 @@ export default {
         this.error = (err, req) => {
             if (error) {error(err, req);}
         };
-        let existingProjectId = null;
+        let existingProject = null;
         scitran.getProjects({authenticate: true}, (projects) => {
             for (let project of projects) {
                 if (project.label === fileTree[0].name && project.group === userId) {
-                    existingProjectId = project._id;
+                    project.children = project.files;
+                    existingProject  = project;
                     break;
                 }
             }
 
-            if (existingProjectId) {
-                this.currentProjectId = existingProjectId;
-                bids.getDataset(existingProjectId, (oldDataset) => {
+            if (existingProject) {
+                this.currentProjectId = existingProject._id;
+                bids.getDatasetTree(existingProject, (oldDataset) => {
                     let newDataset = fileTree[0];
                     this.progressEnd();
-                    this.resumeSubjects(newDataset.children, oldDataset.children, newDataset.name, existingProjectId);
+                    this.resumeSubjects(newDataset.children, oldDataset[0].children, newDataset.name, this.currentProjectId);
                 });
             } else {
                 let body = {
