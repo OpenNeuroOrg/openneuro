@@ -17,6 +17,19 @@ export default {
 		});
 	},
 
+	/**
+	 * GET PROXY
+	 *
+	 * Functions the same as a get request but takes a
+	 * response object instead of a callback and pipe
+	 * the request response to the response object.
+	 */
+	getProxy(url, options, res) {
+		handleRequest(url, options, (req) => {
+			request.get(req).pipe(res);
+		});
+	},
+
 	post(url, options, callback) {
 		handleRequest(url, options, (req) => {
 			request.post(req, (err, res) => {
