@@ -226,7 +226,7 @@ export default {
                 error.http_code = 404;
                 return next(error);
             }
-            scitran.getProject(job.datasetId, (err, resp) => {
+            scitran.getProject(job.snapshotId, (err, resp) => {
                 let hasPermission;
                 if (!req.user) {
                     hasPermission = false;
