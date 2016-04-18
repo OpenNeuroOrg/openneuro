@@ -103,7 +103,7 @@
 					&.cancel,
 					&.success{
 						background: $brand-danger;
-						color:#fff;
+						color:$white;
 						font-size: 14px;
 						padding: 5px 8px;
 						margin: 7px 5px 5px 0;
@@ -123,7 +123,7 @@
 				}
 			}
 		.resume-upload-tool {
-			@extend .clearfix;
+			@extend %clearfix;
 			display: block;
 			float: left;
 			.fileupload-btn{

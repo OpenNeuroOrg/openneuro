@@ -23,7 +23,7 @@ let alert = React.createClass({
         if (type === 'Success') {bsStyle = 'success';}
 
         let alert = (
-            <Alert className="slideInLeft clearfix" bsStyle={bsStyle}>
+            <Alert className="slide-in-left clearfix" bsStyle={bsStyle}>
                 <div className="alert-left">
                     <strong>{type}! </strong>
                     {this.state.alertMessage}

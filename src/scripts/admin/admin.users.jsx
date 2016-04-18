@@ -18,7 +18,7 @@ let users = React.createClass({
         let users = this.state.users.map((user, index) => {
             let adminBadge = user.root ? 'Admin' : null;
             return (
-                <div className="fadeIn user-panel clearfix" key={user._id}>
+                <div className="fade-in user-panel clearfix" key={user._id}>
                     <div className="col-xs-4 user-col">
                         <h3>
                             <div className="userName">
@@ -37,11 +37,11 @@ let users = React.createClass({
         });
 
         return (
-            <div className="dashboard-dataset-teasers fadeIn inner-route admin-users clearfix">
+            <div className="dashboard-dataset-teasers fade-in inner-route admin-users clearfix">
                 <h2>Current Users</h2>
                 <div>
                     <div className="col-xs-12 users-panel-wrap">
-                            <div className="fadeIn user-panel-header clearfix" >
+                            <div className="fade-in user-panel-header clearfix" >
                             <div className="col-xs-4 user-col"><label>User</label></div>
                             <div className="col-xs-4 user-col"><label>Notes</label></div>
                             <div className="col-xs-4 user-col"><label>Actions</label></div>

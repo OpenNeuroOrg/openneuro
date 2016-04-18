@@ -14,7 +14,7 @@ let Resume = React.createClass({
     render () {
         return (
             <div>
-                <span className="message fadeIn error">
+                <span className="message fade-in error">
                     You have already uploaded a dataset with this name. Click continue to resume an unfinished upload or <span className="rename-tab-link" onClick={this._rename}>choose another name.</span>
                 </span>
                 <button className="btn-blue" onClick={this._upload.bind(null, this.state.tree)}>Continue</button>

@@ -61,13 +61,13 @@ let Issues = React.createClass({
         // messages
         let uploadResetLink = <span className="upload-reset-link" onClick={this._reset}>select your folder again</span>;
         if (errors === 'Invalid') {
-            return <span className="message error fadeIn">This does not appear to be a BIDS dataset. <span className="upload-reset-link" onClick={this._reset}>Select a new folder</span> and try again.</span>;
+            return <span className="message error fade-in">This does not appear to be a BIDS dataset. <span className="upload-reset-link" onClick={this._reset}>Select a new folder</span> and try again.</span>;
         } else if (errors.length > 0) {
-            return <span className="message error fadeIn">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and {uploadResetLink}.</span>;
+            return <span className="message error fade-in">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and {uploadResetLink}.</span>;
         }  else if (warnings.length > 0) {
-            return <span className="message error fadeIn">We found {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and {uploadResetLink}.</span>;
+            return <span className="message error fade-in">We found {warningCount} in your dataset. Proceed with this dataset by clicking continue or fix the issues and {uploadResetLink}.</span>;
         } else {
-            return <span className="message fadeIn">Proceed with this dataset by clicking continue or {uploadResetLink}.</span>;
+            return <span className="message fade-in">Proceed with this dataset by clicking continue or {uploadResetLink}.</span>;
         }
     },
 

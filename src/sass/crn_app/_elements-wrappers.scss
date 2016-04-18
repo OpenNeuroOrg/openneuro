@@ -1,4 +1,19 @@
+%clearfix {
 
+    &::before,
+    &::after {
+        content: ' ';
+        display: table;
+    }
+
+    &::after {
+        clear: both;
+    }
+}
+
+.clearfix { 
+	@extend %clearfix;
+}
 
 // Wrapper tags ========================
 
@@ -26,7 +41,7 @@ body{
 
 .inner-route{
 	&.light{
-		background: #fff;
+		background: $white;
 	}
 	.message-4{
 		text-align: center;
@@ -77,7 +92,7 @@ h1,h2,h3,h4,h5,h6{
     width: 100%;
     overflow-y: scroll;
 	&.dataset{
-		background:#fff;
+		background:$white;
 	}
 }
 .route-wrapper{
@@ -121,16 +136,16 @@ h1,h2,h3,h4,h5,h6{
 	&:active,
 	&.hover,
 	&.active {
-		border-color:$primaryHover;
+		border-color:$primary-hover;
 		background: #fafafa;
-		color:$primaryHover;
+		color:$primary-hover;
 	}
 }
 
 .btn-blue{
 	@extend .btn-basic;
     background-color: #007c92;
-    color: #fff;
+    color: $white;
     margin: 0;
     border:none;
 	&:hover,
@@ -140,7 +155,7 @@ h1,h2,h3,h4,h5,h6{
 	&:focus  {
 		background: darken($sky, 10%);
 		transition: all 0.3s ease-out;
-		color:#fff;
+		color:$white;
 		outline: none;
 	}
 }
@@ -202,7 +217,7 @@ h1,h2,h3,h4,h5,h6{
 	    color: $primary;
 	    background:none;
 	    &:hover{
-	    	color: $primaryHover;
+	    	color: $primary-hover;
 	    }
 	    i{margin-left:6px;}
 	}
@@ -295,19 +310,19 @@ h1,h2,h3,h4,h5,h6{
     color:$primary;
     margin-left: 15px;
     &.active{
-    	background: #fff !important;
-    	border-color:#fff;
+    	background: $white !important;
+    	border-color:$white;
     	border-left: 1px solid #f6f6f6;
-    	border-bottom-color:#fff;
+    	border-bottom-color:$white;
     	color:$primary;
     	box-shadow: 0px -1px 1px -1px rgba(0,0,0,0.5);
     }
     &:hover{
-    	background:#fff !important;
+    	background:$white !important;
     	color: $sky;
     }
     &.active:hover{
-    	background:#fff !important;
+    	background:$white !important;
     	color:$primary;
     	cursor: normal;
     	outline:none;
@@ -328,7 +343,7 @@ h1,h2,h3,h4,h5,h6{
 	&.cancel,
 	&.success{
 		background: $brand-danger;
-		color:#fff;
+		color:$white;
 		font-size: 14px;
 		padding: 5px 8px;
 		margin: 7px 5px 5px 0;
@@ -389,7 +404,7 @@ h1,h2,h3,h4,h5,h6{
 			&.cancel,
 			&.success{
 				background: $brand-danger;
-				color:#fff;
+				color:$white;
 				font-size: 10px;
 				padding:2px;
 				margin: 0 5px 0 0;
@@ -455,10 +470,10 @@ h1,h2,h3,h4,h5,h6{
 	width: 72px;
 	display: block;
 	overflow: hidden;
-	background:$primaryHover;
-	color:#fff;
+	background:$primary-hover;
+	color:$white;
 	&:focus, &:hover, &:active{
-		color: #fff;
+		color: $white;
 		background:$primary;
 	}
 	input{
@@ -562,14 +577,14 @@ select {
   height: 40px;
   border-radius:0;
   border: 1px solid #d8d8d8;
-  background: #fff;
+  background: $white;
   font-size: 16px;
   text-indent: 5px;
   color: #a5a5a5;
 }
 
 
-.selectBox-style{
+.select-box-style{
 	padding:5px 20px 5px 10px;
 	margin: 10px 10px 10px 0;
 	color:black;
@@ -580,7 +595,7 @@ select {
 	cursor:pointer;
 	border: 1px solid #ccc;
 	border-radius:0;
-	background:#fff;
+	background:$white;
 }
 
 .caret-down{

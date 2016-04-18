@@ -59,7 +59,7 @@ let Dataset = React.createClass({
             let warnings = dataset.validation.warnings;
 
             content = (
-                <div className="fadeIn dashboard">
+                <div className="dashboard">
                     <div className="clearfix">
                         <div className="col-xs-12 dataset-tools-wrap">
                             <Tools selectedSnapshot={this.state.selectedSnapshot} />
@@ -86,7 +86,7 @@ let Dataset = React.createClass({
                                 <div className="col-xs-5">
                                     <div>
                                         {this._validation(errors, warnings, dataset.status.validating)}
-                                        <div className="fadeIn col-xs-12">
+                                        <div className="fade-in col-xs-12">
                                             <Jobs />
                                         </div>
                                         {this._fileTree(dataset, tree, canEdit)}
@@ -110,7 +110,7 @@ let Dataset = React.createClass({
         }
 
         return (
-            <div className="fadeIn inner-route dataset light">
+            <div className="fade-in inner-route dataset light">
                 {this.state.loading ? <Spinner active={true} /> : content}
                 <UpdateWarn show={this.state.showUpdateModal} onHide={actions.toggleModal.bind(null, 'Update')} update={this.state.currentUpdate} />
             </div>
@@ -146,7 +146,7 @@ let Dataset = React.createClass({
         if (!dataset.status.incomplete) {
             return (
                 <div className="col-xs-12">
-                    <div className="fileStructure fadeIn panel-group">
+                    <div className="file-structure fade-in panel-group">
                         <div className="panel panel-default">
                             <div className="panel-heading" >
                                 <h4 className="panel-title">Dataset File Tree</h4>
@@ -181,14 +181,14 @@ let Dataset = React.createClass({
                 errMessage = 'This does not appear to be a BIDS dataset';
             } else {
                 if (errors.length > 0) {
-                    errMessage = <span className="message error fadeIn">Your dataset is no longer valid. You must fix the <strong>{errors.length + ' ' + pluralize('Error', errors.length)}</strong> to use all of the site features.</span>;
+                    errMessage = <span className="message error fade-in">Your dataset is no longer valid. You must fix the <strong>{errors.length + ' ' + pluralize('Error', errors.length)}</strong> to use all of the site features.</span>;
                 }
                 if (warnings.length > 0) {
-                    warnMessage = <span className="message error fadeIn">We found <strong>{warnings.length + ' ' + pluralize('Warning', warnings.length)}</strong> in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant.</span>;
+                    warnMessage = <span className="message error fade-in">We found <strong>{warnings.length + ' ' + pluralize('Warning', warnings.length)}</strong> in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant.</span>;
                 }
             }
             return (
-                <div className="fadeIn col-xs-12">
+                <div className="fade-in col-xs-12">
                     <h3 className="metaheader">Validation</h3>
                     <div>{errMessage} {warnMessage}</div><br />
                     <Results errors={errors} warnings={warnings} />

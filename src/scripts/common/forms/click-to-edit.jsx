@@ -53,7 +53,7 @@ let ClickToEdit = React.createClass({
 
         switch (type) {
         case 'string':
-            display = <div className="cte-display"><div className="fadeIn">{value}</div></div>;
+            display = <div className="cte-display"><div className="fade-in">{value}</div></div>;
             input = (
                 <div>
                     <textarea className="form-control" value={value} onChange={this._handleChange.bind(null, type)}></textarea>
@@ -78,7 +78,7 @@ let ClickToEdit = React.createClass({
         }
 
         let edit = (
-            <div className="cte-edit fadeIn clearfix">
+            <div className="cte-edit fade-in clearfix">
                 {!this.state.loading ? input : null}
                 <Spinner active={this.state.loading} />
             </div>
@@ -100,7 +100,7 @@ let ClickToEdit = React.createClass({
     _authorList(authors) {
         let list = authors.map((item, index) => {
             return (
-                <div className="fadeIn" key={index}>
+                <div className="fade-in" key={index}>
                     <span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
                 </div>
             );
@@ -112,7 +112,7 @@ let ClickToEdit = React.createClass({
         let edit = this.state.edit;
         if (this.props.editable) {
             return (
-                <button onClick={this._toggleEdit} className="cte-edit-button btn btn-admin fadeIn" >
+                <button onClick={this._toggleEdit} className="cte-edit-button btn btn-admin fade-in" >
                     <span><i className={'fa fa-' + (edit ? 'times' : 'pencil')}></i> {edit ? 'Hide' : 'Edit'}</span>
                 </button>
             );
@@ -133,7 +133,7 @@ let ClickToEdit = React.createClass({
     _fileList(files) {
         let list = files.map((file) => {
             return (
-                <div className="fadeIn file-array" key={file.name}>
+                <div className="fade-in file-array" key={file.name}>
                     <span>
                         <span className="file-array-btn">
                             <WarnButton

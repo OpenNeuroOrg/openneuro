@@ -10,7 +10,7 @@ export default class Spinner extends React.Component {
 
     render() {
         let spinner = (
-            <div className="loading-wrap fadeIn">
+            <div className="loading-wrap fade-in">
                 <div className="spinner">
                     <div className="spinnerinner"></div>
                 </div>

@@ -83,7 +83,7 @@ let Jobs = React.createClass({
 
             return (
                 <Accordion accordion className="results">
-                    <Panel className="fadeIn" header="Download Results" key={run._id} eventKey={run._id}>
+                    <Panel className="fade-in" header="Download Results" key={run._id} eventKey={run._id}>
                         <ul>{resultLinks}</ul>
                     </Panel>
                 </Accordion>
@@ -104,7 +104,7 @@ let Jobs = React.createClass({
 
             return (
                 <Accordion accordion className="results">
-                    <Panel className="fadeIn" header="Parameters" key={run._id} eventKey={run._id}>
+                    <Panel className="fade-in" header="Parameters" key={run._id} eventKey={run._id}>
                         <ul>{parameters}</ul>
                     </Panel>
                 </Accordion>

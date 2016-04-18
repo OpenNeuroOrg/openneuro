@@ -15,7 +15,7 @@ export default class Happybrowser extends React.Component {
     render () {
         return (
 
-                <div className={this.state.hbVisable ? 'hbMarkup' : 'hbMarkup hidden'}>
+                <div className={this.state.hbVisable ? 'happybrowser-markup' : 'happybrowser-markup hidden'}>
                     <div className="hb-wrap clearfix">
                         
                         <div className="hb-text clearfix">
