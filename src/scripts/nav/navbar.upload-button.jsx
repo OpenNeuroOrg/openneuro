@@ -1,12 +1,12 @@
 // dependencies ------------------------------------------------------------------
 
-import React            from 'react';
-import Reflux           from 'reflux';
-import Actions          from '../upload/upload.actions.js';
-import uploadStore      from '../upload/upload.store.js';
-import Upload           from '../upload/upload.jsx';
+import React         from 'react';
+import Reflux        from 'reflux';
+import Actions       from '../upload/upload.actions.js';
+import uploadStore   from '../upload/upload.store.js';
+import Upload        from '../upload/upload.jsx';
 import {ProgressBar,
-        Modal}          from 'react-bootstrap';
+        Modal}       from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
 
@@ -17,7 +17,6 @@ let UploadBtn = React.createClass({
 // life cycle methods ------------------------------------------------------------
 
     render: function () {
-
         let completed = this.state.progress.completed;
         let total     = this.state.progress.total;
         let progress  = total > 0 ? Math.floor(completed / total * 100) : 0;
@@ -50,7 +49,7 @@ let UploadBtn = React.createClass({
         return (
             <span>
                 <div className="upload-btn-wrap">
-                {uploadStore.data.uploadStatus == 'uploading' ? progress : uploadBtn}
+                {this.state.uploadStatus == 'uploading' ? progress : uploadBtn}
                 {uploadModal}
                 <img src="/favicon-upload.png" id="favicon_upload" className="hidden"/>
                 </div>

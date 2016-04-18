@@ -62,7 +62,9 @@ let Dataset = React.createClass({
                 <div className="fadeIn dashboard">
                     <div className="clearfix">
                         <div className="col-xs-12 dataset-tools-wrap">
-                            <Tools selectedSnapshot={this.state.selectedSnapshot} />
+                            <Tools dataset={dataset}
+                                   selectedSnapshot={this.state.selectedSnapshot}
+                                   snapshots={this.state.snapshots} />
                         </div>
                         <div className="col-xs-12 dataset-wrap">
                             <div className="row">
@@ -112,7 +114,7 @@ let Dataset = React.createClass({
         return (
             <div className="fadeIn inner-route dataset light">
                 {this.state.loading ? <Spinner active={true} /> : content}
-                <UpdateWarn show={this.state.showUpdateModal} onHide={actions.toggleModal.bind(null, 'Update')} update={this.state.currentUpdate} />
+                <UpdateWarn show={this.state.modals.update} onHide={actions.toggleModal.bind(null, 'update')} update={this.state.currentUpdate} />
             </div>
         );
     },

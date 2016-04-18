@@ -144,7 +144,9 @@ let UploadStore = Reflux.createStore({
             activeKey = 3;
             renameEnabled = false;
             callback = () => {
-                this.validate(selectedFiles.list);
+                if (this.data.uploadStatus == 'files-selected') {
+                    this.validate(selectedFiles.list);
+                }
             };
         }
         this.setInitialState({
@@ -262,7 +264,6 @@ let UploadStore = Reflux.createStore({
         window.onbeforeunload = () => {
             return 'You are currently uploading files. Leaving this site will cancel the upload process.';
         };
-        
         let uploadingFavicon = document.getElementById('favicon_upload');
         favicon.image(uploadingFavicon); // set new favicon image
 
@@ -271,7 +272,6 @@ let UploadStore = Reflux.createStore({
             this.update({progress: progress, uploading: true, projectId: projectId});
             if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
             if (progress.total === progress.completed) {
-                //let note = {author: 'uploadStatus', text: 'complete'};
                 scitran.removeTag('projects', projectId, 'incomplete', () => {
                     this.uploadComplete(projectId);
                 });
