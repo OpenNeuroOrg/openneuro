@@ -21,7 +21,7 @@ export default {
      * GET PROXY
      *
      * Functions the same as a get request but takes a
-     * response object instead of a callback and pipe
+     * response object instead of a callback and pipes
      * the request response to the response object.
      */
     getProxy(url, options, res) {
