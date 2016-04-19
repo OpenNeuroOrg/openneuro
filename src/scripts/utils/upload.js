@@ -1,34 +1,21 @@
-import request       from './request';
+import request from './request';
+import async   from 'async';
+
+/**
+ * Maximum Concurrent Requests
+ */
+let maxRequests = 3;
 
 let upload = {
 
-    queue: [],
-    activeRequests: 0,
-    maxRequests: 2,
-
     /**
-     * Add
+     * Queue
      *
-     * Takes a file request object, generates
-     * an MD5 hash and then sends it into the
-     * upload queue.
+     * A queueing strategy for upload requests.
+     * Allows concurrency up to the value for
+     * 'maxRequests'
      */
-    add (req) {
-        if (this.maxRequests >= this.activeRequests) {
-            this.start(req);
-        } else {
-            this.queue.push(req);
-        }
-    },
-
-    /**
-     * Start
-     *
-     * Takes a request object and starts an
-     * upload request.
-     */
-    start (req) {
-        this.activeRequests++;
+    queue: async.queue((req, callback) => {
         req.progressStart(req.file.name);
         request.upload(req.url, {
             fields: {
@@ -41,13 +28,19 @@ let upload = {
                 req.error(err, req);
             } else {
                 req.progressEnd(req.file.name);
-                this.activeRequests--;
-                if (this.queue.length > 0 && this.maxRequests >= this.activeRequests) {
-                    this.start(this.queue[0]);
-                    this.queue.shift();
-                }
             }
+            callback();
         });
+    }, maxRequests),
+
+    /**
+     * Add
+     *
+     * Takes a file request object & sends it into the
+     * upload queue.
+     */
+    add (req) {
+        this.queue.push(req);
     }
 
 };
