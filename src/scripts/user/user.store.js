@@ -2,6 +2,8 @@
 
 import React            from 'react';
 import Reflux           from 'reflux';
+import hello            from 'hellojs';
+import async            from 'async';
 import Actions          from './user.actions.js';
 import config           from '../../../config';
 import router           from '../utils/router-container';
@@ -11,7 +13,6 @@ import upload           from '../upload/upload.actions';
 import dashboardActions from '../dashboard/datasets.actions';
 import datasetActions   from '../dataset/dataset.actions';
 import notifications    from '../notification/notification.actions';
-import hello            from 'hellojs';
 
 hello.init({google: config.auth.google.clientID});
 
@@ -287,31 +288,20 @@ let UserStore = Reflux.createStore({
      * synchronously. The 'checkAuth' method is the primary method
      * to start the token check process.
      */
-
-    queue: [],
-
-    activeCheck: false,
-
-    checkAuth(successCallback, errorCallback) {
-        if (!this.activeCheck) {
-            this.startAuthCheck(successCallback, errorCallback);
-        } else {
-            let authReq = {successCallback, errorCallback};
-            this.queue.push(authReq);
-        }
-    },
-
-    startAuthCheck(successCallback, errorCallback) {
-        this.activeCheck = true;
+    queue: async.queue((authReq, callback) => {
         let currentAccount = window.localStorage.hasOwnProperty('scitranUser') ? JSON.parse(window.localStorage.scitranUser).email : '';
         hello('google').login({scope: 'email,openid', force: false, login_hint: currentAccount, display: 'none'}).then((res) => {
-            successCallback(res.authResponse.access_token);
-            this.activeCheck = false;
-            if (this.queue.length > 0) {
-                this.startAuthCheck(this.queue[0].successCallback, this.queue[0].errorCallback);
-                this.queue.shift();
-            }
-        }, errorCallback);
+            authReq.successCallback(res.authResponse.access_token);
+            callback();
+        }, () => {
+            authReq.errorCallback();
+            callback();
+        });
+    }, 1),
+
+    checkAuth(successCallback, errorCallback) {
+        let authReq = {successCallback, errorCallback};
+        this.queue.push(authReq);
     }
 
 });
