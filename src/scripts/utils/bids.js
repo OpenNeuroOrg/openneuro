@@ -46,9 +46,20 @@ export default  {
     /**
      * Get Modalities
      *
-     * Get all BIDS modalidalities for a session.
+     * Get all BIDS modalities for a session.
      */
-    getModalities: scitran.getAcquisitions,
+    getModalities(sessionId, callback) {
+        scitran.getAcquisitions(sessionId, (modalities) => {
+            modalities.sort((a, b) => {
+                let aLabel = a.label.toLowerCase();
+                let bLabel = b.label.toLowerCase();
+                if (aLabel < bLabel) {return -1;}
+                else if (aLabel > bLabel) {return 1;}
+                else {return 0;}
+            });
+            callback(modalities);
+        });
+    },
 
     /**
      * Get Datasets
