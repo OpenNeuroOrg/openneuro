@@ -11,6 +11,7 @@ import userActions from '../user/user.actions';
 import upload      from '../utils/upload';
 import config      from '../../../config';
 import files       from '../utils/files';
+import request     from '../utils/request';
 
 let datasetStore = Reflux.createStore({
 
@@ -693,15 +694,21 @@ let datasetStore = Reflux.createStore({
     /**
      * DisplayFile
      */
-    displayFile(name, text) {
-        let modals = this.data.modals;
-        modals.displayFile = true;
-        this.update({
-            displayFile: {
-                name,
-                text
-            },
-            modals
+    displayFile(jobId, fileLink, fileName, callback) {
+        this.getResultDownloadTicket(jobId, fileLink, (link) => {
+            request.get(link, {}, (err, res) => {
+                if (callback) {callback();}
+                let modals = this.data.modals;
+                modals.displayFile = true;
+                this.update({
+                    displayFile: {
+                        name: fileName,
+                        text: res.text
+                    },
+                    modals
+                });
+                // actions.displayFile(fileName, res.text);
+            });
         });
     },
 

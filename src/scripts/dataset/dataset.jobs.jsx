@@ -8,7 +8,6 @@ import Spinner      from '../common/partials/spinner.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
 import WarnButton   from '../common/forms/warn-button.jsx';
 import moment       from 'moment';
-import request      from '../utils/request';
 
 let Jobs = React.createClass({
 
@@ -76,7 +75,7 @@ let Jobs = React.createClass({
                         <WarnButton
                             icon="fa-search"
                             warn={false}
-                            action={this._displayResult.bind(this, run.jobId, result._links.self.href, result.name)} />
+                            action={actions.displayFile.bind(this, run.jobId, result._links.self.href, result.name)} />
                     );
                 }
                 return (
@@ -121,21 +120,6 @@ let Jobs = React.createClass({
                 </Accordion>
             );
         }
-    },
-
-// actions ------------------------------------------------------------
-
-    _displayResult(jobId, fileLink, fileName, callback) {
-        actions.getResultDownloadTicket(jobId, fileLink, (link) => {
-            request.get(link, {}, (err, res) => {
-                if (callback) {callback();}
-                actions.displayFile(fileName, res.text);
-            });
-        });
-    },
-
-    _downloadResult(jobId, fileName) {
-        actions.downloadResult(jobId, fileName);
     }
 
 });
