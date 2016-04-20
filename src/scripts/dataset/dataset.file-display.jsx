@@ -35,5 +35,5 @@ export default class FileDisplay extends React.Component {
 FileDisplay.propTypes = {
     file: React.PropTypes.object,
     onHide: React.PropTypes.func,
-    show: React.PropTypes.boolean
+    show: React.PropTypes.bool
 };

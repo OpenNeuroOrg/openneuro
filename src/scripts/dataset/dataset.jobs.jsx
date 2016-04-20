@@ -72,7 +72,12 @@ let Jobs = React.createClass({
             let resultLinks = run.results.map((result, index) => {
                 let displayBtn;
                 if (result.name === 'main.err' || result.name === 'main.out') {
-                    displayBtn = <button onClick={this._displayResult.bind(this, run.jobId, result._links.self.href, result.name)}>Display</button>;
+                    displayBtn = (
+                        <WarnButton
+                            icon="fa-search"
+                            warn={false}
+                            action={this._displayResult.bind(this, run.jobId, result._links.self.href, result.name)} />
+                    );
                 }
                 return (
                     <li key={index}>
@@ -120,9 +125,10 @@ let Jobs = React.createClass({
 
 // actions ------------------------------------------------------------
 
-    _displayResult(jobId, fileLink, fileName) {
+    _displayResult(jobId, fileLink, fileName, callback) {
         actions.getResultDownloadTicket(jobId, fileLink, (link) => {
             request.get(link, {}, (err, res) => {
+                if (callback) {callback();}
                 actions.displayFile(fileName, res.text);
             });
         });
