@@ -26,7 +26,7 @@ export default class UploadProgress extends React.Component {
         });
 
         return (
-            <div className="uploadProgress-block">
+            <div className="upload-progress-block">
                 <span className="upload-dirname">
                     <label><i className="folderIcon fa fa-folder-open" /></label>
                     {this.props.name}
@@ -34,7 +34,7 @@ export default class UploadProgress extends React.Component {
 
                 </span>
                 <ProgressBar active now={progress} />
-                <div className="uploadFiles-wrap">
+                <div className="uploadfiles-wrap">
                     {currentFiles}
                 </div>
             </div>

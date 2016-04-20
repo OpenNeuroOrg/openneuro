@@ -41,7 +41,7 @@ let Rename = React.createClass({
             <div>
                 {!resuming ? <span className="message fade-in">Rename your dataset (optional)</span> : null}
                 <div className="dir-name has-input clearfix fade-in">
-                    {nameError ? <span className="message error characterError">{nameError}</span> : null}
+                    {nameError ? <span className="message error character-error">{nameError}</span> : null}
                     {renameResumeMessage}
                     {input}
                 </div>

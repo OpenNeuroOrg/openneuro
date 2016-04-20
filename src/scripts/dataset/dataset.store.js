@@ -439,12 +439,14 @@ let datasetStore = Reflux.createStore({
             if (preferences && preferences.ignoreUpdateWarnings) {
                 action();
             } else {
+                let modals = this.data.modals;
+                modals.update = true;
                 this.update({
                     currentUpdate: {
                         message: type + ' ' + file.name,
                         action: action
                     },
-                    showUpdateModal: true
+                    modals
                 });
             }
         });

@@ -3,8 +3,8 @@
 //progress bar ========================
 
 .progress {
+    @include border-radius(0);
     background: $de;
-    border-radius: 0;
     height: 18px;
     margin: 0;
     padding: 0;

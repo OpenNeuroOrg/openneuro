@@ -1,82 +1,3 @@
-.sign-in-block,
-.modal {
-
-    .modal-actions {
-        padding: 0;
-    }
-
-    .alert {
-        position: relative;
-        top: 0;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        max-width: 100%;
-    }
-}
-
-.share-modal {
-    .select-box-style {
-        margin-right: 0;
-    }
-
-    .caret-down {
-        margin-top: 29px;
-    }
-}
-
-.update-modal {
-
-    .modal-text {
-        font-size: 18px;
-    }
-
-    .parameters {
-        margin: 10px;
-
-        .form-group {
-            padding: 5px;
-            margin: 0 -15px;
-
-            .input-group {
-
-                .input-group-addon {
-                    width: auto;
-                    font-size: 12px;
-                    margin: 5px 0 0;
-                    padding: 0 0 0 13px;
-                    float: left;
-                    display: block;
-                }
-
-                label {
-                    float: left;
-                }
-            }
-        }
-    }
-}
-
-.anaylsis-modal {
-
-    .task-select {
-        border: 1px solid $ccc;
-        padding: 0;
-
-        select {
-            border: 0;
-        }
-    }
-
-    .default-reset {
-        padding: 10px;
-    }
-
-    .modal-actions {
-        margin-top: 10px;
-        padding: 0;
-    }
-}
 
 // modal form elements
 .parameters {
@@ -130,19 +51,19 @@
             + label {
                 position: relative;
                 display: flex;
-                margin: .6em 0;
+                margin: 0 0 10px 10px;
                 align-items: center;
                 color: $c-9e;
                 transition: color 250ms cubic-bezier(.4, .0, .23, 1);
 
                 > span {
+                    @include border-radius(1px);
                     display: block;
                     margin-right: 0;
                     width: auto;
                     height: auto;
                     background: $transparent;
                     border: 2px solid $c-9e;
-                    border-radius: 1px;
                     cursor: pointer;
                     transition: all 250ms cubic-bezier(.4, 0, .23, 1);
                     padding: 8px;
@@ -169,15 +90,14 @@
             &:checked + label {
 
                 > span {
+                    @include animation(shrink-bounce 200ms cubic-bezier(.4, .0, .23, 1));
                     border: 2px solid lighten($brand-success, 10%);
                     background: lighten($brand-success, 10%);
                     color: $white;
-                    -webkit-animation: shrink-bounce 200ms cubic-bezier(.4, .0, .23, 1);
-                    -moz-animation: shrink-bounce 200ms cubic-bezier(.4, .0, .23, 1);
-                    animation: shrink-bounce 200ms cubic-bezier(.4, .0, .23, 1);
                     overflow: hidden;
 
                     &::before {
+                        @include animation(checkbox-check 125ms 250ms cubic-bezier(.4, .0, .23, 1) forwards);
                         content: '';
                         position: absolute;
                         top: .3em;
@@ -186,9 +106,6 @@
                         border-bottom: 3px solid transparent;
                         transform: rotate(45deg);
                         transform-origin: 0% 100%;
-                        -webkit-animation: checkbox-check 125ms 250ms cubic-bezier(.4, .0, .23, 1) forwards;
-                        -moz-animation: checkbox-check 125ms 250ms cubic-bezier(.4, .0, .23, 1) forwards;
-                        animation: checkbox-check 125ms 250ms cubic-bezier(.4, .0, .23, 1) forwards;
                         padding: 5px 2px;
                     }
                 }
@@ -207,21 +124,92 @@
     }
 }
 
+.sign-in-block,
+.modal {
+
+    .modal-actions {
+        padding: 0;
+    }
+
+    .alert {
+        position: relative;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        max-width: 100%;
+    }
+}
+
+.share-modal {
+    .select-box-style {
+        margin-right: 0;
+    }
+
+    .caret-down {
+        margin-top: 29px;
+    }
+}
+
+.update-modal {
+
+    .modal-text {
+        font-size: 18px;
+    }
+
+    .parameters {
+        margin: 10px;
+
+        .form-group {
+            padding: 5px;
+            margin: 0 -15px;
+
+            .input-group {
+
+                .input-group-addon {
+                    width: auto;
+                    font-size: 12px;
+                    margin: 10px 0 0;
+                    padding: 0 0 0 13px;
+                    float: left;
+                    display: block;
+                }
+
+                label {
+                    float: left;
+                }
+            }
+        }
+    }
+}
+
+.anaylsis-modal {
+
+    .task-select {
+        border: 1px solid $ccc;
+        padding: 0;
+
+        select {
+            border: 0;
+        }
+    }
+
+    .default-reset {
+        padding: 10px;
+    }
+
+    .modal-actions {
+        margin-top: 10px;
+        padding: 0;
+    }
+}
+
 .modal,
 .modal-backdrop {
     z-index: 1500;
 }
 
-.modal-open {
-
-    #main {
-        -webkit-filter: blur(5px);
-        -moz-filter: blur(5px);
-        -o-filter: blur(5px);
-        -ms-filter: blur(5px);
-        filter: blur(5px);
-    }
-}
+.modal-open #main {@include blur(5px);}
 
 .modal-backdrop {
     background: $transparent3;
@@ -244,15 +232,15 @@
     }
 
     .modal-dialog {
+        @include border-radius(0);
         width: 700px;
         margin: 0 auto;
         padding: 0 0 20px;
-        border-radius: 0;
         background-color: $white;
         box-shadow: 0 3px 8px $transparent5;
 
         .modal-content {
-            border-radius: 0;
+            @include border-radius(0);
             border: 0;
             width: 100%;
             box-shadow: none;

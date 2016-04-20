@@ -1,56 +1,46 @@
 //base ====================================================================
-@import "bootstrap";
+@import 'bootstrap';
 // Always required /_properties if not importing all animate/animate.scss
-@import "animate/_properties";
-
+@import 'animate/properties';
 
 //font  //=================================================================
 
-@import "font-awesome/_font-awesome";
-
+@import 'font-awesome/font-awesome';
 
 //crn SASS =================================================================
-@import "./crn_app/_variables";
-@import "./crn_app/_elements-wrappers";
+@import './crn_app/variables';
+@import './crn_app/elements-wrappers';
 
 //component common
-@import "./crn_app/_common.spinner";
-@import "./crn_app/_common.pagination";
-@import "./crn_app/_common.status";
-@import "./crn_app/_common.happybrowser";
-@import "./crn_app/_common.click-to-edit";
-@import "./crn_app/_common.typeahead";
-@import "./crn_app/_common.modals";
-@import "./crn_app/_common.progress-bar";
-@import "./crn_app/_common.tooltip";
+@import './crn_app/common.spinner';
+@import './crn_app/common.pagination';
+@import './crn_app/common.status';
+@import './crn_app/common.happybrowser';
+@import './crn_app/common.click-to-edit';
+@import './crn_app/common.typeahead';
+@import './crn_app/common.modals';
+@import './crn_app/common.progress-bar';
+@import './crn_app/common.tooltip';
 
 //component specific
-@import "./crn_app/_nav.navbar";
-@import "./crn_app/_nav.left_navbar";
-@import "./crn_app/_notification.alert";
-@import "./crn_app/_dataset.dataset";
-@import "./crn_app/_dataset.jobs";
-@import "./crn_app/_dataset.tools";
-@import "./crn_app/_dataset.file-tree";
-@import "./crn_app/_admin.admin";
-@import "./crn_app/_user.signin";
-@import "./crn_app/_dashboard.datasets";
-@import "./crn_app/_upload.upload";
-@import "./crn_app/_upload.validation";
-@import "./crn_app/_admin.tools";
+@import './crn_app/nav.navbar';
+@import './crn_app/nav.left_navbar';
+@import './crn_app/notification.alert';
+@import './crn_app/dataset.dataset';
+@import './crn_app/dataset.jobs';
+@import './crn_app/dataset.tools';
+@import './crn_app/dataset.file-tree';
+@import './crn_app/admin.admin';
+@import './crn_app/user.signin';
+@import './crn_app/dashboard.datasets';
+@import './crn_app/upload.upload';
+@import './crn_app/upload.validation';
+@import './crn_app/admin.tools';
 
 // annimations ============================================================
-@import "animate/_fading-entrances/fading-entrances.scss";
-@import "animate/_sliding-entrances/sliding-entrances.scss";
-@import "animate/_flippers/flippers.scss";
-
-// .fade-in-down {@include fadeInDown();}
-// .fade-in-down-big {@include fadeInDownBig();}
-// .fade-in-up {@include fadeInUp();}
-// .fade-in-up-big {@include fadeInUpBig();}
-// .fade-in-left {@include fadeInLeft();}
-// .fade-in-right {@include fadeInRight();}
-// .fade-in-right-big {@include fadeInRightBig();}
+@import 'animate/_fading-entrances/fading-entrances';
+@import 'animate/_sliding-entrances/sliding-entrances';
+@import 'animate/_flippers/flippers';
 
 
 .fade-in {@include fadeIn();}
@@ -64,69 +54,42 @@
     @extend %slide-in-down;
 }
 
-// custome checkbox
-@keyframes shrink-bounce{
-    0% {
-        transform: scale(1);
-    }
-
-    33% {
-        transform: scale(.85);
-    }
-
-    100% {
-        transform: scale(1);
-    }
+@include keyframes(spin) {
+    0% {@include transform(rotate(0));}
+    100% {@include transform(rotate(360deg));}
 }
 
-@keyframes checkbox-check{
+@include keyframes(dot) {
+    0% {opacity: 0;}
+    50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+@include keyframes(shrink-bounce) {
+    0% {@include transform(scale(1));}
+    33% {@include transform(rscale(.85));}
+    100% {@include transform(rscale(1));}
+}
+
+@include keyframes(checkbox-check) {
     0% {
+        @include transform(translate3d(0, 0, 0) rotate(45deg));
         width: 0;
         height: 0;
         border-color: $c-21;
-        transform: translate3d(0, 0, 0) rotate(45deg);
     }
 
     33% {
+        @include transform(translate3d(0, 0, 0) rotate(45deg));
         width: .2em;
         height: 0;
-        transform: translate3d(0, 0, 0) rotate(45deg);
     }
 
     100% {
+        @include transform(translate3d(0, -.5em, 0) rotate(45deg));
         width: .2em;
         height: .5em;
         border-color: $c-21;
-        transform: translate3d(0, -.5em, 0) rotate(45deg);
-    }
-}
-
-// custome ellipsis ...
-@-webkit-keyframes dot {
-    0% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
-    }
-}
-
-@keyframes dot {
-    0% {
-        opacity: 0;
-    }
-
-    50% {
-        opacity: 0;
-    }
-
-    100% {
-        opacity: 1;
     }
 }
 
@@ -139,33 +102,16 @@
     .one,
     .two,
     .three {
+        @include animation(dot 1.3s infinite);
         opacity: 0;
         font-size: 20px;
         line-height: 10px;
-        -webkit-animation: dot 1.3s infinite;
-        animation: dot 1.3s infinite;
     }
 
-    .one {
-        -webkit-animation-delay: .0s;
-        animation-delay: .0s;
-    }
-
-    .two {
-        -webkit-animation-delay: .2s;
-        animation-delay: .2s;
-    }
-
-    .three {
-        -webkit-animation-delay: .3s;
-        animation-delay: .3s;
-    }
+    .one {@include animation-delay(.0s);}
+    .two {@include animation-delay(.2s);}
+    .three {@include animation-delay(.3s);}
 }
 
-.ds-danger .ellipsis-animation {
-    color: $brand-danger;
-}
-
-.ds-warning .ellipsis-animation {
-    color: $brand-warning;
-}
+.ds-danger .ellipsis-animation {color: $brand-danger;}
+.ds-warning .ellipsis-animation {color: $brand-warning;}

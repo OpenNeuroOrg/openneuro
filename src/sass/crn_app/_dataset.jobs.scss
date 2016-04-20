@@ -1,28 +1,27 @@
-
 .analyses {
 
     .jobs-wrap {
 
         .jobs {
-            border-radius: 0;
+            @include border-radius(0);
 
             .panel-heading {
                 padding: 0;
 
                 .panel-title {
                     @extend %clearfix;
-                    padding:0;
+                    padding: 0;
                     display: block;
                     background: lighten($eee, 10%);
 
                     a {
-                        padding:10px;
+                        padding: 10px;
                         display: block;
                         font-size: 14px;
 
                         &::after {
                             content: '\f0d8';
-                            font-family:FontAwesome;
+                            font-family: FontAwesome;
                             float: right;
                             font-size: 12px;
                             margin-top: 3px;
@@ -38,55 +37,51 @@
                 }
             }
         }
+
         .job {
+            @include border-radius(0);
             margin-bottom: 10px;
-            border-radius: 0;
 
             .panel-heading {
                 padding: 0;
-                background:none;
+                background: none;
 
                 .panel-title {
                     @extend %clearfix;
-                    padding:10px;
+                    padding: 10px;
                     display: block;
-                    background:none;
+                    background: none;
 
                     label {
                         margin: 0;
-                        padding: 0 5px 0;
+                        padding: 0 5px;
                         text-transform: uppercase;
                         font-size: 12px;
                     }
 
                     strong {
-                        color:#666;
+                        color: $c-66;
                     }
 
-                    .meta {
-                        background:none;
-                        color:#999;
-                        font-size: 12px;
-
-                        label {
-                            text-transform: none;
-                        }
-                    }
-
+                    .meta,
                     .badge {
-                        background:none;
-                        color:#999;
+                        background: none;
+                        color: $c-9e;
                         font-size: 12px;
+                    }
+
+                    .meta label {
+                        text-transform: none;
                     }
                 }
 
                 .finished .badge {
-                    color:$brand-success;
+                    color: $brand-success;
                 }
             }
 
             .panel-body .inner {
-                margin:-15px;
+                margin: -15px;
                 display: block;
             }
 
@@ -94,25 +89,25 @@
                 margin: 0;
 
                 .panel {
-                    border:none;
-                    border-top:1px solid #ccc;
-                    border-radius:0;
+                    @include border-radius(0);
+                    border: 0;
+                    border-top: 1px solid $ccc;
 
                     .panel-heading .panel-title {
-                        padding:0;
-                        background:lighten($misty, 10%);
+                        padding: 0;
+                        background: lighten($misty, 10%);
 
                         a {
-                            padding:8px 15px;
+                            padding: 8px 15px;
                             display: block;
                             font-size: 14px;
 
                             &::after {
-                                    content: '\f0d8';
-                                    font-family:FontAwesome;
-                                    float: right;
-                                    font-size: 12px;
-                                    margin-top: 3px;
+                                content: '\f0d8';
+                                font-family: FontAwesome;
+                                float: right;
+                                font-size: 12px;
+                                margin-top: 3px;
                             }
 
                             &.collapsed {
@@ -129,7 +124,7 @@
                         list-style: none;
 
                         li {
-                            padding:0 0 10px;
+                            padding: 0 0 10px;
                         }
                     }
 

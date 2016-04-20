@@ -38,7 +38,7 @@ let ClickToEdit = React.createClass({
         value: React.PropTypes.any,
         type: React.PropTypes.any,
         label: React.PropTypes.any,
-        error: React.PropTypes.func,
+        error: React.PropTypes.string,
         editable: React.PropTypes.bool,
         onDismissIssue: React.PropTypes.func,
         onDelete: React.PropTypes.func,

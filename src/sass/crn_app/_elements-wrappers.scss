@@ -1,5 +1,4 @@
 %clearfix {
-
     &::before,
     &::after {
         content: ' ';
@@ -11,488 +10,537 @@
     }
 }
 
-.clearfix { 
-	@extend %clearfix;
-}
-
-// Wrapper tags ========================
-
-body{
-    letter-spacing: 0.03em;
-    
-}
-.container{
-  width: 100%;
-}
-.view.container{
-  width: 100%;
-  margin:0;
-  padding: 0;
-}
-.main.view.container{
-	padding-top:85px;
-}
-
-.container.maxed{
-    width: 90%;
-    max-width: 1500px;
-}
-
-
-.inner-route{
-	&.light{
-		background: $white;
-	}
-	.message-4{
-		text-align: center;
-	}
-}
+.clearfix {@extend %clearfix;}
 
 html,
 body,
-#main,
+.app,
 .page,
 .full-col,
 .view.container,
-.route-wrapper{
-	height:100%;
-}
-
-// Typeography ========================
+.route-wrapper,
+.is-front,
+.is-front .main > div,
+.is-front .sign-in,
+.is-front .intro {height: 100%;}
 
 body {
-  font-family: $font-family-cabin;
+    font-family: $font-family-cabin;
+    letter-spacing: .03em;
 }
+
+.container {
+    width: 100%;
+
+    &.maxed {
+        width: 90%;
+        max-width: 1500px;
+    }
+}
+
+.view.container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.main.view.container {padding-top: 85px;}
+
+.inner-route {
+    &.light {
+        background: $white;
+    }
+
+    .message-4 {
+        text-align: center;
+    }
+}
+
 a {
-  color: $primary;
-  cursor: pointer;
+    color: $primary;
+    cursor: pointer;
 }
-a:hover, a:focus {
-	color:lighten($primary , 15%);
-	text-decoration:none;
+
+a:hover,
+a:focus {
+    color: lighten($primary , 15%);
+    text-decoration: none;
 }
+
 a:active,
 a:hover,
-a:focus{
-  cursor: pointer;
+a:focus {
+    cursor: pointer;
 }
 
-h1,h2,h3,h4,h5,h6{
-  font-family:$font-family-ssp;
-  font-weight: 400;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: $font-family-ssp;
+    font-weight: 400;
 }
 
-.href-font{
-	  font-family:$font-family-ssp;
+.href-font {
+    font-family: $font-family-ssp;
 }
 
-.page{
-	background: #e5e5e5;
-	position: fixed;
+.page {
+    background: $e5;
+    position: fixed;
     width: 100%;
     overflow-y: scroll;
-	&.dataset{
-		background:$white;
-	}
-}
-.route-wrapper{
-	padding: 0;
-	margin: 0;
-	padding-left: 65px;
-	.inner-route{
-		padding:20px 0;
-	}
-}
-.full-col{
-	padding:0;
+
+    &.dataset {
+        background: $white;
+    }
 }
 
+.route-wrapper {
+    padding: 0;
+    margin: 0;
+    padding-left: 65px;
 
+    .inner-route {
+        padding: 20px 0;
+    }
+}
+
+.full-col {
+    padding: 0;
+}
 
 //buttons ========================
 
-.btn-group{
-	overflow:hidden;
+.btn-group {
+    overflow: hidden;
 }
 
-.btn-basic{
-	background: transparent;
-	border-radius: 1px;
-	outline: none;
-	white-space: nowrap;
-	cursor: pointer;
-	font-weight: 400;
-	font-size: 12pt;
-	color:$primary;
-	text-align: center;
-	padding: 8px 13px;
-	width: 100%;
-	border:1px solid $primary;
-	text-transform: uppercase;
-	margin: 0 0 10px;
-	-webkit-user-select: none;
-	transition: all 0.3s ease-out;
-	&:hover,
-	&:active,
-	&.hover,
-	&.active {
-		border-color:$primary-hover;
-		background: #fafafa;
-		color:$primary-hover;
-	}
+%btn-basic {
+    @include border-radius(1px);
+    @include user-select(none);
+    background: none;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    font-weight: 400;
+    font-size: 12pt;
+    color: $primary;
+    text-align: center;
+    padding: 8px 13px;
+    width: 100%;
+    border: 1px solid $primary;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+    transition: all .3s ease-out;
+
+    &:hover,
+    &:active,
+    &.hover,
+    &.active {
+        border-color: $primary-hover;
+        background: $fa;
+        color: $primary-hover;
+    }
 }
 
-.btn-blue{
-	@extend .btn-basic;
-    background-color: #007c92;
+.btn-basic { @extend %btn-basic;}
+
+%btn-blue {
+    @extend %btn-basic;
+    background-color: $sky;
     color: $white;
     margin: 0;
-    border:none;
-	&:hover,
-	&:active,
-	&.hover,
-	&.active,
-	&:focus  {
-		background: darken($sky, 10%);
-		transition: all 0.3s ease-out;
-		color:$white;
-		outline: none;
-	}
+    border: 0;
+
+    &:hover,
+    &:active,
+    &.hover,
+    &.active,
+    &:focus {
+        background: darken($sky, 10%);
+        transition: all .3s ease-out;
+        color: $white;
+        outline: none;
+    }
 }
 
-.btn-admin{
-	background: none;
-	border: 1px solid #BBB;
-	color: #777;
-	border-radius: 0px;
-	box-shadow:none;
-	outline: none;
-	white-space: nowrap;
-	-webkit-user-select: none;
-	cursor: pointer;
-	font-weight: 300;
-	text-align: center;
-	text-transform: uppercase;
-	transition: all 0.3s ease-out;
-	margin:0;
-	padding: 6px 10px;
-	&:hover,
-	&:active,
-	&.hover,
-	&.active  {
-		border-color:#aaa;
-		background: #e0e0e0;
-		color:#666;
-		transition: all 0.3s ease-out;
-	}
-	&:focus{
-		border-color:#aaa;
-		box-shadow: none;
-		outline: none !important;
-	}
-	&.delete{
-		border: none;
-	    color: $white;
-	    background-color: $brand-danger;
-	    &:hover{
-	    	color: $white;
-	    	background:darken($brand-danger, 10%)
-	    }
-	}
-	&.success{
-		border: none;
-	    color: $white;
-	    background-color: $brand-success;
-		&:hover{
-			color: $white;
-			border-color: lighten($brand-success, 10%);
-		}
-	}
-	&.cancel{
-		background:none;
-		border:none;
-	}
-	&.warning{
-		border: none;
-	    color: $primary;
-	    background:none;
-	    &:hover{
-	    	color: $primary-hover;
-	    }
-	    i{margin-left:6px;}
-	}
+.btn-blue { @extend %btn-blue;}
+
+%btn-admin {
+    @include border-radius(0);
+    @include user-select(none);
+    background: none;
+    border: 1px solid $aaa;
+    color: $c-77;
+    box-shadow: none;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    font-weight: 300;
+    text-align: center;
+    text-transform: uppercase;
+    transition: all .3s ease-out;
+    margin: 0;
+    padding: 6px 10px;
+
+    &:hover,
+    &:active,
+    &.hover,
+    &.active {
+        border-color: $aaa;
+        background: $e1;
+        color: $c-66;
+        transition: all .3s ease-out;
+    }
+
+    &:focus {
+        border-color: $aaa;
+        box-shadow: none;
+        outline: none;
+    }
+
+    &.delete {
+        border: 0;
+        color: $white;
+        background-color: $brand-danger;
+
+        &:hover {
+            color: $white;
+            background: darken($brand-danger, 10%);
+        }
+    }
+
+    &.success {
+        border: 0;
+        color: $white;
+        background-color: $brand-success;
+
+        &:hover {
+            color: $white;
+            border-color: lighten($brand-success, 10%);
+        }
+    }
+
+    &.cancel {
+        background: none;
+        border: 0;
+    }
+
+    &.warning {
+        border: 0;
+        color: $primary;
+        background: none;
+
+        &:hover {
+            color: $primary-hover;
+        }
+
+        i {margin-left: 6px;}
+    }
 }
 
-.btn-admin-blue{
-	@extend .btn-admin;
-	color:$sky;
-	border:none;
-	text-transform: uppercase;
-	transition: all 0.3s ease-out;
-	&:hover,
-	&:active,
-	&.hover,
-	&:focus,
-	&.active  {
-		color: darken($sky, 10%);
-		background: #eee;
-	}
+.btn-admin {@extend %btn-admin;}
+
+%btn-admin-blue {
+    @extend %btn-admin;
+    color: $sky;
+    border: 0;
+    text-transform: uppercase;
+    transition: all .3s ease-out;
+
+    &:hover,
+    &:active,
+    &.hover,
+    &:focus,
+    &.active {
+        color: darken($sky, 10%);
+        background: $eee;
+    }
 }
 
-.btn-modal-submit{
-	@extend .btn-admin-blue;
-	border: 2px solid lighten($sky,5%);
-	&:active,
-	&:focus{
-		border:2px solid $sky;
-	}
+.btn-admin-blue {@extend %btn-admin-blue;}
+
+.btn-modal-submit {
+    @extend %btn-admin-blue;
+    border: 2px solid lighten($sky, 5%);
+
+    &:active,
+    &:focus {
+        border: 2px solid $sky;
+    }
 }
 
-.btn-reset{
-	@extend .btn-admin;
-	border:none;
-	margin-left:2px;
-	padding:5px;
-	font-size:12px;
+.btn-reset {
+    @extend %btn-admin;
+    border: 0;
+    margin-left: 2px;
+    padding: 5px;
+    font-size: 12px;
 }
 
-.btn-filter{
-	margin: 0;
-	color: #aaa;
-	border-radius: 0;
-	background: #fefefe;
-	border: 1px solid #C2C2C2;
-	border-width: 0 0 0 1px;
-	padding: 6px 23px;
-	text-align: center;
-	display: inline-block;
-	transition: all 0.3s ease;
+%btn-filter {
+    @include border-radius(0);
+    margin: 0;
+    color: $aaa;
+    background: $fa;
+    border: 1px solid $c2;
+    border-width: 0 0 0 1px;
+    padding: 6px 23px;
+    text-align: center;
+    display: inline-block;
+    transition: all .3s ease;
 }
 
-.btn-file-folder{
-	@extend .btn-admin;
-	border:none;
-	background:none;
-	margin-left:2px;
-	padding:2px 5px;
-	font-size:12px;
-	text-transform: none;
-	&:hover{
-		color:$primary;
-		background:none;
-	}
+.btn-filter {@extend %btn-filter;}
+
+.btn-file-folder {
+    @extend %btn-admin;
+    border: 0;
+    background: none;
+    margin-left: 2px;
+    padding: 2px 5px;
+    font-size: 12px;
+    text-transform: none;
+
+    &:hover {
+        color: $primary;
+        background: none;
+    }
 }
 
-.btn-sort{
-	padding: 7px 20px;
-	background: #fefefe;
-	color: #909090;
-	font-size: 12px;
-	font-weight: 600;
-	text-align: left;
-	transition: all 0.3s ease;
-	&:hover,
-	&:focus,
-	&:active,
-	&.active{
-		outline:0;
-		background: #eee;
-		color: $primary;
-		box-sizing: border-box;
-	}
+%btn-sort {
+    padding: 7px 20px;
+    background: $fa;
+    color: $c-9e;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    transition: all .3s ease;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+        outline: 0;
+        background: $eee;
+        color: $primary;
+        box-sizing: border-box;
+    }
 }
 
-.btn-tab{
-    background: #f7f7f7 !important;
-    border:1px solid #eee;
-    box-shadow: 1px -1px 3px -1px rgba(0,0,0,0.1);
-    border-radius:0;
-    color:$primary;
+.btn-sort {@extend %btn-sort;}
+
+.btn-tab {
+    @include border-radius(0);
+    background: $f8;
+    border: 1px solid $eee;
+    box-shadow: 1px -1px 3px -1px $transparent1;
+    color: $primary;
     margin-left: 15px;
-    &.active{
-    	background: $white !important;
-    	border-color:$white;
-    	border-left: 1px solid #f6f6f6;
-    	border-bottom-color:$white;
-    	color:$primary;
-    	box-shadow: 0px -1px 1px -1px rgba(0,0,0,0.5);
+
+    &.active {
+        background: $white;
+        border-color: $white;
+        border-left: 1px solid $f4;
+        border-bottom-color: $white;
+        color: $primary;
+        box-shadow: 0 -1px 1px -1px $transparent5;
     }
-    &:hover{
-    	background:$white !important;
-    	color: $sky;
+
+    &:hover {
+        background: $white;
+        color: $sky;
     }
-    &.active:hover{
-    	background:$white !important;
-    	color:$primary;
-    	cursor: normal;
-    	outline:none;
+
+    &.active:hover {
+        background: $white;
+        color: $primary;
+        cursor: normal;
+        outline: none;
     }
 }
 
-.btn-warn-component{
-	@extend .btn-admin;
-	padding:5px;
-	transition: all 0.1s ease;
-	border-radius:0;
-	font-size: 12px;
-	display:inline-block;
-	i{
-		line-height: 30px;
-		margin-left: 0;
-	}
-	&.cancel,
-	&.success{
-		background: $brand-danger;
-		color:$white;
-		font-size: 14px;
-		padding: 5px 8px;
-		margin: 7px 5px 5px 0;
-		&:hover{
-			background:darken($brand-danger, 10%);
-		}
-		i{
-			line-height: 15px;
-		}
-	}
-	&.success{
-		background: $brand-success;
-		&:hover{
-			background:darken($brand-success, 10%);
-		}
-	}
+.btn-warn-component {
+    @extend %btn-admin;
+    @include border-radius(0);
+    padding: 5px;
+    transition: all .1s ease;
+    font-size: 12px;
+    display: inline-block;
+
+    i {
+        line-height: 30px;
+        margin-left: 0;
+    }
+
+    &.cancel,
+    &.success {
+        background: $brand-danger;
+        color: $white;
+        font-size: 14px;
+        padding: 5px 8px;
+        margin: 7px 5px 5px 0;
+
+        &:hover {
+            background: darken($brand-danger, 10%);
+        }
+
+        i {
+            line-height: 15px;
+        }
+    }
+
+    &.success {
+        background: $brand-success;
+        &:hover {background: darken($brand-success, 10%);}
+    }
 }
 
-.fileTreeEditFile{
-	.delete-file,
-	.download-file{
-		float: left;
-		margin-right:5px;
-		text-align: center;
-		display: inline-block;
-		padding:0;
-		margin-bottom: 0;
-		overflow:hidden;
-		font-size: 10px;
-		line-height: 10px;
-		margin-right: 5px;
-		.btn-warn-component,
-		.warning.btn-warn-component  {
-			@extend .btn-admin;
-			font-size: 10px;
-			padding:3px 5px;
-			margin: 0;
-			background: none;
-			border:none;
-			color:$sky;
-			border-radius: 0px;
-			i{
-				margin:0 0 0 2px;
-				line-height: 0;
-			}
-			&:hover,
-			&:active,
-			&.hover,
-			&.active  {
-				background: #e0e0e0;
-				color:#666;
-				transition: all 0.3s ease-out;
-			}
-			&:focus{
-				box-shadow: none;
-				outline: none !important;
-			}
-			&.cancel,
-			&.success{
-				background: $brand-danger;
-				color:$white;
-				font-size: 10px;
-				padding:2px;
-				margin: 0 5px 0 0;
-				box-sizing: border-box;
-				line-height: 10px;
-				width: 18px;
-				height: 15px;
-				i{
-					margin:0;
-					line-height: 10px;
-				}
-				&:hover{
-					background:darken($brand-danger, 10%);
-				}
-			}
-			&.success{
-				margin-right:0;
-				background: $brand-success;
-				&:hover{
-					background:darken($brand-success, 10%);
-				}
-			}
-		}
-	}
-	.edit-file{
-		@extend .btn-admin;
-		float: left;
-		margin-right:5px;
-		text-align: center;
-		display: inline-block;
-		overflow:hidden;
-		font-size: 10px;
-		line-height: 10px;
-		margin: 0 5px 0 0;
-		width: auto;
-		position:relative;
-		padding: 3px 5px;
-		border:none;
-		color:$sky;
-		i{
-				margin-left:0;
-				line-height: 0;
-		}
-		input{
-		    position: absolute;
-		    cursor: pointer;
-		    opacity: 0;
-		    filter: alpha(opacity=0);
-		    left: 0;
-		    right: 0;
-		    bottom: 0;
-		    top: 0;
-		    width: 100%;
-		}
-	}
+.filetree-editfile {
+    .delete-file,
+    .download-file {
+        float: left;
+        text-align: center;
+        display: inline-block;
+        padding: 0;
+        margin-bottom: 0;
+        overflow: hidden;
+        font-size: 10px;
+        line-height: 10px;
+        margin-right: 5px;
+
+        .btn-warn-component,
+        .warning.btn-warn-component {
+            @extend %btn-admin;
+            @include border-radius(0);
+            font-size: 10px;
+            padding: 3px 5px;
+            margin: 0;
+            background: none;
+            border: 0;
+            color: $sky;
+
+            i {
+                margin: 0 0 0 2px;
+                line-height: 0;
+            }
+
+            &:hover,
+            &:active,
+            &.hover,
+            &.active {
+                background: $e1;
+                color: $c-66;
+                transition: all .3s ease-out;
+            }
+
+            &:focus {
+                box-shadow: none;
+                outline: none;
+            }
+
+            &.cancel,
+            &.success {
+                background: $brand-danger;
+                color: $white;
+                font-size: 10px;
+                padding: 2px;
+                margin: 0 5px 0 0;
+                box-sizing: border-box;
+                line-height: 10px;
+                width: 18px;
+                height: 15px;
+
+                i {
+                    margin: 0;
+                    line-height: 10px;
+                }
+
+                &:hover {
+                    background: darken($brand-danger, 10%);
+                }
+            }
+
+            &.success {
+                margin-right: 0;
+                background: $brand-success;
+
+                &:hover {
+                    background: darken($brand-success, 10%);
+                }
+            }
+        }
+    }
+
+    .edit-file {
+        @extend %btn-admin;
+        float: left;
+        margin-right: 5px;
+        text-align: center;
+        display: inline-block;
+        overflow: hidden;
+        font-size: 10px;
+        line-height: 10px;
+        margin: 0 5px 0 0;
+        width: auto;
+        position: relative;
+        padding: 3px 5px;
+        border: 0;
+        color: $sky;
+
+        i {
+            margin-left: 0;
+            line-height: 0;
+        }
+
+        input {
+            @include opacity(0);
+            position: absolute;
+            cursor: pointer;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            width: 100%;
+        }
+    }
 }
 
-.add-file{
-	@extend .btn-admin;
-	width: auto;
-	font-size: 10px;
-	position:relative;
-	width: 72px;
-	display: block;
-	overflow: hidden;
-	background:$primary-hover;
-	color:$white;
-	&:focus, &:hover, &:active{
-		color: $white;
-		background:$primary;
-	}
-	input{
+.add-file {
+    @extend %btn-admin;
+    font-size: 10px;
+    position: relative;
+    width: 72px;
+    display: block;
+    overflow: hidden;
+    background: $primary-hover;
+    color: $white;
 
-		position: absolute;
-		top: 0;
-		right: 0;
-		margin: 0;
-		padding: 0;
-		font-size: 20px;
-		cursor: pointer;
-		opacity: 0;
-		filter: alpha(opacity=0);
-	}
+    &:focus,
+    &:hover,
+    &:active {
+        color: $white;
+        background: $primary;
+    }
+
+    input {
+        @include opacity(0);
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 0;
+        padding: 0;
+        font-size: 20px;
+        cursor: pointer;
+    }
 }
 
-.fileupload-btn{
-	@extend .btn-blue;
-	cursor:pointer;
+.fileupload-btn {
+    @extend %btn-blue;
+    cursor: pointer;
     position: relative;
     overflow: hidden;
     margin: 0 auto 10px;
@@ -501,115 +549,117 @@ h1,h2,h3,h4,h5,h6{
     line-height: 16px;
     font-size: 16px;
 
-	input.dirUpload-btn{
-	    position: absolute;
-	    cursor: pointer;
-	    opacity: 0;
-	    filter: alpha(opacity=0);
-	    left: 0;
-	    right: 0;
-	    bottom: 0;
-	    top: 0;
-	    width: 100%;
-	}
+    .multifile-select-btn {
+        @include opacity(0);
+        position: absolute;
+        cursor: pointer;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 0;
+        width: 100%;
+    }
 }
 
 //form ========================
 
-.formField{
-	width: 100%;
-	height: auto;
-	font-size: 18px;
-	font-family: $font-family-ssp;
-	font-weight: lighter;
-	border: none;
-	background: rgba(255,255,255,1);
-	border-radius:2px;
-	box-shadow: inset 0px 0px 1px 1px rgba(0, 0, 0, 0.14);
-	padding: 10px;
-	margin: 0;
-	&:focus{
-		outline: 1px solid rgba(0, 0, 0, 0.9);
-		box-shadow:none;
-	}
+%form-field {
+    @include border-radius(2px);
+    width: 100%;
+    height: auto;
+    font-size: 18px;
+    font-family: $font-family-ssp;
+    font-weight: lighter;
+    border: 0;
+    background: $white;
+    box-shadow: inset 0 0 1px 1px $transparent1;
+    padding: 10px;
+    margin: 0;
+
+    &:focus {
+        outline: 1px solid $transparent9;
+        box-shadow: none;
+    }
 }
 
 
 .form-group {
     position: relative;
     margin: 10px auto;
-	label {
-		font-size: 10px;
-	    color: #777;
-	    right: 5px;
-	    top: 5px;
-	    text-transform: uppercase;
-	}
- 	input {
-		@extend .formField;
-		&:focus{
-			box-shadow:none;
-			outline: 1px solid rgba(0, 0, 0, 0.9);
 
-		}
-	}
-	.input-group-addon{
-		    border-radius: 0;
-		    background: none;
-		    box-shadow:none;
-		    border: none;
-		    text-transform: uppercase;
-	}
+    label {
+        font-size: 10px;
+        color: $c-77;
+        right: 5px;
+        top: 5px;
+        text-transform: uppercase;
+    }
+
+    input {
+        @extend %form-field;
+
+        &:focus {
+            box-shadow: none;
+            outline: 1px solid $transparent9;
+        }
+    }
+
+    .input-group-addon {
+        @include border-radius(0);
+        background: none;
+        box-shadow: none;
+        border: 0;
+        text-transform: uppercase;
+    }
 }
 
 textarea,
 textarea.form-control {
-	min-height: 200px;
-	@extend .formField;
-	&:focus{
-		outline: 1px solid rgba(0, 0, 0, 0.9);
-		box-shadow:none;
-	}
+    @extend %form-field;
+    min-height: 200px;
+
+    &:focus {
+        outline: 1px solid $transparent9;
+        box-shadow: none;
+    }
 }
 
 select {
-  width: 100%;
-  height: 40px;
-  border-radius:0;
-  border: 1px solid #d8d8d8;
-  background: $white;
-  font-size: 16px;
-  text-indent: 5px;
-  color: #a5a5a5;
+    @include border-radius(0);
+    width: 100%;
+    height: 40px;
+    border: 1px solid $d9;
+    background: $white;
+    font-size: 16px;
+    text-indent: 5px;
+    color: $a5;
 }
 
 
-.select-box-style{
-	padding:5px 20px 5px 10px;
-	margin: 10px 10px 10px 0;
-	color:black;
-	border:none;
-	outline:none;
-	display: inline-block;
-	-webkit-appearance:none; 
-	cursor:pointer;
-	border: 1px solid #ccc;
-	border-radius:0;
-	background:$white;
+.select-box-style {
+    @include border-radius(0);
+    padding: 5px 20px 5px 10px;
+    margin: 10px 10px 10px 0;
+    color: $black;
+    outline: none;
+    display: inline-block;
+    -webkit-appearance: none;
+    cursor: pointer;
+    border: 1px solid $ccc;
+    background: $white;
 }
 
-.caret-down{
-	display: inline-block;
-	width: 0;
-	height: 0;
-	vertical-align: top;
-	border-top: 4px solid #000;
-	border-right: 4px solid rgba(0, 0, 0, 0);
-	border-left: 4px solid rgba(0, 0, 0, 0);
-	content: "";
-	position: relative;
-	margin-top: 20px;
-	margin-left: -22px;
-	margin-right: 10px;
-	width: 0;
+.caret-down {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    vertical-align: top;
+    border-top: 4px solid $black;
+    border-right: 4px solid $transparent;
+    border-left: 4px solid $transparent;
+    content: '';
+    position: relative;
+    margin-top: 20px;
+    margin-left: -22px;
+    margin-right: 10px;
 }

@@ -1,5 +1,6 @@
 // Colors
 $transparent: rgba(0, 0, 0, 0);
+$transparent1: rgba(0, 0, 0, .1);
 $transparent3: rgba(0, 0, 0, .3);
 $transparent5: rgba(0, 0, 0, .7);
 $transparent7: rgba(0, 0, 0, .7);
@@ -32,7 +33,6 @@ $notification-green: #77e6a3;
 
 $c-9e: #9e9e9e;
 $c-90: #909090;
-
 $c-77: #777;
 $c-66: #666;
 $c-56: #565656;
@@ -41,6 +41,8 @@ $c-33: #333;
 $c-21: #212121;
 
 $aaa: #aaa;
+$a5: #a5a5a5;
+$bbb: #bbb;
 $ccc: #ccc;
 $c2: #c2c2c2;
 
@@ -57,10 +59,14 @@ $e7: #e7e7e7;
 $f4: #f4f4f4;
 $f8: #f8f8f8;
 $f9: #f9f9f9;
+$fa: #fafafa;
+
+$warning-orange-cream: #ffefdb;
+$warning-orange: #df7600;
 
 
 $primary: $ocean;
-$primary-hover: lighten($ocean,15%);
+$primary-hover: lighten($ocean, 15%);
 
 // BS overrides
 $brand-primary:         $primary;
@@ -104,4 +110,18 @@ $text-danger:          $brand-danger;
 
 .text-danger {
     color: $text-danger;
+}
+
+
+@mixin blur($radius) {
+    -webkit-filter: blur($radius);
+    -moz-filter: blur($radius);
+    -ms-filter: blur($radius);
+    filter: blur($radius);
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
 }

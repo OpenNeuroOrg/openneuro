@@ -143,7 +143,7 @@ let Tools = React.createClass({
         });
 
         return (
-            <div role="presentation" className="snapshotSelect" >
+            <div role="presentation" className="snapshot-select" >
                 <span>
                     <select value={this.props.selectedSnapshot} onChange={this._selectSnapshot}>
                         <option value="" disabled>Select a snapshot</option>
