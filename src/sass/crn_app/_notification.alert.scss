@@ -26,12 +26,25 @@
         &:hover {color: lighten($brand-info, 10%);}
     }
 
+    .close {
+        @include opacity(1);
+        float: right;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1;
+        text-shadow: none;
+        position: relative;
+        right: -35px;
+        top: -2px;
+    }
+
     &.alert-danger {
         color: lighten($brand-danger, 10%);
         strong {color: lighten($brand-danger, 10%);}
         a {text-decoration: underline;}
         a,
-        .dismiss-button-x {
+        .dismiss-button-x,
+        .close {
             color: lighten($brand-danger, 10%);
             &:hover {color: lighten($brand-danger, 2%);}
         }
@@ -42,7 +55,8 @@
         strong {color: $brand-warning;}
         a {text-decoration: underline;}
         a,
-        .dismiss-button-x {
+        .dismiss-button-x,
+        .close {
             color: $brand-warning;
             &:hover {color: lighten($brand-warning, 10%);}
         }
