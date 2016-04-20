@@ -50,6 +50,10 @@ let datasetStore = Reflux.createStore({
             currentUpdate: null,
             dataset: null,
             datasetTree: null,
+            displayFile: {
+                name: '',
+                text: ''
+            },
             loading: false,
             loadingApps: false,
             loadingJobs: false,
@@ -57,10 +61,11 @@ let datasetStore = Reflux.createStore({
             jobs: [],
             metadataIssues: {},
             modals: {
-                jobs:    false,
-                publish: false,
-                share:   false,
-                update:  false
+                jobs:        false,
+                publish:     false,
+                share:       false,
+                update:      false,
+                displayFile: false
             },
             snapshot: false,
             snapshots: [],
@@ -682,6 +687,21 @@ let datasetStore = Reflux.createStore({
             let fileName    = filePath.split('/')[filePath.split('/').length - 1];
             let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
             callback(downloadUrl);
+        });
+    },
+
+    /**
+     * DisplayFile
+     */
+    displayFile(name, text) {
+        let modals = this.data.modals;
+        modals.displayFile = true;
+        this.update({
+            displayFile: {
+                name,
+                text
+            },
+            modals
         });
     },
 

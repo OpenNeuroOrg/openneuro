@@ -7,7 +7,8 @@ import actions      from './dataset.actions';
 import Spinner      from '../common/partials/spinner.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
 import WarnButton   from '../common/forms/warn-button.jsx';
-import moment        from 'moment';
+import moment       from 'moment';
+import request      from '../utils/request';
 
 let Jobs = React.createClass({
 
@@ -69,6 +70,10 @@ let Jobs = React.createClass({
     _results(run) {
         if (run.results) {
             let resultLinks = run.results.map((result, index) => {
+                let displayBtn;
+                if (result.name === 'main.err' || result.name === 'main.out') {
+                    displayBtn = <button onClick={this._displayResult.bind(this, run.jobId, result._links.self.href, result.name)}>Display</button>;
+                }
                 return (
                     <li key={index}>
                         <span className="warning-btn-wrap">
@@ -76,6 +81,7 @@ let Jobs = React.createClass({
                             icon="fa-download"
                             prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
                         </span>
+                        {displayBtn}
                         <span>{result.name}</span>
                     </li>
                 );
@@ -113,6 +119,14 @@ let Jobs = React.createClass({
     },
 
 // actions ------------------------------------------------------------
+
+    _displayResult(jobId, fileLink, fileName) {
+        actions.getResultDownloadTicket(jobId, fileLink, (link) => {
+            request.get(link, {}, (err, res) => {
+                actions.displayFile(fileName, res.text);
+            });
+        });
+    },
 
     _downloadResult(jobId, fileName) {
         actions.downloadResult(jobId, fileName);
