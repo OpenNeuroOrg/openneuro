@@ -10,6 +10,7 @@ var Actions = Reflux.createActions([
     'dismissError',
     'dismissJobsModal',
     'dismissMetadataIssue',
+    'displayFile',
     'flagForValidation',
     'getAttachmentDownloadTicket',
     'getDatasetDownloadTicket',
