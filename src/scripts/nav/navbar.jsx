@@ -63,7 +63,7 @@ let BSNavbar = React.createClass({
 
         if (loading) {
             return (
-                <div className="navbar-right signInNavBtn">
+                <div className="navbar-right sign-in-nav-btn">
                     <button className="btn-blue" >
                         <i className="fa fa-spin fa-circle-o-notch" />
                         <span> Signing In</span>
@@ -72,7 +72,7 @@ let BSNavbar = React.createClass({
             );
         } else {
             return (
-                <div className="navbar-right signInNavBtn">
+                <div className="navbar-right sign-in-nav-btn">
                     <button className="btn-blue" onClick={userActions.signIn.bind(null, {transition: isSignInScreen})} >
                         <i className="fa fa-google" />
                         <span> Sign in</span>

@@ -30,9 +30,9 @@ let Upload = React.createClass({
     // conditional variables -----------------------
 
         let totalTabs    = this.state.showResume ? 5 : 4;
-        let activeBar = 'activeTab-' + activeKey;
-        if (activeKey === 5 && totalTabs < 5) {activeBar = 'activeTab-4';}
-        let activePane = 'activePane-' + activeKey;
+        let activeBar = 'active-tab-' + activeKey;
+        if (activeKey === 5 && totalTabs < 5) {activeBar = 'active-tab-4';}
+        let activePane = 'active-pane-' + activeKey;
 
     // panels --------------------------------------
 

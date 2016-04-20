@@ -42,9 +42,9 @@ let Signin = React.createClass({
         return (
             <div className="sign-in">
                 <div className="intro">
-                    <div className="introBG">
+                    <div className="intro-bg">
                         <div className="intro-inner fade-in clearfix">
-                            <div className="clearfix welcomeBlock flipin-x">
+                            <div className="clearfix welcome-block flipin-x">
                                 <h1>Welcome to CRN</h1>
                                 <p>A free and open platform that enables the analysis and sharing of neuroimaging data</p>
                                 <div className="sign-in-block fade-in">

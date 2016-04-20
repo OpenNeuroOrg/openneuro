@@ -1,207 +1,207 @@
 //navbar // ================================================================
-
-
-
-
-
-.full-col{
-	.navbar{
-		position: fixed;
-		width: 100%;
-		top: 0;
-		left: 0;
-		z-index: 1300;
-		border-top:10px solid $stanford-red;
-	}
-}
-
-
-	.navbar-default{
-  background: #3B3B3B;
-  color:$misty;
-  margin: 0;
-  padding: 0;
-  border-radius:0;
-  border:none;
-//  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.4);
-  z-index: 1300;
-  .navbar-nav>li>{
-		a.link {
-			border: 1px solid transparent;
-			padding:10px;
-			color:$misty;
-			margin: 17px 0;
-			border-radius: 2px;
-			transition: border 0.5s ease;
-			margin-left: 10px;
-			&:hover{
-				color:$stone;
-				border-color:$stone;
-			}
-			&.active{
-				color:$misty;
-				border-color:$misty;
-			}
-		}
-	}
-}
-.navbar-brand {
-  height: 75px;
-}
-
-.signInNavBtn{
-	margin: 15px 20px;
-}
-
-.upload-btn-wrap{
-	float: left;
-	width:220px;
-	margin: 0 30px;
-	.progress{
-		margin-top: 5px;
-		height: 10px;
-	}
-	.btn-blue{
-		margin:15px 0;
-		&.btn-view-progress{
-			margin:9px 0px 0;
-		}
-	}
-}
-
-.navbar-right.useradmin-nav{
-    margin: 0;
-
-    .user-wrap{
-		margin: 15px 75px 0 0;
-		text-align: right;
-		float: left;
-    text-align: right;
-		display: block;
-		.greeting{
-			 text-transform: uppercase;
-		}
-	}
-    .userImgThumb{
-		width: 75px;
-		height: auto;
-		overflow: hidden;
-		//box-shadow: 1px 2px 3px -2px rgba(0, 0, 0, 0.5);
-		position: absolute;
-		top: 0;
-		right: 0;
+.full-col {
+    .navbar {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1300;
+        border-top: 10px solid $stanford-red;
     }
 }
+
+
+.navbar-default {
+    background: $c-33;
+    color: $misty;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    border: 0;
+    z-index: 1300;
+
+    .navbar-nav > li > {
+        .link {
+            border: 1px solid transparent;
+            padding: 10px;
+            color: $misty;
+            margin: 17px 0;
+            border-radius: 2px;
+            transition: border .5s ease;
+            margin-left: 10px;
+
+            &:hover {
+                color: $stone;
+                border-color: $stone;
+            }
+
+            &.active {
+                color: $misty;
+                border-color: $misty;
+            }
+        }
+    }
+}
+
+.navbar-brand {height: 75px;}
+
+.sign-in-nav-btn {
+    margin: 15px 20px;
+}
+
+.upload-btn-wrap {
+    float: left;
+    width: 220px;
+    margin: 0 30px;
+
+    .progress {
+        margin-top: 5px;
+        height: 10px;
+    }
+
+    .btn-blue {
+        margin: 15px 0;
+
+        &.btn-view-progress {margin: 9px 0 0;}
+
+    }
+}
+
+.navbar-right.useradmin-nav {
+    margin: 0;
+
+    .user-wrap {
+        margin: 15px 75px 0 0;
+        float: left;
+        text-align: right;
+        display: block;
+
+        .greeting {text-transform: uppercase;}
+    }
+
+    .user-img-thumb {
+        width: 75px;
+        height: auto;
+        overflow: hidden;
+        //box-shadow: 1px 2px 3px -2px rgba(0, 0, 0, 0.5);
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+}
+
 .user-menu {
-	position: initial;
-    &.btn-null{
-		.btn{
-			background: rgba(0, 0, 0, 0);
-			box-shadow: none;
-			outline: none;
-			border: none;
-			border-radius: 0;
-			height: 100%;
-			padding: 0;
-			margin: 0;
-			width: 100%;
-			text-align: center;
-			margin:0;
-			color:$white;
-			position: absolute;
-			right: 0;
-			left: auto;
-			width: 75px;
-			top: 0;
-			
-			.caret{
-				display: none;
-			}
-			i{
-				top: 0;
-				right: 0;
-				position: absolute;
-				padding: 0;
-				background-color: rgba(0, 0, 0, 0.28);
-				width: 30%;
-				height: 30%;
-				line-height: 25px;
-				transition: all 0.3s ease;
+    position: initial;
 
-			}
+    &.btn-null {
+        .btn {
+            background: $transparent;
+            box-shadow: none;
+            outline: none;
+            border: 0;
+            border-radius: 0;
+            height: 100%;
+            padding: 0;
+            text-align: center;
+            margin: 0;
+            color: $white;
+            position: absolute;
+            right: 0;
+            left: auto;
+            width: 75px;
+            top: 0;
 
-			&.active,
-			&:active,
-			&:hover,
-			&.hover
-			&:focus{
-				i{
-					transition: all 0.3s ease;
-					background-color: rgba(0, 0, 0, 0.28);
-					width: 100%;
-					height: 100%;
-					line-height: 75px;
-				}
-			}
-		}
-		&.open{
-			.btn{
-				background: rgba(0, 0, 0, 0.28);
-				box-shadow: none;
-				outline: none;
-				border: none;
-			}
-		}
-	}
-	.dropdown-toggle{
-		padding: 25px 15px;
-	}
-	.dropdown-menu{
-		background-color:$white;
-		padding:20px 15px 0;
-		margin: 2px 8px 0 0;
-		border-radius: 0;
-		box-shadow: 1px 2px 4px -3px rgba(0, 0, 0, 0.7);
-		border-color: #F4F4F4;
-		.dropdown-header{
-			width: 100%;
-			text-align: center;
-			padding: 10px 0;
-		}
-		img{
-			width: 100px;
-			margin: 0 auto;
-			display: block;
-		}
-		.um-sign-out{
-			width: auto;
-			margin: 0;
-			display: block;
-			text-align:center;
-			font-size: 12px;
-			border: none;
-			padding: 0;
-			color:$primary;
-		}
-		li.um-icon {
-			font-size: 20px;
-			background-color: rgba(0, 0, 0, 0);
-			margin: 2px 0 10px;
-			padding: 0;
-			float: left;
-			a{
-				display: inline;
-				padding: 3px;
-				margin: 0;
-				background-color: rgba(0, 0, 0, 0);
-				color:#888;
-				&:hover{
-					color: $primary;
-				}
-				&.active{
-					color: darken(#888, 5%);
-				}
-			}
-		}
-	}
+            .caret {display: none;}
+
+            i {
+                top: 0;
+                right: 0;
+                position: absolute;
+                padding: 0;
+                background-color: $transparent3;
+                width: 30%;
+                height: 30%;
+                line-height: 25px;
+                transition: all .3s ease;
+            }
+
+            &.active,
+            &:active,
+            &:hover,
+            &.hover,
+            &:focus {
+
+                i {
+                    transition: all .3s ease;
+                    background-color: $transparent3;
+                    width: 100%;
+                    height: 100%;
+                    line-height: 75px;
+                }
+            }
+        }
+
+        &.open {
+            .btn {
+                background: $transparent3;
+                box-shadow: none;
+                outline: none;
+                border: 0;
+            }
+        }
+    }
+
+    .dropdown-toggle {padding: 25px 15px;}
+
+    .dropdown-menu {
+        background-color: $white;
+        padding: 20px 15px 0;
+        margin: 2px 8px 0 0;
+        border-radius: 0;
+        box-shadow: 1px 2px 4px -3px $transparent7;
+        border-color: $f4;
+
+        .dropdown-header {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        img {
+            width: 100px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        .um-sign-out {
+            width: auto;
+            margin: 0;
+            display: block;
+            text-align: center;
+            font-size: 12px;
+            border: 0;
+            padding: 0;
+            color: $primary;
+        }
+
+        .um-icon {
+            font-size: 20px;
+            background-color: $transparent;
+            margin: 2px 0 10px;
+            padding: 0;
+            float: left;
+
+            a {
+                display: inline;
+                padding: 3px;
+                margin: 0;
+                background-color: $transparent;
+                color: $c-77;
+
+                &:hover {color: $primary;}
+
+                &.active {color: darken($c-77, 5%);}
+            }
+        }
+    }
 }

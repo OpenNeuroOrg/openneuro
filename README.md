@@ -4,7 +4,7 @@
 
 __Requirements:__
 
-Node `v4.4.1 (LTS)`  
+Node `v4.4.1 (LTS)`
 gulp-cli (`npm install -g gulp-cli`)
 
 __Configure:__
@@ -27,3 +27,9 @@ run `gulp build`
 __To run the linting command:__
 
 run `npm run lint path/to/file`
+
+__To run the scss linting command:__
+
+install `gem install scss_lint`
+
+run `scss-lint path/to/file`

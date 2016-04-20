@@ -3,65 +3,58 @@
 .alert {
     font-size: 14px;
     background: $transparent7;
-    border: none;
+    border: 0;
     padding: 10px 40px 10px 20px;
     color: $d9;
+
     .alert-left {
-    	a {
-			text-decoration: underline;
-    		color: $brand-info; 
-    		&:hover {
-    			color:lighten($brand-info, 10%);
-    		}
-    	}
+        a {
+            text-decoration: underline;
+            color: $brand-info;
+            &:hover {color: lighten($brand-info, 10%);}
+        }
     }
-	.dismiss-button-x {
-	    position: absolute;
-	    top: 0;
-	    right: 0;
-	    background: none;
-	    border: none;
-	    color: $brand-info; 
-    		&:hover {
-    			color:lighten($brand-info, 10%);
-    		}
-	}
-	&.alert-danger {
-		color:lighten($brand-danger,10%);
-		strong {color:lighten($brand-danger,10%);}
-		a {
-			text-decoration: underline;
-		}
-		a,
-		.dismiss-button-x {	
-			color:lighten($brand-danger,10%);
-    		&:hover {
-    			color:lighten($brand-danger, 2%);
-    		}
-    	}
-	}
-	&.alert-warning {
-		color:$brand-warning;
-		strong {color: $brand-warning;}
-		a {
-			text-decoration: underline;
-		}
-		a,
-		.dismiss-button-x {	
-			color:$brand-warning;
-    		&:hover {
-    			color:lighten($brand-warning, 10%);
-    		}
-    	}
-	}
+
+    .dismiss-button-x {
+        position: absolute;
+        top: 0;
+        right: 0;
+        background: none;
+        border: 0;
+        color: $brand-info;
+        &:hover {color: lighten($brand-info, 10%);}
+    }
+
+    &.alert-danger {
+        color: lighten($brand-danger, 10%);
+        strong {color: lighten($brand-danger, 10%);}
+        a {text-decoration: underline;}
+        a,
+        .dismiss-button-x {
+            color: lighten($brand-danger, 10%);
+            &:hover {color: lighten($brand-danger, 2%);}
+        }
+    }
+
+    &.alert-warning {
+        color: $brand-warning;
+        strong {color: $brand-warning;}
+        a {text-decoration: underline;}
+        a,
+        .dismiss-button-x {
+            color: $brand-warning;
+            &:hover {color: lighten($brand-warning, 10%);}
+        }
+    }
 }
+
 .navbar {
-	.alert {
-		position: absolute;
-	    left: 1%;
-	    top: 5px;
-	    font-size: 18px;
-	    width: 98%;
-	    min-height: 64px;
-	}
+    .alert {
+        position: absolute;
+        left: 1%;
+        top: 5px;
+        font-size: 18px;
+        width: 98%;
+        min-height: 64px;
+    }
 }
