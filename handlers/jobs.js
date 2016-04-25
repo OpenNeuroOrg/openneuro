@@ -16,14 +16,18 @@ let c = mongo.collections;
 
 let models = {
     job: {
-        appId:           'string, required',
-        appLabel:        'string, required',
-        appVersion:      'string, required',
-        datasetId:       'string, required',
-        executionSystem: 'String, required',
-        parameters:      'object, required',
-        snapshotId:      'string, required',
-        userId:          'string, required'
+        appId:             'string, required',
+        appLabel:          'string, required',
+        appVersion:        'string, required',
+        datasetId:         'string, required',
+        executionSystem:   'String, required',
+        parameters:        'object, required',
+        snapshotId:        'string, required',
+        userId:            'string, required',
+        batchQueue:        'string, required',
+        memoryPerNode:     'number, required',
+        nodeCount:         'number, required',
+        processorsPerNode: 'number, required'
     }
 };
 
@@ -68,15 +72,15 @@ export default {
                 let body = {
                     name:              'crn-automated-job',
                     appId:             job.appId,
-                    batchQueue:        'normal',
+                    batchQueue:        job.batchQueue,
                     executionSystem:   job.executionSystem,
-                    maxRunTime:        '04:00:00',
-                    memoryPerNode:     '4GB',
-                    nodeCount:         1,
-                    processorsPerNode: 8,
+                    maxRunTime:        '05:00:00',
+                    memoryPerNode:     job.memoryPerNode,
+                    nodeCount:         job.nodeCount,
+                    processorsPerNode: job.processorsPerNode,
                     archive:           true,
                     archiveSystem:     'openfmri-storage',
-                    archivePath:       null,
+                    archivePath:       'archive',
                     inputs: {
                         bidsFile: config.agave.storage + hash
                     },
