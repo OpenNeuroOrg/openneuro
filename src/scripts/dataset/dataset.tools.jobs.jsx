@@ -37,13 +37,14 @@ export default class JobMenu extends React.Component {
     }
 
     render() {
-
+        let selectedApp = this.state.selectedApp;
         let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedAppID;
 
         let form = (
             <div className="anaylsis-modal clearfix">
                 {this._snapshots()}
                 {this._apps()}
+                {this._description(selectedApp.longDescription)}
                 {this._parameters()}
                 {this._submit()}
             </div>
@@ -110,6 +111,23 @@ export default class JobMenu extends React.Component {
                             </div>
                         </div>
                     </div>
+                </div>
+            );
+        }
+    }
+
+    /**
+     * Description
+     *
+     * Returns markup for an app description.
+     */
+    _description(description) {
+        if (description) {
+            return (
+                <div>
+                    <br />
+                    <h5>Description</h5>
+                    <div className="well">{description}</div>
                 </div>
             );
         }
@@ -204,8 +222,13 @@ export default class JobMenu extends React.Component {
         let reset;
         if (parameters.length > 0) {
             reset = (
-                <div className="default-reset">
-                    <button className="btn-reset" onClick={this._restoreDefaultParameters.bind(this)}>Restore Default Parameters</button>
+                <div className="row">
+                    <div className="col-xs-6">
+                        <h5>Parameters</h5>
+                    </div>
+                    <div className="col-xs-6 default-reset">
+                        <button className="btn-reset" onClick={this._restoreDefaultParameters.bind(this)}>Restore Default Parameters</button>
+                    </div>
                 </div>
             );
         }
@@ -238,12 +261,13 @@ export default class JobMenu extends React.Component {
         let success = !!this.state.message && !this.state.error;
         this.props.onHide(success, this.state.selectedSnapshot);
         this.setState({
-            loading: false,
-            parameters: [],
-            selectedAppID: '',
+            loading:          false,
+            parameters:       [],
+            selectedApp:      {},
+            selectedAppID:    '',
             selectedSnapshot: '',
-            message: null,
-            error: false
+            message:          null,
+            error:            false
         });
     }
 
