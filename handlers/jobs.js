@@ -42,16 +42,16 @@ export default {
     listApps(req, res, next) {
         agave.listApps((err, resp) => {
             if (err) {return next(err);}
-            let apps = resp.body.result;
-            async.each(apps, (app, cb) => {
+            let apps = [];
+            async.each(resp.body.result, (app, cb) => {
                 agave.getApp(app.id, (err, resp2) => {
-                    if (resp2.body && resp2.body.result && resp2.body.result.parameters) {
-                        app.parameters = resp2.body.result.parameters;
+                    if (resp2.body && resp2.body.result) {
+                        apps.push(resp2.body.result);
                     }
                     cb();
                 });
             }, () => {
-                res.send(resp.body.result);
+                res.send(apps);
             });
         });
     },
