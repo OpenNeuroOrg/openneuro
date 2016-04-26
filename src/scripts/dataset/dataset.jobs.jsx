@@ -29,9 +29,9 @@ let Jobs = React.createClass({
         return (
             <div className="analyses">
                 {jobs.length === 0 ?  null : header }
-            <Accordion accordion className="jobs-wrap">
-                {this.state.loadingJobs ? <Spinner active={true} /> : jobs}
-            </Accordion>
+                <Accordion accordion className="jobs-wrap">
+                    {this.state.loadingJobs ? <Spinner active={true} text="Loading Analyses" /> : jobs}
+                </Accordion>
             </div>
         );
     },

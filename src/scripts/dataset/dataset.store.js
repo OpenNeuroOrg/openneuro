@@ -87,15 +87,16 @@ let datasetStore = Reflux.createStore({
         let snapshot = !!(options && options.snapshot);
         this.update({loading: true, dataset: null, datasetTree: null});
         bids.getDataset(datasetId, (res) => {
-            // res.showChildren = true;
             if (res.status === 404 || res.status === 403) {
                 this.update({status: res.status, loading: false, snapshot: snapshot});
             } else {
-                this.update({dataset: res, loading: false, snapshot: snapshot, selectedSnapshot: datasetId});
+                let originalId = res.original ? res.original : datasetId;
+                this.loadJobs(datasetId, snapshot, () => {
+                    this.loadSnapshots(originalId, () => {
+                        this.update({dataset: res, loading: false, snapshot: snapshot, selectedSnapshot: datasetId});
+                    });
+                });
             }
-            let originalId = res.original ? res.original : datasetId;
-            this.loadJobs(datasetId);
-            this.loadSnapshots(originalId);
         }, options);
     },
 
@@ -154,7 +155,12 @@ let datasetStore = Reflux.createStore({
     /**
      * Load Jobs
      */
-    loadJobs(projectId) {
+    loadJobs(projectId, snapshot, callback) {
+        if (!snapshot) {
+            this.update({jobs: []});
+            callback();
+            return;
+        }
         this.update({loadingJobs: true});
         crn.getDatasetJobs(projectId, (err, res) => {
             // sort jobs by app
@@ -190,7 +196,8 @@ let datasetStore = Reflux.createStore({
             }
 
             this.update({jobs: jobArray, loadingJobs: false});
-        }, {snapshot: this.data.snapshot});
+            callback();
+        }, {snapshot});
     },
 
     /**
@@ -642,14 +649,18 @@ let datasetStore = Reflux.createStore({
      */
     startJob(snapshotId, app, parameters, callback) {
         crn.createJob({
-            appId: app.id,
-            appLabel: app.label,
-            appVersion: app.version,
-            datasetId: this.data.dataset._id,
-            executionSystem: app.executionSystem,
-            parameters: parameters,
-            snapshotId: snapshotId,
-            userId: userStore.data.scitran._id
+            appId:             app.id,
+            appLabel:          app.label,
+            appVersion:        app.version,
+            datasetId:         this.data.dataset._id,
+            executionSystem:   app.executionSystem,
+            parameters:        parameters,
+            snapshotId:        snapshotId,
+            userId:            userStore.data.scitran._id,
+            batchQueue:        app.defaultQueue,
+            memoryPerNode:     app.defaultMemoryPerNode,
+            nodeCount:         app.defaultNodeCount,
+            processorsPerNode: app.defaultProcessorsPerNode
         }, (err, res) => {
             callback(err, res);
             if (!err) {
