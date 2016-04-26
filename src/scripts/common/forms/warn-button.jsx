@@ -80,7 +80,7 @@ export default class WarnButton extends React.Component {
             );
         }
 
-        return button;
+        return this.state.loading ? loading : button;
     }
 
 // custom methods -----------------------------------------------------
@@ -111,7 +111,12 @@ export default class WarnButton extends React.Component {
             }
 
             if (!this.props.warn) {
-                action();
+                this.setState({loading: true});
+                action(() => {
+                    if (this._mounted) {
+                        this.setState({loading: false});
+                    }
+                });
                 return;
             } else {
                 this.setState({showAction: true});

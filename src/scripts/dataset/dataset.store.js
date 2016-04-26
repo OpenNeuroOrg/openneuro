@@ -11,6 +11,7 @@ import userActions from '../user/user.actions';
 import upload      from '../utils/upload';
 import config      from '../../../config';
 import files       from '../utils/files';
+import request     from '../utils/request';
 
 let datasetStore = Reflux.createStore({
 
@@ -50,6 +51,10 @@ let datasetStore = Reflux.createStore({
             currentUpdate: null,
             dataset: null,
             datasetTree: null,
+            displayFile: {
+                name: '',
+                text: ''
+            },
             loading: false,
             loadingApps: false,
             loadingJobs: false,
@@ -57,10 +62,11 @@ let datasetStore = Reflux.createStore({
             jobs: [],
             metadataIssues: {},
             modals: {
-                jobs:    false,
-                publish: false,
-                share:   false,
-                update:  false
+                jobs:        false,
+                publish:     false,
+                share:       false,
+                update:      false,
+                displayFile: false
             },
             snapshot: false,
             snapshots: [],
@@ -693,6 +699,27 @@ let datasetStore = Reflux.createStore({
             let fileName    = filePath.split('/')[filePath.split('/').length - 1];
             let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
             callback(downloadUrl);
+        });
+    },
+
+    /**
+     * DisplayFile
+     */
+    displayFile(jobId, fileLink, fileName, callback) {
+        this.getResultDownloadTicket(jobId, fileLink, (link) => {
+            request.get(link, {}, (err, res) => {
+                if (callback) {callback();}
+                let modals = this.data.modals;
+                modals.displayFile = true;
+                this.update({
+                    displayFile: {
+                        name: fileName,
+                        text: res.text
+                    },
+                    modals
+                });
+                // actions.displayFile(fileName, res.text);
+            });
         });
     },
 

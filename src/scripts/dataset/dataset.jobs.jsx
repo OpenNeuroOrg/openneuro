@@ -7,7 +7,7 @@ import actions      from './dataset.actions';
 import Spinner      from '../common/partials/spinner.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
 import WarnButton   from '../common/forms/warn-button.jsx';
-import moment        from 'moment';
+import moment       from 'moment';
 
 let Jobs = React.createClass({
 
@@ -69,6 +69,15 @@ let Jobs = React.createClass({
     _results(run) {
         if (run.results) {
             let resultLinks = run.results.map((result, index) => {
+                let displayBtn;
+                if (result.name === 'main.err' || result.name === 'main.out') {
+                    displayBtn = (
+                        <WarnButton
+                            icon="fa-search"
+                            warn={false}
+                            action={actions.displayFile.bind(this, run.jobId, result._links.self.href, result.name)} />
+                    );
+                }
                 return (
                     <li key={index}>
                         <span className="warning-btn-wrap">
@@ -76,6 +85,7 @@ let Jobs = React.createClass({
                             icon="fa-download"
                             prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
                         </span>
+                        {displayBtn}
                         <span>{result.name}</span>
                     </li>
                 );
@@ -110,12 +120,6 @@ let Jobs = React.createClass({
                 </Accordion>
             );
         }
-    },
-
-// actions ------------------------------------------------------------
-
-    _downloadResult(jobId, fileName) {
-        actions.downloadResult(jobId, fileName);
     }
 
 });
