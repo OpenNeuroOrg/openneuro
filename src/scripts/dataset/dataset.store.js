@@ -87,15 +87,16 @@ let datasetStore = Reflux.createStore({
         let snapshot = !!(options && options.snapshot);
         this.update({loading: true, dataset: null, datasetTree: null});
         bids.getDataset(datasetId, (res) => {
-            // res.showChildren = true;
             if (res.status === 404 || res.status === 403) {
                 this.update({status: res.status, loading: false, snapshot: snapshot});
             } else {
-                this.update({dataset: res, loading: false, snapshot: snapshot, selectedSnapshot: datasetId});
+                let originalId = res.original ? res.original : datasetId;
+                this.loadJobs(datasetId, snapshot, () => {
+                    this.loadSnapshots(originalId, () => {
+                        this.update({dataset: res, loading: false, snapshot: snapshot, selectedSnapshot: datasetId});
+                    });
+                });
             }
-            let originalId = res.original ? res.original : datasetId;
-            this.loadJobs(datasetId);
-            this.loadSnapshots(originalId);
         }, options);
     },
 
@@ -154,9 +155,10 @@ let datasetStore = Reflux.createStore({
     /**
      * Load Jobs
      */
-    loadJobs(projectId) {
-        if (!this.data.snapshot) {
+    loadJobs(projectId, snapshot, callback) {
+        if (!snapshot) {
             this.update({jobs: []});
+            callback();
             return;
         }
         this.update({loadingJobs: true});
@@ -194,7 +196,8 @@ let datasetStore = Reflux.createStore({
             }
 
             this.update({jobs: jobArray, loadingJobs: false});
-        }, {snapshot: this.data.snapshot});
+            callback();
+        }, {snapshot});
     },
 
     /**
