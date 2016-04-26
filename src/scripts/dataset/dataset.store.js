@@ -155,6 +155,10 @@ let datasetStore = Reflux.createStore({
      * Load Jobs
      */
     loadJobs(projectId) {
+        if (!this.data.snapshot) {
+            this.update({jobs: []});
+            return;
+        }
         this.update({loadingJobs: true});
         crn.getDatasetJobs(projectId, (err, res) => {
             // sort jobs by app
