@@ -9,13 +9,12 @@ import actions      from './dataset.actions.js';
 import MetaData     from './dataset.metadata.jsx';
 import Tools        from './dataset.tools.jsx';
 import Statuses     from './dataset.statuses.jsx';
+import Validation   from './dataset.validation.jsx';
 import moment       from 'moment';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 import FileTree     from './dataset.file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
-import Results      from '../upload/upload.validation-results.jsx';
 import UpdateWarn   from './dataset.update-warning.jsx';
-import pluralize    from 'pluralize';
 
 let Dataset = React.createClass({
 
@@ -87,7 +86,7 @@ let Dataset = React.createClass({
                                 </div>
                                 <div className="col-xs-5">
                                     <div>
-                                        {this._validation(errors, warnings, dataset.status.validating)}
+                                        <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} />
                                         <div className="fade-in col-xs-12">
                                             <Jobs />
                                         </div>
@@ -171,32 +170,6 @@ let Dataset = React.createClass({
         let dateAdded  = moment(dateCreated).format('L');
         let timeago    = moment(dateCreated).fromNow(true);
         return <h6>{'uploaded ' + (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +  ' on ' + dateAdded + ' - ' + timeago + ' ago'}</h6>;
-    },
-
-    _validation(errors, warnings, validating) {
-        if (validating) {
-            return <Spinner text="Validating" active={true} />;
-        }
-        if (errors.length > 0 || warnings.length > 0) {
-            let errMessage, warnMessage;
-            if (errors === 'Invalid') {
-                errMessage = 'This does not appear to be a BIDS dataset';
-            } else {
-                if (errors.length > 0) {
-                    errMessage = <span className="message error fade-in">Your dataset is no longer valid. You must fix the <strong>{errors.length + ' ' + pluralize('Error', errors.length)}</strong> to use all of the site features.</span>;
-                }
-                if (warnings.length > 0) {
-                    warnMessage = <span className="message error fade-in">We found <strong>{warnings.length + ' ' + pluralize('Warning', warnings.length)}</strong> in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant.</span>;
-                }
-            }
-            return (
-                <div className="fade-in col-xs-12">
-                    <h3 className="metaheader">Validation</h3>
-                    <div>{errMessage} {warnMessage}</div><br />
-                    <Results errors={errors} warnings={warnings} />
-                </div>
-            );
-        }
     },
 
     _views(views) {
