@@ -35,8 +35,8 @@ let Tools = React.createClass({
             snapshots   = this.props.snapshots,
             isUploading = dataset._id === this.state.projectId;
 
-        // permission check shorthands
-        let isAdmin      = dataset.access === 'admin',
+            // permission check shorthands
+            let isAdmin      = dataset.access === 'admin',
             // isEditor     = dataset.access === 'rw',
             // isViewer     = dataset.access === 'ro',
             isSignedIn   = !!userStore.hasToken(),
@@ -92,6 +92,11 @@ let Tools = React.createClass({
                     {
                         check: isInvalid,
                         message: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.',
+                        messageTimeout: 5000
+                    },
+                    {
+                        check: moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0,
+                        message: 'No modifications have been made since the last snapshot was created.',
                         messageTimeout: 5000
                     }
                 ]
