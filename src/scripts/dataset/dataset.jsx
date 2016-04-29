@@ -86,10 +86,11 @@ let Dataset = React.createClass({
                                 </div>
                                 <div className="col-xs-5">
                                     <div>
-                                        <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} />
+                                        <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} display={!dataset.status.incomplete} />
                                         <div className="fade-in col-xs-12">
                                             <Jobs />
                                         </div>
+                                        {this._incompleteMessage(dataset)}
                                         {this._fileTree(dataset, tree, canEdit)}
                                     </div>
                                 </div>
@@ -155,6 +156,27 @@ let Dataset = React.createClass({
                             <div className="panel-collapse" aria-expanded="false" >
                                 <div className="panel-body">
                                     <FileTree tree={tree} editable={canEdit} loading={this.state.loadingTree}/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    },
+
+    _incompleteMessage(dataset) {
+        if (dataset.status.incomplete) {
+            return (
+                <div className="col-xs-12">
+                    <div className="file-structure fade-in panel-group">
+                        <div className="panel panel-default">
+                            <div className="panel-heading" >
+                                <h4 className="panel-title">Incomplete</h4>
+                            </div>
+                            <div className="panel-collapse" aria-expanded="false" >
+                                <div className="panel-body">
+                                    You will have limited functionality on this dataset until it is completed. Please click resume to finish uploading.
                                 </div>
                             </div>
                         </div>
