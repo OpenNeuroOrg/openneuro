@@ -53,7 +53,6 @@ let Dataset = React.createClass({
         let content;
 
         if (dataset) {
-
             let errors = dataset.validation.errors;
             let warnings = dataset.validation.warnings;
 
@@ -76,6 +75,7 @@ let Dataset = React.createClass({
                                             onChange={actions.updateName}/>
                                     </h1>
                                     {this._uploaded(dataset)}
+                                    {this._modified(dataset.modified)}
                                     {this._authors(dataset.authors)}
                                     {this._views(dataset.views)}
                                     {this._downloads(dataset.downloads)}
@@ -184,6 +184,12 @@ let Dataset = React.createClass({
                 </div>
             );
         }
+    },
+
+    _modified(modified) {
+        let dateModified = moment(modified).format('L');
+        let timeago      = moment(modified).fromNow(true);
+        return <h6>{'last modified ' + dateModified + ' - ' + timeago + ' ago'}</h6>;
     },
 
     _uploaded(dataset) {
