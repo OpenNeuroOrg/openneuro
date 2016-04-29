@@ -11,7 +11,7 @@ export default class Validation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeKey: "2"
+            activeKey: '2'
         };
     }
 
@@ -20,44 +20,42 @@ export default class Validation extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.validating && !nextProps.validating) {
             if (nextProps.errors.length > 0 || nextProps.warnings.length > 0) {
-                this.setState({activeKey: "1"});
+                this.setState({activeKey: '1'});
             } else {
-                this.setState({activeKey: "2"});
+                this.setState({activeKey: '2'});
             }
         }
     }
 
     render () {
-        let temp = false;
         let errors     = this.props.errors,
             warnings   = this.props.warnings,
             validating = this.props.validating;
 
-        if (validating) {
-            return (
-                <div className="fade-in col-xs-12 analyses">
-                    <h3 className="metaheader">Validation</h3>
-                    <Spinner text="Validating" active={true} />
-                </div>
-            );
-        }
-
-        let header = errors.length > 0 ? 'Invalid' : (warnings.length > 0 ? 'Warnings' : 'Valid');
-
         return (
             <div className="fade-in col-xs-12 analyses">
                 <h3 className="metaheader">Validation</h3>
+                {this._accordion(errors, warnings, validating)}
+            </div>
+        );
+    }
+
+// templates methods --------------------------------------------------
+
+    _accordion(errors, warnings, validating) {
+        if (validating) {
+            return <Spinner text="Validating" active={true} />;
+        } else {
+            return (
                 <Accordion className="jobs-wrap" activeKey={this.state.activeKey} onSelect={this._togglePanel.bind(this)}>
                     <Panel className="job" header={this._header(errors, warnings)} eventKey="1">
                         {this._message(errors, warnings)}<br />
                         <Results errors={errors} warnings={warnings} />
                     </Panel>
                 </Accordion>
-            </div>
-        );
+            );
+        }
     }
-
-// templates methods --------------------------------------------------
 
     _header(errors, warnings) {
         let errs, warns;
@@ -93,7 +91,7 @@ export default class Validation extends React.Component {
 
     _togglePanel() {
         if (this.props.errors.length === 0 && this.props.warnings.length === 0) {return;}
-        let activeKey = this.state.activeKey === "1" ? "2" : "1";
+        let activeKey = this.state.activeKey === '1' ? '2' : '1';
         this.setState({activeKey});
     }
 
@@ -109,4 +107,4 @@ Validation.props = {
     errors:     [],
     warnings:   [],
     validating: false
-}
+};
