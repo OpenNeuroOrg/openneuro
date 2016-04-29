@@ -47,8 +47,8 @@ export default class Validation extends React.Component {
         return (
             <div className="fade-in col-xs-12 analyses">
                 <h3 className="metaheader">Validation</h3>
-                <Accordion className="jobs-wrap" activeKey={this.state.activeKey}>
-                    <Panel className="job" header={this._header(errors, warnings)} eventKey="1" onClick={this._togglePanel.bind(this)}>
+                <Accordion className="jobs-wrap" activeKey={this.state.activeKey} onSelect={this._togglePanel.bind(this)}>
+                    <Panel className="job" header={this._header(errors, warnings)} eventKey="1">
                         {this._message(errors, warnings)}<br />
                         <Results errors={errors} warnings={warnings} />
                     </Panel>
