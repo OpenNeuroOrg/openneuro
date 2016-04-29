@@ -749,7 +749,11 @@ let datasetStore = Reflux.createStore({
         scitran.getProjectSnapshots(datasetId, (err, res) => {
             scitran.getProject(datasetId, (res1) => {
                 let snapshots = !err && res.body ? res.body : [];
-                snapshots.reverse();
+                snapshots.sort((a, b) => {
+                    if      (a.snapshot_version < b.snapshot_version) {return 1;}
+                    else if (a.snapshot_version > b.snapshot_version) {return -1;}
+                    else {return 0;}
+                });
                 if (res1.statusCode !== 404 && res1.statusCode !== 403) {
                     snapshots.unshift({
                         isOriginal: true,
