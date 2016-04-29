@@ -35,8 +35,8 @@ let Tools = React.createClass({
             snapshots   = this.props.snapshots,
             isUploading = dataset._id === this.state.projectId;
 
-            // permission check shorthands
-            let isAdmin      = dataset.access === 'admin',
+        // permission check shorthands
+        let isAdmin      = dataset.access === 'admin',
             // isEditor     = dataset.access === 'rw',
             // isViewer     = dataset.access === 'ro',
             isSignedIn   = !!userStore.hasToken(),
