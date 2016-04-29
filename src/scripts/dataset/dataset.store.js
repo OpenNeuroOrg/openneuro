@@ -276,10 +276,11 @@ let datasetStore = Reflux.createStore({
     /**
      * Toggle Modal
      */
-    toggleModal(name) {
+    toggleModal(name, callback) {
         let modals = this.data.modals;
         modals[name] = !modals[name];
         this.update({modals});
+        if (callback && typeof callback === 'function') {callback();}
     },
 
 
