@@ -70,7 +70,7 @@ let Jobs = React.createClass({
         if (run.results) {
             let resultLinks = run.results.map((result, index) => {
                 let displayBtn;
-                if (result.name === 'main.err' || result.name === 'main.out') {
+                if (result.name.indexOf('.err') > -1 || result.name.indexOf('.out') > -1) {
                     displayBtn = (
                         <WarnButton
                             icon="fa-search"

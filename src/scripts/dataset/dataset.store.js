@@ -172,14 +172,6 @@ let datasetStore = Reflux.createStore({
             // sort jobs by app
             let jobs = {};
             for (let job of res.body) {
-                // rename main output file
-                if (job.results && job.results.length > 0) {
-                    for (let file of job.results) {
-                        if (file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) {
-                            file.name = 'main' + file.name.substr(file.name.length - 4);
-                        }
-                    }
-                }
                 if (!jobs.hasOwnProperty(job.appId)) {
                     jobs[job.appId] = {
                         appLabel:   job.appLabel,
