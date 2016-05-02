@@ -93,13 +93,13 @@ let Jobs = React.createClass({
                 }
                 return (
                     <li key={index}>
-                        <span className="warning-btn-wrap">
-                        <WarnButton
-                            icon="fa-download"
-                            prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
-                        </span>
                         {displayBtn}
-                        <span>{result.name}</span>
+                         <span className="warning-btn-wrap">
+                            <WarnButton
+                                icon="fa-download"
+                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
+                        </span>
+                        <span className="result-name">{result.name}</span>
                     </li>
                 );
             });

@@ -154,14 +154,14 @@
 .display-file-modal.modal {
 
     .modal-dialog {
-        height: 100%;
         width: 100%;
         color: $white;
         background: $transparent8;
-
+        height: 100%;
+        padding: 70px 0 0;
         .modal-content {
             background: $transparent;
-
+            height: 100%;
             .modal-header,
             .modal-body {
                 width: 100%;
@@ -169,6 +169,12 @@
 
             .modal-header {
                 font-size: 20px;
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                height: 70px;
 
                 .modal-title {
                     color: $white;
@@ -184,6 +190,10 @@
 
             .modal-body {
                 padding: 30px 50px;
+                white-space: pre-wrap;
+                font-family: monospace;
+                overflow-y: scroll;
+                height: 95%;
             }
         }
     }
