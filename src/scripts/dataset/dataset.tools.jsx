@@ -95,7 +95,7 @@ let Tools = React.createClass({
                         messageTimeout: 5000
                     },
                     {
-                        check: moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0,
+                        check: snapshots.length > 1 && (moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0),
                         message: 'No modifications have been made since the last snapshot was created.',
                         messageTimeout: 5000
                     }
