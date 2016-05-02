@@ -124,67 +124,105 @@
                         list-style: none;
                     }
 
-                    .warning-btn-wrap {
-                        width: 50px;
-                        text-align: center;
-                        overflow: hidden;
+                    .result-name {
+                        padding-left: 10px;
                         display: inline-block;
-                        line-height: 1.1;
                         vertical-align: middle;
-                        font-size: 14px;
-                        margin: 7px 5px 5px 0;
-                        height: 20px;
+                        line-height: 1.3;
+                    }
+
+                    .warning-btn-wrap {
+                        display: inline-block;
+                        overflow: hidden;
+                        vertical-align: middle;
+                        text-align: right;
 
                         .btn-warn-component {
-                            line-height: 1.2;
+                            overflow: hidden;
+                            line-height: 1.3;
 
                             i {
-                                line-height: 1.2;
-                            }
-
-                            &.warning,
-                            &.success,
-                            &.cancel {
-                                margin-top: 0;
-                                padding: 1px 3px;
-
-                                i {
-                                    line-height: 1.2;
-                                }
-
+                                line-height: 1;
                             }
                         }
-                    }
 
-                    .btn-warn-component {
-
-                        i {
-                            line-height: 1.2;
-                        }
-
-                        .warning {
-                            width: 50px;
-                            text-align: center;
-                            overflow: hidden;
-                            display: inline-block;
+                        .cancel,
+                        .success {
+                            padding: 2px 4px;
                             line-height: 1.1;
+                            margin: 0;
                             vertical-align: middle;
-                            font-size: 14px;
-                            margin: 7px 5px 5px 0;
-                            height: 20px;
 
-                            button {
-                                padding: 0;
-                                line-height: 1.1;
-                                display: inline-block;
-                                margin: 5px 0;
+                            i {
+                                line-height: 1;
                             }
                         }
+
+                        .cancel {
+                            margin-right: 5px;
+                        }
                     }
+                    //     width: 50px;
+                    //     text-align: center;
+                    //     overflow: hidden;
+                    //     display: inline-block;
+                    //     line-height: 1.1;
+                    //     vertical-align: middle;
+                    //     font-size: 14px;
+                    //     margin: 7px 5px 5px 0;
+                    //     height: 20px;
+
+                    //     .btn-warn-component {
+                    //         line-height: 1.2;
+
+                    //         i {
+                    //             line-height: 1.2;
+                    //         }
+
+                    //         &.warning,
+                    //         &.success,
+                    //         &.cancel {
+                    //             margin-top: 0;
+                    //             padding: 1px 3px;
+
+                    //             i {
+                    //                 line-height: 1.2;
+                    //             }
+
+                    //         }
+                    //     }
+                    // }
+
+                    // .btn-warn-component {
+
+                    //     i {
+                    //         line-height: 1.2;
+                    //     }
+
+                    //     // .warning {
+                    //     //     width: 50px;
+                    //     //     text-align: center;
+                    //     //     overflow: hidden;
+                    //     //     display: inline-block;
+                    //     //     line-height: 1.1;
+                    //     //     vertical-align: middle;
+                    //     //     font-size: 14px;
+                    //     //     margin: 7px 5px 5px 0;
+                    //     //     height: 20px;
+
+                    //     //     button {
+                    //     //         padding: 0;
+                    //     //         line-height: 1.1;
+                    //     //         display: inline-block;
+                    //     //         margin: 5px 0;
+                    //     //     }
+                    //     // }
+                    // }
 
                     .panel-body li {
-                        height: 35px;
+                        height: auto;
                         border-top: 1px solid $eee;
+                        padding: 5px 0;
 
                         &:last-child {
                             border-bottom: 1px solid $eee;
