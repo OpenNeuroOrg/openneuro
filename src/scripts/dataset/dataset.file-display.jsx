@@ -11,7 +11,7 @@ export default class FileDisplay extends React.Component {
     render() {
 
         return (
-            <Modal show={this.props.show} onHide={this.props.onHide} className="share-modal">
+            <Modal show={this.props.show} onHide={this.props.onHide} className="display-file-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>{this.props.file.name}</Modal.Title>
                 </Modal.Header>

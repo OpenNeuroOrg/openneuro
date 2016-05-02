@@ -122,20 +122,73 @@
                     ul {
                         padding: 0;
                         list-style: none;
-
-                        li {
-                            padding: 0 0 10px;
-                        }
                     }
 
                     .warning-btn-wrap {
-                        width: 68px;
+                        width: 50px;
                         text-align: center;
                         overflow: hidden;
                         display: inline-block;
-                        line-height: 10px;
+                        line-height: 1.1;
                         vertical-align: middle;
                         font-size: 14px;
+                        margin: 7px 5px 5px 0;
+                        height: 20px;
+
+                        .btn-warn-component {
+                            line-height: 1.2;
+
+                            i {
+                                line-height: 1.2;
+                            }
+
+                            &.warning,
+                            &.success,
+                            &.cancel {
+                                margin-top: 0;
+                                padding: 1px 3px;
+
+                                i {
+                                    line-height: 1.2;
+                                }
+
+                            }
+                        }
+                    }
+
+                    .btn-warn-component {
+
+                        i {
+                            line-height: 1.2;
+                        }
+
+                        .warning {
+                            width: 50px;
+                            text-align: center;
+                            overflow: hidden;
+                            display: inline-block;
+                            line-height: 1.1;
+                            vertical-align: middle;
+                            font-size: 14px;
+                            margin: 7px 5px 5px 0;
+                            height: 20px;
+
+                            button {
+                                padding: 0;
+                                line-height: 1.1;
+                                display: inline-block;
+                                margin: 5px 0;
+                            }
+                        }
+                    }
+
+                    .panel-body li {
+                        height: 35px;
+                        border-top: 1px solid $eee;
+
+                        &:last-child {
+                            border-bottom: 1px solid $eee;
+                        }
                     }
                 }
             }
