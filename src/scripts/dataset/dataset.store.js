@@ -223,16 +223,38 @@ let datasetStore = Reflux.createStore({
      * datasets public status to the passed value.
      */
     publish(snapshotId, value, callback) {
+        let datasetId = this.data.snapshot ? this.data.dataset.original : this.data.dataset._id;
+
+        // check if public snapshots exist outside of current
+        let hasPublic = false;
+        for (let snapshot of this.data.snapshots) {
+            if (snapshot._id === snapshotId) {continue;}
+            if (snapshot.public) {
+                hasPublic = true;
+            }
+        }
+
         scitran.updateSnapshotPublic(snapshotId, value, (err) => {
             if (callback) {callback();}
             if (!err) {
-                if (snapshotId === this.data.dataset._id) {
+                if (value) {
+                    if (!hasPublic) {
+                        scitran.addTag('projects', datasetId, 'public', () => {});
+                    }
+                    if (snapshotId === this.data.dataset._id) {
+                        let dataset = this.data.dataset;
+                        dataset.public = value;
+                        this.update({dataset});
+                    } else {
+                        router.transitionTo('snapshot', {datasetId, snapshotId});
+                    }
+                } else {
+                    if (!hasPublic) {
+                        scitran.removeTag('projects', datasetId, 'public', () => {});
+                    }
                     let dataset = this.data.dataset;
                     dataset.public = value;
                     this.update({dataset});
-                } else {
-                    let datasetId = this.data.snapshot ? this.data.dataset.original : this.data.dataset._id;
-                    router.transitionTo('snapshot', {datasetId, snapshotId});
                 }
             }
         });
