@@ -40,7 +40,6 @@ let Jobs = React.createClass({
 
     _runs(job) {
         let runs = job.runs.map((run) => {
-
             let runBy = run.userId ? <span><label> by </label><strong>{run.userId}</strong></span> : null;
 
             let jobAccordionHeader = (
@@ -54,13 +53,27 @@ let Jobs = React.createClass({
                 </div>
             );
 
-            return (
-                <Panel className="job" header={jobAccordionHeader}  key={run._id} eventKey={run._id}>
+            let resultsPending = (
+                <div className="job panel panel-default">
+                    <div className="panel-heading" >
+                        <div className="panel-title pending">
+                            {jobAccordionHeader}
+                        </div>
+                    </div>
+                </div>
+            );
+
+            let resultsRun = (
+                <Panel className="job" header={jobAccordionHeader}>
                     <span className="inner">
                         {this._parameters(run)}
                         {this._results(run)}
                     </span>
                 </Panel>
+            );
+
+            return (
+                    <span key={run._id} eventKey={run._id}> {run.results && run.results.length > 0 ?  resultsRun : resultsPending } </span>
             );
         });
         return runs;
@@ -73,7 +86,7 @@ let Jobs = React.createClass({
                 if (result.name.indexOf('.err') > -1 || result.name.indexOf('.out') > -1) {
                     displayBtn = (
                         <WarnButton
-                            icon="fa-search"
+                            icon="fa-eye"
                             warn={false}
                             action={actions.displayFile.bind(this, run.jobId, result._links.self.href, result.name)} />
                     );

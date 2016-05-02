@@ -37,7 +37,7 @@ export default class Validation extends React.Component {
 
         return (
             <div className="fade-in col-xs-12 analyses">
-                <h3 className="metaheader">Validation</h3>
+                <h3 className="metaheader">BIDS Validation</h3>
                 {this._accordion(errors, warnings, validating)}
             </div>
         );

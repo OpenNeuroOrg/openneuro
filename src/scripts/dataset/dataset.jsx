@@ -151,7 +151,7 @@ let Dataset = React.createClass({
                     <div className="file-structure fade-in panel-group">
                         <div className="panel panel-default">
                             <div className="panel-heading" >
-                                <h4 className="panel-title">Dataset File Tree</h4>
+                                <h3 className="panel-title">Dataset File Tree</h3>
                             </div>
                             <div className="panel-collapse" aria-expanded="false" >
                                 <div className="panel-body">

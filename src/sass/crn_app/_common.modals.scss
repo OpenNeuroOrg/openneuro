@@ -151,6 +151,44 @@
     }
 }
 
+.display-file-modal.modal {
+
+    .modal-dialog {
+        height: 100%;
+        width: 100%;
+        color: $white;
+        background: $transparent8;
+
+        .modal-content {
+            background: $transparent;
+
+            .modal-header,
+            .modal-body {
+                width: 100%;
+            }
+
+            .modal-header {
+                font-size: 20px;
+
+                .modal-title {
+                    color: $white;
+                    font-size: 30px;
+                }
+
+                .close {
+                    color: $white;
+                    margin-top: -10px !important;
+                    font-size: 50px;
+                }
+            }
+
+            .modal-body {
+                padding: 30px 50px;
+            }
+        }
+    }
+}
+
 .update-modal {
 
     .modal-text {
