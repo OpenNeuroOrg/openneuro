@@ -399,10 +399,12 @@ export default  {
         let status = {
             incomplete: false,
             validating: false,
-            invalid: false,
-            public: false,
-            shared: false
+            invalid:    false,
+            public:     false,
+            shared:     false
         };
+        status['public'] = !!project.public;
+        status['shared'] = userStore.data.scitran && (project.group != userStore.data.scitran._id)  &&  !!userAccess;
         if (project.tags) {
             for (let tag of project.tags) {
                 if (tag === 'incomplete') {
@@ -414,10 +416,11 @@ export default  {
                 if (tag == 'invalid') {
                     status['invalid'] = true;
                 }
+                if (tag == 'public') {
+                    status['public'] = true;
+                }
             }
         }
-        status['public'] = !!project.public;
-        status['shared'] = userStore.data.scitran && (project.group != userStore.data.scitran._id)  &&  !!userAccess;
         return status;
     },
 
