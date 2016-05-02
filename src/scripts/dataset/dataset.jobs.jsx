@@ -73,7 +73,7 @@ let Jobs = React.createClass({
             );
 
             return (
-                    <span key={run._id} eventKey={run._id}> {run.agave.status == 'PENDING' ? resultsPending : resultsRun } </span>
+                    <span key={run._id} eventKey={run._id}> {run.results && run.results.length > 0 ?  resultsRun : resultsPending } </span>
             );
         });
         return runs;
