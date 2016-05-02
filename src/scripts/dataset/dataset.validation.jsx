@@ -30,7 +30,10 @@ export default class Validation extends React.Component {
     render () {
         let errors     = this.props.errors,
             warnings   = this.props.warnings,
-            validating = this.props.validating;
+            validating = this.props.validating,
+            display    = this.props.display;
+
+        if (!display) {return false;}
 
         return (
             <div className="fade-in col-xs-12 analyses">

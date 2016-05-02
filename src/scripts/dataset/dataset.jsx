@@ -53,7 +53,6 @@ let Dataset = React.createClass({
         let content;
 
         if (dataset) {
-
             let errors = dataset.validation.errors;
             let warnings = dataset.validation.warnings;
 
@@ -76,6 +75,7 @@ let Dataset = React.createClass({
                                             onChange={actions.updateName}/>
                                     </h1>
                                     {this._uploaded(dataset)}
+                                    {this._modified(dataset.modified)}
                                     {this._authors(dataset.authors)}
                                     {this._views(dataset.views)}
                                     {this._downloads(dataset.downloads)}
@@ -86,10 +86,11 @@ let Dataset = React.createClass({
                                 </div>
                                 <div className="col-xs-5">
                                     <div>
-                                        <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} />
+                                        <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} display={!dataset.status.incomplete} />
                                         <div className="fade-in col-xs-12">
                                             <Jobs />
                                         </div>
+                                        {this._incompleteMessage(dataset)}
                                         {this._fileTree(dataset, tree, canEdit)}
                                     </div>
                                 </div>
@@ -162,6 +163,33 @@ let Dataset = React.createClass({
                 </div>
             );
         }
+    },
+
+    _incompleteMessage(dataset) {
+        if (dataset.status.incomplete) {
+            return (
+                <div className="col-xs-12">
+                    <div className="file-structure fade-in panel-group">
+                        <div className="panel panel-default">
+                            <div className="panel-heading" >
+                                <h4 className="panel-title">Incomplete</h4>
+                            </div>
+                            <div className="panel-collapse" aria-expanded="false" >
+                                <div className="panel-body">
+                                    You will have limited functionality on this dataset until it is completed. Please click resume to finish uploading.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    },
+
+    _modified(modified) {
+        let dateModified = moment(modified).format('L');
+        let timeago      = moment(modified).fromNow(true);
+        return <h6>{'last modified ' + dateModified + ' - ' + timeago + ' ago'}</h6>;
     },
 
     _uploaded(dataset) {

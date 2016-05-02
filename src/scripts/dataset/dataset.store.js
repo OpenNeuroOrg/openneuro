@@ -12,6 +12,7 @@ import upload      from '../utils/upload';
 import config      from '../../../config';
 import files       from '../utils/files';
 import request     from '../utils/request';
+import moment      from 'moment';
 
 let datasetStore = Reflux.createStore({
 
@@ -172,14 +173,6 @@ let datasetStore = Reflux.createStore({
             // sort jobs by app
             let jobs = {};
             for (let job of res.body) {
-                // rename main output file
-                if (job.results && job.results.length > 0) {
-                    for (let file of job.results) {
-                        if (file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) {
-                            file.name = 'main' + file.name.substr(file.name.length - 4);
-                        }
-                    }
-                }
                 if (!jobs.hasOwnProperty(job.appId)) {
                     jobs[job.appId] = {
                         appLabel:   job.appLabel,
@@ -284,14 +277,27 @@ let datasetStore = Reflux.createStore({
     /**
      * Toggle Modal
      */
-    toggleModal(name) {
+    toggleModal(name, callback) {
         let modals = this.data.modals;
         modals[name] = !modals[name];
         this.update({modals});
+        if (callback && typeof callback === 'function') {callback();}
     },
 
 
     // Metadata ----------------------------------------------------------------------
+
+    /**
+     * Update Modified
+     *
+     * Updated the last modified date for the current
+     * dataset (client-side only).
+     */
+    updateModified() {
+        let dataset = this.data.dataset;
+        dataset.modified = moment().format();
+        this.update({dataset});
+    },
 
     updateName(value, callback) {
         scitran.updateProject(this.data.dataset._id, {label: value}, () => {
@@ -343,6 +349,7 @@ let datasetStore = Reflux.createStore({
                 authors.push(author.name);
             }
             description.Authors = authors;
+            this.updateModified();
             scitran.updateFileFromString('projects', datasetId, 'dataset_description.json', JSON.stringify(description), 'application/json', ['project'], callback);
         });
     },
@@ -351,7 +358,10 @@ let datasetStore = Reflux.createStore({
      * Update README
      */
     updateREADME(value, callback) {
-        scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, '', [], callback);
+        scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, '', [], (err, res) => {
+            callback(err, res);
+            this.updateModified();
+        });
     },
 
     /**
@@ -408,6 +418,7 @@ let datasetStore = Reflux.createStore({
                 }
             };
             upload.add(request);
+            this.updateModified();
         }
     },
 
@@ -422,6 +433,7 @@ let datasetStore = Reflux.createStore({
             let dataset = this.data.dataset;
             dataset.attachments.splice(index, 1);
             this.update({dataset});
+            this.updateModified();
         });
     },
 
@@ -568,6 +580,7 @@ let datasetStore = Reflux.createStore({
                 dataset.validation = validation;
                 dataset.status.invalid = validation.errors && (validation.errors == 'Invalid' || validation.errors.length > 0);
                 this.update({dataset});
+                this.updateModified();
             });
         });
     },
@@ -718,7 +731,6 @@ let datasetStore = Reflux.createStore({
                     },
                     modals
                 });
-                // actions.displayFile(fileName, res.text);
             });
         });
     },
@@ -740,14 +752,18 @@ let datasetStore = Reflux.createStore({
             } else if (project.metadata.hasOwnProperty('validation') && project.metadata.validation.errors.length > 0) {
                 callback({error: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.'});
             } else {
-                scitran.createSnapshot(datasetId, (err, res) => {
-                    if (transition) {
-                        router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
-                    }
-                    this.loadSnapshots(datasetId, () => {
-                        if (callback){callback(res.body._id);}
+                if (moment(project.modified).diff(moment(this.data.snapshots[1].modified)) <= 0) {
+                    callback({error: 'No modifications have been made since the last snapshot was created.'});
+                } else {
+                    scitran.createSnapshot(datasetId, (err, res) => {
+                        if (transition) {
+                            router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
+                        }
+                        this.loadSnapshots(datasetId, () => {
+                            if (callback){callback(res.body._id);}
+                        });
                     });
-                });
+                }
             }
         });
     },
@@ -756,7 +772,11 @@ let datasetStore = Reflux.createStore({
         scitran.getProjectSnapshots(datasetId, (err, res) => {
             scitran.getProject(datasetId, (res1) => {
                 let snapshots = !err && res.body ? res.body : [];
-                snapshots.reverse();
+                snapshots.sort((a, b) => {
+                    if      (a.snapshot_version < b.snapshot_version) {return 1;}
+                    else if (a.snapshot_version > b.snapshot_version) {return -1;}
+                    else {return 0;}
+                });
                 if (res1.statusCode !== 404 && res1.statusCode !== 403) {
                     snapshots.unshift({
                         isOriginal: true,

@@ -361,6 +361,7 @@ export default  {
         dataset.authors      = dataset.description.Authors;
         dataset.user         = this.user(dataset, users);
         if (project.original) {dataset.original = project.original;}
+        if (project.snapshot_version) {dataset.snapshot_version = project.snapshot_version;}
         return dataset;
     },
 
