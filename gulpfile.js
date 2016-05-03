@@ -3,21 +3,21 @@
 
 // dependencies -----------------------------------------------------------
 
-    var gulp = require('gulp'),
-        changed = require('gulp-changed'),
-        sass = require('gulp-sass'),
-        csso = require('gulp-csso'),
-        browserify = require('browserify'),
-        watchify = require('watchify'),
-        source = require('vinyl-source-stream'),
-        buffer = require('vinyl-buffer'),
-        babelify = require('babelify'),
-        uglify = require('gulp-uglify'),
-        del = require('del'),
-        notify = require('gulp-notify'),
+    var gulp        = require('gulp'),
+        babelify    = require('babelify'),
+        browserify  = require('browserify'),
         browserSync = require('browser-sync'),
-        sourcemaps = require('gulp-sourcemaps'),
-        reload = browserSync.reload;
+        buffer      = require('vinyl-buffer'),
+        changed     = require('gulp-changed'),
+        csso        = require('gulp-csso'),
+        del         = require('del'),
+        notify      = require('gulp-notify'),
+        reload      = browserSync.reload,
+        sass        = require('gulp-sass'),
+        source      = require('vinyl-source-stream'),
+        sourcemaps  = require('gulp-sourcemaps'),
+        uglify      = require('gulp-uglify'),
+        watchify    = require('watchify');
 
 // project config ---------------------------------------------------------
 
