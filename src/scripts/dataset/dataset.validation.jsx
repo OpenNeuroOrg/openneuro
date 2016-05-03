@@ -103,7 +103,8 @@ export default class Validation extends React.Component {
 Validation.propTypes = {
     errors:     React.PropTypes.array,
     warnings:   React.PropTypes.array,
-    validating: React.PropTypes.bool
+    validating: React.PropTypes.bool,
+    display:    React.PropTypes.bool
 };
 
 Validation.props = {

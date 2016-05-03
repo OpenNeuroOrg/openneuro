@@ -1,0 +1,114 @@
+
+//dataset sidebar
+.left-sidebar {
+    padding: 0;
+    position: fixed;
+    margin-left: -15%;
+    width: 15%;
+    height: 100%;
+    z-index: 1300;
+    transition: all .5s ease;
+
+    .show-nav-btn {
+        position: absolute;
+        background: $c-56;
+        height: 45px;
+        width: 45px;
+        right: -45px;
+        padding: 2px 0 0 8px;
+        top: 0;
+        font-size: 28px;
+        text-align: center;
+        margin: 0;
+        cursor: pointer;
+        color: $white;
+        border-right: 2px solid $c-42;
+        border-bottom: 2px solid $c-42;
+    }
+
+    .slide {
+        z-index: 1200;
+        background-color: $c-56;
+        border-right: 2px solid $c-42;
+        display: block;
+        position: relative;
+        height: 100%;
+        padding: 0;
+
+        h3 {
+            height: 45px;
+            margin: 0;
+            color: $white;
+            padding: 11px 15px;
+            width: 100%;
+        }
+
+        ul {
+            padding: 0 0 200px;
+            margin: 0;
+            list-style: none;
+            overflow-y: scroll;
+            height: 100%;
+            position: absolute;
+            width: 100%;
+
+            a {
+                font-size: 14px;
+                background-color: transparent;
+                color: $misty;
+                width: 100%;
+                display: block;
+                text-decoration: none;
+                border-top: 1px solid $c-9e;
+                transition: background .4s ease;
+                padding: 10px 8px;
+
+                &:hover {
+                    text-decoration: none;
+                    background: $transparent1;
+                    color: $white;
+                }
+
+                &.active {
+                    background-color: $stanford-red;
+                    box-shadow: inset 0 0 5px $transparent5;
+                    color: $white;
+                }
+
+                .icons {
+                    width: 100%;
+                    margin: 0 -8px;
+                    padding: 8px 8px 0;
+                    display: block;
+                }
+            }
+
+            li:last-child a {
+                border-bottom: 1px solid $c-9e;
+            }
+
+        }
+    }
+}
+
+.dataset-wrap {
+    transition: all .5s ease;
+}
+
+.open {
+    .left-sidebar {
+        margin-left: 0;
+        width: 15%;
+
+        .slide {
+
+            width: 100%;
+            box-shadow: 1px 1px 3px -1px $transparent1;
+        }
+    }
+
+    .dataset-wrap {
+        width: 85%;
+        margin-left: 15%;
+    }
+}

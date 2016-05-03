@@ -1,30 +1,3 @@
-// .no-chrome {
-//     .right-sidebar {@include blur(2px);}
-
-//     .no-chrome-overlay {
-
-//         right: 0;
-//         background: $black;
-//         background-color: rgba(0,0,0,.7);
-//         position: fixed;
-//         height: 100%;
-//         z-index: 9000;
-//         width: 33.3333%;
-//         padding:100px 20px;
-//         text-align: center;
-//         color: #FBFBFB;
-//         font-size: 20px;
-//         line-height: 25px;
-//         text-shadow: 1px 1px 2px #000;
-//         .message {
-//             color:$coral;
-//             &:hover {
-//                 color:lighten($coral, 10%);
-//             }
-//         }
-//     }
-// }
-
 .upload-modal.modal.in {
     .modal-dialog {padding: 0;}
     .modal-header {background: $f4;}
@@ -144,6 +117,7 @@
         background: transparent;
         position: relative;
         z-index: 1000;
+
         .upload-panel {
             border-radius: 0;
             border: 0;

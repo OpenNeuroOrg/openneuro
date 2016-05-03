@@ -48,6 +48,7 @@ let Dataset = React.createClass({
 
     render() {
         let dataset = this.state.dataset;
+        let showSidebar = this.state.showSidebar;
         let tree    = this.state.datasetTree;
         let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
         let content;
@@ -57,42 +58,40 @@ let Dataset = React.createClass({
             let warnings = dataset.validation.warnings;
 
             content = (
-                <div className="dashboard">
-                    <div className="clearfix">
-                        <div className="col-xs-12 dataset-tools-wrap">
-                            <Tools dataset={dataset}
-                                   selectedSnapshot={this.state.selectedSnapshot}
-                                   snapshots={this.state.snapshots} />
-                        </div>
-                        <div className="col-xs-12 dataset-wrap">
-                            <div className="row">
-                                <div className="col-xs-7">
-                                    <h1 className="clearfix">
-                                        <ClickToEdit
-                                            value={dataset.label}
-                                            label={false}
-                                            editable={canEdit}
-                                            onChange={actions.updateName}/>
-                                    </h1>
-                                    {this._uploaded(dataset)}
-                                    {this._modified(dataset.modified)}
-                                    {this._authors(dataset.authors)}
-                                    {this._views(dataset.views)}
-                                    {this._downloads(dataset.downloads)}
-                                    <div className="status-container">
-                                        <Statuses dataset={dataset} />
-                                    </div>
-                                    <MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
+                <div className="clearfix dataset-wrap">
+                    <div className="col-xs-12 dataset-tools-wrap">
+                        <Tools dataset={dataset}
+                               selectedSnapshot={this.state.selectedSnapshot}
+                               snapshots={this.state.snapshots} />
+                    </div>
+                    <div className="col-xs-12 dataset-inner">
+                        <div className="row">
+                            <div className="col-xs-7">
+                                <h1 className="clearfix">
+                                    <ClickToEdit
+                                        value={dataset.label}
+                                        label={false}
+                                        editable={canEdit}
+                                        onChange={actions.updateName}/>
+                                </h1>
+                                {this._uploaded(dataset)}
+                                {this._modified(dataset.modified)}
+                                {this._authors(dataset.authors)}
+                                {this._views(dataset.views)}
+                                {this._downloads(dataset.downloads)}
+                                <div className="status-container">
+                                    <Statuses dataset={dataset} />
                                 </div>
-                                <div className="col-xs-5">
-                                    <div>
-                                        <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} display={!dataset.status.incomplete} />
-                                        <div className="fade-in col-xs-12">
-                                            <Jobs />
-                                        </div>
-                                        {this._incompleteMessage(dataset)}
-                                        {this._fileTree(dataset, tree, canEdit)}
+                                <MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
+                            </div>
+                            <div className="col-xs-5">
+                                <div>
+                                    <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} display={!dataset.status.incomplete} />
+                                    <div className="fade-in col-xs-12">
+                                        <Jobs />
                                     </div>
+                                    {this._incompleteMessage(dataset)}
+                                    {this._fileTree(dataset, tree, canEdit)}
                                 </div>
                             </div>
                         </div>
@@ -112,14 +111,58 @@ let Dataset = React.createClass({
         }
 
         return (
-            <div className="fade-in inner-route dataset light">
-                {this.state.loading ? <Spinner active={true} /> : content}
-                <UpdateWarn show={this.state.modals.update} onHide={actions.toggleModal.bind(null, 'update')} update={this.state.currentUpdate} />
-            </div>
+            <span className={showSidebar ? 'open' : null}>
+                <div className="fade-in inner-route dataset-route light">
+                        {this._leftSidebar(showSidebar)}
+                        {this.state.loading ? <Spinner active={true} /> : content}
+                    <UpdateWarn show={this.state.modals.update} onHide={actions.toggleModal.bind(null, 'update')} update={this.state.currentUpdate} />
+                </div>
+            </span>
         );
     },
 
 // template methods ---------------------------------------------------
+
+    _leftSidebar(showSidebar) {
+        return (
+            <div className="left-sidebar">
+                <span className="slide">
+                    {this._snapshotSelect(this.state.snapshots)}
+                    <span className="show-nav-btn" onClick={actions.toggleSidebar}>
+                        {showSidebar ?  <i className="fa fa-angle-double-left" aria-hidden="true"></i> : <i className="fa fa-angle-double-right" aria-hidden="true"></i>}
+                    </span>
+                </span>
+            </div>
+        );
+    },
+
+    _snapshotSelect(snapshots) {
+        let snapshotOptions = snapshots.map((snapshot) => {
+            let icons = (
+                <span className="icons"><i className="fa fa-globe"></i></span>
+            );
+
+            return (
+                <li key={snapshot._id}>
+                    <a onClick={this._selectSnapshot.bind(this, snapshot._id)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
+                        {snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
+                        {snapshot.public ? icons : null}
+                    </a>
+                </li>
+            );
+        });
+
+        return (
+            <div role="presentation" className="snapshot-select" >
+                <span>
+                    <h3>Versions</h3>
+                    <ul>
+                        {snapshotOptions}
+                    </ul>
+                </span>
+            </div>
+        );
+    },
 
     _authors(authors) {
         if (authors.length > 0) {
@@ -202,7 +245,25 @@ let Dataset = React.createClass({
 
     _views(views) {
         if (views) {return <h6>views: {views}</h6>;}
+    },
+
+
+
+// custom methods ---------------------------------------------------
+
+    _selectSnapshot(snapshotId) {
+        let snapshot;
+        // let snapshotId = e.target.value;
+        for (let i = 0; i < this.state.snapshots.length; i++) {
+            if (this.state.snapshots[i]._id == snapshotId) {
+                snapshot = this.state.snapshots[i];
+                break;
+            }
+        }
+
+        actions.loadSnapshot(snapshot.isOriginal, snapshot._id);
     }
+
 
 });
 

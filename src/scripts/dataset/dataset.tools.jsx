@@ -105,7 +105,7 @@ let Tools = React.createClass({
 
         return (
             <div className="tools clearfix">
-                {this._snapshotSelect(snapshots)}
+                <div className="snapshot-select-label" ><div className={this.props.selectedSnapshot == this.props.snapshots[0]._id ? 'draft' : 'snapshot'}>{this._snapshotVersion(this.props.selectedSnapshot)}</div></div>
                 {this._tools(tools)}
                 {this._runAnalysis(isSignedIn && !isIncomplete)}
                 {this._resume(isIncomplete, isUploading)}
@@ -138,25 +138,17 @@ let Tools = React.createClass({
         }
     },
 
-    _snapshotSelect(snapshots) {
-        let snapshotOptions = snapshots.map((snapshot) => {
-            return (
-                <option key={snapshot._id} value={snapshot._id}>
-                    {snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
-                </option>
-            );
-        });
-
-        return (
-            <div role="presentation" className="snapshot-select" >
-                <span>
-                    <select value={this.props.selectedSnapshot} onChange={this._selectSnapshot}>
-                        <option value="" disabled>Select a snapshot</option>
-                        {snapshotOptions}
-                    </select>
-                </span>
-            </div>
-        );
+    _snapshotVersion(selectedSnapshot) {
+        let snapshotId = selectedSnapshot;
+        for (let i = 0; i < this.props.snapshots.length; i++) {
+            if (this.props.snapshots[i]._id == snapshotId) {
+                if(this.props.snapshots[i].isOriginal){
+                    return 'Draft';
+                }else{
+                    return 'Snapshot v' + this.props.snapshots[i].snapshot_version;
+                }
+            }
+        }
     },
 
     _tools(toolConfig) {
@@ -183,18 +175,6 @@ let Tools = React.createClass({
 
     _onFileSelect(files) {
         uploadActions.onResume(files, this.props.dataset.label);
-    },
-
-    _selectSnapshot(e) {
-        let snapshot;
-        let snapshotId = e.target.value;
-        for (let i = 0; i < this.props.snapshots.length; i++) {
-            if (this.props.snapshots[i]._id == snapshotId) {
-                snapshot = this.props.snapshots[i];
-                break;
-            }
-        }
-        datasetActions.loadSnapshot(snapshot.isOriginal, snapshot._id);
     }
 
 });

@@ -44,7 +44,7 @@ body {
     padding: 0;
 }
 
-.main.view.container {padding-top: 85px;}
+.main.view.container {padding-top: 115px;}
 
 .inner-route {
     &.light {
@@ -93,18 +93,16 @@ h6 {
     width: 100%;
     overflow-y: scroll;
 
+    &.snapshot,
     &.dataset {
         background: $white;
     }
 }
 
 .route-wrapper {
-    padding: 0;
-    margin: 0;
-    padding-left: 65px;
 
     .inner-route {
-        padding: 20px 0;
+        padding: 0 0 20px;
     }
 }
 

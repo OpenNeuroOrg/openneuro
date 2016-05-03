@@ -27,7 +27,7 @@ let Usermenu = React.createClass({
         let gear = (<i className="fa fa-gear" />);
 
         return (
-            <div className="clearfix user-wrap">
+            <li className="clearfix user-wrap">
                 <span className="username">
                     <span className="greeting">Hello</span>
                     <br/>
@@ -40,7 +40,7 @@ let Usermenu = React.createClass({
                     <li><a onClick={this._signOut} className="um-sign-out">Sign Out</a></li>
                     <li role="separator" className="divider"></li>
                 </DropdownButton>
-            </div>
+            </li>
         );
     },
 

@@ -73,7 +73,8 @@ let datasetStore = Reflux.createStore({
             snapshots: [],
             selectedSnapshot: '',
             status: null,
-            users: []
+            users: [],
+            showSidebar: true
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data);
@@ -793,6 +794,12 @@ let datasetStore = Reflux.createStore({
 
     trackView (snapshotId) {
         scitran.trackUsage(snapshotId, 'view', () => {});
+    },
+
+    // Toggle Sidebar ----------------------------------------------------------------
+
+    toggleSidebar () {
+        this.update({showSidebar: !this.data.showSidebar});
     }
 
 });
