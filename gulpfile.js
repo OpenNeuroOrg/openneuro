@@ -31,7 +31,6 @@
         bundle:     'app.min.js',
 
         dist:       'dist',
-        distCss:    'dist/css',
         distAssets: 'dist/assets',
         distFonts:  'dist/fonts'
     };
@@ -104,11 +103,11 @@
     // compile & minify scss
     gulp.task('styles', function() {
         return gulp.src(p.scssmain)
-            .pipe(changed(p.distCss))
+            .pipe(changed(p.dist))
             .pipe(sass({errLogToConsole: true}))
             .on('error', notify.onError())
             // .pipe(csso())
-            .pipe(gulp.dest(p.distCss))
+            .pipe(gulp.dest(p.dist))
             .pipe(reload({stream: true}));
     });
 
