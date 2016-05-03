@@ -7,7 +7,6 @@
         changed = require('gulp-changed'),
         sass = require('gulp-sass'),
         csso = require('gulp-csso'),
-        autoprefixer = require('gulp-autoprefixer'),
         browserify = require('browserify'),
         watchify = require('watchify'),
         source = require('vinyl-source-stream'),
