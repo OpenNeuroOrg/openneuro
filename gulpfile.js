@@ -25,7 +25,6 @@
         jsx:        './src/scripts/client.jsx',
         scss:       './src/sass/**/*.scss',
         scssmain:   './src/sass/main.scss',
-        libs:       './src/scripts/libs/*',
         assets:     './src/assets/*',
         fonts:      './src/sass/fonts/*',
         bundle:     'app.min.js',
