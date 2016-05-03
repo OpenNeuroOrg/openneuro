@@ -155,7 +155,7 @@ let Dataset = React.createClass({
         return (
             <div role="presentation" className="snapshot-select" >
                 <span>
-                    <h3>Versions</h3>
+                    <h3>Dataset Snapshots</h3>
                     <ul>
                         {snapshotOptions}
                     </ul>
