@@ -30,7 +30,7 @@ let Statuses = React.createClass({
 
         return (
             <span className="clearfix status-wrap">
-                <Status type='public'     minimal={minimal} display={dataset.public} />
+                <Status type='public'     minimal={minimal} display={status.public || (status.hasPublic && minimal)} />
                 <Status type='incomplete' minimal={minimal} display={status.incomplete && !uploading} dataset={dataset} />
                 <Status type='shared'     minimal={minimal} display={status.shared} />
                 <Status type='inProgress' minimal={minimal} display={uploading} />

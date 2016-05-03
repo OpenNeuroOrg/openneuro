@@ -14,20 +14,22 @@ export default class Filters extends React.Component {
 
         let filters  = this.props.filters;
         let incompleteFilter = this._button('incomplete', 'fa-warning', 'Incomplete datasets', 'Incomplete');
-        let sharedFilter = this._button('shared', 'fa-user', 'Datasets shared with me', 'Shared with me');
-        let invalidFilter = this._button('invalid', 'fa-exclamation-circle', 'Invalid Dataset', 'Invalid');
+        let sharedFilter     = this._button('shared', 'fa-user', 'Datasets shared with me', 'Shared with me');
+        let invalidFilter    = this._button('invalid', 'fa-exclamation-circle', 'Invalid Dataset', 'Invalid');
+        let publicFilter     = this._button('public', 'fa-globe', 'Public Dataset', 'Public');
         let filterButtons;
         if (!this.props.isPublic) {
             filterButtons = (
                 <div className="filters">
                     <label>Filter By:</label>
                     <Tooltip tooltip="All datasets">
-                        <button className={filters.length === 0 ? 'active btn-filter filter-all' : 'btn-filter filter-all'} 
+                        <button className={filters.length === 0 ? 'active btn-filter filter-all' : 'btn-filter filter-all'}
                                 onClick={this._filter.bind(this, 'reset')}>All</button>
                     </Tooltip>
                     {incompleteFilter}
                     {sharedFilter}
                     {invalidFilter}
+                    {publicFilter}
                 </div>
             );
         }
