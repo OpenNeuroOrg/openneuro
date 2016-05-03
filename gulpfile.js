@@ -43,14 +43,14 @@
     });
 
     gulp.task('watch', [], function() {
-        gulp.start(['watchStyles', 'watchApp', 'styles', 'copy', 'browserSync']);
+        gulp.start(['watchStyles', 'watchApp', 'dev-styles', 'dev-copy', 'browserSync']);
     });
 
     gulp.task('default',['watch'], function() {
         console.log('Running"');
     });
 
-// tasks ------------------------------------------------------------------
+// deployment build -------------------------------------------------------
 
     // clean before build
     gulp.task('clean', function(cb) {
@@ -73,21 +73,6 @@
             gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
             gulp.src('dist/temp/*').pipe(gulp.dest(p.dist)).on('end', function () {del(['dist/temp'])});
         });
-    });
-
-    // watch for changes
-    gulp.task('watchApp', function() {
-        var bundler = watchify(browserify(p.jsx, watchify.args));
-        function rebundle() {
-            return bundler
-                .bundle()
-                .on('error', notify.onError())
-                .pipe(source(p.bundle))
-                .pipe(gulp.dest(p.dist))
-                .pipe(reload({stream: true}));
-        }
-        bundler.transform(babelify).on('update', rebundle);
-        return rebundle();
     });
 
     // bundle js
@@ -116,8 +101,55 @@
             .pipe(reload({stream: true}));
     });
 
+// development build ------------------------------------------------------
+
+    // bundle js
+    gulp.task('dev-build-app', function(cb) {
+        browserify(p.jsx)
+            .transform(babelify)
+            .bundle()
+            .pipe(source(p.bundle))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(uglify())
+            .pipe(sourcemaps.write('./'))
+            .pipe(gulp.dest(p.dist))
+            .on('end', cb);
+    });
+
+    gulp.task('dev-styles', function() {
+        return gulp.src(p.scssmain)
+            .pipe(changed(p.dist))
+            .pipe(sass({errLogToConsole: true}))
+            .on('error', notify.onError())
+            .pipe(gulp.dest(p.dist))
+            .pipe(reload({stream: true}));
+    });
+
+    // copy
+    gulp.task('dev-copy', function () {
+        gulp.src(p.html).pipe(gulp.dest(p.dist));
+        gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
+        gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
+    });
+
+    // watch for js changes
+    gulp.task('watchApp', function() {
+        var bundler = watchify(browserify(p.jsx, watchify.args));
+        function rebundle() {
+            return bundler
+                .bundle()
+                .on('error', notify.onError())
+                .pipe(source(p.bundle))
+                .pipe(gulp.dest(p.dist))
+                .pipe(reload({stream: true}));
+        }
+        bundler.transform(babelify).on('update', rebundle);
+        return rebundle();
+    });
+
     // watch styles
     gulp.task('watchStyles', function() {
-        gulp.watch(p.scssmain, ['styles']);
-        gulp.watch(p.scss, ['styles']);
+        gulp.watch(p.scssmain, ['dev-styles']);
+        gulp.watch(p.scss, ['dev-styles']);
     });
