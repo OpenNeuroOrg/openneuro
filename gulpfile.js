@@ -7,8 +7,9 @@
         browserify  = require('browserify'),
         browserSync = require('browser-sync'),
         buffer      = require('vinyl-buffer'),
+        CacheBuster = require('gulp-cachebust'),
+        cachebust   = new CacheBuster(),
         changed     = require('gulp-changed'),
-        csso        = require('gulp-csso'),
         del         = require('del'),
         notify      = require('gulp-notify'),
         reload      = browserSync.reload,
@@ -30,15 +31,15 @@
         bundle:     'app.min.js',
 
         dist:       'dist',
+        distTemp:   'dist/temp',
         distAssets: 'dist/assets',
         distFonts:  'dist/fonts'
     };
 
 // primary tasks ----------------------------------------------------------
 
-    gulp.task('build', [], function() {
-        process.env.NODE_ENV = 'production';
-        gulp.start(['styles', 'copy', 'buildApp']);
+    gulp.task('build', ['styles', 'buildApp'], function() {
+        gulp.start(['copy']);
     });
 
     gulp.task('watch', [], function() {
@@ -53,7 +54,7 @@
 
     // clean before build
     gulp.task('clean', function(cb) {
-          del(['dist'], cb);
+          del(['dist/temp'], cb);
     });
 
     // server and sync changes
@@ -66,9 +67,12 @@
 
     // copy
     gulp.task('copy', function () {
-        gulp.src(p.html).pipe(gulp.dest(p.dist));
-        gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
-        gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
+        del(['dist/*.js', 'dist/*.map', 'dist/*.html', 'dist/*.css']).then(function () {
+            gulp.src(p.html).pipe(cachebust.references()).pipe(gulp.dest(p.dist));
+            gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
+            gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
+            gulp.src('dist/temp/*').pipe(gulp.dest(p.dist)).on('end', function () {del(['dist/temp'])});
+        });
     });
 
     // watch for changes
@@ -87,7 +91,7 @@
     });
 
     // bundle js
-    gulp.task('buildApp', function() {
+    gulp.task('buildApp', function(cb) {
         browserify(p.jsx)
             .transform(babelify)
             .bundle()
@@ -95,8 +99,10 @@
             .pipe(buffer())
             .pipe(sourcemaps.init({loadMaps: true}))
             .pipe(uglify())
+            .pipe(cachebust.resources())
             .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest(p.dist));
+            .pipe(gulp.dest(p.distTemp))
+            .on('end', cb);
     });
 
     // compile & minify scss
@@ -105,8 +111,8 @@
             .pipe(changed(p.dist))
             .pipe(sass({errLogToConsole: true}))
             .on('error', notify.onError())
-            // .pipe(csso())
-            .pipe(gulp.dest(p.dist))
+            .pipe(cachebust.resources())
+            .pipe(gulp.dest(p.distTemp))
             .pipe(reload({stream: true}));
     });
 
