@@ -775,7 +775,7 @@ let datasetStore = Reflux.createStore({
                 callback({error: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.'});
             } else {
                 if (moment(project.modified).diff(moment(this.data.snapshots[1].modified)) <= 0) {
-                    callback({error: 'No modifications have been made since the last snapshot was created.'});
+                    callback({error: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.'});
                 } else {
                     scitran.createSnapshot(datasetId, (err, res) => {
                         if (transition) {
