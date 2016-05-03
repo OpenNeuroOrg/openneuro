@@ -92,12 +92,12 @@ let Tools = React.createClass({
                     {
                         check: isInvalid,
                         message: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.',
-                        messageTimeout: 5000
+                        timeout: 5000
                     },
                     {
                         check: snapshots.length > 1 && (moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0),
                         message: 'No modifications have been made since the last snapshot was created.',
-                        messageTimeout: 5000
+                        timeout: 5000
                     }
                 ]
             }
