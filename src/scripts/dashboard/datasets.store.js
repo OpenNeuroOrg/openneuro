@@ -108,7 +108,7 @@ let UploadStore = Reflux.createStore({
             let results = [];
             for (let dataset of visibleDatasets) {
                 // public
-                if (filters.indexOf('public') > -1 && dataset.status.public) {
+                if (filters.indexOf('public') > -1 && dataset.status.hasPublic) {
                     results.push(dataset);
                 }
 

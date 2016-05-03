@@ -40,7 +40,7 @@ let Tools = React.createClass({
             // isEditor     = dataset.access === 'rw',
             // isViewer     = dataset.access === 'ro',
             isSignedIn   = !!userStore.hasToken(),
-            isPublic     = !!dataset.public,
+            isPublic     = !!dataset.status.public,
             isIncomplete = !!dataset.status.incomplete,
             isInvalid    = !!dataset.status.invalid,
             isSnapshot   = !!dataset.original,

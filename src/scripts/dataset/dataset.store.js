@@ -239,21 +239,21 @@ let datasetStore = Reflux.createStore({
             if (!err) {
                 if (value) {
                     if (!hasPublic) {
-                        scitran.addTag('projects', datasetId, 'public', () => {});
+                        scitran.addTag('projects', datasetId, 'hasPublic', () => {});
                     }
                     if (snapshotId === this.data.dataset._id) {
                         let dataset = this.data.dataset;
-                        dataset.public = value;
+                        dataset.status.public = value;
                         this.update({dataset});
                     } else {
                         router.transitionTo('snapshot', {datasetId, snapshotId});
                     }
                 } else {
                     if (!hasPublic) {
-                        scitran.removeTag('projects', datasetId, 'public', () => {});
+                        scitran.removeTag('projects', datasetId, 'hasPublic', () => {});
                     }
                     let dataset = this.data.dataset;
-                    dataset.public = value;
+                    dataset.status.public = value;
                     this.update({dataset});
                 }
             }
