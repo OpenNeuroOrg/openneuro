@@ -105,7 +105,11 @@ let Tools = React.createClass({
 
         return (
             <div className="tools clearfix">
-                <div className="snapshot-select-label" ><div className={this.props.selectedSnapshot == this.props.snapshots[0]._id ? 'draft' : 'snapshot'}>{this._snapshotVersion(this.props.selectedSnapshot)}</div></div>
+                <div className="snapshot-select-label" >
+                    <div className={this._snapshotVersion(this.props.selectedSnapshot) === 'Draft' ? 'draft' : 'snapshot'}>
+                        {this._snapshotVersion(this.props.selectedSnapshot)}
+                    </div>
+                </div>
                 {this._tools(tools)}
                 {this._runAnalysis(isSignedIn && !isIncomplete)}
                 {this._resume(isIncomplete, isUploading)}
