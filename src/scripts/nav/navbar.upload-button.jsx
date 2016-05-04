@@ -51,7 +51,7 @@ let UploadBtn = React.createClass({
                 <div className="upload-btn-wrap">
                 {this.state.uploadStatus == 'uploading' ? progress : uploadBtn}
                 {uploadModal}
-                <img src="/assets/favicon-upload.png" id="favicon_upload" className="hidden"/>
+                <img src="/favicon-upload.png" id="favicon_upload" className="hidden"/>
                 </div>
             </span>
         );
