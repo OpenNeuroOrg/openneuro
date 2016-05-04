@@ -11,6 +11,7 @@
         cachebust   = new CacheBuster(),
         changed     = require('gulp-changed'),
         del         = require('del'),
+        gulpif      = require('gulp-if'),
         notify      = require('gulp-notify'),
         reload      = browserSync.reload,
         sass        = require('gulp-sass'),
@@ -33,7 +34,9 @@
         dist:       'dist',
         distTemp:   'dist/temp',
         distAssets: 'dist/assets',
-        distFonts:  'dist/fonts'
+        distFonts:  'dist/fonts',
+
+        env:        'prod'
     };
 
 // primary tasks ----------------------------------------------------------
@@ -43,7 +46,8 @@
     });
 
     gulp.task('watch', [], function() {
-        gulp.start(['watchStyles', 'watchApp', 'dev-styles', 'dev-copy', 'browserSync']);
+        p.env = 'dev';
+        gulp.start(['watchStyles', 'watchApp', 'styles', 'dev-copy', 'browserSync']);
     });
 
     gulp.task('default',['watch'], function() {
@@ -96,35 +100,12 @@
             .pipe(changed(p.dist))
             .pipe(sass({errLogToConsole: true}))
             .on('error', notify.onError())
-            .pipe(cachebust.resources())
-            .pipe(gulp.dest(p.distTemp))
+            .pipe(gulpif(p.env === 'prod', cachebust.resources()))
+            .pipe(gulpif(p.env === 'prod', gulp.dest(p.distTemp), gulp.dest(p.dist)))
             .pipe(reload({stream: true}));
     });
 
 // development build ------------------------------------------------------
-
-    // bundle js
-    gulp.task('dev-build-app', function(cb) {
-        browserify(p.jsx)
-            .transform(babelify)
-            .bundle()
-            .pipe(source(p.bundle))
-            .pipe(buffer())
-            .pipe(sourcemaps.init({loadMaps: true}))
-            .pipe(uglify())
-            .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest(p.dist))
-            .on('end', cb);
-    });
-
-    gulp.task('dev-styles', function() {
-        return gulp.src(p.scssmain)
-            .pipe(changed(p.dist))
-            .pipe(sass({errLogToConsole: true}))
-            .on('error', notify.onError())
-            .pipe(gulp.dest(p.dist))
-            .pipe(reload({stream: true}));
-    });
 
     // copy
     gulp.task('dev-copy', function () {
