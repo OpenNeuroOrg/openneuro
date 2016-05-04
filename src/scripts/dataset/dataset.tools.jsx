@@ -106,8 +106,8 @@ let Tools = React.createClass({
         return (
             <div className="tools clearfix">
                 <div className="snapshot-select-label" >
-                    <div className={this._snapshotVersion(this.props.selectedSnapshot) === 'Draft' ? 'draft' : 'snapshot'}>
-                        {this._snapshotVersion(this.props.selectedSnapshot)}
+                    <div className={!dataset.original ? 'draft' : 'snapshot'}>
+                        {!dataset.original ? 'Draft' : 'Snapshot v' + dataset.snapshot_version}
                     </div>
                 </div>
                 {this._tools(tools)}
@@ -139,19 +139,6 @@ let Tools = React.createClass({
                     </button>
                 </div>
             );
-        }
-    },
-
-    _snapshotVersion(selectedSnapshot) {
-        let snapshotId = selectedSnapshot;
-        for (let i = 0; i < this.props.snapshots.length; i++) {
-            if (this.props.snapshots[i]._id == snapshotId) {
-                if(this.props.snapshots[i].isOriginal){
-                    return 'Draft';
-                }else{
-                    return 'Snapshot v' + this.props.snapshots[i].snapshot_version;
-                }
-            }
         }
     },
 
