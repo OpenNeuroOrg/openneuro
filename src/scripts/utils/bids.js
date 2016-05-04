@@ -396,7 +396,7 @@ export default  {
      * to any statuses set in the notes.
      */
     formatStatus (project, userAccess) {
-        let tags = project.tags;
+        let tags = project.tags ? project.tags : [];
         let status = {
             incomplete: tags.indexOf('incomplete') > -1,
             validating: tags.indexOf('validating') > -1,
