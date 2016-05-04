@@ -56,11 +56,6 @@
 
 // deployment build -------------------------------------------------------
 
-    // clean before build
-    gulp.task('clean', function(cb) {
-          del(['dist/temp'], cb);
-    });
-
     // server and sync changes
     gulp.task('browserSync', function() {
         browserSync.init({
