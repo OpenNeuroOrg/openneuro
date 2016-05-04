@@ -47,7 +47,7 @@
 
     gulp.task('watch', [], function() {
         p.env = 'dev';
-        gulp.start(['watchStyles', 'watchApp', 'styles', 'dev-copy', 'browserSync']);
+        gulp.start(['watchStyles', 'watchApp', 'styles', 'copy', 'browserSync']);
     });
 
     gulp.task('default',['watch'], function() {
@@ -71,12 +71,18 @@
 
     // copy
     gulp.task('copy', function () {
-        del(['dist/*.js', 'dist/*.map', 'dist/*.html', 'dist/*.css']).then(function () {
-            gulp.src(p.html).pipe(cachebust.references()).pipe(gulp.dest(p.dist));
+        if (p.env === 'prod') {
+            del(['dist/*.js', 'dist/*.map', 'dist/*.html', 'dist/*.css']).then(function () {
+                gulp.src(p.html).pipe(cachebust.references()).pipe(gulp.dest(p.dist));
+                gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
+                gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
+                gulp.src('dist/temp/*').pipe(gulp.dest(p.dist)).on('end', function () {del(['dist/temp'])});
+            });
+        } else {
+            gulp.src(p.html).pipe(gulp.dest(p.dist));
             gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
             gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
-            gulp.src('dist/temp/*').pipe(gulp.dest(p.dist)).on('end', function () {del(['dist/temp'])});
-        });
+        }
     });
 
     // bundle js
@@ -107,13 +113,6 @@
 
 // development build ------------------------------------------------------
 
-    // copy
-    gulp.task('dev-copy', function () {
-        gulp.src(p.html).pipe(gulp.dest(p.dist));
-        gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
-        gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
-    });
-
     // watch for js changes
     gulp.task('watchApp', function() {
         var bundler = watchify(browserify(p.jsx, watchify.args));
@@ -131,6 +130,6 @@
 
     // watch styles
     gulp.task('watchStyles', function() {
-        gulp.watch(p.scssmain, ['dev-styles']);
-        gulp.watch(p.scss, ['dev-styles']);
+        gulp.watch(p.scssmain, ['styles']);
+        gulp.watch(p.scss, ['styles']);
     });
