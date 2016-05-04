@@ -14,7 +14,6 @@ import moment       from 'moment';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 import FileTree     from './dataset.file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
-import UpdateWarn   from './dataset.update-warning.jsx';
 
 let Dataset = React.createClass({
 
@@ -114,7 +113,6 @@ let Dataset = React.createClass({
         return (
             <div className="fade-in inner-route dataset light">
                 {this.state.loading ? <Spinner active={true} /> : content}
-                <UpdateWarn show={this.state.modals.update} onHide={actions.toggleModal.bind(null, 'update')} update={this.state.currentUpdate} />
             </div>
         );
     },

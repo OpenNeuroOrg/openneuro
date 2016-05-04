@@ -73,7 +73,7 @@ let Tools = React.createClass({
                 icon: 'fa-trash',
                 action: datasetActions.deleteDataset.bind(this, dataset._id),
                 display: (isAdmin && !isPublic) || isSuperuser,
-                warn: true
+                warn: isSnapshot
             },
             {
                 tooltip: 'Share Dataset',
