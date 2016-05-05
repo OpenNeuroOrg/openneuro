@@ -140,7 +140,7 @@ let Dataset = React.createClass({
 
             return (
                 <li key={snapshot._id}>
-                    <a onClick={this._selectSnapshot.bind(this, snapshot._id)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
+                    <a onClick={actions.loadSnapshot.bind(this, snapshot.isOriginal, snapshot._id)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
                         <div className="clearfix">
                             <div className=" col-xs-8">
                                 <span className="dataset-type">
@@ -255,25 +255,7 @@ let Dataset = React.createClass({
 
     _views(views) {
         if (views) {return <h6>views: {views}</h6>;}
-    },
-
-
-
-// custom methods ---------------------------------------------------
-
-    _selectSnapshot(snapshotId) {
-        let snapshot;
-        // let snapshotId = e.target.value;
-        for (let i = 0; i < this.state.snapshots.length; i++) {
-            if (this.state.snapshots[i]._id == snapshotId) {
-                snapshot = this.state.snapshots[i];
-                break;
-            }
-        }
-
-        actions.loadSnapshot(snapshot.isOriginal, snapshot._id);
     }
-
 
 });
 
