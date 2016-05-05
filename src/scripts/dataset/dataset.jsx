@@ -49,9 +49,7 @@ let Dataset = React.createClass({
     },
 
     render() {
-        console.log(this.state.snapshots);
         let dataset = this.state.dataset;
-        let showSidebar = this.state.showSidebar;
         let tree    = this.state.datasetTree;
         let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
         let content;

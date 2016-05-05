@@ -4,7 +4,6 @@ import React          from 'react';
 import Reflux         from 'reflux';
 import moment         from 'moment';
 import actions        from './dataset.actions.js';
-import datasetStore   from './dataset.store';
 import WarnButton     from '../common/forms/warn-button.jsx';
 import FileSelect     from '../common/forms/file-select.jsx';
 import uploadStore    from '../upload/upload.store';
@@ -20,7 +19,8 @@ let Tools = React.createClass({
     propTypes: {
         dataset:   React.PropTypes.object.isRequired,
         snapshots: React.PropTypes.array.isRequired,
-        selectedSnapshot: React.PropTypes.string.isRequired
+        selectedSnapshot: React.PropTypes.string.isRequired,
+        showSidebar: React.PropTypes.bool
     },
 
 // life cycle events --------------------------------------------------
