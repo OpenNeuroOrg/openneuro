@@ -43,7 +43,7 @@ let Tools = React.createClass({
             // isEditor     = dataset.access === 'rw',
             // isViewer     = dataset.access === 'ro',
             isSignedIn   = !!userStore.hasToken(),
-            isPublic     = !!dataset.public,
+            isPublic     = !!dataset.status.public,
             isIncomplete = !!dataset.status.incomplete,
             isInvalid    = !!dataset.status.invalid,
             isSnapshot   = !!dataset.original,
@@ -76,7 +76,7 @@ let Tools = React.createClass({
                 icon: 'fa-trash',
                 action: datasetActions.deleteDataset.bind(this, dataset._id),
                 display: (isAdmin && !isPublic) || isSuperuser,
-                warn: true
+                warn: isSnapshot
             },
             {
                 tooltip: 'Share Dataset',
@@ -95,12 +95,14 @@ let Tools = React.createClass({
                     {
                         check: isInvalid,
                         message: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.',
-                        messageTimeout: 5000
+                        timeout: 5000,
+                        type: 'Error'
                     },
                     {
                         check: snapshots.length > 1 && (moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0),
-                        message: 'No modifications have been made since the last snapshot was created.',
-                        messageTimeout: 5000
+                        message: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.',
+                        timeout: 6000,
+                        type: 'Error'
                     }
                 ]
             },

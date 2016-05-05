@@ -95,7 +95,7 @@ export default class WarnButton extends React.Component {
                 for (let i = 0; i < this.props.validations.length; i++) {
                     let validation = this.props.validations[i];
                     if (validation.check) {
-                        notifications.createAlert({type: 'Warning', message: validation.message, messageTimeout: validation.messageTimeout});
+                        notifications.createAlert({type: validation.type, message: validation.message, timeout: validation.timeout});
                         return;
                     }
                 }

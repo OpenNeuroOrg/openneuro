@@ -1,6 +1,7 @@
 // dependencies ----------------------------------------------------------------------
 
 import Reflux      from 'reflux';
+import React       from 'react';
 import Actions     from './dataset.actions.js';
 import scitran     from '../utils/scitran';
 import crn         from '../utils/crn';
@@ -63,11 +64,11 @@ let datasetStore = Reflux.createStore({
             jobs: [],
             metadataIssues: {},
             modals: {
+                displayFile: false,
                 jobs:        false,
                 publish:     false,
                 share:       false,
-                update:      false,
-                displayFile: false
+                update:      false
             },
             snapshot: false,
             snapshots: [],
@@ -224,16 +225,38 @@ let datasetStore = Reflux.createStore({
      * datasets public status to the passed value.
      */
     publish(snapshotId, value, callback) {
+        let datasetId = this.data.snapshot ? this.data.dataset.original : this.data.dataset._id;
+
+        // check if public snapshots exist outside of current
+        let hasPublic = false;
+        for (let snapshot of this.data.snapshots) {
+            if (snapshot._id === snapshotId) {continue;}
+            if (snapshot.public) {
+                hasPublic = true;
+            }
+        }
+
         scitran.updateSnapshotPublic(snapshotId, value, (err) => {
             if (callback) {callback();}
             if (!err) {
-                if (snapshotId === this.data.dataset._id) {
-                    let dataset = this.data.dataset;
-                    dataset.public = value;
-                    this.update({dataset});
+                if (value) {
+                    if (!hasPublic) {
+                        scitran.addTag('projects', datasetId, 'hasPublic', () => {});
+                    }
+                    if (snapshotId === this.data.dataset._id) {
+                        let dataset = this.data.dataset;
+                        dataset.status.public = value;
+                        this.update({dataset});
+                    } else {
+                        router.transitionTo('snapshot', {datasetId, snapshotId});
+                    }
                 } else {
-                    let datasetId = this.data.snapshot ? this.data.dataset.original : this.data.dataset._id;
-                    router.transitionTo('snapshot', {datasetId, snapshotId});
+                    if (!hasPublic) {
+                        scitran.removeTag('projects', datasetId, 'hasPublic', () => {});
+                    }
+                    let dataset = this.data.dataset;
+                    dataset.status.public = value;
+                    this.update({dataset});
                 }
             }
         });
@@ -269,10 +292,25 @@ let datasetStore = Reflux.createStore({
      * Takes a datsetId, deletes the dataset, and returns the user
      * to the my datasets page.
      */
-    deleteDataset(datasetId) {
-        bids.deleteDataset(datasetId, () => {
-            router.transitionTo('datasets');
-        }, {snapshot: this.data.snapshot});
+    deleteDataset(datasetId, callback) {
+        if (this.data.snapshot) {
+            bids.deleteDataset(datasetId, () => {
+                router.transitionTo('datasets');
+            }, {snapshot: this.data.snapshot});
+        } else {
+            let message = <span>You are about to delete this dataset. This will delete your draft and any unpublished snaphots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.</span>;
+            this.updateWarn({
+                alwaysWarn:   true,
+                hideDontShow: true,
+                message:      message,
+                action:       () => {
+                    bids.deleteDataset(datasetId, () => {
+                        router.transitionTo('datasets');
+                    }, {snapshot: this.data.snapshot});
+                }
+            });
+        }
+        if (callback) {callback();}
     },
 
     /**
@@ -460,22 +498,27 @@ let datasetStore = Reflux.createStore({
      * Throws a modal to warn the user about consequences of
      * dataset modifications.
      */
-    updateWarn(type, file, action) {
+    updateWarn(options) {
         userActions.getPreferences((preferences) => {
-            if (preferences && preferences.ignoreUpdateWarnings) {
-                action();
+            if (preferences && preferences.ignoreUpdateWarnings && !options.alwaysWarn) {
+                options.action();
             } else {
                 let modals = this.data.modals;
                 modals.update = true;
                 this.update({
                     currentUpdate: {
-                        message: type + ' ' + file.name,
-                        action: action
+                        action:       options.action,
+                        hideDontShow: options.hideDontShow,
+                        message:      options.message
                     },
                     modals
                 });
             }
         });
+    },
+
+    updateMessage(type, file) {
+        return <span><span className="text-danger">You are about to {type} {file.name}</span>. This action will run validation again. As a result, your dataset could become invalid. Do you want to continue?</span>;
     },
 
     /**
@@ -497,23 +540,26 @@ let datasetStore = Reflux.createStore({
                 exists = true;
             }
         }
-
         if (exists) {
             this.updateDirectoryState(container._id, {error: '"' + file.name + '" already exists in this directory.'});
         } else {
-            this.updateWarn('add', file, () => {
-                this.updateDirectoryState(container._id, {loading: true});
-                scitran.updateFile(container.containerType, container._id, file, () => {
-                    let children = container.children;
-                    children.unshift({
-                        filename: file.name,
-                        name: file.name,
-                        parentContainer: container.containerType,
-                        parentId: container._id
+            let message = this.updateMessage('add', file);
+            this.updateWarn({
+                message: message,
+                action: () => {
+                    this.updateDirectoryState(container._id, {loading: true});
+                    scitran.updateFile(container.containerType, container._id, file, () => {
+                        let children = container.children;
+                        children.unshift({
+                            filename: file.name,
+                            name: file.name,
+                            parentContainer: container.containerType,
+                            parentId: container._id
+                        });
+                        this.updateDirectoryState(container._id, {children: children, loading: false});
+                        this.revalidate();
                     });
-                    this.updateDirectoryState(container._id, {children: children, loading: false});
-                    this.revalidate();
-                });
+                }
             });
         }
     },
@@ -521,22 +567,27 @@ let datasetStore = Reflux.createStore({
     /**
      * Delete File
      */
-    deleteFile(file) {
-        this.updateWarn('delete', file, () => {
-            let datasetTree = this.data.datasetTree;
-            scitran.deleteFile(file.parentContainer, file.parentId, file.name, () => {
-                let match = files.findInTree(datasetTree, file.parentId);
-                let children = [];
-                for (let existingFile of match.children) {
-                    if (file.name !== existingFile.name) {
-                        children.push(existingFile);
+    deleteFile(file, callback) {
+        let message = this.updateMessage('delete', file);
+        this.updateWarn({
+            message: message,
+            action: () => {
+                let datasetTree = this.data.datasetTree;
+                scitran.deleteFile(file.parentContainer, file.parentId, file.name, () => {
+                    let match = files.findInTree(datasetTree, file.parentId);
+                    let children = [];
+                    for (let existingFile of match.children) {
+                        if (file.name !== existingFile.name) {
+                            children.push(existingFile);
+                        }
                     }
-                }
-                match.children = children;
-                this.update(datasetTree);
-                this.revalidate();
-            });
+                    match.children = children;
+                    this.update(datasetTree);
+                    this.revalidate();
+                });
+            }
         });
+        if (callback) {callback();}
     },
 
     /**
@@ -552,12 +603,16 @@ let datasetStore = Reflux.createStore({
                 error: 'You must replace a file with a file of the same name.'
             });
         } else {
-            this.updateWarn('update', file, () => {
-                this.updateFileState(item, {error: null, loading: true});
-                scitran.updateFile(level, id, file, () => {
-                    this.updateFileState(item, {loading: false});
-                    this.revalidate();
-                });
+            let message = this.updateMessage('update', file);
+            this.updateWarn({
+                message: message,
+                action: () => {
+                    this.updateFileState(item, {error: null, loading: true});
+                    scitran.updateFile(level, id, file, () => {
+                        this.updateFileState(item, {loading: false});
+                        this.revalidate();
+                    });
+                }
             });
         }
     },
@@ -672,7 +727,7 @@ let datasetStore = Reflux.createStore({
             appId:             app.id,
             appLabel:          app.label,
             appVersion:        app.version,
-            datasetId:         this.data.dataset._id,
+            datasetId:         this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id,
             executionSystem:   app.executionSystem,
             parameters:        parameters,
             snapshotId:        snapshotId,
@@ -754,7 +809,7 @@ let datasetStore = Reflux.createStore({
                 callback({error: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.'});
             } else {
                 if (moment(project.modified).diff(moment(this.data.snapshots[1].modified)) <= 0) {
-                    callback({error: 'No modifications have been made since the last snapshot was created.'});
+                    callback({error: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.'});
                 } else {
                     scitran.createSnapshot(datasetId, (err, res) => {
                         if (transition) {

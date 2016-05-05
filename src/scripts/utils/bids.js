@@ -396,28 +396,15 @@ export default  {
      * to any statuses set in the notes.
      */
     formatStatus (project, userAccess) {
+        let tags = project.tags ? project.tags : [];
         let status = {
-            incomplete: false,
-            validating: false,
-            invalid: false,
-            public: false,
-            shared: false
+            incomplete: tags.indexOf('incomplete') > -1,
+            validating: tags.indexOf('validating') > -1,
+            invalid:    tags.indexOf('invalid')    > -1,
+            public:     !!project.public,
+            hasPublic:  tags.indexOf('hasPublic')  > -1,
+            shared:     userStore.data.scitran && (project.group != userStore.data.scitran._id)  &&  !!userAccess
         };
-        if (project.tags) {
-            for (let tag of project.tags) {
-                if (tag === 'incomplete') {
-                    status['incomplete'] = true;
-                }
-                if (tag == 'validating') {
-                    status['validating'] = true;
-                }
-                if (tag == 'invalid') {
-                    status['invalid'] = true;
-                }
-            }
-        }
-        status['public'] = !!project.public;
-        status['shared'] = userStore.data.scitran && (project.group != userStore.data.scitran._id)  &&  !!userAccess;
         return status;
     },
 

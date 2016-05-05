@@ -32,37 +32,39 @@ export default class Publish extends React.Component {
 // template methods ---------------------------------------------------
 
     _body(currentUpdate) {
-        let dontShowAgainInput = (
-            <div className="parameters form-horizontal">
-                <div className="form-group">
-                    <label className="sr-only">Do not show this message again</label>
-                    <div className="input-group">
-                    
-                        <div className="clearfix">
-                            <span>
-                                <input id="dontShowAgain" name="dontShowAgain" className="form-control checkbox" type="checkbox"  value={this.state.dontShowAgain} onChange={this._onChange.bind(this)} />
-                                <label aria-invalid="true" htmlFor="dontShowAgain" className="checkmark">
-                                    <span></span>
-                                </label>
-                                <div className="input-group-addon">Do not show this message again</div>
-                            </span>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        );
         if (currentUpdate) {
             return (
                 <div className="row update-modal">
                     <div className="col-xs-12">
-                        <div className="modal-text">
-                            <span className="text-danger">You are about to {currentUpdate.message}</span>. This action will run validation again. As a result, your dataset could become invalid. Do you want to continue?
-                        </div>
-                        {dontShowAgainInput}
+                        <div className="modal-text">{currentUpdate.message}</div>
+                        {this._dontShowAgain(!currentUpdate.hideDontShow)}<br />
                         <div className="col-xs-12 modal-actions">
                             <button className="btn-modal-submit" onClick={this._confirm.bind(this, currentUpdate.action)}>Confirm</button>
                             <button className="btn-reset" onClick={this._hide.bind(this)}>Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    _dontShowAgain(display) {
+        if (display) {
+            return (
+                <div className="parameters form-horizontal">
+                    <div className="form-group">
+                        <label className="sr-only">Do not show this message again</label>
+                        <div className="input-group">
+                            <div className="clearfix">
+                                <span>
+                                    <input id="dontShowAgain" name="dontShowAgain" className="form-control checkbox" type="checkbox"  value={this.state.dontShowAgain} onChange={this._onChange.bind(this)} />
+                                    <label aria-invalid="true" htmlFor="dontShowAgain" className="checkmark">
+                                        <span></span>
+                                    </label>
+                                    <div className="input-group-addon">Do not show this message again</div>
+                                </span>
+                            </div>
+
                         </div>
                     </div>
                 </div>
