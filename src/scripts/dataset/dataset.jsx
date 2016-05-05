@@ -128,6 +128,17 @@ let Dataset = React.createClass({
     _leftSidebar(snapshots) {
         let isSignedIn   = !!userStore.hasToken();
         let snapshotOptions = snapshots.map((snapshot) => {
+
+            let analysisCount;
+            if (!snapshot.isOriginal) {
+                analysisCount = (
+                    <span className="job-count">
+                        <i className="fa fa-tasks"></i>
+                        <span className="count">({snapshot.analysisCount})</span>
+                    </span>
+                );
+            }
+
             return (
                 <li key={snapshot._id}>
                     <a onClick={actions.loadSnapshot.bind(this, snapshot.isOriginal, snapshot._id)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
@@ -143,7 +154,7 @@ let Dataset = React.createClass({
                             </div>
                             <div className="icons col-xs-4">
                                 {snapshot.public && isSignedIn ? <span className="published"><i className="fa fa-globe"></i></span> : null}
-                                <span className="job-count"><i className="fa fa-tasks"></i><span className="count">({snapshot.analysisCount})</span></span>
+                                {analysisCount}
                             </div>
                         </div>
                     </a>
