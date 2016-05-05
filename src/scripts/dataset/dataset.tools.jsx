@@ -3,6 +3,8 @@
 import React          from 'react';
 import Reflux         from 'reflux';
 import moment         from 'moment';
+import actions        from './dataset.actions.js';
+import datasetStore   from './dataset.store';
 import WarnButton     from '../common/forms/warn-button.jsx';
 import FileSelect     from '../common/forms/file-select.jsx';
 import uploadStore    from '../upload/upload.store';
@@ -33,7 +35,8 @@ let Tools = React.createClass({
     render() {
         let dataset     = this.props.dataset,
             snapshots   = this.props.snapshots,
-            isUploading = dataset._id === this.state.projectId;
+            isUploading = dataset._id === this.state.projectId,
+            showSidebar = this.props.showSidebar;
 
         // permission check shorthands
         let isAdmin      = dataset.access === 'admin',
@@ -100,18 +103,27 @@ let Tools = React.createClass({
                         messageTimeout: 5000
                     }
                 ]
+            },
+            {
+                tooltip: 'Run Anaylsis',
+                icon: 'fa-tasks',
+                action: datasetActions.toggleModal.bind(null, 'jobs'),
+                display: isSignedIn && !isIncomplete,
+                warn: false,
             }
         ];
 
         return (
             <div className="tools clearfix">
+                <span className="show-nav-btn" onClick={actions.toggleSidebar}>
+                    {showSidebar ?  <i className="fa fa-angle-double-left" aria-hidden="true"></i> : <i className="fa fa-angle-double-right" aria-hidden="true"></i>}
+                </span>
                 <div className="snapshot-select-label" >
                     <div className={!dataset.original ? 'draft' : 'snapshot'}>
                         {!dataset.original ? 'Draft' : 'Snapshot v' + dataset.snapshot_version}
                     </div>
                 </div>
                 {this._tools(tools)}
-                {this._runAnalysis(isSignedIn && !isIncomplete)}
                 {this._resume(isIncomplete, isUploading)}
                 <ToolModals />
             </div>
@@ -125,18 +137,6 @@ let Tools = React.createClass({
             return (
                 <div className="resume-upload-tool">
                     <FileSelect resume={true} onChange={this._onFileSelect} />
-                </div>
-            );
-        }
-    },
-
-    _runAnalysis(display) {
-        if (display) {
-            return (
-                <div className="run-analysis">
-                    <button className="btn-blue" onClick={datasetActions.toggleModal.bind(null, 'jobs')}>
-                        <i className="fa fa-tasks"></i> Run Analysis
-                    </button>
                 </div>
             );
         }

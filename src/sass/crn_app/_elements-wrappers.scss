@@ -15,6 +15,7 @@
 html,
 body,
 .app,
+.main,
 .page,
 .full-col,
 .view.container,
@@ -261,7 +262,7 @@ h6 {
 
 .btn-admin-blue {@extend %btn-admin-blue;}
 
-.btn-modal-submit {
+%btn-submit-other {
     @extend %btn-admin-blue;
     border: 2px solid lighten($sky, 5%);
 
@@ -270,6 +271,8 @@ h6 {
         border: 2px solid $sky;
     }
 }
+.btn-submit-other,
+.btn-modal-submit { @extend %btn-submit-other}
 
 .btn-reset {
     @extend %btn-admin;

@@ -45,39 +45,97 @@
             float: right;
             margin-right: -15px;
 
-            a {
+            .nav-link {
+                width: 110px;
+                height: 75px;
+                line-height: 75px;
+                text-align: center;
+                display: block;
+                padding: 0 10px;
                 color: $misty;
-                padding: 15px 20px;
+                background: $transparent;
+                -webkit-transition: all 0.5s;
+                transition: all 0.5s;
 
-                &:hover,
+                .link-name {
+                    width: 100%;
+                    font-size: 14px;
+                    text-transform: uppercase;
+                    display: inline-block;
+                    vertical-align: middle;
+                    line-height: normal;
+                    border-bottom: 3px solid $transparent;
+                }
+
                 &:focus,
                 &:active,
                 &.active {
                     color: $white;
-                    background: $transparent1-w;
+                    background: $transparent05-w;
+                    .link-name {}
                 }
+                 &:hover {
+                    .link-name {
+                        border-color: $transparent1-w;
+                    }
+                 }
 
                 i {
-                    display: block;
-                    width: 100%;
-                    text-align: center;
-                    font-size: 21px;
+                    // display: block;
+                    // width: 100%;
+                    // text-align: center;
+                    // font-size: 21px;
                 }
 
-                .link-name {
-                    display: block;
-                    width: 100%;
-                    margin-top: 5px;
-                    font-size: 14px;
-                    text-transform: uppercase;
+
+            }
+            .upload-btn-wrap {
+                // float: left;
+                // width: 220px;
+                // margin: 0 30px;
+                .nav-link.nl-upload {
+                    width: 180px;
+                    padding: 0 15px;
+                    background: $transparent3;
+                    color: lighten($sky, 10%);
+
+                    .link-name {
+                        border-color: $transparent;
+                    }
+                    &.nl-progress {
+                        .link-name {
+                            margin-top: -20px;
+                        }
+                        .progress {
+                            margin-top: -30px;
+                            height: 10px;
+                            position: relative;
+                        }
+
+                    }
+
+                    &:hover,
+                    &:focus,
+                    &:active,
+                    &.active {
+                        color: $white;
+                        background: $sky;
+
+                    }
                 }
+                // .btn-blue {
+                //     margin: 15px 0;
+
+                //     &.btn-view-progress {margin: 9px 0 0;}
+
+                // }
             }
 
             .user-wrap {
                 margin: 0;
                 height: 75px;
                 vertical-align: middle;
-                padding: 16px 95px 0 28px;
+                width: 75px;
                 border-left: 2px solid $c-56;
                 background: $c-21;
 
@@ -161,10 +219,12 @@
                 .dropdown-menu {
                     background-color: $white;
                     padding: 20px 15px 0;
-                    margin: 2px 8px 0 0;
+                    margin: 0;
                     border-radius: 0;
                     box-shadow: 1px 2px 4px -3px $transparent7;
                     border-color: $f4;
+                    right: 0;
+                    left: auto;
 
                     .dropdown-header {
                         width: 100%;
@@ -172,42 +232,52 @@
                         padding: 10px 0;
                     }
 
-                    img {
-                        width: 100px;
-                        margin: 0 auto;
-                        display: block;
-                    }
-
-                    .um-sign-out {
-                        width: auto;
-                        margin: 0;
-                        display: block;
-                        text-align: center;
-                        font-size: 12px;
-                        border: 0;
-                        padding: 0;
-                        color: $primary;
-                    }
-
-                    .um-icon {
-                        font-size: 20px;
-                        background-color: $transparent;
-                        margin: 2px 0 10px;
-                        padding: 0;
-                        float: left;
-
-                        a {
-                            display: inline;
-                            padding: 3px;
-                            margin: 0;
-                            background-color: $transparent;
-                            color: $c-77;
-
-                            &:hover {color: $primary;}
-
-                            &.active {color: darken($c-77, 5%);}
+                    // img {
+                    //     width: 100px;
+                    //     margin: 0 auto;
+                    //     display: block;
+                    // }
+                    .btn-submit-other {
+                        margin-bottom: 15px;
+                        color: $sky;
+                        border-color: $transparent;
+                        &:hover,
+                        &.active {
+                            border-color: $transparent;
+                            color: darken($sky, 10%);
+                            background: $eee;
                         }
                     }
+                    // .um-sign-out {
+                    //     width: auto;
+                    //     margin: 0;
+                    //     display: block;
+                    //     text-align: center;
+                    //     font-size: 12px;
+                    //     border: 0;
+                    //     padding: 0;
+                    //     color: $primary;
+                    // }
+
+                    // .um-icon {
+                    //     font-size: 20px;
+                    //     background-color: $transparent;
+                    //     margin: 2px 0 10px;
+                    //     padding: 0;
+                    //     float: left;
+
+                    //     a {
+                    //         display: inline;
+                    //         padding: 3px;
+                    //         margin: 0;
+                    //         background-color: $transparent;
+                    //         color: $c-77;
+
+                    //         &:hover {color: $primary;}
+
+                    //         &.active {color: darken($c-77, 5%);}
+                    //     }
+                    // }
                 }
             }
         }
@@ -221,21 +291,5 @@
     margin: 15px 20px;
 }
 
-.upload-btn-wrap {
-    float: left;
-    width: 220px;
-    margin: 0 30px;
 
-    .progress {
-        margin-top: 5px;
-        height: 10px;
-    }
-
-    .btn-blue {
-        margin: 15px 0;
-
-        &.btn-view-progress {margin: 9px 0 0;}
-
-    }
-}
 

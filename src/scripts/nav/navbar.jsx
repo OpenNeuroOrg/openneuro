@@ -54,14 +54,11 @@ let BSNavbar = React.createClass({
         let googleProfile = this.state.google;
         let loading       = this.state.loading;
         let routes        = this.props.routes;
-        let adminLink     = <Link to="admin"><i className="fa fa-lock" /><span className="link-name">admin</span></Link>;
-        let dashboardLink = <Link to="dashboard"><i className="fa fa-dashboard" /><span className="link-name">dashboard</span></Link>;
+        let adminLink     = <Link className="nav-link" to="admin"><span className="link-name">admin</span></Link>;
+        let dashboardLink = <Link className="nav-link" to="dashboard"><span className="link-name">dashboard</span></Link>;
 
         return (
             <ul className="nav navbar-nav main-nav">
-                <li>
-                    <UploadBtn />
-                </li>
                 <li className="link-dashboard">
                     {userStore.hasToken() ? dashboardLink : null}
                 </li>
@@ -69,10 +66,13 @@ let BSNavbar = React.createClass({
                     {this.state.scitran && this.state.scitran.root ? adminLink : null }
                 </li>
                 <li className="link-public">
-                    <Link to="public"><i className="fa fa-globe" /><span className="link-name">Browse Publicly</span></Link>
+                    <Link className="nav-link" to="public"><span className="link-name">Public Datasets</span></Link>
                 </li>
                 <li className="link-contact">
-                    <a  href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><i className="fa fa-envelope-o" /><span className="link-name">contact</span></a>
+                    <a className="nav-link" href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><span className="link-name">contact</span></a>
+                </li>
+                <li className="link-dashboard">
+                    <UploadBtn />
                 </li>
                  <li>
                      <CollapsibleNav eventKey={0}>

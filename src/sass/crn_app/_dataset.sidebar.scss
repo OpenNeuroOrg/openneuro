@@ -1,45 +1,101 @@
+.show-nav-btn {
+    float: left;
+    background: $de;
+    height: 45px;
+    width: 45px;
+    padding: 2px 0 0 8px;
+    font-size: 28px;
+    text-align: center;
+    margin: 0;
+    cursor: pointer;
+    color: $c-56;
+    border-right: 2px solid $c-9e;
+    border-bottom: 2px solid $c-9e;
+}
 
-//dataset sidebar
-.left-sidebar {
-    padding: 0;
-    position: fixed;
-    margin-left: -15%;
-    width: 15%;
+html,
+body,
+#main,
+.app,
+.main.view.container,
+.dataset-container,
+.dataset-route,
+.dataset-wrap {
     height: 100%;
-    z-index: 1300;
-    transition: all .5s ease;
+}
 
-    .show-nav-btn {
-        position: absolute;
-        background: $c-56;
-        height: 45px;
-        width: 45px;
-        right: -45px;
-        padding: 2px 0 0 8px;
-        top: 0;
-        font-size: 28px;
-        text-align: center;
-        margin: 0;
-        cursor: pointer;
-        color: $white;
-        border-right: 2px solid $c-42;
-        border-bottom: 2px solid $c-42;
-    }
+.main.view.container {
+    padding-top: 85px;
+}
+
+.dataset-wrap {
+    overflow-y: scroll;
+}
+
+.dataset-wrap,
+.dataset-annimation {
+    position: relative;
+}
+.dataset-annimation {
+    width: 100%;
+    -webkit-transition: width .3s;
+    transition: width .3s;
+}
+.open .dataset-annimation {
+    width: 80%;
+}
+
+.dataset-container {
+    position: relative;
+    overflow: hidden;
+    // padding-top: 30px;
+    -webkit-perspective: 1500px;
+    perspective: 1500px;
+    -webkit-perspective-origin: 0% 50%;
+    perspective-origin: 0% 50%;
+
+}
+
+.dataset-route {
+    position: relative;
+    z-index: 99;
+    height: 100%;
+    -webkit-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+    left: 0;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+
+.open .dataset-route {
+    left: 20%;
+}
+
+.left-sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    width: 20%;
+    height: 100%;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+     z-index: 1;
 
     .slide {
         z-index: 1200;
-        background-color: $c-56;
-        border-right: 2px solid $c-42;
+        background-color: $de;
         display: block;
         position: relative;
         height: 100%;
         padding: 0;
 
         h3 {
-            min-height: 45px;
+            min-height: 43px;
             margin: 0;
-            color: $white;
-            padding: 11px 15px;
+            padding: 8px 15px;
             width: 100%;
         }
 
@@ -51,38 +107,67 @@
             height: 100%;
             position: absolute;
             width: 100%;
+            border-right: 2px solid $c-9e;
 
             a {
                 font-size: 14px;
                 background-color: transparent;
-                color: $misty;
                 width: 100%;
                 display: block;
                 text-decoration: none;
                 border-top: 1px solid $c-9e;
                 transition: background .4s ease;
-                padding: 10px 8px;
 
                 &:hover {
                     text-decoration: none;
                     background: $transparent1;
-                    color: $white;
+                    color: $black;
                 }
 
                 &.active {
-                    background-color: $stanford-red;
-                    box-shadow: inset 0 0 5px $transparent5;
-                    color: $white;
+                    background-color:  $transparent1;
+                    box-shadow: inset 0 0 2px $transparent1;
+                    color: $black;
                 }
 
+                .dataset-type {
+                    padding: 10px 5px 10px 8px;
+                    display: inline-block;
+                }
+                .date-modified {
+                    padding: 10px 5px 10px 8px;
+                    text-align: right;
+                    display: inline-block;
+                    font-size: 11px;
+                    color: #444;
+                    .update-label {
+                        text-transform: uppercase;
+                    }
+                }
                 .icons {
-                    width: 100%;
-                    margin: 0 -8px;
-                    padding: 8px 8px 0;
-                    display: block;
+                    border-left: 1px solid #bbb;
+                    padding-left: 0;
+                    .published,
+                    .job-count {
+                        padding: 10px 5px;
+                        min-width: 35px;
+                        text-align: center;
+                        display: inline-block;
+                        border-right: 1px solid #bbb;
+
+                        .count {
+                            font-size: 10px;
+                            margin-left: 2px;
+                            position: relative;
+                            top: -2px;
+                        }
+                    }
                 }
             }
 
+            li:first-child a {
+                border-top: 2px solid $c-9e;
+            }
             li:last-child a {
                 border-bottom: 1px solid $c-9e;
             }
@@ -91,24 +176,17 @@
     }
 }
 
-.dataset-wrap {
-    transition: all .5s ease;
+.open .left-sidebar {
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+    visibility: visible;
+    -webkit-transition: -webkit-transform .3s;
+    transition: transform .3s;
+
 }
 
-.open {
-    .left-sidebar {
-        margin-left: 0;
-        width: 15%;
 
-        .slide {
 
-            width: 100%;
-            box-shadow: 1px 1px 3px -1px $transparent1;
-        }
-    }
 
-    .dataset-wrap {
-        width: 85%;
-        margin-left: 15%;
-    }
-}
+
+

@@ -15,6 +15,8 @@ import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 import FileTree     from './dataset.file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
 import UpdateWarn   from './dataset.update-warning.jsx';
+import userStore    from '../user/user.store.js';
+
 
 let Dataset = React.createClass({
 
@@ -47,6 +49,7 @@ let Dataset = React.createClass({
     },
 
     render() {
+        console.log(this.state.snapshots);
         let dataset = this.state.dataset;
         let showSidebar = this.state.showSidebar;
         let tree    = this.state.datasetTree;
@@ -56,42 +59,44 @@ let Dataset = React.createClass({
         if (dataset) {
             let errors = dataset.validation.errors;
             let warnings = dataset.validation.warnings;
-
             content = (
                 <div className="clearfix dataset-wrap">
-                    <div className="col-xs-12 dataset-tools-wrap">
-                        <Tools dataset={dataset}
-                               selectedSnapshot={this.state.selectedSnapshot}
-                               snapshots={this.state.snapshots} />
-                    </div>
-                    <div className="col-xs-12 dataset-inner">
-                        <div className="row">
-                            <div className="col-xs-7">
-                                <h1 className="clearfix">
-                                    <ClickToEdit
-                                        value={dataset.label}
-                                        label={false}
-                                        editable={canEdit}
-                                        onChange={actions.updateName}/>
-                                </h1>
-                                {this._uploaded(dataset)}
-                                {this._modified(dataset.modified)}
-                                {this._authors(dataset.authors)}
-                                {this._views(dataset.views)}
-                                {this._downloads(dataset.downloads)}
-                                <div className="status-container">
-                                    <Statuses dataset={dataset} />
-                                </div>
-                                <MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
-                            </div>
-                            <div className="col-xs-5">
-                                <div>
-                                    <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} display={!dataset.status.incomplete} />
-                                    <div className="fade-in col-xs-12">
-                                        <Jobs />
+                    <div className="dataset-annimation">
+                        <div className="col-xs-12 dataset-tools-wrap">
+                            <Tools dataset={dataset}
+                                   selectedSnapshot={this.state.selectedSnapshot}
+                                   snapshots={this.state.snapshots}
+                                   showSidebar={showSidebar} />
+                        </div>
+                        <div className="col-xs-12 dataset-inner">
+                            <div className="row">
+                                <div className="col-xs-7">
+                                    <h1 className="clearfix">
+                                        <ClickToEdit
+                                            value={dataset.label}
+                                            label={false}
+                                            editable={canEdit}
+                                            onChange={actions.updateName}/>
+                                    </h1>
+                                    {this._uploaded(dataset)}
+                                    {this._modified(dataset.modified)}
+                                    {this._authors(dataset.authors)}
+                                    {this._views(dataset.views)}
+                                    {this._downloads(dataset.downloads)}
+                                    <div className="status-container">
+                                        <Statuses dataset={dataset} />
                                     </div>
-                                    {this._incompleteMessage(dataset)}
-                                    {this._fileTree(dataset, tree, canEdit)}
+                                    <MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
+                                </div>
+                                <div className="col-xs-5">
+                                    <div>
+                                        <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} display={!dataset.status.incomplete} />
+                                        <div className="fade-in col-xs-12">
+                                            <Jobs />
+                                        </div>
+                                        {this._incompleteMessage(dataset)}
+                                        {this._fileTree(dataset, tree, canEdit)}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -111,13 +116,13 @@ let Dataset = React.createClass({
         }
 
         return (
-            <span className={showSidebar ? 'open' : null}>
+            <div className={showSidebar ? 'open dataset-container' : 'dataset-container'}>
                 <div className="fade-in inner-route dataset-route light">
                         {this._leftSidebar(showSidebar)}
                         {this.state.loading ? <Spinner active={true} /> : content}
                     <UpdateWarn show={this.state.modals.update} onHide={actions.toggleModal.bind(null, 'update')} update={this.state.currentUpdate} />
                 </div>
-            </span>
+            </div>
         );
     },
 
@@ -128,25 +133,34 @@ let Dataset = React.createClass({
             <div className="left-sidebar">
                 <span className="slide">
                     {this._snapshotSelect(this.state.snapshots)}
-                    <span className="show-nav-btn" onClick={actions.toggleSidebar}>
-                        {showSidebar ?  <i className="fa fa-angle-double-left" aria-hidden="true"></i> : <i className="fa fa-angle-double-right" aria-hidden="true"></i>}
-                    </span>
                 </span>
             </div>
         );
     },
 
     _snapshotSelect(snapshots) {
+        let isSignedIn   = !!userStore.hasToken();
         let snapshotOptions = snapshots.map((snapshot) => {
-            let icons = (
-                <span className="icons"><i className="fa fa-globe"></i></span>
-            );
 
             return (
                 <li key={snapshot._id}>
                     <a onClick={this._selectSnapshot.bind(this, snapshot._id)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
-                        {snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
-                        {snapshot.public ? icons : null}
+                        <div className="clearfix">
+                            <div className=" col-xs-8">
+                                <span className="dataset-type">
+                                    {snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version}
+                                </span>
+
+                                <span className="date-modified">
+                                    <span className="update-label">{snapshot.isOriginal ? 'updated: ' : 'created: '}</span>
+                                    {moment(snapshot.modified).format('ll')}
+                                </span>
+                            </div>
+                            <div className="icons col-xs-4">
+                                {snapshot.public && isSignedIn ? <span className="published"><i className="fa fa-globe"></i></span> : null}
+                                <span className="job-count"><i className="fa fa-tasks"></i><span className="count">({this.state.jobs.length})</span></span>
+                            </div>
+                        </div>
                     </a>
                 </li>
             );
@@ -155,7 +169,7 @@ let Dataset = React.createClass({
         return (
             <div role="presentation" className="snapshot-select" >
                 <span>
-                    <h3>Dataset Snapshots</h3>
+                    <h3>Versions</h3>
                     <ul>
                         {snapshotOptions}
                     </ul>

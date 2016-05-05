@@ -28,17 +28,11 @@ let Usermenu = React.createClass({
 
         return (
             <li className="clearfix user-wrap">
-                <span className="username">
-                    <span className="greeting">Hello</span>
-                    <br/>
-                    {username}
-                </span>
                 <img src={thumbnail} alt={username} className="user-img-thumb" />
                 <DropdownButton className="user-menu btn-null" eventKey={1} title={gear}>
-                    <img src={thumbnail} alt={username} className="user-menu-thumb" />
-                    <li role="presentation" className="dropdown-header">{username}</li>
-                    <li><a onClick={this._signOut} className="um-sign-out">Sign Out</a></li>
-                    <li role="separator" className="divider"></li>
+                    <li role="presentation" className="dropdown-header">Hello <br/>{username}</li>
+                   <li role="separator" className="divider"></li>
+                   <li><a onClick={this._signOut} className="btn-submit-other">Sign Out</a></li>
                 </DropdownButton>
             </li>
         );
