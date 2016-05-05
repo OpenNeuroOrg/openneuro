@@ -115,7 +115,7 @@ body,
                 width: 100%;
                 display: block;
                 text-decoration: none;
-                border-top: 1px solid $c-9e;
+                border-top: 1px solid $bbb;
                 transition: background .4s ease;
 
                 &:hover {
@@ -131,7 +131,7 @@ body,
                 }
 
                 .dataset-type {
-                    padding: 10px 5px 10px 8px;
+                    padding: 10px 0;
                     display: inline-block;
                 }
                 .date-modified {
@@ -166,10 +166,10 @@ body,
             }
 
             li:first-child a {
-                border-top: 2px solid $c-9e;
+                border-top: 1px solid $bbb;
             }
             li:last-child a {
-                border-bottom: 1px solid $c-9e;
+                border-bottom: 1px solid $bbb;
             }
 
         }
