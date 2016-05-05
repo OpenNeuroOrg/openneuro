@@ -138,7 +138,6 @@ let Dataset = React.createClass({
                                 </span>
 
                                 <span className="date-modified">
-                                    <span className="update-label">{snapshot.isOriginal ? 'updated: ' : 'created: '}</span>
                                     {moment(snapshot.modified).format('ll')}
                                 </span>
                             </div>
