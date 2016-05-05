@@ -47,10 +47,11 @@ let Dataset = React.createClass({
     },
 
     render() {
-        let dataset = this.state.dataset;
+        let dataset     = this.state.dataset;
+        let snapshots   = this.state.snapshots;
         let showSidebar = this.state.showSidebar;
-        let tree    = this.state.datasetTree;
-        let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
+        let tree        = this.state.datasetTree;
+        let canEdit     = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
         let content;
 
         if (dataset) {
@@ -115,7 +116,7 @@ let Dataset = React.createClass({
         return (
             <div className={showSidebar ? 'open dataset-container' : 'dataset-container'}>
                 <div className="fade-in inner-route dataset-route light">
-                    {this._leftSidebar(showSidebar)}
+                    {this._leftSidebar(snapshots)}
                     {this.state.loading ? <Spinner active={true} /> : content}
                 </div>
             </div>
@@ -124,20 +125,9 @@ let Dataset = React.createClass({
 
 // template methods ---------------------------------------------------
 
-    _leftSidebar(showSidebar) {
-        return (
-            <div className="left-sidebar">
-                <span className="slide">
-                    {this._snapshotSelect(this.state.snapshots)}
-                </span>
-            </div>
-        );
-    },
-
-    _snapshotSelect(snapshots) {
+    _leftSidebar(snapshots) {
         let isSignedIn   = !!userStore.hasToken();
         let snapshotOptions = snapshots.map((snapshot) => {
-
             return (
                 <li key={snapshot._id}>
                     <a onClick={actions.loadSnapshot.bind(this, snapshot.isOriginal, snapshot._id)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
@@ -163,12 +153,16 @@ let Dataset = React.createClass({
         });
 
         return (
-            <div role="presentation" className="snapshot-select" >
-                <span>
-                    <h3>Versions</h3>
-                    <ul>
-                        {snapshotOptions}
-                    </ul>
+            <div className="left-sidebar">
+                <span className="slide">
+                    <div role="presentation" className="snapshot-select" >
+                        <span>
+                            <h3>Versions</h3>
+                            <ul>
+                                {snapshotOptions}
+                            </ul>
+                        </span>
+                    </div>
                 </span>
             </div>
         );
