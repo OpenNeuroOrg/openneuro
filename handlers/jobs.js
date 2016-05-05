@@ -144,10 +144,10 @@ export default {
      */
     listDatasetJobs(req, res, next) {
         let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
-        let snapshotId = req.params.datasetId;
+        let datasetId  = req.params.datasetId;
         let user       = req.user;
 
-        scitran.getProject(snapshotId, (err, resp) => {
+        scitran.getProject(datasetId, (err, resp) => {
             if (resp.body.code && resp.body.code == 404) {
                 let error = new Error(resp.body.detail);
                 error.http_code = 404;
@@ -166,7 +166,8 @@ export default {
                 }
             }
 
-            c.jobs.find({snapshotId}).toArray((err, jobs) => {
+            let query = snapshot ? {snapshotId: datasetId} : {datasetId};
+            c.jobs.find(query).toArray((err, jobs) => {
                 if (err) {return next(err);}
 
                 // remove user ID on public requests
