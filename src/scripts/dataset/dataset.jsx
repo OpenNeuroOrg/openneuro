@@ -154,7 +154,7 @@ let Dataset = React.createClass({
                             </div>
                             <div className="icons col-xs-4">
                                 {snapshot.public && isSignedIn ? <span className="published"><i className="fa fa-globe"></i></span> : null}
-                                <span className="job-count"><i className="fa fa-tasks"></i><span className="count">({this.state.jobs.length})</span></span>
+                                <span className="job-count"><i className="fa fa-tasks"></i><span className="count">({snapshot.analysisCount})</span></span>
                             </div>
                         </div>
                     </a>

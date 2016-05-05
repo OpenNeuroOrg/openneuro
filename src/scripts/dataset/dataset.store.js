@@ -100,8 +100,8 @@ let datasetStore = Reflux.createStore({
                 this.update({status: res.status, loading: false, snapshot: snapshot});
             } else {
                 let originalId = res.original ? res.original : datasetId;
-                this.loadJobs(datasetId, snapshot, () => {
-                    this.loadSnapshots(originalId, () => {
+                this.loadJobs(datasetId, snapshot, originalId, (jobs) => {
+                    this.loadSnapshots(originalId, jobs, () => {
                         this.update({dataset: res, loading: false, snapshot: snapshot, selectedSnapshot: datasetId});
                     });
                 });
@@ -164,12 +164,7 @@ let datasetStore = Reflux.createStore({
     /**
      * Load Jobs
      */
-    loadJobs(projectId, snapshot, callback) {
-        if (!snapshot) {
-            this.update({jobs: []});
-            callback();
-            return;
-        }
+    loadJobs(projectId, snapshot, originalId, callback) {
         this.update({loadingJobs: true});
         crn.getDatasetJobs(projectId, (err, res) => {
             // sort jobs by app
@@ -197,7 +192,13 @@ let datasetStore = Reflux.createStore({
             }
 
             this.update({jobs: jobArray, loadingJobs: false});
-            callback();
+            if (snapshot && callback) {
+                crn.getDatasetJobs(originalId, (err1, res1) => {
+                    callback(res1.body);
+                }, {snapshot: false})
+            } else if (callback) {
+                callback(res.body);
+            }
         }, {snapshot});
     },
 
@@ -723,11 +724,12 @@ let datasetStore = Reflux.createStore({
      * Start Job
      */
     startJob(snapshotId, app, parameters, callback) {
+        let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
         crn.createJob({
             appId:             app.id,
             appLabel:          app.label,
             appVersion:        app.version,
-            datasetId:         this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id,
+            datasetId:         datasetId,
             executionSystem:   app.executionSystem,
             parameters:        parameters,
             snapshotId:        snapshotId,
@@ -740,7 +742,9 @@ let datasetStore = Reflux.createStore({
             callback(err, res);
             if (!err) {
                 if (snapshotId == this.data.dataset._id) {
-                    this.loadJobs(snapshotId);
+                    this.loadJobs(snapshotId, this.data.snapshot, datasetId, (jobs) => {
+                        this.loadSnapshots(datasetId, jobs);
+                    });
                 }
             }
         });
@@ -815,7 +819,7 @@ let datasetStore = Reflux.createStore({
                         if (transition) {
                             router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
                         }
-                        this.loadSnapshots(datasetId, () => {
+                        this.loadSnapshots(datasetId, [], () => {
                             if (callback){callback(res.body._id);}
                         });
                     });
@@ -824,15 +828,29 @@ let datasetStore = Reflux.createStore({
         });
     },
 
-    loadSnapshots(datasetId, callback) {
+    loadSnapshots(datasetId, jobs, callback) {
         scitran.getProjectSnapshots(datasetId, (err, res) => {
             scitran.getProject(datasetId, (res1) => {
                 let snapshots = !err && res.body ? res.body : [];
+
+                // sort snapshots
                 snapshots.sort((a, b) => {
                     if      (a.snapshot_version < b.snapshot_version) {return 1;}
                     else if (a.snapshot_version > b.snapshot_version) {return -1;}
                     else {return 0;}
                 });
+
+                // add job counts
+                for (let snapshot of snapshots) {
+                    snapshot.analysisCount = 0;
+                    for (let job of jobs) {
+                        if (job.snapshotId == snapshot._id) {
+                            snapshot.analysisCount++;
+                        }
+                    }
+                }
+
+                // add draft is available
                 if (res1.statusCode !== 404 && res1.statusCode !== 403) {
                     snapshots.unshift({
                         isOriginal: true,
