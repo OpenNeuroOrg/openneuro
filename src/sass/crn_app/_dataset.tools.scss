@@ -52,7 +52,8 @@
             max-width: 400px;
             font-size: 21px;
             overflow: hidden;
-            transition: max-width 1s;
+            transition: max-width .3s;
+            -webkit-transition: max-width .3s;
 
             div {
                 padding: 7px 20px;
@@ -141,6 +142,7 @@
     max-width: 0;
     padding: 0;
     margin: 0;
-    transition: max-width .5s;
+    transition: max-width .3s;
+    -webkit-transition: max-width .3s;
     border:none;
 }

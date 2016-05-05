@@ -72,7 +72,7 @@ let Dataset = React.createClass({
                                     <h1 className="clearfix">
                                         <ClickToEdit
                                             value={dataset.label}
-                                            label={false}
+                                            label= {dataset.label}
                                             editable={canEdit}
                                             onChange={actions.updateName}/>
                                     </h1>
