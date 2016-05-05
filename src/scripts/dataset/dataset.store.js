@@ -94,10 +94,10 @@ let datasetStore = Reflux.createStore({
         options = options ? options : {};
         options.isPublic = !userStore.data.token;
         let snapshot = !!(options && options.snapshot);
-        this.update({loading: true, dataset: null, datasetTree: null});
+        this.update({loading: true, datasetTree: null});
         bids.getDataset(datasetId, (res) => {
             if (res.status === 404 || res.status === 403) {
-                this.update({status: res.status, loading: false, snapshot: snapshot});
+                this.update({status: res.status, dataset: null, loading: false, snapshot: snapshot});
             } else {
                 let originalId = res.original ? res.original : datasetId;
                 this.loadJobs(datasetId, snapshot, originalId, (jobs) => {
