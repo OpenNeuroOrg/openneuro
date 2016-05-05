@@ -16,6 +16,9 @@ let Jobs = React.createClass({
 // life cycle events --------------------------------------------------
 
     render () {
+        if (!this.state.dataset.original) {
+            return false;
+        }
 
         let jobs = this.state.jobs.map((job) => {
             return (
