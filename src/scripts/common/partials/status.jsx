@@ -41,12 +41,6 @@ export default class Status extends React.Component {
             tip         = minimal ? 'Upload in progress' : null;
             title       = 'In progress';
             iconClass   = 'fa fa-spin fa-circle-o-notch';
-            break;
-        case 'invalid':
-            spanClass   = 'dataset-status ds-danger';
-            tip         = minimal ? 'Invalid' : null;
-            title       = 'Invalid';
-            iconClass   = 'fa fa-exclamation-circle';
         }
 
         let content = (
