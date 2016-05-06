@@ -75,7 +75,7 @@ let datasetStore = Reflux.createStore({
             selectedSnapshot: '',
             status: null,
             users: [],
-            showSidebar: true
+            showSidebar: window.localStorage.hasOwnProperty('showSidebar')? window.localStorage.showSidebar === 'true' : true
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data);
@@ -830,6 +830,7 @@ let datasetStore = Reflux.createStore({
                     callback({error: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.'});
                 } else {
                     scitran.createSnapshot(datasetId, (err, res) => {
+                        this.toggleSidebar(true);
                         if (transition) {
                             router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
                         }
@@ -885,8 +886,11 @@ let datasetStore = Reflux.createStore({
 
     // Toggle Sidebar ----------------------------------------------------------------
 
-    toggleSidebar () {
-        this.update({showSidebar: !this.data.showSidebar});
+    toggleSidebar (value) {
+        let showSidebar = !this.data.showSidebar;
+        if (typeof value === 'boolean') {showSidebar = value;}
+        window.localStorage.showSidebar = showSidebar;
+        this.update({showSidebar});
     }
 
 });
