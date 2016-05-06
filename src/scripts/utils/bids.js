@@ -422,7 +422,7 @@ export default  {
                 return JSON.parse(tag.replace('summary-', ''));
             }
         }
-        return {};
+        return null;
     },
 
     /**

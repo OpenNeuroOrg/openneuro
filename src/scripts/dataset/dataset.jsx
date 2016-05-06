@@ -15,6 +15,7 @@ import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 import FileTree     from './dataset.file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
 import userStore    from '../user/user.store.js';
+import Summary      from './dataset.summary.jsx';
 
 let Dataset = React.createClass({
 
@@ -81,6 +82,7 @@ let Dataset = React.createClass({
                                     {this._authors(dataset.authors)}
                                     {this._views(dataset.views)}
                                     {this._downloads(dataset.downloads)}
+                                    <Summary summary={dataset.summary} />
                                     <div className="status-container">
                                         <Statuses dataset={dataset} />
                                     </div>
