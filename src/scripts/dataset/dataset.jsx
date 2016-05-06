@@ -117,6 +117,7 @@ let Dataset = React.createClass({
             <div className={showSidebar ? 'open dataset-container' : 'dataset-container'}>
                 <div className="fade-in inner-route dataset-route light">
                     {this._leftSidebar(snapshots)}
+                    {this._showSideBarButton()}
                     {this.state.loading ? <Spinner active={true} /> : content}
                 </div>
             </div>
@@ -143,7 +144,7 @@ let Dataset = React.createClass({
                 <li key={snapshot._id}>
                     <a onClick={actions.loadSnapshot.bind(this, snapshot.isOriginal, snapshot._id)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
                         <div className="clearfix">
-                            <div className=" col-xs-8">
+                            <div className=" col-xs-12">
                                 <span className="dataset-type">
                                     {snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version}
                                 </span>
@@ -175,6 +176,15 @@ let Dataset = React.createClass({
                     </div>
                 </span>
             </div>
+        );
+    },
+
+    _showSideBarButton(){
+        let showSidebar = this.state.showSidebar;
+        return(
+            <span className="show-nav-btn" onClick={actions.toggleSidebar}>
+                {showSidebar ?  <i className="fa fa-angle-double-left" aria-hidden="true"></i> : <i className="fa fa-angle-double-right" aria-hidden="true"></i>}
+            </span>
         );
     },
 
