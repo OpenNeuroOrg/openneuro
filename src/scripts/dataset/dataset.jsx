@@ -225,7 +225,7 @@ let Dataset = React.createClass({
     },
 
     _incompleteMessage(dataset) {
-        if (dataset.status.incomplete) {
+        if (dataset.status.incomplete && (this.state.currentUploadId !== dataset._id)) {
             return (
                 <div className="col-xs-12">
                     <div className="file-structure fade-in panel-group">
