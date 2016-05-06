@@ -91,9 +91,15 @@ let datasetStore = Reflux.createStore({
      * Takes a datasetId and loads the dataset.
      */
     loadDataset(datasetId, options) {
-        options = options ? options : {};
+        let snapshot     = !!(options && options.snapshot),
+            dataset      = this.data.dataset,
+            options      = options ? options : {};
         options.isPublic = !userStore.data.token;
-        let snapshot = !!(options && options.snapshot);
+
+        // don't reload the current dataset
+        if (dataset && dataset._id === datasetId) {this.update({loading: false}); return;}
+
+        // begin loading
         this.update({loading: true, datasetTree: null});
         bids.getDataset(datasetId, (res) => {
             if (res.status === 404 || res.status === 403) {
@@ -102,7 +108,11 @@ let datasetStore = Reflux.createStore({
                 let originalId = res.original ? res.original : datasetId;
                 this.loadJobs(datasetId, snapshot, originalId, (jobs) => {
                     this.loadSnapshots(originalId, jobs, () => {
-                        this.update({dataset: res, loading: false, snapshot: snapshot, selectedSnapshot: datasetId});
+                        let selectedSnapshot = this.data.selectedSnapshot;
+                        // don't update data if the user has selected another version during loading
+                        if (!selectedSnapshot || selectedSnapshot === datasetId) {
+                            this.update({dataset: res, loading: false, snapshot: snapshot, selectedSnapshot: datasetId});
+                        }
                     });
                 });
             }
@@ -813,7 +823,8 @@ let datasetStore = Reflux.createStore({
             } else if (project.metadata.hasOwnProperty('validation') && project.metadata.validation.errors.length > 0) {
                 callback({error: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.'});
             } else {
-                if (moment(project.modified).diff(moment(this.data.snapshots[1].modified)) <= 0) {
+                let latestSnapshot = this.data.snapshots[1];
+                if (latestSnapshot && (moment(project.modified).diff(moment(latestSnapshot.modified)) <= 0)) {
                     callback({error: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.'});
                 } else {
                     scitran.createSnapshot(datasetId, (err, res) => {
