@@ -4,7 +4,7 @@ import React       from 'react';
 import pluralize   from 'pluralize';
 import bytes       from 'bytes';
 
-let Summary = React.createClass({
+export default class Summary extends React.component {
 
 // life cycle events --------------------------------------------------
 
@@ -16,7 +16,7 @@ let Summary = React.createClass({
                 {this._summary(summary)}
             </div>
         );
-    },
+    }
 
 // custom methods -----------------------------------------------------
 
@@ -34,9 +34,9 @@ let Summary = React.createClass({
                     {this._list('Tasks', summary.tasks)}<br/>
                     {this._list('Modalities', summary.modalities)}
                 </h6>
-            )
+            );
         }
-    },
+    }
 
     _list(type, items) {
         if (items && items.length > 0) {
@@ -44,7 +44,4 @@ let Summary = React.createClass({
         }
     }
 
-});
-
-
-export default Summary;
+}
