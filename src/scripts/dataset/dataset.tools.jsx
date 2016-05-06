@@ -111,7 +111,7 @@ let Tools = React.createClass({
                 icon: 'fa-tasks',
                 action: datasetActions.toggleModal.bind(null, 'jobs'),
                 display: isSignedIn && !isIncomplete,
-                warn: false,
+                warn: false
             }
         ];
 

@@ -91,9 +91,9 @@ let datasetStore = Reflux.createStore({
      * Takes a datasetId and loads the dataset.
      */
     loadDataset(datasetId, options) {
-        let snapshot     = !!(options && options.snapshot),
-            dataset      = this.data.dataset,
-            options      = options ? options : {};
+        let snapshot = !!(options && options.snapshot),
+            dataset  = this.data.dataset;
+        options      = options ? options : {};
         options.isPublic = !userStore.data.token;
 
         // update selection data
@@ -208,7 +208,7 @@ let datasetStore = Reflux.createStore({
             if (snapshot && callback) {
                 crn.getDatasetJobs(originalId, (err1, res1) => {
                     callback(res1.body);
-                }, {snapshot: false})
+                }, {snapshot: false});
             } else if (callback) {
                 callback(res.body);
             }
