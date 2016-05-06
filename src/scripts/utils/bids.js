@@ -355,7 +355,8 @@ export default  {
             description: this.formatDescription(project.metadata, description),
             attachments: attachments,
             userCreated: this.userCreated(project),
-            access:      this.userAccess(project)
+            access:      this.userAccess(project),
+            summary:     this.formatSummary(project.tags)
         };
         dataset.status       = this.formatStatus(project, dataset.access),
         dataset.authors      = dataset.description.Authors;
@@ -406,6 +407,22 @@ export default  {
             shared:     userStore.data.scitran && (project.group != userStore.data.scitran._id)  &&  !!userAccess
         };
         return status;
+    },
+
+    /**
+     * Format Summary
+     *
+     * Takes a tags array and parses the
+     * dataset summary if one is present.
+     */
+    formatSummary (tags, userAccess) {
+        let tags = tags ? tags : [];
+        for (let tag of tags) {
+            if (tag.indexOf('summary-') > -1) {
+                return JSON.parse(tag.replace('summary-', ''));
+            }
+        }
+        return {};
     },
 
     /**
