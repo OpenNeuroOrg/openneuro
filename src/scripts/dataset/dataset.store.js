@@ -96,6 +96,9 @@ let datasetStore = Reflux.createStore({
             options      = options ? options : {};
         options.isPublic = !userStore.data.token;
 
+        // update selection data
+        this.update({selectedSnapshot: datasetId});
+
         // don't reload the current dataset
         if (dataset && dataset._id === datasetId) {this.update({loading: false}); return;}
 
@@ -111,7 +114,7 @@ let datasetStore = Reflux.createStore({
                         let selectedSnapshot = this.data.selectedSnapshot;
                         // don't update data if the user has selected another version during loading
                         if (!selectedSnapshot || selectedSnapshot === datasetId) {
-                            this.update({dataset: res, loading: false, snapshot: snapshot, selectedSnapshot: datasetId});
+                            this.update({dataset: res, loading: false, snapshot: snapshot});
                         }
                     });
                 });
@@ -135,7 +138,6 @@ let datasetStore = Reflux.createStore({
      * Takes a snapshot ID and loads the snapshot.
      */
     loadSnapshot(isOriginal, snapshotId) {
-        this.update({selectedSnapshot: snapshotId});
         let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
         if (isOriginal) {
             router.transitionTo('dataset', {datasetId: snapshotId});
