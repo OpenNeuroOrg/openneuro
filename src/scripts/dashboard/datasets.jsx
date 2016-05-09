@@ -10,7 +10,6 @@ import {PanelGroup}  from 'react-bootstrap';
 import Paginator     from '../common/partials/paginator.jsx';
 import Spinner       from '../common/partials/spinner.jsx';
 import Statuses      from '../dataset/dataset.statuses.jsx';
-import Summary       from '../dataset/dataset.summary.jsx';
 import Filters       from './datasets.filters.jsx';
 import Sort          from './datasets.sort.jsx';
 
@@ -64,7 +63,6 @@ let Datasets = React.createClass({
                                     <div className="meta-container">
                                         <p className="date">uploaded {user ? 'by ' : ''}<span className="name">{fullname}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
                                     </div>
-                                    <Summary summary={dataset.summary} />
                                 </Link>
                                 {!isPublic ? statusContainer : null}
                             </div>
