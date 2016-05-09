@@ -91,18 +91,22 @@ let Jobs = React.createClass({
                         <WarnButton
                             icon="fa-eye"
                             warn={false}
+                            message=" VIEW"
                             action={actions.displayFile.bind(this, run.jobId, result._links.self.href, result.name)} />
                     );
                 }
                 return (
                     <li key={index}>
-                         <span className="warning-btn-wrap">
-                            <WarnButton
-                                icon="fa-download"
-                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
-                        </span>
-                        {displayBtn}
                         <span className="result-name">{result.name}</span>
+                        <div className="result-options">
+                            <span className="warning-btn-wrap">
+                                <WarnButton
+                                icon="fa-download"
+                                message=" DOWNLOAD"
+                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
+                            </span>
+                            {displayBtn}
+                        </div>
                     </li>
                 );
             });

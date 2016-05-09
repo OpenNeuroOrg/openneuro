@@ -82,7 +82,7 @@ let Dataset = React.createClass({
                                     {this._views(dataset.views)}
                                     {this._downloads(dataset.downloads)}
                                     <div className="status-container">
-                                        <Statuses dataset={dataset} />
+                                        <Statuses dataset={dataset} showSidebar={showSidebar}/>
                                     </div>
                                     <MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
                                 </div>
@@ -117,7 +117,7 @@ let Dataset = React.createClass({
             <div className={showSidebar ? 'open dataset-container' : 'dataset-container'}>
                 <div className="fade-in inner-route dataset-route light">
                     {this._leftSidebar(snapshots)}
-                    {this._showSideBarButton()}
+                    {this._showSideBarButton(dataset)}
                     {this.state.loading ? <Spinner active={true} /> : content}
                 </div>
             </div>
@@ -131,11 +131,11 @@ let Dataset = React.createClass({
         let snapshotOptions = snapshots.map((snapshot) => {
 
             let analysisCount;
-            if (!snapshot.isOriginal) {
+            if (!snapshot.isOriginal && snapshot.analysisCount > 0) {
                 analysisCount = (
                     <span className="job-count">
-                        <i className="fa fa-tasks"></i>
-                        <span className="count">({snapshot.analysisCount})</span>
+                        <i className="fa fa-area-chart"></i>
+                        <span className="count">{snapshot.analysisCount}</span>
                     </span>
                 );
             }
@@ -152,10 +152,10 @@ let Dataset = React.createClass({
                                 <span className="date-modified">
                                     {moment(snapshot.modified).format('ll')}
                                 </span>
-                            </div>
-                            <div className="icons col-xs-4">
-                                {snapshot.public && isSignedIn ? <span className="published"><i className="fa fa-globe"></i></span> : null}
-                                {analysisCount}
+                                <span className="icons">
+                                    {snapshot.public && isSignedIn ? <span className="published"><i className="fa fa-globe"></i></span> : null}
+                                    {analysisCount}
+                                </span>
                             </div>
                         </div>
                     </a>
@@ -179,7 +179,7 @@ let Dataset = React.createClass({
         );
     },
 
-    _showSideBarButton(){
+    _showSideBarButton(dataset){
         let showSidebar = this.state.showSidebar;
         return(
             <span className="show-nav-btn" onClick={actions.toggleSidebar}>
@@ -235,11 +235,13 @@ let Dataset = React.createClass({
     _incompleteMessage(dataset) {
         if (dataset.status.incomplete) {
             return (
-                <div className="col-xs-12">
-                    <div className="file-structure fade-in panel-group">
-                        <div className="panel panel-default">
+                <div className="col-xs-12 incomplete-dataset">
+                    <div className="incomplete-wrap fade-in panel-group">
+                        <div className="panel panel-default status">
                             <div className="panel-heading" >
-                                <h4 className="panel-title">Incomplete</h4>
+                                <h4 className="panel-title">
+                                    <span className="dataset-status ds-warning"><i className="fa fa-warning"></i> Incomplete</span>
+                                </h4>
                             </div>
                             <div className="panel-collapse" aria-expanded="false" >
                                 <div className="panel-body">

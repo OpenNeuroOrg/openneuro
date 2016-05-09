@@ -5,7 +5,8 @@
 
 //font  //=================================================================
 
-@import 'font-awesome/font-awesome';
+@import './fonts/font-awesome/font-awesome';
+@import './fonts/custom-font/_customfonts';
 
 //crn SASS =================================================================
 @import './crn_app/variables';
@@ -117,3 +118,34 @@
 
 .ds-danger .ellipsis-animation {color: $brand-danger;}
 .ds-warning .ellipsis-animation {color: $brand-warning;}
+
+.icon-ban:after,
+.icon-undo:after,
+.icon-plus:after,
+.icon-minus:after {
+    font-size: 11px;
+    top: -10px;
+    position: relative;
+        right: -2px
+}
+
+.icon-plus:after {
+    font-size:  9px;
+    content: '\f067';
+}
+
+.icon-minus:after {
+    content: '\f068';
+}
+
+
+.icon-undo:after {
+    content: '\f0e2';
+}
+
+
+
+.icon-ban:after {
+    content: '\f05e';
+    color: $brand-danger;
+}

@@ -1,6 +1,6 @@
 //dataset loading icon spinner
 .loading-wrap {
-    padding: 20px 0 30px;
+    padding: 60px 0 30px;
     text-align: center;
     position: relative;
 
@@ -45,4 +45,8 @@
         width: 60%;
         height: 60%;
     }
+}
+
+.open .loading-wrap{
+    width: 80%;
 }

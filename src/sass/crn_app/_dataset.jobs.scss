@@ -132,6 +132,212 @@
                         line-height: 1.3;
                     }
 
+        .result-options {
+            margin-top: 10px;
+            width: 210px;
+        }
+
+        .btn-warn-component,
+        .warning.btn-warn-component {
+            @extend %btn-admin;
+            @include border-radius(0);
+            font-size: 10px;
+            padding: 3px 5px;
+            margin: 0;
+            background: none;
+            border: 0;
+            color: $sky;
+
+            i {
+                margin: 0 0 0 2px;
+                line-height: 0;
+            }
+
+            &:hover,
+            &:active,
+            &.hover,
+            &.active {
+                background: $e1;
+                color: $c-66;
+                transition: all .3s ease-out;
+            }
+
+            &:focus {
+                box-shadow: none;
+                outline: none;
+            }
+
+            &.cancel,
+            &.success {
+                background: $brand-danger;
+                color: $white;
+                font-size: 10px;
+                padding: 2px;
+                margin: 0 5px 0 0;
+                box-sizing: border-box;
+                line-height: 10px;
+                width: 18px;
+                height: 15px;
+
+                i {
+                    margin: 0;
+                    line-height: 10px;
+                }
+
+                &:hover {
+                    background: darken($brand-danger, 10%);
+                }
+            }
+
+            &.success {
+                margin-right: 0;
+                background: $brand-success;
+
+                &:hover {
+                    background: darken($brand-success, 10%);
+                }
+            }
+        }
+
+                    .panel-body li {
+                        height: auto;
+                        border-top: 1px solid $eee;
+                        padding: 5px 0;
+
+                        &:last-child {
+                            border-bottom: 1px solid $eee;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.validation {
+    .validation-wrap {
+
+        .status {
+            @include border-radius(0);
+            margin-bottom: 10px;
+
+            .panel-heading {
+                padding: 0;
+                background: none;
+
+                .panel-title {
+                    @extend %clearfix;
+                    padding: 0;
+                    display: block;
+                    background: none;
+
+                    .dataset-status {
+                        font-size: 18px;
+                        padding: 10px;
+                        display: block;
+                        float: left;
+                        width: 200px;
+                        text-align: left;
+                        margin-left: 40px;
+                        line-height: 30px;
+                        i {
+                            font-size: 30px;
+                            position: absolute;
+                            left: -25px;
+                        }
+                    }
+
+                    .label {
+                        @include border-radius (0);
+                        text-transform: uppercase;
+                        margin: 10px 3px 10px 0;
+                        padding: 8px 10px;
+                        font-size: 14px;
+
+                        &.text-warning {
+                            color: darken($brand-warning, 10%);
+                        }
+
+                    }
+
+                    strong {
+                        color: $c-66;
+                    }
+
+                    .meta,
+                    .badge {
+                        background: none;
+                        color: $c-9e;
+                        font-size: 12px;
+                    }
+
+                    .meta label {
+                        text-transform: none;
+                    }
+
+                    &.super-valid {
+                         a{
+                            cursor: default;
+                        }
+                    }
+                }
+
+                .finished .badge {
+                    color: $brand-success;
+                }
+            }
+
+            .panel-body .inner {
+                margin: -15px;
+                display: block;
+            }
+
+            .results {
+                margin: 0;
+
+                .panel {
+                    @include border-radius(0);
+                    border: 0;
+                    border-top: 1px solid $ccc;
+
+                    .panel-heading .panel-title {
+                        padding: 0;
+                        background: lighten($misty, 10%);
+
+                        a {
+                            padding: 8px 15px;
+                            display: block;
+                            font-size: 14px;
+
+                            &::after {
+                                content: '\f0d8';
+                                font-family: FontAwesome;
+                                float: right;
+                                font-size: 12px;
+                                margin-top: 3px;
+                            }
+
+                            &.collapsed {
+
+                                &::after {
+                                    content: '\f0d7';
+                                }
+                            }
+                        }
+                    }
+
+                    ul {
+                        padding: 0;
+                        list-style: none;
+                    }
+
+                    .result-name {
+                        padding-left: 10px;
+                        display: inline-block;
+                        vertical-align: middle;
+                        line-height: 1.3;
+                    }
+
                     .warning-btn-wrap {
                         display: inline-block;
                         overflow: hidden;
@@ -235,10 +441,8 @@
     }
 }
 
-.validation {
-
-    .validation-wrap {
-
+.incomplete-dataset {
+    .incomplete-wrap {
         .status {
             @include border-radius(0);
             margin-bottom: 10px;

@@ -57,14 +57,14 @@ let Tools = React.createClass({
             },
             {
                 tooltip: 'Publish Dataset',
-                icon: 'fa-globe',
+                icon: 'fa-globe icon-plus',
                 action: datasetActions.toggleModal.bind(null, 'publish'),
                 display: isAdmin && !isPublic && !isIncomplete,
                 warn: false
             },
             {
                 tooltip: 'Unpublish Dataset',
-                icon: 'fa-eye-slash',
+                icon: 'fa-globe icon-ban',
                 action: datasetActions.publish.bind(this, dataset._id, false),
                 display: isPublic && isSuperuser,
                 warn: true
@@ -78,14 +78,14 @@ let Tools = React.createClass({
             },
             {
                 tooltip: 'Share Dataset',
-                icon: 'fa-user-plus',
+                icon: 'fa-user icon-plus',
                 action: datasetActions.toggleModal.bind(null, 'share'),
                 display: isAdmin && !isSnapshot && !isIncomplete,
                 warn: false
             },
             {
                 tooltip: 'Create Snapshot',
-                icon: 'fa-camera-retro',
+                icon: 'fa-camera-retro icon-plus',
                 action: datasetActions.createSnapshot,
                 display: isAdmin && !isSnapshot && !isIncomplete,
                 warn: true,
@@ -106,7 +106,7 @@ let Tools = React.createClass({
             },
             {
                 tooltip: 'Run Anaylsis',
-                icon: 'fa-tasks',
+                icon: 'fa-area-chart',
                 action: datasetActions.toggleModal.bind(null, 'jobs'),
                 display: isSignedIn && !isIncomplete,
                 warn: false
@@ -115,11 +115,7 @@ let Tools = React.createClass({
 
         return (
             <div className="tools clearfix">
-                <div className="snapshot-select-label" >
-                    <div className={!dataset.original ? 'draft' : 'snapshot'} onClick={actions.toggleSidebar}>
-                        {!dataset.original ? 'Draft' : 'Snapshot v' + dataset.snapshot_version}
-                    </div>
-                </div>
+                {this._snapshotLabel(dataset)}
                 {this._tools(tools)}
                 {this._resume(isIncomplete, isUploading)}
                 <ToolModals />
@@ -128,6 +124,16 @@ let Tools = React.createClass({
     },
 
 // template methods ---------------------------------------------------
+
+    _snapshotLabel(dataset) {
+        return(
+            <div className="snapshot-select-label" >
+                <div className={!dataset.original ? 'draft' : 'snapshot'} onClick={actions.toggleSidebar}>
+                    {!dataset.original ? 'Draft' : 'Snapshot v' + dataset.snapshot_version}
+                </div>
+            </div>
+        );
+    },
 
     _resume(incomplete, isUploading) {
         if (incomplete && !isUploading) {
