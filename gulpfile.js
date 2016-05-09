@@ -28,7 +28,7 @@ var p = {
     scss:       './src/sass/**/*.scss',
     scssmain:   './src/sass/main.scss',
     assets:     './src/assets/*',
-    fonts:      './src/sass/fonts/**/**/**/*',
+    fonts:      './src/fonts/**/**/*',
     bundle:     'app.min.js',
 
     dist:       'dist',
