@@ -652,9 +652,10 @@ let datasetStore = Reflux.createStore({
             dataset.status.validating = true;
             this.update({dataset});
             crn.validate(dataset._id, (err, res) => {
-                let validation = res.body;
+                let validation = res.body.validation;
                 dataset.status.validating = false;
                 dataset.validation = validation;
+                dataset.summary    = res.body.summary;
                 dataset.status.invalid = validation.errors && (validation.errors == 'Invalid' || validation.errors.length > 0);
                 this.update({dataset});
                 this.updateModified();

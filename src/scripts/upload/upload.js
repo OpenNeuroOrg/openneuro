@@ -132,11 +132,9 @@ export default {
                                 authors.push({name: author, ORCIDID: ''});
                             }
                         }
-                        scitran.updateProject(projectId, {metadata: {authors, validation}}, () => {
-                            scitran.addTag('projects', projectId, 'summary-' + JSON.stringify(summary), () => {
-                                let file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
-                                self.uploadFile('projects', projectId, file, 'project');
-                            });
+                        scitran.updateProject(projectId, {metadata: {authors, validation, summary}}, () => {
+                            let file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
+                            self.uploadFile('projects', projectId, file, 'project');
                         });
                     });
 
