@@ -2,7 +2,6 @@
 
 import React                    from 'react';
 import Navbar                   from './nav/navbar.jsx';
-import LeftNavbar               from './nav/left-navbar.jsx';
 import userActions              from './user/user.actions.js';
 import bowser                   from 'bowser';
 import Happybrowser             from './common/partials/happybrowser.jsx';
@@ -26,13 +25,8 @@ let App = React.createClass({
         let pageClasses = ' ';
         let routes = this.getRoutes();
 
-        for (let route of routes) {pageClasses += route.name + ' ';}
-
-        let showLeftNav     = !this.isActive('signIn');
+        for (let route of routes) { pageClasses += route.name + ' '; }
         let is_front        = this.isActive('signIn');
-        let leftnav;
-
-        if (showLeftNav) {leftnav = <div className="left-nav"><LeftNavbar /></div>;}
 
         return (
             <div className={is_front ? 'page is-front' + pageClasses : 'page' + pageClasses}>
@@ -40,8 +34,7 @@ let App = React.createClass({
                 <div className="full-col">
                     <Navbar routes={routes} />
                     <div className="main view container">
-                        <div className={showLeftNav ? 'route-wrapper' : null}>
-                            {leftnav}
+                        <div className="route-wrapper">
                             <RouteHandler/>
                         </div>
                     </div>

@@ -14,6 +14,7 @@ import moment       from 'moment';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
 import FileTree     from './dataset.file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
+import userStore    from '../user/user.store.js';
 
 let Dataset = React.createClass({
 
@@ -46,30 +47,31 @@ let Dataset = React.createClass({
     },
 
     render() {
-        let dataset = this.state.dataset;
-        let tree    = this.state.datasetTree;
-        let canEdit = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
+        let dataset     = this.state.dataset;
+        let snapshots   = this.state.snapshots;
+        let showSidebar = this.state.showSidebar;
+        let tree        = this.state.datasetTree;
+        let canEdit     = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
         let content;
 
         if (dataset) {
             let errors = dataset.validation.errors;
             let warnings = dataset.validation.warnings;
-
             content = (
-                <div className="dashboard">
-                    <div className="clearfix">
+                <div className="clearfix dataset-wrap">
+                    <div className="dataset-annimation">
                         <div className="col-xs-12 dataset-tools-wrap">
                             <Tools dataset={dataset}
                                    selectedSnapshot={this.state.selectedSnapshot}
                                    snapshots={this.state.snapshots} />
                         </div>
-                        <div className="col-xs-12 dataset-wrap">
+                        <div className="col-xs-12 dataset-inner">
                             <div className="row">
                                 <div className="col-xs-7">
                                     <h1 className="clearfix">
                                         <ClickToEdit
                                             value={dataset.label}
-                                            label={false}
+                                            label= {dataset.label}
                                             editable={canEdit}
                                             onChange={actions.updateName}/>
                                     </h1>
@@ -79,7 +81,7 @@ let Dataset = React.createClass({
                                     {this._views(dataset.views)}
                                     {this._downloads(dataset.downloads)}
                                     <div className="status-container">
-                                        <Statuses dataset={dataset} />
+                                        <Statuses dataset={dataset}/>
                                     </div>
                                     <MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
                                 </div>
@@ -111,13 +113,79 @@ let Dataset = React.createClass({
         }
 
         return (
-            <div className="fade-in inner-route dataset light">
-                {this.state.loading ? <Spinner active={true} /> : content}
+            <div className={showSidebar ? 'open dataset-container' : 'dataset-container'}>
+                <div className="fade-in inner-route dataset-route light">
+                    {this._leftSidebar(snapshots)}
+                    {this._showSideBarButton(dataset)}
+                    {this.state.loading ? <Spinner active={true} /> : content}
+                </div>
             </div>
         );
     },
 
 // template methods ---------------------------------------------------
+
+    _leftSidebar(snapshots) {
+        let isSignedIn   = !!userStore.hasToken();
+        let snapshotOptions = snapshots.map((snapshot) => {
+
+            let analysisCount;
+            if (!snapshot.isOriginal && snapshot.analysisCount > 0) {
+                analysisCount = (
+                    <span className="job-count">
+                        <i className="fa fa-area-chart"></i>
+                        <span className="count">{snapshot.analysisCount}</span>
+                    </span>
+                );
+            }
+
+            return (
+                <li key={snapshot._id}>
+                    <a onClick={actions.loadSnapshot.bind(this, snapshot.isOriginal, snapshot._id)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
+                        <div className="clearfix">
+                            <div className=" col-xs-12">
+                                <span className="dataset-type">
+                                    {snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version}
+                                </span>
+
+                                <span className="date-modified">
+                                    {moment(snapshot.modified).format('ll')}
+                                </span>
+                                <span className="icons">
+                                    {snapshot.public && isSignedIn ? <span className="published"><i className="fa fa-globe"></i></span> : null}
+                                    {analysisCount}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            );
+        });
+
+        return (
+            <div className="left-sidebar">
+                <span className="slide">
+                    <div role="presentation" className="snapshot-select" >
+                        <span>
+                            <h3>Versions</h3>
+                            <ul>
+                                {snapshotOptions}
+                            </ul>
+                        </span>
+                    </div>
+                </span>
+            </div>
+        );
+    },
+
+    _showSideBarButton(dataset){
+        let showSidebar = this.state.showSidebar;
+        return(
+            <span className="show-nav-btn" onClick={actions.toggleSidebar}>
+                {showSidebar ?  <i className="fa fa-angle-double-left" aria-hidden="true"></i> : <i className="fa fa-angle-double-right" aria-hidden="true"></i>}
+            </span>
+        );
+    },
 
     _authors(authors) {
         if (authors.length > 0) {
@@ -166,11 +234,13 @@ let Dataset = React.createClass({
     _incompleteMessage(dataset) {
         if (dataset.status.incomplete) {
             return (
-                <div className="col-xs-12">
-                    <div className="file-structure fade-in panel-group">
-                        <div className="panel panel-default">
+                <div className="col-xs-12 incomplete-dataset">
+                    <div className="incomplete-wrap fade-in panel-group">
+                        <div className="panel panel-default status">
                             <div className="panel-heading" >
-                                <h4 className="panel-title">Incomplete</h4>
+                                <h4 className="panel-title">
+                                    <span className="dataset-status ds-warning"><i className="fa fa-warning"></i> Incomplete</span>
+                                </h4>
                             </div>
                             <div className="panel-collapse" aria-expanded="false" >
                                 <div className="panel-body">

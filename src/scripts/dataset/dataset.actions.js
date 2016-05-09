@@ -28,6 +28,7 @@ var Actions = Reflux.createActions([
     'trackView',
     'toggleFolder',
     'toggleModal',
+    'toggleSidebar',
     'uploadAttachment',
     'updateDescription',
     'updateName',

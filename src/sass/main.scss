@@ -5,7 +5,8 @@
 
 //font  //=================================================================
 
-@import 'font-awesome/font-awesome';
+// @import './fonts/font-awesome/font-awesome';
+// @import './fonts/custom-font/_customfonts';
 
 //crn SASS =================================================================
 @import './crn_app/variables';
@@ -24,12 +25,12 @@
 
 //component specific
 @import './crn_app/nav.navbar';
-@import './crn_app/nav.left_navbar';
 @import './crn_app/notification.alert';
 @import './crn_app/dataset.dataset';
 @import './crn_app/dataset.jobs';
 @import './crn_app/dataset.tools';
 @import './crn_app/dataset.file-tree';
+@import './crn_app/dataset.sidebar';
 @import './crn_app/admin.admin';
 @import './crn_app/user.signin';
 @import './crn_app/dashboard.datasets';
@@ -40,11 +41,13 @@
 // annimations ============================================================
 @import 'animate/_fading-entrances/fading-entrances';
 @import 'animate/_sliding-entrances/sliding-entrances';
+@import 'animate/_sliding-exits/sliding-exits';
 @import 'animate/_flippers/flippers';
 
 
 .fade-in {@include fadeIn();}
 .slide-in-left {@include slideInLeft();}
+.slide-out-left {@include slideOutLeft();}
 .slide-in-right-fast {@include slideInRightFast();}
 %slide-in-down { @include slideInDown();}
 .flipin-x {@include flipInX();}
@@ -115,3 +118,34 @@
 
 .ds-danger .ellipsis-animation {color: $brand-danger;}
 .ds-warning .ellipsis-animation {color: $brand-warning;}
+
+.icon-ban:after,
+.icon-undo:after,
+.icon-plus:after,
+.icon-minus:after {
+    font-size: 11px;
+    top: -10px;
+    position: relative;
+        right: -2px
+}
+
+.icon-plus:after {
+    font-size:  9px;
+    content: '\f067';
+}
+
+.icon-minus:after {
+    content: '\f068';
+}
+
+
+.icon-undo:after {
+    content: '\f0e2';
+}
+
+
+
+.icon-ban:after {
+    content: '\f05e';
+    color: $brand-danger;
+}

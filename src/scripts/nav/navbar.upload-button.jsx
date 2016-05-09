@@ -22,16 +22,14 @@ let UploadBtn = React.createClass({
         let progress  = total > 0 ? Math.floor(completed / total * 100) : 0;
 
         progress = (
-            <div>
-                <button className="btn btn-blue btn-view-progress"  onClick={Actions.toggleModal}>view details</button>
-                <ProgressBar active now={progress} />
-            </div>
+                <a className="nav-link nl-upload nl-progress"  onClick={Actions.toggleModal}>
+                    <span className="link-name">view details</span>
+                    <ProgressBar active now={progress} />
+                </a>
         );
 
         let uploadBtn = (
-            <div>
-                <button className="btn btn-blue"  onClick={Actions.toggleModal}>Upload Dataset</button>
-            </div>
+                <a className="nav-link nl-upload"  onClick={Actions.toggleModal}><span className="link-name"><i className="fa fa-upload"></i> Upload Dataset</span></a>
         );
 
         let uploadModal = (
@@ -47,12 +45,10 @@ let UploadBtn = React.createClass({
         );
 
         return (
-            <span>
-                <div className="upload-btn-wrap">
+            <span className="upload-btn-wrap">
                 {this.state.uploadStatus == 'uploading' ? progress : uploadBtn}
                 {uploadModal}
                 <img src="/assets/favicon-upload.png" id="favicon_upload" className="hidden"/>
-                </div>
             </span>
         );
 

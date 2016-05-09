@@ -8,7 +8,7 @@ import UploadBtn        from './navbar.upload-button.jsx';
 import userStore        from '../user/user.store.js';
 import userActions      from '../user/user.actions.js';
 import Alert            from '../notification/notification.alert.jsx';
-import {CollapsibleNav,Nav}          from 'react-bootstrap';
+import {CollapsibleNav} from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
 
@@ -22,21 +22,15 @@ let BSNavbar = React.createClass({
     },
 
     render: function () {
-
-        let isLoggedIn    = !!this.state.token;
-        let googleProfile = this.state.google;
-        let loading       = this.state.loading;
-        let routes        = this.props.routes;
-
         return (
             <nav role="navigation" className="navbar navbar-default" toggleNavKey={0}>
-                <div className="container">
+                <div className="container-fluid">
                     <div className="navbar-header">
                         {this._brand()}
                     </div>
-                    <CollapsibleNav className="clearfix" eventKey={0}>
-                            {isLoggedIn && !loading ? this._userMenu(googleProfile) : this._signIn(loading, routes)}
-                    </CollapsibleNav>
+                    <div className="clearfix">
+                        {this._navMenu()}
+                    </div>
                 </div>
                 <Alert/>
             </nav>
@@ -45,13 +39,47 @@ let BSNavbar = React.createClass({
 
 // template methods --------------------------------------------------------------
 
-    _brand() {
-        return (
+    _brand(){
+        return(
             <Link to="dashboard" className="navbar-brand">
                 <img src="./assets/CRN-Logo-Placeholder.png"
                      alt="Center for Reproducible Neuroscience Logo"
                      title="Center for Reproducible Neuroscience Link To Home Page"/>
             </Link>
+        );
+    },
+
+    _navMenu() {
+        let isLoggedIn    = !!this.state.token;
+        let googleProfile = this.state.google;
+        let loading       = this.state.loading;
+        let routes        = this.props.routes;
+        let adminLink     = <Link className="nav-link" to="admin"><span className="link-name">admin</span></Link>;
+        let dashboardLink = <Link className="nav-link" to="dashboard"><span className="link-name">dashboard</span></Link>;
+
+        return (
+            <ul className="nav navbar-nav main-nav">
+                <li className="link-dashboard">
+                    {userStore.hasToken() ? dashboardLink : null}
+                </li>
+                <li className="link-admin">
+                    {this.state.scitran && this.state.scitran.root ? adminLink : null }
+                </li>
+                <li className="link-public">
+                    <Link className="nav-link" to="public"><span className="link-name">Public Datasets</span></Link>
+                </li>
+                <li className="link-contact">
+                    <a className="nav-link" href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><span className="link-name">contact</span></a>
+                </li>
+                <li className="link-dashboard">
+                    <UploadBtn />
+                </li>
+                 <li>
+                     <CollapsibleNav eventKey={0}>
+                            {isLoggedIn && !loading ? this._userMenu(googleProfile) : this._signIn(loading, routes)}
+                    </CollapsibleNav>
+                </li>
+            </ul>
         );
     },
 
@@ -85,12 +113,7 @@ let BSNavbar = React.createClass({
     _userMenu(googleProfile) {
         if (googleProfile) {
             return (
-                <Nav navbar right className="useradmin-nav clearfix">
-                    <div className="clearfix">
-                        <UploadBtn />
-                        <Usermenu />
-                    </div>
-                </Nav>
+                <Usermenu />
             );
         }
     }

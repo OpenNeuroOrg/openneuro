@@ -72,91 +72,96 @@
     }
 }
 
-.dataset .dataset-wrap {
-    .file-structure.panel-group {
-        .panel-default {
-            .type-icon {
-                background: none;
-                border: 0;
-            }
+.snapshot,
+.dataset {
+    .dataset-inner {
+        .file-structure.panel-group {
+            .panel-default {
+                .type-icon {
+                    background: none;
+                    border: 0;
+                }
 
-            .panel-heading .panel-title {
-                font-size: 21px;
-                color: $c-33;
-                line-height: 21px;
-                padding: 0;
-                display: inline-block;
-                max-width: 100%;
-                margin-bottom: 5px;
-                font-family: 'Cabin', sans-serif;
-            }
-
-            .panel-body {
-                padding: 0;
-
-                ul {
+                .panel-heading .panel-title {
+                    font-size: 21px;
+                    color: $c-33;
+                    line-height: 21px;
                     padding: 0;
-                    position: relative;
-                    li {
+                    display: inline-block;
+                    max-width: 100%;
+                    margin-bottom: 5px;
+                    font-family: 'Cabin', sans-serif;
+                }
+
+                .panel-body {
+                    padding: 0;
+
+                    ul {
+                        padding: 0;
                         position: relative;
 
-                        .cte-edit-button {
-                            position: absolute;
-                            top: 5px;
-                            right: 5px;
-                        }
+                        li {
+                            position: relative;
 
-                        .btn-file-folder {
-                            color: $c-66;
-                        }
-                    }
-                }
-
-                >ul {
-                    overflow: visible;
-                    height: auto;
-                    padding: 0;
-                    margin: 0;
-
-                    li {
-                        padding: 6px 0 6px 10px;
-                        list-style: none;
-                        margin: 2px;
-
-                        .child-files {
-                            margin-left: 5px;
-                            border-left: 1px solid $c-9e;
-
-                            li {
-                                background: $white;
-
-                                &:nth-child(odd) {background: $f9;}
-                                .message.error {color: $coral;}
-                                .fa-times {cursor: pointer;}
-                            }
-
-                            li::before {
-                                content: '';
-                                height: 7px;
-                                width: 7px;
-                                background: none;
-                                border-bottom: 1px solid $c-9e;
-                                margin-left: -11px;
+                            .cte-edit-button {
                                 position: absolute;
-                                margin-top: 3px;
+                                top: 5px;
+                                right: 5px;
+                            }
+
+                            .btn-file-folder {
+                                color: $c-66;
                             }
                         }
                     }
-                }
 
-                .filetree-editfile {
-                    height: 20px;
-                    float: none;
-                    width: 100%;
-                    display: block;
-                    margin: 5px 0 0;
+                    >ul {
+                        overflow: visible;
+                        height: auto;
+                        padding: 0;
+                        margin: 0;
+
+                        li {
+                            padding: 6px 0 6px 10px;
+                            list-style: none;
+                            margin: 2px;
+
+                            .child-files {
+                                margin-left: 5px;
+                                border-left: 1px solid $c-9e;
+
+                                li {
+                                    background: $white;
+
+                                    &:nth-child(odd) {background: $f9;}
+                                    .message.error {color: $coral;}
+                                    .fa-times {cursor: pointer;}
+                                }
+
+                                li::before {
+                                    content: '';
+                                    height: 7px;
+                                    width: 7px;
+                                    background: none;
+                                    border-bottom: 1px solid $c-9e;
+                                    margin-left: -11px;
+                                    position: absolute;
+                                    margin-top: 3px;
+                                }
+                            }
+                        }
+                    }
+
+                    .filetree-editfile {
+                        height: 20px;
+                        float: none;
+                        width: 100%;
+                        display: block;
+                        margin: 5px 0 0;
+                    }
                 }
             }
         }
     }
 }
+

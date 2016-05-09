@@ -36,7 +36,7 @@ export default class Validation extends React.Component {
         if (!display) {return false;}
 
         return (
-            <div className="fade-in col-xs-12 analyses">
+            <div className="fade-in col-xs-12 validation">
                 <h3 className="metaheader">BIDS Validation</h3>
                 {this._accordion(errors, warnings, validating)}
             </div>
@@ -50,8 +50,8 @@ export default class Validation extends React.Component {
             return <Spinner text="Validating" active={true} />;
         } else {
             return (
-                <Accordion className="jobs-wrap" activeKey={this.state.activeKey} onSelect={this._togglePanel.bind(this)}>
-                    <Panel className="job" header={this._header(errors, warnings)} eventKey="1">
+                <Accordion className="validation-wrap" activeKey={this.state.activeKey} onSelect={this._togglePanel.bind(this)}>
+                    <Panel className="status" header={this._header(errors, warnings)} eventKey="1">
                         {this._message(errors, warnings)}<br />
                         <Results errors={errors} warnings={warnings} />
                     </Panel>
@@ -61,16 +61,18 @@ export default class Validation extends React.Component {
     }
 
     _header(errors, warnings) {
-        let errs, warns;
+        let errs, warns, superValid;
         let status = errors.length ? <span className="dataset-status ds-danger"><i className="fa fa-exclamation-circle" /> Invalid</span> : <span className="dataset-status ds-success"><i className="fa fa-check-circle" /> Valid</span>;
         if (errors.length > 0) {
-            errs =  errors.length + ' ' + pluralize('Error', errors.length);
+            errs =  <span className="label text-danger pull-right">{errors.length} {pluralize('Error', errors.length)}</span>;
         }
         if (warnings.length > 0) {
-            warns = warnings.length + ' ' + pluralize('Warning', warnings.length);
-            if (errs) {warns = ', ' + warns;}
+            warns = <span className="label text-warning pull-right">{warnings.length} {pluralize('Warning', warnings.length)}</span>;
         }
-        return <div>{status}{errs || warns ? ' - ' : null}{errs}{warns}</div>;
+        if (warnings.length <= 0 && errors.length <= 0){
+            superValid = 'super-valid';
+        }
+        return <div className={superValid}>{status}{errs}{warns}</div>;
     }
 
     _message(errors, warnings) {
@@ -103,7 +105,8 @@ export default class Validation extends React.Component {
 Validation.propTypes = {
     errors:     React.PropTypes.array,
     warnings:   React.PropTypes.array,
-    validating: React.PropTypes.bool
+    validating: React.PropTypes.bool,
+    display:    React.PropTypes.bool
 };
 
 Validation.props = {

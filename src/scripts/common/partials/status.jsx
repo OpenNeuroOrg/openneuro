@@ -59,9 +59,9 @@ export default class Status extends React.Component {
         if (tip) {content = <Tooltip tooltip={tip}>{content}</Tooltip>;}
 
         return (
-            <span>
+            <span className="clearfix status">
                 {fileSelect}
-                <span className="clearfix status">
+                <span>
                     <span className={spanClass}>{content}</span>
                 </span>
             </span>
