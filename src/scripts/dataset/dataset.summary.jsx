@@ -4,7 +4,7 @@ import React       from 'react';
 import pluralize   from 'pluralize';
 import bytes       from 'bytes';
 
-export default class Summary extends React.component {
+export default class Summary extends React.Component {
 
 // life cycle events --------------------------------------------------
 
