@@ -63,8 +63,7 @@ let Dataset = React.createClass({
                         <div className="col-xs-12 dataset-tools-wrap">
                             <Tools dataset={dataset}
                                    selectedSnapshot={this.state.selectedSnapshot}
-                                   snapshots={this.state.snapshots}
-                                   showSidebar={showSidebar} />
+                                   snapshots={this.state.snapshots} />
                         </div>
                         <div className="col-xs-12 dataset-inner">
                             <div className="row">
@@ -82,7 +81,7 @@ let Dataset = React.createClass({
                                     {this._views(dataset.views)}
                                     {this._downloads(dataset.downloads)}
                                     <div className="status-container">
-                                        <Statuses dataset={dataset} showSidebar={showSidebar}/>
+                                        <Statuses dataset={dataset}/>
                                     </div>
                                     <MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
                                 </div>
