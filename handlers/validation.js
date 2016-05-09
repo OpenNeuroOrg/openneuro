@@ -26,19 +26,18 @@ export default {
 		let datasetId = req.params.datasetId;
 
 		scitran.downloadSymlinkDataset(datasetId, (err, hash) => {
-			validate.BIDS(config.location + '/persistent/datasets/' + hash, {}, (errors, warnings) => {
+			validate.BIDS(config.location + '/persistent/datasets/' + hash, {}, (errors, warnings, summary) => {
 				let validation = {errors, warnings};
 				scitran.updateProject(datasetId, {
-					metadata: {validation}
+					metadata: {validation, summary}
 				}, (err, res1) => {
 					scitran.removeTag('projects', datasetId, 'validating', (err, res2) => {
 						if (errors && errors.length > 0) {
-							scitran.addTag('projects', datasetId, 'invalid', (err, res3) => {res.send(validation)});
+							scitran.addTag('projects', datasetId, 'invalid', (err, res3) => {res.send({validation, summary})});
 						} else {
-							scitran.removeTag('projects', datasetId, 'invalid', (err, res4) => {res.send(validation)});
+							scitran.removeTag('projects', datasetId, 'invalid', (err, res4) => {res.send({validation, summary})});
 						}
 					});
-
 				});
 			});
 		});
