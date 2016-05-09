@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg">
+<metadata>Copyright (C) 2016 by original authors @ fontello.com</metadata>
+<defs>
+<font id="customfonts" horiz-adv-x="1000" >
+<font-face font-family="customfonts" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
+<missing-glyph horiz-adv-x="1000" />
+<glyph glyph-name="anaylsis_icon" unicode="&#xe800;" d="M63-88h937v-62h-1000v1000h63v-187h62v-63h-62v-125h62v-62h-62v-125h62v-63h-62v-125h62v-62h-62v-126z m125 282c0 52 42 94 93 94 10 0 19-2 28-5l82 109c-10 15-16 33-16 52 0 52 42 94 94 94s94-42 94-94c0-10-2-19-5-28l109-82c15 10 33 16 52 16 4 0 7-1 11-1l109 217c-16 17-26 40-26 65 0 52 42 94 93 94s94-42 94-94-42-93-94-93c-4 0-7 0-11 1l-109-218c16-17 27-39 27-65 0-51-42-93-94-93s-94 42-94 93c0 10 2 19 5 28l-109 82c-15-10-33-16-52-16-10 0-19 2-28 5l-82-109c10-15 16-33 16-52 0-52-42-94-94-94s-93 42-93 94z m687 437c0-17 14-31 31-31s32 14 32 31-14 32-32 32-31-14-31-32z m-187-375c0-17 14-31 31-31s31 14 31 31-14 32-31 32-31-14-31-32z m-250 188c0-17 14-31 31-31s31 14 31 31-14 31-31 31-31-14-31-31z m-188-250c0-17 14-31 31-31s32 14 32 31-14 31-32 31-31-14-31-31z" horiz-adv-x="1000" />
+</font>
+</defs>
+</svg>
