@@ -28,13 +28,11 @@ var p = {
     scss:       './src/sass/**/*.scss',
     scssmain:   './src/sass/main.scss',
     assets:     './src/assets/*',
-    fonts:      './src/fonts/**/**/*',
     bundle:     'app.min.js',
 
     dist:       'dist',
     distTemp:   'dist/temp',
     distAssets: 'dist/assets',
-    distFonts:  'dist/fonts',
 
     env:        'prod'
 };
@@ -68,7 +66,6 @@ gulp.task('copy', function () {
         del(['dist/*.js', 'dist/*.map', 'dist/*.html', 'dist/*.css']).then(function () {
             gulp.src(p.html).pipe(cachebust.references()).pipe(gulp.dest(p.dist));
             gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
-            gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
             gulp.src('dist/temp/*').pipe(gulp.dest(p.dist))
                 .on('end', function () {
                     del(['dist/temp']);
@@ -77,7 +74,6 @@ gulp.task('copy', function () {
     } else {
         gulp.src(p.html).pipe(gulp.dest(p.dist));
         gulp.src(p.assets).pipe(gulp.dest(p.distAssets));
-        gulp.src(p.fonts).pipe(gulp.dest(p.distFonts));
     }
 });
 

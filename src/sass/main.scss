@@ -4,11 +4,9 @@
 @import 'animate/properties';
 
 //font  //=================================================================
+@import './font-awesome/font-awesome';
 
-@import '../fonts/font-awesome/font-awesome';
-//@import './fonts/custom-font/_customfonts';
-
-//crn SASS =================================================================
+//crn SASS ================================================================
 @import './crn_app/variables';
 @import './crn_app/elements-wrappers';
 
