@@ -8,6 +8,7 @@ import crn         from '../utils/crn';
 import bids        from '../utils/bids';
 import router      from '../utils/router-container';
 import userStore   from '../user/user.store';
+import uploadStore from '../upload/upload.store';
 import userActions from '../user/user.actions';
 import upload      from '../utils/upload';
 import config      from '../../../config';
@@ -24,6 +25,11 @@ let datasetStore = Reflux.createStore({
     init: function () {
         this.setInitialState();
         this.loadApps();
+        this.listenTo(uploadStore, (data) => {
+            if (data.projectId !== this.data.currentUploadId) {
+                this.update({currentUploadId: data.projectId});
+            }
+        });
     },
 
     getInitialState: function () {
@@ -51,6 +57,7 @@ let datasetStore = Reflux.createStore({
         let data = {
             apps: [],
             currentUpdate: null,
+            currentUploadId: null,
             dataset: null,
             datasetTree: null,
             displayFile: {
@@ -96,8 +103,8 @@ let datasetStore = Reflux.createStore({
         options      = options ? options : {};
         options.isPublic = !userStore.data.token;
 
-        // update selection data
-        this.update({selectedSnapshot: datasetId});
+        // update selection & current upload data
+        this.update({selectedSnapshot: datasetId, currentUploadId: uploadStore.data.projectId});
 
         // don't reload the current dataset
         if (dataset && dataset._id === datasetId) {this.update({loading: false}); return;}
@@ -645,9 +652,10 @@ let datasetStore = Reflux.createStore({
             dataset.status.validating = true;
             this.update({dataset});
             crn.validate(dataset._id, (err, res) => {
-                let validation = res.body;
+                let validation = res.body.validation;
                 dataset.status.validating = false;
                 dataset.validation = validation;
+                dataset.summary    = res.body.summary;
                 dataset.status.invalid = validation.errors && (validation.errors == 'Invalid' || validation.errors.length > 0);
                 this.update({dataset});
                 this.updateModified();

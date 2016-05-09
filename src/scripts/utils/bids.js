@@ -355,7 +355,8 @@ export default  {
             description: this.formatDescription(project.metadata, description),
             attachments: attachments,
             userCreated: this.userCreated(project),
-            access:      this.userAccess(project)
+            access:      this.userAccess(project),
+            summary:     project.metadata && project.metadata.summary ? project.metadata.summary : null,
         };
         dataset.status       = this.formatStatus(project, dataset.access),
         dataset.authors      = dataset.description.Authors;
