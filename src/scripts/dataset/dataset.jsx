@@ -151,7 +151,7 @@ let Dataset = React.createClass({
                                 </span>
 
                                 <span className="date-modified">
-                                    {moment(snapshot.modified).format('ll')}
+                                    {snapshot.modified ? moment(snapshot.modified).format('ll') : null}
                                 </span>
                                 <span className="icons">
                                     {snapshot.public && isSignedIn ? <span className="published"><i className="fa fa-globe"></i></span> : null}
