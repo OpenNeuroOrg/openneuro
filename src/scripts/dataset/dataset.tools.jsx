@@ -106,7 +106,7 @@ let Tools = React.createClass({
             },
             {
                 tooltip: 'Run Anaylsis',
-                icon: 'fa-area-chart',
+                icon: 'fa-area-chart icon-plus',
                 action: datasetActions.toggleModal.bind(null, 'jobs'),
                 display: isSignedIn && !isIncomplete,
                 warn: false
