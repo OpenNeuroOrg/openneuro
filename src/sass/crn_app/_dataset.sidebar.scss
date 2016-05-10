@@ -1,5 +1,5 @@
 .show-nav-btn {
-    float: left;
+    position: fixed;
     background: $de;
     height: 45px;
     width: 45px;
@@ -11,6 +11,7 @@
     color: $c-56;
     border: none;
     border-bottom: 2px solid $bbb;
+    z-index: 200;
 }
 .open .show-nav-btn{
     border-right: 2px solid $bbb;
@@ -34,6 +35,7 @@ body,
 
 .dataset-wrap {
     overflow-y: scroll;
+    z-index: 100;
 }
 
 .dataset-wrap,

@@ -29,18 +29,19 @@ export default class Summary extends React.Component {
             let sessions    = numSessions + ' - ' + pluralize('Session', numSessions);
 
             return (
-                <h6>
-                    <span>{files}, {size}, {subjects}, {sessions}</span><br />
-                    {this._list('Tasks', summary.tasks)}<br/>
-                    {this._list('Modalities', summary.modalities)}
-                </h6>
+                <div>
+                    <hr/>
+                    <h5><b>{files}, {size}, {subjects}, {sessions}</b></h5>
+                    <h5>{this._list(<b>Tasks</b>, summary.tasks)}</h5>
+                    <h5>{this._list(<b>Modalities</b>, summary.modalities)}</h5>
+                </div>
             );
         }
     }
 
     _list(type, items) {
         if (items && items.length > 0) {
-            return <span>Available {type} - {items.join(', ')}</span>;
+            return <span><b>Available</b> {type} : {items.join(', ')}</span>;
         }
     }
 
