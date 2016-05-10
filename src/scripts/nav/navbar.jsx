@@ -55,7 +55,7 @@ let BSNavbar = React.createClass({
         let loading       = this.state.loading;
         let routes        = this.props.routes;
         let adminLink     = <Link className="nav-link" to="admin"><span className="link-name">admin</span></Link>;
-        let dashboardLink = <Link className="nav-link" to="dashboard"><span className="link-name">dashboard</span></Link>;
+        let dashboardLink = <Link className="nav-link" to="dashboard"><span className="link-name">my datasets</span></Link>;
 
         return (
             <ul className="nav navbar-nav main-nav">
