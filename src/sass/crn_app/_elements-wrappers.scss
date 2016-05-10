@@ -101,9 +101,18 @@ h6 {
 }
 
 .route-wrapper {
+    margin-top: 20px;
 
     .inner-route {
         padding: 0 0 20px;
+    }
+}
+
+.is-front,
+.snapshot,
+.dataset {
+    .route-wrapper {
+        margin-top: 0;
     }
 }
 
