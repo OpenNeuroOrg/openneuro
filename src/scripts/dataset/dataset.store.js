@@ -853,8 +853,8 @@ let datasetStore = Reflux.createStore({
 
     loadSnapshots(datasetId, jobs, callback) {
         scitran.getProjectSnapshots(datasetId, (err, res) => {
+            let snapshots = !err && res.body ? res.body : [];
             scitran.getProject(datasetId, (res1) => {
-                let snapshots = !err && res.body ? res.body : [];
 
                 // sort snapshots
                 snapshots.sort((a, b) => {
