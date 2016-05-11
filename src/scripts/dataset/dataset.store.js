@@ -348,6 +348,21 @@ let datasetStore = Reflux.createStore({
         if (callback && typeof callback === 'function') {callback();}
     },
 
+    /**
+     * Update Status
+     */
+    updateStatus(projectId, updates) {
+        if (projectId === this.data.dataset._id) {
+            let dataset = this.data.dataset;
+            for (let prop in updates) {
+                if (dataset.status.hasOwnProperty(prop)) {
+                    dataset.status[prop] = updates[prop];
+                }
+            }
+            this.update({dataset});
+        }
+    },
+
 
     // Metadata ----------------------------------------------------------------------
 

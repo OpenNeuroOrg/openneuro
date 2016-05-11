@@ -274,6 +274,7 @@ let UploadStore = Reflux.createStore({
             if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
             if (progress.total === progress.completed) {
                 scitran.removeTag('projects', projectId, 'incomplete', () => {
+                    datasetActions.updateStatus(projectId, {incomplete: false});
                     this.uploadComplete(projectId);
                 });
             }
