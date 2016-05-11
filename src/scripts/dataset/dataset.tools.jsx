@@ -70,7 +70,7 @@ let Tools = React.createClass({
                 warn: true
             },
             {
-                tooltip: 'Delete Dataset',
+                tooltip: isSnapshot ? 'Delete Snapshot' : 'Delete Dataset',
                 icon: 'fa-trash',
                 action: datasetActions.deleteDataset.bind(this, dataset._id),
                 display: (isAdmin && !isPublic) || isSuperuser,
