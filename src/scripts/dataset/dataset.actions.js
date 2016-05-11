@@ -34,7 +34,8 @@ var Actions = Reflux.createActions([
     'updateName',
     'updateNote',
     'updateFile',
-    'updateREADME'
+    'updateREADME',
+    'updateStatus'
 ]);
 
 export default Actions;
