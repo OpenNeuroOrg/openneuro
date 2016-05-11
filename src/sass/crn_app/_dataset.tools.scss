@@ -1,6 +1,6 @@
 
 .dataset-tools-wrap {
-    margin: -20px 0 20px;
+    margin: 0 0 20px;
     padding: 0;
     position: fixed;
     z-index: 1000;
@@ -9,11 +9,11 @@
 
     .tools {
         padding: 0;
-        margin: 0;
+        margin: 0 0 0 40px;
         display: block;
         width: 100%;
         background: $f4;
-        border-bottom: 1px solid $ddd;
+        position: fixed;
 
         .run-analysis {
             height: 45px;
@@ -40,39 +40,39 @@
             }
         }
 
-        .snapshot-select {
+        .snapshot-select-label {
             text-align: center;
-            padding: 0 10px 0 5px;
             float: left;
             display: block;
-            overflow: hidden;
-            border-right: 1px solid $aaa;
             margin-right: 5px;
             position: relative;
+            color: $c-66;
+            width: auto;
+            max-width: 400px;
+            font-size: 21px;
+            overflow: hidden;
+            transition: max-width .3s;
+            -webkit-transition: max-width .3s;
+            cursor: pointer;
 
-            span {
-                background: transparent;
-                border: 1px solid $aaa;
-                display: block;
-                height: 30px;
-                margin: 7px 0;
+            .snapshot,
+            .draft {
+                background: $de;
+                padding: 7px 20px;
+                white-space: nowrap;
+                height: 45px;
+                border-right: 2px solid $bbb;
+                border-bottom: 2px solid $bbb;
+            }
+            .snapshot {
+                color: $c-56;
+                &:hover { color: $c-77;}
+            }
 
-                select {
-                    background: none;
-                    border: 0;
-                    min-width: 230px;
-                    color: $ocean;
-                    margin: 0;
-                    height: 30px;
-                    font-size: 14px;
-                    filter: none;
-
-                    &:focus {
-                        outline: none;
-                        box-shadow: none;
-                    }
-
-                    option {text-transform: initial;}
+            .draft {
+                color: $brand-danger;
+                &:hover {
+                    color: darken($brand-danger, 10%);
                 }
             }
         }
@@ -143,4 +143,13 @@
             }
         }
     }
+}
+
+.open .dataset-tools-wrap .tools .snapshot-select-label {
+    max-width: 0;
+    padding: 0;
+    margin: 0;
+    transition: max-width .3s;
+    -webkit-transition: max-width .3s;
+    border: none;
 }

@@ -80,7 +80,7 @@ export default class WarnButton extends React.Component {
             );
         }
 
-        return button;
+        return this.state.loading ? loading : button;
     }
 
 // custom methods -----------------------------------------------------
@@ -95,7 +95,7 @@ export default class WarnButton extends React.Component {
                 for (let i = 0; i < this.props.validations.length; i++) {
                     let validation = this.props.validations[i];
                     if (validation.check) {
-                        notifications.createAlert({type: 'Warning', message: validation.message, messageTimeout: validation.messageTimeout});
+                        notifications.createAlert({type: validation.type, message: validation.message, timeout: validation.timeout});
                         return;
                     }
                 }
@@ -111,7 +111,12 @@ export default class WarnButton extends React.Component {
             }
 
             if (!this.props.warn) {
-                action();
+                this.setState({loading: true});
+                action(() => {
+                    if (this._mounted) {
+                        this.setState({loading: false});
+                    }
+                });
                 return;
             } else {
                 this.setState({showAction: true});

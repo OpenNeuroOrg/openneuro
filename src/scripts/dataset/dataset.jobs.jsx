@@ -7,7 +7,7 @@ import actions      from './dataset.actions';
 import Spinner      from '../common/partials/spinner.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
 import WarnButton   from '../common/forms/warn-button.jsx';
-import moment        from 'moment';
+import moment       from 'moment';
 
 let Jobs = React.createClass({
 
@@ -16,6 +16,9 @@ let Jobs = React.createClass({
 // life cycle events --------------------------------------------------
 
     render () {
+        if (!this.state.dataset.original) {
+            return false;
+        }
 
         let jobs = this.state.jobs.map((job) => {
             return (
@@ -40,7 +43,6 @@ let Jobs = React.createClass({
 
     _runs(job) {
         let runs = job.runs.map((run) => {
-
             let runBy = run.userId ? <span><label> by </label><strong>{run.userId}</strong></span> : null;
 
             let jobAccordionHeader = (
@@ -54,13 +56,27 @@ let Jobs = React.createClass({
                 </div>
             );
 
-            return (
-                <Panel className="job" header={jobAccordionHeader}  key={run._id} eventKey={run._id}>
+            let resultsPending = (
+                <div className="job panel panel-default">
+                    <div className="panel-heading" >
+                        <div className="panel-title pending">
+                            {jobAccordionHeader}
+                        </div>
+                    </div>
+                </div>
+            );
+
+            let resultsRun = (
+                <Panel className="job" header={jobAccordionHeader}>
                     <span className="inner">
                         {this._parameters(run)}
                         {this._results(run)}
                     </span>
                 </Panel>
+            );
+
+            return (
+                    <span key={run._id} eventKey={run._id}> {run.results && run.results.length > 0 ?  resultsRun : resultsPending } </span>
             );
         });
         return runs;
@@ -69,14 +85,28 @@ let Jobs = React.createClass({
     _results(run) {
         if (run.results) {
             let resultLinks = run.results.map((result, index) => {
+                let displayBtn;
+                if (result.name.indexOf('.err') > -1 || result.name.indexOf('.out') > -1) {
+                    displayBtn = (
+                        <WarnButton
+                            icon="fa-eye"
+                            warn={false}
+                            message=" VIEW"
+                            action={actions.displayFile.bind(this, run.jobId, result._links.self.href, result.name)} />
+                    );
+                }
                 return (
                     <li key={index}>
-                        <span className="warning-btn-wrap">
-                        <WarnButton
-                            icon="fa-download"
-                            prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
-                        </span>
-                        <span>{result.name}</span>
+                        <span className="result-name">{result.name}</span>
+                        <div className="result-options">
+                            <span className="warning-btn-wrap">
+                                <WarnButton
+                                icon="fa-download"
+                                message=" DOWNLOAD"
+                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
+                            </span>
+                            {displayBtn}
+                        </div>
                     </li>
                 );
             });
@@ -110,12 +140,6 @@ let Jobs = React.createClass({
                 </Accordion>
             );
         }
-    },
-
-// actions ------------------------------------------------------------
-
-    _downloadResult(jobId, fileName) {
-        actions.downloadResult(jobId, fileName);
     }
 
 });

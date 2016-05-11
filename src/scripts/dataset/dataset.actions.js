@@ -10,6 +10,7 @@ var Actions = Reflux.createActions([
     'dismissError',
     'dismissJobsModal',
     'dismissMetadataIssue',
+    'displayFile',
     'flagForValidation',
     'getAttachmentDownloadTicket',
     'getDatasetDownloadTicket',
@@ -27,12 +28,14 @@ var Actions = Reflux.createActions([
     'trackView',
     'toggleFolder',
     'toggleModal',
+    'toggleSidebar',
     'uploadAttachment',
     'updateDescription',
     'updateName',
     'updateNote',
     'updateFile',
-    'updateREADME'
+    'updateREADME',
+    'updateStatus'
 ]);
 
 export default Actions;

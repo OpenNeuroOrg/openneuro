@@ -5,6 +5,8 @@ import Reflux         from 'reflux';
 import Share          from './dataset.tools.share.jsx';
 import Jobs           from './dataset.tools.jobs.jsx';
 import Publish        from './dataset.tools.publish.jsx';
+import FileDisplay    from './dataset.file-display.jsx';
+import UpdateWarn     from './dataset.update-warning.jsx';
 import datasetStore   from './dataset.store';
 import datasetActions from './dataset.actions.js';
 
@@ -37,6 +39,14 @@ let ToolModals = React.createClass({
                     snapshots={snapshots}
                     show={modals.publish}
                     onHide={datasetActions.toggleModal.bind(null, 'publish')} />
+                <FileDisplay
+                    file={this.state.displayFile}
+                    show={modals.displayFile}
+                    onHide={datasetActions.toggleModal.bind(null, 'displayFile')} />
+                <UpdateWarn
+                    show={this.state.modals.update}
+                    onHide={datasetActions.toggleModal.bind(null, 'update')}
+                    update={this.state.currentUpdate} />
             </div>
         );
     }

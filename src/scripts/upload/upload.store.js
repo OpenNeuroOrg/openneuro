@@ -176,7 +176,7 @@ let UploadStore = Reflux.createStore({
     validate (selectedFiles) {
         let self = this;
         self.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
-        validate.BIDS(selectedFiles, {}, function (errors, warnings) {
+        validate.BIDS(selectedFiles, {}, function (errors, warnings, summary) {
 
             if (errors === 'Invalid') {
                 self.update({errors: 'Invalid'});
@@ -188,6 +188,7 @@ let UploadStore = Reflux.createStore({
             self.update({
                 errors: errors,
                 warnings: warnings,
+                summary: summary,
                 uploadStatus: 'validated'
             });
 
@@ -258,7 +259,7 @@ let UploadStore = Reflux.createStore({
         let datasetsUpdated = false;
         let validation = {
             errors: this.data.errors,
-            warnings: this.data.warnings
+            warnings: this.data.warnings,
         };
 
         window.onbeforeunload = () => {
@@ -267,12 +268,13 @@ let UploadStore = Reflux.createStore({
         let uploadingFavicon = document.getElementById('favicon_upload');
         favicon.image(uploadingFavicon); // set new favicon image
 
-        upload.upload(userStore.data.scitran._id, fileTree, validation, count, (progress, projectId) => {
+        upload.upload(userStore.data.scitran._id, fileTree, validation, this.data.summary, count, (progress, projectId) => {
             projectId = projectId ? projectId : this.data.projectId;
             this.update({progress: progress, uploading: true, projectId: projectId});
             if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
             if (progress.total === progress.completed) {
                 scitran.removeTag('projects', projectId, 'incomplete', () => {
+                    datasetActions.updateStatus(projectId, {incomplete: false});
                     this.uploadComplete(projectId);
                 });
             }

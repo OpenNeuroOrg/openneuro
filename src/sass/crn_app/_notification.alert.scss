@@ -9,6 +9,8 @@
     color: $d9;
 
     .alert-left {
+        padding-left: 20px;
+
         a {
             text-decoration: underline;
             color: $brand-info;
@@ -18,8 +20,8 @@
 
     .dismiss-button-x {
         position: absolute;
-        top: 0;
-        right: 0;
+        top: 6px;
+        left: 0;
         background: none;
         border: 0;
         color: $brand-info;

@@ -1,14 +1,20 @@
+.snapshot,
 .dataset {
-    .dataset-wrap {
-        padding-top: 35px;
+
+    .dataset-inner {
+        padding-top: 60px;
 
         h1 {
-            margin: 0 0 15px;
-            padding: 0;
-            text-transform: uppercase;
-            font-weight: 100;
-            font-family: 'Cabin', sans-serif;
-            font-size: 16px;
+            margin-top: 0;
+            label {
+                margin: 0;
+                padding: 0;
+                text-transform: none;
+                font-weight: 300;
+                font-family: $font-family-ssp;
+                font-size: 40px;
+                color: $c-33;
+            }
 
             .nav.nav-pills {
                 float: left;
@@ -16,9 +22,13 @@
 
             .form-group {
                 margin: 0;
-
-                .cte-display {font-size: 30px;}
+                .cte-display {display: none;}
                 .cte-edit {margin: 10px 0;}
+
+                .cte-save-btn {
+                    font-size: 16px;
+                    font-family: $font-family-cabin;
+                }
             }
         }
 

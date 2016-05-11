@@ -48,7 +48,7 @@ let Datasets = React.createClass({
             let paginatedResults = this._paginate(visibleDatasets, this.state.resultsPerPage, this.state.page);
 
             // map results
-            results = paginatedResults.map(function (dataset){
+            results = paginatedResults.map(function (dataset) {
                 let user      = dataset.user;
                 let fullname  = user ? user.firstname + ' ' + user.lastname : '';
                 let dateAdded = moment(dataset.created).format('L');
