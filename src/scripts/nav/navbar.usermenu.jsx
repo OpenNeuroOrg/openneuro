@@ -17,24 +17,27 @@ let Usermenu = React.createClass({
 
     render: function () {
 
-        let thumbnail,
-            username = this.state.google.displayName;
+        let profile = this.props.profile;
+        if (!profile) {return false;}
 
-        if (this.state.google.picture) {
-            thumbnail = this.state.google.picture.replace('sz=50', 'sz=200');
+        let thumbnail,
+            username = profile.displayName;
+
+        if (profile.picture) {
+            thumbnail = profile.picture.replace('sz=50', 'sz=200');
         }
 
         let gear = (<i className="fa fa-gear" />);
 
         return (
-            <li className="clearfix user-wrap">
+            <ul className="clearfix user-wrap">
                 <img src={thumbnail} alt={username} className="user-img-thumb" />
-                <DropdownButton className="user-menu btn-null" eventKey={1} title={gear}>
+                <DropdownButton bsClass="user-menu btn-null" title={gear} id="user-menu">
                     <li role="presentation" className="dropdown-header">Hello <br/>{username}</li>
-                   <li role="separator" className="divider"></li>
-                   <li><a onClick={this._signOut} className="btn-submit-other">Sign Out</a></li>
+                    <li role="separator" className="divider"></li>
+                    <li><a onClick={this._signOut} className="btn-submit-other">Sign Out</a></li>
                 </DropdownButton>
-            </li>
+            </ul>
         );
     },
 
@@ -47,3 +50,15 @@ let Usermenu = React.createClass({
 });
 
 export default Usermenu;
+
+
+// <ul>
+//                 <li className="clearfix user-wrap">
+//                     <img src={thumbnail} alt={username} className="user-img-thumb" />
+//                     <DropdownButton className="user-menu btn-null" key={1} title={gear} id="test">
+//                         <li role="presentation" className="dropdown-header">Hello <br/>{username}</li>
+//                         <li role="separator" className="divider"></li>
+//                         <li><a onClick={this._signOut} className="btn-submit-other">Sign Out</a></li>
+//                     </DropdownButton>
+//                 </li>
+//             </ul>

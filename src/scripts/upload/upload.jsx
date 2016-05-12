@@ -4,7 +4,7 @@ import React       from 'react';
 import Reflux      from 'reflux';
 import Actions     from './upload.actions.js';
 import UploadStore from './upload.store.js';
-import {TabbedArea, TabPane} from 'react-bootstrap';
+import {Tabs, Tab} from 'react-bootstrap';
 
 import Select   from './upload.select.jsx';
 import Rename   from './upload.rename.jsx';
@@ -41,11 +41,11 @@ let Upload = React.createClass({
         if (this.state.showSelect) {
             let tabName = <span><span>1:</span><span> Select</span></span>;
             select = (
-                <TabPane eventKey={1} tab={tabName}  className="upload-step" disabled={disabledTab}>
+                <Tab eventKey={1} title={tabName}  bsClass="upload-step" disabled={disabledTab}>
                     <div className={activePane}>
                         <Select  />
                     </div>
-                </TabPane>
+                </Tab>
             );
         }
 
@@ -53,11 +53,11 @@ let Upload = React.createClass({
         if (this.state.showRename) {
             let tabName = this.state.resuming ? <span><span>2:</span><span> Resume</span></span> : <span><span>2:</span><span> Rename</span></span>;
             rename = (
-                <TabPane eventKey={2} tab={tabName}  className="upload-step" disabled={disabledTab || !this.state.renameEnabled}>
+                <Tab eventKey={2} title={tabName}  bsClass="upload-step" disabled={disabledTab || !this.state.renameEnabled}>
                     <div className={activePane}>
                         <Rename />
                     </div>
-                </TabPane>
+                </Tab>
             );
         }
 
@@ -65,7 +65,7 @@ let Upload = React.createClass({
         if (this.state.showIssues) {
             let tabName = <span><span>3:</span><span> Issues</span></span>;
             issues = (
-                <TabPane eventKey={3} tab={tabName}  className="upload-step" disabled={disabledTab}>
+                <Tab eventKey={3} title={tabName}  bsClass="upload-step" disabled={disabledTab}>
                     <div className={activePane}>
                         <Issues
                             tree={this.state.tree}
@@ -74,7 +74,7 @@ let Upload = React.createClass({
                             dirName={dirName}
                             uploadStatus={uploadStatus} />
                     </div>
-                </TabPane>
+                </Tab>
             );
         }
 
@@ -82,11 +82,11 @@ let Upload = React.createClass({
         if (this.state.showResume) {
             let tabName = <span><span>4:</span><span> Resume</span></span>;
             resume = (
-                <TabPane eventKey={4} tab={tabName}  className="upload-step" disabled={disabledTab}>
+                <Tab eventKey={4} title={tabName}  bsClass="upload-step" disabled={disabledTab}>
                     <div className={activePane}>
                         <Resume />
                     </div>
-                </TabPane>
+                </Tab>
             );
         }
 
@@ -94,11 +94,11 @@ let Upload = React.createClass({
         if (this.state.showProgress) {
             let tabName = <span><span>{totalTabs + ':'}</span><span> Progress</span></span>;
             progress = (
-                <TabPane eventKey={5} tab={tabName}  className="upload-step" >
+                <Tab eventKey={5} title={tabName}  bsClass="upload-step" >
                     <div className={activePane}>
                         <Progress progress={this.state.progress} name={this.state.dirName} />
                     </div>
-                </TabPane>
+                </Tab>
             );
         }
 
@@ -111,14 +111,14 @@ let Upload = React.createClass({
                         <div className="panel-collapse collapse in">
                             <div className="panel-body">
                                 <div>
-                                    <TabbedArea bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={Actions.selectTab}>
+                                    <Tabs bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={Actions.selectTab}>
                                         <div className={activeBar}></div>
                                         {select}
                                         {rename}
                                         {issues}
                                         {resume}
                                         {progress}
-                                    </TabbedArea>
+                                    </Tabs>
                                 </div>
                             </div>
                         </div>
