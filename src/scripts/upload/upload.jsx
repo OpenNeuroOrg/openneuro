@@ -41,7 +41,7 @@ let Upload = React.createClass({
         if (this.state.showSelect) {
             let tabName = <span><span>1:</span><span> Select</span></span>;
             select = (
-                <Tab eventKey={1} title={tabName}  bsClass="upload-step" disabled={disabledTab}>
+                <Tab eventKey={1} title={tabName} disabled={disabledTab}>
                     <div className={activePane}>
                         <Select  />
                     </div>
@@ -53,7 +53,7 @@ let Upload = React.createClass({
         if (this.state.showRename) {
             let tabName = this.state.resuming ? <span><span>2:</span><span> Resume</span></span> : <span><span>2:</span><span> Rename</span></span>;
             rename = (
-                <Tab eventKey={2} title={tabName}  bsClass="upload-step" disabled={disabledTab || !this.state.renameEnabled}>
+                <Tab eventKey={2} title={tabName} disabled={disabledTab || !this.state.renameEnabled}>
                     <div className={activePane}>
                         <Rename />
                     </div>
@@ -65,7 +65,7 @@ let Upload = React.createClass({
         if (this.state.showIssues) {
             let tabName = <span><span>3:</span><span> Issues</span></span>;
             issues = (
-                <Tab eventKey={3} title={tabName}  bsClass="upload-step" disabled={disabledTab}>
+                <Tab eventKey={3} title={tabName} disabled={disabledTab}>
                     <div className={activePane}>
                         <Issues
                             tree={this.state.tree}
@@ -82,7 +82,7 @@ let Upload = React.createClass({
         if (this.state.showResume) {
             let tabName = <span><span>4:</span><span> Resume</span></span>;
             resume = (
-                <Tab eventKey={4} title={tabName}  bsClass="upload-step" disabled={disabledTab}>
+                <Tab eventKey={4} title={tabName} disabled={disabledTab}>
                     <div className={activePane}>
                         <Resume />
                     </div>
@@ -94,7 +94,7 @@ let Upload = React.createClass({
         if (this.state.showProgress) {
             let tabName = <span><span>{totalTabs + ':'}</span><span> Progress</span></span>;
             progress = (
-                <Tab eventKey={5} title={tabName}  bsClass="upload-step" >
+                <Tab eventKey={5} title={tabName}>
                     <div className={activePane}>
                         <Progress progress={this.state.progress} name={this.state.dirName} />
                     </div>
@@ -111,7 +111,7 @@ let Upload = React.createClass({
                         <div className="panel-collapse collapse in">
                             <div className="panel-body">
                                 <div>
-                                    <Tabs bsStyle="pills" bsSize="xsmall" className="upload-steps clearfix" activeKey={activeKey} animation={false}  onSelect={Actions.selectTab}>
+                                    <Tabs id="upload-tabs" bsStyle="pills" bsSize="xsmall" activeKey={activeKey} animation={false}  onSelect={Actions.selectTab}>
                                         <div className={activeBar}></div>
                                         {select}
                                         {rename}
