@@ -32,7 +32,7 @@ let Usermenu = React.createClass({
         return (
             <ul className="clearfix user-wrap">
                 <img src={thumbnail} alt={username} className="user-img-thumb" />
-                <DropdownButton bsClass="user-menu btn-null" title={gear} id="user-menu">
+                <DropdownButton title={gear} id="user-menu">
                     <li role="presentation" className="dropdown-header">Hello <br/>{username}</li>
                     <li role="separator" className="divider"></li>
                     <li><a onClick={this._signOut} className="btn-submit-other">Sign Out</a></li>
@@ -50,15 +50,3 @@ let Usermenu = React.createClass({
 });
 
 export default Usermenu;
-
-
-// <ul>
-//                 <li className="clearfix user-wrap">
-//                     <img src={thumbnail} alt={username} className="user-img-thumb" />
-//                     <DropdownButton className="user-menu btn-null" key={1} title={gear} id="test">
-//                         <li role="presentation" className="dropdown-header">Hello <br/>{username}</li>
-//                         <li role="separator" className="divider"></li>
-//                         <li><a onClick={this._signOut} className="btn-submit-other">Sign Out</a></li>
-//                     </DropdownButton>
-//                 </li>
-//             </ul>
