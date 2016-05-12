@@ -1,8 +1,8 @@
 // dependencies -------------------------------------------------------
 
-import React                     from 'react';
-import {OverlayTrigger, Tooltip} from 'react-bootstrap';
-import notifications             from '../../notification/notification.actions';
+import React         from 'react';
+import Tooltip       from '../partials/tooltip.jsx';
+import notifications from '../../notification/notification.actions';
 
 export default class WarnButton extends React.Component {
 
@@ -30,7 +30,6 @@ export default class WarnButton extends React.Component {
         let message    = this.props.message;
         let cancel     = this.props.cancel;
         let confirm    = this.props.confirm;
-        let tooltip    = <Tooltip>{this.props.tooltip}</Tooltip>;
 
         // check for bad validations and add disabled class
         let disabled = false;
@@ -74,9 +73,9 @@ export default class WarnButton extends React.Component {
 
         if (this.props.tooltip) {
             return (
-                <OverlayTrigger role="presentation"  placement="top" className="tool" overlay={tooltip}>
+                <Tooltip tooltip={this.props.tooltip}>
                     {this.state.loading ? loading : button}
-                </OverlayTrigger>
+                </Tooltip>
             );
         }
 
