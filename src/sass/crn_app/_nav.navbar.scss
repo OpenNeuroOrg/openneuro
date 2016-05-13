@@ -21,28 +21,23 @@
     z-index: 1300;
 
     .navbar-nav {
-        > li {
-            > .navbar-collapse {
-                padding: 0px;
+        > li > .link {
+            border: 1px solid transparent;
+            padding: 10px;
+            color: $misty;
+            margin: 17px 0;
+            border-radius: 2px;
+            transition: border .5s ease;
+            margin-left: 10px;
+
+            &:hover {
+                color: $stone;
+                border-color: $stone;
             }
-            > .link {
-                border: 1px solid transparent;
-                padding: 10px;
+
+            &.active {
                 color: $misty;
-                margin: 17px 0;
-                border-radius: 2px;
-                transition: border .5s ease;
-                margin-left: 10px;
-
-                &:hover {
-                    color: $stone;
-                    border-color: $stone;
-                }
-
-                &.active {
-                    color: $misty;
-                    border-color: $misty;
-                }
+                border-color: $misty;
             }
         }
 
@@ -158,10 +153,10 @@
             }
 
 
-            .dropdown {
+            .user-menu {
                 position: initial;
 
-                &.btn-group {
+                &.btn-null {
                     .btn {
                         background: $transparent;
                         box-shadow: none;
