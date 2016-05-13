@@ -292,7 +292,7 @@ let UploadStore = Reflux.createStore({
      */
     uploadComplete (projectId) {
         let message = <span><a href={'#/datasets/' + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>;
-        let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
+        let fileSelect = this.data.refs.fileSelect;
         if (fileSelect) {fileSelect.value = null;} // clear file input
 
         // reset favicon
@@ -315,7 +315,7 @@ let UploadStore = Reflux.createStore({
      *
      */
     uploadError () {
-        let fileSelect = React.findDOMNode(this.data.refs.fileSelect);
+        let fileSelect = this.data.refs.fileSelect;
         if (fileSelect) {fileSelect.value = null;} // clear file input
 
         // reset favicon
@@ -362,7 +362,9 @@ let UploadStore = Reflux.createStore({
      * in the upload menu.
      */
     selectTab(activeKey) {
-        this.update({activeKey});
+        if (activeKey) {
+            this.update({activeKey});
+        }
     },
 
     /**
