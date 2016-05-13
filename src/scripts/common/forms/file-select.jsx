@@ -14,8 +14,8 @@ let Upload = React.createClass({
 // life cycle events --------------------------------------------------
 
     componentDidMount () {
-        this.refs.fileSelect.getDOMNode().setAttribute('webkitdirectory', true);
-        this.refs.fileSelect.getDOMNode().setAttribute('directory', true);
+        this.refs.fileSelect.setAttribute('webkitdirectory', true);
+        this.refs.fileSelect.setAttribute('directory', true);
         this._setRefs(this.refs);
     },
 
@@ -42,7 +42,7 @@ let Upload = React.createClass({
 // custom methods -----------------------------------------------------
 
     _click (e) {
-        React.findDOMNode(this.refs.fileSelect).value = null;
+        this.refs.fileSelect.value = null;
         e.stopPropagation();
         if (!bowser.chrome) {
             let chromeMessage = (

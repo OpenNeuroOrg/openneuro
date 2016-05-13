@@ -147,7 +147,7 @@ class FileTree extends React.Component {
      * Clear Input
      */
     _clearInput(ref) {
-        React.findDOMNode(this.refs[ref]).value = null;
+        this.refs[ref].value = null;
     }
 
     /**
