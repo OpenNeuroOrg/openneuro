@@ -362,7 +362,9 @@ let UploadStore = Reflux.createStore({
      * in the upload menu.
      */
     selectTab(activeKey) {
-        this.update({activeKey});
+        if (activeKey) {
+            this.update({activeKey});
+        }
     },
 
     /**
