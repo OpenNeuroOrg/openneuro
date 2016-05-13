@@ -2,7 +2,6 @@
 
 import React       from 'react';
 import {Tooltip, OverlayTrigger} from 'react-bootstrap';
-import newId                     from '../../utils/newid';
 
 // component setup ---------------------------------------------------------------
 
@@ -10,12 +9,8 @@ export default class TooltipTop extends React.Component {
 
 // life cycle methods ------------------------------------------------------------
 
-    componentWillMount() {
-        this.id = newId('tooltip-id-');
-    }
-
     render() {
-        let tooltip = <Tooltip id={this.id}>{this.props.tooltip}</Tooltip>;
+        let tooltip = <Tooltip>{this.props.tooltip}</Tooltip>;
 
         return (
             <OverlayTrigger placement='top' overlay={tooltip} delayShow={300} delayHide={150}>

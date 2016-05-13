@@ -194,12 +194,13 @@
 .active-tab-4 {margin-left: 60%;}
 .active-tab-5 {margin-left: 80%;}
 
-.nav.nav-xs.nav-pills {
+.upload-steps {
     margin: 0;
     border: 0;
     background: $d9;
 
-    li {
+    .upload-step,
+    .upload-step.active {
         border: 0;
         margin: 0;
         width: 20%;
