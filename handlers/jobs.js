@@ -187,21 +187,14 @@ export default {
                 let output = resp.body.result;
                 if (output) {
                     // get main output files
-                    console.log('\njob-output - ', jobId);
                     for (let file of output) {
                         if ((file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) && file.length > 0) {
-                            console.log('\t', file.name);
                             results.push(file);
                         }
                     }
                 }
                 agave.getJobResults(req.body.id, (err, resp1) => {
-                    console.log('\njob-results - ', jobId);
                     if (resp1.body.result) {
-                        for (let file of resp1.body.result) {
-                            console.log('\t', file.name);
-                        }
-                        console.log('');
                         results = results.concat(resp1.body.result);
                     }
                     results = results.length > 0 ? results : null;
