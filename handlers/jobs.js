@@ -119,17 +119,21 @@ export default {
                             return next(error);
                         }
                         c.jobs.insertOne({
-                            appId:          job.appId,
-                            appLabel:       job.appLabel,
-                            appVersion:     job.appVersion,
-                            datasetId:      job.datasetId,
-                            datasetHash:    hash,
-                            userId:         job.userId,
-                            jobId:          resp.body.result.id,
-                            agave:          resp.body.result,
-                            parameters:     job.parameters,
-                            parametersHash: parametersHash,
-                            snapshotId:     job.snapshotId
+                            appId:             job.appId,
+                            appLabel:          job.appLabel,
+                            appVersion:        job.appVersion,
+                            datasetId:         job.datasetId,
+                            datasetHash:       hash,
+                            userId:            job.userId,
+                            jobId:             resp.body.result.id,
+                            agave:             resp.body.result,
+                            parameters:        job.parameters,
+                            parametersHash:    parametersHash,
+                            snapshotId:        job.snapshotId,
+                            memoryPerNode:     job.memoryPerNode,
+                            nodeCount:         job.nodeCount,
+                            processorsPerNode: job.processorsPerNode,
+                            batchQueue:        job.batchQueue,
                         }, () => {
                             res.send(resp.body);
                         });
