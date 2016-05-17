@@ -54,7 +54,12 @@ export default class ValidationResults extends React.Component {
 
     _countFiles(issues) {
         let numFiles = 0;
-        for (let issue of issues) {numFiles += issue.files.length;}
+        for (let issue of issues) {
+            numFiles += issue.files.length;
+            if (issue.additionalFileCount) {
+                numFiles += issue.additionalFileCount;
+            }
+        }
         return numFiles;
     }
 
