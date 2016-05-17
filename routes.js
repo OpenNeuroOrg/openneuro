@@ -62,7 +62,7 @@ let routes = [
 		method: 'get',
 		url: '/jobs/:datasetId',
 		middleware: [auth.optional],
-		handler: jobs.listDatasetJobs
+		handler: jobs.list
 	},
 	{
 		method: 'delete',
@@ -75,6 +75,12 @@ let routes = [
 		url: '/jobs/:jobId/results',
 		middleware: [],
 		handler: jobs.results
+	},
+	{
+		method: 'post',
+		url: '/jobs/:jobId/retry',
+		middleware: [],
+		handler: jobs.retry
 	},
 	{
 		method: 'get',
