@@ -401,7 +401,7 @@ function submitJob (job, callback) {
             appLabel:          job.appLabel,
             appVersion:        job.appVersion,
             datasetId:         job.datasetId,
-            datasetHash:       job.hash,
+            datasetHash:       job.datasetHash,
             userId:            job.userId,
             parametersHash:    job.parametersHash,
             snapshotId:        job.snapshotId,
