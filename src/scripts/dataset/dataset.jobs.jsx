@@ -85,15 +85,6 @@ let Jobs = React.createClass({
 
     _failedMessage(run) {
         if (run.agave.status === 'FAILED') {
-            let app = {
-                id:                       run.appId,
-                label:                    run.appLabel,
-                version:                  run.appVersion,
-                defaultQueue:             run.batchQueue,
-                defaultMemoryPerNode:     run.memoryPerNode,
-                defaultNodeCount:         run.nodeCount,
-                defaultProcessorsPerNode: run.processorsPerNode
-            };
             return (
                 <div>
                     {run.agave.message ? <h5 className="text-danger">{run.agave.message}</h5>: null}
