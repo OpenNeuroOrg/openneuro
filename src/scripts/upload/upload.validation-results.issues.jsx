@@ -16,15 +16,15 @@ class Issues extends React.Component {
         let self = this;
         let issueFiles = this.props.issues;
         let issues = issueFiles.map((issue, index) => {
-            let issueCount = pluralize('files', issue.files.length);
+            let totalFiles = issue.files.length;
+            if (issue.additionalFileCount) {totalFiles += issue.additionalFileCount;}
+            let issueCount = pluralize('files', totalFiles);
 
             let header = (
                 <span className="file-header">
                     <h4 className="em-header clearfix">
                         <strong className="em-header pull-left">{this.props.issueType}: {index + 1}</strong>
-                    <span className="pull-right">
-                         {issue.files.length} {issueCount}
-                    </span>
+                        <span className="pull-right">{totalFiles} {issueCount}</span>
                     </h4>
                     {issue.reason}
                 </span>
@@ -34,6 +34,15 @@ class Issues extends React.Component {
             let subErrors = issue.files.map(function (error, index2) {
                 return error ? <Issue type={self.props.issueType} file={issue.file} error={error} index={index2} key={index2} /> : null;
             });
+
+            if (issue.additionalFileCount > 0) {
+                subErrors.push(
+                    <div className="em-body" key="additional-file-count">
+                        <span className="e-meta">and {issue.additionalFileCount} more {pluralize('files', issue.additionalFileCount)}</span>
+                    </div>
+                );
+            }
+
             // issue panel
             return (
                 <Panel key={index} header={header} className="validation-error fade-in" eventKey={index}>
