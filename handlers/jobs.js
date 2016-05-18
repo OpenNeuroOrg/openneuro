@@ -345,6 +345,8 @@ export default {
 
 function submitJob (job, callback) {
 
+    let attempts = job.attempts ? job.attempts + 1: 1;
+
     // form job body
     let body = {
         name:              'crn-automated-job',
@@ -405,6 +407,8 @@ function submitJob (job, callback) {
             userId:            job.userId,
             parametersHash:    job.parametersHash,
             snapshotId:        job.snapshotId,
+
+            attempts:          attempts
         }, () => {
             callback(null, resp.body);
         });
