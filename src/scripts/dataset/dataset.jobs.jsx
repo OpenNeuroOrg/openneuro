@@ -88,9 +88,11 @@ let Jobs = React.createClass({
 
     _failedMessage(run) {
         if (run.agave.status === 'FAILED') {
+            let adminMessage = <span>Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail.</span>;
+            let message = run.agave.message ? run.agave.message : 'We were unable to complete this analysis.'
             return (
                 <div>
-                    {run.agave.message ? <h5 className="text-danger">{run.agave.message}</h5>: null}
+                    <h5 className="text-danger">{message} {adminMessage}</h5>
                     <WarnButton
                         icon="fa fa-repeat"
                         message="re-run"
