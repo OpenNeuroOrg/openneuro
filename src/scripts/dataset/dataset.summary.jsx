@@ -32,10 +32,10 @@ export default class Summary extends React.Component {
                             <strong>{files}, {size}, {subjects}, {sessions}</strong>
                         </div>
                          <div className="summary-data tasks">
-                            <span>{this._list(<b>Tasks</b>, summary.tasks)}</span>
+                            {this._list(<b>Tasks</b>, summary.tasks)}
                         </div>
                         <div className="summary-data modalities">
-                            <span>{this._list(<b>Modalities</b>, summary.modalities)}</span>
+                            {this._list(<b>Modalities</b>, summary.modalities)}
                         </div>
                     </div>
                 );
@@ -55,6 +55,8 @@ export default class Summary extends React.Component {
     _list(type, items) {
         if (items && items.length > 0) {
             return <span><b>Available</b> {type} : {items.join(', ')}</span>;
+        }else{
+            return <span><b>No Available</b> {type}</span>
         }
     }
 
