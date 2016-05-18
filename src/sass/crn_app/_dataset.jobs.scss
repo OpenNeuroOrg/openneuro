@@ -79,6 +79,10 @@
                 .finished .badge {
                     color: $brand-success;
                 }
+
+                .failed .badge {
+                    color: $brand-danger;
+                }
             }
 
             .panel-body .inner {
