@@ -14,7 +14,7 @@
                     display: block;
                     background: lighten($eee, 10%);
 
-                    a {
+                    > a {
                         padding: 10px;
                         display: block;
                         font-size: 14px;
@@ -78,6 +78,10 @@
 
                 .finished .badge {
                     color: $brand-success;
+                }
+
+                .failed .badge {
+                    color: $brand-danger;
                 }
             }
 
