@@ -180,7 +180,7 @@ let Dataset = React.createClass({
         );
     },
 
-    _showSideBarButton(dataset){
+    _showSideBarButton(){
         let showSidebar = this.state.showSidebar;
         return(
             <span className="show-nav-btn" onClick={actions.toggleSidebar}>

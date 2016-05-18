@@ -12,6 +12,7 @@ import Spinner       from '../common/partials/spinner.jsx';
 import Statuses      from '../dataset/dataset.statuses.jsx';
 import Filters       from './datasets.filters.jsx';
 import Sort          from './datasets.sort.jsx';
+import Summary       from '../dataset/dataset.summary.jsx';
 
 // component setup ---------------------------------------------------------------------------
 
@@ -66,6 +67,7 @@ let Datasets = React.createClass({
                                 </Link>
                                 {!isPublic ? statusContainer : null}
                             </div>
+                            <Summary summary={dataset.summary} minimal={true}/>
                         </div>
                     </div>
                 );
