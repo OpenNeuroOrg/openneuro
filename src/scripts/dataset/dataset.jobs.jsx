@@ -8,6 +8,7 @@ import Spinner      from '../common/partials/spinner.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
 import WarnButton   from '../common/forms/warn-button.jsx';
 import moment       from 'moment';
+import pluralize    from 'pluralize';
 
 let Jobs = React.createClass({
 
@@ -44,11 +45,14 @@ let Jobs = React.createClass({
     _runs(job) {
         let runs = job.runs.map((run) => {
             let runBy = run.userId ? <span><label> by </label><strong>{run.userId}</strong></span> : null;
+            let attempts = run.agave.status === 'FAILED' ? '(' + run.attempts + pluralize(' times', run.attempts) + ')': null;
 
             let jobAccordionHeader = (
                 <div className={run.agave.status.toLowerCase()}>
                     <label>Status</label>
-                    <span className="badge">{run.agave.status}</span>
+                    <span className="badge">
+                        {run.agave.status} {attempts}
+                    </span>
                     <span className="meta">
                         <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
                         {runBy}
@@ -76,10 +80,9 @@ let Jobs = React.createClass({
                 </Panel>
             );
 
-            return (
-                    <span key={run._id} eventKey={run._id}> {run.results && run.results.length > 0 ?  resultsRun : resultsPending } </span>
-            );
+            return <span key={run._id} eventKey={run._id}> {run.results && run.results.length > 0 ?  resultsRun : resultsPending } </span>;
         });
+
         return runs;
     },
 
