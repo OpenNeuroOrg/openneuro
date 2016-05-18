@@ -8,11 +8,11 @@ import RouterContainer  from './utils/router-container';
 
 // intialize router -----------------------------------------------------
 
-let router = Router.create({routes});
+let router = Router.create({routes: routes, location: Router.HistoryLocation});
 
 RouterContainer.set(router);
 
-router.run(function (Handler) {
+Router.run(routes, Router.HistoryLocation, function (Handler) {
     React.render(<Handler/>, document.getElementById('main'));
 });
 
