@@ -11,7 +11,7 @@ export default class Summary extends React.Component {
     render () {
         let summary = this.props.summary;
 
-        return <div>{this._summary(summary, this.props.minimal)}</div>;
+        return <div className="clearfix">{this._summary(summary, this.props.minimal)}</div>;
     }
 
 // custom methods -----------------------------------------------------
@@ -20,10 +20,10 @@ export default class Summary extends React.Component {
         if (summary) {
 
             // // example large summary test data
-            // summary.totalFiles = 391;
-            // summary.size = 55000000;
-            // summary.modalities =['bold', 'inplaneT2', 'T1w'];
-            // summary.tasks      =['balloon analog risk task', 'discounting', 'emotional regulation', 'stop signal'];
+            summary.totalFiles = 391;
+            summary.size = 55000000;
+            summary.modalities =['bold', 'inplaneT2', 'T1w'];
+            summary.tasks      =['balloon analog risk task', 'discounting', 'emotional regulation', 'stop signal'];
 
             let numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1;
             let files       = summary.totalFiles + ' ' + pluralize('File', summary.totalFiles);
@@ -33,10 +33,16 @@ export default class Summary extends React.Component {
 
             if (minimal) {
                 return (
-                    <div>
-                        <h5>{files}, {size}, {subjects}, {sessions}</h5>
-                        <h5>{this._list(<b>Tasks</b>, summary.tasks)}</h5>
-                        <h5>{this._list(<b>Modalities</b>, summary.modalities)}</h5>
+                    <div className="minimal-summary">
+                        <div className="summary-data">
+                            <strong>{files}, {size}, {subjects}, {sessions}</strong>
+                        </div>
+                         <div className="summary-data">
+                            <span>{this._list(<b>Tasks</b>, summary.tasks)}</span>
+                        </div>
+                        <div className="summary-data">
+                            <span>{this._list(<b>Modalities</b>, summary.modalities)}</span>
+                        </div>
                     </div>
                 );
             } else {

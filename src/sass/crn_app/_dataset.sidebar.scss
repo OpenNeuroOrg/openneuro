@@ -12,8 +12,9 @@
     border: none;
     border-bottom: 2px solid $bbb;
     z-index: 200;
+    left: -1px;
 }
-.open .show-nav-btn{
+.open .show-nav-btn {
     border-right: 2px solid $bbb;
 }
 
@@ -158,17 +159,19 @@ body,
                 }
                 .icons {
                     padding-left: 0;
+                    float: right;
                     .published,
                     .job-count {
                         margin: 10px 0;
-                        text-align: center;
                         display: inline-block;
                         padding: 0 5px;
+                        min-width: 30px;
+                        text-align: center;
+                        font-size: 12px;
                         .count {
                             font-size: 12px;
                             margin-left: 2px;
                             position: relative;
-                            top: -2px;
                         }
                     }
                 }
