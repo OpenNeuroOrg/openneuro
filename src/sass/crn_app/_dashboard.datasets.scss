@@ -322,9 +322,10 @@
                 padding: 5px 20px;
                 font-size: 13px;
                 line-height: 13px;
-                color: #888;
-                text-align: center;
+                color: $stone;
+                text-align: left;
                 border-right: 1px solid $f4;
+
 
                     &:last-child {
                         border: 0;
@@ -333,7 +334,7 @@
                     b,
                     strong {
                         text-transform: uppercase;
-                        color:$turquoise;
+                        color: $fuchsia;
                         font-size: 10px;
                         line-height: 13px;
                     }

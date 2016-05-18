@@ -34,13 +34,13 @@ export default class Summary extends React.Component {
             if (minimal) {
                 return (
                     <div className="minimal-summary">
-                        <div className="summary-data">
+                        <div className="summary-data files">
                             <strong>{files}, {size}, {subjects}, {sessions}</strong>
                         </div>
-                         <div className="summary-data">
+                         <div className="summary-data tasks">
                             <span>{this._list(<b>Tasks</b>, summary.tasks)}</span>
                         </div>
-                        <div className="summary-data">
+                        <div className="summary-data modalities">
                             <span>{this._list(<b>Modalities</b>, summary.modalities)}</span>
                         </div>
                     </div>
