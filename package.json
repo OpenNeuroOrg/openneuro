@@ -13,7 +13,7 @@
   "dependencies": {
     "async": "^1.2.1",
     "babel-polyfill": "^6.6.1",
-    "bids-validator": "0.18.6",
+    "bids-validator": "0.18.3",
     "bowser": "^1.0.0",
     "bytes": "^2.3.0",
     "es6-react-mixins": "^0.1.6",

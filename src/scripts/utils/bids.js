@@ -71,7 +71,7 @@ export default  {
      * is made with authentication. Defaults to true.
      */
     getDatasets (callback, isPublic, isSignedOut) {
-        scitran.getProjects({authenticate: !isPublic, snapshot: isPublic, metadata: true}, (projects) => {
+        scitran.getProjects({authenticate: !isPublic, snapshot: isPublic}, (projects) => {
             scitran.getUsers((err, res) => {
                 let users = !err && res && res.body ? res.body : null;
                 let results = [];

@@ -790,15 +790,6 @@ let datasetStore = Reflux.createStore({
         });
     },
 
-    retryJob(jobId, callback) {
-        crn.retryJob(jobId, () => {
-            this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, (jobs) => {
-                this.loadSnapshots(this.data.dataset.original, jobs);
-                callback();
-            });
-        });
-    },
-
     /**
      * Dismiss Job Modal
      */

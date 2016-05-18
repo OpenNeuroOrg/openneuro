@@ -163,10 +163,7 @@ export default  {
     getProjects (options, callback) {
         let auth = options.hasOwnProperty('authenticate') ? options.authenticate : true;
         let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + 'projects', {
-            auth,
-            query: {metadata: !!options.metadata}
-        }, (err, res) => {
+        request.get(config.scitran.url + modifier + 'projects', {auth}, (err, res) => {
             callback(res.body);
         });
     },
