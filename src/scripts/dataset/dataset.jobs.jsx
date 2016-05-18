@@ -53,6 +53,7 @@ let Jobs = React.createClass({
                         <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
                         {runBy}
                     </span>
+                    {this._failedMessage(run)}
                 </div>
             );
 
@@ -80,6 +81,21 @@ let Jobs = React.createClass({
             );
         });
         return runs;
+    },
+
+    _failedMessage(run) {
+        if (run.agave.status === 'FAILED') {
+            return (
+                <div>
+                    {run.agave.message ? <h5 className="text-danger">{run.agave.message}</h5>: null}
+                    <WarnButton
+                        icon="fa fa-repeat"
+                        message="re-run"
+                        warn={false}
+                        action={actions.retryJob.bind(this, run.jobId)} />
+                </div>
+            );
+        }
     },
 
     _results(run) {
