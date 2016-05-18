@@ -63,16 +63,6 @@ export default {
     },
 
     /**
-     * Retry Job
-     *
-     * Take a jobId and retries the job with the same
-     * dataset and settings.
-     */
-    retryJob(jobId, callback) {
-        request.post(config.crn.url + 'jobs/' + jobId + '/retry', {}, callback);
-    },
-
-    /**
      * Get Dataset Jobs
      */
     getDatasetJobs(datasetId, callback, options) {

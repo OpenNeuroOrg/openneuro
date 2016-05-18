@@ -19,7 +19,7 @@ let Tools = React.createClass({
     propTypes: {
         dataset:   React.PropTypes.object.isRequired,
         snapshots: React.PropTypes.array.isRequired,
-        selectedSnapshot: React.PropTypes.string.isRequired
+        selectedSnapshot: React.PropTypes.string.isRequired,
     },
 
 // life cycle events --------------------------------------------------

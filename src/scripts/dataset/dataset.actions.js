@@ -20,7 +20,6 @@ var Actions = Reflux.createActions([
     'loadSnapshot',
     'loadUsers',
     'publish',
-    'retryJob',
     'reloadDataset',
     'saveDescription',
     'setInitialState',

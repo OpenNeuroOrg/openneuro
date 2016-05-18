@@ -11,44 +11,31 @@ export default class Summary extends React.Component {
     render () {
         let summary = this.props.summary;
 
-        return <div>{this._summary(summary, this.props.minimal)}</div>;
+        return (
+            <div>
+                {this._summary(summary)}
+            </div>
+        );
     }
 
 // custom methods -----------------------------------------------------
 
-    _summary(summary, minimal) {
+    _summary(summary) {
         if (summary) {
-
-            // // example large summary test data
-            // summary.totalFiles = 391;
-            // summary.size = 55000000;
-            // summary.modalities =['bold', 'inplaneT2', 'T1w'];
-            // summary.tasks      =['balloon analog risk task', 'discounting', 'emotional regulation', 'stop signal'];
-
             let numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1;
             let files       = summary.totalFiles + ' ' + pluralize('File', summary.totalFiles);
             let size        = bytes(summary.size);
             let subjects    = summary.subjects.length + ' - ' + pluralize('Subject', summary.subjects.length);
             let sessions    = numSessions + ' - ' + pluralize('Session', numSessions);
 
-            if (minimal) {
-                return (
-                    <div>
-                        <h5>{files}, {size}, {subjects}, {sessions}</h5>
-                        <h5>{this._list(<b>Tasks</b>, summary.tasks)}</h5>
-                        <h5>{this._list(<b>Modalities</b>, summary.modalities)}</h5>
-                    </div>
-                );
-            } else {
-                return (
-                    <div>
-                        <hr/>
-                        <h5><b>{files}, {size}, {subjects}, {sessions}</b></h5>
-                        <h5>{this._list(<b>Tasks</b>, summary.tasks)}</h5>
-                        <h5>{this._list(<b>Modalities</b>, summary.modalities)}</h5>
-                    </div>
-                );
-            }
+            return (
+                <div>
+                    <hr/>
+                    <h5><b>{files}, {size}, {subjects}, {sessions}</b></h5>
+                    <h5>{this._list(<b>Tasks</b>, summary.tasks)}</h5>
+                    <h5>{this._list(<b>Modalities</b>, summary.modalities)}</h5>
+                </div>
+            );
         }
     }
 
@@ -59,13 +46,3 @@ export default class Summary extends React.Component {
     }
 
 }
-
-Summary.props = {
-    summary: null,
-    minimal: false
-};
-
-Summary.propTypes = {
-    summary: React.PropTypes.object,
-    minimal: React.PropTypes.bool
-};
