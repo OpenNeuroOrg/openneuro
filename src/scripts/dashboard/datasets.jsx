@@ -67,7 +67,7 @@ let Datasets = React.createClass({
                                 </Link>
                                 {!isPublic ? statusContainer : null}
                             </div>
-                            <Summary summary={dataset.summary} />
+                            <Summary summary={dataset.summary} minimal={true}/>
                         </div>
                     </div>
                 );
