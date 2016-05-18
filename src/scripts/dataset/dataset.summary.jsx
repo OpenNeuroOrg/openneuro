@@ -19,12 +19,6 @@ export default class Summary extends React.Component {
     _summary(summary, minimal) {
         if (summary) {
 
-            // // example large summary test data
-            summary.totalFiles = 391;
-            summary.size = 55000000;
-            summary.modalities =['bold', 'inplaneT2', 'T1w'];
-            summary.tasks      =['balloon analog risk task', 'discounting', 'emotional regulation', 'stop signal'];
-
             let numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1;
             let files       = summary.totalFiles + ' ' + pluralize('File', summary.totalFiles);
             let size        = bytes(summary.size);
