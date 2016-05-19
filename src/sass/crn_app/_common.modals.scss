@@ -329,20 +329,4 @@
     }
 }
 
-.modal-open {
-    .dataset-wrap,
-    .dataset-annimation,
-    .left-sidebar .slide ul {
-        position: initial;
-        transition: all 0s;
-    }
 
-    .dataset-tools-wrap {
-        position: relative;
-    }
-
-    .snapshot .dataset-inner,
-    .dataset .dataset-inner {
-        padding-top: 0;
-    }
-}
