@@ -20,16 +20,25 @@ export default class Summary extends React.Component {
         if (summary) {
 
             let numSessions = summary.sessions.length > 0 ? summary.sessions.length : 1;
-            let files       = summary.totalFiles + ' ' + pluralize('File', summary.totalFiles);
-            let size        = bytes(summary.size);
-            let subjects    = summary.subjects.length + ' - ' + pluralize('Subject', summary.subjects.length);
-            let sessions    = numSessions + ' - ' + pluralize('Session', numSessions);
+            let files       = <span><strong> {pluralize('File', summary.totalFiles)}: </strong>{summary.totalFiles}</span>;
+            let size        = <span><strong>Size: </strong>{bytes(summary.size)}</span>;
+            let subjects    = <span><strong> {pluralize('Subject', summary.subjects.length)}: </strong>{summary.subjects.length}</span>;
+            let sessions    = <span><strong>{pluralize('Session', numSessions)}: </strong>{numSessions}</span>;
 
             if (minimal) {
                 return (
                     <div className="minimal-summary">
-                        <div className="summary-data files">
-                            <strong>{files}, {size}, {subjects}, {sessions}</strong>
+                        <div className="summary-data">
+                            {files}
+                        </div>
+                        <div className="summary-data">
+                            {size}
+                        </div>
+                        <div className="summary-data">
+                            {subjects}
+                        </div>
+                        <div className="summary-data">
+                            {sessions}
                         </div>
                          <div className="summary-data tasks">
                             {this._list(<b>Tasks</b>, summary.tasks)}
