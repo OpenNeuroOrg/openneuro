@@ -1,5 +1,5 @@
 .show-nav-btn {
-    position: fixed;
+    position: absolute;
     background: $de;
     height: 45px;
     width: 45px;
@@ -13,10 +13,11 @@
     border-bottom: 2px solid $bbb;
     z-index: 200;
     left: -1px;
+        transition: left .3s;
+    -webkit-transition: left 0.3s;
+        z-index: 1500;
 }
-.open .show-nav-btn {
-    border-right: 2px solid $bbb;
-}
+
 
 
 html,
@@ -48,19 +49,15 @@ body,
     -webkit-transition: width .3s;
     transition: width .3s;
 }
-.open .dataset-annimation {
-    width: 80%;
-}
 
 .dataset-container {
     position: relative;
-    overflow: hidden;
-    // padding-top: 30px;
     -webkit-perspective: 1500px;
     perspective: 1500px;
     -webkit-perspective-origin: 0% 50%;
     perspective-origin: 0% 50%;
-
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .dataset-route {
@@ -72,10 +69,6 @@ body,
     left: 0;
     -webkit-transition: all .3s;
     transition: all .3s;
-}
-
-.open .dataset-route {
-    left: 20%;
 }
 
 .left-sidebar {
@@ -188,16 +181,85 @@ body,
     }
 }
 
-.open .left-sidebar {
-    -webkit-transform: translate3d(-100%, 0, 0);
-    transform: translate3d(-100%, 0, 0);
-    visibility: visible;
-    -webkit-transition: -webkit-transform .3s;
-    transition: transform .3s;
+.dataset-tools-wrap {
+     margin-left: 0;
+    transition: margin-left .3s;
+    -webkit-transition: margin-left 0.3s;
 
+    .tools {
+        margin-left:44px;
+     }
+}
+
+.snapshot-select-label {
+    text-align: center;
+    float: left;
+    display: block;
+    margin-right: 5px;
+    position: relative;
+    color: $c-66;
+    width: auto;
+    max-width: 400px;
+    font-size: 21px;
+    overflow: hidden;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    cursor: pointer;
+
+    .snapshot,
+    .draft {
+        background: $de;
+        padding: 7px 20px;
+        white-space: nowrap;
+        height: 45px;
+        border-right: 2px solid $bbb;
+        border-bottom: 2px solid $bbb;
+    }
+    .snapshot {
+        color: $c-56;
+        &:hover { color: $c-77;}
+    }
+
+    .draft {
+        color: $brand-danger;
+        &:hover {
+            color: darken($brand-danger, 10%);
+        }
+    }
 }
 
 
+
+.open {
+    .dataset-route {
+        left: 20%;
+        width: 80%;
+    }
+    .left-sidebar {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+        -webkit-transition: -webkit-transform .3s;
+        transition: transform .3s;
+
+    }
+
+    .snapshot-select-label{
+        display: block
+    }
+
+    .dataset-tools-wrap{
+        margin-left: 20%;
+        transition: margin-left .3s;
+        -webkit-transition: margin-left 0.3s;
+    }
+    .show-nav-btn {
+        border-right: 2px solid $bbb;
+        left: 20%;
+        transition: left .3s;
+        -webkit-transition: left 0.3s;
+    }
+}
 
 
 
