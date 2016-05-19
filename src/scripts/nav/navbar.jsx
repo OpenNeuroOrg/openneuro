@@ -72,7 +72,7 @@ let BSNavbar = React.createClass({
                     {this.state.scitran && this.state.scitran.root ? adminLink : null }
                 </li>
                 <li className="link-dashboard">
-                    <UploadBtn />
+                    {googleProfile ? <UploadBtn /> : null}
                 </li>
                  <li>
                      <CollapsibleNav eventKey={0}>
