@@ -39,7 +39,7 @@ export default class Publish extends React.Component {
                         <div className="modal-text">{currentUpdate.message}</div>
                         {this._dontShowAgain(!currentUpdate.hideDontShow)}<br />
                         <div className="col-xs-12 modal-actions">
-                            <button className="btn-modal-submit btn-modal-danger" onClick={this._confirm.bind(this, currentUpdate.action)}>Confirm</button>
+                            <button className="btn-modal-submit btn-modal-danger" onClick={this._confirm.bind(this, currentUpdate.action)}>{currentUpdate.confirmTxt ? currentUpdate.confirmTxt : 'Confirm'}</button>
                             <button className="btn-reset" onClick={this._hide.bind(this)}>Cancel</button>
                         </div>
                     </div>
