@@ -326,6 +326,7 @@ let datasetStore = Reflux.createStore({
             let message = <span>You are about to delete this dataset. This will delete your draft and any unpublished snaphots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.</span>;
             this.updateWarn({
                 alwaysWarn:   true,
+                confirmTxt:   'Delete',
                 hideDontShow: true,
                 message:      message,
                 action:       () => {
@@ -549,7 +550,8 @@ let datasetStore = Reflux.createStore({
                     currentUpdate: {
                         action:       options.action,
                         hideDontShow: options.hideDontShow,
-                        message:      options.message
+                        message:      options.message,
+                        confirmTxt:   options.confirmTxt
                     },
                     modals
                 });
