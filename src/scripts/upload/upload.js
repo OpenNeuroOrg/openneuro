@@ -81,10 +81,10 @@ export default {
             }
 
             if (existingProject) {
+                this.progressEnd();
                 this.currentProjectId = existingProject._id;
                 bids.getDatasetTree(existingProject, (oldDataset) => {
                     let newDataset = fileTree[0];
-                    this.progressEnd();
                     this.resumeSubjects(newDataset.children, oldDataset[0].children, newDataset.name, this.currentProjectId);
                 });
             } else {
@@ -113,13 +113,17 @@ export default {
         self.currentProjectId = projectId;
         for (let subject of subjects) {
             if (subject.children && subject.children.length > 0) {
-                self.progressStart(subject.name);
-                scitran.createSubject(projectId, subject.name, function (err, res) {
-                    self.handleUploadResponse(err, res, function () {
-                        let subjectId = res.body._id;
-                        self.uploadSessions(subject.children, projectId, subjectId);
+                if (subject.ignore) {
+                    self.uploadSessions(subject.children, projectId, subject._id);
+                } else {
+                    self.progressStart(subject.name);
+                    scitran.createSubject(projectId, subject.name, function (err, res) {
+                        self.handleUploadResponse(err, res, function () {
+                            let subjectId = res.body._id;
+                            self.uploadSessions(subject.children, projectId, subjectId);
+                        });
                     });
-                });
+                }
             } else {
                 if (subject.name === 'dataset_description.json') {
                     files.read(subject, (contents) => {
@@ -146,6 +150,67 @@ export default {
     },
 
     /**
+     * Upload Sessions
+     *
+     */
+    uploadSessions (sessions, projectId, subjectId) {
+        let self = this;
+        for (let session of sessions) {
+            if (session.children && session.children.length > 0) {
+                if (session.ignore) {
+                    self.uploadModalities(session.children, session._id);
+                } else {
+                    self.progressStart(session.name);
+                    scitran.createSession(projectId, subjectId, session.name, function (err, res) {
+                        self.handleUploadResponse(err, res, function () {
+                            self.uploadModalities(session.children, res.body._id);
+                        });
+                    });
+                }
+            } else {
+                self.uploadFile('sessions', subjectId, session, 'subject');
+            }
+        }
+    },
+
+    /**
+     * Upload Modalities
+     *
+     */
+    uploadModalities (modalities, subjectId) {
+        let self = this;
+        for (let modality of modalities) {
+            if (modality.children && modality.children.length > 0) {
+                if (modality.ignore) {
+                    self.uploadAcquisitions(modality.children, modality._id);
+                } else {
+                    self.progressStart(modality.name);
+                    scitran.createModality(subjectId, modality.name, function (err, res) {
+                        self.handleUploadResponse(err, res, function () {
+                            let modalityId = res.body._id;
+                            self.uploadAcquisitions(modality.children, modalityId);
+                        });
+                    });
+                }
+            } else {
+                self.uploadFile('sessions', subjectId, modality, 'session');
+            }
+        }
+    },
+
+    /**
+     * Upload Acquisitions
+     *
+     */
+    uploadAcquisitions (acquisitions, modalityId) {
+        for (let acquisition of acquisitions) {
+            this.uploadFile('acquisitions', modalityId, acquisition, 'modality');
+        }
+    },
+
+// Resume ---------------------------------------------------------------------------------
+
+    /**
      * Resume Subjects
      *
      */
@@ -158,7 +223,13 @@ export default {
                 this.progressStart(newSubject.name);
                 this.progressEnd(newSubject.name);
                 if (newSubject.type === 'folder') {
-                    this.resumeSessions(newSubject.children, oldSubject.children, projectId, oldSubject._id);
+                    subjectUploads.push({
+                        _id:      oldSubject._id,
+                        name:     newSubject.name,
+                        type:     'folder',
+                        ignore:   true,
+                        children: this.resumeSessions(newSubject.children, oldSubject.children, projectId, oldSubject._id)
+                    });
                 }
             } else {
                 subjectUploads.push(newSubject);
@@ -166,26 +237,6 @@ export default {
         }
         if (subjectUploads.length > 0) {
             this.uploadSubjects(datasetName, subjectUploads, projectId);
-        }
-    },
-
-    /**
-     * Upload Sessions
-     *
-     */
-    uploadSessions (sessions, projectId, subjectId) {
-        let self = this;
-        for (let session of sessions) {
-            if (session.children && session.children.length > 0) {
-                self.progressStart(session.name);
-                scitran.createSession(projectId, subjectId, session.name, function (err, res) {
-                    self.handleUploadResponse(err, res, function () {
-                        self.uploadModalities(session.children, res.body._id);
-                    });
-                });
-            } else {
-                self.uploadFile('sessions', subjectId, session, 'subject');
-            }
         }
     },
 
@@ -202,36 +253,19 @@ export default {
                 this.progressStart(newSession.name);
                 this.progressEnd(newSession.name);
                 if (newSession.type === 'folder') {
-                    this.resumeModalities(newSession.children, oldSession.children, oldSession._id);
+                    sessionUploads.push({
+                        _id:      oldSession._id,
+                        name:     newSession.name,
+                        type:     'folder',
+                        ignore:   true,
+                        children: this.resumeModalities(newSession.children, oldSession.children, oldSession._id)
+                    });
                 }
             } else {
                 sessionUploads.push(newSession);
             }
         }
-        if (sessionUploads.length > 0) {
-            this.uploadSessions(sessionUploads, projectId, subjectId);
-        }
-    },
-
-    /**
-     * Upload Modalities
-     *
-     */
-    uploadModalities (modalities, subjectId) {
-        let self = this;
-        for (let modality of modalities) {
-            if (modality.children && modality.children.length > 0) {
-                self.progressStart(modality.name);
-                scitran.createModality(subjectId, modality.name, function (err, res) {
-                    self.handleUploadResponse(err, res, function () {
-                        let modalityId = res.body._id;
-                        self.uploadAcquisitions(modality.children, modalityId);
-                    });
-                });
-            } else {
-                self.uploadFile('sessions', subjectId, modality, 'session');
-            }
-        }
+        return sessionUploads;
     },
 
     /**
@@ -247,25 +281,19 @@ export default {
                 this.progressStart(newModality.name);
                 this.progressEnd(newModality.name);
                 if (newModality.type === 'folder') {
-                    this.resumeAcquisitions(newModality.children, oldModality.children, oldModality._id);
+                    modalityUploads.push({
+                        _id:      oldModality._id,
+                        name:     newModality.name,
+                        type:     'folder',
+                        ignore:   true,
+                        children: this.resumeAcquisitions(newModality.children, oldModality.children, oldModality._id)
+                    });
                 }
             } else {
                 modalityUploads.push(newModality);
             }
         }
-        if (modalityUploads.length > 0) {
-            this.uploadModalities(modalityUploads, subjectId);
-        }
-    },
-
-    /**
-     * Upload Acquisitions
-     *
-     */
-    uploadAcquisitions (acquisitions, modalityId) {
-        for (let acquisition of acquisitions) {
-            this.uploadFile('acquisitions', modalityId, acquisition, 'modality');
-        }
+        return modalityUploads;
     },
 
     /**
@@ -284,9 +312,7 @@ export default {
                 acquisitionUploads.push(newAcquisition);
             }
         }
-        if (acquisitionUploads.length > 0) {
-            this.uploadAcquisitions(acquisitionUploads, modalityId);
-        }
+        return acquisitionUploads;
     },
 
     /**
