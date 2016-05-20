@@ -78,7 +78,7 @@ let UserStore = Reflux.createStore({
      * if a user is currently logged in.
      */
     initOAuth() {
-        hello.init({google: config.auth.google.clientID});
+        hello.init({google: config.auth.google.clientID}, {redirect_uri: '/'});
         this.checkUser();
     },
 

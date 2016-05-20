@@ -42,6 +42,7 @@ let UploadStore = Reflux.createStore({
         let data = {
             loading: false,
             datasets: [],
+            isPublic: false,
             visibleDatasets: [],
             resultsPerPage: 30,
             page: 0,
@@ -76,7 +77,7 @@ let UploadStore = Reflux.createStore({
             filters: []
         }, () => {
             bids.getDatasets((datasets) => {
-                this.sort(null, null, datasets);
+                if (isPublic === this.data.isPublic) {this.sort(null, null, datasets);}
             }, isPublic, isSignedOut);
         });
     },

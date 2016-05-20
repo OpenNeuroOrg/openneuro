@@ -12,6 +12,29 @@
 
 .clearfix {@extend %clearfix;}
 
+::-webkit-scrollbar {
+    width: 0;
+    z-index: 100;
+}
+ 
+/* Track */
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0); 
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    background: rgba(0,0,0,0.2); 
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(0,0,0,0.2); 
+}
+
 html,
 body,
 .app,
@@ -282,6 +305,11 @@ h6 {
 }
 .btn-submit-other,
 .btn-modal-submit { @extend %btn-submit-other}
+
+.btn-modal-danger{
+    border-color: $brand-danger;
+    color: $brand-danger;
+}
 
 .btn-reset {
     @extend %btn-admin;

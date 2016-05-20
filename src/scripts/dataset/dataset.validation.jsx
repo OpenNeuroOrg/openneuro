@@ -62,14 +62,15 @@ export default class Validation extends React.Component {
 
     _header(errors, warnings) {
         let errs, warns, superValid;
+
         let status = errors.length ? <span className="dataset-status ds-danger"><i className="fa fa-exclamation-circle" /> Invalid</span> : <span className="dataset-status ds-success"><i className="fa fa-check-circle" /> Valid</span>;
         if (errors.length > 0) {
-            errs =  <span className="label text-danger pull-right">{errors.length} {pluralize('Error', errors.length)}</span>;
+            errs =  <span className="label text-danger pull-right"> {errors != 'Invalid' ? errors.length +' '+ pluralize('Error', errors.length) : null}</span>;
         }
-        if (warnings.length > 0) {
+        if (warnings && warnings.length > 0) {
             warns = <span className="label text-warning pull-right">{warnings.length} {pluralize('Warning', warnings.length)}</span>;
         }
-        if (warnings.length <= 0 && errors.length <= 0){
+        if (warnings && warnings.length <= 0 && errors.length <= 0){
             superValid = 'super-valid';
         }
         return <div className={superValid}>{status}{errs}{warns}</div>;

@@ -12,6 +12,7 @@ var gulp        = require('gulp'),
     changed     = require('gulp-changed'),
     del         = require('del'),
     gulpif      = require('gulp-if'),
+    rewrite     = require('connect-history-api-fallback'),
     notify      = require('gulp-notify'),
     reload      = browserSync.reload,
     sass        = require('gulp-sass'),
@@ -56,7 +57,8 @@ gulp.task('default',['watch']);
 gulp.task('browserSync', function() {
     browserSync.init({
         server: './dist',
-        port: 9876
+        port: 9876,
+        middleware: rewrite()
     });
 });
 

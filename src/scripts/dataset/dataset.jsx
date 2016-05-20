@@ -61,11 +61,6 @@ let Dataset = React.createClass({
             content = (
                 <div className="clearfix dataset-wrap">
                     <div className="dataset-annimation">
-                        <div className="col-xs-12 dataset-tools-wrap">
-                            <Tools dataset={dataset}
-                                   selectedSnapshot={this.state.selectedSnapshot}
-                                   snapshots={this.state.snapshots} />
-                        </div>
                         <div className="col-xs-12 dataset-inner">
                             <div className="row">
                                 <div className="col-xs-7">
@@ -116,9 +111,10 @@ let Dataset = React.createClass({
 
         return (
             <div className={showSidebar ? 'open dataset-container' : 'dataset-container'}>
+                {this._leftSidebar(snapshots)}
+                {this._showSideBarButton()}
+                {this._tools(dataset)}
                 <div className="fade-in inner-route dataset-route light">
-                    {this._leftSidebar(snapshots)}
-                    {this._showSideBarButton(dataset)}
                     {this.state.loading ? <Spinner active={true} /> : content}
                 </div>
             </div>
@@ -126,6 +122,18 @@ let Dataset = React.createClass({
     },
 
 // template methods ---------------------------------------------------
+
+    _tools(dataset) {
+        if (dataset) {
+            return(
+                <div className="col-xs-12 dataset-tools-wrap">
+                    <Tools dataset={dataset}
+                            selectedSnapshot={this.state.selectedSnapshot}
+                            snapshots={this.state.snapshots} />
+                </div>
+            );
+        }
+    },
 
     _leftSidebar(snapshots) {
         let isSignedIn   = !!userStore.hasToken();
@@ -149,7 +157,6 @@ let Dataset = React.createClass({
                                 <span className="dataset-type">
                                     {snapshot.isOriginal ? 'Draft' : 'v' + snapshot.snapshot_version}
                                 </span>
-
                                 <span className="date-modified">
                                     {snapshot.modified ? moment(snapshot.modified).format('ll') : null}
                                 </span>
@@ -180,7 +187,7 @@ let Dataset = React.createClass({
         );
     },
 
-    _showSideBarButton(dataset){
+    _showSideBarButton() {
         let showSidebar = this.state.showSidebar;
         return(
             <span className="show-nav-btn" onClick={actions.toggleSidebar}>
