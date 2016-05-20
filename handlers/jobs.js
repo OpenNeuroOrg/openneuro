@@ -67,39 +67,14 @@ export default {
         sanitize.req(req, models.job, (err, job) => {
             if (err) {return next(err);}
             scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
-                let parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
-
-                let body = {
-                    name:              'crn-automated-job',
-                    appId:             job.appId,
-                    batchQueue:        job.batchQueue,
-                    executionSystem:   job.executionSystem,
-                    maxRunTime:        '05:00:00',
-                    memoryPerNode:     job.memoryPerNode,
-                    nodeCount:         job.nodeCount,
-                    processorsPerNode: job.processorsPerNode,
-                    archive:           true,
-                    archiveSystem:     'openfmri-storage',
-                    archivePath:       'archive',
-                    inputs: {
-                        bidsFile: config.agave.storage + hash
-                    },
-                    parameters: {},
-                    notifications: [
-                        {
-                            url:        config.url + ':' + config.port + '/api/v1/jobs/${JOB_ID}/results',
-                            event:      '*',
-                            persistent: true
-                        }
-                    ]
-                };
+                job.datasetHash = hash
+                job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
 
                 c.jobs.findOne({
-                    appId: job.appId,
-                    datasetId: job.datasetId,
-                    datasetHash: hash,
-                    parametersHash: parametersHash,
-                    snapshotId: job.snapshotId
+                    appId:          job.appId,
+                    datasetHash:    job.datasetHash,
+                    parametersHash: job.parametersHash,
+                    snapshotId:     job.snapshotId
                 }, {}, (err, existingJob) => {
                     if (err){return next(err);}
                     if (existingJob) {
@@ -107,32 +82,10 @@ export default {
                         error.http_code = 409;
                         return next(error);
                     }
-                    agave.createJob(body, (err, resp) => {
-                        if (resp.body.status == 'error') {
-                            let error = new Error(resp.body.message);
-                            error.http_code = 400;
-                            return next(error);
-                        }
-                        if (resp.statusCode !== 200 && resp.statusCode !== 201) {
-                            let error = new Error(resp.body ? resp.body : 'AGAVE was unable to process this job submission.');
-                            error.http_code = resp.statusCode ? resp.statusCode : 503;
-                            return next(error);
-                        }
-                        c.jobs.insertOne({
-                            appId:          job.appId,
-                            appLabel:       job.appLabel,
-                            appVersion:     job.appVersion,
-                            datasetId:      job.datasetId,
-                            datasetHash:    hash,
-                            userId:         job.userId,
-                            jobId:          resp.body.result.id,
-                            agave:          resp.body.result,
-                            parameters:     job.parameters,
-                            parametersHash: parametersHash,
-                            snapshotId:     job.snapshotId
-                        }, () => {
-                            res.send(resp.body);
-                        });
+
+                    submitJob(job, (err, resp) => {
+                        if (err) {return next(err);}
+                        res.send(resp);
                     });
                 });
             }, {snapshot: true});
@@ -140,9 +93,49 @@ export default {
     },
 
     /**
+     * Retry
+     */
+    retry (req, res, next) {
+        let jobId = req.params.jobId;
+
+        // find job
+        c.jobs.findOne({jobId}, {}, (err, job) => {
+            if (err){return next(err);}
+            if (!job) {
+                let error = new Error('Could not find job.');
+                error.http_code = 404;
+                return next(error);
+            }
+            if (job.agave.status && job.agave.status === 'FINISHED') {
+                let error = new Error('A job with the same dataset and parameters has already successfully finished.');
+                error.http_code = 409;
+                return next(error);
+            }
+            if (job.agave.status && job.agave.status !== 'FAILED') {
+                let error = new Error('A job with the same dataset and parameters is currently running.');
+                error.http_code = 409;
+                return next(error);
+            }
+
+            // re-submit job with old job data
+            submitJob(job, (err, resp) => {
+                if (err) {
+                    return next(err)
+                } else {
+                    // delete old job
+                    c.jobs.removeOne({jobId}, {}, (err, doc) => {
+                        if (err) {return next(err);}
+                        res.send(resp);
+                    });
+                }
+            });
+        });
+    },
+
+    /**
      *  List Jobs
      */
-    listDatasetJobs(req, res, next) {
+    list(req, res, next) {
         let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
         let datasetId  = req.params.datasetId;
         let user       = req.user;
@@ -188,7 +181,7 @@ export default {
      */
     results(req, res) {
         let jobId = req.params.jobId;
-        if (req.body.status === 'FINISHED') {
+        if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
             let results = [];
             agave.getJobOutput(req.body.id, (err, resp) => {
                 let output = resp.body.result;
@@ -201,7 +194,9 @@ export default {
                     }
                 }
                 agave.getJobResults(req.body.id, (err, resp1) => {
-                    if (resp1.body.result) {results = results.concat(resp1.body.result);}
+                    if (resp1.body.result) {
+                        results = results.concat(resp1.body.result);
+                    }
                     results = results.length > 0 ? results : null;
                     c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
                         if (err) {res.send(err);}
@@ -347,3 +342,75 @@ export default {
     }
 
 };
+
+function submitJob (job, callback) {
+
+    let attempts = job.attempts ? job.attempts + 1: 1;
+
+    // form job body
+    let body = {
+        name:              'crn-automated-job',
+        appId:             job.appId,
+        batchQueue:        job.batchQueue,
+        executionSystem:   job.executionSystem,
+        maxRunTime:        '05:00:00',
+        memoryPerNode:     job.memoryPerNode,
+        nodeCount:         job.nodeCount,
+        processorsPerNode: job.processorsPerNode,
+        archive:           true,
+        archiveSystem:     'openfmri-storage',
+        archivePath:       'archive',
+        inputs: {
+            bidsFile: config.agave.storage + job.datasetHash
+        },
+        parameters: job.parameters ? job.parameters : {},
+        notifications: [
+            {
+                url:        config.url + ':' + config.port + '/api/v1/jobs/${JOB_ID}/results',
+                event:      '*',
+                persistent: true
+            }
+        ]
+    };
+
+    // submit job
+    agave.createJob(body, (err, resp) => {
+
+        // handle submission errors
+        if (resp.body.status == 'error') {
+            let error = new Error(resp.body.message);
+            error.http_code = 400;
+            return callback(error, null);
+        }
+        if (resp.statusCode !== 200 && resp.statusCode !== 201) {
+            let error = new Error(resp.body ? resp.body : 'AGAVE was unable to process this job submission.');
+            error.http_code = resp.statusCode ? resp.statusCode : 503;
+            return callback(error, null);
+        }
+
+        // store job
+        c.jobs.insertOne({
+            jobId:             resp.body.result.id,
+            agave:             resp.body.result,
+
+            appId:             body.appId,
+            parameters:        body.parameters,
+            memoryPerNode:     body.memoryPerNode,
+            nodeCount:         body.nodeCount,
+            processorsPerNode: body.processorsPerNode,
+            batchQueue:        body.batchQueue,
+
+            appLabel:          job.appLabel,
+            appVersion:        job.appVersion,
+            datasetId:         job.datasetId,
+            datasetHash:       job.datasetHash,
+            userId:            job.userId,
+            parametersHash:    job.parametersHash,
+            snapshotId:        job.snapshotId,
+
+            attempts:          attempts
+        }, () => {
+            callback(null, resp.body);
+        });
+    });
+}
