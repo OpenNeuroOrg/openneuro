@@ -1,112 +1,48 @@
 export default {
 
-    progressStart: [],
-    progressEnd: [],
+    progress: [],
 
     /**
-     * Resume Subjects
+     * Datasets
      *
+     * Takes two tree structured datasets and callbacks with
+     * a dataset tree of the items the first contains and the
+     * second doesn't as well as an array or item names to mark
+     * as completed progress.
      */
-    resumeSubjects (newSubjects, oldSubjects, callback) {
-        this.progressStart = [], this.progressEnd = [];
-        let subjectUploads = [];
-        for (let i = 0; i < newSubjects.length; i++) {
-            let newSubject = newSubjects[i];
-            let oldSubject = this.contains(oldSubjects, newSubject);
-            if (oldSubject) {
-                this.progressStart.push(newSubject.name);
-                this.progressEnd.push(newSubject.name);
-                if (newSubject.type === 'folder') {
-                    subjectUploads.push({
-                        _id:      oldSubject._id,
-                        name:     newSubject.name,
-                        type:     'folder',
-                        ignore:   true,
-                        children: this.resumeSessions(newSubject.children, oldSubject.children, oldSubject._id)
-                    });
-                }
-            } else {
-                subjectUploads.push(newSubject);
-            }
-        }
-        if (subjectUploads.length > 0) {
-            callback(subjectUploads, this.progressStart, this.progressEnd);
-        }
+    datasets (newSubjects, oldSubjects, callback) {
+        this.progress = [];
+        callback(this.diff(newSubjects, oldSubjects), this.progress);
     },
 
     /**
-     * Resume Sessions
+     * Diff
      *
+     * Takes an array of new dataset items and an array
+     * of old datasets and recursively finds and returns
+     * the diffs.
      */
-    resumeSessions (newSessions, oldSessions, subjectId) {
-        let sessionUploads = [];
-        for (let i = 0; i < newSessions.length; i++) {
-            let newSession = newSessions[i];
-            let oldSession = this.contains(oldSessions, newSession);
-            if (oldSession) {
-                this.progressStart.push(newSession.name);
-                this.progressEnd.push(newSession.name);
-                if (newSession.type === 'folder') {
-                    sessionUploads.push({
-                        _id:      oldSession._id,
-                        name:     newSession.name,
+    diff (newItems, oldItems) {
+        let diffItems = [];
+        for (let i = 0; i < newItems.length; i++) {
+            let newItem = newItems[i];
+            let oldItem = this.contains(oldItems, newItem);
+            if (oldItem) {
+                this.progress.push(newItem.name);
+                if (newItem.type === 'folder') {
+                    diffItems.push({
+                        _id:      oldItem._id,
+                        name:     newItem.name,
                         type:     'folder',
                         ignore:   true,
-                        children: this.resumeModalities(newSession.children, oldSession.children, oldSession._id)
+                        children: this.diff(newItem.children, oldItem.children, oldItem._id)
                     });
                 }
             } else {
-                sessionUploads.push(newSession);
+                diffItems.push(newItem);
             }
         }
-        return sessionUploads;
-    },
-
-    /**
-     * Resume Modalities
-     *
-     */
-    resumeModalities (newModalities, oldModalities, subjectId) {
-        let modalityUploads = [];
-        for (let i = 0; i < newModalities.length; i++) {
-            let newModality = newModalities[i];
-            let oldModality = this.contains(oldModalities, newModality);
-            if (oldModality) {
-                this.progressStart.push(newModality.name);
-                this.progressEnd.push(newModality.name);
-                if (newModality.type === 'folder') {
-                    modalityUploads.push({
-                        _id:      oldModality._id,
-                        name:     newModality.name,
-                        type:     'folder',
-                        ignore:   true,
-                        children: this.resumeAcquisitions(newModality.children, oldModality.children, oldModality._id)
-                    });
-                }
-            } else {
-                modalityUploads.push(newModality);
-            }
-        }
-        return modalityUploads;
-    },
-
-    /**
-     * Resume Acquisitions
-     *
-     */
-    resumeAcquisitions (newAcquisitions, oldAcquisitions, modalityId) {
-        let acquisitionUploads = [];
-        for (let i = 0; i < newAcquisitions.length; i++) {
-            let newAcquisition = newAcquisitions[i];
-            let oldAcquisition = this.contains(oldAcquisitions, newAcquisition);
-            if (oldAcquisition) {
-                this.progressStart.push(newAcquisition.name);
-                this.progressEnd.push(newAcquisition.name);
-            } else {
-                acquisitionUploads.push(newAcquisition);
-            }
-        }
-        return acquisitionUploads;
+        return diffItems;
     },
 
     /**
