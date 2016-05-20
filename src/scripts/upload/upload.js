@@ -86,9 +86,9 @@ export default {
                 this.currentProjectId = existingProject._id;
                 bids.getDatasetTree(existingProject, (oldDataset) => {
                     let newDataset = fileTree[0];
-                    diff.resumeSubjects(newDataset.children, oldDataset[0].children, (subjectUploads, starts, ends) => {
-                        for (let start of starts) {this.progressStart(start);}
-                        for (let end of ends)     {this.progressEnd(end);}
+                    diff.datasets(newDataset.children, oldDataset[0].children, (subjectUploads, completedFiles) => {
+                        this.completed = this.completed + completedFiles.length;
+                        progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles});
                         this.uploadSubjects(newDataset.name, subjectUploads, this.currentProjectId);
                     });
                 });
