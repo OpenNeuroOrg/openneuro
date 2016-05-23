@@ -17,15 +17,33 @@ let UploadBtn = React.createClass({
 // life cycle methods ------------------------------------------------------------
 
     render: function () {
-        let completed = this.state.progress.completed;
-        let total     = this.state.progress.total;
-        let progress  = total > 0 ? Math.floor(completed / total * 100) : 0;
 
-        progress = (
-                <a className="nav-link nl-upload nl-progress"  onClick={Actions.toggleModal}>
-                    <span className="link-name">view details</span>
-                    <ProgressBar active now={progress} />
-                </a>
+        // resume
+        let rCompleted = this.state.resumeProgress.completed;
+        let rTotal     = this.state.resumeProgress.total;
+        let rProgress  = rTotal > 0 ? Math.floor(rCompleted / rTotal * 100) : 0;
+
+        // upload
+        let uCompleted = this.state.progress.completed;
+        let uTotal     = this.state.progress.total;
+        if (this.state.resumeStart) {
+            let resumeStart = this.state.resumeStart;
+            rProgress = rProgress * (resumeStart / uTotal);
+            uCompleted = uCompleted - resumeStart;
+            uTotal     = uTotal - resumeStart;
+        }
+        let uProgress  = uTotal > 0 ? Math.floor(uCompleted / uTotal * 100) : 0;
+
+
+
+        let progress = (
+            <a className="nav-link nl-upload nl-progress"  onClick={Actions.toggleModal}>
+                <span className="link-name">view details</span>
+                <ProgressBar>
+                    <ProgressBar active bsStyle="warning" now={rProgress} key={1} />
+                    <ProgressBar active bsStyle="success" now={uProgress} key={2}/>
+                </ProgressBar>
+            </a>
         );
 
         let uploadBtn = (

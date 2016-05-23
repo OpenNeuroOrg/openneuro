@@ -180,7 +180,7 @@ export default  {
      * Takes a projectId and returns the full
      * dataset tree.
      */
-    getDatasetTree (dataset, callback, options) {
+    getDatasetTree (dataset, callback, options, progress) {
         dataset = {
             _id: dataset._id,
             label: dataset.label,
@@ -190,18 +190,29 @@ export default  {
             type: 'folder'
         };
         let projectId = dataset._id;
+        let p = {total: 2, completed: 0}
+        progress(p);
         scitran.getSessions(projectId, (scitranSessions) => {
+            p.total += scitranSessions.length;
+            p.completed++;
+            progress(p);
             this.filterSessions(scitranSessions, 'subject', (subjects) => {
+                p.completed++;
+                progress(p);
                 dataset.containerType = 'projects';
                 dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
                 dataset.children = dataset.children.concat(subjects);
                 async.each(subjects, (subject, cb) => {
                     this.filterSessions(scitranSessions, subject._id, (sessions) => {
+                        p.completed++;
+                        progress(p);
                         subject.containerType = 'sessions';
                         subject.children = this.formatFiles(subject.children, subject._id, 'sessions');
                         subject.children = subject.children.concat(sessions);
                         async.each(sessions, (session, cb1) => {
                             this.getModalities(session._id, (modalities) => {
+                                p.completed++;
+                                progress(p);
                                 session.containerType = 'sessions';
                                 session.children = this.formatFiles(session.children, session._id, 'sessions');
                                 session.children = session.children.concat(modalities);
