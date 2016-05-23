@@ -111,7 +111,9 @@
                             height: 10px;
                             position: relative;
                         }
-
+                        .progress-bar-warning {
+                            background: $brand-warning;
+                        }
                     }
 
                     &:hover,

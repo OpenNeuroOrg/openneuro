@@ -7,6 +7,13 @@ import diff    from './diff';
 
 export default {
 
+// progress --------------------------------------------------------------------------
+
+    /**
+     * Current Project Id
+     */
+    currentProjectId: null,
+
     /**
      * Current Files
      *
@@ -15,9 +22,16 @@ export default {
     currentFiles: [],
 
     /**
-     * Current Project Id
+     * Total
      */
-    currentProjectId: null,
+    total: 0,
+
+    /**
+     * Completed
+     */
+    completed: 0,
+
+// upload ----------------------------------------------------------------------------
 
     /**
      * Handle Upload Response
@@ -55,21 +69,17 @@ export default {
      * folder upload request and an error callback.
      */
     upload (userId, fileTree, validation, summary, count, progress, error) {
-        this.completed = 0;
-        this.count = count;
+        this.total = count;
         this.currentProjectId = null;
         this.progressStart = (filename) => {
             this.currentFiles.push(filename);
-            progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles});
+            progress({type: 'upload', total: this.total, completed: this.completed, currentFiles: this.currentFiles});
         };
         this.progressEnd = (filename) => {
             let index = this.currentFiles.indexOf(filename);
             this.currentFiles.splice(index, 1);
             this.completed++;
-            progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles}, this.currentProjectId);
-        };
-        this.error = (err, req) => {
-            if (error) {error(err, req);}
+            progress({type: 'upload', total: this.total, completed: this.completed, currentFiles: this.currentFiles}, this.currentProjectId);
         };
         let existingProject = null;
         scitran.getProjects({authenticate: true}, (projects) => {
@@ -88,9 +98,12 @@ export default {
                     let newDataset = fileTree[0];
                     diff.datasets(newDataset.children, oldDataset[0].children, (subjectUploads, completedFiles) => {
                         this.completed = this.completed + completedFiles.length;
-                        progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles});
+                        progress({total: this.total, completed: this.completed, currentFiles: this.currentFiles, resumeStart: this.completed});
                         this.uploadSubjects(newDataset.name, subjectUploads, this.currentProjectId);
                     });
+                }, {}, (resumeProgress) => {
+                    resumeProgress.type = 'resume';
+                    progress(resumeProgress);
                 });
             } else {
                 let body = {
@@ -114,18 +127,17 @@ export default {
      *
      */
     uploadSubjects (datasetName, subjects, projectId, validation, summary) {
-        let self = this;
-        self.currentProjectId = projectId;
+        this.currentProjectId = projectId;
         for (let subject of subjects) {
             if (subject.children) {
                 if (subject.ignore) {
-                    self.uploadSessions(subject.children, projectId, subject._id);
+                    this.uploadSessions(subject.children, projectId, subject._id);
                 } else {
-                    self.progressStart(subject.name);
-                    scitran.createSubject(projectId, subject.name, function (err, res) {
-                        self.handleUploadResponse(err, res, function () {
+                    this.progressStart(subject.name);
+                    scitran.createSubject(projectId, subject.name, (err, res) => {
+                        this.handleUploadResponse(err, res, () => {
                             let subjectId = res.body._id;
-                            self.uploadSessions(subject.children, projectId, subjectId);
+                            this.uploadSessions(subject.children, projectId, subjectId);
                         });
                     });
                 }
@@ -143,12 +155,12 @@ export default {
                         }
                         scitran.updateProject(projectId, {metadata: {authors, validation, summary}}, () => {
                             let file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
-                            self.uploadFile('projects', projectId, file, 'project');
+                            this.uploadFile('projects', projectId, file, 'project');
                         });
                     });
 
                 } else {
-                    self.uploadFile('projects', projectId, subject, 'project');
+                    this.uploadFile('projects', projectId, subject, 'project');
                 }
             }
         }
@@ -159,21 +171,20 @@ export default {
      *
      */
     uploadSessions (sessions, projectId, subjectId) {
-        let self = this;
         for (let session of sessions) {
             if (session.children) {
                 if (session.ignore) {
-                    self.uploadModalities(session.children, session._id);
+                    this.uploadModalities(session.children, session._id);
                 } else {
-                    self.progressStart(session.name);
-                    scitran.createSession(projectId, subjectId, session.name, function (err, res) {
-                        self.handleUploadResponse(err, res, function () {
-                            self.uploadModalities(session.children, res.body._id);
+                    this.progressStart(session.name);
+                    scitran.createSession(projectId, subjectId, session.name, (err, res) => {
+                        this.handleUploadResponse(err, res, () => {
+                            this.uploadModalities(session.children, res.body._id);
                         });
                     });
                 }
             } else {
-                self.uploadFile('sessions', subjectId, session, 'subject');
+                this.uploadFile('sessions', subjectId, session, 'subject');
             }
         }
     },
@@ -183,22 +194,21 @@ export default {
      *
      */
     uploadModalities (modalities, subjectId) {
-        let self = this;
         for (let modality of modalities) {
             if (modality.children) {
                 if (modality.ignore) {
-                    self.uploadAcquisitions(modality.children, modality._id);
+                    this.uploadAcquisitions(modality.children, modality._id);
                 } else {
-                    self.progressStart(modality.name);
-                    scitran.createModality(subjectId, modality.name, function (err, res) {
-                        self.handleUploadResponse(err, res, function () {
+                    this.progressStart(modality.name);
+                    scitran.createModality(subjectId, modality.name, (err, res) => {
+                        this.handleUploadResponse(err, res, () => {
                             let modalityId = res.body._id;
-                            self.uploadAcquisitions(modality.children, modalityId);
+                            this.uploadAcquisitions(modality.children, modalityId);
                         });
                     });
                 }
             } else {
-                self.uploadFile('sessions', subjectId, modality, 'session');
+                this.uploadFile('sessions', subjectId, modality, 'session');
             }
         }
     },
