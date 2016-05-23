@@ -5,8 +5,6 @@ import Reflux      from 'reflux';
 import Actions     from './upload.actions.js';
 import UploadStore from './upload.store.js';
 import Input       from '../common/forms/input.jsx';
-import FileTree    from './upload.file-tree.jsx';
-import {Accordion, Panel} from 'react-bootstrap';
 
 let Rename = React.createClass({
 
@@ -45,11 +43,7 @@ let Rename = React.createClass({
                     {renameResumeMessage}
                     {input}
                 </div>
-                <Accordion className="file-structure fade-in">
-                    <Panel header={dirName + ' File Structure'} eventKey='1'>
-                        <FileTree tree={tree}/>
-                    </Panel>
-                </Accordion>
+                <br />
                 <button className="btn-blue" disabled={nameError} onClick={this._validate}>Continue</button>
             </div>
         );
