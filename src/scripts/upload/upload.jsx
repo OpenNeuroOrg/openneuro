@@ -43,7 +43,7 @@ let Upload = React.createClass({
             select = (
                 <TabPane eventKey={1} tab={tabName}  className="upload-step" disabled={disabledTab}>
                     <div className={activePane}>
-                        <Select  />
+                        <Select />
                     </div>
                 </TabPane>
             );
@@ -55,7 +55,12 @@ let Upload = React.createClass({
             rename = (
                 <TabPane eventKey={2} tab={tabName}  className="upload-step" disabled={disabledTab || !this.state.renameEnabled}>
                     <div className={activePane}>
-                        <Rename />
+                        <Rename
+                            dirName={dirName}
+                            input={this.state.showRenameInput}
+                            nameError={this.state.nameError}
+                            resuming={this.state.resuming}
+                            selectedName={this.state.selectedName} />
                     </div>
                 </TabPane>
             );

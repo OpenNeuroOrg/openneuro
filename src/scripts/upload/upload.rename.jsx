@@ -3,34 +3,20 @@
 import React       from 'react';
 import Reflux      from 'reflux';
 import Actions     from './upload.actions.js';
-import UploadStore from './upload.store.js';
 import Input       from '../common/forms/input.jsx';
 
-let Rename = React.createClass({
-
-    mixins: [Reflux.connect(UploadStore)],
+export default class Rename extends React.Component {
 
 // life cycle events --------------------------------------------------
 
     render () {
-        let dirName   = this.state.dirName,
-            nameError = this.state.nameError,
-            resuming  = this.state.resuming,
+        let nameError = this.props.nameError,
+            resuming  = this.props.resuming,
             renameResumeMessage;
 
         if (resuming) {
             renameResumeMessage = (
-                <span className="message error">You have selected "{this.state.selectedName}" and are trying to resume "{dirName}." Continue if this is correct or <span className="upload-reset-link" onClick={this._cancel}>cancel</span>.</span>
-            );
-        }
-
-        let input;
-        if (this.state.showRenameInput) {
-            input = (
-                <div>
-                    <label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
-                    <Input type="text" placeholder="dataset name" initialValue={dirName} onChange={this._updateDirName} />
-                </div>
+                <span className="message error">You have selected "{this.props.selectedName}" and are trying to resume "{dirName}." Continue if this is correct or <span className="upload-reset-link" onClick={Actions.setInitialState}>cancel</span>.</span>
             );
         }
 
@@ -40,27 +26,31 @@ let Rename = React.createClass({
                 <div className="dir-name has-input clearfix fade-in">
                     {nameError ? <span className="message error character-error">{nameError}</span> : null}
                     {renameResumeMessage}
-                    {input}
+                    {this._input(this.props.input)}
                 </div>
                 <br />
-                <button className="btn-blue" disabled={nameError} onClick={this._validate}>Continue</button>
+                <button className="btn-blue" disabled={nameError} onClick={Actions.validate}>Continue</button>
             </div>
         );
-    },
-
-// custom methods -----------------------------------------------------
-
-    _updateDirName: function (e) {
-        Actions.updateDirName(e.target.value);
-    },
-
-    _validate: Actions.validate,
-
-    _cancel: function () {
-        Actions.setInitialState();
     }
 
-});
+// template methods ---------------------------------------------------
 
+    _input (display) {
+        if (display) {
+            return (
+                <div>
+                    <label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
+                    <Input type="text" placeholder="dataset name" initialValue={this.props.dirName} onChange={this._updateDirName} />
+                </div>
+            );
+        }
+    }
 
-export default Rename;
+// actions ------------------------------------------------------------
+
+    _updateDirName (e) {
+        Actions.updateDirName(e.target.value);
+    }
+
+}
