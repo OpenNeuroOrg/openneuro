@@ -50,7 +50,7 @@ let Rename = React.createClass({
                         <FileTree tree={tree}/>
                     </Panel>
                 </Accordion>
-                <button className="btn-blue" disabled={nameError} onClick={this._validate.bind(null, this.state.list)}>Continue</button>
+                <button className="btn-blue" disabled={nameError} onClick={this._validate}>Continue</button>
             </div>
         );
     },

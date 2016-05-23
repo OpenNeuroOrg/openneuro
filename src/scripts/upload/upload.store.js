@@ -2,8 +2,10 @@
 
 import React           from 'react';
 import Reflux          from 'reflux';
-import Actions         from './upload.actions.js';
-import notifications   from '../notification/notification.actions.js';
+import actions         from './upload.actions';
+import './upload.file.store';
+import fileStore       from './upload.file.actions';
+import notifications   from '../notification/notification.actions';
 import scitran         from '../utils/scitran';
 import upload          from './upload';
 import files           from '../utils/files';
@@ -20,7 +22,7 @@ let favicon = new favico();
 
 let UploadStore = Reflux.createStore({
 
-    listenables: Actions,
+    listenables: actions,
 
     init: function () {
         // Reset Favico incase timeout or issues
@@ -56,7 +58,6 @@ let UploadStore = Reflux.createStore({
             dirName: '',
             disabledTab: false,
             errors: [],
-            list: {},
             nameError: null,
             progress: {total: 0, completed: 0, currentFiles: []},
             projectId: '',
@@ -72,7 +73,6 @@ let UploadStore = Reflux.createStore({
             showResume: false,
             showProgress: false,
             showSuccess: false,
-            tree: [],
             uploadStatus: 'not-started',
             warnings: []
         };
@@ -115,10 +115,9 @@ let UploadStore = Reflux.createStore({
         if (dirName.length > 32) {
             nameError = 'Names must be 32 characters or less';
         }
+        fileStore.setFiles(selectedFiles);
         this.setInitialState({
             refs: this.data.refs,
-            tree: selectedFiles.tree,
-            list: selectedFiles.list,
             dirName: dirName,
             nameError: nameError,
             uploadStatus: 'files-selected',
@@ -149,10 +148,9 @@ let UploadStore = Reflux.createStore({
                 }
             };
         }
+        fileStore.setFiles(selectedFiles);
         this.setInitialState({
             refs: this.data.refs,
-            tree: selectedFiles.tree,
-            list: selectedFiles.list,
             dirName: originalName,
             uploadStatus: 'files-selected',
             showRename: true,
@@ -173,28 +171,29 @@ let UploadStore = Reflux.createStore({
      * Takes an optional boolean parameter representing
      * whether this is already known as a resume.
      */
-    validate (selectedFiles) {
-        let self = this;
-        self.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
-        validate.BIDS(selectedFiles, {}, function (errors, warnings, summary) {
+    validate () {
+        this.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
+        fileStore.getFiles('list', (list) => {
+            validate.BIDS(list, {}, (errors, warnings, summary) => {
 
-            if (errors === 'Invalid') {
-                self.update({errors: 'Invalid'});
-            }
+                if (errors === 'Invalid') {
+                    this.update({errors: 'Invalid'});
+                }
 
-            errors   = errors   ? errors   : [];
-            warnings = warnings ? warnings : [];
+                errors   = errors   ? errors   : [];
+                warnings = warnings ? warnings : [];
 
-            self.update({
-                errors: errors,
-                warnings: warnings,
-                summary: summary,
-                uploadStatus: 'validated'
+                this.update({
+                    errors: errors,
+                    warnings: warnings,
+                    summary: summary,
+                    uploadStatus: 'validated'
+                });
+
+                if (errors.length === 0 && warnings.length === 0) {
+                    this.checkExists();
+                }
             });
-
-            if (errors.length === 0 && warnings.length === 0) {
-                self.checkExists(self.data.tree, false);
-            }
         });
     },
 
@@ -206,36 +205,38 @@ let UploadStore = Reflux.createStore({
      * it check for existing dataset with the same name
      * and group.
      */
-    checkExists (fileTree) {
-        // rename dirName before upload
-        fileTree[0].name = this.data.dirName;
+    checkExists () {
+        fileStore.getFiles('tree', (fileTree) => {
+            // rename dirName before upload
+            fileTree[0].name = this.data.dirName;
 
-        if (this.data.uploadStatus === 'dataset-exists') {
-            this.upload(fileTree);
-            return;
-        }
+            if (this.data.uploadStatus === 'dataset-exists') {
+                this.upload(fileTree);
+                return;
+            }
 
-        let self = this;
-        let userId = userStore.data.scitran._id;
-        if (!this.data.resuming) {
-            scitran.getProjects({}, function (projects) {
-                let existingProjectId;
-                for (let project of projects) {
-                    if (project.label === fileTree[0].name && project.group === userId) {
-                        existingProjectId = project._id;
-                        break;
+            let self = this;
+            let userId = userStore.data.scitran._id;
+            if (!this.data.resuming) {
+                scitran.getProjects({}, function (projects) {
+                    let existingProjectId;
+                    for (let project of projects) {
+                        if (project.label === fileTree[0].name && project.group === userId) {
+                            existingProjectId = project._id;
+                            break;
+                        }
                     }
-                }
 
-                if (existingProjectId) {
-                    self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: 4});
-                } else {
-                    self.upload(fileTree);
-                }
-            });
-        } else {
-            self.upload(fileTree);
-        }
+                    if (existingProjectId) {
+                        self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: 4});
+                    } else {
+                        self.upload(fileTree);
+                    }
+                });
+            } else {
+                self.upload(fileTree);
+            }
+        });
     },
 
     /**
@@ -374,7 +375,7 @@ let UploadStore = Reflux.createStore({
      * Takes a react refs and store them.
      */
     setRefs(refs) {
-        this.update({refs: refs});
+        this.update({refs});
     }
 
 });
