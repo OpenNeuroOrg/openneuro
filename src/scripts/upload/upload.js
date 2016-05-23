@@ -117,7 +117,7 @@ export default {
         let self = this;
         self.currentProjectId = projectId;
         for (let subject of subjects) {
-            if (subject.children && subject.children.length > 0) {
+            if (subject.children) {
                 if (subject.ignore) {
                     self.uploadSessions(subject.children, projectId, subject._id);
                 } else {
@@ -161,7 +161,7 @@ export default {
     uploadSessions (sessions, projectId, subjectId) {
         let self = this;
         for (let session of sessions) {
-            if (session.children && session.children.length > 0) {
+            if (session.children) {
                 if (session.ignore) {
                     self.uploadModalities(session.children, session._id);
                 } else {
@@ -185,7 +185,7 @@ export default {
     uploadModalities (modalities, subjectId) {
         let self = this;
         for (let modality of modalities) {
-            if (modality.children && modality.children.length > 0) {
+            if (modality.children) {
                 if (modality.ignore) {
                     self.uploadAcquisitions(modality.children, modality._id);
                 } else {
