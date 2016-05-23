@@ -67,6 +67,7 @@ let UploadStore = Reflux.createStore({
      * sort setting.
      */
     getDatasets(isPublic) {
+        if (!isPublic) {isPublic = this.data.isPublic;}
         let isSignedOut = !userStore.data.token;
         this.update({
             loading: true,
