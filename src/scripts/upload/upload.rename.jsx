@@ -15,7 +15,6 @@ let Rename = React.createClass({
     render () {
         let dirName   = this.state.dirName,
             nameError = this.state.nameError,
-            tree      = this.state.tree,
             resuming  = this.state.resuming,
             renameResumeMessage;
 
