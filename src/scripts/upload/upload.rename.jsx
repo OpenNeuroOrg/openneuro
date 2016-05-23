@@ -10,7 +10,8 @@ export default class Rename extends React.Component {
 // life cycle events --------------------------------------------------
 
     render () {
-        let nameError = this.props.nameError,
+        let dirName   = this.props.dirName,
+            nameError = this.props.nameError,
             resuming  = this.props.resuming,
             renameResumeMessage;
 
@@ -26,7 +27,7 @@ export default class Rename extends React.Component {
                 <div className="dir-name has-input clearfix fade-in">
                     {nameError ? <span className="message error character-error">{nameError}</span> : null}
                     {renameResumeMessage}
-                    {this._input(this.props.input)}
+                    {this._input(this.props.input, dirName)}
                 </div>
                 <br />
                 <button className="btn-blue" disabled={nameError} onClick={Actions.validate}>Continue</button>
@@ -36,12 +37,12 @@ export default class Rename extends React.Component {
 
 // template methods ---------------------------------------------------
 
-    _input (display) {
+    _input (display, dirName) {
         if (display) {
             return (
                 <div>
                     <label className="add-name"><i className="folderIcon fa fa-folder-open" /></label>
-                    <Input type="text" placeholder="dataset name" initialValue={this.props.dirName} onChange={this._updateDirName} />
+                    <Input type="text" placeholder="dataset name" initialValue={dirName} onChange={this._updateDirName} />
                 </div>
             );
         }
