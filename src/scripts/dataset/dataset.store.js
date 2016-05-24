@@ -896,11 +896,14 @@ let datasetStore = Reflux.createStore({
                 // add job counts
                 for (let snapshot of snapshots) {
                     snapshot.analysisCount = 0;
-                    for (let job of jobs) {
-                        if (job.snapshotId == snapshot._id) {
-                            snapshot.analysisCount++;
+                    if (jobs && !jobs.error) {
+                        for (let job of jobs) {
+                            if (job.snapshotId == snapshot._id) {
+                                snapshot.analysisCount++;
+                            }
                         }
                     }
+
                 }
 
                 // add draft is available
