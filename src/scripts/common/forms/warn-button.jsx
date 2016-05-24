@@ -70,7 +70,11 @@ export default class WarnButton extends React.Component {
         );
 
         let button = showAction ? viewAction : hideAction;
-        let loading = <span className="warning-loading"><i className="fa fa-spin fa-circle-o-notch"></i></span>;
+        let loading =  (
+            <span className="btn-warn-load" role="group" >
+                <span className="warning-loading"><i className="fa fa-spin fa-circle-o-notch"></i></span>
+            </span>
+        );
 
         if (this.props.tooltip) {
             return (
