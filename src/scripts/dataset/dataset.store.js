@@ -591,17 +591,48 @@ let datasetStore = Reflux.createStore({
                 message: message,
                 action: () => {
                     this.updateDirectoryState(container._id, {loading: true});
-                    scitran.updateFile(container.containerType, container._id, file, () => {
-                        let children = container.children;
-                        children.unshift({
-                            filename: file.name,
-                            name: file.name,
-                            parentContainer: container.containerType,
-                            parentId: container._id
+                    if (file.name === 'dataset_description.json') {
+                        files.read(file, (contents) => {
+                            let description = JSON.parse(contents);
+                            let authors = [];
+                            if (description.hasOwnProperty('Authors')) {
+                                for (let i = 0; i < description.Authors.length; i++) {
+                                    let author = description.Authors[i];
+                                    authors.push({name: author, ORCIDID: ''});
+                                }
+                            }
+                            scitran.updateProject(container._id, {metadata: {authors}}, () => {
+                                file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
+                                scitran.updateFile(container.containerType, container._id, file, () => {
+                                    description.Authors = authors;
+                                    let dataset = this.data.dataset;
+                                    dataset.description = description;
+                                    this.update({dataset});
+                                    let children = container.children;
+                                    children.unshift({
+                                        filename: file.name,
+                                        name: file.name,
+                                        parentContainer: container.containerType,
+                                        parentId: container._id
+                                    });
+                                    this.updateDirectoryState(container._id, {children: children, loading: false});
+                                    this.revalidate();
+                                });
+                            });
                         });
-                        this.updateDirectoryState(container._id, {children: children, loading: false});
-                        this.revalidate();
-                    });
+                    } else {
+                        scitran.updateFile(container.containerType, container._id, file, () => {
+                            let children = container.children;
+                            children.unshift({
+                                filename: file.name,
+                                name: file.name,
+                                parentContainer: container.containerType,
+                                parentId: container._id
+                            });
+                            this.updateDirectoryState(container._id, {children: children, loading: false});
+                            this.revalidate();
+                        });
+                    }
                 }
             });
         }
@@ -639,7 +670,7 @@ let datasetStore = Reflux.createStore({
                         };
                         scitran.updateProject(file.parentId, {metadata: {authors: []}}, () => {});
                     }
-                    this.update(dataset, datasetTree);
+                    this.update({dataset, datasetTree});
                     this.revalidate();
                 });
             }
