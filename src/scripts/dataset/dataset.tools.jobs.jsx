@@ -187,7 +187,9 @@ export default class JobMenu extends React.Component {
     _parameters() {
         let parameters = this.state.parameters.map((parameter) => {
             let input;
-            if (parameter.type) {
+            if (parameter.type === 'string') {
+                input = <input className="form-control" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
+            } else {
                 input = (
                     <span>
                         <input className="form-control checkbox"
@@ -198,8 +200,6 @@ export default class JobMenu extends React.Component {
                         <label htmlFor={'check-' + parameter.id} className="checkmark"><span></span></label>
                     </span>
                 );
-            } else {
-                input = <input className="form-control" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
             }
             return (
                 <div key={parameter.id}>
