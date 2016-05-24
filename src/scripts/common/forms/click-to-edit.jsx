@@ -31,8 +31,7 @@ let ClickToEdit = React.createClass({
         // display edit when error is triggered
         if (nextProps.error) {
             this.setState({edit: true});
-        }
-        if (this.props.type === 'authors') {
+        } else {
             this.setState({value: nextProps.value});
         }
     },

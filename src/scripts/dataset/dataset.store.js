@@ -404,7 +404,7 @@ let datasetStore = Reflux.createStore({
     updateDescription(key, value, callback) {
         let dataset = this.data.dataset;
         let metadataIssues = this.data.metadataIssues;
-        let description = JSON.parse(JSON.stringify(dataset.description));
+        let description = dataset.description;
         description[key] = value;
         if (key !== 'Authors') {
             description.Authors = dataset.authors;
@@ -422,6 +422,7 @@ let datasetStore = Reflux.createStore({
      * the JSON description file.
      */
     saveDescription(description, callback) {
+        description = JSON.parse(JSON.stringify(description));
         let datasetId = this.data.dataset._id;
         scitran.updateProject(datasetId, {metadata: {authors: description.Authors}}, () => {
             let authors = [];
@@ -614,6 +615,7 @@ let datasetStore = Reflux.createStore({
         this.updateWarn({
             message: message,
             action: () => {
+                let dataset = this.data.dataset;
                 let datasetTree = this.data.datasetTree;
                 scitran.deleteFile(file.parentContainer, file.parentId, file.name, () => {
                     let match = files.findInTree(datasetTree, file.parentId);
@@ -624,7 +626,19 @@ let datasetStore = Reflux.createStore({
                         }
                     }
                     match.children = children;
-                    this.update(datasetTree);
+                    if (file.name === 'dataset_description.json') {
+                        dataset.description = {
+                            'Name': '',
+                            'License': '',
+                            'Authors': [],
+                            'Acknowledgements': '',
+                            'HowToAcknowledge': '',
+                            'Funding': '',
+                            'ReferencesAndLinks': '',
+                            'DatasetDOI': ''
+                        };
+                    }
+                    this.update(dataset, datasetTree);
                     this.revalidate();
                 });
             }
