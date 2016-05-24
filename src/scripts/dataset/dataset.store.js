@@ -591,7 +591,7 @@ let datasetStore = Reflux.createStore({
                 message: message,
                 action: () => {
                     this.updateDirectoryState(container._id, {loading: true});
-                    if (file.name === 'dataset_description.json') {
+                    if (file.name === 'dataset_description.json' && container.containerType === "projects") {
                         files.read(file, (contents) => {
                             let description = JSON.parse(contents);
                             let authors = [];
@@ -657,7 +657,7 @@ let datasetStore = Reflux.createStore({
                         }
                     }
                     match.children = children;
-                    if (file.name === 'dataset_description.json') {
+                    if (file.name === 'dataset_description.json' && file.parentContainer === 'projects') {
                         dataset.description = {
                             'Name': '',
                             'License': '',
@@ -696,7 +696,7 @@ let datasetStore = Reflux.createStore({
                 message: message,
                 action: () => {
                     this.updateFileState(item, {error: null, loading: true});
-                    if (file.name === 'dataset_description.json') {
+                    if (file.name === 'dataset_description.json' && level === 'projects') {
                         files.read(file, (contents) => {
                             let description = JSON.parse(contents);
                             let authors = [];
