@@ -416,6 +416,37 @@ let datasetStore = Reflux.createStore({
     },
 
     /**
+     * Update Description File
+     *
+     * Helper method to make necessary state and metadata
+     * changes after a description file is uploaded,
+     * deleted or added.
+     */
+    updateDescriptionFile(file, projectId, callback) {
+        files.read(file, (contents) => {
+            let description = JSON.parse(contents);
+            let authors = [];
+            if (description.hasOwnProperty('Authors')) {
+                for (let i = 0; i < description.Authors.length; i++) {
+                    let author = description.Authors[i];
+                    authors.push({name: author, ORCIDID: ''});
+                }
+            }
+            scitran.updateProject(projectId, {metadata: {authors}}, () => {
+                file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
+                scitran.updateFile('projects', projectId, file, () => {
+                    description.Authors = authors;
+                    let dataset = this.data.dataset;
+                    dataset.description = description;
+                    this.update({dataset});
+                    this.revalidate();
+                    callback();
+                });
+            });
+        });
+    },
+
+    /**
      * Save Description
      *
      * Takes a description object and upserts
@@ -591,34 +622,16 @@ let datasetStore = Reflux.createStore({
                 message: message,
                 action: () => {
                     this.updateDirectoryState(container._id, {loading: true});
-                    if (file.name === 'dataset_description.json' && container.containerType === "projects") {
-                        files.read(file, (contents) => {
-                            let description = JSON.parse(contents);
-                            let authors = [];
-                            if (description.hasOwnProperty('Authors')) {
-                                for (let i = 0; i < description.Authors.length; i++) {
-                                    let author = description.Authors[i];
-                                    authors.push({name: author, ORCIDID: ''});
-                                }
-                            }
-                            scitran.updateProject(container._id, {metadata: {authors}}, () => {
-                                file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
-                                scitran.updateFile(container.containerType, container._id, file, () => {
-                                    description.Authors = authors;
-                                    let dataset = this.data.dataset;
-                                    dataset.description = description;
-                                    this.update({dataset});
-                                    let children = container.children;
-                                    children.unshift({
-                                        filename: file.name,
-                                        name: file.name,
-                                        parentContainer: container.containerType,
-                                        parentId: container._id
-                                    });
-                                    this.updateDirectoryState(container._id, {children: children, loading: false});
-                                    this.revalidate();
-                                });
+                    if (file.name === 'dataset_description.json' && container.containerType === 'projects') {
+                        this.updateDescriptionFile(file, container._id, () => {
+                            let children = container.children;
+                            children.unshift({
+                                filename: file.name,
+                                name: file.name,
+                                parentContainer: container.containerType,
+                                parentId: container._id
                             });
+                            this.updateDirectoryState(container._id, {children: children, loading: false});
                         });
                     } else {
                         scitran.updateFile(container.containerType, container._id, file, () => {
@@ -697,26 +710,8 @@ let datasetStore = Reflux.createStore({
                 action: () => {
                     this.updateFileState(item, {error: null, loading: true});
                     if (file.name === 'dataset_description.json' && level === 'projects') {
-                        files.read(file, (contents) => {
-                            let description = JSON.parse(contents);
-                            let authors = [];
-                            if (description.hasOwnProperty('Authors')) {
-                                for (let i = 0; i < description.Authors.length; i++) {
-                                    let author = description.Authors[i];
-                                    authors.push({name: author, ORCIDID: ''});
-                                }
-                            }
-                            scitran.updateProject(id, {metadata: {authors}}, () => {
-                                file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
-                                scitran.updateFile(level, id, file, () => {
-                                    description.Authors = authors;
-                                    let dataset = this.data.dataset;
-                                    dataset.description = description;
-                                    this.update({dataset});
-                                    this.updateFileState(item, {loading: false});
-                                    this.revalidate();
-                                });
-                            });
+                        this.updateDescriptionFile(file, id, () => {
+                            this.updateFileState(item, {loading: false});
                         });
                     } else {
                         scitran.updateFile(level, id, file, () => {
