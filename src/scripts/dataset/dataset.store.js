@@ -353,7 +353,7 @@ let datasetStore = Reflux.createStore({
      * Update Status
      */
     updateStatus(projectId, updates) {
-        if (projectId === this.data.dataset._id) {
+        if (this.data.dataset && this.data.dataset._id === projectId) {
             let dataset = this.data.dataset;
             for (let prop in updates) {
                 if (dataset.status.hasOwnProperty(prop)) {

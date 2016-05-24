@@ -1,14 +1,14 @@
 // dependencies ------------------------------------------------------------------
 
-import React            from 'react';
-import Reflux           from 'reflux';
-import {Link}           from 'react-router';
-import Usermenu         from './navbar.usermenu.jsx';
-import UploadBtn        from './navbar.upload-button.jsx';
-import userStore        from '../user/user.store.js';
-import userActions      from '../user/user.actions.js';
-import Alert            from '../notification/notification.alert.jsx';
-import {CollapsibleNav} from 'react-bootstrap';
+import React       from 'react';
+import Reflux      from 'reflux';
+import {Link}      from 'react-router';
+import Usermenu    from './navbar.usermenu.jsx';
+import UploadBtn   from './navbar.upload-button.jsx';
+import userStore   from '../user/user.store.js';
+import userActions from '../user/user.actions.js';
+import Alert       from '../notification/notification.alert.jsx';
+import {Navbar}    from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
 
@@ -69,15 +69,15 @@ let BSNavbar = React.createClass({
                     <a className="nav-link" href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><span className="link-name">contact</span></a>
                 </li>
                 <li className="link-admin">
-                    {this.state.scitran && this.state.scitran.root ? adminLink : null }
+                    {this.state.scitran && this.state.scitran.root ? adminLink : null}
                 </li>
                 <li className="link-dashboard">
                     {googleProfile ? <UploadBtn /> : null}
                 </li>
                  <li>
-                     <CollapsibleNav eventKey={0}>
-                            {isLoggedIn && !loading ? this._userMenu(googleProfile) : this._signIn(loading, routes)}
-                    </CollapsibleNav>
+                     <Navbar.Collapse eventKey={0}>
+                            {isLoggedIn && !loading ? <Usermenu profile={googleProfile}/> : this._signIn(loading, routes)}
+                    </Navbar.Collapse>
                 </li>
             </ul>
         );
@@ -106,14 +106,6 @@ let BSNavbar = React.createClass({
                         <span> Sign in</span>
                     </button>
                 </div>
-            );
-        }
-    },
-
-    _userMenu(googleProfile) {
-        if (googleProfile) {
-            return (
-                <Usermenu />
             );
         }
     }
