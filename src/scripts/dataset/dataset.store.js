@@ -404,7 +404,7 @@ let datasetStore = Reflux.createStore({
     updateDescription(key, value, callback) {
         let dataset = this.data.dataset;
         let metadataIssues = this.data.metadataIssues;
-        let description = dataset.description;
+        let description = JSON.parse(JSON.stringify(dataset.description));
         description[key] = value;
         if (key !== 'Authors') {
             description.Authors = dataset.authors;
@@ -650,10 +650,34 @@ let datasetStore = Reflux.createStore({
                 message: message,
                 action: () => {
                     this.updateFileState(item, {error: null, loading: true});
-                    scitran.updateFile(level, id, file, () => {
-                        this.updateFileState(item, {loading: false});
-                        this.revalidate();
-                    });
+                    if (file.name === 'dataset_description.json') {
+                        files.read(file, (contents) => {
+                            let description = JSON.parse(contents);
+                            let authors = [];
+                            if (description.hasOwnProperty('Authors')) {
+                                for (let i = 0; i < description.Authors.length; i++) {
+                                    let author = description.Authors[i];
+                                    authors.push({name: author, ORCIDID: ''});
+                                }
+                            }
+                            scitran.updateProject(id, {metadata: {authors}}, () => {
+                                file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
+                                scitran.updateFile(level, id, file, () => {
+                                    description.Authors = authors;
+                                    let dataset = this.data.dataset;
+                                    dataset.description = description;
+                                    this.update({dataset});
+                                    this.updateFileState(item, {loading: false});
+                                    this.revalidate();
+                                });
+                            });
+                        });
+                    } else {
+                        scitran.updateFile(level, id, file, () => {
+                            this.updateFileState(item, {loading: false});
+                            this.revalidate();
+                        });
+                    }
                 }
             });
         }

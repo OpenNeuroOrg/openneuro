@@ -32,6 +32,9 @@ let ClickToEdit = React.createClass({
         if (nextProps.error) {
             this.setState({edit: true});
         }
+        if (this.props.type === 'authors') {
+            this.setState({value: nextProps.value});
+        }
     },
 
     propTypes: {
