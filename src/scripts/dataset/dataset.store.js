@@ -637,6 +637,7 @@ let datasetStore = Reflux.createStore({
                             'ReferencesAndLinks': '',
                             'DatasetDOI': ''
                         };
+                        scitran.updateProject(file.parentId, {metadata: {authors: []}}, () => {});
                     }
                     this.update(dataset, datasetTree);
                     this.revalidate();
