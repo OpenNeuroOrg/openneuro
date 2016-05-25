@@ -237,6 +237,7 @@ let UploadStore = Reflux.createStore({
             self.upload(fileTree);
         }
     },
+
     /**
      * Upload
      *
@@ -259,7 +260,7 @@ let UploadStore = Reflux.createStore({
         let datasetsUpdated = false;
         let validation = {
             errors: this.data.errors,
-            warnings: this.data.warnings,
+            warnings: this.data.warnings
         };
 
         window.onbeforeunload = () => {
@@ -291,7 +292,7 @@ let UploadStore = Reflux.createStore({
      * complete alert.
      */
     uploadComplete (projectId) {
-        let message = <span><a href={'#/datasets/' + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>;
+        let message = <span><a href={'/datasets/' + projectId}>{this.data.dirName}</a> has been added and saved to your dashboard.</span>;
         let fileSelect = this.data.refs.fileSelect;
         if (fileSelect) {fileSelect.value = null;} // clear file input
 
