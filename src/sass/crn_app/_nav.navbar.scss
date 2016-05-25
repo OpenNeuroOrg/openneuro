@@ -21,23 +21,28 @@
     z-index: 1300;
 
     .navbar-nav {
-        > li > .link {
-            border: 1px solid transparent;
-            padding: 10px;
-            color: $misty;
-            margin: 17px 0;
-            border-radius: 2px;
-            transition: border .5s ease;
-            margin-left: 10px;
-
-            &:hover {
-                color: $stone;
-                border-color: $stone;
+        > li {
+            > .navbar-collapse {
+                padding: 0px;
             }
-
-            &.active {
+            > .link {
+                border: 1px solid transparent;
+                padding: 10px;
                 color: $misty;
-                border-color: $misty;
+                margin: 17px 0;
+                border-radius: 2px;
+                transition: border .5s ease;
+                margin-left: 10px;
+
+                &:hover {
+                    color: $stone;
+                    border-color: $stone;
+                }
+
+                &.active {
+                    color: $misty;
+                    border-color: $misty;
+                }
             }
         }
 
@@ -153,10 +158,10 @@
             }
 
 
-            .user-menu {
+            .dropdown {
                 position: initial;
 
-                &.btn-null {
+                &.btn-group {
                     .btn {
                         background: $transparent;
                         box-shadow: none;

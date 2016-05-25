@@ -435,6 +435,16 @@ h6 {
         background: $brand-success;
         &:hover {background: darken($brand-success, 10%);}
     }
+
+}
+
+.btn-warn-load {
+    line-height: 15px;
+    display: inline-block;
+    padding: 5px 8px;
+    margin: 7px 5px 5px 0;
+    text-align: center;
+    min-width: 70px;
 }
 
 .filetree-editfile {
