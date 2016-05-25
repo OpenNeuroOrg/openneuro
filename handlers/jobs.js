@@ -361,7 +361,7 @@ function submitJob (job, callback) {
         archiveSystem:     'openfmri-storage',
         archivePath:       'archive',
         inputs: {
-            bidsFile: config.agave.storage + job.datasetHash
+            bidsFolder: config.agave.storage + job.datasetHash
         },
         parameters: job.parameters ? job.parameters : {},
         notifications: [
