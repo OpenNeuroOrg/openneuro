@@ -260,7 +260,7 @@ let UploadStore = Reflux.createStore({
         let datasetsUpdated = false;
         let validation = {
             errors: this.data.errors,
-            warnings: this.data.warnings,
+            warnings: this.data.warnings
         };
 
         window.onbeforeunload = () => {
