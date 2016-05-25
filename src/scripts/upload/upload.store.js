@@ -237,6 +237,7 @@ let UploadStore = Reflux.createStore({
             self.upload(fileTree);
         }
     },
+
     /**
      * Upload
      *
