@@ -152,25 +152,38 @@ export default {
                 for (let permission of resp.body.permissions) {
                     if (permission._id == user) {hasAccess = true; break;}
                 }
-                if (!hasAccess) {
-                    let error = new Error('You do not have access to view jobs for this dataset.');
-                    error.http_code = 403;
-                    return next(error);
-                }
             }
+
 
             let query = snapshot ? {snapshotId: datasetId} : {datasetId};
             c.jobs.find(query).toArray((err, jobs) => {
                 if (err) {return next(err);}
-
-                // remove user ID on public requests
-                if (!user) {
-                    for (let job of jobs) {
-                        delete job.userId;
+                if (snapshot) {
+                    if (!hasAccess) {
+                        let error = new Error('You do not have access to view jobs for this dataset.');
+                        error.http_code = 403;
+                        return next(error);
                     }
+                    // remove user ID on public requests
+                    if (!user) {
+                        for (let job of jobs) {delete job.userId;}
+                    }
+                    res.send(jobs);
+                } else {
+                    scitran.getProjectSnapshots(datasetId, (err, resp) => {
+                        let snapshots = resp.body;
+                        let filteredJobs = [];
+                        for (let job of jobs) {
+                            for (let snapshot of snapshots) {
+                                if ((snapshot.public || hasAccess) && (snapshot._id === job.snapshotId)) {
+                                    if (!user) {delete job.userId;}
+                                    filteredJobs.push(job);
+                                }
+                            }
+                        }
+                        res.send(filteredJobs);
+                    });
                 }
-
-                res.send(jobs);
             });
 
         }, {snapshot});
