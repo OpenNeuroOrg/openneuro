@@ -12,6 +12,15 @@ export default {
 // Users -----------------------------------------------------------------------------------
 
     /**
+     * Verify User
+     *
+     * A proxy of scitran verify user endpoint.
+     */
+    verifyUser (callback) {
+        request.get(config.crn.url + 'users/self', {}, callback);
+    },
+
+    /**
      * Create User
      *
      */
