@@ -13,6 +13,17 @@ import files   from './files';
 export default {
 
     /**
+     * Verify User
+     *
+     * Checks if the currently logged in users
+     * in in the scitran system and returns a
+     * user object.
+     */
+    verifyUser (req, res) {
+        request.getProxy(config.scitran.url + 'users/self', {headers: req.headers, status: 200}, res);
+    },
+
+    /**
      * Is Super User
      */
     isSuperUser(accessToken, callback) {
