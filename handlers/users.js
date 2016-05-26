@@ -45,9 +45,7 @@ export default {
 			if (err) {return next(err);}
 			c.blacklist.findOne({_id: user._id}).then((item) => {
 				if (item) {
-					let error = new Error("This user email has been blacklisted and cannot be given an account");
-					error.http_code = 403;
-					return next(error);
+					res.send({status: 403, error: "This user email has been blacklisted and cannot be given an account"});
 				} else {
 					scitran.createUser(user, (err, resp) => {
 						if (!err) {res.send(resp);}
