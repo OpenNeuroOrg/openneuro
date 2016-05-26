@@ -27,7 +27,8 @@ let models = {
         batchQueue:        'string, required',
         memoryPerNode:     'number, required',
         nodeCount:         'number, required',
-        processorsPerNode: 'number, required'
+        processorsPerNode: 'number, required',
+        input:             'string',
     }
 };
 
@@ -373,9 +374,7 @@ function submitJob (job, callback) {
         archive:           true,
         archiveSystem:     'openfmri-storage',
         archivePath:       'archive',
-        inputs: {
-            bidsFolder: config.agave.storage + job.datasetHash
-        },
+        inputs: {},
         parameters: job.parameters ? job.parameters : {},
         notifications: [
             {
@@ -385,6 +384,10 @@ function submitJob (job, callback) {
             }
         ]
     };
+
+    // set input
+    let inputKey = job.input ? job.input : 'bidsFolder';
+    body.inputs[inputKey] = config.agave.storage + job.datasetHash;
 
     // submit job
     agave.createJob(body, (err, resp) => {
