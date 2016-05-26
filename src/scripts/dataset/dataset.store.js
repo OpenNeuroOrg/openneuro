@@ -845,7 +845,8 @@ let datasetStore = Reflux.createStore({
             batchQueue:        app.defaultQueue,
             memoryPerNode:     app.defaultMemoryPerNode,
             nodeCount:         app.defaultNodeCount,
-            processorsPerNode: app.defaultProcessorsPerNode
+            processorsPerNode: app.defaultProcessorsPerNode,
+            input:             app.inputs[0].id
         }, (err, res) => {
             callback(err, res);
             if (!err) {
