@@ -97,7 +97,7 @@ let UserStore = Reflux.createStore({
                 this.update({token: token});
                 hello('google').api('/me').then((profile) => {
                     this.update({google: profile});
-                    scitran.verifyUser((err, res) => {
+                    crn.verifyUser((err, res) => {
                         window.localStorage.scitranUser = JSON.stringify(res.body);
                         this.update({scitran: res.body});
                     });
@@ -126,15 +126,15 @@ let UserStore = Reflux.createStore({
             }
             this.update({token: res.authResponse.access_token});
             hello(res.network).api('/me').then((profile) => {
-                scitran.verifyUser((err, res) => {
-                    if (res.status === 403) {
+                crn.verifyUser((err, res) => {
+                    if (res.body.code === 403) {
                         let user = {
                             _id: profile.email,
                             firstname: profile.first_name,
                             lastname: profile.last_name
                         };
-                        crn.createUser(user, (err) => {
-                            if (err) {
+                        crn.createUser(user, (err, res) => {
+                            if (res.body.status === 403) {
                                 this.clearAuth();
                                 let message = <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>;
                                 if (!transition) {
@@ -147,11 +147,11 @@ let UserStore = Reflux.createStore({
                                 }
                                 return;
                             }
-                            scitran.verifyUser((err, res) => {
+                            crn.verifyUser((err, res) => {
                                 this.handleSignIn(transition, res.body, profile);
                             });
                         });
-                    } else if (res.status !== 200) {
+                    } else if (!res.body._id) {
                         this.clearAuth();
                         let message = 'We are currently experiencing issues. Please try again later.';
                         if (!transition) {

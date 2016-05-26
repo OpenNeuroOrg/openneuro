@@ -1,17 +1,13 @@
 // dependencies ------------------------------------------------------------------
 
 import React            from 'react';
-import Reflux           from 'reflux';
 import Actions          from '../user/user.actions.js';
-import userStore        from '../user/user.store.js';
 import uploadStore      from '../upload/upload.store.js';
 import {DropdownButton} from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
 
 let Usermenu = React.createClass({
-
-    mixins: [Reflux.connect(userStore)],
 
 // life cycle methods ------------------------------------------------------------
 
@@ -24,7 +20,7 @@ let Usermenu = React.createClass({
             username = profile.displayName;
 
         if (profile.picture) {
-            thumbnail = this.state.google.picture.replace('sz=50', 'sz=200');
+            thumbnail = profile.picture.replace('sz=50', 'sz=200');
         }
 
         let gear = (<i className="fa fa-gear" />);
