@@ -72,6 +72,15 @@ export default {
     },
 
     /**
+     * Get Project Snapshots
+     */
+    getProjectSnapshots (projectId, callback) {
+        request.get(config.scitran.url + 'projects/' + projectId + '/snapshots', {
+            query: {public: true}
+        }, callback);
+    },
+
+    /**
      * Update Project
      *
      */
