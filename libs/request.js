@@ -26,7 +26,9 @@ export default {
      */
     getProxy(url, options, res) {
         handleRequest(url, options, (req) => {
-            request.get(req).pipe(res);
+            request.get(req).on('response', (resp) => {
+                if (options.status) {resp.statusCode = options.status;}
+            }).pipe(res);
         });
     },
 
@@ -53,7 +55,6 @@ export default {
             });
         });
     }
-
 
 };
 

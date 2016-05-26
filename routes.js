@@ -5,11 +5,18 @@ import users      from './handlers/users';
 import jobs       from './handlers/jobs';
 import validation from './handlers/validation';
 import auth       from './libs/auth';
+import scitran    from './libs/scitran';
 
 let routes = [
 
 	// users ---------------------------------------
 
+	{
+		method: 'get',
+		url: '/users/self',
+		middleware: [],
+		handler: scitran.verifyUser
+	},
 	{
 		method: 'post',
 		url: '/users',

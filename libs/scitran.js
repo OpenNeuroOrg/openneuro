@@ -13,6 +13,17 @@ import files   from './files';
 export default {
 
     /**
+     * Verify User
+     *
+     * Checks if the currently logged in users
+     * in in the scitran system and returns a
+     * user object.
+     */
+    verifyUser (req, res) {
+        request.getProxy(config.scitran.url + 'users/self', {headers: req.headers, status: 200}, res);
+    },
+
+    /**
      * Is Super User
      */
     isSuperUser(accessToken, callback) {
@@ -69,6 +80,15 @@ export default {
     getProject (projectId, callback, options) {
         let modifier = options && options.snapshot ? 'snapshots/' : '';
         request.get(config.scitran.url + modifier + 'projects/' + projectId, {}, callback);
+    },
+
+    /**
+     * Get Project Snapshots
+     */
+    getProjectSnapshots (projectId, callback) {
+        request.get(config.scitran.url + 'projects/' + projectId + '/snapshots', {
+            query: {public: true}
+        }, callback);
     },
 
     /**
