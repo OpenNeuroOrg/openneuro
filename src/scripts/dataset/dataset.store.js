@@ -115,13 +115,14 @@ let datasetStore = Reflux.createStore({
             if (res.status === 404 || res.status === 403) {
                 this.update({status: res.status, dataset: null, loading: false, snapshot: snapshot});
             } else {
-                let originalId = res.original ? res.original : datasetId;
+                let dataset = res;
+                let originalId = dataset.original ? dataset.original : datasetId;
                 this.loadJobs(datasetId, snapshot, originalId, (jobs) => {
-                    this.loadSnapshots(originalId, jobs, () => {
+                    this.loadSnapshots(dataset, jobs, () => {
                         let selectedSnapshot = this.data.selectedSnapshot;
                         // don't update data if the user has selected another version during loading
                         if (!selectedSnapshot || selectedSnapshot === datasetId) {
-                            this.update({dataset: res, loading: false, snapshot: snapshot});
+                            this.update({dataset: dataset, loading: false, snapshot: snapshot});
                         }
                     });
                 });
@@ -844,13 +845,14 @@ let datasetStore = Reflux.createStore({
             batchQueue:        app.defaultQueue,
             memoryPerNode:     app.defaultMemoryPerNode,
             nodeCount:         app.defaultNodeCount,
-            processorsPerNode: app.defaultProcessorsPerNode
+            processorsPerNode: app.defaultProcessorsPerNode,
+            input:             app.inputs[0].id
         }, (err, res) => {
             callback(err, res);
             if (!err) {
                 if (snapshotId == this.data.dataset._id) {
                     this.loadJobs(snapshotId, this.data.snapshot, datasetId, (jobs) => {
-                        this.loadSnapshots(datasetId, jobs);
+                        this.loadSnapshots(this.data.dataset, jobs);
                     });
                 }
             }
@@ -860,7 +862,7 @@ let datasetStore = Reflux.createStore({
     retryJob(jobId, callback) {
         crn.retryJob(jobId, () => {
             this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, (jobs) => {
-                this.loadSnapshots(this.data.dataset.original, jobs);
+                this.loadSnapshots(this.data.dataset, jobs);
                 callback();
             });
         });
@@ -937,7 +939,7 @@ let datasetStore = Reflux.createStore({
                         if (transition) {
                             router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
                         }
-                        this.loadSnapshots(datasetId, [], () => {
+                        this.loadSnapshots(this.data.dataset, [], () => {
                             if (callback){callback(res.body._id);}
                         });
                     });
@@ -946,41 +948,40 @@ let datasetStore = Reflux.createStore({
         });
     },
 
-    loadSnapshots(datasetId, jobs, callback) {
+    loadSnapshots(dataset, jobs, callback) {
+        let datasetId = dataset.original ? dataset.original : dataset._id;
         scitran.getProjectSnapshots(datasetId, (err, res) => {
             let snapshots = !err && res.body ? res.body : [];
-            scitran.getProject(datasetId, (res1) => {
 
-                // sort snapshots
-                snapshots.sort((a, b) => {
-                    if      (a.snapshot_version < b.snapshot_version) {return 1;}
-                    else if (a.snapshot_version > b.snapshot_version) {return -1;}
-                    else {return 0;}
-                });
+             // sort snapshots
+            snapshots.sort((a, b) => {
+                if      (a.snapshot_version < b.snapshot_version) {return 1;}
+                else if (a.snapshot_version > b.snapshot_version) {return -1;}
+                else {return 0;}
+            });
 
-                // add job counts
-                for (let snapshot of snapshots) {
-                    snapshot.analysisCount = 0;
-                    if (jobs && !jobs.error) {
-                        for (let job of jobs) {
-                            if (job.snapshotId == snapshot._id) {
-                                snapshot.analysisCount++;
-                            }
+            // add job counts
+            for (let snapshot of snapshots) {
+                snapshot.analysisCount = 0;
+                if (jobs && !jobs.error) {
+                    for (let job of jobs) {
+                        if (job.snapshotId == snapshot._id) {
+                            snapshot.analysisCount++;
                         }
                     }
-
                 }
 
-                // add draft is available
-                if (res1.statusCode !== 404 && res1.statusCode !== 403) {
-                    snapshots.unshift({
-                        isOriginal: true,
-                        _id: datasetId
-                    });
-                }
-                this.update({snapshots: snapshots});
-                if (callback) {callback();}
-            });
+            }
+
+            // add draft is available
+            if (dataset && dataset.access !== null) {
+                snapshots.unshift({
+                    isOriginal: true,
+                    _id: datasetId
+                });
+            }
+            this.update({snapshots: snapshots});
+            if (callback) {callback();}
         });
     },
 
