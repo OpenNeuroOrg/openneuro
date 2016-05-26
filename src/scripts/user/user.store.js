@@ -133,8 +133,8 @@ let UserStore = Reflux.createStore({
                             firstname: profile.first_name,
                             lastname: profile.last_name
                         };
-                        crn.createUser(user, (err) => {
-                            if (err) {
+                        crn.createUser(user, (err, res) => {
+                            if (res.body.status === 403) {
                                 this.clearAuth();
                                 let message = <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>;
                                 if (!transition) {
