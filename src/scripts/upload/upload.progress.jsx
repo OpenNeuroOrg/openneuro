@@ -11,16 +11,18 @@ export default class UploadProgress extends React.Component {
 
     render () {
         // resume
-        let rCompleted = this.props.resume.completed;
-        let rTotal     = this.props.resume.total;
+        let resume     = this.props.resume;
+        let rCompleted = resume.completed;
+        let rTotal     = resume.total;
         let rProgress  = rTotal > 0 ? Math.floor(rCompleted / rTotal * 100) : 0;
 
         // upload
-        let uCompleted = this.props.upload.completed;
-        let uTotal     = this.props.upload.total;
+        let upload     = this.props.upload;
+        let uCompleted = upload.completed;
+        let uTotal     = upload.total;
         if (this.props.resumeStart) {
             let resumeStart = this.props.resumeStart;
-            rProgress = rProgress * (resumeStart / uTotal);
+            rProgress  = rProgress * (resumeStart / uTotal);
             uCompleted = uCompleted - resumeStart;
             uTotal     = uTotal - resumeStart;
         }
@@ -33,7 +35,7 @@ export default class UploadProgress extends React.Component {
                     <ProgressBar active bsStyle="warning" now={rProgress} key={1} />
                     <ProgressBar active bsStyle="success" now={uProgress} key={2}/>
                 </ProgressBar>
-                {this._currentFiles(this.props.upload.currentFiles, this.props.minimal)}
+                {this._currentFiles(upload.currentFiles, this.props.minimal)}
             </div>
         );
     }
@@ -71,10 +73,17 @@ export default class UploadProgress extends React.Component {
 }
 
 UploadProgress.propTypes = {
-    progress: React.PropTypes.object,
-    name:   React.PropTypes.string
+    upload:      React.PropTypes.object,
+    resume:      React.PropTypes.object,
+    resumeStart: React.PropTypes.number,
+    name:        React.PropTypes.string,
+    minimal:     React.PropTypes.bool
 };
 
 UploadProgress.Props = {
-    progress: {}
+    upload:      {},
+    resume:      {},
+    resumeStart: 0,
+    name:        '',
+    minimal:     false
 };
