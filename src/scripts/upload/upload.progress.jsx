@@ -48,7 +48,7 @@ export default class UploadProgress extends React.Component {
                         {file}
                         <span className="one">.</span>
                         <span className="two">.</span>
-                        <span className="three">.</span>​
+                        <span className="three">.</span>
                     </div>
                 );
             });
