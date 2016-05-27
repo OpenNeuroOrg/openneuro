@@ -10,11 +10,23 @@ export default class UploadProgress extends React.Component {
 // life cycle events ------------------------------------------------------
 
     render () {
-        let completed = this.props.progress.completed;
-        let total     = this.props.progress.total;
-        let progress  = total > 0 ? Math.floor(completed / total * 100) : 0;
+        // resume
+        let rCompleted = this.props.resume.completed;
+        let rTotal     = this.props.resume.total;
+        let rProgress  = rTotal > 0 ? Math.floor(rCompleted / rTotal * 100) : 0;
 
-        let currentFiles = this.props.progress.currentFiles.map(function (file, index) {
+        // upload
+        let uCompleted = this.props.upload.completed;
+        let uTotal     = this.props.upload.total;
+        if (this.props.resumeStart) {
+            let resumeStart = this.props.resumeStart;
+            rProgress = rProgress * (resumeStart / uTotal);
+            uCompleted = uCompleted - resumeStart;
+            uTotal     = uTotal - resumeStart;
+        }
+        let uProgress  = uTotal > 0 ? Math.floor(uCompleted / uTotal * 100) : 0;
+
+        let currentFiles = this.props.upload.currentFiles.map(function (file, index) {
             return (
                 <div className="ellipsis-animation" key={index}>
                     {file}
@@ -30,10 +42,13 @@ export default class UploadProgress extends React.Component {
                 <span className="upload-dirname">
                     <label><i className="folderIcon fa fa-folder-open" /></label>
                     {this.props.name}
-                    <span className="message fade-in"> {completed}/{total} files complete</span>
+                    <span className="message fade-in"> {rCompleted + uCompleted}/{rTotal + uTotal} files complete</span>
 
                 </span>
-                <ProgressBar active now={progress} />
+                <ProgressBar>
+                    <ProgressBar active bsStyle="warning" now={rProgress} key={1} />
+                    <ProgressBar active bsStyle="success" now={uProgress} key={2}/>
+                </ProgressBar>
                 <div className="uploadfiles-wrap">
                     {currentFiles}
                 </div>

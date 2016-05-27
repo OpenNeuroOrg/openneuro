@@ -101,7 +101,7 @@ let Upload = React.createClass({
             progress = (
                 <Tab eventKey={5} title={tabName}>
                     <div className={activePane}>
-                        <Progress progress={this.state.progress} name={this.state.dirName} />
+                        <Progress upload={this.state.progress} resume={this.state.resumeProgress} resumeStart={this.state.resumeStart} name={this.state.dirName} />
                     </div>
                 </Tab>
             );
