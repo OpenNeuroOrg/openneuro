@@ -1,12 +1,12 @@
 // dependencies ------------------------------------------------------------------
 
-import React         from 'react';
-import Reflux        from 'reflux';
-import Actions       from '../upload/upload.actions.js';
-import uploadStore   from '../upload/upload.store.js';
-import Upload        from '../upload/upload.jsx';
-import {ProgressBar,
-        Modal}       from 'react-bootstrap';
+import React       from 'react';
+import Reflux      from 'reflux';
+import Actions     from '../upload/upload.actions.js';
+import uploadStore from '../upload/upload.store.js';
+import Upload      from '../upload/upload.jsx';
+import {Modal}     from 'react-bootstrap';
+import Progress    from '../upload/upload.progress.jsx';
 
 // component setup ---------------------------------------------------------------
 
@@ -18,31 +18,10 @@ let UploadBtn = React.createClass({
 
     render: function () {
 
-        // resume
-        let rCompleted = this.state.resumeProgress.completed;
-        let rTotal     = this.state.resumeProgress.total;
-        let rProgress  = rTotal > 0 ? Math.floor(rCompleted / rTotal * 100) : 0;
-
-        // upload
-        let uCompleted = this.state.progress.completed;
-        let uTotal     = this.state.progress.total;
-        if (this.state.resumeStart) {
-            let resumeStart = this.state.resumeStart;
-            rProgress = rProgress * (resumeStart / uTotal);
-            uCompleted = uCompleted - resumeStart;
-            uTotal     = uTotal - resumeStart;
-        }
-        let uProgress  = uTotal > 0 ? Math.floor(uCompleted / uTotal * 100) : 0;
-
-
-
         let progress = (
             <a className="nav-link nl-upload nl-progress"  onClick={Actions.toggleModal}>
                 <span className="link-name">view details</span>
-                <ProgressBar>
-                    <ProgressBar active bsStyle="warning" now={rProgress} key={1} />
-                    <ProgressBar active bsStyle="success" now={uProgress} key={2}/>
-                </ProgressBar>
+                <Progress upload={this.state.progress} resume={this.state.resumeProgress} resumeStart={this.state.resumeStart} minimal={true} />
             </a>
         );
 
