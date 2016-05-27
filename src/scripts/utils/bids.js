@@ -198,14 +198,13 @@ export default  {
             progress(p);
             this.filterSessions(scitranSessions, 'subject', (subjects) => {
                 p.completed++;
+                p.completed += subjects.length;
                 progress(p);
                 dataset.containerType = 'projects';
                 dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
                 dataset.children = dataset.children.concat(subjects);
                 async.each(subjects, (subject, cb) => {
                     this.filterSessions(scitranSessions, subject._id, (sessions) => {
-                        p.completed++;
-                        progress(p);
                         subject.containerType = 'sessions';
                         subject.children = this.formatFiles(subject.children, subject._id, 'sessions');
                         subject.children = subject.children.concat(sessions);
