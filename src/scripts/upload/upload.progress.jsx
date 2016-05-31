@@ -31,7 +31,7 @@ export default class UploadProgress extends React.Component {
 
         return (
             <div className="upload-progress-block">
-                {this._progressText(this.props.name, this.props.upload.completed, uTotal, minimal)}
+                {this._progressText(this.props.name, this.props.upload, resume, minimal)}
                 <ProgressBar>
                     <ProgressBar active bsStyle="warning" now={rProgress} key={1} label={!minimal ? 'resuming'  : null} />
                     <ProgressBar active bsStyle="success" now={uProgress} key={2} label={!minimal ? 'uploading' : null} />
@@ -59,7 +59,9 @@ export default class UploadProgress extends React.Component {
         }
     }
 
-    _progressText(name, completed, total, minimal) {
+    _progressText(name, upload, resume, minimal) {
+        let completed = upload.completed > 0 ? upload.completed : resume.completed;
+        let total     = upload.total     > 0 ? upload.total     : resume.uploadTotal;
         if (!minimal) {
             return (
                 <span className="upload-dirname">
