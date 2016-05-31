@@ -70,6 +70,7 @@ export default {
      */
     upload (userId, fileTree, validation, summary, count, progress, error) {
         this.total = count;
+        this.completed = 0;
         this.currentProjectId = null;
         this.progressStart = (filename) => {
             this.currentFiles.push(filename);
