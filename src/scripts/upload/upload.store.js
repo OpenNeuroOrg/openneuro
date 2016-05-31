@@ -286,7 +286,7 @@ let UploadStore = Reflux.createStore({
         upload.upload(userStore.data.scitran._id, fileTree, validation, this.data.summary, count, (progress, projectId) => {
             projectId = projectId ? projectId : this.data.projectId;
             if (progress.type === 'resume') {
-                this.update({resumeProgress: progress});
+                this.update({resumeProgress: progress, projectId: projectId});
             } else {
                 let update = {progress: progress, uploading: true, projectId: projectId};
                 if (progress.resumeStart) {update['resumeStart'] = progress.resumeStart;}

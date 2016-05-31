@@ -105,7 +105,7 @@ export default {
                 }, {}, (resumeProgress) => {
                     resumeProgress.type = 'resume';
                     resumeProgress.uploadTotal = count;
-                    progress(resumeProgress);
+                    progress(resumeProgress, existingProject._id);
                 });
             } else {
                 let body = {
