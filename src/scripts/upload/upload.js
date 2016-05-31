@@ -3,8 +3,16 @@ import bids    from '../utils/bids';
 import uploads from '../utils/upload';
 import files   from '../utils/files';
 import config  from '../../../config';
+import diff    from './diff';
 
 export default {
+
+// progress --------------------------------------------------------------------------
+
+    /**
+     * Current Project Id
+     */
+    currentProjectId: null,
 
     /**
      * Current Files
@@ -14,9 +22,16 @@ export default {
     currentFiles: [],
 
     /**
-     * Current Project Id
+     * Total
      */
-    currentProjectId: null,
+    total: 0,
+
+    /**
+     * Completed
+     */
+    completed: 0,
+
+// upload ----------------------------------------------------------------------------
 
     /**
      * Handle Upload Response
@@ -54,21 +69,19 @@ export default {
      * folder upload request and an error callback.
      */
     upload (userId, fileTree, validation, summary, count, progress, error) {
+        this.total = count;
         this.completed = 0;
-        this.count = count;
+        this.error = error;
         this.currentProjectId = null;
         this.progressStart = (filename) => {
             this.currentFiles.push(filename);
-            progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles});
+            progress({type: 'upload', total: this.total, completed: this.completed, currentFiles: this.currentFiles});
         };
         this.progressEnd = (filename) => {
             let index = this.currentFiles.indexOf(filename);
             this.currentFiles.splice(index, 1);
             this.completed++;
-            progress({total: this.count, completed: this.completed, currentFiles: this.currentFiles}, this.currentProjectId);
-        };
-        this.error = (err, req) => {
-            if (error) {error(err, req);}
+            progress({type: 'upload', total: this.total, completed: this.completed, currentFiles: this.currentFiles}, this.currentProjectId);
         };
         let existingProject = null;
         scitran.getProjects({authenticate: true}, (projects) => {
@@ -84,8 +97,15 @@ export default {
                 this.currentProjectId = existingProject._id;
                 bids.getDatasetTree(existingProject, (oldDataset) => {
                     let newDataset = fileTree[0];
-                    this.progressEnd();
-                    this.resumeSubjects(newDataset.children, oldDataset[0].children, newDataset.name, this.currentProjectId);
+                    diff.datasets(newDataset.children, oldDataset[0].children, (subjectUploads, completedFiles) => {
+                        this.completed = this.completed + completedFiles.length + 1;
+                        progress({total: this.total, completed: this.completed, currentFiles: this.currentFiles, resumeStart: this.completed});
+                        this.uploadSubjects(newDataset.name, subjectUploads, this.currentProjectId);
+                    });
+                }, {}, (resumeProgress) => {
+                    resumeProgress.type = 'resume';
+                    resumeProgress.uploadTotal = count;
+                    progress(resumeProgress, existingProject._id);
                 });
             } else {
                 let body = {
@@ -109,17 +129,20 @@ export default {
      *
      */
     uploadSubjects (datasetName, subjects, projectId, validation, summary) {
-        let self = this;
-        self.currentProjectId = projectId;
+        this.currentProjectId = projectId;
         for (let subject of subjects) {
-            if (subject.children && subject.children.length > 0) {
-                self.progressStart(subject.name);
-                scitran.createSubject(projectId, subject.name, function (err, res) {
-                    self.handleUploadResponse(err, res, function () {
-                        let subjectId = res.body._id;
-                        self.uploadSessions(subject.children, projectId, subjectId);
+            if (subject.children) {
+                if (subject.ignore) {
+                    this.uploadSessions(subject.children, projectId, subject._id);
+                } else {
+                    this.progressStart(subject.name);
+                    scitran.createSubject(projectId, subject.name, (err, res) => {
+                        this.handleUploadResponse(err, res, () => {
+                            let subjectId = res.body._id;
+                            this.uploadSessions(subject.children, projectId, subjectId);
+                        });
                     });
-                });
+                }
             } else {
                 if (subject.name === 'dataset_description.json') {
                     files.read(subject, (contents) => {
@@ -134,38 +157,14 @@ export default {
                         }
                         scitran.updateProject(projectId, {metadata: {authors, validation, summary}}, () => {
                             let file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
-                            self.uploadFile('projects', projectId, file, 'project');
+                            this.uploadFile('projects', projectId, file, 'project');
                         });
                     });
 
                 } else {
-                    self.uploadFile('projects', projectId, subject, 'project');
+                    this.uploadFile('projects', projectId, subject, 'project');
                 }
             }
-        }
-    },
-
-    /**
-     * Resume Subjects
-     *
-     */
-    resumeSubjects (newSubjects, oldSubjects, datasetName, projectId) {
-        let subjectUploads = [];
-        for (let i = 0; i < newSubjects.length; i++) {
-            let newSubject = newSubjects[i];
-            let oldSubject = this.contains(oldSubjects, newSubject);
-            if (oldSubject) {
-                this.progressStart(newSubject.name);
-                this.progressEnd(newSubject.name);
-                if (newSubject.type === 'folder') {
-                    this.resumeSessions(newSubject.children, oldSubject.children, projectId, oldSubject._id);
-                }
-            } else {
-                subjectUploads.push(newSubject);
-            }
-        }
-        if (subjectUploads.length > 0) {
-            this.uploadSubjects(datasetName, subjectUploads, projectId);
         }
     },
 
@@ -174,42 +173,21 @@ export default {
      *
      */
     uploadSessions (sessions, projectId, subjectId) {
-        let self = this;
         for (let session of sessions) {
-            if (session.children && session.children.length > 0) {
-                self.progressStart(session.name);
-                scitran.createSession(projectId, subjectId, session.name, function (err, res) {
-                    self.handleUploadResponse(err, res, function () {
-                        self.uploadModalities(session.children, res.body._id);
+            if (session.children) {
+                if (session.ignore) {
+                    this.uploadModalities(session.children, session._id);
+                } else {
+                    this.progressStart(session.name);
+                    scitran.createSession(projectId, subjectId, session.name, (err, res) => {
+                        this.handleUploadResponse(err, res, () => {
+                            this.uploadModalities(session.children, res.body._id);
+                        });
                     });
-                });
-            } else {
-                self.uploadFile('sessions', subjectId, session, 'subject');
-            }
-        }
-    },
-
-    /**
-     * Resume Sessions
-     *
-     */
-    resumeSessions (newSessions, oldSessions, projectId, subjectId) {
-        let sessionUploads = [];
-        for (let i = 0; i < newSessions.length; i++) {
-            let newSession = newSessions[i];
-            let oldSession = this.contains(oldSessions, newSession);
-            if (oldSession) {
-                this.progressStart(newSession.name);
-                this.progressEnd(newSession.name);
-                if (newSession.type === 'folder') {
-                    this.resumeModalities(newSession.children, oldSession.children, oldSession._id);
                 }
             } else {
-                sessionUploads.push(newSession);
+                this.uploadFile('sessions', subjectId, session, 'subject');
             }
-        }
-        if (sessionUploads.length > 0) {
-            this.uploadSessions(sessionUploads, projectId, subjectId);
         }
     },
 
@@ -218,43 +196,22 @@ export default {
      *
      */
     uploadModalities (modalities, subjectId) {
-        let self = this;
         for (let modality of modalities) {
-            if (modality.children && modality.children.length > 0) {
-                self.progressStart(modality.name);
-                scitran.createModality(subjectId, modality.name, function (err, res) {
-                    self.handleUploadResponse(err, res, function () {
-                        let modalityId = res.body._id;
-                        self.uploadAcquisitions(modality.children, modalityId);
+            if (modality.children) {
+                if (modality.ignore) {
+                    this.uploadAcquisitions(modality.children, modality._id);
+                } else {
+                    this.progressStart(modality.name);
+                    scitran.createModality(subjectId, modality.name, (err, res) => {
+                        this.handleUploadResponse(err, res, () => {
+                            let modalityId = res.body._id;
+                            this.uploadAcquisitions(modality.children, modalityId);
+                        });
                     });
-                });
-            } else {
-                self.uploadFile('sessions', subjectId, modality, 'session');
-            }
-        }
-    },
-
-    /**
-     * Resume Modalities
-     *
-     */
-    resumeModalities (newModalities, oldModalities, subjectId) {
-        let modalityUploads = [];
-        for (let i = 0; i < newModalities.length; i++) {
-            let newModality = newModalities[i];
-            let oldModality = this.contains(oldModalities, newModality);
-            if (oldModality) {
-                this.progressStart(newModality.name);
-                this.progressEnd(newModality.name);
-                if (newModality.type === 'folder') {
-                    this.resumeAcquisitions(newModality.children, oldModality.children, oldModality._id);
                 }
             } else {
-                modalityUploads.push(newModality);
+                this.uploadFile('sessions', subjectId, modality, 'session');
             }
-        }
-        if (modalityUploads.length > 0) {
-            this.uploadModalities(modalityUploads, subjectId);
         }
     },
 
@@ -266,46 +223,6 @@ export default {
         for (let acquisition of acquisitions) {
             this.uploadFile('acquisitions', modalityId, acquisition, 'modality');
         }
-    },
-
-    /**
-     * Resume Acquisitions
-     *
-     */
-    resumeAcquisitions (newAcquisitions, oldAcquisitions, modalityId) {
-        let acquisitionUploads = [];
-        for (let i = 0; i < newAcquisitions.length; i++) {
-            let newAcquisition = newAcquisitions[i];
-            let oldAcquisition = this.contains(oldAcquisitions, newAcquisition);
-            if (oldAcquisition) {
-                this.progressStart(newAcquisition.name);
-                this.progressEnd(newAcquisition.name);
-            } else {
-                acquisitionUploads.push(newAcquisition);
-            }
-        }
-        if (acquisitionUploads.length > 0) {
-            this.uploadAcquisitions(acquisitionUploads, modalityId);
-        }
-    },
-
-    /**
-     * Contains
-     *
-     * Takes an array of container children and
-     * an element. Checks if the element already
-     * exists in the array and return the match
-     * from the array.
-     */
-    contains (arr, elem) {
-        let match = null;
-        for (let i = 0; i < arr.length; i++) {
-            let arrayElem = arr[i];
-            if (arrayElem.name === elem.name) {
-                match = arrayElem;
-            }
-        }
-        return match;
     }
 
 };

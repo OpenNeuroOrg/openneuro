@@ -1,13 +1,9 @@
 // dependencies -------------------------------------------------------
 
-import React       from 'react';
-import Reflux      from 'reflux';
-import Actions     from './upload.actions.js';
-import UploadStore from './upload.store.js';
+import React   from 'react';
+import actions from './upload.actions.js';
 
-let Resume = React.createClass({
-
-    mixins: [Reflux.connect(UploadStore)],
+export default class Resume extends React.Component {
 
 // life cycle events --------------------------------------------------
 
@@ -15,22 +11,11 @@ let Resume = React.createClass({
         return (
             <div>
                 <span className="message fade-in error">
-                    You have already uploaded a dataset with this name. Click continue to resume an unfinished upload or <span className="rename-tab-link" onClick={this._rename}>choose another name.</span>
+                    You have already uploaded a dataset with this name. Click continue to resume an unfinished upload or <span className="rename-tab-link" onClick={actions.selectTab.bind(null, 2)}>choose another name.</span>
                 </span>
-                <button className="btn-blue" onClick={this._upload.bind(null, this.state.tree)}>Continue</button>
+                <button className="btn-blue" onClick={actions.resumeUpload}>Continue</button>
             </div>
         );
-    },
-
-// custom methods -----------------------------------------------------
-
-    _upload: Actions.upload,
-
-    _rename: function () {
-        Actions.selectTab(2);
     }
 
-});
-
-
-export default Resume;
+}

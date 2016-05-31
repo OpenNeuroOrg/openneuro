@@ -10,44 +10,83 @@ export default class UploadProgress extends React.Component {
 // life cycle events ------------------------------------------------------
 
     render () {
-        let completed = this.props.progress.completed;
-        let total     = this.props.progress.total;
-        let progress  = total > 0 ? Math.floor(completed / total * 100) : 0;
+        let minimal = this.props.minimal;
 
-        let currentFiles = this.props.progress.currentFiles.map(function (file, index) {
-            return (
-                <div className="ellipsis-animation" key={index}>
-                    {file}
-                    <span className="one">.</span>
-                    <span className="two">.</span>
-                    <span className="three">.</span>​
-                </div>
-            );
-        });
+        // resume
+        let resume     = this.props.resume,
+            rCompleted = resume.completed,
+            rTotal     = resume.total,
+            rProgress  = rTotal > 0 ? Math.floor(rCompleted / rTotal * 100) : 0;
+
+        // upload
+        let upload     = this.props.upload,
+            uCompleted = upload.completed,
+            uTotal     = upload.total;
+        if (this.props.resumeStart) {
+            let resumeStart = this.props.resumeStart;
+            rProgress  = rProgress * (resumeStart / uTotal);
+            uCompleted = uCompleted - resumeStart;
+        }
+        let uProgress  = uTotal > 0 ? Math.floor(uCompleted / uTotal * 100) : 0;
 
         return (
             <div className="upload-progress-block">
-                <span className="upload-dirname">
-                    <label><i className="folderIcon fa fa-folder-open" /></label>
-                    {this.props.name}
-                    <span className="message fade-in"> {completed}/{total} files complete</span>
-
-                </span>
-                <ProgressBar active now={progress} />
-                <div className="uploadfiles-wrap">
-                    {currentFiles}
-                </div>
+                {this._progressText(this.props.name, this.props.upload, resume, minimal)}
+                <ProgressBar>
+                    <ProgressBar active bsStyle="warning" now={rProgress} key={1} label={!minimal ? 'resuming'  : null} />
+                    <ProgressBar active bsStyle="success" now={uProgress} key={2} label={!minimal && uTotal > 0 ? 'uploading' : null} />
+                </ProgressBar>
+                {this._currentFiles(upload.currentFiles, minimal)}
             </div>
         );
+    }
+
+// template methods -------------------------------------------------------
+
+    _currentFiles(files, minimal) {
+        if (!minimal) {
+            let currentFiles = files.map((file, index) => {
+                return (
+                    <div className="ellipsis-animation" key={index}>
+                        {file}
+                        <span className="one">.</span>
+                        <span className="two">.</span>
+                        <span className="three">.</span>
+                    </div>
+                );
+            });
+            return <div className="uploadfiles-wrap">{currentFiles}</div>;
+        }
+    }
+
+    _progressText(name, upload, resume, minimal) {
+        let completed = upload.completed > 0 ? upload.completed : resume.completed;
+        let total     = upload.total     > 0 ? upload.total     : resume.uploadTotal;
+        if (!minimal) {
+            return (
+                <span className="upload-dirname">
+                    <label><i className="folderIcon fa fa-folder-open" /></label>
+                    {name}
+                    <span className="message fade-in"> {completed}/{total} files complete</span>
+                </span>
+            );
+        }
     }
 
 }
 
 UploadProgress.propTypes = {
-    progress: React.PropTypes.object,
-    name:   React.PropTypes.string
+    upload:      React.PropTypes.object,
+    resume:      React.PropTypes.object,
+    resumeStart: React.PropTypes.number,
+    name:        React.PropTypes.string,
+    minimal:     React.PropTypes.bool
 };
 
 UploadProgress.Props = {
-    progress: {}
+    upload:      {},
+    resume:      {},
+    resumeStart: 0,
+    name:        '',
+    minimal:     false
 };

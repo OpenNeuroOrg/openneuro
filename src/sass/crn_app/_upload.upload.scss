@@ -111,6 +111,9 @@
         }
 
         .uploadfiles-wrap {margin: 10px 0 0;}
+        .progress-bar-warning {
+            background: $brand-warning;
+        }
     }
 
     .upload-wrap {
