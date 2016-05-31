@@ -71,6 +71,7 @@ export default {
     upload (userId, fileTree, validation, summary, count, progress, error) {
         this.total = count;
         this.completed = 0;
+        this.error = error;
         this.currentProjectId = null;
         this.progressStart = (filename) => {
             this.currentFiles.push(filename);
@@ -93,12 +94,11 @@ export default {
             }
 
             if (existingProject) {
-                this.progressEnd();
                 this.currentProjectId = existingProject._id;
                 bids.getDatasetTree(existingProject, (oldDataset) => {
                     let newDataset = fileTree[0];
                     diff.datasets(newDataset.children, oldDataset[0].children, (subjectUploads, completedFiles) => {
-                        this.completed = this.completed + completedFiles.length;
+                        this.completed = this.completed + completedFiles.length + 1;
                         progress({total: this.total, completed: this.completed, currentFiles: this.currentFiles, resumeStart: this.completed});
                         this.uploadSubjects(newDataset.name, subjectUploads, this.currentProjectId);
                     });
