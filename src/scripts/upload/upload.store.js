@@ -277,8 +277,9 @@ let UploadStore = Reflux.createStore({
             if (progress.type === 'resume') {
                 this.update({resumeProgress: progress});
             } else {
-                this.update({progress: progress, uploading: true, projectId: projectId});
-                if (progress.resumeStart) {this.update({resumeStart: progress.resumeStart});}
+                let update = {progress: progress, uploading: true, projectId: projectId};
+                if (progress.resumeStart) {update['resumeStart'] = progress.resumeStart;}
+                this.update(update);
             }
             if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
             if (progress.type === 'upload' && progress.total === progress.completed) {
