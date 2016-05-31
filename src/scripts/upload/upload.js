@@ -104,6 +104,7 @@ export default {
                     });
                 }, {}, (resumeProgress) => {
                     resumeProgress.type = 'resume';
+                    resumeProgress.uploadTotal = count;
                     progress(resumeProgress);
                 });
             } else {
