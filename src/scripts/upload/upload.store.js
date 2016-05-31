@@ -202,7 +202,7 @@ let UploadStore = Reflux.createStore({
     /**
      * Check Exists
      *
-     * Takins a filetree and a boolean representing
+     * Takes a filetree and a boolean representing
      * whether this is a resumed upload. If it isn't
      * it check for existing dataset with the same name
      * and group.
@@ -239,6 +239,17 @@ let UploadStore = Reflux.createStore({
                 self.upload(fileTree);
             }
         });
+    },
+
+    /**
+     * Resume
+     *
+     * Loads the current filetree and calls upload. Allows
+     * for calling upload when dataset tree data is not ready
+     * at hand such as the resume question in the upload modal.
+     */
+    resumeUpload () {
+        fileStore.getFiles('tree', (fileTree) => {this.upload(fileTree);});
     },
 
     /**
