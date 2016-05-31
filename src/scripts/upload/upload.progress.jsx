@@ -10,32 +10,33 @@ export default class UploadProgress extends React.Component {
 // life cycle events ------------------------------------------------------
 
     render () {
+        let minimal = this.props.minimal;
+
         // resume
-        let resume     = this.props.resume;
-        let rCompleted = resume.completed;
-        let rTotal     = resume.total;
-        let rProgress  = rTotal > 0 ? Math.floor(rCompleted / rTotal * 100) : 0;
+        let resume     = this.props.resume,
+            rCompleted = resume.completed,
+            rTotal     = resume.total,
+            rProgress  = rTotal > 0 ? Math.floor(rCompleted / rTotal * 100) : 0;
 
         // upload
-        let upload     = this.props.upload;
-        let uCompleted = upload.completed;
-        let uTotal     = upload.total;
+        let upload     = this.props.upload,
+            uCompleted = upload.completed,
+            uTotal     = upload.total;
         if (this.props.resumeStart) {
             let resumeStart = this.props.resumeStart;
             rProgress  = rProgress * (resumeStart / uTotal);
             uCompleted = uCompleted - resumeStart;
-            uTotal     = uTotal - resumeStart;
         }
         let uProgress  = uTotal > 0 ? Math.floor(uCompleted / uTotal * 100) : 0;
 
         return (
             <div className="upload-progress-block">
-                {this._progressText(this.props.name, (rCompleted + uCompleted), (rTotal + uTotal), this.props.minimal)}
+                {this._progressText(this.props.name, this.props.upload.completed, uTotal, minimal)}
                 <ProgressBar>
-                    <ProgressBar active bsStyle="warning" now={rProgress} key={1} />
-                    <ProgressBar active bsStyle="success" now={uProgress} key={2}/>
+                    <ProgressBar active bsStyle="warning" now={rProgress} key={1} label={!minimal ? 'resuming'  : null} />
+                    <ProgressBar active bsStyle="success" now={uProgress} key={2} label={!minimal ? 'uploading' : null} />
                 </ProgressBar>
-                {this._currentFiles(upload.currentFiles, this.props.minimal)}
+                {this._currentFiles(upload.currentFiles, minimal)}
             </div>
         );
     }
