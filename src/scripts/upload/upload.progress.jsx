@@ -34,7 +34,7 @@ export default class UploadProgress extends React.Component {
                 {this._progressText(this.props.name, this.props.upload, resume, minimal)}
                 <ProgressBar>
                     <ProgressBar active bsStyle="warning" now={rProgress} key={1} label={!minimal ? 'resuming'  : null} />
-                    <ProgressBar active bsStyle="success" now={uProgress} key={2} label={!minimal ? 'uploading' : null} />
+                    <ProgressBar active bsStyle="success" now={uProgress} key={2} label={!minimal && uTotal > 0 ? 'uploading' : null} />
                 </ProgressBar>
                 {this._currentFiles(upload.currentFiles, minimal)}
             </div>
