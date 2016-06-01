@@ -180,7 +180,8 @@ export default  {
      * Takes a projectId and returns the full
      * dataset tree.
      */
-    getDatasetTree (dataset, callback, options, progress) {
+    getDatasetTree (dataset, callback, options, progressCb) {
+        let progress = (p) => {if (progressCb) {progressCb(p);}}
         dataset = {
             _id: dataset._id,
             label: dataset.label,
