@@ -40,7 +40,7 @@ export default {
      * related requests.
      */
     handleUploadResponse (err, res, callback) {
-        let name = res.req._data.name;
+        let name = res.req._data.name ? res.req._data.name : res.req._data.label;
         this.progressEnd(name);
         if (err) {
             this.error(err, res.req);
@@ -75,13 +75,13 @@ export default {
         this.currentProjectId = null;
         this.progressStart = (filename) => {
             this.currentFiles.push(filename);
-            progress({type: 'upload', total: this.total, completed: this.completed, currentFiles: this.currentFiles});
+            progress({status: 'uploading', total: this.total, completed: this.completed, currentFiles: this.currentFiles});
         };
         this.progressEnd = (filename) => {
             let index = this.currentFiles.indexOf(filename);
             this.currentFiles.splice(index, 1);
             this.completed++;
-            progress({type: 'upload', total: this.total, completed: this.completed, currentFiles: this.currentFiles}, this.currentProjectId);
+            progress({status: 'uploading', total: this.total, completed: this.completed, currentFiles: this.currentFiles}, this.currentProjectId);
         };
         let existingProject = null;
         scitran.getProjects({authenticate: true}, (projects) => {
@@ -99,12 +99,13 @@ export default {
                     let newDataset = fileTree[0];
                     diff.datasets(newDataset.children, oldDataset[0].children, (subjectUploads, completedFiles) => {
                         this.completed = this.completed + completedFiles.length + 1;
-                        progress({total: this.total, completed: this.completed, currentFiles: this.currentFiles, resumeStart: this.completed});
+                        progress({status: 'calculating', total: this.total, completed: this.completed, currentFiles: this.currentFiles});
                         this.uploadSubjects(newDataset.name, subjectUploads, this.currentProjectId);
                     });
                 }, {}, (resumeProgress) => {
-                    resumeProgress.type = 'resume';
-                    resumeProgress.uploadTotal = count;
+                    resumeProgress.status       = 'calculating';
+                    resumeProgress.total        = count;
+                    resumeProgress.currentFiles = this.currentFiles;
                     progress(resumeProgress, existingProject._id);
                 });
             } else {

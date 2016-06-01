@@ -81,6 +81,7 @@ gulp.task('copy', function () {
 
 // bundle js
 gulp.task('buildApp', function(cb) {
+    process.env.NODE_ENV = 'production';
     browserify(p.jsx)
         .transform(babelify)
         .bundle()

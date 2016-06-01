@@ -180,7 +180,8 @@ export default  {
      * Takes a projectId and returns the full
      * dataset tree.
      */
-    getDatasetTree (dataset, callback, options, progress) {
+    getDatasetTree (dataset, callback, options, progressCb) {
+        let progress = (p) => {if (progressCb) {progressCb(p);}}
         dataset = {
             _id: dataset._id,
             label: dataset.label,
@@ -211,7 +212,8 @@ export default  {
                         async.each(sessions, (session, cb1) => {
                             this.getModalities(session._id, (modalities) => {
                                 p.completed++;
-                                progress(p);
+                                // limit frequency of progress calls
+                                if (p.total < 50 || p.completed % 10 == 0) {progress(p);}
                                 session.containerType = 'sessions';
                                 session.children = this.formatFiles(session.children, session._id, 'sessions');
                                 session.children = session.children.concat(modalities);

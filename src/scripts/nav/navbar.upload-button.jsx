@@ -21,7 +21,7 @@ let UploadBtn = React.createClass({
         let progress = (
             <a className="nav-link nl-upload nl-progress"  onClick={Actions.toggleModal}>
                 <span className="link-name">view details</span>
-                <Progress upload={this.state.progress} resume={this.state.resumeProgress} resumeStart={this.state.resumeStart} minimal={true} />
+                <Progress progress={this.state.progress} minimal={true} />
             </a>
         );
 
