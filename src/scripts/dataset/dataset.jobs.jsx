@@ -45,13 +45,12 @@ let Jobs = React.createClass({
     _runs(job) {
         let runs = job.runs.map((run) => {
             let runBy = run.userId ? <span><label> by </label><strong>{run.userId}</strong></span> : null;
-            let attempts = run.agave.status === 'FAILED' ? '(' + run.attempts + pluralize(' times', run.attempts) + ')': null;
 
             let jobAccordionHeader = (
                 <div className={run.agave.status.toLowerCase()}>
                     <label>Status</label>
                     <span className="badge">
-                        {run.agave.status} {attempts}
+                        {run.agave.status}
                     </span>
                     <span className="meta">
                         <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
