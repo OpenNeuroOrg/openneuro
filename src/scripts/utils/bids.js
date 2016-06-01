@@ -212,7 +212,8 @@ export default  {
                         async.each(sessions, (session, cb1) => {
                             this.getModalities(session._id, (modalities) => {
                                 p.completed++;
-                                progress(p);
+                                // limit frequency of progress calls
+                                if (p.total < 50 || p.completed % 10 == 0) {progress(p);}
                                 session.containerType = 'sessions';
                                 session.children = this.formatFiles(session.children, session._id, 'sessions');
                                 session.children = session.children.concat(modalities);
