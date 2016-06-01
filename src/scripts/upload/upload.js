@@ -40,7 +40,7 @@ export default {
      * related requests.
      */
     handleUploadResponse (err, res, callback) {
-        let name = res.req._data.name;
+        let name = res.req._data.name ? res.req._data.name : res.req._data.label;
         this.progressEnd(name);
         if (err) {
             this.error(err, res.req);
