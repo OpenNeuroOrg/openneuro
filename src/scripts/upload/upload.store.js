@@ -59,9 +59,7 @@ let UploadStore = Reflux.createStore({
             disabledTab: false,
             errors: [],
             nameError: null,
-            progress: {total: 0, completed: 0, currentFiles: []},
-            resumeProgress: {total: 0, completed: 0},
-            resumeStart: null,
+            progress: {total: 0, completed: 0, currentFiles: [], status: ''},
             projectId: '',
             refs: {},
             resuming: false,
@@ -285,15 +283,9 @@ let UploadStore = Reflux.createStore({
 
         upload.upload(userStore.data.scitran._id, fileTree, validation, this.data.summary, count, (progress, projectId) => {
             projectId = projectId ? projectId : this.data.projectId;
-            if (progress.type === 'resume') {
-                this.update({resumeProgress: progress, projectId: projectId});
-            } else {
-                let update = {progress: progress, uploading: true, projectId: projectId};
-                if (progress.resumeStart) {update['resumeStart'] = progress.resumeStart;}
-                this.update(update);
-            }
+            this.update({progress, uploading: true, projectId});
             if (!datasetsUpdated) {datasetsActions.getDatasets(); datasetsUpdated = true;}
-            if (progress.type === 'upload' && progress.total === progress.completed) {
+            if (progress.total === progress.completed) {
                 scitran.removeTag('projects', projectId, 'incomplete', () => {
                     datasetActions.updateStatus(projectId, {incomplete: false});
                     this.uploadComplete(projectId);
