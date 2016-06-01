@@ -1,12 +1,12 @@
 // dependencies ------------------------------------------------------------------
 
-import React         from 'react';
-import Reflux        from 'reflux';
-import Actions       from '../upload/upload.actions.js';
-import uploadStore   from '../upload/upload.store.js';
-import Upload        from '../upload/upload.jsx';
-import {ProgressBar,
-        Modal}       from 'react-bootstrap';
+import React       from 'react';
+import Reflux      from 'reflux';
+import Actions     from '../upload/upload.actions.js';
+import uploadStore from '../upload/upload.store.js';
+import Upload      from '../upload/upload.jsx';
+import {Modal}     from 'react-bootstrap';
+import Progress    from '../upload/upload.progress.jsx';
 
 // component setup ---------------------------------------------------------------
 
@@ -17,15 +17,12 @@ let UploadBtn = React.createClass({
 // life cycle methods ------------------------------------------------------------
 
     render: function () {
-        let completed = this.state.progress.completed;
-        let total     = this.state.progress.total;
-        let progress  = total > 0 ? Math.floor(completed / total * 100) : 0;
 
-        progress = (
-                <a className="nav-link nl-upload nl-progress"  onClick={Actions.toggleModal}>
-                    <span className="link-name">view details</span>
-                    <ProgressBar active now={progress} />
-                </a>
+        let progress = (
+            <a className="nav-link nl-upload nl-progress"  onClick={Actions.toggleModal}>
+                <span className="link-name">view details</span>
+                <Progress progress={this.state.progress} minimal={true} />
+            </a>
         );
 
         let uploadBtn = (

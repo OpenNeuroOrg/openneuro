@@ -25,6 +25,7 @@ let upload = {
             }
         }, (err) => {
             if (err) {
+                upload.queue.kill();
                 req.error(err, req);
             } else {
                 req.progressEnd(req.file.name);
