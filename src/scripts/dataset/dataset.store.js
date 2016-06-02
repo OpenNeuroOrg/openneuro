@@ -331,6 +331,7 @@ let datasetStore = Reflux.createStore({
                 hideDontShow: true,
                 message:      message,
                 action:       () => {
+                    this.update({loading: 'deleting'});
                     bids.deleteDataset(datasetId, () => {
                         router.transitionTo('datasets');
                     }, {snapshot: this.data.snapshot});
