@@ -16,22 +16,29 @@ let upload = {
      * 'maxRequests'
      */
     queue: async.queue((req, callback) => {
-        req.progressStart(req.file.name);
-        request.upload(req.url, {
-            fields: {
-                name: req.file.name,
-                tags: JSON.stringify(req.tags),
-                file: req.file.data ? req.file.data : req.file
-            }
-        }, (err) => {
-            if (err) {
-                upload.queue.kill();
-                req.error(err, req);
-            } else {
-                req.progressEnd(req.file.name);
-            }
-            callback();
-        });
+        if (req.func) {
+        // container creation requests
+            let name = req.args[req.args.length - 1];
+            req.progressStart(name);
+            req.args.push((err, res) => {
+                upload.handleResponse(err, req, res);
+                callback();
+            });
+            req.func.apply(null, req.args);
+        } else {
+        // file upload requests
+            req.progressStart(req.file.name);
+            request.upload(req.url, {
+                fields: {
+                    name: req.file.name,
+                    tags: JSON.stringify(req.tags),
+                    file: req.file.data ? req.file.data : req.file
+                }
+            }, (err) => {
+                upload.handleResponse(err, req)
+                callback();
+            });
+        }
     }, maxRequests),
 
     /**
@@ -42,6 +49,22 @@ let upload = {
      */
     add (req) {
         this.queue.push(req);
+    },
+
+    /**
+     * Handle Response
+     */
+    handleResponse(err, req, res) {
+        let label = req.file ? req.file.name : req.args[req.args.length - 2];
+        if (err) {
+            upload.queue.kill();
+            req.error();
+        } else {
+            if (res && req.callback) {
+                req.callback(err, res)
+            }
+            req.progressEnd(label);
+        }
     }
 
 };
