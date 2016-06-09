@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 
 // routing ---------------------------------------------------------
 
-app.use('/api/v1/', routes);
+app.use(config.apiPrefix, routes);
 
 // error handling --------------------------------------------------
 

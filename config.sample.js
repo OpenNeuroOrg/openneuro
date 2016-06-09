@@ -1,6 +1,7 @@
 export default {
 	"url": "http://127.0.0.1",
 	"port": 8111,
+	"apiPrefix": "/api/",
 	"location: "/srv/crn-server",
 	"headers": {
 		"Access-Control-Allow-Origin": "*",
