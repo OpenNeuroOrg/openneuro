@@ -9,7 +9,7 @@ let config = {
         "Access-Control-Allow-Headers": "content-type, Authorization"
     },
     "scitran": {
-        "url": "http://localhost:8110/api/",
+        "url":       process.env.SCITRAN_URL,
         "secret":    process.env.SCITRAN_CORE_DRONE_SECRET,
         "fileStore": process.env.CRN_SERVER_CORE_FILE_STORE
     },
