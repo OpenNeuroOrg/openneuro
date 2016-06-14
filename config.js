@@ -11,7 +11,7 @@ let config = {
     "scitran": {
         "url":       process.env.SCITRAN_URL,
         "secret":    process.env.SCITRAN_CORE_DRONE_SECRET,
-        "fileStore": process.env.CRN_SERVER_CORE_FILE_STORE
+        "fileStore": process.env.SCITRAN_PERSISTENT_DATA_PATH
     },
     "agave": {
         "url":               process.env.CRN_SERVER_AGAVE_URL,
