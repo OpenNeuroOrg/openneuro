@@ -1,6 +1,7 @@
 let config = {
     "url": process.env.CRN_SERVER_URL,
     "port": 8111,
+    "apiPrefix": "/crn/",
     "location": process.env.CRN_SERVER_LOCATION,
     "headers": {
         "Access-Control-Allow-Origin": "*",
@@ -27,5 +28,4 @@ let config = {
 	}
 };
 
-console.log(config);
 export default config;
