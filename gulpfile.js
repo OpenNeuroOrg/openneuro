@@ -11,6 +11,7 @@ var gulp        = require('gulp'),
     cachebust   = new CacheBuster(),
     changed     = require('gulp-changed'),
     del         = require('del'),
+    envify      = require('gulp-envify'),
     gulpif      = require('gulp-if'),
     rewrite     = require('connect-history-api-fallback'),
     notify      = require('gulp-notify'),
@@ -87,6 +88,7 @@ gulp.task('buildApp', function(cb) {
         .bundle()
         .pipe(source(p.bundle))
         .pipe(buffer())
+        .pipe(envify(process.env))
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify())
         .pipe(cachebust.resources())
