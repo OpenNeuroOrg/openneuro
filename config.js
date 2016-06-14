@@ -1,4 +1,4 @@
-export default {
+let config = {
     "url": process.env.CRN_SERVER_URL,
     "port": 8111,
     "location": process.env.CRN_SERVER_LOCATION,
@@ -26,3 +26,6 @@ export default {
 		"url": "mongodb://localhost:27017/crn"
 	}
 };
+
+console.log(config);
+export default config;
