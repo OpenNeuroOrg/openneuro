@@ -121,12 +121,12 @@ export default {
                 console.log('Error Creating AGAVE Client');
                 console.log(res.body.message);
             } else {
+                // set config changes and save to env variables
                 config.agave.consumerKey = res.body.result.consumerKey;
+                process.env.CRN_SERVER_AGAVE_CONSUMER_KEY=res.body.result.consumerKey
                 config.agave.consumerSecret = res.body.result.consumerSecret;
+                process.env.CRN_SERVER_AGAVE_CONSUMER_SECRET=res.body.result.consumerSecret
                 clientAuth = 'Basic ' + new Buffer(config.agave.consumerKey + ':' + config.agave.consumerSecret).toString('base64');
-                fs.writeFile('config.js', 'export default ' + JSON.stringify(config, null, 4) + ';', () => {
-                    this.getAccessToken(callback);
-                });
             }
         });
     },
