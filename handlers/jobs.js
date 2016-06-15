@@ -378,7 +378,7 @@ function submitJob (job, callback) {
         parameters: job.parameters ? job.parameters : {},
         notifications: [
             {
-                url:        config.url + ':' + config.port + config.apiPrefix +  'jobs/${JOB_ID}/results',
+                url:        config.url + config.apiPrefix +  'jobs/${JOB_ID}/results',
                 event:      '*',
                 persistent: true
             }
