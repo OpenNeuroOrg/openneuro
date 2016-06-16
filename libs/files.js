@@ -23,7 +23,7 @@ export default {
             async.each(files, (path, cb) => {
                 fs.readlink(path, (err, linkPath) => {
                     fs.unlink(path, () => {
-                        fs.symlink(config.scitran.fileStore + linkPath, path, cb);
+                        fs.symlink(config.scitran.fileStore + '/' + linkPath, path, cb);
                     });
                 });
             }, callback);
