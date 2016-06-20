@@ -369,6 +369,7 @@ export default class JobMenu extends React.Component {
         let parameters = {};
         for (let parameter of this.state.parameters) {
             if (parameter.type === 'number') {parameter.value = Number(parameter.value);}
+            if (parameter.type === 'string' && !parameter.value) {parameter.value = '';}
             parameters[parameter.id] = parameter.value;
         }
         this.setState({loading: true});
