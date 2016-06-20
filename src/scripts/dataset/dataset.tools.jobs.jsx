@@ -189,6 +189,8 @@ export default class JobMenu extends React.Component {
             let input;
             if (parameter.type === 'string') {
                 input = <input className="form-control" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
+            } else if (parameter.type === 'number') {
+                input = <input className="form-control" type="number" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
             } else {
                 input = (
                     <span>
