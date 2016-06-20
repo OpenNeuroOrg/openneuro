@@ -9,7 +9,7 @@ gulp-cli (`npm install -g gulp-cli`)
 
 __Configure:__
 
-Copy or move `config.example` to `config.js` and replace the values with your own.
+Copy or move `config.example` to `config.js` and replace the values with your own. If you prefer to use environment variables in production you can set the values in config.js equal to process.env.YOUR_VARIABLE_NAME and running gulp build will attempt to replace those based on your current environment.
 
 __Install the dependencies:__
 

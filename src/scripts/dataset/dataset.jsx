@@ -53,6 +53,7 @@ let Dataset = React.createClass({
         let showSidebar = this.state.showSidebar;
         let tree        = this.state.datasetTree;
         let canEdit     = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
+        let loadingText = typeof this.state.loading == 'string' ? this.state.loading : 'loading';
         let content;
 
         if (dataset) {
@@ -113,9 +114,9 @@ let Dataset = React.createClass({
             <div className={showSidebar ? 'open dataset-container' : 'dataset-container'}>
                 {this._leftSidebar(snapshots)}
                 {this._showSideBarButton()}
-                {this._tools(dataset)}
+                {!this.state.loading ? this._tools(dataset) : null}
                 <div className="fade-in inner-route dataset-route light">
-                    {this.state.loading ? <Spinner active={true} /> : content}
+                    {this.state.loading ? <Spinner active={true} text={loadingText}/> : content}
                 </div>
             </div>
         );

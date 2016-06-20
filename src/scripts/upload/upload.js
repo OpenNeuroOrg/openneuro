@@ -34,22 +34,6 @@ export default {
 // upload ----------------------------------------------------------------------------
 
     /**
-     * Handle Upload Response
-     *
-     * A generic response handler for all upload
-     * related requests.
-     */
-    handleUploadResponse (err, res, callback) {
-        let name = res.req._data.name ? res.req._data.name : res.req._data.label;
-        this.progressEnd(name);
-        if (err) {
-            this.error(err, res.req);
-        } else {
-            callback(err, res);
-        }
-    },
-
-    /**
      * Upload File
      *
      * Pushes upload details into an upload queue.
@@ -109,16 +93,10 @@ export default {
                     progress(resumeProgress, existingProject._id);
                 });
             } else {
-                let body = {
-                    label: fileTree[0].name,
-                    group: userId
-                };
-                scitran.createProject(body, (err, res) => {
-                    this.handleUploadResponse(err, res, () => {
-                        let projectId = res.body._id;
-                        scitran.addTag('projects', projectId, 'incomplete', () => {
-                            this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId, validation, summary);
-                        });
+                this.createContainer(scitran.createProject, [userId, fileTree[0].name], (err, res) => {
+                    let projectId = res.body._id;
+                    scitran.addTag('projects', projectId, 'incomplete', () => {
+                        this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId, validation, summary);
                     });
                 });
             }
@@ -136,12 +114,9 @@ export default {
                 if (subject.ignore) {
                     this.uploadSessions(subject.children, projectId, subject._id);
                 } else {
-                    this.progressStart(subject.name);
-                    scitran.createSubject(projectId, subject.name, (err, res) => {
-                        this.handleUploadResponse(err, res, () => {
-                            let subjectId = res.body._id;
-                            this.uploadSessions(subject.children, projectId, subjectId);
-                        });
+                    this.createContainer(scitran.createSubject, [projectId, subject.name], (err, res) => {
+                        let subjectId = res.body._id;
+                        this.uploadSessions(subject.children, projectId, subjectId);
                     });
                 }
             } else {
@@ -179,11 +154,8 @@ export default {
                 if (session.ignore) {
                     this.uploadModalities(session.children, session._id);
                 } else {
-                    this.progressStart(session.name);
-                    scitran.createSession(projectId, subjectId, session.name, (err, res) => {
-                        this.handleUploadResponse(err, res, () => {
-                            this.uploadModalities(session.children, res.body._id);
-                        });
+                    this.createContainer(scitran.createSession, [projectId, subjectId, session.name], (err, res) => {
+                        this.uploadModalities(session.children, res.body._id);
                     });
                 }
             } else {
@@ -202,12 +174,9 @@ export default {
                 if (modality.ignore) {
                     this.uploadAcquisitions(modality.children, modality._id);
                 } else {
-                    this.progressStart(modality.name);
-                    scitran.createModality(subjectId, modality.name, (err, res) => {
-                        this.handleUploadResponse(err, res, () => {
-                            let modalityId = res.body._id;
-                            this.uploadAcquisitions(modality.children, modalityId);
-                        });
+                    this.createContainer(scitran.createModality, [subjectId, modality.name], (err, res) => {
+                        let modalityId = res.body._id;
+                        this.uploadAcquisitions(modality.children, modalityId);
                     });
                 }
             } else {
@@ -224,6 +193,19 @@ export default {
         for (let acquisition of acquisitions) {
             this.uploadFile('acquisitions', modalityId, acquisition, 'modality');
         }
+    },
+
+// queue container requests ---------------------------------------------------------------
+
+    createContainer (func, args, callback) {
+        uploads.add({
+            func,
+            args,
+            callback,
+            progressStart: this.progressStart,
+            progressEnd:   this.progressEnd,
+            error:         this.error
+        });
     }
 
 };

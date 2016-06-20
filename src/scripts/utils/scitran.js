@@ -88,8 +88,10 @@ export default  {
      * Takes a request body and
      * generates a request to make a project in scitran.
      */
-    createProject (body, callback) {
-        request.post(config.scitran.url + 'projects', {body: body}, callback);
+    createProject (group, label, callback) {
+        request.post(config.scitran.url + 'projects', {
+            body: {group, label}
+        }, callback);
     },
 
     /**
