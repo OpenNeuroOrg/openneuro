@@ -60,26 +60,32 @@ let Jobs = React.createClass({
                 </div>
             );
 
-            let resultsPending = (
-                <div className="job panel panel-default">
-                    <div className="panel-heading" >
-                        <div className="panel-title pending">
-                            {jobAccordionHeader}
-                        </div>
-                    </div>
-                </div>
-            );
-
-            let resultsRun = (
-                <Panel className="job" header={jobAccordionHeader}>
-                    <span className="inner">
-                        {this._parameters(run)}
-                        {this._results(run)}
+            if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0)) {
+                // header with parameters and/or results
+                return (
+                    <span key={run._id} eventKey={run._id}>
+                        <Panel className="job" header={jobAccordionHeader}>
+                            <span className="inner">
+                                {this._parameters(run)}
+                                {this._results(run)}
+                            </span>
+                        </Panel>
                     </span>
-                </Panel>
-            );
-
-            return <span key={run._id} eventKey={run._id}> {run.results && run.results.length > 0 ?  resultsRun : resultsPending } </span>;
+                );
+            } else {
+                // header only
+                return (
+                    <span key={run._id} eventKey={run._id}>
+                        <div className="job panel panel-default">
+                            <div className="panel-heading" >
+                                <div className="panel-title pending">
+                                    {jobAccordionHeader}
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                );
+            }
         });
 
         return runs;
@@ -103,7 +109,7 @@ let Jobs = React.createClass({
     },
 
     _results(run) {
-        if (run.results) {
+        if (run.results && run.results.length > 0) {
             let resultLinks = run.results.map((result, index) => {
                 let displayBtn;
                 if (result.name.indexOf('.err') > -1 || result.name.indexOf('.out') > -1) {
