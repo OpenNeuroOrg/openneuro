@@ -39,7 +39,7 @@ let models = {
  *
  * Handlers for job actions.
  */
-export default {
+let handlers = {
 
     /**
      * List Apps
@@ -79,6 +79,11 @@ export default {
                 }, {}, (err, existingJob) => {
                     if (err){return next(err);}
                     if (existingJob) {
+                        // allow retrying failed jobs
+                        if (existingJob.agave && existingJob.agave.status === 'FAILED') {
+                            handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
+                            return;
+                        }
                         let error = new Error('A job with the same dataset and parameters has already been run.');
                         error.http_code = 409;
                         return next(error);
@@ -430,3 +435,5 @@ function submitJob (job, callback) {
         });
     });
 }
+
+export default handlers;
