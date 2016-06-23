@@ -8,6 +8,7 @@ import async      from 'async';
 import config     from '../config';
 import {ObjectID} from 'mongodb';
 import crypto     from 'crypto';
+import archiver   from 'archiver';
 
 let c = mongo.collections;
 
@@ -305,12 +306,48 @@ let handlers = {
             }
             let path = result.filePath;
 
-            if (fileName.indexOf('.err') > -1 || fileName.indexOf('.out') > -1) {
-                fileName = 'main' + fileName.substr(fileName.length - 4);
-                res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            }
+            if (path === 'all') {
+                // downlooad all.
+                console.log('download all');
+                console.log(jobId);
 
-            agave.getFile(path, res);
+                // initialize archive
+                let archive = archiver('zip');
+
+                // handle archive errors
+                archive.on('error', (err) => {
+                    console.log('archive error');
+                    console.log(err);
+                });
+
+                //on stream closed we can end the request
+                archive.on('end', function() {
+                    console.log('Archive wrote %d bytes', archive.pointer());
+                });
+
+                //set the archive name
+                res.attachment('archive-name.zip');
+
+                // this is the streaming magic
+                archive.pipe(res);
+
+                c.jobs.findOne({jobId}, {}, (err, job) => {
+                    async.each(job.results, (result) => {
+                        let path = result.path;
+                        let name = result.name;
+                        console.log(path);
+                    }, () =>{
+                        archive.finalize();
+                    });
+                });
+            } else {
+                // download one
+                if (fileName.indexOf('.err') > -1 || fileName.indexOf('.out') > -1) {
+                    fileName = 'main' + fileName.substr(fileName.length - 4);
+                    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+                }
+                agave.getFile(path, res);
+            }
         });
 
     },
