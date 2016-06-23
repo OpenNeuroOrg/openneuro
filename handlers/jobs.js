@@ -332,10 +332,12 @@ let handlers = {
                 archive.pipe(res);
 
                 c.jobs.findOne({jobId}, {}, (err, job) => {
-                    async.each(job.results, (result) => {
+                    async.each(job.results, (result, cb) => {
                         let path = result.path;
                         let name = result.name;
                         console.log(path);
+                        archive.file('test', {name: name});
+                        cb();
                     }, () =>{
                         archive.finalize();
                     });
