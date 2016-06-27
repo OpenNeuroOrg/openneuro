@@ -377,8 +377,8 @@ function submitJob (job, callback) {
         nodeCount:         job.nodeCount,
         processorsPerNode: job.processorsPerNode,
         archive:           true,
-        archiveSystem:     'openfmri-storage',
-        archivePath:       'archive',
+        archiveSystem:     'openfmri-archive',
+        archivePath:       null,
         inputs: {},
         parameters: job.parameters ? job.parameters : {},
         notifications: [
