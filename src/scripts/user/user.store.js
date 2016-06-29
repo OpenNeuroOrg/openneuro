@@ -290,11 +290,15 @@ let UserStore = Reflux.createStore({
      */
     queue: async.queue((authReq, callback) => {
         let currentAccount = window.localStorage.hasOwnProperty('scitranUser') ? JSON.parse(window.localStorage.scitranUser).email : '';
-        hello('google').login({scope: 'email,openid', force: false, login_hint: currentAccount, display: 'none'}).then((res) => {
+        hello('google').login({scope: 'email,openid', force: false, login_hint: currentAccount}).then((res) => {
             authReq.successCallback(res.authResponse.access_token);
             callback();
         }, () => {
-            authReq.errorCallback();
+            if (authReq.errorCallback) {
+                authReq.errorCallback();
+            } else {
+                clearAuth();
+            }
             callback();
         });
     }, 1),
