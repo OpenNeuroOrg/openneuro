@@ -8,6 +8,7 @@ import async      from 'async';
 import config     from '../config';
 import {ObjectID} from 'mongodb';
 import crypto     from 'crypto';
+import archiver   from 'archiver';
 
 let c = mongo.collections;
 
@@ -303,14 +304,55 @@ let handlers = {
                 error.http_code = 401;
                 return next(error);
             }
+
             let path = result.filePath;
 
-            if (fileName.indexOf('.err') > -1 || fileName.indexOf('.out') > -1) {
-                fileName = 'main' + fileName.substr(fileName.length - 4);
-                res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            }
+            if (path === 'all') {
 
-            agave.getFile(path, res);
+                // initialize archive
+                let archive = archiver('zip');
+
+                // log archiving errors
+                archive.on('error', (err) => {
+                    console.log('archiving error - job: ' + jobId);
+                    console.log(err);
+                });
+
+                c.jobs.findOne({jobId}, {}, (err, job) => {
+                    // set archive name
+                    res.attachment(job.appId + '-results.zip');
+
+                    // begin streaming archive
+                    archive.pipe(res);
+
+                    async.eachSeries(job.results, (result, cb) => {
+                        path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
+                        let name = result.name;
+
+                        agave.getPath(path, (err, res, token) => {
+                            let body = res.body;
+                            if (!body || (body.status && body.status === 'error')) {
+                                // error from AGAVE
+                            } else {
+                                // stringify JSON
+                                if (typeof body === 'object' && !Buffer.isBuffer(body)) {
+                                    body = JSON.stringify(body);
+                                }
+                                // append file to archive
+                                archive.append(body, {name: name});
+                            }
+
+                            cb();
+                        });
+                    }, () =>{
+                        archive.finalize();
+                    });
+                });
+            } else {
+                // download individual file
+                path = 'jobs/v2/' + jobId + '/outputs/media' + path;
+                agave.getPathProxy(path, res);
+            }
         });
 
     },

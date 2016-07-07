@@ -269,9 +269,37 @@ export default {
         });
     },
 
-    getFile(path, res) {
+    /**
+     * Get Path
+     *
+     * Takes any AGAVE path and callsback with the response.
+     * Useful for things like file downloads where paths may
+     * be known in advance and have a variety of structures.
+     */
+    getPath(path, callback) {
         this.auth(() => {
-            request.getProxy(path, {
+            request.get(config.agave.url + path, {
+                headers: {
+                    Authorization: 'Bearer ' + token.access,
+                    'Content-Type': 'application/json'
+                },
+                encoding: null
+            }, (err, res) => {
+                callback(err, res, token.access);
+            });
+        });
+    },
+
+    /**
+     * Get Path Proxy
+     *
+     * Works the same as getPath, but takes a response object
+     * instead of a callback and directly pipes the AGAVE
+     * response to the response object.
+     */
+    getPathProxy(path, res) {
+        this.auth(() => {
+            request.getProxy(config.agave.url + path, {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json'
@@ -279,5 +307,6 @@ export default {
             }, res);
         });
     }
+
 
 };
