@@ -11,6 +11,16 @@ export default {
 
     get(url, options, callback) {
         handleRequest(url, options, (req) => {
+            console.log(req);
+            request.get(req, (err, res) => {
+                handleResponse(err, res, callback);
+            });
+        });
+    },
+
+    getBinary(url, options, callback) {
+        handleRequest(url, options, (req) => {
+            req.encoding = null;
             request.get(req, (err, res) => {
                 handleResponse(err, res, callback);
             });
@@ -91,8 +101,9 @@ function handleResponse(err, res, callback) {
  * Normalizes request options.
  */
 function parseOptions(req, options) {
-    if (options.query)  {req.qs = options.query;}
-    if (options.body)   {req.json = options.body;}
+    if (options.query) {req.qs = options.query;}
+    if (options.body) {req.json = options.body;}
+    if (options.hasOwnProperty('encoding')) {req.encoding = options.encoding}
     if (req.url && req.url.indexOf(config.scitran.url) > -1) {
         req.headers = {
             'X-SciTran-Auth': config.scitran.secret,

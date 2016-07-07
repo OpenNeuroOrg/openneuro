@@ -278,6 +278,20 @@ export default {
                 }
             }, res);
         });
+    },
+
+    getFile2(path, callback) {
+        this.auth(() => {
+            request.get(path, {
+                headers: {
+                    Authorization: 'Bearer ' + token.access,
+                    'Content-Type': 'application/json'
+                },
+                encoding: null
+            }, (err, res) => {
+                callback(err, res, token.access);
+            });
+        });
     }
 
 };

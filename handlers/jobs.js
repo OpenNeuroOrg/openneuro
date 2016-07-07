@@ -304,41 +304,49 @@ let handlers = {
                 error.http_code = 401;
                 return next(error);
             }
+
             let path = result.filePath;
 
             if (path === 'all') {
-                // downlooad all.
-                console.log('download all');
-                console.log(jobId);
 
                 // initialize archive
                 let archive = archiver('zip');
 
-                // handle archive errors
+                // log archiving errors
                 archive.on('error', (err) => {
-                    console.log('archive error');
+                    console.log('archiving error - job: ' + jobId);
                     console.log(err);
                 });
 
-                //on stream closed we can end the request
-                archive.on('end', function() {
-                    console.log('Archive wrote %d bytes', archive.pointer());
-                });
-
-                //set the archive name
+                // set archive name
                 res.attachment('archive-name.zip');
 
-                // this is the streaming magic
+                // begin streaming archive
                 archive.pipe(res);
 
                 c.jobs.findOne({jobId}, {}, (err, job) => {
-                    async.each(job.results, (result, cb) => {
-                        let path = result.path;
+                    console.time('request files');
+                    async.eachSeries(job.results, (result, cb) => {
+                        let path = config.agave.url + 'jobs/v2/' + jobId + '/outputs/media' + result.path;
                         let name = result.name;
-                        console.log(path);
-                        archive.file('test', {name: name});
-                        cb();
+
+                        agave.getFile2(path, (err, res, token) => {
+                            let body = res.body;
+                            if (!body || (body.status && body.status === 'error')) {
+                                // error from AGAVE
+                            } else {
+                                // stringify JSON
+                                if (typeof body === 'object' && !Buffer.isBuffer(body)) {
+                                    body = JSON.stringify(body);
+                                }
+                                // append file to archive
+                                archive.append(body, {name: name});
+                            }
+
+                            cb();
+                        });
                     }, () =>{
+                    console.timeEnd('request files');
                         archive.finalize();
                     });
                 });
@@ -348,6 +356,7 @@ let handlers = {
                     fileName = 'main' + fileName.substr(fileName.length - 4);
                     res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
                 }
+                console.log(path);
                 agave.getFile(path, res);
             }
         });

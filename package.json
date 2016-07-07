@@ -20,6 +20,7 @@
     "bids-validator": "0.18.7",
     "body-parser": "^1.14.0",
     "express": "^4.13.3",
+    "memory-streams": "^0.1.0",
     "mongodb": "^2.0.46",
     "morgan": "^1.6.1",
     "request": "^2.63.0",
