@@ -269,7 +269,7 @@ export default {
         });
     },
 
-    getFile(path, res) {
+    getFileProxy(path, res) {
         this.auth(() => {
             request.getProxy(path, {
                 headers: {
@@ -280,7 +280,7 @@ export default {
         });
     },
 
-    getFile2(path, callback) {
+    getFile(path, callback) {
         this.auth(() => {
             request.get(path, {
                 headers: {

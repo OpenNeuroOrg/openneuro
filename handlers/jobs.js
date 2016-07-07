@@ -325,12 +325,11 @@ let handlers = {
                 archive.pipe(res);
 
                 c.jobs.findOne({jobId}, {}, (err, job) => {
-                    console.time('request files');
                     async.eachSeries(job.results, (result, cb) => {
                         let path = config.agave.url + 'jobs/v2/' + jobId + '/outputs/media' + result.path;
                         let name = result.name;
 
-                        agave.getFile2(path, (err, res, token) => {
+                        agave.getFile(path, (err, res, token) => {
                             let body = res.body;
                             if (!body || (body.status && body.status === 'error')) {
                                 // error from AGAVE
@@ -346,18 +345,12 @@ let handlers = {
                             cb();
                         });
                     }, () =>{
-                    console.timeEnd('request files');
                         archive.finalize();
                     });
                 });
             } else {
-                // download one
-                if (fileName.indexOf('.err') > -1 || fileName.indexOf('.out') > -1) {
-                    fileName = 'main' + fileName.substr(fileName.length - 4);
-                    res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-                }
-                console.log(path);
-                agave.getFile(path, res);
+                // download individual file
+                agave.getFileProxy(path, res);
             }
         });
 
