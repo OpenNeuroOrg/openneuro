@@ -326,7 +326,7 @@ let handlers = {
                     archive.pipe(res);
 
                     async.eachSeries(job.results, (result, cb) => {
-                        path = 'jobs/v2/' + jobId + '/outputs/media' + path;
+                        path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
                         let name = result.name;
 
                         agave.getPath(path, (err, res, token) => {
