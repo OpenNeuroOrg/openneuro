@@ -326,10 +326,10 @@ let handlers = {
                     archive.pipe(res);
 
                     async.eachSeries(job.results, (result, cb) => {
-                        let path = config.agave.url + 'jobs/v2/' + jobId + '/outputs/media' + result.path;
+                        path = 'jobs/v2/' + jobId + '/outputs/media' + path;
                         let name = result.name;
 
-                        agave.getFile(path, (err, res, token) => {
+                        agave.getPath(path, (err, res, token) => {
                             let body = res.body;
                             if (!body || (body.status && body.status === 'error')) {
                                 // error from AGAVE
@@ -350,7 +350,8 @@ let handlers = {
                 });
             } else {
                 // download individual file
-                agave.getFileProxy(path, res);
+                path = 'jobs/v2/' + jobId + '/outputs/media' + path;
+                agave.getPathProxy(path, res);
             }
         });
 
