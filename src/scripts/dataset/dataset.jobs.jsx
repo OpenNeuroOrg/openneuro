@@ -118,7 +118,7 @@ let Jobs = React.createClass({
                             icon="fa-eye"
                             warn={false}
                             message=" VIEW"
-                            action={actions.displayFile.bind(this, run.jobId, result._links.self.href, result.name)} />
+                            action={actions.displayFile.bind(this, run.jobId, result.path, result.name)} />
                     );
                 }
                 return (
@@ -129,7 +129,7 @@ let Jobs = React.createClass({
                                 <WarnButton
                                 icon="fa-download"
                                 message=" DOWNLOAD"
-                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
+                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result.path)} />
                             </span>
                             {displayBtn}
                         </div>
