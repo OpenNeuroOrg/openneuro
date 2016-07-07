@@ -318,13 +318,13 @@ let handlers = {
                     console.log(err);
                 });
 
-                // set archive name
-                res.attachment('archive-name.zip');
-
-                // begin streaming archive
-                archive.pipe(res);
-
                 c.jobs.findOne({jobId}, {}, (err, job) => {
+                    // set archive name
+                    res.attachment(job.appId + '-results.zip');
+
+                    // begin streaming archive
+                    archive.pipe(res);
+
                     async.eachSeries(job.results, (result, cb) => {
                         let path = config.agave.url + 'jobs/v2/' + jobId + '/outputs/media' + result.path;
                         let name = result.name;
