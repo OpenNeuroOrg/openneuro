@@ -11,16 +11,6 @@ export default {
 
     get(url, options, callback) {
         handleRequest(url, options, (req) => {
-            console.log(req);
-            request.get(req, (err, res) => {
-                handleResponse(err, res, callback);
-            });
-        });
-    },
-
-    getBinary(url, options, callback) {
-        handleRequest(url, options, (req) => {
-            req.encoding = null;
             request.get(req, (err, res) => {
                 handleResponse(err, res, callback);
             });
