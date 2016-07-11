@@ -8,6 +8,7 @@ import async      from 'async';
 import config     from '../config';
 import {ObjectID} from 'mongodb';
 import crypto     from 'crypto';
+import archiver   from 'archiver';
 
 let c = mongo.collections;
 
@@ -39,7 +40,7 @@ let models = {
  *
  * Handlers for job actions.
  */
-export default {
+let handlers = {
 
     /**
      * List Apps
@@ -79,6 +80,11 @@ export default {
                 }, {}, (err, existingJob) => {
                     if (err){return next(err);}
                     if (existingJob) {
+                        // allow retrying failed jobs
+                        if (existingJob.agave && existingJob.agave.status === 'FAILED') {
+                            handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
+                            return;
+                        }
                         let error = new Error('A job with the same dataset and parameters has already been run.');
                         error.http_code = 409;
                         return next(error);
@@ -298,14 +304,55 @@ export default {
                 error.http_code = 401;
                 return next(error);
             }
+
             let path = result.filePath;
 
-            if (fileName.indexOf('.err') > -1 || fileName.indexOf('.out') > -1) {
-                fileName = 'main' + fileName.substr(fileName.length - 4);
-                res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-            }
+            if (path === 'all') {
 
-            agave.getFile(path, res);
+                // initialize archive
+                let archive = archiver('zip');
+
+                // log archiving errors
+                archive.on('error', (err) => {
+                    console.log('archiving error - job: ' + jobId);
+                    console.log(err);
+                });
+
+                c.jobs.findOne({jobId}, {}, (err, job) => {
+                    // set archive name
+                    res.attachment(job.appId + '-results.zip');
+
+                    // begin streaming archive
+                    archive.pipe(res);
+
+                    async.eachSeries(job.results, (result, cb) => {
+                        path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
+                        let name = result.name;
+
+                        agave.getPath(path, (err, res, token) => {
+                            let body = res.body;
+                            if (!body || (body.status && body.status === 'error')) {
+                                // error from AGAVE
+                            } else {
+                                // stringify JSON
+                                if (typeof body === 'object' && !Buffer.isBuffer(body)) {
+                                    body = JSON.stringify(body);
+                                }
+                                // append file to archive
+                                archive.append(body, {name: name});
+                            }
+
+                            cb();
+                        });
+                    }, () =>{
+                        archive.finalize();
+                    });
+                });
+            } else {
+                // download individual file
+                path = 'jobs/v2/' + jobId + '/outputs/media' + path;
+                agave.getPathProxy(path, res);
+            }
         });
 
     },
@@ -378,7 +425,7 @@ function submitJob (job, callback) {
         parameters: job.parameters ? job.parameters : {},
         notifications: [
             {
-                url:        config.url + ':' + config.port + '/api/v1/jobs/${JOB_ID}/results',
+                url:        config.url + config.apiPrefix +  'jobs/${JOB_ID}/results',
                 event:      '*',
                 persistent: true
             }
@@ -430,3 +477,5 @@ function submitJob (job, callback) {
         });
     });
 }
+
+export default handlers;
