@@ -98,12 +98,8 @@ let UserStore = Reflux.createStore({
                 hello('google').api('/me').then((profile) => {
                     this.update({google: profile});
                     crn.verifyUser((err, res) => {
-                        if (res.body.code === 200) {
-                            window.localStorage.scitranUser = JSON.stringify(res.body);
-                            this.update({scitran: res.body});
-                        } else {
-                            this.signOut();
-                        }
+                        window.localStorage.scitranUser = JSON.stringify(res.body);
+                        this.update({scitran: res.body});
                     });
                 }, () => {
                     this.setInitialState();
