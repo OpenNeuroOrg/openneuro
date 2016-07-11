@@ -922,7 +922,7 @@ let datasetStore = Reflux.createStore({
 
         scitran.getProject(datasetId, (res) => {
             let project = res.body;
-            if (project.metadata && project.metadata.authors && project.metadata.authors.length < 1) {
+            if (!project.metadata || !project.metadata.authors || project.metadata.authors.length < 1) {
                 let metadataIssues = this.data.metadataIssues;
                 let message = 'Your dataset must list at least one author before creating a snapshot.';
                 metadataIssues.authors = message;

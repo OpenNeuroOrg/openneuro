@@ -118,7 +118,7 @@ let Jobs = React.createClass({
                             icon="fa-eye"
                             warn={false}
                             message=" VIEW"
-                            action={actions.displayFile.bind(this, run.jobId, result._links.self.href, result.name)} />
+                            action={actions.displayFile.bind(this, run.jobId, result.path, result.name)} />
                     );
                 }
                 return (
@@ -129,7 +129,7 @@ let Jobs = React.createClass({
                                 <WarnButton
                                 icon="fa-download"
                                 message=" DOWNLOAD"
-                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result._links.self.href)} />
+                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result.path)} />
                             </span>
                             {displayBtn}
                         </div>
@@ -140,6 +140,10 @@ let Jobs = React.createClass({
             return (
                 <Accordion accordion className="results">
                     <Panel className="fade-in" header="Download Results" key={run._id} eventKey={run._id}>
+                        <WarnButton
+                            icon="fa-download"
+                            message=" DOWNLOAD All"
+                            prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, 'all')} />
                         <ul>{resultLinks}</ul>
                     </Panel>
                 </Accordion>
