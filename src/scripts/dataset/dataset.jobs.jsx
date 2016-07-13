@@ -140,10 +140,12 @@ let Jobs = React.createClass({
             return (
                 <Accordion accordion className="results">
                     <Panel className="fade-in" header="Download Results" key={run._id} eventKey={run._id}>
-                        <WarnButton
-                            icon="fa-download"
-                            message=" DOWNLOAD All"
-                            prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, 'all')} />
+                        <span className="download-all">
+                            <WarnButton
+                                icon="fa-download"
+                                message=" DOWNLOAD All"
+                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, 'all')} />
+                        </span>
                         <ul>{resultLinks}</ul>
                     </Panel>
                 </Accordion>
