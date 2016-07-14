@@ -183,47 +183,6 @@ let datasetStore = Reflux.createStore({
     },
 
     /**
-     * Load Jobs
-     */
-    loadJobs(projectId, snapshot, originalId, callback) {
-        this.update({loadingJobs: true});
-        crn.getDatasetJobs(projectId, (err, res) => {
-            // sort jobs by app
-            let jobs = {};
-            for (let job of res.body) {
-                if (!jobs.hasOwnProperty(job.appId)) {
-                    jobs[job.appId] = {
-                        appLabel:   job.appLabel,
-                        appVersion: job.appVersion,
-                        runs: [job]
-                    };
-                } else {
-                    jobs[job.appId].runs.push(job);
-                }
-            }
-            // convert jobs to array
-            let jobArray = [];
-            for (let job in jobs) {
-                jobArray.push({
-                    appId:      job,
-                    appLabel:   jobs[job].appLabel,
-                    appVersion: jobs[job].appVersion,
-                    runs:       jobs[job].runs
-                });
-            }
-
-            this.update({jobs: jobArray, loadingJobs: false});
-            if (snapshot && callback) {
-                crn.getDatasetJobs(originalId, (err1, res1) => {
-                    callback(res1.body);
-                }, {snapshot: false});
-            } else if (callback) {
-                callback(res.body);
-            }
-        }, {snapshot});
-    },
-
-    /**
      * Load Apps
      */
     loadApps() {
@@ -830,6 +789,47 @@ let datasetStore = Reflux.createStore({
     // Jobs --------------------------------------------------------------------------
 
     /**
+     * Load Jobs
+     */
+    loadJobs(projectId, snapshot, originalId, callback) {
+        this.update({loadingJobs: true});
+        crn.getDatasetJobs(projectId, (err, res) => {
+            // sort jobs by app
+            let jobs = {};
+            for (let job of res.body) {
+                if (!jobs.hasOwnProperty(job.appId)) {
+                    jobs[job.appId] = {
+                        appLabel:   job.appLabel,
+                        appVersion: job.appVersion,
+                        runs: [job]
+                    };
+                } else {
+                    jobs[job.appId].runs.push(job);
+                }
+            }
+            // convert jobs to array
+            let jobArray = [];
+            for (let job in jobs) {
+                jobArray.push({
+                    appId:      job,
+                    appLabel:   jobs[job].appLabel,
+                    appVersion: jobs[job].appVersion,
+                    runs:       jobs[job].runs
+                });
+            }
+
+            this.update({jobs: jobArray, loadingJobs: false});
+            if (snapshot && callback) {
+                crn.getDatasetJobs(originalId, (err1, res1) => {
+                    callback(res1.body);
+                }, {snapshot: false});
+            } else if (callback) {
+                callback(res.body);
+            }
+        }, {snapshot});
+    },
+
+    /**
      * Start Job
      */
     startJob(snapshotId, app, parameters, callback) {
@@ -857,6 +857,23 @@ let datasetStore = Reflux.createStore({
                     });
                 }
             }
+        });
+    },
+
+    refreshJob(jobId, callback) {
+        let jobs = this.data.jobs;
+        crn.getJob(jobId, (err, res) => {
+            let jobUpdate = res.body;
+            for (let job of jobs) {
+                for (let run of job.runs) {
+                    if (jobId === run.jobId) {
+                        run.agave = jobUpdate.agave;
+                        run.results = jobUpdate.results;
+                    }
+                }
+            }
+            this.update({jobs});
+            callback();
         });
     },
 

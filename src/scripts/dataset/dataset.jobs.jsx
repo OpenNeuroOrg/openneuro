@@ -56,6 +56,11 @@ let Jobs = React.createClass({
                         <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
                         {runBy}
                     </span>
+                    <WarnButton
+                        icon="fa fa-repeat"
+                        message="refresh"
+                        warn={false}
+                        action={actions.refreshJob.bind(this, run.jobId)} />
                     {this._failedMessage(run)}
                 </div>
             );
