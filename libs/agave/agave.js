@@ -1,7 +1,7 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 
-import request from './request';
-import config  from '../config';
+import request from '../request';
+import config  from '../../config';
 import fs      from 'fs';
 
 let userAuth   = 'Basic ' + new Buffer(config.agave.username + ':' + config.agave.password).toString('base64'),
