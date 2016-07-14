@@ -1,8 +1,7 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 
-import request from './request';
-import config  from '../config';
-import fs      from 'fs';
+import request from '../request';
+import config  from '../../config';
 
 let userAuth   = 'Basic ' + new Buffer(config.agave.username + ':' + config.agave.password).toString('base64'),
     clientAuth = 'Basic ' + new Buffer(config.agave.consumerKey + ':' + config.agave.consumerSecret).toString('base64');
@@ -123,10 +122,11 @@ export default {
             } else {
                 // set config changes and save to env variables
                 config.agave.consumerKey = res.body.result.consumerKey;
-                process.env.CRN_SERVER_AGAVE_CONSUMER_KEY=res.body.result.consumerKey
+                process.env.CRN_SERVER_AGAVE_CONSUMER_KEY=res.body.result.consumerKey;
                 config.agave.consumerSecret = res.body.result.consumerSecret;
-                process.env.CRN_SERVER_AGAVE_CONSUMER_SECRET=res.body.result.consumerSecret
+                process.env.CRN_SERVER_AGAVE_CONSUMER_SECRET=res.body.result.consumerSecret;
                 clientAuth = 'Basic ' + new Buffer(config.agave.consumerKey + ':' + config.agave.consumerSecret).toString('base64');
+                callback();
             }
         });
     },

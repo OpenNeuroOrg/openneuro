@@ -1,7 +1,6 @@
 // dependencies ------------------------------------------------------------
 
 import config   from '../config';
-import agave    from '../libs/agave';
 import sanitize from '../libs/sanitize';
 import mongo    from '../libs/mongo';
 import scitran  from '../libs/scitran';
