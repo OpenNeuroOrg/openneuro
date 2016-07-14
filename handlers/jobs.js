@@ -202,26 +202,10 @@ let handlers = {
     results(req, res) {
         let jobId = req.params.jobId;
         if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
-            let results = [];
-            agave.getJobOutput(req.body.id, (err, resp) => {
-                let output = resp.body.result;
-                if (output) {
-                    // get main output files
-                    for (let file of output) {
-                        if ((file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) && file.length > 0) {
-                            results.push(file);
-                        }
-                    }
-                }
-                agave.getJobResults(req.body.id, (err, resp1) => {
-                    if (resp1.body.result) {
-                        results = results.concat(resp1.body.result);
-                    }
-                    results = results.length > 0 ? results : null;
-                    c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
-                        if (err) {res.send(err);}
-                        else {res.send(result);}
-                    });
+            getOutputs(jobId, (results) => {
+                c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
+                    if (err) {res.send(err);}
+                    else {res.send(result);}
                 });
             });
         } else {
@@ -230,6 +214,28 @@ let handlers = {
                 else {res.send(result);}
             });
         }
+    },
+
+    /**
+     * Get Job
+     */
+    getJob(req, res) {
+        let jobId = req.params.jobId;
+        console.log(jobId);
+        c.jobs.findOne({jobId}, {}, (err, job) => {
+            let status = job.agave.status;
+
+            // check if job is already known to be completed
+            if (status === 'FINISHED' || status === 'FAILED') {
+                res.send(job);
+            } else {
+                agave.getJob(jobId, (err, resp) => {
+                    getOutputs(jobId, (results) => {
+                        res.send({agave: resp.body, results});
+                    });
+                });
+            }
+        });
     },
 
     /**
@@ -403,6 +409,30 @@ let handlers = {
     }
 
 };
+
+// helper methods ----------------------------------------------------------
+
+function getOutputs (jobId, callback) {
+    let results = [];
+    agave.getJobOutput(jobId, (err, res) => {
+        let output = res.body.result;
+        if (output) {
+            // get main output files
+            for (let file of output) {
+                if ((file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) && file.length > 0) {
+                    results.push(file);
+                }
+            }
+        }
+        agave.getJobResults(jobId, (err, resp) => {
+            if (resp.body.result) {
+                results = results.concat(resp.body.result);
+            }
+            results = results.length > 0 ? results : null;
+            callback(results);
+        });
+    });
+}
 
 function submitJob (job, callback) {
 
