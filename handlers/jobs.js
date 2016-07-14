@@ -229,12 +229,22 @@ let handlers = {
                 res.send(job);
             } else {
                 agave.api.getJob(jobId, (err, resp) => {
-                    agave.getOutputs(jobId, (results) => {
-                        c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
-                            if (err) {res.send(err);}
-                            else {res.send({agave: resp.body.result, results});}
+                    // check status
+                    if (resp.body.result.status === 'FINISHED') {
+                        agave.getOutputs(jobId, (results) => {
+                            c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
+                                if (err) {res.send(err);}
+                                else {res.send({agave: resp.body.result, results});}
+                            });
                         });
-                    });
+                    } else if (job.agave.status !== resp.body.result.status) {
+                        c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
+                            if (err) {res.send(err);}
+                            else {res.send({agave: resp.body.result});}
+                        });
+                    } else {
+                        res.send({agave: resp.body.result});
+                    }
                 });
             }
         });
