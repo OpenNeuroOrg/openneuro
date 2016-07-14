@@ -209,7 +209,7 @@ let handlers = {
                 });
             });
         } else {
-            c.jobs.updateOne({jobId}, {$set: {agave: req.body}}, {}).then((err, result) => {
+            c.jobs.updateOne({jobId}, {$set: {agave: req.body}}, {}, (err, result) => {
                 if (err) {res.send(err);}
                 else {res.send(result);}
             });
@@ -221,7 +221,6 @@ let handlers = {
      */
     getJob(req, res) {
         let jobId = req.params.jobId;
-        console.log(jobId);
         c.jobs.findOne({jobId}, {}, (err, job) => {
             let status = job.agave.status;
 
@@ -231,7 +230,10 @@ let handlers = {
             } else {
                 agave.getJob(jobId, (err, resp) => {
                     getOutputs(jobId, (results) => {
-                        res.send({agave: resp.body, results});
+                        c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
+                            if (err) {res.send(err);}
+                            else {res.send({agave: resp.body.result, results});}
+                        });
                     });
                 });
             }
