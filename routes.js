@@ -57,19 +57,19 @@ let routes = [
 		method: 'get',
 		url: '/apps',
 		middleware: [],
-		handler: jobs.listApps
+		handler: jobs.getApps
 	},
 	{
 		method: 'post',
 		url: '/jobs',
 		middleware: [auth.user],
-		handler: jobs.create
+		handler: jobs.postJob
 	},
 	{
 		method: 'get',
 		url: '/datasets/:datasetId/jobs',
 		middleware: [auth.optional],
-		handler: jobs.list
+		handler: jobs.getDatasetJobs
 	},
 	{
 		method: 'delete',
@@ -81,7 +81,7 @@ let routes = [
 		method: 'post',
 		url: '/jobs/:jobId/results',
 		middleware: [],
-		handler: jobs.results
+		handler: jobs.postResults
 	},
 	{
 		method: 'get',
@@ -105,7 +105,7 @@ let routes = [
 		method: 'get',
 		url: '/jobs/:jobId/results/:fileName',
 		middleware: [],
-		handler: jobs.downloadResults
+		handler: jobs.getFile
 	}
 
 ];

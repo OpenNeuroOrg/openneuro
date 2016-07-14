@@ -43,9 +43,9 @@ let models = {
 let handlers = {
 
     /**
-     * List Apps
+     * GET Apps
      */
-    listApps(req, res, next) {
+    getApps(req, res, next) {
         agave.api.listApps((err, resp) => {
             if (err) {return next(err);}
             let apps = [];
@@ -63,9 +63,9 @@ let handlers = {
     },
 
     /**
-     * Create Job
+     * POST Job
      */
-    create(req, res, next) {
+    postJob(req, res, next) {
         sanitize.req(req, models.job, (err, job) => {
             if (err) {return next(err);}
             scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
@@ -140,9 +140,9 @@ let handlers = {
     },
 
     /**
-     *  List Jobs
+     *  GET Dataset Jobs
      */
-    list(req, res, next) {
+    getDatasetJobs(req, res, next) {
         let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
         let datasetId  = req.params.datasetId;
         let user       = req.user;
@@ -197,9 +197,9 @@ let handlers = {
     },
 
     /**
-     * Results
+     * POST Results
      */
-    results(req, res) {
+    postResults(req, res) {
         let jobId = req.params.jobId;
         if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
             agave.getOutputs(jobId, (results) => {
@@ -217,7 +217,7 @@ let handlers = {
     },
 
     /**
-     * Get Job
+     * GET Job
      */
     getJob(req, res) {
         let jobId = req.params.jobId;
@@ -251,7 +251,7 @@ let handlers = {
     },
 
     /**
-     * Get Download Ticket
+     * GET Download Ticket
      */
     getDownloadTicket(req, res, next) {
         let jobId    = req.params.jobId,
@@ -302,9 +302,9 @@ let handlers = {
     },
 
     /**
-     * Download Results
+     * GET File
      */
-    downloadResults(req, res, next) {
+    getFile(req, res, next) {
         let ticket   = req.query.ticket,
             fileName = req.params.fileName,
             jobId    = req.params.jobId;
@@ -376,7 +376,7 @@ let handlers = {
     },
 
     /**
-     * Delete Dataset Jobs
+     * DELETE Dataset Jobs
      *
      * Takes a dataset ID url parameter and deletes all jobs for that dataset.
      */
