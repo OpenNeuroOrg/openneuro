@@ -238,7 +238,7 @@ export default  {
                         callback([dataset]);
                     });
                 });
-            });
+            }, options);
         }, options);
     },
 
@@ -275,25 +275,7 @@ export default  {
      * containers.
      */
     deleteDataset (projectId, callback, options) {
-        if (!options.snapshot) {
-            scitran.getSessions(projectId, (sessions) => {
-                async.each(sessions, (session, cb) => {
-                    scitran.getAcquisitions(session._id, (acquisitions) => {
-                        async.each(acquisitions, (acquisition, cb1) => {
-                            scitran.deleteContainer('acquisitions', acquisition._id, cb1);
-                        }, () => {
-                            scitran.deleteContainer('sessions', session._id, cb);
-                        });
-                    });
-                }, () => {
-                    crn.deleteDatasetJobs(projectId, () => {
-                        scitran.deleteContainer('projects', projectId, callback);
-                    });
-                });
-            });
-        } else {
-            scitran.deleteSnapshot(projectId, callback);
-        }
+        scitran.deleteContainer('projects', projectId, callback, options);
     },
 
 // Dataset Format Helpers -----------------------------------------------------------------

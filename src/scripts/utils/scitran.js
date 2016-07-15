@@ -285,8 +285,9 @@ export default  {
      * Delete Container
      *
      */
-    deleteContainer (type, id, callback) {
-        request.del(config.scitran.url + type + '/' + id, callback);
+    deleteContainer (type, id, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.del(config.scitran.url + modifier + type + '/' + id + '?purge=true', callback);
     },
 
     /**
@@ -366,10 +367,6 @@ export default  {
         request.get(config.scitran.url + 'projects/' + projectId + '/snapshots', {
             query: {public: true}
         }, callback);
-    },
-
-    deleteSnapshot (projectId, callback) {
-        request.del(config.scitran.url + 'snapshots/projects/' + projectId, callback);
     },
 
     updateSnapshotPublic(projectId, value, callback) {
