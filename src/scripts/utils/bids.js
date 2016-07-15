@@ -44,21 +44,27 @@ export default  {
     },
 
     /**
-     * Get Modalities
+     * Filter Modalities
      *
-     * Get all BIDS modalities for a session.
+     * Takes a list scitran acquisitions and a sessionID and
+     * calls back with a list of BIDS modalities in that
+     * session.
      */
-    getModalities(sessionId, callback) {
-        scitran.getAcquisitions(sessionId, (modalities) => {
-            modalities.sort((a, b) => {
-                let aLabel = a.label.toLowerCase();
-                let bLabel = b.label.toLowerCase();
-                if (aLabel < bLabel) {return -1;}
-                else if (aLabel > bLabel) {return 1;}
-                else {return 0;}
-            });
-            callback(modalities);
+    filterModalities (acquisitions, sessionId, callback) {
+        let modalities = [];
+        for (let modality of acquisitions) {
+            if (modality.session === sessionId) {
+                modalities.push(modality);
+            }
+        }
+        modalities.sort((a, b) => {
+            let aLabel = a.label.toLowerCase();
+            let bLabel = b.label.toLowerCase();
+            if (aLabel < bLabel) {return -1;}
+            else if (aLabel > bLabel) {return 1;}
+            else {return 0;}
         });
+        callback(modalities);
     },
 
     /**
@@ -194,41 +200,43 @@ export default  {
         let p = {total: 2, completed: 0}
         progress(p);
         scitran.getSessions(projectId, (scitranSessions) => {
-            p.total += scitranSessions.length;
-            p.completed++;
-            progress(p);
-            this.filterSessions(scitranSessions, 'subject', (subjects) => {
+            scitran.getProjectAcquisitions(projectId, (scitranAcquisitions) => {
+                p.total += scitranSessions.length;
                 p.completed++;
-                p.completed += subjects.length;
                 progress(p);
-                dataset.containerType = 'projects';
-                dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
-                dataset.children = dataset.children.concat(subjects);
-                async.each(subjects, (subject, cb) => {
-                    this.filterSessions(scitranSessions, subject._id, (sessions) => {
-                        subject.containerType = 'sessions';
-                        subject.children = this.formatFiles(subject.children, subject._id, 'sessions');
-                        subject.children = subject.children.concat(sessions);
-                        async.each(sessions, (session, cb1) => {
-                            this.getModalities(session._id, (modalities) => {
-                                p.completed++;
-                                // limit frequency of progress calls
-                                if (p.total < 50 || p.completed % 10 == 0) {progress(p);}
-                                session.containerType = 'sessions';
-                                session.children = this.formatFiles(session.children, session._id, 'sessions');
-                                session.children = session.children.concat(modalities);
-                                async.each(modalities, (modality, cb2) => {
-                                    modality.containerType = 'acquisitions';
-                                    modality.children = modality.files;
-                                    modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
-                                    modality.name = modality.label;
-                                    cb2();
-                                }, cb1);
-                            }, options);
-                        }, cb);
+                this.filterSessions(scitranSessions, 'subject', (subjects) => {
+                    p.completed++;
+                    p.completed += subjects.length;
+                    progress(p);
+                    dataset.containerType = 'projects';
+                    dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
+                    dataset.children = dataset.children.concat(subjects);
+                    async.each(subjects, (subject, cb) => {
+                        this.filterSessions(scitranSessions, subject._id, (sessions) => {
+                            subject.containerType = 'sessions';
+                            subject.children = this.formatFiles(subject.children, subject._id, 'sessions');
+                            subject.children = subject.children.concat(sessions);
+                            async.each(sessions, (session, cb1) => {
+                                this.filterModalities(scitranAcquisitions, session._id, (modalities) => {
+                                    p.completed++;
+                                    // limit frequency of progress calls
+                                    if (p.total < 50 || p.completed % 10 == 0) {progress(p);}
+                                    session.containerType = 'sessions';
+                                    session.children = this.formatFiles(session.children, session._id, 'sessions');
+                                    session.children = session.children.concat(modalities);
+                                    async.each(modalities, (modality, cb2) => {
+                                        modality.containerType = 'acquisitions';
+                                        modality.children = modality.files;
+                                        modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
+                                        modality.name = modality.label;
+                                        cb2();
+                                    }, cb1);
+                                }, options);
+                            }, cb);
+                        });
+                    }, () => {
+                        callback([dataset]);
                     });
-                }, () => {
-                    callback([dataset]);
                 });
             });
         }, options);
