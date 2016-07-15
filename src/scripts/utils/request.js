@@ -93,13 +93,13 @@ var Request = {
  */
 function handleRequest (url, options, callback) {
 
+    // normalize options to play nice with superagent requests
+    options = normalizeOptions(options);
+
     // add snapshot url param to scitran requests
     if (options.snapshot && url.indexOf(config.scitran.url) > -1) {
         url = config.scitran.url + 'snapshots/' + url.slice(config.scitran.url.length);
     }
-
-    // normalize options to play nice with superagent requests
-    options = normalizeOptions(options);
 
     // verify access token before authenticated requests
     if (options.auth && hasToken() && (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)) {
@@ -131,6 +131,7 @@ function handleResponse (err, res, callback) {
  * normalizes it so requests won't fail.
  */
 function normalizeOptions (options) {
+    options = options ? options : {};
     if (!options.headers) {options.headers = {};}
     if (!options.query)   {options.query   = {};}
     if (!options.hasOwnProperty('auth')) {options.auth = true;}
