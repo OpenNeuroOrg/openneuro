@@ -275,6 +275,7 @@ export default  {
      * containers.
      */
     deleteDataset (projectId, callback, options) {
+        options.query = {purge: true};
         scitran.deleteContainer('projects', projectId, callback, options);
     },
 
