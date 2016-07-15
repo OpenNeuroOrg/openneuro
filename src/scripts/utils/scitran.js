@@ -209,6 +209,16 @@ export default  {
     },
 
     /**
+     * Get Project Acquisitions
+     */
+    getProjectAcquisitions (projectId, callback, options) {
+        let modifier = options && options.snapshot ? 'snapshots/' : '';
+        request.get(config.scitran.url + modifier + 'projects/' + projectId + '/acquisitions', {}, (err, res) => {
+            callback(res.body);
+        });
+    },
+
+    /**
      * Get Acquisitions
      *
      */
