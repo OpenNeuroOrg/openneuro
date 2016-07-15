@@ -46,7 +46,7 @@ export default {
      * Un Blacklist
      */
     unBlacklistUser(userId, callback) {
-        request.del(config.crn.url + 'users/blacklist/' + userId, callback);
+        request.del(config.crn.url + 'users/blacklist/' + userId, {}, callback);
     },
 
 // Jobs ------------------------------------------------------------------------------------
@@ -113,7 +113,7 @@ export default {
      * Delete Dataset Jobs
      */
     deleteDatasetJobs(datasetId, callback) {
-        request.del(config.crn.url + 'datasets/' + datasetId + '/jobs', callback);
+        request.del(config.crn.url + 'datasets/' + datasetId + '/jobs', {}, callback);
     },
 
 // Validation ------------------------------------------------------------------------------

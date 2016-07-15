@@ -60,7 +60,7 @@ export default  {
      * Takes a userId and removes the user.
      */
     removeUser (userId, callback) {
-        request.del(config.scitran.url + 'users/' + userId, (err, res) => {
+        request.del(config.scitran.url + 'users/' + userId, {}, (err, res) => {
             callback(err, res);
         });
     },
@@ -286,8 +286,9 @@ export default  {
      *
      */
     deleteContainer (type, id, callback, options) {
+        options = options ? options : {};
         let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.del(config.scitran.url + modifier + type + '/' + id + '?purge=true', callback);
+        request.del(config.scitran.url + modifier + type + '/' + id + '?purge=true', options, callback);
     },
 
     /**
@@ -295,21 +296,21 @@ export default  {
      *
      */
     deleteFile (level, containerId, filename, callback) {
-        request.del(config.scitran.url + level + '/' + containerId + '/files/' + filename, callback);
+        request.del(config.scitran.url + level + '/' + containerId + '/files/' + filename, {}, callback);
     },
 
     /**
      * Remove Tag
      */
     removeTag (containerType, containerId, tag, callback) {
-        request.del(config.scitran.url + containerType + '/' + containerId + '/tags/' + tag, callback);
+        request.del(config.scitran.url + containerType + '/' + containerId + '/tags/' + tag, {}, callback);
     },
 
     /**
      * Remove Permission
      */
     removePermission (container, id, userId, callback) {
-        request.del(config.scitran.url + container + '/' + id + '/permissions/local/' + userId, callback);
+        request.del(config.scitran.url + container + '/' + id + '/permissions/local/' + userId, {}, callback);
     },
 
 // Update ---------------------------------------------------------------------------------
