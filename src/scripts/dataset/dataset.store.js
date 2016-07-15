@@ -263,7 +263,7 @@ let datasetStore = Reflux.createStore({
      * download feedback.
      */
     trackDownload(callback) {
-        scitran.trackUsage(this.data.dataset._id, 'download', () => {
+        scitran.trackUsage(this.data.dataset._id, 'download', {snapshot: true}, () => {
             let dataset = this.data.dataset;
             dataset.downloads++;
             this.update({dataset});
@@ -1006,7 +1006,7 @@ let datasetStore = Reflux.createStore({
     // usage analytics ---------------------------------------------------------------
 
     trackView (snapshotId) {
-        scitran.trackUsage(snapshotId, 'view', () => {});
+        scitran.trackUsage(snapshotId, 'view', {snapshot: true}, () => {});
     },
 
     // Toggle Sidebar ----------------------------------------------------------------

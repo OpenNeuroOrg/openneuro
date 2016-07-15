@@ -364,10 +364,9 @@ export default  {
      *
      * - type ('view' or 'download')
      */
-    trackUsage (snapshotId, type, callback) {
-        request.post(config.scitran.url + 'snapshots/projects/' + snapshotId + '/analytics', {
-            query: {type}
-        }, callback);
+    trackUsage (snapshotId, type, options, callback) {
+        options.query = {type}
+        request.post(config.scitran.url + 'projects/' + snapshotId + '/analytics', options, callback);
     },
 
     /**
@@ -382,9 +381,7 @@ export default  {
      * - limit      (integer)
      */
     getUsage (snapshotId, options, callback) {
-        request.get(config.scitran.url + 'snapshots/projects/' + snapshotId + '/analytics', {
-            query: options
-        }, callback);
+        request.get(config.scitran.url + 'projects/' + snapshotId + '/analytics', options, callback);
     }
 
 };

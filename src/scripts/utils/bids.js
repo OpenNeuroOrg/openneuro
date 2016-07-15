@@ -449,9 +449,9 @@ export default  {
     usage (snapshotId, options, callback) {
         if (options && options.snapshot) {
             let usage = {};
-            scitran.getUsage(snapshotId, {type: 'view', count: true}, (err, res) => {
+            scitran.getUsage(snapshotId, {query: {type: 'view', count: true}, snapshot: true}, (err, res) => {
                 usage.views = res.body.count;
-                scitran.getUsage(snapshotId, {type: 'download', count: true}, (err1, res1) => {
+                scitran.getUsage(snapshotId, {query: {type: 'download', count: true}, snapshot: true}, (err1, res1) => {
                     usage.downloads = res1.body.count;
                     callback(usage);
                 });
