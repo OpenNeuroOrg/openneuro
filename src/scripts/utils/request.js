@@ -46,8 +46,8 @@ var Request = {
         });
     },
 
-    del (url, callback) {
-        handleRequest(url, {}, function (url, options) {
+    del (url, options, callback) {
+        handleRequest(url, options, function (url, options) {
             request.del(url)
                 .set(options.headers)
                 .query(options.query)
@@ -88,9 +88,20 @@ var Request = {
  *   - body: A http request body.
  *   - auth: A boolean determining whether the access token
  *   should be supplied with the request.
+ *   - snapshot: A boolean that will add a 'snapshots' url
+ *   param to scitran requests.
  */
 function handleRequest (url, options, callback) {
+
+    // normalize options to play nice with superagent requests
     options = normalizeOptions(options);
+
+    // add snapshot url param to scitran requests
+    if (options.snapshot && url.indexOf(config.scitran.url) > -1) {
+        url = config.scitran.url + 'snapshots/' + url.slice(config.scitran.url.length);
+    }
+
+    // verify access token before authenticated requests
     if (options.auth && hasToken() && (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)) {
         if (window.localStorage.scitranUser && JSON.parse(window.localStorage.scitranUser).root) {options.query.root = true;}
         userActions.checkAuth((token) => {
@@ -120,6 +131,7 @@ function handleResponse (err, res, callback) {
  * normalizes it so requests won't fail.
  */
 function normalizeOptions (options) {
+    options = options ? options : {};
     if (!options.headers) {options.headers = {};}
     if (!options.query)   {options.query   = {};}
     if (!options.hasOwnProperty('auth')) {options.auth = true;}

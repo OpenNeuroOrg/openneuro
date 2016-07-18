@@ -263,7 +263,7 @@ let datasetStore = Reflux.createStore({
      * download feedback.
      */
     trackDownload(callback) {
-        scitran.trackUsage(this.data.dataset._id, 'download', () => {
+        scitran.trackUsage(this.data.dataset._id, 'download', {snapshot: true}, () => {
             let dataset = this.data.dataset;
             dataset.downloads++;
             this.update({dataset});
@@ -431,8 +431,11 @@ let datasetStore = Reflux.createStore({
      * Update README
      */
     updateREADME(value, callback) {
+        let dataset = this.data.dataset;
         scitran.updateFileFromString('projects', this.data.dataset._id, 'README', value, '', [], (err, res) => {
             callback(err, res);
+            dataset.README = value;
+            this.update({dataset});
             this.updateModified();
         });
     },
@@ -949,7 +952,7 @@ let datasetStore = Reflux.createStore({
                 callback({error: 'You cannot snapshot an invalid dataset. Please fix the errors and try again.'});
             } else {
                 let latestSnapshot = this.data.snapshots[1];
-                if (latestSnapshot && (moment(project.modified).diff(moment(latestSnapshot.modified)) <= 0)) {
+                if (latestSnapshot && (moment(this.data.dataset.modified).diff(moment(latestSnapshot.modified)) <= 0)) {
                     callback({error: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.'});
                 } else {
                     scitran.createSnapshot(datasetId, (err, res) => {
@@ -1006,7 +1009,7 @@ let datasetStore = Reflux.createStore({
     // usage analytics ---------------------------------------------------------------
 
     trackView (snapshotId) {
-        scitran.trackUsage(snapshotId, 'view', () => {});
+        scitran.trackUsage(snapshotId, 'view', {snapshot: true}, () => {});
     },
 
     // Toggle Sidebar ----------------------------------------------------------------

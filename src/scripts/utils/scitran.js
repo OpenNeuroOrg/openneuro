@@ -60,7 +60,7 @@ export default  {
      * Takes a userId and removes the user.
      */
     removeUser (userId, callback) {
-        request.del(config.scitran.url + 'users/' + userId, (err, res) => {
+        request.del(config.scitran.url + 'users/' + userId, {}, (err, res) => {
             callback(err, res);
         });
     },
@@ -163,12 +163,9 @@ export default  {
      *
      */
     getProjects (options, callback) {
-        let auth = options.hasOwnProperty('authenticate') ? options.authenticate : true;
-        let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + 'projects', {
-            auth,
-            query: {metadata: !!options.metadata}
-        }, (err, res) => {
+        options.auth = options.hasOwnProperty('authenticate') ? options.authenticate : true;
+        options.query = {metadata: !!options.metadata};
+        request.get(config.scitran.url + 'projects', options, (err, res) => {
             callback(res.body);
         });
     },
@@ -178,8 +175,7 @@ export default  {
      *
      */
     getProject (projectId, callback, options) {
-        let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + 'projects/' + projectId, {}, (err, res) => {
+        request.get(config.scitran.url + 'projects/' + projectId, options, (err, res) => {
             callback(res);
         });
     },
@@ -189,10 +185,8 @@ export default  {
      *
      */
     getSessions (projectId, callback, options) {
-        let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + 'projects/' + projectId + '/sessions', {
-            query: {public: true}
-        }, (err, res) => {
+        options.query = {public: true};
+        request.get(config.scitran.url + 'projects/' + projectId + '/sessions', options, (err, res) => {
             callback(res.body);
         });
     },
@@ -202,8 +196,16 @@ export default  {
      *
      */
     getSession (sessionId, callback, options) {
-        let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + 'sessions/' + sessionId, {}, (err, res) => {
+        request.get(config.scitran.url + 'sessions/' + sessionId, options, (err, res) => {
+            callback(res.body);
+        });
+    },
+
+    /**
+     * Get Project Acquisitions
+     */
+    getProjectAcquisitions (projectId, callback, options) {
+        request.get(config.scitran.url + 'projects/' + projectId + '/acquisitions', options, (err, res) => {
             callback(res.body);
         });
     },
@@ -213,10 +215,8 @@ export default  {
      *
      */
     getAcquisitions (sessionId, callback, options) {
-        let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + 'sessions/' + sessionId + '/acquisitions', {
-            query: {public: true}
-        }, (err, res) => {
+        options.query = {public: true};
+        request.get(config.scitran.url + 'sessions/' + sessionId + '/acquisitions', options, (err, res) => {
             callback(res.body);
         });
     },
@@ -226,8 +226,7 @@ export default  {
      *
      */
     getAcquisition (acquisitionId, callback, options) {
-        let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url  + modifier + 'acquisitions/' + acquisitionId, {}, (err, res) => {
+        request.get(config.scitran.url  + 'acquisitions/' + acquisitionId, options, (err, res) => {
             callback(res.body);
         });
     },
@@ -237,8 +236,7 @@ export default  {
      *
      */
     getFile (level, id, filename, callback, options) {
-        let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + level + '/' + id + '/files/' + filename, {}, callback);
+        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, options, callback);
     },
 
     /**
@@ -246,10 +244,8 @@ export default  {
      *
      */
     getDownloadTicket (level, id, filename, callback, options) {
-        let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.get(config.scitran.url + modifier + level + '/' + id + '/files/' + filename, {
-            query: {ticket: ''}
-        }, callback);
+        options.query = {ticket: ''};
+        request.get(config.scitran.url + level + '/' + id + '/files/' + filename, options, callback);
     },
 
     /**
@@ -257,16 +253,12 @@ export default  {
      *
      */
     getBIDSDownloadTicket (projectId, callback, options) {
-        let modifier = options && options.snapshot ? 'snapshots/' : '';
-        request.post(config.scitran.url + modifier + 'download', {
-            query: {format: 'bids'},
-            body: {
-                nodes:[
-                    {_id: projectId, level: 'project'}
-                ],
-                optional: false
-            }
-        }, callback);
+        options.query = {format: 'bids'};
+        options.body = {
+            nodes:[{_id: projectId, level: 'project'}],
+            optional: false
+        };
+        request.post(config.scitran.url + 'download', options, callback);
     },
 
 // Delete ---------------------------------------------------------------------------------
@@ -275,8 +267,9 @@ export default  {
      * Delete Container
      *
      */
-    deleteContainer (type, id, callback) {
-        request.del(config.scitran.url + type + '/' + id, callback);
+    deleteContainer (type, id, callback, options) {
+        options = options ? options : {};
+        request.del(config.scitran.url + type + '/' + id + '?purge=true', options, callback);
     },
 
     /**
@@ -284,21 +277,21 @@ export default  {
      *
      */
     deleteFile (level, containerId, filename, callback) {
-        request.del(config.scitran.url + level + '/' + containerId + '/files/' + filename, callback);
+        request.del(config.scitran.url + level + '/' + containerId + '/files/' + filename, {}, callback);
     },
 
     /**
      * Remove Tag
      */
     removeTag (containerType, containerId, tag, callback) {
-        request.del(config.scitran.url + containerType + '/' + containerId + '/tags/' + tag, callback);
+        request.del(config.scitran.url + containerType + '/' + containerId + '/tags/' + tag, {}, callback);
     },
 
     /**
      * Remove Permission
      */
     removePermission (container, id, userId, callback) {
-        request.del(config.scitran.url + container + '/' + id + '/permissions/local/' + userId, callback);
+        request.del(config.scitran.url + container + '/' + id + '/permissions/local/' + userId, {}, callback);
     },
 
 // Update ---------------------------------------------------------------------------------
@@ -358,10 +351,6 @@ export default  {
         }, callback);
     },
 
-    deleteSnapshot (projectId, callback) {
-        request.del(config.scitran.url + 'snapshots/projects/' + projectId, callback);
-    },
-
     updateSnapshotPublic(projectId, value, callback) {
         request.put(config.scitran.url + 'snapshots/projects/' + projectId + '/public', {
             body: {value}
@@ -375,10 +364,9 @@ export default  {
      *
      * - type ('view' or 'download')
      */
-    trackUsage (snapshotId, type, callback) {
-        request.post(config.scitran.url + 'snapshots/projects/' + snapshotId + '/analytics', {
-            query: {type}
-        }, callback);
+    trackUsage (snapshotId, type, options, callback) {
+        options.query = {type}
+        request.post(config.scitran.url + 'projects/' + snapshotId + '/analytics', options, callback);
     },
 
     /**
@@ -393,9 +381,7 @@ export default  {
      * - limit      (integer)
      */
     getUsage (snapshotId, options, callback) {
-        request.get(config.scitran.url + 'snapshots/projects/' + snapshotId + '/analytics', {
-            query: options
-        }, callback);
+        request.get(config.scitran.url + 'projects/' + snapshotId + '/analytics', options, callback);
     }
 
 };
