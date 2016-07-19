@@ -23,21 +23,18 @@ export default {
 	 * Takes an email address, a subject, a template name
 	 * and a data object and immediately sends an email.
 	 */
-	send(receiver, subject, tpl, data) {
+	send (email, callback) {
 
 		// configure mail options
 		var mailOptions = {
 			from: config.email.user,
-			to: receiver,
-			subject: subject,
-			html: templates[tpl](data)
+			to: email.to,
+			subject: email.subject,
+			html: templates[email.template](email.data)
 		};
 
 		// send email
-		transporter.sendMail(mailOptions, (err, info) => {
-			console.log(err);
-			console.log(info);
-		});
+		transporter.sendMail(mailOptions, callback);
 
 	}
 

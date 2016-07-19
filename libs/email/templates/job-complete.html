@@ -1,7 +1,20 @@
-<div>
-	<h1>{{name}}</h1>
-	<p>
-		<b>Message:</b>
-		{{message}}
-	</p>
-</div>
+<html>
+	<body>
+		<div>
+			<h1>Dear {{firstName}} {{lastName}},</h1>
+
+			<p>
+				Your processing analysis {{appName}} scheduled on {{startDate}} for dataset {{datasetName}} has {{status}}. Follow this link to access your dataset and view your results {{siteUrl}}/datasets/{{datasetId}}/versions/{{snapshotId}}
+			</p>
+
+			<p>
+				Sincerely,
+				CRN
+			</p>
+
+			<p>
+				<a href="{{unsubscribeLink}}">Unsubscribe</a>
+			</p>
+		</div>
+	</body>
+<html>
