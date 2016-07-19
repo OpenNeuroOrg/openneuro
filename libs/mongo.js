@@ -25,7 +25,8 @@ export default {
 		validationQueue: null,
 		jobs: null,
 		tickets: null,
-		userPreferences: null
+		userPreferences: null,
+		notifications: null
 	},
 
 	/**
