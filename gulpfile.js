@@ -92,7 +92,11 @@ gulp.task('buildApp', function(cb) {
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(uglify())
         .pipe(cachebust.resources())
-        .pipe(sourcemaps.write('./'))
+        .pipe(sourcemaps.write('./', {
+            sourceMappingURL: function (file) {
+                return '/' + file.relative + '.map';
+            }
+        }))
         .pipe(gulp.dest(p.distTemp))
         .on('end', cb);
 });
