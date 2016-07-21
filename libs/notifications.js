@@ -43,7 +43,7 @@ let notifications = {
                 type: 'email',
                 email: {
                     to: job.userId,
-                    subject: 'Job ' + job.agave.status,
+                    subject: 'Analysis - ' + job.appLabel + ' on ' + job.datasetLabel + ' - ' + job.agave.status,
                     template: 'job-complete',
                     data: {
                         firstName:       user.firstname,
