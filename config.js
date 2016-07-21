@@ -28,9 +28,9 @@ let config = {
 	},
     "notifications": {
         "email": {
-            "service": process.env.CRN_MAIL_SERVICE,
-            "user":    process.env.CRN_MAIL_USER,
-            "pass":    process.env.CRN_MAIL_PASS
+            "service": process.env.CRN_SERVER_MAIL_SERVICE,
+            "user":    process.env.CRN_SERVER_MAIL_USER,
+            "pass":    process.env.CRN_SERVER_MAIL_PASS
         }
     }
 };

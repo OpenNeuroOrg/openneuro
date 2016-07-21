@@ -20,6 +20,10 @@ The CRN Server is configured through environment variables. Set the following va
 | CRN_SERVER_AGAVE_CONSUMER_KEY       | The AGAVE client API key                                |
 | CRN_SERVER_AGAVE_CONSUMER_SECRET    | The AGAVE client API secret                             |
 | CRN_SERVER_AGAVE_STORAGE            | The root path of the associated AGAVE storage system    |
+| CRN_SERVER_MAIL_SERVICE             | The name of the mail service for email notifications    |
+| CRN_SERVER_MAIL_USER                | The username for the mail service                       |
+| CRN_SERVER_MAIL_PASS                | The password for the mail service                       |
+
 
 
 ## Usage
