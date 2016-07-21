@@ -6,10 +6,10 @@ import templates  from './templates';
 
 // setup email transporter
 var transporter = nodemailer.createTransport({
-	service: 'Gmail',
+	service: config.notifications.email.service,
 	auth: {
-		user: config.email.user,
-		pass: config.email.pass
+		user: config.notifications.email.user,
+		pass: config.notifications.email.pass
 	}
 });
 
@@ -27,7 +27,7 @@ export default {
 
 		// configure mail options
 		var mailOptions = {
-			from: config.email.user,
+			from: config.notifications.email.user,
 			to: email.to,
 			subject: email.subject,
 			html: templates[email.template](email.data)
