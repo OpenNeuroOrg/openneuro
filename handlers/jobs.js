@@ -202,20 +202,26 @@ let handlers = {
      */
     postResults(req, res) {
         let jobId = req.params.jobId;
-        if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
-            agave.getOutputs(jobId, (results) => {
-                c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
+        c.jobs.findOne({jobId}, {}, (err, job) => {
+            if (req.body.status === job.agave.status) {
+                res.send(job);
+            } else if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
+                agave.getOutputs(jobId, (results) => {
+                    c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
+                        if (err) {res.send(err);}
+                        else {res.send(result);}
+                        job.agave = req.body;
+                        job.results = results;
+                        notifications.jobComplete(job);
+                    });
+                });
+            } else {
+                c.jobs.updateOne({jobId}, {$set: {agave: req.body}}, {}, (err, result) => {
                     if (err) {res.send(err);}
                     else {res.send(result);}
-                    c.jobs.findOne({jobId}, {}, (err, job) => {notifications.jobComplete(job);});
                 });
-            });
-        } else {
-            c.jobs.updateOne({jobId}, {$set: {agave: req.body}}, {}, (err, result) => {
-                if (err) {res.send(err);}
-                else {res.send(result);}
-            });
-        }
+            }
+        });
     },
 
     /**
