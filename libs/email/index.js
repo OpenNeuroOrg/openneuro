@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import config     from '../../config';
 import templates  from './templates';
+import juice      from 'juice';
 
 // library configuration ---------------------------------------
 
@@ -25,12 +26,18 @@ export default {
 	 */
 	send (email, callback) {
 
+		// template data
+		let html = templates[email.template](email.data);
+
+		// inline styles
+		html = juice(html);
+
 		// configure mail options
 		var mailOptions = {
 			from: config.notifications.email.user,
 			to: email.to,
 			subject: email.subject,
-			html: templates[email.template](email.data)
+			html: html
 		};
 
 		// send email
