@@ -1,5 +1,6 @@
-import fs from 'fs';
-import _  from 'underscore';
+import fs    from 'fs';
+import _     from 'underscore';
+import juice from 'juice';
 
 // set template interpolation wrapper to {{}}
 _.templateSettings = {
@@ -13,6 +14,9 @@ for (let file of files) {
 	if (file.indexOf('.html') > -1) {
 		let tplName = file.slice(0, file.indexOf('.html'));
 		let tpl = fs.readFileSync(__dirname + '/' + file).toString('utf-8');
+		// inline styles
+		tpl = juice(tpl);
+		// convert to underscore template
 		templates[tplName] = _.template(tpl);
 	}
 }
