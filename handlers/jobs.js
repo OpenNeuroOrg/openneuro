@@ -1,17 +1,17 @@
 // dependencies ------------------------------------------------------------
 
-import agave      from '../libs/agave';
-import sanitize   from '../libs/sanitize';
-import scitran    from '../libs/scitran';
-import mongo      from '../libs/mongo';
-import async      from 'async';
-import config     from '../config';
-import {ObjectID} from 'mongodb';
-import crypto     from 'crypto';
-import archiver   from 'archiver';
+import agave         from '../libs/agave';
+import sanitize      from '../libs/sanitize';
+import scitran       from '../libs/scitran';
+import mongo         from '../libs/mongo';
+import async         from 'async';
+import config        from '../config';
+import {ObjectID}    from 'mongodb';
+import crypto        from 'crypto';
+import archiver      from 'archiver';
+import notifications from '../libs/notifications'
 
 let c = mongo.collections;
-
 
 // models ------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ let models = {
         appLabel:          'string, required',
         appVersion:        'string, required',
         datasetId:         'string, required',
+        datasetLabel:      'stirng, required',
         executionSystem:   'String, required',
         parameters:        'object, required',
         snapshotId:        'string, required',
@@ -206,6 +207,7 @@ let handlers = {
                 c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
                     if (err) {res.send(err);}
                     else {res.send(result);}
+                    createJobNotification(jobId);
                 });
             });
         } else {
@@ -235,12 +237,16 @@ let handlers = {
                             c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
                                 if (err) {res.send(err);}
                                 else {res.send({agave: resp.body.result, results});}
+                                createJobNotification(jobId);
                             });
                         });
                     } else if (job.agave.status !== resp.body.result.status) {
                         c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
                             if (err) {res.send(err);}
                             else {res.send({agave: resp.body.result});}
+                            if (resp.body.result.status === 'FAILED') {
+                                createJobNotification(jobId);
+                            }
                         });
                     } else {
                         res.send({agave: resp.body.result});
@@ -423,3 +429,31 @@ let handlers = {
 };
 
 export default handlers;
+
+function createJobNotification (jobId) {
+    c.jobs.findOne({jobId},{}, (err, job) => {
+        scitran.getUser(job.userId, (err, res) => {
+            let user = res.body;
+            notifications.add({
+                type: 'email',
+                email: {
+                    to: job.userId,
+                    subject: 'Job ' + job.agave.status,
+                    template: 'job-complete',
+                    data: {
+                        firstName:       user.firstname,
+                        lastName:        user.lastname,
+                        appName:         job.appLabel,
+                        startDate:       job.agave.created,
+                        datasetName:     job.datasetLabel,
+                        status:          job.agave.status,
+                        siteUrl:         config.url,
+                        datasetId:       job.datasetId,
+                        snapshotId:      job.snapshotId,
+                        unsubscribeLink: ''
+                    }
+                }
+            }, (err, info) => {});
+        });
+    });
+}
