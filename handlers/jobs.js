@@ -207,7 +207,7 @@ let handlers = {
                 c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
                     if (err) {res.send(err);}
                     else {res.send(result);}
-                    notifications.jobComplete(jobId);
+                    c.jobs.findOne({jobId}, {}, (err, job) => {notifications.jobComplete(job);});
                 });
             });
         } else {
@@ -233,19 +233,22 @@ let handlers = {
                 agave.api.getJob(jobId, (err, resp) => {
                     // check status
                     if (resp.body.result.status === 'FINISHED') {
+                        job.agave = resp.body.result;
                         agave.getOutputs(jobId, (results) => {
                             c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
                                 if (err) {res.send(err);}
                                 else {res.send({agave: resp.body.result, results});}
-                                notifications.jobComplete(jobId);
+                                job.results = results;
+                                notifications.jobComplete(job);
                             });
                         });
                     } else if (job.agave.status !== resp.body.result.status) {
+                        job.agave = resp.body.result;
                         c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
                             if (err) {res.send(err);}
                             else {res.send({agave: resp.body.result});}
                             if (resp.body.result.status === 'FAILED') {
-                                notifications.jobComplete(jobId);
+                                notifications.jobComplete(job);
                             }
                         });
                     } else {
