@@ -1,0 +1,39 @@
+<html>
+<head>
+<style>
+	body {
+		font-family: sans-serif;
+		font-weight: lighter;
+		background: #DDD;
+	}
+	.top-bar {
+		width: 100%;
+		background: #333;
+		padding: 8px;
+	}
+	.content {
+		padding: 15px;
+	}
+	p {
+		font-size: 16px;
+	}
+</style>
+</head>
+<body>
+	<div class="top-bar">
+		<img src="http://reproducibility.stanford.edu/wp-content/uploads/2015/06/CRN-Logo-Placeholder1.png" />
+	</div>
+	<div class="content">
+		<h2>Hi, {{firstName}} {{lastName}}</h3>
+
+		<p>
+			Your processing analysis <b>{{appName}}</b> scheduled on <b>{{startDate}}</b> for dataset <b>{{datasetName}}</b> has <b>{{status}}</b>. Follow this link to access your dataset and view your results {{siteUrl}}/datasets/{{datasetId}}/versions/{{snapshotId}}
+		</p>
+
+		<p>
+			Sincerely,
+			CRN
+		</p>
+	</div>
+</body>
+<html>

@@ -109,8 +109,9 @@ export default {
 
                 appLabel:          job.appLabel,
                 appVersion:        job.appVersion,
-                datasetId:         job.datasetId,
                 datasetHash:       job.datasetHash,
+                datasetId:         job.datasetId,
+                datasetLabel:      job.datasetLabel,
                 userId:            job.userId,
                 parametersHash:    job.parametersHash,
                 snapshotId:        job.snapshotId,

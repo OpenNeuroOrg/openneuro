@@ -39,7 +39,14 @@ export default {
     /**
      * Get User
      */
-    getUser(accessToken, callback) {
+    getUser (userId, callback) {
+        request.get(config.scitran.url + 'users/' + userId, {}, callback);
+    },
+
+    /**
+     * Get User by Token
+     */
+    getUserByToken(accessToken, callback) {
         request.get(config.scitran.url + 'users/self', {
             headers: {
                 Authorization: accessToken

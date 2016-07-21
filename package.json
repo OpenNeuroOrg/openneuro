@@ -19,11 +19,15 @@
     "babel": "^5.8.23",
     "bids-validator": "0.18.7",
     "body-parser": "^1.14.0",
+    "cron": "^1.1.0",
     "express": "^4.13.3",
+    "juice": "^2.0.0",
     "mongodb": "^2.0.46",
     "morgan": "^1.6.1",
+    "nodemailer": "^2.5.0",
     "request": "^2.63.0",
-    "tar-fs": "^1.9.0"
+    "tar-fs": "^1.9.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "eslint": "^2.7.0"

@@ -1,17 +1,17 @@
 // dependencies ------------------------------------------------------------
 
-import agave      from '../libs/agave';
-import sanitize   from '../libs/sanitize';
-import scitran    from '../libs/scitran';
-import mongo      from '../libs/mongo';
-import async      from 'async';
-import config     from '../config';
-import {ObjectID} from 'mongodb';
-import crypto     from 'crypto';
-import archiver   from 'archiver';
+import agave         from '../libs/agave';
+import sanitize      from '../libs/sanitize';
+import scitran       from '../libs/scitran';
+import mongo         from '../libs/mongo';
+import async         from 'async';
+import config        from '../config';
+import {ObjectID}    from 'mongodb';
+import crypto        from 'crypto';
+import archiver      from 'archiver';
+import notifications from '../libs/notifications'
 
 let c = mongo.collections;
-
 
 // models ------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ let models = {
         appLabel:          'string, required',
         appVersion:        'string, required',
         datasetId:         'string, required',
+        datasetLabel:      'stirng, required',
         executionSystem:   'String, required',
         parameters:        'object, required',
         snapshotId:        'string, required',
@@ -206,6 +207,7 @@ let handlers = {
                 c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
                     if (err) {res.send(err);}
                     else {res.send(result);}
+                    c.jobs.findOne({jobId}, {}, (err, job) => {notifications.jobComplete(job);});
                 });
             });
         } else {
@@ -231,16 +233,23 @@ let handlers = {
                 agave.api.getJob(jobId, (err, resp) => {
                     // check status
                     if (resp.body.result.status === 'FINISHED') {
+                        job.agave = resp.body.result;
                         agave.getOutputs(jobId, (results) => {
                             c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
                                 if (err) {res.send(err);}
                                 else {res.send({agave: resp.body.result, results});}
+                                job.results = results;
+                                notifications.jobComplete(job);
                             });
                         });
                     } else if (job.agave.status !== resp.body.result.status) {
+                        job.agave = resp.body.result;
                         c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
                             if (err) {res.send(err);}
                             else {res.send({agave: resp.body.result});}
+                            if (resp.body.result.status === 'FAILED') {
+                                notifications.jobComplete(job);
+                            }
                         });
                     } else {
                         res.send({agave: resp.body.result});
