@@ -4,36 +4,53 @@
 	body {
 		font-family: sans-serif;
 		font-weight: lighter;
-		background: #DDD;
+		background: #F5F5F5;
 	}
 	.top-bar {
 		width: 100%;
 		background: #333;
-		padding: 8px;
+		padding: 8px 0px 8px 15px;
 	}
 	.content {
 		padding: 15px;
 	}
 	p {
 		font-size: 16px;
+		font-weight: lighter;
 	}
+	b {
+		font-weight: bold;
+	}
+	.dataset-link {
+		display: inline-block;
+		background: #5cb85c;
+		color: #FFF;
+		font-size: 20px;
+		padding: 8px 15px;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	.FAILED {color: #d9534f;}
+	.FINISHED {color: #5cb85c;}
 </style>
 </head>
 <body>
 	<div class="top-bar">
-		<img src="http://reproducibility.stanford.edu/wp-content/uploads/2015/06/CRN-Logo-Placeholder1.png" />
+		<img src="{{siteUrl}}/assets/CRN-Logo-Placeholder.png" />
 	</div>
 	<div class="content">
 		<h2>Hi, {{firstName}} {{lastName}}</h3>
 
 		<p>
-			Your processing analysis <b>{{appName}}</b> scheduled on <b>{{startDate}}</b> for dataset <b>{{datasetName}}</b> has <b>{{status}}</b>. Follow this link to access your dataset and view your results {{siteUrl}}/datasets/{{datasetId}}/versions/{{snapshotId}}
+			Your analysis <b>{{appName}}</b> scheduled on <b>{{startDate}}</b> for dataset <b>{{datasetName}}</b> has <b class="{{status}}">{{status}}</b>. Go to your dataset snapshot to view the results.
 		</p>
 
 		<p>
 			Sincerely,
-			CRN
+			The CRN Team
 		</p>
+
+		<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetId}}/versions/{{snapshotId}}">Go to snapshot &raquo;</a>
 	</div>
 </body>
 <html>

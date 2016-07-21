@@ -22,6 +22,7 @@
     "cron": "^1.1.0",
     "express": "^4.13.3",
     "juice": "^2.0.0",
+    "moment": "^2.14.1",
     "mongodb": "^2.0.46",
     "morgan": "^1.6.1",
     "nodemailer": "^2.5.0",

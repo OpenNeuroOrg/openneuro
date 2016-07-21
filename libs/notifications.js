@@ -3,6 +3,7 @@ import cron    from 'cron';
 import mongo   from './mongo';
 import email   from './email';
 import scitran from './scitran';
+import moment  from 'moment';
 
 let c = mongo.collections;
 
@@ -43,13 +44,13 @@ let notifications = {
                 type: 'email',
                 email: {
                     to: job.userId,
-                    subject: 'Job ' + job.agave.status,
+                    subject: 'Analysis - ' + job.appLabel + ' on ' + job.datasetLabel + ' - ' + job.agave.status,
                     template: 'job-complete',
                     data: {
                         firstName:       user.firstname,
                         lastName:        user.lastname,
                         appName:         job.appLabel,
-                        startDate:       job.agave.created,
+                        startDate:       moment(job.agave.created).format('MMMM Do'),
                         datasetName:     job.datasetLabel,
                         status:          job.agave.status,
                         siteUrl:         config.url,
