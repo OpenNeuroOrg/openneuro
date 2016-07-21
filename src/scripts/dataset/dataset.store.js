@@ -842,6 +842,7 @@ let datasetStore = Reflux.createStore({
             appLabel:          app.label,
             appVersion:        app.version,
             datasetId:         datasetId,
+            datasetLabel:      this.data.dataset.label,
             executionSystem:   app.executionSystem,
             parameters:        parameters,
             snapshotId:        snapshotId,
