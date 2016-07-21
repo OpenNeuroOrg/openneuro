@@ -1,6 +1,8 @@
-import cron  from 'cron';
-import mongo from './mongo';
-import email from './email';
+import config  from '../config';
+import cron    from 'cron';
+import mongo   from './mongo';
+import email   from './email';
+import scitran from './scitran';
 
 let c = mongo.collections;
 
@@ -26,6 +28,40 @@ let notifications = {
 		if (notification.type === 'email') {
 			email.send(notification.email, callback);
 		}
+	},
+
+	/**
+	 * Job Complete
+	 *
+	 * Sends an email notification to the user
+	 * with the status of their job.
+	 */
+	jobComplete (jobId) {
+	    c.jobs.findOne({jobId},{}, (err, job) => {
+	        scitran.getUser(job.userId, (err, res) => {
+	            let user = res.body;
+	            notifications.add({
+	                type: 'email',
+	                email: {
+	                    to: job.userId,
+	                    subject: 'Job ' + job.agave.status,
+	                    template: 'job-complete',
+	                    data: {
+	                        firstName:       user.firstname,
+	                        lastName:        user.lastname,
+	                        appName:         job.appLabel,
+	                        startDate:       job.agave.created,
+	                        datasetName:     job.datasetLabel,
+	                        status:          job.agave.status,
+	                        siteUrl:         config.url,
+	                        datasetId:       job.datasetId,
+	                        snapshotId:      job.snapshotId,
+	                        unsubscribeLink: ''
+	                    }
+	                }
+	            }, (err, info) => {});
+	        });
+	    });
 	}
 
 };

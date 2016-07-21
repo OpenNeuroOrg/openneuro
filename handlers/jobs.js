@@ -207,7 +207,7 @@ let handlers = {
                 c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
                     if (err) {res.send(err);}
                     else {res.send(result);}
-                    createJobNotification(jobId);
+                    notifications.jobComplete(jobId);
                 });
             });
         } else {
@@ -237,7 +237,7 @@ let handlers = {
                             c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
                                 if (err) {res.send(err);}
                                 else {res.send({agave: resp.body.result, results});}
-                                createJobNotification(jobId);
+                                notifications.jobComplete(jobId);
                             });
                         });
                     } else if (job.agave.status !== resp.body.result.status) {
@@ -245,7 +245,7 @@ let handlers = {
                             if (err) {res.send(err);}
                             else {res.send({agave: resp.body.result});}
                             if (resp.body.result.status === 'FAILED') {
-                                createJobNotification(jobId);
+                                notifications.jobComplete(jobId);
                             }
                         });
                     } else {
@@ -429,31 +429,3 @@ let handlers = {
 };
 
 export default handlers;
-
-function createJobNotification (jobId) {
-    c.jobs.findOne({jobId},{}, (err, job) => {
-        scitran.getUser(job.userId, (err, res) => {
-            let user = res.body;
-            notifications.add({
-                type: 'email',
-                email: {
-                    to: job.userId,
-                    subject: 'Job ' + job.agave.status,
-                    template: 'job-complete',
-                    data: {
-                        firstName:       user.firstname,
-                        lastName:        user.lastname,
-                        appName:         job.appLabel,
-                        startDate:       job.agave.created,
-                        datasetName:     job.datasetLabel,
-                        status:          job.agave.status,
-                        siteUrl:         config.url,
-                        datasetId:       job.datasetId,
-                        snapshotId:      job.snapshotId,
-                        unsubscribeLink: ''
-                    }
-                }
-            }, (err, info) => {});
-        });
-    });
-}
