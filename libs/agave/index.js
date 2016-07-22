@@ -28,7 +28,7 @@ export default {
             if (output) {
                 // get main output files
                 for (let file of output) {
-                    if ((file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) && file.length > 0) {
+                    if (file.type === 'file' && file.length > 0) {
                         results.push(file);
                     }
                 }
