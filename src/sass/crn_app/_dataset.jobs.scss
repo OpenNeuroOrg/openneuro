@@ -202,21 +202,32 @@
                             }
                         }
                     }
+                    ul .btn-warn-load {
+                        margin: 0px;
+                        padding: 0px;
+                        font-size: 12px;
+                    }
                     .download-all {
+                        overflow: hidden;
+                        display: inline-block;
                         .btn-warn-component,
                         .warning.btn-warn-component {
-                            font-size: 22px;
-                            margin: 0 0 15px;
+                            font-size: 16px;
+                            margin: 0 0 10px;
                             &.cancel,
                             &.success {
-                                font-size: 20px;
-                                padding: 13px;
-                                margin: 0 5px 10px 0;
+                                font-size: 14px;
+                                padding: 8px;
+                                margin: 0 5px 12px 0;
                                 box-sizing: border-box;
                                 line-height: 6px;
-                                width: 47px;
-                                height: 37px;
+                                width: 35px;
+                                height: 26px;
                             }
+                        }
+                        .btn-warn-load {
+                            margin-bottom: 6px;
+                            padding: 0px 0px 10px 0px;
                         }
                     }
 
