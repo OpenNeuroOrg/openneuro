@@ -203,7 +203,12 @@ let handlers = {
     postResults(req, res) {
         let jobId = req.params.jobId;
         c.jobs.findOne({jobId}, {}, (err, job) => {
-            if (req.body.status === job.agave.status) {
+            if (!job) {
+                // occasionally result webhooks callback before the
+                // original job submission is save, in these cases
+                // do nothing.
+                res.send({});
+            } else if (req.body.status === job.agave.status) {
                 res.send(job);
             } else if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
                 agave.getOutputs(jobId, (results) => {
