@@ -238,7 +238,7 @@ let handlers = {
             let status = job.agave.status;
 
             // check if job is already known to be completed
-            if (status === 'FINISHED' || status === 'FAILED') {
+            if ((status === 'FINISHED' && job.results && job.results.length > 0) || status === 'FAILED') {
                 res.send(job);
             } else {
                 agave.api.getJob(jobId, (err, resp) => {
