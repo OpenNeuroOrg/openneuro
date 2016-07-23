@@ -110,7 +110,10 @@ let Jobs = React.createClass({
     },
 
     _refreshBtn(run) {
-        if (run.agave.status !== 'FINISHED' && run.agave.status !== 'FAILED') {
+        if (
+                (run.agave.status !== 'FINISHED' && run.agave.status !== 'FAILED') ||
+                (run.agave.status === 'FINISHED' && (!run.results || run.results === []))
+            ) {
             return (
                 <WarnButton
                     icon="fa fa-repeat"
