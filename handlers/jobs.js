@@ -250,7 +250,7 @@ let handlers = {
                                 if (err) {res.send(err);}
                                 else {res.send({agave: resp.body.result, results});}
                                 job.results = results;
-                                notifications.jobComplete(job);
+                                if (status !== 'FINISHED') {notifications.jobComplete(job);}
                             });
                         });
                     } else if (job.agave.status !== resp.body.result.status) {
