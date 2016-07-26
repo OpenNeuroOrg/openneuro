@@ -205,7 +205,7 @@ let handlers = {
         c.jobs.findOne({jobId}, {}, (err, job) => {
             if (!job) {
                 // occasionally result webhooks callback before the
-                // original job submission is save, in these cases
+                // original job submission is saved, in these cases
                 // do nothing.
                 res.send({});
             } else if (req.body.status === job.agave.status) {
@@ -248,7 +248,7 @@ let handlers = {
                         agave.getOutputs(jobId, (results) => {
                             c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
                                 if (err) {res.send(err);}
-                                else {res.send({agave: resp.body.result, results});}
+                                else {res.send({agave: resp.body.result, results, snapshotId: job.snapshotId});}
                                 job.results = results;
                                 if (status !== 'FINISHED') {notifications.jobComplete(job);}
                             });
@@ -257,13 +257,13 @@ let handlers = {
                         job.agave = resp.body.result;
                         c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
                             if (err) {res.send(err);}
-                            else {res.send({agave: resp.body.result});}
+                            else {res.send({agave: resp.body.result, snapshotId: job.snapshotId});}
                             if (resp.body.result.status === 'FAILED') {
                                 notifications.jobComplete(job);
                             }
                         });
                     } else {
-                        res.send({agave: resp.body.result});
+                        res.send({agave: resp.body.result, snapshotId: job.snapshotId});
                     }
                 });
             }
