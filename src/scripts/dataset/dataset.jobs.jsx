@@ -56,7 +56,6 @@ let Jobs = React.createClass({
                         <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
                         {runBy}
                     </span>
-                    {this._refreshBtn(run)}
                     {this._failedMessage(run)}
                 </div>
             );
@@ -105,21 +104,6 @@ let Jobs = React.createClass({
                         warn={false}
                         action={actions.retryJob.bind(this, run.jobId)} />
                 </div>
-            );
-        }
-    },
-
-    _refreshBtn(run) {
-        if (
-                (run.agave.status !== 'FINISHED' && run.agave.status !== 'FAILED') ||
-                (run.agave.status === 'FINISHED' && (!run.results || run.results === []))
-            ) {
-            return (
-                <WarnButton
-                    icon="fa fa-repeat"
-                    message="refresh"
-                    warn={false}
-                    action={actions.refreshJob.bind(this, run.jobId)} />
             );
         }
     },
