@@ -110,7 +110,7 @@ let datasetStore = Reflux.createStore({
         if (dataset && dataset._id === datasetId) {this.update({loading: false}); return;}
 
         // begin loading
-        this.update({loading: true, datasetTree: null});
+        this.update({loading: true, loadingJobs: true, datasetTree: null});
         bids.getDataset(datasetId, (res) => {
             if (res.status === 404 || res.status === 403) {
                 this.update({status: res.status, dataset: null, loading: false, snapshot: snapshot});
@@ -866,7 +866,7 @@ let datasetStore = Reflux.createStore({
                 }
             });
         };
-        poll(jobId);
+        setTimeout(poll.bind(this, jobId), interval);
     },
 
     /**
@@ -892,14 +892,14 @@ let datasetStore = Reflux.createStore({
         }, (err, res) => {
             callback(err, res);
             if (!err) {
-                // start polling job
-                let jobId = res.body.result.id;
-                this.pollJob(jobId);
-
                 // reload jobs
                 if (snapshotId == this.data.dataset._id) {
                     this.loadJobs(snapshotId, this.data.snapshot, datasetId, (jobs) => {
                         this.loadSnapshots(this.data.dataset, jobs);
+
+                        // start polling job
+                        let jobId = res.body.result.id;
+                        this.pollJob(jobId);
                     });
                 }
             }
@@ -907,15 +907,19 @@ let datasetStore = Reflux.createStore({
     },
 
     refreshJob(jobId, callback) {
-        let jobs = this.data.jobs;
         crn.getJob(jobId, (err, res) => {
-            let jobUpdate = res.body;
+            let existingJob;
+            let jobUpdate =  res ? res.body : null;
+            let jobs = this.data.jobs;
             if (jobs && jobs.length > 0) {
                 for (let job of jobs) {
                     for (let run of job.runs) {
                         if (jobId === run.jobId) {
-                            run.agave = jobUpdate.agave;
-                            run.results = jobUpdate.results;
+                            existingJob = run;
+                            if (jobUpdate) {
+                                run.agave = jobUpdate.agave;
+                                run.results = jobUpdate.results;
+                            }
                         }
                     }
                 }
@@ -923,7 +927,7 @@ let datasetStore = Reflux.createStore({
                     this.update({jobs});
                 }
             }
-            callback(jobUpdate);
+            callback(jobUpdate ? jobUpdate : existingJob);
         });
     },
 
