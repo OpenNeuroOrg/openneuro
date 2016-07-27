@@ -50,13 +50,12 @@ let Jobs = React.createClass({
                 <div className={run.agave.status.toLowerCase()}>
                     <label>Status</label>
                     <span className="badge">
-                        {run.agave.status}
+                        {this._status(run.agave.status)}
                     </span>
                     <span className="meta">
                         <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
                         {runBy}
                     </span>
-                    {this._refreshBtn(run)}
                     {this._failedMessage(run)}
                 </div>
             );
@@ -105,18 +104,6 @@ let Jobs = React.createClass({
                         warn={false}
                         action={actions.retryJob.bind(this, run.jobId)} />
                 </div>
-            );
-        }
-    },
-
-    _refreshBtn(run) {
-        if (run.agave.status !== 'FINISHED' && run.agave.status !== 'FAILED') {
-            return (
-                <WarnButton
-                    icon="fa fa-repeat"
-                    message="refresh"
-                    warn={false}
-                    action={actions.refreshJob.bind(this, run.jobId)} />
             );
         }
     },
@@ -183,6 +170,21 @@ let Jobs = React.createClass({
                         <ul>{parameters}</ul>
                     </Panel>
                 </Accordion>
+            );
+        }
+    },
+
+    _status(status) {
+        if (status === 'FINISHED' || status === 'FAILED') {
+            return status;
+        } else {
+            return (
+                <div className="ellipsis-animation">
+                    {status}
+                    <span className="one">.</span>
+                    <span className="two">.</span>
+                    <span className="three">.</span>
+                </div>
             );
         }
     }

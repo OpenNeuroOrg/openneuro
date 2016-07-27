@@ -110,22 +110,23 @@ let datasetStore = Reflux.createStore({
         if (dataset && dataset._id === datasetId) {this.update({loading: false}); return;}
 
         // begin loading
-        this.update({loading: true, datasetTree: null});
+        this.update({loading: true, loadingJobs: true, datasetTree: null});
         bids.getDataset(datasetId, (res) => {
             if (res.status === 404 || res.status === 403) {
                 this.update({status: res.status, dataset: null, loading: false, snapshot: snapshot});
             } else {
-                let dataset = res;
-                let originalId = dataset.original ? dataset.original : datasetId;
-                this.loadJobs(datasetId, snapshot, originalId, (jobs) => {
-                    this.loadSnapshots(dataset, jobs, () => {
-                        let selectedSnapshot = this.data.selectedSnapshot;
-                        // don't update data if the user has selected another version during loading
-                        if (!selectedSnapshot || selectedSnapshot === datasetId) {
-                            this.update({dataset: dataset, loading: false, snapshot: snapshot});
-                        }
+                // don't update data if the user has selected another version during loading
+                let selectedSnapshot = this.data.selectedSnapshot;
+                if (!selectedSnapshot || selectedSnapshot === datasetId) {
+                    let dataset = res;
+                    this.update({dataset});
+                    let originalId = dataset.original ? dataset.original : datasetId;
+                    this.loadJobs(datasetId, snapshot, originalId, (jobs) => {
+                        this.loadSnapshots(dataset, jobs, () => {
+                            this.update({loading: false, snapshot: snapshot});
+                        });
                     });
-                });
+                }
             }
         }, options);
     },
@@ -283,7 +284,7 @@ let datasetStore = Reflux.createStore({
                 router.transitionTo('datasets');
             }, {snapshot: this.data.snapshot});
         } else {
-            let message = <span>You are about to delete this dataset. This will delete your draft and any unpublished snaphots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.</span>;
+            let message = 'You are about to delete this dataset. This will delete your draft and any unpublished snaphots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.';
             this.updateWarn({
                 alwaysWarn:   true,
                 confirmTxt:   'Delete',
@@ -797,9 +798,21 @@ let datasetStore = Reflux.createStore({
     loadJobs(projectId, snapshot, originalId, callback) {
         this.update({loadingJobs: true});
         crn.getDatasetJobs(projectId, (err, res) => {
-            // sort jobs by app
             let jobs = {};
+
+            // iterate jobs
             for (let job of res.body) {
+
+                // check if job should be polled
+                let status     = job.agave.status;
+                let failed     = status === 'FAILED';
+                let finished   = status === 'FINISHED';
+                let hasResults = job.results && job.results.length > 0;
+                if (snapshot && (!finished && !failed || finished && !hasResults)) {
+                    this.pollJob(job.jobId);
+                }
+
+                // sort jobs by app
                 if (!jobs.hasOwnProperty(job.appId)) {
                     jobs[job.appId] = {
                         appLabel:   job.appLabel,
@@ -810,6 +823,7 @@ let datasetStore = Reflux.createStore({
                     jobs[job.appId].runs.push(job);
                 }
             }
+
             // convert jobs to array
             let jobArray = [];
             for (let job in jobs) {
@@ -821,7 +835,10 @@ let datasetStore = Reflux.createStore({
                 });
             }
 
+            // update jobs state
             this.update({jobs: jobArray, loadingJobs: false});
+
+            // callback with original jobs array
             if (snapshot && callback) {
                 crn.getDatasetJobs(originalId, (err1, res1) => {
                     callback(res1.body);
@@ -830,6 +847,23 @@ let datasetStore = Reflux.createStore({
                 callback(res.body);
             }
         }, {snapshot});
+    },
+
+    pollJob(jobId) {
+        let interval = 5000;
+        let poll = (jobId) => {
+            this.refreshJob(jobId, (job) => {
+                let status = job.agave.status;
+                let finished = status === 'FINISHED';
+                let failed = status === 'FAILED';
+                let hasResults = job.results && job.results.length > 0;
+                let needsUpdate = (!finished && !failed) || (finished && !hasResults)
+                if (needsUpdate && job.snapshotId === this.data.dataset._id) {
+                    setTimeout(poll.bind(this, jobId), interval);
+                }
+            });
+        };
+        setTimeout(poll.bind(this, jobId), interval);
     },
 
     /**
@@ -855,9 +889,14 @@ let datasetStore = Reflux.createStore({
         }, (err, res) => {
             callback(err, res);
             if (!err) {
+                // reload jobs
                 if (snapshotId == this.data.dataset._id) {
                     this.loadJobs(snapshotId, this.data.snapshot, datasetId, (jobs) => {
                         this.loadSnapshots(this.data.dataset, jobs);
+
+                        // start polling job
+                        let jobId = res.body.result.id;
+                        this.pollJob(jobId);
                     });
                 }
             }
@@ -865,19 +904,27 @@ let datasetStore = Reflux.createStore({
     },
 
     refreshJob(jobId, callback) {
-        let jobs = this.data.jobs;
         crn.getJob(jobId, (err, res) => {
-            let jobUpdate = res.body;
-            for (let job of jobs) {
-                for (let run of job.runs) {
-                    if (jobId === run.jobId) {
-                        run.agave = jobUpdate.agave;
-                        run.results = jobUpdate.results;
+            let existingJob;
+            let jobUpdate =  res ? res.body : null;
+            let jobs = this.data.jobs;
+            if (jobs && jobs.length > 0) {
+                for (let job of jobs) {
+                    for (let run of job.runs) {
+                        if (jobId === run.jobId) {
+                            existingJob = run;
+                            if (jobUpdate) {
+                                run.agave = jobUpdate.agave;
+                                run.results = jobUpdate.results;
+                            }
+                        }
                     }
                 }
+                if (this.data.dataset && this.data.dataset._id === jobUpdate.snapshotId) {
+                    this.update({jobs});
+                }
             }
-            this.update({jobs});
-            callback();
+            callback(jobUpdate ? jobUpdate : existingJob);
         });
     },
 
