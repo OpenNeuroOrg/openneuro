@@ -50,7 +50,8 @@ let Jobs = React.createClass({
                 <div className={run.agave.status.toLowerCase()}>
                     <label>Status</label>
                     <span className="badge">
-                        {run.agave.status}
+                        {/*run.agave.status*/}
+                        {this._status(run.agave.status)}
                     </span>
                     <span className="meta">
                         <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
@@ -170,6 +171,21 @@ let Jobs = React.createClass({
                         <ul>{parameters}</ul>
                     </Panel>
                 </Accordion>
+            );
+        }
+    },
+
+    _status(status) {
+        if (status === 'FINISHED' || status === 'FAILED') {
+            return status;
+        } else {
+            return (
+                <div className="ellipsis-animation">
+                    {status}
+                    <span className="one">.</span>
+                    <span className="two">.</span>
+                    <span className="three">.</span>
+                </div>
             );
         }
     }

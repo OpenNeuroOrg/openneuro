@@ -69,6 +69,10 @@
                         background: none;
                         color: $c-9e;
                         font-size: 12px;
+
+                        .ellipsis-animation span {
+                            color: $c-9e !important;
+                        }
                     }
 
                     .meta label {
