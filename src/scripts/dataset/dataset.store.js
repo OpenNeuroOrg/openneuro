@@ -804,19 +804,13 @@ let datasetStore = Reflux.createStore({
             for (let job of res.body) {
 
                 // check if job should be polled
-                let status   = job.agave.status;
-                let failed   = status === 'FAILED';
-                let finished = status === 'FINISHED';
-                if (
-                    snapshot &&
-                    (
-                        (!finished && !failed) ||
-                        (finished && (!job.results || job.results.length < 1))
-                    )
-                ) {
+                let status     = job.agave.status;
+                let failed     = status === 'FAILED';
+                let finished   = status === 'FINISHED';
+                let hasResults = job.results && job.results.length > 0;
+                if (snapshot && (!finished && !failed || finished && !hasResults)) {
                     this.pollJob(job.jobId);
                 }
-
 
                 // sort jobs by app
                 if (!jobs.hasOwnProperty(job.appId)) {
