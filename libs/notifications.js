@@ -19,7 +19,7 @@ let notifications = {
 	 * the cron.
 	 */
 	add (notification, callback) {
-		c.notifications.insertOne(notification, callback);
+		c.notifications.updateOne({_id: notification._id}, notification, {upsert: true}, callback);
 	},
 
 	/**
@@ -41,6 +41,7 @@ let notifications = {
         scitran.getUser(job.userId, (err, res) => {
             let user = res.body;
             notifications.add({
+                _id: job.snapshotId + '_' + job.appId + '_' + job.agave.created,
                 type: 'email',
                 email: {
                     to: job.userId,
@@ -67,7 +68,7 @@ let notifications = {
 
 // notifications cron -------------------------------------
 
-new cron.CronJob('*/30 * * * * *', () => {
+new cron.CronJob('* */2 * * * *', () => {
 	c.notifications.find({}).toArray((err, docs) => {
 		for (let notification of docs) {
 			notifications.send(notification, (err) => {
