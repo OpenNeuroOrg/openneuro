@@ -860,7 +860,10 @@ let datasetStore = Reflux.createStore({
         let poll = (jobId) => {
             this.refreshJob(jobId, (job) => {
                 let status = job.agave.status;
-                let needsUpdate = (status !== 'FINISHED' && status !== 'FAILED' || !job.results || job.results.length < 1);
+                let finished = status === 'FINISHED';
+                let failed = status === 'FAILED';
+                let hasResults = job.results && job.results.length > 0;
+                let needsUpdate = (!finished && !failed) || (finished && !hasResults)
                 if (needsUpdate && job.snapshotId === this.data.dataset._id) {
                     setTimeout(poll.bind(this, jobId), interval);
                 }
