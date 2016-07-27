@@ -50,7 +50,6 @@ let Jobs = React.createClass({
                 <div className={run.agave.status.toLowerCase()}>
                     <label>Status</label>
                     <span className="badge">
-                        {/*run.agave.status*/}
                         {this._status(run.agave.status)}
                     </span>
                     <span className="meta">
