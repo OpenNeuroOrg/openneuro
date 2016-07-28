@@ -68,7 +68,7 @@ let notifications = {
 
 // notifications cron -------------------------------------
 
-new cron.CronJob('* */2 * * * *', () => {
+new cron.CronJob('0 */1 * * * *', () => {
 	c.notifications.find({}).toArray((err, docs) => {
 		for (let notification of docs) {
 			notifications.send(notification, (err) => {
