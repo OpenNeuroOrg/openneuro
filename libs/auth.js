@@ -15,7 +15,7 @@ export default {
 	 * function.
 	 */
 	user(req, res, next) {
-		scitran.getUser(req.headers.authorization, (err, resp) => {
+		scitran.getUserByToken(req.headers.authorization, (err, resp) => {
 			if (err || resp.body.code === 400 || resp.body.code === 401) {
 				res.status(401).send({error: 'You must have a valid access token.'});
 			} else {
@@ -34,7 +34,7 @@ export default {
 	 * function.
 	 */
 	superuser(req, res, next) {
-		scitran.getUser(req.headers.authorization, (err, resp) => {
+		scitran.getUserByToken(req.headers.authorization, (err, resp) => {
 			if (err || !resp.body.root) {
 				res.status(403).send({error: 'You must have admin privileges.'});
 			} else {
@@ -54,7 +54,7 @@ export default {
 	 * work with varying levels of access.
 	 */
 	 optional(req, res, next) {
-	 	scitran.getUser(req.headers.authorization, (err, resp) => {
+	 	scitran.getUserByToken(req.headers.authorization, (err, resp) => {
 			if (resp.body && resp.body._id) {
 				req.user = resp.body._id;
 				req.isSuperUser = resp.body.root;

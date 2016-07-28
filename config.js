@@ -25,7 +25,14 @@ let config = {
     },
     "mongo": {
 		"url": process.env.CRN_SERVER_MONGODB_URL
-	}
+	},
+    "notifications": {
+        "email": {
+            "service": process.env.CRN_SERVER_MAIL_SERVICE,
+            "user":    process.env.CRN_SERVER_MAIL_USER,
+            "pass":    process.env.CRN_SERVER_MAIL_PASS
+        }
+    }
 };
 
 export default config;

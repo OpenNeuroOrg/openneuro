@@ -1,17 +1,17 @@
 // dependencies ------------------------------------------------------------
 
-import agave      from '../libs/agave';
-import sanitize   from '../libs/sanitize';
-import scitran    from '../libs/scitran';
-import mongo      from '../libs/mongo';
-import async      from 'async';
-import config     from '../config';
-import {ObjectID} from 'mongodb';
-import crypto     from 'crypto';
-import archiver   from 'archiver';
+import agave         from '../libs/agave';
+import sanitize      from '../libs/sanitize';
+import scitran       from '../libs/scitran';
+import mongo         from '../libs/mongo';
+import async         from 'async';
+import config        from '../config';
+import {ObjectID}    from 'mongodb';
+import crypto        from 'crypto';
+import archiver      from 'archiver';
+import notifications from '../libs/notifications'
 
 let c = mongo.collections;
-
 
 // models ------------------------------------------------------------------
 
@@ -21,6 +21,7 @@ let models = {
         appLabel:          'string, required',
         appVersion:        'string, required',
         datasetId:         'string, required',
+        datasetLabel:      'stirng, required',
         executionSystem:   'String, required',
         parameters:        'object, required',
         snapshotId:        'string, required',
@@ -43,14 +44,14 @@ let models = {
 let handlers = {
 
     /**
-     * List Apps
+     * GET Apps
      */
-    listApps(req, res, next) {
-        agave.listApps((err, resp) => {
+    getApps(req, res, next) {
+        agave.api.listApps((err, resp) => {
             if (err) {return next(err);}
             let apps = [];
             async.each(resp.body.result, (app, cb) => {
-                agave.getApp(app.id, (err, resp2) => {
+                agave.api.getApp(app.id, (err, resp2) => {
                     if (resp2.body && resp2.body.result) {
                         apps.push(resp2.body.result);
                     }
@@ -63,9 +64,9 @@ let handlers = {
     },
 
     /**
-     * Create Job
+     * POST Job
      */
-    create(req, res, next) {
+    postJob(req, res, next) {
         sanitize.req(req, models.job, (err, job) => {
             if (err) {return next(err);}
             scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
@@ -90,7 +91,7 @@ let handlers = {
                         return next(error);
                     }
 
-                    submitJob(job, (err, resp) => {
+                    agave.submitJob(job, (err, resp) => {
                         if (err) {return next(err);}
                         res.send(resp);
                     });
@@ -125,7 +126,7 @@ let handlers = {
             }
 
             // re-submit job with old job data
-            submitJob(job, (err, resp) => {
+            agave.submitJob(job, (err, resp) => {
                 if (err) {
                     return next(err)
                 } else {
@@ -140,9 +141,9 @@ let handlers = {
     },
 
     /**
-     *  List Jobs
+     *  GET Dataset Jobs
      */
-    list(req, res, next) {
+    getDatasetJobs(req, res, next) {
         let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
         let datasetId  = req.params.datasetId;
         let user       = req.user;
@@ -197,43 +198,80 @@ let handlers = {
     },
 
     /**
-     * Results
+     * POST Results
      */
-    results(req, res) {
+    postResults(req, res) {
         let jobId = req.params.jobId;
-        if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
-            let results = [];
-            agave.getJobOutput(req.body.id, (err, resp) => {
-                let output = resp.body.result;
-                if (output) {
-                    // get main output files
-                    for (let file of output) {
-                        if ((file.name.indexOf('.err') > -1 || file.name.indexOf('.out') > -1) && file.length > 0) {
-                            results.push(file);
-                        }
-                    }
-                }
-                agave.getJobResults(req.body.id, (err, resp1) => {
-                    if (resp1.body.result) {
-                        results = results.concat(resp1.body.result);
-                    }
-                    results = results.length > 0 ? results : null;
+        c.jobs.findOne({jobId}, {}, (err, job) => {
+            if (!job) {
+                // occasionally result webhooks callback before the
+                // original job submission is saved, in these cases
+                // do nothing.
+                res.send({});
+            } else if (req.body.status === job.agave.status) {
+                res.send(job);
+            } else if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
+                agave.getOutputs(jobId, (results) => {
                     c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
                         if (err) {res.send(err);}
                         else {res.send(result);}
+                        job.agave = req.body;
+                        job.results = results;
+                        notifications.jobComplete(job);
                     });
                 });
-            });
-        } else {
-            c.jobs.updateOne({jobId}, {$set: {agave: req.body}}, {}).then((err, result) => {
-                if (err) {res.send(err);}
-                else {res.send(result);}
-            });
-        }
+            } else {
+                c.jobs.updateOne({jobId}, {$set: {agave: req.body}}, {}, (err, result) => {
+                    if (err) {res.send(err);}
+                    else {res.send(result);}
+                });
+            }
+        });
     },
 
     /**
-     * Get Download Ticket
+     * GET Job
+     */
+    getJob(req, res) {
+        let jobId = req.params.jobId;
+        c.jobs.findOne({jobId}, {}, (err, job) => {
+            let status = job.agave.status;
+
+            // check if job is already known to be completed
+            if ((status === 'FINISHED' && job.results && job.results.length > 0) || status === 'FAILED') {
+                res.send(job);
+            } else {
+                agave.api.getJob(jobId, (err, resp) => {
+                    // check status
+                    if (resp.body.result.status === 'FINISHED') {
+                        job.agave = resp.body.result;
+                        agave.getOutputs(jobId, (results) => {
+                            c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
+                                if (err) {res.send(err);}
+                                else {res.send({agave: resp.body.result, results, snapshotId: job.snapshotId});}
+                                job.results = results;
+                                if (status !== 'FINISHED') {notifications.jobComplete(job);}
+                            });
+                        });
+                    } else if (job.agave.status !== resp.body.result.status) {
+                        job.agave = resp.body.result;
+                        c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
+                            if (err) {res.send(err);}
+                            else {res.send({agave: resp.body.result, snapshotId: job.snapshotId});}
+                            if (resp.body.result.status === 'FAILED') {
+                                notifications.jobComplete(job);
+                            }
+                        });
+                    } else {
+                        res.send({agave: resp.body.result, snapshotId: job.snapshotId});
+                    }
+                });
+            }
+        });
+    },
+
+    /**
+     * GET Download Ticket
      */
     getDownloadTicket(req, res, next) {
         let jobId    = req.params.jobId,
@@ -284,9 +322,9 @@ let handlers = {
     },
 
     /**
-     * Download Results
+     * GET File
      */
-    downloadResults(req, res, next) {
+    getFile(req, res, next) {
         let ticket   = req.query.ticket,
             fileName = req.params.fileName,
             jobId    = req.params.jobId;
@@ -329,7 +367,7 @@ let handlers = {
                         path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
                         let name = result.name;
 
-                        agave.getPath(path, (err, res, token) => {
+                        agave.api.getPath(path, (err, res, token) => {
                             let body = res.body;
                             if (!body || (body.status && body.status === 'error')) {
                                 // error from AGAVE
@@ -351,14 +389,14 @@ let handlers = {
             } else {
                 // download individual file
                 path = 'jobs/v2/' + jobId + '/outputs/media' + path;
-                agave.getPathProxy(path, res);
+                agave.api.getPathProxy(path, res);
             }
         });
 
     },
 
     /**
-     * Delete Dataset Jobs
+     * DELETE Dataset Jobs
      *
      * Takes a dataset ID url parameter and deletes all jobs for that dataset.
      */
@@ -403,79 +441,5 @@ let handlers = {
     }
 
 };
-
-function submitJob (job, callback) {
-
-    let attempts = job.attempts ? job.attempts + 1: 1;
-
-    // form job body
-    let body = {
-        name:              'crn-automated-job',
-        appId:             job.appId,
-        batchQueue:        job.batchQueue,
-        executionSystem:   job.executionSystem,
-        maxRunTime:        '05:00:00',
-        memoryPerNode:     job.memoryPerNode,
-        nodeCount:         job.nodeCount,
-        processorsPerNode: job.processorsPerNode,
-        archive:           true,
-        archiveSystem:     'openfmri-archive',
-        archivePath:       null,
-        inputs: {},
-        parameters: job.parameters ? job.parameters : {},
-        notifications: [
-            {
-                url:        config.url + config.apiPrefix +  'jobs/${JOB_ID}/results',
-                event:      '*',
-                persistent: true
-            }
-        ]
-    };
-
-    // set input
-    let inputKey = job.input ? job.input : 'bidsFolder';
-    body.inputs[inputKey] = config.agave.storage + job.datasetHash;
-
-    // submit job
-    agave.createJob(body, (err, resp) => {
-
-        // handle submission errors
-        if (resp.body.status == 'error') {
-            let error = new Error(resp.body.message);
-            error.http_code = 400;
-            return callback(error, null);
-        }
-        if (resp.statusCode !== 200 && resp.statusCode !== 201) {
-            let error = new Error(resp.body ? resp.body : 'AGAVE was unable to process this job submission.');
-            error.http_code = resp.statusCode ? resp.statusCode : 503;
-            return callback(error, null);
-        }
-
-        // store job
-        c.jobs.insertOne({
-            jobId:             resp.body.result.id,
-            agave:             resp.body.result,
-
-            appId:             body.appId,
-            parameters:        body.parameters,
-            memoryPerNode:     body.memoryPerNode,
-            nodeCount:         body.nodeCount,
-            processorsPerNode: body.processorsPerNode,
-            batchQueue:        body.batchQueue,
-
-            appLabel:          job.appLabel,
-            appVersion:        job.appVersion,
-            datasetId:         job.datasetId,
-            datasetHash:       job.datasetHash,
-            userId:            job.userId,
-            parametersHash:    job.parametersHash,
-            snapshotId:        job.snapshotId,
-
-            attempts:          attempts
-        }, () => {
-            callback(null, resp.body);
-        });
-    });
-}
 
 export default handlers;
