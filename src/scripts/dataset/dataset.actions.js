@@ -16,6 +16,7 @@ var Actions = Reflux.createActions([
     'getDatasetDownloadTicket',
     'getFileDownloadTicket',
     'getResultDownloadTicket',
+    'refreshJob',
     'loadDataset',
     'loadSnapshot',
     'loadUsers',

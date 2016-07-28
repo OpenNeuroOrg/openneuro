@@ -46,7 +46,7 @@ export default {
      * Un Blacklist
      */
     unBlacklistUser(userId, callback) {
-        request.del(config.crn.url + 'users/blacklist/' + userId, callback);
+        request.del(config.crn.url + 'users/blacklist/' + userId, {}, callback);
     },
 
 // Jobs ------------------------------------------------------------------------------------
@@ -72,6 +72,16 @@ export default {
     },
 
     /**
+     * Get Job
+     *
+     * Takes a job ID and callsback with
+     * the job data.
+     */
+    getJob(jobId, callback) {
+        request.get(config.crn.url + 'jobs/' + jobId, {}, callback);
+    },
+
+    /**
      * Retry Job
      *
      * Take a jobId and retries the job with the same
@@ -85,7 +95,7 @@ export default {
      * Get Dataset Jobs
      */
     getDatasetJobs(datasetId, callback, options) {
-        request.get(config.crn.url + 'jobs/' + datasetId, {
+        request.get(config.crn.url + 'datasets/' + datasetId + '/jobs', {
             query: {snapshot: options && options.snapshot}
         }, callback);
     },
@@ -103,7 +113,7 @@ export default {
      * Delete Dataset Jobs
      */
     deleteDatasetJobs(datasetId, callback) {
-        request.del(config.crn.url + 'jobs/' + datasetId, callback);
+        request.del(config.crn.url + 'datasets/' + datasetId + '/jobs', {}, callback);
     },
 
 // Validation ------------------------------------------------------------------------------
