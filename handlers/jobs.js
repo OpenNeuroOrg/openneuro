@@ -358,7 +358,7 @@ let handlers = {
 
                 c.jobs.findOne({jobId}, {}, (err, job) => {
                     // set archive name
-                    res.attachment(job.appId + '-results.zip');
+                    res.attachment(job.datasetLabel + '__' + job.appId + '__results.zip');
 
                     // begin streaming archive
                     archive.pipe(res);
