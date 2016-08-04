@@ -217,6 +217,11 @@ let handlers = {
      * GET Job
      */
     getJob(req, res) {
+        if (!req.hasAccess) {
+            let error = new Error('You do not have access to view jobs for this dataset.');
+            error.http_code = 403;
+            return next(error);
+        }
         let jobId = req.params.jobId;
         c.jobs.findOne({jobId}, {}, (err, job) => {
             let status = job.agave.status;
