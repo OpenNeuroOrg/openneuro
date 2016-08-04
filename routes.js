@@ -61,7 +61,7 @@ let routes = [
 	},
 	{
 		method: 'post',
-		url: '/jobs',
+		url: '/datasets/:datasetId/jobs',
 		middleware: [auth.datasetAccess],
 		handler: jobs.postJob
 	},
