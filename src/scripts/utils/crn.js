@@ -67,8 +67,8 @@ export default {
      * Takes an options object with a name, appId
      * datasetId and userId and starts a Job.
      */
-    createJob(options, callback) {
-        request.post(config.crn.url + 'jobs', {body: options}, callback);
+    createJob(job, callback) {
+        request.post(config.crn.url + 'datasets/' + job.snapshotId + '/jobs', {body: job, query: {snapshot: true}}, callback);
     },
 
     /**
