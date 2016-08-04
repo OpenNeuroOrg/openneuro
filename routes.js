@@ -74,7 +74,7 @@ let routes = [
 	{
 		method: 'delete',
 		url: '/datasets/:datasetId/jobs',
-		middleware: [auth.user],
+		middleware: [auth.datasetAccess],
 		handler: jobs.deleteDatasetJobs
 	},
 	{

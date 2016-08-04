@@ -397,6 +397,12 @@ let handlers = {
     deleteDatasetJobs(req, res, next) {
         let datasetId = req.params.datasetId;
 
+        if (!req.hasAccess) {
+            let error = new Error('You do not have access to view jobs for this dataset.');
+            error.http_code = 403;
+            return next(error);
+        }
+
         scitran.getProject(datasetId, (err, resp) => {
             if (resp.statusCode == 400) {
                 let error = new Error('Bad request');
