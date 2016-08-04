@@ -67,6 +67,11 @@ let handlers = {
      * POST Job
      */
     postJob(req, res, next) {
+        if (!req.hasAccess) {
+            let error = new Error('You do not have access to submit jobs for this dataset.');
+            error.http_code = 403;
+            return next(error);
+        }
         sanitize.req(req, models.job, (err, job) => {
             if (err) {return next(err);}
             scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
