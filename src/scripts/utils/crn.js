@@ -77,8 +77,10 @@ export default {
      * Takes a job ID and callsback with
      * the job data.
      */
-    getJob(jobId, callback) {
-        request.get(config.crn.url + 'jobs/' + jobId, {}, callback);
+    getJob(datasetId, jobId, callback, options) {
+        request.get(config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId, {
+            query: {snapshot: options && options.snapshot}
+        }, callback);
     },
 
     /**
