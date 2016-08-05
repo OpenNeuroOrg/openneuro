@@ -6,7 +6,6 @@ import jobs       from './handlers/jobs';
 import validation from './handlers/validation';
 import auth       from './libs/auth';
 import scitran    from './libs/scitran';
-import config     from './config';
 
 let routes = [
 
@@ -62,50 +61,50 @@ let routes = [
 	},
 	{
 		method: 'post',
-		url: '/datasets/:datasetId/jobs',
-		middleware: [auth.datasetAccess()],
+		url: '/jobs',
+		middleware: [auth.user],
 		handler: jobs.postJob
 	},
 	{
 		method: 'get',
 		url: '/datasets/:datasetId/jobs',
-		middleware: [auth.datasetAccess({optional: true})],
+		middleware: [auth.optional],
 		handler: jobs.getDatasetJobs
 	},
 	{
 		method: 'delete',
 		url: '/datasets/:datasetId/jobs',
-		middleware: [auth.datasetAccess()],
+		middleware: [auth.user],
 		handler: jobs.deleteDatasetJobs
 	},
 	{
 		method: 'post',
 		url: '/jobs/:jobId/results',
-		middleware: [auth.fromOrigin(config.agave.url)],
+		middleware: [],
 		handler: jobs.postResults
 	},
 	{
 		method: 'get',
-		url: '/datasets/:datasetId/jobs/:jobId',
-		middleware: [auth.datasetAccess()],
+		url: '/jobs/:jobId',
+		middleware: [],
 		handler: jobs.getJob
 	},
 	{
 		method: 'post',
-		url: '/datasets/:datasetId/jobs/:jobId/retry',
-		middleware: [auth.datasetAccess()],
+		url: '/jobs/:jobId/retry',
+		middleware: [],
 		handler: jobs.retry
 	},
 	{
 		method: 'get',
-		url: '/datasets/:datasetId/jobs/:jobId/results/ticket',
-		middleware: [auth.datasetAccess()],
+		url: '/jobs/:jobId/results/ticket',
+		middleware: [auth.optional],
 		handler: jobs.getDownloadTicket
 	},
 	{
 		method: 'get',
 		url: '/jobs/:jobId/results/:fileName',
-		middleware: [auth.ticket],
+		middleware: [],
 		handler: jobs.getFile
 	}
 
