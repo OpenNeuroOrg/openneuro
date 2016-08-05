@@ -100,6 +100,27 @@ let auth = {
     },
 
     /**
+     * Ticket
+     *
+     * Checks for a valid ticket parameter
+     */
+    ticket(req, res, next) {
+        let ticket   = req.query.ticket;
+
+        if (!ticket) {
+            return res.status(400).send({error: 'No download ticket query parameter found.'});
+        }
+
+        c.tickets.findOne({_id: ObjectID(ticket)}, {}, (err, result) => {
+            if (err || !result) {
+                return res.status(401).send({error: 'Download ticket was not found or expired'});
+            }
+            req.ticket = result;
+            return next();
+        });
+    },
+
+    /**
      * From Origin
      *
      * Takes an origin url and ensures the the request

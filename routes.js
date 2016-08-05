@@ -105,7 +105,7 @@ let routes = [
 	{
 		method: 'get',
 		url: '/jobs/:jobId/results/:fileName',
-		middleware: [],
+		middleware: [auth.ticket],
 		handler: jobs.getFile
 	}
 

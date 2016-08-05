@@ -294,73 +294,56 @@ let handlers = {
      * GET File
      */
     getFile(req, res, next) {
-        let ticket   = req.query.ticket,
-            fileName = req.params.fileName,
-            jobId    = req.params.jobId;
+        let jobId = req.params.jobId;
 
-        if (!ticket) {
-            let error = new Error('No download ticket query parameter found.');
-            error.http_code = 400;
-            return next(error);
-        }
+        let path = req.ticket.filePath;
 
-        c.tickets.findOne({_id: ObjectID(ticket), type: 'download', fileName: fileName, jobId: jobId}, {}, (err, result) => {
-            if (err) {return next(err);}
-            if (!result) {
-                let error = new Error('Download ticket was not found or expired');
-                error.http_code = 401;
-                return next(error);
-            }
+        if (path === 'all') {
 
-            let path = result.filePath;
+            // initialize archive
+            let archive = archiver('zip');
 
-            if (path === 'all') {
+            // log archiving errors
+            archive.on('error', (err) => {
+                console.log('archiving error - job: ' + jobId);
+                console.log(err);
+            });
 
-                // initialize archive
-                let archive = archiver('zip');
+            c.jobs.findOne({jobId}, {}, (err, job) => {
+                // set archive name
+                res.attachment(job.datasetLabel + '__' + job.appId + '__results.zip');
 
-                // log archiving errors
-                archive.on('error', (err) => {
-                    console.log('archiving error - job: ' + jobId);
-                    console.log(err);
-                });
+                // begin streaming archive
+                archive.pipe(res);
 
-                c.jobs.findOne({jobId}, {}, (err, job) => {
-                    // set archive name
-                    res.attachment(job.datasetLabel + '__' + job.appId + '__results.zip');
+                async.eachSeries(job.results, (result, cb) => {
+                    path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
+                    let name = result.name;
 
-                    // begin streaming archive
-                    archive.pipe(res);
-
-                    async.eachSeries(job.results, (result, cb) => {
-                        path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
-                        let name = result.name;
-
-                        agave.api.getPath(path, (err, res, token) => {
-                            let body = res.body;
-                            if (!body || (body.status && body.status === 'error')) {
-                                // error from AGAVE
-                            } else {
-                                // stringify JSON
-                                if (typeof body === 'object' && !Buffer.isBuffer(body)) {
-                                    body = JSON.stringify(body);
-                                }
-                                // append file to archive
-                                archive.append(body, {name: name});
+                    agave.api.getPath(path, (err, res, token) => {
+                        let body = res.body;
+                        if (!body || (body.status && body.status === 'error')) {
+                            // error from AGAVE
+                        } else {
+                            // stringify JSON
+                            if (typeof body === 'object' && !Buffer.isBuffer(body)) {
+                                body = JSON.stringify(body);
                             }
+                            // append file to archive
+                            archive.append(body, {name: name});
+                        }
 
-                            cb();
-                        });
-                    }, () =>{
-                        archive.finalize();
+                        cb();
                     });
+                }, () =>{
+                    archive.finalize();
                 });
-            } else {
-                // download individual file
-                path = 'jobs/v2/' + jobId + '/outputs/media' + path;
-                agave.api.getPathProxy(path, res);
-            }
-        });
+            });
+        } else {
+            // download individual file
+            path = 'jobs/v2/' + jobId + '/outputs/media' + path;
+            agave.api.getPathProxy(path, res);
+        }
 
     },
 
