@@ -1,4 +1,7 @@
 import scitran from './scitran';
+import mongo   from './mongo';
+
+let c = mongo.collections;
 
 /**
  * Authorization
