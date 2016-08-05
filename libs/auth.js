@@ -70,26 +70,32 @@ let auth = {
      * a url or query param and adds a hasAccess property to
      * the request object.
      */
-    datasetAccess(req, res, next) {
-        let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
-        let datasetId = req.params.datasetId ? req.params.datasetId : req.query.datasetId;
-        auth.optional(req, res, () => {
-            scitran.getProject(datasetId, (err, resp1) => {
-                if (resp1.body.code && resp1.body.code == 404) {
-                    return res.status(404).send({error: resp1.body.detail});
-                }
-
-                let hasAccess = !!resp1.body.public || req.isSuperUser;
-                if (resp1.body.permissions && !hasAccess) {
-                    for (let permission of resp1.body.permissions) {
-                        if (permission._id == req.user) {hasAccess = true; break;}
+    datasetAccess(options) {
+        options = options ? options : {optional: false};
+        return function (req, res, () => {
+            let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
+            let datasetId = req.params.datasetId ? req.params.datasetId : req.query.datasetId;
+            auth.optional(req, res, () => {
+                scitran.getProject(datasetId, (err, resp1) => {
+                    if (resp1.body.code && resp1.body.code == 404) {
+                        return res.status(404).send({error: resp1.body.detail});
                     }
-                }
 
-                req.hasAccess = hasAccess;
+                    let hasAccess = !!resp1.body.public || req.isSuperUser;
+                    if (resp1.body.permissions && !hasAccess) {
+                        for (let permission of resp1.body.permissions) {
+                            if (permission._id == req.user) {hasAccess = true; break;}
+                        }
+                    }
+                    req.hasAccess = hasAccess;
 
-                return next();
-            }, {snapshot});
+                    if (!options.optional && !req.hasAccess) {
+                        return res.status(403).send({error: 'You do not have access to this dataset.'});
+                    }
+
+                    return next();
+                }, {snapshot});
+            });
         });
     },
 
