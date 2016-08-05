@@ -5,7 +5,7 @@ import scitran from './scitran';
  *
  * Authorization middleware.
  */
-export default {
+let auth = {
 
     /**
      * User
@@ -73,12 +73,7 @@ export default {
     datasetAccess(req, res, next) {
         let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
         let datasetId = req.params.datasetId ? req.params.datasetId : req.query.datasetId;
-        scitran.getUserByToken(req.headers.authorization, (err, resp) => {
-            if (resp.body && resp.body._id) {
-                req.user = resp.body._id;
-                req.isSuperUser = resp.body.root;
-            }
-
+        auth.optional(req, res, () => {
             scitran.getProject(datasetId, (err, resp1) => {
                 if (resp1.body.code && resp1.body.code == 404) {
                     return res.status(404).send({error: resp1.body.detail});
@@ -116,4 +111,6 @@ export default {
         }
     }
 
-}
+};
+
+export default auth;
