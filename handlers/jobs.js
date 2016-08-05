@@ -67,11 +67,6 @@ let handlers = {
      * POST Job
      */
     postJob(req, res, next) {
-        if (!req.hasAccess) {
-            let error = new Error('You do not have access to submit jobs for this dataset.');
-            error.http_code = 403;
-            return next(error);
-        }
         sanitize.req(req, models.job, (err, job) => {
             if (err) {return next(err);}
             scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
@@ -109,11 +104,6 @@ let handlers = {
      * Retry
      */
     retry (req, res, next) {
-        if (!req.hasAccess) {
-            let error = new Error('You do not have access to submit jobs for this dataset.');
-            error.http_code = 403;
-            return next(error);
-        }
         let jobId = req.params.jobId;
 
         // find job
@@ -227,11 +217,6 @@ let handlers = {
      * GET Job
      */
     getJob(req, res) {
-        if (!req.hasAccess) {
-            let error = new Error('You do not have access to view jobs for this dataset.');
-            error.http_code = 403;
-            return next(error);
-        }
         let jobId = req.params.jobId;
         c.jobs.findOne({jobId}, {}, (err, job) => {
             let status = job.agave.status;
@@ -401,12 +386,6 @@ let handlers = {
      */
     deleteDatasetJobs(req, res, next) {
         let datasetId = req.params.datasetId;
-
-        if (!req.hasAccess) {
-            let error = new Error('You do not have access to view jobs for this dataset.');
-            error.http_code = 403;
-            return next(error);
-        }
 
         scitran.getProject(datasetId, (err, resp) => {
             if (resp.statusCode == 400) {

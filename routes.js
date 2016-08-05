@@ -63,19 +63,19 @@ let routes = [
 	{
 		method: 'post',
 		url: '/datasets/:datasetId/jobs',
-		middleware: [auth.datasetAccess],
+		middleware: [auth.datasetAccess()],
 		handler: jobs.postJob
 	},
 	{
 		method: 'get',
 		url: '/datasets/:datasetId/jobs',
-		middleware: [auth.datasetAccess],
+		middleware: [auth.datasetAccess({optional: true})],
 		handler: jobs.getDatasetJobs
 	},
 	{
 		method: 'delete',
 		url: '/datasets/:datasetId/jobs',
-		middleware: [auth.datasetAccess],
+		middleware: [auth.datasetAccess()],
 		handler: jobs.deleteDatasetJobs
 	},
 	{
@@ -87,13 +87,13 @@ let routes = [
 	{
 		method: 'get',
 		url: '/datasets/:datasetId/jobs/:jobId',
-		middleware: [auth.datasetAccess],
+		middleware: [auth.datasetAccess()],
 		handler: jobs.getJob
 	},
 	{
 		method: 'post',
 		url: '/jobs/:jobId/retry',
-		middleware: [auth.datasetAccess],
+		middleware: [auth.datasetAccess()],
 		handler: jobs.retry
 	},
 	{
