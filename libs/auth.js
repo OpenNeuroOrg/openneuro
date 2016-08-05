@@ -72,7 +72,7 @@ let auth = {
      */
     datasetAccess(options) {
         options = options ? options : {optional: false};
-        return function (req, res, () => {
+        return function (req, res, next) {
             let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
             let datasetId = req.params.datasetId ? req.params.datasetId : req.query.datasetId;
             auth.optional(req, res, () => {
@@ -96,7 +96,7 @@ let auth = {
                     return next();
                 }, {snapshot});
             });
-        });
+        };
     },
 
     /**
