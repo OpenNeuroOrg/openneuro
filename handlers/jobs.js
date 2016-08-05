@@ -262,46 +262,31 @@ let handlers = {
             filePath = req.query.filePath,
             fileName = filePath.split('/')[filePath.split('/').length - 1];
         c.jobs.findOne({jobId}, {}, (err, job) => {
+            // check for job
             if (err){return next(err);}
             if (!job) {
                 let error = new Error('Could not find job.');
                 error.http_code = 404;
                 return next(error);
             }
-            scitran.getProject(job.snapshotId, (err, resp) => {
-                let hasPermission;
-                if (!req.user) {
-                    hasPermission = false;
-                } else {
-                    for (let permission of resp.body.permissions) {
-                        if (req.user === permission._id) {
-                            hasPermission = true;
-                            break;
-                        }
-                    }
-                }
-                if (resp.body.public || hasPermission) {
-                    let ticket = {
-                        type: 'download',
-                        userId: req.user,
-                        jobId: jobId,
-                        fileName: fileName,
-                        filePath: filePath,
-                        created: new Date()
-                    };
-                    // Create and return token
-                    c.tickets.insertOne(ticket, (err) => {
-                        if (err) {return next(err);}
-                        c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60}, () => {
-                            res.send(ticket);
-                        });
-                    });
-                } else {
-                    let error = new Error('You do not have permission to access this file.');
-                    error.http_code = 403;
-                    return next(error);
-                }
-            }, {snapshot: true});
+
+            // form ticket
+            let ticket = {
+                type: 'download',
+                userId: req.user,
+                jobId: jobId,
+                fileName: fileName,
+                filePath: filePath,
+                created: new Date()
+            };
+
+            // Create and return ticket
+            c.tickets.insertOne(ticket, (err) => {
+                if (err) {return next(err);}
+                c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60}, () => {
+                    res.send(ticket);
+                });
+            });
         });
     },
 

@@ -99,7 +99,7 @@ let routes = [
 	{
 		method: 'get',
 		url: '/jobs/:jobId/results/ticket',
-		middleware: [auth.optional],
+		middleware: [auth.datasetAccess()],
 		handler: jobs.getDownloadTicket
 	},
 	{
