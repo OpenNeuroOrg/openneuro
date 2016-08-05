@@ -93,7 +93,7 @@ let routes = [
 	{
 		method: 'post',
 		url: '/jobs/:jobId/retry',
-		middleware: [],
+		middleware: [auth.datasetAccess],
 		handler: jobs.retry
 	},
 	{

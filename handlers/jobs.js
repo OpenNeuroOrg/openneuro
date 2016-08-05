@@ -109,6 +109,11 @@ let handlers = {
      * Retry
      */
     retry (req, res, next) {
+        if (!req.hasAccess) {
+            let error = new Error('You do not have access to submit jobs for this dataset.');
+            error.http_code = 403;
+            return next(error);
+        }
         let jobId = req.params.jobId;
 
         // find job
