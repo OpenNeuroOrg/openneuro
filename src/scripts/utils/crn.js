@@ -89,8 +89,10 @@ export default {
      * Take a jobId and retries the job with the same
      * dataset and settings.
      */
-    retryJob(jobId, callback) {
-        request.post(config.crn.url + 'jobs/' + jobId + '/retry', {}, callback);
+    retryJob(datasetId, jobId, callback, options) {
+        request.post(config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId + '/retry', {
+            query: {snapshot: options && options.snapshot}
+        }, callback);
     },
 
     /**
@@ -105,9 +107,12 @@ export default {
     /**
      * Get Result Download Ticket
      */
-    getResultDownloadTicket(jobId, filePath, callback) {
-        request.get(config.crn.url + 'jobs/' + jobId + '/results/ticket', {
-            query: {filePath}
+    getResultDownloadTicket(datasetId, jobId, filePath, callback, options) {
+        request.get(config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId + '/results/ticket', {
+            query: {
+                filePath,
+                snapshot: options && options.snapshot
+            }
         }, callback);
     },
 
