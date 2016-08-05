@@ -6,7 +6,6 @@ import scitran       from '../libs/scitran';
 import mongo         from '../libs/mongo';
 import async         from 'async';
 import config        from '../config';
-import {ObjectID}    from 'mongodb';
 import crypto        from 'crypto';
 import archiver      from 'archiver';
 import notifications from '../libs/notifications'
