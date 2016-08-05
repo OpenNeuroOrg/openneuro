@@ -92,13 +92,13 @@ let routes = [
 	},
 	{
 		method: 'post',
-		url: '/jobs/:jobId/retry',
+		url: '/datasets/:datasetId/jobs/:jobId/retry',
 		middleware: [auth.datasetAccess()],
 		handler: jobs.retry
 	},
 	{
 		method: 'get',
-		url: '/jobs/:jobId/results/ticket',
+		url: '/datasets/:datasetId/jobs/:jobId/results/ticket',
 		middleware: [auth.datasetAccess()],
 		handler: jobs.getDownloadTicket
 	},
