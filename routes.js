@@ -6,6 +6,7 @@ import jobs       from './handlers/jobs';
 import validation from './handlers/validation';
 import auth       from './libs/auth';
 import scitran    from './libs/scitran';
+import config     from './config';
 
 let routes = [
 
@@ -80,7 +81,7 @@ let routes = [
 	{
 		method: 'post',
 		url: '/jobs/:jobId/results',
-		middleware: [],
+		middleware: [auth.fromOrigin(config.agave.url)],
 		handler: jobs.postResults
 	},
 	{
