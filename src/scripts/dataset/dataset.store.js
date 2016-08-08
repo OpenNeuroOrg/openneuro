@@ -904,7 +904,7 @@ let datasetStore = Reflux.createStore({
     },
 
     refreshJob(jobId, callback) {
-        crn.getJob(jobId, (err, res) => {
+        crn.getJob(this.data.dataset._id, jobId, (err, res) => {
             let existingJob;
             let jobUpdate =  res ? res.body : null;
             let jobs = this.data.jobs;
@@ -925,16 +925,16 @@ let datasetStore = Reflux.createStore({
                 }
             }
             callback(jobUpdate ? jobUpdate : existingJob);
-        });
+        }, {snapshot: this.data.snapshot});
     },
 
     retryJob(jobId, callback) {
-        crn.retryJob(jobId, () => {
+        crn.retryJob(this.data.dataset._id, jobId, () => {
             this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, (jobs) => {
                 this.loadSnapshots(this.data.dataset, jobs);
                 callback();
             });
-        });
+        }, {snapshot: this.data.snapshot});
     },
 
     /**
@@ -954,12 +954,12 @@ let datasetStore = Reflux.createStore({
      * Get Result Download Ticket
      */
     getResultDownloadTicket(jobId, filePath, callback) {
-        crn.getResultDownloadTicket(jobId, filePath, (err, res) => {
+        crn.getResultDownloadTicket(this.data.dataset._id, jobId, filePath, (err, res) => {
             let ticket      = res.body._id;
             let fileName    = filePath.split('/')[filePath.split('/').length - 1];
             let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
             callback(downloadUrl);
-        });
+        }, {snapshot: this.data.snapshot});
     },
 
     /**
