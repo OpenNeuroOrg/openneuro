@@ -146,54 +146,38 @@ let handlers = {
         let snapshot   = req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true';
         let datasetId  = req.params.datasetId;
         let user       = req.user;
+        let hasAccess  = req.hasAccess;
 
-        scitran.getProject(datasetId, (err, resp) => {
-            if (resp.body.code && resp.body.code == 404) {
-                let error = new Error(resp.body.detail);
-                error.http_code = 404;
-                return next(error);
-            }
-
-            let hasAccess = !!resp.body.public || req.isSuperUser;
-            if (resp.body.permissions && !hasAccess) {
-                for (let permission of resp.body.permissions) {
-                    if (permission._id == user) {hasAccess = true; break;}
+        let query = snapshot ? {snapshotId: datasetId} : {datasetId};
+        c.jobs.find(query).toArray((err, jobs) => {
+            if (err) {return next(err);}
+            if (snapshot) {
+                if (!hasAccess) {
+                    let error = new Error('You do not have access to view jobs for this dataset.');
+                    error.http_code = 403;
+                    return next(error);
                 }
-            }
-
-
-            let query = snapshot ? {snapshotId: datasetId} : {datasetId};
-            c.jobs.find(query).toArray((err, jobs) => {
-                if (err) {return next(err);}
-                if (snapshot) {
-                    if (!hasAccess) {
-                        let error = new Error('You do not have access to view jobs for this dataset.');
-                        error.http_code = 403;
-                        return next(error);
-                    }
-                    // remove user ID on public requests
-                    if (!user) {
-                        for (let job of jobs) {delete job.userId;}
-                    }
-                    res.send(jobs);
-                } else {
-                    scitran.getProjectSnapshots(datasetId, (err, resp) => {
-                        let snapshots = resp.body;
-                        let filteredJobs = [];
-                        for (let job of jobs) {
-                            for (let snapshot of snapshots) {
-                                if ((snapshot.public || hasAccess) && (snapshot._id === job.snapshotId)) {
-                                    if (!user) {delete job.userId;}
-                                    filteredJobs.push(job);
-                                }
+                // remove user ID on public requests
+                if (!user) {
+                    for (let job of jobs) {delete job.userId;}
+                }
+                res.send(jobs);
+            } else {
+                scitran.getProjectSnapshots(datasetId, (err, resp) => {
+                    let snapshots = resp.body;
+                    let filteredJobs = [];
+                    for (let job of jobs) {
+                        for (let snapshot of snapshots) {
+                            if ((snapshot.public || hasAccess) && (snapshot._id === job.snapshotId)) {
+                                if (!user) {delete job.userId;}
+                                filteredJobs.push(job);
                             }
                         }
-                        res.send(filteredJobs);
-                    });
-                }
-            });
-
-        }, {snapshot});
+                    }
+                    res.send(filteredJobs);
+                });
+            }
+        });
     },
 
     /**
@@ -277,46 +261,31 @@ let handlers = {
             filePath = req.query.filePath,
             fileName = filePath.split('/')[filePath.split('/').length - 1];
         c.jobs.findOne({jobId}, {}, (err, job) => {
+            // check for job
             if (err){return next(err);}
             if (!job) {
                 let error = new Error('Could not find job.');
                 error.http_code = 404;
                 return next(error);
             }
-            scitran.getProject(job.snapshotId, (err, resp) => {
-                let hasPermission;
-                if (!req.user) {
-                    hasPermission = false;
-                } else {
-                    for (let permission of resp.body.permissions) {
-                        if (req.user === permission._id) {
-                            hasPermission = true;
-                            break;
-                        }
-                    }
-                }
-                if (resp.body.public || hasPermission) {
-                    let ticket = {
-                        type: 'download',
-                        userId: req.user,
-                        jobId: jobId,
-                        fileName: fileName,
-                        filePath: filePath,
-                        created: new Date()
-                    };
-                    // Create and return token
-                    c.tickets.insertOne(ticket, (err) => {
-                        if (err) {return next(err);}
-                        c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60}, () => {
-                            res.send(ticket);
-                        });
-                    });
-                } else {
-                    let error = new Error('You do not have permission to access this file.');
-                    error.http_code = 403;
-                    return next(error);
-                }
-            }, {snapshot: true});
+
+            // form ticket
+            let ticket = {
+                type: 'download',
+                userId: req.user,
+                jobId: jobId,
+                fileName: fileName,
+                filePath: filePath,
+                created: new Date()
+            };
+
+            // Create and return ticket
+            c.tickets.insertOne(ticket, (err) => {
+                if (err) {return next(err);}
+                c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60}, () => {
+                    res.send(ticket);
+                });
+            });
         });
     },
 
@@ -324,73 +293,56 @@ let handlers = {
      * GET File
      */
     getFile(req, res, next) {
-        let ticket   = req.query.ticket,
-            fileName = req.params.fileName,
-            jobId    = req.params.jobId;
+        let jobId = req.params.jobId;
 
-        if (!ticket) {
-            let error = new Error('No download ticket query parameter found.');
-            error.http_code = 400;
-            return next(error);
-        }
+        let path = req.ticket.filePath;
 
-        c.tickets.findOne({_id: ObjectID(ticket), type: 'download', fileName: fileName, jobId: jobId}, {}, (err, result) => {
-            if (err) {return next(err);}
-            if (!result) {
-                let error = new Error('Download ticket was not found or expired');
-                error.http_code = 401;
-                return next(error);
-            }
+        if (path === 'all') {
 
-            let path = result.filePath;
+            // initialize archive
+            let archive = archiver('zip');
 
-            if (path === 'all') {
+            // log archiving errors
+            archive.on('error', (err) => {
+                console.log('archiving error - job: ' + jobId);
+                console.log(err);
+            });
 
-                // initialize archive
-                let archive = archiver('zip');
+            c.jobs.findOne({jobId}, {}, (err, job) => {
+                // set archive name
+                res.attachment(job.datasetLabel + '__' + job.appId + '__results.zip');
 
-                // log archiving errors
-                archive.on('error', (err) => {
-                    console.log('archiving error - job: ' + jobId);
-                    console.log(err);
-                });
+                // begin streaming archive
+                archive.pipe(res);
 
-                c.jobs.findOne({jobId}, {}, (err, job) => {
-                    // set archive name
-                    res.attachment(job.appId + '-results.zip');
+                async.eachSeries(job.results, (result, cb) => {
+                    path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
+                    let name = result.name;
 
-                    // begin streaming archive
-                    archive.pipe(res);
-
-                    async.eachSeries(job.results, (result, cb) => {
-                        path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
-                        let name = result.name;
-
-                        agave.api.getPath(path, (err, res, token) => {
-                            let body = res.body;
-                            if (!body || (body.status && body.status === 'error')) {
-                                // error from AGAVE
-                            } else {
-                                // stringify JSON
-                                if (typeof body === 'object' && !Buffer.isBuffer(body)) {
-                                    body = JSON.stringify(body);
-                                }
-                                // append file to archive
-                                archive.append(body, {name: name});
+                    agave.api.getPath(path, (err, res, token) => {
+                        let body = res.body;
+                        if (!body || (body.status && body.status === 'error')) {
+                            // error from AGAVE
+                        } else {
+                            // stringify JSON
+                            if (typeof body === 'object' && !Buffer.isBuffer(body)) {
+                                body = JSON.stringify(body);
                             }
+                            // append file to archive
+                            archive.append(body, {name: name});
+                        }
 
-                            cb();
-                        });
-                    }, () =>{
-                        archive.finalize();
+                        cb();
                     });
+                }, () =>{
+                    archive.finalize();
                 });
-            } else {
-                // download individual file
-                path = 'jobs/v2/' + jobId + '/outputs/media' + path;
-                agave.api.getPathProxy(path, res);
-            }
-        });
+            });
+        } else {
+            // download individual file
+            path = 'jobs/v2/' + jobId + '/outputs/media' + path;
+            agave.api.getPathProxy(path, res);
+        }
 
     },
 
