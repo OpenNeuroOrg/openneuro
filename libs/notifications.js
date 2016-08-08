@@ -4,6 +4,7 @@ import mongo   from './mongo';
 import email   from './email';
 import scitran from './scitran';
 import moment  from 'moment';
+import url     from 'url';
 
 let c = mongo.collections;
 
@@ -54,7 +55,7 @@ let notifications = {
                         startDate:       moment(job.agave.created).format('MMMM Do'),
                         datasetName:     job.datasetLabel,
                         status:          job.agave.status,
-                        siteUrl:         config.url,
+                        siteUrl:         url.parse(config.url).protocol + '//' + url.parse(config.url).hostname,
                         datasetId:       job.datasetId,
                         snapshotId:      job.snapshotId,
                         unsubscribeLink: ''
