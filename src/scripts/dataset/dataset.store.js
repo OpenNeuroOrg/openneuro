@@ -305,9 +305,17 @@ let datasetStore = Reflux.createStore({
      * Toggle Modal
      */
     toggleModal(name, callback) {
+        // reload app is missing for job modals
+        if (name === 'jobs' && (!this.data.apps || this.data.apps.length === 0)) {
+            this.loadApps();
+        }
+
+        // update modals state
         let modals = this.data.modals;
         modals[name] = !modals[name];
         this.update({modals});
+
+        // callback
         if (callback && typeof callback === 'function') {callback();}
     },
 
