@@ -33,7 +33,7 @@ let Jobs = React.createClass({
         return (
             <div className="analyses">
                 {jobs.length === 0 ?  null : header }
-                <Accordion accordion className="jobs-wrap">
+                <Accordion accordion className="jobs-wrap" activeKey={this.state.activeJob} onSelect={actions.selectJob}>
                     {this.state.loadingJobs ? <Spinner active={true} text="Loading Analyses" /> : jobs}
                 </Accordion>
             </div>

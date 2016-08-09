@@ -56,6 +56,7 @@ let datasetStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             apps: [],
+            activeJob: null,
             currentUpdate: null,
             currentUploadId: null,
             dataset: null,
@@ -905,6 +906,9 @@ let datasetStore = Reflux.createStore({
                         // start polling job
                         let jobId = res.body.result.id;
                         this.pollJob(jobId);
+
+                        // open job accordion
+                        this.update({activeJob: app.id});
                     });
                 }
             }
@@ -948,13 +952,29 @@ let datasetStore = Reflux.createStore({
     /**
      * Dismiss Job Modal
      */
-    dismissJobsModal(success, snapshotId) {
+    dismissJobsModal(success, snapshotId, appId) {
         this.toggleModal('jobs');
         if (success) {
             if (snapshotId !== this.data.dataset._id) {
                 let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
                 router.transitionTo('snapshot', {datasetId, snapshotId});
+                // open job accordion
+                this.update({activeJob: appId});
             }
+        }
+    },
+
+    /**
+     * Select Job
+     *
+     * Select the job accordion panel and saves
+     * the state.
+     */
+    selectJob(eventKey) {
+        if (eventKey === this.data.activeJob) {
+            this.update({activeJob: null});
+        } else {
+            this.update({activeJob: eventKey});
         }
     },
 
