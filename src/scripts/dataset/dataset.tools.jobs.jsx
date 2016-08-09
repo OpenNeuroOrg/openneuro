@@ -26,10 +26,12 @@ export default class JobMenu extends React.Component {
     componentWillReceiveProps() {
         this.props.snapshots.map((snapshot) => {
             if (snapshot._id == this.props.dataset._id) {
-                if (snapshot.original) {
-                    this.setState({selectedSnapshot: snapshot._id});
-                } else if (this.props.snapshots.length > 1) {
-                    this.setState({selectedSnapshot: this.props.snapshots[1]._id});
+                if (!this.state.selectedSnapshot) {
+                    if (snapshot.original) {
+                        this.setState({selectedSnapshot: snapshot._id});
+                    } else if (this.props.snapshots.length > 1) {
+                        this.setState({selectedSnapshot: this.props.snapshots[1]._id});
+                    }
                 }
                 return;
             }
@@ -261,7 +263,7 @@ export default class JobMenu extends React.Component {
      */
     _hide() {
         let success = !!this.state.message && !this.state.error;
-        this.props.onHide(success, this.state.selectedSnapshot);
+        this.props.onHide(success, this.state.selectedSnapshot, this.state.selectedAppID);
         this.setState({
             loading:          false,
             parameters:       [],
