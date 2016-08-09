@@ -53,7 +53,7 @@ let Jobs = React.createClass({
                         {this._status(run.agave.status)}
                     </span>
                     <span className="meta">
-                        <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
+                        <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong> at <strong>{moment(run.agave.created).format('LT')}</strong>
                         {runBy}
                     </span>
                     {this._failedMessage(run)}
