@@ -2,7 +2,7 @@ let config = {
     "url": process.env.CRN_SERVER_URL,
     "port": 8111,
     "apiPrefix": "/crn/",
-    "location": process.env.CRN_SERVER_LOCATION,
+    "location": "/srv/crn-server",
     "headers": {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
@@ -24,7 +24,7 @@ let config = {
         "storage":           process.env.CRN_SERVER_AGAVE_STORAGE
     },
     "mongo": {
-		"url": process.env.CRN_SERVER_MONGODB_URL
+		"url": "mongodb://mongo:27017/crn"
 	},
     "notifications": {
         "email": {
