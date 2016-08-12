@@ -9,7 +9,8 @@ WORKDIR /srv/crn-server
 
 # install server app
 # RUN apt-get install git
-RUN git clone -b $branch https://github.com/poldracklab/crn_server.git /srv/crn-server/
+# RUN git clone -b $branch https://github.com/poldracklab/crn_server.git /srv/crn-server/
+ADD . /srv/crn-server
 RUN ls
 RUN ls /srv/crn-server
 RUN npm install
