@@ -17,7 +17,7 @@ export default {
 
 			// required
 			if (model[prop].indexOf('required') > -1) {
-				if (!value) {
+				if (!value && typeof value !== 'boolean') {
 					err.missing.push(prop);
 					continue;
 				}
@@ -38,7 +38,7 @@ export default {
 			// isBoolean
 			if (model[prop].indexOf('boolean') > -1) {
 				if (typeof value !== 'boolean') {
-					err.invalid.push(prop + ' must be a boolean');
+					err.invalid.push(prop + ' must be a boolean.');
 				}
 			}
 
