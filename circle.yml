@@ -1,6 +1,12 @@
 machine:
   node:
     version: 4.3.0
+  services:
+    - docker
+
+dependencies:
+  pre:
+    - docker build -t constellates/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1 .
 
 test:
   override:
