@@ -1,0 +1,10 @@
+machine:
+  node:
+    version: 4.3.0
+
+test:
+  override:
+    # Lint
+    - npm run lint
+    # Run unit tests
+    - npm run test
