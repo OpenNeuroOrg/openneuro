@@ -130,7 +130,7 @@ export default {
      * Recreate Client
      */
     reCreateClient(callback) {
-        client.recreate((clientConfig) => {
+        client.recreate(() => {
             clientAuth = 'Basic ' + new Buffer(client.config.consumerKey + ':' + client.config.consumerSecret).toString('base64');
             this.getAccessToken(callback);
         });

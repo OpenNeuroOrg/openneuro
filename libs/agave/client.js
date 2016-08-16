@@ -64,10 +64,10 @@ let client = {
                 client.config.consumerKey       = res.body.result.consumerKey;
                 client.config.consumerSecret    = res.body.result.consumerSecret;
                 fs.writeFileSync('client.config.js', 'export default ' + JSON.stringify(client.config, null, 4));
-                callback(client.config);
+                callback();
             }
         });
-    },
+    }
 };
 
 export default client;
