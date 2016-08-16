@@ -32,7 +32,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "eslint": "^2.7.0",
-    "mocha": "^3.0.2"
+    "eslint": "2.7.0",
+    "mocha": "3.0.2"
   }
 }
