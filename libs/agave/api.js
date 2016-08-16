@@ -2,9 +2,10 @@
 
 import request from '../request';
 import config  from '../../config';
+import client  from './client';
 
 let userAuth   = 'Basic ' + new Buffer(config.agave.username + ':' + config.agave.password).toString('base64'),
-    clientAuth = 'Basic ' + new Buffer(config.agave.consumerKey + ':' + config.agave.consumerSecret).toString('base64');
+    clientAuth = 'Basic ' + new Buffer(client.config.consumerKey + ':' + client.config.consumerSecret).toString('base64');
 
 let token = {
     access: null,
@@ -32,8 +33,23 @@ export default {
                 Authorization: userAuth
             },
             body: {
-                clientName: config.agave.clientName,
-                description: config.agave.clientDescription
+                clientName: client.config.name,
+                description: client.config.clientDescription
+            }
+        }, callback);
+    },
+
+    /**
+     * Delete Client
+     */
+    deleteClient(clientName, callback) {
+        request.del(config.agave.url + 'clients/v2/' + clientName, {
+            headers: {
+                Authorization: userAuth
+            },
+            body: {
+                clientName: client.config.name,
+                description: client.config.clientDescription
             }
         }, callback);
     },
@@ -114,20 +130,9 @@ export default {
      * Recreate Client
      */
     reCreateClient(callback) {
-        console.log('Recreating AGAVE Client');
-        this.createClient((err, res) => {
-            if (res.body.status == 'error') {
-                console.log('Error Creating AGAVE Client');
-                console.log(res.body.message);
-            } else {
-                // set config changes and save to env variables
-                config.agave.consumerKey = res.body.result.consumerKey;
-                process.env.CRN_SERVER_AGAVE_CONSUMER_KEY=res.body.result.consumerKey;
-                config.agave.consumerSecret = res.body.result.consumerSecret;
-                process.env.CRN_SERVER_AGAVE_CONSUMER_SECRET=res.body.result.consumerSecret;
-                clientAuth = 'Basic ' + new Buffer(config.agave.consumerKey + ':' + config.agave.consumerSecret).toString('base64');
-                callback();
-            }
+        client.recreate(() => {
+            clientAuth = 'Basic ' + new Buffer(client.config.consumerKey + ':' + client.config.consumerSecret).toString('base64');
+            this.getAccessToken(callback);
         });
     },
 
@@ -307,6 +312,5 @@ export default {
             }, res);
         });
     }
-
 
 };

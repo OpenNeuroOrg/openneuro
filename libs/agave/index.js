@@ -1,5 +1,5 @@
 import config from '../../config';
-import api    from './agave';
+import api    from './api';
 import mongo  from '../../libs/mongo';
 
 let c = mongo.collections;
