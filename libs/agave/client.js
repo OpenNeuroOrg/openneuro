@@ -59,10 +59,10 @@ let client = {
                 console.log(res.body.message);
             } else {
                 // set config changes and save
-                client.config.name              =  config.agave.clientName;
-                client.config.clientDescription = config.agave.clientDescription;
-                client.config.consumerKey       = res.body.result.consumerKey;
-                client.config.consumerSecret    = res.body.result.consumerSecret;
+                client.config.name           =  config.agave.clientName;
+                client.config.description    = config.agave.clientDescription;
+                client.config.consumerKey    = res.body.result.consumerKey;
+                client.config.consumerSecret = res.body.result.consumerSecret;
                 fs.writeFileSync('client.config.js', 'export default ' + JSON.stringify(client.config, null, 4));
                 callback();
             }
