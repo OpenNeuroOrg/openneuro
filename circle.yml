@@ -6,7 +6,7 @@ machine:
 
 dependencies:
   pre:
-    - docker build -t constellates/$CIRCLE_PROJECT_REPONAME .
+    - docker build -t constellates/$CIRCLE_PROJECT_REPONAME:$(node -p -e "require('./package.json').version") .
 
 test:
   override:
@@ -24,7 +24,6 @@ deployment:
   hub:
     branch: circle-ci
     commands:
-      - echo $(node -p -e "require('./package.json').version")
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker tag constellates/$CIRCLE_PROJECT_REPONAME constellates/$CIRCLE_PROJECT_REPONAME:dev-$(node -p -e "require('./package.json').version")
+      # - docker tag constellates/$CIRCLE_PROJECT_REPONAME constellates/$CIRCLE_PROJECT_REPONAME:dev-$(node -p -e "require('./package.json').version")
       - docker push constellates/$CIRCLE_PROJECT_REPONAME
