@@ -4,7 +4,7 @@ machine:
   services:
     - docker
   enviroment
-    BRANCH_TAG: $([ "$CIRCLE_BRANCH" == circle-ci ] && echo "dev-" || echo "")
+    BRANCH_TAG: echo $([ "$CIRCLE_BRANCH" == circle-ci ] && echo "dev-" || echo "")
 
 dependencies:
   pre:
