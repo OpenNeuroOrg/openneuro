@@ -16,9 +16,9 @@ test:
     - npm run test
 
     # Lint
-    - docker run constellates/$CIRCLE_PROJECT_REPONAME npm run lint
+    - docker run constellates/$CIRCLE_PROJECT_REPONAME:$(node -p -e "require('./package.json').version") npm run lint
     # Unit Tests
-    - docker run constellates/$CIRCLE_PROJECT_REPONAME npm run test
+    - docker run constellates/$CIRCLE_PROJECT_REPONAME:$(node -p -e "require('./package.json').version") npm run test
 
 deployment:
   hub:
