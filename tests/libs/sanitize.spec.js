@@ -111,7 +111,7 @@ describe('libs/sanitize.js', () => {
             lastname:  'string, required'
         };
         sanitize.req(request, model, (err, res) => {
-            assert.equal(err, null);
+            assert.equal(err, 'null');
             assert.deepEqual(sanitized.body, res);
         });
     });

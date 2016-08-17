@@ -11,9 +11,9 @@ dependencies:
 test:
   override:
     # Lint
-    - npm run lint
+    # - npm run lint
     # Run unit tests
-    - npm run test
+    # - npm run test
 
     # Lint
     - docker run constellates/$CIRCLE_PROJECT_REPONAME:$(node -p -e "require('./package.json').version") npm run lint
