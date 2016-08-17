@@ -85,7 +85,7 @@ describe('libs/sanitize.js', () => {
             }
         };
         sanitize.req(request, model, (err) => {
-            assert.notEqual(err, null);
+            assert.notEqual(err, "null");
             assert.equal(err.message, 'tags must be an object.');
         });
     });
