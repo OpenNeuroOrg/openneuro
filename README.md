@@ -1,3 +1,5 @@
+![](https://circleci.com/gh/poldracklab/crn_server.svg?style=shield&circle-token=:circle-token)
+
 # CRN SERVER
 
 ## Configuration
