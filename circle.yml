@@ -3,9 +3,12 @@ machine:
     version: 4.3.0
   services:
     - docker
+  environment:
+    BUILD_TAG: ${CIRCLE_BRANCH}-$(node -p -e "require('./package.json').version")
 
 dependencies:
   pre:
+    - echo $BUILD_TAG
     - docker build -t constellates/$CIRCLE_PROJECT_REPONAME:$(node -p -e "require('./package.json').version") .
 
 test:
