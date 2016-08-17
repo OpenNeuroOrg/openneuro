@@ -85,7 +85,7 @@ describe('libs/sanitize.js', () => {
             }
         };
         sanitize.req(request, model, (err) => {
-            assert.notEqual(err, "null");
+            assert.notEqual(err, null);
             assert.equal(err.message, 'tags must be an object.');
         });
     });
@@ -111,7 +111,7 @@ describe('libs/sanitize.js', () => {
             lastname:  'string, required'
         };
         sanitize.req(request, model, (err, res) => {
-            assert.equal(err, 'null');
+            assert.equal(err, null);
             assert.deepEqual(sanitized.body, res);
         });
     });
