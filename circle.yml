@@ -21,5 +21,5 @@ deployment:
     branch: circle-ci
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      # - docker tag constellates/$CIRCLE_PROJECT_REPONAME constellates/$CIRCLE_PROJECT_REPONAME:dev-$(node -p -e "require('./package.json').version")
+      - docker tag constellates/$CIRCLE_PROJECT_REPONAME constellates/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == circle-ci ] && echo "dev-" || echo "")latest
       - docker push constellates/$CIRCLE_PROJECT_REPONAME
