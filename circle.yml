@@ -21,5 +21,5 @@ deployment:
     commands:
       - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS && docker push constellates/${CIRCLE_PROJECT_REPONAME}:$CIRCLE_SHA; fi :
           timeout: 21600
-      - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS && docker tag constellates/${CIRCLE_PROJECT_REPONAME} bids/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}-V${CIRCLE_BUILD_NUM}-${CIRCLE_SHA1:0:6} && docker push bids/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}-V${CIRCLE_BUILD_NUM}-${CIRCLE_SHA1:0:6}; fi :
+      - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS && docker tag constellates/${CIRCLE_PROJECT_REPONAME}:$CIRCLE_SHA; constellates/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}-V${CIRCLE_BUILD_NUM}-${CIRCLE_SHA1:0:6} && docker push constellates/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_BRANCH}-V${CIRCLE_BUILD_NUM}-${CIRCLE_SHA1:0:6}; fi :
           timeout: 21600
