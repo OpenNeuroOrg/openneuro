@@ -6,11 +6,25 @@ machine:
 
 dependencies:
   pre:
-    - docker build -t poldracklab/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == dev ] && echo "dev-" || echo "")$(node -p -e "require('./package.json').version") .
+    - docker build -t constellates/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == circle-ci ] && echo "circle-ci-" || echo "")$(node -p -e "require('./package.json').version") .
 
 test:
   override:
     # Lint
-    - docker run poldracklab/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == dev ] && echo "dev-" || echo "")$(node -p -e "require('./package.json').version") npm run lint
+    - docker run constellates/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == circle-ci ] && echo "circle-ci-" || echo "")$(node -p -e "require('./package.json').version") npm run lint
     # Unit Tests
-    - docker run poldracklab/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == dev ] && echo "dev-" || echo "")$(node -p -e "require('./package.json').version") npm run test
+    - docker run constellates/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == circle-ci ] && echo "circle-ci-" || echo "")$(node -p -e "require('./package.json').version") npm run test
+
+deployment:
+  development:
+    branch: circle-ci
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag constellates/$CIRCLE_PROJECT_REPONAME:dev-$(node -p -e "require('./package.json').version") constellates/$CIRCLE_PROJECT_REPONAME:dev-latest
+      - docker push constellates/$CIRCLE_PROJECT_REPONAME
+  production:
+    branch: master
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag constellates/$CIRCLE_PROJECT_REPONAME:$(node -p -e "require('./package.json').version") constellates/$CIRCLE_PROJECT_REPONAME:latest
+      - docker push constellates/$CIRCLE_PROJECT_REPONAME
