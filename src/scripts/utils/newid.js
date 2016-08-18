@@ -6,9 +6,9 @@
  * accessibility.
  */
 
-let lastId = 0;
+let ids = {};
 
 export default (prefix='id') => {
-	lastId++;
-	return `${prefix}${lastId}`;
+	ids[prefix] = ids[prefix] ? ids[prefix] + 1 : 1;
+	return `${prefix}${ids[prefix]}`;
 }
