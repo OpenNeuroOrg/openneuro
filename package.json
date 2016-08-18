@@ -7,7 +7,7 @@
     "type": "git"
   },
   "scripts": {
-    "lint": "eslint",
+    "lint": "eslint src/scripts/**/**/**/* src/tests/scripts/**/**/**/*",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register src/tests/**/**/**/*.spec.js"
   },
   "author": "Squishymedia",
