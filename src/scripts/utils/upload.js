@@ -35,7 +35,7 @@ let upload = {
                     file: req.file.data ? req.file.data : req.file
                 }
             }, (err) => {
-                upload.handleResponse(err, req)
+                upload.handleResponse(err, req);
                 callback();
             });
         }
@@ -61,7 +61,7 @@ let upload = {
             req.error();
         } else {
             if (res && req.callback) {
-                req.callback(err, res)
+                req.callback(err, res);
             }
             req.progressEnd(label);
         }

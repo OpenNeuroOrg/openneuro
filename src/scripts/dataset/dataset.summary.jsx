@@ -65,7 +65,7 @@ export default class Summary extends React.Component {
         if (items && items.length > 0) {
             return <span><b>Available</b> {type} : {items.join(', ')}</span>;
         }else{
-            return <span><b>No Available</b> {type}</span>
+            return <span><b>No Available</b> {type}</span>;
         }
     }
 

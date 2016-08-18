@@ -7,7 +7,8 @@
     "type": "git"
   },
   "scripts": {
-    "lint": "eslint"
+    "lint": "eslint src/scripts/**/**/**/* src/tests/scripts/**/**/**/*",
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register src/tests/**/**/**/*.spec.js"
   },
   "author": "Squishymedia",
   "dependencies": {
@@ -32,12 +33,13 @@
     "superagent": "^1.0.0"
   },
   "devDependencies": {
+    "babel": "5.8.23",
     "babelify": "^5.0.4",
     "browser-sync": "^2.2.3",
     "browserify": "^9.0.3",
     "connect-history-api-fallback": "^1.2.0",
     "del": "2.2.0",
-    "eslint": "^2.7.0",
+    "eslint": "2.7.0",
     "eslint-plugin-react": "^4.3.0",
     "gulp": "^3.8.11",
     "gulp-cachebust": "0.0.6",
@@ -48,6 +50,7 @@
     "gulp-sass": "^2.2.0",
     "gulp-sourcemaps": "^1.5.0",
     "gulp-uglify": "^1.1.0",
+    "mocha": "3.0.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^2.4.0"

@@ -1,3 +1,5 @@
+/*eslint react/no-danger: 0 */
+
 // dependencies -------------------------------------------------------
 
 import React          from 'react';

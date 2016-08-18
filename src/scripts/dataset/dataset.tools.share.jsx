@@ -1,3 +1,5 @@
+/*eslint react/no-did-mount-set-state: 0 */
+
 // dependencies -------------------------------------------------------
 
 import React      from 'react';
