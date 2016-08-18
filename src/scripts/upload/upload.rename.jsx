@@ -1,7 +1,6 @@
 // dependencies -------------------------------------------------------
 
 import React       from 'react';
-import Reflux      from 'reflux';
 import Actions     from './upload.actions.js';
 import Input       from '../common/forms/input.jsx';
 
@@ -55,3 +54,11 @@ export default class Rename extends React.Component {
     }
 
 }
+
+Rename.propTypes = {
+    dirName:      React.PropTypes.string,
+    nameError:    React.PropTypes.string,
+    resuming:     React.PropTypes.bool,
+    selectedName: React.PropTypes.string,
+    input:        React.PropTypes.bool
+};

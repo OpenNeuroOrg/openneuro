@@ -301,7 +301,7 @@ let UserStore = Reflux.createStore({
             if (authReq.errorCallback) {
                 authReq.errorCallback();
             } else {
-                clearAuth();
+                this.clearAuth();
             }
             callback();
         });

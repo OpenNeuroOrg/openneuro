@@ -8,7 +8,6 @@ import Spinner      from '../common/partials/spinner.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
 import WarnButton   from '../common/forms/warn-button.jsx';
 import moment       from 'moment';
-import pluralize    from 'pluralize';
 
 let Jobs = React.createClass({
 
@@ -94,7 +93,7 @@ let Jobs = React.createClass({
     _failedMessage(run) {
         if (run.agave.status === 'FAILED') {
             let adminMessage = <span>Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail.</span>;
-            let message = run.agave.message ? run.agave.message : 'We were unable to complete this analysis.'
+            let message = run.agave.message ? run.agave.message : 'We were unable to complete this analysis.';
             return (
                 <div>
                     <h5 className="text-danger">{message} {adminMessage}</h5>

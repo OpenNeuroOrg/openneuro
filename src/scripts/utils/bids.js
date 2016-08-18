@@ -187,7 +187,7 @@ export default  {
      * dataset tree.
      */
     getDatasetTree (dataset, callback, options, progressCb) {
-        let progress = (p) => {if (progressCb) {progressCb(p);}}
+        let progress = (p) => {if (progressCb) {progressCb(p);}};
         dataset = {
             _id: dataset._id,
             label: dataset.label,
@@ -197,7 +197,7 @@ export default  {
             type: 'folder'
         };
         let projectId = dataset._id;
-        let p = {total: 2, completed: 0}
+        let p = {total: 2, completed: 0};
         progress(p);
         scitran.getSessions(projectId, (scitranSessions) => {
             scitran.getProjectAcquisitions(projectId, (scitranAcquisitions) => {
@@ -359,7 +359,7 @@ export default  {
             attachments: attachments,
             userCreated: this.userCreated(project),
             access:      this.userAccess(project),
-            summary:     project.metadata && project.metadata.summary ? project.metadata.summary : null,
+            summary:     project.metadata && project.metadata.summary ? project.metadata.summary : null
         };
         dataset.status       = this.formatStatus(project, dataset.access),
         dataset.authors      = dataset.description.Authors;

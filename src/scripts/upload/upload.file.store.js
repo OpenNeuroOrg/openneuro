@@ -1,6 +1,5 @@
 // dependencies ----------------------------------------------------------------------
 
-import React   from 'react';
 import Reflux  from 'reflux';
 import Actions from './upload.file.actions.js';
 
@@ -52,7 +51,7 @@ let UploadFileStore = Reflux.createStore({
     setFiles (selectedFiles) {
         this.update({
             tree: selectedFiles.tree,
-            list: selectedFiles.list,
+            list: selectedFiles.list
         });
     },
 
