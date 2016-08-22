@@ -32,7 +32,7 @@ let Jobs = React.createClass({
         return (
             <div className="analyses">
                 {jobs.length === 0 ?  null : header }
-                <Accordion accordion className="jobs-wrap">
+                <Accordion accordion className="jobs-wrap" activeKey={this.state.activeJob} onSelect={actions.selectJob}>
                     {this.state.loadingJobs ? <Spinner active={true} text="Loading Analyses" /> : jobs}
                 </Accordion>
             </div>
@@ -52,21 +52,22 @@ let Jobs = React.createClass({
                         {this._status(run.agave.status)}
                     </span>
                     <span className="meta">
-                        <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong>
+                        <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong> at <strong>{moment(run.agave.created).format('LT')}</strong>
                         {runBy}
                     </span>
                     {this._failedMessage(run)}
                 </div>
             );
 
-            if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0)) {
+            if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0) || (run.logs && run.logs.length > 0)) {
                 // header with parameters and/or results
                 return (
                     <span key={run._id} eventKey={run._id}>
                         <Panel className="job" header={jobAccordionHeader}>
                             <span className="inner">
                                 {this._parameters(run)}
-                                {this._results(run)}
+                                {this._results(run, 'results')}
+                                {/*this._results(run, 'logs')*/}
                             </span>
                         </Panel>
                     </span>
@@ -107,9 +108,9 @@ let Jobs = React.createClass({
         }
     },
 
-    _results(run) {
-        if (run.results && run.results.length > 0) {
-            let resultLinks = run.results.map((result, index) => {
+    _results(run, type) {
+        if (run[type] && run[type].length > 0) {
+            let resultLinks = run[type].map((result, index) => {
                 let displayBtn;
                 if (result.name.indexOf('.err') > -1 || result.name.indexOf('.out') > -1) {
                     displayBtn = (
@@ -136,15 +137,22 @@ let Jobs = React.createClass({
                 );
             });
 
+            let downloadAll;
+            if (type === 'results') {
+                downloadAll = (
+                    <span className="download-all">
+                        <WarnButton
+                            icon="fa-download"
+                            message=" DOWNLOAD All"
+                            prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, 'all')} />
+                    </span>
+                );
+            }
+
             return (
                 <Accordion accordion className="results">
-                    <Panel className="fade-in" header="Download Results" key={run._id} eventKey={run._id}>
-                        <span className="download-all">
-                            <WarnButton
-                                icon="fa-download"
-                                message=" DOWNLOAD All"
-                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, 'all')} />
-                        </span>
+                    <Panel className="fade-in" header={"Download " + type} key={run._id} eventKey={run._id}>
+                        {downloadAll}
                         <ul>{resultLinks}</ul>
                     </Panel>
                 </Accordion>
