@@ -390,7 +390,7 @@ export default class JobMenu extends React.Component {
             if (parameter.type === 'number') {parameter.value = Number(parameter.value);}
             if (parameter.type === 'string' && !parameter.value) {parameter.value = '';}
             if (typeof parameter.value === 'string' && parameter.value.indexOf('sub-') > -1) {
-                parameter.value = parameter.value.replace(/,/g, ' ');
+                parameter.value = parameter.value.replace(/,/g, ' ').replace(/sub-/g, '');
             }
             parameters[parameter.id] = parameter.value;
         }
