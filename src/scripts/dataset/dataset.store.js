@@ -916,28 +916,30 @@ let datasetStore = Reflux.createStore({
     },
 
     refreshJob(jobId, callback) {
-        crn.getJob(this.data.dataset._id, jobId, (err, res) => {
-            let existingJob;
-            let jobUpdate =  res ? res.body : null;
-            let jobs = this.data.jobs;
-            if (jobs && jobs.length > 0) {
-                for (let job of jobs) {
-                    for (let run of job.runs) {
-                        if (jobId === run.jobId) {
-                            existingJob = run;
-                            if (jobUpdate) {
-                                run.agave = jobUpdate.agave;
-                                run.results = jobUpdate.results;
+        if (this.data.dataset) {
+            crn.getJob(this.data.dataset._id, jobId, (err, res) => {
+                let existingJob;
+                let jobUpdate =  res ? res.body : null;
+                let jobs = this.data.jobs;
+                if (jobs && jobs.length > 0) {
+                    for (let job of jobs) {
+                        for (let run of job.runs) {
+                            if (jobId === run.jobId) {
+                                existingJob = run;
+                                if (jobUpdate) {
+                                    run.agave = jobUpdate.agave;
+                                    run.results = jobUpdate.results;
+                                }
                             }
                         }
                     }
+                    if (this.data.dataset && this.data.dataset._id === jobUpdate.snapshotId) {
+                        this.update({jobs});
+                    }
                 }
-                if (this.data.dataset && this.data.dataset._id === jobUpdate.snapshotId) {
-                    this.update({jobs});
-                }
-            }
-            callback(jobUpdate ? jobUpdate : existingJob);
-        }, {snapshot: this.data.snapshot});
+                callback(jobUpdate ? jobUpdate : existingJob);
+            }, {snapshot: this.data.snapshot});
+        }
     },
 
     retryJob(jobId, callback) {
