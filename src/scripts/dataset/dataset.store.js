@@ -56,6 +56,7 @@ let datasetStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             apps: [],
+            activeJob: null,
             currentUpdate: null,
             currentUploadId: null,
             dataset: null,
@@ -305,9 +306,17 @@ let datasetStore = Reflux.createStore({
      * Toggle Modal
      */
     toggleModal(name, callback) {
+        // reload app is missing for job modals
+        if (name === 'jobs' && (!this.data.apps || this.data.apps.length === 0)) {
+            this.loadApps();
+        }
+
+        // update modals state
         let modals = this.data.modals;
         modals[name] = !modals[name];
         this.update({modals});
+
+        // callback
         if (callback && typeof callback === 'function') {callback();}
     },
 
@@ -857,7 +866,7 @@ let datasetStore = Reflux.createStore({
                 let finished = status === 'FINISHED';
                 let failed = status === 'FAILED';
                 let hasResults = job.results && job.results.length > 0;
-                let needsUpdate = (!finished && !failed) || (finished && !hasResults)
+                let needsUpdate = (!finished && !failed) || (finished && !hasResults);
                 if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
                     setTimeout(poll.bind(this, jobId), interval);
                 }
@@ -897,6 +906,9 @@ let datasetStore = Reflux.createStore({
                         // start polling job
                         let jobId = res.body.result.id;
                         this.pollJob(jobId);
+
+                        // open job accordion
+                        this.update({activeJob: app.id});
                     });
                 }
             }
@@ -904,28 +916,30 @@ let datasetStore = Reflux.createStore({
     },
 
     refreshJob(jobId, callback) {
-        crn.getJob(this.data.dataset._id, jobId, (err, res) => {
-            let existingJob;
-            let jobUpdate =  res ? res.body : null;
-            let jobs = this.data.jobs;
-            if (jobs && jobs.length > 0) {
-                for (let job of jobs) {
-                    for (let run of job.runs) {
-                        if (jobId === run.jobId) {
-                            existingJob = run;
-                            if (jobUpdate) {
-                                run.agave = jobUpdate.agave;
-                                run.results = jobUpdate.results;
+        if (this.data.dataset) {
+            crn.getJob(this.data.dataset._id, jobId, (err, res) => {
+                let existingJob;
+                let jobUpdate =  res ? res.body : null;
+                let jobs = this.data.jobs;
+                if (jobs && jobs.length > 0) {
+                    for (let job of jobs) {
+                        for (let run of job.runs) {
+                            if (jobId === run.jobId) {
+                                existingJob = run;
+                                if (jobUpdate) {
+                                    run.agave = jobUpdate.agave;
+                                    run.results = jobUpdate.results;
+                                }
                             }
                         }
                     }
+                    if (this.data.dataset && this.data.dataset._id === jobUpdate.snapshotId) {
+                        this.update({jobs});
+                    }
                 }
-                if (this.data.dataset && this.data.dataset._id === jobUpdate.snapshotId) {
-                    this.update({jobs});
-                }
-            }
-            callback(jobUpdate ? jobUpdate : existingJob);
-        }, {snapshot: this.data.snapshot});
+                callback(jobUpdate ? jobUpdate : existingJob);
+            }, {snapshot: this.data.snapshot});
+        }
     },
 
     retryJob(jobId, callback) {
@@ -940,13 +954,29 @@ let datasetStore = Reflux.createStore({
     /**
      * Dismiss Job Modal
      */
-    dismissJobsModal(success, snapshotId) {
+    dismissJobsModal(success, snapshotId, appId) {
         this.toggleModal('jobs');
         if (success) {
             if (snapshotId !== this.data.dataset._id) {
                 let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
                 router.transitionTo('snapshot', {datasetId, snapshotId});
+                // open job accordion
+                this.update({activeJob: appId});
             }
+        }
+    },
+
+    /**
+     * Select Job
+     *
+     * Select the job accordion panel and saves
+     * the state.
+     */
+    selectJob(eventKey) {
+        if (eventKey === this.data.activeJob) {
+            this.update({activeJob: null});
+        } else {
+            this.update({activeJob: eventKey});
         }
     },
 

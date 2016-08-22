@@ -365,7 +365,7 @@ export default  {
      * - type ('view' or 'download')
      */
     trackUsage (snapshotId, type, options, callback) {
-        options.query = {type}
+        options.query = {type};
         request.post(config.scitran.url + 'projects/' + snapshotId + '/analytics', options, callback);
     },
 

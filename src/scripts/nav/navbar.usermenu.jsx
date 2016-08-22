@@ -9,6 +9,10 @@ import {DropdownButton} from 'react-bootstrap';
 
 let Usermenu = React.createClass({
 
+    propTypes: {
+        profile: React.PropTypes.object
+    },
+
 // life cycle methods ------------------------------------------------------------
 
     render: function () {

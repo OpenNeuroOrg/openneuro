@@ -5,6 +5,7 @@ import actions from './dataset.actions.js';
 import Spinner from '../common/partials/spinner.jsx';
 import {Modal} from 'react-bootstrap';
 import moment  from 'moment';
+import Select  from 'react-select';
 
 export default class JobMenu extends React.Component {
 
@@ -19,21 +20,35 @@ export default class JobMenu extends React.Component {
             selectedAppID:    '',
             selectedSnapshot: '',
             message:          null,
-            error:            false
+            error:            false,
+            subjects:         []
         };
     }
 
     componentWillReceiveProps() {
-        this.props.snapshots.map((snapshot) => {
-            if (snapshot._id == this.props.dataset._id) {
-                if (snapshot.original) {
-                    this.setState({selectedSnapshot: snapshot._id});
-                } else if (this.props.snapshots.length > 1) {
-                    this.setState({selectedSnapshot: this.props.snapshots[1]._id});
-                }
-                return;
+        // initialize subjects into state
+        if (this.state.subjects.length === 0) {
+            let subjects = [];
+            for (let subject of this.props.dataset.summary.subjects) {
+                subjects.push({label: 'sub-' + subject, value: 'sub-' + subject});
             }
-        });
+            subjects.reverse();
+            this.setState({subjects});
+        }
+
+        // pre-select snapshots
+        if (!this.state.selectedSnapshot) {
+            this.props.snapshots.map((snapshot) => {
+                if (snapshot._id == this.props.dataset._id) {
+                    if (snapshot.original) {
+                        this.setState({selectedSnapshot: snapshot._id});
+                    } else if (this.props.snapshots.length > 1) {
+                        this.setState({selectedSnapshot: this.props.snapshots[1]._id});
+                    }
+                    return;
+                }
+            });
+        }
     }
 
     render() {
@@ -200,6 +215,8 @@ export default class JobMenu extends React.Component {
                         <label htmlFor={'check-' + parameter.id} className="checkmark"><span></span></label>
                     </span>
                 );
+            } else if (parameter.label.indexOf('subjects') > -1) {
+                input = <Select multi simpleValue value={parameter.value} placeholder="Select your subject(s)" options={this.state.subjects} onChange={this._updateParameter.bind(this, parameter.id)} />;
             } else {
                 input = <input className="form-control" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
             }
@@ -261,7 +278,7 @@ export default class JobMenu extends React.Component {
      */
     _hide() {
         let success = !!this.state.message && !this.state.error;
-        this.props.onHide(success, this.state.selectedSnapshot);
+        this.props.onHide(success, this.state.selectedSnapshot, this.state.selectedAppID);
         this.setState({
             loading:          false,
             parameters:       [],
@@ -269,7 +286,9 @@ export default class JobMenu extends React.Component {
             selectedAppID:    '',
             selectedSnapshot: '',
             message:          null,
-            error:            false
+            error:            false,
+            options:          [],
+            value:            []
         });
     }
 
@@ -281,7 +300,7 @@ export default class JobMenu extends React.Component {
      * parameter to the new value.
      */
     _updateParameter(id, e) {
-        let value = e.target.value;
+        let value = e && e.target ? e.target.value : e;
         let parameters = this.state.parameters;
         for (let parameter of parameters) {
             if (parameter.id === id) {
@@ -370,6 +389,9 @@ export default class JobMenu extends React.Component {
         for (let parameter of this.state.parameters) {
             if (parameter.type === 'number') {parameter.value = Number(parameter.value);}
             if (parameter.type === 'string' && !parameter.value) {parameter.value = '';}
+            if (typeof parameter.value === 'string' && parameter.value.indexOf('sub-') > -1) {
+                parameter.value = parameter.value.replace(/,/g, ' ').replace(/sub-/g, '');
+            }
             parameters[parameter.id] = parameter.value;
         }
         this.setState({loading: true});

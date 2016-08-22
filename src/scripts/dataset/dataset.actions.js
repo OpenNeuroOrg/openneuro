@@ -24,6 +24,7 @@ var Actions = Reflux.createActions([
     'retryJob',
     'reloadDataset',
     'saveDescription',
+    'selectJob',
     'setInitialState',
     'startJob',
     'trackDownload',
