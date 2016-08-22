@@ -248,22 +248,22 @@ export default {
         });
     },
 
-    getJobOutput(jobId, callback) {
+    getJobResults(jobId, callback) {
         this.auth(() => {
-            request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings', {
+            request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings/out', {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json'
                 }
             }, (err, res) => {
-                this.handleResponse(err, res, callback, this.getJobOutput.bind(this, jobId, callback));
+                this.handleResponse(err, res, callback, this.getJobResults.bind(this, jobId, callback));
             });
         });
     },
 
-    getJobResults(jobId, callback) {
+    getJobLogs(jobId, callback) {
         this.auth(() => {
-            request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings/out', {
+            request.get(config.agave.url + 'jobs/v2/' + jobId + '/outputs/listings/log', {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
                     'Content-Type': 'application/json'
@@ -283,6 +283,10 @@ export default {
      */
     getPath(path, callback) {
         this.auth(() => {
+            if (path.indexOf(config.agave.url) === 0) {
+                path = path.slice(config.agave.url.length);
+            }
+
             request.get(config.agave.url + path, {
                 headers: {
                     Authorization: 'Bearer ' + token.access,
