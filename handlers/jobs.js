@@ -186,20 +186,22 @@ let handlers = {
     postResults(req, res) {
         let jobId = req.params.jobId;
         c.jobs.findOne({jobId}, {}, (err, job) => {
-            if (!job) {
+            if (!job || job.agave.status === 'FAILED' || job.agave.status === 'FINISHED') {
                 // occasionally result webhooks callback before the
-                // original job submission is saved, in these cases
-                // do nothing.
+                // original job submission is saved or after the job
+                // is complete. in these cases do nothing.
                 res.send({});
             } else if (req.body.status === job.agave.status) {
                 res.send(job);
             } else if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
-                agave.getOutputs(jobId, (results) => {
-                    c.jobs.updateOne({jobId}, {$set: {agave: req.body, results}}, {}).then((err, result) => {
+                agave.getOutputs(jobId, (results, logs, statusCode) => {
+                    req.body.status = statusCode == 0 ? req.body.status : 'FAILED';
+                    c.jobs.updateOne({jobId}, {$set: {agave: req.body, results, logs, statusCode}}, {}).then((err, result) => {
                         if (err) {res.send(err);}
                         else {res.send(result);}
                         job.agave = req.body;
                         job.results = results;
+
                         notifications.jobComplete(job);
                     });
                 });
@@ -226,13 +228,17 @@ let handlers = {
             } else {
                 agave.api.getJob(jobId, (err, resp) => {
                     // check status
-                    if (resp.body.result.status === 'FINISHED') {
+                    if (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED') {
                         job.agave = resp.body.result;
-                        agave.getOutputs(jobId, (results) => {
-                            c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results}}, {}, (err, result) => {
+                        agave.getOutputs(jobId, (results, logs, statusCode) => {
+                            resp.body.result.status = statusCode == 0 ? resp.body.result.status : 'FAILED';
+                            c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results, logs, statusCode}}, {}, (err, result) => {
                                 if (err) {res.send(err);}
                                 else {res.send({agave: resp.body.result, results, snapshotId: job.snapshotId});}
+                                job.agave = resp.body.result;
                                 job.results = results;
+                                job.logs = logs;
+                                job.statusCode = statusCode;
                                 if (status !== 'FINISHED') {notifications.jobComplete(job);}
                             });
                         });
@@ -241,9 +247,6 @@ let handlers = {
                         c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
                             if (err) {res.send(err);}
                             else {res.send({agave: resp.body.result, snapshotId: job.snapshotId});}
-                            if (resp.body.result.status === 'FAILED') {
-                                notifications.jobComplete(job);
-                            }
                         });
                     } else {
                         res.send({agave: resp.body.result, snapshotId: job.snapshotId});
