@@ -151,7 +151,7 @@ let Jobs = React.createClass({
 
             return (
                 <Accordion accordion className="results">
-                    <Panel className="fade-in" header={"Download " + type} key={run._id} eventKey={run._id}>
+                    <Panel className="fade-in" header={'Download ' + type} key={run._id} eventKey={run._id}>
                         {downloadAll}
                         <ul>{resultLinks}</ul>
                     </Panel>
