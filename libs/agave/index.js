@@ -1,6 +1,7 @@
 import config from '../../config';
-import api    from './agave';
+import api    from './api';
 import mongo  from '../../libs/mongo';
+import async  from 'async';
 
 let c = mongo.collections;
 
@@ -23,23 +24,32 @@ export default {
      */
     getOutputs (jobId, callback) {
         let results = [];
-        api.getJobOutput(jobId, (err, res) => {
-            let output = res.body.result;
-            if (output) {
-                // get main output files
-                for (let file of output) {
+        let logs = [];
+        let status = null;
+        api.getJobLogs(jobId, (err, res) => {
+            // get main logs files
+            if (res.body.result) {
+                async.each(res.body.result, (file, cb) => {
                     if (file.type === 'file' && file.length > 0) {
-                        results.push(file);
+                        logs.push(file);
+                        if (file.name === 'exit_code.txt') {
+                            let path = file._links.self.href;
+                            api.getPath(path, (err, res) => {
+                                status = res.body;
+                                cb();
+                            });
+                        } else {cb();}
                     }
-                }
+                }, () => {
+                    api.getJobResults(jobId, (err, resp) => {
+                        if (resp.body.result) {
+                            results = results.concat(resp.body.result);
+                        }
+                        results = results.length > 0 ? results : null;
+                        callback(results, logs, status);
+                    });
+                });
             }
-            api.getJobResults(jobId, (err, resp) => {
-                if (resp.body.result) {
-                    results = results.concat(resp.body.result);
-                }
-                results = results.length > 0 ? results : null;
-                callback(results);
-            });
         });
     },
 
