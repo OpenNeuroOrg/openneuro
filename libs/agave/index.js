@@ -23,7 +23,17 @@ export default {
      * array of of results/outputs.
      */
     getOutputs (jobId, callback) {
-        let results = [];
+        this.getLogs(jobId, (logs, status) => {
+            this.getResults(jobId, (results) => {
+                callback(results, logs, status);
+            });
+        });
+    },
+
+    /**
+     * Get Logs
+     */
+    getLogs(jobId, callback) {
         let logs = [];
         let status = null;
         api.getJobLogs(jobId, (err, res) => {
@@ -41,14 +51,15 @@ export default {
                         } else {cb();}
                     }
                 }, () => {
-                    this.getResults(jobId, (results) => {
-                        callback(results, logs, status);
-                    });
+                    callback(logs, status);
                 });
             }
         });
     },
 
+    /**
+     * Get Results
+     */
     getResults (jobId, callback) {
         getDir(jobId, '/out', (results) => {
             results = results.length > 0 ? results : null;
@@ -65,7 +76,7 @@ export default {
                             cb();
                         } else if (result.type === 'dir') {
                             getDir(jobId, result.path, (subResults) => {
-                                result.children = subResults
+                                result.children = subResults;
                                 results.push(result);
                                 cb();
                             });
@@ -76,7 +87,7 @@ export default {
                 } else {
                     callback(results);
                 }
-            })
+            });
         }
     },
 
