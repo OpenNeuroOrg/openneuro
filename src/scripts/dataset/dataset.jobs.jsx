@@ -43,7 +43,6 @@ let Jobs = React.createClass({
 
     _runs(job) {
         let runs = job.runs.map((run) => {
-            console.log(run.logs);
             let runBy = run.userId ? <span><label> by </label><strong>{run.userId}</strong></span> : null;
 
             let jobAccordionHeader = (
