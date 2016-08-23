@@ -23,14 +23,24 @@ export default {
      * array of of results/outputs.
      */
     getOutputs (jobId, callback) {
-        let results = [];
+        this.getLogs(jobId, (logs, status) => {
+            this.getResults(jobId, (results) => {
+                callback(results, logs, status);
+            });
+        });
+    },
+
+    /**
+     * Get Logs
+     */
+    getLogs(jobId, callback) {
         let logs = [];
         let status = null;
         api.getJobLogs(jobId, (err, res) => {
             // get main logs files
             if (res.body.result) {
                 async.each(res.body.result, (file, cb) => {
-                    if (file.type === 'file' && file.length > 0) {
+                    if (file.type === 'file') {
                         logs.push(file);
                         if (file.name === 'exit_code.txt') {
                             let path = file._links.self.href;
@@ -41,16 +51,44 @@ export default {
                         } else {cb();}
                     }
                 }, () => {
-                    api.getJobResults(jobId, (err, resp) => {
-                        if (resp.body.result) {
-                            results = results.concat(resp.body.result);
-                        }
-                        results = results.length > 0 ? results : null;
-                        callback(results, logs, status);
-                    });
+                    callback(logs, status);
                 });
             }
         });
+    },
+
+    /**
+     * Get Results
+     */
+    getResults (jobId, callback) {
+        getDir(jobId, '/out', (results) => {
+            results = results.length > 0 ? results : null;
+            callback(results);
+        });
+
+        function getDir(jobId, dirPath, callback) {
+            let results = [];
+            api.getPath('jobs/v2/' + jobId + '/outputs/listings' + dirPath, (err, res) => {
+                if (res.body.result) {
+                    async.each(res.body.result, (result, cb) => {
+                        if (result.type === 'file') {
+                            results.push(result);
+                            cb();
+                        } else if (result.type === 'dir') {
+                            getDir(jobId, result.path, (subResults) => {
+                                result.children = subResults;
+                                results.push(result);
+                                cb();
+                            });
+                        }
+                    }, () => {
+                        callback(results);
+                    });
+                } else {
+                    callback(results);
+                }
+            });
+        }
     },
 
     /**
