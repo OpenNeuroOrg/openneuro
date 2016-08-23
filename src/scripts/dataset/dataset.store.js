@@ -933,7 +933,7 @@ let datasetStore = Reflux.createStore({
                             }
                         }
                     }
-                    if (this.data.dataset && this.data.dataset._id === jobUpdate.snapshotId) {
+                    if (this.data.dataset && jobUpdate && this.data.dataset._id === jobUpdate.snapshotId) {
                         this.update({jobs});
                     }
                 }
