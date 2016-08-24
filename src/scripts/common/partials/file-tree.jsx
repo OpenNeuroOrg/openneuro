@@ -38,7 +38,20 @@ class FileTree extends React.Component {
 
     _children(item, editable) {
         if (item.showChildren) {
-            return <ul className="child-files"><FileTree tree={item.children} editable={editable}/></ul>;
+            return (
+                <ul className="child-files">
+                    <FileTree
+                        tree={item.children}
+                        editable={editable}
+                        dismissError={this.props.dismissError}
+                        deleteFile={this.props.deleteFile}
+                        getFileDownloadTicket={this.props.getFileDownloadTicket}
+                        toggleFolder={this.props.toggleFolder}
+                        addFile={this.props.addFile}
+                        updateFile={this.props.updateFile}
+                        />
+                </ul>
+            );
         }
     }
 
@@ -47,7 +60,7 @@ class FileTree extends React.Component {
             return (
                 <div className="message error">
                     {item.error + ' '}
-                    <span onClick={actions.dismissError.bind(this, item)}>
+                    <span onClick={this.props.dismissError.bind(this, item)}>
                         <i className="fa fa-times"></i>
                     </span>
                 </div>
@@ -83,7 +96,7 @@ class FileTree extends React.Component {
                         <WarnButton
                             icon="fa-trash"
                             message="Delete"
-                            action={actions.deleteFile.bind(this, item)} />
+                            action={this.props.deleteFile.bind(this, item)} />
                     </span>
                 );
 
@@ -108,7 +121,7 @@ class FileTree extends React.Component {
                     <WarnButton
                         icon="fa-download"
                         message="Download"
-                        prepDownload={actions.getFileDownloadTicket.bind(this, item)} />
+                        prepDownload={this.props.getFileDownloadTicket.bind(this, item)} />
                 </span>
             );
         }
@@ -130,7 +143,7 @@ class FileTree extends React.Component {
         let label = item.label ? item.label : item.name;
         if (item.children) {
             let iconClass = 'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder');
-            return <button className="btn-file-folder" onClick={actions.toggleFolder.bind(this, item)}><i className={iconClass}></i> {label}</button>;
+            return <button className="btn-file-folder" onClick={this.props.toggleFolder.bind(this, item)}><i className={iconClass}></i> {label}</button>;
         }else{
             return label;
         }
@@ -141,7 +154,7 @@ class FileTree extends React.Component {
     /**
      * Add File
      */
-    _addFile(container, event) {actions.addFile(container, event.target.files[0]);}
+    _addFile(container, event) {this.props.addFile(container, event.target.files[0]);}
 
     /**
      * Clear Input
@@ -153,7 +166,7 @@ class FileTree extends React.Component {
     /**
      * Update File
      */
-    _updateFile(item, event) {actions.updateFile(item, event.target.files[0]);}
+    _updateFile(item, event) {this.props.updateFile(item, event.target.files[0]);}
 
 }
 

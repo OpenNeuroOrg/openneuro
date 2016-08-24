@@ -231,7 +231,17 @@ let Dataset = React.createClass({
                             </div>
                             <div className="panel-collapse" aria-expanded="false" >
                                 <div className="panel-body">
-                                    <FileTree tree={tree} editable={canEdit} loading={this.state.loadingTree}/>
+                                    <FileTree
+                                        tree={tree}
+                                        editable={canEdit}
+                                        loading={this.state.loadingTree}
+                                        dismissError={actions.dismissError}
+                                        deleteFile={actions.deleteFile}
+                                        getFileDownloadTicket={actions.getFileDownloadTicket}
+                                        toggleFolder={actions.toggleFolder}
+                                        addFile={actions.addFile}
+                                        updateFile={actions.updateFile}
+                                        />
                                 </div>
                             </div>
                         </div>
