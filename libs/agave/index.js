@@ -53,6 +53,8 @@ export default {
                 }, () => {
                     callback(logs, status);
                 });
+            } else {
+                callback(logs, status);
             }
         });
     },
