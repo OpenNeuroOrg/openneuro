@@ -42,6 +42,7 @@ class FileTree extends React.Component {
                 <ul className="child-files">
                     <FileTree
                         tree={item.children}
+                        treeId={this.props.treeId}
                         editable={editable}
                         dismissError={this.props.dismissError}
                         deleteFile={this.props.deleteFile}
@@ -143,7 +144,7 @@ class FileTree extends React.Component {
         let label = item.label ? item.label : item.name;
         if (item.children) {
             let iconClass = 'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder');
-            return <button className="btn-file-folder" onClick={this.props.toggleFolder.bind(this, item)}><i className={iconClass}></i> {label}</button>;
+            return <button className="btn-file-folder" onClick={this.props.toggleFolder.bind(this, item, this.props.treeId)}><i className={iconClass}></i> {label}</button>;
         }else{
             return label;
         }
