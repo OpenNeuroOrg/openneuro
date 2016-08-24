@@ -12,7 +12,7 @@ import Statuses     from './dataset.statuses.jsx';
 import Validation   from './dataset.validation.jsx';
 import moment       from 'moment';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
-import FileTree     from './dataset.file-tree.jsx';
+import FileTree     from '../common/partials/file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
 import userStore    from '../user/user.store.js';
 import Summary      from './dataset.summary.jsx';

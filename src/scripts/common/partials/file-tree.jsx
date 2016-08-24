@@ -1,9 +1,9 @@
 // dependencies -------------------------------------------------------
 
 import React      from 'react';
-import actions    from './dataset.actions';
-import WarnButton from '../common/forms/warn-button.jsx';
-import Spinner    from '../common/partials/spinner.jsx';
+import actions    from '../../dataset/dataset.actions';
+import WarnButton from '../forms/warn-button.jsx';
+import Spinner    from './spinner.jsx';
 
 class FileTree extends React.Component {
 
