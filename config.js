@@ -1,49 +1,42 @@
-
 /**
-* Configuration - Example
-*
-* Update the values and rename this file "config.js"
-*/
+ * Configuration
+ */
 export default {
 
-/**
-* Scitran
-*/
-scitran: {
-// url: 'http://prod-openfmri.tacc.utexas.edu/api/'
-url: 'http://dev-openfmri.tacc.utexas.edu:443/api/'
-// url: 'http://localhost:8110/api/'
-},
+		/**
+		 * Scitran
+		 */
+		scitran: {
+			url: process.env.CRN_SERVER_URL + '/api/'
+		},
 
-/**
-* CRN
-*/
-crn: {
-// url: 'http://prod-openfmri.tacc.utexas.edu/crn/'
-url: 'http://dev-openfmri.tacc.utexas.edu:443/crn/'
-// url: 'http://localhost:8111/crn/'
-},
+		/**
+		 * CRN
+		 */
+		crn: {
+			url: process.env.CRN_SERVER_URL + '/crn/'
+		},
 
-/**
-* Authentication
-*/
-auth: {
-google: {
-clientID: '502351221849-msl7gongejlva02kq1popd516hgg7bnq.apps.googleusercontent.com'
-}
-},
+		/**
+		 * Authentication
+		 */
+		auth: {
+			google: {
+				clientID: process.env.SCITRAN_AUTH_CLIENT_ID
+			}
+		},
 
-/**
-* Upload
-*/
-upload: {
+		/**
+		 * Upload
+		 */
+		upload: {
 
-/**
-* Filenames ignored during upload.
-*/
-blacklist: [
-   '.DS_Store',
-   'Icon\r'
-]
-}
+			/**
+			 * Filenames ignored during upload.
+			 */
+			blacklist: [
+			    '.DS_Store',
+			    'Icon\r'
+			]
+		}
 };
