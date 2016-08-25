@@ -799,6 +799,28 @@ let datasetStore = Reflux.createStore({
         }
     },
 
+    toggleResultFolder(directory, jobId) {
+        // determine job run
+        let jobs = this.data.jobs;
+        let jobRun;
+        for (let job of jobs) {
+            for (let run of job.runs) {
+                if (jobId === run._id) {
+                    jobRun = run;
+                }
+            }
+        }
+
+        // find directory
+        let dir = files.findInTree(jobRun.results, directory.path, 'path');
+        if (dir) {
+            dir.showChildren = !dir.showChildren;
+        }
+
+        // update state
+        this.update({jobs});
+    },
+
     // Jobs --------------------------------------------------------------------------
 
     /**
@@ -933,7 +955,7 @@ let datasetStore = Reflux.createStore({
                             }
                         }
                     }
-                    if (this.data.dataset && this.data.dataset._id === jobUpdate.snapshotId) {
+                    if (this.data.dataset && jobUpdate && this.data.dataset._id === jobUpdate.snapshotId) {
                         this.update({jobs});
                     }
                 }
@@ -983,10 +1005,10 @@ let datasetStore = Reflux.createStore({
     /**
      * Get Result Download Ticket
      */
-    getResultDownloadTicket(jobId, filePath, callback) {
-        crn.getResultDownloadTicket(this.data.dataset._id, jobId, filePath, (err, res) => {
+    getResultDownloadTicket(jobId, file, callback) {
+        crn.getResultDownloadTicket(this.data.dataset._id, jobId, file.path, (err, res) => {
             let ticket      = res.body._id;
-            let fileName    = filePath.split('/')[filePath.split('/').length - 1];
+            let fileName    = file.path.split('/')[file.path.split('/').length - 1];
             let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
             callback(downloadUrl);
         }, {snapshot: this.data.snapshot});

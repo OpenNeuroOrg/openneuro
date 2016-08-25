@@ -30,6 +30,7 @@ var Actions = Reflux.createActions([
     'trackDownload',
     'trackView',
     'toggleFolder',
+    'toggleResultFolder',
     'toggleModal',
     'toggleSidebar',
     'uploadAttachment',

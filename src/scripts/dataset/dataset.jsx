@@ -12,7 +12,7 @@ import Statuses     from './dataset.statuses.jsx';
 import Validation   from './dataset.validation.jsx';
 import moment       from 'moment';
 import ClickToEdit  from '../common/forms/click-to-edit.jsx';
-import FileTree     from './dataset.file-tree.jsx';
+import FileTree     from '../common/partials/file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
 import userStore    from '../user/user.store.js';
 import Summary      from './dataset.summary.jsx';
@@ -231,7 +231,17 @@ let Dataset = React.createClass({
                             </div>
                             <div className="panel-collapse" aria-expanded="false" >
                                 <div className="panel-body">
-                                    <FileTree tree={tree} editable={canEdit} loading={this.state.loadingTree}/>
+                                    <FileTree
+                                        tree={tree}
+                                        editable={canEdit}
+                                        loading={this.state.loadingTree}
+                                        dismissError={actions.dismissError}
+                                        deleteFile={actions.deleteFile}
+                                        getFileDownloadTicket={actions.getFileDownloadTicket}
+                                        toggleFolder={actions.toggleFolder}
+                                        addFile={actions.addFile}
+                                        updateFile={actions.updateFile}
+                                        />
                                 </div>
                             </div>
                         </div>

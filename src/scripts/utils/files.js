@@ -93,14 +93,15 @@ function countTree (tree) {
  * returns the corresponding object from
  * the tree.
  */
-function findInTree (tree, id) {
+function findInTree (tree, id, prop) {
+    prop = prop ? prop : '_id';
     let match, subTree;
     for (let item of tree) {
         if (item.children) {subTree = item.children;}
-        if (item._id == id) {
+        if (item[prop] == id) {
             return item;
         } else if (subTree) {
-            match = findInTree(subTree, id);
+            match = findInTree(subTree, id, prop);
             if (match) {return match;}
         }
     }
