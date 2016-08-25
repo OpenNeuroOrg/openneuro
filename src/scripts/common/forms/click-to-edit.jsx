@@ -7,10 +7,7 @@ import AuthorInput    from './author-input.jsx';
 import FileArrayInput from './file-array-input.jsx';
 import Spinner        from '../partials/spinner.jsx';
 import WarnButton     from './warn-button.jsx';
-import Remarkable     from 'remarkable';
-import linkifyHTML    from 'linkifyjs/html';
-
-let md = new Remarkable();
+import markdown       from '../../utils/markdown';
 
 let ClickToEdit = React.createClass({
 
@@ -61,7 +58,7 @@ let ClickToEdit = React.createClass({
 
         switch (type) {
         case 'string':
-            display = <div className="cte-display"><div className="fade-in" dangerouslySetInnerHTML={this._formatHTML(value)}></div></div>;
+            display = <div className="cte-display"><div className="fade-in" dangerouslySetInnerHTML={markdown.format(value)}></div></div>;
             input = (
                 <div>
                     <textarea className="form-control" value={value} onChange={this._handleChange.bind(null, type)}></textarea>
@@ -165,10 +162,6 @@ let ClickToEdit = React.createClass({
 
     _toggleEdit() {
         this.setState({edit: !this.state.edit});
-    },
-
-    _formatHTML(value) {
-        return {__html: linkifyHTML(md.render(value))};
     },
 
     _handleFile(file, callback) {
