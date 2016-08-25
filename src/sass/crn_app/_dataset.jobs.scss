@@ -101,6 +101,9 @@
                     @include border-radius(0);
                     border: 0;
                     border-top: 1px solid $ccc;
+                    .file-structure .panel{
+                        border: 0;
+                    }
 
                     .panel-heading .panel-title {
                         padding: 0;
@@ -702,4 +705,9 @@
             }
         }
     }
+}
+
+
+.snapshot .dataset-inner .analyses .file-structure.panel-group .panel-default .panel-body > ul{
+    border: 0;
 }
