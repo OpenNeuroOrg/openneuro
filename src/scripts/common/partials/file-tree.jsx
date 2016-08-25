@@ -1,7 +1,6 @@
 // dependencies -------------------------------------------------------
 
 import React      from 'react';
-import actions    from '../../dataset/dataset.actions';
 import WarnButton from '../forms/warn-button.jsx';
 import Spinner    from './spinner.jsx';
 
@@ -174,13 +173,21 @@ class FileTree extends React.Component {
 FileTree.props = {
     editable: false,
     loading:  false,
-    tree:     []
+    tree:     [],
+    treeId:   ''
 };
 
 FileTree.propTypes = {
-    editable: React.PropTypes.bool,
-    loading:  React.PropTypes.bool,
-    tree:     React.PropTypes.array
+    editable:              React.PropTypes.bool,
+    loading:               React.PropTypes.bool,
+    tree:                  React.PropTypes.array,
+    treeId:                React.PropTypes.string,
+    dismissError:          React.PropTypes.func,
+    deleteFile:            React.PropTypes.func,
+    getFileDownloadTicket: React.PropTypes.func,
+    toggleFolder:          React.PropTypes.func,
+    addFile:               React.PropTypes.func,
+    updateFile:            React.PropTypes.func
 };
 
 export default FileTree;
