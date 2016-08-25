@@ -143,7 +143,6 @@ export default class JobMenu extends React.Component {
         if (app.shortDescription) {
             shortDescription = (
                 <div>
-                    <br />
                     <h5>Short Description</h5>
                     <div className="well" dangerouslySetInnerHTML={markdown.format(app.shortDescription)}></div>
                 </div>
@@ -154,7 +153,6 @@ export default class JobMenu extends React.Component {
         if (app.helpURI) {
             help = (
                 <div>
-                    <br />
                     <h5>Help</h5>
                     <div className="well">
                         <a href={app.helpURI} target="_blank">{app.helpURI}</a>
@@ -167,7 +165,6 @@ export default class JobMenu extends React.Component {
         if (app.tags) {
             tags = (
                 <div>
-                    <br />
                     <h5>Tags</h5>
                     <div className="well">{app.tags.join(', ')}</div>
                 </div>
@@ -182,7 +179,6 @@ export default class JobMenu extends React.Component {
 
             description = (
                 <div>
-                    <br />
                     <h5>Description</h5>
                     <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.description)}></div>
                 </div>
@@ -190,7 +186,6 @@ export default class JobMenu extends React.Component {
 
             acknowledgments = (
                 <div>
-                    <br />
                     <h5>Acknowledgements</h5>
                     <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.acknowledgments)}></div>
                 </div>
@@ -198,7 +193,6 @@ export default class JobMenu extends React.Component {
 
             support = (
                 <div>
-                    <br />
                     <h5>Support</h5>
                     <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.support)}></div>
                 </div>
