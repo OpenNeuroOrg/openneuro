@@ -1,11 +1,14 @@
+/*eslint react/no-danger: 0 */
+
 // dependencies -------------------------------------------------------
 
-import React   from 'react';
-import actions from './dataset.actions.js';
-import Spinner from '../common/partials/spinner.jsx';
-import {Modal} from 'react-bootstrap';
-import moment  from 'moment';
-import Select  from 'react-select';
+import React    from 'react';
+import actions  from './dataset.actions.js';
+import Spinner  from '../common/partials/spinner.jsx';
+import {Modal}  from 'react-bootstrap';
+import moment   from 'moment';
+import Select   from 'react-select';
+import markdown from '../utils/markdown';
 
 export default class JobMenu extends React.Component {
 
@@ -59,7 +62,7 @@ export default class JobMenu extends React.Component {
             <div className="anaylsis-modal clearfix">
                 {this._snapshots()}
                 {this._apps()}
-                {this._description(selectedApp.longDescription)}
+                {this._info(selectedApp)}
                 {this._parameters()}
                 {this._submit()}
             </div>
@@ -132,20 +135,87 @@ export default class JobMenu extends React.Component {
     }
 
     /**
-     * Description
-     *
-     * Returns markup for an app description.
+     * Info
      */
-    _description(description) {
-        if (description) {
-            return (
+    _info(app) {
+
+        let shortDescription;
+        if (app.shortDescription) {
+            shortDescription = (
                 <div>
                     <br />
-                    <h5>Description</h5>
-                    <div className="well">{description}</div>
+                    <h5>Short Description</h5>
+                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.shortDescription)}></div>
                 </div>
             );
         }
+
+        let help;
+        if (app.helpURI) {
+            help = (
+                <div>
+                    <br />
+                    <h5>Help</h5>
+                    <div className="well">
+                        <a href={app.helpURI} target="_blank">{app.helpURI}</a>
+                    </div>
+                </div>
+            );
+        }
+
+        let tags;
+        if (app.tags) {
+            tags = (
+                <div>
+                    <br />
+                    <h5>Tags</h5>
+                    <div className="well">{app.tags.join(', ')}</div>
+                </div>
+            );
+        }
+
+        let description,
+            acknowledgments,
+            support;
+        if (app.longDescription) {
+            app.longDescription = typeof app.longDescription === 'string' ? JSON.parse(app.longDescription) : app.longDescription;
+
+            description = (
+                <div>
+                    <br />
+                    <h5>Description</h5>
+                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.description)}></div>
+                </div>
+            );
+
+            acknowledgments = (
+                <div>
+                    <br />
+                    <h5>Acknowledgements</h5>
+                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.acknowledgments)}></div>
+                </div>
+            );
+
+            support = (
+                <div>
+                    <br />
+                    <h5>Support</h5>
+                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.support)}></div>
+                </div>
+            );
+        }
+
+        return (
+            <div>
+                <br /><hr />
+                {shortDescription}
+                {description}
+                {acknowledgments}
+                {help}
+                {support}
+                {tags}
+            </div>
+        );
     }
 
     /**
@@ -215,7 +285,7 @@ export default class JobMenu extends React.Component {
                         <label htmlFor={'check-' + parameter.id} className="checkmark"><span></span></label>
                     </span>
                 );
-            } else if (parameter.label.indexOf('subjects') > -1) {
+            } else if (parameter.id === 'subjectList') {
                 input = <Select multi simpleValue value={parameter.value} placeholder="Select your subject(s)" options={this.state.subjects} onChange={this._updateParameter.bind(this, parameter.id)} />;
             } else {
                 input = <input className="form-control" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
@@ -250,14 +320,15 @@ export default class JobMenu extends React.Component {
                     </div>
                 </div>
             );
+            return (
+                <div>
+                    <br /><hr /><br />
+                    {reset}
+                    {parameters}
+                </div>
+            );
         }
 
-        return (
-            <div>
-                {reset}
-                {parameters}
-            </div>
-        );
     }
 
     _submit() {
