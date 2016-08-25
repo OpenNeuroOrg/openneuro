@@ -1,11 +1,14 @@
+/*eslint react/no-danger: 0 */
+
 // dependencies -------------------------------------------------------
 
-import React   from 'react';
-import actions from './dataset.actions.js';
-import Spinner from '../common/partials/spinner.jsx';
-import {Modal} from 'react-bootstrap';
-import moment  from 'moment';
-import Select  from 'react-select';
+import React    from 'react';
+import actions  from './dataset.actions.js';
+import Spinner  from '../common/partials/spinner.jsx';
+import {Modal}  from 'react-bootstrap';
+import moment   from 'moment';
+import Select   from 'react-select';
+import markdown from '../utils/markdown';
 
 export default class JobMenu extends React.Component {
 
@@ -142,7 +145,7 @@ export default class JobMenu extends React.Component {
                 <div>
                     <br />
                     <h5>Short Description</h5>
-                    <div className="well">{app.shortDescription}</div>
+                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.shortDescription)}></div>
                 </div>
             );
         }
@@ -181,7 +184,7 @@ export default class JobMenu extends React.Component {
                 <div>
                     <br />
                     <h5>Description</h5>
-                    <div className="well">{app.longDescription.description}</div>
+                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.description)}></div>
                 </div>
             );
 
@@ -189,7 +192,7 @@ export default class JobMenu extends React.Component {
                 <div>
                     <br />
                     <h5>Acknowledgements</h5>
-                    <div className="well">{app.longDescription.acknowledgments}</div>
+                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.acknowledgments)}></div>
                 </div>
             );
 
@@ -197,9 +200,7 @@ export default class JobMenu extends React.Component {
                 <div>
                     <br />
                     <h5>Support</h5>
-                    <div className="well">
-                        <a href={app.longDescription.support} target="_blank">{app.longDescription.support}</a>
-                    </div>
+                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.support)}></div>
                 </div>
             );
         }
