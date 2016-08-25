@@ -8,6 +8,7 @@ import Spinner      from '../common/partials/spinner.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
 import WarnButton   from '../common/forms/warn-button.jsx';
 import moment       from 'moment';
+import FileTree     from '../common/partials/file-tree.jsx';
 
 let Jobs = React.createClass({
 
@@ -67,7 +68,7 @@ let Jobs = React.createClass({
                             <span className="inner">
                                 {this._parameters(run)}
                                 {this._results(run, 'results')}
-                                {/*this._results(run, 'logs')*/}
+                                {this._results(run, 'logs')}
                             </span>
                         </Panel>
                     </span>
@@ -110,33 +111,6 @@ let Jobs = React.createClass({
 
     _results(run, type) {
         if (run[type] && run[type].length > 0) {
-            let resultLinks = run[type].map((result, index) => {
-                let displayBtn;
-                if (result.name.indexOf('.err') > -1 || result.name.indexOf('.out') > -1) {
-                    displayBtn = (
-                        <WarnButton
-                            icon="fa-eye"
-                            warn={false}
-                            message=" VIEW"
-                            action={actions.displayFile.bind(this, run.jobId, result.path, result.name)} />
-                    );
-                }
-                return (
-                    <li key={index}>
-                        <span className="result-name">{result.name}</span>
-                        <div className="result-options">
-                            <span className="warning-btn-wrap">
-                                <WarnButton
-                                icon="fa-download"
-                                message=" DOWNLOAD"
-                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, result.path)} />
-                            </span>
-                            {displayBtn}
-                        </div>
-                    </li>
-                );
-            });
-
             let downloadAll;
             if (type === 'results') {
                 downloadAll = (
@@ -153,7 +127,20 @@ let Jobs = React.createClass({
                 <Accordion accordion className="results">
                     <Panel className="fade-in" header={'Download ' + type} key={run._id} eventKey={run._id}>
                         {downloadAll}
-                        <ul>{resultLinks}</ul>
+                        <div className="file-structure fade-in panel-group">
+                            <div className="panel panel-default">
+                                <div className="panel-collapse" aria-expanded="false" >
+                                    <div className="panel-body">
+                                        <FileTree
+                                            tree={run[type]}
+                                            treeId={run._id}
+                                            editable={false}
+                                            getFileDownloadTicket={actions.getResultDownloadTicket.bind(this, run.jobId)}
+                                            toggleFolder={actions.toggleResultFolder} />
+                                   </div>
+                                </div>
+                            </div>
+                        </div>
                     </Panel>
                 </Accordion>
             );
