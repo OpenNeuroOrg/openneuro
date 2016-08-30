@@ -7,6 +7,7 @@ import requireAuth from './utils/requireAuth';
 // views
 import Index          from './index.jsx';
 import Signin         from './user/signin.jsx';
+import Signin2         from './user/signin2.jsx';
 
 import Admin          from './admin/admin.jsx';
 import Users          from './admin/admin.users.jsx';
@@ -48,6 +49,7 @@ Admin     = requireAuth(Admin, 'admin');
 let routes = (
     <Route name="app" path="/" handler={Index}>
         <Route name="signIn" path="sign-in" handler={Signin}/>
+        <Route name="signIn2" path="sign-in-2" handler={Signin2}/>
         <Route name="dashboard" path="dashboard"  handler={Dashboard} >
             <Route name="datasets" path="datasets" handler={Datasets}/>
             <Route name="notifications" path="notifications" handler={Notifications}/>

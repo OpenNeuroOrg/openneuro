@@ -17,7 +17,7 @@ let App = React.createClass({
 // life cycle methods --------------------------------------------------------
 
     componentDidMount () {
-        userActions.initOAuth();
+        // userActions.initOAuth();
     },
 
     render () {

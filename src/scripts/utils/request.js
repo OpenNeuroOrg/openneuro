@@ -139,9 +139,10 @@ function normalizeOptions (options) {
 }
 
 function hasToken () {
-    if (!window.localStorage.hello) {return false;}
-    let credentials = JSON.parse(window.localStorage.hello);
-    return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
+    // if (!window.localStorage.hello) {return false;}
+    // let credentials = JSON.parse(window.localStorage.hello);
+    // return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
+    return true;
 }
 
 export default Request;

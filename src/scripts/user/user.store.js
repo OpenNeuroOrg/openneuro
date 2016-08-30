@@ -1,41 +1,59 @@
 // dependencies ----------------------------------------------------------------------
 
-import React            from 'react';
-import Reflux           from 'reflux';
-import hello            from 'hellojs';
-import async            from 'async';
-import Actions          from './user.actions.js';
-import config           from '../../../config';
-import router           from '../utils/router-container';
-import scitran          from '../utils/scitran';
-import crn              from '../utils/crn';
-import upload           from '../upload/upload.actions';
-import dashboardActions from '../dashboard/datasets.actions';
-import datasetActions   from '../dataset/dataset.actions';
-import notifications    from '../notification/notification.actions';
-
-hello.init({google: config.auth.google.clientID});
-
-let UserStore = Reflux.createStore({
+import React   from 'react';
+import Reflux  from 'reflux';
+import actions from './user.actions.js';
+import config  from '../../../config';
+import google  from '../utils/google';
+import crn     from '../utils/crn';
+import async   from 'async';
 
 // store setup -----------------------------------------------------------------------
 
-    listenables: Actions,
+let UserStore = Reflux.createStore({
+
+    listenables: actions,
 
     init() {
         this.setInitialState();
+
+        // initialize google APIs
+        google.init((token, profile, isSignedIn) => {
+            this.update({
+                token,
+                google: profile
+            }, {persist: true});
+            crn.verifyUser((err, res) => {
+                if (res.body.code === 403) {
+                    this.signOut();
+                } else {
+                    this.update({scitran: res.body}, {persist: true});
+                }
+            });
+        });
     },
 
     getInitialState() {
         return this.data;
     },
 
+    /**
+     * Instance of Google Auth object
+     * stored for further interaction.
+     */
+    authInstance: {},
+
 // data ------------------------------------------------------------------------------
 
     data: {},
 
-    update(data) {
-        for (let prop in data) {this.data[prop] = data[prop];}
+    update(data, options) {
+        for (let prop in data) {
+            this.data[prop] = data[prop];
+            if (options && options.persist) {
+                window.localStorage[prop] = JSON.stringify(data[prop]);
+            }
+        }
         this.trigger(this.data);
     },
 
@@ -48,10 +66,11 @@ let UserStore = Reflux.createStore({
      * with any differences passed.
      */
     setInitialState(diffs) {
+        // console.log(window.localStorage.token == 'undefined' ? true : false);
         let data = {
-            token: window.localStorage.hello ? JSON.parse(window.localStorage.hello).google.access_token : null,
-            google: null,
-            scitran: window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser) : null,
+            token:   window.localStorage.token !== 'undefined' ? JSON.parse(window.localStorage.token)   : null,
+            google:  window.localStorage.google ? JSON.parse(window.localStorage.google) : null,
+            scitran: window.localStorage.scitran ? JSON.parse(window.localStorage.scitran) : null,
             loading: false,
             signinError: '',
             showUploadModal: false
@@ -62,197 +81,41 @@ let UserStore = Reflux.createStore({
 
 // Actions ---------------------------------------------------------------------------
 
-    /**
-     * Toggle Modal
-     */
-    toggleModal(name) {
-        let updates = {};
-        updates['show' + name + 'Modal'] = !this.data['show' + name + 'Modal'];
-        this.update(updates);
+    signIn() {
+        google.signIn((token, profile, isSignedIn) => {
+            this.update({
+                token,
+                profile
+            }, {persist: true});
+        });
     },
 
-    /**
-     * Initialize OAuth
-     *
-     * Initializes the OAuth libarary (hello.js) and checks
-     * if a user is currently logged in.
-     */
-    initOAuth() {
-        hello.init({google: config.auth.google.clientID}, {redirect_uri: '/'});
-        this.checkUser();
-    },
-
-    /**
-     * Check User
-     *
-     * Checks if the user has an active sessions and
-     * if they do instatiates their session data.
-     */
-    checkUser() {
-        var googleAuth = hello('google').getAuthResponse();
-        var token = googleAuth && googleAuth.access_token ? googleAuth.access_token : null;
-
-        if (token) {
-            this.checkAuth((token) => {
-                this.update({token: token});
-                hello('google').api('/me').then((profile) => {
-                    this.update({google: profile});
-                    crn.verifyUser((err, res) => {
-                        if (res.body.code === 403) {
-                            this.signOut();
-                        } else {
-                            window.localStorage.scitranUser = JSON.stringify(res.body);
-                            this.update({scitran: res.body});
-                        }
-                    });
-                }, () => {
-                    this.setInitialState();
-                });
-            }, this.clearAuth);
-        } else {
-            this.setInitialState();
-        }
-    },
-
-    /**
-     * Signin
-     *
-     * Initiates the google OAuth2 sign in flow. Creates a new
-     * user if the user doesn't already exist.
-     */
-    signIn(options) {
-        let transition = options.hasOwnProperty('transition') ? options.transition : true;
-        this.update({loading: true});
-        hello('google').login({scope: 'email,openid'}, (res) => {
-            if (res.error) {
-                this.update({loading: false});
-                return;
-            }
-            this.update({token: res.authResponse.access_token});
-            hello(res.network).api('/me').then((profile) => {
-                crn.verifyUser((err, res) => {
-                    if (res.body.code === 403) {
-                        let user = {
-                            _id: profile.email,
-                            firstname: profile.first_name,
-                            lastname: profile.last_name
-                        };
-                        crn.createUser(user, (err, res) => {
-                            if (res.body.status === 403) {
-                                this.clearAuth();
-                                let message = <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>;
-                                if (!transition) {
-                                    notifications.createAlert({type: 'Error', message: message});
-                                } else {
-                                    this.update({
-                                        loading: false,
-                                        signinError: message
-                                    });
-                                }
-                                return;
-                            }
-                            crn.verifyUser((err, res) => {
-                                this.handleSignIn(transition, res.body, profile);
-                            });
-                        });
-                    } else if (!res.body._id) {
-                        this.clearAuth();
-                        let message = 'We are currently experiencing issues. Please try again later.';
-                        if (!transition) {
-                            notifications.createAlert({type: 'Error', message: message});
-                        } else {
-                            this.update({
-                                loading: false,
-                                signinError: message
-                            });
-                        }
-                    } else {
-                        this.handleSignIn(transition, res.body, profile);
-                    }
-                });
-            });
-        }, () => {
-            // signin failure
+    signOut() {
+        google.signOut(() => {
+            this.update({
+                token: null,
+                google: null,
+            }, {persist: true});
         });
     },
 
     /**
-     * Handle Sign In
+     * Refresh Token
      *
-     * Handles necessary action after a signin has been completed.
+     * The google client library will automatically refresh
+     * the token behind the scenes when it is within 5 minutes
+     * of expiring. Refresh should be called during that time
+     * or after expiration to reset the local data to match
+     * the updated token.
      */
-    handleSignIn(transition, scitranUser, googleProfile) {
-        window.localStorage.scitranUser = JSON.stringify(scitranUser);
-        this.update({scitran: scitranUser, google: googleProfile, loading: false});
-        if (transition) {
-            router.transitionTo('dashboard');
-        } else {
-            datasetActions.reloadDataset();
-            dashboardActions.getDatasets(true);
-        }
-    },
-
-    /**
-     * Sign Out
-     *
-     * Signs the user out by destroying the current
-     * OAuth2 session.
-     */
-    signOut(uploadStatus) {
-        let signout = true;
-        if (uploadStatus === 'uploading') {
-            signout = confirm('You are currently uploading files. Signing out of this site will cancel the upload process. Are you sure you want to sign out?');
-        }
-        if (signout) {
-            hello('google').logout().then(() => {
-                upload.setInitialState();
-                this.clearAuth();
-                router.transitionTo('signIn');
-            }, () => {
-                // signout failure
-            });
-        }
-    },
-
-    /**
-     * Get Preferences
-     *
-     * Calls back with the current user's preferences.
-     */
-    getPreferences(callback) {
-        callback(this.data.scitran.preferences);
-    },
-
-    /**
-     * Update Preferences
-     */
-    updatePreferences(preferences, callback) {
-        let scitranUser = this.data.scitran;
-        scitranUser.preferences = scitranUser.preferences ? scitranUser.preferences : {};
-        for (let key in preferences) {
-            scitranUser.preferences[key] = preferences[key];
-        }
-        scitran.updateUser(this.data.scitran._id, {preferences: preferences}, (err, res) => {
-            this.update({scitran: scitranUser});
-            if (callback) {callback(err, res);}
-        });
-    },
-
-// helper methods --------------------------------------------------------------------
-
-    /**
-     * Clear Authentication
-     *
-     * Clears all user related data from memory and
-     * browser storage.
-     */
-    clearAuth() {
-        delete window.localStorage.hello;
-        delete window.localStorage.scitranUser;
-        this.setInitialState({
-            token: null,
-            google: null,
-            scitran: null
+    refreshToken(callback) {
+        console.log('refreshToken');
+        google.refresh((token, profile, isSignedIn) => {
+            this.update({
+                token,
+                profile
+            }, {persist: true});
+            callback(token.access_token);
         });
     },
 
@@ -264,24 +127,12 @@ let UserStore = Reflux.createStore({
      * regardless of whether or not is is expired/valid.
      */
     hasToken() {
-        if (!window.localStorage.hello) {return false;}
-        let credentials = JSON.parse(window.localStorage.hello);
-        return credentials.hasOwnProperty('google') && credentials.google.hasOwnProperty('access_token') && credentials.google.access_token;
+        if (!window.localStorage.token || window.localStorage.token === 'undefined') {return false;}
+        let token = JSON.parse(window.localStorage.token);
+        return token.hasOwnProperty('access_token') && token.access_token;
     },
 
-    /**
-     * Is Token Valid
-     *
-     * Returns a boolean representing whether or not the
-     * current access token in valid.
-     */
-    isTokenValid() {
-        var session = hello('google').getAuthResponse();
-        var currentTime = (new Date()).getTime() / 1000;
-        return session && session.access_token && session.expires > currentTime;
-    },
-
-// request queue ---------------------------------------------------------------------
+    // request queue ---------------------------------------------------------------------
 
     /**
      * Authentication Request Queuing
@@ -293,18 +144,20 @@ let UserStore = Reflux.createStore({
      * to start the token check process.
      */
     queue: async.queue((authReq, callback) => {
-        let currentAccount = window.localStorage.hasOwnProperty('scitranUser') ? JSON.parse(window.localStorage.scitranUser).email : '';
-        hello('google').login({scope: 'email,openid', force: false, login_hint: currentAccount}).then((res) => {
-            authReq.successCallback(res.authResponse.access_token);
+        let token = UserStore.data.token;
+        let refreshWindow = 4 * 60 * 1000
+        // console.log(token.access_token, ' ', ((token.expires_at - Date.now())/1000).toFixed(0));
+        if (!token || Date.now() + refreshWindow >= token.expires_at) {
+            // refresh the token
+            UserStore.refreshToken((access_token) => {
+                authReq.successCallback(access_token);
+                callback();
+            });
+        } else {
+            authReq.successCallback(token.access_token);
             callback();
-        }, () => {
-            if (authReq.errorCallback) {
-                authReq.errorCallback();
-            } else {
-                this.clearAuth();
-            }
-            callback();
-        });
+        }
+
     }, 1),
 
     checkAuth(successCallback, errorCallback) {
