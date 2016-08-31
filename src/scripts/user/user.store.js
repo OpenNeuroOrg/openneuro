@@ -68,7 +68,7 @@ let UserStore = Reflux.createStore({
     setInitialState(diffs) {
         // console.log(window.localStorage.token == 'undefined' ? true : false);
         let data = {
-            token:   window.localStorage.token !== 'undefined' ? JSON.parse(window.localStorage.token)   : null,
+            token:   window.localStorage.token && window.localStorage.token !== 'undefined' ? JSON.parse(window.localStorage.token)   : null,
             google:  window.localStorage.google ? JSON.parse(window.localStorage.google) : null,
             scitran: window.localStorage.scitran ? JSON.parse(window.localStorage.scitran) : null,
             loading: false,
@@ -109,7 +109,6 @@ let UserStore = Reflux.createStore({
      * the updated token.
      */
     refreshToken(callback) {
-        console.log('refreshToken');
         google.refresh((token, profile, isSignedIn) => {
             this.update({
                 token,

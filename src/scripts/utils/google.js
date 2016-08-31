@@ -4,6 +4,8 @@ let google = {
 
 	authInstance: {},
 
+	initialized: false,
+
 	init(callback) {
         gapi.load('auth2', () => {
             gapi.client.load('plus', 'v1').then(() => {
@@ -12,6 +14,7 @@ let google = {
                     scopes: 'email,openid'
                 }).then((authInstance) => {
                     this.authInstance = authInstance;
+                    this.initialized = true;
                     this.getCurrentUser(callback);
                 });
             });
@@ -19,13 +22,13 @@ let google = {
 	},
 
 	refresh(callback) {
-			// gapi.auth2.getAuthInstance({
-	  //           client_id: config.auth.google.clientID,
-	  //           scopes: 'email,openid'
-	  //       }).then((authInstance) => {
-	  //           this.authInstance = authInstance;
-	            this.getCurrentUser(callback);
-	        // });
+  		if (this.initialized) {
+            this.getCurrentUser(callback);
+  		} else {
+  			setTimeout(() => {
+  				this.refresh(callback);
+  			}, 500);
+  		}
 	},
 
 	signIn(callback) {
@@ -45,7 +48,12 @@ let google = {
 		let user = this.authInstance.currentUser.get();
 
         // token
-        let token = user.hg;
+        let token = null;
+        for (let key in user) {
+			if (user[key].hasOwnProperty('access_token')) {
+				token = user[key];
+			}
+		}
 
         // profile
         let basicProfile = user.getBasicProfile();
