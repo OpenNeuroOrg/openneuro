@@ -1,11 +1,10 @@
 // dependencies ----------------------------------------------------------------------
 
-import React   from 'react';
 import Reflux  from 'reflux';
 import actions from './user.actions.js';
-import config  from '../../../config';
 import google  from '../utils/google';
 import crn     from '../utils/crn';
+import scitran from '../utils/scitran';
 import async   from 'async';
 
 // store setup -----------------------------------------------------------------------
@@ -18,7 +17,7 @@ let UserStore = Reflux.createStore({
         this.setInitialState();
 
         // initialize google APIs
-        google.init((token, profile, isSignedIn) => {
+        google.init((token, profile) => {
             this.update({
                 token,
                 google: profile
@@ -79,10 +78,10 @@ let UserStore = Reflux.createStore({
         this.update(data);
     },
 
-// Actions ---------------------------------------------------------------------------
+// Auth Actions ----------------------------------------------------------------------
 
     signIn() {
-        google.signIn((token, profile, isSignedIn) => {
+        google.signIn((token, profile) => {
             this.update({
                 token,
                 profile
@@ -94,7 +93,7 @@ let UserStore = Reflux.createStore({
         google.signOut(() => {
             this.update({
                 token: null,
-                google: null,
+                google: null
             }, {persist: true});
         });
     },
@@ -109,7 +108,7 @@ let UserStore = Reflux.createStore({
      * the updated token.
      */
     refreshToken(callback) {
-        google.refresh((token, profile, isSignedIn) => {
+        google.refresh((token, profile) => {
             this.update({
                 token,
                 profile
@@ -131,7 +130,7 @@ let UserStore = Reflux.createStore({
         return token.hasOwnProperty('access_token') && token.access_token;
     },
 
-    // request queue ---------------------------------------------------------------------
+    // request queue -----------------------------------------------------------------
 
     /**
      * Authentication Request Queuing
@@ -144,8 +143,7 @@ let UserStore = Reflux.createStore({
      */
     queue: async.queue((authReq, callback) => {
         let token = UserStore.data.token;
-        let refreshWindow = 4 * 60 * 1000
-        // console.log(token.access_token, ' ', ((token.expires_at - Date.now())/1000).toFixed(0));
+        let refreshWindow = 4 * 60 * 1000;
         if (!token || Date.now() + refreshWindow >= token.expires_at) {
             // refresh the token
             UserStore.refreshToken((access_token) => {
@@ -162,6 +160,33 @@ let UserStore = Reflux.createStore({
     checkAuth(successCallback, errorCallback) {
         let authReq = {successCallback, errorCallback};
         this.queue.push(authReq);
+    },
+
+
+// Actions ---------------------------------------------------------------------------
+
+    /**
+     * Get Preferences
+     *
+     * Calls back with the current user's preferences.
+     */
+    getPreferences(callback) {
+        callback(this.data.scitran.preferences);
+    },
+
+    /**
+     * Update Preferences
+     */
+    updatePreferences(preferences, callback) {
+        let scitranUser = this.data.scitran;
+        scitranUser.preferences = scitranUser.preferences ? scitranUser.preferences : {};
+        for (let key in preferences) {
+            scitranUser.preferences[key] = preferences[key];
+        }
+        scitran.updateUser(this.data.scitran._id, {preferences: preferences}, (err, res) => {
+            this.update({scitran: scitranUser});
+            if (callback) {callback(err, res);}
+        });
     }
 
 });

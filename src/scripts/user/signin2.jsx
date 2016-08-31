@@ -17,9 +17,9 @@ let Signin = React.createClass({
 
     statics: {
         willTransitionTo(transition) {
-            // if (userStore.data.token) {
-            //     transition.redirect('dashboard');
-            // }
+            if (userStore.data.token) {
+                transition.redirect('dashboard');
+            }
         }
     },
 
