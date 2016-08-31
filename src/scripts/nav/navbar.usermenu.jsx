@@ -21,9 +21,9 @@ let Usermenu = React.createClass({
         if (!profile) {return false;}
 
         let thumbnail,
-            username = profile.firstName + profile.lastName;
+            username = profile.firstname + ' ' + profile.lastname;
 
-        if (profile.picture) {
+        if (profile.imageUrl) {
             thumbnail = profile.imageUrl.replace('sz=50', 'sz=200');
         }
 
