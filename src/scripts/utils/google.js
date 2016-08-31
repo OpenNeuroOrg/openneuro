@@ -1,12 +1,14 @@
+/* global gapi */
+
 import config  from '../../../config';
 
 let google = {
 
-	authInstance: {},
+    authInstance: {},
 
-	initialized: false,
+    initialized: false,
 
-	init(callback) {
+    init(callback) {
         gapi.load('auth2', () => {
             gapi.client.load('plus', 'v1').then(() => {
                 gapi.auth2.init({
@@ -19,60 +21,60 @@ let google = {
                 });
             });
         });
-	},
+    },
 
-	refresh(callback) {
-  		if (this.initialized) {
+    refresh(callback) {
+        if (this.initialized) {
             this.getCurrentUser(callback);
-  		} else {
-  			setTimeout(() => {
-  				this.refresh(callback);
-  			}, 500);
-  		}
-	},
+        } else {
+            setTimeout(() => {
+                this.refresh(callback);
+            }, 500);
+        }
+    },
 
-	signIn(callback) {
-		this.authInstance.signIn().then(() => {
+    signIn(callback) {
+        this.authInstance.signIn().then(() => {
             this.getCurrentUser(callback);
         });
-	},
+    },
 
-	signOut(callback) {
-		this.authInstance.signOut().then((a) => {
-			callback();
-		});
-	},
+    signOut(callback) {
+        this.authInstance.signOut().then(() => {
+            callback();
+        });
+    },
 
-	getCurrentUser(callback) {
-		// get user data
-		let user = this.authInstance.currentUser.get();
+    getCurrentUser(callback) {
+        // get user data
+        let user = this.authInstance.currentUser.get();
 
         // token
         let token = null;
         for (let key in user) {
-			if (user[key].hasOwnProperty('access_token')) {
-				token = user[key];
-			}
-		}
+            if (user[key].hasOwnProperty('access_token')) {
+                token = user[key];
+            }
+        }
 
         // profile
         let basicProfile = user.getBasicProfile();
         let profile = null;
         if (basicProfile) {
-	        profile = {
-	        	_id:       basicProfile.getEmail(),
-	        	email:     basicProfile.getEmail(),
-	        	firstName: basicProfile.getGivenName(),
-	        	lastName:  basicProfile.getFamilyName(),
-	        	imageUrl:  basicProfile.getImageUrl()
-	        };
-		}
+            profile = {
+                _id:       basicProfile.getEmail(),
+                email:     basicProfile.getEmail(),
+                firstName: basicProfile.getGivenName(),
+                lastName:  basicProfile.getFamilyName(),
+                imageUrl:  basicProfile.getImageUrl()
+            };
+        }
 
-		// is signed in
+        // is signed in
         let isSignedIn = user.isSignedIn();
 
         callback(token, profile, isSignedIn);
-	}
+    }
 };
 
 export default google;
