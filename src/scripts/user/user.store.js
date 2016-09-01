@@ -92,6 +92,7 @@ let UserStore = Reflux.createStore({
      * user if the user doesn't already exist.
      */
     signIn(options) {
+        if (!google.initialized) {return;}
         let transition = options.hasOwnProperty('transition') ? options.transition : true;
         this.update({loading: true});
         google.signIn((token, profile) => {
