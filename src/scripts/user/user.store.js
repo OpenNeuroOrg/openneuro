@@ -167,11 +167,13 @@ let UserStore = Reflux.createStore({
      */
     clearAuth() {
         delete window.localStorage.token;
+        delete window.localStorage.google;
+        delete window.localStorage.scitran;
         this.setInitialState({
             token: null,
             google: null,
             scitran: null
-        }, {persist: true});
+        });
     },
 
     /**
@@ -239,11 +241,11 @@ let UserStore = Reflux.createStore({
         if (!token || Date.now() + refreshWindow >= token.expires_at) {
             // refresh the token
             UserStore.refreshToken((access_token) => {
-                authReq.successCallback(access_token);
+                authReq.successCallback(access_token, UserStore.isRoot());
                 callback();
             });
         } else {
-            authReq.successCallback(token.access_token);
+            authReq.successCallback(token.access_token, UserStore.isRoot());
             callback();
         }
 
@@ -254,6 +256,18 @@ let UserStore = Reflux.createStore({
         this.queue.push(authReq);
     },
 
+    /**
+     * Is Root
+     *
+     * Returns a boolean representing if the current user has
+     * root permissions. Attempts to read in memory data and falls back
+     * to checking local storage when necessary.
+     */
+    isRoot() {
+        if (this.data.scitran && this.data.scitran.root) {return true;}
+        if (window.localStorage.scitran && JSON.parse(window.localStorage.scitran).root) {return true;}
+        else {return false;}
+    },
 
 // Actions ---------------------------------------------------------------------------
 
