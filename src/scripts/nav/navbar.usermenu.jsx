@@ -21,10 +21,10 @@ let Usermenu = React.createClass({
         if (!profile) {return false;}
 
         let thumbnail,
-            username = profile.displayName;
+            username = profile.firstname + ' ' + profile.lastname;
 
-        if (profile.picture) {
-            thumbnail = profile.picture.replace('sz=50', 'sz=200');
+        if (profile.imageUrl) {
+            thumbnail = profile.imageUrl.replace('sz=50', 'sz=200');
         }
 
         let gear = (<i className="fa fa-gear" />);
