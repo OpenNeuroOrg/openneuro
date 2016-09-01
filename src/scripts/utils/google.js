@@ -34,7 +34,7 @@ let google = {
     },
 
     signIn(callback) {
-        this.authInstance.signIn({}).then(() => {
+        this.authInstance.signIn({prompt: 'none'}).then(() => {
             this.getCurrentUser(callback);
         });
     },
