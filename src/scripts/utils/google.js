@@ -34,7 +34,7 @@ let google = {
     },
 
     signIn(callback) {
-        this.authInstance.signIn().then(() => {
+        this.authInstance.signIn({}).then(() => {
             this.getCurrentUser(callback);
         });
     },
@@ -52,7 +52,7 @@ let google = {
         // token
         let token = null;
         for (let key in user) {
-            if (user[key].hasOwnProperty('access_token')) {
+            if (user[key] && user[key].hasOwnProperty('access_token')) {
                 token = user[key];
             }
         }
@@ -64,15 +64,14 @@ let google = {
             profile = {
                 _id:       basicProfile.getEmail(),
                 email:     basicProfile.getEmail(),
-                firstName: basicProfile.getGivenName(),
-                lastName:  basicProfile.getFamilyName(),
+                firstname: basicProfile.getGivenName(),
+                lastname:  basicProfile.getFamilyName(),
                 imageUrl:  basicProfile.getImageUrl()
             };
         }
 
         // is signed in
         let isSignedIn = user.isSignedIn();
-
         callback(token, profile, isSignedIn);
     }
 };
