@@ -1,11 +1,17 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux  from 'reflux';
-import actions from './user.actions.js';
-import google  from '../utils/google';
-import crn     from '../utils/crn';
-import scitran from '../utils/scitran';
-import async   from 'async';
+import React            from 'react';
+import Reflux           from 'reflux';
+import actions          from './user.actions.js';
+import google           from '../utils/google';
+import crn              from '../utils/crn';
+import scitran          from '../utils/scitran';
+import router           from '../utils/router-container';
+import async            from 'async';
+import notifications    from '../notification/notification.actions';
+import dashboardActions from '../dashboard/datasets.actions';
+import datasetActions   from '../dataset/dataset.actions';
+import upload           from '../upload/upload.actions';
 
 // store setup -----------------------------------------------------------------------
 
@@ -65,7 +71,6 @@ let UserStore = Reflux.createStore({
      * with any differences passed.
      */
     setInitialState(diffs) {
-        // console.log(window.localStorage.token == 'undefined' ? true : false);
         let data = {
             token:   window.localStorage.token && window.localStorage.token !== 'undefined' ? JSON.parse(window.localStorage.token)   : null,
             google:  window.localStorage.google ? JSON.parse(window.localStorage.google) : null,
@@ -80,22 +85,108 @@ let UserStore = Reflux.createStore({
 
 // Auth Actions ----------------------------------------------------------------------
 
-    signIn() {
+    /**
+     * Signin
+     *
+     * Initiates the google OAuth2 sign in flow. Creates a new
+     * user if the user doesn't already exist.
+     */
+    signIn(options) {
+        let transition = options.hasOwnProperty('transition') ? options.transition : true;
+        this.update({loading: true});
         google.signIn((token, profile) => {
             this.update({
                 token,
                 profile
             }, {persist: true});
+
+            crn.verifyUser((err, res) => {
+                if (res.body.code === 403) {
+                    crn.createUser(profile, (err, res) => {
+                        if (res.body.status === 403) {
+                            this.clearAuth();
+                            let message = <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>;
+                            if (!transition) {
+                                notifications.createAlert({type: 'Error', message: message});
+                            } else {
+                                this.update({
+                                    loading: false,
+                                    signinError: message
+                                });
+                            }
+                            return;
+                        }
+                        crn.verifyUser((err, res) => {
+                            this.handleSignIn(transition, res.body, profile);
+                        });
+                    });
+                } else if (!res.body._id) {
+                    this.clearAuth();
+                    let message = 'We are currently experiencing issues. Please try again later.';
+                    if (!transition) {
+                        notifications.createAlert({type: 'Error', message: message});
+                    } else {
+                        this.update({
+                            loading: false,
+                            signinError: message
+                        });
+                    }
+                } else {
+                    this.handleSignIn(transition, res.body, profile);
+                }
+            });
         });
     },
 
-    signOut() {
-        google.signOut(() => {
-            this.update({
-                token: null,
-                google: null
-            }, {persist: true});
-        });
+    /**
+     * Sign Out
+     *
+     * Signs the user out by destroying the current
+     * OAuth2 session.
+     */
+    signOut(uploadStatus) {
+        let signout = true;
+        if (uploadStatus === 'uploading') {
+            signout = confirm('You are currently uploading files. Signing out of this site will cancel the upload process. Are you sure you want to sign out?');
+        }
+        if (signout) {
+            google.signOut(() => {
+                upload.setInitialState();
+                this.clearAuth();
+                router.transitionTo('signIn');
+            });
+        }
+    },
+
+    /**
+     * Clear Authentication
+     *
+     * Clears all user related data from memory and
+     * browser storage.
+     */
+    clearAuth() {
+        delete window.localStorage.token;
+        this.setInitialState({
+            token: null,
+            google: null,
+            scitran: null
+        }, {persist: true});
+    },
+
+    /**
+     * Handle Sign In
+     *
+     * Handles necessary action after a signin has been completed.
+     */
+    handleSignIn(transition, scitran, google) {
+        this.update({loading: false});
+        this.update({scitran, google}, {persist: true});
+        if (transition) {
+            router.transitionTo('dashboard');
+        } else {
+            datasetActions.reloadDataset();
+            dashboardActions.getDatasets(true);
+        }
     },
 
     /**
@@ -113,7 +204,7 @@ let UserStore = Reflux.createStore({
                 token,
                 profile
             }, {persist: true});
-            callback(token.access_token);
+            callback(token ? token.access_token : null);
         });
     },
 
@@ -127,7 +218,7 @@ let UserStore = Reflux.createStore({
     hasToken() {
         if (!window.localStorage.token || window.localStorage.token === 'undefined') {return false;}
         let token = JSON.parse(window.localStorage.token);
-        return token.hasOwnProperty('access_token') && token.access_token;
+        return token && token.hasOwnProperty('access_token') && token.access_token;
     },
 
     // request queue -----------------------------------------------------------------
