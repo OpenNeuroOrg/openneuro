@@ -23,10 +23,10 @@ let UserStore = Reflux.createStore({
         this.setInitialState();
 
         // initialize google APIs
-        google.init((token, profile) => {
+        google.init((err, res) => {
             this.update({
-                token,
-                google: profile
+                token: res.token,
+                google: res.profile
             }, {persist: true});
             crn.verifyUser((err, res) => {
                 if (res.body.code === 403) {
@@ -95,15 +95,20 @@ let UserStore = Reflux.createStore({
         if (!google.initialized) {return;}
         let transition = options.hasOwnProperty('transition') ? options.transition : true;
         this.update({loading: true});
-        google.signIn((token, profile) => {
+        google.signIn((err, user) => {
+            if (err) {
+                this.update({loading: false});
+                return;
+            }
+
             this.update({
-                token,
-                profile
+                token:  user.token,
+                google: user.profile
             }, {persist: true});
 
             crn.verifyUser((err, res) => {
                 if (res.body.code === 403) {
-                    crn.createUser(profile, (err, res) => {
+                    crn.createUser(user.profile, (err, res) => {
                         if (res.body.status === 403) {
                             this.clearAuth();
                             let message = <span>This user account has been blocked. If you believe this is by mistake please contact the <a href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User" target="_blank">site adminstrator</a>.</span>;
@@ -118,7 +123,7 @@ let UserStore = Reflux.createStore({
                             return;
                         }
                         crn.verifyUser((err, res) => {
-                            this.handleSignIn(transition, res.body, profile);
+                            this.handleSignIn(transition, res.body, user.profile);
                         });
                     });
                 } else if (!res.body._id) {
@@ -133,7 +138,7 @@ let UserStore = Reflux.createStore({
                         });
                     }
                 } else {
-                    this.handleSignIn(transition, res.body, profile);
+                    this.handleSignIn(transition, res.body, user.profile);
                 }
             });
         });
@@ -202,12 +207,12 @@ let UserStore = Reflux.createStore({
      * the updated token.
      */
     refreshToken(callback) {
-        google.refresh((token, profile) => {
+        google.refresh((err, res) => {
             this.update({
-                token,
-                profile
+                token:  res.token,
+                google: res.profile
             }, {persist: true});
-            callback(token ? token.access_token : null);
+            callback(res.token ? res.token.access_token : null);
         });
     },
 

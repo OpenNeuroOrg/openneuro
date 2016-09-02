@@ -34,8 +34,30 @@ let google = {
     },
 
     signIn(callback) {
-        this.authInstance.signIn({prompt: 'select_account'}).then(() => {
+
+        let signinDeferred;
+        (function(wrapped) {
+            window.open = function() {
+                // re-assign the original window.open after one usage
+                window.open = wrapped;
+
+                var win = wrapped.apply(this, arguments);
+                var i = setInterval(function() {
+                    if (win.closed) {
+                        clearInterval(i);
+                        // cancel has no effect when the promise is already resolved, e.g. by the success handler
+                        // see http://docs.closure-library.googlecode.com/git/class_goog_Promise.html#goog.Promise.prototype.cancel
+                        signinDeferred.cancel();
+                    }
+                }, 100);
+                return win;
+            };
+        })(window.open);
+
+        signinDeferred = this.authInstance.signIn({prompt: 'select_account'}).then(() => {
             this.getCurrentUser(callback);
+        }, () => {
+            callback('Sign in cancelled by user.', null);
         });
     },
 
@@ -72,7 +94,7 @@ let google = {
 
         // is signed in
         let isSignedIn = user.isSignedIn();
-        callback(token, profile, isSignedIn);
+        callback(null, {token, profile, isSignedIn});
     }
 };
 
