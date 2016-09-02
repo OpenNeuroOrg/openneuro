@@ -312,16 +312,32 @@ let handlers = {
             });
 
             c.jobs.findOne({jobId}, {}, (err, job) => {
+                let archiveName = job.datasetLabel + '__' + job.appId + '__results';
+
                 // set archive name
-                res.attachment(job.datasetLabel + '__' + job.appId + '__results.zip');
+                res.attachment(archiveName + '.zip');
 
                 // begin streaming archive
                 archive.pipe(res);
 
-                async.eachSeries(job.results, (result, cb) => {
-                    path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
-                    let name = result.name;
+                // recurse results
+                getResults(archiveName, job.results, archive, () => {
+                    archive.finalize();
+                });
+            });
+        } else {
+            // download individual file
+            path = 'jobs/v2/' + jobId + '/outputs/media' + path;
+            agave.api.getPathProxy(path, res);
+        }
 
+        // recurse through tree results
+        function getResults(archiveName, results, archive, callback) {
+            async.eachSeries(results, (result, cb) => {
+                let outputName = result.path.replace('/out/', archiveName + '/');
+                if (result.type === 'file') {
+                    let path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
+                    let name = result.name;
                     agave.api.getPath(path, (err, res, token) => {
                         let body = res.body;
                         if (!body || (body.status && body.status === 'error')) {
@@ -332,19 +348,17 @@ let handlers = {
                                 body = JSON.stringify(body);
                             }
                             // append file to archive
-                            archive.append(body, {name: name});
+                            archive.append(body, {name: outputName});
                         }
-
                         cb();
                     });
-                }, () =>{
-                    archive.finalize();
-                });
-            });
-        } else {
-            // download individual file
-            path = 'jobs/v2/' + jobId + '/outputs/media' + path;
-            agave.api.getPathProxy(path, res);
+                } else if (result.type === 'dir') {
+                    archive.append(null, {name: outputName + '/'});
+                    getResults(archiveName, result.children, archive, cb);
+                } else {
+                    cb();
+                }
+            }, callback);
         }
 
     },
