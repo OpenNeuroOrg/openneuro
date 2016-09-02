@@ -1006,9 +1006,10 @@ let datasetStore = Reflux.createStore({
      * Get Result Download Ticket
      */
     getResultDownloadTicket(jobId, file, callback) {
-        crn.getResultDownloadTicket(this.data.dataset._id, jobId, file.path, (err, res) => {
+        let filePath = file === 'all' ? file : file.path;
+        crn.getResultDownloadTicket(this.data.dataset._id, jobId, filePath, (err, res) => {
             let ticket      = res.body._id;
-            let fileName    = file.path.split('/')[file.path.split('/').length - 1];
+            let fileName    = filePath.split('/')[filePath.split('/').length - 1];
             let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
             callback(downloadUrl);
         }, {snapshot: this.data.snapshot});
