@@ -949,8 +949,9 @@ let datasetStore = Reflux.createStore({
                             if (jobId === run.jobId) {
                                 existingJob = run;
                                 if (jobUpdate) {
-                                    run.agave = jobUpdate.agave;
+                                    run.agave   = jobUpdate.agave;
                                     run.results = jobUpdate.results;
+                                    run.logs    = jobUpdate.logs;
                                 }
                             }
                         }
