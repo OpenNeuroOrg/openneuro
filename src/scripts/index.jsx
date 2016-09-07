@@ -25,7 +25,7 @@ let App = React.createClass({
 
         return (
             <div className={is_front ? 'page is-front' + pageClasses : 'page' + pageClasses}>
-                {!bowser.chrome ?  <Happybrowser /> : null }
+                {!bowser.chrome && !bowser.chromium ?  <Happybrowser /> : null }
                 <div className="full-col">
                     <Navbar routes={routes} />
                     <div className="main view container">

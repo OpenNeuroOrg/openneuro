@@ -44,7 +44,7 @@ let Upload = React.createClass({
     _click (e) {
         this.refs.fileSelect.value = null;
         e.stopPropagation();
-        if (!bowser.chrome) {
+        if (!bowser.chrome && !bowser.chromium) {
             let chromeMessage = (
                 <span>This is a Google Chrome only feature. <a href="http://www.google.com/chrome/">Please consider using Chrome as your browser</a>.</span>
             );
