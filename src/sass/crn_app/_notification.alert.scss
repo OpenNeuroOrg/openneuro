@@ -3,7 +3,7 @@
 .alert {
     @include border-radius(0);
     font-size: 14px;
-    background: $transparent7;
+    background: $black;
     border: 0;
     padding: 10px 40px 10px 20px;
     color: $d9;
@@ -65,13 +65,12 @@
     }
 }
 
-.navbar {
+
     .alert {
         position: absolute;
         left: 0;
         top: 0;
         font-size: 18px;
         width: 100%;
-        min-height: 75px;
     }
-}
+

@@ -133,7 +133,6 @@
                                 li {
                                     background: $white;
 
-                                    &:nth-child(odd) {background: $f9;}
                                     .message.error {color: $coral;}
                                     .fa-times {cursor: pointer;}
                                 }

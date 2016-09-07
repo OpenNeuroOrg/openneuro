@@ -279,7 +279,17 @@
     z-index: 1500;
 }
 
-.modal-open #main {@include blur(5px);}
+.modal-open {
+    #main {
+        @include blur(5px);
+            -webkit-transform: translateZ(0);
+        -webkit-backface-visibility: hidden;
+        -webkit-perspective: 1000;
+    }
+    .full-col .navbar{ //used to fix webkit issue with Blur
+        position: absolute;
+    }
+}
 
 .modal-backdrop {
     background: $transparent3;
