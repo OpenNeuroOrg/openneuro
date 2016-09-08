@@ -1043,7 +1043,7 @@ let datasetStore = Reflux.createStore({
                     modals
                 });
             });
-        }
+        };
     },
 
     // Snapshots ---------------------------------------------------------------------

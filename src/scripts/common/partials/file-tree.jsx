@@ -200,7 +200,8 @@ FileTree.propTypes = {
     getFileDownloadTicket: React.PropTypes.func,
     toggleFolder:          React.PropTypes.func,
     addFile:               React.PropTypes.func,
-    updateFile:            React.PropTypes.func
+    updateFile:            React.PropTypes.func,
+    displayFile:           React.PropTypes.func
 };
 
 export default FileTree;
