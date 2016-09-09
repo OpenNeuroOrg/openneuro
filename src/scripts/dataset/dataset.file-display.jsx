@@ -1,8 +1,9 @@
 // dependencies -------------------------------------------------------
 
-import React   from 'react';
-import {Modal} from 'react-bootstrap';
-import files   from '../utils/files';
+import React       from 'react';
+import {Modal}     from 'react-bootstrap';
+import files       from '../utils/files';
+import Spreadsheet from '../common/partials/spreadsheet.jsx';
 
 export default class FileDisplay extends React.Component {
 
@@ -40,6 +41,8 @@ export default class FileDisplay extends React.Component {
             }
         } else if (files.hasExtension(name, ['.pdf'])) {
             return <iframe src={'http://docs.google.com/gview?url=' + content + '&embedded=true'} style={{width:'100%', height:'100%'}} frameBorder='0'></iframe>;
+        } else if (files.hasExtension(name, ['.tsv', '.csv'])) {
+            return <Spreadsheet name={name} content={content} />;
         } else {
             return content;
         }
