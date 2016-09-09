@@ -3,6 +3,7 @@
 import React      from 'react';
 import WarnButton from '../forms/warn-button.jsx';
 import Spinner    from './spinner.jsx';
+import files      from '../../utils/files';
 
 class FileTree extends React.Component {
 
@@ -128,7 +129,10 @@ class FileTree extends React.Component {
         }
 
         let displayBtn;
-        if (!item.children && this.props.displayFile) {
+        if (
+            !item.children && this.props.displayFile &&
+            files.hasExtension(item.name, ['.txt', '.json', '.csv', '.tsv', '.html', '.pdf'])
+        ) {
             displayBtn = (
                 <WarnButton
                     icon="fa-eye"
