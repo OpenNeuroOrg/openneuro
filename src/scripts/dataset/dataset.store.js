@@ -1031,18 +1031,29 @@ let datasetStore = Reflux.createStore({
         }
 
         let requestAndDisplay = (link) => {
-            request.get(link, {}, (err, res) => {
+            let modals = this.data.modals;
+            modals.displayFile = true;
+            if (files.hasExtension(file.name, ['.pdf'])) {
                 if (callback) {callback();}
-                let modals = this.data.modals;
-                modals.displayFile = true;
                 this.update({
                     displayFile: {
                         name: file.name,
-                        text: res.text
+                        text: link
                     },
                     modals
                 });
-            });
+            } else {
+                request.get(link, {}, (err, res) => {
+                    if (callback) {callback();}
+                    this.update({
+                        displayFile: {
+                            name: file.name,
+                            text: res.text
+                        },
+                        modals
+                    });
+                });
+            }
         };
     },
 
