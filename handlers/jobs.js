@@ -234,7 +234,7 @@ let handlers = {
                             resp.body.result.status = statusCode == 0 ? resp.body.result.status : 'FAILED';
                             c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results, logs, statusCode}}, {}, (err, result) => {
                                 if (err) {res.send(err);}
-                                else {res.send({agave: resp.body.result, results, snapshotId: job.snapshotId});}
+                                else {res.send({agave: resp.body.result, results, logs, snapshotId: job.snapshotId});}
                                 job.agave = resp.body.result;
                                 job.results = results;
                                 job.logs = logs;
