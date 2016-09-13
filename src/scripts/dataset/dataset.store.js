@@ -1033,7 +1033,7 @@ let datasetStore = Reflux.createStore({
         let requestAndDisplay = (link) => {
             let modals = this.data.modals;
             modals.displayFile = true;
-            if (files.hasExtension(file.name, ['.pdf'])) {
+            if (files.hasExtension(file.name, ['.pdf', '.nii.gz'])) {
                 if (callback) {callback();}
                 this.update({
                     displayFile: {
