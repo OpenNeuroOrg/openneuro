@@ -129,10 +129,7 @@ class FileTree extends React.Component {
         }
 
         let displayBtn;
-        if (
-            !item.children && this.props.displayFile &&
-            files.hasExtension(item.name, ['.txt', '.json', '.csv', '.tsv', '.html', '.pdf', '.nii.gz'])
-        ) {
+        if (!item.children && this.props.displayFile) {
             displayBtn = (
                 <WarnButton
                     icon="fa-eye"
