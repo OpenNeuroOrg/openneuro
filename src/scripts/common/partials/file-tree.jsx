@@ -3,7 +3,6 @@
 import React      from 'react';
 import WarnButton from '../forms/warn-button.jsx';
 import Spinner    from './spinner.jsx';
-import files      from '../../utils/files';
 
 class FileTree extends React.Component {
 
