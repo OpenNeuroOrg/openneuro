@@ -2,4 +2,3 @@ node_modules/
 dist/
 .DS_store
 npm-debug.log
-config.js
