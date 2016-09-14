@@ -6,6 +6,8 @@
 //font  //=================================================================
 @import './font-awesome/font-awesome';
 
+// papaya asset default
+@import './crn_app/_common.papaya';
 //crn SASS ================================================================
 @import './crn_app/variables';
 @import './crn_app/elements-wrappers';
@@ -127,7 +129,7 @@
     font-size: 11px;
     top: -10px;
     position: relative;
-        right: -2px
+    right: -2px
 }
 
 .icon-plus:after {
@@ -144,9 +146,29 @@
     content: '\f0e2';
 }
 
-
-
 .icon-ban:after {
     content: '\f05e';
     color: $brand-danger;
+}
+
+
+.papaya-wrap{
+    margin: 0 auto;
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    .papaya-controlbar-label{
+        color: $black;
+    }
+    button{
+        @extend %btn-admin;
+        border-color: $sky;
+        color: $sky;
+        padding: 5px 2px;
+        height: auto;
+        &:hover{
+            background:transparentize($sky, .5);
+            color:$white;
+        }
+    }
 }

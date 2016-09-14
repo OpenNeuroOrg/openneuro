@@ -130,11 +130,13 @@ class FileTree extends React.Component {
         let displayBtn;
         if (!item.children && this.props.displayFile) {
             displayBtn = (
-                <WarnButton
-                    icon="fa-eye"
-                    warn={false}
-                    message=" View"
-                    action={this.props.displayFile.bind(this, item)} />
+                <span className="view-file">
+                    <WarnButton
+                        icon="fa-eye"
+                        warn={false}
+                        message=" View"
+                        action={this.props.displayFile.bind(this, item)} />
+                </span>
             );
         }
 
