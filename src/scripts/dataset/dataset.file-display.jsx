@@ -38,7 +38,7 @@ export default class FileDisplay extends React.Component {
                 return content;
             }
         } else if (files.hasExtension(name, ['.pdf'])) {
-            return <iframe src={'http://docs.google.com/gview?url=' + content + '&embedded=true'} style={{width:'100%', height:'100%'}} frameBorder='0'></iframe>;
+            return <iframe src={'http://docs.google.com/gview?url=' + content + '&embedded=true'} className="file-view-iframe" frameBorder='0'></iframe>;
         } else if (files.hasExtension(name, ['.tsv', '.csv'])) {
             return <Spreadsheet name={name} content={content} />;
         } else if (files.hasExtension(name, ['.nii.gz'])) {

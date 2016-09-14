@@ -43,7 +43,9 @@
                 //border-bottom:2px solid #eee;
                 .form-group {
                     margin: 0;
-
+                    .alert.alert-danger{
+                        position: relative;
+                    }
                     .cte-display {
                         border-bottom: 1px solid $eee;
                         padding: 10px;

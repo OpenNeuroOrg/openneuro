@@ -18,6 +18,7 @@ export default class Papaya extends React.Component {
             fullScreen: false,
             allowScroll: false,
             fullScreenPadding: false,
+            showControlBar: true,
             images: [this.props.image],
             kioskMode: true
         };
@@ -31,7 +32,7 @@ export default class Papaya extends React.Component {
 
     render() {
         return (
-            <div className="papaya"></div>
+            <div className="papaya-wrap"><div className="papaya"></div></div>
         );
     }
 }

@@ -16,10 +16,12 @@ export default class Spreadsheet extends React.Component {
         rows.shift();
 
         return (
-            <table>
-                {this._tableHead(headers)}
-                {this._tableBody(rows, separator)}
-            </table>
+            <div className="table-responsive">
+                <table className="file-view-table table table-bordered table-condensed">
+                    {this._tableHead(headers)}
+                    {this._tableBody(rows, separator)}
+                </table>
+            </div>
         );
     }
 
