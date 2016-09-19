@@ -8,7 +8,8 @@ let fileUtils = {
     generateTree,
     countTree,
     findInTree,
-    read
+    read,
+    hasExtension
 };
 
 export default fileUtils;
@@ -123,4 +124,29 @@ function read (file, callback) {
         }
     };
     reader.readAsBinaryString(file);
+}
+
+/**
+ * Has Extension
+ *
+ * Takes a file name and a list of file extensions and
+ * returns true if the file ends with one of the extensions.
+ */
+function hasExtension (fileName, extensionList) {
+    for (let extension of extensionList) {
+        if (endsWith(fileName, extension)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Ends With
+ *
+ * Takes a string and a suffix and returns true
+ * if the string ends in the suffix
+ */
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }

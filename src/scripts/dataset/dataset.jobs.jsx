@@ -136,6 +136,7 @@ let Jobs = React.createClass({
                                             treeId={run._id}
                                             editable={false}
                                             getFileDownloadTicket={actions.getResultDownloadTicket.bind(this, run.jobId)}
+                                            displayFile={actions.displayFile.bind(this, run.jobId)}
                                             toggleFolder={actions.toggleResultFolder} />
                                    </div>
                                 </div>
