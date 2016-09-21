@@ -43,7 +43,7 @@ export default class FileDisplay extends React.Component {
             return <Table className="table-responsive" data={this._parseTabular(name, content)}
                           sortable={true}
                           itemsPerPage={100}
-                          pageButtonLimit={5} />
+                          pageButtonLimit={5} />;
         } else if (files.hasExtension(name, ['.nii.gz'])) {
             return <Papaya image={content} />;
         } else {
@@ -79,8 +79,7 @@ export default class FileDisplay extends React.Component {
             }
         }
 
-        return tableData
-        // console.log(rows);
+        return tableData;
     }
 
 }
