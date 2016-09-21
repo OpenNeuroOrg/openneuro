@@ -44,6 +44,7 @@ class FileTree extends React.Component {
                         treeId={this.props.treeId}
                         editable={editable}
                         dismissError={this.props.dismissError}
+                        displayFile={this.props.displayFile}
                         deleteFile={this.props.deleteFile}
                         getFileDownloadTicket={this.props.getFileDownloadTicket}
                         toggleFolder={this.props.toggleFolder}
@@ -126,13 +127,27 @@ class FileTree extends React.Component {
             );
         }
 
-        if (addFile || editFile || deleteFile || downloadFile) {
+        let displayBtn;
+        if (!item.children && this.props.displayFile) {
+            displayBtn = (
+                <span className="view-file">
+                    <WarnButton
+                        icon="fa-eye"
+                        warn={false}
+                        message=" View"
+                        action={this.props.displayFile.bind(this, item)} />
+                </span>
+            );
+        }
+
+        if (addFile || editFile || deleteFile || downloadFile || displayBtn) {
             return (
                 <span className="filetree-editfile">
                     {addFile}
                     {editFile}
                     {deleteFile}
                     {downloadFile}
+                    {displayBtn}
                 </span>
             );
         } else {return false;}
@@ -187,7 +202,8 @@ FileTree.propTypes = {
     getFileDownloadTicket: React.PropTypes.func,
     toggleFolder:          React.PropTypes.func,
     addFile:               React.PropTypes.func,
-    updateFile:            React.PropTypes.func
+    updateFile:            React.PropTypes.func,
+    displayFile:           React.PropTypes.func
 };
 
 export default FileTree;

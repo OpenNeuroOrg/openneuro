@@ -306,15 +306,25 @@ let datasetStore = Reflux.createStore({
      * Toggle Modal
      */
     toggleModal(name, callback) {
+        let update = {};
+
         // reload app is missing for job modals
         if (name === 'jobs' && (!this.data.apps || this.data.apps.length === 0)) {
             this.loadApps();
         }
 
+        if (name === 'displayFile') {
+            update.displayFile = {
+                name: '',
+                text: ''
+            };
+        }
+
         // update modals state
         let modals = this.data.modals;
         modals[name] = !modals[name];
-        this.update({modals});
+        update.modals = modals;
+        this.update(update);
 
         // callback
         if (callback && typeof callback === 'function') {callback();}
@@ -1019,21 +1029,42 @@ let datasetStore = Reflux.createStore({
     /**
      * DisplayFile
      */
-    displayFile(jobId, fileLink, fileName, callback) {
-        this.getResultDownloadTicket(jobId, fileLink, (link) => {
-            request.get(link, {}, (err, res) => {
+    displayFile(jobId, file, callback) {
+        if (jobId) {
+            this.getResultDownloadTicket(jobId, file, (link) => {
+                requestAndDisplay(link);
+            });
+        } else {
+            this.getFileDownloadTicket(file, (link) => {
+                requestAndDisplay(link);
+            });
+        }
+
+        let requestAndDisplay = (link) => {
+            let modals = this.data.modals;
+            modals.displayFile = true;
+            if (files.hasExtension(file.name, ['.pdf', '.nii.gz'])) {
                 if (callback) {callback();}
-                let modals = this.data.modals;
-                modals.displayFile = true;
                 this.update({
                     displayFile: {
-                        name: fileName,
-                        text: res.text
+                        name: file.name,
+                        text: link
                     },
                     modals
                 });
-            });
-        });
+            } else {
+                request.get(link, {}, (err, res) => {
+                    if (callback) {callback();}
+                    this.update({
+                        displayFile: {
+                            name: file.name,
+                            text: res.text
+                        },
+                        modals
+                    });
+                });
+            }
+        };
     },
 
     // Snapshots ---------------------------------------------------------------------
