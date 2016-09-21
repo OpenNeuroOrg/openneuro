@@ -3,8 +3,8 @@
 import React       from 'react';
 import {Modal}     from 'react-bootstrap';
 import files       from '../utils/files';
-import Spreadsheet from '../common/partials/spreadsheet.jsx';
 import Papaya      from '../common/partials/papaya.jsx';
+import {Table}   from 'reactable';
 
 export default class FileDisplay extends React.Component {
 
@@ -40,12 +40,47 @@ export default class FileDisplay extends React.Component {
         } else if (files.hasExtension(name, ['.pdf'])) {
             return <iframe src={'http://docs.google.com/gview?url=' + content + '&embedded=true'} className="file-view-iframe" frameBorder='0'></iframe>;
         } else if (files.hasExtension(name, ['.tsv', '.csv'])) {
-            return <Spreadsheet name={name} content={content} />;
+            return <Table className="table-responsive" data={this._parseTabular(name, content)}
+                          sortable={true}
+                          itemsPerPage={100}
+                          pageButtonLimit={5} />
         } else if (files.hasExtension(name, ['.nii.gz'])) {
             return <Papaya image={content} />;
         } else {
             return content;
         }
+    }
+
+    _parseTabular(name, data) {
+        // determine separator
+        let separator;
+        if (files.hasExtension(name, ['.tsv'])) {
+            separator = '\t';
+        } else if (files.hasExtension(name, ['.csv'])) {
+            separator = ',';
+        }
+
+        let tableData = [];
+        let rows    = data.split('\n');
+        let headers = rows[0].split(separator);
+
+        // remove headers from rows
+        rows.shift();
+
+        // convert rows to object format
+        for (let row of rows) {
+            if (row && !/^\s*$/.test(row)) {
+                row = row.split(separator);
+                let rowObj = {};
+                for (let i = 0; i < headers.length; i++) {
+                    rowObj[headers[i]] = row[i];
+                }
+                tableData.push(rowObj);
+            }
+        }
+
+        return tableData
+        // console.log(rows);
     }
 
 }
