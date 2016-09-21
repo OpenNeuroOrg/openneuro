@@ -28,6 +28,7 @@
     "react-dom": "0.14.0",
     "react-router": "^0.13.3",
     "react-select": "1.0.0-beta14",
+    "reactable": "0.14.0",
     "reflux": "^0.2.7",
     "remarkable": "1.6.2",
     "spark-md5": "^1.0.0",
