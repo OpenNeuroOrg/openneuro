@@ -111,22 +111,16 @@ let Jobs = React.createClass({
 
     _results(run, type) {
         if (run[type] && run[type].length > 0) {
-            let downloadAll;
-            if (type === 'results') {
-                downloadAll = (
-                    <span className="download-all">
-                        <WarnButton
-                            icon="fa-download"
-                            message=" DOWNLOAD All"
-                            prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, 'all')} />
-                    </span>
-                );
-            }
 
             return (
                 <Accordion accordion className="results">
                     <Panel className="fade-in" header={'Download ' + type} key={run._id} eventKey={run._id}>
-                        {downloadAll}
+                        <span className="download-all">
+                            <WarnButton
+                                icon="fa-download"
+                                message=" DOWNLOAD All"
+                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, {path:'all-' + type})} />
+                        </span>
                         <div className="file-structure fade-in panel-group">
                             <div className="panel panel-default">
                                 <div className="panel-collapse" aria-expanded="false" >
