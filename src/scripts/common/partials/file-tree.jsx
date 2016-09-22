@@ -129,9 +129,25 @@ class FileTree extends React.Component {
         }
 
         let displayBtn;
+        let allowedFiles = [
+            '.json',
+            '.tsv',
+            '.csv',
+            'README',
+            '.nii.gz',
+            '.pdf',
+            '.sh',
+            '.py',
+            '.txt',
+            '.log',
+            '.jpg',
+            '.jpeg',
+            '.png',
+            '.gif'
+        ];
         if (
             !item.children && this.props.displayFile &&
-            files.hasExtension(item.name, ['.json', '.tsv', '.csv', 'README', '.nii.gz', '.pdf', '.sh', '.py', '.txt', '.log'])
+            files.hasExtension(item.name, allowedFiles)
         ) {
             displayBtn = (
                 <span className="view-file">

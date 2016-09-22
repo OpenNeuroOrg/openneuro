@@ -1,10 +1,10 @@
 // dependencies -------------------------------------------------------
 
-import React       from 'react';
-import {Modal}     from 'react-bootstrap';
-import files       from '../utils/files';
-import Papaya      from '../common/partials/papaya.jsx';
-import {Table}   from 'reactable';
+import React   from 'react';
+import {Modal} from 'react-bootstrap';
+import files   from '../utils/files';
+import Papaya  from '../common/partials/papaya.jsx';
+import {Table} from 'reactable';
 
 export default class FileDisplay extends React.Component {
 
@@ -46,6 +46,8 @@ export default class FileDisplay extends React.Component {
                           pageButtonLimit={5} />;
         } else if (files.hasExtension(name, ['.nii.gz'])) {
             return <Papaya image={content} />;
+        } else if (files.hasExtension(name, ['.jpg', '.jpeg', '.png', '.gif'])) {
+            return <img src={content} />;
         } else {
             return content;
         }
