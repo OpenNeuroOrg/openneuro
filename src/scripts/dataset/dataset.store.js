@@ -63,7 +63,8 @@ let datasetStore = Reflux.createStore({
             datasetTree: null,
             displayFile: {
                 name: '',
-                text: ''
+                text: '',
+                link: ''
             },
             loading: false,
             loadingApps: false,
@@ -316,7 +317,8 @@ let datasetStore = Reflux.createStore({
         if (name === 'displayFile') {
             update.displayFile = {
                 name: '',
-                text: ''
+                text: '',
+                link: ''
             };
         }
 
@@ -1048,7 +1050,8 @@ let datasetStore = Reflux.createStore({
                 this.update({
                     displayFile: {
                         name: file.name,
-                        text: link
+                        text: null,
+                        link: link
                     },
                     modals
                 });
@@ -1058,7 +1061,8 @@ let datasetStore = Reflux.createStore({
                     this.update({
                         displayFile: {
                             name: file.name,
-                            text: res.text
+                            text: res.text,
+                            link: link
                         },
                         modals
                     });

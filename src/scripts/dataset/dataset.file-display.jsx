@@ -11,48 +11,59 @@ export default class FileDisplay extends React.Component {
 // life cycle events --------------------------------------------------
 
     render() {
+        if (!this.props.show) {return false;}
+        let file = this.props.file;
 
         return (
             <Modal show={this.props.show} onHide={this.props.onHide} className="display-file-modal">
                 <Modal.Header closeButton>
-                    <Modal.Title>{this.props.file.name}</Modal.Title>
+                    <Modal.Title>{file.name} {this._download(file.link)}</Modal.Title>
                 </Modal.Header>
                 <hr className="modal-inner" />
                 <Modal.Body>
-                    {this._format(this.props.file.name, this.props.file.text, this.props.show)}
+                    {this._format(file.name, file.text, file.link)}
                 </Modal.Body>
             </Modal>
         );
     }
 
-// custom methods -----------------------------------------------------
+// template methods ---------------------------------------------------
 
-    _format(name, content, show) {
-        if (!show) {return false;}
-        if (files.hasExtension(name, ['.txt'])) {
-            return content;
-        } else if (files.hasExtension(name, ['.json'])) {
+    _download(link) {
+        return <a href={link} download>download</a>;
+    }
+
+    _format(name, content, link) {
+        if (files.hasExtension(name, ['.json'])) {
             try {
                 return JSON.stringify(JSON.parse(content), null, 4);
             } catch (e) {
                 return content;
             }
         } else if (files.hasExtension(name, ['.pdf'])) {
-            return <iframe src={'http://docs.google.com/gview?url=' + content + '&embedded=true'} className="file-view-iframe" frameBorder='0'></iframe>;
+            return <iframe src={'http://docs.google.com/gview?url=' + link + '&embedded=true'} className="file-view-iframe" frameBorder='0'></iframe>;
         } else if (files.hasExtension(name, ['.tsv', '.csv'])) {
             return <Table className="table-responsive" data={this._parseTabular(name, content)}
                           sortable={true}
                           itemsPerPage={100}
                           pageButtonLimit={5} />;
         } else if (files.hasExtension(name, ['.nii.gz'])) {
-            return <Papaya image={content} />;
+            return <Papaya image={link} />;
         } else if (files.hasExtension(name, ['.jpg', '.jpeg', '.png', '.gif'])) {
-            return <img src={content} />;
+            return <img src={link} />;
         } else {
             return content;
         }
     }
 
+// custom methods -----------------------------------------------------
+
+    /**
+     * Parse Tabular
+     *
+     * Parse raw tabular data into an array of
+     * objects readable by Reactable.
+     */
     _parseTabular(name, data) {
         // determine separator
         let separator;
