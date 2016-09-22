@@ -148,5 +148,5 @@ function hasExtension (fileName, extensionList) {
  * if the string ends in the suffix
  */
 function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    return str.toLowerCase().indexOf(suffix.toLowerCase(), str.length - suffix.length) !== -1;
 }
