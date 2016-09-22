@@ -285,7 +285,7 @@ let handlers = {
             // Create and return ticket
             c.tickets.insertOne(ticket, (err) => {
                 if (err) {return next(err);}
-                c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60}, () => {
+                c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 20 * 60}, () => {
                     res.send(ticket);
                 });
             });
