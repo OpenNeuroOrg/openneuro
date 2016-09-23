@@ -285,7 +285,7 @@ let handlers = {
             // Create and return ticket
             c.tickets.insertOne(ticket, (err) => {
                 if (err) {return next(err);}
-                c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60}, () => {
+                c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60 * 60}, () => {
                     res.send(ticket);
                 });
             });
@@ -298,9 +298,10 @@ let handlers = {
     getFile(req, res, next) {
         let jobId = req.params.jobId;
 
-        let path = req.ticket.filePath;
+        const path = req.ticket.filePath;
+        if (path === 'all-results' || path === 'all-logs') {
 
-        if (path === 'all') {
+            const type = path.replace('all-', '');
 
             // initialize archive
             let archive = archiver('zip');
@@ -312,7 +313,7 @@ let handlers = {
             });
 
             c.jobs.findOne({jobId}, {}, (err, job) => {
-                let archiveName = job.datasetLabel + '__' + job.appId + '__results';
+                let archiveName = job.datasetLabel + '__' + job.appId + '__' + type;
 
                 // set archive name
                 res.attachment(archiveName + '.zip');
@@ -320,21 +321,22 @@ let handlers = {
                 // begin streaming archive
                 archive.pipe(res);
 
-                // recurse results
-                getResults(archiveName, job.results, archive, () => {
+                // recurse outputs
+                getOutputs(archiveName, job[type], type, archive, () => {
                     archive.finalize();
                 });
             });
+
         } else {
             // download individual file
-            path = 'jobs/v2/' + jobId + '/outputs/media' + path;
-            agave.api.getPathProxy(path, res);
+            agave.api.getPathProxy('jobs/v2/' + jobId + '/outputs/media' + path, res);
         }
 
-        // recurse through tree results
-        function getResults(archiveName, results, archive, callback) {
+        // recurse through tree outputs
+        function getOutputs(archiveName, results, type, archive, callback) {
+            const baseDir = type === 'results' ? '/out/' : '/log/';
             async.eachSeries(results, (result, cb) => {
-                let outputName = result.path.replace('/out/', archiveName + '/');
+                let outputName = result.path.replace(baseDir, archiveName + '/');
                 if (result.type === 'file') {
                     let path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
                     let name = result.name;
@@ -347,6 +349,10 @@ let handlers = {
                             if (typeof body === 'object' && !Buffer.isBuffer(body)) {
                                 body = JSON.stringify(body);
                             }
+                            // stringify numbers
+                            if (typeof body === 'number') {
+                                body = body.toString();
+                            }
                             // append file to archive
                             archive.append(body, {name: outputName});
                         }
@@ -354,7 +360,7 @@ let handlers = {
                     });
                 } else if (result.type === 'dir') {
                     archive.append(null, {name: outputName + '/'});
-                    getResults(archiveName, result.children, archive, cb);
+                    getOutputs(archiveName, result.children, type, archive, cb);
                 } else {
                     cb();
                 }
