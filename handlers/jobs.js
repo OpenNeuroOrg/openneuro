@@ -342,8 +342,10 @@ let handlers = {
                     let name = result.name;
                     agave.api.getPath(path, (err, res, token) => {
                         let body = res.body;
-                        if (!body || (body.status && body.status === 'error')) {
+                        if (body && body.status && body.status === 'error') {
                             // error from AGAVE
+                            console.log('Error downloading - ', path);
+                            console.log(body);
                         } else {
                             // stringify JSON
                             if (typeof body === 'object' && !Buffer.isBuffer(body)) {
@@ -352,6 +354,10 @@ let handlers = {
                             // stringify numbers
                             if (typeof body === 'number') {
                                 body = body.toString();
+                            }
+                            // handle empty files
+                            if (typeof body === 'undefined') {
+                                body = '';
                             }
                             // append file to archive
                             archive.append(body, {name: outputName});
