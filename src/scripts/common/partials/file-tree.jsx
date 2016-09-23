@@ -3,6 +3,7 @@
 import React      from 'react';
 import WarnButton from '../forms/warn-button.jsx';
 import Spinner    from './spinner.jsx';
+import files      from '../../utils/files';
 
 class FileTree extends React.Component {
 
@@ -128,7 +129,26 @@ class FileTree extends React.Component {
         }
 
         let displayBtn;
-        if (!item.children && this.props.displayFile) {
+        let allowedFiles = [
+            '.json',
+            '.tsv',
+            '.csv',
+            'README',
+            '.nii.gz',
+            '.pdf',
+            '.sh',
+            '.py',
+            '.txt',
+            '.log',
+            '.jpg',
+            '.jpeg',
+            '.png',
+            '.gif'
+        ];
+        if (
+            !item.children && this.props.displayFile &&
+            files.hasExtension(item.name, allowedFiles)
+        ) {
             displayBtn = (
                 <span className="view-file">
                     <WarnButton
