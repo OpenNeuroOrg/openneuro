@@ -58,7 +58,7 @@ export default {
      * can be run on AGAVE
      */
     getApps(callback) {
-        request.get(config.crn.url + 'apps', {}, callback);
+        request.get(config.crn.url + 'apps', {auth: false}, callback);
     },
 
     /**
