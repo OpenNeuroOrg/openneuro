@@ -28,13 +28,15 @@ let UserStore = Reflux.createStore({
                 token,
                 google: profile
             }, {persist: true});
-            crn.verifyUser((err, res) => {
-                if (res.body.code === 403) {
-                    this.signOut();
-                } else {
-                    this.update({scitran: res.body}, {persist: true});
-                }
-            });
+            if (token) {
+                crn.verifyUser((err, res) => {
+                    if (res.body.code === 403) {
+                        this.signOut();
+                    } else {
+                        this.update({scitran: res.body}, {persist: true});
+                    }
+                });
+            }
         });
     },
 
