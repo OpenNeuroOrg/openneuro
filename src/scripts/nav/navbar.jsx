@@ -101,7 +101,7 @@ let BSNavbar = React.createClass({
         } else {
             return (
                 <div className="navbar-right sign-in-nav-btn">
-                    <button className="btn-blue" onClick={userActions.signIn.bind(null, {transition: isSignInScreen})} >
+                    <button className="btn-blue" onClick={userStore.signIn.bind(null, {transition: isSignInScreen})} >
                         <i className="fa fa-google" />
                         <span> Sign in</span>
                     </button>
