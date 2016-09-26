@@ -28,3 +28,9 @@ deployment:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - docker tag poldracklab/$CIRCLE_PROJECT_REPONAME:$(node -p -e "require('./package.json').version") poldracklab/$CIRCLE_PROJECT_REPONAME:latest
       - docker push poldracklab/$CIRCLE_PROJECT_REPONAME
+  test:
+    branch: oauth-popups
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag poldracklab/$CIRCLE_PROJECT_REPONAME:oauth-popups-$(node -p -e "require('./package.json').version")
+      - docker push poldracklab/$CIRCLE_PROJECT_REPONAME
