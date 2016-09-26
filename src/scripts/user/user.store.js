@@ -214,7 +214,7 @@ let UserStore = Reflux.createStore({
                 token: user.token,
                 google: user.profile
             }, {persist: true});
-            callback(token ? token.access_token : null);
+            callback(user.token ? user.token.access_token : null);
         });
     },
 
