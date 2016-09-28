@@ -6,6 +6,7 @@ import userStore  from '../user/user.store';
 import adminStore from './admin.store';
 import actions    from './admin.actions';
 import WarnButton from '../common/forms/warn-button.jsx';
+import moment     from 'moment';
 
 let users = React.createClass({
 
@@ -15,10 +16,10 @@ let users = React.createClass({
 
     render () {
 
-        let users = this.state.users.map((user, index) => {
+        let users = this.state.users.map((user) => {
             let adminBadge = user.root ? 'Admin' : null;
             return (
-                <div className="fade-in user-panel clearfix" key={user._id}>
+                <div className="fade-in user-panel clearfix panel panel-default" key={user._id}>
                     <div className="col-xs-4 user-col">
                         <h3>
                             <div className="userName">
@@ -31,7 +32,8 @@ let users = React.createClass({
                     <div className="col-xs-4 user-col middle">
                         <h3 className="user-email">{user._id}</h3>
                     </div>
-                    {this._userTools(user, index)}
+                    {this._userTools(user)}
+                    {this._userSummary(user)}
                 </div>
             );
         });
@@ -55,8 +57,24 @@ let users = React.createClass({
 
 // custom methods -----------------------------------------------------
 
+    _userSummary(user) {
+        const lastLogin = moment(user.lastlogin ? (user.lastlogin) : user.created);
+        const created   = moment(user.created);
+        return (
+            <div className="panel-heading">
+                <div className="minimal-summary">
+                    <div className="summary-data">
+                        <span><b>Signed Up:</b> {created.format('L')} - {created.fromNow(true)} ago</span>
+                    </div>
+                    <div className="summary-data">
+                        <span><b>Last Login:</b> {lastLogin.format('L')} - {lastLogin.fromNow(true)} ago</span>
+                    </div>
+                </div>
+            </div>
+        )
+    },
+
     _userTools(user) {
-        
         let adminIcon = user.root ? 'fa-check-square-o' : 'fa-square-o';
 
         if (user._id !== userStore.data.scitran._id) {
@@ -64,12 +82,12 @@ let users = React.createClass({
                 <div className="col-xs-4 last dataset-tools-wrap-admin">
                     <div className="tools clearfix">
                         <div className="tool">
-                            <WarnButton message='Admin' 
+                            <WarnButton message='Admin'
                                         icon={adminIcon}
                                         action={actions.toggleSuperUser.bind(this, user)}/>
                         </div>
                         <div className="tool">
-                            <WarnButton message='Block' 
+                            <WarnButton message='Block'
                                         icon='fa-ban'
                                         warn={false}
                                         action={actions.blacklistModal.bind(this, user)}/>
