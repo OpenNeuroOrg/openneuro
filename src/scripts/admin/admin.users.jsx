@@ -67,7 +67,7 @@ let users = React.createClass({
                         <span><b>Signed Up:</b> {created.format('L')} - {created.fromNow(true)} ago</span>
                     </div>
                     <div className="summary-data">
-                        <span><b>Last Login:</b> {lastLogin.format('L')} - {lastLogin.fromNow(true)} ago</span>
+                        <span><b>Last Signed In:</b> {lastLogin.format('L')} - {lastLogin.fromNow(true)} ago</span>
                     </div>
                 </div>
             </div>
