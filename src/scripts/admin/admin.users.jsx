@@ -71,7 +71,7 @@ let users = React.createClass({
                     </div>
                 </div>
             </div>
-        )
+        );
     },
 
     _userTools(user) {
