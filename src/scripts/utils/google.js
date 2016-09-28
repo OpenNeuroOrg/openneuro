@@ -53,7 +53,7 @@ let google = {
                         clearInterval(i);
                         // cancel has no effect when the promise is already resolved, e.g. by the success handler
                         // see http://docs.closure-library.googlecode.com/git/class_goog_Promise.html#goog.Promise.prototype.cancel
-                        signInDeferred.cancel();
+                        setTimeout(() => {signInDeferred.cancel();},100);
                     }
                 }, 100);
                 return win;
