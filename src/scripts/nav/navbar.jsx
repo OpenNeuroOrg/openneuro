@@ -1,14 +1,13 @@
 // dependencies ------------------------------------------------------------------
 
-import React       from 'react';
-import Reflux      from 'reflux';
-import {Link}      from 'react-router';
-import Usermenu    from './navbar.usermenu.jsx';
-import UploadBtn   from './navbar.upload-button.jsx';
-import userStore   from '../user/user.store.js';
-import userActions from '../user/user.actions.js';
-import Alert       from '../notification/notification.alert.jsx';
-import {Navbar}    from 'react-bootstrap';
+import React     from 'react';
+import Reflux    from 'reflux';
+import {Link}    from 'react-router';
+import Usermenu  from './navbar.usermenu.jsx';
+import UploadBtn from './navbar.upload-button.jsx';
+import userStore from '../user/user.store.js';
+import Alert     from '../notification/notification.alert.jsx';
+import {Navbar}  from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
 
@@ -101,7 +100,7 @@ let BSNavbar = React.createClass({
         } else {
             return (
                 <div className="navbar-right sign-in-nav-btn">
-                    <button className="btn-blue" onClick={userActions.signIn.bind(null, {transition: isSignInScreen})} >
+                    <button className="btn-blue" onClick={userStore.signIn.bind(null, {transition: isSignInScreen})} >
                         <i className="fa fa-google" />
                         <span> Sign in</span>
                     </button>
