@@ -49,7 +49,7 @@ let Datasets = React.createClass({
             let paginatedResults = this._paginate(visibleDatasets, this.state.resultsPerPage, this.state.page);
 
             // map results
-            results = this._datasets(paginatedResults);
+            results = this._datasets(paginatedResults, isPublic);
         }
 
         return (
@@ -81,7 +81,7 @@ let Datasets = React.createClass({
 
 // template methods --------------------------------------------------------------------------
 
-    _datasets(paginatedResults) {
+    _datasets(paginatedResults, isPublic) {
         return paginatedResults.map((dataset) => {
             let isSnapshot = dataset.hasOwnProperty('original');
             let user      = dataset.user;
@@ -99,7 +99,7 @@ let Datasets = React.createClass({
                                     <p className="date">uploaded {user ? 'by ' : ''}<span className="name">{fullname}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
                                 </div>
                             </Link>
-                            {!isSnapshot ? statusContainer : null}
+                            {!isPublic ? statusContainer : null}
                         </div>
                         <Summary summary={dataset.summary} minimal={true}/>
                     </div>
