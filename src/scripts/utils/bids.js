@@ -88,7 +88,7 @@ export default  {
                         for (let project of projects) {
                             let dataset = this.formatDataset(project, null, users);
                             let datasetId = dataset.hasOwnProperty('original') ? dataset.original : dataset._id;
-                            let existing = resultDict[datasetId]
+                            let existing = resultDict[datasetId];
                             if (
                                 !existing ||
                                 existing.hasOwnProperty('original') && !dataset.hasOwnProperty('original') ||
