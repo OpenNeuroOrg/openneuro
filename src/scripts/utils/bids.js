@@ -423,14 +423,15 @@ export default  {
     userAccess (project) {
         let access = null;
         const currentUser = userStore.data.scitran._id;
-        if (project.group === currentUser) {
-            access = 'ro';
-        }
-        if (project && project.permissions) {
-            for (let user of project.permissions) {
-                if (currentUser === user._id) {
-                    access = user.access;
+        if (project) {
+            if (project.permissions && project.permissions.length > 0) {
+                for (let user of project.permissions) {
+                    if (currentUser === user._id) {
+                        access = user.access;
+                    }
                 }
+            } else if (project.group === currentUser) {
+                access = 'orphaned';
             }
         }
         return access;
