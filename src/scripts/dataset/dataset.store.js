@@ -109,7 +109,7 @@ let datasetStore = Reflux.createStore({
         this.update({selectedSnapshot: datasetId, currentUploadId: uploadStore.data.projectId});
 
         // don't reload the current dataset
-        if (dataset && dataset._id === datasetId) {this.update({loading: false}); return;}
+        if (dataset && dataset._id === datasetId) {this.update({loading: false, loadingJobs: false}); return;}
 
         // begin loading
         this.update({loading: true, loadingJobs: true, datasetTree: null});
@@ -1132,7 +1132,11 @@ let datasetStore = Reflux.createStore({
             }
 
             // add draft is available
-            if (dataset && dataset.access !== null) {
+            if (dataset && dataset.access == 'orphaned') {
+                snapshots.unshift({
+                    orphaned: true
+                });
+            } else if (dataset && dataset.access !== null) {
                 snapshots.unshift({
                     isOriginal: true,
                     _id: datasetId
