@@ -1132,7 +1132,11 @@ let datasetStore = Reflux.createStore({
             }
 
             // add draft is available
-            if (dataset && dataset.access !== null) {
+            if (dataset && dataset.access == 'orphaned') {
+                snapshots.unshift({
+                    orphaned: true
+                });
+            } else if (dataset && dataset.access !== null) {
                 snapshots.unshift({
                     isOriginal: true,
                     _id: datasetId
