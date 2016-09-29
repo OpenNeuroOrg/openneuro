@@ -422,7 +422,7 @@ export default  {
      */
     userAccess (project) {
         let access = null;
-        const currentUser = userStore.data.scitran._id;
+        const currentUser = userStore.data.scitran ? userStore.data.scitran._id : null;
         if (project) {
             if (project.permissions && project.permissions.length > 0) {
                 for (let user of project.permissions) {
