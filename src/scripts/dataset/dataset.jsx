@@ -140,6 +140,25 @@ let Dataset = React.createClass({
         let isSignedIn   = !!userStore.hasToken();
         let snapshotOptions = snapshots.map((snapshot) => {
 
+            if (snapshot.orphaned) {
+                return (
+                    <li key="orphaned">
+                        <a disabled>
+                            <div className="clearfix">
+                                <div className=" col-xs-12">
+                                    <span className="dataset-type text-danger">
+                                        Draft dataset has been deleted.
+                                    </span>
+                                    <span className="icons text-danger">
+                                        <span className="published"><i className="fa fa-exclamation-circle"></i></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                );
+            }
+
             let analysisCount;
             if (!snapshot.isOriginal && snapshot.analysisCount > 0) {
                 analysisCount = (
