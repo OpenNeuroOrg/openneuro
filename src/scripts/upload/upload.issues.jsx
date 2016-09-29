@@ -65,7 +65,7 @@ let Issues = React.createClass({
         } else if (errors.length > 0) {
             return <span className="message error fade-in">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and {uploadResetLink}.</span>;
         }  else if (warnings.length > 0) {
-            return <span className="message error fade-in">We found {warningCount} in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant. Proceed with this dataset by clicking continue or fix the issues and {uploadResetLink}.</span>;
+            return <span className="message error fade-in">We found {warningCount} in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant. Continue or fix the issues and {uploadResetLink}.</span>;
         } else {
             return <span className="message fade-in">Proceed with this dataset by clicking continue or {uploadResetLink}.</span>;
         }
