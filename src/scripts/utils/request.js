@@ -102,7 +102,7 @@ function handleRequest (url, options, callback) {
     }
 
     // verify access token before authenticated requests
-    if (options.auth && (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)) {
+    if (options.auth && hasToken() && (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)) {
         userActions.checkAuth((token, root) => {
             if (root) {options.query.root = true;}
             options.headers.Authorization = token;
@@ -136,6 +136,12 @@ function normalizeOptions (options) {
     if (!options.query)   {options.query   = {};}
     if (!options.hasOwnProperty('auth')) {options.auth = true;}
     return options;
+}
+
+function hasToken () {
+    if (!window.localStorage.token) {return false;}
+    let credentials = JSON.parse(window.localStorage.token);
+    return credentials && credentials.hasOwnProperty('access_token') && credentials.access_token;
 }
 
 export default Request;
