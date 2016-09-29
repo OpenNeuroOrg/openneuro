@@ -49,66 +49,19 @@ let Datasets = React.createClass({
             let paginatedResults = this._paginate(visibleDatasets, this.state.resultsPerPage, this.state.page);
 
             // map results
-            results = paginatedResults.map(function (dataset) {
-                let user      = dataset.user;
-                let fullname  = user ? user.firstname + ' ' + user.lastname : '';
-                let dateAdded = moment(dataset.created).format('L');
-                let timeago   = moment(dataset.created).fromNow(true);
-                let  statusContainer = <div className="status-container"><Statuses dataset={dataset} minimal={true} /></div>;
-                return (
-                    <div className="fade-in  panel panel-default" key={dataset._id}>
-                        <div className="panel-heading">
-                            <div className="header clearfix">
-                                <Link to={isPublic ? 'snapshot' : 'dataset'} params={isPublic ? {datasetId: dataset.original, snapshotId: dataset._id} : {datasetId: dataset._id}}>
-                                    <h4 className="dataset-name">{dataset.label}</h4>
-                                    <div className="meta-container">
-                                        <p className="date">uploaded {user ? 'by ' : ''}<span className="name">{fullname}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
-                                    </div>
-                                </Link>
-                                {!isPublic ? statusContainer : null}
-                            </div>
-                            <Summary summary={dataset.summary} minimal={true}/>
-                        </div>
-                    </div>
-                );
-            });
+            results = this._datasets(paginatedResults);
         }
-        let isPublicDataset = (
-            <div className="fade-in dashboard inner-route clearfix">
-                <div className="col-xs-12">
-                    <div className="dashboard-dataset-teasers datasets datasets-public">
-                        <div className="header-filter-sort clearfix">
-                            <div className="header-wrap clearfix">
-                                 <h2>Public Datasets</h2>
-                            </div>
-                            <div className="filters-sort-wrap clearfix">
-                                <Sort sort={this.state.sort}  />
-                            </div>
-                        </div>
-                        <PanelGroup>
-                            {this.state.loading ? <Spinner active={true} /> : results}
-                        </ PanelGroup>
-                    </div>
-                    <div className="pager-wrapper">
-                        <Paginator
-                            page={this.state.page}
-                            pagesTotal={pagesTotal}
-                            pageRangeDisplayed={5}
-                            onPageSelect={this._onPageSelect} />
-                    </div>
-                </div>
-            </div>
-        );
-        let isPrivateDataset = (
-            <div>
+
+        return (
+           <div>
                 <div className="dashboard-dataset-teasers datasets datasets-private">
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
-                             <h2>My Datasets</h2>
+                             <h2>{!isPublic ? 'My Datasets' : 'Public Datasets'}</h2>
                         </div>
                         <div className="filters-sort-wrap clearfix">
                             <Sort sort={this.state.sort}  />
-                            <Filters filters={this.state.filters} />
+                            {!isPublic ? <Filters filters={this.state.filters} /> : null}
                         </div>
                     </div>
                     <PanelGroup>
@@ -124,11 +77,35 @@ let Datasets = React.createClass({
                 </div>
             </div>
         );
-        return (
-            <div>
-               {isPublic ? isPublicDataset : isPrivateDataset}
-            </div>
-        );
+    },
+
+// template methods --------------------------------------------------------------------------
+
+    _datasets(paginatedResults) {
+        return paginatedResults.map((dataset) => {
+            let isSnapshot = dataset.hasOwnProperty('original');
+            let user      = dataset.user;
+            let fullname  = user ? user.firstname + ' ' + user.lastname : '';
+            let dateAdded = moment(dataset.created).format('L');
+            let timeago   = moment(dataset.created).fromNow(true);
+            let  statusContainer = <div className="status-container"><Statuses dataset={dataset} minimal={true} /></div>;
+            return (
+                <div className="fade-in  panel panel-default" key={dataset._id}>
+                    <div className="panel-heading">
+                        <div className="header clearfix">
+                            <Link to={isSnapshot ? 'snapshot' : 'dataset'} params={isSnapshot ? {datasetId: dataset.original, snapshotId: dataset._id} : {datasetId: dataset._id}}>
+                                <h4 className="dataset-name">{dataset.label}</h4>
+                                <div className="meta-container">
+                                    <p className="date">uploaded {user ? 'by ' : ''}<span className="name">{fullname}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
+                                </div>
+                            </Link>
+                            {!isSnapshot ? statusContainer : null}
+                        </div>
+                        <Summary summary={dataset.summary} minimal={true}/>
+                    </div>
+                </div>
+            );
+        });
     },
 
 // custom methods ----------------------------------------------------------------------------
