@@ -24,13 +24,17 @@ let Issues = React.createClass({
         let errors   = this.props.errors;
         let warnings = this.props.warnings;
         let dirName  = this.props.dirName;
-
+        let uploadResetLink;
+        if (errors.length > 0 || warnings.length > 0) {
+            uploadResetLink = <button className="btn-blue" onClick={this._reset}>select folder</button>;;
+        }
         // results
         let results = (
             <div>
                 {this._message(errors, warnings)}
                 <Results errors={errors} warnings={warnings} />
                 {errors.length === 0 ? <button className="btn-blue" onClick={actions.checkExists.bind(null, tree, false)}>Continue</button> : null}
+                {uploadResetLink}
                 <ErrorLink dirName={dirName} errors={errors} warnings={warnings} />
                 <span className="bids-link">Click to view details on <a href="http://bids.neuroimaging.io" target="_blank">BIDS specification</a></span>
             </div>
@@ -59,15 +63,14 @@ let Issues = React.createClass({
         }
 
         // messages
-        let uploadResetLink = <span className="upload-reset-link" onClick={this._reset}>select your folder again</span>;
         if (errors === 'Invalid') {
             return <span className="message error fade-in">This does not appear to be a BIDS dataset. <span className="upload-reset-link" onClick={this._reset}>Select a new folder</span> and try again.</span>;
         } else if (errors.length > 0) {
-            return <span className="message error fade-in">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and {uploadResetLink}.</span>;
+            return <span className="message error fade-in">Your dataset is not a valid BIDS dataset. Fix the <strong>{errorCount}</strong> and select your folder again.</span>;
         }  else if (warnings.length > 0) {
-            return <span className="message error fade-in">We found {warningCount} in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant. Continue or fix the issues and {uploadResetLink}.</span>;
+            return <span className="message error fade-in">We found {warningCount} in your dataset. You are not required to fix warnings, but doing so will make your dataset more BIDS compliant. Continue or fix the issues and select folder again.</span>;
         } else {
-            return <span className="message fade-in">Proceed with this dataset by clicking continue or {uploadResetLink}.</span>;
+            return <span className="message fade-in">Proceed with this dataset by clicking continue or <span className="upload-reset-link" onClick={this._reset}>select your folder again</span>.</span>;
         }
     },
 
@@ -75,6 +78,7 @@ let Issues = React.createClass({
 
     _reset () {
         actions.selectTab(1);
+        document.getElementById("multifile-select").click();
     }
 
 });
