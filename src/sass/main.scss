@@ -155,8 +155,16 @@
 .papaya-wrap{
     margin: 0 auto;
     width: 100%;
-    max-width: 800px;
+    //max-width: 800px;
     height: auto;
+    .papaya-viewer{
+        width: 100% !important;
+        height: auto !important;
+        canvas{
+        width: 100% !important;
+        height: auto !important;
+        }
+    }
     .papaya-controlbar-label{
         color: $black;
     }
