@@ -4,7 +4,6 @@ import React   from 'react';
 import {Modal} from 'react-bootstrap';
 import files   from '../utils/files';
 import Papaya  from '../common/partials/papaya.jsx';
-import Tooltip  from '../common/partials/tooltip.jsx';
 import {Table} from 'reactable';
 
 export default class FileDisplay extends React.Component {
