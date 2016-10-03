@@ -42,7 +42,7 @@ let google = {
          * cancels authentication. Polyfill this behavior based on
          * this thread https://github.com/google/google-api-javascript-client/issues/25
          */
-        let signInDeferred;
+        // let signInDeferred;
         // (function(wrapped) {
         //     window.open = function() {
         //         // re-assign the original window.open after one usage
@@ -60,7 +60,7 @@ let google = {
         //     };
         // })(window.open);
 
-        signInDeferred = this.authInstance.signIn({prompt: 'select_account'}).then(() => {
+        /*signInDeferred = */this.authInstance.signIn({prompt: 'select_account'}).then(() => {
             this.getCurrentUser(callback);
         }, () => {
             callback('User canceled authentication.', null);
