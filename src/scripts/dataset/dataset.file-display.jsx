@@ -17,7 +17,7 @@ export default class FileDisplay extends React.Component {
         return (
             <Modal show={this.props.show} onHide={this.props.onHide} className="display-file-modal">
                 <Modal.Header closeButton>
-                    <Modal.Title>{file.name} {this._download(file.link)}</Modal.Title>
+                    <Modal.Title>{file.name}<div className="modal-download btn-admin-blue">{this._download(file.link)}</div></Modal.Title>
                 </Modal.Header>
                 <hr className="modal-inner" />
                 <Modal.Body>
@@ -30,7 +30,7 @@ export default class FileDisplay extends React.Component {
 // template methods ---------------------------------------------------
 
     _download(link) {
-        return <a href={link} download>download</a>;
+        return <a href={link} download><i className="fa fa-download"></i></a>;
     }
 
     _format(name, content, link) {
@@ -43,14 +43,16 @@ export default class FileDisplay extends React.Component {
         } else if (files.hasExtension(name, ['.pdf'])) {
             return <iframe src={'http://docs.google.com/gview?url=' + link + '&embedded=true'} className="file-view-iframe" frameBorder='0'></iframe>;
         } else if (files.hasExtension(name, ['.tsv', '.csv'])) {
-            return <Table className="table-responsive" data={this._parseTabular(name, content)}
+            return (<div className="table-responsive">
+                        <Table className="table table-bordered" data={this._parseTabular(name, content)}
                           sortable={true}
                           itemsPerPage={100}
-                          pageButtonLimit={5} />;
+                          pageButtonLimit={5} />
+                    </div>);
         } else if (files.hasExtension(name, ['.nii.gz'])) {
             return <Papaya image={link} />;
         } else if (files.hasExtension(name, ['.jpg', '.jpeg', '.png', '.gif'])) {
-            return <img src={link} />;
+            return <div className="modal-preview-image" ><img src={link} /></div>;
         } else {
             return content;
         }
