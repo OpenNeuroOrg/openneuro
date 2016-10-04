@@ -36,34 +36,8 @@ let google = {
     },
 
     signIn(callback) {
-
-        /**
-         * gapi.auth2 doesn't return a failed promise when a user
-         * cancels authentication. Polyfill this behavior based on
-         * this thread https://github.com/google/google-api-javascript-client/issues/25
-         */
-        let signInDeferred;
-        (function(wrapped) {
-            window.open = function() {
-                // re-assign the original window.open after one usage
-                window.open = wrapped;
-                var win = wrapped.apply(this, arguments);
-                var i = setInterval(function() {
-                    if (win.closed) {
-                        clearInterval(i);
-                        // cancel has no effect when the promise is already resolved, e.g. by the success handler
-                        // see http://docs.closure-library.googlecode.com/git/class_goog_Promise.html#goog.Promise.prototype.cancel
-                        setTimeout(() => {signInDeferred.cancel();},100);
-                    }
-                }, 100);
-                return win;
-            };
-        })(window.open);
-
-        signInDeferred = this.authInstance.signIn({prompt: 'select_account'}).then(() => {
+        this.authInstance.signIn({prompt: 'select_account'}).then(() => {
             this.getCurrentUser(callback);
-        }, () => {
-            callback('User canceled authentication.', null);
         });
     },
 
