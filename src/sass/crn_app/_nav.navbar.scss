@@ -1,4 +1,8 @@
 //navbar // ================================================================
+@include keyframes(alertDown) {
+    0% {transform:translateY(-50px)}
+    100% {transform:translateY(0)}
+}
 .full-col {
     .navbar {
         position: fixed;
@@ -8,6 +12,15 @@
         z-index: 1300;
         border-top: 10px solid $stanford-red;
     }
+}
+
+.alert-state-true {
+    transition: transform 0.5s;
+    transform:translateY(50px);
+}
+
+.nav-alert-state-true .alert{
+    animation: alertDown .5s;
 }
 
 

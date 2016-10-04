@@ -48,7 +48,11 @@
 @import 'animate/_flippers/flippers';
 
 
+
+
 .fade-in {@include fadeIn();}
+%slide-down-fast {@include slideInDown($duration: .3s, $delay: 0);}
+
 .slide-in-left {@include slideInLeft();}
 .slide-out-left {@include slideOutLeft();}
 .slide-in-right-fast {@include slideInRightFast();}

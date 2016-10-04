@@ -7,6 +7,14 @@
     border: 0;
     padding: 10px 40px 10px 20px;
     color: $d9;
+    z-index: 9000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    font-size: 18px;
+    width: 100%;
 
     .alert-left {
         padding-left: 20px;
@@ -66,11 +74,5 @@
 }
 
 
-    .alert {
-        position: absolute;
-        left: 0;
-        top: 0;
-        font-size: 18px;
-        width: 100%;
-    }
+
 
