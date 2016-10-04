@@ -26,7 +26,7 @@ let Issues = React.createClass({
         let dirName  = this.props.dirName;
         let uploadResetLink;
         if (errors.length > 0 || warnings.length > 0) {
-            uploadResetLink = <button className="btn-blue" onClick={this._reset}>select folder</button>;;
+            uploadResetLink = <button className="btn-blue" onClick={this._reset}>select folder</button>;
         }
         // results
         let results = (
@@ -78,7 +78,7 @@ let Issues = React.createClass({
 
     _reset () {
         actions.selectTab(1);
-        document.getElementById("multifile-select").click();
+        document.getElementById('multifile-select').click();
     }
 
 });

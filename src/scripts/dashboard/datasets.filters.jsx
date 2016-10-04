@@ -2,7 +2,6 @@
 
 import React   from 'react';
 import Actions from './datasets.actions.js';
-import Tooltip from '../common/partials/tooltip.jsx';
 
 // component setup --------------------------------------------------------------------
 
@@ -39,8 +38,8 @@ export default class Filters extends React.Component {
     // custom methods ---------------------------------------------------------------------
 
     /**
-     * Takes a filter name, an icon class, and
-     * a tooltip message and returns the markup
+     * Takes a filter name, an icon class,
+     and returns the markup
      * for a filter button.
      */
     _button(filter, icon, label) {
