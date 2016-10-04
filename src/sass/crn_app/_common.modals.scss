@@ -382,17 +382,20 @@
 }
 
 
-.reactable-header-sortable{
+.reactable-header-sortable {
     color: $primary;
-    &:after{
+
+    &::after {
         font-family: FontAwesome;
-        content:' \f0dc';
+        content: ' \f0dc';
     }
-    &.reactable-header-sort-asc:after{
-        content:' \f0de';
+
+    &.reactable-header-sort-asc::after {
+        content: ' \f0de';
     }
-    &.reactable-header-sort-desc:after{
-        content:' \f0dd';
+
+    &.reactable-header-sort-desc::after {
+        content: ' \f0dd';
     }
 }
 
