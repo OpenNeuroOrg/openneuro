@@ -1,8 +1,9 @@
 //navbar // ================================================================
-@include keyframes(alertDown) {
-    0% {transform:translateY(-50px)}
-    100% {transform:translateY(0)}
+@include keyframes(alertown) {
+    0% {transform: translateY(-50px);}
+    100% {transform: translateY(0);}
 }
+
 .full-col {
     .navbar {
         position: fixed;
@@ -15,11 +16,12 @@
 }
 
 .alert-state-true {
-    transition: transform 0.5s;
-    transform:translateY(50px);
+    -webkit-transition: transform .5s;
+    transition: transform .5s;
+    transform: translateY(50px);
 }
 
-.nav-alert-state-true .alert{
+.nav-alert-state-true .alert {
     animation: alertDown .5s;
     height: 50px;
 }
@@ -37,7 +39,7 @@
     .navbar-nav {
         > li {
             > .navbar-collapse {
-                padding: 0px;
+                padding: 0;
             }
             > .link {
                 border: 1px solid transparent;
@@ -73,8 +75,8 @@
                 padding: 0 10px;
                 color: $misty;
                 background: $transparent;
-                -webkit-transition: all 0.5s;
-                transition: all 0.5s;
+                -webkit-transition: all .5s;
+                transition: all .5s;
 
                 .link-name {
                     width: 100%;
@@ -91,9 +93,10 @@
                 &.active {
                     color: $white;
                     background: $transparent05-w;
-                    .link-name {}
                 }
-                 &:hover {
+
+                &:hover {
+
                     .link-name {
                         border-color: $transparent1-w;
                     }
@@ -108,6 +111,7 @@
 
 
             }
+
             .upload-btn-wrap {
                 // float: left;
                 // width: 220px;
@@ -121,15 +125,18 @@
                     .link-name {
                         border-color: $transparent;
                     }
+
                     &.nl-progress {
                         .link-name {
                             margin-top: -20px;
                         }
+
                         .progress {
                             margin-top: -30px;
                             height: 10px;
                             position: relative;
                         }
+
                         .progress-bar-warning {
                             background: $brand-warning;
                         }
@@ -262,6 +269,7 @@
                         margin-bottom: 15px;
                         color: $sky;
                         border-color: $transparent;
+
                         &:hover,
                         &.active {
                             border-color: $transparent;
