@@ -6,7 +6,6 @@ import {Link}    from 'react-router';
 import Usermenu  from './navbar.usermenu.jsx';
 import UploadBtn from './navbar.upload-button.jsx';
 import userStore from '../user/user.store.js';
-import Alert     from '../notification/notification.alert.jsx';
 import {Navbar}  from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
@@ -21,18 +20,20 @@ let BSNavbar = React.createClass({
     },
 
     render: function () {
+
         return (
-            <nav role="navigation" className="navbar navbar-default" toggleNavKey={0}>
-                <div className="container-fluid">
-                    <div className="navbar-header">
-                        {this._brand()}
+            <span>
+                <nav role="navigation" className="navbar navbar-default" toggleNavKey={0}>
+                    <div className="container-fluid">
+                        <div className="navbar-header">
+                            {this._brand()}
+                        </div>
+                        <div className="clearfix">
+                            {this._navMenu()}
+                        </div>
                     </div>
-                    <div className="clearfix">
-                        {this._navMenu()}
-                    </div>
-                </div>
-                <Alert/>
-            </nav>
+                </nav>
+            </span>
         );
     },
 

@@ -1,16 +1,15 @@
 // dependencies -------------------------------------------------------
 
-import React       from 'react';
-import Reflux      from 'reflux';
-import Actions     from './upload.actions.js';
-import UploadStore from './upload.store.js';
-import {Tabs, Tab} from 'react-bootstrap';
-
-import Select   from './upload.select.jsx';
-import Rename   from './upload.rename.jsx';
-import Issues   from './upload.issues.jsx';
-import Resume   from './upload.resume.jsx';
-import Progress from './upload.progress.jsx';
+import React        from 'react';
+import Reflux       from 'reflux';
+import Actions      from './upload.actions.js';
+import UploadStore  from './upload.store.js';
+import {Tabs, Tab}  from 'react-bootstrap';
+import Select       from './upload.select.jsx';
+import Rename       from './upload.rename.jsx';
+import Issues       from './upload.issues.jsx';
+import Resume       from './upload.resume.jsx';
+import Progress     from './upload.progress.jsx';
 
 let Upload = React.createClass({
 
