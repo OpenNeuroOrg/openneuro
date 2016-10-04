@@ -96,16 +96,15 @@ let UserStore = Reflux.createStore({
     signIn(options) {
         if (!google.initialized) {return;}
         let transition = options.hasOwnProperty('transition') ? options.transition : true;
-        this.update({loading: true});
         google.signIn((err, user) => {
             if (err) {
-                this.update({loading: false});
                 return;
             }
 
             this.update({
-                token: user.token,
-                google: user.profile
+                loading: true,
+                token:   user.token,
+                google:  user.profile
             }, {persist: true});
 
             crn.verifyUser((err, res) => {
