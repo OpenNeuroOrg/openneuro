@@ -63,7 +63,8 @@ let datasetStore = Reflux.createStore({
             datasetTree: null,
             displayFile: {
                 name: '',
-                text: ''
+                text: '',
+                link: ''
             },
             loading: false,
             loadingApps: false,
@@ -108,7 +109,7 @@ let datasetStore = Reflux.createStore({
         this.update({selectedSnapshot: datasetId, currentUploadId: uploadStore.data.projectId});
 
         // don't reload the current dataset
-        if (dataset && dataset._id === datasetId) {this.update({loading: false}); return;}
+        if (dataset && dataset._id === datasetId) {this.update({loading: false, loadingJobs: false}); return;}
 
         // begin loading
         this.update({loading: true, loadingJobs: true, datasetTree: null});
@@ -316,7 +317,8 @@ let datasetStore = Reflux.createStore({
         if (name === 'displayFile') {
             update.displayFile = {
                 name: '',
-                text: ''
+                text: '',
+                link: ''
             };
         }
 
@@ -1043,12 +1045,13 @@ let datasetStore = Reflux.createStore({
         let requestAndDisplay = (link) => {
             let modals = this.data.modals;
             modals.displayFile = true;
-            if (files.hasExtension(file.name, ['.pdf', '.nii.gz'])) {
+            if (files.hasExtension(file.name, ['.pdf', '.nii.gz', '.jpg', '.jpeg', '.png', '.gif'])) {
                 if (callback) {callback();}
                 this.update({
                     displayFile: {
                         name: file.name,
-                        text: link
+                        text: null,
+                        link: link
                     },
                     modals
                 });
@@ -1058,7 +1061,8 @@ let datasetStore = Reflux.createStore({
                     this.update({
                         displayFile: {
                             name: file.name,
-                            text: res.text
+                            text: res.text,
+                            link: link
                         },
                         modals
                     });
@@ -1128,7 +1132,11 @@ let datasetStore = Reflux.createStore({
             }
 
             // add draft is available
-            if (dataset && dataset.access !== null) {
+            if (dataset && dataset.access == 'orphaned') {
+                snapshots.unshift({
+                    orphaned: true
+                });
+            } else if (dataset && dataset.access !== null) {
                 snapshots.unshift({
                     isOriginal: true,
                     _id: datasetId

@@ -2,7 +2,6 @@
 
 import React     from 'react';
 import Reflux    from 'reflux';
-import Actions   from './user.actions.js';
 import userStore from './user.store.js';
 import {Link}    from 'react-router';
 import Spinner   from '../common/partials/spinner.jsx';
@@ -28,7 +27,7 @@ let Signin = React.createClass({
         if (!this.state.loading) {
             form = (
                 <span>
-                    <button className="btn-admin" onClick={Actions.signIn} >
+                    <button className="btn-admin" onClick={userStore.signIn} >
                         <i className="fa fa-google" /> Sign in
                     </button>
                 </span>

@@ -1,15 +1,13 @@
 import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
-    'checkUser',
     'checkAuth',
     'getPreferences',
+    'isRoot',
     'updatePreferences',
-    'hasToken',
-    'initOAuth',
+    'refresh',
     'signIn',
-    'signOut',
-    'toggleModal'
+    'signOut'
 ]);
 
 export default Actions;

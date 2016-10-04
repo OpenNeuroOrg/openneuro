@@ -77,35 +77,37 @@ export default  {
      * is made with authentication. Defaults to true.
      */
     getDatasets (callback, isPublic, isSignedOut) {
-        scitran.getProjects({authenticate: !isPublic, snapshot: isPublic, metadata: true}, (projects) => {
-            scitran.getUsers((err, res) => {
-                let users = !err && res && res.body ? res.body : null;
-                let results = [];
-                let publicResults = {};
-                // hide other user's projects from admins & filter snapshots to display newest of each dataset
-                if (projects) {
-                    for (let project of projects) {
-                        let dataset = this.formatDataset(project, null, users);
-                        if (isPublic) {
-                            if (!publicResults.hasOwnProperty(project.original) || publicResults[project.original].snapshot_version < project.snapshot_version) {
-                                publicResults[project.original] = dataset;
+        scitran.getProjects({authenticate: !isPublic, snapshot: false, metadata: true}, (projects) => {
+            scitran.getProjects({authenticate: !isPublic, snapshot: true, metadata: true}, (pubProjects) => {
+                projects = projects.concat(pubProjects);
+                scitran.getUsers((err, res) => {
+                    let users = !err && res && res.body ? res.body : null;
+                    let resultDict = {};
+                    // hide other user's projects from admins & filter snapshots to display newest of each dataset
+                    if (projects) {
+                        for (let project of projects) {
+                            let dataset = this.formatDataset(project, null, users);
+                            let datasetId = dataset.hasOwnProperty('original') ? dataset.original : dataset._id;
+                            let existing = resultDict[datasetId];
+                            if (
+                                !existing ||
+                                existing.hasOwnProperty('original') && !dataset.hasOwnProperty('original') ||
+                                existing.hasOwnProperty('original') && existing.snapshot_version < project.snapshot_version
+                            ) {
+                                if (isPublic || this.userAccess(project)){
+                                    resultDict[datasetId] = dataset;
+                                }
                             }
-                        } else if (this.userAccess(project)) {
-                            results.push(dataset);
                         }
                     }
-                }
 
-                if (isPublic) {
                     let results = [];
-                    for (let key in publicResults) {
-                        results.push(publicResults[key]);
+                    for (let key in resultDict) {
+                        results.push(resultDict[key]);
                     }
                     callback(results);
-                } else {
-                    callback(results);
-                }
-            }, isSignedOut);
+                }, isSignedOut);
+            });
         });
     },
 
@@ -420,11 +422,16 @@ export default  {
      */
     userAccess (project) {
         let access = null;
-        if (project && project.permissions) {
-            for (let user of project.permissions) {
-                if (userStore.data.scitran._id === user._id) {
-                    access = user.access;
+        const currentUser = userStore.data.scitran ? userStore.data.scitran._id : null;
+        if (project) {
+            if (project.permissions && project.permissions.length > 0) {
+                for (let user of project.permissions) {
+                    if (currentUser === user._id) {
+                        access = user.access;
+                    }
                 }
+            } else if (project.group === currentUser) {
+                access = 'orphaned';
             }
         }
         return access;
