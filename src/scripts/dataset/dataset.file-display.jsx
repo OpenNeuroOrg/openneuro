@@ -17,7 +17,7 @@ export default class FileDisplay extends React.Component {
         return (
             <Modal show={this.props.show} onHide={this.props.onHide} className="display-file-modal">
                 <Modal.Header closeButton>
-                    <Modal.Title>{file.name}<div className="modal-download btn-admin-blue">{this._download(file.link)} DOWNLOAD</div></Modal.Title>
+                    <Modal.Title>{file.name}<div className="modal-download btn-admin-blue">{this._download(file.link)}</div></Modal.Title>
                 </Modal.Header>
                 <hr className="modal-inner" />
                 <Modal.Body>
