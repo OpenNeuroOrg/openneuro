@@ -34,7 +34,7 @@ let Upload = React.createClass({
         return (
             <div className="fileupload-btn">
                 <span>{icon}{text}</span>
-                <input type="file"  className="multifile-select-btn" onClick={this._click} onChange={this._onFileSelect} ref="fileSelect"/>
+                <input type="file"  id="multifile-select" className="multifile-select-btn" onClick={this._click} onChange={this._onFileSelect} ref="fileSelect"/>
             </div>
         );
     },
@@ -82,3 +82,5 @@ let Upload = React.createClass({
 });
 
 export default Upload;
+
+
