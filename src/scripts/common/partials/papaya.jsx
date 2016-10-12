@@ -15,7 +15,7 @@ export default class Papaya extends React.Component {
 
         let params = {
             worldSpace: true,
-            fullScreenPadding: false,
+            fullScreen: false,
             allowScroll: false,
             fullScreenPadding: false,
             showControlBar: true,
