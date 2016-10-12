@@ -1,0 +1,97 @@
+// signin page
+.is-front {
+
+    .intro {
+        display: block;
+        width: 100%;
+        background-color: #fff;
+    }
+}
+
+.more-info {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 20px 0 0;
+}
+
+.welcome-block {
+    padding: 0;
+    position: relative;
+    max-width: 820px;
+    width: 100%;
+    text-align: center;
+    margin: 20px auto;
+    .logo-layers{
+        height: 200px;
+        width: 200px;
+        position:relative;
+        margin: 20px auto;
+        img{
+            width: 100%;
+            height: auto;
+            position: absolute;
+            padding: 0;
+            margin: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            &.logo-layer-cube {@include fadeIn($duration: 0s, $delay: 0);}
+            &.logo-layer-data {@include fadeIn($duration: 2s, $delay: 1s);}
+            &.logo-layer-app {@include fadeIn($duration: 5s, $delay: 3s);}
+            &.logo-layer-users {@include fadeIn($duration:3s, $delay: 5s);}
+
+        }
+    }
+    h1 {
+        letter-spacing: -1px;
+        font-size: 45px;
+        font-weight: 100;
+        margin: 0 0 15px;
+    }
+
+    p {
+        font-size: 22px;
+        font-weight: 100;
+        font-family: $font-family-open;
+    }
+}
+
+    .sign-in-block {
+       button{
+            @extend %btn-blue;
+            width: 400px;
+            max-width: 100%;
+            margin: 20px 0 0;
+            text-transform: none;
+            i{
+                float: left;
+                font-size: 23px;
+                border-right: 1px solid #fff;
+                padding: 10px;
+                margin: -10px;
+            }
+        }
+    }
+
+    .browse-publicly {
+        text-align: center;
+        font-size: 16px;
+        position: relative;
+        margin: 30px 0 0;
+        padding: 0;
+        text-transform: none;
+
+        a {
+            display: block;
+            width: 100%;
+            text-align: center;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+    }
+

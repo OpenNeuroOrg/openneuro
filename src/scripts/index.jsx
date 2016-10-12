@@ -21,13 +21,18 @@ let App = React.createClass({
     render () {
         let alertState = this.state.showAlert;
         let pageClasses = ' ';
+        let pagePaths = ' ';
         let routes = this.getRoutes();
 
-        for (let route of routes) { pageClasses += route.name + ' '; }
-        let is_front        = this.isActive('signIn');
+        for (let route of routes) {
+            pageClasses += route.name + ' ';
+            pagePaths = route.path;
+        }
+
+        if (pagePaths == '/' || pagePaths == '/sign-in') { pageClasses += 'is-front' + ' ';};
 
         return (
-            <div className={is_front ? 'page is-front' + pageClasses : 'page' + pageClasses}>
+            <div className={'page' + pageClasses}>
                 {!bowser.chrome ?  <Happybrowser /> : null }
                 <span className={'nav-alert-state-' + alertState}>
                     <Alert />

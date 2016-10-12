@@ -8,6 +8,14 @@
 
 // papaya asset default
 @import './crn_app/_common.papaya';
+
+// annimations ============================================================
+@import 'animate/_fading-entrances/fading-entrances';
+@import 'animate/_sliding-entrances/sliding-entrances';
+@import 'animate/_sliding-exits/sliding-exits';
+@import 'animate/_flippers/flippers';
+
+
 //crn SASS ================================================================
 @import './crn_app/variables';
 @import './crn_app/elements-wrappers';
@@ -35,20 +43,35 @@
 @import './crn_app/dataset.file-tree';
 @import './crn_app/dataset.sidebar';
 @import './crn_app/admin.admin';
-@import './crn_app/user.signin';
+@import './crn_app/user.frontPage';
 @import './crn_app/dashboard.datasets';
 @import './crn_app/upload.upload';
 @import './crn_app/upload.validation';
 @import './crn_app/admin.tools';
 
-// annimations ============================================================
-@import 'animate/_fading-entrances/fading-entrances';
-@import 'animate/_sliding-entrances/sliding-entrances';
-@import 'animate/_sliding-exits/sliding-exits';
-@import 'animate/_flippers/flippers';
 
 
 
+.logo-text{
+    color: $c-42;
+    font-size: 75px;
+    font-weight: 700;
+    position: relative;
+    line-height:  1em;
+    .logo-end{
+        font-size: 75%;
+        text-transform: uppercase;
+        color: $ocean;
+        font-weight: 400;
+    }
+    &:after{
+        content: 'BETA';
+        font-size: 20%;
+        position: absolute;
+        top: -10px;
+        margin-left: 5px;
+    }
+}
 
 .fade-in {@include fadeIn();}
 %slide-down-fast {@include slideInDown($duration: .3s, $delay: 0);}
@@ -72,6 +95,24 @@
 @include keyframes(dot) {
     0% {opacity: 0;}
     50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+
+@include keyframes(borderxpand) {
+    0% {
+        width: 0;
+        height: 0;
+    }
+    100% {
+        width: 100%;
+        height: auto;
+    }
+}
+
+
+@include keyframes(revealIn) {
+    0% {opacity: 0;}
     100% {opacity: 1;}
 }
 
@@ -173,5 +214,92 @@
             background:transparentize($sky, .5);
             color:$white;
         }
+    }
+}
+
+
+
+
+
+#data-tabs{
+    .nav.nav-tabs{
+        background: $white;
+        border: 0;
+        border-bottom: 2px solid $e1;
+        border-top: 2px solid $e1;
+        justify-content: center;
+        display: flex;
+        padding: 0;
+        @media(max-width: 767px){
+            display: block;
+        }
+        > li {
+            float: none;
+                margin: 0;
+                border: none;
+                border-radius: 0;
+                padding: 0;
+                &:focus{
+                    border: 0;
+                    box-shadow: none;
+                    outline: 0;
+                }
+                .thumbnail{
+                    margin: 0;
+                    padding: 30px 25px;
+                    border: 0;
+                    img{
+                        width: 150px;
+                        height: auto;
+                        @media(max-width: 767px){
+                            display: none;
+                        }
+                    }
+                    .caption{
+                        text-align: center;
+                        padding: 30px;
+                        max-width: 400px;
+                        margin: 0 auto;
+                        h3{
+                            font-family: Open Sans;
+                            font-weight: 300;
+                            font-size: 35px;
+                        }
+                        p{
+                            font-size: 20px;
+                            color: $c-66;
+                        }
+                    }
+                }
+        &.active{
+            > a .thumbnail{
+                    background: #f0f0f0;
+                }
+            }
+        }
+    }
+    .tab-pane {
+        background: $white;
+    }
+    .tab-content{
+        max-width: 1500px;
+        width: 100%;
+        padding: 25px;
+        margin: 0 auto;
+        .img-wrap{
+            width: 350px;
+            height: 350px;
+            overflow: hidden;
+            float: left;
+            border-radius: 100%;
+            img{
+                margin: 0 0 0 -70px;
+                border: 2px solid #eee;
+                width: 500px;
+                height: auto;
+
+            }
+        }
+
     }
 }
