@@ -15,13 +15,12 @@ export default class Papaya extends React.Component {
 
         let params = {
             worldSpace: true,
-            fullScreen: false,
+            fullScreenPadding: false,
             allowScroll: false,
             fullScreenPadding: false,
             showControlBar: true,
             images: [this.props.image],
             kioskMode: true,
-            expandable: true
         };
 
         // rebuild container
