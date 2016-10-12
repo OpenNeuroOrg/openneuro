@@ -113,6 +113,7 @@
                             padding: 8px 15px;
                             display: block;
                             font-size: 14px;
+                            text-transform: capitalize;
 
                             &::after {
                                 content: '\f0d8';
@@ -574,6 +575,7 @@
                             padding: 8px 15px;
                             display: block;
                             font-size: 14px;
+                            
 
                             &::after {
                                 content: '\f0d8';
