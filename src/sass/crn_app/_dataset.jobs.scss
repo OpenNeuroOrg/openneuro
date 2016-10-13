@@ -113,6 +113,7 @@
                             padding: 8px 15px;
                             display: block;
                             font-size: 14px;
+                            text-transform: capitalize;
 
                             &::after {
                                 content: '\f0d8';
@@ -219,8 +220,8 @@
                         display: inline-block;
                         .btn-warn-component,
                         .warning.btn-warn-component {
-                            font-size: 16px;
-                            margin: 0 0 10px;
+                            font-size: 14px;
+                            margin: 0;
                             &.cancel,
                             &.success {
                                 font-size: 14px;
@@ -574,6 +575,7 @@
                             padding: 8px 15px;
                             display: block;
                             font-size: 14px;
+                            
 
                             &::after {
                                 content: '\f0d8';

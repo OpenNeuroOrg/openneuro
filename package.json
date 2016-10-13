@@ -1,6 +1,6 @@
 {
   "name": "CRN",
-  "version": "0.7.5",
+  "version": "0.7.8",
   "description": "React JS web frontend for the CRN application.",
   "main": "app.js",
   "repository": {
@@ -19,7 +19,6 @@
     "bytes": "^2.3.0",
     "es6-react-mixins": "^0.1.6",
     "favico.js": "git://github.com/ejci/favico.js#0.3.10",
-    "linkifyjs": "2.0.5",
     "moment": "^2.10.3",
     "pluralize": "^1.1.2",
     "react": "0.14.8",

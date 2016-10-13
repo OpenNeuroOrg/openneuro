@@ -20,8 +20,7 @@ export default class Papaya extends React.Component {
             fullScreenPadding: false,
             showControlBar: true,
             images: [this.props.image],
-            kioskMode: true,
-            expandable: true
+            kioskMode: true
         };
 
         // rebuild container
