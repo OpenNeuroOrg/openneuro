@@ -405,14 +405,16 @@ export default class JobMenu extends React.Component {
             }
         }
         for (let parameter of parametersSpec) {
-            parameters.push({
-                id:          parameter.id,
-                label:       parameter.details.label,
-                description: parameter.details.description,
-                type:        parameter.value.type,
-                default:     parameter.value.default,
-                value:       parameter.value.default
-            });
+            if (parameter.value.visible) {
+                parameters.push({
+                    id:          parameter.id,
+                    label:       parameter.details.label,
+                    description: parameter.details.description,
+                    type:        parameter.value.type,
+                    default:     parameter.value.default,
+                    value:       parameter.value.default
+                });
+            }
         }
         this.setState({selectedApp, selectedAppID, parameters});
     }
