@@ -87,7 +87,7 @@ let BSNavbar = React.createClass({
     _signIn (loading, routes) {
         let isSignInScreen = false;
         for (let route of routes) {
-            if (route.name == 'signIn') {isSignInScreen = true;}
+            if (route.name == 'frontPage') {isSignInScreen = true;}
         }
 
         if (loading) {

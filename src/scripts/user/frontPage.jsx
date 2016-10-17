@@ -1,11 +1,14 @@
 // dependencies -------------------------------------------------------
 
-import React     from 'react';
-import Reflux    from 'reflux';
-import userStore from './user.store.js';
-import {Link}    from 'react-router';
-import Spinner   from '../common/partials/spinner.jsx';
-import {Tabs, Tab} from 'react-bootstrap';
+import React           from 'react';
+import Reflux          from 'reflux';
+import userStore       from './user.store.js';
+import {Link}          from 'react-router';
+import Spinner         from '../common/partials/spinner.jsx';
+import {Tabs, Tab}     from 'react-bootstrap';
+import Footer          from '../common/partials/footer.jsx';
+import FrontPageTabs   from '../common/partials/frontPageTabs.jsx';
+import BrowsePipelines from '../common/partials/browsePipelines.jsx';
 
 // component setup ----------------------------------------------------
 
@@ -14,11 +17,6 @@ let FrontPage = React.createClass({
     mixins: [Reflux.connect(userStore)],
 
 // life cycle events --------------------------------------------------
-    getInitialState () {
-        return {
-            currentTab: 0
-        };
-    },
 
     render () {
         let form;
@@ -64,134 +62,59 @@ let FrontPage = React.createClass({
                 </div>
         );
 
-        let tabTitle_one = (
-            <div className="thumbnail" onClick={this._showTabContent.bind(this, 1)}>
-                <img src="./assets/tab-get_data.png" alt="Get Data" />
-                <div className="caption">
-                    <h3>Get Data</h3>
-                    <p>Find, download, and use data. Consectetur adipiscing elit.</p>
-                </div>
-                <div className="more">More</div>
-            </div>
-        );
-        let tabTitle_two = (
-            <div className="thumbnail" onClick={this._showTabContent.bind(this, 2)}>
-                <img src="./assets/tab-share_data.png" alt="Get Data" />
-                <div className="caption">
-                    <h3>Share Data</h3>
-                    <p>Find, download, and use data. Consectetur adipiscing elit.</p>
-                </div>
-                <div className="more">More</div>
-            </div>
-        );
-        let tabTitle_three = (
-            <div className="thumbnail" onClick={this._showTabContent.bind(this, 3)}>
-                <img src="./assets/tab-use_data.png" alt="Get Data" />
-                <div className="caption">
-                    <h3>Use Data</h3>
-                    <p>Find, download, and use data. Consectetur adipiscing elit.</p>
-                </div>
-                <div className="more">More</div>
-            </div>
-        );
-
-        let firstHeader, firstDescription, firstImage, secondHeader, secondDescription, secondImage;
-
-        switch(this.state.currentTab) {
-            case 1:
-                firstHeader         = 'Validation';
-                firstDescription    = (
-                    <span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                        <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                    </span>
-                );
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'This is the second header';
-                secondDescription   = (
-                    <span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                        <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                    </span>
-                );
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                break;
-            case 1:
-                firstHeader         = 'one';
-                firstDescription    = 'asdf';
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'asdfasdf';
-                secondDescription   = 'asdjfh';
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                break;
-            case 2:
-                firstHeader         = 'two';
-                firstDescription    = 'asdf';
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'asdfasdf';
-                secondDescription   = 'asdjfh';
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                break;
-            case 3:
-                firstHeader         = 'three';
-                firstDescription    = 'asdf';
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'asdfasdf';
-                secondDescription   = 'asdjfh';
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-        }
-
-        let tabcontent = (
-            <div className="data-tab-content">
-                <div className="row">
-                    <div className="col-md-6">
+        let generalInfo = (
+            <div className="more-info">
+                <div className="container">
+                    <span className="openneuro-more">
+                        <div className="col-xs-12">
+                            <div className="logo-text">Open<span className="logo-end">Neuro</span></div>
+                        </div>
                         <div className="row">
-                            <div className="img-wrap">{firstImage}</div>
-                            <div className="caption">
-                                <h3>{firstHeader}</h3>
-                                <p>{firstDescription}</p>
+                            <div className="col-sm-6">
+                                    <p>A free and open platform that enables the analysis and sharing of neuroimaging data</p>
+                                </div>
+                                <div className="col-sm-6">
+                                <p>View more information about<br/>
+                                <a href="#">Stanford Center for Reproducible Neuroscience</a></p>
                             </div>
                         </div>
-                    </div>
-                    <div className="col-md-6">
+                    </span>
+                    <span className="bids-more">
+                        <div className="col-xs-12">
+                            <h3>Brain Imaging Data Structure (BIDS) </h3>
+                        </div>
                         <div className="row">
-                            <div className="img-wrap">{secondImage}</div>
-                            <div className="caption">
-                                <h3>{secondHeader}</h3>
-                                {secondDescription}
+                            <div className="col-sm-6">
+                                    <p>A Validator for the Brain Imaging Data Structure<br/>
+                                        Read more about the <a href="#">BIDS specifications</a></p>
+                                </div>
+                                <div className="col-sm-6">
+                                <p>Want to contribute to BIDS?<br/>
+                                    Visit the <a href="#">Google discussion group</a> to contribute.</p>
                             </div>
                         </div>
+                    </span>
+                    <div className="support-more">
+                            <h4>Support for OpenNeuro provided by</h4>
+                            <div className="row">
+                                <div className="col-sm-3"><img src="./assets/ljaf.png" alt="Arnold Foundation"/></div>
+                                <div className="col-sm-3"><img src="./assets/stanford.png" alt="Stanford"/></div>
+                                <div className="col-sm-3"><img src="./assets/nsf.png" alt="National Science Foundation"/></div>
+                                <div className="col-sm-3"><img src="./assets/nih.png" alt="National Institute on Drug and Abuse"/></div>
+                            </div>
                     </div>
                 </div>
             </div>
         );
-
-        let tabSections = (
-            <div id="data-tabs">
-                <ul className="nav nav-tabs">
-                    <li>{tabTitle_one}</li>
-                    <li>{tabTitle_two}</li>
-                    <li>{tabTitle_three}</li>
-                </ul>
-                <div className="tab-content">{this.state.currentTab != 0 ? tabcontent : null}</div>
-            </div>
-        );
-
         return (
             <span>
                 {welcomeHeader}
-                {tabSections}
+                <FrontPageTabs />
+                <BrowsePipelines />
+                {generalInfo}
+                <Footer />
             </span>
         );
-    },
-
-
-    _showTabContent(tab){
-        if(tab == this.state.currentTab){
-            this.setState({currentTab: 0});
-        }else{
-             this.setState({currentTab: tab});
-        }
     }
 
 });

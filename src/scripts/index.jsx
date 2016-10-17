@@ -8,6 +8,7 @@ import Happybrowser             from './common/partials/happybrowser.jsx';
 import {RouteHandler, State}    from 'react-router';
 import Alert                    from './notification/notification.alert.jsx';
 import notificationStore        from './notification/notification.store';
+
 import 'babel-polyfill';
 
 // component setup -----------------------------------------------------------
@@ -32,20 +33,22 @@ let App = React.createClass({
         if (pagePaths == '/' || pagePaths == '/sign-in') { pageClasses += 'is-front' + ' ';};
 
         return (
-            <div className={'page' + pageClasses}>
-                {!bowser.chrome ?  <Happybrowser /> : null }
-                <span className={'nav-alert-state-' + alertState}>
-                    <Alert />
-                </span>
-                <div className={'full-col alert-state-' + alertState}>
-                    <Navbar routes={routes} />
-                    <div className="main view container">
-                        <div className="route-wrapper">
-                            <RouteHandler/>
+            <span>
+                <div className={'page' + pageClasses}>
+                    {!bowser.chrome ?  <Happybrowser /> : null }
+                    <span className={'nav-alert-state-' + alertState}>
+                        <Alert />
+                    </span>
+                    <div className={'full-col alert-state-' + alertState}>
+                        <Navbar routes={routes} />
+                        <div className="main view container">
+                            <div className="route-wrapper">
+                                <RouteHandler/>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </span>
         );
     }
 
