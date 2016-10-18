@@ -2,12 +2,7 @@
 
 import React       from 'react';
 import Reflux      from 'reflux';
-import {Link}      from 'react-router';
-import uploadStore from '../../upload/upload.store.js';
-import Actions     from '../../user/user.actions.js';
-import userStore   from '../../user/user.store.js';
-import packageJson from '../../../../package.json';
-
+import userStore   from '../user/user.store.js';
 
 let FrontPageTabs = React.createClass({
 
@@ -80,47 +75,39 @@ let FrontPageTabs = React.createClass({
             return false;
         }else{
             switch(currentTab) {
-                case 1:
-                    firstHeader         = 'Validation';
-                    firstDescription    = (
-                        <span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                            <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                        </span>
-                    );
-                    firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                    secondHeader        = 'This is the second header';
-                    secondDescription   = (
-                        <span>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                            <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                        </span>
-                    );
-                    secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                    break;
-                case 1:
-                    firstHeader         = 'one';
-                    firstDescription    = 'asdf';
-                    firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                    secondHeader        = 'asdfasdf';
-                    secondDescription   = 'asdjfh';
-                    secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                    break;
-                case 2:
-                    firstHeader         = 'two';
-                    firstDescription    = 'asdf';
-                    firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                    secondHeader        = 'asdfasdf';
-                    secondDescription   = 'asdjfh';
-                    secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                    break;
-                case 3:
-                    firstHeader         = 'three';
-                    firstDescription    = 'asdf';
-                    firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                    secondHeader        = 'asdfasdf';
-                    secondDescription   = 'asdjfh';
-                    secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+            case 1:
+                firstHeader         = 'Validation';
+                firstDescription    = (
+                    <span>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
+                        <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
+                    </span>
+                );
+                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                secondHeader        = 'This is the second header';
+                secondDescription   = (
+                    <span>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
+                        <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
+                    </span>
+                );
+                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                break;
+            case 2:
+                firstHeader         = 'two';
+                firstDescription    = 'asdf';
+                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                secondHeader        = 'asdfasdf';
+                secondDescription   = 'asdjfh';
+                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                break;
+            case 3:
+                firstHeader         = 'three';
+                firstDescription    = 'asdf';
+                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                secondHeader        = 'asdfasdf';
+                secondDescription   = 'asdjfh';
+                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
             }
 
             return(
@@ -154,7 +141,7 @@ let FrontPageTabs = React.createClass({
         if(tab == this.state.currentTab){
             this.setState({currentTab: 0});
         }else{
-             this.setState({currentTab: tab});
+            this.setState({currentTab: tab});
         }
     }
 });

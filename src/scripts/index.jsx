@@ -30,7 +30,7 @@ let App = React.createClass({
             pagePaths = route.path;
         }
 
-        if (pagePaths == '/' || pagePaths == '/sign-in') { pageClasses += 'is-front' + ' ';};
+        if (pagePaths == '/' || pagePaths == '/sign-in') { pageClasses += 'is-front' + ' ';}
 
         return (
             <span>

@@ -1,13 +1,13 @@
 // dependencies -------------------------------------------------------
 
-import React           from 'react';
-import Reflux          from 'reflux';
-import userStore       from './user.store.js';
-import {Link}          from 'react-router';
-import Spinner         from '../common/partials/spinner.jsx';
-import {Tabs, Tab}     from 'react-bootstrap';
-import Footer          from '../common/partials/footer.jsx';
-import FrontPageTabs   from '../common/partials/frontPageTabs.jsx';
+import React            from 'react';
+import Reflux           from 'reflux';
+import {Link}           from 'react-router';
+import FrontPageTabs    from './frontPageTabs.jsx';
+import userStore        from '../user/user.store.js';
+import Spinner          from '../common/partials/spinner.jsx';
+import Footer           from '../common/partials/footer.jsx';
+
 
 // component setup ----------------------------------------------------
 
@@ -56,9 +56,8 @@ let FrontPage = React.createClass({
 // custom methods -------------------------------------------------------
 
     _signinForm(loadingState){
-        let form;
         if (!loadingState) {
-           return(
+            return(
                 <span>
                     <button className="btn-admin" onClick={userStore.signIn} >
                         <i className="fa fa-google" /> Sign in with Google
@@ -69,9 +68,8 @@ let FrontPage = React.createClass({
     },
 
     _error(signinError, loadingState) {
-        let error;
         if (signinError && !loadingState) {
-            return error = <div className="alert alert-danger">{this.state.signinError}</div>;
+            return <div className="alert alert-danger">{this.state.signinError}</div>;
         }
     },
 
