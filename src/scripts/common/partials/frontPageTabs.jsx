@@ -12,7 +12,9 @@ import packageJson from '../../../../package.json';
 let FrontPageTabs = React.createClass({
 
     mixins: [Reflux.connect(userStore)],
+
 // life cycle events --------------------------------------------------
+
     getInitialState () {
         return {
             currentTab: 0
@@ -55,83 +57,94 @@ let FrontPageTabs = React.createClass({
             </ul>
         );
 
-        let firstHeader, firstDescription, firstImage, secondHeader, secondDescription, secondImage;
 
-        switch(this.state.currentTab) {
-            case 1:
-                firstHeader         = 'Validation';
-                firstDescription    = (
-                    <span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                        <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                    </span>
-                );
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'This is the second header';
-                secondDescription   = (
-                    <span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                        <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                    </span>
-                );
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                break;
-            case 1:
-                firstHeader         = 'one';
-                firstDescription    = 'asdf';
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'asdfasdf';
-                secondDescription   = 'asdjfh';
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                break;
-            case 2:
-                firstHeader         = 'two';
-                firstDescription    = 'asdf';
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'asdfasdf';
-                secondDescription   = 'asdjfh';
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                break;
-            case 3:
-                firstHeader         = 'three';
-                firstDescription    = 'asdf';
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'asdfasdf';
-                secondDescription   = 'asdjfh';
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-        }
-
-        let tabcontent = (
-            <div className="tab-content">
-                <div className="row">
-                    <div className="col-md-6">
-                        <div className="row">
-                            <div className="img-wrap">{firstImage}</div>
-                            <div className="caption">
-                                <h3>{firstHeader}</h3>
-                                {firstDescription}
-                            </div>
-                        </div>
-                    </div>
-                    <div className="col-md-6">
-                        <div className="row">
-                            <div className="img-wrap">{secondImage}</div>
-                            <div className="caption">
-                                <h3>{secondHeader}</h3>
-                                {secondDescription}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
 
         return (
             <div id="data-tabs">
                 {tabs}
-                {this.state.currentTab != 0 ? tabcontent : null}
+                {this._tabContent(this.state.currentTab)}
             </div>
         );
+    },
+
+// custom methods -------------------------------------------------------
+
+    _tabContent(currentTab){
+
+        let firstHeader, firstDescription, firstImage, secondHeader, secondDescription, secondImage;
+
+        if(currentTab == 0){
+            return false;
+        }else{
+            switch(currentTab) {
+                case 1:
+                    firstHeader         = 'Validation';
+                    firstDescription    = (
+                        <span>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
+                            <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
+                        </span>
+                    );
+                    firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                    secondHeader        = 'This is the second header';
+                    secondDescription   = (
+                        <span>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
+                            <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
+                        </span>
+                    );
+                    secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                    break;
+                case 1:
+                    firstHeader         = 'one';
+                    firstDescription    = 'asdf';
+                    firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                    secondHeader        = 'asdfasdf';
+                    secondDescription   = 'asdjfh';
+                    secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                    break;
+                case 2:
+                    firstHeader         = 'two';
+                    firstDescription    = 'asdf';
+                    firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                    secondHeader        = 'asdfasdf';
+                    secondDescription   = 'asdjfh';
+                    secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                    break;
+                case 3:
+                    firstHeader         = 'three';
+                    firstDescription    = 'asdf';
+                    firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+                    secondHeader        = 'asdfasdf';
+                    secondDescription   = 'asdjfh';
+                    secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
+            }
+
+            return(
+                <div className="tab-content">
+                    <div className="row">
+                        <div className="col-md-6">
+                            <div className="row">
+                                <div className="img-wrap">{firstImage}</div>
+                                <div className="caption">
+                                    <h3>{firstHeader}</h3>
+                                    {firstDescription}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-md-6">
+                            <div className="row">
+                                <div className="img-wrap">{secondImage}</div>
+                                <div className="caption">
+                                    <h3>{secondHeader}</h3>
+                                    {secondDescription}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
     },
 
     _showTabContent(tab){

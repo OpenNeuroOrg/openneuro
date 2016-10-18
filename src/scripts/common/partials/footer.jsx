@@ -12,11 +12,12 @@ import packageJson from '../../../../package.json';
 let Footer = React.createClass({
 
     mixins: [Reflux.connect(userStore)],
+
 // life cycle events --------------------------------------------------
 
     render () {
-        let isLoggedIn    = !!this.state.token;
-        let loading       = this.state.loading;
+
+        let showSignOut = !!this.state.token && !this.state.loading;
 
         return (
             <span>
@@ -27,7 +28,7 @@ let Footer = React.createClass({
                     </div>
                     <div className="col-xs-12 col-md-4 footer-menu">
                         <ul>
-                            <li> {isLoggedIn && !loading ? <a onClick={this._signOut}>Sign Out</a> : <a onClick={userStore.signIn.bind(null)} >Sign in</a>}</li>
+                            <li> {showSignOut ? <a onClick={this._signOut}>Sign Out</a> : <a onClick={userStore.signIn.bind(null)} >Sign in</a>}</li>
                             <li><Link to="public">Browse</Link></li>
                             <li>About</li>
                             <li>Privacy</li>

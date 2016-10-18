@@ -8,7 +8,6 @@ import Spinner         from '../common/partials/spinner.jsx';
 import {Tabs, Tab}     from 'react-bootstrap';
 import Footer          from '../common/partials/footer.jsx';
 import FrontPageTabs   from '../common/partials/frontPageTabs.jsx';
-import BrowsePipelines from '../common/partials/browsePipelines.jsx';
 
 // component setup ----------------------------------------------------
 
@@ -19,23 +18,9 @@ let FrontPage = React.createClass({
 // life cycle events --------------------------------------------------
 
     render () {
-        let form;
-        if (!this.state.loading) {
-            form = (
-                <span>
-                    <button className="btn-admin" onClick={userStore.signIn} >
-                        <i className="fa fa-google" /> Sign in with Google
-                    </button>
-                </span>
-            );
-        }
 
-        let error;
-        if (this.state.signinError && !this.state.loading) {
-            error = <div className="alert alert-danger">{this.state.signinError}</div>;
-        }
-
-        let welcomeHeader = (
+        return (
+            <span>
                 <div className="intro">
                     <div className="container">
                         <div className="intro-inner fade-in clearfix">
@@ -49,8 +34,8 @@ let FrontPage = React.createClass({
                                 <div className="logo-text">Open<span className="logo-end">Neuro</span></div>
                                 <h1>A free and open platform that enables the analysis and sharing of neuroimaging data</h1>
                                 <div className="sign-in-block fade-in">
-                                    {error}
-                                    {form}
+                                    {this._error(this.state.signinError, this.state.loading)}
+                                    {this._signinForm(this.state.loading)}
                                     <Spinner text="Signing in..." active={this.state.loading} />
                                 </div>
                                 <div className="browse-publicly">
@@ -60,9 +45,40 @@ let FrontPage = React.createClass({
                         </div>
                     </div>
                 </div>
+                <FrontPageTabs />
+                {this._browsePipelines()}
+                {this._moreInfo()}
+                <Footer />
+            </span>
         );
+    },
 
-        let generalInfo = (
+// custom methods -------------------------------------------------------
+
+    _signinForm(loadingState){
+        let form;
+        if (!loadingState) {
+           return(
+                <span>
+                    <button className="btn-admin" onClick={userStore.signIn} >
+                        <i className="fa fa-google" /> Sign in with Google
+                    </button>
+                </span>
+            );
+        }
+    },
+
+    _error(signinError, loadingState) {
+        let error;
+        if (signinError && !loadingState) {
+            return error = <div className="alert alert-danger">{this.state.signinError}</div>;
+        }
+    },
+
+// template functions ----------------------------------------------------
+
+    _moreInfo(){
+        return (
             <div className="more-info">
                 <div className="container">
                     <span className="openneuro-more">
@@ -106,14 +122,40 @@ let FrontPage = React.createClass({
                 </div>
             </div>
         );
-        return (
-            <span>
-                {welcomeHeader}
-                <FrontPageTabs />
-                <BrowsePipelines />
-                {generalInfo}
-                <Footer />
-            </span>
+    },
+
+    _browsePipelines() {
+        return(
+            <div className="browse-pipelines">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-sm-6 mate-slide">
+                            <h3>Check Out Our Pipelines</h3>
+                            <p>Lorem analysis pipelines snapshots datasets. Lorem ipsum dolor sit amet, consectetur ad adipiscing elit.</p>
+                            <ul>
+                                <li>Freesurfer</li>
+                                <li>The Human Connectome Project</li>
+                                <li>Other</li>
+                                <li>mriqc</li>
+                            </ul>
+                        </div>
+                        <div className="col-sm-6 mate-slide">
+                            <h3>Or Browse Pipelines</h3>
+                            <form>
+                                <label>What kinds of pipelines are you interested in?</label>
+                                <select>
+                                    <option>asdf</option>
+                                </select>
+                                <br />
+                                <label>browse X pipelines</label>
+                                <select>
+                                    <option>asdf</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         );
     }
 
