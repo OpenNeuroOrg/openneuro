@@ -313,7 +313,33 @@
     }
 }
 
-.navbar-brand {height: 75px;}
+.navbar-brand {
+    height: 75px;
+    padding: 5px 20px;
+    > img{
+        display: block;
+        width: 60px;
+        height: 60px;
+        float: left;
+    }
+
+    .logo-text{
+        display: block;
+        font-size: 38px;
+        color: #fff;
+        margin: 12px 10px;
+        float: left;
+        .logo-end{
+            transition: color 0.3s;
+            color: lighten($ocean, 12%);
+        }
+        &:hover{
+            .logo-end{
+                color: #fff;
+            }
+        }
+    }
+}
 
 
 .sign-in-nav-btn {

@@ -1,0 +1,338 @@
+// signin page
+.is-front {
+
+    .intro {
+        display: block;
+        width: 100%;
+        background-color: #fff;
+    }
+}
+
+.more-info {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    margin: 20px 0 0;
+}
+
+.welcome-block {
+    padding: 0;
+    position: relative;
+    max-width: 820px;
+    width: 100%;
+    text-align: center;
+    margin: 20px auto;
+    .logo-layers{
+        height: 200px;
+        width: 200px;
+        position:relative;
+        margin: 20px auto;
+        img{
+            width: 100%;
+            height: auto;
+            position: absolute;
+            padding: 0;
+            margin: 0;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            &.logo-layer-cube {@include fadeIn($duration: 0s, $delay: 0);}
+            &.logo-layer-data {@include fadeIn($duration: 2s, $delay: 1s);}
+            &.logo-layer-app {@include fadeIn($duration: 5s, $delay: 3s);}
+            &.logo-layer-users {@include fadeIn($duration:3s, $delay: 5s);}
+
+        }
+    }
+    h1 {
+        letter-spacing: -1px;
+        font-size: 45px;
+        font-weight: 100;
+        margin: 0 0 15px;
+    }
+
+    p {
+        font-size: 22px;
+        font-weight: 100;
+        font-family: $font-family-open;
+    }
+}
+
+.sign-in-block {
+   button{
+        @extend %btn-blue;
+        width: 400px;
+        max-width: 100%;
+        margin: 20px 0 0;
+        text-transform: none;
+        i{
+            float: left;
+            font-size: 23px;
+            border-right: 1px solid #fff;
+            padding: 10px;
+            margin: -10px;
+        }
+    }
+}
+
+.browse-publicly {
+    text-align: center;
+    font-size: 16px;
+    position: relative;
+    margin: 30px 0 0;
+    padding: 0;
+    text-transform: none;
+
+    a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+}
+
+
+
+#data-tabs{
+    background: $white;
+    .nav.nav-tabs{
+        background: $white;
+        border: 0;
+        border-bottom: 2px solid $e1;
+        border-top: 2px solid $e1;
+        justify-content: center;
+        display: flex;
+        padding: 0;
+        @media(max-width: 767px){
+            display: block;
+        }
+        > li {
+            float: none;
+                margin: 0;
+                border: none;
+                border-radius: 0;
+                padding: 0;
+                &:focus{
+                    border: 0;
+                    box-shadow: none;
+                    outline: 0;
+                }
+            .thumbnail{
+                margin: 0;
+                padding: 30px 25px 0;
+                border: 0;
+                img{
+                    width: 150px;
+                    height: auto;
+                    @media(max-width: 767px){
+                        display: none;
+                    }
+                }
+                .caption{
+                    text-align: center;
+                    padding: 30px;
+                    max-width: 400px;
+                    margin: 0 auto;
+                    h3{
+                        font-family: 'Open Sans';
+                        font-weight: 200;
+                        font-size: 40px;
+                    }
+                    p{
+                        font-size: 20px;
+                        color: $c-66;
+                    }
+                }
+                .more{
+                    border-bottom: 5px solid transparent;
+                    font-size: 22px;
+                    color: $sky;
+                    text-transform: uppercase;
+                    text-align: center;
+                    padding: 20px;
+                    margin: 0 10px;
+                    transition: all .3s;
+                    .text{
+                        width: 60px;
+                        display: inline-block;
+                    }
+                    &:before{
+                        content: '+';
+                        font-size: 25px;
+                        border: 1px solid $sky;
+                        border-radius: 100%;
+                        height: 38px;
+                        width: 38px;
+                        display: inline-block;
+                        line-height: 34px;
+                        text-align: center;
+                        font-family: 'Open Sans';
+                        font-weight: 200;
+                        margin-right: 7px;
+                        transition: transform .3s;
+                    }
+                    &:hover{
+                        border-color: $eee;
+                        color: $primary;
+                    }
+                }
+
+                &.active{
+                    .more{
+                        border-color: $sky;
+                        &:before{
+                            -ms-transform: rotate(135deg);
+                            -webkit-transform: rotate(135deg);
+                            transform: rotate(135deg);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .tab-pane {
+        background: $white;
+    }
+    .tab-content{
+        max-width: 1500px;
+        width: 100%;
+        padding: 25px;
+        margin: 0 auto;
+        .img-wrap{
+            width: 250px;
+            height: 250px;
+            overflow: hidden;
+            float: left;
+            border-radius: 100%;
+            margin: 20px 39px 20px 10px;
+            border: 1px solid $ccc;
+            img{
+                margin: 0 0 0 -70px;
+                border: 2px solid #eee;
+                width: 450px;
+                height: auto;
+
+            }
+        }
+        .caption {
+            font-family: 'Open Sans';
+            font-size: 18px;
+            padding-right: 50px;
+            color: $c-66;
+            font-weight: 100;
+            h3 {
+                font-size: 33px;
+                font-weight: 100;
+            }
+        }
+
+    }
+}
+
+.more-info{
+    margin: 0;
+    padding: 70px 0;
+    @include gradient-vertical($start-color: $e7, $end-color: $white, $start-percent: 0%, $end-percent: 30%);
+    .container{
+        max-width: 1500px;
+        .bids-more,
+        .openneuro-more{
+            text-align: left;
+            font-family: 'Open Sans';
+            margin: 0;
+            font-weight: 200;
+            .logo-text{
+                 font-size: 50px;
+                font-family: 'Cabin';
+            }
+            .col-sm-6{
+                padding: 30px 30px;
+                color: #4b4b4b;
+                font-weight: 200;
+                p{
+                    max-width: 450px;
+                }
+                a{
+                    color: $sky;
+                    font-weight: 400;
+                    &:hover{
+                        color: $primary;
+                    }
+                }
+            }
+            h3{
+                font-size: 25px;
+                font-weight: 200;
+                color: #4b4b4b;
+            }
+        }
+        .support-more{
+            margin-top: 50px;
+            h4{
+                text-align: center;
+                font-size: 20px;
+            }
+            img{
+                max-width: 100%;
+                height: auto;
+                margin-top: 20px;
+                padding: 20px;
+                width: 290px;
+            }
+        }
+
+    }
+}
+.browse-pipelines{
+    @extend .clearfix;
+    @include gradient-horizontal($start-color: #00b588, $end-color: #009c75, $end-percent: 90%)
+    .container{
+        max-width: 1500px;
+        .mate-slide{
+            height: 400px;
+            padding: 50px;
+            &:last-child{
+                background:#009c75;
+            }
+        }
+    }
+}
+
+footer{
+    background: #333;
+    padding: 10px 20px;
+    color: $white;
+    display: block;
+    .version{
+
+    }
+    .copy{
+        text-align: right;
+    }
+    .footer-menu{
+        ul{
+            display: flex;
+            padding: 0;
+            margin: 0;
+            li{
+                flex-basis: 100px;
+                text-align: center;
+                list-style: none;
+                a{
+                    color: $white;
+                    &:hover{
+                        text-decoration: underline;
+                        color: lighten($sky, 15%);
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
