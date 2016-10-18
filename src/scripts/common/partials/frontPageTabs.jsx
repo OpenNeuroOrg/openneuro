@@ -22,7 +22,19 @@ let FrontPageTabs = React.createClass({
     },
 
     render () {
-        let tabs = (
+
+        return (
+            <div id="data-tabs">
+                {this._tabs()}
+                {this._tabContent(this.state.currentTab)}
+            </div>
+        );
+    },
+
+// template functions -------------------------------------------------------
+
+    _tabs(){
+        return(
             <ul className="nav nav-tabs">
                 <li>
                     <div className={this.state.currentTab == 1 ? 'active thumbnail' : 'thumbnail'} onClick={this._showTabContent.bind(this, 1)}>
@@ -55,15 +67,6 @@ let FrontPageTabs = React.createClass({
                     </div>
                 </li>
             </ul>
-        );
-
-
-
-        return (
-            <div id="data-tabs">
-                {tabs}
-                {this._tabContent(this.state.currentTab)}
-            </div>
         );
     },
 
