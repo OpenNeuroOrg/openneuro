@@ -158,6 +158,8 @@
 //papaya overrides
 
 .papaya-wrap{
+    margin: auto;
+    max-width: 90%;
     .papaya-controlbar-label{
         color: $black;
     }
