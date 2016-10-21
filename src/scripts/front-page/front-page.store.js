@@ -39,8 +39,7 @@ let FrontPageStore = Reflux.createStore({
             apps: [],
             tags: [],
             selectedTags: '',
-            selectedApp: null,
-            selectedPipeline: ''
+            selectedPipeline: {id: ''}
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data, callback);
@@ -75,8 +74,14 @@ let FrontPageStore = Reflux.createStore({
     /**
      * Select Pipeline
      */
-    selectPipeline (pipeline) {
-        console.log(pipeline);
+    selectPipeline (appId) {
+        let apps = this.data.apps;
+        for (let app of apps) {
+            if (app.id === appId) {
+                this.update({selectedPipeline: app});
+                return;
+            }
+        }
     }
 
 

@@ -37,7 +37,7 @@ let Pipelines = React.createClass({
                                 <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />
                                 <br />
                                 <label>browse {pipelineOptions.length} pipelines</label>
-                                <select value={this.state.selectedPipeline}>
+                                <select value={this.state.selectedPipeline.id} onChange={this._selectPipeline}>
                                     <option value="" disabled>Select a Pipeline</option>
                                     {pipelineOptions}
                                 </select>
@@ -55,6 +55,10 @@ let Pipelines = React.createClass({
         return tags.map((tag) => {
             return <option value={tag} key={tag}>{tag}</option>;
         });
+    },
+
+    _selectPipeline(e) {
+        FPActions.selectPipeline(e.target.value);
     },
 
     _pipelineOptions(apps, selectedTags) {
