@@ -21,7 +21,7 @@ let Pipelines = React.createClass({
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-6 mate-slide">
-                            <h3>Check Out Our Pipelines</h3>
+                            <h3>Check Out a Few of Our Pipelines</h3>
                             <p>Lorem analysis pipelines snapshots datasets. Lorem ipsum dolor sit amet, consectetur ad adipiscing elit.</p>
                             <ul>
                                 <li>Freesurfer</li>
@@ -31,7 +31,7 @@ let Pipelines = React.createClass({
                             </ul>
                         </div>
                         <div className="col-sm-6 mate-slide">
-                            <h3>Or Browse Pipelines</h3>
+                            <h3>Or Browse Our Collection</h3>
                             <form>
                                 <label>What kinds of pipelines are you interested in?</label>
                                 <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />

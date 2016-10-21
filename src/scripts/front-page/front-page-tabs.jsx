@@ -12,15 +12,14 @@ let FrontPageTabs = React.createClass({
 
     getInitialState () {
         return {
-            currentTab: 0
+            currentTab: null
         };
     },
 
     render () {
-
         return (
             <div id="data-tabs">
-                {this._tabs()}
+                <ul className="nav nav-tabs">{this._tabs()}</ul>
                 {this._tabContent(this.state.currentTab)}
             </div>
         );
@@ -28,106 +27,48 @@ let FrontPageTabs = React.createClass({
 
 // template functions -------------------------------------------------------
 
-    _tabs(){
-        return(
-            <ul className="nav nav-tabs">
-                <li>
-                    <div className={this.state.currentTab == 1 ? 'active thumbnail' : 'thumbnail'} onClick={this._showTabContent.bind(this, 1)}>
-                        <img src="./assets/tab-get_data.png" alt="Get Data" />
+    _tabs () {
+        return this._tabData.map((tab, index) => {
+            return (
+                <li key={index}>
+                    <div className={this.state.currentTab == index ? 'active thumbnail' : 'thumbnail'} onClick={this._showTabContent.bind(this, index)}>
+                        <img src={tab.icon} alt={tab.header} />
                         <div className="caption">
-                            <h3>Get Data</h3>
-                            <p>Find, download, and use data. Consectetur adipiscing elit.</p>
+                            <h3>{tab.header}</h3>
+                            <p>{tab.abstract}</p>
                         </div>
-                        <div className="more"><span className="text">{this.state.currentTab == 1 ? 'less': 'more'}</span></div>
+                        <div className="more"><span className="text">{this.state.currentTab == index ? 'less': 'more'}</span></div>
                     </div>
                 </li>
-                <li>
-                    <div className={this.state.currentTab == 2 ? 'active thumbnail' : 'thumbnail'} onClick={this._showTabContent.bind(this, 2)}>
-                        <img src="./assets/tab-share_data.png" alt="Get Data" />
-                        <div className="caption">
-                            <h3>Share Data</h3>
-                            <p>Find, download, and use data. Consectetur adipiscing elit.</p>
-                        </div>
-                        <div className="more"><span className="text">{this.state.currentTab == 2 ? 'less': 'more'}</span></div>
-                    </div>
-                </li>
-                <li>
-                    <div className={this.state.currentTab == 3 ? 'active thumbnail' : 'thumbnail'} onClick={this._showTabContent.bind(this, 3)}>
-                        <img src="./assets/tab-use_data.png" alt="Get Data" />
-                        <div className="caption">
-                            <h3>Use Data</h3>
-                            <p>Find, download, and use data. Consectetur adipiscing elit.</p>
-                        </div>
-                        <div className="more"><span className="text">{this.state.currentTab == 3 ? 'less': 'more'}</span></div>
-                    </div>
-                </li>
-            </ul>
-        );
+            );
+        });
     },
 
 // custom methods -------------------------------------------------------
 
-    _tabContent(currentTab){
-
-        let firstHeader, firstDescription, firstImage, secondHeader, secondDescription, secondImage;
-
-        if(currentTab == 0){
+    _tabContent (currentTab) {
+        if (currentTab == null) {
             return false;
-        }else{
-            switch(currentTab) {
-            case 1:
-                firstHeader         = 'Validation';
-                firstDescription    = (
-                    <span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                        <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                    </span>
-                );
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'This is the second header';
-                secondDescription   = (
-                    <span>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales ac eros sit amet euismod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                        <p>Quisque sodales ac eros sit amet emod. Vestibulum in sem quis velit volutpat sodales in quis elit.</p>
-                    </span>
-                );
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                break;
-            case 2:
-                firstHeader         = 'two';
-                firstDescription    = 'asdf';
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'asdfasdf';
-                secondDescription   = 'asdjfh';
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                break;
-            case 3:
-                firstHeader         = 'three';
-                firstDescription    = 'asdf';
-                firstImage          = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-                secondHeader        = 'asdfasdf';
-                secondDescription   = 'asdjfh';
-                secondImage         = <img src="./assets/tab-content_image.png" alt="Get Data" />;
-            }
-
+        } else {
+            let tab = this._tabData[currentTab];
             return(
                 <div className="tab-content">
                     <div className="row">
                         <div className="col-md-6">
                             <div className="row">
-                                <div className="img-wrap">{firstImage}</div>
+                                <div className="img-wrap"><img src={tab.firstImage} /></div>
                                 <div className="caption">
-                                    <h3>{firstHeader}</h3>
-                                    {firstDescription}
+                                    <h3>{tab.firstHeader}</h3>
+                                    <p>{tab.firstDescription}</p>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-6">
                             <div className="row">
-                                <div className="img-wrap">{secondImage}</div>
+                                <div className="img-wrap"><img src={tab.secondImage} /></div>
                                 <div className="caption">
-                                    <h3>{secondHeader}</h3>
-                                    {secondDescription}
+                                    <h3>{tab.secondHeader}</h3>
+                                    <p>{tab.secondDescription}</p>
                                 </div>
                             </div>
                         </div>
@@ -137,13 +78,51 @@ let FrontPageTabs = React.createClass({
         }
     },
 
-    _showTabContent(tab){
-        if(tab == this.state.currentTab){
-            this.setState({currentTab: 0});
-        }else{
+    _showTabContent (tab) {
+        if (tab == this.state.currentTab) {
+            this.setState({currentTab: null});
+        } else {
             this.setState({currentTab: tab});
         }
-    }
+    },
+
+// data -----------------------------------------------------------------
+
+    _tabData: [
+        {
+            header:            'Get Data',
+            abstract:          'Browse and download datasets from contributors all over the world.',
+            icon:              './assets/tab-get_data.png',
+            firstHeader:       'Browse Data',
+            firstDescription:  <span>Browse and explore public datasets and analyses from a wide range of global contributors. Our collection continues to grow as more and more datasets become <a href="http://bids.neuroimaging.io/">BIDS</a> compatible.</span>,
+            firstImage:        './assets/tab-content_image.png',
+            secondHeader:      'Download Data',
+            secondDescription: 'Download and use public data to create new datasets and run your own analyses.',
+            secondImage:       './assets/tab-content_image.png'
+        },
+        {
+            header:            'Share Data',
+            abstract:          'Upload your data and collaborate with your colleagues or share it with users around the world.',
+            icon:              './assets/tab-share_data.png',
+            firstHeader:       'Validate',
+            firstDescription:  <span>Validate your datasets to assure they are <a href="http://bids.neuroimaging.io/">BIDS</a> compliant and compatible with our pipelines. This standardization means you can use anyone's data and know exactly what to expect.</span>,
+            firstImage:        './assets/tab-content_image.png',
+            secondHeader:      'Collaborate',
+            secondDescription: 'Privately share your data so your colleagues can view and edit your work. Publish your datasets for anyone to view, download and run analyses on.',
+            secondImage:       './assets/tab-content_image.png'
+        },
+        {
+            header:            'Use Data',
+            abstract:          'Use our available pipelines to process any data on the site.',
+            icon:              './assets/tab-use_data.png',
+            firstHeader:       'Snapshot',
+            firstDescription:  'Create snapshots of your datasets to ensure past analyses remain reproducible as your datasets grow and change. Publish any of your snapshots while you continue work on your original data behind the scenes.',
+            firstImage:        './assets/tab-content_image.png',
+            secondHeader:      'Analyze',
+            secondDescription: 'Use our simple web interface to run your analysis at TACC\'s high performance computing center. We\'ll notify you when it\'s complete so you can return to review the results.',
+            secondImage:       './assets/tab-content_image.png'
+        }
+    ]
 });
 
 export default FrontPageTabs;

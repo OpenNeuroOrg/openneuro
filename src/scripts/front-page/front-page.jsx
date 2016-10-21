@@ -33,7 +33,7 @@ let FrontPage = React.createClass({
                                     <img className="logo-layer-data" src="./assets/logo_data.png" alt="OpenNeuro Logo" />
                                 </div>
                                 <div className="logo-text">Open<span className="logo-end">Neuro</span></div>
-                                <h1>A free and open platform that enables the analysis and sharing of neuroimaging data</h1>
+                                <h1>A free and open platform for analyzing and sharing neuroimaging data</h1>
                                 <div className="sign-in-block fade-in">
                                     {this._error(this.state.signinError, this.state.loading)}
                                     {this._signinForm(this.state.loading)}
@@ -86,7 +86,7 @@ let FrontPage = React.createClass({
                         </div>
                         <div className="row">
                             <div className="col-sm-6">
-                                    <p>A free and open platform that enables the analysis and sharing of neuroimaging data</p>
+                                    <p>A free and open platform for analyzing and sharing neuroimaging data</p>
                                 </div>
                                 <div className="col-sm-6">
                                 <p>View more information about<br/>
