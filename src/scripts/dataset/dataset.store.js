@@ -15,6 +15,7 @@ import config      from '../../../config';
 import files       from '../utils/files';
 import request     from '../utils/request';
 import moment      from 'moment';
+import FPActions   from '../front-page/front-page.actions.js';
 
 let datasetStore = Reflux.createStore({
 
@@ -198,6 +199,7 @@ let datasetStore = Reflux.createStore({
                     return (aName < bName) ? -1 : (aName > bName) ? 1 : 0;
                 });
             }
+            FPActions.setApps(res.body);
             this.update({apps: res.body, loadingApps: false});
         });
     },
