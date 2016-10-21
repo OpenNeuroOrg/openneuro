@@ -15,35 +15,64 @@ let Pipelines = React.createClass({
 // life cycle events --------------------------------------------------
 
     render() {
-        let pipelineOptions = this._pipelineOptions(this.state.apps, this.state.selectedTags);
         return(
             <div className="browse-pipelines">
                 <div className="container">
-                    <div className="row">
-                        <div className="col-sm-6 mate-slide">
-                            <h3>Check Out a Few of Our Pipelines</h3>
-                            <p>Lorem analysis pipelines snapshots datasets. Lorem ipsum dolor sit amet, consectetur ad adipiscing elit.</p>
-                            <ul>
-                                <li>Freesurfer</li>
-                                <li>The Human Connectome Project</li>
-                                <li>Other</li>
-                                <li>mriqc</li>
-                            </ul>
-                        </div>
-                        <div className="col-sm-6 mate-slide">
-                            <h3>Or Browse Our Collection</h3>
-                            <form>
-                                <label>What kinds of pipelines are you interested in?</label>
-                                <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />
-                                <br />
-                                <label>browse {pipelineOptions.length} pipelines</label>
-                                <select value={this.state.selectedPipeline.id} onChange={this._selectPipeline}>
-                                    <option value="" disabled>Select a Pipeline</option>
-                                    {pipelineOptions}
-                                </select>
-                            </form>
-                        </div>
-                    </div>
+                    {!this.state.selectedPipeline.id ? this._browsePipelines() : this._pipelineDetail(this.state.selectedPipeline)}
+                </div>
+            </div>
+        );
+    },
+
+// template methods ---------------------------------------------------
+
+    _browsePipelines() {
+        let pipelineOptions = this._pipelineOptions(this.state.apps, this.state.selectedTags);
+        return (
+            <div className="row">
+                <div className="col-sm-6 mate-slide">
+                    <h3>Check Out a Few of Our Pipelines</h3>
+                    <ul>
+                        <li>Freesurfer</li>
+                        <li>The Human Connectome Project</li>
+                        <li>Other</li>
+                        <li>mriqc</li>
+                    </ul>
+                </div>
+                <div className="col-sm-6 mate-slide">
+                    <h3>Or Browse Our Collection</h3>
+                    <form>
+                        <label>What kinds of pipelines are you interested in?</label>
+                        <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />
+                        <br />
+                        <label>browse {pipelineOptions.length} pipelines</label>
+                        <select value={this.state.selectedPipeline.id} onChange={this._selectPipeline}>
+                            <option value="" disabled>Select a Pipeline</option>
+                            {pipelineOptions}
+                        </select>
+                    </form>
+                </div>
+            </div>
+        );
+    },
+
+    _pipelineDetail(pipeline) {
+        pipeline.longDescription = JSON.parse(pipeline.longDescription);
+        return (
+            <div className="row">
+                <div className="col-sm-6 mate-slide">
+                    <a href="#" onClick={FPActions.selectPipeline.bind(null, '')}>back to browse</a>
+                    <h2>{pipeline.name}</h2>
+                    <p>{pipeline.longDescription.description}</p>
+                    <h4>Acknowledgments</h4>
+                    <p>{pipeline.longDescription.acknowledgments}</p>
+                    <h4>Support</h4>
+                    <p><a href={pipeline.longDescription.support}>{pipeline.longDescription.support}</a></p>
+                    <h4>Help</h4>
+                    <p><a href={pipeline.helpURI}>{pipeline.helpURI}</a></p>
+                </div>
+                <div className="col-sm-6 mate-slide">
+
                 </div>
             </div>
         );

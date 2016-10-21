@@ -75,6 +75,10 @@ let FrontPageStore = Reflux.createStore({
      * Select Pipeline
      */
     selectPipeline (appId) {
+        if (appId === '') {
+            this.update({selectedPipeline: {id: ''}});
+            return;
+        }
         let apps = this.data.apps;
         for (let app of apps) {
             if (app.id === appId) {
