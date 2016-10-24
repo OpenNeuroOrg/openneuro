@@ -1,3 +1,17 @@
+%btn-dash{
+    @extend %btn-admin;
+    color: #fff;
+    border: 0;
+    width: 100%;
+    padding: 15px 10px;
+    font-size: 21px;
+    background: #00b489;
+    &:hover{
+        background: lighten(#00b489, 5%);
+        color: $white;
+    }
+}
+
 // signin page
 .is-front {
 
@@ -134,16 +148,18 @@
                 }
                 .caption{
                     text-align: center;
-                    padding: 30px;
+                    padding: 30px 30px 0;
                     max-width: 400px;
                     margin: 0 auto;
+                    height: 180px;
                     h3{
-                        font-family: 'Open Sans';
+                        font-family: $font-family-open;
                         font-weight: 200;
                         font-size: 40px;
                     }
                     p{
                         font-size: 20px;
+                        line-height: 22px;
                         color: $c-66;
                     }
                 }
@@ -170,7 +186,7 @@
                         display: inline-block;
                         line-height: 34px;
                         text-align: center;
-                        font-family: 'Open Sans';
+                        font-family: $font-family-open;
                         font-weight: 200;
                         margin-right: 7px;
                         transition: transform .3s;
@@ -219,7 +235,7 @@
             }
         }
         .caption {
-            font-family: 'Open Sans';
+            font-family: $font-family-open;
             font-size: 18px;
             padding-right: 50px;
             color: $c-66;
@@ -242,7 +258,7 @@
         .bids-more,
         .openneuro-more{
             text-align: left;
-            font-family: 'Open Sans';
+            font-family: $font-family-open;
             margin: 0;
             font-weight: 200;
             .logo-text{
@@ -250,7 +266,7 @@
                 font-family: 'Cabin';
             }
             .col-sm-6{
-                padding: 30px 30px;
+                padding: 10px 30px 30px;
                 color: #4b4b4b;
                 font-weight: 200;
                 p{
@@ -289,17 +305,143 @@
 }
 .browse-pipelines{
     @extend .clearfix;
-    @include gradient-horizontal($start-color: #00b588, $end-color: #009c75, $end-percent: 90%)
+    @include gradient-horizontal($start-color: #009b76, $end-percent: 90%, $end-color: #00b489)
     .container{
         max-width: 1500px;
         .mate-slide{
-            height: 400px;
+            height: 360px;
             padding: 50px;
             &:last-child{
-                background:#009c75;
+                background:#00b489;
+            }
+            h3{
+                color: #fff;
+                font-weight: 200;
+                font-size: 34px;
+                margin: 0 0 15px;
+                text-align: center;
+            }
+            ul{
+                margin: 25px 0 0;
+                padding: 0;
+                list-style: none;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: stretch;
+                justify-content: space-between;
+                align-content: space-between;
+                li{
+                    margin: 0 0 15px;
+                    padding: 10px;
+                    border: 1px dashed lighten(#00b489, 5%);
+                    flex-basis: 49%;
+                    button{
+                        @extend %btn-dash;
+                    }
+                }
+            }
+            &.browse {
+                label{
+                    font-size: 20px;
+                    color: #fff;
+                    font-weight: 300;
+                    font-family: $font-family-open;
+                }
+
+                select{
+                    -webkit-appearance: none;
+                    -moz-appearance:    none;
+                    appearance:         none;
+                    background: none;
+                    border: 0;
+                    border-bottom: 1px solid $white;
+                    color: $white;
+                    border-radius: 0;
+
+                    &:focus {
+                        outline: 0;
+                    }
+                }
+                .select-pipeline{
+                    position: relative;
+                }
+
+                .select-pipeline-arrow{
+                    border-color: $white rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+                    border-style: solid;
+                    border-width: 5px 5px 2.5px;
+                    display: inline-block;
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    bottom: 0;
+                    right: 9px;
+                }
+
+                .Select-control{
+                    background: none;
+                    border: none;
+                    color: #fff;
+                    border-bottom: 1px solid $white;
+                    border-radius: 0;
+
+                    .Select-placeholder,
+                    .Select-clear{
+                        color: $white;
+                    }
+
+                    .Select-arrow{
+                       border-color: $white rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+                    }
+
+                    .Select-value{
+                        color: #fff;
+                        border-color: $white;
+                        background: rgba(0, 0, 0, 0);
+
+                        .Select-value-icon{
+                            border-color: $white;
+                        }
+                    }
+                }
+
+                h3{
+                    text-align: left;
+                }
             }
         }
     }
+}
+
+.selected-pipeline{
+    background: $white;
+    padding: 25px 0;
+    position: relative;
+    overflow: hidden;
+    .container{
+        max-width: 1500px;
+    }
+
+    .close-selected{
+        text-align: right;
+        width: 70px;
+        display: block;
+        padding: 10px 0 0;
+        text-transform: uppercase;
+        float: right;
+    }
+
+    .active-pipeline-arrow{
+        border-color: #00a07a rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+        border-style: solid;
+        border-width: 17px 25px 2.5px;
+        display: inline-block;
+        height: 0;
+        width: 0;
+        position: absolute;
+        margin-top: -25px;
+    }
+
 }
 
 footer{
