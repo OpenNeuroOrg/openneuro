@@ -7,7 +7,7 @@ import moment     from 'moment';
 import FileTree   from '../common/partials/file-tree.jsx';
 import {Accordion, Panel} from 'react-bootstrap';
 
-export default class JobAccordion extends React.Component {
+class JobAccordion extends React.Component {
 
 // life cycle methods ------------------------------------------------------------
 
@@ -150,3 +150,8 @@ export default class JobAccordion extends React.Component {
 
 }
 
+JobAccordion.propTypes = {
+    run: React.PropTypes.object
+};
+
+export default JobAccordion;
