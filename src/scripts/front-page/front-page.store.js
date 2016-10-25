@@ -1,7 +1,8 @@
 // dependencies ----------------------------------------------------------------------
 
 import Reflux  from 'reflux';
-import actions from './front-page.actions.js';
+import actions from './front-page.actions';
+import crn     from '../utils/crn';
 
 // store setup -----------------------------------------------------------------------
 
@@ -37,9 +38,11 @@ let FrontPageStore = Reflux.createStore({
     setInitialState: function (diffs, callback) {
         let data = {
             apps: [],
-            tags: [],
+            exampleJob: null,
+            loadingJob: false,
             selectedTags: '',
-            selectedPipeline: {id: ''}
+            selectedPipeline: {id: ''},
+            tags: []
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data, callback);
@@ -82,10 +85,20 @@ let FrontPageStore = Reflux.createStore({
         let apps = this.data.apps;
         for (let app of apps) {
             if (app.id === appId) {
-                this.update({selectedPipeline: app});
+                this.update({selectedPipeline: app, loadingJob: true});
+                this.loadJob('57e04d604d88b0000a3e3ece', '9173401224112172570-242ac115-0001-007');
                 return;
             }
         }
+    },
+
+    /**
+     * Load Job
+     */
+    loadJob (snapshotId, jobId) {
+        crn.getJob(snapshotId, jobId, (err, res) => {
+            this.update({exampleJob: res.body, loadingJob: false});
+        }, {snapshot: true})
     }
 
 
