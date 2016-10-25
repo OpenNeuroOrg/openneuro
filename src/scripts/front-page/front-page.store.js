@@ -98,7 +98,7 @@ let FrontPageStore = Reflux.createStore({
     loadJob (snapshotId, jobId) {
         crn.getJob(snapshotId, jobId, (err, res) => {
             this.update({exampleJob: res.body, loadingJob: false});
-        }, {snapshot: true})
+        }, {snapshot: true});
     }
 
 
