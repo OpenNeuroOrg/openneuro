@@ -229,7 +229,11 @@ let handlers = {
                 agave.api.getJob(jobId, (err, resp) => {
                     // check status
                     console.log(JSON.stringify(resp.body));
-                    if (resp.body && resp.body.result && (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED')) {
+                    if (resp.body.status === 'error' && resp.body.message.indexOf('No job found with job id') > -1) {
+                        console.log('\nerror ---------------------------------------');
+                        console.log(job);
+                        console.log('\n');
+                    } else if (resp.body && resp.body.result && (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED')) {
                         job.agave = resp.body.result;
                         agave.getOutputs(jobId, (results, logs, statusCode) => {
                             resp.body.result.status = statusCode == 0 ? resp.body.result.status : 'FAILED';
