@@ -231,7 +231,7 @@ let handlers = {
                     if (resp.body.status === 'error' && resp.body.message.indexOf('No job found with job id') > -1) {
                         job.agave.status = 'FAILED';
                         c.jobs.updateOne({jobId}, {$set: {agave: job.agave}}, {}, (err, result) => {
-                            res.send({agave: resp.body.result snapshotId: job.snapshotId});
+                            res.send({agave: resp.body.result, snapshotId: job.snapshotId});
                             notifications.jobComplete(job);
                         });
                     } else if (resp.body && resp.body.result && (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED')) {
