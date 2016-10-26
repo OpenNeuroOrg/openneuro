@@ -243,7 +243,7 @@ let handlers = {
                                 if (status !== 'FINISHED') {notifications.jobComplete(job);}
                             });
                         });
-                    } else if (job.agave.status !== resp.body.result.status) {
+                    } else if (resp.body && resp.body.result && job.agave.status !== resp.body.result.status) {
                         job.agave = resp.body.result;
                         c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
                             if (err) {res.send(err);}
