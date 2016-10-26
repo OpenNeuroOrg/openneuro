@@ -42,7 +42,11 @@ let Jobs = React.createClass({
 
     _runs(job) {
         let runs = job.runs.map((run) => {
-            return <Run run={run} key={run._id} />;
+            return (
+                <Run run={run}
+                     key={run._id}
+                     toggleFolder={actions.toggleResultFolder} />
+            );
         });
 
         return runs;

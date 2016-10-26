@@ -117,7 +117,7 @@ let Pipelines = React.createClass({
                     </div>
                 </div>
                 <Panel className="jobs" header={exampleJob.appLabel + ' - v' + exampleJob.appVersion} eventKey={exampleJob.appId}>
-                    <Run run={exampleJob} />
+                    <Run run={exampleJob} toggleFolder={FPActions.toggleFolder}/>
                 </Panel>
             </div>
         );

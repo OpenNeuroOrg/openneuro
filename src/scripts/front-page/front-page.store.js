@@ -3,6 +3,7 @@
 import Reflux  from 'reflux';
 import actions from './front-page.actions';
 import crn     from '../utils/crn';
+import files   from '../utils/files';
 
 // store setup -----------------------------------------------------------------------
 
@@ -99,8 +100,23 @@ let FrontPageStore = Reflux.createStore({
         crn.getJob(snapshotId, jobId, (err, res) => {
             this.update({exampleJob: res.body, loadingJob: false});
         }, {snapshot: true});
-    }
+    },
 
+    /**
+     * Toggle Folder
+     */
+    toggleFolder(directory, jobId) {
+        let exampleJob = this.data.exampleJob;
+
+        // find directory
+        let dir = files.findInTree(exampleJob.results, directory.path, 'path');
+        if (dir) {
+            dir.showChildren = !dir.showChildren;
+        }
+
+        // update state
+        this.update({exampleJob});
+    }
 
 });
 

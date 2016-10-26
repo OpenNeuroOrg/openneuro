@@ -82,9 +82,9 @@ class JobAccordion extends React.Component {
                                             tree={run[type]}
                                             treeId={run._id}
                                             editable={false}
-                                            getFileDownloadTicket={actions.getResultDownloadTicket.bind(this, run.jobId)}
+                                            getFileDownloadTicket={actions.getResultDownloadTicket.bind(this, run.snapshotId, run.jobId)}
                                             displayFile={actions.displayFile.bind(this, run.jobId)}
-                                            toggleFolder={actions.toggleResultFolder} />
+                                            toggleFolder={this.props.toggleFolder} />
                                    </div>
                                 </div>
                             </div>
