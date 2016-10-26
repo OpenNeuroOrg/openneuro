@@ -228,7 +228,13 @@ let handlers = {
             } else {
                 agave.api.getJob(jobId, (err, resp) => {
                     // check status
-                    if (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED') {
+                    if (resp.body.status === 'error' && resp.body.message.indexOf('No job found with job id') > -1) {
+                        job.agave.status = 'FAILED';
+                        c.jobs.updateOne({jobId}, {$set: {agave: job.agave}}, {}, (err, result) => {
+                            res.send({agave: resp.body.result, snapshotId: job.snapshotId});
+                            notifications.jobComplete(job);
+                        });
+                    } else if (resp.body && resp.body.result && (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED')) {
                         job.agave = resp.body.result;
                         agave.getOutputs(jobId, (results, logs, statusCode) => {
                             resp.body.result.status = statusCode == 0 ? resp.body.result.status : 'FAILED';
@@ -242,7 +248,7 @@ let handlers = {
                                 if (status !== 'FINISHED') {notifications.jobComplete(job);}
                             });
                         });
-                    } else if (job.agave.status !== resp.body.result.status) {
+                    } else if (resp.body && resp.body.result && job.agave.status !== resp.body.result.status) {
                         job.agave = resp.body.result;
                         c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
                             if (err) {res.send(err);}
