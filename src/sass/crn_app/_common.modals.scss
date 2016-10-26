@@ -236,6 +236,13 @@
             }
         }
     }
+
+
+}
+
+.display-file-modal.nii-gz .modal-dialog .modal-content .modal-body {
+    padding: 15px 0px 0px 0px;
+    height: 100%;
 }
 
 .update-modal {
@@ -384,10 +391,14 @@
 
 .reactable-header-sortable {
     color: $primary;
+    padding-right: 50px !important;
+    position: relative;
 
     &::after {
         font-family: FontAwesome;
         content: ' \f0dc';
+        position: absolute;
+        width: 50px;
     }
 
     &.reactable-header-sort-asc::after {
