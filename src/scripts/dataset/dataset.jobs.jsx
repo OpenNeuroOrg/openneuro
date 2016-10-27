@@ -45,7 +45,8 @@ let Jobs = React.createClass({
             return (
                 <Run run={run}
                      key={run._id}
-                     toggleFolder={actions.toggleResultFolder} />
+                     toggleFolder={actions.toggleResultFolder}
+                     displayFile={actions.displayFile}/>
             );
         });
 
