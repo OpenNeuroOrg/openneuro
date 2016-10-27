@@ -83,7 +83,7 @@ class JobAccordion extends React.Component {
                                             treeId={run._id}
                                             editable={false}
                                             getFileDownloadTicket={actions.getResultDownloadTicket.bind(this, run.snapshotId, run.jobId)}
-                                            displayFile={actions.displayFile.bind(this, run.jobId)}
+                                            displayFile={this.props.displayFile.bind(this, run.snapshotId, run.jobId)}
                                             toggleFolder={this.props.toggleFolder} />
                                    </div>
                                 </div>
@@ -151,7 +151,9 @@ class JobAccordion extends React.Component {
 }
 
 JobAccordion.propTypes = {
-    run: React.PropTypes.object
+    run: React.PropTypes.object,
+    displayFile: React.PropTypes.function,
+    toggleFolder: React.PropTypes.function
 };
 
 export default JobAccordion;

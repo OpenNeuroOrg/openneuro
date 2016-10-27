@@ -1,9 +1,11 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux  from 'reflux';
-import actions from './front-page.actions';
-import crn     from '../utils/crn';
-import files   from '../utils/files';
+import Reflux         from 'reflux';
+import actions        from './front-page.actions';
+import crn            from '../utils/crn';
+import files          from '../utils/files';
+import datasetActions from '../dataset/dataset.actions';
+import request        from '../utils/request';
 
 // store setup -----------------------------------------------------------------------
 
@@ -39,6 +41,12 @@ let FrontPageStore = Reflux.createStore({
     setInitialState: function (diffs, callback) {
         let data = {
             apps: [],
+            displayFile: {
+                name: '',
+                text: '',
+                link: '',
+                show: false
+            },
             exampleJob: null,
             loadingJob: false,
             selectedTags: '',
@@ -87,7 +95,7 @@ let FrontPageStore = Reflux.createStore({
         for (let app of apps) {
             if (app.id === appId) {
                 this.update({selectedPipeline: app, loadingJob: true});
-                this.loadJob('57e04d604d88b0000a3e3ece', '9173401224112172570-242ac115-0001-007');
+                this.loadJob('57dc3704a76c87000a24e650', '3036461272949658086-242ac115-0001-007');
                 return;
             }
         }
@@ -105,7 +113,7 @@ let FrontPageStore = Reflux.createStore({
     /**
      * Toggle Folder
      */
-    toggleFolder(directory, jobId) {
+    toggleFolder(directory) {
         let exampleJob = this.data.exampleJob;
 
         // find directory
@@ -116,6 +124,50 @@ let FrontPageStore = Reflux.createStore({
 
         // update state
         this.update({exampleJob});
+    },
+
+    /**
+     * DisplayFile
+     */
+    displayFile(snapshotId, jobId, file, callback) {
+        datasetActions.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
+            // requestAndDisplay(link);
+
+            if (files.hasExtension(file.name, ['.pdf', '.nii.gz', '.jpg', '.jpeg', '.png', '.gif'])) {
+                if (callback) {callback();}
+                this.update({
+                    displayFile: {
+                        name: file.name,
+                        text: null,
+                        link: link,
+                        show: true
+                    }
+                });
+            } else {
+                request.get(link, {}, (err, res) => {
+                    if (callback) {callback();}
+                    this.update({
+                        displayFile: {
+                            name: file.name,
+                            text: res.text,
+                            link: link,
+                            show: true
+                        }
+                    });
+                });
+            }
+        });
+    },
+
+    hideFileDisplay() {
+        this.update({
+            displayFile: {
+                name: '',
+                text: '',
+                link: '',
+                show: false
+            }
+        });
     }
 
 });

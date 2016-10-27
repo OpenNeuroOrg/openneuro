@@ -1033,9 +1033,9 @@ let datasetStore = Reflux.createStore({
     /**
      * DisplayFile
      */
-    displayFile(jobId, file, callback) {
+    displayFile(snapshotId, jobId, file, callback) {
         if (jobId) {
-            this.getResultDownloadTicket(jobId, file, (link) => {
+            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
                 requestAndDisplay(link);
             });
         } else {

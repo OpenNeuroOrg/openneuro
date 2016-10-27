@@ -1,14 +1,15 @@
 // dependencies -------------------------------------------------------
 
-import React     from 'react';
-import Reflux    from 'reflux';
-import FPStore   from './front-page.store.js';
-import FPActions from './front-page.actions.js';
-import Select    from 'react-select';
-import Run       from '../dataset/dataset.jobs.run.jsx';
-import {Link}    from 'react-router';
-import {Panel}   from 'react-bootstrap';
-import Spinner   from '../common/partials/spinner.jsx';
+import React       from 'react';
+import Reflux      from 'reflux';
+import FileDisplay from '../dataset/dataset.file-display.jsx';
+import FPStore     from './front-page.store.js';
+import FPActions   from './front-page.actions.js';
+import Select      from 'react-select';
+import Run         from '../dataset/dataset.jobs.run.jsx';
+import {Link}      from 'react-router';
+import {Panel}     from 'react-bootstrap';
+import Spinner     from '../common/partials/spinner.jsx';
 
 // component setup ----------------------------------------------------
 
@@ -27,6 +28,10 @@ let Pipelines = React.createClass({
                     </div>
                 </div>
                 {!this.state.selectedPipeline.id ? null : this._pipelineDetail(this.state.selectedPipeline)}
+                <FileDisplay
+                    file={this.state.displayFile}
+                    show={this.state.displayFile.show}
+                    onHide={FPActions.hideFileDisplay} />
             </span>
         );
     },
@@ -117,7 +122,9 @@ let Pipelines = React.createClass({
                     </div>
                 </div>
                 <Panel className="jobs" header={exampleJob.appLabel + ' - v' + exampleJob.appVersion} eventKey={exampleJob.appId}>
-                    <Run run={exampleJob} toggleFolder={FPActions.toggleFolder}/>
+                    <Run run={exampleJob}
+                         toggleFolder={FPActions.toggleFolder}
+                         displayFile={FPActions.displayFile} />
                 </Panel>
             </div>
         );
