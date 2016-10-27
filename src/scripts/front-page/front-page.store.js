@@ -99,7 +99,11 @@ let FrontPageStore = Reflux.createStore({
                 // load associated example job
                 // let description = JSON.parse(app.longDescription);
                 // this.loadJob(description.snapshotId, description.jobId);
-                this.loadJob('57dc3704a76c87000a24e650', '3036461272949658086-242ac115-0001-007');
+                if (app.id === 'mriqc-bare-0.8.7') {
+                    this.loadJob('57dc3704a76c87000a24e650', '3036461272949658086-242ac115-0001-007');
+                } else {
+                    this.update({loadingJob: false, exampleJob: null});
+                }
                 return;
             }
         }

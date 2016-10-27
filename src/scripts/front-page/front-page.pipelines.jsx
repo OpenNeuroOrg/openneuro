@@ -110,6 +110,10 @@ let Pipelines = React.createClass({
         }
 
         let exampleJob = this.state.exampleJob;
+        if (!exampleJob) {
+            return <h2>No example results available.</h2>;
+        }
+
         return (
             <div className="col-sm-6 mate-slide">
                 <div className="row">
