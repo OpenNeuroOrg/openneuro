@@ -94,7 +94,11 @@ let FrontPageStore = Reflux.createStore({
         let apps = this.data.apps;
         for (let app of apps) {
             if (app.id === appId) {
+                // set selected app
                 this.update({selectedPipeline: app, loadingJob: true});
+                // load associated example job
+                // let description = JSON.parse(app.longDescription);
+                // this.loadJob(description.snapshotId, description.jobId);
                 this.loadJob('57dc3704a76c87000a24e650', '3036461272949658086-242ac115-0001-007');
                 return;
             }
