@@ -122,24 +122,6 @@ let auth = {
             req.ticket = result;
             return next();
         });
-    },
-
-    /**
-     * From Origin
-     *
-     * Takes an origin url and ensures the the request
-     * originates from it.
-     */
-    fromOrigin(origin) {
-        return function (req, res, next) {
-            console.log(origin);            // https://api.tacc.utexas.edu/
-            console.log(req.get('host'));   // localhost:8111
-            console.log(req.get('origin')); // http://localhost:9876
-            if (false) {
-                return res.status(403).send({error: 'This request did not originate from an allowed domain.'});
-            }
-            next();
-        }
     }
 
 };
