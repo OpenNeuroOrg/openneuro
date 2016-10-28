@@ -135,6 +135,7 @@ let auth = {
             console.log(origin);            // https://api.tacc.utexas.edu/
             console.log(req.get('host'));   // localhost:8111
             console.log(req.get('origin')); // http://localhost:9876
+            console.log(req.headers.referer);
             if (false) {
                 return res.status(403).send({error: 'This request did not originate from an allowed domain.'});
             }
