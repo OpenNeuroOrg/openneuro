@@ -23,9 +23,9 @@ export default {
      * array of of results/outputs.
      */
     getOutputs (jobId, callback) {
-        this.getLogs(jobId, (logs, status) => {
+        this.getLogs(jobId, (logs) => {
             this.getResults(jobId, (results) => {
-                callback(results, logs, status);
+                callback(results, logs);
             });
         });
     },
@@ -35,26 +35,19 @@ export default {
      */
     getLogs(jobId, callback) {
         let logs = [];
-        let status = null;
         api.getJobLogs(jobId, (err, res) => {
             // get main logs files
             if (res.body.result) {
                 async.each(res.body.result, (file, cb) => {
                     if (file.type === 'file') {
                         logs.push(file);
-                        if (file.name === 'exit_code.txt') {
-                            let path = file._links.self.href;
-                            api.getPath(path, (err, res) => {
-                                status = res.body;
-                                cb();
-                            });
-                        } else {cb();}
                     }
+                    cb();
                 }, () => {
-                    callback(logs, status);
+                    callback(logs);
                 });
             } else {
-                callback(logs, status);
+                callback(logs);
             }
         });
     },
