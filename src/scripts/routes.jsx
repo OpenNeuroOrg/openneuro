@@ -6,7 +6,7 @@ import requireAuth from './utils/requireAuth';
 
 // views
 import Index          from './index.jsx';
-import FrontPage      from './front_page/frontPage.jsx';
+import FrontPage      from './front-page/front-page.jsx';
 
 import Admin          from './admin/admin.jsx';
 import Users          from './admin/admin.users.jsx';

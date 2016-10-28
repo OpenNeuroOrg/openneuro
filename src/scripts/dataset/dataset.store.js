@@ -15,6 +15,7 @@ import config      from '../../../config';
 import files       from '../utils/files';
 import request     from '../utils/request';
 import moment      from 'moment';
+import FPActions   from '../front-page/front-page.actions.js';
 
 let datasetStore = Reflux.createStore({
 
@@ -197,8 +198,11 @@ let datasetStore = Reflux.createStore({
                     let bName = b.label.toUpperCase();
                     return (aName < bName) ? -1 : (aName > bName) ? 1 : 0;
                 });
+                FPActions.setApps(res.body);
+                this.update({apps: res.body, loadingApps: false});
+            } else {
+                setTimeout(this.loadApps, 5000);
             }
-            this.update({apps: res.body, loadingApps: false});
         });
     },
 
@@ -1018,22 +1022,22 @@ let datasetStore = Reflux.createStore({
     /**
      * Get Result Download Ticket
      */
-    getResultDownloadTicket(jobId, file, callback) {
+    getResultDownloadTicket(snapshotId, jobId, file, callback) {
         let filePath = file === 'all' ? file : file.path;
-        crn.getResultDownloadTicket(this.data.dataset._id, jobId, filePath, (err, res) => {
+        crn.getResultDownloadTicket(snapshotId, jobId, filePath, (err, res) => {
             let ticket      = res.body._id;
             let fileName    = filePath.split('/')[filePath.split('/').length - 1];
             let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
             callback(downloadUrl);
-        }, {snapshot: this.data.snapshot});
+        }, {snapshot: true});
     },
 
     /**
      * DisplayFile
      */
-    displayFile(jobId, file, callback) {
+    displayFile(snapshotId, jobId, file, callback) {
         if (jobId) {
-            this.getResultDownloadTicket(jobId, file, (link) => {
+            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
                 requestAndDisplay(link);
             });
         } else {

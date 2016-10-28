@@ -3,10 +3,11 @@
 import React            from 'react';
 import Reflux           from 'reflux';
 import {Link}           from 'react-router';
-import FrontPageTabs    from './frontPageTabs.jsx';
+import FrontPageTabs    from './front-page-tabs.jsx';
 import userStore        from '../user/user.store.js';
 import Spinner          from '../common/partials/spinner.jsx';
 import Footer           from '../common/partials/footer.jsx';
+import Pipelines        from './front-page.pipelines.jsx';
 
 
 // component setup ----------------------------------------------------
@@ -32,7 +33,7 @@ let FrontPage = React.createClass({
                                     <img className="logo-layer-data" src="./assets/logo_data.png" alt="OpenNeuro Logo" />
                                 </div>
                                 <div className="logo-text">Open<span className="logo-end">Neuro</span></div>
-                                <h1>A free and open platform that enables the analysis and sharing of neuroimaging data</h1>
+                                <h1>A free and open platform for analyzing and sharing neuroimaging data</h1>
                                 <div className="sign-in-block fade-in">
                                     {this._error(this.state.signinError, this.state.loading)}
                                     {this._signinForm(this.state.loading)}
@@ -46,7 +47,7 @@ let FrontPage = React.createClass({
                     </div>
                 </div>
                 <FrontPageTabs />
-                {this._browsePipelines()}
+                <Pipelines />
                 {this._moreInfo()}
                 <Footer />
             </span>
@@ -85,7 +86,7 @@ let FrontPage = React.createClass({
                         </div>
                         <div className="row">
                             <div className="col-sm-6">
-                                    <p>A free and open platform that enables the analysis and sharing of neuroimaging data</p>
+                                    <p>A free and open platform for analyzing and sharing neuroimaging data</p>
                                 </div>
                                 <div className="col-sm-6">
                                 <p>View more information about<br/>
@@ -116,41 +117,6 @@ let FrontPage = React.createClass({
                                 <div className="col-sm-3"><img src="./assets/nsf.png" alt="National Science Foundation"/></div>
                                 <div className="col-sm-3"><img src="./assets/nih.png" alt="National Institute on Drug and Abuse"/></div>
                             </div>
-                    </div>
-                </div>
-            </div>
-        );
-    },
-
-    _browsePipelines() {
-        return(
-            <div className="browse-pipelines">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-sm-6 mate-slide">
-                            <h3>Check Out Our Pipelines</h3>
-                            <p>Lorem analysis pipelines snapshots datasets. Lorem ipsum dolor sit amet, consectetur ad adipiscing elit.</p>
-                            <ul>
-                                <li>Freesurfer</li>
-                                <li>The Human Connectome Project</li>
-                                <li>Other</li>
-                                <li>mriqc</li>
-                            </ul>
-                        </div>
-                        <div className="col-sm-6 mate-slide">
-                            <h3>Or Browse Pipelines</h3>
-                            <form>
-                                <label>What kinds of pipelines are you interested in?</label>
-                                <select>
-                                    <option>asdf</option>
-                                </select>
-                                <br />
-                                <label>browse X pipelines</label>
-                                <select>
-                                    <option>asdf</option>
-                                </select>
-                            </form>
-                        </div>
                     </div>
                 </div>
             </div>
