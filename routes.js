@@ -81,7 +81,7 @@ let routes = [
 	{
 		method: 'post',
 		url: '/jobs/:jobId/results',
-		middleware: [auth.fromOrigin(config.agave.url)],
+		middleware: [],
 		handler: jobs.postResults
 	},
 	{
