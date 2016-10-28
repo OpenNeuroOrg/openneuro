@@ -24,7 +24,7 @@ let Pipelines = React.createClass({
             <span>
                 <div className="browse-pipelines">
                     <div className="container">
-                        {this._browsePipelines()}
+                        {this._pipelines()}
                     </div>
                 </div>
                 {!this.state.selectedPipeline.id ? null : this._pipelineDetail(this.state.selectedPipeline)}
@@ -38,43 +38,59 @@ let Pipelines = React.createClass({
 
 // template methods ---------------------------------------------------
 
-    _browsePipelines() {
-        let pipelineOptions = this._pipelineOptions(this.state.apps, this.state.selectedTags);
+    _pipelines() {
         return (
             <div className="row">
-                <div className="col-sm-6 mate-slide">
-                    <h3>Check Out a Few of Our Pipelines</h3>
-                    <ul>
-                        <li>
-                            <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
-                        </li>
-                        <li>
-                            <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-kiddo-0.8.6')}>mriqc-kiddo</button>
-                        </li>
-                        <li>
-                            <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
-                        </li>
-                        <li>
-                            <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-kiddo-0.8.6')}>mriqc-kiddo</button>
-                        </li>
-                    </ul>
-                </div>
-                <div className="col-sm-6 mate-slide browse">
-                    <h3>Or Browse Our Collection</h3>
-                    <form>
-                        <label>What kinds of pipelines are you interested in?</label>
-                        <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />
-                        <br />
-                        <label>browse {pipelineOptions.length} pipelines</label>
-                        <span className="select-pipeline">
-                            <select value={this.state.selectedPipeline.id} onChange={this._selectPipeline}>
-                                <option value="" disabled>Select a Pipeline</option>
-                                {pipelineOptions}
-                            </select>
-                            <span className="select-pipeline-arrow"></span>
-                        </span>
-                    </form>
-                </div>
+                {this._featured()}
+                {this._browse()}
+            </div>
+        );
+    },
+
+    _featured() {
+        return (
+            <div className="col-sm-6 mate-slide">
+                <h3>Check Out a Few of Our Pipelines</h3>
+                <ul>
+                    <li>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
+                    </li>
+                    <li>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-kiddo-0.8.6')}>mriqc-kiddo</button>
+                    </li>
+                    <li>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
+                    </li>
+                    <li>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-kiddo-0.8.6')}>mriqc-kiddo</button>
+                    </li>
+                </ul>
+            </div>
+        );
+    },
+
+    _browse() {
+        if (this.state.apps.length < 1) {
+            return <Spinner active={true} text="Loading Pipelines" />;
+        }
+
+        let pipelineOptions = this._pipelineOptions(this.state.apps, this.state.selectedTags);
+        return (
+            <div className="col-sm-6 mate-slide browse">
+                <h3>Or Browse Our Collection</h3>
+                <form>
+                    <label>What kinds of pipelines are you interested in?</label>
+                    <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />
+                    <br />
+                    <label>browse {pipelineOptions.length} pipelines</label>
+                    <span className="select-pipeline">
+                        <select value={this.state.selectedPipeline.id} onChange={this._selectPipeline}>
+                            <option value="" disabled>Select a Pipeline</option>
+                            {pipelineOptions}
+                        </select>
+                        <span className="select-pipeline-arrow"></span>
+                    </span>
+                </form>
             </div>
         );
     },
