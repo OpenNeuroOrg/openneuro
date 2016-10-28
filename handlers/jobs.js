@@ -194,9 +194,8 @@ let handlers = {
             } else if (req.body.status === job.agave.status) {
                 res.send(job);
             } else if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
-                agave.getOutputs(jobId, (results, logs, statusCode) => {
-                    req.body.status = statusCode == 0 ? req.body.status : 'FAILED';
-                    c.jobs.updateOne({jobId}, {$set: {agave: req.body, results, logs, statusCode}}, {}).then((err, result) => {
+                agave.getOutputs(jobId, (results, logs) => {
+                    c.jobs.updateOne({jobId}, {$set: {agave: req.body, results, logs}}, {}).then((err, result) => {
                         if (err) {res.send(err);}
                         else {res.send(result);}
                         job.agave = req.body;
@@ -236,15 +235,13 @@ let handlers = {
                         });
                     } else if (resp.body && resp.body.result && (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED')) {
                         job.agave = resp.body.result;
-                        agave.getOutputs(jobId, (results, logs, statusCode) => {
-                            resp.body.result.status = statusCode == 0 ? resp.body.result.status : 'FAILED';
-                            c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results, logs, statusCode}}, {}, (err, result) => {
+                        agave.getOutputs(jobId, (results, logs) => {
+                            c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results, logs}}, {}, (err, result) => {
                                 if (err) {res.send(err);}
                                 else {res.send({agave: resp.body.result, results, logs, snapshotId: job.snapshotId});}
                                 job.agave = resp.body.result;
                                 job.results = results;
                                 job.logs = logs;
-                                job.statusCode = statusCode;
                                 if (status !== 'FINISHED') {notifications.jobComplete(job);}
                             });
                         });
@@ -252,10 +249,22 @@ let handlers = {
                         job.agave = resp.body.result;
                         c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
                             if (err) {res.send(err);}
-                            else {res.send({agave: resp.body.result, snapshotId: job.snapshotId});}
+                            else {
+                                res.send({
+                                    agave:      resp.body.result,
+                                    datasetId:  job.datasetId,
+                                    snapshotId: job.snapshotId,
+                                    jobId:      jobId
+                                });
+                            }
                         });
                     } else {
-                        res.send({agave: resp.body.result, snapshotId: job.snapshotId});
+                        res.send({
+                            agave:      resp.body.result,
+                            datasetId:  job.datasetId,
+                            snapshotId: job.snapshotId,
+                            jobId:      jobId
+                        });
                     }
                 });
             }
