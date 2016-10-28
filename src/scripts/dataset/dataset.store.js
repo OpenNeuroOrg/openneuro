@@ -198,9 +198,11 @@ let datasetStore = Reflux.createStore({
                     let bName = b.label.toUpperCase();
                     return (aName < bName) ? -1 : (aName > bName) ? 1 : 0;
                 });
+                FPActions.setApps(res.body);
+                this.update({apps: res.body, loadingApps: false});
+            } else {
+                setTimeout(this.loadApps, 5000);
             }
-            FPActions.setApps(res.body);
-            this.update({apps: res.body, loadingApps: false});
         });
     },
 
