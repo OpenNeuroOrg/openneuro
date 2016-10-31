@@ -9,6 +9,7 @@ import Select      from 'react-select';
 import Run         from '../dataset/dataset.jobs.run.jsx';
 import {Link}      from 'react-router';
 import {Panel}     from 'react-bootstrap';
+import pluralize   from 'pluralize';
 import Spinner     from '../common/partials/spinner.jsx';
 
 // component setup ----------------------------------------------------
@@ -23,6 +24,7 @@ let Pipelines = React.createClass({
         return(
             <span>
                 <div className="browse-pipelines">
+                 <h3 className="browse-pipeline-header">Check Out Our Pipelines</h3>
                     <div className="container">
                         {this._pipelines()}
                     </div>
@@ -50,7 +52,7 @@ let Pipelines = React.createClass({
     _featured() {
         return (
             <div className="col-sm-6 mate-slide">
-                <h3>Check Out a Few of Our Pipelines</h3>
+                <h4>Featured</h4>
                 <ul>
                     <li>
                         <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
@@ -77,12 +79,12 @@ let Pipelines = React.createClass({
         let pipelineOptions = this._pipelineOptions(this.state.apps, this.state.selectedTags);
         return (
             <div className="col-sm-6 mate-slide browse fade-in">
-                <h3>Or Browse Our Collection</h3>
+                <h4>Browse Our Collection</h4>
                 <form>
                     <label>What kinds of pipelines are you interested in?</label>
                     <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />
                     <br />
-                    <label>browse {pipelineOptions.length} pipelines</label>
+                    <label>Browse {pipelineOptions.length} {pluralize('pipeline', pipelineOptions.length)}</label>
                     <span className="select-pipeline">
                         <select value={this.state.selectedPipeline.id} onChange={this._selectPipeline}>
                             <option value="" disabled>Select a Pipeline</option>
@@ -140,7 +142,7 @@ let Pipelines = React.createClass({
         return (
             <div className="col-sm-6 mate-slide analyses">
                 <div className="row">
-                    <div className="col-sm-6">
+                    <div className="col-sm-6 mate-analyses-header">
                         <h2>Example Analysis</h2>
                         <span>from dataset {exampleJob.datasetLabel}</span>
                     </div>
