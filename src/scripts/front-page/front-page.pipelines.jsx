@@ -71,12 +71,12 @@ let Pipelines = React.createClass({
 
     _browse() {
         if (this.state.apps.length < 1) {
-            return <Spinner active={true} text="Loading Pipelines" />;
+            return <div className="col-sm-6 mate-slide loading-browse"><Spinner active={true} text="Loading Pipelines" /></div>;
         }
 
         let pipelineOptions = this._pipelineOptions(this.state.apps, this.state.selectedTags);
         return (
-            <div className="col-sm-6 mate-slide browse">
+            <div className="col-sm-6 mate-slide browse fade-in">
                 <h3>Or Browse Our Collection</h3>
                 <form>
                     <label>What kinds of pipelines are you interested in?</label>
@@ -122,26 +122,34 @@ let Pipelines = React.createClass({
 
     _exampleResults() {
         if (this.state.loadingJob) {
-            return <Spinner active={true} text="Loading Analyses" />;
+            return <div className="col-sm-6 mate-slide"><Spinner active={true} text="Loading Analyses" /></div>;
         }
 
         let exampleJob = this.state.exampleJob;
         if (!exampleJob) {
-            return <h2>No example results available.</h2>;
+            return <div className="col-sm-6 mate-slide analyses no-jobs"><h2>No example results available.</h2></div>;
         }
 
+        let analysisLink = (
+            <span>
+                <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}}>
+                {exampleJob.appLabel + ' - v' + exampleJob.appVersion}
+                </Link>
+            </span>
+        );
+
         return (
-            <div className="col-sm-6 mate-slide">
+            <div className="col-sm-6 mate-slide analyses">
                 <div className="row">
                     <div className="col-sm-6">
                         <h2>Example Analysis</h2>
                         <span>from dataset <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}}>{exampleJob.datasetLabel}</Link></span>
                     </div>
-                    <div className="col-sm-6">
-                        <h3><a href="#">Explore More</a></h3>
+                    <div className="col-sm-6 ">
+                        <a className="explore-more pull-right" href="#"><i className="fa fa-area-chart" ></i> Explore More</a>
                     </div>
                 </div>
-                <Panel className="jobs" header={exampleJob.appLabel + ' - v' + exampleJob.appVersion} eventKey={exampleJob.appId}>
+                <Panel className="jobs" header={analysisLink} eventKey={exampleJob.appId}>
                     <Run run={exampleJob}
                          toggleFolder={FPActions.toggleFolder}
                          displayFile={FPActions.displayFile} />
