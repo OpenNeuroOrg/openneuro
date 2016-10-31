@@ -56,13 +56,13 @@ let Pipelines = React.createClass({
                         <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
                     </li>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-kiddo-0.8.6')}>mriqc-kiddo</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'bids-example-0.0.6')}>bids-example</button>
                     </li>
                     <li>
                         <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
                     </li>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-kiddo-0.8.6')}>mriqc-kiddo</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'bids-example-0.0.6')}>bids-example</button>
                     </li>
                 </ul>
             </div>
