@@ -387,7 +387,21 @@
         }
     }
 }
-
+.reactable-previous-page,
+.reactable-next-page,
+.reactable-page-button {
+    font-size: 18px;
+    line-height: 21px;
+    margin-right: 10px;
+    padding-right: 10px;
+    border-right: 1px solid #aaa;
+    &.reactable-current-page{
+        color: #aaa;
+    }
+    &.reactable-next-page{
+        border: 0;
+    }
+}
 
 .reactable-header-sortable {
     color: $primary;

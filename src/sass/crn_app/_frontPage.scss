@@ -1,4 +1,4 @@
-%btn-dash{
+%btn-dash {
     @extend %btn-admin;
     color: #fff;
     border: 0;
@@ -111,7 +111,7 @@
 
 
 
-#data-tabs{
+#data-tabs {
     background: $white;
     .nav.nav-tabs{
         background: $white;
@@ -139,6 +139,7 @@
                 margin: 0;
                 padding: 30px 25px 0;
                 border: 0;
+                border-radius: 0;
                 img{
                     width: 150px;
                     height: auto;
@@ -249,7 +250,7 @@
     }
 }
 
-.more-info{
+.more-info {
     margin: 0;
     padding: 70px 0;
     @include gradient-vertical($start-color: $e7, $end-color: $white, $start-percent: 0%, $end-percent: 30%);
@@ -303,22 +304,31 @@
 
     }
 }
-.browse-pipelines{
+
+.browse-pipelines {
     @extend .clearfix;
-    @include gradient-horizontal($start-color: #009b76, $end-percent: 90%, $end-color: #00b489)
+    @include gradient-vertical($start-color: #009b76, $end-color: #00ad84);
+    .browse-pipeline-header{
+        background: #00b489;
+        color: #fff;
+        font-weight: 200;
+        font-size: 34px;
+        margin: 0;
+        padding: 25px 0;
+        text-align: center;
+    }
     .container{
         max-width: 1500px;
+
         .mate-slide{
             height: 360px;
-            padding: 50px;
-            &:last-child{
-                background:#00b489;
-            }
-            h3{
+            padding: 40px 50px 50px;
+
+            h4{
                 color: #fff;
                 font-weight: 200;
-                font-size: 34px;
-                margin: 0 0 15px;
+                font-size: 24px;
+                margin: 0 0 35px;
                 text-align: center;
             }
             ul{
@@ -344,6 +354,7 @@
                 background: #fff;
             }
             &.browse {
+                border-left: 2px solid #00b489;
                 label{
                     font-size: 20px;
                     color: #fff;
@@ -407,16 +418,16 @@
                         }
                     }
                 }
-
-                h3{
-                    text-align: left;
-                }
             }
         }
     }
 }
 
-.selected-pipeline{
+.mate-analyses-header {
+    margin-bottom: 10px;
+}
+
+.selected-pipeline {
     background: $white;
     padding: 25px 0;
     position: relative;
@@ -435,7 +446,7 @@
     }
 
     .active-pipeline-arrow{
-        border-color: #00a07a rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+        border-color: #00ad84 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
         border-style: solid;
         border-width: 17px 25px 2.5px;
         display: inline-block;
@@ -444,10 +455,9 @@
         position: absolute;
         margin-top: -25px;
     }
-
 }
 
-footer{
+footer {
     background: #333;
     padding: 10px 20px;
     color: $white;
