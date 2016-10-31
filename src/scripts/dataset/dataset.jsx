@@ -23,22 +23,20 @@ let Dataset = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-    componentWillReceiveProps() {
-        let params = this.getParams();
-        if (params.snapshotId) {
-            actions.trackView(params.snapshotId);
-            actions.loadDataset(params.snapshotId, {snapshot: true});
-        } else if (params.datasetId && this.state.dataset && params.datasetId !== this.state.dataset._id) {
-            actions.loadDataset(params.datasetId);
-        }
-    },
+    componentWillReceiveProps() {this._loadData();},
 
-    componentDidMount() {
+    componentDidMount() {this._loadData();},
+
+    _loadData() {
         let params = this.getParams();
+        let query  = this.getQuery();
         if (params.snapshotId) {
             actions.trackView(params.snapshotId);
-            actions.loadDataset(params.snapshotId, {snapshot: true});
-        } else if (params.datasetId) {
+            actions.loadDataset(params.snapshotId, {snapshot: true, appId: query.app});
+        } else if (
+            (params.datasetId && !this.state.dataset) ||
+            (params.datasetId && params.datasetId !== this.state.dataset._id)
+        ) {
             actions.loadDataset(params.datasetId);
         }
     },
