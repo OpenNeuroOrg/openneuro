@@ -106,6 +106,9 @@ let datasetStore = Reflux.createStore({
         options      = options ? options : {};
         options.isPublic = !userStore.data.token;
 
+        // set active job if passed in query param
+        if (options.appId) {this.update({activeJob: options.appId});}
+
         // update selection & current upload data
         this.update({selectedSnapshot: datasetId, currentUploadId: uploadStore.data.projectId});
 
