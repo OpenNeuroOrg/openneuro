@@ -9,6 +9,7 @@ import Select      from 'react-select';
 import Run         from '../dataset/dataset.jobs.run.jsx';
 import {Link}      from 'react-router';
 import {Panel}     from 'react-bootstrap';
+import pluralize   from 'pluralize';
 import Spinner     from '../common/partials/spinner.jsx';
 
 // component setup ----------------------------------------------------
@@ -76,7 +77,6 @@ let Pipelines = React.createClass({
         }
 
         let pipelineOptions = this._pipelineOptions(this.state.apps, this.state.selectedTags);
-
         return (
             <div className="col-sm-6 mate-slide browse fade-in">
                 <h4>Browse Our Collection</h4>
@@ -84,7 +84,7 @@ let Pipelines = React.createClass({
                     <label>What kinds of pipelines are you interested in?</label>
                     <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />
                     <br />
-                    <label>Browse {pipelineOptions.length} {pipelineOptions.length > 1 ? 'pipelines' : 'pipeline'}</label>
+                    <label>Browse {pipelineOptions.length} {pluralize('pipeline', pipelineOptions.length)}</label>
                     <span className="select-pipeline">
                         <select value={this.state.selectedPipeline.id} onChange={this._selectPipeline}>
                             <option value="" disabled>Select a Pipeline</option>
