@@ -340,6 +340,9 @@
                     }
                 }
             }
+            &.loading-browse{
+                background: #fff;
+            }
             &.browse {
                 label{
                     font-size: 20px;
