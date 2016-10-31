@@ -129,10 +129,9 @@ let Pipelines = React.createClass({
         if (!exampleJob) {
             return <div className="col-sm-6 mate-slide analyses no-jobs"><h2>No example results available.</h2></div>;
         }
-
         let analysisLink = (
             <span>
-                <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}}>
+                <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}} query={{app: exampleJob.appId}}>
                 {exampleJob.appLabel + ' - v' + exampleJob.appVersion}
                 </Link>
             </span>
@@ -143,7 +142,7 @@ let Pipelines = React.createClass({
                 <div className="row">
                     <div className="col-sm-6">
                         <h2>Example Analysis</h2>
-                        <span>from dataset <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}}>{exampleJob.datasetLabel}</Link></span>
+                        <span>from dataset {exampleJob.datasetLabel}</span>
                     </div>
                     <div className="col-sm-6 ">
                         <a className="explore-more pull-right" href="#"><i className="fa fa-area-chart" ></i> Explore More</a>
