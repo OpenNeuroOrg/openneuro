@@ -86,9 +86,9 @@ let FrontPage = React.createClass({
                         </div>
                         <div className="row">
                             <div className="col-sm-6">
-                                    <p>A free and open platform for analyzing and sharing neuroimaging data</p>
-                                </div>
-                                <div className="col-sm-6">
+                                <p>A free and open platform for analyzing and sharing neuroimaging data</p>
+                            </div>
+                            <div className="col-sm-6">
                                 <p>View more information about<br/>
                                 <a href="#">Stanford Center for Reproducible Neuroscience</a></p>
                             </div>
@@ -112,10 +112,23 @@ let FrontPage = React.createClass({
                     <div className="support-more">
                             <h4>Support for OpenNeuro provided by</h4>
                             <div className="row">
-                                <div className="col-sm-3"><img src="./assets/ljaf.png" alt="Arnold Foundation"/></div>
-                                <div className="col-sm-3"><img src="./assets/stanford.png" alt="Stanford"/></div>
-                                <div className="col-sm-3"><img src="./assets/nsf.png" alt="National Science Foundation"/></div>
-                                <div className="col-sm-3"><img src="./assets/nih.png" alt="National Institute on Drug and Abuse"/></div>
+                                <div className="col-sm-4">
+                                    <img src="./assets/ljaf.png" alt="Arnold Foundation"/>
+                                </div>
+                                <div className="col-sm-4">
+                                    <img src="./assets/nsf.png" alt="National Science Foundation"/>
+                                </div>
+                                <div className="col-sm-4">
+                                    <img src="./assets/nih.png" alt="National Institute on Drug and Abuse"/>
+                                </div>
+                            </div>
+                            <div className="row">
+                                <div className="col-sm-offset-3 col-sm-3">
+                                    <img src="./assets/stanford.png" alt="Stanford"/>
+                                </div>
+                                <div className="col-sm-3">
+                                    <img src="./assets/squishymedia.png" alt="Squishymedia"/>
+                                </div>
                             </div>
                     </div>
                 </div>

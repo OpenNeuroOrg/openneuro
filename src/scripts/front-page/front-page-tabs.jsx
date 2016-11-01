@@ -56,7 +56,7 @@ let FrontPageTabs = React.createClass({
                     <div className="row">
                         <div className="col-md-6">
                             <div className="row">
-                                <div className="img-wrap"><img src={tab.firstImage} /></div>
+                                <div className="img-wrap"><img className={tab.firstImageClass} src={tab.firstImage} /></div>
                                 <div className="caption">
                                     <h3>{tab.firstHeader}</h3>
                                     <p>{tab.firstDescription}</p>
@@ -65,7 +65,7 @@ let FrontPageTabs = React.createClass({
                         </div>
                         <div className="col-md-6">
                             <div className="row">
-                                <div className="img-wrap"><img src={tab.secondImage} /></div>
+                                <div className="img-wrap"><img className={tab.secondImageClass} src={tab.secondImage} /></div>
                                 <div className="caption">
                                     <h3>{tab.secondHeader}</h3>
                                     <p>{tab.secondDescription}</p>
@@ -95,10 +95,12 @@ let FrontPageTabs = React.createClass({
             icon:              './assets/tab-get_data.png',
             firstHeader:       'Browse Data',
             firstDescription:  <span>Browse and explore public datasets and analyses from a wide range of global contributors. Our collection continues to grow as more and more datasets become <a href="http://bids.neuroimaging.io/">BIDS</a> compatible.</span>,
-            firstImage:        './assets/tab-content_image.png',
+            firstImage:        './assets/get_data_browse.png',
+            firstImageClass:   'browse',
             secondHeader:      'Download Data',
             secondDescription: 'Download and use public data to create new datasets and run your own analyses.',
-            secondImage:       './assets/tab-content_image.png'
+            secondImage:       './assets/get_data_download.png',
+            secondImageClass:   'download'
         },
         {
             header:            'Share Data',
@@ -106,10 +108,12 @@ let FrontPageTabs = React.createClass({
             icon:              './assets/tab-share_data.png',
             firstHeader:       'Validate',
             firstDescription:  <span>Validate your datasets to assure they are <a href="http://bids.neuroimaging.io/">BIDS</a> compliant and compatible with our pipelines. This standardization means you can use anyone's data and know exactly what to expect.</span>,
-            firstImage:        './assets/tab-content_image.png',
+            firstImage:        './assets/share_data_validate.png',
+            firstImageClass:   'validate',
             secondHeader:      'Collaborate',
             secondDescription: 'Privately share your data so your colleagues can view and edit your work. Publish your datasets for anyone to view, download and run analyses on.',
-            secondImage:       './assets/tab-content_image.png'
+            secondImage:       './assets/share_data_collaborate.png',
+            secondImageClass:   'collabotate'
         },
         {
             header:            'Use Data',
@@ -117,10 +121,12 @@ let FrontPageTabs = React.createClass({
             icon:              './assets/tab-use_data.png',
             firstHeader:       'Snapshot',
             firstDescription:  'Create snapshots of your datasets to ensure past analyses remain reproducible as your datasets grow and change. Publish any of your snapshots while you continue work on your original data behind the scenes.',
-            firstImage:        './assets/tab-content_image.png',
+            firstImage:        './assets/use_data_snapshot.png',
+            firstImageClass:   'snapshot',
             secondHeader:      'Analyze',
             secondDescription: 'Use our simple web interface to run your analysis at TACC\'s high performance computing center. We\'ll notify you when it\'s complete so you can return to review the results.',
-            secondImage:       './assets/tab-content_image.png'
+            secondImage:       './assets/use_data_analyze.png',
+            secondImageClass:   'analyze'
         }
     ]
 });
