@@ -87,7 +87,7 @@ let Pipelines = React.createClass({
                     <label>Browse {pipelineOptions.length} {pluralize('pipeline', pipelineOptions.length)}</label>
                     <span className="select-pipeline">
                         <select value={this.state.selectedPipeline.id} onChange={this._selectPipeline}>
-                            <option value="" disabled>Select a Pipeline</option>
+                            <option value="" disabled>Select a pipeline</option>
                             {pipelineOptions}
                         </select>
                         <span className="select-pipeline-arrow"></span>
