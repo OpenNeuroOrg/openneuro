@@ -82,7 +82,7 @@ let Pipelines = React.createClass({
                 <h4>Browse Our Collection</h4>
                 <form>
                     <label>What kinds of pipelines are you interested in?</label>
-                    <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />
+                    <Select multi simpleValue value={this.state.selectedTags} placeholder="All tags" options={this.state.tags} onChange={FPActions.selectTag} />
                     <br />
                     <label>Browse {pipelineOptions.length} {pluralize('pipeline', pipelineOptions.length)}</label>
                     <span className="select-pipeline">
@@ -133,7 +133,7 @@ let Pipelines = React.createClass({
         }
         let analysisLink = (
             <span>
-                <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}} query={{app: exampleJob.appId}}>
+                <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}} query={{app: exampleJob.appId, job: exampleJob.jobId}}>
                 {exampleJob.appLabel + ' - v' + exampleJob.appVersion}
                 </Link>
             </span>

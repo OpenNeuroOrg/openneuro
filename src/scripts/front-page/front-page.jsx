@@ -113,21 +113,31 @@ let FrontPage = React.createClass({
                             <h4>Support for OpenNeuro provided by</h4>
                             <div className="row">
                                 <div className="col-sm-4">
-                                    <img src="./assets/ljaf.png" alt="Arnold Foundation"/>
+                                    <a href="http://www.arnoldfoundation.org/" title="Arnold Foundation">
+                                        <img src="./assets/ljaf.png" alt="Arnold Foundation"/>
+                                    </a>
                                 </div>
                                 <div className="col-sm-4">
-                                    <img src="./assets/nsf.png" alt="National Science Foundation"/>
+                                    <a href="https://www.nsf.gov/" title="NSF">
+                                        <img src="./assets/nsf.png" alt="National Science Foundation"/>
+                                    </a>
                                 </div>
                                 <div className="col-sm-4">
-                                    <img src="./assets/nih.png" alt="National Institute on Drug and Abuse"/>
+                                    <a href="https://www.nih.gov/" title="NIH">
+                                        <img src="./assets/nih.png" alt="National Institute on Drug and Abuse"/>
+                                    </a>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-offset-3 col-sm-3">
-                                    <img src="./assets/stanford.png" alt="Stanford"/>
+                                    <a href="https://www.stanford.edu/" title="Stanford">
+                                        <img src="./assets/stanford.png" alt="Stanford"/>
+                                    </a>
                                 </div>
                                 <div className="col-sm-3">
-                                    <img src="./assets/squishymedia.png" alt="Squishymedia"/>
+                                    <a href="https://squishymedia.com/" title="Squishymedia">
+                                        <img src="./assets/squishymedia.png" alt="Squishymedia"/>
+                                    </a>
                                 </div>
                             </div>
                     </div>
