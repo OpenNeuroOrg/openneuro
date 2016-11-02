@@ -1,15 +1,19 @@
 .analyses {
+
         &.no-jobs{
             h2{
                 text-align: center;
             }
         }
+
         .explore-more {
             padding: 20px 0 0;
             text-transform: uppercase;
         }
+
         .jobs {
             @include border-radius(0);
+
             .panel-heading {
                 padding: 0;
 
@@ -47,17 +51,21 @@
         .job {
             @include border-radius(0);
             margin-bottom: 10px;
+
             &.border-flash{
                 border: 1px solid $yellow;
                 @include animation(border-flash .6s 5);
+
                  .panel-heading {
                     background: $honey;
                     @include animation(background-flash .6s 5);
                 }
             }
+
             .panel-heading {
                 padding: 0;
                 background: none;
+
                 .panel-title {
                     @extend %clearfix;
                     padding: 10px;
