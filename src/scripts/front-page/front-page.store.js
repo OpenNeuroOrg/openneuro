@@ -60,6 +60,13 @@ let FrontPageStore = Reflux.createStore({
 // actions ---------------------------------------------------------------------------
 
     /**
+     * Reset
+     */
+    reset() {
+        this.setInitialState({apps: this.data.apps});
+    },
+
+    /**
      * Set Apps
      */
     setApps (apps) {
