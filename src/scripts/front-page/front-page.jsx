@@ -1,13 +1,14 @@
 // dependencies -------------------------------------------------------
 
-import React            from 'react';
-import Reflux           from 'reflux';
-import {Link}           from 'react-router';
-import FrontPageTabs    from './front-page-tabs.jsx';
-import userStore        from '../user/user.store.js';
-import Spinner          from '../common/partials/spinner.jsx';
-import Footer           from '../common/partials/footer.jsx';
-import Pipelines        from './front-page.pipelines.jsx';
+import React         from 'react';
+import Reflux        from 'reflux';
+import {Link}        from 'react-router';
+import FrontPageTabs from './front-page-tabs.jsx';
+import userStore     from '../user/user.store.js';
+import Spinner       from '../common/partials/spinner.jsx';
+import Footer        from '../common/partials/footer.jsx';
+import Pipelines     from './front-page.pipelines.jsx';
+import FPActions     from './front-page.actions.js';
 
 
 // component setup ----------------------------------------------------
@@ -17,6 +18,10 @@ let FrontPage = React.createClass({
     mixins: [Reflux.connect(userStore)],
 
 // life cycle events --------------------------------------------------
+
+    componentWillMount() {
+        FPActions.reset();
+    },
 
     render () {
 
