@@ -17,6 +17,14 @@ let FrontPage = React.createClass({
 
     mixins: [Reflux.connect(userStore)],
 
+    statics: {
+        willTransitionTo(transition) {
+            if (userStore.data.token) {
+                transition.redirect('dashboard');
+            }
+        }
+    },
+
 // life cycle events --------------------------------------------------
 
     componentWillMount() {
