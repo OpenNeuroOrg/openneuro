@@ -250,14 +250,19 @@
                     width: 360px;
                     margin: 0px 0 0 0;
                 }
+                &.publish{
+                    width: 270px;
+                }
             }
         }
         .caption {
             font-family: $font-family-open;
             font-size: 18px;
-            padding-right: 50px;
+            padding: 10px 40px 0 10px;
             color: $c-66;
             font-weight: 100;
+            width: 310px;
+            float: left;
             h3 {
                 font-size: 33px;
                 font-weight: 100;

@@ -14,6 +14,7 @@
 @import 'animate/_sliding-entrances/sliding-entrances';
 @import 'animate/_sliding-exits/sliding-exits';
 @import 'animate/_flippers/flippers';
+@import 'animate/_attention-seekers/flash';
 
 
 //crn SASS ================================================================
@@ -81,6 +82,7 @@
 .slide-in-right-fast {@include slideInRightFast();}
 %slide-in-down { @include slideInDown();}
 .flipin-x {@include flipInX();}
+%flash {@include flash();}
 
 
 .slide-in-down {
@@ -98,6 +100,17 @@
     100% {opacity: 1;}
 }
 
+
+@include keyframes(border-flash) {
+    0% {border: 1px solid $yellow; }
+    50% {border: 1px solid transparent;}
+    100% {border: 1px solid $yellow;}
+}
+@include keyframes(background-flash) {
+    0% {background-color: $honey; }
+    50% {background-color: transparent;}
+    100% {background-color: $honey;}
+}
 
 @include keyframes(borderxpand) {
     0% {
@@ -163,6 +176,9 @@
     .two {@include animation-delay(.2s);}
     .three {@include animation-delay(.3s);}
 }
+
+
+
 
 .ds-danger .ellipsis-animation {color: $brand-danger;}
 .ds-warning .ellipsis-animation {color: $brand-warning;}

@@ -139,6 +139,7 @@ class FileTree extends React.Component {
             '.sh',
             '.py',
             '.txt',
+            '.sbatch',
             '.log',
             '.jpg',
             '.jpeg',
