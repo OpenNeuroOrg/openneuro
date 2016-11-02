@@ -106,12 +106,12 @@ let FrontPageTabs = React.createClass({
             header:            'Share Data',
             abstract:          'Upload your data and collaborate with your colleagues or share it with users around the world.',
             icon:              './assets/tab-share_data.png',
-            firstHeader:       'Validate',
-            firstDescription:  <span>Validate your datasets to assure they are <a href="http://bids.neuroimaging.io/">BIDS</a> compliant and compatible with our pipelines. This standardization means you can use anyone's data and know exactly what to expect.</span>,
+            firstHeader:       'Publish',
+            firstDescription:  'Publish your datasets for anyone to view, download and run analyses on.',
             firstImage:        './assets/share_data_validate.png',
             firstImageClass:   'validate',
             secondHeader:      'Collaborate',
-            secondDescription: 'Privately share your data so your colleagues can view and edit your work. Publish your datasets for anyone to view, download and run analyses on.',
+            secondDescription: 'Privately share your data so your colleagues can view and edit your work.',
             secondImage:       './assets/share_data_collaborate.png',
             secondImageClass:   'collabotate'
         },
@@ -124,7 +124,7 @@ let FrontPageTabs = React.createClass({
             firstImage:        './assets/use_data_snapshot.png',
             firstImageClass:   'snapshot',
             secondHeader:      'Analyze',
-            secondDescription: 'Use our simple web interface to run your analysis at TACC\'s high performance computing center. We\'ll notify you when it\'s complete so you can return to review the results.',
+            secondDescription: 'Use our simple web interface to run your analysis on a super computer. We\'ll notify you when it\'s complete so you can return to review the results.',
             secondImage:       './assets/use_data_analyze.png',
             secondImageClass:   'analyze'
         }
