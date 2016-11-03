@@ -101,20 +101,20 @@ let FrontPageTabs = React.createClass({
                 secondHeader:      'Download Data',
                 secondDescription: 'Download and use public data to create new datasets and run your own analyses.',
                 secondImage:       './assets/get_data_download.png',
-                secondImageClass:   'download'
+                secondImageClass:  'download'
             },
             {
                 header:            'Share Data',
                 abstract:          'Upload your data and collaborate with your colleagues or share it with users around the world.',
                 icon:              './assets/tab-share_data.png',
-                firstHeader:      'Collaborate',
-                firstDescription: 'Privately share your data so your colleagues can view and edit your work.',
-                firstImage:       './assets/share_data_collaborate.png',
+                firstHeader:       'Collaborate',
+                firstDescription:  'Privately share your data so your colleagues can view and edit your work.',
+                firstImage:        './assets/share_data_collaborate.png',
                 firstImageClass:   'collabotate',
-                secondHeader:       'Publish',
-                secondDescription:  'Publish your datasets for anyone to view, download and run analyses on.',
-                secondImage:        './assets/share_data_publish.png',
-                secondImageClass:   'publish'
+                secondHeader:      'Publish',
+                secondDescription: 'Publish your datasets for anyone to view, download and run analyses on.',
+                secondImage:       './assets/share_data_publish.png',
+                secondImageClass:  'publish'
             },
             {
                 header:            'Use Data',
