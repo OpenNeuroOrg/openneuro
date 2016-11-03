@@ -3,6 +3,7 @@
 import Reflux         from 'reflux';
 import actions        from './front-page.actions';
 import crn            from '../utils/crn';
+import bids           from '../utils/bids';
 import files          from '../utils/files';
 import datasetActions from '../dataset/dataset.actions';
 import request        from '../utils/request';
@@ -15,6 +16,9 @@ let FrontPageStore = Reflux.createStore({
 
     init: function () {
         this.setInitialState();
+        bids.getDatasets((datasets) => {
+            this.update({datasetCount: datasets.length});
+        }, true, true);
     },
 
     getInitialState: function () {
@@ -41,6 +45,7 @@ let FrontPageStore = Reflux.createStore({
     setInitialState: function (diffs, callback) {
         let data = {
             apps: [],
+            datasetCount: null,
             displayFile: {
                 name: '',
                 text: '',
@@ -63,7 +68,10 @@ let FrontPageStore = Reflux.createStore({
      * Reset
      */
     reset() {
-        this.setInitialState({apps: this.data.apps});
+        this.setInitialState({
+            apps: this.data.apps,
+            datasetCount: this.data.datasetCount
+        });
     },
 
     /**
