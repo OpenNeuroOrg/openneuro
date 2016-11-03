@@ -85,9 +85,9 @@ let BSNavbar = React.createClass({
     },
 
     _signIn (loading, routes) {
-        let isSignInScreen = false;
+        let onFrontPage = false;
         for (let route of routes) {
-            if (route.name == 'frontPage') {isSignInScreen = true;}
+            if (route.name == 'front-page') {onFrontPage = true;}
         }
 
         if (loading) {
@@ -102,7 +102,7 @@ let BSNavbar = React.createClass({
         } else {
             return (
                 <div className="navbar-right sign-in-nav-btn">
-                    <button className="btn-blue" onClick={userStore.signIn.bind(null, {transition: isSignInScreen})} >
+                    <button className="btn-blue" onClick={userStore.signIn.bind(null, {transition: onFrontPage})} >
                         <i className="fa fa-google" />
                         <span> Sign in</span>
                     </button>
