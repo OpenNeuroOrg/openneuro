@@ -103,7 +103,7 @@ let FrontPage = React.createClass({
                             </div>
                             <div className="col-sm-6">
                                 <p>View more information about<br/>
-                                <a href="#">Stanford Center for Reproducible Neuroscience</a></p>
+                                <a href="http://reproducibility.stanford.edu/">Stanford Center for Reproducible Neuroscience</a></p>
                             </div>
                         </div>
                     </span>
@@ -114,11 +114,11 @@ let FrontPage = React.createClass({
                         <div className="row">
                             <div className="col-sm-6">
                                     <p>A Validator for the Brain Imaging Data Structure<br/>
-                                        Read more about the <a href="#">BIDS specifications</a></p>
+                                        Read more about the <a href="http://bids.neuroimaging.io/">BIDS specifications</a></p>
                                 </div>
                                 <div className="col-sm-6">
                                 <p>Want to contribute to BIDS?<br/>
-                                    Visit the <a href="#">Google discussion group</a> to contribute.</p>
+                                    Visit the <a href="https://groups.google.com/forum/#!forum/bids-discussion">Google discussion group</a> to contribute.</p>
                             </div>
                         </div>
                     </span>
