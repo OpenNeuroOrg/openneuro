@@ -114,7 +114,7 @@ let FrontPageTabs = React.createClass({
                 secondHeader:       'Publish',
                 secondDescription:  'Publish your datasets for anyone to view, download and run analyses on.',
                 secondImage:        './assets/share_data_publish.png',
-                secondImageClass:   'publish',
+                secondImageClass:   'publish'
             },
             {
                 header:            'Use Data',
