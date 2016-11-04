@@ -1,6 +1,15 @@
 .analyses {
 
-    .jobs-wrap {
+        &.no-jobs{
+            h2{
+                text-align: center;
+            }
+        }
+
+        .explore-more {
+            padding: 20px 0 0;
+            text-transform: uppercase;
+        }
 
         .jobs {
             @include border-radius(0);
@@ -42,6 +51,16 @@
         .job {
             @include border-radius(0);
             margin-bottom: 10px;
+
+            &.border-flash{
+                border: 1px solid $yellow;
+                @include animation(border-flash .6s 5);
+
+                 .panel-heading {
+                    background: $honey;
+                    @include animation(background-flash .6s 5);
+                }
+            }
 
             .panel-heading {
                 padding: 0;
@@ -93,7 +112,21 @@
                 margin: -15px;
                 display: block;
             }
+            .file-structure.panel-group .panel-default .panel-collapse .panel-body > ul {
+                height: auto;
+            }
+            .filetree-editfile {
+                height: 20px;
+                float: none;
+                width: 100%;
+                display: block;
+                margin: 5px 0 0;
 
+                .btn-warn-load {
+                    padding: 0px;
+                    margin: 0px;
+                }
+            }
             .results {
                 margin: 0;
 
@@ -251,7 +284,6 @@
                 }
             }
         }
-    }
 }
 
 .validation {
@@ -575,7 +607,7 @@
                             padding: 8px 15px;
                             display: block;
                             font-size: 14px;
-                            
+
 
                             &::after {
                                 content: '\f0d8';

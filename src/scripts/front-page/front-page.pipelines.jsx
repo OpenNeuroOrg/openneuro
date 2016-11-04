@@ -9,6 +9,7 @@ import Select      from 'react-select';
 import Run         from '../dataset/dataset.jobs.run.jsx';
 import {Link}      from 'react-router';
 import {Panel}     from 'react-bootstrap';
+import pluralize   from 'pluralize';
 import Spinner     from '../common/partials/spinner.jsx';
 
 // component setup ----------------------------------------------------
@@ -23,6 +24,7 @@ let Pipelines = React.createClass({
         return(
             <span>
                 <div className="browse-pipelines">
+                 <h3 className="browse-pipeline-header">Check Out Our Pipelines</h3>
                     <div className="container">
                         {this._pipelines()}
                     </div>
@@ -50,19 +52,19 @@ let Pipelines = React.createClass({
     _featured() {
         return (
             <div className="col-sm-6 mate-slide">
-                <h3>Check Out a Few of Our Pipelines</h3>
+                <h4>Featured</h4>
                 <ul>
                     <li>
                         <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
                     </li>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-kiddo-0.8.6')}>mriqc-kiddo</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'bids-example-0.0.6')}>bids-example</button>
                     </li>
                     <li>
                         <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
                     </li>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-kiddo-0.8.6')}>mriqc-kiddo</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'bids-example-0.0.6')}>bids-example</button>
                     </li>
                 </ul>
             </div>
@@ -71,21 +73,21 @@ let Pipelines = React.createClass({
 
     _browse() {
         if (this.state.apps.length < 1) {
-            return <Spinner active={true} text="Loading Pipelines" />;
+            return <div className="col-sm-6 mate-slide loading-browse"><Spinner active={true} text="Loading Pipelines" /></div>;
         }
 
         let pipelineOptions = this._pipelineOptions(this.state.apps, this.state.selectedTags);
         return (
-            <div className="col-sm-6 mate-slide browse">
-                <h3>Or Browse Our Collection</h3>
+            <div className="col-sm-6 mate-slide browse fade-in">
+                <h4>Browse Our Collection</h4>
                 <form>
                     <label>What kinds of pipelines are you interested in?</label>
-                    <Select multi simpleValue value={this.state.selectedTags} placeholder="All Tags" options={this.state.tags} onChange={FPActions.selectTag} />
+                    <Select multi simpleValue value={this.state.selectedTags} placeholder="All tags" options={this.state.tags} onChange={FPActions.selectTag} />
                     <br />
-                    <label>browse {pipelineOptions.length} pipelines</label>
+                    <label>Browse {pipelineOptions.length} {pluralize('pipeline', pipelineOptions.length)}</label>
                     <span className="select-pipeline">
                         <select value={this.state.selectedPipeline.id} onChange={this._selectPipeline}>
-                            <option value="" disabled>Select a Pipeline</option>
+                            <option value="" disabled>Select a pipeline</option>
                             {pipelineOptions}
                         </select>
                         <span className="select-pipeline-arrow"></span>
@@ -122,26 +124,33 @@ let Pipelines = React.createClass({
 
     _exampleResults() {
         if (this.state.loadingJob) {
-            return <Spinner active={true} text="Loading Analyses" />;
+            return <div className="col-sm-6 mate-slide"><Spinner active={true} text="Loading Analyses" /></div>;
         }
 
         let exampleJob = this.state.exampleJob;
         if (!exampleJob) {
-            return <h2>No example results available.</h2>;
+            return <div className="col-sm-6 mate-slide analyses no-jobs"><h2>No example results available.</h2></div>;
         }
+        let analysisLink = (
+            <span>
+                <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}} query={{app: exampleJob.appId, job: exampleJob.jobId}}>
+                {exampleJob.appLabel + ' - v' + exampleJob.appVersion}
+                </Link>
+            </span>
+        );
 
         return (
-            <div className="col-sm-6 mate-slide">
+            <div className="col-sm-6 mate-slide analyses">
                 <div className="row">
-                    <div className="col-sm-6">
+                    <div className="col-sm-6 mate-analyses-header">
                         <h2>Example Analysis</h2>
-                        <span>from dataset <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}}>{exampleJob.datasetLabel}</Link></span>
+                        <span>from dataset {exampleJob.datasetLabel}</span>
                     </div>
-                    <div className="col-sm-6">
-                        <h3><a href="#">Explore More</a></h3>
+                    <div className="col-sm-6 ">
+                        <a className="explore-more pull-right" href="#"><i className="fa fa-area-chart" ></i> Explore More</a>
                     </div>
                 </div>
-                <Panel className="jobs" header={exampleJob.appLabel + ' - v' + exampleJob.appVersion} eventKey={exampleJob.appId}>
+                <Panel className="jobs" header={analysisLink} eventKey={exampleJob.appId}>
                     <Run run={exampleJob}
                          toggleFolder={FPActions.toggleFolder}
                          displayFile={FPActions.displayFile} />

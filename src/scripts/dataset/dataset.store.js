@@ -106,6 +106,9 @@ let datasetStore = Reflux.createStore({
         options      = options ? options : {};
         options.isPublic = !userStore.data.token;
 
+        // set active job if passed in query param
+        if (options.appId) {this.update({activeJob: options.appId});}
+
         // update selection & current upload data
         this.update({selectedSnapshot: datasetId, currentUploadId: uploadStore.data.projectId});
 
@@ -124,7 +127,7 @@ let datasetStore = Reflux.createStore({
                     let dataset = res;
                     this.update({dataset});
                     let originalId = dataset.original ? dataset.original : datasetId;
-                    this.loadJobs(datasetId, snapshot, originalId, (jobs) => {
+                    this.loadJobs(datasetId, snapshot, originalId, options.jobId, (jobs) => {
                         this.loadSnapshots(dataset, jobs, () => {
                             this.update({loading: false, snapshot: snapshot});
                         });
@@ -842,7 +845,7 @@ let datasetStore = Reflux.createStore({
     /**
      * Load Jobs
      */
-    loadJobs(projectId, snapshot, originalId, callback) {
+    loadJobs(projectId, snapshot, originalId, jobId, callback) {
         this.update({loadingJobs: true});
         crn.getDatasetJobs(projectId, (err, res) => {
             let jobs = {};
@@ -857,6 +860,10 @@ let datasetStore = Reflux.createStore({
                 let hasResults = job.results && job.results.length > 0;
                 if (snapshot && (!finished && !failed || finished && !hasResults)) {
                     this.pollJob(job.jobId);
+                }
+
+                if (job.jobId === jobId) {
+                    job.active = true;
                 }
 
                 // sort jobs by app
@@ -938,11 +945,11 @@ let datasetStore = Reflux.createStore({
             if (!err) {
                 // reload jobs
                 if (snapshotId == this.data.dataset._id) {
-                    this.loadJobs(snapshotId, this.data.snapshot, datasetId, (jobs) => {
+                    let jobId = res.body.result.id;
+                    this.loadJobs(snapshotId, this.data.snapshot, datasetId, jobId, (jobs) => {
                         this.loadSnapshots(this.data.dataset, jobs);
 
                         // start polling job
-                        let jobId = res.body.result.id;
                         this.pollJob(jobId);
 
                         // open job accordion
@@ -983,7 +990,7 @@ let datasetStore = Reflux.createStore({
 
     retryJob(jobId, callback) {
         crn.retryJob(this.data.dataset._id, jobId, () => {
-            this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, (jobs) => {
+            this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, null, (jobs) => {
                 this.loadSnapshots(this.data.dataset, jobs);
                 callback();
             });

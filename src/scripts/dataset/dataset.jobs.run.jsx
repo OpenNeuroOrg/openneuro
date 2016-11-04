@@ -18,7 +18,7 @@ class JobAccordion extends React.Component {
             // header with parameters and/or results
             return (
                 <span eventKey={run._id}>
-                    <Panel className="job" header={this._header(run)}>
+                    <Panel className={run.active ? 'job border-flash' : 'job'} header={this._header(run)}>
                         <span className="inner">
                             {this._parameters(run)}
                             {this._results(run, 'results')}
@@ -46,16 +46,19 @@ class JobAccordion extends React.Component {
 // template methods --------------------------------------------------------------
 
     _header (run) {
-        let runBy = run.userId ? <span><label> by </label><strong>{run.userId}</strong></span> : null;
+        let runBy = run.userId ? <span><br/><label>By </label><strong>{run.userId}</strong></span> : null;
         return (
             <div className={run.agave.status.toLowerCase()}>
                 <label>Status</label>
                 <span className="badge">
                     {this._status(run.agave.status)}
-                </span>
+                </span><br/>
                 <span className="meta">
                     <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong> at <strong>{moment(run.agave.created).format('LT')}</strong>
                     {runBy}
+                </span><br/>
+                <span className="meta">
+                    <label>Job ID</label><strong>{run.jobId}</strong>
                 </span>
                 {this._failedMessage(run)}
             </div>

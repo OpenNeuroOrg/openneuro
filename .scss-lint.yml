@@ -1,6 +1,6 @@
 scss_files: 'src/sass/**/*.scss'
 
-exclude: 
+exclude:
   - 'src/sass/animate/**'
   - 'src/sass/bootstrap/**'
   - 'src/sass/font-awesome/**'
@@ -9,6 +9,8 @@ exclude:
   - 'src/sass/_bootstrap-mincer.scss'
   - 'src/sass/_bootstrap-sprockets.scss'
   - 'src/sass/_bootstrap.scss'
+  - 'src/sass/react-select.scss'
+  - 'src/sass/crn_app/_common.papaya.scss'
 
 linters:
   BorderZero:
@@ -24,5 +26,5 @@ linters:
   SelectorDepth:
     enabled: false
 
-  NestingDepth: 
+  NestingDepth:
     enabled: false
