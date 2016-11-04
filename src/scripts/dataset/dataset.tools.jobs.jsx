@@ -11,6 +11,7 @@ import Select   from 'react-select';
 import markdown from '../utils/markdown';
 import validate from '../../../../validator';
 import scitran  from '../utils/scitran';
+import Results  from '../upload/upload.validation-results.jsx';
 
 export default class JobMenu extends React.Component {
 
@@ -21,7 +22,7 @@ export default class JobMenu extends React.Component {
         this.state = {
             loading:          false,
             parameters:       [],
-            disabledApps:     [],
+            disabledApps:     {},
             selectedApp:      {},
             selectedAppID:    '',
             selectedSnapshot: '',
@@ -115,7 +116,7 @@ export default class JobMenu extends React.Component {
      */
     _apps() {
         let options = this.props.apps ? this.props.apps.map((app) => {
-            let disabled = this.state.disabledApps.indexOf(app.id) > -1 ? '* ' : null;
+            let disabled = this.state.disabledApps.hasOwnProperty(app.id) ? '* ' : null;
             return <option key={app.id}
                            value={app.id}>
                        {disabled + app.label + ' - v' + app.version}
@@ -147,17 +148,8 @@ export default class JobMenu extends React.Component {
      */
     _info(app) {
 
-        if (this.state.disabledApps.indexOf(app.id) > -1) {
-            return (
-                <div>
-                    <div>
-                        <h5>Incompatible</h5>
-                        <div className="well">
-                            This snapshot has issues that make it incompatible with this app.
-                        </div>
-                    </div>
-                </div>
-            );
+        if (this.state.disabledApps.hasOwnProperty(app.id)) {
+            return this._incompatible(app);
         }
 
         let shortDescription;
@@ -234,6 +226,24 @@ export default class JobMenu extends React.Component {
     }
 
     /**
+     * Incompatible
+     */
+    _incompatible(app) {
+        let issues = this.state.disabledApps[app.id].issues;
+        return (
+            <div>
+                <div>
+                    <h5>Incompatible</h5>
+                    <div className="well">
+                        <div>This snapshot has issues that make it incompatible with this pipeline. Pipelines may have validation requirements beyond BIDS compatability.</div>
+                        <Results errors={issues.errors} warnings={issues.warnings} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    /**
      * Snapshots
      *
      * Returns a labeled select box for selecting a snapshot
@@ -285,7 +295,7 @@ export default class JobMenu extends React.Component {
      * app.
      */
     _parameters() {
-        if (this.state.disabledApps.indexOf(this.state.selectedApp.id) > -1) {
+        if (this.state.disabledApps.hasOwnProperty(this.state.selectedApp.id)) {
             return false;
         }
         let parameters = this.state.parameters.map((parameter) => {
@@ -350,7 +360,7 @@ export default class JobMenu extends React.Component {
     }
 
     _submit() {
-        if (this.state.disabledApps.indexOf(this.state.selectedApp.id) > -1) {
+        if (this.state.disabledApps.hasOwnProperty(this.state.selectedApp.id)) {
             return false;
         }
         if (this.state.selectedAppID) {
@@ -451,7 +461,7 @@ export default class JobMenu extends React.Component {
      */
     _selectSnapshot(e) {
         let snapshotId = e.target.value;
-        let disabledApps = [];
+        let disabledApps = {};
 
         /**
          * determine app availability
@@ -460,12 +470,10 @@ export default class JobMenu extends React.Component {
         scitran.getProject(snapshotId, (res) => {
 
             for (let app of this.props.apps) {
-                let appConfig = {
-                    error: [1]
-                };
+                let appConfig = {error: [1]};
                 let issues = validate.reformat(res.body.metadata.validation, res.body.metadata.summary, appConfig);
                 if (issues.errors.length > 0) {
-                    disabledApps.push(app.id);
+                    disabledApps[app.id] = {issues};
                 }
             }
             this.setState({selectedSnapshot: snapshotId, disabledApps});
