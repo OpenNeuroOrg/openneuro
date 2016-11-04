@@ -9,6 +9,8 @@ import {Modal}  from 'react-bootstrap';
 import moment   from 'moment';
 import Select   from 'react-select';
 import markdown from '../utils/markdown';
+import validate from '../../../../validator';
+import scitran  from '../utils/scitran';
 
 export default class JobMenu extends React.Component {
 
@@ -19,6 +21,7 @@ export default class JobMenu extends React.Component {
         this.state = {
             loading:          false,
             parameters:       [],
+            disabledApps:     [],
             selectedApp:      {},
             selectedAppID:    '',
             selectedSnapshot: '',
@@ -44,9 +47,9 @@ export default class JobMenu extends React.Component {
             this.props.snapshots.map((snapshot) => {
                 if (snapshot._id == this.props.dataset._id) {
                     if (snapshot.original) {
-                        this.setState({selectedSnapshot: snapshot._id});
+                        this._selectSnapshot({target: {value: snapshot._id}});
                     } else if (this.props.snapshots.length > 1) {
-                        this.setState({selectedSnapshot: this.props.snapshots[1]._id});
+                        this._selectSnapshot({target: {value: this.props.snapshots[1]._id}});
                     }
                     return;
                 }
@@ -112,7 +115,11 @@ export default class JobMenu extends React.Component {
      */
     _apps() {
         let options = this.props.apps ? this.props.apps.map((app) => {
-            return <option key={app.id} value={app.id}>{app.label + ' - v' + app.version}</option>;
+            let disabled = this.state.disabledApps.indexOf(app.id) > -1 ? '* ' : null;
+            return <option key={app.id}
+                           value={app.id}>
+                       {disabled + app.label + ' - v' + app.version}
+                   </option>;
         }) : [];
 
         if (this.state.selectedSnapshot) {
@@ -128,6 +135,7 @@ export default class JobMenu extends React.Component {
                                 </select>
                             </div>
                         </div>
+                            <br /><span> * - app is incompatible with selected snapshot</span>
                     </div>
                 </div>
             );
@@ -138,6 +146,19 @@ export default class JobMenu extends React.Component {
      * Info
      */
     _info(app) {
+
+        if (this.state.disabledApps.indexOf(app.id) > -1) {
+            return (
+                <div>
+                    <div>
+                        <h5>Incompatible</h5>
+                        <div className="well">
+                            This snapshot has issues that make it incompatible with this app.
+                        </div>
+                    </div>
+                </div>
+            );
+        }
 
         let shortDescription;
         if (app.shortDescription) {
@@ -264,6 +285,9 @@ export default class JobMenu extends React.Component {
      * app.
      */
     _parameters() {
+        if (this.state.disabledApps.indexOf(this.state.selectedApp.id) > -1) {
+            return false;
+        }
         let parameters = this.state.parameters.map((parameter) => {
             let input;
             if (parameter.type === 'number') {
@@ -326,6 +350,9 @@ export default class JobMenu extends React.Component {
     }
 
     _submit() {
+        if (this.state.disabledApps.indexOf(this.state.selectedApp.id) > -1) {
+            return false;
+        }
         if (this.state.selectedAppID) {
             return (
                 <div className="col-xs-12 modal-actions">
@@ -424,7 +451,25 @@ export default class JobMenu extends React.Component {
      */
     _selectSnapshot(e) {
         let snapshotId = e.target.value;
-        this.setState({selectedSnapshot: snapshotId});
+        let disabledApps = [];
+
+        /**
+         * determine app availability
+         */
+        // load validation data for selected snapshot
+        scitran.getProject(snapshotId, (res) => {
+
+            for (let app of this.props.apps) {
+                let appConfig = {
+                    error: [1]
+                };
+                let issues = validate.reformat(res.body.metadata.validation, res.body.metadata.summary, appConfig);
+                if (issues.errors.length > 0) {
+                    disabledApps.push(app.id);
+                }
+            }
+            this.setState({selectedSnapshot: snapshotId, disabledApps});
+        },{snapshot:true});
     }
 
     /**
