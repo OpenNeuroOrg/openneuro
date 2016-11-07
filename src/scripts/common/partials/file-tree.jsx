@@ -176,7 +176,7 @@ class FileTree extends React.Component {
     }
 
     _noErrorsInLogs(item){
-        if(item.name === "errors.txt" && item.length === 0){
+        if(item.name === 'errors.txt' && item.length === 0){
             return(
                     <span className="color-green">
                         <i className="fa fa-check-circle"></i> There are no errors

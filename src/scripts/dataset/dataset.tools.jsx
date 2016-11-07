@@ -8,7 +8,6 @@ import WarnButton     from '../common/forms/warn-button.jsx';
 import uploadStore    from '../upload/upload.store';
 import userStore      from '../user/user.store.js';
 import datasetActions from './dataset.actions.js';
-import uploadActions  from '../upload/upload.actions.js';
 import ToolModals     from './dataset.tools.modals.jsx';
 
 let Tools = React.createClass({
@@ -32,8 +31,7 @@ let Tools = React.createClass({
 
     render() {
         let dataset     = this.props.dataset,
-            snapshots   = this.props.snapshots,
-            isUploading = dataset._id === this.state.projectId;
+            snapshots   = this.props.snapshots;
 
         // permission check shorthands
         let isAdmin      = dataset.access === 'admin',
@@ -151,7 +149,7 @@ let Tools = React.createClass({
             }
         });
         return tools;
-    },
+    }
 
 });
 
