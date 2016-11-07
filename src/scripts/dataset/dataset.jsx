@@ -16,6 +16,7 @@ import FileTree     from '../common/partials/file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
 import userStore    from '../user/user.store.js';
 import Summary      from './dataset.summary.jsx';
+import FileSelect     from '../common/forms/file-select.jsx';
 
 let Dataset = React.createClass({
 
@@ -277,7 +278,10 @@ let Dataset = React.createClass({
                         <div className="panel panel-default status">
                             <div className="panel-heading" >
                                 <h4 className="panel-title">
-                                    <span className="dataset-status ds-warning"><i className="fa fa-warning"></i> Incomplete</span>
+                                    <span className="dataset-status ds-warning">
+                                        <i className="fa fa-warning"></i> Incomplete
+                                    </span>
+                                    <FileSelect resume={true} onChange={this._onFileSelect} />
                                 </h4>
                             </div>
                             <div className="panel-collapse" aria-expanded="false" >
@@ -291,6 +295,8 @@ let Dataset = React.createClass({
             );
         }
     },
+
+// custom methods -----------------------------------------------------
 
     _modified(modified) {
         let dateModified = moment(modified).format('L');
@@ -308,6 +314,10 @@ let Dataset = React.createClass({
 
     _views(views) {
         if (views) {return <h6>views: {views}</h6>;}
+    },
+
+    _onFileSelect(files) {
+        uploadActions.onResume(files, this.props.dataset.label);
     }
 
 });
