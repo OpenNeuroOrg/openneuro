@@ -17,6 +17,7 @@ import Jobs         from './dataset.jobs.jsx';
 import userStore    from '../user/user.store.js';
 import Summary      from './dataset.summary.jsx';
 import FileSelect     from '../common/forms/file-select.jsx';
+import uploadActions  from '../upload/upload.actions.js';
 
 let Dataset = React.createClass({
 
@@ -317,7 +318,7 @@ let Dataset = React.createClass({
     },
 
     _onFileSelect(files) {
-        uploadActions.onResume(files, this.props.dataset.label);
+        uploadActions.onResume(files, this.state.dataset.label);
     }
 
 });
