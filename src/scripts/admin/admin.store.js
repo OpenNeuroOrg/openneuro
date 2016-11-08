@@ -117,7 +117,6 @@ let UserStore = Reflux.createStore({
         this.update({adminFilter: !this.data.adminFilter});
         let users = this.data.users;
         for (let user of users) {
-            user.inList = true;
             if(this.data.adminFilter){
                 if(user.root === true){
                     user.inList = true;
