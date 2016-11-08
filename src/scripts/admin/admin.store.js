@@ -104,10 +104,7 @@ let UserStore = Reflux.createStore({
             }
         }
 
-        console.log(users);
-
         this.update({users: users});
-
     },
 
     /**
