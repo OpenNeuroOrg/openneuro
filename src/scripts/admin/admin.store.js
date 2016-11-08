@@ -39,6 +39,7 @@ let UserStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             users: [],
+            filteredUsers: [],
             blacklist: [],
             showBlacklistModal: false,
             blacklistForm: {
@@ -87,6 +88,26 @@ let UserStore = Reflux.createStore({
                 this.blacklistUser(this.data.blacklistForm);
             }
         }
+    },
+
+    searchUsername(searchInput){
+        let users = this.data.users;
+
+        for (let i = 0; i < this.data.users.length; i++) {
+
+            let user = this.data.users[i];
+            user.inList = true;
+            if(user.email.toLowerCase().includes(searchInput.toLowerCase()) || user.lastname.toLowerCase().includes(searchInput.toLowerCase()) || user.firstname.toLowerCase().includes(searchInput.toLowerCase())){
+                user.inList = true;
+            }else{
+                user.inList = false;
+            }
+        }
+
+        console.log(users);
+
+        this.update({users: users});
+
     },
 
     /**
@@ -140,7 +161,9 @@ let UserStore = Reflux.createStore({
      */
     getUsers() {
         scitran.getUsers((err, res) => {
-            this.update({users: res.body});
+            this.update({users: res.body}, () => {
+                this.searchUsername('');
+            });
         });
     },
 

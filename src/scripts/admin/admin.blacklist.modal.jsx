@@ -33,8 +33,6 @@ let BlacklistModal = React.createClass({
                             <span>Block</span>
                         </button>
                         <button className="btn-reset" onClick={this._hide}>close</button>
-                        
-                        
                     </div>
                 </Modal.Body>
             </Modal>
