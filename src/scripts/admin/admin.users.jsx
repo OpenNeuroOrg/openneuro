@@ -16,7 +16,6 @@ let users = React.createClass({
 // life cycle events --------------------------------------------------
 
     render () {
-
         let users = this.state.users.map((user) => {
             let adminBadge = user.root ? 'Admin' : null;
             if (user.inList){
@@ -43,12 +42,24 @@ let users = React.createClass({
 
         return (
             <div className="dashboard-dataset-teasers fade-in inner-route admin-users clearfix">
-                <div className="col-sm-9">
-                    <h2>Current Users</h2>
+                <div className="header-wrap clearfix">
+                    <div className="col-sm-9">
+                        <h2>Current Users</h2>
+                    </div>
+                    <div className="col-sm-3">
+                        <Input className="pull-right" placeholder="Search Name or Email" onChange={this._searchUsername} />
+                    </div>
                 </div>
-                <div className="col-sm-3">
-                    <Input className="pull-right" placeholder="Search Name or Email" onChange={this._searchUsername} />
+
+                <div className="filters-sort-wrap clearfix">
+                    <span>
+                        <div className="filters">
+                            <label>Filter By:</label>
+                            <button onClick={actions.toggleAdmin}>Admin</button>
+                        </div>
+                    </span>
                 </div>
+
                 <div>
                     <div className="col-xs-12 users-panel-wrap">
                             <div className="fade-in user-panel-header clearfix" >
@@ -117,7 +128,6 @@ let users = React.createClass({
     _searchUsername(e) {
         actions.searchUsername(e.target.value);
     }
-
 
 });
 

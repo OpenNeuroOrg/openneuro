@@ -39,7 +39,7 @@ let UserStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             users: [],
-            filteredUsers: [],
+            adminFilter: false,
             blacklist: [],
             showBlacklistModal: false,
             blacklistForm: {
@@ -90,17 +90,40 @@ let UserStore = Reflux.createStore({
         }
     },
 
+    /**
+     * Search username and email
+     *
+     */
     searchUsername(searchInput){
         let users = this.data.users;
 
-        for (let i = 0; i < this.data.users.length; i++) {
-
-            let user = this.data.users[i];
+        for (let user of users) {
             user.inList = true;
             if(user.email.toLowerCase().includes(searchInput.toLowerCase()) || user.lastname.toLowerCase().includes(searchInput.toLowerCase()) || user.firstname.toLowerCase().includes(searchInput.toLowerCase())){
                 user.inList = true;
             }else{
                 user.inList = false;
+            }
+        }
+        this.update({users: users});
+    },
+
+    /**
+     * toggle admin
+     *
+     */
+
+    toggleAdmin(){
+        this.update({adminFilter: !this.data.adminFilter});
+        let users = this.data.users;
+        for (let user of users) {
+            user.inList = true;
+            if(this.data.adminFilter){
+                if(user.root === true){
+                    user.inList = true;
+                }else{
+                    user.inList = false;
+                }
             }
         }
 
