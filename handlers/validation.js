@@ -30,7 +30,7 @@ export default {
 					metadata: {validation, summary}
 				}, (err, res1) => {
 					scitran.removeTag('projects', datasetId, 'validating', (err, res2) => {
-						if (errors && errors.length > 0) {
+						if (validation.errors && validation.errors.length > 0) {
 							scitran.addTag('projects', datasetId, 'invalid', (err, res3) => {res.send({validation, summary})});
 						} else {
 							scitran.removeTag('projects', datasetId, 'invalid', (err, res4) => {res.send({validation, summary})});
