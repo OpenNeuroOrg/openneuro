@@ -94,39 +94,45 @@ let UserStore = Reflux.createStore({
      * Search username and email
      *
      */
-    searchUsername(searchInput){
+    searchUser(searchInput){
         let users = this.data.users;
 
         for (let user of users) {
-            user.inList = true;
-            if(user.email.toLowerCase().includes(searchInput.toLowerCase()) || user.lastname.toLowerCase().includes(searchInput.toLowerCase()) || user.firstname.toLowerCase().includes(searchInput.toLowerCase())){
-                user.inList = true;
-            }else{
-                user.inList = false;
+            user.visable = true;
+            searchInput = searchInput.toLowerCase();
+            if(
+                user.email.toLowerCase().includes(searchInput) ||
+                user.lastname.toLowerCase().includes(searchInput) ||
+                user.firstname.toLowerCase().includes(searchInput)
+            ) {
+                user.visable = true;
+            } else {
+                user.visable = false;
             }
         }
-        this.update({users: users});
+        this.update({users});
     },
 
     /**
-     * toggle admin
+     * filter admin
      *
      */
 
-    toggleAdmin(){
-        this.update({adminFilter: !this.data.adminFilter});
+    filterAdmin(){
+        let adminFilter = !this.data.adminFilter;
         let users = this.data.users;
         for (let user of users) {
-            if(this.data.adminFilter){
-                if(user.root === true){
-                    user.inList = true;
-                }else{
-                    user.inList = false;
+            if (adminFilter) {
+                if (user.root === true) {
+                    user.visable = true;
+                } else {
+                    user.visable = false;
                 }
+            }else{
+                user.visable = true;
             }
         }
-
-        this.update({users: users});
+        this.update({users, adminFilter});
     },
 
     /**
@@ -181,7 +187,7 @@ let UserStore = Reflux.createStore({
     getUsers() {
         scitran.getUsers((err, res) => {
             this.update({users: res.body}, () => {
-                this.searchUsername('');
+                this.searchUser('');
             });
         });
     },

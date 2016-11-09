@@ -13,12 +13,16 @@ let users = React.createClass({
 
     mixins: [Reflux.connect(adminStore)],
 
+    getInitialState() {
+        return{filterAdminActive: false, inputValue: ''}
+    },
+
 // life cycle events --------------------------------------------------
 
     render () {
         let users = this.state.users.map((user) => {
             let adminBadge = user.root ? 'Admin' : null;
-            if (user.inList){
+            if (user.visable){
                 return (
                     <div className="fade-in user-panel clearfix panel panel-default" key={user._id}>
                         <div className="col-xs-4 user-col">
@@ -40,6 +44,8 @@ let users = React.createClass({
             }
         });
 
+        let filterAdminActive = this.state.filterAdminActive;
+
         return (
             <div className="dashboard-dataset-teasers fade-in inner-route admin-users clearfix">
                 <div className="header-wrap clearfix">
@@ -47,7 +53,7 @@ let users = React.createClass({
                         <h2>Current Users</h2>
                     </div>
                     <div className="col-sm-3">
-                        <Input className="pull-right" placeholder="Search Name or Email" onChange={this._searchUsername} />
+                        <Input className="pull-right" placeholder="Search Name or Email" value={this.state.inputValue} onChange={this._searchUser} />
                     </div>
                 </div>
 
@@ -55,7 +61,11 @@ let users = React.createClass({
                     <span>
                         <div className="filters">
                             <label>Filter By:</label>
-                            <button onClick={actions.toggleAdmin}>Admin</button>
+                            <button className={filterAdminActive ? 'active' : null} onClick={this._filterAdmin}>
+                                <span className="filter-admin">
+                                    <i className={filterAdminActive ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Admin
+                                </span>
+                            </button>
                         </div>
                     </span>
                 </div>
@@ -125,8 +135,15 @@ let users = React.createClass({
         actions.inputChange('newUserForm', e.target.name, e.target.value);
     },
 
-    _searchUsername(e) {
-        actions.searchUsername(e.target.value);
+    _searchUser(e) {
+        this.setState({filterAdminActive: false, inputValue: e.target.value});
+        actions.searchUser(e.target.value);
+    },
+
+    _filterAdmin(){
+        let filterAdminActive = !this.state.filterAdminActive;
+        actions.filterAdmin();
+        this.setState({filterAdminActive, inputValue: ''});
     }
 
 });
