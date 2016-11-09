@@ -25,8 +25,7 @@ export default {
 		let datasetId = req.params.datasetId;
 
 		scitran.downloadSymlinkDataset(datasetId, (err, hash) => {
-			validate.BIDS(config.location + '/persistent/datasets/' + hash, {}, (errors, warnings, summary) => {
-				let validation = {errors, warnings};
+			validate.BIDS(config.location + '/persistent/datasets/' + hash, {}, (validation, summary) => {
 				scitran.updateProject(datasetId, {
 					metadata: {validation, summary}
 				}, (err, res1) => {
