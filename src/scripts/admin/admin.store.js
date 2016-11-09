@@ -96,7 +96,6 @@ let UserStore = Reflux.createStore({
      */
     searchUser(searchInput){
         let users = this.data.users;
-
         for (let user of users) {
             user.visable = true;
             searchInput = searchInput.toLowerCase();
@@ -110,7 +109,7 @@ let UserStore = Reflux.createStore({
                 user.visable = false;
             }
         }
-        this.update({users});
+        this.update({users, adminFilter: false});
     },
 
     /**
