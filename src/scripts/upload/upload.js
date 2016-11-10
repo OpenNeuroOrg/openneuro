@@ -111,14 +111,7 @@ export default {
         this.currentProjectId = projectId;
         for (let subject of subjects) {
             if (subject.children) {
-                if (subject.ignore) {
-                    this.uploadSessions(subject.children, projectId, subject._id);
-                } else {
-                    this.createContainer(scitran.createSubject, [projectId, subject.name], (err, res) => {
-                        let subjectId = res.body._id;
-                        this.uploadSessions(subject.children, projectId, subjectId);
-                    });
-                }
+                this.uploadSessions(subject.children, projectId, subject._id);
             } else {
                 if (subject.name === 'dataset_description.json') {
                     files.read(subject, (contents) => {
@@ -148,16 +141,10 @@ export default {
      * Upload Sessions
      *
      */
-    uploadSessions (sessions, projectId, subjectId) {
+    uploadSessions (sessions, projectId) {
         for (let session of sessions) {
             if (session.children) {
-                if (session.ignore) {
-                    this.uploadModalities(session.children, session._id, projectId);
-                } else {
-                    this.createContainer(scitran.createSession, [projectId, subjectId, session.name], (err, res) => {
-                        this.uploadModalities(session.children, res.body._id, projectId);
-                    });
-                }
+                this.uploadModalities(session.children, session._id, projectId);
             } else {
                 this.uploadFile('projects', projectId, session, 'subject');
             }
@@ -171,14 +158,7 @@ export default {
     uploadModalities (modalities, subjectId, projectId) {
         for (let modality of modalities) {
             if (modality.children) {
-                if (modality.ignore) {
-                    this.uploadAcquisitions(modality.children, modality._id, projectId);
-                } else {
-                    this.createContainer(scitran.createModality, [subjectId, modality.name], (err, res) => {
-                        let modalityId = res.body._id;
-                        this.uploadAcquisitions(modality.children, modalityId, projectId);
-                    });
-                }
+                this.uploadAcquisitions(modality.children, modality._id, projectId);
             } else {
                 this.uploadFile('projects', projectId, modality, 'session');
             }
