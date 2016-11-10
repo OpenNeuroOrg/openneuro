@@ -13,10 +13,6 @@ let users = React.createClass({
 
     mixins: [Reflux.connect(adminStore)],
 
-    getInitialState() {
-        return{filterAdminActive: false, inputValue: ''}
-    },
-
 // life cycle events --------------------------------------------------
 
     render () {
@@ -44,7 +40,6 @@ let users = React.createClass({
             }
         });
 
-        let filterAdminActive = this.state.filterAdminActive;
 
         return (
             <div className="dashboard-dataset-teasers fade-in inner-route admin-users clearfix">
@@ -53,7 +48,7 @@ let users = React.createClass({
                         <h2>Current Users</h2>
                     </div>
                     <div className="col-sm-3">
-                        <Input className="pull-right" placeholder="Search Name or Email" value={this.state.inputValue} onChange={this._searchUser} />
+                        <Input className="pull-right" placeholder="Search Name or Email" onChange={this._searchUser} />
                     </div>
                 </div>
 
@@ -61,9 +56,9 @@ let users = React.createClass({
                     <span>
                         <div className="filters">
                             <label>Filter By:</label>
-                            <button className={filterAdminActive ? 'active' : null} onClick={this._filterAdmin}>
+                            <button className={this.state.adminFilter ? 'active' : null} onClick={actions.filterAdmin}>
                                 <span className="filter-admin">
-                                    <i className={filterAdminActive ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Admin
+                                    <i className={this.state.adminFilter ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Admin
                                 </span>
                             </button>
                         </div>
@@ -136,14 +131,7 @@ let users = React.createClass({
     },
 
     _searchUser(e) {
-        this.setState({filterAdminActive: false, inputValue: e.target.value});
         actions.searchUser(e.target.value);
-    },
-
-    _filterAdmin(){
-        let filterAdminActive = !this.state.filterAdminActive;
-        actions.filterAdmin();
-        this.setState({filterAdminActive, inputValue: ''});
     }
 
 });

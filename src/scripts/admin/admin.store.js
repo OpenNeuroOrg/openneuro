@@ -39,6 +39,7 @@ let UserStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             users: [],
+            searchInput:'',
             adminFilter: false,
             blacklist: [],
             showBlacklistModal: false,
@@ -96,20 +97,35 @@ let UserStore = Reflux.createStore({
      */
     searchUser(searchInput){
         let users = this.data.users;
+        let admin = user.root === true;
+
         for (let user of users) {
+
             user.visable = true;
             searchInput = searchInput.toLowerCase();
-            if(
-                user.email.toLowerCase().includes(searchInput) ||
-                user.lastname.toLowerCase().includes(searchInput) ||
-                user.firstname.toLowerCase().includes(searchInput)
-            ) {
+
+            let userLastName = user.lastname,
+                firstName = user.firstname,
+                userName = firstName +' '+userLastName,
+                userStrings = (
+                    user.email.toLowerCase().includes(searchInput) ||
+                    userName.toLowerCase().includes(searchInput)
+                );
+
+            if(this.data.adminFilter){
+                if(userStrings && admin) {
+                    user.visable = true;
+                } else {
+                    user.visable = false;
+                }
+            }else if(userStrings) {
                 user.visable = true;
             } else {
                 user.visable = false;
             }
         }
-        this.update({users, adminFilter: false});
+
+        this.update({users, searchInput});
     },
 
     /**
@@ -118,19 +134,45 @@ let UserStore = Reflux.createStore({
      */
 
     filterAdmin(){
+
+        let searchInput = this.data.searchInput;
         let adminFilter = !this.data.adminFilter;
         let users = this.data.users;
+        let admin = user.root === true;
+
         for (let user of users) {
-            if (adminFilter) {
-                if (user.root === true) {
+
+            let userLastName = user.lastname,
+                firstName = user.firstname,
+                userName = firstName +' '+userLastName,
+                userStrings = (
+                    user.email.toLowerCase().includes(searchInput) ||
+                    userName.toLowerCase().includes(searchInput)
+                );
+
+            if (adminFilter && searchInput.length === 0) {
+                if (admin) {
                     user.visable = true;
                 } else {
+                    user.visable = false;
+                }
+            }else if(adminFilter && searchInput.length != 0){
+                if (admin && userStrings) {
+                    user.visable = true;
+                }else{
+                    user.visable = false;
+                }
+            }else if(searchInput.length != 0){
+                if (userStrings) {
+                    user.visable = true;
+                }else{
                     user.visable = false;
                 }
             }else{
                 user.visable = true;
             }
         }
+
         this.update({users, adminFilter});
     },
 
