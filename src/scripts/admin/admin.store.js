@@ -107,18 +107,18 @@ let UserStore = Reflux.createStore({
             let lastName = user.lastname,
                 firstName = user.firstname,
                 userName = firstName +' '+userLastName,
-                userStrings = (
+                userSearchStrings = (
                     user.email.toLowerCase().includes(searchInput) ||
                     userName.toLowerCase().includes(searchInput)
                 );
 
             if(this.data.adminFilter){
-                if(userStrings && admin) {
+                if(userSearchStrings && admin) {
                     user.visable = true;
                 } else {
                     user.visable = false;
                 }
-            }else if(userStrings) {
+            }else if(userSearchStrings) {
                 user.visable = true;
             } else {
                 user.visable = false;
@@ -144,7 +144,7 @@ let UserStore = Reflux.createStore({
             let lastName = user.lastname,
                 firstName = user.firstname,
                 userName = firstName +' '+userLastName,
-                userStrings = (
+                userSearchStrings = (
                     user.email.toLowerCase().includes(searchInput) ||
                     userName.toLowerCase().includes(searchInput)
                 );
@@ -156,13 +156,13 @@ let UserStore = Reflux.createStore({
                     user.visable = false;
                 }
             }else if(adminFilter && searchInput.length != 0){
-                if (admin && userStrings) {
+                if (admin && userSearchStrings) {
                     user.visable = true;
                 }else{
                     user.visable = false;
                 }
             }else if(searchInput.length != 0){
-                if (userStrings) {
+                if (userSearchStrings) {
                     user.visable = true;
                 }else{
                     user.visable = false;
