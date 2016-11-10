@@ -31,7 +31,7 @@ let upload = {
             request.upload(req.url, {
                 fields: {
                     name: req.file.relativePath,
-                    tags: JSON.stringify(req.tags),
+                    tags: '[]',
                     file: req.file.data ? req.file.data : req.file
                 }
             }, (err) => {
