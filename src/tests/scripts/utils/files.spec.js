@@ -126,7 +126,7 @@ describe('utils/files.js', () => {
     });
 
     it('should return the combined number of files and folders in a dataset tree', () => {
-        assert.equal(files.countTree(fileTree), 13);
+        assert.equal(files.countTree(fileTree), 8);
     });
 
     it('should return the tree element with the corresponding id', () => {
