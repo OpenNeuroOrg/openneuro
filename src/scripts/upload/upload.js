@@ -42,7 +42,7 @@ export default {
      * updated at the start and end of every file or
      * folder upload request and an error callback.
      */
-    upload (userId, fileTree, validation, summary, count, progress, error) {
+    upload (userId, fileTree, metadata, count, progress, error) {
         this.total = count;
         this.completed = 0;
         this.error = error;
@@ -86,7 +86,7 @@ export default {
                 this.createContainer(scitran.createProject, [userId, fileTree[0].name], (err, res) => {
                     let projectId = res.body._id;
                     scitran.addTag('projects', projectId, 'incomplete', () => {
-                        this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId, validation, summary);
+                        this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId, metadata);
                     });
                 });
             }
@@ -97,34 +97,40 @@ export default {
      * Upload Subjects
      *
      */
-    uploadSubjects (datasetName, subjects, projectId, validation, summary) {
+    uploadSubjects (datasetName, subjects, projectId, metadata) {
         this.currentProjectId = projectId;
         for (let subject of subjects) {
             if (subject.children) {
-                this.uploadSubjects(datasetName, subject.children, projectId, validation, summary);
+                this.uploadSubjects(datasetName, subject.children, projectId, metadata);
             } else {
                 if (subject.name === 'dataset_description.json') {
-                    files.read(subject, (contents) => {
-                        let description = JSON.parse(contents);
-                        description.Name = datasetName;
-                        let authors = [];
-                        if (description.hasOwnProperty('Authors')) {
-                            for (let i = 0; i < description.Authors.length; i++) {
-                                let author = description.Authors[i];
-                                authors.push({name: author, ORCIDID: ''});
-                            }
-                        }
-                        scitran.updateProject(projectId, {metadata: {authors, validation, summary}}, () => {
-                            let file = new File([JSON.stringify(description)], '/dataset_description.json', {type: 'application/json'});
-                            this.uploadFile('projects', projectId, file);
-                        });
-                    });
-
+                    this.uploadMetadata(datasetName, projectId, metadata, subject);
                 } else {
                     this.uploadFile('projects', projectId, subject);
                 }
             }
         }
+    },
+
+    /**
+     * Upload Metada
+     */
+    uploadMetadata (datasetName, projectId, metadata, descriptionFile) {
+        files.read(descriptionFile, (contents) => {
+            let description = JSON.parse(contents);
+            description.Name = datasetName;
+            metadata.authors = [];
+            if (description.hasOwnProperty('Authors')) {
+                for (let i = 0; i < description.Authors.length; i++) {
+                    let author = description.Authors[i];
+                    metadata.authors.push({name: author, ORCIDID: ''});
+                }
+            }
+            scitran.updateProject(projectId, {metadata}, () => {
+                let file = new File([JSON.stringify(description)], '/dataset_description.json', {type: 'application/json'});
+                this.uploadFile('projects', projectId, file);
+            });
+        });
     },
 
 // queue container and file requests ------------------------------------------------------
