@@ -101,7 +101,7 @@ export default {
         this.currentProjectId = projectId;
         for (let subject of subjects) {
             if (subject.children) {
-                this.uploadSessions(subject.children, projectId, subject._id);
+                this.uploadSubjects(datasetName, subject.children, projectId, validation, summary);
             } else {
                 if (subject.name === 'dataset_description.json') {
                     files.read(subject, (contents) => {
@@ -123,20 +123,6 @@ export default {
                 } else {
                     this.uploadFile('projects', projectId, subject);
                 }
-            }
-        }
-    },
-
-    /**
-     * Upload Sessions
-     *
-     */
-    uploadSessions (sessions, projectId) {
-        for (let session of sessions) {
-            if (session.children) {
-                this.uploadSessions(session.children, projectId);
-            } else {
-                this.uploadFile('projects', projectId, session);
             }
         }
     },
