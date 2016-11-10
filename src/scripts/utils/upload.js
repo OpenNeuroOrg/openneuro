@@ -30,7 +30,7 @@ let upload = {
             req.progressStart(req.file.name);
             request.upload(req.url, {
                 fields: {
-                    name: req.file.name,
+                    name: req.file.relativePath,
                     tags: JSON.stringify(req.tags),
                     file: req.file.data ? req.file.data : req.file
                 }

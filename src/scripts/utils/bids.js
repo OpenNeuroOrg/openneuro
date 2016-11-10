@@ -2,6 +2,7 @@ import async     from 'async';
 import scitran   from './scitran';
 import crn       from './crn';
 import userStore from '../user/user.store';
+import fileUtils from './files';
 
 /**
  * BIDS
@@ -162,6 +163,7 @@ export default  {
         scitran.getUsers((err, res) => {
             let users = !err && res && res.body ? res.body : null;
             scitran.getProject(projectId, (res) => {
+                this._formatFiles(res.body.files);
                 if (res.status !== 200) {return callback(res);}
                 let project = res.body;
                 this.getMetadata(project, (metadata) => {
@@ -180,6 +182,20 @@ export default  {
                 }, options);
             }, options);
         }, options && options.isPublic);
+    },
+
+    _formatFiles(files) {
+        let fileList = [];
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            fileList[i] = {
+                name: file.name.replace(/%2F/g, '/'),
+                webkitRelativePath: file.name.replace(/%2F/g, '/')
+            };
+        }
+        let fileTree = fileUtils.generateTree(fileList);
+        // console.log(fileTree);
+        return fileTree;
     },
 
     /**
