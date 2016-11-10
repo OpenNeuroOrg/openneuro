@@ -1,9 +1,9 @@
-import scitran from '../utils/scitran';
-import bids    from '../utils/bids';
-import uploads from '../utils/upload';
-import files   from '../utils/files';
-import config  from '../../../config';
-import diff    from './diff';
+import scitran   from '../utils/scitran';
+import bids      from '../utils/bids';
+import uploads   from '../utils/upload';
+import fileUtils from '../utils/files';
+import config    from '../../../config';
+import diff      from './diff';
 
 export default {
 
@@ -74,7 +74,7 @@ export default {
                     diff.datasets(newDataset.children, oldDataset[0].children, (subjectUploads, completedFiles) => {
                         this.completed = this.completed + completedFiles.length + 1;
                         progress({status: 'calculating', total: this.total, completed: this.completed, currentFiles: this.currentFiles});
-                        this.uploadSubjects(newDataset.name, subjectUploads, this.currentProjectId);
+                        this.uploadFiles(newDataset.name, subjectUploads, this.currentProjectId);
                     });
                 }, {}, (resumeProgress) => {
                     resumeProgress.status       = 'calculating';
@@ -86,7 +86,7 @@ export default {
                 this.createContainer(scitran.createProject, [userId, fileTree[0].name], (err, res) => {
                     let projectId = res.body._id;
                     scitran.addTag('projects', projectId, 'incomplete', () => {
-                        this.uploadSubjects(fileTree[0].name, fileTree[0].children, projectId, metadata);
+                        this.uploadFiles(fileTree[0].name, fileTree[0].children, projectId, metadata);
                     });
                 });
             }
@@ -94,19 +94,19 @@ export default {
     },
 
     /**
-     * Upload Subjects
+     * Upload Files
      *
      */
-    uploadSubjects (datasetName, subjects, projectId, metadata) {
+    uploadFiles (datasetName, files, projectId, metadata) {
         this.currentProjectId = projectId;
-        for (let subject of subjects) {
-            if (subject.children) {
-                this.uploadSubjects(datasetName, subject.children, projectId, metadata);
+        for (let file of files) {
+            if (file.children) {
+                this.uploadFiles(datasetName, file.children, projectId, metadata);
             } else {
-                if (subject.name === 'dataset_description.json') {
-                    this.uploadMetadata(datasetName, projectId, metadata, subject);
+                if (file.name === 'dataset_description.json') {
+                    this.uploadMetadata(datasetName, projectId, metadata, file);
                 } else {
-                    this.uploadFile('projects', projectId, subject);
+                    this.uploadFile('projects', projectId, file);
                 }
             }
         }
@@ -116,7 +116,7 @@ export default {
      * Upload Metada
      */
     uploadMetadata (datasetName, projectId, metadata, descriptionFile) {
-        files.read(descriptionFile, (contents) => {
+        fileUtils.read(descriptionFile, (contents) => {
             let description = JSON.parse(contents);
             description.Name = datasetName;
             metadata.authors = [];
