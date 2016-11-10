@@ -79,8 +79,11 @@ function countTree (tree) {
     let count = 0;
     function recurse (tree) {
         for (let item of tree) {
-            count++;
-            if (item.children) {recurse(item.children);}
+            if (item.children) {
+                recurse(item.children);
+            } else {
+                count++;
+            }
         }
     }
     recurse(tree);
