@@ -34,16 +34,6 @@ export default {
 // upload ----------------------------------------------------------------------------
 
     /**
-     * Upload File
-     *
-     * Pushes upload details into an upload queue.
-     */
-    uploadFile (level, id, file, tag) {
-        let url = config.scitran.url +  level + '/' + id + '/files';
-        uploads.add({url: url, file: file, tags: [tag], progressStart: this.progressStart, progressEnd: this.progressEnd, error: this.error});
-    },
-
-    /**
      * Upload
      *
      * Takes an entire bids file tree and and file count
@@ -126,12 +116,12 @@ export default {
                         }
                         scitran.updateProject(projectId, {metadata: {authors, validation, summary}}, () => {
                             let file = new File([JSON.stringify(description)], '/dataset_description.json', {type: 'application/json'});
-                            this.uploadFile('projects', projectId, file, 'project');
+                            this.uploadFile('projects', projectId, file);
                         });
                     });
 
                 } else {
-                    this.uploadFile('projects', projectId, subject, 'project');
+                    this.uploadFile('projects', projectId, subject);
                 }
             }
         }
@@ -144,38 +134,14 @@ export default {
     uploadSessions (sessions, projectId) {
         for (let session of sessions) {
             if (session.children) {
-                this.uploadModalities(session.children, session._id, projectId);
+                this.uploadSessions(session.children, projectId);
             } else {
-                this.uploadFile('projects', projectId, session, 'subject');
+                this.uploadFile('projects', projectId, session);
             }
         }
     },
 
-    /**
-     * Upload Modalities
-     *
-     */
-    uploadModalities (modalities, subjectId, projectId) {
-        for (let modality of modalities) {
-            if (modality.children) {
-                this.uploadAcquisitions(modality.children, modality._id, projectId);
-            } else {
-                this.uploadFile('projects', projectId, modality, 'session');
-            }
-        }
-    },
-
-    /**
-     * Upload Acquisitions
-     *
-     */
-    uploadAcquisitions (acquisitions, modalityId, projectId) {
-        for (let acquisition of acquisitions) {
-            this.uploadFile('projects', projectId, acquisition, 'modality');
-        }
-    },
-
-// queue container requests ---------------------------------------------------------------
+// queue container and file requests ------------------------------------------------------
 
     createContainer (func, args, callback) {
         uploads.add({
@@ -186,6 +152,16 @@ export default {
             progressEnd:   this.progressEnd,
             error:         this.error
         });
+    },
+
+    /**
+     * Upload File
+     *
+     * Pushes upload details into an upload queue.
+     */
+    uploadFile (level, id, file) {
+        let url = config.scitran.url +  level + '/' + id + '/files';
+        uploads.add({url: url, file: file, progressStart: this.progressStart, progressEnd: this.progressEnd, error: this.error});
     }
 
 };
