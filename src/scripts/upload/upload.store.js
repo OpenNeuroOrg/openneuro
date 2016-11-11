@@ -255,7 +255,6 @@ let UploadStore = Reflux.createStore({
      * finishes.
      */
     upload (fileList) {
-        let count = fileList.length + 1;
 
         this.update({
             uploadStatus: 'uploading',
@@ -277,7 +276,7 @@ let UploadStore = Reflux.createStore({
         let uploadingFavicon = document.getElementById('favicon_upload');
         favicon.image(uploadingFavicon); // set new favicon image
 
-        upload.upload(userStore.data.scitran._id, this.data.dirName, fileList, {validation, summary: this.data.summary}, count, (progress, projectId) => {
+        upload.upload(userStore.data.scitran._id, this.data.dirName, fileList, {validation, summary: this.data.summary}, (progress, projectId) => {
             projectId = projectId ? projectId : this.data.projectId;
             this.update({progress, uploading: true, projectId});
             if (!datasetsUpdated && progress.completed > 0) {datasetsActions.getDatasets(); datasetsUpdated = true;}
