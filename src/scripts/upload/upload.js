@@ -42,7 +42,7 @@ export default {
      * updated at the start and end of every file or
      * folder upload request and an error callback.
      */
-    upload (userId, fileTree, metadata, count, progress, error) {
+    upload (userId, datasetName, fileList, metadata, count, progress, error) {
         this.total = count;
         this.completed = 0;
         this.error = error;
@@ -60,7 +60,7 @@ export default {
         let existingProject = null;
         scitran.getProjects({authenticate: true}, (projects) => {
             for (let project of projects) {
-                if (project.label === fileTree[0].name && project.group === userId) {
+                if (project.label === datasetName && project.group === userId) {
                     project.children = project.files;
                     existingProject  = project;
                     break;
@@ -70,7 +70,7 @@ export default {
             if (existingProject) {
                 this.currentProjectId = existingProject._id;
                 bids.getDatasetTree(existingProject, (oldDataset) => {
-                    let newDataset = fileTree[0];
+                    let newDataset = datasetName;
                     diff.datasets(newDataset.children, oldDataset[0].children, (subjectUploads, completedFiles) => {
                         this.completed = this.completed + completedFiles.length + 1;
                         progress({status: 'calculating', total: this.total, completed: this.completed, currentFiles: this.currentFiles});
@@ -83,10 +83,10 @@ export default {
                     progress(resumeProgress, existingProject._id);
                 });
             } else {
-                this.createContainer(scitran.createProject, [userId, fileTree[0].name], (err, res) => {
+                this.createContainer(scitran.createProject, [userId, datasetName], (err, res) => {
                     let projectId = res.body._id;
                     scitran.addTag('projects', projectId, 'incomplete', () => {
-                        this.uploadFiles(fileTree[0].name, fileTree[0].children, projectId, metadata);
+                        this.uploadFiles(datasetName, fileList, projectId, metadata);
                     });
                 });
             }
@@ -100,14 +100,10 @@ export default {
     uploadFiles (datasetName, files, projectId, metadata) {
         this.currentProjectId = projectId;
         for (let file of files) {
-            if (file.children) {
-                this.uploadFiles(datasetName, file.children, projectId, metadata);
+            if (file.name === 'dataset_description.json') {
+                this.uploadMetadata(datasetName, projectId, metadata, file);
             } else {
-                if (file.name === 'dataset_description.json') {
-                    this.uploadMetadata(datasetName, projectId, metadata, file);
-                } else {
-                    this.uploadFile('projects', projectId, file);
-                }
+                this.uploadFile('projects', projectId, file);
             }
         }
     },
@@ -128,6 +124,7 @@ export default {
             }
             scitran.updateProject(projectId, {metadata}, () => {
                 let file = new File([JSON.stringify(description)], '/dataset_description.json', {type: 'application/json'});
+                file.relativePath = file.name;
                 this.uploadFile('projects', projectId, file);
             });
         });
