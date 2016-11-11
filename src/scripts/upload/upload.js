@@ -43,7 +43,7 @@ export default {
      * folder upload request and an error callback.
      */
     upload (userId, datasetName, fileList, metadata, progress, error) {
-        this.total = fileList.length + 1;;
+        this.total = fileList.length + 1;
         this.completed = 0;
         this.error = error;
         this.currentProjectId = null;
@@ -78,7 +78,7 @@ export default {
                     });
                 }, {}, (resumeProgress) => {
                     resumeProgress.status       = 'calculating';
-                    resumeProgress.total        = fileList.length + 1;;
+                    resumeProgress.total        = fileList.length + 1;
                     resumeProgress.currentFiles = this.currentFiles;
                     progress(resumeProgress, existingProject._id);
                 });
