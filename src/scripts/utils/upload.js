@@ -27,6 +27,7 @@ let upload = {
             req.func.apply(null, req.args);
         } else {
         // file upload requests
+            req.file.relativePath = req.file.relativePath.replace(/^\//,'');
             req.progressStart(req.file.name);
             request.upload(req.url, {
                 fields: {
