@@ -47,7 +47,8 @@
     }
 }
 
-// Dashboard sort and filter ========================
+// Dashboard and Admin sort and filter ========================
+
 
 .filters-sort-wrap {
     width: 100%;
@@ -117,6 +118,14 @@
                 font-weight: 600;
                 margin-left: 5px;
                 position: relative;
+            }
+
+            .filter-admin{
+                i{
+                    width: 12px;
+                    margin: 0;
+                    font-size: 11px;
+                }
             }
         }
     }

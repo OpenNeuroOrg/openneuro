@@ -39,6 +39,9 @@ let UserStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             users: [],
+            loadingUsers: true,
+            searchInput:'',
+            adminFilter: false,
             blacklist: [],
             showBlacklistModal: false,
             blacklistForm: {
@@ -87,6 +90,50 @@ let UserStore = Reflux.createStore({
                 this.blacklistUser(this.data.blacklistForm);
             }
         }
+    },
+
+    /**
+    * Search username and email
+    */
+    searchUser (input) {
+        this.filter(input, this.data.adminFilter);
+    },
+
+    /**
+    * filter admin
+    */
+    filterAdmin () {
+        this.filter(this.data.searchInput, !this.data.adminFilter);
+    },
+
+    filter (searchInput, adminFilter) {
+        let users = this.data.users;
+
+        for (let user of users) {
+
+            user.visible = true;
+            searchInput = searchInput.toLowerCase();
+
+            let admin = user.root === true,
+                lastName = user.lastname,
+                firstName = user.firstname,
+                userName = firstName +' '+lastName,
+                userSearchStrings = (
+                    user.email.toLowerCase().includes(searchInput) ||
+                    userName.toLowerCase().includes(searchInput)
+                );
+
+            // search filtering
+            if (searchInput.length != 0 && !userSearchStrings) {
+                user.visible = false;
+            }
+
+            // button filtering
+            if (!admin && adminFilter) {
+                user.visible = false;
+            }
+        }
+        this.update({users, searchInput, adminFilter, loadingUsers: false});
     },
 
     /**
@@ -140,7 +187,9 @@ let UserStore = Reflux.createStore({
      */
     getUsers() {
         scitran.getUsers((err, res) => {
-            this.update({users: res.body});
+            this.update({users: res.body}, () => {
+                this.searchUser('');
+            });
         });
     },
 
