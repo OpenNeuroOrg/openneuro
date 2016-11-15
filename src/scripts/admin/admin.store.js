@@ -39,6 +39,7 @@ let UserStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             users: [],
+            loadingUsers: true,
             searchInput:'',
             adminFilter: false,
             blacklist: [],
@@ -92,56 +93,29 @@ let UserStore = Reflux.createStore({
     },
 
     /**
-     * Search username and email
-     *
-     */
-    searchUser(searchInput){
-        let users = this.data.users;
-
-        for (let user of users) {
-
-            let admin = user.root === true;
-            user.visable = true;
-            searchInput = searchInput.toLowerCase();
-
-            let lastName = user.lastname,
-                firstName = user.firstname,
-                userName = firstName +' '+lastName,
-                userSearchStrings = (
-                    user.email.toLowerCase().includes(searchInput) ||
-                    userName.toLowerCase().includes(searchInput)
-                );
-
-            if(this.data.adminFilter){
-                if(userSearchStrings && admin) {
-                    user.visable = true;
-                } else {
-                    user.visable = false;
-                }
-            }else if(userSearchStrings) {
-                user.visable = true;
-            } else {
-                user.visable = false;
-            }
-        }
-
-        this.update({users, searchInput});
+    * Search username and email
+    */
+    searchUser (input) {
+        this.filter(input, this.data.adminFilter);
     },
 
     /**
-     * filter admin
-     *
-     */
+    * filter admin
+    */
+    filterAdmin () {
+        this.filter(this.data.searchInput, !this.data.adminFilter);
+    },
 
-    filterAdmin(){
-
-        let searchInput = this.data.searchInput;
-        let adminFilter = !this.data.adminFilter;
+    filter (searchInput, adminFilter) {
         let users = this.data.users;
 
         for (let user of users) {
-            let admin = user.root === true;
-            let lastName = user.lastname,
+
+            user.visible = true;
+            searchInput = searchInput.toLowerCase();
+
+            let admin = user.root === true,
+                lastName = user.lastname,
                 firstName = user.firstname,
                 userName = firstName +' '+lastName,
                 userSearchStrings = (
@@ -149,30 +123,17 @@ let UserStore = Reflux.createStore({
                     userName.toLowerCase().includes(searchInput)
                 );
 
-            if (adminFilter && searchInput.length === 0) {
-                if (admin) {
-                    user.visable = true;
-                } else {
-                    user.visable = false;
-                }
-            }else if(adminFilter && searchInput.length != 0){
-                if (admin && userSearchStrings) {
-                    user.visable = true;
-                }else{
-                    user.visable = false;
-                }
-            }else if(searchInput.length != 0){
-                if (userSearchStrings) {
-                    user.visable = true;
-                }else{
-                    user.visable = false;
-                }
-            }else{
-                user.visable = true;
+            // search filtering
+            if (searchInput.length != 0 && !userSearchStrings) {
+                user.visible = false;
+            }
+
+            // button filtering
+            if (!admin && adminFilter) {
+                user.visible = false;
             }
         }
-
-        this.update({users, adminFilter});
+        this.update({users, searchInput, adminFilter, loadingUsers: false});
     },
 
     /**

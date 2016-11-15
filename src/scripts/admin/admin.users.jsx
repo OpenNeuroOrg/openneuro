@@ -4,6 +4,7 @@ import React      from 'react';
 import Reflux     from 'reflux';
 import userStore  from '../user/user.store';
 import Input      from '../common/forms/input.jsx';
+import Spinner    from '../common/partials/spinner.jsx';
 import adminStore from './admin.store';
 import actions    from './admin.actions';
 import WarnButton from '../common/forms/warn-button.jsx';
@@ -16,10 +17,11 @@ let users = React.createClass({
 // life cycle events --------------------------------------------------
 
     render () {
-        let users = this.state.users.map((user) => {
+        let users = [];
+        this.state.users.map((user) => {
             let adminBadge = user.root ? 'Admin' : null;
-            if (user.visable){
-                return (
+            if (user.visible){
+                users.push(
                     <div className="fade-in user-panel clearfix panel panel-default" key={user._id}>
                         <div className="col-xs-4 user-col">
                             <h3>
@@ -39,7 +41,6 @@ let users = React.createClass({
                 );
             }
         });
-
 
         return (
             <div className="dashboard-dataset-teasers fade-in inner-route admin-users clearfix">
@@ -72,7 +73,7 @@ let users = React.createClass({
                             <div className="col-xs-4 user-col"><label>Email</label></div>
                             <div className="col-xs-4 user-col"><label>Actions</label></div>
                         </div>
-                        {users}
+                        {users.length != 0 ? users : this._noResults()}
                     </div>
                 </div>
             </div>
@@ -80,6 +81,10 @@ let users = React.createClass({
     },
 
 // custom methods -----------------------------------------------------
+
+    _noResults(){
+        return this.state.loadingUsers ? <Spinner active={true} /> : <h4>No Results Found</h4>;
+    },
 
     _userSummary(user) {
         const lastLogin = moment(user.lastlogin ? (user.lastlogin) : user.created);
