@@ -39,7 +39,9 @@ let UserStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             users: [],
-            filteredUsers: [],
+            loadingUsers: true,
+            searchInput:'',
+            adminFilter: false,
             blacklist: [],
             showBlacklistModal: false,
             blacklistForm: {
@@ -90,24 +92,48 @@ let UserStore = Reflux.createStore({
         }
     },
 
-    searchUsername(searchInput){
+    /**
+    * Search username and email
+    */
+    searchUser (input) {
+        this.filter(input, this.data.adminFilter);
+    },
+
+    /**
+    * filter admin
+    */
+    filterAdmin () {
+        this.filter(this.data.searchInput, !this.data.adminFilter);
+    },
+
+    filter (searchInput, adminFilter) {
         let users = this.data.users;
 
-        for (let i = 0; i < this.data.users.length; i++) {
+        for (let user of users) {
 
-            let user = this.data.users[i];
-            user.inList = true;
-            if(user.email.toLowerCase().includes(searchInput.toLowerCase()) || user.lastname.toLowerCase().includes(searchInput.toLowerCase()) || user.firstname.toLowerCase().includes(searchInput.toLowerCase())){
-                user.inList = true;
-            }else{
-                user.inList = false;
+            user.visible = true;
+            searchInput = searchInput.toLowerCase();
+
+            let admin = user.root === true,
+                lastName = user.lastname,
+                firstName = user.firstname,
+                userName = firstName +' '+lastName,
+                userSearchStrings = (
+                    user.email.toLowerCase().includes(searchInput) ||
+                    userName.toLowerCase().includes(searchInput)
+                );
+
+            // search filtering
+            if (searchInput.length != 0 && !userSearchStrings) {
+                user.visible = false;
+            }
+
+            // button filtering
+            if (!admin && adminFilter) {
+                user.visible = false;
             }
         }
-
-        console.log(users);
-
-        this.update({users: users});
-
+        this.update({users, searchInput, adminFilter, loadingUsers: false});
     },
 
     /**
@@ -162,7 +188,7 @@ let UserStore = Reflux.createStore({
     getUsers() {
         scitran.getUsers((err, res) => {
             this.update({users: res.body}, () => {
-                this.searchUsername('');
+                this.searchUser('');
             });
         });
     },

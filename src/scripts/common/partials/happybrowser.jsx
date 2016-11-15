@@ -7,19 +7,19 @@ export default class Happybrowser extends React.Component {
     constructor () {
         super();
         this.state = {
-            hbVisable: true
+            hbVisible: true
         };
     }
-    
+
 
     render () {
         return (
 
-                <div className={this.state.hbVisable ? 'happybrowser-markup' : 'happybrowser-markup hidden'}>
+                <div className={this.state.hbVisible ? 'happybrowser-markup' : 'happybrowser-markup hidden'}>
                     <div className="hb-wrap clearfix">
-                        
+
                         <div className="hb-text clearfix">
-                            <img src="./assets/warning.jpg" alt="warning" /> 
+                            <img src="./assets/warning.jpg" alt="warning" />
                             <p>We have detected that your are using a browser other than Chrome. This site may not work as expected. <strong><a href="http://www.google.com/chrome/">Please consider using Chrome as your browser</a>.</strong></p>
                         </div>
                         <div className="hb-upgrade clearfix">
@@ -32,15 +32,15 @@ export default class Happybrowser extends React.Component {
                         </div>
 
 
-                    </div>    
+                    </div>
                 </div>
         );
     }
-    
+
 
     _dismiss () {
         let self = this;
-        self.setState({hbVisable: false});
+        self.setState({hbVisible: false});
     }
 }
 

@@ -11,7 +11,8 @@ var Actions = Reflux.createActions([
     'toggleSuperUser',
     'unBlacklistUser',
     'update',
-    'searchUsername'
+    'searchUser',
+    'filterAdmin'
 ]);
 
 export default Actions;
