@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------------------
 
 import config from '../../../config';
+import newId  from './newid';
 
 // public API ---------------------------------------------------------------------
 
@@ -52,12 +53,14 @@ function generateTree (files) {
 
     // convert dirTree to array structure
     function objToArr (obj) {
+
         let arr = [];
         for (let key in obj) {
             if (obj[key].webkitRelativePath && obj[key].webkitRelativePath.length > 0) {
+                obj[key]._id = newId('file-');
                 arr.push(obj[key]);
             } else {
-                arr.push({name: key, type: 'folder', children: objToArr(obj[key])});
+                arr.push({_id: newId('folder-'), name: key, type: 'folder', children: objToArr(obj[key])});
             }
         }
         return arr;
