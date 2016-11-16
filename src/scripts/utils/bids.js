@@ -365,6 +365,7 @@ export default  {
         };
         dataset.status       = this.formatStatus(project, dataset.access),
         dataset.authors      = dataset.description.Authors;
+        dataset.referencesAndLinks      = dataset.description.ReferencesAndLinks
         dataset.user         = this.user(dataset, users);
         if (project.original) {dataset.original = project.original;}
         if (project.snapshot_version) {dataset.snapshot_version = project.snapshot_version;}
@@ -383,12 +384,16 @@ export default  {
             'Acknowledgements': '',
             'HowToAcknowledge': '',
             'Funding': '',
-            'ReferencesAndLinks': '',
+            'ReferencesAndLinks': [],
             'DatasetDOI': ''
         };
 
         if (metadata && metadata.authors) {
             description.Authors = metadata.authors;
+        }
+
+        if (metadata && metadata.referencesAndLinks) {
+            description.ReferencesAndLinks = metadata.referencesAndLinks;
         }
 
         return description;

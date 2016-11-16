@@ -118,6 +118,7 @@
         padding: 6px;
 
         .orcid-id,
+        .reference-name,
         .author-name,
         .share-name,
         .share-access {
@@ -178,6 +179,7 @@
             text-align: center;
         }
 
+        .reference-edit .btn.btn-admin,
         .author-edit .btn.btn-admin {
             width: 100%;
             padding: 8px 10px;

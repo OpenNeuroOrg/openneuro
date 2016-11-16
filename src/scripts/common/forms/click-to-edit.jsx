@@ -4,6 +4,7 @@
 
 import React          from 'react';
 import AuthorInput    from './author-input.jsx';
+import ReferencesAndLinksInput    from './references-input.jsx';
 import FileArrayInput from './file-array-input.jsx';
 import Spinner        from '../partials/spinner.jsx';
 import WarnButton     from './warn-button.jsx';
@@ -72,6 +73,10 @@ let ClickToEdit = React.createClass({
             input = <AuthorInput value={value} onChange={this._handleChange.bind(null, type)} />;
             display = <div className="cte-display">{this._authorList(value)}</div>;
             break;
+        case 'referencesAndLinks':
+            input = <ReferencesAndLinksInput value={value} onChange={this._handleChange.bind(null, type)} />;
+            display = <div className="cte-display">{this._referencesAndLinksList(value)}</div>;
+            break;
         case 'fileArray':
             input = <FileArrayInput
                         value={this.props.value}
@@ -107,6 +112,16 @@ let ClickToEdit = React.createClass({
             return (
                 <div className="fade-in" key={index}>
                     <span>{item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
+                </div>
+            );
+        });
+        return list;
+    },
+    _referencesAndLinksList(refAndLinks) {
+        let list = refAndLinks.map((item, index) => {
+            return (
+                <div className="fade-in" key={index}>
+                    <span>{item}</span>
                 </div>
             );
         });
@@ -175,6 +190,9 @@ let ClickToEdit = React.createClass({
             if (type === 'authors') {
                 this._save(type);
             }
+            if (type === 'referencesAndLinks') {
+                this._save(type);
+            }
         });
     },
 
@@ -191,13 +209,12 @@ let ClickToEdit = React.createClass({
     },
 
     _save(type) {
-        let self = this;
         this.setState({loading: true});
-        let edit = type == 'authors' ? true : false;
+        let edit = type == 'authors' || 'referencesAndLinks';
         if (this.props.onChange) {
             this.props.onChange(this.state.value, () => {
                 let initialValue = JSON.stringify(this.state.value);
-                self.setState({loading: false, edit: edit, initialValue: initialValue});
+                this.setState({loading: false, edit: edit, initialValue: initialValue});
             });
         }
     },
