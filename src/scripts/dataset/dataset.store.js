@@ -753,7 +753,7 @@ let datasetStore = Reflux.createStore({
      * direct download url.
      */
     getFileDownloadTicket(file, callback) {
-        scitran.getDownloadTicket(file.parentContainer, file.parentId, file.name, (err, res) => {
+        scitran.getDownloadTicket('projects', this.data.dataset._id, file.name, (err, res) => {
             let ticket = res.body.ticket;
             let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
             callback(downloadUrl);
