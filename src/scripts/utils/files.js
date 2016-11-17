@@ -61,7 +61,7 @@ function generateTree (files) {
                 obj[key].parentId = parentId;
                 arr.push(obj[key]);
             } else {
-                let folderId = newId('folder-')
+                let folderId = newId('folder-');
                 arr.push({_id: folderId, name: key, type: 'folder', children: objToArr(obj[key], folderId)});
             }
         }
