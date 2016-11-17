@@ -163,7 +163,7 @@ export default  {
         scitran.getUsers((err, res) => {
             let users = !err && res && res.body ? res.body : null;
             scitran.getProject(projectId, (res) => {
-                this._formatFiles(res.body.files);
+                let tempFiles = this._formatFiles(res.body.files);
                 if (res.status !== 200) {return callback(res);}
                 let project = res.body;
                 this.getMetadata(project, (metadata) => {
@@ -171,6 +171,8 @@ export default  {
                     dataset.README = metadata.README;
                     crn.getDatasetJobs(projectId, (err, res) => {
                         dataset.jobs = res.body;
+                        dataset.children = tempFiles;
+                        dataset.showChildren = true;
                         this.usage(projectId, options, (usage) => {
                             if (usage) {
                                 dataset.views = usage.views;
@@ -184,6 +186,12 @@ export default  {
         }, options && options.isPublic);
     },
 
+    /**
+     * Format Files
+     *
+     * Takes a list of files from a dataset and generates
+     * the file tree using file paths.
+     */
     _formatFiles(files) {
         let fileList = [];
         for (let i = 0; i < files.length; i++) {
@@ -194,70 +202,7 @@ export default  {
             };
         }
         let fileTree = fileUtils.generateTree(fileList);
-        // console.log(fileTree);
         return fileTree;
-    },
-
-    /**
-     * Get Dataset Tree
-     *
-     * Takes a projectId and returns the full
-     * dataset tree.
-     */
-    getDatasetTree (dataset, callback, options, progressCb) {
-        let progress = (p) => {if (progressCb) {progressCb(p);}};
-        dataset = {
-            _id: dataset._id,
-            label: dataset.label,
-            children: dataset.children,
-            showChildren: true,
-            containerType: dataset.containerType,
-            type: 'folder'
-        };
-        let projectId = dataset._id;
-        let p = {total: 2, completed: 0};
-        progress(p);
-        scitran.getSessions(projectId, (scitranSessions) => {
-            scitran.getProjectAcquisitions(projectId, (scitranAcquisitions) => {
-                p.total += scitranSessions.length;
-                p.completed++;
-                progress(p);
-                this.filterSessions(scitranSessions, 'subject', (subjects) => {
-                    p.completed++;
-                    p.completed += subjects.length;
-                    progress(p);
-                    dataset.containerType = 'projects';
-                    dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
-                    dataset.children = dataset.children.concat(subjects);
-                    async.each(subjects, (subject, cb) => {
-                        this.filterSessions(scitranSessions, subject._id, (sessions) => {
-                            subject.containerType = 'sessions';
-                            subject.children = this.formatFiles(subject.children, subject._id, 'sessions');
-                            subject.children = subject.children.concat(sessions);
-                            async.each(sessions, (session, cb1) => {
-                                this.filterModalities(scitranAcquisitions, session._id, (modalities) => {
-                                    p.completed++;
-                                    // limit frequency of progress calls
-                                    if (p.total < 50 || p.completed % 10 == 0) {progress(p);}
-                                    session.containerType = 'sessions';
-                                    session.children = this.formatFiles(session.children, session._id, 'sessions');
-                                    session.children = session.children.concat(modalities);
-                                    async.each(modalities, (modality, cb2) => {
-                                        modality.containerType = 'acquisitions';
-                                        modality.children = modality.files;
-                                        modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
-                                        modality.name = modality.label;
-                                        cb2();
-                                    }, cb1);
-                                }, options);
-                            }, cb);
-                        });
-                    }, () => {
-                        callback([dataset]);
-                    });
-                });
-            }, options);
-        }, options);
     },
 
 // Update ---------------------------------------------------------------------------------
