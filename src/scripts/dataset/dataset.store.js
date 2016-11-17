@@ -125,7 +125,11 @@ let datasetStore = Reflux.createStore({
                 let selectedSnapshot = this.data.selectedSnapshot;
                 if (!selectedSnapshot || selectedSnapshot === datasetId) {
                     let dataset = res;
-                    this.update({dataset});
+                    this.update({dataset, datasetTree: [{
+                        _id:      datasetId,
+                        label:    dataset.label,
+                        children: dataset.children
+                    }]});
                     let originalId = dataset.original ? dataset.original : datasetId;
                     this.loadJobs(datasetId, snapshot, originalId, options.jobId, (jobs) => {
                         this.loadSnapshots(dataset, jobs, () => {
@@ -260,7 +264,7 @@ let datasetStore = Reflux.createStore({
     getDatasetDownloadTicket(callback) {
         scitran.getBIDSDownloadTicket(this.data.dataset._id, (err, res) => {
             let ticket = res.body.ticket;
-            let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
+            let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket + '&symlinks=true';
             callback(downloadUrl);
         }, {snapshot: !!this.data.snapshot});
     },
@@ -772,14 +776,14 @@ let datasetStore = Reflux.createStore({
      *
      */
     updateDirectoryState(directoryId, changes, callback) {
-        let datasetTree = this.data.datasetTree;
-        let match = files.findInTree(datasetTree, directoryId);
+        let dataset = this.data.dataset;
+        let match = files.findInTree([dataset], directoryId);
         if (match) {
             for (let key in changes) {
                 match[key] = changes[key];
             }
         }
-        this.update({datasetTree}, callback);
+        this.update({dataset}, callback);
     },
 
     /**
@@ -790,8 +794,8 @@ let datasetStore = Reflux.createStore({
      * updating the state of the file tree
      */
     updateFileState(file, changes, callback) {
-        let datasetTree = this.data.datasetTree;
-        let parent = files.findInTree(datasetTree, file.parentId);
+        let dataset = this.data.dataset;
+        let parent = files.findInTree([dataset], file.parentId);
         for (let existingFile of parent.children) {
             if (file.name == existingFile.name) {
                 for (let key in changes) {
@@ -799,7 +803,7 @@ let datasetStore = Reflux.createStore({
                 }
             }
         }
-        this.update({datasetTree}, callback);
+        this.update({dataset}, callback);
     },
 
     /**
