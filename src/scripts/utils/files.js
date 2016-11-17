@@ -52,15 +52,17 @@ function generateTree (files) {
     }
 
     // convert dirTree to array structure
-    function objToArr (obj) {
+    function objToArr (obj, parentId='root') {
 
         let arr = [];
         for (let key in obj) {
             if (obj[key].webkitRelativePath && obj[key].webkitRelativePath.length > 0) {
                 obj[key]._id = newId('file-');
+                obj[key].parentId = parentId;
                 arr.push(obj[key]);
             } else {
-                arr.push({_id: newId('folder-'), name: key, type: 'folder', children: objToArr(obj[key])});
+                let folderId = newId('folder-')
+                arr.push({_id: folderId, name: key, type: 'folder', children: objToArr(obj[key], folderId)});
             }
         }
         return arr;
