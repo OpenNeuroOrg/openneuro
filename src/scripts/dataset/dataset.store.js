@@ -693,9 +693,7 @@ let datasetStore = Reflux.createStore({
      * Update File
      */
     updateFile(item, file) {
-        let id       = item.parentId,
-            level    = item.parentContainer,
-            filename = item.name;
+        let filename = item.name;
 
         if (filename !== file.name) {
             this.updateFileState(item, {
@@ -707,12 +705,12 @@ let datasetStore = Reflux.createStore({
                 message: message,
                 action: () => {
                     this.updateFileState(item, {error: null, loading: true});
-                    if (file.name === 'dataset_description.json' && level === 'projects') {
-                        this.updateDescriptionFile(file, id, () => {
+                    if (file.name === 'dataset_description.json' && item.parentId == 'root') {
+                        this.updateDescriptionFile(file, this.data.dataset._id, () => {
                             this.updateFileState(item, {loading: false});
                         });
                     } else {
-                        scitran.updateFile(level, id, file, () => {
+                        scitran.updateFile('projects', this.data.dataset._id, file, () => {
                             this.updateFileState(item, {loading: false});
                             this.revalidate();
                         });

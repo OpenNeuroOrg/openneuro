@@ -104,6 +104,7 @@ function countTree (tree) {
  * the tree.
  */
 function findInTree (tree, id, prop) {
+    if (id === 'root') {return tree[0];}
     prop = prop ? prop : '_id';
     let match, subTree;
     for (let item of tree) {
