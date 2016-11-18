@@ -15,60 +15,6 @@ export default  {
 // Read -----------------------------------------------------------------------------------
 
     /**
-     * Filter Sessions
-     *
-     * Takes a list of scitran sessions and a subjectID
-     * and calls back with a list of BIDS sessions in
-     * that subject.
-     */
-    filterSessions (scitranSessions, subjectId, callback) {
-        let sessions = [];
-        async.each(scitranSessions, (session, cb) => {
-            if (session.subject.code === subjectId) {
-                session.children = session.files;
-                session.name = session.label;
-                sessions.push(session);
-                cb();
-            } else {
-                cb();
-            }
-        }, () => {
-            sessions.sort((a, b) => {
-                let aLabel = a.label.toLowerCase();
-                let bLabel = b.label.toLowerCase();
-                if (aLabel < bLabel) {return -1;}
-                else if (aLabel > bLabel) {return 1;}
-                else {return 0;}
-            });
-            callback(sessions);
-        });
-    },
-
-    /**
-     * Filter Modalities
-     *
-     * Takes a list scitran acquisitions and a sessionID and
-     * calls back with a list of BIDS modalities in that
-     * session.
-     */
-    filterModalities (acquisitions, sessionId, callback) {
-        let modalities = [];
-        for (let modality of acquisitions) {
-            if (modality.session === sessionId) {
-                modalities.push(modality);
-            }
-        }
-        modalities.sort((a, b) => {
-            let aLabel = a.label.toLowerCase();
-            let bLabel = b.label.toLowerCase();
-            if (aLabel < bLabel) {return -1;}
-            else if (aLabel > bLabel) {return 1;}
-            else {return 0;}
-        });
-        callback(modalities);
-    },
-
-    /**
      * Get Datasets
      *
      * Returns a list of datasets including any
