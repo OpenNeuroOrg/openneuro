@@ -173,14 +173,14 @@ let UploadStore = Reflux.createStore({
     validate () {
         this.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
         fileStore.getFiles('list', (list) => {
-            validate.BIDS(list, {}, (errors, warnings, summary) => {
+            validate.BIDS(list, {}, (issues, summary) => {
 
-                if (errors === 'Invalid') {
+                if (issues === 'Invalid') {
                     this.update({errors: 'Invalid'});
                 }
 
-                errors   = errors   ? errors   : [];
-                warnings = warnings ? warnings : [];
+                let errors   = issues.errors   ? issues.errors   : [];
+                let warnings = issues.warnings ? issues.warnings : [];
 
                 this.update({
                     errors: errors,
