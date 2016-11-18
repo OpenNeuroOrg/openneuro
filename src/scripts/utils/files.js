@@ -33,7 +33,7 @@ function generateTree (files) {
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
         // ignore blacklisted files
-        if (config.upload.blacklist.indexOf(file.name) > -1) {continue;}
+        if (config.upload.blacklist.indexOf(file.name.split('/')[file.name.split('/').length - 1]) > -1) {continue;}
         pathList[file.webkitRelativePath] = file;
     }
 
@@ -52,7 +52,7 @@ function generateTree (files) {
     }
 
     // convert dirTree to array structure
-    function objToArr (obj, parentId='root') {
+    function objToArr (obj, parentId='root', path='') {
 
         let arr = [];
         for (let key in obj) {
@@ -62,7 +62,8 @@ function generateTree (files) {
                 arr.push(obj[key]);
             } else {
                 let folderId = newId('folder-');
-                arr.push({_id: folderId, name: key, type: 'folder', children: objToArr(obj[key], folderId)});
+                let dirPath = path + key + '/';
+                arr.push({_id: folderId, dirPath, name: key, type: 'folder', children: objToArr(obj[key], folderId, dirPath)});
             }
         }
         return arr;

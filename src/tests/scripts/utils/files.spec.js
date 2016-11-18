@@ -44,6 +44,7 @@ describe('utils/files.js', () => {
     let fileTree = [
         {
             '_id': 'folder-1',
+            'dirPath': 'ds000/',
             'name': 'ds000',
             'type': 'folder',
             'children': [
@@ -73,16 +74,19 @@ describe('utils/files.js', () => {
                 },
                 {
                     '_id': 'folder-2',
+                    'dirPath': 'ds000/sub-01/',
                     'name': 'sub-01',
                     'type': 'folder',
                     'children': [
                         {
                             '_id': 'folder-3',
+                            'dirPath': 'ds000/sub-01/ses-01/',
                             'name': 'ses-01',
                             'type': 'folder',
                             'children': [
                                 {
                                     '_id': 'folder-4',
+                                    'dirPath': 'ds000/sub-01/ses-01/func/',
                                     'name': 'func',
                                     'type': 'folder',
                                     'children': [
@@ -102,6 +106,7 @@ describe('utils/files.js', () => {
                                 },
                                 {
                                     '_id': 'folder-5',
+                                    'dirPath': 'ds000/sub-01/ses-01/anat/',
                                     'name': 'anat',
                                     'type': 'folder',
                                     'children': [
@@ -143,7 +148,6 @@ describe('utils/files.js', () => {
 // tests -----------------------------------------------------------------------------------------
 
     it('should generate a tree structure from a selection of files', () => {
-        // console.log(JSON.stringify(files.generateTree(fileList)));
         assert.deepEqual(files.generateTree(fileList), fileTree);
     });
 
@@ -155,6 +159,7 @@ describe('utils/files.js', () => {
         let idTree = addIds(fileTree);
         let elem = files.findInTree(idTree, 'tree-11');
         let mockElem = {
+            'dirPath': 'ds000/sub-01/ses-01/anat/',
             'name': 'anat',
             'type': 'folder',
             'children': [
