@@ -43,79 +43,79 @@ describe('utils/files.js', () => {
 
     let fileTree = [
         {
-            "_id": "folder-1",
-            "name": "ds000",
-            "type": "folder",
-            "children": [
+            '_id': 'folder-1',
+            'name': 'ds000',
+            'type': 'folder',
+            'children': [
                 {
-                    "name": "dataset_description.json",
-                    "webkitRelativePath": "ds000/dataset_description.json",
-                    "_id": "file-1",
-                    "parentId": "folder-1"
+                    'name': 'dataset_description.json',
+                    'webkitRelativePath': 'ds000/dataset_description.json',
+                    '_id': 'file-1',
+                    'parentId': 'folder-1'
                 },
                 {
-                    "name": "participants.tsv",
-                    "webkitRelativePath": "ds000/participants.tsv",
-                    "_id": "file-2",
-                    "parentId": "folder-1"
+                    'name': 'participants.tsv',
+                    'webkitRelativePath': 'ds000/participants.tsv',
+                    '_id': 'file-2',
+                    'parentId': 'folder-1'
                 },
                 {
-                    "name": "README",
-                    "webkitRelativePath": "ds000/README",
-                    "_id": "file-3",
-                    "parentId": "folder-1"
+                    'name': 'README',
+                    'webkitRelativePath': 'ds000/README',
+                    '_id': 'file-3',
+                    'parentId': 'folder-1'
                 },
                 {
-                    "name": "task-balloonanalogrisktask_bold.json",
-                    "webkitRelativePath": "ds000/task-balloonanalogrisktask_bold.json",
-                    "_id": "file-4",
-                    "parentId": "folder-1"
+                    'name': 'task-balloonanalogrisktask_bold.json',
+                    'webkitRelativePath': 'ds000/task-balloonanalogrisktask_bold.json',
+                    '_id': 'file-4',
+                    'parentId': 'folder-1'
                 },
                 {
-                    "_id": "folder-2",
-                    "name": "sub-01",
-                    "type": "folder",
-                    "children": [
+                    '_id': 'folder-2',
+                    'name': 'sub-01',
+                    'type': 'folder',
+                    'children': [
                         {
-                            "_id": "folder-3",
-                            "name": "ses-01",
-                            "type": "folder",
-                            "children": [
+                            '_id': 'folder-3',
+                            'name': 'ses-01',
+                            'type': 'folder',
+                            'children': [
                                 {
-                                    "_id": "folder-4",
-                                    "name": "func",
-                                    "type": "folder",
-                                    "children": [
+                                    '_id': 'folder-4',
+                                    'name': 'func',
+                                    'type': 'folder',
+                                    'children': [
                                         {
-                                            "name": "sub-01_ses-01_task-balloonanalogrisktask_run-01_bold.nii.gz",
-                                            "webkitRelativePath": "ds000/sub-01/ses-01/func/sub-01_ses-01_task-balloonanalogrisktask_run-01_bold.nii.gz",
-                                            "_id": "file-5",
-                                            "parentId": "folder-4"
+                                            'name': 'sub-01_ses-01_task-balloonanalogrisktask_run-01_bold.nii.gz',
+                                            'webkitRelativePath': 'ds000/sub-01/ses-01/func/sub-01_ses-01_task-balloonanalogrisktask_run-01_bold.nii.gz',
+                                            '_id': 'file-5',
+                                            'parentId': 'folder-4'
                                         },
                                         {
-                                            "name": "sub-01_ses-01_task-balloonanalogrisktask_run-01_events.tsv",
-                                            "webkitRelativePath": "ds000/sub-01/ses-01/func/sub-01_ses-01_task-balloonanalogrisktask_run-01_events.tsv",
-                                            "_id": "file-6",
-                                            "parentId": "folder-4"
+                                            'name': 'sub-01_ses-01_task-balloonanalogrisktask_run-01_events.tsv',
+                                            'webkitRelativePath': 'ds000/sub-01/ses-01/func/sub-01_ses-01_task-balloonanalogrisktask_run-01_events.tsv',
+                                            '_id': 'file-6',
+                                            'parentId': 'folder-4'
                                         }
                                     ]
                                 },
                                 {
-                                    "_id": "folder-5",
-                                    "name": "anat",
-                                    "type": "folder",
-                                    "children": [
+                                    '_id': 'folder-5',
+                                    'name': 'anat',
+                                    'type': 'folder',
+                                    'children': [
                                         {
-                                            "name": "sub-01_ses-01_inplaneT2.nii.gz",
-                                            "webkitRelativePath": "ds000/sub-01/ses-01/anat/sub-01_ses-01_inplaneT2.nii.gz",
-                                            "_id": "file-7",
-                                            "parentId": "folder-5"
+                                            'name': 'sub-01_ses-01_inplaneT2.nii.gz',
+                                            'webkitRelativePath': 'ds000/sub-01/ses-01/anat/sub-01_ses-01_inplaneT2.nii.gz',
+                                            '_id': 'file-7',
+                                            'parentId': 'folder-5'
                                         },
                                         {
-                                            "name": "sub-01_ses-01_T1w.nii.gz",
-                                            "webkitRelativePath": "ds000/sub-01/ses-01/anat/sub-01_ses-01_T1w.nii.gz",
-                                            "_id": "file-8",
-                                            "parentId": "folder-5"
+                                            'name': 'sub-01_ses-01_T1w.nii.gz',
+                                            'webkitRelativePath': 'ds000/sub-01/ses-01/anat/sub-01_ses-01_T1w.nii.gz',
+                                            '_id': 'file-8',
+                                            'parentId': 'folder-5'
                                         }
                                     ]
                                 }
