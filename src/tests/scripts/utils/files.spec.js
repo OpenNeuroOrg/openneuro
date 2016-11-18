@@ -151,10 +151,6 @@ describe('utils/files.js', () => {
         assert.deepEqual(files.generateTree(fileList), fileTree);
     });
 
-    it('should return the combined number of files and folders in a dataset tree', () => {
-        assert.equal(files.countTree(fileTree), 8);
-    });
-
     it('should return the tree element with the corresponding id', () => {
         let idTree = addIds(fileTree);
         let elem = files.findInTree(idTree, 'tree-11');

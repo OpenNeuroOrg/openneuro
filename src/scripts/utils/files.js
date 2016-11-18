@@ -7,7 +7,6 @@ import newId  from './newid';
 
 let fileUtils = {
     generateTree,
-    countTree,
     findInTree,
     read,
     hasExtension
@@ -73,27 +72,6 @@ function generateTree (files) {
 
     // return tree
     return dirTree;
-}
-
-/**
- * Count Tree
- *
- * Takes a BIDS tree object and returns
- * a total count of files and folders.
- */
-function countTree (tree) {
-    let count = 0;
-    function recurse (tree) {
-        for (let item of tree) {
-            if (item.children) {
-                recurse(item.children);
-            } else {
-                count++;
-            }
-        }
-    }
-    recurse(tree);
-    return count;
 }
 
 /**
