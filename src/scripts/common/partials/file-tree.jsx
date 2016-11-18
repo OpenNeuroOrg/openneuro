@@ -191,6 +191,8 @@ class FileTree extends React.Component {
             let iconClass = 'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder');
             return <button className="btn-file-folder" onClick={this.props.toggleFolder.bind(this, item, this.props.treeId)}><i className={iconClass}></i> {label}</button>;
         }else{
+            // remove full file paths
+            label = label.split('/')[label.split('/').length -1];
             return <span>{label} {this._noErrorsInLogs(item)}</span>;
         }
     }
