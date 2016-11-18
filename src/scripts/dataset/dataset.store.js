@@ -607,10 +607,12 @@ let datasetStore = Reflux.createStore({
     addFile(container, file) {
         let exists;
         for (let existingFile of container.children) {
-            if (existingFile.name === file.name) {
+
+            if (existingFile.name.split('/')[existingFile.name.split('/').length - 1] === file.name) {
                 exists = true;
             }
         }
+
         if (exists) {
             this.updateDirectoryState(container._id, {error: '"' + file.name + '" already exists in this directory.'});
         } else {
@@ -619,7 +621,7 @@ let datasetStore = Reflux.createStore({
                 message: message,
                 action: () => {
                     this.updateDirectoryState(container._id, {loading: true});
-                    if (file.name === 'dataset_description.json' && container.containerType === 'projects') {
+                    if (file.name === 'dataset_description.json' && container.hasOwnProperty('group')) {
                         this.updateDescriptionFile(file, container._id, () => {
                             let children = container.children;
                             children.unshift({
@@ -631,12 +633,12 @@ let datasetStore = Reflux.createStore({
                             this.updateDirectoryState(container._id, {children: children, loading: false});
                         });
                     } else {
-                        scitran.updateFile(container.containerType, container._id, file, () => {
+                        file.modifiedName = container.dirPath + file.name;
+                        scitran.updateFile('projects', this.data.dataset._id, file, () => {
                             let children = container.children;
                             children.unshift({
                                 filename: file.name,
                                 name: file.name,
-                                parentContainer: container.containerType,
                                 parentId: container._id
                             });
                             this.updateDirectoryState(container._id, {children: children, loading: false});
@@ -677,7 +679,7 @@ let datasetStore = Reflux.createStore({
                             'ReferencesAndLinks': '',
                             'DatasetDOI': ''
                         };
-                        scitran.updateProject(this.data.datasetId, {metadata: {authors: []}}, () => {});
+                        scitran.updateProject(this.data.dataset._id, {metadata: {authors: []}}, () => {});
                     }
                     this.update({dataset});
                     this.revalidate();
