@@ -1,5 +1,4 @@
 import scitran   from '../utils/scitran';
-import bids      from '../utils/bids';
 import uploads   from '../utils/upload';
 import fileUtils from '../utils/files';
 import config    from '../../../config';
@@ -36,8 +35,7 @@ export default {
     /**
      * Upload
      *
-     * Takes an entire bids file tree and and file count
-     * and recurses through and uploads all the files.
+     * Takes an entire bids file list and uploads all the files.
      * Additionally takes a progress callback that gets
      * updated at the start and end of every file or
      * folder upload request and an error callback.
@@ -69,18 +67,10 @@ export default {
 
             if (existingProject) {
                 this.currentProjectId = existingProject._id;
-                bids.getDatasetTree(existingProject, (oldDataset) => {
-                    let newDataset = datasetName;
-                    diff.datasets(newDataset.children, oldDataset[0].children, (subjectUploads, completedFiles) => {
-                        this.completed = this.completed + completedFiles.length + 1;
-                        progress({status: 'calculating', total: this.total, completed: this.completed, currentFiles: this.currentFiles});
-                        this.uploadFiles(newDataset.name, subjectUploads, this.currentProjectId);
-                    });
-                }, {}, (resumeProgress) => {
-                    resumeProgress.status       = 'calculating';
-                    resumeProgress.total        = fileList.length + 1;
-                    resumeProgress.currentFiles = this.currentFiles;
-                    progress(resumeProgress, existingProject._id);
+                diff.datasets(fileList, existingProject.files, (newFiles, completedFiles) => {
+                    this.completed = this.completed + completedFiles.length + 1;
+                    progress({status: 'calculating', total: this.total, completed: this.completed, currentFiles: this.currentFiles});
+                    this.uploadFiles(datasetName, newFiles, this.currentProjectId, metadata);
                 });
             } else {
                 this.createContainer(scitran.createProject, [userId, datasetName], (err, res) => {
@@ -109,7 +99,7 @@ export default {
     },
 
     /**
-     * Upload Metada
+     * Upload Metadata
      */
     uploadMetadata (datasetName, projectId, metadata, descriptionFile) {
         fileUtils.read(descriptionFile, (contents) => {
