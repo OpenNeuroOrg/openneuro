@@ -79,6 +79,7 @@ class FileTree extends React.Component {
 
         let deleteFile, editFile, addFile;
         if (editable) {
+            let inputId = item.hasOwnProperty('_id') ? item._id : item.name;
             if (item.children && item.showChildren) {
                 addFile = (
                     <div className="edit-file">
@@ -86,9 +87,9 @@ class FileTree extends React.Component {
                         <input
                             type="file"
                             className="add-files"
-                            ref={item.label}
+                            ref={inputId}
                             onChange={this._addFile.bind(this, item)}
-                            onClick={this._clearInput.bind(this, item.label)}/>
+                            onClick={this._clearInput.bind(this, inputId)}/>
                     </div>
                 );
             } else if (!item.children) {
@@ -107,9 +108,9 @@ class FileTree extends React.Component {
                         <input
                             type="file"
                             className="update-file"
-                            ref={item.name}
+                            ref={inputId}
                             onChange={this._updateFile.bind(this, item)}
-                            onClick={this._clearInput.bind(this, item.name)}/>
+                            onClick={this._clearInput.bind(this, inputId)}/>
                     </div>
                 );
             }
@@ -191,6 +192,8 @@ class FileTree extends React.Component {
             let iconClass = 'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder');
             return <button className="btn-file-folder" onClick={this.props.toggleFolder.bind(this, item, this.props.treeId)}><i className={iconClass}></i> {label}</button>;
         }else{
+            // remove full file paths
+            label = label.split('/')[label.split('/').length -1];
             return <span>{label} {this._noErrorsInLogs(item)}</span>;
         }
     }

@@ -51,7 +51,6 @@ let Dataset = React.createClass({
         let dataset     = this.state.dataset;
         let snapshots   = this.state.snapshots;
         let showSidebar = this.state.showSidebar;
-        let tree        = this.state.datasetTree;
         let canEdit     = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
         let loadingText = typeof this.state.loading == 'string' ? this.state.loading : 'loading';
         let content;
@@ -90,7 +89,7 @@ let Dataset = React.createClass({
                                             <Jobs />
                                         </div>
                                         {this._incompleteMessage(dataset)}
-                                        {this._fileTree(dataset, tree, canEdit)}
+                                        {this._fileTree(dataset, canEdit)}
                                     </div>
                                 </div>
                             </div>
@@ -238,8 +237,7 @@ let Dataset = React.createClass({
         if (downloads) {return <h6>downloads: {downloads}</h6>;}
     },
 
-    _fileTree(dataset, tree, canEdit) {
-        tree = tree ? tree : [dataset];
+    _fileTree(dataset, canEdit) {
         if (!dataset.status.incomplete) {
             return (
                 <div className="col-xs-12">
@@ -251,7 +249,7 @@ let Dataset = React.createClass({
                             <div className="panel-collapse" aria-expanded="false" >
                                 <div className="panel-body">
                                     <FileTree
-                                        tree={tree}
+                                        tree={[dataset]}
                                         editable={canEdit}
                                         loading={this.state.loadingTree}
                                         dismissError={actions.dismissError}

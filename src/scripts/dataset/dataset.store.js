@@ -125,7 +125,11 @@ let datasetStore = Reflux.createStore({
                 let selectedSnapshot = this.data.selectedSnapshot;
                 if (!selectedSnapshot || selectedSnapshot === datasetId) {
                     let dataset = res;
-                    this.update({dataset});
+                    this.update({dataset, datasetTree: [{
+                        _id:      datasetId,
+                        label:    dataset.label,
+                        children: dataset.children
+                    }]});
                     let originalId = dataset.original ? dataset.original : datasetId;
                     this.loadJobs(datasetId, snapshot, originalId, options.jobId, (jobs) => {
                         this.loadSnapshots(dataset, jobs, () => {
@@ -625,10 +629,12 @@ let datasetStore = Reflux.createStore({
     addFile(container, file) {
         let exists;
         for (let existingFile of container.children) {
-            if (existingFile.name === file.name) {
+
+            if (existingFile.name.split('/')[existingFile.name.split('/').length - 1] === file.name) {
                 exists = true;
             }
         }
+
         if (exists) {
             this.updateDirectoryState(container._id, {error: '"' + file.name + '" already exists in this directory.'});
         } else {
@@ -637,7 +643,7 @@ let datasetStore = Reflux.createStore({
                 message: message,
                 action: () => {
                     this.updateDirectoryState(container._id, {loading: true});
-                    if (file.name === 'dataset_description.json' && container.containerType === 'projects') {
+                    if (file.name === 'dataset_description.json' && container.hasOwnProperty('group')) {
                         this.updateDescriptionFile(file, container._id, () => {
                             let children = container.children;
                             children.unshift({
@@ -649,12 +655,11 @@ let datasetStore = Reflux.createStore({
                             this.updateDirectoryState(container._id, {children: children, loading: false});
                         });
                     } else {
-                        scitran.updateFile(container.containerType, container._id, file, () => {
+                        file.modifiedName = container.dirPath + file.name;
+                        scitran.updateFile('projects', this.data.dataset._id, file, () => {
                             let children = container.children;
                             children.unshift({
-                                filename: file.name,
-                                name: file.name,
-                                parentContainer: container.containerType,
+                                name: file.modifiedName,
                                 parentId: container._id
                             });
                             this.updateDirectoryState(container._id, {children: children, loading: false});
@@ -675,9 +680,8 @@ let datasetStore = Reflux.createStore({
             message: message,
             action: () => {
                 let dataset = this.data.dataset;
-                let datasetTree = this.data.datasetTree;
-                scitran.deleteFile(file.parentContainer, file.parentId, file.name, () => {
-                    let match = files.findInTree(datasetTree, file.parentId);
+                scitran.deleteFile('projects', this.data.dataset._id, file.name, () => {
+                    let match = files.findInTree([dataset], file.parentId);
                     let children = [];
                     for (let existingFile of match.children) {
                         if (file.name !== existingFile.name) {
@@ -685,7 +689,7 @@ let datasetStore = Reflux.createStore({
                         }
                     }
                     match.children = children;
-                    if (file.name === 'dataset_description.json' && file.parentContainer === 'projects') {
+                    if (file.name === 'dataset_description.json') {
                         dataset.description = {
                             'Name': '',
                             'License': '',
@@ -696,9 +700,9 @@ let datasetStore = Reflux.createStore({
                             'ReferencesAndLinks': [],
                             'DatasetDOI': ''
                         };
-                        scitran.updateProject(file.parentId, {metadata: {authors: []}}, () => {});
+                        scitran.updateProject(this.data.dataset._id, {metadata: {authors: []}}, () => {});
                     }
-                    this.update({dataset, datasetTree});
+                    this.update({dataset});
                     this.revalidate();
                 });
             }
@@ -710,9 +714,7 @@ let datasetStore = Reflux.createStore({
      * Update File
      */
     updateFile(item, file) {
-        let id       = item.parentId,
-            level    = item.parentContainer,
-            filename = item.name;
+        let filename = item.name;
 
         if (filename !== file.name) {
             this.updateFileState(item, {
@@ -724,12 +726,12 @@ let datasetStore = Reflux.createStore({
                 message: message,
                 action: () => {
                     this.updateFileState(item, {error: null, loading: true});
-                    if (file.name === 'dataset_description.json' && level === 'projects') {
-                        this.updateDescriptionFile(file, id, () => {
+                    if (file.name === 'dataset_description.json' && item.parentId == 'root') {
+                        this.updateDescriptionFile(file, this.data.dataset._id, () => {
                             this.updateFileState(item, {loading: false});
                         });
                     } else {
-                        scitran.updateFile(level, id, file, () => {
+                        scitran.updateFile('projects', this.data.dataset._id, file, () => {
                             this.updateFileState(item, {loading: false});
                             this.revalidate();
                         });
@@ -771,7 +773,7 @@ let datasetStore = Reflux.createStore({
      * direct download url.
      */
     getFileDownloadTicket(file, callback) {
-        scitran.getDownloadTicket(file.parentContainer, file.parentId, file.name, (err, res) => {
+        scitran.getDownloadTicket('projects', this.data.dataset._id, file.name, (err, res) => {
             let ticket = res.body.ticket;
             let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket;
             callback(downloadUrl);
@@ -794,14 +796,14 @@ let datasetStore = Reflux.createStore({
      *
      */
     updateDirectoryState(directoryId, changes, callback) {
-        let datasetTree = this.data.datasetTree;
-        let match = files.findInTree(datasetTree, directoryId);
+        let dataset = this.data.dataset;
+        let match = files.findInTree([dataset], directoryId);
         if (match) {
             for (let key in changes) {
                 match[key] = changes[key];
             }
         }
-        this.update({datasetTree}, callback);
+        this.update({dataset}, callback);
     },
 
     /**
@@ -812,8 +814,8 @@ let datasetStore = Reflux.createStore({
      * updating the state of the file tree
      */
     updateFileState(file, changes, callback) {
-        let datasetTree = this.data.datasetTree;
-        let parent = files.findInTree(datasetTree, file.parentId);
+        let dataset = this.data.dataset;
+        let parent = files.findInTree([dataset], file.parentId);
         for (let existingFile of parent.children) {
             if (file.name == existingFile.name) {
                 for (let key in changes) {
@@ -821,7 +823,7 @@ let datasetStore = Reflux.createStore({
                 }
             }
         }
-        this.update({datasetTree}, callback);
+        this.update({dataset}, callback);
     },
 
     /**
