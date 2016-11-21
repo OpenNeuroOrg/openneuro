@@ -69,9 +69,45 @@ function generateTree (files) {
     }
 
     dirTree = objToArr(dirTree);
+    sortTree(dirTree);
 
     // return tree
     return dirTree;
+}
+
+/**
+ * Sort Tree
+ */
+function sortTree (tree) {
+
+    // sort alaphabetical files before folders
+    let sortStrategy = (a, b) => {
+        let aName     = a.name.toLowerCase(),
+            bName     = b.name.toLowerCase(),
+            aIsFolder = a.type == 'folder',
+            bIsFolder = b.type == 'folder';
+
+        if (!aIsFolder && bIsFolder) {
+            return -1;
+        } else if (aIsFolder && !bIsFolder) {
+            return 1;
+        } else if (aName < bName) {
+            return -1;
+        } else if (aName > bName) {
+            return 1;
+        } else {
+            return 0;
+        }
+    };
+
+    // recursively apply sorting
+    for (let item of tree) {
+        if (item.children && item.children.length > 0) {
+            sortTree(item.children);
+            item.children.sort(sortStrategy);
+        }
+    }
+    tree.sort(sortStrategy);
 }
 
 /**
