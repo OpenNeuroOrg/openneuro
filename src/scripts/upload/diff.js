@@ -29,15 +29,6 @@ export default {
             let oldItem = this.contains(oldItems, newItem);
             if (oldItem) {
                 this.progress.push(newItem.name);
-                if (newItem.type === 'folder') {
-                    diffItems.push({
-                        _id:      oldItem._id,
-                        name:     newItem.name,
-                        type:     'folder',
-                        ignore:   true,
-                        children: this.diff(newItem.children, oldItem.children, oldItem._id)
-                    });
-                }
             } else {
                 diffItems.push(newItem);
             }
@@ -57,7 +48,8 @@ export default {
         let match = null;
         for (let i = 0; i < arr.length; i++) {
             let arrayElem = arr[i];
-            if (arrayElem.name === elem.name) {
+            let arrayElemPath = arrayElem.name.replace(/%2F/g, '/');
+            if ('/' + arrayElemPath === elem.relativePath) {
                 match = arrayElem;
             }
         }

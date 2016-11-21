@@ -8,7 +8,6 @@ import fileStore       from './upload.file.actions';
 import notifications   from '../notification/notification.actions';
 import scitran         from '../utils/scitran';
 import upload          from './upload';
-import files           from '../utils/files';
 import validate        from 'bids-validator';
 import userStore       from '../user/user.store';
 import datasetsActions from '../dashboard/datasets.actions';
@@ -174,14 +173,14 @@ let UploadStore = Reflux.createStore({
     validate () {
         this.update({uploadStatus: 'validating', showIssues: true, activeKey: 3});
         fileStore.getFiles('list', (list) => {
-            validate.BIDS(list, {}, (errors, warnings, summary) => {
+            validate.BIDS(list, {}, (issues, summary) => {
 
-                if (errors === 'Invalid') {
+                if (issues === 'Invalid') {
                     this.update({errors: 'Invalid'});
                 }
 
-                errors   = errors   ? errors   : [];
-                warnings = warnings ? warnings : [];
+                let errors   = issues.errors   ? issues.errors   : [];
+                let warnings = issues.warnings ? issues.warnings : [];
 
                 this.update({
                     errors: errors,
@@ -200,18 +199,16 @@ let UploadStore = Reflux.createStore({
     /**
      * Check Exists
      *
-     * Takes a filetree and a boolean representing
+     * Takes a filelist and a boolean representing
      * whether this is a resumed upload. If it isn't
      * it check for existing dataset with the same name
      * and group.
      */
     checkExists () {
-        fileStore.getFiles('tree', (fileTree) => {
-            // rename dirName before upload
-            fileTree[0].name = this.data.dirName;
+        fileStore.getFiles('list', (fileList) => {
 
             if (this.data.uploadStatus === 'dataset-exists') {
-                this.upload(fileTree);
+                this.upload(fileList);
                 return;
             }
 
@@ -221,7 +218,7 @@ let UploadStore = Reflux.createStore({
                 scitran.getProjects({}, function (projects) {
                     let existingProjectId;
                     for (let project of projects) {
-                        if (project.label === fileTree[0].name && project.group === userId) {
+                        if (project.label === self.data.dirName && project.group === userId) {
                             existingProjectId = project._id;
                             break;
                         }
@@ -230,11 +227,11 @@ let UploadStore = Reflux.createStore({
                     if (existingProjectId) {
                         self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: 4});
                     } else {
-                        self.upload(fileTree);
+                        self.upload(fileList);
                     }
                 });
             } else {
-                self.upload(fileTree);
+                self.upload(fileList);
             }
         });
     },
@@ -247,7 +244,7 @@ let UploadStore = Reflux.createStore({
      * at hand such as the resume question in the upload modal.
      */
     resumeUpload () {
-        fileStore.getFiles('tree', (fileTree) => {this.upload(fileTree);});
+        fileStore.getFiles('list', (fileList) => {this.upload(fileList);});
     },
 
     /**
@@ -257,9 +254,7 @@ let UploadStore = Reflux.createStore({
      * a progress event every time a file or folder
      * finishes.
      */
-    upload (fileTree) {
-        fileTree[0].name = this.data.dirName;
-        let count = files.countTree(fileTree);
+    upload (fileList) {
 
         this.update({
             uploadStatus: 'uploading',
@@ -281,7 +276,7 @@ let UploadStore = Reflux.createStore({
         let uploadingFavicon = document.getElementById('favicon_upload');
         favicon.image(uploadingFavicon); // set new favicon image
 
-        upload.upload(userStore.data.scitran._id, fileTree, validation, this.data.summary, count, (progress, projectId) => {
+        upload.upload(userStore.data.scitran._id, this.data.dirName, fileList, {validation, summary: this.data.summary}, (progress, projectId) => {
             projectId = projectId ? projectId : this.data.projectId;
             this.update({progress, uploading: true, projectId});
             if (!datasetsUpdated && progress.completed > 0) {datasetsActions.getDatasets(); datasetsUpdated = true;}
