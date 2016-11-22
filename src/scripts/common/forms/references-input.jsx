@@ -43,7 +43,6 @@ let ArrayInput = React.createClass({
 // template methods ---------------------------------------------------
 
     _referenceList(references) {
-        console.log(references);
         if (references && references.length > 0) {
             let list = references.map((item, index) => {
                 return (
