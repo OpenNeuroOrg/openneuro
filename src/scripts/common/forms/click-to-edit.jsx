@@ -74,6 +74,7 @@ let ClickToEdit = React.createClass({
             display = <div className="cte-display">{this._authorList(value)}</div>;
             break;
         case 'referencesAndLinks':
+            if (typeof value === 'string') {value = [value];}
             input = <ReferencesAndLinksInput value={value} onChange={this._handleChange.bind(null, type)} />;
             display = <div className="cte-display">{this._referencesAndLinksList(value)}</div>;
             break;
@@ -118,10 +119,11 @@ let ClickToEdit = React.createClass({
         return list;
     },
     _referencesAndLinksList(refAndLinks) {
+        if (typeof refAndLinks === 'string') {refAndLinks = [refAndLinks];}
         let list = refAndLinks.map((item, index) => {
             return (
                 <div className="fade-in" key={index}>
-                    <span>{item}</span>
+                    <span dangerouslySetInnerHTML={markdown.format(item)}></span>
                 </div>
             );
         });
