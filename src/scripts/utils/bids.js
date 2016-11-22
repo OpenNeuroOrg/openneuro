@@ -303,6 +303,10 @@ export default  {
             description.ReferencesAndLinks = metadata.referencesAndLinks;
         }
 
+        if (typeof description.ReferencesAndLinks === 'string') {
+            description.ReferencesAndLinks = [description.ReferencesAndLinks];
+        }
+
         return description;
     },
 
