@@ -1,6 +1,5 @@
 // dependencies -------------------------------------------------------------------
 
-import config from '../../../config';
 import newId  from './newid';
 
 // public API ---------------------------------------------------------------------
@@ -31,8 +30,6 @@ function generateTree (files) {
     // generate list of paths
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
-        // ignore blacklisted files
-        if (config.upload.blacklist.indexOf(file.name.split('/')[file.name.split('/').length - 1]) > -1) {continue;}
         pathList[file.webkitRelativePath] = file;
     }
 
