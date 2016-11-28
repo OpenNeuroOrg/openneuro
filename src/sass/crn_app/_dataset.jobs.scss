@@ -286,6 +286,7 @@
         }
 }
 
+
 .validation {
     .validation-wrap {
 
@@ -516,6 +517,13 @@
 
 .incomplete-dataset {
     .incomplete-wrap {
+
+        .fileupload-btn{
+            width: 104px;
+            margin: 5px;
+            float: right
+        }
+
         .status {
             @include border-radius(0);
             margin-bottom: 10px;

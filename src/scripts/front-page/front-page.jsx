@@ -103,7 +103,7 @@ let FrontPage = React.createClass({
                             </div>
                             <div className="col-sm-6">
                                 <p>View more information about<br/>
-                                <a href="http://reproducibility.stanford.edu/">Stanford Center for Reproducible Neuroscience</a></p>
+                                <a target="_blank" href="http://reproducibility.stanford.edu/">Stanford Center for Reproducible Neuroscience</a></p>
                             </div>
                         </div>
                     </span>
@@ -114,11 +114,11 @@ let FrontPage = React.createClass({
                         <div className="row">
                             <div className="col-sm-6">
                                     <p>A Validator for the Brain Imaging Data Structure<br/>
-                                        Read more about the <a href="http://bids.neuroimaging.io/">BIDS specifications</a></p>
+                                        Read more about the <a target="_blank" href="http://bids.neuroimaging.io/">BIDS specifications</a></p>
                                 </div>
                                 <div className="col-sm-6">
                                 <p>Want to contribute to BIDS?<br/>
-                                    Visit the <a href="https://groups.google.com/forum/#!forum/bids-discussion">Google discussion group</a> to contribute.</p>
+                                    Visit the <a target="_blank" href="https://groups.google.com/forum/#!forum/bids-discussion">Google discussion group</a> to contribute.</p>
                             </div>
                         </div>
                     </span>
@@ -126,29 +126,29 @@ let FrontPage = React.createClass({
                             <h4>Support for OpenNeuro provided by</h4>
                             <div className="row">
                                 <div className="col-sm-4">
-                                    <a href="http://www.arnoldfoundation.org/" title="Arnold Foundation">
+                                    <a target="_blank" href="http://www.arnoldfoundation.org/" title="Arnold Foundation">
                                         <img src="./assets/ljaf.png" alt="Arnold Foundation"/>
                                     </a>
                                 </div>
                                 <div className="col-sm-4">
-                                    <a href="https://www.nsf.gov/" title="NSF">
+                                    <a target="_blank" href="https://www.nsf.gov/" title="NSF">
                                         <img src="./assets/nsf.png" alt="National Science Foundation"/>
                                     </a>
                                 </div>
                                 <div className="col-sm-4">
-                                    <a href="https://www.nih.gov/" title="NIH">
+                                    <a target="_blank" href="https://www.nih.gov/" title="NIH">
                                         <img src="./assets/nih.png" alt="National Institute on Drug and Abuse"/>
                                     </a>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-offset-3 col-sm-3">
-                                    <a href="https://www.stanford.edu/" title="Stanford">
+                                    <a target="_blank" href="https://www.stanford.edu/" title="Stanford">
                                         <img src="./assets/stanford.png" alt="Stanford"/>
                                     </a>
                                 </div>
                                 <div className="col-sm-3">
-                                    <a href="https://squishymedia.com/" title="Squishymedia">
+                                    <a target="_blank" href="https://squishymedia.com/" title="Squishymedia">
                                         <img src="./assets/squishymedia.png" alt="Squishymedia"/>
                                     </a>
                                 </div>

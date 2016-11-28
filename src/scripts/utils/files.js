@@ -1,12 +1,11 @@
 // dependencies -------------------------------------------------------------------
 
-import config from '../../../config';
+import newId  from './newid';
 
 // public API ---------------------------------------------------------------------
 
 let fileUtils = {
     generateTree,
-    countTree,
     findInTree,
     read,
     hasExtension
@@ -31,8 +30,6 @@ function generateTree (files) {
     // generate list of paths
     for (let i = 0; i < files.length; i++) {
         let file = files[i];
-        // ignore blacklisted files
-        if (config.upload.blacklist.indexOf(file.name) > -1) {continue;}
         pathList[file.webkitRelativePath] = file;
     }
 
@@ -51,40 +48,63 @@ function generateTree (files) {
     }
 
     // convert dirTree to array structure
-    function objToArr (obj) {
+    function objToArr (obj, parentId='root', path='') {
+
         let arr = [];
         for (let key in obj) {
             if (obj[key].webkitRelativePath && obj[key].webkitRelativePath.length > 0) {
+                obj[key]._id = newId('file-');
+                obj[key].parentId = parentId;
                 arr.push(obj[key]);
             } else {
-                arr.push({name: key, type: 'folder', children: objToArr(obj[key])});
+                let folderId = newId('folder-');
+                let dirPath = path + key + '/';
+                arr.push({_id: folderId, dirPath, name: key, type: 'folder', children: objToArr(obj[key], folderId, dirPath)});
             }
         }
         return arr;
     }
 
     dirTree = objToArr(dirTree);
+    sortTree(dirTree);
 
     // return tree
     return dirTree;
 }
 
 /**
- * Count Tree
- *
- * Takes a BIDS tree object and returns
- * a total count of files and folders.
+ * Sort Tree
  */
-function countTree (tree) {
-    let count = 0;
-    function recurse (tree) {
-        for (let item of tree) {
-            count++;
-            if (item.children) {recurse(item.children);}
+function sortTree (tree) {
+
+    // sort alaphabetical files before folders
+    let sortStrategy = (a, b) => {
+        let aName     = a.name.toLowerCase(),
+            bName     = b.name.toLowerCase(),
+            aIsFolder = a.type == 'folder',
+            bIsFolder = b.type == 'folder';
+
+        if (!aIsFolder && bIsFolder) {
+            return -1;
+        } else if (aIsFolder && !bIsFolder) {
+            return 1;
+        } else if (aName < bName) {
+            return -1;
+        } else if (aName > bName) {
+            return 1;
+        } else {
+            return 0;
+        }
+    };
+
+    // recursively apply sorting
+    for (let item of tree) {
+        if (item.children && item.children.length > 0) {
+            sortTree(item.children);
+            item.children.sort(sortStrategy);
         }
     }
-    recurse(tree);
-    return count;
+    tree.sort(sortStrategy);
 }
 
 /**
@@ -95,6 +115,7 @@ function countTree (tree) {
  * the tree.
  */
 function findInTree (tree, id, prop) {
+    if (id === 'root') {return tree[0];}
     prop = prop ? prop : '_id';
     let match, subTree;
     for (let item of tree) {
