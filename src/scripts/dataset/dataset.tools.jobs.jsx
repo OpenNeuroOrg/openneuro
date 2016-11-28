@@ -9,7 +9,7 @@ import {Modal}  from 'react-bootstrap';
 import moment   from 'moment';
 import Select   from 'react-select';
 import markdown from '../utils/markdown';
-import validate from '../../../../validator';
+import validate from 'bids-validator';
 import scitran  from '../utils/scitran';
 import Results  from '../upload/upload.validation-results.jsx';
 
@@ -470,7 +470,8 @@ export default class JobMenu extends React.Component {
         scitran.getProject(snapshotId, (res) => {
 
             for (let app of this.props.apps) {
-                let appConfig = {error: [1]};
+                let longDescription = JSON.parse(app.longDescription);
+                let appConfig = longDescription.hasOwnProperty('appConfig') ? longDescription.appConfig : {error: []};
                 let issues = validate.reformat(res.body.metadata.validation, res.body.metadata.summary, appConfig);
                 if (issues.errors.length > 0) {
                     disabledApps[app.id] = {issues};
