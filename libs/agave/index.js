@@ -101,7 +101,6 @@ export default {
             appId:             job.appId,
             batchQueue:        job.batchQueue,
             executionSystem:   job.executionSystem,
-            maxRunTime:        '05:00:00',
             memoryPerNode:     job.memoryPerNode,
             nodeCount:         job.nodeCount,
             processorsPerNode: job.processorsPerNode,
