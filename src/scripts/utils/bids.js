@@ -143,10 +143,13 @@ export default  {
         if (files && files.length > 0) {
             for (let i = 0; i < files.length; i++) {
                 let file = files[i];
-                fileList[i] = {
-                    name: file.name.replace(/%2F/g, '/'),
-                    webkitRelativePath: file.name.replace(/%2F/g, '/')
-                };
+
+                if (!file.tags || file.tags.indexOf('attachment') == -1) {
+                    fileList[i] = {
+                        name: file.name.replace(/%2F/g, '/'),
+                        webkitRelativePath: file.name.replace(/%2F/g, '/')
+                    };
+                }
             }
         }
         let fileTree = fileUtils.generateTree(fileList);
