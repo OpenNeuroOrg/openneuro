@@ -27,12 +27,13 @@ let upload = {
             req.func.apply(null, req.args);
         } else {
         // file upload requests
-            req.file.relativePath = req.file.relativePath.replace(/^\//,'');
+            req.file.relativePath = req.file.hasOwnProperty('relativePath') ? req.file.relativePath.replace(/^\//,'') : req.file.name;
+            req.file.tags = req.hasOwnProperty('tags') ? JSON.stringify(req.tags) : '[]';
             req.progressStart(req.file.name);
             request.upload(req.url, {
                 fields: {
                     name: req.file.relativePath,
-                    tags: '[]',
+                    tags: req.file.tags,
                     file: req.file.data ? req.file.data : req.file
                 }
             }, (err) => {
