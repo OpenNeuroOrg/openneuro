@@ -53,7 +53,7 @@ let notifications = {
                         lastName:        user.lastname,
                         appName:         job.appLabel,
                         appId:           job.appId,
-                        jobId,           job.jobId,
+                        jobId:           job.jobId,
                         startDate:       moment(job.agave.created).format('MMMM Do'),
                         datasetName:     job.datasetLabel,
                         status:          job.agave.status,
