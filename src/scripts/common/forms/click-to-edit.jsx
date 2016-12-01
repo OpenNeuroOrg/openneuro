@@ -3,7 +3,7 @@
 // dependencies -------------------------------------------------------
 
 import React                    from 'react';
-import AuthorInput              from './author-input.jsx';
+import ArrayInput              from './array-input.jsx';
 import ReferencesAndLinksInput  from './references-input.jsx';
 import FileArrayInput           from './file-array-input.jsx';
 import Spinner                  from '../partials/spinner.jsx';
@@ -70,12 +70,12 @@ let ClickToEdit = React.createClass({
             );
             break;
         case 'authors':
-            input = <AuthorInput value={value} onChange={this._handleChange.bind(null, type)} />;
+            input = <ArrayInput model={['name', 'ORCIDID']} value={value} onChange={this._handleChange.bind(null, type)} />;
             display = <div className="cte-display">{this._authorList(value)}</div>;
             break;
         case 'referencesAndLinks':
             if (typeof value === 'string') {value = [value];}
-            input = <ReferencesAndLinksInput value={value} onChange={this._handleChange.bind(null, type)} />;
+            input = <ArrayInput value={value} onChange={this._handleChange.bind(null, type)} />;
             display = <div className="cte-display">{this._referencesAndLinksList(value)}</div>;
             break;
         case 'fileArray':
@@ -123,7 +123,7 @@ let ClickToEdit = React.createClass({
         let list = refAndLinks.map((item, index) => {
             return (
                 <div className="fade-in" key={index}>
-                    <span dangerouslySetInnerHTML={markdown.format(item)}></span>
+                    <span className="ref-link-markdown" dangerouslySetInnerHTML={markdown.format(item)}></span>
                 </div>
             );
         });
