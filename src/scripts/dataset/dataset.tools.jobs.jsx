@@ -471,7 +471,7 @@ export default class JobMenu extends React.Component {
         scitran.getProject(snapshotId, (res) => {
             for (let app of this.props.apps) {
                 let longDescription = typeof(app.longDescription) == 'string' ? JSON.parse(app.longDescription) : app.longDescription;
-                let appConfig = longDescription.hasOwnProperty('appConfig') ? longDescription.appConfig : {error: [1]};
+                let appConfig = longDescription.hasOwnProperty('appConfig') ? longDescription.appConfig : {error: []};
                 let issues = validate.reformat(res.body.metadata.validation, res.body.metadata.summary, appConfig);
                 if (issues.errors.length > 0) {
                     disabledApps[app.id] = {issues};
