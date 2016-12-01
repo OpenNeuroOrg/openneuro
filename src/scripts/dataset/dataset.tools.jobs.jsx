@@ -126,6 +126,7 @@ export default class JobMenu extends React.Component {
         if (this.state.selectedSnapshot) {
             return (
                 <div>
+                    <hr/>
                     <h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
                     <div className="row">
                         <div className="col-xs-12">
@@ -135,8 +136,8 @@ export default class JobMenu extends React.Component {
                                     {options}
                                 </select>
                             </div>
+                            <h6 className="col-xs-12"> * - app is incompatible with selected snapshot</h6>
                         </div>
-                            <br /><span> * - app is incompatible with selected snapshot</span>
                     </div>
                 </div>
             );
@@ -234,8 +235,8 @@ export default class JobMenu extends React.Component {
             <div>
                 <div>
                     <h5>Incompatible</h5>
-                    <div className="well">
-                        <div>This snapshot has issues that make it incompatible with this pipeline. Pipelines may have validation requirements beyond BIDS compatibility.</div>
+                    <div>
+                        <p>This snapshot has issues that make it incompatible with this pipeline. Pipelines may have validation requirements beyond BIDS compatibility.</p>
                         <Results errors={issues.errors} warnings={issues.warnings} />
                     </div>
                 </div>
@@ -470,7 +471,7 @@ export default class JobMenu extends React.Component {
         scitran.getProject(snapshotId, (res) => {
             for (let app of this.props.apps) {
                 let longDescription = typeof(app.longDescription) == 'string' ? JSON.parse(app.longDescription) : app.longDescription;
-                let appConfig = longDescription.hasOwnProperty('appConfig') ? longDescription.appConfig : {error: []};
+                let appConfig = longDescription.hasOwnProperty('appConfig') ? longDescription.appConfig : {error: [1]};
                 let issues = validate.reformat(res.body.metadata.validation, res.body.metadata.summary, appConfig);
                 if (issues.errors.length > 0) {
                     disabledApps[app.id] = {issues};
