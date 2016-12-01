@@ -4,7 +4,6 @@
 
 import React                    from 'react';
 import ArrayInput              from './array-input.jsx';
-import ReferencesAndLinksInput  from './references-input.jsx';
 import FileArrayInput           from './file-array-input.jsx';
 import Spinner                  from '../partials/spinner.jsx';
 import WarnButton               from './warn-button.jsx';

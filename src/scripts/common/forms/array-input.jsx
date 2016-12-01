@@ -11,7 +11,7 @@ let ArrayInput = React.createClass({
 // life cycle events --------------------------------------------------
 
     getInitialState () {
-        let initialState = {error: null}
+        let initialState = {error: null};
         if (this.props.model) {
             initialState.name = '';
             initialState.ORCIDID = '';
@@ -19,7 +19,7 @@ let ArrayInput = React.createClass({
             initialState.reference = '';
         }
 
-       return initialState;
+        return initialState;
     },
 
     getDefaultProps () {
@@ -28,6 +28,7 @@ let ArrayInput = React.createClass({
 
 
     propTypes: {
+        model: React.PropTypes.array,
         value: React.PropTypes.array,
         onChange: React.PropTypes.func
     },
@@ -122,7 +123,7 @@ export default ArrayInput;
 let ArrayItem = React.createClass({
 
     getInitialState () {
-        let initialState = {edit: false}
+        let initialState = {edit: false};
         if (this.props.model) {
             initialState.name = this.props.item.name;
             initialState.ORCIDID = this.props.item.ORCIDID;
@@ -133,7 +134,9 @@ let ArrayItem = React.createClass({
     },
 
     propTypes: {
-        //need to add item propType...?
+        //need to add item propType for Author OBJECT...?
+        model: React.PropTypes.array,
+        item: React.PropTypes.string,
         remove: React.PropTypes.func,
         onEdit: React.PropTypes.func,
         index: React.PropTypes.number
