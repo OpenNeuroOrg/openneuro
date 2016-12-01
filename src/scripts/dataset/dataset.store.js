@@ -966,7 +966,7 @@ let datasetStore = Reflux.createStore({
         if (this.data.dataset) {
             crn.getJob(this.data.dataset._id, jobId, (err, res) => {
                 let existingJob;
-                let jobUpdate =  res ? res.body : null;
+                let jobUpdate =  !err && res ? res.body : null;
                 let jobs = this.data.jobs;
                 if (jobs && jobs.length > 0) {
                     for (let job of jobs) {
@@ -986,7 +986,7 @@ let datasetStore = Reflux.createStore({
                     }
                 }
                 callback(jobUpdate ? jobUpdate : existingJob);
-            }, {snapshot: this.data.snapshot});
+            }, {snapshot: true});
         }
     },
 
