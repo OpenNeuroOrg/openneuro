@@ -1,6 +1,6 @@
 {
   "name": "crn-server",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -18,7 +18,7 @@
     "archiver": "^1.0.0",
     "async": "^1.5.0",
     "babel": "^5.8.23",
-    "bids-validator": "0.19.4",
+    "bids-validator": "0.20.0",
     "body-parser": "^1.14.0",
     "cron": "^1.1.0",
     "express": "^4.13.3",
