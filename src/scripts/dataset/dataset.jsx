@@ -16,6 +16,8 @@ import FileTree     from '../common/partials/file-tree.jsx';
 import Jobs         from './dataset.jobs.jsx';
 import userStore    from '../user/user.store.js';
 import Summary      from './dataset.summary.jsx';
+import FileSelect     from '../common/forms/file-select.jsx';
+import uploadActions  from '../upload/upload.actions.js';
 
 let Dataset = React.createClass({
 
@@ -23,22 +25,20 @@ let Dataset = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-    componentWillReceiveProps() {
-        let params = this.getParams();
-        if (params.snapshotId) {
-            actions.trackView(params.snapshotId);
-            actions.loadDataset(params.snapshotId, {snapshot: true});
-        } else if (params.datasetId && this.state.dataset && params.datasetId !== this.state.dataset._id) {
-            actions.loadDataset(params.datasetId);
-        }
-    },
+    componentWillReceiveProps() {this._loadData();},
 
-    componentDidMount() {
+    componentDidMount() {this._loadData();},
+
+    _loadData() {
         let params = this.getParams();
+        let query  = this.getQuery();
         if (params.snapshotId) {
             actions.trackView(params.snapshotId);
-            actions.loadDataset(params.snapshotId, {snapshot: true});
-        } else if (params.datasetId) {
+            actions.loadDataset(params.snapshotId, {snapshot: true, appId: query.app, jobId: query.job});
+        } else if (
+            (params.datasetId && !this.state.dataset) ||
+            (params.datasetId && params.datasetId !== this.state.dataset._id)
+        ) {
             actions.loadDataset(params.datasetId);
         }
     },
@@ -51,7 +51,6 @@ let Dataset = React.createClass({
         let dataset     = this.state.dataset;
         let snapshots   = this.state.snapshots;
         let showSidebar = this.state.showSidebar;
-        let tree        = this.state.datasetTree;
         let canEdit     = dataset && (dataset.access === 'rw' || dataset.access == 'admin') && !dataset.original;
         let loadingText = typeof this.state.loading == 'string' ? this.state.loading : 'loading';
         let content;
@@ -90,7 +89,7 @@ let Dataset = React.createClass({
                                             <Jobs />
                                         </div>
                                         {this._incompleteMessage(dataset)}
-                                        {this._fileTree(dataset, tree, canEdit)}
+                                        {this._fileTree(dataset, canEdit)}
                                     </div>
                                 </div>
                             </div>
@@ -238,8 +237,7 @@ let Dataset = React.createClass({
         if (downloads) {return <h6>downloads: {downloads}</h6>;}
     },
 
-    _fileTree(dataset, tree, canEdit) {
-        tree = tree ? tree : [dataset];
+    _fileTree(dataset, canEdit) {
         if (!dataset.status.incomplete) {
             return (
                 <div className="col-xs-12">
@@ -251,13 +249,13 @@ let Dataset = React.createClass({
                             <div className="panel-collapse" aria-expanded="false" >
                                 <div className="panel-body">
                                     <FileTree
-                                        tree={tree}
+                                        tree={[dataset]}
                                         editable={canEdit}
                                         loading={this.state.loadingTree}
                                         dismissError={actions.dismissError}
                                         deleteFile={actions.deleteFile}
                                         getFileDownloadTicket={actions.getFileDownloadTicket}
-                                        displayFile={actions.displayFile.bind(this, null)}
+                                        displayFile={actions.displayFile.bind(this, null, null)}
                                         toggleFolder={actions.toggleFolder}
                                         addFile={actions.addFile}
                                         updateFile={actions.updateFile}
@@ -279,7 +277,10 @@ let Dataset = React.createClass({
                         <div className="panel panel-default status">
                             <div className="panel-heading" >
                                 <h4 className="panel-title">
-                                    <span className="dataset-status ds-warning"><i className="fa fa-warning"></i> Incomplete</span>
+                                    <span className="dataset-status ds-warning">
+                                        <i className="fa fa-warning"></i> Incomplete
+                                    </span>
+                                    <FileSelect resume={true} onChange={this._onFileSelect} />
                                 </h4>
                             </div>
                             <div className="panel-collapse" aria-expanded="false" >
@@ -293,6 +294,8 @@ let Dataset = React.createClass({
             );
         }
     },
+
+// custom methods -----------------------------------------------------
 
     _modified(modified) {
         let dateModified = moment(modified).format('L');
@@ -310,6 +313,10 @@ let Dataset = React.createClass({
 
     _views(views) {
         if (views) {return <h6>views: {views}</h6>;}
+    },
+
+    _onFileSelect(files) {
+        uploadActions.onResume(files, this.state.dataset.label);
     }
 
 });

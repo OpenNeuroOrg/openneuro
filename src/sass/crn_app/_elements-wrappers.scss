@@ -12,28 +12,28 @@
 
 .clearfix {@extend %clearfix;}
 
-::-webkit-scrollbar {
-    width: 0;
-    z-index: 100;
-}
- 
-/* Track */
-::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0); 
-    -webkit-border-radius: 0px;
-    border-radius: 0px;
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 0px;
-    border-radius: 0px;
-    background: rgba(0,0,0,0.2); 
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
-}
-::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(0,0,0,0.2); 
-}
+// ::-webkit-scrollbar {
+//     width: 0;
+//     z-index: 100;
+// }
+
+// /* Track */
+// ::-webkit-scrollbar-track {
+//     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+//     -webkit-border-radius: 0px;
+//     border-radius: 0px;
+// }
+
+// /* Handle */
+// ::-webkit-scrollbar-thumb {
+//     -webkit-border-radius: 0px;
+//     border-radius: 0px;
+//     background: rgba(0,0,0,0.2);
+//     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+// }
+// ::-webkit-scrollbar-thumb:window-inactive {
+//     background: rgba(0,0,0,0.2);
+// }
 
 html,
 body,
@@ -42,11 +42,7 @@ body,
 .page,
 .full-col,
 .view.container,
-.route-wrapper,
-.is-front,
-.is-front .main > div,
-.is-front .sign-in,
-.is-front .intro {height: 100%;}
+.route-wrapper{height: 100%;}
 
 body {
     font-family: $font-family-cabin;
@@ -103,12 +99,12 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: $font-family-ssp;
+    font-family: $font-family-open;
     font-weight: 400;
 }
 
 .href-font {
-    font-family: $font-family-ssp;
+    font-family: $font-family-open;
 }
 
 .page {
@@ -617,7 +613,7 @@ h6 {
     width: 100%;
     height: auto;
     font-size: 18px;
-    font-family: $font-family-ssp;
+    font-family: $font-family-open;
     font-weight: lighter;
     border: 0;
     background: $white;

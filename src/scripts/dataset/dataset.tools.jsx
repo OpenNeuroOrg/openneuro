@@ -5,11 +5,9 @@ import Reflux         from 'reflux';
 import moment         from 'moment';
 import actions        from './dataset.actions.js';
 import WarnButton     from '../common/forms/warn-button.jsx';
-import FileSelect     from '../common/forms/file-select.jsx';
 import uploadStore    from '../upload/upload.store';
 import userStore      from '../user/user.store.js';
 import datasetActions from './dataset.actions.js';
-import uploadActions  from '../upload/upload.actions.js';
 import ToolModals     from './dataset.tools.modals.jsx';
 
 let Tools = React.createClass({
@@ -33,8 +31,7 @@ let Tools = React.createClass({
 
     render() {
         let dataset     = this.props.dataset,
-            snapshots   = this.props.snapshots,
-            isUploading = dataset._id === this.state.projectId;
+            snapshots   = this.props.snapshots;
 
         // permission check shorthands
         let isAdmin      = dataset.access === 'admin',
@@ -117,7 +114,6 @@ let Tools = React.createClass({
             <div className="tools clearfix">
                 {this._snapshotLabel(dataset)}
                 {this._tools(tools)}
-                {this._resume(isIncomplete, isUploading)}
                 <ToolModals />
             </div>
         );
@@ -133,16 +129,6 @@ let Tools = React.createClass({
                 </div>
             </div>
         );
-    },
-
-    _resume(incomplete, isUploading) {
-        if (incomplete && !isUploading) {
-            return (
-                <div className="resume-upload-tool">
-                    <FileSelect resume={true} onChange={this._onFileSelect} />
-                </div>
-            );
-        }
     },
 
     _tools(toolConfig) {
@@ -163,12 +149,6 @@ let Tools = React.createClass({
             }
         });
         return tools;
-    },
-
-// custom methods -----------------------------------------------------
-
-    _onFileSelect(files) {
-        uploadActions.onResume(files, this.props.dataset.label);
     }
 
 });

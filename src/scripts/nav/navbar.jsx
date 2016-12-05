@@ -41,10 +41,11 @@ let BSNavbar = React.createClass({
 
     _brand(){
         return(
-            <Link to="dashboard" className="navbar-brand">
-                <img src="./assets/CRN-Logo-Placeholder.png"
-                     alt="Center for Reproducible Neuroscience Logo"
-                     title="Center for Reproducible Neuroscience Link To Home Page"/>
+            <Link to="app" className="navbar-brand">
+                <img src="./assets/brand_mark.png"
+                     alt="OpenNeuro Logo"
+                     title="OpenNeuro Link To Home Page"/>
+                     <div className="logo-text">Open<span className="logo-end">Neuro</span></div>
             </Link>
         );
     },
@@ -84,9 +85,9 @@ let BSNavbar = React.createClass({
     },
 
     _signIn (loading, routes) {
-        let isSignInScreen = false;
+        let onFrontPage = false;
         for (let route of routes) {
-            if (route.name == 'signIn') {isSignInScreen = true;}
+            if (route.name == 'front-page') {onFrontPage = true;}
         }
 
         if (loading) {
@@ -101,7 +102,7 @@ let BSNavbar = React.createClass({
         } else {
             return (
                 <div className="navbar-right sign-in-nav-btn">
-                    <button className="btn-blue" onClick={userStore.signIn.bind(null, {transition: isSignInScreen})} >
+                    <button className="btn-blue" onClick={userStore.signIn.bind(null, {transition: onFrontPage})} >
                         <i className="fa fa-google" />
                         <span> Sign in</span>
                     </button>

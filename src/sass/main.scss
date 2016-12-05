@@ -8,6 +8,15 @@
 
 // papaya asset default
 @import './crn_app/_common.papaya';
+
+// annimations ============================================================
+@import 'animate/_fading-entrances/fading-entrances';
+@import 'animate/_sliding-entrances/sliding-entrances';
+@import 'animate/_sliding-exits/sliding-exits';
+@import 'animate/_flippers/flippers';
+@import 'animate/_attention-seekers/flash';
+
+
 //crn SASS ================================================================
 @import './crn_app/variables';
 @import './crn_app/elements-wrappers';
@@ -35,20 +44,35 @@
 @import './crn_app/dataset.file-tree';
 @import './crn_app/dataset.sidebar';
 @import './crn_app/admin.admin';
-@import './crn_app/user.signin';
+@import './crn_app/frontPage';
 @import './crn_app/dashboard.datasets';
 @import './crn_app/upload.upload';
 @import './crn_app/upload.validation';
 @import './crn_app/admin.tools';
 
-// annimations ============================================================
-@import 'animate/_fading-entrances/fading-entrances';
-@import 'animate/_sliding-entrances/sliding-entrances';
-@import 'animate/_sliding-exits/sliding-exits';
-@import 'animate/_flippers/flippers';
 
 
 
+.logo-text{
+    color: $c-42;
+    font-size: 75px;
+    font-weight: 700;
+    position: relative;
+    line-height:  1em;
+    .logo-end{
+        font-size: 75%;
+        text-transform: uppercase;
+        color: $ocean;
+        font-weight: 400;
+    }
+    &:after{
+        content: 'BETA';
+        font-size: 20%;
+        position: absolute;
+        top: -10px;
+        margin-left: 5px;
+    }
+}
 
 .fade-in {@include fadeIn();}
 %slide-down-fast {@include slideInDown($duration: .3s, $delay: 0);}
@@ -58,6 +82,7 @@
 .slide-in-right-fast {@include slideInRightFast();}
 %slide-in-down { @include slideInDown();}
 .flipin-x {@include flipInX();}
+%flash {@include flash();}
 
 
 .slide-in-down {
@@ -72,6 +97,35 @@
 @include keyframes(dot) {
     0% {opacity: 0;}
     50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+
+@include keyframes(border-flash) {
+    0% {border: 1px solid $yellow; }
+    50% {border: 1px solid transparent;}
+    100% {border: 1px solid $yellow;}
+}
+@include keyframes(background-flash) {
+    0% {background-color: $honey; }
+    50% {background-color: transparent;}
+    100% {background-color: $honey;}
+}
+
+@include keyframes(borderxpand) {
+    0% {
+        width: 0;
+        height: 0;
+    }
+    100% {
+        width: 100%;
+        height: auto;
+    }
+}
+
+
+@include keyframes(revealIn) {
+    0% {opacity: 0;}
     100% {opacity: 1;}
 }
 
@@ -122,6 +176,9 @@
     .two {@include animation-delay(.2s);}
     .three {@include animation-delay(.3s);}
 }
+
+
+
 
 .ds-danger .ellipsis-animation {color: $brand-danger;}
 .ds-warning .ellipsis-animation {color: $brand-warning;}
@@ -175,3 +232,6 @@
         }
     }
 }
+
+
+

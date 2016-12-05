@@ -2,6 +2,7 @@ import async     from 'async';
 import scitran   from './scitran';
 import crn       from './crn';
 import userStore from '../user/user.store';
+import fileUtils from './files';
 
 /**
  * BIDS
@@ -12,60 +13,6 @@ import userStore from '../user/user.store';
 export default  {
 
 // Read -----------------------------------------------------------------------------------
-
-    /**
-     * Filter Sessions
-     *
-     * Takes a list of scitran sessions and a subjectID
-     * and calls back with a list of BIDS sessions in
-     * that subject.
-     */
-    filterSessions (scitranSessions, subjectId, callback) {
-        let sessions = [];
-        async.each(scitranSessions, (session, cb) => {
-            if (session.subject.code === subjectId) {
-                session.children = session.files;
-                session.name = session.label;
-                sessions.push(session);
-                cb();
-            } else {
-                cb();
-            }
-        }, () => {
-            sessions.sort((a, b) => {
-                let aLabel = a.label.toLowerCase();
-                let bLabel = b.label.toLowerCase();
-                if (aLabel < bLabel) {return -1;}
-                else if (aLabel > bLabel) {return 1;}
-                else {return 0;}
-            });
-            callback(sessions);
-        });
-    },
-
-    /**
-     * Filter Modalities
-     *
-     * Takes a list scitran acquisitions and a sessionID and
-     * calls back with a list of BIDS modalities in that
-     * session.
-     */
-    filterModalities (acquisitions, sessionId, callback) {
-        let modalities = [];
-        for (let modality of acquisitions) {
-            if (modality.session === sessionId) {
-                modalities.push(modality);
-            }
-        }
-        modalities.sort((a, b) => {
-            let aLabel = a.label.toLowerCase();
-            let bLabel = b.label.toLowerCase();
-            if (aLabel < bLabel) {return -1;}
-            else if (aLabel > bLabel) {return 1;}
-            else {return 0;}
-        });
-        callback(modalities);
-    },
 
     /**
      * Get Datasets
@@ -162,6 +109,7 @@ export default  {
         scitran.getUsers((err, res) => {
             let users = !err && res && res.body ? res.body : null;
             scitran.getProject(projectId, (res) => {
+                let tempFiles = this._formatFiles(res.body.files);
                 if (res.status !== 200) {return callback(res);}
                 let project = res.body;
                 this.getMetadata(project, (metadata) => {
@@ -169,6 +117,8 @@ export default  {
                     dataset.README = metadata.README;
                     crn.getDatasetJobs(projectId, (err, res) => {
                         dataset.jobs = res.body;
+                        dataset.children = tempFiles;
+                        dataset.showChildren = true;
                         this.usage(projectId, options, (usage) => {
                             if (usage) {
                                 dataset.views = usage.views;
@@ -183,65 +133,27 @@ export default  {
     },
 
     /**
-     * Get Dataset Tree
+     * Format Files
      *
-     * Takes a projectId and returns the full
-     * dataset tree.
+     * Takes a list of files from a dataset and generates
+     * the file tree using file paths.
      */
-    getDatasetTree (dataset, callback, options, progressCb) {
-        let progress = (p) => {if (progressCb) {progressCb(p);}};
-        dataset = {
-            _id: dataset._id,
-            label: dataset.label,
-            children: dataset.children,
-            showChildren: true,
-            containerType: dataset.containerType,
-            type: 'folder'
-        };
-        let projectId = dataset._id;
-        let p = {total: 2, completed: 0};
-        progress(p);
-        scitran.getSessions(projectId, (scitranSessions) => {
-            scitran.getProjectAcquisitions(projectId, (scitranAcquisitions) => {
-                p.total += scitranSessions.length;
-                p.completed++;
-                progress(p);
-                this.filterSessions(scitranSessions, 'subject', (subjects) => {
-                    p.completed++;
-                    p.completed += subjects.length;
-                    progress(p);
-                    dataset.containerType = 'projects';
-                    dataset.children = this.formatFiles(dataset.children, projectId, 'projects');
-                    dataset.children = dataset.children.concat(subjects);
-                    async.each(subjects, (subject, cb) => {
-                        this.filterSessions(scitranSessions, subject._id, (sessions) => {
-                            subject.containerType = 'sessions';
-                            subject.children = this.formatFiles(subject.children, subject._id, 'sessions');
-                            subject.children = subject.children.concat(sessions);
-                            async.each(sessions, (session, cb1) => {
-                                this.filterModalities(scitranAcquisitions, session._id, (modalities) => {
-                                    p.completed++;
-                                    // limit frequency of progress calls
-                                    if (p.total < 50 || p.completed % 10 == 0) {progress(p);}
-                                    session.containerType = 'sessions';
-                                    session.children = this.formatFiles(session.children, session._id, 'sessions');
-                                    session.children = session.children.concat(modalities);
-                                    async.each(modalities, (modality, cb2) => {
-                                        modality.containerType = 'acquisitions';
-                                        modality.children = modality.files;
-                                        modality.children = this.formatFiles(modality.children, modality._id, 'acquisitions');
-                                        modality.name = modality.label;
-                                        cb2();
-                                    }, cb1);
-                                }, options);
-                            }, cb);
-                        });
-                    }, () => {
-                        callback([dataset]);
-                    });
-                });
-            }, options);
-        }, options);
+    _formatFiles(files) {
+        let fileList = [];
+        if (files && files.length > 0) {
+            for (let i = 0; i < files.length; i++) {
+                let file = files[i];
+
+                if (!file.tags || file.tags.indexOf('attachment') == -1) {
+                    fileList[i] = {
+                        name: file.name.replace(/%2F/g, '/'),
+                        webkitRelativePath: file.name.replace(/%2F/g, '/')
+                    };
+                }
+            }
+        }
+        let fileTree = fileUtils.generateTree(fileList);
+        return fileTree;
     },
 
 // Update ---------------------------------------------------------------------------------

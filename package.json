@@ -1,6 +1,6 @@
 {
   "name": "CRN",
-  "version": "0.7.12",
+  "version": "0.9.7",
   "description": "React JS web frontend for the CRN application.",
   "main": "app.js",
   "repository": {
@@ -14,7 +14,7 @@
   "dependencies": {
     "async": "^1.2.1",
     "babel-polyfill": "^6.6.1",
-    "bids-validator": "0.19.4",
+    "bids-validator": "0.20.0",
     "bowser": "^1.0.0",
     "bytes": "^2.3.0",
     "es6-react-mixins": "^0.1.6",

@@ -52,8 +52,8 @@ let Datasets = React.createClass({
             results = this._datasets(paginatedResults, isPublic);
         }
 
-        return (
-           <div>
+        let datasetsDash =(
+            <div>
                 <div className="dashboard-dataset-teasers datasets datasets-private">
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
@@ -66,7 +66,7 @@ let Datasets = React.createClass({
                     </div>
                     <PanelGroup>
                         {this.state.loading ? <Spinner active={true} /> : results}
-                    </ PanelGroup>
+                    </PanelGroup>
                 </div>
                 <div className="pager-wrapper">
                     <Paginator
@@ -76,6 +76,11 @@ let Datasets = React.createClass({
                         onPageSelect={this._onPageSelect} />
                 </div>
             </div>
+        );
+        let datasetsDashPublic = <div className="fade-in inner-route clearfix"><div className="col-xs-12">{datasetsDash}</div></div>;
+
+        return (
+           <span>{!isPublic ? datasetsDash : datasetsDashPublic}</span>
         );
     },
 

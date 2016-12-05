@@ -160,7 +160,7 @@ let UserStore = Reflux.createStore({
             google.signOut(() => {
                 upload.setInitialState();
                 this.clearAuth();
-                router.transitionTo('signIn');
+                router.transitionTo('front-page');
             });
         }
     },

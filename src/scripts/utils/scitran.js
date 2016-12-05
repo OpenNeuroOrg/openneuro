@@ -315,7 +315,7 @@ export default  {
             fields: {
                 tags: '[]',
                 file: file,
-                name: file.name
+                name: file.hasOwnProperty('modifiedName') ? file.modifiedName : file.name
             },
             query: {force: true}
         }, callback);
