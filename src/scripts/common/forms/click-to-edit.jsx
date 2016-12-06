@@ -211,7 +211,7 @@ let ClickToEdit = React.createClass({
 
     _save(type) {
         this.setState({loading: true});
-        let edit = type == 'authors' || 'referencesAndLinks';
+        let edit = type == 'authors' || type == 'referencesAndLinks';
         if (this.props.onChange) {
             this.props.onChange(this.state.value, () => {
                 let initialValue = JSON.stringify(this.state.value);
