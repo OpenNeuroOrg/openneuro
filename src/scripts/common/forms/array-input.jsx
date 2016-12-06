@@ -150,19 +150,9 @@ let ArrayItem = React.createClass({
     },
 
     render() {
-        let item = this.props.item;
-        let authorItem = (
-            <span>
-                <span className="author-name">{item.name}</span>
-                <span className="orcid-id">{item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
-            </span>
-        );
-
-        let referenceItem = <span className="reference-name">{item}</span>;
-
         let view = (
             <div className="cte-array-item">
-                {this.props.model ? authorItem : referenceItem}
+                {this._display()}
                 <div className="btn-wrap">
                     <WarnButton message="Remove" icon="fa-times" action={this.props.remove}/>
                 </div>
@@ -172,19 +162,10 @@ let ArrayItem = React.createClass({
             </div>
         );
 
-        let authorItemInput = (
-            <span>
-                <Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
-                <Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
-            </span>
-        );
-
-        let referenceItemInput = <Input placeholder="Reference" value={this.state.reference} onChange={this._handleChange.bind(null, 'reference')} />;
-
         let edit = (
             <div className="cte-array-item">
                 <div className="form-inline">
-                    {this.props.model ? authorItemInput : referenceItemInput}
+                    {this._input()}
                     <div className="btn-wrap array-edit">
                         <WarnButton message="Save" warn={false} icon="fa-check" action={this._save.bind(this, this.props.model)}/>
                     </div>
@@ -193,11 +174,45 @@ let ArrayItem = React.createClass({
                     </div>
                 </div>
             </div>
-
         );
 
         return this.state.edit ? edit : view;
     },
+
+// template methods ---------------------------------------------------
+
+    _display() {
+        let item = this.props.item;
+        if (this.props.model) {
+            return (
+                <span>
+                    <span className="author-name">{item.name}</span>
+                    <span className="orcid-id">{item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
+                </span>
+            );
+        } else {
+            return (
+                <span className="reference-name">{item}</span>
+            );
+        }
+    },
+
+    _input() {
+        if (this.props.model) {
+            return (
+                <span>
+                    <Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
+                    <Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
+                </span>
+            );
+        } else {
+            return (
+                <Input placeholder="Reference" value={this.state.reference} onChange={this._handleChange.bind(null, 'reference')} />
+            );
+        }
+    },
+
+// custom methods -----------------------------------------------------
 
     _cancel() {
         this._toggleEdit();
