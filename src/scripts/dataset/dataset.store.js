@@ -402,7 +402,7 @@ let datasetStore = Reflux.createStore({
         description[key] = value;
         if (key !== 'Authors') {
             description.Authors = dataset.authors;
-        }else {
+        } else {
             metadataIssues.authors = null;
         }
 
@@ -432,18 +432,10 @@ let datasetStore = Reflux.createStore({
                     authors.push({name: author, ORCIDID: ''});
                 }
             }
-            let referencesAndLinks = [];
-            if (description.hasOwnProperty('ReferencesAndLinks')) {
-                for (let i = 0; i < description.ReferencesAndLinks.length; i++) {
-                    let ref = description.ReferencesAndLinks[i];
-                    referencesAndLinks.push(ref);
-                }
-            }
-            scitran.updateProject(projectId, {metadata: {authors, referencesAndLinks}}, () => {
+            scitran.updateProject(projectId, {metadata: {authors}}, () => {
                 file = new File([JSON.stringify(description)], 'dataset_description.json', {type: 'application/json'});
                 scitran.updateFile('projects', projectId, file, () => {
                     description.Authors = authors;
-                    description.ReferencesAndLinks = referencesAndLinks;
                     let dataset = this.data.dataset;
                     dataset.description = description;
                     this.update({dataset});
