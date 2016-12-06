@@ -136,7 +136,14 @@ let ArrayItem = React.createClass({
     propTypes: {
         //need to add item propType for Author OBJECT...?
         model: React.PropTypes.array,
-        item: React.PropTypes.string,
+        item: (props) => {
+            if (props.model && typeof props.item !== 'object') {
+                return new Error('Prop `item` must be an object if a model prop is defined');
+            }
+            if (!props.model && typeof props.item !== 'string') {
+                return new Error('Prop `item` must be a string if no model prop is defined');
+            }
+        },
         remove: React.PropTypes.func,
         onEdit: React.PropTypes.func,
         index: React.PropTypes.number
@@ -144,7 +151,6 @@ let ArrayItem = React.createClass({
 
     render() {
         let item = this.props.item;
-
         let authorItem = (
             <span>
                 <span className="author-name">{item.name}</span>
