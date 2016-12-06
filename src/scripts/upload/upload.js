@@ -90,7 +90,12 @@ export default {
     uploadFiles (datasetName, files, projectId, metadata) {
         this.currentProjectId = projectId;
         for (let file of files) {
-            if (file.name === 'dataset_description.json') {
+            if (config.upload.blacklist.indexOf(file.name) > -1) {
+                // ignore blacklisted files
+                this.progressStart(file.name);
+                this.progressEnd(file.name);
+                continue;
+            } else if (file.name === 'dataset_description.json') {
                 this.uploadMetadata(datasetName, projectId, metadata, file);
             } else {
                 this.uploadFile('projects', projectId, file);

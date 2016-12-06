@@ -9,6 +9,9 @@ import {Modal}  from 'react-bootstrap';
 import moment   from 'moment';
 import Select   from 'react-select';
 import markdown from '../utils/markdown';
+import validate from 'bids-validator';
+import scitran  from '../utils/scitran';
+import Results  from '../upload/upload.validation-results.jsx';
 
 export default class JobMenu extends React.Component {
 
@@ -19,6 +22,7 @@ export default class JobMenu extends React.Component {
         this.state = {
             loading:          false,
             parameters:       [],
+            disabledApps:     {},
             selectedApp:      {},
             selectedAppID:    '',
             selectedSnapshot: '',
@@ -44,9 +48,9 @@ export default class JobMenu extends React.Component {
             this.props.snapshots.map((snapshot) => {
                 if (snapshot._id == this.props.dataset._id) {
                     if (snapshot.original) {
-                        this.setState({selectedSnapshot: snapshot._id});
+                        this._selectSnapshot({target: {value: snapshot._id}});
                     } else if (this.props.snapshots.length > 1) {
-                        this.setState({selectedSnapshot: this.props.snapshots[1]._id});
+                        this._selectSnapshot({target: {value: this.props.snapshots[1]._id}});
                     }
                     return;
                 }
@@ -112,12 +116,17 @@ export default class JobMenu extends React.Component {
      */
     _apps() {
         let options = this.props.apps ? this.props.apps.map((app) => {
-            return <option key={app.id} value={app.id}>{app.label + ' - v' + app.version}</option>;
+            let disabled = this.state.disabledApps.hasOwnProperty(app.id) ? '* ' : '';
+            return <option key={app.id}
+                           value={app.id}>
+                       {disabled + app.label + ' - v' + app.version}
+                   </option>;
         }) : [];
 
         if (this.state.selectedSnapshot) {
             return (
                 <div>
+                    <hr/>
                     <h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
                     <div className="row">
                         <div className="col-xs-12">
@@ -127,6 +136,7 @@ export default class JobMenu extends React.Component {
                                     {options}
                                 </select>
                             </div>
+                            <h6 className="col-xs-12"> * - app is incompatible with selected snapshot</h6>
                         </div>
                     </div>
                 </div>
@@ -138,6 +148,10 @@ export default class JobMenu extends React.Component {
      * Info
      */
     _info(app) {
+
+        if (this.state.disabledApps.hasOwnProperty(app.id)) {
+            return this._incompatible(app);
+        }
 
         let shortDescription;
         if (app.shortDescription) {
@@ -213,6 +227,24 @@ export default class JobMenu extends React.Component {
     }
 
     /**
+     * Incompatible
+     */
+    _incompatible(app) {
+        let issues = this.state.disabledApps[app.id].issues;
+        return (
+            <div>
+                <div>
+                    <h5>Incompatible</h5>
+                    <div>
+                        <p>This snapshot has issues that make it incompatible with this pipeline. Pipelines may have validation requirements beyond BIDS compatibility.</p>
+                        <Results errors={issues.errors} warnings={issues.warnings} />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    /**
      * Snapshots
      *
      * Returns a labeled select box for selecting a snapshot
@@ -264,6 +296,9 @@ export default class JobMenu extends React.Component {
      * app.
      */
     _parameters() {
+        if (this.state.disabledApps.hasOwnProperty(this.state.selectedApp.id)) {
+            return false;
+        }
         let parameters = this.state.parameters.map((parameter) => {
             let input;
             if (parameter.type === 'number') {
@@ -326,6 +361,9 @@ export default class JobMenu extends React.Component {
     }
 
     _submit() {
+        if (this.state.disabledApps.hasOwnProperty(this.state.selectedApp.id)) {
+            return false;
+        }
         if (this.state.selectedAppID) {
             return (
                 <div className="col-xs-12 modal-actions">
@@ -424,7 +462,23 @@ export default class JobMenu extends React.Component {
      */
     _selectSnapshot(e) {
         let snapshotId = e.target.value;
-        this.setState({selectedSnapshot: snapshotId});
+        let disabledApps = {};
+
+        /**
+         * determine app availability
+         */
+        // load validation data for selected snapshot
+        scitran.getProject(snapshotId, (res) => {
+            for (let app of this.props.apps) {
+                let longDescription = typeof(app.longDescription) == 'string' ? JSON.parse(app.longDescription) : app.longDescription;
+                let appConfig = longDescription.hasOwnProperty('appConfig') ? longDescription.appConfig : {error: []};
+                let issues = validate.reformat(res.body.metadata.validation, res.body.metadata.summary, appConfig);
+                if (issues.errors.length > 0) {
+                    disabledApps[app.id] = {issues};
+                }
+            }
+            this.setState({selectedSnapshot: snapshotId, disabledApps});
+        },{snapshot:true});
     }
 
     /**
