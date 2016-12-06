@@ -2,12 +2,12 @@
 
 // dependencies -------------------------------------------------------
 
-import React                    from 'react';
-import ArrayInput              from './array-input.jsx';
-import FileArrayInput           from './file-array-input.jsx';
-import Spinner                  from '../partials/spinner.jsx';
-import WarnButton               from './warn-button.jsx';
-import markdown                 from '../../utils/markdown';
+import React          from 'react';
+import ArrayInput     from './array-input.jsx';
+import FileArrayInput from './file-array-input.jsx';
+import Spinner        from '../partials/spinner.jsx';
+import WarnButton     from './warn-button.jsx';
+import markdown       from '../../utils/markdown';
 
 let ClickToEdit = React.createClass({
 
