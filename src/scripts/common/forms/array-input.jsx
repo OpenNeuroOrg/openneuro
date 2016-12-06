@@ -134,7 +134,6 @@ let ArrayItem = React.createClass({
     },
 
     propTypes: {
-        //need to add item propType for Author OBJECT...?
         model: React.PropTypes.array,
         item: (props) => {
             if (props.model && typeof props.item !== 'object') {
