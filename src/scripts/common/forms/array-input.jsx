@@ -13,8 +13,9 @@ let ArrayInput = React.createClass({
     getInitialState () {
         let initialState = {error: null};
         if (this.props.model) {
-            initialState.name = '';
-            initialState.ORCIDID = '';
+            for (let property of this.props.model) {
+                initialState[property] = '';
+            }
         } else {
             initialState.reference = '';
         }
@@ -34,7 +35,6 @@ let ArrayInput = React.createClass({
     },
 
     render() {
-
         let referenceInput = <Input placeholder="Reference" value={this.state.reference} onChange={this._handleChange.bind(null, 'reference')} />;
         let authorInputs = (
             <span>
