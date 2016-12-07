@@ -8,7 +8,8 @@ let fileUtils = {
     generateTree,
     findInTree,
     read,
-    hasExtension
+    hasExtension,
+    sortTree
 };
 
 export default fileUtils;
@@ -81,8 +82,8 @@ function sortTree (tree) {
     let sortStrategy = (a, b) => {
         let aName     = a.name.toLowerCase(),
             bName     = b.name.toLowerCase(),
-            aIsFolder = a.type == 'folder',
-            bIsFolder = b.type == 'folder';
+            aIsFolder = a.type == 'folder' || a.format == 'folder',
+            bIsFolder = b.type == 'folder' || b.format == 'folder';
 
         if (!aIsFolder && bIsFolder) {
             return -1;

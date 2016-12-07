@@ -854,6 +854,8 @@ let datasetStore = Reflux.createStore({
 
             // iterate jobs
             for (let job of res.body) {
+                files.sortTree(job.results);
+                files.sortTree(job.logs);
 
                 // check if job should be polled
                 let status     = job.agave.status;
