@@ -57,7 +57,7 @@ let datasetStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             apps: [],
-            activeJob: null,
+            activeJob: false,
             currentUpdate: null,
             currentUploadId: null,
             dataset: null,
@@ -1022,7 +1022,7 @@ let datasetStore = Reflux.createStore({
      */
     selectJob(eventKey) {
         if (eventKey === this.data.activeJob) {
-            this.update({activeJob: null});
+            this.update({activeJob: false});
         } else {
             this.update({activeJob: eventKey});
         }
