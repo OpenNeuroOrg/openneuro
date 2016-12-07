@@ -146,8 +146,8 @@ export default  {
 
                 if (!file.tags || file.tags.indexOf('attachment') == -1) {
                     fileList[i] = {
-                        name: file.name.replace(/%2F/g, '/'),
-                        webkitRelativePath: file.name.replace(/%2F/g, '/')
+                        name: file.name.replace(/%2F/g, '/').replace(/%20/g, ' '),
+                        webkitRelativePath: file.name.replace(/%2F/g, '/').replace(/%20/g, ' ')
                     };
                 }
             }
