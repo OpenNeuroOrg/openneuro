@@ -77,6 +77,11 @@
     .dataset-inner {
         .file-structure.panel-group {
             .panel-default {
+                .accordion-icon {
+                    float: right;
+                    margin-top: 2px;
+                }
+
                 .type-icon {
                     background: none;
                     border: 0;
@@ -111,6 +116,8 @@
 
                             .btn-file-folder {
                                 color: $c-66;
+                                width: 100%;
+                                text-align: left;
                             }
                         }
                     }
