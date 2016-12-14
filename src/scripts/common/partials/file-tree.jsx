@@ -189,8 +189,9 @@ class FileTree extends React.Component {
     _folderIcon(item) {
         let label = item.label ? item.label : item.name;
         if (item.children) {
+            let iconClassAccordion = 'accordion-icon fa ' + (item.showChildren ? 'fa-caret-up' : 'fa-caret-down');
             let iconClass = 'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder');
-            return <button className="btn-file-folder" onClick={this.props.toggleFolder.bind(this, item, this.props.treeId)}><i className={iconClass}></i> {label}</button>;
+            return <button className="btn-file-folder" onClick={this.props.toggleFolder.bind(this, item, this.props.treeId)}><i className={iconClass}></i> {label}<i className={iconClassAccordion}></i></button>;
         }else{
             // remove full file paths
             label = label.split('/')[label.split('/').length -1];
