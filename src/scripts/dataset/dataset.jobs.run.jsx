@@ -75,7 +75,7 @@ class JobAccordion extends React.Component {
                             <WarnButton
                                 icon="fa-download"
                                 message=" DOWNLOAD All"
-                                prepDownload={actions.getResultDownloadTicket.bind(this, run.jobId, {path:'all-' + type})} />
+                                prepDownload={actions.getResultDownloadTicket.bind(this, run.snapshotId, run.jobId, {path:'all-' + type})} />
                         </span>
                         <div className="file-structure fade-in panel-group">
                             <div className="panel panel-default">
