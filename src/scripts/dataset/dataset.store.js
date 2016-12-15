@@ -405,6 +405,12 @@ let datasetStore = Reflux.createStore({
         } else {
             metadataIssues.authors = null;
         }
+
+        if (key !== 'ReferencesAndLinks') {
+            description.ReferencesAndLinks = dataset.referencesAndLinks;
+        } else {
+            metadataIssues.referencesAndLinks = null;
+        }
         this.saveDescription(description, callback);
         this.update({dataset, metadataIssues});
     },
@@ -449,12 +455,20 @@ let datasetStore = Reflux.createStore({
     saveDescription(description, callback) {
         description = JSON.parse(JSON.stringify(description));
         let datasetId = this.data.dataset._id;
-        scitran.updateProject(datasetId, {metadata: {authors: description.Authors}}, () => {
+        scitran.updateProject(datasetId, {metadata: {authors: description.Authors, referencesAndLinks: description.ReferencesAndLinks}}, () => {
             let authors = [];
+            let referencesAndLinks = [];
+
             for (let author of description.Authors) {
                 authors.push(author.name);
             }
             description.Authors = authors;
+
+            for (let referencesAndLink of description.ReferencesAndLinks) {
+                referencesAndLinks.push(referencesAndLink);
+            }
+            description.ReferencesAndLinks = referencesAndLinks;
+
             this.updateModified();
             scitran.updateFileFromString('projects', datasetId, 'dataset_description.json', JSON.stringify(description), 'application/json', ['project'], callback);
         });
@@ -675,7 +689,7 @@ let datasetStore = Reflux.createStore({
                             'Acknowledgements': '',
                             'HowToAcknowledge': '',
                             'Funding': '',
-                            'ReferencesAndLinks': '',
+                            'ReferencesAndLinks': [],
                             'DatasetDOI': ''
                         };
                         scitran.updateProject(this.data.dataset._id, {metadata: {authors: []}}, () => {});
