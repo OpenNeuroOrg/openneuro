@@ -43,6 +43,7 @@
                 //border-bottom:2px solid #eee;
                 .form-group {
                     margin: 0;
+
                     .alert.alert-danger{
                         position: relative;
                     }
@@ -72,9 +73,15 @@
                     }
                 }
 
-                .float-label-input label {
-                    font-size: 10px;
-                    padding-right: 5px;
+                .float-label-input {
+                    width: 75%;
+
+                    label {
+                        font-size: 10px;
+                        padding-right: 5px;
+                        right: 10px;
+                        top: 3px;
+                    }
                 }
 
                 .file-name-link {
