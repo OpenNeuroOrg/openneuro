@@ -62,6 +62,13 @@ export default {
     },
 
     /**
+     * Get Jobs
+     */
+    getJobs(callback) {
+        request.get(config.crn.url + 'jobs', {}, callback);
+    },
+
+    /**
      * Create Job
      *
      * Takes an options object with a name, appId
