@@ -271,6 +271,43 @@ let handlers = {
         });
     },
 
+    getJobs(req, res) {
+        console.log(req.user);
+        c.jobs.find().toArray((err, jobs) => {
+            if (err) {
+                res.send(err);
+                return;
+            }
+
+            // filter jobs by permissions
+            let filteredJobs = [];
+            // for (let job of jobs) {
+            async.each(jobs, (job, cb) => {
+                // scitran.getProject(job.snapshotId, (err, resp) => {
+                    /**
+                     * Push job if
+                     * - there's a public query param && the job snapshot is public
+                     * - not public query param && current user has access.
+                     */
+                    if (
+                        true // job was found
+                    ) {
+                        // filteredJobs.push({
+                        //     snapshotId: job.snapshotId,
+                        //     public: resp.body.public,
+                        //     permissions: resp.body.permissions,
+                        //     startedBy: job.userId
+                        // });
+                        filteredJobs.push(job)
+                    }
+                    cb();
+                // }, {snapshot: true});
+            }, () => {
+                res.send(filteredJobs);
+            })
+        });
+    },
+
     /**
      * GET Download Ticket
      */

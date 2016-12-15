@@ -104,6 +104,12 @@ let routes = [
 	},
 	{
 		method: 'get',
+		url: '/jobs',
+		middleware: [auth.optional],
+		handler: jobs.getJobs
+	},
+	{
+		method: 'get',
 		url: '/jobs/:jobId/results/:fileName',
 		middleware: [auth.ticket],
 		handler: jobs.getFile
