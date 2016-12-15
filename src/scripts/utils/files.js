@@ -8,7 +8,8 @@ let fileUtils = {
     generateTree,
     findInTree,
     read,
-    hasExtension
+    hasExtension,
+    sortTree
 };
 
 export default fileUtils;
@@ -78,33 +79,35 @@ function generateTree (files) {
 function sortTree (tree) {
 
     // sort alaphabetical files before folders
-    let sortStrategy = (a, b) => {
-        let aName     = a.name.toLowerCase(),
-            bName     = b.name.toLowerCase(),
-            aIsFolder = a.type == 'folder',
-            bIsFolder = b.type == 'folder';
+    if (tree && tree.length > 0) {
+        let sortStrategy = (a, b) => {
+            let aName     = a.name.toLowerCase(),
+                bName     = b.name.toLowerCase(),
+                aIsFolder = a.type == 'folder' || a.format == 'folder',
+                bIsFolder = b.type == 'folder' || b.format == 'folder';
 
-        if (!aIsFolder && bIsFolder) {
-            return -1;
-        } else if (aIsFolder && !bIsFolder) {
-            return 1;
-        } else if (aName < bName) {
-            return -1;
-        } else if (aName > bName) {
-            return 1;
-        } else {
-            return 0;
-        }
-    };
+            if (!aIsFolder && bIsFolder) {
+                return -1;
+            } else if (aIsFolder && !bIsFolder) {
+                return 1;
+            } else if (aName < bName) {
+                return -1;
+            } else if (aName > bName) {
+                return 1;
+            } else {
+                return 0;
+            }
+        };
 
-    // recursively apply sorting
-    for (let item of tree) {
-        if (item.children && item.children.length > 0) {
-            sortTree(item.children);
-            item.children.sort(sortStrategy);
+        // recursively apply sorting
+        for (let item of tree) {
+            if (item.children && item.children.length > 0) {
+                sortTree(item.children);
+                item.children.sort(sortStrategy);
+            }
         }
+        tree.sort(sortStrategy);
     }
-    tree.sort(sortStrategy);
 }
 
 /**

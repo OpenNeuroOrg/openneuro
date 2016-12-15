@@ -236,7 +236,7 @@ export default class JobMenu extends React.Component {
                 <div>
                     <h5>Incompatible</h5>
                     <div>
-                        <p>This snapshot has issues that make it incompatible with this pipeline. Pipelines may have validation requirements beyond BIDS compatibility.</p>
+                        <p>This snapshot has issues that make it incompatible with this pipeline. Fix the errors below and try again. Pipelines may have validation requirements beyond BIDS compatibility.</p>
                         <Results errors={issues.errors} warnings={issues.warnings} />
                     </div>
                 </div>

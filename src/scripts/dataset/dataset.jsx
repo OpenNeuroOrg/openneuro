@@ -63,7 +63,7 @@ let Dataset = React.createClass({
                     <div className="dataset-annimation">
                         <div className="col-xs-12 dataset-inner">
                             <div className="row">
-                                <div className="col-xs-7">
+                                <div className="col-xs-6">
                                     <h1 className="clearfix">
                                         <ClickToEdit
                                             value={dataset.label}
@@ -82,7 +82,7 @@ let Dataset = React.createClass({
                                     </div>
                                     <MetaData dataset={dataset} editable={canEdit} issues={this.state.metadataIssues} />
                                 </div>
-                                <div className="col-xs-5">
+                                <div className="col-xs-6">
                                     <div>
                                         <Validation errors={errors} warnings={warnings} validating={dataset.status.validating} display={!dataset.status.incomplete} />
                                         <div className="fade-in col-xs-12">
