@@ -2,7 +2,8 @@ import Reflux from 'reflux';
 
 var Actions = Reflux.createActions([
     'getJobs',
-    'update'
+    'update',
+    'sort'
 ]);
 
 export default Actions;

@@ -8,6 +8,7 @@ import {State, Link} from 'react-router';
 import moment        from 'moment';
 import {PanelGroup}  from 'react-bootstrap';
 import Spinner       from '../common/partials/spinner.jsx';
+import Sort          from './dashboard.jobs.sort.jsx';
 
 let Jobs = React.createClass({
 
@@ -28,6 +29,9 @@ let Jobs = React.createClass({
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
                              <h2>My Analyses</h2>
+                        </div>
+                        <div className="filters-sort-wrap clearfix">
+                            <Sort sort={this.state.sort}  />
                         </div>
                     </div>
                     <PanelGroup>
