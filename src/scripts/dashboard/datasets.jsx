@@ -11,7 +11,7 @@ import Paginator     from '../common/partials/paginator.jsx';
 import Spinner       from '../common/partials/spinner.jsx';
 import Statuses      from '../dataset/dataset.statuses.jsx';
 import Filters       from './datasets.filters.jsx';
-import Sort          from './datasets.sort.jsx';
+import Sort          from './dashboard.sort.jsx';
 import Summary       from '../dataset/dataset.summary.jsx';
 
 // component setup ---------------------------------------------------------------------------
@@ -60,7 +60,9 @@ let Datasets = React.createClass({
                              <h2>{!isPublic ? 'My Datasets' : 'Public Datasets'}</h2>
                         </div>
                         <div className="filters-sort-wrap clearfix">
-                            <Sort sort={this.state.sort}  />
+                            <Sort options={this.state.sortOptions}
+                                  sort={this.state.sort}
+                                  sortFunc={Actions.sort} />
                             {!isPublic ? <Filters filters={this.state.filters} /> : null}
                         </div>
                     </div>

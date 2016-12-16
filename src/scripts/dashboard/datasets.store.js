@@ -48,9 +48,13 @@ let UploadStore = Reflux.createStore({
             resultsPerPage: 30,
             page: 0,
             sort: {
-                value: 'timestamp',
+                value: 'created',
                 direction: '+'
             },
+            sortOptions: [
+                {label: 'Name', property: 'label'},
+                {label: 'Date', property: 'created', isTimestamp: true}
+            ],
             filters: []
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -79,7 +83,7 @@ let UploadStore = Reflux.createStore({
             filters: []
         }, () => {
             bids.getDatasets((datasets) => {
-                if (isPublic === this.data.isPublic) {this.sort(null, null, datasets);}
+                if (isPublic === this.data.isPublic) {this.sort('created', '+', datasets, true);}
             }, isPublic, isSignedOut);
         });
     },
@@ -146,9 +150,7 @@ let UploadStore = Reflux.createStore({
      * sorts the current datasets acordingly.
      */
     sort(value, direction, datasets, isTimeStamp) {
-        value     = value     ? value     : this.data.sort.value;
-        direction = direction ? direction : this.data.sort.direction;
-        datasets  = datasets  ? datasets  : this.data.datasets;
+        datasets = datasets ? datasets : this.data.datasets;
         dashUtils.sort(datasets, value, direction, isTimeStamp);
         this.update({
             datasets,

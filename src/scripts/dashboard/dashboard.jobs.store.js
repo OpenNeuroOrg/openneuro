@@ -48,7 +48,11 @@ let DashboardJobStore = Reflux.createStore({
             sort: {
                 value: 'agave.created',
                 direction: '+'
-            }
+            },
+            sortOptions: [
+                {label: 'Name', property: 'datasetLabel'},
+                {label: 'Date', property: 'agave.created', isTimestamp: true}
+            ]
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data);
@@ -69,7 +73,7 @@ let DashboardJobStore = Reflux.createStore({
         let isSignedOut = !userStore.data.token;
         this.update({loading: true}, () => {
             crn.getJobs((err, res) => {
-                this.sort(null, null, res.body);
+                this.sort('agave.created', '+', res.body, true);
             }, isPublic, isSignedOut);
         });
     },
@@ -81,9 +85,7 @@ let DashboardJobStore = Reflux.createStore({
      * sorts the current jobs acordingly.
      */
     sort(value, direction, jobs, isTimestamp) {
-        value     = value     ? value     : this.data.sort.value;
-        direction = direction ? direction : this.data.sort.direction;
-        jobs      = jobs      ? jobs      : this.data.jobs;
+        jobs = jobs ? jobs : this.data.jobs;
         dashUtils.sort(jobs, value, direction, isTimestamp);
         this.update({
             jobs,
