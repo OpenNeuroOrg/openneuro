@@ -84,9 +84,7 @@ let DashboardJobStore = Reflux.createStore({
         value     = value     ? value     : this.data.sort.value;
         direction = direction ? direction : this.data.sort.direction;
         jobs      = jobs      ? jobs      : this.data.jobs;
-
         dashUtils.sort(jobs, value, direction, isTimestamp);
-
         this.update({
             jobs,
             visiblejobs: jobs,

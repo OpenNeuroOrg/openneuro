@@ -1,9 +1,10 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux     from 'reflux';
-import Actions    from './datasets.actions.js';
-import bids       from '../utils/bids';
-import userStore  from '../user/user.store.js';
+import Reflux    from 'reflux';
+import Actions   from './datasets.actions.js';
+import bids      from '../utils/bids';
+import userStore from '../user/user.store.js';
+import dashUtils from './dashboard.utils.js';
 
 // store setup -----------------------------------------------------------------------
 
@@ -144,32 +145,11 @@ let UploadStore = Reflux.createStore({
      * Takes a value and a direction (+ or -) and
      * sorts the current datasets acordingly.
      */
-    sort(value, direction, datasets) {
+    sort(value, direction, datasets, isTimeStamp) {
         value     = value     ? value     : this.data.sort.value;
         direction = direction ? direction : this.data.sort.direction;
         datasets  = datasets  ? datasets  : this.data.datasets;
-        datasets  = datasets.sort((a, b) => {
-
-            // format comparison data
-            let aVal, bVal;
-            if (value === 'label') {
-                aVal = a[value].toLowerCase();
-                bVal = b[value].toLowerCase();
-            } else if (value === 'created') {
-                aVal = -Date.parse(a[value]);
-                bVal = -Date.parse(b[value]);
-            }
-
-            // sort
-            if (direction == '+') {
-                if (aVal > bVal) {return 1;}
-                if (aVal < bVal) {return -1;}
-            } else if (direction == '-') {
-                if (aVal > bVal) {return -1;}
-                if (aVal < bVal) {return 1;}
-            }
-            return 0;
-        });
+        dashUtils.sort(datasets, value, direction, isTimeStamp);
         this.update({
             datasets,
             visibleDatasets: datasets,
