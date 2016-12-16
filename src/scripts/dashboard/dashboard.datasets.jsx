@@ -2,8 +2,8 @@
 
 import React         from 'react';
 import Reflux        from 'reflux';
-import Actions       from './datasets.actions.js';
-import DatasetsStore from './datasets.store.js';
+import Actions       from './dashboard.datasets.actions.js';
+import DatasetsStore from './dashboard.datasets.store.js';
 import {State, Link} from 'react-router';
 import moment        from 'moment';
 import {PanelGroup}  from 'react-bootstrap';

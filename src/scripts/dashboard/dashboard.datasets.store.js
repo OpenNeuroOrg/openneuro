@@ -1,7 +1,7 @@
 // dependencies ----------------------------------------------------------------------
 
 import Reflux    from 'reflux';
-import Actions   from './datasets.actions.js';
+import Actions   from './dashboard.datasets.actions.js';
 import bids      from '../utils/bids';
 import userStore from '../user/user.store.js';
 import dashUtils from './dashboard.utils.js';

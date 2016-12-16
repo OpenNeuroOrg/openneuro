@@ -14,8 +14,8 @@ import Blacklist      from './admin/admin.blacklist.jsx';
 
 import Dashboard      from './dashboard/dashboard.jsx';
 import Notifications  from './dashboard/notifications.jsx';
-import Jobs           from './dashboard/jobs.jsx';
-import Datasets       from './dashboard/datasets.jsx';
+import Jobs           from './dashboard/dashboard.jobs.jsx';
+import Datasets       from './dashboard/dashboard.datasets.jsx';
 import Dataset        from './dataset/dataset.jsx';
 
 

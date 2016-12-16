@@ -1,8 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React                from 'react';
-import {RouteHandler, Link}       from 'react-router';
-
+import {RouteHandler, Link} from 'react-router';
 
 class Dashboard extends React.Component {
 
