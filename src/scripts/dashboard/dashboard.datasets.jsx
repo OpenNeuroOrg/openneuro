@@ -10,7 +10,7 @@ import {PanelGroup}  from 'react-bootstrap';
 import Paginator     from '../common/partials/paginator.jsx';
 import Spinner       from '../common/partials/spinner.jsx';
 import Statuses      from '../dataset/dataset.statuses.jsx';
-import Filters       from './datasets.filters.jsx';
+import Filters       from './dashboard.filters.jsx';
 import Sort          from './dashboard.sort.jsx';
 import Summary       from '../dataset/dataset.summary.jsx';
 
