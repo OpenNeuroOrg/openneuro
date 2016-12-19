@@ -55,7 +55,7 @@ let Jobs = React.createClass({
                 <div className="fade-in  panel panel-default" key={job._id}>
                     <div className="panel-heading">
                         <div className="header clearfix">
-                            <Link to={'snapshot'} params={{datasetId: job.datasetId, snapshotId: job.snapshotId}}>
+                            <Link to={'snapshot'} params={{datasetId: job.datasetId, snapshotId: job.snapshotId}} query={{app: job.appId, job: job.jobId}}>
                                 <h4 className="dataset-name">{job.datasetLabel} {job.appLabel}</h4>
                                 <div className="meta-container">
                                     <p className="date">uploaded {user ? 'by ' : ''}<span className="name">{user}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
