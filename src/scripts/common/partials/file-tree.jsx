@@ -151,15 +151,26 @@ class FileTree extends React.Component {
             !item.children && this.props.displayFile &&
             files.hasExtension(item.name, allowedFiles)
         ) {
-            displayBtn = (
-                <span className="view-file">
-                    <WarnButton
-                        icon="fa-eye"
-                        warn={false}
-                        message=" View"
-                        action={this.props.displayFile.bind(this, item)} />
-                </span>
-            );
+            if(
+                item.name && item.length > 52428800 &&
+                files.hasExtension(item.name, ['.pdf'])
+            ){
+                displayBtn = (
+                    <span>
+                        <i className="fa fa-exclamation-triangle color-warning"></i> Please download to view file.
+                    </span>
+                );
+            }else{
+                displayBtn = (
+                    <span className="view-file">
+                        <WarnButton
+                            icon="fa-eye"
+                            warn={false}
+                            message=" View"
+                            action={this.props.displayFile.bind(this, item)} />
+                    </span>
+                );
+            }
         }
 
         if (addFile || editFile || deleteFile || downloadFile || displayBtn) {
