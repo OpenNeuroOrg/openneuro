@@ -48,5 +48,18 @@ export default {
 				console.log('db connected');
 			}
 		});
+		MongoClient.connect(config.mongo.url.replace('crn', 'scitran'), (err, db) => {
+			if (err) {
+				console.log(err);
+				process.exit();
+			} else {
+				this.db2 = db;
+				console.log('scitran db connected');
+				this.collections.scitran = {
+					projects: this.db2.collection('projects'),
+					projectSnapshots: this.db2.collection('project_snapshots')
+				};
+			}
+		});
 	}
 }

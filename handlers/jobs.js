@@ -8,7 +8,8 @@ import async         from 'async';
 import config        from '../config';
 import crypto        from 'crypto';
 import archiver      from 'archiver';
-import notifications from '../libs/notifications'
+import notifications from '../libs/notifications';
+import {ObjectID}    from 'mongodb';
 
 let c = mongo.collections;
 
@@ -272,7 +273,6 @@ let handlers = {
     },
 
     getJobs(req, res) {
-        console.log(req.user);
         c.jobs.find().toArray((err, jobs) => {
             if (err) {
                 res.send(err);
@@ -281,27 +281,26 @@ let handlers = {
 
             // filter jobs by permissions
             let filteredJobs = [];
-            // for (let job of jobs) {
+
             async.each(jobs, (job, cb) => {
-                // scitran.getProject(job.snapshotId, (err, resp) => {
+                c.scitran.projectSnapshots.findOne({'_id': ObjectID(job.snapshotId)}, {}, (err, snapshot) => {
                     /**
                      * Push job if
                      * - there's a public query param && the job snapshot is public
                      * - not public query param && current user has access.
                      */
-                    if (
-                        true // job was found
+                    if (!snapshot) {
+                        cb();
+                    } else if (
+                        req.query.public !== 'true' && req.user === job.userId ||
+                        req.query.public === 'true' && snapshot.public === true
                     ) {
-                        // filteredJobs.push({
-                        //     snapshotId: job.snapshotId,
-                        //     public: resp.body.public,
-                        //     permissions: resp.body.permissions,
-                        //     startedBy: job.userId
-                        // });
-                        filteredJobs.push(job)
+                        filteredJobs.push(job);
+                        cb();
+                    } else {
+                        cb();
                     }
-                    cb();
-                // }, {snapshot: true});
+                });
             }, () => {
                 res.send(filteredJobs);
             })
