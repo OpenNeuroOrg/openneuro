@@ -152,7 +152,7 @@ class FileTree extends React.Component {
             files.hasExtension(item.name, allowedFiles)
         ) {
             if(
-                item.name && item.length > 50000000 &&
+                item.name && item.length > 52428800 &&
                 files.hasExtension(item.name, ['.pdf'])
             ){
                 displayBtn = (
