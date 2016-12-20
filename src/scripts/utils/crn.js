@@ -64,8 +64,8 @@ export default {
     /**
      * Get Jobs
      */
-    getJobs(callback) {
-        request.get(config.crn.url + 'jobs', {}, callback);
+    getJobs(callback, isPublic) {
+        request.get(config.crn.url + 'jobs', {query: {public: isPublic}}, callback);
     },
 
     /**
