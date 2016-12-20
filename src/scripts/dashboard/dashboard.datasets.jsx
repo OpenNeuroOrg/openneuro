@@ -30,6 +30,12 @@ let Datasets = React.createClass({
         Actions.getDatasets(isPublic);
     },
 
+    componentWillReceiveProps(nextProps) {
+        let isPublic = this.getPath().indexOf('dashboard') === -1;
+        Actions.update({isPublic});
+        Actions.getDatasets(isPublic);
+    },
+
     render() {
         let datasets = this.state.datasets;
         let visibleDatasets = this.state.visibleDatasets;
