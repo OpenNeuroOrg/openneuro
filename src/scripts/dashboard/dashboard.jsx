@@ -13,11 +13,7 @@ let Dashboard = React.createClass({
 
 // life cycle events --------------------------------------------------
 
-    componentDidMount() {
-        this.setState({isPublic: this._isPublic()});
-    },
-
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps() {
         this.setState({isPublic: this._isPublic()});
     },
 
