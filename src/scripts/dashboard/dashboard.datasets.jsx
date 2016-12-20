@@ -30,7 +30,7 @@ let Datasets = React.createClass({
         Actions.getDatasets(isPublic);
     },
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
         Actions.update({isPublic});
         Actions.getDatasets(isPublic);
