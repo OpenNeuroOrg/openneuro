@@ -60,14 +60,14 @@ export default class JobMenu extends React.Component {
             });
         }
 
-        let appGroup = {};
-        if(this.props.apps){
-            for(let i=0; this.props.apps.length > i; i++){
-                if(appGroup[this.props.apps[i].label]){
+        // group app versions by label
+        if (this.props.apps) {
+            let appGroup = {};
+            for (let i=0; this.props.apps.length > i; i++) {
+                if (appGroup[this.props.apps[i].label]) {
                     appGroup[this.props.apps[i].label].push(this.props.apps[i]);
-                }else{
-                    appGroup[this.props.apps[i].label] = [];
-                    appGroup[this.props.apps[i].label].push(this.props.apps[i]);
+                } else {
+                    appGroup[this.props.apps[i].label] = [this.props.apps[i]];
                 }
             }
             this.setState({appGroup});
@@ -130,15 +130,13 @@ export default class JobMenu extends React.Component {
      * Returns a label and select box for selection an
      * analysis application.
      */
-
     _apps() {
 
-
-        let options = Object.keys(this.state.appGroup).map(function(key, index) {
+        let appOptions = Object.keys(this.state.appGroup).map((key, index) => {
             return <option key={index} value={key}> {key} </option>;
         });
 
-        let version_options = this.state.selectedApp ? this.state.selectedApp.map((app) => {
+        let versionOptions = this.state.selectedApp ? this.state.selectedApp.map((app) => {
             let disabled = this.state.disabledApps.hasOwnProperty(app.id) ? '* ' : '';
             return <option key={app.id} value={app.id}>{disabled + 'v' + app.version}</option>;
         }) : [];
@@ -151,7 +149,7 @@ export default class JobMenu extends React.Component {
                     <div className="col-xs-6 task-select">
                         <select value={this.state.selectedVersionID} onChange={this._selectAppVersion.bind(this)}>
                             <option value="" disabled>Select a Version</option>
-                            {version_options}
+                            {versionOptions}
                         </select>
                     </div>
                     <h6 className="col-xs-12"> * - app is incompatible with selected snapshot</h6>
@@ -169,7 +167,7 @@ export default class JobMenu extends React.Component {
                             <div className="col-xs-12 task-select">
                                 <select value={this.state.selectedAppKey} onChange={this._selectApp.bind(this)}>
                                     <option value="" disabled>Select a Task</option>
-                                    {options}
+                                    {appOptions}
                                 </select>
                             </div>
                             {this.state.selectedAppKey != '' ? versions : null}
@@ -471,8 +469,8 @@ export default class JobMenu extends React.Component {
      * Select App
      */
     _selectApp(e) {
-        let selectedApp;
         let selectedAppKey = e.target.value;
+        let selectedApp    = this.state.appGroup[selectedAppKey];
         if(this.state.selectedAppKey != e.target.value){
             this.setState({
                 parameters:         [],
@@ -481,12 +479,6 @@ export default class JobMenu extends React.Component {
                 selectedVersion:    {},
                 selectedVersionID:  ''
             });
-        }
-        for (let key in this.state.appGroup) {
-            if (key === selectedAppKey) {
-                selectedApp = this.state.appGroup[key];
-                break;
-            }
         }
         this.setState({selectedApp, selectedAppKey});
     }
