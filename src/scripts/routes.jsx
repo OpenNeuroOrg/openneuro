@@ -27,9 +27,15 @@ class RedirectDashboard extends React.Component {
     }
 }
 
-class RedirectNotifications extends React.Component {
+class RedirectDatasets extends React.Component {
     static willTransitionTo(transition) {
         transition.redirect('datasets');
+    }
+}
+
+class RedirectPublicDatasets extends React.Component {
+    static willTransitionTo(transition) {
+        transition.redirect('publicDatasets');
     }
 }
 
@@ -52,14 +58,19 @@ let routes = (
             <Route name="datasets" path="datasets" handler={Datasets}/>
             <Route name="notifications" path="notifications" handler={Notifications}/>
             <Route name="jobs" path="jobs" handler={Jobs}/>
-            <NotFoundRoute handler={RedirectNotifications}/>
+            <NotFoundRoute handler={RedirectDatasets}/>
+        </Route>
+        <Route name="publicDashboard" path="public"  handler={Dashboard} >
+            <Route name="publicDatasets" path="datasets" handler={Datasets}/>
+            <Route name="publicNotifications" path="notifications" handler={Notifications}/>
+            <Route name="publicJobs" path="jobs" handler={Jobs}/>
+            <NotFoundRoute handler={RedirectPublicDatasets}/>
         </Route>
         <Route name="admin" path="admin" handler={Admin} >
             <Route name="users" path="users" handler={Users} />
             <Route name="blacklist" path="blacklist" handler={Blacklist} />
             <NotFoundRoute handler={RedirectUsers}/>
         </Route>
-        <Route name="public" path="datasets" handler={Datasets}/>
         <Route name="dataset" path="datasets/:datasetId" handler={Dataset} />
         <Route name="snapshot" path="datasets/:datasetId/versions/:snapshotId" handler={Dataset} />
         <DefaultRoute handler={FrontPage}/>
