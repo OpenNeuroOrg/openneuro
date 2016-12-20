@@ -140,7 +140,7 @@ export default class JobMenu extends React.Component {
 
         let version_options = this.state.selectedApp ? this.state.selectedApp.map((app) => {
             let disabled = this.state.disabledApps.hasOwnProperty(app.id) ? '* ' : '';
-            return <option key={app.id}value={app.id}>{disabled + 'v' + app.version}</option>;
+            return <option key={app.id} value={app.id}>{disabled + 'v' + app.version}</option>;
         }) : [];
 
         let versions = (
