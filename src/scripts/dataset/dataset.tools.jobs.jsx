@@ -135,7 +135,7 @@ export default class JobMenu extends React.Component {
 
 
         let options = Object.keys(this.state.appGroup).map(function(key, index) {
-            return <option key={index} value={key}> {key} </option>
+            return <option key={index} value={key}> {key} </option>;
         });
 
         let version_options = this.state.selectedApp ? this.state.selectedApp.map((app) => {
