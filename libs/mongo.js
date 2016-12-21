@@ -2,7 +2,7 @@
 
 import {MongoClient} from 'mongodb';
 import config        from '../config';
-
+import async         from 'async';
 
 export default {
 
@@ -42,40 +42,25 @@ export default {
 	/**
 	 * Connect
 	 *
-	 * Makes a connection to mongodba and creates an accessible
+	 * Makes a connection to mongodbs and creates an accessible
 	 * reference to the dbs and collections
 	 */
 	connect() {
-		// connect crn
-		MongoClient.connect(config.mongo.url + 'crn', (err, db) => {
-			if (err) {
-				console.log(err);
-				process.exit();
-			} else {
-				this.dbs.crn = db;
-				for (let collectionName in this.collections.crn) {
-					if (this.collections.crn[collectionName] === null) {
-						this.collections.crn[collectionName] = this.dbs.crn.collection(collectionName);
+		async.each(Object.keys(this.dbs), (dbName, cb) => {
+			MongoClient.connect(config.mongo.url + dbName, (err, db) => {
+				if (err) {
+					console.log(err);
+					process.exit();
+				} else {
+					this.dbs[dbName] = db;
+					for (let collectionName in this.collections[dbName]) {
+						if (this.collections[dbName][collectionName] === null) {
+							this.collections[dbName][collectionName] = this.dbs[dbName].collection(collectionName);
+						}
 					}
+					console.log(dbName, ' - db connected');
 				}
-
-				console.log('db connected');
-			}
-		});
-
-		// connect scitran
-		MongoClient.connect(config.mongo.url + 'scitran', (err, db) => {
-			if (err) {
-				console.log(err);
-				process.exit();
-			} else {
-				this.dbs.scitran = db;
-				console.log('scitran db connected');
-				this.collections.scitran = {
-					projects: this.dbs.scitran.collection('projects'),
-					projectSnapshots: this.dbs.scitran.collection('project_snapshots')
-				};
-			}
+			});
 		});
 	}
 }
