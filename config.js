@@ -24,7 +24,7 @@ let config = {
         "storage":           process.env.CRN_SERVER_AGAVE_STORAGE
     },
     "mongo": {
-		"url": "mongodb://mongo:27017/crn"
+		"url": "mongodb://mongo:27017/"
 	},
     "notifications": {
         "email": {
