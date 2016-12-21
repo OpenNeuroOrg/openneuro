@@ -11,7 +11,10 @@ export default {
 	 * A storage location for a the database instance.
 	 * Used to access the native mongo api.
 	 */
-	db: null,
+	dbs: {
+		crn:     null,
+		scitran: null
+	},
 
 	/**
 	 * Collections
@@ -26,38 +29,47 @@ export default {
 		jobs: null,
 		tickets: null,
 		userPreferences: null,
-		notifications: null
+		notifications: null,
+		scitran: {
+			projects: null,
+			project_snapshots: null
+		}
 	},
 
 	/**
 	 * Connect
 	 *
-	 * Makes a connection to mongodb and creates an accessible
-	 * reference to the db
+	 * Makes a connection to mongodba and creates an accessible
+	 * reference to the dbs and collections
 	 */
 	connect() {
-		MongoClient.connect(config.mongo.url, (err, db) => {
+		// connect crn
+		MongoClient.connect(config.mongo.url + 'crn', (err, db) => {
 			if (err) {
 				console.log(err);
 				process.exit();
 			} else {
-				this.db = db;
+				this.dbs.crn = db;
 				for (let collectionName in this.collections) {
-					this.collections[collectionName] = this.db.collection(collectionName);
+					if (this.collections[collectionName] === null) {
+						this.collections[collectionName] = this.dbs.crn.collection(collectionName);
+					}
 				}
 				console.log('db connected');
 			}
 		});
-		MongoClient.connect(config.mongo.url.replace('crn', 'scitran'), (err, db) => {
+
+		// connect scitran
+		MongoClient.connect(config.mongo.url + 'scitran', (err, db) => {
 			if (err) {
 				console.log(err);
 				process.exit();
 			} else {
-				this.db2 = db;
+				this.dbs.scitran = db;
 				console.log('scitran db connected');
 				this.collections.scitran = {
-					projects: this.db2.collection('projects'),
-					projectSnapshots: this.db2.collection('project_snapshots')
+					projects: this.dbs.scitran.collection('projects'),
+					projectSnapshots: this.dbs.scitran.collection('project_snapshots')
 				};
 			}
 		});
