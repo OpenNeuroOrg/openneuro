@@ -282,28 +282,27 @@ let handlers = {
             // filter jobs by permissions
             let filteredJobs = [];
 
-            async.each(jobs, (job, cb) => {
-                c.scitran.projectSnapshots.findOne({'_id': ObjectID(job.snapshotId)}, {}, (err, snapshot) => {
-                    /**
-                     * Push job if
-                     * - there's a public query param && the job snapshot is public
-                     * - not public query param && current user has access.
-                     */
-                    if (!snapshot) {
-                        cb();
-                    } else if (
-                        req.query.public !== 'true' && req.user === job.userId ||
-                        req.query.public === 'true' && snapshot.public === true
-                    ) {
-                        filteredJobs.push(job);
-                        cb();
-                    } else {
-                        cb();
-                    }
+            if (req.query.public === 'true') {
+                async.each(jobs, (job, cb) => {
+                    c.scitran.projectSnapshots.findOne({'_id': ObjectID(job.snapshotId)}, {}, (err, snapshot) => {
+                        if (snapshot && snapshot.public === true) {
+                            filteredJobs.push(job);
+                            cb();
+                        } else {
+                            cb();
+                        }
+                    });
+                }, () => {
+                    res.send(filteredJobs);
                 });
-            }, () => {
+            } else {
+                for (let job of jobs) {
+                    if (req.user === job.userId) {
+                        filteredJobs.push(job);
+                    }
+                }
                 res.send(filteredJobs);
-            })
+            }
         });
     },
 
