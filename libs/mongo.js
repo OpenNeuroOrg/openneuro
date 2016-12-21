@@ -3,6 +3,7 @@
 import {MongoClient} from 'mongodb';
 import config        from '../config';
 
+
 export default {
 
 	/**
@@ -24,12 +25,14 @@ export default {
 	 * out null an are initialized after mongo connects.
 	 */
 	collections: {
-		blacklist: null,
-		validationQueue: null,
-		jobs: null,
-		tickets: null,
-		userPreferences: null,
-		notifications: null,
+		crn: {
+			blacklist: null,
+			validationQueue: null,
+			jobs: null,
+			tickets: null,
+			userPreferences: null,
+			notifications: null
+		},
 		scitran: {
 			projects: null,
 			project_snapshots: null
@@ -50,11 +53,12 @@ export default {
 				process.exit();
 			} else {
 				this.dbs.crn = db;
-				for (let collectionName in this.collections) {
-					if (this.collections[collectionName] === null) {
-						this.collections[collectionName] = this.dbs.crn.collection(collectionName);
+				for (let collectionName in this.collections.crn) {
+					if (this.collections.crn[collectionName] === null) {
+						this.collections.crn[collectionName] = this.dbs.crn.collection(collectionName);
 					}
 				}
+
 				console.log('db connected');
 			}
 		});
