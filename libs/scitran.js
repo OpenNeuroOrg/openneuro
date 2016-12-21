@@ -54,16 +54,16 @@ export default {
         }, callback);
     },
 
-	/**
-	 * Create User
-	 */
-	createUser(user, callback) {
-	    request.post(config.scitran.url + 'users', {body: user}, (err, res) => {
-    		this.createGroup(user._id, user._id, callback);
+    /**
+     * Create User
+     */
+    createUser(user, callback) {
+        request.post(config.scitran.url + 'users', {body: user}, () => {
+            this.createGroup(user._id, user._id, callback);
         });
-	},
+    },
 
-	/**
+    /**
      * Create Group
      *
      * Takes a groupName and a userId and
@@ -73,9 +73,9 @@ export default {
     createGroup (groupName, userId, callback) {
         let body = {
             _id: groupName,
-    	    name: groupName,
+            name: groupName
         };
-        request.post(config.scitran.url + 'groups', {body: body}, (err, res) => {
+        request.post(config.scitran.url + 'groups', {body: body}, () => {
             this.addRole('groups', groupName, {_id: groupName, access: 'admin', site: 'local'}, callback);
         });
     },
@@ -154,7 +154,7 @@ export default {
             }
         }, (err, res) => {
             if (!res.body.ticket) {
-                callback({status: 404, message: "Dataset not found."});
+                callback({status: 404, message: 'Dataset not found.'});
                 return;
             }
             let ticket = res.body.ticket;
@@ -165,7 +165,7 @@ export default {
                         if (contents && contents.indexOf(hash) > -1) {
                             callback(err, hash);
                         } else {
-                            files.saveSymlinks(hash, res2.body, (err4) => {
+                            files.saveSymlinks(hash, res2.body, () => {
                                 callback(err, hash);
                             });
                         }
@@ -176,4 +176,4 @@ export default {
 
     }
 
-}
+};

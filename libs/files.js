@@ -47,7 +47,7 @@ export default {
                         files_.push(path);
                         cb();
                     } else {
-                        this.getFiles(path, (files) => {
+                        this.getFiles(path, () => {
                             cb();
                         }, files_);
                     }
@@ -82,4 +82,4 @@ export default {
         });
     }
 
-}
+};

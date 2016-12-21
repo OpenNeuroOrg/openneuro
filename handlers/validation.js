@@ -1,10 +1,8 @@
 // dependencies ------------------------------------------------------------
 
 import config   from '../config';
-import sanitize from '../libs/sanitize';
-import mongo    from '../libs/mongo';
 import scitran  from '../libs/scitran';
-import validate from 'bids-validator'
+import validate from 'bids-validator';
 
 // handlers ----------------------------------------------------------------
 
@@ -18,7 +16,7 @@ export default {
     /**
      * Validate
      */
-    validate(req, res, next) {
+    validate(req, res) {
         // get project id
         let datasetId = req.params.datasetId;
 
@@ -26,12 +24,12 @@ export default {
             validate.BIDS(config.location + '/persistent/datasets/' + hash, {}, (validation, summary) => {
                 scitran.updateProject(datasetId, {
                     metadata: {validation, summary}
-                }, (err, res1) => {
-                    scitran.removeTag('projects', datasetId, 'validating', (err, res2) => {
+                }, () => {
+                    scitran.removeTag('projects', datasetId, 'validating', () => {
                         if (validation.errors && validation.errors.length > 0) {
-                            scitran.addTag('projects', datasetId, 'invalid', (err, res3) => {res.send({validation, summary})});
+                            scitran.addTag('projects', datasetId, 'invalid', () => {res.send({validation, summary});});
                         } else {
-                            scitran.removeTag('projects', datasetId, 'invalid', (err, res4) => {res.send({validation, summary})});
+                            scitran.removeTag('projects', datasetId, 'invalid', () => {res.send({validation, summary});});
                         }
                     });
                 });
@@ -39,4 +37,4 @@ export default {
         });
     }
 
-}
+};

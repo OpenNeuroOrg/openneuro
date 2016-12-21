@@ -12,33 +12,33 @@ let c = mongo.collections;
 
 let notifications = {
 
-	/**
-	 * Add
-	 *
-	 * Takes a notification object and
-	 * adds it to the database to be processed by
-	 * the cron.
-	 */
-	add (notification, callback) {
-		c.crn.notifications.updateOne({_id: notification._id}, notification, {upsert: true}, callback);
-	},
+    /**
+     * Add
+     *
+     * Takes a notification object and
+     * adds it to the database to be processed by
+     * the cron.
+     */
+    add (notification, callback) {
+        c.crn.notifications.updateOne({_id: notification._id}, notification, {upsert: true}, callback);
+    },
 
-	/**
-	 * Send
-	 */
-	send (notification, callback) {
-		if (notification.type === 'email') {
-			email.send(notification.email, callback);
-		}
-	},
+    /**
+     * Send
+     */
+    send (notification, callback) {
+        if (notification.type === 'email') {
+            email.send(notification.email, callback);
+        }
+    },
 
-	/**
-	 * Job Complete
-	 *
-	 * Sends an email notification to the user
-	 * with the status of their job.
-	 */
-	jobComplete (job) {
+    /**
+     * Job Complete
+     *
+     * Sends an email notification to the user
+     * with the status of their job.
+     */
+    jobComplete (job) {
         scitran.getUser(job.userId, (err, res) => {
             let user = res.body;
             notifications.add({
@@ -63,24 +63,24 @@ let notifications = {
                         unsubscribeLink: ''
                     }
                 }
-            }, (err, info) => {});
+            }, () => {});
         });
-	}
+    }
 
 };
 
 // notifications cron -------------------------------------
 
 new cron.CronJob('0 */1 * * * *', () => {
-	c.crn.notifications.find({}).toArray((err, docs) => {
-		for (let notification of docs) {
-			notifications.send(notification, (err) => {
-				if (!err) {
-					c.crn.notifications.removeOne({_id: notification._id}, {}, (err, doc) => {});
-				}
-			});
-		}
-	});
+    c.crn.notifications.find({}).toArray((err, docs) => {
+        for (let notification of docs) {
+            notifications.send(notification, (err) => {
+                if (!err) {
+                    c.crn.notifications.removeOne({_id: notification._id}, {}, () => {});
+                }
+            });
+        }
+    });
 }, null, true, 'America/Los_Angeles');
 
-export default notifications
+export default notifications;

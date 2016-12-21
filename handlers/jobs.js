@@ -1,3 +1,5 @@
+/*eslint no-console: ["error", { allow: ["log"] }] */
+
 // dependencies ------------------------------------------------------------
 
 import agave         from '../libs/agave';
@@ -5,7 +7,6 @@ import sanitize      from '../libs/sanitize';
 import scitran       from '../libs/scitran';
 import mongo         from '../libs/mongo';
 import async         from 'async';
-import config        from '../config';
 import crypto        from 'crypto';
 import archiver      from 'archiver';
 import notifications from '../libs/notifications';
@@ -30,7 +31,7 @@ let models = {
         memoryPerNode:     'number, required',
         nodeCount:         'number, required',
         processorsPerNode: 'number, required',
-        input:             'string',
+        input:             'string'
     }
 };
 
@@ -70,7 +71,7 @@ let handlers = {
         sanitize.req(req, models.job, (err, job) => {
             if (err) {return next(err);}
             scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
-                job.datasetHash = hash
+                job.datasetHash = hash;
                 job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
 
                 c.crn.jobs.findOne({
@@ -128,10 +129,10 @@ let handlers = {
             // re-submit job with old job data
             agave.submitJob(job, (err, resp) => {
                 if (err) {
-                    return next(err)
+                    return next(err);
                 } else {
                     // delete old job
-                    c.crn.jobs.removeOne({jobId}, {}, (err, doc) => {
+                    c.crn.jobs.removeOne({jobId}, {}, (err) => {
                         if (err) {return next(err);}
                         res.send(resp);
                     });
@@ -230,14 +231,14 @@ let handlers = {
                     // check status
                     if (resp.body.status === 'error' && resp.body.message.indexOf('No job found with job id') > -1) {
                         job.agave.status = 'FAILED';
-                        c.crn.jobs.updateOne({jobId}, {$set: {agave: job.agave}}, {}, (err, result) => {
+                        c.crn.jobs.updateOne({jobId}, {$set: {agave: job.agave}}, {}, () => {
                             res.send({agave: resp.body.result, snapshotId: job.snapshotId});
                             notifications.jobComplete(job);
                         });
                     } else if (resp.body && resp.body.result && (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED')) {
                         job.agave = resp.body.result;
                         agave.getOutputs(jobId, (results, logs) => {
-                            c.crn.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results, logs}}, {}, (err, result) => {
+                            c.crn.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results, logs}}, {}, (err) => {
                                 if (err) {res.send(err);}
                                 else {res.send({agave: resp.body.result, results, logs, snapshotId: job.snapshotId});}
                                 job.agave = resp.body.result;
@@ -248,7 +249,7 @@ let handlers = {
                         });
                     } else if (resp.body && resp.body.result && job.agave.status !== resp.body.result.status) {
                         job.agave = resp.body.result;
-                        c.crn.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
+                        c.crn.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err) => {
                             if (err) {res.send(err);}
                             else {
                                 res.send({
@@ -345,7 +346,7 @@ let handlers = {
     /**
      * GET File
      */
-    getFile(req, res, next) {
+    getFile(req, res) {
         let jobId = req.params.jobId;
 
         const path = req.ticket.filePath;
@@ -389,8 +390,7 @@ let handlers = {
                 let outputName = result.path.replace(baseDir, archiveName + '/');
                 if (result.type === 'file') {
                     let path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
-                    let name = result.name;
-                    agave.api.getPath(path, (err, res, token) => {
+                    agave.api.getPath(path, (err, res) => {
                         let body = res.body;
                         if (body && body.status && body.status === 'error') {
                             // error from AGAVE

@@ -20,7 +20,7 @@ let models = {
         lastname:  'string',
         note:      'string'
     }
-}
+};
 
 // handlers ----------------------------------------------------------------
 
@@ -45,7 +45,7 @@ export default {
             if (err) {return next(err);}
             c.crn.blacklist.findOne({_id: user._id}).then((item) => {
                 if (item) {
-                    res.send({status: 403, error: "This user email has been blacklisted and cannot be given an account"});
+                    res.send({status: 403, error: 'This user email has been blacklisted and cannot be given an account'});
                 } else {
                     scitran.createUser(user, (err, resp) => {
                         if (!err) {res.send(resp);}
@@ -66,11 +66,11 @@ export default {
             if (err) {return next(err);}
             c.crn.blacklist.findOne({_id: user._id}).then((item) => {
                 if (item) {
-                    let error = new Error("A user with that _id has already been blacklisted");
+                    let error = new Error('A user with that _id has already been blacklisted');
                     error.http_code = 409;
                     return next(error);
                 } else {
-                    c.crn.blacklist.insertOne(user, {w:1}, (err, item) => {
+                    c.crn.blacklist.insertOne(user, {w:1}, (err) => {
                         if (err) {return next(err);}
                         res.send(user);
                     });
@@ -107,12 +107,12 @@ export default {
         c.crn.blacklist.findAndRemove({_id: userId}, [], (err, doc) => {
             if (err) {return next(err);}
             if (!doc.value) {
-                let error = new Error("A user with that id was not found");
+                let error = new Error('A user with that id was not found');
                 error.http_code = 404;
                 return next(error);
             }
-            res.send({message: "User " + userId + " has been un-blacklisted."});
+            res.send({message: 'User ' + userId + ' has been un-blacklisted.'});
         });
     }
 
-}
+};

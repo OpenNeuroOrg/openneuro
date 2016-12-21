@@ -1,3 +1,5 @@
+/*eslint no-console: ["error", { allow: ["log"] }] */
+
 // dependencies ----------------------------------------------------
 
 import express    from 'express';
@@ -6,8 +8,6 @@ import routes     from './routes';
 import bodyParser from 'body-parser';
 import morgan     from 'morgan';
 import mongo      from './libs/mongo';
-import validation from './handlers/validation';
-import notification from './libs/notifications';
 
 // configuration ---------------------------------------------------
 
@@ -29,7 +29,7 @@ app.use(config.apiPrefix, routes);
 
 // error handling --------------------------------------------------
 
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
     res.header('Content-Type', 'application/json');
     var send = {'error' : ''};
     var http_code = (typeof err.http_code === 'undefined') ? 500 : err.http_code;
@@ -37,13 +37,13 @@ app.use(function(err, req, res, next) {
         send.error = err.message;
     } else {
         if(err.http_code == 400){
-            send.error = "there was something wrong with that request";
+            send.error = 'there was something wrong with that request';
         }else if(err.http_code == 401){
-            send.error = "you are not authorized to do that";
+            send.error = 'you are not authorized to do that';
         }else if(err.http_code == 404){
-            send.error = "that resource was not found";
+            send.error = 'that resource was not found';
         }else{
-            send.error = "there was a problem";
+            send.error = 'there was a problem';
         }
     }
     res.status(http_code).send(send);
@@ -52,5 +52,5 @@ app.use(function(err, req, res, next) {
 // start server ----------------------------------------------------
 
 app.listen(config.port, () => {
-	console.log('Server is listening on port ' + config.port);
+    console.log('Server is listening on port ' + config.port);
 });
