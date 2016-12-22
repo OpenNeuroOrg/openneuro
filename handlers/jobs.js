@@ -285,7 +285,7 @@ let handlers = {
 
             if (req.query.public === 'true') {
                 async.each(jobs, (job, cb) => {
-                    c.scitran.projectSnapshots.findOne({'_id': ObjectID(job.snapshotId)}, {}, (err, snapshot) => {
+                    c.scitran.project_snapshots.findOne({'_id': ObjectID(job.snapshotId)}, {}, (err, snapshot) => {
                         if (snapshot && snapshot.public === true) {
                             filteredJobs.push(job);
                             cb();
