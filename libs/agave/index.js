@@ -138,7 +138,7 @@ export default {
             }
 
             // store job
-            c.jobs.insertOne({
+            c.crn.jobs.insertOne({
                 jobId:             resp.body.result.id,
                 agave:             resp.body.result,
 
