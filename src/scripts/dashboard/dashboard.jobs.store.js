@@ -1,10 +1,11 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux    from 'reflux';
-import Actions   from './dashboard.jobs.actions.js';
-import crn       from '../utils/crn';
-import userStore from '../user/user.store.js';
-import dashUtils from './dashboard.utils.js';
+import Reflux       from 'reflux';
+import Actions      from './dashboard.jobs.actions.js';
+import crn          from '../utils/crn';
+import userStore    from '../user/user.store.js';
+import dashUtils    from './dashboard.utils.js';
+import datasetStore from '../dataset/dataset.store.js';
 
 // store setup -----------------------------------------------------------------------
 
@@ -41,10 +42,13 @@ let DashboardJobStore = Reflux.createStore({
      */
     setInitialState(diffs) {
         let data = {
+            apps: [],
+            appsLoading: true,
             loading: false,
             jobs: [],
             visiblejobs: [],
             isPublic: false,
+            pipelineNameFilter: '',
             sort: {
                 value: 'agave.created',
                 direction: '+'
@@ -79,6 +83,20 @@ let DashboardJobStore = Reflux.createStore({
     },
 
     /**
+     * Set Apps
+     *
+     * Apps are retrieved a single time by the dataset store which will call
+     * this function when they're available
+     */
+    setApps(apps) {
+        
+        for (let app of apps) {
+            console.log(app);
+        }
+        this.update({apps, appsLoading: false})
+    },
+
+    /**
      * Sort
      *
      * Takes a value and a direction (+ or -) and
@@ -96,6 +114,24 @@ let DashboardJobStore = Reflux.createStore({
             },
             loading: false
         });
+    },
+
+    /**
+     * Select Pipeline Filter
+     */
+    selectPipelineFilter(pipelineNameFilter) {
+        let visiblejobs = [];
+        if (pipelineNameFilter === null) {
+            visiblejobs = this.data.jobs;
+        } else {
+            let jobs = this.data.jobs;
+            for (let job of jobs) {
+                if (job.appLabel === pipelineNameFilter) {
+                    visiblejobs.push(job);
+                }
+            }
+        }
+        this.update({pipelineNameFilter, visiblejobs});
     }
 
 });
