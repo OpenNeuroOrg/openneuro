@@ -77,23 +77,10 @@ let DashboardJobStore = Reflux.createStore({
         let isSignedOut = !userStore.data.token;
         this.update({loading: true}, () => {
             crn.getJobs((err, res) => {
-                this.sort('agave.created', '+', res.body, true);
+                this.update({apps: res.body.availableApps, appsLoading: false});
+                this.sort('agave.created', '+', res.body.jobs, true);
             }, isPublic, isSignedOut);
         });
-    },
-
-    /**
-     * Set Apps
-     *
-     * Apps are retrieved a single time by the dataset store which will call
-     * this function when they're available
-     */
-    setApps(apps) {
-        
-        for (let app of apps) {
-            console.log(app);
-        }
-        this.update({apps, appsLoading: false})
     },
 
     /**
