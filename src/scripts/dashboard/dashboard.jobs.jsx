@@ -63,11 +63,8 @@ let Jobs = React.createClass({
             {label: 'MRIQC (bare-metal @ ls5)', value: 'MRIQC (bare-metal @ ls5)'},
             {label:'EXAMPLE (cappat @ slurm-sherlock.stanford.edu)', value:'EXAMPLE (cappat @ slurm-sherlock.stanford.edu)'}
         ];
-        let options = appNames.map((app) => {
-            return <option value={app.value} key={app.value}>{app.label}</option>
-        })
         if (this.state.appsLoading) {
-            return <span>Loading</span>
+            return <span>Loading</span>;
         } else {
             return (
                 <div className="filters">
