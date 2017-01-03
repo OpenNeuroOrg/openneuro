@@ -5,7 +5,6 @@ import Actions      from './dashboard.jobs.actions.js';
 import crn          from '../utils/crn';
 import userStore    from '../user/user.store.js';
 import dashUtils    from './dashboard.utils.js';
-import datasetStore from '../dataset/dataset.store.js';
 
 // store setup -----------------------------------------------------------------------
 
