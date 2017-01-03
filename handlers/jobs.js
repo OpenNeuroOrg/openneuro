@@ -280,6 +280,9 @@ let handlers = {
                 return;
             }
 
+            // store request metadata
+            let availableApps = {};
+
             // filter jobs by permissions
             let filteredJobs = [];
 
@@ -287,6 +290,7 @@ let handlers = {
                 async.each(jobs, (job, cb) => {
                     c.scitran.project_snapshots.findOne({'_id': ObjectID(job.snapshotId)}, {}, (err, snapshot) => {
                         if (snapshot && snapshot.public === true) {
+                            buildMetadata(job);
                             filteredJobs.push(job);
                             cb();
                         } else {
@@ -294,15 +298,44 @@ let handlers = {
                         }
                     });
                 }, () => {
-                    res.send(filteredJobs);
+                    res.send({availableApps: reMapMetadata(availableApps), jobs: filteredJobs});
                 });
             } else {
                 for (let job of jobs) {
                     if (req.user === job.userId) {
+                        buildMetadata(job);
                         filteredJobs.push(job);
                     }
                 }
-                res.send(filteredJobs);
+                res.send({availableApps: reMapMetadata(availableApps), jobs: filteredJobs});
+            }
+
+            function buildMetadata(job) {
+                if (!availableApps.hasOwnProperty(job.appLabel)) {
+                    availableApps[job.appLabel] = {versions: {}};
+                    availableApps[job.appLabel].versions[job.appVersion] = job.appId;
+                } else if (availableApps[job.appLabel].versions.indexOf) {
+                    availableApps[job.appLabel].versions.push({
+                        id: job.appId,
+                        version: job.appVersion
+                    });
+                }
+            }
+
+            function reMapMetadata(apps) {
+                let remapped = [];
+                for (let app in apps) {
+                    // console.log(apps[app])
+                    let tempApp = {label: app, versions: []};
+                    for (let version in apps[app].versions) {
+                        tempApp.versions.push({
+                            version,
+                            id: apps[app].versions[version]
+                        });
+                    }
+                    remapped.push(tempApp);
+                }
+                return remapped;
             }
         });
     },
