@@ -144,7 +144,8 @@ class FileTree extends React.Component {
             '.jpg',
             '.jpeg',
             '.png',
-            '.gif'
+            '.gif',
+            '.html'
         ];
 
         if (
