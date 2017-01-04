@@ -1,3 +1,5 @@
+/*eslint react/no-danger: 0 */
+
 // dependencies -------------------------------------------------------
 
 import React   from 'react';
@@ -55,7 +57,7 @@ export default class FileDisplay extends React.Component {
             return <Papaya image={link} />;
         } else if (files.hasExtension(name, ['.jpg', '.jpeg', '.png', '.gif'])) {
             return <div className="modal-preview-image" ><img src={link} /></div>;
-         } else if (files.hasExtension(name, ['.html'])) {
+        } else if (files.hasExtension(name, ['.html'])) {
             return <div dangerouslySetInnerHTML={this._htmlFormat(content)} />;
         } else {
             return content;
