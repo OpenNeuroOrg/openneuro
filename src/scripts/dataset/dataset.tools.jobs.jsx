@@ -73,7 +73,7 @@ export default class JobMenu extends React.Component {
                 }
             }
             for (var key in appGroup) {
-                appGroup[key].sort(function(a, b) {
+                appGroup[key].sort(function(b, a) {
                     var i, diff;
                     var regExStrip0 = /(\.0+)+$/;
                     var segmentsA = a.version.replace(regExStrip0, '').split('.');
