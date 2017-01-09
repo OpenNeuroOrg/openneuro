@@ -63,6 +63,8 @@ export default class JobMenu extends React.Component {
         // group app versions by label
         if (this.props.apps) {
             let appGroup = {};
+
+
             for (let i=0; this.props.apps.length > i; i++) {
                 if (appGroup[this.props.apps[i].label]) {
                     appGroup[this.props.apps[i].label].push(this.props.apps[i]);
@@ -70,6 +72,25 @@ export default class JobMenu extends React.Component {
                     appGroup[this.props.apps[i].label] = [this.props.apps[i]];
                 }
             }
+            for (var key in appGroup) {
+                appGroup[key].sort(function(a, b) {
+                    var i, diff;
+                    var regExStrip0 = /(\.0+)+$/;
+                    var segmentsA = a.version.replace(regExStrip0, '').split('.');
+                    var segmentsB = b.version.replace(regExStrip0, '').split('.');
+                    var l = Math.min(segmentsA.length, segmentsB.length);
+
+                    for (i = 0; i < l; i++) {
+                        diff = parseInt(segmentsA[i], 10) - parseInt(segmentsB[i], 10);
+                        if (diff) {
+                            return diff;
+                        }
+                    }
+                    return segmentsA.length - segmentsB.length;
+                });
+
+            }
+
             this.setState({appGroup});
         }
     }
