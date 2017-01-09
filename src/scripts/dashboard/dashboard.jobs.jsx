@@ -21,6 +21,7 @@ let Jobs = React.createClass({
         let isPublic = this.getPath().indexOf('dashboard') === -1;
         Actions.update({isPublic});
         Actions.getJobs(isPublic);
+        Actions.appFilters();
     },
 
     render () {
@@ -30,13 +31,13 @@ let Jobs = React.createClass({
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
                              <h2>My Analyses</h2>
+                             {this._filter()}
                         </div>
                         <div className="filters-sort-wrap clearfix">
                             <Sort options={this.state.sortOptions}
                                   sort={this.state.sort}
                                   sortFunc={Actions.sort} />
 
-                            {this._filter()}
 
                         </div>
                     </div>
@@ -50,26 +51,18 @@ let Jobs = React.createClass({
 
 // custom methods -----------------------------------------------------
 
+
+
+
     _filter() {
-        /**
-         * Instead of loading this data from the apps endpoint have the server return a list of every
-         * app/version returned in the list of jobs.
-         */
-        let appNames = [
-            {label: 'FREESURFER (cappat @ slurm-sherlock.stanford.edu)', value: 'FREESURFER (cappat @ slurm-sherlock.stanford.edu)'},
-            {label: 'MRIQC-SINGULARITY (cappat @ slurm-stampede.tacc.utexas.edu)', value: 'MRIQC-SINGULARITY (cappat @ slurm-stampede.tacc.utexas.edu)'},
-            {label: 'STAMPEDE-EXAMPLE (cappat @ slurm-stampede.tacc.utexas.edu)', value: 'STAMPEDE-EXAMPLE (cappat @ slurm-stampede.tacc.utexas.edu)'},
-            {label: 'FREESURFER-STAMPEDE (cappat @ slurm-stampede.tacc.utexas.edu)', value: 'FREESURFER-STAMPEDE (cappat @ slurm-stampede.tacc.utexas.edu)'},
-            {label: 'MRIQC (bare-metal @ ls5)', value: 'MRIQC (bare-metal @ ls5)'},
-            {label:'EXAMPLE (cappat @ slurm-sherlock.stanford.edu)', value:'EXAMPLE (cappat @ slurm-sherlock.stanford.edu)'}
-        ];
+
         if (this.state.appsLoading) {
-            return <span>Loading</span>;
+            return <span><i className="fa fa-spin fa-circle-o-notch" /></span>;
         } else {
             return (
                 <div className="filters">
                     <label>Filter By:</label>
-                    <Select simpleValue value={this.state.pipelineNameFilter} placeholder="Pipeline Name" options={appNames} onChange={Actions.selectPipelineFilter} />
+                    <Select simpleValue value={this.state.pipelineNameFilter} placeholder="Pipeline Name" options={this.state.appGroup} onChange={Actions.selectPipelineFilter} />
                 </div>
             );
         }

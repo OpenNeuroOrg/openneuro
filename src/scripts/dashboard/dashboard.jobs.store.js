@@ -55,7 +55,8 @@ let DashboardJobStore = Reflux.createStore({
             sortOptions: [
                 {label: 'Name', property: 'datasetLabel'},
                 {label: 'Date', property: 'agave.created', isTimestamp: true}
-            ]
+            ],
+            appGroup: []
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data);
@@ -80,6 +81,23 @@ let DashboardJobStore = Reflux.createStore({
                 this.sort('agave.created', '+', res.body.jobs, true);
             }, isPublic, isSignedOut);
         });
+    },
+
+    /*
+    *
+    * push labels to new array for App Filter on
+    * analysis dashboard
+    */
+
+    appFilters(){
+        let appGroup = [];
+        for (let i=0; this.data.jobs.length > i; i++) {
+            appGroup.push({
+                label: this.data.jobs[i].appLabel,
+                value: this.data.jobs[i].appLabel
+            });
+        }
+        this.update({appGroup})
     },
 
     /**
