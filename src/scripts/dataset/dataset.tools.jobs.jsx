@@ -20,15 +20,18 @@ export default class JobMenu extends React.Component {
     constructor() {
         super();
         this.state = {
-            loading:          false,
-            parameters:       [],
-            disabledApps:     {},
-            selectedApp:      {},
-            selectedAppID:    '',
-            selectedSnapshot: '',
-            message:          null,
-            error:            false,
-            subjects:         []
+            loading:           false,
+            parameters:         [],
+            disabledApps:       {},
+            selectedApp:        [],
+            selectedVersion:    {},
+            selectedVersionID:  '',
+            selectedAppKey:     '',
+            selectedSnapshot:   '',
+            message:            null,
+            error:              false,
+            subjects:           [],
+            appGroup:           {}
         };
     }
 
@@ -56,17 +59,30 @@ export default class JobMenu extends React.Component {
                 }
             });
         }
+
+        // group app versions by label
+        if (this.props.apps) {
+            let appGroup = {};
+            for (let i=0; this.props.apps.length > i; i++) {
+                if (appGroup[this.props.apps[i].label]) {
+                    appGroup[this.props.apps[i].label].push(this.props.apps[i]);
+                } else {
+                    appGroup[this.props.apps[i].label] = [this.props.apps[i]];
+                }
+            }
+            this.setState({appGroup});
+        }
     }
 
     render() {
-        let selectedApp = this.state.selectedApp;
-        let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedAppID;
+        let selectedVersion = this.state.selectedVersion;
+        let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedVersionID;
 
         let form = (
             <div className="anaylsis-modal clearfix">
                 {this._snapshots()}
                 {this._apps()}
-                {this._info(selectedApp)}
+                {this._info(selectedVersion)}
                 {this._parameters()}
                 {this._submit()}
             </div>
@@ -115,13 +131,31 @@ export default class JobMenu extends React.Component {
      * analysis application.
      */
     _apps() {
-        let options = this.props.apps ? this.props.apps.map((app) => {
+
+        let appOptions = Object.keys(this.state.appGroup).map((key, index) => {
+            return <option key={index} value={key}> {key} </option>;
+        });
+
+        let versionOptions = this.state.selectedApp ? this.state.selectedApp.map((app) => {
             let disabled = this.state.disabledApps.hasOwnProperty(app.id) ? '* ' : '';
-            return <option key={app.id}
-                           value={app.id}>
-                       {disabled + app.label + ' - v' + app.version}
-                   </option>;
+            return <option key={app.id} value={app.id}>{disabled + 'v' + app.version}</option>;
         }) : [];
+
+        let versions = (
+            <div className="col-xs-12">
+                <div className="row">
+                    <hr />
+                    <h5>Please choose a version for {this.state.selectedAppKey}</h5>
+                    <div className="col-xs-6 task-select">
+                        <select value={this.state.selectedVersionID} onChange={this._selectAppVersion.bind(this)}>
+                            <option value="" disabled>Select a Version</option>
+                            {versionOptions}
+                        </select>
+                    </div>
+                    <h6 className="col-xs-12"> * - app is incompatible with selected snapshot</h6>
+                </div>
+            </div>
+        );
 
         if (this.state.selectedSnapshot) {
             return (
@@ -130,13 +164,13 @@ export default class JobMenu extends React.Component {
                     <h5>Choose an analysis pipeline to run on dataset {this.props.dataset.name}</h5>
                     <div className="row">
                         <div className="col-xs-12">
-                            <div className="col-xs-6 task-select">
-                                <select value={this.state.selectedAppID} onChange={this._selectApp.bind(this)}>
+                            <div className="col-xs-12 task-select">
+                                <select value={this.state.selectedAppKey} onChange={this._selectApp.bind(this)}>
                                     <option value="" disabled>Select a Task</option>
-                                    {options}
+                                    {appOptions}
                                 </select>
                             </div>
-                            <h6 className="col-xs-12"> * - app is incompatible with selected snapshot</h6>
+                            {this.state.selectedAppKey != '' ? versions : null}
                         </div>
                     </div>
                 </div>
@@ -296,7 +330,7 @@ export default class JobMenu extends React.Component {
      * app.
      */
     _parameters() {
-        if (this.state.disabledApps.hasOwnProperty(this.state.selectedApp.id)) {
+        if (this.state.disabledApps.hasOwnProperty(this.state.selectedVersion.id)) {
             return false;
         }
         let parameters = this.state.parameters.map((parameter) => {
@@ -361,10 +395,10 @@ export default class JobMenu extends React.Component {
     }
 
     _submit() {
-        if (this.state.disabledApps.hasOwnProperty(this.state.selectedApp.id)) {
+        if (this.state.disabledApps.hasOwnProperty(this.state.selectedVersion.id)) {
             return false;
         }
-        if (this.state.selectedAppID) {
+        if (this.state.selectedVersionID) {
             return (
                 <div className="col-xs-12 modal-actions">
                     <button className="btn-modal-submit" onClick={this._startJob.bind(this)}>Start</button>
@@ -381,17 +415,20 @@ export default class JobMenu extends React.Component {
      */
     _hide() {
         let success = !!this.state.message && !this.state.error;
-        this.props.onHide(success, this.state.selectedSnapshot, this.state.selectedAppID);
+        this.props.onHide(success, this.state.selectedSnapshot, this.state.selectedVersionID);
         this.setState({
-            loading:          false,
-            parameters:       [],
-            selectedApp:      {},
-            selectedAppID:    '',
-            selectedSnapshot: '',
-            message:          null,
-            error:            false,
-            options:          [],
-            value:            []
+            loading:            false,
+            parameters:         [],
+            selectedApp:        [],
+            selectedAppKey:     '',
+            selectedVersion:    {},
+            selectedVersionID:  '',
+            selectedSnapshot:   '',
+            message:            null,
+            error:              false,
+            options:            [],
+            value:              [],
+            appGroup:           {}
         });
     }
 
@@ -432,12 +469,30 @@ export default class JobMenu extends React.Component {
      * Select App
      */
     _selectApp(e) {
-        let selectedApp;
-        let selectedAppID = e.target.value;
+        let selectedAppKey = e.target.value;
+        let selectedApp    = this.state.appGroup[selectedAppKey];
+        if(this.state.selectedAppKey != e.target.value){
+            this.setState({
+                parameters:         [],
+                selectedApp:        [],
+                selectedAppKey:     '',
+                selectedVersion:    {},
+                selectedVersionID:  ''
+            });
+        }
+        this.setState({selectedApp, selectedAppKey});
+    }
+
+    /**
+     * Select App Version
+     */
+    _selectAppVersion(e) {
+        let selectedVersion;
+        let selectedVersionID = e.target.value;
         let parameters = [], parametersSpec = [];
         for (let app of this.props.apps) {
-            if (app.id === selectedAppID) {
-                selectedApp = app;
+            if (app.id === selectedVersionID) {
+                selectedVersion = app;
                 parametersSpec = app.parameters;
                 break;
             }
@@ -454,7 +509,7 @@ export default class JobMenu extends React.Component {
                 });
             }
         }
-        this.setState({selectedApp, selectedAppID, parameters});
+        this.setState({selectedVersion, selectedVersionID, parameters});
     }
 
     /**
@@ -517,7 +572,7 @@ export default class JobMenu extends React.Component {
         }
         this.setState({loading: true});
 
-        actions.startJob(this.state.selectedSnapshot, this.state.selectedApp, parameters, (err, res) => {
+        actions.startJob(this.state.selectedSnapshot, this.state.selectedVersion, parameters, (err, res) => {
             let message, error;
             if (err) {
                 error   = true;

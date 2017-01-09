@@ -12,7 +12,6 @@ export default class MetaData extends React.Component {
         let dataset     = this.props.dataset;
         let description = dataset.description;
         let issues      = this.props.issues;
-
         let metadata = [
             {
                 error:    issues.authors,
@@ -62,8 +61,10 @@ export default class MetaData extends React.Component {
             {
                 key:      'ReferencesAndLinks',
                 label:    'References and Links',
+                type:     'referencesAndLinks',
                 value:    description.ReferencesAndLinks,
-                onChange: actions.updateDescription.bind(this, 'ReferencesAndLinks')
+                onChange: actions.updateDescription.bind(this, 'ReferencesAndLinks'),
+                onDismissIssue: actions.dismissMetadataIssue.bind(this, 'referencesAndLinks')
             },
             {
                 key:         'DigitalDocuments',

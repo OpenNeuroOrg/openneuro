@@ -1,3 +1,5 @@
+/*eslint react/no-danger: 0 */
+
 // dependencies -------------------------------------------------------
 
 import React   from 'react';
@@ -34,6 +36,8 @@ export default class FileDisplay extends React.Component {
     }
 
     _format(name, content, link) {
+
+
         if (files.hasExtension(name, ['.json'])) {
             try {
                 return JSON.stringify(JSON.parse(content), null, 4);
@@ -53,12 +57,18 @@ export default class FileDisplay extends React.Component {
             return <Papaya image={link} />;
         } else if (files.hasExtension(name, ['.jpg', '.jpeg', '.png', '.gif'])) {
             return <div className="modal-preview-image" ><img src={link} /></div>;
+        } else if (files.hasExtension(name, ['.html'])) {
+            return <div dangerouslySetInnerHTML={this._htmlFormat(content)} />;
         } else {
             return content;
         }
     }
 
 // custom methods -----------------------------------------------------
+
+    _htmlFormat(value) {
+        return {__html: value};
+    }
 
     _extension(name) {
         let nameParts = name.split('.');

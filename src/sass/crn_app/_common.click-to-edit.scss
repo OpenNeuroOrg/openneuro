@@ -54,8 +54,14 @@
             background: $f8;
             border-bottom: 1px solid $e7;
             display: block;
-            margin: 0 -10px -10px;
+            margin: 0 -10px;
             padding: 10px;
+            &.ref-link-markdown{
+                p{
+                    display: inline;
+                    margin-bottom: 0;
+                }
+            }
         }
 
         &:last-child {
@@ -118,6 +124,7 @@
         padding: 6px;
 
         .orcid-id,
+        .reference-name,
         .author-name,
         .share-name,
         .share-access {
@@ -163,7 +170,7 @@
 
             input {
                 font-size: 14px;
-                //padding: 10px;
+                padding: 11px 8px 10px;
                 //height: 35px;
                 width: 99%;
                 //margin: 0 .5%;
@@ -178,9 +185,11 @@
             text-align: center;
         }
 
+        .array-edit .btn.btn-admin,
         .author-edit .btn.btn-admin {
             width: 100%;
             padding: 8px 10px;
         }
     }
 }
+
