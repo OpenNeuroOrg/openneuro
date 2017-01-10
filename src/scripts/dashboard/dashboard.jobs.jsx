@@ -21,7 +21,6 @@ let Jobs = React.createClass({
         let isPublic = this.getPath().indexOf('dashboard') === -1;
         Actions.update({isPublic});
         Actions.getJobs(isPublic);
-        Actions.appFilters();
     },
 
     render () {
@@ -55,17 +54,29 @@ let Jobs = React.createClass({
 
 
     _filter() {
-
+        //console.log(this.state.apps);
         if (this.state.appsLoading) {
             return <span><i className="fa fa-spin fa-circle-o-notch" /></span>;
         } else {
             return (
-                <div className="filters">
-                    <label>Filter By:</label>
-                    <Select simpleValue value={this.state.pipelineNameFilter} placeholder="Pipeline Name" options={this.state.apps} onChange={Actions.selectPipelineFilter} />
-                </div>
+                <span>
+                    <div className="apps-filter">
+                        <label>Filter By:</label>
+                        <Select simpleValue value={this.state.pipelineNameFilter} placeholder="Pipeline Name" options={this.state.apps} onChange={Actions.selectPipelineFilter} />
+                    </div>
+                    {this.state.pipelineNameFilter === '' || this.state.pipelineNameFilter === null ? null : this._selectVersions()}
+                </span>
             );
         }
+    },
+
+    _selectVersions(){
+        return (
+            <div className="versions-filter">
+                <label>Version:</label>
+                <Select simpleValue value={this.state.pipelineVersionFilter} placeholder="Version Number" options={this.state.appVersionGroup} onChange={Actions.selectPipelineVersionFilter} />
+            </div>
+        );
     },
 
     _jobs(paginatedResults) {

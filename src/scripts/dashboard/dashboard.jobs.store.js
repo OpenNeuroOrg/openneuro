@@ -48,6 +48,7 @@ let DashboardJobStore = Reflux.createStore({
             visiblejobs: [],
             isPublic: false,
             pipelineNameFilter: '',
+            pipelineVersionFilter: '',
             sort: {
                 value: 'agave.created',
                 direction: '+'
@@ -56,7 +57,7 @@ let DashboardJobStore = Reflux.createStore({
                 {label: 'Name', property: 'datasetLabel'},
                 {label: 'Date', property: 'agave.created', isTimestamp: true}
             ],
-            appGroup: []
+            appVersionGroup: []
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data);
@@ -84,23 +85,6 @@ let DashboardJobStore = Reflux.createStore({
         });
     },
 
-    /*
-    *
-    * push labels to new array for App Filter on
-    * analysis dashboard
-    */
-
-    appFilters(){
-        let appGroup = [];
-        for (let i=0; this.data.jobs.length > i; i++) {
-            appGroup.push({
-                label: this.data.jobs[i].appLabel,
-                value: this.data.jobs[i].appLabel
-            });
-        }
-        this.update({appGroup})
-    },
-
     /**
      * Sort
      *
@@ -121,6 +105,27 @@ let DashboardJobStore = Reflux.createStore({
         });
     },
 
+   /*
+    *
+    * push versions data to new array
+    * for App version Filter on
+    * dashboard
+    */
+
+    appVersions(pipelineNameFilter){
+        let appVersionGroup = [];
+        for (let i=0; this.data.jobs.length > i; i++) {
+            if(this.data.jobs[i].appLabel === pipelineNameFilter){
+                if(appVersionGroup.length > 0){
+                    appVersionGroup.push({label: this.data.jobs[i].appVersion, value: this.data.jobs[i].appVersion});
+                }else{
+                    appVersionGroup = [{label: this.data.jobs[i].appVersion, value: this.data.jobs[i].appVersion}];
+                }
+            }
+        }
+        this.update({appVersionGroup});
+    },
+
     /**
      * Select Pipeline Filter
      */
@@ -136,7 +141,30 @@ let DashboardJobStore = Reflux.createStore({
                 }
             }
         }
+        /* add versions to array */
+        this.appVersions(pipelineNameFilter);
+
         this.update({pipelineNameFilter, visiblejobs});
+    },
+
+
+    /**
+     * Select Version Filter
+     */
+    selectPipelineVersionFilter(pipelineVersionFilter) {
+        let visiblejobs = [];
+        if (pipelineVersionFilter === null) {
+            this.selectPipelineFilter(this.data.pipelineNameFilter);
+            this.update({pipelineVersionFilter});
+        }else {
+            let jobs = this.data.jobs;
+            for (let job of jobs) {
+                if (job.appVersion === pipelineVersionFilter) {
+                    visiblejobs.push(job);
+                }
+            }
+            this.update({pipelineVersionFilter, visiblejobs});
+        }
     }
 
 });
