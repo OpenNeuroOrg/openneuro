@@ -62,7 +62,7 @@ let Jobs = React.createClass({
             return (
                 <div className="filters">
                     <label>Filter By:</label>
-                    <Select simpleValue value={this.state.pipelineNameFilter} placeholder="Pipeline Name" options={this.state.appGroup} onChange={Actions.selectPipelineFilter} />
+                    <Select simpleValue value={this.state.pipelineNameFilter} placeholder="Pipeline Name" options={this.state.apps} onChange={Actions.selectPipelineFilter} />
                 </div>
             );
         }

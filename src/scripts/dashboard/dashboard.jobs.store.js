@@ -77,6 +77,7 @@ let DashboardJobStore = Reflux.createStore({
         let isSignedOut = !userStore.data.token;
         this.update({loading: true}, () => {
             crn.getJobs((err, res) => {
+                for (let app of res.body.availableApps) {app.value = app.label;}
                 this.update({apps: res.body.availableApps, appsLoading: false});
                 this.sort('agave.created', '+', res.body.jobs, true);
             }, isPublic, isSignedOut);
