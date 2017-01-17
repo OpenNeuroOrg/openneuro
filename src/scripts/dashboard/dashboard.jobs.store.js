@@ -39,7 +39,7 @@ let DashboardJobStore = Reflux.createStore({
      * which will set the state to the initial state
      * with any differences passed.
      */
-    setInitialState(diffs) {
+    setInitialState(diffs, callback) {
         let data = {
             apps: [],
             appsLoading: true,
@@ -60,7 +60,7 @@ let DashboardJobStore = Reflux.createStore({
             appVersionGroup: []
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
-        this.update(data);
+        this.update(data, callback);
     },
 
 // actions ---------------------------------------------------------------------------
@@ -76,7 +76,7 @@ let DashboardJobStore = Reflux.createStore({
     getJobs(isPublic) {
         if (isPublic === undefined) {isPublic = this.data.isPublic;}
         let isSignedOut = !userStore.data.token;
-        this.update({loading: true}, () => {
+        this.setInitialState({loading: true}, () => {
             crn.getJobs((err, res) => {
                 for (let app of res.body.availableApps) {app.value = app.label;}
                 this.update({apps: res.body.availableApps, appsLoading: false});
@@ -114,12 +114,10 @@ let DashboardJobStore = Reflux.createStore({
 
     appVersions(pipelineNameFilter){
         let appVersionGroup = [];
-        for (let i=0; this.data.jobs.length > i; i++) {
-            if(this.data.jobs[i].appLabel === pipelineNameFilter){
-                if(appVersionGroup.length > 0){
-                    appVersionGroup.push({label: this.data.jobs[i].appVersion, value: this.data.jobs[i].appVersion});
-                }else{
-                    appVersionGroup = [{label: this.data.jobs[i].appVersion, value: this.data.jobs[i].appVersion}];
+        for (let app of this.data.apps) {
+            if (app.label === pipelineNameFilter) {
+                for (let version of app.versions) {
+                    appVersionGroup.push({label: version.version, value: version.version})
                 }
             }
         }
@@ -147,19 +145,22 @@ let DashboardJobStore = Reflux.createStore({
         this.update({pipelineNameFilter, visiblejobs});
     },
 
+    wordInString(s, word){
+      return new RegExp( '\\b' + word + '\\b', 'i').test(s);
+    },
 
     /**
      * Select Version Filter
      */
     selectPipelineVersionFilter(pipelineVersionFilter) {
         let visiblejobs = [];
-        if (pipelineVersionFilter === null) {
+        if (pipelineVersionFilter === null || pipelineVersionFilter === '') {
             this.selectPipelineFilter(this.data.pipelineNameFilter);
             this.update({pipelineVersionFilter});
         }else {
             let jobs = this.data.jobs;
             for (let job of jobs) {
-                if (job.appVersion === pipelineVersionFilter) {
+                if (this.wordInString(pipelineVersionFilter, job.appVersion) && job.appLabel === this.data.pipelineNameFilter) {
                     visiblejobs.push(job);
                 }
             }

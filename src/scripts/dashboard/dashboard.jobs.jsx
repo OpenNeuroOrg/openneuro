@@ -24,13 +24,16 @@ let Jobs = React.createClass({
     },
 
     render () {
+        let jobs = this.state.visiblejobs.length === 0 ? <div className="col-xs-12"><h3>no results please try again</h3></div> : this._jobs(this.state.visiblejobs) ;
         return (
             <div>
                 <div className="dashboard-dataset-teasers datasets datasets-private">
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
-                             <h2>My Analyses</h2>
-                             {this._filter()}
+                            <div className="row">
+                                <div className="col-md-5"><h2>My Analyses</h2></div>
+                                <div className="col-md-7">{this._filter()}</div>
+                            </div>
                         </div>
                         <div className="filters-sort-wrap clearfix">
                             <Sort options={this.state.sortOptions}
@@ -41,7 +44,7 @@ let Jobs = React.createClass({
                         </div>
                     </div>
                     <PanelGroup>
-                        {this.state.loading ? <Spinner active={true} /> : this._jobs(this.state.visiblejobs)}
+                        <div className="clearfix">{this.state.loading ? <Spinner active={true} /> : jobs}</div>
                     </PanelGroup>
                 </div>
             </div>
@@ -56,25 +59,24 @@ let Jobs = React.createClass({
     _filter() {
         //console.log(this.state.apps);
         if (this.state.appsLoading) {
-            return <span><i className="fa fa-spin fa-circle-o-notch" /></span>;
+            return <div className="col-md-12"><h5><i className="fa fa-spin fa-circle-o-notch pull-right" /></h5></div>;
         } else {
             return (
-                <span>
-                    <div className="apps-filter">
-                        <label>Filter By:</label>
-                        <Select simpleValue value={this.state.pipelineNameFilter} placeholder="Pipeline Name" options={this.state.apps} onChange={Actions.selectPipelineFilter} />
+                <div>
+                    <div className={this.state.pipelineNameFilter === '' || this.state.pipelineNameFilter === null ? 'apps-filter col-md-8' : 'apps-filter col-md-8 app-selected'}>
+                        <Select simpleValue value={this.state.pipelineNameFilter} placeholder="Filter By App" options={this.state.apps} onChange={Actions.selectPipelineFilter} />
                     </div>
-                    {this.state.pipelineNameFilter === '' || this.state.pipelineNameFilter === null ? null : this._selectVersions()}
-                </span>
+                    {this._selectVersions()}
+                </div>
             );
         }
     },
 
     _selectVersions(){
+        console.log(this.refs)
         return (
-            <div className="versions-filter">
-                <label>Version:</label>
-                <Select simpleValue value={this.state.pipelineVersionFilter} placeholder="Version Number" options={this.state.appVersionGroup} onChange={Actions.selectPipelineVersionFilter} />
+            <div className="versions-filter col-md-4 fade-in">
+                <Select multi simpleValue value={this.state.pipelineVersionFilter} placeholder={this.state.pipelineNameFilter === '' || this.state.pipelineNameFilter === null ? 'Choose App to see Versions' : 'App Versions'} options={this.state.appVersionGroup} onChange={Actions.selectPipelineVersionFilter} />
             </div>
         );
     },
@@ -89,11 +91,22 @@ let Jobs = React.createClass({
                     <div className="panel-heading">
                         <div className="header clearfix">
                             <Link to={'snapshot'} params={{datasetId: job.datasetId, snapshotId: job.snapshotId}} query={{app: job.appId, job: job.jobId}}>
-                                <h4 className="dataset-name">{job.appLabel} - v{job.appVersion} - {job.datasetLabel}</h4>
-                                <div className="meta-container">
-                                    <p className="date">uploaded {user ? 'by ' : ''}<span className="name">{user}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>
-                                </div>
+                                <h4 className="dataset-name">{job.appLabel} - v{job.appVersion}</h4>
                             </Link>
+                            <div className="status-container">
+                                <div className="pull-right">Status: {job.agave.status}</div>
+                            </div>
+                        </div>
+                        <div className="minimal-summary">
+                            <div className="summary-data">
+                                <span> Job run <strong>{dateAdded} - {timeago} ago</strong></span>
+                            </div>
+                            <div className="summary-data">
+                                <span>on dataset <strong>{job.datasetLabel}</strong></span>
+                            </div>
+                            <div className="summary-data">
+                                <span>{user ? 'by ' : ''}<strong>{user}</strong></span>
+                            </div>
                         </div>
                     </div>
                 </div>

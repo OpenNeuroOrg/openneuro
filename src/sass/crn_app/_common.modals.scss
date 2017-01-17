@@ -46,20 +46,6 @@
             }
         }
 
-        .Select{
-            z-index: 1000;
-            .Select-multi-value-wrapper{
-                input{
-                    height: auto;
-                    font-size: 16px;
-                    float: none;
-                    padding: 8px;
-                    &:focus{
-                        outline: none;
-                    }
-                }
-            }
-        }
 
         input[type='checkbox'] {
 
