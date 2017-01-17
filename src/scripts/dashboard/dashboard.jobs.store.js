@@ -117,7 +117,7 @@ let DashboardJobStore = Reflux.createStore({
         for (let app of this.data.apps) {
             if (app.label === pipelineNameFilter) {
                 for (let version of app.versions) {
-                    appVersionGroup.push({label: version.version, value: version.version})
+                    appVersionGroup.push({label: version.version, value: version.version});
                 }
             }
         }
@@ -146,7 +146,7 @@ let DashboardJobStore = Reflux.createStore({
     },
 
     wordInString(s, word){
-      return new RegExp( '\\b' + word + '\\b', 'i').test(s);
+        return new RegExp( '\\b' + word + '\\b', 'i').test(s);
     },
 
     /**

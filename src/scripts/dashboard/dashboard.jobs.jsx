@@ -57,7 +57,6 @@ let Jobs = React.createClass({
 
 
     _filter() {
-        //console.log(this.state.apps);
         if (this.state.appsLoading) {
             return <div className="col-md-12"><h5><i className="fa fa-spin fa-circle-o-notch pull-right" /></h5></div>;
         } else {
@@ -73,7 +72,6 @@ let Jobs = React.createClass({
     },
 
     _selectVersions(){
-        console.log(this.refs)
         return (
             <div className="versions-filter col-md-4 fade-in">
                 <Select multi simpleValue value={this.state.pipelineVersionFilter} placeholder={this.state.pipelineNameFilter === '' || this.state.pipelineNameFilter === null ? 'Choose App to see Versions' : 'App Versions'} options={this.state.appVersionGroup} onChange={Actions.selectPipelineVersionFilter} />
