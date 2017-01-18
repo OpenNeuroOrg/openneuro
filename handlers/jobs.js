@@ -314,18 +314,14 @@ let handlers = {
                 if (!availableApps.hasOwnProperty(job.appLabel)) {
                     availableApps[job.appLabel] = {versions: {}};
                     availableApps[job.appLabel].versions[job.appVersion] = job.appId;
-                } else if (availableApps[job.appLabel].versions.indexOf) {
-                    availableApps[job.appLabel].versions.push({
-                        id: job.appId,
-                        version: job.appVersion
-                    });
+                } else if (!availableApps[job.appLabel].versions.hasOwnProperty(job.appVersion)) {
+                    availableApps[job.appLabel].versions[job.appVersion] = job.appId;
                 }
             }
 
             function reMapMetadata(apps) {
                 let remapped = [];
                 for (let app in apps) {
-                    // console.log(apps[app])
                     let tempApp = {label: app, versions: []};
                     for (let version in apps[app].versions) {
                         tempApp.versions.push({
