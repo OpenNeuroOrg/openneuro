@@ -57,7 +57,7 @@ let BSNavbar = React.createClass({
         let loading       = this.state.loading;
         let routes        = this.props.routes;
         let adminLink     = <Link className="nav-link" to="admin"><span className="link-name">admin</span></Link>;
-        let dashboardLink = <Link className="nav-link" to="dashboard"><span className="link-name">my datasets</span></Link>;
+        let dashboardLink = <Link className="nav-link" to="dashboard"><span className="link-name">my dashboard</span></Link>;
 
         return (
             <ul className="nav navbar-nav main-nav">
@@ -65,7 +65,7 @@ let BSNavbar = React.createClass({
                     {userStore.hasToken() ? dashboardLink : null}
                 </li>
                 <li className="link-public">
-                    <Link className="nav-link" to="public"><span className="link-name">Public Datasets</span></Link>
+                    <Link className="nav-link" to="publicDashboard"><span className="link-name">Public Dashboard</span></Link>
                 </li>
                 <li className="link-contact">
                     <a className="nav-link" href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><span className="link-name">contact</span></a>

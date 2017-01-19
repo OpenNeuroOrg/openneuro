@@ -62,6 +62,13 @@ export default {
     },
 
     /**
+     * Get Jobs
+     */
+    getJobs(callback, isPublic) {
+        request.get(config.crn.url + 'jobs', {query: {public: isPublic}}, callback);
+    },
+
+    /**
      * Create Job
      *
      * Takes an options object with a name, appId

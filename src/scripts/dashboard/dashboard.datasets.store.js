@@ -1,9 +1,10 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux     from 'reflux';
-import Actions    from './datasets.actions.js';
-import bids       from '../utils/bids';
-import userStore  from '../user/user.store.js';
+import Reflux    from 'reflux';
+import Actions   from './dashboard.datasets.actions.js';
+import bids      from '../utils/bids';
+import userStore from '../user/user.store.js';
+import dashUtils from './dashboard.utils.js';
 
 // store setup -----------------------------------------------------------------------
 
@@ -47,9 +48,13 @@ let UploadStore = Reflux.createStore({
             resultsPerPage: 30,
             page: 0,
             sort: {
-                value: 'timestamp',
+                value: 'created',
                 direction: '+'
             },
+            sortOptions: [
+                {label: 'Name', property: 'label'},
+                {label: 'Date', property: 'created', isTimestamp: true}
+            ],
             filters: []
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
@@ -78,7 +83,7 @@ let UploadStore = Reflux.createStore({
             filters: []
         }, () => {
             bids.getDatasets((datasets) => {
-                if (isPublic === this.data.isPublic) {this.sort(null, null, datasets);}
+                if (isPublic === this.data.isPublic) {this.sort('created', '+', datasets, true);}
             }, isPublic, isSignedOut);
         });
     },
@@ -144,32 +149,9 @@ let UploadStore = Reflux.createStore({
      * Takes a value and a direction (+ or -) and
      * sorts the current datasets acordingly.
      */
-    sort(value, direction, datasets) {
-        value     = value     ? value     : this.data.sort.value;
-        direction = direction ? direction : this.data.sort.direction;
-        datasets  = datasets  ? datasets  : this.data.datasets;
-        datasets  = datasets.sort((a, b) => {
-
-            // format comparison data
-            let aVal, bVal;
-            if (value === 'label') {
-                aVal = a[value].toLowerCase();
-                bVal = b[value].toLowerCase();
-            } else if (value === 'created') {
-                aVal = -Date.parse(a[value]);
-                bVal = -Date.parse(b[value]);
-            }
-
-            // sort
-            if (direction == '+') {
-                if (aVal > bVal) {return 1;}
-                if (aVal < bVal) {return -1;}
-            } else if (direction == '-') {
-                if (aVal > bVal) {return -1;}
-                if (aVal < bVal) {return 1;}
-            }
-            return 0;
-        });
+    sort(value, direction, datasets, isTimeStamp) {
+        datasets = datasets ? datasets : this.data.datasets;
+        dashUtils.sort(datasets, value, direction, isTimeStamp);
         this.update({
             datasets,
             visibleDatasets: datasets,

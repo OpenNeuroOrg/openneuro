@@ -2,16 +2,16 @@
 
 import React         from 'react';
 import Reflux        from 'reflux';
-import Actions       from './datasets.actions.js';
-import DatasetsStore from './datasets.store.js';
+import Actions       from './dashboard.datasets.actions.js';
+import DatasetsStore from './dashboard.datasets.store.js';
 import {State, Link} from 'react-router';
 import moment        from 'moment';
 import {PanelGroup}  from 'react-bootstrap';
 import Paginator     from '../common/partials/paginator.jsx';
 import Spinner       from '../common/partials/spinner.jsx';
 import Statuses      from '../dataset/dataset.statuses.jsx';
-import Filters       from './datasets.filters.jsx';
-import Sort          from './datasets.sort.jsx';
+import Filters       from './dashboard.filters.jsx';
+import Sort          from './dashboard.sort.jsx';
 import Summary       from '../dataset/dataset.summary.jsx';
 
 // component setup ---------------------------------------------------------------------------
@@ -25,6 +25,12 @@ let Datasets = React.createClass({
     componentWillUnmount(){Actions.update({datasets:[]});},
 
     componentDidMount() {
+        let isPublic = this.getPath().indexOf('dashboard') === -1;
+        Actions.update({isPublic});
+        Actions.getDatasets(isPublic);
+    },
+
+    componentWillReceiveProps() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
         Actions.update({isPublic});
         Actions.getDatasets(isPublic);
@@ -60,7 +66,9 @@ let Datasets = React.createClass({
                              <h2>{!isPublic ? 'My Datasets' : 'Public Datasets'}</h2>
                         </div>
                         <div className="filters-sort-wrap clearfix">
-                            <Sort sort={this.state.sort}  />
+                            <Sort options={this.state.sortOptions}
+                                  sort={this.state.sort}
+                                  sortFunc={Actions.sort} />
                             {!isPublic ? <Filters filters={this.state.filters} /> : null}
                         </div>
                     </div>
@@ -77,7 +85,7 @@ let Datasets = React.createClass({
                 </div>
             </div>
         );
-        let datasetsDashPublic = <div className="fade-in inner-route clearfix"><div className="col-xs-12">{datasetsDash}</div></div>;
+        let datasetsDashPublic = <div className="fade-in inner-route clearfix">{datasetsDash}</div>;
 
         return (
            <span>{!isPublic ? datasetsDash : datasetsDashPublic}</span>
