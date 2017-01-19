@@ -647,7 +647,7 @@ let datasetStore = Reflux.createStore({
                             this.updateDirectoryState(container._id, {children: children, loading: false});
                         });
                     } else {
-                        file.modifiedName = container.dirPath + file.name;
+                        file.modifiedName = container.dirPath ? container.dirPath + file.name : file.name;
                         scitran.updateFile('projects', this.data.dataset._id, file, () => {
                             let children = container.children;
                             children.unshift({
