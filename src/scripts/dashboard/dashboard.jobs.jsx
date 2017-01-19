@@ -53,17 +53,12 @@ let Jobs = React.createClass({
 
 // custom methods -----------------------------------------------------
 
-
-
-
     _filter() {
-        if (this.state.appsLoading) {
-            return <div className="col-md-12"><h5><i className="fa fa-spin fa-circle-o-notch pull-right" /></h5></div>;
-        } else {
+        if (!this.state.appsLoading) {
             return (
                 <div>
-                    <div className={this.state.pipelineNameFilter === '' || this.state.pipelineNameFilter === null ? 'apps-filter col-md-8' : 'apps-filter col-md-8 app-selected'}>
-                        <Select simpleValue value={this.state.pipelineNameFilter} placeholder="Filter By App" options={this.state.apps} onChange={Actions.selectPipelineFilter} />
+                    <div className={this.state.filter.pipeline === '' || this.state.filter.pipeline === null ? 'apps-filter col-md-8' : 'apps-filter col-md-8 app-selected'}>
+                        <Select simpleValue value={this.state.filter.pipeline} placeholder="Filter By App" options={this.state.apps} onChange={Actions.selectPipelineFilter} />
                     </div>
                     {this._selectVersions()}
                 </div>
@@ -74,7 +69,7 @@ let Jobs = React.createClass({
     _selectVersions(){
         return (
             <div className="versions-filter col-md-4 fade-in">
-                <Select multi simpleValue value={this.state.pipelineVersionFilter} placeholder={this.state.pipelineNameFilter === '' || this.state.pipelineNameFilter === null ? 'Choose App to see Versions' : 'App Versions'} options={this.state.appVersionGroup} onChange={Actions.selectPipelineVersionFilter} />
+                <Select multi simpleValue value={this.state.filter.version} placeholder={this.state.filter.pipeline === '' || this.state.filter.pipeline === null ? 'Choose App to see Versions' : 'App Versions'} options={this.state.appVersionGroup} onChange={Actions.selectPipelineVersionFilter} />
             </div>
         );
     },

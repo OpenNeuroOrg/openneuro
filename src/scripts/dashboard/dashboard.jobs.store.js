@@ -47,11 +47,14 @@ let DashboardJobStore = Reflux.createStore({
             jobs: [],
             visiblejobs: [],
             isPublic: false,
-            pipelineNameFilter: '',
-            pipelineVersionFilter: '',
+            filter: {
+                pipeline: null,
+                version: null
+            },
             sort: {
                 value: 'agave.created',
-                direction: '+'
+                direction: '+',
+                isTimestamp: true
             },
             sortOptions: [
                 {label: 'Name', property: 'datasetLabel'},
@@ -93,16 +96,8 @@ let DashboardJobStore = Reflux.createStore({
      */
     sort(value, direction, jobs, isTimestamp) {
         jobs = jobs ? jobs : this.data.jobs;
-        dashUtils.sort(jobs, value, direction, isTimestamp);
-        this.update({
-            jobs,
-            visiblejobs: jobs,
-            sort: {
-                value,
-                direction
-            },
-            loading: false
-        });
+        let sort = {value, direction, isTimestamp};
+        this.filterAndSort(jobs, null, sort);
     },
 
    /*
@@ -111,11 +106,10 @@ let DashboardJobStore = Reflux.createStore({
     * for App version Filter on
     * dashboard
     */
-
-    appVersions(pipelineNameFilter){
+    appVersions(pipeline) {
         let appVersionGroup = [];
         for (let app of this.data.apps) {
-            if (app.label === pipelineNameFilter) {
+            if (app.label === pipeline) {
                 for (let version of app.versions) {
                     appVersionGroup.push({label: version.version, value: version.version});
                 }
@@ -127,45 +121,65 @@ let DashboardJobStore = Reflux.createStore({
     /**
      * Select Pipeline Filter
      */
-    selectPipelineFilter(pipelineNameFilter) {
-        let visiblejobs = [];
-        if (pipelineNameFilter === null) {
-            visiblejobs = this.data.jobs;
-        } else {
-            let jobs = this.data.jobs;
-            for (let job of jobs) {
-                if (job.appLabel === pipelineNameFilter) {
-                    visiblejobs.push(job);
-                }
-            }
-        }
-        /* add versions to array */
-        this.appVersions(pipelineNameFilter);
+    selectPipelineFilter(pipeline) {
+        // add versions to array
+        this.appVersions(pipeline);
 
-        this.update({pipelineNameFilter, visiblejobs});
-    },
-
-    wordInString(s, word){
-        return new RegExp( '\\b' + word + '\\b', 'i').test(s);
+        // apply pipepline filter
+        let filter = this.data.filter;
+        filter.pipeline = pipeline;
+        filter.version  = null;
+        this.filterAndSort(null, filter, null);
     },
 
     /**
      * Select Version Filter
      */
-    selectPipelineVersionFilter(pipelineVersionFilter) {
+    selectPipelineVersionFilter(version) {
         let visiblejobs = [];
-        if (pipelineVersionFilter === null || pipelineVersionFilter === '') {
-            this.selectPipelineFilter(this.data.pipelineNameFilter);
-            this.update({pipelineVersionFilter});
-        }else {
-            let jobs = this.data.jobs;
+        let filter = this.data.filter;
+        filter.version = version;
+        this.filterAndSort(null, filter, null);
+    },
+
+    /**
+     * Filter and Sort
+     *
+     * Takes a list of jobs and filter and sort
+     * settings and updates the list of visible jobs.
+     */
+    filterAndSort(jobs, filter, sort) {
+        // defaults
+        jobs   = jobs   ? jobs   : this.data.jobs;
+        filter = filter ? filter : this.data.filter;
+        sort   = sort   ? sort   : this.data.sort;
+
+        // filter
+        let visiblejobs = [];
+        if (filter.pipeline === null) {
+            visiblejobs = jobs;
+        } else {
             for (let job of jobs) {
-                if (this.wordInString(pipelineVersionFilter, job.appVersion) && job.appLabel === this.data.pipelineNameFilter) {
+                if (
+                    job.appLabel === filter.pipeline && // pipeline match
+                    (!filter.version || new RegExp( '\\b' + job.appVersion + '\\b', 'i').test(filter.version)) // version match
+                ) {
                     visiblejobs.push(job);
                 }
             }
-            this.update({pipelineVersionFilter, visiblejobs});
         }
+
+        // sort
+        dashUtils.sort(visiblejobs, sort.value, sort.direction, sort.isTimestamp);
+
+        // update data
+        this.update({
+            jobs,
+            visiblejobs,
+            filter,
+            sort,
+            loading: false
+        });
     }
 
 });
