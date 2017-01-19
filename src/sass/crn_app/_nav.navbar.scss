@@ -35,6 +35,12 @@
     border-radius: 0;
     border: 0;
     z-index: 1300;
+    .container{
+        padding: 0;
+        .navbar-collapse{
+            padding: 0;
+        }
+    }
 
     .navbar-nav {
         > li {
@@ -64,7 +70,6 @@
 
         &.main-nav {
             float: right;
-            margin-right: -15px;
 
             .nav-link {
                 width: 110px;
@@ -88,6 +93,9 @@
                     border-bottom: 3px solid $transparent;
                 }
 
+
+
+
                 &:focus,
                 &:active,
                 &.active {
@@ -108,9 +116,27 @@
                     // text-align: center;
                     // font-size: 21px;
                 }
-
-
             }
+
+            .sign-in-nav-btn {
+                margin: 15px 20px;
+                @media(max-width: 767px){
+                    margin: 0;
+                }
+            }
+
+            .user-wrap {
+                margin: 0;
+                height: 75px;
+                vertical-align: middle;
+                width: 75px;
+                border-left: 2px solid $c-56;
+                background: $c-21;
+
+                .greeting {text-transform: uppercase;}
+            }
+
+
 
             .upload-btn-wrap {
                 // float: left;
@@ -159,16 +185,6 @@
                 // }
             }
 
-            .user-wrap {
-                margin: 0;
-                height: 75px;
-                vertical-align: middle;
-                width: 75px;
-                border-left: 2px solid $c-56;
-                background: $c-21;
-
-                .greeting {text-transform: uppercase;}
-            }
 
             .user-img-thumb {
                 width: 75px;
@@ -309,6 +325,74 @@
                     // }
                 }
             }
+
+            @media(max-width: 1000px){
+              .nav-link{
+                    padding: 0 10px;
+                    max-width: 80px;
+
+                    .link-name{
+                        font-size: 12px;
+                    }
+                }
+            }
+
+            @media(max-width: 767px){
+                float: none;
+                width: 100%;
+                &.nav > li{
+                    float: none;
+                    margin: 0;
+                    width: 100%;
+
+                    .nav-link{
+                        float: none;
+                        margin: 0;
+                        max-width: initial;
+                        width: 100%;
+                        height: auto;
+                        line-height: 0;
+                        padding: 0;
+                        .link-name{
+                            line-height: 30px;
+                        }
+                        &.nl-upload{
+                            margin: 0;
+                            width: auto;
+                            line-height: 40px;
+                        }
+                    }
+                }
+
+                .user-img-thumb{
+                    display: none;
+                }
+
+                .dropdown{
+                    display: block;
+
+                    .dropdown-menu{
+                        display: block;
+                        width: 100%;
+                        position: relative;
+                        margin: 0;
+                        min-width: 0;
+                        float: none;
+                        padding: 0;
+
+                    }
+                    &.btn-group .btn{
+                        display: none;
+                    }
+                }
+
+                .user-wrap{
+                    height: auto;
+                    width: auto;
+                    margin: 0;
+                    padding: 0;
+                }
+            }
         }
     }
 }
@@ -316,11 +400,21 @@
 .navbar-brand {
     height: 75px;
     padding: 5px 20px;
+
+    @media(max-width: 1000px){
+        padding: 15px 25px;
+    }
+
     > img{
         display: block;
         width: 60px;
         height: 60px;
         float: left;
+
+        @media(max-width: 1000px){
+            width: 40px;
+            height: 40px;
+        }
     }
 
     .logo-text{
@@ -329,6 +423,11 @@
         color: #fff;
         margin: 12px 10px;
         float: left;
+
+        @media(max-width: 1000px){
+            font-size: 22px;
+        }
+
         .logo-end{
             transition: color 0.3s;
             color: lighten($ocean, 12%);
@@ -342,9 +441,7 @@
 }
 
 
-.sign-in-nav-btn {
-    margin: 15px 20px;
-}
+
 
 
 

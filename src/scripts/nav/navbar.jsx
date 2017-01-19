@@ -23,16 +23,17 @@ let BSNavbar = React.createClass({
 
         return (
             <span>
-                <nav role="navigation" className="navbar navbar-default" toggleNavKey={0}>
-                    <div className="container-fluid">
-                        <div className="navbar-header">
+                <Navbar collapseOnSelect>
+                    <Navbar.Header>
+                        <Navbar.Brand>
                             {this._brand()}
-                        </div>
-                        <div className="clearfix">
-                            {this._navMenu()}
-                        </div>
-                    </div>
-                </nav>
+                        </Navbar.Brand>
+                        <Navbar.Toggle />
+                    </Navbar.Header>
+                    <Navbar.Collapse>
+                        {this._navMenu()}
+                    </Navbar.Collapse>
+                </Navbar>
             </span>
         );
     },
