@@ -53,7 +53,7 @@ let FrontPage = React.createClass({
                                     <Spinner text="Signing in..." active={this.state.loading} />
                                 </div>
                                 <div className="browse-publicly">
-                                    <Link to="public"><span>Browse Public Datasets</span></Link>
+                                    <Link to="publicDashboard"><span>Browse Public Datasets</span></Link>
                                 </div>
                             </div>
                         </div>

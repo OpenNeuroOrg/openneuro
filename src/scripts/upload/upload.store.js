@@ -10,7 +10,7 @@ import scitran         from '../utils/scitran';
 import upload          from './upload';
 import validate        from 'bids-validator';
 import userStore       from '../user/user.store';
-import datasetsActions from '../dashboard/datasets.actions';
+import datasetsActions from '../dashboard/dashboard.datasets.actions';
 import datasetActions  from '../dataset/dataset.actions';
 import favico          from 'favico.js';
 import bowser          from 'bowser';
