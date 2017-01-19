@@ -39,8 +39,6 @@ let Jobs = React.createClass({
                             <Sort options={this.state.sortOptions}
                                   sort={this.state.sort}
                                   sortFunc={Actions.sort} />
-
-
                         </div>
                     </div>
                     <PanelGroup>

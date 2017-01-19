@@ -136,7 +136,6 @@ let DashboardJobStore = Reflux.createStore({
      * Select Version Filter
      */
     selectPipelineVersionFilter(version) {
-        let visiblejobs = [];
         let filter = this.data.filter;
         filter.version = version;
         this.filterAndSort(null, filter, null);
