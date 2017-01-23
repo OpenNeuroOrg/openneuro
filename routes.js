@@ -4,6 +4,7 @@ import express    from 'express';
 import users      from './handlers/users';
 import jobs       from './handlers/jobs';
 import validation from './handlers/validation';
+import datasets   from './handlers/datasets';
 import auth       from './libs/auth';
 import scitran    from './libs/scitran';
 
@@ -40,6 +41,17 @@ let routes = [
         url: '/users/blacklist/:id',
         middleware: [auth.superuser],
         handler: users.unBlacklist
+    },
+
+    // datasets ------------------------------------
+        // Note: most dataset interactions are sent directly to Scitran.
+        // These manage those that need to be modified or proxied.
+
+    {
+        method: 'post',
+        url: '/datasets/:datasetId/permissions',
+        middleware: [],
+        handler: datasets.share
     },
 
     // validation ----------------------------------
