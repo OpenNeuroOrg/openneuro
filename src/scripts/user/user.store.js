@@ -9,7 +9,7 @@ import scitran          from '../utils/scitran';
 import router           from '../utils/router-container';
 import async            from 'async';
 import notifications    from '../notification/notification.actions';
-import dashboardActions from '../dashboard/datasets.actions';
+import dashboardActions from '../dashboard/dashboard.datasets.actions';
 import datasetActions   from '../dataset/dataset.actions';
 import upload           from '../upload/upload.actions';
 

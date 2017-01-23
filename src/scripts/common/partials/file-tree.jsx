@@ -153,8 +153,8 @@ class FileTree extends React.Component {
             files.hasExtension(item.name, allowedFiles)
         ) {
             if(
-                item.name && item.length > 52428800 &&
-                files.hasExtension(item.name, ['.pdf'])
+                item.name && files.hasExtension(item.name, ['.pdf']) &&
+                (item.length > 52428800 || item.size > 52428800)
             ){
                 displayBtn = (
                     <span>

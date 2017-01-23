@@ -10,9 +10,9 @@ var requireAuth = (Component, role) => {
         static willTransitionTo(transition) {
             role = role ? role : 'user';
             if (!userStore.data.token) { // if not logged in
-                transition.redirect('signIn', {});
+                transition.redirect('front-page', {});
             } else if (role === 'admin' && (!userStore.data.scitran || !userStore.data.scitran.root)) {
-                transition.redirect('signIn', {});
+                transition.redirect('front-page', {});
             }
         }
         render () {

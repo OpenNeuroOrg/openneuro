@@ -1,7 +1,7 @@
 // dependencies -----------------------------------------------------------------------
 
 import React   from 'react';
-import Actions from './datasets.actions.js';
+import Actions from './dashboard.datasets.actions.js';
 
 // component setup --------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ export default class Filters extends React.Component {
 
     render() {
 
-        let filters  = this.props.filters;
+        let filters          = this.props.filters;
         let incompleteFilter = this._button('incomplete', 'fa-warning', 'Incomplete');
         let sharedFilter     = this._button('shared', 'fa-user', 'Shared with me');
         let invalidFilter    = this._button('invalid', 'fa-exclamation-circle', 'Invalid');
