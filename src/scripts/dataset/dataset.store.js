@@ -884,28 +884,50 @@ let datasetStore = Reflux.createStore({
                     job.active = true;
                 }
 
-                // sort jobs by app
-                if (!jobs.hasOwnProperty(job.appId)) {
-                    jobs[job.appId] = {
-                        appLabel:   job.appLabel,
-                        appVersion: job.appVersion,
-                        runs: [job]
-                    };
+                // sort jobs by label and version
+                if (!jobs.hasOwnProperty(job.appLabel)) {
+                    jobs[job.appLabel] = {}
+                    jobs[job.appLabel][job.appVersion] = {
+                            appId:      job._id,
+                            appLabel:   job.appLabel,
+                            appVersion: job.appVersion,
+                            runs: [job]
+                        }
+                } else if (!jobs[job.appLabel].hasOwnProperty(job.appVersion)) {
+                    jobs[job.appLabel][job.appVersion] = {
+                            appId:      job._id,
+                            appLabel:   job.appLabel,
+                            appVersion: job.appVersion,
+                            runs: [job]
+                        }
                 } else {
-                    jobs[job.appId].runs.push(job);
+                    jobs[job.appLabel][job.appVersion].runs.push(job);
                 }
             }
 
-            // convert jobs to array
-            let jobArray = [];
-            for (let job in jobs) {
-                jobArray.push({
-                    appId:      job,
-                    appLabel:   jobs[job].appLabel,
-                    appVersion: jobs[job].appVersion,
-                    runs:       jobs[job].runs
-                });
+            function jobsToArray(jobs) {
+               let arr = [];
+               for (let app in jobs) {
+                   arr.push({
+                       label: app,
+                       versions: versionsToArray(jobs[app])
+                   });
+               }
+               return arr;
             }
+
+            function versionsToArray(versions) {
+               let arr = [];
+               for (let version in versions) {
+                   arr.push({
+                       label: version,
+                       runs: versions[version].runs
+                   });
+               }
+               return arr;
+            }
+
+            let jobArray = jobsToArray(jobs);
 
             // update jobs state
             this.update({jobs: jobArray, loadingJobs: false});

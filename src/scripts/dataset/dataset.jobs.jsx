@@ -15,14 +15,28 @@ let Jobs = React.createClass({
 // life cycle events --------------------------------------------------
 
     render () {
+        let version;
+
         if (!this.state.dataset.original) {
             return false;
         }
 
-        let jobs = this.state.jobs.map((job) => {
+        for(let i = 0; this.state.jobs.length > i; i++){
+            version = this.state.jobs[i].versions.map((version) => {
+                return (
+                    <Panel className="jobs" header={version.label}  key={version.label} eventKey={version.label}>
+                            {this._runs(version)}
+                    </Panel>
+                );
+            });
+        }
+
+        let app = this.state.jobs.map((app) => {
             return (
-                <Panel className="jobs" header={job.appLabel + ' - v' + job.appVersion}  key={job.appId} eventKey={job.appId}>
-                        {this._runs(job)}
+                <Panel className="jobs" header={app.label}  key={app.label} eventKey={app.label}>
+                    <Accordion accordion className="jobs-wrap">
+                        {version}
+                    </Accordion>
                 </Panel>
             );
         });
@@ -30,9 +44,9 @@ let Jobs = React.createClass({
         let header = <h3 className="metaheader">Analyses</h3>;
         return (
             <div className="analyses">
-                {jobs.length === 0 ?  null : header }
+                {app.length === 0 ?  null : header }
                 <Accordion accordion className="jobs-wrap" activeKey={this.state.activeJob} onSelect={actions.selectJob}>
-                    {this.state.loadingJobs ? <Spinner active={true} text="Loading Analyses" /> : jobs}
+                    {this.state.loadingJobs ? <Spinner active={true} text="Loading Analyses" /> : app}
                 </Accordion>
             </div>
         );
