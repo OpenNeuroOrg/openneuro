@@ -1,3 +1,5 @@
+/*eslint no-console: ["error", { allow: ["log"] }] */
+
 import config  from '../config';
 import cron    from 'cron';
 import mongo   from './mongo';
@@ -77,6 +79,9 @@ new cron.CronJob('0 */1 * * * *', () => {
             notifications.send(notification, (err) => {
                 if (!err) {
                     c.crn.notifications.removeOne({_id: notification._id}, {}, () => {});
+                } else {
+                    console.log('NOTIFICATION ERROR ----------');
+                    console.log(err);
                 }
             });
         }
