@@ -39,7 +39,7 @@ export default {
                             datasetId:   req.params.datasetId,
                             datasetName: resp2.body.label,
                             siteUrl:     url.parse(config.url).protocol + '//' + url.parse(config.url).hostname
-                        }
+                        };
                         let id = crypto.createHash('md5').update(data.email + data.datasetId + data.siteUrl).digest('hex');
                         notifications.add({
                             _id: id,
@@ -50,7 +50,7 @@ export default {
                                 template: 'dataset-shared',
                                 data:     data
                             }
-                        })
+                        });
                     });
                 });
 

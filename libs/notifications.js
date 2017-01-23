@@ -1,3 +1,5 @@
+/*eslint no-console: ["error", { allow: ["log"] }] */
+
 import config  from '../config';
 import cron    from 'cron';
 import mongo   from './mongo';
