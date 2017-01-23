@@ -77,6 +77,9 @@ new cron.CronJob('0 */1 * * * *', () => {
             notifications.send(notification, (err) => {
                 if (!err) {
                     c.crn.notifications.removeOne({_id: notification._id}, {}, () => {});
+                } else {
+                    console.log('NOTIFICATION ERROR ----------');
+                    console.log(err);
                 }
             });
         }
