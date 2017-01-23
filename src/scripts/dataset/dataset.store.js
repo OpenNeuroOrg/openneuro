@@ -647,7 +647,7 @@ let datasetStore = Reflux.createStore({
                             this.updateDirectoryState(container._id, {children: children, loading: false});
                         });
                     } else {
-                        file.modifiedName = container.dirPath ? container.dirPath + file.name : file.name;
+                        file.modifiedName = container.dirPath + file.name;
                         scitran.updateFile('projects', this.data.dataset._id, file, () => {
                             let children = container.children;
                             children.unshift({
@@ -886,45 +886,45 @@ let datasetStore = Reflux.createStore({
 
                 // sort jobs by label and version
                 if (!jobs.hasOwnProperty(job.appLabel)) {
-                    jobs[job.appLabel] = {}
+                    jobs[job.appLabel] = {};
                     jobs[job.appLabel][job.appVersion] = {
-                            appId:      job._id,
-                            appLabel:   job.appLabel,
-                            appVersion: job.appVersion,
-                            runs: [job]
-                        }
+                        appId:      job._id,
+                        appLabel:   job.appLabel,
+                        appVersion: job.appVersion,
+                        runs: [job]
+                    };
                 } else if (!jobs[job.appLabel].hasOwnProperty(job.appVersion)) {
                     jobs[job.appLabel][job.appVersion] = {
-                            appId:      job._id,
-                            appLabel:   job.appLabel,
-                            appVersion: job.appVersion,
-                            runs: [job]
-                        }
+                        appId:      job._id,
+                        appLabel:   job.appLabel,
+                        appVersion: job.appVersion,
+                        runs: [job]
+                    };
                 } else {
                     jobs[job.appLabel][job.appVersion].runs.push(job);
                 }
             }
 
             function jobsToArray(jobs) {
-               let arr = [];
-               for (let app in jobs) {
-                   arr.push({
-                       label: app,
-                       versions: versionsToArray(jobs[app])
-                   });
-               }
-               return arr;
+                let arr = [];
+                for (let app in jobs) {
+                    arr.push({
+                        label: app,
+                        versions: versionsToArray(jobs[app])
+                    });
+                }
+                return arr;
             }
 
             function versionsToArray(versions) {
-               let arr = [];
-               for (let version in versions) {
-                   arr.push({
-                       label: version,
-                       runs: versions[version].runs
-                   });
-               }
-               return arr;
+                let arr = [];
+                for (let version in versions) {
+                    arr.push({
+                        label: version,
+                        runs: versions[version].runs
+                    });
+                }
+                return arr;
             }
 
             let jobArray = jobsToArray(jobs);

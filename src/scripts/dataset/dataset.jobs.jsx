@@ -21,17 +21,16 @@ let Jobs = React.createClass({
             return false;
         }
 
-        for(let i = 0; this.state.jobs.length > i; i++){
-            version = this.state.jobs[i].versions.map((version) => {
+        let app = this.state.jobs.map((app) => {
+
+            version = app.versions.map((version) => {
                 return (
-                    <Panel className="jobs" header={version.label}  key={version.label} eventKey={version.label}>
+                    <Panel className="jobs" header={'Version ' + version.label}  key={version.label} eventKey={version.label}>
                             {this._runs(version)}
                     </Panel>
                 );
             });
-        }
 
-        let app = this.state.jobs.map((app) => {
             return (
                 <Panel className="jobs" header={app.label}  key={app.label} eventKey={app.label}>
                     <Accordion accordion className="jobs-wrap">
@@ -42,6 +41,7 @@ let Jobs = React.createClass({
         });
 
         let header = <h3 className="metaheader">Analyses</h3>;
+
         return (
             <div className="analyses">
                 {app.length === 0 ?  null : header }
