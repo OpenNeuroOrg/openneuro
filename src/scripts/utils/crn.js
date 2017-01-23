@@ -49,6 +49,16 @@ export default {
         request.del(config.crn.url + 'users/blacklist/' + userId, {}, callback);
     },
 
+// Datasets --------------------------------------------------------------------------------
+
+    /**
+     * Add Permission
+     */
+    addPermission(container, id, permission, callback) {
+        permission.site = 'local';
+        request.post(config.crn.url + 'datasets/' + id + '/permissions', {body: permission}, callback);
+    },
+
 // Jobs ------------------------------------------------------------------------------------
 
     /**
