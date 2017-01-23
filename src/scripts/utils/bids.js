@@ -147,7 +147,8 @@ export default  {
                 if (!file.tags || file.tags.indexOf('attachment') == -1) {
                     fileList[i] = {
                         name: file.name.replace(/%2F/g, '/').replace(/%20/g, ' '),
-                        webkitRelativePath: file.name.replace(/%2F/g, '/').replace(/%20/g, ' ')
+                        webkitRelativePath: file.name.replace(/%2F/g, '/').replace(/%20/g, ' '),
+                        size: file.size
                     };
                 }
             }
@@ -166,7 +167,9 @@ export default  {
      * already exist in the project.
      */
     addPermission(projectId, permission, callback) {
-        scitran.addPermission('projects', projectId, permission, callback);
+        crn.addPermission('projects', projectId, permission, (err, res) => {
+            callback(err, res);
+        });
     },
 
     /**
