@@ -998,7 +998,7 @@ let datasetStore = Reflux.createStore({
                         this.pollJob(jobId);
 
                         // open job accordion
-                        this.update({activeJob: app.id});
+                        this.update({activeJob: {app: app.label, version: app.version}});
                     });
                 }
             }
