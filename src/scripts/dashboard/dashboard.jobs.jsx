@@ -81,7 +81,7 @@ let Jobs = React.createClass({
                 <div className="fade-in  panel panel-default" key={job._id}>
                     <div className="panel-heading">
                         <div className="header clearfix">
-                            <Link to={'snapshot'} params={{datasetId: job.datasetId, snapshotId: job.snapshotId}} query={{app: job.appId, job: job.jobId}}>
+                            <Link to={'snapshot'} params={{datasetId: job.datasetId, snapshotId: job.snapshotId}} query={{app: job.appLabel, version: job.appVersion, job: job.jobId}}>
                                 <h4 className="dataset-name">{job.appLabel} - v{job.appVersion}</h4>
                             </Link>
                             <div className="status-container">
