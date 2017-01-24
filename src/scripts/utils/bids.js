@@ -167,7 +167,9 @@ export default  {
      * already exist in the project.
      */
     addPermission(projectId, permission, callback) {
-        scitran.addPermission('projects', projectId, permission, callback);
+        crn.addPermission('projects', projectId, permission, (err, res) => {
+            callback(err, res);
+        });
     },
 
     /**
