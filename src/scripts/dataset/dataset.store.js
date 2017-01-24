@@ -57,7 +57,11 @@ let datasetStore = Reflux.createStore({
     setInitialState: function (diffs) {
         let data = {
             apps: [],
-            activeJob: false,
+            activeJob: {
+                label:   false,
+                version: false,
+                job:     false
+            },
             currentUpdate: null,
             currentUploadId: null,
             dataset: null,
@@ -101,13 +105,13 @@ let datasetStore = Reflux.createStore({
      * Takes a datasetId and loads the dataset.
      */
     loadDataset(datasetId, options) {
-        let snapshot = !!(options && options.snapshot),
-            dataset  = this.data.dataset;
-        options      = options ? options : {};
+        let snapshot     = !!(options && options.snapshot),
+            dataset      = this.data.dataset;
+        options          = options ? options : {};
         options.isPublic = !userStore.data.token;
 
         // set active job if passed in query param
-        if (options.appId) {this.update({activeJob: options.appId});}
+        if (options) {this.update({activeJob: options});}
 
         // update selection & current upload data
         this.update({selectedSnapshot: datasetId, currentUploadId: uploadStore.data.projectId});
@@ -131,7 +135,7 @@ let datasetStore = Reflux.createStore({
                         children: dataset.children
                     }]});
                     let originalId = dataset.original ? dataset.original : datasetId;
-                    this.loadJobs(datasetId, snapshot, originalId, options.jobId, (jobs) => {
+                    this.loadJobs(datasetId, snapshot, originalId, options, (jobs) => {
                         this.loadSnapshots(dataset, jobs, () => {
                             this.update({loading: false, snapshot: snapshot});
                         });
@@ -647,7 +651,7 @@ let datasetStore = Reflux.createStore({
                             this.updateDirectoryState(container._id, {children: children, loading: false});
                         });
                     } else {
-                        file.modifiedName = container.dirPath ? container.dirPath + file.name : file.name;
+                        file.modifiedName = container.dirPath + file.name;
                         scitran.updateFile('projects', this.data.dataset._id, file, () => {
                             let children = container.children;
                             children.unshift({
@@ -861,7 +865,8 @@ let datasetStore = Reflux.createStore({
     /**
      * Load Jobs
      */
-    loadJobs(projectId, snapshot, originalId, jobId, callback) {
+    loadJobs(projectId, snapshot, originalId, options, callback) {
+        let jobId = options.job;
         this.update({loadingJobs: true});
         crn.getDatasetJobs(projectId, (err, res) => {
             let jobs = {};
@@ -884,28 +889,50 @@ let datasetStore = Reflux.createStore({
                     job.active = true;
                 }
 
-                // sort jobs by app
-                if (!jobs.hasOwnProperty(job.appId)) {
-                    jobs[job.appId] = {
+                // sort jobs by label and version
+                if (!jobs.hasOwnProperty(job.appLabel)) {
+                    jobs[job.appLabel] = {};
+                    jobs[job.appLabel][job.appVersion] = {
+                        appId:      job.appId,
+                        appLabel:   job.appLabel,
+                        appVersion: job.appVersion,
+                        runs: [job]
+                    };
+                } else if (!jobs[job.appLabel].hasOwnProperty(job.appVersion)) {
+                    jobs[job.appLabel][job.appVersion] = {
+                        appId:      job.appId,
                         appLabel:   job.appLabel,
                         appVersion: job.appVersion,
                         runs: [job]
                     };
                 } else {
-                    jobs[job.appId].runs.push(job);
+                    jobs[job.appLabel][job.appVersion].runs.push(job);
                 }
             }
 
-            // convert jobs to array
-            let jobArray = [];
-            for (let job in jobs) {
-                jobArray.push({
-                    appId:      job,
-                    appLabel:   jobs[job].appLabel,
-                    appVersion: jobs[job].appVersion,
-                    runs:       jobs[job].runs
-                });
+            function jobsToArray(jobs) {
+                let arr = [];
+                for (let app in jobs) {
+                    arr.push({
+                        label: app,
+                        versions: versionsToArray(jobs[app])
+                    });
+                }
+                return arr;
             }
+
+            function versionsToArray(versions) {
+                let arr = [];
+                for (let version in versions) {
+                    arr.push({
+                        label: version,
+                        runs: versions[version].runs
+                    });
+                }
+                return arr;
+            }
+
+            let jobArray = jobsToArray(jobs);
 
             // update jobs state
             this.update({jobs: jobArray, loadingJobs: false});
@@ -964,14 +991,14 @@ let datasetStore = Reflux.createStore({
                 // reload jobs
                 if (snapshotId == this.data.dataset._id) {
                     let jobId = res.body.result.id;
-                    this.loadJobs(snapshotId, this.data.snapshot, datasetId, jobId, (jobs) => {
+                    this.loadJobs(snapshotId, this.data.snapshot, datasetId, {job: jobId}, (jobs) => {
                         this.loadSnapshots(this.data.dataset, jobs);
 
                         // start polling job
                         this.pollJob(jobId);
 
                         // open job accordion
-                        this.update({activeJob: app.id});
+                        this.update({activeJob: {app: app.label, version: app.version}});
                     });
                 }
             }
@@ -1008,7 +1035,7 @@ let datasetStore = Reflux.createStore({
 
     retryJob(jobId, callback) {
         crn.retryJob(this.data.dataset._id, jobId, () => {
-            this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, null, (jobs) => {
+            this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, {}, (jobs) => {
                 this.loadSnapshots(this.data.dataset, jobs);
                 callback();
             });
@@ -1036,12 +1063,18 @@ let datasetStore = Reflux.createStore({
      * Select the job accordion panel and saves
      * the state.
      */
-    selectJob(eventKey) {
-        if (eventKey === this.data.activeJob) {
-            this.update({activeJob: false});
+    selectJob(type, value) {
+        let activeJob = this.data.activeJob;
+        if (value === activeJob[type]) {
+            activeJob[type] = false;
         } else {
-            this.update({activeJob: eventKey});
+            activeJob[type] = value;
+            if (type === 'app') {
+                activeJob.version = false;
+            }
         }
+
+        this.update(activeJob);
     },
 
     /**
