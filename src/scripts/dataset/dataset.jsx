@@ -34,7 +34,7 @@ let Dataset = React.createClass({
         let query  = this.getQuery();
         if (params.snapshotId) {
             actions.trackView(params.snapshotId);
-            actions.loadDataset(params.snapshotId, {snapshot: true, appId: query.app, jobId: query.job});
+            actions.loadDataset(params.snapshotId, {snapshot: true, app: query.app, version: query.version, job: query.job});
         } else if (
             (params.datasetId && !this.state.dataset) ||
             (params.datasetId && params.datasetId !== this.state.dataset._id)
