@@ -147,7 +147,7 @@ function read (file, callback) {
             callback(e.target.result);
         }
     };
-    reader.readAsBinaryString(file);
+    reader.readAsText(file);
 }
 
 /**
