@@ -1013,13 +1013,15 @@ let datasetStore = Reflux.createStore({
                 let jobs = this.data.jobs;
                 if (jobs && jobs.length > 0) {
                     for (let job of jobs) {
-                        for (let run of job.runs) {
-                            if (jobId === run.jobId) {
-                                existingJob = run;
-                                if (jobUpdate) {
-                                    run.agave   = jobUpdate.agave;
-                                    run.results = jobUpdate.results;
-                                    run.logs    = jobUpdate.logs;
+                        for (let version of job.versions) {
+                            for (let run of version.runs) {
+                                if (jobId === run.jobId) {
+                                    existingJob = run;
+                                    if (jobUpdate) {
+                                        run.agave   = jobUpdate.agave;
+                                        run.results = jobUpdate.results;
+                                        run.logs    = jobUpdate.logs;
+                                    }
                                 }
                             }
                         }
