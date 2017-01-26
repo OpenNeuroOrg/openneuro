@@ -23,6 +23,7 @@ export default class JobMenu extends React.Component {
             loading:           false,
             parameters:         [],
             disabledApps:       {},
+            jobId:              null,
             selectedApp:        [],
             selectedVersion:    {},
             selectedVersionID:  '',
@@ -33,6 +34,14 @@ export default class JobMenu extends React.Component {
             subjects:           [],
             appGroup:           {}
         };
+    }
+
+    componentDidMount() {
+        this.mounted = true;
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     componentWillReceiveProps() {
@@ -436,9 +445,17 @@ export default class JobMenu extends React.Component {
      */
     _hide() {
         let success = !!this.state.message && !this.state.error;
-        this.props.onHide(success, this.state.selectedSnapshot, this.state.selectedVersionID);
+
+        // on modal close arguments
+        let snapshotId = this.state.selectedSnapshot,
+            appLabel   = this.state.selectedVersion.label,
+            appVersion = this.state.selectedVersion.version,
+            jobId      = this.state.jobId;
+
+        this.props.onHide(success, snapshotId, appLabel, appVersion, jobId);
         this.setState({
             loading:            false,
+            jobId:              null,
             parameters:         [],
             selectedApp:        [],
             selectedAppKey:     '',
@@ -553,7 +570,10 @@ export default class JobMenu extends React.Component {
                     disabledApps[app.id] = {issues};
                 }
             }
-            this.setState({selectedSnapshot: snapshotId, disabledApps});
+
+            if (this.mounted) {
+                this.setState({selectedSnapshot: snapshotId, disabledApps});
+            }
         },{snapshot:true});
     }
 
@@ -607,7 +627,8 @@ export default class JobMenu extends React.Component {
             } else {
                 message = 'Your analysis has been submitted. Periodically check the Analyses section of this dataset to view the status and results.';
             }
-            this.setState({loading: false, message: message, error: error});
+
+            this.setState({loading: false, message: message, error: error, jobId: res.body.result.id});
         });
     }
 }

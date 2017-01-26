@@ -111,7 +111,13 @@ let datasetStore = Reflux.createStore({
         options.isPublic = !userStore.data.token;
 
         // set active job if passed in query param
-        if (options) {this.update({activeJob: options});}
+        if (options) {
+            this.update({activeJob: {
+                app:     options.app,
+                version: options.version,
+                job:     options.job
+            }});
+        }
 
         // update selection & current upload data
         this.update({selectedSnapshot: datasetId, currentUploadId: uploadStore.data.projectId});
@@ -882,7 +888,7 @@ let datasetStore = Reflux.createStore({
                 let finished   = status === 'FINISHED';
                 let hasResults = job.results && job.results.length > 0;
                 if (snapshot && (!finished && !failed || finished && !hasResults)) {
-                    this.pollJob(job.jobId);
+                    this.pollJob(job.jobId, projectId);
                 }
 
                 if (job.jobId === jobId) {
@@ -948,19 +954,21 @@ let datasetStore = Reflux.createStore({
         }, {snapshot});
     },
 
-    pollJob(jobId) {
+    pollJob(jobId, snapshotId) {
         let interval = 5000;
         let poll = (jobId) => {
-            this.refreshJob(jobId, (job) => {
-                let status = job.agave.status;
-                let finished = status === 'FINISHED';
-                let failed = status === 'FAILED';
-                let hasResults = job.results && job.results.length > 0;
-                let needsUpdate = (!finished && !failed) || (finished && !hasResults);
-                if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
-                    setTimeout(poll.bind(this, jobId), interval);
-                }
-            });
+            if (snapshotId === this.data.dataset._id) {
+                this.refreshJob(jobId, (job) => {
+                    let status = job.agave.status;
+                    let finished = status === 'FINISHED';
+                    let failed = status === 'FAILED';
+                    let hasResults = job.results && job.results.length > 0;
+                    let needsUpdate = (!finished && !failed) || (finished && !hasResults);
+                    if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
+                        setTimeout(poll.bind(this, jobId), interval);
+                    }
+                });
+            }
         };
         setTimeout(poll.bind(this, jobId), interval);
     },
@@ -995,7 +1003,7 @@ let datasetStore = Reflux.createStore({
                         this.loadSnapshots(this.data.dataset, jobs);
 
                         // start polling job
-                        this.pollJob(jobId);
+                        this.pollJob(jobId, snapshotId);
 
                         // open job accordion
                         this.update({activeJob: {app: app.label, version: app.version}});
@@ -1047,14 +1055,12 @@ let datasetStore = Reflux.createStore({
     /**
      * Dismiss Job Modal
      */
-    dismissJobsModal(success, snapshotId, appId) {
+    dismissJobsModal(success, snapshotId, appLabel, appVersion, jobId) {
         this.toggleModal('jobs');
         if (success) {
             if (snapshotId !== this.data.dataset._id) {
                 let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
-                router.transitionTo('snapshot', {datasetId, snapshotId});
-                // open job accordion
-                this.update({activeJob: appId});
+                router.transitionTo('snapshot', {datasetId, snapshotId}, {app: appLabel, version: appVersion, job: jobId});
             }
         }
     },
