@@ -957,7 +957,7 @@ let datasetStore = Reflux.createStore({
     pollJob(jobId, snapshotId) {
         let interval = 5000;
         let poll = (jobId) => {
-            if (snapshotId === this.data.dataset._id) {
+            if (this.data.dataset && this.data.dataset._id === snapshotId) {
                 this.refreshJob(jobId, (job) => {
                     let status = job.agave.status;
                     let finished = status === 'FINISHED';
