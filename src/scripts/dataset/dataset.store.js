@@ -889,7 +889,7 @@ let datasetStore = Reflux.createStore({
                 let finished   = status === 'FINISHED';
                 let hasResults = job.results && job.results.length > 0;
                 if (snapshot && (!finished && !failed || finished && !hasResults)) {
-                    this.pollJob(job.jobId);
+                    this.pollJob(job.jobId, projectId);
                 }
 
                 if (job.jobId === jobId) {
@@ -955,19 +955,21 @@ let datasetStore = Reflux.createStore({
         }, {snapshot});
     },
 
-    pollJob(jobId) {
+    pollJob(jobId, snapshotId) {
         let interval = 5000;
         let poll = (jobId) => {
-            this.refreshJob(jobId, (job) => {
-                let status = job.agave.status;
-                let finished = status === 'FINISHED';
-                let failed = status === 'FAILED';
-                let hasResults = job.results && job.results.length > 0;
-                let needsUpdate = (!finished && !failed) || (finished && !hasResults);
-                if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
-                    setTimeout(poll.bind(this, jobId), interval);
-                }
-            });
+            if (snapshotId === this.data.dataset._id) {
+                this.refreshJob(jobId, (job) => {
+                    let status = job.agave.status;
+                    let finished = status === 'FINISHED';
+                    let failed = status === 'FAILED';
+                    let hasResults = job.results && job.results.length > 0;
+                    let needsUpdate = (!finished && !failed) || (finished && !hasResults);
+                    if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
+                        setTimeout(poll.bind(this, jobId), interval);
+                    }
+                });
+            }
         };
         setTimeout(poll.bind(this, jobId), interval);
     },
@@ -1002,7 +1004,7 @@ let datasetStore = Reflux.createStore({
                         this.loadSnapshots(this.data.dataset, jobs);
 
                         // start polling job
-                        this.pollJob(jobId);
+                        this.pollJob(jobId, snapshotId);
 
                         // open job accordion
                         this.update({activeJob: {app: app.label, version: app.version}});
