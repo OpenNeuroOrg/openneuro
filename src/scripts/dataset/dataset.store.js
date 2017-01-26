@@ -112,11 +112,10 @@ let datasetStore = Reflux.createStore({
 
         // set active job if passed in query param
         if (options) {
-            let activeJob = this.data.activeJob;
             this.update({activeJob: {
-                app:     options.app     ? options.app     : activeJob.app,
-                version: options.version ? options.version : activeJob.version,
-                job:     options.job     ? options.job     : activeJob.job
+                app:     options.app,
+                version: options.version,
+                job:     options.job
             }});
         }
 
@@ -1056,18 +1055,12 @@ let datasetStore = Reflux.createStore({
     /**
      * Dismiss Job Modal
      */
-    dismissJobsModal(success, snapshotId, appLabel, appVersion) {
+    dismissJobsModal(success, snapshotId, appLabel, appVersion, jobId) {
         this.toggleModal('jobs');
         if (success) {
             if (snapshotId !== this.data.dataset._id) {
                 let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
-                router.transitionTo('snapshot', {datasetId, snapshotId});
-
-                // open job accordion
-                let activeJob = this.data.activeJob;
-                activeJob.app = appLabel;
-                activeJob.version = appVersion;
-                this.update({activeJob});
+                router.transitionTo('snapshot', {datasetId, snapshotId}, {app: appLabel, version: appVersion, job: jobId});
             }
         }
     },
