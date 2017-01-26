@@ -1,10 +1,10 @@
 {
   "name": "crn-server",
-  "version": "0.3.7",
+  "version": "0.4.5",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint **/**/*.js",
+    "lint": "eslint *.js **/*.js **/**/*.js **/**/**/*.js",
     "start": "node index.js",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/"
   },

@@ -115,7 +115,7 @@ let auth = {
             return res.status(400).send({error: 'No download ticket query parameter found.'});
         }
 
-        c.tickets.findOne({_id: ObjectID(ticket)}, {}, (err, result) => {
+        c.crn.tickets.findOne({_id: ObjectID(ticket)}, {}, (err, result) => {
             if (err || !result) {
                 return res.status(401).send({error: 'Download ticket was not found or expired'});
             }

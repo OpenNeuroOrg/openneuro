@@ -1,3 +1,5 @@
+/*eslint no-console: ["error", { allow: ["log"] }] */
+
 // dependencies ------------------------------------------------------------
 
 import agave         from '../libs/agave';
@@ -5,10 +7,10 @@ import sanitize      from '../libs/sanitize';
 import scitran       from '../libs/scitran';
 import mongo         from '../libs/mongo';
 import async         from 'async';
-import config        from '../config';
 import crypto        from 'crypto';
 import archiver      from 'archiver';
-import notifications from '../libs/notifications'
+import notifications from '../libs/notifications';
+import {ObjectID}    from 'mongodb';
 
 let c = mongo.collections;
 
@@ -29,7 +31,7 @@ let models = {
         memoryPerNode:     'number, required',
         nodeCount:         'number, required',
         processorsPerNode: 'number, required',
-        input:             'string',
+        input:             'string'
     }
 };
 
@@ -69,10 +71,10 @@ let handlers = {
         sanitize.req(req, models.job, (err, job) => {
             if (err) {return next(err);}
             scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
-                job.datasetHash = hash
+                job.datasetHash = hash;
                 job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
 
-                c.jobs.findOne({
+                c.crn.jobs.findOne({
                     appId:          job.appId,
                     datasetHash:    job.datasetHash,
                     parametersHash: job.parametersHash,
@@ -106,7 +108,7 @@ let handlers = {
         let jobId = req.params.jobId;
 
         // find job
-        c.jobs.findOne({jobId}, {}, (err, job) => {
+        c.crn.jobs.findOne({jobId}, {}, (err, job) => {
             if (err){return next(err);}
             if (!job) {
                 let error = new Error('Could not find job.');
@@ -127,10 +129,10 @@ let handlers = {
             // re-submit job with old job data
             agave.submitJob(job, (err, resp) => {
                 if (err) {
-                    return next(err)
+                    return next(err);
                 } else {
                     // delete old job
-                    c.jobs.removeOne({jobId}, {}, (err, doc) => {
+                    c.crn.jobs.removeOne({jobId}, {}, (err) => {
                         if (err) {return next(err);}
                         res.send(resp);
                     });
@@ -149,7 +151,7 @@ let handlers = {
         let hasAccess  = req.hasAccess;
 
         let query = snapshot ? {snapshotId: datasetId} : {datasetId};
-        c.jobs.find(query).toArray((err, jobs) => {
+        c.crn.jobs.find(query).toArray((err, jobs) => {
             if (err) {return next(err);}
             if (snapshot) {
                 if (!hasAccess) {
@@ -185,7 +187,7 @@ let handlers = {
      */
     postResults(req, res) {
         let jobId = req.params.jobId;
-        c.jobs.findOne({jobId}, {}, (err, job) => {
+        c.crn.jobs.findOne({jobId}, {}, (err, job) => {
             if (!job || job.agave.status === 'FAILED' || job.agave.status === 'FINISHED') {
                 // occasionally result webhooks callback before the
                 // original job submission is saved or after the job
@@ -195,7 +197,7 @@ let handlers = {
                 res.send(job);
             } else if (req.body.status === 'FINISHED' || req.body.status === 'FAILED') {
                 agave.getOutputs(jobId, (results, logs) => {
-                    c.jobs.updateOne({jobId}, {$set: {agave: req.body, results, logs}}, {}).then((err, result) => {
+                    c.crn.jobs.updateOne({jobId}, {$set: {agave: req.body, results, logs}}, {}).then((err, result) => {
                         if (err) {res.send(err);}
                         else {res.send(result);}
                         job.agave = req.body;
@@ -205,7 +207,7 @@ let handlers = {
                     });
                 });
             } else {
-                c.jobs.updateOne({jobId}, {$set: {agave: req.body}}, {}, (err, result) => {
+                c.crn.jobs.updateOne({jobId}, {$set: {agave: req.body}}, {}, (err, result) => {
                     if (err) {res.send(err);}
                     else {res.send(result);}
                 });
@@ -218,7 +220,7 @@ let handlers = {
      */
     getJob(req, res) {
         let jobId = req.params.jobId;
-        c.jobs.findOne({jobId}, {}, (err, job) => {
+        c.crn.jobs.findOne({jobId}, {}, (err, job) => {
             let status = job.agave.status;
 
             // check if job is already known to be completed
@@ -229,14 +231,14 @@ let handlers = {
                     // check status
                     if (resp.body.status === 'error' && resp.body.message.indexOf('No job found with job id') > -1) {
                         job.agave.status = 'FAILED';
-                        c.jobs.updateOne({jobId}, {$set: {agave: job.agave}}, {}, (err, result) => {
+                        c.crn.jobs.updateOne({jobId}, {$set: {agave: job.agave}}, {}, () => {
                             res.send({agave: resp.body.result, snapshotId: job.snapshotId});
                             notifications.jobComplete(job);
                         });
                     } else if (resp.body && resp.body.result && (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED')) {
                         job.agave = resp.body.result;
                         agave.getOutputs(jobId, (results, logs) => {
-                            c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results, logs}}, {}, (err, result) => {
+                            c.crn.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results, logs}}, {}, (err) => {
                                 if (err) {res.send(err);}
                                 else {res.send({agave: resp.body.result, results, logs, snapshotId: job.snapshotId});}
                                 job.agave = resp.body.result;
@@ -247,7 +249,7 @@ let handlers = {
                         });
                     } else if (resp.body && resp.body.result && job.agave.status !== resp.body.result.status) {
                         job.agave = resp.body.result;
-                        c.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err, result) => {
+                        c.crn.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err) => {
                             if (err) {res.send(err);}
                             else {
                                 res.send({
@@ -271,6 +273,69 @@ let handlers = {
         });
     },
 
+    getJobs(req, res) {
+        c.crn.jobs.find().toArray((err, jobs) => {
+            if (err) {
+                res.send(err);
+                return;
+            }
+
+            // store request metadata
+            let availableApps = {};
+
+            // filter jobs by permissions
+            let filteredJobs = [];
+
+            if (req.query.public === 'true') {
+                async.each(jobs, (job, cb) => {
+                    c.scitran.project_snapshots.findOne({'_id': ObjectID(job.snapshotId)}, {}, (err, snapshot) => {
+                        if (snapshot && snapshot.public === true) {
+                            buildMetadata(job);
+                            filteredJobs.push(job);
+                            cb();
+                        } else {
+                            cb();
+                        }
+                    });
+                }, () => {
+                    res.send({availableApps: reMapMetadata(availableApps), jobs: filteredJobs});
+                });
+            } else {
+                for (let job of jobs) {
+                    if (req.user === job.userId) {
+                        buildMetadata(job);
+                        filteredJobs.push(job);
+                    }
+                }
+                res.send({availableApps: reMapMetadata(availableApps), jobs: filteredJobs});
+            }
+
+            function buildMetadata(job) {
+                if (!availableApps.hasOwnProperty(job.appLabel)) {
+                    availableApps[job.appLabel] = {versions: {}};
+                    availableApps[job.appLabel].versions[job.appVersion] = job.appId;
+                } else if (!availableApps[job.appLabel].versions.hasOwnProperty(job.appVersion)) {
+                    availableApps[job.appLabel].versions[job.appVersion] = job.appId;
+                }
+            }
+
+            function reMapMetadata(apps) {
+                let remapped = [];
+                for (let app in apps) {
+                    let tempApp = {label: app, versions: []};
+                    for (let version in apps[app].versions) {
+                        tempApp.versions.push({
+                            version,
+                            id: apps[app].versions[version]
+                        });
+                    }
+                    remapped.push(tempApp);
+                }
+                return remapped;
+            }
+        });
+    },
+
     /**
      * GET Download Ticket
      */
@@ -278,7 +343,7 @@ let handlers = {
         let jobId    = req.params.jobId,
             filePath = req.query.filePath,
             fileName = filePath.split('/')[filePath.split('/').length - 1];
-        c.jobs.findOne({jobId}, {}, (err, job) => {
+        c.crn.jobs.findOne({jobId}, {}, (err, job) => {
             // check for job
             if (err){return next(err);}
             if (!job) {
@@ -298,9 +363,9 @@ let handlers = {
             };
 
             // Create and return ticket
-            c.tickets.insertOne(ticket, (err) => {
+            c.crn.tickets.insertOne(ticket, (err) => {
                 if (err) {return next(err);}
-                c.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60 * 60}, () => {
+                c.crn.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60 * 60}, () => {
                     res.send(ticket);
                 });
             });
@@ -310,7 +375,7 @@ let handlers = {
     /**
      * GET File
      */
-    getFile(req, res, next) {
+    getFile(req, res) {
         let jobId = req.params.jobId;
 
         const path = req.ticket.filePath;
@@ -327,7 +392,7 @@ let handlers = {
                 console.log(err);
             });
 
-            c.jobs.findOne({jobId}, {}, (err, job) => {
+            c.crn.jobs.findOne({jobId}, {}, (err, job) => {
                 let archiveName = job.datasetLabel + '__' + job.appId + '__' + type;
 
                 // set archive name
@@ -354,8 +419,7 @@ let handlers = {
                 let outputName = result.path.replace(baseDir, archiveName + '/');
                 if (result.type === 'file') {
                     let path = 'jobs/v2/' + jobId + '/outputs/media' + result.path;
-                    let name = result.name;
-                    agave.api.getPath(path, (err, res, token) => {
+                    agave.api.getPath(path, (err, res) => {
                         let body = res.body;
                         if (body && body.status && body.status === 'error') {
                             // error from AGAVE
@@ -422,7 +486,7 @@ let handlers = {
                 }
             }
             if (!resp.body.public && hasPermission) {
-                c.jobs.deleteMany({datasetId}, [], (err, doc) => {
+                c.crn.jobs.deleteMany({datasetId}, [], (err, doc) => {
                     if (err) {return next(err);}
                     res.send({message: doc.result.n + ' job(s) have been deleted for dataset ' + datasetId});
                 });

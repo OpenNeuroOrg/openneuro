@@ -6,56 +6,56 @@
  * a sanitized body.
  */
 export default {
-	req(req, model, callback) {
-		let err = {
-			missing: [],
-			invalid: []
-		};
-		let res = {};
-		for (let prop in model) {
-			let value = req.body.hasOwnProperty(prop) ? req.body[prop] : null;
+    req(req, model, callback) {
+        let err = {
+            missing: [],
+            invalid: []
+        };
+        let res = {};
+        for (let prop in model) {
+            let value = req.body.hasOwnProperty(prop) ? req.body[prop] : null;
 
-			// required
-			if (model[prop].indexOf('required') > -1) {
-				if (!value && typeof value !== 'boolean') {
-					err.missing.push(prop);
-					continue;
-				}
-			}
+            // required
+            if (model[prop].indexOf('required') > -1) {
+                if (!value && typeof value !== 'boolean') {
+                    err.missing.push(prop);
+                    continue;
+                }
+            }
 
-			// not required
-			if (value === null || value === undefined) {
-				continue;
-			}
+            // not required
+            if (value === null || value === undefined) {
+                continue;
+            }
 
-			// isString
-			if (model[prop].indexOf('string') > -1) {
-				if (typeof value !== 'string') {
-					err.invalid.push(prop + ' must be a string.');
-				}
-			}
+            // isString
+            if (model[prop].indexOf('string') > -1) {
+                if (typeof value !== 'string') {
+                    err.invalid.push(prop + ' must be a string.');
+                }
+            }
 
-			// isBoolean
-			if (model[prop].indexOf('boolean') > -1) {
-				if (typeof value !== 'boolean') {
-					err.invalid.push(prop + ' must be a boolean.');
-				}
-			}
+            // isBoolean
+            if (model[prop].indexOf('boolean') > -1) {
+                if (typeof value !== 'boolean') {
+                    err.invalid.push(prop + ' must be a boolean.');
+                }
+            }
 
-			// isObject
-			if (model[prop].indexOf('object') > -1) {
-				if (typeof value !== 'object') {
-					err.invalid.push(prop + ' must be an object.');
-				}
-			}
+            // isObject
+            if (model[prop].indexOf('object') > -1) {
+                if (typeof value !== 'object') {
+                    err.invalid.push(prop + ' must be an object.');
+                }
+            }
 
-			// if sanitary add value
-			res[prop] = value
-		}
-		err = formatError(err);
-		callback(err, res);
-	}
-}
+            // if sanitary add value
+            res[prop] = value;
+        }
+        err = formatError(err);
+        callback(err, res);
+    }
+};
 
 /**
  * Format Error
@@ -65,25 +65,25 @@ export default {
  */
 function formatError(err) {
 
-	if (err.missing.length === 0 && err.invalid.length === 0) {
-		return null;
-	}
+    if (err.missing.length === 0 && err.invalid.length === 0) {
+        return null;
+    }
 
-	let error = '';
-	if (err.missing.length > 0) {
-		if (err.missing.length > 1) {
-			error += 'Missing properties: ';
-		} else {
-			error += 'Missing property ';
-		}
-		error += err.missing.join(', ') + '. ';
-	}
+    let error = '';
+    if (err.missing.length > 0) {
+        if (err.missing.length > 1) {
+            error += 'Missing properties: ';
+        } else {
+            error += 'Missing property ';
+        }
+        error += err.missing.join(', ') + '. ';
+    }
 
-	if (err.invalid.length > 0) {
-		error += err.invalid.join(' ');
-	}
+    if (err.invalid.length > 0) {
+        error += err.invalid.join(' ');
+    }
 
-	error = new Error(error);
-	error.http_code = 400;
-	return error;
+    error = new Error(error);
+    error.http_code = 400;
+    return error;
 }
