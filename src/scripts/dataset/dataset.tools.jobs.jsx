@@ -35,6 +35,14 @@ export default class JobMenu extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.mounted = true;
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
+    }
+
     componentWillReceiveProps() {
         // initialize subjects into state
         if (this.state.subjects.length === 0 && this.props.dataset.summary) {
@@ -436,7 +444,13 @@ export default class JobMenu extends React.Component {
      */
     _hide() {
         let success = !!this.state.message && !this.state.error;
-        this.props.onHide(success, this.state.selectedSnapshot, this.state.selectedVersionID);
+
+        // on modal close arguments
+        let snapshotId = this.state.selectedSnapshot,
+            appLabel   = this.state.selectedVersion.label,
+            appVersion = this.state.selectedVersion.version;
+
+        this.props.onHide(success, snapshotId, appLabel, appVersion);
         this.setState({
             loading:            false,
             parameters:         [],
@@ -553,7 +567,10 @@ export default class JobMenu extends React.Component {
                     disabledApps[app.id] = {issues};
                 }
             }
-            this.setState({selectedSnapshot: snapshotId, disabledApps});
+
+            if (this.mounted) {
+                this.setState({selectedSnapshot: snapshotId, disabledApps});
+            }
         },{snapshot:true});
     }
 
