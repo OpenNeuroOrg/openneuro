@@ -849,9 +849,11 @@ let datasetStore = Reflux.createStore({
         let jobs = this.data.jobs;
         let jobRun;
         for (let job of jobs) {
-            for (let run of job.runs) {
-                if (jobId === run._id) {
-                    jobRun = run;
+            for (let version of job.versions) {
+                for (let run of version.runs) {
+                    if (jobId === run._id) {
+                        jobRun = run;
+                    }
                 }
             }
         }
