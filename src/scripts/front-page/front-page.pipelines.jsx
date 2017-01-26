@@ -133,7 +133,7 @@ let Pipelines = React.createClass({
         }
         let analysisLink = (
             <span>
-                <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}} query={{app: exampleJob.appId, job: exampleJob.jobId}}>
+                <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}} query={{app: exampleJob.appLabel, version: exampleJob.appVersion, job: exampleJob.jobId}}>
                 {exampleJob.appLabel + ' - v' + exampleJob.appVersion}
                 </Link>
             </span>

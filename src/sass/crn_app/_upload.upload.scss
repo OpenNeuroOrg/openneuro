@@ -197,76 +197,81 @@
 .active-tab-4 {margin-left: 60%;}
 .active-tab-5 {margin-left: 80%;}
 
-.nav.nav-xs.nav-pills {
-    margin: 0;
-    border: 0;
-    background: $d9;
+#upload-tabs {
 
-    li {
-        border: 0;
+    .nav.nav-xs.nav-pills {
         margin: 0;
-        width: 20%;
-        text-align: center;
-        font-size: 12px;
+        border: 0;
+        background: $d9;
+        float: none;
 
-        a {
-            border-radius: 0;
-            background-color: transparent;
-            color: lighten($ocean, 10%);
-            font-size: 14px;
-            border-right: 1px solid $transparent1;
-            letter-spacing: 0;
+        li {
+            border: 0;
+            margin: 0;
+            width: 20%;
+            text-align: center;
+            font-size: 12px;
 
-            &:hover {
-                background-color: $transparent;
-                color: $ocean;
+            a {
+                border-radius: 0;
+                background-color: transparent;
+                color: lighten($ocean, 10%);
+                font-size: 14px;
+                border-right: 1px solid $transparent1;
+                letter-spacing: 0;
+                padding-top: 5px;
+
+                &:hover {
+                    background-color: $transparent;
+                    color: $ocean;
+                }
+
+                @media (max-width: 1428px) {span {display: block;}}
             }
 
-            @media (max-width: 1428px) {span {display: block;}}
         }
 
-    }
+        .upload-step {
+            .panel-heading {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                border-radius: 0;
 
-    .upload-step {
-        .panel-heading {
-            margin: 0;
-            padding: 0;
-            border: 0;
-            border-radius: 0;
+                .panel-title a {
+                    padding: 10px;
+                    display: block;
+                    background-color: $c-66;
+                    color: $misty;
+                    border-bottom: 1px solid $c-66;
+                    transition: all .3s ease;
 
-            .panel-title a {
-                padding: 10px;
-                display: block;
-                background-color: $c-66;
-                color: $misty;
-                border-bottom: 1px solid $c-66;
-                transition: all .3s ease;
-
-                &.collapsed {
-                    background-color: $eee;
-                    color: $c-66;
-                    border-bottom: 1px solid $transparent;
+                    &.collapsed {
+                        background-color: $eee;
+                        color: $c-66;
+                        border-bottom: 1px solid $transparent;
+                    }
                 }
             }
+
+            .tab-content {
+                padding: 10px 30px 20px;
+
+                .tab-pane {border-top: 0;}
+            }
         }
 
-        .tab-content {
-            padding: 10px 30px 20px;
+        &.active.step5 {float: right;}
 
-            .tab-pane {border-top: 0;}
-        }
-    }
-
-    &.active.step5 {float: right;}
-
-    &.disabled {
-        a {
-            cursor: default;
-            color: $c-77;
-
-            &:hover {
-                background-color: $transparent;
+        &.disabled {
+            a {
+                cursor: default;
                 color: $c-77;
+
+                &:hover {
+                    background-color: $transparent;
+                    color: $c-77;
+                }
             }
         }
     }
