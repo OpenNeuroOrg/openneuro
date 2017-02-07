@@ -6,6 +6,7 @@ import request       from '../libs/request';
 import notifications from '../libs/notifications';
 import url           from 'url';
 import crypto        from 'crypto';
+import counter       from '../libs/counter';
 
 // handlers ----------------------------------------------------------------
 
@@ -17,8 +18,30 @@ import crypto        from 'crypto';
  */
 export default {
 
+    create(req, res) {
+        counter.getNext('datasets', (datasetNumber) => {
+            let offset = 100;
+            datasetNumber += offset
+            datasetNumber = 'ds' + ('000000' + datasetNumber).substr(-6,6);
+            req.body._id = datasetNumber;
+            delete req.headers['content-length'];
+            request.post(config.scitran.url + 'projects', {
+                body:         req.body,
+                headers:      req.headers,
+                query:        req.query,
+                droneRequest: false
+            }, (err, resp) => {
+                res.send(resp.body);
+            });
+        });
+    },
+
+    snapshot(req, res) {
+        res.send('test');
+    },
+
     /**
-     * Validate
+     * Share
      */
     share(req, res) {
         // proxy add permission request to scitran to avoid extra permissions checks
