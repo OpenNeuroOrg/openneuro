@@ -33,7 +33,8 @@ export default {
             jobs: null,
             tickets: null,
             userPreferences: null,
-            notifications: null
+            notifications: null,
+            counters: null
         },
         scitran: {
             projects: null,
