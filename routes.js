@@ -49,6 +49,20 @@ let routes = [
 
     {
         method: 'post',
+        url: '/datasets',
+        middleware: [],
+        handler: datasets.create
+    },
+
+    {
+        method: 'post',
+        url: '/datasets/:datasetId/snapshot',
+        middleware: [],
+        handler: datasets.snapshot
+    },
+
+    {
+        method: 'post',
         url: '/datasets/:datasetId/permissions',
         middleware: [],
         handler: datasets.share
