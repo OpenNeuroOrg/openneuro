@@ -167,7 +167,7 @@ let datasetStore = Reflux.createStore({
      * Takes a snapshot ID and loads the snapshot.
      */
     loadSnapshot(isOriginal, snapshotId) {
-        let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
+        let datasetId = this.data.dataset.original ? bids.decodeId(this.data.dataset.original) : bids.decodeId(this.data.dataset._id);
         if (isOriginal) {
             router.transitionTo('dataset', {datasetId: snapshotId});
         } else {
@@ -1062,7 +1062,7 @@ let datasetStore = Reflux.createStore({
         if (success) {
             if (snapshotId !== this.data.dataset._id) {
                 let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
-                router.transitionTo('snapshot', {datasetId, snapshotId}, {app: appLabel, version: appVersion, job: jobId});
+                router.transitionTo('snapshot', {datasetId: bids.decodeId(datasetId), snapshotId: bids.decodeId(snapshotId)}, {app: appLabel, version: appVersion, job: jobId});
             }
         }
     },
@@ -1164,13 +1164,14 @@ let datasetStore = Reflux.createStore({
                 if (latestSnapshot && (moment(this.data.dataset.modified).diff(moment(latestSnapshot.modified)) <= 0)) {
                     callback({error: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.'});
                 } else {
-                    scitran.createSnapshot(datasetId, (err, res) => {
+                    crn.createSnapshot(datasetId, (err, res) => {
+                        let snapshotId = bids.decodeId(res.body._id);
                         this.toggleSidebar(true);
                         if (transition) {
-                            router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
+                            router.transitionTo('snapshot', {datasetId: this.data.dataset.linkID, snapshotId: snapshotId});
                         }
                         this.loadSnapshots(this.data.dataset, [], () => {
-                            if (callback){callback(res.body._id);}
+                            if (callback){callback(snapshotId);}
                         });
                     });
                 }
@@ -1193,6 +1194,8 @@ let datasetStore = Reflux.createStore({
             // add job counts
             for (let snapshot of snapshots) {
                 snapshot.analysisCount = 0;
+                snapshot.linkID = bids.decodeId(snapshot._id);
+                snapshot.linkOriginal = bids.decodeId(snapshot.original);
                 if (jobs && !jobs.error) {
                     for (let job of jobs) {
                         if (job.snapshotId == snapshot._id) {
@@ -1211,7 +1214,8 @@ let datasetStore = Reflux.createStore({
             } else if (dataset && dataset.access !== null) {
                 snapshots.unshift({
                     isOriginal: true,
-                    _id: datasetId
+                    _id: datasetId,
+                    linkID: bids.decodeId(datasetId)
                 });
             }
             this.update({snapshots: snapshots});

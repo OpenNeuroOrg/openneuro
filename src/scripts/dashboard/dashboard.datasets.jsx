@@ -106,7 +106,7 @@ let Datasets = React.createClass({
                 <div className="fade-in  panel panel-default" key={dataset._id}>
                     <div className="panel-heading">
                         <div className="header clearfix">
-                            <Link to={isSnapshot ? 'snapshot' : 'dataset'} params={isSnapshot ? {datasetId: dataset.original, snapshotId: dataset._id} : {datasetId: dataset._id}}>
+                            <Link to={isSnapshot ? 'snapshot' : 'dataset'} params={isSnapshot ? {datasetId: dataset.linkOriginal, snapshotId: dataset.linkID} : {datasetId: dataset.linkID}}>
                                 <h4 className="dataset-name">{dataset.label}</h4>
                                 <div className="meta-container">
                                     <p className="date">uploaded {user ? 'by ' : ''}<span className="name">{fullname}</span> on <span className="time-ago">{dateAdded} - {timeago} ago</span></p>

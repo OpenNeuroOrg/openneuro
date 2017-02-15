@@ -52,6 +52,25 @@ export default {
 // Datasets --------------------------------------------------------------------------------
 
     /**
+     * Create Project
+     *
+     * Takes a request body and
+     * generates a request to make a project in scitran.
+     */
+    createProject (group, label, callback) {
+        request.post(config.crn.url + 'datasets', {
+            body: {group, label}
+        }, callback);
+    },
+
+    /**
+     * Create Snapshot
+     */
+    createSnapshot (projectId, callback) {
+        request.post(config.crn.url + 'datasets/' + projectId + '/snapshot', {}, callback);
+    },
+
+    /**
      * Add Permission
      */
     addPermission(container, id, permission, callback) {
