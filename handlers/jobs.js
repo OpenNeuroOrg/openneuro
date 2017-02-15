@@ -89,7 +89,8 @@ let handlers = {
                         }
                         let error = new Error('A job with the same dataset and parameters has already been run.');
                         error.http_code = 409;
-                        return next(error);
+                        res.status(409).send({message: 'A job with the same dataset and parameters has already been run.'});
+                        return;
                     }
 
                     agave.submitJob(job, (err, resp) => {
