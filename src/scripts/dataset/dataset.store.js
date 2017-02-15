@@ -1062,7 +1062,7 @@ let datasetStore = Reflux.createStore({
         if (success) {
             if (snapshotId !== this.data.dataset._id) {
                 let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
-                router.transitionTo('snapshot', {datasetId, snapshotId}, {app: appLabel, version: appVersion, job: jobId});
+                router.transitionTo('snapshot', {datasetId: bids.decodeId(datasetId), snapshotId: bids.decodeId(snapshotId)}, {app: appLabel, version: appVersion, job: jobId});
             }
         }
     },

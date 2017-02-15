@@ -67,9 +67,7 @@ export default {
      * Create Snapshot
      */
     createSnapshot (projectId, callback) {
-        request.post(config.crn.url + 'datasets/' + projectId + '/snapshot', {
-            query: {project: projectId}
-        }, callback);
+        request.post(config.crn.url + 'datasets/' + projectId + '/snapshot', {}, callback);
     },
 
     /**
