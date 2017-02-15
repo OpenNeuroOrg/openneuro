@@ -7,6 +7,7 @@ import email   from './email';
 import scitran from './scitran';
 import moment  from 'moment';
 import url     from 'url';
+import bidsId  from './bidsId';
 
 let c = mongo.collections;
 
@@ -61,8 +62,8 @@ let notifications = {
                         datasetName:     job.datasetLabel,
                         status:          job.agave.status,
                         siteUrl:         url.parse(config.url).protocol + '//' + url.parse(config.url).hostname,
-                        datasetId:       job.datasetId,
-                        snapshotId:      job.snapshotId,
+                        datasetId:       bidsId.decodeId(job.datasetId),
+                        snapshotId:      bidsId.decodeId(job.snapshotId),
                         unsubscribeLink: ''
                     }
                 }

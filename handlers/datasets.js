@@ -7,6 +7,7 @@ import notifications from '../libs/notifications';
 import url           from 'url';
 import crypto        from 'crypto';
 import counter       from '../libs/counter';
+import bidsId        from '../libs/bidsId';
 
 // handlers ----------------------------------------------------------------
 
@@ -37,7 +38,20 @@ export default {
     },
 
     snapshot(req, res) {
-        res.send('test');
+        let datasetId = req.params.datasetId;
+        counter.getNext(datasetId, (versionCount) => {
+            let versionNumber = ('00000' + versionCount).substr(-5, 5);
+            let datasetNumber = bidsId.decodeId(datasetId).slice(2);
+            let versionId     = datasetNumber + '-' + versionNumber;
+
+            request.post(config.scitran.url + 'snapshots/projects/' + bidsId.hexFromASCII(versionId), {
+                headers: req.headers,
+                query:   {project: datasetId}
+            }, (err, resp) => {
+                res.send(resp.body);
+            });
+        });
+
     },
 
     /**
