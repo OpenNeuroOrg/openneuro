@@ -8,7 +8,7 @@ aws.config.loadFromPath('./aws-config.json');
 
 let s3 = new aws.S3({httpOptions: {timeout: 5 * 60 * 1000}});
 
-let concurrency = 3;
+let concurrency = 5;
 
 let s3lib = {
 
@@ -35,20 +35,22 @@ let s3lib = {
         fs.readFile(filePath, (err, data) => {
             let contentType = files.getContentType(filePath);
 
-            let params = {
-                ACL: 'private',
-                Bucket: 'openneuro.snapshots',
-                Key: remotePath,
-                Body: data,
-                ContentType: contentType
-            };
+            let upload = new aws.S3.ManagedUpload({
+                params: {
+                    ACL: 'private',
+                    Bucket: 'openneuro.snapshots',
+                    Key: remotePath,
+                    Body: data,
+                    ContentType: contentType
+                }
+            });
 
-            let upload = new aws.S3.ManagedUpload({params});
-            upload.send(function(err) {
+            upload.send((err) => {
                 if (err) {
                     // console.log(err);
+                } else {
+                    callback();
                 }
-                callback('test');
             });
         });
     },
