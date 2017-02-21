@@ -12,6 +12,8 @@ let concurrency = 3;
 
 let s3lib = {
 
+    api: s3,
+
     queue: async.queue((req, cb) => {
         s3lib.uploadFile(req.filePath, req.remotePath, () => {
             cb();
@@ -24,6 +26,7 @@ let s3lib = {
             callback(err, res);
         });
     },
+
 
     uploadFile(filePath, remotePath, callback) {
         fs.readFile(filePath, (err, data) => {
@@ -56,7 +59,22 @@ let s3lib = {
                     remotePath,
                     cb
                 });
-            }, callback);
+            }, ()  => {
+                s3.putObjectTagging({
+                    Bucket: 'openneuro.snapshots',
+                    Key: dirPath.slice((config.location + '/persistent/datasets/').length) + '/dataset_description.json',
+                    Tagging: {
+                        TagSet: [
+                            {
+                                Key: 'datasetComplete',
+                                Value: 'true'
+                            }
+                        ]
+                    }
+                }, () => {
+                    callback();
+                });
+            });
         });
     }
 
