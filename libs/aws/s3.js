@@ -15,10 +15,13 @@ let s3lib = {
     api: s3,
 
     queue: async.queue((req, cb) => {
-        s3lib.uploadFile(req.filePath, req.remotePath, () => {
-            cb();
-            req.cb();
+        // assign last argument as callback for
+        // queued function and queue callback
+        req.arguments.push(function () {
+            if (req.cb) {req.cb.apply(arguments);}
+            cb.apply(arguments);
         });
+        req.function.apply(this, req.arguments);
     }, concurrency),
 
     createBucket(bucketName, callback) {
@@ -45,7 +48,7 @@ let s3lib = {
                 if (err) {
                     // console.log(err);
                 }
-                callback();
+                callback('test');
             });
         });
     },
@@ -56,8 +59,11 @@ let s3lib = {
             async.each(files, (filePath, cb) => {
                 let remotePath = filePath.slice((config.location + '/persistent/datasets/').length);
                 this.queue.push({
-                    filePath,
-                    remotePath,
+                    function: this.uploadFile,
+                    arguments: [
+                        filePath,
+                        remotePath
+                    ],
                     cb
                 });
             }, ()  => {
