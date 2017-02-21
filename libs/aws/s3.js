@@ -50,7 +50,8 @@ let s3lib = {
         });
     },
 
-    uploadDirectory(dirPath, callback) {
+    uploadSnapshot(snapshotHash, callback) {
+        let dirPath = config.location + '/persistent/datasets/' + snapshotHash;
         files.getFiles(dirPath, (files) => {
             async.each(files, (filePath, cb) => {
                 let remotePath = filePath.slice((config.location + '/persistent/datasets/').length);
@@ -60,9 +61,10 @@ let s3lib = {
                     cb
                 });
             }, ()  => {
+                // tag upload as complete
                 s3.putObjectTagging({
                     Bucket: 'openneuro.snapshots',
-                    Key: dirPath.slice((config.location + '/persistent/datasets/').length) + '/dataset_description.json',
+                    Key: snapshotHash + '/dataset_description.json',
                     Tagging: {
                         TagSet: [
                             {
