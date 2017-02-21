@@ -1,35 +1,49 @@
-import aws    from 'aws-sdk';
+/*eslint no-console: ["error", { allow: ["log"] }] */
+
 import fs     from 'fs';
 import files  from '../files';
 import config from '../../config';
 import async  from 'async';
+import aws    from 'aws-sdk';
 
-aws.config.loadFromPath('./aws-config.json');
+aws.config.update(config.aws.credentials);
+const s3 = new aws.S3({
+    httpOptions: {
+        timeout: config.aws.s3.timeout
+    }
+});
+const Bucket = config.aws.s3.bucket;
 
-let s3 = new aws.S3({httpOptions: {timeout: 5 * 60 * 1000}});
 
-let concurrency = 5;
-
-let s3lib = {
+export default {
 
     api: s3,
 
+    /**
+     * Queue
+     *
+     * A queue to limit s3 request concurrency. To use
+     * call queue.push(request) with a request object with
+     * the following properties.
+     * function: the function to be called
+     * arguments: an array of arguments applied to the function
+     * callback: a callback function
+     */
     queue: async.queue((req, cb) => {
         // assign last argument as callback for
         // queued function and queue callback
         req.arguments.push(function () {
-            if (req.cb) {req.cb.apply(arguments);}
+            if (req.callback) {req.callback.apply(arguments);}
             cb.apply(arguments);
         });
         req.function.apply(this, req.arguments);
-    }, concurrency),
+    }, config.aws.s3.concurrency),
 
     createBucket(bucketName, callback) {
         s3.createBucket({Bucket: bucketName}, function(err, res) {
             callback(err, res);
         });
     },
-
 
     uploadFile(filePath, remotePath, callback) {
         fs.readFile(filePath, (err, data) => {
@@ -38,7 +52,7 @@ let s3lib = {
             let upload = new aws.S3.ManagedUpload({
                 params: {
                     ACL: 'private',
-                    Bucket: 'openneuro.snapshots',
+                    Bucket,
                     Key: remotePath,
                     Body: data,
                     ContentType: contentType
@@ -47,7 +61,7 @@ let s3lib = {
 
             upload.send((err) => {
                 if (err) {
-                    // console.log(err);
+                    console.log(err);
                 } else {
                     callback();
                 }
@@ -55,39 +69,63 @@ let s3lib = {
         });
     },
 
+
+    /**
+     * Upload Snapshot
+     *
+     * Takes the hash of a locally saved snapshot and uploads it
+     * to S3. Callsback immediately if the dataset already exists
+     * on S3 or when the upload is complete.
+     */
     uploadSnapshot(snapshotHash, callback) {
-        let dirPath = config.location + '/persistent/datasets/' + snapshotHash;
-        files.getFiles(dirPath, (files) => {
-            async.each(files, (filePath, cb) => {
-                let remotePath = filePath.slice((config.location + '/persistent/datasets/').length);
-                this.queue.push({
-                    function: this.uploadFile,
-                    arguments: [
-                        filePath,
-                        remotePath
-                    ],
-                    cb
-                });
-            }, ()  => {
-                // tag upload as complete
-                s3.putObjectTagging({
-                    Bucket: 'openneuro.snapshots',
-                    Key: snapshotHash + '/dataset_description.json',
-                    Tagging: {
-                        TagSet: [
-                            {
-                                Key: 'datasetComplete',
-                                Value: 'true'
+        s3.getObjectTagging({
+            Bucket,
+            Key: snapshotHash + '/dataset_description.json'
+        }, (err, data) => {
+
+            // check if snapshot is already complete on s3
+            let snapshotExists = false;
+            if (data && data.TagSet) {
+                for (let tag of data.TagSet) {
+                    if (tag.Key === 'DatasetComplete' && tag.Value === 'true') snapshotExists = true;
+                }
+            }
+
+            if (snapshotExists) {
+                callback();
+            } else {
+                let dirPath = config.location + '/persistent/datasets/' + snapshotHash;
+                files.getFiles(dirPath, (files) => {
+                    async.each(files, (filePath, cb) => {
+                        let remotePath = filePath.slice((config.location + '/persistent/datasets/').length);
+                        this.queue.push({
+                            function: this.uploadFile,
+                            arguments: [
+                                filePath,
+                                remotePath
+                            ],
+                            callback: cb
+                        });
+                    }, ()  => {
+                        // tag upload as complete
+                        s3.putObjectTagging({
+                            Bucket,
+                            Key: snapshotHash + '/dataset_description.json',
+                            Tagging: {
+                                TagSet: [
+                                    {
+                                        Key: 'DatasetComplete',
+                                        Value: 'true'
+                                    }
+                                ]
                             }
-                        ]
-                    }
-                }, () => {
-                    callback();
+                        }, () => {
+                            callback();
+                        });
+                    });
                 });
-            });
+            }
         });
     }
 
 };
-
-export default s3lib;
