@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint *.js **/*.js **/**/*.js **/**/**/*.js",
+    "lint": "eslint *.js **/*.js **/**/*.js **/**/**/*.js --ignore-pattern client.config.js --ignore-pattern debug.js",
     "start": "node index.js",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/"
   },
