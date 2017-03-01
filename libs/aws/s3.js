@@ -18,7 +18,7 @@ export default (aws) => {
 
     return {
 
-        api: s3,
+        sdk: s3,
 
         /**
          * Queue
