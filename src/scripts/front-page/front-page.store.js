@@ -80,11 +80,15 @@ let FrontPageStore = Reflux.createStore({
     setApps (apps) {
         let found = [];
         let tags  = [];
-        for (let app of apps) {
-            for (let tag of app.tags) {
-                if (found.indexOf(tag) === -1) {
-                    found.push(tag);
-                    tags.push({label: tag, value: tag});
+
+        // collect tags
+        for (let app in apps) {
+            if (apps[app].tags) {
+                for (let tag of apps[app].tags) {
+                    if (found.indexOf(tag) === -1) {
+                        found.push(tag);
+                        tags.push({label: tag, value: tag});
+                    }
                 }
             }
         }
