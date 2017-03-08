@@ -1,26 +1,9 @@
 // dependencies ------------------------------------------------------------
 
 import scitran  from '../libs/scitran';
-import sanitize from '../libs/sanitize';
 import mongo    from '../libs/mongo';
 
 let c = mongo.collections;
-
-// models ------------------------------------------------------------------
-
-let models = {
-    newUser: {
-        _id:       'string, required',
-        firstname: 'string, required',
-        lastname:  'string, required'
-    },
-    blacklistUser: {
-        _id:       'string, required',
-        firstname: 'string',
-        lastname:  'string',
-        note:      'string'
-    }
-};
 
 // handlers ----------------------------------------------------------------
 
@@ -40,18 +23,16 @@ export default {
      * Takes a gmail address as an '_id' and a first and last name and
      * creates a scitran user.
      */
-    create(req, res, next) {
-        sanitize.req(req, models.newUser, (err, user) => {
-            if (err) {return next(err);}
-            c.crn.blacklist.findOne({_id: user._id}).then((item) => {
-                if (item) {
-                    res.send({status: 403, error: 'This user email has been blacklisted and cannot be given an account'});
-                } else {
-                    scitran.createUser(user, (err, resp) => {
-                        if (!err) {res.send(resp);}
-                    });
-                }
-            });
+    create(req, res) {
+        let user = req.body;
+        c.crn.blacklist.findOne({_id: user._id}).then((item) => {
+            if (item) {
+                res.send({status: 403, error: 'This user email has been blacklisted and cannot be given an account'});
+            } else {
+                scitran.createUser(user, (err, resp) => {
+                    if (!err) {res.send(resp);}
+                });
+            }
         });
     },
 
@@ -62,20 +43,18 @@ export default {
      * lastname and note and sets the user info as blacklisted.
      */
     blacklist(req, res, next) {
-        sanitize.req(req, models.blacklistUser, (err, user) => {
-            if (err) {return next(err);}
-            c.crn.blacklist.findOne({_id: user._id}).then((item) => {
-                if (item) {
-                    let error = new Error('A user with that _id has already been blacklisted');
-                    error.http_code = 409;
-                    return next(error);
-                } else {
-                    c.crn.blacklist.insertOne(user, {w:1}, (err) => {
-                        if (err) {return next(err);}
-                        res.send(user);
-                    });
-                }
-            });
+        let user = req.body;
+        c.crn.blacklist.findOne({_id: user._id}).then((item) => {
+            if (item) {
+                let error = new Error('A user with that _id has already been blacklisted');
+                error.http_code = 409;
+                return next(error);
+            } else {
+                c.crn.blacklist.insertOne(user, {w:1}, (err) => {
+                    if (err) {return next(err);}
+                    res.send(user);
+                });
+            }
         });
     },
 

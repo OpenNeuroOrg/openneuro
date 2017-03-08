@@ -3,37 +3,15 @@
 // dependencies ------------------------------------------------------------
 
 import agave         from '../libs/agave';
-import sanitize      from '../libs/sanitize';
 import scitran       from '../libs/scitran';
 import mongo         from '../libs/mongo';
 import async         from 'async';
+import crypto        from 'crypto';
 import archiver      from 'archiver';
 import notifications from '../libs/notifications';
 import {ObjectID}    from 'mongodb';
-import aws           from '../libs/aws';
 
 let c = mongo.collections;
-
-// models ------------------------------------------------------------------
-
-let models = {
-    job: {
-        appId:             'string, required',
-        appLabel:          'string, required',
-        appVersion:        'string, required',
-        datasetId:         'string, required',
-        datasetLabel:      'stirng, required',
-        executionSystem:   'String, required',
-        parameters:        'object, required',
-        snapshotId:        'string, required',
-        userId:            'string, required',
-        batchQueue:        'string, required',
-        memoryPerNode:     'number, required',
-        nodeCount:         'number, required',
-        processorsPerNode: 'number, required',
-        input:             'string'
-    }
-};
 
 // handlers ----------------------------------------------------------------
 
@@ -45,38 +23,59 @@ let models = {
 let handlers = {
 
     /**
-     * GET Apps
+     * GET Apps - original
      */
     getApps(req, res, next) {
-        aws.batch.sdk.describeJobDefinitions({}, (err, data) => {
-            if (err) {
-                return next(err);
-            } else {
-                let definitions = {};
-                for (let definition of data.jobDefinitions) {
-                    if (!definitions.hasOwnProperty(definition.jobDefinitionName)) {
-                        definitions[definition.jobDefinitionName] = {};
+        agave.api.listApps((err, resp) => {
+            if (err) {return next(err);}
+            let apps = [];
+            async.each(resp.body.result, (app, cb) => {
+                agave.api.getApp(app.id, (err, resp2) => {
+                    if (resp2.body && resp2.body.result) {
+                        apps.push(resp2.body.result);
                     }
-                    definitions[definition.jobDefinitionName][definition.revision] = definition;
-                }
-
-                res.send(definitions);
-            }
+                    cb();
+                });
+            }, () => {
+                res.send(apps);
+            });
         });
     },
 
     /**
-     * POST Job - aws
+     * POST Job - original
      */
     postJob(req, res, next) {
-        sanitize.req(req, models.job, (err, job) => {
-            if (err) {return next(err);}
-            scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
-                aws.s3.uploadSnapshot(hash, () => {
-                    res.send('upload complete');
+        let job = req.body;
+        scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
+            job.datasetHash = hash;
+            job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
+
+            c.crn.jobs.findOne({
+                appId:          job.appId,
+                datasetHash:    job.datasetHash,
+                parametersHash: job.parametersHash,
+                snapshotId:     job.snapshotId
+            }, {}, (err, existingJob) => {
+                if (err){return next(err);}
+                if (existingJob) {
+                    // allow retrying failed jobs
+                    if (existingJob.agave && existingJob.agave.status === 'FAILED') {
+                        handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
+                        return;
+                    }
+                    let error = new Error('A job with the same dataset and parameters has already been run.');
+                    error.http_code = 409;
+                    res.status(409).send({message: 'A job with the same dataset and parameters has already been run.'});
+                    return;
+                }
+
+                agave.submitJob(job, (err, resp) => {
+                    if (err) {return next(err);}
+                    res.send(resp);
                 });
-            }, {snapshot: true});
-        });
+            });
+        }, {snapshot: true});
     },
 
     /**
