@@ -172,7 +172,7 @@ let Pipelines = React.createClass({
     },
 
     _pipelineOptions(apps, selectedTags) {
-        let filteredApps = [];
+        let filteredApps = {};
         if (selectedTags == null || selectedTags.length === 0) {
             filteredApps = apps;
         } else {
@@ -187,8 +187,9 @@ let Pipelines = React.createClass({
                     }
             }
         }
-        return filteredApps.map((app) => {
-            return <option value={app.id} key={app.id}>{app.name}</option>;
+
+        return Object.keys(filteredApps).map((app) => {
+            return <option value={app} key={app}>{app}</option>;
         });
     }
 
