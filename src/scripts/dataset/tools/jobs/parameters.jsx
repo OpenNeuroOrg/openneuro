@@ -1,6 +1,6 @@
 import React from 'react';
 
-const JobParameters = ({parameters}) => {
+const JobParameters = ({parameters, onChange, onRestoreDefaults}) => {
 
     if (Object.keys(parameters).length === 0) {return <noscript />;}
 
@@ -15,7 +15,7 @@ const JobParameters = ({parameters}) => {
                             <div className="clearfix">
                                 <input className="form-control"
                                        value={parameters[parameter]}
-                                       onChange={() => {}}/>
+                                       onChange={onChange.bind(null, parameter)}/>
                                 <span className="help-text">{parameter}</span>
                             </div>
                         </div>
@@ -33,7 +33,7 @@ const JobParameters = ({parameters}) => {
                     <h5>Parameters</h5>
                 </div>
                 <div className="col-xs-6 default-reset">
-                    <button className="btn-reset">Restore Default Parameters</button>
+                    <button className="btn-reset" onClick={onRestoreDefaults}>Restore Default Parameters</button>
                 </div>
             </div>
             {parameterInputs}
@@ -43,6 +43,8 @@ const JobParameters = ({parameters}) => {
 };
 
 JobParameters.propTypes = {
+    onChange: React.PropTypes.func,
+    onRestoreDefaults: React.PropTypes.func,
     parameters: React.PropTypes.object
 };
 
