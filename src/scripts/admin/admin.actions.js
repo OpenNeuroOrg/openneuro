@@ -8,6 +8,7 @@ var Actions = Reflux.createActions([
     'getBlacklist',
     'inputChange',
     'removeUser',
+    'toggleModal',
     'toggleSuperUser',
     'unBlacklistUser',
     'update',

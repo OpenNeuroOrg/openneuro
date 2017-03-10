@@ -43,12 +43,23 @@ let UserStore = Reflux.createStore({
             searchInput:'',
             adminFilter: false,
             blacklist: [],
-            showBlacklistModal: false,
+            modals: {
+                blacklist: false,
+                defineJob: false
+            },
             blacklistForm: {
                 _id: '',
                 firstname: '',
                 lastname: '',
                 note: ''
+            },
+            jobDefinitionForm: {
+                name: '',
+                jobRoleArn: '',
+                containerImage: '',
+                command: '',
+                vcpus: '1',
+                memory: '2000'
             },
             blacklistError: ''
         };
@@ -166,8 +177,10 @@ let UserStore = Reflux.createStore({
      * Prefills data if a user object is passed.
      */
     blacklistModal(user, callback) {
+        let modals = this.data.modals;
+        modals.blacklist = true;
         this.update({
-            showBlacklistModal: true,
+            modals,
             blacklistError: '',
             blacklistForm: {
                 _id:       user._id       ? user._id : '',
@@ -176,7 +189,9 @@ let UserStore = Reflux.createStore({
                 note: ''
             }
         });
-        if (callback) {callback();}
+        if (callback && typeof callback === 'function') {
+            callback();
+        }
     },
 
     /**
@@ -231,6 +246,15 @@ let UserStore = Reflux.createStore({
             this.update({users});
             if (callback) {callback();}
         });
+    },
+
+    /**
+     * Toggle Modal
+     */
+    toggleModal (modalName) {
+        let modals = this.data.modals;
+        modals[modalName] = !modals[modalName];
+        this.update({modals});
     },
 
     /**
