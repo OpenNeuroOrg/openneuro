@@ -7,7 +7,7 @@ import {State}       from 'react-router';
 import datasetStore  from './dataset.store';
 import actions       from './dataset.actions.js';
 import MetaData      from './dataset.metadata.jsx';
-import Tools         from './dataset.tools.jsx';
+import Tools         from './tools';
 import Statuses      from './dataset.statuses.jsx';
 import Validation    from './dataset.validation.jsx';
 import moment        from 'moment';

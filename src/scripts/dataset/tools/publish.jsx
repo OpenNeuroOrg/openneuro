@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React   from 'react';
-import actions from './dataset.actions.js';
+import actions from '../dataset.actions.js';
 import {Modal} from 'react-bootstrap';
 import moment  from 'moment';
 

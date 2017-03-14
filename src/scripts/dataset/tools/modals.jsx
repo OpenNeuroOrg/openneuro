@@ -2,13 +2,13 @@
 
 import React          from 'react';
 import Reflux         from 'reflux';
-import Share          from './dataset.tools.share.jsx';
-import Jobs           from './dataset.tools.jobs.jsx';
-import Publish        from './dataset.tools.publish.jsx';
-import FileDisplay    from './dataset.file-display.jsx';
-import UpdateWarn     from './dataset.update-warning.jsx';
-import datasetStore   from './dataset.store';
-import datasetActions from './dataset.actions.js';
+import Share          from './share.jsx';
+import Jobs           from './jobs';
+import Publish        from './publish.jsx';
+import FileDisplay    from '../dataset.file-display.jsx';
+import UpdateWarn     from '../dataset.update-warning.jsx';
+import datasetStore   from '../dataset.store';
+import datasetActions from '../dataset.actions.js';
 
 let ToolModals = React.createClass({
 

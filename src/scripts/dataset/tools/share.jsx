@@ -3,11 +3,11 @@
 // dependencies -------------------------------------------------------
 
 import React      from 'react';
-import bids       from '../utils/bids';
-import Input      from '../common/forms/input.jsx';
-import WarnButton from '../common/forms/warn-button.jsx';
+import bids       from '../../utils/bids';
+import Input      from '../../common/forms/input.jsx';
+import WarnButton from '../../common/forms/warn-button.jsx';
 import {Modal}    from 'react-bootstrap';
-import userStore  from '../user/user.store';
+import userStore  from '../../user/user.store';
 
 export default class Share extends React.Component {
 
