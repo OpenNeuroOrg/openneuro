@@ -56,7 +56,7 @@ let datasetStore = Reflux.createStore({
      */
     setInitialState: function (diffs) {
         let data = {
-            apps: [],
+            apps: {},
             activeJob: {
                 label:   false,
                 version: false,
@@ -209,17 +209,8 @@ let datasetStore = Reflux.createStore({
     loadApps() {
         this.update({loadingApps: true});
         crn.getApps((err, res) => {
-            if (res.body) {
-                res.body.sort((a, b) => {
-                    let aName = a.label.toUpperCase();
-                    let bName = b.label.toUpperCase();
-                    return (aName < bName) ? -1 : (aName > bName) ? 1 : 0;
-                });
-                FPActions.setApps(res.body);
-                this.update({apps: res.body, loadingApps: false});
-            } else {
-                setTimeout(this.loadApps, 5000);
-            }
+            FPActions.setApps(res.body);
+            this.update({apps: res.body, loadingApps: false});
         });
     },
 
@@ -978,23 +969,16 @@ let datasetStore = Reflux.createStore({
     /**
      * Start Job
      */
-    startJob(snapshotId, app, parameters, callback) {
+    startJob(snapshotId, jobDefinition, parameters, callback) {
         let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
         crn.createJob({
-            appId:             app.id,
-            appLabel:          app.label,
-            appVersion:        app.version,
-            datasetId:         datasetId,
-            datasetLabel:      this.data.dataset.label,
-            executionSystem:   app.executionSystem,
-            parameters:        parameters,
-            snapshotId:        snapshotId,
-            userId:            userStore.data.scitran._id,
-            batchQueue:        app.defaultQueue,
-            memoryPerNode:     app.defaultMemoryPerNode,
-            nodeCount:         app.defaultNodeCount,
-            processorsPerNode: app.defaultProcessorsPerNode,
-            input:             app.inputs[0].id
+            datasetId:     datasetId,
+            datasetLabel:  this.data.dataset.label,
+            jobDefinition: jobDefinition.jobDefinitionArn,
+            jobName:       jobDefinition.jobDefinitionName,
+            parameters:    parameters,
+            snapshotId:    snapshotId,
+            userId:        userStore.data.scitran._id
         }, (err, res) => {
             callback(err, res);
             if (!err) {
@@ -1008,7 +992,7 @@ let datasetStore = Reflux.createStore({
                         this.pollJob(jobId, snapshotId);
 
                         // open job accordion
-                        this.update({activeJob: {app: app.label, version: app.version}});
+                        this.update({activeJob: {app: jobDefinition.label, version: jobDefinition.version}});
                     });
                 }
             }
