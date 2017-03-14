@@ -17,7 +17,7 @@ let BlacklistModal = React.createClass({
         let blacklistForm = this.state.blacklistForm;
 
         return (
-            <Modal show={this.state.showBlacklistModal} onHide={this._hide}>
+            <Modal show={this.state.modals.blacklist} onHide={this._hide}>
                 <Modal.Header closeButton>
                     <Modal.Title>Block a User</Modal.Title>
                 </Modal.Header>
@@ -28,7 +28,7 @@ let BlacklistModal = React.createClass({
                         <Input placeholder="Gmail Address" type="text"  value={blacklistForm._id}       name={'_id'}       onChange={this._inputChange} />
                         <Input placeholder="First Name"    type="text"  value={blacklistForm.firstname} name={'firstname'} onChange={this._inputChange} />
                         <Input placeholder="Last Name"     type="text"  value={blacklistForm.lastname}  name={'lastname'}  onChange={this._inputChange} />
-                        <Input placeholder="Note"          type="textarea"  value={blacklistForm.note}      name={'note'}      onChange={this._inputChange} />
+                        <Input placeholder="Note"          type="textarea"  value={blacklistForm.note}  name={'note'}      onChange={this._inputChange} />
                         <button className="btn-modal-submit" onClick={actions.blacklistSubmit} >
                             <span>Block</span>
                         </button>
@@ -50,7 +50,7 @@ let BlacklistModal = React.createClass({
     },
 
     _hide() {
-        actions.update({showBlacklistModal: false});
+        actions.toggleModal('blacklist');
     }
 
 });
