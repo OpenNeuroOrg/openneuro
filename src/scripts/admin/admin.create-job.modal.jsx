@@ -29,7 +29,7 @@ const CreateJob = React.createClass({
                         <Input placeholder="Command" type="textarea" value={definition.command}        name={'command'}        onChange={this._inputChange} />
                         <Input placeholder="vCPUs"                   value={definition.vcpus}          name={'vcpus'}          onChange={this._inputChange} />
                         <Input placeholder="Memory (MiB)"            value={definition.memory}         name={'name'}           onChange={this._inputChange} />
-                        <button className="btn-modal-submit">
+                        <button className="btn-modal-submit" onClick={actions.submitJobDefinition}>
                             <span>Submit</span>
                         </button>
                     </div>

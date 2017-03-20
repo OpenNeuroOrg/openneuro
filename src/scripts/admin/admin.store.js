@@ -249,6 +249,13 @@ let UserStore = Reflux.createStore({
     },
 
     /**
+     * Submit Job Definition
+     */
+    submitJobDefinition () {
+        console.log(this.data.jobDefinitionForm);
+    },
+
+    /**
      * Toggle Modal
      */
     toggleModal (modalName) {

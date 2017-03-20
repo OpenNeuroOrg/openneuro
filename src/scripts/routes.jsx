@@ -5,19 +5,19 @@ import {NotFoundRoute, DefaultRoute, Route} from 'react-router';
 import requireAuth from './utils/requireAuth';
 
 // views
-import Index         from './index.jsx';
-import FrontPage     from './front-page/front-page.jsx';
+import Index          from './index.jsx';
+import FrontPage      from './front-page/front-page.jsx';
 
-import Admin         from './admin/admin.jsx';
-import Users         from './admin/admin.users.jsx';
-import Blacklist     from './admin/admin.blacklist.jsx';
-import CreateJob     from './admin/admin.jobs.jsx';
+import Admin          from './admin/admin.jsx';
+import Users          from './admin/admin.users.jsx';
+import Blacklist      from './admin/admin.blacklist.jsx';
+import JobDefinitions from './admin/admin.jobs.jsx';
 
-import Dashboard     from './dashboard/dashboard.jsx';
-import Notifications from './dashboard/notifications.jsx';
-import Jobs          from './dashboard/dashboard.jobs.jsx';
-import Datasets      from './dashboard/dashboard.datasets.jsx';
-import Dataset       from './dataset/dataset.jsx';
+import Dashboard      from './dashboard/dashboard.jsx';
+import Notifications  from './dashboard/notifications.jsx';
+import Jobs           from './dashboard/dashboard.jobs.jsx';
+import Datasets       from './dashboard/dashboard.datasets.jsx';
+import Dataset        from './dataset/dataset.jsx';
 
 
 // redirects -------------------------------------------------------------
@@ -66,7 +66,7 @@ let routes = (
         <Route name="admin" path="admin" handler={requireAuth(Admin, 'admin')} >
             <Route name="users" path="users" handler={Users} />
             <Route name="blacklist" path="blacklist" handler={Blacklist} />
-            <Route name="create-job" path="create-job" handler={CreateJob} />
+            <Route name="job-definitions" path="job-definitions" handler={JobDefinitions} />
             <NotFoundRoute handler={RedirectUsers}/>
         </Route>
         <Route name="dataset" path="datasets/:datasetId" handler={Dataset} />
