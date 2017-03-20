@@ -35,7 +35,7 @@ let App = React.createClass({
         return (
             <span>
                 <div className={'page' + pageClasses}>
-                    {!bowser.chrome ?  <Happybrowser /> : null }
+                    {!bowser.chrome && !bowser.chromium ? <Happybrowser /> : null }
                     <span className={'nav-alert-state-' + alertState}>
                         <Alert />
                     </span>
