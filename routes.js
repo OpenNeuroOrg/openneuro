@@ -95,9 +95,18 @@ const routes = [
     },
     {
         method: 'post',
+        url: '/jobs/definitions',
+        middleware: [
+            auth.superuser,
+            schema.validateBody(schemas.job.definition)
+        ],
+        handler: awsJobs.createJobDefinition
+    },
+    {
+        method: 'post',
         url: '/datasets/:datasetId/jobs',
         middleware: [
-            schema.validateBody(schemas.job)
+            schema.validateBody(schemas.job.submit)
         ],
         handler: awsJobs.submitJob
     },
