@@ -1,6 +1,7 @@
 // dependencies ------------------------------------------------------------
 
-import aws from '../libs/aws';
+import aws     from '../libs/aws';
+import scitran from '../libs/scitran';
 
 // handlers ----------------------------------------------------------------
 
@@ -10,6 +11,13 @@ import aws from '../libs/aws';
  * Handlers for job actions.
  */
 let handlers = {
+
+    /**
+     * Create Job Definition
+     */
+    createJobDefinition(req, res, next) {
+
+    },
 
     /**
      * Describe Job Definitions
@@ -45,8 +53,12 @@ let handlers = {
         };
         batchJobParams.jobQueue = 'bids-queue';
 
-        aws.batch.sdk.submitJob(batchJobParams, (err, data) => {
-            res.send(data);
+        scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
+            aws.s3.uploadSnapshot(hash, () => {
+                aws.batch.sdk.submitJob(batchJobParams, (err, data) => {
+                    res.send(data);
+                });
+            });
         });
     }
 
