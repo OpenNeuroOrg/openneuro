@@ -45,7 +45,7 @@ const definition = {
                 },
                 memory: {
                     type: 'integer',
-                    minimum: 0,
+                    minimum: 0
                 },
                 vcpus: {
                     type: 'integer',

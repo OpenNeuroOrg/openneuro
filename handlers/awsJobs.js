@@ -15,7 +15,7 @@ let handlers = {
     /**
      * Create Job Definition
      */
-    createJobDefinition(req, res, next) {
+    createJobDefinition() {
 
     },
 
