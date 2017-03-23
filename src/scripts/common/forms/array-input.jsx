@@ -13,8 +13,8 @@ let ArrayInput = React.createClass({
     getInitialState () {
         let initialState = {error: null};
         if (this.props.model) {
-            for (let property of this.props.model) {
-                initialState[property] = '';
+            for (let field of this.props.model) {
+                initialState[field.id] = '';
             }
         } else {
             initialState.reference = '';
@@ -35,19 +35,17 @@ let ArrayInput = React.createClass({
     },
 
     render() {
-        let referenceInput = <Input placeholder="Reference" value={this.state.reference} onChange={this._handleChange.bind(null, 'reference')} />;
-        let authorInputs = (
-            <span>
-                <Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
-                <Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
-            </span>
-        );
+
+        let inputFields = this.props.model ? this.props.model.map((field) => {
+            return <Input placeholder={field.placeholder} value={this.state[field.id]} onChange={this._handleChange.bind(null, field.id)} key={field.id} />
+        }) : null;
+
         return (
             <div className="cte-edit-array">
                 {this._arrayList(this.props.value, this.props.model)}
                 <div className="text-danger">{this.state.error}</div>
                 <div className="form-inline">
-                    {this.props.model ? authorInputs : referenceInput}
+                    <span>{inputFields}</span>
                     <button className="cte-save-btn btn-admin-blue " onClick={this._add.bind(this, this.props.model)}>add</button>
                 </div>
             </div>
@@ -79,18 +77,25 @@ let ArrayInput = React.createClass({
         this.setState({error: null});
         let value = this.props.value;
 
-        if(model){
-            if (this.state.name.length < 1) {
-                this.setState({error: 'An author name is required.'});
-                return;
+        if (this.state.name && this.state.name.length < 1) {
+            this.setState({error: 'An author name is required.'});
+            return;
+        }
+
+        if (this.state.reference && this.state.reference.length < 1) {
+            this.setState({error: 'A reference or link is required.'});
+            return;
+        }
+
+        if (model.length > 1) {
+            let itemValue = {};
+            for (let field of model) {
+                itemValue[field.id] = this.state[field.id];
             }
-            value.push({name: this.state.name, ORCIDID: this.state.ORCIDID});
-        }else{
-            if (this.state.reference.length < 1) {
-                this.setState({error: 'A reference or link is required.'});
-                return;
-            }
-            value.push(this.state.reference);
+
+            value.push(itemValue);
+        } else {
+            value.push(this.state[model[0].id]);
         }
 
         this.props.onChange({target: {value: value}});
@@ -136,11 +141,12 @@ let ArrayItem = React.createClass({
     propTypes: {
         model: React.PropTypes.array,
         item: (props) => {
-            if (props.model && typeof props.item !== 'object') {
-                return new Error('Prop `item` must be an object if a model prop is defined');
+
+            if (props.model.length > 1 && typeof props.item !== 'object') {
+                return new Error('Prop `item` must be an object if a model has more than one property');
             }
-            if (!props.model && typeof props.item !== 'string') {
-                return new Error('Prop `item` must be a string if no model prop is defined');
+            if (props.model.length == 1 && typeof props.item !== 'string') {
+                return new Error('Prop `item` must be a string if modal has a single property');
             }
         },
         remove: React.PropTypes.func,
@@ -149,6 +155,7 @@ let ArrayItem = React.createClass({
     },
 
     render() {
+
         let view = (
             <div className="cte-array-item">
                 {this._display()}
@@ -182,11 +189,10 @@ let ArrayItem = React.createClass({
 
     _display() {
         let item = this.props.item;
-        if (this.props.model) {
+        if (typeof item == 'object') {
             return (
                 <span>
-                    <span className="author-name">{item.name}</span>
-                    <span className="orcid-id">{item.ORCIDID ? '-' : null} {item.ORCIDID}</span>
+                    {Object.keys(item).map((key) => {return <span className="reference-name" key={key}>{item[key]}</span>})}
                 </span>
             );
         } else {
@@ -197,18 +203,13 @@ let ArrayItem = React.createClass({
     },
 
     _input() {
-        if (this.props.model) {
-            return (
-                <span>
-                    <Input placeholder="name" value={this.state.name} onChange={this._handleChange.bind(null, 'name')} />
-                    <Input placeholder="ORCID ID" value={this.state.ORCIDID} onChange={this._handleChange.bind(null, 'ORCIDID')} />
-                </span>
-            );
-        } else {
-            return (
-                <Input placeholder="Reference" value={this.state.reference} onChange={this._handleChange.bind(null, 'reference')} />
-            );
-        }
+        return (
+            <span>
+                {this.props.model.map((field) => {
+                    return <Input placeholder={field.placeholder} value={this.state[field.id]} onChange={this._handleChange.bind(null, field.id)} key={field.id} />
+                })}
+            </span>
+        );
     },
 
 // custom methods -----------------------------------------------------
