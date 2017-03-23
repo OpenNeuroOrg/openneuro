@@ -2,6 +2,7 @@
 
 import React      from 'react';
 import Reflux     from 'reflux';
+import ArrayInput from '../common/forms/array-input.jsx';
 import Input      from '../common/forms/input.jsx';
 import {Modal}    from 'react-bootstrap';
 import adminStore from './admin.store';
@@ -29,6 +30,15 @@ const CreateJob = React.createClass({
                         <Input placeholder="Command" type="textarea" value={definition.command}        name={'command'}        onChange={this._inputChange} />
                         <Input placeholder="vCPUs"                   value={definition.vcpus}          name={'vcpus'}          onChange={this._inputChange} />
                         <Input placeholder="Memory (MiB)"            value={definition.memory}         name={'name'}           onChange={this._inputChange} />
+                        <div className="form-group">
+                            <label>Parameters</label>
+                            <ArrayInput value={definition.parameters}
+                                        onChange={this._handleChange.bind(null, 'parameters')}
+                                        model={[
+                                            {id: 'key', placeholder: 'key'},
+                                            {id: 'defaultValue', placeholder: 'default value'}
+                                        ]} />
+                        </div>
                         <button className="btn-modal-submit" onClick={actions.submitJobDefinition}>
                             <span>Submit</span>
                         </button>
@@ -36,6 +46,10 @@ const CreateJob = React.createClass({
                 </Modal.Body>
             </Modal>
         );
+    },
+
+    _handleChange (formProperty, e) {
+        actions.inputChange('jobDefinitionForm', formProperty, e.target.value);
     },
 
     _inputChange (e) {

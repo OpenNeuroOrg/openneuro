@@ -59,7 +59,8 @@ let UserStore = Reflux.createStore({
                 containerImage: '',
                 command: '',
                 vcpus: '1',
-                memory: '2000'
+                memory: '2000',
+                parameters: []
             },
             blacklistError: ''
         };
@@ -252,7 +253,14 @@ let UserStore = Reflux.createStore({
      * Submit Job Definition
      */
     submitJobDefinition () {
-        console.log(this.data.jobDefinitionForm);
+        let jobDefinition = this.data.jobDefinitionForm
+        let parameters = {};
+        for (let param of jobDefinition.parameters) {
+            parameters[param.key] = param.defaultValue;
+        }
+        jobDefinition.parameters = parameters;
+
+        console.log(jobDefinition);
     },
 
     /**
