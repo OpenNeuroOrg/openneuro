@@ -12,12 +12,9 @@ let ArrayInput = React.createClass({
 
     getInitialState () {
         let initialState = {error: null};
-        if (this.props.model) {
-            for (let field of this.props.model) {
-                initialState[field.id] = '';
-            }
-        } else {
-            initialState.reference = '';
+
+        for (let field of this.props.model) {
+            initialState[field.id] = '';
         }
 
         return initialState;
@@ -77,12 +74,12 @@ let ArrayInput = React.createClass({
         this.setState({error: null});
         let value = this.props.value;
 
-        if (this.state.name && this.state.name.length < 1) {
+        if (this.state.hasOwnProperty('name') && this.state.name.length < 1) {
             this.setState({error: 'An author name is required.'});
             return;
         }
 
-        if (this.state.reference && this.state.reference.length < 1) {
+        if (this.state.hasOwnProperty('reference') && this.state.reference.length < 1) {
             this.setState({error: 'A reference or link is required.'});
             return;
         }
@@ -129,13 +126,16 @@ let ArrayItem = React.createClass({
 
     getInitialState () {
         let initialState = {edit: false};
-        if (this.props.model) {
-            initialState.name = this.props.item.name;
-            initialState.ORCIDID = this.props.item.ORCIDID;
-        }else{
-            initialState.reference = this.props.item;
+
+        for (let field of this.props.model) {
+            initialState[field.id] = this.props.item[field.id];
         }
+
         return initialState;
+    },
+
+    componentWillReceiveProps() {
+        this.setState({edit: false});
     },
 
     propTypes: {
@@ -230,11 +230,11 @@ let ArrayItem = React.createClass({
     },
 
     _save(model) {
-        if(model){
-            this.props.onEdit(this.props.index, {ORCIDID: this.state.ORCIDID, name: this.state.name});
-        }else{
-            this.props.onEdit(this.props.index, this.state.reference);
+        let data = {};
+        for (let field of model) {
+            data[field.id] = this.state[field.id];
         }
+        this.props.onEdit(this.props.index, data);
     }
 
 });
