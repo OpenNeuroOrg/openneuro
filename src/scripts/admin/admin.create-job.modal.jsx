@@ -35,7 +35,7 @@ const CreateJob = React.createClass({
                             <ArrayInput value={definition.parameters}
                                         onChange={this._handleChange.bind(null, 'parameters')}
                                         model={[
-                                            {id: 'key', placeholder: 'key'},
+                                            {id: 'key', placeholder: 'Key', required: true},
                                             {id: 'defaultValue', placeholder: 'default value'}
                                         ]} />
                         </div>

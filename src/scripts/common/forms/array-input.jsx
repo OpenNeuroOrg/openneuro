@@ -74,14 +74,11 @@ let ArrayInput = React.createClass({
         this.setState({error: null});
         let value = this.props.value;
 
-        if (this.state.hasOwnProperty('name') && this.state.name.length < 1) {
-            this.setState({error: 'An author name is required.'});
-            return;
-        }
-
-        if (this.state.hasOwnProperty('reference') && this.state.reference.length < 1) {
-            this.setState({error: 'A reference or link is required.'});
-            return;
+        for (let field of model) {
+            if (field.required && !this.state[field.id]) {
+                this.setState({error: field.placeholder + ' is required.'});
+                return;
+            }
         }
 
         if (model.length > 1) {

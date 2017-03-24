@@ -69,12 +69,12 @@ let ClickToEdit = React.createClass({
             );
             break;
         case 'authors':
-            input = <ArrayInput model={[{id: 'name', placeholder: 'name'}, {id: 'ORCIDID', placeholder: 'ORCID ID'}]} value={value} onChange={this._handleChange.bind(null, type)} />;
+            input = <ArrayInput model={[{id: 'name', placeholder: 'Name', required: true}, {id: 'ORCIDID', placeholder: 'ORCID ID'}]} value={value} onChange={this._handleChange.bind(null, type)} />;
             display = <div className="cte-display">{this._authorList(value)}</div>;
             break;
         case 'referencesAndLinks':
             if (typeof value === 'string') {value = [value];}
-            input = <ArrayInput value={value} model={[{id: 'reference', placeholder: 'Reference'}]} onChange={this._handleChange.bind(null, type)} />;
+            input = <ArrayInput value={value} model={[{id: 'reference', placeholder: 'Reference', required: true}]} onChange={this._handleChange.bind(null, type)} />;
             display = <div className="cte-display">{this._referencesAndLinksList(value)}</div>;
             break;
         case 'fileArray':
