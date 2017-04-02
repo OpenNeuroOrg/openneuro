@@ -6,7 +6,8 @@
   "scripts": {
     "lint": "eslint *.js **/*.js **/**/*.js **/**/**/*.js --ignore-pattern client.config.js --ignore-pattern debug.js",
     "start": "node index.js",
-    "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/"
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel/register tests/**/"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "eslint": "2.7.0",
+    "istanbul": "^0.4.5",
     "mocha": "3.0.2"
   }
 }
