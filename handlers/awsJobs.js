@@ -59,7 +59,7 @@ let handlers = {
                     res.send(data);
                 });
             });
-        });
+        }, {snapshot: true});
     }
 
 };
