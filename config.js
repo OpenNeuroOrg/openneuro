@@ -42,7 +42,7 @@ let config = {
         's3': {
             'bucket': process.env.AWS_S3_BUCKET,
             'concurrency': 10,
-            'timout': 10 * 60 * 1000
+            'timeout': 10 * 60 * 1000
         }
     }
 };
