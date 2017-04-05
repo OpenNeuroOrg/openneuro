@@ -7,7 +7,7 @@ import actions    from './admin.actions';
 import WarnButton from '../common/forms/warn-button.jsx';
 import DefineJobModal       from './admin.create-job.modal.jsx';
 
-let Blacklist = React.createClass({
+let Jobs = React.createClass({
 
     mixins: [Reflux.connect(adminStore)],
 
@@ -32,4 +32,4 @@ let Blacklist = React.createClass({
 
 });
 
-export default Blacklist;
+export default Jobs;
