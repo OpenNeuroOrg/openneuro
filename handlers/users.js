@@ -29,7 +29,13 @@ export default {
             if (item) {
                 res.send({status: 403, error: 'This user email has been blacklisted and cannot be given an account'});
             } else {
-                scitran.createUser(user, (err, resp) => {
+                // Only pass on scitran's required user fields
+                let scitranUser = {
+                    _id: user._id,
+                    firstname: user.firstname,
+                    lastname: user.lastname
+                };
+                scitran.createUser(scitranUser, (err, resp) => {
                     if (!err) {res.send(resp);}
                 });
             }
