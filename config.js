@@ -1,3 +1,6 @@
+import schema from './libs/schema';
+import configSchema from './schemas/config';
+
 let config = {
     'url': process.env.CRN_SERVER_URL,
     'port': 8111,
@@ -46,5 +49,8 @@ let config = {
         }
     }
 };
+
+let compiledSchema = schema.compileJsonSchema(configSchema);
+schema.validateJson(compiledSchema, config);
 
 export default config;
