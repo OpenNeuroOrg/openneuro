@@ -21,10 +21,10 @@ let schema = {
 
     validateBody(inputSchema) {
         return function (req, res, next) {
-            let compiledSchema = compileJsonSchema(inputSchema);
-            let valid = validateJson(compiledSchema, req.body);
+            let compiledSchema = schema.compileJsonSchema(inputSchema);
+            let valid = schema.validateJson(compiledSchema, req.body);
             if (!valid) {
-                return res.status(400).send({error: getValidateError(valid)});
+                return res.status(400).send({error: schema.getSchemaError(valid)});
             } else {
                 return next();
             }
