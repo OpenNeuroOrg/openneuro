@@ -23,9 +23,9 @@ describe('libs/schema.js', () => {
                             assert.ok(err);
                             done();
                         }
-                    }
+                    };
                 }
-            }
+            };
             let validate = schema.validateBody(configSchema);
             validate(mockReq, mockRes, () => {
                 // Fail if next() is called
