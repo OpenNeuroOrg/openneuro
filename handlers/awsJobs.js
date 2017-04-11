@@ -15,8 +15,16 @@ let handlers = {
     /**
      * Create Job Definition
      */
-    createJobDefinition() {
+    createJobDefinition(req, res, next) {
+        let jobDef = req.body;
 
+        aws.batch.sdk.registerJobDefinition(jobDef, (err, data) => {
+            if (err) {
+                return next(err);
+            } else {
+                res.send(data);
+            }
+        });
     },
 
     /**
