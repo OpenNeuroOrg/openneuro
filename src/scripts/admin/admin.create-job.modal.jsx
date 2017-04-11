@@ -29,7 +29,7 @@ const CreateJob = React.createClass({
                         <Input placeholder="Container Image"         value={definition.containerImage} name={'containerImage'} onChange={this._inputChange} />
                         <Input placeholder="Command" type="textarea" value={definition.command}        name={'command'}        onChange={this._inputChange} />
                         <Input placeholder="vCPUs"                   value={definition.vcpus}          name={'vcpus'}          onChange={this._inputChange} />
-                        <Input placeholder="Memory (MiB)"            value={definition.memory}         name={'name'}           onChange={this._inputChange} />
+                        <Input placeholder="Memory (MiB)"            value={definition.memory}         name={'memory'}         onChange={this._inputChange} />
                         <div className="form-group">
                             <label>Parameters</label>
                             <ArrayInput value={definition.parameters}
