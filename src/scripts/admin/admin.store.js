@@ -253,14 +253,33 @@ let UserStore = Reflux.createStore({
      * Submit Job Definition
      */
     submitJobDefinition () {
-        let jobDefinition = this.data.jobDefinitionForm
+        let formData = this.data.jobDefinitionForm;
+        // Build up the AWS object
+        let jobDefinition = {};
         let parameters = {};
-        for (let param of jobDefinition.parameters) {
-            parameters[param.key] = param.defaultValue;
+
+        jobDefinition.jobDefinitionName = formData.name;
+        // Container is the only supported type by AWS Batch API as of now.
+        jobDefinition.type = 'container';
+
+        jobDefinition.containerProperties = {
+            image: formData.containerImage,
+            command: formData.command.split(' '),
+            memory: parseInt(formData.memory),
+            vcpus: parseInt(formData.vcpus)
+        }
+
+        if (jobDefinition.parameters) {
+            for (let param of jobDefinition.parameters) {
+                parameters[param.key] = param.defaultValue;
+            }
         }
         jobDefinition.parameters = parameters;
 
-        console.log(jobDefinition);
+        crn.defineJob(jobDefinition, () => {
+            // TODO - update our list of jobs
+            console.log('job submitted');
+        });
     },
 
     /**
