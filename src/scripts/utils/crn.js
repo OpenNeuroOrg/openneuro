@@ -84,10 +84,18 @@ export default {
      * Get Apps
      *
      * Returns a list of available apps that
-     * can be run on AGAVE
+     * can be run on AWS Batch
      */
     getApps(callback) {
         request.get(config.crn.url + 'apps', {auth: false}, callback);
+    },
+
+
+    /**
+     * Define Jobs
+     */
+    defineJob(jobDef, callback) {
+        request.post(config.crn.url + 'jobs/definitions', {body: jobDef}, callback);
     },
 
     /**
