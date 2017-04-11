@@ -269,8 +269,8 @@ let UserStore = Reflux.createStore({
             vcpus: parseInt(formData.vcpus)
         }
 
-        if (jobDefinition.parameters) {
-            for (let param of jobDefinition.parameters) {
+        if (formData.parameters) {
+            for (let param of formData.parameters) {
                 parameters[param.key] = param.defaultValue;
             }
         }
