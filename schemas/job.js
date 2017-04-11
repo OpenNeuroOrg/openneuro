@@ -30,7 +30,8 @@ const definition = {
     properties: {
         jobDefinitionName: {type: 'string'},
         containerProperties: {$ref: '#/definitions/containerProperties'},
-        parameters: {type: 'object'}
+        parameters: {type: 'object'},
+        type: {type: 'string'}
     },
     definitions: {
         containerProperties: {
@@ -64,7 +65,8 @@ const definition = {
     required: [
         'jobDefinitionName',
         'containerProperties',
-        'parameters'
+        'parameters',
+        'type'
     ],
     additionalProperties: false
 };
