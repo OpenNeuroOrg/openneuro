@@ -2,6 +2,9 @@
 
 import aws     from '../libs/aws';
 import scitran from '../libs/scitran';
+import mongo         from '../libs/mongo';
+
+let c = mongo.collections;
 
 // handlers ----------------------------------------------------------------
 
@@ -50,6 +53,8 @@ let handlers = {
 
     /**
      * Submit Job
+     * Inserts a job document in mongo and starts snapshot upload
+     * returns job to client
      */
     submitJob(req, res) {
         let job = req.body;
@@ -61,13 +66,28 @@ let handlers = {
         };
         batchJobParams.jobQueue = 'bids-queue';
 
-        scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
-            aws.s3.uploadSnapshot(hash, () => {
-                aws.batch.sdk.submitJob(batchJobParams, (err, data) => {
-                    res.send(data);
+        job.uploadSnapshotComplete = !!job.uploadSnapshotComplete;
+
+        c.crn.jobs.insertOne(job, (err, mongoJob) => {
+            scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
+                console.log("!!!!!!!!!!!!!!!!!!!!!!!!!");
+                console.log(err);
+                aws.s3.uploadSnapshot(hash, () => {
+                    handlers.startBatchJob(batchJobParams, mongoJob.insertedId);
                 });
-            });
-        }, {snapshot: true});
+            }, {snapshot: true});
+            res.send({jobId: mongoJob.insertedId}); // what do I want to return here??  
+        });
+    },
+
+    startBatchJob(params, jobId) {
+        aws.batch.sdk.submitJob(params, (err, data) => {
+           //update mongo job with aws batch job id?
+           c.crn.jobs.updateOne({_id: jobId}, {$set:{awsBatchJobId: data.jobId, uploadSnapshotComplete: true}}, (err, doc) => {
+            //error handling???
+            console.log(doc);
+           });
+        });
     }
 
 };
