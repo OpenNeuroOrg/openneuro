@@ -53,7 +53,7 @@ let handlers = {
 
     /**
      * Submit Job
-     * Inserts a job document in mongo and starts snapshot upload
+     * Inserts a job document into mongo and starts snapshot upload
      * returns job to client
      */
     submitJob(req, res) {
@@ -70,8 +70,6 @@ let handlers = {
 
         c.crn.jobs.insertOne(job, (err, mongoJob) => {
             scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
-                console.log("!!!!!!!!!!!!!!!!!!!!!!!!!");
-                console.log(err);
                 aws.s3.uploadSnapshot(hash, () => {
                     handlers.startBatchJob(batchJobParams, mongoJob.insertedId);
                 });
@@ -80,12 +78,16 @@ let handlers = {
         });
     },
 
+    /**
+     * Statt AWS Batch Job
+     * starts an aws batch job
+     * returns no return. Batch job start is happening after response has been send to client
+     */
     startBatchJob(params, jobId) {
         aws.batch.sdk.submitJob(params, (err, data) => {
            //update mongo job with aws batch job id?
            c.crn.jobs.updateOne({_id: jobId}, {$set:{awsBatchJobId: data.jobId, uploadSnapshotComplete: true}}, (err, doc) => {
             //error handling???
-            console.log(doc);
            });
         });
     }
