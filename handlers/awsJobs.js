@@ -79,7 +79,7 @@ let handlers = {
     },
 
     /**
-     * Statt AWS Batch Job
+     * Start AWS Batch Job
      * starts an aws batch job
      * returns no return. Batch job start is happening after response has been send to client
      */
