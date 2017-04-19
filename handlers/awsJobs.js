@@ -28,6 +28,21 @@ let handlers = {
     },
 
     /**
+    * Disable Job Definition
+    */
+    disableJobDefinition(req, res, next) {
+        let jobArn = req.body.arn;
+
+        aws.batch.sdk.deregisterJobDefinition({jobDefinition: jobArn}, (err, data) => {
+            if (err) {
+                return next(err);
+            } else {
+                res.send(data);
+            }
+        });
+    },
+
+    /**
      * Describe Job Definitions
      */
     describeJobDefinitions(req, res, next) {
