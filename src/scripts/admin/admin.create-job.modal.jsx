@@ -15,30 +15,20 @@ const CreateJob = React.createClass({
 
     render() {
         let definition = this.state.jobDefinitionForm;
+        let title = definition.edit ? "Edit Job" : "Define a Job";
 
         return (
              <Modal show={this.props.show} onHide={this.props.onHide}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Define a Job</Modal.Title>
+                    <Modal.Title>{title}</Modal.Title>
                 </Modal.Header>
                 <hr className="modal-inner" />
                 <Modal.Body>
                     <div>
-                        <Input placeholder="Job Definition Name"     value={definition.name}           name={'name'}           onChange={this._inputChange} />
-                        <Input placeholder="Job Role ARN"            value={definition.jobRoleArn}     name={'jobRoleArn'}     onChange={this._inputChange} />
-                        <Input placeholder="Container Image"         value={definition.containerImage} name={'containerImage'} onChange={this._inputChange} />
-                        <Input placeholder="Command" type="textarea" value={definition.command}        name={'command'}        onChange={this._inputChange} />
+                        <Input placeholder="Job Definition Name"     value={definition.name}           name={'name'}           onChange={this._inputChange} disabled={!!definition.edit}/>
+                        <Input placeholder="Bids Container"         value={definition.containerImage}  name={'containerImage'} onChange={this._inputChange} />
                         <Input placeholder="vCPUs"                   value={definition.vcpus}          name={'vcpus'}          onChange={this._inputChange} />
                         <Input placeholder="Memory (MiB)"            value={definition.memory}         name={'memory'}         onChange={this._inputChange} />
-                        <div className="form-group">
-                            <label>Parameters</label>
-                            <ArrayInput value={definition.parameters}
-                                        onChange={this._handleChange.bind(null, 'parameters')}
-                                        model={[
-                                            {id: 'key', placeholder: 'Key', required: true},
-                                            {id: 'defaultValue', placeholder: 'default value'}
-                                        ]} />
-                        </div>
                         <button className="btn-modal-submit" onClick={actions.submitJobDefinition}>
                             <span>Submit</span>
                         </button>

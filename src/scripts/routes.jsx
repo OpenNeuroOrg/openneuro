@@ -67,6 +67,7 @@ let routes = (
             <Route name="users" path="users" handler={Users} />
             <Route name="blacklist" path="blacklist" handler={Blacklist} />
             <Route name="job-definitions" path="job-definitions" handler={JobDefinitions} />
+            <Route name="job-definitions-edit" path="job-definitions/:job-definitionsId" handler={JobDefinitions} />
             <NotFoundRoute handler={RedirectUsers}/>
         </Route>
         <Route name="dataset" path="datasets/:datasetId" handler={Dataset} />

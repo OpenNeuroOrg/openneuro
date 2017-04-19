@@ -60,7 +60,8 @@ let UserStore = Reflux.createStore({
                 command: '',
                 vcpus: '1',
                 memory: '2000',
-                parameters: []
+                parameters: [],
+                edit: false
             },
             blacklistError: ''
         };
@@ -264,7 +265,7 @@ let UserStore = Reflux.createStore({
 
         jobDefinition.containerProperties = {
             image: formData.containerImage,
-            command: formData.command.split(' '),
+            command: !!formDat.command.length ? formData.command.split(' ') : [],
             memory: parseInt(formData.memory),
             vcpus: parseInt(formData.vcpus)
         }
@@ -283,11 +284,50 @@ let UserStore = Reflux.createStore({
     },
 
     /**
+    * Setup job definition form for editing
+    */
+    editJobDefinition (jobDefinition) {
+        let jobDefinitionForm = this.data.jobDefinitionForm;
+        jobDefinitionForm.edit = true;
+        jobDefinitionForm.name = jobDefinition.jobDefinitionName;
+        jobDefinitionForm.jobRoleArn = jobDefinition.jobDefinitionArn;
+        jobDefinitionForm.containerImage = jobDefinition.containerProperties.image;
+        jobDefinitionForm.command = jobDefinition.containerProperties.command.join(' ');
+        jobDefinitionForm.vcpus = jobDefinition.containerProperties.vcpus.toString(); //form is expecting string
+        jobDefinitionForm.memory = jobDefinition.containerProperties.memory.toString(); //form is expecting string
+        jobDefinitionForm.parameters = Array.isArray(jobDefinition.parameters) ? jobDefinition.parameters : []; // needs to be an array of key value pairs
+        this.update({jobDefinitionForm});
+    },
+
+    /**
+    * Reset the job definition form
+    */
+    resetJobDefinitionForm () {
+        let jobDefinitionForm = {
+            name: '',
+            jobRoleArn: '',
+            containerImage: '',
+            command: '',
+            vcpus: '1',
+            memory: '2000',
+            parameters: [],
+            edit: false
+        };
+
+        this.update({jobDefinitionForm});    
+    },
+
+    /**
      * Toggle Modal
      */
     toggleModal (modalName) {
         let modals = this.data.modals;
-        modals[modalName] = !modals[modalName];
+        let newModalFlag = !modals[modalName];
+        modals[modalName] = newModalFlag;
+        //If we are going from true to false, i.e. hiding modal, we need to reset form values
+        if(modalName === 'defineJob' && !newModalFlag) {
+            this.resetJobDefinitionForm();
+        }
         this.update({modals});
     },
 

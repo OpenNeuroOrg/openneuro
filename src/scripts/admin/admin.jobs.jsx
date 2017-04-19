@@ -31,11 +31,15 @@ let Jobs = React.createClass({
                                 </div>
                             </h3>
                         </div>
-                        <div className="col-xs-5 job-col">
+                        <div className="col-xs-3 job-col">
                             <div>{app.containerProperties.image}</div>
                         </div>
                         <div className="col-xs-2 job-col">
                             <div>{app.status}</div>
+                        </div>
+                        <div className="col-xs-2 job-col">
+                            <div onClick={this._editJob(app)}><i className="fa fa-pencil"> EDIT</i></div>
+                            <div><i className="fa fa-trash"> DISABLE</i></div>
                         </div>
                     </div>
                 );
@@ -55,15 +59,26 @@ let Jobs = React.createClass({
                     <div className="col-xs-12 job-panel-wrap">
                             <div className="fade-in job-panel-header clearfix" >
                                 <div className="col-xs-5 job-col"><label>Job</label></div>
-                                <div className="col-xs-5 job-col"><label>Container Image</label></div>
+                                <div className="col-xs-3 job-col"><label>Container Image</label></div>
                                 <div className="col-xs-2 job-col"><label>Status</label></div>
+                                <div className="col-xs-2 job-col"><label>Actions</label></div>
                             </div>
                     </div>
                     {Object.keys(this.state.datasets.apps).length == 0 ? noJobs : jobs}
                 </div>
-                <DefineJobModal show={this.state.modals.defineJob} onHide={actions.toggleModal.bind(this, 'defineJob')} />
+                <DefineJobModal 
+                    show={this.state.modals.defineJob} 
+                    onHide={actions.toggleModal.bind(this, 'defineJob')}
+                    edit={this.state.jobDefinitionForm.edit}/>
             </div>
         );
+    },
+
+    _editJob(app) {
+        return () => {
+            actions.editJobDefinition(app);
+            actions.toggleModal('defineJob');
+        }
     }
 
 });
