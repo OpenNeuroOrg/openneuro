@@ -74,7 +74,7 @@ let handlers = {
                     handlers.startBatchJob(batchJobParams, mongoJob.insertedId);
                 });
             }, {snapshot: true});
-            res.send({jobId: mongoJob.insertedId}); // what do I want to return here??  
+            res.send({jobId: mongoJob.insertedId});
         });
     },
 
@@ -85,10 +85,10 @@ let handlers = {
      */
     startBatchJob(params, jobId) {
         aws.batch.sdk.submitJob(params, (err, data) => {
-           //update mongo job with aws batch job id?
-           c.crn.jobs.updateOne({_id: jobId}, {$set:{awsBatchJobId: data.jobId, uploadSnapshotComplete: true}}, (err, doc) => {
+            //update mongo job with aws batch job id?
+            c.crn.jobs.updateOne({_id: jobId}, {$set:{awsBatchJobId: data.jobId, uploadSnapshotComplete: true}}, () => {
             //error handling???
-           });
+            });
         });
     }
 
