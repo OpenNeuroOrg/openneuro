@@ -39,7 +39,7 @@ let Jobs = React.createClass({
                         </div>
                         <div className="col-xs-2 job-col">
                             <div onClick={this._editJob(app)}><i className="fa fa-pencil"> EDIT</i></div>
-                            <div><i className="fa fa-trash"> DISABLE</i></div>
+                            <div onClick={this._disableJob(app)}><i className="fa fa-trash"> DISABLE</i></div>
                         </div>
                     </div>
                 );
@@ -78,6 +78,14 @@ let Jobs = React.createClass({
         return () => {
             actions.editJobDefinition(app);
             actions.toggleModal('defineJob');
+        }
+    },
+
+    _disableJob(app) {
+        let arn = app.jobDefinitionArn;
+        let name = app.jobDefinitionName
+        return () => {
+            actions.disableJobDefinition(name, arn);
         }
     }
 

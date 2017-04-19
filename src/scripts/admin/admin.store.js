@@ -265,7 +265,7 @@ let UserStore = Reflux.createStore({
 
         jobDefinition.containerProperties = {
             image: formData.containerImage,
-            command: !!formDat.command.length ? formData.command.split(' ') : [],
+            command: !!formData.command.length ? formData.command.split(' ') : [],
             memory: parseInt(formData.memory),
             vcpus: parseInt(formData.vcpus)
         }
@@ -280,6 +280,14 @@ let UserStore = Reflux.createStore({
         crn.defineJob(jobDefinition, () => {
             // TODO - update our list of jobs
             console.log('job submitted');
+        });
+    },
+
+    disableJobDefinition (name, jobArn) {
+        crn.disableJobDefinition(name, jobArn, (err, data) => {
+            //TODO Update job list 
+            console.log(data);
+            console.log('Job disabled');
         });
     },
 
