@@ -14,15 +14,16 @@ class JobAccordion extends React.Component {
     render () {
         let run = this.props.run;
 
-        if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0) || (run.logs && run.logs.length > 0)) {
+        // if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0) || (run.logs && run.logs.length > 0)) {
+            if (run.results && run.results.length > 0) {
             // header with parameters and/or results
             return (
                 <span eventKey={run._id}>
                     <Panel className={run.active ? 'job border-flash' : 'job'} header={this._header(run)}>
                         <span className="inner">
-                            {this._parameters(run)}
+                            {/*this._parameters(run)*/}
                             {this._results(run, 'results')}
-                            {this._results(run, 'logs')}
+                            {/*this._results(run, 'logs')*/}
                         </span>
                     </Panel>
                 </span>
@@ -48,13 +49,13 @@ class JobAccordion extends React.Component {
     _header (run) {
         let runBy = run.userId ? <span><br/><label>By </label><strong>{run.userId}</strong></span> : null;
         return (
-            <div className={run.agave.status.toLowerCase()}>
+            <div className={(run && run.analysis) ? run.analysis.status.toLowerCase() : 'pending'}>
                 <label>Status</label>
                 <span className="badge">
-                    {this._status(run.agave.status)}
+                    {this._status(run.analysis.status)}
                 </span><br/>
                 <span className="meta">
-                    <label>Run on </label><strong>{moment(run.agave.created).format('L')}</strong> at <strong>{moment(run.agave.created).format('LT')}</strong>
+                    <label>Run on </label><strong>{moment(run.analysis.created).format('L')}</strong> at <strong>{moment(run.analysis.created).format('LT')}</strong>
                     {runBy}
                 </span><br/>
                 <span className="meta">
@@ -81,13 +82,13 @@ class JobAccordion extends React.Component {
                             <div className="panel panel-default">
                                 <div className="panel-collapse" aria-expanded="false" >
                                     <div className="panel-body">
-                                        <FileTree
+                                        {/*<FileTree
                                             tree={run[type]}
                                             treeId={run._id}
                                             editable={false}
                                             getFileDownloadTicket={actions.getResultDownloadTicket.bind(this, run.snapshotId, run.jobId)}
                                             displayFile={this.props.displayFile.bind(this, run.snapshotId, run.jobId)}
-                                            toggleFolder={this.props.toggleFolder} />
+                                            toggleFolder={this.props.toggleFolder} />*/}
                                    </div>
                                 </div>
                             </div>
@@ -135,9 +136,9 @@ class JobAccordion extends React.Component {
     }
 
     _failedMessage(run) {
-        if (run.agave.status === 'FAILED') {
+        if (run.analysis.status === 'FAILED') {
             let adminMessage = <span>Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail.</span>;
-            let message = run.agave.message ? run.agave.message : 'We were unable to complete this analysis.';
+            let message = run.analysis.message ? run.analysis.message : 'We were unable to complete this analysis.';
             return (
                 <div>
                     <h5 className="text-danger">{message} {adminMessage}</h5>
