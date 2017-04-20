@@ -103,6 +103,14 @@ const routes = [
         handler: awsJobs.createJobDefinition
     },
     {
+        method: 'put',
+        url: '/jobs/definitions/:jobArn',
+        middleware: [
+            auth.superuser
+        ],
+        handler: awsJobs.disableJobDefinition
+    },
+    {
         method: 'post',
         url: '/datasets/:datasetId/jobs',
         middleware: [
