@@ -20,7 +20,8 @@ let Input = React.createClass({
         name: React.PropTypes.string,
         type: React.PropTypes.string,
         value: React.PropTypes.string,
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+        disabled: React.PropTypes.bool
     },
 
     render() {
@@ -45,7 +46,7 @@ let Input = React.createClass({
                 <textarea name={name} placeholder={placeholder} value={value} onChange={this._handleChange}></textarea>
             );
         } else {
-            return <input type={type} name={name} placeholder={placeholder} value={value} onChange={this._handleChange} />;
+            return <input type={type} name={name} placeholder={placeholder} value={value} onChange={this._handleChange} disabled={this.props.disabled}/>;
         }
     },
 

@@ -99,6 +99,13 @@ export default {
     },
 
     /**
+    * Disable Job
+    */
+    disableJobDefinition(name, jobArn, callback) {
+        request.put(config.crn.url + 'jobs/definitions/' + name, {body: {arn: jobArn}}, callback);
+    },
+
+    /**
      * Get Jobs
      */
     getJobs(callback, isPublic) {
