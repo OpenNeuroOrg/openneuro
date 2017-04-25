@@ -5,6 +5,8 @@ import scitran from '../libs/scitran';
 import mongo         from '../libs/mongo';
 import {ObjectID}    from 'mongodb';
 
+import notifications from '../libs/notifications';
+
 let c = mongo.collections;
 
 // handlers ----------------------------------------------------------------
@@ -71,6 +73,9 @@ let handlers = {
         job.analysis = {
             status: 'PENDING'
         };
+        //making consistent with agave ??
+        job.appLabel = job.jobName;
+        job.appVersion = job.jobDefinition.match(/\d+$/)[0];
 
         c.crn.jobs.insertOne(job, (err, mongoJob) => {
             scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
@@ -92,6 +97,7 @@ let handlers = {
             //update mongo job with aws batch job id?
             c.crn.jobs.updateOne({_id: jobId}, {
                 $set:{
+                    // jobId: data.jobId,
                     analysis:{
                         analysisId: data.jobId,
                         status: 'PENDING', //setting status to pending as soon as job submissions is successful
@@ -113,9 +119,10 @@ let handlers = {
 
         c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
             let status = job.analysis.status;
-            let analysisId = job.analysis.analysisId; //there could be a scenario where we are polling before the AWS batch job has been setup.  Need to handle this.
+            let analysisId = job.analysis.analysisId;
             // check if job is already known to be completed
-            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED') {
+            // there could be a scenario where we are polling before the AWS batch job has been setup. !analysisId check handles this.
+            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || !analysisId) {
                 res.send(job);
             } else {
                 let params = {
@@ -125,11 +132,24 @@ let handlers = {
                     let analysis = resp.jobs[0];
                     // check status
                     if(analysis.status === 'SUCCEEDED' || analysis.status === 'FAILED'){
-                        c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
-                            $set:{
-                                'analysis.status': analysis.status,
-                                results: [1]
-                            }
+                        let params = {
+                            Bucket: 'openneuro.outputs',
+                            Prefix: '24fd3a7f24ce267eb488ec5afe5c98c1'
+                        };
+                        aws.s3.sdk.listObjectsV2(params, (err, data) => {
+                            let results = [];
+                            data.Contents.forEach((obj) => {
+                                let result = {};
+                                result.name = obj.Key;
+                                result.path = params.Bucket + '/' + obj.Key;
+                                results.push(result);
+                            });
+                            c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
+                                $set:{
+                                    'analysis.status': analysis.status,
+                                    results: results
+                                }
+                            });
                         });
                     }
                     res.send({
@@ -138,6 +158,8 @@ let handlers = {
                         datasetId: job.datasetId,
                         snapshotId: job.snapshotId
                     });
+
+                    // notifications.jobComplete(job);
 
                     // if (resp.body.status === 'error' && resp.body.message.indexOf('No job found with job id') > -1) {
                     //     job.agave.status = 'FAILED';
