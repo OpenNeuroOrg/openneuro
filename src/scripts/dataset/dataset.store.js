@@ -876,12 +876,12 @@ let datasetStore = Reflux.createStore({
                 files.sortTree(job.logs);
 
                 // check if job should be polled
-                let status     = job.agave.status;
+                let status     = job.analysis ? job.analysis.status : "PENDING";
                 let failed     = status === 'FAILED';
-                let finished   = status === 'FINISHED';
+                let finished   = status === 'SUCCEEDED';
                 let hasResults = job.results && job.results.length > 0;
                 if (snapshot && (!finished && !failed || finished && !hasResults)) {
-                    this.pollJob(job.jobId, projectId);
+                    this.pollJob(job._id, projectId);
                 }
 
                 if (job.jobId === jobId) {
@@ -952,11 +952,12 @@ let datasetStore = Reflux.createStore({
         let poll = (jobId) => {
             if (this.data.dataset && this.data.dataset._id === snapshotId) {
                 this.refreshJob(jobId, (job) => {
-                    let status = job.agave.status;
-                    let finished = status === 'FINISHED';
+                    let status = job.analysis ? job.analysis.status : 'PENDING';
+                    let finished = status === 'SUCCEEDED';
                     let failed = status === 'FAILED';
                     let hasResults = job.results && job.results.length > 0;
                     let needsUpdate = (!finished && !failed) || (finished && !hasResults);
+
                     if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
                         setTimeout(poll.bind(this, jobId), interval);
                     }
@@ -980,11 +981,12 @@ let datasetStore = Reflux.createStore({
             snapshotId:    snapshotId,
             userId:        userStore.data.scitran._id
         }, (err, res) => {
-            callback(err, res);
+            
             if (!err) {
                 // reload jobs
                 if (snapshotId == this.data.dataset._id) {
-                    let jobId = res.body.result.id;
+                    // let jobId = res.body.result.id;
+                    let jobId = res.body.jobId;
                     this.loadJobs(snapshotId, this.data.snapshot, datasetId, {job: jobId}, (jobs) => {
                         this.loadSnapshots(this.data.dataset, jobs);
 
@@ -996,6 +998,7 @@ let datasetStore = Reflux.createStore({
                     });
                 }
             }
+            callback(err, res);
         });
     },
 
@@ -1009,10 +1012,10 @@ let datasetStore = Reflux.createStore({
                     for (let job of jobs) {
                         for (let version of job.versions) {
                             for (let run of version.runs) {
-                                if (jobId === run.jobId) {
+                                if (jobId === run._id) {
                                     existingJob = run;
                                     if (jobUpdate) {
-                                        run.agave   = jobUpdate.agave;
+                                        run.analysis   = jobUpdate.analysis;
                                         run.results = jobUpdate.results;
                                         run.logs    = jobUpdate.logs;
                                     }
