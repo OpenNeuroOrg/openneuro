@@ -145,7 +145,7 @@ const routes = [
         middleware: [
             auth.datasetAccess()
         ],
-        handler: jobs.getJob
+        handler: awsJobs.getJob
     },
     {
         method: 'post',
