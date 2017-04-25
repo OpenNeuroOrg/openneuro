@@ -265,16 +265,14 @@ let UserStore = Reflux.createStore({
         // Container is the only supported type by AWS Batch API as of now.
         jobDefinition.type = 'container';
 
-        // Setup default environment including implicit parameters
-        jobDefinition.environment = {
-            BIDS_CONTAINER: formData.containerImage,
-        }
-
         jobDefinition.containerProperties = {
             image: formData.hostImage,
             command: !!formData.command.length ? formData.command.split(' ') : [],
             memory: parseInt(formData.memory),
-            vcpus: parseInt(formData.vcpus)
+            vcpus: parseInt(formData.vcpus),
+            environment: [
+                {name: 'BIDS_CONTAINER', value: formData.containerImage}
+            ]
         }
 
         if (formData.parameters) {
