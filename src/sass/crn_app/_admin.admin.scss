@@ -35,6 +35,26 @@
         }
     }
 
+    &.job-definitions {
+        h2 {
+            float: left;
+        }
+
+        .admin-jobs .btn-blue {
+            float: right;
+            width: 100px;
+            padding: 10px;
+            font-size: 12px;
+            margin: 20px 10px 0;
+        }
+
+        .no-results {
+            border-top: 1px solid $eee;
+            padding: 10px 15px;
+            margin: 0 -15px;
+        }
+    }
+
     .add-user {
         padding-left: 0;
     }
