@@ -26,7 +26,8 @@ const CreateJob = React.createClass({
                 <Modal.Body>
                     <div>
                         <Input placeholder="Job Definition Name"     value={definition.name}           name={'name'}           onChange={this._inputChange} disabled={!!definition.edit}/>
-                        <Input placeholder="Bids Container"         value={definition.containerImage}  name={'containerImage'} onChange={this._inputChange} />
+                        <Input placeholder="Bids Container"          value={definition.containerImage} name={'containerImage'} onChange={this._inputChange} />
+                        <Input placeholder="Host Container"          value={definition.hostImage}      name={'hostImage'}      onChange={this._inputChange} />
                         <Input placeholder="vCPUs"                   value={definition.vcpus}          name={'vcpus'}          onChange={this._inputChange} />
                         <Input placeholder="Memory (MiB)"            value={definition.memory}         name={'memory'}         onChange={this._inputChange} />
                         <div className="form-group">

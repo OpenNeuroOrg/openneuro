@@ -4,6 +4,7 @@ import Reflux    from 'reflux';
 import Actions   from './admin.actions.js';
 import scitran   from '../utils/scitran';
 import crn       from '../utils/crn';
+import batch     from '../utils/batch';
 
 let UserStore = Reflux.createStore({
 
@@ -57,6 +58,7 @@ let UserStore = Reflux.createStore({
                 name: '',
                 jobRoleArn: '',
                 containerImage: '',
+                hostImage: '',
                 command: '',
                 vcpus: '1',
                 memory: '2000',
@@ -310,7 +312,8 @@ let UserStore = Reflux.createStore({
         jobDefinitionForm.edit = true;
         jobDefinitionForm.name = jobDefinition.jobDefinitionName;
         jobDefinitionForm.jobRoleArn = jobDefinition.jobDefinitionArn;
-        jobDefinitionForm.containerImage = jobDefinition.containerProperties.image;
+        jobDefinitionForm.containerImage = batch.getBidsContainer(jobDefinition);
+        jobDefinitionForm.hostImage = jobDefinition.containerProperties.image;
         jobDefinitionForm.command = jobDefinition.containerProperties.command.join(' ');
         jobDefinitionForm.vcpus = jobDefinition.containerProperties.vcpus.toString(); //form is expecting string
         jobDefinitionForm.memory = jobDefinition.containerProperties.memory.toString(); //form is expecting string
@@ -329,6 +332,7 @@ let UserStore = Reflux.createStore({
             name: '',
             jobRoleArn: '',
             containerImage: '',
+            hostImage: '',
             command: '',
             vcpus: '1',
             memory: '2000',
