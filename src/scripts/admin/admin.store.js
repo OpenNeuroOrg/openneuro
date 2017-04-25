@@ -283,18 +283,24 @@ let UserStore = Reflux.createStore({
         });
     },
 
-    disableJobDefinition (name, jobArn) {
+    disableJobDefinition (jobDefinition, callback) {
+        let name = jobDefinition.jobDefinitionName;
+        let jobArn = jobDefinition.jobDefinitionArn;
         crn.disableJobDefinition(name, jobArn, (err, data) => {
-            //TODO Update job list 
+            //TODO Update job list
             console.log(data);
             console.log('Job disabled');
+            if(callback){
+                callback();
+            }
         });
     },
 
     /**
     * Setup job definition form for editing
     */
-    editJobDefinition (jobDefinition) {
+    editJobDefinition (jobDefinition, callback) {
+        this.toggleModal('defineJob');
         let jobDefinitionForm = this.data.jobDefinitionForm;
         jobDefinitionForm.edit = true;
         jobDefinitionForm.name = jobDefinition.jobDefinitionName;
@@ -305,6 +311,9 @@ let UserStore = Reflux.createStore({
         jobDefinitionForm.memory = jobDefinition.containerProperties.memory.toString(); //form is expecting string
         jobDefinitionForm.parameters = Array.isArray(jobDefinition.parameters) ? jobDefinition.parameters : []; // needs to be an array of key value pairs
         this.update({jobDefinitionForm});
+        if(callback){
+            callback();
+        }
     },
 
     /**
@@ -322,7 +331,7 @@ let UserStore = Reflux.createStore({
             edit: false
         };
 
-        this.update({jobDefinitionForm});    
+        this.update({jobDefinitionForm});
     },
 
     /**

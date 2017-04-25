@@ -35,9 +35,20 @@ let Jobs = React.createClass({
                     <div className="col-xs-2 job-col">
                         <div>{app.status}</div>
                     </div>
-                    <div className="col-xs-2 job-col">
-                        <div onClick={this._editJob(app)}><i className="fa fa-pencil"> EDIT</i></div>
-                        <div onClick={this._disableJob(app)}><i className="fa fa-trash"> DISABLE</i></div>
+                    <div className="col-xs-2 last dataset-tools-wrap-admin">
+                    <div className="tools clearfix">
+                        <div className="tool">
+                            <WarnButton message="Edit"
+                                icon='fa-pencil'
+                                warn={false}
+                                action={actions.editJobDefinition.bind(this, app)} />
+                        </div>
+                        <div className="tool">
+                            <WarnButton message="Disable"
+                                icon='fa-ban'
+                                action={actions.disableJobDefinition.bind(this, app)} />
+                        </div>
+                    </div>
                     </div>
                 </div>
             );
@@ -66,21 +77,6 @@ let Jobs = React.createClass({
                     edit={this.state.jobDefinitionForm.edit}/>
             </div>
         );
-    },
-
-    _editJob(app) {
-        return () => {
-            actions.editJobDefinition(app);
-            actions.toggleModal('defineJob');
-        }
-    },
-
-    _disableJob(app) {
-        let arn = app.jobDefinitionArn;
-        let name = app.jobDefinitionName
-        return () => {
-            actions.disableJobDefinition(name, arn);
-        }
     }
 
 });
