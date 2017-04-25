@@ -20,5 +20,10 @@ export default  {
                 return apps;
             }
         }, []);
+    },
+
+    /* Search BIDS App job def for the environment container */
+    getBidsContainer(app) {
+        return app.containerProperties.environment.find(envProp => envProp.name === 'BIDS_CONTAINER').value;
     }
 }
