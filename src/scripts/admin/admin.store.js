@@ -271,7 +271,7 @@ let UserStore = Reflux.createStore({
         }
 
         jobDefinition.containerProperties = {
-            image: config.bids.hostContainerImage,
+            image: formData.hostImage,
             command: !!formData.command.length ? formData.command.split(' ') : [],
             memory: parseInt(formData.memory),
             vcpus: parseInt(formData.vcpus)
