@@ -51,6 +51,27 @@ const definition = {
                 vcpus: {
                     type: 'integer',
                     minimum: 1
+                },
+                environment: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            name: {
+                                type: 'string'
+                            },
+                            value: {
+                                type: 'string'
+                            }
+                        },
+                        required: [
+                            'name',
+                            'value'
+                        ],
+                        additionalItems: false,
+                        uniqueItems: true
+                    },
+                    minItems: 0
                 }
             },
             required: [
