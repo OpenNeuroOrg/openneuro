@@ -5,8 +5,6 @@ import scitran from '../libs/scitran';
 import mongo         from '../libs/mongo';
 import {ObjectID}    from 'mongodb';
 
-import notifications from '../libs/notifications';
-
 let c = mongo.collections;
 
 // handlers ----------------------------------------------------------------
@@ -117,7 +115,7 @@ let handlers = {
                         analysisId: data.jobId,
                         status: 'PENDING', //setting status to pending as soon as job submissions is successful
                         attempts: 1
-                    }, 
+                    },
                     uploadSnapshotComplete: true
                 }
             }, () => {
