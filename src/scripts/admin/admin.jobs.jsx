@@ -7,6 +7,7 @@ import actions    from './admin.actions';
 import datasetStore from '../dataset/dataset.store';
 import WarnButton from '../common/forms/warn-button.jsx';
 import DefineJobModal       from './admin.create-job.modal.jsx';
+import batch from '../utils/batch.js';
 
 let Jobs = React.createClass({
 
@@ -16,21 +17,19 @@ let Jobs = React.createClass({
 
     render() {
         let noJobs = <div className="no-results">There are no jobs defined.</div>;
-        let jobs = Object.keys(this.state.datasets.apps).map((key, index) => {
-            let appVersions = this.state.datasets.apps[key];
-            let app = appVersions[Math.max(...Object.keys(appVersions))];
+        let jobs = batch.filterJobDefinitions(this.state.datasets.apps).map((app, index) => {
+            let bidsContainer = batch.getBidsContainer(app);
             return (
-                <div className="fade-in job-panel clearfix" key={key}>
+                <div className="fade-in job-panel clearfix" key={app.jobDefinitionName}>
                     <div className="col-xs-5 job-col">
                         <h3>
                             <div className="job-name">
-                                <span>{app.jobDefinitionName}</span>:
-                                <span>{app.revision}</span>
+                                <span>{app.jobDefinitionName}</span>
                             </div>
                         </h3>
                     </div>
                     <div className="col-xs-3 job-col">
-                        <div>{app.containerProperties.image}</div>
+                        <div>{bidsContainer}</div>
                     </div>
                     <div className="col-xs-2 job-col">
                         <div>{app.status}</div>
