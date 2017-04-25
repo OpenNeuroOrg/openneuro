@@ -68,7 +68,6 @@ class JobAccordion extends React.Component {
 
     _results(run, type) {
         if (run[type] && run[type].length > 0) {
-
             return (
                 <Accordion accordion className="results">
                     <Panel className="fade-in" header={type} key={run._id} eventKey={run._id}>
@@ -82,13 +81,13 @@ class JobAccordion extends React.Component {
                             <div className="panel panel-default">
                                 <div className="panel-collapse" aria-expanded="false" >
                                     <div className="panel-body">
-                                        {/*<FileTree
+                                        <FileTree
                                             tree={run[type]}
                                             treeId={run._id}
                                             editable={false}
                                             getFileDownloadTicket={actions.getResultDownloadTicket.bind(this, run.snapshotId, run.jobId)}
                                             displayFile={this.props.displayFile.bind(this, run.snapshotId, run.jobId)}
-                                            toggleFolder={this.props.toggleFolder} />*/}
+                                            toggleFolder={this.props.toggleFolder} />
                                    </div>
                                 </div>
                             </div>
@@ -121,7 +120,7 @@ class JobAccordion extends React.Component {
     }
 
     _status(status) {
-        if (status === 'FINISHED' || status === 'FAILED') {
+        if (status === 'SUCCEEDED' || status === 'FAILED') {
             return status;
         } else {
             return (

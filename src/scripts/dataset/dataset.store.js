@@ -957,6 +957,7 @@ let datasetStore = Reflux.createStore({
                     let failed = status === 'FAILED';
                     let hasResults = job.results && job.results.length > 0;
                     let needsUpdate = (!finished && !failed) || (finished && !hasResults);
+
                     if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
                         setTimeout(poll.bind(this, jobId), interval);
                     }
@@ -986,8 +987,6 @@ let datasetStore = Reflux.createStore({
                 if (snapshotId == this.data.dataset._id) {
                     // let jobId = res.body.result.id;
                     let jobId = res.body.jobId;
-                    console.log(res.body);
-                    console.log(jobId);
                     this.loadJobs(snapshotId, this.data.snapshot, datasetId, {job: jobId}, (jobs) => {
                         this.loadSnapshots(this.data.dataset, jobs);
 
@@ -1013,10 +1012,10 @@ let datasetStore = Reflux.createStore({
                     for (let job of jobs) {
                         for (let version of job.versions) {
                             for (let run of version.runs) {
-                                if (jobId === run.jobId) {
+                                if (jobId === run._id) {
                                     existingJob = run;
                                     if (jobUpdate) {
-                                        run.agave   = jobUpdate.agave;
+                                        run.analysis   = jobUpdate.analysis;
                                         run.results = jobUpdate.results;
                                         run.logs    = jobUpdate.logs;
                                     }
