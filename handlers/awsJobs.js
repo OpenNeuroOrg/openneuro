@@ -99,10 +99,9 @@ let handlers = {
             job.datasetHash = hash;
             job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
 
-            // Since AWS job def labels have to be unique strings, use that instead of an appId
-            // TODO - Also select on job definition version
+            // jobDefintion is the full ARN including version, region, etc
             c.crn.jobs.findOne({
-                appLabel:       job.appLabel,
+                jobDefinition:  job.jobDefintion,
                 datasetHash:    job.datasetHash,
                 parametersHash: job.parametersHash,
                 snapshotId:     job.snapshotId
