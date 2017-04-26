@@ -1,11 +1,89 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
+import mongo from '../../libs/mongo';
+import async from 'async';
 
+let c = mongo.collections;
 
 export default (aws) => {
 
     const batch = new aws.Batch();
 
     return {
-        sdk: batch
+        sdk: batch,
+
+        /**
+         * Start AWS Batch Job
+         * starts an aws batch job
+         * returns no return. Batch job start is happening after response has been send to client
+         */
+        startBatchJob(params, jobId) {
+            //check for subject list and make decision regarding job execution (i.e. one job or multiple, parallel jobs)
+
+            if(params.subjectList) {
+                this.submitParallelJobs(params, (err, data) => {
+                    // need to handle error
+                    this._updateJobOnSubmitSuccessful(jobId, data);
+                });
+            } else {
+                this.submitSingleJob(params, (err, data) => {
+                    // need to handle error
+                    this._updateJobOnSubmitSuccessful(jobId, data);
+                });
+            }
+        },
+
+        /**
+         * Update mongo job on successful job submission to AWS Batch.
+         * returns no return. Batch job start is happening after response has been send to client
+         */
+        _updateJobOnSubmitSuccessful(jobId, batchIds) {
+            c.crn.jobs.updateOne({_id: jobId}, {
+                $set:{
+                    'analysis.status': 'PENDING', //setting status to pending as soon as job submissions is successful
+                    'analysis.attempts': 1,
+                    'analysis.jobs': batchIds, // Should be an array of AWS ids for each AWS batch job
+                    uploadSnapshotComplete: true
+                }
+            }, () => {
+            //error handling???
+            });
+        },
+
+        /**
+         * Submit parallel jobs to AWS batch
+         * for jobs with a subjectList parameter, we want to start all those jobs in parallel
+         * submits all jobs in parallel and callsback with an array of the AWS batch ids for all the jobs
+         */
+        submitParallelJobs(jobParams, callback) {
+            let job = (params, callback) => {
+                batch.submitJob(params, (err, data) => {
+                    if(err) {callback(err);}
+                    //pass the AWS batch job ID
+                    let jobId = data.jobId;
+                    callback(null, jobId);
+                });
+            };
+
+            let jobs = [];
+
+            jobParams.subjectList.forEach((subject) => {
+                let subjectParams = jobParams; //need to figure out how to make params specific to a subject. specifically env var overrides
+                subject;
+                jobs.push(job.bind(this, subjectParams));
+            });
+            async.parallel(jobs, callback);
+        },
+
+        /**
+         * Submits a single job to AWS Batch
+         * for jobs without a subjectList parameter we are running all subjects in one job.
+         * callsback with a single element array containing the AWS batch ID.
+         */
+        submitSingleJob(params, callback) {
+            batch.submitJob(params, (err, data) => {
+                if(err) {callback(err);}
+                callback(null, [data.jobId]); //storing jobId's as array in mongo to support multi job analysis
+            });
+        }
     };
 };

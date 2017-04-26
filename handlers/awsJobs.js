@@ -6,7 +6,6 @@ import crypto  from 'crypto';
 import uuid    from 'uuid';
 import mongo         from '../libs/mongo';
 import {ObjectID}    from 'mongodb';
-import async    from 'async';
 
 let c = mongo.collections;
 
@@ -133,87 +132,11 @@ let handlers = {
 
                     // TODO - handle situation where upload to S3 fails
                     aws.s3.uploadSnapshot(hash, () => {
-                        handlers.startBatchJob(batchJobParams, mongoJob.insertedId);
+                        aws.batch.startBatchJob(batchJobParams, mongoJob.insertedId);
                     });
                 });
             });
         }, {snapshot: true});
-    },
-
-    /**
-     * Start AWS Batch Job
-     * starts an aws batch job
-     * returns no return. Batch job start is happening after response has been send to client
-     */
-    startBatchJob(params, jobId) {
-        //check for subject list and make decision regarding job execution (i.e. one job or multiple, parallel jobs)
-
-        if(params.subjectList) {
-            handlers.submitParallelJobs(params, (err, data) => {
-                // need to handle error
-                handlers.updateJobOnSubmitSuccessful(jobId, data);
-            });
-        } else {
-            handlers.submitSingleJob(params, (err, data) => {
-                // need to handle error
-                handlers.updateJobOnSubmitSuccessful(jobId, data);
-            });
-        }
-    },
-
-    /**
-     * Update mongo job on successful job submission to AWS Batch.
-     * returns no return. Batch job start is happening after response has been send to client
-     */
-    updateJobOnSubmitSuccessful(jobId, batchIds) {
-        c.crn.jobs.updateOne({_id: jobId}, {
-            $set:{
-                analysis:{
-                    status: 'PENDING', //setting status to pending as soon as job submissions is successful
-                    attempts: 1,
-                    jobs: batchIds // Should be an array of AWS ids for each AWS batch job
-                },
-                uploadSnapshotComplete: true
-            }
-        }, () => {
-        //error handling???
-        });
-    },
-
-    /**
-     * Submit parallel jobs to AWS batch
-     * for jobs with a subjectList parameter, we want to start all those jobs in parallel
-     * submits all jobs in parallel and callsback with an array of the AWS batch ids for all the jobs
-     */
-    submitParallelJobs(jobParams, callback) {
-        let job = (params, cb) => {
-            aws.batch.sdk.submitJob(params, (err, data) => {
-                if(err) {cb(err);}
-                //pass the AWS bactch job ID
-                let jobId = data.jobId;
-                cb(null, jobId);
-            });
-        };
-
-        let jobs = [];
-
-        jobParams.subjectList.forEach((subject) => {
-            let subjectParams = jobParams; //need to figure out how to make params specific to a subject. specifically env var overrides
-            jobs.push(job.bind(this, subjectParams));
-        });
-        async.parallel(jobs, callback);
-    },
-
-    /**
-     * Submits a single job to AWS Batch
-     * for jobs without a subjectList parameter we are running all subjects in one job.
-     * callsback with a single element array containing the AWS batch ID.
-     */
-    submitSingleJob(params, callback) {
-        aws.batch.sdk.submitJob(params, (err, data) => {
-            if(err) {cb(err);}
-            callback(null, [data.jobId]); //storing jobId's as array in mongo to support multi job analysis
-        });
     },
 
     /**
@@ -226,9 +149,9 @@ let handlers = {
             let status = job.analysis.status;
             let analysisId = job.analysis.analysisId;
             let jobs = job.analysis.jobs;
-            let totalJobs = jobs.length; //total number of jobs in the analysis
+            //let totalJobs = jobs.length; //total number of jobs in the analysis
             // check if job is already known to be completed
-            // there could be a scenario where we are polling before the AWS batch job has been setup. !analysisId check handles this.
+            // there could be a scenario where we are polling before the AWS batch job has been setup. !jobs check handles this.
             if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || !jobs) {
                 res.send(job);
             } else {
@@ -245,11 +168,11 @@ let handlers = {
                         return status === 'SUCCEEDED' || status === 'FAILED';
                     });
 
-                    analysis.status = !finished ? "RUNNING" : "COMPLETING";
+                    analysis.status = !finished ? 'RUNNING' : 'COMPLETING';
                     // check status
                     if(finished){
                         //Check if any jobs failed, if so analysis failed, else succeeded
-                        let finalStatus = statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : "SUCCEEDED";
+                        let finalStatus = statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
                         let params = {
                             Bucket: 'openneuro.outputs',
                             Prefix: '24fd3a7f24ce267eb488ec5afe5c98c1' || job.snapshotId
