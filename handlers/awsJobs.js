@@ -114,7 +114,8 @@ let handlers = {
                     analysis:{
                         analysisId: data.jobId,
                         status: 'PENDING', //setting status to pending as soon as job submissions is successful
-                        attempts: 1
+                        attempts: 1,
+                        created: new Date()
                     },
                     uploadSnapshotComplete: true
                 }
