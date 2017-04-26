@@ -219,6 +219,17 @@ let handlers = {
                 });
             }
         });
+    },
+
+    /**
+     * Retry a job using existing parameters
+     */
+    retry (req, res, next) {
+        // let jobId = req.params.jobId;
+        // TODO - This is a stub for testing - need to resubmit using the same CRN job data but a new AWS Batch job
+        let error = new Error('Retry is not yet supported.');
+        error.http_code = 409;
+        return next(error);
     }
 
 };
