@@ -12,6 +12,7 @@ import scitran     from '../../../utils/scitran';
 import Results     from '../../../upload/upload.validation-results.jsx';
 import Description from './description.jsx';
 import Parameters  from './parameters.jsx';
+import batch       from '../../../utils/batch';
 
 export default class JobMenu extends React.Component {
 
@@ -136,7 +137,10 @@ export default class JobMenu extends React.Component {
         const apps = this.props.apps;
         const selectedApp = this.state.selectedAppKey;
 
-        const appOptions = Object.keys(apps).map((jobDefinitionName, index) => {
+        let validatedApps = batch.filterJobDefinitions(apps).map((app) => {
+            return app.jobDefinitionName;
+        });
+        const appOptions = validatedApps.map((jobDefinitionName, index) => {
             return <option key={index} value={jobDefinitionName}> {jobDefinitionName} </option>;
         });
 
