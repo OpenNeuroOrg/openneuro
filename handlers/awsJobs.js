@@ -118,7 +118,7 @@ let handlers = {
                     return;
                 }
 
-                c.crn.jobs.insertOne(job, (err, mongoJob) => {
+                c.crn.jobs.insertOne(job, () => {
 
                     // Finish the client request so S3 upload can happen async
                     res.send({jobId: job.analysis.analysisId});
