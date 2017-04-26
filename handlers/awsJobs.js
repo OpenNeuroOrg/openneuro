@@ -74,7 +74,7 @@ let handlers = {
      * Inserts a job document into mongo and starts snapshot upload
      * returns job to client
      */
-    submitJob(req, res) {
+    submitJob(req, res, next) {
         let job = req.body;
 
         const batchJobParams = {
@@ -86,20 +86,50 @@ let handlers = {
 
         job.uploadSnapshotComplete = !!job.uploadSnapshotComplete;
         job.analysis = {
-            status: 'PENDING'
+            analysisId: uuid.v4(),
+            status: 'UPLOADING',
+            created: new Date(),
+            attempts: 0
         };
         //making consistent with agave ??
         job.appLabel = job.jobName;
         job.appVersion = job.jobDefinition.match(/\d+$/)[0];
 
-        c.crn.jobs.insertOne(job, (err, mongoJob) => {
-            scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
-                aws.s3.uploadSnapshot(hash, () => {
-                    handlers.startBatchJob(batchJobParams, mongoJob.insertedId);
+        scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
+            job.datasetHash = hash;
+            job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
+
+            c.crn.jobs.findOne({
+                appLabel:       job.appLabel,
+                datasetHash:    job.datasetHash,
+                parametersHash: job.parametersHash,
+                snapshotId:     job.snapshotId
+            }, {}, (err, existingJob) => {
+                if (err){return next(err);}
+                if (existingJob) {
+                    // allow retrying failed jobs
+                    if (existingJob.analysis && existingJob.analysis.status === 'FAILED') {
+                        handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
+                        return;
+                    }
+                    let error = new Error('A job with the same dataset and parameters has already been run.');
+                    error.http_code = 409;
+                    res.status(409).send({message: 'A job with the same dataset and parameters has already been run.'});
+                    return;
+                }
+
+                c.crn.jobs.insertOne(job, (err, mongoJob) => {
+
+                    // Finish the client request so S3 upload can happen async
+                    res.send({jobId: job.analysis.analysisId});
+
+                    // TODO - handle situation where upload to S3 fails
+                    aws.s3.uploadSnapshot(hash, () => {
+                        handlers.startBatchJob(batchJobParams, job.analysis.analysisId);
+                    });
                 });
-            }, {snapshot: true});
-            res.send({jobId: mongoJob.insertedId});
-        });
+            });
+        }, {snapshot: true});
     },
 
     /**
@@ -114,10 +144,9 @@ let handlers = {
                 $set:{
                     // jobId: data.jobId,
                     analysis:{
-                        analysisId: data.jobId,
                         status: 'PENDING', //setting status to pending as soon as job submissions is successful
                         attempts: 1,
-                        created: new Date()
+                        jobs: data.jobId
                     },
                     uploadSnapshotComplete: true
                 }
