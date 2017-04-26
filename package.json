@@ -32,7 +32,8 @@
     "nodemailer": "^2.5.0",
     "request": "^2.63.0",
     "tar-fs": "^1.9.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
     "eslint": "2.7.0",

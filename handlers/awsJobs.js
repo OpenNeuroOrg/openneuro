@@ -2,6 +2,8 @@
 
 import aws     from '../libs/aws';
 import scitran from '../libs/scitran';
+import crypto  from 'crypto';
+import uuid    from 'uuid';
 import mongo         from '../libs/mongo';
 import {ObjectID}    from 'mongodb';
 
