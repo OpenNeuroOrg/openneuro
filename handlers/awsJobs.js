@@ -78,9 +78,9 @@ let handlers = {
         const batchJobParams = {
             jobDefinition: job.jobDefinition,
             jobName:       job.jobName,
+            jobQueue:      'bids-queue',
             parameters:    job.parameters
         };
-        batchJobParams.jobQueue = 'bids-queue';
 
         job.uploadSnapshotComplete = !!job.uploadSnapshotComplete;
         job.analysis = {
