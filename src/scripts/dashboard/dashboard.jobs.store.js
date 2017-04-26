@@ -52,13 +52,13 @@ let DashboardJobStore = Reflux.createStore({
                 version: null
             },
             sort: {
-                value: 'agave.created',
+                value: 'analysis.created',
                 direction: '+',
                 isTimestamp: true
             },
             sortOptions: [
                 {label: 'Name', property: 'datasetLabel'},
-                {label: 'Date', property: 'agave.created', isTimestamp: true}
+                {label: 'Date', property: 'analysis.created', isTimestamp: true}
             ],
             appVersionGroup: []
         };
@@ -83,7 +83,7 @@ let DashboardJobStore = Reflux.createStore({
             crn.getJobs((err, res) => {
                 for (let app of res.body.availableApps) {app.value = app.label;}
                 this.update({apps: res.body.availableApps, appsLoading: false});
-                this.sort('agave.created', '+', res.body.jobs, true);
+                this.sort('analysis.created', '+', res.body.jobs, true);
             }, isPublic, isSignedOut);
         });
     },
