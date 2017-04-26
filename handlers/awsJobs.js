@@ -147,25 +147,41 @@ let handlers = {
      */
     startBatchJob(params, jobId) {
         //check for subject list and make decision regarding job execution (i.e. one job or multiple, parallel jobs)
-        aws.batch.sdk.submitJob(params, (err, data) => {
-            //update mongo job with aws batch job id?
-            c.crn.jobs.updateOne({_id: jobId}, {
-                $set:{
-                    // jobId: data.jobId,
-                    'analysis.status': 'PENDING', //setting status to pending as soon as job submissions is successful
-                    'analysis.attempts': 1,
-                    'analysis.jobs': data.jobId, // Should be an array of AWS ids for each AWS batch job
-                    uploadSnapshotComplete: true
-                }
-            }, () => {
-            //error handling???
+
+        if(params.subjectList) {
+            handlers.submitParallelJobs(params, (err, data) => {
+                handlers.updateJobOnSubmitSuccessful(jobId, data);
             });
+        } else {
+            handlers.submitSingleJob(params, (err, data) => {
+                handlers.updateJobOnSubmitSuccessful(jobId, data);
+            });
+        }
+    },
+
+    updateJobOnSubmitSuccessful(jobId, batchIds) {
+        c.crn.jobs.updateOne({_id: jobId}, {
+            $set:{
+                analysis:{
+                    status: 'PENDING', //setting status to pending as soon as job submissions is successful
+                    attempts: 1,
+                    jobs: batchIds // Should be an array of AWS ids for each AWS batch job
+                },
+                uploadSnapshotComplete: true
+            }
+        }, () => {
+        //error handling???
         });
     },
 
     submitParallelJobs(jobParams, callback) {
         let job = (params, cb) => {
-            aws.batch.sdk.submitJob(params, cb)
+            aws.batch.sdk.submitJob(params, (err, data) => {
+                if(err) {cb(err);}
+                //pass the AWS bactch job ID
+                let jobId = data.jobId;
+                cb(null, jobId);
+            });
         };
 
         let jobs = [];
@@ -178,7 +194,10 @@ let handlers = {
     },
 
     submitSingleJob(params, callback) {
-        aws.batch.sdk.submitJob(params, callback);
+        aws.batch.sdk.submitJob(params, (err, data) => {
+            if(err) {cb(err);}
+            callback(null, [data.jobId]); //storing jobId's as array in mongo to support multi job analysis
+        });
     },
 
         /**
@@ -189,14 +208,15 @@ let handlers = {
 
         c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
             let status = job.analysis.status;
-            let batchJobId = job.analysis.jobs;
+            let analysisId = job.analysis.analysisId;
+            let jobs = job.analysis.jobs;
             // check if job is already known to be completed
-            // there could be a scenario where we are polling before the AWS batch job has been setup. !jobId check handles this.
-            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || !batchJobId) {
+            // there could be a scenario where we are polling before the AWS batch job has been setup. !analysisId check handles this.
+            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || !jobs) {
                 res.send(job);
             } else {
                 let params = {
-                    jobs: [batchJobId]
+                    jobs: jobs
                 };
                 aws.batch.sdk.describeJobs(params, (err, resp) => {
                     let analysis = resp.jobs[0];
