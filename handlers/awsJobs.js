@@ -122,7 +122,7 @@ let handlers = {
                 c.crn.jobs.insertOne(job, (err, mongoJob) => {
 
                     // Finish the client request so S3 upload can happen async
-                    res.send({analysisId: job.analysis.analysisId});
+                    res.send({jobId: mongoJob.insertedId});
 
                     // TODO - handle situation where upload to S3 fails
                     aws.s3.uploadSnapshot(hash, () => {
@@ -144,11 +144,9 @@ let handlers = {
             c.crn.jobs.updateOne({_id: jobId}, {
                 $set:{
                     // jobId: data.jobId,
-                    analysis:{
-                        status: 'PENDING', //setting status to pending as soon as job submissions is successful
-                        attempts: 1,
-                        jobs: data.jobId // Should be an array of AWS ids for each AWS batch job
-                    },
+                    'analysis.status': 'PENDING', //setting status to pending as soon as job submissions is successful
+                    'analysis.attempts': 1,
+                    'analysis.jobs': data.jobId, // Should be an array of AWS ids for each AWS batch job
                     uploadSnapshotComplete: true
                 }
             }, () => {
@@ -165,14 +163,14 @@ let handlers = {
 
         c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
             let status = job.analysis.status;
-            let analysisId = job.analysis.analysisId;
+            let batchJobId = job.analysis.jobs;
             // check if job is already known to be completed
-            // there could be a scenario where we are polling before the AWS batch job has been setup. !analysisId check handles this.
-            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || !analysisId) {
+            // there could be a scenario where we are polling before the AWS batch job has been setup. !jobId check handles this.
+            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || !batchJobId) {
                 res.send(job);
             } else {
                 let params = {
-                    jobs: [analysisId]
+                    jobs: [batchJobId]
                 };
                 aws.batch.sdk.describeJobs(params, (err, resp) => {
                     let analysis = resp.jobs[0];
