@@ -6,6 +6,7 @@ import crypto  from 'crypto';
 import uuid    from 'uuid';
 import mongo         from '../libs/mongo';
 import {ObjectID}    from 'mongodb';
+import async    from 'async';
 
 let c = mongo.collections;
 
@@ -145,7 +146,7 @@ let handlers = {
      * returns no return. Batch job start is happening after response has been send to client
      */
     startBatchJob(params, jobId) {
-        
+        //check for subject list and make decision regarding job execution (i.e. one job or multiple, parallel jobs)
         aws.batch.sdk.submitJob(params, (err, data) => {
             //update mongo job with aws batch job id?
             c.crn.jobs.updateOne({_id: jobId}, {
@@ -160,6 +161,24 @@ let handlers = {
             //error handling???
             });
         });
+    },
+
+    submitParallelJobs(jobParams, callback) {
+        let job = (params, cb) => {
+            aws.batch.sdk.submitJob(params, cb)
+        };
+
+        let jobs = [];
+
+        jobParams.subjectList.forEach((subject) => {
+            let subjectParams = jobParams; //need to figure out how to make params specific to a subject. specifically env var overrides
+            jobs.push(job.bind(this, subjectParams));
+        });
+        async.parallel(jobs, callback);
+    },
+
+    submitSingleJob(params, callback) {
+        aws.batch.sdk.submitJob(params, callback);
     },
 
         /**
