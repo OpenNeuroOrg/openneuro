@@ -99,6 +99,8 @@ let handlers = {
             job.datasetHash = hash;
             job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
 
+            // Since AWS job def labels have to be unique strings, use that instead of an appId
+            // TODO - Also select on job definition version
             c.crn.jobs.findOne({
                 appLabel:       job.appLabel,
                 datasetHash:    job.datasetHash,
@@ -118,14 +120,14 @@ let handlers = {
                     return;
                 }
 
-                c.crn.jobs.insertOne(job, () => {
+                c.crn.jobs.insertOne(job, (err, mongoJob) => {
 
                     // Finish the client request so S3 upload can happen async
-                    res.send({jobId: job.analysis.analysisId});
+                    res.send({analysisId: job.analysis.analysisId});
 
                     // TODO - handle situation where upload to S3 fails
                     aws.s3.uploadSnapshot(hash, () => {
-                        handlers.startBatchJob(batchJobParams, job.analysis.analysisId);
+                        handlers.startBatchJob(batchJobParams, mongoJob.insertedId);
                     });
                 });
             });
@@ -146,7 +148,7 @@ let handlers = {
                     analysis:{
                         status: 'PENDING', //setting status to pending as soon as job submissions is successful
                         attempts: 1,
-                        jobs: data.jobId
+                        jobs: data.jobId // Should be an array of AWS ids for each AWS batch job
                     },
                     uploadSnapshotComplete: true
                 }
