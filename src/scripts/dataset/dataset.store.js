@@ -981,7 +981,7 @@ let datasetStore = Reflux.createStore({
             snapshotId:    snapshotId,
             userId:        userStore.data.scitran._id
         }, (err, res) => {
-            
+
             if (!err) {
                 // reload jobs
                 if (snapshotId == this.data.dataset._id) {
@@ -1079,12 +1079,7 @@ let datasetStore = Reflux.createStore({
      */
     getResultDownloadTicket(snapshotId, jobId, file, callback) {
         let filePath = file === 'all' ? file : file.path;
-        crn.getResultDownloadTicket(snapshotId, jobId, filePath, (err, res) => {
-            let ticket      = res.body._id;
-            let fileName    = filePath.split('/')[filePath.split('/').length - 1];
-            let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
-            callback(downloadUrl);
-        }, {snapshot: true});
+        callback('https://s3.amazonaws.com/' + filePath);
     },
 
     /**
