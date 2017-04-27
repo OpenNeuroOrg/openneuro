@@ -1152,7 +1152,7 @@ let datasetStore = Reflux.createStore({
                     callback({error: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.'});
                 } else {
                     crn.createSnapshot(datasetId, (err, res) => {
-                        let snapshotId = bids.decodeId(res.body._id);
+                        let snapshotId = res.body._id;
                         this.toggleSidebar(true);
                         if (transition) {
                             router.transitionTo('snapshot', {datasetId: this.data.dataset.linkID, snapshotId: snapshotId});
