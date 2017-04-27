@@ -24,7 +24,8 @@ const goodConfig = {
             'region': 'us-east-1'
         },
         's3': {
-            'bucket': 'test-bucket',
+            'datasetBucket': 'test-bucket',
+            'analysisBucket': 'test-bucket2',
             'concurrency': 10,
             'timeout': 10 * 60 * 1000
         }

@@ -10,7 +10,7 @@ describe('schemas/config.js', () => {
             assert.ok(compiledSchema);
             let valid = schema.validateJson(compiledSchema, goodConfig);
             if (!valid) {
-                throw new Error(schema.getSchemaError(compiledSchema));
+                throw new Error(compiledSchema.errors);
             }
             assert.ok(valid);
         });
