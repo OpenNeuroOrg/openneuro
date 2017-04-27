@@ -78,6 +78,7 @@ export default (aws) => {
 
             batchJob.parameters.participant_label.forEach((subject) => {
                 let subjectBatchJob = JSON.parse(JSON.stringify(batchJob));
+                delete subjectBatchJob.parameters.participant_label;
                 let env = subjectBatchJob.containerOverrides.environment;
                 // TODO - Make BIDS_ANALYSIS_LEVEL configurable for values other than group/participant
                 env.push({name: 'BIDS_ANALYSIS_LEVEL', value: 'participant'});
