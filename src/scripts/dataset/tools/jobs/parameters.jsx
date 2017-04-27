@@ -1,10 +1,26 @@
 import React from 'react';
+import Select from 'react-select';
 
-const JobParameters = ({parameters, onChange, onRestoreDefaults}) => {
+const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults}) => {
 
     if (Object.keys(parameters).length === 0) {return <noscript />;}
 
     const parameterInputs = Object.keys(parameters).map((parameter) => {
+        let input;
+        if (parameter.indexOf('participant_label') > -1) {
+            // Adapt the Select's onChange call to match the expected input event
+            let onSelectChange = (value) => {
+                // Extract list from Select's simpleValue
+                let selected = value.split(',');
+                let event = {target: {value: selected}};
+                return onChange(parameter, event);
+            };
+            input = <Select multi simpleValue value={parameters[parameter]} placeholder="Select your subject(s)" options={subjects} onChange={onSelectChange} />;
+        } else {
+            input = <input className="form-control"
+                           value={parameters[parameter]}
+                           onChange={onChange.bind(null, parameter)}/>;
+        }
         return (
             <div key={parameter}>
                 <div className="parameters form-horizontal">
@@ -13,9 +29,7 @@ const JobParameters = ({parameters, onChange, onRestoreDefaults}) => {
                         <div className="input-group">
                             <div className="input-group-addon">{parameter}</div>
                             <div className="clearfix">
-                                <input className="form-control"
-                                       value={parameters[parameter]}
-                                       onChange={onChange.bind(null, parameter)}/>
+                                {input}
                                 <span className="help-text">{parameter}</span>
                             </div>
                         </div>
@@ -45,7 +59,8 @@ const JobParameters = ({parameters, onChange, onRestoreDefaults}) => {
 JobParameters.propTypes = {
     onChange: React.PropTypes.func,
     onRestoreDefaults: React.PropTypes.func,
-    parameters: React.PropTypes.object
+    parameters: React.PropTypes.object,
+    subjects: React.PropTypes.array
 };
 
 JobParameters.defaultProps = {
