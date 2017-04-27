@@ -107,7 +107,7 @@ let handlers = {
 
             // jobDefintion is the full ARN including version, region, etc
             c.crn.jobs.findOne({
-                jobDefinition:  job.jobDefintion,
+                jobDefinition:  job.jobDefinition,
                 datasetHash:    job.datasetHash,
                 parametersHash: job.parametersHash,
                 snapshotId:     job.snapshotId
