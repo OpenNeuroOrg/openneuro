@@ -8,6 +8,12 @@ import {Modal}    from 'react-bootstrap';
 import adminStore from './admin.store';
 import actions    from './admin.actions';
 
+const PARAMETER_INPUTS = [
+    {label: 'String', value: 'text'},
+    {label: 'Boolean', value: 'checkbox'},
+    {label: 'Number', value: 'numeric'},
+    {label: 'List', value: 'select'}
+];
 
 const CreateJob = React.createClass({
 
@@ -35,7 +41,8 @@ const CreateJob = React.createClass({
                              <ArrayInput value={definition.parameters}
                                          onChange={this._handleChange.bind(null, 'parameters')}
                                          model={[
-                                             {id: 'key', placeholder: 'Key', required: true},
+                                             {id: 'label', placeholder: 'Key', required: true},
+                                             {id: 'type', placeholder: 'Type', select: PARAMETER_INPUTS, required: true},
                                              {id: 'defaultValue', placeholder: 'default value'}
                                          ]} />
                         </div>
