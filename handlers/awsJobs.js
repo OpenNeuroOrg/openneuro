@@ -146,6 +146,10 @@ let handlers = {
         let jobId = req.params.jobId; //this is the mongo id for the job.
 
         c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
+            if (!job) {
+                res.status(404).send({message: 'Job not found.'});
+                return;
+            }
             let status = job.analysis.status;
             let analysisId = job.analysis.analysisId;
             let jobs = job.analysis.jobs;
