@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React      from 'react';
+import Select     from 'react-select';
 import Input      from './input.jsx';
 import WarnButton from './warn-button.jsx';
 
@@ -34,7 +35,11 @@ let ArrayInput = React.createClass({
     render() {
 
         let inputFields = this.props.model ? this.props.model.map((field) => {
-            return <Input placeholder={field.placeholder} value={this.state[field.id]} onChange={this._handleChange.bind(null, field.id)} key={field.id} />
+            if (field.hasOwnProperty('select') && field.select.length > 0) {
+                return <Select placeholder={field.placeholder} simpleValue options={field.select} value={this.state[field.id]} onChange={this._handleSelectChange.bind(null, field.id)} key={field.id} />
+            } else {
+                return <Input placeholder={field.placeholder} value={this.state[field.id]} onChange={this._handleChange.bind(null, field.id)} key={field.id} />
+            }
         }) : null;
 
         return (
@@ -67,6 +72,12 @@ let ArrayInput = React.createClass({
     _handleChange(key, event) {
         let state = {};
         state[key] = event.target.value;
+        this.setState(state);
+    },
+
+    _handleSelectChange(key, selected) {
+        let state = {};
+        state[key] = selected;
         this.setState(state);
     },
 
