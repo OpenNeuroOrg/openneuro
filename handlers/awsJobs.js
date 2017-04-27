@@ -24,7 +24,7 @@ let handlers = {
     createJobDefinition(req, res, next) {
         let jobDef = req.body;
 
-        aws.batch.sdk.registerJobDefinition(jobDef, (err, data) => {
+        aws.batch.registerJobDefinition(jobDef, (err, data) => {
             if (err) {
                 return next(err);
             } else {

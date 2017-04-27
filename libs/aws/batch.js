@@ -1,6 +1,7 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 import mongo from '../../libs/mongo';
 import async from 'async';
+import config from '../../config';
 
 let c = mongo.collections;
 
@@ -10,6 +11,17 @@ export default (aws) => {
 
     return {
         sdk: batch,
+
+        /**
+         * Register a job and store some additional metadata with AWS Batch
+         */
+        registerJobDefinition(jobDef, callback) {
+            let env = jobDef.containerProperties.environment;
+            env.push({name: 'BIDS_DATASET_BUCKET', value: config.aws.s3.datasetBucket});
+            env.push({name: 'BIDS_OUTPUT_BUCKET', value: config.aws.s3.analysisBucket});
+            console.log(jobDef);
+            batch.registerJobDefinition(jobDef, callback);
+        },
 
         /**
          * Start AWS Batch Job

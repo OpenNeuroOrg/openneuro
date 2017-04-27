@@ -43,7 +43,8 @@ let config = {
             'region': process.env.AWS_REGION
         },
         's3': {
-            'bucket': process.env.AWS_S3_BUCKET,
+            'datasetBucket': process.env.AWS_S3_DATASET_BUCKET,
+            'analysisBucket': process.env.AWS_S3_ANALYSIS_BUCKET,
             'concurrency': 10,
             'timeout': 10 * 60 * 1000
         }

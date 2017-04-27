@@ -26,10 +26,15 @@ const config = {
                 s3: {
                     type: 'object',
                     properties: {
-                        bucket: {type: 'string'},
+                        datasetBucket: {type: 'string', minLength: 1},
+                        analysisBucket: {type: 'string', minLength: 1},
                         concurrency: {type: 'integer', minimum: 1},
                         timeout: {type: 'integer'}
-                    }
+                    },
+                    required: [
+                        'datasetBucket',
+                        'analysisBucket'
+                    ]
                 }
             },
             required: [

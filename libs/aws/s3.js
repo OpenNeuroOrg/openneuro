@@ -5,7 +5,7 @@ import files  from '../files';
 import config from '../../config';
 import async  from 'async';
 
-const Bucket = config.aws.s3.bucket;
+const Bucket = config.aws.s3.datasetBucket;
 
 
 export default (aws) => {
