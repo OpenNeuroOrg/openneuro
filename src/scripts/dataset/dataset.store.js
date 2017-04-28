@@ -1086,16 +1086,6 @@ let datasetStore = Reflux.createStore({
      * DisplayFile
      */
     displayFile(snapshotId, jobId, file, callback) {
-        if (jobId) {
-            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
-                requestAndDisplay(link);
-            });
-        } else {
-            this.getFileDownloadTicket(file, (link) => {
-                requestAndDisplay(link);
-            });
-        }
-
         let requestAndDisplay = (link) => {
             let modals = this.data.modals;
             modals.displayFile = true;
@@ -1123,6 +1113,16 @@ let datasetStore = Reflux.createStore({
                 });
             }
         };
+
+        if (jobId) {
+            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
+                requestAndDisplay(link);
+            });
+        } else {
+            this.getFileDownloadTicket(file, (link) => {
+                requestAndDisplay(link);
+            });
+        }
     },
 
     // Snapshots ---------------------------------------------------------------------
