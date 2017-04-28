@@ -128,8 +128,7 @@ let handlers = {
                                 environment: [{
                                     name: 'BIDS_SNAPSHOT_ID',
                                     value: hash
-                                },
-                                {
+                                }, {
                                     name: 'BIDS_ANALYSIS_ID',
                                     value: job.analysis.analysisId
                                 }]
