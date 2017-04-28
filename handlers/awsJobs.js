@@ -182,7 +182,7 @@ let handlers = {
                         let finalStatus = statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
                         let params = {
                             Bucket: 'openneuro.outputs',
-                            Prefix: job.snapshotId + '/' + job.analysis.analysisId
+                            Prefix: job.datasetHash + '/' + job.analysis.analysisId
                         };
                         aws.s3.sdk.listObjectsV2(params, (err, data) => {
                             let results = [];
