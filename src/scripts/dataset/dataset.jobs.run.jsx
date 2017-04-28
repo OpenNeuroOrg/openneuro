@@ -21,7 +21,7 @@ class JobAccordion extends React.Component {
                 <span eventKey={run._id}>
                     <Panel className={run.active ? 'job border-flash' : 'job'} header={this._header(run)}>
                         <span className="inner">
-                            {/*this._parameters(run)*/}
+                            {this._parameters(run)}
                             {this._results(run, 'results')}
                             {/*this._results(run, 'logs')*/}
                         </span>
