@@ -156,6 +156,7 @@ let handlers = {
             let status = job.analysis.status;
             let analysisId = job.analysis.analysisId;
             let jobs = job.analysis.jobs;
+            let createdDate = job.analysis.created;
             //let totalJobs = jobs.length; //total number of jobs in the analysis
             // check if job is already known to be completed
             // there could be a scenario where we are polling before the AWS batch job has been setup. !jobs check handles this.
@@ -176,6 +177,7 @@ let handlers = {
                     });
 
                     analysis.status = !finished ? 'RUNNING' : 'COMPLETING';
+                    analysis.created = createdDate;
                     // check status
                     if(finished){
                         //Check if any jobs failed, if so analysis failed, else succeeded
