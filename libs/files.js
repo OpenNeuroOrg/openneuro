@@ -65,7 +65,7 @@ export default {
         let persistentPath = __dirname + '/../persistent/';
 
         // Make sure temp dir exists. If not, create it.
-        let tempDir = persistentPath + 'temps/';
+        let tempDir = persistentPath + 'temp/';
         let isDir = this._checkTempDir(tempDir);
         if(!isDir) {
             fs.mkdirSync(tempDir); //create temp dir if doesn't exist
