@@ -63,6 +63,14 @@ export default {
      */
     saveSymlinks (hash, body, callback) {
         let persistentPath = __dirname + '/../persistent/';
+
+        // Make sure temp dir exists. If not, create it.
+        let tempDir = persistentPath + 'temps/';
+        let isDir = this._checkTempDir(tempDir);
+        if(!isDir) {
+            fs.mkdirSync(tempDir); //create temp dir if doesn't exist
+        }
+
         fs.writeFile(persistentPath + 'temp/' + hash + '.tar', body, (err) => {
             fs.createReadStream(persistentPath + 'temp/' + hash + '.tar')
                 .pipe(tar.extract(persistentPath + 'datasets/', {
@@ -153,6 +161,21 @@ export default {
 
 
         return contentType;
+    },
+
+    /**
+    * Checks to see if a directory exists
+    */
+    _checkTempDir(path) {
+        try {
+            return fs.statSync(path).isDirectory();
+        } catch (e) {
+            if (e.code === 'ENOENT') {
+              return false;
+            } else {
+              throw e;
+            }
+        }
     }
 
 };
