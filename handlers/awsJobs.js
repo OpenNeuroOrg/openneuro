@@ -180,7 +180,7 @@ let handlers = {
                         return status === 'SUCCEEDED' || status === 'FAILED';
                     });
 
-                    analysis.status = !finished ? 'RUNNING' : 'COMPLETING';
+                    analysis.status = !finished ? 'RUNNING' : 'FINALIZING';
                     analysis.created = createdDate;
                     // check status
                     if(finished){
