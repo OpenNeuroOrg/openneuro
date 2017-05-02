@@ -42,8 +42,8 @@ const CreateJob = React.createClass({
                                          onChange={this._handleChange.bind(null, 'parameters')}
                                          model={[
                                              {id: 'label', placeholder: 'Key', required: true},
-                                             {id: 'type', placeholder: 'Type', select: PARAMETER_INPUTS, required: true},
-                                             {id: 'defaultValue', placeholder: 'default value'}
+                                             {id: 'defaultValue', placeholder: 'default value'},
+                                             {id: 'type', placeholder: 'Type', select: PARAMETER_INPUTS, required: true}
                                          ]} />
                         </div>
                         <button className="btn-modal-submit" onClick={actions.submitJobDefinition}>
