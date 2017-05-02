@@ -1,3 +1,4 @@
+/*eslint no-console: ["error", { allow: ["log"] }] */
 // dependencies ------------------------------------------------------------
 
 import aws     from '../libs/aws';
@@ -6,6 +7,9 @@ import crypto  from 'crypto';
 import uuid    from 'uuid';
 import mongo         from '../libs/mongo';
 import {ObjectID}    from 'mongodb';
+import archiver      from 'archiver';
+import config from '../config';
+import async from 'async';
 
 let c = mongo.collections;
 
@@ -182,10 +186,13 @@ let handlers = {
                     if(finished){
                         //Check if any jobs failed, if so analysis failed, else succeeded
                         let finalStatus = statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
+                        let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
                         let params = {
                             Bucket: 'openneuro.outputs',
-                            Prefix: job.datasetHash + '/' + job.analysis.analysisId
+                            Prefix: s3Prefix,
+                            StartAfter: s3Prefix
                         };
+
                         aws.s3.sdk.listObjectsV2(params, (err, data) => {
                             let results = [];
                             data.Contents.forEach((obj) => {
@@ -211,48 +218,73 @@ let handlers = {
 
                     // notifications.jobComplete(job);
 
-                    // if (resp.body.status === 'error' && resp.body.message.indexOf('No job found with job id') > -1) {
-                    //     job.agave.status = 'FAILED';
-                    //     c.crn.jobs.updateOne({jobId}, {$set: {agave: job.agave}}, {}, () => {
-                    //         res.send({agave: resp.body.result, snapshotId: job.snapshotId});
-                    //         notifications.jobComplete(job);
-                    //     });
-                    // } else if (resp.body && resp.body.result && (resp.body.result.status === 'FINISHED' || resp.body.result.status === 'FAILED')) {
-                    //     job.agave = resp.body.result;
-                    //     agave.getOutputs(jobId, (results, logs) => {
-                    //         c.crn.jobs.updateOne({jobId}, {$set: {agave: resp.body.result, results, logs}}, {}, (err) => {
-                    //             if (err) {res.send(err);}
-                    //             else {res.send({agave: resp.body.result, results, logs, snapshotId: job.snapshotId});}
-                    //             job.agave = resp.body.result;
-                    //             job.results = results;
-                    //             job.logs = logs;
-                    //             if (status !== 'FINISHED') {notifications.jobComplete(job);}
-                    //         });
-                    //     });
-                    // } else if (resp.body && resp.body.result && job.agave.status !== resp.body.result.status) {
-                    //     job.agave = resp.body.result;
-                    //     c.crn.jobs.updateOne({jobId}, {$set: {agave: resp.body.result}}, {}, (err) => {
-                    //         if (err) {res.send(err);}
-                    //         else {
-                    //             res.send({
-                    //                 agave:      resp.body.result,
-                    //                 datasetId:  job.datasetId,
-                    //                 snapshotId: job.snapshotId,
-                    //                 jobId:      jobId
-                    //             });
-                    //         }
-                    //     });
-                    // } else {
-                    //     res.send({
-                    //         agave:      resp.body.result,
-                    //         datasetId:  job.datasetId,
-                    //         snapshotId: job.snapshotId,
-                    //         jobId:      jobId
-                    //     });
-                    // }
                 });
             }
         });
+    },
+
+    /**
+     * GET File
+     * listObjects to find everything in the s3 bucket for a given job
+     * stream all files in series(?) to zip 
+     */
+    downloadAllS3(req, res) {
+        let jobId = req.params.jobId;
+
+        const path = 'all-results'; //req.ticket.filePath;
+        if (path === 'all-results' || path === 'all-logs') {
+
+            const type = path.replace('all-', '');
+
+            // initialize archive
+            let archive = archiver('zip');
+
+            // log archiving errors
+            archive.on('error', (err) => {
+                console.log('archiving error - job: ' + jobId);
+                console.log(err);
+            });
+
+            c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
+                let archiveName = job.datasetLabel + '__' + job.analysis.analysisId + '__' + type;
+                let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
+                //params to list objects for a job
+                let params = {
+                    Bucket: config.aws.s3.analysisBucket,
+                    Prefix: s3Prefix,
+                    StartAfter: s3Prefix
+                };
+
+                // set archive name
+                res.attachment(archiveName + '.zip');
+
+                // begin streaming archive
+                archive.pipe(res);
+
+                aws.s3.sdk.listObjectsV2(params, (err, data) => {
+                    let keysArray = [];
+                    data.Contents.forEach((obj) => {
+                        keysArray.push(obj.Key);
+                    });
+
+                    async.eachSeries(keysArray, (key, cb) => {
+                        let objParams = {
+                            Bucket: config.aws.s3.analysisBucket,
+                            Key: key
+                        };
+                        let fileName = key.split('/')[key.split('/').length - 1]; //get filename from key
+                        aws.s3.sdk.getObject(objParams, (err, response) => {
+                            //append to zip
+                            archive.append(response.Body, {name: fileName});
+                            cb();
+                        });
+                    }, () => {
+                        archive.finalize();
+                    });
+                });
+            });
+        }
+
     },
 
     /**

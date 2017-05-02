@@ -316,37 +316,18 @@ let handlers = {
     /**
      * GET Download Ticket
      */
-    getDownloadTicket(req, res, next) {
-        let jobId    = req.params.jobId,
-            filePath = req.query.filePath,
-            fileName = filePath.split('/')[filePath.split('/').length - 1];
-        c.crn.jobs.findOne({jobId}, {}, (err, job) => {
-            // check for job
-            if (err){return next(err);}
-            if (!job) {
-                let error = new Error('Could not find job.');
-                error.http_code = 404;
-                return next(error);
-            }
+    getDownloadTicket(req, res) {
+        let jobId = req.params.jobId;
+        // form ticket
+        let ticket = {
+            type: 'download',
+            userId: req.user,
+            jobId: jobId,
+            fileName: 'all',
+            created: new Date()
+        };
 
-            // form ticket
-            let ticket = {
-                type: 'download',
-                userId: req.user,
-                jobId: jobId,
-                fileName: fileName,
-                filePath: filePath,
-                created: new Date()
-            };
-
-            // Create and return ticket
-            c.crn.tickets.insertOne(ticket, (err) => {
-                if (err) {return next(err);}
-                c.crn.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60 * 60}, () => {
-                    res.send(ticket);
-                });
-            });
-        });
+        res.send(ticket);
     },
 
     /**

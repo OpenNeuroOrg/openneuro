@@ -174,10 +174,10 @@ const routes = [
     {
         method: 'get',
         url: '/jobs/:jobId/results/:fileName',
-        middleware: [
-            auth.ticket
-        ],
-        handler: jobs.getFile
+        // middleware: [
+        //     auth.ticket
+        // ],
+        handler: awsJobs.downloadAllS3
     }
 
 ];
