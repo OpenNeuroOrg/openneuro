@@ -277,7 +277,7 @@ let UserStore = Reflux.createStore({
 
         if (formData.parameters) {
             for (let param of formData.parameters) {
-                parameters[param.label] = param.defaultValue;
+                parameters[param.label] = JSON.stringify(param);
             }
         }
         jobDefinition.parameters = parameters;
@@ -318,7 +318,12 @@ let UserStore = Reflux.createStore({
         let params = [];
         if(Object.keys(jobDefinition.parameters).length) {
             Object.keys(jobDefinition.parameters).forEach((key) => {
-                params.push({label: key, defaultValue: jobDefinition.parameters[key], Type: 'String'});
+                // params.push({label: key, defaultValue: jobDefinition.parameters[key], Type: 'String'});
+                try {
+                    params.push(JSON.parse(jobDefinition.parameters[key]));
+                } catch(e) {
+                    //error handling for this or just skip improperly formatted JSON params?
+                }
             });
         }
 
