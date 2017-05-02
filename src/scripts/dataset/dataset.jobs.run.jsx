@@ -21,7 +21,7 @@ class JobAccordion extends React.Component {
                 <span eventKey={run._id}>
                     <Panel className={run.active ? 'job border-flash' : 'job'} header={this._header(run)}>
                         <span className="inner">
-                            {/*this._parameters(run)*/}
+                            {this._parameters(run)}
                             {this._results(run, 'results')}
                             {/*this._results(run, 'logs')*/}
                         </span>
@@ -75,7 +75,7 @@ class JobAccordion extends React.Component {
                             <WarnButton
                                 icon="fa-download"
                                 message=" DOWNLOAD All"
-                                prepDownload={actions.getResultDownloadTicket.bind(this, run.snapshotId, run.jobId, {path:'all-' + type})} />
+                                prepDownload={actions.getResultDownloadTicket.bind(this, run.snapshotId, run._id, {path:'all-' + type})} />
                         </span>
                         <div className="file-structure fade-in panel-group">
                             <div className="panel panel-default">
@@ -85,8 +85,8 @@ class JobAccordion extends React.Component {
                                             tree={run[type]}
                                             treeId={run._id}
                                             editable={false}
-                                            getFileDownloadTicket={actions.getResultDownloadTicket.bind(this, run.snapshotId, run.jobId)}
-                                            displayFile={this.props.displayFile.bind(this, run.snapshotId, run.jobId)}
+                                            getFileDownloadTicket={actions.getResultDownloadTicket.bind(this, run.snapshotId, run._id)}
+                                            displayFile={this.props.displayFile.bind(this, run.snapshotId, run._id)}
                                             toggleFolder={this.props.toggleFolder} />
                                    </div>
                                 </div>

@@ -85,7 +85,7 @@ export default class JobMenu extends React.Component {
                     ? (
                         <div>
                             <Description jobDefinition={apps[selectedAppKey][selectedVersionID]} />
-                            <Parameters parameters={this.state.parameters} onChange={this._updateParameter.bind(this)} onRestoreDefaults={this._restoreDefaultParameters.bind(this)} />
+                            <Parameters parameters={this.state.parameters} subjects={this.state.subjects} onChange={this._updateParameter.bind(this)} onRestoreDefaults={this._restoreDefaultParameters.bind(this)} />
                             {this._submit()}
                         </div>)
                     : ''
@@ -144,7 +144,7 @@ export default class JobMenu extends React.Component {
             return <option key={index} value={jobDefinitionName}> {jobDefinitionName} </option>;
         });
 
-        const versionOptions = selectedApp ? Object.keys(apps[selectedApp]).map((revision) => {
+        const versionOptions = selectedApp ? Object.keys(apps[selectedApp]).reverse().map((revision) => {
             let disabled = this.state.disabledApps.hasOwnProperty(apps[selectedApp][revision].jobDefinitionArn) ? '* ' : '';
             return <option key={revision} value={revision}>{disabled + 'v' + revision}</option>;
         }) : [];

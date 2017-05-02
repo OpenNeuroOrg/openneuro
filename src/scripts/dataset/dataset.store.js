@@ -981,7 +981,7 @@ let datasetStore = Reflux.createStore({
             snapshotId:    snapshotId,
             userId:        userStore.data.scitran._id
         }, (err, res) => {
-            
+
             if (!err) {
                 // reload jobs
                 if (snapshotId == this.data.dataset._id) {
@@ -1079,28 +1079,18 @@ let datasetStore = Reflux.createStore({
      */
     getResultDownloadTicket(snapshotId, jobId, file, callback) {
         let filePath = file === 'all' ? file : file.path;
-        crn.getResultDownloadTicket(snapshotId, jobId, filePath, (err, res) => {
-            let ticket      = res.body._id;
-            let fileName    = filePath.split('/')[filePath.split('/').length - 1];
-            let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
-            callback(downloadUrl);
-        }, {snapshot: true});
+        if(filePath === 'all-results') {
+            let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + "fileName" + '?ticket=' + 'ticket';
+            callback(downloadUrl)
+        } else {
+            callback('https://s3.amazonaws.com/' + filePath);    
+        }
     },
 
     /**
      * DisplayFile
      */
     displayFile(snapshotId, jobId, file, callback) {
-        if (jobId) {
-            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
-                requestAndDisplay(link);
-            });
-        } else {
-            this.getFileDownloadTicket(file, (link) => {
-                requestAndDisplay(link);
-            });
-        }
-
         let requestAndDisplay = (link) => {
             let modals = this.data.modals;
             modals.displayFile = true;
@@ -1128,6 +1118,16 @@ let datasetStore = Reflux.createStore({
                 });
             }
         };
+
+        if (jobId) {
+            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
+                requestAndDisplay(link);
+            });
+        } else {
+            this.getFileDownloadTicket(file, (link) => {
+                requestAndDisplay(link);
+            });
+        }
     },
 
     // Snapshots ---------------------------------------------------------------------
@@ -1152,7 +1152,7 @@ let datasetStore = Reflux.createStore({
                     callback({error: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.'});
                 } else {
                     crn.createSnapshot(datasetId, (err, res) => {
-                        let snapshotId = bids.decodeId(res.body._id);
+                        let snapshotId = res.body._id;
                         this.toggleSidebar(true);
                         if (transition) {
                             router.transitionTo('snapshot', {datasetId: this.data.dataset.linkID, snapshotId: snapshotId});
