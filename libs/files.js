@@ -171,9 +171,9 @@ export default {
             return fs.statSync(path).isDirectory();
         } catch (e) {
             if (e.code === 'ENOENT') {
-              return false;
+                return false;
             } else {
-              throw e;
+                throw e;
             }
         }
     }
