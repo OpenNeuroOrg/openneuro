@@ -277,7 +277,7 @@ let UserStore = Reflux.createStore({
 
         if (formData.parameters) {
             for (let param of formData.parameters) {
-                parameters[param.key] = param.defaultValue;
+                parameters[param.label] = param.defaultValue;
             }
         }
         jobDefinition.parameters = parameters;
@@ -293,7 +293,6 @@ let UserStore = Reflux.createStore({
         let jobArn = jobDefinition.jobDefinitionArn;
         crn.disableJobDefinition(name, jobArn, (err, data) => {
             //TODO Update job list
-            console.log(data);
             console.log('Job disabled');
             if(callback){
                 callback();
@@ -315,7 +314,16 @@ let UserStore = Reflux.createStore({
         jobDefinitionForm.command = jobDefinition.containerProperties.command.join(' ');
         jobDefinitionForm.vcpus = jobDefinition.containerProperties.vcpus.toString(); //form is expecting string
         jobDefinitionForm.memory = jobDefinition.containerProperties.memory.toString(); //form is expecting string
-        jobDefinitionForm.parameters = Array.isArray(jobDefinition.parameters) ? jobDefinition.parameters : []; // needs to be an array of key value pairs
+
+        let params = [];
+        if(Object.keys(jobDefinition.parameters).length) {
+            Object.keys(jobDefinition.parameters).forEach((key) => {
+                params.push({label: key, defaultValue: jobDefinition.parameters[key], Type: 'String'});
+            });
+        }
+
+        jobDefinitionForm.parameters = params;
+
         this.update({jobDefinitionForm});
         if(callback){
             callback();
