@@ -1079,23 +1079,18 @@ let datasetStore = Reflux.createStore({
      */
     getResultDownloadTicket(snapshotId, jobId, file, callback) {
         let filePath = file === 'all' ? file : file.path;
-        callback('https://s3.amazonaws.com/' + filePath);
+        if(filePath === 'all-results') {
+            let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + "fileName" + '?ticket=' + 'ticket';
+            callback(downloadUrl)
+        } else {
+            callback('https://s3.amazonaws.com/' + filePath);    
+        }
     },
 
     /**
      * DisplayFile
      */
     displayFile(snapshotId, jobId, file, callback) {
-        if (jobId) {
-            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
-                requestAndDisplay(link);
-            });
-        } else {
-            this.getFileDownloadTicket(file, (link) => {
-                requestAndDisplay(link);
-            });
-        }
-
         let requestAndDisplay = (link) => {
             let modals = this.data.modals;
             modals.displayFile = true;
@@ -1123,6 +1118,16 @@ let datasetStore = Reflux.createStore({
                 });
             }
         };
+
+        if (jobId) {
+            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
+                requestAndDisplay(link);
+            });
+        } else {
+            this.getFileDownloadTicket(file, (link) => {
+                requestAndDisplay(link);
+            });
+        }
     },
 
     // Snapshots ---------------------------------------------------------------------
