@@ -26,12 +26,19 @@ let handlers = {
      * Create Job Definition
      */
     createJobDefinition(req, res, next) {
-        let jobDef = req.body;
-
+        let jobDef = Object.assign({}, req.body);
+        //AWS Batch will choke if we leave descriptions property on payload so deleting before sending
+        delete jobDef.descriptions;
         aws.batch.registerJobDefinition(jobDef, (err, data) => {
             if (err) {
                 return next(err);
             } else {
+                let extendeJobDef = data;
+                extendeJobDef.descriptions = req.body.descriptions || {};
+                c.crn.jobDefinitions.insertOne(extendeJobDef, (err, data) => {
+                    //TODO -- error handling? make response dependant on inserting document?
+                })
+                // can go ahead and respond to client without waiting on mongo insert
                 res.send(data);
             }
         });
@@ -61,14 +68,25 @@ let handlers = {
                 return next(err);
             } else {
                 let definitions = {};
-                for (let definition of data.jobDefinitions) {
+                //need to attach job definition descriptions from mongo to job defs returned from AWS batch
+                async.each(data.jobDefinitions, (definition, cb) => {
                     if (!definitions.hasOwnProperty(definition.jobDefinitionName)) {
                         definitions[definition.jobDefinitionName] = {};
                     }
-                    definitions[definition.jobDefinitionName][definition.revision] = definition;
-                }
-
-                res.send(definitions);
+                    c.crn.jobDefinitions.find({
+                        jobDefinitionName: definition.jobDefinitionName,
+                        jobDefinitionArn: definition.jobDefinitionArn,
+                        revision: definition.revision
+                    }, {descriptions: true}).toArray((err, def) => {
+                        // there will either be a one element array or an empty array returned
+                        let descriptions = def.length === 0 || !def[0].descriptions ? {} : def[0].descriptions;
+                        definition.descriptions = descriptions;
+                        definitions[definition.jobDefinitionName][definition.revision] = definition;
+                        cb();
+                    });
+                }, () => {
+                    res.send(definitions);
+                });
             }
         });
     },

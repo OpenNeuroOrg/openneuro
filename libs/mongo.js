@@ -31,6 +31,7 @@ export default {
             blacklist: null,
             validationQueue: null,
             jobs: null,
+            jobDefinitions: null,
             tickets: null,
             userPreferences: null,
             notifications: null,
