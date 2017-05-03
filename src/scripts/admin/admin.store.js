@@ -6,6 +6,8 @@ import scitran   from '../utils/scitran';
 import crn       from '../utils/crn';
 import batch     from '../utils/batch';
 
+import datasetStore from '../dataset/dataset.store';
+
 let UserStore = Reflux.createStore({
 
 // store setup -----------------------------------------------------------------------
@@ -63,7 +65,8 @@ let UserStore = Reflux.createStore({
                 vcpus: '1',
                 memory: '2000',
                 parameters: [],
-                edit: false
+                edit: false,
+                description: ''
             },
             blacklistError: ''
         };
@@ -282,9 +285,16 @@ let UserStore = Reflux.createStore({
         }
         jobDefinition.parameters = parameters;
 
+        jobDefinition.descriptions = {
+            description: formData.description
+        };
+
         crn.defineJob(jobDefinition, () => {
-            // TODO - update our list of jobs
+            // TODO - error handling
+            datasetStore.loadApps(); //this does not seem like the right way to do this.
             console.log('job submitted');
+            //toggle modal once response comes bacn from server.
+            this.toggleModal('defineJob');
         });
     },
 
@@ -309,6 +319,7 @@ let UserStore = Reflux.createStore({
         let jobDefinitionForm = this.data.jobDefinitionForm;
         jobDefinitionForm.edit = true;
         jobDefinitionForm.name = jobDefinition.jobDefinitionName;
+        jobDefinitionForm.description = jobDefinition.descriptions && jobDefinition.descriptions.description ? jobDefinition.descriptions.description : '';
         jobDefinitionForm.jobRoleArn = jobDefinition.jobDefinitionArn;
         jobDefinitionForm.containerImage = batch.getBidsContainer(jobDefinition);
         jobDefinitionForm.hostImage = jobDefinition.containerProperties.image;
@@ -333,6 +344,7 @@ let UserStore = Reflux.createStore({
             hostImage: '',
             command: '',
             vcpus: '1',
+            description: '',
             memory: '2000',
             parameters: [],
             edit: false
