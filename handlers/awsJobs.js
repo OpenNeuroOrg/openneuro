@@ -35,9 +35,11 @@ let handlers = {
             } else {
                 let extendeJobDef = data;
                 extendeJobDef.descriptions = req.body.descriptions || {};
-                c.crn.jobDefinitions.insertOne(extendeJobDef, (err, data) => {
-                    //TODO -- error handling? make response dependant on inserting document?
-                })
+                c.crn.jobDefinitions.insertOne(extendeJobDef, (err) => {
+                    if(err){
+                        //TODO -- error handling? make response dependant on inserting document?
+                    }
+                });
                 // can go ahead and respond to client without waiting on mongo insert
                 res.send(data);
             }
