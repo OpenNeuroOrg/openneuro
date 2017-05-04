@@ -5,8 +5,8 @@ import Actions   from './admin.actions.js';
 import scitran   from '../utils/scitran';
 import crn       from '../utils/crn';
 import batch     from '../utils/batch';
+import datasetActions from '../dataset/dataset.actions';
 
-import datasetStore from '../dataset/dataset.store';
 
 let UserStore = Reflux.createStore({
 
@@ -291,7 +291,7 @@ let UserStore = Reflux.createStore({
 
         crn.defineJob(jobDefinition, () => {
             // TODO - error handling
-            datasetStore.loadApps(); //this does not seem like the right way to do this.
+            datasetActions.loadApps(); //this does not seem like the right way to do this.
             console.log('job submitted');
             //toggle modal once response comes bacn from server.
             this.toggleModal('defineJob');
