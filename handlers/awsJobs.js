@@ -54,7 +54,6 @@ let handlers = {
     */
     disableJobDefinition(req, res, next) {
         let jobArn = req.body.arn;
-
         aws.batch.sdk.deregisterJobDefinition({jobDefinition: jobArn}, (err, data) => {
             if (err) {
                 return next(err);

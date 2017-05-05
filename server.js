@@ -1,4 +1,5 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
+/* eslint-disable no-unused-vars*/
 
 // dependencies ----------------------------------------------------
 
@@ -29,7 +30,7 @@ app.use(config.apiPrefix, routes);
 
 // error handling --------------------------------------------------
 
-app.use(function(err, req, res) {
+app.use(function(err, req, res, next) {
     res.header('Content-Type', 'application/json');
     var send = {'error' : ''};
     var http_code = (typeof err.http_code === 'undefined') ? 500 : err.http_code;
