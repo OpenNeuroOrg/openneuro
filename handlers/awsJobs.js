@@ -29,12 +29,15 @@ let handlers = {
         let jobDef = Object.assign({}, req.body);
         //AWS Batch will choke if we leave descriptions property on payload so deleting before sending
         delete jobDef.descriptions;
+        delete jobDef.parametersMetadata;
+
         aws.batch.registerJobDefinition(jobDef, (err, data) => {
             if (err) {
                 return next(err);
             } else {
                 let extendeJobDef = data;
                 extendeJobDef.descriptions = req.body.descriptions || {};
+                extendeJobDef.parametersMetadata = req.body.parametersMetadata || {};
                 c.crn.jobDefinitions.insertOne(extendeJobDef, (err) => {
                     if(err){
                         //TODO -- error handling? make response dependant on inserting document?
@@ -79,10 +82,12 @@ let handlers = {
                         jobDefinitionName: definition.jobDefinitionName,
                         jobDefinitionArn: definition.jobDefinitionArn,
                         revision: definition.revision
-                    }, {descriptions: true}).toArray((err, def) => {
+                    }, {descriptions: true, parametersMetadata: true}).toArray((err, def) => {
                         // there will either be a one element array or an empty array returned
                         let descriptions = def.length === 0 || !def[0].descriptions ? {} : def[0].descriptions;
+                        let parametersMetadata = def.length === 0 || !def[0].parametersMetadata ? {} : def[0].parametersMetadata;
                         definition.descriptions = descriptions;
+                        definition.parametersMetadata = parametersMetadata;
                         definitions[definition.jobDefinitionName][definition.revision] = definition;
                         cb();
                     });

@@ -32,7 +32,8 @@ const definition = {
         containerProperties: {$ref: '#/definitions/containerProperties'},
         parameters: {type: 'object'},
         type: {type: 'string'},
-        descriptions: {type: 'object'}
+        descriptions: {type: 'object'},
+        parametersMetadata: {type: 'object'}
     },
     definitions: {
         containerProperties: {
@@ -89,7 +90,8 @@ const definition = {
         'containerProperties',
         'parameters',
         'type',
-        'descriptions'
+        'descriptions',
+        'parametersMetadata'
     ],
     additionalProperties: false
 };
