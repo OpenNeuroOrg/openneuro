@@ -7,6 +7,10 @@ import Input      from '../common/forms/input.jsx';
 import {Modal}    from 'react-bootstrap';
 import adminStore from './admin.store';
 import actions    from './admin.actions';
+import config     from '../../../config';
+
+let vcpusMax = config.aws.batch.vcpusMax;
+let memoryMax = config.aws.batch.memoryMax;
 
 
 const CreateJob = React.createClass({
@@ -25,11 +29,13 @@ const CreateJob = React.createClass({
                 <hr className="modal-inner" />
                 <Modal.Body>
                     <div>
-                        <Input placeholder="Job Definition Name"     value={definition.name}           name={'name'}           onChange={this._inputChange} disabled={!!definition.edit}/>
+                        <Input placeholder="Job Definition Name"     value={definition.name}           name={'name'}           onChange={this._inputChange} disabled={!!definition.edit} />
                         <Input placeholder="Bids Container"          value={definition.containerImage} name={'containerImage'} onChange={this._inputChange} />
                         <Input placeholder="Host Container"          value={definition.hostImage}      name={'hostImage'}      onChange={this._inputChange} />
                         <Input placeholder="vCPUs"                   value={definition.vcpus}          name={'vcpus'}          onChange={this._inputChange} />
+                        <span>{'Max number of vCPUs is ' + vcpusMax}</span>
                         <Input placeholder="Memory (MiB)"            value={definition.memory}         name={'memory'}         onChange={this._inputChange} />
+                        <span>{'Max memory is ' + memoryMax + 'GB'}</span>
                         <div className="form-group">
                              <label>Parameters</label>
                              <ArrayInput value={definition.parameters}

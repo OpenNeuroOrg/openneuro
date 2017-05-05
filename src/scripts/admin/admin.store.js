@@ -5,6 +5,7 @@ import Actions   from './admin.actions.js';
 import scitran   from '../utils/scitran';
 import crn       from '../utils/crn';
 import batch     from '../utils/batch';
+import notifications from '../notification/notification.actions';
 
 let UserStore = Reflux.createStore({
 
@@ -282,9 +283,18 @@ let UserStore = Reflux.createStore({
         }
         jobDefinition.parameters = parameters;
 
-        crn.defineJob(jobDefinition, () => {
+        crn.defineJob(jobDefinition, (err) => {
             // TODO - update our list of jobs
-            console.log('job submitted');
+            // server is returning 400 for invalid inputs for vcpus and memory
+            if(err) {
+                if(err.status === 400){
+                    notifications.createAlert({type: "Error", message: "Invalid job definition inputs for vCPUs and/or Memory."});
+                } else {
+                    notifications.createAlert({type: "Error", message: "There was an error submitting job definition."});
+                }
+            } else {
+                notifications.createAlert({type: "Success", message: "Job Definition Submission Successful!"})
+            }
         });
     },
 
