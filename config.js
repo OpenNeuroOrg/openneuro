@@ -38,5 +38,15 @@ export default {
 			    '.DS_Store',
 			    'Icon\r'
 			]
+		},
+
+		/**
+		* AWS configuration
+		*/
+		aws: {
+			batch: {
+				vcpusMax: 4,
+				memoryMax: 15
+			}
 		}
 };
