@@ -60,11 +60,13 @@ JobParameters.propTypes = {
     onChange: React.PropTypes.func,
     onRestoreDefaults: React.PropTypes.func,
     parameters: React.PropTypes.object,
+    parametersMetadata: React.PropTypes.object,
     subjects: React.PropTypes.array
 };
 
 JobParameters.defaultProps = {
-    parameters: {}
+    parameters: {},
+    parametersMetadata: {}
 };
 
 export default JobParameters;
