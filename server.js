@@ -1,4 +1,5 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
+/* eslint-disable no-unused-vars*/
 
 // dependencies ----------------------------------------------------
 
