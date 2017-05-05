@@ -263,6 +263,7 @@ let UserStore = Reflux.createStore({
         // Build up the AWS object
         let jobDefinition = {};
         let parameters = {};
+        let parametersMetadata = {};
 
         jobDefinition.jobDefinitionName = formData.name;
         // Container is the only supported type by AWS Batch API as of now.
@@ -277,13 +278,16 @@ let UserStore = Reflux.createStore({
                 {name: 'BIDS_CONTAINER', value: formData.containerImage}
             ]
         }
-
+        // Can split out paramter metadata here I think?
+        // Want to post metadata as a separate prop so we can delete before sending to Batch
         if (formData.parameters) {
             for (let param of formData.parameters) {
                 parameters[param.key] = param.defaultValue;
+                parametersMetadata[param.key] = param;
             }
         }
         jobDefinition.parameters = parameters;
+        jobDefinition.parametersMetadata = parametersMetadata;
 
         jobDefinition.descriptions = {
             description: formData.description

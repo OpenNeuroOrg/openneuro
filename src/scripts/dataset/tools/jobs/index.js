@@ -23,6 +23,7 @@ export default class JobMenu extends React.Component {
         this.state = {
             loading:           false,
             parameters:         {},
+            parametersMetadata: {},
             disabledApps:       {},
             jobId:              null,
             selectedApp:        [],
@@ -76,7 +77,6 @@ export default class JobMenu extends React.Component {
         let selectedAppKey = this.state.selectedAppKey;
         let selectedVersionID = this.state.selectedVersionID;
         let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + selectedVersionID;
-
         let form = (
             <div className="anaylsis-modal clearfix">
                 {this._snapshots()}
@@ -85,7 +85,7 @@ export default class JobMenu extends React.Component {
                     ? (
                         <div>
                             <Description jobDefinition={apps[selectedAppKey][selectedVersionID]} />
-                            <Parameters parameters={this.state.parameters} subjects={this.state.subjects} onChange={this._updateParameter.bind(this)} onRestoreDefaults={this._restoreDefaultParameters.bind(this)} />
+                            <Parameters parameters={this.state.parameters} parametersMetadata={this.state.parametersMetadata} subjects={this.state.subjects} onChange={this._updateParameter.bind(this)} onRestoreDefaults={this._restoreDefaultParameters.bind(this)} />
                             {this._submit()}
                         </div>)
                     : ''
@@ -339,7 +339,8 @@ export default class JobMenu extends React.Component {
         let selectedVersionID = e.target.value;
         let selectedDefinition = this.props.apps[this.state.selectedAppKey][selectedVersionID];
         let parameters = JSON.parse(JSON.stringify(selectedDefinition.parameters));
-        this.setState({selectedVersionID, parameters});
+        let parametersMetadata = JSON.parse(JSON.stringify(selectedDefinition.parametersMetadata));
+        this.setState({selectedVersionID, parameters, parametersMetadata});
     }
 
     /**

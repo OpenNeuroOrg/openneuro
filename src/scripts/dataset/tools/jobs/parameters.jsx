@@ -1,7 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 
-const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults}) => {
+const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, parametersMetadata}) => {
 
     if (Object.keys(parameters).length === 0) {return <noscript />;}
 
@@ -30,7 +30,7 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults}) => {
                             <div className="input-group-addon">{parameter}</div>
                             <div className="clearfix">
                                 {input}
-                                <span className="help-text">{parameter}</span>
+                                <span className="help-text">{parametersMetadata[parameter] ? parametersMetadata[parameter].description: parameter}</span>
                             </div>
                         </div>
                     </div>
