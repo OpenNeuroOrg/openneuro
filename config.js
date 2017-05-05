@@ -47,6 +47,10 @@ let config = {
             'analysisBucket': process.env.AWS_S3_ANALYSIS_BUCKET,
             'concurrency': 10,
             'timeout': 10 * 60 * 1000
+        },
+        'batch': {
+            vcpusMax: 4,
+            memoryMax: 14305.1
         }
     }
 };

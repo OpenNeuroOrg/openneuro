@@ -16,6 +16,12 @@ export default (aws) => {
          * Register a job and store some additional metadata with AWS Batch
          */
         registerJobDefinition(jobDef, callback) {
+            if(!this._validateInputs(jobDef)) {
+                let err = new Error('Invalid Inputs For AWS Batch');
+                err.http_code = 400;
+                return callback(err);
+            }
+
             let env = jobDef.containerProperties.environment;
             env.push({name: 'BIDS_DATASET_BUCKET', value: config.aws.s3.datasetBucket});
             env.push({name: 'BIDS_OUTPUT_BUCKET', value: config.aws.s3.analysisBucket});
@@ -105,6 +111,17 @@ export default (aws) => {
                 if(err) {callback(err);}
                 callback(null, [data.jobId]); //storing jobId's as array in mongo to support multi job analysis
             });
+        },
+
+        _validateInputs(jobDef) {
+            let vcpusMax = config.aws.batch.vcpusMax;
+            let memoryMax = config.aws.batch.memoryMax;
+
+            if(jobDef.containerProperties.vcpus > vcpusMax || jobDef.containerProperties.memory > memoryMax) {
+                return false;
+            }
+
+            return true;
         }
     };
 };
