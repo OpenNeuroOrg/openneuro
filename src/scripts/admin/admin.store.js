@@ -6,6 +6,7 @@ import scitran   from '../utils/scitran';
 import crn       from '../utils/crn';
 import batch     from '../utils/batch';
 import notifications from '../notification/notification.actions';
+import datasetActions from '../dataset/dataset.actions';
 
 let UserStore = Reflux.createStore({
 
@@ -64,7 +65,8 @@ let UserStore = Reflux.createStore({
                 vcpus: '1',
                 memory: '2000',
                 parameters: [],
-                edit: false
+                edit: false,
+                description: ''
             },
             blacklistError: ''
         };
@@ -261,6 +263,7 @@ let UserStore = Reflux.createStore({
         // Build up the AWS object
         let jobDefinition = {};
         let parameters = {};
+        let parametersMetadata = {};
 
         jobDefinition.jobDefinitionName = formData.name;
         // Container is the only supported type by AWS Batch API as of now.
@@ -275,13 +278,21 @@ let UserStore = Reflux.createStore({
                 {name: 'BIDS_CONTAINER', value: formData.containerImage}
             ]
         }
-
+        // Can split out paramter metadata here I think?
+        // Want to post metadata as a separate prop so we can delete before sending to Batch
         if (formData.parameters) {
             for (let param of formData.parameters) {
                 parameters[param.label] = JSON.stringify(param);
+                parameters[param.key] = param.defaultValue;
+                parametersMetadata[param.key] = param;
             }
         }
         jobDefinition.parameters = parameters;
+        jobDefinition.parametersMetadata = parametersMetadata;
+
+        jobDefinition.descriptions = {
+            description: formData.description
+        };
 
         crn.defineJob(jobDefinition, (err) => {
             // TODO - update our list of jobs
@@ -295,6 +306,12 @@ let UserStore = Reflux.createStore({
             } else {
                 notifications.createAlert({type: "Success", message: "Job Definition Submission Successful!"})
             }
+
+            // TODO - error handling
+            datasetActions.loadApps(); //this does not seem like the right way to do this.
+            console.log('job submitted');
+            //toggle modal once response comes bacn from server.
+            this.toggleModal('defineJob');
         });
     },
 
@@ -318,6 +335,7 @@ let UserStore = Reflux.createStore({
         let jobDefinitionForm = this.data.jobDefinitionForm;
         jobDefinitionForm.edit = true;
         jobDefinitionForm.name = jobDefinition.jobDefinitionName;
+        jobDefinitionForm.description = jobDefinition.descriptions && jobDefinition.descriptions.description ? jobDefinition.descriptions.description : '';
         jobDefinitionForm.jobRoleArn = jobDefinition.jobDefinitionArn;
         jobDefinitionForm.containerImage = batch.getBidsContainer(jobDefinition);
         jobDefinitionForm.hostImage = jobDefinition.containerProperties.image;
@@ -356,6 +374,7 @@ let UserStore = Reflux.createStore({
             hostImage: '',
             command: '',
             vcpus: '1',
+            description: '',
             memory: '2000',
             parameters: [],
             edit: false

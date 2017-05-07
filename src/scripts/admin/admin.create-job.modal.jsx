@@ -36,6 +36,7 @@ const CreateJob = React.createClass({
                 <Modal.Body>
                     <div>
                         <Input placeholder="Job Definition Name"     value={definition.name}           name={'name'}           onChange={this._inputChange} disabled={!!definition.edit} />
+                        <Input placeholder="Job Definition Description" value={definition.description} name={'description'} onChange={this._inputChange} />
                         <Input placeholder="Bids Container"          value={definition.containerImage} name={'containerImage'} onChange={this._inputChange} />
                         <Input placeholder="Host Container"          value={definition.hostImage}      name={'hostImage'}      onChange={this._inputChange} />
                         <Input placeholder="vCPUs"                   value={definition.vcpus}          name={'vcpus'}          onChange={this._inputChange} />
@@ -49,7 +50,8 @@ const CreateJob = React.createClass({
                                          model={[
                                              {id: 'label', placeholder: 'Key', required: true},
                                              {id: 'defaultValue', placeholder: 'default value'},
-                                             {id: 'type', placeholder: 'Type', select: PARAMETER_INPUTS, required: true}
+                                             {id: 'type', placeholder: 'Type', select: PARAMETER_INPUTS, required: true},
+                                             {id: 'description', placeholder: 'Parameter Description'}
                                          ]} />
                         </div>
                         <button className="btn-modal-submit" onClick={actions.submitJobDefinition}>
