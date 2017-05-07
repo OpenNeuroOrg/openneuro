@@ -12,6 +12,12 @@ import config     from '../../../config';
 let vcpusMax = config.aws.batch.vcpusMax;
 let memoryMax = config.aws.batch.memoryMax;
 
+const PARAMETER_INPUTS = [
+    {label: 'String', value: 'text'},
+    {label: 'Boolean', value: 'checkbox'},
+    {label: 'Number', value: 'numeric'},
+    {label: 'List', value: 'select'}
+];
 
 const CreateJob = React.createClass({
 
@@ -41,8 +47,9 @@ const CreateJob = React.createClass({
                              <ArrayInput value={definition.parameters}
                                          onChange={this._handleChange.bind(null, 'parameters')}
                                          model={[
-                                             {id: 'key', placeholder: 'Key', required: true},
-                                             {id: 'defaultValue', placeholder: 'default value'}
+                                             {id: 'label', placeholder: 'Key', required: true},
+                                             {id: 'defaultValue', placeholder: 'default value'},
+                                             {id: 'type', placeholder: 'Type', select: PARAMETER_INPUTS, required: true}
                                          ]} />
                         </div>
                         <button className="btn-modal-submit" onClick={actions.submitJobDefinition}>
