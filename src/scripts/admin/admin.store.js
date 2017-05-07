@@ -295,7 +295,6 @@ let UserStore = Reflux.createStore({
         };
 
         crn.defineJob(jobDefinition, (err) => {
-            // TODO - update our list of jobs
             // server is returning 400 for invalid inputs for vcpus and memory
             if(err) {
                 if(err.status === 400){
@@ -304,14 +303,14 @@ let UserStore = Reflux.createStore({
                     notifications.createAlert({type: "Error", message: "There was an error submitting job definition."});
                 }
             } else {
-                notifications.createAlert({type: "Success", message: "Job Definition Submission Successful!"})
-            }
+                notifications.createAlert({type: "Success", message: "Job Definition Submission Successful!"});
 
-            // TODO - error handling
-            datasetActions.loadApps(); //this does not seem like the right way to do this.
-            console.log('job submitted');
-            //toggle modal once response comes bacn from server.
-            this.toggleModal('defineJob');
+                //toggle modal once response comes bacn from server.
+                this.toggleModal('defineJob');
+
+                // TODO - error handling
+                datasetActions.loadApps(); //this does not seem like the right way to do this.
+            }
         });
     },
 
