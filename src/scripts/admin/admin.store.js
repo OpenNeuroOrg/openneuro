@@ -64,6 +64,8 @@ let UserStore = Reflux.createStore({
                 command: '',
                 vcpus: '1',
                 memory: '2000',
+                analysisLevels: [],
+                analysisLevelOptions: [],
                 parameters: [],
                 edit: false,
                 description: ''
@@ -289,6 +291,7 @@ let UserStore = Reflux.createStore({
         }
         jobDefinition.parameters = parameters;
         jobDefinition.parametersMetadata = parametersMetadata;
+        jobDefinition.analysisLevels = formData.analysisLevels;
 
         jobDefinition.descriptions = {
             description: formData.description
@@ -375,6 +378,8 @@ let UserStore = Reflux.createStore({
             vcpus: '1',
             description: '',
             memory: '2000',
+            analysisLevels: [],
+            analysisLevelOptions: [],
             parameters: [],
             edit: false
         };
