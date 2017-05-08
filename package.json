@@ -24,7 +24,7 @@
     "react": "0.14.8",
     "react-bootstrap": "0.29.4",
     "react-dom": "0.14.0",
-    "react-input-autosize": "^1.1.0",
+    "react-input-autosize": "1.1.0",
     "react-router": "^0.13.3",
     "react-select": "^1.0.0-rc.3",
     "reactable": "0.14.0",
