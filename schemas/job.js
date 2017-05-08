@@ -33,7 +33,8 @@ const definition = {
         parameters: {type: 'object'},
         type: {type: 'string'},
         descriptions: {type: 'object'},
-        parametersMetadata: {type: 'object'}
+        parametersMetadata: {type: 'object'},
+        analysisLevels: {type: 'array'}
     },
     definitions: {
         containerProperties: {
@@ -91,7 +92,8 @@ const definition = {
         'parameters',
         'type',
         'descriptions',
-        'parametersMetadata'
+        'parametersMetadata',
+        'analysisLevels'
     ],
     additionalProperties: false
 };
