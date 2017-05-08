@@ -28,18 +28,6 @@ export default  {
             } else {
                 return apps;
             }
-
-            // // Get only the latest versions
-            // let app = appVersions[Math.max(...Object.keys(appVersions))];
-            // // Check that a given job has a BIDS_CONTAINER environment value
-            // if (app.containerProperties.environment.filter((envProp) => {
-            //     return envProp.hasOwnProperty('name') && envProp.name === 'BIDS_CONTAINER';
-            // }).length > 0) {
-            //     apps.push(app);
-            //     return apps;
-            // } else {
-            //     return apps;
-            // }
         }, []);
     },
 
