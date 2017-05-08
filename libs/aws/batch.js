@@ -111,7 +111,7 @@ export default (aws) => {
                 // TODO - Make BIDS_ANALYSIS_LEVEL configurable for values other than group/participant
                 env.push({name: 'BIDS_ANALYSIS_LEVEL', value: level});
                 // TODO - Properly escape participant_label subjects and support other parameters
-                env.push({name: 'BIDS_ARGUMENTS', value: '--participant_label ' + subject});
+                env.push({name: 'BIDS_ARGUMENTS', value: '--participant_label ' + subject.slice(4)});
                 jobs.push(job.bind(this, subjectBatchJob));
             });
             async.parallel(jobs, callback);
@@ -124,9 +124,13 @@ export default (aws) => {
          */
         submitSingleJob(batchJob, level, deps, callback) {
             let env = batchJob.containerOverrides.environment;
+            // Filter out sub- from sub-01 and convert to space delimited string
+            let subjects = batchJob.parameters.participant_label.map((subject) => {
+                return subject.slice(4);
+            }).join(' ');
             env.push({name: 'BIDS_ANALYSIS_LEVEL', value: level});
             // TODO - prepare the other BIDS_ARGUMENTS from parameters
-            env.push({name: 'BIDS_ARGUMENTS', value: '--participant_label ' + batchJob.parameters.participant_label.join(' ')});
+            env.push({name: 'BIDS_ARGUMENTS', value: '--participant_label ' + subjects});
             // After constructing the parameter, remove invalid object from batch job
             delete batchJob.parameters.participant_label;
             batchJob.dependsOn = _depsObjects(deps);
