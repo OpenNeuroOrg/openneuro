@@ -5,6 +5,15 @@ import config from '../../config';
 
 let c = mongo.collections;
 
+/**
+ * Converts a list of job Ids into an array of objects as expected by the Batch API
+ */
+function _depsObjects(depsIds) {
+    return depsIds.map((depId) => {
+        return {'jobId': depId};
+    });
+}
+
 export default (aws) => {
 
     const batch = new aws.Batch();
@@ -37,18 +46,27 @@ export default (aws) => {
          * returns no return. Batch job start is happening after response has been send to client
          */
         startBatchJob(batchJob, jobId) {
-            //check for subject list and make decision regarding job execution (i.e. one job or multiple, parallel jobs)
-            if(batchJob.parameters.hasOwnProperty('participant_label') && batchJob.parameters.participant_label instanceof Array) {
-                this.submitParallelJobs(batchJob, (err, data) => {
-                    // need to handle error
-                    this._updateJobOnSubmitSuccessful(jobId, data);
+            c.crn.jobDefinitions.findOne({jobDefinitionArn: batchJob.jobDefinition}, {}, (err, jobDef) => {
+                let analysisLevels = jobDef.analysisLevels;
+                async.reduce(analysisLevels, [], (deps, level, callback) => {
+                    let submitter;
+                    let levelName = level.value;
+                    if (levelName.search('participant') != -1) {
+                        // Run participant level jobs in parallel
+                        submitter = this.submitParallelJobs;
+                    } else {
+                        // Other levels are serial
+                        submitter = this.submitSingleJob;
+                    }
+                    submitter(batchJob, levelName, deps, (err, batchJobIds) => {
+                        // Submit the next set of jobs including the previous as deps
+                        callback(null, deps.concat(batchJobIds));
+                    });
+                }, (err, batchJobIds) => {
+                    // When all jobs are submitted, update job state with the last set
+                    this._updateJobOnSubmitSuccessful(jobId, batchJobIds);
                 });
-            } else {
-                this.submitSingleJob(batchJob, (err, data) => {
-                    // need to handle error
-                    this._updateJobOnSubmitSuccessful(jobId, data);
-                });
-            }
+            });
         },
 
         /**
@@ -73,7 +91,7 @@ export default (aws) => {
          * for jobs with a subjectList parameter, we want to start all those jobs in parallel
          * submits all jobs in parallel and callsback with an array of the AWS batch ids for all the jobs
          */
-        submitParallelJobs(batchJob, callback) {
+        submitParallelJobs(batchJob, level, deps, callback) {
             let job = (params, callback) => {
                 batch.submitJob(params, (err, data) => {
                     if(err) {callback(err);}
@@ -87,10 +105,11 @@ export default (aws) => {
 
             batchJob.parameters.participant_label.forEach((subject) => {
                 let subjectBatchJob = JSON.parse(JSON.stringify(batchJob));
+                subjectBatchJob.dependsOn = _depsObjects(deps);
                 delete subjectBatchJob.parameters.participant_label;
                 let env = subjectBatchJob.containerOverrides.environment;
                 // TODO - Make BIDS_ANALYSIS_LEVEL configurable for values other than group/participant
-                env.push({name: 'BIDS_ANALYSIS_LEVEL', value: 'participant'});
+                env.push({name: 'BIDS_ANALYSIS_LEVEL', value: level});
                 // TODO - Properly escape participant_label subjects and support other parameters
                 env.push({name: 'BIDS_ARGUMENTS', value: '--participant_label ' + subject});
                 jobs.push(job.bind(this, subjectBatchJob));
@@ -103,10 +122,14 @@ export default (aws) => {
          * for jobs without a subjectList parameter we are running all subjects in one job.
          * callsback with a single element array containing the AWS batch ID.
          */
-        submitSingleJob(batchJob, callback) {
-            // TODO - BIDS_ANALYSIS_LEVEL should be handled elsewhere
-            // Value is not always "group" for group analysis
-            batchJob.containerOverrides.environment.push({name: 'BIDS_ANALYSIS_LEVEL', value: 'group'});
+        submitSingleJob(batchJob, level, deps, callback) {
+            let env = batchJob.containerOverrides.environment;
+            env.push({name: 'BIDS_ANALYSIS_LEVEL', value: level});
+            // TODO - prepare the other BIDS_ARGUMENTS from parameters
+            env.push({name: 'BIDS_ARGUMENTS', value: '--participant_label ' + batchJob.parameters.participant_label.join(' ')});
+            // After constructing the parameter, remove invalid object from batch job
+            delete batchJob.parameters.participant_label;
+            batchJob.dependsOn = _depsObjects(deps);
             batch.submitJob(batchJob, (err, data) => {
                 if(err) {callback(err);}
                 callback(null, [data.jobId]); //storing jobId's as array in mongo to support multi job analysis
