@@ -30,6 +30,7 @@ let handlers = {
         //AWS Batch will choke if we leave descriptions property on payload so deleting before sending
         delete jobDef.descriptions;
         delete jobDef.parametersMetadata;
+        delete jobDef.analysisLevels;
 
         aws.batch.registerJobDefinition(jobDef, (err, data) => {
             if (err) {
@@ -38,6 +39,7 @@ let handlers = {
                 let extendeJobDef = data;
                 extendeJobDef.descriptions = req.body.descriptions || {};
                 extendeJobDef.parametersMetadata = req.body.parametersMetadata || {};
+                extendeJobDef.analysisLevels = req.body.analysisLevels || {};
                 c.crn.jobDefinitions.insertOne(extendeJobDef, (err) => {
                     if(err){
                         //TODO -- error handling? make response dependant on inserting document?
@@ -250,7 +252,7 @@ let handlers = {
     /**
      * GET File
      * listObjects to find everything in the s3 bucket for a given job
-     * stream all files in series(?) to zip 
+     * stream all files in series(?) to zip
      */
     downloadAllS3(req, res) {
         let jobId = req.params.jobId;
