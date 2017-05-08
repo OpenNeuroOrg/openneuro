@@ -5,6 +5,7 @@ import Reflux     from 'reflux';
 import ArrayInput from '../common/forms/array-input.jsx';
 import Input      from '../common/forms/input.jsx';
 import {Modal}    from 'react-bootstrap';
+import Select     from 'react-select';
 import adminStore from './admin.store';
 import actions    from './admin.actions';
 import config     from '../../../config';
@@ -44,6 +45,10 @@ const CreateJob = React.createClass({
                         <Input placeholder="Memory (MiB)"            value={definition.memory}         name={'memory'}         onChange={this._inputChange} />
                         <span>{'Max memory is ' + memoryMax + 'GB'}</span>
                         <div className="form-group">
+                            <label>Analysis Levels</label>
+                            <Select.Creatable value={definition.analysisLevels} name={'analysisLevels'} onChange={this._analysisLevelsChange} options={definition.analysisLevelOptions} multi />
+                        </div>
+                        <div className="form-group">
                              <label>Parameters</label>
                              <ArrayInput value={definition.parameters}
                                          onChange={this._handleChange.bind(null, 'parameters')}
@@ -69,8 +74,11 @@ const CreateJob = React.createClass({
 
     _inputChange (e) {
         actions.inputChange('jobDefinitionForm', e.target.name, e.target.value);
-    }
+    },
 
+    _analysisLevelsChange (e) {
+        actions.inputChange('jobDefinitionForm', 'analysisLevels', e);
+    }
 });
 
 export default CreateJob;
