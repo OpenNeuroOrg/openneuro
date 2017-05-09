@@ -343,6 +343,7 @@ let UserStore = Reflux.createStore({
         jobDefinitionForm.command = jobDefinition.containerProperties.command.join(' ');
         jobDefinitionForm.vcpus = jobDefinition.containerProperties.vcpus.toString(); //form is expecting string
         jobDefinitionForm.memory = jobDefinition.containerProperties.memory.toString(); //form is expecting string
+        jobDefinitionForm.analysisLevels = jobDefinition.analysisLevels;
 
         let params = [];
         if(Object.keys(jobDefinition.parameters).length) {
