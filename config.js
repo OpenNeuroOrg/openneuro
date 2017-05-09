@@ -50,7 +50,7 @@ let config = {
         },
         'batch': {
             vcpusMax: 4,
-            memoryMax: 14305.1
+            memoryMax: 15360
         }
     }
 };
