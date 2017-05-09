@@ -16,7 +16,7 @@ let Jobs = React.createClass({
 // life cycle events --------------------------------------------------
 
     render() {
-        let noJobs = <div className="no-results">There are no jobs defined.</div>;
+        let noJobs = <div className="no-results">There are no apps defined.</div>;
         let jobs = batch.filterJobDefinitions(this.state.datasets.apps).map((app, index) => {
             let bidsContainer = batch.getBidsContainer(app);
             return (
@@ -56,14 +56,14 @@ let Jobs = React.createClass({
         return (
             <div className="dashboard-dataset-teasers fade-in inner-route admin-jobs clearfix">
                 <div className="clearfix">
-                    <h2>Job Definitions</h2>
+                    <h2>App Definitions</h2>
                     <button className="btn-blue" onClick={actions.toggleModal.bind(this, 'defineJob')} >
-                        <span>Define a Job</span>
+                        <span>Define an App</span>
                     </button>
                 </div>
                 <div className="col-xs-12 job-panel-wrap">
                         <div className="fade-in job-panel-header clearfix" >
-                            <div className="col-xs-5 job-col"><label>Job</label></div>
+                            <div className="col-xs-5 job-col"><label>App</label></div>
                             <div className="col-xs-3 job-col"><label>Container Image</label></div>
                             <div className="col-xs-2 job-col"><label>Status</label></div>
                             <div className="col-xs-2 job-col"><label>Actions</label></div>
