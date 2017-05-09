@@ -5,63 +5,56 @@ import markdown from '../../../utils/markdown';
 
 
 const JobDescription = ({jobDefinition}) => {
+    let descriptions = jobDefinition.descriptions;
 
     let shortDescription;
-    if (jobDefinition.shortDescription) {
+    if (descriptions && descriptions.shortDescription) {
         shortDescription = (
             <div>
                 <h5>Short Description</h5>
-                <div className="well" dangerouslySetInnerHTML={markdown.format(jobDefinition.shortDescription)}></div>
-            </div>
-        );
-    }
-
-    let help;
-    if (jobDefinition.helpURI) {
-        help = (
-            <div>
-                <h5>Help</h5>
-                <div className="well">
-                    <a href={jobDefinition.helpURI} target="_blank">{jobDefinition.helpURI}</a>
-                </div>
+                <div className="well" dangerouslySetInnerHTML={markdown.format(descriptions.shortDescription)}></div>
             </div>
         );
     }
 
     let tags;
-    if (jobDefinition.tags) {
+    if (descriptions && descriptions.tags) {
         tags = (
             <div>
                 <h5>Tags</h5>
-                <div className="well">{jobDefinition.tags.join(', ')}</div>
+                <div className="well">{descriptions.tags}</div>
             </div>
         );
     }
 
-    let description,
-        acknowledgments,
-        support;
-    if (jobDefinition.longDescription) {
-        jobDefinition.longDescription = typeof jobDefinition.longDescription === 'string' ? JSON.parse(jobDefinition.longDescription) : jobDefinition.longDescription;
+    let description;
+    if (descriptions && descriptions.description) {
+        // descriptions.description = typeof descriptions.description === 'string' ? JSON.parse(descriptions.description) : descriptions.description;
 
         description = (
             <div>
                 <h5>Description</h5>
-                <div className="well" dangerouslySetInnerHTML={markdown.format(jobDefinition.longDescription.description)}></div>
+                <div className="well" dangerouslySetInnerHTML={markdown.format(descriptions.description)}></div>
             </div>
         );
+    }
 
+    let acknowledgments;
+    if (descriptions && descriptions.acknowledgments) {
         acknowledgments = (
             <div>
                 <h5>Acknowledgements</h5>
-                <div className="well" dangerouslySetInnerHTML={markdown.format(jobDefinition.longDescription.acknowledgments)}></div>
+                <div className="well" dangerouslySetInnerHTML={markdown.format(descriptions.acknowledgments)}></div>
             </div>
         );
+    }
 
+    let support;
+    if (descriptions && descriptions.support) {
         support = (
             <div>
                 <h5>Support</h5>
-                <div className="well" dangerouslySetInnerHTML={markdown.format(jobDefinition.longDescription.support)}></div>
+                <div className="well" dangerouslySetInnerHTML={markdown.format(descriptions.support)}></div>
             </div>
         );
     }
@@ -72,7 +65,6 @@ const JobDescription = ({jobDefinition}) => {
             {shortDescription}
             {description}
             {acknowledgments}
-            {help}
             {support}
             {tags}
         </div>
