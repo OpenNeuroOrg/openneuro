@@ -284,8 +284,8 @@ let UserStore = Reflux.createStore({
         // Want to post metadata as a separate prop so we can delete before sending to Batch
         if (formData.parameters) {
             for (let param of formData.parameters) {
-                parameters[param.key] = param.defaultValue;
-                parametersMetadata[param.key] = param;
+                parameters[param.label] = param.defaultValue;
+                parametersMetadata[param.label] = param;
             }
         }
         jobDefinition.parameters = parameters;
@@ -348,12 +348,12 @@ let UserStore = Reflux.createStore({
         let params = [];
         if(Object.keys(jobDefinition.parameters).length) {
             Object.keys(jobDefinition.parameters).forEach((key) => {
-                // params.push({label: key, defaultValue: jobDefinition.parameters[key], Type: 'String'});
-                try {
-                    params.push(JSON.parse(jobDefinition.parameters[key]));
-                } catch(e) {
-                    //error handling for this or just skip improperly formatted JSON params?
+                let paramInputData = {label: key, defaultValue: jobDefinition.parameters[key]};
+                if(jobDefinition.parametersMetadata && jobDefinition.parametersMetadata[key]){
+                    paramInputData.description =  jobDefinition.parametersMetadata[key].description;
+                    paramInputData.type = this._getLabel(jobDefinition.parametersMetadata[key].type);
                 }
+                params.push(paramInputData);
             });
         }
 
