@@ -350,8 +350,8 @@ let UserStore = Reflux.createStore({
             Object.keys(jobDefinition.parameters).forEach((key) => {
                 let paramInputData = {label: key, defaultValue: jobDefinition.parameters[key]};
                 if(jobDefinition.parametersMetadata && jobDefinition.parametersMetadata[key]){
+                    paramInputData.type = jobDefinition.parametersMetadata[key].type;
                     paramInputData.description =  jobDefinition.parametersMetadata[key].description;
-                    paramInputData.type = this._getLabel(jobDefinition.parametersMetadata[key].type);
                 }
                 params.push(paramInputData);
             });
