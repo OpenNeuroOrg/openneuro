@@ -43,7 +43,7 @@ const CreateJob = React.createClass({
                         <Input placeholder="vCPUs"                   value={definition.vcpus}          name={'vcpus'}          onChange={this._inputChange} />
                         <span>{'Max number of vCPUs is ' + vcpusMax}</span>
                         <Input placeholder="Memory (MiB)"            value={definition.memory}         name={'memory'}         onChange={this._inputChange} />
-                        <span>{'Max memory is ' + memoryMax + 'GB'}</span>
+                        <span>{'Max memory is ' + memoryMax + ' MiB'}</span>
                         <div className="form-group">
                             <label>Analysis Levels</label>
                             <Select.Creatable value={definition.analysisLevels} name={'analysisLevels'} onChange={this._analysisLevelsChange} options={definition.analysisLevelOptions} multi />
