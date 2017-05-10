@@ -13,7 +13,7 @@ class CrnEmitter extends EventEmitter {
         this.events = events;
         return CrnEmitter.instance;
     }
-};
+}
 
 let emitter = new CrnEmitter(config.events);
 
