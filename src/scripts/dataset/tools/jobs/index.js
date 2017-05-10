@@ -138,7 +138,8 @@ export default class JobMenu extends React.Component {
         const selectedApp = this.state.selectedAppKey;
 
         let validatedApps = batch.filterJobDefinitions(apps).map((app) => {
-            return app.jobDefinitionName;
+            //filterJobDefinitions returns an array of objects, with each object having a single key which is app name.
+            return Object.keys(app)[0];
         });
         const appOptions = validatedApps.map((jobDefinitionName, index) => {
             return <option key={index} value={jobDefinitionName}> {jobDefinitionName} </option>;

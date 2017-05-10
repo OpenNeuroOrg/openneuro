@@ -2,6 +2,7 @@
 
 import React      from 'react';
 import Reflux     from 'reflux';
+import {Accordion, Panel} from 'react-bootstrap';
 import adminStore from './admin.store';
 import actions    from './admin.actions';
 import datasetStore from '../dataset/dataset.store';
@@ -18,13 +19,53 @@ let Jobs = React.createClass({
     render() {
         let noJobs = <div className="no-results">There are no jobs defined.</div>;
         let jobs = batch.filterJobDefinitions(this.state.datasets.apps).map((app, index) => {
-            let bidsContainer = batch.getBidsContainer(app);
+            //Need to explain this. And should probably stop calling everything app.
+            let appName = Object.keys(app)[0];
+            let list = this._versionList(app[appName]);
             return (
-                <div className="fade-in job-panel clearfix" key={app.jobDefinitionName}>
+                <Panel header={appName} eventKey={index} key={index}>
+                    {list}
+                </Panel>
+            );
+        });
+
+        return (
+            <div className="dashboard-dataset-teasers fade-in inner-route admin-jobs clearfix">
+                <div className="clearfix">
+                    <h2>Job Definitions</h2>
+                    <button className="btn-blue" onClick={actions.toggleModal.bind(this, 'defineJob')} >
+                        <span>Define a Job</span>
+                    </button>
+                </div>
+                <div className="col-xs-12 job-panel-wrap">
+                        <div className="fade-in job-panel-header clearfix" >
+                            <div className="col-xs-5 job-col"><label>Job</label></div>
+                            <div className="col-xs-3 job-col"><label>Container Image</label></div>
+                            <div className="col-xs-2 job-col"><label>Status</label></div>
+                            <div className="col-xs-2 job-col"><label>Actions</label></div>
+                        </div>
+                </div>
+                <Accordion>
+                {Object.keys(this.state.datasets.apps).length == 0 ? noJobs : jobs}
+                </Accordion>
+                <DefineJobModal
+                    show={this.state.modals.defineJob}
+                    onHide={actions.toggleModal.bind(this, 'defineJob')}
+                    edit={this.state.jobDefinitionForm.edit}/>
+            </div>
+        );
+    },
+
+    _versionList(apps) {
+        let list = apps.map((app, index) => {
+            let bidsContainer = batch.getBidsContainer(app);
+
+            return (
+                <div className="job-panel clearfix" key={index}>
                     <div className="col-xs-5 job-col">
                         <h3>
                             <div className="job-name">
-                                <span>{app.jobDefinitionName}</span>
+                                <span>{app.jobDefinitionName + ":" + app.revision}</span>
                             </div>
                         </h3>
                     </div>
@@ -50,32 +91,10 @@ let Jobs = React.createClass({
                     </div>
                     </div>
                 </div>
-            );
+            )
         });
 
-        return (
-            <div className="dashboard-dataset-teasers fade-in inner-route admin-jobs clearfix">
-                <div className="clearfix">
-                    <h2>Job Definitions</h2>
-                    <button className="btn-blue" onClick={actions.toggleModal.bind(this, 'defineJob')} >
-                        <span>Define a Job</span>
-                    </button>
-                </div>
-                <div className="col-xs-12 job-panel-wrap">
-                        <div className="fade-in job-panel-header clearfix" >
-                            <div className="col-xs-5 job-col"><label>Job</label></div>
-                            <div className="col-xs-3 job-col"><label>Container Image</label></div>
-                            <div className="col-xs-2 job-col"><label>Status</label></div>
-                            <div className="col-xs-2 job-col"><label>Actions</label></div>
-                        </div>
-                </div>
-                {Object.keys(this.state.datasets.apps).length == 0 ? noJobs : jobs}
-                <DefineJobModal
-                    show={this.state.modals.defineJob}
-                    onHide={actions.toggleModal.bind(this, 'defineJob')}
-                    edit={this.state.jobDefinitionForm.edit}/>
-            </div>
-        );
+        return list;
     }
 
 });
