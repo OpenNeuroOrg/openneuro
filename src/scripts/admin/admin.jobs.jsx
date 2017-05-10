@@ -17,7 +17,7 @@ let Jobs = React.createClass({
 // life cycle events --------------------------------------------------
 
     render() {
-        let noJobs = <div className="no-results">There are no jobs defined.</div>;
+        let noJobs = <div className="no-results">There are no apps defined.</div>;
         let jobs = batch.filterJobDefinitions(this.state.datasets.apps).map((app, index) => {
             //Need to explain this. And should probably stop calling everything app.
             let appName = Object.keys(app)[0];

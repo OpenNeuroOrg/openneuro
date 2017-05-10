@@ -22,7 +22,7 @@ class Dashboard extends React.Component {
                     <ul className="nav nav-pills tabs">
                         <li><Link to="users" className="btn-tab">Users</Link></li>
                         <li><Link to="blacklist" className="btn-tab">Blocked Users</Link></li>
-                        <li><Link to="job-definitions" className="btn-tab">Job Definitions</Link></li>
+                        <li><Link to="job-definitions" className="btn-tab">App Definitions</Link></li>
                     </ul>
                     <RouteHandler/>
                 </div>

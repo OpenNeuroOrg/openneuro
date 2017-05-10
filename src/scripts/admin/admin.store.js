@@ -68,7 +68,11 @@ let UserStore = Reflux.createStore({
                 analysisLevelOptions: [],
                 parameters: [],
                 edit: false,
-                description: ''
+                description: '',
+                shortDescription: '',
+                acknowledgements:'',
+                tags:'',
+                support:''
             },
             blacklistError: ''
         };
@@ -293,7 +297,11 @@ let UserStore = Reflux.createStore({
         jobDefinition.analysisLevels = formData.analysisLevels;
 
         jobDefinition.descriptions = {
-            description: formData.description
+            description: formData.description,
+            shortDescription: formData.shortDescription,
+            acknowledgements: formData.acknowledgements,
+            support: formData.support,
+            tags: formData.tags
         };
 
         crn.defineJob(jobDefinition, (err) => {
@@ -337,6 +345,10 @@ let UserStore = Reflux.createStore({
         jobDefinitionForm.edit = true;
         jobDefinitionForm.name = jobDefinition.jobDefinitionName;
         jobDefinitionForm.description = jobDefinition.descriptions && jobDefinition.descriptions.description ? jobDefinition.descriptions.description : '';
+        jobDefinitionForm.shortDescription = jobDefinition.descriptions && jobDefinition.descriptions.shortDescription ? jobDefinition.descriptions.shortDescription : '';
+        jobDefinitionForm.acknowledgements = jobDefinition.descriptions && jobDefinition.descriptions.acknowledgements ? jobDefinition.descriptions.acknowledgements : '';
+        jobDefinitionForm.support = jobDefinition.descriptions && jobDefinition.descriptions.support ? jobDefinition.descriptions.support : '';
+        jobDefinitionForm.tags = jobDefinition.descriptions && jobDefinition.descriptions.tags ? jobDefinition.descriptions.tags : '';
         jobDefinitionForm.jobRoleArn = jobDefinition.jobDefinitionArn;
         jobDefinitionForm.containerImage = batch.getBidsContainer(jobDefinition);
         jobDefinitionForm.hostImage = jobDefinition.containerProperties.image;
@@ -381,7 +393,11 @@ let UserStore = Reflux.createStore({
             analysisLevels: [],
             analysisLevelOptions: [],
             parameters: [],
-            edit: false
+            edit: false,
+            shortDescription: '',
+            acknowledgements:'',
+            tags:'',
+            support:''
         };
 
         this.update({jobDefinitionForm});
