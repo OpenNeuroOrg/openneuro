@@ -52,6 +52,12 @@ let config = {
             vcpusMax: 4,
             memoryMax: 15360
         }
+    },
+
+    events: {
+        JOB_STARTED: 'job-started',
+        JOB_COMPLETED: 'job-completed',
+        DATASET_UPLOADED: 'dataset-uploaded'
     }
 };
 

@@ -11,7 +11,10 @@ import archiver      from 'archiver';
 import config from '../config';
 import async from 'async';
 
+import emitter from '../libs/events';
+
 let c = mongo.collections;
+let events = config.events;
 
 // handlers ----------------------------------------------------------------
 
@@ -173,6 +176,7 @@ let handlers = {
                         };
 
                         aws.batch.startBatchJob(batchJobParams, mongoJob.insertedId);
+                        emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created});
                     });
                 });
             });
@@ -225,6 +229,8 @@ let handlers = {
                             Prefix: s3Prefix,
                             StartAfter: s3Prefix
                         };
+                        // emit a job finished event so we can add logs
+                        emitter.emit(events.JOB_COMPLETED, {job: job, completedDate: new Date()});
 
                         aws.s3.sdk.listObjectsV2(params, (err, data) => {
                             let results = [];
