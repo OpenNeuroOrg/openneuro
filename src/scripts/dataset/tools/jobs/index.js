@@ -51,7 +51,7 @@ export default class JobMenu extends React.Component {
         if (this.state.subjects.length === 0 && this.props.dataset.summary) {
             let subjects = [];
             for (let subject of this.props.dataset.summary.subjects) {
-                subjects.push({label: 'sub-' + subject, value: 'sub-' + subject});
+                subjects.push({label: 'sub-' + subject, value: subject});
             }
             subjects.reverse();
             this.setState({subjects});
