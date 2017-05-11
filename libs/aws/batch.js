@@ -122,22 +122,43 @@ export default (aws) => {
          * for jobs without a subjectList parameter we are running all subjects in one job.
          * callsback with a single element array containing the AWS batch ID.
          */
-        submitSingleJob(batchJob, level, deps, callback) {
-            let env = batchJob.containerOverrides.environment;
-            // Filter out sub- from sub-01 and convert to space delimited string
-            let subjects = batchJob.parameters.participant_label.map((subject) => {
-                return subject.slice(4);
-            }).join(' ');
-            env.push({name: 'BIDS_ANALYSIS_LEVEL', value: level});
-            // TODO - prepare the other BIDS_ARGUMENTS from parameters
-            env.push({name: 'BIDS_ARGUMENTS', value: '--participant_label ' + subjects});
-            // After constructing the parameter, remove invalid object from batch job
-            delete batchJob.parameters.participant_label;
+        submitSingleJob(batchJob, deps, callback) {
+            this._addJobArguments(batchJob);
             batchJob.dependsOn = _depsObjects(deps);
+            // After constructing the job document, remove invalid object from batch job
+            delete batchJob.parameters;
             batch.submitJob(batchJob, (err, data) => {
                 if(err) {callback(err);}
                 callback(null, [data.jobId]); //storing jobId's as array in mongo to support multi job analysis
             });
+        },
+
+        /**
+         * Convert JSON parameters into a string to pass to the bids-app container
+         *
+         * Accepts an array of parameter objects
+         * {key: ...value}
+         */
+        _prepareArguments(parameters) {
+            return Object.keys(parameters).map((key) => {
+                let parameter = parameters[key];
+                let argument = '--' + key + ' ';
+                let value = parameter || '';
+                if (value instanceof Array) {
+                    value = value.join(' ');
+                }
+                return argument.concat(value);
+            }).join(' ');
+        },
+
+        /**
+         * Convert batchJob.parameters to a BIDS_ARGUMENTS environment var
+         * and add to document to submit the job
+         */
+        _addJobArguments(batchJob) {
+            let env = batchJob.containerOverrides.environment;
+            let bidsArguments = this._prepareArguments(batchJob.parameters);
+            env.push({name: 'BIDS_ARGUMENTS', value: bidsArguments});
         },
 
         _validateInputs(jobDef) {
