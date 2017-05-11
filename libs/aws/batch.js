@@ -51,14 +51,19 @@ export default (aws) => {
                 async.reduce(analysisLevels, [], (deps, level, callback) => {
                     let submitter;
                     let levelName = level.value;
+
+                    // Pass analysis level to the BIDS app container
+                    let env = batchJob.containerOverrides.environment;
+                    env.push({name: 'BIDS_ANALYSIS_LEVEL', value: levelName});
+
                     if (levelName.search('participant') != -1) {
                         // Run participant level jobs in parallel
-                        submitter = this.submitParallelJobs;
+                        submitter = this.submitParallelJobs.bind(this);
                     } else {
                         // Other levels are serial
-                        submitter = this.submitSingleJob;
+                        submitter = this.submitSingleJob.bind(this);
                     }
-                    submitter(batchJob, levelName, deps, (err, batchJobIds) => {
+                    submitter(batchJob, deps, (err, batchJobIds) => {
                         // Submit the next set of jobs including the previous as deps
                         callback(null, deps.concat(batchJobIds));
                     });
@@ -91,7 +96,7 @@ export default (aws) => {
          * for jobs with a subjectList parameter, we want to start all those jobs in parallel
          * submits all jobs in parallel and callsback with an array of the AWS batch ids for all the jobs
          */
-        submitParallelJobs(batchJob, level, deps, callback) {
+        submitParallelJobs(batchJob, deps, callback) {
             let job = (params, callback) => {
                 batch.submitJob(params, (err, data) => {
                     if(err) {callback(err);}
@@ -106,12 +111,10 @@ export default (aws) => {
             batchJob.parameters.participant_label.forEach((subject) => {
                 let subjectBatchJob = JSON.parse(JSON.stringify(batchJob));
                 subjectBatchJob.dependsOn = _depsObjects(deps);
-                delete subjectBatchJob.parameters.participant_label;
-                let env = subjectBatchJob.containerOverrides.environment;
-                // TODO - Make BIDS_ANALYSIS_LEVEL configurable for values other than group/participant
-                env.push({name: 'BIDS_ANALYSIS_LEVEL', value: level});
-                // TODO - Properly escape participant_label subjects and support other parameters
-                env.push({name: 'BIDS_ARGUMENTS', value: '--participant_label ' + subject.slice(4)});
+                // Reduce participant_label to a single subject
+                subjectBatchJob.parameters.participant_label = [subject];
+                this._addJobArguments(subjectBatchJob);
+                delete subjectBatchJob.parameters;
                 jobs.push(job.bind(this, subjectBatchJob));
             });
             async.parallel(jobs, callback);
