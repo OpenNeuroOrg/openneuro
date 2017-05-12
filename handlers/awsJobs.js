@@ -34,6 +34,7 @@ let handlers = {
 
         aws.batch.registerJobDefinition(jobDef, (err, data) => {
             if (err) {
+                console.log(err);
                 return next(err);
             } else {
                 let extendeJobDef = data;
@@ -75,6 +76,7 @@ let handlers = {
             });
             aws.batch.sdk.describeJobDefinitions({jobDefinitions: arns}, (err, data) => {
                 if (err) {
+                    console.log(err);
                     return next(err);
                 } else {
                     let definitions = {};
@@ -318,6 +320,42 @@ let handlers = {
             });
         }
 
+    },
+
+    getJobLogs (req, res, next) {
+        let jobId = req.params.jobId;
+        let logs = {};
+        //cloudwatch log events requires knowing jobId and taskArn(s)
+        // taskArns are available on job which we can access with a describeJobs call to batch
+        aws.batch.sdk.describeJobs({jobs:[jobId]}, (err, data) => {
+            if(err) {return next(err);}
+            let logStreamNames;
+            if(data.jobs && data.jobs.length > 0) {
+                console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                console.log(data.jobs);
+                logStreamNames = data.jobs.reduce((acc, job) => {
+                    // job.attempts.forEach((attempt)=> {
+                    //     acc.push(job.jobName + '/' + jobId + '/' + attempt.container.taskArn);
+                    // });
+                    let arnnnn = job.container.containerInstanceArn.split('/').pop();
+                    acc.push(job.jobName + '/' + jobId + '/' + arnnnn);
+                    return acc;
+                }, []);
+                console.log(logStreamNames);
+                async.eachSeries(logStreamNames, (logStreamName, cb) => {
+                    let params = {
+                        logGroupName: config.aws.cloudwatchlogs.logGroupName,
+                        logStreamName: logStreamName
+                    };
+                    aws.cloudwatch.sdk.getLogEvents(params, (err, data)=> {
+                        logs[logStreamName] = data;
+                        cb();
+                    });
+                }, (err) =>{
+                    res.send(logs);
+                });
+            }
+        });
     },
 
     /**

@@ -178,8 +178,12 @@ const routes = [
         //     auth.ticket
         // ],
         handler: awsJobs.downloadAllS3
+    },
+    {
+        method: 'get',
+        url: '/jobs/:jobId/logs',
+        handler: awsJobs.getJobLogs
     }
-
 ];
 
 // initialize routes -------------------------------

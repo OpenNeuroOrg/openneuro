@@ -51,6 +51,9 @@ let config = {
         'batch': {
             vcpusMax: 4,
             memoryMax: 15360
+        },
+        'cloudwatchlogs': {
+            logGroupName: '/aws/batch/job'
         }
     }
 };
