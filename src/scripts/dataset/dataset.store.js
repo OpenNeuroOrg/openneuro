@@ -26,6 +26,7 @@ let datasetStore = Reflux.createStore({
     init: function () {
         this.setInitialState();
         this.loadApps();
+        this.getLogs('2aeb52c0-07cb-485e-9ec3-e9242f69fc16');
         this.listenTo(uploadStore, (data) => {
             if (data.projectId !== this.data.currentUploadId) {
                 this.update({currentUploadId: data.projectId});
@@ -211,6 +212,13 @@ let datasetStore = Reflux.createStore({
         crn.getApps((err, res) => {
             FPActions.setApps(res.body);
             this.update({apps: res.body, loadingApps: false});
+        });
+    },
+
+    getLogs(id) {
+        crn.getJobLogs(id, (err, res) => {
+            console.log(err);
+            console.log(res.body);
         });
     },
 

@@ -181,6 +181,10 @@ export default {
      */
     validate(datasetId, callback) {
         request.post(config.crn.url + 'datasets/' + datasetId + '/validate', {}, callback);
+    },
+
+    getJobLogs(jobId, callback) {
+        request.get(config.crn.url + 'jobs/' + jobId + '/logs', {}, callback);
     }
 
 };
