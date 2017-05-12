@@ -10,7 +10,7 @@ import WarnButton from '../common/forms/warn-button.jsx';
 import DefineJobModal       from './admin.create-job.modal.jsx';
 import batch from '../utils/batch.js';
 
-let Jobs = React.createClass({
+let Apps = React.createClass({
 
     mixins: [Reflux.connect(adminStore), Reflux.connect(datasetStore, 'datasets')],
 
@@ -18,7 +18,7 @@ let Jobs = React.createClass({
 
     render() {
         let noJobs = <div className="no-results">There are no apps defined.</div>;
-        let jobs = batch.filterJobDefinitions(this.state.datasets.apps).map((app, index) => {
+        let jobs = batch.filterAppDefinitions(this.state.datasets.apps).map((app, index) => {
             //Need to explain this. And should probably stop calling everything app.
             let appName = Object.keys(app)[0];
             let list = this._versionList(app[appName]);
@@ -99,4 +99,4 @@ let Jobs = React.createClass({
 
 });
 
-export default Jobs;
+export default Apps;

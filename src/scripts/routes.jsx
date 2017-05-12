@@ -11,7 +11,7 @@ import FrontPage      from './front-page/front-page.jsx';
 import Admin          from './admin/admin.jsx';
 import Users          from './admin/admin.users.jsx';
 import Blacklist      from './admin/admin.blacklist.jsx';
-import JobDefinitions from './admin/admin.jobs.jsx';
+import AppDefinitions from './admin/admin.apps.jsx';
 
 import Dashboard      from './dashboard/dashboard.jsx';
 import Notifications  from './dashboard/notifications.jsx';
@@ -66,8 +66,8 @@ let routes = (
         <Route name="admin" path="admin" handler={requireAuth(Admin, 'admin')} >
             <Route name="users" path="users" handler={Users} />
             <Route name="blacklist" path="blacklist" handler={Blacklist} />
-            <Route name="job-definitions" path="job-definitions" handler={JobDefinitions} />
-            <Route name="job-definitions-edit" path="job-definitions/:job-definitionsId" handler={JobDefinitions} />
+            <Route name="app-definitions" path="app-definitions" handler={AppDefinitions} />
+            <Route name="app-definitions-edit" path="app-definitions/:app-definitionsId" handler={AppDefinitions} />
             <NotFoundRoute handler={RedirectUsers}/>
         </Route>
         <Route name="dataset" path="datasets/:datasetId" handler={Dataset} />
@@ -78,4 +78,3 @@ let routes = (
 );
 
 export default routes;
-

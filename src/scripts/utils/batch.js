@@ -5,9 +5,9 @@
  */
 export default  {
     /* Return valid BIDS apps from a list of AWS Batch jobs */
-    filterJobDefinitions(jobDefs) {
-        return Object.keys(jobDefs).reduce((apps, key) => {
-            let appVersions = jobDefs[key];
+    filterAppDefinitions(appDefs) {
+        return Object.keys(appDefs).reduce((apps, key) => {
+            let appVersions = appDefs[key];
             let appsToKeep = {};
             let appsArray = [];
             Object.keys(appVersions).forEach(function(version){
