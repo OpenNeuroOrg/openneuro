@@ -37,6 +37,7 @@ let handlers = {
                 return next(err);
             } else {
                 let extendeJobDef = data;
+                extendeJobDef.parameters = req.body.parameters || {};
                 extendeJobDef.descriptions = req.body.descriptions || {};
                 extendeJobDef.parametersMetadata = req.body.parametersMetadata || {};
                 extendeJobDef.analysisLevels = req.body.analysisLevels || {};
@@ -87,11 +88,13 @@ let handlers = {
                             jobDefinitionName: definition.jobDefinitionName,
                             jobDefinitionArn: definition.jobDefinitionArn,
                             revision: definition.revision
-                        }, {descriptions: true, parametersMetadata: true, analysisLevels: true}).toArray((err, def) => {
+                        }, {descriptions: true, parameters: true, parametersMetadata: true, analysisLevels: true}).toArray((err, def) => {
                             // there will either be a one element array or an empty array returned
+                            let parameters = def.length === 0 || !def[0].parameters ? {} : def[0].parameters;
                             let descriptions = def.length === 0 || !def[0].descriptions ? {} : def[0].descriptions;
                             let parametersMetadata = def.length === 0 || !def[0].parametersMetadata ? {} : def[0].parametersMetadata;
                             let analysisLevels = def.length === 0 || !def[0].analysisLevels ? {} : def[0].analysisLevels;
+                            definition.parameters = parameters;
                             definition.descriptions = descriptions;
                             definition.parametersMetadata = parametersMetadata;
                             definition.analysisLevels = analysisLevels;
