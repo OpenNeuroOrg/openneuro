@@ -106,18 +106,26 @@ export default (aws) => {
                 });
             };
 
-            let jobs = [];
-
-            batchJob.parameters.participant_label.forEach((subject) => {
-                let subjectBatchJob = JSON.parse(JSON.stringify(batchJob));
-                subjectBatchJob.dependsOn = _depsObjects(deps);
-                // Reduce participant_label to a single subject
-                subjectBatchJob.parameters.participant_label = [subject];
-                this._addJobArguments(subjectBatchJob);
-                delete subjectBatchJob.parameters;
-                jobs.push(job.bind(this, subjectBatchJob));
-            });
-            async.parallel(jobs, callback);
+            if (batchJob.parameters.hasOwnProperty('participant_label') &&
+                batchJob.parameters.participant_label instanceof Array &&
+                batchJob.parameters.participant_label.length > 0) {
+                let jobs = [];
+                batchJob.parameters.participant_label.forEach((subject) => {
+                    let subjectBatchJob = JSON.parse(JSON.stringify(batchJob));
+                    subjectBatchJob.dependsOn = _depsObjects(deps);
+                    // Reduce participant_label to a single subject
+                    subjectBatchJob.parameters.participant_label = [subject];
+                    this._addJobArguments(subjectBatchJob);
+                    delete subjectBatchJob.parameters;
+                    jobs.push(job.bind(this, subjectBatchJob));
+                });
+                async.parallel(jobs, callback);
+            } else {
+                // Parallel job with no participants passed in
+                let err = new Error('Parallel job submitted with no subjects specified');
+                err.http_code = 422;
+                callback(err);
+            }
         },
 
         /**
@@ -143,10 +151,17 @@ export default (aws) => {
          * {key: ...value}
          */
         _prepareArguments(parameters) {
-            return Object.keys(parameters).map((key) => {
-                let parameter = parameters[key];
+            return Object.keys(parameters).filter((key) => {
+                // Skip empty arguments
+                let value = parameters[key];
+                if (value instanceof Array) {
+                    return value.length > 0;
+                } else {
+                    return parameters[key];
+                }
+            }).map((key) => {
                 let argument = '--' + key + ' ';
-                let value = parameter || '';
+                let value = parameters[key];
                 if (value instanceof Array) {
                     value = value.join(' ');
                 }
