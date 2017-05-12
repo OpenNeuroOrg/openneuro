@@ -972,6 +972,14 @@ let datasetStore = Reflux.createStore({
      */
     startJob(snapshotId, jobDefinition, parameters, callback) {
         let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
+
+        // If the participant_label parameter exists and has no value, use all subjects
+        if (parameters.hasOwnProperty('participant_label') &&
+            parameters.participant_label.length === 0) {
+            console.log(this.data);
+            parameters.participant_label = this.data.dataset.summary.subjects;
+        }
+
         crn.createJob({
             datasetId:     datasetId,
             datasetLabel:  this.data.dataset.label,
@@ -1083,7 +1091,7 @@ let datasetStore = Reflux.createStore({
             let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + "fileName" + '?ticket=' + 'ticket';
             callback(downloadUrl)
         } else {
-            callback('https://s3.amazonaws.com/' + filePath);    
+            callback('https://s3.amazonaws.com/' + filePath);
         }
     },
 
