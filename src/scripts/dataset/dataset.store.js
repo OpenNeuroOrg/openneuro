@@ -976,7 +976,6 @@ let datasetStore = Reflux.createStore({
         // If the participant_label parameter exists and has no value, use all subjects
         if (parameters.hasOwnProperty('participant_label') &&
             parameters.participant_label.length === 0) {
-            console.log(this.data);
             parameters.participant_label = this.data.dataset.summary.subjects;
         }
 
