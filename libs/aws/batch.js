@@ -143,10 +143,17 @@ export default (aws) => {
          * {key: ...value}
          */
         _prepareArguments(parameters) {
-            return Object.keys(parameters).map((key) => {
-                let parameter = parameters[key];
+            return Object.keys(parameters).filter((key) => {
+                // Skip empty arguments
+                let value = parameters[key];
+                if (value instanceof Array) {
+                    return value.length > 0;
+                } else {
+                    return parameters[key];
+                }
+            }).map((key) => {
                 let argument = '--' + key + ' ';
-                let value = parameter || '';
+                let value = parameters[key];
                 if (value instanceof Array) {
                     value = value.join(' ');
                 }
