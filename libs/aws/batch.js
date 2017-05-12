@@ -110,7 +110,6 @@ export default (aws) => {
                 batchJob.parameters.participant_label instanceof Array &&
                 batchJob.parameters.participant_label.length > 0) {
                 let jobs = [];
-                console.log(batchJob.parameters.participant_label);
                 batchJob.parameters.participant_label.forEach((subject) => {
                     let subjectBatchJob = JSON.parse(JSON.stringify(batchJob));
                     subjectBatchJob.dependsOn = _depsObjects(deps);
