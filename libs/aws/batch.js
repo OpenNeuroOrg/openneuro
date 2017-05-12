@@ -134,11 +134,12 @@ export default (aws) => {
          * callsback with a single element array containing the AWS batch ID.
          */
         submitSingleJob(batchJob, deps, callback) {
-            this._addJobArguments(batchJob);
-            batchJob.dependsOn = _depsObjects(deps);
+            let singleBatchJob = JSON.parse(JSON.stringify(batchJob));
+            this._addJobArguments(singleBatchJob);
+            singleBatchJob.dependsOn = _depsObjects(deps);
             // After constructing the job document, remove invalid object from batch job
-            delete batchJob.parameters;
-            batch.submitJob(batchJob, (err, data) => {
+            delete singleBatchJob.parameters;
+            batch.submitJob(singleBatchJob, (err, data) => {
                 if(err) {callback(err);}
                 callback(null, [data.jobId]); //storing jobId's as array in mongo to support multi job analysis
             });
