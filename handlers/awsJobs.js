@@ -374,6 +374,7 @@ let handlers = {
                 };
                 logsFunc(params, logs, cb);
             }, (err) =>{
+                if(err) {return next(err);}
                 res.send(logs);
             });
         });
