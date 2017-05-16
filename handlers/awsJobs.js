@@ -238,10 +238,12 @@ let handlers = {
                         aws.s3.sdk.listObjectsV2(params, (err, data) => {
                             let results = [];
                             data.Contents.forEach((obj) => {
-                                let result = {};
-                                result.name = obj.Key;
-                                result.path = params.Bucket + '/' + obj.Key;
-                                results.push(result);
+                                if(!/\/$/.test(obj.Key)) {
+                                    let result = {};
+                                    result.name = obj.Key;
+                                    result.path = params.Bucket + '/' + obj.Key;
+                                    results.push(result);
+                                }
                             });
                             c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
                                 $set:{
@@ -306,7 +308,10 @@ let handlers = {
                 aws.s3.sdk.listObjectsV2(params, (err, data) => {
                     let keysArray = [];
                     data.Contents.forEach((obj) => {
-                        keysArray.push(obj.Key);
+                        //only include files in results. listObjectsV2 returns keys for directories also so need to filter those out.
+                        if(!/\/$/.test(obj.Key)) {
+                            keysArray.push(obj.Key);
+                        }
                     });
 
                     async.eachSeries(keysArray, (key, cb) => {
