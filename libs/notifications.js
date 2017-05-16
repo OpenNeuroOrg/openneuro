@@ -45,11 +45,11 @@ let notifications = {
         scitran.getUser(job.userId, (err, res) => {
             let user = res.body;
             notifications.add({
-                _id: job.snapshotId + '_' + job.appId + '_' + job.agave.created,
+                _id: job.snapshotId + '_' + job.appId + '_' + job.analysis.created,
                 type: 'email',
                 email: {
                     to: job.userId,
-                    subject: 'Analysis - ' + job.appLabel + ' on ' + job.datasetLabel + ' - ' + job.agave.status,
+                    subject: 'Analysis - ' + job.appLabel + ' on ' + job.datasetLabel + ' - ' + job.analysis.status,
                     template: 'job-complete',
                     data: {
                         firstName:       user.firstname,
@@ -57,11 +57,11 @@ let notifications = {
                         appName:         job.appLabel,
                         appLabel:        job.appLabel,
                         appVersion:      job.appVersion,
-                        jobId:           job.jobId,
-                        startDate:       moment(job.agave.created).format('MMMM Do'),
+                        jobId:           job.analysis.analysisId,
+                        startDate:       moment(job.analysis.created).format('MMMM Do'),
                         datasetName:     job.datasetLabel,
-                        status:          job.agave.status,
-                        siteUrl:         url.parse(config.url).protocol + '//' + url.parse(config.url).hostname,
+                        status:          job.analysis.status,
+                        siteUrl:         url.parse(config.url).protocol + '//' + url.parse(config.url).host,
                         datasetId:       bidsId.decodeId(job.datasetId),
                         snapshotId:      bidsId.decodeId(job.snapshotId),
                         unsubscribeLink: ''
