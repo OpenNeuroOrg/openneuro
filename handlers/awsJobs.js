@@ -335,7 +335,6 @@ let handlers = {
 
     getJobLogs (req, res, next) {
         let jobId = req.params.jobId; //this will be the mongoId for a given analysis
-        let logs = {};
 
         //Recursive function to snag all logs from a logstream
         let logsFunc = (params, logs, callback) => {
