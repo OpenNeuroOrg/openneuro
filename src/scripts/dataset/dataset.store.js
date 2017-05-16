@@ -26,7 +26,6 @@ let datasetStore = Reflux.createStore({
     init: function () {
         this.setInitialState();
         this.loadApps();
-        this.getLogs('2aeb52c0-07cb-485e-9ec3-e9242f69fc16');
         this.listenTo(uploadStore, (data) => {
             if (data.projectId !== this.data.currentUploadId) {
                 this.update({currentUploadId: data.projectId});
@@ -215,10 +214,18 @@ let datasetStore = Reflux.createStore({
         });
     },
 
-    getLogs(id) {
+    getJobLogs(id, callback) {
         crn.getJobLogs(id, (err, res) => {
-            console.log(err);
-            console.log(res.body);
+            let modals = this.data.modals;
+            modals.displayFile = true;
+            if(callback) {callback();}
+            this.update({
+                displayFile: {
+                    name: 'Logs',
+                    text: JSON.stringify(res.body)
+                },
+                modals
+            });
         });
     },
 
