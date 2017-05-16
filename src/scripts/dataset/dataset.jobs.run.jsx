@@ -59,7 +59,7 @@ class JobAccordion extends React.Component {
                     {runBy}
                 </span><br/>
                 <span className="meta">
-                    <label>Job ID</label><strong>{run.jobId}</strong>
+                    <label>Job ID</label><strong>{run.analysis.analysisId}</strong>
                 </span>
                 {this._failedMessage(run)}
             </div>
