@@ -217,12 +217,19 @@ let datasetStore = Reflux.createStore({
     getJobLogs(id, callback) {
         crn.getJobLogs(id, (err, res) => {
             let modals = this.data.modals;
+            let logs = res.body;
             modals.displayFile = true;
             if(callback) {callback();}
+            // For now, append each set of logs in order with some spacing
+            let logsText = Object.keys(logs).map((taskLogs) => {
+                return logs[taskLogs].reduce((taskLogs, logObj) => {
+                    return taskLogs + logObj.message + '\n  ';
+                }, taskLogs + ':'); // Identify which task
+            }).join('\n');
             this.update({
                 displayFile: {
                     name: 'Logs',
-                    text: JSON.stringify(res.body)
+                    text: logsText
                 },
                 modals
             });
