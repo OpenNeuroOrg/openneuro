@@ -37,6 +37,7 @@ let handlers = {
 
         aws.batch.registerJobDefinition(jobDef, (err, data) => {
             if (err) {
+                console.log(err);
                 return next(err);
             } else {
                 let extendeJobDef = data;
@@ -79,6 +80,7 @@ let handlers = {
             });
             aws.batch.sdk.describeJobDefinitions({jobDefinitions: arns}, (err, data) => {
                 if (err) {
+                    console.log(err);
                     return next(err);
                 } else {
                     let definitions = {};
@@ -224,6 +226,7 @@ let handlers = {
                     analysis.created = createdDate;
                     // check status
                     if(finished){
+                        let logStreamNames; //this will be an array of cloudwatch logstream names logs for each job
                         //Check if any jobs failed, if so analysis failed, else succeeded
                         let finalStatus = statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
                         let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
@@ -239,6 +242,15 @@ let handlers = {
                         emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()});
                         notifications.jobComplete(clonedJob);
 
+                        if(resp.jobs && resp.jobs.length > 0) {
+                            logStreamNames = resp.jobs.reduce((acc, job) => {
+                                job.attempts.forEach((attempt)=> {
+                                    acc.push(job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop());
+                                });
+                                return acc;
+                            }, []);
+                        }
+
                         aws.s3.sdk.listObjectsV2(params, (err, data) => {
                             let results = [];
                             data.Contents.forEach((obj) => {
@@ -250,7 +262,8 @@ let handlers = {
                             c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
                                 $set:{
                                     'analysis.status': finalStatus,
-                                    results: results
+                                    results: results,
+                                    'analysis.logstreams': logStreamNames
                                 }
                             });
                         });
@@ -331,6 +344,53 @@ let handlers = {
             });
         }
 
+    },
+
+    getJobLogs (req, res, next) {
+        let jobId = req.params.jobId; //this will be the mongoId for a given analysis
+
+        //Recursive function to snag all logs from a logstream
+        let logsFunc = (params, logs, callback) => {
+            let logStreamName = params.logStreamName;
+            aws.cloudwatch.sdk.getLogEvents(params, (err, data)=> {
+                if(err) {return callback(err);}
+                //Cloudwatch returns a token even if there are no events. That is why checking events length
+                if((data.events && data.events.length > 0) && data.nextForwardToken) {
+                    if(!logs[logStreamName]) {
+                        logs[logStreamName] = [];
+                    }
+                    logs[logStreamName] = logs[logStreamName].concat(data.events);
+                    params.nextToken = data.nextForwardToken;
+                    if(params.startFromHead) {
+                        delete params.startFromHead; //only necessary on first call I think.
+                    }
+                    logsFunc(params, logs, callback);
+                } else {
+                    callback();
+                }
+            });
+        };
+
+        c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
+            if(err) {next(err);}
+            let logStreamNames = job.analysis.logstreams || [];
+            let logs = {};
+            //cloudwatch log events requires knowing jobId and taskArn(s)
+            // taskArns are available on job which we can access with a describeJobs call to batch
+            async.eachSeries(logStreamNames, (logStreamName, cb) => {
+                // this currently works to grab the latest logs for a job. Need to update to get all logs for a job using next tokens
+                // however there is a bug that will require a little more work to make this happen. https://forums.aws.amazon.com/thread.jspa?threadID=251240&tstart=0
+                let params = {
+                    logGroupName: config.aws.cloudwatchlogs.logGroupName,
+                    logStreamName: logStreamName,
+                    startFromHead: true
+                };
+                logsFunc(params, logs, cb);
+            }, (err) =>{
+                if(err) {return next(err);}
+                res.send(logs);
+            });
+        });
     },
 
     /**
