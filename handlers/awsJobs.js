@@ -10,7 +10,7 @@ import {ObjectID}    from 'mongodb';
 import archiver      from 'archiver';
 import config from '../config';
 import async from 'async';
-
+import notifications from '../libs/notifications';
 import emitter from '../libs/events';
 
 let c = mongo.collections;
@@ -201,7 +201,7 @@ let handlers = {
             let analysisId = job.analysis.analysisId;
             let jobs = job.analysis.jobs;
             let createdDate = job.analysis.created;
-            //let totalJobs = jobs.length; //total number of jobs in the analysis
+
             // check if job is already known to be completed
             // there could be a scenario where we are polling before the AWS batch job has been setup. !jobs check handles this.
             if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || !jobs) {
@@ -232,8 +232,12 @@ let handlers = {
                             Prefix: s3Prefix,
                             StartAfter: s3Prefix
                         };
-                        // emit a job finished event so we can add logs
-                        emitter.emit(events.JOB_COMPLETED, {job: job, completedDate: new Date()});
+                        // emit a job finished event so we can add logs and sent notification email
+                        // cloning job here and sending out event and email because mongos updateOne does not return updated doc
+                        let clonedJob = JSON.parse(JSON.stringify(job));
+                        clonedJob.analysis.status = finalStatus;
+                        emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()});
+                        notifications.jobComplete(clonedJob);
 
                         aws.s3.sdk.listObjectsV2(params, (err, data) => {
                             let results = [];
