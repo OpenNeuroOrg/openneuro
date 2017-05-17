@@ -191,7 +191,7 @@ let handlers = {
     /**
      * GET Job
      */
-    getJob(req, res) {
+    getJob(req, res, next) {
         let jobId = req.params.jobId; //this is the mongo id for the job.
 
         c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
@@ -213,6 +213,7 @@ let handlers = {
                     jobs: jobs
                 };
                 aws.batch.sdk.describeJobs(params, (err, resp) => {
+                    if(err) {return next(err);}
                     let analysis = {};
                     let statusArray = resp.jobs.map((job) => {
                         return job.status;
@@ -228,7 +229,9 @@ let handlers = {
                     if(finished){
                         let logStreamNames; //this will be an array of cloudwatch logstream names logs for each job
                         //Check if any jobs failed, if so analysis failed, else succeeded
-                        let finalStatus = statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
+                        // note, if statusArray is empty, this means the job does not exist on Batch anymore and we did not catch it's 
+                        //   pass or fail state for some reason so we are going to call this a failure.
+                        let finalStatus = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
                         let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
                         let params = {
                             Bucket: 'openneuro.outputs',
@@ -254,6 +257,8 @@ let handlers = {
                         }
 
                         aws.s3.sdk.listObjectsV2(params, (err, data) => {
+                            if(err) {return next(err);}
+
                             let results = [];
                             data.Contents.forEach((obj) => {
                                 if(!/\/$/.test(obj.Key)) {
