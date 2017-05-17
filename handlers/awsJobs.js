@@ -244,9 +244,11 @@ let handlers = {
 
                         if(resp.jobs && resp.jobs.length > 0) {
                             logStreamNames = resp.jobs.reduce((acc, job) => {
-                                job.attempts.forEach((attempt)=> {
-                                    acc.push(job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop());
-                                });
+                                if (job.attempts && job.attemps.length > 0) {
+                                    job.attempts.forEach((attempt)=> {
+                                        acc.push(job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop());
+                                    });
+                                }
                                 return acc;
                             }, []);
                         }
