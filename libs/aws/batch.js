@@ -25,10 +25,9 @@ export default (aws) => {
          * Register a job and store some additional metadata with AWS Batch
          */
         registerJobDefinition(jobDef, callback) {
-            if(!this._validateInputs(jobDef)) {
-                let err = new Error('Invalid Inputs For AWS Batch');
-                err.http_code = 400;
-                return callback(err);
+            let error = this._validateInputs(jobDef)
+            if (error) {
+                return callback(error);
             }
 
             let env = jobDef.containerProperties.environment;
@@ -184,11 +183,26 @@ export default (aws) => {
             let vcpusMax = config.aws.batch.vcpusMax;
             let memoryMax = config.aws.batch.memoryMax;
 
-            if(jobDef.containerProperties.vcpus > vcpusMax || jobDef.containerProperties.memory > memoryMax) {
-                return false;
+            if(jobDef.containerProperties.vcpus > vcpusMax) {
+                let err = new Error('Vcpus exceeds max allowed per app');
+                err.http_code = 422;
+                return err;
             }
 
-            return true;
+            if (jobDef.containerProperties.memory > memoryMax) {
+                let err = new Error('Memory exceeds max allowed per app');
+                err.http_code = 422;
+                return err;
+            }
+
+            // Only save jobs with valid analysisLevels
+            if (!jobDef.hasOwnProperty('analysisLevels') || jobDef.analysisLevels.length === 0) {
+                let err = new Error('App definitions require at least one analysis level');
+                err.http_code = 422;
+                return err;
+            }
+
+            return null;
         }
     };
 };
