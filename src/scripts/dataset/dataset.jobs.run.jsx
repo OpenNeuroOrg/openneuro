@@ -104,7 +104,7 @@ class JobAccordion extends React.Component {
             for (let key in run.parameters) {
                 parameters.push(
                     <li key={key}>
-                        <span>{key}</span>: <span>{run.parameters[key]}</span>
+                        <span className="key">{key}</span>: <span className="value">{run.parameters[key]}</span>
                     </li>
                 );
             }

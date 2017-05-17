@@ -276,7 +276,9 @@
                         height: auto;
                         border-top: 1px solid $eee;
                         padding: 5px 0;
-
+                        .value span {
+                            padding-left: 5px;
+                        }
                         &:last-child {
                             border-bottom: 1px solid $eee;
                         }
