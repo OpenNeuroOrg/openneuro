@@ -25,7 +25,7 @@ export default (aws) => {
          * Register a job and store some additional metadata with AWS Batch
          */
         registerJobDefinition(jobDef, callback) {
-            let error = this._validateInputs(jobDef)
+            let error = this._validateInputs(jobDef);
             if (error) {
                 return callback(error);
             }
