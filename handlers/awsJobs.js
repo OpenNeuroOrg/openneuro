@@ -271,6 +271,13 @@ let handlers = {
                                 }
                             });
                         });
+                    } else if(analysis.status != status) {
+                        //if status changes, update mongo
+                        c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
+                            $set:{
+                                'analysis.status': analysis.status
+                            }
+                        });
                     }
                     res.send({
                         analysis: analysis,
