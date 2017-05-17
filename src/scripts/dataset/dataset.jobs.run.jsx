@@ -36,6 +36,7 @@ class JobAccordion extends React.Component {
                         <div className="panel-heading" >
                             <div className="panel-title pending">
                                 {this._header(run)}
+                                {this._parameters(run)}
                             </div>
                         </div>
                     </div>
