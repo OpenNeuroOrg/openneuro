@@ -23,7 +23,7 @@ class JobAccordion extends React.Component {
                         <span className="inner">
                             {this._parameters(run)}
                             {this._results(run, 'results')}
-                            {/*this._results(run, 'logs')*/}
+                            {this._logs(run)}
                         </span>
                     </Panel>
                 </span>
@@ -149,6 +149,22 @@ class JobAccordion extends React.Component {
                 </div>
             );
         }
+    }
+
+    _logs(run) {
+        return (
+            <Accordion accordion className="results">
+                <Panel className="fade-in" header="Logs" key={run._id} eventKey={run._id}>
+                    <span className="view-file">
+                        <WarnButton
+                            icon="fa-eye"
+                            message=" View Logs"
+                            warn={false}
+                            action={actions.getJobLogs.bind(this, run._id)} />
+                    </span>
+                </Panel>
+            </Accordion>
+        );
     }
 
 }

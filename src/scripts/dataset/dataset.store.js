@@ -214,6 +214,21 @@ let datasetStore = Reflux.createStore({
         });
     },
 
+    getJobLogs(id, callback) {
+        crn.getJobLogs(id, (err, res) => {
+            let modals = this.data.modals;
+            modals.displayFile = true;
+            if(callback) {callback();}
+            this.update({
+                displayFile: {
+                    name: 'Logs',
+                    text: JSON.stringify(res.body)
+                },
+                modals
+            });
+        });
+    },
+
     /**
      * Publish
      *

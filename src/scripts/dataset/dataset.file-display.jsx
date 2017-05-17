@@ -32,7 +32,9 @@ export default class FileDisplay extends React.Component {
 // template methods ---------------------------------------------------
 
     _download(link) {
-        return <a href={link} download><i className="fa fa-download"></i> DOWNLOAD</a>;
+        if(link) {
+            return <a href={link} download><i className="fa fa-download"></i> DOWNLOAD</a>;
+        }
     }
 
     _format(name, content, link) {
