@@ -37,6 +37,7 @@ class JobAccordion extends React.Component {
                             <div className="panel-title pending">
                                 {this._header(run)}
                                 {this._parameters(run)}
+                                {run.analysis.status === 'SUCCEEDED' || run.analysis.status === 'FAILED' ? this._logs(run) : null}
                             </div>
                         </div>
                     </div>
