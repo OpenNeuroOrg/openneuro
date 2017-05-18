@@ -225,6 +225,7 @@ let handlers = {
 
                     analysis.status = !finished ? 'RUNNING' : 'FINALIZING';
                     analysis.created = createdDate;
+                    analysis.analysisId = analysisId;
                     // check status
                     if(finished){
                         let logStreamNames; //this will be an array of cloudwatch logstream names logs for each job
