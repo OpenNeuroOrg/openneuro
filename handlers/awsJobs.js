@@ -151,8 +151,6 @@ let handlers = {
                         handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
                         return;
                     }
-                    let error = new Error('A job with the same dataset and parameters has already been run.');
-                    error.http_code = 409;
                     res.status(409).send({message: 'A job with the same dataset and parameters has already been run.'});
                     return;
                 }
@@ -180,8 +178,18 @@ let handlers = {
                             }
                         };
 
-                        aws.batch.startBatchJob(batchJobParams, mongoJob.insertedId);
-                        emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created});
+                        aws.batch.startBatchJob(batchJobParams, mongoJob.insertedId, (err) => {
+                            if (err) {
+                                // This is an unexpected error, probably from batch.
+                                console.log(err);
+                                // Cleanup the failed to submit job
+                                // TODO - handle this by not inserting it in the first place?
+                                c.crn.jobs.remove({_id: mongoJob.insertedId}, true);
+                                return;
+                            } else {
+                                emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created});
+                            }
+                        });
                     });
                 });
             });
@@ -229,7 +237,7 @@ let handlers = {
                     if(finished){
                         let logStreamNames; //this will be an array of cloudwatch logstream names logs for each job
                         //Check if any jobs failed, if so analysis failed, else succeeded
-                        // note, if statusArray is empty, this means the job does not exist on Batch anymore and we did not catch it's 
+                        // note, if statusArray is empty, this means the job does not exist on Batch anymore and we did not catch it's
                         //   pass or fail state for some reason so we are going to call this a failure.
                         let finalStatus = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
                         let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
