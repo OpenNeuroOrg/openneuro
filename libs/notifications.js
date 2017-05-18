@@ -61,7 +61,7 @@ let notifications = {
                         startDate:       moment(job.analysis.created).format('MMMM Do'),
                         datasetName:     job.datasetLabel,
                         status:          job.analysis.status,
-                        siteUrl:         url.parse(config.url).protocol + '//' + url.parse(config.url).host,
+                        siteUrl:         url.parse(config.url).protocol + '//' + url.parse(config.url).hostname,
                         datasetId:       bidsId.decodeId(job.datasetId),
                         snapshotId:      bidsId.decodeId(job.snapshotId),
                         unsubscribeLink: ''
