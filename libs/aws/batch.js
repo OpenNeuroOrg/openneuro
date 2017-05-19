@@ -60,7 +60,7 @@ export default (aws) => {
          * starts an aws batch job
          * returns no return. Batch job start is happening after response has been send to client
          */
-        startBatchJob(batchJob, jobId) {
+        startBatchJob(batchJob, jobId, callback) {
             c.crn.jobDefinitions.findOne({jobDefinitionArn: batchJob.jobDefinition}, {}, (err, jobDef) => {
                 let analysisLevels = jobDef.analysisLevels;
                 async.reduce(analysisLevels, [], (deps, level, callback) => {
@@ -79,12 +79,21 @@ export default (aws) => {
                         submitter = this.submitSingleJob.bind(this);
                     }
                     submitter(batchJob, deps, (err, batchJobIds) => {
-                        // Submit the next set of jobs including the previous as deps
-                        callback(null, deps.concat(batchJobIds));
+                        if (err) {
+                            return callback(err);
+                        } else {
+                            // Submit the next set of jobs including the previous as deps
+                            return callback(null, deps.concat(batchJobIds));
+                        }
                     });
                 }, (err, batchJobIds) => {
-                    // When all jobs are submitted, update job state with the last set
-                    this._updateJobOnSubmitSuccessful(jobId, batchJobIds);
+                    if (err) {
+                        return callback(err);
+                    } else {
+                        // When all jobs are submitted, update job state with the last set
+                        this._updateJobOnSubmitSuccessful(jobId, batchJobIds);
+                        return callback(null, batchJobIds);
+                    }
                 });
             });
         },
@@ -114,7 +123,9 @@ export default (aws) => {
         submitParallelJobs(batchJob, deps, callback) {
             let job = (params, callback) => {
                 batch.submitJob(params, (err, data) => {
-                    if(err) {callback(err);}
+                    if (err) {
+                        return callback(err);
+                    }
                     //pass the AWS batch job ID
                     let jobId = data.jobId;
                     callback(null, jobId);
@@ -155,7 +166,9 @@ export default (aws) => {
             // After constructing the job document, remove invalid object from batch job
             delete singleBatchJob.parameters;
             batch.submitJob(singleBatchJob, (err, data) => {
-                if(err) {callback(err);}
+                if (err) {
+                    return callback(err);
+                }
                 callback(null, [data.jobId]); //storing jobId's as array in mongo to support multi job analysis
             });
         },

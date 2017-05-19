@@ -147,8 +147,6 @@ let handlers = {
                         handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
                         return;
                     }
-                    let error = new Error('A job with the same dataset and parameters has already been run.');
-                    error.http_code = 409;
                     res.status(409).send({message: 'A job with the same dataset and parameters has already been run.'});
                     return;
                 }
@@ -176,8 +174,18 @@ let handlers = {
                             }
                         };
 
-                        aws.batch.startBatchJob(batchJobParams, mongoJob.insertedId);
-                        emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created});
+                        aws.batch.startBatchJob(batchJobParams, mongoJob.insertedId, (err) => {
+                            if (err) {
+                                // This is an unexpected error, probably from batch.
+                                console.log(err);
+                                // Cleanup the failed to submit job
+                                // TODO - Maybe we save the error message into another field for display?
+                                c.crn.jobs.updateOne({_id: mongoJob.insertedId}, {$set: {'analysis.status': 'REJECTED'}});
+                                return;
+                            } else {
+                                emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created});
+                            }
+                        });
                     });
                 });
             });
@@ -202,7 +210,7 @@ let handlers = {
 
             // check if job is already known to be completed
             // there could be a scenario where we are polling before the AWS batch job has been setup. !jobs check handles this.
-            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || !jobs) {
+            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || status === 'REJECTED' || !jobs) {
                 res.send(job);
             } else {
                 let params = {
@@ -226,7 +234,7 @@ let handlers = {
                     if(finished){
                         let logStreamNames; //this will be an array of cloudwatch logstream names logs for each job
                         //Check if any jobs failed, if so analysis failed, else succeeded
-                        // note, if statusArray is empty, this means the job does not exist on Batch anymore and we did not catch it's 
+                        // note, if statusArray is empty, this means the job does not exist on Batch anymore and we did not catch it's
                         //   pass or fail state for some reason so we are going to call this a failure.
                         let finalStatus = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
                         let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
