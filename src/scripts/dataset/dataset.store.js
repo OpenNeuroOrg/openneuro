@@ -976,7 +976,7 @@ let datasetStore = Reflux.createStore({
                 this.refreshJob(jobId, (job) => {
                     let status = job.analysis ? job.analysis.status : 'PENDING';
                     let finished = status === 'SUCCEEDED';
-                    let failed = status === 'FAILED';
+                    let failed = status === 'FAILED'|| status === 'REJECTED';
                     let hasResults = job.results && job.results.length > 0;
                     let needsUpdate = (!finished && !failed) || (finished && !hasResults);
 

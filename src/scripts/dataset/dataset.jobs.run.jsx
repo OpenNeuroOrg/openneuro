@@ -122,7 +122,7 @@ class JobAccordion extends React.Component {
     }
 
     _status(status) {
-        if (status === 'SUCCEEDED' || status === 'FAILED') {
+        if (status === 'SUCCEEDED' || status === 'FAILED' || status === 'REJECTED') {
             return status;
         } else {
             return (
@@ -137,7 +137,7 @@ class JobAccordion extends React.Component {
     }
 
     _failedMessage(run) {
-        if (run.analysis.status === 'FAILED') {
+        if (run.analysis.status === 'FAILED' || run.analysis.status === 'REJECTED') {
             let adminMessage = <span>Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail.</span>;
             let message = run.analysis.message ? run.analysis.message : 'We were unable to complete this analysis.';
             return (
