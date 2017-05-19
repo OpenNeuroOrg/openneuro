@@ -183,8 +183,8 @@ let handlers = {
                                 // This is an unexpected error, probably from batch.
                                 console.log(err);
                                 // Cleanup the failed to submit job
-                                // TODO - handle this by not inserting it in the first place?
-                                c.crn.jobs.remove({_id: mongoJob.insertedId}, true);
+                                // TODO - Maybe we save the error message into another field for display?
+                                c.crn.jobs.updateOne({_id: mongoJob.insertedId}, {$set: {'analysis.status': 'REJECTED'}});
                                 return;
                             } else {
                                 emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created});
