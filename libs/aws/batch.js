@@ -47,6 +47,11 @@ export default (aws) => {
                 {sourceVolume: 'docker-socket', readOnly: false, containerPath: '/var/run/docker.sock'}
             ];
 
+            //AWS Batch will choke if we leave descriptions property on payload so deleting before sending
+            delete jobDef.descriptions;
+            delete jobDef.parametersMetadata;
+            delete jobDef.analysisLevels;
+
             batch.registerJobDefinition(jobDef, callback);
         },
 
