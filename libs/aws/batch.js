@@ -33,9 +33,20 @@ export default (aws) => {
             let env = jobDef.containerProperties.environment;
             env.push({name: 'BIDS_DATASET_BUCKET', value: config.aws.s3.datasetBucket});
             env.push({name: 'BIDS_OUTPUT_BUCKET', value: config.aws.s3.analysisBucket});
+
             // This controls this value for the host container
             // child containers are always run without the privileged flag
             jobDef.containerProperties.privileged = true;
+
+            // Add the required docker socket and cache volumes
+            jobDef.containerProperties.volumes = [
+                {host: {sourcePath: '/var/run/docker.sock'}, name: 'docker-socket'}
+            ];
+
+            jobDef.containerProperties.mountPoints = [
+                {sourceVolume: 'docker-socket', readOnly: false, containerPath: '/var/run/docker.sock'}
+            ];
+
             batch.registerJobDefinition(jobDef, callback);
         },
 
