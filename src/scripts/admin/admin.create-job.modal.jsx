@@ -50,7 +50,7 @@ const CreateJob = React.createClass({
                             <label>Analysis Levels</label>
                             <Select.Creatable value={definition.analysisLevels} name={'analysisLevels'} onChange={this._analysisLevelsChange} options={definition.analysisLevelOptions} multi />
                         </div>
-                        <div className="form-group">
+                        <div className="form-group admin-job-parameters">
                              <label>Parameters</label>
                              <ArrayInput value={definition.parameters}
                                          onChange={this._handleChange.bind(null, 'parameters')}

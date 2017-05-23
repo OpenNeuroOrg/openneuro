@@ -124,8 +124,8 @@ gulp.task('watchApp', function() {
             .pipe(source(p.bundle))
             .pipe(buffer())
             .pipe(envify(process.env))
-            .pipe(buffer())
-            .pipe(uglify())
+            // .pipe(buffer())
+            // .pipe(uglify())
             .pipe(gulp.dest(p.dist))
             .pipe(reload({stream: true}));
     }
