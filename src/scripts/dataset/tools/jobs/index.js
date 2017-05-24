@@ -150,7 +150,7 @@ export default class JobMenu extends React.Component {
             let disabled = this.state.disabledApps.hasOwnProperty(apps[selectedApp][revision].jobDefinitionArn) ? '* ' : '';
             return active ? <option key={revision} value={revision}>{disabled + 'v' + revision}</option> :  null;
         }) : [];
-        console.log(versionOptions);
+
         const versions = (
             <div className="col-xs-12">
                 <div className="row">
