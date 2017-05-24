@@ -111,6 +111,7 @@ let FrontPageStore = Reflux.createStore({
             return;
         }
         let apps = this.data.apps;
+        console.log(JSON.stringify(apps));
         for (let app of apps) {
             if (app.id === appId) {
                 // set selected app
