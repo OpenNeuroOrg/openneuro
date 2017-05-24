@@ -111,22 +111,32 @@ let FrontPageStore = Reflux.createStore({
             return;
         }
         let apps = this.data.apps;
-        console.log(JSON.stringify(apps));
-        for (let app of apps) {
-            if (app.id === appId) {
-                // set selected app
-                this.update({selectedPipeline: app, loadingJob: true});
-                // load associated example job
-                // let description = JSON.parse(app.longDescription);
-                // this.loadJob(description.snapshotId, description.jobId);
-                if (app.id === 'mriqc-bare-0.8.7') {
-                    this.loadJob('57dc3704a76c87000a24e650', '3036461272949658086-242ac115-0001-007');
-                } else {
-                    this.update({loadingJob: false, exampleJob: null});
-                }
-                return;
-            }
+
+        let selectedApp = apps[appId]; // this is an object with all version of the app. Version numbers are keys
+        let latestVersion = Object.keys(selectedApp).sort((a,b)=>{return a-b;}).pop();
+        this.update({selectedPipeline: selectedApp[latestVersion], loadingJob: true});
+
+        if (selectedApp[latestVersion].jobDefinitionName === 'mriqc-bare-0.8.7') {
+            this.loadJob('57dc3704a76c87000a24e650', '3036461272949658086-242ac115-0001-007');
+        } else {
+            this.update({loadingJob: false, exampleJob: null});
         }
+        
+        // for (let app of apps) {
+        //     if (app.id === appId) {
+        //         // set selected app
+        //         this.update({selectedPipeline: app, loadingJob: true});
+        //         // load associated example job
+        //         // let description = JSON.parse(app.longDescription);
+        //         // this.loadJob(description.snapshotId, description.jobId);
+        //         if (app.id === 'mriqc-bare-0.8.7') {
+        //             this.loadJob('57dc3704a76c87000a24e650', '3036461272949658086-242ac115-0001-007');
+        //         } else {
+        //             this.update({loadingJob: false, exampleJob: null});
+        //         }
+        //         return;
+        //     }
+        // }
     },
 
     /**
