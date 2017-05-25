@@ -146,8 +146,9 @@ export default class JobMenu extends React.Component {
         });
 
         const versionOptions = selectedApp ? Object.keys(apps[selectedApp]).reverse().map((revision) => {
+            let active = apps[selectedApp][revision].status === 'ACTIVE';
             let disabled = this.state.disabledApps.hasOwnProperty(apps[selectedApp][revision].jobDefinitionArn) ? '* ' : '';
-            return <option key={revision} value={revision}>{disabled + 'v' + revision}</option>;
+            return active ? <option key={revision} value={revision}>{disabled + 'v' + revision}</option> :  null;
         }) : [];
 
         const versions = (
