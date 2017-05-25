@@ -872,11 +872,10 @@ let datasetStore = Reflux.createStore({
         }
 
         // find directory
-        let dir = files.findInTree(jobRun.results, directory.path, 'path');
+        let dir = files.findInTree(jobRun.results, directory.dirPath, 'dirPath');
         if (dir) {
             dir.showChildren = !dir.showChildren;
         }
-
         // update state
         this.update({jobs});
     },
