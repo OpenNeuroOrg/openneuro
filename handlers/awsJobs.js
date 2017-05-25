@@ -286,7 +286,7 @@ let handlers = {
                                     return childrenArray.find((child) => {
                                         return child.dirPath === path;
                                     });
-                                }
+                                };
 
                                 array.forEach((level, k) => {
                                     //right now setting up top level before passing in store. can probably change this
@@ -321,8 +321,9 @@ let handlers = {
                                 });
 
                                 return store;
-                            }
-                            results.forEach((result, index) => {
+                            };
+
+                            results.forEach((result) => {
                                 let pathArray = result.path.split('/').slice(3);
                                 if(pathArray.length === 1) {
                                     resultStore[pathArray[0]] = {
@@ -345,7 +346,7 @@ let handlers = {
                             });
 
                             Object.keys(resultStore).forEach((result) => {
-                                formattedResults.push(resultStore[result])
+                                formattedResults.push(resultStore[result]);
                             });
 ///////////////////////////////////////////////////////////////////////////////////////////
                             c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
