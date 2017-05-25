@@ -37,6 +37,11 @@ export default class Publish extends React.Component {
         let form = (
             <div className="anaylsis-modal clearfix">
                 {this._snapshots()}
+                <p className="text-danger">
+                    This snapshot will be released publicly under a 
+                    <a href="https://wiki.creativecommons.org/wiki/CC0" target="_blank"> CC0 license</a>. 
+                    This operation cannot be undone.
+                </p>
                 {this._submit()}
             </div>
         );

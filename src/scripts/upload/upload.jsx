@@ -8,6 +8,7 @@ import {Tabs, Tab}  from 'react-bootstrap';
 import Select       from './upload.select.jsx';
 import Rename       from './upload.rename.jsx';
 import Issues       from './upload.issues.jsx';
+import Disclaimer   from './upload.disclaimer.jsx';
 import Resume       from './upload.resume.jsx';
 import Progress     from './upload.progress.jsx';
 
@@ -28,9 +29,9 @@ let Upload = React.createClass({
 
     // conditional variables -----------------------
 
-        let totalTabs    = this.state.showResume ? 5 : 4;
+        let totalTabs    = this.state.showResume ? 6 : 5;
         let activeBar = 'active-tab-' + activeKey;
-        if (activeKey === 5 && totalTabs < 5) {activeBar = 'active-tab-4';}
+        if (activeKey === 6 && totalTabs < 6) {activeBar = 'active-tab-5';}
         let activePane = 'active-pane-' + activeKey;
 
     // panels --------------------------------------
@@ -82,11 +83,23 @@ let Upload = React.createClass({
             );
         }
 
+        let disclaimer;
+        if (this.state.showDisclaimer) {
+            let tabName = <span><span>4:</span><span> Disclaimer</span></span>;
+            disclaimer = (
+                <Tab eventKey={4} title={tabName} disabled={disabledTab}>
+                    <div className={activePane}>
+                        <Disclaimer />
+                    </div>
+                </Tab>
+            );
+        }
+
         let resume;
         if (this.state.showResume) {
-            let tabName = <span><span>4:</span><span> Resume</span></span>;
+            let tabName = <span><span>5:</span><span> Resume</span></span>;
             resume = (
-                <Tab eventKey={4} title={tabName} disabled={disabledTab}>
+                <Tab eventKey={5} title={tabName} disabled={disabledTab}>
                     <div className={activePane}>
                         <Resume />
                     </div>
@@ -98,7 +111,7 @@ let Upload = React.createClass({
         if (this.state.showProgress) {
             let tabName = <span><span>{totalTabs + ':'}</span><span> Progress</span></span>;
             progress = (
-                <Tab eventKey={5} title={tabName}>
+                <Tab eventKey={6} title={tabName}>
                     <div className={activePane}>
                         <Progress progress={this.state.progress} name={this.state.dirName} />
                     </div>
@@ -120,6 +133,7 @@ let Upload = React.createClass({
                                         {select}
                                         {rename}
                                         {issues}
+                                        {disclaimer}
                                         {resume}
                                         {progress}
                                     </Tabs>
