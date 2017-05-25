@@ -430,7 +430,7 @@ let handlers = {
                             Bucket: config.aws.s3.analysisBucket,
                             Key: key
                         };
-                        let fileName = key.split('/')[key.split('/').length - 1]; //get filename from key
+                        let fileName = key.split('/').slice(2).join('/');
                         aws.s3.sdk.getObject(objParams, (err, response) => {
                             //append to zip
                             archive.append(response.Body, {name: fileName});
