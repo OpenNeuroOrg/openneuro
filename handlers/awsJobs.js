@@ -273,7 +273,7 @@ let handlers = {
                                     results.push(result);
                                 }
                             });
-///////////////////this could use some cleanup but works fro now//////////////////////
+                            //Need to format results to preserver folder structure. this could use some cleanup but works for now
                             let formattedResults = [];
                             let resultStore = {};
 
@@ -348,7 +348,7 @@ let handlers = {
                             Object.keys(resultStore).forEach((result) => {
                                 formattedResults.push(resultStore[result]);
                             });
-///////////////////////////////////////////////////////////////////////////////////////////
+                            //update job with status, results and logstreams
                             c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
                                 $set:{
                                     'analysis.status': finalStatus,
