@@ -104,6 +104,11 @@ class JobAccordion extends React.Component {
         if (run.parameters && Object.keys(run.parameters).length > 0) {
             let parameters = [];
             for (let key in run.parameters) {
+                if(key === 'participant_label') {
+                    run.parameters[key] = run.parameters[key].sort((a,b) => {
+                        return a-b;
+                    });
+                }
                 parameters.push(
                     <li key={key}>
                         <span className="key">{key}</span>: <span className="value">{run.parameters[key]}</span>
