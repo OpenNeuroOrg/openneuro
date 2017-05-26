@@ -153,7 +153,7 @@ const routes = [
         middleware: [
             auth.datasetAccess()
         ],
-        handler: jobs.retry
+        handler: awsJobs.retry
     },
     {
         method: 'get',

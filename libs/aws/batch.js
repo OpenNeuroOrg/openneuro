@@ -99,6 +99,31 @@ export default (aws) => {
         },
 
         /**
+        * build out batch job parameters from a job object and an optional snapshotHash
+        * new job submission will pass a snapshotHash whereas retry will use hash on job object
+        * returns batch job parameters
+        */
+        buildBatchParams(job, snapshotHash) {
+            let hash = snapshotHash || job.datasetHash;
+
+            return {
+                jobDefinition: job.jobDefinition,
+                jobName:       job.jobName,
+                jobQueue:      'bids-queue',
+                parameters:    job.parameters,
+                containerOverrides:{
+                    environment: [{
+                        name: 'BIDS_SNAPSHOT_ID',
+                        value: hash
+                    }, {
+                        name: 'BIDS_ANALYSIS_ID',
+                        value: job.analysis.analysisId
+                    }]
+                }
+            };
+        },
+
+        /**
          * Update mongo job on successful job submission to AWS Batch.
          * returns no return. Batch job start is happening after response has been send to client
          */
