@@ -507,8 +507,8 @@ let handlers = {
 
             c.crn.jobs.updateOne({_id: mongoJobId}, {
                 $set: {
-                    "analysis.status": "RETRYING",
-                    "analysis.jobs": []
+                    'analysis.status': 'RETRYING',
+                    'analysis.jobs': []
                 }
             });
 
