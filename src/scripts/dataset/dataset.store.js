@@ -985,7 +985,7 @@ let datasetStore = Reflux.createStore({
                 });
             }
         };
-        setTimeout(poll.bind(this, jobId), interval);
+        poll(jobId);
     },
 
     /**
@@ -1013,7 +1013,6 @@ let datasetStore = Reflux.createStore({
             if (!err) {
                 // reload jobs
                 if (snapshotId == this.data.dataset._id) {
-                    // let jobId = res.body.result.id;
                     let jobId = res.body.jobId;
                     this.loadJobs(snapshotId, this.data.snapshot, datasetId, {job: jobId}, (jobs) => {
                         this.loadSnapshots(this.data.dataset, jobs);
@@ -1064,6 +1063,9 @@ let datasetStore = Reflux.createStore({
         crn.retryJob(this.data.dataset._id, jobId, () => {
             this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, {}, (jobs) => {
                 this.loadSnapshots(this.data.dataset, jobs);
+
+                // start polling job
+                this.pollJob(jobId, this.data.selectedSnapshot);
                 callback();
             });
         }, {snapshot: this.data.snapshot});
