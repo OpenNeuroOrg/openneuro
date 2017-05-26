@@ -16,6 +16,8 @@ import emitter from '../libs/events';
 let c = mongo.collections;
 let events = config.events;
 
+//Job Polling
+
 // handlers ----------------------------------------------------------------
 
 /**
