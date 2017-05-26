@@ -147,7 +147,7 @@ class JobAccordion extends React.Component {
                         icon="fa fa-repeat"
                         message="re-run"
                         warn={false}
-                        action={actions.retryJob.bind(this, run.jobId)} />
+                        action={actions.retryJob.bind(this, run._id)} />
                 </div>
             );
         }
