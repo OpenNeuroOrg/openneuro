@@ -116,6 +116,7 @@ let handlers = {
      * returns job to client
      */
     submitJob(req, res, next) {
+        let userId = req.user;
         let job = req.body;
 
         job.uploadSnapshotComplete = !!job.uploadSnapshotComplete;
@@ -183,7 +184,7 @@ let handlers = {
                                 c.crn.jobs.updateOne({_id: mongoJob.insertedId}, {$set: {'analysis.status': 'REJECTED'}});
                                 return;
                             } else {
-                                emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created});
+                                emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created}, userId);
                             }
                         });
                     });
@@ -196,6 +197,7 @@ let handlers = {
      * GET Job
      */
     getJob(req, res, next) {
+        let userId = req.user;
         let jobId = req.params.jobId; //this is the mongo id for the job.
 
         c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
@@ -247,7 +249,7 @@ let handlers = {
                         // cloning job here and sending out event and email because mongos updateOne does not return updated doc
                         let clonedJob = JSON.parse(JSON.stringify(job));
                         clonedJob.analysis.status = finalStatus;
-                        emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()});
+                        emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()}, userId);
                         notifications.jobComplete(clonedJob);
 
                         if(resp.jobs && resp.jobs.length > 0) {
