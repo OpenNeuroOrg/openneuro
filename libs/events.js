@@ -18,9 +18,9 @@ class CrnEmitter extends EventEmitter {
 let emitter = new CrnEmitter(config.events);
 
 Object.keys(emitter.events).forEach((event) => {
-    emitter.on(emitter.events[event], (data) => {
+    emitter.on(emitter.events[event], (data, user) => {
         //update logs collection in mongo
-        c.crn.logs.insert({type: event, data: data});
+        c.crn.logs.insert({type: event, data: data, date: new Date(), user: user});
     });
 });
 
