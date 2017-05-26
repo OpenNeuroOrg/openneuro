@@ -158,21 +158,7 @@ let handlers = {
 
                     // TODO - handle situation where upload to S3 fails
                     aws.s3.uploadSnapshot(hash, () => {
-                        const batchJobParams = {
-                            jobDefinition: job.jobDefinition,
-                            jobName:       job.jobName,
-                            jobQueue:      'bids-queue',
-                            parameters:    job.parameters,
-                            containerOverrides:{
-                                environment: [{
-                                    name: 'BIDS_SNAPSHOT_ID',
-                                    value: hash
-                                }, {
-                                    name: 'BIDS_ANALYSIS_ID',
-                                    value: job.analysis.analysisId
-                                }]
-                            }
-                        };
+                        const batchJobParams = aws.batch.buildBatchParams(job, hash);
 
                         aws.batch.startBatchJob(batchJobParams, mongoJob.insertedId, (err) => {
                             if (err) {
@@ -210,7 +196,7 @@ let handlers = {
 
             // check if job is already known to be completed
             // there could be a scenario where we are polling before the AWS batch job has been setup. !jobs check handles this.
-            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || status === 'REJECTED' || !jobs) {
+            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || status === 'REJECTED' || !jobs || !jobs.length) {
                 res.send(job);
             } else {
                 let params = {
@@ -497,11 +483,52 @@ let handlers = {
      * Retry a job using existing parameters
      */
     retry (req, res, next) {
-        // let jobId = req.params.jobId;
-        // TODO - This is a stub for testing - need to resubmit using the same CRN job data but a new AWS Batch job
-        let error = new Error('Retry is not yet supported.');
-        error.http_code = 409;
-        return next(error);
+        let jobId = req.params.jobId;
+        let mongoJobId = typeof jobId != 'object' ? ObjectID(jobId) : jobId;
+
+        // find job
+        c.crn.jobs.findOne({_id: mongoJobId}, {}, (err, job) => {
+            if (err){return next(err);}
+            if (!job) {
+                let error = new Error('Could not find job.');
+                error.http_code = 404;
+                return next(error);
+            }
+            if (job.analysis.status && job.analysis.status === 'SUCCEEDED') {
+                let error = new Error('A job with the same dataset and parameters has already successfully finished.');
+                error.http_code = 409;
+                return next(error);
+            }
+            if (job.analysis.status && job.analysis.status !== 'FAILED' && job.analysis.status !== 'REJECTED') {
+                let error = new Error('A job with the same dataset and parameters is currently running.');
+                error.http_code = 409;
+                return next(error);
+            }
+
+            c.crn.jobs.updateOne({_id: mongoJobId}, {
+                $set: {
+                    'analysis.status': 'RETRYING',
+                    'analysis.jobs': []
+                }
+            });
+
+            res.send({jobId: mongoJobId});
+
+            const batchJobParams = aws.batch.buildBatchParams(job);
+
+            aws.batch.startBatchJob(batchJobParams, mongoJobId, (err) => {
+                if (err) {
+                    // This is an unexpected error, probably from batch.
+                    console.log(err);
+                    // Cleanup the failed to submit job
+                    // TODO - Maybe we save the error message into another field for display?
+                    c.crn.jobs.updateOne({_id: mongoJobId}, {$set: {'analysis.status': 'REJECTED'}});
+                    return;
+                } else {
+                    emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created, retry: true});
+                }
+            });
+        });
     }
 
 };
