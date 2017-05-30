@@ -114,6 +114,7 @@ const routes = [
         method: 'post',
         url: '/datasets/:datasetId/jobs',
         middleware: [
+            auth.datasetAccess(),
             schema.validateBody(schemas.job.submit)
         ],
         handler: awsJobs.submitJob
@@ -153,7 +154,7 @@ const routes = [
         middleware: [
             auth.datasetAccess()
         ],
-        handler: jobs.retry
+        handler: awsJobs.retry
     },
     {
         method: 'get',
