@@ -32,12 +32,16 @@ class JobAccordion extends React.Component {
             // header only
             return (
                 <span eventKey={run._id}>
-                    <div className="job panel panel-default">
+                    <div className="job panel panel-default pending">
                         <div className="panel-heading" >
-                            <div className="panel-title pending">
+                            <div className="panel-title ">
                                 {this._header(run)}
-                                {this._parameters(run)}
                             </div>
+                        </div>
+                        <div className="panel-body">
+                            <span className="inner">
+                                {this._parameters(run)}
+                            </span>
                         </div>
                     </div>
                 </span>
