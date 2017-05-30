@@ -414,6 +414,9 @@ export default class JobMenu extends React.Component {
                     message = 'This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.';
                 } else if (res.status === 503) {
                     message = 'We are temporarily unable to process this analysis. Please try again later. If this issue persists, please contact the site administrator.';
+                } else if (res.status === 403 && res.body.error) {
+                    // If non admins try to run more than 2 jobs at a time, want to display message letting them know they don't have access
+                    message = res.body.error;
                 } else {
                     message = 'There was an issue submitting your analysis. Double check your inputs and try again. If the issue persists, please contact the site administrator.';
                 }
