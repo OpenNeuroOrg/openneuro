@@ -33,8 +33,13 @@
 
             &:hover {color: $primary-hover;}
         }
-    }
 
+    }
+    .disclaimer{
+        padding: 20px;
+        display: block;
+        font-size: 15px;
+    }
 
     .dir-name {
         text-align: center;
