@@ -60,7 +60,7 @@ export default class FileDisplay extends React.Component {
         } else if (files.hasExtension(name, ['.jpg', '.jpeg', '.png', '.gif'])) {
             return <div className="modal-preview-image" ><img src={link} /></div>;
         } else if (files.hasExtension(name, ['.html'])) {
-            return <div dangerouslySetInnerHTML={this._htmlFormat(content)} />;
+            return <iframe src={link} className="file-view-iframe" frameBorder='0' sandbox="allow-scripts"></iframe>
         } else {
             return content;
         }
