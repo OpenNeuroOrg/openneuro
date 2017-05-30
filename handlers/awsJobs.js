@@ -125,7 +125,8 @@ let handlers = {
             analysisId: uuid.v4(),
             status: 'UPLOADING',
             created: new Date(),
-            attempts: 0
+            attempts: 0,
+            notification: false
         };
         //making consistent with agave ??
         job.appLabel = job.jobName;
@@ -186,6 +187,8 @@ let handlers = {
                                 return;
                             } else {
                                 emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created});
+                                //server side polling in case client polling stops
+                                handlers._pollJob(mongoJob.insertedId);
                             }
                         });
                     });
@@ -249,8 +252,12 @@ let handlers = {
                         // cloning job here and sending out event and email because mongos updateOne does not return updated doc
                         let clonedJob = JSON.parse(JSON.stringify(job));
                         clonedJob.analysis.status = finalStatus;
-                        emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()});
-                        notifications.jobComplete(clonedJob);
+
+                        //if notication and log did not happen during server side polling, need to emit event and send notification
+                        if(!job.analysis.notification) {
+                            emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()});
+                            notifications.jobComplete(clonedJob);
+                        }
 
                         if(resp.jobs && resp.jobs.length > 0) {
                             logStreamNames = resp.jobs.reduce((acc, job) => {
@@ -355,7 +362,8 @@ let handlers = {
                                 $set:{
                                     'analysis.status': finalStatus,
                                     results: formattedResults,
-                                    'analysis.logstreams': logStreamNames
+                                    'analysis.logstreams': logStreamNames,
+                                    'analysis.notification': true
                                 }
                             });
                         });
@@ -373,8 +381,6 @@ let handlers = {
                         datasetId: job.datasetId,
                         snapshotId: job.snapshotId
                     });
-
-                    // notifications.jobComplete(job);
 
                 });
             }
@@ -504,6 +510,71 @@ let handlers = {
         let error = new Error('Retry is not yet supported.');
         error.http_code = 409;
         return next(error);
+    },
+
+    /*
+    * Server side polling
+    * want to poll jobs at a 5 minute interval in case client side polling stops
+    * server side polling is only responsible for sending out notifications and emitting completion event
+    * results processing will still occur when client is accessed and polling starts from client
+    */
+    _pollJob(id) {
+        let interval = 300000; // 5 minute interval for server side polling
+        let poll = (jobId) => {
+            c.crn.jobs.findOne({_id: id}, {}, (err, job) => {
+                let status = job.analysis.status;
+                let finished = status === 'SUCCEEDED' || status === 'FAILED';
+                let jobs = job.analysis.jobs;
+                let clonedJob = JSON.parse(JSON.stringify(job));
+                //if analysis is finished and notfication has not been sent, send notification.
+                if(finished && !job.analysis.notification) {
+                    notifications.jobComplete(clonedJob);
+                    emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()});
+                    c.crn.jobs.updateOne({_id: jobId}, {
+                        $set:{
+                            'analysis.notification': true
+                        }
+                    });
+                } else {
+                    let params = {
+                        jobs: jobs
+                    };
+                    aws.batch.sdk.describeJobs(params, (err, resp) => {
+                        if(err) {
+                            // failing silently here for now.
+                            console.log(err);
+                            return;
+                        }
+
+                        let statusArray = resp.jobs.map((job) => {
+                            return job.status;
+                        });
+                        //if every status is either succeeded or failed, all jobs have completed.
+                        let finished = statusArray.length ? statusArray.every((status) => {
+                            return status === 'SUCCEEDED' || status === 'FAILED';
+                        }) : false;
+
+                        let finalStatus = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
+                        clonedJob.analysis.status = finalStatus;
+
+                        if(finished) {
+                            notifications.jobComplete(clonedJob);
+                            emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()});
+                            c.crn.jobs.updateOne({_id: jobId}, {
+                                $set:{
+                                    'analysis.notification': true,
+                                    'analysis.status': 'FINALIZING'
+                                }
+                            });
+                        } else {
+                            setTimeout(poll.bind(this, jobId), interval);
+                        }
+                    });
+                }
+            });
+        };
+
+        setTimeout(poll.bind(this, id), interval);
     }
 
 };
