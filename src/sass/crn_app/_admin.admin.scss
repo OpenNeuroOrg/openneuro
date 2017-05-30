@@ -64,6 +64,9 @@
                     .panel-heading {
                         @extend .row;
                         background: $f8;
+                        a{
+                            width: 100%;
+                        }
                     }
                     .panel-collapse {
                         @extend .row;
