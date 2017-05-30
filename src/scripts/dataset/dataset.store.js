@@ -872,11 +872,10 @@ let datasetStore = Reflux.createStore({
         }
 
         // find directory
-        let dir = files.findInTree(jobRun.results, directory.path, 'path');
+        let dir = files.findInTree(jobRun.results, directory.dirPath, 'dirPath');
         if (dir) {
             dir.showChildren = !dir.showChildren;
         }
-
         // update state
         this.update({jobs});
     },
@@ -976,7 +975,7 @@ let datasetStore = Reflux.createStore({
                 this.refreshJob(jobId, (job) => {
                     let status = job.analysis ? job.analysis.status : 'PENDING';
                     let finished = status === 'SUCCEEDED';
-                    let failed = status === 'FAILED';
+                    let failed = status === 'FAILED'|| status === 'REJECTED';
                     let hasResults = job.results && job.results.length > 0;
                     let needsUpdate = (!finished && !failed) || (finished && !hasResults);
 
@@ -986,7 +985,7 @@ let datasetStore = Reflux.createStore({
                 });
             }
         };
-        setTimeout(poll.bind(this, jobId), interval);
+        poll(jobId);
     },
 
     /**
@@ -1014,7 +1013,6 @@ let datasetStore = Reflux.createStore({
             if (!err) {
                 // reload jobs
                 if (snapshotId == this.data.dataset._id) {
-                    // let jobId = res.body.result.id;
                     let jobId = res.body.jobId;
                     this.loadJobs(snapshotId, this.data.snapshot, datasetId, {job: jobId}, (jobs) => {
                         this.loadSnapshots(this.data.dataset, jobs);
@@ -1065,6 +1063,9 @@ let datasetStore = Reflux.createStore({
         crn.retryJob(this.data.dataset._id, jobId, () => {
             this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, {}, (jobs) => {
                 this.loadSnapshots(this.data.dataset, jobs);
+
+                // start polling job
+                this.pollJob(jobId, this.data.selectedSnapshot);
                 callback();
             });
         }, {snapshot: this.data.snapshot});

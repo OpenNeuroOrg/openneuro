@@ -23,7 +23,15 @@ let Apps = React.createClass({
             let appName = Object.keys(app)[0];
             let list = this._versionList(app[appName]);
             return (
-                <Panel header={appName} eventKey={index} key={index}>
+                <Panel header={appName} eventKey={index} key={index} className="col-xs-12 job-panel-wrap">
+                    <div className="job-panel-header clearfix col-xs-12" >
+                        <div className="row">
+                            <div className="col-xs-3 job-col"><label>{app[appName][0].jobDefinitionName} Version</label></div>
+                            <div className="col-xs-3 job-col"><label>Container Image</label></div>
+                            <div className="col-xs-3 job-col"><label>Status</label></div>
+                            <div className="col-xs-3 job-col last"><label>Actions</label></div>
+                        </div>
+                    </div>
                     {list}
                 </Panel>
             );
@@ -37,15 +45,7 @@ let Apps = React.createClass({
                         <span>Define an App</span>
                     </button>
                 </div>
-                <div className="col-xs-12 job-panel-wrap">
-                        <div className="fade-in job-panel-header clearfix" >
-                            <div className="col-xs-5 job-col"><label>App</label></div>
-                            <div className="col-xs-3 job-col"><label>Container Image</label></div>
-                            <div className="col-xs-2 job-col"><label>Status</label></div>
-                            <div className="col-xs-2 job-col"><label>Actions</label></div>
-                        </div>
-                </div>
-                <Accordion>
+                <Accordion className="clearfix">
                 {Object.keys(this.state.datasets.apps).length == 0 ? noJobs : jobs}
                 </Accordion>
                 <DefineJobModal
@@ -57,38 +57,32 @@ let Apps = React.createClass({
     },
 
     _versionList(apps) {
-        let list = apps.map((app, index) => {
+        let list = apps.reverse().map((app, index) => {
             let bidsContainer = batch.getBidsContainer(app);
 
+            let activeStatus    = <span className="label label-success "><i className="fa fa-check-circle" aria-hidden="true"></i> {app.status}</span>;
+            let inactiveStatus  = <span className="label label-warning"><i className="fa fa-exclamation-triangle"></i> {app.status}</span>;
+
             return (
-                <div className="job-panel clearfix" key={index}>
-                    <div className="col-xs-5 job-col">
-                        <h3>
+                <div className="job-panel col-xs-12" key={index}>
+                    <div className="row">
+                        <div className="col-xs-3 job-col">
                             <div className="job-name">
-                                <span>{app.jobDefinitionName + ":" + app.revision}</span>
+                                <span>{'v' + ":" + app.revision}</span>
                             </div>
-                        </h3>
-                    </div>
-                    <div className="col-xs-3 job-col">
-                        <div>{bidsContainer}</div>
-                    </div>
-                    <div className="col-xs-2 job-col">
-                        <div>{app.status}</div>
-                    </div>
-                    <div className="col-xs-2 last dataset-tools-wrap-admin">
-                    <div className="tools clearfix">
-                        <div className="tool">
-                            <WarnButton message="Edit"
-                                icon='fa-pencil'
-                                warn={false}
-                                action={actions.editJobDefinition.bind(this, app)} />
                         </div>
-                        <div className="tool">
-                            <WarnButton message="Disable"
-                                icon='fa-ban'
-                                action={actions.disableJobDefinition.bind(this, app)} />
+                        <div className="col-xs-3 job-col">
+                            <div>{bidsContainer}</div>
                         </div>
-                    </div>
+                        <div className="col-xs-3 job-col">
+                            <div className={app.status}>{app.status === 'ACTIVE' ? activeStatus : inactiveStatus}</div>
+                        </div>
+                        <div className="col-xs-3  job-col last">
+                            <div className="tools clearfix">
+                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={actions.editJobDefinition.bind(this, app)} ><i className="fa fa-pencil" ></i> Edit </button>
+                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={actions.disableJobDefinition.bind(this, app)} ><i className="fa fa-ban" ></i> Disable</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )

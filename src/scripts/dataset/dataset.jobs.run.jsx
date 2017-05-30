@@ -41,6 +41,7 @@ class JobAccordion extends React.Component {
                         <div className="panel-body">
                             <span className="inner">
                                 {this._parameters(run)}
+                                {run.analysis.status === 'SUCCEEDED' || run.analysis.status === 'FAILED' ? this._logs(run) : null}
                             </span>
                         </div>
                     </div>
@@ -107,6 +108,11 @@ class JobAccordion extends React.Component {
         if (run.parameters && Object.keys(run.parameters).length > 0) {
             let parameters = [];
             for (let key in run.parameters) {
+                if(key === 'participant_label') {
+                    run.parameters[key] = run.parameters[key].sort((a,b) => {
+                        return a-b;
+                    });
+                }
                 parameters.push(
                     <li key={key}>
                         <span className="key">{key}</span>: <span className="value">{run.parameters[key]}</span>
@@ -125,7 +131,7 @@ class JobAccordion extends React.Component {
     }
 
     _status(status) {
-        if (status === 'SUCCEEDED' || status === 'FAILED') {
+        if (status === 'SUCCEEDED' || status === 'FAILED' || status === 'REJECTED') {
             return status;
         } else {
             return (
@@ -140,7 +146,7 @@ class JobAccordion extends React.Component {
     }
 
     _failedMessage(run) {
-        if (run.analysis.status === 'FAILED') {
+        if (run.analysis.status === 'FAILED' || run.analysis.status === 'REJECTED') {
             let adminMessage = <span>Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail.</span>;
             let message = run.analysis.message ? run.analysis.message : 'We were unable to complete this analysis.';
             return (
@@ -150,7 +156,7 @@ class JobAccordion extends React.Component {
                         icon="fa fa-repeat"
                         message="re-run"
                         warn={false}
-                        action={actions.retryJob.bind(this, run.jobId)} />
+                        action={actions.retryJob.bind(this, run._id)} />
                 </div>
             );
         }
