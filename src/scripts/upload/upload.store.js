@@ -226,7 +226,7 @@ let UploadStore = Reflux.createStore({
                     }
 
                     if (existingProjectId) {
-                        self.update({uploadStatus: 'dataset-exists', showResume: true, activeKey: 5});
+                        self.update({uploadStatus: 'dataset-exists', showDisclaimer: true, showResume: true, activeKey: 5});
                     } else {
                         self.update({showDisclaimer: true, activeKey: 4});
                     }
