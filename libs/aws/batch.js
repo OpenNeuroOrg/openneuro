@@ -204,7 +204,7 @@ export default (aws) => {
         getAnalysisJobs(job, callback) {
             let jobs = job.analysis.jobs;
             let params = {
-                    jobs: jobs
+                jobs: jobs
             };
 
             batch.describeJobs(params, (err, resp) => {

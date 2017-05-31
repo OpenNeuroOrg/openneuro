@@ -187,7 +187,7 @@ export default (aws) => {
                             if(k === array.length -1){
                                 delete child.children;
                                 child.type = 'file';
-                                child.path = params.Bucket + '/' + s3Prefix + path;
+                                child.path = params.Bucket + '/' + params.Prefix + path;
                             }
                             parent.children.push(child);
                             parent = child;
@@ -226,5 +226,5 @@ export default (aws) => {
                 callback(null, formattedResults);
             });
         }
-    }
+    };
 };

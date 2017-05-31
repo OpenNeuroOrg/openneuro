@@ -207,7 +207,7 @@ let handlers = {
                 handlers._getJobStatus(job, userId, (err, data) => {
                     if(err) {return next(err);}
                     res.send(data);
-                })
+                });
             }
         });
     },
@@ -387,10 +387,9 @@ let handlers = {
     _pollJob(id, userId) {
         let interval = 300000; // 5 minute interval for server side polling
         let poll = (jobId) => {
-            c.crn.jobs.findOne({_id: id}, {}, (err, job) => {
+            c.crn.jobs.findOne({_id: jobId}, {}, (err, job) => {
                 let status = job.analysis.status;
                 let finished = status === 'SUCCEEDED' || status === 'FAILED';
-                let jobs = job.analysis.jobs;
                 let clonedJob = JSON.parse(JSON.stringify(job));
                 //if analysis is finished and notfication has not been sent, send notification.
                 if(finished) {
@@ -403,7 +402,7 @@ let handlers = {
                             return;
                         }
                         if(!(data.analysis.status === 'SUCCEEDED' || data.analysis.status === 'FAILED')) {
-                            setTimeout(poll.bind(this, id), interval);
+                            setTimeout(poll.bind(this, jobId), interval);
                         }
                     });
                 }
