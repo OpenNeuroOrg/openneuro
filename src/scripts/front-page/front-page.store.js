@@ -121,22 +121,6 @@ let FrontPageStore = Reflux.createStore({
         } else {
             this.update({loadingJob: false, exampleJob: null});
         }
-        
-        // for (let app of apps) {
-        //     if (app.id === appId) {
-        //         // set selected app
-        //         this.update({selectedPipeline: app, loadingJob: true});
-        //         // load associated example job
-        //         // let description = JSON.parse(app.longDescription);
-        //         // this.loadJob(description.snapshotId, description.jobId);
-        //         if (app.id === 'mriqc-bare-0.8.7') {
-        //             this.loadJob('57dc3704a76c87000a24e650', '3036461272949658086-242ac115-0001-007');
-        //         } else {
-        //             this.update({loadingJob: false, exampleJob: null});
-        //         }
-        //         return;
-        //     }
-        // }
     },
 
     /**
