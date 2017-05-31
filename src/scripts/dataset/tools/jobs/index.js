@@ -370,7 +370,7 @@ export default class JobMenu extends React.Component {
             for (let jobDefinitionName in this.props.apps) {
                 let app = this.props.apps[jobDefinitionName];
                 let validationConfig = app.hasOwnProperty('validationConfig') ? app.validationConfig : {error: []};
-                let issues = validate.reformat(res.body.metadata.validation, res.body.metadata.summary, validationConfig);
+                let issues = validate.reformat(res.body.metadata.validation || {}, res.body.metadata.summary || {}, validationConfig);
                 if (issues.errors.length > 0) {
                     disabledApps[app.id] = {issues};
                 }
