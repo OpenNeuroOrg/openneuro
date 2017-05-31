@@ -224,6 +224,26 @@ export default (aws) => {
         },
 
         /**
+         * For now, we limit parallelization to 20 subjobs
+         *
+         * Takes a list of labels and returns a list of no more than 20 lists.
+         */
+        _partitionLabels(labels) {
+            // Limit to 20 groups
+            let pCount = Math.min(20, labels.length);
+            let partitions = new Array(pCount);
+            labels.forEach((label, index) => {
+                let bucket = partitions[index%pCount];
+                if (bucket instanceof Array) {
+                    bucket.push(label);
+                } else {
+                    partitions[index%pCount] = [label];
+                }
+            });
+            return partitions;
+        },
+
+        /**
          * Convert batchJob.parameters to a BIDS_ARGUMENTS environment var
          * and add to document to submit the job
          */
