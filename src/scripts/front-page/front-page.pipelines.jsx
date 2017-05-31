@@ -29,7 +29,7 @@ let Pipelines = React.createClass({
                         {this._pipelines()}
                     </div>
                 </div>
-                {!this.state.selectedPipeline.id ? null : this._pipelineDetail(this.state.selectedPipeline)}
+                {!this.state.selectedPipeline.jobDefinitionName ? null : this._pipelineDetail(this.state.selectedPipeline)}
                 <FileDisplay
                     file={this.state.displayFile}
                     show={this.state.displayFile.show}
@@ -55,16 +55,16 @@ let Pipelines = React.createClass({
                 <h4>Featured</h4>
                 <ul>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'fmriprep')}>fmriprep</button>
                     </li>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'bids-example-0.0.6')}>bids-example</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'MRIQC')}>MRIQC</button>
                     </li>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'mriqc-bare-0.8.7')}>mriqc-bare</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'FreeSurfer')}>FreeSurfer</button>
                     </li>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'bids-example-0.0.6')}>bids-example</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'CPAC')}>CPAC</button>
                     </li>
                 </ul>
             </div>
@@ -98,7 +98,7 @@ let Pipelines = React.createClass({
     },
 
     _pipelineDetail(pipeline) {
-        let longDescription = JSON.parse(pipeline.longDescription);
+        let longDescription = pipeline.descriptions;
         return (
             <div className="selected-pipeline fade-in">
                 <div className="container slide-in-down">
@@ -106,14 +106,12 @@ let Pipelines = React.createClass({
                     <div className="row">
                         <div className="col-sm-6 mate-slide">
                             <a href="#" className="close-selected" onClick={FPActions.selectPipeline.bind(null, '')}>X CLOSE</a>
-                            <h2>{pipeline.name}</h2>
+                            <h2>{pipeline.jobDefinitionName}</h2>
                             <p>{longDescription.description}</p>
                             <h4>Acknowledgments</h4>
                             <p>{longDescription.acknowledgments}</p>
                             <h4>Support</h4>
-                            <p><a href={pipeline.longDescription.support}>{longDescription.support}</a></p>
-                            <h4>Help</h4>
-                            <p><a href={pipeline.helpURI}>{pipeline.helpURI}</a></p>
+                            <p><a href={'http://' + longDescription.support} target="_blank">{longDescription.support}</a></p>
                         </div>
                         {this._exampleResults()}
                     </div>
