@@ -40,4 +40,47 @@ describe('libs/aws/batch.js', () => {
             assert.equal(args, '--participant_label 01 02 03 --n_cpus 4');
         });
     });
+    describe('_partitionLabels()', () => {
+        it('should produce 3 expected groupings from 3 labels', () => {
+            let labels = [ ...Array(3).keys() ];
+            assert.deepEqual(aws.batch._partitionLabels(labels), [[0], [1], [2]]);
+        });
+        it('should produce 20 expected groupings from 23 labels', () => {
+            let labels = [ ...Array(23).keys() ];
+            let res = aws.batch._partitionLabels(labels);
+            assert.deepEqual(res, [[0, 20], [1, 21], [2, 22], [3], [4], [5], [6], [7], [8], [9], [10], [11], [12], [13], [14], [15], [16], [17], [18], [19]]);
+        });
+        it('should limit 10 labels to 10 groups', () => {
+            let labels = [ ...Array(10).keys() ];
+            assert.equal(aws.batch._partitionLabels(labels).length, 10);
+        });
+        it('should limit 25 labels to 20 groups', () => {
+            let labels = [ ...Array(25).keys() ];
+            assert.equal(aws.batch._partitionLabels(labels).length, 20);
+        });
+        it('should limit 40 labels to 20 groups', () => {
+            let labels = [ ...Array(40).keys() ];
+            assert.equal(aws.batch._partitionLabels(labels).length, 20);
+        });
+        it('should limit 250 labels to 20 groups', () => {
+            let labels = [ ...Array(250).keys() ];
+            assert.equal(aws.batch._partitionLabels(labels).length, 20);
+        });
+        it('should limit 1 label to 1 group', () => {
+            let labels = [ "0" ];
+            assert.equal(aws.batch._partitionLabels(labels).length, 1);
+        });
+        it('should return 0 groups for 0 labels', () => {
+            let labels = [ ];
+            assert.equal(aws.batch._partitionLabels(labels).length, 0);
+        });
+        it('should partition labels into +/- 1 item size groups', () => {
+            let labels = [ ...Array(250).keys() ];
+            let groups = aws.batch._partitionLabels(labels);
+            let lengths = groups.map((group) => {
+                return group.length;
+            });
+            assert.equal((Math.max(...lengths) - Math.min(...lengths)), 1);
+        });
+    });
 });
