@@ -67,7 +67,7 @@ describe('libs/aws/batch.js', () => {
             assert.equal(aws.batch._partitionLabels(labels).length, 20);
         });
         it('should limit 1 label to 1 group', () => {
-            let labels = [ "0" ];
+            let labels = [ '0' ];
             assert.equal(aws.batch._partitionLabels(labels).length, 1);
         });
         it('should return 0 groups for 0 labels', () => {
