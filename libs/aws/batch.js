@@ -161,11 +161,12 @@ export default (aws) => {
                 batchJob.parameters.participant_label instanceof Array &&
                 batchJob.parameters.participant_label.length > 0) {
                 let jobs = [];
-                batchJob.parameters.participant_label.forEach((subject) => {
+                let groups = this._partitionLabels(batchJob.parameters.participant_label);
+                groups.forEach((subjectGroup) => {
                     let subjectBatchJob = JSON.parse(JSON.stringify(batchJob));
                     subjectBatchJob.dependsOn = _depsObjects(deps);
-                    // Reduce participant_label to a single subject
-                    subjectBatchJob.parameters.participant_label = [subject];
+                    // Reduce participant_label to a single group of subjects
+                    subjectBatchJob.parameters.participant_label = subjectGroup;
                     this._addJobArguments(subjectBatchJob);
                     delete subjectBatchJob.parameters;
                     jobs.push(job.bind(this, subjectBatchJob));
