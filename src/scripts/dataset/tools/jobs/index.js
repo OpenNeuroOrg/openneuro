@@ -137,10 +137,20 @@ export default class JobMenu extends React.Component {
         const apps = this.props.apps;
         const selectedApp = this.state.selectedAppKey;
 
-        let validatedApps = batch.filterAppDefinitions(apps).map((app) => {
+        let validatedApps = batch.filterAppDefinitions(apps).reduce((acc, app) => {
             //filterAppDefinitions returns an array of objects, with each object having a single key which is app name.
-            return Object.keys(app)[0];
-        });
+            let name = Object.keys(app)[0];
+            // need to filter out any apps that have ALL inactive versions from select list
+            if(app[name].every((version) => {
+                return version.status === 'INACTIVE';
+            })) {
+                return acc;
+            } else {
+                acc.push(name);
+                return acc;
+            }
+        }, []);
+
         const appOptions = validatedApps.map((jobDefinitionName, index) => {
             return <option key={index} value={jobDefinitionName}> {jobDefinitionName} </option>;
         });
@@ -148,7 +158,7 @@ export default class JobMenu extends React.Component {
         const versionOptions = selectedApp ? Object.keys(apps[selectedApp]).reverse().map((revision) => {
             let active = apps[selectedApp][revision].status === 'ACTIVE';
             let disabled = this.state.disabledApps.hasOwnProperty(apps[selectedApp][revision].jobDefinitionArn) ? '* ' : '';
-            return active ? <option key={revision} value={revision}>{disabled + 'v' + revision}</option> :  null;
+            return active ? <option key={revision} value={revision}>{disabled + 'v' + revision}</option> : null;
         }) : [];
 
         const versions = (
