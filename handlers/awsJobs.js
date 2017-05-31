@@ -197,180 +197,17 @@ let handlers = {
                 return;
             }
             let status = job.analysis.status;
-            let analysisId = job.analysis.analysisId;
             let jobs = job.analysis.jobs;
-            let createdDate = job.analysis.created;
 
             // check if job is already known to be completed
             // there could be a scenario where we are polling before the AWS batch job has been setup. !jobs check handles this.
             if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || status === 'REJECTED' || !jobs || !jobs.length) {
                 res.send(job);
             } else {
-                let params = {
-                    jobs: jobs
-                };
-                aws.batch.sdk.describeJobs(params, (err, resp) => {
+                handlers._getJobStatus(job, userId, (err, data) => {
                     if(err) {return next(err);}
-                    let analysis = {};
-                    let statusArray = resp.jobs.map((job) => {
-                        return job.status;
-                    });
-                    //if every status is either succeeded or failed, all jobs have completed.
-                    let finished = statusArray.every((status) => {
-                        return status === 'SUCCEEDED' || status === 'FAILED';
-                    });
-
-                    analysis.status = !finished ? 'RUNNING' : 'FINALIZING';
-                    analysis.created = createdDate;
-                    analysis.analysisId = analysisId;
-                    // check status
-                    if(finished){
-                        let logStreamNames; //this will be an array of cloudwatch logstream names logs for each job
-                        //Check if any jobs failed, if so analysis failed, else succeeded
-                        // note, if statusArray is empty, this means the job does not exist on Batch anymore and we did not catch it's
-                        //   pass or fail state for some reason so we are going to call this a failure.
-                        let finalStatus = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
-                        let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
-                        let params = {
-                            Bucket: 'openneuro.outputs',
-                            Prefix: s3Prefix,
-                            StartAfter: s3Prefix
-                        };
-                        // emit a job finished event so we can add logs and sent notification email
-                        // cloning job here and sending out event and email because mongos updateOne does not return updated doc
-                        let clonedJob = JSON.parse(JSON.stringify(job));
-                        clonedJob.analysis.status = finalStatus;
-
-                        //if notication and log did not happen during server side polling, need to emit event and send notification
-                        if(!job.analysis.notification) {
-                            emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()}, userId);
-                            notifications.jobComplete(clonedJob);
-                        }
-
-                        if(resp.jobs && resp.jobs.length > 0) {
-                            logStreamNames = resp.jobs.reduce((acc, job) => {
-                                if (job.attempts && job.attempts.length > 0) {
-                                    job.attempts.forEach((attempt)=> {
-                                        acc.push(job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop());
-                                    });
-                                }
-                                return acc;
-                            }, []);
-                        }
-
-                        aws.s3.sdk.listObjectsV2(params, (err, data) => {
-                            if(err) {return next(err);}
-
-                            let results = [];
-                            data.Contents.forEach((obj) => {
-                                if(!/\/$/.test(obj.Key)) {
-                                    let result = {};
-                                    result.name = obj.Key;
-                                    result.path = params.Bucket + '/' + obj.Key;
-                                    results.push(result);
-                                }
-                            });
-                            //Need to format results to preserver folder structure. this could use some cleanup but works for now
-                            let formattedResults = [];
-                            let resultStore = {};
-
-
-                            let nestResultsByPath = (array, store) => {
-                                let parent = store[array[0]];
-                                let path = parent.dirPath;
-
-                                let checkChildren = (childrenArray, path) => {
-                                    return childrenArray.find((child) => {
-                                        return child.dirPath === path;
-                                    });
-                                };
-
-                                array.forEach((level, k) => {
-                                    //right now setting up top level before passing in store. can probably change this
-                                    if(k === 0) {
-                                        parent._id = k;
-                                        parent.name = level;
-                                        return;
-                                    }
-
-                                    path = path + level + (k === array.length-1 ? '': '/'); //last element in array is the filename
-
-                                    let child = checkChildren(parent.children, path);
-                                    if(child) {
-                                        parent = child;
-                                    } else {
-                                        child = {
-                                            dirPath: path,
-                                            children: [],
-                                            type: 'folder',
-                                            parentId: k-1,
-                                            name: level,
-                                            _id: k
-                                        };
-                                        if(k === array.length -1){
-                                            delete child.children;
-                                            child.type = 'file';
-                                            child.path = params.Bucket + '/' + s3Prefix + path;
-                                        }
-                                        parent.children.push(child);
-                                        parent = child;
-                                    }
-                                });
-
-                                return store;
-                            };
-
-                            results.forEach((result) => {
-                                let pathArray = result.path.split('/').slice(3);
-                                if(pathArray.length === 1) {
-                                    resultStore[pathArray[0]] = {
-                                        type: 'file',
-                                        dirPath: pathArray[0],
-                                        name: pathArray[0],
-                                        path: result.path
-                                    };
-                                } else {
-                                    if(!resultStore[pathArray[0]]) {
-                                        resultStore[pathArray[0]] = {
-                                            type: 'folder',
-                                            children: [],
-                                            name: pathArray[0],
-                                            dirPath: pathArray[0] + '/'
-                                        };
-                                    }
-                                    nestResultsByPath(pathArray, resultStore);
-                                }
-                            });
-
-                            Object.keys(resultStore).forEach((result) => {
-                                formattedResults.push(resultStore[result]);
-                            });
-                            //update job with status, results and logstreams
-                            c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
-                                $set:{
-                                    'analysis.status': finalStatus,
-                                    results: formattedResults,
-                                    'analysis.logstreams': logStreamNames,
-                                    'analysis.notification': true
-                                }
-                            });
-                        });
-                    } else if(analysis.status != status) {
-                        //if status changes, update mongo
-                        c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
-                            $set:{
-                                'analysis.status': analysis.status
-                            }
-                        });
-                    }
-                    res.send({
-                        analysis: analysis,
-                        jobId: analysisId,
-                        datasetId: job.datasetId,
-                        snapshotId: job.snapshotId
-                    });
-
-                });
+                    res.send(data);
+                })
             }
         });
     },
@@ -556,47 +393,17 @@ let handlers = {
                 let jobs = job.analysis.jobs;
                 let clonedJob = JSON.parse(JSON.stringify(job));
                 //if analysis is finished and notfication has not been sent, send notification.
-                if(finished && !job.analysis.notification) {
-                    notifications.jobComplete(clonedJob);
-                    emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()}, userId);
-                    c.crn.jobs.updateOne({_id: jobId}, {
-                        $set:{
-                            'analysis.notification': true
-                        }
-                    });
+                if(finished) {
+                    handlers._jobComplete(clonedJob, userId);
                 } else {
-                    let params = {
-                        jobs: jobs
-                    };
-                    aws.batch.sdk.describeJobs(params, (err, resp) => {
+                    handlers._getJobStatus(job, userId, (err, data) => {
                         if(err) {
-                            // failing silently here for now.
+                            //failing silently here
                             console.log(err);
                             return;
                         }
-
-                        let statusArray = resp.jobs.map((job) => {
-                            return job.status;
-                        });
-                        //if every status is either succeeded or failed, all jobs have completed.
-                        let finished = statusArray.length ? statusArray.every((status) => {
-                            return status === 'SUCCEEDED' || status === 'FAILED';
-                        }) : false;
-
-                        let finalStatus = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
-                        clonedJob.analysis.status = finalStatus;
-
-                        if(finished) {
-                            notifications.jobComplete(clonedJob);
-                            emitter.emit(events.JOB_COMPLETED, {job: clonedJob, completedDate: new Date()}, userId);
-                            c.crn.jobs.updateOne({_id: jobId}, {
-                                $set:{
-                                    'analysis.notification': true,
-                                    'analysis.status': 'FINALIZING'
-                                }
-                            });
-                        } else {
-                            setTimeout(poll.bind(this, jobId), interval);
+                        if(!(data.analysis.status === 'SUCCEEDED' || data.analysis.status === 'FAILED')) {
+                            setTimeout(poll.bind(this, id), interval);
                         }
                     });
                 }
@@ -604,6 +411,121 @@ let handlers = {
         };
 
         setTimeout(poll.bind(this, id), interval);
+    },
+
+    /*
+     * Gets jobs for a given analysis from batch, checks overall status and callsback with a snapshot of the analysis status
+     */
+    _getJobStatus(job, userId, callback) {
+        aws.batch.getAnalysisJobs(job, (err, jobs) => {
+            if(err) {return callback(err);}
+            //check jobs status
+            let analysis = {};
+            let createdDate = job.analysis.created;
+            let analysisId = job.analysis.analysisId;
+            let statusArray = jobs.map((job) => {
+                return job.status;
+            });
+            let finished = handlers._checkJobStatus(statusArray);
+
+            analysis.status = !finished ? 'RUNNING' : 'FINALIZING';
+            analysis.created = createdDate;
+            analysis.analysisId = analysisId;
+
+            if(finished) {
+                let finalStatus = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
+                let logStreams = handlers._buildLogStreams(jobs);
+
+                let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
+                let params = {
+                    Bucket: 'openneuro.outputs',
+                    Prefix: s3Prefix,
+                    StartAfter: s3Prefix
+                };
+
+                // emit a job finished event so we can add logs and sent notification email
+                // cloning job here and sending out event and email because mongos updateOne does not return updated doc
+                let clonedJob = JSON.parse(JSON.stringify(job));
+                clonedJob.analysis.status = finalStatus;
+                handlers._jobComplete(clonedJob, userId);
+
+                aws.s3.getJobResults(params, (err, results) => {
+                    if(err) {return callback(err);}
+                    //update job with status, results and logstreams
+                    let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
+                    c.crn.jobs.updateOne({_id: jobId}, {
+                        $set:{
+                            'analysis.status': finalStatus,
+                            results: results,
+                            'analysis.logstreams': logStreams,
+                            'analysis.notification': true
+                        }
+                    });
+                });
+            } else if(analysis.status != job.analysis.status) {
+                let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
+                //if status changes, update mongo
+                c.crn.jobs.updateOne({_id: jobId}, {
+                    $set:{
+                        'analysis.status': analysis.status
+                    }
+                });
+            }
+
+            callback(null, {
+                analysis: analysis,
+                jobId: analysisId,
+                datasetId: job.datasetId,
+                snapshotId: job.snapshotId
+            });
+        });
+    },
+
+    /*
+     * Takes an array of statuses for batch jobs and returns a boolean denoting overall finished state of all jobs
+     */
+    _checkJobStatus(statusArray) {
+        //if every status is either succeeded or failed, all jobs have completed.
+        let finished = statusArray.length ? statusArray.every((status) => {
+            return status === 'SUCCEEDED' || status === 'FAILED';
+        }) : false;
+
+        return finished;
+    },
+
+    /*
+     * Takes an array of job objects and constructs path to the cloudwatch logstreams
+     */
+    _buildLogStreams(jobs) {
+        let logStreamNames;
+        if(jobs && jobs.length > 0) {
+            logStreamNames = jobs.reduce((acc, job) => {
+                if (job.attempts && job.attempts.length > 0) {
+                    job.attempts.forEach((attempt)=> {
+                        acc.push(job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop());
+                    });
+                }
+                return acc;
+            }, []);
+        }
+
+        return logStreamNames;
+    },
+
+    /*
+     * Processes job complete tasks (notifications and event emit)
+     */
+    _jobComplete(job, userId) {
+        if(!job.analysis.notification) {
+            emitter.emit(events.JOB_COMPLETED, {job: job, completedDate: new Date()}, userId);
+            notifications.jobComplete(job);
+            let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
+            c.crn.jobs.updateOne({_id: jobId}, {
+                $set:{
+                    'analysis.notification': true
+                }
+            });
+        }
     }
 
 };
