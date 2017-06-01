@@ -79,8 +79,8 @@ let Apps = React.createClass({
                         </div>
                         <div className="col-xs-3  job-col last">
                             <div className="tools clearfix">
-                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={actions.editJobDefinition.bind(this, app)} ><i className="fa fa-pencil" ></i> Edit </button>
-                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={actions.disableJobDefinition.bind(this, app)} ><i className="fa fa-ban" ></i> Disable</button>
+                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._editJobDefinition.bind(this, app)} ><i className="fa fa-pencil" ></i> Edit </button>
+                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._disableJobDefinition.bind(this, app)} ><i className="fa fa-ban" ></i> Disable</button>
                             </div>
                         </div>
                     </div>
@@ -89,6 +89,14 @@ let Apps = React.createClass({
         });
 
         return list;
+    },
+
+    _editJobDefinition(app) {
+        actions.editJobDefinition(app);
+    },
+
+    _disableJobDefinition(app) {
+        actions.disableJobDefinition(app);
     }
 
 });

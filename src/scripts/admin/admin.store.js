@@ -330,6 +330,7 @@ let UserStore = Reflux.createStore({
         crn.disableJobDefinition(name, jobArn, (err, data) => {
             //TODO Update job list
             console.log('Job disabled');
+            datasetActions.loadApps(); //need to reload apps for UI to update with Inactive status on disable
             if(callback){
                 callback();
             }
