@@ -70,18 +70,32 @@ let handlers = {
      * Describe Job Definitions
      */
     describeJobDefinitions(req, res, next) {
+        //recursive function to handle grabbing all job definitions if more than 100 exist on batch
+        let getJobDefinitions = (params, jobDefs, callback) => {
+            aws.batch.sdk.describeJobDefinitions(params, (err, data) => {
+                if(err) {return callback(err);}
+                jobDefs = jobDefs.concat(data.jobDefinitions);
+                if(data.nextToken) {
+                    params.nextToken = data.nextToken;
+                    getJobDefinitions(params, jobDefs, callback);
+                } else {
+                    callback(null, jobDefs);
+                }
+            });
+        };
+
         c.crn.jobDefinitions.find({}, {jobDefinitionArn: true}).toArray((err, appDefs) => {
             let arns = appDefs.map((app) => {
                 return app.jobDefinitionArn;
             });
-            aws.batch.sdk.describeJobDefinitions({jobDefinitions: arns}, (err, data) => {
+            getJobDefinitions({jobDefinitions: arns}, [], (err, jobDefs) => {
                 if (err) {
                     console.log(err);
                     return next(err);
                 } else {
                     let definitions = {};
                     //need to attach job definition descriptions from mongo to job defs returned from AWS batch
-                    async.each(data.jobDefinitions, (definition, cb) => {
+                    async.each(jobDefs, (definition, cb) => {
                         if (!definitions.hasOwnProperty(definition.jobDefinitionName)) {
                             definitions[definition.jobDefinitionName] = {};
                         }
