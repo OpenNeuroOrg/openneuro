@@ -127,7 +127,104 @@ export default (aws) => {
                     });
                 }
             });
-        }
+        },
+        /**
+         * Get Results for a job
+         *
+         * Takes a params object which defines output bucket location for a job
+         * returns results formatted to be compatible with filetree component on client
+         */
+        getJobResults(params, callback) {
+            s3.listObjectsV2(params, (err, data) => {
+                if(err) {return callback(err);}
 
+                let results = [];
+                data.Contents.forEach((obj) => {
+                    if(!/\/$/.test(obj.Key)) {
+                        let result = {};
+                        result.name = obj.Key;
+                        result.path = params.Bucket + '/' + obj.Key;
+                        results.push(result);
+                    }
+                });
+                //Need to format results to preserver folder structure. this could use some cleanup but works for now
+                let formattedResults = [];
+                let resultStore = {};
+
+
+                let nestResultsByPath = (array, store) => {
+                    let parent = store[array[0]];
+                    let path = parent.dirPath;
+
+                    let checkChildren = (childrenArray, path) => {
+                        return childrenArray.find((child) => {
+                            return child.dirPath === path;
+                        });
+                    };
+
+                    array.forEach((level, k) => {
+                        //right now setting up top level before passing in store. can probably change this
+                        if(k === 0) {
+                            parent._id = k;
+                            parent.name = level;
+                            return;
+                        }
+
+                        path = path + level + (k === array.length-1 ? '': '/'); //last element in array is the filename
+
+                        let child = checkChildren(parent.children, path);
+                        if(child) {
+                            parent = child;
+                        } else {
+                            child = {
+                                dirPath: path,
+                                children: [],
+                                type: 'folder',
+                                parentId: k-1,
+                                name: level,
+                                _id: k
+                            };
+                            if(k === array.length -1){
+                                delete child.children;
+                                child.type = 'file';
+                                child.path = params.Bucket + '/' + params.Prefix + path;
+                            }
+                            parent.children.push(child);
+                            parent = child;
+                        }
+                    });
+
+                    return store;
+                };
+
+                results.forEach((result) => {
+                    let pathArray = result.path.split('/').slice(3);
+                    if(pathArray.length === 1) {
+                        resultStore[pathArray[0]] = {
+                            type: 'file',
+                            dirPath: pathArray[0],
+                            name: pathArray[0],
+                            path: result.path
+                        };
+                    } else {
+                        if(!resultStore[pathArray[0]]) {
+                            resultStore[pathArray[0]] = {
+                                type: 'folder',
+                                children: [],
+                                name: pathArray[0],
+                                dirPath: pathArray[0] + '/'
+                            };
+                        }
+                        nestResultsByPath(pathArray, resultStore);
+                    }
+                });
+
+                Object.keys(resultStore).forEach((result) => {
+                    formattedResults.push(resultStore[result]);
+                });
+
+                callback(null, formattedResults);
+            });
+        }
     };
 };

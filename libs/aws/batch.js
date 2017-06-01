@@ -200,6 +200,21 @@ export default (aws) => {
         },
 
         /**
+         * returns jobs array for given analysis from Batch
+         */
+        getAnalysisJobs(job, callback) {
+            let jobs = job.analysis.jobs;
+            let params = {
+                jobs: jobs
+            };
+
+            batch.describeJobs(params, (err, resp) => {
+                if(err) {return callback(err);}
+                callback(null, resp.jobs);
+            });
+        },
+
+        /**
          * Convert JSON parameters into a string to pass to the bids-app container
          *
          * Accepts an array of parameter objects
