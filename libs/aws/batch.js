@@ -161,11 +161,12 @@ export default (aws) => {
                 batchJob.parameters.participant_label instanceof Array &&
                 batchJob.parameters.participant_label.length > 0) {
                 let jobs = [];
-                batchJob.parameters.participant_label.forEach((subject) => {
+                let groups = this._partitionLabels(batchJob.parameters.participant_label);
+                groups.forEach((subjectGroup) => {
                     let subjectBatchJob = JSON.parse(JSON.stringify(batchJob));
                     subjectBatchJob.dependsOn = _depsObjects(deps);
-                    // Reduce participant_label to a single subject
-                    subjectBatchJob.parameters.participant_label = [subject];
+                    // Reduce participant_label to a single group of subjects
+                    subjectBatchJob.parameters.participant_label = subjectGroup;
                     this._addJobArguments(subjectBatchJob);
                     delete subjectBatchJob.parameters;
                     jobs.push(job.bind(this, subjectBatchJob));
@@ -221,6 +222,26 @@ export default (aws) => {
                 }
                 return argument.concat(value);
             }).join(' ');
+        },
+
+        /**
+         * For now, we limit parallelization to 20 subjobs
+         *
+         * Takes a list of labels and returns a list of no more than 20 lists.
+         */
+        _partitionLabels(labels) {
+            // Limit to 20 groups
+            let pCount = Math.min(20, labels.length);
+            let partitions = new Array(pCount);
+            labels.forEach((label, index) => {
+                let bucket = partitions[index%pCount];
+                if (bucket instanceof Array) {
+                    bucket.push(label);
+                } else {
+                    partitions[index%pCount] = [label];
+                }
+            });
+            return partitions;
         },
 
         /**
