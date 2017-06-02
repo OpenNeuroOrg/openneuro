@@ -189,7 +189,7 @@ let handlers = {
                             } else {
                                 emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created}, userId);
                                 //server side polling in case client polling stops
-                                handlers._pollJob(mongoJob.insertedId, userId);
+                                // handlers._pollJob(mongoJob.insertedId, userId);
                             }
                         });
                     });
@@ -218,7 +218,7 @@ let handlers = {
             if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || status === 'REJECTED' || !jobs || !jobs.length) {
                 res.send(job);
             } else {
-                handlers._getJobStatus(job, userId, (err, data) => {
+                handlers.getJobStatus(job, userId, (err, data) => {
                     if(err) {return next(err);}
                     res.send(data);
                 });
@@ -409,7 +409,7 @@ let handlers = {
                 if(finished) {
                     handlers._jobComplete(clonedJob, userId);
                 } else {
-                    handlers._getJobStatus(job, userId, (err, data) => {
+                    handlers.getJobStatus(job, userId, (err, data) => {
                         if(err) {
                             //failing silently here
                             console.log(err);
@@ -429,7 +429,7 @@ let handlers = {
     /*
      * Gets jobs for a given analysis from batch, checks overall status and callsback with a snapshot of the analysis status
      */
-    _getJobStatus(job, userId, callback) {
+    getJobStatus(job, userId, callback) {
         aws.batch.getAnalysisJobs(job, (err, jobs) => {
             if(err) {return callback(err);}
             //check jobs status

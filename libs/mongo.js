@@ -49,8 +49,9 @@ export default {
      *
      * Makes a connection to mongodbs and creates an accessible
      * reference to the dbs and collections
+     * takes optional callback (using callback to kick of server side job polling)
      */
-    connect() {
+    connect(callback) {
         async.each(Object.keys(this.dbs), (dbName, cb) => {
             MongoClient.connect(config.mongo.url + dbName, (err, db) => {
                 if (err) {
@@ -67,6 +68,10 @@ export default {
                 }
                 cb();
             });
+        }, function(err) {
+            if(callback && typeof callback === 'function') {
+                callback();
+            }
         });
     }
 };

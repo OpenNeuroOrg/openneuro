@@ -4,18 +4,46 @@
 // dependencies ----------------------------------------------------
 
 import express    from 'express';
+import async         from 'async';
 import config     from './config';
 import routes     from './routes';
 import bodyParser from 'body-parser';
 import morgan     from 'morgan';
 import mongo      from './libs/mongo';
 
+//Handlers (need access to AwS Jobs handler to kickoff server side polling)
+import awsJobs    from './handlers/awsJobs';
+
 // import events lib to instantiate CRN Emitter
 import events      from './libs/events';
 
 // configuration ---------------------------------------------------
 
-mongo.connect();
+mongo.connect(() => {
+    //Start job polling
+    let c = mongo.collections;
+    let interval = let interval = 300000; // 5 minute interval for server side polling
+
+    let pollJobs = () => {
+        c.crn.jobs.find({
+            $or: [{
+                'analysis.status':{$ne: 'SUCCEEDED'}
+            } , {
+                'analysis.status':{$ne: 'FAILED'}
+            }, {
+                'analysis.status':{$ne: 'REJECTED'}
+            }]
+        }).toArray((err, jobs) => {
+            async.each(jobs, (job, cb) => {
+                awsJobs.getJobStatus(job, job.userId, cb);
+            }, (err) {
+                setTimeout(pollJobs, interval);
+            });
+        });
+    };
+
+    pollJobs();
+});
 
 let app = express();
 
