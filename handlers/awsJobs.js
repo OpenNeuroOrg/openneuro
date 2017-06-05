@@ -188,8 +188,6 @@ let handlers = {
                                 return;
                             } else {
                                 emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created}, userId);
-                                //server side polling in case client polling stops
-                                // handlers._pollJob(mongoJob.insertedId, userId);
                             }
                         });
                     });

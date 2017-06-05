@@ -22,18 +22,10 @@ import events      from './libs/events';
 mongo.connect(() => {
     //Start job polling
     let c = mongo.collections;
-    let interval = let interval = 300000; // 5 minute interval for server side polling
+    let interval = 300000; // 5 minute interval for server side polling
 
     let pollJobs = () => {
-        c.crn.jobs.find({
-            $or: [{
-                'analysis.status':{$ne: 'SUCCEEDED'}
-            } , {
-                'analysis.status':{$ne: 'FAILED'}
-            }, {
-                'analysis.status':{$ne: 'REJECTED'}
-            }]
-        }).toArray((err, jobs) => {
+        c.crn.jobs.find({ 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'REJECTED', 'UPLOADING']}}).toArray((err, jobs) => {
             async.each(jobs, (job, cb) => {
                 awsJobs.getJobStatus(job, job.userId, cb);
             }, (err) => {
