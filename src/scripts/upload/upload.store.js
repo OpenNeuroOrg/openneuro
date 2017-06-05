@@ -262,7 +262,7 @@ let UploadStore = Reflux.createStore({
             showModal: false,
             showProgress: true,
             disabledTab: true,
-            activeKey: 5
+            activeKey: 6
         });
 
         let datasetsUpdated = false;
