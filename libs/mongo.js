@@ -68,7 +68,7 @@ export default {
                 }
                 cb();
             });
-        }, function(err) {
+        }, () => {
             if(callback && typeof callback === 'function') {
                 callback();
             }
