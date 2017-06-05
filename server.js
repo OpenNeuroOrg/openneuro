@@ -36,7 +36,7 @@ mongo.connect(() => {
         }).toArray((err, jobs) => {
             async.each(jobs, (job, cb) => {
                 awsJobs.getJobStatus(job, job.userId, cb);
-            }, (err) {
+            }, (err) => {
                 setTimeout(pollJobs, interval);
             });
         });
