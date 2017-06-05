@@ -13,7 +13,7 @@ export default (aws) => {
     return {
         sdk: cloudwatchlogs,
 
-        getLogsByStreamName(params, logs, callback) {
+        getLogs(params, logs, callback) {
             //Recursive function to snag all logs from a logstream
             let logStreamName = params.logStreamName;
             this.sdk.getLogEvents(params, (err, data)=> {
@@ -28,7 +28,7 @@ export default (aws) => {
                     if(params.startFromHead) {
                         delete params.startFromHead; //only necessary on first call I think.
                     }
-                    this.getLogsByStreamName(params, logs, callback);
+                    this.getLogs(params, logs, callback);
                 } else {
                     callback();
                 }
@@ -50,7 +50,7 @@ export default (aws) => {
                         logStreamName: logStreamName,
                         startFromHead: true
                     };
-                    this.getLogsByStreamName(params, logs, cb);
+                    this.getLogs(params, logs, cb);
                 }, (err) => {
                     callback(err, logs);
                 });
