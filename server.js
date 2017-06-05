@@ -24,6 +24,11 @@ mongo.connect(() => {
     let c = mongo.collections;
     let interval = 300000; // 5 minute interval for server side polling
 
+    /**
+     * pollJobs queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
+     * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
+     * polling occurs on a 5 minute interval
+     */
     let pollJobs = () => {
         c.crn.jobs.find({ 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'REJECTED', 'UPLOADING']}}).toArray((err, jobs) => {
             async.each(jobs, (job, cb) => {
