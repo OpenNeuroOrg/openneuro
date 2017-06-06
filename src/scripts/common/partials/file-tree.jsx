@@ -135,6 +135,7 @@ class FileTree extends React.Component {
             '.csv',
             'README',
             '.nii.gz',
+            '.nii',
             '.pdf',
             '.sh',
             '.py',
