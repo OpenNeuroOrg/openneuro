@@ -110,6 +110,7 @@ export default (aws) => {
                 jobDefinition: job.jobDefinition,
                 jobName:       job.jobName,
                 jobQueue:      'bids-queue',
+                userId: job.userId,
                 parameters:    job.parameters,
                 containerOverrides:{
                     environment: [{
@@ -156,6 +157,9 @@ export default (aws) => {
                     callback(null, jobId);
                 });
             };
+            // want to add userId to parameters before submitting job to batch (below)
+            let userId = batchJob.userId;
+            delete batchJob.userId; //need to delete userId because batch API does not expect a userId prop and will error
 
             if (batchJob.parameters.hasOwnProperty('participant_label') &&
                 batchJob.parameters.participant_label instanceof Array &&
@@ -169,6 +173,11 @@ export default (aws) => {
                     subjectBatchJob.parameters.participant_label = subjectGroup;
                     this._addJobArguments(subjectBatchJob);
                     delete subjectBatchJob.parameters;
+                    // want to add userId to parameters so we can see who is running a given job;
+                    subjectBatchJob.parameters = {
+                        userId: userId
+                    };
+
                     jobs.push(job.bind(this, subjectBatchJob));
                 });
                 async.parallel(jobs, callback);
@@ -187,10 +196,19 @@ export default (aws) => {
          */
         submitSingleJob(batchJob, deps, callback) {
             let singleBatchJob = JSON.parse(JSON.stringify(batchJob));
+
+            // want to add userId to parameters before submitting job to batch (below)
+            let userId = singleBatchJob.userId;
+            delete singleBatchJob.userId; //need to delete userId because batch API does not expect a userId prop and will error
+
             this._addJobArguments(singleBatchJob);
             singleBatchJob.dependsOn = _depsObjects(deps);
             // After constructing the job document, remove invalid object from batch job
             delete singleBatchJob.parameters;
+            // want to add userId to parameters so we can see who is running a given job;
+            singleBatchJob.parameters = {
+                userId: userId
+            };
             batch.submitJob(singleBatchJob, (err, data) => {
                 if (err) {
                     return callback(err);
