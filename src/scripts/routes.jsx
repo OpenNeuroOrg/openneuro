@@ -53,7 +53,7 @@ class RedirectUsers extends React.Component {
 let routes = (
     <Route name="app" path="/" handler={Index}>
         <Route name="front-page" path="/" handler={FrontPage}/>
-        <Route name="faq" path="/faq" handler={Faq}/>
+        <Route name="faq" path="faq" handler={Faq}/>
         <Route name="dashboard" path="dashboard"  handler={requireAuth(Dashboard)} >
             <Route name="datasets" path="datasets" handler={Datasets}/>
             <Route name="notifications" path="notifications" handler={Notifications}/>
