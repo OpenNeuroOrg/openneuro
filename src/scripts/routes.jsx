@@ -19,6 +19,8 @@ import Jobs           from './dashboard/dashboard.jobs.jsx';
 import Datasets       from './dashboard/dashboard.datasets.jsx';
 import Dataset        from './dataset/dataset.jsx';
 
+import Faq            from './faq/faq.jsx'
+
 
 // redirects -------------------------------------------------------------
 
@@ -51,6 +53,7 @@ class RedirectUsers extends React.Component {
 let routes = (
     <Route name="app" path="/" handler={Index}>
         <Route name="front-page" path="/" handler={FrontPage}/>
+        <Route name="faq" path="/faq" handler={Faq}/>
         <Route name="dashboard" path="dashboard"  handler={requireAuth(Dashboard)} >
             <Route name="datasets" path="datasets" handler={Datasets}/>
             <Route name="notifications" path="notifications" handler={Notifications}/>
