@@ -55,7 +55,7 @@ export default class FileDisplay extends React.Component {
                           itemsPerPage={100}
                           pageButtonLimit={5} />
                     </div>);
-        } else if (files.hasExtension(name, ['.nii.gz'])) {
+        } else if (files.hasExtension(name, ['.nii.gz', '.nii'])) {
             return <Papaya image={link} />;
         } else if (files.hasExtension(name, ['.jpg', '.jpeg', '.png', '.gif'])) {
             return <div className="modal-preview-image" ><img src={link} /></div>;
