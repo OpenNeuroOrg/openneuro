@@ -1,7 +1,7 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 import mongo from '../../libs/mongo';
 import {ObjectID} from 'mongodb';
-import async from 'async';
+import mapValuesLimit from 'async/mapValuesLimit';
 import config from '../../config';
 
 let c = mongo.collections;
@@ -36,9 +36,13 @@ export default (aws) => {
             c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
                 if(err) {next(err);}
                 let logStreamNames = job.analysis.logstreams || [];
+                let logStreams = logStreamNames.reduce((streams, name, index) => {
+                    streams[name] = index;
+                    return streams;
+                }, {});
                 //cloudwatch log events requires knowing jobId and taskArn(s)
                 // taskArns are available on job which we can access with a describeJobs call to batch
-                async.mapLimit(logStreamNames, 10, (logStreamName, cb) => {
+                mapValuesLimit(logStreams, 10, (params, logStreamName, cb) => {
                     // this currently works to grab the latest logs for a job. Need to update to get all logs for a job using next tokens
                     // however there is a bug that will require a little more work to make this happen. https://forums.aws.amazon.com/thread.jspa?threadID=251240&tstart=0
                     this.getLogs(logStreamName, [], null, cb);
