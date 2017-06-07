@@ -969,7 +969,6 @@ let datasetStore = Reflux.createStore({
     },
 
     pollJob(jobId, snapshotId) {
-        let interval = 5000;
         let poll = (jobId) => {
             if (this.data.dataset && this.data.dataset._id === snapshotId) {
                 this.refreshJob(jobId, (job) => {
@@ -980,6 +979,7 @@ let datasetStore = Reflux.createStore({
                     let needsUpdate = (!finished && !failed) || (finished && !hasResults);
 
                     if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
+                        let interval = this._getInterval(20000, 40000); // random interval between 20 and 40 seconds
                         setTimeout(poll.bind(this, jobId), interval);
                     }
                 });
@@ -1253,6 +1253,10 @@ let datasetStore = Reflux.createStore({
         if (typeof value === 'boolean') {showSidebar = value;}
         window.localStorage.showSidebar = showSidebar;
         this.update({showSidebar});
+    },
+
+    _getInterval (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 });
