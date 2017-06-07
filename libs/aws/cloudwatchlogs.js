@@ -13,10 +13,14 @@ export default (aws) => {
     return {
         sdk: cloudwatchlogs,
 
+        /**
+         * Get all logs given a logStreamName or continue from nextToken
+         * callback(err, logs) returns logs as an array
+         */
         getLogs(logStreamName, logs = [], nextToken = null, callback) {
             let params = {
                 logGroupName: config.aws.cloudwatchlogs.logGroupName,
-                logStreamName: logStreamName,
+                logStreamName: logStreamName
             };
             if (logs.length === 0) params.startFromHead = true;
             if (nextToken) params.nextToken = nextToken;
@@ -32,12 +36,16 @@ export default (aws) => {
             });
         },
 
+        /**
+         * Given a jobId, get all logs for any subtasks and return useful
+         * metadata along with the log lines
+         */
         getLogsByJobId(jobId, callback) {
             c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
-                if(err) {next(err);}
+                if(err) {callback(err);}
                 let logStreamNames = job.analysis.logstreams || [];
-                let logStreams = logStreamNames.reduce((streams, name, index) => {
-                    streams[name] = index;
+                let logStreams = logStreamNames.reduce((streams, ls, index) => {
+                    streams[ls.name] = ls;
                     return streams;
                 }, {});
                 //cloudwatch log events requires knowing jobId and taskArn(s)
@@ -45,11 +53,21 @@ export default (aws) => {
                 mapValuesLimit(logStreams, 10, (params, logStreamName, cb) => {
                     // this currently works to grab the latest logs for a job. Need to update to get all logs for a job using next tokens
                     // however there is a bug that will require a little more work to make this happen. https://forums.aws.amazon.com/thread.jspa?threadID=251240&tstart=0
-                    this.getLogs(logStreamName, [], null, cb);
+                    this.getLogs(logStreamName, [], null, this._includeJobParams(params, cb));
                 }, (err, logs) => {
                     callback(err, logs);
                 });
             });
+        },
+
+        /**
+         * Adapter for getLogs callback values to object with metadata
+         */
+        _includeJobParams(params, callback) {
+            return (err, logs) => {
+                let logsObj = {...params, logs};
+                callback(err, logsObj);
+            }
         }
     };
 };

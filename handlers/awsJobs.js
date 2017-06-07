@@ -478,7 +478,12 @@ let handlers = {
             logStreamNames = jobs.reduce((acc, job) => {
                 if (job.attempts && job.attempts.length > 0) {
                     job.attempts.forEach((attempt)=> {
-                        acc.push(job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop());
+                        let streamObj = {
+                            name: job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop(),
+                            environment: job.container.environment,
+                            exitCode: job.container.exitCode
+                        };
+                        acc.push(streamObj);
                     });
                 }
                 return acc;
