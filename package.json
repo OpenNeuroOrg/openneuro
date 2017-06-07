@@ -18,7 +18,7 @@
   "dependencies": {
     "ajv": "4.9.0",
     "archiver": "^1.0.0",
-    "async": "^1.5.0",
+    "async": "^2.4.1",
     "aws-sdk": "2.50.0",
     "babel": "^5.8.23",
     "bids-validator": "0.21.3",
