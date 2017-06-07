@@ -159,7 +159,6 @@ export default (aws) => {
             };
             // want to add userId to parameters before submitting job to batch (below)
             let userId = batchJob.userId;
-            delete batchJob.userId; //need to delete userId because batch API does not expect a userId prop and will error
 
             if (batchJob.parameters.hasOwnProperty('participant_label') &&
                 batchJob.parameters.participant_label instanceof Array &&
@@ -173,6 +172,7 @@ export default (aws) => {
                     subjectBatchJob.parameters.participant_label = subjectGroup;
                     this._addJobArguments(subjectBatchJob);
                     delete subjectBatchJob.parameters;
+                    delete subjectBatchJob.userId; //need to delete userId because batch API does not expect a userId prop and will error
                     // want to add userId to parameters so we can see who is running a given job;
                     subjectBatchJob.parameters = {
                         userId: userId
