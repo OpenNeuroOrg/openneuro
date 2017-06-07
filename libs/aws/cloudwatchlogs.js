@@ -24,6 +24,8 @@ export default (aws) => {
             };
             if (logs.length === 0) params.startFromHead = true;
             if (nextToken) params.nextToken = nextToken;
+            // cloudwatch log events requires knowing jobId and taskArn(s)
+            // taskArns are available on job which we can access with a describeJobs call to batch
             this.sdk.getLogEvents(params, (err, data)=> {
                 if(err) {return callback(err);}
                 //Cloudwatch returns a token even if there are no events. That is why checking events length
@@ -53,11 +55,7 @@ export default (aws) => {
                     }
                     return streams;
                 }, {});
-                //cloudwatch log events requires knowing jobId and taskArn(s)
-                // taskArns are available on job which we can access with a describeJobs call to batch
                 mapValuesLimit(logStreams, 10, (params, logStreamName, cb) => {
-                    // this currently works to grab the latest logs for a job. Need to update to get all logs for a job using next tokens
-                    // however there is a bug that will require a little more work to make this happen. https://forums.aws.amazon.com/thread.jspa?threadID=251240&tstart=0
                     this.getLogs(logStreamName, [], null, this._includeJobParams(params, cb));
                 }, (err, logs) => {
                     callback(err, logs);
