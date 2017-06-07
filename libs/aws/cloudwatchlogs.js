@@ -45,7 +45,12 @@ export default (aws) => {
                 if(err) {callback(err);}
                 let logStreamNames = job.analysis.logstreams || [];
                 let logStreams = logStreamNames.reduce((streams, ls, index) => {
-                    streams[ls.name] = ls;
+                    if (ls instanceof Object) {
+                        streams[ls.name] = ls;
+                    } else {
+                        // This handles the old logstream format
+                        streams[ls] = {name: ls, environment: null, exitCode: null};
+                    }
                     return streams;
                 }, {});
                 //cloudwatch log events requires knowing jobId and taskArn(s)
