@@ -1029,6 +1029,10 @@ let datasetStore = Reflux.createStore({
         });
     },
 
+    cancelJob (job, callback) {
+
+    },
+
     refreshJob(jobId, callback) {
         if (this.data.dataset) {
             crn.getJob(this.data.dataset._id, jobId, (err, res) => {
