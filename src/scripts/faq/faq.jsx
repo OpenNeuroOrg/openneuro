@@ -37,6 +37,18 @@ class Faq extends React.Component {
                             </li>
                         </ul>
                     </dd>
+                    <dt>
+                        Do I need to format my data in some special way before uploading it to OpenNeuro?
+                    </dt>
+                    <dd>
+                        Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure (BIDS) format. You can read about it more at <a href="http://bids.neuroimaging.io/" target="_blank">http://bids.neuroimaging.io/</a>
+                    </dd>
+                    <dt>
+                        Do I need to remove facial features from structural images before uploading the data?
+                    </dt>
+                    <dd>
+                        Yes. We recommend using <a href="https://pypi.python.org/pypi/pydeface" target="_blank">pydeface</a>.
+                    </dd>
                 </dl>
             </div>
         );
