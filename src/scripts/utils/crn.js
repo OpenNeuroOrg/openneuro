@@ -134,10 +134,8 @@ export default {
         }, callback);
     },
 
-    cancelJob(datasetId, jobId, callback, options) {
-        request.put(config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId, {
-            query: {snapshot: options && options.snapshot}
-        }, callback);
+    cancelJob(datasetId, jobId, callback) {
+        request.put(config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId, {}, callback);
     },
 
     /**
