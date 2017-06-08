@@ -224,6 +224,32 @@ let handlers = {
         });
     },
 
+    cancelJob (req, res, next) {
+        let jobId = req.params.jobId;
+
+        c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
+            if (!job) {
+                res.status(404).send({message: 'Job not found.'});
+                return;
+            }
+
+            let jobs = job.analysis.jobs;
+            async.each(jobs, (job, cb) => {
+                let params = {
+                    jobId: job,
+                    reason: 'User terminated job'
+                }
+                aws.batch.sdk.terminateJob(params, (err, data) => {
+                    cb();
+                });
+            }, (err) => {
+                if(err) {return next(err);}
+                console.log("ALL JOBS CANCELED");
+                res.send(true);
+            });
+        });
+    },
+
     /**
      * GET File
      * listObjects to find everything in the s3 bucket for a given job
