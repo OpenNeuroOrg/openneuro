@@ -70,6 +70,9 @@ let BSNavbar = React.createClass({
                 <li className="link-contact">
                     <a className="nav-link" href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><span className="link-name">contact</span></a>
                 </li>
+                <li className="link-faq">
+                    <Link className="nav-link" to="faq"><span className="link-name">faq</span></Link>
+                </li>
                 <li className="link-admin">
                     {this.state.scitran && this.state.scitran.root ? adminLink : null}
                 </li>
