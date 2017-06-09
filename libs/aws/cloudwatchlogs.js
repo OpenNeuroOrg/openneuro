@@ -46,7 +46,7 @@ export default (aws) => {
             c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
                 if(err) {callback(err);}
                 let logStreamNames = job.analysis.logstreams || [];
-                let logStreams = logStreamNames.reduce((streams, ls, index) => {
+                let logStreams = logStreamNames.reduce((streams, ls) => {
                     if (ls instanceof Object) {
                         streams[ls.name] = ls;
                     } else {
@@ -70,7 +70,7 @@ export default (aws) => {
             return (err, logs) => {
                 let logsObj = {...params, logs};
                 callback(err, logsObj);
-            }
+            };
         }
     };
 };
