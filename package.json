@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint *.js **/*.js **/**/*.js **/**/**/*.js --ignore-pattern client.config.js --ignore-pattern debug.js",
+    "lint": "eslint .",
     "start": "node index.js",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel/register tests/**/"
@@ -36,7 +36,7 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "eslint": "2.7.0",
+    "eslint": "^3.19.0",
     "istanbul": "^0.4.5",
     "mocha": "3.0.2"
   }
