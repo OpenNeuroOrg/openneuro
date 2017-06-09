@@ -47,12 +47,8 @@ export default (aws) => {
                 if(err) {callback(err);}
                 let logStreamNames = job.analysis.logstreams || [];
                 let logStreams = logStreamNames.reduce((streams, ls) => {
-                    if (ls instanceof Object) {
-                        streams[ls.name] = ls;
-                    } else {
-                        // This handles the old logstream format
-                        streams[ls] = {name: ls, environment: null, exitCode: null};
-                    }
+                    let stream = this.formatLegacyLogStream(ls);
+                    streams[stream.name] = stream;
                     return streams;
                 }, {});
                 mapValuesLimit(logStreams, 10, (params, logStreamName, cb) => {
@@ -71,6 +67,15 @@ export default (aws) => {
                 let logsObj = {...params, logs};
                 callback(err, logsObj);
             };
+        },
+
+        formatLegacyLogStream(stream) {
+            if (stream instanceof Object) {
+                return stream;
+            } else {
+                // If it's not an object, it should be the old string format
+                return {name: stream, environment: null, exitCode: null};
+            }
         }
     };
 };

@@ -2,6 +2,7 @@
 
 // dependencies ------------------------------------------------------------
 
+import aws           from '../libs/aws';
 import agave         from '../libs/agave';
 import scitran       from '../libs/scitran';
 import mongo         from '../libs/mongo';
@@ -130,6 +131,11 @@ let handlers = {
         let query = snapshot ? {snapshotId: datasetId} : {datasetId};
         c.crn.jobs.find(query).toArray((err, jobs) => {
             if (err) {return next(err);}
+            for (let job of jobs) {
+                if (job.analysis.logstreams) {
+                    job.analysis.logstreams = job.analysis.logstreams.map(aws.cloudwatch.formatLegacyLogStream);
+                }
+            }
             if (snapshot) {
                 if (!hasAccess) {
                     let error = new Error('You do not have access to view jobs for this dataset.');
