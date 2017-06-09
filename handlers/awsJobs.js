@@ -303,6 +303,34 @@ let handlers = {
         });
     },
 
+    downloadJobLogs (req, res, next) {
+        let jobId = req.params.jobId; //this will be the mongoId for a given analysis
+
+        aws.cloudwatch.getLogsByJobId(jobId, (err, logs) => {
+            if (err) {
+                return next(err);
+            } else {
+                res.attachment(jobId + '.json');
+                res.send(logs);
+            }
+        });
+    },
+
+    getLogstream(req, res, next) {
+        let appName = req.params.app;
+        let jobId = req.params.jobId;
+        let taskArn = req.params.taskArn;
+        let key = appName + '/' + jobId + '/' + taskArn;
+
+        aws.cloudwatch.getLogs(key, [], null, (err, logs) => {
+            if (err) {
+                return next(err);
+            } else {
+                res.send(logs);
+            }
+        });
+    },
+
     /**
      * Retry a job using existing parameters
      */

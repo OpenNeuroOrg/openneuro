@@ -185,6 +185,16 @@ const routes = [
         method: 'get',
         url: '/jobs/:jobId/logs',
         handler: awsJobs.getJobLogs
+    },
+    {
+        method: 'get',
+        url: '/jobs/:jobId/logs/download',
+        handler: awsJobs.downloadJobLogs
+    },
+    {
+        method: 'get',
+        url: '/logs/:app/:jobId/:taskArn',
+        handler: awsJobs.getLogstream
     }
 ];
 
