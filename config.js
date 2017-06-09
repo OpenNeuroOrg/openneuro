@@ -48,5 +48,9 @@ export default {
 				vcpusMax: 4,
 				memoryMax: 15360
 			}
+		},
+
+		analytics: {
+			trackingId: process.env.GOOGLE_TRACKING_ID
 		}
 };
