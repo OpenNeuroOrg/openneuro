@@ -236,6 +236,33 @@ let datasetStore = Reflux.createStore({
         });
     },
 
+    donloadLogs(id, callback) {
+        crn.downloadJobLogs(id, (err, res) => {
+            callback();
+        });
+    },
+
+    getLogstream(logstreamName, callback) {
+        crn.getLogstream(logstreamName, (err, res) => {
+            let modals = this.data.modals;
+            let logs = res.body;
+            modals.displayFile = true;
+            if(callback) {callback();}
+            // Append all rows together for in-browser display
+            let logsText = logs.map((line) => {
+                return line.message;
+            }).join('\n');
+            this.update({
+                displayFile: {
+                    name: 'Logs',
+                    text: logsText,
+                    link: '/logs/' + logstreamName + '.json'
+                },
+                modals
+            });
+        });
+    },
+
     /**
      * Publish
      *
