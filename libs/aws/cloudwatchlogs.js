@@ -17,13 +17,14 @@ export default (aws) => {
          * Get all logs given a logStreamName or continue from nextToken
          * callback(err, logs) returns logs as an array
          */
-        getLogs(logStreamName, logs = [], nextToken = null, callback) {
+        getLogs(logStreamName, logs = [], nextToken = null, truncateFlag = false, callback) {
             let params = {
                 logGroupName: config.aws.cloudwatchlogs.logGroupName,
                 logStreamName: logStreamName
             };
-            if (logs.length === 0) params.startFromHead = true;
+            if (logs.length === 0 && !truncateFlag) params.startFromHead = true;
             if (nextToken) params.nextToken = nextToken;
+            if (truncateFlag) params.limit = 1000; // we only want the last 1000 lines of logs for view on client
             // cloudwatch log events requires knowing jobId and taskArn(s)
             // taskArns are available on job which we can access with a describeJobs call to batch
             this.sdk.getLogEvents(params, (err, data)=> {
@@ -31,7 +32,7 @@ export default (aws) => {
                 //Cloudwatch returns a token even if there are no events. That is why checking events length
                 if((data.events && data.events.length > 0) && data.nextForwardToken) {
                     logs = logs.concat(data.events);
-                    this.getLogs(logStreamName, logs, data.nextForwardToken, callback);
+                    this.getLogs(logStreamName, logs, data.nextForwardToken, truncateFlag, callback);
                 } else {
                     callback(err, logs);
                 }
@@ -52,7 +53,7 @@ export default (aws) => {
                     return streams;
                 }, {});
                 mapValuesLimit(logStreams, 10, (params, logStreamName, cb) => {
-                    this.getLogs(logStreamName, [], null, this._includeJobParams(params, cb));
+                    this.getLogs(logStreamName, [], null, false, this._includeJobParams(params, cb));
                 }, (err, logs) => {
                     callback(err, logs);
                 });

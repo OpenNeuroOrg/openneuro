@@ -322,7 +322,7 @@ let handlers = {
         let taskArn = req.params.taskArn;
         let key = appName + '/' + jobId + '/' + taskArn;
 
-        aws.cloudwatch.getLogs(key, [], null, (err, logs) => {
+        aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
             if (err) {
                 return next(err);
             } else {
