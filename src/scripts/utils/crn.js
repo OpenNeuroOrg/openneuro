@@ -183,8 +183,18 @@ export default {
         request.post(config.crn.url + 'datasets/' + datasetId + '/validate', {}, callback);
     },
 
+// Logs ------------------------------------------------------------------------------
+
     getJobLogs(jobId, callback) {
         request.get(config.crn.url + 'jobs/' + jobId + '/logs', {}, callback);
+    },
+
+    getLogstream(streamName, callback) {
+        request.get(config.crn.url + 'logs/' + streamName, {}, callback);
+    },
+
+    downloadJobLogs(jobId, callback) {
+        request.get(config.crn.url + 'jobs/' + jobId + '/logs/download', {}, callback);
     }
 
 };
