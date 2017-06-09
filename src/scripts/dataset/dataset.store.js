@@ -224,7 +224,7 @@ let datasetStore = Reflux.createStore({
             let logsText = Object.keys(logs).map((taskLogs) => {
                 return logs[taskLogs].reduce((taskLogs, logObj) => {
                     return taskLogs + logObj.message + '\n  ';
-                }, taskLogs + ':'); // Identify which task
+                }, '\n ==== ' + taskLogs + ' ====:\n'); // Identify which task
             }).join('\n');
             this.update({
                 displayFile: {
