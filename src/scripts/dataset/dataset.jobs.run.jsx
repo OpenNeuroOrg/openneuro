@@ -7,6 +7,8 @@ import moment     from 'moment';
 import FileTree   from '../common/partials/file-tree.jsx';
 import {Accordion, Panel} from 'react-bootstrap';
 
+import config     from '../../../config.js';
+
 class JobAccordion extends React.Component {
 
 // life cycle methods ------------------------------------------------------------
@@ -163,38 +165,60 @@ class JobAccordion extends React.Component {
     }
 
     _logs(run) {
-        let logstreams;
+        let logstreams = [];
         if (run.analysis.hasOwnProperty('logstreams') && run.analysis.logstreams.length > 0) {
-            logstreams = run.analysis.logstreams.map((logstream, index) => {
-                let label = "";
-                // Some jobs won't have the environment available (yet)
-                if (logstream.environment) {
-                    let analysisLevel = logstream.environment.filter((env) => { return env.name === "BIDS_ANALYSIS_LEVEL" })[0].value;
-                    let bidsArgs = logstream.environment.filter((env) => { return env.name === "BIDS_ARGUMENTS" })[0].value;
-                    label = analysisLevel + "/" + bidsArgs;
+            // Group streams by analysis level. If no analysis levels exist (legacy logs) group as "logs"
+            let groupedStreams = run.analysis.logstreams.reduce((acc, logstream) => {
+                let analysisLevel;
+                if(logstream.environment) {
+                    analysisLevel = logstream.environment.filter((env) => { return env.name === "BIDS_ANALYSIS_LEVEL" })[0].value;
                 } else {
-                    label = "Log #" + (index + 1);
+                    analysisLevel = "logs";
                 }
-                return (
-                    <span className="view-file" key={label}>
-                        <WarnButton
-                            icon="fa-eye"
-                            message={label}
-                            warn={false}
-                            action={actions.getLogstream.bind(this, logstream.name)} />
-                    </span>
-                );
-            })
+
+                if(!acc[analysisLevel]) {
+                    acc[analysisLevel] = [];
+                }
+                acc[analysisLevel].push(logstream);
+                return acc;
+            }, {});
+            //Generate logstreams jsx grouped by analysis level. How do we want to use exit code?
+            Object.keys(groupedStreams).forEach((level) => {
+                let streams = groupedStreams[level].map((logstream, index) => {
+                    let label, exitCode;
+                    if (logstream.environment) {
+                        let bidsArgs = logstream.environment.filter((env) => { return env.name === "BIDS_ARGUMENTS" })[0].value;
+                        label = bidsArgs;
+                    } else {
+                        label = "Log #" + (index + 1);
+                    }
+
+                    if(logstream.exitCode) {
+                        exitCode = logstream.exitCode;
+                    }
+
+                    return (
+                        <span className="job-log" key={label}>
+                            <WarnButton
+                                icon="fa-eye"
+                                message={label}
+                                warn={false}
+                                action={actions.getLogstream.bind(this, logstream.name)} />
+                        </span>
+                    );
+                });
+                logstreams.push(<span key={level}>{level.toUpperCase()}{streams}</span>)
+            });
         }
-        // TODO - fix download all URL to use the configured value
-        let allLogsUrl = "/crn/jobs/" + run._id + "/logs/download"
+
         return (
             <Accordion accordion className="results">
                 <Panel className="fade-in" header="Logs" key={run._id} eventKey={run._id}>
                     <span className="download-all">
-                        <a className="btn-warn-component warning" href={allLogsUrl}>
-                            <i className={'fa fa-download'}></i> Download All Logs
-                        </a>
+                        <WarnButton
+                            icon="fa-download"
+                            message=" DOWNLOAD All LOGS"
+                            prepDownload={actions.downloadLogs.bind(this, run._id)} />
                     </span>
                     <div className="file-structure fade-in panel-group">
                         <div className="panel panel-default">
