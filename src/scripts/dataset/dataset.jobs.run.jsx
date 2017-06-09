@@ -163,16 +163,46 @@ class JobAccordion extends React.Component {
     }
 
     _logs(run) {
+        let logstreams;
+        if (run.analysis.hasOwnProperty('logstreams') && run.analysis.logstreams.length > 0) {
+            logstreams = run.analysis.logstreams.map((logstream, index) => {
+                let label = "";
+                // Some jobs won't have the environment available (yet)
+                if (logstream.environment) {
+                    let analysisLevel = logstream.environment.filter((env) => { return env.name === "BIDS_ANALYSIS_LEVEL" })[0].value;
+                    let bidsArgs = logstream.environment.filter((env) => { return env.name === "BIDS_ARGUMENTS" })[0].value;
+                    label = analysisLevel + "/" + bidsArgs;
+                } else {
+                    label = "Log #" + (index + 1);
+                }
+                return (
+                    <span className="view-file" key={label}>
+                        <WarnButton
+                            icon="fa-eye"
+                            message={label}
+                            warn={false}
+                            action={actions.getLogstream.bind(this, logstream.name)} />
+                    </span>
+                );
+            })
+        }
+        // TODO - fix download all URL to use the configured value
+        let allLogsUrl = "/crn/jobs/" + run._id + "/logs/download"
         return (
             <Accordion accordion className="results">
                 <Panel className="fade-in" header="Logs" key={run._id} eventKey={run._id}>
-                    <span className="view-file">
-                        <WarnButton
-                            icon="fa-eye"
-                            message=" View Logs"
-                            warn={false}
-                            action={actions.getJobLogs.bind(this, run._id)} />
+                    <span className="download-all">
+                        <a className="btn-warn-component warning" href={allLogsUrl}>
+                            <i className={'fa fa-download'}></i> Download All Logs
+                        </a>
                     </span>
+                    <div className="file-structure fade-in panel-group">
+                        <div className="panel panel-default">
+                            <div className="panel-collapse" aria-expanded="false" >
+                                {logstreams}
+                            </div>
+                        </div>
+                    </div>
                 </Panel>
             </Accordion>
         );
