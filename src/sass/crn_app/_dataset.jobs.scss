@@ -64,6 +64,14 @@
 
             .job-log {
                 display: block;
+
+                .exit-code {
+                    font-size: 12px;
+                }
+
+                .fail {
+                    color: $brand-danger
+                }
             }
 
             .panel-heading {

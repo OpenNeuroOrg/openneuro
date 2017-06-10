@@ -196,7 +196,7 @@ class JobAccordion extends React.Component {
                     if(typeof logstream.exitCode === 'number') {
                         exitCode = logstream.exitCode;
                     }
-
+                    let exitCodeClass = "exit-code " + (exitCode ? "fail" : ""); // 0 is passing
                     return (
                         <span className="job-log" key={label}>
                             <WarnButton
@@ -204,7 +204,7 @@ class JobAccordion extends React.Component {
                                 message={label}
                                 warn={false}
                                 action={actions.getLogstream.bind(this, logstream.name)} />
-                            {/*exitCode != undefined ? <span> Exit code {exitCode}</span> : null*/}
+                            {exitCode != undefined ? <span className={exitCodeClass}> Exit code {exitCode}</span> : null}
                         </span>
                     );
                 });
