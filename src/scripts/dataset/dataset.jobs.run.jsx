@@ -193,7 +193,7 @@ class JobAccordion extends React.Component {
                         label = "Log #" + (index + 1);
                     }
 
-                    if(logstream.exitCode) {
+                    if(typeof logstream.exitCode === 'number') {
                         exitCode = logstream.exitCode;
                     }
 
@@ -204,6 +204,7 @@ class JobAccordion extends React.Component {
                                 message={label}
                                 warn={false}
                                 action={actions.getLogstream.bind(this, logstream.name)} />
+                            {/*exitCode != undefined ? <span> Exit code {exitCode}</span> : null*/}
                         </span>
                     );
                 });
