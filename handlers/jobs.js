@@ -2,8 +2,8 @@
 
 // dependencies ------------------------------------------------------------
 
+import aws           from '../libs/aws';
 import agave         from '../libs/agave';
-import sanitize      from '../libs/sanitize';
 import scitran       from '../libs/scitran';
 import mongo         from '../libs/mongo';
 import async         from 'async';
@@ -13,27 +13,6 @@ import notifications from '../libs/notifications';
 import {ObjectID}    from 'mongodb';
 
 let c = mongo.collections;
-
-// models ------------------------------------------------------------------
-
-let models = {
-    job: {
-        appId:             'string, required',
-        appLabel:          'string, required',
-        appVersion:        'string, required',
-        datasetId:         'string, required',
-        datasetLabel:      'stirng, required',
-        executionSystem:   'String, required',
-        parameters:        'object, required',
-        snapshotId:        'string, required',
-        userId:            'string, required',
-        batchQueue:        'string, required',
-        memoryPerNode:     'number, required',
-        nodeCount:         'number, required',
-        processorsPerNode: 'number, required',
-        input:             'string'
-    }
-};
 
 // handlers ----------------------------------------------------------------
 
@@ -45,7 +24,7 @@ let models = {
 let handlers = {
 
     /**
-     * GET Apps
+     * GET Apps - original
      */
     getApps(req, res, next) {
         agave.api.listApps((err, resp) => {
@@ -65,40 +44,39 @@ let handlers = {
     },
 
     /**
-     * POST Job
+     * POST Job - original
      */
     postJob(req, res, next) {
-        sanitize.req(req, models.job, (err, job) => {
-            if (err) {return next(err);}
-            scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
-                job.datasetHash = hash;
-                job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
+        let job = req.body;
+        scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
+            job.datasetHash = hash;
+            job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
 
-                c.crn.jobs.findOne({
-                    appId:          job.appId,
-                    datasetHash:    job.datasetHash,
-                    parametersHash: job.parametersHash,
-                    snapshotId:     job.snapshotId
-                }, {}, (err, existingJob) => {
-                    if (err){return next(err);}
-                    if (existingJob) {
-                        // allow retrying failed jobs
-                        if (existingJob.agave && existingJob.agave.status === 'FAILED') {
-                            handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
-                            return;
-                        }
-                        let error = new Error('A job with the same dataset and parameters has already been run.');
-                        error.http_code = 409;
-                        return next(error);
+            c.crn.jobs.findOne({
+                appId:          job.appId,
+                datasetHash:    job.datasetHash,
+                parametersHash: job.parametersHash,
+                snapshotId:     job.snapshotId
+            }, {}, (err, existingJob) => {
+                if (err){return next(err);}
+                if (existingJob) {
+                    // allow retrying failed jobs
+                    if (existingJob.agave && existingJob.agave.status === 'FAILED') {
+                        handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
+                        return;
                     }
+                    let error = new Error('A job with the same dataset and parameters has already been run.');
+                    error.http_code = 409;
+                    res.status(409).send({message: 'A job with the same dataset and parameters has already been run.'});
+                    return;
+                }
 
-                    agave.submitJob(job, (err, resp) => {
-                        if (err) {return next(err);}
-                        res.send(resp);
-                    });
+                agave.submitJob(job, (err, resp) => {
+                    if (err) {return next(err);}
+                    res.send(resp);
                 });
-            }, {snapshot: true});
-        });
+            });
+        }, {snapshot: true});
     },
 
     /**
@@ -153,6 +131,11 @@ let handlers = {
         let query = snapshot ? {snapshotId: datasetId} : {datasetId};
         c.crn.jobs.find(query).toArray((err, jobs) => {
             if (err) {return next(err);}
+            for (let job of jobs) {
+                if (job.analysis.logstreams) {
+                    job.analysis.logstreams = job.analysis.logstreams.map(aws.cloudwatch.formatLegacyLogStream);
+                }
+            }
             if (snapshot) {
                 if (!hasAccess) {
                     let error = new Error('You do not have access to view jobs for this dataset.');
@@ -339,37 +322,18 @@ let handlers = {
     /**
      * GET Download Ticket
      */
-    getDownloadTicket(req, res, next) {
-        let jobId    = req.params.jobId,
-            filePath = req.query.filePath,
-            fileName = filePath.split('/')[filePath.split('/').length - 1];
-        c.crn.jobs.findOne({jobId}, {}, (err, job) => {
-            // check for job
-            if (err){return next(err);}
-            if (!job) {
-                let error = new Error('Could not find job.');
-                error.http_code = 404;
-                return next(error);
-            }
+    getDownloadTicket(req, res) {
+        let jobId = req.params.jobId;
+        // form ticket
+        let ticket = {
+            type: 'download',
+            userId: req.user,
+            jobId: jobId,
+            fileName: 'all',
+            created: new Date()
+        };
 
-            // form ticket
-            let ticket = {
-                type: 'download',
-                userId: req.user,
-                jobId: jobId,
-                fileName: fileName,
-                filePath: filePath,
-                created: new Date()
-            };
-
-            // Create and return ticket
-            c.crn.tickets.insertOne(ticket, (err) => {
-                if (err) {return next(err);}
-                c.crn.tickets.ensureIndex({created: 1}, {expireAfterSeconds: 60 * 60}, () => {
-                    res.send(ticket);
-                });
-            });
-        });
+        res.send(ticket);
     },
 
     /**

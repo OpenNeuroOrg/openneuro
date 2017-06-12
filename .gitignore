@@ -1,5 +1,6 @@
 node_modules/
+coverage/
 npm-debug.log
 .DS_Store
 client.config.js
-agave-debug.js
+debug.js

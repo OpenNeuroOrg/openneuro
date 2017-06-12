@@ -1,12 +1,13 @@
 {
   "name": "crn-server",
-  "version": "0.4.5",
+  "version": "0.6.0-beta.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint *.js **/*.js **/**/*.js **/**/**/*.js",
+    "lint": "eslint .",
     "start": "node index.js",
-    "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/"
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel/register tests/**/"
   },
   "repository": {
     "type": "git",
@@ -15,10 +16,12 @@
   "author": "Squishymedia",
   "license": " ",
   "dependencies": {
+    "ajv": "4.9.0",
     "archiver": "^1.0.0",
-    "async": "^1.5.0",
+    "async": "^2.4.1",
+    "aws-sdk": "2.50.0",
     "babel": "^5.8.23",
-    "bids-validator": "0.20.0",
+    "bids-validator": "0.21.3",
     "body-parser": "^1.14.0",
     "cron": "^1.1.0",
     "express": "^4.13.3",
@@ -29,10 +32,12 @@
     "nodemailer": "^2.5.0",
     "request": "^2.63.0",
     "tar-fs": "^1.9.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "eslint": "2.7.0",
+    "eslint": "^3.19.0",
+    "istanbul": "^0.4.5",
     "mocha": "3.0.2"
   }
 }

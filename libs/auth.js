@@ -104,6 +104,28 @@ let auth = {
     },
 
     /**
+    * Check to see if user is an admin user. If so, just next()
+    * if not, prevent user from having more than 2 jobs running concurrently
+    * NOTE: this middleware function depends on auth middleware that attaches user and isSuperUser to req having already run
+    */
+    submitJobAccess(req, res, next) {
+        let user = req.user;
+        let admin = !!req.isSuperUser;
+        if(admin) {
+            return next();
+        }
+
+        c.crn.jobs.find({userId: user, 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'REJECTED']}}).toArray((err, jobs) => {
+            let totalRunningJobs = jobs.length;
+            if(totalRunningJobs < 2) {
+                return next();
+            }
+
+            return res.status(403).send({error: 'You only have access to run 2 concurrent jobs.'});
+        });
+    },
+
+    /**
      * Ticket
      *
      * Checks for a valid ticket parameter

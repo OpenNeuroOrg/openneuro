@@ -6,16 +6,22 @@ machine:
 
 dependencies:
   pre:
-    - docker build -t poldracklab/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == dev ] && echo "dev-" || echo "")$(node -p -e "require('./package.json').version") .
+    - docker build -t poldracklab/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" != master ] && echo "$CIRCLE_BRANCH-" || echo "")$(node -p -e "require('./package.json').version") .
 
 test:
   override:
     # Lint
-    - docker run poldracklab/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == dev ] && echo "dev-" || echo "")$(node -p -e "require('./package.json').version") npm run lint
+    - docker run poldracklab/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" != master ] && echo "$CIRCLE_BRANCH-" || echo "")$(node -p -e "require('./package.json').version") npm run lint
     # Unit Tests
-    - docker run poldracklab/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" == dev ] && echo "dev-" || echo "")$(node -p -e "require('./package.json').version") npm run test
+    - docker run poldracklab/$CIRCLE_PROJECT_REPONAME:$([ "$CIRCLE_BRANCH" != master ] && echo "$CIRCLE_BRANCH-" || echo "")$(node -p -e "require('./package.json').version") npm run test
 
 deployment:
+  aws:
+    branch: aws
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag poldracklab/$CIRCLE_PROJECT_REPONAME:aws-$(node -p -e "require('./package.json').version") poldracklab/$CIRCLE_PROJECT_REPONAME:aws-latest
+      - docker push poldracklab/$CIRCLE_PROJECT_REPONAME
   development:
     branch: dev
     commands:

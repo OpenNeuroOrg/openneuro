@@ -3,43 +3,55 @@
 import express    from 'express';
 import users      from './handlers/users';
 import jobs       from './handlers/jobs';
+import awsJobs    from './handlers/awsJobs';
 import validation from './handlers/validation';
 import datasets   from './handlers/datasets';
 import auth       from './libs/auth';
 import scitran    from './libs/scitran';
+import schema     from './libs/schema';
+import schemas    from './schemas';
 
-let routes = [
+
+const routes = [
 
     // users ---------------------------------------
 
     {
         method: 'get',
         url: '/users/self',
-        middleware: [],
         handler: scitran.verifyUser
     },
     {
         method: 'post',
         url: '/users',
-        middleware: [],
+        middleware: [
+            schema.validateBody(schemas.user.new)
+        ],
         handler: users.create
     },
     {
         method: 'post',
         url: '/users/blacklist',
-        middleware: [auth.superuser],
+        middleware: [
+            schema.validateBody(schemas.user.blacklisted),
+            auth.superuser
+        ],
         handler: users.blacklist
     },
     {
         method: 'get',
         url: '/users/blacklist',
-        middleware: [auth.superuser],
+        middleware: [
+            auth.superuser
+        ],
         handler: users.getBlacklist
     },
     {
         method: 'delete',
         url: '/users/blacklist/:id',
-        middleware: [auth.superuser],
+        middleware: [
+            auth.superuser
+        ],
         handler: users.unBlacklist
     },
 
@@ -49,8 +61,17 @@ let routes = [
 
     {
         method: 'post',
+        url: '/datasets',
+        handler: datasets.create
+    },
+    {
+        method: 'post',
+        url: '/datasets/:datasetId/snapshot',
+        handler: datasets.snapshot
+    },
+    {
+        method: 'post',
         url: '/datasets/:datasetId/permissions',
-        middleware: [],
         handler: datasets.share
     },
 
@@ -59,7 +80,9 @@ let routes = [
     {
         method: 'post',
         url: '/datasets/:datasetId/validate',
-        middleware: [auth.user],
+        middleware: [
+            auth.user
+        ],
         handler: validation.validate
     },
 
@@ -68,72 +91,119 @@ let routes = [
     {
         method: 'get',
         url: '/apps',
-        middleware: [],
-        handler: jobs.getApps
+        handler: awsJobs.describeJobDefinitions
+    },
+    {
+        method: 'post',
+        url: '/jobs/definitions',
+        middleware: [
+            auth.superuser,
+            schema.validateBody(schemas.job.definition)
+        ],
+        handler: awsJobs.createJobDefinition
+    },
+    {
+        method: 'put',
+        url: '/jobs/definitions/:jobArn',
+        middleware: [
+            auth.superuser
+        ],
+        handler: awsJobs.disableJobDefinition
     },
     {
         method: 'post',
         url: '/datasets/:datasetId/jobs',
-        middleware: [auth.datasetAccess()],
-        handler: jobs.postJob
+        middleware: [
+            auth.datasetAccess(),
+            auth.submitJobAccess,
+            schema.validateBody(schemas.job.submit)
+        ],
+        handler: awsJobs.submitJob
     },
     {
         method: 'get',
         url: '/datasets/:datasetId/jobs',
-        middleware: [auth.datasetAccess({optional: true})],
+        middleware: [
+            auth.datasetAccess({optional: true})
+        ],
         handler: jobs.getDatasetJobs
     },
     {
         method: 'delete',
         url: '/datasets/:datasetId/jobs',
-        middleware: [auth.datasetAccess()],
+        middleware: [
+            auth.datasetAccess()
+        ],
         handler: jobs.deleteDatasetJobs
     },
     {
         method: 'post',
         url: '/jobs/:jobId/results',
-        middleware: [],
         handler: jobs.postResults
     },
     {
         method: 'get',
         url: '/datasets/:datasetId/jobs/:jobId',
-        middleware: [auth.datasetAccess()],
-        handler: jobs.getJob
+        middleware: [
+            auth.datasetAccess()
+        ],
+        handler: awsJobs.getJob
     },
     {
         method: 'post',
         url: '/datasets/:datasetId/jobs/:jobId/retry',
-        middleware: [auth.datasetAccess()],
-        handler: jobs.retry
+        middleware: [
+            auth.datasetAccess()
+        ],
+        handler: awsJobs.retry
     },
     {
         method: 'get',
         url: '/datasets/:datasetId/jobs/:jobId/results/ticket',
-        middleware: [auth.datasetAccess()],
+        middleware: [
+            auth.datasetAccess()
+        ],
         handler: jobs.getDownloadTicket
     },
     {
         method: 'get',
         url: '/jobs',
-        middleware: [auth.optional],
+        middleware: [
+            auth.optional
+        ],
         handler: jobs.getJobs
     },
     {
         method: 'get',
         url: '/jobs/:jobId/results/:fileName',
-        middleware: [auth.ticket],
-        handler: jobs.getFile
+        // middleware: [
+        //     auth.ticket
+        // ],
+        handler: awsJobs.downloadAllS3
+    },
+    {
+        method: 'get',
+        url: '/jobs/:jobId/logs',
+        handler: awsJobs.getJobLogs
+    },
+    {
+        method: 'get',
+        url: '/jobs/:jobId/logs/download',
+        handler: awsJobs.downloadJobLogs
+    },
+    {
+        method: 'get',
+        url: '/logs/:app/:jobId/:taskArn',
+        handler: awsJobs.getLogstream
     }
-
 ];
 
 // initialize routes -------------------------------
 
-let router = express.Router();
+const router = express.Router();
 
-for (let route of routes) {
-    let arr = route.middleware;
+for (const route of routes) {
+    let arr = route.hasOwnProperty('middleware') ? route.middleware : [];
     arr.unshift(route.url);
     arr.push(route.handler);
     router[route.method].apply(router, arr);

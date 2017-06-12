@@ -25,6 +25,10 @@ The CRN Server is configured through environment variables. Set the following va
 | CRN_SERVER_MAIL_SERVICE             | The name of the mail service for email notifications    |
 | CRN_SERVER_MAIL_USER                | The username for the mail service                       |
 | CRN_SERVER_MAIL_PASS                | The password for the mail service                       |
+| AWS_ACCESS_KEY_ID                   | Access Key ID for an AWS IAM account                    |
+| AWS_SECRET_ACCESS_KEY               | Access Secret Key for an AWS IAM account                |
+| AWS_REGION                          | AWS Region snapshots are stored in                      |
+| AWS_S3_BUCKET                       | AWS S3 Bucket snapshots are stored in                   |
 
 
 
