@@ -155,6 +155,7 @@ let UploadStore = Reflux.createStore({
             uploadStatus: 'files-selected',
             showRename: true,
             showModal: true,
+            showDisclaimer: true,
             selectedName: dirName,
             renameEnabled: renameEnabled,
             showRenameInput: false,
