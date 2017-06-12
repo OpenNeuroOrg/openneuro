@@ -1,23 +1,24 @@
 // dependencies -------------------------------------------------------
 
-import React        from 'react';
-import Reflux       from 'reflux';
-import Spinner      from '../common/partials/spinner.jsx';
-import {State}      from 'react-router';
-import datasetStore from './dataset.store';
-import actions      from './dataset.actions.js';
-import MetaData     from './dataset.metadata.jsx';
-import Tools        from './dataset.tools.jsx';
-import Statuses     from './dataset.statuses.jsx';
-import Validation   from './dataset.validation.jsx';
-import moment       from 'moment';
-import ClickToEdit  from '../common/forms/click-to-edit.jsx';
-import FileTree     from '../common/partials/file-tree.jsx';
-import Jobs         from './dataset.jobs.jsx';
-import userStore    from '../user/user.store.js';
-import Summary      from './dataset.summary.jsx';
-import FileSelect     from '../common/forms/file-select.jsx';
-import uploadActions  from '../upload/upload.actions.js';
+import React         from 'react';
+import Reflux        from 'reflux';
+import Spinner       from '../common/partials/spinner.jsx';
+import {State}       from 'react-router';
+import datasetStore  from './dataset.store';
+import actions       from './dataset.actions.js';
+import MetaData      from './dataset.metadata.jsx';
+import Tools         from './tools';
+import Statuses      from './dataset.statuses.jsx';
+import Validation    from './dataset.validation.jsx';
+import moment        from 'moment';
+import ClickToEdit   from '../common/forms/click-to-edit.jsx';
+import FileTree      from '../common/partials/file-tree.jsx';
+import Jobs          from './dataset.jobs.jsx';
+import userStore     from '../user/user.store.js';
+import Summary       from './dataset.summary.jsx';
+import FileSelect    from '../common/forms/file-select.jsx';
+import uploadActions from '../upload/upload.actions.js';
+import bids          from '../utils/bids';
 
 let Dataset = React.createClass({
 
@@ -33,13 +34,14 @@ let Dataset = React.createClass({
         let params = this.getParams();
         let query  = this.getQuery();
         if (params.snapshotId) {
-            actions.trackView(params.snapshotId);
-            actions.loadDataset(params.snapshotId, {snapshot: true, app: query.app, version: query.version, job: query.job});
+            let snapshotId = bids.encodeId(params.datasetId, params.snapshotId);
+            actions.trackView(snapshotId);
+            actions.loadDataset(snapshotId, {snapshot: true, app: query.app, version: query.version, job: query.job});
         } else if (
             (params.datasetId && !this.state.dataset) ||
             (params.datasetId && params.datasetId !== this.state.dataset._id)
         ) {
-            actions.loadDataset(params.datasetId);
+            actions.loadDataset(bids.encodeId(params.datasetId));
         }
     },
 
@@ -170,7 +172,7 @@ let Dataset = React.createClass({
 
             return (
                 <li key={snapshot._id}>
-                    <a onClick={actions.loadSnapshot.bind(this, snapshot.isOriginal, snapshot._id)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
+                    <a onClick={actions.loadSnapshot.bind(this, snapshot.isOriginal, snapshot.linkID)} className={this.state.selectedSnapshot == snapshot._id ? 'active' : null}>
                         <div className="clearfix">
                             <div className=" col-xs-12">
                                 <span className="dataset-type">

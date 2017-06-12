@@ -1,6 +1,6 @@
 {
   "name": "CRN",
-  "version": "0.9.26",
+  "version": "0.11.0-beta.1",
   "description": "React JS web frontend for the CRN application.",
   "main": "app.js",
   "repository": {
@@ -14,7 +14,7 @@
   "dependencies": {
     "async": "^1.2.1",
     "babel-polyfill": "^6.6.1",
-    "bids-validator": "0.20.0",
+    "bids-validator": "0.21.3",
     "bowser": "^1.0.0",
     "bytes": "^2.3.0",
     "es6-react-mixins": "^0.1.6",
@@ -24,8 +24,10 @@
     "react": "0.14.8",
     "react-bootstrap": "0.29.4",
     "react-dom": "0.14.0",
+    "react-ga": "^2.2.0",
+    "react-input-autosize": "1.1.0",
     "react-router": "^0.13.3",
-    "react-select": "1.0.0-beta14",
+    "react-select": "^1.0.0-rc.3",
     "reactable": "0.14.0",
     "reflux": "^0.2.7",
     "remarkable": "1.6.2",

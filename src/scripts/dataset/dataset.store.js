@@ -56,7 +56,7 @@ let datasetStore = Reflux.createStore({
      */
     setInitialState: function (diffs) {
         let data = {
-            apps: [],
+            apps: {},
             activeJob: {
                 label:   false,
                 version: false,
@@ -167,7 +167,7 @@ let datasetStore = Reflux.createStore({
      * Takes a snapshot ID and loads the snapshot.
      */
     loadSnapshot(isOriginal, snapshotId) {
-        let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
+        let datasetId = this.data.dataset.original ? bids.decodeId(this.data.dataset.original) : bids.decodeId(this.data.dataset._id);
         if (isOriginal) {
             router.transitionTo('dataset', {datasetId: snapshotId});
         } else {
@@ -209,17 +209,55 @@ let datasetStore = Reflux.createStore({
     loadApps() {
         this.update({loadingApps: true});
         crn.getApps((err, res) => {
-            if (res.body) {
-                res.body.sort((a, b) => {
-                    let aName = a.label.toUpperCase();
-                    let bName = b.label.toUpperCase();
-                    return (aName < bName) ? -1 : (aName > bName) ? 1 : 0;
-                });
-                FPActions.setApps(res.body);
-                this.update({apps: res.body, loadingApps: false});
-            } else {
-                setTimeout(this.loadApps, 5000);
-            }
+            FPActions.setApps(res.body);
+            this.update({apps: res.body, loadingApps: false});
+        });
+    },
+
+    getJobLogs(id, callback) {
+        crn.getJobLogs(id, (err, res) => {
+            let modals = this.data.modals;
+            let logs = res.body;
+            modals.displayFile = true;
+            if(callback) {callback();}
+            // For now, append each set of logs in order with some spacing
+            let logsText = Object.keys(logs).map((taskLogs) => {
+                return logs[taskLogs].reduce((taskLogs, logObj) => {
+                    return taskLogs + logObj.message + '\n  ';
+                }, '\n ==== ' + taskLogs + ' ====:\n'); // Identify which task
+            }).join('\n');
+            this.update({
+                displayFile: {
+                    name: 'Logs',
+                    text: logsText
+                },
+                modals
+            });
+        });
+    },
+
+    downloadLogs(id, callback) {
+        callback(config.crn.url + "jobs/" + id + "/logs/download");
+    },
+
+    getLogstream(logstreamName, callback) {
+        crn.getLogstream(logstreamName, (err, res) => {
+            let modals = this.data.modals;
+            let logs = res.body;
+            modals.displayFile = true;
+            if(callback) {callback();}
+            // Append all rows together for in-browser display
+            let logsText = logs.map((line) => {
+                return line.message;
+            }).join('\n');
+            this.update({
+                displayFile: {
+                    name: 'Logs',
+                    text: logsText,
+                    link: '/logs/' + logstreamName + '.json'
+                },
+                modals
+            });
         });
     },
 
@@ -859,11 +897,10 @@ let datasetStore = Reflux.createStore({
         }
 
         // find directory
-        let dir = files.findInTree(jobRun.results, directory.path, 'path');
+        let dir = files.findInTree(jobRun.results, directory.dirPath, 'dirPath');
         if (dir) {
             dir.showChildren = !dir.showChildren;
         }
-
         // update state
         this.update({jobs});
     },
@@ -885,12 +922,12 @@ let datasetStore = Reflux.createStore({
                 files.sortTree(job.logs);
 
                 // check if job should be polled
-                let status     = job.agave.status;
+                let status     = job.analysis ? job.analysis.status : "PENDING";
                 let failed     = status === 'FAILED';
-                let finished   = status === 'FINISHED';
+                let finished   = status === 'SUCCEEDED';
                 let hasResults = job.results && job.results.length > 0;
                 if (snapshot && (!finished && !failed || finished && !hasResults)) {
-                    this.pollJob(job.jobId, projectId);
+                    this.pollJob(job._id, projectId);
                 }
 
                 if (job.jobId === jobId) {
@@ -957,50 +994,51 @@ let datasetStore = Reflux.createStore({
     },
 
     pollJob(jobId, snapshotId) {
-        let interval = 5000;
         let poll = (jobId) => {
             if (this.data.dataset && this.data.dataset._id === snapshotId) {
                 this.refreshJob(jobId, (job) => {
-                    let status = job.agave.status;
-                    let finished = status === 'FINISHED';
-                    let failed = status === 'FAILED';
+                    let status = job.analysis ? job.analysis.status : 'PENDING';
+                    let finished = status === 'SUCCEEDED';
+                    let failed = status === 'FAILED'|| status === 'REJECTED';
                     let hasResults = job.results && job.results.length > 0;
                     let needsUpdate = (!finished && !failed) || (finished && !hasResults);
+
                     if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
+                        let interval = this._getInterval(20000, 40000); // random interval between 20 and 40 seconds
                         setTimeout(poll.bind(this, jobId), interval);
                     }
                 });
             }
         };
-        setTimeout(poll.bind(this, jobId), interval);
+        poll(jobId);
     },
 
     /**
      * Start Job
      */
-    startJob(snapshotId, app, parameters, callback) {
+    startJob(snapshotId, jobDefinition, parameters, callback) {
         let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
+
+        // If the participant_label parameter exists and has no value, use all subjects
+        if (parameters.hasOwnProperty('participant_label') &&
+            parameters.participant_label.length === 0) {
+            parameters.participant_label = this.data.dataset.summary.subjects;
+        }
+
         crn.createJob({
-            appId:             app.id,
-            appLabel:          app.label,
-            appVersion:        app.version,
-            datasetId:         datasetId,
-            datasetLabel:      this.data.dataset.label,
-            executionSystem:   app.executionSystem,
-            parameters:        parameters,
-            snapshotId:        snapshotId,
-            userId:            userStore.data.scitran._id,
-            batchQueue:        app.defaultQueue,
-            memoryPerNode:     app.defaultMemoryPerNode,
-            nodeCount:         app.defaultNodeCount,
-            processorsPerNode: app.defaultProcessorsPerNode,
-            input:             app.inputs[0].id
+            datasetId:     datasetId,
+            datasetLabel:  this.data.dataset.label,
+            jobDefinition: jobDefinition.jobDefinitionArn,
+            jobName:       jobDefinition.jobDefinitionName,
+            parameters:    parameters,
+            snapshotId:    snapshotId,
+            userId:        userStore.data.scitran._id
         }, (err, res) => {
-            callback(err, res);
+
             if (!err) {
                 // reload jobs
                 if (snapshotId == this.data.dataset._id) {
-                    let jobId = res.body.result.id;
+                    let jobId = res.body.jobId;
                     this.loadJobs(snapshotId, this.data.snapshot, datasetId, {job: jobId}, (jobs) => {
                         this.loadSnapshots(this.data.dataset, jobs);
 
@@ -1008,10 +1046,11 @@ let datasetStore = Reflux.createStore({
                         this.pollJob(jobId, snapshotId);
 
                         // open job accordion
-                        this.update({activeJob: {app: app.label, version: app.version}});
+                        this.update({activeJob: {app: jobDefinition.label, version: jobDefinition.version}});
                     });
                 }
             }
+            callback(err, res);
         });
     },
 
@@ -1025,10 +1064,10 @@ let datasetStore = Reflux.createStore({
                     for (let job of jobs) {
                         for (let version of job.versions) {
                             for (let run of version.runs) {
-                                if (jobId === run.jobId) {
+                                if (jobId === run._id) {
                                     existingJob = run;
                                     if (jobUpdate) {
-                                        run.agave   = jobUpdate.agave;
+                                        run.analysis   = jobUpdate.analysis;
                                         run.results = jobUpdate.results;
                                         run.logs    = jobUpdate.logs;
                                     }
@@ -1049,6 +1088,9 @@ let datasetStore = Reflux.createStore({
         crn.retryJob(this.data.dataset._id, jobId, () => {
             this.loadJobs(this.data.dataset._id, true, this.data.dataset.original, {}, (jobs) => {
                 this.loadSnapshots(this.data.dataset, jobs);
+
+                // start polling job
+                this.pollJob(jobId, this.data.selectedSnapshot);
                 callback();
             });
         }, {snapshot: this.data.snapshot});
@@ -1062,7 +1104,7 @@ let datasetStore = Reflux.createStore({
         if (success) {
             if (snapshotId !== this.data.dataset._id) {
                 let datasetId = this.data.dataset.original ? this.data.dataset.original : this.data.dataset._id;
-                router.transitionTo('snapshot', {datasetId, snapshotId}, {app: appLabel, version: appVersion, job: jobId});
+                router.transitionTo('snapshot', {datasetId: bids.decodeId(datasetId), snapshotId: bids.decodeId(snapshotId)}, {app: appLabel, version: appVersion, job: jobId});
             }
         }
     },
@@ -1092,28 +1134,18 @@ let datasetStore = Reflux.createStore({
      */
     getResultDownloadTicket(snapshotId, jobId, file, callback) {
         let filePath = file === 'all' ? file : file.path;
-        crn.getResultDownloadTicket(snapshotId, jobId, filePath, (err, res) => {
-            let ticket      = res.body._id;
-            let fileName    = filePath.split('/')[filePath.split('/').length - 1];
-            let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + fileName + '?ticket=' + ticket;
-            callback(downloadUrl);
-        }, {snapshot: true});
+        if(filePath === 'all-results') {
+            let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + "fileName" + '?ticket=' + 'ticket';
+            callback(downloadUrl)
+        } else {
+            callback('https://s3.amazonaws.com/' + filePath);
+        }
     },
 
     /**
      * DisplayFile
      */
     displayFile(snapshotId, jobId, file, callback) {
-        if (jobId) {
-            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
-                requestAndDisplay(link);
-            });
-        } else {
-            this.getFileDownloadTicket(file, (link) => {
-                requestAndDisplay(link);
-            });
-        }
-
         let requestAndDisplay = (link) => {
             let modals = this.data.modals;
             modals.displayFile = true;
@@ -1141,6 +1173,16 @@ let datasetStore = Reflux.createStore({
                 });
             }
         };
+
+        if (jobId) {
+            this.getResultDownloadTicket(snapshotId, jobId, file, (link) => {
+                requestAndDisplay(link);
+            });
+        } else {
+            this.getFileDownloadTicket(file, (link) => {
+                requestAndDisplay(link);
+            });
+        }
     },
 
     // Snapshots ---------------------------------------------------------------------
@@ -1164,13 +1206,14 @@ let datasetStore = Reflux.createStore({
                 if (latestSnapshot && (moment(this.data.dataset.modified).diff(moment(latestSnapshot.modified)) <= 0)) {
                     callback({error: 'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.'});
                 } else {
-                    scitran.createSnapshot(datasetId, (err, res) => {
+                    crn.createSnapshot(datasetId, (err, res) => {
+                        let snapshotId = res.body._id;
                         this.toggleSidebar(true);
                         if (transition) {
-                            router.transitionTo('snapshot', {datasetId: this.data.dataset._id, snapshotId: res.body._id});
+                            router.transitionTo('snapshot', {datasetId: this.data.dataset.linkID, snapshotId: snapshotId});
                         }
                         this.loadSnapshots(this.data.dataset, [], () => {
-                            if (callback){callback(res.body._id);}
+                            if (callback){callback(snapshotId);}
                         });
                     });
                 }
@@ -1193,6 +1236,8 @@ let datasetStore = Reflux.createStore({
             // add job counts
             for (let snapshot of snapshots) {
                 snapshot.analysisCount = 0;
+                snapshot.linkID = bids.decodeId(snapshot._id);
+                snapshot.linkOriginal = bids.decodeId(snapshot.original);
                 if (jobs && !jobs.error) {
                     for (let job of jobs) {
                         if (job.snapshotId == snapshot._id) {
@@ -1211,7 +1256,8 @@ let datasetStore = Reflux.createStore({
             } else if (dataset && dataset.access !== null) {
                 snapshots.unshift({
                     isOriginal: true,
-                    _id: datasetId
+                    _id: datasetId,
+                    linkID: bids.decodeId(datasetId)
                 });
             }
             this.update({snapshots: snapshots});
@@ -1232,6 +1278,10 @@ let datasetStore = Reflux.createStore({
         if (typeof value === 'boolean') {showSidebar = value;}
         window.localStorage.showSidebar = showSidebar;
         this.update({showSidebar});
+    },
+
+    _getInterval (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 });

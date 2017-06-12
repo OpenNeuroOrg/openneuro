@@ -35,6 +35,57 @@
         }
     }
 
+    &.app-definitions {
+        h2 {
+            float: left;
+        }
+
+        .admin-jobs .btn-blue {
+            float: right;
+            width: 100px;
+            padding: 10px;
+            font-size: 12px;
+            margin: 20px 10px 0;
+        }
+
+        .no-results {
+            border-top: 1px solid $eee;
+            padding: 10px 15px;
+            margin: 0 -15px;
+        }
+
+        .dashboard-dataset-teasers.admin-jobs {
+            .panel-group {
+                margin-bottom: 0;
+            }
+
+            .panel {
+                    background: transparent;
+                    .panel-heading {
+                        @extend .row;
+                        background: $f8;
+                        a{
+                            width: 100%;
+                        }
+                    }
+                    .panel-collapse {
+                        @extend .row;
+                        .job-col {
+                            border-right: 1px solid $ddd;
+                            border-bottom: 1px solid $ddd;
+                            min-height: 20px;
+                            > label,
+                            > div {
+                                display: block;
+                                padding: 10px 5px;
+                                font-size: 16px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     .add-user {
         padding-left: 0;
     }
@@ -130,4 +181,15 @@
             }
         }
     }
+
+
+}
+.admin-job-parameters .Select.Select--single {
+    width: 20%;
+    margin: 10px 0;
+    display: inline-block;
+    margin-bottom: 0;
+    vertical-align: middle;
+    padding: 0px;
+    line-height: 30px;
 }

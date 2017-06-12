@@ -1,4 +1,5 @@
 import scitran   from '../utils/scitran';
+import crn       from '../utils/crn';
 import uploads   from '../utils/upload';
 import fileUtils from '../utils/files';
 import config    from '../../../config';
@@ -73,7 +74,7 @@ export default {
                     this.uploadFiles(datasetName, newFiles, this.currentProjectId, metadata);
                 });
             } else {
-                this.createContainer(scitran.createProject, [userId, datasetName], (err, res) => {
+                this.createContainer(crn.createProject, [userId, datasetName], (err, res) => {
                     let projectId = res.body._id;
                     scitran.addTag('projects', projectId, 'incomplete', () => {
                         this.uploadFiles(datasetName, fileList, projectId, metadata);

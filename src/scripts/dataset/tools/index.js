@@ -1,14 +1,13 @@
 // dependencies -------------------------------------------------------
 
-import React          from 'react';
-import Reflux         from 'reflux';
-import moment         from 'moment';
-import actions        from './dataset.actions.js';
-import WarnButton     from '../common/forms/warn-button.jsx';
-import uploadStore    from '../upload/upload.store';
-import userStore      from '../user/user.store.js';
-import datasetActions from './dataset.actions.js';
-import ToolModals     from './dataset.tools.modals.jsx';
+import React       from 'react';
+import Reflux      from 'reflux';
+import moment      from 'moment';
+import WarnButton  from '../../common/forms/warn-button.jsx';
+import uploadStore from '../../upload/upload.store';
+import userStore   from '../../user/user.store.js';
+import actions     from '../dataset.actions.js';
+import ToolModals  from './modals.jsx';
 
 let Tools = React.createClass({
 
@@ -25,7 +24,7 @@ let Tools = React.createClass({
     componentDidMount() {
         let dataset = this.props.dataset;
         if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
-            datasetActions.loadUsers();
+            actions.loadUsers();
         }
     },
 
@@ -48,42 +47,42 @@ let Tools = React.createClass({
             {
                 tooltip: 'Download Dataset',
                 icon: 'fa-download',
-                prepDownload: datasetActions.getDatasetDownloadTicket,
-                action: datasetActions.trackDownload,
+                prepDownload: actions.getDatasetDownloadTicket,
+                action: actions.trackDownload,
                 display: !isIncomplete
             },
             {
                 tooltip: 'Publish Dataset',
                 icon: 'fa-globe icon-plus',
-                action: datasetActions.toggleModal.bind(null, 'publish'),
+                action: actions.toggleModal.bind(null, 'publish'),
                 display: isAdmin && !isPublic && !isIncomplete,
                 warn: false
             },
             {
                 tooltip: 'Unpublish Dataset',
                 icon: 'fa-globe icon-ban',
-                action: datasetActions.publish.bind(this, dataset._id, false),
+                action: actions.publish.bind(this, dataset._id, false),
                 display: isPublic && isSuperuser,
                 warn: true
             },
             {
                 tooltip: isSnapshot ? 'Delete Snapshot' : 'Delete Dataset',
                 icon: 'fa-trash',
-                action: datasetActions.deleteDataset.bind(this, dataset._id),
+                action: actions.deleteDataset.bind(this, dataset._id),
                 display: (isAdmin && !isPublic) || isSuperuser,
                 warn: isSnapshot
             },
             {
                 tooltip: 'Share Dataset',
                 icon: 'fa-user icon-plus',
-                action: datasetActions.toggleModal.bind(null, 'share'),
+                action: actions.toggleModal.bind(null, 'share'),
                 display: isAdmin && !isSnapshot && !isIncomplete,
                 warn: false
             },
             {
                 tooltip: 'Create Snapshot',
                 icon: 'fa-camera-retro icon-plus',
-                action: datasetActions.createSnapshot,
+                action: actions.createSnapshot,
                 display: isAdmin && !isSnapshot && !isIncomplete,
                 warn: true,
                 validations: [
@@ -104,7 +103,7 @@ let Tools = React.createClass({
             {
                 tooltip: 'Run Anaylsis',
                 icon: 'fa-area-chart icon-plus',
-                action: datasetActions.toggleModal.bind(null, 'jobs'),
+                action: actions.toggleModal.bind(null, 'jobs'),
                 display: isSignedIn && !isIncomplete,
                 warn: false
             }

@@ -4,6 +4,9 @@ import Reflux    from 'reflux';
 import Actions   from './admin.actions.js';
 import scitran   from '../utils/scitran';
 import crn       from '../utils/crn';
+import batch     from '../utils/batch';
+import notifications from '../notification/notification.actions';
+import datasetActions from '../dataset/dataset.actions';
 
 let UserStore = Reflux.createStore({
 
@@ -43,12 +46,33 @@ let UserStore = Reflux.createStore({
             searchInput:'',
             adminFilter: false,
             blacklist: [],
-            showBlacklistModal: false,
+            modals: {
+                blacklist: false,
+                defineJob: false
+            },
             blacklistForm: {
                 _id: '',
                 firstname: '',
                 lastname: '',
                 note: ''
+            },
+            jobDefinitionForm: {
+                name: '',
+                jobRoleArn: '',
+                containerImage: '',
+                hostImage: '',
+                command: '',
+                vcpus: '1',
+                memory: '2000',
+                analysisLevels: [],
+                analysisLevelOptions: [],
+                parameters: [],
+                edit: false,
+                description: '',
+                shortDescription: '',
+                acknowledgements:'',
+                tags:'',
+                support:''
             },
             blacklistError: ''
         };
@@ -166,8 +190,10 @@ let UserStore = Reflux.createStore({
      * Prefills data if a user object is passed.
      */
     blacklistModal(user, callback) {
+        let modals = this.data.modals;
+        modals.blacklist = true;
         this.update({
-            showBlacklistModal: true,
+            modals,
             blacklistError: '',
             blacklistForm: {
                 _id:       user._id       ? user._id : '',
@@ -176,7 +202,9 @@ let UserStore = Reflux.createStore({
                 note: ''
             }
         });
-        if (callback) {callback();}
+        if (callback && typeof callback === 'function') {
+            callback();
+        }
     },
 
     /**
@@ -231,6 +259,163 @@ let UserStore = Reflux.createStore({
             this.update({users});
             if (callback) {callback();}
         });
+    },
+
+    /**
+     * Submit Job Definition
+     */
+    submitJobDefinition () {
+        let formData = this.data.jobDefinitionForm;
+        // Build up the AWS object
+        let jobDefinition = {};
+        let parameters = {};
+        let parametersMetadata = {};
+
+        jobDefinition.jobDefinitionName = formData.name;
+        // Container is the only supported type by AWS Batch API as of now.
+        jobDefinition.type = 'container';
+
+        jobDefinition.containerProperties = {
+            image: formData.hostImage,
+            command: !!formData.command.length ? formData.command.split(' ') : [],
+            memory: parseInt(formData.memory),
+            vcpus: parseInt(formData.vcpus),
+            environment: [
+                {name: 'BIDS_CONTAINER', value: formData.containerImage}
+            ]
+        }
+        // Can split out paramter metadata here I think?
+        // Want to post metadata as a separate prop so we can delete before sending to Batch
+        if (formData.parameters) {
+            for (let param of formData.parameters) {
+                parameters[param.label] = param.defaultValue;
+                parametersMetadata[param.label] = param;
+            }
+        }
+        jobDefinition.parameters = parameters;
+        jobDefinition.parametersMetadata = parametersMetadata;
+        jobDefinition.analysisLevels = formData.analysisLevels;
+
+        jobDefinition.descriptions = {
+            description: formData.description,
+            shortDescription: formData.shortDescription,
+            acknowledgements: formData.acknowledgements,
+            support: formData.support,
+            tags: formData.tags
+        };
+
+        crn.defineJob(jobDefinition, (err) => {
+            // server is returning 400 for invalid inputs for vcpus and memory
+            if(err) {
+                if(err.status === 400){
+                    notifications.createAlert({type: "Error", message: "Invalid job definition inputs for vCPUs and/or Memory."});
+                } else {
+                    notifications.createAlert({type: "Error", message: "There was an error submitting job definition."});
+                }
+            } else {
+                notifications.createAlert({type: "Success", message: "Job Definition Submission Successful!"});
+
+                //toggle modal once response comes bacn from server.
+                this.toggleModal('defineJob');
+
+                // TODO - error handling
+                datasetActions.loadApps(); //this does not seem like the right way to do this.
+            }
+        });
+    },
+
+    disableJobDefinition (jobDefinition, callback) {
+        let name = jobDefinition.jobDefinitionName;
+        let jobArn = jobDefinition.jobDefinitionArn;
+        crn.disableJobDefinition(name, jobArn, (err, data) => {
+            //TODO Update job list
+            console.log('Job disabled');
+            datasetActions.loadApps(); //need to reload apps for UI to update with Inactive status on disable
+            if(callback){
+                callback();
+            }
+        });
+    },
+
+    /**
+    * Setup job definition form for editing
+    */
+    editJobDefinition (jobDefinition, callback) {
+        this.toggleModal('defineJob');
+        let jobDefinitionForm = this.data.jobDefinitionForm;
+        jobDefinitionForm.edit = true;
+        jobDefinitionForm.name = jobDefinition.jobDefinitionName;
+        jobDefinitionForm.description = jobDefinition.descriptions && jobDefinition.descriptions.description ? jobDefinition.descriptions.description : '';
+        jobDefinitionForm.shortDescription = jobDefinition.descriptions && jobDefinition.descriptions.shortDescription ? jobDefinition.descriptions.shortDescription : '';
+        jobDefinitionForm.acknowledgements = jobDefinition.descriptions && jobDefinition.descriptions.acknowledgements ? jobDefinition.descriptions.acknowledgements : '';
+        jobDefinitionForm.support = jobDefinition.descriptions && jobDefinition.descriptions.support ? jobDefinition.descriptions.support : '';
+        jobDefinitionForm.tags = jobDefinition.descriptions && jobDefinition.descriptions.tags ? jobDefinition.descriptions.tags : '';
+        jobDefinitionForm.jobRoleArn = jobDefinition.jobDefinitionArn;
+        jobDefinitionForm.containerImage = batch.getBidsContainer(jobDefinition);
+        jobDefinitionForm.hostImage = jobDefinition.containerProperties.image;
+        jobDefinitionForm.command = jobDefinition.containerProperties.command.join(' ');
+        jobDefinitionForm.vcpus = jobDefinition.containerProperties.vcpus.toString(); //form is expecting string
+        jobDefinitionForm.memory = jobDefinition.containerProperties.memory.toString(); //form is expecting string
+        jobDefinitionForm.analysisLevels = jobDefinition.analysisLevels;
+
+        let params = [];
+        if(Object.keys(jobDefinition.parameters).length) {
+            Object.keys(jobDefinition.parameters).forEach((key) => {
+                let paramInputData = {label: key, defaultValue: jobDefinition.parameters[key]};
+                if(jobDefinition.parametersMetadata && jobDefinition.parametersMetadata[key]){
+                    paramInputData.type = jobDefinition.parametersMetadata[key].type;
+                    paramInputData.description =  jobDefinition.parametersMetadata[key].description;
+                }
+                params.push(paramInputData);
+            });
+        }
+
+        jobDefinitionForm.parameters = params;
+
+        this.update({jobDefinitionForm});
+        if(callback){
+            callback();
+        }
+    },
+
+    /**
+    * Reset the job definition form
+    */
+    resetJobDefinitionForm () {
+        let jobDefinitionForm = {
+            name: '',
+            jobRoleArn: '',
+            containerImage: '',
+            hostImage: '',
+            command: '',
+            vcpus: '1',
+            description: '',
+            memory: '2000',
+            analysisLevels: [],
+            analysisLevelOptions: [],
+            parameters: [],
+            edit: false,
+            shortDescription: '',
+            acknowledgements:'',
+            tags:'',
+            support:''
+        };
+
+        this.update({jobDefinitionForm});
+    },
+
+    /**
+     * Toggle Modal
+     */
+    toggleModal (modalName) {
+        let modals = this.data.modals;
+        let newModalFlag = !modals[modalName];
+        modals[modalName] = newModalFlag;
+        //If we are going from true to false, i.e. hiding modal, we need to reset form values
+        if(modalName === 'defineJob' && !newModalFlag) {
+            this.resetJobDefinitionForm();
+        }
+        this.update({modals});
     },
 
     /**

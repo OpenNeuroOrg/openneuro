@@ -32,7 +32,9 @@ export default class FileDisplay extends React.Component {
 // template methods ---------------------------------------------------
 
     _download(link) {
-        return <a href={link} download><i className="fa fa-download"></i> DOWNLOAD</a>;
+        if(link) {
+            return <a href={link} download><i className="fa fa-download"></i> DOWNLOAD</a>;
+        }
     }
 
     _format(name, content, link) {
@@ -53,12 +55,12 @@ export default class FileDisplay extends React.Component {
                           itemsPerPage={100}
                           pageButtonLimit={5} />
                     </div>);
-        } else if (files.hasExtension(name, ['.nii.gz'])) {
+        } else if (files.hasExtension(name, ['.nii.gz', '.nii'])) {
             return <Papaya image={link} />;
         } else if (files.hasExtension(name, ['.jpg', '.jpeg', '.png', '.gif'])) {
             return <div className="modal-preview-image" ><img src={link} /></div>;
         } else if (files.hasExtension(name, ['.html'])) {
-            return <div dangerouslySetInnerHTML={this._htmlFormat(content)} />;
+            return <iframe src={link} className="file-view-iframe" frameBorder='0' sandbox="allow-scripts"></iframe>
         } else {
             return content;
         }

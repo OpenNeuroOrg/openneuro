@@ -2,16 +2,17 @@
 
 // dependencies -------------------------------------------------------
 
-import React    from 'react';
-import actions  from './dataset.actions.js';
-import Spinner  from '../common/partials/spinner.jsx';
-import {Modal}  from 'react-bootstrap';
-import moment   from 'moment';
-import Select   from 'react-select';
-import markdown from '../utils/markdown';
-import validate from 'bids-validator';
-import scitran  from '../utils/scitran';
-import Results  from '../upload/upload.validation-results.jsx';
+import React       from 'react';
+import actions     from '../../dataset.actions.js';
+import Spinner     from '../../../common/partials/spinner.jsx';
+import {Modal}     from 'react-bootstrap';
+import moment      from 'moment';
+import validate    from 'bids-validator';
+import scitran     from '../../../utils/scitran';
+import Results     from '../../../upload/upload.validation-results.jsx';
+import Description from './description.jsx';
+import Parameters  from './parameters.jsx';
+import batch       from '../../../utils/batch';
 
 export default class JobMenu extends React.Component {
 
@@ -21,7 +22,8 @@ export default class JobMenu extends React.Component {
         super();
         this.state = {
             loading:           false,
-            parameters:         [],
+            parameters:         {},
+            parametersMetadata: {},
             disabledApps:       {},
             jobId:              null,
             selectedApp:        [],
@@ -49,7 +51,7 @@ export default class JobMenu extends React.Component {
         if (this.state.subjects.length === 0 && this.props.dataset.summary) {
             let subjects = [];
             for (let subject of this.props.dataset.summary.subjects) {
-                subjects.push({label: 'sub-' + subject, value: 'sub-' + subject});
+                subjects.push({label: 'sub-' + subject, value: subject});
             }
             subjects.reverse();
             this.setState({subjects});
@@ -68,53 +70,26 @@ export default class JobMenu extends React.Component {
                 }
             });
         }
-
-        // group app versions by label
-        if (this.props.apps) {
-            let appGroup = {};
-
-
-            for (let i=0; this.props.apps.length > i; i++) {
-                if (appGroup[this.props.apps[i].label]) {
-                    appGroup[this.props.apps[i].label].push(this.props.apps[i]);
-                } else {
-                    appGroup[this.props.apps[i].label] = [this.props.apps[i]];
-                }
-            }
-            for (var key in appGroup) {
-                appGroup[key].sort(function(b, a) {
-                    var i, diff;
-                    var regExStrip0 = /(\.0+)+$/;
-                    var segmentsA = a.version.replace(regExStrip0, '').split('.');
-                    var segmentsB = b.version.replace(regExStrip0, '').split('.');
-                    var l = Math.min(segmentsA.length, segmentsB.length);
-
-                    for (i = 0; i < l; i++) {
-                        diff = parseInt(segmentsA[i], 10) - parseInt(segmentsB[i], 10);
-                        if (diff) {
-                            return diff;
-                        }
-                    }
-                    return segmentsA.length - segmentsB.length;
-                });
-
-            }
-
-            this.setState({appGroup});
-        }
     }
 
     render() {
-        let selectedVersion = this.state.selectedVersion;
-        let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + this.state.selectedVersionID;
-
+        let apps = this.props.apps;
+        let selectedAppKey = this.state.selectedAppKey;
+        let selectedVersionID = this.state.selectedVersionID;
+        let loadingText = this.props.loadingApps ? 'Loading pipelines' : 'Starting ' + selectedVersionID;
         let form = (
             <div className="anaylsis-modal clearfix">
                 {this._snapshots()}
                 {this._apps()}
-                {this._info(selectedVersion)}
-                {this._parameters()}
-                {this._submit()}
+                {selectedAppKey && selectedVersionID
+                    ? (
+                        <div>
+                            <Description jobDefinition={apps[selectedAppKey][selectedVersionID]} />
+                            <Parameters parameters={this.state.parameters} parametersMetadata={this.state.parametersMetadata} subjects={this.state.subjects} onChange={this._updateParameter.bind(this)} onRestoreDefaults={this._restoreDefaultParameters.bind(this)} />
+                            {this._submit()}
+                        </div>)
+                    : ''
+                }
             </div>
         );
 
@@ -144,9 +119,7 @@ export default class JobMenu extends React.Component {
                 </Modal.Header>
                 <hr className="modal-inner" />
                 <Modal.Body>
-                    <div className="dataset">
-                        {body}
-                    </div>
+                    <div className="dataset">{body}</div>
                 </Modal.Body>
             </Modal>
         );
@@ -161,17 +134,34 @@ export default class JobMenu extends React.Component {
      * analysis application.
      */
     _apps() {
+        const apps = this.props.apps;
+        const selectedApp = this.state.selectedAppKey;
 
-        let appOptions = Object.keys(this.state.appGroup).map((key, index) => {
-            return <option key={index} value={key}> {key} </option>;
+        let validatedApps = batch.filterAppDefinitions(apps).reduce((acc, app) => {
+            //filterAppDefinitions returns an array of objects, with each object having a single key which is app name.
+            let name = Object.keys(app)[0];
+            // need to filter out any apps that have ALL inactive versions from select list
+            if(app[name].every((version) => {
+                return version.status === 'INACTIVE';
+            })) {
+                return acc;
+            } else {
+                acc.push(name);
+                return acc;
+            }
+        }, []);
+
+        const appOptions = validatedApps.map((jobDefinitionName, index) => {
+            return <option key={index} value={jobDefinitionName}> {jobDefinitionName} </option>;
         });
 
-        let versionOptions = this.state.selectedApp ? this.state.selectedApp.map((app) => {
-            let disabled = this.state.disabledApps.hasOwnProperty(app.id) ? '* ' : '';
-            return <option key={app.id} value={app.id}>{disabled + 'v' + app.version}</option>;
+        const versionOptions = selectedApp ? Object.keys(apps[selectedApp]).reverse().map((revision) => {
+            let active = apps[selectedApp][revision].status === 'ACTIVE';
+            let disabled = this.state.disabledApps.hasOwnProperty(apps[selectedApp][revision].jobDefinitionArn) ? '* ' : '';
+            return active ? <option key={revision} value={revision}>{disabled + 'v' + revision}</option> : null;
         }) : [];
 
-        let versions = (
+        const versions = (
             <div className="col-xs-12">
                 <div className="row">
                     <hr />
@@ -206,88 +196,6 @@ export default class JobMenu extends React.Component {
                 </div>
             );
         }
-    }
-
-    /**
-     * Info
-     */
-    _info(app) {
-
-        if (this.state.disabledApps.hasOwnProperty(app.id)) {
-            return this._incompatible(app);
-        }
-
-        let shortDescription;
-        if (app.shortDescription) {
-            shortDescription = (
-                <div>
-                    <h5>Short Description</h5>
-                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.shortDescription)}></div>
-                </div>
-            );
-        }
-
-        let help;
-        if (app.helpURI) {
-            help = (
-                <div>
-                    <h5>Help</h5>
-                    <div className="well">
-                        <a href={app.helpURI} target="_blank">{app.helpURI}</a>
-                    </div>
-                </div>
-            );
-        }
-
-        let tags;
-        if (app.tags) {
-            tags = (
-                <div>
-                    <h5>Tags</h5>
-                    <div className="well">{app.tags.join(', ')}</div>
-                </div>
-            );
-        }
-
-        let description,
-            acknowledgments,
-            support;
-        if (app.longDescription) {
-            app.longDescription = typeof app.longDescription === 'string' ? JSON.parse(app.longDescription) : app.longDescription;
-
-            description = (
-                <div>
-                    <h5>Description</h5>
-                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.description)}></div>
-                </div>
-            );
-
-            acknowledgments = (
-                <div>
-                    <h5>Acknowledgements</h5>
-                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.acknowledgments)}></div>
-                </div>
-            );
-
-            support = (
-                <div>
-                    <h5>Support</h5>
-                    <div className="well" dangerouslySetInnerHTML={markdown.format(app.longDescription.support)}></div>
-                </div>
-            );
-        }
-
-        return (
-            <div>
-                <br /><hr />
-                {shortDescription}
-                {description}
-                {acknowledgments}
-                {help}
-                {support}
-                {tags}
-            </div>
-        );
     }
 
     /**
@@ -352,90 +260,16 @@ export default class JobMenu extends React.Component {
         );
     }
 
-    /**
-     * Parameters
-     *
-     * Returns an array of input markup
-     * for the parameters of the selected
-     * app.
-     */
-    _parameters() {
-        if (this.state.disabledApps.hasOwnProperty(this.state.selectedVersion.id)) {
-            return false;
-        }
-        let parameters = this.state.parameters.map((parameter) => {
-            let input;
-            if (parameter.type === 'number') {
-                input = <input className="form-control" type="number" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
-            } else if (parameter.type === 'checkbox') {
-                input = (
-                    <span>
-                        <input className="form-control checkbox"
-                               type="checkbox"
-                               id={'check-' + parameter.id}
-                               checked={parameter.value}
-                               onChange={this._updateParameter.bind(this, parameter.id)}/>
-                        <label htmlFor={'check-' + parameter.id} className="checkmark"><span></span></label>
-                    </span>
-                );
-            } else if (parameter.id === 'subjectList') {
-                input = <Select multi simpleValue value={parameter.value} placeholder="Select your subject(s)" options={this.state.subjects} onChange={this._updateParameter.bind(this, parameter.id)} />;
-            } else {
-                input = <input className="form-control" value={parameter.value} onChange={this._updateParameter.bind(this, parameter.id)}/>;
-            }
-            return (
-                <div key={parameter.id}>
-                    <div className="parameters form-horizontal">
-                        <div className="form-group" key={parameter.id}>
-                            <label className="sr-only">{parameter.label}</label>
-                            <div className="input-group">
-                                  <div className="input-group-addon">{parameter.label}</div>
-                                <div className="clearfix">
-                                    {input}
-                                    <span className="help-text">{parameter.description}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-        });
-
-        let reset;
-        if (parameters.length > 0) {
-            reset = (
-                <div className="row">
-                    <div className="col-xs-6">
-                        <h5>Parameters</h5>
-                    </div>
-                    <div className="col-xs-6 default-reset">
-                        <button className="btn-reset" onClick={this._restoreDefaultParameters.bind(this)}>Restore Default Parameters</button>
-                    </div>
-                </div>
-            );
-            return (
-                <div>
-                    <br /><hr /><br />
-                    {reset}
-                    {parameters}
-                </div>
-            );
-        }
-
-    }
-
     _submit() {
         if (this.state.disabledApps.hasOwnProperty(this.state.selectedVersion.id)) {
             return false;
         }
-        if (this.state.selectedVersionID) {
-            return (
-                <div className="col-xs-12 modal-actions">
-                    <button className="btn-modal-submit" onClick={this._startJob.bind(this)}>Start</button>
-                    <button className="btn-reset" onClick={this._hide.bind(this)}>close</button>
-                </div>
-            );
-        }
+        return (
+            <div className="col-xs-12 modal-actions">
+                <button className="btn-modal-submit" onClick={this._startJob.bind(this)}>Start</button>
+                <button className="btn-reset" onClick={this._hide.bind(this)}>close</button>
+            </div>
+        );
     }
 
 // actions ------------------------------------------------------------
@@ -456,7 +290,7 @@ export default class JobMenu extends React.Component {
         this.setState({
             loading:            false,
             jobId:              null,
-            parameters:         [],
+            parameters:         {},
             selectedApp:        [],
             selectedAppKey:     '',
             selectedVersion:    {},
@@ -472,23 +306,11 @@ export default class JobMenu extends React.Component {
 
     /**
      * Update Parameter
-     *
-     * Takes a parameter id and the
-     * onChange event and updates the
-     * parameter to the new value.
      */
-    _updateParameter(id, e) {
-        let value = e && e.target ? e.target.value : e;
+    _updateParameter(parameter, event) {
+        const value = event.target.value;
         let parameters = this.state.parameters;
-        for (let parameter of parameters) {
-            if (parameter.id === id) {
-                if (parameter.type === 'bool') {
-                    parameter.value = !parameter.value;
-                } else {
-                    parameter.value = value;
-                }
-            }
-        }
+        parameters[parameter] = value;
         this.setState({parameters});
     }
 
@@ -496,10 +318,11 @@ export default class JobMenu extends React.Component {
      * Restore Default Parameters
      */
     _restoreDefaultParameters() {
-        let parameters = this.state.parameters;
-        for (let parameter of parameters) {
-            parameter.value = parameter.default;
-        }
+        const apps       = this.props.apps;
+        const key        = this.state.selectedAppKey;
+        const revision   = this.state.selectedVersionID;
+        const app        = apps[key][revision];
+        const parameters = JSON.parse(JSON.stringify(app.parameters));
         this.setState({parameters});
     }
 
@@ -508,7 +331,7 @@ export default class JobMenu extends React.Component {
      */
     _selectApp(e) {
         let selectedAppKey = e.target.value;
-        let selectedApp    = this.state.appGroup[selectedAppKey];
+        let selectedApp    = this.props.apps[selectedAppKey];
         if(this.state.selectedAppKey != e.target.value){
             this.setState({
                 parameters:         [],
@@ -525,29 +348,11 @@ export default class JobMenu extends React.Component {
      * Select App Version
      */
     _selectAppVersion(e) {
-        let selectedVersion;
         let selectedVersionID = e.target.value;
-        let parameters = [], parametersSpec = [];
-        for (let app of this.props.apps) {
-            if (app.id === selectedVersionID) {
-                selectedVersion = app;
-                parametersSpec = app.parameters;
-                break;
-            }
-        }
-        for (let parameter of parametersSpec) {
-            if (parameter.value.visible) {
-                parameters.push({
-                    id:          parameter.id,
-                    label:       parameter.details.label,
-                    description: parameter.details.description,
-                    type:        parameter.value.type,
-                    default:     parameter.value.default,
-                    value:       parameter.value.default
-                });
-            }
-        }
-        this.setState({selectedVersion, selectedVersionID, parameters});
+        let selectedDefinition = this.props.apps[this.state.selectedAppKey][selectedVersionID];
+        let parameters = JSON.parse(JSON.stringify(selectedDefinition.parameters));
+        let parametersMetadata = JSON.parse(JSON.stringify(selectedDefinition.parametersMetadata));
+        this.setState({selectedVersionID, parameters, parametersMetadata});
     }
 
     /**
@@ -562,17 +367,17 @@ export default class JobMenu extends React.Component {
          */
         // load validation data for selected snapshot
         scitran.getProject(snapshotId, (res) => {
-            for (let app of this.props.apps) {
-                let longDescription = typeof(app.longDescription) == 'string' ? JSON.parse(app.longDescription) : app.longDescription;
-                let appConfig = longDescription.hasOwnProperty('appConfig') ? longDescription.appConfig : {error: []};
-                let issues = validate.reformat(res.body.metadata.validation, res.body.metadata.summary, appConfig);
+            for (let jobDefinitionName in this.props.apps) {
+                let app = this.props.apps[jobDefinitionName];
+                let validationConfig = app.hasOwnProperty('validationConfig') ? app.validationConfig : {error: []};
+                let issues = validate.reformat(res.body.metadata.validation || {}, res.body.metadata.summary || {}, validationConfig);
                 if (issues.errors.length > 0) {
                     disabledApps[app.id] = {issues};
                 }
             }
 
             if (this.mounted) {
-                this.setState({selectedSnapshot: snapshotId, disabledApps});
+                this.setState({selectedSnapshot: snapshotId /*, disabledApps*/});
             }
         },{snapshot:true});
     }
@@ -602,18 +407,16 @@ export default class JobMenu extends React.Component {
      * Start Job
      */
     _startJob() {
-        let parameters = {};
-        for (let parameter of this.state.parameters) {
-            if (parameter.type === 'number') {parameter.value = Number(parameter.value);}
-            if (parameter.type === 'string' && !parameter.value) {parameter.value = '';}
-            if (typeof parameter.value === 'string' && parameter.value.indexOf('sub-') > -1) {
-                parameter.value = parameter.value.replace(/,/g, ' ').replace(/sub-/g, '');
-            }
-            parameters[parameter.id] = parameter.value;
-        }
+        const selectedSnapshot = this.state.selectedSnapshot;
+        const definitions      = this.props.apps;
+        const key              = this.state.selectedAppKey;
+        const revision         = this.state.selectedVersionID;
+        const jobDefinition    = definitions[key][revision];
+        const parameters       = this.state.parameters;
+
         this.setState({loading: true});
 
-        actions.startJob(this.state.selectedSnapshot, this.state.selectedVersion, parameters, (err, res) => {
+        actions.startJob(selectedSnapshot, jobDefinition, parameters, (err, res) => {
             let message, error;
             if (err) {
                 error   = true;
@@ -621,6 +424,9 @@ export default class JobMenu extends React.Component {
                     message = 'This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.';
                 } else if (res.status === 503) {
                     message = 'We are temporarily unable to process this analysis. Please try again later. If this issue persists, please contact the site administrator.';
+                } else if (res.status === 403 && res.body.error) {
+                    // If non admins try to run more than 2 jobs at a time, want to display message letting them know they don't have access
+                    message = res.body.error;
                 } else {
                     message = 'There was an issue submitting your analysis. Double check your inputs and try again. If the issue persists, please contact the site administrator.';
                 }
@@ -628,13 +434,13 @@ export default class JobMenu extends React.Component {
                 message = 'Your analysis has been submitted. Periodically check the Analyses section of this dataset to view the status and results.';
             }
 
-            this.setState({loading: false, message: message, error: error, jobId: res.body.result.id});
+            this.setState({loading: false, message: message, error: error /*, jobId: res.body.result.id*/});
         });
     }
 }
 
 JobMenu.propTypes = {
-    apps:        React.PropTypes.array,
+    apps:        React.PropTypes.object,
     dataset:     React.PropTypes.object,
     loadingApps: React.PropTypes.bool,
     onHide:      React.PropTypes.func.isRequired,
@@ -643,7 +449,7 @@ JobMenu.propTypes = {
 };
 
 JobMenu.defaultProps = {
-    app:         [],
+    apps:        {},
     dataset:     {},
     loadingApps: false,
     show:        false,

@@ -38,5 +38,19 @@ export default {
 			    '.DS_Store',
 			    'Icon\r'
 			]
+		},
+
+		/**
+		* AWS configuration
+		*/
+		aws: {
+			batch: {
+				vcpusMax: 4,
+				memoryMax: 15360
+			}
+		},
+
+		analytics: {
+			trackingId: process.env.GOOGLE_TRACKING_ID
 		}
 };

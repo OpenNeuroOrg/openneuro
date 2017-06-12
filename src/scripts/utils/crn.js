@@ -52,6 +52,25 @@ export default {
 // Datasets --------------------------------------------------------------------------------
 
     /**
+     * Create Project
+     *
+     * Takes a request body and
+     * generates a request to make a project in scitran.
+     */
+    createProject (group, label, callback) {
+        request.post(config.crn.url + 'datasets', {
+            body: {group, label}
+        }, callback);
+    },
+
+    /**
+     * Create Snapshot
+     */
+    createSnapshot (projectId, callback) {
+        request.post(config.crn.url + 'datasets/' + projectId + '/snapshot', {}, callback);
+    },
+
+    /**
      * Add Permission
      */
     addPermission(container, id, permission, callback) {
@@ -65,10 +84,25 @@ export default {
      * Get Apps
      *
      * Returns a list of available apps that
-     * can be run on AGAVE
+     * can be run on AWS Batch
      */
     getApps(callback) {
         request.get(config.crn.url + 'apps', {auth: false}, callback);
+    },
+
+
+    /**
+     * Define Jobs
+     */
+    defineJob(jobDef, callback) {
+        request.post(config.crn.url + 'jobs/definitions', {body: jobDef}, callback);
+    },
+
+    /**
+    * Disable Job
+    */
+    disableJobDefinition(name, jobArn, callback) {
+        request.put(config.crn.url + 'jobs/definitions/' + name, {body: {arn: jobArn}}, callback);
     },
 
     /**
@@ -147,6 +181,20 @@ export default {
      */
     validate(datasetId, callback) {
         request.post(config.crn.url + 'datasets/' + datasetId + '/validate', {}, callback);
+    },
+
+// Logs ------------------------------------------------------------------------------
+
+    getJobLogs(jobId, callback) {
+        request.get(config.crn.url + 'jobs/' + jobId + '/logs', {}, callback);
+    },
+
+    getLogstream(streamName, callback) {
+        request.get(config.crn.url + 'logs/' + streamName, {}, callback);
+    },
+
+    downloadJobLogs(jobId, callback) {
+        request.get(config.crn.url + 'jobs/' + jobId + '/logs/download', {}, callback);
     }
 
 };

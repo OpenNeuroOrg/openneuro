@@ -3,6 +3,7 @@ import scitran   from './scitran';
 import crn       from './crn';
 import userStore from '../user/user.store';
 import fileUtils from './files';
+import hex       from './hex';
 
 /**
  * BIDS
@@ -199,6 +200,44 @@ export default  {
 // Dataset Format Helpers -----------------------------------------------------------------
 
     /**
+     * Encode ID
+     */
+    encodeId (id, version) {
+        if (version) {
+            id = this.decodeId(id);
+            version = this.decodeId(version);
+            if (version.length <= 5) {
+                let snapshotNumber = ('00000' + Number(version)).substr(-5,5);
+                let snapshotId = this.encodeId(id.slice(2) + '-' + snapshotNumber);
+                return snapshotId;
+            } else {
+                return version;
+            }
+        } else if (/ds\d{6}/.test(id)) {
+            return hex.fromASCII('    ' + id);
+        } else if (/\d{6}-\d{5}/.test(id)) {
+            return hex.fromASCII(id);
+        } else {
+            return id;
+        }
+    },
+
+    /**
+     * Decode ID
+     */
+    decodeId (id) {
+        if (id) {
+            let decodedId = hex.toASCII(id);
+            if (/\s{4}ds\d{6}/.test(decodedId)) {
+                return decodedId.slice(4);
+            } else if (/\d{6}-\d{5}/.test(decodedId)) {
+                return decodedId.slice(7);
+            }
+        }
+        return id;
+    },
+
+    /**
      * User
      *
      * Takes a dataset and users list and returns the
@@ -261,6 +300,7 @@ export default  {
         let dataset = {
             /** same as original **/
             _id:         project._id,
+            linkID:      this.decodeId(project._id),
             label:       project.label,
             group:       project.group,
             created:     project.created,
@@ -282,7 +322,10 @@ export default  {
         dataset.authors            = dataset.description.Authors;
         dataset.referencesAndLinks = dataset.description.ReferencesAndLinks;
         dataset.user               = this.user(dataset, users);
-        if (project.original) {dataset.original = project.original;}
+        if (project.original) {
+            dataset.original = project.original;
+            dataset.linkOriginal = this.decodeId(project.original);
+        }
         if (project.snapshot_version) {dataset.snapshot_version = project.snapshot_version;}
         return dataset;
     },

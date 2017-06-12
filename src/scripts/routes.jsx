@@ -5,18 +5,21 @@ import {NotFoundRoute, DefaultRoute, Route} from 'react-router';
 import requireAuth from './utils/requireAuth';
 
 // views
-import Index         from './index.jsx';
-import FrontPage     from './front-page/front-page.jsx';
+import Index          from './index.jsx';
+import FrontPage      from './front-page/front-page.jsx';
 
-import Admin         from './admin/admin.jsx';
-import Users         from './admin/admin.users.jsx';
-import Blacklist     from './admin/admin.blacklist.jsx';
+import Admin          from './admin/admin.jsx';
+import Users          from './admin/admin.users.jsx';
+import Blacklist      from './admin/admin.blacklist.jsx';
+import AppDefinitions from './admin/admin.apps.jsx';
 
-import Dashboard     from './dashboard/dashboard.jsx';
-import Notifications from './dashboard/notifications.jsx';
-import Jobs          from './dashboard/dashboard.jobs.jsx';
-import Datasets      from './dashboard/dashboard.datasets.jsx';
-import Dataset       from './dataset/dataset.jsx';
+import Dashboard      from './dashboard/dashboard.jsx';
+import Notifications  from './dashboard/notifications.jsx';
+import Jobs           from './dashboard/dashboard.jobs.jsx';
+import Datasets       from './dashboard/dashboard.datasets.jsx';
+import Dataset        from './dataset/dataset.jsx';
+
+import Faq            from './faq/faq.jsx'
 
 
 // redirects -------------------------------------------------------------
@@ -50,6 +53,7 @@ class RedirectUsers extends React.Component {
 let routes = (
     <Route name="app" path="/" handler={Index}>
         <Route name="front-page" path="/" handler={FrontPage}/>
+        <Route name="faq" path="faq" handler={Faq}/>
         <Route name="dashboard" path="dashboard"  handler={requireAuth(Dashboard)} >
             <Route name="datasets" path="datasets" handler={Datasets}/>
             <Route name="notifications" path="notifications" handler={Notifications}/>
@@ -65,6 +69,8 @@ let routes = (
         <Route name="admin" path="admin" handler={requireAuth(Admin, 'admin')} >
             <Route name="users" path="users" handler={Users} />
             <Route name="blacklist" path="blacklist" handler={Blacklist} />
+            <Route name="app-definitions" path="app-definitions" handler={AppDefinitions} />
+            <Route name="app-definitions-edit" path="app-definitions/:app-definitionsId" handler={AppDefinitions} />
             <NotFoundRoute handler={RedirectUsers}/>
         </Route>
         <Route name="dataset" path="datasets/:datasetId" handler={Dataset} />
@@ -75,4 +81,3 @@ let routes = (
 );
 
 export default routes;
-

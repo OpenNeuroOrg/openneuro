@@ -75,8 +75,8 @@ let Jobs = React.createClass({
     _jobs(paginatedResults) {
         return paginatedResults.map((job) => {
             let user      = job.userId;
-            let dateAdded = moment(job.agave.created).format('L');
-            let timeago   = moment(job.agave.created).fromNow(true);
+            let dateAdded = moment(job.analysis.created).format('L');
+            let timeago   = moment(job.analysis.created).fromNow(true);
             return (
                 <div className="fade-in  panel panel-default" key={job._id}>
                     <div className="panel-heading">
@@ -85,7 +85,7 @@ let Jobs = React.createClass({
                                 <h4 className="dataset-name">{job.appLabel} - v{job.appVersion}</h4>
                             </Link>
                             <div className="status-container">
-                                <div className="pull-right">Status: {job.agave.status}</div>
+                                <div className="pull-right">Status: {job.analysis.status}</div>
                             </div>
                         </div>
                         <div className="minimal-summary">
