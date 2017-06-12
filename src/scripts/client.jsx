@@ -5,7 +5,7 @@ import ReactDOM         from 'react-dom';
 import Router           from 'react-router';
 import routes           from './routes.jsx';
 import RouterContainer  from './utils/router-container';
-import config           from '../config'
+import config           from '../../config'
 
 //Google analytics
 import ReactGA          from 'react-ga';
