@@ -6,7 +6,7 @@ const nCpusParam = {n_cpus: 4};
 const templateNameParam = {template_name: 'template1'};
 const emptyParam = {template_name: []};
 const nullParam = {template_name: null};
-const spaceParam = {license_key: "Super Secret Shhhhhh"};
+const spaceParam = {license_key: 'Super Secret Shhhhhh', cartoons: ['Ren and Stimpy']};
 
 describe('libs/aws/batch.js', () => {
     describe('_prepareArguments()', () => {
@@ -43,7 +43,7 @@ describe('libs/aws/batch.js', () => {
         it('should properly format string arguments with spaces', () => {
             let params = Object.assign({}, subjectParam, spaceParam);
             let args = aws.batch._prepareArguments(params);
-            assert.equal(args, '--participant_label 01 02 03 --license_key \'Super Secret Shhhhhh\'');
+            assert.equal(args, '--participant_label 01 02 03 --license_key \'Super Secret Shhhhhh\' --cartoons \'Ren and Stimpy\'');
         });
     });
     describe('_partitionLabels()', () => {
