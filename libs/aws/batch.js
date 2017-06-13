@@ -265,7 +265,7 @@ export default (aws) => {
          */
         _formatString(str) {
             let hasSpace = /\s/g.test(str);
-            return (hasSpace ?  "'" + str + "'" : str);
+            return (hasSpace ?  '\'' + str + '\'' : str);
         },
 
         /**
