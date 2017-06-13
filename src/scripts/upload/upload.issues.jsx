@@ -12,7 +12,7 @@ let Issues = React.createClass({
 // life cycle events --------------------------------------------------
     propTypes: {
         tree:React.PropTypes.array,
-        errors:React.PropTypes.array,
+        errors:React.PropTypes.oneOfType([React.PropTypes.array,React.PropTypes.string]),
         warnings:React.PropTypes.array,
         dirName:React.PropTypes.string,
         uploadStatus:React.PropTypes.string
