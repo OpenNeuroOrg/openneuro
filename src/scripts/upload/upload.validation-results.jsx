@@ -72,7 +72,6 @@ ValidationResults.Props = {
 
 
 ValidationResults.propTypes = {
-    errors: React.PropTypes.array,
+    errors: React.PropTypes.oneOfType([React.PropTypes.array,React.PropTypes.string]),
     warnings: React.PropTypes.array
 };
-
