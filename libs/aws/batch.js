@@ -109,7 +109,7 @@ export default (aws) => {
             return {
                 jobDefinition: job.jobDefinition,
                 jobName:       job.jobName,
-                jobQueue:      'bids-queue',
+                jobQueue:      config.aws.batch.queue,
                 userId: job.userId,
                 parameters:    job.parameters,
                 containerOverrides:{
