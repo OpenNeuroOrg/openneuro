@@ -10,8 +10,7 @@ export default class Issue extends React.Component {
 
     render () {
         let error = this.props.error;
-        let fileName = error.file && error.file.name ? error.file.name : error.file.relativePath.split('/')[error.file.relativePath.split('/').length - 1];
-
+        let fileInfo;
         // build error location string
         let errLocation = '';
         let  errorLocationMeta;
@@ -28,14 +27,20 @@ export default class Issue extends React.Component {
                 </span>
             );
         }
-    
+
+        // Check if this issue has an file associated with it at all
+        if (error.file) {
+            fileInfo = (
+                <span>
+                    {this._fileName(error.file)}
+                    {this._fileMetadata(error.file)}
+                </span>
+            );
+        }
+
         return (
             <div className="em-body">
-                <span className="e-meta">
-                    <label>File Name:</label>
-                    <p>{fileName}</p>
-                </span>
-                {this._fileMetadata(error.file)}
+                {fileInfo}
                 <span className="e-meta">
                     {this._location(error.file)}
                     <label>Reason: </label>
@@ -47,6 +52,18 @@ export default class Issue extends React.Component {
     }
 
 // custom methods -----------------------------------------------------
+
+    _fileName(file) {
+        let fileName = file.name ? file.name : file.relativePath.split('/')[file.relativePath.split('/').length - 1];
+        if (fileName) {
+            return (
+                <span className="e-meta">
+                    <label>File Name:</label>
+                    <p>{fileName}</p>
+                </span>
+            );
+        }
+    }
 
     _fileMetadata(file) {
         if (file.size) {
@@ -60,7 +77,7 @@ export default class Issue extends React.Component {
     }
 
     _location(file) {
-        if (file.webkitRelativePath) {
+        if (file && file.webkitRelativePath) {
             return (
                 <span>
                     <label>Location: </label>
