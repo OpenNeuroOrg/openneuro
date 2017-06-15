@@ -30,9 +30,13 @@ mongo.connect(() => {
      * polling occurs on a 5 minute interval
      */
     let pollJobs = () => {
-        c.crn.jobs.find({ 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'REJECTED', 'UPLOADING']}}).toArray((err, jobs) => {
+        c.crn.jobs.find({ 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'UPLOADING']}}).toArray((err, jobs) => {
             async.each(jobs, (job, cb) => {
-                awsJobs.getJobStatus(job, job.userId, cb);
+                if(job.analysis.status === 'REJECTED') {
+                    awsJobs.jobComplete(job, job.userId, cb);
+                } else {
+                    awsJobs.getJobStatus(job, job.userId, cb);
+                }
             }, (err) => {
                 setTimeout(pollJobs, interval);
             });

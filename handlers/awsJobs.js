@@ -384,40 +384,6 @@ let handlers = {
     },
 
     /*
-    * Server side polling
-    * want to poll jobs at a 5 minute interval in case client side polling stops
-    * server side polling is only responsible for sending out notifications and emitting completion event
-    * results processing will still occur when client is accessed and polling starts from client
-    */
-    _pollJob(id, userId) {
-        let interval = 300000; // 5 minute interval for server side polling
-        let poll = (jobId) => {
-            c.crn.jobs.findOne({_id: jobId}, {}, (err, job) => {
-                let status = job.analysis.status;
-                let finished = status === 'SUCCEEDED' || status === 'FAILED';
-                let clonedJob = JSON.parse(JSON.stringify(job));
-                //if analysis is finished and notfication has not been sent, send notification.
-                if(finished) {
-                    handlers._jobComplete(clonedJob, userId);
-                } else {
-                    handlers.getJobStatus(job, userId, (err, data) => {
-                        if(err) {
-                            //failing silently here
-                            console.log(err);
-                            return;
-                        }
-                        if(!(data.analysis.status === 'SUCCEEDED' || data.analysis.status === 'FAILED')) {
-                            setTimeout(poll.bind(this, jobId), interval);
-                        }
-                    });
-                }
-            });
-        };
-
-        setTimeout(poll.bind(this, id), interval);
-    },
-
-    /*
      * Gets jobs for a given analysis from batch, checks overall status and callsback with a snapshot of the analysis status
      */
     getJobStatus(job, userId, callback) {
@@ -451,7 +417,7 @@ let handlers = {
                 // cloning job here and sending out event and email because mongos updateOne does not return updated doc
                 let clonedJob = JSON.parse(JSON.stringify(job));
                 clonedJob.analysis.status = finalStatus;
-                handlers._jobComplete(clonedJob, userId);
+                handlers.jobComplete(clonedJob, userId);
 
                 aws.s3.getJobResults(params, (err, results) => {
                     if(err) {return callback(err);}
@@ -524,7 +490,7 @@ let handlers = {
     /*
      * Processes job complete tasks (notifications and event emit)
      */
-    _jobComplete(job, userId) {
+    jobComplete(job, userId) {
         if(!job.analysis.notification) {
             emitter.emit(events.JOB_COMPLETED, {job: job, completedDate: new Date()}, userId);
             notifications.jobComplete(job);
