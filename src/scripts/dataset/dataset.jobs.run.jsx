@@ -197,6 +197,15 @@ class JobAccordion extends React.Component {
                         exitCode = logstream.exitCode;
                     }
                     let exitCodeClass = "exit-code " + (exitCode ? "fail" : ""); // 0 is passing
+                    let exitCodeStatus;
+
+                    if(exitCode === 0){
+                       exitCodeStatus =  (<span className="label label-success">SUCCESS</span>);
+                    }else{
+                        exitCodeStatus = (<span><span className="label label-danger">FAIL</span> Exit code {exitCode}</span>);
+                    }
+
+
                     return (
                         <span className="job-log" key={label}>
                             <WarnButton
@@ -204,7 +213,7 @@ class JobAccordion extends React.Component {
                                 message={label}
                                 warn={false}
                                 action={actions.getLogstream.bind(this, logstream.name)} />
-                            {exitCode != undefined ? <span className={exitCodeClass}> Exit code {exitCode}</span> : null}
+                            {exitCode != undefined ? <span className={exitCodeClass}>{exitCodeStatus}</span> : null}
                         </span>
                     );
                 });

@@ -24,6 +24,7 @@ let Jobs = React.createClass({
     },
 
     render () {
+        let isPublic = this.state.isPublic;
         let jobs = this.state.visiblejobs.length === 0 ? <div className="col-xs-12"><h3>no results please try again</h3></div> : this._jobs(this.state.visiblejobs) ;
         return (
             <div>
@@ -31,7 +32,7 @@ let Jobs = React.createClass({
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
                             <div className="row">
-                                <div className="col-md-5"><h2>My Analyses</h2></div>
+                                <div className="col-md-5"><h2>{isPublic ? 'My' : 'Public'} Analyses</h2></div>
                                 <div className="col-md-7">{this._filter()}</div>
                             </div>
                         </div>

@@ -38,7 +38,7 @@ let Apps = React.createClass({
         });
 
         return (
-            <div className="dashboard-dataset-teasers fade-in inner-route admin-jobs clearfix">
+            <div className="dashboard-dataset-teasers fade-in admin-jobs clearfix">
                 <div className="clearfix">
                     <h2>App Definitions</h2>
                     <button className="btn-blue" onClick={actions.toggleModal.bind(this, 'defineJob')} >

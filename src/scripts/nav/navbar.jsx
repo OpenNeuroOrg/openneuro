@@ -6,7 +6,8 @@ import {Link}    from 'react-router';
 import Usermenu  from './navbar.usermenu.jsx';
 import UploadBtn from './navbar.upload-button.jsx';
 import userStore from '../user/user.store.js';
-import {Navbar}  from 'react-bootstrap';
+import actions    from '../user/user.actions.js';
+import {Navbar, Modal}  from 'react-bootstrap';
 
 // component setup ---------------------------------------------------------------
 
@@ -34,6 +35,7 @@ let BSNavbar = React.createClass({
                         {this._navMenu()}
                     </Navbar.Collapse>
                 </Navbar>
+                {this._supportModal()}
             </span>
         );
     },
@@ -67,8 +69,10 @@ let BSNavbar = React.createClass({
                 <li className="link-public">
                     <Link className="nav-link" to="publicDashboard"><span className="link-name">Public Dashboard</span></Link>
                 </li>
-                <li className="link-contact">
-                    <a className="nav-link" href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Contact" target="_blank"><span className="link-name">contact</span></a>
+                <li className="link-support">
+                    <a className="nav-link" onClick={actions.toggleModal}>
+                      <span className="link-name">Support</span>
+                    </a>
                 </li>
                 <li className="link-faq">
                     <Link className="nav-link" to="faq"><span className="link-name">faq</span></Link>
@@ -87,6 +91,29 @@ let BSNavbar = React.createClass({
             </ul>
         );
     },
+
+    _supportModal () {
+        return(
+            <Modal show={this.state.showSupportModal} onHide={actions.toggleModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Support</Modal.Title>
+                </Modal.Header>
+                <hr className="modal-inner" />
+                <Modal.Body>
+                <script type="text/javascript" src="https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.js"></script>
+                <style type="text/css" media="screen, projection">
+                {'@import url(https://s3.amazonaws.com/assets.freshdesk.com/widget/freshwidget.css); '}
+                </style>
+                <iframe title="Feedback Form" className="freshwidget-embedded-form" id="freshwidget-embedded-form" src="https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no" scrolling="no" height="500px" width="100%" frameBorder="0" >
+                </iframe>
+                </Modal.Body>
+                 <Modal.Footer>
+                    <a onClick={actions.toggleModal} >Close</a>
+                </Modal.Footer>
+            </Modal>
+        );
+    },
+
 
     _signIn (loading, routes) {
         let onFrontPage = false;
