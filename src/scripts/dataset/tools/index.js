@@ -32,6 +32,8 @@ let Tools = React.createClass({
         let dataset     = this.props.dataset,
             snapshots   = this.props.snapshots;
 
+        let datasetHasJobs = !!this.props.dataset.jobs.length;
+
         // permission check shorthands
         let isAdmin      = dataset.access === 'admin',
             // isEditor     = dataset.access === 'rw',
@@ -41,7 +43,9 @@ let Tools = React.createClass({
             isIncomplete = !!dataset.status.incomplete,
             isInvalid    = !!dataset.status.invalid,
             isSnapshot   = !!dataset.original,
-            isSuperuser  = window.localStorage.scitranUser ? JSON.parse(window.localStorage.scitranUser).root : null;
+            isSuperuser  = window.localStorage.scitran ? JSON.parse(window.localStorage.scitran).root : null;
+
+        let displayDelete = this._deleteDataset(isAdmin, isPublic, isSuperuser, datasetHasJobs);
 
         let tools = [
             {
@@ -69,7 +73,7 @@ let Tools = React.createClass({
                 tooltip: isSnapshot ? 'Delete Snapshot' : 'Delete Dataset',
                 icon: 'fa-trash',
                 action: actions.deleteDataset.bind(this, dataset._id),
-                display: (isAdmin && !isPublic) || isSuperuser,
+                display: displayDelete,
                 warn: isSnapshot
             },
             {
@@ -148,6 +152,25 @@ let Tools = React.createClass({
             }
         });
         return tools;
+    },
+
+    _deleteDataset(isAdmin, isPublic, isSuperuser, datasetHasJobs) {
+        //CRN admin can delete any dataset 
+        if(isSuperuser) {
+            return true;
+        }
+        // If user is not a CRN admin and the dataset has jobs associated with it, don't allow deletion.
+        if(datasetHasJobs) {
+            return false;
+        }
+        // If user is not a CRN admin, there are no jobs associated with dataset and the dataset is not public,
+        // and the user has been given admin access (this is different than CRN admin) to the shared dataset
+        // allow deletion
+        if(isAdmin && !isPublic) {
+            return true;
+        }
+        //otherwise don't allow deletion
+        return false
     }
 
 });
