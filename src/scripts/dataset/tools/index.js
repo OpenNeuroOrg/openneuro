@@ -34,7 +34,6 @@ let Tools = React.createClass({
 
         let datasetHasJobs = !!this.props.dataset.jobs.length;
 
-console.log(dataset);
         // permission check shorthands
         let isAdmin      = dataset.access === 'admin',
             // isEditor     = dataset.access === 'rw',
