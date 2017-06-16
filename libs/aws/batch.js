@@ -249,12 +249,23 @@ export default (aws) => {
                 }
             }).map((key) => {
                 let argument = '--' + key + ' ';
-                let value = parameters[key];
+                let value = typeof parameters[key] === 'string' ? this._formatString(parameters[key]) : parameters[key];
                 if (value instanceof Array) {
-                    value = value.join(' ');
+                    value = value.map((item)=> {
+                        return typeof item === 'string' ? this._formatString(item) : item;
+                    }).join(' ');
                 }
                 return argument.concat(value);
             }).join(' ');
+        },
+
+        /**
+         * If a string argument has any whitespace we need to make sure that we single quote it.
+         * Accepts a string and returns an appropriately formated string
+         */
+        _formatString(str) {
+            let hasSpace = /\s/g.test(str);
+            return (hasSpace ?  '\'' + str + '\'' : str);
         },
 
         /**
