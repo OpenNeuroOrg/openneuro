@@ -55,7 +55,7 @@ let Pipelines = React.createClass({
                 <h4>Featured</h4>
                 <ul>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'fmriprep')}>fmriprep</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'FMRIPREP')}>FMRIPREP</button>
                     </li>
                     <li>
                         <button onClick={FPActions.selectPipeline.bind(null, 'MRIQC')}>MRIQC</button>
@@ -64,7 +64,7 @@ let Pipelines = React.createClass({
                         <button onClick={FPActions.selectPipeline.bind(null, 'FreeSurfer')}>FreeSurfer</button>
                     </li>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'CPAC')}>CPAC</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'C-PAC')}>C-PAC</button>
                     </li>
                 </ul>
             </div>
