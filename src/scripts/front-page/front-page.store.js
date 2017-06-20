@@ -116,11 +116,7 @@ let FrontPageStore = Reflux.createStore({
         let latestVersion = Object.keys(selectedApp).sort((a,b)=>{return a-b;}).pop();
         this.update({selectedPipeline: selectedApp[latestVersion], loadingJob: true});
 
-        if (selectedApp[latestVersion].jobDefinitionName === 'mriqc-bare-0.8.7') {
-            this.loadJob('57dc3704a76c87000a24e650', '3036461272949658086-242ac115-0001-007');
-        } else {
-            this.update({loadingJob: false, exampleJob: null});
-        }
+        this.loadLatestJob(selectedApp[latestVersion].jobDefinitionName, 'SUCCEEDED', true);
     },
 
     /**
@@ -130,6 +126,17 @@ let FrontPageStore = Reflux.createStore({
         crn.getJob(snapshotId, jobId, (err, res) => {
             this.update({exampleJob: res.body, loadingJob: false});
         }, {snapshot: true});
+    },
+
+    loadLatestJob(appName, status) {
+        crn.getJobs((err, resp) => {
+            // Grab the first job returned
+            if (resp.body && resp.body.jobs && resp.body.jobs instanceof Array && resp.body.jobs.length > 0) {
+                this.update({loadingJob: false, exampleJob: resp.body.jobs[0]});
+            } else {
+                this.update({loadingJob: false, exampleJob: null});
+            }
+        }, true, appName, status, true);
     },
 
     /**
