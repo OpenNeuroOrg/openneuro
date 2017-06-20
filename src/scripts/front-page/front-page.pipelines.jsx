@@ -163,7 +163,7 @@ let Pipelines = React.createClass({
                         <span>from dataset {exampleJob.datasetLabel}</span>
                     </div>
                     <div className="col-sm-6 ">
-                        <a className="explore-more pull-right" href="#"><i className="fa fa-area-chart" ></i> Explore More</a>
+                        <Link to="publicJobs" className="explore-more pull-right"><i className="fa fa-area-chart" ></i> Explore More</Link>
                     </div>
                 </div>
                 <Panel className="jobs" header={analysisLink} eventKey={exampleJob.appId}>
