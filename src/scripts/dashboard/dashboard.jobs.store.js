@@ -84,7 +84,7 @@ let DashboardJobStore = Reflux.createStore({
                 for (let app of res.body.availableApps) {app.value = app.label;}
                 this.update({apps: res.body.availableApps, appsLoading: false});
                 this.sort('analysis.created', '+', res.body.jobs, true);
-            }, isPublic, isSignedOut);
+            }, isPublic);
         });
     },
 
