@@ -108,8 +108,9 @@ export default {
     /**
      * Get Jobs
      */
-    getJobs(callback, isPublic) {
-        request.get(config.crn.url + 'jobs', {query: {public: isPublic}}, callback);
+    getJobs(callback, isPublic, appName = null, status = null, latest = false) {
+        let query = {public: isPublic, appName: appName, status: status, latest: latest};
+        request.get(config.crn.url + 'jobs', {query: query}, callback);
     },
 
     /**
