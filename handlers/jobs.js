@@ -257,7 +257,19 @@ let handlers = {
     },
 
     getJobs(req, res) {
-        c.crn.jobs.find().toArray((err, jobs) => {
+        let jobsQuery = {};
+        // Optionally select by app
+        if (req.query.appName) {
+            jobsQuery['jobName'] = req.query.appName;
+        }
+        if (req.query.status) {
+            jobsQuery['analysis.status'] = req.query.status;
+        }
+        let jobsResults = c.crn.jobs.find(jobsQuery);
+        if (req.query.latest) {
+            jobsResults = jobsResults.sort({'analysis.created': 1}).limit(1);
+        }
+        jobsResults.toArray((err, jobs) => {
             if (err) {
                 res.send(err);
                 return;
