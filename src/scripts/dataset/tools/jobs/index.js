@@ -431,7 +431,7 @@ export default class JobMenu extends React.Component {
                     message = 'There was an issue submitting your analysis. Double check your inputs and try again. If the issue persists, please contact the site administrator.';
                 }
             } else {
-                message = 'Your analysis has been submitted. Periodically check the Analyses section of this dataset to view the status and results.';
+                message = 'Your analysis has been submitted. You will receive a notification by email once the job is complete.';
             }
 
             this.setState({loading: false, message: message, error: error /*, jobId: res.body.result.id*/});
