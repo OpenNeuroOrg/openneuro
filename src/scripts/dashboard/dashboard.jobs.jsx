@@ -19,8 +19,10 @@ let Jobs = React.createClass({
 
     componentDidMount() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
+        let query = this.getQuery();
+        let selectedPipeline = typeof query.pipeline != 'undefined' && query.pipeline || null;
         Actions.update({isPublic});
-        Actions.getJobs(isPublic);
+        Actions.getJobs(isPublic, {pipeline: selectedPipeline, version: null});
     },
 
     render () {
