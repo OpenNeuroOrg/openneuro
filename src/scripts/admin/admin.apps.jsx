@@ -18,7 +18,9 @@ let Apps = React.createClass({
 
     render() {
         let noJobs = <div className="no-results">There are no apps defined.</div>;
-        let jobs = batch.filterAppDefinitions(this.state.datasets.apps).map((app, index) => {
+        let jobs = batch.filterAppDefinitions(this.state.datasets.apps).sort((a,b) => {
+            return Object.keys(a)[0].localeCompare(Object.keys(b)[0]);
+        }).map((app, index) => {
             //Need to explain this. And should probably stop calling everything app.
             let appName = Object.keys(app)[0];
             let list = this._versionList(app[appName]);
