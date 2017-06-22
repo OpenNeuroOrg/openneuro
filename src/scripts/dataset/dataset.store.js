@@ -512,10 +512,12 @@ let datasetStore = Reflux.createStore({
             }
             description.Authors = authors;
 
-            for (let referencesAndLink of description.ReferencesAndLinks) {
-                referencesAndLinks.push(referencesAndLink);
+            if (description.ReferencesAndLinks) {
+                for (let referencesAndLink of description.ReferencesAndLinks) {
+                    referencesAndLinks.push(referencesAndLink);
+                }
+                description.ReferencesAndLinks = referencesAndLinks;
             }
-            description.ReferencesAndLinks = referencesAndLinks;
 
             this.updateModified();
             scitran.updateFileFromString('projects', datasetId, 'dataset_description.json', JSON.stringify(description), 'application/json', ['project'], callback);

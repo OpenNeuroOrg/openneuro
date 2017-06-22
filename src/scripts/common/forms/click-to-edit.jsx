@@ -118,7 +118,11 @@ let ClickToEdit = React.createClass({
         return list;
     },
     _referencesAndLinksList(refAndLinks) {
-        if (typeof refAndLinks === 'string') {refAndLinks = [refAndLinks];}
+        if (typeof refAndLinks === 'string') {
+            refAndLinks = [refAndLinks];
+        } else if (refAndLinks.length === 1 && refAndLinks[0] === '') {
+            refAndLinks = [];
+        }
         let list = refAndLinks.map((item, index) => {
             return (
                 <div className="fade-in" key={index}>
