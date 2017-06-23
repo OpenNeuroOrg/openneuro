@@ -45,7 +45,7 @@ export default {
 		*/
 		aws: {
 			batch: {
-				vcpusMax: 4,
+				vcpusMax: 12,
 				memoryMax: 15360
 			}
 		},
