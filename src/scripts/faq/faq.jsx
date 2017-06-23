@@ -7,6 +7,10 @@ class Faq extends React.Component {
     render () {
         let faqsList = [
             {
+                faq: <span>How do I get started?</span>,
+                faq_answer: <span>Check out our <a href="https://www.youtube.com/playlist?list=PLU-IMZq18nDsf6VpCrLezLgylfAbRPPV8">video tutorial</a>.</span>
+            },
+            {
                 faq: <span>Is this service free to use?</span>,
                 faq_answer: <span>Yes!</span>
             },
