@@ -49,7 +49,7 @@ let config = {
             'timeout': 10 * 60 * 1000
         },
         'batch': {
-            vcpusMax: 4,
+            vcpusMax: 12,
             memoryMax: 15360,
             queue: process.env.AWS_BATCH_QUEUE
         },
