@@ -100,7 +100,7 @@ let Pipelines = React.createClass({
 
     _pipelineDetail(pipeline) {
         let longDescription = pipeline.descriptions;
-        let description = longDescription.description ? markdown.format(longDescription.description) : '';
+        let description = longDescription.description ? markdown.format(longDescription.description) : {__html: ''};
         let acknowledgments = '';
         let support = '';
         if (longDescription.acknowledgments) {
