@@ -402,45 +402,40 @@ let handlers = {
             analysis.created = createdDate;
             analysis.analysisId = analysisId;
 
+            let logStreams = handlers._buildLogStreams(jobs);
+
             if(finished) {
-                let finalStatus = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
-                let logStreams = handlers._buildLogStreams(jobs);
-
-                let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
-                let params = {
-                    Bucket: 'openneuro.outputs',
-                    Prefix: s3Prefix,
-                    StartAfter: s3Prefix
-                };
-
+                analysis.status = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
                 // emit a job finished event so we can add logs and sent notification email
                 // cloning job here and sending out event and email because mongos updateOne does not return updated doc
                 let clonedJob = JSON.parse(JSON.stringify(job));
-                clonedJob.analysis.status = finalStatus;
+                clonedJob.analysis.status = analysis.status;
                 handlers.jobComplete(clonedJob, userId);
-
-                aws.s3.getJobResults(params, (err, results) => {
-                    if(err) {return callback(err);}
-                    //update job with status, results and logstreams
-                    let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
-                    c.crn.jobs.updateOne({_id: jobId}, {
-                        $set:{
-                            'analysis.status': finalStatus,
-                            results: results,
-                            'analysis.logstreams': logStreams,
-                            'analysis.notification': true
-                        }
-                    });
-                });
-            } else if(analysis.status != job.analysis.status) {
-                let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
-                //if status changes, update mongo
-                c.crn.jobs.updateOne({_id: jobId}, {
-                    $set:{
-                        'analysis.status': analysis.status
-                    }
-                });
             }
+
+            let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
+            let params = {
+                Bucket: 'openneuro.outputs',
+                Prefix: s3Prefix,
+                StartAfter: s3Prefix
+            };
+
+            aws.s3.getJobResults(params, (err, results) => {
+                if(err) {return callback(err);}
+                //update job with status, results and logstreams
+                let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
+                let jobUpdate = {
+                    'analysis.status': analysis.status,
+                    results: results
+                };
+                if (finished) {
+                    jobUpdate['analysis.notification'] = true;
+                }
+                c.crn.jobs.updateOne({_id: jobId}, {
+                    $set: jobUpdate,
+                    $addToSet: {'analysis.logstreams': {$each: logStreams}}
+                });
+            });
 
             callback(null, {
                 analysis: analysis,
