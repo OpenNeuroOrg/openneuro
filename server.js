@@ -4,12 +4,13 @@
 // dependencies ----------------------------------------------------
 
 import express    from 'express';
-import async         from 'async';
+import async      from 'async';
 import config     from './config';
 import routes     from './routes';
 import bodyParser from 'body-parser';
 import morgan     from 'morgan';
 import mongo      from './libs/mongo';
+import cron       from 'cron';
 
 //Handlers (need access to AwS Jobs handler to kickoff server side polling)
 import awsJobs    from './handlers/awsJobs';
@@ -19,33 +20,7 @@ import events      from './libs/events';
 
 // configuration ---------------------------------------------------
 
-mongo.connect(() => {
-    //Start job polling
-    let c = mongo.collections;
-    let interval = 300000; // 5 minute interval for server side polling
-
-    /**
-     * pollJobs queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
-     * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
-     * polling occurs on a 5 minute interval
-     */
-    let pollJobs = () => {
-        c.crn.jobs.find({ 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'UPLOADING']}}).toArray((err, jobs) => {
-            async.each(jobs, (job, cb) => {
-                // handling rejected jobs here so we can send notifications for those jobs
-                if(job.analysis.status === 'REJECTED') {
-                    awsJobs.jobComplete(job, job.userId, cb);
-                } else {
-                    awsJobs.getJobStatus(job, job.userId, cb);
-                }
-            }, (err) => {
-                setTimeout(pollJobs, interval);
-            });
-        });
-    };
-
-    pollJobs();
-});
+mongo.connect();
 
 let app = express();
 
@@ -82,6 +57,27 @@ app.use(function(err, req, res, next) {
     }
     res.status(http_code).send(send);
 });
+
+// aws polling cron  -------------------------------------
+
+new cron.CronJob('30 */5 * * * *', () => {
+    let c = mongo.collections;
+    /**
+     * queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
+     * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
+     * polling occurs on a 5 minute interval
+     */
+    c.crn.jobs.find({ 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'UPLOADING']}}).toArray((err, jobs) => {
+        async.each(jobs, (job, cb) => {
+            // handling rejected jobs here so we can send notifications for those jobs
+            if(job.analysis.status === 'REJECTED') {
+                awsJobs.jobComplete(job, job.userId, cb);
+            } else {
+                awsJobs.getJobStatus(job, job.userId, cb);
+            }
+        });
+    });
+}, null, true, 'America/Los_Angeles');
 
 // start server ----------------------------------------------------
 
