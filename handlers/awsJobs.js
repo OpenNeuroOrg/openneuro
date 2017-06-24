@@ -428,9 +428,6 @@ let handlers = {
                     'analysis.status': analysis.status,
                     results: results
                 };
-                if (finished) {
-                    jobUpdate['analysis.notification'] = true;
-                }
                 c.crn.jobs.updateOne({_id: jobId}, {
                     $set: jobUpdate,
                     $addToSet: {'analysis.logstreams': {$each: logStreams}}
