@@ -242,14 +242,21 @@ let datasetStore = Reflux.createStore({
 
     getLogstream(logstreamName, callback) {
         crn.getLogstream(logstreamName, (err, res) => {
+            // Default text in case logs are missing despite no errors
+            let logsText = "No logs available.";
             let modals = this.data.modals;
             let logs = res.body;
             modals.displayFile = true;
             if(callback) {callback();}
-            // Append all rows together for in-browser display
-            let logsText = logs.map((line) => {
-                return line.message;
-            }).join('\n');
+            if (err) {
+                logsText = JSON.stringify(err);
+            } else if (logs) {
+                // Append all rows together for in-browser display
+                // Replaces the default text with the real logs
+                logsText = logs.map((line) => {
+                    return line.message;
+                }).join('\n');
+            }
             this.update({
                 displayFile: {
                     name: 'Logs',
