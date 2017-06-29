@@ -434,12 +434,14 @@ let handlers = {
                 });
             });
 
-            callback(null, {
-                analysis: analysis,
-                jobId: analysisId,
-                datasetId: job.datasetId,
-                snapshotId: job.snapshotId
-            });
+            if (callback) {
+                callback(null, {
+                    analysis: analysis,
+                    jobId: analysisId,
+                    datasetId: job.datasetId,
+                    snapshotId: job.snapshotId
+                });
+            }
         });
     },
 
