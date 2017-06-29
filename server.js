@@ -68,7 +68,7 @@ new cron.CronJob('30 */5 * * * *', () => {
      * polling occurs on a 5 minute interval
      */
     c.crn.jobs.find({ 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'UPLOADING']}}).toArray((err, jobs) => {
-        async.each(jobs, (job, cb) => {
+        async.eachSeries(jobs, (job, cb) => {
             // handling rejected jobs here so we can send notifications for those jobs
             if(job.analysis.status === 'REJECTED') {
                 awsJobs.jobComplete(job, job.userId, cb);
