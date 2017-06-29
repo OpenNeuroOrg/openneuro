@@ -99,10 +99,10 @@ export default {
     },
 
     /**
-    * Disable Job
+    * Delete app definition
     */
-    disableJobDefinition(name, jobArn, callback) {
-        request.put(config.crn.url + 'jobs/definitions/' + name, {body: {arn: jobArn}}, callback);
+    deleteJobDefinition(appId, callback) {
+        request.del(config.crn.url + 'jobs/definitions/' + appId, {}, callback);
     },
 
     /**

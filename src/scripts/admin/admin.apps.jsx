@@ -28,10 +28,9 @@ let Apps = React.createClass({
                 <Panel header={appName} eventKey={index} key={index} className="col-xs-12 job-panel-wrap">
                     <div className="job-panel-header clearfix col-xs-12" >
                         <div className="row">
-                            <div className="col-xs-3 job-col"><label>{app[appName][0].jobDefinitionName} Version</label></div>
-                            <div className="col-xs-3 job-col"><label>Container Image</label></div>
-                            <div className="col-xs-3 job-col"><label>Status</label></div>
-                            <div className="col-xs-3 job-col last"><label>Actions</label></div>
+                            <div className="col-xs-5 job-col"><label>{app[appName][0].jobDefinitionName} Version</label></div>
+                            <div className="col-xs-5 job-col"><label>Container Image</label></div>
+                            <div className="col-xs-2 job-col last"><label>Actions</label></div>
                         </div>
                     </div>
                     {list}
@@ -68,21 +67,18 @@ let Apps = React.createClass({
             return (
                 <div className="job-panel col-xs-12" key={index}>
                     <div className="row">
-                        <div className="col-xs-3 job-col">
+                        <div className="col-xs-5 job-col">
                             <div className="job-name">
                                 <span>{'v' + ":" + app.revision}</span>
                             </div>
                         </div>
-                        <div className="col-xs-3 job-col">
+                        <div className="col-xs-5 job-col">
                             <div>{bidsContainer}</div>
                         </div>
-                        <div className="col-xs-3 job-col">
-                            <div className={app.status}>{app.status === 'ACTIVE' ? activeStatus : inactiveStatus}</div>
-                        </div>
-                        <div className="col-xs-3  job-col last">
+                        <div className="col-xs-2  job-col last">
                             <div className="tools clearfix">
                                 <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._editJobDefinition.bind(this, app)} ><i className="fa fa-pencil" ></i> Edit </button>
-                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._disableJobDefinition.bind(this, app)} ><i className="fa fa-ban" ></i> Disable</button>
+                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._deleteJobDefinition.bind(this, app)} ><i className="fa fa-trash" ></i> Delete</button>
                             </div>
                         </div>
                     </div>
@@ -97,8 +93,8 @@ let Apps = React.createClass({
         actions.editJobDefinition(app);
     },
 
-    _disableJobDefinition(app) {
-        actions.disableJobDefinition(app);
+    _deleteJobDefinition(app) {
+        actions.deleteJobDefinition(app);
     }
 
 });

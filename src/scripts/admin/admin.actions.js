@@ -12,7 +12,7 @@ var Actions = Reflux.createActions([
     'searchUser',
     'submitJobDefinition',
     'editJobDefinition',
-    'disableJobDefinition',
+    'deleteJobDefinition',
     'toggleModal',
     'toggleSuperUser',
     'unBlacklistUser',
