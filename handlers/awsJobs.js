@@ -10,7 +10,6 @@ import {ObjectID}    from 'mongodb';
 import archiver      from 'archiver';
 import config from '../config';
 import async from 'async';
-import notifications from '../libs/notifications';
 import emitter from '../libs/events';
 
 let c = mongo.collections;
