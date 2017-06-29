@@ -76,10 +76,8 @@ let Apps = React.createClass({
                             <div>{bidsContainer}</div>
                         </div>
                         <div className="col-xs-2  job-col last">
-                            <div className="tools clearfix">
-                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._editJobDefinition.bind(this, app)} ><i className="fa fa-pencil" ></i> Edit </button>
-                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._deleteJobDefinition.bind(this, app)} ><i className="fa fa-trash" ></i> Delete</button>
-                            </div>
+                            <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._editJobDefinition.bind(this, app)} ><i className="fa fa-pencil" ></i> Edit </button>
+                            <WarnButton action={this._deleteJobDefinition.bind(this, app)} icon="fa-trash" message="Delete"/>
                         </div>
                     </div>
                 </div>
