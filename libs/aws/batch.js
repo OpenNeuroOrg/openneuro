@@ -2,6 +2,10 @@
 import mongo from '../../libs/mongo';
 import async from 'async';
 import config from '../../config';
+import cron from 'cron';
+
+//Handlers (need access to AwS Jobs handler to kickoff server side polling)
+import awsJobs from '../../handlers/awsJobs';
 
 let c = mongo.collections;
 
@@ -13,6 +17,34 @@ function _depsObjects(depsIds) {
         return {'jobId': depId};
     });
 }
+
+// aws polling cron  -------------------------------------
+
+new cron.CronJob('*/10 * * * * *', () => {
+    let c = mongo.collections;
+    /**
+     * queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
+     * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
+     * polling occurs on a minute interval
+     */
+    c.crn.jobs.findAndModify(
+    {'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'UPLOADING']}},
+    {'analysis.statusAge': 1},
+    {$set: {'analysis.statusAge': new Date()}},
+    {},
+    (err, res) => {
+        // There might be no jobs to poll
+        if (res.ok && res.value) {
+            let job = res.value;
+            // handling rejected jobs here so we can send notifications for those jobs
+            if(job.analysis.status === 'REJECTED') {
+                awsJobs.jobComplete(job, job.userId);
+            } else {
+                awsJobs.getJobStatus(job, job.userId);
+            }
+        }
+    });
+}, null, true, 'America/Los_Angeles');
 
 export default (aws) => {
 
