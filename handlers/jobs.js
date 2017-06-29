@@ -267,7 +267,7 @@ let handlers = {
         }
         let jobsResults = c.crn.jobs.find(jobsQuery);
         if (req.query.latest) {
-            jobsResults = jobsResults.sort({'analysis.created': 1}).limit(1);
+            jobsResults = jobsResults.sort({'analysis.created': -1}).limit(1);
         }
         jobsResults.toArray((err, jobs) => {
             if (err) {
