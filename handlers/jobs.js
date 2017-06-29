@@ -265,10 +265,7 @@ let handlers = {
         if (req.query.status) {
             jobsQuery['analysis.status'] = req.query.status;
         }
-        let jobsResults = c.crn.jobs.find(jobsQuery);
-        if (req.query.latest) {
-            jobsResults = jobsResults.sort({'analysis.created': -1}).limit(1);
-        }
+        let jobsResults = c.crn.jobs.find(jobsQuery).sort({'analysis.created': -1});
         jobsResults.toArray((err, jobs) => {
             if (err) {
                 res.send(err);
