@@ -410,7 +410,7 @@ let handlers = {
                 // cloning job here and sending out event and email because mongos updateOne does not return updated doc
                 let clonedJob = JSON.parse(JSON.stringify(job));
                 clonedJob.analysis.status = analysis.status;
-                handlers.jobComplete(clonedJob, userId);
+                aws.batch.jobComplete(clonedJob, userId);
             }
 
             let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
@@ -479,22 +479,6 @@ let handlers = {
         }
 
         return logStreamNames;
-    },
-
-    /*
-     * Processes job complete tasks (notifications and event emit)
-     */
-    jobComplete(job, userId) {
-        if(!job.analysis.notification) {
-            emitter.emit(events.JOB_COMPLETED, {job: job, completedDate: new Date()}, userId);
-            notifications.jobComplete(job);
-            let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
-            c.crn.jobs.updateOne({_id: jobId}, {
-                $set:{
-                    'analysis.notification': true
-                }
-            });
-        }
     }
 
 };

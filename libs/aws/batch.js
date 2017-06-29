@@ -1,13 +1,17 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
-import mongo from '../../libs/mongo';
+import mongo from '../mongo';
+import {ObjectID} from 'mongodb';
 import async from 'async';
 import config from '../../config';
+import emitter from '../events';
+import notifications from '../notifications';
 import cron from 'cron';
 
 //Handlers (need access to AwS Jobs handler to kickoff server side polling)
 import awsJobs from '../../handlers/awsJobs';
 
 let c = mongo.collections;
+let events = config.events;
 
 /**
  * Converts a list of job Ids into an array of objects as expected by the Batch API
@@ -38,7 +42,7 @@ new cron.CronJob('*/10 * * * * *', () => {
             let job = res.value;
             // handling rejected jobs here so we can send notifications for those jobs
             if(job.analysis.status === 'REJECTED') {
-                awsJobs.jobComplete(job, job.userId);
+                this.jobComplete(job, job.userId);
             } else {
                 awsJobs.getJobStatus(job, job.userId);
             }
@@ -376,6 +380,22 @@ export default (aws) => {
             }
 
             return null;
+        },
+
+        /*
+         * Processes job complete tasks (notifications and event emit)
+         */
+        jobComplete(job, userId) {
+            if(!job.analysis.notification) {
+                emitter.emit(events.JOB_COMPLETED, {job: job, completedDate: new Date()}, userId);
+                notifications.jobComplete(job);
+                let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
+                c.crn.jobs.updateOne({_id: jobId}, {
+                    $set:{
+                        'analysis.notification': true
+                    }
+                });
+            }
         }
     };
 };
