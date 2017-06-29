@@ -55,11 +55,11 @@ let handlers = {
     },
 
     /**
-    * Disable Job Definition
+    * Delete App Definition
     */
-    disableJobDefinition(req, res, next) {
-        let jobArn = req.body.arn;
-        aws.batch.sdk.deregisterJobDefinition({jobDefinition: jobArn}, (err, data) => {
+    deleteJobDefinition(req, res, next) {
+        let appId = req.params.appId;
+        aws.batch.deleteJobDefinition(appId, (err, data) => {
             if (err) {
                 return next(err);
             } else {

@@ -55,6 +55,28 @@ export default (aws) => {
             batch.registerJobDefinition(jobDef, callback);
         },
 
+        deleteJobDefinition(appId, callback) {
+            let appKeys = appId.split(':');
+            let name = appKeys[0];
+            let revision = parseInt(appKeys[1]);
+            c.crn.jobDefinitions.findOne({jobDefinitionName: name, revision: revision}, {}, (err, jobDef) => {
+                if (err) {
+                    callback(err);
+                }
+                let jobArn = jobDef.jobDefinitionArn;
+                batch.deregisterJobDefinition({jobDefinition: jobArn}, (err, batchData) => {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        // Only remove it from the CRN database if disable succeeded
+                        c.crn.jobDefinitions.remove({jobDefinitionArn: jobArn}, (err) => {
+                            callback(err, batchData);
+                        });
+                    }
+                });
+            });
+        },
+
         /**
          * Start AWS Batch Job
          * starts an aws batch job
