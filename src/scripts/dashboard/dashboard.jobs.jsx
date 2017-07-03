@@ -11,6 +11,8 @@ import Spinner       from '../common/partials/spinner.jsx';
 import Sort          from './dashboard.sort.jsx';
 import Select        from 'react-select';
 
+import bids          from '../utils/bids';
+
 let Jobs = React.createClass({
 
     mixins: [State, Reflux.connect(JobsStore)],
@@ -84,7 +86,7 @@ let Jobs = React.createClass({
                 <div className="fade-in  panel panel-default" key={job._id}>
                     <div className="panel-heading">
                         <div className="header clearfix">
-                            <Link to={'snapshot'} params={{datasetId: job.datasetId, snapshotId: job.snapshotId}} query={{app: job.appLabel, version: job.appVersion, job: job.jobId}}>
+                            <Link to={'snapshot'} params={{datasetId: bids.decodeId(job.datasetId), snapshotId: bids.decodeId(job.snapshotId)}} query={{app: job.appLabel, version: job.appVersion, job: job.jobId}}>
                                 <h4 className="dataset-name">{job.appLabel} - v{job.appVersion}</h4>
                             </Link>
                             <div className="status-container">
