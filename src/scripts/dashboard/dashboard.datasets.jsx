@@ -85,7 +85,7 @@ let Datasets = React.createClass({
                 </div>
             </div>
         );
-        let datasetsDashPublic = <div className="fade-in inner-route clearfix">{datasetsDash}</div>;
+        let datasetsDashPublic = <div className="fade-in clearfix">{datasetsDash}</div>;
 
         return (
            <span>{!isPublic ? datasetsDash : datasetsDashPublic}</span>

@@ -11,6 +11,8 @@ import Spinner       from '../common/partials/spinner.jsx';
 import Sort          from './dashboard.sort.jsx';
 import Select        from 'react-select';
 
+import bids          from '../utils/bids';
+
 let Jobs = React.createClass({
 
     mixins: [State, Reflux.connect(JobsStore)],
@@ -19,11 +21,14 @@ let Jobs = React.createClass({
 
     componentDidMount() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
+        let query = this.getQuery();
+        let selectedPipeline = typeof query.pipeline != 'undefined' && query.pipeline || null;
         Actions.update({isPublic});
-        Actions.getJobs(isPublic);
+        Actions.getJobs(isPublic, {pipeline: selectedPipeline, version: null});
     },
 
     render () {
+        let isPublic = this.state.isPublic;
         let jobs = this.state.visiblejobs.length === 0 ? <div className="col-xs-12"><h3>no results please try again</h3></div> : this._jobs(this.state.visiblejobs) ;
         return (
             <div>
@@ -31,7 +36,7 @@ let Jobs = React.createClass({
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
                             <div className="row">
-                                <div className="col-md-5"><h2>My Analyses</h2></div>
+                                <div className="col-md-5"><h2>{isPublic ? 'My' : 'Public'} Analyses</h2></div>
                                 <div className="col-md-7">{this._filter()}</div>
                             </div>
                         </div>
@@ -81,7 +86,7 @@ let Jobs = React.createClass({
                 <div className="fade-in  panel panel-default" key={job._id}>
                     <div className="panel-heading">
                         <div className="header clearfix">
-                            <Link to={'snapshot'} params={{datasetId: job.datasetId, snapshotId: job.snapshotId}} query={{app: job.appLabel, version: job.appVersion, job: job.jobId}}>
+                            <Link to={'snapshot'} params={{datasetId: bids.decodeId(job.datasetId), snapshotId: bids.decodeId(job.snapshotId)}} query={{app: job.appLabel, version: job.appVersion, job: job.jobId}}>
                                 <h4 className="dataset-name">{job.appLabel} - v{job.appVersion}</h4>
                             </Link>
                             <div className="status-container">

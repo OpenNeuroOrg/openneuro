@@ -224,12 +224,44 @@ let datasetStore = Reflux.createStore({
             let logsText = Object.keys(logs).map((taskLogs) => {
                 return logs[taskLogs].reduce((taskLogs, logObj) => {
                     return taskLogs + logObj.message + '\n  ';
-                }, taskLogs + ':'); // Identify which task
+                }, '\n ==== ' + taskLogs + ' ====:\n'); // Identify which task
             }).join('\n');
             this.update({
                 displayFile: {
                     name: 'Logs',
                     text: logsText
+                },
+                modals
+            });
+        });
+    },
+
+    downloadLogs(id, callback) {
+        callback(config.crn.url + "jobs/" + id + "/logs/download");
+    },
+
+    getLogstream(logstreamName, callback) {
+        crn.getLogstream(logstreamName, (err, res) => {
+            // Default text in case logs are missing despite no errors
+            let logsText = "No logs available.";
+            let modals = this.data.modals;
+            let logs = res.body;
+            modals.displayFile = true;
+            if(callback) {callback();}
+            if (err) {
+                logsText = JSON.stringify(err);
+            } else if (logs) {
+                // Append all rows together for in-browser display
+                // Replaces the default text with the real logs
+                logsText = logs.map((line) => {
+                    return line.message;
+                }).join('\n');
+            }
+            this.update({
+                displayFile: {
+                    name: 'Logs',
+                    text: logsText,
+                    link: '/logs/' + logstreamName + '.json'
                 },
                 modals
             });
@@ -487,10 +519,12 @@ let datasetStore = Reflux.createStore({
             }
             description.Authors = authors;
 
-            for (let referencesAndLink of description.ReferencesAndLinks) {
-                referencesAndLinks.push(referencesAndLink);
+            if (description.ReferencesAndLinks) {
+                for (let referencesAndLink of description.ReferencesAndLinks) {
+                    referencesAndLinks.push(referencesAndLink);
+                }
+                description.ReferencesAndLinks = referencesAndLinks;
             }
-            description.ReferencesAndLinks = referencesAndLinks;
 
             this.updateModified();
             scitran.updateFileFromString('projects', datasetId, 'dataset_description.json', JSON.stringify(description), 'application/json', ['project'], callback);
@@ -969,7 +1003,6 @@ let datasetStore = Reflux.createStore({
     },
 
     pollJob(jobId, snapshotId) {
-        let interval = 5000;
         let poll = (jobId) => {
             if (this.data.dataset && this.data.dataset._id === snapshotId) {
                 this.refreshJob(jobId, (job) => {
@@ -980,6 +1013,7 @@ let datasetStore = Reflux.createStore({
                     let needsUpdate = (!finished && !failed) || (finished && !hasResults);
 
                     if (needsUpdate && this.data.dataset && job.snapshotId === this.data.dataset._id) {
+                        let interval = this._getInterval(20000, 40000); // random interval between 20 and 40 seconds
                         setTimeout(poll.bind(this, jobId), interval);
                     }
                 });
@@ -996,7 +1030,7 @@ let datasetStore = Reflux.createStore({
 
         // If the participant_label parameter exists and has no value, use all subjects
         if (parameters.hasOwnProperty('participant_label') &&
-            parameters.participant_label.length === 0) {
+            (parameters.participant_label.length === 0 || (parameters.participant_label.length === 1 && parameters.participant_label[0] === '' ))) {
             parameters.participant_label = this.data.dataset.summary.subjects;
         }
 
@@ -1261,6 +1295,10 @@ let datasetStore = Reflux.createStore({
         if (typeof value === 'boolean') {showSidebar = value;}
         window.localStorage.showSidebar = showSidebar;
         this.update({showSidebar});
+    },
+
+    _getInterval (min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
 });

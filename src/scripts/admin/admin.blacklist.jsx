@@ -42,7 +42,7 @@ let Blacklist = React.createClass({
         });
 
         return (
-            <div className="dashboard-dataset-teasers fade-in inner-route admin-blacklist clearfix">
+            <div className="dashboard-dataset-teasers fade-in admin-blacklist clearfix">
                 <h2>Blocked Users</h2>
                 <button className="btn-blue" onClick={actions.blacklistModal} >
                     <span>Block a User</span>

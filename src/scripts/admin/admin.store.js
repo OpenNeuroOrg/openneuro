@@ -324,13 +324,12 @@ let UserStore = Reflux.createStore({
         });
     },
 
-    disableJobDefinition (jobDefinition, callback) {
-        let name = jobDefinition.jobDefinitionName;
-        let jobArn = jobDefinition.jobDefinitionArn;
-        crn.disableJobDefinition(name, jobArn, (err, data) => {
+    deleteJobDefinition (jobDefinition, callback) {
+        let appId = jobDefinition.jobDefinitionName + ':' + jobDefinition.revision;
+        crn.deleteJobDefinition(appId, (err, data) => {
             //TODO Update job list
-            console.log('Job disabled');
-            datasetActions.loadApps(); //need to reload apps for UI to update with Inactive status on disable
+            console.log('Job deleted');
+            datasetActions.loadApps(); //need to reload apps for UI to update with Inactive status on delete
             if(callback){
                 callback();
             }

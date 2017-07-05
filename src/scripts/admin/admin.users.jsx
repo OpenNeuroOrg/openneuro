@@ -43,7 +43,7 @@ let users = React.createClass({
         });
 
         return (
-            <div className="dashboard-dataset-teasers fade-in inner-route admin-users clearfix">
+            <div className="dashboard-dataset-teasers fade-in admin-users clearfix">
                 <div className="header-wrap clearfix">
                     <div className="col-sm-9">
                         <h2>Current Users</h2>

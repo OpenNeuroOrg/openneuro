@@ -99,17 +99,18 @@ export default {
     },
 
     /**
-    * Disable Job
+    * Delete app definition
     */
-    disableJobDefinition(name, jobArn, callback) {
-        request.put(config.crn.url + 'jobs/definitions/' + name, {body: {arn: jobArn}}, callback);
+    deleteJobDefinition(appId, callback) {
+        request.del(config.crn.url + 'jobs/definitions/' + appId, {}, callback);
     },
 
     /**
      * Get Jobs
      */
-    getJobs(callback, isPublic) {
-        request.get(config.crn.url + 'jobs', {query: {public: isPublic}}, callback);
+    getJobs(callback, isPublic, appName = null, status = null, latest = null) {
+        let query = {public: isPublic, appName: appName, status: status, latest: latest};
+        request.get(config.crn.url + 'jobs', {query: query}, callback);
     },
 
     /**
@@ -187,8 +188,18 @@ export default {
         request.post(config.crn.url + 'datasets/' + datasetId + '/validate', {}, callback);
     },
 
+// Logs ------------------------------------------------------------------------------
+
     getJobLogs(jobId, callback) {
         request.get(config.crn.url + 'jobs/' + jobId + '/logs', {}, callback);
+    },
+
+    getLogstream(streamName, callback) {
+        request.get(config.crn.url + 'logs/' + streamName, {}, callback);
+    },
+
+    downloadJobLogs(jobId, callback) {
+        request.get(config.crn.url + 'jobs/' + jobId + '/logs/download', {}, callback);
     }
 
 };

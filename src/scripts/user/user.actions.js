@@ -7,7 +7,8 @@ var Actions = Reflux.createActions([
     'updatePreferences',
     'refresh',
     'signIn',
-    'signOut'
+    'signOut',
+    'toggleModal'
 ]);
 
 export default Actions;

@@ -7,6 +7,8 @@ import moment     from 'moment';
 import FileTree   from '../common/partials/file-tree.jsx';
 import {Accordion, Panel} from 'react-bootstrap';
 
+import config     from '../../../config.js';
+
 class JobAccordion extends React.Component {
 
 // life cycle methods ------------------------------------------------------------
@@ -163,16 +165,78 @@ class JobAccordion extends React.Component {
     }
 
     _logs(run) {
+        let logstreams = [];
+        if (run.analysis.hasOwnProperty('logstreams') && run.analysis.logstreams.length > 0) {
+            // Group streams by analysis level. If no analysis levels exist (legacy logs) group as "logs"
+            let groupedStreams = run.analysis.logstreams.reduce((acc, logstream) => {
+                let analysisLevel;
+                if(logstream.environment) {
+                    analysisLevel = logstream.environment.filter((env) => { return env.name === "BIDS_ANALYSIS_LEVEL" })[0].value;
+                } else {
+                    analysisLevel = "logs";
+                }
+
+                if(!acc[analysisLevel]) {
+                    acc[analysisLevel] = [];
+                }
+                acc[analysisLevel].push(logstream);
+                return acc;
+            }, {});
+            //Generate logstreams jsx grouped by analysis level. How do we want to use exit code?
+            Object.keys(groupedStreams).forEach((level) => {
+                let streams = groupedStreams[level].map((logstream, index) => {
+                    let label, exitCode;
+                    if (logstream.environment) {
+                        let bidsArgs = logstream.environment.filter((env) => { return env.name === "BIDS_ARGUMENTS" })[0].value;
+                        label = bidsArgs;
+                    } else {
+                        label = "Log #" + (index + 1);
+                    }
+
+                    if(typeof logstream.exitCode === 'number') {
+                        exitCode = logstream.exitCode;
+                    }
+                    let exitCodeClass = "exit-code " + (exitCode ? "fail" : ""); // 0 is passing
+                    let exitCodeStatus;
+
+                    if(exitCode === 0){
+                       exitCodeStatus =  (<span className="label label-success">SUCCESS</span>);
+                    }else{
+                        exitCodeStatus = (<span><span className="label label-danger">FAIL</span> Exit code {exitCode}</span>);
+                    }
+
+
+                    return (
+                        <span className="job-log" key={label}>
+                            <WarnButton
+                                icon="fa-eye"
+                                message={label}
+                                warn={false}
+                                action={actions.getLogstream.bind(this, logstream.name)} />
+                            {exitCode != undefined ? <span className={exitCodeClass}>{exitCodeStatus}</span> : null}
+                        </span>
+                    );
+                });
+                logstreams.push(<span key={level}>{level.toUpperCase()}{streams}</span>)
+            });
+        }
+
         return (
             <Accordion accordion className="results">
                 <Panel className="fade-in" header="Logs" key={run._id} eventKey={run._id}>
-                    <span className="view-file">
+                    <span className="download-all">
                         <WarnButton
-                            icon="fa-eye"
-                            message=" View Logs"
-                            warn={false}
-                            action={actions.getJobLogs.bind(this, run._id)} />
+                            icon="fa-download"
+                            message=" DOWNLOAD All LOGS"
+                            prepDownload={actions.downloadLogs.bind(this, run._id)} />
                     </span>
+                    <div className="file-structure fade-in panel-group">
+                        <div className="panel panel-default">
+                            <div className="panel-collapse" aria-expanded="false" >
+                                {logstreams}
+                            </div>
+                        </div>
+                    </div>
                 </Panel>
             </Accordion>
         );

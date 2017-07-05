@@ -11,6 +11,7 @@ import {Link}      from 'react-router';
 import {Panel}     from 'react-bootstrap';
 import pluralize   from 'pluralize';
 import Spinner     from '../common/partials/spinner.jsx';
+import markdown    from '../utils/markdown';
 
 // component setup ----------------------------------------------------
 
@@ -55,7 +56,7 @@ let Pipelines = React.createClass({
                 <h4>Featured</h4>
                 <ul>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'fmriprep')}>fmriprep</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'FMRIPREP')}>FMRIPREP</button>
                     </li>
                     <li>
                         <button onClick={FPActions.selectPipeline.bind(null, 'MRIQC')}>MRIQC</button>
@@ -64,7 +65,7 @@ let Pipelines = React.createClass({
                         <button onClick={FPActions.selectPipeline.bind(null, 'FreeSurfer')}>FreeSurfer</button>
                     </li>
                     <li>
-                        <button onClick={FPActions.selectPipeline.bind(null, 'CPAC')}>CPAC</button>
+                        <button onClick={FPActions.selectPipeline.bind(null, 'ndmg')}>ndmg</button>
                     </li>
                 </ul>
             </div>
@@ -99,6 +100,25 @@ let Pipelines = React.createClass({
 
     _pipelineDetail(pipeline) {
         let longDescription = pipeline.descriptions;
+        let description = longDescription.description ? markdown.format(longDescription.description) : {__html: ''};
+        let acknowledgments = '';
+        let support = '';
+        if (longDescription.acknowledgments) {
+            acknowledgments = (
+                <span>
+                    <h4>Acknowledgments</h4>
+                    <div dangerouslySetInnerHTML={markdown.format(longDescription.acknowledgments)}/>
+                </span>
+            );
+        }
+        if (longDescription.support) {
+            support = (
+                <span>
+                    <h4>Support</h4>
+                    <div dangerouslySetInnerHTML={markdown.format(longDescription.support)}/>
+                </span>
+            );
+        }
         return (
             <div className="selected-pipeline fade-in">
                 <div className="container slide-in-down">
@@ -107,11 +127,9 @@ let Pipelines = React.createClass({
                         <div className="col-sm-6 mate-slide">
                             <a href="#" className="close-selected" onClick={FPActions.selectPipeline.bind(null, '')}>X CLOSE</a>
                             <h2>{pipeline.jobDefinitionName}</h2>
-                            <p>{longDescription.description}</p>
-                            <h4>Acknowledgments</h4>
-                            <p>{longDescription.acknowledgments}</p>
-                            <h4>Support</h4>
-                            <p><a href={'http://' + longDescription.support} target="_blank">{longDescription.support}</a></p>
+                            <div dangerouslySetInnerHTML={description}/>
+                            {acknowledgments}
+                            {support}
                         </div>
                         {this._exampleResults()}
                     </div>
@@ -145,7 +163,7 @@ let Pipelines = React.createClass({
                         <span>from dataset {exampleJob.datasetLabel}</span>
                     </div>
                     <div className="col-sm-6 ">
-                        <a className="explore-more pull-right" href="#"><i className="fa fa-area-chart" ></i> Explore More</a>
+                        <Link to="publicJobs" className="explore-more pull-right" query={{pipeline: exampleJob.appLabel}}><i className="fa fa-area-chart" ></i> Explore More</Link>
                     </div>
                 </div>
                 <Panel className="jobs" header={analysisLink} eventKey={exampleJob.appId}>

@@ -52,7 +52,7 @@ export default class ErrorLink extends React.Component {
             for (var j = 0; j < issues[i].files.length; j++) {
                 var file = issues[i].files[j];
                 issueString += '\tType:\t\t' + type + '\n';
-                if (!file) {continue;}
+                if (!(file && file.file)) {continue;}
                 if (file.file.name)    {issueString += '\tFile:\t\t' + file.file.name + '\n';}
                 if (file.file.webkitRelativePath)    {issueString += '\tLocation:\t\t' + file.file.webkitRelativePath + '\n';}
                 if (file.reason)    {issueString += '\tReason:\t\t' + file.reason + '\n';}
@@ -67,7 +67,7 @@ export default class ErrorLink extends React.Component {
 }
 
 ErrorLink.propTypes = {
-    errors:React.PropTypes.array,
+    errors:React.PropTypes.oneOfType([React.PropTypes.array,React.PropTypes.string]),
     warnings:React.PropTypes.array,
     dirName:React.PropTypes.string
 };

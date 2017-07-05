@@ -18,7 +18,9 @@ let Apps = React.createClass({
 
     render() {
         let noJobs = <div className="no-results">There are no apps defined.</div>;
-        let jobs = batch.filterAppDefinitions(this.state.datasets.apps).map((app, index) => {
+        let jobs = batch.filterAppDefinitions(this.state.datasets.apps).sort((a,b) => {
+            return Object.keys(a)[0].localeCompare(Object.keys(b)[0]);
+        }).map((app, index) => {
             //Need to explain this. And should probably stop calling everything app.
             let appName = Object.keys(app)[0];
             let list = this._versionList(app[appName]);
@@ -26,10 +28,9 @@ let Apps = React.createClass({
                 <Panel header={appName} eventKey={index} key={index} className="col-xs-12 job-panel-wrap">
                     <div className="job-panel-header clearfix col-xs-12" >
                         <div className="row">
-                            <div className="col-xs-3 job-col"><label>{app[appName][0].jobDefinitionName} Version</label></div>
-                            <div className="col-xs-3 job-col"><label>Container Image</label></div>
-                            <div className="col-xs-3 job-col"><label>Status</label></div>
-                            <div className="col-xs-3 job-col last"><label>Actions</label></div>
+                            <div className="col-xs-5 job-col"><label>{app[appName][0].jobDefinitionName} Version</label></div>
+                            <div className="col-xs-5 job-col"><label>Container Image</label></div>
+                            <div className="col-xs-2 job-col last"><label>Actions</label></div>
                         </div>
                     </div>
                     {list}
@@ -38,7 +39,7 @@ let Apps = React.createClass({
         });
 
         return (
-            <div className="dashboard-dataset-teasers fade-in inner-route admin-jobs clearfix">
+            <div className="dashboard-dataset-teasers fade-in admin-jobs clearfix">
                 <div className="clearfix">
                     <h2>App Definitions</h2>
                     <button className="btn-blue" onClick={actions.toggleModal.bind(this, 'defineJob')} >
@@ -66,22 +67,17 @@ let Apps = React.createClass({
             return (
                 <div className="job-panel col-xs-12" key={index}>
                     <div className="row">
-                        <div className="col-xs-3 job-col">
+                        <div className="col-xs-5 job-col">
                             <div className="job-name">
                                 <span>{'v' + ":" + app.revision}</span>
                             </div>
                         </div>
-                        <div className="col-xs-3 job-col">
+                        <div className="col-xs-5 job-col">
                             <div>{bidsContainer}</div>
                         </div>
-                        <div className="col-xs-3 job-col">
-                            <div className={app.status}>{app.status === 'ACTIVE' ? activeStatus : inactiveStatus}</div>
-                        </div>
-                        <div className="col-xs-3  job-col last">
-                            <div className="tools clearfix">
-                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._editJobDefinition.bind(this, app)} ><i className="fa fa-pencil" ></i> Edit </button>
-                                <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._disableJobDefinition.bind(this, app)} ><i className="fa fa-ban" ></i> Disable</button>
-                            </div>
+                        <div className="col-xs-2  job-col last">
+                            <button className="tool cte-edit-button btn btn-admin fade-in" onClick={this._editJobDefinition.bind(this, app)} ><i className="fa fa-pencil" ></i> Edit </button>
+                            <WarnButton action={this._deleteJobDefinition.bind(this, app)} icon="fa-trash" message="Delete"/>
                         </div>
                     </div>
                 </div>
@@ -95,8 +91,8 @@ let Apps = React.createClass({
         actions.editJobDefinition(app);
     },
 
-    _disableJobDefinition(app) {
-        actions.disableJobDefinition(app);
+    _deleteJobDefinition(app) {
+        actions.deleteJobDefinition(app);
     }
 
 });

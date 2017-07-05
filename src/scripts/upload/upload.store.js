@@ -155,6 +155,7 @@ let UploadStore = Reflux.createStore({
             uploadStatus: 'files-selected',
             showRename: true,
             showModal: true,
+            showDisclaimer: true,
             selectedName: dirName,
             renameEnabled: renameEnabled,
             showRenameInput: false,
@@ -177,21 +178,24 @@ let UploadStore = Reflux.createStore({
             validate.BIDS(list, {}, (issues, summary) => {
 
                 if (issues === 'Invalid') {
-                    this.update({errors: 'Invalid'});
-                }
+                    this.update({
+                        errors: 'Invalid',
+                        uploadStatus: 'validated'
+                    });
+                } else {
+                    let errors   = issues.errors   ? issues.errors   : [];
+                    let warnings = issues.warnings ? issues.warnings : [];
 
-                let errors   = issues.errors   ? issues.errors   : [];
-                let warnings = issues.warnings ? issues.warnings : [];
+                    this.update({
+                        errors: errors,
+                        warnings: warnings,
+                        summary: summary,
+                        uploadStatus: 'validated'
+                    });
 
-                this.update({
-                    errors: errors,
-                    warnings: warnings,
-                    summary: summary,
-                    uploadStatus: 'validated'
-                });
-
-                if (errors.length === 0 && warnings.length === 0) {
-                    this.checkExists();
+                    if (errors.length === 0 && warnings.length === 0) {
+                        this.checkExists();
+                    }
                 }
             });
         });

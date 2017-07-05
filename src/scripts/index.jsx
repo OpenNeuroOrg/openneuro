@@ -35,7 +35,7 @@ let App = React.createClass({
         return (
             <span>
                 <div className={'page' + pageClasses}>
-                    {!bowser.chrome && !bowser.chromium ? <Happybrowser /> : null }
+                    {this._incompatibleBrowser(bowser) ? <Happybrowser /> : null }
                     <span className={'nav-alert-state-' + alertState}>
                         <Alert />
                     </span>
@@ -50,6 +50,18 @@ let App = React.createClass({
                 </div>
             </span>
         );
+    },
+
+    _incompatibleBrowser(browser) {
+        if(browser.chrome || browser.chromium) {
+            if(browser.version < 49) {
+                return true;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
 });

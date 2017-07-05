@@ -50,6 +50,14 @@ let UserStore = Reflux.createStore({
      */
     authInstance: {},
 
+
+    /**
+     * Toggle Modal
+    */
+    toggleModal () {
+        this.update({showSupportModal: !this.data.showSupportModal});
+    },
+
 // data ------------------------------------------------------------------------------
 
     data: {},
@@ -79,7 +87,8 @@ let UserStore = Reflux.createStore({
             scitran: window.localStorage.scitran ? JSON.parse(window.localStorage.scitran) : null,
             loading: false,
             signinError: '',
-            showUploadModal: false
+            showUploadModal: false,
+            showSupportModal: false
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data);
