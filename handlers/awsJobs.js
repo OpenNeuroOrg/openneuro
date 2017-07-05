@@ -244,7 +244,6 @@ let handlers = {
                 });
             }, (err) => {
                 if(err) {return next(err);}
-                console.log("ALL JOBS CANCELED");
                 res.send(true);
             });
         });
