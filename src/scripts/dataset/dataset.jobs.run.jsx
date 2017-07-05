@@ -59,7 +59,7 @@ class JobAccordion extends React.Component {
                 <label>Status</label>
                 <span className="badge">
                     {this._status(run.analysis.status)}
-                </span>{run.analysis.status === 'RUNNING' ? <button onClick={actions.cancelJob.bind(this, run)}>CANCEL</button> : null}<br/>
+                </span>{run.analysis.status === 'PENDING' || run.analysis.status === 'RUNNING' ? <button onClick={actions.cancelJob.bind(this, run)}>CANCEL</button> : null}<br/>
                 <span className="meta">
                     <label>Run on </label><strong>{moment(run.analysis.created).format('L')}</strong> at <strong>{moment(run.analysis.created).format('LT')}</strong>
                     {runBy}
