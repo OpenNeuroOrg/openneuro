@@ -21,7 +21,7 @@ export default {
 
     create(req, res) {
         counter.getNext('datasets', (datasetNumber) => {
-            let offset = 100;
+            let offset = 1000;
             datasetNumber += offset;
             datasetNumber = 'ds' + ('000000' + datasetNumber).substr(-6,6);
             req.body._id = datasetNumber;

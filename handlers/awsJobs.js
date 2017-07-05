@@ -10,7 +10,6 @@ import {ObjectID}    from 'mongodb';
 import archiver      from 'archiver';
 import config from '../config';
 import async from 'async';
-import notifications from '../libs/notifications';
 import emitter from '../libs/events';
 
 let c = mongo.collections;
@@ -55,11 +54,11 @@ let handlers = {
     },
 
     /**
-    * Disable Job Definition
+    * Delete App Definition
     */
-    disableJobDefinition(req, res, next) {
-        let jobArn = req.body.arn;
-        aws.batch.sdk.deregisterJobDefinition({jobDefinition: jobArn}, (err, data) => {
+    deleteJobDefinition(req, res, next) {
+        let appId = req.params.appId;
+        aws.batch.deleteJobDefinition(appId, (err, data) => {
             if (err) {
                 return next(err);
             } else {
@@ -319,47 +318,40 @@ let handlers = {
     getJobLogs (req, res, next) {
         let jobId = req.params.jobId; //this will be the mongoId for a given analysis
 
-        //Recursive function to snag all logs from a logstream
-        let logsFunc = (params, logs, callback) => {
-            let logStreamName = params.logStreamName;
-            aws.cloudwatch.sdk.getLogEvents(params, (err, data)=> {
-                if(err) {return callback(err);}
-                //Cloudwatch returns a token even if there are no events. That is why checking events length
-                if((data.events && data.events.length > 0) && data.nextForwardToken) {
-                    if(!logs[logStreamName]) {
-                        logs[logStreamName] = [];
-                    }
-                    logs[logStreamName] = logs[logStreamName].concat(data.events);
-                    params.nextToken = data.nextForwardToken;
-                    if(params.startFromHead) {
-                        delete params.startFromHead; //only necessary on first call I think.
-                    }
-                    logsFunc(params, logs, callback);
-                } else {
-                    callback();
-                }
-            });
-        };
-
-        c.crn.jobs.findOne({_id: ObjectID(jobId)}, {}, (err, job) => {
-            if(err) {next(err);}
-            let logStreamNames = job.analysis.logstreams || [];
-            let logs = {};
-            //cloudwatch log events requires knowing jobId and taskArn(s)
-            // taskArns are available on job which we can access with a describeJobs call to batch
-            async.eachSeries(logStreamNames, (logStreamName, cb) => {
-                // this currently works to grab the latest logs for a job. Need to update to get all logs for a job using next tokens
-                // however there is a bug that will require a little more work to make this happen. https://forums.aws.amazon.com/thread.jspa?threadID=251240&tstart=0
-                let params = {
-                    logGroupName: config.aws.cloudwatchlogs.logGroupName,
-                    logStreamName: logStreamName,
-                    startFromHead: true
-                };
-                logsFunc(params, logs, cb);
-            }, (err) =>{
-                if(err) {return next(err);}
+        aws.cloudwatch.getLogsByJobId(jobId, (err, logs) => {
+            if (err) {
+                return next(err);
+            } else {
                 res.send(logs);
-            });
+            }
+        });
+    },
+
+    downloadJobLogs (req, res, next) {
+        let jobId = req.params.jobId; //this will be the mongoId for a given analysis
+
+        aws.cloudwatch.getLogsByJobId(jobId, (err, logs) => {
+            if (err) {
+                return next(err);
+            } else {
+                res.attachment(jobId + '.json');
+                res.send(logs);
+            }
+        });
+    },
+
+    getLogstream(req, res, next) {
+        let appName = req.params.app;
+        let jobId = req.params.jobId;
+        let taskArn = req.params.taskArn;
+        let key = appName + '/' + jobId + '/' + taskArn;
+
+        aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
+            if (err) {
+                return next(err);
+            } else {
+                res.send(logs);
+            }
         });
     },
 
@@ -416,40 +408,6 @@ let handlers = {
     },
 
     /*
-    * Server side polling
-    * want to poll jobs at a 5 minute interval in case client side polling stops
-    * server side polling is only responsible for sending out notifications and emitting completion event
-    * results processing will still occur when client is accessed and polling starts from client
-    */
-    _pollJob(id, userId) {
-        let interval = 300000; // 5 minute interval for server side polling
-        let poll = (jobId) => {
-            c.crn.jobs.findOne({_id: jobId}, {}, (err, job) => {
-                let status = job.analysis.status;
-                let finished = status === 'SUCCEEDED' || status === 'FAILED';
-                let clonedJob = JSON.parse(JSON.stringify(job));
-                //if analysis is finished and notfication has not been sent, send notification.
-                if(finished) {
-                    handlers._jobComplete(clonedJob, userId);
-                } else {
-                    handlers.getJobStatus(job, userId, (err, data) => {
-                        if(err) {
-                            //failing silently here
-                            console.log(err);
-                            return;
-                        }
-                        if(!(data.analysis.status === 'SUCCEEDED' || data.analysis.status === 'FAILED')) {
-                            setTimeout(poll.bind(this, jobId), interval);
-                        }
-                    });
-                }
-            });
-        };
-
-        setTimeout(poll.bind(this, id), interval);
-    },
-
-    /*
      * Gets jobs for a given analysis from batch, checks overall status and callsback with a snapshot of the analysis status
      */
     getJobStatus(job, userId, callback) {
@@ -468,52 +426,46 @@ let handlers = {
             analysis.created = createdDate;
             analysis.analysisId = analysisId;
 
+            let logStreams = handlers._buildLogStreams(jobs);
+
             if(finished) {
-                let finalStatus = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
-                let logStreams = handlers._buildLogStreams(jobs);
-
-                let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
-                let params = {
-                    Bucket: 'openneuro.outputs',
-                    Prefix: s3Prefix,
-                    StartAfter: s3Prefix
-                };
-
+                analysis.status = !statusArray.length || statusArray.some((status)=>{ return status === 'FAILED';}) ? 'FAILED' : 'SUCCEEDED';
                 // emit a job finished event so we can add logs and sent notification email
                 // cloning job here and sending out event and email because mongos updateOne does not return updated doc
                 let clonedJob = JSON.parse(JSON.stringify(job));
-                clonedJob.analysis.status = finalStatus;
-                handlers._jobComplete(clonedJob, userId);
-
-                aws.s3.getJobResults(params, (err, results) => {
-                    if(err) {return callback(err);}
-                    //update job with status, results and logstreams
-                    let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
-                    c.crn.jobs.updateOne({_id: jobId}, {
-                        $set:{
-                            'analysis.status': finalStatus,
-                            results: results,
-                            'analysis.logstreams': logStreams,
-                            'analysis.notification': true
-                        }
-                    });
-                });
-            } else if(analysis.status != job.analysis.status) {
-                let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
-                //if status changes, update mongo
-                c.crn.jobs.updateOne({_id: jobId}, {
-                    $set:{
-                        'analysis.status': analysis.status
-                    }
-                });
+                clonedJob.analysis.status = analysis.status;
+                aws.batch.jobComplete(clonedJob, userId);
             }
 
-            callback(null, {
-                analysis: analysis,
-                jobId: analysisId,
-                datasetId: job.datasetId,
-                snapshotId: job.snapshotId
+            let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/';
+            let params = {
+                Bucket: 'openneuro.outputs',
+                Prefix: s3Prefix,
+                StartAfter: s3Prefix
+            };
+
+            aws.s3.getJobResults(params, (err, results) => {
+                if(err) {return callback(err);}
+                //update job with status, results and logstreams
+                let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
+                let jobUpdate = {
+                    'analysis.status': analysis.status,
+                    results: results
+                };
+                c.crn.jobs.updateOne({_id: jobId}, {
+                    $set: jobUpdate,
+                    $addToSet: {'analysis.logstreams': {$each: logStreams}}
+                });
             });
+
+            if (callback) {
+                callback(null, {
+                    analysis: analysis,
+                    jobId: analysisId,
+                    datasetId: job.datasetId,
+                    snapshotId: job.snapshotId
+                });
+            }
         });
     },
 
@@ -538,7 +490,12 @@ let handlers = {
             logStreamNames = jobs.reduce((acc, job) => {
                 if (job.attempts && job.attempts.length > 0) {
                     job.attempts.forEach((attempt)=> {
-                        acc.push(job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop());
+                        let streamObj = {
+                            name: job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop(),
+                            environment: job.container.environment,
+                            exitCode: job.container.exitCode
+                        };
+                        acc.push(streamObj);
                     });
                 }
                 return acc;
@@ -546,22 +503,6 @@ let handlers = {
         }
 
         return logStreamNames;
-    },
-
-    /*
-     * Processes job complete tasks (notifications and event emit)
-     */
-    _jobComplete(job, userId) {
-        if(!job.analysis.notification) {
-            emitter.emit(events.JOB_COMPLETED, {job: job, completedDate: new Date()}, userId);
-            notifications.jobComplete(job);
-            let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
-            c.crn.jobs.updateOne({_id: jobId}, {
-                $set:{
-                    'analysis.notification': true
-                }
-            });
-        }
     }
 
 };

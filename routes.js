@@ -103,12 +103,12 @@ const routes = [
         handler: awsJobs.createJobDefinition
     },
     {
-        method: 'put',
-        url: '/jobs/definitions/:jobArn',
+        method: 'delete',
+        url: '/jobs/definitions/:appId',
         middleware: [
             auth.superuser
         ],
-        handler: awsJobs.disableJobDefinition
+        handler: awsJobs.deleteJobDefinition
     },
     {
         method: 'post',
@@ -193,6 +193,16 @@ const routes = [
         method: 'get',
         url: '/jobs/:jobId/logs',
         handler: awsJobs.getJobLogs
+    },
+    {
+        method: 'get',
+        url: '/jobs/:jobId/logs/download',
+        handler: awsJobs.downloadJobLogs
+    },
+    {
+        method: 'get',
+        url: '/logs/:app/:jobId/:taskArn',
+        handler: awsJobs.getLogstream
     }
 ];
 

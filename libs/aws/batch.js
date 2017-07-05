@@ -1,9 +1,17 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
-import mongo from '../../libs/mongo';
+import mongo from '../mongo';
+import {ObjectID} from 'mongodb';
 import async from 'async';
 import config from '../../config';
+import emitter from '../events';
+import notifications from '../notifications';
+import cron from 'cron';
+
+//Handlers (need access to AwS Jobs handler to kickoff server side polling)
+import awsJobs from '../../handlers/awsJobs';
 
 let c = mongo.collections;
+let events = config.events;
 
 /**
  * Converts a list of job Ids into an array of objects as expected by the Batch API
@@ -13,6 +21,34 @@ function _depsObjects(depsIds) {
         return {'jobId': depId};
     });
 }
+
+// aws polling cron  -------------------------------------
+
+new cron.CronJob('*/10 * * * * *', () => {
+    let c = mongo.collections;
+    /**
+     * queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
+     * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
+     * polling occurs on a minute interval
+     */
+    c.crn.jobs.findAndModify(
+    {'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'UPLOADING']}},
+    {'analysis.statusAge': 1},
+    {$set: {'analysis.statusAge': new Date()}},
+    {},
+    (err, res) => {
+        // There might be no jobs to poll
+        if (res.ok && res.value) {
+            let job = res.value;
+            // handling rejected jobs here so we can send notifications for those jobs
+            if(job.analysis.status === 'REJECTED') {
+                this.jobComplete(job, job.userId);
+            } else {
+                awsJobs.getJobStatus(job, job.userId);
+            }
+        }
+    });
+}, null, true, 'America/Los_Angeles');
 
 export default (aws) => {
 
@@ -53,6 +89,28 @@ export default (aws) => {
             delete jobDef.analysisLevels;
 
             batch.registerJobDefinition(jobDef, callback);
+        },
+
+        deleteJobDefinition(appId, callback) {
+            let appKeys = appId.split(':');
+            let name = appKeys[0];
+            let revision = parseInt(appKeys[1]);
+            c.crn.jobDefinitions.findOne({jobDefinitionName: name, revision: revision}, {}, (err, jobDef) => {
+                if (err) {
+                    callback(err);
+                }
+                let jobArn = jobDef.jobDefinitionArn;
+                batch.deregisterJobDefinition({jobDefinition: jobArn}, (err, batchData) => {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        // Only remove it from the CRN database if disable succeeded
+                        c.crn.jobDefinitions.remove({jobDefinitionArn: jobArn}, (err) => {
+                            callback(err, batchData);
+                        });
+                    }
+                });
+            });
         },
 
         /**
@@ -109,7 +167,7 @@ export default (aws) => {
             return {
                 jobDefinition: job.jobDefinition,
                 jobName:       job.jobName,
-                jobQueue:      'bids-queue',
+                jobQueue:      config.aws.batch.queue,
                 userId: job.userId,
                 parameters:    job.parameters,
                 containerOverrides:{
@@ -249,12 +307,23 @@ export default (aws) => {
                 }
             }).map((key) => {
                 let argument = '--' + key + ' ';
-                let value = parameters[key];
+                let value = typeof parameters[key] === 'string' ? this._formatString(parameters[key]) : parameters[key];
                 if (value instanceof Array) {
-                    value = value.join(' ');
+                    value = value.map((item)=> {
+                        return typeof item === 'string' ? this._formatString(item) : item;
+                    }).join(' ');
                 }
                 return argument.concat(value);
             }).join(' ');
+        },
+
+        /**
+         * If a string argument has any whitespace we need to make sure that we single quote it.
+         * Accepts a string and returns an appropriately formated string
+         */
+        _formatString(str) {
+            let hasSpace = /\s/g.test(str);
+            return (hasSpace ?  '\'' + str + '\'' : str);
         },
 
         /**
@@ -311,6 +380,22 @@ export default (aws) => {
             }
 
             return null;
+        },
+
+        /*
+         * Processes job complete tasks (notifications and event emit)
+         */
+        jobComplete(job, userId) {
+            if(!job.analysis.notification) {
+                emitter.emit(events.JOB_COMPLETED, {job: job, completedDate: new Date()}, userId);
+                notifications.jobComplete(job);
+                let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
+                c.crn.jobs.updateOne({_id: jobId}, {
+                    $set:{
+                        'analysis.notification': true
+                    }
+                });
+            }
         }
     };
 };
