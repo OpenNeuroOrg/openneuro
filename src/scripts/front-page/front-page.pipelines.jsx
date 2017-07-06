@@ -12,6 +12,7 @@ import {Panel}     from 'react-bootstrap';
 import pluralize   from 'pluralize';
 import Spinner     from '../common/partials/spinner.jsx';
 import markdown    from '../utils/markdown';
+import bids        from '../utils/bids';
 
 // component setup ----------------------------------------------------
 
@@ -149,7 +150,7 @@ let Pipelines = React.createClass({
         }
         let analysisLink = (
             <span>
-                <Link to="snapshot" params={{datasetId: exampleJob.datasetId, snapshotId: exampleJob.snapshotId}} query={{app: exampleJob.appLabel, version: exampleJob.appVersion, job: exampleJob.jobId}}>
+                <Link to="snapshot" params={{datasetId: bids.decodeId(exampleJob.datasetId), snapshotId: exampleJob.snapshotId}} query={{app: exampleJob.appLabel, version: exampleJob.appVersion, job: exampleJob.jobId}}>
                 {exampleJob.appLabel + ' - v' + exampleJob.appVersion}
                 </Link>
             </span>
