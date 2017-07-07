@@ -17,7 +17,7 @@ class JobAccordion extends React.Component {
         let run = this.props.run;
 
         // if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0) || (run.logs && run.logs.length > 0)) {
-            if (run.results && run.results.length > 0) {
+        if (run.results && run.results.length > 0) {
             // header with parameters and/or results
             return (
                 <span eventKey={run._id}>
@@ -43,6 +43,7 @@ class JobAccordion extends React.Component {
                         <div className="panel-body">
                             <span className="inner">
                                 {this._parameters(run)}
+                                {this._batchStatus(run)}
                                 {run.analysis.status === 'SUCCEEDED' || run.analysis.status === 'FAILED' ? this._logs(run) : null}
                             </span>
                         </div>
@@ -240,6 +241,34 @@ class JobAccordion extends React.Component {
                 </Panel>
             </Accordion>
         );
+    }
+
+    _batchStatus(run) {
+        let batchStatus = run.analysis.batchStatus;
+        if(batchStatus && batchStatus.length) {
+            batchStatus = batchStatus.map((status) => {
+                return (
+                    <li key={status.job}>
+                        <span>{status.job} : {status.status}</span>
+                    </li>
+                );
+            });
+
+            return (
+                <Accordion accordion className="results">
+                    <Panel className="fade-in" header="Batch Status" key={run._id} eventKey={run._id}>
+                        <ul>
+                            <li>
+                                JobId
+                            </li>
+                            {batchStatus}
+                        </ul>
+                    </Panel>
+                </Accordion>
+            );
+        }
+
+        return null;
     }
 
 }
