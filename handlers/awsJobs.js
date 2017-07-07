@@ -395,6 +395,18 @@ let handlers = {
             let statusArray = jobs.map((job) => {
                 return job.status;
             });
+
+            let batchStatus = jobs.map((job) => {
+                return {
+                    status: job.status,
+                    job: job.jobId
+                };
+            }).sort((a,b) => {
+                return (a.job.split('-')[0] > b.job.split('-')[0]) ? 1 : -1;
+            });
+
+            analysis.batchStatus = batchStatus;
+
             let finished = handlers._checkJobStatus(statusArray);
 
             analysis.status = !finished ? 'RUNNING' : 'FINALIZING';
