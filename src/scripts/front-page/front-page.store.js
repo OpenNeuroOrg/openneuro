@@ -146,7 +146,7 @@ let FrontPageStore = Reflux.createStore({
         let exampleJob = this.data.exampleJob;
 
         // find directory
-        let dir = files.findInTree(exampleJob.results, directory.path, 'path');
+        let dir = files.findInTree(exampleJob.results, directory.dirPath, 'dirPath');
         if (dir) {
             dir.showChildren = !dir.showChildren;
         }

@@ -10,6 +10,16 @@
         box-shadow: none;
         padding: 0;
 
+        .accordion-icon {
+            float: right;
+            margin-top: 2px;
+        }
+
+        .type-icon {
+            background: none;
+            border: 0;
+        }
+
         .panel-heading {
             @include border-radius(0);
             border: 0;
@@ -50,22 +60,49 @@
             .panel-body {
                 border-top: 1px solid transparent;
                 color: $c-56;
+                font-family: 'Cabin', sans-serif;
+                font-size: 11px;
 
-                ul {
-                    list-style: disc;
-                    padding-left: 5px;
-                    font-size: 11px;
-                    list-style-position: inside;
-                }
+                >ul {
+                    overflow: visible;
+                    height: auto;
+                    padding: 0;
+                    margin: 0;
 
-                > ul {
-                    list-style: none;
-                    padding-left: 5px;
-                    overflow: hidden;
-                    overflow-y: scroll;
-                    height: 170px;
-                    border: 1px solid $ddd;
-                    margin: 5px;
+                    li {
+                        padding: 6px 0 6px 10px;
+                        list-style: none;
+                        margin: 2px;
+
+                        .btn-file-folder {
+                            color: $c-66;
+                            width: 100%;
+                            text-align: left;
+                        }
+
+                        .child-files {
+                            margin-left: 5px;
+                            border-left: 1px solid $c-9e;
+
+                            li {
+                                background: $white;
+
+                                .message.error {color: $coral;}
+                                .fa-times {cursor: pointer;}
+                            }
+
+                            li::before {
+                                content: '';
+                                height: 7px;
+                                width: 7px;
+                                background: none;
+                                border-bottom: 1px solid $c-9e;
+                                margin-left: -11px;
+                                position: absolute;
+                                margin-top: 3px;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -75,99 +112,50 @@
 .snapshot,
 .dataset {
     .dataset-inner {
-        .file-structure.panel-group {
-            .panel-default {
-                .accordion-icon {
-                    float: right;
-                    margin-top: 2px;
-                }
+        .dataset-files {
+            .file-structure.panel-group {
+                .panel-default {
 
-                .type-icon {
-                    background: none;
-                    border: 0;
-                }
-
-                .panel-heading .panel-title {
-                    font-size: 21px;
-                    color: $c-33;
-                    line-height: 21px;
-                    padding: 0;
-                    display: inline-block;
-                    max-width: 100%;
-                    margin-bottom: 5px;
-                    font-family: 'Cabin', sans-serif;
-                }
-
-                .panel-body {
-                    padding: 0;
-
-                    ul {
+                    .panel-heading .panel-title {
+                        font-size: 21px;
+                        color: $c-33;
+                        line-height: 21px;
                         padding: 0;
-                        position: relative;
+                        display: inline-block;
+                        max-width: 100%;
+                        margin-bottom: 5px;
+                        font-family: 'Cabin', sans-serif;
+                    }
 
-                        li {
+                    .panel-body {
+                        padding: 0;
+                        border: 1px solid $ddd;
+                        ul {
+                            padding: 0;
                             position: relative;
 
-                            .cte-edit-button {
-                                position: absolute;
-                                top: 5px;
-                                right: 5px;
-                            }
+                            li {
+                                position: relative;
 
-                            .btn-file-folder {
-                                color: $c-66;
-                                width: 100%;
-                                text-align: left;
-                            }
-                        }
-                    }
-
-                    >ul {
-                        overflow: visible;
-                        height: auto;
-                        padding: 0;
-                        margin: 0;
-
-                        li {
-                            padding: 6px 0 6px 10px;
-                            list-style: none;
-                            margin: 2px;
-
-                            .child-files {
-                                margin-left: 5px;
-                                border-left: 1px solid $c-9e;
-
-                                li {
-                                    background: $white;
-
-                                    .message.error {color: $coral;}
-                                    .fa-times {cursor: pointer;}
-                                }
-
-                                li::before {
-                                    content: '';
-                                    height: 7px;
-                                    width: 7px;
-                                    background: none;
-                                    border-bottom: 1px solid $c-9e;
-                                    margin-left: -11px;
+                                .cte-edit-button {
                                     position: absolute;
-                                    margin-top: 3px;
+                                    top: 5px;
+                                    right: 5px;
                                 }
                             }
                         }
-                    }
 
-                    .filetree-editfile {
-                        height: 20px;
-                        float: none;
-                        width: 100%;
-                        display: block;
-                        margin: 5px 0 0;
+                        .filetree-editfile {
+                            height: 20px;
+                            float: none;
+                            width: 100%;
+                            display: block;
+                            margin: 5px 0 0;
 
-                        .btn-warn-load {
-                            padding: 0px;
-                            margin: 0px;
+                            .btn-warn-load {
+                                padding: 0px;
+                                margin: 0px;
+                            }
                         }
                     }
                 }
@@ -175,4 +163,3 @@
         }
     }
 }
-

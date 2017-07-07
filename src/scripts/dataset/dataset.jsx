@@ -90,8 +90,10 @@ let Dataset = React.createClass({
                                         <div className="fade-in col-xs-12">
                                             <Jobs />
                                         </div>
+                                        <div className="dataset-files">
                                         {this._incompleteMessage(dataset)}
                                         {this._fileTree(dataset, canEdit)}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
