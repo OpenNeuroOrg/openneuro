@@ -17,7 +17,7 @@ class JobAccordion extends React.Component {
         let run = this.props.run;
 
         // if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0) || (run.logs && run.logs.length > 0)) {
-            if (run.results && run.results.length > 0) {
+        if (run.results && run.results.length > 0) {
             // header with parameters and/or results
             return (
                 <span eventKey={run._id}>
@@ -43,6 +43,7 @@ class JobAccordion extends React.Component {
                         <div className="panel-body">
                             <span className="inner">
                                 {this._parameters(run)}
+                                {this._batchStatus(run)}
                                 {run.analysis.status === 'SUCCEEDED' || run.analysis.status === 'FAILED' ? this._logs(run) : null}
                             </span>
                         </div>
@@ -240,6 +241,36 @@ class JobAccordion extends React.Component {
                 </Panel>
             </Accordion>
         );
+    }
+
+    _batchStatus(run) {
+        let batchStatus = run.analysis.batchStatus;
+        if(batchStatus && batchStatus.length) {
+            batchStatus = batchStatus.map((status) => {
+                return (
+                    <div className="job-status col-xs-12" key={status.job}>
+                        <div className="col-xs-8">{status.job}</div>
+                        <div className="col-xs-4">{status.status}</div>
+                    </div>
+                );
+            });
+
+            return (
+                <Accordion accordion className="results">
+                    <Panel className="fade-in" header="Jobs Status" key={run._id} eventKey={run._id}>
+                        <ul>
+                            <div className=" job-status col-xs-12" key={run._id}>
+                                <div className="col-xs-8">JobId</div>
+                                <div className="col-xs-4">Status</div>
+                            </div>
+                            {batchStatus}
+                        </ul>
+                    </Panel>
+                </Accordion>
+            );
+        }
+
+        return null;
     }
 
 }
