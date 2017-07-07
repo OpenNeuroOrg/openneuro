@@ -248,19 +248,21 @@ class JobAccordion extends React.Component {
         if(batchStatus && batchStatus.length) {
             batchStatus = batchStatus.map((status) => {
                 return (
-                    <li key={status.job}>
-                        <span>{status.job} : {status.status}</span>
-                    </li>
+                    <div className="job-status col-xs-12" key={status.job}>
+                        <div className="col-xs-8">{status.job}</div>
+                        <div className="col-xs-4">{status.status}</div>
+                    </div>
                 );
             });
 
             return (
                 <Accordion accordion className="results">
-                    <Panel className="fade-in" header="Batch Status" key={run._id} eventKey={run._id}>
+                    <Panel className="fade-in" header="Jobs Status" key={run._id} eventKey={run._id}>
                         <ul>
-                            <li>
-                                JobId
-                            </li>
+                            <div className=" job-status col-xs-12" key={run._id}>
+                                <div className="col-xs-8">JobId</div>
+                                <div className="col-xs-4">Status</div>
+                            </div>
                             {batchStatus}
                         </ul>
                     </Panel>
