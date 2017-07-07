@@ -29,6 +29,9 @@ let config = {
     'mongo': {
         'url': 'mongodb://mongo:27017/'
     },
+    'redis': {
+        'host': 'redis'
+    },
     'notifications': {
         'email': {
             'service': process.env.CRN_SERVER_MAIL_SERVICE,

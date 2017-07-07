@@ -10,6 +10,7 @@ import routes     from './routes';
 import bodyParser from 'body-parser';
 import morgan     from 'morgan';
 import mongo      from './libs/mongo';
+import redis      from './libs/redis';
 
 // import events lib to instantiate CRN Emitter
 import events      from './libs/events';
