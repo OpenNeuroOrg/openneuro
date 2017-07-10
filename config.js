@@ -30,6 +30,7 @@ let config = {
         'url': 'mongodb://mongo:27017/'
     },
     'redis': {
+        'port': 6379,
         'host': 'redis'
     },
     'notifications': {
