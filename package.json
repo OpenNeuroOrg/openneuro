@@ -30,6 +30,7 @@
     "moment": "^2.14.1",
     "mongodb": "^2.0.46",
     "morgan": "^1.6.1",
+    "node-resque": "^4.0.7",
     "nodemailer": "^2.5.0",
     "request": "^2.63.0",
     "tar-fs": "^1.9.0",
