@@ -2,8 +2,23 @@
 
 // dependencies --------------------------------------------------
 import Redis from 'ioredis';
-import config from '../config';
 
 export default {
-    redis: new Redis(config.redis),
+    redis: null,
+
+    connect(config, callback) {
+        if (!this.redis) {
+            console.log('Connecting to Redis "redis://%s:%d/0"', config.host, config.port);
+            this.redis = new Redis(config);
+            this.redis.on('connect', () => {
+                if (callback) {
+                    callback(this.redis);
+                }
+            }.bind(this));
+        } else {
+            if (callback) {
+                callback(this.redis);
+            }
+        }
+    }
 }
