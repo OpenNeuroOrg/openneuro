@@ -12,8 +12,10 @@ import morgan     from 'morgan';
 import mongo      from './libs/mongo';
 import redis      from './libs/redis';
 
+import notifications from './libs/notifications';
+import aws        from './libs/aws';
 // import events lib to instantiate CRN Emitter
-import events      from './libs/events';
+import events     from './libs/events';
 
 // configuration ---------------------------------------------------
 
@@ -54,6 +56,10 @@ app.use(function(err, req, res, next) {
     }
     res.status(http_code).send(send);
 });
+
+// start background tasks
+notifications.initCron();
+aws.batch.initCron();
 
 // start server ----------------------------------------------------
 

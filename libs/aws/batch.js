@@ -26,37 +26,38 @@ export default (aws) => {
 
     const batch = new aws.Batch();
 
-    // aws polling cron  -------------------------------------
-
-    new cron.CronJob('*/10 * * * * *', () => {
-        let c = mongo.collections;
-        /**
-         * queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
-         * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
-         * also just query jobs that have not had a notification sent otherwise REJECTED jobs will always be returned
-         * polling occurs on a 10 second interval
-         */
-        c.crn.jobs.findAndModify(
-        {'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'UPLOADING']}, 'analysis.notification': false},
-        [['analysis.statusAge', 'asc']],
-        {$set: {'analysis.statusAge': new Date()}},
-        {},
-        (err, res) => {
-            // There might be no jobs to poll
-            if (res.ok && res.value) {
-                let job = res.value;
-                // handling rejected jobs here so we can send notifications for those jobs
-                if(job.analysis.status === 'REJECTED') {
-                    batchMethods.jobComplete(job, job.userId);
-                } else {
-                    awsJobs.getJobStatus(job, job.userId);
-                }
-            }
-        });
-    }, null, true, 'America/Los_Angeles');
-
     const batchMethods = {
         sdk: batch,
+
+        initCron() {
+            new cron.CronJob('*/10 * * * * *', this._pollJob, null, true, 'America/Los_Angeles');
+        },
+
+        _pollJob() {
+            /**
+             * queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
+             * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
+             * also just query jobs that have not had a notification sent otherwise REJECTED jobs will always be returned
+             * polling occurs on a 10 second interval
+             */
+            c.crn.jobs.findAndModify(
+            {'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'UPLOADING']}, 'analysis.notification': false},
+            [['analysis.statusAge', 'asc']],
+            {$set: {'analysis.statusAge': new Date()}},
+            {},
+            (err, res) => {
+                // There might be no jobs to poll
+                if (res.ok && res.value) {
+                    let job = res.value;
+                    // handling rejected jobs here so we can send notifications for those jobs
+                    if(job.analysis.status === 'REJECTED') {
+                        batchMethods.jobComplete(job, job.userId);
+                    } else {
+                        awsJobs.getJobStatus(job, job.userId);
+                    }
+                }
+            });
+        },
 
         /**
          * Register a job and store some additional metadata with AWS Batch
