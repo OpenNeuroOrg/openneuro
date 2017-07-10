@@ -10,8 +10,8 @@ redis.connect(config.redis, (redis) => {
         looping: true,
         timeout: 5000,
         queues: ['*'],
-        name: os.hostname() + ":" + process.pid
-    }
+        name: os.hostname() + ':' + process.pid
+    };
 
     let worker = new NR.worker(workerConfig, tasks);
 

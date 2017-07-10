@@ -16,4 +16,4 @@ export default {
             callback(this.queue);
         }
     }
-}
+};

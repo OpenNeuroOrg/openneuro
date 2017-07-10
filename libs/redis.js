@@ -14,11 +14,11 @@ export default {
                 if (callback) {
                     callback(this.redis);
                 }
-            }.bind(this));
+            });
         } else {
             if (callback) {
                 callback(this.redis);
             }
         }
     }
-}
+};

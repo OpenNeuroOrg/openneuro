@@ -14,4 +14,4 @@ export default {
             aws.s3.uploadSnapshot(snapshotHash, callback);
         },
     }
-}
+};
