@@ -1,8 +1,11 @@
 import os from 'os';
+import mongo from '../mongo';
 import redis from '../redis';
 import config from '../../config';
 import NR from 'node-resque';
 import tasks from './tasks';
+
+mongo.connect();
 
 redis.connect(config.redis, (redis) => {
     let workerConfig = {
