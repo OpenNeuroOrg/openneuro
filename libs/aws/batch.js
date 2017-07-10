@@ -1,4 +1,6 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
+import crypto  from 'crypto';
+import uuid from 'uuid';
 import mongo from '../mongo';
 import {ObjectID} from 'mongodb';
 import async from 'async';
@@ -6,6 +8,8 @@ import config from '../../config';
 import emitter from '../events';
 import notifications from '../notifications';
 import cron from 'cron';
+import s3func from './s3';
+import scitran from '../scitran';
 
 //Handlers (need access to AwS Jobs handler to kickoff server side polling)
 import awsJobs from '../../handlers/awsJobs';
@@ -25,6 +29,7 @@ function _depsObjects(depsIds) {
 export default (aws) => {
 
     const batch = new aws.Batch();
+    const s3 = s3func(aws);
 
     const batchMethods = {
         sdk: batch,
@@ -116,11 +121,76 @@ export default (aws) => {
         },
 
         /**
-         * Start AWS Batch Job
-         * starts an aws batch job
-         * returns no return. Batch job start is happening after response has been send to client
+         * Prepare to run a job by downloading the scitran snapshot and
+         * creating a mongo entry for it.
          */
-        startBatchJob(batchJob, jobId, callback) {
+        prepareAnalysis(job, callback) {
+            job.uploadSnapshotComplete = !!job.uploadSnapshotComplete;
+            job.analysis = {
+                analysisId: uuid.v4(),
+                status: 'UPLOADING',
+                created: new Date(),
+                attempts: 0,
+                notification: false
+            };
+            //making consistent with agave ??
+            job.appLabel = job.jobName;
+            job.appVersion = job.jobDefinition.match(/\d+$/)[0];
+
+            scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
+                job.datasetHash = hash;
+                job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
+
+                // jobDefintion is the full ARN including version, region, etc
+                c.crn.jobs.findOne({
+                    jobDefinition:  job.jobDefinition,
+                    datasetHash:    job.datasetHash,
+                    parametersHash: job.parametersHash,
+                    snapshotId:     job.snapshotId
+                }, {}, (err, existingJob) => {
+                    if (err) {
+                        return callback(err);
+                    }
+                    if (existingJob) {
+                        return callback({existingJob: existingJob});
+                    }
+
+                    c.crn.jobs.insertOne(job, (err, mongoJob) => {
+                        callback(err, job, mongoJob.insertedId);
+                    });
+                });
+            }, {snapshot: true});
+        },
+
+        /**
+         * Upload any required data and submit jobs to Batch API
+         *
+         * This is called by worker processes and must be process safe.
+         */
+        startAnalysis(job, jobId, userId, callback) {
+            let hash = job.datasetHash;
+            s3.uploadSnapshot(hash, () => {
+                const batchJobParams = this.buildBatchParams(job, hash);
+
+                this.startBatchJobs(batchJobParams, jobId, (err) => {
+                    if (err) {
+                        // This is an unexpected error, probably from batch.
+                        console.log(err);
+                        // Cleanup the failed to submit job
+                        // TODO - Maybe we save the error message into another field for display?
+                        c.crn.jobs.updateOne({_id: jobId}, {$set: {'analysis.status': 'REJECTED'}});
+                    } else {
+                        emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created}, userId);
+                    }
+                    callback();
+                });
+            });
+        },
+
+        /**
+         * Start AWS Batch Jobs for an analysis
+         */
+        startBatchJobs(batchJob, jobId, callback) {
             c.crn.jobDefinitions.findOne({jobDefinitionArn: batchJob.jobDefinition}, {}, (err, jobDef) => {
                 let analysisLevels = jobDef.analysisLevels;
                 async.reduce(analysisLevels, [], (deps, level, callback) => {

@@ -1,17 +1,12 @@
+/*eslint no-console: ["error", { allow: ["log"] }] */
+
 import aws from '../aws';
 
 export default {
-    uploadSnapshot: {
-        plugins: [ 'jobLock', 'retry' ],
-        pluginOptions: {
-            jobLock: {},
-            retry: {
-                retryLimit: 3,
-                retryDelay: (1000 * 5),
-            }
-        },
-        perform: function(snapshotHash, callback){
-            aws.s3.uploadSnapshot(snapshotHash, callback);
-        },
+    startAnalysis: {
+        perform: (options, callback) => {
+            console.log('Starting analysis %s', JSON.stringify(options));
+            aws.batch.startAnalysis(options.job, options.jobId, options.userId, callback);
+        }
     }
 };
