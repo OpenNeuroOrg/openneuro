@@ -11,7 +11,7 @@ import bodyParser from 'body-parser';
 import morgan     from 'morgan';
 import mongo      from './libs/mongo';
 import redis      from './libs/redis';
-
+import queue      from './libs/queue';
 import notifications from './libs/notifications';
 import aws        from './libs/aws';
 // import events lib to instantiate CRN Emitter
@@ -20,6 +20,11 @@ import events     from './libs/events';
 // configuration ---------------------------------------------------
 
 mongo.connect();
+redis.connect(config.redis, () => {
+    queue.connect(() => {
+        console.log('Resque connected');
+    });
+});
 
 let app = express();
 
