@@ -169,8 +169,6 @@ export default (aws) => {
          */
         startAnalysis(job, jobId, userId, callback) {
             let hash = job.datasetHash;
-            // When called via node-resque, this needs to be converted back
-            jobId = ObjectID(jobId);
             s3.uploadSnapshot(hash, () => {
                 const batchJobParams = this.buildBatchParams(job, hash);
 
@@ -261,7 +259,7 @@ export default (aws) => {
          * returns no return. Batch job start is happening after response has been send to client
          */
         _updateJobOnSubmitSuccessful(jobId, batchIds) {
-            c.crn.jobs.updateOne({_id: jobId}, {
+            c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
                 $set:{
                     'analysis.status': 'PENDING', //setting status to pending as soon as job submissions is successful
                     'analysis.attempts': 1,
