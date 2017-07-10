@@ -169,6 +169,7 @@ export default (aws) => {
          */
         startAnalysis(job, jobId, userId, callback) {
             let hash = job.datasetHash;
+            jobId = ObjectID(jobId);
             s3.uploadSnapshot(hash, () => {
                 const batchJobParams = this.buildBatchParams(job, hash);
 
