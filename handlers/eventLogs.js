@@ -8,7 +8,7 @@ let events = Object.keys(config.events);
 /**
  * Event Logs
  *
- * Handlers for job actions.
+ * Handlers for event logs.
  */
 let handlers = {
     getEventLogs (req, res, next) {
