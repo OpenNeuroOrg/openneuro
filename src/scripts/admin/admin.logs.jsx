@@ -5,6 +5,7 @@ import Reflux     from 'reflux';
 import Input      from '../common/forms/input.jsx';
 import adminStore from './admin.store';
 import actions    from './admin.actions';
+import Paginator     from '../common/partials/paginator.jsx';
 
 let Logs = React.createClass({
 
@@ -13,19 +14,32 @@ let Logs = React.createClass({
 // life cycle events --------------------------------------------------
 
     render() {
-        let logz = [];
+        let logs = [];
 
-        this.state.eventLogs.map((log, index) => {
-            if(log.visible){
-                logz.push(
-                    <div className="fade-in user-panel-header clearfix" key={index}>
-                        <div className="col-xs-4 user-col"><label>{log.type}</label></div>
-                        <div className="col-xs-4 user-col"><label>{log.user}</label></div>
-                        <div className="col-xs-4 user-col"><label>{log.date}</label></div>
-                    </div>
-                );
-            }
-        });
+        let eventLogs = this.state.eventLogs;
+        let results;
+        if (eventLogs.length === 0) {
+            let noEventLogs = 'There are no event logs.';
+            results = <p className="no-datasets">{noEventLogs}</p>;
+        } else {
+            var pagesTotal = Math.ceil(eventLogs.length / this.state.resultsPerPage);
+            let paginatedResults = this._paginate(eventLogs, this.state.resultsPerPage, this.state.page);
+            paginatedResults.map((log, index) => {
+                if(log.visible){
+                    logs.push(
+                        <div className="fade-in user-panel-header clearfix" key={index}>
+                            <div className="col-xs-4 user-col"><label>{log.type}</label></div>
+                            <div className="col-xs-4 user-col"><label>{log.user}</label></div>
+                            <div className="col-xs-4 user-col"><label>{log.date}</label></div>
+                        </div>
+                    );
+                }
+            });
+            // map results
+            results = logs;
+        }
+
+
         return (
             <div className="dashboard-dataset-teasers fade-in admin-users clearfix">
                 <div className="header-wrap clearfix">
@@ -44,8 +58,15 @@ let Logs = React.createClass({
                             <div className="col-xs-4 user-col"><label>User</label></div>
                             <div className="col-xs-4 user-col"><label>Date</label></div>
                         </div>
-                        {logz.length != 0 ? logz : null}
+                        {results.length != 0 ? results : null}
                     </div>
+                </div>
+                <div className="pager-wrapper">
+                    <Paginator
+                        page={this.state.page}
+                        pagesTotal={pagesTotal}
+                        pageRangeDisplayed={5}
+                        onPageSelect={this._onPageSelect} />
                 </div>
             </div>
         );
@@ -53,7 +74,22 @@ let Logs = React.createClass({
 
     _searchLogs(e) {
         actions.searchLogs(e.target.value);
-    }
+    },
+
+
+    _paginate(data, perPage, page) {
+        if (data.length < 1) return null;
+        (page) ? page : this.state.page;
+        let start = (page * perPage);
+        let end = start + perPage;
+        var retArr = data.slice(start, end);
+        return retArr;
+    },
+
+    _onPageSelect(page) {
+        let pageNumber = Number(page);
+        this.setState({ page: pageNumber });
+    },
 });
 
 export default Logs;

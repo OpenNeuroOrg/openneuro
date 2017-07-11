@@ -77,7 +77,9 @@ let UserStore = Reflux.createStore({
             blacklistError: '',
             eventLogs: [],
             logsFilters: [],
-            filteredLogs: []
+            filteredLogs: [],
+            resultsPerPage: 30,
+            page: 0,
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data);
