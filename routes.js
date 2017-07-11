@@ -4,6 +4,7 @@ import express    from 'express';
 import users      from './handlers/users';
 import jobs       from './handlers/jobs';
 import awsJobs    from './handlers/awsJobs';
+import eventLogs    from './handlers/eventLogs';
 import validation from './handlers/validation';
 import datasets   from './handlers/datasets';
 import auth       from './libs/auth';
@@ -195,6 +196,14 @@ const routes = [
         method: 'get',
         url: '/logs/:app/:jobId/:taskArn',
         handler: awsJobs.getLogstream
+    },
+    {
+        method: 'get',
+        url:'/eventlogs',
+        middleware: [
+            auth.superuser
+        ],
+        handler: eventLogs.getEventLogs
     }
 ];
 
