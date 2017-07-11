@@ -28,11 +28,11 @@ let Input = React.createClass({
         let placeholder = this.props.placeholder;
         let type = this.props.type;
         let name = this.props.name;
-        let value = this.props.hasOwnProperty('value') ? this.props.value : this.state.value;
+        let value = this.state.value || this.props.value;
 
         return (
             <div className="form-group float-label-input">
-                {value.length > 0 ? <label>{placeholder}</label> : null}
+                {value && value.length > 0 ? <label>{placeholder}</label> : null}
                 {this._input(type, name, placeholder, value)}
             </div>
         );
