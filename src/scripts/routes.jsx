@@ -12,6 +12,7 @@ import Admin          from './admin/admin.jsx';
 import Users          from './admin/admin.users.jsx';
 import Blacklist      from './admin/admin.blacklist.jsx';
 import AppDefinitions from './admin/admin.apps.jsx';
+import EventLogs from './admin/admin.logs.jsx';
 
 import Dashboard      from './dashboard/dashboard.jsx';
 import Notifications  from './dashboard/notifications.jsx';
@@ -71,6 +72,7 @@ let routes = (
             <Route name="blacklist" path="blacklist" handler={Blacklist} />
             <Route name="app-definitions" path="app-definitions" handler={AppDefinitions} />
             <Route name="app-definitions-edit" path="app-definitions/:app-definitionsId" handler={AppDefinitions} />
+            <Route name="event-logs" path="event-logs" handler={EventLogs} />
             <NotFoundRoute handler={RedirectUsers}/>
         </Route>
         <Route name="dataset" path="datasets/:datasetId" handler={Dataset} />

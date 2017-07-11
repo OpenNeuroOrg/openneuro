@@ -13,6 +13,7 @@ class Dashboard extends React.Component {
         actions.getBlacklist();
         actions.getUsers();
         actions.update({showBlacklistModal: false});
+        actions.getEventLogs();
     }
 
     render () {
@@ -23,6 +24,7 @@ class Dashboard extends React.Component {
                         <li><Link to="users" className="btn-tab">Users</Link></li>
                         <li><Link to="blacklist" className="btn-tab">Blocked Users</Link></li>
                         <li><Link to="app-definitions" className="btn-tab">App Definitions</Link></li>
+                        <li><Link to="event-logs" className="btn-tab">Event Logs</Link></li>
                     </ul>
                     <RouteHandler/>
                 </div>
