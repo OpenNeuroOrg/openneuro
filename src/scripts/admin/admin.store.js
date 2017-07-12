@@ -76,7 +76,6 @@ let UserStore = Reflux.createStore({
             },
             blacklistError: '',
             eventLogs: [],
-            logsFilters: [],
             filteredLogs: [],
             resultsPerPage: 30,
             page: 0,
@@ -165,6 +164,9 @@ let UserStore = Reflux.createStore({
         this.update({users, searchInput, adminFilter, loadingUsers: false});
     },
 
+    /**
+     * Search through event logs
+     */
     searchLogs(input) {
         let eventLogs = this.data.eventLogs;
 
@@ -178,7 +180,11 @@ let UserStore = Reflux.createStore({
             }
         }
 
-        this.update({eventLogs});
+        let filteredLogs = eventLogs.filter((log) => {
+            return log.visible;
+        });
+        
+        this.update({eventLogs, filteredLogs});
     },
 
     /**

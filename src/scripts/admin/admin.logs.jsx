@@ -17,13 +17,17 @@ let Logs = React.createClass({
         let logs = [];
 
         let eventLogs = this.state.eventLogs;
+        let filteredLogs = this.state.filteredLogs;
         let results;
         if (eventLogs.length === 0) {
             let noEventLogs = 'There are no event logs.';
             results = <p className="no-datasets">{noEventLogs}</p>;
+        } else if (eventLogs.length && filteredLogs.length === 0) {
+            let noMatchedLogs = 'There are no event logs matching your search.';
+            results = <p className="no-datasets">{noMatchedLogs}</p>;
         } else {
-            var pagesTotal = Math.ceil(eventLogs.length / this.state.resultsPerPage);
-            let paginatedResults = this._paginate(eventLogs, this.state.resultsPerPage, this.state.page);
+            var pagesTotal = Math.ceil(filteredLogs.length / this.state.resultsPerPage);
+            let paginatedResults = this._paginate(filteredLogs, this.state.resultsPerPage, this.state.page);
             paginatedResults.map((log, index) => {
                 if(log.visible){
                     logs.push(
