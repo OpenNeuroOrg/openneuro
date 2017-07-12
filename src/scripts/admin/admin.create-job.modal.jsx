@@ -17,7 +17,8 @@ const PARAMETER_INPUTS = [
     {label: 'String', value: 'text'},
     {label: 'Boolean', value: 'checkbox'},
     {label: 'Number', value: 'numeric'},
-    {label: 'List', value: 'select'}
+    {label: 'List', value: 'select'},
+    {label: 'File', value: 'file'}
 ];
 
 const CreateJob = React.createClass({

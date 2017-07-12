@@ -24,6 +24,7 @@ export default class JobMenu extends React.Component {
             loading:           false,
             parameters:         {},
             parametersMetadata: {},
+            inputFileParameters: {},
             disabledApps:       {},
             jobId:              null,
             selectedApp:        [],
@@ -309,9 +310,13 @@ export default class JobMenu extends React.Component {
      */
     _updateParameter(parameter, event) {
         const value = event.target.value;
+        let inputFileParameters = this.state.inputFileParameters;
+        if(event.target.files && event.target.files.length > 0) {
+            inputFileParameters[parameter] = event.target.files[0];
+        }
         let parameters = this.state.parameters;
         parameters[parameter] = value;
-        this.setState({parameters});
+        this.setState({parameters, inputFileParameters});
     }
 
     /**
@@ -323,7 +328,8 @@ export default class JobMenu extends React.Component {
         const revision   = this.state.selectedVersionID;
         const app        = apps[key][revision];
         const parameters = JSON.parse(JSON.stringify(app.parameters));
-        this.setState({parameters});
+        const inputFileParameters = {};
+        this.setState({parameters, inputFileParameters});
     }
 
     /**
@@ -412,7 +418,13 @@ export default class JobMenu extends React.Component {
         const key              = this.state.selectedAppKey;
         const revision         = this.state.selectedVersionID;
         const jobDefinition    = definitions[key][revision];
-        const parameters       = this.state.parameters;
+        let parameters       = this.state.parameters;
+        const inputFileParameters = this.state.inputFileParameters;
+        Object.keys(inputFileParameters).forEach((param) => {
+            if(parameters[param]) {
+                parameters[param] = inputFileParameters[param];
+            }
+        });
 
         this.setState({loading: true});
 

@@ -120,7 +120,8 @@ export default {
      * datasetId and userId and starts a Job.
      */
     createJob(job, callback) {
-        request.post(config.crn.url + 'datasets/' + job.snapshotId + '/jobs', {body: job, query: {snapshot: true}}, callback);
+        console.log(job);
+        //request.post(config.crn.url + 'datasets/' + job.snapshotId + '/jobs', {body: job, query: {snapshot: true}}, callback);
     },
 
     /**

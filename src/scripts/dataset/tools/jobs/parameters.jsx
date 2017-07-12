@@ -1,5 +1,6 @@
 import React from 'react';
 import Select from 'react-select';
+import FileSelect from '../../../common/forms/file-select.jsx';
 
 const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, parametersMetadata}) => {
 
@@ -16,7 +17,12 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
                 return onChange(parameter, event);
             };
             input = <Select multi simpleValue value={parameters[parameter]} placeholder="Select your subject(s)" options={subjects} onChange={onSelectChange} />;
-        } else {
+        } else if(parametersMetadata[parameter].type === "file") {
+            input = <input className="form-control" 
+                        type="file" 
+                        name={parameter} 
+                        onChange={onChange.bind(null, parameter)} />
+        }else {
             input = <input className="form-control"
                            value={parameters[parameter]}
                            onChange={onChange.bind(null, parameter)}/>;
