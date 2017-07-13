@@ -237,9 +237,9 @@ let handlers = {
                 let params = {
                     jobId: job,
                     reason: 'User terminated job'
-                }
+                };
                 aws.batch.sdk.terminateJob(params, (err, data) => {
-                    cb();
+                    cb(null, data);
                 });
             }, (err) => {
                 if(err) {return next(err);}
