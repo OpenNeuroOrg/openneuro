@@ -140,9 +140,9 @@ let handlers = {
                     // allow retrying failed jobs
                     if (existingJob.analysis && existingJob.analysis.status === 'FAILED') {
                         handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
+                    } else {
+                        res.status(409).send({message: 'An analysis with the same dataset and parameters has already been run.'});
                     }
-                } else {
-                    res.status(409).send({message: 'An analysis with the same dataset and parameters has already been run.'});
                 }
             } else {
                 queue.enqueue('batch', 'startAnalysis', {job: preparedJob, jobId: jobId, userId: userId}, () => {
