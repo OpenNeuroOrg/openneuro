@@ -266,6 +266,7 @@ let handlers = {
         if (req.query.status) {
             jobsQuery['analysis.status'] = req.query.status;
         }
+        jobsQuery.deleted = {$ne: true};
         let jobsResults = c.crn.jobs.find(jobsQuery).sort({'analysis.created': -1});
         jobsResults.toArray((err, jobs) => {
             if (err) {
