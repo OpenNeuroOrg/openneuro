@@ -1067,7 +1067,7 @@ let datasetStore = Reflux.createStore({
         let datasetId = job.datasetId;
         let jobId = job._id;
         crn.cancelJob(datasetId, jobId, (err, data) => {
-            console.log(err, data);
+            console.log("Job canceled");
         });
     },
 
