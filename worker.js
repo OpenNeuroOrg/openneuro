@@ -1,2 +1,3 @@
 require('babel/register');
-require('./libs/queue/worker.js');
+var worker = require('./libs/queue/worker.js');
+worker.start();
