@@ -74,7 +74,11 @@ let UserStore = Reflux.createStore({
                 tags:'',
                 support:''
             },
-            blacklistError: ''
+            blacklistError: '',
+            eventLogs: [],
+            filteredLogs: [],
+            resultsPerPage: 30,
+            page: 0,
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data);
@@ -158,6 +162,30 @@ let UserStore = Reflux.createStore({
             }
         }
         this.update({users, searchInput, adminFilter, loadingUsers: false});
+    },
+
+    /**
+     * Search through event logs
+     */
+    searchLogs(input) {
+        // If the API is unavailable, there are no logs to search
+        let eventLogs = this.data.eventLogs || [];
+
+        for (let log of eventLogs) {
+            log.visible = true;
+            input = input.toLowerCase();
+            let logKeep = log.type.toLowerCase().includes(input) || log.user.toLowerCase().includes(input);
+
+            if(input.length != 0 && !logKeep) {
+                log.visible = false;
+            }
+        }
+
+        let filteredLogs = eventLogs.filter((log) => {
+            return log.visible;
+        });
+
+        this.update({eventLogs, filteredLogs});
     },
 
     /**
@@ -450,6 +478,18 @@ let UserStore = Reflux.createStore({
             }
             this.update({blacklist});
         });
+    },
+
+    /**
+     * Get Event Logs
+     */
+    getEventLogs(callback) {
+        crn.getEventLogs((err, data) => {
+            let eventLogs = data.body;
+            this.update({eventLogs}, () => {
+                this.searchLogs('');
+            });
+        })
     }
 
 });

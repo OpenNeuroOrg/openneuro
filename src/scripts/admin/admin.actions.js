@@ -6,7 +6,8 @@ var Actions = Reflux.createActions([
     'blacklistModal',
     'filterAdmin',
     'getUsers',
-    'getBlacklist',
+    'getBlacklist',,
+    'getEventLogs',
     'inputChange',
     'removeUser',
     'searchUser',
@@ -16,7 +17,8 @@ var Actions = Reflux.createActions([
     'toggleModal',
     'toggleSuperUser',
     'unBlacklistUser',
-    'update'
+    'update',
+    'searchLogs'
 ]);
 
 export default Actions;

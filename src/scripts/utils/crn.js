@@ -196,6 +196,10 @@ export default {
 
     downloadJobLogs(jobId, callback) {
         request.get(config.crn.url + 'jobs/' + jobId + '/logs/download', {}, callback);
+    },
+
+    getEventLogs(callback) {
+       request.get(config.crn.url + 'eventlogs', {}, callback);
     }
 
 };
