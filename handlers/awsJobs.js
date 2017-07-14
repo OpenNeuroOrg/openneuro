@@ -417,7 +417,7 @@ let handlers = {
         if(job.analysis.status === 'CANCELED') return callback ? callback(null, job) : job;
 
         aws.batch.getAnalysisJobs(job, (err, jobs) => {
-            if(err) {return callback(err);}
+            if(err) {return callback ? callback(err) : err;}
             //check jobs status
             let analysis = {};
             let createdDate = job.analysis.created;
