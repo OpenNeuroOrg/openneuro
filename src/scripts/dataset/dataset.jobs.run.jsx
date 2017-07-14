@@ -220,27 +220,26 @@ class JobAccordion extends React.Component {
                 });
                 logstreams.push(<span key={level}>{level.toUpperCase()}{streams}</span>)
             });
-        }
-
-        return (
-            <Accordion accordion className="results">
-                <Panel className="fade-in" header="Logs" key={run._id} eventKey={run._id}>
-                    <span className="download-all">
-                        <WarnButton
-                            icon="fa-download"
-                            message=" DOWNLOAD All LOGS"
-                            prepDownload={actions.downloadLogs.bind(this, run._id)} />
-                    </span>
-                    <div className="file-structure fade-in panel-group">
-                        <div className="panel panel-default">
-                            <div className="panel-collapse" aria-expanded="false" >
-                                {logstreams}
+            return (
+                <Accordion accordion className="results">
+                    <Panel className="fade-in" header="Logs" key={run._id} eventKey={run._id}>
+                        <span className="download-all">
+                            <WarnButton
+                                icon="fa-download"
+                                message=" DOWNLOAD All LOGS"
+                                prepDownload={actions.downloadLogs.bind(this, run._id)} />
+                        </span>
+                        <div className="file-structure fade-in panel-group">
+                            <div className="panel panel-default">
+                                <div className="panel-collapse" aria-expanded="false" >
+                                    {logstreams}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </Panel>
-            </Accordion>
-        );
+                    </Panel>
+                </Accordion>
+            );
+        }
     }
 
     _batchStatus(run) {
