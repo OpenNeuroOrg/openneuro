@@ -31,6 +31,7 @@ let datasetStore = Reflux.createStore({
                 this.update({currentUploadId: data.projectId});
             }
         });
+        this.update({currentUser: userStore.data});
     },
 
     getInitialState: function () {

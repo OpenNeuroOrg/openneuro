@@ -14,6 +14,7 @@ class JobAccordion extends React.Component {
     // life cycle methods ------------------------------------------------------------
     constructor(props) {
         super(props);
+        console.log(props);
         this.state = {cancelingJob: false};
     }
 
@@ -60,12 +61,13 @@ class JobAccordion extends React.Component {
 
     _header (run) {
         let runBy = run.userId ? <span><br/><label>By </label><strong>{run.userId}</strong></span> : null;
+        let userCanCancel = this.props.currentUser.scitran.root || this.props.currentUser.scitran._id === run.userId;
         return (
             <div className={(run && run.analysis) ? run.analysis.status.toLowerCase() : 'pending'}>
                 <label>Status</label>
                 <span className="badge">
                     {this._status(run.analysis.status)}
-                </span>{(run.analysis.status === 'PENDING' || run.analysis.status === 'RUNNING') && !this.state.cancelingJob ? <button className="cancel-job" onClick={this._cancelJob.bind(this, run)}>CANCEL</button> : null}<br/>
+                </span>{userCanCancel && ((run.analysis.status === 'PENDING' || run.analysis.status === 'RUNNING') && !this.state.cancelingJob) ? <button className="cancel-job" onClick={this._cancelJob.bind(this, run)}>CANCEL</button> : null}<br/>
                 <span className="meta">
                     <label>Run on </label><strong>{moment(run.analysis.created).format('L')}</strong> at <strong>{moment(run.analysis.created).format('LT')}</strong>
                     {runBy}

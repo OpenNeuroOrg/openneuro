@@ -60,7 +60,8 @@ let Jobs = React.createClass({
                 <Run run={run}
                      key={run._id}
                      toggleFolder={actions.toggleResultFolder}
-                     displayFile={actions.displayFile}/>
+                     displayFile={actions.displayFile}
+                     currentUser={this.state.currentUser}/>
             );
         });
 
