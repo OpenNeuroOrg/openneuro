@@ -14,7 +14,6 @@ class JobAccordion extends React.Component {
     // life cycle methods ------------------------------------------------------------
     constructor(props) {
         super(props);
-        console.log(props);
         this.state = {cancelingJob: false};
     }
 
