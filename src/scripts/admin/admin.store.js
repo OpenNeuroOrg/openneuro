@@ -168,7 +168,8 @@ let UserStore = Reflux.createStore({
      * Search through event logs
      */
     searchLogs(input) {
-        let eventLogs = this.data.eventLogs;
+        // If the API is unavailable, there are no logs to search
+        let eventLogs = this.data.eventLogs || [];
 
         for (let log of eventLogs) {
             log.visible = true;
@@ -183,7 +184,7 @@ let UserStore = Reflux.createStore({
         let filteredLogs = eventLogs.filter((log) => {
             return log.visible;
         });
-        
+
         this.update({eventLogs, filteredLogs});
     },
 

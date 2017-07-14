@@ -19,7 +19,7 @@ let Logs = React.createClass({
         let eventLogs = this.state.eventLogs;
         let filteredLogs = this.state.filteredLogs;
         let results;
-        if (eventLogs.length === 0) {
+        if (!eventLogs || eventLogs.length === 0) {
             let noEventLogs = 'There are no event logs.';
             results = <p className="no-datasets">{noEventLogs}</p>;
         } else if (eventLogs.length && filteredLogs.length === 0) {
