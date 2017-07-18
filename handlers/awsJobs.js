@@ -212,7 +212,7 @@ let handlers = {
 
             // check if job is already known to be completed
             // there could be a scenario where we are polling before the AWS batch job has been setup. !jobs check handles this.
-            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || status === 'REJECTED' || !jobs || !jobs.length) {
+            if ((status === 'SUCCEEDED' && job.results && job.results.length > 0) || status === 'FAILED' || status === 'REJECTED' || status === 'CANCELED' || !jobs || !jobs.length) {
                 res.send(job);
             } else {
                 handlers.getJobStatus(job, userId, (err, data) => {
@@ -220,6 +220,31 @@ let handlers = {
                     res.send(data);
                 });
             }
+        });
+    },
+
+    cancelJob (req, res, next) {
+        let jobId = req.params.jobId;
+
+        c.crn.jobs.findOneAndUpdate({_id: ObjectID(jobId)}, {$set: {deleted: true, 'analysis.status': 'CANCELED'}}, {}, (err, job) => {
+            if (!job.value) {
+                res.status(404).send({message: 'Job not found.'});
+                return;
+            }
+
+            let jobs = job.value.analysis.jobs;
+            async.each(jobs, (job, cb) => {
+                let params = {
+                    jobId: job,
+                    reason: 'User terminated job'
+                };
+                aws.batch.sdk.terminateJob(params, (err, data) => {
+                    cb(null, data);
+                });
+            }, (err) => {
+                if(err) {return next(err);}
+                res.send(true);
+            });
         });
     },
 
@@ -387,8 +412,13 @@ let handlers = {
      * Gets jobs for a given analysis from batch, checks overall status and callsback with a snapshot of the analysis status
      */
     getJobStatus(job, userId, callback) {
+        // Because of server side and client side polling, it is possible that getJobStatus could get called after
+        // a job has been canceled. For that scenario, we just want to return to avoid overwriting CANCELED status
+        // with the FAILED statuses that would get returned from AWS Batch.
+        if(job.analysis.status === 'CANCELED') return callback ? callback(null, job) : job;
+
         aws.batch.getAnalysisJobs(job, (err, jobs) => {
-            if(err) {return callback(err);}
+            if(err) {return callback ? callback(err) : err;}
             //check jobs status
             let analysis = {};
             let createdDate = job.analysis.created;

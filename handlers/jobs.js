@@ -129,6 +129,7 @@ let handlers = {
         let hasAccess  = req.hasAccess;
 
         let query = snapshot ? {snapshotId: datasetId} : {datasetId};
+        query.deleted = {$ne: true};
         c.crn.jobs.find(query).toArray((err, jobs) => {
             if (err) {return next(err);}
             for (let job of jobs) {
@@ -265,6 +266,7 @@ let handlers = {
         if (req.query.status) {
             jobsQuery['analysis.status'] = req.query.status;
         }
+        jobsQuery.deleted = {$ne: true};
         let jobsResults = c.crn.jobs.find(jobsQuery).sort({'analysis.created': -1});
         jobsResults.toArray((err, jobs) => {
             if (err) {

@@ -151,6 +151,14 @@ const routes = [
         handler: awsJobs.getJob
     },
     {
+        method: 'put',
+        url: '/datasets/:datasetId/jobs/:jobId',
+        middleware: [
+            auth.datasetAccess()
+        ],
+        handler: awsJobs.cancelJob
+    },
+    {
         method: 'post',
         url: '/datasets/:datasetId/jobs/:jobId/retry',
         middleware: [
