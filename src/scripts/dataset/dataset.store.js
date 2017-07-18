@@ -31,6 +31,7 @@ let datasetStore = Reflux.createStore({
                 this.update({currentUploadId: data.projectId});
             }
         });
+        this.update({currentUser: userStore.data});
     },
 
     getInitialState: function () {
@@ -1060,6 +1061,14 @@ let datasetStore = Reflux.createStore({
                 }
             }
             callback(err, res);
+        });
+    },
+
+    cancelJob (job, callback) {
+        let datasetId = job.datasetId;
+        let jobId = job._id;
+        crn.cancelJob(datasetId, jobId, (err, data) => {
+            console.log("Job canceled");
         });
     },
 

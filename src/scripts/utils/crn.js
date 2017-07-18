@@ -135,6 +135,10 @@ export default {
         }, callback);
     },
 
+    cancelJob(datasetId, jobId, callback) {
+        request.put(config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId, {}, callback);
+    },
+
     /**
      * Retry Job
      *

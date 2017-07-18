@@ -11,7 +11,11 @@ import config     from '../../../config.js';
 
 class JobAccordion extends React.Component {
 
-// life cycle methods ------------------------------------------------------------
+    // life cycle methods ------------------------------------------------------------
+    constructor(props) {
+        super(props);
+        this.state = {cancelingJob: false};
+    }
 
     render () {
         let run = this.props.run;
@@ -57,12 +61,13 @@ class JobAccordion extends React.Component {
 
     _header (run) {
         let runBy = run.userId ? <span><br/><label>By </label><strong>{run.userId}</strong></span> : null;
+        let userCanCancel = this.props.currentUser.scitran.root || this.props.currentUser.scitran._id === run.userId;
         return (
             <div className={(run && run.analysis) ? run.analysis.status.toLowerCase() : 'pending'}>
                 <label>Status</label>
                 <span className="badge">
                     {this._status(run.analysis.status)}
-                </span><br/>
+                </span>{userCanCancel && ((run.analysis.status === 'PENDING' || run.analysis.status === 'RUNNING') && !this.state.cancelingJob) ? <button className="cancel-job" onClick={this._cancelJob.bind(this, run)}>CANCEL</button> : null}<br/>
                 <span className="meta">
                     <label>Run on </label><strong>{moment(run.analysis.created).format('L')}</strong> at <strong>{moment(run.analysis.created).format('LT')}</strong>
                     {runBy}
@@ -71,6 +76,7 @@ class JobAccordion extends React.Component {
                     <label>Job ID</label><strong>{run.analysis.analysisId}</strong>
                 </span>
                 {this._failedMessage(run)}
+                {this._canceledMesssage(run)}
             </div>
         );
     }
@@ -134,12 +140,12 @@ class JobAccordion extends React.Component {
     }
 
     _status(status) {
-        if (status === 'SUCCEEDED' || status === 'FAILED' || status === 'REJECTED') {
+        if (status === 'SUCCEEDED' || status === 'FAILED' || status === 'REJECTED' || status == 'CANCELED') {
             return status;
         } else {
             return (
                 <div className="ellipsis-animation">
-                    {status}
+                    {this.state.cancelingJob ? 'CANCELING' : status}
                     <span className="one">.</span>
                     <span className="two">.</span>
                     <span className="three">.</span>
@@ -162,6 +168,26 @@ class JobAccordion extends React.Component {
                         action={actions.retryJob.bind(this, run._id)} />
                 </div>
             );
+        }
+    }
+
+    _canceledMesssage(run) {
+        if(run.analysis.status === 'CANCELED'){
+            let message = "This job has been canceled and will be deleted from jobs dashboard.";
+            return (
+                <div>
+                    <h5 className="text-danger">{message}</h5>
+                </div>
+            );
+        }
+    }
+
+    _cancelJob(run) {
+        if(confirm("Canceling this job will delete the job. Cancel Job?")) {
+            this.setState({
+                cancelingJob: true
+            });
+            actions.cancelJob(run);
         }
     }
 
