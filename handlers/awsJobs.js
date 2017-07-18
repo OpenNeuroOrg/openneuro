@@ -325,7 +325,7 @@ let handlers = {
 
             const batchJobParams = aws.batch.buildBatchParams(job);
 
-            aws.batch.startBatchJob(batchJobParams, mongoJobId, (err) => {
+            aws.batch.startBatchJobs(batchJobParams, mongoJobId, (err) => {
                 if (err) {
                     // This is an unexpected error, probably from batch.
                     console.log(err);
