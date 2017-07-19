@@ -2,15 +2,13 @@
 // dependencies ------------------------------------------------------------
 
 import aws     from '../libs/aws';
-import scitran from '../libs/scitran';
-import crypto  from 'crypto';
-import uuid    from 'uuid';
 import mongo         from '../libs/mongo';
 import {ObjectID}    from 'mongodb';
 import archiver      from 'archiver';
 import config from '../config';
 import async from 'async';
 import emitter from '../libs/events';
+import {queue} from '../libs/queue';
 
 let c = mongo.collections;
 let events = config.events;
@@ -134,65 +132,25 @@ let handlers = {
         let userId = req.user;
         let job = req.body;
 
-        job.uploadSnapshotComplete = !!job.uploadSnapshotComplete;
-        job.analysis = {
-            analysisId: uuid.v4(),
-            status: 'UPLOADING',
-            created: new Date(),
-            attempts: 0,
-            notification: false
-        };
-        //making consistent with agave ??
-        job.appLabel = job.jobName;
-        job.appVersion = job.jobDefinition.match(/\d+$/)[0];
-
-        scitran.downloadSymlinkDataset(job.snapshotId, (err, hash) => {
-            job.datasetHash = hash;
-            job.parametersHash = crypto.createHash('md5').update(JSON.stringify(job.parameters)).digest('hex');
-
-            // jobDefintion is the full ARN including version, region, etc
-            c.crn.jobs.findOne({
-                jobDefinition:  job.jobDefinition,
-                datasetHash:    job.datasetHash,
-                parametersHash: job.parametersHash,
-                snapshotId:     job.snapshotId
-            }, {}, (err, existingJob) => {
-                if (err){return next(err);}
-                if (existingJob) {
+        aws.batch.prepareAnalysis(job, (err, preparedJob, jobId) => {
+            if (err) {
+                // Existing job errors are handled
+                if (err.existingJob) {
+                    let existingJob = err.existingJob;
                     // allow retrying failed jobs
                     if (existingJob.analysis && existingJob.analysis.status === 'FAILED') {
                         handlers.retry({params: {jobId: existingJob.jobId}}, res, next);
-                        return;
+                    } else {
+                        res.status(409).send({message: 'An analysis with the same dataset and parameters has already been run.'});
                     }
-                    res.status(409).send({message: 'A job with the same dataset and parameters has already been run.'});
-                    return;
                 }
-
-                c.crn.jobs.insertOne(job, (err, mongoJob) => {
-
+            } else {
+                queue.enqueue('batch', 'startAnalysis', {job: preparedJob, jobId: jobId, userId: userId}, () => {
                     // Finish the client request so S3 upload can happen async
-                    res.send({jobId: mongoJob.insertedId});
-
-                    // TODO - handle situation where upload to S3 fails
-                    aws.s3.uploadSnapshot(hash, () => {
-                        const batchJobParams = aws.batch.buildBatchParams(job, hash);
-
-                        aws.batch.startBatchJob(batchJobParams, mongoJob.insertedId, (err) => {
-                            if (err) {
-                                // This is an unexpected error, probably from batch.
-                                console.log(err);
-                                // Cleanup the failed to submit job
-                                // TODO - Maybe we save the error message into another field for display?
-                                c.crn.jobs.updateOne({_id: mongoJob.insertedId}, {$set: {'analysis.status': 'REJECTED'}});
-                                return;
-                            } else {
-                                emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created}, userId);
-                            }
-                        });
-                    });
+                    res.send({jobId: jobId});
                 });
-            });
-        }, {snapshot: true});
+            }
+        });
     },
 
     /**
@@ -393,7 +351,7 @@ let handlers = {
 
             const batchJobParams = aws.batch.buildBatchParams(job);
 
-            aws.batch.startBatchJob(batchJobParams, mongoJobId, (err) => {
+            aws.batch.startBatchJobs(batchJobParams, mongoJobId, (err) => {
                 if (err) {
                     // This is an unexpected error, probably from batch.
                     console.log(err);

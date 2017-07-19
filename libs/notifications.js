@@ -14,6 +14,7 @@ let c = mongo.collections;
 // public api ---------------------------------------------
 
 let notifications = {
+    cron: null,
 
     /**
      * Add
@@ -69,25 +70,25 @@ let notifications = {
                 }
             }, () => {});
         });
-    }
+    },
 
-};
-
-// notifications cron -------------------------------------
-
-new cron.CronJob('0 */1 * * * *', () => {
-    c.crn.notifications.find({}).toArray((err, docs) => {
-        for (let notification of docs) {
-            notifications.send(notification, (err) => {
-                if (!err) {
-                    c.crn.notifications.removeOne({_id: notification._id}, {}, () => {});
-                } else {
-                    console.log('NOTIFICATION ERROR ----------');
-                    console.log(err);
+    initCron() {
+        // notifications cron -------------------------------------
+        notifications.cron = new cron.CronJob('0 */1 * * * *', () => {
+            c.crn.notifications.find({}).toArray((err, docs) => {
+                for (let notification of docs) {
+                    notifications.send(notification, (err) => {
+                        if (!err) {
+                            c.crn.notifications.removeOne({_id: notification._id}, {}, () => {});
+                        } else {
+                            console.log('NOTIFICATION ERROR ----------');
+                            console.log(err);
+                        }
+                    });
                 }
             });
-        }
-    });
-}, null, true, 'America/Los_Angeles');
+        }, null, true, 'America/Los_Angeles');
+    }
+};
 
 export default notifications;
