@@ -292,6 +292,7 @@ export default class JobMenu extends React.Component {
             loading:            false,
             jobId:              null,
             parameters:         {},
+            inputFileParameters:{},
             selectedApp:        [],
             selectedAppKey:     '',
             selectedVersion:    {},
@@ -341,6 +342,7 @@ export default class JobMenu extends React.Component {
         if(this.state.selectedAppKey != e.target.value){
             this.setState({
                 parameters:         [],
+                inputFileParameters:{},
                 selectedApp:        [],
                 selectedAppKey:     '',
                 selectedVersion:    {},
@@ -420,33 +422,30 @@ export default class JobMenu extends React.Component {
         const jobDefinition    = definitions[key][revision];
         let parameters       = this.state.parameters;
         const inputFileParameters = this.state.inputFileParameters;
-        Object.keys(inputFileParameters).forEach((param) => {
-            if(parameters[param]) {
-                parameters[param] = inputFileParameters[param];
-            }
-        });
 
         this.setState({loading: true});
 
-        actions.startJob(selectedSnapshot, jobDefinition, parameters, (err, res) => {
-            let message, error;
-            if (err) {
-                error   = true;
-                if (res.status === 409) {
-                    message = 'This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.';
-                } else if (res.status === 503) {
-                    message = 'We are temporarily unable to process this analysis. Please try again later. If this issue persists, please contact the site administrator.';
-                } else if (res.status === 403 && res.body.error) {
-                    // If non admins try to run more than 2 jobs at a time, want to display message letting them know they don't have access
-                    message = res.body.error;
+        actions.prepareJobSubmission(parameters, inputFileParameters, (e, updatedParameters) => {
+            actions.startJob(selectedSnapshot, jobDefinition, updatedParameters, (err, res) => {
+                let message, error;
+                if (err) {
+                    error   = true;
+                    if (res.status === 409) {
+                        message = 'This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.';
+                    } else if (res.status === 503) {
+                        message = 'We are temporarily unable to process this analysis. Please try again later. If this issue persists, please contact the site administrator.';
+                    } else if (res.status === 403 && res.body.error) {
+                        // If non admins try to run more than 2 jobs at a time, want to display message letting them know they don't have access
+                        message = res.body.error;
+                    } else {
+                        message = 'There was an issue submitting your analysis. Double check your inputs and try again. If the issue persists, please contact the site administrator.';
+                    }
                 } else {
-                    message = 'There was an issue submitting your analysis. Double check your inputs and try again. If the issue persists, please contact the site administrator.';
+                    message = 'Your analysis has been submitted. You will receive a notification by email once the job is complete.';
                 }
-            } else {
-                message = 'Your analysis has been submitted. You will receive a notification by email once the job is complete.';
-            }
 
-            this.setState({loading: false, message: message, error: error /*, jobId: res.body.result.id*/});
+                this.setState({loading: false, message: message, error: error /*, jobId: res.body.result.id*/});
+            });
         });
     }
 }

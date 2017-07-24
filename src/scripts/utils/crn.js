@@ -120,8 +120,23 @@ export default {
      * datasetId and userId and starts a Job.
      */
     createJob(job, callback) {
-        console.log(job);
-        //request.post(config.crn.url + 'datasets/' + job.snapshotId + '/jobs', {body: job, query: {snapshot: true}}, callback);
+        request.post(config.crn.url + 'datasets/' + job.snapshotId + '/jobs', {body: job, query: {snapshot: true}}, callback);
+    },
+
+    uploadParamFile(parameters, file, callback) {
+        let options = {
+            fields: {
+                file: file.file,
+                name: file.file.name,
+                tags: []
+            }
+        };
+        request.upload(config.crn.url + 'datasets/jobsupload', options, (err, res) => {
+            if(err) return callback(err);
+            let s3path = res.body.s3path;
+            parameters[file.key] = s3path;
+            callback();
+        });
     },
 
     /**

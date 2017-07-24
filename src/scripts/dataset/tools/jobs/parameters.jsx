@@ -22,7 +22,7 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
                         type="file" 
                         name={parameter} 
                         onChange={onChange.bind(null, parameter)} />
-        }else {
+        } else {
             input = <input className="form-control"
                            value={parameters[parameter]}
                            onChange={onChange.bind(null, parameter)}/>;

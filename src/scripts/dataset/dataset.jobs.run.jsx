@@ -42,7 +42,7 @@ class JobAccordion extends React.Component {
                         </div>
                         <div className="panel-body">
                             <span className="inner">
-                                {this._parameters(run)}
+                                {/*this._parameters(run)*/}
                                 {this._batchStatus(run)}
                                 {run.analysis.status === 'SUCCEEDED' || run.analysis.status === 'FAILED' ? this._logs(run) : null}
                             </span>
