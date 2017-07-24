@@ -12,6 +12,8 @@ import scitran    from './libs/scitran';
 import schema     from './libs/schema';
 import schemas    from './schemas';
 
+import fileUpload from 'express-fileupload';
+
 
 const routes = [
 
@@ -120,6 +122,15 @@ const routes = [
             schema.validateBody(schemas.job.submit)
         ],
         handler: awsJobs.submitJob
+    },
+    {
+        method: 'post',
+        url: '/datasets/jobsupload',
+        middleware: [
+            fileUpload(),
+            auth.optional
+        ],
+        handler: awsJobs.parameterFileUpload
     },
     {
         method: 'get',

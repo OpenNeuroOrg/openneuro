@@ -131,7 +131,6 @@ let handlers = {
     submitJob(req, res, next) {
         let userId = req.user;
         let job = req.body;
-
         aws.batch.prepareAnalysis(job, (err, preparedJob, jobId) => {
             if (err) {
                 // Existing job errors are handled
@@ -150,6 +149,30 @@ let handlers = {
                     res.send({jobId: jobId});
                 });
             }
+        });
+    },
+
+    parameterFileUpload(req, res, next) {
+        let userId = req.user;
+        let bucket = config.aws.s3.inputsBucket;
+        let file = req.files.file.data; //Buffer
+        let fileName = req.files.file.name;
+        let key = userId + "/" + Date.now() + "/" + fileName;
+        let params = {
+            Bucket: bucket,
+            Body: file,
+            Key: key
+        };
+
+        aws.s3.sdk.putObject(params, (err, data) => {
+            if(err) return next(err);
+
+            let encodedKey = key.split("/").map((str) => {
+                return encodeURIComponent(str);
+            }).join("/");
+
+            let s3path = 'https://s3.amazonaws.com/' + bucket + "/" + encodedKey;
+            res.send({s3path: s3path});
         });
     },
 
