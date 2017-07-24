@@ -55,6 +55,7 @@ const CreateJob = React.createClass({
                              <ArrayInput value={definition.parameters}
                                          onChange={this._handleChange.bind(null, 'parameters')}
                                          model={[
+                                             {id: 'required', type: 'checkbox', placeholder: 'Required'},
                                              {id: 'label', placeholder: 'Key', required: true},
                                              {id: 'defaultValue', placeholder: 'default value'},
                                              {id: 'type', placeholder: 'Type', select: PARAMETER_INPUTS, required: true},

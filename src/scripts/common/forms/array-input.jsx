@@ -37,6 +37,8 @@ let ArrayInput = React.createClass({
         let inputFields = this.props.model ? this.props.model.map((field) => {
             if (field.hasOwnProperty('select') && field.select.length > 0) {
                 return <Select placeholder={field.placeholder} simpleValue options={field.select} value={this.state[field.id]} onChange={this._handleSelectChange.bind(null, field.id)} key={field.id} />
+            } else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
+                return <Input type={'checkbox'} placeholder={field.placeholder} checked={this.state[field.id]} onChange={this._toggleCheckBox.bind(null, field.id)} key={field.id} />
             } else {
                 return <Input placeholder={field.placeholder} value={this.state[field.id]} onChange={this._handleChange.bind(null, field.id)} key={field.id} />
             }
@@ -78,6 +80,12 @@ let ArrayInput = React.createClass({
     _handleSelectChange(key, selected) {
         let state = {};
         state[key] = selected;
+        this.setState(state);
+    },
+
+    _toggleCheckBox(key, event) {
+        let state = {};
+        state[key] = event.target.checked;
         this.setState(state);
     },
 
