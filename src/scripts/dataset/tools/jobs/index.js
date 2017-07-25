@@ -328,7 +328,6 @@ export default class JobMenu extends React.Component {
 
     _checkSubmitStatus() {
         let requiredParameters = this.state.requiredParameters;
-        console.log(requiredParameters);
         let submitActive = Object.keys(requiredParameters).every((param) => {
             return !!requiredParameters[param];
         });
