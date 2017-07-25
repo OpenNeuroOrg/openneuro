@@ -196,7 +196,7 @@ export default (aws) => {
                 let requiredParamsPresent = this._checkRequiredParams(batchJob, jobDef);
 
                 //if the required parameters are not present, the job will be rejected
-                if(!requiredParamsPresent) return callback(new Error("Required Parameters Missing!"));
+                if(!requiredParamsPresent) return callback(new Error('Required Parameters Missing!'));
 
                 async.reduce(analysisLevels, [], (deps, level, callback) => {
                     let submitter;
@@ -262,8 +262,7 @@ export default (aws) => {
         _checkRequiredParams(job, jobDef) {
             let paramsPresent = [];
             let parameters = job.parameters;
-            let parametersMetadata = jobDef.parametersMetadata
-            let requiredParameteres = {};
+            let parametersMetadata = jobDef.parametersMetadata;
             Object.keys(parametersMetadata).forEach((param) =>{
                 if(parametersMetadata[param].required) {
                     let exists = param === 'participant_label' ? !!parameters[param].length : !!parameters[param];
