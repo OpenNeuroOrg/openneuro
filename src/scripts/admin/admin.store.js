@@ -392,6 +392,7 @@ let UserStore = Reflux.createStore({
                 if(jobDefinition.parametersMetadata && jobDefinition.parametersMetadata[key]){
                     paramInputData.type = jobDefinition.parametersMetadata[key].type;
                     paramInputData.description =  jobDefinition.parametersMetadata[key].description;
+                    paramInputData.required = !!jobDefinition.parametersMetadata[key].required;
                 }
                 params.push(paramInputData);
             });

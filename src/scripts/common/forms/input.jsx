@@ -46,8 +46,6 @@ let Input = React.createClass({
             return (
                 <textarea name={name} placeholder={placeholder} value={value} onChange={this._handleChange}></textarea>
             );
-        } else if (type === 'checkbox'){
-            return <input type='checkbox' name={name} value={placeholder} onChange={this._toggleChecbox} checked={!!value} />
         } else {
             return <input type={type} name={name} placeholder={placeholder} value={value} onChange={this._handleChange} disabled={this.props.disabled}/>;
         }
