@@ -178,7 +178,7 @@ export default (aws) => {
                         console.log(err);
                         // Cleanup the failed to submit job
                         // TODO - Maybe we save the error message into another field for display?
-                        c.crn.jobs.updateOne({_id: jobId}, {$set: {'analysis.status': 'REJECTED'}});
+                        c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {$set: {'analysis.status': 'REJECTED'}});
                     } else {
                         emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created}, userId);
                     }
@@ -193,6 +193,11 @@ export default (aws) => {
         startBatchJobs(batchJob, jobId, callback) {
             c.crn.jobDefinitions.findOne({jobDefinitionArn: batchJob.jobDefinition}, {}, (err, jobDef) => {
                 let analysisLevels = jobDef.analysisLevels;
+                let requiredParamsPresent = this._checkRequiredParams(batchJob, jobDef);
+
+                //if the required parameters are not present, the job will be rejected
+                if(!requiredParamsPresent) return callback(new Error("Required Parameters Missing!"));
+
                 async.reduce(analysisLevels, [], (deps, level, callback) => {
                     let submitter;
                     let levelName = level.value;
@@ -252,6 +257,21 @@ export default (aws) => {
                     }]
                 }
             };
+        },
+
+        _checkRequiredParams(job, jobDef) {
+            let paramsPresent = [];
+            let parameters = job.parameters;
+            let parametersMetadata = jobDef.parametersMetadata
+            let requiredParameteres = {};
+            Object.keys(parametersMetadata).forEach((param) =>{
+                if(parametersMetadata[param].required) {
+                    let exists = param === 'participant_label' ? !!parameters[param].length : !!parameters[param];
+                    paramsPresent.push(exists);
+                }
+            });
+
+            return paramsPresent.every((flag) => { return flag; });
         },
 
         /**
