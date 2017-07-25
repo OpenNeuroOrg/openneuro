@@ -133,8 +133,8 @@ export default {
         };
         request.upload(config.crn.url + 'datasets/jobsupload', options, (err, res) => {
             if(err) return callback(err);
-            let s3path = res.body.s3path;
-            parameters[file.key] = s3path;
+            let filePath = res.body.filePath;
+            parameters[file.key] = filePath;
             callback();
         });
     },
