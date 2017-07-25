@@ -170,8 +170,8 @@ let handlers = {
                 return encodeURIComponent(str);
             }).join('/');
 
-            let s3path = 'https://s3.amazonaws.com/' + bucket + '/' + encodedKey;
-            res.send({s3path: s3path});
+            let filePath = '/input/data/' + encodedKey;
+            res.send({filePath: filePath});
         });
     },
 
