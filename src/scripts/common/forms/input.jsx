@@ -21,7 +21,8 @@ let Input = React.createClass({
         type: React.PropTypes.string,
         value: React.PropTypes.string,
         onChange: React.PropTypes.func,
-        disabled: React.PropTypes.bool
+        disabled: React.PropTypes.bool,
+        checekd: React.PropTypes.bool
     },
 
     render() {
@@ -53,6 +54,13 @@ let Input = React.createClass({
     _handleChange(event) {
         this.setState({value: event.target.value});
 
+        if (this.props.onChange) {
+            this.props.onChange(event);
+        }
+    },
+
+    _toggleChecbox(event) {
+        this.setState({value: event.target.checked});
         if (this.props.onChange) {
             this.props.onChange(event);
         }

@@ -22,7 +22,7 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
                            onChange={onChange.bind(null, parameter)}/>;
         }
         return (
-            <div key={parameter}>
+            <div className={parametersMetadata[parameter] && parametersMetadata[parameter].required ? 'required-param':null} key={parameter}>
                 <div className="parameters form-horizontal">
                     <div className="form-group" key={parameter}>
                         <label className="sr-only">{parameter}</label>

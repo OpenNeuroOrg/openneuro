@@ -34,7 +34,9 @@ export default class JobMenu extends React.Component {
             message:            null,
             error:              false,
             subjects:           [],
-            appGroup:           {}
+            appGroup:           {},
+            submitActive:       false,
+            requiredParameters: {}
         };
     }
 
@@ -266,7 +268,7 @@ export default class JobMenu extends React.Component {
         }
         return (
             <div className="col-xs-12 modal-actions">
-                <button className="btn-modal-submit" onClick={this._startJob.bind(this)}>Start</button>
+                <button className="btn-modal-submit" onClick={this._startJob.bind(this)} disabled={!this.state.submitActive}>Start</button>
                 <button className="btn-reset" onClick={this._hide.bind(this)}>close</button>
             </div>
         );
@@ -300,7 +302,10 @@ export default class JobMenu extends React.Component {
             error:              false,
             options:            [],
             value:              [],
-            appGroup:           {}
+            appGroup:           {},
+            submitActive:       false,
+            requiredParameters: {},
+            parametersMetadata: {}
         });
     }
 
@@ -309,9 +314,24 @@ export default class JobMenu extends React.Component {
      */
     _updateParameter(parameter, event) {
         const value = event.target.value;
+        let requiredParamsUpdate = Object.keys(this.state.requiredParameters).indexOf(parameter) != -1;
         let parameters = this.state.parameters;
+        let requiredParameters = this.state.requiredParameters;
         parameters[parameter] = value;
-        this.setState({parameters});
+        if (requiredParamsUpdate) {
+            requiredParameters[parameter] = value;
+        }
+        this.setState({parameters, requiredParameters}, ()=>{
+            this._checkSubmitStatus();
+        });
+    }
+
+    _checkSubmitStatus() {
+        let requiredParameters = this.state.requiredParameters;
+        let submitActive = Object.keys(requiredParameters).every((param) => {
+            return !!requiredParameters[param];
+        });
+        this.setState({submitActive});
     }
 
     /**
@@ -352,7 +372,20 @@ export default class JobMenu extends React.Component {
         let selectedDefinition = this.props.apps[this.state.selectedAppKey][selectedVersionID];
         let parameters = JSON.parse(JSON.stringify(selectedDefinition.parameters));
         let parametersMetadata = JSON.parse(JSON.stringify(selectedDefinition.parametersMetadata));
-        this.setState({selectedVersionID, parameters, parametersMetadata});
+        //if there are required parameters for the app, disable start button
+        let requiredParameters = {};
+        let submitActive = this.state.submitActive;
+        Object.keys(parametersMetadata).forEach((param) =>{
+            if(parametersMetadata[param].required) {
+                requiredParameters[param] = null;
+            }
+        });
+
+        if(Object.keys(requiredParameters).length) {
+            submitActive = false;
+        }
+
+        this.setState({selectedVersionID, parameters, parametersMetadata, submitActive, requiredParameters});
     }
 
     /**
