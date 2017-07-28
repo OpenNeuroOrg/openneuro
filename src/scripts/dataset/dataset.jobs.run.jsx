@@ -61,7 +61,7 @@ class JobAccordion extends React.Component {
 
     _header (run) {
         let runBy = run.userId ? <span><br/><label>By </label><strong>{run.userId}</strong></span> : null;
-        let userCanCancel = this.props.currentUser.scitran.root || this.props.currentUser.scitran._id === run.userId;
+        let userCanCancel = (this.props.currentUser && this.props.currentUser.scitran) ? this.props.currentUser.scitran.root || this.props.currentUser.scitran._id === run.userId : false;
         return (
             <div className={(run && run.analysis) ? run.analysis.status.toLowerCase() : 'pending'}>
                 <label>Status</label>
