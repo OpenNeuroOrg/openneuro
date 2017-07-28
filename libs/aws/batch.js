@@ -236,8 +236,7 @@ export default (aws) => {
         */
         buildBatchParams(job, snapshotHash) {
             let hash = snapshotHash || job.datasetHash;
-
-            return {
+            let batchParams = {
                 jobDefinition: job.jobDefinition,
                 jobName:       job.jobName,
                 jobQueue:      config.aws.batch.queue,
@@ -253,6 +252,32 @@ export default (aws) => {
                     }]
                 }
             };
+            let hashList = this._checkForFileInputParameters(job.parameters);
+
+            if (hashList) {
+                batchParams.containerOverrides.environment.push({
+                    name: 'INPUT_HASH_LIST',
+                    value: hashList
+                });
+            }
+            return batchParams;
+        },
+
+        _checkForFileInputParameters(parameters) {
+            let fileRegex = /^\/input\/data\/([0-9a-f]{32})\//;
+            let hashList = "";
+            let hashArray = [];
+            Object.keys(parameters).forEach((param) => {
+                let result = fileRegex.exec(parameters[param]);
+                if(result) {
+                    hashArray.push(result[1]);
+                }
+            });
+            if(hashArray.length) {
+                hashArray = hashArray.sort();
+                hashList = hashArray.join(" ");
+            }
+            return hashList;
         },
 
         /**

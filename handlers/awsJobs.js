@@ -1,6 +1,6 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 // dependencies ------------------------------------------------------------
-
+import crypto  from 'crypto';
 import aws     from '../libs/aws';
 import mongo         from '../libs/mongo';
 import {ObjectID}    from 'mongodb';
@@ -156,8 +156,9 @@ let handlers = {
         let userId = req.user;
         let bucket = config.aws.s3.inputsBucket;
         let file = req.files.file.data; //Buffer
+        let hash = crypto.createHash('md5').update(file).digest('hex');
         let fileName = req.files.file.name;
-        let key = userId + '/' + Date.now() + '/' + fileName;
+        let key = hash + '/' + fileName;
         let params = {
             Bucket: bucket,
             Body: file,
