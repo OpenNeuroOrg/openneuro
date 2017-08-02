@@ -18,7 +18,6 @@ let Jobs = React.createClass({
     mixins: [State, Reflux.connect(JobsStore)],
 
 // life cycle events --------------------------------------------------
-
     componentDidMount() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
         let query = this.getQuery();
@@ -36,7 +35,7 @@ let Jobs = React.createClass({
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
                             <div className="row">
-                                <div className="col-md-5"><h2>{isPublic ? 'My' : 'Public'} Analyses</h2></div>
+                                <div className="col-md-5"><h2>{!isPublic ? 'My' : 'Public'} Analyses</h2></div>
                                 <div className="col-md-7">{this._filter()}</div>
                             </div>
                         </div>
