@@ -42,6 +42,7 @@ export default class JobMenu extends React.Component {
 
     componentDidMount() {
         this.mounted = true;
+        this._checkSubmitStatus();
     }
 
     componentWillUnmount() {

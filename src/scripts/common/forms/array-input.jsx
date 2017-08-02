@@ -39,7 +39,7 @@ let ArrayInput = React.createClass({
                 return <Select placeholder={field.placeholder} simpleValue options={field.select} value={this.state[field.id]} onChange={this._handleSelectChange.bind(null, field.id)} key={field.id} />
             } else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
                 return (
-                    <div className="form-group float-label-input">
+                    <div className="form-group float-label-input" key={field.id}>
                         <button className="required-button" onClick={this._toggleCheckBox.bind(null, field.id)} key={field.id} >
                             <span>
                                 <i className={this.state[field.id] ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Required
@@ -233,7 +233,7 @@ let ArrayItem = React.createClass({
                         return <Select placeholder={field.placeholder} simpleValue options={field.select} value={this.state[field.id]} onChange={this._handleSelectChange.bind(null, field.id)} key={field.id} />
                     } else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
                         return (
-                            <div className="form-group float-label-input">
+                            <div className="form-group float-label-input" key={field.id}>
                                 <button className="required-button" onClick={this._toggleCheckBox.bind(null, field.id)} key={field.id} >
                                     <span className="filter-admin">
                                         <i className={this.state[field.id] ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Required
