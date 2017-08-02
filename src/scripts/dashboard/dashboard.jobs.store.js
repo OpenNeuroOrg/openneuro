@@ -79,7 +79,7 @@ let DashboardJobStore = Reflux.createStore({
     getJobs(isPublic, filter) {
         if (isPublic === undefined) {isPublic = this.data.isPublic;}
         let isSignedOut = !userStore.data.token;
-        this.setInitialState({loading: true, filter: filter}, () => {
+        this.update({loading: true, filter: filter}, () => {
             crn.getJobs((err, res) => {
                 for (let app of res.body.availableApps) {app.value = app.label;}
                 this.update({apps: res.body.availableApps, appsLoading: false});
