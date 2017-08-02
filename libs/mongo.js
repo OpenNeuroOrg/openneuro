@@ -44,6 +44,14 @@ export default {
         }
     },
 
+    /** Index definitions **/
+    indexes: {
+        crn: {
+            jobs: {'analysis.created': -1},
+            logs: {'date': -1}
+        }
+    },
+
     /**
      * Connect
      *
@@ -62,6 +70,9 @@ export default {
                     for (let collectionName in this.collections[dbName]) {
                         if (this.collections[dbName][collectionName] === null) {
                             this.collections[dbName][collectionName] = this.dbs[dbName].collection(collectionName);
+                            if (this.indexes[dbName] && this.indexes[dbName][collectionName]) {
+                                this.collections[dbName][collectionName].createIndex(this.indexes[dbName][collectionName]);
+                            }
                         }
                     }
                     console.log(dbName, ' - db connected');
