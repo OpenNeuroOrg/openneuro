@@ -292,8 +292,9 @@ let handlers = {
             if (err) {
                 return next(err);
             } else {
-                res.attachment(jobId + '.json');
-                res.send(logs);
+                let textLogs = handlers._processLogs(logs);
+                res.attachment(jobId + '.txt');
+                res.send(textLogs);
             }
         });
     },
@@ -479,6 +480,27 @@ let handlers = {
         }
 
         return logStreamNames;
+    },
+
+    _processLogs(logs) {
+        let logString = '';
+        Object.keys(logs).forEach((streamName) => {
+            logString += (streamName + ' - exit code ' + logs[streamName].exitCode + '\n');
+            logString += '  Environment variables:\n';
+
+            logs[streamName].environment.forEach((env) => {
+                logString += ('\t' + env.name + ': ' + env.value + '\n');
+            });
+
+            logString += '  Logs:\n';
+
+            logs[streamName].logs.forEach((log) => {
+                logString += ('\t' + log.timestamp + '\t' + log.message + '\n');
+            });
+            logString += '\n\n';
+        });
+
+        return logString;
     }
 
 };
