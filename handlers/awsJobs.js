@@ -244,12 +244,12 @@ let handlers = {
                 // begin streaming archive
                 archive.pipe(res);
 
-                aws.s3.sdk.listObjectsV2(params, (err, data) => {
+                aws.s3.getAllS3Objects(params, [], (err, data) => {
                     let keysArray = [];
-                    data.Contents.forEach((obj) => {
+                    data.forEach((obj) => {
                         //only include files in results. listObjectsV2 returns keys for directories also so need to filter those out.
-                        if(!/\/$/.test(obj.Key)) {
-                            keysArray.push(obj.Key);
+                        if(!/\/$/.test(obj.name)) {
+                            keysArray.push(obj.name);
                         }
                     });
 
