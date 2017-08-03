@@ -151,6 +151,10 @@ export default {
         }, callback);
     },
 
+    cancelJob(datasetId, jobId, callback) {
+        request.put(config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId, {}, callback);
+    },
+
     /**
      * Retry Job
      *
@@ -212,6 +216,10 @@ export default {
 
     downloadJobLogs(jobId, callback) {
         request.get(config.crn.url + 'jobs/' + jobId + '/logs/download', {}, callback);
+    },
+
+    getEventLogs(callback) {
+       request.get(config.crn.url + 'eventlogs', {}, callback);
     }
 
 };

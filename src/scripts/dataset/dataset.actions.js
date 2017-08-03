@@ -32,6 +32,7 @@ var Actions = Reflux.createActions([
     'selectJob',
     'setInitialState',
     'startJob',
+    'cancelJob',
     'trackDownload',
     'trackView',
     'toggleFolder',
