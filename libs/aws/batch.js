@@ -265,7 +265,7 @@ export default (aws) => {
 
         _checkForFileInputParameters(parameters) {
             let fileRegex = /^\/input\/data\/([0-9a-f]{32})\//;
-            let hashList = "";
+            let hashList = '';
             let hashArray = [];
             Object.keys(parameters).forEach((param) => {
                 let result = fileRegex.exec(parameters[param]);
@@ -275,7 +275,7 @@ export default (aws) => {
             });
             if(hashArray.length) {
                 hashArray = hashArray.sort();
-                hashList = hashArray.join(" ");
+                hashList = hashArray.join(' ');
             }
             return hashList;
         },

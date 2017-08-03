@@ -153,7 +153,6 @@ let handlers = {
     },
 
     parameterFileUpload(req, res, next) {
-        let userId = req.user;
         let bucket = config.aws.s3.inputsBucket;
         let file = req.files.file.data; //Buffer
         let hash = crypto.createHash('md5').update(file).digest('hex');
