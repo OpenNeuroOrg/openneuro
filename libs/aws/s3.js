@@ -135,7 +135,7 @@ export default (aws) => {
          * returns results formatted to be compatible with filetree component on client
          */
         getJobResults(params, callback) {
-            this._getAllS3Objects(params, [], (err, results) => {
+            this.getAllS3Objects(params, [], (err, results) => {
                 if(err) {return callback(err);}
 
                 //Need to format results to preserver folder structure. this could use some cleanup but works for now
@@ -218,7 +218,7 @@ export default (aws) => {
             });
         },
 
-        _getAllS3Objects(params, results, callback) {
+        getAllS3Objects(params, results, callback) {
             s3.listObjectsV2(params, (err, data) => {
                 data.Contents.forEach((obj) => {
                     if(!/\/$/.test(obj.Key)) {
@@ -231,7 +231,7 @@ export default (aws) => {
                 if (data.IsTruncated) {
                     // Append more results from the next call
                     params.ContinuationToken = data.NextContinuationToken;
-                    this._getAllS3Objects(params, results, callback);
+                    this.getAllS3Objects(params, results, callback);
                 } else {
                     callback(err, results);
                 }
