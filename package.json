@@ -1,6 +1,6 @@
 {
   "name": "CRN",
-  "version": "0.12.2",
+  "version": "0.12.3-alpha",
   "description": "React JS web frontend for the CRN application.",
   "main": "app.js",
   "repository": {
