@@ -1,0 +1,46 @@
+{
+  "name": "crn-server",
+  "version": "0.7.2-alpha",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint .",
+    "start": "node index.js",
+    "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/",
+    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel/register tests/**/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:poldracklab/crn_server.git"
+  },
+  "author": "Squishymedia",
+  "license": " ",
+  "dependencies": {
+    "ajv": "4.9.0",
+    "archiver": "^1.0.0",
+    "async": "^2.4.1",
+    "aws-sdk": "2.50.0",
+    "babel": "^5.8.23",
+    "bids-validator": "0.21.6",
+    "body-parser": "^1.14.0",
+    "cron": "^1.1.0",
+    "express": "^4.13.3",
+    "express-fileupload": "^0.1.4",
+    "ioredis": "^3.1.1",
+    "juice": "^2.0.0",
+    "moment": "^2.14.1",
+    "mongodb": "^2.0.46",
+    "morgan": "^1.6.1",
+    "node-resque": "^4.0.7",
+    "nodemailer": "^2.5.0",
+    "request": "^2.63.0",
+    "tar-fs": "^1.9.0",
+    "underscore": "^1.8.3",
+    "uuid": "^3.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "istanbul": "^0.4.5",
+    "mocha": "3.0.2"
+  }
+}
