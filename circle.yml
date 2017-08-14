@@ -23,7 +23,7 @@ deployment:
   production:
     tag: /v.*/
     commands:
-      - docker tag openneuro/server:$([ "$CIRCLE_BRANCH" || "$CIRCLE_TAG" ]) openneuro/server
-      - docker tag openneuro/app:$([ "$CIRCLE_BRANCH" || "$CIRCLE_TAG" ]) openneuro/app
+      - docker tag openneuro/server:$CIRCLE_TAG openneuro/server
+      - docker tag openneuro/app:$CIRCLE_TAG openneuro/app
       - docker push openneuro/server
       - docker push openneuro/app
