@@ -123,6 +123,22 @@ export default {
         request.post(config.crn.url + 'datasets/' + job.snapshotId + '/jobs', {body: job, query: {snapshot: true}}, callback);
     },
 
+    uploadParamFile(parameters, file, callback) {
+        let options = {
+            fields: {
+                file: file.file,
+                name: file.file.name,
+                tags: []
+            }
+        };
+        request.upload(config.crn.url + 'datasets/jobsupload', options, (err, res) => {
+            if(err) return callback(err);
+            let filePath = res.body.filePath;
+            parameters[file.key] = filePath;
+            callback();
+        });
+    },
+
     /**
      * Get Job
      *

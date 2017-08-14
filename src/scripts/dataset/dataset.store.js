@@ -2,6 +2,7 @@
 
 import Reflux      from 'reflux';
 import React       from 'react';
+import async       from 'async';
 import Actions     from './dataset.actions.js';
 import scitran     from '../utils/scitran';
 import crn         from '../utils/crn';
@@ -1023,6 +1024,26 @@ let datasetStore = Reflux.createStore({
         poll(jobId);
     },
 
+    prepareJobSubmission(parameters, inputFileParameters, callback) {
+        if(Object.keys(inputFileParameters) && Object.keys(inputFileParameters).length > 0) {
+            let filesToUpload = [];
+
+            Object.keys(inputFileParameters).forEach((param) => {
+                let file = {
+                    file: inputFileParameters[param],
+                    key: param
+                };
+                filesToUpload.push(file);
+            });
+            let uploadFunc = crn.uploadParamFile.bind(null, parameters);
+            async.each(filesToUpload, uploadFunc, (err) => {
+                if(err) return callback(err);
+                callback(null, parameters);
+            });
+        } else {
+            callback(null, parameters)
+        }
+    },
     /**
      * Start Job
      */

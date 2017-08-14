@@ -24,6 +24,7 @@ export default class JobMenu extends React.Component {
             loading:           false,
             parameters:         {},
             parametersMetadata: {},
+            inputFileParameters: {},
             disabledApps:       {},
             jobId:              null,
             selectedApp:        [],
@@ -294,6 +295,7 @@ export default class JobMenu extends React.Component {
             loading:            false,
             jobId:              null,
             parameters:         {},
+            inputFileParameters:{},
             selectedApp:        [],
             selectedAppKey:     '',
             selectedVersion:    {},
@@ -315,14 +317,19 @@ export default class JobMenu extends React.Component {
      */
     _updateParameter(parameter, event) {
         const value = event.target.value;
+        let inputFileParameters = this.state.inputFileParameters;
+        if(event.target.files && event.target.files.length > 0) {
+            inputFileParameters[parameter] = event.target.files[0];
+        }
         let requiredParamsUpdate = Object.keys(this.state.requiredParameters).indexOf(parameter) != -1;
         let parameters = this.state.parameters;
         let requiredParameters = this.state.requiredParameters;
         parameters[parameter] = value;
+
         if (requiredParamsUpdate) {
             requiredParameters[parameter] = value;
         }
-        this.setState({parameters, requiredParameters}, ()=>{
+        this.setState({parameters, requiredParameters, inputFileParameters}, ()=>{
             this._checkSubmitStatus();
         });
     }
@@ -344,7 +351,8 @@ export default class JobMenu extends React.Component {
         const revision   = this.state.selectedVersionID;
         const app        = apps[key][revision];
         const parameters = JSON.parse(JSON.stringify(app.parameters));
-        this.setState({parameters});
+        const inputFileParameters = {};
+        this.setState({parameters, inputFileParameters});
     }
 
     /**
@@ -356,6 +364,7 @@ export default class JobMenu extends React.Component {
         if(this.state.selectedAppKey != e.target.value){
             this.setState({
                 parameters:         [],
+                inputFileParameters:{},
                 selectedApp:        [],
                 selectedAppKey:     '',
                 selectedVersion:    {},
@@ -446,29 +455,32 @@ export default class JobMenu extends React.Component {
         const key              = this.state.selectedAppKey;
         const revision         = this.state.selectedVersionID;
         const jobDefinition    = definitions[key][revision];
-        const parameters       = this.state.parameters;
+        let parameters       = this.state.parameters;
+        const inputFileParameters = this.state.inputFileParameters;
 
         this.setState({loading: true});
 
-        actions.startJob(selectedSnapshot, jobDefinition, parameters, (err, res) => {
-            let message, error;
-            if (err) {
-                error   = true;
-                if (res.status === 409) {
-                    message = 'This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.';
-                } else if (res.status === 503) {
-                    message = 'We are temporarily unable to process this analysis. Please try again later. If this issue persists, please contact the site administrator.';
-                } else if (res.status === 403 && res.body.error) {
-                    // If non admins try to run more than 2 jobs at a time, want to display message letting them know they don't have access
-                    message = res.body.error;
+        actions.prepareJobSubmission(parameters, inputFileParameters, (e, updatedParameters) => {
+            actions.startJob(selectedSnapshot, jobDefinition, updatedParameters, (err, res) => {
+                let message, error;
+                if (err) {
+                    error   = true;
+                    if (res.status === 409) {
+                        message = 'This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.';
+                    } else if (res.status === 503) {
+                        message = 'We are temporarily unable to process this analysis. Please try again later. If this issue persists, please contact the site administrator.';
+                    } else if (res.status === 403 && res.body.error) {
+                        // If non admins try to run more than 2 jobs at a time, want to display message letting them know they don't have access
+                        message = res.body.error;
+                    } else {
+                        message = 'There was an issue submitting your analysis. Double check your inputs and try again. If the issue persists, please contact the site administrator.';
+                    }
                 } else {
-                    message = 'There was an issue submitting your analysis. Double check your inputs and try again. If the issue persists, please contact the site administrator.';
+                    message = 'Your analysis has been submitted. You will receive a notification by email once the job is complete.';
                 }
-            } else {
-                message = 'Your analysis has been submitted. You will receive a notification by email once the job is complete.';
-            }
 
-            this.setState({loading: false, message: message, error: error /*, jobId: res.body.result.id*/});
+                this.setState({loading: false, message: message, error: error /*, jobId: res.body.result.id*/});
+            });
         });
     }
 }
