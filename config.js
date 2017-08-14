@@ -49,6 +49,7 @@ let config = {
         's3': {
             'datasetBucket': process.env.AWS_S3_DATASET_BUCKET,
             'analysisBucket': process.env.AWS_S3_ANALYSIS_BUCKET,
+            'inputsBucket': process.env.AWS_S3_INPUTS_BUCKET,
             'concurrency': 10,
             'timeout': 10 * 60 * 1000
         },

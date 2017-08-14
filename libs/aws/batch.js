@@ -76,6 +76,7 @@ export default (aws) => {
             let env = jobDef.containerProperties.environment;
             env.push({name: 'BIDS_DATASET_BUCKET', value: config.aws.s3.datasetBucket});
             env.push({name: 'BIDS_OUTPUT_BUCKET', value: config.aws.s3.analysisBucket});
+            env.push({name: 'BIDS_INPUT_BUCKET', value: config.aws.s3.inputsBucket});
 
             // This controls this value for the host container
             // child containers are always run without the privileged flag
@@ -240,8 +241,7 @@ export default (aws) => {
         */
         buildBatchParams(job, snapshotHash) {
             let hash = snapshotHash || job.datasetHash;
-
-            return {
+            let batchParams = {
                 jobDefinition: job.jobDefinition,
                 jobName:       job.jobName,
                 jobQueue:      config.aws.batch.queue,
@@ -257,6 +257,32 @@ export default (aws) => {
                     }]
                 }
             };
+            let hashList = this._checkForFileInputParameters(job.parameters);
+
+            if (hashList) {
+                batchParams.containerOverrides.environment.push({
+                    name: 'INPUT_HASH_LIST',
+                    value: hashList
+                });
+            }
+            return batchParams;
+        },
+
+        _checkForFileInputParameters(parameters) {
+            let fileRegex = /^\/input\/data\/([0-9a-f]{32})\//;
+            let hashList = '';
+            let hashArray = [];
+            Object.keys(parameters).forEach((param) => {
+                let result = fileRegex.exec(parameters[param]);
+                if(result) {
+                    hashArray.push(result[1]);
+                }
+            });
+            if(hashArray.length) {
+                hashArray = hashArray.sort();
+                hashList = hashArray.join(' ');
+            }
+            return hashList;
         },
 
         _checkRequiredParams(job, jobDef) {
