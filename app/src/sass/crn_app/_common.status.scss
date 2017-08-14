@@ -1,0 +1,100 @@
+.snapshot,
+.dataset {
+    .status-container {
+        width: 100%;
+        float: none;
+        box-sizing: border-box;
+
+        .status-wrap {
+            padding: 0;
+            margin: 0;
+
+            > span {
+                @extend %clearfix;
+                padding: 20px 0 0;
+                display: block;
+            }
+
+            .status {
+                display: inline-block;
+                width: auto;
+                float: left;
+                margin-left: 0;
+                margin-right: 15px;
+                text-align: left;
+            }
+        }
+    }
+}
+
+.dataset-status {
+    background: none;
+    color: $c-66;
+    font-size: 14px;
+    font-family: $font-family-cabin;
+    font-weight: 300;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    display: inline;
+    width: 100%;
+    position: relative;
+
+    i {
+        margin-right: 5px;
+    }
+
+    &.ds-primary {
+        background: none;
+        color: $primary;
+    }
+
+    &.ds-success {
+        background: none;
+        color: $brand-success;
+    }
+
+    &.ds-info {
+        background: none;
+        color: $brand-info;
+    }
+
+    &.ds-warning {
+        background: none;
+        color: $brand-warning;
+    }
+
+    &.ds-danger {
+        background: none;
+        color: $brand-danger;
+    }
+
+    input {
+        color: transparent;
+        padding: 0;
+        height: 20px;
+        display: block;
+        width: 100%;
+        max-width: 90px;
+
+        &::-webkit-file-upload-button {
+            visibility: hidden;
+            color: transparent;
+        }
+
+        &::before {
+            @extend %btn-blue;
+            @include user-select(none);
+            content: 'resume';
+            display: inline-block;
+            outline: none;
+            white-space: nowrap;
+            font-size: 10px;
+            padding: 0;
+        }
+
+        &[type="file"]:focus {
+            outline: none;
+        }
+    }
+}

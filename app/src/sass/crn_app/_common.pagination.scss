@@ -1,0 +1,38 @@
+// Pagination Pager // ================================================================
+.pager-wrapper {
+    text-align: center;
+
+    .pagination > li {
+
+        a,
+        span {
+            transition: all .3s ease-out;
+            color: $sky;
+        }
+
+        &:first-child>,
+        &:last-child > {
+
+            a,
+            span {
+                @include border-radius(0);
+            }
+        }
+
+        &.active {
+
+            a,
+            span {
+                @include transition(all .3s ease-out);
+                background: darken($sky, 10%);
+                color: $white;
+
+                &:hover {
+                    @include transition(all .3s ease-out);
+                    background: darken($sky, 10%);
+                    color: $white;
+                }
+            }
+        }
+    }
+}

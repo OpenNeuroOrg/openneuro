@@ -1,0 +1,325 @@
+.upload-modal.modal.in {
+    .modal-dialog {padding: 0;}
+    .modal-header {background: $f4;}
+    .modal-body {padding: 0;}
+}
+
+
+.uploader {
+    .message {
+        text-align: center;
+        width: 100%;
+        font-size: 15px;
+        font-weight: 600;
+        color: $rock;
+        max-width: 400px;
+        margin: 0 auto;
+        display: block;
+        padding: 20px;
+
+        &.error {
+            color: $coral;
+        }
+
+        &.character-error {
+            padding: 0 10px 5px;
+            text-align: center;
+        }
+
+        .upload-reset-link,
+        .rename-tab-link {
+            color: $primary;
+            cursor: pointer;
+
+            &:hover {color: $primary-hover;}
+        }
+
+    }
+    .disclaimer{
+        padding: 20px;
+        display: block;
+        font-size: 15px;
+    }
+
+    .dir-name {
+        text-align: center;
+        font-size: 21px;
+        i {margin-right: 10px;}
+        &.has-input {
+            width: 330px;
+            margin: 0 auto;
+            max-width: 100%;
+
+            .add-name {
+                float: left;
+                width: 10%;
+                height: 45px;
+                text-align: right;
+                padding: 10px 8px;
+                background-color: $white;
+                margin: 0;
+                box-shadow: inset 2px 0 5px -1px $transparent1;
+            }
+
+            .form-group {
+                float: left;
+                width: 90%;
+                margin: 0;
+
+                label {
+                    position: absolute;
+                    text-align: right;
+                    width: 100%;
+                    padding: 2px 2%;
+
+                }
+
+                input {
+                    box-shadow: inset -2px 0 5px -1px $transparent1;
+
+                    &:focus {
+                        @include gradient-directional($start-color: $white, $end-color: $fa, $deg: 85deg);
+                        outline: none;
+                    }
+                }
+            }
+
+            button {
+                font-size: 12px;
+                background-color: $transparent;
+                border: 0;
+                color: $primary;
+                margin: 0 0 0 20px;
+                vertical-align: middle;
+                height: 30px;
+
+                &:hover {
+                    color: $primary-hover;
+                }
+            }
+        }
+    }
+
+    .upload-progress-block {
+        margin-top: 0;
+        position: relative;
+        padding: 0;
+        border-bottom: 1px solid transparent;
+        z-index: 1000;
+
+        .upload-dirname {
+            text-align: center;
+            display: block;
+            width: 100%;
+            font-size: 21px;
+            label {margin: 0 5px 0 0;}
+        }
+
+        .uploadfiles-wrap {margin: 10px 0 0;}
+        .progress-bar-warning {
+            background: $brand-warning;
+        }
+    }
+
+    .upload-wrap {
+        background: transparent;
+        position: relative;
+        z-index: 1000;
+
+        .upload-panel {
+            border-radius: 0;
+            border: 0;
+
+            > .panel-heading {
+                padding: 0;
+                z-index: 1299;
+                text-transform: uppercase;
+                background-color: $transparent;
+                position: relative;
+
+                h4 {
+                    margin: 0;
+                    font-size: 21px;
+                    display: block;
+                    padding: 18px;
+                    background-color: $f4;
+                    color: $ocean;
+                    font-family: $font-family-open;
+                    font-weight: 400;
+                    text-decoration: none;
+                }
+            }
+
+            .panel-body {
+                padding: 0;
+                background: $eee;
+            }
+        }
+    }
+}
+
+
+.active-pane-2,
+.active-pane-3,
+.active-pane-4 {
+    .file-structure.panel-group .panel-default .panel-heading { text-align: center;}
+
+    .btn-blue {
+        width: 100%;
+        max-width: 200px;
+        display: block;
+        margin: 0 auto 30px;
+    }
+}
+
+.active-pane-3 {
+    .btn-blue {margin: 20px auto 0;}
+}
+
+.active-pane-5 {padding: 30px 50px;}
+
+.active-tab-1,
+.active-tab-2,
+.active-tab-3,
+.active-tab-4,
+.active-tab-5 {
+    height: 45px;
+    width: 20%;
+    background: $bbb;
+    transition: margin-left .3s ease;
+    margin-top: -40px;
+    border-bottom: 5px solid $sky;
+
+    @media (max-width: 1428px)  {
+        margin-top: -60px;
+        height: 65px;
+    }
+}
+
+
+.active-tab-2 {margin-left: 20%;}
+.active-tab-3 {margin-left: 40%;}
+.active-tab-4 {margin-left: 60%;}
+.active-tab-5 {margin-left: 80%;}
+
+#upload-tabs {
+
+    .nav.nav-xs.nav-pills {
+        margin: 0;
+        border: 0;
+        background: $d9;
+        float: none;
+
+        li {
+            border: 0;
+            margin: 0;
+            width: 20%;
+            text-align: center;
+            font-size: 12px;
+
+            a {
+                border-radius: 0;
+                background-color: transparent;
+                color: lighten($ocean, 10%);
+                font-size: 14px;
+                border-right: 1px solid $transparent1;
+                letter-spacing: 0;
+                padding-top: 5px;
+
+                &:hover {
+                    background-color: $transparent;
+                    color: $ocean;
+                }
+
+                @media (max-width: 1428px) {span {display: block;}}
+            }
+
+        }
+
+        .upload-step {
+            .panel-heading {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                border-radius: 0;
+
+                .panel-title a {
+                    padding: 10px;
+                    display: block;
+                    background-color: $c-66;
+                    color: $misty;
+                    border-bottom: 1px solid $c-66;
+                    transition: all .3s ease;
+
+                    &.collapsed {
+                        background-color: $eee;
+                        color: $c-66;
+                        border-bottom: 1px solid $transparent;
+                    }
+                }
+            }
+
+            .tab-content {
+                padding: 10px 30px 20px;
+
+                .tab-pane {border-top: 0;}
+            }
+        }
+
+        &.active.step5 {float: right;}
+
+        &.disabled {
+            a {
+                cursor: default;
+                color: $c-77;
+
+                &:hover {
+                    background-color: $transparent;
+                    color: $c-77;
+                }
+            }
+        }
+    }
+}
+
+.error-log {
+    border: 0;
+    border-color: $transparent;
+    box-shadow: none;
+    margin: 20px 0;
+    border-radius: 0;
+    font-size: 12px;
+    text-align: center;
+    display: block;
+    color: $primary;
+    background-color: $transparent;
+    &:hover {color: $primary-hover;}
+}
+
+.bids-link {
+    text-align: center;
+    width: 100%;
+    display: block;
+    margin: 10px 0;
+    padding: 0;
+    color: $c-66;
+    font-size: 12px;
+}
+
+//UPLOAD display
+.uploading.right-sidebar {
+
+    .message {
+        text-align: left;
+        color: $turquoise;
+        text-transform: lowercase;
+        font-size: 12px;
+        margin: 5px 0;
+    }
+
+    .dir-name {
+        text-align: left;
+        margin-top: 0;
+    }
+}
+

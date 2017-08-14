@@ -1,0 +1,30 @@
+scss_files: 'src/sass/**/*.scss'
+
+exclude:
+  - 'src/sass/animate/**'
+  - 'src/sass/bootstrap/**'
+  - 'src/sass/font-awesome/**'
+  - 'src/sass/fonts/**'
+  - 'src/sass/_bootstrap-compass.scss'
+  - 'src/sass/_bootstrap-mincer.scss'
+  - 'src/sass/_bootstrap-sprockets.scss'
+  - 'src/sass/_bootstrap.scss'
+  - 'src/sass/react-select.scss'
+  - 'src/sass/crn_app/_common.papaya.scss'
+
+linters:
+  BorderZero:
+    enabled: true
+
+  Indentation:
+    severity: warning
+    width: 4
+
+  PropertySortOrder:
+    enabled: false
+
+  SelectorDepth:
+    enabled: false
+
+  NestingDepth:
+    enabled: false

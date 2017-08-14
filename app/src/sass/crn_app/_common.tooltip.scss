@@ -1,0 +1,22 @@
+
+// tooltips ========================
+
+.tooltip {
+    z-index: 1000;
+    margin-left: -1px;
+
+    &.top .tooltip-arrow {
+        border-top-color: $transparent9;
+    }
+}
+
+.tooltip-inner {
+    max-width: 200px;
+    font-size: 12px;
+    border-radius: 0;
+    background: $transparent9;
+    color: $white;
+    padding: 8px 12px;
+}
+
+

@@ -1,0 +1,141 @@
+// Colors
+$transparent: rgba(0, 0, 0, 0);
+$transparent1: rgba(0, 0, 0, .1);
+$transparent3: rgba(0, 0, 0, .3);
+$transparent5: rgba(0, 0, 0, .7);
+$transparent7: rgba(0, 0, 0, .7);
+$transparent8: rgba(0, 0, 0, .8);
+$transparent9: rgba(0, 0, 0, .9);
+
+$transparent1-w: rgba(255, 255, 255, .1);
+$transparent05-w: rgba(255, 255, 255, .05);
+
+$white: #fff;
+$black: #000;
+$stanford-red: #8c1515; //link color
+$coral:#eb472c;
+$salmon:#ec7764;
+
+$rock:#5f574f;
+$stone:#928b81;
+$driftwood:#b6b1a9;
+$misty:#dad7cb;
+
+$fuchsia: #9169a7;
+
+$ocean:#00505c;
+$algae:#175e54;
+$sky:#007c92;
+$turquoise:#009b76;
+$night:#012a30; //body font color
+
+$yellow: #ffd820;
+$honey: #fffcee;
+
+$notification-green: #77e6a3;
+
+.color-green{
+    color: $brand-success;
+}
+
+
+.color-warning{
+    color: $coral;
+}
+
+// Gray
+
+$c-9e: #9e9e9e;
+$c-90: #909090;
+$c-77: #777;
+$c-66: #666;
+$c-56: #565656;
+$c-42: #424242;
+$c-33: #333;
+$c-21: #212121;
+
+$aaa: #aaa;
+$a5: #a5a5a5;
+$bbb: #bbb;
+$ccc: #ccc;
+$c2: #c2c2c2;
+
+$ddd: #ddd;
+$d9: #d9d9d9;
+$de: #dedede;
+
+$eee: #eee;
+$e1: #e1e1e1;
+$e5: #e5e5e5;
+$e7: #e7e7e7;
+
+
+$f4: #f4f4f4;
+$f8: #f8f8f8;
+$f9: #f9f9f9;
+$fa: #fafafa;
+
+$warning-orange-cream: #ffefdb;
+$warning-orange: #df7600;
+
+
+$primary: $ocean;
+$primary-hover: lighten($ocean, 15%);
+
+// BS overrides
+$brand-primary:         $primary;
+$brand-success:         #24c85e !default;
+$brand-info:            #24c8c8 !default;
+$brand-warning:         #f7ba4b !default;
+$brand-danger:          #c82424 !default;
+
+// ssp weights: normal 300, 400, 700 - italic 300, 400 , 700
+// Cabin weights: normal 400 - italic 400
+
+$font-family-open: 'Open Sans', sans-serif;
+$font-family-cabin: 'Cabin', sans-serif;
+
+
+$btn-shadow: 1px 1px 3px -1px $transparent7;
+
+
+$text-primary:         $primary;
+$text-success:         $brand-success;
+$text-info:            $brand-info;
+$text-warning:         $brand-warning;
+$text-danger:          $brand-danger;
+
+
+.text-primary {
+    color: $primary;
+}
+
+.text-success {
+    color: $text-success;
+}
+
+.text-info {
+    color: $text-info;
+}
+
+.text-warning {
+    color: $text-warning;
+}
+
+.text-danger {
+    color: $text-danger;
+}
+
+
+@mixin blur($radius) {
+    -webkit-filter: blur($radius);
+    -moz-filter: blur($radius);
+    -ms-filter: blur($radius);
+    filter: blur($radius);
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}

@@ -1,0 +1,245 @@
+//base ====================================================================
+@import 'bootstrap';
+// Always required /_properties if not importing all animate/animate.scss
+@import 'animate/properties';
+
+//font  //=================================================================
+@import './font-awesome/font-awesome';
+
+// papaya asset default
+@import './crn_app/_common.papaya';
+
+// annimations ============================================================
+@import 'animate/_fading-entrances/fading-entrances';
+@import 'animate/_sliding-entrances/sliding-entrances';
+@import 'animate/_sliding-exits/sliding-exits';
+@import 'animate/_flippers/flippers';
+@import 'animate/_attention-seekers/flash';
+
+
+//crn SASS ================================================================
+@import './crn_app/variables';
+@import './crn_app/elements-wrappers';
+
+// react-select
+@import './react-select';
+
+//component common
+@import './crn_app/common.spinner';
+@import './crn_app/common.pagination';
+@import './crn_app/common.status';
+@import './crn_app/common.happybrowser';
+@import './crn_app/common.click-to-edit';
+@import './crn_app/common.typeahead';
+@import './crn_app/common.modals';
+@import './crn_app/common.progress-bar';
+@import './crn_app/common.tooltip';
+
+//component specific
+@import './crn_app/nav.navbar';
+@import './crn_app/notification.alert';
+@import './crn_app/dataset.dataset';
+@import './crn_app/dataset.jobs';
+@import './crn_app/dataset.tools';
+@import './crn_app/dataset.file-tree';
+@import './crn_app/dataset.sidebar';
+@import './crn_app/admin.admin';
+@import './crn_app/frontPage';
+@import './crn_app/dashboard.datasets';
+@import './crn_app/upload.upload';
+@import './crn_app/upload.validation';
+@import './crn_app/admin.tools';
+@import './crn_app/faq';
+
+
+
+
+.logo-text{
+    color: $c-42;
+    font-size: 75px;
+    font-weight: 700;
+    position: relative;
+    line-height:  1em;
+    .logo-end{
+        font-size: 75%;
+        text-transform: uppercase;
+        color: $ocean;
+        font-weight: 400;
+    }
+    &:after{
+        content: 'BETA';
+        font-size: 20%;
+        position: absolute;
+        top: -10px;
+        margin-left: 5px;
+    }
+}
+
+.fade-in {@include fadeIn();}
+%slide-down-fast {@include slideInDown($duration: .3s, $delay: 0);}
+
+.slide-in-left {@include slideInLeft();}
+.slide-out-left {@include slideOutLeft();}
+.slide-in-right-fast {@include slideInRightFast();}
+%slide-in-down { @include slideInDown();}
+.flipin-x {@include flipInX();}
+%flash {@include flash();}
+
+
+.slide-in-down {
+    @extend %slide-in-down;
+}
+
+@include keyframes(spin) {
+    0% {@include transform(rotate(0));}
+    100% {@include transform(rotate(360deg));}
+}
+
+@include keyframes(dot) {
+    0% {opacity: 0;}
+    50% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+
+@include keyframes(border-flash) {
+    0% {border: 1px solid $yellow; }
+    50% {border: 1px solid transparent;}
+    100% {border: 1px solid $yellow;}
+}
+@include keyframes(background-flash) {
+    0% {background-color: $honey; }
+    50% {background-color: transparent;}
+    100% {background-color: $honey;}
+}
+
+@include keyframes(borderxpand) {
+    0% {
+        width: 0;
+        height: 0;
+    }
+    100% {
+        width: 100%;
+        height: auto;
+    }
+}
+
+
+@include keyframes(revealIn) {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+
+@include keyframes(shrink-bounce) {
+    0% {@include transform(scale(1));}
+    33% {@include transform(rscale(.85));}
+    100% {@include transform(rscale(1));}
+}
+
+@include keyframes(checkbox-check) {
+    0% {
+        @include transform(translate3d(0, 0, 0) rotate(45deg));
+        width: 0;
+        height: 0;
+        border-color: $c-21;
+    }
+
+    33% {
+        @include transform(translate3d(0, 0, 0) rotate(45deg));
+        width: .2em;
+        height: 0;
+    }
+
+    100% {
+        @include transform(translate3d(0, -.5em, 0) rotate(45deg));
+        width: .2em;
+        height: .5em;
+        border-color: $c-21;
+    }
+}
+
+.ellipsis-animation {
+    color: $rock;
+    margin: 0;
+    padding: 4px;
+    font-size: 12px;
+
+    .one,
+    .two,
+    .three {
+        @include animation(dot 1.3s infinite);
+        opacity: 0;
+        font-size: 20px;
+        line-height: 10px;
+    }
+
+    .one {@include animation-delay(.0s);}
+    .two {@include animation-delay(.2s);}
+    .three {@include animation-delay(.3s);}
+}
+
+
+
+
+.ds-danger .ellipsis-animation {color: $brand-danger;}
+.ds-warning .ellipsis-animation {color: $brand-warning;}
+
+.icon-ban:after,
+.icon-undo:after,
+.icon-plus:after,
+.icon-minus:after {
+    font-size: 11px;
+    top: -10px;
+    position: relative;
+    right: -2px
+}
+
+.icon-plus:after {
+    font-size:  9px;
+    content: '\f067';
+}
+
+.icon-minus:after {
+    content: '\f068';
+}
+
+
+.icon-undo:after {
+    content: '\f0e2';
+}
+
+.icon-ban:after {
+    content: '\f05e';
+    color: $brand-danger;
+}
+
+//papaya overrides
+
+.papaya-wrap{
+    margin: auto;
+    max-width: 90%;
+    .papaya-controlbar-label{
+        color: $black;
+    }
+    button{
+        @extend %btn-admin;
+        border-color: $sky;
+        color: $sky;
+        padding: 5px 2px;
+        height: auto;
+        &:hover{
+            background:transparentize($sky, .5);
+            color:$white;
+        }
+    }
+}
+
+
+
+
+
+.apps-filter,
+.versions-filter{
+ margin: 15px 0;
+ z-index: 1000;
+}

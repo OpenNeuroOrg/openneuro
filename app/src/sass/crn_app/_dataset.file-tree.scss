@@ -1,0 +1,165 @@
+//File structure  accordion
+.file-structure.panel-group {
+    margin: 5px 0 10px;
+    border: 0;
+
+    .panel-default {
+        @include border-radius(0);
+        background: none;
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+
+        .accordion-icon {
+            float: right;
+            margin-top: 2px;
+        }
+
+        .type-icon {
+            background: none;
+            border: 0;
+        }
+
+        .panel-heading {
+            @include border-radius(0);
+            border: 0;
+            border-color: $transparent;
+            box-shadow: none;
+            margin: 0;
+            padding: 5px 0;
+            background-color: transparent;
+            text-align: left;
+
+            .panel-title {
+                color: $aaa;
+                font-size: 13px;
+                padding: 0;
+
+                a {
+                    text-decoration: none;
+                    color: $primary;
+                    background: none;
+                    margin: 0;
+                    padding: 0 0 20px;
+                    border-color: transparent;
+
+                    &::before {content: 'Hide ';}
+                    &.collapsed::before {content: 'View ';}
+
+                    &:hover {
+                        text-decoration: none;
+                        color: $primary-hover;
+                    }
+                }
+            }
+        }
+
+        .panel-collapse {
+            margin-top: 0;
+
+            .panel-body {
+                border-top: 1px solid transparent;
+                color: $c-56;
+                font-family: 'Cabin', sans-serif;
+                font-size: 11px;
+
+                >ul {
+                    overflow: visible;
+                    height: auto;
+                    padding: 0;
+                    margin: 0;
+
+                    li {
+                        padding: 6px 0 6px 10px;
+                        list-style: none;
+                        margin: 2px;
+
+                        .btn-file-folder {
+                            color: $c-66;
+                            width: 100%;
+                            text-align: left;
+                        }
+
+                        .child-files {
+                            margin-left: 5px;
+                            border-left: 1px solid $c-9e;
+
+                            li {
+                                background: $white;
+
+                                .message.error {color: $coral;}
+                                .fa-times {cursor: pointer;}
+                            }
+
+                            li::before {
+                                content: '';
+                                height: 7px;
+                                width: 7px;
+                                background: none;
+                                border-bottom: 1px solid $c-9e;
+                                margin-left: -11px;
+                                position: absolute;
+                                margin-top: 3px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.snapshot,
+.dataset {
+    .dataset-inner {
+        .dataset-files {
+            .file-structure.panel-group {
+                .panel-default {
+
+                    .panel-heading .panel-title {
+                        font-size: 21px;
+                        color: $c-33;
+                        line-height: 21px;
+                        padding: 0;
+                        display: inline-block;
+                        max-width: 100%;
+                        margin-bottom: 5px;
+                        font-family: 'Cabin', sans-serif;
+                    }
+
+                    .panel-body {
+                        padding: 0;
+                        border: 1px solid $ddd;
+                        ul {
+                            padding: 0;
+                            position: relative;
+
+                            li {
+                                position: relative;
+
+                                .cte-edit-button {
+                                    position: absolute;
+                                    top: 5px;
+                                    right: 5px;
+                                }
+                            }
+                        }
+
+                        .filetree-editfile {
+                            height: 20px;
+                            float: none;
+                            width: 100%;
+                            display: block;
+                            margin: 5px 0 0;
+
+                            .btn-warn-load {
+                                padding: 0px;
+                                margin: 0px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

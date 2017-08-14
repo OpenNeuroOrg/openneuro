@@ -1,0 +1,98 @@
+.snapshot,
+.dataset {
+
+    .dataset-inner {
+        padding-top: 60px;
+
+        h1 {
+            margin-top: 0;
+            label {
+                margin: 0;
+                padding: 0;
+                text-transform: none;
+                font-weight: 300;
+                font-family: $font-family-open;
+                font-size: 40px;
+                color: $c-33;
+            }
+
+            .nav.nav-pills {
+                float: left;
+            }
+
+            .form-group {
+                margin: 0;
+                .cte-display {display: none;}
+                .cte-edit {margin: 10px 0;}
+
+                .cte-save-btn {
+                    font-size: 16px;
+                    font-family: $font-family-cabin;
+                }
+            }
+        }
+
+        h6 {margin: 5px 0 0;}
+
+        .dataset-readme {
+            margin-top: 20px;
+
+            .description-item {
+                padding-bottom: 10px;
+                margin-bottom: 10px;
+                //border-bottom:2px solid #eee;
+                .form-group {
+                    margin: 0;
+
+                    .alert.alert-danger{
+                        position: relative;
+                    }
+                    .cte-display {
+                        border-bottom: 1px solid $eee;
+                        padding: 10px;
+                    }
+
+                    .cte-edit {
+                        border-bottom: 1px solid $eee;
+
+                        .cte-edit-array {
+                            margin-bottom: 10px;
+                        }
+                    }
+
+                    label {
+                        font-size: 18px;
+                        color: $c-42;
+                        line-height: 10px;
+                        padding: 0;
+                    }
+
+                    textarea,
+                    textarea.form-control {
+                        min-height: 300px;
+                    }
+                }
+
+                .float-label-input {
+                    width: 75%;
+
+                    label {
+                        font-size: 10px;
+                        padding-right: 5px;
+                        right: 10px;
+                        top: 3px;
+                    }
+                }
+
+                .file-name-link {
+                    i {
+                        font-size: 13px;
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+

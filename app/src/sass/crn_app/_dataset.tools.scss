@@ -1,0 +1,118 @@
+
+.dataset-tools-wrap {
+    margin: 0 0 20px;
+    padding: 0;
+    position: fixed;
+    z-index: 1000;
+    height: 45px;
+    overflow: hidden;
+
+    .tools {
+        padding: 0;
+        margin: 0 0 0 40px;
+        display: block;
+        width: 100%;
+        background: $f4;
+        position: relative;
+
+        .run-analysis {
+            height: 45px;
+            width: auto;
+            float: left;
+            border-left: 1px solid $aaa;
+
+            .btn-blue {
+                margin: 0 5px 0 0;
+                padding: 11px 20px;
+
+                i {
+                    font-size: 18px;
+                    line-height: 16px;
+                }
+
+                span {
+                    margin-left: 5px;
+                    position: relative;
+                    top: -2px;
+                    font-size: 14px;
+                    line-height: 14px;
+                }
+            }
+        }
+
+        .tool {
+            text-align: center;
+            width: 70px;
+            float: left;
+            display: block;
+            overflow: hidden;
+
+            .warning-loading {
+                margin-top: 10px;
+                display: block;
+            }
+
+            > button,
+            .fade-in > button {width: 100%;}
+
+            .disabled > button {color: $stone;}
+
+            .btn-group {@include backface-visibility(initial);}
+
+            .btn-warn-component {
+                font-size: 18px;
+                padding: 7px 0;
+
+                i {
+                    line-height: 30px;
+                    margin-left: 0;
+                }
+
+                &.cancel,
+                &.success {
+                    background: $brand-danger;
+                    color: $white;
+                    font-size: 14px;
+                    padding: 5px 8px;
+                    margin: 7px 5px 5px 0;
+
+                    &:hover {background: darken($brand-danger, 10%);}
+
+                    i {line-height: 15px;}
+                }
+
+                &.success {
+                    background: $brand-success;
+
+                    &:hover {background: darken($brand-success, 10%);}
+                }
+            }
+        }
+
+        .resume-upload-tool {
+            @extend %clearfix;
+            display: block;
+            float: left;
+
+            .fileupload-btn {
+                padding: 10px 25px;
+                line-height: 23px;
+                font-size: 16px;
+                height: 44px;
+                width: auto;
+                float: left;
+                border-left: 1px solid $aaa;
+                margin: 0;
+            }
+        }
+    }
+}
+
+.open .dataset-tools-wrap .tools .snapshot-select-label {
+    max-width: 0;
+    padding: 0;
+    margin: 0;
+    transition: max-width .3s;
+    -webkit-transition: max-width .3s;
+    border: none;
+}
