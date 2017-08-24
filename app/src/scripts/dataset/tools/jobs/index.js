@@ -160,7 +160,9 @@ export default class JobMenu extends React.Component {
         });
 
         const versionOptions = selectedApp ? Object.keys(apps[selectedApp]).reverse().map((revision) => {
-            let active = apps[selectedApp][revision].status === 'ACTIVE';
+            //Since we are no longer disabling apps on Batch, they will all have an ACTIVE status and therefore we need to check deleted property
+            // the deleted property is tracked in crn mongo
+            let active = apps[selectedApp][revision].status === 'ACTIVE' && !apps[selectedApp][revision].deleted;
             let disabled = this.state.disabledApps.hasOwnProperty(apps[selectedApp][revision].jobDefinitionArn) ? '* ' : '';
             return active ? <option key={revision} value={revision}>{disabled + 'v' + revision}</option> : null;
         }) : [];

@@ -62,7 +62,7 @@ export default class WarnButton extends React.Component {
 
         let hideAction = (
             <span className={'fade-in' + (disabled ? ' disabled' : '')} >
-                <button className="btn-warn-component warning" onClick={this.toggle.bind(this, this.props.action)}>
+                <button className="btn-warn-component warning" onClick={this.toggle.bind(this, this.props.action)} disabled={this.props.lock}>
                     <i className={'fa ' + this.props.icon}></i>  {message}
                 </button>
             </span>
@@ -154,8 +154,8 @@ WarnButton.propTypes = {
     confirm: React.PropTypes.object,
     validations: React.PropTypes.array,
     action: React.PropTypes.func,
-    prepDownload: React.PropTypes.func
-
+    prepDownload: React.PropTypes.func,
+    lock: React.PropTypes.bool
 };
 
 WarnButton.defaultProps = {
