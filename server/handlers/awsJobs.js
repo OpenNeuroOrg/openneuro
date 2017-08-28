@@ -330,7 +330,7 @@ let handlers = {
         let appName = req.params.app;
         let jobId = req.params.jobId;
         let taskArn = req.params.taskArn;
-        let key = appName + '/' + jobId + '/' + taskArn;
+        let key = appName + '/default/' + taskArn;
 
         aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
             if (err) {
@@ -495,7 +495,8 @@ let handlers = {
                 if (job.attempts && job.attempts.length > 0) {
                     job.attempts.forEach((attempt)=> {
                         let streamObj = {
-                            name: job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop(),
+                            // Prior to August 21st, 2017 default was job.jobId
+                            name: job.jobName + '/default/' + attempt.container.taskArn.split('/').pop(),
                             environment: job.container.environment,
                             exitCode: job.container.exitCode
                         };
