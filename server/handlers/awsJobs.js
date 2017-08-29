@@ -495,7 +495,8 @@ let handlers = {
                 if (job.attempts && job.attempts.length > 0) {
                     job.attempts.forEach((attempt)=> {
                         let streamObj = {
-                            name: job.jobName + '/' + job.jobId + '/' + attempt.container.taskArn.split('/').pop(),
+                            // Prior to August 21st, 2017 default was job.jobId
+                            name: job.jobName + '/default/' + attempt.container.taskArn.split('/').pop(),
                             environment: job.container.environment,
                             exitCode: job.container.exitCode
                         };
