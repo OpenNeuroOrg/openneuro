@@ -330,7 +330,7 @@ let handlers = {
         let appName = req.params.app;
         let jobId = req.params.jobId;
         let taskArn = req.params.taskArn;
-        let key = appName + '/default/' + taskArn;
+        let key = appName + '/' + jobId + '/' + taskArn;
 
         aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
             if (err) {
