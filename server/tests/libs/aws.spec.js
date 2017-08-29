@@ -1,4 +1,5 @@
-var assert   = require('assert');
+var assert = require('assert');
+var moment = require('moment');
 var aws = require('../../libs/aws');
 
 const subjectParam = {participant_label: ['01', '02', '03']};
@@ -87,6 +88,57 @@ describe('libs/aws/batch.js', () => {
                 return group.length;
             });
             assert.equal((Math.max(...lengths) - Math.min(...lengths)), 1);
+        });
+    });
+});
+
+describe('libs/aws/cloudwatchlogs.js', () => {
+    let oldStream = 'FreeSurfer/eb251a5f-6314-457f-a36f-d11665451ddb/bf4fc87d-2e87-4309-abd9-998a0de708de';
+    let newStream = 'FreeSurfer/default/bf4fc87d-2e87-4309-abd9-998a0de708de';
+    let streamObjOrig = {name: oldStream, exitCode: 0, environment: {'TEST_ENV': true}};
+    let streamObj = {};
+    beforeEach(() => {
+        // Use the copy since some tests modify it in place
+        streamObj = Object.assign({}, streamObjOrig);
+    });
+    describe('streamNameVersion()', () => {
+        let versions = {
+            0: {'analysis':
+                {'created': moment('2017-08-21T13:23-07:00')}
+            },
+            1: {'analysis':
+                {'created': moment('2017-08-21T18:14-07:00')}
+            }
+        };
+        it('should return 0 for jobs created before 2017-08-21 14:00 UTC-7', () => {
+            assert.equal(aws.cloudwatch.streamNameVersion(versions[0]), 0);
+        });
+        it('should return 1 for jobs created after 2017-08-21 14:00 UTC-7', () => {
+            assert.equal(aws.cloudwatch.streamNameVersion(versions[1]), 1);
+        });
+    });
+    describe('_batchRenameStream()', () => {
+        it('should translate old stream names to new ones', () => {
+            assert.equal(aws.cloudwatch._renameStream(oldStream), newStream);
+        });
+        it('should leave new stream names unchanged', () => {
+            assert.equal(aws.cloudwatch._renameStream(newStream), newStream);
+        });
+    });
+    describe('formatLegacyLogStream', () => {
+        it('should return a stream object with string arguments', () => {
+            assert(aws.cloudwatch.formatLegacyLogStream(oldStream) instanceof Object);
+        });
+        it('should return an object for stream object arguments', () => {
+            assert(aws.cloudwatch.formatLegacyLogStream(streamObj) instanceof Object);
+        });
+        it('should not change the format for version 0 stream objects', () => {
+            assert.deepEqual(aws.cloudwatch.formatLegacyLogStream(streamObj, 0), streamObjOrig);
+        });
+        it('should fix stream names for version 1 objects', () => {
+            let formatted = aws.cloudwatch.formatLegacyLogStream(streamObj, 1);
+            assert.notDeepEqual(formatted, streamObjOrig);
+            assert.equal(formatted.name, newStream);
         });
     });
 });
