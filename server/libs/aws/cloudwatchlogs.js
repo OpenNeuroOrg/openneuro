@@ -3,6 +3,7 @@ import mongo from '../../libs/mongo';
 import {ObjectID} from 'mongodb';
 import mapValuesLimit from 'async/mapValuesLimit';
 import config from '../../config';
+import moment from 'moment';
 
 let c = mongo.collections;
 
@@ -48,7 +49,7 @@ export default (aws) => {
                 if(err) {callback(err);}
                 let logStreamNames = job.analysis.logstreams || [];
                 let logStreams = logStreamNames.reduce((streams, ls) => {
-                    let stream = this.formatLegacyLogStream(ls);
+                    let stream = this.formatLegacyLogStream(ls, this.streamNameVersion(job));
                     streams[stream.name] = stream;
                     return streams;
                 }, {});
@@ -70,12 +71,65 @@ export default (aws) => {
             };
         },
 
-        formatLegacyLogStream(stream) {
+        /*
+         * Return a version value for breaking Batch API changes to log stream names
+         */
+        streamNameVersion(job) {
+            // The only way to determin which version a job uses is date started
+            if (job.analysis.created < moment('2017-08-21T14:00-07:00')) {
+                // The original stream name format
+                // appDefName / jobId / ecsTaskId
+                // FreeSurfer/eb251a5f-6314-457f-a36f-d11665451ddb/bf4fc87d-2e87-4309-abd9-998a0de708de
+                return 0;
+            } else {
+                // New stream name format
+                // appDefName / 'default' / ecsTaskId
+                // FreeSurfer/default/bf4fc87d-2e87-4309-abd9-998a0de708de
+                return 1;
+            }
+        },
+
+
+        /*
+         * Relate a name and version to the function to fix it
+         */
+        _repairStreamName(streamName, version) {
+            if (version >= 1) {
+                return this._renameStream(streamName);
+            } else {
+                return streamName;
+            }
+        },
+
+        /*
+         * The cloudwatch stream names used by Batch changed for jobs after
+         * 2017-08-21 14:00 UTC-7 and we need to translate them to support jobs
+         * submitted previously
+         */
+        _renameStream(streamName) {
+            if (streamName.indexOf('/default/') !== -1) {
+                return streamName;
+            } else {
+                let tokens = streamName.split('/');
+                return [tokens[0], 'default', tokens[2]].join('/');
+            }
+        },
+
+        /*
+         * Some jobs were created with a string instead of an object for
+         * log data
+         */
+        formatLegacyLogStream(stream, version=0) {
             if (stream instanceof Object) {
+                stream.name = this._repairStreamName(stream.name, version);
                 return stream;
             } else {
                 // If it's not an object, it should be the old string format
-                return {name: stream, environment: null, exitCode: null};
+                return {
+                    name: this._repairStreamName(stream, version),
+                    environment: null,
+                    exitCode: null
+                };
             }
         }
     };
