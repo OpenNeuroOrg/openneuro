@@ -422,6 +422,20 @@ let handlers = {
                 return (a.job.split('-')[0] > b.job.split('-')[0]) ? 1 : -1;
             });
 
+            // Check the number of returned jobs from batch (describeJobs) versus the total number of jobs in the analysis
+            // If these are different, this means that some jobs have disappeared from batch and their status is no longer being returned
+            // NOTE: disappearing from batch is not necessarily a bad thing. Batch only keeps jobs around for 24 hours after they have entered
+            // a failed or succeeded state
+            if(batchStatus.length != job.analysis.jobs.length) {
+                batchStatus = job.analysis.batchStatus.map((statusObj) => {
+                    return batchStatus[statusObj.job] ? batchStatus[statusObj.job] : statusObj;
+                });
+                // update status array to include ALL job statuses
+                statusArray = batchStatus.map((statusObj) => {
+                    return statusObj.status;
+                });
+            }
+
             analysis.batchStatus = batchStatus;
 
             let finished = handlers._checkJobStatus(statusArray);
@@ -454,6 +468,7 @@ let handlers = {
                 let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
                 let jobUpdate = {
                     'analysis.status': analysis.status,
+                    'analysis.batchStatus': analysis.batchStatus,
                     results: results
                 };
                 c.crn.jobs.updateOne({_id: jobId}, {

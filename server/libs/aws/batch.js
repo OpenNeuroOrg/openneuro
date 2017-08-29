@@ -304,11 +304,20 @@ export default (aws) => {
          * returns no return. Batch job start is happening after response has been send to client
          */
         _updateJobOnSubmitSuccessful(jobId, batchIds) {
+            // create initial batchStatus array
+            let batchStatus = batchIds.map((id) => {
+                return {
+                    status: 'SUBMITTED',
+                    job: id
+                };
+            });
+
             c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {
                 $set:{
                     'analysis.status': 'PENDING', //setting status to pending as soon as job submissions is successful
                     'analysis.attempts': 1,
                     'analysis.jobs': batchIds, // Should be an array of AWS ids for each AWS batch job
+                    'analysis.batchStatus': batchStatus,
                     uploadSnapshotComplete: true
                 }
             }, () => {
