@@ -134,7 +134,11 @@ let handlers = {
             if (err) {return next(err);}
             for (let job of jobs) {
                 if (job.analysis.logstreams) {
-                    job.analysis.logstreams = job.analysis.logstreams.map(aws.cloudwatch.formatLegacyLogStream);
+                    let streamNameVersion = aws.cloudwatch.streamNameVersion(job);
+                    job.analysis.logstreams = job.analysis.logstreams.map((stream) => {
+                        // Fix legacy internal logstream values and adapt for changes in Batch names
+                        return aws.cloudwatch.formatLegacyLogStream(stream, streamNameVersion);
+                    });
                 }
             }
             if (snapshot) {
