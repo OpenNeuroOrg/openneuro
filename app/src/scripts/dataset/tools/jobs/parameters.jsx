@@ -23,7 +23,7 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
                         onChange={onChange.bind(null, parameter)} />;
         } else if(parametersMetadata[parameter].type === 'checkbox') {
             let onCheckChange = (e) => {
-                // Extract list from Select's simpleValue
+                // using checked property for checkbox values
                 let event = {target: {value: e.target.checked}};
                 return onChange(parameter, event);
             };
