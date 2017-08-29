@@ -307,7 +307,7 @@ export default (aws) => {
             // create initial batchStatus array
             let batchStatus = batchIds.map((id) => {
                 return {
-                    status: "SUBMITTED",
+                    status: 'SUBMITTED',
                     job: id
                 };
             });
