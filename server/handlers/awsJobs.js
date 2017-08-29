@@ -430,6 +430,10 @@ let handlers = {
                 batchStatus = job.analysis.batchStatus.map((statusObj) => {
                     return batchStatus[statusObj.job] ? batchStatus[statusObj.job] : statusObj;
                 });
+                // update status array to include ALL job statuses
+                statusArray = batchStatus.map((statusObj) => {
+                    return statusObj.status;
+                });
             }
 
             analysis.batchStatus = batchStatus;
