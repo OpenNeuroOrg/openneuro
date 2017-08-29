@@ -21,6 +21,16 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
                         type="file" 
                         name={parameter} 
                         onChange={onChange.bind(null, parameter)} />;
+        } else if(parametersMetadata[parameter].type === 'checkbox') {
+            let onCheckChange = (e) => {
+                // Extract list from Select's simpleValue
+                let event = {target: {value: e.target.checked}};
+                return onChange(parameter, event);
+            };
+            input = <input className="form-control"
+                        type="checkbox"
+                        name={parameter}
+                        onChange={onCheckChange} />;
         } else {
             input = <input className="form-control"
                            value={parameters[parameter]}
