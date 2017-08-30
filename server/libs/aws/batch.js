@@ -73,11 +73,6 @@ export default (aws) => {
                 return callback(error);
             }
 
-            let env = jobDef.containerProperties.environment;
-            env.push({name: 'BIDS_DATASET_BUCKET', value: config.aws.s3.datasetBucket});
-            env.push({name: 'BIDS_OUTPUT_BUCKET', value: config.aws.s3.analysisBucket});
-            env.push({name: 'BIDS_INPUT_BUCKET', value: config.aws.s3.inputsBucket});
-
             // This controls this value for the host container
             // child containers are always run without the privileged flag
             jobDef.containerProperties.privileged = true;
@@ -254,6 +249,15 @@ export default (aws) => {
                     }, {
                         name: 'BIDS_ANALYSIS_ID',
                         value: job.analysis.analysisId
+                    }, {
+                        name: 'BIDS_DATASET_BUCKET',
+                        value: config.aws.s3.datasetBucket
+                    }, {
+                        name: 'BIDS_OUTPUT_BUCKET',
+                        value: config.aws.s3.analysisBucket
+                    }, {
+                        name: 'BIDS_INPUT_BUCKET',
+                        value: config.aws.s3.inputsBucket
                     }]
                 }
             };
