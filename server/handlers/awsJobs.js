@@ -427,9 +427,12 @@ let handlers = {
             // NOTE: disappearing from batch is not necessarily a bad thing. Batch only keeps jobs around for 24 hours after they have entered
             // a failed or succeeded state
             if(batchStatus.length != job.analysis.jobs.length) {
-                batchStatus = job.analysis.batchStatus.map((statusObj) => {
-                    return batchStatus[statusObj.job] ? batchStatus[statusObj.job] : statusObj;
-                });
+                if (job.analysis.hasOwnProperty('batchStatus')) {
+                    // Running jobs being updated may have to skip this once
+                    batchStatus = job.analysis.batchStatus.map((statusObj) => {
+                        return batchStatus[statusObj.job] ? batchStatus[statusObj.job] : statusObj;
+                    });
+                }
                 // update status array to include ALL job statuses
                 statusArray = batchStatus.map((statusObj) => {
                     return statusObj.status;
