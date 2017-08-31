@@ -74,6 +74,8 @@ export default class JobMenu extends React.Component {
                 }
             });
         }
+
+        this._checkSubmitStatus();
     }
 
     render() {
