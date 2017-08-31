@@ -4,8 +4,9 @@
 
 __Requirements:__
 
-Node `v4.4.1 (LTS)`
-gulp-cli (`npm install -g gulp-cli`)
+Node `v6.11.2 (LTS)`
+Yarn
+gulp-cli (`yarn install -g gulp-cli`)
 
 __Configure:__
 
@@ -13,7 +14,7 @@ Copy or move `config.example` to `config.js` and replace the values with your ow
 
 __Install the dependencies:__
 
-run `npm install`
+run `yarn install`
 
 __Development mode with livereload:__
 
@@ -26,7 +27,7 @@ run `gulp build`
 
 __To run the linting command:__
 
-run `npm run lint path/to/file`
+run `yarn run lint path/to/file`
 
 __To run the scss linting command:__
 

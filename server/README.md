@@ -36,13 +36,14 @@ The CRN Server is configured through environment variables. Set the following va
 
 __Requirements:__
 
-Node `v4.4.1 (LTS)`
+Node `v6.11.2 (LTS)`
+Yarn
 MongoDB
 
 __Install the dependencies:__
 
-`npm install`
+`yarn install`
 
 __Run:__
 
-`node index.js` or `npm start`
+`node index.js` or `yarn start`
