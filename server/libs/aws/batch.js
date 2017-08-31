@@ -142,7 +142,8 @@ export default (aws) => {
                     jobDefinition:  job.jobDefinition,
                     datasetHash:    job.datasetHash,
                     parametersHash: job.parametersHash,
-                    snapshotId:     job.snapshotId
+                    snapshotId:     job.snapshotId,
+                    deleted: {$ne: true}
                 }, {}, (err, existingJob) => {
                     if (err) {
                         return callback(err);
