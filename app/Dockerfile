@@ -8,8 +8,7 @@ WORKDIR /srv/crn-app
 
 # install web app
 ADD . /srv/crn-app
-RUN npm install
-RUN npm install -g gulp-cli yarn
+RUN npm install -g gulp-cli yarn && yarn install
 
 # build app
 CMD gulp build
