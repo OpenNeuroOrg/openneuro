@@ -13,11 +13,11 @@ dependencies:
 test:
   override:
     # Lint
-    - docker run openneuro/server npm run lint
-    - docker run openneuro/app npm run lint
+    - docker run openneuro/server yarn run lint
+    - docker run openneuro/app yarn run lint
     # Unit Tests
-    - docker run openneuro/server npm run test
-    - docker run openneuro/app npm run test
+    - docker run openneuro/server yarn run test
+    - docker run openneuro/app yarn run test
 
 deployment:
   dev:
