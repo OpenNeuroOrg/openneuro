@@ -115,7 +115,7 @@ let auth = {
             return next();
         }
 
-        c.crn.jobs.find({userId: user, 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'REJECTED']}}).toArray((err, jobs) => {
+        c.crn.jobs.find({userId: user, 'analysis.status': {$nin: ['SUCCEEDED', 'FAILED', 'REJECTED', 'CANCELED']}}).toArray((err, jobs) => {
             let totalRunningJobs = jobs.length;
             if(totalRunningJobs < 2) {
                 return next();
