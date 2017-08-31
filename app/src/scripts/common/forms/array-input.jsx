@@ -45,7 +45,7 @@ let ArrayInput = React.createClass({
                                 <i className={this.state[field.id] ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Required
                             </span>
                         </button>
-                    </div>
+                    </div>   
                 );
             } else {
                 return <Input placeholder={field.placeholder} value={this.state[field.id]} onChange={this._handleChange.bind(null, field.id)} key={field.id} />
@@ -58,6 +58,7 @@ let ArrayInput = React.createClass({
                 <div className="text-danger">{this.state.error}</div>
                 <div className="form-inline">
                     <span>{inputFields}</span>
+                    <br />
                     <button className="cte-save-btn btn-admin-blue " onClick={this._add.bind(this, this.props.model)}>add</button>
                 </div>
             </div>

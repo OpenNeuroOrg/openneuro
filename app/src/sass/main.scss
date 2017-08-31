@@ -235,7 +235,18 @@
 }
 
 
-
+div.form-inline > span {
+    div:nth-child(4) {
+        width: 70% !important;
+        label {
+            background: transparent !important;
+            padding-right: 6px !important;
+        }
+    }
+    div:nth-child(5) {
+        width: 25% !important;
+    }
+}
 
 
 .apps-filter,

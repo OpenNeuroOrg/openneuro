@@ -168,6 +168,7 @@
             .modal-header,
             .modal-body {
                 width: 100%;
+                padding: 2em;
                 .modal-preview-image{
                     width: 100%;
                     height: auto;
@@ -219,6 +220,7 @@
                 font-family: monospace;
                 overflow-y: scroll;
                 height: 95%;
+                padding-bottom: 3em;
             }
         }
     }
@@ -363,6 +365,7 @@
             .modal-body {
                 width: 700px;
                 margin: 0 auto;
+                padding-bottom: 3em;
 
                 .add-members {
                     margin: 20px 0 0;
