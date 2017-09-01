@@ -25,10 +25,16 @@ describe('dataset/Validation', () => {
         );
         expect(wrapper.html()).toBe(null);
     });
-    it('renders when errors is "Invalid" instead of a list', () => {
+    it('renders when the dataset is marked invalid', () => {
         const wrapper = shallow(
-            <Validation {...defProps} errors={'Invalid'} />
-        )
+            <Validation {...defProps} invalid={true} />
+        );
         expect(wrapper).toMatchSnapshot();
+    });
+    it('returns the correct message on invalid datasets', () => {
+        const wrapper = shallow(
+            <Validation {...defProps} invalid={true} />
+        );
+        expect(wrapper.contains('This does not appear to be a BIDS dataset.')).toBe(true);
     });
 });
