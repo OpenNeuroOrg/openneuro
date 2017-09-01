@@ -1,6 +1,6 @@
 import WarnButton from '../../../../scripts/common/forms/warn-button';
 
-describe('component WarnButton', () => {
+describe('common/forms/WarnButton', () => {
     it('renders successfully', () => {
         const wrapper = shallow(
             <WarnButton message="A Button!"/>
@@ -12,5 +12,5 @@ describe('component WarnButton', () => {
             <WarnButton message="A Button!" warn={false}/>
         );
         expect(wrapper).toMatchSnapshot();
-    })
+    });
 });
