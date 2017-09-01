@@ -219,7 +219,7 @@ export default {
     },
 
     getEventLogs(callback) {
-       request.get(config.crn.url + 'eventlogs', {}, callback);
+        request.get(config.crn.url + 'eventlogs', {}, callback);
     }
 
 };
