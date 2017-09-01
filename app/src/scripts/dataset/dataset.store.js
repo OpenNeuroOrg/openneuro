@@ -239,13 +239,13 @@ let datasetStore = Reflux.createStore({
     },
 
     downloadLogs(id, callback) {
-        callback(config.crn.url + "jobs/" + id + "/logs/download");
+        callback(config.crn.url + 'jobs/' + id + '/logs/download');
     },
 
     getLogstream(logstreamName, callback) {
         crn.getLogstream(logstreamName, (err, res) => {
             // Default text in case logs are missing despite no errors
-            let logsText = "No logs available.";
+            let logsText = 'No logs available.';
             let modals = this.data.modals;
             let logs = res.body;
             modals.displayFile = true;
@@ -933,7 +933,7 @@ let datasetStore = Reflux.createStore({
                 files.sortTree(job.logs);
 
                 // check if job should be polled
-                let status     = job.analysis ? job.analysis.status : "PENDING";
+                let status     = job.analysis ? job.analysis.status : 'PENDING';
                 let failed     = status === 'FAILED';
                 let finished   = status === 'SUCCEEDED';
                 let hasResults = job.results && job.results.length > 0;
@@ -1041,7 +1041,7 @@ let datasetStore = Reflux.createStore({
                 callback(null, parameters);
             });
         } else {
-            callback(null, parameters)
+            callback(null, parameters);
         }
     },
     /**
@@ -1085,12 +1085,10 @@ let datasetStore = Reflux.createStore({
         });
     },
 
-    cancelJob (job, callback) {
+    cancelJob (job) {
         let datasetId = job.datasetId;
         let jobId = job._id;
-        crn.cancelJob(datasetId, jobId, (err, data) => {
-            console.log("Job canceled");
-        });
+        crn.cancelJob(datasetId, jobId);
     },
 
     refreshJob(jobId, callback) {
@@ -1174,8 +1172,8 @@ let datasetStore = Reflux.createStore({
     getResultDownloadTicket(snapshotId, jobId, file, callback) {
         let filePath = file === 'all' ? file : file.path;
         if(filePath === 'all-results') {
-            let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + "fileName" + '?ticket=' + 'ticket';
-            callback(downloadUrl)
+            let downloadUrl = config.crn.url + 'jobs/' + jobId + '/results/' + 'fileName' + '?ticket=' + 'ticket';
+            callback(downloadUrl);
         } else {
             callback('https://s3.amazonaws.com/' + filePath);
         }

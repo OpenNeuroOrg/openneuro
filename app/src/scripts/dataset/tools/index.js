@@ -170,7 +170,7 @@ let Tools = React.createClass({
             return true;
         }
         //otherwise don't allow deletion
-        return false
+        return false;
     }
 
 });

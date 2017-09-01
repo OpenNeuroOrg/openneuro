@@ -119,11 +119,6 @@ let UserStore = Reflux.createStore({
             crn.verifyUser((err, res) => {
                 if (res.body.code === 403) {
                     // Pass only the scitran required user values to createUser
-                    let newUserProfile = {
-                        _id: user.profile._id,
-                        firstname: user.profile.firstname,
-                        lastname: user.profile.lastname
-                    };
                     crn.createUser(user.profile, (err, res) => {
                         if (res.body.status === 403) {
                             this.clearAuth();

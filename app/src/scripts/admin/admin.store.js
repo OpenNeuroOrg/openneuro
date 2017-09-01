@@ -78,7 +78,7 @@ let UserStore = Reflux.createStore({
             eventLogs: [],
             filteredLogs: [],
             resultsPerPage: 30,
-            page: 0,
+            page: 0
         };
         for (let prop in diffs) {data[prop] = diffs[prop];}
         this.update(data);
@@ -305,13 +305,13 @@ let UserStore = Reflux.createStore({
 
         jobDefinition.containerProperties = {
             image: formData.hostImage,
-            command: !!formData.command.length ? formData.command.split(' ') : [],
+            command: formData.command.length ? formData.command.split(' ') : [],
             memory: parseInt(formData.memory),
             vcpus: parseInt(formData.vcpus),
             environment: [
                 {name: 'BIDS_CONTAINER', value: formData.containerImage}
             ]
-        }
+        };
         // Can split out paramter metadata here I think?
         // Want to post metadata as a separate prop so we can delete before sending to Batch
         if (formData.parameters) {
@@ -336,12 +336,12 @@ let UserStore = Reflux.createStore({
             // server is returning 400 for invalid inputs for vcpus and memory
             if(err) {
                 if(err.status === 400){
-                    notifications.createAlert({type: "Error", message: "Invalid job definition inputs for vCPUs and/or Memory."});
+                    notifications.createAlert({type: 'Error', message: 'Invalid job definition inputs for vCPUs and/or Memory.'});
                 } else {
-                    notifications.createAlert({type: "Error", message: "There was an error submitting job definition."});
+                    notifications.createAlert({type: 'Error', message: 'There was an error submitting job definition.'});
                 }
             } else {
-                notifications.createAlert({type: "Success", message: "Job Definition Submission Successful!"});
+                notifications.createAlert({type: 'Success', message: 'Job Definition Submission Successful!'});
 
                 //toggle modal once response comes bacn from server.
                 this.toggleModal('defineJob');
@@ -354,9 +354,7 @@ let UserStore = Reflux.createStore({
 
     deleteJobDefinition (jobDefinition, callback) {
         let appId = jobDefinition.jobDefinitionName + ':' + jobDefinition.revision;
-        crn.deleteJobDefinition(appId, (err, data) => {
-            //TODO Update job list
-            console.log('Job deleted');
+        crn.deleteJobDefinition(appId, () => {
             datasetActions.loadApps(); //need to reload apps for UI to update with Inactive status on delete
             if(callback){
                 callback();
@@ -484,13 +482,13 @@ let UserStore = Reflux.createStore({
     /**
      * Get Event Logs
      */
-    getEventLogs(callback) {
+    getEventLogs() {
         crn.getEventLogs((err, data) => {
             let eventLogs = data.body;
             this.update({eventLogs}, () => {
                 this.searchLogs('');
             });
-        })
+        });
     }
 
 });
