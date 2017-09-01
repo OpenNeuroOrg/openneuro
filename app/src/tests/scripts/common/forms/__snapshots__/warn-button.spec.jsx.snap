@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`component WarnButton renders successfully 1`] = `
+exports[`common/forms/WarnButton renders successfully 1`] = `
 <span
   className="fade-in"
 >
@@ -17,7 +17,7 @@ exports[`component WarnButton renders successfully 1`] = `
 </span>
 `;
 
-exports[`component WarnButton renders with warnings disable 1`] = `
+exports[`common/forms/WarnButton renders with warnings disable 1`] = `
 <span
   className="fade-in"
 >
