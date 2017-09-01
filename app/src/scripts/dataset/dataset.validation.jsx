@@ -28,8 +28,8 @@ export default class Validation extends React.Component {
     }
 
     render () {
-        let errors     = this.props.errors,
-            warnings   = this.props.warnings,
+        let errors     = this.props.errors || [],
+            warnings   = this.props.warnings || [],
             validating = this.props.validating,
             display    = this.props.display,
             invalid    = this.props.invalid;
