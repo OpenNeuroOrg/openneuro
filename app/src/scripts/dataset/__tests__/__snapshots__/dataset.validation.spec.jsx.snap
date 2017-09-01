@@ -1,5 +1,57 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`dataset/Validation does not crash when errors is "Invalid" 1`] = `
+<div
+  className="fade-in col-xs-12 validation"
+>
+  <h3
+    className="metaheader"
+  >
+    BIDS Validation
+  </h3>
+  <Accordion
+    activeKey="2"
+    className="validation-wrap"
+    onSelect={[Function]}
+  >
+    <Panel
+      bsClass="panel"
+      bsStyle="default"
+      className="status"
+      defaultExpanded={false}
+      eventKey="1"
+      header={
+        <div>
+          <span
+            className="dataset-status ds-danger"
+          >
+            <i
+              className="fa fa-exclamation-circle"
+            />
+             Invalid
+          </span>
+          <span
+            className="label text-danger pull-right"
+          >
+             
+          </span>
+        </div>
+      }
+    >
+      <div>
+        This does not appear to be a BIDS dataset
+         
+      </div>
+      <br />
+      <ValidationResults
+        errors="Invalid"
+        warnings={Array []}
+      />
+    </Panel>
+  </Accordion>
+</div>
+`;
+
 exports[`dataset/Validation renders successfully 1`] = `
 <div
   className="fade-in col-xs-12 validation"

@@ -25,4 +25,10 @@ describe('dataset/Validation', () => {
         );
         expect(wrapper.html()).toBe(null);
     });
+    it('renders when errors is "Invalid" instead of a list', () => {
+        const wrapper = shallow(
+            <Validation {...defProps} errors={'Invalid'} />
+        )
+        expect(wrapper).toMatchSnapshot();
+    });
 });
