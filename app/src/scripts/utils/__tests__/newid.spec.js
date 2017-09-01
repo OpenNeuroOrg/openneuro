@@ -1,5 +1,5 @@
 import assert from 'assert';
-import newid  from '../../../scripts/utils/newid';
+import newid  from '../newid';
 
 describe('utils/newid.js', () => {
 

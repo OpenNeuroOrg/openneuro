@@ -1,4 +1,4 @@
-import Faq from '../../../scripts/faq/faq';
+import Faq from '../faq';
 
 describe('faq/faq/Faq', () => {
     it('renders successfully', () => {

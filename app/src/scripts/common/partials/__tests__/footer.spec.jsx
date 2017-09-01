@@ -1,4 +1,4 @@
-import Footer from '../../../../scripts/common/partials/footer';
+import Footer from '../footer';
 
 describe('common/partials/footer', () => {
     it('renders successfully', () => {

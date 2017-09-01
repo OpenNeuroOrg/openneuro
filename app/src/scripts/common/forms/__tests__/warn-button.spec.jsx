@@ -1,4 +1,4 @@
-import WarnButton from '../../../../scripts/common/forms/warn-button';
+import WarnButton from '../warn-button';
 
 describe('common/forms/WarnButton', () => {
     it('renders successfully', () => {
