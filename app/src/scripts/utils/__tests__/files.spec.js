@@ -1,5 +1,5 @@
 import assert from 'assert';
-import files  from '../../../scripts/utils/files';
+import files  from '../files';
 
 describe('utils/files.js', () => {
 

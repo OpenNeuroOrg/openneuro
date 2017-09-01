@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`common/partials/footer renders successfully 1`] = `
+<span>
+  <footer>
+    <div
+      className="row"
+    >
+      <div
+        className="col-xs-12 col-md-4 version"
+      >
+        <span>
+          OpenNeuro Beta v
+          1.0.0
+        </span>
+      </div>
+      <div
+        className="col-xs-12 col-md-4 footer-menu"
+      />
+      <div
+        className="col-xs-12 col-md-4 copy"
+      >
+        <span>
+          © 2017 Stanford Center for Reproducible Neuroscience
+        </span>
+      </div>
+    </div>
+  </footer>
+</span>
+`;
