@@ -3,7 +3,6 @@
 import Reflux       from 'reflux';
 import Actions      from './dashboard.jobs.actions.js';
 import crn          from '../utils/crn';
-import userStore    from '../user/user.store.js';
 import dashUtils    from './dashboard.utils.js';
 
 // store setup -----------------------------------------------------------------------
@@ -78,7 +77,6 @@ let DashboardJobStore = Reflux.createStore({
      */
     getJobs(isPublic, filter) {
         if (isPublic === undefined) {isPublic = this.data.isPublic;}
-        let isSignedOut = !userStore.data.token;
         this.update({loading: true, filter: filter}, () => {
             crn.getJobs((err, res) => {
                 for (let app of res.body.availableApps) {app.value = app.label;}

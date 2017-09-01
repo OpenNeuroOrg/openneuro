@@ -35,4 +35,4 @@ export default  {
     getBidsContainer(app) {
         return app.containerProperties.environment.find(envProp => envProp.name === 'BIDS_CONTAINER').value;
     }
-}
+};
