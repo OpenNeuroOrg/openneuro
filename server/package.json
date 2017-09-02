@@ -2,6 +2,7 @@
   "name": "crn-server",
   "version": "1.0.1",
   "description": "",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
