@@ -38,7 +38,7 @@ export default class Happybrowser extends React.Component {
     }
 
     _incompatibleBrowser(ua) {
-        let check = bowser.check({chrome: "49", chromium: "49"}, true, ua || window.navigator.userAgent);
+        let check = bowser.check({chrome: "49", chromium: "49", googlebot: "0"}, true, ua || window.navigator.userAgent);
         return !check;
     }
 
