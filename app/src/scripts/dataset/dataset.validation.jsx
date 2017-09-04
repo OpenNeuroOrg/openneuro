@@ -28,31 +28,32 @@ export default class Validation extends React.Component {
     }
 
     render () {
-        let errors     = this.props.errors,
-            warnings   = this.props.warnings,
+        let errors     = this.props.errors || [],
+            warnings   = this.props.warnings || [],
             validating = this.props.validating,
-            display    = this.props.display;
+            display    = this.props.display,
+            invalid    = this.props.invalid;
 
         if (!display) {return false;}
 
         return (
             <div className="fade-in col-xs-12 validation">
                 <h3 className="metaheader">BIDS Validation</h3>
-                {this._accordion(errors, warnings, validating)}
+                {this._accordion(errors, warnings, validating, invalid)}
             </div>
         );
     }
 
 // templates methods --------------------------------------------------
 
-    _accordion(errors, warnings, validating) {
+    _accordion(errors, warnings, validating, invalid) {
         if (validating) {
             return <Spinner text="Validating" active={true} />;
         } else {
             return (
                 <Accordion className="validation-wrap" activeKey={this.state.activeKey} onSelect={this._togglePanel.bind(this)}>
                     <Panel className="status" header={this._header(errors, warnings)} eventKey="1">
-                        {this._message(errors, warnings)}<br />
+                        {this._message(errors, warnings, invalid)}<br />
                         <Results errors={errors} warnings={warnings} />
                     </Panel>
                 </Accordion>
@@ -76,10 +77,10 @@ export default class Validation extends React.Component {
         return <div className={superValid}>{status}{errs}{warns}</div>;
     }
 
-    _message(errors, warnings) {
+    _message(errors, warnings, invalid) {
         let errMessage, warnMessage;
-        if (errors === 'Invalid') {
-            errMessage = 'This does not appear to be a BIDS dataset';
+        if (invalid) {
+            errMessage = 'This does not appear to be a BIDS dataset.';
         } else {
             if (errors.length > 0) {
                 errMessage = <span className="message error fade-in">Your dataset is no longer valid. You must fix the <strong>{errors.length + ' ' + pluralize('Error', errors.length)}</strong> to use all of the site features.</span>;
@@ -107,11 +108,14 @@ Validation.propTypes = {
     errors:     React.PropTypes.array,
     warnings:   React.PropTypes.array,
     validating: React.PropTypes.bool,
-    display:    React.PropTypes.bool
+    display:    React.PropTypes.bool,
+    invalid:    React.PropTypes.bool
 };
 
 Validation.props = {
     errors:     [],
     warnings:   [],
-    validating: false
+    validating: false,
+    display: true,
+    invalid: false
 };
