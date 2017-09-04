@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`common/partials/happybrowser renders successfully 1`] = `
+<div
+  className="happybrowser-markup hidden"
+>
+  <div
+    className="hb-wrap clearfix"
+  >
+    <div
+      className="hb-text clearfix"
+    >
+      <img
+        alt="warning"
+        src="./assets/warning.jpg"
+      />
+      <p>
+        We have detected that you are using an incompatible browser. This site may not work as expected. 
+        <strong>
+          <a
+            href="http://www.google.com/chrome/"
+          >
+            Please consider using Chrome, V49.0 or higher, as your browser
+          </a>
+          .
+        </strong>
+      </p>
+    </div>
+    <div
+      className="hb-upgrade clearfix"
+    >
+      <div
+        className="hb-img-wrap hb-dismiss"
+        id="dismiss"
+        onClick={[Function]}
+      >
+        X
+      </div>
+      <div
+        className="hb-img-wrap hb-chrome"
+      >
+        <a
+          href="http://www.google.com/chrome/"
+        >
+          <img
+            alt="upgrade chrome"
+            src="./assets/chrome.jpg"
+          />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
