@@ -1,16 +1,16 @@
 // dependencies ------------------------------------------------------------------
-import React     from 'react';
+import React from 'react';
+import bowser from 'bowser';
 
 export default class Happybrowser extends React.Component {
 
 // life cycle methods ------------------------------------------------------------
-    constructor () {
-        super();
+    constructor (props) {
+        super(props);
         this.state = {
-            hbVisible: true
+            hbVisible: this._incompatibleBrowser(props.ua),
         };
     }
-
 
     render () {
         return (
@@ -37,6 +37,10 @@ export default class Happybrowser extends React.Component {
         );
     }
 
+    _incompatibleBrowser(ua) {
+        let check = bowser.check({chrome: "49", chromium: "49"}, true, ua || window.navigator.userAgent);
+        return !check;
+    }
 
     _dismiss () {
         let self = this;
