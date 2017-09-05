@@ -3,7 +3,6 @@
 import React                    from 'react';
 import Reflux                   from 'reflux';
 import Navbar                   from './nav/navbar.jsx';
-import bowser                   from 'bowser';
 import Happybrowser             from './common/partials/happybrowser.jsx';
 import {RouteHandler, State}    from 'react-router';
 import Alert                    from './notification/notification.alert.jsx';
@@ -35,7 +34,7 @@ let App = React.createClass({
         return (
             <span>
                 <div className={'page' + pageClasses}>
-                    {this._incompatibleBrowser(bowser) ? <Happybrowser /> : null }
+                    <Happybrowser />
                     <span className={'nav-alert-state-' + alertState}>
                         <Alert />
                     </span>
@@ -50,20 +49,7 @@ let App = React.createClass({
                 </div>
             </span>
         );
-    },
-
-    _incompatibleBrowser(browser) {
-        if(browser.chrome || browser.chromium) {
-            if(browser.version < 49) {
-                return true;
-            }
-
-            return false;
-        }
-
-        return true;
     }
-
 });
 
 export default App;
