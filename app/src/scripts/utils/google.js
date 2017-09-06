@@ -1,6 +1,5 @@
-/* global gapi */
-
 import config  from '../../../config';
+import LoadGoogleAPI from 'load-google-api';
 
 let google = {
 
@@ -9,16 +8,20 @@ let google = {
     initialized: false,
 
     init(callback) {
-        gapi.load('auth2', () => {
-            gapi.client.load('plus', 'v1').then(() => {
-                gapi.auth2.init({
-                    client_id: config.auth.google.clientID,
-                    scopes: 'email,openid'
-                }).then((authInstance) => {
-                    this.authInstance = authInstance;
-                    this.initialized = true;
-                    this.getCurrentUser(callback);
-                });
+        if (!config.auth.google.clientID) {
+            /* eslint-disable no-console */
+            console.error('Missing Google clientID, check auth.google.clientID configuration');
+            return;
+        }
+        const loader = new LoadGoogleAPI({
+            clientId: config.auth.google.clientID,
+            scope: ['openid', 'email']
+        });
+        loader.loadGoogleAPI().then(() => {
+            loader.init().then(() => {
+                this.authInstance = window.gapi.auth2.getAuthInstance();
+                this.initialized = true;
+                this.getCurrentUser(callback);
             });
         });
     },
