@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -12,6 +13,7 @@ module.exports = {
     filename: '[name].bundle.js'
   },
   plugins: [
+    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       title: 'OpenNeuro'
     })
