@@ -1,15 +1,21 @@
 const path = require('path');
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  context: path.resolve(__dirname, 'src/scripts'),
+  context: path.resolve(__dirname, 'src'),
   entry: {
-    app: './index.jsx',
+      app: './scripts/index.jsx'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    filename: '[name].bundle.js'
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'OpenNeuro'
+    })
+  ],
   module: {
     rules: [
       {
