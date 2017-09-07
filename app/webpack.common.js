@@ -18,7 +18,8 @@ module.exports = {
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       title: 'OpenNeuro',
-      template: path.resolve(__dirname, 'src/index.html')
+      template: path.resolve(__dirname, 'src/index.html'),
+      favicon: './assets/favicon.ico'
     }),
     new webpack.DefinePlugin({
 	    'process.env': {
