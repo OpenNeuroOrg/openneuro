@@ -1,12 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
-      app: './scripts/client.jsx'
+      app: './scripts/client.jsx',
+      css: './sass/main.scss'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -25,6 +27,7 @@ module.exports = {
         'GOOGLE_TRACKING_ID': JSON.stringify(process.env.GOOGLE_TRACKING_ID),
       }
     }),
+    new ExtractTextPlugin('style.css'),
   ],
   module: {
     rules: [
@@ -36,6 +39,21 @@ module.exports = {
           options: { presets: ['es2015', 'react'] },
         }],
       },
+      {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          //resolve-url-loader may be chained before sass-loader if necessary
+          use: ['css-loader', 'sass-loader']
+        })
+      },
+      {
+        test: /\.woff2$/,
+        loader: 'url-loader',
+        options: {
+          limit: 50000,
+        },
+      }
     ],
   },
   node: {
