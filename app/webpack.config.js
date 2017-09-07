@@ -6,7 +6,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
-      app: './scripts/index.jsx'
+      app: './scripts/client.jsx'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -15,8 +15,16 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
-      title: 'OpenNeuro'
-    })
+      title: 'OpenNeuro',
+      template: path.resolve(__dirname, 'src/index.html')
+    }),
+    new webpack.DefinePlugin({
+	    'process.env': {
+        'CRN_SERVER_URL': JSON.stringify(process.env.CRN_SERVER_URL),
+        'SCITRAN_AUTH_CLIENT_ID': JSON.stringify(process.env.SCITRAN_AUTH_CLIENT_ID),
+        'GOOGLE_TRACKING_ID': JSON.stringify(process.env.GOOGLE_TRACKING_ID),
+      }
+    }),
   ],
   module: {
     rules: [
@@ -32,5 +40,13 @@ module.exports = {
   },
   node: {
     fs: "empty"
+  },
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    compress: true,
+    host: "0.0.0.0",
+    port: 9876,
+    disableHostCheck: true,
+    historyApiFallback: true
   }
 };
