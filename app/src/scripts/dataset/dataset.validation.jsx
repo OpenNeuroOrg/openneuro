@@ -113,7 +113,7 @@ Validation.propTypes = {
     invalid:    React.PropTypes.bool
 };
 
-Validation.props = {
+Validation.defaultProps = {
     errors:     [],
     warnings:   [],
     validating: false,
