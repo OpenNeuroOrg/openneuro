@@ -32,7 +32,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.jsx?$/,
+        test: /\.jsx?$/,
         exclude: [/node_modules/],
         use: [{
           loader: 'babel-loader',
@@ -48,12 +48,12 @@ module.exports = {
         })
       },
       {
-        test: /\.woff2$/,
-        loader: 'url-loader',
+        test: /\.(jpg|png|svg|ico)$/,
+        loader: 'file-loader',
         options: {
-          limit: 50000,
+          name: './img/[name].[hash].[ext]',
         },
-      }
+      },
     ],
   },
   node: {

@@ -2,6 +2,9 @@
 import React from 'react';
 import bowser from 'bowser';
 
+import chrome from './assets/chrome.jpg';
+import warning from './assets/warning.jpg';
+
 export default class Happybrowser extends React.Component {
 
 // life cycle methods ------------------------------------------------------------
@@ -19,7 +22,7 @@ export default class Happybrowser extends React.Component {
                     <div className="hb-wrap clearfix">
 
                         <div className="hb-text clearfix">
-                            <img src="./assets/warning.jpg" alt="warning" />
+                            <img src={warning} alt="warning" />
                             <p>We have detected that you are using an incompatible browser. This site may not work as expected. <strong><a href="http://www.google.com/chrome/">Please consider using Chrome, V49.0 or higher, as your browser</a>.</strong></p>
                         </div>
                         <div className="hb-upgrade clearfix">
@@ -27,7 +30,7 @@ export default class Happybrowser extends React.Component {
                                     X
                             </div>
                             <div className="hb-img-wrap hb-chrome">
-                                <a href="http://www.google.com/chrome/" ><img src="./assets/chrome.jpg" alt="upgrade chrome"/></a>
+                                <a href="http://www.google.com/chrome/" ><img src={chrome} alt="upgrade chrome"/></a>
                             </div>
                         </div>
 

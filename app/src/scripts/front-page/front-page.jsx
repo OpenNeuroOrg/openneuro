@@ -10,6 +10,16 @@ import Footer        from '../common/partials/footer.jsx';
 import Pipelines     from './front-page.pipelines.jsx';
 import FPActions     from './front-page.actions.js';
 
+// assets -------------------------------------------------------------
+import ljaf          from './assets/ljaf.png';
+import logo_app      from './assets/logo_app.png';
+import logo_cube     from './assets/logo_cube.png';
+import logo_data     from './assets/logo_data.png';
+import logo_users    from './assets/logo_users.png';
+import nih           from './assets/nih.png';
+import nsf           from './assets/nsf.png';
+import squishymedia  from './assets/squishymedia.png';
+import stanford      from './assets/stanford.png';
 
 // component setup ----------------------------------------------------
 
@@ -40,10 +50,10 @@ let FrontPage = React.createClass({
                         <div className="intro-inner fade-in clearfix">
                             <div className="clearfix welcome-block">
                                 <div className="logo-layers">
-                                    <img className="logo-layer-users" src="./assets/logo_users.png" alt="OpenNeuro Logo" />
-                                    <img className="logo-layer-cube" src="./assets/logo_cube.png" alt="OpenNeuro Logo" />
-                                    <img className="logo-layer-app" src="./assets/logo_app.png" alt="OpenNeuro Logo" />
-                                    <img className="logo-layer-data" src="./assets/logo_data.png" alt="OpenNeuro Logo" />
+                                    <img className="logo-layer-users" src={logo_users} alt="OpenNeuro Logo" />
+                                    <img className="logo-layer-cube" src={logo_cube} alt="OpenNeuro Logo" />
+                                    <img className="logo-layer-app" src={logo_app} alt="OpenNeuro Logo" />
+                                    <img className="logo-layer-data" src={logo_data} alt="OpenNeuro Logo" />
                                 </div>
                                 <div className="logo-text">Open<span className="logo-end">Neuro</span></div>
                                 <h1>A free and open platform for analyzing and sharing neuroimaging data</h1>
@@ -127,29 +137,29 @@ let FrontPage = React.createClass({
                             <div className="row">
                                 <div className="col-sm-4">
                                     <a target="_blank" href="http://www.arnoldfoundation.org/" title="Arnold Foundation">
-                                        <img src="./assets/ljaf.png" alt="Arnold Foundation"/>
+                                        <img src={ljaf} alt="Arnold Foundation"/>
                                     </a>
                                 </div>
                                 <div className="col-sm-4">
                                     <a target="_blank" href="https://www.nsf.gov/" title="NSF">
-                                        <img src="./assets/nsf.png" alt="National Science Foundation"/>
+                                        <img src={nsf} alt="National Science Foundation"/>
                                     </a>
                                 </div>
                                 <div className="col-sm-4">
                                     <a target="_blank" href="https://www.nih.gov/" title="NIH">
-                                        <img src="./assets/nih.png" alt="National Institute on Drug and Abuse"/>
+                                        <img src={nih} alt="National Institute on Drug and Abuse"/>
                                     </a>
                                 </div>
                             </div>
                             <div className="row">
                                 <div className="col-sm-offset-3 col-sm-3">
                                     <a target="_blank" href="https://www.stanford.edu/" title="Stanford">
-                                        <img src="./assets/stanford.png" alt="Stanford"/>
+                                        <img src={stanford.png} alt="Stanford"/>
                                     </a>
                                 </div>
                                 <div className="col-sm-3">
                                     <a target="_blank" href="https://squishymedia.com/" title="Squishymedia">
-                                        <img src="./assets/squishymedia.png" alt="Squishymedia"/>
+                                        <img src={squishymedia} alt="Squishymedia"/>
                                     </a>
                                 </div>
                             </div>
