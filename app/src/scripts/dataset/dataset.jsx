@@ -58,9 +58,9 @@ let Dataset = React.createClass({
         let content;
 
         if (dataset) {
-            let invalid = typeof dataset.validation.errors === 'string' ? true : false;
-            let errors = invalid ? [] : dataset.validation.errors;
-            let warnings = invalid ? [] : dataset.validation.warnings;
+            let invalid = typeof dataset.validation === 'string' ? true : false;
+            let errors = dataset.validation.errors;
+            let warnings = dataset.validation.warnings;
             content = (
                 <div className="clearfix dataset-wrap">
                     <div className="dataset-annimation">
