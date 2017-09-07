@@ -4,8 +4,8 @@ import Select from 'react-select';
 const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, parametersMetadata}) => {
 
     if (Object.keys(parameters).length === 0) {return <noscript />;}
-
     const parameterInputs = Object.keys(parameters).map((parameter) => {
+        console.log(parametersMetadata[parameter])
         let input;
         if (parameter.indexOf('participant_label') > -1) {
             // Adapt the Select's onChange call to match the expected input event
@@ -37,7 +37,7 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
                            onChange={onChange.bind(null, parameter)}/>;
         }
         return (
-            <div className={parametersMetadata[parameter] && parametersMetadata[parameter].required ? 'required-param' : null} key={parameter}>
+            <div className={parametersMetadata[parameter] && parametersMetadata[parameter].required ? 'required-param' : null} id={parametersMetadata[parameter].hidden ? 'hidden' :null} key={parameter}>
                 <div className="parameters form-horizontal">
                     <div className="form-group" key={parameter}>
                         <label className="sr-only">{parameter}</label>

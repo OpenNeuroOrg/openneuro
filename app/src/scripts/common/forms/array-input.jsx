@@ -29,15 +29,16 @@ let ArrayInput = React.createClass({
     propTypes: {
         model: React.PropTypes.array,
         value: React.PropTypes.array,
-        onChange: React.PropTypes.func
+        onChange: React.PropTypes.func,
+
     },
 
     render() {
-
+        console.log(this.props.model)
         let inputFields = this.props.model ? this.props.model.map((field) => {
             if (field.hasOwnProperty('select') && field.select.length > 0) {
                 return <Select placeholder={field.placeholder} simpleValue options={field.select} value={this.state[field.id]} onChange={this._handleSelectChange.bind(null, field.id)} key={field.id} />
-            } else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
+            } else if (field.hasOwnProperty('id') && field.id === 'required') {
                 return (
                     <div className="form-group float-label-input" key={field.id}>
                         <button className="required-button" onClick={this._toggleCheckBox.bind(null, field.id)} key={field.id} >
@@ -45,9 +46,19 @@ let ArrayInput = React.createClass({
                                 <i className={this.state[field.id] ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Required
                             </span>
                         </button>
-                    </div>   
+                    </div>
                 );
-            } else {
+            } else if (field.hasOwnProperty('id') && field.id === 'hidden') {
+                return (
+                    <div className="form-group float-label-input" key={field.id}>
+                        <button className="hide-button" onClick={this._hidden.bind(null, field.id)} key={field.id} >
+                            <span>
+                                <i className={this.state[field.id] ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Hide for Users
+                            </span>
+                        </button>
+                    </div>
+                );
+             } else {
                 return <Input placeholder={field.placeholder} value={this.state[field.id]} onChange={this._handleChange.bind(null, field.id)} key={field.id} />
             }
         }) : null;
@@ -58,7 +69,7 @@ let ArrayInput = React.createClass({
                 <div className="text-danger">{this.state.error}</div>
                 <div className="form-inline">
                     <span>{inputFields}</span>
-                    <br />
+                    <br/>
                     <button className="cte-save-btn btn-admin-blue " onClick={this._add.bind(this, this.props.model)}>add</button>
                 </div>
             </div>
@@ -134,6 +145,12 @@ let ArrayInput = React.createClass({
         let item = this.props.value;
         item[index] = value;
         this.props.onChange({target: {value: item}});
+    }, 
+
+    _hidden(key, event) {
+         let state = {};
+        state[key] = !this.state[key];
+        this.setState(state);
     }
 
 });
@@ -232,12 +249,22 @@ let ArrayItem = React.createClass({
                 {this.props.model.map((field) => {
                     if (field.hasOwnProperty('select') && field.select.length > 0) {
                         return <Select placeholder={field.placeholder} simpleValue options={field.select} value={this.state[field.id]} onChange={this._handleSelectChange.bind(null, field.id)} key={field.id} />
-                    } else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
+                    } else if (field.hasOwnProperty('id') && field.id === 'required') {
                         return (
                             <div className="form-group float-label-input" key={field.id}>
                                 <button className="required-button" onClick={this._toggleCheckBox.bind(null, field.id)} key={field.id} >
                                     <span className="filter-admin">
                                         <i className={this.state[field.id] ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Required
+                                    </span>
+                                </button>
+                            </div>
+                        );
+                    } else if (field.hasOwnProperty('id') && field.id === 'hidden') {
+                        return (
+                            <div className="form-group float-label-input" key={field.id}>
+                                <button className="hide-button" onClick={this._hidden.bind(null, field.id)} key={field.id} >
+                                    <span>
+                                        <i className={this.state[field.id] ? 'fa fa-check-square-o' : 'fa fa-square-o' }></i> Hide for Users
                                     </span>
                                 </button>
                             </div>
