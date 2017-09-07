@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
@@ -29,6 +30,9 @@ module.exports = {
       }
     }),
     new ExtractTextPlugin('style.css'),
+    new CopyWebpackPlugin([
+      {from: './assets/papaya.js'},
+    ])
   ],
   module: {
     rules: [
