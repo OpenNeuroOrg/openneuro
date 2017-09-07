@@ -11,4 +11,4 @@ ADD . /srv/crn-app
 RUN npm install -g yarn && yarn install
 
 # build app
-CMD ./node_modules/.bin/webpack -p
+CMD yarn build
