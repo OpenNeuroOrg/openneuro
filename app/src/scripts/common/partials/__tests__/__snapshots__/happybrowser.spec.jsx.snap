@@ -12,7 +12,7 @@ exports[`common/partials/happybrowser renders successfully 1`] = `
     >
       <img
         alt="warning"
-        src="./assets/warning.jpg"
+        src="test-file-stub"
       />
       <p>
         We have detected that you are using an incompatible browser. This site may not work as expected. 
@@ -44,7 +44,7 @@ exports[`common/partials/happybrowser renders successfully 1`] = `
         >
           <img
             alt="upgrade chrome"
-            src="./assets/chrome.jpg"
+            src="test-file-stub"
           />
         </a>
       </div>
