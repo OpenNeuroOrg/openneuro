@@ -52,7 +52,7 @@ export default class Validation extends React.Component {
         } else {
             return (
                 <Accordion className="validation-wrap" activeKey={this.state.activeKey} onSelect={this._togglePanel.bind(this)}>
-                    <Panel className="status" header={this._header(errors, warnings)} eventKey="1">
+                    <Panel className="status" header={this._header(errors, warnings, invalid)} eventKey="1">
                         {this._message(errors, warnings, invalid)}<br />
                         <Results errors={errors} warnings={warnings} />
                     </Panel>
@@ -61,12 +61,13 @@ export default class Validation extends React.Component {
         }
     }
 
-    _header(errors, warnings) {
+    _header(errors, warnings, invalid) {
         let errs, warns, superValid;
 
-        let status = errors.length ? <span className="dataset-status ds-danger"><i className="fa fa-exclamation-circle" /> Invalid</span> : <span className="dataset-status ds-success"><i className="fa fa-check-circle" /> Valid</span>;
+        let failed = errors.length || invalid;
+        let status = failed ? <span className="dataset-status ds-danger"><i className="fa fa-exclamation-circle" />Invalid</span> : <span className="dataset-status ds-success"><i className="fa fa-check-circle" /> Valid</span>;
         if (errors.length > 0) {
-            errs =  <span className="label text-danger pull-right"> {errors != 'Invalid' ? errors.length +' '+ pluralize('Error', errors.length) : null}</span>;
+            errs = <span className="label text-danger pull-right"> {errors != 'Invalid' ? errors.length +' '+ pluralize('Error', errors.length) : null}</span>;
         }
         if (warnings && warnings.length > 0) {
             warns = <span className="label text-warning pull-right">{warnings.length} {pluralize('Warning', warnings.length)}</span>;
