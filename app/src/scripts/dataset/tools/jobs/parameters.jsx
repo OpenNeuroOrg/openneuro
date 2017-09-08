@@ -5,7 +5,6 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
 
     if (Object.keys(parameters).length === 0) {return <noscript />;}
     const parameterInputs = Object.keys(parameters).map((parameter) => {
-        console.log(parametersMetadata[parameter])
         let input;
         if (parameter.indexOf('participant_label') > -1) {
             // Adapt the Select's onChange call to match the expected input event

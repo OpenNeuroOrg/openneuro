@@ -245,8 +245,9 @@ div.form-inline > span {
             padding-right: 6px !important;
         }
     }
-    div:nth-child(5) {
-        width: 25% !important;
+    div:nth-child(5), 
+    div:nth-child(6) {
+        width: 15% !important;
     }
 }
 
@@ -260,7 +261,7 @@ div.input-group {
         }
 
         input[type='checkbox']{
-            width: 2em;
+            width: 15%;
             border: none;
             box-shadow: none;
         }
@@ -276,6 +277,14 @@ div.input-group {
     }
 }
 
+#hidden {
+    display: none;
+}
+
+.add-btn {
+    font-size: 18px;
+    margin-top: .5em;
+}
 
 .apps-filter,
 .versions-filter{
