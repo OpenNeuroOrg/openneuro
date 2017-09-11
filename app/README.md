@@ -18,11 +18,11 @@ run `yarn install`
 
 __Development mode with livereload:__
 
-run `gulp`
+run `yarn start`
 
 __When you are done, create a production ready version of the JS bundle:__
 
-run `gulp build`
+run `yarn build`
 
 
 __To run the linting command:__

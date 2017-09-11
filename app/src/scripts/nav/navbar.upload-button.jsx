@@ -8,6 +8,8 @@ import Upload      from '../upload/upload.jsx';
 import {Modal}     from 'react-bootstrap';
 import Progress    from '../upload/upload.progress.jsx';
 
+import favicon_upload from './assets/favicon-upload.png';
+
 // component setup ---------------------------------------------------------------
 
 let UploadBtn = React.createClass({
@@ -45,7 +47,7 @@ let UploadBtn = React.createClass({
             <span className="upload-btn-wrap">
                 {this.state.uploadStatus == 'uploading' ? progress : uploadBtn}
                 {uploadModal}
-                <img src="/assets/favicon-upload.png" id="favicon_upload" className="hidden"/>
+                <img src={favicon_upload} id="favicon_upload" className="hidden"/>
             </span>
         );
 

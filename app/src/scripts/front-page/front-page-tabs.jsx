@@ -4,6 +4,16 @@ import React   from 'react';
 import Reflux  from 'reflux';
 import FPStore from '../front-page/front-page.store.js';
 
+import tab_get_data from './assets/tab-get_data.png';
+import get_data_browse from './assets/get_data_browse.png';
+import get_data_download from './assets/get_data_download.png';
+import tab_share_data from './assets/tab-share_data.png';
+import share_data_collaborate from './assets/share_data_collaborate.png';
+import share_data_publish from './assets/share_data_publish.png';
+import tab_use_data from './assets/tab-use_data.png';
+import use_data_snapshot from './assets/use_data_snapshot.png';
+import use_data_analyze from './assets/use_data_analyze.png';
+
 let FrontPageTabs = React.createClass({
 
     mixins: [Reflux.connect(FPStore)],
@@ -93,41 +103,41 @@ let FrontPageTabs = React.createClass({
             {
                 header:            'Get Data',
                 abstract:          'Browse and download datasets from contributors all over the world.',
-                icon:              './assets/tab-get_data.png',
+                icon:              tab_get_data,
                 firstHeader:       'Browse Data',
                 firstDescription:  <span>Browse and explore public datasets and analyses from a wide range of global contributors. Our collection of <strong>{this.state.datasetCount}</strong> public datasets continues to grow as more and more become <a href="http://bids.neuroimaging.io/">BIDS</a> compatible.</span>,
-                firstImage:        './assets/get_data_browse.png',
+                firstImage:        get_data_browse,
                 firstImageClass:   'browse',
                 secondHeader:      'Download Data',
                 secondDescription: 'Download and use public data to create new datasets and run your own analyses.',
-                secondImage:       './assets/get_data_download.png',
+                secondImage:       get_data_download,
                 secondImageClass:  'download'
             },
             {
                 header:            'Share Data',
                 abstract:          'Upload your data and collaborate with your colleagues or share it with users around the world.',
-                icon:              './assets/tab-share_data.png',
+                icon:              tab_share_data,
                 firstHeader:       'Collaborate',
                 firstDescription:  'Privately share your data so your colleagues can view and edit your work.',
-                firstImage:        './assets/share_data_collaborate.png',
+                firstImage:        share_data_collaborate,
                 firstImageClass:   'collabotate',
                 secondHeader:      'Publish',
                 secondDescription: 'Publish your datasets for anyone to view, download and run analyses on.',
-                secondImage:       './assets/share_data_publish.png',
+                secondImage:       share_data_publish,
                 secondImageClass:  'publish'
 
             },
             {
                 header:            'Use Data',
                 abstract:          'Use our available pipelines to process any data on the site.',
-                icon:              './assets/tab-use_data.png',
+                icon:              tab_use_data,
                 firstHeader:       'Snapshot',
                 firstDescription:  'Create snapshots of your datasets to ensure past analyses remain reproducible as your datasets grow and change. Publish any of your snapshots while you continue work on your original data behind the scenes.',
-                firstImage:        './assets/use_data_snapshot.png',
+                firstImage:        use_data_snapshot,
                 firstImageClass:   'snapshot',
                 secondHeader:      'Analyze',
                 secondDescription: 'Use our simple web interface to run your analysis on a super computer. We\'ll notify you when it\'s complete so you can return to review the results.',
-                secondImage:       './assets/use_data_analyze.png',
+                secondImage:       use_data_analyze,
                 secondImageClass:   'analyze'
             }
         ];

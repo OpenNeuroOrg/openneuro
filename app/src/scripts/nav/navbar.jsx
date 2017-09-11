@@ -9,6 +9,8 @@ import userStore from '../user/user.store.js';
 import actions    from '../user/user.actions.js';
 import {Navbar, Modal}  from 'react-bootstrap';
 
+import brand_mark from './assets/brand_mark.png';
+
 // component setup ---------------------------------------------------------------
 
 let BSNavbar = React.createClass({
@@ -45,7 +47,7 @@ let BSNavbar = React.createClass({
     _brand(){
         return(
             <Link to="app" className="navbar-brand">
-                <img src="./assets/brand_mark.png"
+                <img src={brand_mark}
                      alt="OpenNeuro Logo"
                      title="OpenNeuro Link To Home Page"/>
                      <div className="logo-text">Open<span className="logo-end">Neuro</span></div>
