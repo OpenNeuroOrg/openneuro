@@ -8,7 +8,7 @@ WORKDIR /srv/crn-app
 
 # install web app
 ADD . /srv/crn-app
-RUN npm install -g yarn && yarn install
+RUN npm install -g yarn && yarn install --pure-lockfile
 
 # build app
 CMD yarn build
