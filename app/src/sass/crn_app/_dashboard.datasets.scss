@@ -256,16 +256,17 @@
 
             }
             
-            #UPLOADING {
+            .UPLOADING,
+            .RUNNING {
                 background-color: rgba(0, 124, 147, .1);
             }
 
-            #REJECTED,
-            #FAILED {
+            .REJECTED,
+            .FAILED {
                 background-color: rgba(140, 21, 21, .1);
             }
 
-            #SUCCESS {
+            .SUCCESS {
                 background-color: rgba(123, 196, 123, .1);
             }
 
