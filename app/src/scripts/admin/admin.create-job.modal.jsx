@@ -4,6 +4,7 @@ import React      from 'react';
 import Reflux     from 'reflux';
 import ArrayInput from '../common/forms/array-input.jsx';
 import Input      from '../common/forms/input.jsx';
+// import Visibility from '../common/forms/visibility.jsx';
 import {Modal, Panel, Accordion}    from 'react-bootstrap';
 import Select     from 'react-select';
 import adminStore from './admin.store';
@@ -60,7 +61,8 @@ const CreateJob = React.createClass({
                                              {id: 'defaultValue', placeholder: 'default value'},
                                              {id: 'type', placeholder: 'Type', select: PARAMETER_INPUTS, required: true},
                                              {id: 'description', placeholder: 'Parameter Description'},
-                                             {id: 'required', type: 'checkbox'}
+                                             {id: 'required', type: 'checkbox'},
+                                             {id: 'hidden', type: 'checkbox'}
                                          ]} />
                         </div>
                         <button className="btn-modal-submit" onClick={actions.submitJobDefinition}>
