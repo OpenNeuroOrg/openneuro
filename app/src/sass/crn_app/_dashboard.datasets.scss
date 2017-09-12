@@ -131,7 +131,6 @@
     }
 
     .sort {
-        width: 230px;
         float: left;
         padding: 0;
         margin: 0;
@@ -253,6 +252,22 @@
                 &:hover {
                     color: $primary-hover;
                 }
+
+
+            }
+            
+            .UPLOADING,
+            .RUNNING {
+                background-color: rgba(0, 124, 147, .1);
+            }
+
+            .REJECTED,
+            .FAILED {
+                background-color: rgba(140, 21, 21, .1);
+            }
+
+            .SUCCESS {
+                background-color: rgba(123, 196, 123, .1);
             }
 
             .status-container {

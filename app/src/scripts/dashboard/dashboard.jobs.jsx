@@ -84,13 +84,15 @@ let Jobs = React.createClass({
             return (
                 <div className="fade-in  panel panel-default" key={job._id}>
                     <div className="panel-heading">
-                        <div className="header clearfix">
-                            <Link to={'snapshot'} params={{datasetId: bids.decodeId(job.datasetId), snapshotId: bids.decodeId(job.snapshotId)}} query={{app: job.appLabel, version: job.appVersion, job: job.jobId}}>
-                                <h4 className="dataset-name">{job.appLabel} - v{job.appVersion}</h4>
-                            </Link>
-                            <div className="status-container">
-                                <div className="pull-right">Status: {job.analysis.status}</div>
-                            </div>
+                        <div className={job.analysis.status}> 
+                            <div className="header clearfix">
+                                <Link to={'snapshot'} params={{datasetId: bids.decodeId(job.datasetId), snapshotId: bids.decodeId(job.snapshotId)}} query={{app: job.appLabel, version: job.appVersion, job: job.jobId}}>
+                                    <h4 className="dataset-name">{job.appLabel} - v{job.appVersion}</h4>
+                                </Link>
+                                <div className="status-container">
+                                    <div className="pull-right">Status: {job.analysis.status}</div>
+                                </div>
+                            </div> 
                         </div>
                         <div className="minimal-summary">
                             <div className="summary-data">
