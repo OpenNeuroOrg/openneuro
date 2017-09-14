@@ -123,6 +123,29 @@
         color: $c-9e;
         background: $eee;
     }
+
+    label > input[type=checkbox] {
+        width: 30px;
+        border: 0;
+        box-shadow: none;
+        &:focus {
+            box-shadow: none;
+            outline: 0;
+        }
+    }
+
+    label.help-text {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        background: none;
+        border: 0;
+
+        span {
+            padding-left: 8px;
+        }
+    }
+
 }
 
 .sign-in-block,
