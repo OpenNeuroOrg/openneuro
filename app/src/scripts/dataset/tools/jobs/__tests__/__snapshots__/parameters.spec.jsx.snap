@@ -1,0 +1,197 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
+<div>
+  <br />
+  <hr />
+  <br />
+  <div
+    className="row"
+  >
+    <div
+      className="col-xs-6"
+    >
+      <h5>
+        Parameters
+      </h5>
+    </div>
+    <div
+      className="col-xs-6 default-reset"
+    >
+      <button
+        className="btn-reset"
+        onClick={[Function]}
+      >
+        Restore Default Parameters
+      </button>
+    </div>
+  </div>
+  <div
+    className={null}
+    id={null}
+  >
+    <div
+      className="parameters form-horizontal"
+    >
+      <div
+        className="form-group"
+      >
+        <label
+          className="sr-only"
+        >
+          boolean
+        </label>
+        <div
+          className="input-group"
+        >
+          <div
+            className="input-group-addon"
+          >
+            boolean
+          </div>
+          <div
+            className="clearfix"
+          >
+            <label
+              className="help-text"
+            >
+              <input
+                className="form-control"
+                name="boolean"
+                onChange={[Function]}
+                type="checkbox"
+              />
+              some kind of checkbox
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className={null}
+    id={null}
+  >
+    <div
+      className="parameters form-horizontal"
+    >
+      <div
+        className="form-group"
+      >
+        <label
+          className="sr-only"
+        >
+          participant_label
+        </label>
+        <div
+          className="input-group"
+        >
+          <div
+            className="input-group-addon"
+          >
+            participant_label
+          </div>
+          <div
+            className="clearfix"
+          >
+            <Select
+              addLabelText="Add \\"{label}\\"?"
+              arrowRenderer={[Function]}
+              autosize={true}
+              backspaceRemoves={true}
+              backspaceToRemoveMessage="Press backspace to remove {label}"
+              clearAllText="Clear all"
+              clearRenderer={[Function]}
+              clearValueText="Clear value"
+              clearable={true}
+              deleteRemoves={true}
+              delimiter=","
+              disabled={false}
+              escapeClearsValue={true}
+              filterOptions={[Function]}
+              ignoreAccents={true}
+              ignoreCase={true}
+              inputProps={Object {}}
+              isLoading={false}
+              joinValues={false}
+              labelKey="label"
+              matchPos="any"
+              matchProp="any"
+              menuBuffer={0}
+              menuRenderer={[Function]}
+              multi={true}
+              noResultsText="No results found"
+              onBlurResetsInput={true}
+              onChange={[Function]}
+              onCloseResetsInput={true}
+              optionComponent={[Function]}
+              options={
+                Array [
+                  "01",
+                  "02",
+                ]
+              }
+              pageSize={5}
+              placeholder="Select your subject(s)"
+              required={false}
+              scrollMenuIntoView={true}
+              searchable={true}
+              simpleValue={true}
+              tabSelectsValue={true}
+              value="01,02"
+              valueComponent={[Function]}
+              valueKey="value"
+            />
+            <span
+              className="help-text"
+            >
+              job participants
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    className="required-param"
+    id={null}
+  >
+    <div
+      className="parameters form-horizontal"
+    >
+      <div
+        className="form-group"
+      >
+        <label
+          className="sr-only"
+        >
+          another_option
+        </label>
+        <div
+          className="input-group"
+        >
+          <div
+            className="input-group-addon"
+          >
+            another_option
+          </div>
+          <div
+            className="clearfix"
+          >
+            <input
+              className="form-control"
+              onChange={[Function]}
+              value="some_string_value"
+            />
+            <span
+              className="help-text"
+            >
+              some kind of text option
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
