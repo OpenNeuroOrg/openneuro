@@ -6,6 +6,7 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
     if (Object.keys(parameters).length === 0) {return <noscript />;}
     const parameterInputs = Object.keys(parameters).map((parameter) => {
         let input;
+        let isCheckbox = parametersMetadata[parameter].type === 'checkbox';
         if (parameter.indexOf('participant_label') > -1) {
             // Adapt the Select's onChange call to match the expected input event
             let onSelectChange = (value) => {
@@ -20,20 +21,30 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
                         type="file" 
                         name={parameter} 
                         onChange={onChange.bind(null, parameter)} />;
-        } else if(parametersMetadata[parameter].type === 'checkbox') {
+        } else if(isCheckbox) {
             let onCheckChange = (e) => {
                 // using checked property for checkbox values
                 let event = {target: {value: e.target.checked}};
                 return onChange(parameter, event);
             };
-            input = <input className="form-control"
+            input = <label className="help-text">
+                        <input className="form-control"
                         type="checkbox"
                         name={parameter}
-                        onChange={onCheckChange} />;
+                        onChange={onCheckChange} />
+                        {parametersMetadata[parameter] ? parametersMetadata[parameter].description: parameter}
+                    </label>;
         } else {
             input = <input className="form-control"
                            value={parameters[parameter]}
                            onChange={onChange.bind(null, parameter)}/>;
+        }
+        let help_text;
+        if (isCheckbox) {
+            // The label has the help text.
+            help_text = '';
+        } else {
+            help_text = <span className="help-text">{parametersMetadata[parameter] ? parametersMetadata[parameter].description: parameter}</span>;
         }
         return (
             <div className={parametersMetadata[parameter] && parametersMetadata[parameter].required ? 'required-param' : null} id={parametersMetadata[parameter].hidden ? 'hidden' :null} key={parameter}>
@@ -44,7 +55,7 @@ const JobParameters = ({parameters, subjects, onChange, onRestoreDefaults, param
                             <div className="input-group-addon">{parameter}</div>
                             <div className="clearfix">
                                 {input}
-                                <span className="help-text">{parametersMetadata[parameter] ? parametersMetadata[parameter].description: parameter}</span>
+                                {help_text}
                             </div>
                         </div>
                     </div>
