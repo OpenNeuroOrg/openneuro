@@ -429,7 +429,7 @@ export default (aws) => {
          */
         _prepareArguments(parameters) {
             return Object.keys(parameters).filter((key) => {
-                // Skip empty arguments
+                // Skip empty or false boolean arguments
                 let value = parameters[key];
                 if (value instanceof Array) {
                     return value.length > 0;
@@ -438,7 +438,16 @@ export default (aws) => {
                 }
             }).map((key) => {
                 let argument = '--' + key + ' ';
-                let value = typeof parameters[key] === 'string' ? this._formatString(parameters[key]) : parameters[key];
+                let value = parameters[key];
+                if (typeof value === 'boolean') {
+                    // Don't include the value if it is a boolean
+                    // Arguments should be '--<key>' not '--<key> true'
+                    value = '';
+                    // Trim the extra space added after the flag
+                    argument = argument.slice(0, -1);
+                } else if (typeof value === 'string') {
+                    value = this._formatString(parameters[key]);
+                }
                 if (value instanceof Array) {
                     value = value.map((item)=> {
                         return typeof item === 'string' ? this._formatString(item) : item;

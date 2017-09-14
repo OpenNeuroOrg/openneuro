@@ -5,6 +5,8 @@ var aws = require('../../libs/aws');
 const subjectParam = {participant_label: ['01', '02', '03']};
 const nCpusParam = {n_cpus: 4};
 const templateNameParam = {template_name: 'template1'};
+const boolParam = {ica: true};
+const falseBoolParam = {ica: false};
 const emptyParam = {template_name: []};
 const nullParam = {template_name: null};
 const spaceParam = {license_key: 'Super Secret Shhhhhh', cartoons: ['Ren and Stimpy']};
@@ -45,6 +47,26 @@ describe('libs/aws/batch.js', () => {
             let params = Object.assign({}, subjectParam, spaceParam);
             let args = aws.batch._prepareArguments(params);
             assert.equal(args, '--participant_label 01 02 03 --license_key \'Super Secret Shhhhhh\' --cartoons \'Ren and Stimpy\'');
+        });
+        it('should include booleans as bare flags', () => {
+            let params = Object.assign({}, boolParam);
+            let args = aws.batch._prepareArguments(params);
+            assert.equal(args, '--ica');
+        });
+        it('should exclude false booleans as bare flags', () => {
+            let params = Object.assign({}, falseBoolParam);
+            let args = aws.batch._prepareArguments(params);
+            assert.equal(args, '');
+        });
+        it('should include booleans correctly in mixed parameters', () => {
+            let params = Object.assign({}, subjectParam, boolParam, nCpusParam);
+            let args = aws.batch._prepareArguments(params);
+            assert.equal(args, '--participant_label 01 02 03 --ica --n_cpus 4');
+        });
+        it('should exclude false booleans correctly in mixed parameters', () => {
+            let params = Object.assign({}, subjectParam, falseBoolParam, nCpusParam);
+            let args = aws.batch._prepareArguments(params);
+            assert.equal(args, '--participant_label 01 02 03 --n_cpus 4');
         });
     });
     describe('_partitionLabels()', () => {
