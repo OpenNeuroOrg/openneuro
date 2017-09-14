@@ -63,6 +63,11 @@ describe('libs/aws/batch.js', () => {
             let args = aws.batch._prepareArguments(params);
             assert.equal(args, '--participant_label 01 02 03 --ica --n_cpus 4');
         });
+        it('should exclude false booleans correctly in mixed parameters', () => {
+            let params = Object.assign({}, subjectParam, falseBoolParam, nCpusParam);
+            let args = aws.batch._prepareArguments(params);
+            assert.equal(args, '--participant_label 01 02 03 --n_cpus 4');
+        });
     });
     describe('_partitionLabels()', () => {
         it('should produce 3 expected groupings from 3 labels', () => {
