@@ -77,14 +77,14 @@ ajv-keywords@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-2.1.0.tgz#a296e17f7bfae7c1ce4f7e0de53d29cb32162df0"
 
-ajv@^4.7.0, ajv@^4.9.0, ajv@^4.9.1:
+ajv@^4.7.0, ajv@^4.9.1:
   version "4.11.8"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-4.11.8.tgz#82ffb02b29e662ae53bdc20af15947706739c536"
   dependencies:
     co "^4.6.0"
     json-stable-stringify "^1.0.1"
 
-ajv@^5.0.0, ajv@^5.1.5:
+ajv@^5.0.0, ajv@^5.1.5, ajv@^5.2.2:
   version "5.2.2"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-5.2.2.tgz#47c68d69e86f5d953103b0074a9430dc63da5e39"
   dependencies:
@@ -1196,11 +1196,11 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bids-validator@0.21.6:
-  version "0.21.6"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.21.6.tgz#1ab7a32920ece9d15a15ca8d7d0d817eaa220253"
+bids-validator@^0.23.2:
+  version "0.23.2"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.23.2.tgz#672ff1b8368a417a41c9b1f28c2a12c571d32975"
   dependencies:
-    ajv "^4.9.0"
+    ajv "^5.2.2"
     async "^2.1.5"
     bytes "^2.3.0"
     cliff "^0.1.10"
@@ -1209,6 +1209,7 @@ bids-validator@0.21.6:
     minimatch "3.0.3"
     nifti-js "^1.0.0"
     pako "^1.0.4"
+    path "^0.12.7"
     pluralize "^3.1.0"
     yargs "^6.6.0"
 
@@ -5259,6 +5260,13 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
+path@^0.12.7:
+  version "0.12.7"
+  resolved "https://registry.yarnpkg.com/path/-/path-0.12.7.tgz#d4dc2a506c4ce2197eb481ebfcd5b36c0140b10f"
+  dependencies:
+    process "^0.11.1"
+    util "^0.10.3"
+
 pbkdf2@^3.0.3:
   version "3.0.13"
   resolved "https://registry.yarnpkg.com/pbkdf2/-/pbkdf2-3.0.13.tgz#c37d295531e786b1da3e3eadc840426accb0ae25"
@@ -5601,7 +5609,7 @@ process@^0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/process/-/process-0.10.1.tgz#842457cc51cfed72dc775afeeafb8c6034372725"
 
-process@^0.11.0, process@~0.11.0:
+process@^0.11.0, process@^0.11.1, process@~0.11.0:
   version "0.11.10"
   resolved "https://registry.yarnpkg.com/process/-/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
 
