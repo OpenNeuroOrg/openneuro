@@ -312,6 +312,20 @@
         margin-top: 10px;
         padding: 0;
     }
+
+    .submit-warning {
+        color: red;
+        text-align: right;
+        float: right;
+    }
+
+    .btn-modal-submit:disabled {
+        border-color: $transparent3;
+        color: $transparent3;
+        &:hover {
+            background: $transparent3;
+        }
+    }
 }
 
 .modal,
