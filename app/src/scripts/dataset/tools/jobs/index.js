@@ -43,7 +43,6 @@ export default class JobMenu extends React.Component {
 
     componentDidMount() {
         this.mounted = true;
-        this._checkSubmitStatus();
     }
 
     componentWillUnmount() {
@@ -75,7 +74,6 @@ export default class JobMenu extends React.Component {
             });
         }
 
-        this._checkSubmitStatus();
     }
 
     render() {
@@ -92,6 +90,7 @@ export default class JobMenu extends React.Component {
                         <div>
                             <Description jobDefinition={apps[selectedAppKey][selectedVersionID]} />
                             <Parameters parameters={this.state.parameters} parametersMetadata={this.state.parametersMetadata} subjects={this.state.subjects} onChange={this._updateParameter.bind(this)} onRestoreDefaults={this._restoreDefaultParameters.bind(this)} />
+                            <span className="submit-warning">{this.state.submitWarning}</span>
                             {this._submit()}
                         </div>)
                     : ''
@@ -311,6 +310,7 @@ export default class JobMenu extends React.Component {
             value:              [],
             appGroup:           {},
             submitActive:       false,
+            submitWarning:      null,
             requiredParameters: {},
             parametersMetadata: {}
         });
@@ -340,10 +340,14 @@ export default class JobMenu extends React.Component {
 
     _checkSubmitStatus() {
         let requiredParameters = this.state.requiredParameters;
+        let submitWarning = null;
         let submitActive = Object.keys(requiredParameters).every((param) => {
+            if (!requiredParameters[param]) {
+                submitWarning = 'The required parameter "' + param + '" is missing.';
+            }
             return !!requiredParameters[param];
         });
-        this.setState({submitActive});
+        this.setState({submitActive, submitWarning});
     }
 
     /**
@@ -399,7 +403,9 @@ export default class JobMenu extends React.Component {
             submitActive = false;
         }
 
-        this.setState({selectedVersionID, parameters, parametersMetadata, submitActive, requiredParameters});
+        this.setState({selectedVersionID, parameters, parametersMetadata, submitActive, requiredParameters}, () => {
+            this._checkSubmitStatus();
+        });
     }
 
     /**
