@@ -262,6 +262,13 @@ let handlers = {
     },
 
     getJobs(req, res) {
+        let reqAll = false;
+        let reqPublic = req.query.public === 'true';
+        if (req.isSuperUser) {
+            reqAll = req.query.all === 'true';
+            // If all jobs are requested, skip the public query
+            reqPublic = false;
+        }
         let jobsQuery = {};
         // Optionally select by app
         if (req.query.appName) {
@@ -284,7 +291,7 @@ let handlers = {
             // filter jobs by permissions
             let filteredJobs = [];
 
-            if (req.query.public === 'true') {
+            if (reqPublic) {
                 async.each(jobs, (job, cb) => {
                     c.scitran.project_snapshots.findOne({'_id': ObjectID(job.snapshotId)}, {}, (err, snapshot) => {
                         if (snapshot && snapshot.public === true) {
@@ -300,7 +307,7 @@ let handlers = {
                 });
             } else {
                 for (let job of jobs) {
-                    if (req.user === job.userId) {
+                    if (reqAll || (req.user === job.userId)) {
                         buildMetadata(job);
                         filteredJobs.push(job);
                     }

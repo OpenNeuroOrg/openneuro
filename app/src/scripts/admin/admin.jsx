@@ -26,6 +26,7 @@ class Dashboard extends React.Component {
                         <li><Link to="app-definitions" className="btn-tab">App Definitions</Link></li>
                         <li><Link to="event-logs" className="btn-tab">Event Logs</Link></li>
                         <li><Link to="admin-datasets" className="btn-tab">All Datasets</Link></li>
+                        <li><Link to="admin-jobs" className="btn-tab">All Jobs</Link></li>
                     </ul>
                     <RouteHandler/>
                 </div>
