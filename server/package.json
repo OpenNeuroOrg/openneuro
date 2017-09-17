@@ -5,7 +5,7 @@
   "license": "MIT",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint libs/ handlers/ tests/",
     "start": "node index.js",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/",
     "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel/register tests/**/"
