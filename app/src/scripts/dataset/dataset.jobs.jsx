@@ -12,6 +12,29 @@ let Jobs = React.createClass({
 
     mixins: [Reflux.connect(datasetStore)],
 
+    getInitialState () {
+        let initialState = {
+            acknowledgements:   "",
+            support:            "",
+            summary:            "",
+            label:              "",
+        };
+
+        return initialState;
+    },
+
+    componentWillMount() {
+        this._arrayObject();
+    },
+
+    componentDidUpdate(prevProps, prevState) {
+        // There is a bug with activeJob, when state changes twice causing an infinite loop, this is a store debug needed from prior code. Must compare to label in orer to update state without causing an infinite loop.
+        if(this.state.label === this.state.activeJob.app) {
+        } else {
+            this._arrayObject();
+        };
+  },
+
 // life cycle events --------------------------------------------------
 
     render () {
@@ -38,6 +61,7 @@ let Jobs = React.createClass({
 
             return (
                 <Panel className="jobs" header={app.label}  key={app.label} eventKey={app.label}>
+                        {this._return()}
                     <Accordion accordion className="jobs-wrap" activeKey={this.state.activeJob.version} onSelect={actions.selectJob.bind(null, 'version')}>
                         {version}
                     </Accordion>
@@ -71,7 +95,45 @@ let Jobs = React.createClass({
         });
 
         return runs;
-    }
+    },
+
+    _arrayObject() {
+        let activeJob = this.state.activeJob.app;
+        let apps = this.state.apps;
+
+        Object.keys(apps).map((key) => {
+            let jobs = apps[key];
+            Object.keys(jobs).map((key) => {
+                let job = jobs[key];
+                if (job.jobDefinitionName === activeJob) {
+                    let acknowledgements = job.descriptions.acknowledgements;
+                    let support          = job.descriptions.support;
+                    let summary          = job.descriptions.shortDescription;
+
+                    this.setState({
+                        acknowledgements : acknowledgements,
+                        support          : support,
+                        summary          : summary,
+                        label            : activeJob
+                    }, function() {});
+                }
+            });
+        });
+        this._return()
+    },
+
+    _return() {        
+        return (
+            <div className="app-descriptions">
+                <strong> {this.state.summary}</strong>
+                <br />
+                <br />
+                <label>App created by</label><em> {this.state.acknowledgements}</em>
+                <br />
+                <label>Support at</label><strong> {this.state.support}</strong>
+            </div>
+        )
+    },
 
 });
 
