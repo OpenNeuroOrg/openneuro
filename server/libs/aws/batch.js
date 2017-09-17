@@ -191,7 +191,8 @@ export default (aws) => {
                         // TODO - Maybe we save the error message into another field for display?
                         c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {$set: {'analysis.status': 'REJECTED'}});
                     } else {
-                        emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created}, userId);
+                        let jobLog = extractJobLog(job);
+                        emitter.emit(events.JOB_STARTED, {job: jobLog, createdDate: job.analysis.created}, userId);
                     }
                     callback();
                 });
