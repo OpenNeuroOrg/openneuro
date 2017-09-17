@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`admin/Logs renders successfully 1`] = `
+<div
+  className="dashboard-dataset-teasers fade-in admin-users clearfix"
+>
+  <div
+    className="header-wrap clearfix"
+  >
+    <div
+      className="col-sm-9"
+    >
+      <h2>
+        Events Log
+      </h2>
+    </div>
+    <div
+      className="col-sm-3"
+    >
+      <Input
+        className="pull-right"
+        onChange={[Function]}
+        placeholder="Search Type or Email"
+      />
+    </div>
+  </div>
+  <div>
+    <div
+      className="col-xs-12 users-panel-wrap"
+    >
+      <div
+        className="fade-in user-panel-header clearfix"
+      >
+        <div
+          className="col-xs-3 user-col"
+        >
+          <label>
+            Event Type
+          </label>
+        </div>
+        <div
+          className="col-xs-3 user-col"
+        >
+          <label>
+            User
+          </label>
+        </div>
+        <div
+          className="col-xs-3 user-col"
+        >
+          <label>
+            Date
+          </label>
+        </div>
+        <div
+          className="col-xs-3 user-col"
+        >
+          <label>
+            Link
+          </label>
+        </div>
+      </div>
+      <p
+        className="no-datasets"
+      >
+        There are no event logs.
+      </p>
+    </div>
+  </div>
+  <div
+    className="pager-wrapper"
+  >
+    <Paginator
+      activePageRangeDisplayed={1}
+      breakLabel="..."
+      containerClass="pagination"
+      nextLabel="»"
+      onPageSelect={[Function]}
+      page={0}
+      pageRangeDisplayed={5}
+      pagesTotal={0}
+      prevLabel="«"
+    />
+  </div>
+</div>
+`;
