@@ -44,6 +44,7 @@ let UploadStore = Reflux.createStore({
             loading: false,
             datasets: [],
             isPublic: false,
+            isAdmin: false,
             visibleDatasets: [],
             resultsPerPage: 30,
             page: 0,
@@ -72,8 +73,9 @@ let UploadStore = Reflux.createStore({
      * a list of datasets and sorts by the current
      * sort setting.
      */
-    getDatasets(isPublic) {
+    getDatasets(isPublic, isAdmin) {
         if (isPublic === undefined) {isPublic = this.data.isPublic;}
+        if (typeof isAdmin === 'undefined') {isAdmin = false;}
         let isSignedOut = !userStore.data.token;
         this.update({
             loading: true,
@@ -85,7 +87,7 @@ let UploadStore = Reflux.createStore({
         }, () => {
             bids.getDatasets((datasets) => {
                 if (isPublic === this.data.isPublic) {this.sort('created', '+', datasets, true);}
-            }, isPublic, isSignedOut);
+            }, isPublic, isSignedOut, isAdmin);
         });
     },
 
