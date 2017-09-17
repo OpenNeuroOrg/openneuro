@@ -128,9 +128,9 @@ let Jobs = React.createClass({
                 <strong> {this.state.summary}</strong>
                 <br />
                 <br />
-                <label>App created by</label><em> {this.state.acknowledgements}</em>
+                <label>App created by</label><strong> {this.state.acknowledgements}</strong>
                 <br />
-                <label>Support at</label><strong> {this.state.support}</strong>
+                <label>Support at</label><strong id="support"> {this.state.support}</strong>
             </div>
         )
     },
