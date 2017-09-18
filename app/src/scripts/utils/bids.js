@@ -335,7 +335,7 @@ export default  {
      *
      */
     formatDescription (metadata, description) {
-        description = description ? description : {
+        let defaultDescription = {
             'Name': '',
             'License': '',
             'Authors': [],
@@ -345,6 +345,7 @@ export default  {
             'ReferencesAndLinks': [],
             'DatasetDOI': ''
         };
+        description = description ? description : defaultDescription;
 
         if (metadata && metadata.authors) {
             description.Authors = metadata.authors;

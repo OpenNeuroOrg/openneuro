@@ -230,15 +230,18 @@ export default class JobMenu extends React.Component {
      * to run analysis on.
      */
     _snapshots() {
-        let options = this.props.snapshots ? this.props.snapshots.map((snapshot) => {
-            if (!snapshot.isOriginal && !snapshot.orphaned) {
-                return (
-                    <option key={snapshot._id} value={snapshot._id}>
-                        {'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
-                    </option>
-                );
-            }
-        }) : [];
+        let options = [];
+        if (this.props.snapshots) {
+            options = this.props.snapshots.map((snapshot) => {
+                if (!snapshot.isOriginal && !snapshot.orphaned) {
+                    return (
+                        <option key={snapshot._id} value={snapshot._id}>
+                            {'v' + snapshot.snapshot_version + ' (' + moment(snapshot.modified).format('lll') + ')'}
+                        </option>
+                    );
+                }
+            });
+        }
 
         let createSnapshot;
         if (this.props.dataset.access === 'admin') {
