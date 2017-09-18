@@ -55,9 +55,11 @@ let Jobs = React.createClass({
             return (
                 <Panel className="jobs" header={app.label}  key={app.label} eventKey={app.label}>
                     <div className="app-descriptions">
-                        <div><label>App created by: </label><span dangerouslySetInnerHTML={markdown.format(acknowledgements)}/></div>
-                        <label>{support ? "Support at :" : ''}</label><span dangerouslySetInnerHTML={markdown.format(support)}/>
+                        <label>App created by:</label>  <span dangerouslySetInnerHTML={markdown.format(acknowledgements)}/>
+                        <br />
+                        <label>{support ? "Support at:" : ''}</label>  <span dangerouslySetInnerHTML={markdown.format(support)}/>
                     </div>
+                        <hr />
                     <Accordion accordion className="jobs-wrap" activeKey={this.state.activeJob.version} onSelect={actions.selectJob.bind(null, 'version')}>
                         {version}
                     </Accordion>
