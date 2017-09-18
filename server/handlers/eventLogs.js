@@ -14,6 +14,7 @@ let handlers = {
     getEventLogs (req, res, next) {
         // This stuff could be a middleware?
         let limit = 30;
+        /*eslint-disable no-unused-vars*/
         let skip = 0;
         let reqLimit = parseInt(req.query.limit);
         let reqSkip = parseInt(req.query.skip);
@@ -25,9 +26,7 @@ let handlers = {
         }
         c.crn.logs.find({type:{$in: events}},
             {
-                sort : [['date', 'desc']],
-                limit: limit,
-                skip: skip
+                sort : [['date', 'desc']]
             }).toArray((err, logs) => {
                 if(err) return next(err);
                 res.send(logs);
