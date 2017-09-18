@@ -2,6 +2,11 @@ import request     from 'superagent';
 import config      from '../../../config';
 import userActions from '../user/user.actions.js';
 
+/*
+ * Upload retries limit
+ */
+const maxRetries = 3;
+
 /**
  * Request
  *
@@ -64,6 +69,7 @@ var Request = {
                 .set(options.headers)
                 .field('tags', options.fields.tags)
                 .attach('file', options.fields.file, options.fields.name)
+                .retry(maxRetries)
                 .end((err, res) => {
                     handleResponse(err, res, callback);
                 });
