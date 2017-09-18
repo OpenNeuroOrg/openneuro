@@ -31,7 +31,7 @@
         ],
         "semi": [
             "error",
-            "always"
+            "never"
         ]
     },
     "settings": {
