@@ -6,6 +6,7 @@ import WarnButton from '../common/forms/warn-button.jsx';
 import moment     from 'moment';
 import FileTree   from '../common/partials/file-tree.jsx';
 import {Accordion, Panel} from 'react-bootstrap';
+import markdown     from '../utils/markdown';
 
 import config     from '../../../config.js';
 
@@ -19,7 +20,6 @@ class JobAccordion extends React.Component {
 
     render () {
         let run = this.props.run;
-
         // if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0) || (run.logs && run.logs.length > 0)) {
         if (run.results && run.results.length > 0) {
             // header with parameters and/or results
@@ -156,7 +156,10 @@ class JobAccordion extends React.Component {
 
     _failedMessage(run) {
         if (run.analysis.status === 'FAILED' || run.analysis.status === 'REJECTED') {
-            let adminMessage = <span>Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail.</span>;
+            let support = this.props.apps.descriptions.support;
+            let appEmailMessage =  support ? 'Support for this app can be reached at' : "";
+
+            let adminMessage = <span>Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail. <br /><br />{appEmailMessage}<span dangerouslySetInnerHTML={markdown.format(support)} /></span>;
             let message = run.analysis.message ? run.analysis.message : 'We were unable to complete this analysis.';
             return (
                 <div>

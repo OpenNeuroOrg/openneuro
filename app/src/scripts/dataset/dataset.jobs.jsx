@@ -7,6 +7,7 @@ import actions      from './dataset.actions';
 import Spinner      from '../common/partials/spinner.jsx';
 import Run          from './dataset.jobs.run.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
+import markdown     from '../utils/markdown';
 
 let Jobs = React.createClass({
 
@@ -34,6 +35,10 @@ let Jobs = React.createClass({
 
         let app = this.state.jobs.map((app) => {
 
+            let newestVersion = Math.max(...Object.keys(this.state.apps[app.label]));
+            let appDef = this.state.apps[app.label][newestVersion];
+            let {acknowledgements, support} = appDef.descriptions;
+            
             version = app.versions.map((version) => {
                 let appDef = this.state.apps[app.label][version.label];
                 let bidsAppVersion = appDef.containerProperties.environment.filter((tuple) => {
@@ -47,17 +52,11 @@ let Jobs = React.createClass({
                 );
             });
 
-
-            let newestVersion = Math.max(...Object.keys(this.state.apps[app.label]));
-            let appDef = this.state.apps[app.label][newestVersion];
-            let {acknowledgements, support} = appDef.descriptions;
-            console.log(acknowledgements);
-
             return (
                 <Panel className="jobs" header={app.label}  key={app.label} eventKey={app.label}>
                     <div className="app-descriptions">
-                        <div>{acknowledgements}</div>
-                        <div>{support}</div>
+                        <div><label>App created by: </label><span dangerouslySetInnerHTML={markdown.format(acknowledgements)}/></div>
+                        <label>{support ? "Support at :" : ''}</label><span dangerouslySetInnerHTML={markdown.format(support)}/>
                     </div>
                     <Accordion accordion className="jobs-wrap" activeKey={this.state.activeJob.version} onSelect={actions.selectJob.bind(null, 'version')}>
                         {version}
@@ -67,12 +66,12 @@ let Jobs = React.createClass({
         });
 
         let header = <h3 className="metaheader">Analyses</h3>;
-
         return (
             <div className="analyses">
                 {app.length === 0 ?  null : header }
                 <Accordion accordion className="jobs-wrap" activeKey={this.state.activeJob.app} onSelect={actions.selectJob.bind(null, 'app')}>
                     {this.state.loadingJobs ? <Spinner active={true} text="Loading Analyses" /> : app}
+                    <div  />
                 </Accordion>
             </div>
         );
@@ -80,14 +79,16 @@ let Jobs = React.createClass({
 
 // templates methods --------------------------------------------------
 
-    _runs(job) {
+    _runs(job, apps) {
         let runs = job.runs.map((run) => {
             return (
                 <Run run={run}
                      key={run._id}
                      toggleFolder={actions.toggleResultFolder}
                      displayFile={actions.displayFile}
-                     currentUser={this.state.currentUser}/>
+                     currentUser={this.state.currentUser}
+                     apps={apps}
+                     />
             );
         });
 
