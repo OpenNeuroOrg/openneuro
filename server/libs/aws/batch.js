@@ -26,6 +26,20 @@ function _depsObjects(depsIds) {
     });
 }
 
+const extractJobLog = (job) => {
+    let jobLog = {
+        'datasetId': job.datasetId,
+        'datasetLabel': job.datasetLabel,
+        'snapshotId': job.snapshotId,
+        'appLabel': job.appLabel,
+        'appVersion': job.appVersion,
+        'status': job.analysis.status,
+        'created': job.analysis.created,
+        'parameters': job.parameters
+    };
+    return jobLog;
+};
+
 export default (aws) => {
 
     const batch = new aws.Batch();
@@ -177,7 +191,8 @@ export default (aws) => {
                         // TODO - Maybe we save the error message into another field for display?
                         c.crn.jobs.updateOne({_id: ObjectID(jobId)}, {$set: {'analysis.status': 'REJECTED'}});
                     } else {
-                        emitter.emit(events.JOB_STARTED, {job: batchJobParams, createdDate: job.analysis.created}, userId);
+                        let jobLog = extractJobLog(job);
+                        emitter.emit(events.JOB_STARTED, {job: jobLog, createdDate: job.analysis.created}, userId);
                     }
                     callback();
                 });
@@ -527,7 +542,9 @@ export default (aws) => {
          */
         jobComplete(job, userId) {
             if(!job.analysis.notification) {
-                emitter.emit(events.JOB_COMPLETED, {job: job, completedDate: new Date()}, userId);
+                // Save a summary of the job object instead of the whole dataset
+                let jobLog = extractJobLog(job);
+                emitter.emit(events.JOB_COMPLETED, {job: jobLog, completedDate: new Date()}, userId);
                 notifications.jobComplete(job);
                 let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id);
                 c.crn.jobs.updateOne({_id: jobId}, {

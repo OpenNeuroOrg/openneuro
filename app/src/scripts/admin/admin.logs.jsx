@@ -2,6 +2,7 @@
 
 import React      from 'react';
 import Reflux     from 'reflux';
+import { Link }   from 'react-router';
 import Input      from '../common/forms/input.jsx';
 import adminStore from './admin.store';
 import actions    from './admin.actions';
@@ -29,12 +30,23 @@ let Logs = React.createClass({
             var pagesTotal = Math.ceil(filteredLogs.length / this.state.resultsPerPage);
             let paginatedResults = this._paginate(filteredLogs, this.state.resultsPerPage, this.state.page);
             paginatedResults.map((log, index) => {
+                let link;
+                if ('job' in log.data) {
+                    let job = log.data.job;
+                    // Jobs are always run against snapshots, so we link to a snapshot + job ref for those
+                    link = <Link to={'snapshot'}
+                                params={{datasetId: job.datasetId, snapshotId: job.snapshotId}}
+                                query={{app: job.appLabel, version: job.appVersion, job: job.jobId}} >
+                              {job.datasetLabel} <br /> {job.appLabel}:{job.appVersion}
+                           </Link>;
+                }
                 if(log.visible){
                     logs.push(
                         <div className="fade-in user-panel-header clearfix" key={index}>
-                            <div className="col-xs-4 user-col"><label>{log.type}</label></div>
-                            <div className="col-xs-4 user-col"><label>{log.user}</label></div>
-                            <div className="col-xs-4 user-col"><label>{log.date}</label></div>
+                            <div className="col-xs-3 user-col"><label>{log.type}</label></div>
+                            <div className="col-xs-3 user-col"><label>{log.user}</label></div>
+                            <div className="col-xs-3 user-col"><label>{log.date}</label></div>
+                            <div className="col-xs-3 user-col"><label>{link}</label></div>
                         </div>
                     );
                 }
@@ -58,9 +70,10 @@ let Logs = React.createClass({
                 <div>
                     <div className="col-xs-12 users-panel-wrap">
                         <div className="fade-in user-panel-header clearfix" >
-                            <div className="col-xs-4 user-col"><label>Event Type</label></div>
-                            <div className="col-xs-4 user-col"><label>User</label></div>
-                            <div className="col-xs-4 user-col"><label>Date</label></div>
+                            <div className="col-xs-3 user-col"><label>Event Type</label></div>
+                            <div className="col-xs-3 user-col"><label>User</label></div>
+                            <div className="col-xs-3 user-col"><label>Date</label></div>
+                            <div className="col-xs-3 user-col"><label>Link</label></div>
                         </div>
                         {results.length != 0 ? results : null}
                     </div>
