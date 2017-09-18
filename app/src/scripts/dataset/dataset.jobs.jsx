@@ -24,8 +24,13 @@ let Jobs = React.createClass({
         let app = this.state.jobs.map((app) => {
 
             version = app.versions.map((version) => {
+                let appDef = this.state.apps[app.label][version.label];
+                let bidsAppVersion = appDef.containerProperties.environment.filter((tuple) => {
+                    return tuple.name === 'BIDS_CONTAINER';
+                })[0].value;
+                let compositeVersion = bidsAppVersion + ' - #' + version.label;
                 return (
-                    <Panel className="jobs" header={'Version ' + version.label}  key={version.label} eventKey={version.label}>
+                    <Panel className="jobs" header={compositeVersion}  key={version.label} eventKey={version.label}>
                         {this._runs(version)}
                     </Panel>
                 );
