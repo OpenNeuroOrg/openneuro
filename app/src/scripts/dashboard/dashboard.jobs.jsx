@@ -20,14 +20,19 @@ let Jobs = React.createClass({
 // life cycle events --------------------------------------------------
     componentDidMount() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
+        let isAdmin = this.getPath().indexOf('admin') !== -1;
         let query = this.getQuery();
         let selectedPipeline = typeof query.pipeline != 'undefined' && query.pipeline || null;
-        Actions.update({isPublic});
-        Actions.getJobs(isPublic, {pipeline: selectedPipeline, version: null});
+        Actions.update({isPublic, isAdmin});
+        // Admin views grab all jobs
+        Actions.getJobs(isPublic, isAdmin, {pipeline: selectedPipeline, version: null});
     },
 
     render () {
         let isPublic = this.state.isPublic;
+        let isAdmin = this.state.isAdmin;
+        let title = !isPublic ? 'My' : 'Public';
+        title = isAdmin ? 'All' : title;
         let jobs = this.state.visiblejobs.length === 0 ? <div className="col-xs-12"><h3>no results please try again</h3></div> : this._jobs(this.state.visiblejobs) ;
         return (
             <div>
@@ -35,7 +40,7 @@ let Jobs = React.createClass({
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
                             <div className="row">
-                                <div className="col-md-5"><h2>{!isPublic ? 'My' : 'Public'} Analyses</h2></div>
+                                <div className="col-md-5"><h2>{title} Analyses</h2></div>
                                 <div className="col-md-7">{this._filter()}</div>
                             </div>
                         </div>

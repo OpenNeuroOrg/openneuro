@@ -24,8 +24,8 @@ export default  {
      * boolean as second argument to specifiy if request
      * is made with authentication. Defaults to true.
      */
-    getDatasets (callback, isPublic, isSignedOut) {
-        scitran.getProjects({authenticate: !isPublic, snapshot: false, metadata: true}, (projects) => {
+    getDatasets (callback, isPublic, isSignedOut, isAdmin=false) {
+        scitran.getProjects({authenticate: isAdmin || !isPublic, snapshot: false, metadata: true}, (projects) => {
             scitran.getProjects({authenticate: !isPublic, snapshot: true, metadata: true}, (pubProjects) => {
                 projects = projects.concat(pubProjects);
                 scitran.getUsers((err, res) => {

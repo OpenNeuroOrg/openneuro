@@ -26,20 +26,23 @@ let Datasets = React.createClass({
 
     componentDidMount() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
-        Actions.update({isPublic});
-        Actions.getDatasets(isPublic);
+        let isAdmin = this.getPath().indexOf('admin') !== -1;
+        Actions.update({isPublic, isAdmin});
+        Actions.getDatasets(isPublic, isAdmin);
     },
 
     componentWillReceiveProps() {
         let isPublic = this.getPath().indexOf('dashboard') === -1;
-        Actions.update({isPublic});
-        Actions.getDatasets(isPublic);
+        let isAdmin = this.getPath().indexOf('admin') !== -1;
+        Actions.update({isPublic, isAdmin});
+        Actions.getDatasets(isPublic, isAdmin);
     },
 
     render() {
         let datasets = this.state.datasets;
         let visibleDatasets = this.state.visibleDatasets;
         let isPublic  = this.state.isPublic;
+        let isAdmin = this.state.isAdmin;
         let results;
         if (datasets.length === 0 && isPublic) {
             let noDatasets = 'There are no public datasets.';
@@ -58,12 +61,21 @@ let Datasets = React.createClass({
             results = this._datasets(paginatedResults, isPublic);
         }
 
+        let title;
+        if (isAdmin) {
+            title = 'All Datasets';
+        } else if (isPublic) {
+            title = 'Public Datasets';
+        } else {
+            title = 'My Datasets';
+        }
+
         let datasetsDash =(
             <div>
                 <div className="dashboard-dataset-teasers datasets datasets-private">
                     <div className="header-filter-sort clearfix">
                         <div className="header-wrap clearfix">
-                             <h2>{!isPublic ? 'My Datasets' : 'Public Datasets'}</h2>
+                             <h2>{title}</h2>
                         </div>
                         <div className="filters-sort-wrap clearfix">
                             <Sort options={this.state.sortOptions}

@@ -73,6 +73,8 @@ let routes = (
             <Route name="app-definitions" path="app-definitions" handler={AppDefinitions} />
             <Route name="app-definitions-edit" path="app-definitions/:app-definitionsId" handler={AppDefinitions} />
             <Route name="event-logs" path="event-logs" handler={EventLogs} />
+            <Route name="admin-datasets" path="datasets" handler={Datasets}/>
+            <Route name="admin-jobs" path="jobs" handler={Jobs}/>
             <NotFoundRoute handler={RedirectUsers}/>
         </Route>
         <Route name="dataset" path="datasets/:datasetId" handler={Dataset} />
