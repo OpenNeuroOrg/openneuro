@@ -267,7 +267,9 @@ let handlers = {
         if (req.isSuperUser) {
             reqAll = req.query.all === 'true';
             // If all jobs are requested, skip the public query
-            reqPublic = false;
+            if (reqAll) {
+                reqPublic = false;
+            }
         }
         let jobsQuery = {};
         // Optionally select by app
