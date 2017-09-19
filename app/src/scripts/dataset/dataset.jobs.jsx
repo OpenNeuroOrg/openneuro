@@ -34,11 +34,6 @@ let Jobs = React.createClass({
         }
 
         let app = this.state.jobs.map((app) => {
-
-            let newestVersion = Math.max(...Object.keys(this.state.apps[app.label]));
-            let appDef = this.state.apps[app.label][newestVersion];
-            let {acknowledgements, support} = appDef.descriptions;
-            
             version = app.versions.map((version) => {
                 let appDef = this.state.apps[app.label][version.label];
                 let bidsAppVersion = appDef.containerProperties.environment.filter((tuple) => {
@@ -47,19 +42,13 @@ let Jobs = React.createClass({
                 let compositeVersion = bidsAppVersion + ' - #' + version.label;
                 return (
                     <Panel className="jobs" header={compositeVersion}  key={version.label} eventKey={version.label}>
-                        {this._runs(version)}
+                        {this._runs(version, appDef.descriptions)}
                     </Panel>
                 );
             });
 
             return (
                 <Panel className="jobs" header={app.label}  key={app.label} eventKey={app.label}>
-                    <div className="app-descriptions">
-                        <label>App created by:</label>  <span dangerouslySetInnerHTML={markdown.format(acknowledgements)}/>
-                        <br />
-                        <label>{support ? "Support at:" : ''}</label>  <span dangerouslySetInnerHTML={markdown.format(support)}/>
-                    </div>
-                        <hr />
                     <Accordion accordion className="jobs-wrap" activeKey={this.state.activeJob.version} onSelect={actions.selectJob.bind(null, 'version')}>
                         {version}
                     </Accordion>
@@ -81,15 +70,17 @@ let Jobs = React.createClass({
 
 // templates methods --------------------------------------------------
 
-    _runs(job, apps) {
-        let runs = job.runs.map((run) => {
+    _runs(job, descriptions) {
+        const {acknowledgements, support} = descriptions;
+        const runs = job.runs.map((run) => {
             return (
                 <Run run={run}
                      key={run._id}
                      toggleFolder={actions.toggleResultFolder}
                      displayFile={actions.displayFile}
                      currentUser={this.state.currentUser}
-                     apps={apps}
+                     acknowledgements={acknowledgements}
+                     support={support}
                      />
             );
         });
