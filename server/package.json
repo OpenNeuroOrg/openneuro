@@ -8,14 +8,15 @@
     "lint": "eslint libs/ handlers/ tests/",
     "start": "node index.js",
     "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/",
-    "coverage": "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel/register tests/**/"
+    "coverage":
+      "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel/register tests/**/",
+    "precommit": "lint-staged"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:poldracklab/crn_server.git"
   },
   "author": "Squishymedia",
-  "license": " ",
   "dependencies": {
     "ajv": "4.9.0",
     "archiver": "^1.0.0",
@@ -41,7 +42,16 @@
   },
   "devDependencies": {
     "eslint": "^3.19.0",
+    "husky": "^0.14.3",
     "istanbul": "^0.4.5",
-    "mocha": "3.0.2"
+    "lint-staged": "^4.2.1",
+    "mocha": "3.0.2",
+    "prettier": "^1.7.0"
+  },
+  "lint-staged": {
+    "gitDir": "../",
+    "linters": {
+      "*.{js,jsx,json}": ["prettier --write", "git add"]
+    }
   }
 }
