@@ -46,6 +46,7 @@ class JobAccordion extends React.Component {
                         </div>
                         <div className="panel-body">
                             <span className="inner">
+                                {this._support(run)}
                                 {this._parameters(run)}
                                 {this._batchStatus(run)}
                                 {run.analysis.status === 'SUCCEEDED' || run.analysis.status === 'FAILED' ? this._logs(run) : null}
@@ -161,10 +162,7 @@ class JobAccordion extends React.Component {
 
     _failedMessage(run) {
         if (run.analysis.status === 'FAILED' || run.analysis.status === 'REJECTED') {
-            let support = this.props.apps.descriptions.support;
-            let appEmailMessage =  support ? 'Support for this app can be reached at' : "";
-
-            let adminMessage = <span>Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail. <br /><br />{appEmailMessage}<span dangerouslySetInnerHTML={markdown.format(support)} /></span>;
+            let adminMessage = <span>Support information for this app is available below. Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail.</span>;
             let message = run.analysis.message ? run.analysis.message : 'We were unable to complete this analysis.';
             return (
                 <div>
@@ -176,6 +174,20 @@ class JobAccordion extends React.Component {
                         action={actions.retryJob.bind(this, run._id)} />
                 </div>
             );
+        }
+    }
+
+    _support(run) {
+        if (run.analysis.status === 'FAILED' || run.analysis.status === 'REJECTED') {
+            return (
+                <Accordion accordion className="results">
+                    <Panel className="fade-in" header="Support" key={run._id} eventKey={run._id}>
+                        <div className="app-support">
+                            <div className="markdown" dangerouslySetInnerHTML={markdown.format(this.props.support)} />
+                        </div>
+                    </Panel>
+                </Accordion>
+            )
         }
     }
 
