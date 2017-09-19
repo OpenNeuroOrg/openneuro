@@ -7,10 +7,22 @@ import actions      from './dataset.actions';
 import Spinner      from '../common/partials/spinner.jsx';
 import Run          from './dataset.jobs.run.jsx';
 import { Accordion, Panel } from 'react-bootstrap';
+import markdown     from '../utils/markdown';
 
 let Jobs = React.createClass({
 
     mixins: [Reflux.connect(datasetStore)],
+
+    getInitialState () {
+        let initialState = {
+            acknowledgements:   '',
+            support:            '',
+            summary:            '',
+            label:              '',
+        };
+
+        return initialState;
+    },
 
 // life cycle events --------------------------------------------------
 
@@ -22,7 +34,6 @@ let Jobs = React.createClass({
         }
 
         let app = this.state.jobs.map((app) => {
-
             version = app.versions.map((version) => {
                 let appDef = this.state.apps[app.label][version.label];
                 let bidsAppVersion = appDef.containerProperties.environment.filter((tuple) => {
@@ -31,7 +42,7 @@ let Jobs = React.createClass({
                 let compositeVersion = bidsAppVersion + ' - #' + version.label;
                 return (
                     <Panel className="jobs" header={compositeVersion}  key={version.label} eventKey={version.label}>
-                        {this._runs(version)}
+                        {this._runs(version, appDef.descriptions)}
                     </Panel>
                 );
             });
@@ -46,12 +57,12 @@ let Jobs = React.createClass({
         });
 
         let header = <h3 className="metaheader">Analyses</h3>;
-
         return (
             <div className="analyses">
                 {app.length === 0 ?  null : header }
                 <Accordion accordion className="jobs-wrap" activeKey={this.state.activeJob.app} onSelect={actions.selectJob.bind(null, 'app')}>
                     {this.state.loadingJobs ? <Spinner active={true} text="Loading Analyses" /> : app}
+                    <div  />
                 </Accordion>
             </div>
         );
@@ -59,19 +70,23 @@ let Jobs = React.createClass({
 
 // templates methods --------------------------------------------------
 
-    _runs(job) {
-        let runs = job.runs.map((run) => {
+    _runs(job, descriptions) {
+        const {acknowledgements, support} = descriptions;
+        const runs = job.runs.map((run) => {
             return (
                 <Run run={run}
                      key={run._id}
                      toggleFolder={actions.toggleResultFolder}
                      displayFile={actions.displayFile}
-                     currentUser={this.state.currentUser}/>
+                     currentUser={this.state.currentUser}
+                     acknowledgements={acknowledgements}
+                     support={support}
+                     />
             );
         });
 
         return runs;
-    }
+    } 
 
 });
 

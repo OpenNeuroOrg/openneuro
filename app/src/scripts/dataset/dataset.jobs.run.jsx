@@ -6,6 +6,7 @@ import WarnButton from '../common/forms/warn-button.jsx';
 import moment     from 'moment';
 import FileTree   from '../common/partials/file-tree.jsx';
 import {Accordion, Panel} from 'react-bootstrap';
+import markdown     from '../utils/markdown';
 
 import config     from '../../../config.js';
 
@@ -19,7 +20,6 @@ class JobAccordion extends React.Component {
 
     render () {
         let run = this.props.run;
-
         // if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0) || (run.logs && run.logs.length > 0)) {
         if (run.results && run.results.length > 0) {
             // header with parameters and/or results
@@ -46,6 +46,7 @@ class JobAccordion extends React.Component {
                         </div>
                         <div className="panel-body">
                             <span className="inner">
+                                {this._support(run)}
                                 {this._parameters(run)}
                                 {this._batchStatus(run)}
                                 {run.analysis.status === 'SUCCEEDED' || run.analysis.status === 'FAILED' ? this._logs(run) : null}
@@ -86,6 +87,11 @@ class JobAccordion extends React.Component {
             return (
                 <Accordion accordion className="results">
                     <Panel className="fade-in" header={type} key={run._id} eventKey={run._id}>
+                        <div className="app-acknowledgements">
+                            <label>Acknowledgements</label>
+                            <div className="markdown" dangerouslySetInnerHTML={markdown.format(this.props.acknowledgements)} />
+                        </div>
+                        <hr />
                         <span className="download-all">
                             <WarnButton
                                 icon="fa-download"
@@ -156,7 +162,7 @@ class JobAccordion extends React.Component {
 
     _failedMessage(run) {
         if (run.analysis.status === 'FAILED' || run.analysis.status === 'REJECTED') {
-            let adminMessage = <span>Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail.</span>;
+            let adminMessage = <span>Support information for this app is available below. Please contact the site <a href="mailto:openfmri@gmail.com?subject=Analysis%20Failure" target="_blank">administrator</a> if this analysis continues to fail.</span>;
             let message = run.analysis.message ? run.analysis.message : 'We were unable to complete this analysis.';
             return (
                 <div>
@@ -168,6 +174,20 @@ class JobAccordion extends React.Component {
                         action={actions.retryJob.bind(this, run._id)} />
                 </div>
             );
+        }
+    }
+
+    _support(run) {
+        if (run.analysis.status === 'FAILED' || run.analysis.status === 'REJECTED') {
+            return (
+                <Accordion accordion className="results">
+                    <Panel className="fade-in" header="Support" key={run._id} eventKey={run._id}>
+                        <div className="app-support">
+                            <div className="markdown" dangerouslySetInnerHTML={markdown.format(this.props.support)} />
+                        </div>
+                    </Panel>
+                </Accordion>
+            )
         }
     }
 
@@ -303,7 +323,9 @@ class JobAccordion extends React.Component {
 JobAccordion.propTypes = {
     run: React.PropTypes.object,
     displayFile: React.PropTypes.func,
-    toggleFolder: React.PropTypes.func
+    toggleFolder: React.PropTypes.func,
+    acknowledgements: React.PropTypes.string,
+    support: React.PropTypes.string
 };
 
 export default JobAccordion;
