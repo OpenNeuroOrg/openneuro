@@ -15,10 +15,10 @@ let Jobs = React.createClass({
 
     getInitialState () {
         let initialState = {
-            acknowledgements:   "",
-            support:            "",
-            summary:            "",
-            label:              "",
+            acknowledgements:   '',
+            support:            '',
+            summary:            '',
+            label:              '',
         };
 
         return initialState;
