@@ -323,7 +323,9 @@ class JobAccordion extends React.Component {
 JobAccordion.propTypes = {
     run: React.PropTypes.object,
     displayFile: React.PropTypes.func,
-    toggleFolder: React.PropTypes.func
+    toggleFolder: React.PropTypes.func,
+    acknowledgements: React.PropTypes.string,
+    support: React.PropTypes.string
 };
 
 export default JobAccordion;
