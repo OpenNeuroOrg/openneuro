@@ -4,11 +4,11 @@
     "node": true
   },
   "extends": "eslint:recommended",
+  "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module",
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
-    }
+    "allowImportExportEverywhere": false,
+    "codeFrame": false
   },
   "rules": {
     "indent": ["error", 2],

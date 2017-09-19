@@ -41,6 +41,7 @@
     "uuid": "^3.0.1"
   },
   "devDependencies": {
+    "babel-eslint": "^8.0.0",
     "eslint": "^3.19.0",
     "husky": "^0.14.3",
     "istanbul": "^0.4.5",
