@@ -32,11 +32,11 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
               Run on 
             </label>
             <strong>
-              09/19/2017
+              09/20/2017
             </strong>
              at 
             <strong>
-              11:39 AM
+              12:24 AM
             </strong>
             <span>
               <br />
@@ -251,11 +251,11 @@ exports[`dataset/dataset.job.run/JobAccordion renders a successful run 1`] = `
             Run on 
           </label>
           <strong>
-            09/19/2017
+            09/20/2017
           </strong>
            at 
           <strong>
-            11:34 AM
+            12:19 AM
           </strong>
           <span>
             <br />
