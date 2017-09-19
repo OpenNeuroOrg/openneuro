@@ -86,6 +86,11 @@ class JobAccordion extends React.Component {
             return (
                 <Accordion accordion className="results">
                     <Panel className="fade-in" header={type} key={run._id} eventKey={run._id}>
+                        <div className="app-acknowledgements">
+                            <label>Acknowledgements</label>
+                            <div className="markdown" dangerouslySetInnerHTML={markdown.format(this.props.acknowledgements)} />
+                        </div>
+                        <hr />
                         <span className="download-all">
                             <WarnButton
                                 icon="fa-download"
