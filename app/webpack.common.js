@@ -5,6 +5,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
+const env = {
+  CRN_SERVER_URL: JSON.stringify(process.env.CRN_SERVER_URL),
+  SCITRAN_AUTH_CLIENT_ID: JSON.stringify(process.env.SCITRAN_AUTH_CLIENT_ID),
+  GOOGLE_TRACKING_ID: JSON.stringify(process.env.GOOGLE_TRACKING_ID),
+}
+
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
@@ -23,13 +29,7 @@ module.exports = {
       favicon: './assets/favicon.ico',
     }),
     new webpack.DefinePlugin({
-      'process.env': {
-        CRN_SERVER_URL: JSON.stringify(process.env.CRN_SERVER_URL),
-        SCITRAN_AUTH_CLIENT_ID: JSON.stringify(
-          process.env.SCITRAN_AUTH_CLIENT_ID,
-        ),
-        GOOGLE_TRACKING_ID: JSON.stringify(process.env.GOOGLE_TRACKING_ID),
-      },
+      'process.env': env,
     }),
     new ExtractTextPlugin('style.css'),
     new CopyWebpackPlugin([{ from: './assets/papaya.js' }]),
