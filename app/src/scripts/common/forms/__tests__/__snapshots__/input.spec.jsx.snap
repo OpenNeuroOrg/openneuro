@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`common/forms/Input renders successfully 1`] = `
+<div
+  className="form-group float-label-input"
+>
+  <label />
+  <input
+    onChange={[Function]}
+    value="test-value"
+  />
+</div>
+`;
