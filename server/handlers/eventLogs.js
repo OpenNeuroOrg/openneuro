@@ -25,12 +25,7 @@ let handlers = {
       skip = reqSkip
     }
     c.crn.logs
-      .find(
-        { type: { $in: events } },
-        {
-          sort: [['date', 'desc']],
-        },
-      )
+      .find({ type: { $in: events } }, { sort: [['date', 'desc']] })
       .toArray((err, logs) => {
         if (err) return next(err)
         res.send(logs)

@@ -111,21 +111,20 @@ let handlers = {
                 if (!definitions.hasOwnProperty(definition.jobDefinitionName)) {
                   definitions[definition.jobDefinitionName] = {}
                 }
+                const query = {
+                  jobDefinitionName: definition.jobDefinitionName,
+                  jobDefinitionArn: definition.jobDefinitionArn,
+                  revision: definition.revision,
+                }
+                const projection = {
+                  descriptions: true,
+                  parameters: true,
+                  parametersMetadata: true,
+                  analysisLevels: true,
+                  deleted: true,
+                }
                 c.crn.jobDefinitions
-                  .find(
-                    {
-                      jobDefinitionName: definition.jobDefinitionName,
-                      jobDefinitionArn: definition.jobDefinitionArn,
-                      revision: definition.revision,
-                    },
-                    {
-                      descriptions: true,
-                      parameters: true,
-                      parametersMetadata: true,
-                      analysisLevels: true,
-                      deleted: true,
-                    },
-                  )
+                  .find(query, projection)
                   .toArray((err, def) => {
                     // there will either be a one element array or an empty array returned
                     let parameters =
@@ -617,13 +616,10 @@ let handlers = {
      */
   _checkJobStatus(statusArray) {
     //if every status is either succeeded or failed, all jobs have completed.
-    let finished = statusArray.length
-      ? statusArray.every(status => {
-          return status === 'SUCCEEDED' || status === 'FAILED'
-        })
-      : false
-
-    return finished
+    if (statusArray.length === 0) return false
+    return statusArray.every(status => {
+      return status === 'SUCCEEDED' || status === 'FAILED'
+    })
   },
 
   /*

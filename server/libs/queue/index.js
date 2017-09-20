@@ -9,8 +9,8 @@ export default {
       if (!redis) {
         throw 'Redis must be connected to connect a queue.'
       }
-      ;(this.queue = new NR.queue({ connection: { redis: redis } }, tasks)),
-        this.queue.connect()
+      this.queue = new NR.queue({ connection: { redis: redis } }, tasks)
+      this.queue.connect()
       callback(this.queue)
     } else {
       callback(this.queue)
