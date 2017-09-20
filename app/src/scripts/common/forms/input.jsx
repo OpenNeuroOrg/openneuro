@@ -14,6 +14,13 @@ let Input = React.createClass({
         };
     },
 
+    componentWillReceiveProps(nextProps) {
+        // Will reset value when prop changes
+        if ('value' in nextProps) {
+            this.setState({value: nextProps.value})
+        }
+    },
+
     propTypes: {
         initialValue: React.PropTypes.string,
         placeholder: React.PropTypes.string,
@@ -22,7 +29,7 @@ let Input = React.createClass({
         value: React.PropTypes.string,
         onChange: React.PropTypes.func,
         disabled: React.PropTypes.bool,
-        checekd: React.PropTypes.bool
+        checked: React.PropTypes.bool
     },
 
     render() {
