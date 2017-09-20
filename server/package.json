@@ -15,7 +15,6 @@
     "url": "git@github.com:poldracklab/crn_server.git"
   },
   "author": "Squishymedia",
-  "license": " ",
   "dependencies": {
     "ajv": "4.9.0",
     "archiver": "^1.0.0",
