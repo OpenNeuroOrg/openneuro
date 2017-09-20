@@ -34,7 +34,8 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
             <strong>
               09/20/2017
             </strong>
-             at 
+             at
+             
             <strong>
               12:24 AM
             </strong>
@@ -66,14 +67,16 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
               We were unable to complete this analysis.
                
               <span>
-                Support information for this app is available below. Please contact the site 
+                Support information for this app is available below. Please contact the site
+                 
                 <a
                   href="mailto:openfmri@gmail.com?subject=Analysis%20Failure"
                   target="_blank"
                 >
                   administrator
                 </a>
-                 if this analysis continues to fail.
+                 
+                if this analysis continues to fail.
               </span>
             </h5>
             <WarnButton
@@ -148,7 +151,8 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
                 >
                   participant_label
                 </span>
-                : 
+                :
+                 
                 <span
                   className="value"
                 >
@@ -253,7 +257,8 @@ exports[`dataset/dataset.job.run/JobAccordion renders a successful run 1`] = `
           <strong>
             09/20/2017
           </strong>
-           at 
+           at
+           
           <strong>
             12:19 AM
           </strong>
@@ -303,7 +308,8 @@ exports[`dataset/dataset.job.run/JobAccordion renders a successful run 1`] = `
               >
                 participant_label
               </span>
-              : 
+              :
+               
               <span
                 className="value"
               >
