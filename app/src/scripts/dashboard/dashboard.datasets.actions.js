@@ -1,10 +1,5 @@
-import Reflux from 'reflux';
+import Reflux from 'reflux'
 
-var Actions = Reflux.createActions([
-    'getDatasets',
-    'filter',
-    'sort',
-    'update'
-]);
+var Actions = Reflux.createActions(['getDatasets', 'filter', 'sort', 'update'])
 
-export default Actions;
+export default Actions

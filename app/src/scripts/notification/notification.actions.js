@@ -1,8 +1,5 @@
-import Reflux from 'reflux';
+import Reflux from 'reflux'
 
-let actions = Reflux.createActions([
-    'closeAlert',
-    'createAlert'
-]);
+let actions = Reflux.createActions(['closeAlert', 'createAlert'])
 
-export default actions;
+export default actions

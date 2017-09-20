@@ -6,9 +6,9 @@
  * accessibility.
  */
 
-let ids = {};
+let ids = {}
 
-export default (prefix='id') => {
-    ids[prefix] = ids[prefix] ? ids[prefix] + 1 : 1;
-    return `${prefix}${ids[prefix]}`;
-};
+export default (prefix = 'id') => {
+  ids[prefix] = ids[prefix] ? ids[prefix] + 1 : 1
+  return `${prefix}${ids[prefix]}`
+}

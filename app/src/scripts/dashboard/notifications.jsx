@@ -1,21 +1,15 @@
 // dependencies -------------------------------------------------------
 
-import React               from 'react';
+import React from 'react'
 
 class Notifications extends React.Component {
+  // life cycle events --------------------------------------------------
 
-// life cycle events --------------------------------------------------
+  render() {
+    return <h1>nothing here yet</h1>
+  }
 
-    render () {
-        
-        return (
-            <h1>nothing here yet</h1>
-        );
-    }
-
-// custom methods -----------------------------------------------------
-
+  // custom methods -----------------------------------------------------
 }
 
-export default Notifications;
-
+export default Notifications
