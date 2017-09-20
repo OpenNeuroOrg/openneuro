@@ -21,7 +21,8 @@ exports[`faq/faq/Faq renders successfully 1`] = `
       className="panel-body"
     >
       <span>
-        Check out our 
+        Check out our
+         
         <a
           href="https://www.youtube.com/playlist?list=PLU-IMZq18nDsf6VpCrLezLgylfAbRPPV8"
         >
@@ -110,7 +111,8 @@ exports[`faq/faq/Faq renders successfully 1`] = `
       className="panel-body"
     >
       <span>
-        Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure (BIDS) format. You can read about it more at 
+        Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure (BIDS) format. You can read about it more at
+         
         <a
           href="http://bids.neuroimaging.io/"
           target="_blank"
@@ -134,7 +136,8 @@ exports[`faq/faq/Faq renders successfully 1`] = `
       className="panel-body"
     >
       <span>
-        Yes. We recommend using 
+        Yes. We recommend using
+         
         <a
           href="https://pypi.python.org/pypi/pydeface"
           target="_blank"

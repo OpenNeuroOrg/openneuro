@@ -15,7 +15,8 @@ exports[`common/partials/happybrowser renders successfully 1`] = `
         src="test-file-stub"
       />
       <p>
-        We have detected that you are using an incompatible browser. This site may not work as expected. 
+        We have detected that you are using an incompatible browser. This site may not work as expected.
+         
         <strong>
           <a
             href="http://www.google.com/chrome/"

@@ -8,12 +8,14 @@
     "type": "git"
   },
   "scripts": {
-    "start": "webpack-dev-server --config webpack.dev.js --progress --watch --color",
+    "start":
+      "webpack-dev-server --config webpack.dev.js --progress --watch --color",
     "build": "webpack --config webpack.prod.js",
-    "lint": "eslint src/scripts/ src/tests/",
+    "lint": "eslint src/scripts/",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "precommit": "lint-staged"
   },
   "author": "Squishymedia",
   "dependencies": {
@@ -37,10 +39,11 @@
     "reflux": "^0.2.7",
     "remarkable": "1.6.2",
     "spark-md5": "^1.0.0",
-    "superagent": "3.6.0"
+    "superagent": "^3.6.0"
   },
   "devDependencies": {
     "babel": "5.8.23",
+    "babel-eslint": "7",
     "babel-jest": "^20.0.3",
     "babel-loader": "^7.1.2",
     "babel-minify-webpack-plugin": "^0.2.0",
@@ -52,14 +55,17 @@
     "css-loader": "^0.28.7",
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^1.5.1",
-    "eslint": "2.7.0",
+    "eslint": "3.x",
     "eslint-plugin-react": "^4.3.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.30.1",
+    "husky": "^0.14.3",
     "jest": "^20.0.4",
+    "lint-staged": "^4.2.1",
     "moment-timezone": "^0.5.13",
     "node-sass": "^4.5.3",
+    "prettier": "^1.7.0",
     "react-addons-test-utils": "0.14.8",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
@@ -70,15 +76,18 @@
     "webpack-merge": "^4.1.0"
   },
   "jest": {
-    "setupFiles": [
-      "./jestsetup.js"
-    ],
-    "snapshotSerializers": [
-      "<rootDir>/node_modules/enzyme-to-json/serializer"
-    ],
+    "setupFiles": ["./jestsetup.js"],
+    "snapshotSerializers": ["<rootDir>/node_modules/enzyme-to-json/serializer"],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+        "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    }
+  },
+  "lint-staged": {
+    "gitDir": "../",
+    "linters": {
+      "*.{js,jsx,json}": ["prettier --write", "git add"]
     }
   }
 }

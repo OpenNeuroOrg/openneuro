@@ -1,14 +1,14 @@
-import Reflux from 'reflux';
+import Reflux from 'reflux'
 
 var Actions = Reflux.createActions([
-    'checkAuth',
-    'getPreferences',
-    'isRoot',
-    'updatePreferences',
-    'refresh',
-    'signIn',
-    'signOut',
-    'toggleModal'
-]);
+  'checkAuth',
+  'getPreferences',
+  'isRoot',
+  'updatePreferences',
+  'refresh',
+  'signIn',
+  'signOut',
+  'toggleModal',
+])
 
-export default Actions;
+export default Actions

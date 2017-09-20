@@ -1,11 +1,11 @@
-import Reflux from 'reflux';
+import Reflux from 'reflux'
 
 var Actions = Reflux.createActions([
-    'getJobs',
-    'update',
-    'selectPipelineFilter',
-    'selectPipelineVersionFilter',
-    'sort'
-]);
+  'getJobs',
+  'update',
+  'selectPipelineFilter',
+  'selectPipelineVersionFilter',
+  'sort',
+])
 
-export default Actions;
+export default Actions
