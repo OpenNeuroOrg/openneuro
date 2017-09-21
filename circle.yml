@@ -19,7 +19,7 @@ test:
     - cd app && yarn run lint
     # Unit Tests
     - cd server && yarn run test
-    - cd app yarn run test
+    - cd app && yarn run test
     # Coverage
     - cd server && yarn run codecov
     - cd app && yarn run codecov
