@@ -1,26 +1,33 @@
 machine:
   node:
-    version: 4.4.1
+    version: 6.1.0
   services:
     - docker
+  environment:
+    PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
+  dependencies:
+    cache_directories:
+      - ~/.cache/yarn
 
 dependencies:
   pre:
     - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
     - docker build --pull -t openneuro/server server
     - docker build --pull -t openneuro/app app
+  override:
+    - yarn
 
 test:
   override:
     # Lint
-    - docker run openneuro/server yarn run lint
-    - docker run openneuro/app yarn run lint
+    - cd server && yarn run lint
+    - cd app && yarn run lint
     # Unit Tests
-    - docker run openneuro/server yarn run test
-    - docker run openneuro/app yarn run test
+    - cd server && yarn run test
+    - cd app yarn run test
     # Coverage
-    - docker run $(bash <(curl -s https://codecov.io/env)) openneuro/server yarn run codecov -t $CODECOV_TOKEN
-    - docker run $(bash <(curl -s https://codecov.io/env)) openneuro/app yarn run codecov -t $CODECOV_TOKEN
+    - cd server && yarn run codecov
+    - cd app && yarn run codecov
 
 deployment:
   dev:
