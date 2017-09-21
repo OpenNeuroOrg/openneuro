@@ -1,106 +1,54 @@
 // dependencies ----------------------------------------------------------
 
 import React from 'react'
-import { NotFoundRoute, DefaultRoute, Route } from 'react-router'
+import {
+  BrowserRouter as Router,
+  browserHistory,
+  Route,
+  Switch,
+} from 'react-router-dom'
 import requireAuth from './utils/requireAuth'
 
 // views
-import Index from './index.jsx'
 import FrontPage from './front-page/front-page.jsx'
-
 import Admin from './admin/admin.jsx'
-import Users from './admin/admin.users.jsx'
-import Blacklist from './admin/admin.blacklist.jsx'
-import AppDefinitions from './admin/admin.apps.jsx'
-import EventLogs from './admin/admin.logs.jsx'
-
 import Dashboard from './dashboard/dashboard.jsx'
-import Notifications from './dashboard/notifications.jsx'
-import Jobs from './dashboard/dashboard.jobs.jsx'
-import Datasets from './dashboard/dashboard.datasets.jsx'
 import Dataset from './dataset/dataset.jsx'
-
 import Faq from './faq/faq.jsx'
-
-// redirects -------------------------------------------------------------
-
-class RedirectDashboard extends React.Component {
-  static willTransitionTo(transition) {
-    transition.redirect('dashboard')
-  }
-}
-
-class RedirectDatasets extends React.Component {
-  static willTransitionTo(transition) {
-    transition.redirect('datasets')
-  }
-}
-
-class RedirectPublicDatasets extends React.Component {
-  static willTransitionTo(transition) {
-    transition.redirect('publicDatasets')
-  }
-}
-
-class RedirectUsers extends React.Component {
-  static willTransitionTo(transition) {
-    transition.redirect('users')
-  }
-}
 
 // routes ----------------------------------------------------------------
 
-let routes = (
-  <Route name="app" path="/" handler={Index}>
-    <Route name="front-page" path="/" handler={FrontPage} />
-    <Route name="faq" path="faq" handler={Faq} />
-    <Route name="dashboard" path="dashboard" handler={requireAuth(Dashboard)}>
-      <Route name="datasets" path="datasets" handler={Datasets} />
+const appRoutes = () => (
+  <Router history={browserHistory}>
+    <Switch>
+      <Route name="front-page" exact path="/" component={FrontPage} />
+      <Route name="faq" exact path="/faq" component={Faq} />
       <Route
-        name="notifications"
-        path="notifications"
-        handler={Notifications}
-      />
-      <Route name="jobs" path="jobs" handler={Jobs} />
-      <NotFoundRoute handler={RedirectDatasets} />
-    </Route>
-    <Route name="publicDashboard" path="public" handler={Dashboard}>
-      <Route name="publicDatasets" path="datasets" handler={Datasets} />
-      <Route
-        name="publicNotifications"
-        path="notifications"
-        handler={Notifications}
-      />
-      <Route name="publicJobs" path="jobs" handler={Jobs} />
-      <NotFoundRoute handler={RedirectPublicDatasets} />
-    </Route>
-    <Route name="admin" path="admin" handler={requireAuth(Admin, 'admin')}>
-      <Route name="users" path="users" handler={Users} />
-      <Route name="blacklist" path="blacklist" handler={Blacklist} />
-      <Route
-        name="app-definitions"
-        path="app-definitions"
-        handler={AppDefinitions}
+        name="dashboard"
+        exact
+        path="/dashboard"
+        component={requireAuth(Dashboard)}
       />
       <Route
-        name="app-definitions-edit"
-        path="app-definitions/:app-definitionsId"
-        handler={AppDefinitions}
+        name="admin"
+        exact
+        path="/admin"
+        component={requireAuth(Admin, 'admin')}
       />
-      <Route name="event-logs" path="event-logs" handler={EventLogs} />
-      <Route name="admin-datasets" path="datasets" handler={Datasets} />
-      <Route name="admin-jobs" path="jobs" handler={Jobs} />
-      <NotFoundRoute handler={RedirectUsers} />
-    </Route>
-    <Route name="dataset" path="datasets/:datasetId" handler={Dataset} />
-    <Route
-      name="snapshot"
-      path="datasets/:datasetId/versions/:snapshotId"
-      handler={Dataset}
-    />
-    <DefaultRoute handler={FrontPage} />
-    <NotFoundRoute handler={RedirectDashboard} />
-  </Route>
+      <Route
+        name="dataset"
+        exact
+        path="/datasets/:datasetId"
+        component={Dataset}
+      />
+      <Route
+        name="snapshot"
+        exact
+        path="/datasets/:datasetId/versions/:snapshotId"
+        component={Dataset}
+      />
+    </Switch>
+  </Router>
 )
 
-export default routes
+export default appRoutes
