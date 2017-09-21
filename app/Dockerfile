@@ -1,5 +1,7 @@
 FROM node:6.11.3-alpine
 
+RUN apk --no-cache --update add git
+
 # accept 'branch' build argument
 ARG branch
 
