@@ -1,6 +1,6 @@
-var assert = require('assert')
-var moment = require('moment')
-var aws = require('../../libs/aws')
+import assert from 'assert'
+import moment from 'moment'
+import aws from '../../libs/aws'
 
 const subjectParam = { participant_label: ['01', '02', '03'] }
 const nCpusParam = { n_cpus: 4 }

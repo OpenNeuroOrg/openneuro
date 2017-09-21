@@ -3,26 +3,25 @@
 // dependencies --------------------------------------------------
 import Redis from 'ioredis'
 
-export default {
-  redis: null,
+let redis = null
 
-  connect(config, callback) {
-    if (!this.redis) {
+const connect = async config => {
+  return new Promise(resolve => {
+    if (!redis) {
       console.log(
         'Connecting to Redis "redis://%s:%d/0"',
         config.host,
         config.port,
       )
-      this.redis = new Redis(config)
-      this.redis.on('connect', () => {
-        if (callback) {
-          callback(this.redis)
-        }
+      redis = new Redis(config)
+      redis.on('connect', () => {
+        resolve(redis)
       })
     } else {
-      if (callback) {
-        callback(this.redis)
-      }
+      resolve(redis)
     }
-  },
+  })
 }
+
+export default { connect }
+export { redis, connect }

@@ -1,23 +1,34 @@
 machine:
   node:
-    version: 4.4.1
+    version: 6.1.0
   services:
     - docker
+  dependencies:
+    cache_directories:
+      - ~/.cache/yarn
 
 dependencies:
-  pre:
-    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-    - docker build --pull -t openneuro/server server
-    - docker build --pull -t openneuro/app app
+  override:
+    - cd server && yarn
+    - cd app && yarn
 
 test:
   override:
     # Lint
-    - docker run openneuro/server yarn run lint
-    - docker run openneuro/app yarn run lint
+    - cd server && yarn run lint
+    - cd app && yarn run lint
     # Unit Tests
-    - docker run openneuro/server yarn run test
-    - docker run openneuro/app yarn run test
+    - cd server && yarn run test
+    - cd app && yarn run test
+    # Coverage
+    - cd server && yarn run codecov
+    - cd app && yarn run codecov
+  post:
+    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+    - docker build --pull -t openneuro/server server:
+      parallel: true
+    - docker build --pull -t openneuro/app app:
+      parallel: true
 
 deployment:
   dev:

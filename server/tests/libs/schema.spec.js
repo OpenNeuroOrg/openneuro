@@ -1,7 +1,7 @@
-var assert = require('assert')
-var schema = require('../../libs/schema')
-var configSchema = require('../../schemas/config')
-var goodConfig = require('../data/goodConfig')
+import assert from 'assert'
+import schema from '../../libs/schema'
+import configSchema from '../../schemas/config'
+import goodConfig from '../data/goodConfig'
 
 describe('libs/schema.js', () => {
   describe('validateBody()', () => {

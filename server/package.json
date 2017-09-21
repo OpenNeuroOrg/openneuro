@@ -7,9 +7,9 @@
   "scripts": {
     "lint": "eslint libs/ handlers/ tests/",
     "start": "node index.js",
-    "test": "./node_modules/.bin/mocha --compilers js:babel/register tests/**/",
-    "coverage":
-      "./node_modules/istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha -- --compilers js:babel/register tests/**/",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "codecov": "jest --coverage && codecov",
     "precommit": "lint-staged"
   },
   "repository": {
@@ -22,7 +22,8 @@
     "archiver": "^1.0.0",
     "async": "^2.4.1",
     "aws-sdk": "2.50.0",
-    "babel": "^5.8.23",
+    "babel-core": "^6.26.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "bids-validator": "^0.23.2",
     "body-parser": "^1.14.0",
     "cron": "^1.1.0",
@@ -42,11 +43,13 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.0.0",
+    "babel-jest": "^21.0.2",
+    "babel-preset-env": "^1.6.0",
+    "codecov": "^2.3.0",
     "eslint": "^3.19.0",
     "husky": "^0.14.3",
-    "istanbul": "^0.4.5",
+    "jest": "^21.1.0",
     "lint-staged": "^4.2.1",
-    "mocha": "3.0.2",
     "prettier": "^1.7.0"
   },
   "lint-staged": {
