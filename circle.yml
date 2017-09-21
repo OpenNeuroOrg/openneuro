@@ -3,8 +3,6 @@ machine:
     version: 6.1.0
   services:
     - docker
-  environment:
-    PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
   dependencies:
     cache_directories:
       - ~/.cache/yarn
@@ -15,7 +13,8 @@ dependencies:
     - docker build --pull -t openneuro/server server
     - docker build --pull -t openneuro/app app
   override:
-    - yarn
+    - cd server && yarn
+    - cd app && yarn
 
 test:
   override:
