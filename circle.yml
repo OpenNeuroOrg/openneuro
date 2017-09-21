@@ -18,6 +18,9 @@ test:
     # Unit Tests
     - docker run openneuro/server yarn run test
     - docker run openneuro/app yarn run test
+    # Coverage
+    - docker run openneuro/server yarn run codecov -- -t $CODECOV_TOKEN
+    - docker run openneuro/app yarn run codecov -- -t $CODECOV_TOKEN
 
 deployment:
   dev:
