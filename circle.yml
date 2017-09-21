@@ -21,8 +21,8 @@ test:
     - cd server && yarn run test
     - cd app && yarn run test
     # Coverage
-    - cd server && yarn run codecov
-    - cd app && yarn run codecov
+    - cd server && yarn run codecov -F server
+    - cd app && yarn run codecov -F app
   post:
     - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
     - docker build --pull -t openneuro/server server:
