@@ -10,8 +10,10 @@ machine:
 dependencies:
   pre:
     - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-    - docker build --pull -t openneuro/server server
-    - docker build --pull -t openneuro/app app
+    - docker build --pull -t openneuro/server server:
+      parallel: true
+    - docker build --pull -t openneuro/app app:
+      parallel: true
   override:
     - cd server && yarn
     - cd app && yarn
