@@ -1,4 +1,4 @@
-FROM node:6.11.2
+FROM node:6.11.3-alpine
 
 # setup server directory
 RUN mkdir /srv/crn-server

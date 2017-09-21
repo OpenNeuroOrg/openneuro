@@ -9,26 +9,25 @@ machine:
 
 dependencies:
   override:
-    - cd server && yarn
-    - cd app && yarn
+    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn:
+      parallel: true
+  post: # You would think these are tests but this way the build stops if they fail
+    # Lint
+    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run lint:
+        parallel: true
+    # Unit Tests
+    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run coverage:
+        parallel: true
 
 test:
   override:
-    # Lint
-    - cd server && yarn run lint
-    - cd app && yarn run lint
-    # Unit Tests
-    - cd server && yarn run test
-    - cd app && yarn run test
     # Coverage
-    - cd server && yarn run codecov -F server
-    - cd app && yarn run codecov -F app
+    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run codecov:
+        parallel: true
   post:
     - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-    - docker build --pull -t openneuro/server server:
-      parallel: true
-    - docker build --pull -t openneuro/app app:
-      parallel: true
+    - case $CIRCLE_NODE_INDEX in 0) docker build --pull -t openneuro/server server;; 1) docker build --pull -t openneuro/app app;; esac:
+        parallel: true
 
 deployment:
   dev:

@@ -14,8 +14,8 @@
     "lint": "eslint src/scripts/",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "codecov": "jest --coverage && codecov",
+    "coverage": "jest --coverage",
+    "codecov": "codecov -F app",
     "precommit": "lint-staged"
   },
   "author": "Squishymedia",
