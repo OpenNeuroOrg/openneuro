@@ -16,7 +16,7 @@ dependencies:
     - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run lint:
         parallel: true
     # Unit Tests
-    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run test --coverage:
+    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run coverage:
         parallel: true
 
 test:
