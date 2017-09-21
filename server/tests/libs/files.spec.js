@@ -1,5 +1,5 @@
-var assert = require('assert')
-var files = require('../../libs/files')
+import assert from 'assert'
+import files from '../../libs/files'
 
 describe('libs/files.js', () => {
   describe('getContentType()', () => {

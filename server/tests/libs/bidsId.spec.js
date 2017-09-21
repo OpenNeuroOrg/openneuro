@@ -1,5 +1,5 @@
-var assert = require('assert')
-var bidsId = require('../../libs/bidsId')
+import assert from 'assert'
+import bidsId from '../../libs/bidsId'
 
 describe('libs/bidsId.js', () => {
   describe('hexToASCII()', () => {
