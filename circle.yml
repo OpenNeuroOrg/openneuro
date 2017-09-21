@@ -20,6 +20,7 @@ test:
     - docker run openneuro/app yarn run test
     # Coverage
     - export ci_env=$(bash <(curl -s https://codecov.io/env))
+    - echo $ci_env
     - docker run $ci_env openneuro/server yarn run codecov -t $CODECOV_TOKEN
     - docker run $ci_env openneuro/app yarn run codecov -t $CODECOV_TOKEN
 
