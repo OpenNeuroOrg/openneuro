@@ -19,8 +19,9 @@ test:
     - docker run openneuro/server yarn run test
     - docker run openneuro/app yarn run test
     # Coverage
-    - docker run openneuro/server yarn run codecov -- -t $CODECOV_TOKEN
-    - docker run openneuro/app yarn run codecov -- -t $CODECOV_TOKEN
+    - export ci_env=$(bash <(curl -s https://codecov.io/env))
+    - docker run $ci_env openneuro/server yarn run codecov -t $CODECOV_TOKEN
+    - docker run $ci_env openneuro/app yarn run codecov -t $CODECOV_TOKEN
 
 deployment:
   dev:
