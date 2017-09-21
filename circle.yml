@@ -11,15 +11,16 @@ dependencies:
   override:
     - cd server && yarn
     - cd app && yarn
-
-test:
-  override:
+  post: # You would think these are tests but this way the build stops if they fail
     # Lint
     - cd server && yarn run lint
     - cd app && yarn run lint
     # Unit Tests
     - cd server && yarn run test
     - cd app && yarn run test
+
+test:
+  override:
     # Coverage
     - cd server && yarn run codecov -F server
     - cd app && yarn run codecov -F app
