@@ -1,3 +1,15 @@
 {
-  "presets": ["babel-preset-es2015", "babel-preset-react"]
+  "presets": 
+  [
+  "babel-preset-es2015", "babel-preset-react"
+  ],
+  "plugins": 
+  [
+  "syntax-dynamic-import",
+
+  ],
+   ["import-inspector", {
+      "serverSideRequirePath": true,
+      "webpackRequireWeakId": true,
+    }]
 }
