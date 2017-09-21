@@ -26,8 +26,8 @@ test:
         parallel: true
   post:
     - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-    - case $CIRCLE_NODE_INDEX in 0) docker build --pull -t openneuro/server server;; 1) docker build --pull -t openneuro/app app;; esac:
-        parallel: true
+    - docker build --pull -t openneuro/server server
+    - docker build --pull -t openneuro/app app
 
 deployment:
   dev:
