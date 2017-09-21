@@ -4,14 +4,13 @@
 // dependencies ----------------------------------------------------
 
 import express from 'express'
-import async from 'async'
 import config from './config'
 import routes from './routes'
 import bodyParser from 'body-parser'
 import morgan from 'morgan'
 import mongo from './libs/mongo'
-import redis from './libs/redis'
-import queue from './libs/queue'
+import { connect as redis_connect } from './libs/redis'
+import { connect as resque_connect } from './libs/queue'
 import notifications from './libs/notifications'
 import aws from './libs/aws'
 // import events lib to instantiate CRN Emitter
@@ -20,11 +19,20 @@ import events from './libs/events'
 // configuration ---------------------------------------------------
 
 mongo.connect()
-redis.connect(config.redis, () => {
-  queue.connect(() => {
+
+const redisConnect = async () => {
+  try {
+    const redis = await redis_connect(config.redis)
+    await resque_connect(redis)
     console.log('Resque connected')
-  })
-})
+    // start background tasks
+    notifications.initCron()
+    aws.batch.initCron()
+  } catch (err) {
+    console.error(err)
+    process.exit(1)
+  }
+}
 
 let app = express()
 
@@ -62,12 +70,10 @@ app.use(function(err, req, res, next) {
   res.status(http_code).send(send)
 })
 
-// start background tasks
-notifications.initCron()
-aws.batch.initCron()
-
 // start server ----------------------------------------------------
 
-app.listen(config.port, () => {
-  console.log('Server is listening on port ' + config.port)
+redisConnect().then(() => {
+  app.listen(config.port, () => {
+    console.log('Server is listening on port ' + config.port)
+  })
 })
