@@ -52,6 +52,14 @@
     "lint-staged": "^4.2.1",
     "prettier": "^1.7.0"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/*.spec.js",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ]
+  },
   "lint-staged": {
     "gitDir": "../",
     "linters": {
