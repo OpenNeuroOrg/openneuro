@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dataset/Summary renders successfully 1`] = `
+<div
+  className="clearfix"
+>
+  <div>
+    <hr />
+    <h5>
+      <b>
+        <span>
+          <strong>
+             
+            File
+            : 
+          </strong>
+          1
+        </span>
+        , 
+        <span>
+          <strong>
+            Size: 
+          </strong>
+          5.69kB
+        </span>
+        , 
+        <span>
+          <strong>
+             
+            Subjects
+            : 
+          </strong>
+          2
+        </span>
+        , 
+        <span>
+          <strong>
+            Session
+            : 
+          </strong>
+          1
+        </span>
+      </b>
+    </h5>
+    <h5>
+      <span>
+        <b>
+          Available
+        </b>
+         
+        <b>
+          Tasks
+        </b>
+         : 
+        psuedotask
+      </span>
+    </h5>
+    <h5>
+      <span>
+        <b>
+          Available
+        </b>
+         
+        <b>
+          Modalities
+        </b>
+         : 
+        MRI
+      </span>
+    </h5>
+  </div>
+</div>
+`;
