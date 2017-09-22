@@ -12,7 +12,7 @@ coverage:
 flags:
   app:
     paths:
-      - app
+      - .
   server:
     paths:
-      - server
+      - .
