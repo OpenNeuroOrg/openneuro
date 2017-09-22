@@ -9,7 +9,7 @@
     "start": "node index.js",
     "test": "jest",
     "coverage": "jest --coverage",
-    "codecov": "codecov -F server",
+    "codecov": "codecov -p ../ -F server",
     "precommit": "lint-staged"
   },
   "repository": {

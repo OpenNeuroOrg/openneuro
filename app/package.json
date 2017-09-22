@@ -15,7 +15,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "coverage": "jest --coverage",
-    "codecov": "codecov -F app",
+    "codecov": "codecov -p ../ -F app",
     "precommit": "lint-staged"
   },
   "author": "Squishymedia",
