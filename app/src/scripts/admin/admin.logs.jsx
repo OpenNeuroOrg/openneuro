@@ -7,6 +7,7 @@ import Input from '../common/forms/input.jsx'
 import adminStore from './admin.store'
 import actions from './admin.actions'
 import Paginator from '../common/partials/paginator.jsx'
+import LogLink from './admin.logs.link.jsx'
 
 let Logs = React.createClass({
   mixins: [Reflux.connect(adminStore)],
@@ -35,23 +36,7 @@ let Logs = React.createClass({
         this.state.page,
       )
       paginatedResults.map((log, index) => {
-        let link
-        if ('job' in log.data) {
-          let job = log.data.job
-          // Jobs are always run against snapshots, so we link to a snapshot + job ref for those
-          link = (
-            <Link
-              to={'snapshot'}
-              params={{ datasetId: job.datasetId, snapshotId: job.snapshotId }}
-              query={{
-                app: job.appLabel,
-                version: job.appVersion,
-                job: job.jobId,
-              }}>
-              {job.datasetLabel} <br /> {job.appLabel}:{job.appVersion}
-            </Link>
-          )
-        }
+        const link = <LogLink log={log} />
         if (log.visible) {
           logs.push(
             <div className="fade-in user-panel-header clearfix" key={index}>
