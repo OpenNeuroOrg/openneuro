@@ -33,7 +33,7 @@ export default class Publish extends React.Component {
 
   render() {
     let form = (
-      <div className="anaylsis-modal clearfix">
+      <div className="analysis-modal clearfix">
         {this._snapshots()}
         <p className="text-danger">
           This snapshot will be released publicly under a
