@@ -50,6 +50,11 @@ class Dashboard extends React.Component {
                 All Jobs
               </Link>
             </li>
+                <li>
+              <Link to="progression" className="btn-tab">
+                Progression
+              </Link>
+            </li>
           </ul>
           <RouteHandler />
         </div>

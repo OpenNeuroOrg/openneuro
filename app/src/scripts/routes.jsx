@@ -13,6 +13,7 @@ import Users from './admin/admin.users.jsx'
 import Blacklist from './admin/admin.blacklist.jsx'
 import AppDefinitions from './admin/admin.apps.jsx'
 import EventLogs from './admin/admin.logs.jsx'
+import Progression from './admin/admin.progression.jsx'
 
 import Dashboard from './dashboard/dashboard.jsx'
 import Notifications from './dashboard/notifications.jsx'
@@ -77,6 +78,7 @@ let routes = (
     <Route name="admin" path="admin" handler={requireAuth(Admin, 'admin')}>
       <Route name="users" path="users" handler={Users} />
       <Route name="blacklist" path="blacklist" handler={Blacklist} />
+      <Route name="progression" path="progression" handler={Progression} />
       <Route
         name="app-definitions"
         path="app-definitions"
