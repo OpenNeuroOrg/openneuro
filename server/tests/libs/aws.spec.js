@@ -139,6 +139,72 @@ describe('libs/aws/batch.js', () => {
       assert.equal(Math.max(...lengths) - Math.min(...lengths), 1)
     })
   })
+  describe('_submitLevels()', () => {
+    const batchJob = {
+      containerOverrides: {
+        environment: [],
+      },
+    }
+    const analysisLevels = [
+      { value: 'participant' },
+      { value: 'group1' },
+      { value: 'group2' },
+    ]
+    it('calls each level with the correct submit function', () => {
+      const submitCallback = (a, b, c) => {
+        c(null, ['test'])
+      }
+      const parallelSubmit = jest.fn(submitCallback)
+      const singleSubmit = jest.fn(submitCallback)
+      const done = jest.fn()
+      aws.batch._submitLevels(
+        batchJob,
+        analysisLevels,
+        parallelSubmit,
+        singleSubmit,
+        done,
+      )
+      expect(parallelSubmit).toHaveBeenCalledTimes(1) // One participant level
+      expect(singleSubmit).toHaveBeenCalledTimes(2) // One group level
+      expect(done).toHaveBeenCalled()
+    })
+    it('passes dependencies up exactly one level', () => {
+      const parallelSubmit = jest.fn((a, b, c) => {
+        c(null, [1, 2])
+      })
+      // Simulate group1 returning dependencies (itself) to group2
+      const singleSubmit = jest
+        .fn()
+        .mockImplementationOnce((a, b, c) => {
+          // group1
+          c(null, [3])
+        })
+        .mockImplementationOnce((a, b, c) => {
+          // group2 (last job in chain)
+          c(null, [4])
+        })
+      const done = jest.fn()
+      aws.batch._submitLevels(
+        batchJob,
+        analysisLevels,
+        parallelSubmit,
+        singleSubmit,
+        done,
+      )
+      expect(parallelSubmit).toHaveBeenCalledWith(
+        batchJob,
+        [],
+        expect.any(Function),
+      )
+      // Validate that we aren't getting the [1, 2] deps from the
+      // participant level in the second group
+      expect(singleSubmit).toHaveBeenLastCalledWith(
+        batchJob,
+        [3],
+        expect.any(Function),
+      )
+    })
+  })
 })
 
 describe('libs/aws/cloudwatchlogs.js', () => {
