@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`common/forms/ArrayInput renders a hidden checkbox 1`] = `
+<div
+  className="cte-edit-array"
+>
+  <div
+    className="cte-array-items"
+  >
+    <ArrayItem
+      index={0}
+      item="false"
+      model={
+        Array [
+          Object {
+            "id": "license-key",
+            "type": "checkbox",
+          },
+        ]
+      }
+      onEdit={[Function]}
+      remove={[Function]}
+    />
+  </div>
+  <div
+    className="text-danger"
+  />
+  <div
+    className="form-inline"
+  >
+    <span>
+      <div
+        className="form-group float-label-input"
+      >
+        <button
+          className="admin-button"
+          onClick={[Function]}
+        >
+          <span>
+            <i
+              className="fa fa-square-o"
+            />
+             Hidden
+          </span>
+        </button>
+      </div>
+    </span>
+    <br />
+    <button
+      className="cte-save-btn btn-admin-blue add-btn"
+      onClick={[Function]}
+    >
+      add
+    </button>
+  </div>
+</div>
+`;
+
+exports[`common/forms/ArrayInput renders successfully 1`] = `
+<div
+  className="cte-edit-array"
+>
+  <div
+    className="text-danger"
+  />
+  <div
+    className="form-inline"
+  >
+    <span />
+    <br />
+    <button
+      className="cte-save-btn btn-admin-blue add-btn"
+      onClick={[Function]}
+    >
+      add
+    </button>
+  </div>
+</div>
+`;

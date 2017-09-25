@@ -31,59 +31,56 @@ let ArrayInput = React.createClass({
   },
 
   render() {
-    let inputFields = this.props.model
-      ? this.props.model.map(field => {
-          if (field.hasOwnProperty('select') && field.select.length > 0) {
-            return (
-              <Select
-                placeholder={field.placeholder}
-                simpleValue
-                options={field.select}
-                value={this.state[field.id]}
-                onChange={this._handleSelectChange.bind(null, field.id)}
-                key={field.id}
-              />
-            )
-          } else if (
-            field.hasOwnProperty('type') &&
-            field.type === 'checkbox'
-          ) {
-            if (field.hasOwnProperty('id') && field.id === 'required') {
-              var message = ' Required'
-            } else {
-              var message = ' Hidden'
-            }
-            return (
-              <div className="form-group float-label-input" key={field.id}>
-                <button
-                  className="admin-button"
-                  onClick={this._toggleCheckBox.bind(null, field.id)}
-                  key={field.id}>
-                  <span>
-                    <i
-                      className={
-                        this.state[field.id]
-                          ? 'fa fa-check-square-o'
-                          : 'fa fa-square-o'
-                      }
-                    />
-                    {message}
-                  </span>
-                </button>
-              </div>
-            )
-          } else {
-            return (
-              <Input
-                placeholder={field.placeholder}
-                value={this.state[field.id]}
-                onChange={this._handleChange.bind(null, field.id)}
-                key={field.id}
-              />
-            )
+    let inputFields = null
+    if (this.props.model) {
+      inputFields = this.props.model.map(field => {
+        if (field.hasOwnProperty('select') && field.select.length > 0) {
+          return (
+            <Select
+              placeholder={field.placeholder}
+              simpleValue
+              options={field.select}
+              value={this.state[field.id]}
+              onChange={this._handleSelectChange.bind(null, field.id)}
+              key={field.id}
+            />
+          )
+        } else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
+          let message = ' Hidden'
+          if (field.hasOwnProperty('id') && field.id === 'required') {
+            message = ' Required'
           }
-        })
-      : null
+          return (
+            <div className="form-group float-label-input" key={field.id}>
+              <button
+                className="admin-button"
+                onClick={this._toggleCheckBox.bind(null, field.id)}
+                key={field.id}>
+                <span>
+                  <i
+                    className={
+                      this.state[field.id]
+                        ? 'fa fa-check-square-o'
+                        : 'fa fa-square-o'
+                    }
+                  />
+                  {message}
+                </span>
+              </button>
+            </div>
+          )
+        } else {
+          return (
+            <Input
+              placeholder={field.placeholder}
+              value={this.state[field.id]}
+              onChange={this._handleChange.bind(null, field.id)}
+              key={field.id}
+            />
+          )
+        }
+      })
+    }
 
     return (
       <div className="cte-edit-array">
@@ -314,32 +311,19 @@ let ArrayItem = React.createClass({
                 key={field.id}
               />
             )
-          } else if (field.hasOwnProperty('id') && field.id === 'required') {
+          } else if (
+            field.hasOwnProperty('type') &&
+            field.type === 'checkbox'
+          ) {
+            let message = ' Hidden'
+            if (field.hasOwnProperty('id') && field.id === 'required') {
+              message = ' Required'
+            }
             return (
               <div className="form-group float-label-input" key={field.id}>
                 <button
-                  className="required-button"
+                  className="admin-button"
                   onClick={this._toggleCheckBox.bind(null, field.id)}
-                  key={field.id}>
-                  <span className="filter-admin">
-                    <i
-                      className={
-                        this.state[field.id]
-                          ? 'fa fa-check-square-o'
-                          : 'fa fa-square-o'
-                      }
-                    />{' '}
-                    Required
-                  </span>
-                </button>
-              </div>
-            )
-          } else if (field.hasOwnProperty('id') && field.id === 'hidden') {
-            return (
-              <div className="form-group float-label-input" key={field.id}>
-                <button
-                  className="hide-button"
-                  onClick={this._hidden}
                   key={field.id}>
                   <span>
                     <i
@@ -348,9 +332,9 @@ let ArrayItem = React.createClass({
                           ? 'fa fa-check-square-o'
                           : 'fa fa-square-o'
                       }
-                    />{' '}
-                    Hide for Users
+                    />
                   </span>
+                  {message}
                 </button>
               </div>
             )
