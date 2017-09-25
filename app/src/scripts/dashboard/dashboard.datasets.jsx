@@ -119,7 +119,6 @@ let Datasets = React.createClass({
 
   _datasets(paginatedResults, isPublic) {
     return paginatedResults.map(dataset => {
-      let isSnapshot = dataset.hasOwnProperty('original')
       let user = dataset.user
       let fullname = user ? user.firstname + ' ' + user.lastname : ''
       let dateAdded = moment(dataset.created).format('L')
@@ -129,20 +128,12 @@ let Datasets = React.createClass({
           <Statuses dataset={dataset} minimal={true} />
         </div>
       )
+      let linkProps = this._linkTo(dataset)
       return (
         <div className="fade-in  panel panel-default" key={dataset._id}>
           <div className="panel-heading">
             <div className="header clearfix">
-              <Link
-                to={isSnapshot ? 'snapshot' : 'dataset'}
-                params={
-                  isSnapshot
-                    ? {
-                        datasetId: dataset.linkOriginal,
-                        snapshotId: dataset.linkID,
-                      }
-                    : { datasetId: dataset.linkID }
-                }>
+              <Link {...linkProps}>
                 <h4 className="dataset-name">{dataset.label}</h4>
                 <div className="meta-container">
                   <p className="date">
@@ -161,6 +152,21 @@ let Datasets = React.createClass({
         </div>
       )
     })
+  },
+
+  _linkTo(dataset) {
+    const isSnapshot = dataset.hasOwnProperty('original')
+    if (isSnapshot) {
+      return {
+        to: 'snapshot',
+        params: { datasetId: dataset.linkOriginal, snapshotId: dataset.linkID },
+      }
+    } else {
+      return {
+        to: 'dataset',
+        params: { datasetId: dataset.linkID },
+      }
+    }
   },
 
   // custom methods ----------------------------------------------------------------------------

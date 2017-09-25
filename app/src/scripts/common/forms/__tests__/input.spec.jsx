@@ -1,3 +1,5 @@
+import React from 'react'
+import { shallow, mount } from 'enzyme'
 import Input from '../input'
 
 describe('common/forms/Input', () => {

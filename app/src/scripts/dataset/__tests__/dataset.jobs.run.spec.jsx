@@ -1,3 +1,5 @@
+import React from 'react'
+import { shallow } from 'enzyme'
 import JobAccordion from '../dataset.jobs.run'
 
 const successful_run = {

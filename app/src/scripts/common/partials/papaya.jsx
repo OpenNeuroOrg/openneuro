@@ -17,6 +17,7 @@ export default class Papaya extends React.Component {
 
   componentDidMount() {
     // clear any old containers
+    // eslint-disable-next-line no-global-assign
     papayaContainers = []
 
     let params = {

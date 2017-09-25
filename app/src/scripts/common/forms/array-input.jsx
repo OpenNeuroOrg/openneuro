@@ -133,7 +133,7 @@ let ArrayInput = React.createClass({
     this.setState(state)
   },
 
-  _toggleCheckBox(key, event) {
+  _toggleCheckBox(key) {
     let state = {}
     state[key] = !this.state[key]
     this.setState(state)
@@ -177,7 +177,7 @@ let ArrayInput = React.createClass({
     this.props.onChange({ target: { value: item } })
   },
 
-  _hidden(key, event) {
+  _hidden(key) {
     let state = {}
     state[key] = !this.state[key]
     this.setState(state)
@@ -376,7 +376,7 @@ let ArrayItem = React.createClass({
     this.setState(state)
   },
 
-  _toggleCheckBox(key, event) {
+  _toggleCheckBox(key) {
     let state = {}
     state[key] = !this.state[key]
     this.setState(state)
