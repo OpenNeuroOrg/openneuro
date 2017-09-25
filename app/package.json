@@ -11,7 +11,7 @@
     "start":
       "webpack-dev-server --config webpack.dev.js --progress --watch --color",
     "build": "webpack --config webpack.prod.js",
-    "lint": "eslint src/scripts/",
+    "lint": "eslint --ext .jsx src/scripts/",
     "test": "jest",
     "test:watch": "jest --watch",
     "coverage": "jest --coverage",
