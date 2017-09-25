@@ -3,7 +3,7 @@
 import React from 'react'
 import packageJson from '../../../../package.json'
 
-export default function Footer(props) {
+const Footer = props => {
   let version = props.version ? props.version : packageJson.version
   return (
     <span>
@@ -23,3 +23,9 @@ export default function Footer(props) {
     </span>
   )
 }
+
+Footer.propTypes = {
+  version: React.PropTypes.string,
+}
+
+export default Footer
