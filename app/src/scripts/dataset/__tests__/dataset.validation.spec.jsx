@@ -1,3 +1,5 @@
+import React from 'react'
+import { shallow } from 'enzyme'
 import Validation from '../dataset.validation.jsx'
 
 describe('dataset/Validation', () => {
