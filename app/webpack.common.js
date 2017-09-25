@@ -62,6 +62,16 @@ module.exports = {
         },
       },
     ],
+    loaders: [
+      {
+        // use `test` to split a single file
+        // or `include` to split a whole folder
+        test: './scripts/admin/admin.progression.jsx',
+        // include: [path.resolve(__dirname, './scripts/admin/admin.')],
+        loader: 'bundle?lazy&name=admin.progression'
+     }
+  ],  
+}
   },
   node: {
     fs: 'empty',
