@@ -74,10 +74,15 @@
                         list-style: none;
                         margin: 2px;
 
+                        span.item-name > * {
+                            white-space: normal;
+                        }
+
                         .btn-file-folder {
                             color: $c-66;
                             width: 100%;
                             text-align: left;
+
                         }
 
                         .child-files {
