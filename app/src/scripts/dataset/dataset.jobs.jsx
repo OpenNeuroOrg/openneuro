@@ -7,7 +7,6 @@ import actions from './dataset.actions'
 import Spinner from '../common/partials/spinner.jsx'
 import Run from './dataset.jobs.run.jsx'
 import { Accordion, Panel } from 'react-bootstrap'
-import markdown from '../utils/markdown'
 
 let Jobs = React.createClass({
   mixins: [Reflux.connect(datasetStore)],

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 // dependencies ------------------------------------------------------------------
 
 import React from 'react'
@@ -7,8 +8,6 @@ import moment from 'moment'
 import FileTree from '../common/partials/file-tree.jsx'
 import { Accordion, Panel } from 'react-bootstrap'
 import markdown from '../utils/markdown'
-
-import config from '../../../config.js'
 
 class JobAccordion extends React.Component {
   // life cycle methods ------------------------------------------------------------
@@ -447,6 +446,7 @@ JobAccordion.propTypes = {
   toggleFolder: React.PropTypes.func,
   acknowledgements: React.PropTypes.string,
   support: React.PropTypes.string,
+  currentUser: React.PropTypes.object,
 }
 
 export default JobAccordion
