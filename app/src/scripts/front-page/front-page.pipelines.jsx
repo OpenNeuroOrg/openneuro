@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 // dependencies -------------------------------------------------------
 
 import React from 'react'

@@ -67,3 +67,7 @@ export default class Happybrowser extends React.Component {
     self.setState({ hbVisible: false })
   }
 }
+
+Happybrowser.propTypes = {
+  ua: React.PropTypes.string,
+}

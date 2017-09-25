@@ -1,3 +1,5 @@
+import React from 'react'
+import { shallow } from 'enzyme'
 import Summary from '../dataset.summary.jsx'
 
 const defProps = {
