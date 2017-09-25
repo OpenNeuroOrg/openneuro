@@ -14,8 +14,8 @@
     "lint": "eslint src/scripts/",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "codecov": "jest --coverage && codecov",
+    "coverage": "jest --coverage",
+    "codecov": "codecov -p ../ -F app",
     "precommit": "lint-staged"
   },
   "author": "Squishymedia",
@@ -84,7 +84,13 @@
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
         "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
-    }
+    },
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/*.spec.js",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ]
   },
   "lint-staged": {
     "gitDir": "../",

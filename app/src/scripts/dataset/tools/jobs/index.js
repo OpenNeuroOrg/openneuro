@@ -84,7 +84,7 @@ export default class JobMenu extends React.Component {
       ? 'Loading pipelines'
       : 'Starting ' + selectedVersionID
     let form = (
-      <div className="anaylsis-modal clearfix">
+      <div className="analysis-modal clearfix">
         {this._snapshots()}
         {this._apps()}
         {selectedAppKey && selectedVersionID ? (

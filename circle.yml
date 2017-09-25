@@ -9,32 +9,29 @@ machine:
 
 dependencies:
   override:
-    - cd server && yarn
-    - cd app && yarn
+    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn:
+      parallel: true
+  post: # You would think these are tests but this way the build stops if they fail
+    # Lint
+    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run lint:
+        parallel: true
+    # Unit Tests
+    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run coverage:
+        parallel: true
 
 test:
   override:
-    # Lint
-    - cd server && yarn run lint
-    - cd app && yarn run lint
-    # Unit Tests
-    - cd server && yarn run test
-    - cd app && yarn run test
     # Coverage
-    - cd server && yarn run codecov
-    - cd app && yarn run codecov
-  post:
-    - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-    - docker build --pull -t openneuro/server server:
-      parallel: true
-    - docker build --pull -t openneuro/app app:
-      parallel: true
+    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run codecov:
+        parallel: true
 
 deployment:
   dev:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker build --pull -t openneuro/server server
+      - docker build --pull -t openneuro/app app
       # Update latest tag
       - docker tag -f openneuro/server openneuro/server:latest
       - docker tag -f openneuro/app openneuro/app:latest
@@ -44,6 +41,8 @@ deployment:
     tag: /v.*/
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker build --pull -t openneuro/server server
+      - docker build --pull -t openneuro/app app
       - docker tag openneuro/server openneuro/server:$CIRCLE_TAG
       - docker tag openneuro/app openneuro/app:$CIRCLE_TAG
       - docker push openneuro/server
