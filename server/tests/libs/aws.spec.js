@@ -165,7 +165,7 @@ describe('libs/aws/batch.js', () => {
         done,
       )
       expect(parallelSubmit).toHaveBeenCalledTimes(1) // One participant level
-      expect(singleSubmit).toHaveBeenCalledTimes(2) // One group level
+      expect(singleSubmit).toHaveBeenCalledTimes(2) // Two group levels
       expect(done).toHaveBeenCalled()
     })
     it('passes dependencies up exactly one level', () => {
