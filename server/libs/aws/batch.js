@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import uuid from 'uuid'
 import mongo from '../mongo'
 import { ObjectID } from 'mongodb'
-import async from 'async'
+import { parallel, reduce } from 'async'
 import config from '../../config'
 import emitter from '../events'
 import notifications from '../notifications'
@@ -258,44 +258,70 @@ export default aws => {
           if (!requiredParamsPresent)
             return callback(new Error('Required Parameters Missing!'))
 
-          async.reduce(
+          const parallelSubmit = this.submitParallelJobs.bind(this)
+          const singleSubmit = this.submitSingleJob.bind(this)
+          this._submitLevels(
+            batchJob,
             analysisLevels,
-            [],
-            (deps, level, callback) => {
-              let submitter
-              let levelName = level.value
-
-              // Pass analysis level to the BIDS app container
-              let env = batchJob.containerOverrides.environment
-              env.push({ name: 'BIDS_ANALYSIS_LEVEL', value: levelName })
-
-              if (levelName.search('participant') != -1) {
-                // Run participant level jobs in parallel
-                submitter = this.submitParallelJobs.bind(this)
-              } else {
-                // Other levels are serial
-                submitter = this.submitSingleJob.bind(this)
-              }
-              submitter(batchJob, deps, (err, batchJobIds) => {
-                if (err) {
-                  return callback(err)
-                } else {
-                  // Submit the next set of jobs including the previous as deps
-                  return callback(null, deps.concat(batchJobIds))
-                }
-              })
-            },
-            (err, batchJobIds) => {
+            parallelSubmit,
+            singleSubmit,
+            (err, submitLevelIds) => {
               if (err) {
                 return callback(err)
               } else {
-                // When all jobs are submitted, update job state with the last set
-                this._updateJobOnSubmitSuccessful(jobId, batchJobIds)
-                return callback(null, batchJobIds)
+                // When all jobs are submitted, update job state with all batch ids
+                this._updateJobOnSubmitSuccessful(jobId, submitLevelIds.all)
+                return callback(null, submitLevelIds.all)
               }
             },
           )
         },
+      )
+    },
+
+    /*
+     * For each analysis level, submit tasks for each component job
+     */
+    _submitLevels(
+      batchJob,
+      analysisLevels,
+      parallelSubmit,
+      singleSubmit,
+      done,
+    ) {
+      reduce(
+        analysisLevels,
+        { last: [], all: [] }, // Reduction includes previous step state
+        (submittedJobs, level, callback) => {
+          let submitter
+          let levelName = level.value
+
+          // Pass analysis level to the BIDS app container
+          let env = batchJob.containerOverrides.environment
+          env.push({ name: 'BIDS_ANALYSIS_LEVEL', value: levelName })
+
+          if (levelName.search('participant') != -1) {
+            // Run participant level jobs in parallel
+            submitter = parallelSubmit
+          } else {
+            // Other levels are serial
+            submitter = singleSubmit
+          }
+
+          // Submit this level with the previous level as arguments
+          submitter(batchJob, submittedJobs.last, (err, batchJobIds) => {
+            if (err) {
+              return callback(err)
+            } else {
+              // Submit the next set of jobs including the previous as deps
+              return callback(null, {
+                last: batchJobIds,
+                all: submittedJobs.all.concat(batchJobIds),
+              })
+            }
+          })
+        },
+        done,
       )
     },
 
@@ -457,7 +483,7 @@ export default aws => {
 
           jobs.push(job.bind(this, subjectBatchJob))
         })
-        async.parallel(jobs, callback)
+        parallel(jobs, callback)
       } else {
         // Parallel job with no participants passed in
         let err = new Error('Parallel job submitted with no subjects specified')
@@ -564,10 +590,10 @@ export default aws => {
     },
 
     /**
-         * For now, we limit parallelization to 20 subjobs
-         *
-         * Takes a list of labels and returns a list of no more than 20 lists.
-         */
+      * For now, we limit parallelization to 20 subjobs
+      *
+      * Takes a list of labels and returns a list of no more than 20 lists.
+      */
     _partitionLabels(labels) {
       // Limit to 20 groups
       let pCount = Math.min(20, labels.length)
