@@ -591,18 +591,15 @@ let handlers = {
           'analysis.batchStatus': analysis.batchStatus,
           results: results,
         }
-        c.crn.jobs
-          .updateOne(
-            { _id: jobId },
-            {
-              $set: jobUpdate,
-              $addToSet: { 'analysis.logstreams': { $each: logStreams } },
-            },
-          )
-          .catch(err => {
-            // Log bad query errors
-            console.log(err)
-          })
+        const filter = { _id: jobId }
+        const update = {
+          $set: jobUpdate,
+          $addToSet: { 'analysis.logstreams': { $each: logStreams } },
+        }
+        c.crn.jobs.updateOne(filter, update).catch(err => {
+          // Log bad query errors
+          console.log(err)
+        })
       })
 
       if (callback) {
