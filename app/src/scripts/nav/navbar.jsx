@@ -14,7 +14,7 @@ import brand_mark from './assets/brand_mark.png'
 // component setup ---------------------------------------------------------------
 
 let BSNavbar = React.createClass({
-  mixins: [Reflux.connect(userStore)],
+  mixins: [Reflux.connect(userStore, 'users')],
 
   // life cycle methods ------------------------------------------------------------
   propTypes: {
@@ -54,9 +54,9 @@ let BSNavbar = React.createClass({
   },
 
   _navMenu() {
-    let isLoggedIn = !!this.state.token
-    let googleProfile = this.state.google
-    let loading = this.state.loading
+    let isLoggedIn = !!this.state.users.token
+    let googleProfile = this.state.users.google
+    let loading = this.state.users.loading
     let routes = this.props.routes
     let adminLink = (
       <Link className="nav-link" to="admin">
@@ -90,7 +90,9 @@ let BSNavbar = React.createClass({
           </Link>
         </li>
         <li className="link-admin">
-          {this.state.scitran && this.state.scitran.root ? adminLink : null}
+          {this.state.users.scitran && this.state.users.scitran.root
+            ? adminLink
+            : null}
         </li>
         <li className="link-dashboard">
           {googleProfile ? <UploadBtn /> : null}
@@ -110,7 +112,9 @@ let BSNavbar = React.createClass({
 
   _supportModal() {
     return (
-      <Modal show={this.state.showSupportModal} onHide={actions.toggleModal}>
+      <Modal
+        show={this.state.users.showSupportModal}
+        onHide={actions.toggleModal}>
         <Modal.Header closeButton>
           <Modal.Title>Support</Modal.Title>
         </Modal.Header>

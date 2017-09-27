@@ -7,7 +7,7 @@ import actions from './admin.actions'
 import WarnButton from '../common/forms/warn-button.jsx'
 
 let Blacklist = React.createClass({
-  mixins: [Reflux.connect(adminStore)],
+  mixins: [Reflux.connect(adminStore, 'admin')],
 
   // life cycle events --------------------------------------------------
 
@@ -15,7 +15,7 @@ let Blacklist = React.createClass({
     let noBlacklist = (
       <div className="no-results">There are no blocked users</div>
     )
-    let users = this.state.blacklist.map(user => {
+    let users = this.state.admin.blacklist.map(user => {
       return (
         <div className="fade-in user-panel clearfix" key={user._id}>
           <div className="col-xs-5 user-col">
@@ -63,7 +63,7 @@ let Blacklist = React.createClass({
                 <label>Actions</label>
               </div>
             </div>
-            {this.state.blacklist.length == 0 ? noBlacklist : users}
+            {this.state.admin.blacklist.length == 0 ? noBlacklist : users}
           </div>
         </div>
       </div>
@@ -73,8 +73,10 @@ let Blacklist = React.createClass({
   // custom methods -----------------------------------------------------
 
   _blacklistError() {
-    return this.state.blacklistError ? (
-      <div className="alert alert-danger">{this.state.blacklistError}</div>
+    return this.state.admin.blacklistError ? (
+      <div className="alert alert-danger">
+        {this.state.admin.blacklistError}
+      </div>
     ) : null
   },
 

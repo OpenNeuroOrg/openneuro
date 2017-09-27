@@ -12,7 +12,7 @@ import batch from '../utils/batch.js'
 
 let Apps = React.createClass({
   mixins: [
-    Reflux.connect(adminStore),
+    Reflux.connect(adminStore, 'admin'),
     Reflux.connect(datasetStore, 'datasets'),
   ],
 
@@ -70,9 +70,9 @@ let Apps = React.createClass({
           {Object.keys(this.state.datasets.apps).length == 0 ? noJobs : jobs}
         </Accordion>
         <DefineJobModal
-          show={this.state.modals.defineJob}
+          show={this.state.admin.modals.defineJob}
           onHide={actions.toggleModal.bind(this, 'defineJob')}
-          edit={this.state.jobDefinitionForm.edit}
+          edit={this.state.admin.jobDefinitionForm.edit}
         />
       </div>
     )

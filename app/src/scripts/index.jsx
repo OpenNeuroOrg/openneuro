@@ -13,12 +13,12 @@ import 'babel-polyfill'
 // component setup -----------------------------------------------------------
 
 let App = React.createClass({
-  mixins: [State, Reflux.connect(notificationStore)],
+  mixins: [State, Reflux.connect(notificationStore, 'notification')],
 
   // life cycle methods --------------------------------------------------------
 
   render() {
-    let alertState = this.state.showAlert
+    let alertState = this.state.notification.showAlert
     let pageClasses = ' '
     let pagePaths = ' '
     let routes = this.getRoutes()

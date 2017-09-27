@@ -8,15 +8,15 @@ import Input from '../common/forms/input.jsx'
 import { Modal } from 'react-bootstrap'
 
 let BlacklistModal = React.createClass({
-  mixins: [Reflux.connect(adminStore)],
+  mixins: [Reflux.connect(adminStore, 'admin')],
 
   // life cycle events --------------------------------------------------
 
   render() {
-    let blacklistForm = this.state.blacklistForm
+    let blacklistForm = this.state.admin.blacklistForm
 
     return (
-      <Modal show={this.state.modals.blacklist} onHide={this._hide}>
+      <Modal show={this.state.admin.modals.blacklist} onHide={this._hide}>
         <Modal.Header closeButton>
           <Modal.Title>Block a User</Modal.Title>
         </Modal.Header>
@@ -69,8 +69,10 @@ let BlacklistModal = React.createClass({
   // custom methods -----------------------------------------------------
 
   _blacklistError() {
-    return this.state.blacklistError ? (
-      <div className="alert alert-danger">{this.state.blacklistError}</div>
+    return this.state.admin.blacklistError ? (
+      <div className="alert alert-danger">
+        {this.state.admin.blacklistError}
+      </div>
     ) : null
   },
 

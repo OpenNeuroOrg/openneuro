@@ -14,7 +14,7 @@ import Select from 'react-select'
 import bids from '../utils/bids'
 
 let Jobs = React.createClass({
-  mixins: [State, Reflux.connect(JobsStore)],
+  mixins: [State, Reflux.connect(JobsStore, 'jobs')],
 
   // life cycle events --------------------------------------------------
   componentDidMount() {
@@ -32,17 +32,17 @@ let Jobs = React.createClass({
   },
 
   render() {
-    let isPublic = this.state.isPublic
-    let isAdmin = this.state.isAdmin
+    let isPublic = this.state.jobs.isPublic
+    let isAdmin = this.state.jobs.isAdmin
     let title = !isPublic ? 'My' : 'Public'
     title = isAdmin ? 'All' : title
     let jobs =
-      this.state.visiblejobs.length === 0 ? (
+      this.state.jobs.visiblejobs.length === 0 ? (
         <div className="col-xs-12">
           <h3>no results please try again</h3>
         </div>
       ) : (
-        this._jobs(this.state.visiblejobs)
+        this._jobs(this.state.jobs.visiblejobs)
       )
     return (
       <div>
@@ -58,15 +58,15 @@ let Jobs = React.createClass({
             </div>
             <div className="filters-sort-wrap clearfix">
               <Sort
-                options={this.state.sortOptions}
-                sort={this.state.sort}
+                options={this.state.jobs.sortOptions}
+                sort={this.state.jobs.sort}
                 sortFunc={Actions.sort}
               />
             </div>
           </div>
           <PanelGroup>
             <div className="clearfix">
-              {this.state.loading ? <Spinner active={true} /> : jobs}
+              {this.state.jobs.loading ? <Spinner active={true} /> : jobs}
             </div>
           </PanelGroup>
         </div>
@@ -77,21 +77,21 @@ let Jobs = React.createClass({
   // custom methods -----------------------------------------------------
 
   _filter() {
-    if (!this.state.appsLoading) {
+    if (!this.state.jobs.appsLoading) {
       return (
         <div>
           <div
             className={
-              this.state.filter.pipeline === '' ||
-              this.state.filter.pipeline === null
+              this.state.jobs.filter.pipeline === '' ||
+              this.state.jobs.filter.pipeline === null
                 ? 'apps-filter col-md-8'
                 : 'apps-filter col-md-8 app-selected'
             }>
             <Select
               simpleValue
-              value={this.state.filter.pipeline}
+              value={this.state.jobs.filter.pipeline}
               placeholder="Filter By App"
-              options={this.state.apps}
+              options={this.state.jobs.apps}
               onChange={Actions.selectPipelineFilter}
             />
           </div>
@@ -107,14 +107,14 @@ let Jobs = React.createClass({
         <Select
           multi
           simpleValue
-          value={this.state.filter.version}
+          value={this.state.jobs.filter.version}
           placeholder={
-            this.state.filter.pipeline === '' ||
-            this.state.filter.pipeline === null
+            this.state.jobs.filter.pipeline === '' ||
+            this.state.jobs.filter.pipeline === null
               ? 'Choose App to see Versions'
               : 'App Versions'
           }
-          options={this.state.appVersionGroup}
+          options={this.state.jobs.appVersionGroup}
           onChange={Actions.selectPipelineVersionFilter}
         />
       </div>

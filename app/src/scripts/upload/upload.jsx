@@ -13,21 +13,21 @@ import Resume from './upload.resume.jsx'
 import Progress from './upload.progress.jsx'
 
 let Upload = React.createClass({
-  mixins: [Reflux.connect(UploadStore)],
+  mixins: [Reflux.connect(UploadStore, 'upload')],
 
   // life cycle events --------------------------------------------------
 
   render() {
     // short references ----------------------------
 
-    let activeKey = this.state.activeKey
-    let uploadStatus = this.state.uploadStatus
-    let dirName = this.state.dirName
-    let disabledTab = this.state.disabledTab
+    let activeKey = this.state.upload.activeKey
+    let uploadStatus = this.state.upload.uploadStatus
+    let dirName = this.state.upload.dirName
+    let disabledTab = this.state.upload.disabledTab
 
     // conditional variables -----------------------
 
-    let totalTabs = this.state.showResume ? 6 : 5
+    let totalTabs = this.state.upload.showResume ? 6 : 5
     let activeBar = 'active-tab-' + activeKey
     if (activeKey === 6 && totalTabs < 6) {
       activeBar = 'active-tab-5'
@@ -37,7 +37,7 @@ let Upload = React.createClass({
     // panels --------------------------------------
 
     let select
-    if (this.state.showSelect) {
+    if (this.state.upload.showSelect) {
       let tabName = (
         <span>
           <span>1:</span>
@@ -54,8 +54,8 @@ let Upload = React.createClass({
     }
 
     let rename
-    if (this.state.showRename) {
-      let tabName = this.state.resuming ? (
+    if (this.state.upload.showRename) {
+      let tabName = this.state.upload.resuming ? (
         <span>
           <span>2:</span>
           <span> Resume</span>
@@ -70,14 +70,14 @@ let Upload = React.createClass({
         <Tab
           eventKey={2}
           title={tabName}
-          disabled={disabledTab || !this.state.renameEnabled}>
+          disabled={disabledTab || !this.state.upload.renameEnabled}>
           <div className={activePane}>
             <Rename
               dirName={dirName}
-              input={this.state.showRenameInput}
-              nameError={this.state.nameError}
-              resuming={this.state.resuming}
-              selectedName={this.state.selectedName}
+              input={this.state.upload.showRenameInput}
+              nameError={this.state.upload.nameError}
+              resuming={this.state.upload.resuming}
+              selectedName={this.state.upload.selectedName}
             />
           </div>
         </Tab>
@@ -85,7 +85,7 @@ let Upload = React.createClass({
     }
 
     let issues
-    if (this.state.showIssues) {
+    if (this.state.upload.showIssues) {
       let tabName = (
         <span>
           <span>3:</span>
@@ -96,9 +96,9 @@ let Upload = React.createClass({
         <Tab eventKey={3} title={tabName} disabled={disabledTab}>
           <div className={activePane}>
             <Issues
-              tree={this.state.tree}
-              errors={this.state.errors}
-              warnings={this.state.warnings}
+              tree={this.state.upload.tree}
+              errors={this.state.upload.errors}
+              warnings={this.state.upload.warnings}
               dirName={dirName}
               uploadStatus={uploadStatus}
             />
@@ -108,7 +108,7 @@ let Upload = React.createClass({
     }
 
     let disclaimer
-    if (this.state.showDisclaimer) {
+    if (this.state.upload.showDisclaimer) {
       let tabName = (
         <span>
           <span>4:</span>
@@ -125,7 +125,7 @@ let Upload = React.createClass({
     }
 
     let resume
-    if (this.state.showResume) {
+    if (this.state.upload.showResume) {
       let tabName = (
         <span>
           <span>5:</span>
@@ -142,7 +142,7 @@ let Upload = React.createClass({
     }
 
     let progress
-    if (this.state.showProgress) {
+    if (this.state.upload.showProgress) {
       let tabName = (
         <span>
           <span>{totalTabs + ':'}</span>
@@ -153,8 +153,8 @@ let Upload = React.createClass({
         <Tab eventKey={6} title={tabName}>
           <div className={activePane}>
             <Progress
-              progress={this.state.progress}
-              name={this.state.dirName}
+              progress={this.state.upload.progress}
+              name={this.state.upload.dirName}
             />
           </div>
         </Tab>

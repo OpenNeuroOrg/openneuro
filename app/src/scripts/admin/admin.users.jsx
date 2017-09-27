@@ -11,13 +11,13 @@ import WarnButton from '../common/forms/warn-button.jsx'
 import moment from 'moment'
 
 let users = React.createClass({
-  mixins: [Reflux.connect(adminStore)],
+  mixins: [Reflux.connect(adminStore, 'admin')],
 
   // life cycle events --------------------------------------------------
 
   render() {
     let users = []
-    this.state.users.map(user => {
+    this.state.admin.users.map(user => {
       let adminBadge = user.root ? 'Admin' : null
       if (user.visible) {
         users.push(
@@ -63,12 +63,12 @@ let users = React.createClass({
             <div className="filters">
               <label>Filter By:</label>
               <button
-                className={this.state.adminFilter ? 'active' : null}
+                className={this.state.admin.adminFilter ? 'active' : null}
                 onClick={actions.filterAdmin}>
                 <span className="filter-admin">
                   <i
                     className={
-                      this.state.adminFilter
+                      this.state.admin.adminFilter
                         ? 'fa fa-check-square-o'
                         : 'fa fa-square-o'
                     }
@@ -103,7 +103,7 @@ let users = React.createClass({
   // custom methods -----------------------------------------------------
 
   _noResults() {
-    return this.state.loadingUsers ? (
+    return this.state.admin.loadingUsers ? (
       <Spinner active={true} />
     ) : (
       <h4>No Results Found</h4>
@@ -162,8 +162,8 @@ let users = React.createClass({
   },
 
   _newUserError() {
-    return this.state.newUserError ? (
-      <div className="alert alert-danger">{this.state.newUserError}</div>
+    return this.state.admin.newUserError ? (
+      <div className="alert alert-danger">{this.state.admin.newUserError}</div>
     ) : null
   },
 

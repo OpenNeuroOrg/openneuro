@@ -17,7 +17,7 @@ import Summary from '../dataset/dataset.summary.jsx'
 // component setup ---------------------------------------------------------------------------
 
 let Datasets = React.createClass({
-  mixins: [State, Reflux.connect(DatasetsStore)],
+  mixins: [State, Reflux.connect(DatasetsStore, 'datasets')],
 
   // life cycle events -------------------------------------------------------------------------
 
@@ -40,10 +40,10 @@ let Datasets = React.createClass({
   },
 
   render() {
-    let datasets = this.state.datasets
-    let visibleDatasets = this.state.visibleDatasets
-    let isPublic = this.state.isPublic
-    let isAdmin = this.state.isAdmin
+    let datasets = this.state.datasets.datasets
+    let visibleDatasets = this.state.datasets.visibleDatasets
+    let isPublic = this.state.datasets.isPublic
+    let isAdmin = this.state.datasets.isAdmin
     let results
     if (datasets.length === 0 && isPublic) {
       let noDatasets = 'There are no public datasets.'
@@ -57,12 +57,12 @@ let Datasets = React.createClass({
       results = <p className="no-datasets">{noDatasets}</p>
     } else {
       var pagesTotal = Math.ceil(
-        visibleDatasets.length / this.state.resultsPerPage,
+        visibleDatasets.length / this.state.datasets.resultsPerPage,
       )
       let paginatedResults = this._paginate(
         visibleDatasets,
-        this.state.resultsPerPage,
-        this.state.page,
+        this.state.datasets.resultsPerPage,
+        this.state.datasets.page,
       )
 
       // map results
@@ -87,20 +87,22 @@ let Datasets = React.createClass({
             </div>
             <div className="filters-sort-wrap clearfix">
               <Sort
-                options={this.state.sortOptions}
-                sort={this.state.sort}
+                options={this.state.datasets.sortOptions}
+                sort={this.state.datasets.sort}
                 sortFunc={Actions.sort}
               />
-              {!isPublic ? <Filters filters={this.state.filters} /> : null}
+              {!isPublic ? (
+                <Filters filters={this.state.datasets.filters} />
+              ) : null}
             </div>
           </div>
           <PanelGroup>
-            {this.state.loading ? <Spinner active={true} /> : results}
+            {this.state.datasets.loading ? <Spinner active={true} /> : results}
           </PanelGroup>
         </div>
         <div className="pager-wrapper">
           <Paginator
-            page={this.state.page}
+            page={this.state.datasets.page}
             pagesTotal={pagesTotal}
             pageRangeDisplayed={5}
             onPageSelect={this._onPageSelect}
@@ -173,7 +175,7 @@ let Datasets = React.createClass({
 
   _paginate(data, perPage, page) {
     if (data.length < 1) return null
-    page ? page : this.state.page
+    page ? page : this.state.datasets.page
     let start = page * perPage
     let end = start + perPage
     var retArr = data.slice(start, end)

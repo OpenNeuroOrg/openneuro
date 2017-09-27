@@ -11,17 +11,17 @@ import datasetStore from '../dataset.store'
 import datasetActions from '../dataset.actions.js'
 
 let ToolModals = React.createClass({
-  mixins: [Reflux.connect(datasetStore)],
+  mixins: [Reflux.connect(datasetStore, 'datasets')],
 
   // life cycle events --------------------------------------------------
 
   render() {
-    let apps = this.state.apps,
-      dataset = this.state.dataset,
-      loadingApps = this.state.loadingApps,
-      users = this.state.users,
-      modals = this.state.modals,
-      snapshots = this.state.snapshots
+    let apps = this.state.datasets.apps,
+      dataset = this.state.datasets.dataset,
+      loadingApps = this.state.datasets.loadingApps,
+      users = this.state.datasets.users,
+      modals = this.state.datasets.modals,
+      snapshots = this.state.datasets.snapshots
 
     return (
       <div>
@@ -46,14 +46,14 @@ let ToolModals = React.createClass({
           onHide={datasetActions.toggleModal.bind(null, 'publish')}
         />
         <FileDisplay
-          file={this.state.displayFile}
+          file={this.state.datasets.displayFile}
           show={modals.displayFile}
           onHide={datasetActions.toggleModal.bind(null, 'displayFile')}
         />
         <UpdateWarn
-          show={this.state.modals.update}
+          show={this.state.datasets.modals.update}
           onHide={datasetActions.toggleModal.bind(null, 'update')}
-          update={this.state.currentUpdate}
+          update={this.state.datasets.currentUpdate}
         />
       </div>
     )

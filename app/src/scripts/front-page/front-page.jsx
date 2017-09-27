@@ -24,7 +24,7 @@ import stanford from './assets/stanford.png'
 // component setup ----------------------------------------------------
 
 let FrontPage = React.createClass({
-  mixins: [Reflux.connect(userStore)],
+  mixins: [Reflux.connect(userStore, 'users')],
 
   statics: {
     willTransitionTo(transition) {
@@ -77,9 +77,15 @@ let FrontPage = React.createClass({
                   neuroimaging data
                 </h1>
                 <div className="sign-in-block fade-in">
-                  {this._error(this.state.signinError, this.state.loading)}
-                  {this._signinForm(this.state.loading)}
-                  <Spinner text="Signing in..." active={this.state.loading} />
+                  {this._error(
+                    this.state.users.signinError,
+                    this.state.users.loading,
+                  )}
+                  {this._signinForm(this.state.users.loading)}
+                  <Spinner
+                    text="Signing in..."
+                    active={this.state.users.loading}
+                  />
                 </div>
                 <div className="browse-publicly">
                   <Link to="publicDashboard">
@@ -114,7 +120,9 @@ let FrontPage = React.createClass({
 
   _error(signinError, loadingState) {
     if (signinError && !loadingState) {
-      return <div className="alert alert-danger">{this.state.signinError}</div>
+      return (
+        <div className="alert alert-danger">{this.state.users.signinError}</div>
+      )
     }
   },
 

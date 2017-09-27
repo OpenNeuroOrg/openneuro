@@ -21,7 +21,7 @@ import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
 
 let Dataset = React.createClass({
-  mixins: [State, Reflux.connect(datasetStore)],
+  mixins: [State, Reflux.connect(datasetStore, 'datasets')],
 
   // life cycle events --------------------------------------------------
 
@@ -46,27 +46,29 @@ let Dataset = React.createClass({
         job: query.job,
       })
     } else if (
-      (params.datasetId && !this.state.dataset) ||
-      (params.datasetId && params.datasetId !== this.state.dataset._id)
+      (params.datasetId && !this.state.datasets.dataset) ||
+      (params.datasetId && params.datasetId !== this.state.datasets.dataset._id)
     ) {
       actions.loadDataset(bids.encodeId(params.datasetId))
     }
   },
 
   componentWillUnmount() {
-    actions.setInitialState({ apps: this.state.apps })
+    actions.setInitialState({ apps: this.state.datasets.apps })
   },
 
   render() {
-    let dataset = this.state.dataset
-    let snapshots = this.state.snapshots
-    let showSidebar = this.state.showSidebar
+    let dataset = this.state.datasets.dataset
+    let snapshots = this.state.datasets.snapshots
+    let showSidebar = this.state.datasets.showSidebar
     let canEdit =
       dataset &&
       (dataset.access === 'rw' || dataset.access == 'admin') &&
       !dataset.original
     let loadingText =
-      typeof this.state.loading == 'string' ? this.state.loading : 'loading'
+      typeof this.state.datasets.loading == 'string'
+        ? this.state.datasets.loading
+        : 'loading'
     let content
 
     if (dataset) {
@@ -98,7 +100,7 @@ let Dataset = React.createClass({
                   <MetaData
                     dataset={dataset}
                     editable={canEdit}
-                    issues={this.state.metadataIssues}
+                    issues={this.state.datasets.metadataIssues}
                   />
                 </div>
                 <div className="col-xs-6">
@@ -125,7 +127,7 @@ let Dataset = React.createClass({
       )
     } else {
       let message
-      let status = this.state.status
+      let status = this.state.datasets.status
       if (status === 404) {
         message = 'Dataset not found'
       }
@@ -146,9 +148,9 @@ let Dataset = React.createClass({
         }>
         {this._leftSidebar(snapshots)}
         {this._showSideBarButton()}
-        {!this.state.loading ? this._tools(dataset) : null}
+        {!this.state.datasets.loading ? this._tools(dataset) : null}
         <div className="fade-in inner-route dataset-route light">
-          {this.state.loading ? (
+          {this.state.datasets.loading ? (
             <Spinner active={true} text={loadingText} />
           ) : (
             content
@@ -166,8 +168,8 @@ let Dataset = React.createClass({
         <div className="col-xs-12 dataset-tools-wrap">
           <Tools
             dataset={dataset}
-            selectedSnapshot={this.state.selectedSnapshot}
-            snapshots={this.state.snapshots}
+            selectedSnapshot={this.state.datasets.selectedSnapshot}
+            snapshots={this.state.datasets.snapshots}
           />
         </div>
       )
@@ -217,7 +219,9 @@ let Dataset = React.createClass({
               snapshot.linkID,
             )}
             className={
-              this.state.selectedSnapshot == snapshot._id ? 'active' : null
+              this.state.datasets.selectedSnapshot == snapshot._id
+                ? 'active'
+                : null
             }>
             <div className="clearfix">
               <div className=" col-xs-12">
@@ -261,7 +265,7 @@ let Dataset = React.createClass({
   },
 
   _showSideBarButton() {
-    let showSidebar = this.state.showSidebar
+    let showSidebar = this.state.datasets.showSidebar
     return (
       <span className="show-nav-btn" onClick={actions.toggleSidebar}>
         {showSidebar ? (
@@ -311,7 +315,7 @@ let Dataset = React.createClass({
                   <FileTree
                     tree={[dataset]}
                     editable={canEdit}
-                    loading={this.state.loadingTree}
+                    loading={this.state.datasets.loadingTree}
                     dismissError={actions.dismissError}
                     deleteFile={actions.deleteFile}
                     getFileDownloadTicket={actions.getFileDownloadTicket}
@@ -332,7 +336,7 @@ let Dataset = React.createClass({
   _incompleteMessage(dataset) {
     if (
       dataset.status.incomplete &&
-      this.state.currentUploadId !== dataset._id
+      this.state.datasets.currentUploadId !== dataset._id
     ) {
       return (
         <div className="col-xs-12 incomplete-dataset">
@@ -392,7 +396,7 @@ let Dataset = React.createClass({
   },
 
   _onFileSelect(files) {
-    uploadActions.onResume(files, this.state.dataset.label)
+    uploadActions.onResume(files, this.state.datasets.dataset.label)
   },
 })
 

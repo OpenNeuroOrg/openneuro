@@ -18,7 +18,7 @@ import bids from '../utils/bids'
 // component setup ----------------------------------------------------
 
 let Pipelines = React.createClass({
-  mixins: [Reflux.connect(FPStore)],
+  mixins: [Reflux.connect(FPStore, 'frontpage')],
 
   // life cycle events --------------------------------------------------
 
@@ -29,12 +29,12 @@ let Pipelines = React.createClass({
           <h3 className="browse-pipeline-header">Check Out Our Pipelines</h3>
           <div className="container">{this._pipelines()}</div>
         </div>
-        {!this.state.selectedPipeline.jobDefinitionName
+        {!this.state.frontpage.selectedPipeline.jobDefinitionName
           ? null
-          : this._pipelineDetail(this.state.selectedPipeline)}
+          : this._pipelineDetail(this.state.frontpage.selectedPipeline)}
         <FileDisplay
-          file={this.state.displayFile}
-          show={this.state.displayFile.show}
+          file={this.state.frontpage.displayFile}
+          show={this.state.frontpage.displayFile.show}
           onHide={FPActions.hideFileDisplay}
         />
       </span>
@@ -83,7 +83,7 @@ let Pipelines = React.createClass({
   },
 
   _browse() {
-    if (this.state.apps.length < 1) {
+    if (this.state.frontpage.apps.length < 1) {
       return (
         <div className="col-sm-6 mate-slide loading-browse">
           <Spinner active={true} text="Loading Pipelines" />
@@ -92,8 +92,8 @@ let Pipelines = React.createClass({
     }
 
     let pipelineOptions = this._pipelineOptions(
-      this.state.apps,
-      this.state.selectedTags,
+      this.state.frontpage.apps,
+      this.state.frontpage.selectedTags,
     )
     return (
       <div className="col-sm-6 mate-slide browse fade-in">
@@ -103,9 +103,9 @@ let Pipelines = React.createClass({
           <Select
             multi
             simpleValue
-            value={this.state.selectedTags}
+            value={this.state.frontpage.selectedTags}
             placeholder="All tags"
-            options={this.state.tags}
+            options={this.state.frontpage.tags}
             onChange={FPActions.selectTag}
           />
           <br />
@@ -115,7 +115,7 @@ let Pipelines = React.createClass({
           </label>
           <span className="select-pipeline">
             <select
-              value={this.state.selectedPipeline.id}
+              value={this.state.frontpage.selectedPipeline.id}
               onChange={this._selectPipeline}>
               <option value="" disabled>
                 Select a pipeline
@@ -183,7 +183,7 @@ let Pipelines = React.createClass({
   },
 
   _exampleResults() {
-    if (this.state.loadingJob) {
+    if (this.state.frontpage.loadingJob) {
       return (
         <div className="col-sm-6 mate-slide">
           <Spinner active={true} text="Loading Analyses" />
@@ -191,7 +191,7 @@ let Pipelines = React.createClass({
       )
     }
 
-    let exampleJob = this.state.exampleJob
+    let exampleJob = this.state.frontpage.exampleJob
     if (!exampleJob) {
       return (
         <div className="col-sm-6 mate-slide analyses no-jobs">

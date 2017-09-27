@@ -6,7 +6,7 @@ import Status from '../common/partials/status.jsx'
 import UploadStore from '../upload/upload.store.js'
 
 let Statuses = React.createClass({
-  mixins: [Reflux.connect(UploadStore)],
+  mixins: [Reflux.connect(UploadStore, 'upload')],
 
   // life cycle events --------------------------------------------------
 
@@ -25,7 +25,7 @@ let Statuses = React.createClass({
     let dataset = this.props.dataset,
       minimal = this.props.minimal,
       status = dataset.status,
-      uploading = dataset._id === this.state.projectId
+      uploading = dataset._id === this.state.upload.projectId
 
     return (
       <span className="clearfix status-wrap">

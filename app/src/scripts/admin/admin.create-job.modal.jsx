@@ -4,7 +4,6 @@ import React from 'react'
 import Reflux from 'reflux'
 import ArrayInput from '../common/forms/array-input.jsx'
 import Input from '../common/forms/input.jsx'
-// import Visibility from '../common/forms/visibility.jsx';
 import { Modal, Panel } from 'react-bootstrap'
 import Select from 'react-select'
 import adminStore from './admin.store'
@@ -23,7 +22,7 @@ const PARAMETER_INPUTS = [
 ]
 
 const CreateJob = React.createClass({
-  mixins: [Reflux.connect(adminStore)],
+  mixins: [Reflux.connect(adminStore, 'admin')],
 
   propTypes: {
     show: React.PropTypes.bool,
@@ -31,7 +30,7 @@ const CreateJob = React.createClass({
   },
 
   render() {
-    let definition = this.state.jobDefinitionForm
+    let definition = this.state.admin.jobDefinitionForm
     let title = definition.edit ? 'Edit App' : 'Define an App'
 
     return (

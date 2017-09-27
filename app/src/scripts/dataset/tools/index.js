@@ -1,16 +1,17 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
+//import Reflux from 'reflux'
 import moment from 'moment'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import uploadStore from '../../upload/upload.store'
+//import UploadStore from '../../upload/upload.store'
 import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
 import ToolModals from './modals.jsx'
 
 let Tools = React.createClass({
-  mixins: [Reflux.connect(uploadStore)],
+  // TODO - verify this removal
+  //mixins: [Reflux.connect(UploadStore, 'upload')],
 
   propTypes: {
     dataset: React.PropTypes.object.isRequired,

@@ -8,7 +8,7 @@ import notifications from '../../notification/notification.actions'
 import UploadStore from '../../upload/upload.store.js'
 
 let Upload = React.createClass({
-  mixins: [Reflux.connect(UploadStore)],
+  mixins: [Reflux.connect(UploadStore, 'upload')],
 
   // life cycle events --------------------------------------------------
 
@@ -72,7 +72,7 @@ let Upload = React.createClass({
         message: chromeMessage,
       })
     }
-    if (this.state.uploadStatus === 'uploading') {
+    if (this.state.upload.uploadStatus === 'uploading') {
       e.preventDefault()
       notifications.createAlert({
         type: 'Warning',

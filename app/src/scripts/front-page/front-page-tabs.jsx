@@ -15,7 +15,7 @@ import use_data_snapshot from './assets/use_data_snapshot.png'
 import use_data_analyze from './assets/use_data_analyze.png'
 
 let FrontPageTabs = React.createClass({
-  mixins: [Reflux.connect(FPStore)],
+  mixins: [Reflux.connect(FPStore, 'frontpage')],
 
   // life cycle events --------------------------------------------------
 
@@ -29,7 +29,7 @@ let FrontPageTabs = React.createClass({
     return (
       <div id="data-tabs">
         <ul className="nav nav-tabs">{this._tabs()}</ul>
-        {this._tabContent(this.state.currentTab)}
+        {this._tabContent(this.state.frontpage.currentTab)}
       </div>
     )
   },
@@ -42,7 +42,9 @@ let FrontPageTabs = React.createClass({
         <li key={index}>
           <div
             className={
-              this.state.currentTab == index ? 'active thumbnail' : 'thumbnail'
+              this.state.frontpage.currentTab == index
+                ? 'active thumbnail'
+                : 'thumbnail'
             }
             onClick={this._showTabContent.bind(this, index)}>
             <img src={tab.icon} alt={tab.header} />
@@ -52,7 +54,7 @@ let FrontPageTabs = React.createClass({
             </div>
             <div className="more">
               <span className="text">
-                {this.state.currentTab == index ? 'less' : 'more'}
+                {this.state.frontpage.currentTab == index ? 'less' : 'more'}
               </span>
             </div>
           </div>
@@ -100,7 +102,7 @@ let FrontPageTabs = React.createClass({
   },
 
   _showTabContent(tab) {
-    if (tab == this.state.currentTab) {
+    if (tab == this.state.frontpage.currentTab) {
       this.setState({ currentTab: null })
     } else {
       this.setState({ currentTab: tab })
@@ -121,8 +123,8 @@ let FrontPageTabs = React.createClass({
           <span>
             Browse and explore public datasets and analyses from a wide range of
             global contributors. Our collection of{' '}
-            <strong>{this.state.datasetCount}</strong> public datasets continues
-            to grow as more and more become{' '}
+            <strong>{this.state.frontpage.datasetCount}</strong> public datasets
+            continues to grow as more and more become{' '}
             <a href="http://bids.neuroimaging.io/">BIDS</a> compatible.
           </span>
         ),
