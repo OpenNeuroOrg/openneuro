@@ -265,13 +265,13 @@ export default aws => {
             analysisLevels,
             parallelSubmit,
             singleSubmit,
-            (err, batchJobIds) => {
+            (err, submitLevelIds) => {
               if (err) {
                 return callback(err)
               } else {
-                // When all jobs are submitted, update job state with the last set
-                this._updateJobOnSubmitSuccessful(jobId, batchJobIds)
-                return callback(null, batchJobIds)
+                // When all jobs are submitted, update job state with all batch ids
+                this._updateJobOnSubmitSuccessful(jobId, submitLevelIds.all)
+                return callback(null, submitLevelIds.all)
               }
             },
           )
@@ -291,8 +291,8 @@ export default aws => {
     ) {
       reduce(
         analysisLevels,
-        [],
-        (deps, level, callback) => {
+        { last: [], all: [] }, // Reduction includes previous step state
+        (submittedJobs, level, callback) => {
           let submitter
           let levelName = level.value
 
@@ -308,12 +308,16 @@ export default aws => {
             submitter = singleSubmit
           }
 
-          submitter(batchJob, deps, (err, batchJobIds) => {
+          // Submit this level with the previous level as arguments
+          submitter(batchJob, submittedJobs.last, (err, batchJobIds) => {
             if (err) {
               return callback(err)
             } else {
               // Submit the next set of jobs including the previous as deps
-              return callback(null, deps.concat(batchJobIds))
+              return callback(null, {
+                last: batchJobIds,
+                all: submittedJobs.all.concat(batchJobIds),
+              })
             }
           })
         },
