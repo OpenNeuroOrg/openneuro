@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const env = {
   CRN_SERVER_URL: JSON.stringify(process.env.CRN_SERVER_URL),
@@ -30,6 +31,12 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': env,
     }),
+    new CopyWebpackPlugin([
+      {
+        from: './assets/papaya.js',
+        to: './papaya-[hash:8].js',
+      },
+    ]),
   ],
   module: {
     rules: [

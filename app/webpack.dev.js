@@ -14,13 +14,5 @@ module.exports = merge(common, {
     disableHostCheck: true,
     historyApiFallback: true,
   },
-  plugins: [
-    new CopyWebpackPlugin([
-      {
-        from: './assets/papaya.js',
-        to: './papaya.js',
-      },
-    ]),
-    new ExtractTextPlugin('style.css'),
-  ],
+  plugins: [new ExtractTextPlugin('style.css')],
 })
