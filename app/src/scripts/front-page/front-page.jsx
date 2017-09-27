@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import FrontPageTabs from './front-page-tabs.jsx'
 import userStore from '../user/user.store.js'
 import Spinner from '../common/partials/spinner.jsx'
