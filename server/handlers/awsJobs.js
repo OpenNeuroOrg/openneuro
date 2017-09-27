@@ -591,13 +591,18 @@ let handlers = {
           'analysis.batchStatus': analysis.batchStatus,
           results: results,
         }
-        c.crn.jobs.updateOne(
-          { _id: jobId },
-          {
-            $set: jobUpdate,
-            $addToSet: { 'analysis.logstreams': { $each: logStreams } },
-          },
-        )
+        c.crn.jobs
+          .updateOne(
+            { _id: jobId },
+            {
+              $set: jobUpdate,
+              $addToSet: { 'analysis.logstreams': { $each: logStreams } },
+            },
+          )
+          .catch(err => {
+            // Log bad query errors
+            console.log(err)
+          })
       })
 
       if (callback) {
@@ -623,10 +628,10 @@ let handlers = {
   },
 
   /*
-     * Takes an array of job objects and constructs path to the cloudwatch logstreams
-     */
+   * Takes an array of job objects and constructs path to the cloudwatch logstreams
+   */
   _buildLogStreams(jobs) {
-    let logStreamNames
+    let logStreamNames = []
     if (jobs && jobs.length > 0) {
       logStreamNames = jobs.reduce((acc, job) => {
         if (job.attempts && job.attempts.length > 0) {
@@ -646,7 +651,6 @@ let handlers = {
         return acc
       }, [])
     }
-
     return logStreamNames
   },
 
