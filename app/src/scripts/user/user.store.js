@@ -199,7 +199,7 @@ let UserStore = Reflux.createStore({
       google.signOut(() => {
         upload.setInitialState()
         this.clearAuth()
-        router.transitionTo('front-page')
+        this.context.router.transitionTo('front-page')
       })
     }
   },
@@ -230,7 +230,7 @@ let UserStore = Reflux.createStore({
     this.update({ loading: false })
     this.update({ scitran, google }, { persist: true })
     if (transition) {
-      router.transitionTo('dashboard')
+      this.context.router.transitionTo('dashboard')
     } else {
       datasetActions.reloadDataset()
       dashboardActions.getDatasets(true)
