@@ -23,7 +23,7 @@ let UploadBtn = React.createClass({
         className="nav-link nl-upload nl-progress"
         onClick={Actions.toggleModal}>
         <span className="link-name">view details</span>
-        <Progress progress={this.state.upload.upload.progress} minimal={true} />
+        <Progress progress={this.state.upload.progress} minimal={true} />
       </a>
     )
 
@@ -37,7 +37,7 @@ let UploadBtn = React.createClass({
 
     let uploadModal = (
       <Modal
-        show={this.state.upload.upload.showModal}
+        show={this.state.upload.showModal}
         onHide={Actions.toggleModal}
         className="upload-modal">
         <Modal.Header closeButton>
@@ -54,9 +54,7 @@ let UploadBtn = React.createClass({
 
     return (
       <span className="upload-btn-wrap">
-        {this.state.upload.upload.uploadStatus == 'uploading'
-          ? progress
-          : uploadBtn}
+        {this.state.upload.uploadStatus == 'uploading' ? progress : uploadBtn}
         {uploadModal}
         <img src={favicon_upload} id="favicon_upload" className="hidden" />
       </span>
