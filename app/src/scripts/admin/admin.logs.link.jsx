@@ -2,7 +2,8 @@ import React from 'react'
 import { Link } from 'react-router'
 
 const LogLink = ({ log }) => {
-  if ('job' in log.data) {
+  // datasetId check is for bugged logs from #102
+  if ('job' in log.data && 'datasetId' in log.data.job) {
     // Jobs are always run against snapshots, so we link to a snapshot + job ref for those
     const job = log.data.job
     return (
