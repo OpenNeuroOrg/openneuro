@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import { Link } from 'react-router'
+import { withRouter, Link } from 'react-router-dom'
 import Usermenu from './navbar.usermenu.jsx'
 import UploadBtn from './navbar.upload-button.jsx'
 import userStore from '../user/user.store.js'
@@ -102,7 +102,7 @@ let BSNavbar = React.createClass({
             {isLoggedIn && !loading ? (
               <Usermenu profile={googleProfile} />
             ) : (
-              this._signIn(loading, routes)
+              this._signIn(loading)
             )}
           </Navbar.Collapse>
         </li>
@@ -147,13 +147,8 @@ let BSNavbar = React.createClass({
     )
   },
 
-  _signIn(loading, routes) {
-    let onFrontPage = false
-    for (let route of routes) {
-      if (route.name == 'front-page') {
-        onFrontPage = true
-      }
-    }
+  _signIn(loading) {
+    const onFrontPage = this.props.location.pathname === '/'
 
     if (loading) {
       return (
@@ -179,4 +174,4 @@ let BSNavbar = React.createClass({
   },
 })
 
-export default BSNavbar
+export default withRouter(BSNavbar)
