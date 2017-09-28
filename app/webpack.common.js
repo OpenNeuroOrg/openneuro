@@ -1,8 +1,8 @@
 const path = require('path')
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const env = {
@@ -31,8 +31,12 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env': env,
     }),
-    new ExtractTextPlugin('style.css'),
-    new CopyWebpackPlugin([{ from: './assets/papaya.js' }]),
+    new CopyWebpackPlugin([
+      {
+        from: './assets/papaya.js',
+        to: './papaya-[hash:8].js',
+      },
+    ]),
   ],
   module: {
     rules: [
@@ -58,7 +62,7 @@ module.exports = {
         test: /\.(jpg|png|svg|ico)$/,
         loader: 'file-loader',
         options: {
-          name: './img/[name].[hash].[ext]',
+          name: './img/[name].[hash:8].[ext]',
         },
       },
     ],
