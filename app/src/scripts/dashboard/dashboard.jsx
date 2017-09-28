@@ -1,23 +1,12 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { State, RouteHandler, Link } from 'react-router'
+import { withRouter } from 'react-router'
+import { RouteHandler, Link } from 'react-router-dom'
 
-let Dashboard = React.createClass({
-  mixins: [State],
-
-  getInitialState() {
-    return { isPublic: this._isPublic() }
-  },
-
-  // life cycle events --------------------------------------------------
-
-  componentWillReceiveProps() {
-    this.setState({ isPublic: this._isPublic() })
-  },
-
+class Dashboard extends React.Component {
   render() {
-    let isPublic = this.state.isPublic
+    let isPublic = this.props.location.pathname.indexOf('dashboard') === -1
     return (
       <div className="fade-in inner-route clearfix">
         <div className="col-xs-12">
@@ -35,17 +24,11 @@ let Dashboard = React.createClass({
               </Link>
             </li>
           </ul>
-          <RouteHandler />
+          {/*<RouteHandler /> TODO */}
         </div>
       </div>
     )
-  },
+  }
+}
 
-  // custom methods -----------------------------------------------------
-
-  _isPublic() {
-    return this.getPath().indexOf('dashboard') === -1
-  },
-})
-
-export default Dashboard
+export default withRouter(Dashboard)
