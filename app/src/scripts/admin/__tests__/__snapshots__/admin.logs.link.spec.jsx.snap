@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`admin/LogLink links to datasets 1`] = `
+<Link
+  activeClassName="active"
+  className=""
+  params={
+    Object {
+      "datasetId": "someid",
+    }
+  }
+  to="dataset"
+>
+  somedataset
+</Link>
+`;
+
+exports[`admin/LogLink links to jobs 1`] = `
+<Link
+  activeClassName="active"
+  className=""
+  params={
+    Object {
+      "datasetId": "someid",
+      "snapshotId": "anotherid",
+    }
+  }
+  query={
+    Object {
+      "app": "someapp",
+      "job": undefined,
+      "version": "1",
+    }
+  }
+  to="snapshot"
+>
+  somedataset
+   
+  <br />
+   
+  someapp
+  :
+  1
+</Link>
+`;
+
+exports[`admin/LogLink renders successfully 1`] = `<span />`;
