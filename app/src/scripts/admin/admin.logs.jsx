@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import { Link } from 'react-router'
 import Input from '../common/forms/input.jsx'
 import adminStore from './admin.store'
 import actions from './admin.actions'

@@ -1,3 +1,5 @@
+import React from 'react'
+import { shallow } from 'enzyme'
 import LogLink from '../admin.logs.link'
 
 describe('admin/LogLink', () => {
