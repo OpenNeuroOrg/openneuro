@@ -58,12 +58,12 @@ let BSNavbar = React.createClass({
     let googleProfile = this.state.users.google
     let loading = this.state.users.loading
     let adminLink = (
-      <Link className="nav-link" to="admin">
+      <Link className="nav-link" to="/admin">
         <span className="link-name">admin</span>
       </Link>
     )
     let dashboardLink = (
-      <Link className="nav-link" to="dashboard">
+      <Link className="nav-link" to="/dashboard">
         <span className="link-name">my dashboard</span>
       </Link>
     )
@@ -74,7 +74,7 @@ let BSNavbar = React.createClass({
           {userStore.hasToken() ? dashboardLink : null}
         </li>
         <li className="link-public">
-          <Link className="nav-link" to="publicDashboard">
+          <Link className="nav-link" to="/public/dashboard">
             <span className="link-name">Public Dashboard</span>
           </Link>
         </li>
@@ -84,7 +84,7 @@ let BSNavbar = React.createClass({
           </a>
         </li>
         <li className="link-faq">
-          <Link className="nav-link" to="faq">
+          <Link className="nav-link" to="/faq">
             <span className="link-name">faq</span>
           </Link>
         </li>
