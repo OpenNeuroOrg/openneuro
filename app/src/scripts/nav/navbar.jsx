@@ -40,7 +40,7 @@ let BSNavbar = React.createClass({
 
   _brand() {
     return (
-      <Link to="app" className="navbar-brand">
+      <Link to="/" className="navbar-brand">
         <img
           src={brand_mark}
           alt="OpenNeuro Logo"
@@ -57,7 +57,6 @@ let BSNavbar = React.createClass({
     let isLoggedIn = !!this.state.users.token
     let googleProfile = this.state.users.google
     let loading = this.state.users.loading
-    let routes = this.props.routes
     let adminLink = (
       <Link className="nav-link" to="admin">
         <span className="link-name">admin</span>
