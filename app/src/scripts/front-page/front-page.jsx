@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import { Link } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import FrontPageTabs from './front-page-tabs.jsx'
 import userStore from '../user/user.store.js'
 import Spinner from '../common/partials/spinner.jsx'
@@ -108,13 +108,17 @@ let FrontPage = React.createClass({
 
   _signinForm(loadingState) {
     if (!loadingState) {
-      return (
-        <span>
-          <button className="btn-admin" onClick={userStore.signIn}>
-            <i className="fa fa-google" /> Sign in with Google
-          </button>
-        </span>
-      )
+      if (this.state.users.token) {
+        return <Redirect to="dashboard" push />
+      } else {
+        return (
+          <span>
+            <button className="btn-admin" onClick={userStore.signIn}>
+              <i className="fa fa-google" /> Sign in with Google
+            </button>
+          </span>
+        )
+      }
     }
   },
 
