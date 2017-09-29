@@ -23,6 +23,11 @@ import bids from '../utils/bids'
 let Dataset = React.createClass({
   mixins: [Reflux.connect(datasetStore, 'datasets')],
 
+  propTypes: {
+    match: React.PropTypes.object,
+    location: React.PropTypes.object,
+  },
+
   // life cycle events --------------------------------------------------
 
   componentWillReceiveProps() {
@@ -41,7 +46,6 @@ let Dataset = React.createClass({
       const app = query.get('app')
       const version = query.get('version')
       const job = query.get('job')
-      console.log(datasetId, snapshotId, app, version, job)
       const snapshotUrl = bids.encodeId(datasetId, snapshotId)
       actions.trackView(snapshotUrl)
       actions.loadDataset(snapshotUrl, {
