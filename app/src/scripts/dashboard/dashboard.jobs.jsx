@@ -4,7 +4,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import Actions from './dashboard.jobs.actions'
 import JobsStore from './dashboard.jobs.store.js'
-import { State, Link } from 'react-router'
+import { withRouter, Link } from 'react-router-dom'
 import moment from 'moment'
 import { PanelGroup } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
@@ -14,15 +14,19 @@ import Select from 'react-select'
 import bids from '../utils/bids'
 
 let Jobs = React.createClass({
-  mixins: [State, Reflux.connect(JobsStore, 'jobs')],
+  mixins: [Reflux.connect(JobsStore, 'jobs')],
 
   // life cycle events --------------------------------------------------
   componentDidMount() {
-    let isPublic = this.getPath().indexOf('dashboard') === -1
-    let isAdmin = this.getPath().indexOf('admin') !== -1
-    let query = this.getQuery()
-    let selectedPipeline =
-      (typeof query.pipeline != 'undefined' && query.pipeline) || null
+    let isPublic = this.props.public
+    let isAdmin = this.props.admin
+
+    // React Router v4 compatible replacement for this.getQuery()
+    const search = this.props.location.search
+    const params = new URLSearchParams(search)
+    const pipeline = params.get('pipeline')
+    const selectedPipeline =
+      (typeof pipeline !== 'undefined' && pipeline) || null
     Actions.update({ isPublic, isAdmin })
     // Admin views grab all jobs
     Actions.getJobs(isPublic, isAdmin, {
@@ -182,4 +186,4 @@ let Jobs = React.createClass({
   },
 })
 
-export default Jobs
+export default withRouter(Jobs)

@@ -74,7 +74,7 @@ let BSNavbar = React.createClass({
           {userStore.hasToken() ? dashboardLink : null}
         </li>
         <li className="link-public">
-          <Link className="nav-link" to="/public/dashboard">
+          <Link className="nav-link" to="/public/datasets">
             <span className="link-name">Public Dashboard</span>
           </Link>
         </li>

@@ -1,34 +1,59 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { withRouter } from 'react-router'
-import { RouteHandler, Link } from 'react-router-dom'
+import { Switch, Route, Link } from 'react-router-dom'
+import Datasets from './dashboard.datasets.jsx'
+import Jobs from './dashboard.jobs.jsx'
+
+const publicDatasets = () => <Datasets public />
+const publicJobs = () => <Jobs public />
 
 class Dashboard extends React.Component {
   render() {
-    let isPublic = this.props.location.pathname.indexOf('dashboard') === -1
+    let prefix = '/dashboard'
+    let datasets = Datasets
+    let jobs = Jobs
+    let isPublic = false
+    if (this.props.public) {
+      prefix = '/public'
+      datasets = publicDatasets
+      jobs = publicJobs
+      isPublic = true
+    }
     return (
       <div className="fade-in inner-route clearfix">
         <div className="col-xs-12">
           <ul className="nav nav-pills tabs">
             <li>
-              <Link
-                to={isPublic ? 'publicDatasets' : 'datasets'}
-                className="btn-tab">
+              <Link to={prefix + '/datasets'} className="btn-tab">
                 {isPublic ? 'Public' : 'My'} Datasets
               </Link>
             </li>
             <li>
-              <Link to={isPublic ? 'publicJobs' : 'jobs'} className="btn-tab">
+              <Link to={prefix + '/jobs'} className="btn-tab">
                 {isPublic ? 'Public' : 'My'} Analyses
               </Link>
             </li>
           </ul>
-          {/*<RouteHandler /> TODO */}
+          <Switch>
+            <Route component={datasets} path={prefix + '/datasets'} />
+            <Route component={jobs} path={prefix + '/jobs'} />
+          </Switch>
         </div>
       </div>
     )
   }
 }
 
-export default withRouter(Dashboard)
+Dashboard.defaultProps = {
+  public: false,
+}
+
+Dashboard.propTypes = {
+  public: React.PropTypes.bool,
+}
+
+const PublicDashboard = () => <Dashboard public />
+
+export default Dashboard
+export { Dashboard, PublicDashboard }

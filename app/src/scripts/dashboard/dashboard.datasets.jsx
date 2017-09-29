@@ -4,7 +4,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import Actions from './dashboard.datasets.actions.js'
 import DatasetsStore from './dashboard.datasets.store.js'
-import { State, Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { PanelGroup } from 'react-bootstrap'
 import Paginator from '../common/partials/paginator.jsx'
@@ -17,7 +17,7 @@ import Summary from '../dataset/dataset.summary.jsx'
 // component setup ---------------------------------------------------------------------------
 
 let Datasets = React.createClass({
-  mixins: [State, Reflux.connect(DatasetsStore, 'datasets')],
+  mixins: [Reflux.connect(DatasetsStore, 'datasets')],
 
   // life cycle events -------------------------------------------------------------------------
 
@@ -26,15 +26,15 @@ let Datasets = React.createClass({
   },
 
   componentDidMount() {
-    let isPublic = this.getPath().indexOf('dashboard') === -1
-    let isAdmin = this.getPath().indexOf('admin') !== -1
+    const isPublic = this.props.public
+    const isAdmin = this.props.admin
     Actions.update({ isPublic, isAdmin })
     Actions.getDatasets(isPublic, isAdmin)
   },
 
   componentWillReceiveProps() {
-    let isPublic = this.getPath().indexOf('dashboard') === -1
-    let isAdmin = this.getPath().indexOf('admin') !== -1
+    const isPublic = this.props.public
+    const isAdmin = this.props.admin
     Actions.update({ isPublic, isAdmin })
     Actions.getDatasets(isPublic, isAdmin)
   },

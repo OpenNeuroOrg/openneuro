@@ -3,7 +3,6 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Spinner from '../common/partials/spinner.jsx'
-import { State } from 'react-router'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
 import MetaData from './dataset.metadata.jsx'
@@ -21,7 +20,7 @@ import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
 
 let Dataset = React.createClass({
-  mixins: [State, Reflux.connect(datasetStore, 'datasets')],
+  mixins: [Reflux.connect(datasetStore, 'datasets')],
 
   // life cycle events --------------------------------------------------
 

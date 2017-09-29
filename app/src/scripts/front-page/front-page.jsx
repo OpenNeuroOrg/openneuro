@@ -88,7 +88,7 @@ let FrontPage = React.createClass({
                   />
                 </div>
                 <div className="browse-publicly">
-                  <Link to="publicDashboard">
+                  <Link to="/public/datasets">
                     <span>Browse Public Datasets</span>
                   </Link>
                 </div>

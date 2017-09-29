@@ -8,7 +8,7 @@ import requireAuth from './utils/requireAuth'
 import NavBar from './nav/navbar.jsx'
 import FrontPage from './front-page/front-page.jsx'
 import Admin from './admin/admin.jsx'
-import Dashboard from './dashboard/dashboard.jsx'
+import { Dashboard, PublicDashboard } from './dashboard/dashboard.jsx'
 import Dataset from './dataset/dataset.jsx'
 import Faq from './faq/faq.jsx'
 
@@ -32,6 +32,8 @@ const appRoutes = () => (
         path="/admin"
         component={requireAuth(Admin, 'admin')}
       />
+      <Route name="dashboard" path="/dashboard" component={Dashboard} />
+      <Route name="public" path="/public" component={PublicDashboard} />
       <Route
         name="dataset"
         exact
