@@ -19,6 +19,7 @@ let BSNavbar = React.createClass({
   // life cycle methods ------------------------------------------------------------
   propTypes: {
     routes: React.PropTypes.array,
+    location: React.PropTypes.object,
   },
 
   render: function() {

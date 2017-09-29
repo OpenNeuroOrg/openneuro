@@ -16,6 +16,12 @@ import bids from '../utils/bids'
 let Jobs = React.createClass({
   mixins: [Reflux.connect(JobsStore, 'jobs')],
 
+  propTypes: {
+    location: React.PropTypes.object,
+    public: React.PropTypes.bool,
+    admin: React.PropTypes.bool,
+  },
+
   // life cycle events --------------------------------------------------
   componentDidMount() {
     let isPublic = this.props.public

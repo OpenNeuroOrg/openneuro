@@ -19,6 +19,11 @@ import Summary from '../dataset/dataset.summary.jsx'
 let Datasets = React.createClass({
   mixins: [Reflux.connect(DatasetsStore, 'datasets')],
 
+  propTypes: {
+    public: React.PropTypes.bool,
+    admin: React.PropTypes.bool,
+  },
+
   // life cycle events -------------------------------------------------------------------------
 
   componentWillUnmount() {
@@ -160,7 +165,7 @@ let Datasets = React.createClass({
     const isSnapshot = dataset.hasOwnProperty('original')
     if (isSnapshot) {
       return {
-        to: 'snapshot',
+        to: '/dataset/snapshot',
         params: { datasetId: dataset.linkOriginal, snapshotId: dataset.linkID },
       }
     } else {
