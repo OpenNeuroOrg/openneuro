@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import Datasets from './dashboard.datasets.jsx'
 import Jobs from './dashboard.jobs.jsx'
 
@@ -36,6 +36,7 @@ class Dashboard extends React.Component {
             </li>
           </ul>
           <Switch>
+            <Redirect path={prefix} to={prefix + '/datasets'} exact />
             <Route component={datasets} path={prefix + '/datasets'} />
             <Route component={jobs} path={prefix + '/jobs'} />
           </Switch>
