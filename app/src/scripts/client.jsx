@@ -7,12 +7,12 @@ import {
   Route,
   browserHistory,
 } from 'react-router-dom'
-import Routes from './routes.jsx'
+import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 
 ReactDOM.render(
   <Router history={browserHistory}>
-    <Route component={analyticsWrapper(Routes)} />
+    <Route component={analyticsWrapper(Index)} />
   </Router>,
   document.getElementById('main'),
 )
