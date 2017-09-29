@@ -205,7 +205,7 @@ let FrontPage = React.createClass({
                   target="_blank"
                   href="https://www.stanford.edu/"
                   title="Stanford">
-                  <img src={stanford.png} alt="Stanford" />
+                  <img src={stanford} alt="Stanford" />
                 </a>
               </div>
               <div className="col-sm-3">
