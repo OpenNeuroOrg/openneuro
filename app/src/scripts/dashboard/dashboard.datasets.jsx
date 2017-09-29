@@ -165,13 +165,11 @@ let Datasets = React.createClass({
     const isSnapshot = dataset.hasOwnProperty('original')
     if (isSnapshot) {
       return {
-        to: '/dataset/snapshot',
-        params: { datasetId: dataset.linkOriginal, snapshotId: dataset.linkID },
+        to: '/datasets/' + dataset.linkOriginal + '/versions/' + dataset.linkID,
       }
     } else {
       return {
-        to: 'dataset',
-        params: { datasetId: dataset.linkID },
+        to: '/datasets/' + dataset.linkID,
       }
     }
   },

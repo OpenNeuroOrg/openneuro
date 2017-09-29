@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Reflux from 'reflux'
+import { withRouter } from 'react-router-dom'
 import Spinner from '../common/partials/spinner.jsx'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
@@ -33,22 +34,27 @@ let Dataset = React.createClass({
   },
 
   _loadData() {
-    let params = this.getParams()
-    let query = this.getQuery()
-    if (params.snapshotId) {
-      let snapshotId = bids.encodeId(params.datasetId, params.snapshotId)
-      actions.trackView(snapshotId)
-      actions.loadDataset(snapshotId, {
+    const datasetId = this.props.match.params.datasetId
+    const snapshotId = this.props.match.params.snapshotId
+    const query = new URLSearchParams(this.props.location.search)
+    if (snapshotId) {
+      const app = query.get('app')
+      const version = query.get('version')
+      const job = query.get('job')
+      console.log(datasetId, snapshotId, app, version, job)
+      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
+      actions.trackView(snapshotUrl)
+      actions.loadDataset(snapshotUrl, {
         snapshot: true,
-        app: query.app,
-        version: query.version,
-        job: query.job,
+        app: app,
+        version: version,
+        job: job,
       })
     } else if (
-      (params.datasetId && !this.state.datasets.dataset) ||
-      (params.datasetId && params.datasetId !== this.state.datasets.dataset._id)
+      (datasetId && !this.state.datasets.dataset) ||
+      (datasetId && datasetId !== this.state.datasets.dataset._id)
     ) {
-      actions.loadDataset(bids.encodeId(params.datasetId))
+      actions.loadDataset(bids.encodeId(datasetId))
     }
   },
 
@@ -399,4 +405,4 @@ let Dataset = React.createClass({
   },
 })
 
-export default Dataset
+export default withRouter(Dataset)
