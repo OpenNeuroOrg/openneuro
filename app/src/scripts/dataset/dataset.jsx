@@ -21,14 +21,11 @@ import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
 
-let Dataset = React.createClass({
-  mixins: [Reflux.connect(datasetStore, 'datasets')],
-
-  propTypes: {
-    match: PropTypes.object,
-    location: PropTypes.object,
-  },
-
+class Dataset extends Reflux.Component {
+  constructor(props) {
+    super(props)
+    this.stores = [datasetStore]
+  }
   // life cycle events --------------------------------------------------
 
   componentWillReceiveProps(nextProps) {
@@ -36,13 +33,13 @@ let Dataset = React.createClass({
       nextProps.match.params.datasetId,
       nextProps.match.params.snapshotId,
     )
-  },
+  }
 
   componentDidMount() {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
-  },
+  }
 
   _loadData(datasetId, snapshotId) {
     const query = new URLSearchParams(this.props.location.search)
@@ -64,11 +61,12 @@ let Dataset = React.createClass({
     ) {
       actions.loadDataset(bids.encodeId(datasetId))
     }
-  },
+  }
 
   componentWillUnmount() {
     actions.setInitialState({ apps: this.state.datasets.apps })
-  },
+    super.componentWillUnmount()
+  }
 
   render() {
     let dataset = this.state.datasets.dataset
@@ -173,7 +171,7 @@ let Dataset = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -189,7 +187,7 @@ let Dataset = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _leftSidebar(snapshots) {
     let isSignedIn = !!userStore.hasToken()
@@ -281,7 +279,7 @@ let Dataset = React.createClass({
         </span>
       </div>
     )
-  },
+  }
 
   _showSideBarButton() {
     let showSidebar = this.state.datasets.showSidebar
@@ -294,7 +292,7 @@ let Dataset = React.createClass({
         )}
       </span>
     )
-  },
+  }
 
   _authors(authors) {
     if (authors.length > 0) {
@@ -312,13 +310,13 @@ let Dataset = React.createClass({
       }
       return <h6>{authorString}</h6>
     }
-  },
+  }
 
   _downloads(downloads) {
     if (downloads) {
       return <h6>downloads: {downloads}</h6>
     }
-  },
+  }
 
   _fileTree(dataset, canEdit) {
     if (!dataset.status.incomplete) {
@@ -350,7 +348,7 @@ let Dataset = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _incompleteMessage(dataset) {
     if (
@@ -380,7 +378,7 @@ let Dataset = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -388,7 +386,7 @@ let Dataset = React.createClass({
     let dateModified = moment(modified).format('L')
     let timeago = moment(modified).fromNow(true)
     return <h6>{'last modified ' + dateModified + ' - ' + timeago + ' ago'}</h6>
-  },
+  }
 
   _uploaded(dataset) {
     let user = dataset ? dataset.user : null
@@ -406,17 +404,22 @@ let Dataset = React.createClass({
           ' ago'}
       </h6>
     )
-  },
+  }
 
   _views(views) {
     if (views) {
       return <h6>views: {views}</h6>
     }
-  },
+  }
 
   _onFileSelect(files) {
     uploadActions.onResume(files, this.state.datasets.dataset.label)
-  },
-})
+  }
+}
+
+Dataset.propTypes = {
+  match: PropTypes.object,
+  location: PropTypes.object,
+}
 
 export default withRouter(Dataset)
