@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Redirect, Switch, Route, Link } from 'react-router-dom'
 import Users from './admin.users.jsx'
 import Blacklist from './admin.blacklist.jsx'
 import AppDefinitions from './admin.apps.jsx'
@@ -58,6 +58,12 @@ class Dashboard extends React.Component {
             </li>
           </ul>
           <Switch>
+            <Redirect
+              name="defaultPath"
+              path="/admin"
+              to="/admin/users"
+              exact
+            />
             <Route name="users" path="/admin/users" exact component={Users} />
             <Route
               name="blacklist"
