@@ -19,18 +19,11 @@ const appRoutes = () => (
     <Route name="faq" exact path="/faq" component={Faq} />
     <Route
       name="dashboard"
-      exact
       path="/dashboard"
       component={requireAuth(Dashboard)}
     />
-    <Route
-      name="admin"
-      exact
-      path="/admin"
-      component={requireAuth(Admin, 'admin')}
-    />
-    <Route name="dashboard" path="/dashboard" component={Dashboard} />
     <Route name="public" path="/public" component={PublicDashboard} />
+    <Route name="admin" path="/admin" component={requireAuth(Admin, 'admin')} />
     <Route
       name="dataset"
       exact

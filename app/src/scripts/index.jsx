@@ -19,6 +19,7 @@ let App = React.createClass({
 
   render() {
     let alertState = this.state.notification.showAlert
+    // TODO - restore page class names...
     return (
       <span>
         <div className="page">

@@ -1,7 +1,13 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { RouteHandler, Link } from 'react-router'
+import { Switch, Route, Link } from 'react-router-dom'
+import Users from './admin.users.jsx'
+import Blacklist from './admin.blacklist.jsx'
+import AppDefinitions from './admin.apps.jsx'
+import EventLogs from './admin.logs.jsx'
+import Datasets from '../dataset/dataset.jsx'
+import Jobs from '../dataset/dataset.jobs.jsx'
 import BlacklistModal from './admin.blacklist.modal.jsx'
 import actions from './admin.actions'
 
@@ -51,7 +57,39 @@ class Dashboard extends React.Component {
               </Link>
             </li>
           </ul>
-          <RouteHandler />
+          <Switch>
+            <Route name="users" path="/admin/users" exact component={Users} />
+            <Route
+              name="blacklist"
+              path="/admin/blacklist"
+              exact
+              component={Blacklist}
+            />
+            <Route
+              name="app-definitions"
+              path="/admin/app-definitions"
+              exact
+              component={AppDefinitions}
+            />
+            <Route
+              name="event-logs"
+              path="/admin/event-logs"
+              exact
+              component={EventLogs}
+            />
+            <Route
+              name="admin-datasets"
+              path="/admin/datasets"
+              exact
+              component={Datasets}
+            />
+            <Route
+              name="admin-jobs"
+              path="/admin/jobs"
+              exact
+              component={Jobs}
+            />
+          </Switch>
         </div>
         <BlacklistModal />
       </div>
