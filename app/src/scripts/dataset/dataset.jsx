@@ -20,11 +20,12 @@ import Summary from './dataset.summary.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
+import { refluxConnect } from '../utils/reflux'
 
 class Dataset extends Reflux.Component {
   constructor(props) {
     super(props)
-    this.stores = [datasetStore]
+    refluxConnect(this, datasetStore, 'datasets')
   }
   // life cycle events --------------------------------------------------
 
