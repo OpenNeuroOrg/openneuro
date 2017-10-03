@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 //import Reflux from 'reflux'
 import moment from 'moment'
 import WarnButton from '../../common/forms/warn-button.jsx'

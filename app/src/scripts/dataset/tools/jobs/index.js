@@ -3,6 +3,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import actions from '../../dataset.actions.js'
 import Spinner from '../../../common/partials/spinner.jsx'
 import { Modal } from 'react-bootstrap'
