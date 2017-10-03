@@ -1,15 +1,18 @@
 // dependencies ------------------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
 import { Alert } from 'react-bootstrap'
 import notificationStore from './notification.store'
 import actions from './notification.actions'
+import { refluxConnect } from './utils/reflux'
 
 // component setup ---------------------------------------------------------------
 
-let alert = React.createClass({
-  mixins: [Reflux.connect(notificationStore, 'notification')],
+class alert extends React.Component {
+  constructor() {
+    super()
+    refluxConnect(this, notificationStore, 'notification')
+  }
 
   // life cycle methods ------------------------------------------------------------
 
@@ -41,7 +44,7 @@ let alert = React.createClass({
     )
 
     return this.state.notification.showAlert ? alert : false
-  },
-})
+  }
+}
 
 export default alert
