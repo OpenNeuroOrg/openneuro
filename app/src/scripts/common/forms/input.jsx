@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // component setup ----------------------------------------------------
 
@@ -21,14 +22,14 @@ let Input = React.createClass({
   },
 
   propTypes: {
-    initialValue: React.PropTypes.string,
-    placeholder: React.PropTypes.string,
-    name: React.PropTypes.string,
-    type: React.PropTypes.string,
-    value: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    disabled: React.PropTypes.bool,
-    checked: React.PropTypes.bool,
+    initialValue: PropTypes.string,
+    placeholder: PropTypes.string,
+    name: PropTypes.string,
+    type: PropTypes.string,
+    value: PropTypes.string,
+    onChange: PropTypes.func,
+    disabled: PropTypes.bool,
+    checked: PropTypes.bool,
   },
 
   render() {

@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import { Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
@@ -24,8 +25,8 @@ let Dataset = React.createClass({
   mixins: [Reflux.connect(datasetStore, 'datasets')],
 
   propTypes: {
-    match: React.PropTypes.object,
-    location: React.PropTypes.object,
+    match: PropTypes.object,
+    location: PropTypes.object,
   },
 
   // life cycle events --------------------------------------------------
@@ -44,7 +45,6 @@ let Dataset = React.createClass({
   },
 
   _loadData(datasetId, snapshotId) {
-    console.log('_loadData', datasetId, snapshotId)
     const query = new URLSearchParams(this.props.location.search)
     if (snapshotId) {
       const app = query.get('app')

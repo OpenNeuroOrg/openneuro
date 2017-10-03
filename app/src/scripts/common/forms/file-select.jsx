@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import fileUtils from '../../utils/files'
 import bowser from 'bowser'
@@ -19,10 +20,10 @@ let Upload = React.createClass({
   },
 
   propTypes: {
-    resume: React.PropTypes.bool,
-    onClick: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    setRefs: React.PropTypes.func,
+    resume: PropTypes.bool,
+    onClick: PropTypes.func,
+    onChange: PropTypes.func,
+    setRefs: PropTypes.func,
   },
 
   render() {

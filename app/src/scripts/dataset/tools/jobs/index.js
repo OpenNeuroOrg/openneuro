@@ -613,12 +613,12 @@ export default class JobMenu extends React.Component {
 }
 
 JobMenu.propTypes = {
-  apps: React.PropTypes.object,
-  dataset: React.PropTypes.object,
-  loadingApps: React.PropTypes.bool,
-  onHide: React.PropTypes.func.isRequired,
-  show: React.PropTypes.bool,
-  snapshots: React.PropTypes.array,
+  apps: PropTypes.object,
+  dataset: PropTypes.object,
+  loadingApps: PropTypes.bool,
+  onHide: PropTypes.func.isRequired,
+  show: PropTypes.bool,
+  snapshots: PropTypes.array,
 }
 
 JobMenu.defaultProps = {

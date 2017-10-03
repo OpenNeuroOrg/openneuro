@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Spinner from '../../common/partials/spinner.jsx'
 import WarnButton from './warn-button.jsx'
 
@@ -22,10 +23,10 @@ let FileArrayInput = React.createClass({
   },
 
   propTypes: {
-    value: React.PropTypes.array,
-    onFileClick: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onDelete: React.PropTypes.func,
+    value: PropTypes.array,
+    onFileClick: PropTypes.func,
+    onChange: PropTypes.func,
+    onDelete: PropTypes.func,
   },
 
   render() {

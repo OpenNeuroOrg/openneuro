@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import actions from './dataset.actions.js'
 import { Modal } from 'react-bootstrap'
 
@@ -119,7 +120,7 @@ export default class Publish extends React.Component {
 }
 
 Publish.propTypes = {
-  show: React.PropTypes.bool,
-  update: React.PropTypes.object,
-  onHide: React.PropTypes.func,
+  show: PropTypes.bool,
+  update: PropTypes.object,
+  onHide: PropTypes.func,
 }

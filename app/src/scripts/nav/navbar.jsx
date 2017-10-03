@@ -1,6 +1,7 @@
 // dependencies ------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import { withRouter, Link } from 'react-router-dom'
 import Usermenu from './navbar.usermenu.jsx'
@@ -18,8 +19,8 @@ let BSNavbar = React.createClass({
 
   // life cycle methods ------------------------------------------------------------
   propTypes: {
-    routes: React.PropTypes.array,
-    location: React.PropTypes.object,
+    routes: PropTypes.array,
+    location: PropTypes.object,
   },
 
   render: function() {

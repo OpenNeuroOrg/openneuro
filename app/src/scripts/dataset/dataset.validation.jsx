@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Spinner from '../common/partials/spinner.jsx'
 import { Accordion, Panel } from 'react-bootstrap'
 import pluralize from 'pluralize'
@@ -159,10 +160,10 @@ export default class Validation extends React.Component {
 }
 
 Validation.propTypes = {
-  errors: React.PropTypes.array,
-  warnings: React.PropTypes.array,
-  validating: React.PropTypes.bool,
-  display: React.PropTypes.bool,
+  errors: PropTypes.array,
+  warnings: PropTypes.array,
+  validating: PropTypes.bool,
+  display: PropTypes.bool,
 }
 
 Validation.props = {

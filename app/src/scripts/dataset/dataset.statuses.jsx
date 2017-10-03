@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import Status from '../common/partials/status.jsx'
 import UploadStore from '../upload/upload.store.js'
@@ -17,8 +18,8 @@ let Statuses = React.createClass({
   },
 
   propTypes: {
-    dataset: React.PropTypes.object,
-    minimal: React.PropTypes.bool,
+    dataset: PropTypes.object,
+    minimal: PropTypes.bool,
   },
 
   render() {

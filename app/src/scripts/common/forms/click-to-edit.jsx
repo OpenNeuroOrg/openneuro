@@ -3,6 +3,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import ArrayInput from './array-input.jsx'
 import FileArrayInput from './file-array-input.jsx'
 import Spinner from '../partials/spinner.jsx'
@@ -39,15 +40,15 @@ let ClickToEdit = React.createClass({
   },
 
   propTypes: {
-    value: React.PropTypes.any,
-    type: React.PropTypes.any,
-    label: React.PropTypes.any,
-    error: React.PropTypes.string,
-    editable: React.PropTypes.bool,
-    onDismissIssue: React.PropTypes.func,
-    onDelete: React.PropTypes.func,
-    onFileClick: React.PropTypes.func,
-    onChange: React.PropTypes.func,
+    value: PropTypes.any,
+    type: PropTypes.any,
+    label: PropTypes.any,
+    error: PropTypes.string,
+    editable: PropTypes.bool,
+    onDismissIssue: PropTypes.func,
+    onDelete: PropTypes.func,
+    onFileClick: PropTypes.func,
+    onChange: PropTypes.func,
   },
 
   render() {

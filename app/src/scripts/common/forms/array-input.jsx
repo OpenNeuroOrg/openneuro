@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Select from 'react-select'
 import Input from './input.jsx'
 import WarnButton from './warn-button.jsx'
@@ -25,9 +26,9 @@ let ArrayInput = React.createClass({
   },
 
   propTypes: {
-    model: React.PropTypes.array,
-    value: React.PropTypes.array,
-    onChange: React.PropTypes.func,
+    model: PropTypes.array,
+    value: PropTypes.array,
+    onChange: PropTypes.func,
   },
 
   render() {
@@ -208,7 +209,7 @@ let ArrayItem = React.createClass({
   },
 
   propTypes: {
-    model: React.PropTypes.array,
+    model: PropTypes.array,
     item: props => {
       if (props.model.length > 1 && typeof props.item !== 'object') {
         return new Error(
@@ -221,9 +222,9 @@ let ArrayItem = React.createClass({
         )
       }
     },
-    remove: React.PropTypes.func,
-    onEdit: React.PropTypes.func,
-    index: React.PropTypes.number,
+    remove: PropTypes.func,
+    onEdit: PropTypes.func,
+    index: PropTypes.number,
   },
 
   render() {

@@ -1,6 +1,7 @@
 // dependencies -----------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // component setup --------------------------------------------------------
 
@@ -88,10 +89,7 @@ export default class ErrorLink extends React.Component {
 }
 
 ErrorLink.propTypes = {
-  errors: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.string,
-  ]),
-  warnings: React.PropTypes.array,
-  dirName: React.PropTypes.string,
+  errors: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  warnings: PropTypes.array,
+  dirName: PropTypes.string,
 }

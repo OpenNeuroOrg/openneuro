@@ -1,6 +1,7 @@
 // dependencies ------------------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // component setup ---------------------------------------------------------------------------
 
@@ -21,8 +22,8 @@ export default class Spinner extends React.Component {
 }
 
 Spinner.propTypes = {
-  text: React.PropTypes.string,
-  active: React.PropTypes.bool,
+  text: PropTypes.string,
+  active: PropTypes.bool,
 }
 
 Spinner.defaultProps = {

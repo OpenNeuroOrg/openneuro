@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import Datasets from './dashboard.datasets.jsx'
 import Jobs from './dashboard.jobs.jsx'
@@ -53,7 +54,7 @@ Dashboard.defaultProps = {
 }
 
 Dashboard.propTypes = {
-  public: React.PropTypes.bool,
+  public: PropTypes.bool,
 }
 
 const PublicDashboard = () => <Dashboard public />

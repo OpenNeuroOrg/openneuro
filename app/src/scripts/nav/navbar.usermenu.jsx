@@ -1,6 +1,7 @@
 // dependencies ------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Actions from '../user/user.actions.js'
 import uploadStore from '../upload/upload.store.js'
 import { DropdownButton } from 'react-bootstrap'
@@ -9,7 +10,7 @@ import { DropdownButton } from 'react-bootstrap'
 
 let Usermenu = React.createClass({
   propTypes: {
-    profile: React.PropTypes.object,
+    profile: PropTypes.object,
   },
 
   // life cycle methods ------------------------------------------------------------

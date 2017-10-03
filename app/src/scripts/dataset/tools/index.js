@@ -14,9 +14,9 @@ let Tools = React.createClass({
   //mixins: [Reflux.connect(UploadStore, 'upload')],
 
   propTypes: {
-    dataset: React.PropTypes.object.isRequired,
-    snapshots: React.PropTypes.array.isRequired,
-    selectedSnapshot: React.PropTypes.string.isRequired,
+    dataset: PropTypes.object.isRequired,
+    snapshots: PropTypes.array.isRequired,
+    selectedSnapshot: PropTypes.string.isRequired,
   },
 
   // life cycle events --------------------------------------------------

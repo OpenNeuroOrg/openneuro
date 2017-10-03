@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import actions from './upload.actions.js'
 import Results from './upload.validation-results.jsx'
@@ -10,14 +11,11 @@ import ErrorLink from './upload.error-link.jsx'
 let Issues = React.createClass({
   // life cycle events --------------------------------------------------
   propTypes: {
-    tree: React.PropTypes.array,
-    errors: React.PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.string,
-    ]),
-    warnings: React.PropTypes.array,
-    dirName: React.PropTypes.string,
-    uploadStatus: React.PropTypes.string,
+    tree: PropTypes.array,
+    errors: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+    warnings: PropTypes.array,
+    dirName: PropTypes.string,
+    uploadStatus: PropTypes.string,
   },
 
   render() {

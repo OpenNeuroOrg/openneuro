@@ -1,6 +1,7 @@
 // dependencies ------------------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import Actions from './dashboard.datasets.actions.js'
 import DatasetsStore from './dashboard.datasets.store.js'
@@ -20,8 +21,8 @@ let Datasets = React.createClass({
   mixins: [Reflux.connect(DatasetsStore, 'datasets')],
 
   propTypes: {
-    public: React.PropTypes.bool,
-    admin: React.PropTypes.bool,
+    public: PropTypes.bool,
+    admin: PropTypes.bool,
   },
 
   // life cycle events -------------------------------------------------------------------------

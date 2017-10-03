@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import { stringify as querystring } from 'urlite/querystring'
 import Actions from './dashboard.jobs.actions'
@@ -18,9 +19,9 @@ let Jobs = React.createClass({
   mixins: [Reflux.connect(JobsStore, 'jobs')],
 
   propTypes: {
-    location: React.PropTypes.object,
-    public: React.PropTypes.bool,
-    admin: React.PropTypes.bool,
+    location: PropTypes.object,
+    public: PropTypes.bool,
+    admin: PropTypes.bool,
   },
 
   // life cycle events --------------------------------------------------

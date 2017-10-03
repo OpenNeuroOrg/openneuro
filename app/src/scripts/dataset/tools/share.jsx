@@ -3,6 +3,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import bids from '../../utils/bids'
 import Input from '../../common/forms/input.jsx'
 import WarnButton from '../../common/forms/warn-button.jsx'
@@ -205,8 +206,8 @@ export default class Share extends React.Component {
 }
 
 Share.propTypes = {
-  users: React.PropTypes.array,
-  dataset: React.PropTypes.object,
-  show: React.PropTypes.bool,
-  onHide: React.PropTypes.func,
+  users: PropTypes.array,
+  dataset: PropTypes.object,
+  show: PropTypes.bool,
+  onHide: PropTypes.func,
 }

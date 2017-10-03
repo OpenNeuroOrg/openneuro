@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router'
 
 const LogLink = ({ log }) => {
@@ -32,7 +33,7 @@ const LogLink = ({ log }) => {
 }
 
 LogLink.propTypes = {
-  log: React.PropTypes.object,
+  log: PropTypes.object,
 }
 
 export default LogLink

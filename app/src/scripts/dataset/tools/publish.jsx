@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import actions from '../dataset.actions.js'
 import { Modal } from 'react-bootstrap'
 import moment from 'moment'
@@ -205,9 +206,9 @@ export default class Publish extends React.Component {
 }
 
 Publish.propTypes = {
-  snapshots: React.PropTypes.array,
-  dataset: React.PropTypes.object,
-  loadingApps: React.PropTypes.bool,
-  show: React.PropTypes.bool,
-  onHide: React.PropTypes.func,
+  snapshots: PropTypes.array,
+  dataset: PropTypes.object,
+  loadingApps: PropTypes.bool,
+  show: PropTypes.bool,
+  onHide: PropTypes.func,
 }
