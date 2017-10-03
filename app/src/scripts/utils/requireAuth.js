@@ -1,26 +1,24 @@
 // dependencies ----------------------------------------------------
 
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 import userStore from '../user/user.store.js'
 
 // require auth ----------------------------------------------------
 
-var requireAuth = (Component, role) => {
-  return class Authenticated extends React.Component {
-    static willTransitionTo(transition) {
-      role = role ? role : 'user'
+const requireAuth = (Component, role = 'user') => {
+  return class Authenticated extends Component {
+    render() {
       if (!userStore.data.token) {
         // if not logged in
-        transition.redirect('front-page', {})
+        return <Redirect to="/" />
       } else if (
         role === 'admin' &&
         (!userStore.data.scitran || !userStore.data.scitran.root)
       ) {
-        transition.redirect('front-page', {})
+        return <Redirect to="/" />
       }
-    }
-    render() {
-      return <Component />
+      return super.render()
     }
   }
 }
