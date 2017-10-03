@@ -194,22 +194,6 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Load Snapshot
-     *
-     * Takes a snapshot ID and loads the snapshot.
-     */
-  loadSnapshot(isOriginal, snapshotId) {
-    let datasetId = this.data.dataset.original
-      ? bids.decodeId(this.data.dataset.original)
-      : bids.decodeId(this.data.dataset._id)
-    if (isOriginal) {
-      router.transitionTo('dataset', { datasetId: snapshotId })
-    } else {
-      router.transitionTo('snapshot', { datasetId, snapshotId })
-    }
-  },
-
-  /**
      * Reload Dataset
      *
      * Optionally takes a datasetId and only reloads
