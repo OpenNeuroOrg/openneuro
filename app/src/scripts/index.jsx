@@ -30,9 +30,7 @@ let App = React.createClass({
           <div className={'full-col alert-state-' + alertState}>
             <Navbar />
             <div className="main view container">
-              <div className="route-wrapper">
-                <Routes />
-              </div>
+              <Routes />
             </div>
           </div>
         </div>

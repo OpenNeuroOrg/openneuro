@@ -21,25 +21,27 @@ class Dashboard extends React.Component {
       isPublic = true
     }
     return (
-      <div className="fade-in inner-route clearfix">
-        <div className="col-xs-12">
-          <ul className="nav nav-pills tabs">
-            <li>
-              <Link to={prefix + '/datasets'} className="btn-tab">
-                {isPublic ? 'Public' : 'My'} Datasets
-              </Link>
-            </li>
-            <li>
-              <Link to={prefix + '/jobs'} className="btn-tab">
-                {isPublic ? 'Public' : 'My'} Analyses
-              </Link>
-            </li>
-          </ul>
-          <Switch>
-            <Redirect path={prefix} to={prefix + '/datasets'} exact />
-            <Route component={datasets} path={prefix + '/datasets'} />
-            <Route component={jobs} path={prefix + '/jobs'} />
-          </Switch>
+      <div className="route-wrapper">
+        <div className="fade-in inner-route clearfix">
+          <div className="col-xs-12">
+            <ul className="nav nav-pills tabs">
+              <li>
+                <Link to={prefix + '/datasets'} className="btn-tab">
+                  {isPublic ? 'Public' : 'My'} Datasets
+                </Link>
+              </li>
+              <li>
+                <Link to={prefix + '/jobs'} className="btn-tab">
+                  {isPublic ? 'Public' : 'My'} Analyses
+                </Link>
+              </li>
+            </ul>
+            <Switch>
+              <Redirect path={prefix} to={prefix + '/datasets'} exact />
+              <Route component={datasets} path={prefix + '/datasets'} />
+              <Route component={jobs} path={prefix + '/jobs'} />
+            </Switch>
+          </div>
         </div>
       </div>
     )
