@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Reflux from 'reflux'
+import { stringify as querystring } from 'urlite/querystring'
 import Actions from './dashboard.jobs.actions'
 import JobsStore from './dashboard.jobs.store.js'
 import { withRouter, Link } from 'react-router-dom'
@@ -136,22 +137,22 @@ let Jobs = React.createClass({
       let user = job.userId
       let dateAdded = moment(job.analysis.created).format('L')
       let timeago = moment(job.analysis.created).fromNow(true)
+      const datasetId = bids.decodeId(job.datasetId)
+      const snapshotId = bids.decodeId(job.snapshotId)
+      const jobQuery = {
+        app: job.appLabel,
+        version: job.appVersion,
+        job: job._id,
+      }
+      const queryString = querystring(jobQuery)
+      const jobUrl =
+        '/datasets/' + datasetId + '/versions/' + snapshotId + queryString
       return (
         <div className="fade-in  panel panel-default" key={job._id}>
           <div className="panel-heading">
             <div className={job.analysis.status}>
               <div className="header clearfix">
-                <Link
-                  to={'snapshot'}
-                  params={{
-                    datasetId: bids.decodeId(job.datasetId),
-                    snapshotId: bids.decodeId(job.snapshotId),
-                  }}
-                  query={{
-                    app: job.appLabel,
-                    version: job.appVersion,
-                    job: job.jobId,
-                  }}>
+                <Link to={jobUrl}>
                   <h4 className="dataset-name">
                     {job.appLabel} - v{job.appVersion}
                   </h4>
@@ -166,8 +167,7 @@ let Jobs = React.createClass({
             <div className="minimal-summary">
               <div className="summary-data">
                 <span>
-                  {' '}
-                  Job run{' '}
+                  Job run
                   <strong>
                     {dateAdded} - {timeago} ago
                   </strong>
