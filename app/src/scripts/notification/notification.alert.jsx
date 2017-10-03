@@ -4,7 +4,7 @@ import React from 'react'
 import { Alert } from 'react-bootstrap'
 import notificationStore from './notification.store'
 import actions from './notification.actions'
-import { refluxConnect } from './utils/reflux'
+import { refluxConnect } from '../utils/reflux'
 
 // component setup ---------------------------------------------------------------
 
