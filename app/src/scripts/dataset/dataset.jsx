@@ -2,7 +2,8 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+import moment from 'moment'
 import Spinner from '../common/partials/spinner.jsx'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
@@ -10,7 +11,6 @@ import MetaData from './dataset.metadata.jsx'
 import Tools from './tools'
 import Statuses from './dataset.statuses.jsx'
 import Validation from './dataset.validation.jsx'
-import moment from 'moment'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import FileTree from '../common/partials/file-tree.jsx'
 import Jobs from './dataset.jobs.jsx'
@@ -30,17 +30,21 @@ let Dataset = React.createClass({
 
   // life cycle events --------------------------------------------------
 
-  componentWillReceiveProps() {
-    this._loadData()
+  componentWillReceiveProps(nextProps) {
+    this._loadData(
+      nextProps.match.params.datasetId,
+      nextProps.match.params.snapshotId,
+    )
   },
 
   componentDidMount() {
-    this._loadData()
-  },
-
-  _loadData() {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
+    this._loadData(datasetId, snapshotId)
+  },
+
+  _loadData(datasetId, snapshotId) {
+    console.log('_loadData', datasetId, snapshotId)
     const query = new URLSearchParams(this.props.location.search)
     if (snapshotId) {
       const app = query.get('app')
@@ -151,19 +155,21 @@ let Dataset = React.createClass({
     }
 
     return (
-      <div
-        className={
-          showSidebar ? 'open dataset-container' : 'dataset-container'
-        }>
-        {this._leftSidebar(snapshots)}
-        {this._showSideBarButton()}
-        {!this.state.datasets.loading ? this._tools(dataset) : null}
-        <div className="fade-in inner-route dataset-route light">
-          {this.state.datasets.loading ? (
-            <Spinner active={true} text={loadingText} />
-          ) : (
-            content
-          )}
+      <div className="dataset">
+        <div
+          className={
+            showSidebar ? 'open dataset-container' : 'dataset-container'
+          }>
+          {this._leftSidebar(snapshots)}
+          {this._showSideBarButton()}
+          {!this.state.datasets.loading ? this._tools(dataset) : null}
+          <div className="fade-in inner-route dataset-route light">
+            {this.state.datasets.loading ? (
+              <Spinner active={true} text={loadingText} />
+            ) : (
+              content
+            )}
+          </div>
         </div>
       </div>
     )
@@ -219,14 +225,18 @@ let Dataset = React.createClass({
         )
       }
 
+      const datasetId = bids.decodeId(
+        snapshot.original ? snapshot.original : snapshot._id,
+      )
+      const urlBase = '/datasets/' + datasetId
+      const snapshotUrl = snapshot.original
+        ? urlBase + '/versions/' + bids.decodeId(snapshot._id)
+        : urlBase
+
       return (
         <li key={snapshot._id}>
-          <a
-            onClick={actions.loadSnapshot.bind(
-              this,
-              snapshot.isOriginal,
-              snapshot.linkID,
-            )}
+          <Link
+            to={snapshotUrl}
             className={
               this.state.datasets.selectedSnapshot == snapshot._id
                 ? 'active'
@@ -254,7 +264,7 @@ let Dataset = React.createClass({
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
         </li>
       )
     })
