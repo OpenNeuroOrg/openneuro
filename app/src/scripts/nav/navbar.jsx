@@ -162,9 +162,7 @@ class BSNavbar extends Reflux.Component {
     } else {
       return (
         <div className="navbar-right sign-in-nav-btn">
-          <button
-            className="btn-blue"
-            onClick={userStore.signIn.bind(null, { transition: onFrontPage })}>
+          <button className="btn-blue" onClick={userStore.signIn}>
             <i className="fa fa-google" />
             <span> Sign in</span>
           </button>

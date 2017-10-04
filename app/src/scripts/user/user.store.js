@@ -229,12 +229,8 @@ let UserStore = Reflux.createStore({
   handleSignIn(transition, scitran, google) {
     this.update({ loading: false })
     this.update({ scitran, google }, { persist: true })
-    if (transition) {
-      this.context.router.transitionTo('dashboard')
-    } else {
-      datasetActions.reloadDataset()
-      dashboardActions.getDatasets(true)
-    }
+    datasetActions.reloadDataset()
+    dashboardActions.getDatasets(true)
   },
 
   /**
