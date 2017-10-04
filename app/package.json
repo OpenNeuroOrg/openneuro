@@ -31,7 +31,7 @@
     "pluralize": "^1.1.2",
     "prop-types": "^15.6.0",
     "react": "15",
-    "react-bootstrap": "0.30.10",
+    "react-bootstrap": "0.31.3",
     "react-dom": "15",
     "react-ga": "^2.2.0",
     "react-input-autosize": "1.1.0",
