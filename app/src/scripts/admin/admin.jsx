@@ -1,7 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { Redirect, Switch, Route, Link } from 'react-router-dom'
+import { Redirect, Switch, Route, NavLink } from 'react-router-dom'
 import Users from './admin.users.jsx'
 import Blacklist from './admin.blacklist.jsx'
 import AppDefinitions from './admin.apps.jsx'
@@ -28,34 +28,34 @@ class Dashboard extends React.Component {
           <div className="col-xs-12">
             <ul className="nav nav-pills tabs">
               <li>
-                <Link to="/admin/users" className="btn-tab">
+                <NavLink to="/admin/users" className="btn-tab">
                   Users
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/admin/blacklist" className="btn-tab">
+                <NavLink to="/admin/blacklist" className="btn-tab">
                   Blocked Users
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/admin/app-definitions" className="btn-tab">
+                <NavLink to="/admin/app-definitions" className="btn-tab">
                   App Definitions
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/admin/event-logs" className="btn-tab">
+                <NavLink to="/admin/event-logs" className="btn-tab">
                   Event Logs
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/admin/datasets" className="btn-tab">
+                <NavLink to="/admin/datasets" className="btn-tab">
                   All Datasets
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to="/admin/jobs" className="btn-tab">
+                <NavLink to="/admin/jobs" className="btn-tab">
                   All Jobs
-                </Link>
+                </NavLink>
               </li>
             </ul>
             <Switch>

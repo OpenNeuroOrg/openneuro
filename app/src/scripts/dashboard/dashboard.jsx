@@ -2,7 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Switch, Route, Link, Redirect } from 'react-router-dom'
+import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
 import Datasets from './dashboard.datasets.jsx'
 import Jobs from './dashboard.jobs.jsx'
 
@@ -27,14 +27,14 @@ class Dashboard extends React.Component {
           <div className="col-xs-12">
             <ul className="nav nav-pills tabs">
               <li>
-                <Link to={prefix + '/datasets'} className="btn-tab">
+                <NavLink to={prefix + '/datasets'} className="btn-tab">
                   {isPublic ? 'Public' : 'My'} Datasets
-                </Link>
+                </NavLink>
               </li>
               <li>
-                <Link to={prefix + '/jobs'} className="btn-tab">
+                <NavLink to={prefix + '/jobs'} className="btn-tab">
                   {isPublic ? 'Public' : 'My'} Analyses
-                </Link>
+                </NavLink>
               </li>
             </ul>
             <Switch>

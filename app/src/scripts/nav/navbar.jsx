@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Reflux from 'reflux'
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter, Link, NavLink } from 'react-router-dom'
 import Usermenu from './navbar.usermenu.jsx'
 import UploadBtn from './navbar.upload-button.jsx'
 import userStore from '../user/user.store.js'
@@ -59,14 +59,14 @@ class BSNavbar extends Reflux.Component {
     let googleProfile = this.state.users.google
     let loading = this.state.users.loading
     let adminLink = (
-      <Link className="nav-link" to="/admin">
+      <NavLink className="nav-link" to="/admin">
         <span className="link-name">admin</span>
-      </Link>
+      </NavLink>
     )
     let dashboardLink = (
-      <Link className="nav-link" to="/dashboard">
+      <NavLink className="nav-link" to="/dashboard">
         <span className="link-name">my dashboard</span>
-      </Link>
+      </NavLink>
     )
 
     return (
@@ -75,9 +75,9 @@ class BSNavbar extends Reflux.Component {
           {userStore.hasToken() ? dashboardLink : null}
         </li>
         <li className="link-public">
-          <Link className="nav-link" to="/public/datasets">
+          <NavLink className="nav-link" to="/public/datasets">
             <span className="link-name">Public Dashboard</span>
-          </Link>
+          </NavLink>
         </li>
         <li className="link-support">
           <a className="nav-link" onClick={actions.toggleModal}>
@@ -85,9 +85,9 @@ class BSNavbar extends Reflux.Component {
           </a>
         </li>
         <li className="link-faq">
-          <Link className="nav-link" to="/faq">
+          <NavLink className="nav-link" to="/faq">
             <span className="link-name">faq</span>
-          </Link>
+          </NavLink>
         </li>
         <li className="link-admin">
           {this.state.users.scitran && this.state.users.scitran.root
