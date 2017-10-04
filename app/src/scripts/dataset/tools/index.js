@@ -2,6 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import moment from 'moment'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import userStore from '../../user/user.store.js'
@@ -55,7 +56,7 @@ class Tools extends React.Component {
       {
         tooltip: 'Publish Dataset',
         icon: 'fa-globe icon-plus',
-        action: actions.toggleModal.bind(null, 'publish'),
+        action: actions.toggleModal.bind(null, 'publish', this.props.history),
         display: isAdmin && !isPublic && !isIncomplete,
         warn: false,
       },
@@ -69,7 +70,11 @@ class Tools extends React.Component {
       {
         tooltip: isSnapshot ? 'Delete Snapshot' : 'Delete Dataset',
         icon: 'fa-trash',
-        action: actions.deleteDataset.bind(this, dataset._id),
+        action: actions.deleteDataset.bind(
+          this,
+          dataset._id,
+          this.props.history,
+        ),
         display: displayDelete,
         warn: isSnapshot,
       },
@@ -83,7 +88,7 @@ class Tools extends React.Component {
       {
         tooltip: 'Create Snapshot',
         icon: 'fa-camera-retro icon-plus',
-        action: actions.createSnapshot,
+        action: actions.createSnapshot.bind(null, this.props.history),
         display: isAdmin && !isSnapshot && !isIncomplete,
         warn: true,
         validations: [
@@ -184,6 +189,7 @@ Tools.propTypes = {
   dataset: PropTypes.object.isRequired,
   snapshots: PropTypes.array.isRequired,
   selectedSnapshot: PropTypes.string.isRequired,
+  history: PropTypes.object,
 }
 
-export default Tools
+export default withRouter(Tools)

@@ -389,12 +389,12 @@ let datasetStore = Reflux.createStore({
      * Takes a datsetId, deletes the dataset, and returns the user
      * to the my datasets page.
      */
-  deleteDataset(datasetId, callback) {
+  deleteDataset(datasetId, history, callback) {
     if (this.data.snapshot) {
       bids.deleteDataset(
         datasetId,
         () => {
-          router.transitionTo('datasets')
+          history.push('/dashboard/datasets')
         },
         { snapshot: this.data.snapshot },
       )
@@ -411,7 +411,7 @@ let datasetStore = Reflux.createStore({
           bids.deleteDataset(
             datasetId,
             () => {
-              router.transitionTo('datasets')
+              history.push('/dashboard/datasets')
             },
             { snapshot: this.data.snapshot },
           )
