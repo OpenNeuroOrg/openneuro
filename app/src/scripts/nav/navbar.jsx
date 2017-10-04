@@ -9,21 +9,20 @@ import UploadBtn from './navbar.upload-button.jsx'
 import userStore from '../user/user.store.js'
 import actions from '../user/user.actions.js'
 import { Navbar, Modal } from 'react-bootstrap'
+import { refluxConnect } from '../utils/reflux'
 
 import brand_mark from './assets/brand_mark.png'
 
 // component setup ---------------------------------------------------------------
 
-let BSNavbar = React.createClass({
-  mixins: [Reflux.connect(userStore, 'users')],
+class BSNavbar extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, userStore, 'users')
+  }
 
   // life cycle methods ------------------------------------------------------------
-  propTypes: {
-    routes: PropTypes.array,
-    location: PropTypes.object,
-  },
-
-  render: function() {
+  render() {
     return (
       <span>
         <Navbar collapseOnSelect>
@@ -36,7 +35,7 @@ let BSNavbar = React.createClass({
         {this._supportModal()}
       </span>
     )
-  },
+  }
 
   // template methods --------------------------------------------------------------
 
@@ -53,7 +52,7 @@ let BSNavbar = React.createClass({
         </div>
       </Link>
     )
-  },
+  }
 
   _navMenu() {
     let isLoggedIn = !!this.state.users.token
@@ -109,7 +108,7 @@ let BSNavbar = React.createClass({
         </li>
       </ul>
     )
-  },
+  }
 
   _supportModal() {
     return (
@@ -146,7 +145,7 @@ let BSNavbar = React.createClass({
         </Modal.Footer>
       </Modal>
     )
-  },
+  }
 
   _signIn(loading) {
     const onFrontPage = this.props.location.pathname === '/'
@@ -172,7 +171,12 @@ let BSNavbar = React.createClass({
         </div>
       )
     }
-  },
-})
+  }
+}
+
+BSNavbar.propTypes = {
+  routes: PropTypes.array,
+  location: PropTypes.object,
+}
 
 export default withRouter(BSNavbar)

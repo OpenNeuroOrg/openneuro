@@ -1,6 +1,7 @@
 // dependencies --------------------------------------------------------------
 
 import React from 'react'
+import Reflux from 'reflux'
 import Navbar from './nav/navbar.jsx'
 import Happybrowser from './common/partials/happybrowser.jsx'
 import Routes from './routes.jsx'
@@ -10,10 +11,10 @@ import { refluxConnect } from './utils/reflux'
 
 import 'babel-polyfill'
 
-class App extends React.Component {
+class App extends Reflux.Component {
   constructor() {
     super()
-    refluxConnect(self, notificationStore, 'notification')
+    refluxConnect(this, notificationStore, 'notification')
   }
 
   // life cycle methods --------------------------------------------------------

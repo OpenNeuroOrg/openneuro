@@ -1,6 +1,7 @@
 // dependencies ------------------------------------------------------------------
 
 import React from 'react'
+import Reflux from 'reflux'
 import { Alert } from 'react-bootstrap'
 import notificationStore from './notification.store'
 import actions from './notification.actions'
@@ -8,7 +9,7 @@ import { refluxConnect } from '../utils/reflux'
 
 // component setup ---------------------------------------------------------------
 
-class alert extends React.Component {
+class alert extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, notificationStore, 'notification')
