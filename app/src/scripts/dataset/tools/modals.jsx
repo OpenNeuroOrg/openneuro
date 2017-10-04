@@ -1,7 +1,9 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
+import { withRouter } from 'react-router-dom'
 import Share from './share.jsx'
 import Jobs from './jobs'
 import Publish from './publish.jsx'
@@ -41,7 +43,7 @@ class ToolModals extends Reflux.Component {
           loadingApps={loadingApps}
           snapshots={snapshots}
           show={modals.jobs}
-          onHide={datasetActions.dismissJobsModal}
+          onHide={datasetActions.dismissJobsModal.bind(null, history)}
         />
         <Publish
           dataset={dataset}
@@ -64,4 +66,8 @@ class ToolModals extends Reflux.Component {
   }
 }
 
-export default ToolModals
+ToolModals.propTypes = {
+  history: PropTypes.object,
+}
+
+export default withRouter(ToolModals)

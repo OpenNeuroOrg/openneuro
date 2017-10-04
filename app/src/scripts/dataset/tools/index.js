@@ -56,7 +56,7 @@ class Tools extends React.Component {
       {
         tooltip: 'Publish Dataset',
         icon: 'fa-globe icon-plus',
-        action: actions.toggleModal.bind(null, 'publish', this.props.history),
+        action: actions.toggleModal.bind(null, 'publish'),
         display: isAdmin && !isPublic && !isIncomplete,
         warn: false,
       },

@@ -2,11 +2,12 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import actions from '../dataset.actions.js'
 import { Modal } from 'react-bootstrap'
 import moment from 'moment'
 
-export default class Publish extends React.Component {
+class Publish extends React.Component {
   // life cycle events --------------------------------------------------
 
   constructor() {
@@ -201,7 +202,12 @@ export default class Publish extends React.Component {
      * Publish
      */
   _publish() {
-    actions.publish(this.state.selectedSnapshot, true, this._hide.bind(this))
+    actions.publish(
+      this.state.selectedSnapshot,
+      true,
+      this.props.history,
+      this._hide.bind(this),
+    )
   }
 }
 
@@ -211,4 +217,7 @@ Publish.propTypes = {
   loadingApps: PropTypes.bool,
   show: PropTypes.bool,
   onHide: PropTypes.func,
+  history: PropTypes.object,
 }
+
+export default withRouter(Publish)

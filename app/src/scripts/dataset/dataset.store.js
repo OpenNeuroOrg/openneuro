@@ -16,6 +16,7 @@ import files from '../utils/files'
 import request from '../utils/request'
 import moment from 'moment'
 import FPActions from '../front-page/front-page.actions.js'
+import { stringify as querystring } from 'urlite/querystring'
 
 let datasetStore = Reflux.createStore({
   // store setup -----------------------------------------------------------------------
@@ -302,7 +303,7 @@ let datasetStore = Reflux.createStore({
      * Takes a snapshotId, value and callback and sets the
      * datasets public status to the passed value.
      */
-  publish(snapshotId, value, callback) {
+  publish(snapshotId, value, history, callback) {
     let datasetId = this.data.snapshot
       ? this.data.dataset.original
       : this.data.dataset._id
@@ -331,7 +332,7 @@ let datasetStore = Reflux.createStore({
           if (snapshotId === this.data.dataset._id) {
             dataset.status.public = value
           } else {
-            router.transitionTo('snapshot', { datasetId, snapshotId })
+            history.push('/datasets/' + datasetId + '/versions/' + snapshotId)
           }
         } else {
           if (!hasPublic) {
@@ -426,7 +427,7 @@ let datasetStore = Reflux.createStore({
   /**
      * Toggle Modal
      */
-  toggleModal(name, callback) {
+  toggleModal(name, history, callback) {
     let update = {}
 
     // reload app is missing for job modals
@@ -1346,14 +1347,10 @@ let datasetStore = Reflux.createStore({
         let datasetId = this.data.dataset.original
           ? this.data.dataset.original
           : this.data.dataset._id
-        router.transitionTo(
-          'snapshot',
-          {
-            datasetId: bids.decodeId(datasetId),
-            snapshotId: bids.decodeId(snapshotId),
-          },
-          { app: appLabel, version: appVersion, job: jobId },
-        )
+        const base = '/datasets/' + datasetId + '/versions/' + snapshotId
+        const query = { app: appLabel, version: appVersion, job: jobId }
+        const url = base + querystring(query)
+        history.push(url)
       }
     }
   },
@@ -1456,7 +1453,7 @@ let datasetStore = Reflux.createStore({
 
   // Snapshots ---------------------------------------------------------------------
 
-  createSnapshot(callback, transition) {
+  createSnapshot(history, callback, transition) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
@@ -1500,10 +1497,12 @@ let datasetStore = Reflux.createStore({
             let snapshotId = res.body._id
             this.toggleSidebar(true)
             if (transition) {
-              router.transitionTo('snapshot', {
-                datasetId: this.data.dataset.linkID,
-                snapshotId: snapshotId,
-              })
+              const url =
+                '/datasets/' +
+                this.data.dataset.linkID +
+                '/versions/' +
+                snapshotId
+              history.push(url)
             }
             this.loadSnapshots(this.data.dataset, [], () => {
               if (callback) {
