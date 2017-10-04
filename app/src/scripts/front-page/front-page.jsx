@@ -27,7 +27,7 @@ import stanford from './assets/stanford.png'
 class FrontPage extends Reflux.Component {
   constructor() {
     super()
-    refluxConnect(this, userSTore, 'users')
+    refluxConnect(this, userStore, 'users')
   }
 
   // life cycle events --------------------------------------------------
