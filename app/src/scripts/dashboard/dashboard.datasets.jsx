@@ -27,6 +27,7 @@ class Datasets extends Reflux.Component {
   // life cycle events -------------------------------------------------------------------------
 
   componentWillUnmount() {
+    super.componentWillUnmount()
     Actions.update({ datasets: [] })
   }
 
