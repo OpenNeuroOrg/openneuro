@@ -1,9 +1,6 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
-import FPStore from '../front-page/front-page.store.js'
-import { refluxConnect } from '../utils/reflux'
 
 import tab_get_data from './assets/tab-get_data.png'
 import get_data_browse from './assets/get_data_browse.png'
@@ -15,10 +12,9 @@ import tab_use_data from './assets/tab-use_data.png'
 import use_data_snapshot from './assets/use_data_snapshot.png'
 import use_data_analyze from './assets/use_data_analyze.png'
 
-class FrontPageTabs extends Reflux.Component {
+class FrontPageTabs extends React.Component {
   constructor() {
     super()
-    refluxConnect(this, FPStore, 'frontpage')
     this.state = {
       currentTab: null,
     }
@@ -29,7 +25,7 @@ class FrontPageTabs extends Reflux.Component {
     return (
       <div id="data-tabs">
         <ul className="nav nav-tabs">{this._tabs()}</ul>
-        {this._tabContent(this.state.frontpage.currentTab)}
+        {this._tabContent(this.state.currentTab)}
       </div>
     )
   }
@@ -42,9 +38,7 @@ class FrontPageTabs extends Reflux.Component {
         <li key={index}>
           <div
             className={
-              this.state.frontpage.currentTab == index
-                ? 'active thumbnail'
-                : 'thumbnail'
+              this.state.currentTab == index ? 'active thumbnail' : 'thumbnail'
             }
             onClick={this._showTabContent.bind(this, index)}>
             <img src={tab.icon} alt={tab.header} />
@@ -54,7 +48,7 @@ class FrontPageTabs extends Reflux.Component {
             </div>
             <div className="more">
               <span className="text">
-                {this.state.frontpage.currentTab == index ? 'less' : 'more'}
+                {this.state.currentTab == index ? 'less' : 'more'}
               </span>
             </div>
           </div>
@@ -102,7 +96,7 @@ class FrontPageTabs extends Reflux.Component {
   }
 
   _showTabContent(tab) {
-    if (tab == this.state.frontpage.currentTab) {
+    if (tab == this.state.currentTab) {
       this.setState({ currentTab: null })
     } else {
       this.setState({ currentTab: tab })
@@ -123,8 +117,8 @@ class FrontPageTabs extends Reflux.Component {
           <span>
             Browse and explore public datasets and analyses from a wide range of
             global contributors. Our collection of{' '}
-            <strong>{this.state.frontpage.datasetCount}</strong> public datasets
-            continues to grow as more and more become{' '}
+            <strong>{this.state.datasetCount}</strong> public datasets continues
+            to grow as more and more become{' '}
             <a href="http://bids.neuroimaging.io/">BIDS</a> compatible.
           </span>
         ),
