@@ -38,7 +38,7 @@ class FrontPage extends Reflux.Component {
 
   render() {
     return (
-      <span>
+      <span className="front-page is-front">
         <div className="intro">
           <div className="container">
             <div className="intro-inner fade-in clearfix">
