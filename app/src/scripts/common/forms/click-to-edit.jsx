@@ -12,11 +12,11 @@ import markdown from '../../utils/markdown'
 
 class ClickToEdit extends React.Component {
   // life cycle events --------------------------------------------------
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
-      value: this.props.value,
-      initialValue: JSON.stringify(this.props.value),
+      value: props.value,
+      initialValue: JSON.stringify(props.value),
       loading: false,
       edit: false,
     }
