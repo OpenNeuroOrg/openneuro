@@ -166,7 +166,7 @@ class ClickToEdit extends React.Component {
     if (this.props.editable) {
       return (
         <button
-          onClick={this._toggleEdit}
+          onClick={this._toggleEdit.bind(this)}
           className="cte-edit-button btn btn-admin fade-in">
           <span>
             <i className={'fa fa-' + (edit ? 'times' : 'pencil')} />{' '}
