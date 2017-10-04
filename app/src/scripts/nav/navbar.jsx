@@ -148,8 +148,6 @@ class BSNavbar extends Reflux.Component {
   }
 
   _signIn(loading) {
-    const onFrontPage = this.props.location.pathname === '/'
-
     if (loading) {
       return (
         <div className="navbar-right sign-in-nav-btn">
