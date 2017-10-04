@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import GoogleAnalytics from 'react-ga'
 import config from '../../../config'
 
@@ -13,7 +14,7 @@ const analyticsWrapper = (WrappedComponent, options = {}) => {
     GoogleAnalytics.pageview(page)
   }
 
-  const HOC = class extends Component {
+  const HOC = class HOC extends Component {
     componentDidMount() {
       const page = this.props.location.pathname
       trackPage(page)
@@ -31,6 +32,10 @@ const analyticsWrapper = (WrappedComponent, options = {}) => {
     render() {
       return <WrappedComponent {...this.props} />
     }
+  }
+
+  HOC.propTypes = {
+    location: PropTypes.object,
   }
 
   return HOC
