@@ -9,12 +9,14 @@ import datasetStore from '../dataset/dataset.store'
 import WarnButton from '../common/forms/warn-button.jsx'
 import DefineJobModal from './admin.create-job.modal.jsx'
 import batch from '../utils/batch.js'
+import { refluxConnect } from '../utils/reflux'
 
-let Apps = React.createClass({
-  mixins: [
-    Reflux.connect(adminStore, 'admin'),
-    Reflux.connect(datasetStore, 'datasets'),
-  ],
+class Apps extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+    refluxConnect(this, datasetStore, 'datasets')
+  }
 
   // life cycle events --------------------------------------------------
 
@@ -76,7 +78,7 @@ let Apps = React.createClass({
         />
       </div>
     )
-  },
+  }
 
   _versionList(apps) {
     let list = apps.reverse().map((app, index) => {
@@ -128,15 +130,15 @@ let Apps = React.createClass({
     })
 
     return list
-  },
+  }
 
   _editJobDefinition(app) {
     actions.editJobDefinition(app)
-  },
+  }
 
   _deleteJobDefinition(app, callback) {
     actions.deleteJobDefinition(app, callback)
-  },
-})
+  }
+}
 
 export default Apps

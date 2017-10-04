@@ -5,9 +5,13 @@ import Reflux from 'reflux'
 import adminStore from './admin.store'
 import actions from './admin.actions'
 import WarnButton from '../common/forms/warn-button.jsx'
+import { refluxConnect } from '../utils/reflux'
 
-let Blacklist = React.createClass({
-  mixins: [Reflux.connect(adminStore, 'admin')],
+class Blacklist extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
 
   // life cycle events --------------------------------------------------
 
@@ -68,7 +72,7 @@ let Blacklist = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -78,11 +82,11 @@ let Blacklist = React.createClass({
         {this.state.admin.blacklistError}
       </div>
     ) : null
-  },
+  }
 
   _inputChange(e) {
     actions.inputChange('blacklistForm', e.target.name, e.target.value)
-  },
-})
+  }
+}
 
 export default Blacklist

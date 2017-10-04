@@ -7,9 +7,13 @@ import adminStore from './admin.store'
 import actions from './admin.actions'
 import Paginator from '../common/partials/paginator.jsx'
 import LogLink from './admin.logs.link.jsx'
+import { refluxConnect } from '../utils/reflux'
 
-let Logs = React.createClass({
-  mixins: [Reflux.connect(adminStore, 'admin')],
+class Logs extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
 
   // life cycle events --------------------------------------------------
 
@@ -103,11 +107,11 @@ let Logs = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   _searchLogs(e) {
     actions.searchLogs(e.target.value)
-  },
+  }
 
   _paginate(data, perPage, page) {
     if (data.length < 1) return null
@@ -116,12 +120,12 @@ let Logs = React.createClass({
     let end = start + perPage
     var retArr = data.slice(start, end)
     return retArr
-  },
+  }
 
   _onPageSelect(page) {
     let pageNumber = Number(page)
     this.setState({ page: pageNumber })
-  },
-})
+  }
+}
 
 export default Logs

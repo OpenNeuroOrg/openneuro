@@ -9,10 +9,13 @@ import adminStore from './admin.store'
 import actions from './admin.actions'
 import WarnButton from '../common/forms/warn-button.jsx'
 import moment from 'moment'
+import { refluxConnect } from '../utils/reflux'
 
-let users = React.createClass({
-  mixins: [Reflux.connect(adminStore, 'admin')],
-
+class users extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
   // life cycle events --------------------------------------------------
 
   render() {
@@ -98,7 +101,7 @@ let users = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -108,7 +111,7 @@ let users = React.createClass({
     ) : (
       <h4>No Results Found</h4>
     )
-  },
+  }
 
   _userSummary(user) {
     const lastLogin = moment(user.lastlogin ? user.lastlogin : user.created)
@@ -131,7 +134,7 @@ let users = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   _userTools(user) {
     let adminIcon = user.root ? 'fa-check-square-o' : 'fa-square-o'
@@ -159,21 +162,21 @@ let users = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _newUserError() {
     return this.state.admin.newUserError ? (
       <div className="alert alert-danger">{this.state.admin.newUserError}</div>
     ) : null
-  },
+  }
 
   _inputChange(e) {
     actions.inputChange('newUserForm', e.target.name, e.target.value)
-  },
+  }
 
   _searchUser(e) {
     actions.searchUser(e.target.value)
-  },
-})
+  }
+}
 
 export default users

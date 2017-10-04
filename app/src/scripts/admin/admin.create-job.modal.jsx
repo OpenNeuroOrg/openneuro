@@ -22,13 +22,13 @@ const PARAMETER_INPUTS = [
   { label: 'File', value: 'file' },
 ]
 
-const CreateJob = React.createClass({
-  mixins: [Reflux.connect(adminStore, 'admin')],
+import { refluxConnect } from '../utils/reflux'
 
-  propTypes: {
-    show: PropTypes.bool,
-    onHide: PropTypes.func,
-  },
+class CreateJob extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
 
   render() {
     let definition = this.state.admin.jobDefinitionForm
@@ -117,19 +117,19 @@ const CreateJob = React.createClass({
         </Modal.Body>
       </Modal>
     )
-  },
+  }
 
   _handleChange(formProperty, e) {
     actions.inputChange('jobDefinitionForm', formProperty, e.target.value)
-  },
+  }
 
   _inputChange(e) {
     actions.inputChange('jobDefinitionForm', e.target.name, e.target.value)
-  },
+  }
 
   _analysisLevelsChange(e) {
     actions.inputChange('jobDefinitionForm', 'analysisLevels', e)
-  },
+  }
 
   _addDescriptions(definition) {
     return [
@@ -169,7 +169,7 @@ const CreateJob = React.createClass({
         key={5}
       />,
     ]
-  },
-})
+  }
+}
 
 export default CreateJob

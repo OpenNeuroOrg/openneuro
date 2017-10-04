@@ -6,10 +6,13 @@ import adminStore from './admin.store'
 import actions from './admin.actions'
 import Input from '../common/forms/input.jsx'
 import { Modal } from 'react-bootstrap'
+import { refluxConnect } from '../utils/reflux'
 
-let BlacklistModal = React.createClass({
-  mixins: [Reflux.connect(adminStore, 'admin')],
-
+class BlacklistModal extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
   // life cycle events --------------------------------------------------
 
   render() {
@@ -64,7 +67,7 @@ let BlacklistModal = React.createClass({
         </Modal.Body>
       </Modal>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -74,15 +77,15 @@ let BlacklistModal = React.createClass({
         {this.state.admin.blacklistError}
       </div>
     ) : null
-  },
+  }
 
   _inputChange(e) {
     actions.inputChange('blacklistForm', e.target.name, e.target.value)
-  },
+  }
 
   _hide() {
     actions.toggleModal('blacklist')
-  },
-})
+  }
+}
 
 export default BlacklistModal
