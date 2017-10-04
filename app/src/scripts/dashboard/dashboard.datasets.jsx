@@ -14,36 +14,35 @@ import Statuses from '../dataset/dataset.statuses.jsx'
 import Filters from './dashboard.filters.jsx'
 import Sort from './dashboard.sort.jsx'
 import Summary from '../dataset/dataset.summary.jsx'
+import { refluxConnect } from '../utils/reflux'
 
 // component setup ---------------------------------------------------------------------------
 
-let Datasets = React.createClass({
-  mixins: [Reflux.connect(DatasetsStore, 'datasets')],
-
-  propTypes: {
-    public: PropTypes.bool,
-    admin: PropTypes.bool,
-  },
+class Datasets extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, DatasetsStore, 'datasets')
+  }
 
   // life cycle events -------------------------------------------------------------------------
 
   componentWillUnmount() {
     Actions.update({ datasets: [] })
-  },
+  }
 
   componentDidMount() {
     const isPublic = this.props.public
     const isAdmin = this.props.admin
     Actions.update({ isPublic, isAdmin })
     Actions.getDatasets(isPublic, isAdmin)
-  },
+  }
 
   componentWillReceiveProps() {
     const isPublic = this.props.public
     const isAdmin = this.props.admin
     Actions.update({ isPublic, isAdmin })
     Actions.getDatasets(isPublic, isAdmin)
-  },
+  }
 
   render() {
     let datasets = this.state.datasets.datasets
@@ -121,7 +120,7 @@ let Datasets = React.createClass({
     )
 
     return <span>{!isPublic ? datasetsDash : datasetsDashPublic}</span>
-  },
+  }
 
   // template methods --------------------------------------------------------------------------
 
@@ -160,7 +159,7 @@ let Datasets = React.createClass({
         </div>
       )
     })
-  },
+  }
 
   _linkTo(dataset) {
     const isSnapshot = dataset.hasOwnProperty('original')
@@ -173,7 +172,7 @@ let Datasets = React.createClass({
         to: '/datasets/' + dataset.linkID,
       }
     }
-  },
+  }
 
   // custom methods ----------------------------------------------------------------------------
 
@@ -184,16 +183,21 @@ let Datasets = React.createClass({
     let end = start + perPage
     var retArr = data.slice(start, end)
     return retArr
-  },
+  }
 
   _onPageSelect(page) {
     let pageNumber = Number(page)
     this.setState({ page: pageNumber })
-  },
+  }
 
   _sort(value, direction) {
     Actions.sort(value, direction)
-  },
-})
+  }
+}
+
+Datasets.propTypes = {
+  public: PropTypes.bool,
+  admin: PropTypes.bool,
+}
 
 export default Datasets

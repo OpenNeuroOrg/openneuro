@@ -2,24 +2,13 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-//import Reflux from 'reflux'
 import moment from 'moment'
 import WarnButton from '../../common/forms/warn-button.jsx'
-//import UploadStore from '../../upload/upload.store'
 import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
 import ToolModals from './modals.jsx'
 
-let Tools = React.createClass({
-  // TODO - verify this removal
-  //mixins: [Reflux.connect(UploadStore, 'upload')],
-
-  propTypes: {
-    dataset: PropTypes.object.isRequired,
-    snapshots: PropTypes.array.isRequired,
-    selectedSnapshot: PropTypes.string.isRequired,
-  },
-
+class Tools extends React.Component {
   // life cycle events --------------------------------------------------
 
   componentDidMount() {
@@ -27,7 +16,7 @@ let Tools = React.createClass({
     if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
       actions.loadUsers()
     }
-  },
+  }
 
   render() {
     let dataset = this.props.dataset,
@@ -132,7 +121,7 @@ let Tools = React.createClass({
         <ToolModals />
       </div>
     )
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -148,7 +137,7 @@ let Tools = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   _tools(toolConfig) {
     let tools = toolConfig.map((tool, index) => {
@@ -169,7 +158,7 @@ let Tools = React.createClass({
       }
     })
     return tools
-  },
+  }
 
   _deleteDataset(isAdmin, isPublic, isSuperuser, datasetHasJobs) {
     //CRN admin can delete any dataset
@@ -188,7 +177,13 @@ let Tools = React.createClass({
     }
     //otherwise don't allow deletion
     return false
-  },
-})
+  }
+}
+
+Tools.propTypes = {
+  dataset: PropTypes.object.isRequired,
+  snapshots: PropTypes.array.isRequired,
+  selectedSnapshot: PropTypes.string.isRequired,
+}
 
 export default Tools

@@ -9,9 +9,13 @@ import FileDisplay from '../dataset.file-display.jsx'
 import UpdateWarn from '../dataset.update-warning.jsx'
 import datasetStore from '../dataset.store'
 import datasetActions from '../dataset.actions.js'
+import { refluxConnect } from '../../utils/reflux'
 
-let ToolModals = React.createClass({
-  mixins: [Reflux.connect(datasetStore, 'datasets')],
+class ToolModals extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, datasetStore, 'datasets')
+  }
 
   // life cycle events --------------------------------------------------
 
@@ -57,7 +61,7 @@ let ToolModals = React.createClass({
         />
       </div>
     )
-  },
-})
+  }
+}
 
 export default ToolModals

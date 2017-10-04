@@ -5,22 +5,15 @@ import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import Status from '../common/partials/status.jsx'
 import UploadStore from '../upload/upload.store.js'
+import { refluxConnect } from '../utils/reflux'
 
-let Statuses = React.createClass({
-  mixins: [Reflux.connect(UploadStore, 'upload')],
+class Statuses extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, UploadStore, 'upload')
+  }
 
   // life cycle events --------------------------------------------------
-
-  getDefaultProps() {
-    return {
-      minimal: false,
-    }
-  },
-
-  propTypes: {
-    dataset: PropTypes.object,
-    minimal: PropTypes.bool,
-  },
 
   render() {
     let dataset = this.props.dataset,
@@ -50,7 +43,16 @@ let Statuses = React.createClass({
         />
       </span>
     )
-  },
-})
+  }
+}
+
+Statuses.defaultProps = {
+  minimal: false,
+}
+
+Statuses.propTypes = {
+  dataset: PropTypes.object,
+  minimal: PropTypes.bool,
+}
 
 export default Statuses

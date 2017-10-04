@@ -11,10 +11,13 @@ import Issues from './upload.issues.jsx'
 import Disclaimer from './upload.disclaimer.jsx'
 import Resume from './upload.resume.jsx'
 import Progress from './upload.progress.jsx'
+import { refluxConnect } from '../utils/reflux'
 
-let Upload = React.createClass({
-  mixins: [Reflux.connect(UploadStore, 'upload')],
-
+class Upload extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, UploadStore, 'upload')
+  }
   // life cycle events --------------------------------------------------
 
   render() {
@@ -192,7 +195,7 @@ let Upload = React.createClass({
         </div>
       </div>
     )
-  },
-})
+  }
+}
 
 export default Upload

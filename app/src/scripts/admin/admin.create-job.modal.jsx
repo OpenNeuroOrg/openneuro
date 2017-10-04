@@ -1,7 +1,6 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import ArrayInput from '../common/forms/array-input.jsx'
 import Input from '../common/forms/input.jsx'

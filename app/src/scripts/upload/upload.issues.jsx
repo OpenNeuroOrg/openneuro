@@ -8,16 +8,8 @@ import Results from './upload.validation-results.jsx'
 import Spinner from '../common/partials/spinner.jsx'
 import ErrorLink from './upload.error-link.jsx'
 
-let Issues = React.createClass({
+class Issues extends React.Component {
   // life cycle events --------------------------------------------------
-  propTypes: {
-    tree: PropTypes.array,
-    errors: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
-    warnings: PropTypes.array,
-    dirName: PropTypes.string,
-    uploadStatus: PropTypes.string,
-  },
-
   render() {
     // short references
     let tree = this.props.tree
@@ -64,7 +56,7 @@ let Issues = React.createClass({
         )}
       </div>
     )
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -116,14 +108,22 @@ let Issues = React.createClass({
         </span>
       )
     }
-  },
+  }
 
   // actions ------------------------------------------------------------
 
   _reset() {
     actions.selectTab(1)
     document.getElementById('multifile-select').click()
-  },
-})
+  }
+}
+
+Issues.propTypes = {
+  tree: PropTypes.array,
+  errors: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  warnings: PropTypes.array,
+  dirName: PropTypes.string,
+  uploadStatus: PropTypes.string,
+}
 
 export default Issues

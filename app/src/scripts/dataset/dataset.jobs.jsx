@@ -7,20 +7,19 @@ import actions from './dataset.actions'
 import Spinner from '../common/partials/spinner.jsx'
 import Run from './dataset.jobs.run.jsx'
 import { Accordion, Panel } from 'react-bootstrap'
+import { refluxConnect } from '../utils/reflux'
 
-let Jobs = React.createClass({
-  mixins: [Reflux.connect(datasetStore, 'datasets')],
-
-  getInitialState() {
-    let initialState = {
+class Jobs extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, datasetStore, 'datasets')
+    this.state = {
       acknowledgements: '',
       support: '',
       summary: '',
       label: '',
     }
-
-    return initialState
-  },
+  }
 
   // life cycle events --------------------------------------------------
 
@@ -86,7 +85,7 @@ let Jobs = React.createClass({
         </Accordion>
       </div>
     )
-  },
+  }
 
   // templates methods --------------------------------------------------
 
@@ -107,7 +106,7 @@ let Jobs = React.createClass({
     })
 
     return runs
-  },
-})
+  }
+}
 
 export default Jobs

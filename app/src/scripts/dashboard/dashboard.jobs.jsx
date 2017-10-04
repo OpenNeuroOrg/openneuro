@@ -12,17 +12,14 @@ import { PanelGroup } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
 import Sort from './dashboard.sort.jsx'
 import Select from 'react-select'
-
 import bids from '../utils/bids'
+import { refluxConnect } from '../utils/reflux'
 
-let Jobs = React.createClass({
-  mixins: [Reflux.connect(JobsStore, 'jobs')],
-
-  propTypes: {
-    location: PropTypes.object,
-    public: PropTypes.bool,
-    admin: PropTypes.bool,
-  },
+class Jobs extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, JobsStore, 'jobs')
+  }
 
   // life cycle events --------------------------------------------------
   componentDidMount() {
@@ -41,7 +38,7 @@ let Jobs = React.createClass({
       pipeline: selectedPipeline,
       version: null,
     })
-  },
+  }
 
   render() {
     let isPublic = this.state.jobs.isPublic
@@ -84,7 +81,7 @@ let Jobs = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -111,7 +108,7 @@ let Jobs = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _selectVersions() {
     return (
@@ -131,7 +128,7 @@ let Jobs = React.createClass({
         />
       </div>
     )
-  },
+  }
 
   _jobs(paginatedResults) {
     return paginatedResults.map(job => {
@@ -190,7 +187,13 @@ let Jobs = React.createClass({
         </div>
       )
     })
-  },
-})
+  }
+}
+
+Jobs.propTypes = {
+  location: PropTypes.object,
+  public: PropTypes.bool,
+  admin: PropTypes.bool,
+}
 
 export default withRouter(Jobs)

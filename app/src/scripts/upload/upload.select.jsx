@@ -4,7 +4,7 @@ import React from 'react'
 import FileSelect from '../common/forms/file-select.jsx'
 import Actions from './upload.actions.js'
 
-let Select = React.createClass({
+class Select extends React.Component {
   // life cycle events --------------------------------------------------
 
   render() {
@@ -19,22 +19,18 @@ let Select = React.createClass({
         </span>
         <FileSelect
           onClick={this._clearInput}
-          onChange={this._onChange}
-          setRefs={this._setRefs}
+          onChange={Actions.onChange}
+          setRefs={Actions.setRefs}
         />
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
-  _clearInput: () => {
+  _clearInput() {
     Actions.setInitialState({ showModal: true })
-  },
-
-  _onChange: Actions.onChange,
-
-  _setRefs: Actions.setRefs,
-})
+  }
+}
 
 export default Select
