@@ -59,23 +59,25 @@ class Apps extends Reflux.Component {
       })
 
     return (
-      <div className="dashboard-dataset-teasers fade-in admin-jobs clearfix">
-        <div className="clearfix">
-          <h2>App Definitions</h2>
-          <button
-            className="btn-blue"
-            onClick={actions.toggleModal.bind(this, 'defineJob')}>
-            <span>Define an App</span>
-          </button>
+      <div className="admin app-definitions">
+        <div className="dashboard-dataset-teasers fade-in admin-jobs clearfix">
+          <div className="clearfix">
+            <h2>App Definitions</h2>
+            <button
+              className="btn-blue"
+              onClick={actions.toggleModal.bind(this, 'defineJob')}>
+              <span>Define an App</span>
+            </button>
+          </div>
+          <Accordion className="clearfix">
+            {Object.keys(this.state.datasets.apps).length == 0 ? noJobs : jobs}
+          </Accordion>
+          <DefineJobModal
+            show={this.state.admin.modals.defineJob}
+            onHide={actions.toggleModal.bind(this, 'defineJob')}
+            edit={this.state.admin.jobDefinitionForm.edit}
+          />
         </div>
-        <Accordion className="clearfix">
-          {Object.keys(this.state.datasets.apps).length == 0 ? noJobs : jobs}
-        </Accordion>
-        <DefineJobModal
-          show={this.state.admin.modals.defineJob}
-          onHide={actions.toggleModal.bind(this, 'defineJob')}
-          edit={this.state.admin.jobDefinitionForm.edit}
-        />
       </div>
     )
   }

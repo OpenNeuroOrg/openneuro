@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div className="route-wrapper">
+      <div className="admin route-wrapper">
         <div className="inner-route clearfix">
           <div className="col-xs-12">
             <ul className="nav nav-pills tabs">
