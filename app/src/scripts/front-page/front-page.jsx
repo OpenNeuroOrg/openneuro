@@ -9,6 +9,7 @@ import Spinner from '../common/partials/spinner.jsx'
 import Footer from '../common/partials/footer.jsx'
 import Pipelines from './front-page.pipelines.jsx'
 import FPActions from './front-page.actions.js'
+import { refluxConnect } from '../utils/reflux'
 
 // assets -------------------------------------------------------------
 import ljaf from './assets/ljaf.png'
@@ -23,22 +24,17 @@ import stanford from './assets/stanford.png'
 
 // component setup ----------------------------------------------------
 
-let FrontPage = React.createClass({
-  mixins: [Reflux.connect(userStore, 'users')],
-
-  statics: {
-    willTransitionTo(transition) {
-      if (userStore.data.token) {
-        transition.redirect('dashboard')
-      }
-    },
-  },
+class FrontPage extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, userSTore, 'users')
+  }
 
   // life cycle events --------------------------------------------------
-
   componentWillMount() {
+    super.componentWillMount()
     FPActions.reset()
-  },
+  }
 
   render() {
     return (
@@ -102,7 +98,7 @@ let FrontPage = React.createClass({
         <Footer />
       </span>
     )
-  },
+  }
 
   // custom methods -------------------------------------------------------
 
@@ -120,7 +116,7 @@ let FrontPage = React.createClass({
         )
       }
     }
-  },
+  }
 
   _error(signinError, loadingState) {
     if (signinError && !loadingState) {
@@ -128,7 +124,7 @@ let FrontPage = React.createClass({
         <div className="alert alert-danger">{this.state.users.signinError}</div>
       )
     }
-  },
+  }
 
   // template functions ----------------------------------------------------
 
@@ -233,7 +229,7 @@ let FrontPage = React.createClass({
         </div>
       </div>
     )
-  },
-})
+  }
+}
 
 export default FrontPage

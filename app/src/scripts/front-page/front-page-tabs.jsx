@@ -3,6 +3,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import FPStore from '../front-page/front-page.store.js'
+import { refluxConnect } from '../utils/reflux'
 
 import tab_get_data from './assets/tab-get_data.png'
 import get_data_browse from './assets/get_data_browse.png'
@@ -14,17 +15,16 @@ import tab_use_data from './assets/tab-use_data.png'
 import use_data_snapshot from './assets/use_data_snapshot.png'
 import use_data_analyze from './assets/use_data_analyze.png'
 
-let FrontPageTabs = React.createClass({
-  mixins: [Reflux.connect(FPStore, 'frontpage')],
-
-  // life cycle events --------------------------------------------------
-
-  getInitialState() {
-    return {
+class FrontPageTabs extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, FPStore, 'frontpage')
+    this.state = {
       currentTab: null,
     }
-  },
+  }
 
+  // life cycle events --------------------------------------------------
   render() {
     return (
       <div id="data-tabs">
@@ -32,7 +32,7 @@ let FrontPageTabs = React.createClass({
         {this._tabContent(this.state.frontpage.currentTab)}
       </div>
     )
-  },
+  }
 
   // template functions -------------------------------------------------------
 
@@ -61,7 +61,7 @@ let FrontPageTabs = React.createClass({
         </li>
       )
     })
-  },
+  }
 
   // custom methods -------------------------------------------------------
 
@@ -99,7 +99,7 @@ let FrontPageTabs = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _showTabContent(tab) {
     if (tab == this.state.frontpage.currentTab) {
@@ -107,7 +107,7 @@ let FrontPageTabs = React.createClass({
     } else {
       this.setState({ currentTab: tab })
     }
-  },
+  }
 
   // data -----------------------------------------------------------------
 
@@ -169,7 +169,7 @@ let FrontPageTabs = React.createClass({
         secondImageClass: 'analyze',
       },
     ]
-  },
-})
+  }
+}
 
 export default FrontPageTabs

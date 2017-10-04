@@ -8,14 +8,10 @@ import { DropdownButton } from 'react-bootstrap'
 
 // component setup ---------------------------------------------------------------
 
-let Usermenu = React.createClass({
-  propTypes: {
-    profile: PropTypes.object,
-  },
-
+class Usermenu extends React.Component {
   // life cycle methods ------------------------------------------------------------
 
-  render: function() {
+  render() {
     let profile = this.props.profile
     if (!profile) {
       return false
@@ -47,13 +43,17 @@ let Usermenu = React.createClass({
         </DropdownButton>
       </ul>
     )
-  },
+  }
 
   // custom methods ----------------------------------------------------------------
 
-  _signOut: function() {
+  _signOut() {
     Actions.signOut(uploadStore.data.uploadStatus)
-  },
-})
+  }
+}
+
+Usermenu.propTypes = {
+  profile: PropTypes.object,
+}
 
 export default Usermenu

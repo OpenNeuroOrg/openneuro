@@ -7,24 +7,20 @@ import fileUtils from '../../utils/files'
 import bowser from 'bowser'
 import notifications from '../../notification/notification.actions'
 import UploadStore from '../../upload/upload.store.js'
+import { refluxConnect } from '../../utils/reflux'
 
-let Upload = React.createClass({
-  mixins: [Reflux.connect(UploadStore, 'upload')],
-
+class Upload extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, UploadStore, 'upload')
+  }
   // life cycle events --------------------------------------------------
 
   componentDidMount() {
     this.refs.fileSelect.setAttribute('webkitdirectory', true)
     this.refs.fileSelect.setAttribute('directory', true)
     this._setRefs(this.refs)
-  },
-
-  propTypes: {
-    resume: PropTypes.bool,
-    onClick: PropTypes.func,
-    onChange: PropTypes.func,
-    setRefs: PropTypes.func,
-  },
+  }
 
   render() {
     let resumeIcon = (
@@ -51,7 +47,7 @@ let Upload = React.createClass({
         />
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -84,7 +80,7 @@ let Upload = React.createClass({
     if (this.props.onClick) {
       this.props.onClick(e)
     }
-  },
+  }
 
   _onFileSelect(e) {
     if (e.target && e.target.files.length > 0) {
@@ -93,13 +89,20 @@ let Upload = React.createClass({
       let results = { tree: dirTree, list: files }
       this.props.onChange(results)
     }
-  },
+  }
 
   _setRefs(refs) {
     if (this.props.setRefs) {
       this.props.setRefs(refs)
     }
-  },
-})
+  }
+}
+
+Upload.propTypes = {
+  resume: PropTypes.bool,
+  onClick: PropTypes.func,
+  onChange: PropTypes.func,
+  setRefs: PropTypes.func,
+}
 
 export default Upload

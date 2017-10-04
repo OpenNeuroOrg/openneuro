@@ -7,17 +7,21 @@ import UploadStore from '../upload/upload.store.js'
 import Upload from '../upload/upload.jsx'
 import { Modal } from 'react-bootstrap'
 import Progress from '../upload/upload.progress.jsx'
+import { refluxConnect } from '../utils/reflux'
 
 import favicon_upload from './assets/favicon-upload.png'
 
 // component setup ---------------------------------------------------------------
 
-let UploadBtn = React.createClass({
-  mixins: [Reflux.connect(UploadStore, 'upload')],
+class UploadBtn extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, UploadStore, 'upload')
+  }
 
   // life cycle methods ------------------------------------------------------------
 
-  render: function() {
+  render() {
     let progress = (
       <a
         className="nav-link nl-upload nl-progress"
@@ -59,7 +63,7 @@ let UploadBtn = React.createClass({
         <img src={favicon_upload} id="favicon_upload" className="hidden" />
       </span>
     )
-  },
-})
+  }
+}
 
 export default UploadBtn

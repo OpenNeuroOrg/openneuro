@@ -14,12 +14,15 @@ import pluralize from 'pluralize'
 import Spinner from '../common/partials/spinner.jsx'
 import markdown from '../utils/markdown'
 import bids from '../utils/bids'
+import { refluxConnect } from '../utils/reflux'
 
 // component setup ----------------------------------------------------
 
-let Pipelines = React.createClass({
-  mixins: [Reflux.connect(FPStore, 'frontpage')],
-
+class Pipelines extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, FPStore, 'frontpage')
+  }
   // life cycle events --------------------------------------------------
 
   render() {
@@ -39,7 +42,7 @@ let Pipelines = React.createClass({
         />
       </span>
     )
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -50,7 +53,7 @@ let Pipelines = React.createClass({
         {this._browse()}
       </div>
     )
-  },
+  }
 
   _featured() {
     return (
@@ -80,7 +83,7 @@ let Pipelines = React.createClass({
         </ul>
       </div>
     )
-  },
+  }
 
   _browse() {
     if (this.state.frontpage.apps.length < 1) {
@@ -127,7 +130,7 @@ let Pipelines = React.createClass({
         </form>
       </div>
     )
-  },
+  }
 
   _pipelineDetail(pipeline) {
     let longDescription = pipeline.descriptions
@@ -180,7 +183,7 @@ let Pipelines = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   _exampleResults() {
     if (this.state.frontpage.loadingJob) {
@@ -245,7 +248,7 @@ let Pipelines = React.createClass({
         </Panel>
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -257,11 +260,11 @@ let Pipelines = React.createClass({
         </option>
       )
     })
-  },
+  }
 
   _selectPipeline(e) {
     FPActions.selectPipeline(e.target.value)
-  },
+  }
 
   _pipelineOptions(apps, selectedTags) {
     let filteredApps = {}
@@ -286,7 +289,7 @@ let Pipelines = React.createClass({
         </option>
       )
     })
-  },
-})
+  }
+}
 
 export default Pipelines

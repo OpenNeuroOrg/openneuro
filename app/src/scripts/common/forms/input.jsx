@@ -5,32 +5,22 @@ import PropTypes from 'prop-types'
 
 // component setup ----------------------------------------------------
 
-let Input = React.createClass({
+class Input extends React.Component {
   // life cycle events --------------------------------------------------
 
-  getInitialState() {
-    return {
-      value: this.props.initialValue ? this.props.initialValue : '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: props.initialValue ? props.initialValue : '',
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     // Will reset value when prop changes
     if ('value' in nextProps) {
       this.setState({ value: nextProps.value })
     }
-  },
-
-  propTypes: {
-    initialValue: PropTypes.string,
-    placeholder: PropTypes.string,
-    name: PropTypes.string,
-    type: PropTypes.string,
-    value: PropTypes.string,
-    onChange: PropTypes.func,
-    disabled: PropTypes.bool,
-    checked: PropTypes.bool,
-  },
+  }
 
   render() {
     let placeholder = this.props.placeholder
@@ -44,7 +34,7 @@ let Input = React.createClass({
         {this._input(type, name, placeholder, value)}
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -70,7 +60,7 @@ let Input = React.createClass({
         />
       )
     }
-  },
+  }
 
   _handleChange(event) {
     this.setState({ value: event.target.value })
@@ -78,14 +68,25 @@ let Input = React.createClass({
     if (this.props.onChange) {
       this.props.onChange(event)
     }
-  },
+  }
 
   _toggleCheckbox(event) {
     this.setState({ value: event.target.checked })
     if (this.props.onChange) {
       this.props.onChange(event)
     }
-  },
-})
+  }
+}
+
+Input.propTypes = {
+  initialValue: PropTypes.string,
+  placeholder: PropTypes.string,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool,
+  checked: PropTypes.bool,
+}
 
 export default Input

@@ -7,27 +7,14 @@ import WarnButton from './warn-button.jsx'
 
 // component setup ----------------------------------------------------
 
-let FileArrayInput = React.createClass({
+class FileArrayInput extends React.Component {
   // life cycle events --------------------------------------------------
-
-  getDefaultProps() {
-    return {
-      value: [],
-    }
-  },
-
-  getInitialState() {
-    return {
+  constructor() {
+    super()
+    this.state = {
       loading: false,
     }
-  },
-
-  propTypes: {
-    value: PropTypes.array,
-    onFileClick: PropTypes.func,
-    onChange: PropTypes.func,
-    onDelete: PropTypes.func,
-  },
+  }
 
   render() {
     return (
@@ -37,7 +24,7 @@ let FileArrayInput = React.createClass({
         {this._addFile(this.state.loading)}
       </div>
     )
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -52,7 +39,7 @@ let FileArrayInput = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _error(error) {
     if (error) {
@@ -65,7 +52,7 @@ let FileArrayInput = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _fileList(files) {
     let list = files.map((file, index) => {
@@ -87,7 +74,7 @@ let FileArrayInput = React.createClass({
       )
     })
     return <div className="cte-array-items clearfix">{list}</div>
-  },
+  }
 
   // actions ------------------------------------------------------------
 
@@ -95,7 +82,7 @@ let FileArrayInput = React.createClass({
     if (this.props.onFileClick) {
       this.props.onFileClick(filename, callback)
     }
-  },
+  }
 
   _handleChange(e) {
     let file = e.target.files[0]
@@ -106,17 +93,28 @@ let FileArrayInput = React.createClass({
         this.setState({ loading: false, error: error })
       })
     }
-  },
+  }
 
   _remove(filename, index) {
     if (this.props.onDelete) {
       this.props.onDelete(filename, index)
     }
-  },
+  }
 
   _dismissError() {
     this.setState({ error: null })
-  },
-})
+  }
+}
+
+FileArrayInput.defaultProps = {
+  value: [],
+}
+
+FileArrayInput.propTypes = {
+  value: PropTypes.array,
+  onFileClick: PropTypes.func,
+  onChange: PropTypes.func,
+  onDelete: PropTypes.func,
+}
 
 export default FileArrayInput

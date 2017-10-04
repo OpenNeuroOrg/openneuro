@@ -8,28 +8,18 @@ import WarnButton from './warn-button.jsx'
 
 // component setup ----------------------------------------------------
 
-let ArrayInput = React.createClass({
+class ArrayInput extends React.Component {
   // life cycle events --------------------------------------------------
-
-  getInitialState() {
-    let initialState = { error: null }
+  constructor(props) {
+    super(props)
+    const initialState = { error: null }
 
     for (let field of this.props.model) {
       initialState[field.id] = ''
     }
 
-    return initialState
-  },
-
-  getDefaultProps() {
-    return { value: [] }
-  },
-
-  propTypes: {
-    model: PropTypes.array,
-    value: PropTypes.array,
-    onChange: PropTypes.func,
-  },
+    this.state = initialState
+  }
 
   render() {
     let inputFields = null
@@ -98,7 +88,7 @@ let ArrayInput = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -118,7 +108,7 @@ let ArrayInput = React.createClass({
       })
       return <div className="cte-array-items">{list}</div>
     }
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -126,19 +116,19 @@ let ArrayInput = React.createClass({
     let state = {}
     state[key] = event.target.value
     this.setState(state)
-  },
+  }
 
   _handleSelectChange(key, selected) {
     let state = {}
     state[key] = selected
     this.setState(state)
-  },
+  }
 
   _toggleCheckBox(key) {
     let state = {}
     state[key] = !this.state[key]
     this.setState(state)
-  },
+  }
 
   _add(model) {
     this.setState({ error: null })
@@ -164,26 +154,36 @@ let ArrayInput = React.createClass({
 
     this.props.onChange({ target: { value: value } })
     this.setState(this.getInitialState())
-  },
+  }
 
   _remove(index) {
     let array = this.props.value
     array.splice(index, 1)
     this.props.onChange({ target: { value: array } })
-  },
+  }
 
   _edit(index, value) {
     let item = this.props.value
     item[index] = value
     this.props.onChange({ target: { value: item } })
-  },
+  }
 
   _hidden(key) {
     let state = {}
     state[key] = !this.state[key]
     this.setState(state)
-  },
-})
+  }
+}
+
+ArrayInput.defaultProps = {
+  value: [],
+}
+
+ArrayInput.propTypes = {
+  model: PropTypes.array,
+  value: PropTypes.array,
+  onChange: PropTypes.func,
+}
 
 export default ArrayInput
 
@@ -193,39 +193,21 @@ export default ArrayInput
  * Sub component of Array List Input used to manage
  * interactions on individual Array Items.
  */
-let ArrayItem = React.createClass({
-  getInitialState() {
+class ArrayItem extends React.Component {
+  constructor(props) {
+    super(props)
     let initialState = { edit: false }
 
     for (let field of this.props.model) {
       initialState[field.id] = this.props.item[field.id]
     }
 
-    return initialState
-  },
+    this.state = initialState
+  }
 
   componentWillReceiveProps() {
     this.setState({ edit: false })
-  },
-
-  propTypes: {
-    model: PropTypes.array,
-    item: props => {
-      if (props.model.length > 1 && typeof props.item !== 'object') {
-        return new Error(
-          'Prop `item` must be an object if a model has more than one property',
-        )
-      }
-      if (props.model.length == 1 && typeof props.item !== 'string') {
-        return new Error(
-          'Prop `item` must be a string if modal has a single property',
-        )
-      }
-    },
-    remove: PropTypes.func,
-    onEdit: PropTypes.func,
-    index: PropTypes.number,
-  },
+  }
 
   render() {
     let view = (
@@ -274,7 +256,7 @@ let ArrayItem = React.createClass({
     )
 
     return this.state.edit ? edit : view
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -295,7 +277,7 @@ let ArrayItem = React.createClass({
     } else {
       return <span className="reference-name">{item}</span>
     }
-  },
+  }
 
   _input() {
     return (
@@ -352,36 +334,36 @@ let ArrayItem = React.createClass({
         })}
       </span>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
   _cancel() {
     this._toggleEdit()
     this.setState(this.getInitialState())
-  },
+  }
 
   _toggleEdit() {
     this.setState({ edit: !this.state.edit })
-  },
+  }
 
   _handleChange(key, event) {
     let state = {}
     state[key] = event.target.value
     this.setState(state)
-  },
+  }
 
   _handleSelectChange(key, selected) {
     let state = {}
     state[key] = selected
     this.setState(state)
-  },
+  }
 
   _toggleCheckBox(key) {
     let state = {}
     state[key] = !this.state[key]
     this.setState(state)
-  },
+  }
 
   _save(model) {
     let data = {}
@@ -389,5 +371,24 @@ let ArrayItem = React.createClass({
       data[field.id] = this.state[field.id]
     }
     this.props.onEdit(this.props.index, data)
+  }
+}
+
+ArrayItem.propTypes = {
+  model: PropTypes.array,
+  item: props => {
+    if (props.model.length > 1 && typeof props.item !== 'object') {
+      return new Error(
+        'Prop `item` must be an object if a model has more than one property',
+      )
+    }
+    if (props.model.length == 1 && typeof props.item !== 'string') {
+      return new Error(
+        'Prop `item` must be a string if modal has a single property',
+      )
+    }
   },
-})
+  remove: PropTypes.func,
+  onEdit: PropTypes.func,
+  index: PropTypes.number,
+}
