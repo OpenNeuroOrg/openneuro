@@ -188,7 +188,7 @@ let UserStore = Reflux.createStore({
      * Signs the user out by destroying the current
      * OAuth2 session.
      */
-  signOut(uploadStatus) {
+  signOut(uploadStatus, history) {
     let signout = true
     if (uploadStatus === 'uploading') {
       signout = confirm(
@@ -199,7 +199,7 @@ let UserStore = Reflux.createStore({
       google.signOut(() => {
         upload.setInitialState()
         this.clearAuth()
-        this.context.router.transitionTo('front-page')
+        history.push('/')
       })
     }
   },
