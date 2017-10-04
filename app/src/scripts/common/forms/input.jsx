@@ -45,7 +45,7 @@ class Input extends React.Component {
           name={name}
           placeholder={placeholder}
           value={value}
-          onChange={this._handleChange}
+          onChange={this._handleChange.bind(this)}
         />
       )
     } else {
@@ -55,7 +55,7 @@ class Input extends React.Component {
           name={name}
           placeholder={placeholder}
           value={value}
-          onChange={this._handleChange}
+          onChange={this._handleChange.bind(this)}
           disabled={this.props.disabled}
         />
       )
