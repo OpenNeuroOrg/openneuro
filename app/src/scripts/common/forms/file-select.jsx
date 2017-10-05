@@ -14,14 +14,8 @@ class Upload extends Reflux.Component {
     super()
     refluxConnect(this, UploadStore, 'upload')
   }
+
   // life cycle events --------------------------------------------------
-
-  componentDidMount() {
-    this.refs.fileSelect.setAttribute('webkitdirectory', true)
-    this.refs.fileSelect.setAttribute('directory', true)
-    this._setRefs(this.refs)
-  }
-
   render() {
     let resumeIcon = (
       <span>
@@ -41,9 +35,10 @@ class Upload extends Reflux.Component {
           type="file"
           id="multifile-select"
           className="multifile-select-btn"
-          onClick={this._click}
-          onChange={this._onFileSelect}
-          ref="fileSelect"
+          onClick={this._click.bind(this)}
+          onChange={this._onFileSelect.bind(this)}
+          webkitdirectory="true"
+          directory="true"
         />
       </div>
     )
@@ -52,7 +47,6 @@ class Upload extends Reflux.Component {
   // custom methods -----------------------------------------------------
 
   _click(e) {
-    this.refs.fileSelect.value = null
     e.stopPropagation()
     if (!bowser.chrome && !bowser.chromium) {
       let chromeMessage = (
