@@ -147,14 +147,16 @@ class Dataset extends Reflux.Component {
         message = 'You are not authorized to view this dataset'
       }
       content = (
-        <div>
-          <h2 className="message-4">{message}</h2>
+        <div className="page dataset">
+          <div className="dataset-container">
+            <h2 className="message-4">{message}</h2>
+          </div>
         </div>
       )
     }
 
     return (
-      <div className="dataset">
+      <div className="page dataset">
         <div
           className={
             showSidebar ? 'open dataset-container' : 'dataset-container'
