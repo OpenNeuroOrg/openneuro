@@ -5,7 +5,7 @@ import Reflux from 'reflux'
 import Actions from '../upload/upload.actions.js'
 import UploadStore from '../upload/upload.store.js'
 import Upload from '../upload/upload.jsx'
-import { Modal } from 'react-bootstrap'
+import { Modal } from '../utils/modal.jsx'
 import Progress from '../upload/upload.progress.jsx'
 import { refluxConnect } from '../utils/reflux'
 

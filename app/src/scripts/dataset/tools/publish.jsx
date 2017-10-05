@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import actions from '../dataset.actions.js'
-import { Modal } from 'react-bootstrap'
+import { Modal } from '../../utils/modal.jsx'
 import moment from 'moment'
 
 class Publish extends React.Component {

@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import actions from './dataset.actions.js'
-import { Modal } from 'react-bootstrap'
+import { Modal } from '../utils/modal.jsx'
 
 export default class Publish extends React.Component {
   // life cycle events --------------------------------------------------

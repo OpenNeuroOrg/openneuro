@@ -5,7 +5,7 @@ import Reflux from 'reflux'
 import adminStore from './admin.store'
 import actions from './admin.actions'
 import Input from '../common/forms/input.jsx'
-import { Modal } from 'react-bootstrap'
+import { Modal } from '../utils/modal.jsx'
 import { refluxConnect } from '../utils/reflux'
 
 class BlacklistModal extends Reflux.Component {
