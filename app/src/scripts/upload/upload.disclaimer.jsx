@@ -41,6 +41,9 @@ export default class Disclaimer extends React.Component {
             the grace period in case the publication of a corresponding paper takes longer than expected.
             See <a href="/faq">FAQ</a> for details.
           </p>
+          <p>
+            Please refrain from uploading datasets already publicly available in other repositories.
+          </p>
         </span>
         <button className="btn-blue" onClick={actions.resumeUpload}>
           I Agree
