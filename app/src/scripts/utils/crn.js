@@ -136,6 +136,7 @@ export default {
       status: status,
       latest: latest,
       all: all,
+      results: false,
     }
     request.get(config.crn.url + 'jobs', { query: query }, callback)
   },

@@ -384,6 +384,7 @@ let handlers = {
   getJobs(req, res) {
     let reqAll = false
     let reqPublic = req.query.public === 'true'
+    const includeResults = req.query.results === 'true'
     if (req.isSuperUser) {
       reqAll = req.query.all === 'true'
       // If all jobs are requested, skip the public query
@@ -400,9 +401,15 @@ let handlers = {
       jobsQuery['analysis.status'] = req.query.status
     }
     jobsQuery.deleted = { $ne: true }
-    let jobsResults = c.crn.jobs
-      .find(jobsQuery)
-      .sort({ 'analysis.created': -1 })
+    let jobsResults
+    if (includeResults) {
+      jobsResults = c.crn.jobs.find(jobsQuery).sort({ 'analysis.created': -1 })
+    } else {
+      const jobsProjection = { results: 0, 'analysis.logstreams': 0 }
+      jobsResults = c.crn.jobs
+        .find(jobsQuery, jobsProjection)
+        .sort({ 'analysis.created': -1 })
+    }
     jobsResults.toArray((err, jobs) => {
       if (err) {
         res.send(err)
