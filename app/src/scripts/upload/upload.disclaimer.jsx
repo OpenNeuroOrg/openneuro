@@ -35,9 +35,9 @@ export default class Disclaimer extends React.Component {
             or{' '}
             <a href="https://creativecommons.org/licenses/by/4.0/legalcode">
               Creative Commons CC-BY
-            </a>{' '} license (depending on the dataset metadata) after a grace period of 18 months
+            </a>{' '} license (depending on the dataset metadata) after a grace period of 36 months
             counted from first successful analysis of data from more than one
-            participant. You will be able to apply for up to three 6 month extensions to increase
+            participant. You will be able to apply for up to two 6 month extensions to increase
             the grace period in case the publication of a corresponding paper takes longer than expected.
             See <a href="/faq">FAQ</a> for details.
           </p>
