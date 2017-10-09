@@ -1,6 +1,6 @@
 {
   "name": "CRN",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "React JS web frontend for the CRN application.",
   "license": "MIT",
   "main": "app.js",
