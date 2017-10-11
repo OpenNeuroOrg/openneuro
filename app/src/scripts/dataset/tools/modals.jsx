@@ -43,7 +43,10 @@ class ToolModals extends Reflux.Component {
           loadingApps={loadingApps}
           snapshots={snapshots}
           show={modals.jobs}
-          onHide={datasetActions.dismissJobsModal.bind(null, history)}
+          onHide={datasetActions.dismissJobsModal.bind(
+            null,
+            this.props.history,
+          )}
         />
         <Publish
           dataset={dataset}
