@@ -182,7 +182,7 @@ class Publish extends React.Component {
      */
   _createSnapshot() {
     this.setState({ loading: true })
-    actions.createSnapshot(res => {
+    actions.createSnapshot.bind(null, this.props.history)(res => {
       if (res.error) {
         this.setState({
           error: true,
