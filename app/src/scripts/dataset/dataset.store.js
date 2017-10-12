@@ -1340,7 +1340,7 @@ let datasetStore = Reflux.createStore({
   /**
      * Dismiss Job Modal
      */
-  dismissJobsModal(history, success, snapshotId, appLabel, appVersion, jobId) {
+  dismissJobsModal(success, snapshotId, appLabel, appVersion, jobId, history) {
     this.toggleModal('jobs')
     if (success) {
       if (snapshotId !== this.data.dataset._id) {
