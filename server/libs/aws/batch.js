@@ -41,7 +41,9 @@ const extractJobLog = job => {
 }
 
 /*
- * Filter for stale jobs
+ * Factory to create a stale job filter for a specific time
+ * Takes a current Date object and the function returned is 
+ * used with any filter
  */
 const staleJobFilter = (now) => job => {
   // Kill jobs that are still running and where the actual container start time was 48 hours ago
@@ -118,6 +120,9 @@ export default aws => {
       // Subtract two days from the current date to search
       const twoDaysAgo = new Date()
       twoDaysAgo.setDate(twoDaysAgo.getDate() - 2)
+      // This query will get some jobs we don't want to stop since
+      // those jobs may have spent time in pending or runnable
+      // Tasks are filtered to only long run times in _terminateOldJobs
       const query = {
         'analysis.status': 'RUNNING',
         'analysis.started': { $lte: twoDaysAgo },
