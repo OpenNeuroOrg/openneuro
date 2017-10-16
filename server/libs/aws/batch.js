@@ -3,7 +3,7 @@ import crypto from 'crypto'
 import uuid from 'uuid'
 import mongo from '../mongo'
 import { ObjectID } from 'mongodb'
-import { parallel, reduce, eachOfSeries } from 'async'
+import { parallel, reduce } from 'async'
 import config from '../../config'
 import emitter from '../events'
 import notifications from '../notifications'
@@ -137,7 +137,7 @@ export default aws => {
               .map(status => status.job),
           )
         }, [])
-        batchMethods._terminateOldJobs(runningTasks)
+        batchMethods._terminateOldJobs(batch, runningTasks)
       })
     },
 
@@ -146,23 +146,23 @@ export default aws => {
      * running for too long.
      * Up to 100 jobs can be killed at once
      */
-    _terminateOldJobs(jobs) {
+    _terminateOldJobs(sdk, jobs) {
       if (jobs.length) {
         const params = { jobs: jobs.slice(0, 100) }
-        batch.describeJobs(params, (err, data) => {
+        sdk.describeJobs(params, (err, data) => {
           if (err) {
             console.log('_terminateOldJobs', err)
             return err
           }
           const now = new Date()
           const terminate = data.jobs.filter(staleJobFilter(now))
-          eachOfSeries(terminate, job => {
+          terminate.map(job => {
             const params = {
               jobId: job.jobId,
               reason:
                 'This analysis task did not complete within 48 hours and has failed due to timeout',
             }
-            batch.terminateJob(params)
+            return sdk.terminateJob(params)
           })
         })
       }
