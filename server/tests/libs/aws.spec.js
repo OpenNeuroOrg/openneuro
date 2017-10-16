@@ -205,6 +205,23 @@ describe('libs/aws/batch.js', () => {
       )
     })
   })
+  describe('staleJobFilter', () => {
+    it('excludes one day running jobs', () => {
+      const oldJob = {startedAt: 1, status: 'RUNNING'}
+      const now = new Date(1 + 60 * 60 * 24)
+      assert(!aws.batch.staleJobFilter(now)(oldJob))
+    })
+    it('excludes two day old jobs that are not running', () => {
+      const oldJob = {startedAt: 1, status: 'FAILED'}
+      const now = new Date(1 + 60 * 60 * 48)
+      assert(!aws.batch.staleJobFilter(now)(oldJob))
+    })
+    it('includes two day running jobs', () => {
+      const oldJob = {startedAt: 1, status: 'RUNNING'}
+      const now = new Date(1 + 60 * 60 * 48)
+      assert(aws.batch.staleJobFilter(now)(oldJob))
+    })
+  })
 })
 
 describe('libs/aws/cloudwatchlogs.js', () => {

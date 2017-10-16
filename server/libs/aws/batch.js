@@ -40,12 +40,29 @@ const extractJobLog = job => {
   return jobLog
 }
 
+/*
+ * Filter for stale jobs
+ */
+const staleJobFilter = (now) => job => {
+  // Kill jobs that are still running and where the actual container start time was 48 hours ago
+  if (
+    'startedAt' in job &&
+    now.getTime() - job.startedAt >= 60 * 60 * 48 &&
+    job.status === 'RUNNING'
+  ) {
+    return true
+  }
+  return false
+}
+
 export default aws => {
   const batch = new aws.Batch()
   const s3 = s3func(aws)
 
   const batchMethods = {
     sdk: batch,
+
+    staleJobFilter: staleJobFilter,
 
     initCron() {
       new cron.CronJob(
@@ -127,23 +144,13 @@ export default aws => {
     _terminateOldJobs(jobs) {
       if (jobs.length) {
         const params = { jobs: jobs.slice(0, 100) }
-        const now = new Date()
         batch.describeJobs(params, (err, data) => {
           if (err) {
             console.log('_terminateOldJobs', err)
             return err
           }
-          const terminate = data.jobs.filter(job => {
-            // Kill jobs that are still running and where the actual container start time was 48 hours ago
-            if (
-              'startedAt' in job &&
-              now.getTime() - job.startedAt > 60 * 60 * 48 &&
-              job.status === 'RUNNING'
-            ) {
-              return true
-            }
-            return false
-          })
+          const now = new Date()
+          const terminate = data.jobs.filter(staleJobFilter(now))
           eachOfSeries(terminate, job => {
             const params = {
               jobId: job.jobId,
