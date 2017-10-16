@@ -73,7 +73,7 @@ export default aws => {
         'America/Los_Angeles',
       )
       new cron.CronJob(
-        '15 * * * * *',
+        '0 15 * * * *',
         this._cleanupJobs,
         null,
         true,
