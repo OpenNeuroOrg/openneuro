@@ -56,7 +56,7 @@ export default aws => {
         'America/Los_Angeles',
       )
       new cron.CronJob(
-        '10 * * * * *',
+        '15 * * * * *',
         this._cleanupJobs,
         null,
         true,
@@ -115,38 +115,45 @@ export default aws => {
               .map(status => status.job),
           )
         }, [])
-        this._terminateOldJobs(runningTasks)
+        batchMethods._terminateOldJobs(runningTasks)
       })
     },
 
     /*
-     * Takes a list of job ids to check for on Batch and kill if they have been running for too long
+     * Takes a list of job ids to check for on Batch and kill if they have been
+     * running for too long.
      * Up to 100 jobs can be killed at once
      */
     _terminateOldJobs(jobs) {
-      const params = { jobs: jobs.slice(0, 100) }
-      const now = new Date()
-      aws.batch.describeJobs(params, (err, data) => {
-        const terminate = data.jobs.filter(job => {
-          // Kill jobs that are still running and where the actual container start time was 48 hours ago
-          if (
-            'startedAt' in job &&
-            now.getTime() - job.startedAt > 60 * 60 * 48 &&
-            job.status === 'RUNNING'
-          ) {
-            return true
+      if (jobs.length) {
+        const params = { jobs: jobs.slice(0, 100) }
+        const now = new Date()
+        batch.describeJobs(params, (err, data) => {
+          if (err) {
+            console.log('_terminateOldJobs', err)
+            return err
           }
-          return false
+          const terminate = data.jobs.filter(job => {
+            // Kill jobs that are still running and where the actual container start time was 48 hours ago
+            if (
+              'startedAt' in job &&
+              now.getTime() - job.startedAt > 60 * 60 * 48 &&
+              job.status === 'RUNNING'
+            ) {
+              return true
+            }
+            return false
+          })
+          eachOfSeries(terminate, job => {
+            const params = {
+              jobId: job.jobId,
+              reason:
+                'This analysis task did not complete within 48 hours and has failed due to timeout',
+            }
+            batch.terminateJob(params)
+          })
         })
-        eachOfSeries(terminate, job => {
-          const params = {
-            jobId: job.jobId,
-            reason:
-              'This analysis task did not complete within 48 hours and has failed due to timeout',
-          }
-          aws.batch.terminateJob(params)
-        })
-      })
+      }
     },
 
     /**
