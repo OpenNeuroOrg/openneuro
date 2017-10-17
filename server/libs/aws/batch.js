@@ -125,7 +125,7 @@ export default aws => {
       // Tasks are filtered to only long run times in _terminateOldJobs
       const query = {
         'analysis.status': 'RUNNING',
-        'analysis.started': { $lte: twoDaysAgo },
+        'analysis.created': { $lte: twoDaysAgo },
       }
       const projection = { 'analysis.batchStatus': true }
       c.crn.jobs.find(query, projection).toArray((err, jobs) => {
