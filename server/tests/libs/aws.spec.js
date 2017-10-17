@@ -205,6 +205,42 @@ describe('libs/aws/batch.js', () => {
       )
     })
   })
+  describe('staleJobFilter', () => {
+    it('excludes one day running jobs', () => {
+      const oldJob = {startedAt: 1, status: 'RUNNING'}
+      const now = new Date(1 + 60 * 60 * 24)
+      assert(!aws.batch.staleJobFilter(now)(oldJob))
+    })
+    it('excludes two day old jobs that are not running', () => {
+      const oldJob = {startedAt: 1, status: 'FAILED'}
+      const now = new Date(1 + 60 * 60 * 48)
+      assert(!aws.batch.staleJobFilter(now)(oldJob))
+    })
+    it('includes two day running jobs', () => {
+      const oldJob = {startedAt: 1, status: 'RUNNING'}
+      const now = new Date(1 + 60 * 60 * 48)
+      assert(aws.batch.staleJobFilter(now)(oldJob))
+    })
+  })
+  describe('_terminateOldJobs', () => {
+    it('terminates the input jobs', () => {
+      const threeDaysAgo = new Date()
+      threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
+      const batch = {
+        describeJobs: jest.fn((params, callback) => {
+          callback(null, {jobs: params.jobs.map(jobId => {
+            return {jobId: jobId, status: 'RUNNING', startedAt: threeDaysAgo}
+          })})
+        }),
+        terminateJob: jest.fn(),
+      }
+      const jobIds = ['f1a5320d-f0d3-4cfb-8c26-f725c3b9a48e', 'abbcce16-f0ff-4ec1-8ede-4502660e8aa2']
+      const params = {jobs: jobIds}
+      aws.batch._terminateOldJobs(batch, jobIds)
+      expect(batch.describeJobs).toBeCalledWith(params, expect.any(Function))
+      expect(batch.terminateJob).toHaveBeenCalledTimes(jobIds.length)
+    })
+  })
 })
 
 describe('libs/aws/cloudwatchlogs.js', () => {

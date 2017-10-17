@@ -40,12 +40,31 @@ const extractJobLog = job => {
   return jobLog
 }
 
+/*
+ * Factory to create a stale job filter for a specific time
+ * Takes a current Date object and the function returned is 
+ * used with any filter
+ */
+const staleJobFilter = (now) => job => {
+  // Kill jobs that are still running and where the actual container start time was 48 hours ago
+  if (
+    'startedAt' in job &&
+    now.getTime() - job.startedAt >= 60 * 60 * 48 &&
+    job.status === 'RUNNING'
+  ) {
+    return true
+  }
+  return false
+}
+
 export default aws => {
   const batch = new aws.Batch()
   const s3 = s3func(aws)
 
   const batchMethods = {
     sdk: batch,
+
+    staleJobFilter: staleJobFilter,
 
     initCron() {
       new cron.CronJob(
@@ -55,15 +74,22 @@ export default aws => {
         true,
         'America/Los_Angeles',
       )
+      new cron.CronJob(
+        '0 15 * * * *',
+        this._cleanupJobs,
+        null,
+        true,
+        'America/Los_Angeles',
+      )
     },
 
     _pollJob() {
       /**
-             * queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
-             * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
-             * also just query jobs that have not had a notification sent otherwise REJECTED jobs will always be returned
-             * polling occurs on a 10 second interval
-             */
+       * queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
+       * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
+       * also just query jobs that have not had a notification sent otherwise REJECTED jobs will always be returned
+       * polling occurs on a 10 second interval
+       */
       c.crn.jobs.findAndModify(
         {
           'analysis.status': { $nin: ['SUCCEEDED', 'FAILED', 'UPLOADING'] },
@@ -85,6 +111,61 @@ export default aws => {
           }
         },
       )
+    },
+
+    /*
+     * Looks for rogue jobs and terminates them as needed
+     */
+    _cleanupJobs() {
+      // Subtract two days from the current date to search
+      const twoDaysAgo = new Date()
+      twoDaysAgo.setDate(twoDaysAgo.getDate() - 2)
+      // This query will get some jobs we don't want to stop since
+      // those jobs may have spent time in pending or runnable
+      // Tasks are filtered to only long run times in _terminateOldJobs
+      const query = {
+        'analysis.status': 'RUNNING',
+        'analysis.created': { $lte: twoDaysAgo },
+      }
+      const projection = { 'analysis.batchStatus': true }
+      c.crn.jobs.find(query, projection).toArray((err, jobs) => {
+        // For each analysis, collect the running task ids
+        const runningTasks = jobs.reduce((tasks, job) => {
+          return tasks.concat(
+            job.analysis.batchStatus
+              .filter(status => status.status === 'RUNNING')
+              .map(status => status.job),
+          )
+        }, [])
+        batchMethods._terminateOldJobs(batch, runningTasks)
+      })
+    },
+
+    /*
+     * Takes a list of job ids to check for on Batch and kill if they have been
+     * running for too long.
+     * Up to 100 jobs can be killed at once
+     */
+    _terminateOldJobs(sdk, jobs) {
+      if (jobs.length) {
+        const params = { jobs: jobs.slice(0, 100) }
+        sdk.describeJobs(params, (err, data) => {
+          if (err) {
+            console.log('_terminateOldJobs', err)
+            return err
+          }
+          const now = new Date()
+          const terminate = data.jobs.filter(staleJobFilter(now))
+          terminate.map(job => {
+            const params = {
+              jobId: job.jobId,
+              reason:
+                'This analysis task did not complete within 48 hours and has failed due to timeout',
+            }
+            return sdk.terminateJob(params)
+          })
+        })
+      }
     },
 
     /**
