@@ -32,9 +32,17 @@ export default class Disclaimer extends React.Component {
             <a href="https://wiki.creativecommons.org/wiki/CC0">
               Creative Commons CC0
             </a>{' '}
-            (“no rights reserved”) license after a grace period of 18 months
+            or{' '}
+            <a href="https://creativecommons.org/licenses/by/4.0/legalcode">
+              Creative Commons CC-BY
+            </a>{' '} license (depending on the dataset metadata) after a grace period of 36 months
             counted from first successful analysis of data from more than one
-            participant.
+            participant. You will be able to apply for up to two 6 month extensions to increase
+            the grace period in case the publication of a corresponding paper takes longer than expected.
+            See <a href="/faq">FAQ</a> for details.
+          </p>
+          <p>
+            Please refrain from uploading datasets already publicly available in other repositories.
           </p>
         </span>
         <button className="btn-blue" onClick={actions.resumeUpload}>
