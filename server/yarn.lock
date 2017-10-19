@@ -874,9 +874,9 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bids-validator@^0.23.2:
-  version "0.23.2"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.23.2.tgz#672ff1b8368a417a41c9b1f28c2a12c571d32975"
+bids-validator@^0.23.10:
+  version "0.23.10"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.23.10.tgz#288e514f8cf6bdb8e5834d62247540f7dfb93090"
   dependencies:
     ajv "^5.2.2"
     async "^2.1.5"
