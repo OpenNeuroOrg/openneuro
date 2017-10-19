@@ -427,7 +427,7 @@ let datasetStore = Reflux.createStore({
   /**
      * Toggle Modal
      */
-  toggleModal(name, history, callback) {
+  toggleModal(name, callback) {
     let update = {}
 
     // reload app is missing for job modals
