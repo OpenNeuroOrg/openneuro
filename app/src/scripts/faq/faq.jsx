@@ -28,7 +28,7 @@ class Faq extends React.Component {
         ),
         faq_answer: (
           <span>
-            Yes, but only for a period of 18 months counted from first
+            Yes, but only for a period of 36 months counted from first
             successful analysis of data from more than one participant. After
             this period the dataset and related analysis results will be made
             publicly available.
@@ -56,12 +56,42 @@ class Faq extends React.Component {
               <li>
                 You agree that this dataset and results of all analyses
                 performed on it using the OpenNeuro platform will become
-                publicly available under a Creative Commons CC0 (“no rights
-                reserved”) license after a grace period of 18 months counted
-                from first successful analysis of data from more than one
-                participant.
+                publicly available under a Creative Commons CC0 or CC-BY license
+                after a grace period of 36 months counted from first successful
+                analysis of data from more than one participant.
               </li>
             </ul>
+          </span>
+        ),
+      },
+      {
+        faq: (
+          <span>
+            What if I will not be able to publish my paper in 36 months?
+          </span>
+        ),
+        faq_answer: (
+          <span>
+            You can apply for up to two 6 month long extensions of the grace
+            period. To apply please contact support. We encourage you to publish
+            a preprint of your work to reduce the uncertainty of the publishing
+            pipeline.
+          </span>
+        ),
+      },
+      {
+        faq: (
+          <span>
+            Can I upload and analyze a publicly available dataset from another
+            repository?
+          </span>
+        ),
+        faq_answer: (
+          <span>
+            The mission of OpenNeuro is to incentivize data sharing via
+            providing data analysis service. Thus we discourage using it to
+            analyze already publicly available datasets. This policy might
+            change in the future depending on improvements in analysis cost.
           </span>
         ),
       },
