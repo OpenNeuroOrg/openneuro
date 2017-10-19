@@ -64,7 +64,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
       className="panel-body"
     >
       <span>
-        Yes, but only for a period of 18 months counted from first successful analysis of data from more than one participant. After this period the dataset and related analysis results will be made publicly available.
+        Yes, but only for a period of 36 months counted from first successful analysis of data from more than one participant. After this period the dataset and related analysis results will be made publicly available.
       </span>
     </div>
   </div>
@@ -91,9 +91,45 @@ exports[`faq/faq/Faq renders successfully 1`] = `
             This dataset does not include any identifiable personal health information as defined by the Health Insurance Portability and Accountability Act of 1996 (including names, zip codes, dates of birth, acquisition dates, facial features on structural scans etc.).
           </li>
           <li>
-            You agree that this dataset and results of all analyses performed on it using the OpenNeuro platform will become publicly available under a Creative Commons CC0 (“no rights reserved”) license after a grace period of 18 months counted from first successful analysis of data from more than one participant.
+            You agree that this dataset and results of all analyses performed on it using the OpenNeuro platform will become publicly available under a Creative Commons CC0 or CC-BY license after a grace period of 36 months counted from first successful analysis of data from more than one participant.
           </li>
         </ul>
+      </span>
+    </div>
+  </div>
+  <div
+    className="panel"
+  >
+    <div
+      className="panel-heading"
+    >
+      <span>
+        What if I will not be able to publish my paper in 36 months?
+      </span>
+    </div>
+    <div
+      className="panel-body"
+    >
+      <span>
+        You can apply for up to two 6 month long extensions of the grace period. To apply please contact support. We encourage you to publish a preprint of your work to reduce the uncertainty of the publishing pipeline.
+      </span>
+    </div>
+  </div>
+  <div
+    className="panel"
+  >
+    <div
+      className="panel-heading"
+    >
+      <span>
+        Can I upload and analyze a publicly available dataset from another repository?
+      </span>
+    </div>
+    <div
+      className="panel-body"
+    >
+      <span>
+        The mission of OpenNeuro is to incentivize data sharing via providing data analysis service. Thus we discourage using it to analyze already publicly available datasets. This policy might change in the future depending on improvements in analysis cost.
       </span>
     </div>
   </div>
