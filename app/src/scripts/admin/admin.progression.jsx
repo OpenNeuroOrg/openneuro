@@ -53,9 +53,6 @@ let Progresssion = React.createClass({
       <div className="dashboard-dataset-teasers fade-in">
         <div className="header-wrap clearfix">
           <div className="col-sm-9">
-            <h1 className="testing123">
-              Lazy loading: {this.state.chart} whaaaa
-            </h1>
             <div>
               <label>Please make a selection: </label>
               <form>
