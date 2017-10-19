@@ -40,7 +40,8 @@
     "reflux": "^0.2.7",
     "remarkable": "1.6.2",
     "spark-md5": "^1.0.0",
-    "superagent": "^3.6.0"
+    "superagent": "^3.6.0",
+    "victory": "^0.23.1"
   },
   "devDependencies": {
     "babel": "5.8.23",

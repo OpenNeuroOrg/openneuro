@@ -78,6 +78,9 @@ let UserStore = Reflux.createStore({
       blacklistError: '',
       eventLogs: [],
       filteredLogs: [],
+      failedLogs: [],
+      successLogs: [],
+      uploadingLogs: [],
       resultsPerPage: 30,
       page: 0,
     }
@@ -171,7 +174,6 @@ let UserStore = Reflux.createStore({
   searchLogs(input) {
     // If the API is unavailable, there are no logs to search
     let eventLogs = this.data.eventLogs || []
-
     for (let log of eventLogs) {
       log.visible = true
       input = input.toLowerCase()
@@ -189,6 +191,40 @@ let UserStore = Reflux.createStore({
     })
 
     this.update({ eventLogs, filteredLogs })
+  },
+
+  // ** Filters Eventlog to smaller logs based on job status *
+  // uploading contains all jobs, as all jobs are uploaded.
+  filterLogs() {
+    console.log('Pop!')
+    let eventLogs = this.data.eventLogs || []
+    // console log data object
+    console.log('This is the data object at componentWillMount()')
+    console.log('----------------------------')
+    console.log(this.data)
+    console.log('----------------------------')
+
+    // loop through object
+    for (let log of eventLogs) {
+      // look for job statuses
+      let eventStatus = log.data.job.status.toLowerCase()
+      // Check for the status, and then check if log already exists within the the array
+      if (eventStatus === 'failed' && !this.data.failedLogs.includes(log)) {
+        this.data.failedLogs.push(log)
+        // this.update({ failedLogs : log})
+      } else if (
+        eventStatus === 'success' &&
+        !this.data.successLogs.includes(log)
+      ) {
+        this.data.successLogs.push(log)
+      } else if (
+        log.type === 'JOB_STARTED' &&
+        eventStatus === 'uploading' &&
+        !this.data.uploadingLogs.includes(log)
+      ) {
+        this.data.uploadingLogs.push(log)
+      }
+    }
   },
 
   /**

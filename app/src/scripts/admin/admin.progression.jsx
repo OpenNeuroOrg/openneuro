@@ -1,99 +1,85 @@
 // dependencies ----------------------------------------------------------------------
 
-import React 			from 'react'
-import Reflux 			from 'reflux'
-import Actions 			from './admin.actions.js'
-import adminStore 		from './admin.store'
-import {Link}			from 'react-router'
-import {Route}			from 'react-router'
+import React from 'react'
+import Reflux from 'reflux'
+import actions from './admin.actions.js'
+import adminStore from './admin.store'
+import { Link } from 'react-router'
+import { Route } from 'react-router'
+import Chart from './charts/admin.progression-chart.jsx'
 
-// import Chart 			from './charts/admin.progression-chart.jsx'
-// import LoadingChart		from 'bundle-loader!./charts/admin.progression-chart.jsx'
-import { VictoryPie} 	from 'victory'
-
+import { VictoryPie } from 'victory'
+import { VictoryScatter } from 'victory'
+import { VictoryLabel } from 'victory'
 
 let Progresssion = React.createClass({
-  	mixins: [Reflux.connect(adminStore)],
-	
-	getInitialState() {
-		let initialState = {
-			"chart" : "whaddup",
-			"count" : 0,
-			"failedLogs": [],
-		}
-		return initialState;
-	},
+  mixins: [Reflux.connect(adminStore)],
 
-// // Lazy Loading ----------------------------------------------------------------------
-// 	componentDidMount() {
-// 		const load = require("bundle-loader!./charts/admin.progression-chart.jsx")(function(file) {
-// 			// console.log(typeof(file));
-// 			// this.setState({"chart": "fudge"});
-// 			return file;
-// 		});
-// 		// console.log(load);
-// 	},
-	
+  getInitialState() {
+    let initialState = {
+      value: 'failed',
+      failed: 90,
+      success: 60,
+    }
 
-// Life Cycle ----------------------------------------------------------------------
+    return initialState
+  },
 
-	render() {
+  // Life Cycle ----------------------------------------------------------------------
 
-		return (
-			<div className="dashboard-dataset-teasers fade-in">
-				<div className="header-wrap clearfix">
-					<div className="col-sm-9">
-						<h1 className="testing123">Lazy loading: {this.state.chart} whaaaa</h1>
-					</div>
-				</div>
-			</div>
-		)
-	},
+  componentWillMount() {
+    // filterLogs() takes all of the logs from the eventLogs[] and filters the logs into their own arrays depending on the status of the job. failedLogs, successLogs, uploadingLogs. I was hoping to gather successes, failures, and currently uploading jobs. "Pop!" signifies the function has run.
+    actions.filterLogs()
 
-	chartItUp() {
-		let eventLogs = this.state.eventLogs;
-		let logs = [];
-		// let failedLogs = [];
-		let uploadingLogs = [];
+    // At this state the failedLogs[] is empty are veiwable within the console
+    console.log('the failedLogs[] length: ' + this.state.failedLogs.length)
 
-    	Object.keys(eventLogs).map((key) => {
-			let job = eventLogs[key];
-			// console.log(job);
-			let status = job.data.job.status;
-			if (status != undefined || status != null) {
-				if (status === "FAILED") {
-					this.state.failedLogs.push(job._id);
-				} else {
-					uploadingLogs.push(job._id);
-				}
-				console.log(this.state.failedLogs);
-			}
-    	});
-			// logs.push(data);	
-			
-		let data = [
-			{x : "failures", y : 19},
-			{x : "uploading",  y : 21}
-		]
+    // Was attempting to set the state equal to the lenght of those logs
+    console.log(
+      'The filtered logs length is: ' + this.state.filteredLogs.length,
+    )
+  },
 
-    	return (
-    		<div>
-				<h2>This is the chart currently loading:</h2>
-				<VictoryPie 
-				data = {data}
-				/>
-			</div>
-    		)
-	}
+  componentDidMount() {
+    console.log(
+      'this is the length of failedLogs[] AFTER the render method: ' +
+        this.state.failedLogs.length,
+    )
+  },
 
-});
+  render() {
+    // Ignore the select menu.
+    return (
+      <div className="dashboard-dataset-teasers fade-in">
+        <div className="header-wrap clearfix">
+          <div className="col-sm-9">
+            <h1 className="testing123">
+              Lazy loading: {this.state.chart} whaaaa
+            </h1>
+            <div>
+              <label>Please make a selection: </label>
+              <form>
+                <div>
+                  <select value={this.state.value} onChange={this.handleChange}>
+                    <option value="failed">Failed</option>
+                    <option value="success">Successful</option>
+                    <option value="rejected">rejected</option>
+                  </select>
+                </div>
+              </form>
+            </div>
+          </div>
+          <Chart failed={this.state.failed} success={this.state.success} />
+        </div>
+      </div>
+    )
+  },
 
-// Progresssion.proptypes =  {
-// 	jobName: React.proptypes.string,
-// 	jobId: React.proptypes.string,
-// 	status: React.proptypes.string,
-// 	link: React.proptypes.func,
-// }
+  handleChange(e) {
+    this.setState({
+      value: e.target.value,
+    })
+  },
+})
 
-
-export default Progresssion;
+export default Progresssion

@@ -19,6 +19,7 @@ var Actions = Reflux.createActions([
   'unBlacklistUser',
   'update',
   'searchLogs',
+  'filterLogs',
 ])
 
 export default Actions
