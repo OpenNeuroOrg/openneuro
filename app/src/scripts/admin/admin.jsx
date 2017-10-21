@@ -50,9 +50,9 @@ class Dashboard extends React.Component {
                 All Jobs
               </Link>
             </li>
-                <li>
-              <Link to="progression" className="btn-tab">
-                Progression
+            <li>
+              <Link to="progression-graphs" className="btn-tab">
+                Progress Graphs
               </Link>
             </li>
           </ul>
