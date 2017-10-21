@@ -80,7 +80,7 @@ let UserStore = Reflux.createStore({
       filteredLogs: [],
       failedLogs: [],
       successLogs: [],
-      uploadingLogs: [],
+      uploadedLogs: [],
       resultsPerPage: 30,
       page: 0,
     }
@@ -196,33 +196,28 @@ let UserStore = Reflux.createStore({
   // ** Filters Eventlog to smaller logs based on job status *
   // uploading contains all jobs, as all jobs are uploaded.
   filterLogs() {
-    console.log('Pop!')
     let eventLogs = this.data.eventLogs || []
-    // console log data object
-    console.log('This is the data object at componentWillMount()')
-    console.log('----------------------------')
-    console.log(this.data)
-    console.log('----------------------------')
-
-    // loop through object
+    console.log(eventLogs)
     for (let log of eventLogs) {
-      // look for job statuses
-      let eventStatus = log.data.job.status.toLowerCase()
-      // Check for the status, and then check if log already exists within the the array
-      if (eventStatus === 'failed' && !this.data.failedLogs.includes(log)) {
-        this.data.failedLogs.push(log)
-        // this.update({ failedLogs : log})
-      } else if (
-        eventStatus === 'success' &&
-        !this.data.successLogs.includes(log)
-      ) {
-        this.data.successLogs.push(log)
-      } else if (
-        log.type === 'JOB_STARTED' &&
-        eventStatus === 'uploading' &&
-        !this.data.uploadingLogs.includes(log)
-      ) {
-        this.data.uploadingLogs.push(log)
+      if (!eventLogs.length) {
+        this.getEventLogs()
+      } else if (log.type != 'JOB_STARTED') {
+        let data = this.data
+        let eventStatus = log.data.job.status.toLowerCase()
+
+        if (eventStatus === 'failed' && !data.failedLogs.includes(log)) {
+          data.failedLogs.push(log)
+          this.update(data)
+        } else if (
+          eventStatus === 'success' &&
+          !data.successLogs.includes(log)
+        ) {
+          data.successLogs.push(log)
+          this.update(data)
+        } else if (!data.uploadedLogs.includes(log)) {
+          data.uploadedLogs.push(log)
+          this.update(data)
+        }
       }
     }
   },
@@ -561,6 +556,9 @@ let UserStore = Reflux.createStore({
       let eventLogs = data.body
       this.update({ eventLogs }, () => {
         this.searchLogs('')
+        if (eventLogs.length) {
+          this.filterLogs()
+        }
       })
     })
   },

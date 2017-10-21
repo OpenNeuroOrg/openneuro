@@ -1,0 +1,16 @@
+.chart {
+  width: 100%;
+  * {
+    text-align: center;
+  }
+
+  svg {
+    width: 40% !important;
+    g > path:nth-child(1) {
+      fill: $brand-danger !important;
+    }
+    g > path:nth-child(2) {
+      fill: $brand-success !important;
+    }
+  }
+}
