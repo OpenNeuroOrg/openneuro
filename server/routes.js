@@ -23,6 +23,16 @@ const routes = [
     handler: scitran.verifyUser,
   },
   {
+    method: 'get',
+    url: '/users/signin/orcid',
+    handler: users.validateORCIDToken,
+  },
+  {
+    method: 'get',
+    url: '/users/orcid',
+    handler: users.getORCIDProfile,
+  },
+  {
     method: 'post',
     url: '/users',
     middleware: [schema.validateBody(schemas.user.new)],

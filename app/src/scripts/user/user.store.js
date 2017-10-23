@@ -4,6 +4,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import actions from './user.actions.js'
 import google from '../utils/google'
+import orcid from '../utils/orcid'
 import crn from '../utils/crn'
 import scitran from '../utils/scitran'
 import router from '../utils/router-container'
@@ -21,36 +22,45 @@ let UserStore = Reflux.createStore({
   init() {
     this.setInitialState()
 
-    // initialize google APIs
-    google.init((err, user) => {
-      this.update(
-        {
-          token: user.token,
-          google: user.profile,
-        },
-        { persist: true },
-      )
-      if (user.token) {
-        crn.verifyUser((err, res) => {
-          if (res.body.code === 403) {
-            this.signOut()
-          } else {
-            this.update({ scitran: res.body }, { persist: true })
+    this.authMethods = {
+      google,
+      orcid,
+    }
+
+    switch (this.data.authMethod) {
+      case 'orcid':
+
+        break;
+
+      case 'google':
+      default:
+        // initialize google APIs
+        google.init((err, user) => {
+          this.update(
+            {
+              token: user.token,
+              profile: user.profile,
+              authMethod: 'google',
+            },
+            { persist: true },
+          )
+          if (user.token) {
+            crn.verifyUser((err, res) => {
+              if (res.body.code === 403) {
+                this.signOut()
+              } else {
+                this.update({ scitran: res.body }, { persist: true })
+              }
+            })
           }
         })
-      }
-    })
+        break;
+    }
   },
 
   getInitialState() {
     return this.data
   },
-
-  /**
-     * Instance of Google Auth object
-     * stored for further interaction.
-     */
-  authInstance: {},
 
   /**
      * Toggle Modal
@@ -87,8 +97,11 @@ let UserStore = Reflux.createStore({
         window.localStorage.token && window.localStorage.token !== 'undefined'
           ? JSON.parse(window.localStorage.token)
           : null,
-      google: window.localStorage.google
-        ? JSON.parse(window.localStorage.google)
+      profile: window.localStorage.profile
+        ? JSON.parse(window.localStorage.profile)
+        : null,
+      authMethod: window.localStorage.authMethod
+        ? JSON.parse(window.localStorage.authMethod)
         : null,
       scitran: window.localStorage.scitran
         ? JSON.parse(window.localStorage.scitran)
@@ -106,20 +119,14 @@ let UserStore = Reflux.createStore({
 
   // Auth Actions ----------------------------------------------------------------------
 
-  /**
-     * Signin
-     *
-     * Initiates the google OAuth2 sign in flow. Creates a new
-     * user if the user doesn't already exist.
-     */
   signIn(options) {
-    if (!google.initialized) {
-      return
-    }
     let transition = options.hasOwnProperty('transition')
       ? options.transition
       : true
-    google.signIn((err, user) => {
+
+    this.authMethods[options.authMethod]
+      .signIn((err, user) => {
+
       if (err) {
         return
       }
@@ -128,7 +135,8 @@ let UserStore = Reflux.createStore({
         {
           loading: true,
           token: user.token,
-          google: user.profile,
+          profile: user.profile,
+          authMethod: options.authMethod,
         },
         { persist: true },
       )
@@ -184,6 +192,31 @@ let UserStore = Reflux.createStore({
   },
 
   /**
+     * Signin
+     *
+     * Initiates the Google OAuth2 sign in flow. Creates a new
+     * user if the user doesn't already exist.
+     */
+  googleSignIn(options) {
+    if (!google.initialized) {
+      return
+    }
+    options.authMethod = 'google'
+    this.signIn(options)
+  },
+
+  /**
+     * Signin
+     *
+     * Initiates the ORCID OAuth2 sign in flow. Creates a new
+     * user if the user doesn't already exist.
+     */
+  orcidSignIn(options) {
+    options.authMethod = 'orcid'
+    this.signIn(options)
+  },
+
+  /**
      * Sign Out
      *
      * Signs the user out by destroying the current
@@ -215,10 +248,12 @@ let UserStore = Reflux.createStore({
     delete window.localStorage.token
     delete window.localStorage.google
     delete window.localStorage.scitran
+    delete window.localStorage.orcid
     this.setInitialState({
       token: null,
       google: null,
       scitran: null,
+      orcid: null,
     })
   },
 
@@ -227,9 +262,9 @@ let UserStore = Reflux.createStore({
      *
      * Handles necessary action after a signin has been completed.
      */
-  handleSignIn(transition, scitran, google) {
+  handleSignIn(transition, scitran, profile) {
     this.update({ loading: false })
-    this.update({ scitran, google }, { persist: true })
+    this.update({ scitran, profile }, { persist: true })
     if (transition) {
       router.transitionTo('dashboard')
     } else {
@@ -252,7 +287,7 @@ let UserStore = Reflux.createStore({
       this.update(
         {
           token: user.token,
-          google: user.profile,
+          profile: user.profile,
         },
         { persist: true },
       )

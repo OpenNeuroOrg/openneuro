@@ -2,8 +2,10 @@
 
 import scitran from '../libs/scitran'
 import mongo from '../libs/mongo'
+import orcid from '../libs/orcid'
 
 let c = mongo.collections
+
 
 // handlers ----------------------------------------------------------------
 
@@ -14,6 +16,20 @@ let c = mongo.collections
  */
 export default {
   // create --------------------------------------------------------------
+
+  validateORCIDToken(req, res) {
+    let { code } = req.query
+    orcid.validateToken(code, (err, result) => {
+      res.send(result)
+    })
+  },
+
+  getORCIDProfile(req, res) {
+    let { accessToken, orcid: ORCID } = req.query
+    orcid.getProfile(accessToken, ORCID, (err, result) => {
+      res.send(result)
+    })
+  },
 
   /**
      * Create User

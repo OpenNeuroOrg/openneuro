@@ -55,7 +55,7 @@ let BSNavbar = React.createClass({
 
   _navMenu() {
     let isLoggedIn = !!this.state.token
-    let googleProfile = this.state.google
+    let profile = this.state.profile
     let loading = this.state.loading
     let routes = this.props.routes
     let adminLink = (
@@ -93,12 +93,12 @@ let BSNavbar = React.createClass({
           {this.state.scitran && this.state.scitran.root ? adminLink : null}
         </li>
         <li className="link-dashboard">
-          {googleProfile ? <UploadBtn /> : null}
+          {profile ? <UploadBtn /> :profile}
         </li>
         <li>
           <Navbar.Collapse eventKey={0}>
             {isLoggedIn && !loading ? (
-              <Usermenu profile={googleProfile} />
+              <Usermenu profile={profile} />
             ) : (
               this._signIn(loading, routes)
             )}
@@ -165,8 +165,14 @@ let BSNavbar = React.createClass({
         <div className="navbar-right sign-in-nav-btn">
           <button
             className="btn-blue"
-            onClick={userStore.signIn.bind(null, { transition: onFrontPage })}>
+            onClick={userStore.googleSignIn.bind(null, { transition: onFrontPage })}>
             <i className="fa fa-google" />
+            <span> Sign in</span>
+          </button>
+          <button
+            className="btn-blue"
+            onClick={userStore.orcidSignIn.bind(null, { transition: onFrontPage })}>
+            <span className="icon"><img alt="ORCID logo" width="20" height="20" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" /></span>
             <span> Sign in</span>
           </button>
         </div>
