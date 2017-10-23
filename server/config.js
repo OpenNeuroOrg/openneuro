@@ -26,6 +26,13 @@ let config = {
     consumerSecret: process.env.CRN_SERVER_AGAVE_CONSUMER_SECRET,
     storage: process.env.CRN_SERVER_AGAVE_STORAGE,
   },
+  auth: {
+    orcid: {
+      clientId: process.env.ORCID_AUTH_CLIENT_ID,
+      clientSecret: process.env.ORCID_AUTH_CLIENT_SECRET,
+      redirectURI: process.env.ORCID_AUTH_REDIRECT_URI,
+    },
+  },
   mongo: {
     url: 'mongodb://mongo:27017/',
   },

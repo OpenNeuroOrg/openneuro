@@ -53,15 +53,15 @@ export default {
      */
   getORCIDToken(code, callback) {
     request.get(config.crn.url + 'users/signin/orcid', {
-      query: { code }
+      query: { code, home: true }
     }, callback)
   },
   /**
      * Get ORCID profile
      */
-  getORCIDProfile(accessToken, orcid, callback) {
+  getORCIDProfile(accessToken, callback) {
     request.get(config.crn.url + 'users/orcid', {
-      query: { accessToken, orcid }
+      query: { accessToken }
     }, callback)
   },
 

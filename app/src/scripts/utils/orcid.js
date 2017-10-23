@@ -18,12 +18,12 @@ let orcid = {
     let { orcid, access_token } = this.token
     let isSignedIn = TextTrackCue
 
-    crn.getORCIDProfile(access_token, orcid, (err, res) => {
-      let { firstname, lastname } = res.body
+    crn.getORCIDProfile(access_token, (err, res) => {
+      let { firstname, lastname, email } = res.body
 
       callback(err, {
-        token: access_token,
-        profile: { _id: orcid, firstname, lastname },
+        token: this.token,
+        profile: { _id: orcid, firstname, lastname, email },
         isSignedIn
       })
     })
@@ -45,7 +45,6 @@ let orcid = {
   },
 
   signIn(callback) {
-
     if (this.oauthWindow) {
       window.clearInterval(this.polling)
       this.oauthWindow.close()
@@ -62,19 +61,28 @@ let orcid = {
 
     this.polling = window.setInterval(() => {
       try {
+        if (!this.oauthWindow || this.oauthWindow.closed) {
+          window.clearInterval(this.polling)
+          return
+        }
         let url = this.oauthWindow.document.URL
         if (url.indexOf(config.auth.orcid.redirectURI) != -1) {
           window.clearInterval(this.polling)
           this.oauthWindow.close()
           let code = url.toString().match(/code=([^&]+)/)[1]
           crn.getORCIDToken(code, (err, res) => {
-            this.token = res.body
-            this.getCurrentUser(callback)
+            if (err) {
+
+            } else {
+              this.token = res.body
+              this.getCurrentUser(callback)
+            }
           })
         }
       } catch(e) {
+        console.log(e)
       }
-    }, 100)
+    }, 50)
   },
 
   signOut(callback) {

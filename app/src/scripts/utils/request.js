@@ -116,10 +116,11 @@ function handleRequest(url, options, callback) {
     hasToken() &&
     (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)
   ) {
-    userActions.checkAuth((token, root) => {
+    userActions.checkAuth((provider, token, root) => {
       if (root) {
         options.query.root = true
       }
+      options.headers['Authorization-Provider'] = provider
       options.headers.Authorization = token
       callback(url, options)
     })

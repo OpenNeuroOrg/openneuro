@@ -22,12 +22,12 @@ let UserStore = Reflux.createStore({
   init() {
     this.setInitialState()
 
-    this.authMethods = {
+    this.providers = {
       google,
       orcid,
     }
 
-    switch (this.data.authMethod) {
+    switch (this.data.provider) {
       case 'orcid':
 
         break;
@@ -40,7 +40,7 @@ let UserStore = Reflux.createStore({
             {
               token: user.token,
               profile: user.profile,
-              authMethod: 'google',
+              provider: 'google',
             },
             { persist: true },
           )
@@ -100,8 +100,8 @@ let UserStore = Reflux.createStore({
       profile: window.localStorage.profile
         ? JSON.parse(window.localStorage.profile)
         : null,
-      authMethod: window.localStorage.authMethod
-        ? JSON.parse(window.localStorage.authMethod)
+      provider: window.localStorage.provider
+        ? JSON.parse(window.localStorage.provider)
         : null,
       scitran: window.localStorage.scitran
         ? JSON.parse(window.localStorage.scitran)
@@ -124,7 +124,7 @@ let UserStore = Reflux.createStore({
       ? options.transition
       : true
 
-    this.authMethods[options.authMethod]
+    this.providers[options.provider]
       .signIn((err, user) => {
 
       if (err) {
@@ -136,7 +136,7 @@ let UserStore = Reflux.createStore({
           loading: true,
           token: user.token,
           profile: user.profile,
-          authMethod: options.authMethod,
+          provider: options.provider,
         },
         { persist: true },
       )
@@ -201,7 +201,7 @@ let UserStore = Reflux.createStore({
     if (!google.initialized) {
       return
     }
-    options.authMethod = 'google'
+    options.provider = 'google'
     this.signIn(options)
   },
 
@@ -212,7 +212,7 @@ let UserStore = Reflux.createStore({
      * user if the user doesn't already exist.
      */
   orcidSignIn(options) {
-    options.authMethod = 'orcid'
+    options.provider = 'orcid'
     this.signIn(options)
   },
 
@@ -283,7 +283,7 @@ let UserStore = Reflux.createStore({
      * the updated token.
      */
   refreshToken(callback) {
-    google.refresh((err, user) => {
+    const refreshCallback = (err, user) => {
       this.update(
         {
           token: user.token,
@@ -292,7 +292,20 @@ let UserStore = Reflux.createStore({
         { persist: true },
       )
       callback(user.token ? user.token.access_token : null)
-    })
+    }
+
+    switch (this.data.provider) {
+      case 'orcid':
+        orcid.refresh(refreshCallback)
+        break;
+
+      case 'google':
+        google.refresh(refreshCallback)
+        break;
+
+      default:
+        callback(null)
+    }
   },
 
   /**
@@ -325,16 +338,16 @@ let UserStore = Reflux.createStore({
      * to start the token check process.
      */
   queue: async.queue((authReq, callback) => {
-    let token = UserStore.data.token
+    let { token, provider } = UserStore.data
     let refreshWindow = 4 * 60 * 1000
     if (!token || Date.now() + refreshWindow >= token.expires_at) {
       // refresh the token
       UserStore.refreshToken(access_token => {
-        authReq.successCallback(access_token, UserStore.isRoot())
+        authReq.successCallback(provider, access_token, UserStore.isRoot())
         callback()
       })
     } else {
-      authReq.successCallback(token.access_token, UserStore.isRoot())
+      authReq.successCallback(provider, token.access_token, UserStore.isRoot())
       callback()
     }
   }, 1),

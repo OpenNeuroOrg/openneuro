@@ -18,16 +18,24 @@ export default {
   // create --------------------------------------------------------------
 
   validateORCIDToken(req, res) {
-    let { code } = req.query
-    orcid.validateToken(code, (err, result) => {
-      res.send(result)
+    let { code, home } = req.query
+    if (!home) {
+      res.status(400).send()
+      return
+    }
+    orcid.validateToken(code, (error, result) => {
+      if (error) {
+        res.status(403).send({ error })
+      } else {
+        res.send(result)
+      }
     })
   },
 
   getORCIDProfile(req, res) {
-    let { accessToken, orcid: ORCID } = req.query
-    orcid.getProfile(accessToken, ORCID, (err, result) => {
-      res.send(result)
+    let { accessToken } = req.query
+    orcid.getProfile(accessToken, (error, result) => {
+      res.send(error ? error : result)
     })
   },
 
@@ -52,6 +60,7 @@ export default {
           _id: user._id,
           firstname: user.firstname,
           lastname: user.lastname,
+          email: user.email,
         }
         scitran.createUser(scitranUser, (err, resp) => {
           if (!err) {

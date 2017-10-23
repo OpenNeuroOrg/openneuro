@@ -102,7 +102,7 @@ export default class Share extends React.Component {
 
     return permissions.map(user => {
       let remove =
-        userStore.data.google && userStore.data.google.email !== user._id ? (
+        userStore.data.profile && userStore.data.profile.uid !== user._id ? (
           <WarnButton
             message="Remove"
             action={this._removeUser.bind(this, user._id)}
