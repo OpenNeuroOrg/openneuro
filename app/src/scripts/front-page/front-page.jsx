@@ -110,7 +110,7 @@ let FrontPage = React.createClass({
             Sign in with Google
           </button>
           <button className="btn-admin" onClick={userStore.orcidSignIn}>
-            <span className="icon"><img alt="ORCID logo" width="20" height="20" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" /></span>
+            <span className="icon"><img alt="ORCID" width="20" height="20" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" /></span>
             Sign in with ORCID
           </button>
         </span>

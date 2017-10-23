@@ -230,7 +230,7 @@ let UserStore = Reflux.createStore({
       )
     }
     if (signout) {
-      google.signOut(() => {
+      this.providers[this.data.provider].signOut(() => {
         upload.setInitialState()
         this.clearAuth()
         router.transitionTo('front-page')

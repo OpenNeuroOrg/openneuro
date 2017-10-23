@@ -86,6 +86,7 @@ let orcid = {
   },
 
   signOut(callback) {
+    callback()
   },
 }
 

@@ -195,6 +195,10 @@ h6 {
 }
 
 .btn-blue { @extend %btn-blue;}
+.btn-blue.half {
+    width: 48%;
+    margin-right: 1%;
+}
 
 %btn-admin {
     @include border-radius(0);

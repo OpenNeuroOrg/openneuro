@@ -164,15 +164,15 @@ let BSNavbar = React.createClass({
       return (
         <div className="navbar-right sign-in-nav-btn">
           <button
-            className="btn-blue"
+            className="btn-blue half"
             onClick={userStore.googleSignIn.bind(null, { transition: onFrontPage })}>
             <i className="fa fa-google" />
             <span> Sign in</span>
           </button>
           <button
-            className="btn-blue"
+            className="btn-blue half"
             onClick={userStore.orcidSignIn.bind(null, { transition: onFrontPage })}>
-            <span className="icon"><img alt="ORCID logo" width="20" height="20" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" /></span>
+            <span className="icon"><img alt="ORCID" width="16" height="16" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" /></span>
             <span> Sign in</span>
           </button>
         </div>
