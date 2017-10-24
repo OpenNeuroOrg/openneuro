@@ -32,7 +32,7 @@ class ArrayInput extends React.Component {
               simpleValue
               options={field.select}
               value={this.state[field.id]}
-              onChange={this._handleSelectChange.bind(null, field.id)}
+              onChange={this._handleSelectChange.bind(this, field.id)}
               key={field.id}
             />
           )
@@ -45,7 +45,7 @@ class ArrayInput extends React.Component {
             <div className="form-group float-label-input" key={field.id}>
               <button
                 className="admin-button"
-                onClick={this._toggleCheckBox.bind(null, field.id)}
+                onClick={this._toggleCheckBox.bind(this, field.id)}
                 key={field.id}>
                 <span>
                   <i
@@ -65,7 +65,7 @@ class ArrayInput extends React.Component {
             <Input
               placeholder={field.placeholder}
               value={this.state[field.id]}
-              onChange={this._handleChange.bind(null, field.id)}
+              onChange={this._handleChange.bind(this, field.id)}
               key={field.id}
             />
           )
@@ -153,7 +153,13 @@ class ArrayInput extends React.Component {
     }
 
     this.props.onChange({ target: { value: value } })
-    this.setState(this.getInitialState())
+    //need to clear form on parameter add
+    const initialState = { error: null }
+    for (let field of this.props.model) {
+      initialState[field.id] = ''
+    }
+
+    this.setState(initialState)
   }
 
   _remove(index) {
