@@ -162,7 +162,12 @@ export default aws => {
               reason:
                 'This analysis task did not complete within 48 hours and has failed due to timeout',
             }
-            return sdk.terminateJob(params)
+            console.log('Terminating timed out job:', job.jobId)
+            sdk.terminateJob(params, (err) => {
+              if (err) {
+                console.log('Error terminating job:', err)
+              }
+            })
           })
         })
       }
