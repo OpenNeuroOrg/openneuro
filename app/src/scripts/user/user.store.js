@@ -128,6 +128,13 @@ let UserStore = Reflux.createStore({
       ? options.transition
       : true
 
+    this.update(
+      {
+        loading: true,
+      },
+      { persist: true },
+    )
+
     this.providers[options.provider]
       .signIn((err, user) => {
 
@@ -147,7 +154,6 @@ let UserStore = Reflux.createStore({
 
       this.update(
         {
-          loading: true,
           token: user.token,
           profile: user.profile,
           provider: options.provider,
