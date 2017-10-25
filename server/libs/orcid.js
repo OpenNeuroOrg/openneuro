@@ -14,7 +14,7 @@ export default {
     let accessToken = data[1]
 
     request.get(
-      `https://api.sandbox.orcid.org/v2.0/${orcid}/record`,
+      `${config.auth.orcid.apiURI}/v2.0/${orcid}/record`,
       {
         headers: { 'Authorization': `Bearer ${accessToken}` }
       },
@@ -40,10 +40,10 @@ export default {
 
   validateToken(code, callback) {
     request.post(
-      'https://sandbox.orcid.org/oauth/token',
+      `${config.auth.orcid.URI}/oauth/token`,
       {
         form: {
-          client_id: config.auth.orcid.clientId,
+          client_id: config.auth.orcid.clientID,
           client_secret: config.auth.orcid.clientSecret,
           redirect_uri: config.auth.orcid.redirectURI,
           grant_type: 'authorization_code',
