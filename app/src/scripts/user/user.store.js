@@ -132,6 +132,16 @@ let UserStore = Reflux.createStore({
       .signIn((err, user) => {
 
       if (err) {
+        let message =
+          'We could not sign you in. Please try again later.'
+        if (!transition) {
+          notifications.createAlert({ type: 'Error', message: message })
+        } else {
+          this.update({
+            loading: false,
+            signinError: message,
+          })
+        }
         return
       }
 
@@ -307,12 +317,10 @@ let UserStore = Reflux.createStore({
         orcid.refresh(refreshCallback)
         break;
 
+      default:
       case 'google':
         google.refresh(refreshCallback)
         break;
-
-      default:
-        callback(null)
     }
   },
 

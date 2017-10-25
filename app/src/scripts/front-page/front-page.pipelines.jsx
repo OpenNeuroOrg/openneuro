@@ -83,7 +83,7 @@ let Pipelines = React.createClass({
   },
 
   _browse() {
-    if (this.state.apps.length < 1) {
+    if (!this.state.apps || this.state.apps.length < 1) {
       return (
         <div className="col-sm-6 mate-slide loading-browse">
           <Spinner active={true} text="Loading Pipelines" />

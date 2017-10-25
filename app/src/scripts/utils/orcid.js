@@ -16,10 +16,12 @@ let orcid = {
     }
 
     this.token = token
-    this.getCurrentUser((err, user) => {
-      this.initialized = true
-      callback(err, user)
-    })
+    if (this.token) {
+      this.getCurrentUser((err, user) => {
+        this.initialized = true
+        callback(err, user)
+      })
+    }
   },
 
   getCurrentUser(callback) {
@@ -83,7 +85,7 @@ let orcid = {
           let code = url.toString().match(/code=([^&]+)/)[1]
           crn.getORCIDToken(code, (err, res) => {
             if (err) {
-
+              callback(err)
             } else {
               this.token = res.body
               this.getCurrentUser(callback)
