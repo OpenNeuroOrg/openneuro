@@ -27,33 +27,37 @@ let UserStore = Reflux.createStore({
       orcid,
     }
 
+    const provider = this.data.provider
+    const initCallback = (err, user) => {
+      this.update(
+        {
+          token: user.token,
+          profile: user.profile,
+          provider: 'orcid',
+        },
+        { persist: true },
+      )
+      if (user.token) {
+        crn.verifyUser((err, res) => {
+          if (res.body.code === 403) {
+            this.signOut()
+          } else {
+            this.update({ scitran: res.body }, { persist: true })
+          }
+        })
+      }
+    }
+
     switch (this.data.provider) {
       case 'orcid':
-
+        // initialize ORCID
+        orcid.init(this.data.token, initCallback)
         break;
 
       case 'google':
       default:
         // initialize google APIs
-        google.init((err, user) => {
-          this.update(
-            {
-              token: user.token,
-              profile: user.profile,
-              provider: 'google',
-            },
-            { persist: true },
-          )
-          if (user.token) {
-            crn.verifyUser((err, res) => {
-              if (res.body.code === 403) {
-                this.signOut()
-              } else {
-                this.update({ scitran: res.body }, { persist: true })
-              }
-            })
-          }
-        })
+        google.init(initCallback)
         break;
     }
   },
@@ -284,14 +288,18 @@ let UserStore = Reflux.createStore({
      */
   refreshToken(callback) {
     const refreshCallback = (err, user) => {
-      this.update(
-        {
-          token: user.token,
-          profile: user.profile,
-        },
-        { persist: true },
-      )
-      callback(user.token ? user.token.access_token : null)
+      if (err) {
+        this.signOut()
+      } else {
+        this.update(
+          {
+            token: user.token,
+            profile: user.profile,
+          },
+          { persist: true },
+        )
+        callback(user.token ? user.token.access_token : null)
+      }
     }
 
     switch (this.data.provider) {

@@ -29,6 +29,11 @@ const routes = [
   },
   {
     method: 'get',
+    url: '/users/orcid/refresh',
+    handler: users.refreshORCIDToken,
+  },
+  {
+    method: 'get',
     url: '/users/orcid',
     handler: users.getORCIDProfile,
   },

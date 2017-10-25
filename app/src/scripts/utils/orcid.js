@@ -4,9 +4,9 @@ import crn from './crn'
 
 let orcid = {
 
-  initialized: false,
+  initialized: true,
 
-  init(callback) {
+  init(token, callback) {
     if (!config.auth.orcid.clientID) {
       /* eslint-disable no-console */
       console.error(
@@ -15,7 +15,11 @@ let orcid = {
       return
     }
 
-    this.initialized = true
+    this.token = token
+    this.getCurrentUser((err, user) => {
+      this.initialized = true
+      callback(err, user)
+    })
   },
 
   getCurrentUser(callback) {
@@ -36,12 +40,14 @@ let orcid = {
 
   refresh(callback) {
     if (this.initialized) {
-      this.authInstance.currentUser
-        .get()
-        .reloadAuthResponse()
-        .then(() => {
+      let { refresh_token } = this.token
+      crn.refreshORCIDToken(refresh_token, (err, res) => {
+        if (err) {
+          callback(err)
+        } else {
           this.getCurrentUser(callback)
-        })
+        }
+      })
     } else {
       setTimeout(() => {
         this.refresh(callback)

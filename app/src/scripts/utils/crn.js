@@ -56,12 +56,22 @@ export default {
       query: { code, home: true }
     }, callback)
   },
+
   /**
      * Get ORCID profile
      */
   getORCIDProfile(accessToken, callback) {
     request.get(config.crn.url + 'users/orcid', {
       query: { accessToken }
+    }, callback)
+  },
+
+  /**
+     * Get ORCID profile
+     */
+  refreshORCIDToken(refreshToken, callback) {
+    request.get(config.crn.url + 'users/orcid/refresh', {
+      query: { refreshToken }
     }, callback)
   },
 

@@ -32,6 +32,17 @@ export default {
     })
   },
 
+  refreshORCIDToken(req, res) {
+    let { refreshToken } = req.query
+    orcid.refreshToken(refreshToken, (error, result) => {
+      if (error) {
+        res.status(403).send({ error })
+      } else {
+        res.send(result)
+      }
+    })
+  },
+
   getORCIDProfile(req, res) {
     let { accessToken } = req.query
     orcid.getProfile(accessToken, (error, result) => {

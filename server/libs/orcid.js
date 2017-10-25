@@ -38,6 +38,29 @@ export default {
     )
   },
 
+  refreshToken(refreshToken, callback) {
+    request.post(
+      `${config.auth.orcid.URI}/oauth/token`,
+      {
+        form: {
+          client_id: config.auth.orcid.clientID,
+          client_secret: config.auth.orcid.clientSecret,
+          redirect_uri: config.auth.orcid.redirectURI,
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
+        },
+        json: true,
+      },
+      (err, res) => {
+        if (!err) {
+          const { orcid, access_token } = res.body
+          res.body.access_token = `${orcid}:${access_token}`
+        }
+        callback(err, res.body)
+      }
+    )
+  },
+
   validateToken(code, callback) {
     request.post(
       `${config.auth.orcid.URI}/oauth/token`,
