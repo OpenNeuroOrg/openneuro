@@ -3,6 +3,9 @@ import config from '../../../config'
 import crn from './crn'
 
 let orcid = {
+
+  initialized: false,
+
   init(callback) {
     if (!config.auth.orcid.clientID) {
       /* eslint-disable no-console */
@@ -11,6 +14,8 @@ let orcid = {
       )
       return
     }
+
+    this.initialized = true
   },
 
   getCurrentUser(callback) {
