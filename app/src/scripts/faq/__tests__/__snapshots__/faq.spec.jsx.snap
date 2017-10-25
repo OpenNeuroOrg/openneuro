@@ -122,6 +122,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
   </div>
   <div
     className="panel"
+    key="5"
   >
     <div
       className="panel-heading"
@@ -140,6 +141,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
   </div>
   <div
     className="panel"
+    key="6"
   >
     <div
       className="panel-heading"
@@ -165,7 +167,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
   </div>
   <div
     className="panel"
-    key="5"
+    key="7"
   >
     <div
       className="panel-heading"
