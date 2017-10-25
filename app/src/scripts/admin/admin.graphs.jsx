@@ -7,26 +7,33 @@ import adminStore from './admin.store'
 import { Link } from 'react-router'
 import { Route } from 'react-router'
 import Pie from './charts/admin.progression-pie.jsx'
-
-import { VictoryPie } from 'victory'
-import { VictoryScatter } from 'victory'
-import { VictoryLabel } from 'victory'
+import Scatter from './charts/admin.scatter-chart.jsx'
 
 let Progresssion = React.createClass({
   mixins: [Reflux.connect(adminStore)],
+
+  getInitialState() {
+    let initialState = {
+      month: 'all',
+      year: 'all',
+      value: 'failed',
+    }
+
+    return initialState
+  },
 
   componentWillMount() {
     actions.filterLogs()
   },
 
   render() {
-    // failedLogs contains all failed jobs
     let failures = this.state.failedLogs.length
-    // console.log(failures);
-    // successLogs contains all successful jobs
+    let successLogs = this.state.failedLogs
+    // **** testing
     let successes = this.state.successLogs.length
-    //  uploadedLogs contains all logs that have been completed
     let total = this.state.uploadedLogs.length
+
+    let activity = this.state.activityLogs
 
     return (
       <div className="dashboard-dataset-teasers fade-in">
@@ -35,9 +42,61 @@ let Progresssion = React.createClass({
             <h2>Current job sucession rate:</h2>
             <Pie failed={failures} success={successes} total={total} />
           </div>
+          <div>
+            <label>Please make a selection: </label>
+            <form>
+              <div>
+                <select
+                  value={this.state.month}
+                  onChange={this._handleChangeMonth}>
+                  <option value="">All</option>
+                  {this._options('month')}
+                </select>
+                <select
+                  value={this.state.year}
+                  onChange={this._handleChangeYear}>
+                  <option value="">All</option>
+                  {this._options('year')}
+                </select>
+              </div>
+            </form>
+          </div>
+          <Scatter
+            logs={activity}
+            month={this.state.month}
+            year={this.state.year}
+          />
         </div>
       </div>
     )
+  },
+
+  _handleChangeMonth(e) {
+    this.setState({
+      month: e.target.value,
+    })
+    console.log(this.state.month)
+  },
+
+  _handleChangeYear(e) {
+    this.setState({
+      year: e.target.value,
+    })
+    console.log(this.state.year)
+  },
+
+  _options(e) {
+    let activity = this.state.activityLogs
+    let options = []
+
+    Object.entries(activity).map((index, value) => {
+      let log = activity[value]
+      if (!options.includes(log[e])) {
+        options.push(<option value={log[e]}>{log[e]}</option>)
+      }
+    })
+
+    return options
   },
 })
 
