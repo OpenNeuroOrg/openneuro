@@ -1,6 +1,7 @@
 // dependencies -----------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import { Accordion, Panel } from 'react-bootstrap'
 import Issues from './upload.validation-results.issues.jsx'
@@ -87,9 +88,6 @@ ValidationResults.Props = {
 }
 
 ValidationResults.propTypes = {
-  errors: React.PropTypes.oneOfType([
-    React.PropTypes.array,
-    React.PropTypes.string,
-  ]),
-  warnings: React.PropTypes.array,
+  errors: PropTypes.oneOfType([PropTypes.array, PropTypes.string]),
+  warnings: PropTypes.array,
 }

@@ -1,6 +1,7 @@
 // dependencies -----------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Accordion, Panel } from 'react-bootstrap'
 import pluralize from 'pluralize'
 import Issue from './upload.validation-results.issues.issue.jsx'
@@ -77,8 +78,8 @@ class Issues extends React.Component {
 }
 
 Issues.propTypes = {
-  issues: React.PropTypes.array.isRequired,
-  issueType: React.PropTypes.string.isRequired,
+  issues: PropTypes.array.isRequired,
+  issueType: PropTypes.string.isRequired,
 }
 
 export default Issues

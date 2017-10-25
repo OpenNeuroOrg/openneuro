@@ -3,31 +3,24 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import ArrayInput from './array-input.jsx'
 import FileArrayInput from './file-array-input.jsx'
 import Spinner from '../partials/spinner.jsx'
 import WarnButton from './warn-button.jsx'
 import markdown from '../../utils/markdown'
 
-let ClickToEdit = React.createClass({
+class ClickToEdit extends React.Component {
   // life cycle events --------------------------------------------------
-
-  getDefaultProps() {
-    return {
-      editable: true,
-      type: 'string',
-      value: '',
-    }
-  },
-
-  getInitialState() {
-    return {
-      value: this.props.value,
-      initialValue: JSON.stringify(this.props.value),
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: props.value,
+      initialValue: JSON.stringify(props.value),
       loading: false,
       edit: false,
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     // display edit when error is triggered
@@ -36,19 +29,7 @@ let ClickToEdit = React.createClass({
     } else {
       this.setState({ value: nextProps.value })
     }
-  },
-
-  propTypes: {
-    value: React.PropTypes.any,
-    type: React.PropTypes.any,
-    label: React.PropTypes.any,
-    error: React.PropTypes.string,
-    editable: React.PropTypes.bool,
-    onDismissIssue: React.PropTypes.func,
-    onDelete: React.PropTypes.func,
-    onFileClick: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-  },
+  }
 
   render() {
     let value = this.state.value
@@ -145,7 +126,7 @@ let ClickToEdit = React.createClass({
         <div>{this.state.edit ? edit : display}</div>
       </div>
     )
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -160,7 +141,7 @@ let ClickToEdit = React.createClass({
       )
     })
     return list
-  },
+  }
   _referencesAndLinksList(refAndLinks) {
     if (typeof refAndLinks === 'string') {
       refAndLinks = [refAndLinks]
@@ -178,14 +159,14 @@ let ClickToEdit = React.createClass({
       )
     })
     return list
-  },
+  }
 
   _editBtn() {
     let edit = this.state.edit
     if (this.props.editable) {
       return (
         <button
-          onClick={this._toggleEdit}
+          onClick={this._toggleEdit.bind(this)}
           className="cte-edit-button btn btn-admin fade-in">
           <span>
             <i className={'fa fa-' + (edit ? 'times' : 'pencil')} />{' '}
@@ -194,7 +175,7 @@ let ClickToEdit = React.createClass({
         </button>
       )
     }
-  },
+  }
 
   _error(error) {
     if (error) {
@@ -207,7 +188,7 @@ let ClickToEdit = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _fileList(files) {
     let list = files.map(file => {
@@ -227,23 +208,23 @@ let ClickToEdit = React.createClass({
       )
     })
     return list
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
   _display() {
     this.setState({ edit: false })
-  },
+  }
 
   _toggleEdit() {
     this.setState({ edit: !this.state.edit })
-  },
+  }
 
   _handleFile(file, callback) {
     if (this.props.onChange) {
       this.props.onChange(file, callback)
     }
-  },
+  }
 
   _handleChange(type, event) {
     this.setState({ value: event.target.value }, () => {
@@ -254,19 +235,19 @@ let ClickToEdit = React.createClass({
         this._save(type)
       }
     })
-  },
+  }
 
   _handleDelete(filename, index) {
     if (this.props.onDelete) {
       this.props.onDelete(filename, index)
     }
-  },
+  }
 
   _download(filename, callback) {
     if (this.props.onFileClick) {
       this.props.onFileClick(filename, callback)
     }
-  },
+  }
 
   _save(type) {
     this.setState({ loading: true })
@@ -281,12 +262,30 @@ let ClickToEdit = React.createClass({
         })
       })
     }
-  },
+  }
 
   _cancel() {
     let value = JSON.parse(this.state.initialValue)
     this.setState({ edit: false, value: value })
-  },
-})
+  }
+}
+
+ClickToEdit.propTypes = {
+  value: PropTypes.any,
+  type: PropTypes.any,
+  label: PropTypes.any,
+  error: PropTypes.string,
+  editable: PropTypes.bool,
+  onDismissIssue: PropTypes.func,
+  onDelete: PropTypes.func,
+  onFileClick: PropTypes.func,
+  onChange: PropTypes.func,
+}
+
+ClickToEdit.defaultProps = {
+  editable: true,
+  type: 'string',
+  value: '',
+}
 
 export default ClickToEdit

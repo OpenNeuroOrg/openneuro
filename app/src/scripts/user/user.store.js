@@ -6,7 +6,6 @@ import actions from './user.actions.js'
 import google from '../utils/google'
 import crn from '../utils/crn'
 import scitran from '../utils/scitran'
-import router from '../utils/router-container'
 import async from 'async'
 import notifications from '../notification/notification.actions'
 import dashboardActions from '../dashboard/dashboard.datasets.actions'
@@ -189,7 +188,7 @@ let UserStore = Reflux.createStore({
      * Signs the user out by destroying the current
      * OAuth2 session.
      */
-  signOut(uploadStatus) {
+  signOut(uploadStatus, history) {
     let signout = true
     if (uploadStatus === 'uploading') {
       signout = confirm(
@@ -200,7 +199,7 @@ let UserStore = Reflux.createStore({
       google.signOut(() => {
         upload.setInitialState()
         this.clearAuth()
-        router.transitionTo('front-page')
+        history.push('/')
       })
     }
   },
@@ -230,12 +229,8 @@ let UserStore = Reflux.createStore({
   handleSignIn(transition, scitran, google) {
     this.update({ loading: false })
     this.update({ scitran, google }, { persist: true })
-    if (transition) {
-      router.transitionTo('dashboard')
-    } else {
-      datasetActions.reloadDataset()
-      dashboardActions.getDatasets(true)
-    }
+    datasetActions.reloadDataset()
+    dashboardActions.getDatasets(true)
   },
 
   /**

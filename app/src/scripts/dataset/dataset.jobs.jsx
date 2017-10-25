@@ -7,33 +7,32 @@ import actions from './dataset.actions'
 import Spinner from '../common/partials/spinner.jsx'
 import Run from './dataset.jobs.run.jsx'
 import { Accordion, Panel } from 'react-bootstrap'
+import { refluxConnect } from '../utils/reflux'
 
-let Jobs = React.createClass({
-  mixins: [Reflux.connect(datasetStore)],
-
-  getInitialState() {
-    let initialState = {
+class Jobs extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, datasetStore, 'datasets')
+    this.state = {
       acknowledgements: '',
       support: '',
       summary: '',
       label: '',
     }
-
-    return initialState
-  },
+  }
 
   // life cycle events --------------------------------------------------
 
   render() {
     let version
 
-    if (!this.state.dataset.original) {
+    if (!this.state.datasets.dataset.original) {
       return false
     }
 
-    let app = this.state.jobs.map(app => {
+    let app = this.state.datasets.jobs.map(app => {
       version = app.versions.map(version => {
-        let appDef = this.state.apps[app.label][version.label]
+        let appDef = this.state.datasets.apps[app.label][version.label]
         let bidsAppVersion = appDef.containerProperties.environment.filter(
           tuple => {
             return tuple.name === 'BIDS_CONTAINER'
@@ -60,7 +59,7 @@ let Jobs = React.createClass({
           <Accordion
             accordion
             className="jobs-wrap"
-            activeKey={this.state.activeJob.version}
+            activeKey={this.state.datasets.activeJob.version}
             onSelect={actions.selectJob.bind(null, 'version')}>
             {version}
           </Accordion>
@@ -75,9 +74,9 @@ let Jobs = React.createClass({
         <Accordion
           accordion
           className="jobs-wrap"
-          activeKey={this.state.activeJob.app}
+          activeKey={this.state.datasets.activeJob.app}
           onSelect={actions.selectJob.bind(null, 'app')}>
-          {this.state.loadingJobs ? (
+          {this.state.datasets.loadingJobs ? (
             <Spinner active={true} text="Loading Analyses" />
           ) : (
             app
@@ -86,7 +85,7 @@ let Jobs = React.createClass({
         </Accordion>
       </div>
     )
-  },
+  }
 
   // templates methods --------------------------------------------------
 
@@ -99,7 +98,7 @@ let Jobs = React.createClass({
           key={run._id}
           toggleFolder={actions.toggleResultFolder}
           displayFile={actions.displayFile}
-          currentUser={this.state.currentUser}
+          currentUser={this.state.datasets.currentUser}
           acknowledgements={acknowledgements}
           support={support}
         />
@@ -107,7 +106,7 @@ let Jobs = React.createClass({
     })
 
     return runs
-  },
-})
+  }
+}
 
 export default Jobs

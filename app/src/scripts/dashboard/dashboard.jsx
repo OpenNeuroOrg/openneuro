@@ -1,51 +1,63 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { State, RouteHandler, Link } from 'react-router'
+import PropTypes from 'prop-types'
+import { Switch, Route, NavLink, Redirect } from 'react-router-dom'
+import Datasets from './dashboard.datasets.jsx'
+import Jobs from './dashboard.jobs.jsx'
 
-let Dashboard = React.createClass({
-  mixins: [State],
+const publicDatasets = () => <Datasets public />
+const publicJobs = () => <Jobs public />
 
-  getInitialState() {
-    return { isPublic: this._isPublic() }
-  },
-
-  // life cycle events --------------------------------------------------
-
-  componentWillReceiveProps() {
-    this.setState({ isPublic: this._isPublic() })
-  },
-
+class Dashboard extends React.Component {
   render() {
-    let isPublic = this.state.isPublic
+    let prefix = '/dashboard'
+    let datasets = Datasets
+    let jobs = Jobs
+    let isPublic = false
+    if (this.props.public) {
+      prefix = '/public'
+      datasets = publicDatasets
+      jobs = publicJobs
+      isPublic = true
+    }
     return (
-      <div className="fade-in inner-route clearfix">
-        <div className="col-xs-12">
-          <ul className="nav nav-pills tabs">
-            <li>
-              <Link
-                to={isPublic ? 'publicDatasets' : 'datasets'}
-                className="btn-tab">
-                {isPublic ? 'Public' : 'My'} Datasets
-              </Link>
-            </li>
-            <li>
-              <Link to={isPublic ? 'publicJobs' : 'jobs'} className="btn-tab">
-                {isPublic ? 'Public' : 'My'} Analyses
-              </Link>
-            </li>
-          </ul>
-          <RouteHandler />
+      <div className="route-wrapper">
+        <div className="fade-in inner-route clearfix">
+          <div className="col-xs-12">
+            <ul className="nav nav-pills tabs">
+              <li>
+                <NavLink to={prefix + '/datasets'} className="btn-tab">
+                  {isPublic ? 'Public' : 'My'} Datasets
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to={prefix + '/jobs'} className="btn-tab">
+                  {isPublic ? 'Public' : 'My'} Analyses
+                </NavLink>
+              </li>
+            </ul>
+            <Switch>
+              <Redirect path={prefix} to={prefix + '/datasets'} exact />
+              <Route component={datasets} path={prefix + '/datasets'} />
+              <Route component={jobs} path={prefix + '/jobs'} />
+            </Switch>
+          </div>
         </div>
       </div>
     )
-  },
+  }
+}
 
-  // custom methods -----------------------------------------------------
+Dashboard.defaultProps = {
+  public: false,
+}
 
-  _isPublic() {
-    return this.getPath().indexOf('dashboard') === -1
-  },
-})
+Dashboard.propTypes = {
+  public: PropTypes.bool,
+}
+
+const PublicDashboard = () => <Dashboard public />
 
 export default Dashboard
+export { Dashboard, PublicDashboard }

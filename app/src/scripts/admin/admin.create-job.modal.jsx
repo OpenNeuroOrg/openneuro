@@ -4,8 +4,8 @@ import React from 'react'
 import Reflux from 'reflux'
 import ArrayInput from '../common/forms/array-input.jsx'
 import Input from '../common/forms/input.jsx'
-// import Visibility from '../common/forms/visibility.jsx';
-import { Modal, Panel } from 'react-bootstrap'
+import { Modal } from '../utils/modal.jsx'
+import { Panel } from 'react-bootstrap'
 import Select from 'react-select'
 import adminStore from './admin.store'
 import actions from './admin.actions'
@@ -22,16 +22,16 @@ const PARAMETER_INPUTS = [
   { label: 'File', value: 'file' },
 ]
 
-const CreateJob = React.createClass({
-  mixins: [Reflux.connect(adminStore)],
+import { refluxConnect } from '../utils/reflux'
 
-  propTypes: {
-    show: React.PropTypes.bool,
-    onHide: React.PropTypes.func,
-  },
+class CreateJob extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
 
   render() {
-    let definition = this.state.jobDefinitionForm
+    let definition = this.state.admin.jobDefinitionForm
     let title = definition.edit ? 'Edit App' : 'Define an App'
 
     return (
@@ -117,19 +117,19 @@ const CreateJob = React.createClass({
         </Modal.Body>
       </Modal>
     )
-  },
+  }
 
   _handleChange(formProperty, e) {
     actions.inputChange('jobDefinitionForm', formProperty, e.target.value)
-  },
+  }
 
   _inputChange(e) {
     actions.inputChange('jobDefinitionForm', e.target.name, e.target.value)
-  },
+  }
 
   _analysisLevelsChange(e) {
     actions.inputChange('jobDefinitionForm', 'analysisLevels', e)
-  },
+  }
 
   _addDescriptions(definition) {
     return [
@@ -169,7 +169,7 @@ const CreateJob = React.createClass({
         key={5}
       />,
     ]
-  },
-})
+  }
+}
 
 export default CreateJob

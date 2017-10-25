@@ -1,30 +1,21 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import fileUtils from '../../utils/files'
 import bowser from 'bowser'
 import notifications from '../../notification/notification.actions'
 import UploadStore from '../../upload/upload.store.js'
+import { refluxConnect } from '../../utils/reflux'
 
-let Upload = React.createClass({
-  mixins: [Reflux.connect(UploadStore)],
+class Upload extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, UploadStore, 'upload')
+  }
 
   // life cycle events --------------------------------------------------
-
-  componentDidMount() {
-    this.refs.fileSelect.setAttribute('webkitdirectory', true)
-    this.refs.fileSelect.setAttribute('directory', true)
-    this._setRefs(this.refs)
-  },
-
-  propTypes: {
-    resume: React.PropTypes.bool,
-    onClick: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    setRefs: React.PropTypes.func,
-  },
-
   render() {
     let resumeIcon = (
       <span>
@@ -44,18 +35,18 @@ let Upload = React.createClass({
           type="file"
           id="multifile-select"
           className="multifile-select-btn"
-          onClick={this._click}
-          onChange={this._onFileSelect}
-          ref="fileSelect"
+          onClick={this._click.bind(this)}
+          onChange={this._onFileSelect.bind(this)}
+          webkitdirectory="true"
+          directory="true"
         />
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
   _click(e) {
-    this.refs.fileSelect.value = null
     e.stopPropagation()
     if (!bowser.chrome && !bowser.chromium) {
       let chromeMessage = (
@@ -72,7 +63,7 @@ let Upload = React.createClass({
         message: chromeMessage,
       })
     }
-    if (this.state.uploadStatus === 'uploading') {
+    if (this.state.upload.uploadStatus === 'uploading') {
       e.preventDefault()
       notifications.createAlert({
         type: 'Warning',
@@ -83,7 +74,7 @@ let Upload = React.createClass({
     if (this.props.onClick) {
       this.props.onClick(e)
     }
-  },
+  }
 
   _onFileSelect(e) {
     if (e.target && e.target.files.length > 0) {
@@ -92,13 +83,20 @@ let Upload = React.createClass({
       let results = { tree: dirTree, list: files }
       this.props.onChange(results)
     }
-  },
+  }
 
   _setRefs(refs) {
     if (this.props.setRefs) {
       this.props.setRefs(refs)
     }
-  },
-})
+  }
+}
+
+Upload.propTypes = {
+  resume: PropTypes.bool,
+  onClick: PropTypes.func,
+  onChange: PropTypes.func,
+  setRefs: PropTypes.func,
+}
 
 export default Upload

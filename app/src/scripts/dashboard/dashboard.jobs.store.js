@@ -26,11 +26,8 @@ let DashboardJobStore = Reflux.createStore({
     for (let prop in data) {
       this.data[prop] = data[prop]
     }
-    this.trigger(this.data, () => {
-      if (callback) {
-        callback()
-      }
-    })
+    this.trigger(this.data)
+    if (callback) callback()
   },
 
   /**

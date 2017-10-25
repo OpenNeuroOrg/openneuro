@@ -1,6 +1,7 @@
 // dependencies -----------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import { ProgressBar } from 'react-bootstrap'
 
 // component setup --------------------------------------------------------
@@ -67,9 +68,9 @@ export default class UploadProgress extends React.Component {
 }
 
 UploadProgress.propTypes = {
-  progress: React.PropTypes.object,
-  name: React.PropTypes.string,
-  minimal: React.PropTypes.bool,
+  progress: PropTypes.object,
+  name: PropTypes.string,
+  minimal: PropTypes.bool,
 }
 
 UploadProgress.Props = {

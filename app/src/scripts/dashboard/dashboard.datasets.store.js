@@ -27,11 +27,8 @@ let UploadStore = Reflux.createStore({
     for (let prop in data) {
       this.data[prop] = data[prop]
     }
-    this.trigger(this.data, () => {
-      if (callback) {
-        callback()
-      }
-    })
+    this.trigger(this.data)
+    if (callback) callback()
   },
 
   /**
@@ -79,7 +76,7 @@ let UploadStore = Reflux.createStore({
      * sort setting.
      */
   getDatasets(isPublic, isAdmin) {
-    if (isPublic === undefined) {
+    if (typeof isPublic === 'undefined') {
       isPublic = this.data.isPublic
     }
     if (typeof isAdmin === 'undefined') {

@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import packageJson from '../../../../package.json'
 
 const Footer = props => {
@@ -25,7 +26,7 @@ const Footer = props => {
 }
 
 Footer.propTypes = {
-  version: React.PropTypes.string,
+  version: PropTypes.string,
 }
 
 export default Footer

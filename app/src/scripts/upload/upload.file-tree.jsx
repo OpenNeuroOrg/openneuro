@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class FileTree extends React.Component {
   // life cycle events --------------------------------------------------
@@ -22,5 +23,5 @@ export default class FileTree extends React.Component {
 }
 
 FileTree.propTypes = {
-  tree: React.PropTypes.array,
+  tree: PropTypes.array,
 }

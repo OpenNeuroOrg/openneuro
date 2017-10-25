@@ -1,6 +1,7 @@
 // dependencies ------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 import newId from '../../utils/newid'
 
@@ -29,6 +30,6 @@ export default class TooltipTop extends React.Component {
 }
 
 TooltipTop.propTypes = {
-  tooltip: React.PropTypes.string,
-  children: React.PropTypes.object,
+  tooltip: PropTypes.string,
+  children: PropTypes.object,
 }

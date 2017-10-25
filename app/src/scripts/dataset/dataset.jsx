@@ -1,16 +1,17 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
+import { Link, withRouter } from 'react-router-dom'
+import moment from 'moment'
 import Spinner from '../common/partials/spinner.jsx'
-import { State } from 'react-router'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
 import MetaData from './dataset.metadata.jsx'
 import Tools from './tools'
 import Statuses from './dataset.statuses.jsx'
 import Validation from './dataset.validation.jsx'
-import moment from 'moment'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import FileTree from '../common/partials/file-tree.jsx'
 import Jobs from './dataset.jobs.jsx'
@@ -19,54 +20,67 @@ import Summary from './dataset.summary.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
+import { refluxConnect } from '../utils/reflux'
 
-let Dataset = React.createClass({
-  mixins: [State, Reflux.connect(datasetStore)],
-
+class Dataset extends Reflux.Component {
+  constructor(props) {
+    super(props)
+    refluxConnect(this, datasetStore, 'datasets')
+  }
   // life cycle events --------------------------------------------------
 
-  componentWillReceiveProps() {
-    this._loadData()
-  },
+  componentWillReceiveProps(nextProps) {
+    this._loadData(
+      nextProps.match.params.datasetId,
+      nextProps.match.params.snapshotId,
+    )
+  }
 
   componentDidMount() {
-    this._loadData()
-  },
+    const datasetId = this.props.match.params.datasetId
+    const snapshotId = this.props.match.params.snapshotId
+    this._loadData(datasetId, snapshotId)
+  }
 
-  _loadData() {
-    let params = this.getParams()
-    let query = this.getQuery()
-    if (params.snapshotId) {
-      let snapshotId = bids.encodeId(params.datasetId, params.snapshotId)
-      actions.trackView(snapshotId)
-      actions.loadDataset(snapshotId, {
+  _loadData(datasetId, snapshotId) {
+    const query = new URLSearchParams(this.props.location.search)
+    if (snapshotId) {
+      const app = query.get('app')
+      const version = query.get('version')
+      const job = query.get('job')
+      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
+      actions.trackView(snapshotUrl)
+      actions.loadDataset(snapshotUrl, {
         snapshot: true,
-        app: query.app,
-        version: query.version,
-        job: query.job,
+        app: app,
+        version: version,
+        job: job,
       })
     } else if (
-      (params.datasetId && !this.state.dataset) ||
-      (params.datasetId && params.datasetId !== this.state.dataset._id)
+      (datasetId && !this.state.datasets.dataset) ||
+      (datasetId && datasetId !== this.state.datasets.dataset._id)
     ) {
-      actions.loadDataset(bids.encodeId(params.datasetId))
+      actions.loadDataset(bids.encodeId(datasetId))
     }
-  },
+  }
 
   componentWillUnmount() {
-    actions.setInitialState({ apps: this.state.apps })
-  },
+    actions.setInitialState({ apps: this.state.datasets.apps })
+    super.componentWillUnmount()
+  }
 
   render() {
-    let dataset = this.state.dataset
-    let snapshots = this.state.snapshots
-    let showSidebar = this.state.showSidebar
+    let dataset = this.state.datasets.dataset
+    let snapshots = this.state.datasets.snapshots
+    let showSidebar = this.state.datasets.showSidebar
     let canEdit =
       dataset &&
       (dataset.access === 'rw' || dataset.access == 'admin') &&
       !dataset.original
     let loadingText =
-      typeof this.state.loading == 'string' ? this.state.loading : 'loading'
+      typeof this.state.datasets.loading == 'string'
+        ? this.state.datasets.loading
+        : 'loading'
     let content
 
     if (dataset) {
@@ -98,7 +112,7 @@ let Dataset = React.createClass({
                   <MetaData
                     dataset={dataset}
                     editable={canEdit}
-                    issues={this.state.metadataIssues}
+                    issues={this.state.datasets.metadataIssues}
                   />
                 </div>
                 <div className="col-xs-6">
@@ -125,7 +139,7 @@ let Dataset = React.createClass({
       )
     } else {
       let message
-      let status = this.state.status
+      let status = this.state.datasets.status
       if (status === 404) {
         message = 'Dataset not found'
       }
@@ -133,30 +147,34 @@ let Dataset = React.createClass({
         message = 'You are not authorized to view this dataset'
       }
       content = (
-        <div>
-          <h2 className="message-4">{message}</h2>
+        <div className="page dataset">
+          <div className="dataset-container">
+            <h2 className="message-4">{message}</h2>
+          </div>
         </div>
       )
     }
 
     return (
-      <div
-        className={
-          showSidebar ? 'open dataset-container' : 'dataset-container'
-        }>
-        {this._leftSidebar(snapshots)}
-        {this._showSideBarButton()}
-        {!this.state.loading ? this._tools(dataset) : null}
-        <div className="fade-in inner-route dataset-route light">
-          {this.state.loading ? (
-            <Spinner active={true} text={loadingText} />
-          ) : (
-            content
-          )}
+      <div className="page dataset">
+        <div
+          className={
+            showSidebar ? 'open dataset-container' : 'dataset-container'
+          }>
+          {this._leftSidebar(snapshots)}
+          {this._showSideBarButton()}
+          {!this.state.datasets.loading ? this._tools(dataset) : null}
+          <div className="fade-in inner-route dataset-route light">
+            {this.state.datasets.loading ? (
+              <Spinner active={true} text={loadingText} />
+            ) : (
+              content
+            )}
+          </div>
         </div>
       </div>
     )
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -166,13 +184,13 @@ let Dataset = React.createClass({
         <div className="col-xs-12 dataset-tools-wrap">
           <Tools
             dataset={dataset}
-            selectedSnapshot={this.state.selectedSnapshot}
-            snapshots={this.state.snapshots}
+            selectedSnapshot={this.state.datasets.selectedSnapshot}
+            snapshots={this.state.datasets.snapshots}
           />
         </div>
       )
     }
-  },
+  }
 
   _leftSidebar(snapshots) {
     let isSignedIn = !!userStore.hasToken()
@@ -208,16 +226,22 @@ let Dataset = React.createClass({
         )
       }
 
+      const datasetId = bids.decodeId(
+        snapshot.original ? snapshot.original : snapshot._id,
+      )
+      const urlBase = '/datasets/' + datasetId
+      const snapshotUrl = snapshot.original
+        ? urlBase + '/versions/' + bids.decodeId(snapshot._id)
+        : urlBase
+
       return (
         <li key={snapshot._id}>
-          <a
-            onClick={actions.loadSnapshot.bind(
-              this,
-              snapshot.isOriginal,
-              snapshot.linkID,
-            )}
+          <Link
+            to={snapshotUrl}
             className={
-              this.state.selectedSnapshot == snapshot._id ? 'active' : null
+              this.state.datasets.selectedSnapshot == snapshot._id
+                ? 'active'
+                : null
             }>
             <div className="clearfix">
               <div className=" col-xs-12">
@@ -241,7 +265,7 @@ let Dataset = React.createClass({
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
         </li>
       )
     })
@@ -258,10 +282,10 @@ let Dataset = React.createClass({
         </span>
       </div>
     )
-  },
+  }
 
   _showSideBarButton() {
-    let showSidebar = this.state.showSidebar
+    let showSidebar = this.state.datasets.showSidebar
     return (
       <span className="show-nav-btn" onClick={actions.toggleSidebar}>
         {showSidebar ? (
@@ -271,7 +295,7 @@ let Dataset = React.createClass({
         )}
       </span>
     )
-  },
+  }
 
   _authors(authors) {
     if (authors.length > 0) {
@@ -289,13 +313,13 @@ let Dataset = React.createClass({
       }
       return <h6>{authorString}</h6>
     }
-  },
+  }
 
   _downloads(downloads) {
     if (downloads) {
       return <h6>downloads: {downloads}</h6>
     }
-  },
+  }
 
   _fileTree(dataset, canEdit) {
     if (!dataset.status.incomplete) {
@@ -311,7 +335,7 @@ let Dataset = React.createClass({
                   <FileTree
                     tree={[dataset]}
                     editable={canEdit}
-                    loading={this.state.loadingTree}
+                    loading={this.state.datasets.loadingTree}
                     dismissError={actions.dismissError}
                     deleteFile={actions.deleteFile}
                     getFileDownloadTicket={actions.getFileDownloadTicket}
@@ -327,12 +351,12 @@ let Dataset = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _incompleteMessage(dataset) {
     if (
       dataset.status.incomplete &&
-      this.state.currentUploadId !== dataset._id
+      this.state.datasets.currentUploadId !== dataset._id
     ) {
       return (
         <div className="col-xs-12 incomplete-dataset">
@@ -357,7 +381,7 @@ let Dataset = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -365,7 +389,7 @@ let Dataset = React.createClass({
     let dateModified = moment(modified).format('L')
     let timeago = moment(modified).fromNow(true)
     return <h6>{'last modified ' + dateModified + ' - ' + timeago + ' ago'}</h6>
-  },
+  }
 
   _uploaded(dataset) {
     let user = dataset ? dataset.user : null
@@ -383,17 +407,22 @@ let Dataset = React.createClass({
           ' ago'}
       </h6>
     )
-  },
+  }
 
   _views(views) {
     if (views) {
       return <h6>views: {views}</h6>
     }
-  },
+  }
 
   _onFileSelect(files) {
-    uploadActions.onResume(files, this.state.dataset.label)
-  },
-})
+    uploadActions.onResume(files, this.state.datasets.dataset.label)
+  }
+}
 
-export default Dataset
+Dataset.propTypes = {
+  match: PropTypes.object,
+  location: PropTypes.object,
+}
+
+export default withRouter(Dataset)

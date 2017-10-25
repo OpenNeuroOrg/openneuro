@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Select from 'react-select'
 
 const JobParameters = ({
@@ -129,11 +130,11 @@ const JobParameters = ({
 }
 
 JobParameters.propTypes = {
-  onChange: React.PropTypes.func,
-  onRestoreDefaults: React.PropTypes.func,
-  parameters: React.PropTypes.object,
-  parametersMetadata: React.PropTypes.object,
-  subjects: React.PropTypes.array,
+  onChange: PropTypes.func,
+  onRestoreDefaults: PropTypes.func,
+  parameters: PropTypes.object,
+  parametersMetadata: PropTypes.object,
+  subjects: PropTypes.array,
 }
 
 JobParameters.defaultProps = {

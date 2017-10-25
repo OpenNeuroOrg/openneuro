@@ -1,23 +1,15 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
+import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import moment from 'moment'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import uploadStore from '../../upload/upload.store'
 import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
 import ToolModals from './modals.jsx'
 
-let Tools = React.createClass({
-  mixins: [Reflux.connect(uploadStore)],
-
-  propTypes: {
-    dataset: React.PropTypes.object.isRequired,
-    snapshots: React.PropTypes.array.isRequired,
-    selectedSnapshot: React.PropTypes.string.isRequired,
-  },
-
+class Tools extends React.Component {
   // life cycle events --------------------------------------------------
 
   componentDidMount() {
@@ -25,7 +17,7 @@ let Tools = React.createClass({
     if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
       actions.loadUsers()
     }
-  },
+  }
 
   render() {
     let dataset = this.props.dataset,
@@ -78,7 +70,11 @@ let Tools = React.createClass({
       {
         tooltip: isSnapshot ? 'Delete Snapshot' : 'Delete Dataset',
         icon: 'fa-trash',
-        action: actions.deleteDataset.bind(this, dataset._id),
+        action: actions.deleteDataset.bind(
+          this,
+          dataset._id,
+          this.props.history,
+        ),
         display: displayDelete,
         warn: isSnapshot,
       },
@@ -92,7 +88,7 @@ let Tools = React.createClass({
       {
         tooltip: 'Create Snapshot',
         icon: 'fa-camera-retro icon-plus',
-        action: actions.createSnapshot,
+        action: actions.createSnapshot.bind(null, this.props.history),
         display: isAdmin && !isSnapshot && !isIncomplete,
         warn: true,
         validations: [
@@ -130,7 +126,7 @@ let Tools = React.createClass({
         <ToolModals />
       </div>
     )
-  },
+  }
 
   // template methods ---------------------------------------------------
 
@@ -146,7 +142,7 @@ let Tools = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   _tools(toolConfig) {
     let tools = toolConfig.map((tool, index) => {
@@ -167,7 +163,7 @@ let Tools = React.createClass({
       }
     })
     return tools
-  },
+  }
 
   _deleteDataset(isAdmin, isPublic, isSuperuser, datasetHasJobs) {
     //CRN admin can delete any dataset
@@ -186,7 +182,14 @@ let Tools = React.createClass({
     }
     //otherwise don't allow deletion
     return false
-  },
-})
+  }
+}
 
-export default Tools
+Tools.propTypes = {
+  dataset: PropTypes.object.isRequired,
+  snapshots: PropTypes.array.isRequired,
+  selectedSnapshot: PropTypes.string.isRequired,
+  history: PropTypes.object,
+}
+
+export default withRouter(Tools)

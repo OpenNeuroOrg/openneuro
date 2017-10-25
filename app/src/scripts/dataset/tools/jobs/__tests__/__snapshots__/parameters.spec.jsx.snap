@@ -29,12 +29,14 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
   <div
     className={null}
     id={null}
+    key="boolean"
   >
     <div
       className="parameters form-horizontal"
     >
       <div
         className="form-group"
+        key="boolean"
       >
         <label
           className="sr-only"
@@ -71,12 +73,14 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
   <div
     className={null}
     id={null}
+    key="participant_label"
   >
     <div
       className="parameters form-horizontal"
     >
       <div
         className="form-group"
+        key="participant_label"
       >
         <label
           className="sr-only"
@@ -155,12 +159,14 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
   <div
     className="required-param"
     id={null}
+    key="another_option"
   >
     <div
       className="parameters form-horizontal"
     >
       <div
         className="form-group"
+        key="another_option"
       >
         <label
           className="sr-only"

@@ -1,35 +1,26 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // component setup ----------------------------------------------------
 
-let Input = React.createClass({
+class Input extends React.Component {
   // life cycle events --------------------------------------------------
 
-  getInitialState() {
-    return {
-      value: this.props.initialValue ? this.props.initialValue : '',
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: props.initialValue ? props.initialValue : '',
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     // Will reset value when prop changes
     if ('value' in nextProps) {
       this.setState({ value: nextProps.value })
     }
-  },
-
-  propTypes: {
-    initialValue: React.PropTypes.string,
-    placeholder: React.PropTypes.string,
-    name: React.PropTypes.string,
-    type: React.PropTypes.string,
-    value: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    disabled: React.PropTypes.bool,
-    checked: React.PropTypes.bool,
-  },
+  }
 
   render() {
     let placeholder = this.props.placeholder
@@ -43,7 +34,7 @@ let Input = React.createClass({
         {this._input(type, name, placeholder, value)}
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
@@ -54,7 +45,7 @@ let Input = React.createClass({
           name={name}
           placeholder={placeholder}
           value={value}
-          onChange={this._handleChange}
+          onChange={this._handleChange.bind(this)}
         />
       )
     } else {
@@ -64,12 +55,12 @@ let Input = React.createClass({
           name={name}
           placeholder={placeholder}
           value={value}
-          onChange={this._handleChange}
+          onChange={this._handleChange.bind(this)}
           disabled={this.props.disabled}
         />
       )
     }
-  },
+  }
 
   _handleChange(event) {
     this.setState({ value: event.target.value })
@@ -77,14 +68,25 @@ let Input = React.createClass({
     if (this.props.onChange) {
       this.props.onChange(event)
     }
-  },
+  }
 
   _toggleCheckbox(event) {
     this.setState({ value: event.target.checked })
     if (this.props.onChange) {
       this.props.onChange(event)
     }
-  },
-})
+  }
+}
+
+Input.propTypes = {
+  initialValue: PropTypes.string,
+  placeholder: PropTypes.string,
+  name: PropTypes.string,
+  type: PropTypes.string,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool,
+  checked: PropTypes.bool,
+}
 
 export default Input
