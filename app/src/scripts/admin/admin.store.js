@@ -81,6 +81,7 @@ let UserStore = Reflux.createStore({
       failedLogs: [],
       successLogs: [],
       uploadedLogs: [],
+      activityLogs: [],
       resultsPerPage: 30,
       page: 0,
     }
@@ -197,7 +198,7 @@ let UserStore = Reflux.createStore({
   // uploading contains all jobs, as all jobs are uploaded.
   filterLogs() {
     let eventLogs = this.data.eventLogs || []
-    console.log(eventLogs)
+    // console.log(eventLogs)
     for (let log of eventLogs) {
       if (!eventLogs.length) {
         this.getEventLogs()
@@ -220,6 +221,43 @@ let UserStore = Reflux.createStore({
         }
       }
     }
+    this.filterMonthActivity()
+  },
+
+  filterMonthActivity() {
+    let successLogs = this.data.failedLogs
+    let activityLogs = this.data.activityLogs
+    let data = this.data
+    let entries = []
+
+    for (let job of successLogs) {
+      // convert date
+      let not_utc = new Date(job.date).toString()
+      // push to mediary array
+      entries.push({ dateTime: not_utc, log: job })
+
+      // access month and year
+      let explode = not_utc.split(' ')
+      let month = explode[1]
+      let year = explode[3]
+
+      // if array is empty add first entry
+      if (activityLogs.length === 0) {
+        activityLogs.push({ month: month, year: year })
+      } else {
+        // loop through months
+        for (let entry of activityLogs) {
+          if (entry.month != month && entry.year != year) {
+            activityLogs.push({ month: month, year: year })
+          } else {
+            if (entry.month === month && entry.year === year) {
+              entry['entries'] = entries
+            }
+          }
+        }
+      }
+    }
+    this.update(data)
   },
 
   /**
