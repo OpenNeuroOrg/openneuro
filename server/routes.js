@@ -183,6 +183,11 @@ const routes = [
   },
   {
     method: 'get',
+    url: '/logs/:app/:jobId/:taskArn/raw',
+    handler: awsJobs.getLogstreamRaw,
+  },
+  {
+    method: 'get',
     url: '/eventlogs',
     middleware: [auth.superuser],
     handler: eventLogs.getEventLogs,

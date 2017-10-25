@@ -423,6 +423,27 @@ let handlers = {
     })
   },
 
+  getLogstreamRaw(req, res, next) {
+    let appName = req.params.app
+    let jobId = req.params.jobId
+    let taskArn = req.params.taskArn
+    let key = appName + '/' + jobId + '/' + taskArn
+
+    aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
+      if (err) {
+        return next(err)
+      } else {
+        res.writeHead(200, {
+          'Content-Type': 'text/plain',
+          'Transfer-Encoding': 'chunked',
+          'Content-Disposition': 'attachment; filename="' + key + '.txt"',
+        })
+        logs.map(log => res.write(log.message + '\n'))
+        res.end()
+      }
+    })
+  },
+
   /**
      * Retry a job using existing parameters
      */

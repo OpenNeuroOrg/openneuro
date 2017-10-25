@@ -290,7 +290,7 @@ let datasetStore = Reflux.createStore({
         displayFile: {
           name: 'Logs',
           text: logsText,
-          link: '/logs/' + logstreamName + '.json',
+          link: config.crn.url + 'logs/' + logstreamName + '/raw',
         },
         modals,
       })
