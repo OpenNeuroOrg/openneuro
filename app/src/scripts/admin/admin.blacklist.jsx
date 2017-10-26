@@ -5,9 +5,13 @@ import Reflux from 'reflux'
 import adminStore from './admin.store'
 import actions from './admin.actions'
 import WarnButton from '../common/forms/warn-button.jsx'
+import { refluxConnect } from '../utils/reflux'
 
-let Blacklist = React.createClass({
-  mixins: [Reflux.connect(adminStore)],
+class Blacklist extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
 
   // life cycle events --------------------------------------------------
 
@@ -15,7 +19,7 @@ let Blacklist = React.createClass({
     let noBlacklist = (
       <div className="no-results">There are no blocked users</div>
     )
-    let users = this.state.blacklist.map(user => {
+    let users = this.state.admin.blacklist.map(user => {
       return (
         <div className="fade-in user-panel clearfix" key={user._id}>
           <div className="col-xs-5 user-col">
@@ -45,42 +49,46 @@ let Blacklist = React.createClass({
     })
 
     return (
-      <div className="dashboard-dataset-teasers fade-in admin-blacklist clearfix">
-        <h2>Blocked Users</h2>
-        <button className="btn-blue" onClick={actions.blacklistModal}>
-          <span>Block a User</span>
-        </button>
-        <div>
-          <div className="col-xs-12 users-panel-wrap ">
-            <div className="fade-in user-panel-header clearfix">
-              <div className="col-xs-5 user-col">
-                <label>User</label>
+      <div className="admin blacklist">
+        <div className="dashboard-dataset-teasers fade-in admin-blacklist clearfix">
+          <h2>Blocked Users</h2>
+          <button className="btn-blue" onClick={actions.blacklistModal}>
+            <span>Block a User</span>
+          </button>
+          <div>
+            <div className="col-xs-12 users-panel-wrap ">
+              <div className="fade-in user-panel-header clearfix">
+                <div className="col-xs-5 user-col">
+                  <label>User</label>
+                </div>
+                <div className="col-xs-4 user-col">
+                  <label>Notes</label>
+                </div>
+                <div className="col-xs-3 user-col">
+                  <label>Actions</label>
+                </div>
               </div>
-              <div className="col-xs-4 user-col">
-                <label>Notes</label>
-              </div>
-              <div className="col-xs-3 user-col">
-                <label>Actions</label>
-              </div>
+              {this.state.admin.blacklist.length == 0 ? noBlacklist : users}
             </div>
-            {this.state.blacklist.length == 0 ? noBlacklist : users}
           </div>
         </div>
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
   _blacklistError() {
-    return this.state.blacklistError ? (
-      <div className="alert alert-danger">{this.state.blacklistError}</div>
+    return this.state.admin.blacklistError ? (
+      <div className="alert alert-danger">
+        {this.state.admin.blacklistError}
+      </div>
     ) : null
-  },
+  }
 
   _inputChange(e) {
     actions.inputChange('blacklistForm', e.target.name, e.target.value)
-  },
-})
+  }
+}
 
 export default Blacklist

@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import bytes from 'bytes'
 
@@ -103,6 +104,6 @@ Summary.props = {
 }
 
 Summary.propTypes = {
-  summary: React.PropTypes.object,
-  minimal: React.PropTypes.bool,
+  summary: PropTypes.object,
+  minimal: PropTypes.bool,
 }

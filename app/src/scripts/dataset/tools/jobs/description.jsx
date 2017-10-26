@@ -1,6 +1,7 @@
 /*eslint react/no-danger: 0 */
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import markdown from '../../../utils/markdown'
 
 const JobDescription = ({ jobDefinition }) => {
@@ -88,7 +89,7 @@ const JobDescription = ({ jobDefinition }) => {
 }
 
 JobDescription.propTypes = {
-  jobDefinition: React.PropTypes.object,
+  jobDefinition: PropTypes.object,
 }
 
 JobDescription.defaultProps = {

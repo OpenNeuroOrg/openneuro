@@ -2,14 +2,8 @@
 
 exports[`admin/LogLink links to datasets 1`] = `
 <Link
-  activeClassName="active"
-  className=""
-  params={
-    Object {
-      "datasetId": "someid",
-    }
-  }
-  to="dataset"
+  replace={false}
+  to="/datasets/someid"
 >
   somedataset
 </Link>
@@ -17,22 +11,8 @@ exports[`admin/LogLink links to datasets 1`] = `
 
 exports[`admin/LogLink links to jobs 1`] = `
 <Link
-  activeClassName="active"
-  className=""
-  params={
-    Object {
-      "datasetId": "someid",
-      "snapshotId": "anotherid",
-    }
-  }
-  query={
-    Object {
-      "app": "someapp",
-      "job": undefined,
-      "version": "1",
-    }
-  }
-  to="snapshot"
+  replace={false}
+  to="/datasets/someid/versions/anotherid"
 >
   somedataset
    

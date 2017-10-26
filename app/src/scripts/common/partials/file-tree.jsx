@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
@@ -279,17 +280,17 @@ FileTree.props = {
 }
 
 FileTree.propTypes = {
-  editable: React.PropTypes.bool,
-  loading: React.PropTypes.bool,
-  tree: React.PropTypes.array,
-  treeId: React.PropTypes.string,
-  dismissError: React.PropTypes.func,
-  deleteFile: React.PropTypes.func,
-  getFileDownloadTicket: React.PropTypes.func,
-  toggleFolder: React.PropTypes.func,
-  addFile: React.PropTypes.func,
-  updateFile: React.PropTypes.func,
-  displayFile: React.PropTypes.func,
+  editable: PropTypes.bool,
+  loading: PropTypes.bool,
+  tree: PropTypes.array,
+  treeId: PropTypes.string,
+  dismissError: PropTypes.func,
+  deleteFile: PropTypes.func,
+  getFileDownloadTicket: PropTypes.func,
+  toggleFolder: PropTypes.func,
+  addFile: PropTypes.func,
+  updateFile: PropTypes.func,
+  displayFile: PropTypes.func,
 }
 
 export default FileTree

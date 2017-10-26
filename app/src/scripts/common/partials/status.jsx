@@ -1,6 +1,7 @@
 // dependencies --------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Tooltip from './tooltip.jsx'
 import FileSelect from '../forms/file-select.jsx'
 import actions from '../../upload/upload.actions'
@@ -86,8 +87,8 @@ export default class Status extends React.Component {
 }
 
 Status.propTypes = {
-  display: React.PropTypes.bool,
-  minimal: React.PropTypes.bool,
-  type: React.PropTypes.string,
-  dataset: React.PropTypes.object,
+  display: PropTypes.bool,
+  minimal: PropTypes.bool,
+  type: PropTypes.string,
+  dataset: PropTypes.object,
 }

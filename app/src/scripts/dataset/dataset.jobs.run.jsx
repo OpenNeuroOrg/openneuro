@@ -2,6 +2,7 @@
 // dependencies ------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import actions from './dataset.actions'
 import WarnButton from '../common/forms/warn-button.jsx'
 import moment from 'moment'
@@ -27,6 +28,7 @@ class JobAccordion extends React.Component {
             className={run.active ? 'job border-flash' : 'job'}
             header={this._header(run)}>
             <span className="inner">
+              {this._support(run)}
               {this._parameters(run)}
               {this._results(run, 'results')}
               {this._logs(run)}
@@ -179,10 +181,12 @@ class JobAccordion extends React.Component {
             return a - b
           })
         }
+        // Values can be strings or arrays
+        const value = run.parameters[key].constructor === Array ? run.parameters[key].join(' ') : run.parameters[key]
         parameters.push(
           <li key={key}>
             <span className="key">{key}</span>:{' '}
-            <span className="value">{run.parameters[key]}</span>
+            <span className="value">{value}</span>
           </li>,
         )
       }
@@ -441,12 +445,12 @@ class JobAccordion extends React.Component {
 }
 
 JobAccordion.propTypes = {
-  run: React.PropTypes.object,
-  displayFile: React.PropTypes.func,
-  toggleFolder: React.PropTypes.func,
-  acknowledgements: React.PropTypes.string,
-  support: React.PropTypes.string,
-  currentUser: React.PropTypes.object,
+  run: PropTypes.object,
+  displayFile: PropTypes.func,
+  toggleFolder: PropTypes.func,
+  acknowledgements: PropTypes.string,
+  support: PropTypes.string,
+  currentUser: PropTypes.object,
 }
 
 export default JobAccordion

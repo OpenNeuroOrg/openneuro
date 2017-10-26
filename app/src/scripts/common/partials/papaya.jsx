@@ -4,6 +4,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class Papaya extends React.Component {
   // life cycle events --------------------------------------------------
@@ -91,5 +92,5 @@ export default class Papaya extends React.Component {
 // prop validation ----------------------------------------------------
 
 Papaya.propTypes = {
-  image: React.PropTypes.string,
+  image: PropTypes.string,
 }

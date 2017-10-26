@@ -7,17 +7,21 @@ import adminStore from './admin.store'
 import actions from './admin.actions'
 import Paginator from '../common/partials/paginator.jsx'
 import LogLink from './admin.logs.link.jsx'
+import { refluxConnect } from '../utils/reflux'
 
-let Logs = React.createClass({
-  mixins: [Reflux.connect(adminStore)],
+class Logs extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
 
   // life cycle events --------------------------------------------------
 
   render() {
     let logs = []
 
-    let eventLogs = this.state.eventLogs
-    let filteredLogs = this.state.filteredLogs
+    let eventLogs = this.state.admin.eventLogs
+    let filteredLogs = this.state.admin.filteredLogs
     let results
     if (!eventLogs || eventLogs.length === 0) {
       let noEventLogs = 'There are no event logs.'
@@ -27,12 +31,12 @@ let Logs = React.createClass({
       results = <p className="no-datasets">{noMatchedLogs}</p>
     } else {
       var pagesTotal = Math.ceil(
-        filteredLogs.length / this.state.resultsPerPage,
+        filteredLogs.length / this.state.admin.resultsPerPage,
       )
       let paginatedResults = this._paginate(
         filteredLogs,
-        this.state.resultsPerPage,
-        this.state.page,
+        this.state.admin.resultsPerPage,
+        this.state.admin.page,
       )
       paginatedResults.map((log, index) => {
         const link = <LogLink log={log} />
@@ -95,7 +99,7 @@ let Logs = React.createClass({
         </div>
         <div className="pager-wrapper">
           <Paginator
-            page={this.state.page}
+            page={this.state.admin.page}
             pagesTotal={pagesTotal}
             pageRangeDisplayed={5}
             onPageSelect={this._onPageSelect}
@@ -103,25 +107,25 @@ let Logs = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   _searchLogs(e) {
     actions.searchLogs(e.target.value)
-  },
+  }
 
   _paginate(data, perPage, page) {
     if (data.length < 1) return null
-    page ? page : this.state.page
+    page ? page : this.state.admin.page
     let start = page * perPage
     let end = start + perPage
     var retArr = data.slice(start, end)
     return retArr
-  },
+  }
 
   _onPageSelect(page) {
     let pageNumber = Number(page)
     this.setState({ page: pageNumber })
-  },
-})
+  }
+}
 
 export default Logs

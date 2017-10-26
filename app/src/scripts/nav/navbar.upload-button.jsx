@@ -3,27 +3,31 @@
 import React from 'react'
 import Reflux from 'reflux'
 import Actions from '../upload/upload.actions.js'
-import uploadStore from '../upload/upload.store.js'
+import UploadStore from '../upload/upload.store.js'
 import Upload from '../upload/upload.jsx'
-import { Modal } from 'react-bootstrap'
+import { Modal } from '../utils/modal.jsx'
 import Progress from '../upload/upload.progress.jsx'
+import { refluxConnect } from '../utils/reflux'
 
 import favicon_upload from './assets/favicon-upload.png'
 
 // component setup ---------------------------------------------------------------
 
-let UploadBtn = React.createClass({
-  mixins: [Reflux.connect(uploadStore)],
+class UploadBtn extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, UploadStore, 'upload')
+  }
 
   // life cycle methods ------------------------------------------------------------
 
-  render: function() {
+  render() {
     let progress = (
       <a
         className="nav-link nl-upload nl-progress"
         onClick={Actions.toggleModal}>
         <span className="link-name">view details</span>
-        <Progress progress={this.state.progress} minimal={true} />
+        <Progress progress={this.state.upload.progress} minimal={true} />
       </a>
     )
 
@@ -37,7 +41,7 @@ let UploadBtn = React.createClass({
 
     let uploadModal = (
       <Modal
-        show={this.state.showModal}
+        show={this.state.upload.showModal}
         onHide={Actions.toggleModal}
         className="upload-modal">
         <Modal.Header closeButton>
@@ -54,12 +58,12 @@ let UploadBtn = React.createClass({
 
     return (
       <span className="upload-btn-wrap">
-        {this.state.uploadStatus == 'uploading' ? progress : uploadBtn}
+        {this.state.upload.uploadStatus == 'uploading' ? progress : uploadBtn}
         {uploadModal}
         <img src={favicon_upload} id="favicon_upload" className="hidden" />
       </span>
     )
-  },
-})
+  }
+}
 
 export default UploadBtn

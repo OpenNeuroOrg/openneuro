@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // component setup ----------------------------------------------------
 
@@ -102,10 +103,10 @@ export default class Typeahead extends React.Component {
 }
 
 Typeahead.propTypes = {
-  value: React.PropTypes.array,
-  options: React.PropTypes.array,
-  filter: React.PropTypes.array,
-  formate: React.PropTypes.array,
-  onChange: React.PropTypes.func,
-  format: React.PropTypes.array,
+  value: PropTypes.array,
+  options: PropTypes.array,
+  filter: PropTypes.array,
+  formate: PropTypes.array,
+  onChange: PropTypes.func,
+  format: PropTypes.array,
 }

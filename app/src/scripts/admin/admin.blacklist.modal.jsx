@@ -5,18 +5,21 @@ import Reflux from 'reflux'
 import adminStore from './admin.store'
 import actions from './admin.actions'
 import Input from '../common/forms/input.jsx'
-import { Modal } from 'react-bootstrap'
+import { Modal } from '../utils/modal.jsx'
+import { refluxConnect } from '../utils/reflux'
 
-let BlacklistModal = React.createClass({
-  mixins: [Reflux.connect(adminStore)],
-
+class BlacklistModal extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
   // life cycle events --------------------------------------------------
 
   render() {
-    let blacklistForm = this.state.blacklistForm
+    let blacklistForm = this.state.admin.blacklistForm
 
     return (
-      <Modal show={this.state.modals.blacklist} onHide={this._hide}>
+      <Modal show={this.state.admin.modals.blacklist} onHide={this._hide}>
         <Modal.Header closeButton>
           <Modal.Title>Block a User</Modal.Title>
         </Modal.Header>
@@ -64,23 +67,25 @@ let BlacklistModal = React.createClass({
         </Modal.Body>
       </Modal>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
   _blacklistError() {
-    return this.state.blacklistError ? (
-      <div className="alert alert-danger">{this.state.blacklistError}</div>
+    return this.state.admin.blacklistError ? (
+      <div className="alert alert-danger">
+        {this.state.admin.blacklistError}
+      </div>
     ) : null
-  },
+  }
 
   _inputChange(e) {
     actions.inputChange('blacklistForm', e.target.name, e.target.value)
-  },
+  }
 
   _hide() {
     actions.toggleModal('blacklist')
-  },
-})
+  }
+}
 
 export default BlacklistModal

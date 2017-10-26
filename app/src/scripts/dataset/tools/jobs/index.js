@@ -3,9 +3,11 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import actions from '../../dataset.actions.js'
 import Spinner from '../../../common/partials/spinner.jsx'
-import { Modal } from 'react-bootstrap'
+import { Modal } from '../../../utils/modal.jsx'
 import moment from 'moment'
 import validate from 'bids-validator'
 import scitran from '../../../utils/scitran'
@@ -14,7 +16,7 @@ import Description from './description.jsx'
 import Parameters from './parameters.jsx'
 import batch from '../../../utils/batch'
 
-export default class JobMenu extends React.Component {
+class JobMenu extends React.Component {
   // life cycle events --------------------------------------------------
 
   constructor() {
@@ -358,15 +360,22 @@ export default class JobMenu extends React.Component {
      * Hide
      */
   _hide() {
-    let success = !!this.state.message && !this.state.error
+    const success = this.state.message && !this.state.error
 
     // on modal close arguments
-    let snapshotId = this.state.selectedSnapshot,
-      appLabel = this.state.selectedVersion.label,
-      appVersion = this.state.selectedVersion.version,
+    const snapshotId = this.state.selectedSnapshot,
+      appLabel = this.state.selectedAppKey,
+      appVersion = this.state.selectedVersionID,
       jobId = this.state.jobId
 
-    this.props.onHide(success, snapshotId, appLabel, appVersion, jobId)
+    this.props.onHide(
+      success,
+      snapshotId,
+      appLabel,
+      appVersion,
+      jobId,
+      this.props.history,
+    )
     this.setState({
       loading: false,
       jobId: null,
@@ -540,7 +549,7 @@ export default class JobMenu extends React.Component {
      */
   _createSnapshot() {
     this.setState({ loading: true })
-    actions.createSnapshot(res => {
+    actions.createSnapshot.bind(null, this.props.history)(res => {
       if (res.error) {
         this.setState({
           error: true,
@@ -600,11 +609,20 @@ export default class JobMenu extends React.Component {
                 'Your analysis has been submitted. You will receive a notification by email once the job is complete.'
             }
 
-            this.setState({
-              loading: false,
-              message: message,
-              error: error /*, jobId: res.body.result.id*/,
-            })
+            if ('jobId' in res.body && res.body.jobId) {
+              this.setState({
+                loading: false,
+                message: message,
+                error: error,
+                jobId: res.body.jobId,
+              })
+            } else {
+              this.setState({
+                loading: false,
+                message: message,
+                error: error,
+              })
+            }
           },
         )
       },
@@ -613,12 +631,13 @@ export default class JobMenu extends React.Component {
 }
 
 JobMenu.propTypes = {
-  apps: React.PropTypes.object,
-  dataset: React.PropTypes.object,
-  loadingApps: React.PropTypes.bool,
-  onHide: React.PropTypes.func.isRequired,
-  show: React.PropTypes.bool,
-  snapshots: React.PropTypes.array,
+  apps: PropTypes.object,
+  dataset: PropTypes.object,
+  loadingApps: PropTypes.bool,
+  onHide: PropTypes.func.isRequired,
+  show: PropTypes.bool,
+  snapshots: PropTypes.array,
+  history: PropTypes.object,
 }
 
 JobMenu.defaultProps = {
@@ -628,3 +647,5 @@ JobMenu.defaultProps = {
   show: false,
   snapshots: [],
 }
+
+export default withRouter(JobMenu)

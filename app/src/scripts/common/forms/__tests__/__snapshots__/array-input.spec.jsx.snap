@@ -10,6 +10,7 @@ exports[`common/forms/ArrayInput renders a hidden checkbox 1`] = `
     <ArrayItem
       index={0}
       item="false"
+      key="0"
       model={
         Array [
           Object {
@@ -31,9 +32,11 @@ exports[`common/forms/ArrayInput renders a hidden checkbox 1`] = `
     <span>
       <div
         className="form-group float-label-input"
+        key="license-key"
       >
         <button
           className="admin-button"
+          key="license-key"
           onClick={[Function]}
         >
           <span>

@@ -117,6 +117,7 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
             defaultExpanded={false}
             eventKey="59c16458c650bd001111f010"
             header="Support"
+            key="59c16458c650bd001111f010"
           >
             <div
               className="app-support"
@@ -143,9 +144,12 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
             defaultExpanded={false}
             eventKey="59c16458c650bd001111f010"
             header="Parameters"
+            key="59c16458c650bd001111f010"
           >
             <ul>
-              <li>
+              <li
+                key="participant_label"
+              >
                 <span
                   className="key"
                 >
@@ -173,10 +177,12 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
             defaultExpanded={false}
             eventKey="59c16458c650bd001111f010"
             header="Jobs Status"
+            key="59c16458c650bd001111f010"
           >
             <ul>
               <div
                 className=" job-status col-xs-12"
+                key="59c16458c650bd001111f010"
               >
                 <div
                   className="col-xs-8"
@@ -191,6 +197,7 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
               </div>
               <div
                 className="job-status col-xs-12"
+                key="49c03ed3-281e-40d3-b027-3102dcb5153c"
               >
                 <div
                   className="col-xs-8"
@@ -205,6 +212,7 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
               </div>
               <div
                 className="job-status col-xs-12"
+                key="e276c571-83f7-439f-a34c-09840bb2a9cd"
               >
                 <div
                   className="col-xs-8"
@@ -300,9 +308,12 @@ exports[`dataset/dataset.job.run/JobAccordion renders a successful run 1`] = `
           defaultExpanded={false}
           eventKey="59c1632cc650bd001111f00d"
           header="Parameters"
+          key="59c1632cc650bd001111f00d"
         >
           <ul>
-            <li>
+            <li
+              key="participant_label"
+            >
               <span
                 className="key"
               >
@@ -330,6 +341,7 @@ exports[`dataset/dataset.job.run/JobAccordion renders a successful run 1`] = `
           defaultExpanded={false}
           eventKey="59c1632cc650bd001111f00d"
           header="results"
+          key="59c1632cc650bd001111f00d"
         >
           <div
             className="app-acknowledgements"
@@ -421,6 +433,7 @@ exports[`dataset/dataset.job.run/JobAccordion renders a successful run 1`] = `
           defaultExpanded={false}
           eventKey="59c1632cc650bd001111f00d"
           header="Logs"
+          key="59c1632cc650bd001111f00d"
         >
           <span
             className="download-all"
@@ -453,10 +466,13 @@ exports[`dataset/dataset.job.run/JobAccordion renders a successful run 1`] = `
                 aria-expanded="false"
                 className="panel-collapse"
               >
-                <span>
+                <span
+                  key="participant"
+                >
                   PARTICIPANT
                   <span
                     className="job-log"
+                    key="--participant_label 13"
                   >
                     <WarnButton
                       action={[Function]}
@@ -486,10 +502,13 @@ exports[`dataset/dataset.job.run/JobAccordion renders a successful run 1`] = `
                     </span>
                   </span>
                 </span>
-                <span>
+                <span
+                  key="group"
+                >
                   GROUP
                   <span
                     className="job-log"
+                    key="--participant_label 13"
                   >
                     <WarnButton
                       action={[Function]}

@@ -1,27 +1,29 @@
 // dependencies ------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
-import { Link } from 'react-router'
+import { withRouter, Link, NavLink } from 'react-router-dom'
 import Usermenu from './navbar.usermenu.jsx'
 import UploadBtn from './navbar.upload-button.jsx'
 import userStore from '../user/user.store.js'
 import actions from '../user/user.actions.js'
-import { Navbar, Modal } from 'react-bootstrap'
+import { Navbar } from 'react-bootstrap'
+import { Modal } from '../utils/modal.jsx'
+import { refluxConnect } from '../utils/reflux'
 
 import brand_mark from './assets/brand_mark.png'
 
 // component setup ---------------------------------------------------------------
 
-let BSNavbar = React.createClass({
-  mixins: [Reflux.connect(userStore)],
+class BSNavbar extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, userStore, 'users')
+  }
 
   // life cycle methods ------------------------------------------------------------
-  propTypes: {
-    routes: React.PropTypes.array,
-  },
-
-  render: function() {
+  render() {
     return (
       <span>
         <Navbar collapseOnSelect>
@@ -34,13 +36,13 @@ let BSNavbar = React.createClass({
         {this._supportModal()}
       </span>
     )
-  },
+  }
 
   // template methods --------------------------------------------------------------
 
   _brand() {
     return (
-      <Link to="app" className="navbar-brand">
+      <Link to="/" className="navbar-brand">
         <img
           src={brand_mark}
           alt="OpenNeuro Logo"
@@ -51,22 +53,21 @@ let BSNavbar = React.createClass({
         </div>
       </Link>
     )
-  },
+  }
 
   _navMenu() {
-    let isLoggedIn = !!this.state.token
-    let profile = this.state.profile
-    let loading = this.state.loading
-    let routes = this.props.routes
+      let isLoggedIn = !!this.state.users.token
+    let googleProfile = this.state.users.profile
+    let loading = this.state.users.loading
     let adminLink = (
-      <Link className="nav-link" to="admin">
+      <NavLink className="nav-link" to="/admin">
         <span className="link-name">admin</span>
-      </Link>
+      </NavLink>
     )
     let dashboardLink = (
-      <Link className="nav-link" to="dashboard">
+      <NavLink className="nav-link" to="/dashboard">
         <span className="link-name">my dashboard</span>
-      </Link>
+      </NavLink>
     )
 
     return (
@@ -75,9 +76,9 @@ let BSNavbar = React.createClass({
           {userStore.hasToken() ? dashboardLink : null}
         </li>
         <li className="link-public">
-          <Link className="nav-link" to="publicDashboard">
+          <NavLink className="nav-link" to="/public/datasets">
             <span className="link-name">Public Dashboard</span>
-          </Link>
+          </NavLink>
         </li>
         <li className="link-support">
           <a className="nav-link" onClick={actions.toggleModal}>
@@ -85,12 +86,14 @@ let BSNavbar = React.createClass({
           </a>
         </li>
         <li className="link-faq">
-          <Link className="nav-link" to="faq">
+          <NavLink className="nav-link" to="/faq">
             <span className="link-name">faq</span>
-          </Link>
+          </NavLink>
         </li>
         <li className="link-admin">
-          {this.state.scitran && this.state.scitran.root ? adminLink : null}
+          {this.state.users.scitran && this.state.users.scitran.root
+            ? adminLink
+            : null}
         </li>
         <li className="link-dashboard">
           {profile ? <UploadBtn /> :profile}
@@ -100,17 +103,19 @@ let BSNavbar = React.createClass({
             {isLoggedIn && !loading ? (
               <Usermenu profile={profile} />
             ) : (
-              this._signIn(loading, routes)
+              this._signIn(loading)
             )}
           </Navbar.Collapse>
         </li>
       </ul>
     )
-  },
+  }
 
   _supportModal() {
     return (
-      <Modal show={this.state.showSupportModal} onHide={actions.toggleModal}>
+      <Modal
+        show={this.state.users.showSupportModal}
+        onHide={actions.toggleModal}>
         <Modal.Header closeButton>
           <Modal.Title>Support</Modal.Title>
         </Modal.Header>
@@ -141,16 +146,9 @@ let BSNavbar = React.createClass({
         </Modal.Footer>
       </Modal>
     )
-  },
+  }
 
-  _signIn(loading, routes) {
-    let onFrontPage = false
-    for (let route of routes) {
-      if (route.name == 'front-page') {
-        onFrontPage = true
-      }
-    }
-
+  _signIn(loading) {
     if (loading) {
       return (
         <div className="navbar-right sign-in-nav-btn">
@@ -165,20 +163,25 @@ let BSNavbar = React.createClass({
         <div className="navbar-right sign-in-nav-btn">
           <button
             className="btn-blue half"
-            onClick={userStore.googleSignIn.bind(null, { transition: onFrontPage })}>
+            onClick={userStore.googleSignIn.bind(null)}>
             <i className="fa fa-google" />
             <span> Sign in</span>
           </button>
           <button
             className="btn-blue half"
-            onClick={userStore.orcidSignIn.bind(null, { transition: onFrontPage })}>
+            onClick={userStore.orcidSignIn.bind(null)}>
             <span className="icon"><img alt="ORCID" width="16" height="16" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" /></span>
             <span> Sign in</span>
           </button>
         </div>
       )
     }
-  },
-})
+  }
+}
 
-export default BSNavbar
+BSNavbar.propTypes = {
+  routes: PropTypes.array,
+  location: PropTypes.object,
+}
+
+export default withRouter(BSNavbar)
