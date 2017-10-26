@@ -36,7 +36,7 @@
     "react-ga": "^2.2.0",
     "react-router": "4",
     "react-select": "^1.0.0-rc.5",
-    "reactable": "0.14.0",
+    "reactable": "vladnicula/reactable",
     "reflux": "6.4.1",
     "remarkable": "1.6.2",
     "spark-md5": "^1.0.0",
