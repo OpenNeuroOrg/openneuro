@@ -83,12 +83,12 @@ export default class Paginator extends React.Component {
   // custom methods ----------------------------------------------------------------------------
 
   onPageSelect(e) {
-    // get the selected page
-    var thePage = e.currentTarget.getAttribute('data-page')
-    // call props function
-    if (this.props.onPageSelect) this.props.onPageSelect(thePage, e)
     // prevent Default
     e.preventDefault()
+    // get the selected page
+    const thePage = e.currentTarget.getAttribute('data-page')
+    // call props function
+    if (this.props.onPageSelect) this.props.onPageSelect(thePage, e)
   }
 
   createPageArr() {

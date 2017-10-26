@@ -529,6 +529,13 @@ let UserStore = Reflux.createStore({
       })
     })
   },
+
+  /**
+   * Switch the page for the event logs view
+   */
+  setLogsPage(page) {
+    this.update({page})
+  },
 })
 
 export default UserStore

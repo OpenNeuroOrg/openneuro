@@ -102,7 +102,7 @@ class Logs extends Reflux.Component {
             page={this.state.admin.page}
             pagesTotal={pagesTotal}
             pageRangeDisplayed={5}
-            onPageSelect={this._onPageSelect}
+            onPageSelect={this._onPageSelect.bind(this)}
           />
         </div>
       </div>
@@ -123,8 +123,8 @@ class Logs extends Reflux.Component {
   }
 
   _onPageSelect(page) {
-    let pageNumber = Number(page)
-    this.setState({ page: pageNumber })
+    const pageNumber = Number(page)
+    adminStore.setLogsPage(pageNumber)
   }
 }
 
