@@ -56,8 +56,9 @@ class BSNavbar extends Reflux.Component {
   }
 
   _navMenu() {
-      let isLoggedIn = !!this.state.users.token
     let profile = this.state.users.profile
+    let scitran = this.state.users.scitran
+    let isLoggedIn = !!this.state.users.token && profile && scitran
     let loading = this.state.users.loading
     let adminLink = (
       <NavLink className="nav-link" to="/admin">
@@ -73,7 +74,7 @@ class BSNavbar extends Reflux.Component {
     return (
       <ul className="nav navbar-nav main-nav">
         <li className="link-dashboard">
-          {userStore.hasToken() ? dashboardLink : null}
+          {isLoggedIn ? dashboardLink : null}
         </li>
         <li className="link-public">
           <NavLink className="nav-link" to="/public/datasets">
@@ -96,11 +97,11 @@ class BSNavbar extends Reflux.Component {
             : null}
         </li>
         <li className="link-dashboard">
-          {isLoggedIn && !loading ? <UploadBtn /> : null}
+          {isLoggedIn ? <UploadBtn /> : null}
         </li>
         <li>
           <Navbar.Collapse eventKey={0}>
-            {isLoggedIn && !loading ? (
+            {isLoggedIn ? (
               <Usermenu profile={profile} />
             ) : (
               this._signIn(loading)
