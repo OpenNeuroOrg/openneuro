@@ -27,16 +27,16 @@ let UserStore = Reflux.createStore({
     }
 
     const provider = this.data.provider
-    const initCallback = (err, user) => {
-      this.update(
-        {
-          token: user.token,
-          profile: user.profile,
-          provider: 'orcid',
-        },
-        { persist: true },
-      )
+    const initCallback = (provider) => (err, user) => {
       if (user.token) {
+        this.update(
+          {
+            token: user.token,
+            profile: user.profile,
+            provider,
+          },
+          { persist: true },
+        )
         crn.verifyUser((err, res) => {
           if (res.body.code === 403) {
             this.signOut()
@@ -47,18 +47,8 @@ let UserStore = Reflux.createStore({
       }
     }
 
-    switch (this.data.provider) {
-      case 'orcid':
-        // initialize ORCID
-        orcid.init(this.data.token, initCallback)
-        break;
-
-      case 'google':
-      default:
-        // initialize google APIs
-        google.init(initCallback)
-        break;
-    }
+    google.init(initCallback('google'))
+    orcid.init(this.data.token, initCallback('orcid'))
   },
 
   getInitialState() {
@@ -265,15 +255,15 @@ let UserStore = Reflux.createStore({
      */
   clearAuth() {
     delete window.localStorage.token
-    delete window.localStorage.google
+    delete window.localStorage.provider
+    delete window.localStorage.profile
     delete window.localStorage.scitran
-    delete window.localStorage.orcid
-    this.setInitialState({
+    this.update({
       token: null,
-      google: null,
+      provider: null,
+      profile: null,
       scitran: null,
-      orcid: null,
-    })
+    }, { persist: true })
   },
 
   /**
@@ -282,6 +272,9 @@ let UserStore = Reflux.createStore({
      * Handles necessary action after a signin has been completed.
      */
   handleSignIn(transition, scitran, profile) {
+    if (!profile.imageUrl) {
+      profile.imageUrl = scitran.avatar
+    }
     this.update({ loading: false })
     this.update({ scitran, profile }, { persist: true })
     datasetActions.reloadDataset()
@@ -387,7 +380,7 @@ let UserStore = Reflux.createStore({
     }
     if (
       window.localStorage.scitran &&
-      JSON.parse(window.localStorage.scitran).root
+      (JSON.parse(window.localStorage.scitran) || {}).root
     ) {
       return true
     } else {

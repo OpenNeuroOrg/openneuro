@@ -27,15 +27,22 @@ let orcid = {
   getCurrentUser(callback) {
     let err = null
     let { orcid, access_token } = this.token
-    let isSignedIn = TextTrackCue
+
+    if (!orcid || !access_token) {
+      callback(true, {
+        token: null,
+        profile: null,
+        isSignedIn: false,
+      })
+      return
+    }
 
     crn.getORCIDProfile(access_token, (err, res) => {
       let { firstname, lastname, email } = res.body
-
       callback(err, {
         token: this.token,
         profile: { _id: orcid, firstname, lastname, email },
-        isSignedIn
+        isSignedIn: !err && orcid,
       })
     })
   },
@@ -72,15 +79,16 @@ let orcid = {
       "_blank",
     )
 
-    this.polling = window.setInterval(() => {
+    const retryUrlCheck = () => window.setTimeout(() => this.pooling(callback), 50)
+
+    this.pooling = (callback) => {
       try {
         if (!this.oauthWindow || this.oauthWindow.closed) {
-          window.clearInterval(this.polling)
+          callback(true)
           return
         }
         let url = this.oauthWindow.document.URL
         if (url.indexOf(config.auth.orcid.redirectURI) != -1) {
-          window.clearInterval(this.polling)
           this.oauthWindow.close()
           let code = url.toString().match(/code=([^&]+)/)[1]
           crn.getORCIDToken(code, (err, res) => {
@@ -91,11 +99,14 @@ let orcid = {
               this.getCurrentUser(callback)
             }
           })
+        } else {
+          retryUrlCheck()
         }
       } catch(e) {
-        console.log(e)
       }
-    }, 50)
+    }
+
+    retryUrlCheck()
   },
 
   signOut(callback) {

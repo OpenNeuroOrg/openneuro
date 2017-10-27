@@ -57,7 +57,7 @@ class BSNavbar extends Reflux.Component {
 
   _navMenu() {
       let isLoggedIn = !!this.state.users.token
-    let googleProfile = this.state.users.profile
+    let profile = this.state.users.profile
     let loading = this.state.users.loading
     let adminLink = (
       <NavLink className="nav-link" to="/admin">
@@ -96,7 +96,7 @@ class BSNavbar extends Reflux.Component {
             : null}
         </li>
         <li className="link-dashboard">
-          {profile ? <UploadBtn /> :profile}
+          {isLoggedIn && !loading ? <UploadBtn /> : null}
         </li>
         <li>
           <Navbar.Collapse eventKey={0}>
