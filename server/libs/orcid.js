@@ -25,7 +25,7 @@ export default {
         let email = doc.valueWithPath('person:person.email:emails.email:email.email:email')
 
         if (!email) {
-          callback('Your account does not have an e-mail or your e-mail is not public. Please fix your account before continuing.')
+          callback('Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.')
           return
         }
 
