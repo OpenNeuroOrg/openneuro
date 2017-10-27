@@ -7,7 +7,7 @@ export default {
   getProfile(token, callback) {
     let data = token.split(':')
     if (data.length != 2) {
-      callback("Invalid token")
+      callback('Invalid token')
     }
 
     let orcid = data[0]
@@ -25,7 +25,7 @@ export default {
         let email = doc.valueWithPath('person:person.email:emails.email:email.email:email')
 
         if (!email) {
-          callback("Missing e-mail.")
+          callback('Your account does not have an e-mail or your e-mail is not public. Please fix your account before continuing.')
           return
         }
 
