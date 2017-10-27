@@ -79,9 +79,7 @@ let orcid = {
       "_blank",
     )
 
-    const retryUrlCheck = () => window.setTimeout(() => this.pooling(callback), 50)
-
-    this.pooling = (callback) => {
+    const pooling = (callback) => {
       try {
         if (!this.oauthWindow || this.oauthWindow.closed) {
           callback(true)
@@ -99,12 +97,18 @@ let orcid = {
               this.getCurrentUser(callback)
             }
           })
-        } else {
-          retryUrlCheck()
+          return
         }
-      } catch(e) {
-      }
+      } catch(e) { }
+
+      retryUrlCheck()
     }
+
+    const retryUrlCheck = () =>
+      window.setTimeout(() =>
+        pooling(callback),
+        50
+      )
 
     retryUrlCheck()
   },
