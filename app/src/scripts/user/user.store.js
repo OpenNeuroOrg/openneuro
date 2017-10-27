@@ -130,6 +130,10 @@ let UserStore = Reflux.createStore({
       if (err) {
         let message =
           'We could not sign you in. Please try again later.'
+        if (err.response && err.response.body) {
+          message = err.response.body.error || message
+        }
+
         if (!transition) {
           notifications.createAlert({ type: 'Error', message: message })
         } else {
