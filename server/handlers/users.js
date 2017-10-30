@@ -2,8 +2,10 @@
 
 import scitran from '../libs/scitran'
 import mongo from '../libs/mongo'
+import orcid from '../libs/orcid'
 
 let c = mongo.collections
+
 
 // handlers ----------------------------------------------------------------
 
@@ -14,6 +16,39 @@ let c = mongo.collections
  */
 export default {
   // create --------------------------------------------------------------
+
+  validateORCIDToken(req, res) {
+    let { code, home } = req.query
+    if (!home) {
+      res.status(400).send()
+      return
+    }
+    orcid.validateToken(code, (error, result) => {
+      if (error) {
+        res.status(403).send({ error })
+      } else {
+        res.send(result)
+      }
+    })
+  },
+
+  refreshORCIDToken(req, res) {
+    let { refreshToken } = req.query
+    orcid.refreshToken(refreshToken, (error, result) => {
+      if (error) {
+        res.status(403).send({ error })
+      } else {
+        res.send(result)
+      }
+    })
+  },
+
+  getORCIDProfile(req, res) {
+    let { accessToken } = req.query
+    orcid.getProfile(accessToken, (error, result) => {
+      res.send(error ? error : result)
+    })
+  },
 
   /**
      * Create User
@@ -36,6 +71,7 @@ export default {
           _id: user._id,
           firstname: user.firstname,
           lastname: user.lastname,
+          email: user.email,
         }
         scitran.createUser(scitranUser, (err, resp) => {
           if (!err) {

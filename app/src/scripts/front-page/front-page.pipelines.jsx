@@ -86,7 +86,7 @@ class Pipelines extends Reflux.Component {
   }
 
   _browse() {
-    if (this.state.frontpage.apps.length < 1) {
+    if (!this.state.frontpage.apps || this.state.frontpage.apps.length < 1) {
       return (
         <div className="col-sm-6 mate-slide loading-browse">
           <Spinner active={true} text="Loading Pipelines" />

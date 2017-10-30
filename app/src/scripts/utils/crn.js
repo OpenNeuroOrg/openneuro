@@ -48,6 +48,35 @@ export default {
     request.del(config.crn.url + 'users/blacklist/' + userId, {}, callback)
   },
 
+  /**
+     * Finish OAuth2 ORCID flow
+     */
+  getORCIDToken(code, callback) {
+    request.get(config.crn.url + 'users/signin/orcid', {
+      query: { code, home: true }
+    }, callback)
+  },
+
+  /**
+     * Get ORCID profile
+     */
+  getORCIDProfile(accessToken, callback) {
+    request.get(config.crn.url + 'users/orcid', {
+      query: { accessToken }
+    }, callback)
+  },
+
+  /**
+     * Get ORCID profile
+     */
+  refreshORCIDToken(refreshToken, callback) {
+    request.get(config.crn.url + 'users/orcid/refresh', {
+      query: { refreshToken }
+    }, callback)
+  },
+
+
+
   // Datasets --------------------------------------------------------------------------------
 
   /**

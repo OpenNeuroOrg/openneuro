@@ -6,6 +6,7 @@ const user = {
       _id: { type: 'string' },
       firstname: { type: 'string' },
       lastname: { type: 'string' },
+      email: { type: 'string' },
     },
     required: ['_id', 'firstname', 'lastname'],
   },
