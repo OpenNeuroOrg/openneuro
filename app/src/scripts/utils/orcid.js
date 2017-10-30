@@ -1,9 +1,7 @@
-import request from './request'
 import config from '../../../config'
 import crn from './crn'
 
 let orcid = {
-
   initialized: true,
 
   init(token, callback) {
@@ -25,7 +23,6 @@ let orcid = {
   },
 
   getCurrentUser(callback) {
-    let err = null
     let { orcid, access_token } = this.token
 
     if (!orcid || !access_token) {
@@ -50,7 +47,7 @@ let orcid = {
   refresh(callback) {
     if (this.initialized) {
       let { refresh_token } = this.token
-      crn.refreshORCIDToken(refresh_token, (err, res) => {
+      crn.refreshORCIDToken(refresh_token, (err) => {
         if (err) {
           callback(err)
         } else {
@@ -72,14 +69,14 @@ let orcid = {
 
     this.oauthWindow = window.open(
       config.auth.orcid.URI +
-      "/oauth/authorize?client_id=" +
-      config.auth.orcid.clientID +
-      "&response_type=code&scope=/read-limited&redirect_uri=" +
-      config.auth.orcid.redirectURI,
-      "_blank",
+        '/oauth/authorize?client_id=' +
+        config.auth.orcid.clientID +
+        '&response_type=code&scope=/read-limited&redirect_uri=' +
+        config.auth.orcid.redirectURI,
+      '_blank',
     )
 
-    const pooling = (callback) => {
+    const pooling = callback => {
       try {
         if (!this.oauthWindow || this.oauthWindow.closed) {
           callback(true)
@@ -99,16 +96,14 @@ let orcid = {
           })
           return
         }
-      } catch(e) { }
+      } catch (e) {
+        console.log(e)
+      }
 
       retryUrlCheck()
     }
 
-    const retryUrlCheck = () =>
-      window.setTimeout(() =>
-        pooling(callback),
-        50
-      )
+    const retryUrlCheck = () => window.setTimeout(() => pooling(callback), 50)
 
     retryUrlCheck()
   },

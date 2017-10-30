@@ -26,8 +26,7 @@ let UserStore = Reflux.createStore({
       orcid,
     }
 
-    const provider = this.data.provider
-    const initCallback = (provider) => (err, user) => {
+    const initCallback = provider => (err, user) => {
       if (user.token) {
         this.update(
           {
@@ -124,12 +123,9 @@ let UserStore = Reflux.createStore({
       { persist: true },
     )
 
-    this.providers[options.provider]
-      .signIn((err, user) => {
-
+    this.providers[options.provider].signIn((err, user) => {
       if (err) {
-        let message =
-          'We could not sign you in. Please try again later.'
+        let message = 'We could not sign you in. Please try again later.'
         if (err.response && err.response.body) {
           message = err.response.body.error || message
         }
@@ -262,12 +258,15 @@ let UserStore = Reflux.createStore({
     delete window.localStorage.provider
     delete window.localStorage.profile
     delete window.localStorage.scitran
-    this.update({
-      token: null,
-      provider: null,
-      profile: null,
-      scitran: null,
-    }, { persist: true })
+    this.update(
+      {
+        token: null,
+        provider: null,
+        profile: null,
+        scitran: null,
+      },
+      { persist: true },
+    )
   },
 
   /**
@@ -313,12 +312,12 @@ let UserStore = Reflux.createStore({
     switch (this.data.provider) {
       case 'orcid':
         orcid.refresh(refreshCallback)
-        break;
+        break
 
       default:
       case 'google':
         google.refresh(refreshCallback)
-        break;
+        break
     }
   },
 
