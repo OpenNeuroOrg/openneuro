@@ -355,7 +355,7 @@ class JobAccordion extends React.Component {
           } else {
             exitCodeStatus = (
               <span>
-                <span className="label label-danger">FAIL</span> Exit code{' '}
+                <span className="label label-danger">FAIL</span> Exit code
                 {exitCode}
               </span>
             )
@@ -414,9 +414,14 @@ class JobAccordion extends React.Component {
     if (batchStatus && batchStatus.length) {
       batchStatus = batchStatus.map(status => {
         return (
-          <div className="job-status col-xs-12" key={status.job}>
-            <div className="col-xs-8">{status.job}</div>
-            <div className="col-xs-4">{status.status}</div>
+          <div className="job-status col-xs-12">
+            <div key={status.job}>
+              <div className="col-xs-8">{status.job}</div>
+              <div className="col-xs-4">{status.status}</div>
+            </div>
+            <div key={status.statusReason}>
+              <strong className="col-xs-12">{'statusReason' in status ? status.statusReason : ''}</strong>
+            </div>
           </div>
         )
       })
@@ -430,7 +435,7 @@ class JobAccordion extends React.Component {
             eventKey={run._id}>
             <ul>
               <div className=" job-status col-xs-12" key={run._id}>
-                <div className="col-xs-8">JobId</div>
+                <div className="col-xs-8">Job Id</div>
                 <div className="col-xs-4">Status</div>
               </div>
               {batchStatus}
