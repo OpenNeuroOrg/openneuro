@@ -1,6 +1,7 @@
 // dependencies ------------------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // component setup ---------------------------------------------------------------------------
 
@@ -82,12 +83,12 @@ export default class Paginator extends React.Component {
   // custom methods ----------------------------------------------------------------------------
 
   onPageSelect(e) {
-    // get the selected page
-    var thePage = e.currentTarget.getAttribute('data-page')
-    // call props function
-    if (this.props.onPageSelect) this.props.onPageSelect(thePage, e)
     // prevent Default
     e.preventDefault()
+    // get the selected page
+    const thePage = e.currentTarget.getAttribute('data-page')
+    // call props function
+    if (this.props.onPageSelect) this.props.onPageSelect(thePage, e)
   }
 
   createPageArr() {
@@ -148,15 +149,15 @@ export default class Paginator extends React.Component {
 // props -------------------------------------------------------------------------------------
 
 Paginator.propTypes = {
-  page: React.PropTypes.number.isRequired,
-  pagesTotal: React.PropTypes.number.isRequired,
-  pageRangeDisplayed: React.PropTypes.number,
-  activePageRangeDisplayed: React.PropTypes.number,
-  prevLabel: React.PropTypes.string,
-  nextLabel: React.PropTypes.string,
-  breakLabel: React.PropTypes.string,
-  containerClass: React.PropTypes.string,
-  onPageSelect: React.PropTypes.func,
+  page: PropTypes.number.isRequired,
+  pagesTotal: PropTypes.number.isRequired,
+  pageRangeDisplayed: PropTypes.number,
+  activePageRangeDisplayed: PropTypes.number,
+  prevLabel: PropTypes.string,
+  nextLabel: PropTypes.string,
+  breakLabel: PropTypes.string,
+  containerClass: PropTypes.string,
+  onPageSelect: PropTypes.func,
 }
 
 Paginator.defaultProps = {

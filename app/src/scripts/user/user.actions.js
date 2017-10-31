@@ -6,7 +6,8 @@ var Actions = Reflux.createActions([
   'isRoot',
   'updatePreferences',
   'refresh',
-  'signIn',
+  'googleSignIn',
+  'orcidSignIn',
   'signOut',
   'toggleModal',
 ])

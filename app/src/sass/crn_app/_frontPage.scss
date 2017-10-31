@@ -74,18 +74,21 @@
 }
 
 .sign-in-block {
-   button{
+   button {
         @extend %btn-blue;
-        width: 400px;
+        width: 300px;
         max-width: 100%;
-        margin: 20px 0 0;
+        min-height: 40px;
+        margin: 20px 10px 0;
         text-transform: none;
-        i{
+        .icon {
             float: left;
-            font-size: 23px;
             border-right: 1px solid #fff;
             padding: 10px;
             margin: -10px;
+        }
+        i.icon {
+            font-size: 23px;
         }
     }
 }

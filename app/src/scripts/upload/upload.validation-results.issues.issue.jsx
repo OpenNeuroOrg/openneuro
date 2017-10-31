@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // component setup ----------------------------------------------------
 
@@ -96,7 +97,7 @@ export default class Issue extends React.Component {
 }
 
 Issue.propTypes = {
-  file: React.PropTypes.object,
-  error: React.PropTypes.object,
-  type: React.PropTypes.string.isRequired,
+  file: PropTypes.object,
+  error: PropTypes.object,
+  type: PropTypes.string.isRequired,
 }

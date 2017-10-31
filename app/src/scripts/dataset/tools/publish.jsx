@@ -1,11 +1,13 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import actions from '../dataset.actions.js'
-import { Modal } from 'react-bootstrap'
+import { Modal } from '../../utils/modal.jsx'
 import moment from 'moment'
 
-export default class Publish extends React.Component {
+class Publish extends React.Component {
   // life cycle events --------------------------------------------------
 
   constructor() {
@@ -180,7 +182,7 @@ export default class Publish extends React.Component {
      */
   _createSnapshot() {
     this.setState({ loading: true })
-    actions.createSnapshot(res => {
+    actions.createSnapshot.bind(null, this.props.history)(res => {
       if (res.error) {
         this.setState({
           error: true,
@@ -200,14 +202,22 @@ export default class Publish extends React.Component {
      * Publish
      */
   _publish() {
-    actions.publish(this.state.selectedSnapshot, true, this._hide.bind(this))
+    actions.publish(
+      this.state.selectedSnapshot,
+      true,
+      this.props.history,
+      this._hide.bind(this),
+    )
   }
 }
 
 Publish.propTypes = {
-  snapshots: React.PropTypes.array,
-  dataset: React.PropTypes.object,
-  loadingApps: React.PropTypes.bool,
-  show: React.PropTypes.bool,
-  onHide: React.PropTypes.func,
+  snapshots: PropTypes.array,
+  dataset: PropTypes.object,
+  loadingApps: PropTypes.bool,
+  show: PropTypes.bool,
+  onHide: PropTypes.func,
+  history: PropTypes.object,
 }
+
+export default withRouter(Publish)

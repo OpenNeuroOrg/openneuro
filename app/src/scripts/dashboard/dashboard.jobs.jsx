@@ -1,48 +1,57 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Reflux from 'reflux'
+import { stringify as querystring } from 'urlite/querystring'
 import Actions from './dashboard.jobs.actions'
 import JobsStore from './dashboard.jobs.store.js'
-import { State, Link } from 'react-router'
+import { withRouter, Link } from 'react-router-dom'
 import moment from 'moment'
 import { PanelGroup } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
 import Sort from './dashboard.sort.jsx'
 import Select from 'react-select'
-
 import bids from '../utils/bids'
+import { refluxConnect } from '../utils/reflux'
 
-let Jobs = React.createClass({
-  mixins: [State, Reflux.connect(JobsStore)],
+class Jobs extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, JobsStore, 'jobs')
+  }
 
   // life cycle events --------------------------------------------------
   componentDidMount() {
-    let isPublic = this.getPath().indexOf('dashboard') === -1
-    let isAdmin = this.getPath().indexOf('admin') !== -1
-    let query = this.getQuery()
-    let selectedPipeline =
-      (typeof query.pipeline != 'undefined' && query.pipeline) || null
+    let isPublic = this.props.public
+    let isAdmin = this.props.admin
+
+    // React Router v4 compatible replacement for this.getQuery()
+    const search = this.props.location.search
+    const params = new URLSearchParams(search)
+    const pipeline = params.get('pipeline')
+    const selectedPipeline =
+      (typeof pipeline !== 'undefined' && pipeline) || null
     Actions.update({ isPublic, isAdmin })
     // Admin views grab all jobs
     Actions.getJobs(isPublic, isAdmin, {
       pipeline: selectedPipeline,
       version: null,
     })
-  },
+  }
 
   render() {
-    let isPublic = this.state.isPublic
-    let isAdmin = this.state.isAdmin
+    let isPublic = this.state.jobs.isPublic
+    let isAdmin = this.state.jobs.isAdmin
     let title = !isPublic ? 'My' : 'Public'
     title = isAdmin ? 'All' : title
     let jobs =
-      this.state.visiblejobs.length === 0 ? (
+      this.state.jobs.visiblejobs.length === 0 ? (
         <div className="col-xs-12">
           <h3>no results please try again</h3>
         </div>
       ) : (
-        this._jobs(this.state.visiblejobs)
+        this._jobs(this.state.jobs.visiblejobs)
       )
     return (
       <div>
@@ -58,40 +67,40 @@ let Jobs = React.createClass({
             </div>
             <div className="filters-sort-wrap clearfix">
               <Sort
-                options={this.state.sortOptions}
-                sort={this.state.sort}
+                options={this.state.jobs.sortOptions}
+                sort={this.state.jobs.sort}
                 sortFunc={Actions.sort}
               />
             </div>
           </div>
           <PanelGroup>
             <div className="clearfix">
-              {this.state.loading ? <Spinner active={true} /> : jobs}
+              {this.state.jobs.loading ? <Spinner active={true} /> : jobs}
             </div>
           </PanelGroup>
         </div>
       </div>
     )
-  },
+  }
 
   // custom methods -----------------------------------------------------
 
   _filter() {
-    if (!this.state.appsLoading) {
+    if (!this.state.jobs.appsLoading) {
       return (
         <div>
           <div
             className={
-              this.state.filter.pipeline === '' ||
-              this.state.filter.pipeline === null
+              this.state.jobs.filter.pipeline === '' ||
+              this.state.jobs.filter.pipeline === null
                 ? 'apps-filter col-md-8'
                 : 'apps-filter col-md-8 app-selected'
             }>
             <Select
               simpleValue
-              value={this.state.filter.pipeline}
+              value={this.state.jobs.filter.pipeline}
               placeholder="Filter By App"
-              options={this.state.apps}
+              options={this.state.jobs.apps}
               onChange={Actions.selectPipelineFilter}
             />
           </div>
@@ -99,7 +108,7 @@ let Jobs = React.createClass({
         </div>
       )
     }
-  },
+  }
 
   _selectVersions() {
     return (
@@ -107,41 +116,41 @@ let Jobs = React.createClass({
         <Select
           multi
           simpleValue
-          value={this.state.filter.version}
+          value={this.state.jobs.filter.version}
           placeholder={
-            this.state.filter.pipeline === '' ||
-            this.state.filter.pipeline === null
+            this.state.jobs.filter.pipeline === '' ||
+            this.state.jobs.filter.pipeline === null
               ? 'Choose App to see Versions'
               : 'App Versions'
           }
-          options={this.state.appVersionGroup}
+          options={this.state.jobs.appVersionGroup}
           onChange={Actions.selectPipelineVersionFilter}
         />
       </div>
     )
-  },
+  }
 
   _jobs(paginatedResults) {
     return paginatedResults.map(job => {
       let user = job.userId
       let dateAdded = moment(job.analysis.created).format('L')
       let timeago = moment(job.analysis.created).fromNow(true)
+      const datasetId = bids.decodeId(job.datasetId)
+      const snapshotId = bids.decodeId(job.snapshotId)
+      const jobQuery = {
+        app: job.appLabel,
+        version: job.appVersion,
+        job: job._id,
+      }
+      const queryString = querystring(jobQuery)
+      const jobUrl =
+        '/datasets/' + datasetId + '/versions/' + snapshotId + queryString
       return (
         <div className="fade-in  panel panel-default" key={job._id}>
           <div className="panel-heading">
             <div className={job.analysis.status}>
               <div className="header clearfix">
-                <Link
-                  to={'snapshot'}
-                  params={{
-                    datasetId: bids.decodeId(job.datasetId),
-                    snapshotId: bids.decodeId(job.snapshotId),
-                  }}
-                  query={{
-                    app: job.appLabel,
-                    version: job.appVersion,
-                    job: job.jobId,
-                  }}>
+                <Link to={jobUrl}>
                   <h4 className="dataset-name">
                     {job.appLabel} - v{job.appVersion}
                   </h4>
@@ -156,8 +165,7 @@ let Jobs = React.createClass({
             <div className="minimal-summary">
               <div className="summary-data">
                 <span>
-                  {' '}
-                  Job run{' '}
+                  Job run
                   <strong>
                     {dateAdded} - {timeago} ago
                   </strong>
@@ -179,7 +187,13 @@ let Jobs = React.createClass({
         </div>
       )
     })
-  },
-})
+  }
+}
 
-export default Jobs
+Jobs.propTypes = {
+  location: PropTypes.object,
+  public: PropTypes.bool,
+  admin: PropTypes.bool,
+}
+
+export default withRouter(Jobs)

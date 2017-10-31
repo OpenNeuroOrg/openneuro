@@ -29,7 +29,8 @@ let UserStore = Reflux.createStore({
     for (let prop in data) {
       this.data[prop] = data[prop]
     }
-    this.trigger(this.data, callback)
+    this.trigger(this.data)
+    if (callback) callback()
   },
 
   /**
@@ -599,6 +600,13 @@ let UserStore = Reflux.createStore({
         }
       })
     })
+  },
+
+  /**
+   * Switch the page for the event logs view
+   */
+  setLogsPage(page) {
+    this.update({ page })
   },
 })
 

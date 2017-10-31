@@ -3,7 +3,8 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import { Modal } from 'react-bootstrap'
+import PropTypes from 'prop-types'
+import { Modal } from '../utils/modal.jsx'
 import files from '../utils/files'
 import Papaya from '../common/partials/papaya.jsx'
 import { Table } from 'reactable'
@@ -151,7 +152,7 @@ export default class FileDisplay extends React.Component {
 // prop validation ----------------------------------------------------
 
 FileDisplay.propTypes = {
-  file: React.PropTypes.object,
-  onHide: React.PropTypes.func,
-  show: React.PropTypes.bool,
+  file: PropTypes.object,
+  onHide: PropTypes.func,
+  show: PropTypes.bool,
 }

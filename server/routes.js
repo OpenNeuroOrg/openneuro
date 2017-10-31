@@ -23,6 +23,21 @@ const routes = [
     handler: scitran.verifyUser,
   },
   {
+    method: 'get',
+    url: '/users/signin/orcid',
+    handler: users.validateORCIDToken,
+  },
+  {
+    method: 'get',
+    url: '/users/orcid/refresh',
+    handler: users.refreshORCIDToken,
+  },
+  {
+    method: 'get',
+    url: '/users/orcid',
+    handler: users.getORCIDProfile,
+  },
+  {
     method: 'post',
     url: '/users',
     middleware: [schema.validateBody(schemas.user.new)],
@@ -180,6 +195,11 @@ const routes = [
     method: 'get',
     url: '/logs/:app/:jobId/:taskArn',
     handler: awsJobs.getLogstream,
+  },
+  {
+    method: 'get',
+    url: '/logs/:app/:jobId/:taskArn/raw',
+    handler: awsJobs.getLogstreamRaw,
   },
   {
     method: 'get',

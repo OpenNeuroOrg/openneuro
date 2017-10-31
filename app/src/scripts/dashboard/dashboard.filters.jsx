@@ -1,6 +1,7 @@
 // dependencies -----------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Actions from './dashboard.datasets.actions.js'
 
 // component setup --------------------------------------------------------------------
@@ -75,6 +76,6 @@ export default class Filters extends React.Component {
 }
 
 Filters.propTypes = {
-  filters: React.PropTypes.array,
-  isPublic: React.PropTypes.bool,
+  filters: PropTypes.array,
+  isPublic: PropTypes.bool,
 }

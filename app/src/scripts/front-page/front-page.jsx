@@ -2,13 +2,14 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import { Link } from 'react-router'
+import { Redirect, Link } from 'react-router-dom'
 import FrontPageTabs from './front-page-tabs.jsx'
 import userStore from '../user/user.store.js'
 import Spinner from '../common/partials/spinner.jsx'
 import Footer from '../common/partials/footer.jsx'
 import Pipelines from './front-page.pipelines.jsx'
 import FPActions from './front-page.actions.js'
+import { refluxConnect } from '../utils/reflux'
 
 // assets -------------------------------------------------------------
 import ljaf from './assets/ljaf.png'
@@ -23,26 +24,21 @@ import stanford from './assets/stanford.png'
 
 // component setup ----------------------------------------------------
 
-let FrontPage = React.createClass({
-  mixins: [Reflux.connect(userStore)],
-
-  statics: {
-    willTransitionTo(transition) {
-      if (userStore.data.token) {
-        transition.redirect('dashboard')
-      }
-    },
-  },
+class FrontPage extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, userStore, 'users')
+  }
 
   // life cycle events --------------------------------------------------
-
   componentWillMount() {
+    super.componentWillMount()
     FPActions.reset()
-  },
+  }
 
   render() {
     return (
-      <span>
+      <span className="front-page is-front">
         <div className="intro">
           <div className="container">
             <div className="intro-inner fade-in clearfix">
@@ -77,12 +73,18 @@ let FrontPage = React.createClass({
                   neuroimaging data
                 </h1>
                 <div className="sign-in-block fade-in">
-                  {this._error(this.state.signinError, this.state.loading)}
-                  {this._signinForm(this.state.loading)}
-                  <Spinner text="Signing in..." active={this.state.loading} />
+                  {this._error(
+                    this.state.users.signinError,
+                    this.state.users.loading,
+                  )}
+                  {this._signinForm(this.state.users.loading)}
+                  <Spinner
+                    text="Signing in..."
+                    active={this.state.users.loading}
+                  />
                 </div>
                 <div className="browse-publicly">
-                  <Link to="publicDashboard">
+                  <Link to="/public/datasets">
                     <span>Browse Public Datasets</span>
                   </Link>
                 </div>
@@ -96,27 +98,45 @@ let FrontPage = React.createClass({
         <Footer />
       </span>
     )
-  },
+  }
 
   // custom methods -------------------------------------------------------
 
   _signinForm(loadingState) {
     if (!loadingState) {
-      return (
-        <span>
-          <button className="btn-admin" onClick={userStore.signIn}>
-            <i className="fa fa-google" /> Sign in with Google
-          </button>
-        </span>
-      )
+      if (this.state.users.token) {
+        return <Redirect to="dashboard" push />
+      } else {
+        return (
+          <span>
+            <button className="btn-admin" onClick={userStore.googleSignIn}>
+              <i className="icon fa fa-google" />
+              Sign in with Google
+            </button>
+            <button className="btn-admin" onClick={userStore.orcidSignIn}>
+              <span className="icon">
+                <img
+                  alt="ORCID"
+                  width="20"
+                  height="20"
+                  src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
+                />
+              </span>
+              Sign in with ORCID
+            </button>
+          </span>
+        )
+      }
     }
-  },
+  }
 
   _error(signinError, loadingState) {
     if (signinError && !loadingState) {
-      return <div className="alert alert-danger">{this.state.signinError}</div>
+      return (
+        <div className="alert alert-danger">{this.state.users.signinError}</div>
+      )
     }
-  },
+  }
 
   // template functions ----------------------------------------------------
 
@@ -221,7 +241,7 @@ let FrontPage = React.createClass({
         </div>
       </div>
     )
-  },
-})
+  }
+}
 
 export default FrontPage

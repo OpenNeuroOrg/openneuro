@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import Tooltip from '../partials/tooltip.jsx'
 import notifications from '../../notification/notification.actions'
 
@@ -164,17 +165,17 @@ export default class WarnButton extends React.Component {
 }
 
 WarnButton.propTypes = {
-  message: React.PropTypes.string,
-  icon: React.PropTypes.string,
-  warn: React.PropTypes.bool,
-  tooltip: React.PropTypes.string,
-  link: React.PropTypes.string,
-  cancel: React.PropTypes.object,
-  confirm: React.PropTypes.object,
-  validations: React.PropTypes.array,
-  action: React.PropTypes.func,
-  prepDownload: React.PropTypes.func,
-  lock: React.PropTypes.bool,
+  message: PropTypes.string,
+  icon: PropTypes.string,
+  warn: PropTypes.bool,
+  tooltip: PropTypes.string,
+  link: PropTypes.string,
+  cancel: PropTypes.object,
+  confirm: PropTypes.object,
+  validations: PropTypes.array,
+  action: PropTypes.func,
+  prepDownload: PropTypes.func,
+  lock: PropTypes.bool,
 }
 
 WarnButton.defaultProps = {

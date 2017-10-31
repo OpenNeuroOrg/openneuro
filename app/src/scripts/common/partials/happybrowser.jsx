@@ -1,5 +1,6 @@
 // dependencies ------------------------------------------------------------------
 import React from 'react'
+import PropTypes from 'prop-types'
 import bowser from 'bowser'
 
 import chrome from './assets/chrome.jpg'
@@ -69,5 +70,5 @@ export default class Happybrowser extends React.Component {
 }
 
 Happybrowser.propTypes = {
-  ua: React.PropTypes.string,
+  ua: PropTypes.string,
 }

@@ -1,6 +1,7 @@
 // dependencies -----------------------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 
 // component setup --------------------------------------------------------------------
 
@@ -57,7 +58,7 @@ export default class Sort extends React.Component {
 }
 
 Sort.propTypes = {
-  options: React.PropTypes.array,
-  sort: React.PropTypes.object,
-  sortFunc: React.PropTypes.func,
+  options: PropTypes.array,
+  sort: PropTypes.object,
+  sortFunc: PropTypes.func,
 }

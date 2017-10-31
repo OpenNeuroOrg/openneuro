@@ -12,15 +12,14 @@ describe('common/forms/Input', () => {
     const newValue = 'two'
     const component = mount(<Input initialValue={initValue} />)
     const input = component.find('input')
-    expect(component.node.state.value).toBe(initValue)
+    expect(component.state('value')).toBe(initValue)
 
     // User types in a value
-    input.node.value = newValue
-    input.simulate('change', input)
-    expect(component.node.state.value).toBe(newValue)
+    input.simulate('change', { target: { value: newValue } })
+    expect(component.state('value')).toBe(newValue)
 
     // Reset by parent component (cleared)
     component.setProps({ value: initValue })
-    expect(component.node.state.value).toBe(initValue)
+    expect(component.state('value')).toBe(initValue)
   })
 })

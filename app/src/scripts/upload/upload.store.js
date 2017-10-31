@@ -61,7 +61,6 @@ let UploadStore = Reflux.createStore({
       nameError: null,
       progress: { total: 0, completed: 0, currentFiles: [], status: '' },
       projectId: '',
-      refs: {},
       resuming: false,
       selectedName: '',
       showModal: false,
@@ -125,7 +124,6 @@ let UploadStore = Reflux.createStore({
     }
     fileStore.setFiles(selectedFiles)
     this.setInitialState({
-      refs: this.data.refs,
       dirName: dirName,
       nameError: nameError,
       uploadStatus: 'files-selected',
@@ -160,7 +158,6 @@ let UploadStore = Reflux.createStore({
     fileStore.setFiles(selectedFiles)
     this.setInitialState(
       {
-        refs: this.data.refs,
         dirName: originalName,
         uploadStatus: 'files-selected',
         showRename: true,
@@ -339,10 +336,6 @@ let UploadStore = Reflux.createStore({
         added and saved to your dashboard.
       </span>
     )
-    let fileSelect = this.data.refs.fileSelect
-    if (fileSelect) {
-      fileSelect.value = null
-    } // clear file input
 
     // reset favicon
     favicon.reset()
@@ -364,11 +357,6 @@ let UploadStore = Reflux.createStore({
      *
      */
   uploadError() {
-    let fileSelect = this.data.refs.fileSelect
-    if (fileSelect) {
-      fileSelect.value = null
-    } // clear file input
-
     // reset favicon
     favicon.reset()
     // refresh my datasets
@@ -426,15 +414,6 @@ let UploadStore = Reflux.createStore({
     if (activeKey) {
       this.update({ activeKey })
     }
-  },
-
-  /**
-     * Set Refs
-     *
-     * Takes a react refs and store them.
-     */
-  setRefs(refs) {
-    this.update({ refs })
   },
 })
 

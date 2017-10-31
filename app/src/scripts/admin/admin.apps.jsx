@@ -9,12 +9,14 @@ import datasetStore from '../dataset/dataset.store'
 import WarnButton from '../common/forms/warn-button.jsx'
 import DefineJobModal from './admin.create-job.modal.jsx'
 import batch from '../utils/batch.js'
+import { refluxConnect } from '../utils/reflux'
 
-let Apps = React.createClass({
-  mixins: [
-    Reflux.connect(adminStore),
-    Reflux.connect(datasetStore, 'datasets'),
-  ],
+class Apps extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+    refluxConnect(this, datasetStore, 'datasets')
+  }
 
   // life cycle events --------------------------------------------------
 
@@ -57,26 +59,28 @@ let Apps = React.createClass({
       })
 
     return (
-      <div className="dashboard-dataset-teasers fade-in admin-jobs clearfix">
-        <div className="clearfix">
-          <h2>App Definitions</h2>
-          <button
-            className="btn-blue"
-            onClick={actions.toggleModal.bind(this, 'defineJob')}>
-            <span>Define an App</span>
-          </button>
+      <div className="admin app-definitions">
+        <div className="dashboard-dataset-teasers fade-in admin-jobs clearfix">
+          <div className="clearfix">
+            <h2>App Definitions</h2>
+            <button
+              className="btn-blue"
+              onClick={actions.toggleModal.bind(this, 'defineJob')}>
+              <span>Define an App</span>
+            </button>
+          </div>
+          <Accordion className="clearfix">
+            {Object.keys(this.state.datasets.apps).length == 0 ? noJobs : jobs}
+          </Accordion>
+          <DefineJobModal
+            show={this.state.admin.modals.defineJob}
+            onHide={actions.toggleModal.bind(this, 'defineJob')}
+            edit={this.state.admin.jobDefinitionForm.edit}
+          />
         </div>
-        <Accordion className="clearfix">
-          {Object.keys(this.state.datasets.apps).length == 0 ? noJobs : jobs}
-        </Accordion>
-        <DefineJobModal
-          show={this.state.modals.defineJob}
-          onHide={actions.toggleModal.bind(this, 'defineJob')}
-          edit={this.state.jobDefinitionForm.edit}
-        />
       </div>
     )
-  },
+  }
 
   _versionList(apps) {
     let list = apps.reverse().map((app, index) => {
@@ -128,15 +132,15 @@ let Apps = React.createClass({
     })
 
     return list
-  },
+  }
 
   _editJobDefinition(app) {
     actions.editJobDefinition(app)
-  },
+  }
 
   _deleteJobDefinition(app, callback) {
     actions.deleteJobDefinition(app, callback)
-  },
-})
+  }
+}
 
 export default Apps

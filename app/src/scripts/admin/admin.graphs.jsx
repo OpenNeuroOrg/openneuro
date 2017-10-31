@@ -8,9 +8,13 @@ import { Link } from 'react-router'
 import { Route } from 'react-router'
 import Pie from './charts/admin.progression-pie.jsx'
 import Scatter from './charts/admin.scatter-chart.jsx'
+import { refluxConnect } from '../utils/reflux'
 
-let Progresssion = React.createClass({
-  mixins: [Reflux.connect(adminStore)],
+class Progresssion extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, adminStore, 'admin')
+  }
 
   getInitialState() {
     let initialState = {
@@ -18,13 +22,12 @@ let Progresssion = React.createClass({
       year: 'all',
       value: 'failed',
     }
-
     return initialState
-  },
+  }
 
   componentWillMount() {
     actions.filterLogs()
-  },
+  }
 
   render() {
     let failures = this.state.failedLogs.length
@@ -69,21 +72,21 @@ let Progresssion = React.createClass({
         </div>
       </div>
     )
-  },
+  }
 
   _handleChangeMonth(e) {
     this.setState({
       month: e.target.value,
     })
     console.log(this.state.month)
-  },
+  }
 
   _handleChangeYear(e) {
     this.setState({
       year: e.target.value,
     })
     console.log(this.state.year)
-  },
+  }
 
   _options(e) {
     let activity = this.state.activityLogs
@@ -97,7 +100,7 @@ let Progresssion = React.createClass({
     })
 
     return options
-  },
-})
+  }
+}
 
 export default Progresssion

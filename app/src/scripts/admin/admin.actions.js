@@ -20,6 +20,7 @@ var Actions = Reflux.createActions([
   'update',
   'searchLogs',
   'filterLogs',
+  'setLogsPage',
 ])
 
 export default Actions

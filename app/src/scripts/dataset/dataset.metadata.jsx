@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import actions from './dataset.actions.js'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 
@@ -102,7 +103,7 @@ export default class MetaData extends React.Component {
 }
 
 MetaData.propTypes = {
-  dataset: React.PropTypes.object,
-  issues: React.PropTypes.object,
-  editable: React.PropTypes.bool,
+  dataset: PropTypes.object,
+  issues: PropTypes.object,
+  editable: PropTypes.bool,
 }

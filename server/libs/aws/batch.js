@@ -45,7 +45,7 @@ const extractJobLog = job => {
  * Takes a current Date object and the function returned is 
  * used with any filter
  */
-const staleJobFilter = (now) => job => {
+const staleJobFilter = now => job => {
   // Kill jobs that are still running and where the actual container start time was 48 hours ago
   if (
     'startedAt' in job &&
@@ -162,7 +162,12 @@ export default aws => {
               reason:
                 'This analysis task did not complete within 48 hours and has failed due to timeout',
             }
-            return sdk.terminateJob(params)
+            console.log('Terminating timed out job:', job.jobId)
+            sdk.terminateJob(params, err => {
+              if (err) {
+                console.log('Error terminating job:', err)
+              }
+            })
           })
         })
       }

@@ -874,9 +874,9 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bids-validator@^0.23.10:
-  version "0.23.10"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.23.10.tgz#288e514f8cf6bdb8e5834d62247540f7dfb93090"
+bids-validator@^0.23.11:
+  version "0.23.11"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.23.11.tgz#8ce83e3406d924c2a0ae0884f4f5387a0a517fc6"
   dependencies:
     ajv "^5.2.2"
     async "^2.1.5"
@@ -5039,6 +5039,12 @@ xmlbuilder@4.2.1, xmlbuilder@^4.1.0:
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-4.2.1.tgz#aa58a3041a066f90eaa16c2f5389ff19f3f461a5"
   dependencies:
     lodash "^4.0.0"
+
+xmldoc@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/xmldoc/-/xmldoc-1.1.0.tgz#25c92f08f263f344dac8d0b32370a701ee9d0e93"
+  dependencies:
+    sax "^1.2.1"
 
 xtend@^4.0.0, xtend@^4.0.1:
   version "4.0.1"
