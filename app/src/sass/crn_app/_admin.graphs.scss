@@ -1,16 +1,14 @@
-.chart {
-  width: 100%;
-  * {
+.chart-header {
+  h2 {
     text-align: center;
   }
-
-  svg {
-    width: 40% !important;
-    g > path:nth-child(1) {
-      fill: $brand-danger !important;
-    }
-    g > path:nth-child(2) {
-      fill: $brand-success !important;
-    }
+}
+ div.chart{
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  * {
+    text-align: center;
   }
 }
