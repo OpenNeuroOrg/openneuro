@@ -60,8 +60,8 @@ class Dashboard extends React.Component {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="progression-graphs" className="btn-tab">
-                  Progress Graphs
+                <NavLink to="/admin/progression-graphs" className="btn-tab">
+                  Graphs
                 </NavLink>
               </li>
             </ul>
