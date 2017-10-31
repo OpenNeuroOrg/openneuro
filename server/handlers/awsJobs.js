@@ -524,8 +524,9 @@ let handlers = {
       let batchStatus = jobs
         .map(job => {
           return {
-            status: job.status,
             job: job.jobId,
+            status: job.status,
+            statusReason: job.statusReason,
           }
         })
         .sort((a, b) => {

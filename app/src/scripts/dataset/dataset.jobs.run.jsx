@@ -19,46 +19,21 @@ class JobAccordion extends React.Component {
 
   render() {
     let run = this.props.run
-    // if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0) || (run.logs && run.logs.length > 0)) {
-    if (run.results && run.results.length > 0) {
-      // header with parameters and/or results
-      return (
-        <span eventKey={run._id}>
-          <Panel
-            className={run.active ? 'job border-flash' : 'job'}
-            header={this._header(run)}>
-            <span className="inner">
-              {this._support(run)}
-              {this._parameters(run)}
-              {this._results(run, 'results')}
-              {this._logs(run)}
-            </span>
-          </Panel>
-        </span>
-      )
-    } else {
-      // header only
-      return (
-        <span eventKey={run._id}>
-          <div className="job panel panel-default pending">
-            <div className="panel-heading">
-              <div className="panel-title ">{this._header(run)}</div>
-            </div>
-            <div className="panel-body">
-              <span className="inner">
-                {this._support(run)}
-                {this._parameters(run)}
-                {this._batchStatus(run)}
-                {run.analysis.status === 'SUCCEEDED' ||
-                run.analysis.status === 'FAILED'
-                  ? this._logs(run)
-                  : null}
-              </span>
-            </div>
-          </div>
-        </span>
-      )
-    }
+    return (
+      <span eventKey={run._id}>
+        <Panel
+          className={run.active ? 'job border-flash' : 'job'}
+          header={this._header(run)}>
+          <span className="inner">
+            {this._support(run)}
+            {this._parameters(run)}
+            {this._results(run, 'results')}
+            {this._logs(run)}
+            {this._batchStatus(run)}
+          </span>
+        </Panel>
+      </span>
+    )
   }
 
   // template methods --------------------------------------------------------------
@@ -182,7 +157,10 @@ class JobAccordion extends React.Component {
           })
         }
         // Values can be strings or arrays
-        const value = run.parameters[key].constructor === Array ? run.parameters[key].join(' ') : run.parameters[key]
+        const value =
+          run.parameters[key].constructor === Array
+            ? run.parameters[key].join(' ')
+            : run.parameters[key]
         parameters.push(
           <li key={key}>
             <span className="key">{key}</span>:{' '}
@@ -355,7 +333,7 @@ class JobAccordion extends React.Component {
           } else {
             exitCodeStatus = (
               <span>
-                <span className="label label-danger">FAIL</span> Exit code{' '}
+                <span className="label label-danger">FAIL</span> Exit code
                 {exitCode}
               </span>
             )
@@ -412,11 +390,22 @@ class JobAccordion extends React.Component {
   _batchStatus(run) {
     let batchStatus = run.analysis.batchStatus
     if (batchStatus && batchStatus.length) {
+      const failed = run.analysis.batchStatus.filter(status => status.status !== 'SUCCEEDED')
+      if (failed.length === 0) {
+        return null
+      }
       batchStatus = batchStatus.map(status => {
         return (
           <div className="job-status col-xs-12" key={status.job}>
-            <div className="col-xs-8">{status.job}</div>
-            <div className="col-xs-4">{status.status}</div>
+            <div>
+              <div className="col-xs-8">{status.job}</div>
+              <div className="col-xs-4">{status.status}</div>
+            </div>
+            <div key={status.statusReason}>
+              <strong className="col-xs-12">
+                {'statusReason' in status ? status.statusReason : ''}
+              </strong>
+            </div>
           </div>
         )
       })
@@ -430,7 +419,7 @@ class JobAccordion extends React.Component {
             eventKey={run._id}>
             <ul>
               <div className=" job-status col-xs-12" key={run._id}>
-                <div className="col-xs-8">JobId</div>
+                <div className="col-xs-8">Job Id</div>
                 <div className="col-xs-4">Status</div>
               </div>
               {batchStatus}
