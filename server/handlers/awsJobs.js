@@ -240,10 +240,11 @@ let handlers = {
      * GET Job
      */
   getJob(req, res, next) {
-    let userId = req.user
     let jobId = req.params.jobId //this is the mongo id for the job.
 
     c.crn.jobs.findOne({ _id: ObjectID(jobId) }, {}, (err, job) => {
+      if (err) next(err)
+
       if (!job) {
         res.status(404).send({ message: 'Job not found.' })
         return
