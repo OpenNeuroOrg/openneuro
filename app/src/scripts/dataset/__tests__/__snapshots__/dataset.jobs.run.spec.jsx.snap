@@ -187,7 +187,7 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
                 <div
                   className="col-xs-8"
                 >
-                  JobId
+                  Job Id
                 </div>
                 <div
                   className="col-xs-4"
@@ -199,30 +199,44 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
                 className="job-status col-xs-12"
                 key="49c03ed3-281e-40d3-b027-3102dcb5153c"
               >
-                <div
-                  className="col-xs-8"
-                >
-                  49c03ed3-281e-40d3-b027-3102dcb5153c
+                <div>
+                  <div
+                    className="col-xs-8"
+                  >
+                    49c03ed3-281e-40d3-b027-3102dcb5153c
+                  </div>
+                  <div
+                    className="col-xs-4"
+                  >
+                    FAILED
+                  </div>
                 </div>
-                <div
-                  className="col-xs-4"
-                >
-                  FAILED
+                <div>
+                  <strong
+                    className="col-xs-12"
+                  />
                 </div>
               </div>
               <div
                 className="job-status col-xs-12"
                 key="e276c571-83f7-439f-a34c-09840bb2a9cd"
               >
-                <div
-                  className="col-xs-8"
-                >
-                  e276c571-83f7-439f-a34c-09840bb2a9cd
+                <div>
+                  <div
+                    className="col-xs-8"
+                  >
+                    e276c571-83f7-439f-a34c-09840bb2a9cd
+                  </div>
+                  <div
+                    className="col-xs-4"
+                  >
+                    FAILED
+                  </div>
                 </div>
-                <div
-                  className="col-xs-4"
-                >
-                  FAILED
+                <div>
+                  <strong
+                    className="col-xs-12"
+                  />
                 </div>
               </div>
             </ul>

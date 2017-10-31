@@ -414,8 +414,8 @@ class JobAccordion extends React.Component {
     if (batchStatus && batchStatus.length) {
       batchStatus = batchStatus.map(status => {
         return (
-          <div className="job-status col-xs-12">
-            <div key={status.job}>
+          <div className="job-status col-xs-12" key={status.job}>
+            <div>
               <div className="col-xs-8">{status.job}</div>
               <div className="col-xs-4">{status.status}</div>
             </div>
