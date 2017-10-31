@@ -8,13 +8,14 @@ import { VictoryPie } from 'victory'
 
 const Pie = ({ failed, success, total }) => {
   let fakeTotal = 3060
-  let dataPoints = { failed: 1864, success: 1196 }
+  let dataPoints = { failed, success }
   let data = []
   let dataP
 
   Object.entries(dataPoints).forEach(([key, value]) => {
     if (value && total) {
-      dataP = Math.floor(value / fakeTotal * 100)
+      // console.log(total)
+      dataP = Math.floor(value / total * 100)
       let label = key + ' ' + dataP + '%'
       // console.log(dataP);
       data.push({ x: label, y: dataP })
@@ -28,12 +29,14 @@ const Pie = ({ failed, success, total }) => {
         width={400}
         height={400}
         data={data}
-        innerRadius={68}
-        labelRadius={100}
-        style={{ labels: { fontSize: 10, fill: 'white' } }}
+        innerRadius={49}
+        labelRadius={78}
+        style={{ labels: { fontSize: 14, fill: 'white' } }}
+        colorScale={['black', '#007c92']}
       />
     </div>
   )
 }
+// padding={{ top: 50, bottom: 80, left: 40, right: 80 }}
 
 export default Pie
