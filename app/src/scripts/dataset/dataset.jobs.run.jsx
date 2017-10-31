@@ -390,6 +390,10 @@ class JobAccordion extends React.Component {
   _batchStatus(run) {
     let batchStatus = run.analysis.batchStatus
     if (batchStatus && batchStatus.length) {
+      const failed = run.analysis.batchStatus.filter(status => status.status !== 'SUCCEEDED')
+      if (failed.length === 0) {
+        return null
+      }
       batchStatus = batchStatus.map(status => {
         return (
           <div className="job-status col-xs-12" key={status.job}>
