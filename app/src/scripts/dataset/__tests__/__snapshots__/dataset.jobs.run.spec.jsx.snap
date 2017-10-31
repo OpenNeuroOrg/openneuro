@@ -4,247 +4,240 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
 <span
   eventKey="59c16458c650bd001111f010"
 >
-  <div
-    className="job panel panel-default pending"
-  >
-    <div
-      className="panel-heading"
-    >
+  <Panel
+    bsClass="panel"
+    bsStyle="default"
+    className="job border-flash"
+    defaultExpanded={false}
+    header={
       <div
-        className="panel-title "
+        className="failed"
       >
-        <div
-          className="failed"
+        <label>
+          Status
+        </label>
+        <span
+          className="badge"
+        >
+          FAILED
+        </span>
+        <br />
+        <span
+          className="meta"
         >
           <label>
-            Status
+            Run on 
           </label>
-          <span
-            className="badge"
-          >
-            FAILED
-          </span>
-          <br />
-          <span
-            className="meta"
-          >
+          <strong>
+            09/20/2017
+          </strong>
+           at
+           
+          <strong>
+            12:24 AM
+          </strong>
+          <span>
+            <br />
             <label>
-              Run on 
+              By 
             </label>
             <strong>
-              09/20/2017
+              nell@squishymedia.com
             </strong>
-             at
+          </span>
+        </span>
+        <br />
+        <span
+          className="meta"
+        >
+          <label>
+            Job ID
+          </label>
+          <strong>
+            a2e4e221-a671-415a-bd0f-b7fdd44cea14
+          </strong>
+        </span>
+        <div>
+          <h5
+            className="text-danger"
+          >
+            We were unable to complete this analysis.
              
-            <strong>
-              12:24 AM
-            </strong>
             <span>
-              <br />
-              <label>
-                By 
-              </label>
-              <strong>
-                nell@squishymedia.com
-              </strong>
-            </span>
-          </span>
-          <br />
-          <span
-            className="meta"
-          >
-            <label>
-              Job ID
-            </label>
-            <strong>
-              a2e4e221-a671-415a-bd0f-b7fdd44cea14
-            </strong>
-          </span>
-          <div>
-            <h5
-              className="text-danger"
-            >
-              We were unable to complete this analysis.
+              Support information for this app is available below. Please contact the site
                
-              <span>
-                Support information for this app is available below. Please contact the site
-                 
-                <a
-                  href="mailto:openfmri@gmail.com?subject=Analysis%20Failure"
-                  target="_blank"
-                >
-                  administrator
-                </a>
-                 
-                if this analysis continues to fail.
-              </span>
-            </h5>
-            <WarnButton
-              action={[Function]}
-              cancel={
-                <i
-                  className="fa fa-times"
-                />
-              }
-              confirm={
-                <i
-                  className="fa fa-check"
-                />
-              }
-              icon="fa fa-repeat"
-              message="re-run"
-              tooltip={null}
-              warn={false}
-            />
-          </div>
+              <a
+                href="mailto:openfmri@gmail.com?subject=Analysis%20Failure"
+                target="_blank"
+              >
+                administrator
+              </a>
+               
+              if this analysis continues to fail.
+            </span>
+          </h5>
+          <WarnButton
+            action={[Function]}
+            cancel={
+              <i
+                className="fa fa-times"
+              />
+            }
+            confirm={
+              <i
+                className="fa fa-check"
+              />
+            }
+            icon="fa fa-repeat"
+            message="re-run"
+            tooltip={null}
+            warn={false}
+          />
         </div>
       </div>
-    </div>
-    <div
-      className="panel-body"
+    }
+  >
+    <span
+      className="inner"
     >
-      <span
-        className="inner"
+      <Accordion
+        accordion={true}
+        className="results"
       >
-        <Accordion
-          accordion={true}
-          className="results"
+        <Panel
+          bsClass="panel"
+          bsStyle="default"
+          className="fade-in"
+          defaultExpanded={false}
+          eventKey="59c16458c650bd001111f010"
+          header="Support"
+          key="59c16458c650bd001111f010"
         >
-          <Panel
-            bsClass="panel"
-            bsStyle="default"
-            className="fade-in"
-            defaultExpanded={false}
-            eventKey="59c16458c650bd001111f010"
-            header="Support"
-            key="59c16458c650bd001111f010"
+          <div
+            className="app-support"
           >
             <div
-              className="app-support"
+              className="markdown"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "",
+                }
+              }
+            />
+          </div>
+        </Panel>
+      </Accordion>
+      <Accordion
+        accordion={true}
+        className="results"
+      >
+        <Panel
+          bsClass="panel"
+          bsStyle="default"
+          className="fade-in"
+          defaultExpanded={false}
+          eventKey="59c16458c650bd001111f010"
+          header="Parameters"
+          key="59c16458c650bd001111f010"
+        >
+          <ul>
+            <li
+              key="participant_label"
+            >
+              <span
+                className="key"
+              >
+                participant_label
+              </span>
+              :
+               
+              <span
+                className="value"
+              >
+                07
+              </span>
+            </li>
+          </ul>
+        </Panel>
+      </Accordion>
+      <Accordion
+        accordion={true}
+        className="results"
+      >
+        <Panel
+          bsClass="panel"
+          bsStyle="default"
+          className="fade-in"
+          defaultExpanded={false}
+          eventKey="59c16458c650bd001111f010"
+          header="Jobs Status"
+          key="59c16458c650bd001111f010"
+        >
+          <ul>
+            <div
+              className=" job-status col-xs-12"
+              key="59c16458c650bd001111f010"
             >
               <div
-                className="markdown"
-                dangerouslySetInnerHTML={
-                  Object {
-                    "__html": "",
-                  }
-                }
-              />
-            </div>
-          </Panel>
-        </Accordion>
-        <Accordion
-          accordion={true}
-          className="results"
-        >
-          <Panel
-            bsClass="panel"
-            bsStyle="default"
-            className="fade-in"
-            defaultExpanded={false}
-            eventKey="59c16458c650bd001111f010"
-            header="Parameters"
-            key="59c16458c650bd001111f010"
-          >
-            <ul>
-              <li
-                key="participant_label"
+                className="col-xs-8"
               >
-                <span
-                  className="key"
-                >
-                  participant_label
-                </span>
-                :
-                 
-                <span
-                  className="value"
-                >
-                  07
-                </span>
-              </li>
-            </ul>
-          </Panel>
-        </Accordion>
-        <Accordion
-          accordion={true}
-          className="results"
-        >
-          <Panel
-            bsClass="panel"
-            bsStyle="default"
-            className="fade-in"
-            defaultExpanded={false}
-            eventKey="59c16458c650bd001111f010"
-            header="Jobs Status"
-            key="59c16458c650bd001111f010"
-          >
-            <ul>
+                Job Id
+              </div>
               <div
-                className=" job-status col-xs-12"
-                key="59c16458c650bd001111f010"
+                className="col-xs-4"
               >
+                Status
+              </div>
+            </div>
+            <div
+              className="job-status col-xs-12"
+              key="49c03ed3-281e-40d3-b027-3102dcb5153c"
+            >
+              <div>
                 <div
                   className="col-xs-8"
                 >
-                  Job Id
+                  49c03ed3-281e-40d3-b027-3102dcb5153c
                 </div>
                 <div
                   className="col-xs-4"
                 >
-                  Status
+                  FAILED
                 </div>
               </div>
-              <div
-                className="job-status col-xs-12"
-                key="49c03ed3-281e-40d3-b027-3102dcb5153c"
-              >
-                <div>
-                  <div
-                    className="col-xs-8"
-                  >
-                    49c03ed3-281e-40d3-b027-3102dcb5153c
-                  </div>
-                  <div
-                    className="col-xs-4"
-                  >
-                    FAILED
-                  </div>
+              <div>
+                <strong
+                  className="col-xs-12"
+                />
+              </div>
+            </div>
+            <div
+              className="job-status col-xs-12"
+              key="e276c571-83f7-439f-a34c-09840bb2a9cd"
+            >
+              <div>
+                <div
+                  className="col-xs-8"
+                >
+                  e276c571-83f7-439f-a34c-09840bb2a9cd
                 </div>
-                <div>
-                  <strong
-                    className="col-xs-12"
-                  />
+                <div
+                  className="col-xs-4"
+                >
+                  FAILED
                 </div>
               </div>
-              <div
-                className="job-status col-xs-12"
-                key="e276c571-83f7-439f-a34c-09840bb2a9cd"
-              >
-                <div>
-                  <div
-                    className="col-xs-8"
-                  >
-                    e276c571-83f7-439f-a34c-09840bb2a9cd
-                  </div>
-                  <div
-                    className="col-xs-4"
-                  >
-                    FAILED
-                  </div>
-                </div>
-                <div>
-                  <strong
-                    className="col-xs-12"
-                  />
-                </div>
+              <div>
+                <strong
+                  className="col-xs-12"
+                />
               </div>
-            </ul>
-          </Panel>
-        </Accordion>
-      </span>
-    </div>
-  </div>
+            </div>
+          </ul>
+        </Panel>
+      </Accordion>
+    </span>
+  </Panel>
 </span>
 `;
 
