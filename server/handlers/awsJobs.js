@@ -250,7 +250,7 @@ let handlers = {
         return
       }
       //Send back job object to client
-      // server side polling handles all interactions with Batch now therefore we are not initiating batch polling from server
+      // server side polling handles all interactions with Batch now therefore we are not initiating batch polling from client
       res.send(job)
     })
   },
