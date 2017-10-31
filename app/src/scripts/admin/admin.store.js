@@ -196,27 +196,29 @@ let UserStore = Reflux.createStore({
   },
 
   // ** Filters Eventlog to smaller logs based on job status *
-  // uploading contains all jobs, as all jobs are uploaded.
+  // uploading contains all jobs
   filterLogs() {
-    let eventLogs = this.data.eventLogs || []
-    // console.log(eventLogs)
+    let eventLogs = this.data.eventLogs
     for (let log of eventLogs) {
       if (!eventLogs.length) {
         this.getEventLogs()
       } else if (log.type != 'JOB_STARTED') {
         let data = this.data
         let eventStatus = log.data.job.status.toLowerCase()
+        if (eventStatus === 'failed' && data.failedLogs.includes(log)) {
+          console.log('pop!')
+        }
 
         if (eventStatus === 'failed' && !data.failedLogs.includes(log)) {
           data.failedLogs.push(log)
+          data.uploadedLogs.push(log)
           this.update(data)
+          console.log(data.failedLogs)
         } else if (
           eventStatus === 'success' &&
           !data.successLogs.includes(log)
         ) {
           data.successLogs.push(log)
-          this.update(data)
-        } else if (!data.uploadedLogs.includes(log)) {
           data.uploadedLogs.push(log)
           this.update(data)
         }
@@ -226,7 +228,7 @@ let UserStore = Reflux.createStore({
   },
 
   filterMonthActivity() {
-    let successLogs = this.data.failedLogs
+    let successLogs = this.data.successLogs
     let activityLogs = this.data.activityLogs
     let data = this.data
     let entries = []
