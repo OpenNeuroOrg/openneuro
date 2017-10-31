@@ -2,8 +2,8 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import actions from './admin.actions.js'
 import adminStore from './admin.store'
+import actions from './admin.actions.js'
 import { Link } from 'react-router'
 import { Route } from 'react-router'
 import Pie from './charts/admin.progression-pie.jsx'
@@ -14,15 +14,11 @@ class Progresssion extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, adminStore, 'admin')
-  }
-
-  getInitialState() {
-    let initialState = {
+    this.state = {
       month: 'all',
       year: 'all',
       value: 'failed',
     }
-    return initialState
   }
 
   componentWillMount() {
@@ -30,46 +26,55 @@ class Progresssion extends Reflux.Component {
   }
 
   render() {
-    let failures = this.state.failedLogs.length
-    let successLogs = this.state.failedLogs
-    // **** testing
-    let successes = this.state.successLogs.length
-    let total = this.state.uploadedLogs.length
-
-    let activity = this.state.activityLogs
+    let failures = this.state.admin.failedLogs.length
+    let successes = this.state.admin.successLogs.length
+    let total = this.state.admin.uploadedLogs.length
+    // console.log(total)
+    // let successLogs = this.state.admin.failedLogs
+    // // **** testing
+    let activity = this.state.admin.activityLogs
 
     return (
       <div className="dashboard-dataset-teasers fade-in">
-        <div className="header-wrap clearfix">
+        <div className="header-wrap clearfix chart-header">
+          <h2>Current job sucession rate:</h2>
           <div className="col-sm-9 chart">
-            <h2>Current job sucession rate:</h2>
-            <Pie failed={failures} success={successes} total={total} />
+            <div className="col-1">
+              <Pie failed={failures} success={successes} total={total} />
+            </div>
+            <div className="col-2">
+              <Scatter
+                logs={activity}
+                month={this.state.month}
+                year={this.state.year}
+              />
+            </div>
           </div>
-          <div>
-            <label>Please make a selection: </label>
-            <form>
-              <div>
-                <select
-                  value={this.state.month}
-                  onChange={this._handleChangeMonth}>
-                  <option value="">All</option>
-                  {this._options('month')}
-                </select>
-                <select
-                  value={this.state.year}
-                  onChange={this._handleChangeYear}>
-                  <option value="">All</option>
-                  {this._options('year')}
-                </select>
-              </div>
-            </form>
-          </div>
-          <Scatter
-            logs={activity}
-            month={this.state.month}
-            year={this.state.year}
-          />
         </div>
+      </div>
+    )
+  }
+
+  _handleFiltering() {
+    return (
+      <div>
+        <label>Please make a selection: </label>
+        <form>
+          <div>
+            <select
+              value={this.state.month}
+              onChange={this._handleChangeMonth.bind(this)}>
+              <option value="">All</option>
+              {this._options('month')}
+            </select>
+          </div>
+          <select
+            value={this.state.year}
+            onChange={this._handleChangeYear.bind(this)}>
+            <option value="">All</option>
+            {this._options('year')}
+          </select>
+        </form>
       </div>
     )
   }
@@ -78,24 +83,26 @@ class Progresssion extends Reflux.Component {
     this.setState({
       month: e.target.value,
     })
-    console.log(this.state.month)
   }
 
   _handleChangeYear(e) {
     this.setState({
       year: e.target.value,
     })
-    console.log(this.state.year)
   }
 
   _options(e) {
-    let activity = this.state.activityLogs
+    let activity = this.state.admin.activityLogs
     let options = []
 
     Object.entries(activity).map((index, value) => {
       let log = activity[value]
       if (!options.includes(log[e])) {
-        options.push(<option value={log[e]}>{log[e]}</option>)
+        options.push(
+          <option key={e} value={log[e]}>
+            {log[e]}
+          </option>,
+        )
       }
     })
 
