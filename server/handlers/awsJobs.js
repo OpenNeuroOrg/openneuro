@@ -240,36 +240,18 @@ let handlers = {
      * GET Job
      */
   getJob(req, res, next) {
-    let userId = req.user
     let jobId = req.params.jobId //this is the mongo id for the job.
 
     c.crn.jobs.findOne({ _id: ObjectID(jobId) }, {}, (err, job) => {
+      if (err) next(err)
+
       if (!job) {
         res.status(404).send({ message: 'Job not found.' })
         return
       }
-      let status = job.analysis.status
-      let jobs = job.analysis.jobs
-
-      // check if job is already known to be completed
-      // there could be a scenario where we are polling before the AWS batch job has been setup. !jobs check handles this.
-      if (
-        (status === 'SUCCEEDED' && job.results && job.results.length > 0) ||
-        status === 'FAILED' ||
-        status === 'REJECTED' ||
-        status === 'CANCELED' ||
-        !jobs ||
-        !jobs.length
-      ) {
-        res.send(job)
-      } else {
-        handlers.getJobStatus(job, userId, (err, data) => {
-          if (err) {
-            return next(err)
-          }
-          res.send(data)
-        })
-      }
+      //Send back job object to client
+      // server side polling handles all interactions with Batch now therefore we are not initiating batch polling from client
+      res.send(job)
     })
   },
 
