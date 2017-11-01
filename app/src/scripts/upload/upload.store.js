@@ -141,36 +141,29 @@ let UploadStore = Reflux.createStore({
      */
   onResume(selectedFiles, originalName) {
     let dirName = selectedFiles.tree[0].name,
-      renameEnabled = true,
-      activeKey,
-      callback
+      activeKey
     if (dirName !== originalName) {
       activeKey = 2
     } else {
       activeKey = 3
-      renameEnabled = false
-      callback = () => {
-        if (this.data.uploadStatus == 'files-selected') {
-          this.validate(selectedFiles.list)
-        }
-      }
     }
+
     fileStore.setFiles(selectedFiles)
-    this.setInitialState(
-      {
-        dirName: originalName,
-        uploadStatus: 'files-selected',
-        showRename: true,
-        showModal: true,
-        showDisclaimer: true,
-        selectedName: dirName,
-        renameEnabled: renameEnabled,
-        showRenameInput: false,
-        activeKey: activeKey,
-        resuming: true,
-      },
-      callback,
-    )
+    this.validate()
+    this.setInitialState({
+      dirName: originalName,
+      uploadStatus: 'files-selected',
+      showRename: false,
+      showResume: true,
+      showModal: true,
+      showIssues: true,
+      showDisclaimer: true,
+      selectedName: dirName,
+      renameEnabled: false,
+      showRenameInput: false,
+      activeKey: activeKey,
+      resuming: true,
+    })
   },
 
   /**
@@ -244,7 +237,7 @@ let UploadStore = Reflux.createStore({
               uploadStatus: 'dataset-exists',
               showDisclaimer: true,
               showResume: true,
-              activeKey: 5,
+              activeKey: 4,
             })
           } else {
             self.update({ showDisclaimer: true, activeKey: 4 })
