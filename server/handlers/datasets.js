@@ -25,6 +25,7 @@ export default {
       datasetNumber = 'ds' + ('000000' + datasetNumber).substr(-6, 6)
       req.body._id = datasetNumber
       delete req.headers['content-length']
+      delete req.headers['accept-encoding']
       request.post(
         config.scitran.url + 'projects',
         {
