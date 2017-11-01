@@ -79,25 +79,34 @@ export default {
       }
 
       if (existingProject) {
-        this.currentProjectId = existingProject._id
-        diff.datasets(
-          fileList,
-          existingProject.files,
-          (newFiles, completedFiles) => {
-            this.completed = this.completed + completedFiles.length + 1
-            progress({
-              status: 'calculating',
-              total: this.total,
-              completed: this.completed,
-              currentFiles: this.currentFiles,
-            })
-            this.uploadFiles(
-              datasetName,
-              newFiles,
-              this.currentProjectId,
-              metadata,
+        // Since files are no longer included with getProjects
+        // we have to make a second request
+        scitran.getProject(
+          existingProject._id,
+          response => {
+            const existingProject = response.body
+            this.currentProjectId = existingProject._id
+            diff.datasets(
+              fileList,
+              existingProject.files,
+              (newFiles, completedFiles) => {
+                this.completed = this.completed + completedFiles.length + 1
+                progress({
+                  status: 'calculating',
+                  total: this.total,
+                  completed: this.completed,
+                  currentFiles: this.currentFiles,
+                })
+                this.uploadFiles(
+                  datasetName,
+                  newFiles,
+                  this.currentProjectId,
+                  metadata,
+                )
+              },
             )
           },
+          { query: { metadata: true } },
         )
       } else {
         this.createContainer(
