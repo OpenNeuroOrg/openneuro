@@ -20,6 +20,10 @@ class BSNavbar extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, userStore, 'users')
+
+    this.state = {
+      login: true,
+    }
   }
 
   // life cycle methods ------------------------------------------------------------
@@ -73,9 +77,7 @@ class BSNavbar extends Reflux.Component {
 
     return (
       <ul className="nav navbar-nav main-nav">
-        <li className="link-dashboard">
-          {isLoggedIn ? dashboardLink : null}
-        </li>
+        <li className="link-dashboard">{isLoggedIn ? dashboardLink : null}</li>
         <li className="link-public">
           <NavLink className="nav-link" to="/public/datasets">
             <span className="link-name">Public Dashboard</span>
@@ -96,9 +98,7 @@ class BSNavbar extends Reflux.Component {
             ? adminLink
             : null}
         </li>
-        <li className="link-dashboard">
-          {isLoggedIn ? <UploadBtn /> : null}
-        </li>
+        <li className="link-dashboard">{isLoggedIn ? <UploadBtn /> : null}</li>
         <li>
           <Navbar.Collapse eventKey={0}>
             {isLoggedIn ? (
@@ -162,21 +162,53 @@ class BSNavbar extends Reflux.Component {
     } else {
       return (
         <div className="navbar-right sign-in-nav-btn">
-          <button
-            className="btn-blue half"
-            onClick={userStore.googleSignIn.bind(null)}>
-            <i className="fa fa-google" />
-            <span> Sign in</span>
-          </button>
-          <button
-            className="btn-blue half"
-            onClick={userStore.orcidSignIn.bind(null)}>
-            <span className="icon"><img alt="ORCID" width="16" height="16" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" /></span>
-            <span> Sign in</span>
-          </button>
+          <div
+            className="login-nav-right"
+            onClick={this._toggleNav.bind(this, 'login')}
+            onMouseLeave={this._toggleNav.bind(this, 'login')}>
+            <a className="nav-link">
+              <span className="link-name">
+                {' '}
+                Sign in <span className="arrow" />
+              </span>
+            </a>
+            {!this.state.login && this._loginNav()}
+          </div>
         </div>
       )
     }
+  }
+
+  _toggleNav(name) {
+    let newState = {}
+    newState[name] = !this.state[name]
+    this.setState(newState)
+  }
+
+  _loginNav() {
+    return (
+      <div className="dropdown-login">
+        <button
+          className="btn-blue half"
+          onClick={userStore.googleSignIn.bind(null)}>
+          <i className="fa fa-google" />
+          <span> Sign in</span>
+        </button>
+        <button
+          className="btn-blue half"
+          onClick={userStore.orcidSignIn.bind(null)}>
+          <span className="icon">
+            <img
+              alt="ORCID"
+              width="16"
+              height="16"
+              src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
+            />
+          </span>
+          <span> Sign in</span>
+        </button>
+      </div>
+    )
   }
 }
 
