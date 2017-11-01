@@ -141,14 +141,11 @@ let UploadStore = Reflux.createStore({
      */
   onResume(selectedFiles, originalName) {
     let dirName = selectedFiles.tree[0].name,
-      renameEnabled = true,
-      activeKey,
-      callback
+      activeKey
     if (dirName !== originalName) {
       activeKey = 2
     } else {
       activeKey = 3
-      renameEnabled = false
     }
 
     fileStore.setFiles(selectedFiles)
