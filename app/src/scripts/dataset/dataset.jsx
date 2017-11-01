@@ -367,7 +367,7 @@ class Dataset extends Reflux.Component {
                   <span className="dataset-status ds-warning">
                     <i className="fa fa-warning" /> Incomplete
                   </span>
-                  <FileSelect resume={true} onChange={this._onFileSelect} />
+                  <FileSelect resume={true} onChange={this._onFileSelect.bind(this)} />
                 </h4>
               </div>
               <div className="panel-collapse" aria-expanded="false">

@@ -27,7 +27,7 @@ export default {
     handleRequest(url, options, req => {
       request
         .get(req)
-        .on('response', resp => {
+        .on('data', resp => {
           if (options.status) {
             resp.statusCode = options.status
           }
