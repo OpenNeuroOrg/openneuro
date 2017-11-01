@@ -36,7 +36,7 @@
     "morgan": "^1.6.1",
     "node-resque": "^4.0.7",
     "nodemailer": "^2.5.0",
-    "request": "^2.63.0",
+    "request": "^2.83.0",
     "tar-fs": "^1.9.0",
     "underscore": "^1.8.3",
     "uuid": "^3.0.1",
@@ -64,7 +64,10 @@
   "lint-staged": {
     "gitDir": "../",
     "linters": {
-      "*.{js,jsx,json}": ["prettier --write", "git add"]
+      "*.{js,jsx,json}": [
+        "prettier --write",
+        "git add"
+      ]
     }
   }
 }
