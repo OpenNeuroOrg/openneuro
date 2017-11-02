@@ -78,6 +78,7 @@ body {
 
 a {
     color: $primary;
+    font-weight: 600;
     cursor: pointer;
 }
 
@@ -740,5 +741,3 @@ select {
 .markdown {
     overflow-wrap: break-word;
 }
-
-
