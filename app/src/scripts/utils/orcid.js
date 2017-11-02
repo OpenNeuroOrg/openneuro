@@ -71,7 +71,7 @@ let orcid = {
       config.auth.orcid.URI +
         '/oauth/authorize?client_id=' +
         config.auth.orcid.clientID +
-        '&response_type=code&scope=/read-limited&redirect_uri=' +
+        '&response_type=code&scope=/authenticate&redirect_uri=' +
         config.auth.orcid.redirectURI,
       '_blank',
     )
