@@ -152,7 +152,7 @@ class BSNavbar extends Reflux.Component {
   _signIn(loading) {
     if (loading) {
       return (
-        <div className="navbar-right sign-in-nav-btn active-singing">
+        <div className="navbar-right sign-in-nav-btn active-signin">
           <button className="btn-blue">
             <i className="fa fa-spin fa-circle-o-notch" />
             <span> Signing In</span>
