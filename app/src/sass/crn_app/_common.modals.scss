@@ -296,9 +296,16 @@
     .task-select {
         border: 1px solid $ccc;
         padding: 0;
-
         select {
             border: 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .m-arrow {
+          position: absolute;
+          top: 30%;
+          right: 0;
         }
     }
 
@@ -452,6 +459,3 @@
         content: ' \f0dd';
     }
 }
-
-
-
