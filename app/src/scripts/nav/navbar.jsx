@@ -20,6 +20,10 @@ class BSNavbar extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, userStore, 'users')
+
+    this.state = {
+      login: true,
+    }
   }
 
   // life cycle methods ------------------------------------------------------------
@@ -73,9 +77,7 @@ class BSNavbar extends Reflux.Component {
 
     return (
       <ul className="nav navbar-nav main-nav">
-        <li className="link-dashboard">
-          {isLoggedIn ? dashboardLink : null}
-        </li>
+        <li className="link-dashboard">{isLoggedIn ? dashboardLink : null}</li>
         <li className="link-public">
           <NavLink className="nav-link" to="/public/datasets">
             <span className="link-name">Public Dashboard</span>
@@ -96,9 +98,7 @@ class BSNavbar extends Reflux.Component {
             ? adminLink
             : null}
         </li>
-        <li className="link-dashboard">
-          {isLoggedIn ? <UploadBtn /> : null}
-        </li>
+        <li className="link-dashboard">{isLoggedIn ? <UploadBtn /> : null}</li>
         <li>
           <Navbar.Collapse eventKey={0}>
             {isLoggedIn ? (
@@ -150,33 +150,61 @@ class BSNavbar extends Reflux.Component {
   }
 
   _signIn(loading) {
-    if (loading) {
-      return (
-        <div className="navbar-right sign-in-nav-btn">
-          <button className="btn-blue">
-            <i className="fa fa-spin fa-circle-o-notch" />
-            <span> Signing In</span>
-          </button>
+    const menuText = loading ? (
+      <span className="link-name">
+        <span>Signing In </span>
+        <i className="fa fa-spin fa-circle-o-notch" />
+      </span>
+    ) : (
+      <span className="link-name">
+        Sign In <span className="arrow" />
+      </span>
+    )
+    return (
+      <div className="navbar-right sign-in-nav-btn">
+        <div
+          className="login-nav-right"
+          onClick={this._toggleNav.bind(this, 'login')}
+          onMouseLeave={this._toggleNav.bind(this, 'login')}>
+          <a className="nav-link">{menuText}</a>
+          {!this.state.login && this._loginNav()}
         </div>
-      )
-    } else {
-      return (
-        <div className="navbar-right sign-in-nav-btn">
-          <button
-            className="btn-blue half"
-            onClick={userStore.googleSignIn.bind(null)}>
-            <i className="fa fa-google" />
-            <span> Sign in</span>
-          </button>
-          <button
-            className="btn-blue half"
-            onClick={userStore.orcidSignIn.bind(null)}>
-            <span className="icon"><img alt="ORCID" width="16" height="16" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" /></span>
-            <span> Sign in</span>
-          </button>
-        </div>
-      )
-    }
+      </div>
+    )
+  }
+
+  _toggleNav(name) {
+    let newState = {}
+    newState[name] = !this.state[name]
+    this.setState(newState)
+  }
+
+  _loginNav() {
+    return (
+      <div className="dropdown-login">
+        <span className="dropdown-header">Sign in with:</span>
+        <button
+          className="btn-blue"
+          onClick={userStore.googleSignIn.bind(null)}>
+          <i className="fa fa-google" />
+          <span> Google</span>
+        </button>
+        <hr/>
+        <button
+          className="btn-blue"
+          onClick={userStore.orcidSignIn.bind(null)}>
+          <span className="icon">
+            <img
+              alt="ORCID"
+              width="16"
+              height="16"
+              src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
+            />
+          </span>
+          <span> ORCID</span>
+        </button>
+      </div>
+    )
   }
 }
 
