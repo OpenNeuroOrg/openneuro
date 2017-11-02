@@ -150,33 +150,27 @@ class BSNavbar extends Reflux.Component {
   }
 
   _signIn(loading) {
-    if (loading) {
-      return (
-        <div className="navbar-right sign-in-nav-btn active-signin">
-          <button className="btn-blue">
-            <i className="fa fa-spin fa-circle-o-notch" />
-            <span> Signing In</span>
-          </button>
+    const menuText = loading ? (
+      <span className="link-name">
+        <span>Signing In </span>
+        <i className="fa fa-spin fa-circle-o-notch" />
+      </span>
+    ) : (
+      <span className="link-name">
+        Sign In <span className="arrow" />
+      </span>
+    )
+    return (
+      <div className="navbar-right sign-in-nav-btn">
+        <div
+          className="login-nav-right"
+          onClick={this._toggleNav.bind(this, 'login')}
+          onMouseLeave={this._toggleNav.bind(this, 'login')}>
+          <a className="nav-link">{menuText}</a>
+          {!this.state.login && this._loginNav()}
         </div>
-      )
-    } else {
-      return (
-        <div className="navbar-right sign-in-nav-btn">
-          <div
-            className="login-nav-right"
-            onClick={this._toggleNav.bind(this, 'login')}
-            onMouseLeave={this._toggleNav.bind(this, 'login')}>
-            <a className="nav-link">
-              <span className="link-name">
-                {' '}
-                Sign in <span className="arrow" />
-              </span>
-            </a>
-            {!this.state.login && this._loginNav()}
-          </div>
-        </div>
-      )
-    }
+      </div>
+    )
   }
 
   _toggleNav(name) {
