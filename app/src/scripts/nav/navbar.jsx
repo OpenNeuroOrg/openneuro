@@ -183,13 +183,13 @@ class BSNavbar extends Reflux.Component {
     return (
       <div className="dropdown-login">
         <button
-          className="btn-blue half"
+          className="btn-blue"
           onClick={userStore.googleSignIn.bind(null)}>
           <i className="fa fa-google" />
-          <span> Sign in</span>
+          <span> Google</span>
         </button>
         <button
-          className="btn-blue half"
+          className="btn-blue"
           onClick={userStore.orcidSignIn.bind(null)}>
           <span className="icon">
             <img
@@ -199,7 +199,7 @@ class BSNavbar extends Reflux.Component {
               src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
             />
           </span>
-          <span> Sign in</span>
+          <span> ORCID</span>
         </button>
       </div>
     )
