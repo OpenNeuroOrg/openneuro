@@ -182,12 +182,14 @@ class BSNavbar extends Reflux.Component {
   _loginNav() {
     return (
       <div className="dropdown-login">
+        <span className="dropdown-header">Sign in with:</span>
         <button
           className="btn-blue"
           onClick={userStore.googleSignIn.bind(null)}>
           <i className="fa fa-google" />
           <span> Google</span>
         </button>
+        <hr/>
         <button
           className="btn-blue"
           onClick={userStore.orcidSignIn.bind(null)}>

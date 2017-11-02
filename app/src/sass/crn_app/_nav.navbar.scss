@@ -140,18 +140,25 @@
                   }
 
                 .dropdown-login {
-                  background: $c-33;
+                  background: $white;
                   overflow: hidden;
                   position: absolute;
                   width: 180px;
                   z-index: 1;
                   top: 70px;
                   padding: 10px;
-                  right: 0px;
+                  right: 0;
+                  left: auto;
+                  border-radius: 0;
+                  box-shadow: 1px 2px 4px -3px $transparent7;
+                  border-color: $f4;
                   button {
                     display: block;
                     margin: 5px;
                     width: 84%;
+                  }
+                  hr {
+                    margin: 0;
                   }
                 }
             }
