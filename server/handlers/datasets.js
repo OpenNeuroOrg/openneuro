@@ -48,6 +48,7 @@ export default {
       let datasetNumber = bidsId.decodeId(datasetId).slice(2)
       let versionId = datasetNumber + '-' + versionNumber
 
+      delete req.headers['accept-encoding']
       request.post(
         config.scitran.url +
           'snapshots/projects/' +
@@ -68,6 +69,7 @@ export default {
      */
   share(req, res) {
     // proxy add permission request to scitran to avoid extra permissions checks
+    delete req.headers['accept-encoding']
     request.post(
       config.scitran.url + 'projects/' + req.params.datasetId + '/permissions',
       {
