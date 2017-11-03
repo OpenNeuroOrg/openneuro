@@ -453,5 +453,38 @@
     }
 }
 
+.login-modal {
+  div.modal-header{
+    background-color: $well-bg;
+    div.logo-text {
+      width: 50%;
+      img {
+        height: 40px;
+      }
+      font-size: 32px;
+    }
+  }
 
+  hr.spacer {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
 
+  div.login-btns {
+    width: 50%;
+    margin: 0 auto;
+    span {
+      font-size: 14px;
+    }
+
+    button {
+      margin: 10px;
+    }
+  }
+
+  a {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+  }
+}
