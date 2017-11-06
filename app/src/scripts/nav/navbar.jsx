@@ -13,8 +13,6 @@ import { Modal } from '../utils/modal.jsx'
 import { refluxConnect } from '../utils/reflux'
 import brand_mark from './assets/brand_mark.png'
 
-import logo_app from './assets/logo_app.png'
-
 // component setup ---------------------------------------------------------------
 
 class BSNavbar extends Reflux.Component {
