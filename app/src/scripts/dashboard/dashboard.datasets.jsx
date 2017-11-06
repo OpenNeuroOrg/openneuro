@@ -187,8 +187,8 @@ class Datasets extends Reflux.Component {
   }
 
   _onPageSelect(page) {
-    let pageNumber = Number(page)
-    this.setState({ page: pageNumber })
+    const pageNumber = Number(page)
+    Actions.update({page: pageNumber })
   }
 
   _sort(value, direction) {
