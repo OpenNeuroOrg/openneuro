@@ -247,6 +247,7 @@ let UserStore = Reflux.createStore({
         this.clearAuth()
         history.push('/')
       })
+      this.update({ loginModal: false })
     }
   },
 
