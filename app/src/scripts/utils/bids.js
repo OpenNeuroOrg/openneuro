@@ -59,7 +59,7 @@ export default {
                     (existing.hasOwnProperty('original') &&
                       existing.snapshot_version < project.snapshot_version)
                   ) {
-                    if (isPublic || this.userAccess(project)) {
+                    if (isAdmin || isPublic || this.userAccess(project)) {
                       resultDict[datasetId] = dataset
                     }
                   }
