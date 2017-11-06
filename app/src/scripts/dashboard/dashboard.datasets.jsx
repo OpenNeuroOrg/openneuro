@@ -28,7 +28,7 @@ class Datasets extends Reflux.Component {
 
   componentWillUnmount() {
     super.componentWillUnmount()
-    Actions.update({ datasets: [] })
+    Actions.update({ datasets: [], page: 0 })
   }
 
   componentDidMount() {
@@ -188,7 +188,7 @@ class Datasets extends Reflux.Component {
 
   _onPageSelect(page) {
     const pageNumber = Number(page)
-    Actions.update({page: pageNumber })
+    Actions.update({ page: pageNumber })
   }
 
   _sort(value, direction) {
