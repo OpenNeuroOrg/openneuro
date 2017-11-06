@@ -160,7 +160,7 @@ class BSNavbar extends Reflux.Component {
       <span
         className="link-name"
         onClick={actions.toggleModal.bind(this, 'loginModal')}>
-        Sign In
+        <button className="btn-blue">Sign In</button>
         {this._loginModal()}
       </span>
     )
