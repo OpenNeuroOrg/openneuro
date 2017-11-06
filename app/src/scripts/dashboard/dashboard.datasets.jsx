@@ -111,7 +111,7 @@ class Datasets extends Reflux.Component {
             page={this.state.datasets.page}
             pagesTotal={pagesTotal}
             pageRangeDisplayed={5}
-            onPageSelect={this._onPageSelect}
+            onPageSelect={this._onPageSelect.bind(this)}
           />
         </div>
       </div>
