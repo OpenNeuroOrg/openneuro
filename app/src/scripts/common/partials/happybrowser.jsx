@@ -31,7 +31,8 @@ export default class Happybrowser extends React.Component {
               site may not work as expected.{' '}
               <strong>
                 <a href="http://www.google.com/chrome/">
-                  Please consider using Chrome, V49.0 or higher, as your browser
+                  Please consider using Chrome or Firefox, V49.0 or higher, as
+                  your browser
                 </a>.
               </strong>
             </p>
@@ -56,12 +57,16 @@ export default class Happybrowser extends React.Component {
 
   _incompatibleBrowser(ua) {
     const check = bowser.check(
-      { chrome: '49', chromium: '49', googlebot: '0' },
+      { chrome: '49', chromium: '49', googlebot: '0', firefox: '50' },
       true,
       ua || window.navigator.userAgent,
     )
     if (
-      bowser.check({ chrome: '41' }, true, ua || window.navigator.userAgent)
+      bowser.check(
+        { chrome: '41', firefox: '50' },
+        true,
+        ua || window.navigator.userAgent,
+      )
     ) {
       // Also allow Chrome 41 even though uploading does not work
       // This is for Googlebot to index correctly
