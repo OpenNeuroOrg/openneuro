@@ -55,7 +55,7 @@ let notifications = {
           _id: job.snapshotId + '_' + job.appId + '_' + job.analysis.created,
           type: 'email',
           email: {
-            to: job.userId,
+            to: user.email,
             subject:
               'Analysis - ' +
               job.appLabel +
