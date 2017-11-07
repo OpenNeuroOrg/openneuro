@@ -113,6 +113,8 @@
 
                     strong {
                         color: $c-66;
+                        font-size: 13px;
+                        font-weight: normal;
                     }
 
                     .meta,
@@ -158,6 +160,10 @@
                     padding: 0px;
                     margin: 0px;
                 }
+            }
+
+            .app-support p > a {
+              font-weight: normal;
             }
 
             .job-status {
