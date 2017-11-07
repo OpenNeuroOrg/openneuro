@@ -55,11 +55,18 @@ export default class Happybrowser extends React.Component {
   }
 
   _incompatibleBrowser(ua) {
-    let check = bowser.check(
+    const check = bowser.check(
       { chrome: '49', chromium: '49', googlebot: '0' },
       true,
       ua || window.navigator.userAgent,
     )
+    if (
+      bowser.check({ chrome: '41' }, true, ua || window.navigator.userAgent)
+    ) {
+      // Also allow Chrome 41 even though uploading does not work
+      // This is for Googlebot to index correctly
+      return false
+    }
     return !check
   }
 

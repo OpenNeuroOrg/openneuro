@@ -34,9 +34,10 @@ class Tools extends React.Component {
       isIncomplete = !!dataset.status.incomplete,
       isInvalid = !!dataset.status.invalid,
       isSnapshot = !!dataset.original,
-      isSuperuser = window.localStorage.scitran
-        ? JSON.parse(window.localStorage.scitran).root
-        : null
+      isSuperuser =
+        window.localStorage.scitran && JSON.parse(window.localStorage.scitran)
+          ? JSON.parse(window.localStorage.scitran).root
+          : null
 
     let displayDelete = this._deleteDataset(
       isAdmin,

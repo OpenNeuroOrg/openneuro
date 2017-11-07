@@ -18,6 +18,7 @@ class ArrayInput extends React.Component {
       initialState[field.id] = ''
     }
 
+    this.initialState = initialState
     this.state = initialState
   }
 
@@ -101,8 +102,8 @@ class ArrayInput extends React.Component {
             index={index}
             item={item}
             model={model}
-            onEdit={this._edit}
-            remove={this._remove.bind(null, index)}
+            onEdit={this._edit.bind(this)}
+            remove={this._remove.bind(this, index)}
           />
         )
       })
@@ -231,7 +232,7 @@ class ArrayItem extends React.Component {
             message="Edit"
             warn={false}
             icon="fa-pencil"
-            action={this._toggleEdit}
+            action={this._toggleEdit.bind(this)}
           />
         </div>
       </div>
@@ -254,7 +255,7 @@ class ArrayItem extends React.Component {
               message="Cancel"
               warn={false}
               icon="fa-times"
-              action={this._cancel}
+              action={this._cancel.bind(this)}
             />
           </div>
         </div>
@@ -296,7 +297,7 @@ class ArrayItem extends React.Component {
                 simpleValue
                 options={field.select}
                 value={this.state[field.id]}
-                onChange={this._handleSelectChange.bind(null, field.id)}
+                onChange={this._handleSelectChange.bind(this, field.id)}
                 key={field.id}
               />
             )
@@ -312,7 +313,7 @@ class ArrayItem extends React.Component {
               <div className="form-group float-label-input" key={field.id}>
                 <button
                   className="admin-button"
-                  onClick={this._toggleCheckBox.bind(null, field.id)}
+                  onClick={this._toggleCheckBox.bind(this, field.id)}
                   key={field.id}>
                   <span>
                     <i
@@ -332,7 +333,7 @@ class ArrayItem extends React.Component {
               <Input
                 placeholder={field.placeholder}
                 value={this.state[field.id]}
-                onChange={this._handleChange.bind(null, field.id)}
+                onChange={this._handleChange.bind(this, field.id)}
                 key={field.id}
               />
             )
@@ -346,7 +347,7 @@ class ArrayItem extends React.Component {
 
   _cancel() {
     this._toggleEdit()
-    this.setState(this.getInitialState())
+    this.setState(this.initialState)
   }
 
   _toggleEdit() {
