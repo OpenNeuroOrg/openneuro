@@ -117,7 +117,7 @@
                     // font-size: 21px;
                 }
             }
-            
+
             .active-signin {
               margin: 15px 20px;
             }
@@ -438,6 +438,7 @@
 .navbar-brand {
     height: 75px;
     padding: 5px 20px;
+    border: none;
 
     @media(max-width: 1000px){
         padding: 15px 25px;
