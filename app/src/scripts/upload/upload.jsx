@@ -30,7 +30,7 @@ class Upload extends Reflux.Component {
 
     // conditional variables -----------------------
 
-    let totalTabs = this.state.upload.showResume ? 5 : 5
+    let totalTabs = this.state.upload.showResume ? 6 : 5
     let activeBar = 'active-tab-' + activeKey
     if (activeKey === 6 && totalTabs < 6) {
       activeBar = 'active-tab-5'
@@ -131,12 +131,12 @@ class Upload extends Reflux.Component {
     if (this.state.upload.showResume) {
       let tabName = (
         <span>
-          <span>2:</span>
+          <span>5:</span>
           <span> Resume</span>
         </span>
       )
       resume = (
-        <Tab eventKey={2} title={tabName} disabled={disabledTab}>
+        <Tab eventKey={5} title={tabName} disabled={disabledTab}>
           <div className={activePane}>
             <Resume />
           </div>
@@ -168,7 +168,7 @@ class Upload extends Reflux.Component {
 
     return (
       <div className="uploader">
-        <div className="upload-wrap panel-group" defaultActiveKey="1">
+        <div className="upload-wrap panel-group" defaultactivekey="1">
           <div className="upload-panel panel panel-default">
             <div className="panel-collapse collapse in">
               <div className="panel-body">
@@ -183,9 +183,9 @@ class Upload extends Reflux.Component {
                     <div className={activeBar} />
                     {select}
                     {rename}
-                    {resume}
                     {issues}
                     {disclaimer}
+                    {resume}
                     {progress}
                   </Tabs>
                 </div>
