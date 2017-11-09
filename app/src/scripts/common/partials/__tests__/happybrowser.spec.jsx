@@ -40,8 +40,8 @@ describe('common/partials/happybrowser', () => {
     const wrapper = shallow(<Happybrowser ua={ie} />)
     expect(wrapper.hasClass('hidden')).toBe(false)
   })
-  it('is visible in Firefox', () => {
+  it('is hidden in Firefox', () => {
     const wrapper = shallow(<Happybrowser ua={firefox} />)
-    expect(wrapper.hasClass('hidden')).toBe(false)
+    expect(wrapper.hasClass('hidden')).toBe(true)
   })
 })
