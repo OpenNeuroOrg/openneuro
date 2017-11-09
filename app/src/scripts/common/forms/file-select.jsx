@@ -48,6 +48,7 @@ class Upload extends Reflux.Component {
 
   _click(e) {
     e.stopPropagation()
+    e.target.value = null
     if (!bowser.chrome && !bowser.chromium) {
       let chromeMessage = (
         <span>

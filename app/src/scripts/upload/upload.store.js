@@ -153,8 +153,8 @@ let UploadStore = Reflux.createStore({
     this.setInitialState({
       dirName: originalName,
       uploadStatus: 'files-selected',
-      showRename: false,
-      showResume: true,
+      showRename: true,
+      showResume: false,
       showModal: true,
       showIssues: true,
       showDisclaimer: true,
@@ -237,7 +237,7 @@ let UploadStore = Reflux.createStore({
               uploadStatus: 'dataset-exists',
               showDisclaimer: true,
               showResume: true,
-              activeKey: 4,
+              activeKey: 5,
             })
           } else {
             self.update({ showDisclaimer: true, activeKey: 4 })
