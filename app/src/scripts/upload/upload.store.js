@@ -75,6 +75,7 @@ let UploadStore = Reflux.createStore({
       showSuccess: false,
       uploadStatus: 'not-started',
       warnings: [],
+      bidsSpecVersion: '1',
     }
     for (let prop in diffs) {
       data[prop] = diffs[prop]
@@ -193,7 +194,6 @@ let UploadStore = Reflux.createStore({
             summary: summary,
             uploadStatus: 'validated',
           })
-
           if (errors.length === 0 && warnings.length === 0) {
             this.checkExists()
           }

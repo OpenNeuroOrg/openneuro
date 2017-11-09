@@ -157,6 +157,10 @@ export default {
           metadata.authors.push({ name: author, ORCIDID: '' })
         }
       }
+      if (description.BIDSVersion != metadata.summary.bidsVersion) {
+        description.BIDSVersion = metadata.summary.bidsVersion
+      }
+
       scitran.updateProject(projectId, { metadata }, () => {
         let file = new File(
           [JSON.stringify(description)],
