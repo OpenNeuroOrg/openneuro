@@ -75,7 +75,6 @@ let UploadStore = Reflux.createStore({
       showSuccess: false,
       uploadStatus: 'not-started',
       warnings: [],
-      bidsSpecVersion: '1',
     }
     for (let prop in diffs) {
       data[prop] = diffs[prop]
