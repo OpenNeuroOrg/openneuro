@@ -6,7 +6,7 @@
       "env",
       {
         "targets": {
-          "browsers": ["chrome >= 49", "firefox >= 49"]
+          "browsers": ["chrome >= 49", "firefox >= 50"]
         }
       }
     ]
