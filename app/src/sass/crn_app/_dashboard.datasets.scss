@@ -58,7 +58,6 @@
     border-bottom: 1px solid $ddd;
 
     .filters {
-        width: 600px;
         float: right;
         text-align: right;
         padding: 0;
@@ -255,7 +254,7 @@
 
 
             }
-            
+
             .UPLOADING,
             .RUNNING {
                 background-color: rgba(0, 124, 147, .1);
@@ -414,5 +413,3 @@
         }
     }
 }
-
-

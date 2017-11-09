@@ -46,6 +46,8 @@
             padding: 10px;
             font-size: 12px;
             margin: 20px 10px 0;
+            // border: solid red;
+            -moz-padding-end: 97px;
         }
 
         .no-results {
@@ -195,7 +197,7 @@
 }
 
 .admin-job-parameters .admin-button,
-.required-button, 
+.required-button,
 .hide-button {
     border: none;
     background-color: transparent;

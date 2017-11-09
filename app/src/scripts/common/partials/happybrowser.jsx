@@ -31,7 +31,8 @@ export default class Happybrowser extends React.Component {
               site may not work as expected.{' '}
               <strong>
                 <a href="http://www.google.com/chrome/">
-                  Please consider using Chrome, V49.0 or higher, as your browser
+                  Please consider using a minimum of Chrome V49.0 or Firefox
+                  V50.0 as your browser
                 </a>.
               </strong>
             </p>
@@ -56,7 +57,7 @@ export default class Happybrowser extends React.Component {
 
   _incompatibleBrowser(ua) {
     const check = bowser.check(
-      { chrome: '49', chromium: '49', googlebot: '0' },
+      { chrome: '49', chromium: '49', googlebot: '0', firefox: '50' },
       true,
       ua || window.navigator.userAgent,
     )

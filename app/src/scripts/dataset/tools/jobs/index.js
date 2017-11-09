@@ -217,6 +217,9 @@ class JobMenu extends React.Component {
               </option>
               {versionOptions}
             </select>
+            <span className="Select-arrow-zone m-arrow">
+              <span className="Select-arrow" />
+            </span>
           </div>
           <h6 className="col-xs-12">
             {' '}
@@ -245,6 +248,9 @@ class JobMenu extends React.Component {
                   </option>
                   {appOptions}
                 </select>
+                <span className="Select-arrow-zone m-arrow">
+                  <span className="Select-arrow" />
+                </span>
               </div>
               {this.state.selectedAppKey != '' ? versions : null}
             </div>
@@ -327,6 +333,9 @@ class JobMenu extends React.Component {
                 </option>
                 {options}
               </select>
+              <span className="Select-arrow-zone m-arrow">
+                <span className="Select-arrow" />
+              </span>
             </div>
             {createSnapshot}
           </div>

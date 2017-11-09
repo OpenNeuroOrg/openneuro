@@ -49,12 +49,12 @@ class Upload extends Reflux.Component {
   _click(e) {
     e.stopPropagation()
     e.target.value = null
-    if (!bowser.chrome && !bowser.chromium) {
+    if (!bowser.chrome && !bowser.chromium && !bowser.firefox) {
       let chromeMessage = (
         <span>
-          This is a Google Chrome only feature.{' '}
+          This is a Google Chrome and Mozilla Firefox feature.{' '}
           <a href="http://www.google.com/chrome/">
-            Please consider using Chrome as your browser
+            Please consider using Chrome or Firefox as your browser
           </a>.
         </span>
       )
