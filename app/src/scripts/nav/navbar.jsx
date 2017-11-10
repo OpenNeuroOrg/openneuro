@@ -37,6 +37,7 @@ class BSNavbar extends Reflux.Component {
           <Navbar.Collapse>{this._navMenu()}</Navbar.Collapse>
         </Navbar>
         {this._supportModal()}
+        {this._loginModal()}
       </span>
     )
   }
@@ -151,26 +152,24 @@ class BSNavbar extends Reflux.Component {
   }
 
   _signIn(loading) {
-    const menuText = loading ? (
-      <span className="link-name active-sign-in">
-        <span>Signing In </span>
-        <i className="fa fa-spin fa-circle-o-notch" />
-      </span>
-    ) : (
-      <span
-        className="link-name"
-        onClick={actions.toggleModal.bind(this, 'loginModal')}>
-        <button className="btn-blue">Sign In</button>
-        {this._loginModal()}
-      </span>
-    )
-    return (
-      <div className="navbar-right sign-in-nav-btn">
-        <div className="login-nav-right">
-          <a className="nav-link">{menuText}</a>
+    if (loading) {
+      return (
+        <div className="navbar-right sign-in-nav-btn">
+          <button className="btn-blue">
+            <i className="fa fa-spin fa-circle-o-notch" />
+            <span> Signing In</span>
+          </button>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div className="navbar-right sign-in-nav-btn">
+          <button className="btn-blue" onClick={actions.toggleModal.bind(this, 'loginModal')}>
+            <span>Sign in</span>
+          </button>
+        </div>
+      )
+    }
   }
 
   _loginModal() {

@@ -214,6 +214,7 @@ let UserStore = Reflux.createStore({
       return
     }
     options.provider = 'google'
+    this.update({ loginModal: false })
     this.signIn(options)
   },
 
@@ -225,6 +226,7 @@ let UserStore = Reflux.createStore({
      */
   orcidSignIn(options) {
     options.provider = 'orcid'
+    this.update({ loginModal: false })
     this.signIn(options)
   },
 
@@ -247,6 +249,7 @@ let UserStore = Reflux.createStore({
         this.clearAuth()
         history.push('/')
       })
+      // Always reset the loginModal on logout
       this.update({ loginModal: false })
     }
   },
