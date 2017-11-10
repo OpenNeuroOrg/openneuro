@@ -152,7 +152,7 @@ class BSNavbar extends Reflux.Component {
 
   _signIn(loading) {
     const menuText = loading ? (
-      <span className="link-name">
+      <span className="link-name active-sign-in">
         <span>Signing In </span>
         <i className="fa fa-spin fa-circle-o-notch" />
       </span>
