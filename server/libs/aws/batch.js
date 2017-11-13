@@ -45,7 +45,7 @@ const extractJobLog = job => {
  * Takes a current Date object and the function returned is 
  * used with any filter
  */
-const staleJobFilter = (now) => job => {
+const staleJobFilter = now => job => {
   // Kill jobs that are still running and where the actual container start time was 48 hours ago
   if (
     'startedAt' in job &&
@@ -65,6 +65,46 @@ export default aws => {
     sdk: batch,
 
     staleJobFilter: staleJobFilter,
+
+    /*
+     * Create the Batch queue for this instance
+     * Compute environments need to be manually assigned
+     */
+    initQueue(callback) {
+      const queueName = config.aws.batch.queue
+      const describeParams = {
+        jobQueues: [queueName],
+      }
+      batch.describeJobQueues(describeParams, (err, data) => {
+        if (err) {
+          console.log('describeJobQueues', err)
+          if (callback) {
+            callback(err)
+          }
+        } else {
+          if (data.jobQueues.length === 0) {
+            // Queue does not exist, create it
+            const createParams = {
+              // TODO - avoid hard coding the compute environment name
+              computeEnvironmentOrder: [
+                { order: 0, computeEnvironment: 'openneuro-dev-2017-10-25' },
+              ],
+              jobQueueName: queueName,
+              priority: 1,
+              state: 'ENABLED',
+            }
+            batch.createJobQueue(createParams, (err, data) => {
+              if (err) {
+                console.log('createJobQueue', err)
+              }
+              if (callback) {
+                callback(err, data)
+              }
+            })
+          }
+        }
+      })
+    },
 
     initCron() {
       new cron.CronJob(
@@ -163,7 +203,7 @@ export default aws => {
                 'This analysis task did not complete within 48 hours and has failed due to timeout',
             }
             console.log('Terminating timed out job:', job.jobId)
-            sdk.terminateJob(params, (err) => {
+            sdk.terminateJob(params, err => {
               if (err) {
                 console.log('Error terminating job:', err)
               }
