@@ -37,6 +37,17 @@ deployment:
       - docker tag -f openneuro/app openneuro/app:latest
       - docker push openneuro/server
       - docker push openneuro/app
+  branches:
+    branch: /.*/
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker build --pull -t openneuro/server server
+      - docker build --pull -t openneuro/app app
+      # Update latest tag
+      - docker tag -f openneuro/server openneuro/server:$CIRCLE_BRANCH
+      - docker tag -f openneuro/app openneuro/app:$CIRCLE_BRANCH
+      - docker push openneuro/server
+      - docker push openneuro/app
   production:
     tag: /v.*/
     commands:
