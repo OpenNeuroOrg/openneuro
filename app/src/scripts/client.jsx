@@ -1,3 +1,4 @@
+/*eslint no-console: ["error", { allow: ["log"] }] */
 window.onerror = function(message, url, lineNo, colNo, error) {
   console.log(arguments)
 
