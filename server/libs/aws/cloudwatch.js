@@ -16,6 +16,9 @@ const initEventRule = (eventSdk, ruleName) => {
   const awsAccount = config.aws.credentials.accountId
   const jobQueueARN = `arn:aws:batch:${awsRegion}:${awsAccount}:job-queue/${batchQueue}`
   const rulePattern = `{
+    "detail-type": [
+      "Batch Job State Change"
+    ],
     "source": [
       "aws.batch"
     ],
