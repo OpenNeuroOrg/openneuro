@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
+import RadioInput from '../../../common/forms/radio-input.jsx'
 
 const JobParameters = ({
   parameters,
@@ -26,15 +27,6 @@ const JobParameters = ({
       : parameter
 
     if (isSelect) {
-      let placeholder = 'Select your ' + parametersMetadata[parameter].label
-      let options = []
-      let params = parametersMetadata[parameter].defaultValue
-      Object.values(params).map(ops => {
-        for (let i = 0; i <= ops.length; ++i) {
-          options[i] = { value: i, label: ops[i] }
-        }
-      })
-
       if (parameter.indexOf('participant_label') > -1) {
         let onSelectChange = value => {
           // Extract list from Select's simpleValue
@@ -58,6 +50,14 @@ const JobParameters = ({
         let onSelectChange = value => {
           let event = { target: { value: value } }
           return onChange(parameter, event)
+        }
+
+        let placeholder = 'Select your ' + parametersMetadata[parameter].label
+        let params = parametersMetadata[parameter].defaultValue
+        // break up options for the select
+        let options = []
+        for (let i = 0; i < params.length; ++i) {
+          options.push({ value: i, label: params[i] })
         }
 
         input = (
@@ -113,13 +113,22 @@ const JobParameters = ({
         )
       }
     } else if (isRadio) {
+      let onRadioChange = e => {
+        let event = { target: { value: e.target.value } }
+        return onChange(parameter, event)
+      }
+
+      // admin.store sends options as array
+      let options = parametersMetadata[parameter].defaultValue
       input = (
-        <input
-          type="radio"
-          className="form-control"
-          value={parameters[parameter]}
-          onChange={onChange.bind(null, parameter)}
-        />
+        <div>
+          <RadioInput
+            option1={options[0]}
+            option2={options[1]}
+            title={parameter}
+            controlFunc={onRadioChange}
+          />
+        </div>
       )
     } else if (isMulti) {
       let onCheckChange = e => {
@@ -130,24 +139,22 @@ const JobParameters = ({
 
       let inputArr = []
       let params = parametersMetadata[parameter].defaultValue
-      Object.values(params).map(ops => {
-        for (let i = 0; i < ops.length; ++i) {
-          let name = ops[i]
-          let html = (
-            <div key={i} className="checkbox multi-check">
-              <input
-                type="checkbox"
-                className="form-control"
-                value={parameters[parameter]}
-                name={name}
-                onChange={onChange.bind(null, parameter)}
-              />
-              <span>{name}</span>
-            </div>
-          )
-          inputArr.push(html)
-        }
-      })
+      for (let param of params) {
+        console.log(param)
+        let html = (
+          <div className="checkbox multi-check">
+            <input
+              type="checkbox"
+              className="form-control"
+              value={parameters[parameter]}
+              name={param}
+              onChange={onChange.bind(null, parameter)}
+            />
+            <span>{param}</span>
+          </div>
+        )
+        inputArr.push(html)
+      }
 
       // ** render the array w/in input **//
       input = <label className="multi-container">{inputArr}</label>
@@ -160,6 +167,7 @@ const JobParameters = ({
         />
       )
     }
+
     let help_text
     if (isCheckbox) {
       // The label has the help text.
@@ -173,6 +181,7 @@ const JobParameters = ({
         </span>
       )
     }
+
     return (
       <div
         className={
