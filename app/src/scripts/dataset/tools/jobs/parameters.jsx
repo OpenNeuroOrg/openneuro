@@ -15,6 +15,7 @@ const JobParameters = ({
   const parameterInputs = Object.keys(parameters).map(parameter => {
     let input
     let isCheckbox = parametersMetadata[parameter].type === 'checkbox'
+    let isDefaultChecked = parametersMetadata[parameter].defaultValue === 'true'
     if (parameter.indexOf('participant_label') > -1) {
       // Adapt the Select's onChange call to match the expected input event
       let onSelectChange = value => {
@@ -48,19 +49,37 @@ const JobParameters = ({
         let event = { target: { value: e.target.checked } }
         return onChange(parameter, event)
       }
-      input = (
-        <label className="help-text">
-          <input
-            className="form-control"
-            type="checkbox"
-            name={parameter}
-            onChange={onCheckChange}
-          />
-          {parametersMetadata[parameter]
-            ? parametersMetadata[parameter].description
-            : parameter}
-        </label>
-      )
+      // ** Check for default checked ** //
+      if (isDefaultChecked) {
+        input = (
+          <label className="help-text">
+            <input
+              className="form-control"
+              type="checkbox"
+              name={parameter}
+              onChange={onCheckChange}
+              defaultChecked
+            />
+            {parametersMetadata[parameter]
+              ? parametersMetadata[parameter].description
+              : parameter}
+          </label>
+        )
+      } else {
+        input = (
+          <label className="help-text">
+            <input
+              className="form-control"
+              type="checkbox"
+              name={parameter}
+              onChange={onCheckChange}
+            />
+            {parametersMetadata[parameter]
+              ? parametersMetadata[parameter].description
+              : parameter}
+          </label>
+        )
+      }
     } else {
       input = (
         <input
