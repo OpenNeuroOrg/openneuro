@@ -54,6 +54,7 @@ let config = {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       region: process.env.AWS_REGION,
+      accountId: process.env.AWS_ACCOUNT_ID,
     },
     s3: {
       datasetBucket: process.env.AWS_S3_DATASET_BUCKET,
@@ -66,6 +67,7 @@ let config = {
       vcpusMax: 12,
       memoryMax: 15360,
       queue: process.env.AWS_BATCH_QUEUE,
+      computeEnvironment: process.env.AWS_BATCH_COMPUTE_ENVIRONMENT,
     },
     cloudwatchlogs: {
       logGroupName: '/aws/batch/job',

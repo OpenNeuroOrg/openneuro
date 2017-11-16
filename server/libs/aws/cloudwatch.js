@@ -7,16 +7,117 @@ import moment from 'moment'
 
 let c = mongo.collections
 
+/**
+ * Setup the event rule for passing events to SQS
+ */
+const initEventRule = (eventSdk, ruleName) => {
+  const batchQueue = config.aws.batch.queue
+  const awsRegion = config.aws.credentials.region
+  const awsAccount = config.aws.credentials.accountId
+  const jobQueueARN = `arn:aws:batch:${awsRegion}:${awsAccount}:job-queue/${batchQueue}`
+  const rulePattern = `{
+    "detail-type": [
+      "Batch Job State Change"
+    ],
+    "source": [
+      "aws.batch"
+    ],
+    "detail": {
+      "jobQueue": [
+        "${jobQueueARN}"
+      ]
+    }
+  }
+  `
+  // The rule is fairly simple, push any events to an SQS queue with the same name
+  const rule = {
+    Name: ruleName,
+    Description: `Auto-generated rule for queue ${batchQueue}`,
+    EventPattern: rulePattern,
+    State: 'ENABLED',
+  }
+  return eventSdk.putRule(rule).promise()
+}
+
+/**
+ * Init SQS queue to receive events
+ */
+const initSQSQueue = (SQS, sqsQueueName) => {
+  const { accountId, region } = config.aws.credentials
+  const policy = {
+    Version: '2012-10-17',
+    Id: `arn:aws:sqs:${region}:${accountId}:${sqsQueueName}/SQSDefaultPolicy`,
+    Statement: [
+      {
+        Sid: `AWSEvents_batch-${sqsQueueName}_${sqsQueueName}`,
+        Effect: 'Allow',
+        Principal: {
+          AWS: '*',
+        },
+        Action: 'sqs:SendMessage',
+        Resource: `arn:aws:sqs:${region}:${accountId}:${sqsQueueName}`,
+        Condition: {
+          ArnEquals: {
+            'aws:SourceArn': `arn:aws:events:${region}:${accountId}:rule/${sqsQueueName}`,
+          },
+        },
+      },
+    ],
+  }
+
+  const queueParam = {
+    QueueName: sqsQueueName,
+    Attributes: {
+      VisibilityTimeout: '600',
+      Policy: JSON.stringify(policy),
+    },
+  }
+  return SQS.createQueue(queueParam).promise()
+}
+
+/**
+     * Add a destination for the events produced by the rule
+     */
+const initRuleTarget = (eventSdk, ruleName) => {
+  const awsRegion = config.aws.credentials.region
+  const awsAccount = config.aws.credentials.accountId
+  const sqsQueueArn = `arn:aws:sqs:${awsRegion}:${awsAccount}:${ruleName}`
+  const target = {
+    Rule: ruleName,
+    Targets: [
+      {
+        Id: ruleName,
+        Arn: sqsQueueArn,
+      },
+    ],
+  }
+  return eventSdk.putTargets(target).promise()
+}
+
 export default aws => {
-  const cloudwatchlogs = new aws.CloudWatchLogs()
+  const cloudWatchLogs = new aws.CloudWatchLogs()
+  const cloudWatchEvents = new aws.CloudWatchEvents()
+  const SQS = new aws.SQS()
 
   return {
-    sdk: cloudwatchlogs,
+    sdk: cloudWatchLogs,
+    events: cloudWatchEvents,
 
     /**
-         * Get all logs given a logStreamName or continue from nextToken
-         * callback(err, logs) returns logs as an array
-         */
+     * Setup all event related AWS prereqs
+     */
+    initEvents() {
+      const batchQueue = config.aws.batch.queue
+      const ruleName = `batch-events-${batchQueue}`
+      return initEventRule(cloudWatchEvents, ruleName)
+        .then(() => initSQSQueue(SQS, ruleName))
+        .then(() => initRuleTarget(cloudWatchEvents, ruleName))
+    },
+
+    /**
+     * Get all logs given a logStreamName or continue from nextToken
+     * callback(err, logs) returns logs as an array
+     */
     getLogs(
       logStreamName,
       logs = [],

@@ -28,6 +28,7 @@ const redisConnect = async () => {
     // start background tasks
     notifications.initCron()
     aws.batch.initCron()
+    aws.cloudwatch.initEvents().then(aws.batch.initQueue)
   } catch (err) {
     console.error(err)
     process.exit(1)
