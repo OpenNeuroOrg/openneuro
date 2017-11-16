@@ -43,9 +43,11 @@ const initEventRule = (eventSdk, ruleName) => {
  * Init SQS queue to receive events
  */
 const initSQSQueue = (SQS, sqsQueueName) => {
-  // TODO - SQS automated setup
   const queueParam = {
     QueueName: sqsQueueName,
+    Attributes: {
+      VisibilityTimeout: '600',
+    },
   }
   return SQS.createQueue(queueParam).promise()
 }
