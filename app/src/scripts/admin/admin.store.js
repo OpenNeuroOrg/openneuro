@@ -320,15 +320,17 @@ let UserStore = Reflux.createStore({
     // Want to post metadata as a separate prop so we can delete before sending to Batch
     if (formData.parameters) {
       for (let param of formData.parameters) {
-        let arrayInput = []
         parameters[param.label] = param.defaultValue
         parametersMetadata[param.label] = param
         if (
           param.type === 'multi' ||
-          (param.type === 'select' && param.label != 'participant_label')
+          (param.type === 'select' && param.label != 'participant_label') ||
+          param.type === 'radio'
         ) {
-          arrayInput.push(param.defaultValue.split(' '))
-          param.defaultValue = arrayInput
+          let arrayInput = param.defaultValue.split(' ')
+          console.log(arrayInput)
+          let filterArr = arrayInput.filter(value => value.trim() != ' ')
+          param.defaultValue = filterArr
         } else {
           param.defaultValue = param.defaultValue
         }
