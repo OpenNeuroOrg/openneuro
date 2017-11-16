@@ -67,6 +67,7 @@ let config = {
       vcpusMax: 12,
       memoryMax: 15360,
       queue: process.env.AWS_BATCH_QUEUE,
+      computeEnvironment: process.env.AWS_BATCH_COMPUTE_ENVIRONMENT,
     },
     cloudwatchlogs: {
       logGroupName: '/aws/batch/job',

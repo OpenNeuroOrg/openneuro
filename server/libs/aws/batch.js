@@ -83,9 +83,11 @@ export default aws => {
           if (data.jobQueues.length === 0) {
             // Queue does not exist, create it
             const createParams = {
-              // TODO - avoid hard coding the compute environment name
               computeEnvironmentOrder: [
-                { order: 0, computeEnvironment: 'openneuro-dev-2017-10-25' },
+                {
+                  order: 0,
+                  computeEnvironment: config.aws.batch.computeEnvironment,
+                },
               ],
               jobQueueName: queueName,
               priority: 1,
