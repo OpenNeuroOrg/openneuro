@@ -106,7 +106,7 @@ export default aws => {
 
     initCron() {
       new cron.CronJob(
-        '*/3 * * * * *',
+        '*/5 * * * * *',
         this._pollJob,
         null,
         true,
