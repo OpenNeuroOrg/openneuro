@@ -308,7 +308,7 @@ describe('libs/aws/batch.js', () => {
       }
       expect(aws.batch._parentStatus(analysis)).toEqual('RUNNING')
     })
-    it('returns failed if any job has failed', () => {
+    it('returns running if jobs have failed but some are pending', () => {
       const analysis = {
         analysis: {
           status: 'RUNNING',
@@ -318,7 +318,7 @@ describe('libs/aws/batch.js', () => {
           ],
         },
       }
-      expect(aws.batch._parentStatus(analysis)).toEqual('FAILED')
+      expect(aws.batch._parentStatus(analysis)).toEqual('RUNNING')
     })
   })
 })

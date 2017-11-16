@@ -260,9 +260,16 @@ export default aws => {
         const failed = batchStatus.filter(status => status.status === 'FAILED')
         if (success.length === batchStatus.length) {
           return 'SUCCEEDED'
-        } else if (failed.length > 0) {
+        } else if (
+          failed.length > 0 &&
+          success.length + failed.length === batchStatus.length
+        ) {
           return 'FAILED'
-        } else if (running.length > 0 || success.length > 0) {
+        } else if (
+          running.length > 0 ||
+          success.length > 0 ||
+          failed.length > 0
+        ) {
           return 'RUNNING'
         } else if (pending.length > 0) {
           return 'PENDING'
