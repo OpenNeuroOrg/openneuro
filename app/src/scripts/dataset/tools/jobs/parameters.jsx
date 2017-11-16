@@ -134,7 +134,7 @@ const JobParameters = ({
         for (let i = 0; i < ops.length; ++i) {
           let name = ops[i]
           let html = (
-            <div className="checkbox multi-check">
+            <div key={i} className="checkbox multi-check">
               <input
                 type="checkbox"
                 className="form-control"
