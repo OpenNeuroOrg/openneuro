@@ -11,9 +11,6 @@ import cron from 'cron'
 import s3func from './s3'
 import scitran from '../scitran'
 
-//Handlers (need access to AwS Jobs handler to kickoff server side polling)
-import awsJobs from '../../handlers/awsJobs'
-
 let c = mongo.collections
 let events = config.events
 
@@ -59,6 +56,7 @@ const staleJobFilter = now => job => {
 
 export default aws => {
   const batch = new aws.Batch()
+  const SQS = new aws.SQS()
   const s3 = s3func(aws)
 
   const batchMethods = {
@@ -108,7 +106,7 @@ export default aws => {
 
     initCron() {
       new cron.CronJob(
-        '*/10 * * * * *',
+        '*/3 * * * * *',
         this._pollJob,
         null,
         true,
@@ -123,34 +121,164 @@ export default aws => {
       )
     },
 
+    /**
+     * Read any pending events from SQS and update job status as appropriate
+     */
     _pollJob() {
-      /**
-       * queries mongo to find running jobs and runs getJobStatus to check status and update if needed.
-       * excluding 'UPLOADING' because jobs in that state have not been submitted to Batch
-       * also just query jobs that have not had a notification sent otherwise REJECTED jobs will always be returned
-       * polling occurs on a 10 second interval
-       */
-      c.crn.jobs.findAndModify(
-        {
-          'analysis.status': { $nin: ['SUCCEEDED', 'FAILED', 'UPLOADING'] },
-          'analysis.notification': false,
-        },
-        [['analysis.statusAge', 'asc']],
-        { $set: { 'analysis.statusAge': new Date() } },
-        {},
-        (err, res) => {
-          // There might be no jobs to poll
-          if (res.ok && res.value) {
-            let job = res.value
-            // handling rejected jobs here so we can send notifications for those jobs
-            if (job.analysis.status === 'REJECTED') {
-              batchMethods.jobComplete(job, job.userId)
-            } else {
-              awsJobs.getJobStatus(job, job.userId)
-            }
+      const { accountId, region } = config.aws.credentials
+      const queueName = config.aws.batch.queue
+      const queueUrl = `https://sqs.${region}.amazonaws.com/${accountId}/batch-events-${queueName}`
+      const sqsParams = {
+        QueueUrl: queueUrl,
+      }
+      const awsRequest = SQS.receiveMessage(sqsParams).promise()
+      awsRequest.then(data => {
+        if ('Messages' in data) {
+          data.Messages.map(messageObj => {
+            const message = JSON.parse(messageObj.Body)
+            const job = message.detail
+            const receiptHandle = messageObj.ReceiptHandle
+            batchMethods._updateJobStatus(job).then(() => {
+              const deleteParam = {
+                QueueUrl: queueUrl,
+                ReceiptHandle: receiptHandle,
+              }
+              SQS.deleteMessage(deleteParam)
+            })
+          })
+        }
+      })
+    },
+
+    /**
+     * Based on a job event, update the batchStatus and trigger 
+     * any analysis updates needed
+     */
+    _updateJobStatus(job) {
+      return new Promise((resolve, reject) => {
+        // Get the analysis related to this job
+        const query = {
+          'analysis.batchStatus.job': job.jobId,
+        }
+        // Only update one status row at a time
+        let update = {
+          $set: {
+            'analysis.batchStatus.$': {
+              job: job.jobId,
+              status: job.status,
+              statusReason: job.statusReason ? job.statusReason : '',
+            },
+          },
+        }
+        // Update the logstream
+        const logstream = batchMethods._buildLogStream(job)
+        if (logstream) {
+          update['$addToSet'] = { 'analysis.logstreams': logstream }
+        }
+        console.log('updateJobStatus', job.jobId, update)
+        c.crn.jobs.findOneAndUpdate(
+          query,
+          update,
+          { returnOriginal: false },
+          batchMethods._finishAnalysis.bind(null, resolve, reject),
+        )
+      })
+    },
+
+    /**
+     * Takes an array of statuses for batch jobs and returns a boolean denoting overall finished state of all jobs
+     */
+    _checkJobStatus(batchStatus) {
+      //if every status is either succeeded or failed, all jobs have completed.
+      if (batchStatus.length === 0) return false
+      return batchStatus.every(job => {
+        return job.status === 'SUCCEEDED' || job.status === 'FAILED'
+      })
+    },
+
+    /**
+     * Takes a job object and constructs path to the cloudwatch logstream
+     */
+    _buildLogStream(job) {
+      if (job.attempts && job.attempts.length > 0) {
+        job.attempts.forEach(attempt => {
+          let streamObj = {
+            // Prior to August 21st, 2017 default was job.jobId
+            name:
+              job.jobName +
+              '/default/' +
+              attempt.container.taskArn.split('/').pop(),
+            environment: job.container.environment,
+            exitCode: job.container.exitCode,
           }
-        },
+          // TODO - handle multiple attempts
+          return streamObj
+        })
+      }
+    },
+
+    /**
+     * Collect any results and update the analysis status as needed
+     */
+    _finishAnalysis(resolve, reject, err, mongoResult) {
+      if (err) {
+        console.log('_finishAnalysis', err)
+        reject(err)
+      }
+      const analysisObj = mongoResult.value
+      const finished = batchMethods._checkJobStatus(
+        analysisObj.analysis.batchStatus,
       )
+
+      if (finished) {
+        // Can be failed or successful
+        const failed =
+          analysisObj.analysis.batchStatus.filter(
+            status => status.status === 'FAILED',
+          ).length === 0
+        const analysisStatus = failed ? 'FAILED' : 'SUCCEEDED'
+        // emit a job finished event so we can add logs and sent notification email
+        // cloning job here and sending out event and email because mongos updateOne does not return updated doc
+        let clonedJob = JSON.parse(JSON.stringify(analysisObj))
+        clonedJob.analysis.status = analysisStatus
+        batchMethods.jobComplete(clonedJob, analysisObj.userId)
+      }
+
+      // Fetch any available results
+      const s3Prefix =
+        analysisObj.datasetHash + '/' + analysisObj.analysis.analysisId + '/'
+      const params = {
+        Bucket: 'openneuro.outputs',
+        Prefix: s3Prefix,
+        StartAfter: s3Prefix,
+      }
+      s3.getJobResults(params, (err, results) => {
+        if (err) {
+          console.log('_finishAnalysis', err)
+          reject(err)
+        }
+        // update job with status and results
+        let jobId =
+          typeof analysisObj._id === 'object'
+            ? analysisObj._id
+            : ObjectID(analysisObj._id)
+        let jobUpdate = {
+          'analysis.status': analysisObj.analysis.status,
+          'analysis.batchStatus': analysisObj.analysis.batchStatus,
+          results: results,
+        }
+        const filter = { _id: jobId }
+        const update = {
+          $set: jobUpdate,
+        }
+        c.crn.jobs
+          .updateOne(filter, update)
+          .then(updatedAnalysis => resolve(updatedAnalysis))
+          .catch(err => {
+            // Log bad query errors
+            console.log('_finishAnalysis', err)
+          })
+      })
     },
 
     /*
