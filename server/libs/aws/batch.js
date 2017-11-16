@@ -299,12 +299,6 @@ export default aws => {
       )
 
       if (finished) {
-        // Can be failed or successful
-        const failed =
-          analysisObj.analysis.batchStatus.filter(
-            status => status.status === 'FAILED',
-          ).length === 0
-        const analysisStatus = failed ? 'FAILED' : 'SUCCEEDED'
         // emit a job finished event so we can add logs and sent notification email
         // cloning job here and sending out event and email because mongos updateOne does not return updated doc
         let clonedJob = JSON.parse(JSON.stringify(analysisObj))
