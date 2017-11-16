@@ -76,23 +76,6 @@ exports[`dataset/dataset.job.run/JobAccordion renders a failed run 1`] = `
               if this analysis continues to fail.
             </span>
           </h5>
-          <WarnButton
-            action={[Function]}
-            cancel={
-              <i
-                className="fa fa-times"
-              />
-            }
-            confirm={
-              <i
-                className="fa fa-check"
-              />
-            }
-            icon="fa fa-repeat"
-            message="re-run"
-            tooltip={null}
-            warn={false}
-          />
         </div>
       </div>
     }

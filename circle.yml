@@ -46,8 +46,8 @@ deployment:
       # Update latest tag
       - docker tag -f openneuro/server openneuro/server:$CIRCLE_BRANCH
       - docker tag -f openneuro/app openneuro/app:$CIRCLE_BRANCH
-      - docker push openneuro/server
-      - docker push openneuro/app
+      - docker push openneuro/server:$CIRCLE_BRANCH
+      - docker push openneuro/app:$CIRCLE_BRANCH
   production:
     tag: /v.*/
     commands:
@@ -56,5 +56,5 @@ deployment:
       - docker build --pull -t openneuro/app app
       - docker tag openneuro/server openneuro/server:$CIRCLE_TAG
       - docker tag openneuro/app openneuro/app:$CIRCLE_TAG
-      - docker push openneuro/server
-      - docker push openneuro/app
+      - docker push openneuro/server:$CIRCLE_TAG
+      - docker push openneuro/app:$CIRCLE_TAG
