@@ -148,6 +148,18 @@ class ArrayInput extends React.Component {
         itemValue[field.id] = this.state[field.id]
       }
 
+      // Checks Radio buttons default value length
+      if (itemValue.type === 'radio') {
+        let checkArr = []
+        checkArr.push(itemValue.defaultValue.split(' '))
+        // check for white space and remove them
+        let filterArr = checkArr[0].filter(value => value.trim() != '')
+        if (filterArr.length > 2 || filterArr.length <= 1) {
+          this.setState({ error: 'Type radio accepts two default values.' })
+          return
+        }
+      }
+
       value.push(itemValue)
     } else {
       value.push(this.state[model[0].id])
