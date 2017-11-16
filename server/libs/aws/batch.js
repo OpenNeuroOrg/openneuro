@@ -158,8 +158,6 @@ export default aws => {
               SQS.deleteMessage(deleteParam, (err, data) => {
                 if (err) {
                   console.log('Failed to remove message from SQS', err)
-                } else {
-                  console.log('SQS message handled:', data)
                 }
               })
             })
@@ -185,7 +183,6 @@ export default aws => {
           // the update is skipped the promise resolves early
           query['analysis.batchStatus'].$elemMatch.status = { $in: prevStates }
         }
-        console.log(query)
         // Only update one status row at a time
         let update = {
           $set: {
@@ -201,7 +198,6 @@ export default aws => {
         if (logstream) {
           update['$addToSet'] = { 'analysis.logstreams': logstream }
         }
-        console.log('updateJobStatus', job.jobId, update)
         c.crn.jobs.findOneAndUpdate(
           query,
           update,
