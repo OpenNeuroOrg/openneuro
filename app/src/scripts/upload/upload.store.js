@@ -193,7 +193,6 @@ let UploadStore = Reflux.createStore({
             summary: summary,
             uploadStatus: 'validated',
           })
-
           if (errors.length === 0 && warnings.length === 0) {
             this.checkExists()
           }
