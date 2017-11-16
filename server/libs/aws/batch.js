@@ -200,9 +200,10 @@ export default aws => {
      * Takes a job object and constructs path to the cloudwatch logstream
      */
     _buildLogStream(job) {
+      let streamObj
       if (job.attempts && job.attempts.length > 0) {
         job.attempts.forEach(attempt => {
-          let streamObj = {
+          streamObj = {
             // Prior to August 21st, 2017 default was job.jobId
             name:
               job.jobName +
@@ -211,10 +212,45 @@ export default aws => {
             environment: job.container.environment,
             exitCode: job.container.exitCode,
           }
-          // TODO - handle multiple attempts
-          return streamObj
         })
       }
+      return streamObj
+    },
+
+    _parentStatus(analysisObj) {
+      if (
+        'batchStatus' in analysisObj.analysis &&
+        analysisObj.analysis.batchStatus
+      ) {
+        const batchStatus = analysisObj.analysis.batchStatus
+        const pending = batchStatus.filter(
+          status =>
+            status.status === 'PENDING' ||
+            status.status === 'RUNNABLE' ||
+            status.status === 'STARTING',
+        )
+        const running = batchStatus.filter(
+          status => status.status === 'RUNNING',
+        )
+        const success = batchStatus.filter(
+          status => status.status === 'SUCCEEDED',
+        )
+        const failed = batchStatus.filter(status => status.status === 'FAILED')
+        if (success.length === batchStatus.length) {
+          return 'SUCCEEDED'
+        } else if (
+          failed.length > 0 &&
+          success.length + failed.length === batchStatus.length
+        ) {
+          return 'FAILED'
+        } else if (running.length > 0) {
+          return 'RUNNING'
+        } else if (pending.length > 0) {
+          return 'PENDING'
+        }
+      }
+      // Unknown status, use the existing status
+      return analysisObj.analysis.status
     },
 
     /**
@@ -226,6 +262,7 @@ export default aws => {
         reject(err)
       }
       const analysisObj = mongoResult.value
+      const analysisStatus = batchMethods._parentStatus(analysisObj)
       const finished = batchMethods._checkJobStatus(
         analysisObj.analysis.batchStatus,
       )
@@ -263,7 +300,7 @@ export default aws => {
             ? analysisObj._id
             : ObjectID(analysisObj._id)
         let jobUpdate = {
-          'analysis.status': analysisObj.analysis.status,
+          'analysis.status': analysisStatus,
           'analysis.batchStatus': analysisObj.analysis.batchStatus,
           results: results,
         }
