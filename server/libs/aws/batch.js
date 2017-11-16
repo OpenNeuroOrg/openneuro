@@ -38,6 +38,7 @@ const extractJobLog = job => {
 }
 
 const batchStates = [
+  'UPLOADING',
   'SUBMITTED',
   'PENDING',
   'RUNNABLE',
@@ -45,6 +46,7 @@ const batchStates = [
   'RUNNING',
   'SUCCEEDED',
   'FAILED',
+  'REJECTED',
 ]
 
 /*
@@ -176,14 +178,14 @@ export default aws => {
       return new Promise((resolve, reject) => {
         // Get the analysis related to this job
         const query = {
-          'analysis.batchStatus.job': job.jobId,
+          'analysis.batchStatus': { $elemMatch: { job: job.jobId } },
         }
         // This prevents out of order updates from reaching 88 MPH
         const prevStates = batchStates.slice(0, batchStates.indexOf(job.status))
         if (prevStates.length !== 0) {
           // If the job is past this state
           // the update is skipped the promise resolves early
-          query['analysis.batchStatus.status'] = { $in: prevStates }
+          query['analysis.batchStatus'].$elemMatch.status = { $in: prevStates }
         }
         console.log(query)
         // Only update one status row at a time
