@@ -152,25 +152,26 @@ let FrontPageStore = Reflux.createStore({
   },
 
   loadLatestJob(appName, status) {
-    crn.getJobs(
-      (err, resp) => {
-        // Grab the first job returned
-        if (
-          resp.body &&
-          resp.body.jobs &&
-          resp.body.jobs instanceof Array &&
-          resp.body.jobs.length > 0
-        ) {
-          this.update({ loadingJob: false, exampleJob: resp.body.jobs[0] })
-        } else {
-          this.update({ loadingJob: false, exampleJob: null })
-        }
-      },
-      true,
-      appName,
-      status,
-      true,
-    )
+    let query = {
+      public: true,
+      appName: appName,
+      status: status,
+      latest: true,
+      results: true,
+    }
+    crn.getJobsQuery(query, (err, resp) => {
+      // Grab the first job returned
+      if (
+        resp.body &&
+        resp.body.jobs &&
+        resp.body.jobs instanceof Array &&
+        resp.body.jobs.length > 0
+      ) {
+        this.update({ loadingJob: false, exampleJob: resp.body.jobs[0] })
+      } else {
+        this.update({ loadingJob: false, exampleJob: null })
+      }
+    })
   },
 
   /**

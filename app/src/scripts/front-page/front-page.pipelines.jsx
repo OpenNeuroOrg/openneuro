@@ -8,7 +8,7 @@ import FPStore from './front-page.store.js'
 import FPActions from './front-page.actions.js'
 import Select from 'react-select'
 import Run from '../dataset/dataset.jobs.run.jsx'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { Panel } from 'react-bootstrap'
 import pluralize from 'pluralize'
 import Spinner from '../common/partials/spinner.jsx'
@@ -109,7 +109,7 @@ class Pipelines extends Reflux.Component {
             value={this.state.frontpage.selectedTags}
             placeholder="All tags"
             options={this.state.frontpage.tags}
-            onChange={FPActions.selectTag}
+            onChange={FPActions.selectTag.bind(this)}
           />
           <br />
           <label>
@@ -119,7 +119,7 @@ class Pipelines extends Reflux.Component {
           <span className="select-pipeline">
             <select
               value={this.state.frontpage.selectedPipeline.id}
-              onChange={this._selectPipeline}>
+              onChange={this._selectPipeline.bind(this)}>
               <option value="" disabled>
                 Select a pipeline
               </option>
