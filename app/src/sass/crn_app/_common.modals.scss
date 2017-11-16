@@ -336,6 +336,36 @@
             background: $transparent3;
         }
     }
+
+    .multi-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start !important;
+      .multi-check {
+        width: 100%;
+        margin:10px;
+        padding: 4px;
+        display: inline-flex;
+        margin-left: 20px;
+
+        span {
+          font-size: small;
+          color: $c-9e;
+          height: 40px;
+          font-size: 16px;
+          padding: 10px;
+        }
+
+        input[type=checkbox] {
+          box-shadow: 0px 0px;
+          width: 5%;
+          &:focus {
+            outline: none;
+            border: 0px;
+          }
+        }
+      }
+    }
 }
 
 .modal,
