@@ -37,6 +37,16 @@ const extractJobLog = job => {
   return jobLog
 }
 
+const batchStates = [
+  'SUBMITTED',
+  'PENDING',
+  'RUNNABLE',
+  'STARTING',
+  'RUNNING',
+  'SUCCEEDED',
+  'FAILED',
+]
+
 /*
  * Factory to create a stale job filter for a specific time
  * Takes a current Date object and the function returned is 
@@ -145,7 +155,13 @@ export default aws => {
                 QueueUrl: queueUrl,
                 ReceiptHandle: receiptHandle,
               }
-              SQS.deleteMessage(deleteParam)
+              SQS.deleteMessage(deleteParam, (err, data) => {
+                if (err) {
+                  console.log('Failed to remove message from SQS', err)
+                } else {
+                  console.log('SQS message handled:', data)
+                }
+              })
             })
           })
         }
@@ -162,6 +178,14 @@ export default aws => {
         const query = {
           'analysis.batchStatus.job': job.jobId,
         }
+        // This prevents out of order updates from reaching 88 MPH
+        const prevStates = batchStates.slice(0, batchStates.indexOf(job.status))
+        if (prevStates.length !== 0) {
+          // If the job is past this state
+          // the update is skipped the promise resolves early
+          query['analysis.batchStatus.status'] = { $in: prevStates }
+        }
+        console.log(query)
         // Only update one status row at a time
         let update = {
           $set: {
@@ -261,7 +285,12 @@ export default aws => {
     _finishAnalysis(resolve, reject, err, mongoResult) {
       if (err) {
         console.log('_finishAnalysis', err)
-        reject(err)
+        return reject(err)
+      }
+      if (mongoResult.lastErrorObject.n === 0) {
+        // An update was skipped because this job was either removed
+        // or in a later state.
+        return resolve(null)
       }
       const analysisObj = mongoResult.value
       const analysisStatus = batchMethods._parentStatus(analysisObj)
@@ -294,7 +323,7 @@ export default aws => {
       s3.getJobResults(params, (err, results) => {
         if (err) {
           console.log('_finishAnalysis', err)
-          reject(err)
+          return reject(err)
         }
         // update job with status and results
         let jobId =
