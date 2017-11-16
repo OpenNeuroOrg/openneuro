@@ -155,7 +155,7 @@ export default aws => {
                 QueueUrl: queueUrl,
                 ReceiptHandle: receiptHandle,
               }
-              SQS.deleteMessage(deleteParam, (err, data) => {
+              SQS.deleteMessage(deleteParam, err => {
                 if (err) {
                   console.log('Failed to remove message from SQS', err)
                 }
