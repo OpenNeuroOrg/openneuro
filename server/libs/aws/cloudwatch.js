@@ -43,10 +43,33 @@ const initEventRule = (eventSdk, ruleName) => {
  * Init SQS queue to receive events
  */
 const initSQSQueue = (SQS, sqsQueueName) => {
+  const { accountId, region } = config.aws.credentials
+  const policy = {
+    Version: '2012-10-17',
+    Id: `arn:aws:sqs:${region}:${accountId}:${sqsQueueName}/SQSDefaultPolicy`,
+    Statement: [
+      {
+        Sid: `AWSEvents_batch-${sqsQueueName}_${sqsQueueName}`,
+        Effect: 'Allow',
+        Principal: {
+          AWS: '*',
+        },
+        Action: 'sqs:SendMessage',
+        Resource: `arn:aws:sqs:${region}:${accountId}:${sqsQueueName}`,
+        Condition: {
+          ArnEquals: {
+            'aws:SourceArn': `arn:aws:events:${region}:${accountId}:rule/${sqsQueueName}`,
+          },
+        },
+      },
+    ],
+  }
+
   const queueParam = {
     QueueName: sqsQueueName,
     Attributes: {
       VisibilityTimeout: '600',
+      Policy: JSON.stringify(policy),
     },
   }
   return SQS.createQueue(queueParam).promise()
