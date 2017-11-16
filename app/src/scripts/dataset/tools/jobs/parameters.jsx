@@ -12,29 +12,65 @@ const JobParameters = ({
   if (Object.keys(parameters).length === 0) {
     return <noscript />
   }
+  // console.log(parameters)
   const parameterInputs = Object.keys(parameters).map(parameter => {
     let input
     let isCheckbox = parametersMetadata[parameter].type === 'checkbox'
+    let isMulti = parametersMetadata[parameter].type === 'multi'
+    let isSelect = parametersMetadata[parameter].type === 'select'
+    let isRadio = parametersMetadata[parameter].type === 'radio'
+    let isFile = parametersMetadata[parameter].type === 'file'
     let isDefaultChecked = parametersMetadata[parameter].defaultValue === 'true'
-    if (parameter.indexOf('participant_label') > -1) {
-      // Adapt the Select's onChange call to match the expected input event
-      let onSelectChange = value => {
-        // Extract list from Select's simpleValue
-        let selected = value.split(',')
-        let event = { target: { value: selected } }
-        return onChange(parameter, event)
-      }
-      input = (
-        <Select
-          multi
-          simpleValue
-          value={parameters[parameter]}
-          placeholder="Select your subject(s)"
-          options={subjects}
-          onChange={onSelectChange}
-        />
-      )
-    } else if (parametersMetadata[parameter].type === 'file') {
+    let helpText = parametersMetadata[parameter]
+      ? parametersMetadata[parameter].description
+      : parameter
+
+    if (isSelect) {
+      let placeholder = 'Select your ' + parametersMetadata[parameter].label
+      let options = []
+      let params = parametersMetadata[parameter].defaultValue
+      Object.values(params).map(ops => {
+        for (let i = 0; i <= ops.length; ++i) {
+          options[i] = { value: i, label: ops[i] }
+        }
+      })
+
+      if (parameter.indexOf('participant_label') > -1) {
+        let onSelectChange = value => {
+          // Extract list from Select's simpleValue
+          let selected = value.split(',')
+          let event = { target: { value: selected } }
+          console.log(event)
+          return onChange(parameter, event)
+        }
+        // Adapt the Select's onChange call to match the expected input event
+        input = (
+          <Select
+            multi
+            simpleValue
+            value={parameters[parameter]}
+            placeholder="Select your subject(s)"
+            options={subjects}
+            onChange={onSelectChange}
+          />
+        )
+      } else {
+        let onSelectChange = value => {
+          let event = { target: { value: value } }
+          return onChange(parameter, event)
+        }
+
+        input = (
+          <Select
+            simpleValue
+            value={parameters[parameter]}
+            placeholder={placeholder}
+            options={options}
+            onChange={onSelectChange}
+          />
+        )
+      } // end of select conditionals //
+    } else if (isFile) {
       input = (
         <input
           className="form-control"
@@ -60,9 +96,7 @@ const JobParameters = ({
               onChange={onCheckChange}
               defaultChecked
             />
-            {parametersMetadata[parameter]
-              ? parametersMetadata[parameter].description
-              : parameter}
+            {helpText}
           </label>
         )
       } else {
@@ -74,12 +108,49 @@ const JobParameters = ({
               name={parameter}
               onChange={onCheckChange}
             />
-            {parametersMetadata[parameter]
-              ? parametersMetadata[parameter].description
-              : parameter}
+            {helpText}
           </label>
         )
       }
+    } else if (isRadio) {
+      input = (
+        <input
+          type="radio"
+          className="form-control"
+          value={parameters[parameter]}
+          onChange={onChange.bind(null, parameter)}
+        />
+      )
+    } else if (isMulti) {
+      let onCheckChange = e => {
+        // using checked property for checkbox values
+        let event = { target: { value: e.target.checked } }
+        return onChange(parameter, event)
+      }
+
+      let inputArr = []
+      let params = parametersMetadata[parameter].defaultValue
+      Object.values(params).map(ops => {
+        for (let i = 0; i < ops.length; ++i) {
+          let name = ops[i]
+          let html = (
+            <div className="checkbox multi-check">
+              <input
+                type="checkbox"
+                className="form-control"
+                value={parameters[parameter]}
+                name={name}
+                onChange={onChange.bind(null, parameter)}
+              />
+              <span>{name}</span>
+            </div>
+          )
+          inputArr.push(html)
+        }
+      })
+
+      // ** render the array w/in input **//
+      input = <label className="multi-container">{inputArr}</label>
     } else {
       input = (
         <input
