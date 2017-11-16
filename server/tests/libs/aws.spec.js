@@ -296,6 +296,18 @@ describe('libs/aws/batch.js', () => {
       }
       expect(aws.batch._parentStatus(analysis)).toEqual('SUCCEEDED')
     })
+    it('returns running if any job has been through running', () => {
+      const analysis = {
+        analysis: {
+          status: 'RUNNING',
+          batchStatus: [
+            { job: 'testing', status: 'PENDING' },
+            { job: 'test', status: 'SUCCEEDED' },
+          ],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('RUNNING')
+    })
   })
 })
 
