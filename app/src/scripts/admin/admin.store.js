@@ -320,10 +320,21 @@ let UserStore = Reflux.createStore({
     // Want to post metadata as a separate prop so we can delete before sending to Batch
     if (formData.parameters) {
       for (let param of formData.parameters) {
+        let arrayInput = []
         parameters[param.label] = param.defaultValue
         parametersMetadata[param.label] = param
+        if (
+          param.type === 'multi' ||
+          (param.type === 'select' && param.label != 'participant_label')
+        ) {
+          arrayInput.push(param.defaultValue.split(' '))
+          param.defaultValue = arrayInput
+        } else {
+          param.defaultValue = param.defaultValue
+        }
       }
     }
+
     jobDefinition.parameters = parameters
     jobDefinition.parametersMetadata = parametersMetadata
     jobDefinition.analysisLevels = formData.analysisLevels
@@ -534,7 +545,7 @@ let UserStore = Reflux.createStore({
    * Switch the page for the event logs view
    */
   setLogsPage(page) {
-    this.update({page})
+    this.update({ page })
   },
 })
 
