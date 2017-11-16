@@ -250,6 +250,53 @@ describe('libs/aws/batch.js', () => {
       expect(batch.terminateJob).toHaveBeenCalledTimes(jobIds.length)
     })
   })
+  describe('_parentStatus', () => {
+    it('returns the existing status with an unknown', () => {
+      const analysis = {
+        analysis: {
+          status: 'UPLOADING',
+          batchStatus: [{ job: 'testing', status: 'UPLOADING' }],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('UPLOADING')
+    })
+    it('returns pending for pending, runnable, starting', () => {
+      const analysis = {
+        analysis: {
+          status: 'STARTING',
+          batchStatus: [
+            { job: 'testing', status: 'STARTING' },
+            { job: 'test', status: 'RUNNABLE' },
+          ],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('PENDING')
+    })
+    it('returns pending failed if any jobs failed', () => {
+      const analysis = {
+        analysis: {
+          status: 'RUNNING',
+          batchStatus: [
+            { job: 'testing', status: 'SUCCEEDED' },
+            { job: 'test', status: 'FAILED' },
+          ],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('FAILED')
+    })
+    it('returns succeeded if all jobs succeeded', () => {
+      const analysis = {
+        analysis: {
+          status: 'RUNNING',
+          batchStatus: [
+            { job: 'testing', status: 'SUCCEEDED' },
+            { job: 'test', status: 'SUCCEEDED' },
+          ],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('SUCCEEDED')
+    })
+  })
 })
 
 describe('libs/aws/cloudwatch.js', () => {
