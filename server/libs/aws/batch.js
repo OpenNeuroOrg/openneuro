@@ -38,7 +38,6 @@ const extractJobLog = job => {
 }
 
 const batchStates = [
-  'UPLOADING',
   'SUBMITTED',
   'PENDING',
   'RUNNABLE',
@@ -46,7 +45,6 @@ const batchStates = [
   'RUNNING',
   'SUCCEEDED',
   'FAILED',
-  'REJECTED',
 ]
 
 /*
