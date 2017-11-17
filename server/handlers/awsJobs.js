@@ -469,6 +469,9 @@ let handlers = {
             'analysis.status': 'RETRYING',
             'analysis.jobs': [],
             'analysis.logstreams': [],
+            'analysis.results': [],
+            'analysis.batchStatus': [],
+            'analysis.created': new Date(),
           },
         },
       )
