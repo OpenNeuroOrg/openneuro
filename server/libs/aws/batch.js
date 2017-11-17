@@ -244,6 +244,9 @@ export default aws => {
         'batchStatus' in analysisObj.analysis &&
         analysisObj.analysis.batchStatus
       ) {
+        if (analysisObj.deleted) {
+          return 'CANCELED'
+        }
         const batchStatus = analysisObj.analysis.batchStatus
         const pending = batchStatus.filter(
           status =>
