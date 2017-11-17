@@ -1,6 +1,6 @@
 {
   "name": "CRN",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "React JS web frontend for the CRN application.",
   "license": "MIT",
   "main": "app.js",
@@ -22,7 +22,7 @@
   "dependencies": {
     "async": "^1.2.1",
     "babel-polyfill": "^6.6.1",
-    "bids-validator": "^0.23.11",
+    "bids-validator": "^0.24.0",
     "bowser": "^1.7.3",
     "bytes": "^2.3.0",
     "favico.js": "git://github.com/ejci/favico.js#0.3.10",
@@ -41,6 +41,7 @@
     "remarkable": "1.6.2",
     "spark-md5": "^1.0.0",
     "superagent": "^3.6.0",
+    "url-search-params-polyfill": "^2.0.1",
     "urlite": "^1.2.8"
   },
   "devDependencies": {

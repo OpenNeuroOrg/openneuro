@@ -145,6 +145,32 @@ let auth = {
       })
   },
 
+  rerunJobAccess(req, res, next) {
+    let jobId = req.params.jobId
+    let mongoJobId = typeof jobId != 'object' ? ObjectID(jobId) : jobId
+    let user = req.user
+    let admin = !!req.isSuperUser
+    if (admin) {
+      return next()
+    }
+
+    c.crn.jobs.findOne(
+      {
+        _id: mongoJobId,
+      },
+      (err, job) => {
+        let jobOwner = job.userId
+        if (jobOwner === user) {
+          return next()
+        }
+
+        return res
+          .status(403)
+          .send({ error: 'You do not have access to rerun this job.' })
+      },
+    )
+  },
+
   /**
      * Ticket
      *

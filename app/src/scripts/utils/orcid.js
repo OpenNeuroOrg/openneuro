@@ -47,7 +47,7 @@ let orcid = {
   refresh(callback) {
     if (this.initialized) {
       let { refresh_token } = this.token
-      crn.refreshORCIDToken(refresh_token, (err) => {
+      crn.refreshORCIDToken(refresh_token, err => {
         if (err) {
           callback(err)
         } else {
@@ -71,7 +71,7 @@ let orcid = {
       config.auth.orcid.URI +
         '/oauth/authorize?client_id=' +
         config.auth.orcid.clientID +
-        '&response_type=code&scope=/read-limited&redirect_uri=' +
+        '&response_type=code&scope=/authenticate&redirect_uri=' +
         config.auth.orcid.redirectURI,
       '_blank',
     )

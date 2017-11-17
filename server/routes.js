@@ -158,7 +158,11 @@ const routes = [
   {
     method: 'post',
     url: '/datasets/:datasetId/jobs/:jobId/retry',
-    middleware: [auth.datasetAccess()],
+    middleware: [
+      auth.datasetAccess(),
+      auth.rerunJobAccess,
+      auth.submitJobAccess,
+    ],
     handler: awsJobs.retry,
   },
   {

@@ -204,6 +204,12 @@ class JobAccordion extends React.Component {
   }
 
   _failedMessage(run) {
+    let userCanRerun =
+      this.props.currentUser && this.props.currentUser.scitran
+        ? this.props.currentUser.scitran.root ||
+          this.props.currentUser.scitran._id === run.userId
+        : false
+
     if (
       run.analysis.status === 'FAILED' ||
       run.analysis.status === 'REJECTED'
@@ -228,12 +234,14 @@ class JobAccordion extends React.Component {
           <h5 className="text-danger">
             {message} {adminMessage}
           </h5>
-          <WarnButton
-            icon="fa fa-repeat"
-            message="re-run"
-            warn={false}
-            action={actions.retryJob.bind(this, run._id)}
-          />
+          {userCanRerun ? (
+            <WarnButton
+              icon="fa fa-repeat"
+              message="re-run"
+              warn={false}
+              action={actions.retryJob.bind(this, run._id)}
+            />
+          ) : null}
         </div>
       )
     }
@@ -390,7 +398,9 @@ class JobAccordion extends React.Component {
   _batchStatus(run) {
     let batchStatus = run.analysis.batchStatus
     if (batchStatus && batchStatus.length) {
-      const failed = run.analysis.batchStatus.filter(status => status.status !== 'SUCCEEDED')
+      const failed = run.analysis.batchStatus.filter(
+        status => status.status !== 'SUCCEEDED',
+      )
       if (failed.length === 0) {
         return null
       }

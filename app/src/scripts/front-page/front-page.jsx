@@ -114,7 +114,14 @@ class FrontPage extends Reflux.Component {
               Sign in with Google
             </button>
             <button className="btn-admin" onClick={userStore.orcidSignIn}>
-              <span className="icon"><img alt="ORCID" width="20" height="20" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" /></span>
+              <span className="icon">
+                <img
+                  alt="ORCID"
+                  width="20"
+                  height="20"
+                  src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
+                />
+              </span>
               Sign in with ORCID
             </button>
           </span>
@@ -125,9 +132,25 @@ class FrontPage extends Reflux.Component {
 
   _error(signinError, loadingState) {
     if (signinError && !loadingState) {
-      return (
-        <div className="alert alert-danger">{this.state.users.signinError}</div>
-      )
+      const errMessage = this.state.users.signinError
+      // This special case is fairly common and needs to return a richer error
+      if (
+        errMessage ===
+        'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.'
+      ) {
+        return (
+          <div className="alert alert-danger">
+            <span>
+              Your ORCID account does not have an e-mail, or your e-mail is not
+              public. Visit your{' '}
+              <a href="https://orcid.org/my-orcid">ORCID profile</a> and verify
+              your primary email privacy is set to public.
+            </span>
+          </div>
+        )
+      } else {
+        return <div className="alert alert-danger">{errMessage}</div>
+      }
     }
   }
 

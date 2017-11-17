@@ -160,7 +160,7 @@ export default {
       scitran.updateProject(projectId, { metadata }, () => {
         let file = new File(
           [JSON.stringify(description)],
-          '/dataset_description.json',
+          'dataset_description.json',
           { type: 'application/json' },
         )
         file.relativePath = file.name

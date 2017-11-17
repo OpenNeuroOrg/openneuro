@@ -88,12 +88,12 @@ let UploadStore = Reflux.createStore({
      * Toggle Modal
      */
   toggleModal() {
-    if (!bowser.chrome && !bowser.chromium) {
+    if (!bowser.chrome && !bowser.chromium && !bowser.firefox) {
       let chromeMessage = (
         <span>
-          This is a Google Chrome only feature.{' '}
+          This is a Google Chrome and Mozilla Firefox feature.{' '}
           <a href="http://www.google.com/chrome/">
-            Please consider using Chrome as your browser
+            Please consider using Chrome or Firefox as your browser
           </a>.
         </span>
       )
@@ -153,8 +153,8 @@ let UploadStore = Reflux.createStore({
     this.setInitialState({
       dirName: originalName,
       uploadStatus: 'files-selected',
-      showRename: false,
-      showResume: true,
+      showRename: true,
+      showResume: false,
       showModal: true,
       showIssues: true,
       showDisclaimer: true,
@@ -237,7 +237,7 @@ let UploadStore = Reflux.createStore({
               uploadStatus: 'dataset-exists',
               showDisclaimer: true,
               showResume: true,
-              activeKey: 4,
+              activeKey: 5,
             })
           } else {
             self.update({ showDisclaimer: true, activeKey: 4 })
