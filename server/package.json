@@ -1,6 +1,6 @@
 {
   "name": "crn-server",
-  "version": "1.1.4",
+  "version": "1.2.0",
   "description": "",
   "license": "MIT",
   "main": "index.js",
@@ -64,10 +64,7 @@
   "lint-staged": {
     "gitDir": "../",
     "linters": {
-      "*.{js,jsx,json}": [
-        "prettier --write",
-        "git add"
-      ]
+      "*.{js,jsx,json}": ["prettier --write", "git add"]
     }
   }
 }
