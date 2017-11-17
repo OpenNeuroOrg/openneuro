@@ -47,7 +47,7 @@ let orcid = {
   refresh(callback) {
     if (this.initialized) {
       let { refresh_token } = this.token
-      crn.refreshORCIDToken(refresh_token, (err) => {
+      crn.refreshORCIDToken(refresh_token, err => {
         if (err) {
           callback(err)
         } else {

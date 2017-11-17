@@ -57,8 +57,10 @@ let UserStore = Reflux.createStore({
   /**
      * Toggle Modal
     */
-  toggleModal() {
-    this.update({ showSupportModal: !this.data.showSupportModal })
+  toggleModal(modal) {
+    let newState = {}
+    newState[modal] = !this.data[modal]
+    this.update(newState)
   },
 
   // data ------------------------------------------------------------------------------
@@ -101,7 +103,8 @@ let UserStore = Reflux.createStore({
       loading: false,
       signinError: '',
       showUploadModal: false,
-      showSupportModal: false,
+      supportModal: false,
+      loginModal: false,
     }
     for (let prop in diffs) {
       data[prop] = diffs[prop]
@@ -211,6 +214,7 @@ let UserStore = Reflux.createStore({
       return
     }
     options.provider = 'google'
+    this.update({ loginModal: false })
     this.signIn(options)
   },
 
@@ -222,6 +226,7 @@ let UserStore = Reflux.createStore({
      */
   orcidSignIn(options) {
     options.provider = 'orcid'
+    this.update({ loginModal: false })
     this.signIn(options)
   },
 
@@ -244,6 +249,8 @@ let UserStore = Reflux.createStore({
         this.clearAuth()
         history.push('/')
       })
+      // Always reset the loginModal on logout
+      this.update({ loginModal: false })
     }
   },
 

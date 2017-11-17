@@ -88,13 +88,13 @@ class Dashboard extends React.Component {
                 name="admin-datasets"
                 path="/admin/datasets"
                 exact
-                render={(props) => (<Datasets admin {...props}/>)}
+                render={props => <Datasets admin {...props} />}
               />
               <Route
                 name="admin-jobs"
                 path="/admin/jobs"
                 exact
-                render={(props) => (<Jobs admin {...props}/>)}
+                render={props => <Jobs admin {...props} />}
               />
             </Switch>
           </div>
