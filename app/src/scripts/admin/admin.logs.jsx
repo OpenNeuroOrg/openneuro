@@ -38,13 +38,17 @@ class Logs extends Reflux.Component {
         this.state.admin.resultsPerPage,
         this.state.admin.page,
       )
+
       paginatedResults.map((log, index) => {
         const link = <LogLink log={log} />
+        const retry = <i class="fa fa fa-repeat" />
         if (log.visible) {
           logs.push(
             <div className="fade-in user-panel-header clearfix" key={index}>
               <div className="col-xs-3 user-col">
-                <label>{log.type}</label>
+                <label>
+                  {log.type} {log.data.retry ? retry : null}
+                </label>
               </div>
               <div className="col-xs-3 user-col">
                 <label>{log.user}</label>
