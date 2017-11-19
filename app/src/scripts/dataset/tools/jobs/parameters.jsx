@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import RadioInput from '../../../common/forms/radio-input.jsx'
+import CheckOrRadio from '../../../common/forms/multi-radio-input.jsx'
 
 const JobParameters = ({
   parameters,
@@ -86,78 +86,52 @@ const JobParameters = ({
         return onChange(parameter, event)
       }
       // ** Check for default checked ** //
-      if (isDefaultChecked) {
-        input = (
-          <label className="help-text">
-            <input
-              className="form-control"
-              type="checkbox"
-              name={parameter}
-              onChange={onCheckChange}
-              defaultChecked
-            />
-            {helpText}
-          </label>
-        )
-      } else {
-        input = (
-          <label className="help-text">
-            <input
-              className="form-control"
-              type="checkbox"
-              name={parameter}
-              onChange={onCheckChange}
-            />
-            {helpText}
-          </label>
-        )
-      }
-    } else if (isRadio) {
-      let onRadioChange = e => {
-        let event = { target: { value: e.target.value } }
-        return onChange(parameter, event)
-      }
-
-      // admin.store sends options as array
-      let options = parametersMetadata[parameter].defaultValue
       input = (
-        <div>
-          <RadioInput
-            option1={options[0]}
-            option2={options[1]}
-            title={parameter}
-            controlFunc={onRadioChange}
+        <label className="help-text">
+          <input
+            className="form-control"
+            type="checkbox"
+            name={parameter}
+            onChange={onCheckChange}
+            defaultChecked={isDefaultChecked}
           />
-        </div>
+          {helpText}
+        </label>
       )
-    } else if (isMulti) {
-      let onCheckChange = e => {
-        // using checked property for checkbox values
-        let event = { target: { value: e.target.checked } }
+    } else if (isRadio || isMulti) {
+      let op = parametersMetadata[parameter].defaultValue
+      // remove white spaces from options
+      let options = op.filter(value => value.trim() != '')
+      let selectedArr = []
+      let bool
+      let handleChange = e => {
+        let value = e.target.value
+        let event = { target: { value: value } }
+        selectedArr = selectedArr.filter(v => v !== value)
         return onChange(parameter, event)
       }
 
-      let inputArr = []
-      let params = parametersMetadata[parameter].defaultValue
-      for (let param of params) {
-        console.log(param)
-        let html = (
-          <div className="checkbox multi-check">
-            <input
-              type="checkbox"
-              className="form-control"
-              value={parameters[parameter]}
-              name={param}
-              onChange={onChange.bind(null, parameter)}
-            />
-            <span>{param}</span>
-          </div>
+      if (isRadio) {
+        input = (
+          <CheckOrRadio
+            type="radio"
+            setName={parameter}
+            options={options}
+            selectedOptions={bool}
+            controlFunc={handleChange}
+          />
         )
-        inputArr.push(html)
+      } else if (isMulti) {
+        input = (
+          <CheckOrRadio
+            type="checkbox"
+            setName={parameter}
+            options={options}
+            selectedOptions={bool}
+            controlFunc={handleChange}
+          />
+        )
       }
-
-      // ** render the array w/in input **//
-      input = <label className="multi-container">{inputArr}</label>
     } else {
       input = (
         <input
