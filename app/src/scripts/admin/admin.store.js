@@ -328,7 +328,6 @@ let UserStore = Reflux.createStore({
           param.type === 'radio'
         ) {
           let arrayInput = param.defaultValue.split(' ')
-          console.log(arrayInput)
           let filterArr = arrayInput.filter(value => value.trim() != ' ')
           param.defaultValue = filterArr
         } else {

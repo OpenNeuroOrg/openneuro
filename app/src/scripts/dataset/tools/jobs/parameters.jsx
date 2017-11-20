@@ -13,7 +13,6 @@ const JobParameters = ({
   if (Object.keys(parameters).length === 0) {
     return <noscript />
   }
-  // console.log(parameters)
   const parameterInputs = Object.keys(parameters).map(parameter => {
     let input
     let isCheckbox = parametersMetadata[parameter].type === 'checkbox'
@@ -32,7 +31,6 @@ const JobParameters = ({
           // Extract list from Select's simpleValue
           let selected = value.split(',')
           let event = { target: { value: selected } }
-          console.log(event)
           return onChange(parameter, event)
         }
         // Adapt the Select's onChange call to match the expected input event
