@@ -83,7 +83,7 @@ Input.propTypes = {
   placeholder: PropTypes.string,
   name: PropTypes.string,
   type: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.node,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
   checked: PropTypes.bool,
