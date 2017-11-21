@@ -9,6 +9,7 @@ const JobParameters = ({
   onChange,
   onRestoreDefaults,
   parametersMetadata,
+  arrInput,
 }) => {
   if (Object.keys(parameters).length === 0) {
     return <noscript />
@@ -100,16 +101,15 @@ const JobParameters = ({
       let op = parametersMetadata[parameter].defaultValue
       // remove white spaces from options
       let options = op.filter(value => value.trim() != '')
-      let selectedArr = []
       let bool
-      let handleChange = e => {
-        let value = e.target.value
-        let event = { target: { value: value } }
-        selectedArr = selectedArr.filter(v => v !== value)
-        return onChange(parameter, event)
-      }
 
       if (isRadio) {
+        let handleChange = e => {
+          let value = e.target.value
+          let event = { target: { value: value } }
+          return onChange(parameter, event)
+        }
+
         input = (
           <CheckOrRadio
             type="radio"
@@ -120,6 +120,19 @@ const JobParameters = ({
           />
         )
       } else if (isMulti) {
+        let selectedArr
+        let handleChange = e => {
+          let value = e.target.value
+          let index = arrInput.indexOf(value)
+          if (index === -1) {
+            arrInput.push(value)
+          } else {
+            arrInput.splice(index, 1)
+          }
+          let event = { target: { value: arrInput } }
+          return onChange(parameter, event)
+        }
+
         input = (
           <CheckOrRadio
             type="checkbox"
@@ -206,6 +219,7 @@ JobParameters.propTypes = {
   parameters: PropTypes.object,
   parametersMetadata: PropTypes.object,
   subjects: PropTypes.array,
+  arrInput: PropTypes.array,
 }
 
 JobParameters.defaultProps = {

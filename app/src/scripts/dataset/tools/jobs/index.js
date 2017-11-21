@@ -36,6 +36,7 @@ class JobMenu extends React.Component {
       message: null,
       error: false,
       subjects: [],
+      arrInput: [],
       appGroup: {},
       submitActive: false,
       requiredParameters: {},
@@ -98,6 +99,7 @@ class JobMenu extends React.Component {
               parameters={this.state.parameters}
               parametersMetadata={this.state.parametersMetadata}
               subjects={this.state.subjects}
+              arrInput={this.state.arrInput}
               onChange={this._updateParameter.bind(this)}
               onRestoreDefaults={this._restoreDefaultParameters.bind(this)}
             />
