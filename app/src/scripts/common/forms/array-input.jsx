@@ -207,7 +207,6 @@ class ArrayInput extends React.Component {
     } else {
       value.push(this.state[model[0].id])
     }
-    console.log(this.props.model)
     this.props.onChange({ target: { value: value } })
     //need to clear form on parameter add
     const initialState = { error: null }
@@ -466,7 +465,6 @@ class ArrayItem extends React.Component {
         return
       }
     }
-    console.log('POP' + data)
     this.props.onEdit(this.props.index, data)
   }
 }
