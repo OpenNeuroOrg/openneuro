@@ -125,12 +125,15 @@
     }
 
     label > input[type=checkbox] {
-        width: 30px;
+        max-width: 20px;
+        min-width: 20px;
         border: 0;
         box-shadow: none;
+        margin-right: 5px;
         &:focus {
             box-shadow: none;
             outline: 0;
+
         }
     }
 
@@ -338,6 +341,9 @@
     }
 
     input[type=radio] {
+      max-width: 20px;
+      min-width: 20px;
+      margin-right: 5px;
       box-shadow: 0px 0px;
       width: 5%;
       &:focus {
