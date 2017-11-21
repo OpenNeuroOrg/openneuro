@@ -120,7 +120,6 @@ const JobParameters = ({
           />
         )
       } else if (isMulti) {
-        let selectedArr
         let handleChange = e => {
           let value = e.target.value
           let index = arrInput.indexOf(value)
