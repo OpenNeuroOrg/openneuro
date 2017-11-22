@@ -30,7 +30,7 @@ export default aws => {
     queue: async.queue((req, cb) => {
       // assign last argument as callback for
       // queued function and queue callback
-      req.arguments.push(function() {
+      req.arguments.push(function () {
         if (req.callback) {
           req.callback.apply(arguments)
         }
@@ -40,32 +40,31 @@ export default aws => {
     }, config.aws.s3.concurrency),
 
     createBucket(bucketName, callback) {
-      s3.createBucket({ Bucket: bucketName }, function(err, res) {
+      s3.createBucket({ Bucket: bucketName }, function (err, res) {
         callback(err, res)
       })
     },
 
     uploadFile(filePath, remotePath, callback) {
-      fs.readFile(filePath, (err, data) => {
-        let contentType = files.getContentType(filePath)
+      const data = fs.createReadStream(filePath)
+      const contentType = files.getContentType(filePath)
 
-        let upload = new aws.S3.ManagedUpload({
-          params: {
-            ACL: 'private',
-            Bucket,
-            Key: remotePath,
-            Body: data,
-            ContentType: contentType,
-          },
-        })
+      const upload = new aws.S3.ManagedUpload({
+        params: {
+          ACL: 'private',
+          Bucket,
+          Key: remotePath,
+          Body: data,
+          ContentType: contentType,
+        },
+      })
 
-        upload.send(err => {
-          if (err) {
-            console.log(err)
-          } else {
-            callback()
-          }
-        })
+      upload.send(err => {
+        if (err) {
+          console.log(err)
+        } else {
+          callback()
+        }
       })
     },
 
