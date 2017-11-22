@@ -97,9 +97,6 @@
                     border-bottom: 3px solid $transparent;
                 }
 
-
-
-
                 &:focus,
                 &:active,
                 &.active {
@@ -113,13 +110,6 @@
                         border-color: $transparent1-w;
                     }
                  }
-
-                i {
-                    // display: block;
-                    // width: 100%;
-                    // text-align: center;
-                    // font-size: 21px;
-                }
             }
             .active-signin {
               margin: 15px 20px;
@@ -133,8 +123,6 @@
                   border-bottom: none;
                 }
               }
-
-
 
             .user-wrap {
                 margin: 0;
@@ -150,9 +138,7 @@
 
 
             .upload-btn-wrap {
-                // float: left;
-                // width: 220px;
-                // margin: 0 30px;
+
                 .nav-link.nl-upload {
                     width: 180px;
                     padding: 0 15px;
@@ -188,12 +174,7 @@
 
                     }
                 }
-                // .btn-blue {
-                //     margin: 15px 0;
 
-                //     &.btn-view-progress {margin: 9px 0 0;}
-
-                // }
             }
 
 
@@ -287,11 +268,6 @@
                         padding: 10px 0;
                     }
 
-                    // img {
-                    //     width: 100px;
-                    //     margin: 0 auto;
-                    //     display: block;
-                    // }
                     .btn-submit-other {
                         margin-bottom: 15px;
                         color: $sky;
