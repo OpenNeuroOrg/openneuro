@@ -10,7 +10,8 @@ import analyticsWrapper from './utils/analytics.js'
 const ravenConfig = {
   release: __GIT_HASH__,
   tags: { branch: __GIT_BRANCH__ },
-  environment: process.env.AWS_BATCH_QUEUE,
+  environment: process.env.ENVIRONMENT,
+  autoBreadcrumbs: true,
 }
 
 Raven.config(
