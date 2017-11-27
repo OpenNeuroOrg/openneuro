@@ -4,6 +4,11 @@
     "es6": true,
     "jest": true
   },
+  "globals": {
+    "process": true,
+    "__GIT_HASH__": true,
+    "__GIT_BRANCH__": true
+  },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parser": "babel-eslint",
   "parserOptions": {
