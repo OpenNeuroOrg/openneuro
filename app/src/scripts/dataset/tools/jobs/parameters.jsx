@@ -10,6 +10,7 @@ const JobParameters = ({
   onRestoreDefaults,
   parametersMetadata,
   arrInput,
+  arrControl,
 }) => {
   if (Object.keys(parameters).length === 0) {
     return <noscript />
@@ -120,15 +121,31 @@ const JobParameters = ({
           />
         )
       } else if (isMulti) {
+        // ** Adds objects to arrInput if empty ** //
+        if (!arrControl.includes(parameter)) {
+          arrControl.push(parameter)
+          arrInput.push({ label: parameter, action: { value: [] } })
+        }
+
         let handleChange = e => {
           let value = e.target.value
-          let index = arrInput.indexOf(value)
-          if (index === -1) {
-            arrInput.push(value)
-          } else {
-            arrInput.splice(index, 1)
-          }
-          let event = { target: { value: arrInput } }
+          let name = e.target.name
+
+          // ** Use case: multiple multi checks** //
+          let v = arrInput.map(obj => {
+            if (obj.label === name) {
+              let val = obj.action.value
+              // ** Add or remove values ** //
+              let index = val.indexOf(value)
+              if (index === -1) {
+                val.push(value)
+              } else {
+                val.splice(index, 1)
+              }
+              return val
+            }
+          })
+          let event = { target: { value: v } }
           return onChange(parameter, event)
         }
 
