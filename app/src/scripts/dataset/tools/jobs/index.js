@@ -651,6 +651,8 @@ JobMenu.propTypes = {
   show: PropTypes.bool,
   snapshots: PropTypes.array,
   history: PropTypes.object,
+  arrInput: PropTypes.array,
+  arrControl: PropTypes.array,
 }
 
 JobMenu.defaultProps = {
