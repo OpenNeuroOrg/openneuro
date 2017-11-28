@@ -52,30 +52,40 @@ export default {
      * Finish OAuth2 ORCID flow
      */
   getORCIDToken(code, callback) {
-    request.get(config.crn.url + 'users/signin/orcid', {
-      query: { code, home: true }
-    }, callback)
+    request.get(
+      config.crn.url + 'users/signin/orcid',
+      {
+        query: { code, home: true },
+      },
+      callback,
+    )
   },
 
   /**
      * Get ORCID profile
      */
   getORCIDProfile(accessToken, callback) {
-    request.get(config.crn.url + 'users/orcid', {
-      query: { accessToken }
-    }, callback)
+    request.get(
+      config.crn.url + 'users/orcid',
+      {
+        query: { accessToken },
+      },
+      callback,
+    )
   },
 
   /**
      * Get ORCID profile
      */
   refreshORCIDToken(refreshToken, callback) {
-    request.get(config.crn.url + 'users/orcid/refresh', {
-      query: { refreshToken }
-    }, callback)
+    request.get(
+      config.crn.url + 'users/orcid/refresh',
+      {
+        query: { refreshToken },
+      },
+      callback,
+    )
   },
-
-
 
   // Datasets --------------------------------------------------------------------------------
 
@@ -237,6 +247,21 @@ export default {
   retryJob(datasetId, jobId, callback, options) {
     request.post(
       config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId + '/retry',
+      {
+        query: { snapshot: options && options.snapshot },
+      },
+      callback,
+    )
+  },
+
+  /**
+       * Delete Job
+       *
+       * Take a jobId and deletes the job.
+       */
+  deleteJob(datasetId, jobId, callback, options) {
+    request.del(
+      config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId,
       {
         query: { snapshot: options && options.snapshot },
       },

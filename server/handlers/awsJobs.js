@@ -207,6 +207,18 @@ let handlers = {
     })
   },
 
+  deleteJob(req, res, next) {
+    let jobId = req.params.jobId
+    c.crn.jobs.update(
+      { _id: ObjectID(jobId) },
+      { $set: { deleted: true } },
+      (err, result) => {
+        if (err) return next(err)
+        res.send({ data: result })
+      },
+    )
+  },
+
   parameterFileUpload(req, res, next) {
     let bucket = config.aws.s3.inputsBucket
     let file = req.files.file.data //Buffer
