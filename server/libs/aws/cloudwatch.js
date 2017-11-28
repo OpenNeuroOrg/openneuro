@@ -115,41 +115,65 @@ export default aws => {
     },
 
     /**
-     * Get all logs given a logStreamName or continue from nextToken
-     * callback(err, logs) returns logs as an array
+     * Fetch logs based on a CloudWatch stream name
+     * 
+     * @param {string} logStreamName - CloudWatch stream to read
+     * @param {boolean} truncate - limit results to 1000 lines
+     * @param {function} callback - Callback each time logs are received 
+     * 
+     * @returns {Promise} - Resolves when all logs have been retrieved
      */
-    getLogs(
+    getLogs(logStreamName, truncate, callback) {
+      return new Promise((resolve, reject) => {
+        this.getCloudwatchLogs(
+          logStreamName,
+          null,
+          truncate,
+          callback,
+          resolve,
+          reject,
+        )
+      })
+    },
+
+    /**
+     * Get all logs given a logStreamName or continue from nextToken
+     * callback(logs) is called each time logs are received
+     */
+    getCloudwatchLogs(
       logStreamName,
-      logs = [],
       nextToken = null,
       truncateFlag = false,
       callback,
+      resolve,
+      reject,
     ) {
-      let params = {
+      const params = {
         logGroupName: config.aws.cloudwatchlogs.logGroupName,
         logStreamName: logStreamName,
       }
-      if (logs.length === 0 && !truncateFlag) params.startFromHead = true
+      if (!truncateFlag) params.startFromHead = true
       if (nextToken) params.nextToken = nextToken
       if (truncateFlag) params.limit = 1000 // we only want the last 1000 lines of logs for view on client
       // cloudwatch log events requires knowing jobId and taskArn(s)
       // taskArns are available on job which we can access with a describeJobs call to batch
       this.sdk.getLogEvents(params, (err, data) => {
         if (err) {
-          return callback(err)
+          reject(err)
         }
+        callback(data.events)
         //Cloudwatch returns a token even if there are no events. That is why checking events length
         if (data.events && data.events.length > 0 && data.nextForwardToken) {
-          logs = logs.concat(data.events)
-          this.getLogs(
+          this.getCloudwatchLogs(
             logStreamName,
-            logs,
             data.nextForwardToken,
             truncateFlag,
             callback,
+            resolve,
+            reject,
           )
         } else {
-          callback(err, logs)
+          resolve()
         }
       })
     },
@@ -178,8 +202,6 @@ export default aws => {
           (params, logStreamName, cb) => {
             this.getLogs(
               logStreamName,
-              [],
-              null,
               false,
               this._includeJobParams(params, cb),
             )

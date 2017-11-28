@@ -390,40 +390,52 @@ let handlers = {
     })
   },
 
+  /**
+   * Wrapper for getLogstreamRaw that requests the json version
+   */
   getLogstream(req, res, next) {
-    let appName = req.params.app
-    let jobId = req.params.jobId
-    let taskArn = req.params.taskArn
-    let key = appName + '/' + jobId + '/' + taskArn
-
-    aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        res.send(logs)
-      }
-    })
+    handlers.getLogstreamRaw(req, res, next, false)
   },
 
-  getLogstreamRaw(req, res, next) {
-    let appName = req.params.app
-    let jobId = req.params.jobId
-    let taskArn = req.params.taskArn
-    let key = appName + '/' + jobId + '/' + taskArn
+  getLogstreamRaw(req, res, next, raw = true) {
+    const appName = req.params.app
+    const jobId = req.params.jobId
+    const taskArn = req.params.taskArn
+    const key = appName + '/' + jobId + '/' + taskArn
+    const ct = raw ? 'text/plain' : 'application/json'
 
-    aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        res.writeHead(200, {
-          'Content-Type': 'text/plain',
-          'Transfer-Encoding': 'chunked',
-          'Content-Disposition': 'attachment; filename="' + key + '.txt"',
-        })
-        logs.map(log => res.write(log.message + '\n'))
-        res.end()
-      }
+    res.writeHead(200, {
+      'Content-Type': ct,
+      'Transfer-Encoding': 'chunked',
+      'Content-Disposition': 'attachment; filename="' + key + '.txt"',
     })
+
+    if (!raw) {
+      // Streaming JSON as an array with each element loaded over time
+      // One dummy row to allow the callback to insert commas
+      res.write('[\n{}')
+    }
+
+    aws.cloudwatch
+      .getLogs(key, raw, logs => {
+        logs.map(log => {
+          if (raw) {
+            res.write(log.message + '\n')
+          } else {
+            res.write(',\n' + JSON.stringify(log))
+          }
+        })
+      })
+      .then(() => {
+        if (!raw) {
+          res.write(']\n')
+        }
+        res.end()
+      })
+      .catch(err => {
+        console.log(err)
+        res.end()
+      })
   },
 
   /**
