@@ -377,17 +377,43 @@ let handlers = {
   },
 
   downloadJobLogs(req, res, next) {
-    let jobId = req.params.jobId //this will be the mongoId for a given analysis
+    const jobId = req.params.jobId //this will be the mongoId for a given analysis
+    const prefix = {}
+    let first = true // Flag to skip the space at the start
 
-    aws.cloudwatch.getLogsByJobId(jobId, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        let textLogs = handlers._processLogs(logs)
-        res.attachment(jobId + '.txt')
-        res.send(textLogs)
-      }
+    res.writeHead(200, {
+      'Content-Type': 'text/plain',
+      'Transfer-Encoding': 'chunked',
+      'Content-Disposition': 'attachment; filename="' + jobId + '.txt"',
     })
+
+    aws.cloudwatch.getLogsByJobId(
+      jobId,
+      data => {
+        let logString = first ? '' : '\n\n'
+        first = false
+        if (!prefix.hasOwnProperty(data.name)) {
+          logString += data.name + ' - exit code ' + data.exitCode + '\n'
+          logString += '  Environment variables:\n'
+          data.environment.forEach(env => {
+            logString += '\t' + env.name + ': ' + env.value + '\n'
+          })
+          logString += '  Logs:\n'
+          prefix[data.name] = true
+        }
+        data.logs.forEach(log => {
+          logString += '\t' + log.timestamp + '\t' + log.message + '\n'
+        })
+        res.write(logString)
+      },
+      err => {
+        if (err) {
+          console.log(err)
+          next(err)
+        }
+        res.end()
+      },
+    )
   },
 
   /**
@@ -512,28 +538,6 @@ let handlers = {
         }
       })
     })
-  },
-
-  _processLogs(logs) {
-    let logString = ''
-    Object.keys(logs).forEach(streamName => {
-      logString +=
-        streamName + ' - exit code ' + logs[streamName].exitCode + '\n'
-      logString += '  Environment variables:\n'
-
-      logs[streamName].environment.forEach(env => {
-        logString += '\t' + env.name + ': ' + env.value + '\n'
-      })
-
-      logString += '  Logs:\n'
-
-      logs[streamName].logs.forEach(log => {
-        logString += '\t' + log.timestamp + '\t' + log.message + '\n'
-      })
-      logString += '\n\n'
-    })
-
-    return logString
   },
 }
 

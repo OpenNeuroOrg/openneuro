@@ -1,7 +1,6 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 import mongo from '../../libs/mongo'
 import { ObjectID } from 'mongodb'
-import mapValuesLimit from 'async/mapValuesLimit'
 import config from '../../config'
 import moment from 'moment'
 
@@ -179,13 +178,17 @@ export default aws => {
     },
 
     /**
-         * Given a jobId, get all logs for any subtasks and return useful
-         * metadata along with the log lines
-         */
-    getLogsByJobId(jobId, callback) {
+     * Given a jobId, get all logs for any subtasks and return useful
+     * metadata along with the log lines
+     * 
+     * @param {string} jobId - analysis to get all logs for
+     * @param {function} receive - callback for each line received
+     * @param {function} finish - callback when all logs are fetched
+     */
+    getLogsByJobId(jobId, receive, finish) {
       c.crn.jobs.findOne({ _id: ObjectID(jobId) }, {}, (err, job) => {
         if (err) {
-          callback(err)
+          finish(err)
         }
         let logStreamNames = job.analysis.logstreams || []
         let logStreams = logStreamNames.reduce((streams, ls) => {
@@ -196,20 +199,21 @@ export default aws => {
           streams[stream.name] = stream
           return streams
         }, {})
-        mapValuesLimit(
-          logStreams,
-          10,
-          (params, logStreamName, cb) => {
-            this.getLogs(
-              logStreamName,
-              false,
-              this._includeJobParams(params, cb),
-            )
-          },
-          (err, logs) => {
-            callback(err, logs)
-          },
-        )
+        const promises = []
+        for (let logStreamName in logStreams) {
+          if (logStreams.hasOwnProperty(logStreamName)) {
+            // Curry in metadata
+            const receiveMetadata = logs => {
+              receive({ ...logStreams[logStreamName], logs })
+            }
+            promises.push(this.getLogs(logStreamName, false, receiveMetadata))
+          }
+        }
+        Promise.all(promises)
+          .then(() => {
+            finish()
+          })
+          .catch(err => finish(err))
       })
     },
 
