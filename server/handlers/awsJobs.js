@@ -364,18 +364,6 @@ let handlers = {
     }
   },
 
-  getJobLogs(req, res, next) {
-    let jobId = req.params.jobId //this will be the mongoId for a given analysis
-
-    aws.cloudwatch.getLogsByJobId(jobId, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        res.send(logs)
-      }
-    })
-  },
-
   downloadJobLogs(req, res, next) {
     const jobId = req.params.jobId //this will be the mongoId for a given analysis
     const prefix = {}
