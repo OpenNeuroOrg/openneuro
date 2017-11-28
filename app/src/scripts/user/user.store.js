@@ -1,5 +1,5 @@
 // dependencies ----------------------------------------------------------------------
-
+import Raven from 'raven-js'
 import React from 'react'
 import Reflux from 'reflux'
 import actions from './user.actions.js'
@@ -41,6 +41,10 @@ let UserStore = Reflux.createStore({
             this.signOut()
           } else {
             this.update({ scitran: res.body }, { persist: true })
+            Raven.setUserContext({
+              email: user.profile.email,
+              id: user.profile._id,
+            })
           }
         })
       }
@@ -153,6 +157,11 @@ let UserStore = Reflux.createStore({
         { persist: true },
       )
 
+      Raven.setUserContext({
+        email: user.profile.email,
+        id: user.profile._id,
+      })
+
       crn.verifyUser((err, res) => {
         if (res.body.code === 403) {
           // Pass only the scitran required user values to createUser
@@ -261,6 +270,7 @@ let UserStore = Reflux.createStore({
      * browser storage.
      */
   clearAuth() {
+    Raven.setUserContext()
     delete window.localStorage.token
     delete window.localStorage.provider
     delete window.localStorage.profile
