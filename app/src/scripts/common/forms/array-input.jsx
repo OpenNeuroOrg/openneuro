@@ -151,11 +151,6 @@ class ArrayInput extends React.Component {
   }
 
   _add(model) {
-    this.setState({
-      error: null,
-      helper: null,
-    })
-
     let value = this.props.value
 
     for (let field of model) {
@@ -171,32 +166,27 @@ class ArrayInput extends React.Component {
         itemValue[field.id] = this.state[field.id]
       }
 
-      // Error messages for radio, multi, and checkboxes
-      if (
-        itemValue.type === 'radio' ||
-        itemValue.type === 'multi' ||
-        itemValue.type === 'checkbox'
-      ) {
-        let checkArr = []
-        checkArr.push(itemValue.defaultValue.split(' '))
-
+      if (types.includes(itemValue.type)) {
+        let types = ['radio', 'multi', 'checkbox']
+        let checkArr = itemValue.defaultValue.split(' ')
         // check for white space and remove them
-        let filterArr = checkArr[0].filter(value => value.trim() != '')
+        checkArr = checkArr.filter(value => value.trim() != '')
 
-        if (itemValue.type === 'multi' && filterArr.length <= 1) {
+        // Error messages for radio, multi, and checkboxes
+        if (itemValue.type === 'multi' && checkArr.length <= 1) {
           this.setState({
             error:
               'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
           })
           return
-        } else if (itemValue.type === 'checkbox' && filterArr.length > 1) {
+        } else if (itemValue.type === 'checkbox' && checkArr.length > 1) {
           this.setState({
             error: "Type boolean accepts 'true' or 'false' as default values.",
           })
           return
         } else if (
-          (itemValue.type === 'radio' && filterArr.length > 2) ||
-          (itemValue.type === 'radio' && filterArr.length <= 1)
+          (itemValue.type === 'radio' && checkArr.length > 2) ||
+          (itemValue.type === 'radio' && checkArr.length <= 1)
         ) {
           this.setState({ error: 'Type radio accepts two default values.' })
           return
