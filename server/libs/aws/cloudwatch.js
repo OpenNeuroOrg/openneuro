@@ -123,57 +123,35 @@ export default aws => {
      * @returns {Promise} - Resolves when all logs have been retrieved
      */
     getLogs(logStreamName, truncate, callback) {
-      return new Promise((resolve, reject) => {
-        this.getCloudwatchLogs(
-          logStreamName,
-          null,
-          truncate,
-          callback,
-          resolve,
-          reject,
-        )
-      })
-    },
+      return new Promise(async (resolve, reject) => {
+        let data
+        // cloudwatch log events requires knowing jobId and taskArn(s)
+        // taskArns are available on job which we can access with a describeJobs call to batch
+        const params = {
+          logGroupName: config.aws.cloudwatchlogs.logGroupName,
+          logStreamName: logStreamName,
+        }
 
-    /**
-     * Get all logs given a logStreamName or continue from nextToken
-     * callback(logs) is called each time logs are received
-     */
-    getCloudwatchLogs(
-      logStreamName,
-      nextToken = null,
-      truncateFlag = false,
-      callback,
-      resolve,
-      reject,
-    ) {
-      const params = {
-        logGroupName: config.aws.cloudwatchlogs.logGroupName,
-        logStreamName: logStreamName,
-      }
-      if (!truncateFlag) params.startFromHead = true
-      if (nextToken) params.nextToken = nextToken
-      if (truncateFlag) params.limit = 1000 // we only want the last 1000 lines of logs for view on client
-      // cloudwatch log events requires knowing jobId and taskArn(s)
-      // taskArns are available on job which we can access with a describeJobs call to batch
-      this.sdk.getLogEvents(params, (err, data) => {
-        if (err) {
-          reject(err)
-        }
-        callback(data.events)
-        //Cloudwatch returns a token even if there are no events. That is why checking events length
-        if (data.events && data.events.length > 0 && data.nextForwardToken) {
-          this.getCloudwatchLogs(
-            logStreamName,
-            data.nextForwardToken,
-            truncateFlag,
-            callback,
-            resolve,
-            reject,
-          )
+        if (truncate) {
+          params.limit = 1000 // we only want the last 1000 lines of logs for view on client
         } else {
-          resolve()
+          params.startFromHead = true
         }
+
+        do {
+          try {
+            data = await this.sdk.getLogEvents(params).promise()
+            if (data.nextForwardToken) {
+              params.nextToken = data.nextForwardToken
+              if (params.hasOwnProperty('startFromHead'))
+                delete params.startFromHead
+            }
+            callback(data.events)
+          } catch (err) {
+            reject(err)
+          }
+        } while (data.events && data.events.length > 0 && data.nextForwardToken)
+        resolve()
       })
     },
 
