@@ -8,7 +8,7 @@ import FPStore from './front-page.store.js'
 import FPActions from './front-page.actions.js'
 import Select from 'react-select'
 import Run from '../dataset/dataset.jobs.run.jsx'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 import { Panel } from 'react-bootstrap'
 import pluralize from 'pluralize'
 import Spinner from '../common/partials/spinner.jsx'
@@ -109,7 +109,7 @@ class Pipelines extends Reflux.Component {
             value={this.state.frontpage.selectedTags}
             placeholder="All tags"
             options={this.state.frontpage.tags}
-            onChange={FPActions.selectTag}
+            onChange={FPActions.selectTag.bind(this)}
           />
           <br />
           <label>
@@ -119,7 +119,7 @@ class Pipelines extends Reflux.Component {
           <span className="select-pipeline">
             <select
               value={this.state.frontpage.selectedPipeline.id}
-              onChange={this._selectPipeline}>
+              onChange={this._selectPipeline.bind(this)}>
               <option value="" disabled>
                 Select a pipeline
               </option>
@@ -137,15 +137,15 @@ class Pipelines extends Reflux.Component {
     let description = longDescription.description
       ? markdown.format(longDescription.description)
       : { __html: '' }
-    let acknowledgments = ''
+    let acknowledgements = ''
     let support = ''
-    if (longDescription.acknowledgments) {
-      acknowledgments = (
+    if (longDescription.acknowledgements) {
+      acknowledgements = (
         <span>
-          <h4>Acknowledgments</h4>
+          <h4>Acknowledgements</h4>
           <div
             dangerouslySetInnerHTML={markdown.format(
-              longDescription.acknowledgments,
+              longDescription.acknowledgements,
             )}
           />
         </span>
@@ -175,7 +175,7 @@ class Pipelines extends Reflux.Component {
               </a>
               <h2>{pipeline.jobDefinitionName}</h2>
               <div dangerouslySetInnerHTML={description} />
-              {acknowledgments}
+              {acknowledgements}
               {support}
             </div>
             {this._exampleResults()}
