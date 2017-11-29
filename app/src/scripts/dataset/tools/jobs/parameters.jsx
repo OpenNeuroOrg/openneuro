@@ -236,6 +236,7 @@ JobParameters.propTypes = {
   parametersMetadata: PropTypes.object,
   subjects: PropTypes.array,
   arrInput: PropTypes.array,
+  arrControl: PropTypes.array,
 }
 
 JobParameters.defaultProps = {
