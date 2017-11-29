@@ -1,7 +1,6 @@
 /*eslint no-console: ["error", { allow: ["log"] }] */
 import mongo from '../../libs/mongo'
 import { ObjectID } from 'mongodb'
-import mapValuesLimit from 'async/mapValuesLimit'
 import config from '../../config'
 import moment from 'moment'
 
@@ -115,53 +114,59 @@ export default aws => {
     },
 
     /**
-     * Get all logs given a logStreamName or continue from nextToken
-     * callback(err, logs) returns logs as an array
+     * Fetch logs based on a CloudWatch stream name
+     * 
+     * @param {string} logStreamName - CloudWatch stream to read
+     * @param {boolean} truncate - limit results to 1000 lines
+     * @param {function} callback - Callback each time logs are received 
+     * 
+     * @returns {Promise} - Resolves when all logs have been retrieved
      */
-    getLogs(
-      logStreamName,
-      logs = [],
-      nextToken = null,
-      truncateFlag = false,
-      callback,
-    ) {
-      let params = {
-        logGroupName: config.aws.cloudwatchlogs.logGroupName,
-        logStreamName: logStreamName,
-      }
-      if (logs.length === 0 && !truncateFlag) params.startFromHead = true
-      if (nextToken) params.nextToken = nextToken
-      if (truncateFlag) params.limit = 1000 // we only want the last 1000 lines of logs for view on client
-      // cloudwatch log events requires knowing jobId and taskArn(s)
-      // taskArns are available on job which we can access with a describeJobs call to batch
-      this.sdk.getLogEvents(params, (err, data) => {
-        if (err) {
-          return callback(err)
+    getLogs(logStreamName, truncate, callback) {
+      return new Promise(async (resolve, reject) => {
+        let data
+        // cloudwatch log events requires knowing jobId and taskArn(s)
+        // taskArns are available on job which we can access with a describeJobs call to batch
+        const params = {
+          logGroupName: config.aws.cloudwatchlogs.logGroupName,
+          logStreamName: logStreamName,
         }
-        //Cloudwatch returns a token even if there are no events. That is why checking events length
-        if (data.events && data.events.length > 0 && data.nextForwardToken) {
-          logs = logs.concat(data.events)
-          this.getLogs(
-            logStreamName,
-            logs,
-            data.nextForwardToken,
-            truncateFlag,
-            callback,
-          )
+
+        if (truncate) {
+          params.limit = 1000 // we only want the last 1000 lines of logs for view on client
         } else {
-          callback(err, logs)
+          params.startFromHead = true
         }
+
+        do {
+          try {
+            data = await this.sdk.getLogEvents(params).promise()
+            if (data.nextForwardToken) {
+              params.nextToken = data.nextForwardToken
+              if (params.hasOwnProperty('startFromHead'))
+                delete params.startFromHead
+            }
+            callback(data.events)
+          } catch (err) {
+            reject(err)
+          }
+        } while (data.events && data.events.length > 0 && data.nextForwardToken)
+        resolve()
       })
     },
 
     /**
-         * Given a jobId, get all logs for any subtasks and return useful
-         * metadata along with the log lines
-         */
-    getLogsByJobId(jobId, callback) {
+     * Given a jobId, get all logs for any subtasks and return useful
+     * metadata along with the log lines
+     * 
+     * @param {string} jobId - analysis to get all logs for
+     * @param {function} receive - callback for each line received
+     * @param {function} finish - callback when all logs are fetched
+     */
+    getLogsByJobId(jobId, receive, finish) {
       c.crn.jobs.findOne({ _id: ObjectID(jobId) }, {}, (err, job) => {
         if (err) {
-          callback(err)
+          finish(err)
         }
         let logStreamNames = job.analysis.logstreams || []
         let logStreams = logStreamNames.reduce((streams, ls) => {
@@ -172,22 +177,21 @@ export default aws => {
           streams[stream.name] = stream
           return streams
         }, {})
-        mapValuesLimit(
-          logStreams,
-          10,
-          (params, logStreamName, cb) => {
-            this.getLogs(
-              logStreamName,
-              [],
-              null,
-              false,
-              this._includeJobParams(params, cb),
-            )
-          },
-          (err, logs) => {
-            callback(err, logs)
-          },
-        )
+        const promises = []
+        for (let logStreamName in logStreams) {
+          if (logStreams.hasOwnProperty(logStreamName)) {
+            // Curry in metadata
+            const receiveMetadata = logs => {
+              receive({ ...logStreams[logStreamName], logs })
+            }
+            promises.push(this.getLogs(logStreamName, false, receiveMetadata))
+          }
+        }
+        Promise.all(promises)
+          .then(() => {
+            finish()
+          })
+          .catch(err => finish(err))
       })
     },
 
