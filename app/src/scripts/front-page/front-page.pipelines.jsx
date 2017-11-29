@@ -137,15 +137,15 @@ class Pipelines extends Reflux.Component {
     let description = longDescription.description
       ? markdown.format(longDescription.description)
       : { __html: '' }
-    let acknowledgments = ''
+    let acknowledgements = ''
     let support = ''
-    if (longDescription.acknowledgments) {
-      acknowledgments = (
+    if (longDescription.acknowledgements) {
+      acknowledgements = (
         <span>
-          <h4>Acknowledgments</h4>
+          <h4>Acknowledgements</h4>
           <div
             dangerouslySetInnerHTML={markdown.format(
-              longDescription.acknowledgments,
+              longDescription.acknowledgements,
             )}
           />
         </span>
@@ -175,7 +175,7 @@ class Pipelines extends Reflux.Component {
               </a>
               <h2>{pipeline.jobDefinitionName}</h2>
               <div dangerouslySetInnerHTML={description} />
-              {acknowledgments}
+              {acknowledgements}
               {support}
             </div>
             {this._exampleResults()}
