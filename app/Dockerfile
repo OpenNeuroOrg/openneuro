@@ -6,10 +6,10 @@ RUN apk --no-cache --update add git
 ARG branch
 
 # setup app directory
-WORKDIR /srv/crn-app
+WORKDIR /srv/app
 
 # install web app
-ADD . /srv/crn-app
+ADD . /srv/app
 RUN npm install -g yarn && yarn install --pure-lockfile
 
 # build app
