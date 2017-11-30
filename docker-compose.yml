@@ -1,0 +1,71 @@
+# docker compose versions
+version: '2'
+
+# shared volumes
+volumes:
+  project:
+
+services:
+
+  # mongodb
+  mongo:
+    image: mongo
+
+  # Redis
+  redis:
+    image: redis:alpine
+
+  # web app bundle build
+  app:
+    image: openneuro/app:${CRN_APP_TAG}
+    volumes:
+      - project:/srv/app/dist
+    env_file: ./config.env
+
+  # crn core (bids-core)
+  core:
+    image: poldracklab/bids-core:${BIDS_CORE_TAG}
+    volumes:
+      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
+    env_file: ./config.env
+    restart: always
+
+  # crn node server
+  server:
+    image: openneuro/server:${CRN_SERVER_TAG}
+    volumes:
+      - ./server/client.config.js:/srv/crn-server/client.config.js:rw
+      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/crn-server/persistent
+    env_file: ./config.env
+    restart: always
+
+  # worker
+  worker:
+    image: openneuro/server:${CRN_SERVER_TAG}
+    command:
+      - node
+      - /srv/crn-server/worker.js
+    volumes:
+      - ./server/client.config.js:/srv/crn-server/client.config.js:rw
+      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/crn-server/persistent
+    env_file: ./config.env
+    restart: always
+
+  # nginx - static file serving and service proxy
+  nginx:
+    image: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/.htpasswd:/etc/nginx/.htpasswd:ro
+      - project:/srv/crn-app/dist
+      - ./acme:/acme
+      - ${SSL_DIR}:/etc/nginx/ssl
+    ports:
+      - "80:80"
+      - "8110:8110"
+      - "443:443"
+    depends_on:
+      - server
+      - core
