@@ -9,7 +9,9 @@ volumes:
 services:
   # web app bundle build
   app:
-    image: openneuro/app:${CRN_APP_TAG}
+    build:
+      context: .
+      dockerfile: app/Dockerfile
     command: sh -c "yarn install --pure-lockfile && yarn start"
     volumes:
       - ../openneuro:/srv
@@ -26,6 +28,9 @@ services:
 
   # crn node server
   server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
     command: sh -c "yarn install && node /srv/crn-server/index.js"
     volumes:
       - ../openneuro/server:/srv/crn-server
