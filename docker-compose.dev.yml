@@ -42,6 +42,9 @@ services:
       - /srv/crn-server/node_modules:exec
 
   worker:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
     command: sh -c "yarn install  && node /srv/crn-server/worker.js"
     volumes:
       - ../openneuro/server:/srv/crn-server

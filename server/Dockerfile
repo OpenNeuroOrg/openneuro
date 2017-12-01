@@ -9,4 +9,4 @@ RUN npm install -g yarn && yarn install
 RUN rm -rf /srv/app
 
 # start server
-CMD ["node", "/srv/crn-server/index.js"]
+CMD ["node", "/srv/server/index.js"]
