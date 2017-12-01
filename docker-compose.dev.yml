@@ -31,29 +31,29 @@ services:
     build:
       context: .
       dockerfile: server/Dockerfile
-    command: sh -c "yarn install && node /srv/crn-server/index.js"
+    command: sh -c "yarn install && node /srv/server/index.js"
     volumes:
-      - ../openneuro/server:/srv/crn-server
+      - ../openneuro/server:/srv/server
       - yarn_cache:/root/.cache
-      - ./server/client.config.js:/srv/crn-server/client.config.js:rw
+      - ./server/client.config.js:/srv/server/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/crn-server/persistent
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
     tmpfs:
-      - /srv/crn-server/node_modules:exec
+      - /srv/server/node_modules:exec
 
   worker:
     build:
       context: .
       dockerfile: server/Dockerfile
-    command: sh -c "yarn install  && node /srv/crn-server/worker.js"
+    command: sh -c "yarn install  && node /srv/server/worker.js"
     volumes:
-      - ../openneuro/server:/srv/crn-server
+      - ../openneuro/server:/srv/server
       - yarn_cache:/root/.cache
-      - ./server/client.config.js:/srv/crn-server/client.config.js:rw
+      - ./server/client.config.js:/srv/server/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/crn-server/persistent
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
     tmpfs:
-      - /srv/crn-server/node_modules:exec
+      - /srv/server/node_modules:exec
 
   # nginx - static file serving and service proxy
   nginx:
