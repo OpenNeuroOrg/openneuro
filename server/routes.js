@@ -158,7 +158,11 @@ const routes = [
   {
     method: 'post',
     url: '/datasets/:datasetId/jobs/:jobId/retry',
-    middleware: [auth.datasetAccess()],
+    middleware: [
+      auth.datasetAccess(),
+      auth.rerunJobAccess,
+      auth.submitJobAccess,
+    ],
     handler: awsJobs.retry,
   },
   {
@@ -184,11 +188,6 @@ const routes = [
   {
     method: 'get',
     url: '/jobs/:jobId/logs',
-    handler: awsJobs.getJobLogs,
-  },
-  {
-    method: 'get',
-    url: '/jobs/:jobId/logs/download',
     handler: awsJobs.downloadJobLogs,
   },
   {

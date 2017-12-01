@@ -1,5 +1,5 @@
 // dependencies ----------------------------------------------------------------------
-
+import Raven from 'raven-js'
 import React from 'react'
 import Reflux from 'reflux'
 import actions from './user.actions.js'
@@ -41,6 +41,10 @@ let UserStore = Reflux.createStore({
             this.signOut()
           } else {
             this.update({ scitran: res.body }, { persist: true })
+            Raven.setUserContext({
+              email: user.profile.email,
+              id: user.profile._id,
+            })
           }
         })
       }
@@ -57,8 +61,10 @@ let UserStore = Reflux.createStore({
   /**
      * Toggle Modal
     */
-  toggleModal() {
-    this.update({ showSupportModal: !this.data.showSupportModal })
+  toggleModal(modal) {
+    let newState = {}
+    newState[modal] = !this.data[modal]
+    this.update(newState)
   },
 
   // data ------------------------------------------------------------------------------
@@ -101,7 +107,8 @@ let UserStore = Reflux.createStore({
       loading: false,
       signinError: '',
       showUploadModal: false,
-      showSupportModal: false,
+      supportModal: false,
+      loginModal: false,
     }
     for (let prop in diffs) {
       data[prop] = diffs[prop]
@@ -149,6 +156,11 @@ let UserStore = Reflux.createStore({
         },
         { persist: true },
       )
+
+      Raven.setUserContext({
+        email: user.profile.email,
+        id: user.profile._id,
+      })
 
       crn.verifyUser((err, res) => {
         if (res.body.code === 403) {
@@ -211,6 +223,7 @@ let UserStore = Reflux.createStore({
       return
     }
     options.provider = 'google'
+    this.update({ loginModal: false })
     this.signIn(options)
   },
 
@@ -222,6 +235,7 @@ let UserStore = Reflux.createStore({
      */
   orcidSignIn(options) {
     options.provider = 'orcid'
+    this.update({ loginModal: false })
     this.signIn(options)
   },
 
@@ -244,6 +258,8 @@ let UserStore = Reflux.createStore({
         this.clearAuth()
         history.push('/')
       })
+      // Always reset the loginModal on logout
+      this.update({ loginModal: false })
     }
   },
 
@@ -254,6 +270,7 @@ let UserStore = Reflux.createStore({
      * browser storage.
      */
   clearAuth() {
+    Raven.setUserContext()
     delete window.localStorage.token
     delete window.localStorage.provider
     delete window.localStorage.profile

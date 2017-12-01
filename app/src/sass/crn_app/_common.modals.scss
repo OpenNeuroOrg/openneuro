@@ -296,21 +296,38 @@
 
 .analysis-modal {
 
-    .task-select {
-        border: 1px solid $ccc;
-        padding: 0;
-        select {
-            border: 0;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        .m-arrow {
-          position: absolute;
-          top: 30%;
-          right: 0;
-        }
+  .task-select {
+    border: 1px solid $ccc;
+    padding: 0;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    select {
+      border: 0;
+      -webkit-appearance: none;
+      -moz-appearance: none;
     }
+    select ::-ms-expand {
+      display: none;
+    }
+
+    .Select-arrow-zone {
+      position: absolute;
+      display: unset;
+      right: 0px;
+      top: 10px;
+      border: 0;
+      box-shadow: none;
+      z-index: 15;
+      -moz-padding-start: 10px;
+      -moz-padding-end: 10px;
+      .arrow {
+        width: 50%;
+      }
+    }
+  }
+
 
     .default-reset {
         padding: 10px;
@@ -473,4 +490,40 @@
     &.reactable-header-sort-desc::after {
         content: ' \f0dd';
     }
+}
+
+.login-modal {
+  div.modal-header{
+    background-color: $well-bg;
+    div.logo-text {
+      width: 50%;
+      img {
+        height: 40px;
+      }
+      font-size: 32px;
+    }
+  }
+
+  hr.spacer {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  div.login-btns {
+    width: 50%;
+    margin: 0 auto;
+    span {
+      font-size: 14px;
+    }
+
+    button {
+      margin: 10px;
+    }
+  }
+
+  a {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+  }
 }

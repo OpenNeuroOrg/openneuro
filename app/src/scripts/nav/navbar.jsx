@@ -11,7 +11,6 @@ import actions from '../user/user.actions.js'
 import { Navbar } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
 import { refluxConnect } from '../utils/reflux'
-
 import brand_mark from './assets/brand_mark.png'
 
 // component setup ---------------------------------------------------------------
@@ -38,6 +37,7 @@ class BSNavbar extends Reflux.Component {
           <Navbar.Collapse>{this._navMenu()}</Navbar.Collapse>
         </Navbar>
         {this._supportModal()}
+        {this._loginModal()}
       </span>
     )
   }
@@ -84,7 +84,9 @@ class BSNavbar extends Reflux.Component {
           </NavLink>
         </li>
         <li className="link-support">
-          <a className="nav-link" onClick={actions.toggleModal}>
+          <a
+            className="nav-link"
+            onClick={actions.toggleModal.bind(this, 'supportModal')}>
             <span className="link-name">Support</span>
           </a>
         </li>
@@ -115,8 +117,8 @@ class BSNavbar extends Reflux.Component {
   _supportModal() {
     return (
       <Modal
-        show={this.state.users.showSupportModal}
-        onHide={actions.toggleModal}>
+        show={this.state.users.supportModal}
+        onHide={actions.toggleModal.bind(this, 'supportModal')}>
         <Modal.Header closeButton>
           <Modal.Title>Support</Modal.Title>
         </Modal.Header>
@@ -143,67 +145,83 @@ class BSNavbar extends Reflux.Component {
           />
         </Modal.Body>
         <Modal.Footer>
-          <a onClick={actions.toggleModal}>Close</a>
+          <a onClick={actions.toggleModal.bind(this, 'supportModal')}>Close</a>
         </Modal.Footer>
       </Modal>
     )
   }
 
   _signIn(loading) {
-    const menuText = loading ? (
-      <span className="link-name">
-        <span>Signing In </span>
-        <i className="fa fa-spin fa-circle-o-notch" />
-      </span>
-    ) : (
-      <span className="link-name">
-        Sign In <span className="arrow" />
-      </span>
-    )
-    return (
-      <div className="navbar-right sign-in-nav-btn">
-        <div
-          className="login-nav-right"
-          onClick={this._toggleNav.bind(this, 'login')}
-          onMouseLeave={this._toggleNav.bind(this, 'login')}>
-          <a className="nav-link">{menuText}</a>
-          {!this.state.login && this._loginNav()}
+    if (loading) {
+      return (
+        <div className="navbar-right sign-in-nav-btn">
+          <button className="btn-blue">
+            <i className="fa fa-spin fa-circle-o-notch" />
+            <span> Signing In</span>
+          </button>
         </div>
-      </div>
-    )
+      )
+    } else {
+      return (
+        <div className="navbar-right sign-in-nav-btn">
+          <button
+            className="btn-blue"
+            onClick={actions.toggleModal.bind(this, 'loginModal')}>
+            <span>Sign in</span>
+          </button>
+        </div>
+      )
+    }
   }
 
-  _toggleNav(name) {
-    let newState = {}
-    newState[name] = !this.state[name]
-    this.setState(newState)
-  }
-
-  _loginNav() {
+  _loginModal() {
     return (
-      <div className="dropdown-login">
-        <span className="dropdown-header">Sign in with:</span>
-        <button
-          className="btn-blue"
-          onClick={userStore.googleSignIn.bind(null)}>
-          <i className="fa fa-google" />
-          <span> Google</span>
-        </button>
-        <hr/>
-        <button
-          className="btn-blue"
-          onClick={userStore.orcidSignIn.bind(null)}>
-          <span className="icon">
-            <img
-              alt="ORCID"
-              width="16"
-              height="16"
-              src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
-            />
-          </span>
-          <span> ORCID</span>
-        </button>
-      </div>
+      <Modal
+        show={this.state.users.loginModal}
+        onHide={actions.toggleModal.bind(this, 'loginModal')}
+        className="login-modal">
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <div className="logo-text">
+              <span>
+                Open<span className="logo-end">Neuro</span>
+              </span>
+            </div>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="login-btns">
+            <span className="dropdown-header">Sign in with:</span>
+          </div>
+          <hr className="spacer" />
+          <div className="login-modal">
+            <div className="login-btns">
+              <button
+                className="btn-blue"
+                onClick={userStore.googleSignIn.bind(null)}>
+                <i className="fa fa-google" />
+                <span> Google</span>
+              </button>
+            </div>
+            <div className="login-btns">
+              <button
+                className="btn-blue"
+                onClick={userStore.orcidSignIn.bind(null)}>
+                <span className="icon">
+                  <img
+                    alt="ORCID"
+                    width="16"
+                    height="16"
+                    src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
+                  />
+                </span>
+                <span> ORCID</span>
+              </button>
+            </div>
+            <a onClick={actions.toggleModal.bind(this, 'loginModal')}>Close</a>
+          </div>
+        </Modal.Body>
+      </Modal>
     )
   }
 }
