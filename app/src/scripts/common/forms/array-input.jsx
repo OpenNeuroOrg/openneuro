@@ -133,7 +133,7 @@ class ArrayInput extends React.Component {
     } else if (selected === 'checkbox') {
       this.setState({
         helper:
-          "Please enter 'true' or 'false' to set the default value to checked.",
+          "Please enter 'true' or 'false' to set the default value to checked for the user.",
       })
     } else {
       this.setState({ helper: null })
@@ -152,6 +152,7 @@ class ArrayInput extends React.Component {
 
   _add(model) {
     let value = this.props.value
+    let types = ['radio', 'multi', 'checkbox']
 
     for (let field of model) {
       if (field.required && !this.state[field.id]) {
@@ -167,21 +168,15 @@ class ArrayInput extends React.Component {
       }
 
       if (types.includes(itemValue.type)) {
-        let types = ['radio', 'multi', 'checkbox']
         let checkArr = itemValue.defaultValue.split(' ')
         // check for white space and remove them
         checkArr = checkArr.filter(value => value.trim() != '')
 
-        // Error messages for radio, multi, and checkboxes
+        // Error messages for multi and radio
         if (itemValue.type === 'multi' && checkArr.length <= 1) {
           this.setState({
             error:
               'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
-          })
-          return
-        } else if (itemValue.type === 'checkbox' && checkArr.length > 1) {
-          this.setState({
-            error: "Type boolean accepts 'true' or 'false' as default values.",
           })
           return
         } else if (
@@ -421,31 +416,26 @@ class ArrayItem extends React.Component {
 
   _save(model) {
     let data = {}
+    let types = ['radio', 'multi', 'checkbox']
     for (let field of model) {
       data[field.id] = this.state[field.id]
     }
 
-    if (types.includes(itemValue.type)) {
-      let types = ['radio', 'multi', 'checkbox']
-      let checkArr = itemValue.defaultValue.split(' ')
+    if (types.includes(data.type)) {
+      let checkArr = data.defaultValue.split(' ')
       // check for white space and remove them
       checkArr = checkArr.filter(value => value.trim() != '')
 
-      // Error messages for radio, multi, and checkboxes
-      if (itemValue.type === 'multi' && checkArr.length <= 1) {
+      // Error messages for multi and radio
+      if (data.type === 'multi' && checkArr.length <= 1) {
         this.setState({
           error:
             'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
         })
         return
-      } else if (itemValue.type === 'checkbox' && checkArr.length > 1) {
-        this.setState({
-          error: "Type boolean accepts 'true' or 'false' as default values.",
-        })
-        return
       } else if (
-        (itemValue.type === 'radio' && checkArr.length > 2) ||
-        (itemValue.type === 'radio' && checkArr.length <= 1)
+        (data.type === 'radio' && checkArr.length > 2) ||
+        (data.type === 'radio' && checkArr.length <= 1)
       ) {
         this.setState({ error: 'Type radio accepts two default values.' })
         return
