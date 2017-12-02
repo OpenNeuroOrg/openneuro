@@ -322,14 +322,10 @@ let UserStore = Reflux.createStore({
       for (let param of formData.parameters) {
         parameters[param.label] = param.defaultValue
         parametersMetadata[param.label] = param
-        if (
-          param.type === 'multi' ||
-          (param.type === 'select' && param.label != 'participant_label') ||
-          param.type === 'radio'
-        ) {
+        let types = ['radio', 'multi', 'select']
+        if (types.includes(param.type) && param.label != 'participant_label') {
           let arrayInput = param.defaultValue.split(' ')
-          let filterArr = arrayInput.filter(value => value.trim() != ' ')
-          param.defaultValue = filterArr
+          param.defaultValue = arrayInput.filter(value => value.trim() != ' ')
         } else {
           param.defaultValue = param.defaultValue
         }
