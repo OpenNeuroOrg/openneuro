@@ -45,7 +45,7 @@ services:
     image: openneuro/server:${CRN_SERVER_TAG}
     command:
       - node
-      - /srv/crn-server/worker.js
+      - /srv/server/worker.js
     volumes:
       - ./server/client.config.js:/srv/server/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
