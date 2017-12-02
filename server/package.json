@@ -19,7 +19,7 @@
   "author": "Squishymedia",
   "dependencies": {
     "ajv": "4.9.0",
-    "archiver": "^1.0.0",
+    "archiver": "^2.0.3",
     "async": "^2.4.1",
     "aws-sdk": "2.50.0",
     "babel-core": "^6.26.0",

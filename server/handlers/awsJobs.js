@@ -349,11 +349,9 @@ let handlers = {
                 .split('/')
                 .slice(2)
                 .join('/')
-              aws.s3.sdk.getObject(objParams, (err, response) => {
-                //append to zip
-                archive.append(response.Body, { name: fileName })
-                cb()
-              })
+              const stream = aws.s3.sdk.getObject(objParams).createReadStream()
+              archive.append(stream, { name: fileName })
+              cb()
             },
             () => {
               archive.finalize()
