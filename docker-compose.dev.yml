@@ -14,7 +14,7 @@ services:
       dockerfile: app/Dockerfile
     command: sh -c "yarn install --pure-lockfile && yarn start"
     volumes:
-      - ../openneuro:/srv
+      - .:/srv
       - yarn_cache:/root/.cache
       - project:/srv/app/dist
     tmpfs:
@@ -33,7 +33,7 @@ services:
       dockerfile: server/Dockerfile
     command: sh -c "yarn install && node /srv/server/index.js"
     volumes:
-      - ../openneuro/server:/srv/server
+      - .:/srv
       - yarn_cache:/root/.cache
       - ./server/client.config.js:/srv/server/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
@@ -47,7 +47,7 @@ services:
       dockerfile: server/Dockerfile
     command: sh -c "yarn install  && node /srv/server/worker.js"
     volumes:
-      - ../openneuro/server:/srv/server
+      - .:/srv
       - yarn_cache:/root/.cache
       - ./server/client.config.js:/srv/server/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
