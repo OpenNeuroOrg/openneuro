@@ -9,6 +9,7 @@ import UploadBtn from './navbar.upload-button.jsx'
 import userStore from '../user/user.store.js'
 import actions from '../user/user.actions.js'
 import { Navbar } from 'react-bootstrap'
+import { Panel } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
 import { refluxConnect } from '../utils/reflux'
 import brand_mark from './assets/brand_mark.png'
@@ -86,7 +87,7 @@ class BSNavbar extends Reflux.Component {
         <li className="link-support">
           <a
             className="nav-link"
-            onClick={actions.toggleModal.bind(this, 'supportModal')}>
+            onClick={actions.toggle.bind(this, 'supportModal')}>
             <span className="link-name">Support</span>
           </a>
         </li>
@@ -118,7 +119,7 @@ class BSNavbar extends Reflux.Component {
     return (
       <Modal
         show={this.state.users.supportModal}
-        onHide={actions.toggleModal.bind(this, 'supportModal')}>
+        onHide={actions.toggle.bind(this, 'supportModal')}>
         <Modal.Header closeButton>
           <Modal.Title>Support</Modal.Title>
         </Modal.Header>
@@ -145,7 +146,7 @@ class BSNavbar extends Reflux.Component {
           />
         </Modal.Body>
         <Modal.Footer>
-          <a onClick={actions.toggleModal.bind(this, 'supportModal')}>Close</a>
+          <a onClick={actions.toggle.bind(this, 'supportModal')}>Close</a>
         </Modal.Footer>
       </Modal>
     )
@@ -166,7 +167,7 @@ class BSNavbar extends Reflux.Component {
         <div className="navbar-right sign-in-nav-btn">
           <button
             className="btn-blue"
-            onClick={actions.toggleModal.bind(this, 'loginModal')}>
+            onClick={actions.toggle.bind(this, 'loginModal')}>
             <span>Sign in</span>
           </button>
         </div>
@@ -178,7 +179,7 @@ class BSNavbar extends Reflux.Component {
     return (
       <Modal
         show={this.state.users.loginModal}
-        onHide={actions.toggleModal.bind(this, 'loginModal')}
+        onHide={actions.toggle.bind(this, 'loginModal')}
         className="login-modal">
         <Modal.Header closeButton>
           <Modal.Title>
@@ -217,11 +218,38 @@ class BSNavbar extends Reflux.Component {
                 </span>
                 <span> ORCID</span>
               </button>
+              <div className="info-panel">
+                <span
+                  className="help-info"
+                  onClick={actions.toggle.bind(this, 'infoPanel')}>
+                  What is this?
+                </span>
+                {this.state.users.infoPanel && this._infoPanel()}
+              </div>
             </div>
-            <a onClick={actions.toggleModal.bind(this, 'loginModal')}>Close</a>
+            <a onClick={actions.toggle.bind(this, 'loginModal')}>Close</a>
           </div>
         </Modal.Body>
       </Modal>
+    )
+  }
+
+  _infoPanel() {
+    return (
+      <Panel className="fade-in panel">
+        <button
+          className="close"
+          onClick={actions.toggle.bind(this, 'infoPanel')}>
+          <span className="close-sym" />
+          <span className="sr-only">close</span>
+        </button>
+        <span className="info">
+          {' '}
+          ORCID users are identified and connected to their contributions and
+          affiliations, across disciplines, borders, and time.{' '}
+          <a href="https://orcid.org/content/about-orcid">Learn more</a>
+        </span>
+      </Panel>
     )
   }
 }

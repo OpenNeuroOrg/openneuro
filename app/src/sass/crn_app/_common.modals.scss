@@ -526,4 +526,47 @@
     bottom: 0;
     right: 10px;
   }
+
+
+  div.info-panel {
+    margin-left: 20px;
+
+    .help-info {
+      float: right;
+      font-size: 10px;
+      color: $primary;
+
+      &:hover {
+        color: $primary-hover;
+        cursor: pointer;
+      }
+    }
+
+    .panel {
+      border-radius: 0;
+
+      button {
+        position: relative;
+        margin: 0;
+        outline: none;
+        top: -15px;
+        right: -7px;
+
+        .close-sym::after {
+          content:"\2715";
+          font-size: 10px;
+        }
+      }
+
+      span.info {
+        font-size: 12px;
+        color: $gray-dark;
+
+        a {
+          position: relative;
+          right: 0;
+        }
+      }
+    }
+  }
 }

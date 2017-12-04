@@ -9,7 +9,7 @@ var Actions = Reflux.createActions([
   'googleSignIn',
   'orcidSignIn',
   'signOut',
-  'toggleModal',
+  'toggle',
 ])
 
 export default Actions

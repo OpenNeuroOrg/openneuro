@@ -61,9 +61,9 @@ let UserStore = Reflux.createStore({
   /**
      * Toggle Modal
     */
-  toggleModal(modal) {
+  toggle(value) {
     let newState = {}
-    newState[modal] = !this.data[modal]
+    newState[value] = !this.data[value]
     this.update(newState)
   },
 
@@ -109,6 +109,7 @@ let UserStore = Reflux.createStore({
       showUploadModal: false,
       supportModal: false,
       loginModal: false,
+      infoPanel: false,
     }
     for (let prop in diffs) {
       data[prop] = diffs[prop]
