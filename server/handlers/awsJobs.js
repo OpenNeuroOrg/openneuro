@@ -454,6 +454,7 @@ let handlers = {
      * Retry a job using existing parameters
      */
   retry(req, res, next) {
+    let userId = req.user
     let jobId = req.params.jobId
     let mongoJobId = typeof jobId != 'object' ? ObjectID(jobId) : jobId
 
@@ -516,11 +517,16 @@ let handlers = {
           )
           return
         } else {
-          emitter.emit(events.JOB_STARTED, {
-            job: batchJobParams,
-            createdDate: job.analysis.created,
-            retry: true,
-          })
+          let jobLog = aws.batch.extractJobLog(job)
+          emitter.emit(
+            events.JOB_STARTED,
+            {
+              job: jobLog,
+              createdDate: job.analysis.created,
+              retry: true,
+            },
+            userId,
+          )
         }
       })
     })

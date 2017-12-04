@@ -73,6 +73,7 @@ export default aws => {
     sdk: batch,
 
     staleJobFilter: staleJobFilter,
+    extractJobLog: extractJobLog,
 
     /*
      * Create the Batch queue for this instance
