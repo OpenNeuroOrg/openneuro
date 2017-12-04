@@ -41,7 +41,11 @@ class Logs extends Reflux.Component {
 
       paginatedResults.map((log, index) => {
         const link = <LogLink log={log} />
-        const retry = <span className="label label-info">Retry</span>
+        const retry = (
+          <span className="label label-info">
+            <i className="fa fa fa-repeat" /> Retry
+          </span>
+        )
         if (log.visible) {
           logs.push(
             <div className="fade-in user-panel-header clearfix" key={index}>
