@@ -517,10 +517,11 @@ let handlers = {
           )
           return
         } else {
+          let jobLog = aws.batch.extractJobLog(job)
           emitter.emit(
             events.JOB_STARTED,
             {
-              job: batchJobParams,
+              job: jobLog,
               createdDate: job.analysis.created,
               retry: true,
             },
