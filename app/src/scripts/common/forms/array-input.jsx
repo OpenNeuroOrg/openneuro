@@ -12,7 +12,10 @@ class ArrayInput extends React.Component {
   // life cycle events --------------------------------------------------
   constructor(props) {
     super(props)
-    const initialState = { error: null }
+    const initialState = {
+      error: null,
+      helper: null,
+    }
 
     for (let field of this.props.model) {
       initialState[field.id] = ''
@@ -78,6 +81,7 @@ class ArrayInput extends React.Component {
       <div className="cte-edit-array">
         {this._arrayList(this.props.value, this.props.model)}
         <div className="text-danger">{this.state.error}</div>
+        <div className="text-info">{this.state.helper}</div>
         <div className="form-inline">
           <span>{inputFields}</span>
           <br />
@@ -120,6 +124,21 @@ class ArrayInput extends React.Component {
   }
 
   _handleSelectChange(key, selected) {
+    // ** Updates the text above params **//
+    if (selected === 'radio' || selected === 'multi' || selected === 'select') {
+      this.setState({
+        helper:
+          'Please seperate values with spaces. The default values will automatically be seperated for the user.',
+      })
+    } else if (selected === 'checkbox') {
+      this.setState({
+        helper:
+          "Please enter 'true' or 'false' to set the default value to checked for the user.",
+      })
+    } else {
+      this.setState({ helper: null })
+    }
+
     let state = {}
     state[key] = selected
     this.setState(state)
@@ -132,8 +151,8 @@ class ArrayInput extends React.Component {
   }
 
   _add(model) {
-    this.setState({ error: null })
     let value = this.props.value
+    let types = ['radio', 'multi', 'checkbox']
 
     for (let field of model) {
       if (field.required && !this.state[field.id]) {
@@ -148,11 +167,31 @@ class ArrayInput extends React.Component {
         itemValue[field.id] = this.state[field.id]
       }
 
+      if (types.includes(itemValue.type)) {
+        let checkArr = itemValue.defaultValue.split(' ')
+        // check for white space and remove them
+        checkArr = checkArr.filter(value => value.trim() != '')
+
+        // Error messages for multi and radio
+        if (itemValue.type === 'multi' && checkArr.length <= 1) {
+          this.setState({
+            error:
+              'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
+          })
+          return
+        } else if (
+          (itemValue.type === 'radio' && checkArr.length > 2) ||
+          (itemValue.type === 'radio' && checkArr.length <= 1)
+        ) {
+          this.setState({ error: 'Type radio accepts two default values.' })
+          return
+        }
+      }
+
       value.push(itemValue)
     } else {
       value.push(this.state[model[0].id])
     }
-
     this.props.onChange({ target: { value: value } })
     //need to clear form on parameter add
     const initialState = { error: null }
@@ -203,7 +242,10 @@ export default ArrayInput
 class ArrayItem extends React.Component {
   constructor(props) {
     super(props)
-    let initialState = { edit: false }
+    let initialState = {
+      edit: false,
+      error: null,
+    }
 
     for (let field of this.props.model) {
       initialState[field.id] = this.props.item[field.id]
@@ -240,15 +282,15 @@ class ArrayItem extends React.Component {
 
     let edit = (
       <div className="cte-array-item">
+        <div className="text-danger">{this.state.error}</div>
         <div className="form-inline">
           {this._input()}
           <div className="btn-wrap array-edit">
-            <WarnButton
-              message="Save"
-              warn={false}
-              icon="fa-check"
-              action={this._save.bind(this, this.props.model)}
-            />
+            <button
+              className="btn-warn-component warning"
+              onClick={this._save.bind(this, this.props.model)}>
+              <i className="fa fa-check" /> Save
+            </button>
           </div>
           <div className="btn-wrap array-edit">
             <WarnButton
@@ -374,8 +416,30 @@ class ArrayItem extends React.Component {
 
   _save(model) {
     let data = {}
+    let types = ['radio', 'multi', 'checkbox']
     for (let field of model) {
       data[field.id] = this.state[field.id]
+    }
+
+    if (types.includes(data.type)) {
+      let checkArr = data.defaultValue.split(' ')
+      // check for white space and remove them
+      checkArr = checkArr.filter(value => value.trim() != '')
+
+      // Error messages for multi and radio
+      if (data.type === 'multi' && checkArr.length <= 1) {
+        this.setState({
+          error:
+            'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
+        })
+        return
+      } else if (
+        (data.type === 'radio' && checkArr.length > 2) ||
+        (data.type === 'radio' && checkArr.length <= 1)
+      ) {
+        this.setState({ error: 'Type radio accepts two default values.' })
+        return
+      }
     }
     this.props.onEdit(this.props.index, data)
   }

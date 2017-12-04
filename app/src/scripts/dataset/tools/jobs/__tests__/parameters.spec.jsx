@@ -26,8 +26,22 @@ describe('dataset/tools/jobs/parameters', () => {
       required: true,
       description: 'some kind of text option',
     },
+    multi_option: {
+      type: 'multi',
+      required: false,
+      description: 'multi checkboxes',
+      defaultValue: 'check1 check2 check3',
+    },
+    radio_option: {
+      type: 'radio',
+      required: false,
+      description: 'some kind of radio option',
+      defaultValue: 'option1 option2',
+    },
   }
+
   const subjects = ['01', '02']
+  const arrInput = ['check1', 'check2']
 
   it('renders successfully', () => {
     const wrapper = shallow(
@@ -35,6 +49,7 @@ describe('dataset/tools/jobs/parameters', () => {
         parameters={params}
         parametersMetadata={metadata}
         subjects={subjects}
+        arrInput={arrInput}
         onChange={onChange}
         onRestoreDefaults={onRestoreDefaults}
       />,

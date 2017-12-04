@@ -164,7 +164,9 @@ class BSNavbar extends Reflux.Component {
     } else {
       return (
         <div className="navbar-right sign-in-nav-btn">
-          <button className="btn-blue" onClick={actions.toggleModal.bind(this, 'loginModal')}>
+          <button
+            className="btn-blue"
+            onClick={actions.toggleModal.bind(this, 'loginModal')}>
             <span>Sign in</span>
           </button>
         </div>

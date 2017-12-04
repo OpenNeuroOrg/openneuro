@@ -36,6 +36,8 @@ class JobMenu extends React.Component {
       message: null,
       error: false,
       subjects: [],
+      arrInput: [],
+      arrControl: [],
       appGroup: {},
       submitActive: false,
       requiredParameters: {},
@@ -98,6 +100,8 @@ class JobMenu extends React.Component {
               parameters={this.state.parameters}
               parametersMetadata={this.state.parametersMetadata}
               subjects={this.state.subjects}
+              arrInput={this.state.arrInput}
+              arrControl={this.state.arrControl}
               onChange={this._updateParameter.bind(this)}
               onRestoreDefaults={this._restoreDefaultParameters.bind(this)}
             />
@@ -647,6 +651,8 @@ JobMenu.propTypes = {
   show: PropTypes.bool,
   snapshots: PropTypes.array,
   history: PropTypes.object,
+  arrInput: PropTypes.array,
+  arrControl: PropTypes.array,
 }
 
 JobMenu.defaultProps = {
