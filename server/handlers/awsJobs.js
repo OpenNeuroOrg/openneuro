@@ -3,8 +3,9 @@
 import crypto from 'crypto'
 import aws from '../libs/aws'
 import mongo from '../libs/mongo'
-import { ObjectID } from 'mongodb'
+import { ObjectID, CommandCursor } from 'mongodb'
 import yazl from 'yazl'
+import S3StreamDownload from 's3-stream-download'
 import config from '../config'
 import async from 'async'
 import emitter from '../libs/events'
@@ -343,10 +344,21 @@ let handlers = {
                 .split('/')
                 .slice(2)
                 .join('/')
-              const stream = aws.s3.sdk.getObject(objParams).createReadStream()
+              const streamOptions = {
+                downloadChunkSize: 5 * 1024 * 1024, // 5MB
+                concurrentChunks: 5,
+                retries: 5,
+              }
+              // The built in createReadStream blocks the main thread in some situations
+              const stream = new S3StreamDownload(
+                aws.s3.sdk,
+                objParams,
+                streamOptions,
+              )
               archive.addReadStream(stream, fileName)
-              // Prevent race condition blocking new streams
-              setImmediate(cb)
+              stream.on('end', () => {
+                cb()
+              })
             },
             () => {
               archive.end()

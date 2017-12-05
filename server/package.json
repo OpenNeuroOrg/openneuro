@@ -36,6 +36,7 @@
     "node-resque": "^4.0.7",
     "nodemailer": "^2.5.0",
     "request": "^2.83.0",
+    "s3-stream-download": "^0.0.2",
     "tar-fs": "^1.9.0",
     "underscore": "^1.8.3",
     "uuid": "^3.0.1",
