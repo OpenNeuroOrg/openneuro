@@ -4308,16 +4308,9 @@ rxjs@^5.0.0-beta.11:
   dependencies:
     symbol-observable "^1.0.1"
 
-s3-stream-download@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/s3-stream-download/-/s3-stream-download-0.0.2.tgz#73300dff56828b3b0532b572fc5ac6a194a1031f"
-  dependencies:
-    async "^2.0.1"
-    debug "^2.2.0"
-
 "s3-stream-download@https://github.com/OpenNeuroOrg/s3-stream-download.git":
   version "0.0.2"
-  resolved "https://github.com/OpenNeuroOrg/s3-stream-download.git#499d4fc6c398adc25c5db936b64f518dea927e0d"
+  resolved "https://github.com/OpenNeuroOrg/s3-stream-download.git#8ef3995bbc153aa2dd91a9287cbb6b06eb428b7f"
   dependencies:
     async "^2.0.1"
     debug "^2.2.0"
