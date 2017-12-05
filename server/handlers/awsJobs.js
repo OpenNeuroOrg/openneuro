@@ -4,7 +4,7 @@ import crypto from 'crypto'
 import aws from '../libs/aws'
 import mongo from '../libs/mongo'
 import { ObjectID } from 'mongodb'
-import archiver from 'archiver'
+import yazl from 'yazl'
 import config from '../config'
 import async from 'async'
 import emitter from '../libs/events'
@@ -304,13 +304,7 @@ let handlers = {
       const type = path.replace('all-', '')
 
       // initialize archive
-      let archive = archiver('zip')
-
-      // log archiving errors
-      archive.on('error', err => {
-        console.log('archiving error - job: ' + jobId)
-        console.log(err)
-      })
+      let archive = new yazl.ZipFile()
 
       c.crn.jobs.findOne({ _id: ObjectID(jobId) }, {}, (err, job) => {
         let archiveName =
@@ -327,7 +321,7 @@ let handlers = {
         res.attachment(archiveName + '.zip')
 
         // begin streaming archive
-        archive.pipe(res)
+        archive.outputStream.pipe(res)
 
         aws.s3.getAllS3Objects(params, [], (err, data) => {
           let keysArray = []
@@ -350,12 +344,12 @@ let handlers = {
                 .slice(2)
                 .join('/')
               const stream = aws.s3.sdk.getObject(objParams).createReadStream()
-              archive.append(stream, { name: fileName })
+              archive.addReadStream(stream, fileName)
               // Prevent race condition blocking new streams
-              setTimeout(cb, 300)
+              setImmediate(cb)
             },
             () => {
-              archive.finalize()
+              archive.end()
             },
           )
         })

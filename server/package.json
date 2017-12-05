@@ -19,7 +19,6 @@
   "author": "Squishymedia",
   "dependencies": {
     "ajv": "4.9.0",
-    "archiver": "^2.0.3",
     "async": "^2.4.1",
     "aws-sdk": "2.50.0",
     "babel-core": "^6.26.0",
@@ -40,7 +39,8 @@
     "tar-fs": "^1.9.0",
     "underscore": "^1.8.3",
     "uuid": "^3.0.1",
-    "xmldoc": "^1.1.0"
+    "xmldoc": "^1.1.0",
+    "yazl": "^2.4.3"
   },
   "devDependencies": {
     "babel-eslint": "^8.0.0",
