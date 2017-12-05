@@ -356,9 +356,7 @@ let handlers = {
                 streamOptions,
               )
               archive.addReadStream(stream, fileName)
-              stream.on('end', () => {
-                cb()
-              })
+              stream.on('end', cb)
             },
             () => {
               archive.end()
