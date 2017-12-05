@@ -351,7 +351,8 @@ let handlers = {
                 .join('/')
               const stream = aws.s3.sdk.getObject(objParams).createReadStream()
               archive.append(stream, { name: fileName })
-              async.setImmediate(cb)
+              // Prevent race condition blocking new streams
+              setTimeout(cb, 300)
             },
             () => {
               archive.finalize()
