@@ -349,13 +349,9 @@ let handlers = {
                 .split('/')
                 .slice(2)
                 .join('/')
-              async.ensureAsync(() => {
-                const stream = aws.s3.sdk
-                  .getObject(objParams)
-                  .createReadStream()
-                archive.append(stream, { name: fileName })
-                cb()
-              })
+              const stream = aws.s3.sdk.getObject(objParams).createReadStream()
+              archive.append(stream, { name: fileName })
+              async.setImmediate(cb)
             },
             () => {
               archive.finalize()
