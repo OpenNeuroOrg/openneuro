@@ -4310,7 +4310,7 @@ rxjs@^5.0.0-beta.11:
 
 "s3-stream-download@https://github.com/OpenNeuroOrg/s3-stream-download.git":
   version "0.0.2"
-  resolved "https://github.com/OpenNeuroOrg/s3-stream-download.git#8ef3995bbc153aa2dd91a9287cbb6b06eb428b7f"
+  resolved "https://github.com/OpenNeuroOrg/s3-stream-download.git#f713be6d401603a7d55f1ab0b1bab5b783ecee5e"
   dependencies:
     async "^2.0.1"
     debug "^2.2.0"
