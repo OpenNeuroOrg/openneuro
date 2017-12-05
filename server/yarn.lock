@@ -4308,6 +4308,13 @@ rxjs@^5.0.0-beta.11:
   dependencies:
     symbol-observable "^1.0.1"
 
+"s3-stream-download@https://github.com/OpenNeuroOrg/s3-stream-download.git":
+  version "0.0.2"
+  resolved "https://github.com/OpenNeuroOrg/s3-stream-download.git#7f7bffec9e6a648d692b3824044f107e6ce42c13"
+  dependencies:
+    async "^2.0.1"
+    debug "^2.2.0"
+
 safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
