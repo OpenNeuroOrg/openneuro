@@ -345,9 +345,9 @@ let handlers = {
                 .slice(2)
                 .join('/')
               const streamOptions = {
-                downloadChunkSize: 5 * 1024 * 1024, // 5MB
-                concurrentChunks: 5,
-                retries: 5,
+                downloadChunkSize: 8 * 1024 * 1024, // 8MB
+                concurrentChunks: 2,
+                retries: 7,
               }
               // The built in createReadStream blocks the main thread in some situations
               const stream = new S3StreamDownload(
