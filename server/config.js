@@ -73,11 +73,14 @@ let config = {
       logGroupName: '/aws/batch/job',
     },
   },
-
   events: {
     JOB_STARTED: 'job-started',
     JOB_COMPLETED: 'job-completed',
     DATASET_UPLOADED: 'dataset-uploaded',
+  },
+  sentry: {
+    DSN: process.env.SENTRY_DSN,
+    ENVIRONMENT: process.env.ENVIRONMENT,
   },
 }
 

@@ -13,7 +13,6 @@ const env = {
   ORCID_AUTH_CLIENT_ID: JSON.stringify(process.env.ORCID_AUTH_CLIENT_ID),
   ORCID_AUTH_REDIRECT_URI: JSON.stringify(process.env.ORCID_AUTH_REDIRECT_URI),
   ORCID_URI: JSON.stringify(process.env.ORCID_URI),
-  ENVIRONMENT: JSON.stringify(process.env.AWS_BATCH_QUEUE),
 }
 
 module.exports = {
