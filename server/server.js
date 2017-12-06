@@ -13,12 +13,19 @@ import mongo from './libs/mongo'
 import { connect as redis_connect } from './libs/redis'
 import { connect as resque_connect } from './libs/queue'
 import notifications from './libs/notifications'
+import git from 'git-rev-sync'
 import aws from './libs/aws'
 // import events lib to instantiate CRN Emitter
 import events from './libs/events'
 
 // configuration ---------------------------------------------------
-Raven.config(config.sentry.DSN).install()
+const ravenConfig = {
+  release: git.long(),
+  tags: { branch: git.branch() },
+  environment: config.sentry.ENVIRONMENT,
+  autoBreadcrumbs: true,
+}
+Raven.config(config.sentry.DSN, ravenConfig).install()
 
 mongo.connect()
 
