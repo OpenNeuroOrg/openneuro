@@ -4,6 +4,7 @@
 // dependencies ----------------------------------------------------
 
 import express from 'express'
+import Raven from 'raven'
 import config from './config'
 import routes from './routes'
 import bodyParser from 'body-parser'
@@ -17,6 +18,7 @@ import aws from './libs/aws'
 import events from './libs/events'
 
 // configuration ---------------------------------------------------
+Raven.config(config.sentry.DSN).install()
 
 mongo.connect()
 
@@ -37,6 +39,9 @@ const redisConnect = async () => {
 
 let app = express()
 
+// Raven must be first to work
+app.use(Raven.requestHandler())
+
 app.use((req, res, next) => {
   res.set(config.headers)
   res.type('application/json')
@@ -50,6 +55,8 @@ app.use(bodyParser.json())
 app.use(config.apiPrefix, routes)
 
 // error handling --------------------------------------------------
+// Raven reporting passes to the next step
+app.use(Raven.errorHandler())
 
 app.use(function(err, req, res, next) {
   res.header('Content-Type', 'application/json')
