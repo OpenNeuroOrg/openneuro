@@ -160,7 +160,7 @@ class JobAccordion extends React.Component {
         const value =
           run.parameters[key].constructor === Array
             ? run.parameters[key].join(' ')
-            : run.parameters[key]
+            : run.parameters[key].toString()
         parameters.push(
           <li key={key}>
             <span className="key">{key}</span>:{' '}
