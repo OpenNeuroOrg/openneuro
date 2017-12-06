@@ -127,16 +127,21 @@ class ArrayInput extends React.Component {
     // ** Updates the text above params **//
     if (selected === 'radio' || selected === 'multi' || selected === 'select') {
       this.setState({
+        error: null,
         helper:
           'Please seperate values with spaces. The default values will automatically be seperated for the user.',
       })
     } else if (selected === 'checkbox') {
       this.setState({
+        error: null,
         helper:
           "Please enter 'true' or 'false' to set the default value to checked for the user.",
       })
     } else {
-      this.setState({ helper: null })
+      this.setState({
+        error: null,
+        helper: null,
+      })
     }
 
     let state = {}
@@ -177,13 +182,17 @@ class ArrayInput extends React.Component {
           this.setState({
             error:
               'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
+            helper: null,
           })
           return
         } else if (
           (itemValue.type === 'radio' && checkArr.length > 2) ||
           (itemValue.type === 'radio' && checkArr.length <= 1)
         ) {
-          this.setState({ error: 'Type radio accepts two default values.' })
+          this.setState({
+            error: 'Type radio accepts two default values.',
+            helper: null,
+          })
           return
         }
       }
