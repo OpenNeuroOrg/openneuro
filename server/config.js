@@ -65,7 +65,7 @@ let config = {
     },
     batch: {
       vcpusMax: 12,
-      memoryMax: 15360,
+      memoryMax: 30720,
       queue: process.env.AWS_BATCH_QUEUE,
       computeEnvironment: process.env.AWS_BATCH_COMPUTE_ENVIRONMENT,
     },
