@@ -850,6 +850,33 @@ let datasetStore = Reflux.createStore({
     }
   },
 
+  addDirectoryFile(uploads, callback) {
+    async.each(
+      uploads,
+      (upload, cb) => {
+        let file = upload.file
+        let container = upload.container
+        file.modifiedName = (container.dirPath || '') + file.name
+        scitran.updateFile('projects', this.data.dataset._id, file, () => {
+          let children = container.children
+          children.unshift({
+            name: file.modifiedName,
+            parentId: container._id,
+          })
+          this.updateDirectoryState(container._id, {
+            children: children,
+            loading: false,
+          })
+          cb()
+        })
+      },
+      err => {
+        this.revalidate()
+        if (callback) callback()
+      },
+    )
+  },
+
   /**
      * Delete File
      */

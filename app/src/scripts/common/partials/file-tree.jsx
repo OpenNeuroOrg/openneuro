@@ -6,6 +6,7 @@ import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
 import upload from '../../upload/upload'
+import async from 'async'
 
 class FileTree extends React.Component {
   // life cycle events --------------------------------------------------
@@ -278,64 +279,31 @@ class FileTree extends React.Component {
      * Add File
      */
   _addFile(container, event) {
-    console.log(container, event.target.files[0])
     this.props.addFile(container, event.target.files[0])
   }
 
   _addDirectory(container, event) {
     event.preventDefault()
-    const buildContainer = (file, childrenArray) => {
-      let match
-      if (childrenArray && childrenArray.length) {
-        let lastChild = childrenArray[childrenArray.length - 1]
-        if (lastChild.name === file.name && lastChild.type != 'folder') {
-          let dirPathArray = file.webkitRelativePath.split('/')
-          let dirPath =
-            dirPathArray.slice(0, dirPathArray.length - 1).join('/') + '/'
-          console.log(lastChild)
-          let modcontainer = {
-            _id: lastChild.parentId,
-            dirPath: dirPath,
-            name: dirPathArray[dirPathArray.length - 1],
-          }
-          return modcontainer
-        }
 
-        if (lastChild.children) {
-          match = buildContainer(file, lastChild.children)
-          if (match) {
-            return match
-          }
-        } else {
-          match = buildContainer(
-            file,
-            childrenArray.slice(0, childrenArray.length - 1),
-          )
-          if (match) {
-            return match
-          }
-        }
-      }
-    }
     let fileList = event.target.files
-    let testContainer = files.generateTree(fileList)
-    Object.keys(fileList).forEach(file => {
-      let fileName = fileList[file]
-      let uniqueName = testContainer[0].children
-      // let stuff = buildContainer(fileName, uniqueName);
-      let stuff = files.findInTree(uniqueName, fileName.name, 'name')
-      let dirPathArray = stuff.webkitRelativePath.split('/')
+    let dirTree = files.generateTree(fileList)
+    let uploads = []
+    Object.keys(fileList).forEach(fileKey => {
+      let fileObj = fileList[fileKey]
+      let dirTreeChildren = dirTree[0].children
+      let file = files.findInTree(dirTreeChildren, fileObj.name, 'name')
+      let dirPathArray = file.webkitRelativePath.split('/')
       let dirPath =
         dirPathArray.slice(0, dirPathArray.length - 1).join('/') + '/'
       let modcontainer = {
-        _id: stuff.parentId,
+        _id: file.parentId,
         dirPath: dirPath,
         name: dirPathArray[dirPathArray.length - 1],
       }
-      let modifiedContainer = Object.assign({}, testContainer[0], modcontainer)
-      console.log(modifiedContainer)
-      this.props.addFile(modifiedContainer, fileList[file])
+      let modifiedContainer = Object.assign({}, dirTree[0], modcontainer)
+      uploads.push({ container: modifiedContainer, file: fileList[fileKey] })
     })
+    this.props.addDirectoryFile(uploads)
   }
 
   /**
@@ -370,6 +338,7 @@ FileTree.propTypes = {
   getFileDownloadTicket: PropTypes.func,
   toggleFolder: PropTypes.func,
   addFile: PropTypes.func,
+  addDirectoryFile: PropTypes.func,
   updateFile: PropTypes.func,
   displayFile: PropTypes.func,
 }
