@@ -28,11 +28,11 @@ let config = {
   },
   auth: {
     orcid: {
-      clientID: process.env.ORCID_AUTH_CLIENT_ID,
-      clientSecret: process.env.ORCID_AUTH_CLIENT_SECRET,
-      redirectURI: process.env.ORCID_AUTH_REDIRECT_URI,
-      apiURI: process.env.ORCID_API_URI,
-      URI: process.env.ORCID_URI,
+      clientID: process.env.SCITRAN_AUTH_CLIENT_ID,
+      clientSecret: process.env.SCITRAN_AUTH_CLIENT_SECRET,
+      redirectURI: process.env.SCITRAN_ORCID_AUTH_REDIRECT_URI,
+      apiURI: process.env.SCITRAN_ORCID_API_URI,
+      URI: process.env.SCITRAN_ORCID_URI,
     },
   },
   mongo: {

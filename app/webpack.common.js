@@ -8,11 +8,15 @@ const git = require('git-rev-sync')
 
 const env = {
   CRN_SERVER_URL: JSON.stringify(process.env.CRN_SERVER_URL),
-  SCITRAN_AUTH_GOOGLE_CLIENT_ID: JSON.stringify(process.env.SCITRAN_AUTH_GOOGLE_CLIENT_ID),
+  SCITRAN_AUTH_GOOGLE_CLIENT_ID: JSON.stringify(
+    process.env.SCITRAN_AUTH_GOOGLE_CLIENT_ID,
+  ),
   GOOGLE_TRACKING_ID: JSON.stringify(process.env.GOOGLE_TRACKING_ID),
-  ORCID_AUTH_CLIENT_ID: JSON.stringify(process.env.ORCID_AUTH_CLIENT_ID),
-  ORCID_AUTH_REDIRECT_URI: JSON.stringify(process.env.ORCID_AUTH_REDIRECT_URI),
-  ORCID_URI: JSON.stringify(process.env.ORCID_URI),
+  SCITRAN_AUTH_CLIENT_ID: JSON.stringify(process.env.SCITRAN_AUTH_CLIENT_ID),
+  SCITRAN_ORCID_AUTH_REDIRECT_URI: JSON.stringify(
+    process.env.SCITRAN_ORCID_AUTH_REDIRECT_URI,
+  ),
+  SCITRAN_ORCID_URI: JSON.stringify(process.env.SCITRAN_ORCID_URI),
 }
 
 module.exports = {
