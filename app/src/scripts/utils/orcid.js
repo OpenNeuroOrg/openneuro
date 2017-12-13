@@ -76,7 +76,7 @@ let orcid = {
       'ORCID',
     )
 
-    const pooling = callback => {
+    this.oauthWindow.addEventListener('beforeunload', () => {
       try {
         if (!this.oauthWindow || this.oauthWindow.closed) {
           callback(true)
@@ -99,13 +99,7 @@ let orcid = {
       } catch (e) {
         console.log(e)
       }
-
-      retryUrlCheck()
-    }
-
-    const retryUrlCheck = () => window.setTimeout(() => pooling(callback), 50)
-
-    retryUrlCheck()
+    })
   },
 
   signOut(callback) {
