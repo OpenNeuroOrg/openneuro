@@ -12,7 +12,7 @@ let config = {
     'Access-Control-Allow-Headers': 'content-type, Authorization',
   },
   scitran: {
-    url: process.env.SCITRAN_URL,
+    url: process.env.SCITRAN_SITE_URL,
     secret: process.env.SCITRAN_CORE_DRONE_SECRET,
     fileStore: process.env.SCITRAN_PERSISTENT_DATA_PATH,
   },

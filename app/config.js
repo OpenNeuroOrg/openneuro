@@ -21,7 +21,7 @@ export default {
 		 */
   auth: {
     google: {
-      clientID: process.env.SCITRAN_AUTH_CLIENT_ID,
+      clientID: process.env.SCITRAN_AUTH_GOOGLE_CLIENT_ID,
     },
     orcid: {
       clientID: process.env.ORCID_AUTH_CLIENT_ID,
