@@ -73,7 +73,7 @@ let orcid = {
         config.auth.orcid.clientID +
         '&response_type=code&scope=/authenticate&redirect_uri=' +
         config.auth.orcid.redirectURI,
-      '_blank',
+      'ORCID',
     )
 
     const pooling = callback => {
