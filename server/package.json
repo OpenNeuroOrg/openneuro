@@ -23,7 +23,7 @@
     "aws-sdk": "2.50.0",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "bids-validator": "^0.24.0",
+    "bids-validator": "^0.24.1",
     "body-parser": "^1.14.0",
     "cron": "^1.1.0",
     "express": "^4.13.3",
