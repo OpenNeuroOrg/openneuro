@@ -48,6 +48,32 @@ class ClickToEdit extends React.Component {
         )
         input = (
           <div>
+            <input
+              className="form-control"
+              value={value}
+              onChange={this._handleChange.bind(this, type)}
+            />
+            <div className="btn-wrapper">
+              <button
+                className="cte-save-btn btn-admin-blue"
+                onClick={this._save.bind(this)}>
+                save
+              </button>
+            </div>
+          </div>
+        )
+        break
+      case 'textarea':
+        display = (
+          <div className="cte-display">
+            <div
+              className="fade-in"
+              dangerouslySetInnerHTML={markdown.format(value)}
+            />
+          </div>
+        )
+        input = (
+          <div>
             <textarea
               className="form-control"
               value={value}
@@ -284,7 +310,7 @@ ClickToEdit.propTypes = {
 
 ClickToEdit.defaultProps = {
   editable: true,
-  type: 'string',
+  type: 'textarea',
   value: '',
 }
 

@@ -100,6 +100,7 @@ class Dataset extends Reflux.Component {
                       label={dataset.label}
                       editable={canEdit}
                       onChange={actions.updateName}
+                      type="string"
                     />
                   </h1>
                   {this._uploaded(dataset)}
