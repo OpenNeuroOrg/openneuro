@@ -8,7 +8,6 @@ import scitran from '../libs/scitran'
 import mongo from '../libs/mongo'
 import async from 'async'
 import crypto from 'crypto'
-import archiver from 'archiver'
 import notifications from '../libs/notifications'
 import { ObjectID } from 'mongodb'
 
@@ -503,89 +502,6 @@ let handlers = {
     }
 
     res.send(ticket)
-  },
-
-  /**
-     * GET File
-     */
-  getFile(req, res) {
-    let jobId = req.params.jobId
-
-    const path = req.ticket.filePath
-    if (path === 'all-results' || path === 'all-logs') {
-      const type = path.replace('all-', '')
-
-      // initialize archive
-      let archive = archiver('zip')
-
-      // log archiving errors
-      archive.on('error', err => {
-        console.log('archiving error - job: ' + jobId)
-        console.log(err)
-      })
-
-      c.crn.jobs.findOne({ jobId }, {}, (err, job) => {
-        let archiveName = job.datasetLabel + '__' + job.appId + '__' + type
-
-        // set archive name
-        res.attachment(archiveName + '.zip')
-
-        // begin streaming archive
-        archive.pipe(res)
-
-        // recurse outputs
-        getOutputs(archiveName, job[type], type, archive, () => {
-          archive.finalize()
-        })
-      })
-    } else {
-      // download individual file
-      agave.api.getPathProxy('jobs/v2/' + jobId + '/outputs/media' + path, res)
-    }
-
-    // recurse through tree outputs
-    function getOutputs(archiveName, results, type, archive, callback) {
-      const baseDir = type === 'results' ? '/out/' : '/log/'
-      async.eachSeries(
-        results,
-        (result, cb) => {
-          let outputName = result.path.replace(baseDir, archiveName + '/')
-          if (result.type === 'file') {
-            let path = 'jobs/v2/' + jobId + '/outputs/media' + result.path
-            agave.api.getPath(path, (err, res) => {
-              let body = res.body
-              if (body && body.status && body.status === 'error') {
-                // error from AGAVE
-                console.log('Error downloading - ', path)
-                console.log(body)
-              } else {
-                // stringify JSON
-                if (typeof body === 'object' && !Buffer.isBuffer(body)) {
-                  body = JSON.stringify(body)
-                }
-                // stringify numbers
-                if (typeof body === 'number') {
-                  body = body.toString()
-                }
-                // handle empty files
-                if (typeof body === 'undefined') {
-                  body = ''
-                }
-                // append file to archive
-                archive.append(body, { name: outputName })
-              }
-              cb()
-            })
-          } else if (result.type === 'dir') {
-            archive.append(null, { name: outputName + '/' })
-            getOutputs(archiveName, result.children, type, archive, cb)
-          } else {
-            cb()
-          }
-        },
-        callback,
-      )
-    }
   },
 
   /**

@@ -262,7 +262,7 @@ let datasetStore = Reflux.createStore({
   },
 
   downloadLogs(id, callback) {
-    callback(config.crn.url + 'jobs/' + id + '/logs/download')
+    callback(config.crn.url + 'jobs/' + id + '/logs')
   },
 
   getLogstream(logstreamName, callback) {

@@ -1,16 +1,13 @@
-FROM node:6.11.3-alpine
+FROM node:6.12.0-alpine
 
 RUN apk --no-cache --update add git
 
-# accept 'branch' build argument
-ARG branch
+ADD . /srv
 
 # setup app directory
-WORKDIR /srv/crn-app
+WORKDIR /srv/app
 
-# install web app
-ADD . /srv/crn-app
+# Build the frontend
 RUN npm install -g yarn && yarn install --pure-lockfile
 
-# build app
 CMD yarn build

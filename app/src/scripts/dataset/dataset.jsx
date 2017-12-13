@@ -67,6 +67,7 @@ class Dataset extends Reflux.Component {
   componentWillUnmount() {
     actions.setInitialState({ apps: this.state.datasets.apps })
     super.componentWillUnmount()
+    document.title = 'OpenNeuro'
   }
 
   render() {
@@ -84,6 +85,7 @@ class Dataset extends Reflux.Component {
     let content
 
     if (dataset) {
+      document.title = 'OpenNeuro - ' + dataset.label
       let errors = dataset.validation.errors
       let warnings = dataset.validation.warnings
       content = (
@@ -98,6 +100,7 @@ class Dataset extends Reflux.Component {
                       label={dataset.label}
                       editable={canEdit}
                       onChange={actions.updateName}
+                      type="string"
                     />
                   </h1>
                   {this._uploaded(dataset)}
