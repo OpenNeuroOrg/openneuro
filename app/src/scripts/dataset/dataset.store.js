@@ -831,7 +831,7 @@ let datasetStore = Reflux.createStore({
               })
             })
           } else {
-            file.modifiedName = container.dirPath + file.name
+            file.modifiedName = (container.dirPath || '') + file.name
             scitran.updateFile('projects', this.data.dataset._id, file, () => {
               let children = container.children
               children.unshift({

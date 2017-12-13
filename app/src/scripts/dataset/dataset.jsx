@@ -343,6 +343,7 @@ class Dataset extends Reflux.Component {
                     toggleFolder={actions.toggleFolder}
                     addFile={actions.addFile}
                     updateFile={actions.updateFile}
+                    topLevel
                   />
                 </div>
               </div>
@@ -367,7 +368,10 @@ class Dataset extends Reflux.Component {
                   <span className="dataset-status ds-warning">
                     <i className="fa fa-warning" /> Incomplete
                   </span>
-                  <FileSelect resume={true} onChange={this._onFileSelect.bind(this)} />
+                  <FileSelect
+                    resume={true}
+                    onChange={this._onFileSelect.bind(this)}
+                  />
                 </h4>
               </div>
               <div className="panel-collapse" aria-expanded="false">

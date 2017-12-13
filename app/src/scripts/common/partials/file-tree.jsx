@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
+import upload from '../../upload/upload'
 
 class FileTree extends React.Component {
   // life cycle events --------------------------------------------------
@@ -12,6 +13,8 @@ class FileTree extends React.Component {
   render() {
     let editable = this.props.editable
     let tree = this.props.tree
+    let topLevel = this.props.topLevel
+
     let nodes = tree.map(item => {
       let name = item.label ? item.label : item.name
       return (
@@ -19,7 +22,7 @@ class FileTree extends React.Component {
           <span className="item-name">
             {this._folderIcon(item)} {this._fileLoading(item.loading)}
           </span>
-          {this._fileTools(item, editable)}
+          {this._fileTools(item, editable, topLevel)}
           {this._error(item)}
           {this._children(item, editable)}
         </li>
@@ -83,8 +86,8 @@ class FileTree extends React.Component {
     }
   }
 
-  _fileTools(item, editable) {
-    let deleteFile, editFile, addFile
+  _fileTools(item, editable, topLevel) {
+    let deleteFile, editFile, addFile, addDirectory
     if (editable) {
       let inputId = item.hasOwnProperty('_id') ? item._id : item.name
       if (item.children && item.showChildren) {
@@ -124,6 +127,26 @@ class FileTree extends React.Component {
               ref={inputId}
               onChange={this._updateFile.bind(this, item)}
               onClick={this._clearInput.bind(this, inputId)}
+            />
+          </div>
+        )
+      }
+      //Adding a multiple file input at the top level of the tree to support adding directories to the dataset
+      // this will allow for adding subjects to the dataset
+      if (topLevel) {
+        addDirectory = (
+          <div className="edit-file">
+            <span>
+              <i className="fa fa-plus" /> Add Directory
+            </span>
+            <input
+              type="file"
+              className="add-files"
+              ref={inputId}
+              onChange={this._addDirectory.bind(this, item)}
+              onClick={this._clearInput.bind(this, inputId)}
+              webkitdirectory="true"
+              directory="true"
             />
           </div>
         )
@@ -198,6 +221,7 @@ class FileTree extends React.Component {
       return (
         <span className="filetree-editfile">
           {addFile}
+          {addDirectory}
           {editFile}
           {deleteFile}
           {downloadFile}
@@ -254,7 +278,64 @@ class FileTree extends React.Component {
      * Add File
      */
   _addFile(container, event) {
+    console.log(container, event.target.files[0])
     this.props.addFile(container, event.target.files[0])
+  }
+
+  _addDirectory(container, event) {
+    event.preventDefault()
+    const buildContainer = (file, childrenArray) => {
+      let match
+      if (childrenArray && childrenArray.length) {
+        let lastChild = childrenArray[childrenArray.length - 1]
+        if (lastChild.name === file.name && lastChild.type != 'folder') {
+          let dirPathArray = file.webkitRelativePath.split('/')
+          let dirPath =
+            dirPathArray.slice(0, dirPathArray.length - 1).join('/') + '/'
+          console.log(lastChild)
+          let modcontainer = {
+            _id: lastChild.parentId,
+            dirPath: dirPath,
+            name: dirPathArray[dirPathArray.length - 1],
+          }
+          return modcontainer
+        }
+
+        if (lastChild.children) {
+          match = buildContainer(file, lastChild.children)
+          if (match) {
+            return match
+          }
+        } else {
+          match = buildContainer(
+            file,
+            childrenArray.slice(0, childrenArray.length - 1),
+          )
+          if (match) {
+            return match
+          }
+        }
+      }
+    }
+    let fileList = event.target.files
+    let testContainer = files.generateTree(fileList)
+    Object.keys(fileList).forEach(file => {
+      let fileName = fileList[file]
+      let uniqueName = testContainer[0].children
+      // let stuff = buildContainer(fileName, uniqueName);
+      let stuff = files.findInTree(uniqueName, fileName.name, 'name')
+      let dirPathArray = stuff.webkitRelativePath.split('/')
+      let dirPath =
+        dirPathArray.slice(0, dirPathArray.length - 1).join('/') + '/'
+      let modcontainer = {
+        _id: stuff.parentId,
+        dirPath: dirPath,
+        name: dirPathArray[dirPathArray.length - 1],
+      }
+      let modifiedContainer = Object.assign({}, testContainer[0], modcontainer)
+      console.log(modifiedContainer)
+      this.props.addFile(modifiedContainer, fileList[file])
+    })
   }
 
   /**
