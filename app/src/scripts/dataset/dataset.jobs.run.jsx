@@ -162,7 +162,8 @@ class JobAccordion extends React.Component {
         if (run.parameters[key].constructor === Array) {
           value = run.parameters[key].join(' ')
         } else if (run.parameters[key] === '') {
-          value = 'false'
+          value =
+            run.parameters[key].constructor === Boolean ? 'false' : 'unset'
         } else {
           value = run.parameters[key].toString()
         }
