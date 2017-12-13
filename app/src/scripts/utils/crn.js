@@ -52,30 +52,40 @@ export default {
      * Finish OAuth2 ORCID flow
      */
   getORCIDToken(code, callback) {
-    request.get(config.crn.url + 'users/signin/orcid', {
-      query: { code, home: true }
-    }, callback)
+    request.get(
+      config.crn.url + 'users/signin/orcid',
+      {
+        query: { code, home: true },
+      },
+      callback,
+    )
   },
 
   /**
      * Get ORCID profile
      */
   getORCIDProfile(accessToken, callback) {
-    request.get(config.crn.url + 'users/orcid', {
-      query: { accessToken }
-    }, callback)
+    request.get(
+      config.crn.url + 'users/orcid',
+      {
+        query: { accessToken },
+      },
+      callback,
+    )
   },
 
   /**
      * Get ORCID profile
      */
   refreshORCIDToken(refreshToken, callback) {
-    request.get(config.crn.url + 'users/orcid/refresh', {
-      query: { refreshToken }
-    }, callback)
+    request.get(
+      config.crn.url + 'users/orcid/refresh',
+      {
+        query: { refreshToken },
+      },
+      callback,
+    )
   },
-
-
 
   // Datasets --------------------------------------------------------------------------------
 
@@ -167,6 +177,10 @@ export default {
       all: all,
       results: false,
     }
+    request.get(config.crn.url + 'jobs', { query: query }, callback)
+  },
+
+  getJobsQuery(query, callback) {
     request.get(config.crn.url + 'jobs', { query: query }, callback)
   },
 

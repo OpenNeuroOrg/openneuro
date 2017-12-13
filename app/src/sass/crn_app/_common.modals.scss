@@ -125,12 +125,15 @@
     }
 
     label > input[type=checkbox] {
-        width: 30px;
+        max-width: 20px;
+        min-width: 20px;
         border: 0;
         box-shadow: none;
+        margin-right: 5px;
         &:focus {
             box-shadow: none;
             outline: 0;
+
         }
     }
 
@@ -293,21 +296,38 @@
 
 .analysis-modal {
 
-    .task-select {
-        border: 1px solid $ccc;
-        padding: 0;
-        select {
-            border: 0;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
-        .m-arrow {
-          position: absolute;
-          top: 30%;
-          right: 0;
-        }
+  .task-select {
+    border: 1px solid $ccc;
+    padding: 0;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    select {
+      border: 0;
+      -webkit-appearance: none;
+      -moz-appearance: none;
     }
+    select ::-ms-expand {
+      display: none;
+    }
+
+    .Select-arrow-zone {
+      position: absolute;
+      display: unset;
+      right: 0px;
+      top: 10px;
+      border: 0;
+      box-shadow: none;
+      z-index: 15;
+      -moz-padding-start: 10px;
+      -moz-padding-end: 10px;
+      .arrow {
+        width: 50%;
+      }
+    }
+  }
+
 
     .default-reset {
         padding: 10px;
@@ -335,6 +355,18 @@
         &:hover {
             background: $transparent3;
         }
+    }
+
+    input[type=radio] {
+      max-width: 20px;
+      min-width: 20px;
+      margin-right: 5px;
+      box-shadow: 0px 0px;
+      width: 5%;
+      &:focus {
+        outline: none;
+        border: 0px;
+      }
     }
 }
 
@@ -458,4 +490,83 @@
     &.reactable-header-sort-desc::after {
         content: ' \f0dd';
     }
+}
+
+.login-modal {
+  div.modal-header{
+    background-color: $well-bg;
+    div.logo-text {
+      width: 50%;
+      img {
+        height: 40px;
+      }
+      font-size: 32px;
+    }
+  }
+
+  hr.spacer {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  div.login-btns {
+    width: 50%;
+    margin: 0 auto;
+    span {
+      font-size: 14px;
+    }
+
+    button {
+      margin: 10px;
+    }
+  }
+
+  a {
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+  }
+
+
+  div.info-panel {
+    margin-left: 20px;
+
+    .help-info {
+      float: right;
+      font-size: 10px;
+      color: $primary;
+
+      &:hover {
+        color: $primary-hover;
+        cursor: pointer;
+      }
+    }
+
+    .panel {
+      border-radius: 0;
+
+      button {
+        position: relative;
+        margin: 0;
+        outline: none;
+        top: -15px;
+        right: -7px;
+
+        .close-sym::after {
+          content:"\2715";
+          font-size: 10px;
+        }
+      }
+
+      span.info {
+        font-size: 12px;
+        color: $gray-dark;
+
+        a {
+          position: relative;
+          right: 0;
+        }
+      }
+    }
+  }
 }

@@ -5,7 +5,7 @@ let config = {
   url: process.env.CRN_SERVER_URL,
   port: 8111,
   apiPrefix: '/crn/',
-  location: '/srv/crn-server',
+  location: '/srv/server',
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
@@ -54,6 +54,7 @@ let config = {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       region: process.env.AWS_REGION,
+      accountId: process.env.AWS_ACCOUNT_ID,
     },
     s3: {
       datasetBucket: process.env.AWS_S3_DATASET_BUCKET,
@@ -64,18 +65,22 @@ let config = {
     },
     batch: {
       vcpusMax: 12,
-      memoryMax: 15360,
+      memoryMax: 30720,
       queue: process.env.AWS_BATCH_QUEUE,
+      computeEnvironment: process.env.AWS_BATCH_COMPUTE_ENVIRONMENT,
     },
     cloudwatchlogs: {
       logGroupName: '/aws/batch/job',
     },
   },
-
   events: {
     JOB_STARTED: 'job-started',
     JOB_COMPLETED: 'job-completed',
     DATASET_UPLOADED: 'dataset-uploaded',
+  },
+  sentry: {
+    DSN: process.env.SENTRY_DSN,
+    ENVIRONMENT: process.env.ENVIRONMENT,
   },
 }
 

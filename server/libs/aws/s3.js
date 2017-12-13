@@ -46,26 +46,25 @@ export default aws => {
     },
 
     uploadFile(filePath, remotePath, callback) {
-      fs.readFile(filePath, (err, data) => {
-        let contentType = files.getContentType(filePath)
+      const data = fs.createReadStream(filePath)
+      const contentType = files.getContentType(filePath)
 
-        let upload = new aws.S3.ManagedUpload({
-          params: {
-            ACL: 'private',
-            Bucket,
-            Key: remotePath,
-            Body: data,
-            ContentType: contentType,
-          },
-        })
+      const upload = new aws.S3.ManagedUpload({
+        params: {
+          ACL: 'private',
+          Bucket,
+          Key: remotePath,
+          Body: data,
+          ContentType: contentType,
+        },
+      })
 
-        upload.send(err => {
-          if (err) {
-            console.log(err)
-          } else {
-            callback()
-          }
-        })
+      upload.send(err => {
+        if (err) {
+          console.log(err)
+        } else {
+          callback()
+        }
       })
     },
 

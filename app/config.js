@@ -53,4 +53,8 @@ export default {
   analytics: {
     trackingId: process.env.GOOGLE_TRACKING_ID,
   },
+
+  sentry: {
+    environment: process.env.ENVIRONMENT,
+  },
 }
