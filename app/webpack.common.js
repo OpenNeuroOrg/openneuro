@@ -6,6 +6,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const git = require('git-rev-sync')
 
+// prettier-ignore
 const env = {
   CRN_SERVER_URL: JSON.stringify(process.env.CRN_SERVER_URL),
   SCITRAN_AUTH_GOOGLE_CLIENT_ID: JSON.stringify(process.env.SCITRAN_AUTH_GOOGLE_CLIENT_ID),
