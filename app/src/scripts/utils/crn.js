@@ -259,6 +259,21 @@ export default {
   },
 
   /**
+       * Delete Job
+       *
+       * Take a jobId and deletes the job.
+       */
+  deleteJob(datasetId, jobId, callback, options) {
+    request.del(
+      config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId,
+      {
+        query: { snapshot: options && options.snapshot },
+      },
+      callback,
+    )
+  },
+
+  /**
      * Get Dataset Jobs
      */
   getDatasetJobs(datasetId, callback, options) {

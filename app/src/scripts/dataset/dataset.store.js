@@ -1337,6 +1337,29 @@ let datasetStore = Reflux.createStore({
     )
   },
 
+  deleteJob(jobId, callback) {
+    crn.deleteJob(
+      this.data.dataset._id,
+      jobId,
+      () => {
+        this.loadJobs(
+          this.data.dataset._id,
+          true,
+          this.data.dataset.original,
+          {},
+          jobs => {
+            this.loadSnapshots(this.data.dataset, jobs)
+
+            // start polling job
+            this.pollJob(jobId, this.data.selectedSnapshot)
+            callback()
+          },
+        )
+      },
+      { snapshot: this.data.snapshot },
+    )
+  },
+
   /**
      * Dismiss Job Modal
      */
