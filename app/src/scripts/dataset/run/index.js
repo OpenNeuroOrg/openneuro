@@ -48,7 +48,12 @@ class JobAccordion extends React.Component {
       <span>
         <br />
         <label>By </label>
-        <strong>{run.userId}</strong>
+        <strong>
+          {run.hasOwnProperty('userMetaData') &&
+          run.userMetaData.hasOwnProperty('email')
+            ? run.userMetadata.email
+            : run.userId}
+        </strong>
       </span>
     ) : null
     let userCanCancel =
