@@ -75,12 +75,13 @@ let orcid = {
     // Setup a timer to check for the redirect URI
     this.oauthTimer = window.setInterval(() => {
       try {
-        if (this.oauthWindow.closed) {
-          clearInterval(this.oauthTimer)
-          return callback(true)
-        }
-        const url = this.oauthWindow.document.URL
-        if (url.indexOf(config.auth.orcid.redirectURI) != -1) {
+        if (
+          this.oauthWindow.document &&
+          this.oauthWindow.document.URL.indexOf(
+            config.auth.orcid.redirectURI,
+          ) !== -1
+        ) {
+          const url = this.oauthWindow.document.URL
           const code = url.toString().match(/code=([^&]+)/)[1]
           clearInterval(this.oauthTimer)
           crn.getORCIDToken(code, (err, res) => {
@@ -91,6 +92,12 @@ let orcid = {
               this.getCurrentUser(callback)
             }
           })
+        } else {
+          // If not the redirect page - check if closed and unregister
+          if (this.oauthWindow.closed) {
+            clearInterval(this.oauthTimer)
+            return callback(true)
+          }
         }
       } catch (e) {
         // DOMException means the oauth window is inaccessible due to the origin
@@ -98,7 +105,6 @@ let orcid = {
           // Any other errors should stop polling
           // TODO - could reset login state here in case of failures
           clearInterval(this.oauthTimer)
-        } else {
           console.log(e)
         }
       }
