@@ -850,31 +850,43 @@ let datasetStore = Reflux.createStore({
     }
   },
 
-  addDirectoryFile(uploads, callback) {
-    async.each(
-      uploads,
-      (upload, cb) => {
-        let file = upload.file
-        let container = upload.container
-        file.modifiedName = (container.dirPath || '') + file.name
-        scitran.updateFile('projects', this.data.dataset._id, file, () => {
-          let children = container.children
-          children.unshift({
-            name: file.modifiedName,
-            parentId: container._id,
-          })
-          this.updateDirectoryState(container._id, {
-            children: children,
-            loading: false,
-          })
-          cb()
-        })
+  addDirectoryFile(uploads, dirTree, callback) {
+    let topLevelDirectory = `${uploads.pop().container.dirPath.split('/')[0]}/`
+    let message = this.updateMessage('add directory', {
+      name: topLevelDirectory,
+    })
+    this.updateWarn({
+      message: message,
+      action: () => {
+        async.each(
+          uploads,
+          (upload, cb) => {
+            let file = upload.file
+            let container = upload.container
+            // this.updateDirectoryState(container._id, { loading: true })
+            file.modifiedName = (container.dirPath || '') + file.name
+            scitran.updateFile('projects', this.data.dataset._id, file, () => {
+              let children = container.children
+              children.unshift({
+                name: file.modifiedName,
+                parentId: container._id,
+              })
+              // this.updateDirectoryState(container._id, {
+              //   children: children,
+              //   loading: false,
+              // })
+              cb()
+            })
+          },
+          err => {
+            this.loadDataset(this.data.dataset._id)
+            // this.updateFileTreeOnAddDir(dirTree)
+            this.revalidate()
+            if (callback) callback()
+          },
+        )
       },
-      err => {
-        this.revalidate()
-        if (callback) callback()
-      },
-    )
+    })
   },
 
   /**
@@ -1026,6 +1038,14 @@ let datasetStore = Reflux.createStore({
         match[key] = changes[key]
       }
     }
+    this.update({ dataset }, callback)
+  },
+
+  updateFileTreeOnAddDir(addedContainer, callback) {
+    console.log(addedContainer)
+    let dataset = this.data.dataset
+    console.log(dataset)
+    dataset.children.push(addedContainer)
     this.update({ dataset }, callback)
   },
 

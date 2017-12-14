@@ -303,7 +303,7 @@ class FileTree extends React.Component {
       let modifiedContainer = Object.assign({}, dirTree[0], modcontainer)
       uploads.push({ container: modifiedContainer, file: fileList[fileKey] })
     })
-    this.props.addDirectoryFile(uploads)
+    this.props.addDirectoryFile(uploads, dirTree[0])
   }
 
   /**
