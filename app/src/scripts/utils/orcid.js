@@ -98,8 +98,9 @@ let orcid = {
           // Any other errors should stop polling
           // TODO - could reset login state here in case of failures
           clearInterval(this.oauthTimer)
+        } else {
+          console.log(e)
         }
-        console.log(e)
       }
     }, 200)
   },
