@@ -30,7 +30,7 @@ export default aws => {
     queue: async.queue((req, cb) => {
       // assign last argument as callback for
       // queued function and queue callback
-      req.arguments.push(function () {
+      req.arguments.push(function() {
         if (req.callback) {
           req.callback.apply(arguments)
         }
@@ -40,7 +40,7 @@ export default aws => {
     }, config.aws.s3.concurrency),
 
     createBucket(bucketName, callback) {
-      s3.createBucket({ Bucket: bucketName }, function (err, res) {
+      s3.createBucket({ Bucket: bucketName }, function(err, res) {
         callback(err, res)
       })
     },

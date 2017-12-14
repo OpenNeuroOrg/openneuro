@@ -180,6 +180,10 @@ export default {
     request.get(config.crn.url + 'jobs', { query: query }, callback)
   },
 
+  getJobsQuery(query, callback) {
+    request.get(config.crn.url + 'jobs', { query: query }, callback)
+  },
+
   /**
      * Create Job
      *

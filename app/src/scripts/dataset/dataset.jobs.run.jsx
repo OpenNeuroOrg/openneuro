@@ -157,10 +157,17 @@ class JobAccordion extends React.Component {
           })
         }
         // Values can be strings or arrays
-        const value =
-          run.parameters[key].constructor === Array
-            ? run.parameters[key].join(' ')
-            : run.parameters[key]
+        let value
+
+        if (run.parameters[key].constructor === Array) {
+          value = run.parameters[key].join(' ')
+        } else if (run.parameters[key] === '') {
+          value =
+            run.parameters[key].constructor === Boolean ? 'false' : 'unset'
+        } else {
+          value = run.parameters[key].toString()
+        }
+
         parameters.push(
           <li key={key}>
             <span className="key">{key}</span>:{' '}

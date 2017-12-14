@@ -322,8 +322,16 @@ let UserStore = Reflux.createStore({
       for (let param of formData.parameters) {
         parameters[param.label] = param.defaultValue
         parametersMetadata[param.label] = param
+        let types = ['radio', 'multi', 'select']
+        if (types.includes(param.type) && param.label != 'participant_label') {
+          let arrayInput = param.defaultValue.split(' ')
+          param.defaultValue = arrayInput.filter(value => value.trim() != ' ')
+        } else {
+          param.defaultValue = param.defaultValue
+        }
       }
     }
+
     jobDefinition.parameters = parameters
     jobDefinition.parametersMetadata = parametersMetadata
     jobDefinition.analysisLevels = formData.analysisLevels
@@ -534,7 +542,7 @@ let UserStore = Reflux.createStore({
    * Switch the page for the event logs view
    */
   setLogsPage(page) {
-    this.update({page})
+    this.update({ page })
   },
 })
 

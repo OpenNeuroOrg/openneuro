@@ -4,7 +4,8 @@ import crypto from 'crypto'
 import aws from '../libs/aws'
 import mongo from '../libs/mongo'
 import { ObjectID } from 'mongodb'
-import archiver from 'archiver'
+import yazl from 'yazl'
+import S3StreamDownload from 's3-stream-download'
 import config from '../config'
 import async from 'async'
 import emitter from '../libs/events'
@@ -316,13 +317,7 @@ let handlers = {
       const type = path.replace('all-', '')
 
       // initialize archive
-      let archive = archiver('zip')
-
-      // log archiving errors
-      archive.on('error', err => {
-        console.log('archiving error - job: ' + jobId)
-        console.log(err)
-      })
+      let archive = new yazl.ZipFile()
 
       c.crn.jobs.findOne({ _id: ObjectID(jobId) }, {}, (err, job) => {
         let archiveName =
@@ -339,7 +334,7 @@ let handlers = {
         res.attachment(archiveName + '.zip')
 
         // begin streaming archive
-        archive.pipe(res)
+        archive.outputStream.pipe(res)
 
         aws.s3.getAllS3Objects(params, [], (err, data) => {
           let keysArray = []
@@ -361,14 +356,22 @@ let handlers = {
                 .split('/')
                 .slice(2)
                 .join('/')
-              aws.s3.sdk.getObject(objParams, (err, response) => {
-                //append to zip
-                archive.append(response.Body, { name: fileName })
-                cb()
-              })
+              const streamOptions = {
+                downloadChunkSize: 8 * 1024 * 1024, // 8MB
+                concurrentChunks: 2,
+                retries: 7,
+              }
+              // The built in createReadStream blocks the main thread in some situations
+              const stream = new S3StreamDownload(
+                aws.s3.sdk,
+                objParams,
+                streamOptions,
+              )
+              archive.addReadStream(stream, fileName)
+              stream.on('end', cb)
             },
             () => {
-              archive.finalize()
+              archive.end()
             },
           )
         })
@@ -376,72 +379,99 @@ let handlers = {
     }
   },
 
-  getJobLogs(req, res, next) {
-    let jobId = req.params.jobId //this will be the mongoId for a given analysis
-
-    aws.cloudwatch.getLogsByJobId(jobId, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        res.send(logs)
-      }
-    })
-  },
-
   downloadJobLogs(req, res, next) {
-    let jobId = req.params.jobId //this will be the mongoId for a given analysis
+    const jobId = req.params.jobId //this will be the mongoId for a given analysis
+    const prefix = {}
+    let first = true // Flag to skip the space at the start
 
-    aws.cloudwatch.getLogsByJobId(jobId, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        let textLogs = handlers._processLogs(logs)
-        res.attachment(jobId + '.txt')
-        res.send(textLogs)
-      }
+    res.writeHead(200, {
+      'Content-Type': 'text/plain',
+      'Transfer-Encoding': 'chunked',
+      'Content-Disposition': 'attachment; filename="' + jobId + '.txt"',
     })
-  },
 
-  getLogstream(req, res, next) {
-    let appName = req.params.app
-    let jobId = req.params.jobId
-    let taskArn = req.params.taskArn
-    let key = appName + '/' + jobId + '/' + taskArn
-
-    aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        res.send(logs)
-      }
-    })
-  },
-
-  getLogstreamRaw(req, res, next) {
-    let appName = req.params.app
-    let jobId = req.params.jobId
-    let taskArn = req.params.taskArn
-    let key = appName + '/' + jobId + '/' + taskArn
-
-    aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        res.writeHead(200, {
-          'Content-Type': 'text/plain',
-          'Transfer-Encoding': 'chunked',
-          'Content-Disposition': 'attachment; filename="' + key + '.txt"',
+    aws.cloudwatch.getLogsByJobId(
+      jobId,
+      data => {
+        let logString = first ? '' : '\n\n'
+        first = false
+        if (!prefix.hasOwnProperty(data.name)) {
+          logString += data.name + ' - exit code ' + data.exitCode + '\n'
+          logString += '  Environment variables:\n'
+          data.environment.forEach(env => {
+            logString += '\t' + env.name + ': ' + env.value + '\n'
+          })
+          logString += '  Logs:\n'
+          prefix[data.name] = true
+        }
+        data.logs.forEach(log => {
+          logString += '\t' + log.timestamp + '\t' + log.message + '\n'
         })
-        logs.map(log => res.write(log.message + '\n'))
+        res.write(logString)
+      },
+      err => {
+        if (err) {
+          console.log(err)
+          next(err)
+        }
         res.end()
-      }
+      },
+    )
+  },
+
+  /**
+   * Wrapper for getLogstreamRaw that requests the json version
+   */
+  getLogstream(req, res, next) {
+    handlers.getLogstreamRaw(req, res, next, false)
+  },
+
+  getLogstreamRaw(req, res, next, raw = true) {
+    const appName = req.params.app
+    const jobId = req.params.jobId
+    const taskArn = req.params.taskArn
+    const key = appName + '/' + jobId + '/' + taskArn
+    const ct = raw ? 'text/plain' : 'application/json'
+
+    res.writeHead(200, {
+      'Content-Type': ct,
+      'Transfer-Encoding': 'chunked',
+      'Content-Disposition': 'attachment; filename="' + key + '.txt"',
     })
+
+    if (!raw) {
+      // Streaming JSON as an array with each element loaded over time
+      // One dummy row to allow the callback to insert commas
+      res.write('[\n{}')
+    }
+
+    aws.cloudwatch
+      .getLogs(key, raw, logs => {
+        logs.map(log => {
+          if (raw) {
+            res.write(log.message + '\n')
+          } else {
+            res.write(',\n' + JSON.stringify(log))
+          }
+        })
+      })
+      .then(() => {
+        if (!raw) {
+          res.write(']\n')
+        }
+        res.end()
+      })
+      .catch(err => {
+        console.log(err)
+        res.end()
+      })
   },
 
   /**
      * Retry a job using existing parameters
      */
   retry(req, res, next) {
+    let userId = req.user
     let jobId = req.params.jobId
     let mongoJobId = typeof jobId != 'object' ? ObjectID(jobId) : jobId
 
@@ -504,36 +534,19 @@ let handlers = {
           )
           return
         } else {
-          emitter.emit(events.JOB_STARTED, {
-            job: batchJobParams,
-            createdDate: job.analysis.created,
-            retry: true,
-          })
+          let jobLog = aws.batch.extractJobLog(job)
+          emitter.emit(
+            events.JOB_STARTED,
+            {
+              job: jobLog,
+              createdDate: job.analysis.created,
+              retry: true,
+            },
+            userId,
+          )
         }
       })
     })
-  },
-
-  _processLogs(logs) {
-    let logString = ''
-    Object.keys(logs).forEach(streamName => {
-      logString +=
-        streamName + ' - exit code ' + logs[streamName].exitCode + '\n'
-      logString += '  Environment variables:\n'
-
-      logs[streamName].environment.forEach(env => {
-        logString += '\t' + env.name + ': ' + env.value + '\n'
-      })
-
-      logString += '  Logs:\n'
-
-      logs[streamName].logs.forEach(log => {
-        logString += '\t' + log.timestamp + '\t' + log.message + '\n'
-      })
-      logString += '\n\n'
-    })
-
-    return logString
   },
 }
 

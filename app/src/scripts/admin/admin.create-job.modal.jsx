@@ -20,6 +20,8 @@ const PARAMETER_INPUTS = [
   { label: 'Number', value: 'numeric' },
   { label: 'List', value: 'select' },
   { label: 'File', value: 'file' },
+  { label: 'Mutli Check', value: 'multi' },
+  { label: 'Radio', value: 'radio' },
 ]
 
 import { refluxConnect } from '../utils/reflux'
