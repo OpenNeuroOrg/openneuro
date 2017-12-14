@@ -62,11 +62,7 @@ let orcid = {
   },
 
   signIn(callback) {
-    if (this.oauthWindow) {
-      window.clearInterval(this.polling)
-      this.oauthWindow.close()
-    }
-
+    // Start the third part oauth flow in a new window
     this.oauthWindow = window.open(
       config.auth.orcid.URI +
         '/oauth/authorize?client_id=' +
@@ -76,16 +72,17 @@ let orcid = {
       'ORCID',
     )
 
-    this.oauthWindow.addEventListener('beforeunload', () => {
+    // Setup a timer to check for the redirect URI
+    this.oauthTimer = window.setInterval(() => {
       try {
-        if (!this.oauthWindow || this.oauthWindow.closed) {
-          callback(true)
-          return
+        if (this.oauthWindow.closed) {
+          clearInterval(this.oauthTimer)
+          return callback(true)
         }
-        let url = this.oauthWindow.document.URL
+        const url = this.oauthWindow.document.URL
         if (url.indexOf(config.auth.orcid.redirectURI) != -1) {
-          this.oauthWindow.close()
-          let code = url.toString().match(/code=([^&]+)/)[1]
+          const code = url.toString().match(/code=([^&]+)/)[1]
+          clearInterval(this.oauthTimer)
           crn.getORCIDToken(code, (err, res) => {
             if (err) {
               callback(err)
@@ -94,12 +91,17 @@ let orcid = {
               this.getCurrentUser(callback)
             }
           })
-          return
         }
       } catch (e) {
+        // DOMException means the oauth window is inaccessible due to the origin
+        if (!(e instanceof DOMException)) {
+          // Any other errors should stop polling
+          // TODO - could reset login state here in case of failures
+          clearInterval(this.oauthTimer)
+        }
         console.log(e)
       }
-    })
+    }, 200)
   },
 
   signOut(callback) {
