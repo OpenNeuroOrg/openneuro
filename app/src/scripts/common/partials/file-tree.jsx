@@ -279,6 +279,7 @@ class FileTree extends React.Component {
      * Add File
      */
   _addFile(container, event) {
+    console.log(container)
     this.props.addFile(container, event.target.files[0])
   }
 
@@ -286,9 +287,14 @@ class FileTree extends React.Component {
     event.preventDefault()
 
     let fileList = event.target.files
-    let dirTree = files.generateTree(fileList)
+    let newFileList = []
+    Object.keys(fileList).forEach(key => {
+      newFileList.push(fileList[key])
+    })
+    let dirTree = files.generateTree(newFileList)
     let uploads = []
-    Object.keys(fileList).forEach(fileKey => {
+    console.log(newFileList)
+    Object.keys(newFileList).forEach(fileKey => {
       let fileObj = fileList[fileKey]
       let dirTreeChildren = dirTree[0].children
       let file = files.findInTree(dirTreeChildren, fileObj.name, 'name')
@@ -298,11 +304,26 @@ class FileTree extends React.Component {
       let modcontainer = {
         _id: file.parentId,
         dirPath: dirPath,
-        name: dirPathArray[dirPathArray.length - 1],
+        name: fileObj.name,
       }
-      let modifiedContainer = Object.assign({}, dirTree[0], modcontainer)
-      uploads.push({ container: modifiedContainer, file: fileList[fileKey] })
+      let children = dirTree[0].children
+      let baseContainer = children.filter(obj => {
+        console.log(obj)
+        return modcontainer._id === obj._id
+      })
+      console.log(baseContainer)
+      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!')
+      console.log(modcontainer)
+      //this will be top level files.
+      if (!baseContainer.length) {
+        baseContainer = dirTree[0]
+      } else {
+        baseContainer.pop()
+      }
+      let modifiedContainer = Object.assign({}, baseContainer, modcontainer)
+      uploads.push({ container: modifiedContainer, file: fileObj })
     })
+    console.log(uploads)
     this.props.addDirectoryFile(uploads, dirTree[0])
   }
 
