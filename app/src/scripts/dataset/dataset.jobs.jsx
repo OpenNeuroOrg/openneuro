@@ -5,7 +5,7 @@ import Reflux from 'reflux'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions'
 import Spinner from '../common/partials/spinner.jsx'
-import Run from './dataset.jobs.run.jsx'
+import Run from './run'
 import { Accordion, Panel } from 'react-bootstrap'
 import { refluxConnect } from '../utils/reflux'
 

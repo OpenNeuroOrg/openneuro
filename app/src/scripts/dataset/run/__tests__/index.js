@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import JobAccordion from '../dataset.jobs.run'
+import JobAccordion from '../index'
 
 const successful_run = {
   _id: '59c1632cc650bd001111f00d',
@@ -145,7 +145,7 @@ const props = {
   currentUser: 'nell@squishymedia.com',
 }
 
-describe('dataset/dataset.job.run/JobAccordion', () => {
+describe('dataset/dataset/run/JobAccordion', () => {
   it('renders a successful run', () => {
     const wrapper = shallow(
       <JobAccordion
