@@ -3,7 +3,6 @@
 import crypto from 'crypto'
 import aws from '../libs/aws'
 import mongo from '../libs/mongo'
-import scitran from '../libs/scitran'
 import { ObjectID } from 'mongodb'
 import yazl from 'yazl'
 import S3StreamDownload from 's3-stream-download'
