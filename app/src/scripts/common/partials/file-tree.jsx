@@ -293,7 +293,6 @@ class FileTree extends React.Component {
     })
     let dirTree = files.generateTree(newFileList)
     let uploads = []
-    console.log(newFileList)
     Object.keys(newFileList).forEach(fileKey => {
       let fileObj = fileList[fileKey]
       let dirTreeChildren = dirTree[0].children
