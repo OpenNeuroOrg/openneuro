@@ -264,18 +264,9 @@ let handlers = {
         return
       }
 
-      //Pair the job data with the scitran user info
-      scitran.getUser(job.userId, (err, response) => {
-        if (err) next(err)
-
-        job.userMetadata = {}
-        if (response.statusCode == 200) {
-          job.userMetadata = response.body
-        }
-        //Send back job object to client
-        // server side polling handles all interactions with Batch now therefore we are not initiating batch polling from client
-        res.send(job)
-      })
+      //Send back job object to client
+      // server side polling handles all interactions with Batch now therefore we are not initiating batch polling from client
+      res.send(job)
     })
   },
 
