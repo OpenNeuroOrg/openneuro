@@ -6,7 +6,6 @@ import orcid from '../libs/orcid'
 
 let c = mongo.collections
 
-
 // handlers ----------------------------------------------------------------
 
 /**
@@ -20,7 +19,12 @@ export default {
   validateORCIDToken(req, res) {
     let { code, home } = req.query
     if (!home) {
-      res.status(400).send()
+      res.set('Content-Type', 'text/html')
+      res
+        .status(200)
+        .send(
+          '<!doctype html><meta charset=utf-8><title>Logged in!</title><script>window.onload = function () {window.close()}</script>',
+        )
       return
     }
     orcid.validateToken(code, (error, result) => {
