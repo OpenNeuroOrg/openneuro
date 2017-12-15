@@ -44,8 +44,8 @@ class JobAccordion extends React.Component {
         <br />
         <label>By </label>
         <strong>
-          {run.hasOwnProperty('userMetaData') &&
-          run.userMetaData.hasOwnProperty('email')
+          {run.hasOwnProperty('userMetadata') &&
+          run.userMetadata.hasOwnProperty('email')
             ? run.userMetadata.email
             : run.userId}
         </strong>
