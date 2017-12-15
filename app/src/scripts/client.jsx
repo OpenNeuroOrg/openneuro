@@ -12,7 +12,9 @@ const ravenConfig = {
   release: __GIT_HASH__,
   tags: { branch: __GIT_BRANCH__ },
   environment: config.sentry.environment,
-  autoBreadcrumbs: true,
+  autoBreadcrumbs: {
+    console: false,
+  },
 }
 
 // Uses the public DSN here - private should not be used in the client app
