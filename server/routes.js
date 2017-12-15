@@ -150,6 +150,12 @@ const routes = [
     handler: awsJobs.getJob,
   },
   {
+    method: 'delete',
+    url: '/datasets/:datasetId/jobs/:jobId',
+    middleware: [auth.datasetAccess(), auth.deleteJobAccess],
+    handler: awsJobs.deleteJob,
+  },
+  {
     method: 'put',
     url: '/datasets/:datasetId/jobs/:jobId',
     middleware: [auth.datasetAccess()],

@@ -11,7 +11,7 @@ The CRN Server is configured through environment variables. Set the following va
 | CRN_SERVER_URL                      | The url where this service is listening                 |
 | CRN_SERVER_LOCATION                 | The file system location of this repository             |
 | CRN_SERVER_MONGODB_URL              | The url where mongodb is listening                      |
-| SCITRAN_URL                         | The url where SciTran is listening                      |
+| SCITRAN_SITE_URL                    | The url where SciTran is listening                      |
 | SCITRAN_CORE_DRONE_SECRET           | A secret string shared between this service and scitran |
 | SCITRAN_PERSISTENT_DATA_PATH        | The file system location of SciTran's data store        |
 | CRN_SERVER_AGAVE_URL                | The root url to the AGAVE API                           |

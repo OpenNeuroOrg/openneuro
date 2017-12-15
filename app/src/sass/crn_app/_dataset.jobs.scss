@@ -292,6 +292,7 @@
                             }
                         }
                     }
+
                     ul .btn-warn-load {
                         margin: 0px;
                         padding: 0px;
@@ -491,62 +492,6 @@
                             margin-right: 5px;
                         }
                     }
-                    //     width: 50px;
-                    //     text-align: center;
-                    //     overflow: hidden;
-                    //     display: inline-block;
-                    //     line-height: 1.1;
-                    //     vertical-align: middle;
-                    //     font-size: 14px;
-                    //     margin: 7px 5px 5px 0;
-                    //     height: 20px;
-
-                    //     .btn-warn-component {
-                    //         line-height: 1.2;
-
-                    //         i {
-                    //             line-height: 1.2;
-                    //         }
-
-                    //         &.warning,
-                    //         &.success,
-                    //         &.cancel {
-                    //             margin-top: 0;
-                    //             padding: 1px 3px;
-
-                    //             i {
-                    //                 line-height: 1.2;
-                    //             }
-
-                    //         }
-                    //     }
-                    // }
-
-                    // .btn-warn-component {
-
-                    //     i {
-                    //         line-height: 1.2;
-                    //     }
-
-                    //     // .warning {
-                    //     //     width: 50px;
-                    //     //     text-align: center;
-                    //     //     overflow: hidden;
-                    //     //     display: inline-block;
-                    //     //     line-height: 1.1;
-                    //     //     vertical-align: middle;
-                    //     //     font-size: 14px;
-                    //     //     margin: 7px 5px 5px 0;
-                    //     //     height: 20px;
-
-                    //     //     button {
-                    //     //         padding: 0;
-                    //     //         line-height: 1.1;
-                    //     //         display: inline-block;
-                    //     //         margin: 5px 0;
-                    //     //     }
-                    //     // }
-                    // }
 
                     .panel-body li {
                         height: auto;
@@ -725,62 +670,6 @@
                             margin-right: 5px;
                         }
                     }
-                    //     width: 50px;
-                    //     text-align: center;
-                    //     overflow: hidden;
-                    //     display: inline-block;
-                    //     line-height: 1.1;
-                    //     vertical-align: middle;
-                    //     font-size: 14px;
-                    //     margin: 7px 5px 5px 0;
-                    //     height: 20px;
-
-                    //     .btn-warn-component {
-                    //         line-height: 1.2;
-
-                    //         i {
-                    //             line-height: 1.2;
-                    //         }
-
-                    //         &.warning,
-                    //         &.success,
-                    //         &.cancel {
-                    //             margin-top: 0;
-                    //             padding: 1px 3px;
-
-                    //             i {
-                    //                 line-height: 1.2;
-                    //             }
-
-                    //         }
-                    //     }
-                    // }
-
-                    // .btn-warn-component {
-
-                    //     i {
-                    //         line-height: 1.2;
-                    //     }
-
-                    //     // .warning {
-                    //     //     width: 50px;
-                    //     //     text-align: center;
-                    //     //     overflow: hidden;
-                    //     //     display: inline-block;
-                    //     //     line-height: 1.1;
-                    //     //     vertical-align: middle;
-                    //     //     font-size: 14px;
-                    //     //     margin: 7px 5px 5px 0;
-                    //     //     height: 20px;
-
-                    //     //     button {
-                    //     //         padding: 0;
-                    //     //         line-height: 1.1;
-                    //     //         display: inline-block;
-                    //     //         margin: 5px 0;
-                    //     //     }
-                    //     // }
-                    // }
 
                     .panel-body li {
                         height: auto;
@@ -800,4 +689,9 @@
 
 .snapshot .dataset-inner .analyses .file-structure.panel-group .panel-default .panel-body > ul{
     border: 0;
+}
+
+span.btn-small > span > button {
+  border: solid red;
+  padding: 3px 6px !important;
 }
