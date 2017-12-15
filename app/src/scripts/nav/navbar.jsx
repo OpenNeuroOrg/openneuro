@@ -3,9 +3,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Reflux from 'reflux'
-import { withRouter, Link, NavLink } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
+import NavMenu from './navbar.navmenu.jsx'
 import Usermenu from './navbar.usermenu.jsx'
-import UploadBtn from './navbar.upload-button.jsx'
 import userStore from '../user/user.store.js'
 import actions from '../user/user.actions.js'
 import { Navbar } from 'react-bootstrap'
@@ -28,6 +28,10 @@ class BSNavbar extends Reflux.Component {
 
   // life cycle methods ------------------------------------------------------------
   render() {
+    const profile = this.state.users.profile
+    const scitran = this.state.users.scitran
+    const isLoggedIn = !!this.state.users.token && profile && scitran
+    const loading = this.state.users.loading
     return (
       <span>
         <Navbar collapseOnSelect>
@@ -35,7 +39,14 @@ class BSNavbar extends Reflux.Component {
             <Navbar.Brand>{this._brand()}</Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
-          <Navbar.Collapse>{this._navMenu()}</Navbar.Collapse>
+          <Navbar.Collapse>
+            <NavMenu
+              profile={profile}
+              scitran={scitran}
+              isLoggedIn={isLoggedIn}
+              loading={loading}
+            />
+          </Navbar.Collapse>
         </Navbar>
         {this._supportModal()}
         {this._loginModal()}
@@ -57,61 +68,6 @@ class BSNavbar extends Reflux.Component {
           Open<span className="logo-end">Neuro</span>
         </div>
       </Link>
-    )
-  }
-
-  _navMenu() {
-    let profile = this.state.users.profile
-    let scitran = this.state.users.scitran
-    let isLoggedIn = !!this.state.users.token && profile && scitran
-    let loading = this.state.users.loading
-    let adminLink = (
-      <NavLink className="nav-link" to="/admin">
-        <span className="link-name">admin</span>
-      </NavLink>
-    )
-    let dashboardLink = (
-      <NavLink className="nav-link" to="/dashboard">
-        <span className="link-name">my dashboard</span>
-      </NavLink>
-    )
-
-    return (
-      <ul className="nav navbar-nav main-nav">
-        <li className="link-dashboard">{isLoggedIn ? dashboardLink : null}</li>
-        <li className="link-public">
-          <NavLink className="nav-link" to="/public/datasets">
-            <span className="link-name">Public Dashboard</span>
-          </NavLink>
-        </li>
-        <li className="link-support">
-          <a
-            className="nav-link"
-            onClick={actions.toggle.bind(this, 'supportModal')}>
-            <span className="link-name">Support</span>
-          </a>
-        </li>
-        <li className="link-faq">
-          <NavLink className="nav-link" to="/faq">
-            <span className="link-name">faq</span>
-          </NavLink>
-        </li>
-        <li className="link-admin">
-          {this.state.users.scitran && this.state.users.scitran.root
-            ? adminLink
-            : null}
-        </li>
-        <li className="link-dashboard">{isLoggedIn ? <UploadBtn /> : null}</li>
-        <li>
-          <Navbar.Collapse eventKey={0}>
-            {isLoggedIn ? (
-              <Usermenu profile={profile} />
-            ) : (
-              this._signIn(loading)
-            )}
-          </Navbar.Collapse>
-        </li>
-      </ul>
     )
   }
 
@@ -150,29 +106,6 @@ class BSNavbar extends Reflux.Component {
         </Modal.Footer>
       </Modal>
     )
-  }
-
-  _signIn(loading) {
-    if (loading) {
-      return (
-        <div className="navbar-right sign-in-nav-btn">
-          <button className="btn-blue">
-            <i className="fa fa-spin fa-circle-o-notch" />
-            <span> Signing In</span>
-          </button>
-        </div>
-      )
-    } else {
-      return (
-        <div className="navbar-right sign-in-nav-btn">
-          <button
-            className="btn-blue"
-            onClick={actions.toggle.bind(this, 'loginModal')}>
-            <span>Sign in</span>
-          </button>
-        </div>
-      )
-    }
   }
 
   _loginModal() {
