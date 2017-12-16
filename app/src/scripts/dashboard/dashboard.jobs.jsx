@@ -132,7 +132,11 @@ class Jobs extends Reflux.Component {
 
   _jobs(paginatedResults) {
     return paginatedResults.map(job => {
-      let user = job.userId
+      let user =
+        job.hasOwnProperty('userMetadata') &&
+        job.userMetadata.hasOwnProperty('email')
+          ? job.userMetadata.email
+          : job.userId
       let dateAdded = moment(job.analysis.created).format('L')
       let timeago = moment(job.analysis.created).fromNow(true)
       const datasetId = bids.decodeId(job.datasetId)

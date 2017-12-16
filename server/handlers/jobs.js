@@ -172,7 +172,7 @@ let handlers = {
         return next(err)
       }
 
-      var userPromises = jobs.map(job => {
+      const userPromises = jobs.map(job => {
         return new Promise(resolve => {
           scitran.getUser(job.userId, (err, response) => {
             job.userMetadata = {}
@@ -430,75 +430,91 @@ let handlers = {
         return
       }
 
-      // store request metadata
-      let availableApps = {}
-
-      // filter jobs by permissions
-      let filteredJobs = []
-
-      if (reqPublic) {
-        async.each(
-          jobs,
-          (job, cb) => {
-            c.scitran.project_snapshots.findOne(
-              { _id: ObjectID(job.snapshotId) },
-              {},
-              (err, snapshot) => {
-                if (snapshot && snapshot.public === true) {
-                  buildMetadata(job)
-                  filteredJobs.push(job)
-                  cb()
-                } else {
-                  cb()
-                }
-              },
-            )
-          },
-          () => {
-            res.send({
-              availableApps: reMapMetadata(availableApps),
-              jobs: filteredJobs,
-            })
-          },
-        )
-      } else {
-        for (let job of jobs) {
-          if (reqAll || req.user === job.userId) {
-            buildMetadata(job)
-            filteredJobs.push(job)
-          }
-        }
-        res.send({
-          availableApps: reMapMetadata(availableApps),
-          jobs: filteredJobs,
+      // tie user metadata to the jobs
+      const userPromises = jobs.map(job => {
+        return new Promise(resolve => {
+          scitran.getUser(job.userId, (err, response) => {
+            job.userMetadata = {}
+            if (response.statusCode == 200) {
+              job.userMetadata = response.body
+            }
+            resolve()
+          })
         })
-      }
+      })
+      Promise.all(userPromises).then(() => {
+        console.log('JOB AFTER PROMISE:', jobs)
 
-      function buildMetadata(job) {
-        if (!availableApps.hasOwnProperty(job.appLabel)) {
-          availableApps[job.appLabel] = { versions: {} }
-          availableApps[job.appLabel].versions[job.appVersion] = job.appId
-        } else if (
-          !availableApps[job.appLabel].versions.hasOwnProperty(job.appVersion)
-        ) {
-          availableApps[job.appLabel].versions[job.appVersion] = job.appId
-        }
-      }
+        // store request metadata
+        let availableApps = {}
 
-      function reMapMetadata(apps) {
-        let remapped = []
-        for (let app in apps) {
-          let tempApp = { label: app, versions: [] }
-          for (let version in apps[app].versions) {
-            tempApp.versions.push({
-              version,
-              id: apps[app].versions[version],
-            })
+        // filter jobs by permissions
+        let filteredJobs = []
+
+        if (reqPublic) {
+          async.each(
+            jobs,
+            (job, cb) => {
+              c.scitran.project_snapshots.findOne(
+                { _id: ObjectID(job.snapshotId) },
+                {},
+                (err, snapshot) => {
+                  if (snapshot && snapshot.public === true) {
+                    buildMetadata(job)
+                    filteredJobs.push(job)
+                    cb()
+                  } else {
+                    cb()
+                  }
+                },
+              )
+            },
+            () => {
+              res.send({
+                availableApps: reMapMetadata(availableApps),
+                jobs: filteredJobs,
+              })
+            },
+          )
+        } else {
+          for (let job of jobs) {
+            if (reqAll || req.user === job.userId) {
+              buildMetadata(job)
+              filteredJobs.push(job)
+            }
           }
-          remapped.push(tempApp)
+          res.send({
+            availableApps: reMapMetadata(availableApps),
+            jobs: filteredJobs,
+          })
         }
-        return remapped
-      }
+
+        function buildMetadata(job) {
+          if (!availableApps.hasOwnProperty(job.appLabel)) {
+            availableApps[job.appLabel] = { versions: {} }
+            availableApps[job.appLabel].versions[job.appVersion] = job.appId
+          } else if (
+            !availableApps[job.appLabel].versions.hasOwnProperty(job.appVersion)
+          ) {
+            availableApps[job.appLabel].versions[job.appVersion] = job.appId
+          }
+        }
+
+        function reMapMetadata(apps) {
+          let remapped = []
+          for (let app in apps) {
+            let tempApp = { label: app, versions: [] }
+            for (let version in apps[app].versions) {
+              tempApp.versions.push({
+                version,
+                id: apps[app].versions[version],
+              })
+            }
+            remapped.push(tempApp)
+          }
+          return remapped
+        }
+      })
     })
   },
 
