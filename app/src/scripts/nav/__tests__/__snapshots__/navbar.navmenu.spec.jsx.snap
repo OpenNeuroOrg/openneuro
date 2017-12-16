@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavMenu renders successfully 1`] = `
+<ul
+  className="nav navbar-nav main-nav"
+>
+  <li
+    className="link-dashboard"
+  />
+  <li
+    className="link-public"
+  >
+    <NavLink
+      activeClassName="active"
+      ariaCurrent="true"
+      className="nav-link"
+      to="/public/datasets"
+    >
+      <span
+        className="link-name"
+      >
+        Public Dashboard
+      </span>
+    </NavLink>
+  </li>
+  <li
+    className="link-support"
+  >
+    <a
+      className="nav-link"
+      onClick={[Function]}
+    >
+      <span
+        className="link-name"
+      >
+        Support
+      </span>
+    </a>
+  </li>
+  <li
+    className="link-faq"
+  >
+    <NavLink
+      activeClassName="active"
+      ariaCurrent="true"
+      className="nav-link"
+      to="/faq"
+    >
+      <span
+        className="link-name"
+      >
+        faq
+      </span>
+    </NavLink>
+  </li>
+  <li
+    className="link-admin"
+  />
+  <li
+    className="link-dashboard"
+  />
+  <li>
+    <NavbarCollapse
+      eventKey={0}
+    >
+      <SignIn
+        loading={false}
+      />
+    </NavbarCollapse>
+  </li>
+</ul>
+`;
