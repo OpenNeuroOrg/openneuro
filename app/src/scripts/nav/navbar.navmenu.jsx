@@ -29,15 +29,20 @@ const SignIn = ({ loading }) => {
 }
 
 const NavMenu = ({ profile, scitran, isLoggedIn, loading }) => {
-  let adminLink = (
+  const adminLink = (
     <NavLink className="nav-link" to="/admin">
       <span className="link-name">admin</span>
     </NavLink>
   )
-  let dashboardLink = (
+  const dashboardLink = (
     <NavLink className="nav-link" to="/dashboard">
       <span className="link-name">my dashboard</span>
     </NavLink>
+  )
+  const loginButton = isLoggedIn ? (
+    <Usermenu profile={profile} />
+  ) : (
+    <SignIn loading={loading} />
   )
 
   return (
@@ -65,16 +70,11 @@ const NavMenu = ({ profile, scitran, isLoggedIn, loading }) => {
       </li>
       <li className="link-dashboard">{isLoggedIn ? <UploadBtn /> : null}</li>
       <li>
-        <Navbar.Collapse eventKey={0}>
-          {isLoggedIn ? (
-            <Usermenu profile={profile} />
-          ) : (
-            <SignIn loading={loading} />
-          )}
-        </Navbar.Collapse>
+        <Navbar.Collapse eventKey={0}>{loginButton}</Navbar.Collapse>
       </li>
     </ul>
   )
 }
 
+export { NavMenu, SignIn }
 export default NavMenu
