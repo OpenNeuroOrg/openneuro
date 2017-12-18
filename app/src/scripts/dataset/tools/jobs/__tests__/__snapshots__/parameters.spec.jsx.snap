@@ -20,7 +20,7 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
     >
       <button
         className="btn-reset"
-        onClick={[Function]}
+        onClick={[MockFunction]}
       >
         Restore Default Parameters
       </button>

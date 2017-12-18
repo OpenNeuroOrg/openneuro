@@ -387,7 +387,7 @@ exports[`dataset/dataset.job.run/JobAccordion renders a successful run 1`] = `
                     displayFile={[Function]}
                     editable={false}
                     getFileDownloadTicket={[Function]}
-                    toggleFolder={[Function]}
+                    toggleFolder={[MockFunction]}
                     tree={
                       Array [
                         Object {
