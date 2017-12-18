@@ -70,7 +70,7 @@ const NavMenu = ({ profile, scitran, isLoggedIn, loading }) => {
       </li>
       <li className="link-dashboard">{isLoggedIn ? <UploadBtn /> : null}</li>
       <li>
-        <Navbar.Collapse eventKey={0}>{loginButton}</Navbar.Collapse>
+        <Navbar.Collapse>{loginButton}</Navbar.Collapse>
       </li>
     </ul>
   )
