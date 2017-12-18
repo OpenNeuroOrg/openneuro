@@ -3,7 +3,7 @@ import React from 'react'
 import actions from '../dataset.actions'
 import { Accordion, Panel } from 'react-bootstrap'
 import FileTree from '../../common/partials/file-tree.jsx'
-import WarnButton from '../../common/forms/warn-button.jsx'
+import DownloadAll from './download-all.jsx'
 import markdown from '../../utils/markdown'
 
 const JobResults = ({ run, acknowledgements, displayFile, toggleFolder }) => {
@@ -19,18 +19,7 @@ const JobResults = ({ run, acknowledgements, displayFile, toggleFolder }) => {
           />
         </div>
         <hr />
-        <span className="download-all">
-          <WarnButton
-            icon="fa-download"
-            message=" DOWNLOAD All"
-            prepDownload={actions.getResultDownloadTicket.bind(
-              this,
-              run.snapshotId,
-              run._id,
-              { path: 'all-' + type },
-            )}
-          />
-        </span>
+        <DownloadAll datasetId={run._id} snapshotId={run.snapshotId} />
         <div className="file-structure fade-in panel-group">
           <div className="panel panel-default">
             <div className="panel-collapse" aria-expanded="false">
