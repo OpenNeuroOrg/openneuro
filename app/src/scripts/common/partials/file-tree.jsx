@@ -5,8 +5,6 @@ import PropTypes from 'prop-types'
 import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
-import upload from '../../upload/upload'
-import async from 'async'
 import config from '../../../../config'
 
 let uploadBlacklist = config.upload.blacklist
@@ -298,7 +296,7 @@ class FileTree extends React.Component {
     })
     let dirTree = files.generateTree(newFileList)
     let uploads = []
-    Object.keys(newFileList).forEach((fileKey, index) => {
+    Object.keys(newFileList).forEach(fileKey => {
       let fileObj = newFileList[fileKey]
       let modifiedContainer = files.findInTree(dirTree, fileObj.parentId)
       uploads.push({ container: modifiedContainer, file: fileObj })
@@ -341,6 +339,7 @@ FileTree.propTypes = {
   addDirectoryFile: PropTypes.func,
   updateFile: PropTypes.func,
   displayFile: PropTypes.func,
+  topLevel: PropTypes.bool,
 }
 
 export default FileTree
