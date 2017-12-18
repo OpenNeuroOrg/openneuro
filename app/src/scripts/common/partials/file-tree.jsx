@@ -7,6 +7,9 @@ import Spinner from './spinner.jsx'
 import files from '../../utils/files'
 import upload from '../../upload/upload'
 import async from 'async'
+import config from '../../../../config'
+
+let uploadBlacklist = config.upload.blacklist
 
 class FileTree extends React.Component {
   // life cycle events --------------------------------------------------
@@ -279,7 +282,6 @@ class FileTree extends React.Component {
      * Add File
      */
   _addFile(container, event) {
-    console.log(container)
     this.props.addFile(container, event.target.files[0])
   }
 
@@ -289,40 +291,18 @@ class FileTree extends React.Component {
     let fileList = event.target.files
     let newFileList = []
     Object.keys(fileList).forEach(key => {
-      newFileList.push(fileList[key])
+      //filter out any blacklisted files before upload
+      if (uploadBlacklist.indexOf(fileList[key].name) === -1) {
+        newFileList.push(fileList[key])
+      }
     })
     let dirTree = files.generateTree(newFileList)
     let uploads = []
-    Object.keys(newFileList).forEach(fileKey => {
-      let fileObj = fileList[fileKey]
-      let dirTreeChildren = dirTree[0].children
-      let file = files.findInTree(dirTreeChildren, fileObj.name, 'name')
-      let dirPathArray = file.webkitRelativePath.split('/')
-      let dirPath =
-        dirPathArray.slice(0, dirPathArray.length - 1).join('/') + '/'
-      let modcontainer = {
-        _id: file.parentId,
-        dirPath: dirPath,
-        name: fileObj.name,
-      }
-      let children = dirTree[0].children
-      let baseContainer = children.filter(obj => {
-        console.log(obj)
-        return modcontainer._id === obj._id
-      })
-      console.log(baseContainer)
-      console.log('!!!!!!!!!!!!!!!!!!!!!!!!!')
-      console.log(modcontainer)
-      //this will be top level files.
-      if (!baseContainer.length) {
-        baseContainer = dirTree[0]
-      } else {
-        baseContainer.pop()
-      }
-      let modifiedContainer = Object.assign({}, baseContainer, modcontainer)
+    Object.keys(newFileList).forEach((fileKey, index) => {
+      let fileObj = newFileList[fileKey]
+      let modifiedContainer = files.findInTree(dirTree, fileObj.parentId)
       uploads.push({ container: modifiedContainer, file: fileObj })
     })
-    console.log(uploads)
     this.props.addDirectoryFile(uploads, dirTree[0])
   }
 

@@ -851,42 +851,49 @@ let datasetStore = Reflux.createStore({
   },
 
   addDirectoryFile(uploads, dirTree, callback) {
-    let topLevelDirectory = `${uploads.pop().container.dirPath.split('/')[0]}/`
-    let message = this.updateMessage('add directory', {
-      name: topLevelDirectory,
+    // get the top level directory name to display in warning message
+    let topLevelDirectory = `${uploads[0].container.dirPath.split('/')[0]}/`
+    let dataset = this.data.dataset
+    let childExistsIndex = dataset.children.findIndex(el => {
+      return el.name === dirTree.name
     })
-    this.updateWarn({
-      message: message,
-      action: () => {
-        async.each(
-          uploads,
-          (upload, cb) => {
-            let file = upload.file
-            let container = upload.container
-            // this.updateDirectoryState(container._id, { loading: true })
-            file.modifiedName = (container.dirPath || '') + file.name
-            scitran.updateFile('projects', this.data.dataset._id, file, () => {
-              let children = container.children
-              children.unshift({
-                name: file.modifiedName,
-                parentId: container._id,
-              })
-              // this.updateDirectoryState(container._id, {
-              //   children: children,
-              //   loading: false,
-              // })
-              cb()
-            })
-          },
-          err => {
-            this.loadDataset(this.data.dataset._id)
-            // this.updateFileTreeOnAddDir(dirTree)
-            this.revalidate()
-            if (callback) callback()
-          },
-        )
-      },
-    })
+    if (childExistsIndex === -1) {
+      let message = this.updateMessage('add directory', {
+        name: topLevelDirectory,
+      })
+      this.updateWarn({
+        message: message,
+        action: () => {
+          async.each(
+            uploads,
+            (upload, cb) => {
+              let file = upload.file
+              let container = upload.container
+              this.updateDirectoryState(container._id, { loading: true })
+              file.modifiedName = (container.dirPath || '') + file.name
+              scitran.updateFile(
+                'projects',
+                this.data.dataset._id,
+                file,
+                () => {
+                  cb()
+                },
+              )
+            },
+            err => {
+              // this.loadDataset(this.data.dataset._id)
+              this.updateFileTreeOnAddDir(dirTree)
+              this.revalidate()
+              if (callback) callback()
+            },
+          )
+        },
+      })
+    } else {
+      this.updateDirectoryState(dataset._id, {
+        error: '"' + topLevelDirectory + '" already exists in this dataset.',
+      })
+    }
   },
 
   /**
@@ -1042,10 +1049,17 @@ let datasetStore = Reflux.createStore({
   },
 
   updateFileTreeOnAddDir(addedContainer, callback) {
-    console.log(addedContainer)
     let dataset = this.data.dataset
-    console.log(dataset)
-    dataset.children.push(addedContainer)
+    let childExistsIndex = dataset.children.findIndex(el => {
+      return el.name === addedContainer.name
+    })
+    // If directory does not exist in the dataset, add it as a child
+    // otherwise overwrite existing child
+    if (childExistsIndex === -1) {
+      dataset.children.push(addedContainer)
+    } else {
+      dataset.children[childExistsIndex] = addedContainer
+    }
     this.update({ dataset }, callback)
   },
 
