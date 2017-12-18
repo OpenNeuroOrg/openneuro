@@ -62,30 +62,28 @@ let orcid = {
   },
 
   signIn(callback) {
-    if (this.oauthWindow) {
-      window.clearInterval(this.polling)
-      this.oauthWindow.close()
-    }
-
+    // Start the third part oauth flow in a new window
     this.oauthWindow = window.open(
       config.auth.orcid.URI +
         '/oauth/authorize?client_id=' +
         config.auth.orcid.clientID +
         '&response_type=code&scope=/authenticate&redirect_uri=' +
         config.auth.orcid.redirectURI,
-      '_blank',
+      'ORCID',
     )
 
-    const pooling = callback => {
+    // Setup a timer to check for the redirect URI
+    this.oauthTimer = window.setInterval(() => {
       try {
-        if (!this.oauthWindow || this.oauthWindow.closed) {
-          callback(true)
-          return
-        }
-        let url = this.oauthWindow.document.URL
-        if (url.indexOf(config.auth.orcid.redirectURI) != -1) {
-          this.oauthWindow.close()
-          let code = url.toString().match(/code=([^&]+)/)[1]
+        if (
+          this.oauthWindow.document &&
+          this.oauthWindow.document.URL.indexOf(
+            config.auth.orcid.redirectURI,
+          ) !== -1
+        ) {
+          const url = this.oauthWindow.document.URL
+          const code = url.toString().match(/code=([^&]+)/)[1]
+          clearInterval(this.oauthTimer)
           crn.getORCIDToken(code, (err, res) => {
             if (err) {
               callback(err)
@@ -94,18 +92,23 @@ let orcid = {
               this.getCurrentUser(callback)
             }
           })
-          return
+        } else {
+          // If not the redirect page - check if closed and unregister
+          if (this.oauthWindow.closed) {
+            clearInterval(this.oauthTimer)
+            return callback(true)
+          }
         }
       } catch (e) {
-        console.log(e)
+        // DOMException means the oauth window is inaccessible due to the origin
+        if (!(e instanceof DOMException)) {
+          // Any other errors should stop polling
+          // TODO - could reset login state here in case of failures
+          clearInterval(this.oauthTimer)
+          console.log(e)
+        }
       }
-
-      retryUrlCheck()
-    }
-
-    const retryUrlCheck = () => window.setTimeout(() => pooling(callback), 50)
-
-    retryUrlCheck()
+    }, 200)
   },
 
   signOut(callback) {
