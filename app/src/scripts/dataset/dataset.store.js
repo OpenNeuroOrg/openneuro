@@ -881,7 +881,7 @@ let datasetStore = Reflux.createStore({
               )
             },
             err => {
-              // this.loadDataset(this.data.dataset._id)
+              if (err && callback) callback(err)
               this.updateFileTreeOnAddDir(dirTree)
               this.revalidate()
               if (callback) callback()
