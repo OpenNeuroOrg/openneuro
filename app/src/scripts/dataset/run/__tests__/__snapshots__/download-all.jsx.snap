@@ -1,3 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`dataset/run/DownloadAll should render something 1`] = `""`;
+exports[`dataset/run/DownloadAll should render something 1`] = `
+<span
+  className="download-all"
+>
+  <WarnButton
+    cancel={
+      <i
+        className="fa fa-times"
+      />
+    }
+    confirm={
+      <i
+        className="fa fa-check"
+      />
+    }
+    icon="fa-download"
+    message=" DOWNLOAD All"
+    prepDownload={[Function]}
+    tooltip={null}
+    warn={true}
+  />
+</span>
+`;
