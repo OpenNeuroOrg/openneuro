@@ -11,8 +11,6 @@ exports[`NavMenu renders successfully 1`] = `
     className="link-public"
   >
     <NavLink
-      activeClassName="active"
-      ariaCurrent="true"
       className="nav-link"
       to="/public/datasets"
     >
@@ -41,8 +39,6 @@ exports[`NavMenu renders successfully 1`] = `
     className="link-faq"
   >
     <NavLink
-      activeClassName="active"
-      ariaCurrent="true"
       className="nav-link"
       to="/faq"
     >
