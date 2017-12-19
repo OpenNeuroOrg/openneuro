@@ -111,7 +111,7 @@ let datasetStore = Reflux.createStore({
      *
      * Takes a datasetId and loads the dataset.
      */
-  loadDataset(datasetId, options) {
+  loadDataset(datasetId, options, forceReload) {
     let snapshot = !!(options && options.snapshot),
       dataset = this.data.dataset
     options = options ? options : {}
@@ -135,7 +135,7 @@ let datasetStore = Reflux.createStore({
     })
 
     // don't reload the current dataset
-    if (dataset && dataset._id === datasetId) {
+    if (!forceReload && dataset && dataset._id === datasetId) {
       this.update({ loading: false, loadingJobs: false })
       return
     }
@@ -173,6 +173,9 @@ let datasetStore = Reflux.createStore({
                 this.update({ loading: false, snapshot: snapshot })
               })
             })
+            if (forceReload) {
+              this.revalidate()
+            }
           }
         }
       },
@@ -882,7 +885,45 @@ let datasetStore = Reflux.createStore({
             },
             err => {
               if (err && callback) callback(err)
-              this.updateFileTreeOnAddDir(dirTree)
+              this.loadDataset(bids.encodeId(dataset._id), undefined, true) // forcing reload
+              this.updateDirectoryState(dataset._id, { error: '' })
+              if (callback) callback()
+            },
+          )
+        },
+      })
+    } else {
+      this.updateDirectoryState(dataset._id, {
+        error: '"' + topLevelDirectory + '" already exists in this dataset.',
+      })
+    }
+  },
+
+  deleteDirectory(dirTree, label, callback) {
+    // get the top level directory name to display in warning message
+    let fileList = files.findFiles(dirTree)
+    if (true || childExistsIndex === -1) {
+      let message = this.updateMessage('delete directory', {
+        name: label,
+      })
+      this.updateWarn({
+        message: message,
+        action: () => {
+          async.each(
+            fileList,
+            (file, cb) => {
+              scitran.deleteFile(
+                'projects',
+                this.data.dataset._id,
+                file.name,
+                () => {
+                  cb()
+                },
+              )
+            },
+            err => {
+              if (err && callback) callback(err)
+              this.updateFileTreeOnDeleteDir(label)
               this.revalidate()
               if (callback) callback()
             },
@@ -1048,21 +1089,14 @@ let datasetStore = Reflux.createStore({
     this.update({ dataset }, callback)
   },
 
-  updateFileTreeOnAddDir(addedContainer, callback) {
+  updateFileTreeOnDeleteDir(directoryName, callback) {
     let dataset = this.data.dataset
-    let childExistsIndex = dataset.children.findIndex(el => {
-      return el.name === addedContainer.name
+    dataset.children = dataset.children.filter(child => {
+      return child.name != directoryName
     })
-    // If directory does not exist in the dataset, add it as a child
-    // otherwise overwrite existing child
-    if (childExistsIndex === -1) {
-      dataset.children.push(addedContainer)
-    } else {
-      dataset.children[childExistsIndex] = addedContainer
-    }
+
     this.update({ dataset }, callback)
   },
-
   /**
      * Update File State
      *

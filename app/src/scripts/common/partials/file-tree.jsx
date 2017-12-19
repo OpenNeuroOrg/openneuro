@@ -55,6 +55,7 @@ class FileTree extends React.Component {
             dismissError={this.props.dismissError}
             displayFile={this.props.displayFile}
             deleteFile={this.props.deleteFile}
+            deleteDirectory={this.props.deleteDirectory}
             getFileDownloadTicket={this.props.getFileDownloadTicket}
             toggleFolder={this.props.toggleFolder}
             addFile={this.props.addFile}
@@ -89,9 +90,10 @@ class FileTree extends React.Component {
   }
 
   _fileTools(item, editable, topLevel) {
-    let deleteFile, editFile, addFile, addDirectory
+    let deleteFile, editFile, addFile, addDirectory, deleteDirectory
     if (editable) {
       let inputId = item.hasOwnProperty('_id') ? item._id : item.name
+      let label = item.label ? item.label : item.name
       if (item.children && item.showChildren) {
         addFile = (
           <div className="edit-file">
@@ -107,6 +109,16 @@ class FileTree extends React.Component {
             />
           </div>
         )
+
+        deleteDirectory = !this.props.topLevel ? (
+          <span className="delete-file">
+            <WarnButton
+              icon="fa-trash"
+              message={`Delete ${label}`}
+              action={this.props.deleteDirectory.bind(null, item, label)}
+            />
+          </span>
+        ) : null
       } else if (!item.children) {
         deleteFile = (
           <span className="delete-file">
@@ -223,6 +235,7 @@ class FileTree extends React.Component {
       return (
         <span className="filetree-editfile">
           {addFile}
+          {deleteDirectory}
           {addDirectory}
           {editFile}
           {deleteFile}
@@ -256,12 +269,18 @@ class FileTree extends React.Component {
       let iconClass =
         'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder')
       return (
-        <button
-          className="btn-file-folder"
-          onClick={this.props.toggleFolder.bind(this, item, this.props.treeId)}>
-          <i className={iconClass} /> {label}
-          <i className={iconClassAccordion} />
-        </button>
+        <div>
+          <button
+            className="btn-file-folder"
+            onClick={this.props.toggleFolder.bind(
+              this,
+              item,
+              this.props.treeId,
+            )}>
+            <i className={iconClass} /> {label}
+            <i className={iconClassAccordion} />
+          </button>
+        </div>
       )
     } else {
       // remove full file paths
