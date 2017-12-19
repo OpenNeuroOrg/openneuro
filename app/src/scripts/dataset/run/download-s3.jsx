@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import config from '../../../../config'
 import { Modal, Well } from 'react-bootstrap'
 
@@ -25,7 +26,7 @@ class DownloadS3 extends React.Component {
     this.setState({ instructionModal: true })
   }
 
-  _closeModal(event) {
+  _closeModal() {
     this.setState({ instructionModal: false })
   }
 
@@ -62,6 +63,11 @@ class DownloadS3 extends React.Component {
       </span>
     )
   }
+}
+
+DownloadS3.propTypes = {
+  analysisId: PropTypes.string,
+  datasetHash: PropTypes.string,
 }
 
 export default DownloadS3

@@ -1,7 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import DownloadS3 from '../download-s3.jsx'
-import { Modal } from 'react-bootstrap'
 
 const datasetHash = 'dataset-hash'
 const analysisId = 'analysis-id'
