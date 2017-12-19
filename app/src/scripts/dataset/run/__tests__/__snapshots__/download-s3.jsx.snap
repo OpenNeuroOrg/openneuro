@@ -4,7 +4,7 @@ exports[`dataset/run/DownloadS3 should render something 1`] = `
 <span>
   <a
     className="btn-warn-component"
-    href="s3://undefined/undefined/undefined"
+    href="s3://test-bucket/dataset-hash/analysis-id"
   >
     <i
       aria-hidden="true"
