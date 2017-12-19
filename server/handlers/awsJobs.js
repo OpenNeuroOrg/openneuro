@@ -262,6 +262,7 @@ let handlers = {
         res.status(404).send({ message: 'Job not found.' })
         return
       }
+
       //Send back job object to client
       // server side polling handles all interactions with Batch now therefore we are not initiating batch polling from client
       res.send(job)

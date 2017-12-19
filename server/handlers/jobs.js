@@ -171,53 +171,68 @@ let handlers = {
       if (err) {
         return next(err)
       }
-      for (let job of jobs) {
-        if (job.analysis.logstreams) {
-          let streamNameVersion = aws.cloudwatch.streamNameVersion(job)
-          job.analysis.logstreams = job.analysis.logstreams.map(stream => {
-            // Fix legacy internal logstream values and adapt for changes in Batch names
-            return aws.cloudwatch.formatLegacyLogStream(
-              stream,
-              streamNameVersion,
-            )
+
+      var userPromises = jobs.map(job => {
+        return new Promise(resolve => {
+          scitran.getUser(job.userId, (err, response) => {
+            job.userMetadata = {}
+            if (response.statusCode == 200) {
+              job.userMetadata = response.body
+            }
+            resolve()
           })
-        }
-      }
-      if (snapshot) {
-        if (!hasAccess) {
-          let error = new Error(
-            'You do not have access to view jobs for this dataset.',
-          )
-          error.http_code = 403
-          return next(error)
-        }
-        // remove user ID on public requests
-        if (!user) {
-          for (let job of jobs) {
-            delete job.userId
+        })
+      })
+
+      Promise.all(userPromises).then(() => {
+        for (let job of jobs) {
+          if (job.analysis.logstreams) {
+            let streamNameVersion = aws.cloudwatch.streamNameVersion(job)
+            job.analysis.logstreams = job.analysis.logstreams.map(stream => {
+              // Fix legacy internal logstream values and adapt for changes in Batch names
+              return aws.cloudwatch.formatLegacyLogStream(
+                stream,
+                streamNameVersion,
+              )
+            })
           }
         }
-        res.send(jobs)
-      } else {
-        scitran.getProjectSnapshots(datasetId, (err, resp) => {
-          let snapshots = resp.body
-          let filteredJobs = []
-          for (let job of jobs) {
-            for (let snapshot of snapshots) {
-              if (
-                (snapshot.public || hasAccess) &&
-                snapshot._id === job.snapshotId
-              ) {
-                if (!user) {
-                  delete job.userId
-                }
-                filteredJobs.push(job)
-              }
+        if (snapshot) {
+          if (!hasAccess) {
+            let error = new Error(
+              'You do not have access to view jobs for this dataset.',
+            )
+            error.http_code = 403
+            return next(error)
+          }
+          // remove user ID on public requests
+          if (!user) {
+            for (let job of jobs) {
+              delete job.userId
             }
           }
-          res.send(filteredJobs)
-        })
-      }
+          res.send(jobs)
+        } else {
+          scitran.getProjectSnapshots(datasetId, (err, resp) => {
+            let snapshots = resp.body
+            let filteredJobs = []
+            for (let job of jobs) {
+              for (let snapshot of snapshots) {
+                if (
+                  (snapshot.public || hasAccess) &&
+                  snapshot._id === job.snapshotId
+                ) {
+                  if (!user) {
+                    delete job.userId
+                  }
+                  filteredJobs.push(job)
+                }
+              }
+            }
+            res.send(filteredJobs)
+          })
+        }
+      })
     })
   },
 
