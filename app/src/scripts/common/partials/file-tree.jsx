@@ -5,6 +5,9 @@ import PropTypes from 'prop-types'
 import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
+import config from '../../../../config'
+
+let uploadBlacklist = config.upload.blacklist
 
 class FileTree extends React.Component {
   // life cycle events --------------------------------------------------
@@ -12,6 +15,8 @@ class FileTree extends React.Component {
   render() {
     let editable = this.props.editable
     let tree = this.props.tree
+    let topLevel = this.props.topLevel
+
     let nodes = tree.map(item => {
       let name = item.label ? item.label : item.name
       return (
@@ -19,7 +24,7 @@ class FileTree extends React.Component {
           <span className="item-name">
             {this._folderIcon(item)} {this._fileLoading(item.loading)}
           </span>
-          {this._fileTools(item, editable)}
+          {this._fileTools(item, editable, topLevel)}
           {this._error(item)}
           {this._children(item, editable)}
         </li>
@@ -50,6 +55,7 @@ class FileTree extends React.Component {
             dismissError={this.props.dismissError}
             displayFile={this.props.displayFile}
             deleteFile={this.props.deleteFile}
+            deleteDirectory={this.props.deleteDirectory}
             getFileDownloadTicket={this.props.getFileDownloadTicket}
             toggleFolder={this.props.toggleFolder}
             addFile={this.props.addFile}
@@ -83,10 +89,11 @@ class FileTree extends React.Component {
     }
   }
 
-  _fileTools(item, editable) {
-    let deleteFile, editFile, addFile
+  _fileTools(item, editable, topLevel) {
+    let deleteFile, editFile, addFile, addDirectory, deleteDirectory
     if (editable) {
       let inputId = item.hasOwnProperty('_id') ? item._id : item.name
+      let label = item.label ? item.label : item.name
       if (item.children && item.showChildren) {
         addFile = (
           <div className="edit-file">
@@ -102,6 +109,16 @@ class FileTree extends React.Component {
             />
           </div>
         )
+
+        deleteDirectory = !this.props.topLevel ? (
+          <span className="delete-file">
+            <WarnButton
+              icon="fa-trash"
+              message={`Delete ${label}`}
+              action={this.props.deleteDirectory.bind(null, item, label)}
+            />
+          </span>
+        ) : null
       } else if (!item.children) {
         deleteFile = (
           <span className="delete-file">
@@ -124,6 +141,26 @@ class FileTree extends React.Component {
               ref={inputId}
               onChange={this._updateFile.bind(this, item)}
               onClick={this._clearInput.bind(this, inputId)}
+            />
+          </div>
+        )
+      }
+      //Adding a multiple file input at the top level of the tree to support adding directories to the dataset
+      // this will allow for adding subjects to the dataset
+      if (topLevel) {
+        addDirectory = (
+          <div className="edit-file">
+            <span>
+              <i className="fa fa-plus" /> Add Directory
+            </span>
+            <input
+              type="file"
+              className="add-files"
+              ref={inputId}
+              onChange={this._addDirectory.bind(this, item)}
+              onClick={this._clearInput.bind(this, inputId)}
+              webkitdirectory="true"
+              directory="true"
             />
           </div>
         )
@@ -198,6 +235,8 @@ class FileTree extends React.Component {
       return (
         <span className="filetree-editfile">
           {addFile}
+          {deleteDirectory}
+          {addDirectory}
           {editFile}
           {deleteFile}
           {downloadFile}
@@ -230,12 +269,18 @@ class FileTree extends React.Component {
       let iconClass =
         'type-icon fa ' + (item.showChildren ? 'fa-folder-open' : 'fa-folder')
       return (
-        <button
-          className="btn-file-folder"
-          onClick={this.props.toggleFolder.bind(this, item, this.props.treeId)}>
-          <i className={iconClass} /> {label}
-          <i className={iconClassAccordion} />
-        </button>
+        <div>
+          <button
+            className="btn-file-folder"
+            onClick={this.props.toggleFolder.bind(
+              this,
+              item,
+              this.props.treeId,
+            )}>
+            <i className={iconClass} /> {label}
+            <i className={iconClassAccordion} />
+          </button>
+        </div>
       )
     } else {
       // remove full file paths
@@ -255,6 +300,27 @@ class FileTree extends React.Component {
      */
   _addFile(container, event) {
     this.props.addFile(container, event.target.files[0])
+  }
+
+  _addDirectory(container, event) {
+    event.preventDefault()
+
+    let fileList = event.target.files
+    let newFileList = []
+    Object.keys(fileList).forEach(key => {
+      //filter out any blacklisted files before upload
+      if (uploadBlacklist.indexOf(fileList[key].name) === -1) {
+        newFileList.push(fileList[key])
+      }
+    })
+    let dirTree = files.generateTree(newFileList)
+    let uploads = []
+    Object.keys(newFileList).forEach(fileKey => {
+      let fileObj = newFileList[fileKey]
+      let modifiedContainer = files.findInTree(dirTree, fileObj.parentId)
+      uploads.push({ container: modifiedContainer, file: fileObj })
+    })
+    this.props.addDirectoryFile(uploads, dirTree[0])
   }
 
   /**
@@ -289,8 +355,11 @@ FileTree.propTypes = {
   getFileDownloadTicket: PropTypes.func,
   toggleFolder: PropTypes.func,
   addFile: PropTypes.func,
+  addDirectoryFile: PropTypes.func,
+  deleteDirectory: PropTypes.func,
   updateFile: PropTypes.func,
   displayFile: PropTypes.func,
+  topLevel: PropTypes.bool,
 }
 
 export default FileTree
