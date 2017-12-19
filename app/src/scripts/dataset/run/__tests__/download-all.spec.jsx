@@ -3,7 +3,7 @@ import { shallow } from 'enzyme'
 import DownloadAll from '../download-all.jsx'
 import WarnButton from '../../../common/forms/warn-button.jsx'
 import DownloadS3 from '../download-s3.jsx'
-import { successful_run } from './index.js'
+import { successful_run } from './index.spec.js'
 
 describe('dataset/run/DownloadAll', () => {
   it('should render something', () => {
