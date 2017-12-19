@@ -11,8 +11,6 @@ exports[`NavMenu renders successfully 1`] = `
     className="link-public"
   >
     <NavLink
-      activeClassName="active"
-      ariaCurrent="true"
       className="nav-link"
       to="/public/datasets"
     >
@@ -41,8 +39,6 @@ exports[`NavMenu renders successfully 1`] = `
     className="link-faq"
   >
     <NavLink
-      activeClassName="active"
-      ariaCurrent="true"
       className="nav-link"
       to="/faq"
     >
@@ -60,13 +56,117 @@ exports[`NavMenu renders successfully 1`] = `
     className="link-dashboard"
   />
   <li>
-    <NavbarCollapse
-      eventKey={0}
-    >
+    <NavbarCollapse>
       <SignIn
         loading={false}
       />
     </NavbarCollapse>
   </li>
 </ul>
+`;
+
+exports[`NavMenu renders without "eventKey" warnings 1`] = `
+<NavMenu
+  isLoggedIn={false}
+  loading={false}
+>
+  <ul
+    className="nav navbar-nav main-nav"
+  >
+    <li
+      className="link-dashboard"
+    />
+    <li
+      className="link-public"
+    >
+      <NavLink
+        className="nav-link"
+        to="/public/datasets"
+      />
+    </li>
+    <li
+      className="link-support"
+    >
+      <a
+        className="nav-link"
+        onClick={[Function]}
+      >
+        <span
+          className="link-name"
+        >
+          Support
+        </span>
+      </a>
+    </li>
+    <li
+      className="link-faq"
+    >
+      <NavLink
+        className="nav-link"
+        to="/faq"
+      />
+    </li>
+    <li
+      className="link-admin"
+    />
+    <li
+      className="link-dashboard"
+    />
+    <li>
+      <NavbarCollapse>
+        <Collapse
+          dimension="height"
+          getDimensionValue={[Function]}
+          in={false}
+          mountOnEnter={false}
+          timeout={300}
+          transitionAppear={false}
+          unmountOnExit={false}
+        >
+          <Transition
+            aria-expanded={null}
+            className=""
+            enteredClassName="collapse in"
+            enteringClassName="collapsing"
+            exitedClassName="collapse"
+            exitingClassName="collapsing"
+            in={false}
+            mountOnEnter={false}
+            onEnter={[Function]}
+            onEntered={[Function]}
+            onEntering={[Function]}
+            onExit={[Function]}
+            onExited={[Function]}
+            onExiting={[Function]}
+            timeout={300}
+            transitionAppear={false}
+            unmountOnExit={false}
+          >
+            <div
+              aria-expanded={null}
+              className="navbar-collapse collapse"
+            >
+              <SignIn
+                loading={false}
+              >
+                <div
+                  className="navbar-right sign-in-nav-btn"
+                >
+                  <button
+                    className="btn-blue"
+                    onClick={[Function]}
+                  >
+                    <span>
+                      Sign in
+                    </span>
+                  </button>
+                </div>
+              </SignIn>
+            </div>
+          </Transition>
+        </Collapse>
+      </NavbarCollapse>
+    </li>
+  </ul>
+</NavMenu>
 `;
