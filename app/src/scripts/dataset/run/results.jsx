@@ -19,7 +19,7 @@ const JobResults = ({ run, acknowledgements, displayFile, toggleFolder }) => {
           />
         </div>
         <hr />
-        <DownloadAll datasetId={run._id} snapshotId={run.snapshotId} />
+        <DownloadAll run={run} />
         <div className="file-structure fade-in panel-group">
           <div className="panel panel-default">
             <div className="panel-collapse" aria-expanded="false">

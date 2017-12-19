@@ -2,7 +2,7 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import JobAccordion from '../index'
 
-const successful_run = {
+export const successful_run = {
   _id: '59c1632cc650bd001111f00d',
   datasetId: '202020206473303031303033',
   datasetLabel: 'DS003-downsampled (only T1)',
@@ -103,7 +103,7 @@ const successful_run = {
   active: true,
 }
 
-const failed_run = {
+export const failed_run = {
   _id: '59c16458c650bd001111f010',
   datasetId: '202020206473303031303033',
   datasetLabel: 'DS003-downsampled (only T1)',

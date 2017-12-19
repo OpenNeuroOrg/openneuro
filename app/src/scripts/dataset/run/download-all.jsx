@@ -1,8 +1,9 @@
 import React from 'react'
 import WarnButton from '../../common/forms/warn-button.jsx'
+import DownloadS3 from './download-s3.jsx'
 import actions from '../dataset.actions'
 
-const DownloadAll = ({ datasetId, snapshotId, type = 'results' }) => {
+const DownloadAll = ({ run, type = 'results' }) => {
   return (
     <span className="download-all">
       <WarnButton
@@ -10,10 +11,14 @@ const DownloadAll = ({ datasetId, snapshotId, type = 'results' }) => {
         message=" DOWNLOAD All"
         prepDownload={actions.getResultDownloadTicket.bind(
           this,
-          snapshotId,
-          datasetId,
+          run.snapshotId,
+          run._id,
           { path: 'all-' + type },
         )}
+      />
+      <DownloadS3
+        datasetHash={run.datasetHash}
+        analysisId={run.analysis.analysisId}
       />
     </span>
   )

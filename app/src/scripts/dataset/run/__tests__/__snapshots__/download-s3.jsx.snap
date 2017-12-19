@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dataset/run/DownloadS3 should render something 1`] = `
+<span>
+  <a
+    className="btn-warn-component"
+    href="s3://undefined/undefined/undefined"
+  >
+    <i
+      aria-hidden="true"
+      className="fa fa-link"
+    />
+     S3 URL
+  </a>
+</span>
+`;
