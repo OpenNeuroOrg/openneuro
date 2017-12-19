@@ -23,29 +23,25 @@ describe('dataset/run/DownloadS3', () => {
       shallow(<DownloadS3 datasetHash={datasetHash} analysisId={analysisId} />),
     ).toMatchSnapshot()
   })
-  it('opens a new window when the download link is clicked', () => {
-    // Simulate window.open and event.preventDefault
-    global.open = jest.fn()
-    const preventDefault = jest.fn()
-    const wrapper = shallow(
-      <DownloadS3 datasetHash={datasetHash} analysisId={analysisId} />,
-    )
-    const s3Link = wrapper.find('a.s3-link')
-    s3Link.simulate('click', { preventDefault })
-    expect(preventDefault).toHaveBeenCalled()
-    expect(global.open).toHaveBeenCalledWith(
-      's3://test-bucket/dataset-hash/analysis-id',
-      'S3',
-    )
-  })
   it('displays a help message if the s3:// URL is clicked', () => {
-    global.open = jest.fn()
-    const preventDefault = jest.fn()
     const wrapper = shallow(
       <DownloadS3 datasetHash={datasetHash} analysisId={analysisId} />,
     )
     const s3Link = wrapper.find('a.s3-link')
+    const preventDefault = jest.fn()
     s3Link.simulate('click', { preventDefault })
-    expect(wrapper.find(Modal)).toHaveLength(1)
+    expect(wrapper.find('Modal').props()['show']).toBe(true)
+  })
+  it('closes the modal when the close button is clicked', () => {
+    const wrapper = shallow(
+      <DownloadS3 datasetHash={datasetHash} analysisId={analysisId} />,
+    )
+    const s3Link = wrapper.find('a.s3-link')
+    const preventDefault = jest.fn()
+    s3Link.simulate('click', { preventDefault })
+    // After opening the modal, hide it and see if that works correctly
+    const modal = wrapper.find('Modal')
+    modal.simulate('hide')
+    expect(wrapper.find('Modal').props()['show']).toBe(false)
   })
 })
