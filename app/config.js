@@ -48,6 +48,9 @@ export default {
       vcpusMax: 12,
       memoryMax: 30720,
     },
+    s3: {
+      analysisBucket: process.env.AWS_S3_ANALYSIS_BUCKET,
+    },
   },
 
   analytics: {
