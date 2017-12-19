@@ -22,13 +22,15 @@ describe('dataset/run/DownloadS3', () => {
       shallow(<DownloadS3 datasetHash={datasetHash} analysisId={analysisId} />),
     ).toMatchSnapshot()
   })
-  it('opens a window when the download link is clicked', () => {
+  it('opens a new window when the download link is clicked', () => {
     global.open = jest.fn()
+    const preventDefault = jest.fn()
     const wrapper = shallow(
       <DownloadS3 datasetHash={datasetHash} analysisId={analysisId} />,
     )
     const s3Link = wrapper.find('a')
-    s3Link.simulate('click')
+    s3Link.simulate('click', { preventDefault })
+    expect(preventDefault).toHaveBeenCalled()
     expect(global.open).toHaveBeenCalledWith(
       's3://test-bucket/dataset-hash/analysis-id',
       'S3',
