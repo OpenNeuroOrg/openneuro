@@ -11,7 +11,10 @@ const DownloadS3 = ({ datasetHash, analysisId }) => {
   const url = 's3://' + bucket + '/' + datasetHash + '/' + analysisId
   return (
     <span>
-      <a className="btn-warn-component" href={url} onClick={tryOpenS3(url)}>
+      <a
+        className="btn-warn-component s3-link"
+        href={url}
+        onClick={tryOpenS3(url)}>
         <i className="fa fa-link" aria-hidden="true" /> S3 URL
       </a>
     </span>

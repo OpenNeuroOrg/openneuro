@@ -28,7 +28,7 @@ describe('dataset/run/DownloadS3', () => {
     const wrapper = shallow(
       <DownloadS3 datasetHash={datasetHash} analysisId={analysisId} />,
     )
-    const s3Link = wrapper.find('a')
+    const s3Link = wrapper.find('a.s3-link')
     s3Link.simulate('click', { preventDefault })
     expect(preventDefault).toHaveBeenCalled()
     expect(global.open).toHaveBeenCalledWith(

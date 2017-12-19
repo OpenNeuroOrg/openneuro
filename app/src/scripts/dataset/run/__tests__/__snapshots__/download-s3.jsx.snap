@@ -3,7 +3,7 @@
 exports[`dataset/run/DownloadS3 should render something 1`] = `
 <span>
   <a
-    className="btn-warn-component"
+    className="btn-warn-component s3-link"
     href="s3://test-bucket/dataset-hash/analysis-id"
     onClick={[Function]}
   >
