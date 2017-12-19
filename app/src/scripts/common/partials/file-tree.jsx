@@ -356,6 +356,7 @@ FileTree.propTypes = {
   toggleFolder: PropTypes.func,
   addFile: PropTypes.func,
   addDirectoryFile: PropTypes.func,
+  deleteDirectory: PropTypes.func,
   updateFile: PropTypes.func,
   displayFile: PropTypes.func,
   topLevel: PropTypes.bool,

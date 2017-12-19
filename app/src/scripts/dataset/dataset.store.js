@@ -900,11 +900,10 @@ let datasetStore = Reflux.createStore({
   },
 
   deleteDirectory(dirTree, label, callback) {
-    // get the top level directory name to display in warning message
     let fileList = files.findFiles(dirTree)
-    if (true || childExistsIndex === -1) {
+    if (fileList.length) {
       let message = this.updateMessage('delete directory', {
-        name: label,
+        name: label + '/',
       })
       this.updateWarn({
         message: message,
@@ -931,8 +930,8 @@ let datasetStore = Reflux.createStore({
         },
       })
     } else {
-      this.updateDirectoryState(dataset._id, {
-        error: '"' + topLevelDirectory + '" already exists in this dataset.',
+      this.updateDirectoryState(this.data.dataset._id, {
+        error: 'The directory you have selected is empty',
       })
     }
   },
