@@ -71,7 +71,7 @@ exports[`dataset/run/DownloadS3 should render something 1`] = `
         bsClass="well"
         bsSize="small"
       >
-        aws s3 sync 
+        aws --no-sign-request s3 sync 
         s3://test-bucket/dataset-hash/analysis-id
          
         <strong>

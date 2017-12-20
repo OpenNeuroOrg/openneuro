@@ -56,7 +56,8 @@ class DownloadS3 extends React.Component {
               awscli
             </a>:
             <Well bsSize="small">
-              aws s3 sync {url} <strong>destination-directory</strong>
+              aws --no-sign-request s3 sync {url}{' '}
+              <strong>destination-directory</strong>
             </Well>
           </Modal.Body>
         </Modal>
