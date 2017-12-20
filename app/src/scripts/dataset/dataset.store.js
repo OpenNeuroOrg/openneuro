@@ -404,7 +404,7 @@ let datasetStore = Reflux.createStore({
       )
     } else {
       let message =
-        'You are about to delete this dataset. This will delete your draft and any unpublished snaphots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.'
+        'You are about to delete this dataset. This will delete your draft and any unpublished snapshots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.'
       this.updateWarn({
         alwaysWarn: true,
         confirmTxt: 'Delete',
