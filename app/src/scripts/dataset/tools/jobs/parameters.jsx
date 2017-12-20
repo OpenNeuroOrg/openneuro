@@ -102,7 +102,6 @@ const JobParameters = ({
       let op = parametersMetadata[parameter].defaultValue
       // remove white spaces from options
       let options = op.filter(value => value.trim() != '')
-      let bool
 
       if (isRadio) {
         let handleChange = e => {
@@ -111,12 +110,15 @@ const JobParameters = ({
           return onChange(parameter, event)
         }
 
+        if (parameters[parameter].indexOf(' ') !== -1) {
+          parameters[parameter] = options[0]
+        }
         input = (
           <CheckOrRadio
             type="radio"
             setName={parameter}
             options={options}
-            selectedOptions={bool}
+            selectedOptions={parameters[parameter]}
             controlFunc={handleChange}
           />
         )
@@ -154,7 +156,6 @@ const JobParameters = ({
             type="checkbox"
             setName={parameter}
             options={options}
-            selectedOptions={bool}
             controlFunc={handleChange}
           />
         )
