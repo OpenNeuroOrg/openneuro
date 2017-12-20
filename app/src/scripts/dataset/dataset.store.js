@@ -921,11 +921,9 @@ let datasetStore = Reflux.createStore({
                 },
               )
             },
-            err => {
-              if (err && callback) callback(err)
+            () => {
               this.updateFileTreeOnDeleteDir(label)
               this.revalidate()
-              if (callback) callback()
             },
           )
         },
@@ -934,6 +932,9 @@ let datasetStore = Reflux.createStore({
       this.updateDirectoryState(this.data.dataset._id, {
         error: 'The directory you have selected is empty',
       })
+    }
+    if (callback) {
+      callback()
     }
   },
 
