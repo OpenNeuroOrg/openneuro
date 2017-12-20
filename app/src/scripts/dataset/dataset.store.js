@@ -867,12 +867,13 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
-          async.each(
+          this.updateDirectoryState(dataset._id, { loading: true })
+          async.eachLimit(
             uploads,
+            3,
             (upload, cb) => {
               let file = upload.file
               let container = upload.container
-              this.updateDirectoryState(container._id, { loading: true })
               file.modifiedName = (container.dirPath || '') + file.name
               scitran.updateFile(
                 'projects',
@@ -886,7 +887,6 @@ let datasetStore = Reflux.createStore({
             err => {
               if (err && callback) callback(err)
               this.loadDataset(bids.encodeId(dataset._id), undefined, true) // forcing reload
-              this.updateDirectoryState(dataset._id, { error: '' })
               if (callback) callback()
             },
           )
@@ -908,8 +908,9 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
-          async.each(
+          async.eachLimit(
             fileList,
+            3,
             (file, cb) => {
               scitran.deleteFile(
                 'projects',
