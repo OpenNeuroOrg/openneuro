@@ -12,9 +12,11 @@ const CheckOrRadio = ({
     <div>
       <div>
         {options.map((opt, index) => {
-          let checked = false
-          if (selectedOptions === opt) {
-            checked = true
+          let checked = null
+          if (type === 'radio') {
+            if (selectedOptions === opt) {
+              checked = true
+            }
           }
           return (
             <label key={index} className="help-text">
