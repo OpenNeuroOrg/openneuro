@@ -181,16 +181,13 @@ class ArrayInput extends React.Component {
         if (itemValue.type === 'multi' && checkArr.length <= 1) {
           this.setState({
             error:
-              'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
+              'Multiple checkboxes accepts 2 or more values. Please use type boolean if you intend to use a single checkbox.',
             helper: null,
           })
           return
-        } else if (
-          (itemValue.type === 'radio' && checkArr.length > 2) ||
-          (itemValue.type === 'radio' && checkArr.length <= 1)
-        ) {
+        } else if (itemValue.type === 'radio' && checkArr.length <= 1) {
           this.setState({
-            error: 'Type radio accepts two default values.',
+            error: 'Type radio accepts two or more default values.',
             helper: null,
           })
           return
@@ -442,11 +439,10 @@ class ArrayItem extends React.Component {
             'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
         })
         return
-      } else if (
-        (data.type === 'radio' && checkArr.length > 2) ||
-        (data.type === 'radio' && checkArr.length <= 1)
-      ) {
-        this.setState({ error: 'Type radio accepts two default values.' })
+      } else if (data.type === 'radio' && checkArr.length <= 1) {
+        this.setState({
+          error: 'Type radio accepts two or more default values.',
+        })
         return
       }
     }
