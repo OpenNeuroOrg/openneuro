@@ -874,24 +874,39 @@ let datasetStore = Reflux.createStore({
             uploadingProgress: 0,
           })
           this.updateDirectoryState(datasetId, { loading: true })
+          const scitranUploads = []
           async.eachLimit(
             uploads,
             3,
             (upload, cb) => {
+              // Cancel adding files if navigated away
+              if (this.data.dataset && this.data.dataset._id !== datasetId) {
+                throw new Error('Add directory interrupted')
+              }
               let file = upload.file
               let container = upload.container
               file.modifiedName = (container.dirPath || '') + file.name
-              scitran.updateFile('projects', datasetId, file, () => {
-                this.update({
-                  uploadingProgress: this.data.uploadingProgress + 1,
-                })
-                cb()
-              })
+              scitranUploads.push(
+                scitran.updateFile('projects', datasetId, file, () => {
+                  this.update({
+                    uploadingProgress: this.data.uploadingProgress + 1,
+                  })
+                  cb()
+                }),
+              )
             },
             err => {
               this.update({ uploading: false })
               if (err && callback) callback(err)
-              this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
+              if (err) {
+                // cancel any uploads
+                scitranUploads.forEach(upload => {
+                  upload.abort()
+                })
+                this.loadDataset(bids.encodeId(datasetId), undefined, false)
+              } else {
+                this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
+              }
               if (callback) callback()
             },
           )

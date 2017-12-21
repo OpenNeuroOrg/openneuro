@@ -66,8 +66,8 @@ var Request = {
   },
 
   upload(url, options, callback) {
-    handleRequest(url, options, function(url, options) {
-      request
+    return handleRequest(url, options, function(url, options) {
+      return request
         .post(url)
         .query(options.query)
         .set(options.headers)
