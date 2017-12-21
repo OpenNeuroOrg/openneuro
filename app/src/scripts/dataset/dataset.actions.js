@@ -4,6 +4,7 @@ var Actions = Reflux.createActions([
   'addFile',
   'addDirectoryFile',
   'createSnapshot',
+  'cancelDirectoryUpload',
   'deleteAttachment',
   'deleteDataset',
   'deleteFile',

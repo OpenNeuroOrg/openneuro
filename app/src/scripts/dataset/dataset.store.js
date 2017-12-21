@@ -93,6 +93,7 @@ let datasetStore = Reflux.createStore({
       status: null,
       users: [],
       uploading: false,
+      uploadingCanceled: false,
       showSidebar: window.localStorage.hasOwnProperty('showSidebar')
         ? window.localStorage.showSidebar === 'true'
         : true,
@@ -880,8 +881,8 @@ let datasetStore = Reflux.createStore({
             3,
             (upload, cb) => {
               // Cancel adding files if navigated away
-              if (this.data.dataset && this.data.dataset._id !== datasetId) {
-                throw new Error('Add directory interrupted')
+              if (this.data.uploadingCanceled) {
+                return cb(new Error('Add directory interrupted'))
               }
               let file = upload.file
               let container = upload.container
@@ -903,6 +904,8 @@ let datasetStore = Reflux.createStore({
                 scitranUploads.forEach(upload => {
                   upload.abort()
                 })
+                // Reset to original state after canceled
+                this.update({ uploadingCanceled: false })
                 this.loadDataset(bids.encodeId(datasetId), undefined, false)
               } else {
                 this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
@@ -917,6 +920,16 @@ let datasetStore = Reflux.createStore({
         error: '"' + topLevelDirectory + '" already exists in this dataset.',
       })
     }
+  },
+
+  cancelDirectoryUpload() {
+    // Reset the uploading state
+    this.update({
+      uploading: false,
+      uploadingProgress: null,
+      uploadingFileCount: 0,
+      uploadingCanceled: true,
+    })
   },
 
   deleteDirectory(dirTree, label, callback) {

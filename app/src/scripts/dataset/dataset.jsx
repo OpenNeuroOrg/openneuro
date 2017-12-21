@@ -56,7 +56,7 @@ class Dataset extends Reflux.Component {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
-    this.props.history.block(({ pathname }) => {
+    const isDataset = pathname => {
       const slugs = pathname.split('/')
       if (
         slugs.length &&
@@ -69,11 +69,19 @@ class Dataset extends Reflux.Component {
         }
         // The same dataset
         if (slugs[2] === datasetId) {
-          return // Don't block this
+          return true
         }
       }
-      if (this.state.datasets.uploading) {
+      return false
+    }
+    this.props.history.block(({ pathname }) => {
+      if (!isDataset(pathname) && this.state.datasets.uploading) {
         return uploadWarning
+      }
+    })
+    this.props.history.listen(({ pathname }) => {
+      if (!isDataset(pathname) && this.state.datasets.uploading) {
+        actions.cancelDirectoryUpload()
       }
     })
   }
