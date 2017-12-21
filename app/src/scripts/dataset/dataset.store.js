@@ -881,22 +881,21 @@ let datasetStore = Reflux.createStore({
               let file = upload.file
               let container = upload.container
               file.modifiedName = (container.dirPath || '') + file.name
-              scitran.updateFile(
-                'projects',
-                this.data.dataset._id,
-                file,
-                () => {
-                  this.update({
-                    uploadingProgress: this.data.uploadingProgress + 1,
-                  })
-                  cb()
-                },
-              )
+              scitran.updateFile('projects', dataset._id, file, () => {
+                this.update({
+                  uploadingProgress: this.data.uploadingProgress + 1,
+                })
+                cb()
+              })
             },
             err => {
               this.update({ uploading: false })
               if (err && callback) callback(err)
-              this.loadDataset(bids.encodeId(dataset._id), undefined, true) // forcing reload
+              if (this.data.dataset._id === dataset._id) {
+                this.loadDataset(bids.encodeId(dataset._id), undefined, true) // forcing reload
+              } else {
+                this.revalidate(dataset._id)
+              }
               if (callback) callback()
             },
           )
@@ -1035,23 +1034,32 @@ let datasetStore = Reflux.createStore({
      * and validates the dataset server side. Updates status
      * tags and validation results on dataset.
      */
-  revalidate() {
+  revalidate(optionalDatasetID) {
     let dataset = this.data.dataset
-    scitran.addTag('projects', dataset._id, 'validating', () => {
-      dataset.status.validating = true
-      this.update({ dataset })
-      crn.validate(dataset._id, (err, res) => {
-        let validation = res.body.validation
-        dataset.status.validating = false
-        dataset.validation = validation
-        dataset.summary = res.body.summary
-        dataset.status.invalid =
-          validation.errors &&
-          (validation.errors == 'Invalid' || validation.errors.length > 0)
-        this.update({ dataset })
-        this.updateModified()
-      })
-    })
+    scitran.addTag(
+      'projects',
+      optionalDatasetID ? optionalDatasetID : dataset._id,
+      'validating',
+      () => {
+        dataset.status.validating = true
+        if (!optionalDatasetID) {
+          this.update({ dataset })
+        }
+        crn.validate(dataset._id, (err, res) => {
+          let validation = res.body.validation
+          dataset.status.validating = false
+          dataset.validation = validation
+          dataset.summary = res.body.summary
+          dataset.status.invalid =
+            validation.errors &&
+            (validation.errors == 'Invalid' || validation.errors.length > 0)
+          if (!optionalDatasetID) {
+            this.update({ dataset })
+            this.updateModified()
+          }
+        })
+      },
+    )
   },
 
   /**

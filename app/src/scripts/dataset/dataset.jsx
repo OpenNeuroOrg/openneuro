@@ -225,6 +225,7 @@ class Dataset extends Reflux.Component {
             dataset={dataset}
             selectedSnapshot={this.state.datasets.selectedSnapshot}
             snapshots={this.state.datasets.snapshots}
+            uploading={this.state.datasets.uploading}
           />
         </div>
       )
