@@ -263,6 +263,14 @@ class Dataset extends Reflux.Component {
             <span className="count">{snapshot.analysisCount}</span>
           </span>
         )
+      } else if (this.state.datasets.uploading) {
+        analysisCount = (
+          <span className="job-count">
+            <span className="warning-loading">
+              <i className="fa fa-spin fa-circle-o-notch" />
+            </span>
+          </span>
+        )
       }
 
       const datasetId = bids.decodeId(
