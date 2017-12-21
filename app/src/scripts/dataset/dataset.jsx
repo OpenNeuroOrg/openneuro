@@ -36,24 +36,15 @@ class Dataset extends Reflux.Component {
     )
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    let unblock
-    // transtion from not uploading to uploading
-    if (nextState.datasets.uploading && !this.state.datasets.uploading) {
-      unblock = this.props.history.block(
-        'You are currently uploading files. Leaving this page will cancel the upload process.',
-      )
-    } else {
-      if (typeof unblock == 'function') {
-        unblock()
-      }
-    }
-  }
-
   componentDidMount() {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
+    this.props.history.block(() => {
+      if (this.state.datasets.uploading) {
+        return 'You are currently uploading files. Leaving this page will cancel the upload process.'
+      }
+    })
   }
 
   _loadData(datasetId, snapshotId) {
