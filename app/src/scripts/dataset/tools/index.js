@@ -53,6 +53,14 @@ class Tools extends React.Component {
         prepDownload: actions.getDatasetDownloadTicket,
         action: actions.trackDownload,
         display: !isIncomplete,
+        validations: [
+          {
+            check: this.props.uploading && !isSnapshot,
+            message: 'Files are currently uploading',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
       },
       {
         tooltip: 'Publish Dataset',
@@ -60,6 +68,14 @@ class Tools extends React.Component {
         action: actions.toggleModal.bind(null, 'publish'),
         display: isAdmin && !isPublic && !isIncomplete,
         warn: false,
+        validations: [
+          {
+            check: this.props.uploading && !isSnapshot,
+            message: 'Files are currently uploading',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
       },
       {
         tooltip: 'Unpublish Dataset',
@@ -67,6 +83,14 @@ class Tools extends React.Component {
         action: actions.publish.bind(this, dataset._id, false),
         display: isPublic && isSuperuser,
         warn: true,
+        validations: [
+          {
+            check: this.props.uploading && !isSnapshot,
+            message: 'Files are currently uploading',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
       },
       {
         tooltip: isSnapshot ? 'Delete Snapshot' : 'Delete Dataset',
@@ -78,6 +102,14 @@ class Tools extends React.Component {
         ),
         display: displayDelete,
         warn: isSnapshot,
+        validations: [
+          {
+            check: this.props.uploading && !isSnapshot,
+            message: 'Files are currently uploading',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
       },
       {
         tooltip: 'Share Dataset',
@@ -85,6 +117,14 @@ class Tools extends React.Component {
         action: actions.toggleModal.bind(null, 'share'),
         display: isAdmin && !isSnapshot && !isIncomplete,
         warn: false,
+        validations: [
+          {
+            check: this.props.uploading && !isSnapshot,
+            message: 'Files are currently uploading',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
       },
       {
         tooltip: 'Create Snapshot',
@@ -109,6 +149,12 @@ class Tools extends React.Component {
             timeout: 6000,
             type: 'Error',
           },
+          {
+            check: this.props.uploading && !isSnapshot,
+            message: 'Files are currently uploading',
+            timeout: 5000,
+            type: 'Error',
+          },
         ],
       },
       {
@@ -117,6 +163,14 @@ class Tools extends React.Component {
         action: actions.toggleModal.bind(null, 'jobs'),
         display: isSignedIn && !isIncomplete,
         warn: false,
+        validations: [
+          {
+            check: this.props.uploading && !isSnapshot,
+            message: 'Files are currently uploading',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
       },
     ]
 
@@ -191,6 +245,7 @@ Tools.propTypes = {
   snapshots: PropTypes.array.isRequired,
   selectedSnapshot: PropTypes.string.isRequired,
   history: PropTypes.object,
+  uploading: PropTypes.bool,
 }
 
 export default withRouter(Tools)

@@ -56,20 +56,32 @@ class Dataset extends Reflux.Component {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
-    this.props.history.block(({ pathname }) => {
-      const datasetId =
-        this.state.datasets.dataset.linkOriginal ||
-        this.state.datasets.dataset.linkID
+    const isDataset = pathname => {
       const slugs = pathname.split('/')
-      // Dataset or snapshot URLs
-      if (slugs.length === 3 || slugs.length === 5) {
+      if (
+        slugs.length &&
+        slugs[1] === 'datasets' &&
+        this.state.datasets.dataset
+      ) {
+        let datasetId = this.state.datasets.dataset.linkID
+        if ('linkOriginal' in this.state.datasets.dataset) {
+          datasetId = this.state.datasets.dataset.linkOriginal
+        }
         // The same dataset
-        if (slugs[1] === 'datasets' && slugs[2] === datasetId) {
-          return // Don't block this
+        if (slugs[2] === datasetId) {
+          return true
         }
       }
-      if (this.state.datasets.uploading) {
+      return false
+    }
+    this.props.history.block(({ pathname }) => {
+      if (!isDataset(pathname) && this.state.datasets.uploading) {
         return uploadWarning
+      }
+    })
+    this.props.history.listen(({ pathname }) => {
+      if (!isDataset(pathname) && this.state.datasets.uploading) {
+        actions.cancelDirectoryUpload()
       }
     })
   }
@@ -225,6 +237,7 @@ class Dataset extends Reflux.Component {
             dataset={dataset}
             selectedSnapshot={this.state.datasets.selectedSnapshot}
             snapshots={this.state.datasets.snapshots}
+            uploading={this.state.datasets.uploading}
           />
         </div>
       )
@@ -263,7 +276,7 @@ class Dataset extends Reflux.Component {
             <span className="count">{snapshot.analysisCount}</span>
           </span>
         )
-      } else if (this.state.datasets.uploading) {
+      } else if (snapshot.isOriginal && this.state.datasets.uploading) {
         analysisCount = (
           <span className="job-count">
             <span className="warning-loading">

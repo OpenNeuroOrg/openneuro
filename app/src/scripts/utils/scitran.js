@@ -400,7 +400,7 @@ export default {
      *
      */
   updateFile(level, id, file, callback) {
-    request.upload(
+    return request.upload(
       config.scitran.url + level + '/' + id + '/files',
       {
         fields: {
