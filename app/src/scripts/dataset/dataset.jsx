@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import { Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
+import { ProgressBar } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
@@ -139,7 +140,7 @@ class Dataset extends Reflux.Component {
                     </div>
                     <div className="dataset-files">
                       {this._incompleteMessage(dataset)}
-                      {this._fileTree(dataset, canEdit)}
+                      {this._fileTree.bind(this)(dataset, canEdit)}
                     </div>
                   </div>
                 </div>
@@ -333,6 +334,44 @@ class Dataset extends Reflux.Component {
   }
 
   _fileTree(dataset, canEdit) {
+    let fileTree = (
+      <FileTree
+        tree={[dataset]}
+        editable={canEdit}
+        loading={this.state.datasets.loadingTree}
+        dismissError={actions.dismissError}
+        deleteFile={actions.deleteFile}
+        getFileDownloadTicket={actions.getFileDownloadTicket}
+        displayFile={actions.displayFile.bind(this, null, null)}
+        toggleFolder={actions.toggleFolder}
+        addFile={actions.addFile}
+        addDirectoryFile={actions.addDirectoryFile}
+        deleteDirectory={actions.deleteDirectory}
+        updateFile={actions.updateFile}
+        topLevel
+      />
+    )
+
+    if (this.state.datasets.uploading) {
+      const max = this.state.datasets.uploadingFileCount
+      const now = this.state.datasets.uploadingProgress
+      const progress = {
+        max,
+        now,
+        label: now + '/' + max + ' files uploaded',
+      }
+      fileTree = (
+        <ul className="uploading-directory">
+          <li className="clearfix uploading-spinner">
+            <Spinner active={true} text="Adding files..." />
+          </li>
+          <li className="clearfix uploading-progress">
+            <ProgressBar active {...progress} />
+          </li>
+        </ul>
+      )
+    }
+
     if (!dataset.status.incomplete) {
       return (
         <div className="col-xs-12">
@@ -342,23 +381,7 @@ class Dataset extends Reflux.Component {
                 <h3 className="panel-title">Dataset File Tree</h3>
               </div>
               <div className="panel-collapse" aria-expanded="false">
-                <div className="panel-body">
-                  <FileTree
-                    tree={[dataset]}
-                    editable={canEdit}
-                    loading={this.state.datasets.loadingTree}
-                    dismissError={actions.dismissError}
-                    deleteFile={actions.deleteFile}
-                    getFileDownloadTicket={actions.getFileDownloadTicket}
-                    displayFile={actions.displayFile.bind(this, null, null)}
-                    toggleFolder={actions.toggleFolder}
-                    addFile={actions.addFile}
-                    addDirectoryFile={actions.addDirectoryFile}
-                    deleteDirectory={actions.deleteDirectory}
-                    updateFile={actions.updateFile}
-                    topLevel
-                  />
-                </div>
+                <div className="panel-body">{fileTree}</div>
               </div>
             </div>
           </div>
