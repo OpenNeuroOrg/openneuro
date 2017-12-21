@@ -10,6 +10,7 @@ import { withRouter, Link } from 'react-router-dom'
 import moment from 'moment'
 import { PanelGroup } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
+import ErrorBoundary from '../errors/errorBoundary.jsx'
 import Sort from './dashboard.sort.jsx'
 import Select from 'react-select'
 import bids from '../utils/bids'
@@ -73,11 +74,19 @@ class Jobs extends Reflux.Component {
               />
             </div>
           </div>
-          <PanelGroup>
-            <div className="clearfix">
-              {this.state.jobs.loading ? <Spinner active={true} /> : jobs}
-            </div>
-          </PanelGroup>
+          <ErrorBoundary
+            message="The jobs server has failed to respond."
+            className="loading-wrap fade-in">
+            <PanelGroup>
+              <div className="clearfix">
+                {this.state.jobs.loading ? (
+                  <Spinner active={true} timeout={20000} />
+                ) : (
+                  jobs
+                )}
+              </div>
+            </PanelGroup>
+          </ErrorBoundary>
         </div>
       </div>
     )

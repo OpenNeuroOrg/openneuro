@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import Raven from 'raven-js'
 
 class ErrorBoundary extends Component {
@@ -15,14 +16,24 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div>
-          <h1> {this.props.message}</h1>
+        <div className={this.props.className}>
+          <h3> {this.props.message}</h3>
         </div>
       )
     }
-    console.log('error boundary children:', this.props.children)
     return this.props.children
   }
+}
+
+ErrorBoundary.propTypes = {
+  children: PropTypes.function,
+  message: PropTypes.string,
+  className: PropTypes.string,
+}
+
+ErrorBoundary.defaultProps = {
+  message:
+    'An error has been caught within this component. Please intiialize the error boundary with a "message" property for a more specific message.',
 }
 
 export default ErrorBoundary

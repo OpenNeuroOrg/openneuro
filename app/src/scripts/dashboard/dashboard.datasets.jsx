@@ -10,6 +10,7 @@ import moment from 'moment'
 import { PanelGroup } from 'react-bootstrap'
 import Paginator from '../common/partials/paginator.jsx'
 import Spinner from '../common/partials/spinner.jsx'
+import ErrorBoundary from '../errors/errorBoundary.jsx'
 import Statuses from '../dataset/dataset.statuses.jsx'
 import Filters from './dashboard.filters.jsx'
 import Sort from './dashboard.sort.jsx'
@@ -102,9 +103,17 @@ class Datasets extends Reflux.Component {
               ) : null}
             </div>
           </div>
-          <PanelGroup>
-            {this.state.datasets.loading ? <Spinner active={true} /> : results}
-          </PanelGroup>
+          <ErrorBoundary
+            message="The dataset server failed to respond."
+            className="loading-wrap fade-in">
+            <PanelGroup>
+              {this.state.datasets.loading ? (
+                <Spinner active={true} timeout={20000} />
+              ) : (
+                results
+              )}
+            </PanelGroup>
+          </ErrorBoundary>
         </div>
         <div className="pager-wrapper">
           <Paginator

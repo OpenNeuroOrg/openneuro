@@ -77,7 +77,7 @@ class Jobs extends Reflux.Component {
           activeKey={this.state.datasets.activeJob.app}
           onSelect={actions.selectJob.bind(null, 'app')}>
           {this.state.datasets.loadingJobs ? (
-            <Spinner active={true} text="Loading Analyses" />
+            <Spinner active={true} text="Loading Analyses" timeout={20000} />
           ) : (
             app
           )}
