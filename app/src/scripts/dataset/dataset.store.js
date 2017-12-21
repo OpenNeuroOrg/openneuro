@@ -904,12 +904,12 @@ let datasetStore = Reflux.createStore({
                 scitranUploads.forEach(upload => {
                   upload.abort()
                 })
-                // Reset to original state after canceled
-                this.update({ uploadingCanceled: false })
                 this.loadDataset(bids.encodeId(datasetId), undefined, false)
               } else {
                 this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
               }
+              // Reset canceled when an upload is done (canceled or otherwise)
+              this.update({ uploadingCanceled: false })
               if (callback) callback()
             },
           )
