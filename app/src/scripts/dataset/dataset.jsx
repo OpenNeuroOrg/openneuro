@@ -56,7 +56,18 @@ class Dataset extends Reflux.Component {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
-    this.props.history.block(() => {
+    this.props.history.block(({ pathname }) => {
+      const datasetId =
+        this.state.datasets.dataset.linkOriginal ||
+        this.state.datasets.dataset.linkID
+      const slugs = pathname.split('/')
+      // Dataset or snapshot URLs
+      if (slugs.length === 3 || slugs.length === 5) {
+        // The same dataset
+        if (slugs[1] === 'datasets' && slugs[2] === datasetId) {
+          return // Don't block this
+        }
+      }
       if (this.state.datasets.uploading) {
         return uploadWarning
       }
@@ -367,8 +378,7 @@ class Dataset extends Reflux.Component {
         topLevel
       />
     )
-
-    if (this.state.datasets.uploading) {
+    if (this.state.datasets.uploading && !('original' in dataset)) {
       const max = this.state.datasets.uploadingFileCount
       const now = this.state.datasets.uploadingProgress
       const progress = {
