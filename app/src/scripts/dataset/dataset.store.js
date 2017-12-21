@@ -92,6 +92,7 @@ let datasetStore = Reflux.createStore({
       selectedSnapshot: '',
       status: null,
       users: [],
+      uploading: false,
       showSidebar: window.localStorage.hasOwnProperty('showSidebar')
         ? window.localStorage.showSidebar === 'true'
         : true,
@@ -867,6 +868,7 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
+          this.update({ uploading: true })
           this.updateDirectoryState(dataset._id, { loading: true })
           async.eachLimit(
             uploads,
@@ -885,6 +887,7 @@ let datasetStore = Reflux.createStore({
               )
             },
             err => {
+              this.update({ uploading: false })
               if (err && callback) callback(err)
               this.loadDataset(bids.encodeId(dataset._id), undefined, true) // forcing reload
               if (callback) callback()
