@@ -20,7 +20,7 @@ class ErrorBoundary extends Component {
         </div>
       )
     }
-    //console.log('error boundary children:', this.props.children)
+    console.log('error boundary children:', this.props.children)
     return this.props.children
   }
 }
