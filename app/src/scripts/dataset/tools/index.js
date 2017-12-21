@@ -55,7 +55,7 @@ class Tools extends React.Component {
         display: !isIncomplete,
         validations: [
           {
-            check: this.props.uploading,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -70,7 +70,7 @@ class Tools extends React.Component {
         warn: false,
         validations: [
           {
-            check: this.props.uploading,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -85,7 +85,7 @@ class Tools extends React.Component {
         warn: true,
         validations: [
           {
-            check: this.props.uploading,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -104,7 +104,7 @@ class Tools extends React.Component {
         warn: isSnapshot,
         validations: [
           {
-            check: this.props.uploading,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -119,7 +119,7 @@ class Tools extends React.Component {
         warn: false,
         validations: [
           {
-            check: this.props.uploading,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -150,7 +150,7 @@ class Tools extends React.Component {
             type: 'Error',
           },
           {
-            check: this.props.uploading,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -165,7 +165,7 @@ class Tools extends React.Component {
         warn: false,
         validations: [
           {
-            check: this.props.uploading,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
