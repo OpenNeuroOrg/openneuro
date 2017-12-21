@@ -23,6 +23,9 @@ import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
 
+const uploadWarning =
+  'You are currently uploading files. Leaving this page will cancel the upload process.'
+
 class Dataset extends Reflux.Component {
   constructor(props) {
     super(props)
@@ -37,13 +40,25 @@ class Dataset extends Reflux.Component {
     )
   }
 
+  componentWillUpdate() {
+    // Prevent navigation away if adding a directory
+    if (this.state.datasets.uploading) {
+      window.onbeforeunload = () => {
+        // Warning not shown in modern browsers but we have to return something
+        return uploadWarning
+      }
+    } else {
+      window.onbeforeunload = () => {}
+    }
+  }
+
   componentDidMount() {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
     this.props.history.block(() => {
       if (this.state.datasets.uploading) {
-        return 'You are currently uploading files. Leaving this page will cancel the upload process.'
+        return uploadWarning
       }
     })
   }
@@ -74,6 +89,7 @@ class Dataset extends Reflux.Component {
     actions.setInitialState({ apps: this.state.datasets.apps })
     super.componentWillUnmount()
     document.title = 'OpenNeuro'
+    window.onbeforeunload = () => {}
   }
 
   render() {
