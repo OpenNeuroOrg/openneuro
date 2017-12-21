@@ -868,7 +868,11 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
-          this.update({ uploading: true })
+          this.update({
+            uploading: true,
+            uploadingFileCount: uploads.length,
+            uploadingProgress: 0,
+          })
           this.updateDirectoryState(dataset._id, { loading: true })
           async.eachLimit(
             uploads,
@@ -882,6 +886,9 @@ let datasetStore = Reflux.createStore({
                 this.data.dataset._id,
                 file,
                 () => {
+                  this.update({
+                    uploadingProgress: this.data.uploadingProgress + 1,
+                  })
                   cb()
                 },
               )
