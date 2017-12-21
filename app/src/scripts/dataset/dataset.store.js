@@ -857,8 +857,8 @@ let datasetStore = Reflux.createStore({
   addDirectoryFile(uploads, dirTree, callback) {
     // get the top level directory name to display in warning message
     let topLevelDirectory = `${uploads[0].container.dirPath.split('/')[0]}/`
-    let dataset = this.data.dataset
-    let childExistsIndex = dataset.children.findIndex(el => {
+    let datasetId = this.data.dataset._id
+    let childExistsIndex = this.data.dataset.children.findIndex(el => {
       return el.name === dirTree.name
     })
     if (childExistsIndex === -1) {
@@ -873,7 +873,7 @@ let datasetStore = Reflux.createStore({
             uploadingFileCount: uploads.length,
             uploadingProgress: 0,
           })
-          this.updateDirectoryState(dataset._id, { loading: true })
+          this.updateDirectoryState(datasetId, { loading: true })
           async.eachLimit(
             uploads,
             3,
@@ -881,29 +881,24 @@ let datasetStore = Reflux.createStore({
               let file = upload.file
               let container = upload.container
               file.modifiedName = (container.dirPath || '') + file.name
-              scitran.updateFile(
-                'projects',
-                this.data.dataset._id,
-                file,
-                () => {
-                  this.update({
-                    uploadingProgress: this.data.uploadingProgress + 1,
-                  })
-                  cb()
-                },
-              )
+              scitran.updateFile('projects', datasetId, file, () => {
+                this.update({
+                  uploadingProgress: this.data.uploadingProgress + 1,
+                })
+                cb()
+              })
             },
             err => {
               this.update({ uploading: false })
               if (err && callback) callback(err)
-              this.loadDataset(bids.encodeId(dataset._id), undefined, true) // forcing reload
+              this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
               if (callback) callback()
             },
           )
         },
       })
     } else {
-      this.updateDirectoryState(dataset._id, {
+      this.updateDirectoryState(datasetId, {
         error: '"' + topLevelDirectory + '" already exists in this dataset.',
       })
     }
