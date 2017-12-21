@@ -57,14 +57,18 @@ class Dataset extends Reflux.Component {
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
     this.props.history.block(({ pathname }) => {
-      const datasetId =
-        this.state.datasets.dataset.linkOriginal ||
-        this.state.datasets.dataset.linkID
       const slugs = pathname.split('/')
-      // Dataset or snapshot URLs
-      if (slugs.length === 3 || slugs.length === 5) {
+      if (
+        slugs.length &&
+        slugs[1] === 'datasets' &&
+        this.state.datasets.dataset
+      ) {
+        let datasetId = this.state.datasets.dataset.linkID
+        if ('linkOriginal' in this.state.datasets.dataset) {
+          datasetId = this.state.datasets.dataset.linkOriginal
+        }
         // The same dataset
-        if (slugs[1] === 'datasets' && slugs[2] === datasetId) {
+        if (slugs[2] === datasetId) {
           return // Don't block this
         }
       }
