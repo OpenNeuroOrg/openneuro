@@ -30,6 +30,35 @@ class Dataset extends Reflux.Component {
   constructor(props) {
     super(props)
     refluxConnect(this, datasetStore, 'datasets')
+    const isDataset = pathname => {
+      const slugs = pathname.split('/')
+      if (
+        slugs.length &&
+        slugs[1] === 'datasets' &&
+        this.state.datasets.dataset
+      ) {
+        let datasetId = this.state.datasets.dataset.linkID
+        if ('linkOriginal' in this.state.datasets.dataset) {
+          datasetId = this.state.datasets.dataset.linkOriginal
+        }
+        // The same dataset
+        if (slugs[2] === datasetId) {
+          return true
+        }
+      }
+      return false
+    }
+    const unblock = this.props.history.block(({ pathname }) => {
+      if (!isDataset(pathname) && this.state.datasets.uploading) {
+        return uploadWarning
+      }
+    })
+    this.props.history.listen(({ pathname }) => {
+      if (!isDataset(pathname) && this.state.datasets.uploading) {
+        actions.cancelDirectoryUpload()
+      }
+    })
+    this.state = { unblock }
   }
   // life cycle events --------------------------------------------------
 
@@ -56,34 +85,6 @@ class Dataset extends Reflux.Component {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
-    const isDataset = pathname => {
-      const slugs = pathname.split('/')
-      if (
-        slugs.length &&
-        slugs[1] === 'datasets' &&
-        this.state.datasets.dataset
-      ) {
-        let datasetId = this.state.datasets.dataset.linkID
-        if ('linkOriginal' in this.state.datasets.dataset) {
-          datasetId = this.state.datasets.dataset.linkOriginal
-        }
-        // The same dataset
-        if (slugs[2] === datasetId) {
-          return true
-        }
-      }
-      return false
-    }
-    this.props.history.block(({ pathname }) => {
-      if (!isDataset(pathname) && this.state.datasets.uploading) {
-        return uploadWarning
-      }
-    })
-    this.props.history.listen(({ pathname }) => {
-      if (!isDataset(pathname) && this.state.datasets.uploading) {
-        actions.cancelDirectoryUpload()
-      }
-    })
   }
 
   _loadData(datasetId, snapshotId) {
@@ -113,6 +114,9 @@ class Dataset extends Reflux.Component {
     super.componentWillUnmount()
     document.title = 'OpenNeuro'
     window.onbeforeunload = () => {}
+    if (this.state.unblock) {
+      this.state.unblock()
+    }
   }
 
   render() {
