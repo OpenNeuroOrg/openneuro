@@ -129,7 +129,10 @@ class Dataset extends Reflux.Component {
                       errors={errors}
                       warnings={warnings}
                       validating={dataset.status.validating}
-                      display={!dataset.status.incomplete}
+                      display={
+                        !dataset.status.incomplete &&
+                        !this.state.datasets.uploading
+                      }
                     />
                     <div className="fade-in col-xs-12">
                       <Jobs />
