@@ -65,9 +65,9 @@ var Request = {
     })
   },
 
-  upload(url, options, callback, reqCallback) {
+  upload(url, options, callback) {
     return handleRequest(url, options, function(url, options) {
-      const req = request
+      return request
         .post(url)
         .query(options.query)
         .set(options.headers)
@@ -77,10 +77,6 @@ var Request = {
         .end((err, res) => {
           handleResponse(err, res, callback)
         })
-      if (reqCallback) {
-        reqCallback(req)
-      }
-      return req
     })
   },
 }
@@ -104,7 +100,7 @@ var Request = {
  *   - snapshot: A boolean that will add a 'snapshots' url
  *   param to scitran requests.
  */
-function handleRequest(url, options, callback) {
+async function handleRequest(url, options, callback) {
   // normalize options to play nice with superagent requests
   options = normalizeOptions(options)
 
@@ -120,16 +116,16 @@ function handleRequest(url, options, callback) {
     hasToken() &&
     (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)
   ) {
-    userActions.checkAuth((provider, token, root) => {
+    return await userActions.checkAuth((provider, token, root) => {
       if (root) {
         options.query.root = true
       }
       options.headers['Authorization-Provider'] = provider
       options.headers.Authorization = token
-      callback(url, options)
+      return callback(url, options)
     })
   } else {
-    callback(url, options)
+    return callback(url, options)
   }
 }
 
