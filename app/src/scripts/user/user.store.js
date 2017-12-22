@@ -383,9 +383,18 @@ let UserStore = Reflux.createStore({
     }
   }, 1),
 
-  checkAuth(successCallback, errorCallback) {
-    let authReq = { successCallback, errorCallback }
-    this.queue.push(authReq)
+  checkAuth(successFunc, errorFunc) {
+    // Wrap the queue behavior in a promise
+    return new Promise((resolve, reject) => {
+      const successCallback = (...args) => {
+        resolve(successFunc(...args))
+      }
+      const errorCallback = (...args) => {
+        reject(errorFunc(...args))
+      }
+      let authReq = { successCallback, errorCallback }
+      this.queue.push(authReq)
+    })
   },
 
   /**
