@@ -67,18 +67,20 @@ var Request = {
 
   upload(url, options, callback, reqCallback) {
     return handleRequest(url, options, function(url, options) {
-      reqCallback(
-        request
-          .post(url)
-          .query(options.query)
-          .set(options.headers)
-          .field('tags', options.fields.tags)
-          .attach('file', options.fields.file, options.fields.name)
-          .retry(maxRetries)
-          .end((err, res) => {
-            handleResponse(err, res, callback)
-          }),
-      )
+      const req = request
+        .post(url)
+        .query(options.query)
+        .set(options.headers)
+        .field('tags', options.fields.tags)
+        .attach('file', options.fields.file, options.fields.name)
+        .retry(maxRetries)
+        .end((err, res) => {
+          handleResponse(err, res, callback)
+        })
+      if (reqCallback) {
+        reqCallback(req)
+      }
+      return req
     })
   },
 }
