@@ -59,8 +59,8 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Toggle Modal
-    */
+   * Toggle Modal
+   */
   toggle(value) {
     let newState = {}
     newState[value] = !this.data[value]
@@ -82,13 +82,13 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Set Initial State
-     *
-     * Sets the state to the data object defined
-     * inside the function. Also takes a diffs object
-     * which will set the state to the initial state
-     * with any differences passed.
-     */
+   * Set Initial State
+   *
+   * Sets the state to the data object defined
+   * inside the function. Also takes a diffs object
+   * which will set the state to the initial state
+   * with any differences passed.
+   */
   setInitialState(diffs) {
     let data = {
       token:
@@ -214,11 +214,11 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Signin
-     *
-     * Initiates the Google OAuth2 sign in flow. Creates a new
-     * user if the user doesn't already exist.
-     */
+   * Signin
+   *
+   * Initiates the Google OAuth2 sign in flow. Creates a new
+   * user if the user doesn't already exist.
+   */
   googleSignIn(options) {
     if (!google.initialized) {
       return
@@ -229,11 +229,11 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Signin
-     *
-     * Initiates the ORCID OAuth2 sign in flow. Creates a new
-     * user if the user doesn't already exist.
-     */
+   * Signin
+   *
+   * Initiates the ORCID OAuth2 sign in flow. Creates a new
+   * user if the user doesn't already exist.
+   */
   orcidSignIn(options) {
     options.provider = 'orcid'
     this.update({ loginModal: false })
@@ -241,11 +241,11 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Sign Out
-     *
-     * Signs the user out by destroying the current
-     * OAuth2 session.
-     */
+   * Sign Out
+   *
+   * Signs the user out by destroying the current
+   * OAuth2 session.
+   */
   signOut(uploadStatus, history) {
     let signout = true
     if (uploadStatus === 'uploading') {
@@ -265,11 +265,11 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Clear Authentication
-     *
-     * Clears all user related data from memory and
-     * browser storage.
-     */
+   * Clear Authentication
+   *
+   * Clears all user related data from memory and
+   * browser storage.
+   */
   clearAuth() {
     Raven.setUserContext()
     delete window.localStorage.token
@@ -288,10 +288,10 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Handle Sign In
-     *
-     * Handles necessary action after a signin has been completed.
-     */
+   * Handle Sign In
+   *
+   * Handles necessary action after a signin has been completed.
+   */
   handleSignIn(transition, scitran, profile) {
     if (!profile.imageUrl) {
       profile.imageUrl = scitran.avatar
@@ -303,14 +303,14 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Refresh Token
-     *
-     * The google client library will automatically refresh
-     * the token behind the scenes when it is within 5 minutes
-     * of expiring. Refresh should be called during that time
-     * or after expiration to reset the local data to match
-     * the updated token.
-     */
+   * Refresh Token
+   *
+   * The google client library will automatically refresh
+   * the token behind the scenes when it is within 5 minutes
+   * of expiring. Refresh should be called during that time
+   * or after expiration to reset the local data to match
+   * the updated token.
+   */
   refreshToken(callback) {
     const refreshCallback = (err, user) => {
       if (err) {
@@ -340,12 +340,12 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Has Token
-     *
-     * Returns a boolean representing whether or not
-     * the current session has an access token present
-     * regardless of whether or not is is expired/valid.
-     */
+   * Has Token
+   *
+   * Returns a boolean representing whether or not
+   * the current session has an access token present
+   * regardless of whether or not is is expired/valid.
+   */
   hasToken() {
     if (
       !window.localStorage.token ||
@@ -360,14 +360,14 @@ let UserStore = Reflux.createStore({
   // request queue -----------------------------------------------------------------
 
   /**
-     * Authentication Request Queuing
-     *
-     * Before any request we verify the status of the OAuth token.
-     * To avoid multiple signin dialogues in the event the token
-     * is expired all auth checking is queued to be performed
-     * synchronously. The 'checkAuth' method is the primary method
-     * to start the token check process.
-     */
+   * Authentication Request Queuing
+   *
+   * Before any request we verify the status of the OAuth token.
+   * To avoid multiple signin dialogues in the event the token
+   * is expired all auth checking is queued to be performed
+   * synchronously. The 'checkAuth' method is the primary method
+   * to start the token check process.
+   */
   queue: async.queue((authReq, callback) => {
     let { token, provider } = UserStore.data
     let refreshWindow = 4 * 60 * 1000
@@ -389,12 +389,12 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Is Root
-     *
-     * Returns a boolean representing if the current user has
-     * root permissions. Attempts to read in memory data and falls back
-     * to checking local storage when necessary.
-     */
+   * Is Root
+   *
+   * Returns a boolean representing if the current user has
+   * root permissions. Attempts to read in memory data and falls back
+   * to checking local storage when necessary.
+   */
   isRoot() {
     if (this.data.scitran && this.data.scitran.root) {
       return true
@@ -412,17 +412,17 @@ let UserStore = Reflux.createStore({
   // Actions ---------------------------------------------------------------------------
 
   /**
-     * Get Preferences
-     *
-     * Calls back with the current user's preferences.
-     */
+   * Get Preferences
+   *
+   * Calls back with the current user's preferences.
+   */
   getPreferences(callback) {
     callback(this.data.scitran.preferences)
   },
 
   /**
-     * Update Preferences
-     */
+   * Update Preferences
+   */
   updatePreferences(preferences, callback) {
     let scitranUser = this.data.scitran
     scitranUser.preferences = scitranUser.preferences
