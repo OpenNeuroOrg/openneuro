@@ -50,13 +50,13 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Set Initial State
-     *
-     * Sets the state to the data object defined
-     * inside the function. Also takes a diffs object
-     * which will set the state to the initial state
-     * with any differences passed.
-     */
+   * Set Initial State
+   *
+   * Sets the state to the data object defined
+   * inside the function. Also takes a diffs object
+   * which will set the state to the initial state
+   * with any differences passed.
+   */
   setInitialState: function(diffs) {
     let data = {
       apps: {},
@@ -94,6 +94,7 @@ let datasetStore = Reflux.createStore({
       users: [],
       uploading: false,
       uploadingCanceled: false,
+      uploadingScitranRequests: [],
       showSidebar: window.localStorage.hasOwnProperty('showSidebar')
         ? window.localStorage.showSidebar === 'true'
         : true,
@@ -109,10 +110,10 @@ let datasetStore = Reflux.createStore({
   // Dataset -----------------------------------------------------------------------
 
   /**
-     * Load Dataset
-     *
-     * Takes a datasetId and loads the dataset.
-     */
+   * Load Dataset
+   *
+   * Takes a datasetId and loads the dataset.
+   */
   loadDataset(datasetId, options, forceReload) {
     let snapshot = !!(options && options.snapshot),
       dataset = this.data.dataset
@@ -186,8 +187,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Load Dataset Tree
-     */
+   * Load Dataset Tree
+   */
   loadDatasetTree() {
     this.update({ loadingTree: true })
     bids.getDatasetTree(
@@ -200,12 +201,12 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Reload Dataset
-     *
-     * Optionally takes a datasetId and only reloads
-     * the dataset if that ID matches the current ID.
-     * If no ID is passed it reloads the current ID.
-     */
+   * Reload Dataset
+   *
+   * Optionally takes a datasetId and only reloads
+   * the dataset if that ID matches the current ID.
+   * If no ID is passed it reloads the current ID.
+   */
   reloadDataset(datasetId) {
     if (this.data.dataset) {
       if (!datasetId) {
@@ -219,10 +220,10 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Load Users
-     *
-     * Loads a list of all users.
-     */
+   * Load Users
+   *
+   * Loads a list of all users.
+   */
   loadUsers() {
     scitran.getUsers((err, res) => {
       this.update({ users: res.body })
@@ -230,8 +231,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Load Apps
-     */
+   * Load Apps
+   */
   loadApps() {
     this.update({ loadingApps: true })
     crn.getApps((err, res) => {
@@ -303,11 +304,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Publish
-     *
-     * Takes a snapshotId, value and callback and sets the
-     * datasets public status to the passed value.
-     */
+   * Publish
+   *
+   * Takes a snapshotId, value and callback and sets the
+   * datasets public status to the passed value.
+   */
   publish(snapshotId, value, history, callback) {
     let datasetId = this.data.snapshot
       ? this.data.dataset.original
@@ -369,12 +370,12 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Track Download
-     *
-     * Tracks download and increments download
-     * count (client side only) to provide immediate
-     * download feedback.
-     */
+   * Track Download
+   *
+   * Tracks download and increments download
+   * count (client side only) to provide immediate
+   * download feedback.
+   */
   trackDownload(callback) {
     scitran.trackUsage(
       this.data.dataset._id,
@@ -390,11 +391,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Delete Dataset
-     *
-     * Takes a datsetId, deletes the dataset, and returns the user
-     * to the my datasets page.
-     */
+   * Delete Dataset
+   *
+   * Takes a datsetId, deletes the dataset, and returns the user
+   * to the my datasets page.
+   */
   deleteDataset(datasetId, history, callback) {
     if (this.data.snapshot) {
       bids.deleteDataset(
@@ -430,8 +431,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Toggle Modal
-     */
+   * Toggle Modal
+   */
   toggleModal(name, callback) {
     let update = {}
 
@@ -461,8 +462,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update Status
-     */
+   * Update Status
+   */
   updateStatus(projectId, updates) {
     if (this.data.dataset && this.data.dataset._id === projectId) {
       let dataset = this.data.dataset
@@ -478,11 +479,11 @@ let datasetStore = Reflux.createStore({
   // Metadata ----------------------------------------------------------------------
 
   /**
-     * Update Modified
-     *
-     * Updated the last modified date for the current
-     * dataset (client-side only).
-     */
+   * Update Modified
+   *
+   * Updated the last modified date for the current
+   * dataset (client-side only).
+   */
   updateModified() {
     let dataset = this.data.dataset
     dataset.modified = moment().format()
@@ -506,11 +507,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update Description
-     *
-     * Takes a key and a value and updates the dataset
-     * description JSON note accordingly.
-     */
+   * Update Description
+   *
+   * Takes a key and a value and updates the dataset
+   * description JSON note accordingly.
+   */
   updateDescription(key, value, callback) {
     let dataset = this.data.dataset
     let metadataIssues = this.data.metadataIssues
@@ -532,12 +533,12 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update Description File
-     *
-     * Helper method to make necessary state and metadata
-     * changes after a description file is uploaded,
-     * deleted or added.
-     */
+   * Update Description File
+   *
+   * Helper method to make necessary state and metadata
+   * changes after a description file is uploaded,
+   * deleted or added.
+   */
   updateDescriptionFile(file, projectId, callback) {
     files.read(file, contents => {
       let description = JSON.parse(contents)
@@ -567,11 +568,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Save Description
-     *
-     * Takes a description object and upserts
-     * the JSON description file.
-     */
+   * Save Description
+   *
+   * Takes a description object and upserts
+   * the JSON description file.
+   */
   saveDescription(description, callback) {
     description = JSON.parse(JSON.stringify(description))
     let datasetId = this.data.dataset._id
@@ -614,8 +615,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update README
-     */
+   * Update README
+   */
   updateREADME(value, callback) {
     let dataset = this.data.dataset
     scitran.updateFileFromString(
@@ -635,8 +636,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Dismiss Metadata Issue
-     */
+   * Dismiss Metadata Issue
+   */
   dismissMetadataIssue(key) {
     let metadataIssues = this.data.metadataIssues
     metadataIssues[key] = null
@@ -646,11 +647,11 @@ let datasetStore = Reflux.createStore({
   // Attachments -------------------------------------------------------------------
 
   /**
-     * Upload Attachment
-     *
-     * Takes a file and a callback and uploads
-     * the file to the current dataset.
-     */
+   * Upload Attachment
+   *
+   * Takes a file and a callback and uploads
+   * the file to the current dataset.
+   */
   uploadAttachment(file, callback) {
     let attachmentExists, fileExists
     for (let attachment of this.data.dataset.attachments) {
@@ -707,11 +708,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Delete Attachment
-     *
-     * Takes a filename and index and deletes
-     * the attachment from the current dataset.
-     */
+   * Delete Attachment
+   *
+   * Takes a filename and index and deletes
+   * the attachment from the current dataset.
+   */
   deleteAttachment(filename, index) {
     scitran.deleteFile('projects', this.data.dataset._id, filename, () => {
       let dataset = this.data.dataset
@@ -722,11 +723,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Get Attachment Download Ticket
-     *
-     * Takes a filename and callsback with a direct
-     * download url for an attachment.
-     */
+   * Get Attachment Download Ticket
+   *
+   * Takes a filename and callsback with a direct
+   * download url for an attachment.
+   */
   getAttachmentDownloadTicket(filename, callback) {
     scitran.getDownloadTicket(
       'projects',
@@ -744,11 +745,11 @@ let datasetStore = Reflux.createStore({
   // File Structure ----------------------------------------------------------------
 
   /**
-     * Update Warning
-     *
-     * Throws a modal to warn the user about consequences of
-     * dataset modifications.
-     */
+   * Update Warning
+   *
+   * Throws a modal to warn the user about consequences of
+   * dataset modifications.
+   */
   updateWarn(options) {
     userActions.getPreferences(preferences => {
       if (
@@ -785,17 +786,17 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Disable Update Warning
-     *
-     * Disables the update warning modal
-     */
+   * Disable Update Warning
+   *
+   * Disables the update warning modal
+   */
   disableUpdateWarn(callback) {
     userActions.updatePreferences({ ignoreUpdateWarnings: true }, callback)
   },
 
   /**
-     * Add File
-     */
+   * Add File
+   */
   addFile(container, file) {
     let exists
     for (let existingFile of container.children) {
@@ -873,9 +874,9 @@ let datasetStore = Reflux.createStore({
             uploading: true,
             uploadingFileCount: uploads.length,
             uploadingProgress: 0,
+            uploadingScitranRequests: [],
           })
           this.updateDirectoryState(datasetId, { loading: true })
-          const scitranUploads = []
           async.eachLimit(
             uploads,
             3,
@@ -887,23 +888,29 @@ let datasetStore = Reflux.createStore({
               let file = upload.file
               let container = upload.container
               file.modifiedName = (container.dirPath || '') + file.name
-              scitranUploads.push(
-                scitran.updateFile('projects', datasetId, file, () => {
+              scitran.updateFile(
+                'projects',
+                datasetId,
+                file,
+                () => {
                   this.update({
                     uploadingProgress: this.data.uploadingProgress + 1,
                   })
                   cb()
-                }),
+                },
+                scitranReq => {
+                  this.update({
+                    uploadingScitranRequests: this.data.uploadingScitranRequests.concat(
+                      [scitranReq],
+                    ),
+                  })
+                },
               )
             },
             err => {
               this.update({ uploading: false })
               if (err && callback) callback(err)
               if (err) {
-                // cancel any uploads
-                scitranUploads.forEach(upload => {
-                  upload.abort()
-                })
                 this.loadDataset(bids.encodeId(datasetId), undefined, false)
               } else {
                 this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
@@ -923,12 +930,16 @@ let datasetStore = Reflux.createStore({
   },
 
   cancelDirectoryUpload() {
+    this.data.uploadingScitranRequests.forEach(upload => {
+      upload.abort()
+    })
     // Reset the uploading state
     this.update({
       uploading: false,
       uploadingProgress: null,
       uploadingFileCount: 0,
       uploadingCanceled: true,
+      uploadingScitranRequests: [],
     })
   },
 
@@ -972,8 +983,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Delete File
-     */
+   * Delete File
+   */
   deleteFile(file, callback) {
     let message = this.updateMessage('delete', file)
     this.updateWarn({
@@ -1017,8 +1028,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update File
-     */
+   * Update File
+   */
   updateFile(item, file) {
     let filename = item.name
 
@@ -1051,13 +1062,13 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Re Validate
-     *
-     * Used after any modification and must be run
-     * only after the modification is complete. Downloads
-     * and validates the dataset server side. Updates status
-     * tags and validation results on dataset.
-     */
+   * Re Validate
+   *
+   * Used after any modification and must be run
+   * only after the modification is complete. Downloads
+   * and validates the dataset server side. Updates status
+   * tags and validation results on dataset.
+   */
   revalidate() {
     let dataset = this.data.dataset
     scitran.addTag('projects', dataset._id, 'validating', () => {
@@ -1078,11 +1089,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Get File Download Ticket
-     *
-     * Takes a filename and callsback with a
-     * direct download url.
-     */
+   * Get File Download Ticket
+   *
+   * Takes a filename and callsback with a
+   * direct download url.
+   */
   getFileDownloadTicket(file, callback) {
     scitran.getDownloadTicket(
       'projects',
@@ -1098,8 +1109,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Dismiss Error
-     */
+   * Dismiss Error
+   */
   dismissError(item) {
     if (item.children) {
       this.updateDirectoryState(item._id, { error: '' })
@@ -1109,9 +1120,9 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update Directory State
-     *
-     */
+   * Update Directory State
+   *
+   */
   updateDirectoryState(directoryId, changes, callback) {
     let dataset = this.data.dataset
     let match = files.findInTree([dataset], directoryId)
@@ -1132,12 +1143,12 @@ let datasetStore = Reflux.createStore({
     this.update({ dataset }, callback)
   },
   /**
-     * Update File State
-     *
-     * Take a file object and changes to be
-     * made and applies those changes by
-     * updating the state of the file tree
-     */
+   * Update File State
+   *
+   * Take a file object and changes to be
+   * made and applies those changes by
+   * updating the state of the file tree
+   */
   updateFileState(file, changes, callback) {
     let dataset = this.data.dataset
     let parent = files.findInTree([dataset], file.parentId)
@@ -1152,13 +1163,13 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Toggle Folder
-     *
-     * Takes the id of a container in the
-     * current dataset and toggles its showChildren
-     * boolean which determines whether container
-     * children are shown in the tree hierarchy UI.
-     */
+   * Toggle Folder
+   *
+   * Takes the id of a container in the
+   * current dataset and toggles its showChildren
+   * boolean which determines whether container
+   * children are shown in the tree hierarchy UI.
+   */
   toggleFolder(directory) {
     if (directory.label === this.data.dataset.label && !this.data.datasetTree) {
       this.loadDatasetTree()
@@ -1195,8 +1206,8 @@ let datasetStore = Reflux.createStore({
   // Jobs --------------------------------------------------------------------------
 
   /**
-     * Load Jobs
-     */
+   * Load Jobs
+   */
   loadJobs(projectId, snapshot, originalId, options, callback) {
     let jobId = options.job
     this.update({ loadingJobs: true })
@@ -1339,8 +1350,8 @@ let datasetStore = Reflux.createStore({
     }
   },
   /**
-     * Start Job
-     */
+   * Start Job
+   */
   startJob(snapshotId, jobDefinition, parameters, callback) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
@@ -1490,8 +1501,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Dismiss Job Modal
-     */
+   * Dismiss Job Modal
+   */
   dismissJobsModal(success, snapshotId, appLabel, appVersion, jobId, history) {
     this.toggleModal('jobs')
     if (success) {
@@ -1508,11 +1519,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Select Job
-     *
-     * Select the job accordion panel and saves
-     * the state.
-     */
+   * Select Job
+   *
+   * Select the job accordion panel and saves
+   * the state.
+   */
   selectJob(type, value) {
     let activeJob = this.data.activeJob
     if (value === activeJob[type]) {
@@ -1528,8 +1539,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Get Result Download Ticket
-     */
+   * Get Result Download Ticket
+   */
   getResultDownloadTicket(snapshotId, jobId, file, callback) {
     let filePath = file === 'all' ? file : file.path
     if (filePath === 'all-results') {
@@ -1548,8 +1559,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * DisplayFile
-     */
+   * DisplayFile
+   */
   displayFile(snapshotId, jobId, file, callback) {
     let requestAndDisplay = link => {
       let modals = this.data.modals

@@ -65,18 +65,20 @@ var Request = {
     })
   },
 
-  upload(url, options, callback) {
+  upload(url, options, callback, reqCallback) {
     return handleRequest(url, options, function(url, options) {
-      return request
-        .post(url)
-        .query(options.query)
-        .set(options.headers)
-        .field('tags', options.fields.tags)
-        .attach('file', options.fields.file, options.fields.name)
-        .retry(maxRetries)
-        .end((err, res) => {
-          handleResponse(err, res, callback)
-        })
+      reqCallback(
+        request
+          .post(url)
+          .query(options.query)
+          .set(options.headers)
+          .field('tags', options.fields.tags)
+          .attach('file', options.fields.file, options.fields.name)
+          .retry(maxRetries)
+          .end((err, res) => {
+            handleResponse(err, res, callback)
+          }),
+      )
     })
   },
 }
