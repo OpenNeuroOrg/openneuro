@@ -92,6 +92,8 @@ let datasetStore = Reflux.createStore({
       selectedSnapshot: '',
       status: null,
       users: [],
+      uploading: false,
+      uploadingCanceled: false,
       showSidebar: window.localStorage.hasOwnProperty('showSidebar')
         ? window.localStorage.showSidebar === 'true'
         : true,
@@ -856,8 +858,8 @@ let datasetStore = Reflux.createStore({
   addDirectoryFile(uploads, dirTree, callback) {
     // get the top level directory name to display in warning message
     let topLevelDirectory = `${uploads[0].container.dirPath.split('/')[0]}/`
-    let dataset = this.data.dataset
-    let childExistsIndex = dataset.children.findIndex(el => {
+    let datasetId = this.data.dataset._id
+    let childExistsIndex = this.data.dataset.children.findIndex(el => {
       return el.name === dirTree.name
     })
     if (childExistsIndex === -1) {
@@ -867,36 +869,67 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
-          this.updateDirectoryState(dataset._id, { loading: true })
+          this.update({
+            uploading: true,
+            uploadingFileCount: uploads.length,
+            uploadingProgress: 0,
+          })
+          this.updateDirectoryState(datasetId, { loading: true })
+          const scitranUploads = []
           async.eachLimit(
             uploads,
             3,
             (upload, cb) => {
+              // Cancel adding files if navigated away
+              if (this.data.uploadingCanceled) {
+                return cb(new Error('Add directory interrupted'))
+              }
               let file = upload.file
               let container = upload.container
               file.modifiedName = (container.dirPath || '') + file.name
-              scitran.updateFile(
-                'projects',
-                this.data.dataset._id,
-                file,
-                () => {
+              scitranUploads.push(
+                scitran.updateFile('projects', datasetId, file, () => {
+                  this.update({
+                    uploadingProgress: this.data.uploadingProgress + 1,
+                  })
                   cb()
-                },
+                }),
               )
             },
             err => {
+              this.update({ uploading: false })
               if (err && callback) callback(err)
-              this.loadDataset(bids.encodeId(dataset._id), undefined, true) // forcing reload
+              if (err) {
+                // cancel any uploads
+                scitranUploads.forEach(upload => {
+                  upload.abort()
+                })
+                this.loadDataset(bids.encodeId(datasetId), undefined, false)
+              } else {
+                this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
+              }
+              // Reset canceled when an upload is done (canceled or otherwise)
+              this.update({ uploadingCanceled: false })
               if (callback) callback()
             },
           )
         },
       })
     } else {
-      this.updateDirectoryState(dataset._id, {
+      this.updateDirectoryState(datasetId, {
         error: '"' + topLevelDirectory + '" already exists in this dataset.',
       })
     }
+  },
+
+  cancelDirectoryUpload() {
+    // Reset the uploading state
+    this.update({
+      uploading: false,
+      uploadingProgress: null,
+      uploadingFileCount: 0,
+      uploadingCanceled: true,
+    })
   },
 
   deleteDirectory(dirTree, label, callback) {
