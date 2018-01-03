@@ -18,7 +18,12 @@ let UserStore = Reflux.createStore({
   listenables: actions,
 
   init() {
-    this.setInitialState()
+    if (window.localStorage) {
+      this.setInitialState(null, window.localStorage)
+    } else {
+      // Not a browser
+      this.setInitialState(null, {})
+    }
 
     this.providers = {
       google,
@@ -88,21 +93,17 @@ let UserStore = Reflux.createStore({
    * which will set the state to the initial state
    * with any differences passed.
    */
-  setInitialState(diffs) {
+  setInitialState(diffs, localStorage) {
     let data = {
       token:
-        window.localStorage.token && window.localStorage.token !== 'undefined'
-          ? JSON.parse(window.localStorage.token)
+        localStorage.token && localStorage.token !== 'undefined'
+          ? JSON.parse(localStorage.token)
           : null,
-      profile: window.localStorage.profile
-        ? JSON.parse(window.localStorage.profile)
+      profile: localStorage.profile ? JSON.parse(localStorage.profile) : null,
+      provider: localStorage.provider
+        ? JSON.parse(localStorage.provider)
         : null,
-      provider: window.localStorage.provider
-        ? JSON.parse(window.localStorage.provider)
-        : null,
-      scitran: window.localStorage.scitran
-        ? JSON.parse(window.localStorage.scitran)
-        : null,
+      scitran: localStorage.scitran ? JSON.parse(localStorage.scitran) : null,
       loading: false,
       signinError: '',
       showUploadModal: false,
