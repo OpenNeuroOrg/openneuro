@@ -74,6 +74,7 @@ export default class FileDisplay extends React.Component {
             data={data}
             columns={columns}
             sortable={true}
+            defaultPageSize={100}
             showPageSizeOptions={false}
           />
         </div>
