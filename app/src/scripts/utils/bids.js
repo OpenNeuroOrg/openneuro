@@ -15,14 +15,14 @@ export default {
   // Read -----------------------------------------------------------------------------------
 
   /**
-     * Get Datasets
-     *
-     * Returns a list of datasets including any
-     * derived statuses and notes on each. Only returns
-     * the top level 'project' container. Takes an optional
-     * boolean as second argument to specifiy if request
-     * is made with authentication. Defaults to true.
-     */
+   * Get Datasets
+   *
+   * Returns a list of datasets including any
+   * derived statuses and notes on each. Only returns
+   * the top level 'project' container. Takes an optional
+   * boolean as second argument to specifiy if request
+   * is made with authentication. Defaults to true.
+   */
   getDatasets(
     callback,
     isPublic,
@@ -43,34 +43,34 @@ export default {
             projects = projects.concat(pubProjects)
             scitran.getUsers((err, res) => {
               let users = !err && res && res.body ? res.body : null
-              let resultDict = {}
-              // hide other user's projects from admins & filter snapshots to display newest of each dataset
-              if (projects) {
-                for (let project of projects) {
-                  let dataset = this.formatDataset(project, null, users)
-                  let datasetId = dataset.hasOwnProperty('original')
-                    ? dataset.original
-                    : dataset._id
-                  let existing = resultDict[datasetId]
-                  if (
-                    !existing ||
-                    (existing.hasOwnProperty('original') &&
-                      !dataset.hasOwnProperty('original')) ||
-                    (existing.hasOwnProperty('original') &&
-                      existing.snapshot_version < project.snapshot_version)
-                  ) {
-                    if (isAdmin || isPublic || this.userAccess(project)) {
-                      resultDict[datasetId] = dataset
+                let resultDict = {}
+                // hide other user's projects from admins & filter snapshots to display newest of each dataset
+                if (projects) {
+                  for (let project of projects) {
+                    let dataset = this.formatDataset(project, null, users)
+                    let datasetId = dataset.hasOwnProperty('original')
+                      ? dataset.original
+                      : dataset._id
+                    let existing = resultDict[datasetId]
+                    if (
+                      !existing ||
+                      (existing.hasOwnProperty('original') &&
+                        !dataset.hasOwnProperty('original')) ||
+                      (existing.hasOwnProperty('original') &&
+                        existing.snapshot_version < project.snapshot_version)
+                    ) {
+                      if (isAdmin || isPublic || this.userAccess(project)) {
+                        resultDict[datasetId] = dataset
+                      }
                     }
                   }
                 }
-              }
 
-              let results = []
-              for (let key in resultDict) {
-                results.push(resultDict[key])
-              }
-              callback(results)
+                let results = []
+                for (let key in resultDict) {
+                  results.push(resultDict[key])
+                }
+                callback(results)
             }, isSignedOut)
           },
         )
@@ -79,9 +79,9 @@ export default {
   },
 
   /**
-     * Get Metadata
-     *
-     */
+   * Get Metadata
+   *
+   */
   getMetadata(project, callback, options) {
     // determine which metadata files are available
     let metadataFiles = [],
@@ -126,11 +126,11 @@ export default {
   },
 
   /**
-     * Get Dataset
-     *
-     * Takes a projectId and returns a full
-     * nested BIDS dataset.
-     */
+   * Get Dataset
+   *
+   * Takes a projectId and returns a full
+   * nested BIDS dataset.
+   */
   getDataset(projectId, callback, options) {
     scitran.getUsers((err, res) => {
       let users = !err && res && res.body ? res.body : null
@@ -154,19 +154,19 @@ export default {
               crn.getDatasetJobs(
                 projectId,
                 (err, res) => {
-                  dataset.jobs = res.body
-                  dataset.children = tempFiles
-                  dataset.showChildren = true
-                  this.usage(projectId, options, usage => {
-                    if (usage) {
-                      dataset.views = usage.views
-                      dataset.downloads = usage.downloads
-                    }
-                    callback(dataset)
-                  })
-                },
-                options,
-              )
+                dataset.jobs = res.body
+                dataset.children = tempFiles
+                dataset.showChildren = true
+                this.usage(projectId, options, usage => {
+                  if (usage) {
+                    dataset.views = usage.views
+                    dataset.downloads = usage.downloads
+                  }
+                  callback(dataset)
+                })
+            },
+            options,
+          )
             },
             options,
           )
@@ -177,11 +177,11 @@ export default {
   },
 
   /**
-     * Format Files
-     *
-     * Takes a list of files from a dataset and generates
-     * the file tree using file paths.
-     */
+   * Format Files
+   *
+   * Takes a list of files from a dataset and generates
+   * the file tree using file paths.
+   */
   _formatFiles(files) {
     let fileList = []
     if (files && files.length > 0) {
@@ -206,12 +206,12 @@ export default {
   // Update ---------------------------------------------------------------------------------
 
   /**
-     * Add Permission
-     *
-     * Takes a projectId and a permission object and
-     * adds the permission object if the user doesn't
-     * already exist in the project.
-     */
+   * Add Permission
+   *
+   * Takes a projectId and a permission object and
+   * adds the permission object if the user doesn't
+   * already exist in the project.
+   */
   addPermission(projectId, permission, callback) {
     crn.addPermission('projects', projectId, permission, (err, res) => {
       callback(err, res)
@@ -219,11 +219,11 @@ export default {
   },
 
   /**
-     * Remove Permission
-     *
-     * Takes a projectId and a userId and removes
-     * the user if they were a member of the project.
-     */
+   * Remove Permission
+   *
+   * Takes a projectId and a userId and removes
+   * the user if they were a member of the project.
+   */
   removePermission(projectId, userId, callback) {
     scitran.removePermission('projects', projectId, userId, callback)
   },
@@ -231,12 +231,12 @@ export default {
   // Delete ---------------------------------------------------------------------------------
 
   /**
-     * Delete Dataset
-     *
-     * Takes a projectId and delete the project
-     * after recursing and removing all sub
-     * containers.
-     */
+   * Delete Dataset
+   *
+   * Takes a projectId and delete the project
+   * after recursing and removing all sub
+   * containers.
+   */
   deleteDataset(projectId, callback, options) {
     options.query = { purge: true }
     scitran.deleteContainer('projects', projectId, callback, options)
@@ -245,8 +245,8 @@ export default {
   // Dataset Format Helpers -----------------------------------------------------------------
 
   /**
-     * Encode ID
-     */
+   * Encode ID
+   */
   encodeId(id, version) {
     if (version) {
       id = this.decodeId(id)
@@ -268,8 +268,8 @@ export default {
   },
 
   /**
-     * Decode ID
-     */
+   * Decode ID
+   */
   decodeId(id) {
     if (id) {
       let decodedId = hex.toASCII(id)
@@ -283,11 +283,11 @@ export default {
   },
 
   /**
-     * User
-     *
-     * Takes a dataset and users list and returns the
-     * user object of the uploader.
-     */
+   * User
+   *
+   * Takes a dataset and users list and returns the
+   * user object of the uploader.
+   */
   user(dataset, users) {
     if (users) {
       for (let user of users) {
@@ -301,11 +301,11 @@ export default {
   },
 
   /**
-     * Format Files
-     *
-     * Sorts files alphabetically and adds parentId
-     * and container properties.
-     */
+   * Format Files
+   *
+   * Sorts files alphabetically and adds parentId
+   * and container properties.
+   */
   formatFiles(items, parentId, parentContainer) {
     items = items ? items : []
     items.sort((a, b) => {
@@ -327,12 +327,12 @@ export default {
   },
 
   /**
-     * Format Dataset
-     *
-     * Takes a scitran project and returns
-     * a formatted top level container of a
-     * BIDS dataset.
-     */
+   * Format Dataset
+   *
+   * Takes a scitran project and returns
+   * a formatted top level container of a
+   * BIDS dataset.
+   */
   formatDataset(project, description, users) {
     let files = [],
       attachments = []
@@ -388,9 +388,9 @@ export default {
   },
 
   /**
-     * formatDescription
-     *
-     */
+   * formatDescription
+   *
+   */
   formatDescription(metadata, description) {
     let defaultDescription = {
       Name: '',
@@ -420,12 +420,12 @@ export default {
   },
 
   /**
-     * Format Status
-     *
-     * Takes a metadata object and returns
-     * a dataset status object corresponding
-     * to any statuses set in the notes.
-     */
+   * Format Status
+   *
+   * Takes a metadata object and returns
+   * a dataset status object corresponding
+   * to any statuses set in the notes.
+   */
   formatStatus(project, userAccess) {
     let tags = project.tags ? project.tags : []
     let status = {
@@ -443,11 +443,11 @@ export default {
   },
 
   /**
-     * User Access
-     *
-     * Takes a project and returns the level of access
-     * the current user has with that project.
-     */
+   * User Access
+   *
+   * Takes a project and returns the level of access
+   * the current user has with that project.
+   */
   userAccess(project) {
     let access = null
     const currentUser = userStore.data.scitran
@@ -468,11 +468,11 @@ export default {
   },
 
   /**
-     * User Created
-     *
-     * Takes project and returns boolean representing
-     * whether the current user created the project.
-     */
+   * User Created
+   *
+   * Takes project and returns boolean representing
+   * whether the current user created the project.
+   */
   userCreated(project) {
     if (!userStore.data.scitran) {
       return false
@@ -481,10 +481,10 @@ export default {
   },
 
   /**
-     * Usage
-     * Takes a snapshotId and snapshot boolean and
-     * callsback view and download counts for snapshots.
-     */
+   * Usage
+   * Takes a snapshotId and snapshot boolean and
+   * callsback view and download counts for snapshots.
+   */
   usage(snapshotId, options, callback) {
     if (options && options.snapshot) {
       let usage = {}

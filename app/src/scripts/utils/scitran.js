@@ -44,7 +44,7 @@ export default {
   addUser(userData, callback) {
     request.post(config.scitran.url + 'users', { body: userData }, () => {
       this.createGroup(userData._id, userData._id, callback)
-    })
+      })
   },
 
   /**
@@ -98,7 +98,7 @@ export default {
     request.post(
       config.scitran.url + 'projects',
       {
-        body: { group, label },
+      body: { group, label },
       },
       callback,
     )
@@ -112,13 +112,13 @@ export default {
     request.post(
       config.scitran.url + 'sessions',
       {
-        body: {
-          project: projectId,
-          label: subjectName,
-          subject: {
-            code: 'subject',
-          },
+      body: {
+        project: projectId,
+        label: subjectName,
+        subject: {
+          code: 'subject',
         },
+      },
       },
       callback,
     )
@@ -132,13 +132,13 @@ export default {
     request.post(
       config.scitran.url + 'sessions',
       {
-        body: {
-          project: projectId,
-          label: sessionName,
-          subject: {
-            code: subjectId,
-          },
+      body: {
+        project: projectId,
+        label: sessionName,
+        subject: {
+          code: subjectId,
         },
+      },
       },
       callback,
     )
@@ -152,10 +152,10 @@ export default {
     request.post(
       config.scitran.url + 'acquisitions',
       {
-        body: {
-          session: sessionId,
-          label: modalityName,
-        },
+      body: {
+        session: sessionId,
+        label: modalityName,
+      },
       },
       callback,
     )
@@ -403,14 +403,14 @@ export default {
     return request.upload(
       config.scitran.url + level + '/' + id + '/files',
       {
-        fields: {
-          tags: '[]',
-          file: file,
-          name: file.hasOwnProperty('modifiedName')
-            ? file.modifiedName
-            : file.name,
-        },
-        query: { force: true },
+      fields: {
+        tags: '[]',
+        file: file,
+        name: file.hasOwnProperty('modifiedName')
+          ? file.modifiedName
+          : file.name,
+      },
+      query: { force: true },
       },
       callback,
       reqCallback,
@@ -443,7 +443,7 @@ export default {
     request.post(
       config.scitran.url + 'snapshots',
       {
-        query: { project: projectId },
+      query: { project: projectId },
       },
       callback,
     )

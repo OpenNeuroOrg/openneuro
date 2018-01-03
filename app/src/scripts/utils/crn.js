@@ -11,77 +11,77 @@ export default {
   // Users -----------------------------------------------------------------------------------
 
   /**
-     * Verify User
-     *
-     * A proxy of scitran verify user endpoint.
-     */
+   * Verify User
+   *
+   * A proxy of scitran verify user endpoint.
+   */
   verifyUser(callback) {
     request.get(config.crn.url + 'users/self', {}, callback)
   },
 
   /**
-     * Create User
-     *
-     */
+   * Create User
+   *
+   */
   createUser(user, callback) {
     request.post(config.crn.url + 'users', { body: user }, callback)
   },
 
   /**
-     * Get Blacklist
-     */
+   * Get Blacklist
+   */
   getBlacklist(callback) {
     request.get(config.crn.url + 'users/blacklist', {}, callback)
   },
 
   /**
-     * Blacklist User
-     */
+   * Blacklist User
+   */
   blacklistUser(user, callback) {
     request.post(config.crn.url + 'users/blacklist', { body: user }, callback)
   },
 
   /**
-     * Un Blacklist
-     */
+   * Un Blacklist
+   */
   unBlacklistUser(userId, callback) {
     request.del(config.crn.url + 'users/blacklist/' + userId, {}, callback)
   },
 
   /**
-     * Finish OAuth2 ORCID flow
-     */
+   * Finish OAuth2 ORCID flow
+   */
   getORCIDToken(code, callback) {
     request.get(
       config.crn.url + 'users/signin/orcid',
       {
-        query: { code, home: true },
+      query: { code, home: true },
       },
       callback,
     )
   },
 
   /**
-     * Get ORCID profile
-     */
+   * Get ORCID profile
+   */
   getORCIDProfile(accessToken, callback) {
     request.get(
       config.crn.url + 'users/orcid',
       {
-        query: { accessToken },
+      query: { accessToken },
       },
       callback,
     )
   },
 
   /**
-     * Get ORCID profile
-     */
+   * Get ORCID profile
+   */
   refreshORCIDToken(refreshToken, callback) {
     request.get(
       config.crn.url + 'users/orcid/refresh',
       {
-        query: { refreshToken },
+      query: { refreshToken },
       },
       callback,
     )
@@ -90,24 +90,24 @@ export default {
   // Datasets --------------------------------------------------------------------------------
 
   /**
-     * Create Project
-     *
-     * Takes a request body and
-     * generates a request to make a project in scitran.
-     */
+   * Create Project
+   *
+   * Takes a request body and
+   * generates a request to make a project in scitran.
+   */
   createProject(group, label, callback) {
     request.post(
       config.crn.url + 'datasets',
       {
-        body: { group, label },
+      body: { group, label },
       },
       callback,
     )
   },
 
   /**
-     * Create Snapshot
-     */
+   * Create Snapshot
+   */
   createSnapshot(projectId, callback) {
     request.post(
       config.crn.url + 'datasets/' + projectId + '/snapshot',
@@ -117,8 +117,8 @@ export default {
   },
 
   /**
-     * Add Permission
-     */
+   * Add Permission
+   */
   addPermission(container, id, permission, callback) {
     permission.site = 'local'
     request.post(
@@ -131,18 +131,18 @@ export default {
   // Jobs ------------------------------------------------------------------------------------
 
   /**
-     * Get Apps
-     *
-     * Returns a list of available apps that
-     * can be run on AWS Batch
-     */
+   * Get Apps
+   *
+   * Returns a list of available apps that
+   * can be run on AWS Batch
+   */
   getApps(callback) {
     request.get(config.crn.url + 'apps', { auth: false }, callback)
   },
 
   /**
-     * Define Jobs
-     */
+   * Define Jobs
+   */
   defineJob(jobDef, callback) {
     request.post(
       config.crn.url + 'jobs/definitions',
@@ -152,15 +152,15 @@ export default {
   },
 
   /**
-    * Delete app definition
-    */
+   * Delete app definition
+   */
   deleteJobDefinition(appId, callback) {
     request.del(config.crn.url + 'jobs/definitions/' + appId, {}, callback)
   },
 
   /**
-     * Get Jobs
-     */
+   * Get Jobs
+   */
   getJobs(
     callback,
     isPublic,
@@ -185,11 +185,11 @@ export default {
   },
 
   /**
-     * Create Job
-     *
-     * Takes an options object with a name, appId
-     * datasetId and userId and starts a Job.
-     */
+   * Create Job
+   *
+   * Takes an options object with a name, appId
+   * datasetId and userId and starts a Job.
+   */
   createJob(job, callback) {
     request.post(
       config.crn.url + 'datasets/' + job.snapshotId + '/jobs',
@@ -219,11 +219,11 @@ export default {
   },
 
   /**
-     * Get Job
-     *
-     * Takes a job ID and callsback with
-     * the job data.
-     */
+   * Get Job
+   *
+   * Takes a job ID and callsback with
+   * the job data.
+   */
   getJob(datasetId, jobId, callback, options) {
     request.get(
       config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId,
@@ -243,11 +243,11 @@ export default {
   },
 
   /**
-     * Retry Job
-     *
-     * Take a jobId and retries the job with the same
-     * dataset and settings.
-     */
+   * Retry Job
+   *
+   * Take a jobId and retries the job with the same
+   * dataset and settings.
+   */
   retryJob(datasetId, jobId, callback, options) {
     request.post(
       config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId + '/retry',
@@ -259,10 +259,10 @@ export default {
   },
 
   /**
-       * Delete Job
-       *
-       * Take a jobId and deletes the job.
-       */
+   * Delete Job
+   *
+   * Take a jobId and deletes the job.
+   */
   deleteJob(datasetId, jobId, callback, options) {
     request.del(
       config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId,
@@ -274,13 +274,13 @@ export default {
   },
 
   /**
-     * Get Dataset Jobs
-     */
+   * Get Dataset Jobs
+   */
   getDatasetJobs(datasetId, callback, options) {
     request.get(
       config.crn.url + 'datasets/' + datasetId + '/jobs',
       {
-        query: { snapshot: options && options.snapshot },
+      query: { snapshot: options && options.snapshot },
       },
       callback,
     )
@@ -308,8 +308,8 @@ export default {
   },
 
   /**
-     * Delete Dataset Jobs
-     */
+   * Delete Dataset Jobs
+   */
   deleteDatasetJobs(datasetId, callback) {
     request.del(
       config.crn.url + 'datasets/' + datasetId + '/jobs',
@@ -321,8 +321,8 @@ export default {
   // Validation ------------------------------------------------------------------------------
 
   /**
-     * Validate
-     */
+   * Validate
+   */
   validate(datasetId, callback) {
     request.post(
       config.crn.url + 'datasets/' + datasetId + '/validate',

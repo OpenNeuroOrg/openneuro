@@ -35,13 +35,13 @@ let orcid = {
     }
 
     crn.getORCIDProfile(access_token, (err, res) => {
-      let { firstname, lastname, email } = res.body
+        let { firstname, lastname, email } = res.body
       callback(err, {
-        token: this.token,
-        profile: { _id: orcid, firstname, lastname, email },
+          token: this.token,
+          profile: { _id: orcid, firstname, lastname, email },
         isSignedIn: !err && orcid,
+        })
       })
-    })
   },
 
   refresh(callback) {
@@ -53,7 +53,7 @@ let orcid = {
         } else {
           this.getCurrentUser(callback)
         }
-      })
+        })
     } else {
       setTimeout(() => {
         this.refresh(callback)
@@ -91,7 +91,7 @@ let orcid = {
               this.token = res.body
               this.getCurrentUser(callback)
             }
-          })
+            })
         } else {
           // If not the redirect page - check if closed and unregister
           if (this.oauthWindow.closed) {

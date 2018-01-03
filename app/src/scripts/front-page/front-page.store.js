@@ -40,13 +40,13 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * Set Initial State
-     *
-     * Sets the state to the data object defined
-     * inside the function. Also takes a diffs object
-     * which will set the state to the initial state
-     * with any differences passed.
-     */
+   * Set Initial State
+   *
+   * Sets the state to the data object defined
+   * inside the function. Also takes a diffs object
+   * which will set the state to the initial state
+   * with any differences passed.
+   */
   setInitialState: function(diffs, callback) {
     let data = {
       apps: [],
@@ -72,8 +72,8 @@ let FrontPageStore = Reflux.createStore({
   // actions ---------------------------------------------------------------------------
 
   /**
-     * Reset
-     */
+   * Reset
+   */
   reset() {
     this.setInitialState({
       apps: this.data.apps,
@@ -82,8 +82,8 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * Set Apps
-     */
+   * Set Apps
+   */
   setApps(apps) {
     let found = []
     let tags = []
@@ -103,15 +103,15 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * Select Tag
-     */
+   * Select Tag
+   */
   selectTag(selectedTags) {
     this.update({ selectedTags })
   },
 
   /**
-     * Select Pipeline
-     */
+   * Select Pipeline
+   */
   selectPipeline(appId) {
     if (appId === '') {
       this.update({ selectedPipeline: { id: '' } })
@@ -138,8 +138,8 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * Load Job
-     */
+   * Load Job
+   */
   loadJob(snapshotId, jobId) {
     crn.getJob(
       snapshotId,
@@ -175,8 +175,8 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * Toggle Folder
-     */
+   * Toggle Folder
+   */
   toggleFolder(directory) {
     let exampleJob = this.data.exampleJob
 
@@ -191,8 +191,8 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * DisplayFile
-     */
+   * DisplayFile
+   */
   displayFile(snapshotId, jobId, file, callback) {
     datasetActions.getResultDownloadTicket(snapshotId, jobId, file, link => {
       // requestAndDisplay(link);

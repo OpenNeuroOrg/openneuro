@@ -9,37 +9,37 @@ export default {
   // progress --------------------------------------------------------------------------
 
   /**
-     * Current Project Id
-     */
+   * Current Project Id
+   */
   currentProjectId: null,
 
   /**
-     * Current Files
-     *
-     * An array of file names that are currently being uploaded.
-     */
+   * Current Files
+   *
+   * An array of file names that are currently being uploaded.
+   */
   currentFiles: [],
 
   /**
-     * Total
-     */
+   * Total
+   */
   total: 0,
 
   /**
-     * Completed
-     */
+   * Completed
+   */
   completed: 0,
 
   // upload ----------------------------------------------------------------------------
 
   /**
-     * Upload
-     *
-     * Takes an entire bids file list and uploads all the files.
-     * Additionally takes a progress callback that gets
-     * updated at the start and end of every file or
-     * folder upload request and an error callback.
-     */
+   * Upload
+   *
+   * Takes an entire bids file list and uploads all the files.
+   * Additionally takes a progress callback that gets
+   * updated at the start and end of every file or
+   * folder upload request and an error callback.
+   */
   upload(userId, datasetName, fileList, metadata, progress, error) {
     this.total = fileList.length + 1
     this.completed = 0
@@ -124,9 +124,9 @@ export default {
   },
 
   /**
-     * Upload Files
-     *
-     */
+   * Upload Files
+   *
+   */
   uploadFiles(datasetName, files, projectId, metadata) {
     this.currentProjectId = projectId
     for (let file of files) {
@@ -144,8 +144,8 @@ export default {
   },
 
   /**
-     * Upload Metadata
-     */
+   * Upload Metadata
+   */
   uploadMetadata(datasetName, projectId, metadata, descriptionFile) {
     fileUtils.read(descriptionFile, contents => {
       let description = JSON.parse(contents)
@@ -183,10 +183,10 @@ export default {
   },
 
   /**
-     * Upload File
-     *
-     * Pushes upload details into an upload queue.
-     */
+   * Upload File
+   *
+   * Pushes upload details into an upload queue.
+   */
   uploadFile(level, id, file) {
     let url = config.scitran.url + level + '/' + id + '/files'
     uploads.add({
