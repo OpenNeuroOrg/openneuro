@@ -455,21 +455,6 @@
         }
     }
 }
-.reactable-previous-page,
-.reactable-next-page,
-.reactable-page-button {
-    font-size: 18px;
-    line-height: 21px;
-    margin-right: 10px;
-    padding-right: 10px;
-    border-right: 1px solid #aaa;
-    &.reactable-current-page{
-        color: #aaa;
-    }
-    &.reactable-next-page{
-        border: 0;
-    }
-}
 
 div.rt-resizable-header-content {
     color: $primary;
@@ -512,27 +497,6 @@ div.rt-resizable-header-content {
         width: 50px;
         padding-left: 5px !important;  
         padding-top: 2px;
-    }
-}
-
-.reactable-header-sortable {
-    color: $primary;
-    padding-right: 50px !important;
-    position: relative;
-
-    &::after {
-        font-family: FontAwesome;
-        content: ' \f0dc';
-        position: absolute;
-        width: 50px;
-    }
-
-    &.reactable-header-sort-asc::after {
-        content: ' \f0de';
-    }
-
-    &.reactable-header-sort-desc::after {
-        content: ' \f0dd';
     }
 }
 
