@@ -8,7 +8,8 @@ import markdown from '../../utils/markdown'
 
 const JobResults = ({ run, acknowledgements, displayFile, toggleFolder }) => {
   const type = 'results'
-  const jobLength = run.analysis.jobs ? run.analysis.jobs.length : false
+  const jobs = run.analysis ? run.analysis.jobs : null
+  const jobLength = jobs ? jobs.length : false
   if (run[type] && run[type].length > 0 && run[type].length === jobLength) {
     return (
       <Accordion accordion className="results">
