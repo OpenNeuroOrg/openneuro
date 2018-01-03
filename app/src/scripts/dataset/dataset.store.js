@@ -363,7 +363,7 @@ let datasetStore = Reflux.createStore({
       .getBIDSDownloadTicket(this.data.dataset._id, {
         snapshot: !!this.data.snapshot,
       })
-      .then((err, res) => {
+      .then(res => {
         let ticket = res.body.ticket
         let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
         callback(downloadUrl)
