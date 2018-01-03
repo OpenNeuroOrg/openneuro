@@ -66,7 +66,6 @@ export default class FileDisplay extends React.Component {
       )
     } else if (files.hasExtension(name, ['.tsv', '.csv'])) {
       let tableData = this._parseTabular(name, content)
-      console.log('tableData:', tableData)
       let data = tableData.data
       let columns = tableData.columns
       return (
