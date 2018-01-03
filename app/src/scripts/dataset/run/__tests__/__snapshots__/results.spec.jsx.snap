@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`dataset/run/Results should render something 1`] = `
+exports[`dataset/run/Results should render something when all job results are in 1`] = `
 <Accordion
   accordion={true}
   className="results"
@@ -32,6 +32,11 @@ exports[`dataset/run/Results should render something 1`] = `
     <DownloadAll
       run={
         Object {
+          "analysis": Object {
+            "jobs": Array [
+              "only_one_job",
+            ],
+          },
           "results": Array [
             Object {
               "dirPath": "avg_brain_size.txt",
