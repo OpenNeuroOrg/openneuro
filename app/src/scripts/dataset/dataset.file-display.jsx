@@ -7,7 +7,7 @@ import PropTypes from 'prop-types'
 import { Modal } from '../utils/modal.jsx'
 import files from '../utils/files'
 import Papaya from '../common/partials/papaya.jsx'
-import { Table } from 'reactable'
+import ReactTable from 'react-table'
 
 export default class FileDisplay extends React.Component {
   // life cycle events --------------------------------------------------
@@ -65,14 +65,17 @@ export default class FileDisplay extends React.Component {
         />
       )
     } else if (files.hasExtension(name, ['.tsv', '.csv'])) {
+      let tableData = this._parseTabular(name, content)
+      console.log('tableData:', tableData)
+      let data = tableData.data
+      let columns = tableData.columns
       return (
         <div className="table-responsive">
-          <Table
-            className="table table-bordered"
-            data={this._parseTabular(name, content)}
+          <ReactTable
+            data={data}
+            columns={columns}
             sortable={true}
-            itemsPerPage={100}
-            pageButtonLimit={5}
+            showPageSizeOptions={false}
           />
         </div>
       )
@@ -126,10 +129,18 @@ export default class FileDisplay extends React.Component {
       separator = ','
     }
 
-    let tableData = []
+    let tableData = { data: [], columns: [] }
     let rows = data.split('\n')
     let headers = rows[0].split(separator)
 
+    //create columns from headers:
+    for (let header of headers) {
+      let headerObj = {
+        Header: header,
+        accessor: header,
+      }
+      tableData['columns'].push(headerObj)
+    }
     // remove headers from rows
     rows.shift()
 
@@ -141,7 +152,7 @@ export default class FileDisplay extends React.Component {
         for (let i = 0; i < headers.length; i++) {
           rowObj[headers[i]] = row[i]
         }
-        tableData.push(rowObj)
+        tableData['data'].push(rowObj)
       }
     }
 
