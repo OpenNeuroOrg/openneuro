@@ -220,7 +220,8 @@ let UploadStore = Reflux.createStore({
       let self = this
       let userId = userStore.data.scitran._id
       if (!this.data.resuming) {
-        scitran.getProjects({}, function(projects) {
+        scitran.getProjects({}).then(res => {
+          const projects = res.body
           let existingProjectId
           for (let project of projects) {
             if (
@@ -303,7 +304,7 @@ let UploadStore = Reflux.createStore({
           datasetsUpdated = true
         }
         if (progress.total === progress.completed) {
-          scitran.removeTag('projects', projectId, 'incomplete', () => {
+          scitran.removeTag('projects', projectId, 'incomplete').then(() => {
             datasetActions.updateStatus(projectId, { incomplete: false })
             this.uploadComplete(projectId)
           })

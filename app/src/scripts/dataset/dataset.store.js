@@ -225,7 +225,7 @@ let datasetStore = Reflux.createStore({
    * Loads a list of all users.
    */
   loadUsers() {
-    scitran.getUsers((err, res) => {
+    scitran.getUsers().then(res => {
       this.update({ users: res.body })
     })
   },
@@ -235,14 +235,14 @@ let datasetStore = Reflux.createStore({
    */
   loadApps() {
     this.update({ loadingApps: true })
-    crn.getApps((err, res) => {
+    crn.getApps().then(res => {
       FPActions.setApps(res.body)
       this.update({ apps: res.body, loadingApps: false })
     })
   },
 
   getJobLogs(id, callback) {
-    crn.getJobLogs(id, (err, res) => {
+    crn.getJobLogs(id).then(res => {
       let modals = this.data.modals
       let logs = res.body
       modals.displayFile = true
@@ -272,18 +272,17 @@ let datasetStore = Reflux.createStore({
   },
 
   getLogstream(logstreamName, callback) {
-    crn.getLogstream(logstreamName, (err, res) => {
-      // Default text in case logs are missing despite no errors
+    // Default text in case logs are missing
     let logsText = 'No logs available.'
-      let modals = this.data.modals
-      let logs = res.body
+    const modals = this.data.modals
+    crn
+      .getLogstream(logstreamName)
+      .then(res => {
+        const logs = res.body
         modals.displayFile = true
         if (callback) {
           callback()
         }
-      if (err) {
-        logsText = JSON.stringify(err)
-      } else if (logs) {
         // Append all rows together for in-browser display
         // Replaces the default text with the real logs
         logsText = logs
@@ -291,7 +290,11 @@ let datasetStore = Reflux.createStore({
             return line.message
           })
           .join('\n')
-      }
+      })
+      .catch(err => {
+        logsText = JSON.stringify(err)
+      })
+      .finally(() => {
         this.update({
           displayFile: {
             name: 'Logs',
@@ -325,15 +328,14 @@ let datasetStore = Reflux.createStore({
       }
     }
 
-    scitran.updateSnapshotPublic(snapshotId, value, err => {
+    scitran.updateSnapshotPublic(snapshotId, value).then(() => {
       if (callback) {
         callback()
       }
-      if (!err) {
       let dataset = this.data.dataset
       if (value) {
         if (!hasPublic) {
-            scitran.addTag('projects', datasetId, 'hasPublic', () => {})
+          scitran.addTag('projects', datasetId, 'hasPublic')
         }
         if (snapshotId === this.data.dataset._id) {
           dataset.status.public = value
@@ -342,7 +344,7 @@ let datasetStore = Reflux.createStore({
         }
       } else {
         if (!hasPublic) {
-            scitran.removeTag('projects', datasetId, 'hasPublic', () => {})
+          scitran.removeTag('projects', datasetId, 'hasPublic')
         }
         dataset.status.public = value
       }
@@ -353,20 +355,19 @@ let datasetStore = Reflux.createStore({
         }
       }
       this.update({ dataset, snapshots })
-      }
     })
   },
 
   getDatasetDownloadTicket(callback) {
-    scitran.getBIDSDownloadTicket(
-      this.data.dataset._id,
-      (err, res) => {
+    scitran
+      .getBIDSDownloadTicket(this.data.dataset._id, {
+        snapshot: !!this.data.snapshot,
+      })
+      .then((err, res) => {
         let ticket = res.body.ticket
         let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
         callback(downloadUrl)
-      },
-      { snapshot: !!this.data.snapshot },
-    )
+      })
   },
 
   /**
@@ -377,17 +378,14 @@ let datasetStore = Reflux.createStore({
    * download feedback.
    */
   trackDownload(callback) {
-    scitran.trackUsage(
-      this.data.dataset._id,
-      'download',
-      { snapshot: true },
-      () => {
+    scitran
+      .trackUsage(this.data.dataset._id, 'download', { snapshot: true })
+      .then(() => {
         let dataset = this.data.dataset
         dataset.downloads++
         this.update({ dataset })
         callback()
-      },
-    )
+      })
   },
 
   /**
@@ -398,13 +396,11 @@ let datasetStore = Reflux.createStore({
    */
   deleteDataset(datasetId, history, callback) {
     if (this.data.snapshot) {
-      bids.deleteDataset(
-        datasetId,
-        () => {
+      bids
+        .deleteDataset(datasetId, { snapshot: this.data.snapshot })
+        .then(() => {
           history.push('/dashboard/datasets')
-        },
-        { snapshot: this.data.snapshot },
-      )
+        })
     } else {
       let message =
         'You are about to delete this dataset. This will delete your draft and any unpublished snapshots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.'
@@ -415,13 +411,11 @@ let datasetStore = Reflux.createStore({
         message: message,
         action: () => {
           this.update({ loading: 'deleting' })
-          bids.deleteDataset(
-            datasetId,
-            () => {
+          bids
+            .deleteDataset(datasetId, { snapshot: this.data.snapshot })
+            .then(() => {
               history.push('/dashboard/datasets')
-            },
-            { snapshot: this.data.snapshot },
-          )
+            })
         },
       })
     }
@@ -491,7 +485,7 @@ let datasetStore = Reflux.createStore({
   },
 
   updateName(value, callback) {
-    scitran.updateProject(this.data.dataset._id, { label: value }, () => {
+    scitran.updateProject(this.data.dataset._id, { label: value }).then(() => {
       // update description
       this.updateDescription('Name', value, callback)
 
@@ -549,13 +543,13 @@ let datasetStore = Reflux.createStore({
           authors.push({ name: author, ORCIDID: '' })
         }
       }
-      scitran.updateProject(projectId, { metadata: { authors } }, () => {
+      scitran.updateProject(projectId, { metadata: { authors } }).then(() => {
         file = new File(
           [JSON.stringify(description)],
           'dataset_description.json',
           { type: 'application/json' },
         )
-        scitran.updateFile('projects', projectId, file, () => {
+        scitran.updateFile('projects', projectId, file).then(() => {
           description.Authors = authors
           let dataset = this.data.dataset
           dataset.description = description
@@ -576,15 +570,14 @@ let datasetStore = Reflux.createStore({
   saveDescription(description, callback) {
     description = JSON.parse(JSON.stringify(description))
     let datasetId = this.data.dataset._id
-    scitran.updateProject(
-      datasetId,
-      {
+    scitran
+      .updateProject(datasetId, {
         metadata: {
           authors: description.Authors,
           referencesAndLinks: description.ReferencesAndLinks,
         },
-      },
-      () => {
+      })
+      .then(() => {
         let authors = []
         let referencesAndLinks = []
 
@@ -601,17 +594,17 @@ let datasetStore = Reflux.createStore({
         }
 
         this.updateModified()
-        scitran.updateFileFromString(
+        scitran
+          .updateFileFromString(
             'projects',
             datasetId,
             'dataset_description.json',
             JSON.stringify(description),
             'application/json',
             ['project'],
-          callback,
-        )
-      },
           )
+          .then(callback)
+      })
   },
 
   /**
@@ -619,20 +612,21 @@ let datasetStore = Reflux.createStore({
    */
   updateREADME(value, callback) {
     let dataset = this.data.dataset
-    scitran.updateFileFromString(
+    scitran
+      .updateFileFromString(
         'projects',
         this.data.dataset._id,
         'README',
         value,
         '',
         [],
-      (err, res) => {
-        callback(err, res)
+      )
+      .then(res => {
+        callback(null, res)
         dataset.README = value
         this.update({ dataset })
         this.updateModified()
-      },
-    )
+      })
   },
 
   /**
@@ -714,7 +708,7 @@ let datasetStore = Reflux.createStore({
    * the attachment from the current dataset.
    */
   deleteAttachment(filename, index) {
-    scitran.deleteFile('projects', this.data.dataset._id, filename, () => {
+    scitran.deleteFile('projects', this.data.dataset._id, filename).then(() => {
       let dataset = this.data.dataset
       dataset.attachments.splice(index, 1)
       this.update({ dataset })
@@ -729,17 +723,15 @@ let datasetStore = Reflux.createStore({
    * download url for an attachment.
    */
   getAttachmentDownloadTicket(filename, callback) {
-    scitran.getDownloadTicket(
-      'projects',
-      this.data.dataset._id,
-      filename,
-      (err, res) => {
+    scitran
+      .getDownloadTicket('projects', this.data.dataset._id, filename, {
+        snapshot: !!this.data.snapshot,
+      })
+      .then(res => {
         let ticket = res.body.ticket
         let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
         callback(downloadUrl)
-      },
-      { snapshot: !!this.data.snapshot },
-    )
+      })
   },
 
   // File Structure ----------------------------------------------------------------
@@ -838,7 +830,9 @@ let datasetStore = Reflux.createStore({
             })
           } else {
             file.modifiedName = (container.dirPath || '') + file.name
-            scitran.updateFile('projects', this.data.dataset._id, file, () => {
+            scitran
+              .updateFile('projects', this.data.dataset._id, file)
+              .then(() => {
                 let children = container.children
                 children.unshift({
                   name: file.modifiedName,
@@ -888,24 +882,22 @@ let datasetStore = Reflux.createStore({
               let file = upload.file
               let container = upload.container
               file.modifiedName = (container.dirPath || '') + file.name
-              scitran.updateFile(
-                'projects',
-                datasetId,
-                file,
-                () => {
+              const scitranReq = scitran
+                .updateFile('projects', datasetId, file)
+                .then(() => {
                   this.update({
                     uploadingProgress: this.data.uploadingProgress + 1,
                   })
                   cb()
-                },
-                scitranReq => {
+                })
+                .catch(err => {
+                  cb(err)
+                })
               this.update({
                 uploadingScitranRequests: this.data.uploadingScitranRequests.concat(
                   [scitranReq],
                 ),
               })
-            },
-              )
             },
             err => {
               this.update({ uploading: false })
@@ -956,14 +948,9 @@ let datasetStore = Reflux.createStore({
             fileList,
             3,
             (file, cb) => {
-              scitran.deleteFile(
-                'projects',
-                this.data.dataset._id,
-                file.name,
-                () => {
-                  cb()
-                },
-              )
+              scitran
+                .deleteFile('projects', this.data.dataset._id, file.name)
+                .then(cb)
             },
             () => {
               this.updateFileTreeOnDeleteDir(label)
@@ -991,7 +978,9 @@ let datasetStore = Reflux.createStore({
       message: message,
       action: () => {
         let dataset = this.data.dataset
-        scitran.deleteFile('projects', this.data.dataset._id, file.name, () => {
+        scitran
+          .deleteFile('projects', this.data.dataset._id, file.name)
+          .then(() => {
             let match = files.findInTree([dataset], file.parentId)
             let children = []
             for (let existingFile of match.children) {
@@ -1011,11 +1000,9 @@ let datasetStore = Reflux.createStore({
                 ReferencesAndLinks: [],
                 DatasetDOI: '',
               }
-            scitran.updateProject(
-              this.data.dataset._id,
-              { metadata: { authors: [] } },
-              () => {},
-            )
+              scitran.updateProject(this.data.dataset._id, {
+                metadata: { authors: [] },
+              })
             }
             this.update({ dataset })
             this.revalidate()
@@ -1051,7 +1038,9 @@ let datasetStore = Reflux.createStore({
               this.updateFileState(item, { loading: false })
             })
           } else {
-            scitran.updateFile('projects', this.data.dataset._id, file, () => {
+            scitran
+              .updateFile('projects', this.data.dataset._id, file)
+              .then(() => {
                 this.updateFileState(item, { loading: false })
                 this.revalidate()
               })
@@ -1071,10 +1060,10 @@ let datasetStore = Reflux.createStore({
    */
   revalidate() {
     let dataset = this.data.dataset
-    scitran.addTag('projects', dataset._id, 'validating', () => {
+    scitran.addTag('projects', dataset._id, 'validating').then(() => {
       dataset.status.validating = true
       this.update({ dataset })
-      crn.validate(dataset._id, (err, res) => {
+      crn.validate(dataset._id).then(res => {
         let validation = res.body.validation
         dataset.status.validating = false
         dataset.validation = validation
@@ -1095,17 +1084,15 @@ let datasetStore = Reflux.createStore({
    * direct download url.
    */
   getFileDownloadTicket(file, callback) {
-    scitran.getDownloadTicket(
-      'projects',
-      this.data.dataset._id,
-      file.name,
-      (err, res) => {
+    scitran
+      .getDownloadTicket('projects', this.data.dataset._id, file.name, {
+        snapshot: this.data.snapshot,
+      })
+      .then(res => {
         let ticket = res.body.ticket
         let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
         callback(downloadUrl)
-      },
-      { snapshot: this.data.snapshot },
-    )
+      })
   },
 
   /**
@@ -1211,9 +1198,7 @@ let datasetStore = Reflux.createStore({
   loadJobs(projectId, snapshot, originalId, options, callback) {
     let jobId = options.job
     this.update({ loadingJobs: true })
-    crn.getDatasetJobs(
-      projectId,
-      (err, res) => {
+    crn.getDatasetJobs(projectId, { snapshot }).then(res => {
       let jobs = {}
 
       // iterate jobs
@@ -1226,10 +1211,7 @@ let datasetStore = Reflux.createStore({
         let failed = status === 'FAILED'
         let finished = status === 'SUCCEEDED'
         let hasResults = job.results && job.results.length > 0
-          if (
-            snapshot &&
-            ((!finished && !failed) || (finished && !hasResults))
-          ) {
+        if (snapshot && ((!finished && !failed) || (finished && !hasResults))) {
           this.pollJob(job._id, projectId)
         }
 
@@ -1287,19 +1269,13 @@ let datasetStore = Reflux.createStore({
 
       // callback with original jobs array
       if (snapshot && callback) {
-          crn.getDatasetJobs(
-            originalId,
-            (err1, res1) => {
-              callback(res1.body)
-            },
-            { snapshot: false },
-          )
+        crn.getDatasetJobs(originalId, { snapshot: false }).then(res => {
+          callback(null, res)
+        })
       } else if (callback) {
         callback(res.body)
       }
-      },
-      { snapshot },
-    )
+    })
   },
 
   pollJob(jobId, snapshotId) {
@@ -1367,8 +1343,8 @@ let datasetStore = Reflux.createStore({
       parameters.participant_label = this.data.dataset.summary.subjects
     }
 
-    crn.createJob(
-      {
+    crn
+      .createJob({
         datasetId: datasetId,
         datasetLabel: this.data.dataset.label,
         jobDefinition: jobDefinition.jobDefinitionArn,
@@ -1376,9 +1352,8 @@ let datasetStore = Reflux.createStore({
         parameters: parameters,
         snapshotId: snapshotId,
         userId: userStore.data.scitran._id,
-      },
-      (err, res) => {
-        if (!err) {
+      })
+      .then(res => {
         // reload jobs
         if (snapshotId == this.data.dataset._id) {
           let jobId = res.body.jobId
@@ -1403,10 +1378,11 @@ let datasetStore = Reflux.createStore({
             },
           )
         }
-        }
-        callback(err, res)
-      },
-    )
+        callback(null, res)
+      })
+      .catch(err => {
+        callback(err)
+      })
   },
 
   cancelJob(job) {
@@ -1417,12 +1393,9 @@ let datasetStore = Reflux.createStore({
 
   refreshJob(jobId, callback) {
     if (this.data.dataset) {
-      crn.getJob(
-        this.data.dataset._id,
-        jobId,
-        (err, res) => {
+      crn.getJob(this.data.dataset._id, jobId, { snapshot: true }).then(res => {
         let existingJob
-          let jobUpdate = !err && res ? res.body : null
+        let jobUpdate = res ? res.body : null
         let jobs = this.data.jobs
         if (jobs && jobs.length > 0) {
           for (let job of jobs) {
@@ -1448,17 +1421,14 @@ let datasetStore = Reflux.createStore({
           }
         }
         callback(jobUpdate ? jobUpdate : existingJob)
-        },
-        { snapshot: true },
-      )
+      })
     }
   },
 
   retryJob(jobId, callback) {
-    crn.retryJob(
-      this.data.dataset._id,
-      jobId,
-      () => {
+    crn
+      .retryJob(this.data.dataset._id, jobId, { snapshot: this.data.snapshot })
+      .then(() => {
         this.loadJobs(
           this.data.dataset._id,
           true,
@@ -1472,16 +1442,13 @@ let datasetStore = Reflux.createStore({
             callback()
           },
         )
-      },
-      { snapshot: this.data.snapshot },
-    )
+      })
   },
 
   deleteJob(jobId, callback) {
-    crn.deleteJob(
-      this.data.dataset._id,
-      jobId,
-      () => {
+    crn
+      .deleteJob(this.data.dataset._id, jobId, { snapshot: this.data.snapshot })
+      .then(() => {
         this.loadJobs(
           this.data.dataset._id,
           true,
@@ -1495,9 +1462,7 @@ let datasetStore = Reflux.createStore({
             callback()
           },
         )
-      },
-      { snapshot: this.data.snapshot },
-    )
+      })
   },
 
   /**
@@ -1587,7 +1552,7 @@ let datasetStore = Reflux.createStore({
           modals,
         })
       } else {
-        request.get(link, {}, (err, res) => {
+        request.get(link, {}).then(res => {
           if (callback) {
             callback()
           }
@@ -1622,7 +1587,7 @@ let datasetStore = Reflux.createStore({
       : this.data.dataset._id
     transition = transition == undefined ? true : transition
 
-    scitran.getProject(datasetId, res => {
+    scitran.getProject(datasetId).then(res => {
       let project = res.body
       if (
         !project.metadata ||
@@ -1656,7 +1621,7 @@ let datasetStore = Reflux.createStore({
               'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.',
           })
         } else {
-          crn.createSnapshot(datasetId, (err, res) => {
+          crn.createSnapshot(datasetId).then(res => {
             let snapshotId = res.body._id
             this.toggleSidebar(true)
             if (transition) {
@@ -1680,8 +1645,8 @@ let datasetStore = Reflux.createStore({
 
   loadSnapshots(dataset, jobs, callback) {
     let datasetId = dataset.original ? dataset.original : dataset._id
-    scitran.getProjectSnapshots(datasetId, (err, res) => {
-      let snapshots = !err && res.body ? res.body : []
+    scitran.getProjectSnapshots(datasetId).then(res => {
+      let snapshots = res.body
 
       // sort snapshots
       snapshots.sort((a, b) => {
@@ -1730,7 +1695,7 @@ let datasetStore = Reflux.createStore({
   // usage analytics ---------------------------------------------------------------
 
   trackView(snapshotId) {
-    scitran.trackUsage(snapshotId, 'view', { snapshot: true }, () => {})
+    scitran.trackUsage(snapshotId, 'view', { snapshot: true })
   },
 
   // Toggle Sidebar ----------------------------------------------------------------

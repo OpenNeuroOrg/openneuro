@@ -531,9 +531,7 @@ class JobMenu extends React.Component {
      * determine app availability
      */
     // load validation data for selected snapshot
-    scitran.getProject(
-      snapshotId,
-      res => {
+    scitran.getProject(snapshotId, { snapshot: true }).then(res => {
       for (let jobDefinitionName in this.props.apps) {
         let app = this.props.apps[jobDefinitionName]
         let validationConfig = app.hasOwnProperty('validationConfig')
@@ -552,9 +550,7 @@ class JobMenu extends React.Component {
       if (this.mounted) {
         this.setState({ selectedSnapshot: snapshotId /*, disabledApps*/ })
       }
-      },
-      { snapshot: true },
-    )
+    })
   }
 
   /**

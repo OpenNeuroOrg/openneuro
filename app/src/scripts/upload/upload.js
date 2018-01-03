@@ -69,7 +69,8 @@ export default {
       )
     }
     let existingProject = null
-    scitran.getProjects({ authenticate: true }, projects => {
+    scitran.getProjects({ authenticate: true }).then(res => {
+      const projects = res.body
       for (let project of projects) {
         if (project.label === datasetName && project.group === userId) {
           project.children = project.files
@@ -81,9 +82,9 @@ export default {
       if (existingProject) {
         // Since files are no longer included with getProjects
         // we have to make a second request
-        scitran.getProject(
-          existingProject._id,
-          response => {
+        scitran
+          .getProject(existingProject._id, { query: { metadata: true } })
+          .then(response => {
             const existingProject = response.body
             this.currentProjectId = existingProject._id
             diff.datasets(
@@ -105,16 +106,14 @@ export default {
                 )
               },
             )
-          },
-          { query: { metadata: true } },
-        )
+          })
       } else {
         this.createContainer(
           crn.createProject,
           [userId, datasetName],
           (err, res) => {
             let projectId = res.body._id
-            scitran.addTag('projects', projectId, 'incomplete', () => {
+            scitran.addTag('projects', projectId, 'incomplete').then(() => {
               this.uploadFiles(datasetName, fileList, projectId, metadata)
             })
           },

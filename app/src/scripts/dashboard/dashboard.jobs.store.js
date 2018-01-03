@@ -83,17 +83,13 @@ let DashboardJobStore = Reflux.createStore({
       isPublic = this.data.isPublic
     }
     this.update({ loading: true, filter: filter }, () => {
-      crn.getJobs(
-        (err, res) => {
+      crn.getJobs(isPublic, all).then(res => {
         for (let app of res.body.availableApps) {
           app.value = app.label
         }
         this.update({ apps: res.body.availableApps, appsLoading: false })
         this.sort('analysis.created', '+', res.body.jobs, true)
-        },
-        isPublic,
-        all,
-      )
+      })
     })
   },
 

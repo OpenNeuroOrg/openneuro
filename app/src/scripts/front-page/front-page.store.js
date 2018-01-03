@@ -17,7 +17,8 @@ let FrontPageStore = Reflux.createStore({
     this.setInitialState()
     bids.getDatasets(
       datasets => {
-        this.update({ datasetCount: datasets.length })
+        const totalDatasets = datasets ? datasets.length : 0
+        this.update({ datasetCount: totalDatasets })
       },
       true,
       true,
@@ -141,10 +142,8 @@ let FrontPageStore = Reflux.createStore({
    * Load Job
    */
   loadJob(snapshotId, jobId) {
-    crn.getJob(
-      snapshotId,
-      jobId,
-      (err, res) => {
+    crn.getJob(snapshotId, jobId).then(
+      res => {
         this.update({ exampleJob: res.body, loadingJob: false })
       },
       { snapshot: true },
@@ -159,7 +158,7 @@ let FrontPageStore = Reflux.createStore({
       latest: true,
       results: true,
     }
-    crn.getJobsQuery(query, (err, resp) => {
+    crn.getJobsQuery(query).then(resp => {
       // Grab the first job returned
       if (
         resp.body &&
@@ -219,7 +218,7 @@ let FrontPageStore = Reflux.createStore({
           },
         })
       } else {
-        request.get(link, {}, (err, res) => {
+        request.get(link, {}).then(res => {
           if (callback) {
             callback()
           }

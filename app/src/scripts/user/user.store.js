@@ -35,7 +35,7 @@ let UserStore = Reflux.createStore({
           },
           { persist: true },
         )
-        crn.verifyUser((err, res) => {
+        crn.verifyUser().then(res => {
           if (res.body.code === 403) {
             this.signOut()
           } else {
@@ -162,10 +162,10 @@ let UserStore = Reflux.createStore({
         id: user.profile._id,
       })
 
-      crn.verifyUser((err, res) => {
+      crn.verifyUser().then(res => {
         if (res.body.code === 403) {
           // Pass only the scitran required user values to createUser
-          crn.createUser(user.profile, (err, res) => {
+          crn.createUser(user.profile).then(res => {
             if (res.body.status === 403) {
               this.clearAuth()
               let message = (
@@ -189,7 +189,7 @@ let UserStore = Reflux.createStore({
               }
               return
             }
-            crn.verifyUser((err, res) => {
+            crn.verifyUser().then(res => {
               this.handleSignIn(transition, res.body, user.profile)
             })
           })
@@ -399,16 +399,14 @@ let UserStore = Reflux.createStore({
     for (let key in preferences) {
       scitranUser.preferences[key] = preferences[key]
     }
-    scitran.updateUser(
-      this.data.scitran._id,
-      { preferences: preferences },
-      (err, res) => {
+    scitran
+      .updateUser(this.data.scitran._id, { preferences: preferences })
+      .then(res => {
         this.update({ scitran: scitranUser })
         if (callback) {
-          callback(err, res)
+          callback(res)
         }
-      },
-    )
+      })
   },
 })
 

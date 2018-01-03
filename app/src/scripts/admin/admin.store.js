@@ -199,7 +199,7 @@ let UserStore = Reflux.createStore({
    * name and adds the user as a blacklisted user.
    */
   blacklistUser(userInfo) {
-    crn.blacklistUser(userInfo, () => {
+    crn.blacklistUser(userInfo).then(() => {
       let blacklist = this.data.blacklist
       blacklist.push(userInfo)
       this.update({
@@ -246,7 +246,7 @@ let UserStore = Reflux.createStore({
    * admin store state.
    */
   getUsers() {
-    scitran.getUsers((err, res) => {
+    scitran.getUsers().then(res => {
       this.update({ users: res.body }, () => {
         this.searchUser('')
       })
@@ -260,7 +260,7 @@ let UserStore = Reflux.createStore({
    * it to the admin store state.
    */
   getBlacklist() {
-    crn.getBlacklist((err, res) => {
+    crn.getBlacklist().then(res => {
       this.update({ blacklist: res.body })
     })
   },
@@ -285,7 +285,7 @@ let UserStore = Reflux.createStore({
    * Takes a userId and removes the user.
    */
   removeUser(userId, index, callback) {
-    scitran.removeUser(userId, () => {
+    scitran.removeUser(userId).then(() => {
       let users = this.data.users
       users.splice(index, 1)
       this.update({ users })
@@ -344,9 +344,22 @@ let UserStore = Reflux.createStore({
       tags: formData.tags,
     }
 
-    crn.defineJob(jobDefinition, err => {
+    crn
+      .defineJob(jobDefinition)
+      .then(() => {
+        notifications.createAlert({
+          type: 'Success',
+          message: 'Job Definition Submission Successful!',
+        })
+
+        //toggle modal once response comes bacn from server.
+        this.toggleModal('defineJob')
+
+        // TODO - error handling
+        datasetActions.loadApps() //this does not seem like the right way to do this.
+      })
+      .catch(err => {
         // server is returning 400 for invalid inputs for vcpus and memory
-      if (err) {
         if (err.status === 400) {
           notifications.createAlert({
             type: 'Error',
@@ -358,24 +371,12 @@ let UserStore = Reflux.createStore({
             message: 'There was an error submitting job definition.',
           })
         }
-      } else {
-        notifications.createAlert({
-          type: 'Success',
-          message: 'Job Definition Submission Successful!',
-        })
-
-        //toggle modal once response comes bacn from server.
-        this.toggleModal('defineJob')
-
-        // TODO - error handling
-        datasetActions.loadApps() //this does not seem like the right way to do this.
-      }
       })
   },
 
   deleteJobDefinition(jobDefinition, callback) {
     let appId = jobDefinition.jobDefinitionName + ':' + jobDefinition.revision
-    crn.deleteJobDefinition(appId, () => {
+    crn.deleteJobDefinition(appId).then(() => {
       datasetActions.loadApps() //need to reload apps for UI to update with Inactive status on delete
       if (callback) {
         callback()
@@ -495,7 +496,7 @@ let UserStore = Reflux.createStore({
    * Toggle Super User
    */
   toggleSuperUser(user, callback) {
-    scitran.updateUser(user._id, { root: !user.root }, () => {
+    scitran.updateUser(user._id, { root: !user.root }).then(() => {
       let users = this.data.users
       for (let existingUser of users) {
         if (existingUser._id === user._id) {
@@ -513,7 +514,7 @@ let UserStore = Reflux.createStore({
    * Unblacklist User
    */
   unBlacklistUser(userId) {
-    crn.unBlacklistUser(userId, () => {
+    crn.unBlacklistUser(userId).then(() => {
       let blacklist = this.data.blacklist
       for (let i = 0; i < blacklist.length; i++) {
         let user = blacklist[i]
@@ -530,8 +531,8 @@ let UserStore = Reflux.createStore({
    * Get Event Logs
    */
   getEventLogs() {
-    crn.getEventLogs((err, data) => {
-      let eventLogs = data.body
+    crn.getEventLogs().then(res => {
+      let eventLogs = res.body
       this.update({ eventLogs }, () => {
         this.searchLogs('')
       })
