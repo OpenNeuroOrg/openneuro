@@ -7,7 +7,6 @@ import google from '../utils/google'
 import orcid from '../utils/orcid'
 import crn from '../utils/crn'
 import scitran from '../utils/scitran'
-import async from 'async'
 import notifications from '../notification/notification.actions'
 import dashboardActions from '../dashboard/dashboard.datasets.actions'
 import datasetActions from '../dataset/dataset.actions'
@@ -355,46 +354,6 @@ let UserStore = Reflux.createStore({
     }
     let token = JSON.parse(window.localStorage.token)
     return token && token.hasOwnProperty('access_token') && token.access_token
-  },
-
-  // request queue -----------------------------------------------------------------
-
-  /**
-   * Authentication Request Queuing
-   *
-   * Before any request we verify the status of the OAuth token.
-   * To avoid multiple signin dialogues in the event the token
-   * is expired all auth checking is queued to be performed
-   * synchronously. The 'checkAuth' method is the primary method
-   * to start the token check process.
-   */
-  queue: async.queue((authReq, callback) => {
-    let { token, provider } = UserStore.data
-    let refreshWindow = 4 * 60 * 1000
-    if (!token || Date.now() + refreshWindow >= token.expires_at) {
-      // refresh the token
-      UserStore.refreshToken(access_token => {
-        authReq.successCallback(provider, access_token, UserStore.isRoot())
-        callback()
-      })
-    } else {
-      authReq.successCallback(provider, token.access_token, UserStore.isRoot())
-      callback()
-    }
-  }, 1),
-
-  checkAuth(successFunc, errorFunc) {
-    // Wrap the queue behavior in a promise
-    return new Promise((resolve, reject) => {
-      const successCallback = (...args) => {
-        resolve(successFunc(...args))
-      }
-      const errorCallback = (...args) => {
-        reject(errorFunc(...args))
-      }
-      let authReq = { successCallback, errorCallback }
-      this.queue.push(authReq)
-    })
   },
 
   /**

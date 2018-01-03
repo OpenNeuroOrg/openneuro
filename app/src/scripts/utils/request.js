@@ -1,6 +1,6 @@
 import request from 'superagent'
 import config from '../../../config'
-import userActions from '../user/user.actions.js'
+import checkAuth from './checkAuth.js'
 
 /*
  * Upload retries limit
@@ -116,7 +116,7 @@ async function handleRequest(url, options, callback) {
     hasToken() &&
     (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)
   ) {
-    return await userActions.checkAuth((provider, token, root) => {
+    return await checkAuth((provider, token, root) => {
       if (root) {
         options.query.root = true
       }
