@@ -15,58 +15,46 @@ const maxRetries = 3
  * and response handling.
  */
 var Request = {
-  get(url, options, callback) {
-    handleRequest(url, options, function(url, options) {
-      request
+  get(url, options) {
+    return handleRequest(url, options, (url, options) => {
+      return request
         .get(url)
         .set(options.headers)
         .query(options.query)
-        .end(function(err, res) {
-          handleResponse(err, res, callback)
-        })
     })
   },
 
-  post(url, options, callback) {
-    handleRequest(url, options, function(url, options) {
-      request
+  post(url, options) {
+    return handleRequest(url, options, (url, options) => {
+      return request
         .post(url)
         .set(options.headers)
         .query(options.query)
         .send(options.body)
-        .end(function(err, res) {
-          handleResponse(err, res, callback)
-        })
     })
   },
 
-  put(url, options, callback) {
-    handleRequest(url, options, function(url, options) {
-      request
+  put(url, options) {
+    return handleRequest(url, options, (url, options) => {
+      return request
         .put(url)
         .set(options.headers)
         .query(options.query)
         .send(options.body)
-        .end(function(err, res) {
-          handleResponse(err, res, callback)
-        })
     })
   },
 
-  del(url, options, callback) {
-    handleRequest(url, options, function(url, options) {
-      request
+  del(url, options) {
+    return handleRequest(url, options, (url, options) => {
+      return request
         .del(url)
         .set(options.headers)
         .query(options.query)
-        .end(function(err, res) {
-          handleResponse(err, res, callback)
-        })
     })
   },
 
-  upload(url, options, callback) {
-    return handleRequest(url, options, function(url, options) {
+  upload(url, options) {
+    return handleRequest(url, options, (url, options) => {
       return request
         .post(url)
         .query(options.query)
@@ -74,9 +62,6 @@ var Request = {
         .field('tags', options.fields.tags)
         .attach('file', options.fields.file, options.fields.name)
         .retry(maxRetries)
-        .end((err, res) => {
-          handleResponse(err, res, callback)
-        })
     })
   },
 }
@@ -127,17 +112,6 @@ async function handleRequest(url, options, callback) {
   } else {
     return callback(url, options)
   }
-}
-
-/**
- * Handle Response
- *
- * A generic response handler used to intercept
- * responses before returning them to the main
- * callback.
- */
-function handleResponse(err, res, callback) {
-  callback(err, res)
 }
 
 /**
