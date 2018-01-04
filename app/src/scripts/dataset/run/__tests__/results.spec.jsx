@@ -3,8 +3,8 @@ import { shallow } from 'enzyme'
 import Results from '../results.jsx'
 
 describe('dataset/run/Results', () => {
-  it('should render something when all job results are in', () => {
-    const exampleRun = {
+  it('should render something when the job status is "SUCCEEDED"', () => {
+    const successfulRun = {
       results: [
         {
           type: 'file',
@@ -15,13 +15,13 @@ describe('dataset/run/Results', () => {
         },
       ],
       analysis: {
-        jobs: ['only_one_job'],
+        status: 'SUCCEEDED',
       },
     }
     expect(
       shallow(
         <Results
-          run={exampleRun}
+          run={successfulRun}
           acknowledgements="acknowledge"
           displayFile={jest.fn()}
           toggleFolder={jest.fn()}
@@ -29,8 +29,8 @@ describe('dataset/run/Results', () => {
       ),
     ).toMatchSnapshot()
   })
-  it('should render nothing if there are less results than there are jobs', () => {
-    const lessResultsRun = {
+  it('should render something when the job status is "FAILED"', () => {
+    const failedRun = {
       results: [
         {
           type: 'file',
@@ -41,23 +41,26 @@ describe('dataset/run/Results', () => {
         },
       ],
       analysis: {
-        jobs: ['job_one', 'job_two'],
+        status: 'FAILED',
       },
     }
     expect(
       shallow(
         <Results
-          run={lessResultsRun}
+          run={failedRun}
           acknowledgements="acknowledge"
           displayFile={jest.fn()}
           toggleFolder={jest.fn()}
         />,
-      ).getElement(),
-    ).toBe(null)
+      ),
+    ).toMatchSnapshot()
   })
-  it('should render nothing when there are no results', () => {
+  it('should render nothing when job status is neither "SUCCEEDED" nor "FAILED"', () => {
     const noResultsRun = {
       results: [],
+      analysis: {
+        status: 'RUNNING',
+      },
     }
     expect(
       shallow(
