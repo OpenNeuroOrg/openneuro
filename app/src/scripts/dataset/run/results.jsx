@@ -8,7 +8,8 @@ import markdown from '../../utils/markdown'
 
 const JobResults = ({ run, acknowledgements, displayFile, toggleFolder }) => {
   const type = 'results'
-  if (run[type] && run[type].length > 0) {
+  const jobStatus = run.analysis ? run.analysis.status : null
+  if (run[type] && (jobStatus === 'FAILED' || jobStatus === 'SUCCEEDED')) {
     return (
       <Accordion accordion className="results">
         <Panel
