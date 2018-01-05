@@ -603,7 +603,9 @@ let datasetStore = Reflux.createStore({
             'application/json',
             ['project'],
           )
-          .then(callback)
+          .then(() => {
+            callback()
+          })
       })
   },
 
