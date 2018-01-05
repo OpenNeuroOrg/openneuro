@@ -950,7 +950,9 @@ let datasetStore = Reflux.createStore({
             (file, cb) => {
               scitran
                 .deleteFile('projects', this.data.dataset._id, file.name)
-                .then(cb)
+                .then(() => {
+                  cb()
+                })
             },
             () => {
               this.updateFileTreeOnDeleteDir(label)
