@@ -14,14 +14,9 @@ export default {
    * Get Users
    *
    * Gets a list of all users
-   * Ignores request if public option is true.
    */
-  getUsers(callback, isPublic) {
-    if (isPublic) {
-      callback()
-      return
-    }
-    request.get(config.scitran.url + 'users', {}, callback)
+  getUsers() {
+    return request.get(config.scitran.url + 'users', {})
   },
 
   /**
@@ -31,8 +26,8 @@ export default {
    * in in the scitran system and returns a
    * user object.
    */
-  verifyUser(callback) {
-    request.get(config.scitran.url + 'users/self', {}, callback)
+  verifyUser() {
+    return request.get(config.scitran.url + 'users/self', {})
   },
 
   /**
@@ -41,23 +36,21 @@ export default {
    * Takes an email, first name, and last name
    * add adds the user.
    */
-  addUser(userData, callback) {
-    request.post(config.scitran.url + 'users', { body: userData }, () => {
-      this.createGroup(userData._id, userData._id, callback)
-    })
+  addUser(userData) {
+    return request
+      .post(config.scitran.url + 'users', { body: userData })
+      .then(() => {
+        return this.createGroup(userData._id, userData._id)
+      })
   },
 
   /**
    * Update User
    */
-  updateUser(userId, userData, callback) {
-    request.put(
-      config.scitran.url + 'users/' + userId,
-      { body: userData },
-      (err, res) => {
-        callback(err, res)
-      },
-    )
+  updateUser(userId, userData) {
+    return request.put(config.scitran.url + 'users/' + userId, {
+      body: userData,
+    })
   },
 
   /**
@@ -65,10 +58,8 @@ export default {
    *
    * Takes a userId and removes the user.
    */
-  removeUser(userId, callback) {
-    request.del(config.scitran.url + 'users/' + userId, {}, (err, res) => {
-      callback(err, res)
-    })
+  removeUser(userId) {
+    return request.del(config.scitran.url + 'users/' + userId, {})
   },
 
   // Create ---------------------------------------------------------------------------------
@@ -80,12 +71,12 @@ export default {
    * creates a group with that user as the
    * admin.
    */
-  createGroup(groupName, userId, callback) {
+  createGroup(groupName, userId) {
     let body = {
       _id: groupName,
       roles: [{ access: 'admin', _id: userId }],
     }
-    request.post(config.scitran.url + 'groups', { body: body }, callback)
+    return request.post(config.scitran.url + 'groups', { body: body })
   },
 
   /**
@@ -94,95 +85,77 @@ export default {
    * Takes a request body and
    * generates a request to make a project in scitran.
    */
-  createProject(group, label, callback) {
-    request.post(
-      config.scitran.url + 'projects',
-      {
-        body: { group, label },
-      },
-      callback,
-    )
+  createProject(group, label) {
+    return request.post(config.scitran.url + 'projects', {
+      body: { group, label },
+    })
   },
 
   /**
    * Create Subject
    *
    */
-  createSubject(projectId, subjectName, callback) {
-    request.post(
-      config.scitran.url + 'sessions',
-      {
-        body: {
-          project: projectId,
-          label: subjectName,
-          subject: {
-            code: 'subject',
-          },
+  createSubject(projectId, subjectName) {
+    return request.post(config.scitran.url + 'sessions', {
+      body: {
+        project: projectId,
+        label: subjectName,
+        subject: {
+          code: 'subject',
         },
       },
-      callback,
-    )
+    })
   },
 
   /**
    * Create Session
    *
    */
-  createSession(projectId, subjectId, sessionName, callback) {
-    request.post(
-      config.scitran.url + 'sessions',
-      {
-        body: {
-          project: projectId,
-          label: sessionName,
-          subject: {
-            code: subjectId,
-          },
+  createSession(projectId, subjectId, sessionName) {
+    return request.post(config.scitran.url + 'sessions', {
+      body: {
+        project: projectId,
+        label: sessionName,
+        subject: {
+          code: subjectId,
         },
       },
-      callback,
-    )
+    })
   },
 
   /**
    * Create Modality
    *
    */
-  createModality(sessionId, modalityName, callback) {
-    request.post(
-      config.scitran.url + 'acquisitions',
-      {
-        body: {
-          session: sessionId,
-          label: modalityName,
-        },
+  createModality(sessionId, modalityName) {
+    return request.post(config.scitran.url + 'acquisitions', {
+      body: {
+        session: sessionId,
+        label: modalityName,
       },
-      callback,
-    )
+    })
   },
 
   /**
    * Add Tag
    */
-  addTag(containerType, containerId, tag, callback) {
-    request.post(
+  addTag(containerType, containerId, tag) {
+    return request.post(
       config.scitran.url + containerType + '/' + containerId + '/tags',
       {
         body: { value: tag },
       },
-      callback,
     )
   },
 
   /**
    * Add Permission
    */
-  addPermission(container, id, permission, callback) {
+  addPermission(container, id, permission) {
     permission.site = 'local'
-    request.post(
+    return request.post(
       config.scitran.url + container + '/' + id + '/permissions',
       { body: permission },
-      callback,
     )
   },
 
@@ -192,42 +165,31 @@ export default {
    * Get Projects
    *
    */
-  getProjects(options, callback) {
+  getProjects(options) {
     options.auth = options.hasOwnProperty('authenticate')
       ? options.authenticate
       : true
     options.query = { metadata: !!options.metadata }
-    request.get(config.scitran.url + 'projects', options, (err, res) => {
-      callback(res.body)
-    })
+    return request.get(config.scitran.url + 'projects', options)
   },
 
   /**
    * Get Project
    *
    */
-  getProject(projectId, callback, options) {
-    request.get(
-      config.scitran.url + 'projects/' + projectId,
-      options,
-      (err, res) => {
-        callback(res)
-      },
-    )
+  getProject(projectId, options) {
+    return request.get(config.scitran.url + 'projects/' + projectId, options)
   },
 
   /**
    * Get Sessions
    *
    */
-  getSessions(projectId, callback, options) {
+  getSessions(projectId, options) {
     options.query = { public: true }
-    request.get(
+    return request.get(
       config.scitran.url + 'projects/' + projectId + '/sessions',
       options,
-      (err, res) => {
-        callback(res.body)
-      },
     )
   },
 
@@ -235,26 +197,17 @@ export default {
    * Get Session
    *
    */
-  getSession(sessionId, callback, options) {
-    request.get(
-      config.scitran.url + 'sessions/' + sessionId,
-      options,
-      (err, res) => {
-        callback(res.body)
-      },
-    )
+  getSession(sessionId, options) {
+    return request.get(config.scitran.url + 'sessions/' + sessionId, options)
   },
 
   /**
    * Get Project Acquisitions
    */
-  getProjectAcquisitions(projectId, callback, options) {
-    request.get(
+  getProjectAcquisitions(projectId, options) {
+    return request.get(
       config.scitran.url + 'projects/' + projectId + '/acquisitions',
       options,
-      (err, res) => {
-        callback(res.body)
-      },
     )
   },
 
@@ -262,14 +215,11 @@ export default {
    * Get Acquisitions
    *
    */
-  getAcquisitions(sessionId, callback, options) {
+  getAcquisitions(sessionId, options) {
     options.query = { public: true }
-    request.get(
+    return request.get(
       config.scitran.url + 'sessions/' + sessionId + '/acquisitions',
       options,
-      (err, res) => {
-        callback(res.body)
-      },
     )
   },
 
@@ -277,13 +227,10 @@ export default {
    * Get Acquisition
    *
    */
-  getAcquisition(acquisitionId, callback, options) {
-    request.get(
+  getAcquisition(acquisitionId, options) {
+    return request.get(
       config.scitran.url + 'acquisitions/' + acquisitionId,
       options,
-      (err, res) => {
-        callback(res.body)
-      },
     )
   },
 
@@ -291,11 +238,10 @@ export default {
    * Get File
    *
    */
-  getFile(level, id, filename, callback, options) {
-    request.get(
+  getFile(level, id, filename, options) {
+    return request.get(
       config.scitran.url + level + '/' + id + '/files/' + filename,
       options,
-      callback,
     )
   },
 
@@ -303,12 +249,11 @@ export default {
    * Get Download Ticket
    *
    */
-  getDownloadTicket(level, id, filename, callback, options) {
+  getDownloadTicket(level, id, filename, options) {
     options.query = { ticket: '' }
-    request.get(
+    return request.get(
       config.scitran.url + level + '/' + id + '/files/' + filename,
       options,
-      callback,
     )
   },
 
@@ -316,13 +261,13 @@ export default {
    * Get BIDS Download Ticket
    *
    */
-  getBIDSDownloadTicket(projectId, callback, options) {
+  getBIDSDownloadTicket(projectId, options) {
     options.query = { format: 'bids' }
     options.body = {
       nodes: [{ _id: projectId, level: 'project' }],
       optional: false,
     }
-    request.post(config.scitran.url + 'download', options, callback)
+    return request.post(config.scitran.url + 'download', options)
   },
 
   // Delete ---------------------------------------------------------------------------------
@@ -331,12 +276,11 @@ export default {
    * Delete Container
    *
    */
-  deleteContainer(type, id, callback, options) {
+  deleteContainer(type, id, options) {
     options = options ? options : {}
-    request.del(
+    return request.del(
       config.scitran.url + type + '/' + id + '?purge=true',
       options,
-      callback,
     )
   },
 
@@ -344,30 +288,28 @@ export default {
    * Delete File
    *
    */
-  deleteFile(level, containerId, filename, callback) {
-    request.del(
+  deleteFile(level, containerId, filename) {
+    return request.del(
       config.scitran.url + level + '/' + containerId + '/files/' + filename,
       {},
-      callback,
     )
   },
 
   /**
    * Remove Tag
    */
-  removeTag(containerType, containerId, tag, callback) {
-    request.del(
+  removeTag(containerType, containerId, tag) {
+    return request.del(
       config.scitran.url + containerType + '/' + containerId + '/tags/' + tag,
       {},
-      callback,
     )
   },
 
   /**
    * Remove Permission
    */
-  removePermission(container, id, userId, callback) {
-    request.del(
+  removePermission(container, id, userId) {
+    return request.del(
       config.scitran.url +
         container +
         '/' +
@@ -375,7 +317,6 @@ export default {
         '/permissions/local/' +
         userId,
       {},
-      callback,
     )
   },
 
@@ -385,36 +326,25 @@ export default {
    * Update Project
    *
    */
-  updateProject(projectId, body, callback) {
-    request.put(
-      config.scitran.url + 'projects/' + projectId,
-      { body },
-      (err, res) => {
-        callback(err, res)
-      },
-    )
+  updateProject(projectId, body) {
+    return request.put(config.scitran.url + 'projects/' + projectId, { body })
   },
 
   /**
    * Update File
    *
    */
-  updateFile(level, id, file, callback, reqCallback) {
-    return request.upload(
-      config.scitran.url + level + '/' + id + '/files',
-      {
-        fields: {
-          tags: '[]',
-          file: file,
-          name: file.hasOwnProperty('modifiedName')
-            ? file.modifiedName
-            : file.name,
-        },
-        query: { force: true },
+  updateFile(level, id, file) {
+    return request.upload(config.scitran.url + level + '/' + id + '/files', {
+      fields: {
+        tags: '[]',
+        file: file,
+        name: file.hasOwnProperty('modifiedName')
+          ? file.modifiedName
+          : file.name,
       },
-      callback,
-      reqCallback,
-    )
+      query: { force: true },
+    })
   },
 
   /**
@@ -423,7 +353,7 @@ export default {
    */
   updateFileFromString(level, id, filename, value, type, tags, callback) {
     let file = new File([value], filename, { type: type })
-    request.upload(
+    return request.upload(
       config.scitran.url + level + '/' + id + '/files',
       {
         fields: {
@@ -439,33 +369,27 @@ export default {
 
   // Snapshots ------------------------------------------------------------------------------
 
-  createSnapshot(projectId, callback) {
-    request.post(
-      config.scitran.url + 'snapshots',
-      {
-        query: { project: projectId },
-      },
-      callback,
-    )
+  createSnapshot(projectId) {
+    return request.post(config.scitran.url + 'snapshots', {
+      query: { project: projectId },
+    })
   },
 
-  getProjectSnapshots(projectId, callback) {
-    request.get(
+  getProjectSnapshots(projectId) {
+    return request.get(
       config.scitran.url + 'projects/' + projectId + '/snapshots',
       {
         query: { public: true },
       },
-      callback,
     )
   },
 
-  updateSnapshotPublic(projectId, value, callback) {
-    request.put(
+  updateSnapshotPublic(projectId, value) {
+    return request.put(
       config.scitran.url + 'snapshots/projects/' + projectId + '/public',
       {
         body: { value },
       },
-      callback,
     )
   },
 
@@ -476,12 +400,11 @@ export default {
    *
    * - type ('view' or 'download')
    */
-  trackUsage(snapshotId, type, options, callback) {
+  trackUsage(snapshotId, type, options) {
     options.query = { type }
-    request.post(
+    return request.post(
       config.scitran.url + 'projects/' + snapshotId + '/analytics',
       options,
-      callback,
     )
   },
 
@@ -496,11 +419,10 @@ export default {
    * - count      (boolean)
    * - limit      (integer)
    */
-  getUsage(snapshotId, options, callback) {
-    request.get(
+  getUsage(snapshotId, options) {
+    return request.get(
       config.scitran.url + 'projects/' + snapshotId + '/analytics',
       options,
-      callback,
     )
   },
 }

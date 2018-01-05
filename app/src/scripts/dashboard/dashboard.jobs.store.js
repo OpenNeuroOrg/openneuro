@@ -31,13 +31,13 @@ let DashboardJobStore = Reflux.createStore({
   },
 
   /**
-     * Set Initial State
-     *
-     * Sets the state to the data object defined
-     * inside the function. Also takes a diffs object
-     * which will set the state to the initial state
-     * with any differences passed.
-     */
+   * Set Initial State
+   *
+   * Sets the state to the data object defined
+   * inside the function. Also takes a diffs object
+   * which will set the state to the initial state
+   * with any differences passed.
+   */
   setInitialState(diffs, callback) {
     let data = {
       apps: [],
@@ -71,38 +71,34 @@ let DashboardJobStore = Reflux.createStore({
   // actions ---------------------------------------------------------------------------
 
   /**
-     * Get Jobs
-     *
-     * Takes a boolean representing whether the
-     * request is for public jobs and gets
-     * a list of jobs and sorts by the current
-     * sort setting.
-     */
+   * Get Jobs
+   *
+   * Takes a boolean representing whether the
+   * request is for public jobs and gets
+   * a list of jobs and sorts by the current
+   * sort setting.
+   */
   getJobs(isPublic, all, filter) {
     if (isPublic === undefined) {
       isPublic = this.data.isPublic
     }
     this.update({ loading: true, filter: filter }, () => {
-      crn.getJobs(
-        (err, res) => {
-          for (let app of res.body.availableApps) {
-            app.value = app.label
-          }
-          this.update({ apps: res.body.availableApps, appsLoading: false })
-          this.sort('analysis.created', '+', res.body.jobs, true)
-        },
-        isPublic,
-        all,
-      )
+      crn.getJobs(isPublic, all).then(res => {
+        for (let app of res.body.availableApps) {
+          app.value = app.label
+        }
+        this.update({ apps: res.body.availableApps, appsLoading: false })
+        this.sort('analysis.created', '+', res.body.jobs, true)
+      })
     })
   },
 
   /**
-     * Sort
-     *
-     * Takes a value and a direction (+ or -) and
-     * sorts the current jobs acordingly.
-     */
+   * Sort
+   *
+   * Takes a value and a direction (+ or -) and
+   * sorts the current jobs acordingly.
+   */
   sort(value, direction, jobs, isTimestamp) {
     jobs = jobs ? jobs : this.data.jobs
     let sort = { value, direction, isTimestamp }
@@ -131,8 +127,8 @@ let DashboardJobStore = Reflux.createStore({
   },
 
   /**
-     * Select Pipeline Filter
-     */
+   * Select Pipeline Filter
+   */
   selectPipelineFilter(pipeline) {
     // add versions to array
     this.appVersions(pipeline)
@@ -145,8 +141,8 @@ let DashboardJobStore = Reflux.createStore({
   },
 
   /**
-     * Select Version Filter
-     */
+   * Select Version Filter
+   */
   selectPipelineVersionFilter(version) {
     let filter = this.data.filter
     filter.version = version
@@ -154,11 +150,11 @@ let DashboardJobStore = Reflux.createStore({
   },
 
   /**
-     * Filter and Sort
-     *
-     * Takes a list of jobs and filter and sort
-     * settings and updates the list of visible jobs.
-     */
+   * Filter and Sort
+   *
+   * Takes a list of jobs and filter and sort
+   * settings and updates the list of visible jobs.
+   */
   filterAndSort(jobs, filter, sort) {
     // defaults
     jobs = jobs ? jobs : this.data.jobs

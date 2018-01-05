@@ -15,6 +15,8 @@ global.shallow = shallow
 global.render = render
 global.mount = mount
 
+jest.mock('./config.js')
+
 // Fail tests on any warning
 const fail_test_on_console = message => {
   throw new Error(message)

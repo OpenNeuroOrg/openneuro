@@ -1,6 +1,6 @@
 import request from 'superagent'
 import config from '../../../config'
-import userActions from '../user/user.actions.js'
+import checkAuth from './checkAuth.js'
 
 /*
  * Upload retries limit
@@ -15,72 +15,53 @@ const maxRetries = 3
  * and response handling.
  */
 var Request = {
-  get(url, options, callback) {
-    handleRequest(url, options, function(url, options) {
-      request
+  get(url, options) {
+    return handleRequest(url, options, (url, options) => {
+      return request
         .get(url)
         .set(options.headers)
         .query(options.query)
-        .end(function(err, res) {
-          handleResponse(err, res, callback)
-        })
     })
   },
 
-  post(url, options, callback) {
-    handleRequest(url, options, function(url, options) {
-      request
+  post(url, options) {
+    return handleRequest(url, options, (url, options) => {
+      return request
         .post(url)
         .set(options.headers)
         .query(options.query)
         .send(options.body)
-        .end(function(err, res) {
-          handleResponse(err, res, callback)
-        })
     })
   },
 
-  put(url, options, callback) {
-    handleRequest(url, options, function(url, options) {
-      request
+  put(url, options) {
+    return handleRequest(url, options, (url, options) => {
+      return request
         .put(url)
         .set(options.headers)
         .query(options.query)
         .send(options.body)
-        .end(function(err, res) {
-          handleResponse(err, res, callback)
-        })
     })
   },
 
-  del(url, options, callback) {
-    handleRequest(url, options, function(url, options) {
-      request
+  del(url, options) {
+    return handleRequest(url, options, (url, options) => {
+      return request
         .del(url)
         .set(options.headers)
         .query(options.query)
-        .end(function(err, res) {
-          handleResponse(err, res, callback)
-        })
     })
   },
 
-  upload(url, options, callback, reqCallback) {
-    return handleRequest(url, options, function(url, options) {
-      const req = request
+  upload(url, options) {
+    return handleRequest(url, options, (url, options) => {
+      return request
         .post(url)
         .query(options.query)
         .set(options.headers)
         .field('tags', options.fields.tags)
         .attach('file', options.fields.file, options.fields.name)
         .retry(maxRetries)
-        .end((err, res) => {
-          handleResponse(err, res, callback)
-        })
-      if (reqCallback) {
-        reqCallback(req)
-      }
-      return req
     })
   },
 }
@@ -104,7 +85,7 @@ var Request = {
  *   - snapshot: A boolean that will add a 'snapshots' url
  *   param to scitran requests.
  */
-function handleRequest(url, options, callback) {
+async function handleRequest(url, options, callback) {
   // normalize options to play nice with superagent requests
   options = normalizeOptions(options)
 
@@ -120,28 +101,17 @@ function handleRequest(url, options, callback) {
     hasToken() &&
     (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)
   ) {
-    userActions.checkAuth((provider, token, root) => {
+    return await checkAuth((provider, token, root) => {
       if (root) {
         options.query.root = true
       }
       options.headers['Authorization-Provider'] = provider
       options.headers.Authorization = token
-      callback(url, options)
+      return callback(url, options)
     })
   } else {
-    callback(url, options)
+    return callback(url, options)
   }
-}
-
-/**
- * Handle Response
- *
- * A generic response handler used to intercept
- * responses before returning them to the main
- * callback.
- */
-function handleResponse(err, res, callback) {
-  callback(err, res)
 }
 
 /**

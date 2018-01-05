@@ -34,26 +34,32 @@ let orcid = {
       return
     }
 
-    crn.getORCIDProfile(access_token, (err, res) => {
-      let { firstname, lastname, email } = res.body
-      callback(err, {
-        token: this.token,
-        profile: { _id: orcid, firstname, lastname, email },
-        isSignedIn: !err && orcid,
+    crn
+      .getORCIDProfile(access_token)
+      .then(res => {
+        let { firstname, lastname, email } = res.body
+        callback(null, {
+          token: this.token,
+          profile: { _id: orcid, firstname, lastname, email },
+          isSignedIn: orcid,
+        })
       })
-    })
+      .catch(err => {
+        callback(err)
+      })
   },
 
   refresh(callback) {
     if (this.initialized) {
       let { refresh_token } = this.token
-      crn.refreshORCIDToken(refresh_token, err => {
-        if (err) {
-          callback(err)
-        } else {
+      crn
+        .refreshORCIDToken(refresh_token)
+        .then(() => {
           this.getCurrentUser(callback)
-        }
-      })
+        })
+        .catch(err => {
+          callback(err)
+        })
     } else {
       setTimeout(() => {
         this.refresh(callback)
@@ -84,14 +90,15 @@ let orcid = {
           const url = this.oauthWindow.document.URL
           const code = url.toString().match(/code=([^&]+)/)[1]
           clearInterval(this.oauthTimer)
-          crn.getORCIDToken(code, (err, res) => {
-            if (err) {
-              callback(err)
-            } else {
+          crn
+            .getORCIDToken(code)
+            .then(res => {
               this.token = res.body
               this.getCurrentUser(callback)
-            }
-          })
+            })
+            .catch(err => {
+              callback(err)
+            })
         } else {
           // If not the redirect page - check if closed and unregister
           if (this.oauthWindow.closed) {

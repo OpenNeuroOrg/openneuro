@@ -1,4 +1,5 @@
 // dependencies ---------------------------------------------------------
+import 'babel-polyfill'
 import 'url-search-params-polyfill'
 import Raven from 'raven-js'
 import React from 'react'
