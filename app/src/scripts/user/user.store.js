@@ -40,17 +40,20 @@ let UserStore = Reflux.createStore({
           },
           { persist: true },
         )
-        crn.verifyUser().then(res => {
-          if (res.body.code === 403) {
-            this.signOut()
-          } else {
+        crn
+          .verifyUser()
+          .then(res => {
             this.update({ scitran: res.body }, { persist: true })
             Raven.setUserContext({
               email: user.profile.email,
               id: user.profile._id,
             })
-          }
-        })
+          })
+          .catch(err => {
+            if ('response' in err && err.response.body.code === 403) {
+              this.signOut()
+            }
+          })
       }
     }
 
