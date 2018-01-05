@@ -156,7 +156,7 @@ export default {
           metadata.authors.push({ name: author, ORCIDID: '' })
         }
       }
-      scitran.updateProject(projectId, { metadata }, () => {
+      scitran.updateProject(projectId, { metadata }).then(() => {
         let file = new File(
           [JSON.stringify(description)],
           'dataset_description.json',
