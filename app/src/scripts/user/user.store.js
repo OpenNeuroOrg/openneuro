@@ -166,53 +166,60 @@ let UserStore = Reflux.createStore({
         id: user.profile._id,
       })
 
-      crn.verifyUser().then(res => {
-        if (res.body.code === 403) {
-          // Pass only the scitran required user values to createUser
-          crn.createUser(user.profile).then(res => {
-            if (res.body.status === 403) {
-              this.clearAuth()
-              let message = (
-                <span>
-                  This user account has been blocked. If you believe this is by
-                  mistake please contact the{' '}
-                  <a
-                    href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User"
-                    target="_blank">
-                    site adminstrator
-                  </a>.
-                </span>
-              )
-              if (!transition) {
-                notifications.createAlert({ type: 'Error', message: message })
-              } else {
-                this.update({
-                  loading: false,
-                  signinError: message,
-                })
-              }
-              return
+      crn
+        .verifyUser()
+        .then(res => {
+          if (!res.body._id) {
+            this.clearAuth()
+            let message =
+              'We are currently experiencing issues. Please try again later.'
+            if (!transition) {
+              notifications.createAlert({ type: 'Error', message: message })
+            } else {
+              this.update({
+                loading: false,
+                signinError: message,
+              })
             }
-            crn.verifyUser().then(res => {
-              this.handleSignIn(transition, res.body, user.profile)
-            })
-          })
-        } else if (!res.body._id) {
-          this.clearAuth()
-          let message =
-            'We are currently experiencing issues. Please try again later.'
-          if (!transition) {
-            notifications.createAlert({ type: 'Error', message: message })
           } else {
-            this.update({
-              loading: false,
-              signinError: message,
-            })
+            this.handleSignIn(transition, res.body, user.profile)
           }
-        } else {
-          this.handleSignIn(transition, res.body, user.profile)
-        }
-      })
+        })
+        .catch(() => {
+          // Pass only the scitran required user values to createUser
+          crn
+            .createUser(user.profile)
+            .then(() => {
+              crn.verifyUser().then(res => {
+                this.handleSignIn(transition, res.body, user.profile)
+              })
+            })
+            .catch(err => {
+              if ('response' in err && err.response.body.status === 403) {
+                this.clearAuth()
+                let message = (
+                  <span>
+                    This user account has been blocked. If you believe this is
+                    by mistake please contact the{' '}
+                    <a
+                      href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User"
+                      target="_blank">
+                      site adminstrator
+                    </a>.
+                  </span>
+                )
+                if (!transition) {
+                  notifications.createAlert({ type: 'Error', message: message })
+                } else {
+                  this.update({
+                    loading: false,
+                    signinError: message,
+                  })
+                }
+                return
+              }
+            })
+        })
     })
   },
 
