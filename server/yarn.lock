@@ -879,15 +879,16 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bids-validator@^0.24.1:
-  version "0.24.1"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.24.1.tgz#bd3549bb76611010c85a82628d80e2d9d4e4bed9"
+bids-validator@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.25.0.tgz#c6a11f7abb8c1983e812b6b7dd370119e78e5465"
   dependencies:
     ajv "^5.2.2"
     async "^2.1.5"
     bytes "^2.3.0"
     cliff "^0.1.10"
     colors "^1.1.0"
+    ignore "^3.3.7"
     jshint "^2.8.0"
     minimatch "3.0.3"
     nifti-js "^1.0.0"
@@ -2425,6 +2426,10 @@ ieee754@^1.1.4:
 ignore@^3.2.0:
   version "3.3.5"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.3.5.tgz#c4e715455f6073a8d7e5dae72d2fc9d71663dba6"
+
+ignore@^3.3.7:
+  version "3.3.7"
+  resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.3.7.tgz#612289bfb3c220e186a58118618d5be8c1bab021"
 
 imurmurhash@^0.1.4:
   version "0.1.4"
