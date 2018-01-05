@@ -8,22 +8,21 @@ let maxRequests = 3
 
 let upload = {
   /**
-     * Queue
-     *
-     * A queueing strategy for upload requests.
-     * Allows concurrency up to the value for
-     * 'maxRequests'
-     */
+   * Queue
+   *
+   * A queueing strategy for upload requests.
+   * Allows concurrency up to the value for
+   * 'maxRequests'
+   */
   queue: async.queue((req, callback) => {
     if (req.func) {
       // container creation requests
       let name = req.args[req.args.length - 1]
       req.progressStart(name)
-      req.args.push((err, res) => {
-        upload.handleResponse(err, req, res)
+      req.func.apply(null, req.args).then(res => {
+        upload.handleResponse(null, req, res)
         callback()
       })
-      req.func.apply(null, req.args)
     } else {
       // file upload requests
       req.file.relativePath = req.file.hasOwnProperty('relativePath')
@@ -33,36 +32,38 @@ let upload = {
         ? JSON.stringify(req.tags)
         : '[]'
       req.progressStart(req.file.name)
-      request.upload(
-        req.url,
-        {
+      request
+        .upload(req.url, {
           fields: {
             name: req.file.relativePath,
             tags: req.file.tags,
             file: req.file.data ? req.file.data : req.file,
           },
-        },
-        err => {
+        })
+        .then(() => {
+          upload.handleResponse(null, req)
+          callback()
+        })
+        .catch(err => {
           upload.handleResponse(err, req)
           callback()
-        },
-      )
+        })
     }
   }, maxRequests),
 
   /**
-     * Add
-     *
-     * Takes a file request object & sends it into the
-     * upload queue.
-     */
+   * Add
+   *
+   * Takes a file request object & sends it into the
+   * upload queue.
+   */
   add(req) {
     this.queue.push(req)
   },
 
   /**
-     * Handle Response
-     */
+   * Handle Response
+   */
   handleResponse(err, req, res) {
     let label = req.file ? req.file.name : req.args[req.args.length - 2]
     if (err) {
