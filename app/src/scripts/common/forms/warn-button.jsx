@@ -75,7 +75,7 @@ export default class WarnButton extends React.Component {
     )
 
     let hideAction = (
-      <span className={'fade-in' + (disabled ? ' disabled' : '')}>
+      <span className={disabled ? ' disabled' : ''}>
         <button
           className="btn-warn-component warning"
           onClick={this.toggle.bind(this, this.props.action)}
