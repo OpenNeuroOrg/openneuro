@@ -27,23 +27,9 @@ export default aws => {
          * arguments: an array of arguments applied to the function
          * callback: a callback function
          */
-    queue: async.queue((req, cb) => {
-      // assign last argument as callback for
-      // queued function and queue callback
-      req.arguments.push(function() {
-        if (req.callback) {
-          req.callback.apply(arguments)
-        }
-        cb.apply(arguments)
-      })
-      req.function.apply(this, req.arguments)
+    fileQueue: async.queue((task, callback) => {
+      task.uploadFunction(task.filePath, task.remotePath, callback)
     }, config.aws.s3.concurrency),
-
-    createBucket(bucketName, callback) {
-      s3.createBucket({ Bucket: bucketName }, function(err, res) {
-        callback(err, res)
-      })
-    },
 
     uploadFile(filePath, remotePath, callback) {
       const data = fs.createReadStream(filePath)
@@ -61,10 +47,16 @@ export default aws => {
 
       upload.send(err => {
         if (err) {
-          console.log(err)
+          return callback(err)
         } else {
           callback()
         }
+      })
+    },
+
+    createBucket(bucketName, callback) {
+      s3.createBucket({ Bucket: bucketName }, function(err, res) {
+        callback(err, res)
       })
     },
 
@@ -96,38 +88,55 @@ export default aws => {
           } else {
             let dirPath =
               config.location + '/persistent/datasets/' + snapshotHash
+
+            // loop through each file in the directory
             files.getFiles(dirPath, files => {
+              // loop through each file and add them to the file queue.
+              // fileQueue uploads via async.queue(), and limits concurrent uploads.
               async.each(
                 files,
                 (filePath, cb) => {
                   let remotePath = filePath.slice(
                     (config.location + '/persistent/datasets/').length,
                   )
-                  this.queue.push({
-                    function: this.uploadFile,
-                    arguments: [filePath, remotePath],
-                    callback: cb,
-                  })
-                },
-                () => {
-                  // tag upload as complete
-                  s3.putObjectTagging(
+
+                  // push file to the fileQueue
+                  this.fileQueue.push(
                     {
-                      Bucket,
-                      Key: snapshotHash + '/dataset_description.json',
-                      Tagging: {
-                        TagSet: [
-                          {
-                            Key: 'DatasetComplete',
-                            Value: 'true',
-                          },
-                        ],
-                      },
+                      uploadFunction: this.uploadFile,
+                      filePath: filePath,
+                      remotePath: remotePath,
                     },
-                    () => {
-                      callback()
+                    err => {
+                      if (err) {
+                        return cb(err)
+                      }
                     },
                   )
+                },
+                err => {
+                  if (err) {
+                    callback(err)
+                  } else {
+                    // tag upload as complete
+                    s3.putObjectTagging(
+                      {
+                        Bucket,
+                        Key: snapshotHash + '/dataset_description.json',
+                        Tagging: {
+                          TagSet: [
+                            {
+                              Key: 'DatasetComplete',
+                              Value: 'true',
+                            },
+                          ],
+                        },
+                      },
+                      () => {
+                        callback()
+                      },
+                    )
+                  }
                 },
               )
             })

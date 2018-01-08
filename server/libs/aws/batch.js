@@ -534,7 +534,17 @@ export default aws => {
          */
     startAnalysis(job, jobId, userId, callback) {
       let hash = job.datasetHash
-      s3.uploadSnapshot(hash, () => {
+      s3.uploadSnapshot(hash, err => {
+        // If the snapshot upload fails, set the job analysis.status = 'FAILED'
+        // so the user can retry.
+        if (err) {
+          console.log(err)
+          c.crn.jobs.updateOne(
+            { _id: ObjectID(jobId) },
+            { $set: { 'analysis.status': 'FAILED' } },
+          )
+          return callback()
+        }
         const batchJobParams = this.buildBatchParams(job, hash)
 
         this.startBatchJobs(batchJobParams, jobId, err => {
