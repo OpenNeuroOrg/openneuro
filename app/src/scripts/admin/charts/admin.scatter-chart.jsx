@@ -26,8 +26,7 @@ const Scatter = ({ logs, month, year }) => {
   ]
 
   let data = []
-  Object.entries(logs).forEach(([key, value]) => {
-    let log = value
+  logs.forEach(log => {
     data.push({ x: log.month, y: log.entries.length })
   })
 

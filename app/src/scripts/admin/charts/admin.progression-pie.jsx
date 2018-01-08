@@ -7,7 +7,6 @@ import { VictoryPie } from 'victory'
 // Life Cycle ----------------------------------------------------------------------
 
 const Pie = ({ failed, success, total }) => {
-  let fakeTotal = 3060
   let dataPoints = { failed, success }
   let data = []
   let dataP

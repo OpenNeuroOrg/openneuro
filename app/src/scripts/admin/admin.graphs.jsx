@@ -21,23 +21,22 @@ class Progresssion extends Reflux.Component {
     }
   }
 
-  componentWillMount() {
-    actions.filterLogs()
+  componentDidMount() {
+    if (!this.state.admin.eventLogs.length) {
+      actions.getEventLogs()
+    }
   }
 
   render() {
     let failures = this.state.admin.failedLogs.length
     let successes = this.state.admin.successLogs.length
     let total = this.state.admin.uploadedLogs.length
-    // console.log(total)
-    // let successLogs = this.state.admin.failedLogs
-    // // **** testing
     let activity = this.state.admin.activityLogs
 
     return (
       <div className="dashboard-dataset-teasers fade-in">
         <div className="header-wrap clearfix chart-header">
-          <h2>Current job sucession rate:</h2>
+          <h2>Job Sucess Rate:</h2>
           <div className="col-sm-9 chart">
             <div className="col-1">
               <Pie failed={failures} success={successes} total={total} />
