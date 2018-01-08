@@ -4,6 +4,8 @@ import Happybrowser from '../happybrowser'
 
 const chrome =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.78 Safari/537.36'
+const chrome41 =
+  'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.104 Safari/537.36'
 const chromium =
   'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/60.0.3112.113 Chrome/60.0.3112.113 Safari/537.36'
 const googlebot =
@@ -30,12 +32,16 @@ describe('common/partials/happybrowser', () => {
     const wrapper = shallow(<Happybrowser ua={googlebot} />)
     expect(wrapper.hasClass('hidden')).toBe(true)
   })
+  it('is hidden when accessed by Chrome 41', () => {
+    const wrapper = shallow(<Happybrowser ua={chrome41} />)
+    expect(wrapper.hasClass('hidden')).toBe(true)
+  })
   it('is visible in IE', () => {
     const wrapper = shallow(<Happybrowser ua={ie} />)
     expect(wrapper.hasClass('hidden')).toBe(false)
   })
-  it('is visible in Firefox', () => {
+  it('is hidden in Firefox', () => {
     const wrapper = shallow(<Happybrowser ua={firefox} />)
-    expect(wrapper.hasClass('hidden')).toBe(false)
+    expect(wrapper.hasClass('hidden')).toBe(true)
   })
 })

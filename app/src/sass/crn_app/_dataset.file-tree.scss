@@ -164,6 +164,23 @@
                         }
                     }
                 }
+
+                .panel-collapse {
+                    .panel-body {
+                        >ul.uploading-directory {
+                            >li.uploading-spinner {
+                                padding: 10px;
+                                .loading-wrap {
+                                    padding: 30px;
+                                    width: 100%;
+                                }
+                            }
+                            >li.uploading-progress {
+                                padding: 10px;
+                            }
+                        }
+                    }
+                }
             }
         }
     }

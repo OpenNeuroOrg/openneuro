@@ -3,12 +3,12 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import actions from './dataset.actions'
-import WarnButton from '../common/forms/warn-button.jsx'
+import actions from '../dataset.actions'
+import WarnButton from '../../common/forms/warn-button.jsx'
 import moment from 'moment'
-import FileTree from '../common/partials/file-tree.jsx'
+import Results from './results.jsx'
 import { Accordion, Panel } from 'react-bootstrap'
-import markdown from '../utils/markdown'
+import markdown from '../../utils/markdown'
 
 class JobAccordion extends React.Component {
   // life cycle methods ------------------------------------------------------------
@@ -19,46 +19,26 @@ class JobAccordion extends React.Component {
 
   render() {
     let run = this.props.run
-    // if ((run.parameters && Object.keys(run.parameters).length > 0) || (run.results && run.results.length > 0) || (run.logs && run.logs.length > 0)) {
-    if (run.results && run.results.length > 0) {
-      // header with parameters and/or results
-      return (
-        <span eventKey={run._id}>
-          <Panel
-            className={run.active ? 'job border-flash' : 'job'}
-            header={this._header(run)}>
-            <span className="inner">
-              {this._support(run)}
-              {this._parameters(run)}
-              {this._results(run, 'results')}
-              {this._logs(run)}
-            </span>
-          </Panel>
-        </span>
-      )
-    } else {
-      // header only
-      return (
-        <span eventKey={run._id}>
-          <div className="job panel panel-default pending">
-            <div className="panel-heading">
-              <div className="panel-title ">{this._header(run)}</div>
-            </div>
-            <div className="panel-body">
-              <span className="inner">
-                {this._support(run)}
-                {this._parameters(run)}
-                {this._batchStatus(run)}
-                {run.analysis.status === 'SUCCEEDED' ||
-                run.analysis.status === 'FAILED'
-                  ? this._logs(run)
-                  : null}
-              </span>
-            </div>
-          </div>
-        </span>
-      )
-    }
+    return (
+      <span eventKey={run._id}>
+        <Panel
+          className={run.active ? 'job border-flash' : 'job'}
+          header={this._header(run)}>
+          <span className="inner">
+            {this._support(run)}
+            {this._parameters(run)}
+            <Results
+              run={run}
+              acknowledgements={this.props.acknowledgements}
+              displayFile={this.props.displayFile}
+              toggleFolder={this.props.toggleFolder}
+            />
+            {this._logs(run)}
+            {this._batchStatus(run)}
+          </span>
+        </Panel>
+      </span>
+    )
   }
 
   // template methods --------------------------------------------------------------
@@ -68,7 +48,12 @@ class JobAccordion extends React.Component {
       <span>
         <br />
         <label>By </label>
-        <strong>{run.userId}</strong>
+        <strong>
+          {run.hasOwnProperty('userMetadata') &&
+          run.userMetadata.hasOwnProperty('email')
+            ? run.userMetadata.email
+            : run.userId}
+        </strong>
       </span>
     ) : null
     let userCanCancel =
@@ -111,67 +96,6 @@ class JobAccordion extends React.Component {
     )
   }
 
-  _results(run, type) {
-    if (run[type] && run[type].length > 0) {
-      return (
-        <Accordion accordion className="results">
-          <Panel
-            className="fade-in"
-            header={type}
-            key={run._id}
-            eventKey={run._id}>
-            <div className="app-acknowledgements">
-              <label>Acknowledgements</label>
-              <div
-                className="markdown"
-                dangerouslySetInnerHTML={markdown.format(
-                  this.props.acknowledgements,
-                )}
-              />
-            </div>
-            <hr />
-            <span className="download-all">
-              <WarnButton
-                icon="fa-download"
-                message=" DOWNLOAD All"
-                prepDownload={actions.getResultDownloadTicket.bind(
-                  this,
-                  run.snapshotId,
-                  run._id,
-                  { path: 'all-' + type },
-                )}
-              />
-            </span>
-            <div className="file-structure fade-in panel-group">
-              <div className="panel panel-default">
-                <div className="panel-collapse" aria-expanded="false">
-                  <div className="panel-body">
-                    <FileTree
-                      tree={run[type]}
-                      treeId={run._id}
-                      editable={false}
-                      getFileDownloadTicket={actions.getResultDownloadTicket.bind(
-                        this,
-                        run.snapshotId,
-                        run._id,
-                      )}
-                      displayFile={this.props.displayFile.bind(
-                        this,
-                        run.snapshotId,
-                        run._id,
-                      )}
-                      toggleFolder={this.props.toggleFolder}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </Panel>
-        </Accordion>
-      )
-    }
-  }
-
   _parameters(run) {
     if (run.parameters && Object.keys(run.parameters).length > 0) {
       let parameters = []
@@ -182,10 +106,16 @@ class JobAccordion extends React.Component {
           })
         }
         // Values can be strings or arrays
-        const value =
-          run.parameters[key].constructor === Array
-            ? run.parameters[key].join(' ')
-            : run.parameters[key]
+        let value
+
+        if (run.parameters[key].constructor === Array) {
+          value = run.parameters[key].join(' ')
+        } else if (run.parameters[key] === '') {
+          value =
+            run.parameters[key].constructor === Boolean ? 'false' : 'unset'
+        } else {
+          value = run.parameters[key].toString()
+        }
         parameters.push(
           <li key={key}>
             <span className="key">{key}</span>:{' '}
@@ -229,6 +159,12 @@ class JobAccordion extends React.Component {
   }
 
   _failedMessage(run) {
+    let userCanChange =
+      this.props.currentUser && this.props.currentUser.scitran
+        ? this.props.currentUser.scitran.root ||
+          this.props.currentUser.scitran._id === run.userId
+        : false
+
     if (
       run.analysis.status === 'FAILED' ||
       run.analysis.status === 'REJECTED'
@@ -253,12 +189,24 @@ class JobAccordion extends React.Component {
           <h5 className="text-danger">
             {message} {adminMessage}
           </h5>
-          <WarnButton
-            icon="fa fa-repeat"
-            message="re-run"
-            warn={false}
-            action={actions.retryJob.bind(this, run._id)}
-          />
+          {userCanChange ? (
+            <WarnButton
+              icon="fa fa-repeat"
+              message="re-run"
+              warn={false}
+              action={actions.retryJob.bind(this, run._id)}
+            />
+          ) : null}
+          {userCanChange ? (
+            <span className="btn-small">
+              <WarnButton
+                icon="fa fa-trash-o"
+                message="Delete"
+                warn={true}
+                action={actions.deleteJob.bind(this, run._id)}
+              />
+            </span>
+          ) : null}
         </div>
       )
     }
@@ -358,7 +306,7 @@ class JobAccordion extends React.Component {
           } else {
             exitCodeStatus = (
               <span>
-                <span className="label label-danger">FAIL</span> Exit code{' '}
+                <span className="label label-danger">FAIL</span> Exit code
                 {exitCode}
               </span>
             )
@@ -415,11 +363,24 @@ class JobAccordion extends React.Component {
   _batchStatus(run) {
     let batchStatus = run.analysis.batchStatus
     if (batchStatus && batchStatus.length) {
+      const failed = run.analysis.batchStatus.filter(
+        status => status.status !== 'SUCCEEDED',
+      )
+      if (failed.length === 0) {
+        return null
+      }
       batchStatus = batchStatus.map(status => {
         return (
           <div className="job-status col-xs-12" key={status.job}>
-            <div className="col-xs-8">{status.job}</div>
-            <div className="col-xs-4">{status.status}</div>
+            <div>
+              <div className="col-xs-8">{status.job}</div>
+              <div className="col-xs-4">{status.status}</div>
+            </div>
+            <div key={status.statusReason}>
+              <strong className="col-xs-12">
+                {'statusReason' in status ? status.statusReason : ''}
+              </strong>
+            </div>
           </div>
         )
       })
@@ -433,7 +394,7 @@ class JobAccordion extends React.Component {
             eventKey={run._id}>
             <ul>
               <div className=" job-status col-xs-12" key={run._id}>
-                <div className="col-xs-8">JobId</div>
+                <div className="col-xs-8">Job Id</div>
                 <div className="col-xs-4">Status</div>
               </div>
               {batchStatus}

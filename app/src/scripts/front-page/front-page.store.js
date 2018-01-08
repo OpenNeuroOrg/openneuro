@@ -17,7 +17,8 @@ let FrontPageStore = Reflux.createStore({
     this.setInitialState()
     bids.getDatasets(
       datasets => {
-        this.update({ datasetCount: datasets.length })
+        const totalDatasets = datasets ? datasets.length : 0
+        this.update({ datasetCount: totalDatasets })
       },
       true,
       true,
@@ -40,13 +41,13 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * Set Initial State
-     *
-     * Sets the state to the data object defined
-     * inside the function. Also takes a diffs object
-     * which will set the state to the initial state
-     * with any differences passed.
-     */
+   * Set Initial State
+   *
+   * Sets the state to the data object defined
+   * inside the function. Also takes a diffs object
+   * which will set the state to the initial state
+   * with any differences passed.
+   */
   setInitialState: function(diffs, callback) {
     let data = {
       apps: [],
@@ -72,8 +73,8 @@ let FrontPageStore = Reflux.createStore({
   // actions ---------------------------------------------------------------------------
 
   /**
-     * Reset
-     */
+   * Reset
+   */
   reset() {
     this.setInitialState({
       apps: this.data.apps,
@@ -82,8 +83,8 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * Set Apps
-     */
+   * Set Apps
+   */
   setApps(apps) {
     let found = []
     let tags = []
@@ -103,15 +104,15 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * Select Tag
-     */
+   * Select Tag
+   */
   selectTag(selectedTags) {
     this.update({ selectedTags })
   },
 
   /**
-     * Select Pipeline
-     */
+   * Select Pipeline
+   */
   selectPipeline(appId) {
     if (appId === '') {
       this.update({ selectedPipeline: { id: '' } })
@@ -138,44 +139,40 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * Load Job
-     */
+   * Load Job
+   */
   loadJob(snapshotId, jobId) {
-    crn.getJob(
-      snapshotId,
-      jobId,
-      (err, res) => {
-        this.update({ exampleJob: res.body, loadingJob: false })
-      },
-      { snapshot: true },
-    )
+    crn.getJob(snapshotId, jobId).then(res => {
+      this.update({ exampleJob: res.body, loadingJob: false })
+    }, { snapshot: true })
   },
 
   loadLatestJob(appName, status) {
-    crn.getJobs(
-      (err, resp) => {
-        // Grab the first job returned
-        if (
-          resp.body &&
-          resp.body.jobs &&
-          resp.body.jobs instanceof Array &&
-          resp.body.jobs.length > 0
-        ) {
-          this.update({ loadingJob: false, exampleJob: resp.body.jobs[0] })
-        } else {
-          this.update({ loadingJob: false, exampleJob: null })
-        }
-      },
-      true,
-      appName,
-      status,
-      true,
-    )
+    let query = {
+      public: true,
+      appName: appName,
+      status: status,
+      latest: true,
+      results: true,
+    }
+    crn.getJobsQuery(query).then(resp => {
+      // Grab the first job returned
+      if (
+        resp.body &&
+        resp.body.jobs &&
+        resp.body.jobs instanceof Array &&
+        resp.body.jobs.length > 0
+      ) {
+        this.update({ loadingJob: false, exampleJob: resp.body.jobs[0] })
+      } else {
+        this.update({ loadingJob: false, exampleJob: null })
+      }
+    })
   },
 
   /**
-     * Toggle Folder
-     */
+   * Toggle Folder
+   */
   toggleFolder(directory) {
     let exampleJob = this.data.exampleJob
 
@@ -190,8 +187,8 @@ let FrontPageStore = Reflux.createStore({
   },
 
   /**
-     * DisplayFile
-     */
+   * DisplayFile
+   */
   displayFile(snapshotId, jobId, file, callback) {
     datasetActions.getResultDownloadTicket(snapshotId, jobId, file, link => {
       // requestAndDisplay(link);
@@ -218,7 +215,7 @@ let FrontPageStore = Reflux.createStore({
           },
         })
       } else {
-        request.get(link, {}, (err, res) => {
+        request.get(link, {}).then(res => {
           if (callback) {
             callback()
           }

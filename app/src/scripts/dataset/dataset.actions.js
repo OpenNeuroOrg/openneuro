@@ -2,10 +2,14 @@ import Reflux from 'reflux'
 
 var Actions = Reflux.createActions([
   'addFile',
+  'addDirectoryFile',
   'createSnapshot',
+  'cancelDirectoryUpload',
   'deleteAttachment',
   'deleteDataset',
   'deleteFile',
+  'deleteDirectory',
+  'deleteJob',
   'disableUpdateWarn',
   'dismissError',
   'dismissJobsModal',

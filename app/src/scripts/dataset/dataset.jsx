@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import { Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
+import { ProgressBar } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
@@ -22,10 +23,37 @@ import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
 
+const uploadWarning =
+  'You are currently uploading files. Leaving this page will cancel the upload process.'
+
 class Dataset extends Reflux.Component {
   constructor(props) {
     super(props)
     refluxConnect(this, datasetStore, 'datasets')
+    const isDataset = pathname => {
+      const slugs = pathname.split('/')
+      if (
+        slugs.length &&
+        slugs[1] === 'datasets' &&
+        this.state.datasets.dataset
+      ) {
+        let datasetId = this.state.datasets.dataset.linkID
+        if ('linkOriginal' in this.state.datasets.dataset) {
+          datasetId = this.state.datasets.dataset.linkOriginal
+        }
+        // The same dataset
+        if (slugs[2] === datasetId) {
+          return true
+        }
+      }
+      return false
+    }
+    const unblock = props.history.block(({ pathname }) => {
+      if (!isDataset(pathname) && this.state.datasets.uploading) {
+        return uploadWarning
+      }
+    })
+    this.state = { unblock }
   }
   // life cycle events --------------------------------------------------
 
@@ -36,10 +64,45 @@ class Dataset extends Reflux.Component {
     )
   }
 
+  componentWillUpdate() {
+    // Prevent navigation away if adding a directory
+    if (this.state.datasets.uploading) {
+      window.onbeforeunload = () => {
+        // Warning not shown in modern browsers but we have to return something
+        return uploadWarning
+      }
+    } else {
+      window.onbeforeunload = () => {}
+    }
+  }
+
   componentDidMount() {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
+    const isDataset = pathname => {
+      const slugs = pathname.split('/')
+      if (
+        slugs.length &&
+        slugs[1] === 'datasets' &&
+        this.state.datasets.dataset
+      ) {
+        let datasetId = this.state.datasets.dataset.linkID
+        if ('linkOriginal' in this.state.datasets.dataset) {
+          datasetId = this.state.datasets.dataset.linkOriginal
+        }
+        // The same dataset
+        if (slugs[2] === datasetId) {
+          return true
+        }
+      }
+      return false
+    }
+    this.props.history.listen(({ pathname }) => {
+      if (!isDataset(pathname) && this.state.datasets.uploading) {
+        actions.cancelDirectoryUpload()
+      }
+    })
   }
 
   _loadData(datasetId, snapshotId) {
@@ -67,6 +130,11 @@ class Dataset extends Reflux.Component {
   componentWillUnmount() {
     actions.setInitialState({ apps: this.state.datasets.apps })
     super.componentWillUnmount()
+    document.title = 'OpenNeuro'
+    window.onbeforeunload = () => {}
+    if (this.state.unblock) {
+      this.state.unblock()
+    }
   }
 
   render() {
@@ -84,6 +152,7 @@ class Dataset extends Reflux.Component {
     let content
 
     if (dataset) {
+      document.title = 'OpenNeuro - ' + dataset.label
       let errors = dataset.validation.errors
       let warnings = dataset.validation.warnings
       content = (
@@ -98,6 +167,7 @@ class Dataset extends Reflux.Component {
                       label={dataset.label}
                       editable={canEdit}
                       onChange={actions.updateName}
+                      type="string"
                     />
                   </h1>
                   {this._uploaded(dataset)}
@@ -121,14 +191,17 @@ class Dataset extends Reflux.Component {
                       errors={errors}
                       warnings={warnings}
                       validating={dataset.status.validating}
-                      display={!dataset.status.incomplete}
+                      display={
+                        !dataset.status.incomplete &&
+                        !this.state.datasets.uploading
+                      }
                     />
                     <div className="fade-in col-xs-12">
                       <Jobs />
                     </div>
                     <div className="dataset-files">
                       {this._incompleteMessage(dataset)}
-                      {this._fileTree(dataset, canEdit)}
+                      {this._fileTree.bind(this)(dataset, canEdit)}
                     </div>
                   </div>
                 </div>
@@ -186,6 +259,7 @@ class Dataset extends Reflux.Component {
             dataset={dataset}
             selectedSnapshot={this.state.datasets.selectedSnapshot}
             snapshots={this.state.datasets.snapshots}
+            uploading={this.state.datasets.uploading}
           />
         </div>
       )
@@ -222,6 +296,14 @@ class Dataset extends Reflux.Component {
           <span className="job-count">
             <i className="fa fa-area-chart" />
             <span className="count">{snapshot.analysisCount}</span>
+          </span>
+        )
+      } else if (snapshot.isOriginal && this.state.datasets.uploading) {
+        analysisCount = (
+          <span className="job-count">
+            <span className="warning-loading">
+              <i className="fa fa-spin fa-circle-o-notch" />
+            </span>
           </span>
         )
       }
@@ -322,6 +404,43 @@ class Dataset extends Reflux.Component {
   }
 
   _fileTree(dataset, canEdit) {
+    let fileTree = (
+      <FileTree
+        tree={[dataset]}
+        editable={canEdit}
+        loading={this.state.datasets.loadingTree}
+        dismissError={actions.dismissError}
+        deleteFile={actions.deleteFile}
+        getFileDownloadTicket={actions.getFileDownloadTicket}
+        displayFile={actions.displayFile.bind(this, null, null)}
+        toggleFolder={actions.toggleFolder}
+        addFile={actions.addFile}
+        addDirectoryFile={actions.addDirectoryFile}
+        deleteDirectory={actions.deleteDirectory}
+        updateFile={actions.updateFile}
+        topLevel
+      />
+    )
+    if (this.state.datasets.uploading && !('original' in dataset)) {
+      const max = this.state.datasets.uploadingFileCount
+      const now = this.state.datasets.uploadingProgress
+      const progress = {
+        max,
+        now,
+        label: now + '/' + max + ' files uploaded',
+      }
+      fileTree = (
+        <ul className="uploading-directory">
+          <li className="clearfix uploading-spinner">
+            <Spinner active={true} text="Adding files..." />
+          </li>
+          <li className="clearfix uploading-progress">
+            <ProgressBar active {...progress} />
+          </li>
+        </ul>
+      )
+    }
+
     if (!dataset.status.incomplete) {
       return (
         <div className="col-xs-12">
@@ -331,20 +450,7 @@ class Dataset extends Reflux.Component {
                 <h3 className="panel-title">Dataset File Tree</h3>
               </div>
               <div className="panel-collapse" aria-expanded="false">
-                <div className="panel-body">
-                  <FileTree
-                    tree={[dataset]}
-                    editable={canEdit}
-                    loading={this.state.datasets.loadingTree}
-                    dismissError={actions.dismissError}
-                    deleteFile={actions.deleteFile}
-                    getFileDownloadTicket={actions.getFileDownloadTicket}
-                    displayFile={actions.displayFile.bind(this, null, null)}
-                    toggleFolder={actions.toggleFolder}
-                    addFile={actions.addFile}
-                    updateFile={actions.updateFile}
-                  />
-                </div>
+                <div className="panel-body">{fileTree}</div>
               </div>
             </div>
           </div>
@@ -367,7 +473,10 @@ class Dataset extends Reflux.Component {
                   <span className="dataset-status ds-warning">
                     <i className="fa fa-warning" /> Incomplete
                   </span>
-                  <FileSelect resume={true} onChange={this._onFileSelect} />
+                  <FileSelect
+                    resume={true}
+                    onChange={this._onFileSelect.bind(this)}
+                  />
                 </h4>
               </div>
               <div className="panel-collapse" aria-expanded="false">

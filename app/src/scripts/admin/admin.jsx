@@ -95,13 +95,13 @@ class Dashboard extends React.Component {
                 name="admin-datasets"
                 path="/admin/datasets"
                 exact
-                component={Datasets}
+                render={props => <Datasets admin {...props} />}
               />
               <Route
                 name="admin-jobs"
                 path="/admin/jobs"
                 exact
-                component={Jobs}
+                render={props => <Jobs admin {...props} />}
               />
               <Route
                 name="admin-graphs"

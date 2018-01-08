@@ -34,13 +34,13 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Set Initial State
-     *
-     * Sets the state to the data object defined
-     * inside the function. Also takes a diffs object
-     * which will set the state to the initial state
-     * with any differences passed.
-     */
+   * Set Initial State
+   *
+   * Sets the state to the data object defined
+   * inside the function. Also takes a diffs object
+   * which will set the state to the initial state
+   * with any differences passed.
+   */
   setInitialState: function(diffs) {
     let data = {
       users: [],
@@ -95,10 +95,10 @@ let UserStore = Reflux.createStore({
   // Actions ---------------------------------------------------------------------------
 
   /**
-     * Blacklist Submit
-     *
-     * Parses form for blacklisting a user.
-     */
+   * Blacklist Submit
+   *
+   * Parses form for blacklisting a user.
+   */
   blacklistSubmit() {
     let blacklistForm = this.data.blacklistForm
 
@@ -129,15 +129,15 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-    * Search username and email
-    */
+   * Search username and email
+   */
   searchUser(input) {
     this.filter(input, this.data.adminFilter)
   },
 
   /**
-    * filter admin
-    */
+   * filter admin
+   */
   filterAdmin() {
     this.filter(this.data.searchInput, !this.data.adminFilter)
   },
@@ -171,8 +171,8 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Search through event logs
-     */
+   * Search through event logs
+   */
   searchLogs(input) {
     // If the API is unavailable, there are no logs to search
     let eventLogs = this.data.eventLogs || []
@@ -264,13 +264,13 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Blacklist User
-     *
-     * Takes a gmail address and a first and last
-     * name and adds the user as a blacklisted user.
-     */
+   * Blacklist User
+   *
+   * Takes a gmail address and a first and last
+   * name and adds the user as a blacklisted user.
+   */
   blacklistUser(userInfo) {
-    crn.blacklistUser(userInfo, () => {
+    crn.blacklistUser(userInfo).then(() => {
       let blacklist = this.data.blacklist
       blacklist.push(userInfo)
       this.update({
@@ -287,11 +287,11 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Blacklist Modal
-     *
-     * Triggers a modal for blacklisting a user.
-     * Prefills data if a user object is passed.
-     */
+   * Blacklist Modal
+   *
+   * Triggers a modal for blacklisting a user.
+   * Prefills data if a user object is passed.
+   */
   blacklistModal(user, callback) {
     let modals = this.data.modals
     modals.blacklist = true
@@ -311,13 +311,13 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Get Users
-     *
-     * Retrieves a list of all users and saves it to the
-     * admin store state.
-     */
+   * Get Users
+   *
+   * Retrieves a list of all users and saves it to the
+   * admin store state.
+   */
   getUsers() {
-    scitran.getUsers((err, res) => {
+    scitran.getUsers().then(res => {
       this.update({ users: res.body }, () => {
         this.searchUser('')
       })
@@ -325,23 +325,23 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Get Blacklist
-     *
-     * Retrieves a list of all blacklisted users and saves
-     * it to the admin store state.
-     */
+   * Get Blacklist
+   *
+   * Retrieves a list of all blacklisted users and saves
+   * it to the admin store state.
+   */
   getBlacklist() {
-    crn.getBlacklist((err, res) => {
+    crn.getBlacklist().then(res => {
       this.update({ blacklist: res.body })
     })
   },
 
   /**
-     * Input Change
-     *
-     * Handles input change state management for
-     * admin form data.
-     */
+   * Input Change
+   *
+   * Handles input change state management for
+   * admin form data.
+   */
   inputChange(form, name, value) {
     let formData = this.data[form]
     formData[name] = value
@@ -351,12 +351,12 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Remove User
-     *
-     * Takes a userId and removes the user.
-     */
+   * Remove User
+   *
+   * Takes a userId and removes the user.
+   */
   removeUser(userId, index, callback) {
-    scitran.removeUser(userId, () => {
+    scitran.removeUser(userId).then(() => {
       let users = this.data.users
       users.splice(index, 1)
       this.update({ users })
@@ -367,8 +367,8 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Submit Job Definition
-     */
+   * Submit Job Definition
+   */
   submitJobDefinition() {
     let formData = this.data.jobDefinitionForm
     // Build up the AWS object
@@ -393,8 +393,16 @@ let UserStore = Reflux.createStore({
       for (let param of formData.parameters) {
         parameters[param.label] = param.defaultValue
         parametersMetadata[param.label] = param
+        let types = ['radio', 'multi', 'select']
+        if (types.includes(param.type) && param.label != 'participant_label') {
+          let arrayInput = param.defaultValue.split(' ')
+          param.defaultValue = arrayInput.filter(value => value.trim() != ' ')
+        } else {
+          param.defaultValue = param.defaultValue
+        }
       }
     }
+
     jobDefinition.parameters = parameters
     jobDefinition.parametersMetadata = parametersMetadata
     jobDefinition.analysisLevels = formData.analysisLevels
@@ -407,9 +415,22 @@ let UserStore = Reflux.createStore({
       tags: formData.tags,
     }
 
-    crn.defineJob(jobDefinition, err => {
-      // server is returning 400 for invalid inputs for vcpus and memory
-      if (err) {
+    crn
+      .defineJob(jobDefinition)
+      .then(() => {
+        notifications.createAlert({
+          type: 'Success',
+          message: 'Job Definition Submission Successful!',
+        })
+
+        //toggle modal once response comes bacn from server.
+        this.toggleModal('defineJob')
+
+        // TODO - error handling
+        datasetActions.loadApps() //this does not seem like the right way to do this.
+      })
+      .catch(err => {
+        // server is returning 400 for invalid inputs for vcpus and memory
         if (err.status === 400) {
           notifications.createAlert({
             type: 'Error',
@@ -421,24 +442,12 @@ let UserStore = Reflux.createStore({
             message: 'There was an error submitting job definition.',
           })
         }
-      } else {
-        notifications.createAlert({
-          type: 'Success',
-          message: 'Job Definition Submission Successful!',
-        })
-
-        //toggle modal once response comes bacn from server.
-        this.toggleModal('defineJob')
-
-        // TODO - error handling
-        datasetActions.loadApps() //this does not seem like the right way to do this.
-      }
-    })
+      })
   },
 
   deleteJobDefinition(jobDefinition, callback) {
     let appId = jobDefinition.jobDefinitionName + ':' + jobDefinition.revision
-    crn.deleteJobDefinition(appId, () => {
+    crn.deleteJobDefinition(appId).then(() => {
       datasetActions.loadApps() //need to reload apps for UI to update with Inactive status on delete
       if (callback) {
         callback()
@@ -447,8 +456,8 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-    * Setup job definition form for editing
-    */
+   * Setup job definition form for editing
+   */
   editJobDefinition(jobDefinition, callback) {
     this.toggleModal('defineJob')
     let jobDefinitionForm = this.data.jobDefinitionForm
@@ -515,8 +524,8 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-    * Reset the job definition form
-    */
+   * Reset the job definition form
+   */
   resetJobDefinitionForm() {
     let jobDefinitionForm = {
       name: '',
@@ -541,8 +550,8 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Toggle Modal
-     */
+   * Toggle Modal
+   */
   toggleModal(modalName) {
     let modals = this.data.modals
     let newModalFlag = !modals[modalName]
@@ -555,10 +564,10 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Toggle Super User
-     */
+   * Toggle Super User
+   */
   toggleSuperUser(user, callback) {
-    scitran.updateUser(user._id, { root: !user.root }, () => {
+    scitran.updateUser(user._id, { root: !user.root }).then(() => {
       let users = this.data.users
       for (let existingUser of users) {
         if (existingUser._id === user._id) {
@@ -573,10 +582,10 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Unblacklist User
-     */
+   * Unblacklist User
+   */
   unBlacklistUser(userId) {
-    crn.unBlacklistUser(userId, () => {
+    crn.unBlacklistUser(userId).then(() => {
       let blacklist = this.data.blacklist
       for (let i = 0; i < blacklist.length; i++) {
         let user = blacklist[i]
@@ -590,11 +599,11 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-     * Get Event Logs
-     */
+   * Get Event Logs
+   */
   getEventLogs() {
-    crn.getEventLogs((err, data) => {
-      let eventLogs = data.body
+    crn.getEventLogs().then(res => {
+      let eventLogs = res.body
       this.update({ eventLogs }, () => {
         this.searchLogs('')
         if (eventLogs.length) {

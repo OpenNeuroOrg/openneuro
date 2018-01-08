@@ -178,7 +178,7 @@ export default class Share extends React.Component {
       _id: this.state.input,
       access: this.state.select,
     }
-    bids.addPermission(this.props.dataset._id, role, () => {
+    bids.addPermission(this.props.dataset._id, role).then(() => {
       let permissions = this.state.permissions
       permissions.push(role)
       this.setState({
@@ -191,7 +191,7 @@ export default class Share extends React.Component {
   }
 
   _removeUser(userId) {
-    bids.removePermission(this.props.dataset._id, userId, () => {
+    bids.removePermission(this.props.dataset._id, userId).then(() => {
       let index
       let permissions = this.state.permissions
       for (let i = 0; i < permissions.length; i++) {

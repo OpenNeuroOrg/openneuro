@@ -48,15 +48,41 @@ class ClickToEdit extends React.Component {
         )
         input = (
           <div>
-            <textarea
+            <input
               className="form-control"
               value={value}
-              onChange={this._handleChange.bind(null, type)}
+              onChange={this._handleChange.bind(this, type)}
             />
             <div className="btn-wrapper">
               <button
                 className="cte-save-btn btn-admin-blue"
-                onClick={this._save}>
+                onClick={this._save.bind(this)}>
+                save
+              </button>
+            </div>
+          </div>
+        )
+        break
+      case 'textarea':
+        display = (
+          <div className="cte-display">
+            <div
+              className="fade-in"
+              dangerouslySetInnerHTML={markdown.format(value)}
+            />
+          </div>
+        )
+        input = (
+          <div>
+            <textarea
+              className="form-control"
+              value={value}
+              onChange={this._handleChange.bind(this, type)}
+            />
+            <div className="btn-wrapper">
+              <button
+                className="cte-save-btn btn-admin-blue"
+                onClick={this._save.bind(this)}>
                 save
               </button>
             </div>
@@ -71,7 +97,7 @@ class ClickToEdit extends React.Component {
               { id: 'ORCIDID', placeholder: 'ORCID ID' },
             ]}
             value={value}
-            onChange={this._handleChange.bind(null, type)}
+            onChange={this._handleChange.bind(this, type)}
           />
         )
         display = <div className="cte-display">{this._authorList(value)}</div>
@@ -86,7 +112,7 @@ class ClickToEdit extends React.Component {
             model={[
               { id: 'reference', placeholder: 'Reference', required: true },
             ]}
-            onChange={this._handleChange.bind(null, type)}
+            onChange={this._handleChange.bind(this, type)}
           />
         )
         display = (
@@ -199,7 +225,7 @@ class ClickToEdit extends React.Component {
               <WarnButton
                 tooltip="Download Attachment"
                 icon="fa-download"
-                prepDownload={this._download.bind(null, file.name)}
+                prepDownload={this._download.bind(this, file.name)}
               />
             </span>
             {file.name}
@@ -284,7 +310,7 @@ ClickToEdit.propTypes = {
 
 ClickToEdit.defaultProps = {
   editable: true,
-  type: 'string',
+  type: 'textarea',
   value: '',
 }
 

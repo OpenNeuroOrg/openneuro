@@ -150,6 +150,12 @@ const routes = [
     handler: awsJobs.getJob,
   },
   {
+    method: 'delete',
+    url: '/datasets/:datasetId/jobs/:jobId',
+    middleware: [auth.datasetAccess(), auth.deleteJobAccess],
+    handler: awsJobs.deleteJob,
+  },
+  {
     method: 'put',
     url: '/datasets/:datasetId/jobs/:jobId',
     middleware: [auth.datasetAccess()],
@@ -158,7 +164,11 @@ const routes = [
   {
     method: 'post',
     url: '/datasets/:datasetId/jobs/:jobId/retry',
-    middleware: [auth.datasetAccess()],
+    middleware: [
+      auth.datasetAccess(),
+      auth.rerunJobAccess,
+      auth.submitJobAccess,
+    ],
     handler: awsJobs.retry,
   },
   {
@@ -184,11 +194,6 @@ const routes = [
   {
     method: 'get',
     url: '/jobs/:jobId/logs',
-    handler: awsJobs.getJobLogs,
-  },
-  {
-    method: 'get',
-    url: '/jobs/:jobId/logs/download',
     handler: awsJobs.downloadJobLogs,
   },
   {

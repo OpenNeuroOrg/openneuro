@@ -1,6 +1,6 @@
 machine:
   node:
-    version: 6.1.0
+    version: 6.11.4
   services:
     - docker
   dependencies:
@@ -30,20 +30,31 @@ deployment:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker build --pull -t openneuro/server server
-      - docker build --pull -t openneuro/app app
+      - docker build --pull -t openneuro/server -f server/Dockerfile .
+      - docker build --pull -t openneuro/app -f app/Dockerfile .
       # Update latest tag
       - docker tag -f openneuro/server openneuro/server:latest
       - docker tag -f openneuro/app openneuro/app:latest
       - docker push openneuro/server
       - docker push openneuro/app
+  branches:
+    branch: /.*/
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker build --pull -t openneuro/server -f server/Dockerfile .
+      - docker build --pull -t openneuro/app -f app/Dockerfile .
+      # Update latest tag
+      - docker tag -f openneuro/server openneuro/server:$CIRCLE_BRANCH
+      - docker tag -f openneuro/app openneuro/app:$CIRCLE_BRANCH
+      - docker push openneuro/server:$CIRCLE_BRANCH
+      - docker push openneuro/app:$CIRCLE_BRANCH
   production:
     tag: /v.*/
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker build --pull -t openneuro/server server
-      - docker build --pull -t openneuro/app app
+      - docker build --pull -t openneuro/server -f server/Dockerfile .
+      - docker build --pull -t openneuro/app -f app/Dockerfile .
       - docker tag openneuro/server openneuro/server:$CIRCLE_TAG
       - docker tag openneuro/app openneuro/app:$CIRCLE_TAG
-      - docker push openneuro/server
-      - docker push openneuro/app
+      - docker push openneuro/server:$CIRCLE_TAG
+      - docker push openneuro/app:$CIRCLE_TAG

@@ -20,7 +20,7 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
     >
       <button
         className="btn-reset"
-        onClick={[Function]}
+        onClick={[MockFunction]}
       >
         Restore Default Parameters
       </button>
@@ -59,6 +59,7 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
             >
               <input
                 className="form-control"
+                defaultChecked={false}
                 name="boolean"
                 onChange={[Function]}
                 type="checkbox"

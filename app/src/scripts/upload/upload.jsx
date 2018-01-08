@@ -168,7 +168,7 @@ class Upload extends Reflux.Component {
 
     return (
       <div className="uploader">
-        <div className="upload-wrap panel-group" defaultActiveKey="1">
+        <div className="upload-wrap panel-group" defaultactivekey="1">
           <div className="upload-panel panel panel-default">
             <div className="panel-collapse collapse in">
               <div className="panel-body">

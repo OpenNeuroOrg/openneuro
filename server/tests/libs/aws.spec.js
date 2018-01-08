@@ -207,17 +207,17 @@ describe('libs/aws/batch.js', () => {
   })
   describe('staleJobFilter', () => {
     it('excludes one day running jobs', () => {
-      const oldJob = {startedAt: 1, status: 'RUNNING'}
+      const oldJob = { startedAt: 1, status: 'RUNNING' }
       const now = new Date(1 + 60 * 60 * 24)
       assert(!aws.batch.staleJobFilter(now)(oldJob))
     })
     it('excludes two day old jobs that are not running', () => {
-      const oldJob = {startedAt: 1, status: 'FAILED'}
+      const oldJob = { startedAt: 1, status: 'FAILED' }
       const now = new Date(1 + 60 * 60 * 48)
       assert(!aws.batch.staleJobFilter(now)(oldJob))
     })
     it('includes two day running jobs', () => {
-      const oldJob = {startedAt: 1, status: 'RUNNING'}
+      const oldJob = { startedAt: 1, status: 'RUNNING' }
       const now = new Date(1 + 60 * 60 * 48)
       assert(aws.batch.staleJobFilter(now)(oldJob))
     })
@@ -228,22 +228,102 @@ describe('libs/aws/batch.js', () => {
       threeDaysAgo.setDate(threeDaysAgo.getDate() - 3)
       const batch = {
         describeJobs: jest.fn((params, callback) => {
-          callback(null, {jobs: params.jobs.map(jobId => {
-            return {jobId: jobId, status: 'RUNNING', startedAt: threeDaysAgo}
-          })})
+          callback(null, {
+            jobs: params.jobs.map(jobId => {
+              return {
+                jobId: jobId,
+                status: 'RUNNING',
+                startedAt: threeDaysAgo,
+              }
+            }),
+          })
         }),
         terminateJob: jest.fn(),
       }
-      const jobIds = ['f1a5320d-f0d3-4cfb-8c26-f725c3b9a48e', 'abbcce16-f0ff-4ec1-8ede-4502660e8aa2']
-      const params = {jobs: jobIds}
+      const jobIds = [
+        'f1a5320d-f0d3-4cfb-8c26-f725c3b9a48e',
+        'abbcce16-f0ff-4ec1-8ede-4502660e8aa2',
+      ]
+      const params = { jobs: jobIds }
       aws.batch._terminateOldJobs(batch, jobIds)
       expect(batch.describeJobs).toBeCalledWith(params, expect.any(Function))
       expect(batch.terminateJob).toHaveBeenCalledTimes(jobIds.length)
     })
   })
+  describe('_parentStatus', () => {
+    it('returns the existing status with an unknown', () => {
+      const analysis = {
+        analysis: {
+          status: 'UPLOADING',
+          batchStatus: [{ job: 'testing', status: 'UPLOADING' }],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('UPLOADING')
+    })
+    it('returns pending for pending, runnable, starting', () => {
+      const analysis = {
+        analysis: {
+          status: 'STARTING',
+          batchStatus: [
+            { job: 'testing', status: 'STARTING' },
+            { job: 'test', status: 'RUNNABLE' },
+          ],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('PENDING')
+    })
+    it('returns pending failed if any jobs failed', () => {
+      const analysis = {
+        analysis: {
+          status: 'RUNNING',
+          batchStatus: [
+            { job: 'testing', status: 'SUCCEEDED' },
+            { job: 'test', status: 'FAILED' },
+          ],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('FAILED')
+    })
+    it('returns succeeded if all jobs succeeded', () => {
+      const analysis = {
+        analysis: {
+          status: 'RUNNING',
+          batchStatus: [
+            { job: 'testing', status: 'SUCCEEDED' },
+            { job: 'test', status: 'SUCCEEDED' },
+          ],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('SUCCEEDED')
+    })
+    it('returns running if any job has been through running', () => {
+      const analysis = {
+        analysis: {
+          status: 'RUNNING',
+          batchStatus: [
+            { job: 'testing', status: 'PENDING' },
+            { job: 'test', status: 'SUCCEEDED' },
+          ],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('RUNNING')
+    })
+    it('returns running if jobs have failed but some are pending', () => {
+      const analysis = {
+        analysis: {
+          status: 'RUNNING',
+          batchStatus: [
+            { job: 'testing', status: 'FAILED' },
+            { job: 'test', status: 'PENDING' },
+          ],
+        },
+      }
+      expect(aws.batch._parentStatus(analysis)).toEqual('RUNNING')
+    })
+  })
 })
 
-describe('libs/aws/cloudwatchlogs.js', () => {
+describe('libs/aws/cloudwatch.js', () => {
   let oldStream =
     'FreeSurfer/eb251a5f-6314-457f-a36f-d11665451ddb/bf4fc87d-2e87-4309-abd9-998a0de708de'
   let newStream = 'FreeSurfer/default/bf4fc87d-2e87-4309-abd9-998a0de708de'

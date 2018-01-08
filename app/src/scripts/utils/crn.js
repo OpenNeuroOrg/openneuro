@@ -11,164 +11,134 @@ export default {
   // Users -----------------------------------------------------------------------------------
 
   /**
-     * Verify User
-     *
-     * A proxy of scitran verify user endpoint.
-     */
-  verifyUser(callback) {
-    request.get(config.crn.url + 'users/self', {}, callback)
+   * Verify User
+   *
+   * A proxy of scitran verify user endpoint.
+   */
+  verifyUser() {
+    return request.get(config.crn.url + 'users/self', {})
   },
 
   /**
-     * Create User
-     *
-     */
-  createUser(user, callback) {
-    request.post(config.crn.url + 'users', { body: user }, callback)
+   * Create User
+   *
+   */
+  createUser(user) {
+    return request.post(config.crn.url + 'users', { body: user })
   },
 
   /**
-     * Get Blacklist
-     */
-  getBlacklist(callback) {
-    request.get(config.crn.url + 'users/blacklist', {}, callback)
+   * Get Blacklist
+   */
+  getBlacklist() {
+    return request.get(config.crn.url + 'users/blacklist', {})
   },
 
   /**
-     * Blacklist User
-     */
-  blacklistUser(user, callback) {
-    request.post(config.crn.url + 'users/blacklist', { body: user }, callback)
+   * Blacklist User
+   */
+  blacklistUser(user) {
+    return request.post(config.crn.url + 'users/blacklist', { body: user })
   },
 
   /**
-     * Un Blacklist
-     */
-  unBlacklistUser(userId, callback) {
-    request.del(config.crn.url + 'users/blacklist/' + userId, {}, callback)
+   * Un Blacklist
+   */
+  unBlacklistUser(userId) {
+    return request.del(config.crn.url + 'users/blacklist/' + userId, {})
   },
 
   /**
-     * Finish OAuth2 ORCID flow
-     */
-  getORCIDToken(code, callback) {
-    request.get(
-      config.crn.url + 'users/signin/orcid',
-      {
-        query: { code, home: true },
-      },
-      callback,
-    )
+   * Finish OAuth2 ORCID flow
+   */
+  getORCIDToken(code) {
+    return request.get(config.crn.url + 'users/signin/orcid', {
+      query: { code, home: true },
+    })
   },
 
   /**
-     * Get ORCID profile
-     */
-  getORCIDProfile(accessToken, callback) {
-    request.get(
-      config.crn.url + 'users/orcid',
-      {
-        query: { accessToken },
-      },
-      callback,
-    )
+   * Get ORCID profile
+   */
+  getORCIDProfile(accessToken) {
+    return request.get(config.crn.url + 'users/orcid', {
+      query: { accessToken },
+    })
   },
 
   /**
-     * Get ORCID profile
-     */
-  refreshORCIDToken(refreshToken, callback) {
-    request.get(
-      config.crn.url + 'users/orcid/refresh',
-      {
-        query: { refreshToken },
-      },
-      callback,
-    )
+   * Get ORCID profile
+   */
+  refreshORCIDToken(refreshToken) {
+    return request.get(config.crn.url + 'users/orcid/refresh', {
+      query: { refreshToken },
+    })
   },
 
   // Datasets --------------------------------------------------------------------------------
 
   /**
-     * Create Project
-     *
-     * Takes a request body and
-     * generates a request to make a project in scitran.
-     */
-  createProject(group, label, callback) {
-    request.post(
-      config.crn.url + 'datasets',
-      {
-        body: { group, label },
-      },
-      callback,
-    )
+   * Create Project
+   *
+   * Takes a request body and
+   * generates a request to make a project in scitran.
+   */
+  createProject(group, label) {
+    return request.post(config.crn.url + 'datasets', {
+      body: { group, label },
+    })
   },
 
   /**
-     * Create Snapshot
-     */
-  createSnapshot(projectId, callback) {
-    request.post(
+   * Create Snapshot
+   */
+  createSnapshot(projectId) {
+    return request.post(
       config.crn.url + 'datasets/' + projectId + '/snapshot',
       {},
-      callback,
     )
   },
 
   /**
-     * Add Permission
-     */
-  addPermission(container, id, permission, callback) {
+   * Add Permission
+   */
+  addPermission(container, id, permission) {
     permission.site = 'local'
-    request.post(
-      config.crn.url + 'datasets/' + id + '/permissions',
-      { body: permission },
-      callback,
-    )
+    return request.post(config.crn.url + 'datasets/' + id + '/permissions', {
+      body: permission,
+    })
   },
 
   // Jobs ------------------------------------------------------------------------------------
 
   /**
-     * Get Apps
-     *
-     * Returns a list of available apps that
-     * can be run on AWS Batch
-     */
-  getApps(callback) {
-    request.get(config.crn.url + 'apps', { auth: false }, callback)
+   * Get Apps
+   *
+   * Returns a list of available apps that
+   * can be run on AWS Batch
+   */
+  getApps() {
+    return request.get(config.crn.url + 'apps', { auth: false })
   },
 
   /**
-     * Define Jobs
-     */
-  defineJob(jobDef, callback) {
-    request.post(
-      config.crn.url + 'jobs/definitions',
-      { body: jobDef },
-      callback,
-    )
+   * Define Jobs
+   */
+  defineJob(jobDef) {
+    return request.post(config.crn.url + 'jobs/definitions', { body: jobDef })
   },
 
   /**
-    * Delete app definition
-    */
-  deleteJobDefinition(appId, callback) {
-    request.del(config.crn.url + 'jobs/definitions/' + appId, {}, callback)
+   * Delete app definition
+   */
+  deleteJobDefinition(appId) {
+    return request.del(config.crn.url + 'jobs/definitions/' + appId, {})
   },
 
   /**
-     * Get Jobs
-     */
-  getJobs(
-    callback,
-    isPublic,
-    all,
-    appName = null,
-    status = null,
-    latest = null,
-  ) {
+   * Get Jobs
+   */
+  getJobs(isPublic, all, appName = null, status = null, latest = null) {
     let query = {
       public: isPublic,
       appName: appName,
@@ -177,20 +147,23 @@ export default {
       all: all,
       results: false,
     }
-    request.get(config.crn.url + 'jobs', { query: query }, callback)
+    return request.get(config.crn.url + 'jobs', { query: query })
+  },
+
+  getJobsQuery(query) {
+    return request.get(config.crn.url + 'jobs', { query: query })
   },
 
   /**
-     * Create Job
-     *
-     * Takes an options object with a name, appId
-     * datasetId and userId and starts a Job.
-     */
-  createJob(job, callback) {
-    request.post(
+   * Create Job
+   *
+   * Takes an options object with a name, appId
+   * datasetId and userId and starts a Job.
+   */
+  createJob(job) {
+    return request.post(
       config.crn.url + 'datasets/' + job.snapshotId + '/jobs',
       { body: job, query: { snapshot: true } },
-      callback,
     )
   },
 
@@ -202,135 +175,108 @@ export default {
         tags: [],
       },
     }
-    request.upload(
-      config.crn.url + 'datasets/jobsupload',
-      options,
-      (err, res) => {
-        if (err) return callback(err)
+    return request
+      .upload(config.crn.url + 'datasets/jobsupload', options)
+      .then(res => {
         let filePath = res.body.filePath
         parameters[file.key] = filePath
         callback()
-      },
-    )
+      })
+      .catch(err => {
+        callback(err)
+      })
   },
 
   /**
-     * Get Job
-     *
-     * Takes a job ID and callsback with
-     * the job data.
-     */
-  getJob(datasetId, jobId, callback, options) {
-    request.get(
+   * Get Job
+   *
+   * Takes a job ID and callsback with
+   * the job data.
+   */
+  getJob(datasetId, jobId, options) {
+    return request.get(
       config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId,
       {
         query: { snapshot: options && options.snapshot },
       },
-      callback,
     )
   },
 
-  cancelJob(datasetId, jobId, callback) {
-    request.put(
+  cancelJob(datasetId, jobId) {
+    return request.put(
       config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId,
       {},
-      callback,
     )
   },
 
   /**
-     * Retry Job
-     *
-     * Take a jobId and retries the job with the same
-     * dataset and settings.
-     */
-  retryJob(datasetId, jobId, callback, options) {
-    request.post(
+   * Retry Job
+   *
+   * Take a jobId and retries the job with the same
+   * dataset and settings.
+   */
+  retryJob(datasetId, jobId, options) {
+    return request.post(
       config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId + '/retry',
       {
         query: { snapshot: options && options.snapshot },
       },
-      callback,
     )
   },
 
   /**
-     * Get Dataset Jobs
-     */
-  getDatasetJobs(datasetId, callback, options) {
-    request.get(
-      config.crn.url + 'datasets/' + datasetId + '/jobs',
+   * Delete Job
+   *
+   * Take a jobId and deletes the job.
+   */
+  deleteJob(datasetId, jobId, options) {
+    return request.del(
+      config.crn.url + 'datasets/' + datasetId + '/jobs/' + jobId,
       {
         query: { snapshot: options && options.snapshot },
       },
-      callback,
     )
   },
 
   /**
-     * Get Result Download Ticket
-     */
-  getResultDownloadTicket(datasetId, jobId, filePath, callback, options) {
-    request.get(
-      config.crn.url +
-        'datasets/' +
-        datasetId +
-        '/jobs/' +
-        jobId +
-        '/results/ticket',
-      {
-        query: {
-          filePath,
-          snapshot: options && options.snapshot,
-        },
-      },
-      callback,
-    )
+   * Get Dataset Jobs
+   */
+  getDatasetJobs(datasetId, options) {
+    return request.get(config.crn.url + 'datasets/' + datasetId + '/jobs', {
+      query: { snapshot: options && options.snapshot },
+    })
   },
 
   /**
-     * Delete Dataset Jobs
-     */
-  deleteDatasetJobs(datasetId, callback) {
-    request.del(
-      config.crn.url + 'datasets/' + datasetId + '/jobs',
-      {},
-      callback,
-    )
+   * Delete Dataset Jobs
+   */
+  deleteDatasetJobs(datasetId) {
+    return request.del(config.crn.url + 'datasets/' + datasetId + '/jobs', {})
   },
 
   // Validation ------------------------------------------------------------------------------
 
   /**
-     * Validate
-     */
-  validate(datasetId, callback) {
-    request.post(
+   * Validate
+   */
+  validate(datasetId) {
+    return request.post(
       config.crn.url + 'datasets/' + datasetId + '/validate',
       {},
-      callback,
     )
   },
 
   // Logs ------------------------------------------------------------------------------
 
-  getJobLogs(jobId, callback) {
-    request.get(config.crn.url + 'jobs/' + jobId + '/logs', {}, callback)
+  getJobLogs(jobId) {
+    return request.get(config.crn.url + 'jobs/' + jobId + '/logs', {})
   },
 
-  getLogstream(streamName, callback) {
-    request.get(config.crn.url + 'logs/' + streamName, {}, callback)
+  getLogstream(streamName) {
+    return request.get(config.crn.url + 'logs/' + streamName, {})
   },
 
-  downloadJobLogs(jobId, callback) {
-    request.get(
-      config.crn.url + 'jobs/' + jobId + '/logs/download',
-      {},
-      callback,
-    )
-  },
-
-  getEventLogs(callback) {
-    request.get(config.crn.url + 'eventlogs', {}, callback)
+  getEventLogs() {
+    return request.get(config.crn.url + 'eventlogs', {})
   },
 }

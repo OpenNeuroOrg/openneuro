@@ -21,7 +21,7 @@ exports[`common/partials/happybrowser renders successfully 1`] = `
           <a
             href="http://www.google.com/chrome/"
           >
-            Please consider using Chrome, V49.0 or higher, as your browser
+            Please consider using a minimum of Chrome V49.0 or Firefox V50.0 as your browser
           </a>
           .
         </strong>

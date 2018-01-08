@@ -44,13 +44,13 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Set Initial State
-     *
-     * Sets the state to the data object defined
-     * inside the function. Also takes a diffs object
-     * which will set the state to the initial state
-     * with any differences passed.
-     */
+   * Set Initial State
+   *
+   * Sets the state to the data object defined
+   * inside the function. Also takes a diffs object
+   * which will set the state to the initial state
+   * with any differences passed.
+   */
   setInitialState: function(diffs, callback) {
     let data = {
       activeKey: 1,
@@ -85,15 +85,15 @@ let UploadStore = Reflux.createStore({
   // actions ---------------------------------------------------------------------------
 
   /**
-     * Toggle Modal
-     */
+   * Toggle Modal
+   */
   toggleModal() {
-    if (!bowser.chrome && !bowser.chromium) {
+    if (!bowser.chrome && !bowser.chromium && !bowser.firefox) {
       let chromeMessage = (
         <span>
-          This is a Google Chrome only feature.{' '}
+          This is a Google Chrome and Mozilla Firefox feature.{' '}
           <a href="http://www.google.com/chrome/">
-            Please consider using Chrome as your browser
+            Please consider using Chrome or Firefox as your browser
           </a>.
         </span>
       )
@@ -111,11 +111,11 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * On Change
-     *
-     * On file select this adds files to the state
-     * and starts validation.
-     */
+   * On Change
+   *
+   * On file select this adds files to the state
+   * and starts validation.
+   */
   onChange(selectedFiles) {
     let dirName = selectedFiles.tree[0].name,
       nameError = null
@@ -134,53 +134,46 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * On Resume
-     *
-     * A file select on change handler for resuming
-     * incomplete uploads.
-     */
+   * On Resume
+   *
+   * A file select on change handler for resuming
+   * incomplete uploads.
+   */
   onResume(selectedFiles, originalName) {
     let dirName = selectedFiles.tree[0].name,
-      renameEnabled = true,
-      activeKey,
-      callback
+      activeKey
     if (dirName !== originalName) {
       activeKey = 2
     } else {
       activeKey = 3
-      renameEnabled = false
-      callback = () => {
-        if (this.data.uploadStatus == 'files-selected') {
-          this.validate(selectedFiles.list)
-        }
-      }
     }
+
     fileStore.setFiles(selectedFiles)
-    this.setInitialState(
-      {
-        dirName: originalName,
-        uploadStatus: 'files-selected',
-        showRename: true,
-        showModal: true,
-        showDisclaimer: true,
-        selectedName: dirName,
-        renameEnabled: renameEnabled,
-        showRenameInput: false,
-        activeKey: activeKey,
-        resuming: true,
-      },
-      callback,
-    )
+    this.validate()
+    this.setInitialState({
+      dirName: originalName,
+      uploadStatus: 'files-selected',
+      showRename: true,
+      showResume: false,
+      showModal: true,
+      showIssues: true,
+      showDisclaimer: true,
+      selectedName: dirName,
+      renameEnabled: false,
+      showRenameInput: false,
+      activeKey: activeKey,
+      resuming: true,
+    })
   },
 
   /**
-     * Validate
-     *
-     * Takes a filelist, runs BIDS validation checks
-     * against it, and sets any errors to the state.
-     * Takes an optional boolean parameter representing
-     * whether this is already known as a resume.
-     */
+   * Validate
+   *
+   * Takes a filelist, runs BIDS validation checks
+   * against it, and sets any errors to the state.
+   * Takes an optional boolean parameter representing
+   * whether this is already known as a resume.
+   */
   validate() {
     this.update({ uploadStatus: 'validating', showIssues: true, activeKey: 3 })
     fileStore.getFiles('list', list => {
@@ -210,13 +203,13 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Check Exists
-     *
-     * Takes a filelist and a boolean representing
-     * whether this is a resumed upload. If it isn't
-     * it check for existing dataset with the same name
-     * and group.
-     */
+   * Check Exists
+   *
+   * Takes a filelist and a boolean representing
+   * whether this is a resumed upload. If it isn't
+   * it check for existing dataset with the same name
+   * and group.
+   */
   checkExists() {
     fileStore.getFiles('list', fileList => {
       if (this.data.uploadStatus === 'dataset-exists') {
@@ -227,7 +220,8 @@ let UploadStore = Reflux.createStore({
       let self = this
       let userId = userStore.data.scitran._id
       if (!this.data.resuming) {
-        scitran.getProjects({}, function(projects) {
+        scitran.getProjects({}).then(res => {
+          const projects = res.body
           let existingProjectId
           for (let project of projects) {
             if (
@@ -257,12 +251,12 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Resume
-     *
-     * Loads the current filetree and calls upload. Allows
-     * for calling upload when dataset tree data is not ready
-     * at hand such as the resume question in the upload modal.
-     */
+   * Resume
+   *
+   * Loads the current filetree and calls upload. Allows
+   * for calling upload when dataset tree data is not ready
+   * at hand such as the resume question in the upload modal.
+   */
   resumeUpload() {
     fileStore.getFiles('list', fileList => {
       this.upload(fileList)
@@ -270,12 +264,12 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Upload
-     *
-     * Uploads currently selected and triggers
-     * a progress event every time a file or folder
-     * finishes.
-     */
+   * Upload
+   *
+   * Uploads currently selected and triggers
+   * a progress event every time a file or folder
+   * finishes.
+   */
   upload(fileList) {
     this.update({
       uploadStatus: 'uploading',
@@ -310,7 +304,7 @@ let UploadStore = Reflux.createStore({
           datasetsUpdated = true
         }
         if (progress.total === progress.completed) {
-          scitran.removeTag('projects', projectId, 'incomplete', () => {
+          scitran.removeTag('projects', projectId, 'incomplete').then(() => {
             datasetActions.updateStatus(projectId, { incomplete: false })
             this.uploadComplete(projectId)
           })
@@ -323,12 +317,12 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Upload Complete
-     *
-     * Resets the componenent state to its
-     * initial state. And creates an upload
-     * complete alert.
-     */
+   * Upload Complete
+   *
+   * Resets the componenent state to its
+   * initial state. And creates an upload
+   * complete alert.
+   */
   uploadComplete(projectId) {
     let message = (
       <span>
@@ -353,9 +347,9 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Upload Error
-     *
-     */
+   * Upload Error
+   *
+   */
   uploadError() {
     // reset favicon
     favicon.reset()
@@ -383,10 +377,10 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Update Directory Name
-     *
-     * Sets the directory name to the passed value.
-     */
+   * Update Directory Name
+   *
+   * Sets the directory name to the passed value.
+   */
   updateDirName(value) {
     let error = this.data.nameError
     if (value.length > 32) {
@@ -405,11 +399,11 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Select Tab
-     *
-     * Sets the state to open the selected tab
-     * in the upload menu.
-     */
+   * Select Tab
+   *
+   * Sets the state to open the selected tab
+   * in the upload menu.
+   */
   selectTab(activeKey) {
     if (activeKey) {
       this.update({ activeKey })

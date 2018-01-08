@@ -1,7 +1,6 @@
 import Reflux from 'reflux'
 
 var Actions = Reflux.createActions([
-  'checkAuth',
   'getPreferences',
   'isRoot',
   'updatePreferences',
@@ -9,7 +8,7 @@ var Actions = Reflux.createActions([
   'googleSignIn',
   'orcidSignIn',
   'signOut',
-  'toggleModal',
+  'toggle',
 ])
 
 export default Actions

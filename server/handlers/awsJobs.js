@@ -4,7 +4,8 @@ import crypto from 'crypto'
 import aws from '../libs/aws'
 import mongo from '../libs/mongo'
 import { ObjectID } from 'mongodb'
-import archiver from 'archiver'
+import yazl from 'yazl'
+import S3StreamDownload from 's3-stream-download'
 import config from '../config'
 import async from 'async'
 import emitter from '../libs/events'
@@ -207,6 +208,18 @@ let handlers = {
     })
   },
 
+  deleteJob(req, res, next) {
+    let jobId = req.params.jobId
+    c.crn.jobs.update(
+      { _id: ObjectID(jobId) },
+      { $set: { deleted: true } },
+      (err, result) => {
+        if (err) return next(err)
+        res.send({ data: result })
+      },
+    )
+  },
+
   parameterFileUpload(req, res, next) {
     let bucket = config.aws.s3.inputsBucket
     let file = req.files.file.data //Buffer
@@ -240,36 +253,19 @@ let handlers = {
      * GET Job
      */
   getJob(req, res, next) {
-    let userId = req.user
     let jobId = req.params.jobId //this is the mongo id for the job.
 
     c.crn.jobs.findOne({ _id: ObjectID(jobId) }, {}, (err, job) => {
+      if (err) next(err)
+
       if (!job) {
         res.status(404).send({ message: 'Job not found.' })
         return
       }
-      let status = job.analysis.status
-      let jobs = job.analysis.jobs
 
-      // check if job is already known to be completed
-      // there could be a scenario where we are polling before the AWS batch job has been setup. !jobs check handles this.
-      if (
-        (status === 'SUCCEEDED' && job.results && job.results.length > 0) ||
-        status === 'FAILED' ||
-        status === 'REJECTED' ||
-        status === 'CANCELED' ||
-        !jobs ||
-        !jobs.length
-      ) {
-        res.send(job)
-      } else {
-        handlers.getJobStatus(job, userId, (err, data) => {
-          if (err) {
-            return next(err)
-          }
-          res.send(data)
-        })
-      }
+      //Send back job object to client
+      // server side polling handles all interactions with Batch now therefore we are not initiating batch polling from client
+      res.send(job)
     })
   },
 
@@ -322,13 +318,7 @@ let handlers = {
       const type = path.replace('all-', '')
 
       // initialize archive
-      let archive = archiver('zip')
-
-      // log archiving errors
-      archive.on('error', err => {
-        console.log('archiving error - job: ' + jobId)
-        console.log(err)
-      })
+      let archive = new yazl.ZipFile()
 
       c.crn.jobs.findOne({ _id: ObjectID(jobId) }, {}, (err, job) => {
         let archiveName =
@@ -345,7 +335,7 @@ let handlers = {
         res.attachment(archiveName + '.zip')
 
         // begin streaming archive
-        archive.pipe(res)
+        archive.outputStream.pipe(res)
 
         aws.s3.getAllS3Objects(params, [], (err, data) => {
           let keysArray = []
@@ -367,14 +357,22 @@ let handlers = {
                 .split('/')
                 .slice(2)
                 .join('/')
-              aws.s3.sdk.getObject(objParams, (err, response) => {
-                //append to zip
-                archive.append(response.Body, { name: fileName })
-                cb()
-              })
+              const streamOptions = {
+                downloadChunkSize: 8 * 1024 * 1024, // 8MB
+                concurrentChunks: 2,
+                retries: 7,
+              }
+              // The built in createReadStream blocks the main thread in some situations
+              const stream = new S3StreamDownload(
+                aws.s3.sdk,
+                objParams,
+                streamOptions,
+              )
+              archive.addReadStream(stream, fileName)
+              stream.on('end', cb)
             },
             () => {
-              archive.finalize()
+              archive.end()
             },
           )
         })
@@ -382,72 +380,99 @@ let handlers = {
     }
   },
 
-  getJobLogs(req, res, next) {
-    let jobId = req.params.jobId //this will be the mongoId for a given analysis
-
-    aws.cloudwatch.getLogsByJobId(jobId, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        res.send(logs)
-      }
-    })
-  },
-
   downloadJobLogs(req, res, next) {
-    let jobId = req.params.jobId //this will be the mongoId for a given analysis
+    const jobId = req.params.jobId //this will be the mongoId for a given analysis
+    const prefix = {}
+    let first = true // Flag to skip the space at the start
 
-    aws.cloudwatch.getLogsByJobId(jobId, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        let textLogs = handlers._processLogs(logs)
-        res.attachment(jobId + '.txt')
-        res.send(textLogs)
-      }
+    res.writeHead(200, {
+      'Content-Type': 'text/plain',
+      'Transfer-Encoding': 'chunked',
+      'Content-Disposition': 'attachment; filename="' + jobId + '.txt"',
     })
-  },
 
-  getLogstream(req, res, next) {
-    let appName = req.params.app
-    let jobId = req.params.jobId
-    let taskArn = req.params.taskArn
-    let key = appName + '/' + jobId + '/' + taskArn
-
-    aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        res.send(logs)
-      }
-    })
-  },
-
-  getLogstreamRaw(req, res, next) {
-    let appName = req.params.app
-    let jobId = req.params.jobId
-    let taskArn = req.params.taskArn
-    let key = appName + '/' + jobId + '/' + taskArn
-
-    aws.cloudwatch.getLogs(key, [], null, true, (err, logs) => {
-      if (err) {
-        return next(err)
-      } else {
-        res.writeHead(200, {
-          'Content-Type': 'text/plain',
-          'Transfer-Encoding': 'chunked',
-          'Content-Disposition': 'attachment; filename="' + key + '.txt"',
+    aws.cloudwatch.getLogsByJobId(
+      jobId,
+      data => {
+        let logString = first ? '' : '\n\n'
+        first = false
+        if (!prefix.hasOwnProperty(data.name)) {
+          logString += data.name + ' - exit code ' + data.exitCode + '\n'
+          logString += '  Environment variables:\n'
+          data.environment.forEach(env => {
+            logString += '\t' + env.name + ': ' + env.value + '\n'
+          })
+          logString += '  Logs:\n'
+          prefix[data.name] = true
+        }
+        data.logs.forEach(log => {
+          logString += '\t' + log.timestamp + '\t' + log.message + '\n'
         })
-        logs.map(log => res.write(log.message + '\n'))
+        res.write(logString)
+      },
+      err => {
+        if (err) {
+          console.log(err)
+          next(err)
+        }
         res.end()
-      }
+      },
+    )
+  },
+
+  /**
+   * Wrapper for getLogstreamRaw that requests the json version
+   */
+  getLogstream(req, res, next) {
+    handlers.getLogstreamRaw(req, res, next, false)
+  },
+
+  getLogstreamRaw(req, res, next, raw = true) {
+    const appName = req.params.app
+    const jobId = req.params.jobId
+    const taskArn = req.params.taskArn
+    const key = appName + '/' + jobId + '/' + taskArn
+    const ct = raw ? 'text/plain' : 'application/json'
+
+    res.writeHead(200, {
+      'Content-Type': ct,
+      'Transfer-Encoding': 'chunked',
+      'Content-Disposition': 'attachment; filename="' + key + '.txt"',
     })
+
+    if (!raw) {
+      // Streaming JSON as an array with each element loaded over time
+      // One dummy row to allow the callback to insert commas
+      res.write('[\n{}')
+    }
+
+    aws.cloudwatch
+      .getLogs(key, raw, logs => {
+        logs.map(log => {
+          if (raw) {
+            res.write(log.message + '\n')
+          } else {
+            res.write(',\n' + JSON.stringify(log))
+          }
+        })
+      })
+      .then(() => {
+        if (!raw) {
+          res.write(']\n')
+        }
+        res.end()
+      })
+      .catch(err => {
+        console.log(err)
+        res.end()
+      })
   },
 
   /**
      * Retry a job using existing parameters
      */
   retry(req, res, next) {
+    let userId = req.user
     let jobId = req.params.jobId
     let mongoJobId = typeof jobId != 'object' ? ObjectID(jobId) : jobId
 
@@ -487,6 +512,9 @@ let handlers = {
             'analysis.status': 'RETRYING',
             'analysis.jobs': [],
             'analysis.logstreams': [],
+            'analysis.results': [],
+            'analysis.batchStatus': [],
+            'analysis.created': new Date(),
           },
         },
       )
@@ -507,191 +535,19 @@ let handlers = {
           )
           return
         } else {
-          emitter.emit(events.JOB_STARTED, {
-            job: batchJobParams,
-            createdDate: job.analysis.created,
-            retry: true,
-          })
+          let jobLog = aws.batch.extractJobLog(job)
+          emitter.emit(
+            events.JOB_STARTED,
+            {
+              job: jobLog,
+              createdDate: job.analysis.created,
+              retry: true,
+            },
+            userId,
+          )
         }
       })
     })
-  },
-
-  /*
-     * Gets jobs for a given analysis from batch, checks overall status and callsback with a snapshot of the analysis status
-     */
-  getJobStatus(job, userId, callback) {
-    // Because of server side and client side polling, it is possible that getJobStatus could get called after
-    // a job has been canceled. For that scenario, we just want to return to avoid overwriting CANCELED status
-    // with the FAILED statuses that would get returned from AWS Batch.
-    if (job.analysis.status === 'CANCELED')
-      return callback ? callback(null, job) : job
-
-    aws.batch.getAnalysisJobs(job, (err, jobs) => {
-      if (err) {
-        return callback ? callback(err) : err
-      }
-      //check jobs status
-      let analysis = {}
-      let createdDate = job.analysis.created
-      let analysisId = job.analysis.analysisId
-      let statusArray = jobs.map(job => {
-        return job.status
-      })
-
-      let batchStatus = jobs
-        .map(job => {
-          return {
-            status: job.status,
-            job: job.jobId,
-          }
-        })
-        .sort((a, b) => {
-          return a.job.split('-')[0] > b.job.split('-')[0] ? 1 : -1
-        })
-
-      // Check the number of returned jobs from batch (describeJobs) versus the total number of jobs in the analysis
-      // If these are different, this means that some jobs have disappeared from batch and their status is no longer being returned
-      // NOTE: disappearing from batch is not necessarily a bad thing. Batch only keeps jobs around for 24 hours after they have entered
-      // a failed or succeeded state
-      if (batchStatus.length != job.analysis.jobs.length) {
-        if (job.analysis.hasOwnProperty('batchStatus')) {
-          // Running jobs being updated may have to skip this once
-          batchStatus = job.analysis.batchStatus.map(statusObj => {
-            return batchStatus[statusObj.job]
-              ? batchStatus[statusObj.job]
-              : statusObj
-          })
-        }
-        // update status array to include ALL job statuses
-        statusArray = batchStatus.map(statusObj => {
-          return statusObj.status
-        })
-      }
-
-      analysis.batchStatus = batchStatus
-
-      let finished = handlers._checkJobStatus(statusArray)
-
-      analysis.status = !finished ? 'RUNNING' : 'FINALIZING'
-      analysis.created = createdDate
-      analysis.analysisId = analysisId
-
-      let logStreams = handlers._buildLogStreams(jobs)
-
-      if (finished) {
-        analysis.status =
-          !statusArray.length ||
-          statusArray.some(status => {
-            return status === 'FAILED'
-          })
-            ? 'FAILED'
-            : 'SUCCEEDED'
-        // emit a job finished event so we can add logs and sent notification email
-        // cloning job here and sending out event and email because mongos updateOne does not return updated doc
-        let clonedJob = JSON.parse(JSON.stringify(job))
-        clonedJob.analysis.status = analysis.status
-        aws.batch.jobComplete(clonedJob, userId)
-      }
-
-      let s3Prefix = job.datasetHash + '/' + job.analysis.analysisId + '/'
-      let params = {
-        Bucket: 'openneuro.outputs',
-        Prefix: s3Prefix,
-        StartAfter: s3Prefix,
-      }
-
-      aws.s3.getJobResults(params, (err, results) => {
-        if (err) {
-          return callback(err)
-        }
-        //update job with status, results and logstreams
-        let jobId = typeof job._id === 'object' ? job._id : ObjectID(job._id)
-        let jobUpdate = {
-          'analysis.status': analysis.status,
-          'analysis.batchStatus': analysis.batchStatus,
-          results: results,
-        }
-        const filter = { _id: jobId }
-        const update = {
-          $set: jobUpdate,
-          $addToSet: { 'analysis.logstreams': { $each: logStreams } },
-        }
-        c.crn.jobs.updateOne(filter, update).catch(err => {
-          // Log bad query errors
-          console.log(err)
-        })
-      })
-
-      if (callback) {
-        callback(null, {
-          analysis: analysis,
-          jobId: analysisId,
-          datasetId: job.datasetId,
-          snapshotId: job.snapshotId,
-        })
-      }
-    })
-  },
-
-  /*
-     * Takes an array of statuses for batch jobs and returns a boolean denoting overall finished state of all jobs
-     */
-  _checkJobStatus(statusArray) {
-    //if every status is either succeeded or failed, all jobs have completed.
-    if (statusArray.length === 0) return false
-    return statusArray.every(status => {
-      return status === 'SUCCEEDED' || status === 'FAILED'
-    })
-  },
-
-  /*
-   * Takes an array of job objects and constructs path to the cloudwatch logstreams
-   */
-  _buildLogStreams(jobs) {
-    let logStreamNames = []
-    if (jobs && jobs.length > 0) {
-      logStreamNames = jobs.reduce((acc, job) => {
-        if (job.attempts && job.attempts.length > 0) {
-          job.attempts.forEach(attempt => {
-            let streamObj = {
-              // Prior to August 21st, 2017 default was job.jobId
-              name:
-                job.jobName +
-                '/default/' +
-                attempt.container.taskArn.split('/').pop(),
-              environment: job.container.environment,
-              exitCode: job.container.exitCode,
-            }
-            acc.push(streamObj)
-          })
-        }
-        return acc
-      }, [])
-    }
-    return logStreamNames
-  },
-
-  _processLogs(logs) {
-    let logString = ''
-    Object.keys(logs).forEach(streamName => {
-      logString +=
-        streamName + ' - exit code ' + logs[streamName].exitCode + '\n'
-      logString += '  Environment variables:\n'
-
-      logs[streamName].environment.forEach(env => {
-        logString += '\t' + env.name + ': ' + env.value + '\n'
-      })
-
-      logString += '  Logs:\n'
-
-      logs[streamName].logs.forEach(log => {
-        logString += '\t' + log.timestamp + '\t' + log.message + '\n'
-      })
-      logString += '\n\n'
-    })
-
-    return logString
   },
 }
 

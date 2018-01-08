@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dataset/run/Results should render something when the job status is "FAILED" 1`] = `
+<Accordion
+  accordion={true}
+  className="results"
+>
+  <Panel
+    bsClass="panel"
+    bsStyle="default"
+    className="fade-in"
+    defaultExpanded={false}
+    header="results"
+  >
+    <div
+      className="app-acknowledgements"
+    >
+      <label>
+        Acknowledgements
+      </label>
+      <div
+        className="markdown"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "<p>acknowledge</p>
+",
+          }
+        }
+      />
+    </div>
+    <hr />
+    <DownloadAll
+      run={
+        Object {
+          "analysis": Object {
+            "status": "FAILED",
+          },
+          "results": Array [
+            Object {
+              "dirPath": "avg_brain_size.txt",
+              "name": "avg_brain_size.txt",
+              "path": "openneuro.outputs/cf02b5bf17df80d056effadccffd65bd/dcedf0c3-4438-466d-9f85-61c75275b355/avg_brain_size.txt",
+              "type": "file",
+            },
+          ],
+        }
+      }
+    />
+    <div
+      className="file-structure fade-in panel-group"
+    >
+      <div
+        className="panel panel-default"
+      >
+        <div
+          aria-expanded="false"
+          className="panel-collapse"
+        >
+          <div
+            className="panel-body"
+          >
+            <FileTree
+              displayFile={[Function]}
+              editable={false}
+              getFileDownloadTicket={[Function]}
+              toggleFolder={[MockFunction]}
+              tree={
+                Array [
+                  Object {
+                    "dirPath": "avg_brain_size.txt",
+                    "name": "avg_brain_size.txt",
+                    "path": "openneuro.outputs/cf02b5bf17df80d056effadccffd65bd/dcedf0c3-4438-466d-9f85-61c75275b355/avg_brain_size.txt",
+                    "type": "file",
+                  },
+                ]
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Panel>
+</Accordion>
+`;
+
+exports[`dataset/run/Results should render something when the job status is "SUCCEEDED" 1`] = `
+<Accordion
+  accordion={true}
+  className="results"
+>
+  <Panel
+    bsClass="panel"
+    bsStyle="default"
+    className="fade-in"
+    defaultExpanded={false}
+    header="results"
+  >
+    <div
+      className="app-acknowledgements"
+    >
+      <label>
+        Acknowledgements
+      </label>
+      <div
+        className="markdown"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "<p>acknowledge</p>
+",
+          }
+        }
+      />
+    </div>
+    <hr />
+    <DownloadAll
+      run={
+        Object {
+          "analysis": Object {
+            "status": "SUCCEEDED",
+          },
+          "results": Array [
+            Object {
+              "dirPath": "avg_brain_size.txt",
+              "name": "avg_brain_size.txt",
+              "path": "openneuro.outputs/cf02b5bf17df80d056effadccffd65bd/dcedf0c3-4438-466d-9f85-61c75275b355/avg_brain_size.txt",
+              "type": "file",
+            },
+          ],
+        }
+      }
+    />
+    <div
+      className="file-structure fade-in panel-group"
+    >
+      <div
+        className="panel panel-default"
+      >
+        <div
+          aria-expanded="false"
+          className="panel-collapse"
+        >
+          <div
+            className="panel-body"
+          >
+            <FileTree
+              displayFile={[Function]}
+              editable={false}
+              getFileDownloadTicket={[Function]}
+              toggleFolder={[MockFunction]}
+              tree={
+                Array [
+                  Object {
+                    "dirPath": "avg_brain_size.txt",
+                    "name": "avg_brain_size.txt",
+                    "path": "openneuro.outputs/cf02b5bf17df80d056effadccffd65bd/dcedf0c3-4438-466d-9f85-61c75275b355/avg_brain_size.txt",
+                    "type": "file",
+                  },
+                ]
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </Panel>
+</Accordion>
+`;

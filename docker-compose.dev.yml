@@ -1,0 +1,65 @@
+# docker compose versions
+version: '2'
+
+# shared volumes
+volumes:
+  project:
+  yarn_cache:
+
+services:
+  # web app bundle build
+  app:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    command: sh -c "yarn install --pure-lockfile && yarn start"
+    volumes:
+      - .:/srv
+      - yarn_cache:/root/.cache
+      - project:/srv/app/dist
+    tmpfs:
+      - /srv/app/node_modules:exec
+
+  # crn core (bids-core)
+  core:
+    volumes:
+      - ../bids-core:/srv/bids-core
+      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
+
+  # crn node server
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    command: sh -c "yarn install && node /srv/server/index.js"
+    volumes:
+      - .:/srv
+      - yarn_cache:/root/.cache
+      - ./server/client.config.js:/srv/server/client.config.js:rw
+      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
+    tmpfs:
+      - /srv/server/node_modules:exec
+
+  worker:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    command: sh -c "yarn install  && node /srv/server/worker.js"
+    volumes:
+      - .:/srv
+      - yarn_cache:/root/.cache
+      - ./server/client.config.js:/srv/server/client.config.js:rw
+      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
+    tmpfs:
+      - /srv/server/node_modules:exec
+
+  # nginx - static file serving and service proxy
+  nginx:
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "9876:80"
+      - "8110:8110"
+      - "8443:443"

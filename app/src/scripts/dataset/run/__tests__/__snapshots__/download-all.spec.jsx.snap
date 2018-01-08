@@ -1,0 +1,663 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `
+<span
+  eventKey="59c16458c650bd001111f010"
+>
+  <Panel
+    bsClass="panel"
+    bsStyle="default"
+    className="job border-flash"
+    defaultExpanded={false}
+    header={
+      <div
+        className="failed"
+      >
+        <label>
+          Status
+        </label>
+        <span
+          className="badge"
+        >
+          FAILED
+        </span>
+        <br />
+        <span
+          className="meta"
+        >
+          <label>
+            Run on 
+          </label>
+          <strong>
+            09/20/2017
+          </strong>
+           at
+           
+          <strong>
+            12:24 AM
+          </strong>
+          <span>
+            <br />
+            <label>
+              By 
+            </label>
+            <strong>
+              nell@squishymedia.com
+            </strong>
+          </span>
+        </span>
+        <br />
+        <span
+          className="meta"
+        >
+          <label>
+            Job ID
+          </label>
+          <strong>
+            a2e4e221-a671-415a-bd0f-b7fdd44cea14
+          </strong>
+        </span>
+        <div>
+          <h5
+            className="text-danger"
+          >
+            We were unable to complete this analysis.
+             
+            <span>
+              Support information for this app is available below. Please contact the site
+               
+              <a
+                href="mailto:openfmri@gmail.com?subject=Analysis%20Failure"
+                target="_blank"
+              >
+                administrator
+              </a>
+               
+              if this analysis continues to fail.
+            </span>
+          </h5>
+        </div>
+      </div>
+    }
+  >
+    <span
+      className="inner"
+    >
+      <Accordion
+        accordion={true}
+        className="results"
+      >
+        <Panel
+          bsClass="panel"
+          bsStyle="default"
+          className="fade-in"
+          defaultExpanded={false}
+          eventKey="59c16458c650bd001111f010"
+          header="Support"
+          key="59c16458c650bd001111f010"
+        >
+          <div
+            className="app-support"
+          >
+            <div
+              className="markdown"
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "",
+                }
+              }
+            />
+          </div>
+        </Panel>
+      </Accordion>
+      <Accordion
+        accordion={true}
+        className="results"
+      >
+        <Panel
+          bsClass="panel"
+          bsStyle="default"
+          className="fade-in"
+          defaultExpanded={false}
+          eventKey="59c16458c650bd001111f010"
+          header="Parameters"
+          key="59c16458c650bd001111f010"
+        >
+          <ul>
+            <li
+              key="participant_label"
+            >
+              <span
+                className="key"
+              >
+                participant_label
+              </span>
+              :
+               
+              <span
+                className="value"
+              >
+                07
+              </span>
+            </li>
+          </ul>
+        </Panel>
+      </Accordion>
+      <JobResults
+        run={
+          Object {
+            "_id": "59c16458c650bd001111f010",
+            "active": true,
+            "analysis": Object {
+              "analysisId": "a2e4e221-a671-415a-bd0f-b7fdd44cea14",
+              "attempts": 1,
+              "batchStatus": Array [
+                Object {
+                  "job": "49c03ed3-281e-40d3-b027-3102dcb5153c",
+                  "status": "FAILED",
+                },
+                Object {
+                  "job": "e276c571-83f7-439f-a34c-09840bb2a9cd",
+                  "status": "FAILED",
+                },
+              ],
+              "created": "2017-09-19T18:39:20.385Z",
+              "jobs": Array [
+                "49c03ed3-281e-40d3-b027-3102dcb5153c",
+                "e276c571-83f7-439f-a34c-09840bb2a9cd",
+              ],
+              "logstreams": Array [],
+              "notification": true,
+              "status": "FAILED",
+              "statusAge": "2017-09-19T18:47:00.093Z",
+            },
+            "appLabel": "bids-example-nell",
+            "appVersion": "7",
+            "datasetHash": "cf02b5bf17df80d056effadccffd65bd",
+            "datasetId": "202020206473303031303033",
+            "datasetLabel": "DS003-downsampled (only T1)",
+            "jobDefinition": "arn:aws:batch:us-east-1:488777458602:job-definition/bids-example-nell:7",
+            "jobName": "bids-example-nell",
+            "parameters": Object {
+              "participant_label": Array [
+                "07",
+              ],
+            },
+            "parametersHash": "75e27e50b5d846730740410875649318",
+            "results": Array [],
+            "snapshotId": "3030313030332d3030303031",
+            "uploadSnapshotComplete": true,
+            "userId": "nell@squishymedia.com",
+          }
+        }
+      />
+      <Accordion
+        accordion={true}
+        className="results"
+      >
+        <Panel
+          bsClass="panel"
+          bsStyle="default"
+          className="fade-in"
+          defaultExpanded={false}
+          eventKey="59c16458c650bd001111f010"
+          header="Jobs Status"
+          key="59c16458c650bd001111f010"
+        >
+          <ul>
+            <div
+              className=" job-status col-xs-12"
+              key="59c16458c650bd001111f010"
+            >
+              <div
+                className="col-xs-8"
+              >
+                Job Id
+              </div>
+              <div
+                className="col-xs-4"
+              >
+                Status
+              </div>
+            </div>
+            <div
+              className="job-status col-xs-12"
+              key="49c03ed3-281e-40d3-b027-3102dcb5153c"
+            >
+              <div>
+                <div
+                  className="col-xs-8"
+                >
+                  49c03ed3-281e-40d3-b027-3102dcb5153c
+                </div>
+                <div
+                  className="col-xs-4"
+                >
+                  FAILED
+                </div>
+              </div>
+              <div>
+                <strong
+                  className="col-xs-12"
+                />
+              </div>
+            </div>
+            <div
+              className="job-status col-xs-12"
+              key="e276c571-83f7-439f-a34c-09840bb2a9cd"
+            >
+              <div>
+                <div
+                  className="col-xs-8"
+                >
+                  e276c571-83f7-439f-a34c-09840bb2a9cd
+                </div>
+                <div
+                  className="col-xs-4"
+                >
+                  FAILED
+                </div>
+              </div>
+              <div>
+                <strong
+                  className="col-xs-12"
+                />
+              </div>
+            </div>
+          </ul>
+        </Panel>
+      </Accordion>
+    </span>
+  </Panel>
+</span>
+`;
+
+exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
+<span
+  eventKey="59c1632cc650bd001111f00d"
+>
+  <Panel
+    bsClass="panel"
+    bsStyle="default"
+    className="job border-flash"
+    defaultExpanded={false}
+    header={
+      <div
+        className="succeeded"
+      >
+        <label>
+          Status
+        </label>
+        <span
+          className="badge"
+        >
+          SUCCEEDED
+        </span>
+        <br />
+        <span
+          className="meta"
+        >
+          <label>
+            Run on 
+          </label>
+          <strong>
+            09/20/2017
+          </strong>
+           at
+           
+          <strong>
+            12:19 AM
+          </strong>
+          <span>
+            <br />
+            <label>
+              By 
+            </label>
+            <strong>
+              nell@squishymedia.com
+            </strong>
+          </span>
+        </span>
+        <br />
+        <span
+          className="meta"
+        >
+          <label>
+            Job ID
+          </label>
+          <strong>
+            dcedf0c3-4438-466d-9f85-61c75275b355
+          </strong>
+        </span>
+      </div>
+    }
+  >
+    <span
+      className="inner"
+    >
+      <Accordion
+        accordion={true}
+        className="results"
+      >
+        <Panel
+          bsClass="panel"
+          bsStyle="default"
+          className="fade-in"
+          defaultExpanded={false}
+          eventKey="59c1632cc650bd001111f00d"
+          header="Parameters"
+          key="59c1632cc650bd001111f00d"
+        >
+          <ul>
+            <li
+              key="participant_label"
+            >
+              <span
+                className="key"
+              >
+                participant_label
+              </span>
+              :
+               
+              <span
+                className="value"
+              >
+                13
+              </span>
+            </li>
+          </ul>
+        </Panel>
+      </Accordion>
+      <JobResults
+        displayFile={[MockFunction]}
+        run={
+          Object {
+            "_id": "59c1632cc650bd001111f00d",
+            "active": true,
+            "analysis": Object {
+              "analysisId": "dcedf0c3-4438-466d-9f85-61c75275b355",
+              "attempts": 1,
+              "batchStatus": Array [
+                Object {
+                  "job": "53f77df6-588e-4708-bfa0-5909b3c6c47f",
+                  "status": "SUCCEEDED",
+                },
+                Object {
+                  "job": "855fb131-e50d-4a75-97b5-edff18968307",
+                  "status": "SUCCEEDED",
+                },
+              ],
+              "created": "2017-09-19T18:34:20.179Z",
+              "jobs": Array [
+                "53f77df6-588e-4708-bfa0-5909b3c6c47f",
+                "855fb131-e50d-4a75-97b5-edff18968307",
+              ],
+              "logstreams": Array [
+                Object {
+                  "environment": Array [
+                    Object {
+                      "name": "BIDS_OUTPUT_BUCKET",
+                      "value": "openneuro.outputs",
+                    },
+                    Object {
+                      "name": "BIDS_DATASET_BUCKET",
+                      "value": "openneuro.snapshots",
+                    },
+                    Object {
+                      "name": "BIDS_ANALYSIS_LEVEL",
+                      "value": "participant",
+                    },
+                    Object {
+                      "name": "BIDS_CONTAINER",
+                      "value": "bids/example:0.0.6",
+                    },
+                    Object {
+                      "name": "BIDS_ANALYSIS_ID",
+                      "value": "dcedf0c3-4438-466d-9f85-61c75275b355",
+                    },
+                    Object {
+                      "name": "BIDS_SNAPSHOT_ID",
+                      "value": "cf02b5bf17df80d056effadccffd65bd",
+                    },
+                    Object {
+                      "name": "BIDS_ARGUMENTS",
+                      "value": "--participant_label 13",
+                    },
+                    Object {
+                      "name": "BIDS_INPUT_BUCKET",
+                      "value": "openneuro.inputs",
+                    },
+                  ],
+                  "exitCode": 0,
+                  "name": "bids-example-nell/default/5c35f0d9-1ff1-49fa-b7a7-0175a53ef4ca",
+                },
+                Object {
+                  "environment": Array [
+                    Object {
+                      "name": "BIDS_OUTPUT_BUCKET",
+                      "value": "openneuro.outputs",
+                    },
+                    Object {
+                      "name": "BIDS_DATASET_BUCKET",
+                      "value": "openneuro.snapshots",
+                    },
+                    Object {
+                      "name": "BIDS_ANALYSIS_LEVEL",
+                      "value": "group",
+                    },
+                    Object {
+                      "name": "BIDS_CONTAINER",
+                      "value": "bids/example:0.0.6",
+                    },
+                    Object {
+                      "name": "BIDS_ANALYSIS_ID",
+                      "value": "dcedf0c3-4438-466d-9f85-61c75275b355",
+                    },
+                    Object {
+                      "name": "BIDS_SNAPSHOT_ID",
+                      "value": "cf02b5bf17df80d056effadccffd65bd",
+                    },
+                    Object {
+                      "name": "BIDS_ARGUMENTS",
+                      "value": "--participant_label 13",
+                    },
+                    Object {
+                      "name": "BIDS_INPUT_BUCKET",
+                      "value": "openneuro.inputs",
+                    },
+                  ],
+                  "exitCode": 0,
+                  "name": "bids-example-nell/default/eb40a865-750c-4f91-b71e-c4b9ed90ccae",
+                },
+              ],
+              "notification": true,
+              "status": "SUCCEEDED",
+              "statusAge": "2017-09-19T18:48:40.117Z",
+            },
+            "appLabel": "bids-example-nell",
+            "appVersion": "7",
+            "datasetHash": "cf02b5bf17df80d056effadccffd65bd",
+            "datasetId": "202020206473303031303033",
+            "datasetLabel": "DS003-downsampled (only T1)",
+            "jobDefinition": "arn:aws:batch:us-east-1:488777458602:job-definition/bids-example-nell:7",
+            "jobName": "bids-example-nell",
+            "parameters": Object {
+              "participant_label": Array [
+                "13",
+              ],
+            },
+            "parametersHash": "5426923f600d855dd0c423a10a341640",
+            "results": Array [
+              Object {
+                "dirPath": "avg_brain_size.txt",
+                "name": "avg_brain_size.txt",
+                "path": "openneuro.outputs/cf02b5bf17df80d056effadccffd65bd/dcedf0c3-4438-466d-9f85-61c75275b355/avg_brain_size.txt",
+                "type": "file",
+              },
+              Object {
+                "dirPath": "sub-13_brain.nii.gz",
+                "name": "sub-13_brain.nii.gz",
+                "path": "openneuro.outputs/cf02b5bf17df80d056effadccffd65bd/dcedf0c3-4438-466d-9f85-61c75275b355/sub-13_brain.nii.gz",
+                "type": "file",
+              },
+            ],
+            "snapshotId": "3030313030332d3030303031",
+            "uploadSnapshotComplete": true,
+            "userId": "nell@squishymedia.com",
+          }
+        }
+        toggleFolder={[MockFunction]}
+      />
+      <Accordion
+        accordion={true}
+        className="results"
+      >
+        <Panel
+          bsClass="panel"
+          bsStyle="default"
+          className="fade-in"
+          defaultExpanded={false}
+          eventKey="59c1632cc650bd001111f00d"
+          header="Logs"
+          key="59c1632cc650bd001111f00d"
+        >
+          <span
+            className="download-all"
+          >
+            <WarnButton
+              cancel={
+                <i
+                  className="fa fa-times"
+                />
+              }
+              confirm={
+                <i
+                  className="fa fa-check"
+                />
+              }
+              icon="fa-download"
+              message=" DOWNLOAD All LOGS"
+              prepDownload={[Function]}
+              tooltip={null}
+              warn={true}
+            />
+          </span>
+          <div
+            className="file-structure fade-in panel-group"
+          >
+            <div
+              className="panel panel-default"
+            >
+              <div
+                aria-expanded="false"
+                className="panel-collapse"
+              >
+                <span
+                  key="participant"
+                >
+                  PARTICIPANT
+                  <span
+                    className="job-log"
+                    key="--participant_label 13"
+                  >
+                    <WarnButton
+                      action={[Function]}
+                      cancel={
+                        <i
+                          className="fa fa-times"
+                        />
+                      }
+                      confirm={
+                        <i
+                          className="fa fa-check"
+                        />
+                      }
+                      icon="fa-eye"
+                      message="--participant_label 13"
+                      tooltip={null}
+                      warn={false}
+                    />
+                    <span
+                      className="exit-code "
+                    >
+                      <span
+                        className="label label-success"
+                      >
+                        SUCCESS
+                      </span>
+                    </span>
+                  </span>
+                </span>
+                <span
+                  key="group"
+                >
+                  GROUP
+                  <span
+                    className="job-log"
+                    key="--participant_label 13"
+                  >
+                    <WarnButton
+                      action={[Function]}
+                      cancel={
+                        <i
+                          className="fa fa-times"
+                        />
+                      }
+                      confirm={
+                        <i
+                          className="fa fa-check"
+                        />
+                      }
+                      icon="fa-eye"
+                      message="--participant_label 13"
+                      tooltip={null}
+                      warn={false}
+                    />
+                    <span
+                      className="exit-code "
+                    >
+                      <span
+                        className="label label-success"
+                      >
+                        SUCCESS
+                      </span>
+                    </span>
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </Panel>
+      </Accordion>
+    </span>
+  </Panel>
+</span>
+`;
+
+exports[`dataset/run/DownloadAll should render something 1`] = `
+<span
+  className="download-all"
+>
+  <WarnButton
+    cancel={
+      <i
+        className="fa fa-times"
+      />
+    }
+    confirm={
+      <i
+        className="fa fa-check"
+      />
+    }
+    icon="fa-download"
+    message=" DOWNLOAD All"
+    prepDownload={[Function]}
+    tooltip={null}
+    warn={true}
+  />
+  <DownloadS3
+    analysisId="dcedf0c3-4438-466d-9f85-61c75275b355"
+    datasetHash="cf02b5bf17df80d056effadccffd65bd"
+  />
+</span>
+`;
