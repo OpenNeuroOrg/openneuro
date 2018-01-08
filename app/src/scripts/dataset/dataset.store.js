@@ -176,8 +176,14 @@ let datasetStore = Reflux.createStore({
                 this.update({ loading: false, snapshot: snapshot })
               })
             })
-            if (forceReload) {
+            if (
+              forceReload ||
+              (!this.data.uploading && dataset.tags.includes('updating'))
+            ) {
               this.revalidate()
+              if (dataset.tags.includes('updating')) {
+                scitran.removeTag('projects', datasetId, 'updating')
+              }
             }
           }
         }
@@ -872,48 +878,52 @@ let datasetStore = Reflux.createStore({
             uploadingProgress: 0,
             uploadingScitranRequests: [],
           })
+
           this.updateDirectoryState(datasetId, { loading: true })
-          async.eachLimit(
-            uploads,
-            3,
-            (upload, cb) => {
-              // Cancel adding files if navigated away
-              if (this.data.uploadingCanceled) {
-                return cb(new Error('Add directory interrupted'))
-              }
-              let file = upload.file
-              let container = upload.container
-              file.modifiedName = (container.dirPath || '') + file.name
-              const scitranReq = scitran
-                .updateFile('projects', datasetId, file)
-                .then(() => {
-                  this.update({
-                    uploadingProgress: this.data.uploadingProgress + 1,
+          scitran.addTag('projects', datasetId, 'updating').then(() => {
+            async.eachLimit(
+              uploads,
+              3,
+              (upload, cb) => {
+                // Cancel adding files if navigated away
+                if (this.data.uploadingCanceled) {
+                  return cb(new Error('Add directory interrupted'))
+                }
+                let file = upload.file
+                let container = upload.container
+                file.modifiedName = (container.dirPath || '') + file.name
+                const scitranReq = scitran
+                  .updateFile('projects', datasetId, file)
+                  .then(() => {
+                    this.update({
+                      uploadingProgress: this.data.uploadingProgress + 1,
+                    })
+                    cb()
                   })
-                  cb()
+                  .catch(err => {
+                    cb(err)
+                  })
+                this.update({
+                  uploadingScitranRequests: this.data.uploadingScitranRequests.concat(
+                    [scitranReq],
+                  ),
                 })
-                .catch(err => {
-                  cb(err)
-                })
-              this.update({
-                uploadingScitranRequests: this.data.uploadingScitranRequests.concat(
-                  [scitranReq],
-                ),
-              })
-            },
-            err => {
-              this.update({ uploading: false })
-              if (err && callback) callback(err)
-              if (err) {
-                this.loadDataset(bids.encodeId(datasetId), undefined, false)
-              } else {
-                this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
-              }
-              // Reset canceled when an upload is done (canceled or otherwise)
-              this.update({ uploadingCanceled: false })
-              if (callback) callback()
-            },
-          )
+              },
+              err => {
+                scitran.removeTag('projects', datasetId, 'updating')
+                this.update({ uploading: false })
+                if (err && callback) callback(err)
+                if (err) {
+                  this.loadDataset(bids.encodeId(datasetId), undefined, false)
+                } else {
+                  this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
+                }
+                // Reset canceled when an upload is done (canceled or otherwise)
+                this.update({ uploadingCanceled: false })
+                if (callback) callback()
+              },
+            )
+          })
         },
       })
     } else {
