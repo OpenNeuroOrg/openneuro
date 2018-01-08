@@ -2,7 +2,7 @@
 
 exports[`common/forms/WarnButton renders successfully 1`] = `
 <span
-  className="fade-in"
+  className=""
 >
   <button
     className="btn-warn-component warning"
@@ -19,7 +19,7 @@ exports[`common/forms/WarnButton renders successfully 1`] = `
 
 exports[`common/forms/WarnButton renders with warnings disable 1`] = `
 <span
-  className="fade-in"
+  className=""
 >
   <button
     className="btn-warn-component warning"
