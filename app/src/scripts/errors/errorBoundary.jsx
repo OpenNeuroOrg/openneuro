@@ -26,7 +26,7 @@ class ErrorBoundary extends Component {
 }
 
 ErrorBoundary.propTypes = {
-  children: PropTypes.function,
+  children: PropTypes.object,
   message: PropTypes.string,
   className: PropTypes.string,
 }

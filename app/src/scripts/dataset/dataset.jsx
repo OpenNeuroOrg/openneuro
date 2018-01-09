@@ -7,6 +7,7 @@ import { Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
 import { ProgressBar } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
+import Timeout from '../common/partials/timeout.jsx'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
 import MetaData from './dataset.metadata.jsx'
@@ -245,7 +246,9 @@ class Dataset extends Reflux.Component {
             className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
             <div className="fade-in inner-route dataset-route light">
               {this.state.datasets.loading ? (
-                <Spinner active={true} text={loadingText} timeout={20000} />
+                <Timeout timeout={20000}>
+                  <Spinner active={true} text={loadingText} />
+                </Timeout>
               ) : (
                 content
               )}

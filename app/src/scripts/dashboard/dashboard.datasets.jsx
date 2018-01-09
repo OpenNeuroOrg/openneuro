@@ -10,6 +10,7 @@ import moment from 'moment'
 import { PanelGroup } from 'react-bootstrap'
 import Paginator from '../common/partials/paginator.jsx'
 import Spinner from '../common/partials/spinner.jsx'
+import Timeout from '../common/partials/timeout.jsx'
 import ErrorBoundary from '../errors/errorBoundary.jsx'
 import Statuses from '../dataset/dataset.statuses.jsx'
 import Filters from './dashboard.filters.jsx'
@@ -108,7 +109,9 @@ class Datasets extends Reflux.Component {
             className="loading-wrap fade-in">
             <PanelGroup>
               {this.state.datasets.loading ? (
-                <Spinner active={true} timeout={20000} />
+                <Timeout timeout={20000}>
+                  <Spinner active={true} />
+                </Timeout>
               ) : (
                 results
               )}
