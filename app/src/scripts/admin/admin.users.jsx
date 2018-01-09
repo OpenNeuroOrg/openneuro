@@ -47,8 +47,6 @@ class users extends Reflux.Component {
       }
     })
 
-    console.log(this.state.admin.users)
-
     return (
       <div className="dashboard-dataset-teasers fade-in admin-users clearfix">
         <div className="header-wrap clearfix">
