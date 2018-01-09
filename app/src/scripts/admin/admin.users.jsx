@@ -23,6 +23,7 @@ class users extends Reflux.Component {
     this.state.admin.users.map(user => {
       let adminBadge = user.root ? 'Admin' : null
       if (user.visible) {
+        let userEmail = user.hasOwnProperty('email') ? user.email : user._id
         users.push(
           <div
             className="fade-in user-panel clearfix panel panel-default"
@@ -37,7 +38,7 @@ class users extends Reflux.Component {
               </h3>
             </div>
             <div className="col-xs-4 user-col middle">
-              <h3 className="user-email">{user._id}</h3>
+              <h3 className="user-email">{userEmail}</h3>
             </div>
             {this._userTools(user)}
             {this._userSummary(user)}
@@ -45,6 +46,8 @@ class users extends Reflux.Component {
         )
       }
     })
+
+    console.log(this.state.admin.users)
 
     return (
       <div className="dashboard-dataset-teasers fade-in admin-users clearfix">
