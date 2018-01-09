@@ -196,7 +196,7 @@ let handlers = {
         queue.enqueue(
           'batch',
           'startAnalysis',
-          { job: preparedJob, jobId: jobId, userId: userId },
+          { job: preparedJob, jobId: jobId, userId: userId, retry: false },
           () => {
             // Finish the client request so S3 upload can happen async
             res.send({ jobId: jobId })
@@ -519,7 +519,7 @@ let handlers = {
       queue.enqueue(
         'batch',
         'startAnalysis',
-        { job: job, jobId: mongoJobId, userId: userId },
+        { job: job, jobId: mongoJobId, userId: userId, retry: true },
         () => {
           // Finish the client request so S3 upload can happen async
           res.send({ jobId: mongoJobId })

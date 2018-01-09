@@ -532,7 +532,7 @@ export default aws => {
          *
          * This is called by worker processes and must be process safe.
          */
-    startAnalysis(job, jobId, userId, callback) {
+    startAnalysis(job, jobId, userId, retry, callback) {
       let hash = job.datasetHash
       s3.uploadSnapshot(hash, err => {
         // If the snapshot upload fails, set the job analysis.status = 'FAILED'
@@ -560,7 +560,7 @@ export default aws => {
             let jobLog = extractJobLog(job)
             emitter.emit(
               events.JOB_STARTED,
-              { job: jobLog, createdDate: job.analysis.created },
+              { job: jobLog, createdDate: job.analysis.created, retry: retry },
               userId,
             )
           }
