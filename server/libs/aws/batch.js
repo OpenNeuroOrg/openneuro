@@ -538,7 +538,6 @@ export default aws => {
         // If the snapshot upload fails, set the job analysis.status = 'FAILED'
         // so the user can retry.
         if (err) {
-          console.log(err)
           c.crn.jobs.updateOne(
             { _id: ObjectID(jobId) },
             { $set: { 'analysis.status': 'FAILED' } },
