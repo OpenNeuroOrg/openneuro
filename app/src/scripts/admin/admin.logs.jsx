@@ -47,6 +47,11 @@ class Logs extends Reflux.Component {
           </span>
         )
         if (log.visible) {
+          let user =
+            log.hasOwnProperty('userMetadata') &&
+            log.userMetadata.hasOwnProperty('email')
+              ? log.userMetadata.email
+              : log.user
           logs.push(
             <div className="fade-in user-panel-header clearfix" key={index}>
               <div className="col-xs-3 user-col">
@@ -55,7 +60,7 @@ class Logs extends Reflux.Component {
                 </label>
               </div>
               <div className="col-xs-3 user-col">
-                <label>{log.user}</label>
+                <label>{user}</label>
               </div>
               <div className="col-xs-3 user-col">
                 <label>{log.date}</label>

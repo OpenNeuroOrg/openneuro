@@ -1,5 +1,6 @@
 import mongo from '../libs/mongo'
 import config from '../config'
+import scitran from '../libs/scitran'
 
 let c = mongo.collections
 let events = Object.keys(config.events)
@@ -24,11 +25,27 @@ let handlers = {
     if (!isNaN(reqSkip) && reqSkip) {
       skip = reqSkip
     }
+
     c.crn.logs
       .find({ type: { $in: events } }, { sort: [['date', 'desc']] })
       .toArray((err, logs) => {
         if (err) return next(err)
-        res.send(logs)
+
+        const userPromises = logs.map(log => {
+          return new Promise(resolve => {
+            scitran.getUser(log.user, (err, response) => {
+              log.userMetadata = {}
+              if (response.statusCode == 200) {
+                log.userMetadata = response.body
+              }
+              resolve()
+            })
+          })
+        })
+
+        Promise.all(userPromises).then(() => {
+          res.send(logs)
+        })
       })
   },
 }
