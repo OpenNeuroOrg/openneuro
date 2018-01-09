@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import Select from 'react-select'
 import Input from './input.jsx'
 import WarnButton from './warn-button.jsx'
+import ParamController from './paramTypes/paramController.jsx'
 
 // component setup ----------------------------------------------------
 
@@ -15,6 +16,7 @@ class ArrayInput extends React.Component {
     const initialState = {
       error: null,
       helper: null,
+      type: null,
     }
 
     for (let field of this.props.model) {
@@ -40,42 +42,46 @@ class ArrayInput extends React.Component {
               key={field.id}
             />
           )
-        } else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
-          let message = ' Hidden'
-          if (field.hasOwnProperty('id') && field.id === 'required') {
-            message = ' Required'
-          }
-          return (
-            <div className="form-group float-label-input" key={field.id}>
-              <button
-                className="admin-button"
-                onClick={this._toggleCheckBox.bind(this, field.id)}
-                key={field.id}>
-                <span>
-                  <i
-                    className={
-                      this.state[field.id]
-                        ? 'fa fa-check-square-o'
-                        : 'fa fa-square-o'
-                    }
-                  />
-                  {message}
-                </span>
-              </button>
-            </div>
-          )
-        } else {
-          return (
-            <Input
-              placeholder={field.placeholder}
-              value={this.state[field.id]}
-              onChange={this._handleChange.bind(this, field.id)}
-              key={field.id}
-            />
-          )
         }
+
+        // else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
+        //   let message = ' Hidden'
+        //   if (field.hasOwnProperty('id') && field.id === 'required') {
+        //     message = ' Required'
+        //   }
+        //   return (
+        //     <div className="form-group float-label-input" key={field.id}>
+        //       <button
+        //         className="admin-button"
+        //         onClick={this._toggleCheckBox.bind(this, field.id)}
+        //         key={field.id}>
+        //         <span>
+        //           <i
+        //             className={
+        //               this.state[field.id]
+        //                 ? 'fa fa-check-square-o'
+        //                 : 'fa fa-square-o'
+        //             }
+        //           />
+        //           {message}
+        //         </span>
+        //       </button>
+        //     </div>
+        //   )
+        // } else {
+        //   return (
+        //     <Input
+        //       placeholder={field.placeholder}
+        //       value={this.state[field.id]}
+        //       onChange={this._handleChange.bind(this, field.id)}
+        //       key={field.id}
+        //     />
+        //   )
+        // }
       })
     }
+
+    // console.log(this.state.type)
 
     return (
       <div className="cte-edit-array">
@@ -84,6 +90,12 @@ class ArrayInput extends React.Component {
         <div className="text-info">{this.state.helper}</div>
         <div className="form-inline">
           <span>{inputFields}</span>
+          <ParamController
+            model={this.props.model}
+            selected={this.state.type}
+            onCheck={this._toggleCheckBox.bind(this)}
+            onInput={this._handleChange.bind(this)}
+          />
           <br />
           <button
             className="cte-save-btn btn-admin-blue add-btn"
@@ -124,6 +136,7 @@ class ArrayInput extends React.Component {
   }
 
   _handleSelectChange(key, selected) {
+    this.setState({ type: selected })
     // ** Updates the text above params **//
     if (selected === 'radio' || selected === 'multi' || selected === 'select') {
       this.setState({
