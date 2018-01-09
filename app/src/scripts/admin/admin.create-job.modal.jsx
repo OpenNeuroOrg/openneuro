@@ -20,7 +20,6 @@ const PARAMETER_INPUTS = [
   { label: 'Number', value: 'numeric' },
   { label: 'List', value: 'select' },
   { label: 'File', value: 'file' },
-  { label: 'Mutli Check', value: 'multi' },
   { label: 'Radio', value: 'radio' },
 ]
 
@@ -105,8 +104,16 @@ class CreateJob extends Reflux.Component {
                     required: true,
                   },
                   { id: 'description', placeholder: 'Parameter Description' },
+                  // { id: 'default checked', type: 'checkbox'},
                   { id: 'required', type: 'checkbox' },
                   { id: 'hidden', type: 'checkbox' },
+                  {
+                    id: 'option',
+                    radio: 2,
+                    multi: 1,
+                    options: [],
+                    required: true,
+                  },
                 ]}
               />
             </div>
