@@ -20,28 +20,32 @@ describe('common/partials/happybrowser', () => {
     const wrapper = shallow(<Happybrowser ua={chrome} />)
     expect(wrapper).toMatchSnapshot()
   })
+  it('renders for unsupported browsers', () => {
+    const wrapper = shallow(<Happybrowser ua={ie} />)
+    expect(wrapper).toMatchSnapshot()
+  })
   it('is hidden in Chrome', () => {
     const wrapper = shallow(<Happybrowser ua={chrome} />)
-    expect(wrapper.hasClass('hidden')).toBe(true)
+    expect(wrapper.text()).toBe('')
   })
   it('is hidden in Chromium', () => {
     const wrapper = shallow(<Happybrowser ua={chromium} />)
-    expect(wrapper.hasClass('hidden')).toBe(true)
+    expect(wrapper.text()).toBe('')
   })
   it('is hidden when accessed by Googlebot', () => {
     const wrapper = shallow(<Happybrowser ua={googlebot} />)
-    expect(wrapper.hasClass('hidden')).toBe(true)
+    expect(wrapper.text()).toBe('')
   })
   it('is hidden when accessed by Chrome 41', () => {
     const wrapper = shallow(<Happybrowser ua={chrome41} />)
-    expect(wrapper.hasClass('hidden')).toBe(true)
+    expect(wrapper.text()).toBe('')
   })
   it('is visible in IE', () => {
     const wrapper = shallow(<Happybrowser ua={ie} />)
-    expect(wrapper.hasClass('hidden')).toBe(false)
+    expect(wrapper.text()).not.toBe('')
   })
   it('is hidden in Firefox', () => {
     const wrapper = shallow(<Happybrowser ua={firefox} />)
-    expect(wrapper.hasClass('hidden')).toBe(true)
+    expect(wrapper.text()).toBe('')
   })
 })
