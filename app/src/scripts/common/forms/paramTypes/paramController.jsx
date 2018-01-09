@@ -81,10 +81,10 @@ class ParamController extends React.Component {
   }
 
   _returnFile(field) {
-    if (field.id === 'defaultValue') {
+    if (field.id === 'description' || field.id === 'label') {
       return (
         <Input
-          type={this.props.selected}
+          type="text"
           name={field.id}
           placeholder={field.placeholder}
           onChange={this._handleChange.bind(this, field.id)}
