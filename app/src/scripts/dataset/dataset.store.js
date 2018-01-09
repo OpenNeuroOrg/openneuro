@@ -50,13 +50,13 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Set Initial State
-     *
-     * Sets the state to the data object defined
-     * inside the function. Also takes a diffs object
-     * which will set the state to the initial state
-     * with any differences passed.
-     */
+   * Set Initial State
+   *
+   * Sets the state to the data object defined
+   * inside the function. Also takes a diffs object
+   * which will set the state to the initial state
+   * with any differences passed.
+   */
   setInitialState: function(diffs) {
     let data = {
       apps: {},
@@ -92,6 +92,9 @@ let datasetStore = Reflux.createStore({
       selectedSnapshot: '',
       status: null,
       users: [],
+      uploading: false,
+      uploadingCanceled: false,
+      uploadingScitranRequests: [],
       showSidebar: window.localStorage.hasOwnProperty('showSidebar')
         ? window.localStorage.showSidebar === 'true'
         : true,
@@ -107,11 +110,11 @@ let datasetStore = Reflux.createStore({
   // Dataset -----------------------------------------------------------------------
 
   /**
-     * Load Dataset
-     *
-     * Takes a datasetId and loads the dataset.
-     */
-  loadDataset(datasetId, options) {
+   * Load Dataset
+   *
+   * Takes a datasetId and loads the dataset.
+   */
+  loadDataset(datasetId, options, forceReload) {
     let snapshot = !!(options && options.snapshot),
       dataset = this.data.dataset
     options = options ? options : {}
@@ -135,7 +138,7 @@ let datasetStore = Reflux.createStore({
     })
 
     // don't reload the current dataset
-    if (dataset && dataset._id === datasetId) {
+    if (!forceReload && dataset && dataset._id === datasetId) {
       this.update({ loading: false, loadingJobs: false })
       return
     }
@@ -173,6 +176,15 @@ let datasetStore = Reflux.createStore({
                 this.update({ loading: false, snapshot: snapshot })
               })
             })
+            if (
+              forceReload ||
+              (!this.data.uploading && dataset.tags.includes('updating'))
+            ) {
+              this.revalidate()
+              if (dataset.tags.includes('updating')) {
+                scitran.removeTag('projects', datasetId, 'updating')
+              }
+            }
           }
         }
       },
@@ -181,8 +193,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Load Dataset Tree
-     */
+   * Load Dataset Tree
+   */
   loadDatasetTree() {
     this.update({ loadingTree: true })
     bids.getDatasetTree(
@@ -195,12 +207,12 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Reload Dataset
-     *
-     * Optionally takes a datasetId and only reloads
-     * the dataset if that ID matches the current ID.
-     * If no ID is passed it reloads the current ID.
-     */
+   * Reload Dataset
+   *
+   * Optionally takes a datasetId and only reloads
+   * the dataset if that ID matches the current ID.
+   * If no ID is passed it reloads the current ID.
+   */
   reloadDataset(datasetId) {
     if (this.data.dataset) {
       if (!datasetId) {
@@ -214,29 +226,29 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Load Users
-     *
-     * Loads a list of all users.
-     */
+   * Load Users
+   *
+   * Loads a list of all users.
+   */
   loadUsers() {
-    scitran.getUsers((err, res) => {
+    scitran.getUsers().then(res => {
       this.update({ users: res.body })
     })
   },
 
   /**
-     * Load Apps
-     */
+   * Load Apps
+   */
   loadApps() {
     this.update({ loadingApps: true })
-    crn.getApps((err, res) => {
+    crn.getApps().then(res => {
       FPActions.setApps(res.body)
       this.update({ apps: res.body, loadingApps: false })
     })
   },
 
   getJobLogs(id, callback) {
-    crn.getJobLogs(id, (err, res) => {
+    crn.getJobLogs(id).then(res => {
       let modals = this.data.modals
       let logs = res.body
       modals.displayFile = true
@@ -266,18 +278,17 @@ let datasetStore = Reflux.createStore({
   },
 
   getLogstream(logstreamName, callback) {
-    crn.getLogstream(logstreamName, (err, res) => {
-      // Default text in case logs are missing despite no errors
-      let logsText = 'No logs available.'
-      let modals = this.data.modals
-      let logs = res.body
-      modals.displayFile = true
-      if (callback) {
-        callback()
-      }
-      if (err) {
-        logsText = JSON.stringify(err)
-      } else if (logs) {
+    // Default text in case logs are missing
+    let logsText = 'No logs available.'
+    const modals = this.data.modals
+    crn
+      .getLogstream(logstreamName)
+      .then(res => {
+        const logs = res.body
+        modals.displayFile = true
+        if (callback) {
+          callback()
+        }
         // Append all rows together for in-browser display
         // Replaces the default text with the real logs
         logsText = logs
@@ -285,24 +296,28 @@ let datasetStore = Reflux.createStore({
             return line.message
           })
           .join('\n')
-      }
-      this.update({
-        displayFile: {
-          name: 'Logs',
-          text: logsText,
-          link: config.crn.url + 'logs/' + logstreamName + '/raw',
-        },
-        modals,
       })
-    })
+      .catch(err => {
+        logsText = JSON.stringify(err)
+      })
+      .finally(() => {
+        this.update({
+          displayFile: {
+            name: 'Logs',
+            text: logsText,
+            link: config.crn.url + 'logs/' + logstreamName + '/raw',
+          },
+          modals,
+        })
+      })
   },
 
   /**
-     * Publish
-     *
-     * Takes a snapshotId, value and callback and sets the
-     * datasets public status to the passed value.
-     */
+   * Publish
+   *
+   * Takes a snapshotId, value and callback and sets the
+   * datasets public status to the passed value.
+   */
   publish(snapshotId, value, history, callback) {
     let datasetId = this.data.snapshot
       ? this.data.dataset.original
@@ -319,89 +334,82 @@ let datasetStore = Reflux.createStore({
       }
     }
 
-    scitran.updateSnapshotPublic(snapshotId, value, err => {
+    scitran.updateSnapshotPublic(snapshotId, value).then(() => {
       if (callback) {
         callback()
       }
-      if (!err) {
-        let dataset = this.data.dataset
-        if (value) {
-          if (!hasPublic) {
-            scitran.addTag('projects', datasetId, 'hasPublic', () => {})
-          }
-          if (snapshotId === this.data.dataset._id) {
-            dataset.status.public = value
-          } else {
-            history.push('/datasets/' + datasetId + '/versions/' + snapshotId)
-          }
-        } else {
-          if (!hasPublic) {
-            scitran.removeTag('projects', datasetId, 'hasPublic', () => {})
-          }
+      let dataset = this.data.dataset
+      if (value) {
+        if (!hasPublic) {
+          scitran.addTag('projects', datasetId, 'hasPublic')
+        }
+        if (snapshotId === this.data.dataset._id) {
           dataset.status.public = value
+        } else {
+          history.push('/datasets/' + datasetId + '/versions/' + snapshotId)
         }
-        let snapshots = this.data.snapshots
-        for (let snapshot of snapshots) {
-          if (snapshot._id === snapshotId) {
-            snapshot.public = value
-          }
+      } else {
+        if (!hasPublic) {
+          scitran.removeTag('projects', datasetId, 'hasPublic')
         }
-        this.update({ dataset, snapshots })
+        dataset.status.public = value
       }
+      let snapshots = this.data.snapshots
+      for (let snapshot of snapshots) {
+        if (snapshot._id === snapshotId) {
+          snapshot.public = value
+        }
+      }
+      this.update({ dataset, snapshots })
     })
   },
 
   getDatasetDownloadTicket(callback) {
-    scitran.getBIDSDownloadTicket(
-      this.data.dataset._id,
-      (err, res) => {
+    scitran
+      .getBIDSDownloadTicket(this.data.dataset._id, {
+        snapshot: !!this.data.snapshot,
+      })
+      .then(res => {
         let ticket = res.body.ticket
         let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
         callback(downloadUrl)
-      },
-      { snapshot: !!this.data.snapshot },
-    )
+      })
   },
 
   /**
-     * Track Download
-     *
-     * Tracks download and increments download
-     * count (client side only) to provide immediate
-     * download feedback.
-     */
+   * Track Download
+   *
+   * Tracks download and increments download
+   * count (client side only) to provide immediate
+   * download feedback.
+   */
   trackDownload(callback) {
-    scitran.trackUsage(
-      this.data.dataset._id,
-      'download',
-      { snapshot: true },
-      () => {
+    scitran
+      .trackUsage(this.data.dataset._id, 'download', { snapshot: true })
+      .then(() => {
         let dataset = this.data.dataset
         dataset.downloads++
         this.update({ dataset })
         callback()
-      },
-    )
+      })
   },
 
   /**
-     * Delete Dataset
-     *
-     * Takes a datsetId, deletes the dataset, and returns the user
-     * to the my datasets page.
-     */
+   * Delete Dataset
+   *
+   * Takes a datsetId, deletes the dataset, and returns the user
+   * to the my datasets page.
+   */
   deleteDataset(datasetId, history, callback) {
     if (this.data.snapshot) {
-      bids.deleteDataset(
-        datasetId,
-        () => {
+      bids
+        .deleteDataset(datasetId, { snapshot: this.data.snapshot })
+        .then(() => {
           history.push('/dashboard/datasets')
-        },
-        { snapshot: this.data.snapshot },
-      )
+        })
     } else {
       let message =
-        'You are about to delete this dataset. This will delete your draft and any unpublished snaphots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.'
+        'You are about to delete this dataset. This will delete your draft and any unpublished snapshots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.'
       this.updateWarn({
         alwaysWarn: true,
         confirmTxt: 'Delete',
@@ -409,13 +417,11 @@ let datasetStore = Reflux.createStore({
         message: message,
         action: () => {
           this.update({ loading: 'deleting' })
-          bids.deleteDataset(
-            datasetId,
-            () => {
+          bids
+            .deleteDataset(datasetId, { snapshot: this.data.snapshot })
+            .then(() => {
               history.push('/dashboard/datasets')
-            },
-            { snapshot: this.data.snapshot },
-          )
+            })
         },
       })
     }
@@ -425,8 +431,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Toggle Modal
-     */
+   * Toggle Modal
+   */
   toggleModal(name, callback) {
     let update = {}
 
@@ -456,8 +462,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update Status
-     */
+   * Update Status
+   */
   updateStatus(projectId, updates) {
     if (this.data.dataset && this.data.dataset._id === projectId) {
       let dataset = this.data.dataset
@@ -473,11 +479,11 @@ let datasetStore = Reflux.createStore({
   // Metadata ----------------------------------------------------------------------
 
   /**
-     * Update Modified
-     *
-     * Updated the last modified date for the current
-     * dataset (client-side only).
-     */
+   * Update Modified
+   *
+   * Updated the last modified date for the current
+   * dataset (client-side only).
+   */
   updateModified() {
     let dataset = this.data.dataset
     dataset.modified = moment().format()
@@ -485,7 +491,7 @@ let datasetStore = Reflux.createStore({
   },
 
   updateName(value, callback) {
-    scitran.updateProject(this.data.dataset._id, { label: value }, () => {
+    scitran.updateProject(this.data.dataset._id, { label: value }).then(() => {
       // update description
       this.updateDescription('Name', value, callback)
 
@@ -501,11 +507,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update Description
-     *
-     * Takes a key and a value and updates the dataset
-     * description JSON note accordingly.
-     */
+   * Update Description
+   *
+   * Takes a key and a value and updates the dataset
+   * description JSON note accordingly.
+   */
   updateDescription(key, value, callback) {
     let dataset = this.data.dataset
     let metadataIssues = this.data.metadataIssues
@@ -527,12 +533,12 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update Description File
-     *
-     * Helper method to make necessary state and metadata
-     * changes after a description file is uploaded,
-     * deleted or added.
-     */
+   * Update Description File
+   *
+   * Helper method to make necessary state and metadata
+   * changes after a description file is uploaded,
+   * deleted or added.
+   */
   updateDescriptionFile(file, projectId, callback) {
     files.read(file, contents => {
       let description = JSON.parse(contents)
@@ -543,13 +549,13 @@ let datasetStore = Reflux.createStore({
           authors.push({ name: author, ORCIDID: '' })
         }
       }
-      scitran.updateProject(projectId, { metadata: { authors } }, () => {
+      scitran.updateProject(projectId, { metadata: { authors } }).then(() => {
         file = new File(
           [JSON.stringify(description)],
           'dataset_description.json',
           { type: 'application/json' },
         )
-        scitran.updateFile('projects', projectId, file, () => {
+        scitran.updateFile('projects', projectId, file).then(() => {
           description.Authors = authors
           let dataset = this.data.dataset
           dataset.description = description
@@ -562,23 +568,22 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Save Description
-     *
-     * Takes a description object and upserts
-     * the JSON description file.
-     */
+   * Save Description
+   *
+   * Takes a description object and upserts
+   * the JSON description file.
+   */
   saveDescription(description, callback) {
     description = JSON.parse(JSON.stringify(description))
     let datasetId = this.data.dataset._id
-    scitran.updateProject(
-      datasetId,
-      {
+    scitran
+      .updateProject(datasetId, {
         metadata: {
           authors: description.Authors,
           referencesAndLinks: description.ReferencesAndLinks,
         },
-      },
-      () => {
+      })
+      .then(() => {
         let authors = []
         let referencesAndLinks = []
 
@@ -595,43 +600,46 @@ let datasetStore = Reflux.createStore({
         }
 
         this.updateModified()
-        scitran.updateFileFromString(
-          'projects',
-          datasetId,
-          'dataset_description.json',
-          JSON.stringify(description),
-          'application/json',
-          ['project'],
-          callback,
-        )
-      },
-    )
+        scitran
+          .updateFileFromString(
+            'projects',
+            datasetId,
+            'dataset_description.json',
+            JSON.stringify(description),
+            'application/json',
+            ['project'],
+          )
+          .then(() => {
+            callback()
+          })
+      })
   },
 
   /**
-     * Update README
-     */
+   * Update README
+   */
   updateREADME(value, callback) {
     let dataset = this.data.dataset
-    scitran.updateFileFromString(
-      'projects',
-      this.data.dataset._id,
-      'README',
-      value,
-      '',
-      [],
-      (err, res) => {
-        callback(err, res)
+    scitran
+      .updateFileFromString(
+        'projects',
+        this.data.dataset._id,
+        'README',
+        value,
+        '',
+        [],
+      )
+      .then(res => {
+        callback(null, res)
         dataset.README = value
         this.update({ dataset })
         this.updateModified()
-      },
-    )
+      })
   },
 
   /**
-     * Dismiss Metadata Issue
-     */
+   * Dismiss Metadata Issue
+   */
   dismissMetadataIssue(key) {
     let metadataIssues = this.data.metadataIssues
     metadataIssues[key] = null
@@ -641,11 +649,11 @@ let datasetStore = Reflux.createStore({
   // Attachments -------------------------------------------------------------------
 
   /**
-     * Upload Attachment
-     *
-     * Takes a file and a callback and uploads
-     * the file to the current dataset.
-     */
+   * Upload Attachment
+   *
+   * Takes a file and a callback and uploads
+   * the file to the current dataset.
+   */
   uploadAttachment(file, callback) {
     let attachmentExists, fileExists
     for (let attachment of this.data.dataset.attachments) {
@@ -702,13 +710,13 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Delete Attachment
-     *
-     * Takes a filename and index and deletes
-     * the attachment from the current dataset.
-     */
+   * Delete Attachment
+   *
+   * Takes a filename and index and deletes
+   * the attachment from the current dataset.
+   */
   deleteAttachment(filename, index) {
-    scitran.deleteFile('projects', this.data.dataset._id, filename, () => {
+    scitran.deleteFile('projects', this.data.dataset._id, filename).then(() => {
       let dataset = this.data.dataset
       dataset.attachments.splice(index, 1)
       this.update({ dataset })
@@ -717,33 +725,31 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Get Attachment Download Ticket
-     *
-     * Takes a filename and callsback with a direct
-     * download url for an attachment.
-     */
+   * Get Attachment Download Ticket
+   *
+   * Takes a filename and callsback with a direct
+   * download url for an attachment.
+   */
   getAttachmentDownloadTicket(filename, callback) {
-    scitran.getDownloadTicket(
-      'projects',
-      this.data.dataset._id,
-      filename,
-      (err, res) => {
+    scitran
+      .getDownloadTicket('projects', this.data.dataset._id, filename, {
+        snapshot: !!this.data.snapshot,
+      })
+      .then(res => {
         let ticket = res.body.ticket
         let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
         callback(downloadUrl)
-      },
-      { snapshot: !!this.data.snapshot },
-    )
+      })
   },
 
   // File Structure ----------------------------------------------------------------
 
   /**
-     * Update Warning
-     *
-     * Throws a modal to warn the user about consequences of
-     * dataset modifications.
-     */
+   * Update Warning
+   *
+   * Throws a modal to warn the user about consequences of
+   * dataset modifications.
+   */
   updateWarn(options) {
     userActions.getPreferences(preferences => {
       if (
@@ -780,17 +786,17 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Disable Update Warning
-     *
-     * Disables the update warning modal
-     */
+   * Disable Update Warning
+   *
+   * Disables the update warning modal
+   */
   disableUpdateWarn(callback) {
     userActions.updatePreferences({ ignoreUpdateWarnings: true }, callback)
   },
 
   /**
-     * Add File
-     */
+   * Add File
+   */
   addFile(container, file) {
     let exists
     for (let existingFile of container.children) {
@@ -831,63 +837,190 @@ let datasetStore = Reflux.createStore({
               })
             })
           } else {
-            file.modifiedName = container.dirPath + file.name
-            scitran.updateFile('projects', this.data.dataset._id, file, () => {
-              let children = container.children
-              children.unshift({
-                name: file.modifiedName,
-                parentId: container._id,
+            file.modifiedName = (container.dirPath || '') + file.name
+            scitran
+              .updateFile('projects', this.data.dataset._id, file)
+              .then(() => {
+                let children = container.children
+                children.unshift({
+                  name: file.modifiedName,
+                  parentId: container._id,
+                })
+                this.updateDirectoryState(container._id, {
+                  children: children,
+                  loading: false,
+                })
+                this.revalidate()
               })
-              this.updateDirectoryState(container._id, {
-                children: children,
-                loading: false,
-              })
-              this.revalidate()
-            })
           }
         },
       })
     }
   },
 
+  addDirectoryFile(uploads, dirTree, callback) {
+    // get the top level directory name to display in warning message
+    let topLevelDirectory = `${uploads[0].container.dirPath.split('/')[0]}/`
+    let datasetId = this.data.dataset._id
+    let childExistsIndex = this.data.dataset.children.findIndex(el => {
+      return el.name === dirTree.name
+    })
+    if (childExistsIndex === -1) {
+      let message = this.updateMessage('add directory', {
+        name: topLevelDirectory,
+      })
+      this.updateWarn({
+        message: message,
+        action: () => {
+          this.update({
+            uploading: true,
+            uploadingFileCount: uploads.length,
+            uploadingProgress: 0,
+            uploadingScitranRequests: [],
+          })
+
+          this.updateDirectoryState(datasetId, { loading: true })
+          scitran.addTag('projects', datasetId, 'updating').then(() => {
+            async.eachLimit(
+              uploads,
+              3,
+              (upload, cb) => {
+                // Cancel adding files if navigated away
+                if (this.data.uploadingCanceled) {
+                  return cb(new Error('Add directory interrupted'))
+                }
+                let file = upload.file
+                let container = upload.container
+                file.modifiedName = (container.dirPath || '') + file.name
+                const scitranReq = scitran
+                  .updateFile('projects', datasetId, file)
+                  .then(() => {
+                    this.update({
+                      uploadingProgress: this.data.uploadingProgress + 1,
+                    })
+                    cb()
+                  })
+                  .catch(err => {
+                    cb(err)
+                  })
+                this.update({
+                  uploadingScitranRequests: this.data.uploadingScitranRequests.concat(
+                    [scitranReq],
+                  ),
+                })
+              },
+              err => {
+                scitran.removeTag('projects', datasetId, 'updating')
+                this.update({ uploading: false })
+                if (err && callback) callback(err)
+                if (err) {
+                  this.loadDataset(bids.encodeId(datasetId), undefined, false)
+                } else {
+                  this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
+                }
+                // Reset canceled when an upload is done (canceled or otherwise)
+                this.update({ uploadingCanceled: false })
+                if (callback) callback()
+              },
+            )
+          })
+        },
+      })
+    } else {
+      this.updateDirectoryState(datasetId, {
+        error: '"' + topLevelDirectory + '" already exists in this dataset.',
+      })
+    }
+  },
+
+  cancelDirectoryUpload() {
+    this.data.uploadingScitranRequests.forEach(upload => {
+      upload.abort()
+    })
+    // Reset the uploading state
+    this.update({
+      uploading: false,
+      uploadingProgress: null,
+      uploadingFileCount: 0,
+      uploadingCanceled: true,
+      uploadingScitranRequests: [],
+    })
+  },
+
+  deleteDirectory(dirTree, label, callback) {
+    let fileList = files.findFiles(dirTree)
+    if (fileList.length) {
+      let message = this.updateMessage('delete directory', {
+        name: label + '/',
+      })
+      this.updateWarn({
+        message: message,
+        action: () => {
+          async.eachLimit(
+            fileList,
+            3,
+            (file, cb) => {
+              scitran
+                .deleteFile('projects', this.data.dataset._id, file.name)
+                .then(() => {
+                  cb()
+                })
+            },
+            () => {
+              this.updateFileTreeOnDeleteDir(label)
+              this.revalidate()
+            },
+          )
+        },
+      })
+    } else {
+      this.updateDirectoryState(this.data.dataset._id, {
+        error: 'The directory you have selected is empty',
+      })
+    }
+    if (callback) {
+      callback()
+    }
+  },
+
   /**
-     * Delete File
-     */
+   * Delete File
+   */
   deleteFile(file, callback) {
     let message = this.updateMessage('delete', file)
     this.updateWarn({
       message: message,
       action: () => {
         let dataset = this.data.dataset
-        scitran.deleteFile('projects', this.data.dataset._id, file.name, () => {
-          let match = files.findInTree([dataset], file.parentId)
-          let children = []
-          for (let existingFile of match.children) {
-            if (file.name !== existingFile.name) {
-              children.push(existingFile)
+        scitran
+          .deleteFile('projects', this.data.dataset._id, file.name)
+          .then(() => {
+            let match = files.findInTree([dataset], file.parentId)
+            let children = []
+            for (let existingFile of match.children) {
+              if (file.name !== existingFile.name) {
+                children.push(existingFile)
+              }
             }
-          }
-          match.children = children
-          if (file.name === 'dataset_description.json') {
-            dataset.description = {
-              Name: '',
-              License: '',
-              Authors: [],
-              Acknowledgements: '',
-              HowToAcknowledge: '',
-              Funding: '',
-              ReferencesAndLinks: [],
-              DatasetDOI: '',
+            match.children = children
+            if (file.name === 'dataset_description.json') {
+              dataset.description = {
+                Name: '',
+                License: '',
+                Authors: [],
+                Acknowledgements: '',
+                HowToAcknowledge: '',
+                Funding: '',
+                ReferencesAndLinks: [],
+                DatasetDOI: '',
+              }
+              scitran.updateProject(this.data.dataset._id, {
+                metadata: { authors: [] },
+              })
             }
-            scitran.updateProject(
-              this.data.dataset._id,
-              { metadata: { authors: [] } },
-              () => {},
-            )
-          }
-          this.update({ dataset })
-          this.revalidate()
-        })
+            this.update({ dataset })
+            this.revalidate()
+          })
       },
     })
     if (callback) {
@@ -896,8 +1029,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update File
-     */
+   * Update File
+   */
   updateFile(item, file) {
     let filename = item.name
 
@@ -919,10 +1052,12 @@ let datasetStore = Reflux.createStore({
               this.updateFileState(item, { loading: false })
             })
           } else {
-            scitran.updateFile('projects', this.data.dataset._id, file, () => {
-              this.updateFileState(item, { loading: false })
-              this.revalidate()
-            })
+            scitran
+              .updateFile('projects', this.data.dataset._id, file)
+              .then(() => {
+                this.updateFileState(item, { loading: false })
+                this.revalidate()
+              })
           }
         },
       })
@@ -930,19 +1065,19 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Re Validate
-     *
-     * Used after any modification and must be run
-     * only after the modification is complete. Downloads
-     * and validates the dataset server side. Updates status
-     * tags and validation results on dataset.
-     */
+   * Re Validate
+   *
+   * Used after any modification and must be run
+   * only after the modification is complete. Downloads
+   * and validates the dataset server side. Updates status
+   * tags and validation results on dataset.
+   */
   revalidate() {
     let dataset = this.data.dataset
-    scitran.addTag('projects', dataset._id, 'validating', () => {
+    scitran.addTag('projects', dataset._id, 'validating').then(() => {
       dataset.status.validating = true
       this.update({ dataset })
-      crn.validate(dataset._id, (err, res) => {
+      crn.validate(dataset._id).then(res => {
         let validation = res.body.validation
         dataset.status.validating = false
         dataset.validation = validation
@@ -957,28 +1092,26 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Get File Download Ticket
-     *
-     * Takes a filename and callsback with a
-     * direct download url.
-     */
+   * Get File Download Ticket
+   *
+   * Takes a filename and callsback with a
+   * direct download url.
+   */
   getFileDownloadTicket(file, callback) {
-    scitran.getDownloadTicket(
-      'projects',
-      this.data.dataset._id,
-      file.name,
-      (err, res) => {
+    scitran
+      .getDownloadTicket('projects', this.data.dataset._id, file.name, {
+        snapshot: this.data.snapshot,
+      })
+      .then(res => {
         let ticket = res.body.ticket
         let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
         callback(downloadUrl)
-      },
-      { snapshot: this.data.snapshot },
-    )
+      })
   },
 
   /**
-     * Dismiss Error
-     */
+   * Dismiss Error
+   */
   dismissError(item) {
     if (item.children) {
       this.updateDirectoryState(item._id, { error: '' })
@@ -988,9 +1121,9 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Update Directory State
-     *
-     */
+   * Update Directory State
+   *
+   */
   updateDirectoryState(directoryId, changes, callback) {
     let dataset = this.data.dataset
     let match = files.findInTree([dataset], directoryId)
@@ -1002,13 +1135,21 @@ let datasetStore = Reflux.createStore({
     this.update({ dataset }, callback)
   },
 
+  updateFileTreeOnDeleteDir(directoryName, callback) {
+    let dataset = this.data.dataset
+    dataset.children = dataset.children.filter(child => {
+      return child.name != directoryName
+    })
+
+    this.update({ dataset }, callback)
+  },
   /**
-     * Update File State
-     *
-     * Take a file object and changes to be
-     * made and applies those changes by
-     * updating the state of the file tree
-     */
+   * Update File State
+   *
+   * Take a file object and changes to be
+   * made and applies those changes by
+   * updating the state of the file tree
+   */
   updateFileState(file, changes, callback) {
     let dataset = this.data.dataset
     let parent = files.findInTree([dataset], file.parentId)
@@ -1023,13 +1164,13 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Toggle Folder
-     *
-     * Takes the id of a container in the
-     * current dataset and toggles its showChildren
-     * boolean which determines whether container
-     * children are shown in the tree hierarchy UI.
-     */
+   * Toggle Folder
+   *
+   * Takes the id of a container in the
+   * current dataset and toggles its showChildren
+   * boolean which determines whether container
+   * children are shown in the tree hierarchy UI.
+   */
   toggleFolder(directory) {
     if (directory.label === this.data.dataset.label && !this.data.datasetTree) {
       this.loadDatasetTree()
@@ -1066,100 +1207,89 @@ let datasetStore = Reflux.createStore({
   // Jobs --------------------------------------------------------------------------
 
   /**
-     * Load Jobs
-     */
+   * Load Jobs
+   */
   loadJobs(projectId, snapshot, originalId, options, callback) {
     let jobId = options.job
     this.update({ loadingJobs: true })
-    crn.getDatasetJobs(
-      projectId,
-      (err, res) => {
-        let jobs = {}
+    crn.getDatasetJobs(projectId, { snapshot }).then(res => {
+      let jobs = {}
 
-        // iterate jobs
-        for (let job of res.body) {
-          files.sortTree(job.results)
-          files.sortTree(job.logs)
+      // iterate jobs
+      for (let job of res.body) {
+        files.sortTree(job.results)
+        files.sortTree(job.logs)
 
-          // check if job should be polled
-          let status = job.analysis ? job.analysis.status : 'PENDING'
-          let failed = status === 'FAILED'
-          let finished = status === 'SUCCEEDED'
-          let hasResults = job.results && job.results.length > 0
-          if (
-            snapshot &&
-            ((!finished && !failed) || (finished && !hasResults))
-          ) {
-            this.pollJob(job._id, projectId)
-          }
-
-          if (job.jobId === jobId) {
-            job.active = true
-          }
-
-          // sort jobs by label and version
-          if (!jobs.hasOwnProperty(job.appLabel)) {
-            jobs[job.appLabel] = {}
-            jobs[job.appLabel][job.appVersion] = {
-              appId: job.appId,
-              appLabel: job.appLabel,
-              appVersion: job.appVersion,
-              runs: [job],
-            }
-          } else if (!jobs[job.appLabel].hasOwnProperty(job.appVersion)) {
-            jobs[job.appLabel][job.appVersion] = {
-              appId: job.appId,
-              appLabel: job.appLabel,
-              appVersion: job.appVersion,
-              runs: [job],
-            }
-          } else {
-            jobs[job.appLabel][job.appVersion].runs.push(job)
-          }
+        // check if job should be polled
+        let status = job.analysis ? job.analysis.status : 'PENDING'
+        let failed = status === 'FAILED'
+        let finished = status === 'SUCCEEDED'
+        let hasResults = job.results && job.results.length > 0
+        if (snapshot && ((!finished && !failed) || (finished && !hasResults))) {
+          this.pollJob(job._id, projectId)
         }
 
-        function jobsToArray(jobs) {
-          let arr = []
-          for (let app in jobs) {
-            arr.push({
-              label: app,
-              versions: versionsToArray(jobs[app]),
-            })
+        if (job.jobId === jobId) {
+          job.active = true
+        }
+
+        // sort jobs by label and version
+        if (!jobs.hasOwnProperty(job.appLabel)) {
+          jobs[job.appLabel] = {}
+          jobs[job.appLabel][job.appVersion] = {
+            appId: job.appId,
+            appLabel: job.appLabel,
+            appVersion: job.appVersion,
+            runs: [job],
           }
-          return arr
-        }
-
-        function versionsToArray(versions) {
-          let arr = []
-          for (let version in versions) {
-            arr.push({
-              label: version,
-              runs: versions[version].runs,
-            })
+        } else if (!jobs[job.appLabel].hasOwnProperty(job.appVersion)) {
+          jobs[job.appLabel][job.appVersion] = {
+            appId: job.appId,
+            appLabel: job.appLabel,
+            appVersion: job.appVersion,
+            runs: [job],
           }
-          return arr
+        } else {
+          jobs[job.appLabel][job.appVersion].runs.push(job)
         }
+      }
 
-        let jobArray = jobsToArray(jobs)
-
-        // update jobs state
-        this.update({ jobs: jobArray, loadingJobs: false })
-
-        // callback with original jobs array
-        if (snapshot && callback) {
-          crn.getDatasetJobs(
-            originalId,
-            (err1, res1) => {
-              callback(res1.body)
-            },
-            { snapshot: false },
-          )
-        } else if (callback) {
-          callback(res.body)
+      function jobsToArray(jobs) {
+        let arr = []
+        for (let app in jobs) {
+          arr.push({
+            label: app,
+            versions: versionsToArray(jobs[app]),
+          })
         }
-      },
-      { snapshot },
-    )
+        return arr
+      }
+
+      function versionsToArray(versions) {
+        let arr = []
+        for (let version in versions) {
+          arr.push({
+            label: version,
+            runs: versions[version].runs,
+          })
+        }
+        return arr
+      }
+
+      let jobArray = jobsToArray(jobs)
+
+      // update jobs state
+      this.update({ jobs: jobArray, loadingJobs: false })
+
+      // callback with original jobs array
+      if (snapshot && callback) {
+        crn.getDatasetJobs(originalId, { snapshot: false }).then(res => {
+          callback(null, res)
+        })
+      } else if (callback) {
+        callback(res.body)
+      }
+    })
   },
 
   pollJob(jobId, snapshotId) {
@@ -1210,8 +1340,8 @@ let datasetStore = Reflux.createStore({
     }
   },
   /**
-     * Start Job
-     */
+   * Start Job
+   */
   startJob(snapshotId, jobDefinition, parameters, callback) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
@@ -1227,8 +1357,8 @@ let datasetStore = Reflux.createStore({
       parameters.participant_label = this.data.dataset.summary.subjects
     }
 
-    crn.createJob(
-      {
+    crn
+      .createJob({
         datasetId: datasetId,
         datasetLabel: this.data.dataset.label,
         jobDefinition: jobDefinition.jobDefinitionArn,
@@ -1236,37 +1366,37 @@ let datasetStore = Reflux.createStore({
         parameters: parameters,
         snapshotId: snapshotId,
         userId: userStore.data.scitran._id,
-      },
-      (err, res) => {
-        if (!err) {
-          // reload jobs
-          if (snapshotId == this.data.dataset._id) {
-            let jobId = res.body.jobId
-            this.loadJobs(
-              snapshotId,
-              this.data.snapshot,
-              datasetId,
-              { job: jobId },
-              jobs => {
-                this.loadSnapshots(this.data.dataset, jobs)
+      })
+      .then(res => {
+        // reload jobs
+        if (snapshotId == this.data.dataset._id) {
+          let jobId = res.body.jobId
+          this.loadJobs(
+            snapshotId,
+            this.data.snapshot,
+            datasetId,
+            { job: jobId },
+            jobs => {
+              this.loadSnapshots(this.data.dataset, jobs)
 
-                // start polling job
-                this.pollJob(jobId, snapshotId)
+              // start polling job
+              this.pollJob(jobId, snapshotId)
 
-                // open job accordion
-                this.update({
-                  activeJob: {
-                    app: jobDefinition.label,
-                    version: jobDefinition.version,
-                  },
-                })
-              },
-            )
-          }
+              // open job accordion
+              this.update({
+                activeJob: {
+                  app: jobDefinition.label,
+                  version: jobDefinition.version,
+                },
+              })
+            },
+          )
         }
-        callback(err, res)
-      },
-    )
+        callback(null, res)
+      })
+      .catch(err => {
+        callback(err)
+      })
   },
 
   cancelJob(job) {
@@ -1277,48 +1407,42 @@ let datasetStore = Reflux.createStore({
 
   refreshJob(jobId, callback) {
     if (this.data.dataset) {
-      crn.getJob(
-        this.data.dataset._id,
-        jobId,
-        (err, res) => {
-          let existingJob
-          let jobUpdate = !err && res ? res.body : null
-          let jobs = this.data.jobs
-          if (jobs && jobs.length > 0) {
-            for (let job of jobs) {
-              for (let version of job.versions) {
-                for (let run of version.runs) {
-                  if (jobId === run._id) {
-                    existingJob = run
-                    if (jobUpdate) {
-                      run.analysis = jobUpdate.analysis
-                      run.results = jobUpdate.results
-                      run.logs = jobUpdate.logs
-                    }
+      crn.getJob(this.data.dataset._id, jobId, { snapshot: true }).then(res => {
+        let existingJob
+        let jobUpdate = res ? res.body : null
+        let jobs = this.data.jobs
+        if (jobs && jobs.length > 0) {
+          for (let job of jobs) {
+            for (let version of job.versions) {
+              for (let run of version.runs) {
+                if (jobId === run._id) {
+                  existingJob = run
+                  if (jobUpdate) {
+                    run.analysis = jobUpdate.analysis
+                    run.results = jobUpdate.results
+                    run.logs = jobUpdate.logs
                   }
                 }
               }
             }
-            if (
-              this.data.dataset &&
-              jobUpdate &&
-              this.data.dataset._id === jobUpdate.snapshotId
-            ) {
-              this.update({ jobs })
-            }
           }
-          callback(jobUpdate ? jobUpdate : existingJob)
-        },
-        { snapshot: true },
-      )
+          if (
+            this.data.dataset &&
+            jobUpdate &&
+            this.data.dataset._id === jobUpdate.snapshotId
+          ) {
+            this.update({ jobs })
+          }
+        }
+        callback(jobUpdate ? jobUpdate : existingJob)
+      })
     }
   },
 
   retryJob(jobId, callback) {
-    crn.retryJob(
-      this.data.dataset._id,
-      jobId,
-      () => {
+    crn
+      .retryJob(this.data.dataset._id, jobId, { snapshot: this.data.snapshot })
+      .then(() => {
         this.loadJobs(
           this.data.dataset._id,
           true,
@@ -1332,14 +1456,32 @@ let datasetStore = Reflux.createStore({
             callback()
           },
         )
-      },
-      { snapshot: this.data.snapshot },
-    )
+      })
+  },
+
+  deleteJob(jobId, callback) {
+    crn
+      .deleteJob(this.data.dataset._id, jobId, { snapshot: this.data.snapshot })
+      .then(() => {
+        this.loadJobs(
+          this.data.dataset._id,
+          true,
+          this.data.dataset.original,
+          {},
+          jobs => {
+            this.loadSnapshots(this.data.dataset, jobs)
+
+            // start polling job
+            this.pollJob(jobId, this.data.selectedSnapshot)
+            callback()
+          },
+        )
+      })
   },
 
   /**
-     * Dismiss Job Modal
-     */
+   * Dismiss Job Modal
+   */
   dismissJobsModal(success, snapshotId, appLabel, appVersion, jobId, history) {
     this.toggleModal('jobs')
     if (success) {
@@ -1356,11 +1498,11 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Select Job
-     *
-     * Select the job accordion panel and saves
-     * the state.
-     */
+   * Select Job
+   *
+   * Select the job accordion panel and saves
+   * the state.
+   */
   selectJob(type, value) {
     let activeJob = this.data.activeJob
     if (value === activeJob[type]) {
@@ -1376,8 +1518,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * Get Result Download Ticket
-     */
+   * Get Result Download Ticket
+   */
   getResultDownloadTicket(snapshotId, jobId, file, callback) {
     let filePath = file === 'all' ? file : file.path
     if (filePath === 'all-results') {
@@ -1396,8 +1538,8 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
-     * DisplayFile
-     */
+   * DisplayFile
+   */
   displayFile(snapshotId, jobId, file, callback) {
     let requestAndDisplay = link => {
       let modals = this.data.modals
@@ -1424,7 +1566,7 @@ let datasetStore = Reflux.createStore({
           modals,
         })
       } else {
-        request.get(link, {}, (err, res) => {
+        request.get(link, {}).then(res => {
           if (callback) {
             callback()
           }
@@ -1459,7 +1601,7 @@ let datasetStore = Reflux.createStore({
       : this.data.dataset._id
     transition = transition == undefined ? true : transition
 
-    scitran.getProject(datasetId, res => {
+    scitran.getProject(datasetId).then(res => {
       let project = res.body
       if (
         !project.metadata ||
@@ -1493,7 +1635,7 @@ let datasetStore = Reflux.createStore({
               'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.',
           })
         } else {
-          crn.createSnapshot(datasetId, (err, res) => {
+          crn.createSnapshot(datasetId).then(res => {
             let snapshotId = res.body._id
             this.toggleSidebar(true)
             if (transition) {
@@ -1517,8 +1659,8 @@ let datasetStore = Reflux.createStore({
 
   loadSnapshots(dataset, jobs, callback) {
     let datasetId = dataset.original ? dataset.original : dataset._id
-    scitran.getProjectSnapshots(datasetId, (err, res) => {
-      let snapshots = !err && res.body ? res.body : []
+    scitran.getProjectSnapshots(datasetId).then(res => {
+      let snapshots = res.body
 
       // sort snapshots
       snapshots.sort((a, b) => {
@@ -1567,7 +1709,7 @@ let datasetStore = Reflux.createStore({
   // usage analytics ---------------------------------------------------------------
 
   trackView(snapshotId) {
-    scitran.trackUsage(snapshotId, 'view', { snapshot: true }, () => {})
+    scitran.trackUsage(snapshotId, 'view', { snapshot: true })
   },
 
   // Toggle Sidebar ----------------------------------------------------------------

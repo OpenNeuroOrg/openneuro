@@ -3,7 +3,7 @@ FROM node:6.12.0-alpine
 # install server app
 ADD . /srv
 WORKDIR /srv/server
-RUN npm install -g yarn && yarn install
+RUN apk add git --no-cache --update && npm install -g yarn && yarn install
 
 # Reduce the final image size
 RUN rm -rf /srv/app

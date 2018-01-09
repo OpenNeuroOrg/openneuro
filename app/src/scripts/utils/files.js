@@ -10,6 +10,7 @@ let fileUtils = {
   read,
   hasExtension,
   sortTree,
+  findFiles,
 }
 
 export default fileUtils
@@ -190,4 +191,29 @@ function endsWith(str, suffix) {
       .toLowerCase()
       .indexOf(suffix.toLowerCase(), str.length - suffix.length) !== -1
   )
+}
+
+/**
+ * Find Files
+ *
+ * takes a container object or an array of children and returns all files in the container
+ */
+function findFiles(container, fileList = []) {
+  let tree, subTree
+  //First iteration is the root container and the rest are children arrays
+  tree = container.children || container
+
+  tree.forEach(item => {
+    if (item.children) {
+      subTree = item.children
+    }
+    if (item.type !== 'folder') {
+      fileList.push(item)
+    }
+    if (subTree) {
+      findFiles(subTree, fileList)
+    }
+  })
+
+  return fileList
 }

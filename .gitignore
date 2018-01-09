@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-app/src/css/animate
-node_modules
-app/src/css/react-select.css
-app/src/css/react-select.css.map
-*.map
-=======
 .DS_Store
 config.env
 .env
->>>>>>> master
+

@@ -9,8 +9,6 @@ import Alert from './notification/notification.alert.jsx'
 import notificationStore from './notification/notification.store'
 import { refluxConnect } from './utils/reflux'
 
-import 'babel-polyfill'
-
 class App extends Reflux.Component {
   constructor() {
     super()

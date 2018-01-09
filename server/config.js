@@ -12,7 +12,7 @@ let config = {
     'Access-Control-Allow-Headers': 'content-type, Authorization',
   },
   scitran: {
-    url: process.env.SCITRAN_URL,
+    url: process.env.SCITRAN_SITE_URL,
     secret: process.env.SCITRAN_CORE_DRONE_SECRET,
     fileStore: process.env.SCITRAN_PERSISTENT_DATA_PATH,
   },
@@ -28,11 +28,11 @@ let config = {
   },
   auth: {
     orcid: {
-      clientID: process.env.ORCID_AUTH_CLIENT_ID,
-      clientSecret: process.env.ORCID_AUTH_CLIENT_SECRET,
-      redirectURI: process.env.ORCID_AUTH_REDIRECT_URI,
-      apiURI: process.env.ORCID_API_URI,
-      URI: process.env.ORCID_URI,
+      clientID: process.env.SCITRAN_AUTH_ORCID_CLIENT_ID,
+      clientSecret: process.env.SCITRAN_AUTH_ORCID_CLIENT_SECRET,
+      redirectURI: process.env.SCITRAN_AUTH_ORCID_REDIRECT_URI,
+      apiURI: process.env.SCITRAN_AUTH_ORCID_API_ENDPOINT,
+      URI: process.env.SCITRAN_AUTH_ORCID_URI,
     },
   },
   mongo: {
@@ -65,7 +65,7 @@ let config = {
     },
     batch: {
       vcpusMax: 12,
-      memoryMax: 15360,
+      memoryMax: 30720,
       queue: process.env.AWS_BATCH_QUEUE,
       computeEnvironment: process.env.AWS_BATCH_COMPUTE_ENVIRONMENT,
     },
@@ -73,11 +73,14 @@ let config = {
       logGroupName: '/aws/batch/job',
     },
   },
-
   events: {
     JOB_STARTED: 'job-started',
     JOB_COMPLETED: 'job-completed',
     DATASET_UPLOADED: 'dataset-uploaded',
+  },
+  sentry: {
+    DSN: process.env.SENTRY_DSN,
+    ENVIRONMENT: process.env.ENVIRONMENT,
   },
 }
 

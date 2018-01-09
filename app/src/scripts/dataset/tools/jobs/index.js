@@ -151,11 +151,11 @@ class JobMenu extends React.Component {
   // template methods ---------------------------------------------------
 
   /**
-     * Apps
-     *
-     * Returns a label and select box for selection an
-     * analysis application.
-     */
+   * Apps
+   *
+   * Returns a label and select box for selection an
+   * analysis application.
+   */
   _apps() {
     const apps = this.props.apps
     const selectedApp = this.state.selectedAppKey
@@ -265,8 +265,8 @@ class JobMenu extends React.Component {
   }
 
   /**
-     * Incompatible
-     */
+   * Incompatible
+   */
   _incompatible(app) {
     let issues = this.state.disabledApps[app.id].issues
     return (
@@ -287,11 +287,11 @@ class JobMenu extends React.Component {
   }
 
   /**
-     * Snapshots
-     *
-     * Returns a labeled select box for selecting a snapshot
-     * to run analysis on.
-     */
+   * Snapshots
+   *
+   * Returns a labeled select box for selecting a snapshot
+   * to run analysis on.
+   */
   _snapshots() {
     let options = []
     if (this.props.snapshots) {
@@ -370,8 +370,8 @@ class JobMenu extends React.Component {
   // actions ------------------------------------------------------------
 
   /**
-     * Hide
-     */
+   * Hide
+   */
   _hide() {
     const success = this.state.message && !this.state.error
 
@@ -412,8 +412,8 @@ class JobMenu extends React.Component {
   }
 
   /**
-     * Update Parameter
-     */
+   * Update Parameter
+   */
   _updateParameter(parameter, event) {
     const value = event.target.value
     let inputFileParameters = this.state.inputFileParameters
@@ -450,8 +450,8 @@ class JobMenu extends React.Component {
   }
 
   /**
-     * Restore Default Parameters
-     */
+   * Restore Default Parameters
+   */
   _restoreDefaultParameters() {
     const apps = this.props.apps
     const key = this.state.selectedAppKey
@@ -463,8 +463,8 @@ class JobMenu extends React.Component {
   }
 
   /**
-     * Select App
-     */
+   * Select App
+   */
   _selectApp(e) {
     let selectedAppKey = e.target.value
     let selectedApp = this.props.apps[selectedAppKey]
@@ -482,8 +482,8 @@ class JobMenu extends React.Component {
   }
 
   /**
-     * Select App Version
-     */
+   * Select App Version
+   */
   _selectAppVersion(e) {
     let selectedVersionID = e.target.value
     let selectedDefinition = this.props.apps[this.state.selectedAppKey][
@@ -521,45 +521,41 @@ class JobMenu extends React.Component {
   }
 
   /**
-     * Select Snapshot
-     */
+   * Select Snapshot
+   */
   _selectSnapshot(e) {
     let snapshotId = e.target.value
     let disabledApps = {}
 
     /**
-         * determine app availability
-         */
+     * determine app availability
+     */
     // load validation data for selected snapshot
-    scitran.getProject(
-      snapshotId,
-      res => {
-        for (let jobDefinitionName in this.props.apps) {
-          let app = this.props.apps[jobDefinitionName]
-          let validationConfig = app.hasOwnProperty('validationConfig')
-            ? app.validationConfig
-            : { error: [] }
-          let issues = validate.reformat(
-            res.body.metadata.validation || {},
-            res.body.metadata.summary || {},
-            validationConfig,
-          )
-          if (issues.errors.length > 0) {
-            disabledApps[app.id] = { issues }
-          }
+    scitran.getProject(snapshotId, { snapshot: true }).then(res => {
+      for (let jobDefinitionName in this.props.apps) {
+        let app = this.props.apps[jobDefinitionName]
+        let validationConfig = app.hasOwnProperty('validationConfig')
+          ? app.validationConfig
+          : { error: [] }
+        let issues = validate.reformat(
+          res.body.metadata.validation || {},
+          res.body.metadata.summary || {},
+          validationConfig,
+        )
+        if (issues.errors.length > 0) {
+          disabledApps[app.id] = { issues }
         }
+      }
 
-        if (this.mounted) {
-          this.setState({ selectedSnapshot: snapshotId /*, disabledApps*/ })
-        }
-      },
-      { snapshot: true },
-    )
+      if (this.mounted) {
+        this.setState({ selectedSnapshot: snapshotId /*, disabledApps*/ })
+      }
+    })
   }
 
   /**
-     * Create Snapshot
-     */
+   * Create Snapshot
+   */
   _createSnapshot() {
     this.setState({ loading: true })
     actions.createSnapshot.bind(null, this.props.history)(res => {
@@ -579,8 +575,8 @@ class JobMenu extends React.Component {
   }
 
   /**
-     * Start Job
-     */
+   * Start Job
+   */
   _startJob() {
     const selectedSnapshot = this.state.selectedSnapshot
     const definitions = this.props.apps

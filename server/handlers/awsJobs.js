@@ -4,7 +4,8 @@ import crypto from 'crypto'
 import aws from '../libs/aws'
 import mongo from '../libs/mongo'
 import { ObjectID } from 'mongodb'
-import archiver from 'archiver'
+import yazl from 'yazl'
+import S3StreamDownload from 's3-stream-download'
 import config from '../config'
 import async from 'async'
 import emitter from '../libs/events'
@@ -207,6 +208,18 @@ let handlers = {
     })
   },
 
+  deleteJob(req, res, next) {
+    let jobId = req.params.jobId
+    c.crn.jobs.update(
+      { _id: ObjectID(jobId) },
+      { $set: { deleted: true } },
+      (err, result) => {
+        if (err) return next(err)
+        res.send({ data: result })
+      },
+    )
+  },
+
   parameterFileUpload(req, res, next) {
     let bucket = config.aws.s3.inputsBucket
     let file = req.files.file.data //Buffer
@@ -249,6 +262,7 @@ let handlers = {
         res.status(404).send({ message: 'Job not found.' })
         return
       }
+
       //Send back job object to client
       // server side polling handles all interactions with Batch now therefore we are not initiating batch polling from client
       res.send(job)
@@ -304,13 +318,7 @@ let handlers = {
       const type = path.replace('all-', '')
 
       // initialize archive
-      let archive = archiver('zip')
-
-      // log archiving errors
-      archive.on('error', err => {
-        console.log('archiving error - job: ' + jobId)
-        console.log(err)
-      })
+      let archive = new yazl.ZipFile()
 
       c.crn.jobs.findOne({ _id: ObjectID(jobId) }, {}, (err, job) => {
         let archiveName =
@@ -327,7 +335,7 @@ let handlers = {
         res.attachment(archiveName + '.zip')
 
         // begin streaming archive
-        archive.pipe(res)
+        archive.outputStream.pipe(res)
 
         aws.s3.getAllS3Objects(params, [], (err, data) => {
           let keysArray = []
@@ -349,12 +357,22 @@ let handlers = {
                 .split('/')
                 .slice(2)
                 .join('/')
-              const stream = aws.s3.sdk.getObject(objParams).createReadStream()
-              archive.append(stream, { name: fileName })
-              cb()
+              const streamOptions = {
+                downloadChunkSize: 8 * 1024 * 1024, // 8MB
+                concurrentChunks: 2,
+                retries: 7,
+              }
+              // The built in createReadStream blocks the main thread in some situations
+              const stream = new S3StreamDownload(
+                aws.s3.sdk,
+                objParams,
+                streamOptions,
+              )
+              archive.addReadStream(stream, fileName)
+              stream.on('end', cb)
             },
             () => {
-              archive.finalize()
+              archive.end()
             },
           )
         })
@@ -454,6 +472,7 @@ let handlers = {
      * Retry a job using existing parameters
      */
   retry(req, res, next) {
+    let userId = req.user
     let jobId = req.params.jobId
     let mongoJobId = typeof jobId != 'object' ? ObjectID(jobId) : jobId
 
@@ -516,11 +535,16 @@ let handlers = {
           )
           return
         } else {
-          emitter.emit(events.JOB_STARTED, {
-            job: batchJobParams,
-            createdDate: job.analysis.created,
-            retry: true,
-          })
+          let jobLog = aws.batch.extractJobLog(job)
+          emitter.emit(
+            events.JOB_STARTED,
+            {
+              job: jobLog,
+              createdDate: job.analysis.created,
+              retry: true,
+            },
+            userId,
+          )
         }
       })
     })
