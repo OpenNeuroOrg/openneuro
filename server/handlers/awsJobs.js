@@ -8,11 +8,9 @@ import yazl from 'yazl'
 import S3StreamDownload from 's3-stream-download'
 import config from '../config'
 import async from 'async'
-import emitter from '../libs/events'
 import { queue } from '../libs/queue'
 
 let c = mongo.collections
-let events = config.events
 
 //Job Polling
 
