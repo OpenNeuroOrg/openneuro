@@ -357,6 +357,7 @@ export default {
         project.metadata && project.metadata.validation
           ? project.metadata.validation
           : { errors: [], warnings: [] },
+      tags: project.tags || [],
       type: 'folder',
       children: files,
       description: this.formatDescription(project.metadata, description),
