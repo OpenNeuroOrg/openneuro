@@ -17,6 +17,7 @@ class ArrayInput extends React.Component {
       error: null,
       helper: null,
       type: null,
+      checked: [],
     }
 
     for (let field of this.props.model) {
@@ -95,6 +96,7 @@ class ArrayInput extends React.Component {
             selected={this.state.type}
             onCheck={this._toggleCheckBox.bind(this)}
             onInput={this._handleChange.bind(this)}
+            checked={this.state.checked}
           />
           <br />
           <button
