@@ -21,7 +21,11 @@ class ArrayInput extends React.Component {
     }
 
     for (let field of this.props.model) {
-      initialState[field.id] = ''
+      if (field.id === 'option') {
+        initialState[field.options] = []
+      } else {
+        initialState[field.id] = ''
+      }
     }
 
     this.initialState = initialState
@@ -81,8 +85,6 @@ class ArrayInput extends React.Component {
         // }
       })
     }
-
-    // console.log(this.state.type)
 
     return (
       <div className="cte-edit-array">

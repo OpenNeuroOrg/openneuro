@@ -99,68 +99,69 @@ const JobParameters = ({
         </label>
       )
     } else if (isRadio || isMulti) {
-      let op = parametersMetadata[parameter].defaultValue
+      // let op = parametersMetadata[parameter].defaultValue
       // remove white spaces from options
-      let options = op.filter(value => value.trim() != '')
-      if (isRadio) {
-        console.log(parametersMetadata[parameter])
-        let handleChange = e => {
-          let value = e.target.value
-          let event = { target: { value: value } }
-          return onChange(parameter, event)
-        }
+      // let options = op.filter(value => value.trim() != '')
+      // if (isRadio) {
+      //   console.log(parametersMetadata[parameter])
+      //   let handleChange = e => {
+      //     let value = e.target.value
+      //     let event = { target: { value: value } }
+      //     return onChange(parameter, event)
+      //   }
 
-        if (parameters[parameter].indexOf(' ') !== -1) {
-          parameters[parameter] = options[0]
-        }
-        input = (
-          <div>pop!</div>
-          // <CheckOrRadio
-          //   type="radio"
-          //   setName={parameter}
-          //   options={options}
-          //   selectedOptions={parameters[parameter]}
-          //   controlFunc={handleChange}
-          // />
-        )
-      } else if (isMulti) {
-        // ** Adds objects to arrInput if empty ** //
-        if (!arrControl.includes(parameter)) {
-          arrControl.push(parameter)
-          arrInput.push({ label: parameter, action: { value: [] } })
-        }
+      //   if (parameters[parameter].indexOf(' ') !== -1) {
+      //     parameters[parameter] = options[0]
+      //   }
+      input = (
+        <div>pop!</div>
+        // <CheckOrRadio
+        //   type="radio"
+        //   setName={parameter}
+        //   options={options}
+        //   selectedOptions={parameters[parameter]}
+        //   controlFunc={handleChange}
+        // />
+      )
+    } else if (isMulti) {
+      // ** Adds objects to arrInput if empty ** //
+      // if (!arrControl.includes(parameter)) {
+      // arrControl.push(parameter)
+      // arrInput.push({ label: parameter, action: { value: [] } })
+      // }
 
-        let handleChange = e => {
-          let value = e.target.value
-          let name = e.target.name
+      let handleChange = e => {
+        let value = e.target.value
+        let name = e.target.name
 
-          // ** Use case: multiple multi checks** //
-          let v = arrInput.map(obj => {
-            if (obj.label === name) {
-              let val = obj.action.value
-              // ** Add or remove values ** //
-              let index = val.indexOf(value)
-              if (index === -1) {
-                val.push(value)
-              } else {
-                val.splice(index, 1)
-              }
-              return val
-            }
-          })
-          let event = { target: { value: v } }
-          return onChange(parameter, event)
-        }
-
-        input = (
-          <CheckOrRadio
-            type="checkbox"
-            setName={parameter}
-            options={options}
-            controlFunc={handleChange}
-          />
-        )
+        // ** Use case: multiple multi checks** //
+        //   let v = arrInput.map(obj => {
+        //     if (obj.label === name) {
+        //       let val = obj.action.value
+        //       // ** Add or remove values ** //
+        //       let index = val.indexOf(value)
+        //       if (index === -1) {
+        //         val.push(value)
+        //       } else {
+        //         val.splice(index, 1)
+        //       }
+        //       return val
+        //     }
+        //   })
+        //   let event = { target: { value: v } }
+        //   return onChange(parameter, event)
       }
+
+      input = (
+        <div>POP!</div>
+        // <CheckOrRadio
+        //   type="checkbox"
+        //   setName={parameter}
+        //   options={options}
+        //   controlFunc={handleChange}
+        // />
+      )
+      // }
     } else {
       input = (
         <input
