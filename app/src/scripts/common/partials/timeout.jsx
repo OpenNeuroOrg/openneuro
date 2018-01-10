@@ -13,9 +13,7 @@ export default class Timeout extends React.Component {
   // life cycle events -------------------------------------------------------------------------
   componentDidMount() {
     setTimeout(() => {
-      this.setState({ timedOut: true }, () => {
-        this.forceUpdate()
-      })
+      this.setState({ timedOut: true })
     }, this.props.timeout)
   }
 
