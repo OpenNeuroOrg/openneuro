@@ -8,11 +8,9 @@ import yazl from 'yazl'
 import S3StreamDownload from 's3-stream-download'
 import config from '../config'
 import async from 'async'
-import emitter from '../libs/events'
 import { queue } from '../libs/queue'
 
 let c = mongo.collections
-let events = config.events
 
 //Job Polling
 
@@ -198,7 +196,7 @@ let handlers = {
         queue.enqueue(
           'batch',
           'startAnalysis',
-          { job: preparedJob, jobId: jobId, userId: userId },
+          { job: preparedJob, jobId: jobId, userId: userId, retry: false },
           () => {
             // Finish the client request so S3 upload can happen async
             res.send({ jobId: jobId })
@@ -518,35 +516,15 @@ let handlers = {
           },
         },
       )
-
-      res.send({ jobId: mongoJobId })
-
-      const batchJobParams = aws.batch.buildBatchParams(job)
-
-      aws.batch.startBatchJobs(batchJobParams, mongoJobId, err => {
-        if (err) {
-          // This is an unexpected error, probably from batch.
-          console.log(err)
-          // Cleanup the failed to submit job
-          // TODO - Maybe we save the error message into another field for display?
-          c.crn.jobs.updateOne(
-            { _id: mongoJobId },
-            { $set: { 'analysis.status': 'REJECTED' } },
-          )
-          return
-        } else {
-          let jobLog = aws.batch.extractJobLog(job)
-          emitter.emit(
-            events.JOB_STARTED,
-            {
-              job: jobLog,
-              createdDate: job.analysis.created,
-              retry: true,
-            },
-            userId,
-          )
-        }
-      })
+      queue.enqueue(
+        'batch',
+        'startAnalysis',
+        { job: job, jobId: mongoJobId, userId: userId, retry: true },
+        () => {
+          // Finish the client request so S3 upload can happen async
+          res.send({ jobId: mongoJobId })
+        },
+      )
     })
   },
 }
