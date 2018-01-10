@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`common/partials/happybrowser renders successfully 1`] = `
+exports[`common/partials/happybrowser renders for unsupported browsers 1`] = `
 <div
-  className="happybrowser-markup hidden"
+  className="happybrowser-markup"
 >
   <div
     className="hb-wrap clearfix"
@@ -53,3 +53,5 @@ exports[`common/partials/happybrowser renders successfully 1`] = `
   </div>
 </div>
 `;
+
+exports[`common/partials/happybrowser renders successfully 1`] = `""`;
