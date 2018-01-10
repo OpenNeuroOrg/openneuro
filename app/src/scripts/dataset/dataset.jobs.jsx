@@ -5,6 +5,7 @@ import Reflux from 'reflux'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions'
 import Spinner from '../common/partials/spinner.jsx'
+import Timeout from '../common/partials/timeout.jsx'
 import Run from './run'
 import { Accordion, Panel } from 'react-bootstrap'
 import { refluxConnect } from '../utils/reflux'
@@ -77,7 +78,9 @@ class Jobs extends Reflux.Component {
           activeKey={this.state.datasets.activeJob.app}
           onSelect={actions.selectJob.bind(null, 'app')}>
           {this.state.datasets.loadingJobs ? (
-            <Spinner active={true} text="Loading Analyses" />
+            <Timeout timeout={20000}>
+              <Spinner active={true} text="Loading Analyses" />
+            </Timeout>
           ) : (
             app
           )}
