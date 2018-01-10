@@ -12,13 +12,14 @@ export default class Timeout extends React.Component {
   }
   // life cycle events -------------------------------------------------------------------------
   componentDidMount() {
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
       this.setState({ timedOut: true })
     }, this.props.timeout)
+    this.timeoutId = timeoutId
   }
 
   componentWillUnmount() {
-    clearTimeout()
+    clearTimeout(this.timeoutId)
   }
 
   render() {
@@ -34,9 +35,11 @@ export default class Timeout extends React.Component {
 
 Timeout.propTypes = {
   timeout: PropTypes.number,
+  timeoutId: PropTypes.number,
   children: PropTypes.object,
 }
 
 Timeout.defaultProps = {
   timeout: null,
+  timeoutId: null,
 }
