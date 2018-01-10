@@ -102,8 +102,8 @@ const JobParameters = ({
       let op = parametersMetadata[parameter].defaultValue
       // remove white spaces from options
       let options = op.filter(value => value.trim() != '')
-
       if (isRadio) {
+        console.log(parametersMetadata[parameter])
         let handleChange = e => {
           let value = e.target.value
           let event = { target: { value: value } }
@@ -114,13 +114,14 @@ const JobParameters = ({
           parameters[parameter] = options[0]
         }
         input = (
-          <CheckOrRadio
-            type="radio"
-            setName={parameter}
-            options={options}
-            selectedOptions={parameters[parameter]}
-            controlFunc={handleChange}
-          />
+          <div>pop!</div>
+          // <CheckOrRadio
+          //   type="radio"
+          //   setName={parameter}
+          //   options={options}
+          //   selectedOptions={parameters[parameter]}
+          //   controlFunc={handleChange}
+          // />
         )
       } else if (isMulti) {
         // ** Adds objects to arrInput if empty ** //

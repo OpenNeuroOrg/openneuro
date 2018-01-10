@@ -112,7 +112,6 @@ class CreateJob extends Reflux.Component {
                     radio: 2,
                     multi: 1,
                     options: [],
-                    required: true,
                   },
                 ]}
               />

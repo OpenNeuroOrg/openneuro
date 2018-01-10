@@ -96,6 +96,7 @@ class ArrayInput extends React.Component {
             selected={this.state.type}
             onCheck={this._toggleCheckBox.bind(this)}
             onInput={this._handleChange.bind(this)}
+            onArray={this._handleArray.bind(this)}
             checked={this.state.checked}
           />
           <br />
@@ -132,6 +133,12 @@ class ArrayInput extends React.Component {
   // custom methods -----------------------------------------------------
 
   _handleChange(key, event) {
+    let state = {}
+    state[key] = event.target.value
+    this.setState(state)
+  }
+
+  _handleArray(key, field, event) {
     let state = {}
     state[key] = event.target.value
     this.setState(state)
@@ -200,13 +207,14 @@ class ArrayInput extends React.Component {
             helper: null,
           })
           return
-        } else if (itemValue.type === 'radio' && checkArr.length <= 1) {
-          this.setState({
-            error: 'Type radio accepts two or more default values.',
-            helper: null,
-          })
-          return
         }
+        // else if (itemValue.type === 'radio' && checkArr.length <= 1) {
+        //   this.setState({
+        //     error: 'Type radio accepts two or more default values.',
+        //     helper: null,
+        //   })
+        //   return
+        // }
       }
 
       value.push(itemValue)

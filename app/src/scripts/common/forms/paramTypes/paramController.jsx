@@ -18,7 +18,6 @@ class ParamController extends React.Component {
     let checked = this.props.checked
     let selected = this.props.selected
 
-    // console.log(inputFields)
     this.props.model.map(field => {
       if (selected === 'file') {
         inputFields.push(this._returnFile(field))
@@ -51,9 +50,13 @@ class ParamController extends React.Component {
     this.props.onCheck(field)
   }
 
-  // _handleOptions(field, option) {
-  //   field.options.push(option)
-  // }
+  _handleArray(field, e) {
+    let value = e.target.value
+    let key = e.target.name
+    // console.log(field)
+    let event = { target: { value: value } }
+    this.props.onArray(key, field, event)
+  }
 
   // ParamTypes Methods ---------------------------------------------------------------------------
 
@@ -134,7 +137,7 @@ class ParamController extends React.Component {
           {field.id}
         </button>
       )
-    } else if (field.hasOwnProperty('placeholder') && field.id != 'type') {
+    } else if (field.id === 'label' || field.id === 'description') {
       return (
         <Input
           type="text"
@@ -144,7 +147,8 @@ class ParamController extends React.Component {
           key={field.id}
         />
       )
-    } else if (field.id === 'options') {
+    } else if (field.id === 'option') {
+      let options = []
       for (let i = 0; i < field.radio; i++) {
         let num = i + 1
         let key = field.id + ' ' + num
@@ -154,15 +158,15 @@ class ParamController extends React.Component {
               type="text"
               name={key}
               placeholder={key}
-              onChange={this._handleChange.bind(this, key)}
+              onChange={this._handleArray.bind(this, field)}
               key={key}
             />
           </li>
         )
-
-        field.options.push(input)
+        field.options.push(key)
+        options.push(input)
       }
-      return field.options
+      return options
     }
   }
 }
@@ -172,6 +176,7 @@ ParamController.propTypes = {
   selected: PropTypes.string,
   onInput: PropTypes.func,
   onCheck: PropTypes.func,
+  onArray: PropTypes.func,
   checked: PropTypes.array,
 }
 
