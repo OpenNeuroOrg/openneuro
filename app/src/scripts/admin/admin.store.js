@@ -299,6 +299,8 @@ let UserStore = Reflux.createStore({
    * Submit Job Definition
    */
   submitJobDefinition() {
+    console.log('This is adminstore')
+
     let formData = this.data.jobDefinitionForm
     // Build up the AWS object
     let jobDefinition = {}
@@ -322,14 +324,24 @@ let UserStore = Reflux.createStore({
       for (let param of formData.parameters) {
         parameters[param.label] = param.defaultValue
         parametersMetadata[param.label] = param
-        console.log(param)
-        let types = ['radio', 'multi', 'select']
-        if (types.includes(param.type) && param.label != 'participant_label') {
-          // let arrayInput = param.defaultValue.split(' ')
-          // param.defaultValue = arrayInput.filter(value => value.trim() != ' ')
-        } else {
-          param.defaultValue = param.defaultValue
+        if (param.option) {
+          let option = []
+          Object.values(param.option).map(value => {
+            console.log(value)
+            option.push(value)
+          })
+          // console.log(param.option)
+          // console.log(typeof(param.option))
+          parametersMetadata[param.option] = option
+          param.option = option
         }
+        // let types = ['radio', 'multi', 'select']
+        // if (types.includes(param.type) && param.label != 'participant_label') {
+        // let arrayInput = param.defaultValue.split(' ')
+        // param.defaultValue = arrayInput.filter(value => value.trim() != ' ')
+        // } else {
+        // }
+        param.defaultValue = param.defaultValue
       }
     }
 
