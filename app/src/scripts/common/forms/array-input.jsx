@@ -18,6 +18,7 @@ class ArrayInput extends React.Component {
       helper: null,
       type: null,
       checked: [],
+      options: {},
     }
 
     for (let field of this.props.model) {
@@ -141,33 +142,12 @@ class ArrayInput extends React.Component {
   }
 
   _handleArray(key, field, event) {
-    let state = {}
-    state[key] = event.target.value
-    this.setState(state)
+    let opts = this.state.options
+    opts[key] = event.target.value
   }
 
   _handleSelectChange(key, selected) {
-    this.setState({ type: selected })
-    // ** Updates the text above params **//
-    if (selected === 'radio' || selected === 'multi' || selected === 'select') {
-      this.setState({
-        error: null,
-        helper:
-          'Please seperate values with spaces. The default values will automatically be seperated for the user.',
-      })
-    } else if (selected === 'checkbox') {
-      this.setState({
-        error: null,
-        helper:
-          "Please enter 'true' or 'false' to set the default value to checked for the user.",
-      })
-    } else {
-      this.setState({
-        error: null,
-        helper: null,
-      })
-    }
-
+    this.setState({ type: selected, options: [] })
     let state = {}
     state[key] = selected
     this.setState(state)
@@ -181,7 +161,6 @@ class ArrayInput extends React.Component {
 
   _add(model) {
     let value = this.props.value
-    let types = ['radio', 'multi', 'checkbox']
 
     for (let field of model) {
       if (field.required && !this.state[field.id]) {
@@ -193,32 +172,13 @@ class ArrayInput extends React.Component {
     if (model.length > 1) {
       let itemValue = {}
       for (let field of model) {
-        itemValue[field.id] = this.state[field.id]
-      }
-
-      if (types.includes(itemValue.type)) {
-        let checkArr = itemValue.defaultValue.split(' ')
-        // check for white space and remove them
-        checkArr = checkArr.filter(value => value.trim() != '')
-
-        // Error messages for multi and radio
-        if (itemValue.type === 'multi' && checkArr.length <= 1) {
-          this.setState({
-            error:
-              'Multiple checkboxes accepts 2 or more values. Please use type boolean if you intend to use a single checkbox.',
-            helper: null,
-          })
-          return
+        if (field.id === 'option') {
+          itemValue[field.id] = this.state.options
+        } else {
+          itemValue[field.id] = this.state[field.id]
         }
-        // else if (itemValue.type === 'radio' && checkArr.length <= 1) {
-        //   this.setState({
-        //     error: 'Type radio accepts two or more default values.',
-        //     helper: null,
-        //   })
-        //   return
-        // }
       }
-
+      console.log(itemValue)
       value.push(itemValue)
     } else {
       value.push(this.state[model[0].id])
@@ -452,25 +412,25 @@ class ArrayItem extends React.Component {
       data[field.id] = this.state[field.id]
     }
 
-    if (types.includes(data.type)) {
-      let checkArr = data.defaultValue.split(' ')
-      // check for white space and remove them
-      checkArr = checkArr.filter(value => value.trim() != '')
+    // if (types.includes(data.type)) {
+    //   let checkArr = data.defaultValue.split(' ')
+    //   // check for white space and remove them
+    //   checkArr = checkArr.filter(value => value.trim() != '')
 
-      // Error messages for multi and radio
-      if (data.type === 'multi' && checkArr.length <= 1) {
-        this.setState({
-          error:
-            'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
-        })
-        return
-      } else if (data.type === 'radio' && checkArr.length <= 1) {
-        this.setState({
-          error: 'Type radio accepts two or more default values.',
-        })
-        return
-      }
-    }
+    //   // Error messages for multi and radio
+    //   if (data.type === 'multi' && checkArr.length <= 1) {
+    //     this.setState({
+    //       error:
+    //         'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
+    //     })
+    //     return
+    //   } else if (data.type === 'radio' && checkArr.length <= 1) {
+    //     this.setState({
+    //       error: 'Type radio accepts two or more default values.',
+    //     })
+    //     return
+    //   }
+    // }
     this.props.onEdit(this.props.index, data)
   }
 }

@@ -7,7 +7,6 @@ class ParamController extends React.Component {
     super(props)
 
     this.state = {
-      options: [],
       counter: 1,
     }
   }
@@ -59,6 +58,7 @@ class ParamController extends React.Component {
 
   _handleArray(field, e) {
     let value = e.target.value
+    // console.log(value)
     let key = e.target.name
     let event = { target: { value: value } }
     this.props.onArray(key, field, event)
@@ -162,7 +162,7 @@ class ParamController extends React.Component {
       )
     } else if (field.id === 'option') {
       let options = []
-      for (let i = 0; i < field.radio; i++) {
+      for (let i = 0; i < 2; i++) {
         let num = i + 1
         let key = field.id + ' ' + num
         let input = (

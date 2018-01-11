@@ -109,7 +109,6 @@ class CreateJob extends Reflux.Component {
                   { id: 'hidden', type: 'checkbox' },
                   {
                     id: 'option',
-                    radio: 2,
                     options: [],
                   },
                 ]}
