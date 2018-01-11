@@ -21,27 +21,25 @@ class JobAccordion extends React.Component {
   render() {
     let run = this.props.run
     return (
-      <span>
-        <Panel
-          className={run.active ? 'job border-flash' : 'job'}
-          header={this._header(run)}
-          eventKey={run._id}>
-          <Wrapper>
-            <span className="inner">
-              {this._support(run)}
-              {this._parameters(run)}
-              <Results
-                run={run}
-                acknowledgements={this.props.acknowledgements}
-                displayFile={this.props.displayFile}
-                toggleFolder={this.props.toggleFolder}
-              />
-              {this._logs(run)}
-              {this._batchStatus(run)}
-            </span>
-          </Wrapper>
-        </Panel>
-      </span>
+      <Panel
+        className={run.active ? 'job border-flash' : 'job'}
+        header={this._header(run)}
+        eventKey={run._id}>
+        <Wrapper>
+          <span className="inner">
+            {this._support(run)}
+            {this._parameters(run)}
+            <Results
+              run={run}
+              acknowledgements={this.props.acknowledgements}
+              displayFile={this.props.displayFile}
+              toggleFolder={this.props.toggleFolder}
+            />
+            {this._logs(run)}
+            {this._batchStatus(run)}
+          </span>
+        </Wrapper>
+      </Panel>
     )
   }
 
