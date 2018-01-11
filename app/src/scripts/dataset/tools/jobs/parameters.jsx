@@ -10,7 +10,6 @@ const JobParameters = ({
   onRestoreDefaults,
   parametersMetadata,
   arrInput,
-  arrControl,
 }) => {
   if (Object.keys(parameters).length === 0) {
     return <noscript />
@@ -53,7 +52,7 @@ const JobParameters = ({
         }
 
         let placeholder = 'Select your ' + parametersMetadata[parameter].label
-        let params = parametersMetadata[parameter].defaultValue
+        let params = parametersMetadata[parameter].option
         // break up options for the select
         let options = []
         for (let i = 0; i < params.length; ++i) {
@@ -79,89 +78,52 @@ const JobParameters = ({
           onChange={onChange.bind(null, parameter)}
         />
       )
-    } else if (isCheckbox) {
-      let onCheckChange = e => {
-        // using checked property for checkbox values
-        let event = { target: { value: e.target.checked } }
-        return onChange(parameter, event)
-      }
-      // ** Check for default checked ** //
-      input = (
-        <label className="help-text">
-          <input
-            className="form-control"
-            type="checkbox"
-            name={parameter}
-            onChange={onCheckChange}
-            defaultChecked={isDefaultChecked}
-          />
-          {helpText}
-        </label>
-      )
-    } else if (isRadio || isMulti) {
-      // let op = parametersMetadata[parameter].defaultValue
-      // remove white spaces from options
-      // let options = op.filter(value => value.trim() != '')
-      // if (isRadio) {
-      //   console.log(parametersMetadata[parameter])
-      //   let handleChange = e => {
-      //     let value = e.target.value
-      //     let event = { target: { value: value } }
-      //     return onChange(parameter, event)
-      //   }
-
-      //   if (parameters[parameter].indexOf(' ') !== -1) {
-      //     parameters[parameter] = options[0]
-      //   }
-      input = (
-        <div>pop!</div>
-        // <CheckOrRadio
-        //   type="radio"
-        //   setName={parameter}
-        //   options={options}
-        //   selectedOptions={parameters[parameter]}
-        //   controlFunc={handleChange}
-        // />
-      )
-    } else if (isMulti) {
-      // ** Adds objects to arrInput if empty ** //
-      // if (!arrControl.includes(parameter)) {
-      // arrControl.push(parameter)
-      // arrInput.push({ label: parameter, action: { value: [] } })
-      // }
-
+    } else if (isRadio || isCheckbox) {
+      let options = parametersMetadata[parameter].option
       let handleChange = e => {
         let value = e.target.value
-        let name = e.target.name
-
-        // ** Use case: multiple multi checks** //
-        //   let v = arrInput.map(obj => {
-        //     if (obj.label === name) {
-        //       let val = obj.action.value
-        //       // ** Add or remove values ** //
-        //       let index = val.indexOf(value)
-        //       if (index === -1) {
-        //         val.push(value)
-        //       } else {
-        //         val.splice(index, 1)
-        //       }
-        //       return val
-        //     }
-        //   })
-        //   let event = { target: { value: v } }
-        //   return onChange(parameter, event)
+        let event = { target: { value: value } }
+        return onChange(parameter, event)
       }
 
-      input = (
-        <div>POP!</div>
-        // <CheckOrRadio
-        //   type="checkbox"
-        //   setName={parameter}
-        //   options={options}
-        //   controlFunc={handleChange}
-        // />
-      )
-      // }
+      if (isRadio) {
+        input = (
+          <CheckOrRadio
+            type="radio"
+            setName={parameter}
+            options={options}
+            selectedOptions={parameters[parameter]}
+            controlFunc={handleChange}
+          />
+        )
+      } else if (isCheckbox) {
+        // ** only for multi checkboxes ** //
+        if (options.length > 1) {
+          handleChange = e => {
+            let value = e.target.value
+            let name = e.target.name
+            // ** Add or remove values ** //
+            let index = arrInput.indexOf(value)
+            if (index === -1) {
+              arrInput.push(value)
+            } else {
+              arrInput.splice(index, 1)
+            }
+
+            let event = { target: { value: arrInput } }
+            return onChange(parameter, event)
+          }
+        }
+
+        input = (
+          <CheckOrRadio
+            type="checkbox"
+            setName={parameter}
+            options={options}
+            controlFunc={handleChange}
+          />
+        )
+      }
     } else {
       input = (
         <input
@@ -172,19 +134,13 @@ const JobParameters = ({
       )
     }
 
-    let help_text
-    if (isCheckbox) {
-      // The label has the help text.
-      help_text = ''
-    } else {
-      help_text = (
-        <span className="help-text">
-          {parametersMetadata[parameter]
-            ? parametersMetadata[parameter].description
-            : parameter}
-        </span>
-      )
-    }
+    let help_text = (
+      <span className="help-text">
+        {parametersMetadata[parameter]
+          ? parametersMetadata[parameter].description
+          : parameter}
+      </span>
+    )
 
     return (
       <div
@@ -239,7 +195,6 @@ JobParameters.propTypes = {
   parametersMetadata: PropTypes.object,
   subjects: PropTypes.array,
   arrInput: PropTypes.array,
-  arrControl: PropTypes.array,
 }
 
 JobParameters.defaultProps = {
