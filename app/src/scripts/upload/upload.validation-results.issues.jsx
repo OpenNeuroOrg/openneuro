@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 import { Accordion, Panel } from 'react-bootstrap'
 import pluralize from 'pluralize'
 import Issue from './upload.validation-results.issues.issue.jsx'
+import Wrapper from '../common/partials/wrapper.jsx'
 
 // component setup --------------------------------------------------------
 
@@ -66,7 +67,9 @@ class Issues extends React.Component {
           header={header}
           className="validation-error fade-in"
           eventKey={index}>
-          {subErrors}
+          <Wrapper>
+            <div className="wrapper">{subErrors}</div>
+          </Wrapper>
         </Panel>
       )
     })
