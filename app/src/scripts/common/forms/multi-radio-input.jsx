@@ -14,13 +14,13 @@ const CheckOrRadio = ({
       <div>
         {options.map((opt, index) => {
           let checked = null
+          let defChecked = null
           if (type === 'radio') {
             if (selectedOptions === opt) {
               checked = true
             }
           } else if (type === 'checkbox') {
-            console.log(defaultChecked)
-            defaultChecked.includes(opt) ? (checked = true) : null
+            defaultChecked.includes(opt) ? (defChecked = true) : null
           }
           return (
             <label key={index} className="help-text">
@@ -30,6 +30,7 @@ const CheckOrRadio = ({
                 onChange={controlFunc}
                 value={opt}
                 checked={checked}
+                defaultChecked={defChecked}
               />
               {opt}
             </label>
