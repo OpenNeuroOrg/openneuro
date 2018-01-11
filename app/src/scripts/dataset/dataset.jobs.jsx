@@ -7,7 +7,7 @@ import actions from './dataset.actions'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
 import Run from './run'
-import { Accordion, Panel } from 'react-bootstrap'
+import { Accordion, PanelGroup, Panel } from 'react-bootstrap'
 import { refluxConnect } from '../utils/reflux'
 
 class Jobs extends Reflux.Component {
@@ -84,7 +84,6 @@ class Jobs extends Reflux.Component {
           ) : (
             app
           )}
-          <div />
         </Accordion>
       </div>
     )
