@@ -3,6 +3,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import { Alert } from 'react-bootstrap'
+import Wrapper from '../common/partials/wrapper.jsx'
 import notificationStore from './notification.store'
 import actions from './notification.actions'
 import { refluxConnect } from '../utils/reflux'
@@ -32,15 +33,19 @@ class alert extends Reflux.Component {
 
     let alert = (
       <Alert className="clearfix" bsStyle={bsStyle}>
-        <div className="alert-left">
-          <strong>{type}! </strong>
-          {this.state.notification.alertMessage}
-        </div>
-        <button
-          className="alert-right dismiss-button-x"
-          onClick={actions.closeAlert}>
-          <i className="fa fa-times" />
-        </button>
+        <Wrapper>
+          <div className="wrapper">
+            <div className="alert-left">
+              <strong>{type}! </strong>
+              {this.state.notification.alertMessage}
+            </div>
+            <button
+              className="alert-right dismiss-button-x"
+              onClick={actions.closeAlert}>
+              <i className="fa fa-times" />
+            </button>
+          </div>
+        </Wrapper>
       </Alert>
     )
 
