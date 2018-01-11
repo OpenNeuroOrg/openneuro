@@ -49,41 +49,6 @@ class ArrayInput extends React.Component {
             />
           )
         }
-
-        // else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
-        //   let message = ' Hidden'
-        //   if (field.hasOwnProperty('id') && field.id === 'required') {
-        //     message = ' Required'
-        //   }
-        //   return (
-        //     <div className="form-group float-label-input" key={field.id}>
-        //       <button
-        //         className="admin-button"
-        //         onClick={this._toggleCheckBox.bind(this, field.id)}
-        //         key={field.id}>
-        //         <span>
-        //           <i
-        //             className={
-        //               this.state[field.id]
-        //                 ? 'fa fa-check-square-o'
-        //                 : 'fa fa-square-o'
-        //             }
-        //           />
-        //           {message}
-        //         </span>
-        //       </button>
-        //     </div>
-        //   )
-        // } else {
-        //   return (
-        //     <Input
-        //       placeholder={field.placeholder}
-        //       value={this.state[field.id]}
-        //       onChange={this._handleChange.bind(this, field.id)}
-        //       key={field.id}
-        //     />
-        //   )
-        // }
       })
     }
 
@@ -236,6 +201,8 @@ class ArrayItem extends React.Component {
     let initialState = {
       edit: false,
       error: null,
+      checked: [],
+      options: {},
     }
 
     for (let field of this.props.model) {
@@ -320,59 +287,36 @@ class ArrayItem extends React.Component {
   }
 
   _input() {
+    let inputFields = null
+    if (this.props.model) {
+      inputFields = this.props.model.map(field => {
+        if (field.hasOwnProperty('select') && field.select.length > 0) {
+          return (
+            <Select
+              placeholder={field.placeholder}
+              simpleValue
+              options={field.select}
+              value={this.state[field.id]}
+              onChange={this._handleSelectChange.bind(this, field.id)}
+              key={field.id}
+            />
+          )
+        }
+      })
+    }
+
     return (
-      <span>
-        {this.props.model.map(field => {
-          if (field.hasOwnProperty('select') && field.select.length > 0) {
-            return (
-              <Select
-                placeholder={field.placeholder}
-                simpleValue
-                options={field.select}
-                value={this.state[field.id]}
-                onChange={this._handleSelectChange.bind(this, field.id)}
-                key={field.id}
-              />
-            )
-          } else if (
-            field.hasOwnProperty('type') &&
-            field.type === 'checkbox'
-          ) {
-            let message = ' Hidden'
-            if (field.hasOwnProperty('id') && field.id === 'required') {
-              message = ' Required'
-            }
-            return (
-              <div className="form-group float-label-input" key={field.id}>
-                <button
-                  className="admin-button"
-                  onClick={this._toggleCheckBox.bind(this, field.id)}
-                  key={field.id}>
-                  <span>
-                    <i
-                      className={
-                        this.state[field.id]
-                          ? 'fa fa-check-square-o'
-                          : 'fa fa-square-o'
-                      }
-                    />
-                  </span>
-                  {message}
-                </button>
-              </div>
-            )
-          } else {
-            return (
-              <Input
-                placeholder={field.placeholder}
-                value={this.state[field.id]}
-                onChange={this._handleChange.bind(this, field.id)}
-                key={field.id}
-              />
-            )
-          }
-        })}
-      </span>
+      <div className="cte-edit-array">
+        <span>{inputFields}</span>
+        <ParamController
+          model={this.props.model}
+          selected={this.state.type}
+          onCheck={this._toggleCheckBox.bind(this)}
+          onInput={this._handleChange.bind(this)}
+          onArray={this._handleArray.bind(this)}
+          checked={this.state.checked}
+        />
+      </div>
     )
   }
 
@@ -393,6 +337,11 @@ class ArrayItem extends React.Component {
     this.setState(state)
   }
 
+  _handleArray(key, field, event) {
+    let opts = this.state.options
+    opts[key] = event.target.value
+  }
+
   _handleSelectChange(key, selected) {
     let state = {}
     state[key] = selected
@@ -407,30 +356,9 @@ class ArrayItem extends React.Component {
 
   _save(model) {
     let data = {}
-    let types = ['radio', 'multi', 'checkbox']
     for (let field of model) {
       data[field.id] = this.state[field.id]
     }
-
-    // if (types.includes(data.type)) {
-    //   let checkArr = data.defaultValue.split(' ')
-    //   // check for white space and remove them
-    //   checkArr = checkArr.filter(value => value.trim() != '')
-
-    //   // Error messages for multi and radio
-    //   if (data.type === 'multi' && checkArr.length <= 1) {
-    //     this.setState({
-    //       error:
-    //         'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
-    //     })
-    //     return
-    //   } else if (data.type === 'radio' && checkArr.length <= 1) {
-    //     this.setState({
-    //       error: 'Type radio accepts two or more default values.',
-    //     })
-    //     return
-    //   }
-    // }
     this.props.onEdit(this.props.index, data)
   }
 }

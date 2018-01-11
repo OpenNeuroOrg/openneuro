@@ -58,7 +58,6 @@ class ParamController extends React.Component {
 
   _handleArray(field, e) {
     let value = e.target.value
-    // console.log(value)
     let key = e.target.name
     let event = { target: { value: value } }
     this.props.onArray(key, field, event)
