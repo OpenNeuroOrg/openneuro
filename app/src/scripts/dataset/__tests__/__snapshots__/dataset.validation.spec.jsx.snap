@@ -14,11 +14,8 @@ exports[`dataset/Validation renders successfully 1`] = `
     className="validation-wrap"
     onSelect={[Function]}
   >
-    <Panel
-      bsClass="panel"
-      bsStyle="default"
+    <Uncontrolled(Panel)
       className="status"
-      defaultExpanded={false}
       eventKey="1"
       header={
         <div
@@ -40,7 +37,7 @@ exports[`dataset/Validation renders successfully 1`] = `
         errors={Array []}
         warnings={Array []}
       />
-    </Panel>
+    </Uncontrolled(Panel)>
   </Accordion>
 </div>
 `;
