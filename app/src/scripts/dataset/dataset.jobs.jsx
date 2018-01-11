@@ -6,6 +6,7 @@ import datasetStore from './dataset.store'
 import actions from './dataset.actions'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
+import Wrapper from '../common/partials/wrapper.jsx'
 import Run from './run'
 import { Accordion, Panel } from 'react-bootstrap'
 import { refluxConnect } from '../utils/reflux'
@@ -46,7 +47,11 @@ class Jobs extends Reflux.Component {
             header={compositeVersion}
             key={version.label}
             eventKey={version.label}>
-            {this._runs(version, appDef.descriptions)}
+            <Wrapper>
+              <div className="wrapper">
+                {this._runs(version, appDef.descriptions)}
+              </div>
+            </Wrapper>
           </Panel>
         )
       })
@@ -84,7 +89,6 @@ class Jobs extends Reflux.Component {
           ) : (
             app
           )}
-          <div />
         </Accordion>
       </div>
     )

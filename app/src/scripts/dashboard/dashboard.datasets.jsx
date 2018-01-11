@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { PanelGroup } from 'react-bootstrap'
 import Paginator from '../common/partials/paginator.jsx'
+import Wrapper from '../common/partials/wrapper.jsx'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
 import ErrorBoundary from '../errors/errorBoundary.jsx'
@@ -74,7 +75,11 @@ class Datasets extends Reflux.Component {
       )
 
       // map results
-      results = this._datasets(paginatedResults, isPublic)
+      results = (
+        <div className="dataset-results">
+          {this._datasets(paginatedResults, isPublic)}
+        </div>
+      )
     }
 
     let title
@@ -108,13 +113,15 @@ class Datasets extends Reflux.Component {
             message="The dataset server failed to respond."
             className="loading-wrap fade-in">
             <PanelGroup>
-              {this.state.datasets.loading ? (
-                <Timeout timeout={20000}>
-                  <Spinner active={true} />
-                </Timeout>
-              ) : (
-                results
-              )}
+              <Wrapper>
+                {this.state.datasets.loading ? (
+                  <Timeout timeout={20000}>
+                    <Spinner active={true} />
+                  </Timeout>
+                ) : (
+                  results
+                )}
+              </Wrapper>
             </PanelGroup>
           </ErrorBoundary>
         </div>

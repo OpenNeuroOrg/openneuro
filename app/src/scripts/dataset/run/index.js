@@ -5,6 +5,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import actions from '../dataset.actions'
 import WarnButton from '../../common/forms/warn-button.jsx'
+import Wrapper from '../../common/partials/wrapper.jsx'
 import moment from 'moment'
 import Results from './results.jsx'
 import { Accordion, Panel } from 'react-bootstrap'
@@ -20,10 +21,11 @@ class JobAccordion extends React.Component {
   render() {
     let run = this.props.run
     return (
-      <span eventKey={run._id}>
-        <Panel
-          className={run.active ? 'job border-flash' : 'job'}
-          header={this._header(run)}>
+      <Panel
+        className={run.active ? 'job border-flash' : 'job'}
+        header={this._header(run)}
+        eventKey={run._id}>
+        <Wrapper>
           <span className="inner">
             {this._support(run)}
             {this._parameters(run)}
@@ -36,8 +38,8 @@ class JobAccordion extends React.Component {
             {this._logs(run)}
             {this._batchStatus(run)}
           </span>
-        </Panel>
-      </span>
+        </Wrapper>
+      </Panel>
     )
   }
 
@@ -132,7 +134,9 @@ class JobAccordion extends React.Component {
             header="Parameters"
             key={run._id}
             eventKey={run._id}>
-            <ul>{parameters}</ul>
+            <Wrapper>
+              <ul>{parameters}</ul>
+            </Wrapper>
           </Panel>
         </Accordion>
       )
@@ -225,12 +229,14 @@ class JobAccordion extends React.Component {
             header="Support"
             key={run._id}
             eventKey={run._id}>
-            <div className="app-support">
-              <div
-                className="markdown"
-                dangerouslySetInnerHTML={markdown.format(this.props.support)}
-              />
-            </div>
+            <Wrapper>
+              <div className="app-support">
+                <div
+                  className="markdown"
+                  dangerouslySetInnerHTML={markdown.format(this.props.support)}
+                />
+              </div>
+            </Wrapper>
           </Panel>
         </Accordion>
       )
@@ -341,20 +347,24 @@ class JobAccordion extends React.Component {
             header="Logs"
             key={run._id}
             eventKey={run._id}>
-            <span className="download-all">
-              <WarnButton
-                icon="fa-download"
-                message=" DOWNLOAD All LOGS"
-                prepDownload={actions.downloadLogs.bind(this, run._id)}
-              />
-            </span>
-            <div className="file-structure fade-in panel-group">
-              <div className="panel panel-default">
-                <div className="panel-collapse" aria-expanded="false">
-                  {logstreams}
+            <Wrapper>
+              <div className="wrapper">
+                <span className="download-all">
+                  <WarnButton
+                    icon="fa-download"
+                    message=" DOWNLOAD All LOGS"
+                    prepDownload={actions.downloadLogs.bind(this, run._id)}
+                  />
+                </span>
+                <div className="file-structure fade-in panel-group">
+                  <div className="panel panel-default">
+                    <div className="panel-collapse" aria-expanded="false">
+                      {logstreams}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Wrapper>
           </Panel>
         </Accordion>
       )
@@ -393,13 +403,15 @@ class JobAccordion extends React.Component {
             header="Jobs Status"
             key={run._id}
             eventKey={run._id}>
-            <ul>
-              <div className=" job-status col-xs-12" key={run._id}>
-                <div className="col-xs-8">Job Id</div>
-                <div className="col-xs-4">Status</div>
-              </div>
-              {batchStatus}
-            </ul>
+            <Wrapper>
+              <ul>
+                <div className=" job-status col-xs-12" key={run._id}>
+                  <div className="col-xs-8">Job Id</div>
+                  <div className="col-xs-4">Status</div>
+                </div>
+                {batchStatus}
+              </ul>
+            </Wrapper>
           </Panel>
         </Accordion>
       )
