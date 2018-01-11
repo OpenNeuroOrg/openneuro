@@ -104,13 +104,10 @@ class CreateJob extends Reflux.Component {
                     required: true,
                   },
                   { id: 'description', placeholder: 'Parameter Description' },
-                  { id: 'default checked', type: 'checkbox' },
                   { id: 'required', type: 'checkbox' },
                   { id: 'hidden', type: 'checkbox' },
-                  {
-                    id: 'option',
-                    options: [],
-                  },
+                  { id: 'option' },
+                  { id: 'defaultChecked' },
                 ]}
               />
             </div>

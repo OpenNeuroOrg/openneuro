@@ -19,7 +19,7 @@ class ParamController extends React.Component {
 
   _selectControl() {
     let inputFields = []
-    let checked = this.props.checked
+    // let checked = this.props.checked
     let selected = this.props.selected
     this.props.model.map(field => {
       if (selected === 'file') {
@@ -44,16 +44,20 @@ class ParamController extends React.Component {
     this.props.onInput(field, event)
   }
 
-  _handleCheck(field) {
-    let checked = this.props.checked
-
-    if (!checked.includes(field)) {
-      this.props.checked.push(field)
+  _handleCheck(key) {
+    let checked
+    if (key === 'required' || key === 'hidden') {
+      checked = this.props.checked
     } else {
-      checked.splice(field, 1)
+      checked = this.props.defChecked
+    }
+    if (!checked.includes(key)) {
+      checked.push(key)
+    } else {
+      checked.splice(key, 1)
     }
 
-    this.props.onCheck(field)
+    this.props.onCheck(key)
   }
 
   _handleArray(field, e) {
@@ -71,7 +75,7 @@ class ParamController extends React.Component {
   // ParamTypes Methods ---------------------------------------------------------------------------
 
   _returnTextOrNum(field) {
-    let types = ['default checked', 'type', 'option']
+    let types = ['defaultChecked', 'type', 'option']
     if (field.type === 'checkbox' && !types.includes(field.id)) {
       return (
         <button
@@ -188,8 +192,6 @@ class ParamController extends React.Component {
 
   _returnMulti(field) {
     let options = []
-    let add
-
     if (field.type === 'checkbox' && field.id === 'required') {
       return (
         <button
@@ -228,7 +230,7 @@ class ParamController extends React.Component {
             key={num}>
             <i
               className={
-                this.props.checked.includes(key)
+                this.props.defChecked.includes(key)
                   ? 'fa fa-check-square-o'
                   : 'fa fa-square-o'
               }
@@ -259,7 +261,7 @@ class ParamController extends React.Component {
           <button
             className="cte-save-btn btn-admin-blue"
             onClick={this._addInput.bind(this, this.state)}>
-            add another <i className="fa fa-plus" aria-hidden="true" />
+            add another option <i className="fa fa-plus" aria-hidden="true" />
           </button>
         </div>
       )
@@ -274,6 +276,7 @@ ParamController.propTypes = {
   onCheck: PropTypes.func,
   onArray: PropTypes.func,
   checked: PropTypes.array,
+  defChecked: PropTypes.array,
 }
 
 export default ParamController

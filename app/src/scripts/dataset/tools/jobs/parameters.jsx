@@ -25,7 +25,6 @@ const JobParameters = ({
     let helpText = parametersMetadata[parameter]
       ? parametersMetadata[parameter].description
       : parameter
-
     if (isSelect) {
       if (parameter.indexOf('participant_label') > -1) {
         let onSelectChange = value => {
@@ -97,6 +96,7 @@ const JobParameters = ({
           />
         )
       } else if (isCheckbox) {
+        let defCheck = parametersMetadata[parameter].defaultChecked
         // ** only for multi checkboxes ** //
         if (options.length > 1) {
           handleChange = e => {
@@ -121,6 +121,7 @@ const JobParameters = ({
             setName={parameter}
             options={options}
             controlFunc={handleChange}
+            defaultChecked={defCheck}
           />
         )
       }

@@ -18,6 +18,7 @@ class ArrayInput extends React.Component {
       helper: null,
       type: null,
       checked: [],
+      defChecked: [],
       options: {},
     }
 
@@ -66,6 +67,7 @@ class ArrayInput extends React.Component {
             onInput={this._handleChange.bind(this)}
             onArray={this._handleArray.bind(this)}
             checked={this.state.checked}
+            defChecked={this.state.defChecked}
           />
           <br />
           <button
@@ -139,11 +141,19 @@ class ArrayInput extends React.Component {
       for (let field of model) {
         if (field.id === 'option') {
           itemValue[field.id] = this.state.options
+        } else if (field.id === 'defaultChecked') {
+          let options = this.state.options
+          let defArr = []
+          for (let op of this.state.defChecked) {
+            if (options[op]) {
+              defArr.push(options[op])
+            }
+          }
+          itemValue[field.id] = defArr
         } else {
           itemValue[field.id] = this.state[field.id]
         }
       }
-      console.log(itemValue)
       value.push(itemValue)
     } else {
       value.push(this.state[model[0].id])

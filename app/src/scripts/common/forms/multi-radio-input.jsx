@@ -7,6 +7,7 @@ const CheckOrRadio = ({
   setName,
   controlFunc,
   selectedOptions,
+  defaultChecked,
 }) => {
   return (
     <div>
@@ -17,6 +18,9 @@ const CheckOrRadio = ({
             if (selectedOptions === opt) {
               checked = true
             }
+          } else if (type === 'checkbox') {
+            console.log(defaultChecked)
+            defaultChecked.includes(opt) ? (checked = true) : null
           }
           return (
             <label key={index} className="help-text">
@@ -42,6 +46,7 @@ CheckOrRadio.propTypes = {
   options: PropTypes.array.isRequired,
   selectedOptions: PropTypes.string,
   controlFunc: PropTypes.func.isRequired,
+  defaultChecked: PropTypes.array,
 }
 
 export default CheckOrRadio
