@@ -436,10 +436,13 @@ class JobMenu extends React.Component {
   }
 
   _checkSubmitStatus() {
+    let metaData = this.state.parametersMetadata
     let requiredParameters = this.state.requiredParameters
     let submitWarning = null
     let submitActive = Object.keys(requiredParameters).every(param => {
-      if (!requiredParameters[param]) {
+      if (metaData[param].defaultValue != '') {
+        requiredParameters[param] = metaData[param].defaultValue
+      } else if (!requiredParameters[param]) {
         submitWarning = 'The required parameter "' + param + '" is missing.'
       }
       return !!requiredParameters[param]
