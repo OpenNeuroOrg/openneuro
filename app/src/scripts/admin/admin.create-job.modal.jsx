@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import ArrayInput from '../common/forms/array-input.jsx'
 import Input from '../common/forms/input.jsx'
 import { Modal } from '../utils/modal.jsx'
 import { Panel } from 'react-bootstrap'
@@ -10,18 +9,10 @@ import Select from 'react-select'
 import adminStore from './admin.store'
 import actions from './admin.actions'
 import config from '../../../config'
+import JobParameterSetup from './admin.job-parameter-setup.jsx'
 
 let vcpusMax = config.aws.batch.vcpusMax
 let memoryMax = config.aws.batch.memoryMax
-
-const PARAMETER_INPUTS = [
-  { label: 'String', value: 'text' },
-  { label: 'Boolean', value: 'checkbox' },
-  { label: 'Number', value: 'numeric' },
-  { label: 'List', value: 'select' },
-  { label: 'File', value: 'file' },
-  { label: 'Radio', value: 'radio' },
-]
 
 import { refluxConnect } from '../utils/reflux'
 
@@ -91,25 +82,7 @@ class CreateJob extends Reflux.Component {
             </div>
             <div className="form-group admin-job-parameters">
               <label>Parameters</label>
-              <ArrayInput
-                value={definition.parameters}
-                onChange={this._handleChange.bind(null, 'parameters')}
-                model={[
-                  { id: 'label', placeholder: 'Key', required: true },
-                  { id: 'defaultValue', placeholder: 'default value' },
-                  {
-                    id: 'type',
-                    placeholder: 'Type',
-                    select: PARAMETER_INPUTS,
-                    required: true,
-                  },
-                  { id: 'description', placeholder: 'Parameter Description' },
-                  { id: 'required', type: 'checkbox' },
-                  { id: 'hidden', type: 'checkbox' },
-                  { id: 'option' },
-                  { id: 'defaultChecked' },
-                ]}
-              />
+              <JobParameterSetup parameters={definition.parameters} />
             </div>
             <button
               className="btn-modal-submit"
