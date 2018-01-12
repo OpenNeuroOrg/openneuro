@@ -44,7 +44,7 @@ const CheckOrRadio = ({
 CheckOrRadio.propTypes = {
   type: PropTypes.string.isRequired,
   setName: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
+  options: PropTypes.array,
   selectedOptions: PropTypes.string,
   controlFunc: PropTypes.func.isRequired,
   defaultChecked: PropTypes.array,

@@ -32,25 +32,22 @@ exports[`common/forms/ArrayInput renders a hidden checkbox 1`] = `
   <div
     className="form-inline"
   >
-    <span>
-      <div
-        className="form-group float-label-input"
-        key="license-key"
-      >
-        <button
-          className="admin-button"
-          key="license-key"
-          onClick={[Function]}
-        >
-          <span>
-            <i
-              className="fa fa-square-o"
-            />
-             Hidden
-          </span>
-        </button>
-      </div>
-    </span>
+    <span />
+    <ParamController
+      checked={Array []}
+      model={
+        Array [
+          Object {
+            "id": "license-key",
+            "type": "checkbox",
+          },
+        ]
+      }
+      onArray={[Function]}
+      onCheck={[Function]}
+      onInput={[Function]}
+      selected={null}
+    />
     <br />
     <button
       className="cte-save-btn btn-admin-blue add-btn"
@@ -76,6 +73,14 @@ exports[`common/forms/ArrayInput renders successfully 1`] = `
     className="form-inline"
   >
     <span />
+    <ParamController
+      checked={Array []}
+      model={Array []}
+      onArray={[Function]}
+      onCheck={[Function]}
+      onInput={[Function]}
+      selected={null}
+    />
     <br />
     <button
       className="cte-save-btn btn-admin-blue add-btn"
