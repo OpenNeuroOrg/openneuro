@@ -208,10 +208,11 @@ class ArrayInput extends React.Component {
     this.setState(initialState)
   }
 
-  _remove(index) {
+  _remove(index, callback) {
     let array = this.props.value
     array.splice(index, 1)
     this.props.onChange({ target: { value: array } })
+    callback()
   }
 
   _edit(index, value) {
