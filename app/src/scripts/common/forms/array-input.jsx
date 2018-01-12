@@ -18,13 +18,13 @@ class ArrayInput extends React.Component {
       helper: null,
       type: null,
       checked: [],
-      defChecked: [],
+      // defChecked: [],
       options: {},
     }
 
     for (let field of this.props.model) {
-      if (field.id === 'option') {
-        initialState[field.options] = []
+      if (field.id === 'option' || field.id === 'defaultChecked') {
+        initialState[field.id] = []
       } else {
         initialState[field.id] = ''
       }
@@ -67,7 +67,7 @@ class ArrayInput extends React.Component {
             onInput={this._handleChange.bind(this)}
             onArray={this._handleArray.bind(this)}
             checked={this.state.checked}
-            defChecked={this.state.defChecked}
+            defChecked={this.state.defaultChecked}
           />
           <br />
           <button
@@ -83,8 +83,10 @@ class ArrayInput extends React.Component {
   // template methods ---------------------------------------------------
 
   _arrayList(array, model) {
+    // console.log(array)
     if (array && array.length > 0) {
       let list = array.map((item, index) => {
+        // console.log(item)
         return (
           <ArrayItem
             key={index}
@@ -144,7 +146,7 @@ class ArrayInput extends React.Component {
         } else if (field.id === 'defaultChecked') {
           let options = this.state.options
           let defArr = []
-          for (let op of this.state.defChecked) {
+          for (let op of this.state.defaultChecked) {
             if (options[op]) {
               defArr.push(options[op])
             }
@@ -279,6 +281,7 @@ class ArrayItem extends React.Component {
 
   _display() {
     let item = this.props.item
+    // console.log(this.props.model)
     if (typeof item == 'object') {
       return (
         <span>
@@ -325,6 +328,7 @@ class ArrayItem extends React.Component {
           onInput={this._handleChange.bind(this)}
           onArray={this._handleArray.bind(this)}
           checked={this.state.checked}
+          defChecked={this.state.defaultChecked}
         />
       </div>
     )

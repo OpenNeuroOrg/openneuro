@@ -98,20 +98,22 @@ const JobParameters = ({
       } else if (isCheckbox) {
         let defCheck = parametersMetadata[parameter].defaultChecked
         // ** only for multi checkboxes ** //
-        if (options.length > 1) {
-          handleChange = e => {
-            let value = e.target.value
-            let name = e.target.name
-            // ** Add or remove values ** //
-            let index = arrInput.indexOf(value)
-            if (index === -1) {
-              arrInput.push(value)
-            } else {
-              arrInput.splice(index, 1)
-            }
+        if (options) {
+          if (options.length > 1) {
+            handleChange = e => {
+              let value = e.target.value
+              let name = e.target.name
+              // ** Add or remove values ** //
+              let index = arrInput.indexOf(value)
+              if (index === -1) {
+                arrInput.push(value)
+              } else {
+                arrInput.splice(index, 1)
+              }
 
-            let event = { target: { value: arrInput } }
-            return onChange(parameter, event)
+              let event = { target: { value: arrInput } }
+              return onChange(parameter, event)
+            }
           }
         }
 
