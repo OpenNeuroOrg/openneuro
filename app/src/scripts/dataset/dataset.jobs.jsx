@@ -84,7 +84,6 @@ class Jobs extends Reflux.Component {
           ) : (
             app
           )}
-          <div />
         </Accordion>
       </div>
     )
