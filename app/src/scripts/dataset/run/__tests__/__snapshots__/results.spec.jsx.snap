@@ -5,8 +5,11 @@ exports[`dataset/run/Results should render something when the job status is "FAI
   accordion={true}
   className="results"
 >
-  <Uncontrolled(Panel)
+  <Panel
+    bsClass="panel"
+    bsStyle="default"
     className="fade-in"
+    defaultExpanded={false}
     header="results"
   >
     <div
@@ -76,7 +79,7 @@ exports[`dataset/run/Results should render something when the job status is "FAI
         </div>
       </div>
     </div>
-  </Uncontrolled(Panel)>
+  </Panel>
 </Accordion>
 `;
 
@@ -85,8 +88,11 @@ exports[`dataset/run/Results should render something when the job status is "SUC
   accordion={true}
   className="results"
 >
-  <Uncontrolled(Panel)
+  <Panel
+    bsClass="panel"
+    bsStyle="default"
     className="fade-in"
+    defaultExpanded={false}
     header="results"
   >
     <div
@@ -156,6 +162,6 @@ exports[`dataset/run/Results should render something when the job status is "SUC
         </div>
       </div>
     </div>
-  </Uncontrolled(Panel)>
+  </Panel>
 </Accordion>
 `;

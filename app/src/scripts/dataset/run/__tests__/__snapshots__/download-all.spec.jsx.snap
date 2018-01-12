@@ -1,8 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `
-<Uncontrolled(Panel)
+<Panel
+  bsClass="panel"
+  bsStyle="default"
   className="job border-flash"
+  defaultExpanded={false}
   eventKey="59c16458c650bd001111f010"
   header={
     <div
@@ -82,8 +85,11 @@ exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `
       accordion={true}
       className="results"
     >
-      <Uncontrolled(Panel)
+      <Panel
+        bsClass="panel"
+        bsStyle="default"
         className="fade-in"
+        defaultExpanded={false}
         eventKey="59c16458c650bd001111f010"
         header="Support"
         key="59c16458c650bd001111f010"
@@ -100,14 +106,17 @@ exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `
             }
           />
         </div>
-      </Uncontrolled(Panel)>
+      </Panel>
     </Accordion>
     <Accordion
       accordion={true}
       className="results"
     >
-      <Uncontrolled(Panel)
+      <Panel
+        bsClass="panel"
+        bsStyle="default"
         className="fade-in"
+        defaultExpanded={false}
         eventKey="59c16458c650bd001111f010"
         header="Parameters"
         key="59c16458c650bd001111f010"
@@ -130,7 +139,7 @@ exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `
             </span>
           </li>
         </ul>
-      </Uncontrolled(Panel)>
+      </Panel>
     </Accordion>
     <JobResults
       run={
@@ -184,8 +193,11 @@ exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `
       accordion={true}
       className="results"
     >
-      <Uncontrolled(Panel)
+      <Panel
+        bsClass="panel"
+        bsStyle="default"
         className="fade-in"
+        defaultExpanded={false}
         eventKey="59c16458c650bd001111f010"
         header="Jobs Status"
         key="59c16458c650bd001111f010"
@@ -251,15 +263,18 @@ exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `
             </div>
           </div>
         </ul>
-      </Uncontrolled(Panel)>
+      </Panel>
     </Accordion>
   </span>
-</Uncontrolled(Panel)>
+</Panel>
 `;
 
 exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
-<Uncontrolled(Panel)
+<Panel
+  bsClass="panel"
+  bsStyle="default"
   className="job border-flash"
+  defaultExpanded={false}
   eventKey="59c1632cc650bd001111f00d"
   header={
     <div
@@ -319,8 +334,11 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
       accordion={true}
       className="results"
     >
-      <Uncontrolled(Panel)
+      <Panel
+        bsClass="panel"
+        bsStyle="default"
         className="fade-in"
+        defaultExpanded={false}
         eventKey="59c1632cc650bd001111f00d"
         header="Parameters"
         key="59c1632cc650bd001111f00d"
@@ -343,7 +361,7 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
             </span>
           </li>
         </ul>
-      </Uncontrolled(Panel)>
+      </Panel>
     </Accordion>
     <JobResults
       displayFile={[MockFunction]}
@@ -489,8 +507,11 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
       accordion={true}
       className="results"
     >
-      <Uncontrolled(Panel)
+      <Panel
+        bsClass="panel"
+        bsStyle="default"
         className="fade-in"
+        defaultExpanded={false}
         eventKey="59c1632cc650bd001111f00d"
         header="Logs"
         key="59c1632cc650bd001111f00d"
@@ -601,10 +622,10 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
             </div>
           </div>
         </div>
-      </Uncontrolled(Panel)>
+      </Panel>
     </Accordion>
   </span>
-</Uncontrolled(Panel)>
+</Panel>
 `;
 
 exports[`dataset/run/DownloadAll should render something 1`] = `
