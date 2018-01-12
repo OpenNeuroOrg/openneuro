@@ -25,7 +25,6 @@ class CreateJob extends Reflux.Component {
   render() {
     let definition = this.state.admin.jobDefinitionForm
     let title = definition.edit ? 'Edit App' : 'Define an App'
-
     return (
       <Modal show={this.props.show} onHide={this.props.onHide}>
         <Modal.Header closeButton>
