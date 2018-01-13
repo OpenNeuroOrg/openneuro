@@ -3,7 +3,7 @@ import config from '../config'
 import fs from 'fs'
 import crypto from 'crypto'
 import files from './files'
-import checkUserCache from '../libs/cache/userCache.js'
+import userCache from '../libs/cache/userCache.js'
 
 /**
  * Scitran
@@ -50,7 +50,7 @@ export default {
   getUser(userId, callback) {
     request.getCache(
       config.scitran.url + 'users/' + userId,
-      checkUserCache,
+      userCache,
       { body: { userId: userId } },
       callback,
     )
