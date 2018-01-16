@@ -17,10 +17,6 @@ export default {
     })
   },
   store(userData, callback) {
-    console.log(
-      'storing user info in the cache. here is the userData:',
-      userData,
-    )
     const data = JSON.stringify(userData)
     const userId = userData._id
     redis.set(userId, data)
