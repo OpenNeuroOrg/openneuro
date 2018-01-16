@@ -26,18 +26,34 @@ export default {
    */
   getCache(url, cache, options, callback) {
     handleRequest(url, options, req => {
-      cache.get(req, (err, data) => {
-        if (data) {
-          handleResponse(err, data, callback)
+      cache.get(req, (err, res1) => {
+        if (res1) {
+          handleResponse(err, res1, callback)
         } else {
-          request.get(req, (err, res) => {
+          request.get(req, (err, res2) => {
             if (err) {
-              handleResponse(err, res, callback)
+              handleResponse(err, res2, callback)
             } else {
-              cache.store(res, () => {
-                handleResponse(err, res, callback)
+              const data = res2.body
+              cache.store(data, () => {
+                handleResponse(err, res2, callback)
               })
             }
+          })
+        }
+      })
+    })
+  },
+
+  postCache(url, cache, options, callback) {
+    handleRequest(url, options, req => {
+      request.post(req, (err, res) => {
+        if (err) {
+          handleResponse(err, res, callback)
+        } else {
+          const data = req.json
+          cache.store(data, () => {
+            handleResponse(err, res, callback)
           })
         }
       })

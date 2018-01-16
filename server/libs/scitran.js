@@ -75,9 +75,14 @@ export default {
      * Create User
      */
   createUser(user, callback) {
-    request.post(config.scitran.url + 'users', { body: user }, () => {
-      this.createGroup(user._id, user._id, callback)
-    })
+    request.postCache(
+      config.scitran.url + 'users',
+      userCache,
+      { body: user },
+      () => {
+        this.createGroup(user._id, user._id, callback)
+      },
+    )
   },
 
   /**

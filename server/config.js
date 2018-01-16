@@ -41,7 +41,6 @@ let config = {
   redis: {
     port: 6379,
     host: 'redis',
-    cacheTimeout: 3600,
   },
   notifications: {
     email: {
