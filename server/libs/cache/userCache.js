@@ -17,10 +17,11 @@ export default {
     })
   },
   store(res, callback) {
-    const data = res
-    const data_store = JSON.stringify(data)
-    const userId = data.body._id
-    redis.setex(userId, config.redis.cacheTimeout, data_store)
+    if (res.statusCode && res.statusCode == 200) {
+      const data = JSON.stringify(res)
+      const userId = res.body._id
+      redis.setex(userId, config.redis.cacheTimeout, data)
+    }
     callback()
   },
 }

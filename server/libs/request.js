@@ -31,9 +31,13 @@ export default {
           handleResponse(err, data, callback)
         } else {
           request.get(req, (err, res) => {
-            cache.store(res, () => {
+            if (err) {
               handleResponse(err, res, callback)
-            })
+            } else {
+              cache.store(res, () => {
+                handleResponse(err, res, callback)
+              })
+            }
           })
         }
       })
