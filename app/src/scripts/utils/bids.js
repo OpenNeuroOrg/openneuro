@@ -46,10 +46,10 @@ export default {
           })
           .then(async pubProjects => {
             projects = projects.concat(pubProjects.body)
-            let users = isSignedOut ? null : (await scitran.getUsers()).body
             let resultDict = {}
             // hide other user's projects from admins & filter snapshots to display newest of each dataset
             if (projects) {
+              const users = isSignedOut ? null : (await scitran.getUsers()).body
               for (let project of projects) {
                 let dataset = this.formatDataset(project, null, users)
                 let datasetId = dataset.hasOwnProperty('original')
