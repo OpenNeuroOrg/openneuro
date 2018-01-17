@@ -658,8 +658,6 @@ let handlers = {
         })
       })
       Promise.all(userPromises).then(() => {
-        console.log('JOB AFTER PROMISE:', jobs)
-
         // store request metadata
         let availableApps = {}
 
