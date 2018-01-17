@@ -550,7 +550,7 @@ let handlers = {
         return new Promise(resolve => {
           scitran.getUser(job.userId, (err, response) => {
             job.userMetadata = {}
-            if (response.statusCode == 200) {
+            if (response && response.statusCode === 200) {
               job.userMetadata = response.body
             }
             resolve()
@@ -650,7 +650,7 @@ let handlers = {
         return new Promise(resolve => {
           scitran.getUser(job.userId, (err, response) => {
             job.userMetadata = {}
-            if (response.statusCode == 200) {
+            if (response && response.statusCode === 200) {
               job.userMetadata = response.body
             }
             resolve()
@@ -658,8 +658,6 @@ let handlers = {
         })
       })
       Promise.all(userPromises).then(() => {
-        console.log('JOB AFTER PROMISE:', jobs)
-
         // store request metadata
         let availableApps = {}
 
