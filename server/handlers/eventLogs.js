@@ -35,7 +35,7 @@ let handlers = {
           return new Promise(resolve => {
             scitran.getUser(log.user, (err, response) => {
               log.userMetadata = {}
-              if (response.statusCode == 200) {
+              if (response && response.statusCode === 200) {
                 log.userMetadata = response.body
               }
               resolve()
