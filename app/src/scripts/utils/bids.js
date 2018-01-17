@@ -49,40 +49,57 @@ export default {
             if (!isSignedOut) {
               scitran.getUsers().then(res => {
                 let users = res && res.body ? res.body : null
-                let resultDict = {}
-                // hide other user's projects from admins & filter snapshots to display newest of each dataset
-                if (projects) {
-                  for (let project of projects) {
-                    let dataset = this.formatDataset(project, null, users)
-                    let datasetId = dataset.hasOwnProperty('original')
-                      ? dataset.original
-                      : dataset._id
-                    let existing = resultDict[datasetId]
-                    if (
-                      !existing ||
-                      (existing.hasOwnProperty('original') &&
-                        !dataset.hasOwnProperty('original')) ||
-                      (existing.hasOwnProperty('original') &&
-                        existing.snapshot_version < project.snapshot_version)
-                    ) {
-                      if (isAdmin || isPublic || this.userAccess(project)) {
-                        resultDict[datasetId] = dataset
-                      }
-                    }
-                  }
-                }
-
-                let results = []
-                for (let key in resultDict) {
-                  results.push(resultDict[key])
-                }
+                let results = this.constructResults(
+                  projects,
+                  users,
+                  isAdmin,
+                  isPublic,
+                )
                 callback(results)
               })
             } else {
-              callback()
+              let users = null
+              let results = this.constructResults(
+                projects,
+                users,
+                isAdmin,
+                isPublic,
+              )
+              callback(results)
             }
           })
       })
+  },
+
+  constructResults(projects, users, isAdmin, isPublic) {
+    let resultDict = {}
+    // hide other user's projects from admins & filter snapshots to display newest of each dataset
+    if (projects) {
+      for (let project of projects) {
+        let dataset = this.formatDataset(project, null, users)
+        let datasetId = dataset.hasOwnProperty('original')
+          ? dataset.original
+          : dataset._id
+        let existing = resultDict[datasetId]
+        if (
+          !existing ||
+          (existing.hasOwnProperty('original') &&
+            !dataset.hasOwnProperty('original')) ||
+          (existing.hasOwnProperty('original') &&
+            existing.snapshot_version < project.snapshot_version)
+        ) {
+          if (isAdmin || isPublic || this.userAccess(project)) {
+            resultDict[datasetId] = dataset
+          }
+        }
+      }
+    }
+
+    let results = []
+    for (let key in resultDict) {
+      results.push(resultDict[key])
+    }
+    return results
   },
 
   /**
