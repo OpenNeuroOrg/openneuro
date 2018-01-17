@@ -44,43 +44,37 @@ export default {
             snapshot: true,
             metadata: metadata,
           })
-          .then(pubProjects => {
+          .then(async pubProjects => {
             projects = projects.concat(pubProjects.body)
-            if (!isSignedOut) {
-              scitran.getUsers().then(res => {
-                let users = res && res.body ? res.body : null
-                let resultDict = {}
-                // hide other user's projects from admins & filter snapshots to display newest of each dataset
-                if (projects) {
-                  for (let project of projects) {
-                    let dataset = this.formatDataset(project, null, users)
-                    let datasetId = dataset.hasOwnProperty('original')
-                      ? dataset.original
-                      : dataset._id
-                    let existing = resultDict[datasetId]
-                    if (
-                      !existing ||
-                      (existing.hasOwnProperty('original') &&
-                        !dataset.hasOwnProperty('original')) ||
-                      (existing.hasOwnProperty('original') &&
-                        existing.snapshot_version < project.snapshot_version)
-                    ) {
-                      if (isAdmin || isPublic || this.userAccess(project)) {
-                        resultDict[datasetId] = dataset
-                      }
-                    }
+            let users = isSignedOut ? null : (await scitran.getUsers()).body
+            let resultDict = {}
+            // hide other user's projects from admins & filter snapshots to display newest of each dataset
+            if (projects) {
+              for (let project of projects) {
+                let dataset = this.formatDataset(project, null, users)
+                let datasetId = dataset.hasOwnProperty('original')
+                  ? dataset.original
+                  : dataset._id
+                let existing = resultDict[datasetId]
+                if (
+                  !existing ||
+                  (existing.hasOwnProperty('original') &&
+                    !dataset.hasOwnProperty('original')) ||
+                  (existing.hasOwnProperty('original') &&
+                    existing.snapshot_version < project.snapshot_version)
+                ) {
+                  if (isAdmin || isPublic || this.userAccess(project)) {
+                    resultDict[datasetId] = dataset
                   }
                 }
-
-                let results = []
-                for (let key in resultDict) {
-                  results.push(resultDict[key])
-                }
-                callback(results)
-              })
-            } else {
-              callback()
+              }
             }
+
+            let results = []
+            for (let key in resultDict) {
+              results.push(resultDict[key])
+            }
+            callback(results)
           })
       })
   },
