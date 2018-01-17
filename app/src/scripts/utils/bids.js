@@ -46,10 +46,10 @@ export default {
           })
           .then(async pubProjects => {
             projects = projects.concat(pubProjects.body)
+            const users = isSignedOut ? null : (await scitran.getUsers()).body
             let resultDict = {}
             // hide other user's projects from admins & filter snapshots to display newest of each dataset
             if (projects) {
-              const users = isSignedOut ? null : (await scitran.getUsers()).body
               for (let project of projects) {
                 let dataset = this.formatDataset(project, null, users)
                 let datasetId = dataset.hasOwnProperty('original')
@@ -128,43 +128,38 @@ export default {
    * Takes a projectId and returns a full
    * nested BIDS dataset.
    */
-  getDataset(projectId, callback, options) {
-    if (options && !options.isPublic) {
-      scitran.getUsers().then(res => {
-        let users = res && res.body ? res.body : null
-        scitran.getProject(projectId, options).then(res => {
-          let tempFiles = this._formatFiles(res.body.files)
-          if (res.status !== 200) {
-            return callback(res)
-          }
-          let project = res.body
-          this.getMetadata(
-            project,
-            metadata => {
-              let dataset = this.formatDataset(
-                project,
-                metadata['dataset_description.json'],
-                users,
-              )
-              dataset.README = metadata.README
-              crn.getDatasetJobs(projectId, options).then(res => {
-                dataset.jobs = res.body
-                dataset.children = tempFiles
-                dataset.showChildren = true
-                this.usage(projectId, options, usage => {
-                  if (usage) {
-                    dataset.views = usage.views
-                    dataset.downloads = usage.downloads
-                  }
-                  callback(dataset)
-                })
-              })
-            },
-            options,
-          )
-        })
-      })
+  async getDataset(projectId, callback, options) {
+    const users = options.isPublic ? null : (await scitran.getUsers()).body
+    const res = await scitran.getProject(projectId, options)
+    let tempFiles = this._formatFiles(res.body.files)
+    if (res.status !== 200) {
+      return callback(res)
     }
+    let project = res.body
+    this.getMetadata(
+      project,
+      metadata => {
+        let dataset = this.formatDataset(
+          project,
+          metadata['dataset_description.json'],
+          users,
+        )
+        dataset.README = metadata.README
+        crn.getDatasetJobs(projectId, options).then(res => {
+          dataset.jobs = res.body
+          dataset.children = tempFiles
+          dataset.showChildren = true
+          this.usage(projectId, options, usage => {
+            if (usage) {
+              dataset.views = usage.views
+              dataset.downloads = usage.downloads
+            }
+            callback(dataset)
+          })
+        })
+      },
+      options,
+    )
   },
 
   /**
