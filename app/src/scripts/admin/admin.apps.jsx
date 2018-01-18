@@ -21,7 +21,11 @@ class Apps extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
   render() {
-    let noJobs = <div className="no-results">There are no apps defined.</div>
+    let noJobs = (
+      <Panel>
+        <div className="no-results">There are no apps defined.</div>
+      </Panel>
+    )
     let jobs = batch
       .filterAppDefinitions(this.state.datasets.apps)
       .sort((a, b) => {
