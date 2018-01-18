@@ -18,6 +18,7 @@ class JobParameterSetup extends React.Component {
       error: null,
       helper: null,
       checked: [],
+      counter: 1,
       // options: {},
     }
 
@@ -69,7 +70,11 @@ class JobParameterSetup extends React.Component {
             type="text"
           />
 
-          <JobParameter selected={this.state.type} />
+          <JobParameter
+            selected={this.state.type}
+            counter={this.state.counter}
+            addInput={this._addInputArray.bind(this)}
+          />
         </span>
       </div>
     )
@@ -100,6 +105,11 @@ class JobParameterSetup extends React.Component {
     this.setState({ type: value })
   }
 
+  _addInputArray() {
+    let counter = this.state.counter
+    let newState = counter + 1
+    this.setState({ counter: newState })
+  }
   // End of class
 }
 

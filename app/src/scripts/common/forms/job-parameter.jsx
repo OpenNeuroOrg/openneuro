@@ -19,7 +19,6 @@ export const PARAMETER_INPUTS = [
 /** Generic parameter, wrapper around the type */
 class JobParameter extends React.Component {
   render() {
-    console.log(this.props.selected)
     if (this.props.selected === 'text') {
       return <TextParameter />
     } else if (this.props.selected === 'checkbox') {
@@ -31,7 +30,12 @@ class JobParameter extends React.Component {
     } else if (this.props.selected === 'file') {
       return <FileParameter />
     } else if (this.props.selected === 'radio') {
-      return <RadioParameter counter={2} />
+      return (
+        <RadioParameter
+          counter={this.props.counter}
+          addInput={this.props.addInput}
+        />
+      )
     } else {
       return null
     }
@@ -40,6 +44,8 @@ class JobParameter extends React.Component {
 
 JobParameter.propTypes = {
   selected: PropTypes.string,
+  counter: PropTypes.number,
+  addInput: PropTypes.func,
 }
 
 export default JobParameter

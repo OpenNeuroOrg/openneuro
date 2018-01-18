@@ -1,11 +1,9 @@
 import React from 'react'
 import Input from '../input.jsx'
 
-export default ({ props, counter }) => {
+export default ({ props, counter, addInput }) => {
   let options = []
-  // let counter = 2;
-  console.log(counter)
-  for (let i = 0; i < counter; i++) {
+  for (let i = 0; i <= counter; i++) {
     let num = i + 1
     let key = 'option ' + num
     let input = (
@@ -20,11 +18,6 @@ export default ({ props, counter }) => {
       </li>
     )
     options.push(input)
-  }
-
-  let addInput = () => {
-    // Need to update counter w/out state. Trying to keep these stateless components. May need to feed this function as a prop and set the state higher up in the component tree. End of day.
-    return counter + 1
   }
 
   return (
