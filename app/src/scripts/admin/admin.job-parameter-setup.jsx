@@ -6,63 +6,7 @@ import JobParameter, {
 } from '../common/forms/job-parameter.jsx'
 import Spinner from '../common/partials/spinner.jsx'
 import WarnButton from '../common/forms/warn-button.jsx'
-
-/** 
- * Options for a single parameter 
- */
-class JobParameterOptions extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      type: props.type ? props.type : 'text',
-      label: props.label ? props.label : '',
-      description: props.description ? props.description : '',
-      defaultValue: props.defaultValue ? props.defaultValue : '',
-      value: props.value ? props.value : '',
-      required: props.required ? props.required : false,
-      hidden: props.hidden ? props.hidden : false,
-      defaultChecked: props.defaultChecked ? props.defaultChecked : [],
-      option: props.option ? props.option : [],
-    }
-    console.log(this.state)
-  }
-  render() {
-    // TODO - onChange here would replace the parameter with the updated one
-    return (
-      <ul>
-        <li>
-          <Select options={PARAMETER_INPUTS} value={this.state.type} />
-        </li>
-        <li>
-          <input
-            name="label"
-            value={this.state.label}
-            placeholder="Key"
-            type="text"
-          />
-        </li>
-        <li>
-          here~
-          <input
-            name="description"
-            value={this.state.description}
-            placeholder="Parameter Description"
-            type="text"
-          />
-        </li>
-        <li>
-          <JobParameter type={this.state.type} />
-        </li>
-        <li>
-          <input name="required" value={this.state.required} type="checkbox" />
-        </li>
-        <li>
-          <input name="hidden" value={this.state.hidden} type="checkbox" />
-        </li>
-      </ul>
-    )
-  }
-}
+import Input from '../common/forms/input.jsx'
 
 /**
  * Define the parameters for a given job
@@ -70,40 +14,36 @@ class JobParameterOptions extends React.Component {
 class JobParameterSetup extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      type: props.type ? props.type : '',
-      label: props.label ? props.label : '',
-      description: props.description ? props.description : '',
-      defaultValue: props.defaultValue ? props.defaultValue : '',
-      value: props.value ? props.value : '',
-      required: props.required ? props.required : false,
-      hidden: props.hidden ? props.hidden : false,
-      defaultChecked: props.defaultChecked ? props.defaultChecked : [],
-      option: props.option ? props.option : [],
+    const initialState = {
+      error: null,
+      helper: null,
+      checked: [],
+      // options: {},
     }
+
+    for (let field of this.props.model) {
+      if (field.id === 'options' || field.id === 'defaultChecked') {
+        initialState[field.id] = []
+      } else {
+        initialState[field.id] = ''
+      }
+    }
+
+    this.initialState = initialState
+    this.state = initialState
   }
 
   render() {
     let value = this.state.value
-    console.log(this.state.type)
     return (
       <div className="job-parameters-setup">
-        <Select options={PARAMETER_INPUTS} value={this.state.type} />
-        <ul className="job-parameters-list">
-          {this.props.parameters.map(param => {
-            return (
-              <li>
-                <JobParameterOptions {...param} />
-                <button
-                  className="btn"
-                  onClick={this._remove.bind(this, param.label)}>
-                  Delete
-                </button>
-              </li>
-            )
-          })}
-        </ul>
-        <button className="btn" onClick={this._add.bind(this)}>
+        <Select
+          options={PARAMETER_INPUTS}
+          value={this.state.type}
+          onChange={this._handleSelectChange.bind(this)}
+        />
+        {this.state.type != '' ? this._returnInput() : null}
+        <button className="btn admin-btn" onClick={this._add.bind(this)}>
           Add
         </button>
       </div>
@@ -111,10 +51,34 @@ class JobParameterSetup extends React.Component {
   }
   // template methods -----------------------------------------------------------------------
 
+  _returnInput() {
+    return (
+      <div className="form-inline">
+        <span>
+          <Input
+            name="label"
+            value={this.state.label}
+            placeholder="Key"
+            type="text"
+          />
+
+          <Input
+            name="description"
+            value={this.state.description}
+            placeholder="Parameter Description"
+            type="text"
+          />
+
+          <JobParameter selected={this.state.type} />
+        </span>
+      </div>
+    )
+  }
+
   // custom methods -------------------------------------------------------------------------
   _add(e) {
     /* TODO - This would push a new parameter into the definition in the store */
-    console.log(e)
+    console.log('POP!')
   }
 
   _remove(e, target) {
@@ -122,17 +86,25 @@ class JobParameterSetup extends React.Component {
     console.log(e, target)
   }
 
-  _handleSelectChange(e, target) {
-    console.log(e, target)
-    // console.log()
-    // this.setState({type: e.target.value})
+  _onChange() {
+    /* TODO - This will handle input changes */
+  }
+
+  _toggleCheck() {
+    /* TODO - This will handle checkbox changes */
+  }
+
+  _handleSelectChange(e) {
+    let value
+    e === null ? (value = '') : (value = e.value)
+    this.setState({ type: value })
   }
 
   // End of class
 }
 
 JobParameterSetup.propTypes = {
-  parameters: PropTypes.array,
+  model: PropTypes.array,
 }
 
 export default JobParameterSetup
