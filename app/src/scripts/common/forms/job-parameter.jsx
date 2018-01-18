@@ -1,8 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import TextParameter from './parameter-types/text.jsx'
 import CheckboxParameter from './parameter-types/checkbox.jsx'
 import NumericParameter from './parameter-types/numeric.jsx'
-import SelectParameter from './parameter-types/select.jsx'
+import SelectParameter from './parameter-types/list.jsx'
 import FileParameter from './parameter-types/file.jsx'
 import RadioParameter from './parameter-types/radio.jsx'
 
@@ -18,20 +19,27 @@ export const PARAMETER_INPUTS = [
 /** Generic parameter, wrapper around the type */
 class JobParameter extends React.Component {
   render() {
-    if (this.props.type === 'text') {
+    console.log(this.props.selected)
+    if (this.props.selected === 'text') {
       return <TextParameter />
-    } else if (this.props.type === 'checkbox') {
+    } else if (this.props.selected === 'checkbox') {
       return <CheckboxParameter />
-    } else if (this.props.type === 'numeric') {
+    } else if (this.props.selected === 'numeric') {
       return <NumericParameter />
-    } else if (this.props.type === 'select') {
+    } else if (this.props.selected === 'select') {
       return <SelectParameter />
-    } else if (this.props.type === 'file') {
+    } else if (this.props.selected === 'file') {
       return <FileParameter />
-    } else if (this.props.type === 'radio') {
-      return <RadioParameter />
+    } else if (this.props.selected === 'radio') {
+      return <RadioParameter counter={2} />
+    } else {
+      return null
     }
   }
+}
+
+JobParameter.propTypes = {
+  selected: PropTypes.string,
 }
 
 export default JobParameter
