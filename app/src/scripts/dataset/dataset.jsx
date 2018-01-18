@@ -7,6 +7,7 @@ import { Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
 import { ProgressBar } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
+import Timeout from '../common/partials/timeout.jsx'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
 import MetaData from './dataset.metadata.jsx'
@@ -16,6 +17,7 @@ import Validation from './dataset.validation.jsx'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import FileTree from '../common/partials/file-tree.jsx'
 import Jobs from './dataset.jobs.jsx'
+import ErrorBoundary from '../errors/errorBoundary.jsx'
 import userStore from '../user/user.store.js'
 import Summary from './dataset.summary.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
@@ -197,7 +199,9 @@ class Dataset extends Reflux.Component {
                       }
                     />
                     <div className="fade-in col-xs-12">
-                      <Jobs />
+                      <ErrorBoundary message="The server failed to provide OpenNeuro with a list of jobs.">
+                        <Jobs />
+                      </ErrorBoundary>
                     </div>
                     <div className="dataset-files">
                       {this._incompleteMessage(dataset)}
@@ -237,13 +241,19 @@ class Dataset extends Reflux.Component {
           {this._leftSidebar(snapshots)}
           {this._showSideBarButton()}
           {!this.state.datasets.loading ? this._tools(dataset) : null}
-          <div className="fade-in inner-route dataset-route light">
-            {this.state.datasets.loading ? (
-              <Spinner active={true} text={loadingText} />
-            ) : (
-              content
-            )}
-          </div>
+          <ErrorBoundary
+            message="The dataset has failed to load in time. Please check your network connection."
+            className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
+            <div className="fade-in inner-route dataset-route light">
+              {this.state.datasets.loading ? (
+                <Timeout timeout={20000}>
+                  <Spinner active={true} text={loadingText} />
+                </Timeout>
+              ) : (
+                content
+              )}
+            </div>
+          </ErrorBoundary>
         </div>
       </div>
     )

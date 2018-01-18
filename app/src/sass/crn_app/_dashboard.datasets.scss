@@ -211,7 +211,7 @@
         border-bottom: 1px solid $e1;
         box-shadow: none;
         background: $f8;
-
+    
         .panel-heading {
             padding: 0;
             background: $white;
@@ -410,6 +410,10 @@
                     }
                 }
             }
+        }
+
+        .panel-body {
+            padding: 0;
         }
     }
 }

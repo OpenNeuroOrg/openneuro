@@ -18,32 +18,19 @@ export default aws => {
     sdk: s3,
 
     /**
-         * Queue
+         * uploadQueue
          *
          * A queue to limit s3 request concurrency. To use
-         * call queue.push(request) with a request object with
+         * call uploadQueue.push(task) with a task object with
          * the following properties.
-         * function: the function to be called
-         * arguments: an array of arguments applied to the function
+         * uploadFunction: the function that uploads files to s3
+         * filePath: the local path of the file
+         * remotePath: the remote path the file will be uploaded to
          * callback: a callback function
          */
-    queue: async.queue((req, cb) => {
-      // assign last argument as callback for
-      // queued function and queue callback
-      req.arguments.push(function() {
-        if (req.callback) {
-          req.callback.apply(arguments)
-        }
-        cb.apply(arguments)
-      })
-      req.function.apply(this, req.arguments)
+    uploadQueue: async.queue((task, callback) => {
+      task.uploadFunction(task.filePath, task.remotePath, callback)
     }, config.aws.s3.concurrency),
-
-    createBucket(bucketName, callback) {
-      s3.createBucket({ Bucket: bucketName }, function(err, res) {
-        callback(err, res)
-      })
-    },
 
     uploadFile(filePath, remotePath, callback) {
       const data = fs.createReadStream(filePath)
@@ -58,13 +45,39 @@ export default aws => {
           ContentType: contentType,
         },
       })
+      // We have to set a callbackFired flag to ensure
+      // aws managed upload doesn't callback twice
+      upload.callbackFired = false
 
       upload.send(err => {
-        if (err) {
-          console.log(err)
-        } else {
-          callback()
+        if (!upload.callbackFired) {
+          upload.callbackFired = true
+          if (err) {
+            upload.abort()
+            return callback(err)
+          } else {
+            return callback()
+          }
         }
+      })
+    },
+
+    /**
+     * cleanUploadQueue
+     *  
+     * Take the hash of a locally saved snapshot
+     * and removes all tasks from the uploadQueue that have
+     * a matching hash.
+     */
+    cleanUploadQueue(queue, hash) {
+      queue.remove(task => {
+        return task.data.snapshotHash === hash
+      })
+    },
+
+    createBucket(bucketName, callback) {
+      s3.createBucket({ Bucket: bucketName }, function(err, res) {
+        callback(err, res)
       })
     },
 
@@ -82,7 +95,7 @@ export default aws => {
           Key: snapshotHash + '/dataset_description.json',
         },
         (err, data) => {
-          // check if snapshot is already complete on s3
+          // Check if snapshot is already complete on s3
           let snapshotExists = false
           if (data && data.TagSet) {
             for (let tag of data.TagSet) {
@@ -96,38 +109,64 @@ export default aws => {
           } else {
             let dirPath =
               config.location + '/persistent/datasets/' + snapshotHash
+
+            // Loop through each file in the directory
             files.getFiles(dirPath, files => {
+              // Loop through each file and add them to the file queue.
+              // fileQueue uploads via async.queue(), and limits concurrent uploads.
               async.each(
                 files,
                 (filePath, cb) => {
                   let remotePath = filePath.slice(
                     (config.location + '/persistent/datasets/').length,
                   )
-                  this.queue.push({
-                    function: this.uploadFile,
-                    arguments: [filePath, remotePath],
-                    callback: cb,
-                  })
-                },
-                () => {
-                  // tag upload as complete
-                  s3.putObjectTagging(
+
+                  // Push file to the fileQueue
+                  this.uploadQueue.push(
                     {
-                      Bucket,
-                      Key: snapshotHash + '/dataset_description.json',
-                      Tagging: {
-                        TagSet: [
-                          {
-                            Key: 'DatasetComplete',
-                            Value: 'true',
-                          },
-                        ],
-                      },
+                      uploadFunction: this.uploadFile,
+                      filePath: filePath,
+                      remotePath: remotePath,
+                      snapshotHash: snapshotHash,
                     },
-                    () => {
-                      callback()
+                    err => {
+                      if (err) {
+                        return cb(err)
+                      } else {
+                        cb()
+                      }
                     },
                   )
+                },
+                err => {
+                  if (err) {
+                    // If there has been an error on the snapshot upload, clear all remaining
+                    // items from the queue that are a part of the same snapshot.
+                    console.log(
+                      'There was an error while uploading this dataset snapshot. Clearing associated queue entries.',
+                    )
+                    this.cleanUploadQueue(this.uploadQueue, snapshotHash)
+                    callback(err)
+                  } else {
+                    // tag upload as complete
+                    s3.putObjectTagging(
+                      {
+                        Bucket,
+                        Key: snapshotHash + '/dataset_description.json',
+                        Tagging: {
+                          TagSet: [
+                            {
+                              Key: 'DatasetComplete',
+                              Value: 'true',
+                            },
+                          ],
+                        },
+                      },
+                      () => {
+                        callback()
+                      },
+                    )
+                  }
                 },
               )
             })

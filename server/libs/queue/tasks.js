@@ -10,6 +10,7 @@ export default {
         options.job,
         options.jobId,
         options.userId,
+        options.retry,
         callback,
       )
     },

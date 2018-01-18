@@ -2,17 +2,16 @@
 // dependencies ------------------------------------------------------------
 import crypto from 'crypto'
 import aws from '../libs/aws'
+import scitran from '../libs/scitran'
 import mongo from '../libs/mongo'
 import { ObjectID } from 'mongodb'
 import yazl from 'yazl'
 import S3StreamDownload from 's3-stream-download'
 import config from '../config'
 import async from 'async'
-import emitter from '../libs/events'
 import { queue } from '../libs/queue'
 
 let c = mongo.collections
-let events = config.events
 
 //Job Polling
 
@@ -198,7 +197,7 @@ let handlers = {
         queue.enqueue(
           'batch',
           'startAnalysis',
-          { job: preparedJob, jobId: jobId, userId: userId },
+          { job: preparedJob, jobId: jobId, userId: userId, retry: false },
           () => {
             // Finish the client request so S3 upload can happen async
             res.send({ jobId: jobId })
@@ -518,35 +517,288 @@ let handlers = {
           },
         },
       )
+      queue.enqueue(
+        'batch',
+        'startAnalysis',
+        { job: job, jobId: mongoJobId, userId: userId, retry: true },
+        () => {
+          // Finish the client request so S3 upload can happen async
+          res.send({ jobId: mongoJobId })
+        },
+      )
+    })
+  },
 
-      res.send({ jobId: mongoJobId })
+  /**
+     *  GET Dataset Jobs
+     */
+  getDatasetJobs(req, res, next) {
+    let snapshot =
+      req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true'
+    let datasetId = req.params.datasetId
+    let user = req.user
+    let hasAccess = req.hasAccess
 
-      const batchJobParams = aws.batch.buildBatchParams(job)
+    let query = snapshot ? { snapshotId: datasetId } : { datasetId }
+    query.deleted = { $ne: true }
+    c.crn.jobs.find(query).toArray((err, jobs) => {
+      if (err) {
+        return next(err)
+      }
 
-      aws.batch.startBatchJobs(batchJobParams, mongoJobId, err => {
-        if (err) {
-          // This is an unexpected error, probably from batch.
-          console.log(err)
-          // Cleanup the failed to submit job
-          // TODO - Maybe we save the error message into another field for display?
-          c.crn.jobs.updateOne(
-            { _id: mongoJobId },
-            { $set: { 'analysis.status': 'REJECTED' } },
-          )
-          return
+      const userPromises = jobs.map(job => {
+        return new Promise(resolve => {
+          scitran.getUser(job.userId, (err, response) => {
+            job.userMetadata = {}
+            if (response && response.statusCode === 200) {
+              job.userMetadata = response.body
+            }
+            resolve()
+          })
+        })
+      })
+
+      Promise.all(userPromises).then(() => {
+        for (let job of jobs) {
+          if (job.analysis.logstreams) {
+            let streamNameVersion = aws.cloudwatch.streamNameVersion(job)
+            job.analysis.logstreams = job.analysis.logstreams.map(stream => {
+              // Fix legacy internal logstream values and adapt for changes in Batch names
+              return aws.cloudwatch.formatLegacyLogStream(
+                stream,
+                streamNameVersion,
+              )
+            })
+          }
+        }
+        if (snapshot) {
+          if (!hasAccess) {
+            let error = new Error(
+              'You do not have access to view jobs for this dataset.',
+            )
+            error.http_code = 403
+            return next(error)
+          }
+          // remove user ID on public requests
+          if (!user) {
+            for (let job of jobs) {
+              delete job.userId
+            }
+          }
+          res.send(jobs)
         } else {
-          let jobLog = aws.batch.extractJobLog(job)
-          emitter.emit(
-            events.JOB_STARTED,
-            {
-              job: jobLog,
-              createdDate: job.analysis.created,
-              retry: true,
-            },
-            userId,
-          )
+          scitran.getProjectSnapshots(datasetId, (err, resp) => {
+            let snapshots = resp.body
+            let filteredJobs = []
+            for (let job of jobs) {
+              for (let snapshot of snapshots) {
+                if (
+                  (snapshot.public || hasAccess) &&
+                  snapshot._id === job.snapshotId
+                ) {
+                  if (!user) {
+                    delete job.userId
+                  }
+                  filteredJobs.push(job)
+                }
+              }
+            }
+            res.send(filteredJobs)
+          })
         }
       })
+    })
+  },
+
+  getJobs(req, res) {
+    let reqAll = false
+    let reqPublic = req.query.public === 'true'
+    const includeResults = req.query.results === 'true'
+    if (req.isSuperUser) {
+      reqAll = req.query.all === 'true'
+      // If all jobs are requested, skip the public query
+      if (reqAll) {
+        reqPublic = false
+      }
+    }
+    let jobsQuery = {}
+    // Optionally select by app
+    if (req.query.appName) {
+      jobsQuery['jobName'] = req.query.appName
+    }
+    if (req.query.status) {
+      jobsQuery['analysis.status'] = req.query.status
+    }
+    jobsQuery.deleted = { $ne: true }
+    let jobsResults
+    if (includeResults) {
+      jobsResults = c.crn.jobs.find(jobsQuery).sort({ 'analysis.created': -1 })
+    } else {
+      const jobsProjection = { results: 0, 'analysis.logstreams': 0 }
+      jobsResults = c.crn.jobs
+        .find(jobsQuery, jobsProjection)
+        .sort({ 'analysis.created': -1 })
+    }
+    jobsResults.toArray((err, jobs) => {
+      if (err) {
+        res.send(err)
+        return
+      }
+
+      // tie user metadata to the jobs
+      const userPromises = jobs.map(job => {
+        return new Promise(resolve => {
+          scitran.getUser(job.userId, (err, response) => {
+            job.userMetadata = {}
+            if (response && response.statusCode === 200) {
+              job.userMetadata = response.body
+            }
+            resolve()
+          })
+        })
+      })
+      Promise.all(userPromises).then(() => {
+        // store request metadata
+        let availableApps = {}
+
+        // filter jobs by permissions
+        let filteredJobs = []
+
+        if (reqPublic) {
+          async.each(
+            jobs,
+            (job, cb) => {
+              c.scitran.project_snapshots.findOne(
+                { _id: ObjectID(job.snapshotId) },
+                {},
+                (err, snapshot) => {
+                  if (snapshot && snapshot.public === true) {
+                    buildMetadata(job)
+                    filteredJobs.push(job)
+                    cb()
+                  } else {
+                    cb()
+                  }
+                },
+              )
+            },
+            () => {
+              res.send({
+                availableApps: reMapMetadata(availableApps),
+                jobs: filteredJobs,
+              })
+            },
+          )
+        } else {
+          for (let job of jobs) {
+            if (reqAll || req.user === job.userId) {
+              buildMetadata(job)
+              filteredJobs.push(job)
+            }
+          }
+          res.send({
+            availableApps: reMapMetadata(availableApps),
+            jobs: filteredJobs,
+          })
+        }
+
+        function buildMetadata(job) {
+          if (!availableApps.hasOwnProperty(job.appLabel)) {
+            availableApps[job.appLabel] = { versions: {} }
+            availableApps[job.appLabel].versions[job.appVersion] = job.appId
+          } else if (
+            !availableApps[job.appLabel].versions.hasOwnProperty(job.appVersion)
+          ) {
+            availableApps[job.appLabel].versions[job.appVersion] = job.appId
+          }
+        }
+
+        function reMapMetadata(apps) {
+          let remapped = []
+          for (let app in apps) {
+            let tempApp = { label: app, versions: [] }
+            for (let version in apps[app].versions) {
+              tempApp.versions.push({
+                version,
+                id: apps[app].versions[version],
+              })
+            }
+            remapped.push(tempApp)
+          }
+          return remapped
+        }
+      })
+    })
+  },
+
+  /**
+       * GET Download Ticket
+       */
+  getDownloadTicket(req, res) {
+    let jobId = req.params.jobId
+    // form ticket
+    let ticket = {
+      type: 'download',
+      userId: req.user,
+      jobId: jobId,
+      fileName: 'all',
+      created: new Date(),
+    }
+
+    res.send(ticket)
+  },
+
+  /**
+       * DELETE Dataset Jobs
+       *
+       * Takes a dataset ID url parameter and deletes all jobs for that dataset.
+       */
+  deleteDatasetJobs(req, res, next) {
+    let datasetId = req.params.datasetId
+
+    scitran.getProject(datasetId, (err, resp) => {
+      if (resp.statusCode == 400) {
+        let error = new Error('Bad request')
+        error.http_code = 400
+        return next(error)
+      }
+      if (resp.statusCode == 404) {
+        let error = new Error('No dataset found')
+        error.http_code = 404
+        return next(error)
+      }
+
+      let hasPermission
+      if (!req.user) {
+        hasPermission = false
+      } else {
+        for (let permission of resp.body.permissions) {
+          if (req.user === permission._id && permission.access === 'admin') {
+            hasPermission = true
+            break
+          }
+        }
+      }
+      if (!resp.body.public && hasPermission) {
+        c.crn.jobs.deleteMany({ datasetId }, [], (err, doc) => {
+          if (err) {
+            return next(err)
+          }
+          res.send({
+            message:
+              doc.result.n +
+              ' job(s) have been deleted for dataset ' +
+              datasetId,
+          })
+        })
+      } else {
+        let message = resp.body.public
+          ? "You don't have permission to delete results from public datasets"
+          : "You don't have permission to delete jobs from this dataset."
+        let error = new Error(message)
+        error.http_code = 403
+        return next(error)
+      }
     })
   },
 }

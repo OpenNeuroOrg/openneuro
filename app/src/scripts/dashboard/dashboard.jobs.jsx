@@ -8,8 +8,10 @@ import Actions from './dashboard.jobs.actions'
 import JobsStore from './dashboard.jobs.store.js'
 import { withRouter, Link } from 'react-router-dom'
 import moment from 'moment'
-import { PanelGroup } from 'react-bootstrap'
+import { PanelGroup, Panel } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
+import Timeout from '../common/partials/timeout.jsx'
+import ErrorBoundary from '../errors/errorBoundary.jsx'
 import Sort from './dashboard.sort.jsx'
 import Select from 'react-select'
 import bids from '../utils/bids'
@@ -73,11 +75,23 @@ class Jobs extends Reflux.Component {
               />
             </div>
           </div>
-          <PanelGroup>
-            <div className="clearfix">
-              {this.state.jobs.loading ? <Spinner active={true} /> : jobs}
-            </div>
-          </PanelGroup>
+          <ErrorBoundary
+            message="The jobs server has failed to respond."
+            className="loading-wrap fade-in">
+            <PanelGroup>
+              <Panel>
+                <div className="clearfix">
+                  {this.state.jobs.loading ? (
+                    <Timeout timeout={20000}>
+                      <Spinner active={true} />
+                    </Timeout>
+                  ) : (
+                    jobs
+                  )}
+                </div>
+              </Panel>
+            </PanelGroup>
+          </ErrorBoundary>
         </div>
       </div>
     )
