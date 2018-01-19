@@ -129,27 +129,21 @@ export default {
    * nested BIDS dataset.
    */
   async getDataset(projectId, callback, options) {
-    // get users
+    // Users
     let users = null
     try {
       const userRes = await scitran.getUsers()
       users = !options.isPublic && userRes ? userRes.body : null
     } catch (err) {
-      // we don't care if the users returns 403, but we want to catch the error separately
+      // The user request failed
     }
 
-    // get projects
+    // Dataset
     try {
       const projectRes = await scitran.getProject(projectId, options)
-
-      // if the response isnt successful, callback with the response
-      // for error handling
       if (projectRes.status !== 200) {
         return callback(projectRes)
       }
-
-      // associate tempFiles, metadata, and jobs with the dataset
-      // object and return it
       const project = projectRes ? projectRes.body : null
       if (project) {
         let tempFiles = project.files ? this._formatFiles(project.files) : null

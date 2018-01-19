@@ -195,35 +195,46 @@ let datasetStore = Reflux.createStore({
     )
   },
 
-  // generates a fallback url
+  /**
+   * Generate Fallback Url
+   * 
+   * Given a datasetId, return the most recent
+   * publicly available snapshot url
+   */
   async generateFallbackUrl(datasetId) {
-    const snapshotRes = await scitran.getProjectSnapshots(datasetId)
-    const snapshots = snapshotRes ? snapshotRes.body : null
+    try {
+      const snapshotRes = await scitran.getProjectSnapshots(datasetId)
+      const snapshots = snapshotRes ? snapshotRes.body : null
 
-    if (snapshots && snapshots.length) {
-      // sort snapshots
-      snapshots.sort((a, b) => {
-        if (a.snapshot_version < b.snapshot_version) {
-          return 1
-        } else if (a.snapshot_version > b.snapshot_version) {
-          return -1
-        } else {
-          return 0
-        }
-      })
-
-      const project = snapshots[0]
-      if (project.snapshot_version) {
-        const redirectUrl = String.prototype.concat(
-          '/datasets/',
-          bids.decodeId(datasetId),
-          '/versions/',
-          bids.formatVersionNumber(project.snapshot_version),
-        )
-        this.update({
-          redirectUrl: redirectUrl,
+      if (snapshots && snapshots.length) {
+        // sort snapshots
+        snapshots.sort((a, b) => {
+          if (a.snapshot_version < b.snapshot_version) {
+            return 1
+          } else if (a.snapshot_version > b.snapshot_version) {
+            return -1
+          } else {
+            return 0
+          }
         })
+
+        const project = snapshots[0]
+        if (project.snapshot_version) {
+          const redirectUrl = String.prototype.concat(
+            '/datasets/',
+            bids.decodeId(datasetId),
+            '/versions/',
+            bids.formatVersionNumber(project.snapshot_version),
+          )
+          this.update({
+            redirectUrl: redirectUrl,
+          })
+        }
       }
+    } catch (err) {
+      this.update({
+        redirectUrl: null,
+      })
     }
   },
 
