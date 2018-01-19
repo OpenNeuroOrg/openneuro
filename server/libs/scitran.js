@@ -3,6 +3,7 @@ import config from '../config'
 import fs from 'fs'
 import crypto from 'crypto'
 import files from './files'
+import userCache from '../libs/cache/userCache.js'
 
 /**
  * Scitran
@@ -47,7 +48,12 @@ export default {
      * Get User
      */
   getUser(userId, callback) {
-    request.get(config.scitran.url + 'users/' + userId, {}, callback)
+    request.getCache(
+      config.scitran.url + 'users/' + userId,
+      userCache,
+      { body: { userId: userId } },
+      callback,
+    )
   },
 
   /**
@@ -69,9 +75,14 @@ export default {
      * Create User
      */
   createUser(user, callback) {
-    request.post(config.scitran.url + 'users', { body: user }, () => {
-      this.createGroup(user._id, user._id, callback)
-    })
+    request.postCache(
+      config.scitran.url + 'users',
+      userCache,
+      { body: user },
+      () => {
+        this.createGroup(user._id, user._id, callback)
+      },
+    )
   },
 
   /**

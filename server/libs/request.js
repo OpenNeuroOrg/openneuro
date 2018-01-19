@@ -16,6 +16,50 @@ export default {
     })
   },
 
+  /** 
+   * GET CACHE
+   * 
+   * Functions the same as request but takes a
+   * cache function, checks to see if the response is
+   * already cached. If so, responds with the cached data.
+   * If not, stores the response in the cache before responding.
+   */
+  getCache(url, cache, options, callback) {
+    handleRequest(url, options, req => {
+      cache.get(req, (err, res1) => {
+        if (res1) {
+          handleResponse(err, res1, callback)
+        } else {
+          request.get(req, (err, res2) => {
+            if (err) {
+              handleResponse(err, res2, callback)
+            } else {
+              const data = res2.body
+              cache.store(data, () => {
+                handleResponse(err, res2, callback)
+              })
+            }
+          })
+        }
+      })
+    })
+  },
+
+  postCache(url, cache, options, callback) {
+    handleRequest(url, options, req => {
+      request.post(req, (err, res) => {
+        if (err) {
+          handleResponse(err, res, callback)
+        } else {
+          const data = req.json
+          cache.store(data, () => {
+            handleResponse(err, res, callback)
+          })
+        }
+      })
+    })
+  },
+
   /**
      * GET PROXY
      *
