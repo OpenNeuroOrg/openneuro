@@ -129,37 +129,58 @@ export default {
    * nested BIDS dataset.
    */
   async getDataset(projectId, callback, options) {
-    const users = options.isPublic ? null : (await scitran.getUsers()).body
-    const res = await scitran.getProject(projectId, options)
-    let tempFiles = this._formatFiles(res.body.files)
-    if (res.status !== 200) {
-      return callback(res)
+    // get users
+    let users = null
+    try {
+      const userRes = await scitran.getUsers()
+      users = !options.isPublic && userRes ? userRes.body : null
+    } catch (err) {
+      // we don't care if the users returns 403, but we want to catch the error separately
     }
-    let project = res.body
-    this.getMetadata(
-      project,
-      metadata => {
-        let dataset = this.formatDataset(
+
+    try {
+      // get projects
+      const projectRes = await scitran.getProject(projectId, options)
+
+      // if the response isnt successful, callback with the response
+      // for error handling
+      if (projectRes.status !== 200) {
+        return callback(projectRes)
+      }
+
+      // associate tempFiles, metadata, and jobs with the dataset
+      // object and return it
+      const project = projectRes ? projectRes.body : null
+      if (project) {
+        let tempFiles = project.files ? this._formatFiles(project.files) : null
+        this.getMetadata(
           project,
-          metadata['dataset_description.json'],
-          users,
+          metadata => {
+            let dataset = this.formatDataset(
+              project,
+              metadata['dataset_description.json'],
+              users,
+            )
+            dataset.README = metadata.README
+            crn.getDatasetJobs(projectId, options).then(res => {
+              dataset.jobs = res.body
+              dataset.children = tempFiles
+              dataset.showChildren = true
+              this.usage(projectId, options, usage => {
+                if (usage) {
+                  dataset.views = usage.views
+                  dataset.downloads = usage.downloads
+                }
+                callback(dataset)
+              })
+            })
+          },
+          options,
         )
-        dataset.README = metadata.README
-        crn.getDatasetJobs(projectId, options).then(res => {
-          dataset.jobs = res.body
-          dataset.children = tempFiles
-          dataset.showChildren = true
-          this.usage(projectId, options, usage => {
-            if (usage) {
-              dataset.views = usage.views
-              dataset.downloads = usage.downloads
-            }
-            callback(dataset)
-          })
-        })
-      },
-      options,
-    )
+      }
+    } catch (err) {
+      callback(err)
+    }
   },
 
   /**
@@ -236,7 +257,7 @@ export default {
       id = this.decodeId(id)
       version = this.decodeId(version)
       if (version.length <= 5) {
-        let snapshotNumber = ('00000' + Number(version)).substr(-5, 5)
+        let snapshotNumber = this.formatVersionNumber(version)
         let snapshotId = this.encodeId(id.slice(2) + '-' + snapshotNumber)
         return snapshotId
       } else {
@@ -264,6 +285,15 @@ export default {
       }
     }
     return id
+  },
+
+  /**
+   * Get Five Digit Version Number
+   */
+  formatVersionNumber(version) {
+    if (version) {
+      return ('00000' + Number(version)).substr(-5, 5)
+    }
   },
 
   /**

@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Reflux from 'reflux'
-import { Link, withRouter } from 'react-router-dom'
+import { Redirect, Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
 import { ProgressBar } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
@@ -81,30 +81,36 @@ class Dataset extends Reflux.Component {
   componentDidMount() {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
-    this._loadData(datasetId, snapshotId)
-    const isDataset = pathname => {
-      const slugs = pathname.split('/')
-      if (
-        slugs.length &&
-        slugs[1] === 'datasets' &&
-        this.state.datasets.dataset
-      ) {
-        let datasetId = this.state.datasets.dataset.linkID
-        if ('linkOriginal' in this.state.datasets.dataset) {
-          datasetId = this.state.datasets.dataset.linkOriginal
+
+    // has access
+    // this._checkAccess(datasetId, snapshotId)
+    if (this.state.datasets.userAccess) {
+      this._loadData(datasetId, snapshotId)
+
+      const isDataset = pathname => {
+        const slugs = pathname.split('/')
+        if (
+          slugs.length &&
+          slugs[1] === 'datasets' &&
+          this.state.datasets.dataset
+        ) {
+          let datasetId = this.state.datasets.dataset.linkID
+          if ('linkOriginal' in this.state.datasets.dataset) {
+            datasetId = this.state.datasets.dataset.linkOriginal
+          }
+          // The same dataset
+          if (slugs[2] === datasetId) {
+            return true
+          }
         }
-        // The same dataset
-        if (slugs[2] === datasetId) {
-          return true
-        }
+        return false
       }
-      return false
+      this.props.history.listen(({ pathname }) => {
+        if (!isDataset(pathname) && this.state.datasets.uploading) {
+          actions.cancelDirectoryUpload()
+        }
+      })
     }
-    this.props.history.listen(({ pathname }) => {
-      if (!isDataset(pathname) && this.state.datasets.uploading) {
-        actions.cancelDirectoryUpload()
-      }
-    })
   }
 
   _loadData(datasetId, snapshotId) {
@@ -215,21 +221,25 @@ class Dataset extends Reflux.Component {
         </div>
       )
     } else {
-      let message
-      let status = this.state.datasets.status
-      if (status === 404) {
-        message = 'Dataset not found'
-      }
-      if (status === 403) {
-        message = 'You are not authorized to view this dataset'
-      }
-      content = (
-        <div className="page dataset">
-          <div className="dataset-container">
-            <h2 className="message-4">{message}</h2>
+      if (this.state.datasets.redirectUrl) {
+        content = <Redirect to={this.state.datasets.redirectUrl} />
+      } else {
+        let message
+        let status = this.state.datasets.status
+        if (status === 404) {
+          message = 'Dataset not found'
+        }
+        if (status === 403) {
+          message = 'You are not authorized to view this dataset'
+        }
+        content = (
+          <div className="page dataset">
+            <div className="dataset-container">
+              <h2 className="message-4">{message}</h2>
+            </div>
           </div>
-        </div>
-      )
+        )
+      }
     }
 
     return (

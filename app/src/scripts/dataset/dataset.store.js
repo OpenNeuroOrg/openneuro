@@ -87,10 +87,12 @@ let datasetStore = Reflux.createStore({
         share: false,
         update: false,
       },
+      redirectUrl: null,
       snapshot: false,
       snapshots: [],
       selectedSnapshot: '',
       status: null,
+      userAccess: true,
       users: [],
       uploading: false,
       uploadingCanceled: false,
@@ -155,6 +157,8 @@ let datasetStore = Reflux.createStore({
             loading: false,
             snapshot: snapshot,
           })
+
+          this.generateFallbackUrl(datasetId, snapshot)
         } else {
           // don't update data if the user has selected another version during loading
           let selectedSnapshot = this.data.selectedSnapshot
@@ -190,6 +194,44 @@ let datasetStore = Reflux.createStore({
       },
       options,
     )
+  },
+
+  // generates a fallback url
+  async generateFallbackUrl(datasetId, snapshot) {
+    if (!snapshot) {
+      const snapshotRes = await scitran.getProjectSnapshots(datasetId)
+      const snapshots = snapshotRes ? snapshotRes.body : null
+
+      if (snapshots && snapshots.length) {
+        // sort snapshots
+        snapshots.sort((a, b) => {
+          if (a.snapshot_version < b.snapshot_version) {
+            return 1
+          } else if (a.snapshot_version > b.snapshot_version) {
+            return -1
+          } else {
+            return 0
+          }
+        })
+
+        const project = snapshots[0]
+        if (project.snapshot_version) {
+          const redirectUrl = String.prototype.concat(
+            '/datasets/',
+            bids.decodeId(datasetId),
+            '/versions/',
+            bids.formatVersionNumber(project.snapshot_version),
+          )
+          this.update({
+            redirectUrl: redirectUrl,
+          })
+        }
+      }
+    } else {
+      this.update({
+        redirectUrl: '/public/datasets/',
+      })
+    }
   },
 
   /**
