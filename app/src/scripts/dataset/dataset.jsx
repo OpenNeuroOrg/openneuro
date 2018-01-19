@@ -120,6 +120,7 @@ class Dataset extends Reflux.Component {
         app: app,
         version: version,
         job: job,
+        datasetId: bids.encodeId(datasetId),
       })
     } else if (
       (datasetId && !this.state.datasets.dataset) ||

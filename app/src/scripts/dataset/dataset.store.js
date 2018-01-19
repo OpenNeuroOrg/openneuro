@@ -156,8 +156,8 @@ let datasetStore = Reflux.createStore({
             loading: false,
             snapshot: snapshot,
           })
-
-          this.generateFallbackUrl(datasetId, snapshot)
+          const fallbackDatasetId = snapshot ? options.datasetId : datasetId
+          this.generateFallbackUrl(fallbackDatasetId)
         } else {
           // don't update data if the user has selected another version during loading
           let selectedSnapshot = this.data.selectedSnapshot
@@ -196,40 +196,34 @@ let datasetStore = Reflux.createStore({
   },
 
   // generates a fallback url
-  async generateFallbackUrl(datasetId, snapshot) {
-    if (!snapshot) {
-      const snapshotRes = await scitran.getProjectSnapshots(datasetId)
-      const snapshots = snapshotRes ? snapshotRes.body : null
+  async generateFallbackUrl(datasetId) {
+    const snapshotRes = await scitran.getProjectSnapshots(datasetId)
+    const snapshots = snapshotRes ? snapshotRes.body : null
 
-      if (snapshots && snapshots.length) {
-        // sort snapshots
-        snapshots.sort((a, b) => {
-          if (a.snapshot_version < b.snapshot_version) {
-            return 1
-          } else if (a.snapshot_version > b.snapshot_version) {
-            return -1
-          } else {
-            return 0
-          }
-        })
-
-        const project = snapshots[0]
-        if (project.snapshot_version) {
-          const redirectUrl = String.prototype.concat(
-            '/datasets/',
-            bids.decodeId(datasetId),
-            '/versions/',
-            bids.formatVersionNumber(project.snapshot_version),
-          )
-          this.update({
-            redirectUrl: redirectUrl,
-          })
+    if (snapshots && snapshots.length) {
+      // sort snapshots
+      snapshots.sort((a, b) => {
+        if (a.snapshot_version < b.snapshot_version) {
+          return 1
+        } else if (a.snapshot_version > b.snapshot_version) {
+          return -1
+        } else {
+          return 0
         }
-      }
-    } else {
-      this.update({
-        redirectUrl: '/public/datasets/',
       })
+
+      const project = snapshots[0]
+      if (project.snapshot_version) {
+        const redirectUrl = String.prototype.concat(
+          '/datasets/',
+          bids.decodeId(datasetId),
+          '/versions/',
+          bids.formatVersionNumber(project.snapshot_version),
+        )
+        this.update({
+          redirectUrl: redirectUrl,
+        })
+      }
     }
   },
 
