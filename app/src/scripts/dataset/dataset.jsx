@@ -81,36 +81,30 @@ class Dataset extends Reflux.Component {
   componentDidMount() {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
-
-    // has access
-    // this._checkAccess(datasetId, snapshotId)
-    if (this.state.datasets.userAccess) {
-      this._loadData(datasetId, snapshotId)
-
-      const isDataset = pathname => {
-        const slugs = pathname.split('/')
-        if (
-          slugs.length &&
-          slugs[1] === 'datasets' &&
-          this.state.datasets.dataset
-        ) {
-          let datasetId = this.state.datasets.dataset.linkID
-          if ('linkOriginal' in this.state.datasets.dataset) {
-            datasetId = this.state.datasets.dataset.linkOriginal
-          }
-          // The same dataset
-          if (slugs[2] === datasetId) {
-            return true
-          }
+    this._loadData(datasetId, snapshotId)
+    const isDataset = pathname => {
+      const slugs = pathname.split('/')
+      if (
+        slugs.length &&
+        slugs[1] === 'datasets' &&
+        this.state.datasets.dataset
+      ) {
+        let datasetId = this.state.datasets.dataset.linkID
+        if ('linkOriginal' in this.state.datasets.dataset) {
+          datasetId = this.state.datasets.dataset.linkOriginal
         }
-        return false
+        // The same dataset
+        if (slugs[2] === datasetId) {
+          return true
+        }
       }
-      this.props.history.listen(({ pathname }) => {
-        if (!isDataset(pathname) && this.state.datasets.uploading) {
-          actions.cancelDirectoryUpload()
-        }
-      })
+      return false
     }
+    this.props.history.listen(({ pathname }) => {
+      if (!isDataset(pathname) && this.state.datasets.uploading) {
+        actions.cancelDirectoryUpload()
+      }
+    })
   }
 
   _loadData(datasetId, snapshotId) {

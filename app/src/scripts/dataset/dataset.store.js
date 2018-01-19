@@ -92,7 +92,6 @@ let datasetStore = Reflux.createStore({
       snapshots: [],
       selectedSnapshot: '',
       status: null,
-      userAccess: true,
       users: [],
       uploading: false,
       uploadingCanceled: false,

@@ -138,8 +138,8 @@ export default {
       // we don't care if the users returns 403, but we want to catch the error separately
     }
 
+    // get projects
     try {
-      // get projects
       const projectRes = await scitran.getProject(projectId, options)
 
       // if the response isnt successful, callback with the response
