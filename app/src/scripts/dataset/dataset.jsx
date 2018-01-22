@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Reflux from 'reflux'
-import { Link, withRouter } from 'react-router-dom'
+import { Redirect, Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
 import { ProgressBar } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
@@ -120,6 +120,7 @@ class Dataset extends Reflux.Component {
         app: app,
         version: version,
         job: job,
+        datasetId: bids.encodeId(datasetId),
       })
     } else if (
       (datasetId && !this.state.datasets.dataset) ||
@@ -215,21 +216,25 @@ class Dataset extends Reflux.Component {
         </div>
       )
     } else {
-      let message
-      let status = this.state.datasets.status
-      if (status === 404) {
-        message = 'Dataset not found'
-      }
-      if (status === 403) {
-        message = 'You are not authorized to view this dataset'
-      }
-      content = (
-        <div className="page dataset">
-          <div className="dataset-container">
-            <h2 className="message-4">{message}</h2>
+      if (this.state.datasets.redirectUrl) {
+        content = <Redirect to={this.state.datasets.redirectUrl} />
+      } else {
+        let message
+        let status = this.state.datasets.status
+        if (status === 404) {
+          message = 'Dataset not found'
+        }
+        if (status === 403) {
+          message = 'You are not authorized to view this dataset'
+        }
+        content = (
+          <div className="page dataset">
+            <div className="dataset-container">
+              <h2 className="message-4">{message}</h2>
+            </div>
           </div>
-        </div>
-      )
+        )
+      }
     }
 
     return (
