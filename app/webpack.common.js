@@ -29,6 +29,7 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     new HtmlWebpackPlugin({
       title: 'OpenNeuro',
       template: path.resolve(__dirname, 'src/index.html'),

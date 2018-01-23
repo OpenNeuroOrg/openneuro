@@ -84,7 +84,8 @@
     "watchify": "^2.4.0",
     "webpack": "^3.5.5",
     "webpack-dev-server": "^2.7.1",
-    "webpack-merge": "^4.1.0"
+    "webpack-merge": "^4.1.0",
+    "webpack-visualizer-plugin": "^0.1.11"
   },
   "jest": {
     "setupFiles": ["./jestsetup.js"],
