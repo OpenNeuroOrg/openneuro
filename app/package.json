@@ -35,6 +35,7 @@
     "react-bootstrap": "0.31.3",
     "react-dom": "16",
     "react-ga": "^2.2.0",
+    "react-helmet": "^5.2.0",
     "react-router": "4",
     "react-select": "^1.0.0-rc.5",
     "react-table": "^6.7.6",

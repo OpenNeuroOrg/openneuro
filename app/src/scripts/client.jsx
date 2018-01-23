@@ -4,10 +4,8 @@ import 'url-search-params-polyfill'
 import Raven from 'raven-js'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Index from './index.jsx'
-import analyticsWrapper from './utils/analytics.js'
 import config from '../../config.js'
+import App from './app.jsx'
 
 const ravenConfig = {
   release: __GIT_HASH__,
@@ -24,9 +22,4 @@ Raven.config(
   ravenConfig,
 ).install()
 
-ReactDOM.render(
-  <Router>
-    <Route component={analyticsWrapper(Index)} />
-  </Router>,
-  document.getElementById('main'),
-)
+ReactDOM.render(<App />, document.getElementById('main'))

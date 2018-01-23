@@ -12,6 +12,7 @@ import FPActions from './front-page.actions.js'
 import { refluxConnect } from '../utils/reflux'
 
 // assets -------------------------------------------------------------
+import { pageDescription } from '../resources/strings.js'
 import ljaf from './assets/ljaf.png'
 import logo_app from './assets/logo_app.png'
 import logo_cube from './assets/logo_cube.png'
@@ -68,10 +69,7 @@ class FrontPage extends Reflux.Component {
                 <div className="logo-text">
                   Open<span className="logo-end">Neuro</span>
                 </div>
-                <h1>
-                  A free and open platform for analyzing and sharing
-                  neuroimaging data
-                </h1>
+                <h1>{pageDescription}</h1>
                 <div className="sign-in-block fade-in">
                   {this._error(
                     this.state.users.signinError,
