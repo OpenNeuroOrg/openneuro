@@ -55,7 +55,7 @@
     "eslint": "^3.19.0",
     "husky": "^0.14.3",
     "jest": "^22.0.0",
-    "lint-staged": "^4.2.1",
+    "lint-staged": "^6.0.1",
     "prettier": "^1.7.0"
   },
   "jest": {
@@ -67,7 +67,6 @@
     ]
   },
   "lint-staged": {
-    "gitDir": "../",
     "linters": {
       "*.{js,jsx,json}": ["prettier --write", "git add"]
     }
