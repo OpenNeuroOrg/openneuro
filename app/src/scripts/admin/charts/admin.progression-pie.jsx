@@ -13,13 +13,10 @@ const Pie = ({ failed, success, total }) => {
 
   Object.entries(dataPoints).forEach(([key, value]) => {
     if (value && total) {
-      // console.log(total)
-      dataP = Math.floor(value / total * 100)
+      dataP = Math.round(value / total * 100)
       let label = key + ' ' + dataP + '%'
-      // console.log(dataP);
       data.push({ x: label, y: dataP })
     }
-    // console.log(dataP);
   })
 
   return (
@@ -36,6 +33,5 @@ const Pie = ({ failed, success, total }) => {
     </div>
   )
 }
-// padding={{ top: 50, bottom: 80, left: 40, right: 80 }}
 
 export default Pie
