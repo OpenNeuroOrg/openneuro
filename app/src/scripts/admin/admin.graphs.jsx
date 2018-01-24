@@ -24,6 +24,7 @@ class Progresssion extends Reflux.Component {
   componentDidMount() {
     if (!this.state.admin.eventLogs.length) {
       actions.getEventLogs()
+      actions.filterLogs()
     }
   }
 
@@ -32,10 +33,10 @@ class Progresssion extends Reflux.Component {
     let successes = this.state.admin.successLogs.length
     let total = this.state.admin.uploadedLogs.length
     let activity = this.state.admin.activityLogs
-
     return (
       <div className="dashboard-dataset-teasers fade-in">
         <div className="header-wrap clearfix chart-header">
+          {this._handleFiltering()}
           <h2>Job Sucess Rate:</h2>
           <div className="col-sm-9 chart">
             <div className="col-1">
@@ -46,6 +47,7 @@ class Progresssion extends Reflux.Component {
                 logs={activity}
                 month={this.state.month}
                 year={this.state.year}
+                jobs={this._showJobs.bind(this)}
               />
             </div>
           </div>
@@ -59,15 +61,16 @@ class Progresssion extends Reflux.Component {
       <div>
         <label>Please make a selection: </label>
         <form>
-          <div>
+          {/* <div>
             <select
               value={this.state.month}
               onChange={this._handleChangeMonth.bind(this)}>
               <option value="">All</option>
               {this._options('month')}
             </select>
-          </div>
+          </div> */}
           <select
+            className="year-dropdown"
             value={this.state.year}
             onChange={this._handleChangeYear.bind(this)}>
             <option value="">All</option>
@@ -90,22 +93,37 @@ class Progresssion extends Reflux.Component {
     })
   }
 
-  _options(e) {
+  _options(key) {
     let activity = this.state.admin.activityLogs
     let options = []
 
-    Object.entries(activity).map((index, value) => {
-      let log = activity[value]
-      if (!options.includes(log[e])) {
+    Object.keys(activity).map(x => {
+      let date = x.split('_')
+      let month = date[0]
+      let year = date[1]
+      if (key === 'year' && !options.includes(year)) {
         options.push(
-          <option key={e} value={log[e]}>
-            {log[e]}
+          <option key={year[year]} value={year}>
+            {year}
+          </option>,
+        )
+      } else {
+        options.push(
+          <option key={month[month]} value={month}>
+            {month}
           </option>,
         )
       }
     })
-
     return options
+  }
+
+  _showJobs(e) {
+    console.log(e)
+    console.log('POP')
+    // this.setState({month: month})
+    // and then render activity log from that month
+    // also needs to change progression pie
   }
 }
 
