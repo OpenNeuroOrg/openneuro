@@ -23,6 +23,8 @@ class JobParameterSetup extends React.Component {
     for (let field of this.props.model) {
       if (field.id === 'options' || field.id === 'defaultChecked') {
         initialState[field.id] = []
+      } else if (field.id === 'hidden' || field.id === 'required') {
+        initialState[field.id] = false
       } else {
         initialState[field.id] = ''
       }
@@ -59,6 +61,7 @@ class JobParameterSetup extends React.Component {
             value={this.state.label}
             placeholder="Key"
             type="text"
+            onChange={this._onChange.bind(this, 'label')}
           />
 
           <Input
@@ -66,11 +69,26 @@ class JobParameterSetup extends React.Component {
             value={this.state.description}
             placeholder="Parameter Description"
             type="text"
+            onChange={this._onChange.bind(this, 'description')}
           />
+
+          <button
+            className="admin-button"
+            onClick={this._toggleCheckBox.bind(this, 'required')}
+            key="required">
+            <i
+              className={
+                this.state.required === true
+                  ? 'fa fa-check-square-o'
+                  : 'fa fa-square-o'
+              }
+            />required
+          </button>
 
           <JobParameter
             selected={this.state.type}
-            // addInput={this._addInputArray.bind(this)}
+            onCheck={this._toggleCheckBox}
+            checked={this.state.checked}
           />
         </span>
       </div>
@@ -89,12 +107,17 @@ class JobParameterSetup extends React.Component {
   //   console.log(e, target)
   // }
 
-  _onChange() {
-    /* TODO - This will handle input changes */
+  _onChange(key, e) {
+    let value = e.target.value
+    let state = {}
+    state[key] = value
+    this.setState(state)
   }
 
-  _toggleCheck() {
-    /* TODO - This will handle checkbox changes */
+  _toggleCheckBox(key) {
+    let state = {}
+    state[key] = !this.state[key]
+    this.setState(state)
   }
 
   _handleSelectChange(e) {

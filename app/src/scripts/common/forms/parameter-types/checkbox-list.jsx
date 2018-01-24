@@ -14,14 +14,9 @@ class CheckboxOrListParameter extends React.Component {
 
   render() {
     let options = []
+
     return (
       <span>
-        <button
-          className="admin-button"
-          // onClick={this._handleCheck.bind(this, type)}
-          key="required">
-          <i className="fa fa-square-o" />required
-        </button>
         <br />
         {this._returnInputs(options)}
         <br />
@@ -47,6 +42,18 @@ class CheckboxOrListParameter extends React.Component {
     this.setState({ counter: newState })
   }
 
+  //  still needs to be full configured
+  _handleCheck(key) {
+    // let checked
+    // //  checked = this.props.defChecked
+    // if (!checked.includes(key)) {
+    //   checked.push(key)
+    // } else {
+    //   checked.splice(key, 1)
+    // }
+    // this.props.onCheck(key)
+  }
+
   // Template Methods -------------------------------------------------------------
   _returnInputs(options) {
     let counter = this.state.counter
@@ -58,7 +65,7 @@ class CheckboxOrListParameter extends React.Component {
       let button = (
         <button
           className="admin-button"
-          // onClick={this._handleCheck.bind(this, key)}
+          // onClick={this.props.onCheck.bind(this, key)}
           key={num}>
           <i className="fa fa-square-o" /> default checked
         </button>
@@ -74,9 +81,8 @@ class CheckboxOrListParameter extends React.Component {
             key={key}
           />
           {type === 'checkbox' ? button : null}
-          <button
-            className="admin-button"
-            onClick={this._deleteInput.bind(this)}>
+          <button className="admin-button">
+            {/* // onClick={this._deleteInput.bind(this)} */}
             <i className="fa fa-trash-o" /> delete
           </button>
         </li>
@@ -92,4 +98,6 @@ export default CheckboxOrListParameter
 
 CheckboxOrListParameter.propTypes = {
   type: PropTypes.string,
+  onCheck: PropTypes.func,
+  checked: PropTypes.array,
 }

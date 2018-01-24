@@ -24,9 +24,9 @@ class JobParameter extends React.Component {
     } else if (selected === 'checkbox' || selected === 'select') {
       return (
         <CheckboxOrListParameter
-          // counter={this.props.counter}
-          // addInput={this.props.addInput}
           type={selected}
+          onCheck={this.props.onCheck}
+          checked={this.props.checked}
         />
       )
     } else if (selected === 'numeric') {
@@ -34,12 +34,7 @@ class JobParameter extends React.Component {
     } else if (selected === 'file') {
       return <FileParameter />
     } else if (selected === 'radio') {
-      return (
-        <RadioParameter
-        // counter={this.props.counter}
-        // addInput={this.props.addInput}
-        />
-      )
+      return <RadioParameter />
     } else {
       return null
     }
@@ -48,6 +43,8 @@ class JobParameter extends React.Component {
 
 JobParameter.propTypes = {
   selected: PropTypes.string,
+  onCheck: PropTypes.func,
+  checked: PropTypes.array,
 }
 
 export default JobParameter
