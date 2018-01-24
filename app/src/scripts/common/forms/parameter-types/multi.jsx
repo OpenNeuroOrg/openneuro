@@ -2,12 +2,13 @@ import React from 'react'
 import Input from '../input.jsx'
 import PropTypes from 'prop-types'
 
-class CheckboxOrListParameter extends React.Component {
+class MultiType extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       counter: 1,
-      opts: {},
+      opts: this.props.model.options,
+      defChecked: this.props.model.defaultChecked,
     }
   }
 
@@ -32,16 +33,16 @@ class CheckboxOrListParameter extends React.Component {
   _deleteInput(key) {
     let counter = this.state.counter
     let newState = counter - 1
-    // force a new render
-    this.setState({ counter: newState })
 
-    // how in the heck do I do this
+    // how in the heck do I do this?
     // const {[key], ...newState } = this.state.opts
 
     delete this.state.opts[key]
-    console.log(this.state)
-
-    // stuck on logic here. Since I am using a counter to render each input option, when I force the re-render the number of options is off.
+    if (this.state.defChecked.includes(key)) {
+      this.state.defChecked.splice(key, 1)
+    }
+    // force a new render
+    this.setState({ counter: newState })
   }
 
   _addInput() {
@@ -51,7 +52,7 @@ class CheckboxOrListParameter extends React.Component {
   }
 
   _handleCheck(key) {
-    let checked = this.props.defChecked
+    let checked = this.state.defChecked
     if (!checked.includes(key)) {
       checked.push(key)
     } else {
@@ -64,10 +65,6 @@ class CheckboxOrListParameter extends React.Component {
   _handleArray(key, e) {
     // update locally
     this.state.opts[key] = e.target.value
-    //  update within parent for model save
-    let value = e.target.value
-    let event = { target: { value: value } }
-    this.props.onArray(key, event)
   }
 
   // Template Methods -------------------------------------------------------------
@@ -96,7 +93,7 @@ class CheckboxOrListParameter extends React.Component {
           onClick={this._handleCheck.bind(this, key)}>
           <i
             className={
-              this.props.defChecked.includes(key)
+              this.state.defChecked.includes(key)
                 ? 'fa fa-check-square-o'
                 : 'fa fa-square-o'
             }
@@ -133,12 +130,10 @@ class CheckboxOrListParameter extends React.Component {
   }
 }
 
-export default CheckboxOrListParameter
+export default MultiType
 
-CheckboxOrListParameter.propTypes = {
+MultiType.propTypes = {
   type: PropTypes.string,
-  checked: PropTypes.array,
-  defChecked: PropTypes.array,
   onCheck: PropTypes.func,
-  onArray: PropTypes.func,
+  model: PropTypes.object,
 }
