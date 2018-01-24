@@ -84,15 +84,14 @@ class JobParameterSetup extends React.Component {
 
           <JobParameter
             selected={this.state.type}
-            onCheck={this._toggleCheckBox}
-            checked={this.state.checked}
-            onArray={this._onArray.bind(this)}
-            defChecked={this.state.defaultChecked}
+            onCheck={this._toggleCheckBox.bind(this)}
+            onChange={this._onChange.bind(this)}
+            model={this.state}
           />
           <br />
           <button
             className="cte-save-btn btn-admin-blue add-btn"
-            onClick={this._add.bind(this)}>
+            onClick={this._add()}>
             Add
           </button>
         </span>
@@ -101,7 +100,7 @@ class JobParameterSetup extends React.Component {
   }
 
   // custom methods -------------------------------------------------------------------------
-  _add(e) {
+  _add() {
     /* TODO - This would push a new parameter into the definition in the store */
     // this is currently disabled.
     console.log(this.state)
@@ -132,11 +131,6 @@ class JobParameterSetup extends React.Component {
     this.setState({ type: value })
   }
 
-  // Needs to handle delete don't forget
-  _onArray(key, event) {
-    let opts = this.state.options
-    opts[key] = event.target.value
-  }
   // End of class
 }
 
