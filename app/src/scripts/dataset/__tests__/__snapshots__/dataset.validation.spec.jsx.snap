@@ -9,9 +9,12 @@ exports[`dataset/Validation renders successfully 1`] = `
   >
     BIDS Validation
   </h3>
-  <Accordion
+  <PanelGroup
+    accordion={true}
     activeKey="2"
+    bsClass="panel-group"
     className="validation-wrap"
+    id="validation"
     onSelect={[Function]}
   >
     <Panel
@@ -41,7 +44,7 @@ exports[`dataset/Validation renders successfully 1`] = `
         warnings={Array []}
       />
     </Panel>
-  </Accordion>
+  </PanelGroup>
 </div>
 `;
 
