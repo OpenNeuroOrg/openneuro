@@ -56,8 +56,7 @@ export default class Validation extends React.Component {
           accordion
           className="validation-wrap"
           activeKey={this.state.activeKey}
-          onSelect={this._togglePanel.bind(this)}
-          id="validation">
+          onSelect={this._togglePanel.bind(this)}>
           <Panel
             className="status"
             header={this._header(errors, warnings)}
