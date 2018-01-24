@@ -17,7 +17,6 @@ class JobParameterSetup extends React.Component {
     const initialState = {
       error: null,
       helper: null,
-      checked: [],
     }
 
     for (let field of this.props.model) {
@@ -34,8 +33,9 @@ class JobParameterSetup extends React.Component {
     this.state = initialState
   }
 
+  // Must set up error handling and edit/remove
+
   render() {
-    let value = this.state.value
     return (
       <div className="job-parameters-setup">
         <Select
@@ -44,9 +44,6 @@ class JobParameterSetup extends React.Component {
           onChange={this._handleSelectChange.bind(this)}
         />
         {this.state.type != '' ? this._returnInput() : null}
-        <button className="btn admin-btn" onClick={this._add.bind(this)}>
-          Add
-        </button>
       </div>
     )
   }
@@ -92,6 +89,12 @@ class JobParameterSetup extends React.Component {
             onArray={this._onArray.bind(this)}
             defChecked={this.state.defaultChecked}
           />
+          <br />
+          <button
+            className="cte-save-btn btn-admin-blue add-btn"
+            onClick={this._add.bind(this)}>
+            Add
+          </button>
         </span>
       </div>
     )
@@ -100,12 +103,13 @@ class JobParameterSetup extends React.Component {
   // custom methods -------------------------------------------------------------------------
   _add(e) {
     /* TODO - This would push a new parameter into the definition in the store */
-    // this is currently disabled. TO DO AFTER TOGGLE.
-    console.log('POP!')
+    // this is currently disabled.
+    console.log(this.state)
   }
 
   // _remove(e, target) {
   //   /* TODO - This would find the key and remove it */
+  // Needs to set up rendering of edit...
   //   console.log(e, target)
   // }
 
@@ -117,10 +121,9 @@ class JobParameterSetup extends React.Component {
   }
 
   _toggleCheckBox(key) {
-    console.log(key)
-    // let state = {}
-    // state[key] = !this.state[key]
-    // this.setState(state)
+    let state = {}
+    state[key] = !this.state[key]
+    this.setState(state)
   }
 
   _handleSelectChange(e) {
@@ -133,7 +136,6 @@ class JobParameterSetup extends React.Component {
   _onArray(key, event) {
     let opts = this.state.options
     opts[key] = event.target.value
-    // console.log(this.state)
   }
   // End of class
 }
