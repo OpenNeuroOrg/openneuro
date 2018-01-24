@@ -14,7 +14,6 @@ exports[`dataset/Validation renders successfully 1`] = `
     activeKey="2"
     bsClass="panel-group"
     className="validation-wrap"
-    id="validation"
     onSelect={[Function]}
   >
     <Panel
