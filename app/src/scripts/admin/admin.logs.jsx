@@ -22,6 +22,7 @@ class Logs extends Reflux.Component {
 
     let eventLogs = this.state.admin.eventLogs
     let filteredLogs = this.state.admin.filteredLogs
+    // console.log(filteredLogs)
     let results
     if (!eventLogs || eventLogs.length === 0) {
       let noEventLogs = 'There are no event logs.'

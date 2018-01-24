@@ -174,6 +174,7 @@ let UserStore = Reflux.createStore({
     let eventLogs = this.data.eventLogs || []
 
     for (let log of eventLogs) {
+      console.log(log)
       log.visible = true
       input = input.toLowerCase()
       let logKeep =
@@ -188,7 +189,7 @@ let UserStore = Reflux.createStore({
     let filteredLogs = eventLogs.filter(log => {
       return log.visible
     })
-
+    // console.log(this.data.eventLogs)
     this.update({ eventLogs, filteredLogs })
   },
 
