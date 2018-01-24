@@ -18,8 +18,6 @@ class JobParameterSetup extends React.Component {
       error: null,
       helper: null,
       checked: [],
-      // counter: 1,
-      // options: {},
     }
 
     for (let field of this.props.model) {
@@ -82,13 +80,14 @@ class JobParameterSetup extends React.Component {
   // custom methods -------------------------------------------------------------------------
   _add(e) {
     /* TODO - This would push a new parameter into the definition in the store */
+    // this is currently disabled. TO DO AFTER TOGGLE.
     console.log('POP!')
   }
 
-  _remove(e, target) {
-    /* TODO - This would find the key and remove it */
-    console.log(e, target)
-  }
+  // _remove(e, target) {
+  //   /* TODO - This would find the key and remove it */
+  //   console.log(e, target)
+  // }
 
   _onChange() {
     /* TODO - This will handle input changes */
@@ -103,12 +102,6 @@ class JobParameterSetup extends React.Component {
     e === null ? (value = '') : (value = e.value)
     this.setState({ type: value })
   }
-
-  // _addInputArray() {
-  //   let counter = this.state.counter
-  //   let newState = counter + 1
-  //   this.setState({ counter: newState })
-  // }
   // End of class
 }
 

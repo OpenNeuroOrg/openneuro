@@ -10,6 +10,8 @@ class CheckboxOrListParameter extends React.Component {
     }
   }
 
+  // still need to implement logic for onclick check, deal with issue of uncontrolled to controlled
+
   render() {
     let options = []
     return (
@@ -58,13 +60,7 @@ class CheckboxOrListParameter extends React.Component {
           className="admin-button"
           // onClick={this._handleCheck.bind(this, key)}
           key={num}>
-          <i className="fa fa-square-o" />{' '}
-          // {
-          //   this.props.defChecked.includes(key)
-          //     ? 'fa fa-check-square-o'
-          //     : 'fa fa-square-o'
-          // }
-          default checked
+          <i className="fa fa-square-o" /> default checked
         </button>
       )
 
@@ -81,13 +77,7 @@ class CheckboxOrListParameter extends React.Component {
           <button
             className="admin-button"
             onClick={this._deleteInput.bind(this)}>
-            <i className="fa fa-trash-o" />{' '}
-            // {
-            //   this.props.defChecked.includes(key)
-            //     ? 'fa fa-check-square-o'
-            //     : 'fa fa-square-o'
-            // }
-            delete
+            <i className="fa fa-trash-o" /> delete
           </button>
         </li>
       )
