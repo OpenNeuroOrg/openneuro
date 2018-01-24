@@ -4,6 +4,14 @@ import Input from '../input.jsx'
 export default ({ type, onCheck, onChange, model }) => {
   return (
     <span>
+      <button className="admin-button" onClick={onCheck.bind(this, 'hidden')}>
+        <i
+          className={
+            model.hidden === true ? 'fa fa-check-square-o' : 'fa fa-square-o'
+          }
+        />{' '}
+        hidden
+      </button>
       <Input
         type={type}
         name="defaultValue"
@@ -11,14 +19,6 @@ export default ({ type, onCheck, onChange, model }) => {
         placeholder="Default Value"
         onChange={onChange.bind(this, 'defaultValue')}
       />
-      <button className="admin-button" onClick={onCheck.bind(this, 'hidden')}>
-        <i
-          className={
-            model.hidden === true ? 'fa fa-check-square-o' : 'fa fa-square-o'
-          }
-        />
-        hidden
-      </button>
     </span>
   )
 }
