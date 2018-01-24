@@ -27,6 +27,8 @@ class JobParameter extends React.Component {
           type={selected}
           onCheck={this.props.onCheck}
           checked={this.props.checked}
+          onArray={this.props.onArray}
+          defChecked={this.props.defChecked}
         />
       )
     } else if (selected === 'numeric') {
@@ -45,6 +47,8 @@ JobParameter.propTypes = {
   selected: PropTypes.string,
   onCheck: PropTypes.func,
   checked: PropTypes.array,
+  onArray: PropTypes.func,
+  defChecked: PropTypes.array,
 }
 
 export default JobParameter

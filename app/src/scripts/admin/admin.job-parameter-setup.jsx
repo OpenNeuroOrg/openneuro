@@ -89,6 +89,8 @@ class JobParameterSetup extends React.Component {
             selected={this.state.type}
             onCheck={this._toggleCheckBox}
             checked={this.state.checked}
+            onArray={this._onArray.bind(this)}
+            defChecked={this.state.defaultChecked}
           />
         </span>
       </div>
@@ -115,15 +117,23 @@ class JobParameterSetup extends React.Component {
   }
 
   _toggleCheckBox(key) {
-    let state = {}
-    state[key] = !this.state[key]
-    this.setState(state)
+    console.log(key)
+    // let state = {}
+    // state[key] = !this.state[key]
+    // this.setState(state)
   }
 
   _handleSelectChange(e) {
     let value
     e === null ? (value = '') : (value = e.value)
     this.setState({ type: value })
+  }
+
+  // Needs to handle delete don't forget
+  _onArray(key, event) {
+    let opts = this.state.options
+    opts[key] = event.target.value
+    // console.log(this.state)
   }
   // End of class
 }
