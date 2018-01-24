@@ -1,5 +1,6 @@
 /* eslint-disable react/no-danger */
 import React from 'react'
+import PropTypes from 'prop-types'
 import actions from '../dataset.actions'
 import { Accordion, Panel } from 'react-bootstrap'
 import FileTree from '../../common/partials/file-tree.jsx'
@@ -56,6 +57,13 @@ const JobResults = ({ run, acknowledgements, displayFile, toggleFolder }) => {
   } else {
     return null
   }
+}
+
+JobResults.propTypes = {
+  run: PropTypes.object,
+  acknowledgements: PropTypes.string,
+  displayFile: PropTypes.func,
+  toggleFolder: PropTypes.func,
 }
 
 export default JobResults

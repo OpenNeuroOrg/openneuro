@@ -66,6 +66,7 @@ exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `
              
             <a
               href="mailto:openfmri@gmail.com?subject=Analysis%20Failure"
+              rel="noopener noreferrer"
               target="_blank"
             >
               administrator

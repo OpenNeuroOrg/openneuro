@@ -40,7 +40,10 @@ class Issues extends React.Component {
         <ErrorLink dirName={dirName} errors={errors} warnings={warnings} />
         <span className="bids-link">
           Click to view details on{' '}
-          <a href="http://bids.neuroimaging.io" target="_blank">
+          <a
+            href="http://bids.neuroimaging.io"
+            target="_blank"
+            rel="noopener noreferrer">
             BIDS specification
           </a>
         </span>

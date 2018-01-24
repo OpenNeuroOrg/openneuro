@@ -203,7 +203,8 @@ let UserStore = Reflux.createStore({
                     by mistake please contact the{' '}
                     <a
                       href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User"
-                      target="_blank">
+                      target="_blank"
+                      rel="noopener noreferrer">
                       site adminstrator
                     </a>.
                   </span>

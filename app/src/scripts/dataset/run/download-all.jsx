@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import DownloadS3 from './download-s3.jsx'
 import actions from '../dataset.actions'
@@ -22,6 +23,11 @@ const DownloadAll = ({ run, type = 'results' }) => {
       />
     </span>
   )
+}
+
+DownloadAll.propTypes = {
+  run: PropTypes.object,
+  type: PropTypes.string,
 }
 
 export default DownloadAll
