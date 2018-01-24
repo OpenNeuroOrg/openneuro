@@ -126,6 +126,7 @@ class JobParameterSetup extends React.Component {
   }
 
   _handleSelectChange(e) {
+    this.setState(this.initialState)
     let value
     e === null ? (value = '') : (value = e.value)
     this.setState({ type: value })
