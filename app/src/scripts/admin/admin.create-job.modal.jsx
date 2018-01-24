@@ -82,6 +82,8 @@ class CreateJob extends Reflux.Component {
             <div className="form-group admin-job-parameters">
               <label>Parameters</label>
               <JobParameterSetup
+                value={definition.parameters}
+                onChange={this._handleChange.bind(null, 'parameters')}
                 model={[
                   { id: 'label', placeholder: 'Key', required: true },
                   { id: 'defaultValue', placeholder: 'default value' },

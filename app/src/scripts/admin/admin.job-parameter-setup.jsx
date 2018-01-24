@@ -38,6 +38,8 @@ class JobParameterSetup extends React.Component {
   render() {
     return (
       <div className="job-parameters-setup">
+        {/* <div className="text-danger">{this.state.error}</div> */}
+        {this.state.error != '' ? this._returnError() : null}
         <Select
           options={PARAMETER_INPUTS}
           value={this.state.type}
@@ -79,7 +81,8 @@ class JobParameterSetup extends React.Component {
                   ? 'fa fa-check-square-o'
                   : 'fa fa-square-o'
               }
-            />required
+            />{' '}
+             required
           </button>
 
           <JobParameter
@@ -91,7 +94,7 @@ class JobParameterSetup extends React.Component {
           <br />
           <button
             className="cte-save-btn btn-admin-blue add-btn"
-            onClick={this._add()}>
+            onClick={this._add.bind(this, this.props.model)}>
             Add
           </button>
         </span>
@@ -99,17 +102,49 @@ class JobParameterSetup extends React.Component {
     )
   }
 
+  _returnError() {
+    return <div className="text-danger">{this.state.error}</div>
+  }
+
   // custom methods -------------------------------------------------------------------------
-  _add() {
-    /* TODO - This would push a new parameter into the definition in the store */
-    // this is currently disabled.
-    console.log(this.state)
+  _add(model) {
+    let value = this.props.value
+
+    // error for checkboxes
+    if (this.state.required && this.state.hidden) {
+      this.setState({ error: 'Please select hidden or required' })
+      return
+    }
+
+    // error for missing label
+    for (let field of model) {
+      if (field.required && !this.state[field.id]) {
+        this.setState({ error: field.placeholder + ' is required.' })
+        return
+      }
+    }
+
+    if (model.length > 1) {
+      let itemValue = {}
+      for (let field of model) {
+        itemValue[field.id] = this.state[field.id]
+      }
+      value.push(itemValue)
+    } else {
+      value.push(this.state[model[0].id])
+    }
+    this.props.onChange({ target: { value: value } })
+    this.setState(this.initialState)
   }
 
   // _remove(e, target) {
   //   /* TODO - This would find the key and remove it */
   // Needs to set up rendering of edit...
   //   console.log(e, target)
+  // }
+
+  // _edit(e, target) {
+  //   /* TODO - This would find the key and remove it */
   // }
 
   _onChange(key, e) {
@@ -137,6 +172,8 @@ class JobParameterSetup extends React.Component {
 
 JobParameterSetup.propTypes = {
   model: PropTypes.array,
+  value: PropTypes.array,
+  onChange: PropTypes.func,
 }
 
 export default JobParameterSetup
