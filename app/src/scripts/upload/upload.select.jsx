@@ -12,7 +12,10 @@ class Select extends React.Component {
       <div>
         <span className="message fade-in">
           Select a{' '}
-          <a href="http://bids.neuroimaging.io" target="_blank">
+          <a
+            href="http://bids.neuroimaging.io"
+            target="_blank"
+            rel="noopener noreferrer">
             BIDS dataset
           </a>{' '}
           to upload

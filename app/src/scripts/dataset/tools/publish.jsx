@@ -39,7 +39,10 @@ class Publish extends React.Component {
         {this._snapshots()}
         <p className="text-danger">
           This snapshot will be released publicly under a
-          <a href="https://wiki.creativecommons.org/wiki/CC0" target="_blank">
+          <a
+            href="https://wiki.creativecommons.org/wiki/CC0"
+            target="_blank"
+            rel="noopener noreferrer">
             {' '}
             CC0 license
           </a>. This operation cannot be undone.
@@ -83,11 +86,11 @@ class Publish extends React.Component {
   // template methods ---------------------------------------------------
 
   /**
-     * Snapshots
-     *
-     * Returns a labeled select box for selecting a snapshot
-     * to run analysis on.
-     */
+   * Snapshots
+   *
+   * Returns a labeled select box for selecting a snapshot
+   * to run analysis on.
+   */
   _snapshots() {
     let options = []
     if (this.props.snapshots) {
@@ -157,8 +160,8 @@ class Publish extends React.Component {
   // actions ------------------------------------------------------------
 
   /**
-     * Hide
-     */
+   * Hide
+   */
   _hide() {
     this.setState({
       loading: false,
@@ -170,16 +173,16 @@ class Publish extends React.Component {
   }
 
   /**
-     * Select Snapshot
-     */
+   * Select Snapshot
+   */
   _selectSnapshot(e) {
     let snapshotId = e.target.value
     this.setState({ selectedSnapshot: snapshotId })
   }
 
   /**
-     * Create Snapshot
-     */
+   * Create Snapshot
+   */
   _createSnapshot() {
     this.setState({ loading: true })
     actions.createSnapshot.bind(null, this.props.history)(res => {
@@ -199,8 +202,8 @@ class Publish extends React.Component {
   }
 
   /**
-     * Publish
-     */
+   * Publish
+   */
   _publish() {
     actions.publish(
       this.state.selectedSnapshot,

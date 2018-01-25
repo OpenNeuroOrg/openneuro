@@ -17,8 +17,9 @@ export default class Rename extends React.Component {
     if (resuming) {
       renameResumeMessage = (
         <span className="message error">
-          You have selected "{this.props.selectedName}" and are trying to resume
-          "{dirName}." Continue if this is correct or{' '}
+          You have selected &ldquo;{this.props.selectedName}&rdquo; and are
+          trying to resume &ldquo;{dirName}.&rdquo; Continue if this is correct
+          or{' '}
           <span className="upload-reset-link" onClick={Actions.setInitialState}>
             cancel
           </span>.

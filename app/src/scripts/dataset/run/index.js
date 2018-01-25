@@ -175,7 +175,8 @@ class JobAccordion extends React.Component {
           the site{' '}
           <a
             href="mailto:openfmri@gmail.com?subject=Analysis%20Failure"
-            target="_blank">
+            target="_blank"
+            rel="noopener noreferrer">
             administrator
           </a>{' '}
           if this analysis continues to fail.

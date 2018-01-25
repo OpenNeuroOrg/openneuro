@@ -366,7 +366,8 @@ let UploadStore = Reflux.createStore({
           try again. If the issue persists, contact the site{' '}
           <a
             href="mailto:openfmri@gmail.com?subject=Upload%20Error"
-            target="_blank">
+            target="_blank"
+            rel="noopener noreferrer">
             administrator
           </a>.
         </span>

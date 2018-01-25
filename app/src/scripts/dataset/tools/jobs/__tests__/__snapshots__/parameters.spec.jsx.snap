@@ -100,7 +100,6 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
             className="clearfix"
           >
             <Select
-              addLabelText="Add \\"{label}\\"?"
               arrowRenderer={[Function]}
               autosize={true}
               backspaceRemoves={true}
@@ -109,6 +108,7 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
               clearRenderer={[Function]}
               clearValueText="Clear value"
               clearable={true}
+              closeOnSelect={true}
               deleteRemoves={true}
               delimiter=","
               disabled={false}
@@ -129,6 +129,8 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
               onBlurResetsInput={true}
               onChange={[Function]}
               onCloseResetsInput={true}
+              onSelectResetsInput={true}
+              openOnClick={true}
               optionComponent={[Function]}
               options={
                 Array [
@@ -138,11 +140,14 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
               }
               pageSize={5}
               placeholder="Select your subject(s)"
+              removeSelected={true}
               required={false}
+              rtl={false}
               scrollMenuIntoView={true}
               searchable={true}
               simpleValue={true}
               tabSelectsValue={true}
+              trimFilter={true}
               value="01,02"
               valueComponent={[Function]}
               valueKey="value"
