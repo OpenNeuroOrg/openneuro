@@ -14,6 +14,7 @@ const JobParameters = ({
   if (Object.keys(parameters).length === 0) {
     return <noscript />
   }
+  console.log(parametersMetadata)
   const parameterInputs = Object.keys(parameters).map(parameter => {
     let input
     let isCheckbox = parametersMetadata[parameter].type === 'checkbox'
@@ -98,6 +99,7 @@ const JobParameters = ({
         )
       } else if (isCheckbox) {
         let defCheck = parametersMetadata[parameter].defaultChecked
+        console.log(defCheck)
         // ** only for multi checkboxes ** //
         if (options) {
           if (options.length > 1) {

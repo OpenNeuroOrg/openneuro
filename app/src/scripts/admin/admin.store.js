@@ -322,14 +322,13 @@ let UserStore = Reflux.createStore({
       for (let param of formData.parameters) {
         parameters[param.label] = param.defaultValue
         parametersMetadata[param.label] = param
-        if (param.options) {
-          let option = []
-          Object.values(param.options).map(value => {
-            option.push(value)
-          })
-          parametersMetadata[param.label].options = option
-        }
-        // param.defaultValue = param.defaultValue
+        parametersMetadata[param.label].options = param.options
+        // if (param.options) {
+        //   let option = []
+        //   Object.values(param.options).map(value => {
+        //     option.push(value)
+        //   })
+        // }
       }
     }
 
@@ -344,7 +343,7 @@ let UserStore = Reflux.createStore({
       support: formData.support,
       tags: formData.tags,
     }
-
+    console.log(jobDefinition)
     crn
       .defineJob(jobDefinition)
       .then(() => {
@@ -414,7 +413,7 @@ let UserStore = Reflux.createStore({
         ? jobDefinition.descriptions.tags
         : ''
     jobDefinitionForm.jobRoleArn = jobDefinition.jobDefinitionArn
-    jobDefinitionForm.option = jobDefinition.option
+    jobDefinitionForm.options = jobDefinition.options
     jobDefinitionForm.containerImage = batch.getBidsContainer(jobDefinition)
     jobDefinitionForm.hostImage = jobDefinition.containerProperties.image
     jobDefinitionForm.command = jobDefinition.containerProperties.command.join(
@@ -435,7 +434,7 @@ let UserStore = Reflux.createStore({
           jobDefinition.parametersMetadata &&
           jobDefinition.parametersMetadata[key]
         ) {
-          paramInputData.option = jobDefinition.parametersMetadata[key].option
+          paramInputData.options = jobDefinition.parametersMetadata[key].options
           paramInputData.defaultChecked =
             jobDefinition.parametersMetadata[key].defaultChecked
           paramInputData.type = jobDefinition.parametersMetadata[key].type
