@@ -4,13 +4,12 @@ import PropTypes from 'prop-types'
 import JobParameter, {
   PARAMETER_INPUTS,
 } from '../common/forms/job-parameter.jsx'
-import Spinner from '../common/partials/spinner.jsx'
-import WarnButton from '../common/forms/warn-button.jsx'
 import Input from '../common/forms/input.jsx'
 
-/**
- * Define the parameters for a given job
- */
+// Sub-component ----------------------------------------
+import JobParameterEdit from './admin.job-parameter-edit.jsx'
+// ------------------------------------------------------
+
 class JobParameterSetup extends React.Component {
   constructor(props) {
     super(props)
@@ -33,22 +32,25 @@ class JobParameterSetup extends React.Component {
     this.state = initialState
   }
 
-  // Must set up error handling and edit/remove
+  // Must set up edit
 
   render() {
     return (
-      <div className="job-parameters-setup">
-        {/* <div className="text-danger">{this.state.error}</div> */}
+      <div className="cte-edit-array">
+        {this._arrayList(this.props.value, this.props.model)}
         {this.state.error != '' ? this._returnError() : null}
-        <Select
-          options={PARAMETER_INPUTS}
-          value={this.state.type}
-          onChange={this._handleSelectChange.bind(this)}
-        />
-        {this.state.type != '' ? this._returnInput() : null}
+        <div className="job-parameters-setup">
+          <Select
+            options={PARAMETER_INPUTS}
+            value={this.state.type}
+            onChange={this._handleSelectChange.bind(this)}
+          />
+          {this.state.type != '' ? this._returnInput() : null}
+        </div>
       </div>
     )
   }
+
   // template methods -----------------------------------------------------------------------
 
   _returnInput() {
@@ -82,7 +84,7 @@ class JobParameterSetup extends React.Component {
                   : 'fa fa-square-o'
               }
             />{' '}
-             required
+            required
           </button>
 
           <JobParameter
@@ -102,6 +104,25 @@ class JobParameterSetup extends React.Component {
     )
   }
 
+  _arrayList(array, model) {
+    if (array && array.length > 0) {
+      let list = array.map((item, index) => {
+        return (
+          <JobParameterEdit
+            key={index}
+            index={index}
+            item={item}
+            model={model}
+            onEdit={this._edit.bind(this)}
+            remove={this._remove.bind(this, index)}
+            returnInput={this._returnInput.bind(this)}
+          />
+        )
+      })
+      return <div className="cte-array-items">{list}</div>
+    }
+  }
+
   _returnError() {
     return <div className="text-danger">{this.state.error}</div>
   }
@@ -112,10 +133,15 @@ class JobParameterSetup extends React.Component {
 
     // error for checkboxes
     if (this.state.required && this.state.hidden) {
-      this.setState({ error: 'Please select hidden or required' })
+      this.setState({ error: 'Please select either hidden or required.' })
       return
     }
 
+    // error for hidden params w/out defvalue
+    if (this.state.hidden && this.state.defaultValue === '') {
+      this.setState({ error: 'Hidden parameters require a default value.' })
+      return
+    }
     // error for missing label
     for (let field of model) {
       if (field.required && !this.state[field.id]) {
@@ -137,15 +163,18 @@ class JobParameterSetup extends React.Component {
     this.setState(this.initialState)
   }
 
-  // _remove(e, target) {
-  //   /* TODO - This would find the key and remove it */
-  // Needs to set up rendering of edit...
-  //   console.log(e, target)
-  // }
+  _remove(index, callback) {
+    let array = this.props.value
+    array.splice(index, 1)
+    this.props.onChange({ target: { value: array } })
+    callback()
+  }
 
-  // _edit(e, target) {
-  //   /* TODO - This would find the key and remove it */
-  // }
+  _edit(index, value) {
+    let item = this.props.value
+    item[index] = value
+    this.props.onChange({ target: { value: item } })
+  }
 
   _onChange(key, e) {
     let value = e.target.value
