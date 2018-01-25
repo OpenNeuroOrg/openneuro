@@ -2,6 +2,7 @@ import Reflux from 'reflux'
 
 var Actions = Reflux.createActions([
   'cancelEdit',
+  'constructFile',
   'findRow',
   'getRows',
   'getSize',
