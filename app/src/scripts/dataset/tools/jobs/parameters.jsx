@@ -51,7 +51,7 @@ const JobParameters = ({
         }
 
         let placeholder = 'Select your ' + parametersMetadata[parameter].label
-        let params = parametersMetadata[parameter].option
+        let params = parametersMetadata[parameter].options
         // break up options for the select
         let options = []
         for (let i = 0; i < params.length; ++i) {
@@ -78,7 +78,8 @@ const JobParameters = ({
         />
       )
     } else if (isRadio || isCheckbox) {
-      let options = parametersMetadata[parameter].option
+      let options = parametersMetadata[parameter].options
+      console.log(options)
       let handleChange = e => {
         let value = e.target.value
         let event = { target: { value: value } }
