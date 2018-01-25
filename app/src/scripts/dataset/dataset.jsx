@@ -6,6 +6,7 @@ import Reflux from 'reflux'
 import { Redirect, Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
 import { ProgressBar } from 'react-bootstrap'
+import Helmet from 'react-helmet'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
 import datasetStore from './dataset.store'
@@ -24,6 +25,7 @@ import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
+import { pageTitle } from '../resources/strings'
 
 const uploadWarning =
   'You are currently uploading files. Leaving this page will cancel the upload process.'
@@ -133,7 +135,6 @@ class Dataset extends Reflux.Component {
   componentWillUnmount() {
     actions.setInitialState({ apps: this.state.datasets.apps })
     super.componentWillUnmount()
-    document.title = 'OpenNeuro'
     window.onbeforeunload = () => {}
     if (this.state.unblock) {
       this.state.unblock()
@@ -155,11 +156,18 @@ class Dataset extends Reflux.Component {
     let content
 
     if (dataset) {
-      document.title = 'OpenNeuro - ' + dataset.label
       let errors = dataset.validation.errors
       let warnings = dataset.validation.warnings
+      // meta description is README unless it's empty
+      const description = dataset.README ? dataset.README : dataset.label
       content = (
         <div className="clearfix dataset-wrap">
+          <Helmet>
+            <title>
+              {pageTitle} - {dataset.label}
+            </title>
+            <meta name="description" content={description} />
+          </Helmet>
           <div className="dataset-annimation">
             <div className="col-xs-12 dataset-inner">
               <div className="row">

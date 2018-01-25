@@ -8,6 +8,7 @@ import DatasetsStore from './dashboard.datasets.store.js'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import { PanelGroup, Panel } from 'react-bootstrap'
+import Helmet from 'react-helmet'
 import Paginator from '../common/partials/paginator.jsx'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
@@ -16,7 +17,9 @@ import Statuses from '../dataset/dataset.statuses.jsx'
 import Filters from './dashboard.filters.jsx'
 import Sort from './dashboard.sort.jsx'
 import Summary from '../dataset/dataset.summary.jsx'
+
 import { refluxConnect } from '../utils/reflux'
+import { pageTitle } from '../resources/strings'
 
 // component setup ---------------------------------------------------------------------------
 
@@ -90,6 +93,11 @@ class Datasets extends Reflux.Component {
       <div>
         <div className="dashboard-dataset-teasers datasets datasets-private">
           <div className="header-filter-sort clearfix">
+            <Helmet>
+              <title>
+                {pageTitle} - {title}
+              </title>
+            </Helmet>
             <div className="header-wrap clearfix">
               <h2>{title}</h2>
             </div>
