@@ -155,6 +155,7 @@ let TableEditorStore = Reflux.createStore({
 
   handlePaste(e) {
     if (this.data.editing && this.data.editable) {
+      let separator = this.determineSeparator(name)
       let rowStart = this.data.clickedCell.row
       let columnStart = this.data.clickedCell.column
       const maxColumn = this.data.columns.length - 1
@@ -163,7 +164,7 @@ let TableEditorStore = Reflux.createStore({
       const rows = pastedText.split('\n')
       const matrix = []
       for (let row of rows) {
-        const entries = row.split('\t')
+        const entries = row.split(separator)
         matrix.push(entries)
       }
 
@@ -204,15 +205,9 @@ let TableEditorStore = Reflux.createStore({
     const columns = data.columns
     const rows = data.rows
     const name = originalFile.name
-    const link = originalFile.link
     const parentId = originalFile.info.parentId
 
-    let separator
-    if (files.hasExtension(name, ['.tsv'])) {
-      separator = '\t'
-    } else if (files.hasExtension(name, ['.csv'])) {
-      separator = ','
-    }
+    let separator = this.determineSeparator(name)
     if (rows && rows.length) {
       const columnKeys = []
       columns.forEach(column => {
@@ -246,10 +241,17 @@ let TableEditorStore = Reflux.createStore({
     return
   },
 
+  determineSeparator(fileName) {
+    let separator
+    if (files.hasExtension(name, ['.tsv'])) {
+      separator = '\t'
+    } else if (files.hasExtension(name, ['.csv'])) {
+      separator = ','
+    }
+    return separator
+  },
+
   saveFile() {
-    console.log('saveFile')
-    console.log('this.data:', this.data)
-    console.log('this.data.onSave', this.data.onSave)
     let file = this.constructFile(this.data, this.data.originalFile)
     this.data.onSave(this.data.originalFile.info, file)
     this.update({ editing: false })
