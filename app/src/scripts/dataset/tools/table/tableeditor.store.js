@@ -155,7 +155,7 @@ let TableEditorStore = Reflux.createStore({
 
   handlePaste(e) {
     if (this.data.editing && this.data.editable) {
-      let separator = this.determineSeparator(name)
+      let separator = this.determineSeparator(this.data.fileName)
       let rowStart = this.data.clickedCell.row
       let columnStart = this.data.clickedCell.column
       const maxColumn = this.data.columns.length - 1
@@ -243,9 +243,9 @@ let TableEditorStore = Reflux.createStore({
 
   determineSeparator(fileName) {
     let separator
-    if (files.hasExtension(name, ['.tsv'])) {
+    if (files.hasExtension(fileName, ['.tsv'])) {
       separator = '\t'
-    } else if (files.hasExtension(name, ['.csv'])) {
+    } else if (files.hasExtension(fileName, ['.csv'])) {
       separator = ','
     }
     return separator
