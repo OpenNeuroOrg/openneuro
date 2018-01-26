@@ -320,15 +320,17 @@ let UserStore = Reflux.createStore({
     // Want to post metadata as a separate prop so we can delete before sending to Batch
     if (formData.parameters) {
       for (let param of formData.parameters) {
+        // console.log(formData.parameters)
         parameters[param.label] = param.defaultValue
         parametersMetadata[param.label] = param
-        let types = ['radio', 'multi', 'select']
-        if (types.includes(param.type) && param.label != 'participant_label') {
-          let arrayInput = param.defaultValue.split(' ')
-          param.defaultValue = arrayInput.filter(value => value.trim() != ' ')
-        } else {
-          param.defaultValue = param.defaultValue
+        if (param.option) {
+          let option = []
+          Object.values(param.option).map(value => {
+            option.push(value)
+          })
+          parametersMetadata[param.label].option = option
         }
+        // param.defaultValue = param.defaultValue
       }
     }
 
@@ -413,6 +415,7 @@ let UserStore = Reflux.createStore({
         ? jobDefinition.descriptions.tags
         : ''
     jobDefinitionForm.jobRoleArn = jobDefinition.jobDefinitionArn
+    jobDefinitionForm.option = jobDefinition.option
     jobDefinitionForm.containerImage = batch.getBidsContainer(jobDefinition)
     jobDefinitionForm.hostImage = jobDefinition.containerProperties.image
     jobDefinitionForm.command = jobDefinition.containerProperties.command.join(
@@ -433,6 +436,9 @@ let UserStore = Reflux.createStore({
           jobDefinition.parametersMetadata &&
           jobDefinition.parametersMetadata[key]
         ) {
+          paramInputData.option = jobDefinition.parametersMetadata[key].option
+          paramInputData.defaultChecked =
+            jobDefinition.parametersMetadata[key].defaultChecked
           paramInputData.type = jobDefinition.parametersMetadata[key].type
           paramInputData.description =
             jobDefinition.parametersMetadata[key].description
@@ -445,7 +451,8 @@ let UserStore = Reflux.createStore({
     }
 
     jobDefinitionForm.parameters = params
-
+    // ** leave this for debugging, needed for on edit issue ** //
+    // console.log(jobDefinitionForm)
     this.update({ jobDefinitionForm })
     if (callback) {
       callback()

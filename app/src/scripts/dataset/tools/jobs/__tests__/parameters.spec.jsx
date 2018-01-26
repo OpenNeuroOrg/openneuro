@@ -10,11 +10,17 @@ describe('dataset/tools/jobs/parameters', () => {
     participant_label: '01,02',
     another_option: 'some_string_value',
   }
+
+  let options = ['option1', 'option2', 'option3']
+  let defChecked = ['option1']
+
   const metadata = {
     boolean: {
       type: 'checkbox',
       required: false,
       description: 'some kind of checkbox',
+      options: options,
+      defaultChecked: defChecked,
     },
     participant_label: {
       type: 'select',
@@ -24,19 +30,21 @@ describe('dataset/tools/jobs/parameters', () => {
     another_option: {
       type: 'text',
       required: true,
+      hidden: true,
+      defaultValue: 'some default value',
       description: 'some kind of text option',
-    },
-    multi_option: {
-      type: 'multi',
-      required: false,
-      description: 'multi checkboxes',
-      defaultValue: 'check1 check2 check3',
     },
     radio_option: {
       type: 'radio',
       required: false,
       description: 'some kind of radio option',
-      defaultValue: 'option1 option2',
+      options: options,
+    },
+    list_option: {
+      type: 'select',
+      required: false,
+      description: 'some kind of select list',
+      options: options,
     },
   }
 

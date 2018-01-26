@@ -54,18 +54,21 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
           <div
             className="clearfix"
           >
-            <label
+            <CheckOrRadio
+              controlFunc={[Function]}
+              defaultChecked={
+                Array [
+                  "option1",
+                ]
+              }
+              setName="boolean"
+              type="checkbox"
+            />
+            <span
               className="help-text"
             >
-              <input
-                className="form-control"
-                defaultChecked={false}
-                name="boolean"
-                onChange={[Function]}
-                type="checkbox"
-              />
               some kind of checkbox
-            </label>
+            </span>
           </div>
         </div>
       </div>
@@ -164,7 +167,7 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
   </div>
   <div
     className="required-param"
-    id={null}
+    id="hidden"
     key="another_option"
   >
     <div

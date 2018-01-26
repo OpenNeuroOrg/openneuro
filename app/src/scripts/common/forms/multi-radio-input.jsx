@@ -7,16 +7,20 @@ const CheckOrRadio = ({
   setName,
   controlFunc,
   selectedOptions,
+  defaultChecked,
 }) => {
   return (
     <div>
       <div>
         {options.map((opt, index) => {
           let checked = null
+          let defChecked = null
           if (type === 'radio') {
             if (selectedOptions === opt) {
               checked = true
             }
+          } else if (type === 'checkbox') {
+            defaultChecked.includes(opt) ? (defChecked = true) : null
           }
           return (
             <label key={index} className="help-text">
@@ -26,6 +30,7 @@ const CheckOrRadio = ({
                 onChange={controlFunc}
                 value={opt}
                 checked={checked}
+                defaultChecked={defChecked}
               />
               {opt}
             </label>
@@ -39,9 +44,10 @@ const CheckOrRadio = ({
 CheckOrRadio.propTypes = {
   type: PropTypes.string.isRequired,
   setName: PropTypes.string.isRequired,
-  options: PropTypes.array.isRequired,
+  options: PropTypes.array,
   selectedOptions: PropTypes.string,
   controlFunc: PropTypes.func.isRequired,
+  defaultChecked: PropTypes.array,
 }
 
 export default CheckOrRadio
