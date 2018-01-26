@@ -2190,14 +2190,6 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.6.2:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.2.tgz#cf1ed15f12aad7f14ef5f2dfe05e6c42f91ef02a"
-  dependencies:
-    fbjs "^0.8.9"
-    loose-envify "^1.3.1"
-    object-assign "^4.1.1"
-
 cross-spawn@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-3.0.1.tgz#1256037ecb9f0c5f79e3d6ef135e30770184b982"
@@ -3258,7 +3250,7 @@ fbjs@^0.6.1:
     ua-parser-js "^0.7.9"
     whatwg-fetch "^0.9.0"
 
-fbjs@^0.8.16, fbjs@^0.8.9:
+fbjs@^0.8.16:
   version "0.8.16"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.16.tgz#5e67432f550dc41b572bf55847b8aca64e5337db"
   dependencies:
@@ -4026,12 +4018,6 @@ iferr@^0.1.5:
 ignore@^3.3.3, ignore@^3.3.5, ignore@^3.3.7:
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.3.7.tgz#612289bfb3c220e186a58118618d5be8c1bab021"
-
-immutability-helper@^2.6.4:
-  version "2.6.4"
-  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.6.4.tgz#a931aef97257fcb6d2b5456de652ab6e3bba8408"
-  dependencies:
-    invariant "^2.2.0"
 
 import-local@^1.0.0:
   version "1.0.0"
@@ -6756,16 +6742,6 @@ react-bootstrap@0.31.3:
     uncontrollable "^4.1.0"
     warning "^3.0.0"
 
-react-data-grid-addons@^3.0.5:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/react-data-grid-addons/-/react-data-grid-addons-3.0.6.tgz#ce9016e43fe4f85c8a1cf39a2dc6df33479d1f9c"
-  dependencies:
-    react-data-grid "^3.0.6"
-
-react-data-grid@^3.0.5, react-data-grid@^3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-3.0.6.tgz#3e0819696c265ed9fd380582d8c5ca5632ccf8ba"
-
 react-dom@16:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
@@ -6863,6 +6839,12 @@ react-side-effect@^1.1.0:
   dependencies:
     exenv "^1.2.1"
     shallowequal "^1.0.1"
+
+react-table@^6.7.6:
+  version "6.7.6"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-6.7.6.tgz#3f9e3b308328ceb04ef93a47babefaba2619c905"
+  dependencies:
+    classnames "^2.2.5"
 
 react-test-renderer@^16.0.0, react-test-renderer@^16.0.0-0:
   version "16.2.0"

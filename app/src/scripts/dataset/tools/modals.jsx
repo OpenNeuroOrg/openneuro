@@ -53,8 +53,6 @@ class ToolModals extends Reflux.Component {
         <FileDisplay
           file={this.state.datasets.displayFile}
           show={modals.displayFile}
-          isSnapshot={this.state.datasets.snapshot}
-          onSave={datasetActions.updateFile}
           onHide={datasetActions.toggleModal.bind(null, 'displayFile')}
         />
         <UpdateWarn
