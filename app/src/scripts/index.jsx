@@ -9,7 +9,7 @@ import Alert from './notification/notification.alert.jsx'
 import notificationStore from './notification/notification.store'
 import { refluxConnect } from './utils/reflux'
 
-class App extends Reflux.Component {
+class Index extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, notificationStore, 'notification')
@@ -38,4 +38,4 @@ class App extends Reflux.Component {
   }
 }
 
-export default App
+export default Index
