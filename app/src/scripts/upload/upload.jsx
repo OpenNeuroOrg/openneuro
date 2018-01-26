@@ -17,6 +17,8 @@ class Upload extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, UploadStore, 'upload')
+    // Preload the bids-validator if possible
+    import('bids-validator')
   }
   // life cycle events --------------------------------------------------
 
