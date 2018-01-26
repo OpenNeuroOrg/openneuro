@@ -14,11 +14,11 @@ jest.mock('react-router-dom', () => {
 
 describe('NavMenu', () => {
   it('renders successfully', () => {
-    const wrapper = shallow(<NavMenu isLoggedIn={false} loading={false} />)
+    const wrapper = shallow(<NavMenu isLoggedIn={null} loading={false} />)
     expect(wrapper).toMatchSnapshot()
   })
   it('renders without "eventKey" warnings', () => {
-    const component = mount(<NavMenu isLoggedIn={false} loading={false} />)
+    const component = mount(<NavMenu isLoggedIn={null} loading={false} />)
     expect(component).toMatchSnapshot()
   })
 })
