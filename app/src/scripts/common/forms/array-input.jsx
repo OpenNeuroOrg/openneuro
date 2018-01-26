@@ -5,7 +5,6 @@ import PropTypes from 'prop-types'
 import Select from 'react-select'
 import Input from './input.jsx'
 import WarnButton from './warn-button.jsx'
-import ParamController from './paramTypes/paramController.jsx'
 
 // component setup ----------------------------------------------------
 
@@ -16,18 +15,10 @@ class ArrayInput extends React.Component {
     const initialState = {
       error: null,
       helper: null,
-      type: null,
-      checked: [],
-      // defChecked: [],
-      options: {},
     }
 
     for (let field of this.props.model) {
-      if (field.id === 'option' || field.id === 'defaultChecked') {
-        initialState[field.id] = []
-      } else {
-        initialState[field.id] = ''
-      }
+      initialState[field.id] = ''
     }
 
     this.initialState = initialState
@@ -49,6 +40,39 @@ class ArrayInput extends React.Component {
               key={field.id}
             />
           )
+        } else if (field.hasOwnProperty('type') && field.type === 'checkbox') {
+          let message = ' Hidden'
+          if (field.hasOwnProperty('id') && field.id === 'required') {
+            message = ' Required'
+          }
+          return (
+            <div className="form-group float-label-input" key={field.id}>
+              <button
+                className="admin-button"
+                onClick={this._toggleCheckBox.bind(this, field.id)}
+                key={field.id}>
+                <span>
+                  <i
+                    className={
+                      this.state[field.id]
+                        ? 'fa fa-check-square-o'
+                        : 'fa fa-square-o'
+                    }
+                  />
+                  {message}
+                </span>
+              </button>
+            </div>
+          )
+        } else {
+          return (
+            <Input
+              placeholder={field.placeholder}
+              value={this.state[field.id]}
+              onChange={this._handleChange.bind(this, field.id)}
+              key={field.id}
+            />
+          )
         }
       })
     }
@@ -60,15 +84,6 @@ class ArrayInput extends React.Component {
         <div className="text-info">{this.state.helper}</div>
         <div className="form-inline">
           <span>{inputFields}</span>
-          <ParamController
-            model={this.props.model}
-            selected={this.state.type}
-            onCheck={this._toggleCheckBox.bind(this)}
-            onInput={this._handleChange.bind(this)}
-            onArray={this._handleArray.bind(this)}
-            checked={this.state.checked}
-            defChecked={this.state.defaultChecked}
-          />
           <br />
           <button
             className="cte-save-btn btn-admin-blue add-btn"
@@ -83,10 +98,8 @@ class ArrayInput extends React.Component {
   // template methods ---------------------------------------------------
 
   _arrayList(array, model) {
-    // console.log(array)
     if (array && array.length > 0) {
       let list = array.map((item, index) => {
-        // console.log(item)
         return (
           <ArrayItem
             key={index}
@@ -110,13 +123,27 @@ class ArrayInput extends React.Component {
     this.setState(state)
   }
 
-  _handleArray(key, field, event) {
-    let opts = this.state.options
-    opts[key] = event.target.value
-  }
-
   _handleSelectChange(key, selected) {
-    this.setState({ type: selected, options: [] })
+    // ** Updates the text above params **//
+    if (selected === 'radio' || selected === 'multi' || selected === 'select') {
+      this.setState({
+        error: null,
+        helper:
+          'Please seperate values with spaces. The default values will automatically be seperated for the user.',
+      })
+    } else if (selected === 'checkbox') {
+      this.setState({
+        error: null,
+        helper:
+          "Please enter 'true' or 'false' to set the default value to checked for the user.",
+      })
+    } else {
+      this.setState({
+        error: null,
+        helper: null,
+      })
+    }
+
     let state = {}
     state[key] = selected
     this.setState(state)
@@ -130,6 +157,7 @@ class ArrayInput extends React.Component {
 
   _add(model) {
     let value = this.props.value
+    let types = ['radio', 'multi', 'checkbox']
 
     for (let field of model) {
       if (field.required && !this.state[field.id]) {
@@ -141,21 +169,31 @@ class ArrayInput extends React.Component {
     if (model.length > 1) {
       let itemValue = {}
       for (let field of model) {
-        if (field.id === 'option') {
-          itemValue[field.id] = this.state.options
-        } else if (field.id === 'defaultChecked') {
-          let options = this.state.options
-          let defArr = []
-          for (let op of this.state.defaultChecked) {
-            if (options[op]) {
-              defArr.push(options[op])
-            }
-          }
-          itemValue[field.id] = defArr
-        } else {
-          itemValue[field.id] = this.state[field.id]
+        itemValue[field.id] = this.state[field.id]
+      }
+
+      if (types.includes(itemValue.type)) {
+        let checkArr = itemValue.defaultValue.split(' ')
+        // check for white space and remove them
+        checkArr = checkArr.filter(value => value.trim() != '')
+
+        // Error messages for multi and radio
+        if (itemValue.type === 'multi' && checkArr.length <= 1) {
+          this.setState({
+            error:
+              'Multiple checkboxes accepts 2 or more values. Please use type boolean if you intend to use a single checkbox.',
+            helper: null,
+          })
+          return
+        } else if (itemValue.type === 'radio' && checkArr.length <= 1) {
+          this.setState({
+            error: 'Type radio accepts two or more default values.',
+            helper: null,
+          })
+          return
         }
       }
+
       value.push(itemValue)
     } else {
       value.push(this.state[model[0].id])
@@ -214,8 +252,6 @@ class ArrayItem extends React.Component {
     let initialState = {
       edit: false,
       error: null,
-      checked: [],
-      options: {},
     }
 
     for (let field of this.props.model) {
@@ -282,7 +318,6 @@ class ArrayItem extends React.Component {
 
   _display() {
     let item = this.props.item
-    // console.log(this.props.model)
     if (typeof item == 'object') {
       return (
         <span>
@@ -301,37 +336,59 @@ class ArrayItem extends React.Component {
   }
 
   _input() {
-    let inputFields = null
-    if (this.props.model) {
-      inputFields = this.props.model.map(field => {
-        if (field.hasOwnProperty('select') && field.select.length > 0) {
-          return (
-            <Select
-              placeholder={field.placeholder}
-              simpleValue
-              options={field.select}
-              value={this.state[field.id]}
-              onChange={this._handleSelectChange.bind(this, field.id)}
-              key={field.id}
-            />
-          )
-        }
-      })
-    }
-
     return (
-      <div className="cte-edit-array">
-        <span>{inputFields}</span>
-        <ParamController
-          model={this.props.model}
-          selected={this.state.type}
-          onCheck={this._toggleCheckBox.bind(this)}
-          onInput={this._handleChange.bind(this)}
-          onArray={this._handleArray.bind(this)}
-          checked={this.state.checked}
-          defChecked={this.state.defaultChecked}
-        />
-      </div>
+      <span>
+        {this.props.model.map(field => {
+          if (field.hasOwnProperty('select') && field.select.length > 0) {
+            return (
+              <Select
+                placeholder={field.placeholder}
+                simpleValue
+                options={field.select}
+                value={this.state[field.id]}
+                onChange={this._handleSelectChange.bind(this, field.id)}
+                key={field.id}
+              />
+            )
+          } else if (
+            field.hasOwnProperty('type') &&
+            field.type === 'checkbox'
+          ) {
+            let message = ' Hidden'
+            if (field.hasOwnProperty('id') && field.id === 'required') {
+              message = ' Required'
+            }
+            return (
+              <div className="form-group float-label-input" key={field.id}>
+                <button
+                  className="admin-button"
+                  onClick={this._toggleCheckBox.bind(this, field.id)}
+                  key={field.id}>
+                  <span>
+                    <i
+                      className={
+                        this.state[field.id]
+                          ? 'fa fa-check-square-o'
+                          : 'fa fa-square-o'
+                      }
+                    />
+                  </span>
+                  {message}
+                </button>
+              </div>
+            )
+          } else {
+            return (
+              <Input
+                placeholder={field.placeholder}
+                value={this.state[field.id]}
+                onChange={this._handleChange.bind(this, field.id)}
+                key={field.id}
+              />
+            )
+          }
+        })}
+      </span>
     )
   }
 
@@ -352,11 +409,6 @@ class ArrayItem extends React.Component {
     this.setState(state)
   }
 
-  _handleArray(key, field, event) {
-    let opts = this.state.options
-    opts[key] = event.target.value
-  }
-
   _handleSelectChange(key, selected) {
     let state = {}
     state[key] = selected
@@ -371,8 +423,29 @@ class ArrayItem extends React.Component {
 
   _save(model) {
     let data = {}
+    let types = ['radio', 'multi', 'checkbox']
     for (let field of model) {
       data[field.id] = this.state[field.id]
+    }
+
+    if (types.includes(data.type)) {
+      let checkArr = data.defaultValue.split(' ')
+      // check for white space and remove them
+      checkArr = checkArr.filter(value => value.trim() != '')
+
+      // Error messages for multi and radio
+      if (data.type === 'multi' && checkArr.length <= 1) {
+        this.setState({
+          error:
+            'Multiple checkboxes accepts 2 or more values. Please use type boolen if you intend to use a signle checkbox.',
+        })
+        return
+      } else if (data.type === 'radio' && checkArr.length <= 1) {
+        this.setState({
+          error: 'Type radio accepts two or more default values.',
+        })
+        return
+      }
     }
     this.props.onEdit(this.props.index, data)
   }
