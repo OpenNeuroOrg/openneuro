@@ -12,7 +12,8 @@ class MultiType extends React.Component {
     this.state = initialState
 
     if (this.props.model.edit) {
-      this.state.counter = Object.keys(this.props.model.options).length
+      let newState = Object.keys(this.props.model.options).length
+      this.setState({ counter: newState })
     }
   }
 
