@@ -188,7 +188,6 @@ let UserStore = Reflux.createStore({
     let filteredLogs = eventLogs.filter(log => {
       return log.visible
     })
-    // console.log(this.data.eventLogs)
     this.update({ eventLogs, filteredLogs })
   },
 
@@ -402,7 +401,6 @@ let UserStore = Reflux.createStore({
   editJobDefinition(jobDefinition, callback) {
     this.toggleModal('defineJob')
     let jobDefinitionForm = this.data.jobDefinitionForm
-    console.log(jobDefinition)
     jobDefinitionForm.edit = true
     jobDefinitionForm.name = jobDefinition.jobDefinitionName
     jobDefinitionForm.description =

@@ -159,6 +159,17 @@ class JobParameterSetup extends React.Component {
       value.push(this.state[model[0].id])
     }
     this.props.onChange({ target: { value: value } })
+
+    // clear the state on add
+    for (let field of this.props.model) {
+      if (field.id === 'options' || field.id === 'defaultChecked') {
+        this.initialState[field.id] = []
+      } else if (field.id === 'hidden' || field.id === 'required') {
+        this.initialState[field.id] = false
+      } else {
+        this.initialState[field.id] = ''
+      }
+    }
     this.setState(this.initialState)
   }
 

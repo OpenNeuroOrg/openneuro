@@ -5,20 +5,24 @@ import PropTypes from 'prop-types'
 class MultiType extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
+    const initialState = {
       counter: 1,
       opts: this.props.model.options,
       defChecked: this.props.model.defaultChecked,
     }
+    this.initialState = initialState
+    this.state = initialState
+
+    if (this.props.model.edit) {
+      this.state.counter = Object.keys(this.props.model.options).length
+    }
   }
 
   render() {
-    let options = []
-
     return (
       <span>
         <br />
-        {this._returnInputs(options)}
+        {this._returnInputs()}
         <br />
         <button
           className="cte-save-btn btn-admin-blue"
@@ -63,18 +67,17 @@ class MultiType extends React.Component {
   }
 
   _handleArray(key, e) {
-    // update locally
     this.state.opts[key] = e.target.value
   }
 
   // Template Methods -------------------------------------------------------------
-  _returnInputs(options) {
+  _returnInputs() {
+    let opts = this.state.opts
     let counter = this.state.counter
     let type = this.props.type
+    let options = []
     let key
-    let opts = this.state.opts
 
-    // Set up local object with keys equal to counter
     for (let i = 0; i < counter; i++) {
       let num = i + 1
       key = 'option ' + num
@@ -93,7 +96,7 @@ class MultiType extends React.Component {
           onClick={this._handleCheck.bind(this, opts[key])}>
           <i
             className={
-              this.state.defChecked.includes(opts[key])
+              this.state.defChecked.includes(this.state.opts[key])
                 ? 'fa fa-check-square-o'
                 : 'fa fa-square-o'
             }
