@@ -207,61 +207,7 @@
                         height: auto;
                     }
                 }
-                .react-grid-Container {
-                    .react-grid-Grid {
-                        .react-grid-Header {
-                            color: $primary;
-                            .react-grid-HeaderRow {
-                                span.pull-right {
-                                    display: inline-block;
-                                    font-size: 0px;
-                                    color: transparent;
-                                    content: none;
-                                    float: right;
-                                    margin-top: -1px;
-                                }
 
-                                .react-grid-HeaderCell-sortable {
-                                    float: left;
-                                    text-align: left;
-
-                                    span.pull-right::after {
-                                        font-family: FontAwesome;
-                                        color: $primary;
-                                        position: absolute;
-                                        content: ' \f0dc';                                        
-                                        width: 50px; 
-                                        padding-left: 5px !important; 
-                                        padding-top: 2px;
-                                        float: right;
-                                        font-size: 14px;
-                                    }
-                                }
-
-                                .react-grid-HeaderCell-sortable--ascending {
-                                    span.pull-right::after {
-                                        content: ' \f0de'
-                                    }
-                                }
-
-                                .react-grid-HeaderCell-sortable--descending {
-                                    span.pull-right::after {
-                                        content: ' \f0dd'
-                                    }
-                                }
-                            }
-                        }
-
-                        .form-group {
-                            input {
-                                font-size: 14px;
-                                font-family: monospace;
-                                margin-top: -9px;
-                                height: 30px;
-                            }
-                        }
-                    }
-                }
             }
 
             .modal-header {
@@ -277,16 +223,12 @@
                 .modal-title {
                     color: $black;
                     font-size: 30px;
-                    .modal-download, .modal-edit, .modal-cancel, .modal-save {
+                    .modal-download {
                         display: inline;
                         font-size: 18px;
                         margin-left: 20px;
                         position: relative;
                         top: -3px;
-                    }
-
-                    .modal-edit-group {
-                        display: inline;
                     }
                 }
                 .close {
@@ -311,6 +253,8 @@
             }
         }
     }
+
+
 }
 
 .display-file-modal.nii-gz .modal-dialog .modal-content .modal-body {

@@ -73,7 +73,6 @@ let datasetStore = Reflux.createStore({
         name: '',
         text: '',
         link: '',
-        info: null,
       },
       loading: false,
       loadingApps: false,
@@ -1622,7 +1621,6 @@ let datasetStore = Reflux.createStore({
               name: file.name,
               text: res.text,
               link: link,
-              info: file,
             },
             modals,
           })
