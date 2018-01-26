@@ -6,7 +6,7 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = merge(common, {
-  devtool: 'source-map',
+  devtool: 'none',
   plugins: [
     new ExtractTextPlugin('style-[contenthash:8].css'),
     new MinifyPlugin(),
