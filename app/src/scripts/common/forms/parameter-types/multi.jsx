@@ -7,8 +7,6 @@ class MultiType extends React.Component {
     super(props)
     const initialState = {
       counter: 1,
-      opts: this.props.model.options,
-      defChecked: this.props.model.defaultChecked,
     }
     this.initialState = initialState
     this.state = initialState
@@ -37,13 +35,13 @@ class MultiType extends React.Component {
   _deleteInput(key) {
     let counter = this.state.counter
     let newState = counter - 1
+    let opts = this.props.model.options
+    let value = opts[key]
+    let checked = this.props.model.defaultChecked
 
-    // how in the heck do I do this?
-    // const {[key], ...newState } = this.state.opts
-
-    delete this.state.opts[key]
-    if (this.state.defChecked.includes(key)) {
-      this.state.defChecked.splice(key, 1)
+    delete opts[key]
+    if (checked.includes(value)) {
+      this._remove(checked, value)
     }
     // force a new render
     this.setState({ counter: newState })
@@ -55,24 +53,34 @@ class MultiType extends React.Component {
     this.setState({ counter: newState })
   }
 
-  _handleCheck(value) {
-    let checked = this.state.defChecked
-    if (!checked.includes(value)) {
+  _handleCheck(key) {
+    let value = this.props.model.options[key]
+    let checked = this.props.model.defaultChecked
+
+    if (!checked.includes(value) && value != '') {
       checked.push(value)
-    } else {
-      checked.splice(value, 1)
+    } else if (checked.includes(value)) {
+      this._remove(checked, value)
     }
-    // can I use this, or should I switch to a lifecycle method?
     this.forceUpdate()
   }
 
   _handleArray(key, e) {
-    this.state.opts[key] = e.target.value
+    this.props.model.options[key] = e.target.value
+  }
+
+  _remove(arr, word) {
+    let found = arr.indexOf(word)
+
+    if (found !== -1) {
+      arr.splice(found, 1)
+      found = arr.indexOf(word)
+    }
   }
 
   // Template Methods -------------------------------------------------------------
   _returnInputs() {
-    let opts = this.state.opts
+    let opts = this.props.model.options
     let counter = this.state.counter
     let type = this.props.type
     let options = []
@@ -82,7 +90,7 @@ class MultiType extends React.Component {
       let num = i + 1
       key = 'option ' + num
       // if option# does not exist within the object
-      if (!this.state.opts[key]) {
+      if (!opts[key]) {
         opts[key] = ''
       }
     }
@@ -93,10 +101,10 @@ class MultiType extends React.Component {
         <button
           className="admin-button"
           key={key + '_button'}
-          onClick={this._handleCheck.bind(this, opts[key])}>
+          onClick={this._handleCheck.bind(this, key)}>
           <i
             className={
-              this.state.defChecked.includes(this.state.opts[key])
+              this.props.model.defaultChecked.includes(opts[key])
                 ? 'fa fa-check-square-o'
                 : 'fa fa-square-o'
             }
@@ -110,7 +118,7 @@ class MultiType extends React.Component {
           <Input
             key={key}
             type="text"
-            value={this.state.opts[key]}
+            value={opts[key]}
             name={key}
             placeholder={key}
             onChange={this._handleArray.bind(this, key)}
