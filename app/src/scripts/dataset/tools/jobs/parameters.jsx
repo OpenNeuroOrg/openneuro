@@ -92,7 +92,6 @@ const JobParameters = ({
             type="radio"
             setName={parameter}
             options={options}
-            selectedOptions={parameters[parameter]}
             controlFunc={handleChange}
           />
         )
@@ -133,7 +132,6 @@ const JobParameters = ({
             setName={parameter}
             options={options}
             controlFunc={handleChange}
-            defaultChecked={defCheck}
             selectedOptions={arrInput}
           />
         )

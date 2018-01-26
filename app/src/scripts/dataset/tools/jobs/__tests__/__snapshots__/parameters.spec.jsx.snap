@@ -56,11 +56,6 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
           >
             <CheckOrRadio
               controlFunc={[Function]}
-              defaultChecked={
-                Array [
-                  "option1",
-                ]
-              }
               options={
                 Array [
                   "option1",
