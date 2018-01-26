@@ -326,8 +326,9 @@ let UserStore = Reflux.createStore({
       required: true,
       type: 'select',
     }
-
-    formData.parameters.push(participantLabel)
+    if (!formData.parameters.includes('participant_label')) {
+      formData.parameters.push(participantLabel)
+    }
     // Can split out paramter metadata here I think?
     // Want to post metadata as a separate prop so we can delete before sending to Batch
     if (formData.parameters) {
