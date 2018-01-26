@@ -22,7 +22,15 @@ module.exports = {
   entry: {
     app: './scripts/client.jsx',
     css: './sass/main.scss',
-    vendor: ['react', 'react-dom', 'react-router-dom'],
+    vendor: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'react-select',
+      'react-bootstrap',
+      'moment',
+      'remarkable',
+    ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
