@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Spinner from '../common/partials/spinner.jsx'
 import WarnButton from '../common/forms/warn-button.jsx'
 import Input from '../common/forms/input.jsx'
 import JobParameter from '../common/forms/job-parameter.jsx'
