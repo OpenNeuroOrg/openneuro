@@ -135,6 +135,14 @@ class JobParameterSetup extends React.Component {
       this.setState({ error: 'Please select either hidden or required.' })
       return
     }
+    // cannot add participant_label
+    if (this.state.label === 'participant_label') {
+      this.setState({
+        error:
+          'Participant label will be added automatically. Please do not add it as a parameter. ',
+      })
+      return
+    }
 
     // error for hidden params w/out defvalue
     if (this.state.hidden && this.state.defaultValue === '') {
