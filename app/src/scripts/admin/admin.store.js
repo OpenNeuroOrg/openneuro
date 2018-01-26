@@ -316,6 +316,18 @@ let UserStore = Reflux.createStore({
       vcpus: parseInt(formData.vcpus),
       environment: [{ name: 'BIDS_CONTAINER', value: formData.containerImage }],
     }
+
+    let participantLabel = {
+      label: 'participant_label',
+      description:
+        'Limit the analysis to selected participants. If none selected (default) data from all participants will be analyzed.',
+      defaultValue: '',
+      hidden: false,
+      required: true,
+      type: 'select',
+    }
+
+    formData.parameters.push(participantLabel)
     // Can split out paramter metadata here I think?
     // Want to post metadata as a separate prop so we can delete before sending to Batch
     if (formData.parameters) {
@@ -389,6 +401,7 @@ let UserStore = Reflux.createStore({
   editJobDefinition(jobDefinition, callback) {
     this.toggleModal('defineJob')
     let jobDefinitionForm = this.data.jobDefinitionForm
+    console.log(jobDefinition)
     jobDefinitionForm.edit = true
     jobDefinitionForm.name = jobDefinition.jobDefinitionName
     jobDefinitionForm.description =
