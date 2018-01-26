@@ -414,8 +414,15 @@ class JobMenu extends React.Component {
    */
   _setDefaults(parameter, event) {
     let value = event.target.value
-    this.state.parameters[parameter] = value
-    this.state.parametersMetadata[parameter].defaultChecked = []
+    let newState = {}
+    let newDef = {}
+    // set defaults to run w/in parameters
+    let param = this.state.parameters[parameter]
+    newState[param] = value
+    // clear defaultchecked array
+    let metaData = this.state.parametersMetadata[parameter].defaultChecked
+    newDef[metaData] = []
+    this.setState({ newDef, newState })
   }
 
   /**
@@ -586,7 +593,6 @@ class JobMenu extends React.Component {
     const jobDefinition = definitions[key][revision]
     let parameters = this.state.parameters
     const inputFileParameters = this.state.inputFileParameters
-    console.log(this.state)
     this.setState({ loading: true })
 
     actions.prepareJobSubmission(
