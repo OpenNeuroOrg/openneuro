@@ -22,6 +22,7 @@ module.exports = {
   entry: {
     app: './scripts/client.jsx',
     css: './sass/main.scss',
+    vendor: ['react', 'react-dom', 'react-router-dom'],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -30,6 +31,10 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: Infinity,
+    }),
     new HtmlWebpackPlugin({
       title: 'OpenNeuro',
       template: path.resolve(__dirname, 'src/index.html'),
