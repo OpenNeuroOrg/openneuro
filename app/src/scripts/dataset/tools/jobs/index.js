@@ -101,6 +101,7 @@ class JobMenu extends React.Component {
               subjects={this.state.subjects}
               arrInput={this.state.arrInput}
               onChange={this._updateParameter.bind(this)}
+              setDefault={this._setDefaults.bind(this)}
               onRestoreDefaults={this._restoreDefaultParameters.bind(this)}
             />
             <span className="submit-warning">{this.state.submitWarning}</span>
@@ -354,8 +355,7 @@ class JobMenu extends React.Component {
       <div className="col-xs-12 modal-actions">
         <button
           className="btn-modal-submit"
-          onClick={this._startJob.bind(this)}
-          disabled={!this.state.submitActive}>
+          onClick={this._checkSubmitStatus.bind(this)}>
           Start
         </button>
         <button className="btn-reset" onClick={this._hide.bind(this)}>
@@ -410,6 +410,15 @@ class JobMenu extends React.Component {
   }
 
   /**
+   * set up default parameters
+   */
+  _setDefaults(parameter, event) {
+    let value = event.target.value
+    this.state.parameters[parameter] = value
+    this.state.parametersMetadata[parameter].defaultChecked = []
+  }
+
+  /**
    * Update Parameter
    */
   _updateParameter(parameter, event) {
@@ -427,12 +436,7 @@ class JobMenu extends React.Component {
     if (requiredParamsUpdate) {
       requiredParameters[parameter] = value
     }
-    this.setState(
-      { parameters, requiredParameters, inputFileParameters },
-      () => {
-        this._checkSubmitStatus()
-      },
-    )
+    this.setState({ parameters, requiredParameters, inputFileParameters })
   }
 
   _checkSubmitStatus() {
@@ -448,6 +452,7 @@ class JobMenu extends React.Component {
       return !!requiredParameters[param]
     })
     this.setState({ submitActive, submitWarning })
+    this.state.submitActive === true ? this._startJob() : null
   }
 
   /**
@@ -507,18 +512,13 @@ class JobMenu extends React.Component {
       submitActive = false
     }
 
-    this.setState(
-      {
-        selectedVersionID,
-        parameters,
-        parametersMetadata,
-        submitActive,
-        requiredParameters,
-      },
-      () => {
-        this._checkSubmitStatus()
-      },
-    )
+    this.setState({
+      selectedVersionID,
+      parameters,
+      parametersMetadata,
+      submitActive,
+      requiredParameters,
+    })
   }
 
   /**
@@ -586,7 +586,7 @@ class JobMenu extends React.Component {
     const jobDefinition = definitions[key][revision]
     let parameters = this.state.parameters
     const inputFileParameters = this.state.inputFileParameters
-
+    console.log(this.state)
     this.setState({ loading: true })
 
     actions.prepareJobSubmission(

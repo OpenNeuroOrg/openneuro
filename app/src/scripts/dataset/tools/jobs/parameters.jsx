@@ -10,11 +10,11 @@ const JobParameters = ({
   onRestoreDefaults,
   parametersMetadata,
   arrInput,
+  setDefault,
 }) => {
   if (Object.keys(parameters).length === 0) {
     return <noscript />
   }
-  console.log(parametersMetadata)
   const parameterInputs = Object.keys(parameters).map(parameter => {
     let input
     let isCheckbox = parametersMetadata[parameter].type === 'checkbox'
@@ -80,7 +80,6 @@ const JobParameters = ({
       )
     } else if (isRadio || isCheckbox) {
       let options = parametersMetadata[parameter].options
-      console.log(options)
       let handleChange = e => {
         let value = e.target.value
         let event = { target: { value: value } }
@@ -99,24 +98,32 @@ const JobParameters = ({
         )
       } else if (isCheckbox) {
         let defCheck = parametersMetadata[parameter].defaultChecked
-        console.log(defCheck)
         // ** only for multi checkboxes ** //
-        if (options) {
-          if (options.length > 1) {
-            handleChange = e => {
-              let value = e.target.value
-              let name = e.target.name
-              // ** Add or remove values ** //
-              let index = arrInput.indexOf(value)
-              if (index === -1) {
-                arrInput.push(value)
-              } else {
-                arrInput.splice(index, 1)
+        if (!arrInput.length) {
+          if (defCheck.length) {
+            for (let opt of defCheck) {
+              if (!arrInput.includes(opt) && opt != '') {
+                arrInput.push(opt)
               }
-
-              let event = { target: { value: arrInput } }
-              return onChange(parameter, event)
             }
+            let event = { target: { value: arrInput } }
+            setDefault(parameter, event)
+          }
+        } else {
+          handleChange = e => {
+            // need to add def checked
+            let value = e.target.value
+            let name = e.target.name
+            // ** Add or remove values ** //
+            let index = arrInput.indexOf(value)
+            if (index === -1) {
+              arrInput.push(value)
+            } else {
+              arrInput.splice(index, 1)
+            }
+
+            let event = { target: { value: arrInput } }
+            return onChange(parameter, event)
           }
         }
 
@@ -127,6 +134,7 @@ const JobParameters = ({
             options={options}
             controlFunc={handleChange}
             defaultChecked={defCheck}
+            selectedOptions={arrInput}
           />
         )
       }
