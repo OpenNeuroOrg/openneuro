@@ -21,11 +21,10 @@ const JobParameters = ({
     let isMulti = parametersMetadata[parameter].type === 'multi'
     let isSelect = parametersMetadata[parameter].type === 'select'
     let isRadio = parametersMetadata[parameter].type === 'radio'
-    let isFile = parametersMetadata[parameter].type === 'file'
-    let isDefaultChecked = parametersMetadata[parameter].defaultValue === 'true'
-    let helpText = parametersMetadata[parameter]
-      ? parametersMetadata[parameter].description
-      : parameter
+    let isFile =
+      parametersMetadata[parameter].type === 'file'
+        ? parametersMetadata[parameter].description
+        : parameter
     if (isSelect) {
       if (parameter.indexOf('participant_label') > -1) {
         let onSelectChange = value => {
@@ -112,7 +111,6 @@ const JobParameters = ({
           handleChange = e => {
             // need to add def checked
             let value = e.target.value
-            let name = e.target.name
             // ** Add or remove values ** //
             let index = arrInput.indexOf(value)
             if (index === -1) {
@@ -136,6 +134,15 @@ const JobParameters = ({
           />
         )
       }
+    } else if (isMulti) {
+      input = (
+        <div>
+          <span>
+            Sorry, this input type is deprecated. Please contact creators of the
+            app to update this input type.
+          </span>
+        </div>
+      )
     } else {
       input = (
         <input
@@ -207,6 +214,7 @@ JobParameters.propTypes = {
   parametersMetadata: PropTypes.object,
   subjects: PropTypes.array,
   arrInput: PropTypes.array,
+  setDefault: PropTypes.func,
 }
 
 JobParameters.defaultProps = {

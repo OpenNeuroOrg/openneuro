@@ -54,23 +54,11 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
           <div
             className="clearfix"
           >
-            <CheckOrRadio
-              controlFunc={[Function]}
-              options={
-                Array [
-                  "option1",
-                  "option2",
-                  "option3",
-                ]
-              }
-              selectedOptions={
-                Array [
-                  "check1",
-                  "check2",
-                ]
-              }
-              setName="boolean"
-              type="checkbox"
+            <input
+              className="form-control"
+              name="boolean"
+              onChange={[Function]}
+              type="file"
             />
             <span
               className="help-text"
@@ -198,8 +186,9 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
           >
             <input
               className="form-control"
+              name="another_option"
               onChange={[Function]}
-              value="some_string_value"
+              type="file"
             />
             <span
               className="help-text"
