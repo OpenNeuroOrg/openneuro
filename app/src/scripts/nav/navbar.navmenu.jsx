@@ -84,7 +84,7 @@ const NavMenu = ({ profile, scitran, isLoggedIn, loading }) => {
 NavMenu.propTypes = {
   profile: PropTypes.object,
   scitran: PropTypes.object,
-  isLoggedIn: PropTypes.bool,
+  isLoggedIn: PropTypes.object,
   loading: PropTypes.bool,
 }
 
