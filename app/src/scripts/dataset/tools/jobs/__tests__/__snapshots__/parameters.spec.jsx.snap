@@ -61,6 +61,19 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
                   "option1",
                 ]
               }
+              options={
+                Array [
+                  "option1",
+                  "option2",
+                  "option3",
+                ]
+              }
+              selectedOptions={
+                Array [
+                  "check1",
+                  "check2",
+                ]
+              }
               setName="boolean"
               type="checkbox"
             />
