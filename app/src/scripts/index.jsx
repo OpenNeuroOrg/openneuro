@@ -18,7 +18,6 @@ class Index extends Reflux.Component {
   // life cycle methods --------------------------------------------------------
   render() {
     let alertState = this.state.notification.showAlert
-    // TODO - restore page class names...
     return (
       <span>
         <div className="page">
