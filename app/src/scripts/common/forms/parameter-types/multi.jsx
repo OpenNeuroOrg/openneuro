@@ -51,12 +51,12 @@ class MultiType extends React.Component {
     this.setState({ counter: newState })
   }
 
-  _handleCheck(key) {
+  _handleCheck(value) {
     let checked = this.state.defChecked
-    if (!checked.includes(key)) {
-      checked.push(key)
+    if (!checked.includes(value)) {
+      checked.push(value)
     } else {
-      checked.splice(key, 1)
+      checked.splice(value, 1)
     }
     // can I use this, or should I switch to a lifecycle method?
     this.forceUpdate()
@@ -90,10 +90,10 @@ class MultiType extends React.Component {
         <button
           className="admin-button"
           key={key + '_button'}
-          onClick={this._handleCheck.bind(this, key)}>
+          onClick={this._handleCheck.bind(this, opts[key])}>
           <i
             className={
-              this.state.defChecked.includes(key)
+              this.state.defChecked.includes(opts[key])
                 ? 'fa fa-check-square-o'
                 : 'fa fa-square-o'
             }

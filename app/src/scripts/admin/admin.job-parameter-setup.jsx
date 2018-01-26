@@ -130,7 +130,6 @@ class JobParameterSetup extends React.Component {
   // custom methods -------------------------------------------------------------------------
   _add(model) {
     let value = this.props.value
-
     // error for checkboxes
     if (this.state.required && this.state.hidden) {
       this.setState({ error: 'Please select either hidden or required.' })

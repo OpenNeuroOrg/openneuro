@@ -322,13 +322,13 @@ let UserStore = Reflux.createStore({
       for (let param of formData.parameters) {
         parameters[param.label] = param.defaultValue
         parametersMetadata[param.label] = param
-        parametersMetadata[param.label].options = param.options
-        // if (param.options) {
-        //   let option = []
-        //   Object.values(param.options).map(value => {
-        //     option.push(value)
-        //   })
-        // }
+        if (param.options) {
+          let options = []
+          Object.values(param.options).map(value => {
+            options.push(value)
+          })
+          parametersMetadata[param.label].options = options
+        }
       }
     }
 
@@ -343,7 +343,6 @@ let UserStore = Reflux.createStore({
       support: formData.support,
       tags: formData.tags,
     }
-    console.log(jobDefinition)
     crn
       .defineJob(jobDefinition)
       .then(() => {
@@ -450,7 +449,6 @@ let UserStore = Reflux.createStore({
 
     jobDefinitionForm.parameters = params
     // ** leave this for debugging, needed for on edit issue ** //
-    // console.log(jobDefinitionForm)
     this.update({ jobDefinitionForm })
     if (callback) {
       callback()
