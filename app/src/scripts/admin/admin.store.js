@@ -322,7 +322,7 @@ let UserStore = Reflux.createStore({
         'Limit the analysis to selected participants. If none selected (default) data from all participants will be analyzed.',
       defaultValue: '',
       hidden: false,
-      required: true,
+      required: false,
       type: 'select',
     }
     if (!formData.parameters.includes('participant_label')) {
