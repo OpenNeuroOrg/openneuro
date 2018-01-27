@@ -8,6 +8,7 @@ import { Modal } from '../utils/modal.jsx'
 import files from '../utils/files'
 import Papaya from '../common/partials/papaya.jsx'
 import ReactTable from 'react-table'
+import JsonEditor from './tools/json/jsoneditor.js'
 
 export default class FileDisplay extends React.Component {
   // life cycle events --------------------------------------------------
@@ -51,11 +52,14 @@ export default class FileDisplay extends React.Component {
 
   _format(name, content, link) {
     if (files.hasExtension(name, ['.json'])) {
-      try {
-        return JSON.stringify(JSON.parse(content), null, 4)
-      } catch (e) {
-        return content
-      }
+      return (
+        <JsonEditor
+          data={content}
+          file={file}
+          onSave={this.props.onSave.bind(file)}
+          isSnapshot={this.props.isSnapshot}
+        />
+      )
     } else if (files.hasExtension(name, ['.pdf'])) {
       return (
         <iframe
@@ -115,11 +119,11 @@ export default class FileDisplay extends React.Component {
   }
 
   /**
-     * Parse Tabular
-     *
-     * Parse raw tabular data into an array of
-     * objects readable by Reactable.
-     */
+   * Parse Tabular
+   *
+   * Parse raw tabular data into an array of
+   * objects readable by Reactable.
+   */
   _parseTabular(name, data) {
     // determine separator
     let separator
