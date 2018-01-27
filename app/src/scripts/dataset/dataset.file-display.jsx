@@ -33,7 +33,7 @@ export default class FileDisplay extends React.Component {
           </Modal.Title>
         </Modal.Header>
         <hr className="modal-inner" />
-        <Modal.Body>{this._format(file.name, file.text, file.link)}</Modal.Body>
+        <Modal.Body>{this._format(file)}</Modal.Body>
       </Modal>
     )
   }
@@ -50,15 +50,20 @@ export default class FileDisplay extends React.Component {
     }
   }
 
-  _format(name, content, link) {
+  _format(file) {
+    let name = file.name
+    let link = file.link
+    let content = file.text
     if (files.hasExtension(name, ['.json'])) {
       return (
-        <JsonEditor
-          data={content}
-          file={file}
-          onSave={this.props.onSave.bind(file)}
-          isSnapshot={this.props.isSnapshot}
-        />
+        <div>
+          <JsonEditor
+            data={content}
+            file={file}
+            onSave={this.props.onSave.bind(file)}
+            isSnapshot={this.props.isSnapshot}
+          />
+        </div>
       )
     } else if (files.hasExtension(name, ['.pdf'])) {
       return (

@@ -73,6 +73,7 @@ let datasetStore = Reflux.createStore({
         name: '',
         text: '',
         link: '',
+        info: null,
       },
       loading: false,
       loadingApps: false,
@@ -197,7 +198,7 @@ let datasetStore = Reflux.createStore({
 
   /**
    * Generate Fallback Url
-   * 
+   *
    * Given a datasetId, return the most recent
    * publicly available snapshot url
    */
@@ -1621,6 +1622,7 @@ let datasetStore = Reflux.createStore({
               name: file.name,
               text: res.text,
               link: link,
+              info: file,
             },
             modals,
           })

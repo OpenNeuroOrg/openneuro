@@ -126,8 +126,9 @@ export default class JsonEditor extends Reflux.Component {
     ) {
       let errorDetails = []
       for (let detail of this.state.json.errorDetail) {
+        const key = this.state.json.errorDetail.indexOf(detail)
         errorDetails.push(
-          <div>
+          <div key={key}>
             <span className="text-danger">{detail}</span>
           </div>,
         )
@@ -172,7 +173,7 @@ export default class JsonEditor extends Reflux.Component {
   }
 }
 
-JsonEditor.PropTypes = {
+JsonEditor.propTypes = {
   isSnapshot: PropTypes.bool,
   onSave: PropTypes.func,
   data: PropTypes.string,
