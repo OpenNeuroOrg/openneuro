@@ -21,10 +21,7 @@ const JobParameters = ({
     let isMulti = parametersMetadata[parameter].type === 'multi'
     let isSelect = parametersMetadata[parameter].type === 'select'
     let isRadio = parametersMetadata[parameter].type === 'radio'
-    let isFile =
-      parametersMetadata[parameter].type === 'file'
-        ? parametersMetadata[parameter].description
-        : parameter
+    let isFile = parametersMetadata[parameter].type === 'file'
     if (isSelect) {
       if (parameter.indexOf('participant_label') > -1) {
         let onSelectChange = value => {
@@ -138,8 +135,8 @@ const JobParameters = ({
       input = (
         <div>
           <span>
-            Sorry, this input type is deprecated. Please contact creators of the
-            app to update this input type.
+            Sorry, this input type is deprecated. Please contact the creators of
+            this app for support.
           </span>
         </div>
       )
