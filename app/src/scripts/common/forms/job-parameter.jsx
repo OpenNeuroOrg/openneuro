@@ -2,10 +2,12 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TextOrNum from './parameter-types/text-num.jsx'
 import MultiType from './parameter-types/multi.jsx'
+import Checkbox from './parameter-types/checkbox.jsx'
 
 export const PARAMETER_INPUTS = [
   { label: 'String', value: 'text' },
   { label: 'Boolean', value: 'checkbox' },
+  { label: 'Multi', value: 'multi' },
   { label: 'Number', value: 'numeric' },
   { label: 'List', value: 'select' },
   { label: 'File', value: 'file' },
@@ -16,7 +18,7 @@ export const PARAMETER_INPUTS = [
 class JobParameter extends React.Component {
   render() {
     let selected = this.props.selected
-    let multiTypes = ['checkbox', 'select', 'radio']
+    let multiTypes = ['multi', 'select', 'radio']
     if (multiTypes.includes(selected)) {
       return (
         <MultiType
@@ -25,6 +27,8 @@ class JobParameter extends React.Component {
           model={this.props.model}
         />
       )
+    } else if (selected === 'checkbox') {
+      return <Checkbox {...this.props} />
     } else {
       return (
         <TextOrNum

@@ -74,7 +74,7 @@ const JobParameters = ({
           onChange={onChange.bind(null, parameter)}
         />
       )
-    } else if (isRadio || isCheckbox) {
+    } else if (isRadio || isMulti) {
       let options = parametersMetadata[parameter].options
       let handleChange = e => {
         let value = e.target.value
@@ -91,7 +91,7 @@ const JobParameters = ({
             controlFunc={handleChange}
           />
         )
-      } else if (isCheckbox) {
+      } else if (isMulti) {
         let defCheck = parametersMetadata[parameter].defaultChecked
         // ** only for multi checkboxes ** //
         if (!arrInput.length) {
@@ -131,14 +131,14 @@ const JobParameters = ({
           />
         )
       }
-    } else if (isMulti) {
+    } else if (isCheckbox) {
       input = (
-        <div>
-          <span>
-            Sorry, this input type is deprecated. Please contact the creators of
-            this app for support.
-          </span>
-        </div>
+        <input
+          className="form-control"
+          type="checkbox"
+          name={parameter}
+          onChange={onChange.bind(null, parameter)}
+        />
       )
     } else {
       input = (
