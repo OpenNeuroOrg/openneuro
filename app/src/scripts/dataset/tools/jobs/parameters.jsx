@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import CheckOrRadio from '../../../common/forms/multi-radio-input.jsx'
+import MultiInput from '../../../common/forms/multi-radio-input.jsx'
 
 const JobParameters = ({
   parameters,
@@ -74,63 +74,65 @@ const JobParameters = ({
           onChange={onChange.bind(null, parameter)}
         />
       )
-    } else if (isRadio || isMulti) {
-      let options = parametersMetadata[parameter].options
-      let handleChange = e => {
-        let value = e.target.value
-        let event = { target: { value: value } }
+    } else if (isRadio) {
+      const options = parametersMetadata[parameter].options
+      const handleChange = e => {
+        const value = e.target.value
+        const event = { target: { value: value } }
         return onChange(parameter, event)
       }
 
       if (isRadio) {
         input = (
-          <CheckOrRadio
+          <MultiInput
             type="radio"
             setName={parameter}
             options={options}
             controlFunc={handleChange}
           />
         )
-      } else if (isMulti) {
-        let defCheck = parametersMetadata[parameter].defaultChecked
-        // ** only for multi checkboxes ** //
-        if (!arrInput.length) {
-          if (defCheck.length) {
-            for (let opt of defCheck) {
-              if (!arrInput.includes(opt) && opt != '') {
-                arrInput.push(opt)
-              }
-            }
-            let event = { target: { value: arrInput } }
-            setDefault(parameter, event)
-          }
-        } else {
-          handleChange = e => {
-            // need to add def checked
-            let value = e.target.value
-            // ** Add or remove values ** //
-            let index = arrInput.indexOf(value)
-            if (index === -1) {
-              arrInput.push(value)
-            } else {
-              arrInput.splice(index, 1)
-            }
+      }
+    } else if (isMulti) {
+      const options = parametersMetadata[parameter].options
+      const defCheck = parametersMetadata[parameter].defaultChecked
 
-            let event = { target: { value: arrInput } }
-            return onChange(parameter, event)
-          }
+      const handleChange = e => {
+        // need to add def checked
+        let value = e.target.value
+        // ** Add or remove values ** //
+        let index = arrInput.indexOf(value)
+        if (index === -1) {
+          arrInput.push(value)
+        } else {
+          arrInput.splice(index, 1)
         }
 
-        input = (
-          <CheckOrRadio
-            type="checkbox"
-            setName={parameter}
-            options={options}
-            controlFunc={handleChange}
-            selectedOptions={arrInput}
-          />
-        )
+        let event = { target: { value: arrInput } }
+        return onChange(parameter, event)
       }
+
+      // ** only for multi checkboxes ** //
+      if (!arrInput.length) {
+        if (defCheck.length) {
+          for (let opt of defCheck) {
+            if (!arrInput.includes(opt) && opt != '') {
+              arrInput.push(opt)
+            }
+          }
+          let event = { target: { value: arrInput } }
+          setDefault(parameter, event)
+        }
+      }
+
+      input = (
+        <MultiInput
+          type="checkbox"
+          setName={parameter}
+          options={options}
+          controlFunc={handleChange}
+          selectedOptions={arrInput}
+        />
+      )
     } else if (isCheckbox) {
       const onCheck = e => {
         const value = e.target.checked

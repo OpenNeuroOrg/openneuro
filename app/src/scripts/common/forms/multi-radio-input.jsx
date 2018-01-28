@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const CheckOrRadio = ({
+const MultiInput = ({
   options,
   type,
   setName,
@@ -13,7 +13,7 @@ const CheckOrRadio = ({
       <div>
         {options.map((opt, index) => {
           let checked = null
-          if (type === 'checkbox') {
+          if (type === 'multi') {
             selectedOptions.includes(opt) ? (checked = true) : (checked = false)
           }
           return (
@@ -35,7 +35,7 @@ const CheckOrRadio = ({
   )
 }
 
-CheckOrRadio.propTypes = {
+MultiInput.propTypes = {
   type: PropTypes.string.isRequired,
   setName: PropTypes.string.isRequired,
   options: PropTypes.array,
@@ -43,4 +43,4 @@ CheckOrRadio.propTypes = {
   selectedOptions: PropTypes.array,
 }
 
-export default CheckOrRadio
+export default MultiInput
