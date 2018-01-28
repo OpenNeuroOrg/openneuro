@@ -18,7 +18,7 @@ export default ({ onCheck, onChange, model }) => {
       <label>
         <input
           type="checkbox"
-          value={model.defaultValue}
+          checked={model.defaultValue}
           onChange={onChange.bind(this, 'defaultValue')}
         />Default Value
       </label>

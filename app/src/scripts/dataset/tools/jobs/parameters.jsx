@@ -132,12 +132,18 @@ const JobParameters = ({
         )
       }
     } else if (isCheckbox) {
+      const onCheck = e => {
+        const value = e.target.checked
+        const event = { target: { value: value } }
+        return onChange(parameter, event)
+      }
       input = (
         <input
           className="form-control"
           type="checkbox"
           name={parameter}
-          onChange={onChange.bind(null, parameter)}
+          checked={parameters[parameter]}
+          onChange={onCheck}
         />
       )
     } else {
