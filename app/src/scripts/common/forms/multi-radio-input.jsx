@@ -8,6 +8,7 @@ const MultiInput = ({
   controlFunc,
   selectedOptions,
 }) => {
+  const inputType = type === 'multi' ? 'checkbox' : 'radio'
   return (
     <div>
       <div>
@@ -20,7 +21,7 @@ const MultiInput = ({
             <label key={index} className="help-text">
               <input
                 key={opt}
-                type={type}
+                type={inputType}
                 name={setName}
                 onChange={controlFunc}
                 value={opt}

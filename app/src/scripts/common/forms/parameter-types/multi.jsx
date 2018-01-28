@@ -125,7 +125,7 @@ class MultiType extends React.Component {
             onChange={this._handleArray.bind(this, key)}
           />
 
-          {type === 'checkbox' ? button : null}
+          {type === 'multi' ? button : null}
 
           <button
             className="admin-button"

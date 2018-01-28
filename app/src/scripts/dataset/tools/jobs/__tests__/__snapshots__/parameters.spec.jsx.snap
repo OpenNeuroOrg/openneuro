@@ -54,22 +54,11 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
           <div
             className="clearfix"
           >
-            <CheckOrRadio
-              controlFunc={[Function]}
-              options={
-                Array [
-                  "option1",
-                  "option2",
-                  "option3",
-                ]
-              }
-              selectedOptions={
-                Array [
-                  "check1",
-                  "check2",
-                ]
-              }
-              setName="boolean"
+            <input
+              checked={true}
+              className="form-control"
+              name="boolean"
+              onChange={[Function]}
               type="checkbox"
             />
             <span

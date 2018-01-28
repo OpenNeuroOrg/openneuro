@@ -49,7 +49,6 @@ describe('dataset/tools/jobs/parameters', () => {
   }
 
   const subjects = ['01', '02']
-  const arrInput = ['check1', 'check2']
 
   it('renders successfully', () => {
     const wrapper = shallow(
@@ -57,7 +56,6 @@ describe('dataset/tools/jobs/parameters', () => {
         parameters={params}
         parametersMetadata={metadata}
         subjects={subjects}
-        arrInput={arrInput}
         onChange={onChange}
         onRestoreDefaults={onRestoreDefaults}
       />,

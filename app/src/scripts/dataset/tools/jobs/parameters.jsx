@@ -9,8 +9,6 @@ const JobParameters = ({
   onChange,
   onRestoreDefaults,
   parametersMetadata,
-  arrInput,
-  setDefault,
 }) => {
   if (Object.keys(parameters).length === 0) {
     return <noscript />
@@ -93,44 +91,30 @@ const JobParameters = ({
         )
       }
     } else if (isMulti) {
-      const options = parametersMetadata[parameter].options
-      const defCheck = parametersMetadata[parameter].defaultChecked
-
       const handleChange = e => {
         // need to add def checked
-        let value = e.target.value
+        const value = e.target.value
+        const arrParam = parameters[parameter]
+
         // ** Add or remove values ** //
-        let index = arrInput.indexOf(value)
+        let index = arrParam.indexOf(value)
         if (index === -1) {
-          arrInput.push(value)
+          arrParam.push(value)
         } else {
-          arrInput.splice(index, 1)
+          arrParam.splice(index, 1)
         }
 
-        let event = { target: { value: arrInput } }
+        let event = { target: { value: arrParam } }
         return onChange(parameter, event)
-      }
-
-      // ** only for multi checkboxes ** //
-      if (!arrInput.length) {
-        if (defCheck.length) {
-          for (let opt of defCheck) {
-            if (!arrInput.includes(opt) && opt != '') {
-              arrInput.push(opt)
-            }
-          }
-          let event = { target: { value: arrInput } }
-          setDefault(parameter, event)
-        }
       }
 
       input = (
         <MultiInput
-          type="checkbox"
+          type="multi"
           setName={parameter}
-          options={options}
+          options={parametersMetadata[parameter].options}
           controlFunc={handleChange}
-          selectedOptions={arrInput}
+          selectedOptions={parameters[parameter]}
         />
       )
     } else if (isCheckbox) {
@@ -218,7 +202,6 @@ JobParameters.propTypes = {
   parameters: PropTypes.object,
   parametersMetadata: PropTypes.object,
   subjects: PropTypes.array,
-  arrInput: PropTypes.array,
   setDefault: PropTypes.func,
 }
 

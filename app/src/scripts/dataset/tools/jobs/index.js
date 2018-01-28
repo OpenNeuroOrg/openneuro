@@ -36,7 +36,6 @@ class JobMenu extends React.Component {
       message: null,
       error: false,
       subjects: [],
-      arrInput: [],
       appGroup: {},
       submitActive: false,
       requiredParameters: {},
@@ -99,9 +98,7 @@ class JobMenu extends React.Component {
               parameters={this.state.parameters}
               parametersMetadata={this.state.parametersMetadata}
               subjects={this.state.subjects}
-              arrInput={this.state.arrInput}
               onChange={this._updateParameter.bind(this)}
-              setDefault={this._setDefaults.bind(this)}
               onRestoreDefaults={this._restoreDefaultParameters.bind(this)}
             />
             <span className="submit-warning">{this.state.submitWarning}</span>
@@ -410,22 +407,6 @@ class JobMenu extends React.Component {
   }
 
   /**
-   * set up default parameters
-   */
-  _setDefaults(parameter, event) {
-    let value = event.target.value
-    let newState = {}
-    let newDef = {}
-    // set defaults to run w/in parameters
-    let param = this.state.parameters[parameter]
-    newState[param] = value
-    // clear defaultchecked array
-    let metaData = this.state.parametersMetadata[parameter].defaultChecked
-    newDef[metaData] = []
-    this.setState({ newDef, newState })
-  }
-
-  /**
    * Update Parameter
    */
   _updateParameter(parameter, event) {
@@ -479,9 +460,9 @@ class JobMenu extends React.Component {
    * Select App
    */
   _selectApp(e) {
-    let selectedAppKey = e.target.value
-    let selectedApp = this.props.apps[selectedAppKey]
-    if (this.state.selectedAppKey != e.target.value) {
+    const selectedAppKey = e.target.value
+    const selectedApp = this.props.apps[selectedAppKey]
+    if (this.state.selectedAppKey !== e.target.value) {
       this.setState({
         parameters: [],
         inputFileParameters: {},
@@ -512,6 +493,10 @@ class JobMenu extends React.Component {
     Object.keys(parametersMetadata).forEach(param => {
       if (parametersMetadata[param].required) {
         requiredParameters[param] = null
+      }
+      // Setup any default checkboxes
+      if ('defaultChecked' in parametersMetadata[param]) {
+        parameters[param] = parametersMetadata[param].defaultChecked
       }
     })
 
@@ -654,7 +639,6 @@ JobMenu.propTypes = {
   show: PropTypes.bool,
   snapshots: PropTypes.array,
   history: PropTypes.object,
-  arrInput: PropTypes.array,
 }
 
 JobMenu.defaultProps = {
