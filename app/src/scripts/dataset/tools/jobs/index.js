@@ -451,9 +451,25 @@ class JobMenu extends React.Component {
     const key = this.state.selectedAppKey
     const revision = this.state.selectedVersionID
     const app = apps[key][revision]
+    const parametersMetadata = JSON.parse(
+      JSON.stringify(app.parametersMetadata),
+    )
     const parameters = JSON.parse(JSON.stringify(app.parameters))
+    this._applyDefaults(parameters, parametersMetadata)
     const inputFileParameters = {}
     this.setState({ parameters, inputFileParameters })
+  }
+
+  _applyDefaults(parameters, metadata) {
+    Object.keys(metadata).forEach(param => {
+      if ('defaultChecked' in metadata[param]) {
+        parameters[param] = metadata[param].defaultChecked
+      }
+      if (metadata[param].type === 'radio') {
+        // Sets a default for a radio parameter if none is configured
+        parameters[param] = metadata[param].options[0]
+      }
+    })
   }
 
   /**
@@ -479,24 +495,21 @@ class JobMenu extends React.Component {
    * Select App Version
    */
   _selectAppVersion(e) {
-    let selectedVersionID = e.target.value
-    let selectedDefinition = this.props.apps[this.state.selectedAppKey][
+    const selectedVersionID = e.target.value
+    const selectedDefinition = this.props.apps[this.state.selectedAppKey][
       selectedVersionID
     ]
-    let parameters = JSON.parse(JSON.stringify(selectedDefinition.parameters))
-    let parametersMetadata = JSON.parse(
+    const parametersMetadata = JSON.parse(
       JSON.stringify(selectedDefinition.parametersMetadata),
     )
+    const parameters = JSON.parse(JSON.stringify(selectedDefinition.parameters))
+    this._applyDefaults(parameters, parametersMetadata)
     //if there are required parameters for the app, disable start button
     let requiredParameters = {}
     let submitActive = this.state.submitActive
     Object.keys(parametersMetadata).forEach(param => {
       if (parametersMetadata[param].required) {
         requiredParameters[param] = null
-      }
-      // Setup any default checkboxes
-      if ('defaultChecked' in parametersMetadata[param]) {
-        parameters[param] = parametersMetadata[param].defaultChecked
       }
     })
 

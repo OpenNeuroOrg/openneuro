@@ -1,29 +1,19 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const MultiInput = ({
-  options,
-  type,
-  setName,
-  controlFunc,
-  selectedOptions,
-}) => {
-  const inputType = type === 'multi' ? 'checkbox' : 'radio'
+const MultiCheckbox = ({ options, setName, onChange, selectedOptions }) => {
   return (
     <div>
       <div>
         {options.map((opt, index) => {
-          let checked = null
-          if (type === 'multi') {
-            selectedOptions.includes(opt) ? (checked = true) : (checked = false)
-          }
+          const checked = selectedOptions.includes(opt)
           return (
             <label key={index} className="help-text">
               <input
                 key={opt}
-                type={inputType}
+                type="checkbox"
                 name={setName}
-                onChange={controlFunc}
+                onChange={onChange}
                 value={opt}
                 checked={checked}
               />
@@ -36,12 +26,11 @@ const MultiInput = ({
   )
 }
 
-MultiInput.propTypes = {
-  type: PropTypes.string.isRequired,
+MultiCheckbox.propTypes = {
   setName: PropTypes.string.isRequired,
   options: PropTypes.array,
-  controlFunc: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   selectedOptions: PropTypes.array,
 }
 
-export default MultiInput
+export default MultiCheckbox

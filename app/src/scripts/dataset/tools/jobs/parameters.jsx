@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import MultiInput from '../../../common/forms/multi-radio-input.jsx'
+import Radio from '../../../common/forms/radio.jsx'
+import MultiCheckbox from '../../../common/forms/multi-checkbox.jsx'
 
 const JobParameters = ({
   parameters,
@@ -82,11 +83,11 @@ const JobParameters = ({
 
       if (isRadio) {
         input = (
-          <MultiInput
-            type="radio"
+          <Radio
             setName={parameter}
             options={options}
-            controlFunc={handleChange}
+            onChange={handleChange}
+            value={parameters[parameter]}
           />
         )
       }
@@ -109,11 +110,10 @@ const JobParameters = ({
       }
 
       input = (
-        <MultiInput
-          type="multi"
+        <MultiCheckbox
           setName={parameter}
           options={parametersMetadata[parameter].options}
-          controlFunc={handleChange}
+          onChange={handleChange}
           selectedOptions={parameters[parameter]}
         />
       )
