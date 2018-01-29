@@ -1,18 +1,14 @@
 import Reflux from 'reflux'
 import Actions from './jsoneditor.actions.js'
-import async from 'async'
-import validate from 'bids-validator'
-import files from '../../../utils/files'
-import PropTypes from 'prop-types'
 
 let JsonEditorStore = Reflux.createStore({
   listenables: Actions,
 
-  init: function() {
+  init() {
     this.setInitialState()
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return this.data
   },
 
@@ -82,7 +78,7 @@ let JsonEditorStore = Reflux.createStore({
     this.update({ showErrorDetail: !this.data.showErrorDetail })
   },
 
-  saveFile: function() {
+  saveFile: async function() {
     let jsonContent
     try {
       jsonContent = JSON.stringify(JSON.parse(this.data.data), null, '\t')
@@ -95,11 +91,12 @@ let JsonEditorStore = Reflux.createStore({
       ) {
         let originalFile = this.data.originalFile
         originalFile.relativePath = '/' + fileName
-        this.update({ originalFile, originalFile })
+        this.update({ originalFile })
       }
 
+      const validate = await import('bids-validator')
       // apply custom validation agains bids schemas, if relevant
-      validate.JSON(this.data.originalFile, jsonContent, (issues, jsObj) => {
+      validate.JSON(this.data.originalFile, jsonContent, issues => {
         if (issues.length) {
           let errors = []
           for (let issue of issues) {

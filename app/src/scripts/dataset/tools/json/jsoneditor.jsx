@@ -2,7 +2,6 @@ import React from 'react'
 import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import actions from './jsoneditor.actions.js'
-import async from 'async'
 import JsonEditorStore from './jsoneditor.store.js'
 import { refluxConnect } from '../../../utils/reflux'
 

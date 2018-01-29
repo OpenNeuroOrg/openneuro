@@ -8,7 +8,7 @@ import { Modal } from '../utils/modal.jsx'
 import files from '../utils/files'
 import Papaya from '../common/partials/papaya.jsx'
 import ReactTable from 'react-table'
-import JsonEditor from './tools/json/jsoneditor.js'
+import JsonEditor from './tools/json/jsoneditor.jsx'
 
 export default class FileDisplay extends React.Component {
   // life cycle events --------------------------------------------------
@@ -175,4 +175,6 @@ FileDisplay.propTypes = {
   file: PropTypes.object,
   onHide: PropTypes.func,
   show: PropTypes.bool,
+  onSave: PropTypes.func,
+  isSnapshot: PropTypes.bool,
 }
