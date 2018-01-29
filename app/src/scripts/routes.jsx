@@ -14,6 +14,8 @@ const Faq = loadable(() => import('./faq/faq.jsx'))
 
 // routes ----------------------------------------------------------------
 
+const PublicDashboard = () => <Dashboard public />
+
 const appRoutes = () => (
   <Switch>
     <Route name="front-page" exact path="/" component={FrontPage} />
@@ -23,11 +25,7 @@ const appRoutes = () => (
       path="/dashboard"
       component={requireAuth(Dashboard)}
     />
-    <Route
-      name="public"
-      path="/public"
-      component={() => <Dashboard public />}
-    />
+    <Route name="public" path="/public" component={PublicDashboard} />
     <Route name="admin" path="/admin" component={requireAuth(Admin, 'admin')} />
     <Route
       name="dataset"
