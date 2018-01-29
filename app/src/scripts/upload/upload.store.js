@@ -8,7 +8,6 @@ import fileStore from './upload.file.actions'
 import notifications from '../notification/notification.actions'
 import scitran from '../utils/scitran'
 import upload from './upload'
-import validate from 'bids-validator'
 import userStore from '../user/user.store'
 import datasetsActions from '../dashboard/dashboard.datasets.actions'
 import datasetActions from '../dataset/dataset.actions'
@@ -174,7 +173,8 @@ let UploadStore = Reflux.createStore({
    * Takes an optional boolean parameter representing
    * whether this is already known as a resume.
    */
-  validate() {
+  async validate() {
+    const validate = await import('bids-validator')
     this.update({ uploadStatus: 'validating', showIssues: true, activeKey: 3 })
     fileStore.getFiles('list', list => {
       validate.BIDS(list, {}, (issues, summary) => {

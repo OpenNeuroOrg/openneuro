@@ -57,7 +57,4 @@ Dashboard.propTypes = {
   public: PropTypes.bool,
 }
 
-const PublicDashboard = () => <Dashboard public />
-
 export default Dashboard
-export { Dashboard, PublicDashboard }

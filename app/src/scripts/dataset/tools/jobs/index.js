@@ -9,7 +9,6 @@ import actions from '../../dataset.actions.js'
 import Spinner from '../../../common/partials/spinner.jsx'
 import { Modal } from '../../../utils/modal.jsx'
 import moment from 'moment'
-import validate from 'bids-validator'
 import scitran from '../../../utils/scitran'
 import Results from '../../../upload/upload.validation-results.jsx'
 import Description from './description.jsx'
@@ -537,7 +536,8 @@ class JobMenu extends React.Component {
      * determine app availability
      */
     // load validation data for selected snapshot
-    scitran.getProject(snapshotId, { snapshot: true }).then(res => {
+    scitran.getProject(snapshotId, { snapshot: true }).then(async res => {
+      const validate = await import('bids-validator')
       for (let jobDefinitionName in this.props.apps) {
         let app = this.props.apps[jobDefinitionName]
         let validationConfig = app.hasOwnProperty('validationConfig')
