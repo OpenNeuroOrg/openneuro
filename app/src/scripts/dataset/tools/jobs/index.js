@@ -36,8 +36,6 @@ class JobMenu extends React.Component {
       message: null,
       error: false,
       subjects: [],
-      arrInput: [],
-      arrControl: [],
       appGroup: {},
       submitActive: false,
       requiredParameters: {},
@@ -100,8 +98,6 @@ class JobMenu extends React.Component {
               parameters={this.state.parameters}
               parametersMetadata={this.state.parametersMetadata}
               subjects={this.state.subjects}
-              arrInput={this.state.arrInput}
-              arrControl={this.state.arrControl}
               onChange={this._updateParameter.bind(this)}
               onRestoreDefaults={this._restoreDefaultParameters.bind(this)}
             />
@@ -356,8 +352,7 @@ class JobMenu extends React.Component {
       <div className="col-xs-12 modal-actions">
         <button
           className="btn-modal-submit"
-          onClick={this._startJob.bind(this)}
-          disabled={!this.state.submitActive}>
+          onClick={this._checkSubmitStatus.bind(this)}>
           Start
         </button>
         <button className="btn-reset" onClick={this._hide.bind(this)}>
@@ -429,24 +424,23 @@ class JobMenu extends React.Component {
     if (requiredParamsUpdate) {
       requiredParameters[parameter] = value
     }
-    this.setState(
-      { parameters, requiredParameters, inputFileParameters },
-      () => {
-        this._checkSubmitStatus()
-      },
-    )
+    this.setState({ parameters, requiredParameters, inputFileParameters })
   }
 
   _checkSubmitStatus() {
+    let metaData = this.state.parametersMetadata
     let requiredParameters = this.state.requiredParameters
     let submitWarning = null
     let submitActive = Object.keys(requiredParameters).every(param => {
-      if (!requiredParameters[param]) {
+      if (metaData[param].defaultValue != '') {
+        requiredParameters[param] = metaData[param].defaultValue
+      } else if (!requiredParameters[param]) {
         submitWarning = 'The required parameter "' + param + '" is missing.'
       }
       return !!requiredParameters[param]
     })
     this.setState({ submitActive, submitWarning })
+    this.state.submitActive === true ? this._startJob() : null
   }
 
   /**
@@ -457,18 +451,34 @@ class JobMenu extends React.Component {
     const key = this.state.selectedAppKey
     const revision = this.state.selectedVersionID
     const app = apps[key][revision]
+    const parametersMetadata = JSON.parse(
+      JSON.stringify(app.parametersMetadata),
+    )
     const parameters = JSON.parse(JSON.stringify(app.parameters))
+    this._applyDefaults(parameters, parametersMetadata)
     const inputFileParameters = {}
     this.setState({ parameters, inputFileParameters })
+  }
+
+  _applyDefaults(parameters, metadata) {
+    Object.keys(metadata).forEach(param => {
+      if ('defaultChecked' in metadata[param]) {
+        parameters[param] = metadata[param].defaultChecked
+      }
+      if (metadata[param].type === 'radio') {
+        // Sets a default for a radio parameter if none is configured
+        parameters[param] = metadata[param].options[0]
+      }
+    })
   }
 
   /**
    * Select App
    */
   _selectApp(e) {
-    let selectedAppKey = e.target.value
-    let selectedApp = this.props.apps[selectedAppKey]
-    if (this.state.selectedAppKey != e.target.value) {
+    const selectedAppKey = e.target.value
+    const selectedApp = this.props.apps[selectedAppKey]
+    if (this.state.selectedAppKey !== e.target.value) {
       this.setState({
         parameters: [],
         inputFileParameters: {},
@@ -485,14 +495,15 @@ class JobMenu extends React.Component {
    * Select App Version
    */
   _selectAppVersion(e) {
-    let selectedVersionID = e.target.value
-    let selectedDefinition = this.props.apps[this.state.selectedAppKey][
+    const selectedVersionID = e.target.value
+    const selectedDefinition = this.props.apps[this.state.selectedAppKey][
       selectedVersionID
     ]
-    let parameters = JSON.parse(JSON.stringify(selectedDefinition.parameters))
-    let parametersMetadata = JSON.parse(
+    const parametersMetadata = JSON.parse(
       JSON.stringify(selectedDefinition.parametersMetadata),
     )
+    const parameters = JSON.parse(JSON.stringify(selectedDefinition.parameters))
+    this._applyDefaults(parameters, parametersMetadata)
     //if there are required parameters for the app, disable start button
     let requiredParameters = {}
     let submitActive = this.state.submitActive
@@ -506,18 +517,13 @@ class JobMenu extends React.Component {
       submitActive = false
     }
 
-    this.setState(
-      {
-        selectedVersionID,
-        parameters,
-        parametersMetadata,
-        submitActive,
-        requiredParameters,
-      },
-      () => {
-        this._checkSubmitStatus()
-      },
-    )
+    this.setState({
+      selectedVersionID,
+      parameters,
+      parametersMetadata,
+      submitActive,
+      requiredParameters,
+    })
   }
 
   /**
@@ -585,7 +591,6 @@ class JobMenu extends React.Component {
     const jobDefinition = definitions[key][revision]
     let parameters = this.state.parameters
     const inputFileParameters = this.state.inputFileParameters
-
     this.setState({ loading: true })
 
     actions.prepareJobSubmission(
@@ -647,8 +652,6 @@ JobMenu.propTypes = {
   show: PropTypes.bool,
   snapshots: PropTypes.array,
   history: PropTypes.object,
-  arrInput: PropTypes.array,
-  arrControl: PropTypes.array,
 }
 
 JobMenu.defaultProps = {

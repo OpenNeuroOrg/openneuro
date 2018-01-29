@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import CheckOrRadio from '../../../common/forms/multi-radio-input.jsx'
+import Radio from '../../../common/forms/radio.jsx'
+import MultiCheckbox from '../../../common/forms/multi-checkbox.jsx'
 
 const JobParameters = ({
   parameters,
@@ -9,8 +10,6 @@ const JobParameters = ({
   onChange,
   onRestoreDefaults,
   parametersMetadata,
-  arrInput,
-  arrControl,
 }) => {
   if (Object.keys(parameters).length === 0) {
     return <noscript />
@@ -22,11 +21,6 @@ const JobParameters = ({
     let isSelect = parametersMetadata[parameter].type === 'select'
     let isRadio = parametersMetadata[parameter].type === 'radio'
     let isFile = parametersMetadata[parameter].type === 'file'
-    let isDefaultChecked = parametersMetadata[parameter].defaultValue === 'true'
-    let helpText = parametersMetadata[parameter]
-      ? parametersMetadata[parameter].description
-      : parameter
-
     if (isSelect) {
       if (parameter.indexOf('participant_label') > -1) {
         let onSelectChange = value => {
@@ -53,7 +47,7 @@ const JobParameters = ({
         }
 
         let placeholder = 'Select your ' + parametersMetadata[parameter].label
-        let params = parametersMetadata[parameter].defaultValue
+        let params = parametersMetadata[parameter].options
         // break up options for the select
         let options = []
         for (let i = 0; i < params.length; ++i) {
@@ -79,87 +73,65 @@ const JobParameters = ({
           onChange={onChange.bind(null, parameter)}
         />
       )
-    } else if (isCheckbox) {
-      let onCheckChange = e => {
-        // using checked property for checkbox values
-        let event = { target: { value: e.target.checked } }
+    } else if (isRadio) {
+      const options = parametersMetadata[parameter].options
+      const handleChange = e => {
+        const value = e.target.value
+        const event = { target: { value: value } }
         return onChange(parameter, event)
       }
-      // ** Check for default checked ** //
-      input = (
-        <label className="help-text">
-          <input
-            className="form-control"
-            type="checkbox"
-            name={parameter}
-            onChange={onCheckChange}
-            defaultChecked={isDefaultChecked}
-          />
-          {helpText}
-        </label>
-      )
-    } else if (isRadio || isMulti) {
-      let op = parametersMetadata[parameter].defaultValue
-      // remove white spaces from options
-      let options = op.filter(value => value.trim() != '')
 
       if (isRadio) {
-        let handleChange = e => {
-          let value = e.target.value
-          let event = { target: { value: value } }
-          return onChange(parameter, event)
-        }
-
-        if (parameters[parameter].indexOf(' ') !== -1) {
-          parameters[parameter] = options[0]
-        }
         input = (
-          <CheckOrRadio
-            type="radio"
+          <Radio
             setName={parameter}
             options={options}
-            selectedOptions={parameters[parameter]}
-            controlFunc={handleChange}
-          />
-        )
-      } else if (isMulti) {
-        // ** Adds objects to arrInput if empty ** //
-        if (!arrControl.includes(parameter)) {
-          arrControl.push(parameter)
-          arrInput.push({ label: parameter, action: { value: [] } })
-        }
-
-        let handleChange = e => {
-          let value = e.target.value
-          let name = e.target.name
-
-          // ** Use case: multiple multi checks** //
-          let v = arrInput.map(obj => {
-            if (obj.label === name) {
-              let val = obj.action.value
-              // ** Add or remove values ** //
-              let index = val.indexOf(value)
-              if (index === -1) {
-                val.push(value)
-              } else {
-                val.splice(index, 1)
-              }
-              return val
-            }
-          })
-          let event = { target: { value: v } }
-          return onChange(parameter, event)
-        }
-
-        input = (
-          <CheckOrRadio
-            type="checkbox"
-            setName={parameter}
-            options={options}
-            controlFunc={handleChange}
+            onChange={handleChange}
+            value={parameters[parameter]}
           />
         )
       }
+    } else if (isMulti) {
+      const handleChange = e => {
+        // need to add def checked
+        const value = e.target.value
+        const arrParam = parameters[parameter]
+
+        // ** Add or remove values ** //
+        let index = arrParam.indexOf(value)
+        if (index === -1) {
+          arrParam.push(value)
+        } else {
+          arrParam.splice(index, 1)
+        }
+
+        let event = { target: { value: arrParam } }
+        return onChange(parameter, event)
+      }
+
+      input = (
+        <MultiCheckbox
+          setName={parameter}
+          options={parametersMetadata[parameter].options}
+          onChange={handleChange}
+          selectedOptions={parameters[parameter]}
+        />
+      )
+    } else if (isCheckbox) {
+      const onCheck = e => {
+        const value = e.target.checked
+        const event = { target: { value: value } }
+        return onChange(parameter, event)
+      }
+      input = (
+        <input
+          className="form-control"
+          type="checkbox"
+          name={parameter}
+          checked={parameters[parameter]}
+          onChange={onCheck}
+        />
+      )
     } else {
       input = (
         <input
@@ -170,19 +142,13 @@ const JobParameters = ({
       )
     }
 
-    let help_text
-    if (isCheckbox) {
-      // The label has the help text.
-      help_text = ''
-    } else {
-      help_text = (
-        <span className="help-text">
-          {parametersMetadata[parameter]
-            ? parametersMetadata[parameter].description
-            : parameter}
-        </span>
-      )
-    }
+    let help_text = (
+      <span className="help-text">
+        {parametersMetadata[parameter]
+          ? parametersMetadata[parameter].description
+          : parameter}
+      </span>
+    )
 
     return (
       <div
@@ -236,8 +202,7 @@ JobParameters.propTypes = {
   parameters: PropTypes.object,
   parametersMetadata: PropTypes.object,
   subjects: PropTypes.array,
-  arrInput: PropTypes.array,
-  arrControl: PropTypes.array,
+  setDefault: PropTypes.func,
 }
 
 JobParameters.defaultProps = {

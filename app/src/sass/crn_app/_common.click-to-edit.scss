@@ -3,15 +3,12 @@
         background-color: $e5;
         margin: 5px 0;
     }
-
     .form-control {
         min-height: 50px;
         font-size: 18px;
     }
-
     .btn-wrapper {
         margin-top: 10px;
-
     }
 }
 
@@ -21,18 +18,15 @@
     color: $primary;
     padding: 0;
     margin: -5px 0 0 10px;
-
     span {
         font-size: 10px;
         font-family: sans-serif;
         text-transform: uppercase;
     }
-
     i {
         font-size: 12px;
         margin-top: -2px;
     }
-
     &:hover {
         background: none;
         color: lighten($primary, 10%);
@@ -46,29 +40,27 @@
     font-family: $font-family-open;
     word-wrap: break-word;
     white-space: pre-wrap;
-
     div {
         padding: 0;
-
-        > span {
+        >span {
             background: $f8;
             border-bottom: 1px solid $e7;
             display: block;
             margin: 0 -10px;
             padding: 10px;
-            &.ref-link-markdown{
-                p{
+            &.ref-link-markdown {
+                p {
                     display: inline;
                     margin-bottom: 0;
                 }
             }
         }
-
         &:last-child {
-            > span { border-bottom: 0;}
+            >span {
+                border-bottom: 0;
+            }
         }
     }
-
     .warning-loading {
         font-size: 13px;
         padding: 2px;
@@ -76,8 +68,6 @@
         margin: 0 5px 0 0;
         line-height: 10px;
     }
-
-
     .file-array-btn {
         width: 50px;
         overflow: hidden;
@@ -85,14 +75,12 @@
         text-align: center;
         padding: 0;
     }
-
     .btn-warn-component {
         padding: 2px 5px;
         margin: 0;
         font-size: 13px;
         line-height: 12px;
         display: inline-block;
-
         &.cancel,
         &.success {
             font-size: 12px;
@@ -101,7 +89,6 @@
             margin: 0 5px 0 0;
             line-height: 10px;
         }
-
         i {
             line-height: 0;
             margin-left: 0;
@@ -118,11 +105,9 @@
     margin-bottom: 10px;
     background: $f4;
     border: 1px solid $ddd;
-
     .cte-array-item {
         overflow: hidden;
         padding: 6px;
-
         .orcid-id,
         .reference-name,
         .author-name,
@@ -132,17 +117,13 @@
             padding: 10px 0 5px 5px;
             margin: 0;
         }
-
         .file-name {
             float: left;
             padding: 10px 5px;
         }
-
         .btn-wrap {
             float: right;
-        }
-
-        //a.delete-Wrap {float: left;}
+        } //a.delete-Wrap {float: left;}
         &:nth-child(odd) {
             background: $eee;
         }
@@ -153,12 +134,18 @@
     input[type="file"] {
         padding: 0;
     }
-
+    li {
+        list-style: none;
+    }
+    #hidden-btn {
+        position: relative;
+        float: right;
+        bottom: 20px;
+        right: 65px;
+    }
     .form-inline {
-
         .form-group {
             width: 40%;
-
             label {
                 position: absolute;
                 font-size: 10px;
@@ -167,16 +154,12 @@
                 padding: 0;
                 background-color: $white;
             }
-
             input {
                 font-size: 14px;
-                padding: 11px 8px 10px;
-                //height: 35px;
-                width: 99%;
-                //margin: 0 .5%;
+                padding: 11px 8px 10px; //height: 35px;
+                width: 99%; //margin: 0 .5%;
             }
         }
-
         .btn.btn-admin {
             background-color: $transparent;
             border: 0;
@@ -184,7 +167,6 @@
             padding: 0;
             text-align: center;
         }
-
         .array-edit .btn.btn-admin,
         .author-edit .btn.btn-admin {
             width: 100%;
@@ -192,4 +174,3 @@
         }
     }
 }
-
