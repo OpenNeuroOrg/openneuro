@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import TextOrNum from './parameter-types/text-num.jsx'
-import MultiType from './parameter-types/multi.jsx'
+import MultiCheckbox from './parameter-types/multi.jsx'
 import Checkbox from './parameter-types/checkbox.jsx'
 
 export const PARAMETER_INPUTS = [
@@ -21,7 +21,7 @@ class JobParameter extends React.Component {
     let multiTypes = ['multi', 'select', 'radio']
     if (multiTypes.includes(selected)) {
       return (
-        <MultiType
+        <MultiCheckbox
           type={selected}
           onCheck={this.props.onCheck}
           model={this.props.model}

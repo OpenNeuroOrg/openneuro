@@ -2,7 +2,7 @@ import React from 'react'
 import Input from '../input.jsx'
 import PropTypes from 'prop-types'
 
-class MultiType extends React.Component {
+class MultiCheckbox extends React.Component {
   constructor(props) {
     super(props)
     const initialState = {
@@ -142,10 +142,10 @@ class MultiType extends React.Component {
   }
 }
 
-export default MultiType
-
-MultiType.propTypes = {
+MultiCheckbox.propTypes = {
   type: PropTypes.string,
   onCheck: PropTypes.func,
   model: PropTypes.object,
 }
+
+export default MultiCheckbox
