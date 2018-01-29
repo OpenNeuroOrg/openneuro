@@ -466,7 +466,13 @@ class JobMenu extends React.Component {
       }
       if (metadata[param].type === 'radio') {
         // Sets a default for a radio parameter if none is configured
-        parameters[param] = metadata[param].options[0]
+        if (metadata[param].options) {
+          // Current schema
+          parameters[param] = metadata[param].options[0]
+        } else if (metadata[param].defaultValue) {
+          // Deprecated schema
+          parameters[param] = metadata[param].defaultValue[0]
+        }
       }
     })
   }
