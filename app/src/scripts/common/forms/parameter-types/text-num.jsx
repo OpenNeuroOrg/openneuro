@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Input from '../input.jsx'
 
-export default ({ type, onCheck, onChange, model }) => {
+const TextOrNumeral = ({ type, onCheck, onChange, model }) => {
   return (
     <span>
       <button
@@ -26,3 +27,12 @@ export default ({ type, onCheck, onChange, model }) => {
     </span>
   )
 }
+
+TextOrNumeral.propTypes = {
+  type: PropTypes.oneOf(['text', 'numeric']).isRequired,
+  onCheck: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
+  model: PropTypes.object,
+}
+
+export default TextOrNumeral
