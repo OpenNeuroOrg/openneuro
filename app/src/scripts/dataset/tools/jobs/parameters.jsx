@@ -147,13 +147,17 @@ const JobParameters = ({
       )
     }
 
-    let help_text = (
-      <span className="help-text">
-        {parametersMetadata[parameter]
-          ? parametersMetadata[parameter].description
-          : parameter}
-      </span>
-    )
+    let help_text
+
+    if (!isCheckbox) {
+      help_text = (
+        <span className="help-text">
+          {parametersMetadata[parameter]
+            ? parametersMetadata[parameter].description
+            : parameter}
+        </span>
+      )
+    }
 
     return (
       <div
