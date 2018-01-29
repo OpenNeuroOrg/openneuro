@@ -137,11 +137,18 @@
     li {
         list-style: none;
     }
-    #hidden-btn {
+    .admin-button {
         position: relative;
+    }
+    #hidden-btn {
         float: right;
         bottom: 20px;
         right: 65px;
+    }
+    #default-btn {
+        float: right;
+        left: 56px;
+        bottom: 4px;
     }
     .form-inline {
         .form-group {

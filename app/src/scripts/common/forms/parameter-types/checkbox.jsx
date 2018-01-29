@@ -16,13 +16,19 @@ const Checkbox = ({ onCheck, onChange, model }) => {
         hidden
       </button>
       <br />
-      <label>
-        <input
-          type="checkbox"
-          checked={model.defaultValue}
-          onChange={onChange.bind(this, 'defaultValue')}
-        />Default Value
-      </label>
+      <button
+        className="admin-button"
+        id="default-btn"
+        onClick={onCheck.bind(this, 'defaultValue')}>
+        <i
+          className={
+            model.defaultValue === true
+              ? 'fa fa-check-square-o'
+              : 'fa fa-square-o'
+          }
+        />{' '}
+        default checked
+      </button>
     </span>
   )
 }
