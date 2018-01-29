@@ -124,13 +124,18 @@ const JobParameters = ({
         return onChange(parameter, event)
       }
       input = (
-        <input
-          className="form-control"
-          type="checkbox"
-          name={parameter}
-          checked={parameters[parameter]}
-          onChange={onCheck}
-        />
+        <label className="help-text">
+          <input
+            className="form-control"
+            type="checkbox"
+            name={parameter}
+            checked={parameters[parameter]}
+            onChange={onCheck}
+          />
+          {parametersMetadata[parameter]
+            ? parametersMetadata[parameter].description
+            : parameter}
+        </label>
       )
     } else {
       input = (
