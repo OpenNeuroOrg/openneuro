@@ -212,6 +212,24 @@ body > div:nth-child(9) > div.fade.in.modal > div > div > div.modal-body > div >
                         height: auto;
                     }
                 }
+                .json-editor {
+
+                    textarea {
+                        min-height: 500px;
+                        resize: vertical;
+                    }
+
+                    .json-editor-controls {
+                        span {
+                            padding-right: 15px;
+                            
+                            i {
+                                padding-right: 3px;
+                            }
+                        }
+                    }
+
+                }
             }
 
             .modal-header {
