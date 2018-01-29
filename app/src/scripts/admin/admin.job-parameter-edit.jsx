@@ -23,9 +23,8 @@ class JobParameterEdit extends React.Component {
   }
 
   render() {
-    let view = (
-      <div className="cte-array-item">
-        {this._display()}
+    const viewControls = (
+      <span>
         <div className="btn-wrap">
           <WarnButton
             message="Remove"
@@ -41,6 +40,13 @@ class JobParameterEdit extends React.Component {
             action={this._toggleEdit.bind(this)}
           />
         </div>
+      </span>
+    )
+
+    let view = (
+      <div className="cte-array-item">
+        {this._display()}
+        {this.props.item.label !== 'participant_label' ? viewControls : ''}
       </div>
     )
 
