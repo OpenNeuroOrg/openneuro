@@ -445,6 +445,10 @@ let UserStore = Reflux.createStore({
           label: key,
           defaultValue: jobDefinition.parameters[key],
         }
+        if (jobDefinition.parametersMetadata[key].type === 'checkbox') {
+          paramInputData.defaultValue =
+            jobDefinition.parametersMetadata[key].defaultValue
+        }
         if (
           jobDefinition.parametersMetadata &&
           jobDefinition.parametersMetadata[key]
