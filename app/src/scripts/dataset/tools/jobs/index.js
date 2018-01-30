@@ -461,10 +461,10 @@ class JobMenu extends React.Component {
 
   _applyDefaults(parameters, metadata) {
     Object.keys(metadata).forEach(param => {
-      if ('defaultChecked' in metadata[param]) {
+      const type = metadata[param].type
+      if (type in ['multi', 'select'] && 'defaultChecked' in metadata[param]) {
         parameters[param] = metadata[param].defaultChecked
-      }
-      if (metadata[param].type === 'radio') {
+      } else if (type === 'radio') {
         // Sets a default for a radio parameter if none is configured
         if (metadata[param].options) {
           // Current schema
