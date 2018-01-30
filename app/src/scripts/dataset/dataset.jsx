@@ -21,6 +21,7 @@ import Jobs from './dataset.jobs.jsx'
 import ErrorBoundary from '../errors/errorBoundary.jsx'
 import userStore from '../user/user.store.js'
 import Summary from './dataset.summary.jsx'
+import CommentTree from './tools/comments/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
@@ -195,6 +196,7 @@ class Dataset extends Reflux.Component {
                     editable={canEdit}
                     issues={this.state.datasets.metadataIssues}
                   />
+                  {this._commentTree()}
                 </div>
                 <div className="col-xs-6">
                   <div>
@@ -481,6 +483,17 @@ class Dataset extends Reflux.Component {
         </div>
       )
     }
+  }
+
+  _commentTree() {
+    return (
+      <div className="dataset-comments">
+        <CommentTree
+          datasetId={this.state.datasets.dataset._id}
+          user={this.state.datasets.currentUser.profile}
+        />
+      </div>
+    )
   }
 
   _incompleteMessage(dataset) {

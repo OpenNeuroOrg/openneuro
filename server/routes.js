@@ -6,6 +6,7 @@ import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
 import validation from './handlers/validation'
 import datasets from './handlers/datasets'
+import comments from './handlers/comments'
 import auth from './libs/auth'
 import scitran from './libs/scitran'
 import schema from './libs/schema'
@@ -206,6 +207,28 @@ const routes = [
     middleware: [auth.superuser],
     handler: eventLogs.getEventLogs,
   },
+
+  // comments --------------------------------------
+  {
+    method: 'get',
+    url: '/comments/:datasetId',
+    handler: comments.getComments,
+  },
+
+  {
+    method: 'post',
+    url: '/comments/:datasetId',
+    middleware: [auth.datasetAccess()],
+    handler: comments.create,
+  },
+  
+  {
+    method: 'delete',
+    url: '/comments/:commentId',
+    middleware: [auth.datasetAccess()],
+    handler: comments.delete,
+  }
+
 ]
 
 // initialize routes -------------------------------
