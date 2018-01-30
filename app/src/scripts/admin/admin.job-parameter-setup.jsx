@@ -212,6 +212,7 @@ class JobParameterSetup extends React.Component {
     let value
     e === null ? (value = '') : (value = e.value)
     this.setState({ type: value })
+    value === 'checkbox' ? this.setState({ defaultValue: false }) : null
   }
 
   // End of class

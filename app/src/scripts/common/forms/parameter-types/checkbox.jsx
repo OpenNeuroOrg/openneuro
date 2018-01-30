@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Checkbox = ({ onCheck, onChange, model }) => {
+const Checkbox = ({ onCheck, model }) => {
   return (
     <span>
       <button
@@ -16,20 +16,25 @@ const Checkbox = ({ onCheck, onChange, model }) => {
         hidden
       </button>
       <br />
-      <label>
-        <input
-          type="checkbox"
-          checked={model.defaultValue}
-          onChange={onChange.bind(this, 'defaultValue')}
-        />Default Value
-      </label>
+      <button
+        className="admin-button"
+        id="default-btn"
+        onClick={onCheck.bind(this, 'defaultValue')}>
+        <i
+          className={
+            model.defaultValue === true
+              ? 'fa fa-check-square-o'
+              : 'fa fa-square-o'
+          }
+        />{' '}
+        default checked
+      </button>
     </span>
   )
 }
 
 Checkbox.propTypes = {
   onCheck: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
   model: PropTypes.object,
 }
 

@@ -118,19 +118,29 @@ const JobParameters = ({
         />
       )
     } else if (isCheckbox) {
+      parametersMetadata[parameter].defaultValue === true
+        ? (parameters[parameter] = true)
+        : (parameters[parameter] = false)
+
       const onCheck = e => {
         const value = e.target.checked
         const event = { target: { value: value } }
         return onChange(parameter, event)
       }
+
       input = (
-        <input
-          className="form-control"
-          type="checkbox"
-          name={parameter}
-          checked={parameters[parameter]}
-          onChange={onCheck}
-        />
+        <label className="help-text">
+          <input
+            className="form-control"
+            type="checkbox"
+            name={parameter}
+            checked={parameters[parameter]}
+            onChange={onCheck}
+          />
+          {parametersMetadata[parameter]
+            ? parametersMetadata[parameter].description
+            : parameter}
+        </label>
       )
     } else {
       input = (
@@ -142,13 +152,17 @@ const JobParameters = ({
       )
     }
 
-    let help_text = (
-      <span className="help-text">
-        {parametersMetadata[parameter]
-          ? parametersMetadata[parameter].description
-          : parameter}
-      </span>
-    )
+    let help_text
+
+    if (!isCheckbox) {
+      help_text = (
+        <span className="help-text">
+          {parametersMetadata[parameter]
+            ? parametersMetadata[parameter].description
+            : parameter}
+        </span>
+      )
+    }
 
     return (
       <div

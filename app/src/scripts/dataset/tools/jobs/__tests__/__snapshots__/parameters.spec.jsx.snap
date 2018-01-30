@@ -54,18 +54,18 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
           <div
             className="clearfix"
           >
-            <input
-              checked={true}
-              className="form-control"
-              name="boolean"
-              onChange={[Function]}
-              type="checkbox"
-            />
-            <span
+            <label
               className="help-text"
             >
+              <input
+                checked={false}
+                className="form-control"
+                name="boolean"
+                onChange={[Function]}
+                type="checkbox"
+              />
               some kind of checkbox
-            </span>
+            </label>
           </div>
         </div>
       </div>
