@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Checkbox = ({ onCheck, onChange, model }) => {
+const Checkbox = ({ onCheck, model }) => {
   return (
     <span>
       <button
@@ -35,7 +35,6 @@ const Checkbox = ({ onCheck, onChange, model }) => {
 
 Checkbox.propTypes = {
   onCheck: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
   model: PropTypes.object,
 }
 
