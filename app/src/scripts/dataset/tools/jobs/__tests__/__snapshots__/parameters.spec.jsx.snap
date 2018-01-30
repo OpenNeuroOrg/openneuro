@@ -58,7 +58,7 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
               className="help-text"
             >
               <input
-                checked={true}
+                checked={false}
                 className="form-control"
                 name="boolean"
                 onChange={[Function]}
