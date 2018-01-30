@@ -279,4 +279,22 @@ export default {
   getEventLogs() {
     return request.get(config.crn.url + 'eventlogs', {})
   },
+
+  // Comments --------------------------------------------------------------------------
+
+  getComments(datasetId) {
+    console.log('calling crn.getComments')
+    return request.get(config.crn.url + 'comments/' + datasetId, {})
+  },
+
+  createComment(datasetId, comment) {
+    console.log('datasetId:', datasetId, 'comment:', comment)
+    return request.post(config.crn.url + 'comments/' + datasetId, {
+      body: comment,
+    })
+  },
+
+  deleteComment(comment) {
+    return request.delete(config.crn.url + 'comments/' + comment.commentId)
+  },
 }
