@@ -79,8 +79,7 @@ let UserStore = Reflux.createStore({
       blacklistError: '',
       eventLogs: [],
       filteredLogs: [],
-      failedLogs: [],
-      successLogs: [],
+      yearOptions: [],
       uploadedLogs: [],
       activityLogs: {},
       resultsPerPage: 30,
@@ -199,8 +198,8 @@ let UserStore = Reflux.createStore({
   // uploading contains all jobs
   filterLogs() {
     let eventLogs = this.data.eventLogs
-    let failedLogs = []
-    let successLogs = []
+    // let failedLogs = []
+    // let successLogs = []
     let uploadedLogs = []
     if (!eventLogs.length) {
       this.getEventLogs()
@@ -213,48 +212,63 @@ let UserStore = Reflux.createStore({
         let eventStatus = log.data.job.status.toLowerCase()
 
         if (eventStatus === 'failed') {
-          failedLogs.push(log)
+          // failedLogs.push(log)
           uploadedLogs.push(log)
         } else if (eventStatus === 'succeeded') {
-          successLogs.push(log)
+          // successLogs.push(log)
           uploadedLogs.push(log)
         }
       }
     }
 
-    this.update({ failedLogs, successLogs, uploadedLogs }, () => {
-      this.filterMonthActivity()
+    this.update({ uploadedLogs }, () => {
+      this.filterYearActivity()
     })
   },
 
-  filterMonthActivity() {
-    let successLogs = this.data.failedLogs
+  filterYearActivity() {
+    let uploaded = this.data.uploadedLogs
+    let yearArr = this.data.yearOptions
     let activityLogs = this.data.activityLogs
-    let data = this.data
-    let entries = []
-    let local = {}
-
-    for (let job of successLogs) {
-      // convert date
-      let not_utc = new Date(job.date).toString()
-      // push to mediary array
-      entries.push({ dateTime: not_utc, log: job })
+    let entries = {
+      FAILED: [],
+      SUCCEEDED: [],
     }
 
-    for (let entry of entries) {
-      // access month and year
-      let explode = entry.dateTime.split(' ')
+    for (let job of uploaded) {
+      let status = job.data.job.status
+      // convert date
+      let dateTime = new Date(job.date).toString()
+      let explode = dateTime.split(' ')
       let month = explode[1]
       let year = explode[3]
       let date = month + '_' + year
-      if (!local[date]) {
-        local[date] = []
-        local[date].push(entry)
-      } else if (local[date].includes(entry) === false) {
-        local[date].push(entry)
+      if (!entries[status][year]) {
+        entries[status][year] = []
+      } else if (entries[status][year]) {
+        entries[status][year].push({ dateTime: dateTime, log: job })
+        // push to mediary array
+      }
+      if (!yearArr.includes(year)) {
+        yearArr.push(year)
       }
     }
-    activityLogs = local
+
+    // for (let status of entries) {
+    //   // access month and year
+    //   let explode = entry.dateTime.split(' ')
+    //   let month = explode[1]
+    //   let year = explode[3]
+    //   let date = month + '_' + year
+    //   if (!local[date]) {
+    //     local[date] = []
+    //     local[date].push(entry)
+    //   } else if (local[date].includes(entry) === false) {
+    //     local[date].push(entry)
+    //   }
+    // }
+    console.log(entries)
+    activityLogs = entries
     this.update({ activityLogs })
   },
 

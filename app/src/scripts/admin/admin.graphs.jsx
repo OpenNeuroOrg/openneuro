@@ -15,9 +15,7 @@ class Progresssion extends Reflux.Component {
     super()
     refluxConnect(this, adminStore, 'admin')
     this.state = {
-      month: 'all',
-      year: 'all',
-      value: 'failed',
+      year: '2018',
     }
   }
 
@@ -29,23 +27,31 @@ class Progresssion extends Reflux.Component {
   }
 
   render() {
-    let failures = this.state.admin.failedLogs.length
-    let successes = this.state.admin.successLogs.length
-    let total = this.state.admin.uploadedLogs.length
+    let year = this.state.year
     let activity = this.state.admin.activityLogs
+    let failures = this.state.admin.activityLogs.FAILED[year].length
+    let successes
+
+    if (!this.state.admin.activityLogs.SUCCEEDED.includes(year)) {
+      successes = 0
+    } else {
+      successes = this.state.admin.activityLogs.SUCCEEDED[year].length
+    }
+
+    let total = successes + failures
+
     return (
       <div className="dashboard-dataset-teasers fade-in">
         <div className="header-wrap clearfix chart-header">
           {this._handleFiltering()}
-          <h2>Job Sucess Rate:</h2>
+          <h2>Progress for {this.state.year}:</h2>
           <div className="col-sm-9 chart">
             <div className="col-1">
-              <Pie failed={failures} success={successes} total={total} />
+              {/* <Pie failed={failures[year].length} success={successes[year].length} total={total} /> */}
             </div>
             <div className="col-2">
               <Scatter
                 logs={activity}
-                month={this.state.month}
                 year={this.state.year}
                 jobs={this._showJobs.bind(this)}
               />
@@ -59,62 +65,34 @@ class Progresssion extends Reflux.Component {
   _handleFiltering() {
     return (
       <div>
-        <label>Please make a selection: </label>
-        <form>
-          {/* <div>
-            <select
-              value={this.state.month}
-              onChange={this._handleChangeMonth.bind(this)}>
-              <option value="">All</option>
-              {this._options('month')}
-            </select>
-          </div> */}
-          <select
-            className="year-dropdown"
-            value={this.state.year}
-            onChange={this._handleChangeYear.bind(this)}>
-            <option value="">All</option>
-            {this._options('year')}
-          </select>
-        </form>
+        <select
+          className="year-dropdown"
+          value={this.state.year}
+          onChange={this._handleSelect.bind(this)}
+          placeholder={'Select year...'}>
+          {this._options()}
+        </select>
       </div>
     )
   }
 
-  _handleChangeMonth(e) {
-    this.setState({
-      month: e.target.value,
-    })
-  }
-
-  _handleChangeYear(e) {
+  _handleSelect(e) {
     this.setState({
       year: e.target.value,
     })
   }
 
-  _options(key) {
-    let activity = this.state.admin.activityLogs
+  _options() {
+    let years = this.state.admin.yearOptions
     let options = []
-
-    Object.keys(activity).map(x => {
-      let date = x.split('_')
-      let month = date[0]
-      let year = date[1]
-      if (key === 'year' && !options.includes(year)) {
-        options.push(
-          <option key={year[year]} value={year}>
-            {year}
-          </option>,
-        )
-      } else {
-        options.push(
-          <option key={month[month]} value={month}>
-            {month}
-          </option>,
-        )
-      }
-    })
+    for (let year of years) {
+      let opt = (
+        <option key={year} value={year}>
+          {year}
+        </option>
+      )
+      options.push(opt)
+    }
     return options
   }
 

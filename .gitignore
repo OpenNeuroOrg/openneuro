@@ -2,3 +2,23 @@
 config.env
 .env
 
+.vscode/settings.json
+app/src/css/main.css.map
+app/src/css/react-select.css
+app/src/css/react-select.css.map
+app/src/css/animate/animate.css
+app/src/css/animate/animate.css.map
+app/src/css/animate/_attention-seekers/attention-seekers.css
+app/src/css/animate/_bouncing-entrances/bouncing-entrances.css
+app/src/css/animate/_bouncing-exits/bouncing-exits.css
+app/src/css/animate/_fading-entrances/fading-entrances.css
+app/src/css/animate/_fading-exits/fading-exits.css
+app/src/css/animate/_flippers/flippers.css
+app/src/css/animate/_lightspeed/lightspeed.css
+app/src/css/animate/_rotating-entrances/rotating-entrances.css
+app/src/css/animate/_rotating-exits/rotating-exits.css
+app/src/css/animate/_sliding-entrances/sliding-entrances.css
+app/src/css/animate/_sliding-exits/sliding-exits.css
+app/src/css/animate/_specials/specials.css
+app/src/css/animate/_zooming-entrances/zooming-entrances.css
+app/src/css/animate/_zooming-exits/zooming-exits.css

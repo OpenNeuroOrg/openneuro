@@ -9,7 +9,7 @@ import { VictoryAxis } from 'victory'
 
 // Life Cycle ----------------------------------------------------------------------
 
-const Scatter = ({ logs, month, year, jobs }) => {
+const Scatter = ({ logs, year, jobs }) => {
   let ms = [
     'Jan',
     'Feb',
@@ -28,14 +28,30 @@ const Scatter = ({ logs, month, year, jobs }) => {
   // console.log(year)
 
   let data = []
-  Object.entries(logs).map((log, index) => {
-    let key = log[0].split('_')
-    data.push({ x: key[0], y: log[1].length })
+  // console.log(logs)
+  Object.values(logs.SUCCEEDED[year]).map(job => {
+    let dateArr = job.dateTime.split(' ')
+    let key = dateArr[1]
+    let entries = {}
+    if (!entries[key]) {
+      entries[key] = []
+      entries[key].push(job.dateTime)
+    } else {
+      entries[key].push(job.dateTime)
+    }
+    console.log(entries)
+    data.push({ x: key, y: entries[key].length })
+
+    // for (let job of log) {
+    // }
+    // console.log(index)
+    // console.log(log[1][year])
+    // let key = log[1][year]
   })
 
   return (
     <div>
-      <h3>{year != 'all' ? 'Successful jobs for ' + year : null}</h3>
+      {/* <h3>{year != 'all' ? 'Successful jobs for ' + year : null}</h3> */}
       <VictoryChart>
         <VictoryAxis
           style={{ tickLabels: { fontSize: 15 } }}
@@ -57,7 +73,6 @@ const Scatter = ({ logs, month, year, jobs }) => {
                     {
                       target: 'labels',
                       mutation: props => {
-                        // console.log(props.text)
                         jobs(props.text)
                       },
                     },
