@@ -409,6 +409,7 @@ class JobMenu extends React.Component {
    * Update Parameter
    */
   _updateParameter(parameter, event) {
+    let parametersMetadata = this.state.parametersMetadata
     const value = event.target.value
     let inputFileParameters = this.state.inputFileParameters
     if (event.target.files && event.target.files.length > 0) {
@@ -422,6 +423,9 @@ class JobMenu extends React.Component {
 
     if (requiredParamsUpdate) {
       requiredParameters[parameter] = value
+    }
+    if (parametersMetadata[parameter].type === 'checkbox') {
+      parametersMetadata[parameter].defaultValue = parameters[parameter]
     }
     this.setState({ parameters, requiredParameters, inputFileParameters })
   }
