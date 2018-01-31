@@ -28,7 +28,7 @@ const Pie = ({ failed, success, total }) => {
         innerRadius={49}
         labelRadius={78}
         style={{ labels: { fontSize: 14, fill: 'white' } }}
-        colorScale={['black', '#007c92']}
+        colorScale={['#333333', '#007c92']}
       />
     </div>
   )
