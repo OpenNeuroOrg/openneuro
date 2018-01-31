@@ -59,23 +59,6 @@ const Scatter = ({ logs, year, jobs }) => {
             labels={datum => datum.y}
             size={10}
             onClick={jobs.bind(this)}
-            events={[
-              {
-                target: 'data',
-                eventHandlers: {
-                  onClick: () => {
-                    return [
-                      {
-                        target: 'labels',
-                        mutation: props => {
-                          jobs(props.text)
-                        },
-                      },
-                    ]
-                  },
-                },
-              },
-            ]}
           />
         </VictoryChart>
       </div>
