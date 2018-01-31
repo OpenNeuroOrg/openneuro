@@ -15,7 +15,6 @@ import config from '../../../config'
 import files from '../utils/files'
 import request from '../utils/request'
 import moment from 'moment'
-import FPActions from '../front-page/front-page.actions.js'
 import { stringify as querystring } from 'urlite/querystring'
 
 let datasetStore = Reflux.createStore({
@@ -289,7 +288,6 @@ let datasetStore = Reflux.createStore({
   loadApps() {
     this.update({ loadingApps: true })
     crn.getApps().then(res => {
-      FPActions.setApps(res.body)
       this.update({ apps: res.body, loadingApps: false })
     })
   },
