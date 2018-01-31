@@ -253,21 +253,6 @@ let UserStore = Reflux.createStore({
         yearArr.push(year)
       }
     }
-
-    // for (let status of entries) {
-    //   // access month and year
-    //   let explode = entry.dateTime.split(' ')
-    //   let month = explode[1]
-    //   let year = explode[3]
-    //   let date = month + '_' + year
-    //   if (!local[date]) {
-    //     local[date] = []
-    //     local[date].push(entry)
-    //   } else if (local[date].includes(entry) === false) {
-    //     local[date].push(entry)
-    //   }
-    // }
-    console.log(entries)
     activityLogs = entries
     this.update({ activityLogs })
   },
