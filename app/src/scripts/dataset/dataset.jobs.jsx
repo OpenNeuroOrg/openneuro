@@ -67,7 +67,7 @@ class Jobs extends Reflux.Component {
       )
     })
 
-    let header = <h3 className="metaheader">Analyses Whadup</h3>
+    let header = <h3 className="metaheader">Analyses</h3>
     return (
       <div className="analyses">
         {app.length === 0 ? null : header}
