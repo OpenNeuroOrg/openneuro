@@ -1,14 +1,16 @@
 .chart-header {
-  h2 {
-    text-align: center;
-  }
+    h2 {
+        text-align: center;
+    }
 }
- div.chart{
-  width: 100%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  * {
-    text-align: center;
+
+div.chart {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    * {
+        text-align: center;
+    }
   }
-}
