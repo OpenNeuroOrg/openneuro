@@ -208,7 +208,6 @@ let UserStore = Reflux.createStore({
 
     for (let log of eventLogs) {
       if (log.type != 'JOB_STARTED') {
-        let data = this.data
         let eventStatus = log.data.job.status.toLowerCase()
 
         if (eventStatus === 'failed') {
@@ -240,9 +239,7 @@ let UserStore = Reflux.createStore({
       // convert date
       let dateTime = new Date(job.date).toString()
       let explode = dateTime.split(' ')
-      let month = explode[1]
       let year = explode[3]
-      let date = month + '_' + year
       if (!entries[status][year]) {
         entries[status][year] = []
       } else if (entries[status][year]) {

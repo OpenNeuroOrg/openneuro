@@ -1,10 +1,9 @@
 // dependencies ----------------------------------------------------------------------
 
 import React from 'react'
-import ReactDOM from 'react-dom'
+import PropTypes from 'prop-type'
 import { VictoryChart } from 'victory'
 import { VictoryScatter } from 'victory'
-import { VictoryBar } from 'victory'
 import { VictoryAxis } from 'victory'
 
 // Life Cycle ----------------------------------------------------------------------
@@ -68,6 +67,11 @@ const Scatter = ({ logs, year }) => {
       </div>
     )
   }
+}
+
+Scatter.propTypes = {
+  logs: PropTypes.node,
+  year: PropTypes.number,
 }
 
 export default Scatter
