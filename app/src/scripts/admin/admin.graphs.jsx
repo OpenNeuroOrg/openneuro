@@ -40,18 +40,17 @@ class Progresssion extends Reflux.Component {
     return (
       <div className="dashboard-dataset-teasers fade-in">
         <div className="header-wrap clearfix chart-header">
-          {this._handleFiltering()}
           <h2>Progress for {this.state.year}:</h2>
           <div className="col-sm-9 chart">
             <div className="col-1">
               <Pie failed={failures} success={successes} total={total} />
             </div>
             <div className="col-2">
-              <Scatter
-                logs={activity}
-                year={this.state.year}
-                jobs={this._showJobs.bind(this)}
-              />
+              <Scatter logs={activity} year={this.state.year} />
+              <div>
+                <label>Choose another year:</label>
+                {this._handleFiltering()}
+              </div>
             </div>
           </div>
         </div>
@@ -92,8 +91,5 @@ class Progresssion extends Reflux.Component {
     }
     return options
   }
-
-  _showJobs(e) {}
 }
-
 export default Progresssion

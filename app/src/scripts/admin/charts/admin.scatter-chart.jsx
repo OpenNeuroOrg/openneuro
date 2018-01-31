@@ -9,7 +9,7 @@ import { VictoryAxis } from 'victory'
 
 // Life Cycle ----------------------------------------------------------------------
 
-const Scatter = ({ logs, year, jobs }) => {
+const Scatter = ({ logs, year }) => {
   let ms = [
     'Jan',
     'Feb',
@@ -44,7 +44,6 @@ const Scatter = ({ logs, year, jobs }) => {
     entries[key] ? (dataLength = entries[key].length) : null
     data.push({ x: key, y: dataLength })
 
-    // Need to set a default height and width on this div
     return (
       <div className="chart-container">
         <VictoryChart>
@@ -58,7 +57,6 @@ const Scatter = ({ logs, year, jobs }) => {
             data={data}
             labels={datum => datum.y}
             size={10}
-            onClick={jobs.bind(this)}
           />
         </VictoryChart>
       </div>
@@ -66,7 +64,7 @@ const Scatter = ({ logs, year, jobs }) => {
   } else {
     return (
       <div className="chart-container">
-        <p>Sorry, there were not any successful jobs in {year}.</p>
+        <h4>Sorry, there were not any successful jobs in {year}.</h4>
       </div>
     )
   }
