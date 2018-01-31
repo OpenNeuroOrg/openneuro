@@ -30,16 +30,13 @@ class Progresssion extends Reflux.Component {
     let year = this.state.year
     let activity = this.state.admin.activityLogs
     let failures = this.state.admin.activityLogs.FAILED[year].length
-    let successes
+    let successes = 0
 
-    if (!this.state.admin.activityLogs.SUCCEEDED.includes(year)) {
-      successes = 0
-    } else {
-      successes = this.state.admin.activityLogs.SUCCEEDED[year].length
-    }
+    this.state.admin.activityLogs.SUCCEEDED[year]
+      ? (successes = this.state.admin.activityLogs.SUCCEEDED[year].length)
+      : null
 
     let total = successes + failures
-
     return (
       <div className="dashboard-dataset-teasers fade-in">
         <div className="header-wrap clearfix chart-header">
@@ -47,7 +44,7 @@ class Progresssion extends Reflux.Component {
           <h2>Progress for {this.state.year}:</h2>
           <div className="col-sm-9 chart">
             <div className="col-1">
-              {/* <Pie failed={failures[year].length} success={successes[year].length} total={total} /> */}
+              <Pie failed={failures} success={successes} total={total} />
             </div>
             <div className="col-2">
               <Scatter
@@ -96,13 +93,7 @@ class Progresssion extends Reflux.Component {
     return options
   }
 
-  _showJobs(e) {
-    console.log(e)
-    console.log('POP')
-    // this.setState({month: month})
-    // and then render activity log from that month
-    // also needs to change progression pie
-  }
+  _showJobs(e) {}
 }
 
 export default Progresssion
