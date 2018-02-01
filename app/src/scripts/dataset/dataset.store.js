@@ -64,6 +64,8 @@ let datasetStore = Reflux.createStore({
         version: false,
         job: false,
       },
+      comments: [],
+      commentTree: [],
       currentUpdate: null,
       currentUploadId: null,
       dataset: null,
@@ -183,6 +185,7 @@ let datasetStore = Reflux.createStore({
             let originalId = dataset.original ? dataset.original : datasetId
             this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
               this.loadSnapshots(dataset, jobs, () => {
+                this.loadComments(originalId)
                 this.update({ loading: false, snapshot: snapshot })
               })
             })
@@ -1827,8 +1830,6 @@ let datasetStore = Reflux.createStore({
     scitran.trackUsage(snapshotId, 'view', { snapshot: true })
   },
 
-  // Toggle Sidebar ----------------------------------------------------------------
-
   toggleSidebar(value) {
     let showSidebar = !this.data.showSidebar
     if (typeof value === 'boolean') {
@@ -1840,6 +1841,115 @@ let datasetStore = Reflux.createStore({
 
   _getInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
+  },
+
+  // Comments  ----------------------------------------------------------------
+
+  loadComments(datasetId) {
+    console.log('calling loadComments with datasetId:', datasetId)
+    crn.getComments(datasetId).then(res => {
+      console.log('got a response from the server for loadComments:', res)
+      if (res && (res.status === 404 || res.status === 403)) {
+        this.update({
+          commentTree: [],
+          comments: [],
+        })
+      } else {
+        console.log('response from loadComments:', res)
+        let comments = res.body
+        this.createCommentTree(comments)
+        this.update({
+          comments: comments,
+          content: '',
+        })
+      }
+    })
+  },
+
+  createComment(content, parent) {
+    console.log('running createComment')
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    console.log(
+      'with content:',
+      content,
+      'datasetId:',
+      datasetId,
+      'and parent:',
+      parent,
+    )
+    const parentId = typeof parent === 'undefined' ? null : parent
+    console.log('parentId:', parentId)
+    const comment = {
+      datasetId: datasetId,
+      parentId: parentId,
+      text: content,
+      user: this.data.currentUser.profile,
+      createDate: moment().format(),
+    }
+    console.log('comment object:', comment)
+    crn.createComment(datasetId, comment).then(res => {
+      console.log('comment sent to crn!')
+      if (res) {
+        console.log('response from createComment:', res)
+        if (res.status === 200 && res.ok) {
+          this.loadComments(datasetId)
+        }
+      }
+    })
+  },
+
+  deleteComment(commentId, parent) {
+    console.log('running deleteComment')
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    const parentId = typeof parent == undefined ? null : parent
+    console.log('with the commentId:', commentId, 'and parentId:', parentId)
+    const comment = {
+      commentId: commentId,
+      parentId: parentId,
+    }
+    crn.deleteComment(comment).then(res => {
+      console.log('comment deleted!')
+      if (res) {
+        console.log('response from deleteComment:', res)
+        if (res.status === 200 && res.ok) {
+          this.loadComments(datasetId)
+        }
+      }
+    })
+  },
+
+  createCommentTree(comments) {
+    let commentTree = this.listToTree(comments)
+    this.update({
+      commentTree: commentTree,
+    })
+  },
+
+  listToTree(list) {
+    // converts a flat array of comments to a list of parent / children relations
+    let map = {}
+    let node = []
+    let roots = []
+
+    for (let i = 0; i < list.length; i += 1) {
+      map[list[i]._id] = i
+      list[i].children = []
+    }
+    for (let j = 0; j < list.length; j += 1) {
+      node = list[j]
+      if (node.parentId !== null) {
+        if (map[node.parentId] !== undefined) {
+          list[map[node.parentId]].children.push(node)
+        }
+      } else {
+        roots.push(node)
+      }
+    }
+    return roots
   },
 })
 
