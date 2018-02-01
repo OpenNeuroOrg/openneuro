@@ -35,6 +35,9 @@ let google = {
         .then(() => {
           this.getCurrentUser(callback)
         })
+        .catch(err => {
+          callback(err)
+        })
     } else {
       setTimeout(() => {
         this.refresh(callback)
