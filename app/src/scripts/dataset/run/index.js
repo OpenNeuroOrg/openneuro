@@ -8,6 +8,7 @@ import WarnButton from '../../common/forms/warn-button.jsx'
 import moment from 'moment'
 import Results from './results.jsx'
 import { Accordion, Panel } from 'react-bootstrap'
+import Archive from './archive.jsx'
 import markdown from '../../utils/markdown'
 
 class JobAccordion extends React.Component {
@@ -88,6 +89,12 @@ class JobAccordion extends React.Component {
         <span className="meta">
           <label>Job ID</label>
           <strong>{run.analysis.analysisId}</strong>
+        </span>
+        <span className="meta">
+          <label>S3 Download Demo Link</label>
+          <strong>
+            <Archive run={run} />
+          </strong>
         </span>
         {this._failedMessage(run)}
         {this._canceledMesssage(run)}
