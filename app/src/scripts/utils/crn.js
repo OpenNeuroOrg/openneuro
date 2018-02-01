@@ -295,6 +295,9 @@ export default {
   },
 
   deleteComment(comment) {
-    return request.delete(config.crn.url + 'comments/' + comment.commentId)
+    console.log('comment:', comment)
+    return request.del(config.crn.url + 'comments/' + comment.commentId, {
+      body: comment,
+    })
   },
 }
