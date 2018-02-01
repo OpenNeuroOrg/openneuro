@@ -1,0 +1,57 @@
+
+
+.comment-tree {
+    margin-left: 20px;
+    padding: 10px;
+
+    .comment-box {
+        padding: 20px;
+    }
+    .comment-text {
+        padding: 20px;
+    }
+
+    .user-info {
+        padding-bottom: 5px;
+    }
+}
+
+.comment-input {
+    width: 80%;
+}
+
+.comment-submit {
+    margin: 0px 10px;
+}
+
+.comments {
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.parent-comment {
+    margin-left: 0px;
+    margin-bottom: 10px;
+}
+
+.comment-avatar {
+    img {
+        height: 60px;
+        width: 60px;
+    }
+}
+
+.dataset-owner-flag {
+    padding: 0px 2px;
+    background-color: $c-33;
+    color: white;
+}
+
+.login-for-comments {
+    text-align: center;
+}
+
+.reply, .delete {
+    padding-left: 20px;
+}
