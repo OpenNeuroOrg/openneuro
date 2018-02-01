@@ -218,14 +218,14 @@ const routes = [
   {
     method: 'post',
     url: '/comments/:datasetId',
-    middleware: [auth.datasetAccess()],
+    middleware: [auth.user],
     handler: comments.create,
   },
   
   {
     method: 'delete',
     url: '/comments/:commentId',
-    middleware: [auth.datasetAccess()],
+    middleware: [auth.deleteCommentAccess],
     handler: comments.delete,
   }
 
