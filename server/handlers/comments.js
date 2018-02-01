@@ -2,6 +2,7 @@ import config from '../config'
 import request from '../libs/request'
 import crypto from 'crypto'
 import mongo from '../libs/mongo'
+import {ObjectID} from 'mongodb'
 
 let c = mongo.collections
 
@@ -42,30 +43,34 @@ export default {
    * replies to a comment
    */
   delete(req, res, next) {
+    console.log('server/handlers/comments/delete with req: ', req.body, 'and params:', req.params)
     const commentId = req.params.commentId
     const parentId = req.body.parentId
 
+    console.log('deleting an entry in the mongo db with commentId:', commentId, 'and parentId:', parentId)
     // delete the comment in question
     c.crn.comments.deleteOne(
-      { commentId: commentId}, {},
+      { _id: ObjectID(commentId)},
       err => {
         if (err) {
           return next(err)
         }
 
+        console.log('successfully deleted one comment...')
+        console.log('deleting children of said comment...')
         // delete the children of that comment
         if (parentId) {
           c.crn.comments.deleteMany(
-            { parentId: commentId}, {},
+            { parentId: commentId},
             err => {
               if (err) {
                 return next(err)
               }
+              console.log('successfully deleted the children of that comment.')
               return res.send()
             },
           )
         }
-
         return res.send()
       },
     )
@@ -79,6 +84,7 @@ export default {
   * Returns a list of comments that are associated with a dataset
   */
   getComments(req, res, next) {
+      console.log('/server/handlers/comments.js getComments')
     let datasetId = req.params.datasetId
 
     c.crn.comments
