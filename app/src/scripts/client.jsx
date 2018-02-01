@@ -5,6 +5,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import config from '../../config.js'
 import App from './app.jsx'
+import runtime from 'serviceworker-webpack-plugin/lib/runtime'
 
 const ravenConfig = {
   release: __GIT_HASH__,
@@ -13,6 +14,13 @@ const ravenConfig = {
   autoBreadcrumbs: {
     console: false,
   },
+}
+
+// Setup the service worker
+if ('serviceWorker' in navigator) {
+  runtime.register()
+} else {
+  Raven.captureMessage('Service worker registration failed.')
 }
 
 // Uses the public DSN here - private should not be used in the client app

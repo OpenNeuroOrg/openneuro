@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 const git = require('git-rev-sync')
 
 // prettier-ignore
@@ -52,6 +53,9 @@ module.exports = {
       'process.env': env,
       __GIT_HASH__: JSON.stringify(git.long()),
       __GIT_BRANCH__: JSON.stringify(git.branch()),
+    }),
+    new ServiceWorkerWebpackPlugin({
+      entry: path.join(__dirname, './src/scripts/sw.js'),
     }),
     new CopyWebpackPlugin([
       {
