@@ -21,7 +21,8 @@ import Jobs from './dataset.jobs.jsx'
 import ErrorBoundary from '../errors/errorBoundary.jsx'
 import userStore from '../user/user.store.js'
 import Summary from './dataset.summary.jsx'
-import CommentTree from './tools/comments/comment-tree.jsx'
+import Comment from '../common/partials/comment.jsx'
+import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
@@ -486,12 +487,49 @@ class Dataset extends Reflux.Component {
   }
 
   _commentTree() {
+    console.log('comment tree state:', this.state.datasets)
+
+    // add a top level comment box to the dataset if user is logged in
+    let loggedIn = !!userStore.hasToken()
+    let content = []
+    if (loggedIn) {
+      content.push(
+        <div className="comment-box top-level" key="topComment">
+          <Comment
+            createComment={actions.createComment}
+            parentId={null}
+            show={true}
+          />
+        </div>,
+      )
+    } else {
+      content.push(
+        <div className="login-for-comments">
+          Please login to contribute to the discussion
+        </div>,
+      )
+    }
+
+    // construct comment tree
+    for (let comment of this.state.datasets.commentTree) {
+      content.push(
+        <div key={comment._id}>
+          <CommentTree
+            uploadUser={this.state.datasets.dataset.user}
+            user={this.state.datasets.currentUser.profile}
+            node={comment}
+            datasetId={this.props.match.params.datasetId}
+            createComment={actions.createComment}
+            deleteComment={actions.deleteComment}
+            isParent={true}
+          />
+        </div>,
+      )
+    }
     return (
       <div className="dataset-comments">
-        <CommentTree
-          datasetId={this.state.datasets.dataset._id}
-          user={this.state.datasets.currentUser.profile}
-        />
+        <div className="comment-header">COMMENTS</div>
+        <div className="comments">{content}</div>
       </div>
     )
   }
