@@ -46,15 +46,25 @@ let google = {
   },
 
   signIn(callback) {
-    this.authInstance.signIn({ prompt: 'select_account' }).then(() => {
-      this.getCurrentUser(callback)
-    })
+    this.authInstance
+      .signIn({ prompt: 'select_account' })
+      .then(() => {
+        this.getCurrentUser(callback)
+      })
+      .catch(err => {
+        callback(err)
+      })
   },
 
   signOut(callback) {
-    this.authInstance.signOut().then(() => {
-      callback()
-    })
+    this.authInstance
+      .signOut()
+      .then(() => {
+        callback()
+      })
+      .catch(err => {
+        callback(err)
+      })
   },
 
   getCurrentUser(callback) {
