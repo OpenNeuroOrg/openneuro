@@ -10,11 +10,8 @@ import JSZip from 'jszip'
 export const zipFiles = async namedStreams => {
   const zip = new JSZip()
   for (const { key, stream } of namedStreams) {
-    // TODO - Streaming here needs some work - fetch the whole file for now...
-    const res = await stream
-    const arrayBuffer = await res.arrayBuffer()
-    console.log(`${key} added`, arrayBuffer)
-    zip.file(key, await arrayBuffer)
+    // TODO - Streaming here needs some work, fetch the whole file for now
+    zip.file(key, (await stream).blob())
   }
   return zip.generateAsync({ type: 'blob', streamFiles: true })
 }

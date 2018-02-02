@@ -10,8 +10,6 @@ const CACHE_NAME = `openneuro-${packageJson.version}`
 const CACHE_PATHS = serviceWorkerOption.assets
 
 self.addEventListener('install', event => {
-  // TODO - remove console messages
-  console.log('installed')
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(CACHE_PATHS)
