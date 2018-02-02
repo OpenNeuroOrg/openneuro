@@ -46,7 +46,7 @@ export const fetchFiles = files => {
     console.log(`fetching file ${key} size ${size}`)
     return {
       key,
-      stream: fetch(url).then(res => res.body),
+      stream: fetch(url),
     }
   })
 }
