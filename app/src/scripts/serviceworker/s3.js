@@ -42,7 +42,7 @@ export const getObjects = hostname => listBucketBody => {
  * @returns {object} Body of the response
  */
 export const fetchFiles = files => {
-  return files.map(({ key, size, url }) => {
+  return files.map(({ key, url }) => {
     return {
       key,
       stream: fetch(url),

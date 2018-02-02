@@ -14,7 +14,6 @@ const downloadHandler = datasetHash => () => {
 }
 
 const Archive = ({ run }) => {
-  console.log(run)
   return <button onClick={downloadHandler(run.datasetHash)}>Download</button>
 }
 
