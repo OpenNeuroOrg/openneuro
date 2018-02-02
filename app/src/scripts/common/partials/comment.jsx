@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import RichEditor from './rich-editor.jsx'
 
 export default class Comment extends React.Component {
   constructor(props) {
@@ -32,15 +33,9 @@ export default class Comment extends React.Component {
       return (
         <div className="reply-div">
           {replyIcon}
-          <input
-            className="comment-input"
-            type="text"
-            placeholder={inputPlaceholderText}
-            value={this.state.content}
-            onChange={this.handleChange}
-          />
+          <RichEditor placeholderText={inputPlaceholderText} />
           <button
-            className="comment-submit"
+            className="comment-submit btn btn-md btn-primary"
             onClick={this.handleSubmit.bind(this, this.props.parentId)}>
             {submitText}
           </button>
