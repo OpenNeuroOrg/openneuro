@@ -1,6 +1,6 @@
 // dependencies ----------------------------------------------------------------------
 import React from 'react'
-import PropTypes from 'prop-type'
+import PropTypes from 'prop-types'
 import { VictoryPie } from 'victory'
 
 // Life Cycle ----------------------------------------------------------------------
@@ -34,9 +34,9 @@ const Pie = ({ failed, success, total }) => {
 }
 
 Pie.propTypes = {
-  failed: PropTypes.number,
-  success: PropTypes.number,
-  total: PropTypes.numer,
+  failed: PropTypes.node,
+  success: PropTypes.node,
+  total: PropTypes.node,
 }
 
 export default Pie
