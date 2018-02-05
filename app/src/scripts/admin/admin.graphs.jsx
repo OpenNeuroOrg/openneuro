@@ -6,6 +6,8 @@ import adminStore from './admin.store'
 import actions from './admin.actions.js'
 import Pie from './charts/admin.progression-pie.jsx'
 import Scatter from './charts/admin.scatter-chart.jsx'
+import Bar from './charts/admin.bar.jsx'
+
 import { refluxConnect } from '../utils/reflux'
 
 class Progresssion extends Reflux.Component {
@@ -25,6 +27,20 @@ class Progresssion extends Reflux.Component {
   }
 
   render() {
+    let months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'June',
+      'July',
+      'Aug',
+      'Sept',
+      'Oct',
+      'Nov',
+      'Dec',
+    ]
     let year = this.state.year
     let activity = this.state.admin.activityLogs
     let failures = this.state.admin.activityLogs.FAILED[year].length
@@ -44,8 +60,9 @@ class Progresssion extends Reflux.Component {
               <Pie failed={failures} success={successes} total={total} />
             </div>
             <div className="col-2">
-              <Scatter logs={activity} year={this.state.year} />
+              <Scatter logs={activity} year={this.state.year} months={months} />
               <div>
+                <Bar logs={activity} year={this.state.year} months={months} />
                 <label>Choose another year:</label>
                 {this._handleFiltering()}
               </div>
