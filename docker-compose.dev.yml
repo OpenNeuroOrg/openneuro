@@ -12,7 +12,7 @@ services:
     build:
       context: .
       dockerfile: app/Dockerfile
-    command: sh -c "yarn install --pure-lockfile && yarn start"
+    command: sh -c "yarn install --pure-lockfile && yarn start --watch --watch-poll ${WEBPACK_POLL_INTERVAL}"
     volumes:
       - .:/srv
       - yarn_cache:/root/.cache

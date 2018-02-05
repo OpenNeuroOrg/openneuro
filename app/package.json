@@ -8,8 +8,7 @@
     "type": "git"
   },
   "scripts": {
-    "start":
-      "webpack-dev-server --config webpack.dev.js --progress --watch --color",
+    "start": "webpack-dev-server --config webpack.dev.js --progress --color",
     "build": "webpack --config webpack.prod.js",
     "lint": "eslint --ext .jsx --ext .js src/scripts/",
     "test": "jest",
