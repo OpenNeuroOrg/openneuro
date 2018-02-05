@@ -24,6 +24,8 @@ export default class CommentTree extends Reflux.Component {
         parentId={parentId}
         createComment={this.props.createComment}
         show={this.state.showNewComment}
+        editing={true}
+        new={true}
       />
     )
   }
@@ -111,7 +113,14 @@ export default class CommentTree extends Reflux.Component {
         </div>
         <div className="comment-avatar">
           <img src={comment.user.imageUrl} />
-          <span className="comment-text">{comment.text}</span>
+          <span className="comment-text">
+            <Comment
+              editing={false}
+              new={false}
+              show={true}
+              content={comment.content}
+            />
+          </span>
         </div>
         {this._actions(comment)}
       </div>
