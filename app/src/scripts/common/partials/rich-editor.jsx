@@ -78,10 +78,6 @@ export default class RichEditor extends React.Component {
     )
   }
 
-  _onSave() {
-    console.log()
-  }
-
   render() {
     const { editorState } = this.state
 
@@ -107,11 +103,11 @@ export default class RichEditor extends React.Component {
             editorState={editorState}
             onToggle={this.toggleBlockType}
           />
-          <SyntaxLanguageSelector changeLanguage={this.changeLanguage} />
           <InlineStyleControls
             editorState={editorState}
             onToggle={this.toggleInlineStyle}
           />
+          <SyntaxLanguageSelector changeLanguage={this.changeLanguage} />
           <div className={className}>
             <Editor
               blockStyleFn={getBlockStyle}
@@ -214,14 +210,19 @@ const BlockStyleControls = props => {
 const SyntaxLanguageSelector = props => {
   return (
     <div>
-      <select onChange={props.changeLanguage}>
-        <option value="python" defaultValue>
-          Python
-        </option>
-        <option value="javascript">JS</option>
-        <option value="c">C</option>
-        <option value="cpp">C++</option>
-      </select>
+      <div className="form-group row">
+        <label>Syntax Highlighting Language:</label>
+        <div className="form-control-plaintext">
+          <select onChange={props.changeLanguage} className="language-selector">
+            <option value="python" defaultValue>
+              Python
+            </option>
+            <option value="javascript">JavaScript</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+          </select>
+        </div>
+      </div>
     </div>
   )
 }
@@ -252,4 +253,25 @@ const InlineStyleControls = props => {
 
 RichEditor.propTypes = {
   placeholderText: PropTypes.string,
+}
+
+SyntaxLanguageSelector.propTypes = {
+  changeLanguage: PropTypes.func,
+}
+
+InlineStyleControls.propTypes = {
+  editorState: PropTypes.object,
+  onToggle: PropTypes.func,
+}
+
+BlockStyleControls.propTypes = {
+  editorState: PropTypes.object,
+  onToggle: PropTypes.func,
+}
+
+StyleButton.propTypes = {
+  style: PropTypes.string,
+  onToggle: PropTypes.func,
+  active: PropTypes.bool,
+  label: PropTypes.string,
 }
