@@ -218,11 +218,6 @@ export default class Comment extends React.Component {
   _existingContent() {
     const { editorState } = this.state
 
-    console.log(
-      'rendering existing content with the following editing state:',
-      this.props.editing,
-    )
-
     // If the user changes block type before entering any text, we can
     // either style the placeholder or hide it. Let's just hide it now.
     let className = 'RichEditor-editor'
