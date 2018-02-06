@@ -283,19 +283,25 @@ export default {
   // Comments --------------------------------------------------------------------------
 
   getComments(datasetId) {
-    console.log('calling crn.getComments')
     return request.get(config.crn.url + 'comments/' + datasetId, {})
   },
 
   createComment(datasetId, comment) {
-    console.log('datasetId:', datasetId, 'comment:', comment)
     return request.post(config.crn.url + 'comments/' + datasetId, {
       body: comment,
     })
   },
 
+  updateComment(datasetId, commentId, comment) {
+    return request.post(
+      config.crn.url + 'comments/' + datasetId + '/' + commentId,
+      {
+        body: comment,
+      },
+    )
+  },
+
   deleteComment(comment) {
-    console.log('comment:', comment)
     return request.del(config.crn.url + 'comments/' + comment.commentId, {
       body: comment,
     })
