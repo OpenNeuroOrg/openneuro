@@ -144,6 +144,10 @@ class Dataset extends Reflux.Component {
   }
 
   render() {
+    console.log(
+      'rendering dataset with the following state:',
+      this.state.datasets.dataset,
+    )
     let dataset = this.state.datasets.dataset
     let snapshots = this.state.datasets.snapshots
     let showSidebar = this.state.datasets.showSidebar
@@ -486,11 +490,17 @@ class Dataset extends Reflux.Component {
   }
 
   _commentTree() {
-    console.log('rendering _commentTree()')
-    console.log('comment tree state:', this.state.datasets)
-
     // add a top level comment box to the dataset if user is logged in
     let loggedIn = !!userStore.hasToken()
+    let isAdmin =
+      loggedIn && this.state.datasets.currentUser
+        ? this.state.datasets.currentUser.scitran.root
+        : false
+    console.log(
+      'rendering comment tree with current state:',
+      this.state.datasets,
+    )
+    console.log('and isAdmin:', isAdmin)
     let content = []
     if (loggedIn) {
       content.push(
@@ -518,6 +528,7 @@ class Dataset extends Reflux.Component {
           <CommentTree
             uploadUser={this.state.datasets.dataset.user}
             user={this.state.datasets.currentUser.profile}
+            isAdmin={isAdmin}
             node={comment}
             datasetId={this.props.match.params.datasetId}
             createComment={actions.createComment}

@@ -454,7 +454,7 @@ Comment.propTypes = {
   createComment: PropTypes.func,
   updateComment: PropTypes.func,
   cancelEdit: PropTypes.func,
-  commentId: PropTypes.commentId,
+  commentId: PropTypes.string,
   show: PropTypes.bool,
   editing: PropTypes.bool,
   new: PropTypes.bool,

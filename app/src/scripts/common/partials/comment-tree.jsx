@@ -47,7 +47,8 @@ export default class CommentTree extends Reflux.Component {
   }
 
   _deleteButton(comment) {
-    if (comment.user.email === this.props.user.email) {
+    console.log('isAdmin? ', this.props.isAdmin)
+    if (comment.user.email === this.props.user.email || this.props.isAdmin) {
       return (
         <a
           className="delete"
@@ -73,26 +74,30 @@ export default class CommentTree extends Reflux.Component {
   }
 
   _editButton() {
-    if (!this.state.editing) {
-      return (
-        <a className="edit" onClick={this.startEdit.bind(this)}>
-          Edit
-        </a>
-      )
-    } else {
-      return (
-        <a className="cancel-edit" onClick={this.cancelEdit.bind(this)}>
-          Cancel Edit
-        </a>
-      )
+    let comment = this.props.node
+    if (comment.user.email === this.props.user.email || this.props.isAdmin) {
+      if (!this.state.editing) {
+        return (
+          <a className="edit" onClick={this.startEdit.bind(this)}>
+            Edit
+          </a>
+        )
+      } else {
+        return (
+          <a className="cancel-edit" onClick={this.cancelEdit.bind(this)}>
+            Cancel Edit
+          </a>
+        )
+      }
     }
+    return null
   }
 
-  _ownerTag() {
+  _ownerTag(ownerEmail) {
     if (
       this.props.user &&
       this.props.uploadUser &&
-      this.props.uploadUser.email === this.props.user._id
+      ownerEmail === this.props.user._id
     ) {
       return (
         <span>
@@ -136,7 +141,7 @@ export default class CommentTree extends Reflux.Component {
       <div className="comment">
         <div className="user-info">
           {this._userTag(comment.user.email)}
-          {this._ownerTag()}
+          {this._ownerTag(comment.user.email)}
           {this._timestamp(comment.createDate)}
         </div>
         <div className="comment-avatar">
@@ -173,6 +178,7 @@ export default class CommentTree extends Reflux.Component {
             key={childNode._id}
             uploadUser={this.props.uploadUser}
             user={this.props.user}
+            isAdmin={this.props.isAdmin}
             node={childNode}
             parentId={this.props.node._id}
             createComment={this.props.createComment}
@@ -208,4 +214,5 @@ CommentTree.propTypes = {
   deleteComment: PropTypes.func,
   createComment: PropTypes.func,
   commentTree: PropTypes.array,
+  isAdmin: PropTypes.bool,
 }
