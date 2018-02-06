@@ -9,9 +9,12 @@ export default class CommentTree extends Reflux.Component {
     super(props)
     this.state = {
       showNewComment: false,
+      editing: false,
     }
     this.handleDelete = this._handleDelete.bind(this)
     this.toggleNewComment = this._toggleNewComment.bind(this)
+    this.startEdit = this._startEdit.bind(this)
+    this.cancelEdit = this._cancelEdit.bind(this)
   }
 
   _handleDelete(commentId, parentId) {
@@ -33,6 +36,14 @@ export default class CommentTree extends Reflux.Component {
   _toggleNewComment() {
     let showNewComment = !this.state.showNewComment
     this.setState({ showNewComment: showNewComment })
+  }
+
+  _startEdit() {
+    this.setState({ editing: true })
+  }
+
+  _cancelEdit() {
+    this.setState({ editing: false })
   }
 
   _deleteButton(comment) {
@@ -59,6 +70,22 @@ export default class CommentTree extends Reflux.Component {
         {replyText}
       </a>
     )
+  }
+
+  _editButton() {
+    if (!this.state.editing) {
+      return (
+        <a className="edit" onClick={this.startEdit.bind(this)}>
+          Edit
+        </a>
+      )
+    } else {
+      return (
+        <a className="cancel-edit" onClick={this.cancelEdit.bind(this)}>
+          Cancel Edit
+        </a>
+      )
+    }
   }
 
   _ownerTag() {
@@ -95,6 +122,7 @@ export default class CommentTree extends Reflux.Component {
         <div className="comment-actions">
           {this._deleteButton(comment)}
           {this._replyButton()}
+          {this._editButton()}
           {this._newComment(comment._id)}
         </div>
       )
@@ -113,12 +141,18 @@ export default class CommentTree extends Reflux.Component {
         </div>
         <div className="comment-avatar">
           <img src={comment.user.imageUrl} />
+        </div>
+        <div className="comment-div">
           <span className="comment-text">
             <Comment
-              editing={false}
+              editing={this.state.editing}
               new={false}
               show={true}
-              content={comment.content}
+              content={comment.text}
+              commentId={comment._id}
+              updateComment={this.props.updateComment}
+              startEdit={this.startEdit.bind(this)}
+              cancelEdit={this.cancelEdit.bind(this)}
             />
           </span>
         </div>
@@ -143,12 +177,13 @@ export default class CommentTree extends Reflux.Component {
             parentId={this.props.node._id}
             createComment={this.props.createComment}
             deleteComment={this.props.deleteComment}
+            updateComment={this.props.updateComment}
           />,
         )
       }
       return content
     } else {
-      return
+      return null
     }
   }
 
