@@ -14,6 +14,14 @@
     .user-info {
         padding-bottom: 5px;
     }
+
+    .reply-div {
+        display: inline-block;  
+    }
+
+    .comment-div {
+        display: inline-block;
+    }
 }
 
 .comment-input {
@@ -38,6 +46,8 @@
 }
 
 .comment-avatar {
+    display: inline-block;
+    
     img {
         height: 60px;
         width: 60px;
@@ -54,6 +64,6 @@
     text-align: center;
 }
 
-.reply, .delete {
+.reply, .delete, .edit, .cancel-edit {
     padding-left: 20px;
 }
