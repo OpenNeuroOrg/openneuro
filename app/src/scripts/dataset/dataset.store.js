@@ -1777,16 +1777,13 @@ let datasetStore = Reflux.createStore({
   // Comments  ----------------------------------------------------------------
 
   loadComments(datasetId) {
-    console.log('calling loadComments with datasetId:', datasetId)
     crn.getComments(datasetId).then(res => {
-      console.log('got a response from the server for loadComments:', res)
       if (res && (res.status === 404 || res.status === 403)) {
         this.update({
           commentTree: [],
           comments: [],
         })
       } else {
-        console.log('response from loadComments:', res)
         let comments = res.body
         this.createCommentTree(comments)
         this.update({
@@ -1798,20 +1795,12 @@ let datasetStore = Reflux.createStore({
   },
 
   createComment(content, parent) {
-    console.log('running createComment')
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
-    console.log(
-      'with content:',
-      content,
-      'datasetId:',
-      datasetId,
-      'and parent:',
-      parent,
-    )
+
     const parentId = typeof parent === 'undefined' ? null : parent
-    console.log('parentId:', parentId)
+
     const comment = {
       datasetId: datasetId,
       parentId: parentId,
@@ -1819,11 +1808,27 @@ let datasetStore = Reflux.createStore({
       user: this.data.currentUser.profile,
       createDate: moment().format(),
     }
-    console.log('comment object:', comment)
+
     crn.createComment(datasetId, comment).then(res => {
-      console.log('comment sent to crn!')
       if (res) {
-        console.log('response from createComment:', res)
+        if (res.status === 200 && res.ok) {
+          this.loadComments(datasetId)
+        }
+      }
+    })
+  },
+
+  updateComment(commentId, content) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+
+    const comment = {
+      commentId: commentId,
+      text: content,
+    }
+    crn.updateComment(datasetId, commentId, comment).then(res => {
+      if (res) {
         if (res.status === 200 && res.ok) {
           this.loadComments(datasetId)
         }
@@ -1832,20 +1837,18 @@ let datasetStore = Reflux.createStore({
   },
 
   deleteComment(commentId, parent) {
-    console.log('running deleteComment')
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
+
     const parentId = typeof parent == undefined ? null : parent
-    console.log('with the commentId:', commentId, 'and parentId:', parentId)
+
     const comment = {
       commentId: commentId,
       parentId: parentId,
     }
     crn.deleteComment(comment).then(res => {
-      console.log('comment deleted!')
       if (res) {
-        console.log('response from deleteComment:', res)
         if (res.status === 200 && res.ok) {
           this.loadComments(datasetId)
         }
@@ -1854,33 +1857,27 @@ let datasetStore = Reflux.createStore({
   },
 
   createCommentTree(comments) {
-    let commentTree = this.listToTree(comments)
-    this.update({
-      commentTree: commentTree,
-    })
-  },
-
-  listToTree(list) {
-    // converts a flat array of comments to a list of parent / children relations
     let map = {}
     let node = []
     let roots = []
 
-    for (let i = 0; i < list.length; i += 1) {
-      map[list[i]._id] = i
-      list[i].children = []
+    for (let i = 0; i < comments.length; i += 1) {
+      map[comments[i]._id] = i
+      comments[i].children = []
     }
-    for (let j = 0; j < list.length; j += 1) {
-      node = list[j]
+    for (let j = 0; j < comments.length; j += 1) {
+      node = comments[j]
       if (node.parentId !== null) {
         if (map[node.parentId] !== undefined) {
-          list[map[node.parentId]].children.push(node)
+          comments[map[node.parentId]].children.push(node)
         }
       } else {
         roots.push(node)
       }
     }
-    return roots
+    this.update({
+      commentTree: roots,
+    })
   },
 })
 

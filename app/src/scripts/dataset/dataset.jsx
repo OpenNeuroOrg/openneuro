@@ -486,6 +486,7 @@ class Dataset extends Reflux.Component {
   }
 
   _commentTree() {
+    console.log('rendering _commentTree()')
     console.log('comment tree state:', this.state.datasets)
 
     // add a top level comment box to the dataset if user is logged in
@@ -498,6 +499,7 @@ class Dataset extends Reflux.Component {
             createComment={actions.createComment}
             parentId={null}
             show={true}
+            new={true}
           />
         </div>,
       )
@@ -520,6 +522,7 @@ class Dataset extends Reflux.Component {
             datasetId={this.props.match.params.datasetId}
             createComment={actions.createComment}
             deleteComment={actions.deleteComment}
+            updateComment={actions.updateComment}
             isParent={true}
           />
         </div>,
