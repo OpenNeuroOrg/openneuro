@@ -497,11 +497,7 @@ class Dataset extends Reflux.Component {
       loggedIn && this.state.datasets.currentUser
         ? this.state.datasets.currentUser.scitran.root
         : false
-    console.log(
-      'rendering comment tree with current state:',
-      this.state.datasets,
-    )
-    console.log('and isAdmin:', isAdmin)
+
     let content = []
     if (loggedIn) {
       content.push(

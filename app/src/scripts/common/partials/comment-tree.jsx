@@ -47,7 +47,6 @@ export default class CommentTree extends Reflux.Component {
   }
 
   _deleteButton(comment) {
-    console.log('isAdmin? ', this.props.isAdmin)
     if (comment.user.email === this.props.user.email || this.props.isAdmin) {
       return (
         <a
