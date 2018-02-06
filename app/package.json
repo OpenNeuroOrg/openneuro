@@ -22,7 +22,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "babel-polyfill": "^6.6.1",
-    "bids-validator": "^0.25.0",
+    "bids-validator": "^0.25.7",
     "bowser": "^1.7.3",
     "bytes": "^3.0.0",
     "favico.js": "git://github.com/ejci/favico.js#0.3.10",
