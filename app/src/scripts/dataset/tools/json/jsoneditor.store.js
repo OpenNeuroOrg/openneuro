@@ -114,7 +114,7 @@ let JsonEditorStore = Reflux.createStore({
 
           this.data.onSave(this.data.originalFile, file)
 
-          this.update({ editing: false, error: null, data: jsonContent })
+          this.update({ error: null, data: jsonContent })
         }
       })
     } catch (e) {

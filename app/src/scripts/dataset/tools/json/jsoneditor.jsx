@@ -11,9 +11,7 @@ export default class JsonEditor extends Reflux.Component {
     refluxConnect(this, JsonEditorStore, 'json')
 
     this.widgets = {
-      edit: this.editWidget.bind(this),
       save: this.saveWidget.bind(this),
-      cancel: this.cancelWidget.bind(this),
       error: this.errorWidget.bind(this),
       errorDetail: this.errorDetailWidget.bind(this),
     }
@@ -23,12 +21,13 @@ export default class JsonEditor extends Reflux.Component {
   }
 
   componentDidMount() {
+    let editing = this.props.editing ? this.props.editing : false
     let data = {
       isSnapshot: this.props.isSnapshot,
       onSave: this.props.onSave,
       originalData: this.props.data,
       originalFile: this.props.file.info,
-      editing: false,
+      editing: editing,
       editable: !this.props.isSnapshot,
     }
     actions.setInitialState(data)
@@ -59,32 +58,6 @@ export default class JsonEditor extends Reflux.Component {
       this.refs.text.selectionStart = startIdx + 1
       this.refs.text.selectionEnd = startIdx + 1
       this.forceUpdate()
-    }
-  }
-
-  editWidget() {
-    if (!this.state.json.editing && this.state.json.editable) {
-      return (
-        <span>
-          <a title="edit json" onClick={actions.startEdit}>
-            <i className="fa fa-pencil" />
-            EDIT FILE
-          </a>
-        </span>
-      )
-    }
-  }
-
-  cancelWidget() {
-    if (this.state.json.editing && this.state.json.editable) {
-      return (
-        <span>
-          <a title="cancel edit" onClick={actions.cancelEdit}>
-            <i className="fa fa-times" />
-            CANCEL EDIT
-          </a>
-        </span>
-      )
     }
   }
 
@@ -148,8 +121,6 @@ export default class JsonEditor extends Reflux.Component {
   headerBar() {
     return (
       <div className="json-editor-controls">
-        {this.widgets.edit()}
-        {this.widgets.cancel()}
         {this.widgets.save()}
         {this.widgets.error()}
         {this.widgets.errorDetail()}

@@ -74,6 +74,12 @@ let datasetStore = Reflux.createStore({
         link: '',
         info: null,
       },
+      editFile: {
+        name: '',
+        text: '',
+        link: '',
+        info: null,
+      },
       loading: false,
       loadingApps: false,
       loadingJobs: false,
@@ -82,6 +88,7 @@ let datasetStore = Reflux.createStore({
       metadataIssues: {},
       modals: {
         displayFile: false,
+        editFile: false,
         jobs: false,
         publish: false,
         share: false,
@@ -501,6 +508,28 @@ let datasetStore = Reflux.createStore({
     this.update(update)
 
     // callback
+    if (callback && typeof callback === 'function') {
+      callback()
+    }
+  },
+
+  /**
+   * Dismiss All Modals
+   */
+  dismissModals(callback) {
+    let update = {}
+    update.displayFile = {
+      name: '',
+      text: '',
+      link: '',
+    }
+    update.editFile = update.displayFile
+    let modals = this.data.modals
+    for (let modal of Object.keys(modals)) {
+      modals[modal] = false
+    }
+    update.modals = modals
+    this.update(update)
     if (callback && typeof callback === 'function') {
       callback()
     }
@@ -1095,12 +1124,14 @@ let datasetStore = Reflux.createStore({
           ) {
             this.updateDescriptionFile(file, this.data.dataset._id, () => {
               this.updateFileState(item, { loading: false })
+              this.dismissModals()
             })
           } else {
             scitran
               .updateFile('projects', this.data.dataset._id, file)
               .then(() => {
                 this.updateFileState(item, { loading: false })
+                this.dismissModals()
                 this.revalidate()
               })
           }
@@ -1617,6 +1648,44 @@ let datasetStore = Reflux.createStore({
           }
           this.update({
             displayFile: {
+              name: file.name,
+              text: res.text,
+              link: link,
+              info: file,
+            },
+            modals,
+          })
+        })
+      }
+    }
+
+    if (jobId) {
+      this.getResultDownloadTicket(snapshotId, jobId, file, link => {
+        requestAndDisplay(link)
+      })
+    } else {
+      this.getFileDownloadTicket(file, link => {
+        requestAndDisplay(link)
+      })
+    }
+  },
+
+  /**
+   * EditFile
+   *
+   * Toggles the editFile modal for files of type .json, .tsv, .csv
+   */
+  editFile(snapshotId, jobId, file, callback) {
+    let requestAndDisplay = link => {
+      let modals = this.data.modals
+      modals.editFile = true
+      if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
+        request.get(link, {}).then(res => {
+          if (callback) {
+            callback()
+          }
+          this.update({
+            editFile: {
               name: file.name,
               text: res.text,
               link: link,
