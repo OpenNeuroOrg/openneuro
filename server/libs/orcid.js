@@ -3,7 +3,6 @@ import xmldoc from 'xmldoc'
 import config from '../config'
 
 export default {
-
   getProfile(token, callback) {
     let data = token.split(':')
     if (data.length != 2) {
@@ -16,16 +15,38 @@ export default {
     request.get(
       `${config.auth.orcid.apiURI}/v2.0/${orcid}/record`,
       {
-        headers: { 'Authorization': `Bearer ${accessToken}` }
+        headers: { Authorization: `Bearer ${accessToken}` },
       },
       (err, res) => {
         let doc = new xmldoc.XmlDocument(res.body)
-        let firstname = doc.valueWithPath('person:person.person:name.personal-details:given-names')
-        let lastname = doc.valueWithPath('person:person.person:name.personal-details:family-name')
-        let email = doc.valueWithPath('person:person.email:emails.email:email.email:email')
+        let firstname = doc.valueWithPath(
+          'person:person.person:name.personal-details:given-names',
+        )
+        let lastname = doc.valueWithPath(
+          'person:person.person:name.personal-details:family-name',
+        )
+        let email = doc.valueWithPath(
+          'person:person.email:emails.email:email.email:email',
+        )
+
+        if (!firstname) {
+          callback(
+            'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
+          )
+          return
+        }
+
+        if (!lastname) {
+          callback(
+            'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
+          )
+          return
+        }
 
         if (!email) {
-          callback('Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.')
+          callback(
+            'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.',
+          )
           return
         }
 
@@ -34,7 +55,7 @@ export default {
           lastname,
           email,
         })
-      }
+      },
     )
   },
 
@@ -57,7 +78,7 @@ export default {
           res.body.access_token = `${orcid}:${access_token}`
         }
         callback(err, res.body)
-      }
+      },
     )
   },
 
@@ -80,7 +101,7 @@ export default {
           res.body.access_token = `${orcid}:${access_token}`
 
           // Check if user has email
-          this.getProfile(res.body.access_token, (err) => {
+          this.getProfile(res.body.access_token, err => {
             if (err) {
               callback(err)
             } else {
@@ -90,8 +111,7 @@ export default {
         } else {
           callback(err, res.body)
         }
-      }
+      },
     )
   },
-
 }
