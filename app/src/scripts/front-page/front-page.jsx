@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import FrontPageTabs from './front-page-tabs.jsx'
 import userStore from '../user/user.store.js'
 import Spinner from '../common/partials/spinner.jsx'
@@ -102,9 +102,7 @@ class FrontPage extends Reflux.Component {
 
   _signinForm(loadingState) {
     if (!loadingState) {
-      if (this.state.users.token) {
-        return <Redirect to="dashboard" push />
-      } else {
+      if (!this.state.users.token) {
         return (
           <span>
             <button className="btn-admin" onClick={userStore.googleSignIn}>
