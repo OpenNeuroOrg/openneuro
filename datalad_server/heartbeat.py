@@ -3,12 +3,13 @@ import json
 import falcon
 
 
-class Heartbeat(object):
-  def on_get(self, req, resp):
-    doc = {
-      'alive': True,
-    }
+class HeartbeatResource(object):
 
-    resp.body = json.dumps(doc, ensure_ascii=False)
+    def on_get(self, req, resp):
+        doc = {
+            'alive': True,
+        }
 
-    resp.status = falcon.HTTP_200
+        resp.body = json.dumps(doc, ensure_ascii=False)
+
+        resp.status = falcon.HTTP_200

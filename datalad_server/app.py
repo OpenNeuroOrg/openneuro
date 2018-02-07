@@ -1,7 +1,15 @@
 import falcon
-from .heartbeat import Heartbeat
+from .dataset import DatasetResource
+from .heartbeat import HeartbeatResource
 
-api = application = falcon.API()
 
-heartbeat = Heartbeat()
-api.add_route('/heartbeat', heartbeat)
+def create_app(annex_path):
+    api = application = falcon.API()
+
+    heartbeat = HeartbeatResource()
+    datasets = DatasetResource(annex_path)
+
+    api.add_route('/heartbeat', heartbeat)
+    api.add_route('/datasets/{dataset}', datasets)
+
+    return api
