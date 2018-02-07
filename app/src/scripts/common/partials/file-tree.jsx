@@ -56,6 +56,7 @@ class FileTree extends React.Component {
             displayFile={this.props.displayFile}
             deleteFile={this.props.deleteFile}
             deleteDirectory={this.props.deleteDirectory}
+            editFile={this.props.editFile}
             getFileDownloadTicket={this.props.getFileDownloadTicket}
             toggleFolder={this.props.toggleFolder}
             addFile={this.props.addFile}
@@ -188,7 +189,7 @@ class FileTree extends React.Component {
               icon="fa-pencil"
               warn={false}
               message=" Edit"
-              action={this.props.displayFile.bind(this, item)}
+              action={this.props.editFile.bind(this, item)}
             />
           </span>
         )
@@ -382,6 +383,7 @@ FileTree.propTypes = {
   deleteDirectory: PropTypes.func,
   updateFile: PropTypes.func,
   displayFile: PropTypes.func,
+  editFile: PropTypes.func,
   topLevel: PropTypes.bool,
 }
 

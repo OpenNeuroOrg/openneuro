@@ -436,6 +436,7 @@ class Dataset extends Reflux.Component {
         deleteFile={actions.deleteFile}
         getFileDownloadTicket={actions.getFileDownloadTicket}
         displayFile={actions.displayFile.bind(this, null, null)}
+        editFile={actions.editFile.bind(this, null, null)}
         toggleFolder={actions.toggleFolder}
         addFile={actions.addFile}
         addDirectoryFile={actions.addDirectoryFile}
