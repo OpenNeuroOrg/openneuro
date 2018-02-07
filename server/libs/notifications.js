@@ -89,6 +89,83 @@ let notifications = {
     })
   },
 
+  /**
+   * Snapshot Created
+   * 
+   * Sends an email notification to
+   * all users following a dataset, informing
+   * them that a new snapshot has been created.
+   * Includes changelog if available.
+   */
+  snapshotCreated(snapshot) {
+    console.log('snapshotCreated notification sent with snapshot:', snapshot)
+
+    // get all users that are subscribed to the dataset
+    c.crn.subscriptions.find({datasetId: snapshot.original._id}).toArray((err, users) => {
+
+      // create the email object for each user
+      let emails = users.map(user => {
+        let emailContent = {
+          _id: null,
+          type: 'email',
+          email: {
+            to: user.email,
+            subject: '',
+            template: 'snapshot-created',
+            data: {
+              firstName: user.firstname,
+              lastName: user.lastname,
+              datasetName: ''
+            }
+          }
+        }
+        return emailContent
+      })
+
+      // send each email to the notification database for distribution
+      emails.forEach((email) => {
+        notifications.add(email, () => {})
+      }) 
+    })
+  },
+
+    /**
+   * Comment / Reply added
+   * 
+   * Sends an email notification to
+   * all users following a dataset, informing
+   * them that a new comment has been created.
+   */
+  commentCreated(comment) {
+
+    // get all users that are subscribed to the dataset
+    c.crn.subscriptions.find({datasetId: comment.datasetId}).toArray((err, users) => {
+      let emails = users.map(user => {
+        let emailContent = {
+          _id: null,
+          type: 'email',
+          email: {
+            to: user.email,
+            subject: '',
+            template: 'comment-created',
+            data: {
+              firstName: user.firstname,
+              lastName: user.lastname,
+              datasetName: '',
+              comment: comment
+            }
+          }
+        }
+        return emailContent      
+      })
+      
+      // send each email to the notification database for distribution
+      emails.forEach((email) => {
+        notifications.add(email, () => {})
+      })
+    })
+  },
+
   initCron() {
     // notifications cron -------------------------------------
     notifications.cron = new cron.CronJob(
