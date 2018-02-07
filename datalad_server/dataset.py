@@ -27,7 +27,8 @@ class DatasetResource(object):
             resp.status = falcon.HTTP_NOT_FOUND
 
     def on_post(self, req, resp, dataset):
-        dataset = Dataset(path=dataset)
+        path = '{}/{}'.format(self.annex_path, dataset)
+        dataset = Dataset(path=path)
         dataset.create()
 
         if (dataset.repo):

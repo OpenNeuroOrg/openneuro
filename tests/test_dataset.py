@@ -41,7 +41,8 @@ def test_get_dataset_404(client):
     assert response.status == falcon.HTTP_NOT_FOUND
 
 
-def test_create_dataset(client):
+def test_create_dataset(client, annex_path):
     ds_id = 'ds000002'
     response = client.simulate_post('/datasets/{}'.format(ds_id))
     assert response.status == falcon.HTTP_OK
+    assert Dataset(str(annex_path.join(ds_id))).repo is not None
