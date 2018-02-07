@@ -41,6 +41,14 @@ class Datasets extends Reflux.Component {
     const isAdmin = this.props.admin
     Actions.update({ isPublic, isAdmin })
     Actions.getDatasets(isPublic, isAdmin)
+
+    var cx = '016952313242172063987:retmkn_owto'
+    var gcse = document.createElement('script')
+    gcse.type = 'text/javascript'
+    gcse.async = true
+    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx
+    var s = document.getElementsByTagName('script')[0]
+    s.parentNode.insertBefore(gcse, s)
   }
 
   componentWillReceiveProps() {
@@ -100,6 +108,7 @@ class Datasets extends Reflux.Component {
             </Helmet>
             <div className="header-wrap clearfix">
               <h2>{title}</h2>
+              <div className="gcse-search" />
             </div>
             <div className="filters-sort-wrap clearfix">
               <Sort
