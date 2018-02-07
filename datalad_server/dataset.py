@@ -10,9 +10,11 @@ class DatasetResource(object):
     def __init__(self, annex_path):
         self.annex_path = annex_path
 
+    def __dataset_path(self, dataset):
+        return '{}/{}'.format(self.annex_path, dataset)
+
     def on_get(self, req, resp, dataset):
-        path = '{}/{}'.format(self.annex_path, dataset)
-        datalad = Dataset(path=path)
+        datalad = Dataset(path=self.__dataset_path(dataset))
         # repo will only be defined if it already exists
         if (datalad.repo):
             dataset_description = {
@@ -27,8 +29,7 @@ class DatasetResource(object):
             resp.status = falcon.HTTP_NOT_FOUND
 
     def on_post(self, req, resp, dataset):
-        path = '{}/{}'.format(self.annex_path, dataset)
-        dataset = Dataset(path=path)
+        dataset = Dataset(path=self.__dataset_path(dataset))
         dataset.create()
 
         if (dataset.repo):
