@@ -39,3 +39,9 @@ def test_get_dataset(client):
 def test_get_dataset_404(client):
     response = client.simulate_get('/datasets/dsdoesntexist')
     assert response.status == falcon.HTTP_NOT_FOUND
+
+
+def test_create_dataset(client):
+    ds_id = 'ds000002'
+    response = client.simulate_post('/datasets/{}'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
