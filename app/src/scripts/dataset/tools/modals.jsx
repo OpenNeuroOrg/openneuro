@@ -7,6 +7,7 @@ import Share from './share.jsx'
 import Jobs from './jobs'
 import Publish from './publish.jsx'
 import FileDisplay from '../dataset.file-display.jsx'
+import FileEdit from '../dataset.file-edit.jsx'
 import UpdateWarn from '../dataset.update-warning.jsx'
 import datasetStore from '../dataset.store'
 import datasetActions from '../dataset.actions.js'
@@ -55,6 +56,13 @@ class ToolModals extends Reflux.Component {
           show={modals.displayFile}
           isSnapshot={this.state.datasets.snapshot}
           onHide={datasetActions.toggleModal.bind(null, 'displayFile')}
+          onSave={datasetActions.updateFile}
+        />
+        <FileEdit
+          file={this.state.datasets.editFile}
+          show={modals.editFile}
+          isSnapshot={this.state.datasets.snapshot}
+          onHide={datasetActions.toggleModal.bind(null, 'editFile')}
           onSave={datasetActions.updateFile}
         />
         <UpdateWarn
