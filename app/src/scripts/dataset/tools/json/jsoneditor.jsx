@@ -35,6 +35,15 @@ export default class JsonEditor extends Reflux.Component {
     actions.setJsonContent(this.props.data)
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.editing !== this.state.json.editing) {
+      actions.update({
+        errorMessage: null,
+        errorDetail: [],
+      })
+    }
+  }
+
   async onKeyDown(e) {
     // check for tab pressed, turn into four spaces:
     if (e.keyCode === 9) {
