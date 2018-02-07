@@ -36,7 +36,11 @@ export default {
       notifications: null,
       counters: null,
       logs: null,
+<<<<<<< HEAD
       comments: null,
+=======
+      subscriptions: null,
+>>>>>>> d02046ef... add subscriptions collection to mongo config
     },
     scitran: {
       projects: null,
