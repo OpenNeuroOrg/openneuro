@@ -75,6 +75,11 @@ const Bar = ({ year, logs, months }) => {
             <VictoryBar data={total} />
           </VictoryStack>
         </VictoryChart>
+        <span>
+          <span className="failed">Failed</span>
+          <span className="succeed">Succeeded</span>
+          <span className="total">Total</span>
+        </span>
       </div>
     )
   } else {
