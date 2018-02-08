@@ -15,6 +15,7 @@ export default class CommentTree extends Reflux.Component {
     this.toggleNewComment = this._toggleNewComment.bind(this)
     this.startEdit = this._startEdit.bind(this)
     this.cancelEdit = this._cancelEdit.bind(this)
+    this.createComment = this._createComment.bind(this)
   }
 
   _handleDelete(commentId, parentId) {
@@ -25,12 +26,17 @@ export default class CommentTree extends Reflux.Component {
     return (
       <Comment
         parentId={parentId}
-        createComment={this.props.createComment}
+        createComment={this.createComment}
         show={this.state.showNewComment}
         editing={true}
         new={true}
       />
     )
+  }
+
+  _createComment(content, parentId) {
+    this.props.createComment(content, parentId)
+    this.setState({ showNewComment: false })
   }
 
   _toggleNewComment() {
