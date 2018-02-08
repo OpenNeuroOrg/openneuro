@@ -182,7 +182,10 @@ export default class Comment extends React.Component {
                 editorState={editorState}
                 onToggle={this.toggleInlineStyle}
               />
-              {/* <SyntaxLanguageSelector changeLanguage={this.changeLanguage} /> */}
+              <SyntaxLanguageSelector
+                changeLanguage={this.changeLanguage}
+                editorState={editorState}
+              />
               <div className={className}>
                 <Editor
                   blockStyleFn={getBlockStyle}
@@ -244,7 +247,10 @@ export default class Comment extends React.Component {
             editorState={editorState}
             onToggle={this.toggleInlineStyle}
           />
-          <SyntaxLanguageSelector changeLanguage={this.changeLanguage} />
+          <SyntaxLanguageSelector
+            changeLanguage={this.changeLanguage}
+            editorState={editorState}
+          />
         </div>
       )
 
@@ -371,23 +377,36 @@ const BlockStyleControls = props => {
 }
 
 const SyntaxLanguageSelector = props => {
-  return (
-    <div>
-      <div className="form-group row">
-        <label>Syntax Highlighting Language:</label>
-        <div className="form-control-plaintext">
-          <select onChange={props.changeLanguage} className="language-selector">
-            <option value="python" defaultValue>
-              Python
-            </option>
-            <option value="javascript">JavaScript</option>
-            <option value="c">C</option>
-            <option value="cpp">C++</option>
-          </select>
+  const { editorState } = props
+  const selection = editorState.getSelection()
+  const blockType = editorState
+    .getCurrentContent()
+    .getBlockForKey(selection.getStartKey())
+    .getType()
+
+  if (blockType === 'code-block') {
+    return (
+      <div>
+        <div className="form-group row">
+          <label>Syntax Highlighting Language:</label>
+          <div className="form-control-plaintext">
+            <select
+              onChange={props.changeLanguage}
+              className="language-selector">
+              <option value="python" defaultValue>
+                Python
+              </option>
+              <option value="javascript">JavaScript</option>
+              <option value="c">C</option>
+              <option value="cpp">C++</option>
+            </select>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return null
+  }
 }
 
 var INLINE_STYLES = [
@@ -416,6 +435,7 @@ const InlineStyleControls = props => {
 
 SyntaxLanguageSelector.propTypes = {
   changeLanguage: PropTypes.func,
+  editorState: PropTypes.object,
 }
 
 InlineStyleControls.propTypes = {
