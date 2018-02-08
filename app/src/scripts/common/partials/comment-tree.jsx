@@ -41,10 +41,8 @@ export default class CommentTree extends Reflux.Component {
   }
 
   _createComment(content, parentId) {
-    if (this.editorState.getCurrentContent.hasText()) {
-      this.props.createComment(content, parentId)
-      this.setState({ showNewComment: false, showSubtree: true })
-    }
+    this.props.createComment(content, parentId)
+    this.setState({ showNewComment: false, showSubtree: true })
   }
 
   _toggleNewComment() {

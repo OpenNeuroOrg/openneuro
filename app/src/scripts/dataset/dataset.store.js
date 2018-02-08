@@ -66,6 +66,7 @@ let datasetStore = Reflux.createStore({
       },
       comments: [],
       commentTree: [],
+      commentSortOrder: 'DESC',
       currentUpdate: null,
       currentUploadId: null,
       dataset: null,
@@ -1853,6 +1854,24 @@ let datasetStore = Reflux.createStore({
           this.loadComments(datasetId)
         }
       }
+    })
+  },
+
+  sortComments(e) {
+    let commentTree
+    let commentSortOrder = e.currentTarget.value
+    if (commentSortOrder === 'ASC') {
+      commentTree = this.data.commentTree.sort((a, b) => {
+        return a.createDate < b.createDate
+      })
+    } else {
+      commentTree = this.data.commentTree.sort((a, b) => {
+        return a.createDate > b.createDate
+      })
+    }
+    this.update({
+      commentSortOrder: commentSortOrder,
+      commentTree: commentTree,
     })
   },
 
