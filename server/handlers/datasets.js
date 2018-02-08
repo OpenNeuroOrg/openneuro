@@ -58,6 +58,8 @@ export default {
           query: { project: datasetId },
         },
         (err, resp) => {
+          console.log('response from /server/handlers/datasets.snapshot():', resp.body)
+          notifications.snapshotCreated(resp.body)
           res.send(resp.body)
         },
       )
