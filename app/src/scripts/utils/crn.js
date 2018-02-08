@@ -306,4 +306,28 @@ export default {
       body: comment,
     })
   },
+
+  // Subscriptions --------------------------------------------------------------------------
+
+  getSubscriptions(datasetId) {
+    return request.get(config.crn.url + 'subscriptions/' + datasetId, {})
+  },
+
+  createSubscription(datasetId, userId) {
+    return request.post(config.crn.url + 'subscriptions/' + datasetId, {
+      body: {
+        datasetId: datasetId,
+        userId: userId,
+      },
+    })
+  },
+
+  deleteSubscription(datasetId, userId) {
+    return request.del(config.crn.url + 'subscriptions/' + datasetId, {
+      body: {
+        datasetId: datasetId,
+        userId: userId,
+      },
+    })
+  },
 }
