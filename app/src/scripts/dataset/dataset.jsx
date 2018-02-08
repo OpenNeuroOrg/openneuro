@@ -144,10 +144,6 @@ class Dataset extends Reflux.Component {
   }
 
   render() {
-    console.log(
-      'rendering dataset with the following state:',
-      this.state.datasets.dataset,
-    )
     let dataset = this.state.datasets.dataset
     let snapshots = this.state.datasets.snapshots
     let showSidebar = this.state.datasets.showSidebar

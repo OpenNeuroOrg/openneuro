@@ -79,15 +79,18 @@ export default class Comment extends React.Component {
   }
 
   _onSubmit(parentId) {
-    let content = convertToRaw(this.state.editorState.getCurrentContent())
-    content.codeLanguage = this.state.decorator.options.defaultSyntax
-    let stringContent = JSON.stringify(content)
-    this.props.createComment(stringContent, parentId)
-    let emptyEditorState = EditorState.createEmpty()
-    this.onChange(emptyEditorState)
-    this.setState({
-      editing: false,
-    })
+    let contentState = this.state.editorState.getCurrentContent()
+    if (contentState.hasText()) {
+      let content = convertToRaw(contentState)
+      content.codeLanguage = this.state.decorator.options.defaultSyntax
+      let stringContent = JSON.stringify(content)
+      this.props.createComment(stringContent, parentId)
+      let emptyEditorState = EditorState.createEmpty()
+      this.onChange(emptyEditorState)
+      this.setState({
+        editing: false,
+      })
+    }
   }
 
   _onUpdate() {
@@ -172,6 +175,8 @@ export default class Comment extends React.Component {
       <i className="fa fa-reply fa-rotate-180" />
     ) : null
 
+    let submitDisabled = !contentState.hasText()
+
     if (this.props.show) {
       return (
         <div className="reply-div">
@@ -208,7 +213,8 @@ export default class Comment extends React.Component {
           </div>
           <button
             className="comment-submit btn btn-md btn-primary"
-            onClick={this.onSubmit.bind(this, this.props.parentId)}>
+            onClick={this.onSubmit.bind(this, this.props.parentId)}
+            disabled={submitDisabled}>
             {submitText}
           </button>
         </div>
@@ -264,7 +270,8 @@ export default class Comment extends React.Component {
       submitButton = (
         <button
           className="comment-submit btn btn-md btn-primary"
-          onClick={this.onUpdate.bind(this)}>
+          onClick={this.onUpdate.bind(this)}
+          disabled={!contentState.hasText()}>
           SAVE CHANGES
         </button>
       )
