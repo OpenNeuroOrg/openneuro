@@ -19,6 +19,7 @@ import bidsId from '../libs/bidsId'
  */
 export default {
   create(req, res) {
+    
     counter.getNext('datasets', datasetNumber => {
       let offset = 1000
       datasetNumber += offset
@@ -58,8 +59,6 @@ export default {
           query: { project: datasetId },
         },
         (err, resp) => {
-          console.log('response from /server/handlers/datasets.snapshot():', resp.body)
-          notifications.snapshotCreated(resp.body)
           res.send(resp.body)
         },
       )
