@@ -97,11 +97,11 @@ let notifications = {
    * them that a new snapshot has been created.
    * Includes changelog if available.
    */
-  snapshotCreated(snapshot) {
-    console.log('snapshotCreated notification sent with snapshot:', snapshot)
+  snapshotCreated(datasetId, versionNumber, snapshotId) {
+    console.log('snapshotCreated notification sent with datasetId:', bidsId.decodeId(datasetId), 'versionNumber:', versionNumber, 'and snapshotId:', snapshotId)
 
     // get all users that are subscribed to the dataset
-    c.crn.subscriptions.find({datasetId: snapshot.original._id}).toArray((err, users) => {
+    c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, users) => {
 
       // create the email object for each user
       let emails = users.map(user => {
@@ -115,7 +115,14 @@ let notifications = {
             data: {
               firstName: user.firstname,
               lastName: user.lastname,
-              datasetName: ''
+              datasetName: '',
+              versionNumber: versionNumber,
+              datasetId: bidsId.decodeId(datasetId),
+              snapshotId: snapshotId ,
+              siteUrl:
+              url.parse(config.url).protocol +
+              '//' +
+              url.parse(config.url).hostname,
             }
           }
         }
@@ -152,7 +159,7 @@ let notifications = {
               firstName: user.firstname,
               lastName: user.lastname,
               datasetName: '',
-              comment: comment
+              comment: comment,
             }
           }
         }
