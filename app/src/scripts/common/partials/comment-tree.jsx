@@ -68,15 +68,15 @@ export default class CommentTree extends Reflux.Component {
   _deleteButton(comment) {
     if (comment.user.email === this.props.user.email || this.props.isAdmin) {
       return (
-        <a
-          className="delete"
-          onClick={this.handleDelete.bind(
+        <WarnButton
+          action={this.handleDelete.bind(
             this,
             comment._id,
             this.props.parentId,
-          )}>
-          Delete
-        </a>
+          )}
+          message="Delete"
+          icon="fa-trash"
+        />
       )
     }
     return null
