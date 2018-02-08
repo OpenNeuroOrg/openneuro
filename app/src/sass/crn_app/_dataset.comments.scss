@@ -12,10 +12,23 @@
     border-left: 5px solid $ocean;
   }
   .comment-header {
-    font-size: 18px;
-    color: $c-42;
-    line-height: 10px;
-    padding: 0;
+    label {
+      font-size: 18px;
+      color: $c-42;
+      line-height: 10px;
+      padding: 0;
+    }
+    div {
+      margin-bottom: 15px;
+      span {
+        float: right;
+        select {
+          width: 160px;
+          font-size: 13px;
+          height: 25px;
+        }
+      }
+    }
   }
   pre {
     background-color: $eee !important;
@@ -69,16 +82,22 @@
     .comment-actions {
       text-align: right;
       padding-right: 20px;
+      font-size: 12px;
       a {
         text-transform: uppercase;
-        font-size: 10px;
         color: $ocean;
         &:hover {
           color: $sky;
         }
       }
+      .toggle-replies {
+        width: 65%;
+        display: inline-block;
+        text-align: left;
+      }
       .reply-div {
         border: solid 1px $ddd;
+        margin: 0px;
         margin-top: 10px;
         padding: 15px;
         button {

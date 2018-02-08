@@ -79,15 +79,18 @@ export default class Comment extends React.Component {
   }
 
   _onSubmit(parentId) {
-    let content = convertToRaw(this.state.editorState.getCurrentContent())
-    content.codeLanguage = this.state.decorator.options.defaultSyntax
-    let stringContent = JSON.stringify(content)
-    this.props.createComment(stringContent, parentId)
-    let emptyEditorState = EditorState.createEmpty()
-    this.onChange(emptyEditorState)
-    this.setState({
-      editing: false,
-    })
+    let contentState = this.state.editorState.getCurrentContent()
+    if (contentState.hasText()) {
+      let content = convertToRaw(contentState)
+      content.codeLanguage = this.state.decorator.options.defaultSyntax
+      let stringContent = JSON.stringify(content)
+      this.props.createComment(stringContent, parentId)
+      let emptyEditorState = EditorState.createEmpty()
+      this.onChange(emptyEditorState)
+      this.setState({
+        editing: false,
+      })
+    }
   }
 
   _onUpdate() {
@@ -169,6 +172,8 @@ export default class Comment extends React.Component {
       ? 'Type your reply here...'
       : 'Type your comment here...'
 
+    let submitDisabled = !contentState.hasText()
+
     if (this.props.show) {
       return (
         <div className="reply-div">
@@ -182,7 +187,10 @@ export default class Comment extends React.Component {
                 editorState={editorState}
                 onToggle={this.toggleInlineStyle}
               />
-              {/* <SyntaxLanguageSelector changeLanguage={this.changeLanguage} /> */}
+              <SyntaxLanguageSelector
+                changeLanguage={this.changeLanguage}
+                editorState={editorState}
+              />
               <div className={className}>
                 <Editor
                   blockStyleFn={getBlockStyle}
@@ -200,8 +208,9 @@ export default class Comment extends React.Component {
             </div>
           </div>
           <button
-            className="comment-submit btn btn-md btn-primary"
-            onClick={this.onSubmit.bind(this, this.props.parentId)}>
+            className="comment-submit btn btn-md"
+            onClick={this.onSubmit.bind(this, this.props.parentId)}
+            disabled={submitDisabled}>
             {submitText}
           </button>
         </div>
@@ -244,14 +253,18 @@ export default class Comment extends React.Component {
             editorState={editorState}
             onToggle={this.toggleInlineStyle}
           />
-          <SyntaxLanguageSelector changeLanguage={this.changeLanguage} />
+          <SyntaxLanguageSelector
+            changeLanguage={this.changeLanguage}
+            editorState={editorState}
+          />
         </div>
       )
 
       submitButton = (
         <button
           className="comment-submit btn btn-md btn-primary"
-          onClick={this.onUpdate.bind(this)}>
+          onClick={this.onUpdate.bind(this)}
+          disabled={!contentState.hasText()}>
           SAVE CHANGES
         </button>
       )
@@ -371,23 +384,36 @@ const BlockStyleControls = props => {
 }
 
 const SyntaxLanguageSelector = props => {
-  return (
-    <div>
-      <div className="form-group row">
-        <label>Syntax Highlighting Language:</label>
-        <div className="form-control-plaintext">
-          <select onChange={props.changeLanguage} className="language-selector">
-            <option value="python" defaultValue>
-              Python
-            </option>
-            <option value="javascript">JavaScript</option>
-            <option value="c">C</option>
-            <option value="cpp">C++</option>
-          </select>
+  const { editorState } = props
+  const selection = editorState.getSelection()
+  const blockType = editorState
+    .getCurrentContent()
+    .getBlockForKey(selection.getStartKey())
+    .getType()
+
+  if (blockType === 'code-block') {
+    return (
+      <div>
+        <div className="form-group row">
+          <label>Syntax Highlighting Language:</label>
+          <div className="form-control-plaintext">
+            <select
+              onChange={props.changeLanguage}
+              className="language-selector">
+              <option value="python" defaultValue>
+                Python
+              </option>
+              <option value="javascript">JavaScript</option>
+              <option value="c">C</option>
+              <option value="cpp">C++</option>
+            </select>
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  } else {
+    return null
+  }
 }
 
 var INLINE_STYLES = [
@@ -416,6 +442,7 @@ const InlineStyleControls = props => {
 
 SyntaxLanguageSelector.propTypes = {
   changeLanguage: PropTypes.func,
+  editorState: PropTypes.object,
 }
 
 InlineStyleControls.propTypes = {

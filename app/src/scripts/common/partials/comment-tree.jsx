@@ -3,18 +3,25 @@ import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import Comment from './comment.jsx'
+import WarnButton from '../forms/warn-button.jsx'
 
 export default class CommentTree extends Reflux.Component {
   constructor(props) {
     super(props)
+
+    let showSubtree = this.props.showSubtree ? this.props.showSubtree : false
+
     this.state = {
       showNewComment: false,
+      showSubtree: showSubtree,
       editing: false,
     }
     this.handleDelete = this._handleDelete.bind(this)
     this.toggleNewComment = this._toggleNewComment.bind(this)
+    this.toggleSubtree = this._toggleSubtree.bind(this)
     this.startEdit = this._startEdit.bind(this)
     this.cancelEdit = this._cancelEdit.bind(this)
+    this.createComment = this._createComment.bind(this)
   }
 
   _handleDelete(commentId, parentId) {
@@ -25,7 +32,7 @@ export default class CommentTree extends Reflux.Component {
     return (
       <Comment
         parentId={parentId}
-        createComment={this.props.createComment}
+        createComment={this.createComment}
         show={this.state.showNewComment}
         editing={true}
         new={true}
@@ -33,9 +40,19 @@ export default class CommentTree extends Reflux.Component {
     )
   }
 
+  _createComment(content, parentId) {
+    this.props.createComment(content, parentId)
+    this.setState({ showNewComment: false, showSubtree: true })
+  }
+
   _toggleNewComment() {
     let showNewComment = !this.state.showNewComment
     this.setState({ showNewComment: showNewComment })
+  }
+
+  _toggleSubtree() {
+    let showSubtree = !this.state.showSubtree
+    this.setState({ showSubtree: showSubtree })
   }
 
   _startEdit() {
@@ -49,15 +66,15 @@ export default class CommentTree extends Reflux.Component {
   _deleteButton(comment) {
     if (comment.user.email === this.props.user.email || this.props.isAdmin) {
       return (
-        <a
-          className="delete"
-          onClick={this.handleDelete.bind(
+        <WarnButton
+          action={this.handleDelete.bind(
             this,
             comment._id,
             this.props.parentId,
-          )}>
-          Delete
-        </a>
+          )}
+          message="Delete"
+          icon="fa-trash"
+        />
       )
     }
     return null
@@ -92,6 +109,22 @@ export default class CommentTree extends Reflux.Component {
     return null
   }
 
+  _showRepliesButton() {
+    let repliesExist = this.props.node.children
+      ? this.props.node.children.length
+      : false
+    if (repliesExist) {
+      let buttonText = this.state.showSubtree ? 'Hide Replies' : 'Show Replies'
+      return (
+        <a className="toggle-replies" onClick={this.toggleSubtree.bind(this)}>
+          {buttonText}
+        </a>
+      )
+    } else {
+      return null
+    }
+  }
+
   _ownerTag(ownerEmail) {
     if (
       this.props.user &&
@@ -124,6 +157,7 @@ export default class CommentTree extends Reflux.Component {
     if (this.props.user) {
       return (
         <div className="comment-actions">
+          {this._showRepliesButton()}
           {this._deleteButton(comment)}
           {this._replyButton()}
           {this._editButton()}
@@ -170,7 +204,7 @@ export default class CommentTree extends Reflux.Component {
       ? this.props.node.children
       : null
     let content = []
-    if (childTree) {
+    if (childTree && this.state.showSubtree) {
       for (let childNode of childTree) {
         content.push(
           <CommentTree
@@ -214,4 +248,5 @@ CommentTree.propTypes = {
   createComment: PropTypes.func,
   commentTree: PropTypes.array,
   isAdmin: PropTypes.bool,
+  showSubtree: PropTypes.bool,
 }
