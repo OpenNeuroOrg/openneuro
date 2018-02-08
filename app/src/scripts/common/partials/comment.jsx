@@ -168,14 +168,10 @@ export default class Comment extends React.Component {
     let inputPlaceholderText = this.props.parentId
       ? 'Type your reply here...'
       : 'Type your comment here...'
-    let replyIcon = this.props.parentId ? (
-      <i className="fa fa-reply fa-rotate-180" />
-    ) : null
 
     if (this.props.show) {
       return (
         <div className="reply-div">
-          {replyIcon}
           <div>
             <div className="RichEditor-root">
               <BlockStyleControls
@@ -186,7 +182,7 @@ export default class Comment extends React.Component {
                 editorState={editorState}
                 onToggle={this.toggleInlineStyle}
               />
-              <SyntaxLanguageSelector changeLanguage={this.changeLanguage} />
+              {/* <SyntaxLanguageSelector changeLanguage={this.changeLanguage} /> */}
               <div className={className}>
                 <Editor
                   blockStyleFn={getBlockStyle}
@@ -235,9 +231,6 @@ export default class Comment extends React.Component {
     let inputPlaceholderText = this.props.parentId
       ? 'Type your reply here...'
       : 'Type your comment here...'
-    let replyIcon = this.props.parentId ? (
-      <i className="fa fa-reply fa-rotate-180" />
-    ) : null
     let controls
     let submitButton
     if (this.state.editing) {
@@ -265,7 +258,6 @@ export default class Comment extends React.Component {
     }
     return (
       <div className="reply-div">
-        {replyIcon}
         <div>
           <div className="RichEditor-root">
             {controls}
