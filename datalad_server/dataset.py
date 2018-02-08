@@ -30,11 +30,15 @@ class DatasetResource(object):
 
     def on_post(self, req, resp, dataset):
         dataset = Dataset(path=self.__dataset_path(dataset))
-        dataset.create()
-
         if (dataset.repo):
-            resp.body = json.dumps({})
-            resp.status = falcon.HTTP_OK
+            resp.body = json.dumps({'error': 'dataset already exists'})
+            resp.status = falcon.HTTP_CONFLICT
         else:
-            resp.body = json.dumps({'error': 'dataset creation failed'})
-            resp.status = falcon.HTTP_500
+            dataset.create()
+
+            if (dataset.repo):
+                resp.body = json.dumps({})
+                resp.status = falcon.HTTP_OK
+            else:
+                resp.body = json.dumps({'error': 'dataset creation failed'})
+                resp.status = falcon.HTTP_500
