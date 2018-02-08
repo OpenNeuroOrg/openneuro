@@ -1,69 +1,153 @@
+/*Globals*/
 
+.dataset-comments {
+  * {
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+  button:focus {
+    outline: none;
+  }
+  blockquote.RichEditor-blockquote {
+    border-left: 5px solid $ocean;
+  }
+  .comment-header {
+    font-size: 18px;
+    color: $c-42;
+    line-height: 10px;
+    padding: 0;
+  }
+  pre {
+    background-color: $eee !important;
+    color: inherit;
+    * {
+      background-color: inherit !important;
+    }
+  }
+}
+
+/*Comment Tree*/
 
 .comment-tree {
-    margin-left: 20px;
-    padding: 10px;
-
-    .comment-box {
-        padding: 20px;
-    }
+  margin-left: 20px;
+  padding: 5px;
+  .parent-comment {
+    margin-left: 0px;
+  }
+  .comment-box,
+  .comment-text {
+    padding: 20px;
+  }
+  .comment-div {
+    display: inline-block;
+    width: 80%;
+    display: inline-block;
     .comment-text {
-        padding: 20px;
+      background: transparent;
     }
-
+  }
+  .comment-avatar {
+    display: inline-block;
+    width: 75px;
+    vertical-align: top;
+    img {
+      height: 60px;
+      width: 60px;
+    }
+  }
+  .comment {
+    border: 1px solid $ddd;
+    padding: 15px 0px 10px 10px;
+    margin: 0px 0px 10px 0px;
     .user-info {
-        padding-bottom: 5px;
+      padding-bottom: 5px;
+      font-size: 13px;
+      .username {
+        font-weight: bold;
+      }
     }
-
-    .reply-div {
-        display: inline-block;  
+    .comment-actions {
+      text-align: right;
+      padding-right: 20px;
+      a {
+        text-transform: uppercase;
+        font-size: 10px;
+        color: $ocean;
+        &:hover {
+          color: $sky;
+        }
+      }
+      .reply-div {
+        border: solid 1px $ddd;
+        margin-top: 10px;
+        padding: 15px;
+        button {
+          margin-right: 5%;
+        }
+      }
     }
-
-    .comment-div {
-        display: inline-block;
-    }
+  }
 }
 
 .comment-input {
-    width: 80%;
+  width: 80%;
 }
 
+/*Editor Block*/
+
+.comment-box.top-level,
+.reply-div {
+  margin: 0px 0px 30px 0px;
+  div.RichEditor-editor {
+    background-color: $f8;
+    color: $c-66;
+    padding: 10px;
+    &:focus-within {
+      box-shadow: inset 0px 0px 5px $c-66;
+    }
+  }
+}
+
+/*Submit Button*/
+
 .comment-submit {
-    width: 100%;
-    background-color: $ocean;
-    color: white;
+  background: $white;
+  color: $ocean;
+  width: 90%;
+  border: 2px solid $ocean;
+  border-radius: 0px;
+  margin-left: 4%;
+  &:focus {
+    outline: none !important;
+  }
+  &:hover {
+    background-color: $sky;
+    color: $white;
+    border: 2px solid $sky;
+  }
 }
 
 .comments {
-    border: 1px solid #dddddd;
-    border-radius: 10px;
-    padding: 10px;
-}
-
-.parent-comment {
-    margin-left: 0px;
-    margin-bottom: 10px;
-}
-
-.comment-avatar {
-    display: inline-block;
-    
-    img {
-        height: 60px;
-        width: 60px;
-    }
+  position: relative;
+  border: solid 1px $ddd;
+  margin: 0px 0px 20px 0px;
+  padding: 10px;
+  top: 20px;
 }
 
 .dataset-owner-flag {
-    padding: 0px 2px;
-    background-color: $c-33;
-    color: white;
+  padding: 0px 2px;
+  background-color: $ocean;
+  color: white;
 }
 
 .login-for-comments {
-    text-align: center;
+  text-align: center;
 }
 
-.reply, .delete, .edit, .cancel-edit {
-    padding-left: 20px;
+.reply,
+.delete,
+.edit,
+.cancel-edit {
+  padding-left: 20px;
 }
