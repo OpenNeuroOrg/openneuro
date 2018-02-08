@@ -486,6 +486,31 @@ class Dataset extends Reflux.Component {
     }
   }
 
+  _commentHeader() {
+    let sortBar
+    if (this.state.datasets.commentTree.length) {
+      sortBar = (
+        <select
+          value={this.state.datasets.commentSortOrder}
+          onChange={actions.sortComments}
+          className="comment-sort-select">
+          <option value="DESC">Date: Oldest First</option>
+          <option value="ASC">Date: Newest First</option>
+        </select>
+      )
+    }
+
+    let content = (
+      <div className="comment-header">
+        COMMENTS
+        <div>
+          <span className="comment-sort">SORT BY: {sortBar}</span>
+        </div>
+      </div>
+    )
+
+    return content
+  }
   _commentTree() {
     // add a top level comment box to the dataset if user is logged in
     let loggedIn = !!userStore.hasToken()
@@ -534,7 +559,7 @@ class Dataset extends Reflux.Component {
     }
     return (
       <div className="dataset-comments">
-        <div className="comment-header">COMMENTS</div>
+        {this._commentHeader()}
         <div className="comments">{content}</div>
       </div>
     )
