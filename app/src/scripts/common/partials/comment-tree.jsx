@@ -84,6 +84,7 @@ export default class CommentTree extends Reflux.Component {
     let replyText = this.state.showNewComment ? 'Hide Reply' : 'Reply'
     return (
       <a className="reply" onClick={this.toggleNewComment.bind(this)}>
+        <i className="fa fa-comment" />
         {replyText}
       </a>
     )
@@ -95,12 +96,14 @@ export default class CommentTree extends Reflux.Component {
       if (!this.state.editing) {
         return (
           <a className="edit" onClick={this.startEdit.bind(this)}>
+            <i className="fa fa-pencil" />
             Edit
           </a>
         )
       } else {
         return (
           <a className="cancel-edit" onClick={this.cancelEdit.bind(this)}>
+            <i className="fa fa-times" />
             Cancel Edit
           </a>
         )
