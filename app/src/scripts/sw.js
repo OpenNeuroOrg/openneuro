@@ -26,11 +26,25 @@ self.addEventListener('fetch', event => {
     const bucket = config.aws.s3.datasetBucket
     const bucketHostname = `${bucket}.s3.amazonaws.com`
     if (url.hostname.endsWith(bucketHostname)) {
+      // Respond from the service worker
       const hostname = url.hostname
       const prefix = url.pathname.slice(1)
       event.respondWith(zipResponse(hostname, prefix))
     } else {
-      return
+      // Respond from cache, then the network
+      event.respondWith(
+        caches.open(CACHE_NAME).then(function(cache) {
+          return cache.match(event.request).then(function(response) {
+            return (
+              response ||
+              fetch(event.request).then(function(response) {
+                cache.put(event.request, response.clone())
+                return response
+              })
+            )
+          })
+        }),
+      )
     }
   }
 })
