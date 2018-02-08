@@ -3,22 +3,22 @@
  */
 export default {
   /**
-		 * Scitran
-		 */
+   * Scitran
+   */
   scitran: {
     url: process.env.CRN_SERVER_URL + '/api/',
   },
 
   /**
-		 * CRN
-		 */
+   * CRN
+   */
   crn: {
     url: process.env.CRN_SERVER_URL + '/crn/',
   },
 
   /**
-		 * Authentication
-		 */
+   * Authentication
+   */
   auth: {
     google: {
       clientID: process.env.SCITRAN_AUTH_GOOGLE_CLIENT_ID,
@@ -31,24 +31,25 @@ export default {
   },
 
   /**
-		 * Upload
-		 */
+   * Upload
+   */
   upload: {
     /**
-			 * Filenames ignored during upload.
-			 */
+     * Filenames ignored during upload.
+     */
     blacklist: ['.DS_Store', 'Icon\r'],
   },
 
   /**
-		* AWS configuration
-		*/
+   * AWS configuration
+   */
   aws: {
     batch: {
       vcpusMax: 12,
       memoryMax: 30720,
     },
     s3: {
+      datasetBucket: process.env.AWS_S3_DATASET_BUCKET,
       analysisBucket: process.env.AWS_S3_ANALYSIS_BUCKET,
     },
   },
