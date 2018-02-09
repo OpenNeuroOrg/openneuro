@@ -14,3 +14,10 @@ class FilesResource(object):
         resp.media = doc
 
         resp.status = falcon.HTTP_200
+
+    def on_post(self, req, resp, dataset, filename):
+        if filename:
+            pass
+        else:
+            resp.media = {'error': 'filename is missing'}
+            resp.status = falcon.HTTP_BAD_REQUEST
