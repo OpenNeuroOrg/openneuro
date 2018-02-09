@@ -1,11 +1,11 @@
 // dependencies ----------------------------------------------------------------------
 import React from 'react'
 import PropTypes from 'prop-types'
-import { VictoryPie } from 'victory'
+import { VictoryPie, VictoryLabel } from 'victory'
 
 // Life Cycle ----------------------------------------------------------------------
 
-const Pie = ({ failed, success, total }) => {
+const Pie = ({ failed, success, total, year }) => {
   let dataPoints = { failed, success }
   let data = []
   let dataP
@@ -19,16 +19,27 @@ const Pie = ({ failed, success, total }) => {
   })
 
   return (
-    <div>
-      <VictoryPie
-        width={400}
-        height={400}
-        data={data}
-        innerRadius={49}
-        labelRadius={78}
-        style={{ labels: { fontSize: 14, fill: 'white' } }}
-        colorScale={['#424242', '#007c92']}
-      />
+    <div className="pie-container">
+      <svg viewBox="0 0 400 400">
+        <VictoryPie
+          standalone={false}
+          width={400}
+          height={400}
+          data={data}
+          innerRadius={70}
+          labelRadius={100}
+          style={{ labels: { fontSize: 16, fill: 'black' } }}
+          colorScale={['rgba(236, 71, 46, 0.4', '#009b76']}
+        />
+        <VictoryLabel
+          textAnchor="middle"
+          verticalAnchor="middle"
+          x={200}
+          y={200}
+          style={{ fontSize: 30 }}
+          text={year}
+        />
+      </svg>
     </div>
   )
 }
@@ -37,6 +48,7 @@ Pie.propTypes = {
   failed: PropTypes.node,
   success: PropTypes.node,
   total: PropTypes.node,
+  year: PropTypes.string,
 }
 
 export default Pie
