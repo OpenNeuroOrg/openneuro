@@ -33,7 +33,6 @@ export default class RichEditor extends React.Component {
 
   _onChange(editorState) {
     let decorator = this.state.decorator
-    console.log('editorState', editorState)
     this.setState({
       editorState: EditorState.set(editorState, { decorator }),
     })
