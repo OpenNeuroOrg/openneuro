@@ -38,10 +38,10 @@ const Scatter = ({ logs, year, months }) => {
             tickFormat={ms}
           />
           <VictoryScatter
-            style={{ data: { fill: '#007c92' } }}
+            style={{ data: { fill: '#009b76' } }}
             data={data}
             labels={datum => datum.y}
-            size={10}
+            size={5}
           />
         </VictoryChart>
       </div>
