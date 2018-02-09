@@ -1275,9 +1275,9 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bids-validator@^0.25.0:
-  version "0.25.5"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.25.5.tgz#c61fd98b415647438f80cf1bfab7fac957edca65"
+bids-validator@^0.25.7:
+  version "0.25.7"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.25.7.tgz#7b6d097014b30f43adf6bb3e6c156553a2f467e4"
   dependencies:
     ajv "^5.2.2"
     async "^2.1.5"
@@ -2669,9 +2669,10 @@ domutils@^1.5.1:
 downloadjs@^1.4.7:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/downloadjs/-/downloadjs-1.4.7.tgz#f69f96f940e0d0553dac291139865a3cd0101e3c"
-draft-js-prism@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/draft-js-prism/-/draft-js-prism-1.0.5.tgz#c32aa9c31bfd7b8ad9eb889c62e88a2cd7c741bd"
+
+draft-js-prism@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/draft-js-prism/-/draft-js-prism-1.0.6.tgz#880c5e5ae1a161646cdacc7296a01bf48b0030b4"
   dependencies:
     extend "^3.0.0"
     immutable "*"
@@ -4075,6 +4076,7 @@ ignore@^3.3.3, ignore@^3.3.5, ignore@^3.3.7:
 immediate@~3.0.5:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
+
 immutable@*:
   version "3.8.2"
   resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
