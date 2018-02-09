@@ -70,13 +70,6 @@ $bootstrap-sass-asset-helper: true;
         color: $ocean;
         font-weight: 400;
     }
-    &:after{
-        content: 'BETA';
-        font-size: 20%;
-        position: absolute;
-        top: -10px;
-        margin-left: 5px;
-    }
 }
 
 .fade-in {@include fadeIn();}
