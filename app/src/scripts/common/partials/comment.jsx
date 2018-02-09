@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withRouter } from 'react-router-dom'
 import {
   Editor,
   EditorState,
@@ -11,7 +12,7 @@ import Prism from 'prismjs'
 import '../../../assets/prism-language-loader'
 import PrismDecorator from 'draft-js-prism'
 
-export default class Comment extends React.Component {
+class Comment extends React.Component {
   constructor(props) {
     super(props)
 
@@ -43,6 +44,9 @@ export default class Comment extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.location.hash === `#comment-${this.props.commentId}`) {
+      this.focusElement.focus()
+    }
     // load existing comment editorState + decorator
     if (!this.state.new && this.props.content) {
       let content = JSON.parse(this.props.content)
@@ -297,11 +301,15 @@ export default class Comment extends React.Component {
   }
 
   render() {
-    if (this.state.new) {
-      return this.newContent()
-    } else {
-      return this.existingContent()
-    }
+    return (
+      <div
+        tabIndex="-1"
+        ref={element => {
+          this.focusElement = element
+        }}>
+        {this.state.new ? this.newContent() : this.existingContent()}
+      </div>
+    )
   }
 }
 
@@ -475,3 +483,5 @@ Comment.propTypes = {
   placeholderText: PropTypes.string,
   content: PropTypes.string,
 }
+
+export default withRouter(Comment)

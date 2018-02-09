@@ -2,10 +2,11 @@ import React from 'react'
 import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { withRouter } from 'react-router-dom'
 import Comment from './comment.jsx'
 import WarnButton from '../forms/warn-button.jsx'
 
-export default class CommentTree extends Reflux.Component {
+class CommentTree extends Reflux.Component {
   constructor(props) {
     super(props)
 
@@ -174,11 +175,14 @@ export default class CommentTree extends Reflux.Component {
   _comment() {
     let comment = this.props.node
     return (
-      <div className="comment">
+      <div className="comment" id={`comment-${comment._id}`}>
         <div className="user-info">
           {this._userTag(comment.user.email)}
           {this._ownerTag(comment.user.email)}
           {this._timestamp(comment.createDate)}
+          <a href={`${this.props.location.pathname}#comment-${comment._id}`}>
+            <i className="fa fa-link" aria-hidden="true" />
+          </a>
         </div>
         <div className="comment-avatar">
           <img src={comment.user.imageUrl} />
@@ -253,3 +257,5 @@ CommentTree.propTypes = {
   isAdmin: PropTypes.bool,
   showSubtree: PropTypes.bool,
 }
+
+export default withRouter(CommentTree)
