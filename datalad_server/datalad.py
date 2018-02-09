@@ -10,4 +10,7 @@ class DataladStore(object):
 
     def get_dataset(self, name):
         """Return raw Datalad API dataset based on the name param."""
-        return Dataset('{}/{}'.format(self.annex_path, name))
+        return Dataset(self.get_dataset_path(name))
+
+    def get_dataset_path(self, name):
+        return '{}/{}'.format(self.annex_path, name)

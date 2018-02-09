@@ -20,6 +20,6 @@ def create_app(annex_path):
     api.add_route('/datasets/{dataset}', datasets)
 
     api.add_route('/datasets/{dataset}/files', dataset_files)
-    api.add_route('/datasets/{dataset}/files/{file}', dataset_files)
+    api.add_route('/datasets/{dataset}/files/{filename}', dataset_files)
 
     return api
