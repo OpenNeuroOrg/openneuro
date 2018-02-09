@@ -482,6 +482,7 @@ Comment.propTypes = {
   new: PropTypes.bool,
   placeholderText: PropTypes.string,
   content: PropTypes.string,
+  location: PropTypes.object,
 }
 
 export default withRouter(Comment)
