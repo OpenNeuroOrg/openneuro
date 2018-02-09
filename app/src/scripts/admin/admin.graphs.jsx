@@ -16,6 +16,11 @@ class Progresssion extends Reflux.Component {
     refluxConnect(this, adminStore, 'admin')
     this.state = {
       year: '2018',
+      entries: {
+        failed: [],
+        succeeded: [],
+      },
+      key: '',
     }
   }
 
@@ -24,6 +29,7 @@ class Progresssion extends Reflux.Component {
       actions.getEventLogs()
       actions.filterLogs()
     }
+    this._filterData()
   }
 
   render() {
@@ -73,8 +79,14 @@ class Progresssion extends Reflux.Component {
                   logs={activity}
                   year={this.state.year}
                   months={months}
+                  entries={this.state.entries}
                 />
-                <Bar logs={activity} year={this.state.year} months={months} />
+                <Bar
+                  logs={activity}
+                  year={this.state.year}
+                  months={months}
+                  entries={this.state.entries}
+                />
               </div>
               <div>
                 <span className="key">
@@ -121,6 +133,31 @@ class Progresssion extends Reflux.Component {
       options.push(opt)
     }
     return options
+  }
+
+  _filterData() {
+    let entries = this.state.entries
+    let logs = this.state.admin.activityLogs
+    let year = this.state.year
+    let date
+
+    Object.keys(logs).map(type => {
+      console.log(type)
+      if (logs[type][year]) {
+        Object.values(logs[type][year]).map(job => {
+          let dateArr = job.dateTime.split(' ')
+          let status = job.log.data.job.status.toLowerCase()
+          date = dateArr[1]
+          console.log(date)
+          if (!entries[status][date]) {
+            entries[status][date] = []
+            entries[status][date].push({ date: job.dateTime, status: status })
+          } else {
+            entries[status][date].push({ date: job.dateTime, status: status })
+          }
+        })
+      }
+    })
   }
 }
 export default Progresssion

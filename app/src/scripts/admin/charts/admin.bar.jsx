@@ -6,38 +6,19 @@ import { VictoryChart, VictoryAxis, VictoryStack, VictoryBar } from 'victory'
 
 // Life Cycle ----------------------------------------------------------------------
 
-const Bar = ({ year, logs, months }) => {
+const Bar = ({ year, logs, months, entries }) => {
   let ms = months
-  let key
-  // ARRAY AND OBJECT VARS FOR DATA
   let failed = []
   let succeeded = []
-  let entries = {
-    failed: [],
-    succeeded: [],
-  }
 
-  Object.keys(logs).map(type => {
-    if (logs[type][year]) {
-      Object.values(logs[type][year]).map(job => {
-        let dateArr = job.dateTime.split(' ')
-        let status = job.log.data.job.status.toLowerCase()
-        key = dateArr[1]
-        if (!entries[status][key]) {
-          entries[status][key] = []
-          entries[status][key].push({ date: job.dateTime, status: status })
-        } else {
-          entries[status][key].push({ date: job.dateTime, status: status })
+  Object.keys(entries).map(status => {
+    for (let month of ms) {
+      if (entries[status][month]) {
+        if (status === 'failed') {
+          failed.push({ x: month, y: entries.failed[month].length })
+        } else if (status === 'succeeded') {
+          succeeded.push({ x: month, y: entries.succeeded[month].length })
         }
-      })
-    }
-  })
-  Object.keys(entries).map(log => {
-    if (entries[log][key]) {
-      if (log === 'failed') {
-        failed.push({ x: key, y: entries[log][key].length })
-      } else if (log === 'succeeded') {
-        succeeded.push({ x: key, y: entries[log][key].length })
       }
     }
   })
@@ -45,11 +26,18 @@ const Bar = ({ year, logs, months }) => {
   if (logs.FAILED[year].length || logs.SUCCEEDED[year].length) {
     return (
       <div className="chart-container">
-        <VictoryChart>
+        <VictoryChart domainPadding={10}>
           <VictoryAxis
             style={{ tickLabels: { fontSize: 15 } }}
             tickValues={ms}
             tickFormat={ms}
+          />
+          <VictoryAxis
+            dependentAxis
+            width={400}
+            height={400}
+            domain={[0, 100]}
+            standalone={false}
           />
           <VictoryStack colorScale={['#009b76', '#eb472c']}>
             <VictoryBar data={succeeded} />
@@ -71,6 +59,7 @@ Bar.propTypes = {
   logs: PropTypes.object,
   year: PropTypes.node,
   months: PropTypes.array,
+  entries: PropTypes.object,
 }
 
 export default Bar
