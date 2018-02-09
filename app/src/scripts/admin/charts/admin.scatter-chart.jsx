@@ -12,11 +12,10 @@ import {
 // Life Cycle ----------------------------------------------------------------------
 
 const Scatter = ({ logs, year, months, entries }) => {
-  let dataLength = 0
   let ms = months
   let failed = []
   let succeeded = []
-
+  console.log(year)
   Object.keys(entries).map(status => {
     for (let month of ms) {
       if (entries[status][month]) {
@@ -28,6 +27,7 @@ const Scatter = ({ logs, year, months, entries }) => {
       }
     }
   })
+
   return (
     <div className="chart-container">
       <VictoryChart>
