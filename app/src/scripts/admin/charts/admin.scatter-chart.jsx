@@ -28,40 +28,31 @@ const Scatter = ({ logs, year, months, entries }) => {
       }
     }
   })
-
-  if (logs.SUCCEEDED[year]) {
-    return (
-      <div className="chart-container">
-        <VictoryChart>
-          <VictoryAxis
-            style={{ tickLabels: { fontSize: 15 } }}
-            tickValues={ms}
-            tickFormat={ms}
+  return (
+    <div className="chart-container">
+      <VictoryChart>
+        <VictoryAxis
+          style={{ tickLabels: { fontSize: 15 } }}
+          tickValues={ms}
+          tickFormat={ms}
+        />
+        <VictoryStack>
+          <VictoryScatter
+            style={{ data: { fill: '#009b76' } }}
+            data={succeeded}
+            labels={datum => datum.y}
+            size={5}
           />
-          <VictoryStack>
-            <VictoryScatter
-              style={{ data: { fill: '#009b76' } }}
-              data={succeeded}
-              labels={datum => datum.y}
-              size={5}
-            />
-            <VictoryScatter
-              style={{ data: { fill: '#eb472c' } }}
-              data={failed}
-              labels={datum => datum.y}
-              size={5}
-            />
-          </VictoryStack>
-        </VictoryChart>
-      </div>
-    )
-  } else {
-    return (
-      <div className="chart-container">
-        <h4>Sorry, we can't find any data on jobs in {year}.</h4>
-      </div>
-    )
-  }
+          <VictoryScatter
+            style={{ data: { fill: '#eb472c' } }}
+            data={failed}
+            labels={datum => datum.y}
+            size={5}
+          />
+        </VictoryStack>
+      </VictoryChart>
+    </div>
+  )
 }
 
 Scatter.propTypes = {
