@@ -54,17 +54,35 @@ class Progresssion extends Reflux.Component {
     return (
       <div className="dashboard-dataset-teasers fade-in">
         <div className="header-wrap clearfix chart-header">
-          <h2>Progress for {this.state.year}:</h2>
           <div className="col-sm-9 chart">
             <div className="col-1">
-              <Pie failed={failures} success={successes} total={total} />
+              <Pie
+                failed={failures}
+                success={successes}
+                total={total}
+                year={this.state.year}
+              />
             </div>
             <div className="col-2">
-              <Scatter logs={activity} year={this.state.year} months={months} />
-              <div>
-                <Bar logs={activity} year={this.state.year} months={months} />
-                <label>Choose another year:</label>
+              <div className="filtering">
+                <label>Choose another year: </label>
                 {this._handleFiltering()}
+              </div>
+              <div>
+                <Scatter
+                  logs={activity}
+                  year={this.state.year}
+                  months={months}
+                />
+                <Bar logs={activity} year={this.state.year} months={months} />
+              </div>
+              <div>
+                <span className="key">
+                  <i className="fa fa-circle success" /> - Successful Jobs
+                </span>
+                <span className="key">
+                  <i className="fa fa-circle failed" /> - Failed Jobs
+                </span>
               </div>
             </div>
           </div>
@@ -75,15 +93,13 @@ class Progresssion extends Reflux.Component {
 
   _handleFiltering() {
     return (
-      <div>
-        <select
-          className="year-dropdown"
-          value={this.state.year}
-          onChange={this._handleSelect.bind(this)}
-          placeholder={'Select year...'}>
-          {this._options()}
-        </select>
-      </div>
+      <select
+        className="year-dropdown"
+        value={this.state.year}
+        onChange={this._handleSelect.bind(this)}
+        placeholder={'Select year...'}>
+        {this._options()}
+      </select>
     )
   }
 
