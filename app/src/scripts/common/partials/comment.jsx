@@ -208,7 +208,7 @@ export default class Comment extends React.Component {
             </div>
           </div>
           <button
-            className="comment-submit btn btn-md btn-primary"
+            className="comment-submit btn btn-md"
             onClick={this.onSubmit.bind(this, this.props.parentId)}
             disabled={submitDisabled}>
             {submitText}

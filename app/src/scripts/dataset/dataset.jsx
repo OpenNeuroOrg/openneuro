@@ -502,7 +502,7 @@ class Dataset extends Reflux.Component {
 
     let content = (
       <div className="comment-header">
-        COMMENTS
+        <label>COMMENTS</label>
         <div>
           <span className="comment-sort">SORT BY: {sortBar}</span>
         </div>
