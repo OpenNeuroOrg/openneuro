@@ -214,7 +214,7 @@ class CommentTree extends Reflux.Component {
     if (childTree && this.state.showSubtree) {
       for (let childNode of childTree) {
         content.push(
-          <CommentTree
+          <CommentTreeWithRouter
             key={childNode._id}
             uploadUser={this.props.uploadUser}
             user={this.props.user}
@@ -246,6 +246,8 @@ class CommentTree extends Reflux.Component {
   }
 }
 
+const CommentTreeWithRouter = withRouter(CommentTree)
+
 CommentTree.propTypes = {
   datasetId: PropTypes.string,
   uploadUser: PropTypes.object,
@@ -258,4 +260,4 @@ CommentTree.propTypes = {
   showSubtree: PropTypes.bool,
 }
 
-export default withRouter(CommentTree)
+export default CommentTreeWithRouter
