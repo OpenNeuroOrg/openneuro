@@ -11,7 +11,7 @@ const Footer = props => {
       <footer>
         <div className="row">
           <div className="col-xs-12 col-md-4 version">
-            <span>OpenNeuro Beta v{version}</span>
+            <span>OpenNeuro v{version}</span>
           </div>
           <div className="col-xs-12 col-md-4 footer-menu" />
           <div className="col-xs-12 col-md-4 copy">
