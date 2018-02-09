@@ -51,7 +51,7 @@ const Bar = ({ year, logs, months }) => {
             tickValues={ms}
             tickFormat={ms}
           />
-          <VictoryStack colorScale={['#38A171', '#c82424']}>
+          <VictoryStack colorScale={['#009b76', '#eb472c']}>
             <VictoryBar data={succeeded} />
             <VictoryBar data={failed} />
           </VictoryStack>
