@@ -58,6 +58,7 @@ const Scatter = ({ logs, year, months }) => {
 Scatter.propTypes = {
   logs: PropTypes.object,
   year: PropTypes.node,
+  months: PropTypes.array,
 }
 
 export default Scatter
