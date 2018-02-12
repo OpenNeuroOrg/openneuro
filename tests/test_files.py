@@ -17,6 +17,13 @@ def test_get_file(client):
     assert json.loads(result.content)['BIDSVersion'] == '1.0.2'
 
 
+def test_get_missing_file(client):
+    ds_id = 'ds000001'
+    result = client.simulate_get(
+        '/datasets/{}/files/thisdoesnotexist.json'.format(ds_id), file_wrapper=FileWrapper)
+    assert result.status == falcon.HTTP_NOT_FOUND
+
+
 def test_add_file(client, annex_path):
     ds_id = 'ds000001'
     file_data = 'Test dataset README'

@@ -10,10 +10,14 @@ class FilesResource(object):
 
     def on_get(self, req, resp, dataset, filename):
         ds_path = self.store.get_dataset_path(dataset)
-        fd = open(os.path.join(ds_path, filename), 'rb')
-        resp.stream = fd
-        resp.stream_len = os.fstat(fd.fileno()).st_size
-        resp.status = falcon.HTTP_OK
+        try:
+            fd = open(os.path.join(ds_path, filename), 'rb')
+            resp.stream = fd
+            resp.stream_len = os.fstat(fd.fileno()).st_size
+            resp.status = falcon.HTTP_OK
+        except FileNotFoundError:
+            resp.media = {'error': 'file does not exist'}
+            resp.status = falcon.HTTP_NOT_FOUND
 
     def on_post(self, req, resp, dataset, filename):
         if filename:
