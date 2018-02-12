@@ -156,7 +156,7 @@ class CommentTree extends React.Component {
 
   _userAvatar() {
     let comment = this.props.node
-    if (!comment.deleted) {
+    if (!comment.deleted && !this.props.isAdmin) {
       return (
         <div className="comment-avatar">
           <img src={comment.user.imageUrl} />
@@ -176,7 +176,7 @@ class CommentTree extends React.Component {
   }
 
   _actions(comment) {
-    if (this.props.user && !this.props.node.deleted) {
+    if (this.props.user && !this.props.node.deleted && !this.props.isAdmin) {
       return (
         <div className="comment-actions">
           {this._deleteButton(comment)}
@@ -254,7 +254,8 @@ class CommentTree extends React.Component {
     if (
       !this.props.node.children.length &&
       this.props.node.deleted &&
-      !this.props.parentId
+      !this.props.parentId &&
+      !this.props.isAdmin
     ) {
       return null
     }
