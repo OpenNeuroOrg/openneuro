@@ -533,7 +533,7 @@ class Dataset extends Reflux.Component {
       )
     } else {
       content.push(
-        <div className="login-for-comments">
+        <div key="commentLoginMessage" className="login-for-comments">
           Please login to contribute to the discussion
         </div>,
       )

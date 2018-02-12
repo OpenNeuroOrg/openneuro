@@ -24,8 +24,8 @@ class CommentTree extends React.Component {
     this.createComment = this._createComment.bind(this)
   }
 
-  _handleDelete(commentId, parentId) {
-    this.props.deleteComment(commentId, parentId)
+  _handleDelete(commentId, parentId, callback) {
+    this.props.deleteComment(commentId, parentId, callback)
   }
 
   _newComment(parentId) {
@@ -64,7 +64,10 @@ class CommentTree extends React.Component {
   }
 
   _deleteButton(comment) {
-    if (comment.user.email === this.props.user.email || this.props.isAdmin) {
+    if (
+      (comment.user.email === this.props.user.email || this.props.isAdmin) &&
+      !this.props.node.deleted
+    ) {
       return (
         <WarnButton
           action={this.handleDelete.bind(
@@ -156,7 +159,7 @@ class CommentTree extends React.Component {
 
   _userAvatar() {
     let comment = this.props.node
-    if (!comment.deleted && !this.props.isAdmin) {
+    if (!comment.deleted || this.props.isAdmin) {
       return (
         <div className="comment-avatar">
           <img src={comment.user.imageUrl} />
@@ -176,7 +179,7 @@ class CommentTree extends React.Component {
   }
 
   _actions(comment) {
-    if (this.props.user && !this.props.node.deleted && !this.props.isAdmin) {
+    if ((this.props.user && !this.props.node.deleted) || this.props.isAdmin) {
       return (
         <div className="comment-actions">
           {this._deleteButton(comment)}
@@ -187,6 +190,34 @@ class CommentTree extends React.Component {
       )
     }
     return null
+  }
+
+  _commentContent() {
+    let comment = this.props.node
+    if (comment.deleted) {
+      return (
+        <div className="comment-div">
+          <div className="reply-div">
+            <div className="deleted-comment">[deleted]</div>
+          </div>
+        </div>
+      )
+    } else {
+      return (
+        <div className="comment-div">
+          <Comment
+            editing={this.state.editing}
+            new={false}
+            show={true}
+            content={comment.text}
+            commentId={comment._id}
+            updateComment={this.props.updateComment}
+            startEdit={this.startEdit.bind(this)}
+            cancelEdit={this.cancelEdit.bind(this)}
+          />
+        </div>
+      )
+    }
   }
 
   _comment() {
@@ -203,18 +234,7 @@ class CommentTree extends React.Component {
           {this._showRepliesButton()}
         </div>
         {this._userAvatar()}
-        <div className="comment-div">
-          <Comment
-            editing={this.state.editing}
-            new={false}
-            show={true}
-            content={comment.text}
-            commentId={comment._id}
-            updateComment={this.props.updateComment}
-            startEdit={this.startEdit.bind(this)}
-            cancelEdit={this.cancelEdit.bind(this)}
-          />
-        </div>
+        {this._commentContent()}
         {this._actions(comment)}
       </div>
     )
