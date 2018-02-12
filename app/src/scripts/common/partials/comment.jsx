@@ -34,6 +34,7 @@ class Comment extends React.Component {
 
     this.state = {
       defaultSyntax: 'python',
+      codeLanguage: 'python',
       editorState: EditorState.createEmpty(decorator),
       originalEditorState: EditorState.createEmpty(decorator),
       decorator: decorator,
@@ -55,7 +56,11 @@ class Comment extends React.Component {
       let contentState = convertFromRaw(content)
       let editorState = EditorState.createWithContent(contentState)
       this.setState(
-        { decorator: decorator, originalEditorState: editorState },
+        {
+          decorator: decorator,
+          originalEditorState: editorState,
+          codeLanguage: codeLanguage,
+        },
         () => {
           this.onChange(editorState)
         },
@@ -133,7 +138,7 @@ class Comment extends React.Component {
   _changeLanguage(e) {
     let value = e.currentTarget.value
     let decorator = this.getDecorator(value)
-    this.setState({ decorator: decorator }, () => {
+    this.setState({ decorator: decorator, codeLanguage: value }, () => {
       this.onChange(this.state.editorState)
     })
   }
@@ -194,6 +199,7 @@ class Comment extends React.Component {
               <SyntaxLanguageSelector
                 changeLanguage={this.changeLanguage}
                 editorState={editorState}
+                codeLanguage={this.state.codeLanguage}
               />
               <div className={className}>
                 <Editor
@@ -260,6 +266,7 @@ class Comment extends React.Component {
           <SyntaxLanguageSelector
             changeLanguage={this.changeLanguage}
             editorState={editorState}
+            codeLanguage={this.state.codeLanguage}
           />
         </div>
       )
@@ -407,10 +414,9 @@ const SyntaxLanguageSelector = props => {
           <div className="form-control-plaintext">
             <select
               onChange={props.changeLanguage}
+              value={props.codeLanguage}
               className="language-selector">
-              <option value="python" defaultValue>
-                Python
-              </option>
+              <option value="python">Python</option>
               <option value="javascript">JavaScript</option>
               <option value="c">C</option>
               <option value="cpp">C++</option>
@@ -451,6 +457,7 @@ const InlineStyleControls = props => {
 SyntaxLanguageSelector.propTypes = {
   changeLanguage: PropTypes.func,
   editorState: PropTypes.object,
+  codeLanguage: PropTypes.string,
 }
 
 InlineStyleControls.propTypes = {
