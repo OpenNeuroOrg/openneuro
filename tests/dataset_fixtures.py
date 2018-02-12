@@ -24,6 +24,7 @@ def annex_path(tmpdir_factory):
     json_path = os.path.join(ds_path, 'dataset_description.json')
     with open(json_path, 'w') as f:
         json.dump(DATASET_DESCRIPTION, f, ensure_ascii=False)
+    ds.add(json_path)
     return path
 
 
