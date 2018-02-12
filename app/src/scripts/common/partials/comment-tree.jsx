@@ -1,12 +1,11 @@
 import React from 'react'
-import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import Comment from './comment.jsx'
 import WarnButton from '../forms/warn-button.jsx'
 
-class CommentTree extends Reflux.Component {
+class CommentTree extends React.Component {
   constructor(props) {
     super(props)
 
