@@ -323,11 +323,9 @@ export default {
   },
 
   deleteSubscription(datasetId, userId) {
-    return request.del(config.crn.url + 'subscriptions/' + datasetId, {
-      body: {
-        datasetId: datasetId,
-        userId: userId,
-      },
-    })
+    return request.del(
+      config.crn.url + 'subscriptions/' + datasetId + '/' + userId,
+      {},
+    )
   },
 }

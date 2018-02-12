@@ -54,10 +54,10 @@ export default {
    */
 
   delete(req, res, next) {
-    let data = req.body
-    let datasetId = data.datasetId
-    let userId = data.userId
-
+    let data = req.params
+    let datasetId = data.datasetId ? data.datasetId : null
+    let userId = data.userId ? data.userId : null
+    
     // delete an entry in the c.crn.subscriptions db
     // with the datasetId and userId
     c.crn.subscriptions.deleteOne(
@@ -65,17 +65,16 @@ export default {
         datasetId: datasetId,
         userId: userId,
       },
-      {},
       err => {
         if (err) {
           console.log('error in mongo db subscriotions create():', err)
           return next(err)
         } else {
           console.log(
-            'sucessfully created a subscription! response data:',
+            'sucessfully deleted a subscription! response data:',
             data,
           )
-          return res.send(200)
+          return res.send()
         }
       },
     )
