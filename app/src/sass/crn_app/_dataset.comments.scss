@@ -115,6 +115,8 @@
 }
 
 .top-level {
+  margin-bottom: 10px; 
+
   .reply-div {
     border: solid 1px $ddd;
     margin: 0px;
@@ -133,6 +135,7 @@
 
 .parent-comment {
   margin-left: 0px;
+  padding-left: 0px;
   border-left: none;
 }
 
