@@ -7,6 +7,11 @@ $bootstrap-sass-asset-helper: true;
 //font  //=================================================================
 @import './font-awesome/font-awesome';
 
+// draft.js
+@import './draft/draft';
+@import './draft/rich-editor';
+@import '../../node_modules/prismjs/themes/prism-coy';
+
 // papaya asset default
 @import './crn_app/_common.papaya';
 
@@ -47,6 +52,7 @@ $bootstrap-sass-asset-helper: true;
 @import './crn_app/dataset.tools';
 @import './crn_app/dataset.file-tree';
 @import './crn_app/dataset.sidebar';
+@import './crn_app/dataset.comments';
 @import './crn_app/admin.admin';
 @import './crn_app/frontPage';
 @import './crn_app/dashboard.datasets';

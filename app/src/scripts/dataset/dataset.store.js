@@ -64,6 +64,9 @@ let datasetStore = Reflux.createStore({
         version: false,
         job: false,
       },
+      comments: [],
+      commentTree: [],
+      commentSortOrder: 'DESC',
       currentUpdate: null,
       currentUploadId: null,
       dataset: null,
@@ -183,6 +186,7 @@ let datasetStore = Reflux.createStore({
             let originalId = dataset.original ? dataset.original : datasetId
             this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
               this.loadSnapshots(dataset, jobs, () => {
+                this.loadComments(originalId)
                 this.update({ loading: false, snapshot: snapshot })
               })
             })
@@ -1827,8 +1831,6 @@ let datasetStore = Reflux.createStore({
     scitran.trackUsage(snapshotId, 'view', { snapshot: true })
   },
 
-  // Toggle Sidebar ----------------------------------------------------------------
-
   toggleSidebar(value) {
     let showSidebar = !this.data.showSidebar
     if (typeof value === 'boolean') {
@@ -1840,6 +1842,133 @@ let datasetStore = Reflux.createStore({
 
   _getInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
+  },
+
+  // Comments  ----------------------------------------------------------------
+
+  loadComments(datasetId) {
+    crn.getComments(datasetId).then(res => {
+      if (res && (res.status === 404 || res.status === 403)) {
+        this.update({
+          commentTree: [],
+          comments: [],
+        })
+      } else {
+        let comments = res.body
+        this.createCommentTree(comments)
+        this.update({
+          comments: comments,
+          content: '',
+        })
+      }
+    })
+  },
+
+  createComment(content, parent) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+
+    const parentId = typeof parent === 'undefined' ? null : parent
+
+    const comment = {
+      datasetId: datasetId,
+      parentId: parentId,
+      text: content,
+      user: this.data.currentUser.profile,
+      createDate: moment().format(),
+    }
+
+    crn.createComment(datasetId, comment).then(res => {
+      if (res) {
+        if (res.status === 200 && res.ok) {
+          this.loadComments(datasetId)
+        }
+      }
+    })
+  },
+
+  updateComment(commentId, content) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+
+    const comment = {
+      commentId: commentId,
+      text: content,
+    }
+    crn.updateComment(datasetId, commentId, comment).then(res => {
+      if (res) {
+        if (res.status === 200 && res.ok) {
+          this.loadComments(datasetId)
+        }
+      }
+    })
+  },
+
+  deleteComment(commentId, parent, callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+
+    const parentId = typeof parent == undefined ? null : parent
+
+    const comment = {
+      commentId: commentId,
+      parentId: parentId,
+    }
+    crn.deleteComment(comment).then(res => {
+      if (res) {
+        if (res.status === 200 && res.ok) {
+          this.loadComments(datasetId)
+          if (callback) {
+            callback()
+          }
+        }
+      }
+    })
+  },
+
+  sortComments(e) {
+    let commentTree
+    let commentSortOrder = e.currentTarget.value
+    if (commentSortOrder === 'ASC') {
+      commentTree = this.data.commentTree.sort((a, b) => {
+        return a.createDate < b.createDate
+      })
+    } else {
+      commentTree = this.data.commentTree.sort((a, b) => {
+        return a.createDate > b.createDate
+      })
+    }
+    this.update({
+      commentSortOrder: commentSortOrder,
+      commentTree: commentTree,
+    })
+  },
+
+  createCommentTree(comments) {
+    let map = {}
+    let node = []
+    let roots = []
+
+    for (let i = 0; i < comments.length; i += 1) {
+      map[comments[i]._id] = i
+      comments[i].children = []
+    }
+    for (let j = 0; j < comments.length; j += 1) {
+      node = comments[j]
+      if (node.parentId !== null) {
+        if (map[node.parentId] !== undefined) {
+          comments[map[node.parentId]].children.push(node)
+        }
+      } else {
+        roots.push(node)
+      }
+    }
+    this.update({
+      commentTree: roots,
+    })
   },
 })
 

@@ -115,6 +115,38 @@ let auth = {
   },
 
   /**
+     * Delete Comment Access
+     *
+     * Determines whether the user has the right
+     * to delete a comment
+     */
+  deleteCommentAccess(req, res, next) {
+    let commentId = req.params.commentId
+    let user = req.user
+    let admin = !!req.isSuperUser
+
+    if (admin) {
+      return next()
+    }
+
+    c.crn.comments.findOne(
+      {
+        _id: ObjectID(commentId),
+      },
+      (err, comment) => {
+        let commentOwner = comment.userId
+        if (commentOwner === user) {
+          return next()
+        }
+
+        return res
+          .status(403)
+          .send({ error: 'You do not have access to delete this comment.' })
+      },
+    )
+  },
+
+  /**
     * Check to see if user is an admin user. If so, just next()
     * if not, prevent user from having more than 2 jobs running concurrently
     * NOTE: this middleware function depends on auth middleware that attaches user and isSuperUser to req having already run

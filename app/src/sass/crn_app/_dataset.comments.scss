@@ -1,0 +1,204 @@
+/*Globals*/
+
+.dataset-comments {
+  * {
+    box-sizing: border-box;
+    font-family: inherit;
+  }
+  button:focus {
+    outline: none;
+  }
+  blockquote.RichEditor-blockquote {
+    border-left: 5px solid $ocean;
+  }
+  .comment-header {
+    label {
+      font-size: 18px;
+      color: $c-42;
+      line-height: 10px;
+      padding: 0;
+    }
+    div {
+      margin-bottom: 15px;
+      span {
+        float: right;
+        select {
+          width: 160px;
+          font-size: 13px;
+          height: 25px;
+        }
+      }
+    }
+  }
+  pre {
+    background-color: $eee !important;
+    color: inherit;
+    * {
+      background-color: inherit !important;
+    }
+  }
+  i {
+    font-family: "FontAwesome";
+    padding-right: 2px;
+    padding-left: 2px;
+  }
+}
+
+/*Comment Tree*/
+
+.comment-tree {
+  margin-left: 20px;
+  padding-left: 15px;
+  border-left: solid 1px $ccc;
+
+  .comment-box {
+    padding: 20px;
+  }
+  .comment-div {
+    display: inline-block;
+    width: 80%;
+    display: inline-block;
+    .comment-text {
+      background: transparent;
+    }
+  }
+  .comment-avatar {
+    display: inline-block;
+    width: 75px;
+    vertical-align: top;
+    position: relative;
+    top: 10px;
+
+    img {
+      height: 60px;
+      width: 60px;
+    }
+  }
+  .comment {
+    border: 1px solid $ddd;
+    padding: 15px 0px 10px 10px;
+    margin: 0px 0px 10px 0px;
+    .user-info {
+      font-size: 13px;
+      .username {
+        font-weight: bold;
+      }
+    }
+    .comment-actions {
+      text-align: right;
+      padding-right: 20px;
+      font-size: 12px;
+      a {
+        text-transform: uppercase;
+        color: $ocean;
+        &:hover {
+          color: $sky;
+        }
+      }
+      .reply-div {
+        border: solid 1px $ddd;
+        margin: 0px;
+        margin-top: 10px;
+        padding: 15px;
+        button {
+          margin-top: 10px;
+          margin-right: 5%;
+        }
+      }
+    }
+  }
+}
+
+.toggle-replies {
+  float:right;
+  margin-right:20px;
+}
+
+.top-level {
+  margin-bottom: 10px; 
+
+  .reply-div {
+    border: solid 1px $ddd;
+    margin: 0px;
+    margin-top: 10px;
+    padding: 15px;
+    button {
+      margin-top: 10px;      
+      margin-right: 5%;
+    }
+  }
+}
+
+.comment-input {
+  width: 80%;
+}
+
+.deleted-comment {
+  padding: 15px;
+}
+
+.parent-comment {
+  margin-left: 0px;
+  padding-left: 0px;
+  border-left: none;
+}
+
+
+/*Editor Block*/
+
+.comment-box.top-level,
+.reply-div {
+  // margin: 0px 0px 30px 0px;
+  div.RichEditor-editor {
+    background-color: $f8;
+    color: $c-66;
+    padding: 0px 10px 10px 10px;
+    &:focus-within {
+      box-shadow: inset 0px 0px 5px $c-66;
+    }
+  }
+}
+
+/*Submit Button*/
+
+.comment-submit {
+  background: $white;
+  color: $ocean;
+  width: 90%;
+  border: 2px solid $ocean;
+  border-radius: 0px;
+  margin-left: 4%;
+  &:focus {
+    outline: none !important;
+  }
+  &:hover {
+    background-color: $sky;
+    color: $white;
+    border: 2px solid $sky;
+  }
+}
+
+.comments {
+  position: relative;
+  border: solid 1px $ddd;
+  margin: 0px 0px 20px 0px;
+  padding: 10px;
+  top: 20px;
+}
+
+.dataset-owner-flag {
+  padding: 0px 2px;
+  background-color: $ocean;
+  color: white;
+}
+
+.login-for-comments {
+  text-align: center;
+}
+
+.reply,
+.delete,
+.edit,
+.cancel-edit {
+  padding-left: 20px;
+}

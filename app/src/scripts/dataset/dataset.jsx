@@ -21,6 +21,8 @@ import Jobs from './dataset.jobs.jsx'
 import ErrorBoundary from '../errors/errorBoundary.jsx'
 import userStore from '../user/user.store.js'
 import Summary from './dataset.summary.jsx'
+import Comment from '../common/partials/comment.jsx'
+import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
 import bids from '../utils/bids'
@@ -195,6 +197,7 @@ class Dataset extends Reflux.Component {
                     editable={canEdit}
                     issues={this.state.datasets.metadataIssues}
                   />
+                  {this._commentTree()}
                 </div>
                 <div className="col-xs-6">
                   <div>
@@ -481,6 +484,85 @@ class Dataset extends Reflux.Component {
         </div>
       )
     }
+  }
+
+  _commentHeader() {
+    let sortBar
+    if (this.state.datasets.commentTree.length) {
+      sortBar = (
+        <select
+          value={this.state.datasets.commentSortOrder}
+          onChange={actions.sortComments}
+          className="comment-sort-select">
+          <option value="DESC">Date: Oldest First</option>
+          <option value="ASC">Date: Newest First</option>
+        </select>
+      )
+    }
+
+    let content = (
+      <div className="comment-header">
+        <label>COMMENTS</label>
+        <div>
+          <span className="comment-sort">SORT BY: {sortBar}</span>
+        </div>
+      </div>
+    )
+
+    return content
+  }
+  _commentTree() {
+    // add a top level comment box to the dataset if user is logged in
+    let loggedIn = !!userStore.hasToken()
+    let isAdmin =
+      loggedIn && this.state.datasets.currentUser
+        ? this.state.datasets.currentUser.scitran.root
+        : false
+
+    let content = []
+    if (loggedIn) {
+      content.push(
+        <div className="comment-box top-level" key="topComment">
+          <Comment
+            createComment={actions.createComment}
+            parentId={null}
+            show={true}
+            new={true}
+          />
+        </div>,
+      )
+    } else {
+      content.push(
+        <div key="commentLoginMessage" className="login-for-comments">
+          Please login to contribute to the discussion
+        </div>,
+      )
+    }
+
+    // construct comment tree
+    for (let comment of this.state.datasets.commentTree) {
+      content.push(
+        <div key={comment._id}>
+          <CommentTree
+            uploadUser={this.state.datasets.dataset.user}
+            user={this.state.datasets.currentUser.profile}
+            isAdmin={isAdmin}
+            node={comment}
+            datasetId={this.props.match.params.datasetId}
+            createComment={actions.createComment}
+            deleteComment={actions.deleteComment}
+            updateComment={actions.updateComment}
+            isParent={true}
+          />
+        </div>,
+      )
+    }
+    return (
+      <div className="dataset-comments">
+        {this._commentHeader()}
+        <div className="comments">{content}</div>
+      </div>
+    )
   }
 
   _incompleteMessage(dataset) {
