@@ -1970,6 +1970,33 @@ let datasetStore = Reflux.createStore({
       commentTree: roots,
     })
   },
+  
+  // subscriptions ---------------------------------------------------------------
+  createSubscription() {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    let userId = this.data.dataset.user._id
+    crn.createSubscription(datasetId, userId).then((err, res) => {
+      console.log('createSubscription returned err:', err, 'and res:', res)
+    })
+  },
+
+  deleteSubscription() {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    let userId = this.data.dataset.user._id
+    console.log(
+      'dataset.store deleteSubscription() with datasetId:',
+      datasetId,
+      'and userId:',
+      userId,
+    )
+    crn.deleteSubscription(datasetId, userId).then((err, res) => {
+      console.log('deleteSubscription returned err:', err, 'and res:', res)
+    })
+  },
 })
 
 export default datasetStore

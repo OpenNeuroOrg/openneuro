@@ -172,6 +172,36 @@ class Tools extends React.Component {
           },
         ],
       },
+      {
+        tooltip: 'Follow Dataset',
+        icon: 'fa-tag icon-plus',
+        action: actions.createSubscription.bind(this),
+        display: isSignedIn,
+        warn: false,
+        validations: [
+          {
+            check: this.props.uploading && !isSnapshot,
+            message: 'You are about to follow a dataset',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
+      },
+      {
+        tooltip: 'Unfollow Dataset',
+        icon: 'fa-tag icon-minus',
+        action: actions.deleteSubscription.bind(this),
+        display: isSignedIn,
+        warn: false,
+        // validations: [
+        //   {
+        //     check: null,
+        //     message: 'You are about to unfollow a dataset.',
+        //     timeout: 5000,
+        //     type: 'Error',
+        //   },
+        // ],
+      },
     ]
 
     return (
