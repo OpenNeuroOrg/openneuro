@@ -328,4 +328,11 @@ export default {
       {},
     )
   },
+
+  checkUserSubscription(datasetId, userId) {
+    return request.get(
+      config.crn.url + 'subscriptions/' + datasetId + '/' + userId,
+      {},
+    )
+  },
 }

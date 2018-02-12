@@ -37,10 +37,8 @@ export default {
       },
       (err, response) => {
         if (err) {
-          console.log('error in mongo db subscriotions create():', err)
           return next(err)
         } else {
-          console.log('sucessfully created a subscription!')
           return res.send(response.ops)
         }
       },
@@ -57,7 +55,7 @@ export default {
     let data = req.params
     let datasetId = data.datasetId ? data.datasetId : null
     let userId = data.userId ? data.userId : null
-    
+
     // delete an entry in the c.crn.subscriptions db
     // with the datasetId and userId
     c.crn.subscriptions.deleteOne(
@@ -67,13 +65,8 @@ export default {
       },
       err => {
         if (err) {
-          console.log('error in mongo db subscriotions create():', err)
           return next(err)
         } else {
-          console.log(
-            'sucessfully deleted a subscription! response data:',
-            data,
-          )
           return res.send()
         }
       },
@@ -100,6 +93,29 @@ export default {
           return next(err)
         }
         res.send(subscriptions)
+      })
+  },
+
+  /**
+  * Check User Subscription
+  *
+  * Checks to see if a user is subscribed to a dataset
+  */
+
+  checkUserSubscription(req, res) {
+    let datasetId = req.params.datasetId
+    let userId = req.params.userId
+
+    c.crn.subscriptions
+      .findOne({
+        datasetId: datasetId,
+        userId: userId
+      }).then((resp) => {
+        if (resp) {
+          return res.send({subscribed: true})
+        } else {
+          return res.send({subscribed: false})
+        }
       })
   },
 }

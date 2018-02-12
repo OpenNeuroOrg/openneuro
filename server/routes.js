@@ -250,6 +250,12 @@ const routes = [
     handler: subscriptions.getSubscriptions
   },
   {
+    method: 'get',
+    url: '/subscriptions/:datasetId/:userId',
+    middleware: [auth.user],
+    handler: subscriptions.checkUserSubscription
+  },
+  {
     method: 'post',
     url: '/subscriptions/:datasetId',
     middleware: [auth.user],
