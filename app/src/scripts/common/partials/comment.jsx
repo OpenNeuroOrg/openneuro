@@ -8,9 +8,6 @@ import {
   convertFromRaw,
   convertToRaw,
 } from 'draft-js'
-import Prism from 'prismjs'
-import '../../../assets/prism-language-loader'
-import PrismDecorator from 'draft-js-prism'
 
 class Comment extends React.Component {
   constructor(props) {
@@ -25,19 +22,12 @@ class Comment extends React.Component {
     this.onTab = this._onTab.bind(this)
     this.toggleBlockType = this._toggleBlockType.bind(this)
     this.toggleInlineStyle = this._toggleInlineStyle.bind(this)
-    this.changeLanguage = this._changeLanguage.bind(this)
     this.newContent = this._newContent.bind(this)
     this.existingContent = this._existingContent.bind(this)
-    this.getDecorator = this._getDecorator.bind(this)
-
-    let decorator = this.getDecorator('python')
 
     this.state = {
-      defaultSyntax: 'python',
-      codeLanguage: 'python',
-      editorState: EditorState.createEmpty(decorator),
-      originalEditorState: EditorState.createEmpty(decorator),
-      decorator: decorator,
+      editorState: EditorState.createEmpty(),
+      originalEditorState: EditorState.createEmpty(),
       placeholderText: this.props.placeholderText,
       editing: this.props.editing,
       new: this.props.new,
@@ -51,15 +41,11 @@ class Comment extends React.Component {
     // load existing comment editorState + decorator
     if (!this.state.new && this.props.content) {
       let content = JSON.parse(this.props.content)
-      let codeLanguage = content.codeLanguage
-      let decorator = this.getDecorator(codeLanguage)
       let contentState = convertFromRaw(content)
       let editorState = EditorState.createWithContent(contentState)
       this.setState(
         {
-          decorator: decorator,
           originalEditorState: editorState,
-          codeLanguage: codeLanguage,
         },
         () => {
           this.onChange(editorState)
@@ -81,9 +67,8 @@ class Comment extends React.Component {
   }
 
   _onChange(editorState) {
-    let decorator = this.state.decorator
     this.setState({
-      editorState: EditorState.set(editorState, { decorator }),
+      editorState: EditorState.set(editorState, { decorator: null }),
     })
   }
 
@@ -91,7 +76,6 @@ class Comment extends React.Component {
     let contentState = this.state.editorState.getCurrentContent()
     if (contentState.hasText()) {
       let content = convertToRaw(contentState)
-      content.codeLanguage = this.state.decorator.options.defaultSyntax
       let stringContent = JSON.stringify(content)
       this.props.createComment(stringContent, parentId)
       let emptyEditorState = EditorState.createEmpty()
@@ -104,7 +88,6 @@ class Comment extends React.Component {
 
   _onUpdate() {
     let content = convertToRaw(this.state.editorState.getCurrentContent())
-    content.codeLanguage = this.state.decorator.options.defaultSyntax
     let stringContent = JSON.stringify(content)
     this.props.updateComment(this.props.commentId, stringContent)
     this.setState(
@@ -129,25 +112,6 @@ class Comment extends React.Component {
   _onTab(e) {
     const maxDepth = 4
     this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth))
-  }
-
-  _getSyntax() {
-    return this.state.codeSyntax
-  }
-
-  _changeLanguage(e) {
-    let value = e.currentTarget.value
-    let decorator = this.getDecorator(value)
-    this.setState({ decorator: decorator, codeLanguage: value }, () => {
-      this.onChange(this.state.editorState)
-    })
-  }
-
-  _getDecorator(syntax) {
-    return new PrismDecorator({
-      prism: Prism,
-      defaultSyntax: syntax,
-    })
   }
 
   _toggleBlockType(blockType) {
@@ -196,15 +160,9 @@ class Comment extends React.Component {
                 editorState={editorState}
                 onToggle={this.toggleInlineStyle}
               />
-              <SyntaxLanguageSelector
-                changeLanguage={this.changeLanguage}
-                editorState={editorState}
-                codeLanguage={this.state.codeLanguage}
-              />
               <div className={className}>
                 <Editor
                   blockStyleFn={getBlockStyle}
-                  syntax="python"
                   customStyleMap={styleMap}
                   editorState={editorState}
                   handleKeyCommand={this.handleKeyCommand}
@@ -263,11 +221,6 @@ class Comment extends React.Component {
             editorState={editorState}
             onToggle={this.toggleInlineStyle}
           />
-          <SyntaxLanguageSelector
-            changeLanguage={this.changeLanguage}
-            editorState={editorState}
-            codeLanguage={this.state.codeLanguage}
-          />
         </div>
       )
 
@@ -288,7 +241,6 @@ class Comment extends React.Component {
             <div className={className}>
               <Editor
                 blockStyleFn={getBlockStyle}
-                syntax={this.state.decorator.defaultSyntax}
                 customStyleMap={styleMap}
                 editorState={editorState}
                 handleKeyCommand={this.handleKeyCommand}
@@ -398,38 +350,6 @@ const BlockStyleControls = props => {
   )
 }
 
-const SyntaxLanguageSelector = props => {
-  const { editorState } = props
-  const selection = editorState.getSelection()
-  const blockType = editorState
-    .getCurrentContent()
-    .getBlockForKey(selection.getStartKey())
-    .getType()
-
-  if (blockType === 'code-block') {
-    return (
-      <div>
-        <div className="form-group row">
-          <label>Syntax Highlighting Language:</label>
-          <div className="form-control-plaintext">
-            <select
-              onChange={props.changeLanguage}
-              value={props.codeLanguage}
-              className="language-selector">
-              <option value="python">Python</option>
-              <option value="javascript">JavaScript</option>
-              <option value="c">C</option>
-              <option value="cpp">C++</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    )
-  } else {
-    return null
-  }
-}
-
 var INLINE_STYLES = [
   { label: 'Bold', style: 'BOLD' },
   { label: 'Italic', style: 'ITALIC' },
@@ -452,12 +372,6 @@ const InlineStyleControls = props => {
       ))}
     </div>
   )
-}
-
-SyntaxLanguageSelector.propTypes = {
-  changeLanguage: PropTypes.func,
-  editorState: PropTypes.object,
-  codeLanguage: PropTypes.string,
 }
 
 InlineStyleControls.propTypes = {
