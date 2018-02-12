@@ -118,8 +118,10 @@ class CommentTree extends React.Component {
       : false
     if (repliesExist) {
       let buttonText = this.state.showSubtree ? 'Hide Replies' : 'Show Replies'
+      let iconClass = this.state.showSubtree ? 'fa fa-minus' : 'fa fa-plus'
       return (
         <a className="toggle-replies" onClick={this.toggleSubtree.bind(this)}>
+          <i className={iconClass} />
           {buttonText}
         </a>
       )
@@ -160,7 +162,6 @@ class CommentTree extends React.Component {
     if (this.props.user) {
       return (
         <div className="comment-actions">
-          {this._showRepliesButton()}
           {this._deleteButton(comment)}
           {this._replyButton()}
           {this._editButton()}
@@ -182,23 +183,22 @@ class CommentTree extends React.Component {
           <a href={`${this.props.location.pathname}#comment-${comment._id}`}>
             <i className="fa fa-link" aria-hidden="true" />
           </a>
+          {this._showRepliesButton()}
         </div>
         <div className="comment-avatar">
           <img src={comment.user.imageUrl} />
         </div>
         <div className="comment-div">
-          <span className="comment-text">
-            <Comment
-              editing={this.state.editing}
-              new={false}
-              show={true}
-              content={comment.text}
-              commentId={comment._id}
-              updateComment={this.props.updateComment}
-              startEdit={this.startEdit.bind(this)}
-              cancelEdit={this.cancelEdit.bind(this)}
-            />
-          </span>
+          <Comment
+            editing={this.state.editing}
+            new={false}
+            show={true}
+            content={comment.text}
+            commentId={comment._id}
+            updateComment={this.props.updateComment}
+            startEdit={this.startEdit.bind(this)}
+            cancelEdit={this.cancelEdit.bind(this)}
+          />
         </div>
         {this._actions(comment)}
       </div>
@@ -257,6 +257,10 @@ CommentTree.propTypes = {
   commentTree: PropTypes.array,
   isAdmin: PropTypes.bool,
   showSubtree: PropTypes.bool,
+  node: PropTypes.object,
+  updateComment: PropTypes.func,
+  location: PropTypes.object,
+  parentId: PropTypes.string,
 }
 
 export default CommentTreeWithRouter

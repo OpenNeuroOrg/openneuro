@@ -51,8 +51,7 @@
   padding-left: 15px;
   border-left: solid 1px $ccc;
 
-  .comment-box,
-  .comment-text {
+  .comment-box {
     padding: 20px;
   }
   .comment-div {
@@ -67,6 +66,9 @@
     display: inline-block;
     width: 75px;
     vertical-align: top;
+    position: relative;
+    top: 10px;
+
     img {
       height: 60px;
       width: 60px;
@@ -77,7 +79,6 @@
     padding: 15px 0px 10px 10px;
     margin: 0px 0px 10px 0px;
     .user-info {
-      padding-bottom: 5px;
       font-size: 13px;
       .username {
         font-weight: bold;
@@ -94,20 +95,34 @@
           color: $sky;
         }
       }
-      .toggle-replies {
-        width: 65%;
-        display: inline-block;
-        text-align: left;
-      }
       .reply-div {
         border: solid 1px $ddd;
         margin: 0px;
         margin-top: 10px;
         padding: 15px;
         button {
+          margin-top: 10px;
           margin-right: 5%;
         }
       }
+    }
+  }
+}
+
+.toggle-replies {
+  float:right;
+  margin-right:20px;
+}
+
+.top-level {
+  .reply-div {
+    border: solid 1px $ddd;
+    margin: 0px;
+    margin-top: 10px;
+    padding: 15px;
+    button {
+      margin-top: 10px;      
+      margin-right: 5%;
     }
   }
 }
@@ -126,11 +141,11 @@
 
 .comment-box.top-level,
 .reply-div {
-  margin: 0px 0px 30px 0px;
+  // margin: 0px 0px 30px 0px;
   div.RichEditor-editor {
     background-color: $f8;
     color: $c-66;
-    padding: 10px;
+    padding: 0px 10px 10px 10px;
     &:focus-within {
       box-shadow: inset 0px 0px 5px $c-66;
     }
