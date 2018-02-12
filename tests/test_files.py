@@ -66,3 +66,12 @@ def test_update_file(client, annex_path):
     assert len(test_files) == 1
     with open(test_files.pop()['path']) as f:
         assert f.read() == file_data
+
+
+def test_update_missing_file(client):
+    ds_id = 'ds000001'
+    file_data = 'File that does not exist'
+    # First post a file
+    response = client.simulate_put(
+        '/datasets/{}/files/NEWFILE'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_NOT_FOUND

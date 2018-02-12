@@ -52,7 +52,7 @@ class FilesResource(object):
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             file_path = os.path.join(ds_path, filename)
-            if os.stat(file_path):
+            if os.path.exists(file_path):
                 ds = self.store.get_dataset(dataset)
                 ds.unlock(path=filename)
                 self._update_file(file_path, req.stream)
