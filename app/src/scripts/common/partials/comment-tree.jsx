@@ -24,6 +24,18 @@ class CommentTree extends React.Component {
     this.createComment = this._createComment.bind(this)
   }
 
+  componentWillMount() {
+    if (this.props.location.hash) {
+      this.setState({ showSubtree: true })
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.location.hash === `#comment-${this.props.node._id}`) {
+      this.focusElement.focus()
+    }
+  }
+
   _handleDelete(commentId, parentId, callback) {
     this.props.deleteComment(commentId, parentId, callback)
   }
@@ -223,7 +235,13 @@ class CommentTree extends React.Component {
   _comment() {
     let comment = this.props.node
     return (
-      <div className="comment" id={`comment-${comment._id}`}>
+      <div
+        className="comment"
+        id={`comment-${comment._id}`}
+        tabIndex="-1"
+        ref={element => {
+          this.focusElement = element
+        }}>
         <div className="user-info">
           {this._userTag(comment.user.email)}
           {this._ownerTag(comment.user.email)}

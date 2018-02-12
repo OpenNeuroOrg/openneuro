@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
 import {
   Editor,
   EditorState,
@@ -35,9 +34,6 @@ class Comment extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.location.hash === `#comment-${this.props.commentId}`) {
-      this.focusElement.focus()
-    }
     // load existing comment editorState + decorator
     if (!this.state.new && this.props.content) {
       let content = JSON.parse(this.props.content)
@@ -260,15 +256,7 @@ class Comment extends React.Component {
   }
 
   render() {
-    return (
-      <div
-        tabIndex="-1"
-        ref={element => {
-          this.focusElement = element
-        }}>
-        {this.state.new ? this.newContent() : this.existingContent()}
-      </div>
-    )
+    return this.state.new ? this.newContent() : this.existingContent()
   }
 }
 
@@ -406,4 +394,4 @@ Comment.propTypes = {
   location: PropTypes.object,
 }
 
-export default withRouter(Comment)
+export default Comment
