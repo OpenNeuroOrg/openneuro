@@ -41,7 +41,7 @@ export default {
 
     c.crn.comments.updateOne(
       { _id: ObjectID(commentId) },
-      { $set: { text: comment.text } },
+      { $set: { text: comment.text, edited: true} },
       (err) => {
         if (err) {
           return next(err)
@@ -59,20 +59,11 @@ export default {
    */
   delete(req, res, next) {
     const commentId = req.params.commentId
-    const parentId = req.body.parentId
     // delete the comment in question
-    c.crn.comments.deleteOne({ _id: ObjectID(commentId) }, err => {
+    c.crn.comments.updateOne({ _id: ObjectID(commentId) },
+    { $set: { deleted: true } }, err => {
       if (err) {
         return next(err)
-      }
-      // delete the children of that comment
-      if (parentId) {
-        c.crn.comments.deleteMany({ parentId: commentId }, err => {
-          if (err) {
-            return next(err)
-          }
-          return res.send()
-        })
       }
       return res.send()
     })

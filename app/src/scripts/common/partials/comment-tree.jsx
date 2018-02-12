@@ -134,7 +134,8 @@ class CommentTree extends React.Component {
     if (
       this.props.user &&
       this.props.uploadUser &&
-      ownerEmail === this.props.user._id
+      ownerEmail === this.props.user._id &&
+      !this.props.node.deleted
     ) {
       return (
         <span>
@@ -147,7 +148,23 @@ class CommentTree extends React.Component {
   }
 
   _userTag(email) {
+    if (this.props.node.deleted) {
+      return <span className="username"> By [deleted] - </span>
+    }
     return <span className="username"> By {email} - </span>
+  }
+
+  _userAvatar() {
+    let comment = this.props.node
+    if (!comment.deleted) {
+      return (
+        <div className="comment-avatar">
+          <img src={comment.user.imageUrl} />
+        </div>
+      )
+    } else {
+      return <div className="comment-avatar" />
+    }
   }
 
   _timestamp(createDate) {
@@ -159,7 +176,7 @@ class CommentTree extends React.Component {
   }
 
   _actions(comment) {
-    if (this.props.user) {
+    if (this.props.user && !this.props.node.deleted) {
       return (
         <div className="comment-actions">
           {this._deleteButton(comment)}
@@ -185,9 +202,7 @@ class CommentTree extends React.Component {
           </a>
           {this._showRepliesButton()}
         </div>
-        <div className="comment-avatar">
-          <img src={comment.user.imageUrl} />
-        </div>
+        {this._userAvatar()}
         <div className="comment-div">
           <Comment
             editing={this.state.editing}
@@ -236,6 +251,13 @@ class CommentTree extends React.Component {
     let parentClass = this.props.isParent
       ? 'comment-tree parent-comment'
       : 'comment-tree'
+    if (
+      !this.props.node.children.length &&
+      this.props.node.deleted &&
+      !this.props.parentId
+    ) {
+      return null
+    }
     return (
       <div className={parentClass}>
         {this._comment()}

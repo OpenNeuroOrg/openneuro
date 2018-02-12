@@ -1906,7 +1906,7 @@ let datasetStore = Reflux.createStore({
     })
   },
 
-  deleteComment(commentId, parent) {
+  deleteComment(commentId, parent, callback) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
@@ -1921,6 +1921,9 @@ let datasetStore = Reflux.createStore({
       if (res) {
         if (res.status === 200 && res.ok) {
           this.loadComments(datasetId)
+          if (callback) {
+            callback()
+          }
         }
       }
     })
