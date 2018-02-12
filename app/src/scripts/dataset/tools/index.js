@@ -34,6 +34,7 @@ class Tools extends React.Component {
       isIncomplete = !!dataset.status.incomplete,
       isInvalid = !!dataset.status.invalid,
       isSnapshot = !!dataset.original,
+      isSubscribed = !!dataset.subscribed,
       isSuperuser =
         window.localStorage.scitran && JSON.parse(window.localStorage.scitran)
           ? JSON.parse(window.localStorage.scitran).root
@@ -176,8 +177,8 @@ class Tools extends React.Component {
         tooltip: 'Follow Dataset',
         icon: 'fa-tag icon-plus',
         action: actions.createSubscription.bind(this),
-        display: isSignedIn,
-        warn: false,
+        display: isSignedIn && !isSubscribed,
+        warn: true,
         validations: [
           {
             check: this.props.uploading && !isSnapshot,
@@ -191,8 +192,8 @@ class Tools extends React.Component {
         tooltip: 'Unfollow Dataset',
         icon: 'fa-tag icon-minus',
         action: actions.deleteSubscription.bind(this),
-        display: isSignedIn,
-        warn: false,
+        display: isSignedIn && isSubscribed,
+        warn: true,
         // validations: [
         //   {
         //     check: null,

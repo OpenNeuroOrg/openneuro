@@ -187,7 +187,9 @@ let datasetStore = Reflux.createStore({
             this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
               this.loadSnapshots(dataset, jobs, () => {
                 this.loadComments(originalId)
-                this.update({ loading: false, snapshot: snapshot })
+                this.checkUserSubscription(() => {
+                  this.update({ loading: false, snapshot: snapshot })
+                })
               })
             })
             if (
@@ -1972,29 +1974,66 @@ let datasetStore = Reflux.createStore({
   },
   
   // subscriptions ---------------------------------------------------------------
-  createSubscription() {
+  createSubscription(callback) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
     let userId = this.data.dataset.user._id
-    crn.createSubscription(datasetId, userId).then((err, res) => {
-      console.log('createSubscription returned err:', err, 'and res:', res)
+    crn.createSubscription(datasetId, userId).then(res => {
+      if (res && res.status !== 200) {
+        callback({ error: 'There was an error while following this dataset.' })
+      } else {
+        let dataset = this.data.dataset
+        dataset.subscribed = true
+        this.update(
+          {
+            dataset,
+          },
+          callback(),
+        )
+      }
     })
   },
 
-  deleteSubscription() {
+  deleteSubscription(callback) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
     let userId = this.data.dataset.user._id
-    console.log(
-      'dataset.store deleteSubscription() with datasetId:',
-      datasetId,
-      'and userId:',
-      userId,
-    )
-    crn.deleteSubscription(datasetId, userId).then((err, res) => {
-      console.log('deleteSubscription returned err:', err, 'and res:', res)
+    crn.deleteSubscription(datasetId, userId).then(res => {
+      if (res && res.status !== 200) {
+        callback({
+          error: 'There was an error while unfollowing this dataset.',
+        })
+      } else {
+        let dataset = this.data.dataset
+        dataset.subscribed = false
+        this.update(
+          {
+            dataset,
+          },
+          callback,
+        )
+      }
+    })
+  },
+
+  checkUserSubscription(callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    let userId = this.data.dataset.user._id
+    crn.checkUserSubscription(datasetId, userId).then(res => {
+      if (
+        res &&
+        res.status === 200 &&
+        res.body &&
+        res.body.hasOwnProperty('subscribed')
+      ) {
+        let dataset = this.data.dataset
+        dataset.subscribed = res.body.subscribed
+        this.update({ dataset }, callback())
+      }
     })
   },
 })
