@@ -8,6 +8,15 @@ from datalad_server.app import create_app
 from .dataset_fixtures import *
 
 
+def test_get_file(client):
+    ds_id = 'ds000001'
+    result = client.simulate_get(
+        '/datasets/{}/files/dataset_description.json'.format(ds_id), file_wrapper=FileWrapper)
+    content_len = int(result.headers['content-length'])
+    assert content_len == len(result.content)
+    assert json.loads(result.content)['BIDSVersion'] == '1.0.2'
+
+
 def test_add_file(client, annex_path):
     ds_id = 'ds000001'
     file_data = 'Test dataset README'

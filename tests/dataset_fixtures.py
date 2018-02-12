@@ -1,3 +1,5 @@
+import os
+import json
 import pytest
 from falcon import testing
 from datalad.api import Dataset
@@ -5,18 +7,40 @@ from datalad_server.app import create_app
 
 # Test dataset to create
 DATASET_ID = 'ds000001'
+DATASET_DESCRIPTION = {
+    'BIDSVersion': '1.0.2',
+    'License': 'This is not a real dataset',
+    'Name': 'Test fixture dataset',
+}
 
 
 @pytest.fixture(scope='session')
 def annex_path(tmpdir_factory):
     path = tmpdir_factory.mktemp('annexes')
-    ds_path = path.join(DATASET_ID)
+    ds_path = str(path.join(DATASET_ID))
     # Create an empty dataset for testing
-    ds = Dataset(str(ds_path))
+    ds = Dataset(ds_path)
     ds.create()
+    json_path = os.path.join(ds_path, 'dataset_description.json')
+    with open(json_path, 'w') as f:
+        json.dump(DATASET_DESCRIPTION, f, ensure_ascii=False)
     return path
 
 
 @pytest.fixture
 def client(annex_path):
     return testing.TestClient(create_app(annex_path))
+
+
+class FileWrapper(object):
+
+    def __init__(self, file_like, block_size=8192):
+        self.file_like = file_like
+        self.block_size = block_size
+
+    def __getitem__(self, key):
+        data = self.file_like.read(self.block_size)
+        if data:
+            return data
+
+        raise IndexError

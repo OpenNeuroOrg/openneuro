@@ -8,12 +8,11 @@ class FilesResource(object):
     def __init__(self, store):
         self.store = store
 
-    def on_get(self, req, resp):
-        doc = {
-            'alive': True,
-        }
-
-        resp.media = doc
+    def on_get(self, req, resp, dataset, filename):
+        ds_path = self.store.get_dataset_path(dataset)
+        fd = open(os.path.join(ds_path, filename), 'rb')
+        resp.stream = fd
+        resp.stream_len = os.fstat(fd.fileno()).st_size
         resp.status = falcon.HTTP_OK
 
     def on_post(self, req, resp, dataset, filename):
