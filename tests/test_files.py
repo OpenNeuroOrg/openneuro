@@ -37,3 +37,32 @@ def test_add_file(client, annex_path):
     assert len(test_files) == 1
     with open(test_files.pop()['path']) as f:
         assert f.read() == file_data
+
+
+def test_add_existing_file(client):
+    ds_id = 'ds000001'
+    file_data = 'should not update'
+    response = client.simulate_post(
+        '/datasets/{}/files/dataset_description.json'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_CONFLICT
+
+
+def test_update_file(client, annex_path):
+    ds_id = 'ds000001'
+    file_data = 'Test dataset LICENSE'
+    # First post a file
+    response = client.simulate_post(
+        '/datasets/{}/files/LICENSE'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_OK
+    # Then update it
+    file_data = 'New test LICENSE'
+    response = client.simulate_put(
+        '/datasets/{}/files/LICENSE'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_OK
+    # Load the dataset to check for the updated file
+    ds_obj = Dataset(str(annex_path.join(ds_id)))
+    test_files = ds_obj.get('LICENSE')
+    assert test_files
+    assert len(test_files) == 1
+    with open(test_files.pop()['path']) as f:
+        assert f.read() == file_data
