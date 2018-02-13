@@ -2022,19 +2022,25 @@ let datasetStore = Reflux.createStore({
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
-    let userId = this.data.dataset.user._id
-    crn.checkUserSubscription(datasetId, userId).then(res => {
-      if (
-        res &&
-        res.status === 200 &&
-        res.body &&
-        res.body.hasOwnProperty('subscribed')
-      ) {
-        let dataset = this.data.dataset
-        dataset.subscribed = res.body.subscribed
-        this.update({ dataset }, callback())
-      }
-    })
+    let userId = this.data.dataset.user ? this.data.dataset.user._id : null
+    if (datasetId && userId) {
+      crn.checkUserSubscription(datasetId, userId).then(res => {
+        if (
+          res &&
+          res.status === 200 &&
+          res.body &&
+          res.body.hasOwnProperty('subscribed')
+        ) {
+          let dataset = this.data.dataset
+          dataset.subscribed = res.body.subscribed
+          this.update({ dataset }, callback())
+        } else {
+          callback()
+        }
+      })
+    } else {
+      callback()
+    }
   },
 })
 
