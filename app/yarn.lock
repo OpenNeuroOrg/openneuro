@@ -2670,12 +2670,22 @@ downloadjs@^1.4.7:
   version "1.4.7"
   resolved "https://registry.yarnpkg.com/downloadjs/-/downloadjs-1.4.7.tgz#f69f96f940e0d0553dac291139865a3cd0101e3c"
 
+draft-js-export-html@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/draft-js-export-html/-/draft-js-export-html-1.2.0.tgz#1cbe2b78e1fed74fc29c7cdcbfd7540468eca209"
+  dependencies:
+    draft-js-utils "^1.2.0"
+
 draft-js-prism@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/draft-js-prism/-/draft-js-prism-1.0.6.tgz#880c5e5ae1a161646cdacc7296a01bf48b0030b4"
   dependencies:
     extend "^3.0.0"
     immutable "*"
+
+draft-js-utils@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/draft-js-utils/-/draft-js-utils-1.2.0.tgz#f5cb23eb167325ffed3d79882fdc317721d2fd12"
 
 draft-js@^0.10.5:
   version "0.10.5"

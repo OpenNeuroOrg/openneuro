@@ -8,6 +8,8 @@ import scitran from './scitran'
 import moment from 'moment'
 import url from 'url'
 import bidsId from './bidsId'
+import {convertFromRaw, EditorState} from 'draft-js'
+import {stateToHTML} from 'draft-js-export-html'
 
 let c = mongo.collections
 
@@ -145,12 +147,17 @@ let notifications = {
    */
   commentCreated(comment) {
     let datasetId = comment.datasetId ? comment.datasetId : null
-    let userId = comment.userId ? comment.userId : null
+    let userId = (comment.user && comment.user.email) ? comment.user.email : null
     let content = comment.text
+    let commentId = comment._id ? comment._id : null
     let isReply = comment.parentId ? comment.parentId : null
     let commentStatus = isReply ? 'reply to a comment' : 'comment'
+    let editorState = EditorState.createWithContent(convertFromRaw(JSON.parse(content)))
+    let contentState = editorState.getCurrentContent()
+    let htmlContent = stateToHTML(contentState)
 
 
+    console.log('creating comment notification with comment:', comment)
     // get all users that are subscribed to the dataset
     c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, subscriptions) => {
 
@@ -171,7 +178,9 @@ let notifications = {
                 lastName: user.lastname,
                 datasetName: bidsId.decodeId(datasetId),
                 commentUserId: userId,
-                commentContent: content,
+                commentId: commentId,
+                dateCreated: moment(comment.createDate).format('MMMM Do'),
+                commentContent: htmlContent,
                 commentStatus: commentStatus,
                 siteUrl:
                 url.parse(config.url).protocol +
