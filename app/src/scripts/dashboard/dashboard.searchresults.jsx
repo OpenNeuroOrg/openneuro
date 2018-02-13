@@ -17,11 +17,11 @@ class SearchResults extends Reflux.Component {
     let searchParams = new URLSearchParams(this.props.location.search)
     let key = 'AIzaSyB68V4zjGxWpZzTn8-vRuogiRLPmSCmWoo'
     let cx = '016952313242172063987:retmkn_owto'
-    let q = searchParams.get('q')
-    if (q) {
+    let query = searchParams.get('q')
+    if (query) {
       request
         .get('https://www.googleapis.com/customsearch/v1', {
-          query: { key: key, cx: cx, q: q },
+          query: { key: key, cx: cx, q: query },
         })
         .then(res => this.setState({ results: res }))
     }
@@ -69,14 +69,14 @@ class SearchResults extends Reflux.Component {
         <div className="fade-in  panel panel-default">
           <div className="panel-heading">
             <div className="header clearfix">
-              <Link to={url}>
+              <a href={url}>
                 <h4 className="dataset-name">{url}</h4>
                 <div className="meta-container">
                   <p className="date">
                     <span className="name">{description}</span>
                   </p>
                 </div>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
