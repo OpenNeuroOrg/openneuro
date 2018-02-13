@@ -6,11 +6,8 @@ import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
 import validation from './handlers/validation'
 import datasets from './handlers/datasets'
-<<<<<<< HEAD
 import comments from './handlers/comments'
-=======
 import subscriptions from './handlers/subscriptions'
->>>>>>> 6b4287b4... add handler and routes for dataset subscriptions
 import auth from './libs/auth'
 import scitran from './libs/scitran'
 import schema from './libs/schema'
