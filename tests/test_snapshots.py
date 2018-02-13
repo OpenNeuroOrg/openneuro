@@ -1,5 +1,7 @@
-import falcon
+import os
 import json
+
+import falcon
 import pytest
 
 from .dataset_fixtures import *
@@ -11,5 +13,13 @@ def test_get_snapshot(client):
         '/datasets/{}/snapshot/{}'.format(DATASET_ID, SNAPSHOT_ID))
     result_doc = json.loads(response.content, encoding='utf-8')
 
+    assert response.status == falcon.HTTP_OK
     assert {'files': ['dataset_description.json']} == result_doc
+
+
+def test_create_snapshot(client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    snapshot_id = '1'
+    response = client.simulate_post(
+        '/datasets/{}/snapshot/{}'.format(ds_id, snapshot_id))
     assert response.status == falcon.HTTP_OK
