@@ -1,5 +1,7 @@
+import string
 import os
 import json
+import random
 
 import pytest
 from falcon import testing
@@ -16,6 +18,10 @@ DATASET_DESCRIPTION = {
 }
 
 
+def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
 @pytest.fixture(scope='session')
 def annex_path(tmpdir_factory):
     path = tmpdir_factory.mktemp('annexes')
@@ -28,7 +34,27 @@ def annex_path(tmpdir_factory):
         json.dump(DATASET_DESCRIPTION, f, ensure_ascii=False)
     ds.add(json_path)
     ds.save(version_tag=SNAPSHOT_ID)
+    # Setup a seed for any new_dataset uses
+    random.seed(42)
     return path
+
+
+@pytest.fixture
+def new_dataset(annex_path):
+    """Create a new dataset with a unique name for one test."""
+    ds_path = str(annex_path.join(id_generator()))
+    ds = Dataset(ds_path)
+    ds.create()
+    json_path = os.path.join(ds_path, 'dataset_description.json')
+    dsdesc = {
+        'BIDSVersion': '1.0.2',
+        'License': 'This is not a real dataset',
+        'Name': 'Test fixture new dataset',
+    }
+    with open(json_path, 'w') as f:
+        json.dump(dsdesc, f, ensure_ascii=False)
+    ds.add(json_path)
+    return ds
 
 
 @pytest.fixture
