@@ -1,5 +1,6 @@
 import os
 import json
+
 import pytest
 from falcon import testing
 from datalad.api import Dataset
@@ -7,6 +8,7 @@ from datalad_server.app import create_app
 
 # Test dataset to create
 DATASET_ID = 'ds000001'
+SNAPSHOT_ID = '000001'
 DATASET_DESCRIPTION = {
     'BIDSVersion': '1.0.2',
     'License': 'This is not a real dataset',
@@ -25,6 +27,7 @@ def annex_path(tmpdir_factory):
     with open(json_path, 'w') as f:
         json.dump(DATASET_DESCRIPTION, f, ensure_ascii=False)
     ds.add(json_path)
+    ds.save(version_tag=SNAPSHOT_ID)
     return path
 
 
