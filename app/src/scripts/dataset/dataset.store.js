@@ -1980,9 +1980,10 @@ let datasetStore = Reflux.createStore({
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
-    let userId = this.data.currentUser
-      ? this.data.currentUser.profile._id
-      : null
+    let userId =
+      this.data.currentUser && this.data.currentUser.profile
+        ? this.data.currentUser.profile._id
+        : null
     crn.createSubscription(datasetId, userId).then(res => {
       if (res && res.status !== 200) {
         callback({ error: 'There was an error while following this dataset.' })
@@ -2003,9 +2004,10 @@ let datasetStore = Reflux.createStore({
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
-    let userId = this.data.currentUser
-      ? this.data.currentUser.profile._id
-      : null
+    let userId =
+      this.data.currentUser && this.data.currentUser.profile
+        ? this.data.currentUser.profile._id
+        : null
     crn.deleteSubscription(datasetId, userId).then(res => {
       if (res && res.status !== 200) {
         callback({
@@ -2029,9 +2031,10 @@ let datasetStore = Reflux.createStore({
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
-    let userId = this.data.currentUser
-      ? this.data.currentUser.profile._id
-      : null
+    let userId =
+      this.data.currentUser && this.data.currentUser.profile
+        ? this.data.currentUser.profile._id
+        : null
     if (datasetId && userId) {
       crn.checkUserSubscription(datasetId, userId).then(res => {
         if (
