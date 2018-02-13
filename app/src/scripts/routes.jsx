@@ -42,7 +42,12 @@ const appRoutes = () => (
       path="/datasets/:datasetId/versions/:snapshotId"
       component={Dataset}
     />
-    <Route name="search" exact path="/search" component={SearchResults} />
+    <Route
+      name="search"
+      exact
+      path="/search/:query?"
+      component={SearchResults}
+    />
   </Switch>
 )
 
