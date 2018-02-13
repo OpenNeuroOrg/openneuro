@@ -266,6 +266,12 @@ const routes = [
     url: '/subscriptions/:datasetId/:userId',
     middleware: [auth.user],
     handler: subscriptions.delete
+  },
+  {
+    method: 'delete',
+    url: '/subscriptions/:datasetId',
+    middleware: [auth.user],
+    handler: subscriptions.deleteAll
   }
 ]
 

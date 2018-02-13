@@ -73,6 +73,30 @@ export default {
     )
   },
 
+  deleteAll(req, res, next) {
+    let data = req.params
+    let datasetId = data.datasetId ? data.datasetId : null
+
+    notifications.datasetDeleted(datasetId)
+    c.crn.subscriptions.find(
+      {
+        datasetId: datasetId
+      }).toArray((err, subscriptions) => {
+        console.log('err:', err, 'subscriptions: ', subscriptions)
+        if (err) {
+          return next(err)
+        }
+        subscriptions.forEach((subscription) => {
+          console.log('subscription:', subscription)
+          c.crn.subscriptions.deleteOne(
+            {
+              _id: ObjectID(subscription._id)
+            })
+        })
+        return res.send()
+      })
+  },
+
   // read
 
   /**

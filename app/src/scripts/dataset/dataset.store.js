@@ -478,7 +478,9 @@ let datasetStore = Reflux.createStore({
           bids
             .deleteDataset(datasetId, { snapshot: this.data.snapshot })
             .then(() => {
-              history.push('/dashboard/datasets')
+              crn.deleteDatasetSubscriptions(datasetId).then(res => {
+                history.push('/dashboard/datasets')
+              })
             })
         },
       })
@@ -1978,7 +1980,9 @@ let datasetStore = Reflux.createStore({
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
-    let userId = this.data.dataset.user._id
+    let userId = this.data.currentUser
+      ? this.data.currentUser.profile._id
+      : null
     crn.createSubscription(datasetId, userId).then(res => {
       if (res && res.status !== 200) {
         callback({ error: 'There was an error while following this dataset.' })
@@ -1999,7 +2003,9 @@ let datasetStore = Reflux.createStore({
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
-    let userId = this.data.dataset.user._id
+    let userId = this.data.currentUser
+      ? this.data.currentUser.profile._id
+      : null
     crn.deleteSubscription(datasetId, userId).then(res => {
       if (res && res.status !== 200) {
         callback({
@@ -2019,10 +2025,13 @@ let datasetStore = Reflux.createStore({
   },
 
   checkUserSubscription(callback) {
+    console.log('state:', this.data)
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
-    let userId = this.data.dataset.user ? this.data.dataset.user._id : null
+    let userId = this.data.currentUser
+      ? this.data.currentUser.profile._id
+      : null
     if (datasetId && userId) {
       crn.checkUserSubscription(datasetId, userId).then(res => {
         if (

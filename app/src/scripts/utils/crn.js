@@ -329,6 +329,10 @@ export default {
     )
   },
 
+  deleteDatasetSubscriptions(datasetId) {
+    return request.del(config.crn.url + 'subscriptions/' + datasetId, {})
+  },
+
   checkUserSubscription(datasetId, userId) {
     return request.get(
       config.crn.url + 'subscriptions/' + datasetId + '/' + userId,

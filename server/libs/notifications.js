@@ -173,6 +173,51 @@ let notifications = {
     })
   },
 
+    /**
+   * Dataset Deleted
+   * 
+   * Sends an email notification to
+   * all users following a dataset, informing
+   * them that a the dataset has been deleted.
+   */
+  datasetDeleted(datasetId) {
+    console.log('datasetDeleted notification sent with datasetName:', bidsId.decodeId(datasetId))
+
+    // get all users that are subscribed to the dataset
+    c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, users) => {
+
+      // create the email object for each user
+      let emails = users.map(user => {
+        console.log('user:', user)
+        let emailContent = {
+          _id: null,
+          type: 'email',
+          email: {
+            to: user.email,
+            subject: 'Dataset Deleted',
+            template: 'dataset-deleted',
+            data: {
+              firstName: user.firstname,
+              lastName: user.lastname,
+              datasetName: bidsId.decodeId(datasetId),
+              siteUrl:
+              url.parse(config.url).protocol +
+              '//' +
+              url.parse(config.url).hostname,
+            }
+          }
+        }
+        return emailContent
+      })
+
+      // send each email to the notification database for distribution
+      emails.forEach((email) => {
+        notifications.add(email, () => {})
+      }) 
+    })
+  },
+
+
   initCron() {
     // notifications cron -------------------------------------
     notifications.cron = new cron.CronJob(
