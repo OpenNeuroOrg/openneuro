@@ -36,3 +36,13 @@ class DatasetResource(object):
             else:
                 resp.media = {'error': 'dataset creation failed'}
                 resp.status = falcon.HTTP_500
+
+    def on_delete(self, req, resp, dataset):
+        datalad = self.store.get_dataset(dataset)
+        if (datalad.repo):
+            datalad.remove()
+            resp.media = {}
+            resp.status = falcon.HTTP_OK
+        else:
+            resp.media = {'error': 'dataset not found'}
+            resp.status = falcon.HTTP_NOT_FOUND
