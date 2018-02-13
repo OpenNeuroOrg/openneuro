@@ -104,7 +104,7 @@ let notifications = {
     c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, users) => {
 
       // create the email object for each user
-      let emails = users.map(user => {
+      let emails = users.forEach(user => {
         let emailContent = {
           _id: null,
           type: 'email',
@@ -144,31 +144,45 @@ let notifications = {
    * them that a new comment has been created.
    */
   commentCreated(comment) {
+    let datasetId = comment.datasetId ? comment.datasetId : null
+    let userId = comment.userId ? comment.userId : null
+    let content = comment.text
+    let isReply = comment.parentId ? comment.parentId : null
+    let commentStatus = isReply ? 'reply to a comment' : 'comment'
+
 
     // get all users that are subscribed to the dataset
-    c.crn.subscriptions.find({datasetId: comment.datasetId}).toArray((err, users) => {
-      let emails = users.map(user => {
-        let emailContent = {
-          _id: null,
-          type: 'email',
-          email: {
-            to: user.email,
-            subject: '',
-            template: 'comment-created',
-            data: {
-              firstName: user.firstname,
-              lastName: user.lastname,
-              datasetName: '',
-              comment: comment,
+    c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, subscriptions) => {
+
+      // create the email object for each user, using subscription userid and scitran
+      subscriptions.forEach(subscription => {
+        scitran.getUser(subscription.userId, (err, res) => {
+          console.log('scitran user:', res.body)
+          let user = res.body
+          let emailContent = {
+            _id: datasetId + '_' + subscription._id + '_' + comment._id + '_' + 'comment_created',
+            type: 'email',
+            email: {
+              to: user.email,
+              subject: 'Comment Created',
+              template: 'comment-created',
+              data: {
+                firstName: user.firstname,
+                lastName: user.lastname,
+                datasetName: bidsId.decodeId(datasetId),
+                commentUserId: userId,
+                commentContent: content,
+                commentStatus: commentStatus,
+                siteUrl:
+                url.parse(config.url).protocol +
+                '//' +
+                url.parse(config.url).hostname,
+              }
             }
           }
-        }
-        return emailContent      
-      })
-      
-      // send each email to the notification database for distribution
-      emails.forEach((email) => {
-        notifications.add(email, () => {})
+          // send each email to the notification database for distribution
+          notifications.add(emailContent, () => {})
+        })
       })
     })
   },
@@ -184,36 +198,78 @@ let notifications = {
     console.log('datasetDeleted notification sent with datasetName:', bidsId.decodeId(datasetId))
 
     // get all users that are subscribed to the dataset
-    c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, users) => {
+    c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, subscriptions) => {
 
-      // create the email object for each user
-      let emails = users.map(user => {
-        console.log('user:', user)
-        let emailContent = {
-          _id: null,
-          type: 'email',
-          email: {
-            to: user.email,
-            subject: 'Dataset Deleted',
-            template: 'dataset-deleted',
-            data: {
-              firstName: user.firstname,
-              lastName: user.lastname,
-              datasetName: bidsId.decodeId(datasetId),
-              siteUrl:
-              url.parse(config.url).protocol +
-              '//' +
-              url.parse(config.url).hostname,
+      // create the email object for each user, using subscription userid and scitran
+      subscriptions.forEach(subscription => {
+        scitran.getUser(subscription.userId, (err, res) => {
+          console.log('scitran user:', res.body)
+          let user = res.body
+          let emailContent = {
+            _id: datasetId + '_' + subscription._id + '_' + 'dataset_deleted',
+            type: 'email',
+            email: {
+              to: user.email,
+              subject: 'Dataset Deleted',
+              template: 'dataset-deleted',
+              data: {
+                firstName: user.firstname,
+                lastName: user.lastname,
+                datasetName: bidsId.decodeId(datasetId),
+                siteUrl:
+                url.parse(config.url).protocol +
+                '//' +
+                url.parse(config.url).hostname,
+              }
             }
           }
-        }
-        return emailContent
+          // send each email to the notification database for distribution
+          notifications.add(emailContent, () => {})
+        })
       })
+    })
+  },
 
-      // send each email to the notification database for distribution
-      emails.forEach((email) => {
-        notifications.add(email, () => {})
-      }) 
+  /**
+   * Dataset Deleted
+   * 
+   * Sends an email notification to
+   * all users following a dataset, informing
+   * them that a the dataset has been deleted.
+   */
+  ownerUnsubscribed(datasetId) {
+    console.log('ownerUnsubscribed notification sent with datasetName:', bidsId.decodeId(datasetId))
+
+    // get all users that are subscribed to the dataset
+    c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, subscriptions) => {
+
+      // create the email object for each user, using subscription userid and scitran
+      subscriptions.forEach(subscription => {
+        scitran.getUser(subscription.userId, (err, res) => {
+          console.log('scitran user:', res.body)
+          let user = res.body
+          let emailContent = {
+            _id: datasetId + '_' + subscription._id + '_' + 'owner_unsubscribed',
+            type: 'email',
+            email: {
+              to: user.email,
+              subject: 'Owner Unsubscribed',
+              template: 'owner-unsubscribed',
+              data: {
+                firstName: user.firstname,
+                lastName: user.lastname,
+                datasetName: bidsId.decodeId(datasetId),
+                siteUrl:
+                url.parse(config.url).protocol +
+                '//' +
+                url.parse(config.url).hostname,
+              }
+            }
+          }
+          // send each email to the notification database for distribution
+          notifications.add(emailContent, () => {})
+        })
+      })
     })
   },
 
