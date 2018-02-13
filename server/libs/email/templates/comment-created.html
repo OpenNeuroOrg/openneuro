@@ -30,6 +30,9 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
+	.comment {
+		border: 1px solid #ccc;
+	}
 	.FAILED {color: #d9534f;}
 	.FINISHED {color: #5cb85c;}
 </style>
@@ -39,18 +42,23 @@
 		<img src="{{siteUrl}}/assets/CRN-Logo-Placeholder.png" />
 	</div>
 	<div class="content">
-		<h2>Hi, {{firstName}} {{lastName}}</h3>
+		<h2>Hi, {{firstName}} {{lastName}}</h2>
 
 		<p>
-			Dataset <b>{{datasetName}}</b> has been commented on.
+			A new {{commentStatus}} has been posted on a dataset you follow, <b>{{datasetName}}</b>. 
 		</p>
+		<div class="comment">
+			<p>By: <b>{{commentUserId}}</b> on {{dateCreated}}</p>
 
+		
+			{{commentContent}}		
+		</div>
 		<p>
 			Sincerely,
 			The CRN Team
 		</p>
 
-		<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetId}}">Go to dataset. &raquo;</a>
+		<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetName}}#comment-{{commentId}}">Go to comment &raquo;</a>
 	</div>
 </body>
 <html>
