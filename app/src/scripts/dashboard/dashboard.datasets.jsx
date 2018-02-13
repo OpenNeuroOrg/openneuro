@@ -17,6 +17,8 @@ import Statuses from '../dataset/dataset.statuses.jsx'
 import Filters from './dashboard.filters.jsx'
 import Sort from './dashboard.sort.jsx'
 import Summary from '../dataset/dataset.summary.jsx'
+import Input from '../common/forms/input.jsx'
+import search from '../common/partials/search.jsx'
 
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
@@ -41,14 +43,6 @@ class Datasets extends Reflux.Component {
     const isAdmin = this.props.admin
     Actions.update({ isPublic, isAdmin })
     Actions.getDatasets(isPublic, isAdmin)
-
-    var cx = '016952313242172063987:retmkn_owto'
-    var gcse = document.createElement('script')
-    gcse.type = 'text/javascript'
-    gcse.async = true
-    gcse.src = 'https://cse.google.com/cse.js?cx=' + cx
-    var s = document.getElementsByTagName('script')[0]
-    s.parentNode.insertBefore(gcse, s)
   }
 
   componentWillReceiveProps() {
@@ -106,9 +100,13 @@ class Datasets extends Reflux.Component {
                 {pageTitle} - {title}
               </title>
             </Helmet>
-            <div className="header-wrap clearfix">
-              <h2>{title}</h2>
-              <div className="gcse-search" />
+            <div className="admin header-wrap clearfix">
+              <div className="row">
+                <div className="col-md-5">
+                  <h2>{title}</h2>
+                </div>
+                <div className="col-md-7">{search()}</div>
+              </div>
             </div>
             <div className="filters-sort-wrap clearfix">
               <Sort
