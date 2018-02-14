@@ -12,7 +12,7 @@ import {
 
 // Life Cycle ----------------------------------------------------------------------
 
-const Scatter = ({ logs, year, months, index, entries }) => {
+const Scatter = ({ months, index, entries }) => {
   let failed = []
   let succeeded = []
   Object.keys(entries).map(status => {
@@ -61,10 +61,9 @@ const Scatter = ({ logs, year, months, index, entries }) => {
 }
 
 Scatter.propTypes = {
-  logs: PropTypes.object,
-  year: PropTypes.node,
   months: PropTypes.array,
   entries: PropTypes.object,
+  index: PropTypes.array,
 }
 
 export default Scatter
