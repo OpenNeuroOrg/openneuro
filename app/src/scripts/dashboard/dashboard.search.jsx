@@ -12,7 +12,7 @@ class Search extends React.Component {
   }
 
   updateLink(e) {
-    this.setState({ query: '/search/' + e.target.value })
+    this.setState({ query: '/search/' + encodeURIComponent(e.target.value) })
   }
 
   render() {

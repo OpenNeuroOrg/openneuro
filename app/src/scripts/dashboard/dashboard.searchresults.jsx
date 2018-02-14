@@ -34,7 +34,7 @@ class SearchResults extends React.Component {
       <div className="route-wrapper">
         <div className="fade-in inner-route clearfix">
           <div className="dashboard-dataset-teasers datasets datasets-private">
-            <div className="header-wrap clearfix">
+            <div className="admin header-wrap clearfix">
               <div className="row">
                 <div className="col-md-5">
                   <h2>Search Results</h2>
