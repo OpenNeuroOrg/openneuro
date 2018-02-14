@@ -60,6 +60,7 @@ Bar.propTypes = {
   year: PropTypes.node,
   months: PropTypes.array,
   entries: PropTypes.object,
+  index: PropTypes.array,
 }
 
 export default Bar
