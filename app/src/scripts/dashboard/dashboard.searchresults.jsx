@@ -12,6 +12,7 @@ class SearchResults extends React.Component {
     super()
     this.state = {
       results: null,
+      query: null,
     }
   }
 
@@ -19,13 +20,18 @@ class SearchResults extends React.Component {
     let searchParams = new URLSearchParams(this.props.location.search)
     let key = 'AIzaSyB68V4zjGxWpZzTn8-vRuogiRLPmSCmWoo'
     let cx = '016952313242172063987:retmkn_owto'
-    let query = this.props.match.params.query
+    let query = searchParams.get('q')
     if (query) {
       request
         .get('https://www.googleapis.com/customsearch/v1', {
           query: { key: key, cx: cx, q: query },
         })
-        .then(res => this.setState({ results: res }))
+        .then(res =>
+          this.setState({
+            results: res,
+            query: query,
+          }),
+        )
     }
   }
 
@@ -57,6 +63,16 @@ class SearchResults extends React.Component {
     let noResults = { items: [{ link: 'No results', snippet: '' }] }
     if (!results || !results.text) {
       parsedResults = noResults
+    } else if (results.statusCode == 403) {
+      parsedResults = {
+        items: [
+          {
+            link: 'https://www.google.com/search?q=' + this.state.query,
+            snippet:
+              'Failed to load search results, please try using Google directly.',
+          },
+        ],
+      }
     } else if (results.statusCode != 200) {
       parsedResults = noResults
     } else {
