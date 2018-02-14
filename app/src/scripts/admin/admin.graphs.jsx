@@ -59,10 +59,7 @@ class Progresssion extends Reflux.Component {
                   <label>Choose another year: </label>
                   {this._handleFiltering()}
                 </div>
-                <div>
-                  {this._returnScatter()}
-                  {this._returnBar()}
-                </div>
+                {this._returnStats()}
                 <div>
                   <span className="key">
                     <i className="fa fa-circle success" /> - Successful Jobs
@@ -104,27 +101,42 @@ class Progresssion extends Reflux.Component {
     )
   }
 
-  _returnScatter() {
-    return (
-      <Scatter
-        logs={this.state.admin.activityLogs}
-        year={this.state.year}
-        months={this.state.months}
-        index={this.state.index}
-        entries={this.state.entries}
-      />
-    )
-  }
+  _returnStats() {
+    let failed = []
+    let succeeded = []
+    let entries = this.state.entries
+    Object.keys(entries).map(status => {
+      let counter = 0
+      for (let month of this.state.months) {
+        counter++
+        if (entries[status][month]) {
+          if (status === 'failed') {
+            failed.push({ x: counter, y: entries.failed[month].length })
+          } else if (status === 'succeeded') {
+            succeeded.push({
+              x: counter,
+              y: entries.succeeded[month].length,
+            })
+          }
+        }
+      }
+    })
 
-  _returnBar() {
     return (
-      <Bar
-        logs={this.state.admin.activityLogs}
-        year={this.state.year}
-        months={this.state.months}
-        index={this.state.index}
-        entries={this.state.entries}
-      />
+      <div>
+        <Scatter
+          months={this.state.months}
+          index={this.state.index}
+          failed={failed}
+          succeeded={succeeded}
+        />
+        <Bar
+          months={this.state.months}
+          index={this.state.index}
+          failed={failed}
+          succeeded={succeeded}
+        />
+      </div>
     )
   }
 

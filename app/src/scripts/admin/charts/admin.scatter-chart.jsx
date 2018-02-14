@@ -12,22 +12,7 @@ import {
 
 // Life Cycle ----------------------------------------------------------------------
 
-const Scatter = ({ months, index, entries }) => {
-  let failed = []
-  let succeeded = []
-  Object.keys(entries).map(status => {
-    let counter = 0
-    for (let month of months) {
-      counter++
-      if (entries[status][month]) {
-        if (status === 'failed') {
-          failed.push({ x: counter, y: entries.failed[month].length })
-        } else if (status === 'succeeded') {
-          succeeded.push({ x: counter, y: entries.succeeded[month].length })
-        }
-      }
-    }
-  })
+const Scatter = ({ months, index, succeeded, failed }) => {
   return (
     <div className="chart-container">
       <VictoryChart>
@@ -62,8 +47,9 @@ const Scatter = ({ months, index, entries }) => {
 
 Scatter.propTypes = {
   months: PropTypes.array,
-  entries: PropTypes.object,
   index: PropTypes.array,
+  succeeded: PropTypes.array,
+  failed: PropTypes.array,
 }
 
 export default Scatter
