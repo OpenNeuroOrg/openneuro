@@ -1,5 +1,5 @@
 import React from 'react'
-import Input from '../common/forms/input.jsx'
+import Input from '../forms/input.jsx'
 import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router'
 
