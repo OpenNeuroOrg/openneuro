@@ -7,34 +7,34 @@ import {
   VictoryScatter,
   VictoryAxis,
   VictoryStack,
+  VictoryLine,
 } from 'victory'
 
 // Life Cycle ----------------------------------------------------------------------
 
-const Scatter = ({ logs, year, months, entries }) => {
-  let ms = months
+const Scatter = ({ logs, year, months, index, entries }) => {
   let failed = []
   let succeeded = []
-  console.log(year)
   Object.keys(entries).map(status => {
-    for (let month of ms) {
+    let counter = 0
+    for (let month of months) {
+      counter++
       if (entries[status][month]) {
         if (status === 'failed') {
-          failed.push({ x: month, y: entries.failed[month].length })
+          failed.push({ x: counter, y: entries.failed[month].length })
         } else if (status === 'succeeded') {
-          succeeded.push({ x: month, y: entries.succeeded[month].length })
+          succeeded.push({ x: counter, y: entries.succeeded[month].length })
         }
       }
     }
   })
-
   return (
     <div className="chart-container">
       <VictoryChart>
         <VictoryAxis
           style={{ tickLabels: { fontSize: 15 } }}
-          tickValues={ms}
-          tickFormat={ms}
+          tickValues={index}
+          tickFormat={months}
         />
         <VictoryStack>
           <VictoryScatter
@@ -50,6 +50,11 @@ const Scatter = ({ logs, year, months, entries }) => {
             size={5}
           />
         </VictoryStack>
+        <VictoryLine
+          style={{ data: { stroke: '#009b76' } }}
+          data={succeeded}
+          animate={{ duration: 800 }}
+        />
       </VictoryChart>
     </div>
   )

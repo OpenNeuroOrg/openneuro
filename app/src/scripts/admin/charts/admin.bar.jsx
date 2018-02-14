@@ -6,18 +6,18 @@ import { VictoryChart, VictoryAxis, VictoryStack, VictoryBar } from 'victory'
 
 // Life Cycle ----------------------------------------------------------------------
 
-const Bar = ({ year, logs, months, entries }) => {
-  let ms = months
+const Bar = ({ year, logs, months, index, entries }) => {
   let failed = []
   let succeeded = []
-
   Object.keys(entries).map(status => {
-    for (let month of ms) {
+    let counter = 0
+    for (let month of months) {
+      counter++
       if (entries[status][month]) {
         if (status === 'failed') {
-          failed.push({ x: month, y: entries.failed[month].length })
+          failed.push({ x: counter, y: entries.failed[month].length })
         } else if (status === 'succeeded') {
-          succeeded.push({ x: month, y: entries.succeeded[month].length })
+          succeeded.push({ x: counter, y: entries.succeeded[month].length })
         }
       }
     }
@@ -29,8 +29,8 @@ const Bar = ({ year, logs, months, entries }) => {
         <VictoryChart domainPadding={10}>
           <VictoryAxis
             style={{ tickLabels: { fontSize: 15 } }}
-            tickValues={ms}
-            tickFormat={ms}
+            tickValues={index}
+            tickFormat={months}
           />
           <VictoryAxis
             dependentAxis
@@ -40,8 +40,8 @@ const Bar = ({ year, logs, months, entries }) => {
             standalone={false}
           />
           <VictoryStack colorScale={['#009b76', '#eb472c']}>
-            <VictoryBar data={succeeded} />
-            <VictoryBar data={failed} />
+            <VictoryBar data={succeeded} animate={{ duration: 800 }} />
+            <VictoryBar data={failed} animate={{ duration: 800 }} />
           </VictoryStack>
         </VictoryChart>
       </div>
