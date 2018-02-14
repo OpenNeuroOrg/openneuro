@@ -155,7 +155,7 @@ class CommentTree extends React.Component {
       return (
         <span>
           {' '}
-          <span className="dataset-owner-flag"> Owner</span> -{' '}
+          <span className="dataset-owner-flag"> Dataset Uploader</span> -{' '}
         </span>
       )
     }
