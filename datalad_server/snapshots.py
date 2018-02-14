@@ -23,4 +23,8 @@ class SnapshotResource(object):
 
     def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
-        resp.status = falcon.HTTP_NOT_IMPLEMENTED
+        ds = self.store.get_dataset(dataset)
+        ds.save(version_tag=snapshot)
+        snapshot_tree = ds.repo.get_files(branch=snapshot)
+        resp.media = {'files': filter_git_files(snapshot_tree)}
+        resp.status = falcon.HTTP_OK
