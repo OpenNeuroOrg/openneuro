@@ -8,7 +8,7 @@ source .venv/bin/activate
 # Running
 
 ```bash
-gunicorn --reload datalad_server.app
+gunicorn --reload datalad_service.app
 ```
 
 # Tests
