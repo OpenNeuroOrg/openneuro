@@ -60,8 +60,8 @@ class Dashboard extends React.Component {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/admin/progression-graphs" className="btn-tab">
-                  Graphs
+                <NavLink to="/admin/job-statistics" className="btn-tab">
+                  Job Stats
                 </NavLink>
               </li>
             </ul>
@@ -104,8 +104,8 @@ class Dashboard extends React.Component {
                 render={props => <Jobs admin {...props} />}
               />
               <Route
-                name="admin-graphs"
-                path="/admin/progression-graphs"
+                name="admin-jobs-stats"
+                path="/admin/job-statistics"
                 exact
                 component={Graphs}
               />
