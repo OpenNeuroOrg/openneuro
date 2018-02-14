@@ -14,7 +14,7 @@ class Progresssion extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, adminStore, 'admin')
-    this.state = {
+    const initialState = {
       year: '2018',
       entries: {
         failed: [],
@@ -22,6 +22,9 @@ class Progresssion extends Reflux.Component {
       },
       key: '',
     }
+
+    this.initialState = initialState
+    this.state = initialState
   }
 
   componentDidMount() {
@@ -29,7 +32,7 @@ class Progresssion extends Reflux.Component {
       actions.getEventLogs()
       actions.filterLogs()
     }
-    this._filterData()
+    this._filterData(this.state.year)
   }
 
   render() {
@@ -47,6 +50,7 @@ class Progresssion extends Reflux.Component {
       'Nov',
       'Dec',
     ]
+    let index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     let year = this.state.year
     let activity = this.state.admin.activityLogs
     let failures = this.state.admin.activityLogs.FAILED[year].length
@@ -79,12 +83,14 @@ class Progresssion extends Reflux.Component {
                   logs={activity}
                   year={this.state.year}
                   months={months}
+                  index={index}
                   entries={this.state.entries}
                 />
                 <Bar
                   logs={activity}
                   year={this.state.year}
                   months={months}
+                  index={index}
                   entries={this.state.entries}
                 />
               </div>
@@ -103,6 +109,8 @@ class Progresssion extends Reflux.Component {
     )
   }
 
+  // template methods --------------------------------------------------------------------------------
+
   _handleFiltering() {
     return (
       <select
@@ -113,12 +121,6 @@ class Progresssion extends Reflux.Component {
         {this._options()}
       </select>
     )
-  }
-
-  _handleSelect(e) {
-    this.setState({
-      year: e.target.value,
-    })
   }
 
   _options() {
@@ -135,21 +137,32 @@ class Progresssion extends Reflux.Component {
     return options
   }
 
-  _filterData() {
+  // custom methods --------------------------------------------------------------------------------
+
+  _handleSelect(e) {
+    this.setState({
+      year: e.target.value,
+    })
+    this._filterData(e.target.value)
+  }
+
+  _filterData(year) {
     let entries = this.state.entries
     let logs = this.state.admin.activityLogs
-    let year = this.state.year
     let date
 
+    // empty arrays before loop
+    entries.failed = []
+    entries.succeeded = []
+
     Object.keys(logs).map(type => {
-      console.log(type)
       if (logs[type][year]) {
         Object.values(logs[type][year]).map(job => {
           let dateArr = job.dateTime.split(' ')
           let status = job.log.data.job.status.toLowerCase()
           date = dateArr[1]
-          console.log(date)
           if (!entries[status][date]) {
+            entries[status] = []
             entries[status][date] = []
             entries[status][date].push({ date: job.dateTime, status: status })
           } else {
