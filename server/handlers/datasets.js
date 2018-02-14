@@ -59,6 +59,8 @@ export default {
           query: { project: datasetId },
         },
         (err, resp) => {
+          let versionNumber = (resp.body && resp.body._id) ? resp.body._id : null
+          notifications.snapshotCreated(datasetId, versionNumber)
           res.send(resp.body)
         },
       )
