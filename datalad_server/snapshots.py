@@ -24,7 +24,13 @@ class SnapshotResource(object):
     def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
         ds = self.store.get_dataset(dataset)
-        ds.save(version_tag=snapshot)
-        snapshot_tree = ds.repo.get_files(branch=snapshot)
-        resp.media = {'files': filter_git_files(snapshot_tree)}
-        resp.status = falcon.HTTP_OK
+        # Search for any existing tags
+        tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
+        if not tagged:
+            ds.save(version_tag=snapshot)
+            snapshot_tree = ds.repo.get_files(branch=snapshot)
+            resp.media = {'files': filter_git_files(snapshot_tree)}
+            resp.status = falcon.HTTP_OK
+        else:
+            resp.media = {'error': 'tag already exists'}
+            resp.status = falcon.HTTP_CONFLICT

@@ -23,3 +23,14 @@ def test_create_snapshot(client, new_dataset):
     response = client.simulate_post(
         '/datasets/{}/snapshot/{}'.format(ds_id, snapshot_id))
     assert response.status == falcon.HTTP_OK
+
+
+def test_duplicate_snapshot(client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    snapshot_id = '1'
+    response = client.simulate_post(
+        '/datasets/{}/snapshot/{}'.format(ds_id, snapshot_id))
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post(
+        '/datasets/{}/snapshot/{}'.format(ds_id, snapshot_id))
+    assert response.status == falcon.HTTP_CONFLICT
