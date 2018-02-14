@@ -490,22 +490,23 @@ class Dataset extends Reflux.Component {
     let sortBar
     if (this.state.datasets.commentTree.length) {
       sortBar = (
-        <select
-          value={this.state.datasets.commentSortOrder}
-          onChange={actions.sortComments}
-          className="comment-sort-select">
-          <option value="ASC">Date: Newest First</option>
-          <option value="DESC">Date: Oldest First</option>
-        </select>
+        <span className="comment-sort">
+          SORT BY:
+          <select
+            value={this.state.datasets.commentSortOrder}
+            onChange={actions.sortComments}
+            className="comment-sort-select">
+            <option value="ASC">Date: Newest First</option>
+            <option value="DESC">Date: Oldest First</option>
+          </select>
+        </span>
       )
     }
 
     let content = (
       <div className="comment-header">
         <label>COMMENTS</label>
-        <div>
-          <span className="comment-sort">SORT BY: {sortBar}</span>
-        </div>
+        <div>{sortBar}</div>
       </div>
     )
 
