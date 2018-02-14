@@ -478,9 +478,7 @@ let datasetStore = Reflux.createStore({
           bids
             .deleteDataset(datasetId, { snapshot: this.data.snapshot })
             .then(() => {
-              crn.deleteDatasetSubscriptions(datasetId).then(res => {
-                history.push('/dashboard/datasets')
-              })
+              history.push('/dashboard/datasets')
             })
         },
       })
@@ -1873,10 +1871,13 @@ let datasetStore = Reflux.createStore({
       ? this.data.dataset.original
       : this.data.dataset._id
 
+    let datasetLabel = this.data.dataset ? this.data.dataset.label : null
+
     const parentId = typeof parent === 'undefined' ? null : parent
 
     const comment = {
       datasetId: datasetId,
+      datasetLabel: datasetLabel,
       parentId: parentId,
       text: content,
       user: this.data.currentUser.profile,
@@ -1974,7 +1975,7 @@ let datasetStore = Reflux.createStore({
       commentTree: roots,
     })
   },
-  
+
   // subscriptions ---------------------------------------------------------------
   createSubscription(callback) {
     let datasetId = this.data.dataset.original
