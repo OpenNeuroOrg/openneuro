@@ -25,6 +25,7 @@ import Comment from '../common/partials/comment.jsx'
 import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
+import userActions from '../user/user.actions.js'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
@@ -534,7 +535,9 @@ class Dataset extends Reflux.Component {
     } else {
       content.push(
         <div key="commentLoginMessage" className="login-for-comments">
-          Please login to contribute to the discussion
+          Please{' '}
+          <a onClick={userActions.toggle.bind(this, 'loginModal')}>login</a> to
+          contribute to the discussion.
         </div>,
       )
     }
