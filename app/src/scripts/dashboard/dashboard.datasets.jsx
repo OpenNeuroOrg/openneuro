@@ -18,7 +18,7 @@ import Filters from './dashboard.filters.jsx'
 import Sort from './dashboard.sort.jsx'
 import Summary from '../dataset/dataset.summary.jsx'
 import Input from '../common/forms/input.jsx'
-import search from '../common/partials/search.jsx'
+import Search from './dashboard.search.jsx'
 
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
@@ -105,7 +105,9 @@ class Datasets extends Reflux.Component {
                 <div className="col-md-5">
                   <h2>{title}</h2>
                 </div>
-                <div className="col-md-7">{search()}</div>
+                <div className="col-md-7">
+                  <Search />
+                </div>
               </div>
             </div>
             <div className="filters-sort-wrap clearfix">

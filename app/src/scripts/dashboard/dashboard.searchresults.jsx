@@ -3,9 +3,10 @@ import Reflux from 'reflux'
 import 'url-search-params-polyfill'
 import { Link } from 'react-router-dom'
 import request from '../utils/request'
-import search from '../common/partials/search.jsx'
+import Search from './dashboard.search.jsx'
+import { withRouter } from 'react-router'
 
-class SearchResults extends Reflux.Component {
+class SearchResults extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -17,7 +18,7 @@ class SearchResults extends Reflux.Component {
     let searchParams = new URLSearchParams(this.props.location.search)
     let key = 'AIzaSyB68V4zjGxWpZzTn8-vRuogiRLPmSCmWoo'
     let cx = '016952313242172063987:retmkn_owto'
-    let query = searchParams.get('q')
+    let query = this.props.match.params.query
     if (query) {
       request
         .get('https://www.googleapis.com/customsearch/v1', {
@@ -38,7 +39,9 @@ class SearchResults extends Reflux.Component {
                 <div className="col-md-5">
                   <h2>Search Results</h2>
                 </div>
-                <div className="col-md-7">{search()}</div>
+                <div className="col-md-7">
+                  <Search />
+                </div>
               </div>
               {renderedResults}
             </div>
@@ -85,4 +88,4 @@ class SearchResults extends Reflux.Component {
   }
 }
 
-export default SearchResults
+export default withRouter(SearchResults)
