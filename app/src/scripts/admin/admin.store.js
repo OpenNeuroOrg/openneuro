@@ -81,7 +81,10 @@ let UserStore = Reflux.createStore({
       filteredLogs: [],
       yearOptions: [],
       uploadedLogs: [],
-      activityLogs: {},
+      activityLogs: {
+        failed: [],
+        succeeded: [],
+      },
       resultsPerPage: 30,
       page: 0,
     }
@@ -198,8 +201,6 @@ let UserStore = Reflux.createStore({
   // uploading contains all jobs
   filterLogs() {
     let eventLogs = this.data.eventLogs
-    // let failedLogs = []
-    // let successLogs = []
     let uploadedLogs = []
     if (!eventLogs.length) {
       this.getEventLogs()
@@ -211,10 +212,8 @@ let UserStore = Reflux.createStore({
         let eventStatus = log.data.job.status.toLowerCase()
 
         if (eventStatus === 'failed') {
-          // failedLogs.push(log)
           uploadedLogs.push(log)
         } else if (eventStatus === 'succeeded') {
-          // successLogs.push(log)
           uploadedLogs.push(log)
         }
       }
@@ -228,30 +227,29 @@ let UserStore = Reflux.createStore({
   filterYearActivity() {
     let uploaded = this.data.uploadedLogs
     let yearArr = this.data.yearOptions
-    let activityLogs = this.data.activityLogs
-    let entries = {
-      FAILED: [],
-      SUCCEEDED: [],
-    }
+    let entries = this.data.activityLogs
+    // only want this to run if the logs are empty...
+    if (
+      !this.data.activityLogs.failed.length ||
+      !this.data.activityLogs.succeeded.length
+    ) {
+      for (let job of uploaded) {
+        let status = job.data.job.status.toLowerCase()
+        let dateTime = new Date(job.date).toString()
+        let explode = dateTime.split(' ')
+        let year = explode[3]
 
-    for (let job of uploaded) {
-      let status = job.data.job.status
-      // convert date
-      let dateTime = new Date(job.date).toString()
-      let explode = dateTime.split(' ')
-      let year = explode[3]
-      if (!entries[status][year]) {
-        entries[status][year] = []
-      } else if (entries[status][year]) {
-        entries[status][year].push({ dateTime: dateTime, log: job })
-        // push to mediary array
+        if (!entries[status][year]) {
+          entries[status][year] = []
+        } else if (entries[status][year]) {
+          entries[status][year].push({ dateTime: dateTime, log: job })
+        }
+        if (!yearArr.includes(year)) {
+          yearArr.push(year)
+        }
       }
-      if (!yearArr.includes(year)) {
-        yearArr.push(year)
-      }
+      this.update({ entries })
     }
-    activityLogs = entries
-    this.update({ activityLogs })
   },
 
   /**
