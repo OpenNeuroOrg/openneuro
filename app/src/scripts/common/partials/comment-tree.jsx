@@ -9,7 +9,7 @@ class CommentTree extends React.Component {
   constructor(props) {
     super(props)
 
-    let showSubtree = this.props.showSubtree ? this.props.showSubtree : false
+    let showSubtree = this.props.showSubtree ? this.props.showSubtree : true
 
     this.state = {
       showNewComment: false,
