@@ -18,7 +18,7 @@ class SnapshotResource(object):
         """Get the tree of files for a snapshot."""
         ds = self.store.get_dataset(dataset)
         snapshot_tree = ds.repo.get_files(branch=snapshot)
-        resp.media = {'files': filter_git_files(snapshot_tree)}
+        resp.media = {'files': filter_git_files(snapshot_tree), 'version': snapshot}
         resp.status = falcon.HTTP_OK
 
     def on_post(self, req, resp, dataset, snapshot):
@@ -29,7 +29,8 @@ class SnapshotResource(object):
         if not tagged:
             ds.save(version_tag=snapshot)
             snapshot_tree = ds.repo.get_files(branch=snapshot)
-            resp.media = {'files': filter_git_files(snapshot_tree)}
+            resp.media = {'files': filter_git_files(
+                snapshot_tree), 'version': snapshot}
             resp.status = falcon.HTTP_OK
         else:
             resp.media = {'error': 'tag already exists'}
