@@ -7,12 +7,20 @@ class Search extends React.Component {
   constructor() {
     super()
     this.state = {
-      query: '/search',
+      query: '',
     }
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
-  updateLink(e) {
-    this.setState({ query: '/search/' + encodeURIComponent(e.target.value) })
+  handleChange(event) {
+    this.setState({ query: event.target.value })
+  }
+
+  handleSubmit() {
+    this.props.history.push('/search/' + encodeURIComponent(this.state.query))
+    console.log(encodeURIComponent(this.state.query))
+    this.setState({ query: '' })
   }
 
   render() {
@@ -24,11 +32,13 @@ class Search extends React.Component {
             type="text"
             className="search-field"
             name="q"
-            onChange={e => this.updateLink(e)}
+            value={this.state.query}
+            onChange={this.handleChange}
+            onSubmit={this.handleSubmit}
           />
           <div className="form-group float-label-input">
             <Link to={this.state.query}>
-              <button className="btn-blue" type="submit">
+              <button className="btn-blue" onClick={this.handleSubmit}>
                 <span className="">
                   <i className="fa fa-search" />
                 </span>
