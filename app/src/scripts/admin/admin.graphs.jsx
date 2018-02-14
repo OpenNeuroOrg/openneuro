@@ -21,95 +21,112 @@ class Progresssion extends Reflux.Component {
         succeeded: [],
       },
       key: '',
+      index: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      months: [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'June',
+        'July',
+        'Aug',
+        'Sept',
+        'Oct',
+        'Nov',
+        'Dec',
+      ],
     }
 
     this.initialState = initialState
     this.state = initialState
   }
 
-  componentDidMount() {
+  render() {
     if (!this.state.admin.eventLogs.length) {
       actions.getEventLogs()
       actions.filterLogs()
+      this._filterData(this.state.year)
+      return null
+    } else {
+      return (
+        <div className="dashboard-dataset-teasers fade-in">
+          <div className="header-wrap clearfix chart-header">
+            <div className="col-sm-9 chart">
+              <div className="col-1">{this._returnPie()}</div>
+              <div className="col-2">
+                <div className="filtering">
+                  <label>Choose another year: </label>
+                  {this._handleFiltering()}
+                </div>
+                <div>
+                  {this._returnScatter()}
+                  {this._returnBar()}
+                </div>
+                <div>
+                  <span className="key">
+                    <i className="fa fa-circle success" /> - Successful Jobs
+                  </span>
+                  <span className="key">
+                    <i className="fa fa-circle failed" /> - Failed Jobs
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
     }
-    this._filterData(this.state.year)
   }
 
-  render() {
-    let months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'June',
-      'July',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec',
-    ]
-    let index = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  // template methods --------------------------------------------------------------------------------
+
+  _returnPie() {
     let year = this.state.year
     let activity = this.state.admin.activityLogs
     let failures = this.state.admin.activityLogs.FAILED[year].length
     let successes = 0
 
+    failures ? failures : 0
     this.state.admin.activityLogs.SUCCEEDED[year]
       ? (successes = this.state.admin.activityLogs.SUCCEEDED[year].length)
       : null
 
     let total = successes + failures
+
     return (
-      <div className="dashboard-dataset-teasers fade-in">
-        <div className="header-wrap clearfix chart-header">
-          <div className="col-sm-9 chart">
-            <div className="col-1">
-              <Pie
-                failed={failures}
-                success={successes}
-                total={total}
-                year={this.state.year}
-              />
-            </div>
-            <div className="col-2">
-              <div className="filtering">
-                <label>Choose another year: </label>
-                {this._handleFiltering()}
-              </div>
-              <div>
-                <Scatter
-                  logs={activity}
-                  year={this.state.year}
-                  months={months}
-                  index={index}
-                  entries={this.state.entries}
-                />
-                <Bar
-                  logs={activity}
-                  year={this.state.year}
-                  months={months}
-                  index={index}
-                  entries={this.state.entries}
-                />
-              </div>
-              <div>
-                <span className="key">
-                  <i className="fa fa-circle success" /> - Successful Jobs
-                </span>
-                <span className="key">
-                  <i className="fa fa-circle failed" /> - Failed Jobs
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Pie
+        failed={failures}
+        success={successes}
+        total={total}
+        year={this.state.year}
+      />
     )
   }
 
-  // template methods --------------------------------------------------------------------------------
+  _returnScatter() {
+    return (
+      <Scatter
+        logs={this.state.admin.activityLogs}
+        year={this.state.year}
+        months={this.state.months}
+        index={this.state.index}
+        entries={this.state.entries}
+      />
+    )
+  }
+
+  _returnBar() {
+    return (
+      <Bar
+        logs={this.state.admin.activityLogs}
+        year={this.state.year}
+        months={this.state.months}
+        index={this.state.index}
+        entries={this.state.entries}
+      />
+    )
+  }
 
   _handleFiltering() {
     return (
