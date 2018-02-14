@@ -46,9 +46,9 @@ class Progresssion extends Reflux.Component {
     if (!this.state.admin.eventLogs.length) {
       actions.getEventLogs()
       actions.filterLogs()
-      this._filterData(this.state.year)
       return null
     } else {
+      this._filterData(this.state.year)
       return (
         <div className="dashboard-dataset-teasers fade-in">
           <div className="header-wrap clearfix chart-header">
@@ -82,18 +82,18 @@ class Progresssion extends Reflux.Component {
   // template methods --------------------------------------------------------------------------------
 
   _returnPie() {
-    let year = this.state.year
     let activity = this.state.admin.activityLogs
-    let failures = this.state.admin.activityLogs.FAILED[year].length
-    let successes = 0
+    let year = this.state.year
+    let failures
+    let successes
 
-    failures ? failures : 0
-    this.state.admin.activityLogs.SUCCEEDED[year]
-      ? (successes = this.state.admin.activityLogs.SUCCEEDED[year].length)
-      : null
-
+    activity.failed[year]
+      ? (failures = activity.failed[year].length)
+      : (failures = 0)
+    activity.succeeded[year]
+      ? (successes = activity.succeeded[year].length)
+      : (successes = 0)
     let total = successes + failures
-
     return (
       <Pie
         failed={failures}
@@ -157,10 +157,10 @@ class Progresssion extends Reflux.Component {
   // custom methods --------------------------------------------------------------------------------
 
   _handleSelect(e) {
+    this._filterData(e.target.value)
     this.setState({
       year: e.target.value,
     })
-    this._filterData(e.target.value)
   }
 
   _filterData(year) {
