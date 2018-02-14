@@ -3,8 +3,9 @@ import Reflux from 'reflux'
 import 'url-search-params-polyfill'
 import { Link } from 'react-router-dom'
 import request from '../utils/request'
-import Search from './dashboard.search.jsx'
+import Search from '../common/partials/search.jsx'
 import { withRouter } from 'react-router'
+import urlParse from 'url-parse'
 
 class SearchResults extends React.Component {
   constructor() {
@@ -66,25 +67,33 @@ class SearchResults extends React.Component {
     }
 
     return parsedResults.items.map(result => {
-      let url = result.link
-      let description = result.snippet
+      let resultLink = this._resultLink(result)
       return (
         <div className="fade-in  panel panel-default">
           <div className="panel-heading">
-            <div className="header clearfix">
-              <a href={url}>
-                <h4 className="dataset-name">{url}</h4>
-                <div className="meta-container">
-                  <p className="date">
-                    <span className="name">{description}</span>
-                  </p>
-                </div>
-              </a>
-            </div>
+            <div className="header clearfix">{resultLink}</div>
           </div>
         </div>
       )
     })
+  }
+
+  _resultLink(result) {
+    let innerContent = (
+      <div className="meta-container">
+        <h4 className="dataset-name">{result.link}</h4>
+        <p className="date">
+          <span className="name">{result.snippet}</span>
+        </p>
+      </div>
+    )
+    let parsedUrl = urlParse(result.link, true)
+    const hostname = parsedUrl.hostname
+    if (hostname === window.location.hostname) {
+      return <Link to={parsedUrl.pathname}>{innerContent}</Link>
+    } else {
+      return <a href={result.link}>{innerContent}</a>
+    }
   }
 }
 
