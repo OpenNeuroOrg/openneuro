@@ -494,8 +494,8 @@ class Dataset extends Reflux.Component {
           value={this.state.datasets.commentSortOrder}
           onChange={actions.sortComments}
           className="comment-sort-select">
-          <option value="DESC">Date: Oldest First</option>
           <option value="ASC">Date: Newest First</option>
+          <option value="DESC">Date: Oldest First</option>
         </select>
       )
     }
