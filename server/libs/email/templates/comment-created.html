@@ -2,9 +2,19 @@
 <head>
 <style>
 	body {
-		font-family: sans-serif;
+		font-family: 'Open Sans', sans-serif;
 		font-weight: lighter;
 		background: #F5F5F5;
+	}
+	footer {
+		border-top: 1px solid #333;
+		padding-top: 15px;
+	}
+	.link {
+		color: #00505c
+	}
+	.link:hover {
+		color: #0093a9
 	}
 	.top-bar {
 		width: 100%;
@@ -30,6 +40,9 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
+	.link-div {
+		padding-top: 20px;
+	}
 	.comment {
 		border: 1px solid #ccc;
 		padding: 15px;
@@ -53,12 +66,18 @@
 			
 			{{commentContent}}		
 		</div>
+		<div class="link-div">
+			<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetName}}#comment-{{commentId}}">Click here to view this comment on OpenNeuro &raquo;</a>
+		</div>
+
 		<p>
 			Sincerely,
 			The CRN Team
 		</p>
 
-		<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetName}}#comment-{{commentId}}">Go to comment &raquo;</a>
 	</div>
 </body>
+<footer>
+	If you would like to stop receiving notifications about this dataset, please <a class='link' href="{{siteUrl}}/datasets/{{datasetName}}">visit the dataset page</a> and click the 'unfollow' icon.
+</footer>
 <html>
