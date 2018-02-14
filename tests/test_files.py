@@ -4,7 +4,6 @@ import json
 import pytest
 from datalad.api import Dataset
 
-from datalad_server.app import create_app
 from .dataset_fixtures import *
 
 

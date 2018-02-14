@@ -3,7 +3,7 @@ from falcon import testing
 import json
 import pytest
 
-from datalad_server.app import create_app
+from datalad_service.app import create_app
 
 
 @pytest.fixture

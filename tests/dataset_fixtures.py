@@ -6,7 +6,7 @@ import random
 import pytest
 from falcon import testing
 from datalad.api import Dataset
-from datalad_server.app import create_app
+from datalad_service.app import create_app
 
 # Test dataset to create
 DATASET_ID = 'ds000001'
