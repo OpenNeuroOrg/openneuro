@@ -19,7 +19,6 @@ class Search extends React.Component {
 
   handleSubmit() {
     this.props.history.push('/search/' + encodeURIComponent(this.state.query))
-    console.log(encodeURIComponent(this.state.query))
     this.setState({ query: '' })
   }
 
