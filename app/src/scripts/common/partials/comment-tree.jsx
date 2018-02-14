@@ -171,7 +171,7 @@ class CommentTree extends React.Component {
 
   _userAvatar() {
     let comment = this.props.node
-    if (!comment.deleted || this.props.isAdmin) {
+    if (!comment.deleted) {
       return (
         <div className="comment-avatar">
           <img src={comment.user.imageUrl} />
