@@ -99,42 +99,43 @@ let notifications = {
    * them that a new snapshot has been created.
    * Includes changelog if available.
    */
-  snapshotCreated(datasetId, versionNumber, snapshotId) {
-    console.log('snapshotCreated notification sent with datasetId:', bidsId.decodeId(datasetId), 'versionNumber:', versionNumber, 'and snapshotId:', snapshotId)
+  snapshotCreated(datasetId, versionNumber) {
 
-    // get all users that are subscribed to the dataset
-    c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, users) => {
+    scitran.getProject(datasetId, (err, resp) => {
+      let datasetLabel = (resp.body && resp.body.label) ? resp.body.label : datasetId
 
-      // create the email object for each user
-      let emails = users.forEach(user => {
-        let emailContent = {
-          _id: null,
-          type: 'email',
-          email: {
-            to: user.email,
-            subject: '',
-            template: 'snapshot-created',
-            data: {
-              firstName: user.firstname,
-              lastName: user.lastname,
-              datasetName: '',
-              versionNumber: versionNumber,
-              datasetId: bidsId.decodeId(datasetId),
-              snapshotId: snapshotId ,
-              siteUrl:
-              url.parse(config.url).protocol +
-              '//' +
-              url.parse(config.url).hostname,
+      // get all users that are subscribed to the dataset
+      c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, subscriptions) => {
+
+        // create the email object for each user
+        subscriptions.forEach(subscription => {
+          scitran.getUser(subscription.userId, (err, res) => {
+            let user = res.body
+            let emailContent = {
+              _id: datasetId + '_' + user._id + '_' + 'snapshot_created',
+              type: 'email',
+              email: {
+                to: user.email,
+                subject: 'Snapshot Created',
+                template: 'snapshot-created',
+                data: {
+                  firstName: user.firstname,
+                  lastName: user.lastname,
+                  datasetLabel: datasetLabel,
+                  datasetId: bidsId.decodeId(datasetId),
+                  versionNumber: versionNumber,
+                  siteUrl:
+                  url.parse(config.url).protocol +
+                  '//' +
+                  url.parse(config.url).hostname,
+                }
+              }
             }
-          }
-        }
-        return emailContent
+            // send the email to the notifications database for distribution
+            notifications.add(emailContent, () => {})
+          })
+        })
       })
-
-      // send each email to the notification database for distribution
-      emails.forEach((email) => {
-        notifications.add(email, () => {})
-      }) 
     })
   },
 
@@ -147,6 +148,7 @@ let notifications = {
    */
   commentCreated(comment) {
     let datasetId = comment.datasetId ? comment.datasetId : null
+    let datasetLabel = comment.datasetLabel ? comment.datasetLabel : comment.datasetId
     let userId = (comment.user && comment.user.email) ? comment.user.email : null
     let content = comment.text
     let commentId = comment._id ? comment._id : null
@@ -156,15 +158,12 @@ let notifications = {
     let contentState = editorState.getCurrentContent()
     let htmlContent = stateToHTML(contentState)
 
-
-    console.log('creating comment notification with comment:', comment)
     // get all users that are subscribed to the dataset
     c.crn.subscriptions.find({datasetId: datasetId}).toArray((err, subscriptions) => {
 
       // create the email object for each user, using subscription userid and scitran
       subscriptions.forEach(subscription => {
         scitran.getUser(subscription.userId, (err, res) => {
-          console.log('scitran user:', res.body)
           let user = res.body
           let emailContent = {
             _id: datasetId + '_' + subscription._id + '_' + comment._id + '_' + 'comment_created',
@@ -177,6 +176,7 @@ let notifications = {
                 firstName: user.firstname,
                 lastName: user.lastname,
                 datasetName: bidsId.decodeId(datasetId),
+                datasetLabel: datasetLabel,
                 commentUserId: userId,
                 commentId: commentId,
                 dateCreated: moment(comment.createDate).format('MMMM Do'),
@@ -240,11 +240,11 @@ let notifications = {
   },
 
   /**
-   * Dataset Deleted
+   * Owner Unsubscribed
    * 
    * Sends an email notification to
    * all users following a dataset, informing
-   * them that a the dataset has been deleted.
+   * them that a the uploader of the dataset is no longer following.
    */
   ownerUnsubscribed(datasetId) {
     console.log('ownerUnsubscribed notification sent with datasetName:', bidsId.decodeId(datasetId))

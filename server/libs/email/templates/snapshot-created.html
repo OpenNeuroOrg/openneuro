@@ -42,19 +42,17 @@
 		<h2>Hi, {{firstName}} {{lastName}}</h2>
 
 		<p>
-			A dataset you are following, {{datasetName}},  had a snapshot created. 
+			A dataset you are following, <b>{{datasetLabel}}</b>,  had a new snapshot created. 
 		</p>
 
 		<p>
-			You can view the new snapshot by following <a class='dataset-link' href="{{siteUrl}}/datasets/{{datasetId}}/versions/{{versionNumber}}">this link</a>.
+			<a class='dataset-link' href="{{siteUrl}}/datasets/{{datasetId}}/versions/{{versionNumber}}">Click here to see new snapshot</a>
 		</p>
 
 		<p>
 			Sincerely,
 			The CRN Team
 		</p>
-
-		<a class="dataset-link" href="{{siteUrl}}/datasets/{{datasetId}}">Go to dataset. &raquo;</a>
 	</div>
 </body>
 <html>
