@@ -44,6 +44,7 @@ let JsonEditorStore = Reflux.createStore({
       errorMessage: null,
       errorDetail: null,
       showErrorDetail: false,
+      highlightPosition: null,
     }
     for (let prop in diffs) {
       data[prop] = diffs[prop]
@@ -113,13 +114,65 @@ let JsonEditorStore = Reflux.createStore({
 
           this.data.onSave(this.data.originalFile, file)
 
-          this.update({ editing: false, error: null, data: jsonContent })
+          this.update({ error: null, data: jsonContent })
         }
       })
     } catch (e) {
       let errorMessage = 'The data you have entered is not valid JSON.'
-      this.update({ errorDetail: [e.message], errorMessage: errorMessage })
+      let detailHighlight = this.getDetailHighlight(e.message)
+      this.update({
+        errorDetail: [e.message, detailHighlight],
+        errorMessage: errorMessage,
+      })
     }
+  },
+
+  getDetailHighlight(errorMessage) {
+    let highlightPosition = this.getHighlightPosition(errorMessage)
+    let slicePosition = highlightPosition
+    if (this.data.data[highlightPosition] !== '\n') {
+      slicePosition = highlightPosition + 1
+    }
+    let subsection = this.data.data.substring(0, slicePosition)
+
+    // split the data into separate  lines and take the last
+    const lines = subsection.split('\n')
+
+    // get the last line
+    const lastLine = lines[lines.length - 1]
+
+    // trim off the tabs at the beginning of each line
+    const tabSplit = lastLine.split('\t')
+    const lineContent = tabSplit[tabSplit.length - 1]
+    let caratPosition = lineContent.length
+    const carat = ' '.repeat(caratPosition - 1).concat('^')
+    const tabs = '\t'.repeat(tabSplit.length - 1)
+
+    // don't include the entire json data in the error message
+    // indicating error position - only the first 100 chars
+    if (subsection.length > 100) {
+      let subIndex = Math.max(subsection.length - 100, 0)
+      subsection = subsection.substring(subIndex)
+      if (subsection.indexOf('\n')) {
+        subsection = subsection.substring(subsection.indexOf('\n') + 1)
+      }
+    }
+    let errorDetail = subsection
+      .concat('\n')
+      .concat(tabs)
+      .concat(carat)
+    return errorDetail
+  },
+
+  getHighlightPosition(errorMessage) {
+    if (errorMessage.indexOf('position')) {
+      let split = errorMessage.split('position ')
+      if (split.length > 1) {
+        return Number(split[1])
+      }
+    }
+
+    return null
   },
 
   setJsonContent: function(content) {

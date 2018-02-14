@@ -36,6 +36,7 @@ export default {
       notifications: null,
       counters: null,
       logs: null,
+      comments: null,
     },
     scitran: {
       projects: null,

@@ -10,7 +10,7 @@ exports[`common/partials/footer renders successfully 1`] = `
         className="col-xs-12 col-md-4 version"
       >
         <span>
-          OpenNeuro Beta v
+          OpenNeuro v
           1.0.0
         </span>
       </div>

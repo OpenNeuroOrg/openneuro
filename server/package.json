@@ -1,6 +1,6 @@
 {
-  "name": "crn-server",
-  "version": "1.6.1",
+  "name": "openneuro-server",
+  "version": "1.7.0",
   "description": "",
   "license": "MIT",
   "main": "index.js",
@@ -23,7 +23,7 @@
     "aws-sdk": "2.50.0",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "bids-validator": "^0.25.0",
+    "bids-validator": "^0.25.7",
     "body-parser": "^1.14.0",
     "cron": "^1.1.0",
     "express": "^4.13.3",

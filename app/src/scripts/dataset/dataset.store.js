@@ -64,11 +64,20 @@ let datasetStore = Reflux.createStore({
         version: false,
         job: false,
       },
+      comments: [],
+      commentTree: [],
+      commentSortOrder: 'ASC',
       currentUpdate: null,
       currentUploadId: null,
       dataset: null,
       datasetTree: null,
       displayFile: {
+        name: '',
+        text: '',
+        link: '',
+        info: null,
+      },
+      editFile: {
         name: '',
         text: '',
         link: '',
@@ -82,6 +91,7 @@ let datasetStore = Reflux.createStore({
       metadataIssues: {},
       modals: {
         displayFile: false,
+        editFile: false,
         jobs: false,
         publish: false,
         share: false,
@@ -176,6 +186,7 @@ let datasetStore = Reflux.createStore({
             let originalId = dataset.original ? dataset.original : datasetId
             this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
               this.loadSnapshots(dataset, jobs, () => {
+                this.loadComments(originalId)
                 this.update({ loading: false, snapshot: snapshot })
               })
             })
@@ -501,6 +512,28 @@ let datasetStore = Reflux.createStore({
     this.update(update)
 
     // callback
+    if (callback && typeof callback === 'function') {
+      callback()
+    }
+  },
+
+  /**
+   * Dismiss All Modals
+   */
+  dismissModals(callback) {
+    let update = {}
+    update.displayFile = {
+      name: '',
+      text: '',
+      link: '',
+    }
+    update.editFile = update.displayFile
+    let modals = this.data.modals
+    for (let modal of Object.keys(modals)) {
+      modals[modal] = false
+    }
+    update.modals = modals
+    this.update(update)
     if (callback && typeof callback === 'function') {
       callback()
     }
@@ -1095,12 +1128,14 @@ let datasetStore = Reflux.createStore({
           ) {
             this.updateDescriptionFile(file, this.data.dataset._id, () => {
               this.updateFileState(item, { loading: false })
+              this.dismissModals()
             })
           } else {
             scitran
               .updateFile('projects', this.data.dataset._id, file)
               .then(() => {
                 this.updateFileState(item, { loading: false })
+                this.dismissModals()
                 this.revalidate()
               })
           }
@@ -1639,6 +1674,44 @@ let datasetStore = Reflux.createStore({
     }
   },
 
+  /**
+   * EditFile
+   *
+   * Toggles the editFile modal for files of type .json, .tsv, .csv
+   */
+  editFile(snapshotId, jobId, file, callback) {
+    let requestAndDisplay = link => {
+      let modals = this.data.modals
+      modals.editFile = true
+      if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
+        request.get(link, {}).then(res => {
+          if (callback) {
+            callback()
+          }
+          this.update({
+            editFile: {
+              name: file.name,
+              text: res.text,
+              link: link,
+              info: file,
+            },
+            modals,
+          })
+        })
+      }
+    }
+
+    if (jobId) {
+      this.getResultDownloadTicket(snapshotId, jobId, file, link => {
+        requestAndDisplay(link)
+      })
+    } else {
+      this.getFileDownloadTicket(file, link => {
+        requestAndDisplay(link)
+      })
+    }
+  },
+
   // Snapshots ---------------------------------------------------------------------
 
   createSnapshot(history, callback, transition) {
@@ -1758,8 +1831,6 @@ let datasetStore = Reflux.createStore({
     scitran.trackUsage(snapshotId, 'view', { snapshot: true })
   },
 
-  // Toggle Sidebar ----------------------------------------------------------------
-
   toggleSidebar(value) {
     let showSidebar = !this.data.showSidebar
     if (typeof value === 'boolean') {
@@ -1771,6 +1842,136 @@ let datasetStore = Reflux.createStore({
 
   _getInterval(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min
+  },
+
+  // Comments  ----------------------------------------------------------------
+
+  loadComments(datasetId) {
+    crn.getComments(datasetId).then(res => {
+      if (res && (res.status === 404 || res.status === 403)) {
+        this.update({
+          commentTree: [],
+          comments: [],
+        })
+      } else {
+        let comments = res.body
+        this.createCommentTree(comments)
+        this.sortComments()
+        this.update({
+          comments: comments,
+          content: '',
+        })
+      }
+    })
+  },
+
+  createComment(content, parent) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+
+    const parentId = typeof parent === 'undefined' ? null : parent
+
+    const comment = {
+      datasetId: datasetId,
+      parentId: parentId,
+      text: content,
+      user: this.data.currentUser.profile,
+      createDate: moment().format(),
+    }
+
+    crn.createComment(datasetId, comment).then(res => {
+      if (res) {
+        if (res.status === 200 && res.ok) {
+          this.loadComments(datasetId)
+        }
+      }
+    })
+  },
+
+  updateComment(commentId, content) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+
+    const comment = {
+      commentId: commentId,
+      text: content,
+    }
+    crn.updateComment(datasetId, commentId, comment).then(res => {
+      if (res) {
+        if (res.status === 200 && res.ok) {
+          this.loadComments(datasetId)
+        }
+      }
+    })
+  },
+
+  deleteComment(commentId, parent, callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+
+    const parentId = typeof parent == undefined ? null : parent
+
+    const comment = {
+      commentId: commentId,
+      parentId: parentId,
+    }
+    crn.deleteComment(comment).then(res => {
+      if (res) {
+        if (res.status === 200 && res.ok) {
+          this.loadComments(datasetId)
+          if (callback) {
+            callback()
+          }
+        }
+      }
+    })
+  },
+
+  sortComments(e) {
+    let commentTree
+    let commentSortOrder = e
+      ? e.currentTarget.value
+      : this.data.commentSortOrder
+    if (commentSortOrder === 'ASC') {
+      commentTree = this.data.commentTree.sort((a, b) => {
+        return a.createDate < b.createDate
+      })
+    } else {
+      commentTree = this.data.commentTree.sort((a, b) => {
+        return a.createDate > b.createDate
+      })
+    }
+    this.update({
+      commentSortOrder: commentSortOrder,
+      commentTree: commentTree,
+    })
+  },
+
+  createCommentTree(comments) {
+    let map = {}
+    let node = []
+    let roots = []
+
+    for (let i = 0; i < comments.length; i += 1) {
+      map[comments[i]._id] = i
+      comments[i].children = []
+    }
+    for (let j = 0; j < comments.length; j += 1) {
+      node = comments[j]
+      if (node.parentId !== null) {
+        if (map[node.parentId] !== undefined) {
+          comments[map[node.parentId]].children.push(node)
+        }
+      } else {
+        roots.push(node)
+      }
+    }
+    this.update({
+      commentTree: roots,
+    })
   },
 })
 
