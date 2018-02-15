@@ -1,11 +1,11 @@
 import React from 'react'
-import Reflux from 'reflux'
 import 'url-search-params-polyfill'
 import { Link } from 'react-router-dom'
 import request from '../utils/request'
 import Search from '../common/partials/search.jsx'
 import { withRouter } from 'react-router'
 import urlParse from 'url-parse'
+import PropTypes from 'prop-types'
 
 class SearchResults extends React.Component {
   constructor() {
@@ -111,6 +111,12 @@ class SearchResults extends React.Component {
       return <a href={result.link}>{innerContent}</a>
     }
   }
+}
+
+SearchResults.propTypes = {
+  location: PropTypes.shape({
+    search: PropTypes.string,
+  }),
 }
 
 export default withRouter(SearchResults)

@@ -1,7 +1,7 @@
 import React from 'react'
 import Input from '../forms/input.jsx'
-import { Link } from 'react-router-dom'
 import { withRouter } from 'react-router'
+import PropTypes from 'prop-types'
 
 class Search extends React.Component {
   constructor() {
@@ -49,6 +49,12 @@ class Search extends React.Component {
       </div>
     )
   }
+}
+
+Search.propTypes = {
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 }
 
 export default withRouter(Search)

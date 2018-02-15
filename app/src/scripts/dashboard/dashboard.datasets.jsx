@@ -17,7 +17,6 @@ import Statuses from '../dataset/dataset.statuses.jsx'
 import Filters from './dashboard.filters.jsx'
 import Sort from './dashboard.sort.jsx'
 import Summary from '../dataset/dataset.summary.jsx'
-import Input from '../common/forms/input.jsx'
 import Search from '../common/partials/search.jsx'
 
 import { refluxConnect } from '../utils/reflux'
