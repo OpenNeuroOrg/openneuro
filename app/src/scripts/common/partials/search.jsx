@@ -17,7 +17,7 @@ class Search extends React.Component {
     this.setState({ query: event.target.value })
   }
 
-  handleSubmit(event) {
+  handleSubmit() {
     this.props.history
       .push({
         pathname: '/search/',
