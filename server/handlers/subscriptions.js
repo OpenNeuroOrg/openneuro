@@ -1,11 +1,7 @@
 // dependencies ------------------------------------------------------------
-import scitran from '../libs/scitran'
 import mongo from '../libs/mongo'
 import { ObjectID } from 'mongodb'
-import config from '../config'
-import bidsId from '../libs/bidsId'
 import notifications from '../libs/notifications'
-import url from 'url'
 
 let c = mongo.collections
 
@@ -82,12 +78,10 @@ export default {
       {
         datasetId: datasetId
       }).toArray((err, subscriptions) => {
-        console.log('err:', err, 'subscriptions: ', subscriptions)
         if (err) {
           return next(err)
         }
         subscriptions.forEach((subscription) => {
-          console.log('subscription:', subscription)
           c.crn.subscriptions.deleteOne(
             {
               _id: ObjectID(subscription._id)
