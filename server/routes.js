@@ -243,13 +243,11 @@ const routes = [
   {
     method: 'get',
     url: '/subscriptions/:datasetId',
-    middleware: [auth.user],
     handler: subscriptions.getSubscriptions
   },
   {
     method: 'get',
     url: '/subscriptions/:datasetId/:userId',
-    middleware: [auth.user],
     handler: subscriptions.checkUserSubscription
   },
   {
