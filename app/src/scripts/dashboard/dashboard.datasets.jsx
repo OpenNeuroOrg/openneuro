@@ -17,6 +17,8 @@ import Statuses from '../dataset/dataset.statuses.jsx'
 import Filters from './dashboard.filters.jsx'
 import Sort from './dashboard.sort.jsx'
 import Summary from '../dataset/dataset.summary.jsx'
+import Input from '../common/forms/input.jsx'
+import Search from '../common/partials/search.jsx'
 
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
@@ -98,8 +100,15 @@ class Datasets extends Reflux.Component {
                 {pageTitle} - {title}
               </title>
             </Helmet>
-            <div className="header-wrap clearfix">
-              <h2>{title}</h2>
+            <div className="admin header-wrap clearfix">
+              <div className="row">
+                <div className="col-md-5">
+                  <h2>{title}</h2>
+                </div>
+                <div className="col-md-7">
+                  <Search />
+                </div>
+              </div>
             </div>
             <div className="filters-sort-wrap clearfix">
               <Sort

@@ -11,6 +11,9 @@ const Admin = loadable(() => import('./admin/admin.jsx'))
 const Dashboard = loadable(() => import('./dashboard/dashboard.jsx'))
 const Dataset = loadable(() => import('./dataset/dataset.jsx'))
 const Faq = loadable(() => import('./faq/faq.jsx'))
+const SearchResults = loadable(() =>
+  import('./dashboard/dashboard.searchresults.jsx'),
+)
 
 // routes ----------------------------------------------------------------
 
@@ -38,6 +41,12 @@ const appRoutes = () => (
       exact
       path="/datasets/:datasetId/versions/:snapshotId"
       component={Dataset}
+    />
+    <Route
+      name="search"
+      exact
+      path="/search/:query?"
+      component={SearchResults}
     />
   </Switch>
 )
