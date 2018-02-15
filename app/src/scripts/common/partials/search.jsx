@@ -18,11 +18,12 @@ class Search extends React.Component {
   }
 
   handleSubmit() {
-    this.props.history.push({
-      pathname: '/search/',
-      search: '?q=' + encodeURIComponent(this.state.query),
-    })
-    this.setState({ query: '' })
+    this.props.history
+      .push({
+        pathname: '/search/',
+        search: '?q=' + encodeURIComponent(this.state.query),
+      })
+      .then(this.setState({ query: '' }))
   }
 
   render() {
