@@ -1995,14 +1995,9 @@ let datasetStore = Reflux.createStore({
       if (res && res.status !== 200) {
         callback({ error: 'There was an error while following this dataset.' })
       } else {
-        let dataset = this.data.dataset
-        dataset.subscribed = true
-        this.update(
-          {
-            dataset,
-          },
-          callback(),
-        )
+        this.checkUserSubscription(() => {
+          callback()
+        })
       }
     })
   },
@@ -2021,14 +2016,9 @@ let datasetStore = Reflux.createStore({
           error: 'There was an error while unfollowing this dataset.',
         })
       } else {
-        let dataset = this.data.dataset
-        dataset.subscribed = false
-        this.update(
-          {
-            dataset,
-          },
-          callback,
-        )
+        this.checkUserSubscription(() => {
+          callback()
+        })
       }
     })
   },
@@ -2041,21 +2031,37 @@ let datasetStore = Reflux.createStore({
       this.data.currentUser && this.data.currentUser.profile
         ? this.data.currentUser.profile._id
         : null
-    if (datasetId && userId) {
-      crn.checkUserSubscription(datasetId, userId).then(res => {
+    let ownerId = this.data.dataset.group ? this.data.dataset.group : null
+
+    if (datasetId) {
+      // check the owner subscription
+      crn.checkUserSubscription(datasetId, ownerId).then(res => {
         if (
           res &&
           res.status === 200 &&
           res.body &&
           res.body.hasOwnProperty('subscribed')
         ) {
-          console.log('updating user subscription status.')
           let dataset = this.data.dataset
-          dataset.subscribed = res.body.subscribed
-          this.update({ dataset }, callback())
-        } else {
-          callback()
+          dataset.uploaderSubscribed = res.body.subscribed
+          this.update({ dataset })
         }
+
+        // check the user subscription
+        crn.checkUserSubscription(datasetId, userId).then(res => {
+          if (
+            res &&
+            res.status === 200 &&
+            res.body &&
+            res.body.hasOwnProperty('subscribed')
+          ) {
+            let dataset = this.data.dataset
+            dataset.subscribed = res.body.subscribed
+            this.update({ dataset }, callback())
+          } else {
+            callback()
+          }
+        })
       })
     } else {
       callback()

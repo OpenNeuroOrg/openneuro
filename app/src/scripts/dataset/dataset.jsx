@@ -499,11 +499,19 @@ class Dataset extends Reflux.Component {
         </select>
       )
     }
-
+    let uploaderFollowing
+    if (this.state.datasets.dataset.uploaderSubscribed) {
+      uploaderFollowing = (
+        <span className="uploader-following">
+          <i className="fa fa-user" />Uploader is Following
+        </span>
+      )
+    }
     let content = (
       <div className="comment-header">
         <label>COMMENTS</label>
         <div>
+          {uploaderFollowing}
           <span className="comment-sort">SORT BY: {sortBar}</span>
         </div>
       </div>
