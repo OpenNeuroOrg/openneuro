@@ -18,9 +18,10 @@ class Search extends React.Component {
   }
 
   handleSubmit() {
-    this.props.history.push(
-      '/search/?q=' + encodeURIComponent(this.state.query),
-    )
+    this.props.history.push({
+      pathname: '/search/',
+      search: '?q=' + encodeURIComponent(this.state.query),
+    })
     this.setState({ query: '' })
   }
 
@@ -38,13 +39,11 @@ class Search extends React.Component {
             onSubmit={this.handleSubmit}
           />
           <div className="form-group float-label-input">
-            <Link to={this.state.query}>
-              <button className="btn-blue" onClick={this.handleSubmit}>
-                <span className="">
-                  <i className="fa fa-search" />
-                </span>
-              </button>
-            </Link>
+            <button className="btn-blue" onClick={this.handleSubmit}>
+              <span className="">
+                <i className="fa fa-search" />
+              </span>
+            </button>
           </div>
         </form>
       </div>
