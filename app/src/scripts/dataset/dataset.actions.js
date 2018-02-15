@@ -3,6 +3,7 @@ import Reflux from 'reflux'
 var Actions = Reflux.createActions([
   'addFile',
   'addDirectoryFile',
+  'checkUserSubscription',
   'createSnapshot',
   'createComment',
   'cancelDirectoryUpload',

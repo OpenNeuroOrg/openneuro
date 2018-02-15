@@ -96,6 +96,7 @@ let datasetStore = Reflux.createStore({
         publish: false,
         share: false,
         update: false,
+        subscribe: false,
       },
       redirectUrl: null,
       snapshot: false,
@@ -511,6 +512,11 @@ let datasetStore = Reflux.createStore({
     let modals = this.data.modals
     modals[name] = !modals[name]
     update.modals = modals
+
+    // don't display the follow modal if the user is already following
+    if (name === 'subscribe' && this.data.dataset.subscribed) {
+      update.modals[name] = false
+    }
     this.update(update)
 
     // callback
@@ -2028,7 +2034,6 @@ let datasetStore = Reflux.createStore({
   },
 
   checkUserSubscription(callback) {
-    console.log('state:', this.data)
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
@@ -2044,6 +2049,7 @@ let datasetStore = Reflux.createStore({
           res.body &&
           res.body.hasOwnProperty('subscribed')
         ) {
+          console.log('updating user subscription status.')
           let dataset = this.data.dataset
           dataset.subscribed = res.body.subscribed
           this.update({ dataset }, callback())

@@ -52,7 +52,7 @@ class Tools extends React.Component {
         tooltip: 'Download Dataset',
         icon: 'fa-download',
         prepDownload: actions.getDatasetDownloadTicket,
-        action: actions.trackDownload,
+        action: actions.toggleModal.bind(null, 'subscribe'),
         display: !isIncomplete,
         validations: [
           {
