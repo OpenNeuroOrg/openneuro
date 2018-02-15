@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start":
-      "webpack-dev-server --config webpack.dev.js --watch-poll --progress --watch --color",
+      "webpack-dev-server --config webpack.dev.js --progress --watch --color",
     "build": "webpack --config webpack.prod.js",
     "lint": "eslint --ext .jsx --ext .js src/scripts/",
     "test": "jest",
