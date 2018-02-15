@@ -85,6 +85,11 @@ let UserStore = Reflux.createStore({
         failed: [],
         succeeded: [],
       },
+      monthLogs: {
+        failed: [],
+        succeeded: [],
+      },
+      loadingFilters: true,
       resultsPerPage: 30,
       page: 0,
     }
@@ -235,10 +240,9 @@ let UserStore = Reflux.createStore({
     ) {
       for (let job of uploaded) {
         let status = job.data.job.status.toLowerCase()
-        let dateTime = new Date(job.date).toString()
+        const dateTime = new Date(job.date).toString()
         let explode = dateTime.split(' ')
         let year = explode[3]
-
         if (!entries[status][year]) {
           entries[status][year] = []
         } else if (entries[status][year]) {
@@ -248,8 +252,48 @@ let UserStore = Reflux.createStore({
           yearArr.push(year)
         }
       }
-      this.update({ entries })
+      this.update({ entries, yearArr }, () => {
+        this._filterMonthActivity()
+      })
     }
+  },
+
+  _filterMonthActivity() {
+    let logs = this.data.activityLogs
+    let monthLogs = this.data.monthLogs
+    if (!logs) {
+      return
+    }
+
+    for (let year of this.data.yearArr) {
+      Object.keys(logs).map(type => {
+        if (logs[type][year]) {
+          Object.values(logs[type][year]).map(job => {
+            let dateArr = job.dateTime.split(' ')
+            let status = job.log.data.job.status.toLowerCase()
+            let month = dateArr[1]
+
+            if (!monthLogs[status][year]) {
+              monthLogs[status][year] = []
+            }
+
+            if (!monthLogs[status][year][month]) {
+              monthLogs[status][year][month] = []
+              monthLogs[status][year][month].push({
+                date: job.dateTime,
+                status: status,
+              })
+            } else {
+              monthLogs[status][year][month].push({
+                date: job.dateTime,
+                status: status,
+              })
+            }
+          })
+        }
+      })
+    }
+    this.update({ monthLogs, loadingFilters: false })
   },
 
   /**

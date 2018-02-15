@@ -4,6 +4,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import adminStore from './admin.store'
 import actions from './admin.actions.js'
+import Spinner from '../common/partials/spinner.jsx'
 import Pie from './charts/admin.progression-pie.jsx'
 import Scatter from './charts/admin.scatter-chart.jsx'
 import Bar from './charts/admin.bar.jsx'
@@ -16,11 +17,6 @@ class Progresssion extends Reflux.Component {
     refluxConnect(this, adminStore, 'admin')
     const initialState = {
       year: '2018',
-      entries: {
-        failed: [],
-        succeeded: [],
-      },
-      key: '',
       index: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       months: [
         'Jan',
@@ -43,12 +39,9 @@ class Progresssion extends Reflux.Component {
   }
 
   render() {
-    if (!this.state.admin.eventLogs.length) {
-      actions.getEventLogs()
-      actions.filterLogs()
-      return null
+    if (this.state.admin.loadingFilters) {
+      return <Spinner active={true} />
     } else {
-      this._filterData(this.state.year)
       return (
         <div className="dashboard-dataset-teasers fade-in">
           <div className="header-wrap clearfix chart-header">
@@ -104,19 +97,26 @@ class Progresssion extends Reflux.Component {
   _returnStats() {
     let failed = []
     let succeeded = []
-    let entries = this.state.entries
+    let entries = this.state.admin.monthLogs
+    let year = this.state.year
+
     Object.keys(entries).map(status => {
       let counter = 0
       for (let month of this.state.months) {
         counter++
-        if (entries[status][month]) {
-          if (status === 'failed') {
-            failed.push({ x: counter, y: entries.failed[month].length })
-          } else if (status === 'succeeded') {
-            succeeded.push({
-              x: counter,
-              y: entries.succeeded[month].length,
-            })
+        if (entries[status][year]) {
+          if (entries[status][year][month]) {
+            if (status === 'failed') {
+              failed.push({
+                x: counter,
+                y: entries[status][year][month].length,
+              })
+            } else if (status === 'succeeded') {
+              succeeded.push({
+                x: counter,
+                y: entries[status][year][month].length,
+              })
+            }
           }
         }
       }
@@ -169,36 +169,8 @@ class Progresssion extends Reflux.Component {
   // custom methods --------------------------------------------------------------------------------
 
   _handleSelect(e) {
-    this._filterData(e.target.value)
     this.setState({
       year: e.target.value,
-    })
-  }
-
-  _filterData(year) {
-    let entries = this.state.entries
-    let logs = this.state.admin.activityLogs
-    let date
-
-    // empty arrays before loop
-    entries.failed = []
-    entries.succeeded = []
-
-    Object.keys(logs).map(type => {
-      if (logs[type][year]) {
-        Object.values(logs[type][year]).map(job => {
-          let dateArr = job.dateTime.split(' ')
-          let status = job.log.data.job.status.toLowerCase()
-          date = dateArr[1]
-          if (!entries[status][date]) {
-            entries[status] = []
-            entries[status][date] = []
-            entries[status][date].push({ date: job.dateTime, status: status })
-          } else {
-            entries[status][date].push({ date: job.dateTime, status: status })
-          }
-        })
-      }
     })
   }
 }
