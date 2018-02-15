@@ -44,43 +44,37 @@ export default {
             snapshot: true,
             metadata: metadata,
           })
-          .then(pubProjects => {
+          .then(async pubProjects => {
             projects = projects.concat(pubProjects.body)
-            if (!isSignedOut) {
-              scitran.getUsers().then(res => {
-                let users = res && res.body ? res.body : null
-                let resultDict = {}
-                // hide other user's projects from admins & filter snapshots to display newest of each dataset
-                if (projects) {
-                  for (let project of projects) {
-                    let dataset = this.formatDataset(project, null, users)
-                    let datasetId = dataset.hasOwnProperty('original')
-                      ? dataset.original
-                      : dataset._id
-                    let existing = resultDict[datasetId]
-                    if (
-                      !existing ||
-                      (existing.hasOwnProperty('original') &&
-                        !dataset.hasOwnProperty('original')) ||
-                      (existing.hasOwnProperty('original') &&
-                        existing.snapshot_version < project.snapshot_version)
-                    ) {
-                      if (isAdmin || isPublic || this.userAccess(project)) {
-                        resultDict[datasetId] = dataset
-                      }
-                    }
+            const users = isSignedOut ? null : (await scitran.getUsers()).body
+            let resultDict = {}
+            // hide other user's projects from admins & filter snapshots to display newest of each dataset
+            if (projects) {
+              for (let project of projects) {
+                let dataset = this.formatDataset(project, null, users)
+                let datasetId = dataset.hasOwnProperty('original')
+                  ? dataset.original
+                  : dataset._id
+                let existing = resultDict[datasetId]
+                if (
+                  !existing ||
+                  (existing.hasOwnProperty('original') &&
+                    !dataset.hasOwnProperty('original')) ||
+                  (existing.hasOwnProperty('original') &&
+                    existing.snapshot_version < project.snapshot_version)
+                ) {
+                  if (isAdmin || isPublic || this.userAccess(project)) {
+                    resultDict[datasetId] = dataset
                   }
                 }
-
-                let results = []
-                for (let key in resultDict) {
-                  results.push(resultDict[key])
-                }
-                callback(results)
-              })
-            } else {
-              callback()
+              }
             }
+
+            let results = []
+            for (let key in resultDict) {
+              results.push(resultDict[key])
+            }
+            callback(results)
           })
       })
   },
@@ -134,42 +128,52 @@ export default {
    * Takes a projectId and returns a full
    * nested BIDS dataset.
    */
-  getDataset(projectId, callback, options) {
-    if (options && !options.isPublic) {
-      scitran.getUsers().then(res => {
-        let users = res && res.body ? res.body : null
-        scitran.getProject(projectId, options).then(res => {
-          let tempFiles = this._formatFiles(res.body.files)
-          if (res.status !== 200) {
-            return callback(res)
-          }
-          let project = res.body
-          this.getMetadata(
-            project,
-            metadata => {
-              let dataset = this.formatDataset(
-                project,
-                metadata['dataset_description.json'],
-                users,
-              )
-              dataset.README = metadata.README
-              crn.getDatasetJobs(projectId, options).then(res => {
-                dataset.jobs = res.body
-                dataset.children = tempFiles
-                dataset.showChildren = true
-                this.usage(projectId, options, usage => {
-                  if (usage) {
-                    dataset.views = usage.views
-                    dataset.downloads = usage.downloads
-                  }
-                  callback(dataset)
-                })
+  async getDataset(projectId, callback, options) {
+    // Users
+    let users = null
+    try {
+      const userRes = await scitran.getUsers()
+      users = !options.isPublic && userRes ? userRes.body : null
+    } catch (err) {
+      // The user request failed
+    }
+
+    // Dataset
+    try {
+      const projectRes = await scitran.getProject(projectId, options)
+      if (projectRes.status !== 200) {
+        return callback(projectRes)
+      }
+      const project = projectRes ? projectRes.body : null
+      if (project) {
+        let tempFiles = project.files ? this._formatFiles(project.files) : null
+        this.getMetadata(
+          project,
+          metadata => {
+            let dataset = this.formatDataset(
+              project,
+              metadata['dataset_description.json'],
+              users,
+            )
+            dataset.README = metadata.README
+            crn.getDatasetJobs(projectId, options).then(res => {
+              dataset.jobs = res.body
+              dataset.children = tempFiles
+              dataset.showChildren = true
+              this.usage(projectId, options, usage => {
+                if (usage) {
+                  dataset.views = usage.views
+                  dataset.downloads = usage.downloads
+                }
+                callback(dataset)
               })
-            },
-            options,
-          )
-        })
-      })
+            })
+          },
+          options,
+        )
+      }
+    } catch (err) {
+      callback(err)
     }
   },
 
@@ -247,7 +251,7 @@ export default {
       id = this.decodeId(id)
       version = this.decodeId(version)
       if (version.length <= 5) {
-        let snapshotNumber = ('00000' + Number(version)).substr(-5, 5)
+        let snapshotNumber = this.formatVersionNumber(version)
         let snapshotId = this.encodeId(id.slice(2) + '-' + snapshotNumber)
         return snapshotId
       } else {
@@ -275,6 +279,15 @@ export default {
       }
     }
     return id
+  },
+
+  /**
+   * Get Five Digit Version Number
+   */
+  formatVersionNumber(version) {
+    if (version) {
+      return ('00000' + Number(version)).substr(-5, 5)
+    }
   },
 
   /**
@@ -357,6 +370,7 @@ export default {
         project.metadata && project.metadata.validation
           ? project.metadata.validation
           : { errors: [], warnings: [] },
+      tags: project.tags || [],
       type: 'folder',
       children: files,
       description: this.formatDescription(project.metadata, description),

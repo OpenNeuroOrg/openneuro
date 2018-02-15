@@ -29,6 +29,20 @@ export default {
           'person:person.email:emails.email:email.email:email',
         )
 
+        if (!firstname) {
+          callback(
+            'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
+          )
+          return
+        }
+
+        if (!lastname) {
+          callback(
+            'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
+          )
+          return
+        }
+
         if (!email) {
           callback(
             'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.',

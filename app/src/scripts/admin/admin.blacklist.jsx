@@ -20,6 +20,7 @@ class Blacklist extends Reflux.Component {
       <div className="no-results">There are no blocked users</div>
     )
     let users = this.state.admin.blacklist.map(user => {
+      let userEmail = user.hasOwnProperty('email') ? user.email : user._id
       return (
         <div className="fade-in user-panel clearfix" key={user._id}>
           <div className="col-xs-5 user-col">
@@ -29,7 +30,7 @@ class Blacklist extends Reflux.Component {
                 <span>{user.lastname}</span>
               </div>
             </h3>
-            <h3 className="user-email">{user._id}</h3>
+            <h3 className="user-email">{userEmail}</h3>
           </div>
           <div className="col-xs-4 user-col">
             <div>{user.note}</div>

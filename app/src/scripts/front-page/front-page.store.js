@@ -23,6 +23,10 @@ let FrontPageStore = Reflux.createStore({
       true,
       true,
     )
+    // Load apps
+    crn.getApps().then(res => {
+      this.setApps(res.body)
+    })
   },
 
   getInitialState: function() {

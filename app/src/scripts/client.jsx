@@ -1,13 +1,11 @@
 // dependencies ---------------------------------------------------------
-import 'babel-polyfill'
 import 'url-search-params-polyfill'
 import Raven from 'raven-js'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
-import Index from './index.jsx'
-import analyticsWrapper from './utils/analytics.js'
 import config from '../../config.js'
+import App from './app.jsx'
+import runtime from 'serviceworker-webpack-plugin/lib/runtime'
 
 const ravenConfig = {
   release: __GIT_HASH__,
@@ -18,15 +16,17 @@ const ravenConfig = {
   },
 }
 
+// Setup the service worker
+if ('serviceWorker' in navigator) {
+  runtime.register()
+} else {
+  Raven.captureMessage('Service worker registration failed.')
+}
+
 // Uses the public DSN here - private should not be used in the client app
 Raven.config(
   'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',
   ravenConfig,
 ).install()
 
-ReactDOM.render(
-  <Router>
-    <Route component={analyticsWrapper(Index)} />
-  </Router>,
-  document.getElementById('main'),
-)
+ReactDOM.render(<App />, document.getElementById('main'))

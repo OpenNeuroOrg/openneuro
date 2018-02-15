@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import FrontPageTabs from './front-page-tabs.jsx'
 import userStore from '../user/user.store.js'
 import Spinner from '../common/partials/spinner.jsx'
@@ -12,6 +12,7 @@ import FPActions from './front-page.actions.js'
 import { refluxConnect } from '../utils/reflux'
 
 // assets -------------------------------------------------------------
+import { pageDescription } from '../resources/strings.js'
 import ljaf from './assets/ljaf.png'
 import logo_app from './assets/logo_app.png'
 import logo_cube from './assets/logo_cube.png'
@@ -68,10 +69,7 @@ class FrontPage extends Reflux.Component {
                 <div className="logo-text">
                   Open<span className="logo-end">Neuro</span>
                 </div>
-                <h1>
-                  A free and open platform for analyzing and sharing
-                  neuroimaging data
-                </h1>
+                <h1>{pageDescription}</h1>
                 <div className="sign-in-block fade-in">
                   {this._error(
                     this.state.users.signinError,
@@ -104,9 +102,7 @@ class FrontPage extends Reflux.Component {
 
   _signinForm(loadingState) {
     if (!loadingState) {
-      if (this.state.users.token) {
-        return <Redirect to="dashboard" push />
-      } else {
+      if (!this.state.users.token) {
         return (
           <span>
             <button className="btn-admin" onClick={userStore.googleSignIn}>
@@ -178,7 +174,8 @@ class FrontPage extends Reflux.Component {
                   View more information about<br />
                   <a
                     target="_blank"
-                    href="http://reproducibility.stanford.edu/">
+                    href="http://reproducibility.stanford.edu/"
+                    rel="noopener noreferrer">
                     Stanford Center for Reproducible Neuroscience
                   </a>
                 </p>
@@ -194,7 +191,10 @@ class FrontPage extends Reflux.Component {
                 <p>
                   A Validator for the Brain Imaging Data Structure<br />
                   Read more about the{' '}
-                  <a target="_blank" href="http://bids.neuroimaging.io/">
+                  <a
+                    target="_blank"
+                    href="http://bids.neuroimaging.io/"
+                    rel="noopener noreferrer">
                     BIDS specifications
                   </a>
                 </p>
@@ -205,7 +205,8 @@ class FrontPage extends Reflux.Component {
                   Visit the{' '}
                   <a
                     target="_blank"
-                    href="https://groups.google.com/forum/#!forum/bids-discussion">
+                    href="https://groups.google.com/forum/#!forum/bids-discussion"
+                    rel="noopener noreferrer">
                     Google discussion group
                   </a>{' '}
                   to contribute.
@@ -220,17 +221,26 @@ class FrontPage extends Reflux.Component {
                 <a
                   target="_blank"
                   href="http://www.arnoldfoundation.org/"
-                  title="Arnold Foundation">
+                  title="Arnold Foundation"
+                  rel="noopener noreferrer">
                   <img src={ljaf} alt="Arnold Foundation" />
                 </a>
               </div>
               <div className="col-sm-4">
-                <a target="_blank" href="https://www.nsf.gov/" title="NSF">
+                <a
+                  target="_blank"
+                  href="https://www.nsf.gov/"
+                  title="NSF"
+                  rel="noopener noreferrer">
                   <img src={nsf} alt="National Science Foundation" />
                 </a>
               </div>
               <div className="col-sm-4">
-                <a target="_blank" href="https://www.nih.gov/" title="NIH">
+                <a
+                  target="_blank"
+                  href="https://www.nih.gov/"
+                  title="NIH"
+                  rel="noopener noreferrer">
                   <img src={nih} alt="National Institute on Drug and Abuse" />
                 </a>
               </div>
@@ -240,13 +250,15 @@ class FrontPage extends Reflux.Component {
                 <a
                   target="_blank"
                   href="https://www.stanford.edu/"
-                  title="Stanford">
+                  title="Stanford"
+                  rel="noopener noreferrer">
                   <img src={stanford} alt="Stanford" />
                 </a>
               </div>
               <div className="col-sm-3">
                 <a
                   target="_blank"
+                  rel="noopener noreferrer"
                   href="https://squishymedia.com/"
                   title="Squishymedia">
                   <img src={squishymedia} alt="Squishymedia" />

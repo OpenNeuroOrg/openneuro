@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import Usermenu from './navbar.usermenu.jsx'
 import UploadBtn from './navbar.upload-button.jsx'
@@ -26,6 +27,10 @@ const SignIn = ({ loading }) => {
       </div>
     )
   }
+}
+
+SignIn.propTypes = {
+  loading: PropTypes.bool,
 }
 
 const NavMenu = ({ profile, scitran, isLoggedIn, loading }) => {
@@ -74,6 +79,13 @@ const NavMenu = ({ profile, scitran, isLoggedIn, loading }) => {
       </li>
     </ul>
   )
+}
+
+NavMenu.propTypes = {
+  profile: PropTypes.object,
+  scitran: PropTypes.object,
+  isLoggedIn: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  loading: PropTypes.bool,
 }
 
 export { NavMenu, SignIn }

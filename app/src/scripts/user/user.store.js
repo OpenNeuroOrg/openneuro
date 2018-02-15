@@ -2,6 +2,7 @@
 import Raven from 'raven-js'
 import React from 'react'
 import Reflux from 'reflux'
+import { setImmediate } from 'async'
 import actions from './user.actions.js'
 import google from '../utils/google'
 import orcid from '../utils/orcid'
@@ -56,9 +57,11 @@ let UserStore = Reflux.createStore({
           })
       }
     }
-
-    google.init(initCallback('google'))
-    orcid.init(this.data.token, initCallback('orcid'))
+    // Workaround for webpack loading order issues with createStore
+    setImmediate(() => {
+      google.init(initCallback('google'))
+      orcid.init(this.data.token, initCallback('orcid'))
+    })
   },
 
   getInitialState() {
@@ -203,7 +206,8 @@ let UserStore = Reflux.createStore({
                     by mistake please contact the{' '}
                     <a
                       href="mailto:openfmri@gmail.com?subject=Center%20for%20Reproducible%20Neuroscience%20Blocked%20User"
-                      target="_blank">
+                      target="_blank"
+                      rel="noopener noreferrer">
                       site adminstrator
                     </a>.
                   </span>

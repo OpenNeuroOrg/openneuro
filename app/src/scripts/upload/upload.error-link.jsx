@@ -21,6 +21,7 @@ export default class ErrorLink extends React.Component {
         download={this.props.dirName + '_errors.txt'}
         className="error-log"
         target="_blank"
+        rel="noopener noreferrer"
         href={dataURL}>
         Download error log for {this.props.dirName}
       </a>
@@ -30,12 +31,12 @@ export default class ErrorLink extends React.Component {
   // custom methods ---------------------------------------------------------
 
   /**
-     * Generate Error Log
-     *
-     * Takes an array of errors and an array of
-     * warnings and returns text error log encoded
-     * as a url.
-     */
+   * Generate Error Log
+   *
+   * Takes an array of errors and an array of
+   * warnings and returns text error log encoded
+   * as a url.
+   */
   _generateErrorLog(errors, warnings) {
     let issueString = this._generateIssueLog(errors, 'Error')
     issueString += this._generateIssueLog(warnings, 'Warning')
@@ -46,12 +47,12 @@ export default class ErrorLink extends React.Component {
   }
 
   /**
-     * Generate Issue Log
-     *
-     * Takes an array of issues and a string of the
-     * issue type and return a human readable log
-     * of the issues as a string.
-     */
+   * Generate Issue Log
+   *
+   * Takes an array of issues and a string of the
+   * issue type and return a human readable log
+   * of the issues as a string.
+   */
   _generateIssueLog(issues, type) {
     let issueString = ''
     let endLine = '======================================================'

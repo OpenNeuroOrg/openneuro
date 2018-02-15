@@ -7,14 +7,19 @@ import Actions from './dashboard.datasets.actions.js'
 import DatasetsStore from './dashboard.datasets.store.js'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
-import { PanelGroup } from 'react-bootstrap'
+import { PanelGroup, Panel } from 'react-bootstrap'
+import Helmet from 'react-helmet'
 import Paginator from '../common/partials/paginator.jsx'
 import Spinner from '../common/partials/spinner.jsx'
+import Timeout from '../common/partials/timeout.jsx'
+import ErrorBoundary from '../errors/errorBoundary.jsx'
 import Statuses from '../dataset/dataset.statuses.jsx'
 import Filters from './dashboard.filters.jsx'
 import Sort from './dashboard.sort.jsx'
 import Summary from '../dataset/dataset.summary.jsx'
+
 import { refluxConnect } from '../utils/reflux'
+import { pageTitle } from '../resources/strings'
 
 // component setup ---------------------------------------------------------------------------
 
@@ -88,6 +93,11 @@ class Datasets extends Reflux.Component {
       <div>
         <div className="dashboard-dataset-teasers datasets datasets-private">
           <div className="header-filter-sort clearfix">
+            <Helmet>
+              <title>
+                {pageTitle} - {title}
+              </title>
+            </Helmet>
             <div className="header-wrap clearfix">
               <h2>{title}</h2>
             </div>
@@ -102,9 +112,21 @@ class Datasets extends Reflux.Component {
               ) : null}
             </div>
           </div>
-          <PanelGroup>
-            {this.state.datasets.loading ? <Spinner active={true} /> : results}
-          </PanelGroup>
+          <ErrorBoundary
+            message="The dataset server failed to respond."
+            className="loading-wrap fade-in">
+            <PanelGroup>
+              <Panel>
+                {this.state.datasets.loading ? (
+                  <Timeout timeout={20000}>
+                    <Spinner active={true} />
+                  </Timeout>
+                ) : (
+                  results
+                )}
+              </Panel>
+            </PanelGroup>
+          </ErrorBoundary>
         </div>
         <div className="pager-wrapper">
           <Paginator

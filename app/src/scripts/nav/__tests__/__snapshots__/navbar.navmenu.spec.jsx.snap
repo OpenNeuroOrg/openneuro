@@ -67,7 +67,7 @@ exports[`NavMenu renders successfully 1`] = `
 
 exports[`NavMenu renders without "eventKey" warnings 1`] = `
 <NavMenu
-  isLoggedIn={false}
+  isLoggedIn={null}
   loading={false}
 >
   <ul

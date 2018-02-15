@@ -3,10 +3,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Reflux from 'reflux'
-import { Link, withRouter } from 'react-router-dom'
+import { Redirect, Link, withRouter } from 'react-router-dom'
 import moment from 'moment'
 import { ProgressBar } from 'react-bootstrap'
+import Helmet from 'react-helmet'
 import Spinner from '../common/partials/spinner.jsx'
+import Timeout from '../common/partials/timeout.jsx'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
 import MetaData from './dataset.metadata.jsx'
@@ -16,12 +18,17 @@ import Validation from './dataset.validation.jsx'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import FileTree from '../common/partials/file-tree.jsx'
 import Jobs from './dataset.jobs.jsx'
+import ErrorBoundary from '../errors/errorBoundary.jsx'
 import userStore from '../user/user.store.js'
 import Summary from './dataset.summary.jsx'
+import Comment from '../common/partials/comment.jsx'
+import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
+import userActions from '../user/user.actions.js'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
+import { pageTitle } from '../resources/strings'
 
 const uploadWarning =
   'You are currently uploading files. Leaving this page will cancel the upload process.'
@@ -118,6 +125,7 @@ class Dataset extends Reflux.Component {
         app: app,
         version: version,
         job: job,
+        datasetId: bids.encodeId(datasetId),
       })
     } else if (
       (datasetId && !this.state.datasets.dataset) ||
@@ -130,7 +138,6 @@ class Dataset extends Reflux.Component {
   componentWillUnmount() {
     actions.setInitialState({ apps: this.state.datasets.apps })
     super.componentWillUnmount()
-    document.title = 'OpenNeuro'
     window.onbeforeunload = () => {}
     if (this.state.unblock) {
       this.state.unblock()
@@ -152,11 +159,18 @@ class Dataset extends Reflux.Component {
     let content
 
     if (dataset) {
-      document.title = 'OpenNeuro - ' + dataset.label
       let errors = dataset.validation.errors
       let warnings = dataset.validation.warnings
+      // meta description is README unless it's empty
+      const description = dataset.README ? dataset.README : dataset.label
       content = (
         <div className="clearfix dataset-wrap">
+          <Helmet>
+            <title>
+              {pageTitle} - {dataset.label}
+            </title>
+            <meta name="description" content={description} />
+          </Helmet>
           <div className="dataset-annimation">
             <div className="col-xs-12 dataset-inner">
               <div className="row">
@@ -184,6 +198,7 @@ class Dataset extends Reflux.Component {
                     editable={canEdit}
                     issues={this.state.datasets.metadataIssues}
                   />
+                  {this._commentTree()}
                 </div>
                 <div className="col-xs-6">
                   <div>
@@ -197,7 +212,9 @@ class Dataset extends Reflux.Component {
                       }
                     />
                     <div className="fade-in col-xs-12">
-                      <Jobs />
+                      <ErrorBoundary message="The server failed to provide OpenNeuro with a list of jobs.">
+                        <Jobs />
+                      </ErrorBoundary>
                     </div>
                     <div className="dataset-files">
                       {this._incompleteMessage(dataset)}
@@ -211,21 +228,25 @@ class Dataset extends Reflux.Component {
         </div>
       )
     } else {
-      let message
-      let status = this.state.datasets.status
-      if (status === 404) {
-        message = 'Dataset not found'
-      }
-      if (status === 403) {
-        message = 'You are not authorized to view this dataset'
-      }
-      content = (
-        <div className="page dataset">
-          <div className="dataset-container">
-            <h2 className="message-4">{message}</h2>
+      if (this.state.datasets.redirectUrl) {
+        content = <Redirect to={this.state.datasets.redirectUrl} />
+      } else {
+        let message
+        let status = this.state.datasets.status
+        if (status === 404) {
+          message = 'Dataset not found'
+        }
+        if (status === 403) {
+          message = 'You are not authorized to view this dataset'
+        }
+        content = (
+          <div className="page dataset">
+            <div className="dataset-container">
+              <h2 className="message-4">{message}</h2>
+            </div>
           </div>
-        </div>
-      )
+        )
+      }
     }
 
     return (
@@ -237,13 +258,19 @@ class Dataset extends Reflux.Component {
           {this._leftSidebar(snapshots)}
           {this._showSideBarButton()}
           {!this.state.datasets.loading ? this._tools(dataset) : null}
-          <div className="fade-in inner-route dataset-route light">
-            {this.state.datasets.loading ? (
-              <Spinner active={true} text={loadingText} />
-            ) : (
-              content
-            )}
-          </div>
+          <ErrorBoundary
+            message="The dataset has failed to load in time. Please check your network connection."
+            className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
+            <div className="fade-in inner-route dataset-route light">
+              {this.state.datasets.loading ? (
+                <Timeout timeout={20000}>
+                  <Spinner active={true} text={loadingText} />
+                </Timeout>
+              ) : (
+                content
+              )}
+            </div>
+          </ErrorBoundary>
         </div>
       </div>
     )
@@ -413,6 +440,7 @@ class Dataset extends Reflux.Component {
         deleteFile={actions.deleteFile}
         getFileDownloadTicket={actions.getFileDownloadTicket}
         displayFile={actions.displayFile.bind(this, null, null)}
+        editFile={actions.editFile.bind(this, null, null)}
         toggleFolder={actions.toggleFolder}
         addFile={actions.addFile}
         addDirectoryFile={actions.addDirectoryFile}
@@ -457,6 +485,88 @@ class Dataset extends Reflux.Component {
         </div>
       )
     }
+  }
+
+  _commentHeader() {
+    let sortBar
+    if (this.state.datasets.commentTree.length) {
+      sortBar = (
+        <span className="comment-sort">
+          SORT BY:
+          <select
+            value={this.state.datasets.commentSortOrder}
+            onChange={actions.sortComments}
+            className="comment-sort-select">
+            <option value="ASC">Date: Newest First</option>
+            <option value="DESC">Date: Oldest First</option>
+          </select>
+        </span>
+      )
+    }
+
+    let content = (
+      <div className="comment-header">
+        <label>COMMENTS</label>
+        <div>{sortBar}</div>
+      </div>
+    )
+
+    return content
+  }
+  _commentTree() {
+    // add a top level comment box to the dataset if user is logged in
+    let loggedIn = !!userStore.hasToken()
+    let isAdmin =
+      loggedIn && this.state.datasets.currentUser
+        ? this.state.datasets.currentUser.scitran.root
+        : false
+
+    let content = []
+    if (loggedIn) {
+      content.push(
+        <div className="comment-box top-level" key="topComment">
+          <Comment
+            createComment={actions.createComment}
+            parentId={null}
+            show={true}
+            new={true}
+          />
+        </div>,
+      )
+    } else {
+      content.push(
+        <div key="commentLoginMessage" className="login-for-comments">
+          Please{' '}
+          <a onClick={userActions.toggle.bind(this, 'loginModal')}>sign in</a>{' '}
+          to contribute to the discussion.
+        </div>,
+      )
+    }
+
+    // construct comment tree
+    for (let comment of this.state.datasets.commentTree) {
+      content.push(
+        <div key={comment._id}>
+          <CommentTree
+            uploadUser={this.state.datasets.dataset.user}
+            user={this.state.datasets.currentUser.profile}
+            isAdmin={isAdmin}
+            node={comment}
+            datasetId={this.props.match.params.datasetId}
+            createComment={actions.createComment}
+            deleteComment={actions.deleteComment}
+            updateComment={actions.updateComment}
+            isParent={true}
+          />
+        </div>,
+      )
+    }
+    return (
+      <div className="dataset-comments">
+        {this._commentHeader()}
+        <div className="comments">{content}</div>
+      </div>
+    )
   }
 
   _incompleteMessage(dataset) {

@@ -2,11 +2,11 @@
 
 import express from 'express'
 import users from './handlers/users'
-import jobs from './handlers/jobs'
 import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
 import validation from './handlers/validation'
 import datasets from './handlers/datasets'
+import comments from './handlers/comments'
 import auth from './libs/auth'
 import scitran from './libs/scitran'
 import schema from './libs/schema'
@@ -130,18 +130,13 @@ const routes = [
     method: 'get',
     url: '/datasets/:datasetId/jobs',
     middleware: [auth.datasetAccess({ optional: true })],
-    handler: jobs.getDatasetJobs,
+    handler: awsJobs.getDatasetJobs,
   },
   {
     method: 'delete',
     url: '/datasets/:datasetId/jobs',
     middleware: [auth.datasetAccess()],
-    handler: jobs.deleteDatasetJobs,
-  },
-  {
-    method: 'post',
-    url: '/jobs/:jobId/results',
-    handler: jobs.postResults,
+    handler: awsJobs.deleteDatasetJobs,
   },
   {
     method: 'get',
@@ -175,13 +170,13 @@ const routes = [
     method: 'get',
     url: '/datasets/:datasetId/jobs/:jobId/results/ticket',
     middleware: [auth.datasetAccess()],
-    handler: jobs.getDownloadTicket,
+    handler: awsJobs.getDownloadTicket,
   },
   {
     method: 'get',
     url: '/jobs',
     middleware: [auth.optional],
-    handler: jobs.getJobs,
+    handler: awsJobs.getJobs,
   },
   {
     method: 'get',
@@ -212,6 +207,35 @@ const routes = [
     middleware: [auth.superuser],
     handler: eventLogs.getEventLogs,
   },
+
+  // comments --------------------------------------
+  {
+    method: 'get',
+    url: '/comments/:datasetId',
+    handler: comments.getComments,
+  },
+
+  {
+    method: 'post',
+    url: '/comments/:datasetId',
+    middleware: [auth.user],
+    handler: comments.create,
+  },
+
+  {
+    method: 'post',
+    url: '/comments/:datasetId/:commentId',
+    middleware: [auth.deleteCommentAccess],
+    handler: comments.update
+  },
+  
+  {
+    method: 'delete',
+    url: '/comments/:commentId',
+    middleware: [auth.deleteCommentAccess],
+    handler: comments.delete,
+  }
+
 ]
 
 // initialize routes -------------------------------

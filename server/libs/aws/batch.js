@@ -532,9 +532,18 @@ export default aws => {
          *
          * This is called by worker processes and must be process safe.
          */
-    startAnalysis(job, jobId, userId, callback) {
+    startAnalysis(job, jobId, userId, retry, callback) {
       let hash = job.datasetHash
-      s3.uploadSnapshot(hash, () => {
+      s3.uploadSnapshot(hash, err => {
+        // If the snapshot upload fails, set the job analysis.status = 'FAILED'
+        // so the user can retry.
+        if (err) {
+          c.crn.jobs.updateOne(
+            { _id: ObjectID(jobId) },
+            { $set: { 'analysis.status': 'FAILED' } },
+          )
+          return callback()
+        }
         const batchJobParams = this.buildBatchParams(job, hash)
 
         this.startBatchJobs(batchJobParams, jobId, err => {
@@ -551,7 +560,7 @@ export default aws => {
             let jobLog = extractJobLog(job)
             emitter.emit(
               events.JOB_STARTED,
-              { job: jobLog, createdDate: job.analysis.created },
+              { job: jobLog, createdDate: job.analysis.created, retry: retry },
               userId,
             )
           }

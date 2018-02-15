@@ -7,7 +7,8 @@
   "globals": {
     "process": true,
     "__GIT_HASH__": true,
-    "__GIT_BRANCH__": true
+    "__GIT_BRANCH__": true,
+    "serviceWorkerOption": true
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"],
   "parser": "babel-eslint",
@@ -18,10 +19,11 @@
   },
   "plugins": ["react"],
   "rules": {
-    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "indent": 0,
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single", { "avoidEscape": true }],
-    "semi": ["error", "never"]
+    "semi": ["error", "never"],
+    "react/no-string-refs": 0
   },
   "settings": {
     "react": {

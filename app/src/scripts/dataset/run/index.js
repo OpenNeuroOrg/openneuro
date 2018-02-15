@@ -20,24 +20,23 @@ class JobAccordion extends React.Component {
   render() {
     let run = this.props.run
     return (
-      <span eventKey={run._id}>
-        <Panel
-          className={run.active ? 'job border-flash' : 'job'}
-          header={this._header(run)}>
-          <span className="inner">
-            {this._support(run)}
-            {this._parameters(run)}
-            <Results
-              run={run}
-              acknowledgements={this.props.acknowledgements}
-              displayFile={this.props.displayFile}
-              toggleFolder={this.props.toggleFolder}
-            />
-            {this._logs(run)}
-            {this._batchStatus(run)}
-          </span>
-        </Panel>
-      </span>
+      <Panel
+        eventKey={run._id}
+        className={run.active ? 'job border-flash' : 'job'}
+        header={this._header(run)}>
+        <span className="inner">
+          {this._support(run)}
+          {this._parameters(run)}
+          <Results
+            run={run}
+            acknowledgements={this.props.acknowledgements}
+            displayFile={this.props.displayFile}
+            toggleFolder={this.props.toggleFolder}
+          />
+          {this._logs(run)}
+          {this._batchStatus(run)}
+        </span>
+      </Panel>
     )
   }
 
@@ -109,7 +108,10 @@ class JobAccordion extends React.Component {
         let value
 
         if (run.parameters[key].constructor === Array) {
-          value = run.parameters[key].join(' ')
+          value =
+            run.parameters[key].length === 0
+              ? 'unset'
+              : run.parameters[key].join(' ')
         } else if (run.parameters[key] === '') {
           value =
             run.parameters[key].constructor === Boolean ? 'false' : 'unset'
@@ -175,7 +177,8 @@ class JobAccordion extends React.Component {
           the site{' '}
           <a
             href="mailto:openfmri@gmail.com?subject=Analysis%20Failure"
-            target="_blank">
+            target="_blank"
+            rel="noopener noreferrer">
             administrator
           </a>{' '}
           if this analysis continues to fail.

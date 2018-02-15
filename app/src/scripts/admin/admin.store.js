@@ -198,7 +198,6 @@ let UserStore = Reflux.createStore({
     let filteredLogs = eventLogs.filter(log => {
       return log.visible
     })
-
     this.update({ eventLogs, filteredLogs })
   },
 
@@ -420,18 +419,35 @@ let UserStore = Reflux.createStore({
       vcpus: parseInt(formData.vcpus),
       environment: [{ name: 'BIDS_CONTAINER', value: formData.containerImage }],
     }
+
+    let participantLabel = {
+      label: 'participant_label',
+      description:
+        'Limit the analysis to selected participants. If none selected (default) data from all participants will be analyzed.',
+      defaultValue: '',
+      hidden: false,
+      required: false,
+      type: 'select',
+    }
+    if (!formData.parameters.includes('participant_label')) {
+      formData.parameters.push(participantLabel)
+    }
     // Can split out paramter metadata here I think?
     // Want to post metadata as a separate prop so we can delete before sending to Batch
     if (formData.parameters) {
       for (let param of formData.parameters) {
-        parameters[param.label] = param.defaultValue
-        parametersMetadata[param.label] = param
-        let types = ['radio', 'multi', 'select']
-        if (types.includes(param.type) && param.label != 'participant_label') {
-          let arrayInput = param.defaultValue.split(' ')
-          param.defaultValue = arrayInput.filter(value => value.trim() != ' ')
+        if (typeof param.defaultValue === 'boolean') {
+          parameters[param.label] = ''
         } else {
-          param.defaultValue = param.defaultValue
+          parameters[param.label] = param.defaultValue
+        }
+        parametersMetadata[param.label] = param
+        if (param.options) {
+          let options = []
+          Object.values(param.options).map(value => {
+            options.push(value)
+          })
+          parametersMetadata[param.label].options = options
         }
       }
     }
@@ -447,7 +463,6 @@ let UserStore = Reflux.createStore({
       support: formData.support,
       tags: formData.tags,
     }
-
     crn
       .defineJob(jobDefinition)
       .then(() => {
@@ -517,6 +532,7 @@ let UserStore = Reflux.createStore({
         ? jobDefinition.descriptions.tags
         : ''
     jobDefinitionForm.jobRoleArn = jobDefinition.jobDefinitionArn
+    jobDefinitionForm.options = jobDefinition.options
     jobDefinitionForm.containerImage = batch.getBidsContainer(jobDefinition)
     jobDefinitionForm.hostImage = jobDefinition.containerProperties.image
     jobDefinitionForm.command = jobDefinition.containerProperties.command.join(
@@ -533,10 +549,17 @@ let UserStore = Reflux.createStore({
           label: key,
           defaultValue: jobDefinition.parameters[key],
         }
+        if (jobDefinition.parametersMetadata[key].type === 'checkbox') {
+          paramInputData.defaultValue =
+            jobDefinition.parametersMetadata[key].defaultValue
+        }
         if (
           jobDefinition.parametersMetadata &&
           jobDefinition.parametersMetadata[key]
         ) {
+          paramInputData.options = jobDefinition.parametersMetadata[key].options
+          paramInputData.defaultChecked =
+            jobDefinition.parametersMetadata[key].defaultChecked
           paramInputData.type = jobDefinition.parametersMetadata[key].type
           paramInputData.description =
             jobDefinition.parametersMetadata[key].description
@@ -549,7 +572,7 @@ let UserStore = Reflux.createStore({
     }
 
     jobDefinitionForm.parameters = params
-
+    // ** leave this for debugging, needed for on edit issue ** //
     this.update({ jobDefinitionForm })
     if (callback) {
       callback()

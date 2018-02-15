@@ -8,12 +8,16 @@ import Actions from './dashboard.jobs.actions'
 import JobsStore from './dashboard.jobs.store.js'
 import { withRouter, Link } from 'react-router-dom'
 import moment from 'moment'
-import { PanelGroup } from 'react-bootstrap'
+import { PanelGroup, Panel } from 'react-bootstrap'
+import Helmet from 'react-helmet'
 import Spinner from '../common/partials/spinner.jsx'
+import Timeout from '../common/partials/timeout.jsx'
+import ErrorBoundary from '../errors/errorBoundary.jsx'
 import Sort from './dashboard.sort.jsx'
 import Select from 'react-select'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
+import { pageTitle } from '../resources/strings'
 
 class Jobs extends Reflux.Component {
   constructor() {
@@ -43,8 +47,13 @@ class Jobs extends Reflux.Component {
   render() {
     let isPublic = this.state.jobs.isPublic
     let isAdmin = this.state.jobs.isAdmin
-    let title = !isPublic ? 'My' : 'Public'
-    title = isAdmin ? 'All' : title
+    let titlePrefix = 'My'
+    if (isPublic) {
+      titlePrefix = 'Public'
+    } else if (isAdmin) {
+      titlePrefix = 'All'
+    }
+    const title = `${titlePrefix} Analyses`
     let jobs =
       this.state.jobs.visiblejobs.length === 0 ? (
         <div className="col-xs-12">
@@ -55,12 +64,17 @@ class Jobs extends Reflux.Component {
       )
     return (
       <div>
+        <Helmet>
+          <title>
+            {pageTitle} - {title}
+          </title>
+        </Helmet>
         <div className="dashboard-dataset-teasers datasets datasets-private">
           <div className="header-filter-sort clearfix">
             <div className="header-wrap clearfix">
               <div className="row">
                 <div className="col-md-5">
-                  <h2>{title} Analyses</h2>
+                  <h2>{title}</h2>
                 </div>
                 <div className="col-md-7">{this._filter()}</div>
               </div>
@@ -73,11 +87,23 @@ class Jobs extends Reflux.Component {
               />
             </div>
           </div>
-          <PanelGroup>
-            <div className="clearfix">
-              {this.state.jobs.loading ? <Spinner active={true} /> : jobs}
-            </div>
-          </PanelGroup>
+          <ErrorBoundary
+            message="The jobs server has failed to respond."
+            className="loading-wrap fade-in">
+            <PanelGroup>
+              <Panel>
+                <div className="clearfix">
+                  {this.state.jobs.loading ? (
+                    <Timeout timeout={20000}>
+                      <Spinner active={true} />
+                    </Timeout>
+                  ) : (
+                    jobs
+                  )}
+                </div>
+              </Panel>
+            </PanelGroup>
+          </ErrorBoundary>
         </div>
       </div>
     )

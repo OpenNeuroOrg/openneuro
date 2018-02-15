@@ -158,6 +158,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
          
         <a
           href="http://bids.neuroimaging.io/"
+          rel="noopener noreferrer"
           target="_blank"
         >
           bids.neuroimaging.io
@@ -184,6 +185,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
          
         <a
           href="https://pypi.python.org/pypi/pydeface"
+          rel="noopener noreferrer"
           target="_blank"
         >
           pydeface

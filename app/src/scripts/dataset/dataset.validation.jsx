@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Spinner from '../common/partials/spinner.jsx'
-import { Accordion, Panel } from 'react-bootstrap'
+import { PanelGroup, Panel } from 'react-bootstrap'
 import pluralize from 'pluralize'
 import Results from '../upload/upload.validation-results.jsx'
 
@@ -52,7 +52,8 @@ export default class Validation extends React.Component {
       return <Spinner text="Validating" active={true} />
     } else {
       return (
-        <Accordion
+        <PanelGroup
+          accordion
           className="validation-wrap"
           activeKey={this.state.activeKey}
           onSelect={this._togglePanel.bind(this)}>
@@ -64,7 +65,7 @@ export default class Validation extends React.Component {
             <br />
             <Results errors={errors} warnings={warnings} />
           </Panel>
-        </Accordion>
+        </PanelGroup>
       )
     }
   }

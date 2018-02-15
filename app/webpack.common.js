@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 const git = require('git-rev-sync')
 
 // prettier-ignore
@@ -15,6 +16,7 @@ const env = {
   SCITRAN_AUTH_ORCID_REDIRECT_URI: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_REDIRECT_URI),
   SCITRAN_AUTH_ORCID_URI: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_URI),
   AWS_S3_ANALYSIS_BUCKET: JSON.stringify(process.env.AWS_S3_ANALYSIS_BUCKET),
+  AWS_S3_DATASET_BUCKET: JSON.stringify(process.env.AWS_S3_DATASET_BUCKET),
 }
 
 module.exports = {
@@ -22,6 +24,15 @@ module.exports = {
   entry: {
     app: './scripts/client.jsx',
     css: './sass/main.scss',
+    vendor: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'react-select',
+      'react-bootstrap',
+      'moment',
+      'remarkable',
+    ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -29,6 +40,11 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
+    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: Infinity,
+    }),
     new HtmlWebpackPlugin({
       title: 'OpenNeuro',
       template: path.resolve(__dirname, 'src/index.html'),
@@ -38,6 +54,9 @@ module.exports = {
       'process.env': env,
       __GIT_HASH__: JSON.stringify(git.long()),
       __GIT_BRANCH__: JSON.stringify(git.branch()),
+    }),
+    new ServiceWorkerWebpackPlugin({
+      entry: path.join(__dirname, './src/scripts/sw.js'),
     }),
     new CopyWebpackPlugin([
       {

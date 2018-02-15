@@ -106,7 +106,10 @@ class Faq extends React.Component {
           <span>
             Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure
             (BIDS) format. You can read about it more at{' '}
-            <a href="http://bids.neuroimaging.io/" target="_blank">
+            <a
+              href="http://bids.neuroimaging.io/"
+              target="_blank"
+              rel="noopener noreferrer">
               bids.neuroimaging.io
             </a>
           </span>
@@ -122,7 +125,10 @@ class Faq extends React.Component {
         faq_answer: (
           <span>
             Yes. We recommend using{' '}
-            <a href="https://pypi.python.org/pypi/pydeface" target="_blank">
+            <a
+              href="https://pypi.python.org/pypi/pydeface"
+              target="_blank"
+              rel="noopener noreferrer">
               pydeface
             </a>.
           </span>

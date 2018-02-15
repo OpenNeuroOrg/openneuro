@@ -56,6 +56,7 @@ class FileTree extends React.Component {
             displayFile={this.props.displayFile}
             deleteFile={this.props.deleteFile}
             deleteDirectory={this.props.deleteDirectory}
+            editFile={this.props.editFile}
             getFileDownloadTicket={this.props.getFileDownloadTicket}
             toggleFolder={this.props.toggleFolder}
             addFile={this.props.addFile}
@@ -90,7 +91,7 @@ class FileTree extends React.Component {
   }
 
   _fileTools(item, editable, topLevel) {
-    let deleteFile, editFile, addFile, addDirectory, deleteDirectory
+    let deleteFile, uploadFile, editFile, addFile, addDirectory, deleteDirectory
     if (editable) {
       let inputId = item.hasOwnProperty('_id') ? item._id : item.name
       let label = item.label ? item.label : item.name
@@ -130,7 +131,7 @@ class FileTree extends React.Component {
           </span>
         )
 
-        editFile = (
+        uploadFile = (
           <div className="edit-file">
             <span>
               <i className="fa fa-file-o" /> Update
@@ -178,6 +179,21 @@ class FileTree extends React.Component {
           />
         </span>
       )
+    }
+
+    if (!item.children) {
+      if (this.props.editable && files.hasExtension(item.name, ['.json'])) {
+        editFile = (
+          <span className="view-file">
+            <WarnButton
+              icon="fa-pencil"
+              warn={false}
+              message=" Edit"
+              action={this.props.editFile.bind(this, item)}
+            />
+          </span>
+        )
+      }
     }
 
     let displayBtn
@@ -231,16 +247,24 @@ class FileTree extends React.Component {
       }
     }
 
-    if (addFile || editFile || deleteFile || downloadFile || displayBtn) {
+    if (
+      addFile ||
+      uploadFile ||
+      editFile ||
+      deleteFile ||
+      downloadFile ||
+      displayBtn
+    ) {
       return (
         <span className="filetree-editfile">
           {addFile}
           {deleteDirectory}
           {addDirectory}
-          {editFile}
+          {uploadFile}
           {deleteFile}
           {downloadFile}
           {displayBtn}
+          {editFile}
         </span>
       )
     } else {
@@ -296,8 +320,8 @@ class FileTree extends React.Component {
   // custom methods -----------------------------------------------------
 
   /**
-     * Add File
-     */
+   * Add File
+   */
   _addFile(container, event) {
     this.props.addFile(container, event.target.files[0])
   }
@@ -324,15 +348,15 @@ class FileTree extends React.Component {
   }
 
   /**
-     * Clear Input
-     */
+   * Clear Input
+   */
   _clearInput(ref) {
     this.refs[ref].value = null
   }
 
   /**
-     * Update File
-     */
+   * Update File
+   */
   _updateFile(item, event) {
     this.props.updateFile(item, event.target.files[0])
   }
@@ -359,6 +383,7 @@ FileTree.propTypes = {
   deleteDirectory: PropTypes.func,
   updateFile: PropTypes.func,
   displayFile: PropTypes.func,
+  editFile: PropTypes.func,
   topLevel: PropTypes.bool,
 }
 

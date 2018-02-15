@@ -52,7 +52,8 @@ class DownloadS3 extends React.Component {
             Example download with{' '}
             <a
               href="http://docs.aws.amazon.com/cli/latest/userguide/installing.html"
-              target="_blank">
+              target="_blank"
+              rel="noopener noreferrer">
               awscli
             </a>:
             <Well bsSize="small">

@@ -58,8 +58,8 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
               className="help-text"
             >
               <input
+                checked={false}
                 className="form-control"
-                defaultChecked={false}
                 name="boolean"
                 onChange={[Function]}
                 type="checkbox"
@@ -164,7 +164,7 @@ exports[`dataset/tools/jobs/parameters renders successfully 1`] = `
   </div>
   <div
     className="required-param"
-    id={null}
+    id="hidden"
     key="another_option"
   >
     <div

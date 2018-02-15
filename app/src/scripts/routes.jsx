@@ -2,16 +2,19 @@
 
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
+import loadable from 'loadable-components'
 import requireAuth from './utils/requireAuth'
 
-// views
-import FrontPage from './front-page/front-page.jsx'
-import Admin from './admin/admin.jsx'
-import { Dashboard, PublicDashboard } from './dashboard/dashboard.jsx'
-import Dataset from './dataset/dataset.jsx'
-import Faq from './faq/faq.jsx'
+// wrap with loadable HOC
+const FrontPage = loadable(() => import('./front-page/front-page.jsx'))
+const Admin = loadable(() => import('./admin/admin.jsx'))
+const Dashboard = loadable(() => import('./dashboard/dashboard.jsx'))
+const Dataset = loadable(() => import('./dataset/dataset.jsx'))
+const Faq = loadable(() => import('./faq/faq.jsx'))
 
 // routes ----------------------------------------------------------------
+
+const PublicDashboard = () => <Dashboard public />
 
 const appRoutes = () => (
   <Switch>
