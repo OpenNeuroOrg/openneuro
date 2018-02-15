@@ -82,10 +82,10 @@ class SearchResults extends React.Component {
       }
     }
 
-    return parsedResults.items.map(result => {
+    return parsedResults.items.map((result, index) => {
       let resultLink = this._resultLink(result)
       return (
-        <div className="fade-in  panel panel-default">
+        <div key={index} className="fade-in  panel panel-default">
           <div className="panel-heading">
             <div className="header clearfix">{resultLink}</div>
           </div>
