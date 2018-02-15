@@ -17,7 +17,7 @@ class Search extends React.Component {
     this.setState({ query: event.target.value })
   }
 
-  handleSubmit() {
+  handleSubmit(event) {
     this.props.history
       .push({
         pathname: '/search/',
@@ -29,7 +29,7 @@ class Search extends React.Component {
   render() {
     return (
       <div className="search-group">
-        <form className="form-inline">
+        <form className="form-inline" onSubmit={this.handleSubmit}>
           <Input
             placeholder="Search Datasets"
             type="text"
@@ -37,7 +37,6 @@ class Search extends React.Component {
             name="q"
             value={this.state.query}
             onChange={this.handleChange}
-            onSubmit={this.handleSubmit}
           />
           <div className="form-group float-label-input">
             <button className="btn-blue" onClick={this.handleSubmit}>
