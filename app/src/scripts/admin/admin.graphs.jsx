@@ -3,7 +3,6 @@
 import React from 'react'
 import Reflux from 'reflux'
 import adminStore from './admin.store'
-import actions from './admin.actions.js'
 import Spinner from '../common/partials/spinner.jsx'
 import Pie from './charts/admin.progression-pie.jsx'
 import Scatter from './charts/admin.scatter-chart.jsx'
