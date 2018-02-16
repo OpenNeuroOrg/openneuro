@@ -97,6 +97,7 @@ let datasetStore = Reflux.createStore({
         share: false,
         update: false,
         subscribe: false,
+        snapshot: false,
       },
       redirectUrl: null,
       snapshot: false,

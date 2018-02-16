@@ -600,3 +600,29 @@ div.rt-resizable-header-content {
     }
   }
 }
+
+.snapshot-modal {
+
+    .changes {
+        padding-bottom: 10px;
+    }
+
+    .change {
+        padding-top:10px;
+    }
+    
+
+    .modal-controls {
+        padding-top: 20px;
+    }
+    .change-controls {
+        vertical-align: text-top;
+        a {
+            padding-right: 10px;
+            i {
+                padding-right: 2px;
+            }
+        }
+
+    }
+}

@@ -134,7 +134,7 @@ class Tools extends React.Component {
       {
         tooltip: 'Create Snapshot',
         icon: 'fa-camera-retro icon-plus',
-        action: actions.createSnapshot.bind(null, this.props.history),
+        action: actions.toggleModal.bind(null, 'snapshot'),
         display: isAdmin && !isSnapshot && !isIncomplete,
         warn: false,
         modalLink: 'snapshot',
