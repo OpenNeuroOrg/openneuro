@@ -1,0 +1,51 @@
+div.chart {
+  width: 100%;
+  min-height: 600px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 0px 35px 0px;
+  * {
+    box-sizing: border-box;
+  }
+  span.key {
+    margin-left: 20px;
+    text-align: left;
+    .success {
+      color: $turquoise;
+    }
+    .failed {
+      color: $coral;
+    }
+  }
+  .filtering {
+    text-align: right;
+    label {
+      margin-right: 5px;
+    }
+    select {
+      width: 200px;
+      height: 30px;
+    }
+  }
+  .col-1 {
+    border-right: 1px solid $aaa;
+    width: 30%;
+    .pie-container {
+      margin: 0 auto;
+    }
+  }
+  .col-2 {
+    width: 70%;
+    padding: 10px 25px;
+    .chart-container {
+      background-color: $f4;
+      display: inline-block;
+      margin: 20px;
+    }
+    svg {
+      height: 300px;
+      width: 275px;
+    }
+  }
+}

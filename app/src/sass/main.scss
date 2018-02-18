@@ -54,14 +54,13 @@ $bootstrap-sass-asset-helper: true;
 @import './crn_app/dataset.sidebar';
 @import './crn_app/dataset.comments';
 @import './crn_app/admin.admin';
+@import './crn_app/admin.graphs';
 @import './crn_app/frontPage';
 @import './crn_app/dashboard.datasets';
 @import './crn_app/upload.upload';
 @import './crn_app/upload.validation';
 @import './crn_app/admin.tools';
 @import './crn_app/faq';
-
-
 
 
 .logo-text{

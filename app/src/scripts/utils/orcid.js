@@ -52,6 +52,7 @@ let orcid = {
   refresh(callback) {
     if (this.initialized) {
       let { refresh_token } = this.token
+
       crn
         .refreshORCIDToken(refresh_token)
         .then(() => {

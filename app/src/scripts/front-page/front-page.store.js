@@ -146,12 +146,9 @@ let FrontPageStore = Reflux.createStore({
    * Load Job
    */
   loadJob(snapshotId, jobId) {
-    crn.getJob(snapshotId, jobId).then(
-      res => {
-        this.update({ exampleJob: res.body, loadingJob: false })
-      },
-      { snapshot: true },
-    )
+    crn.getJob(snapshotId, jobId).then(res => {
+      this.update({ exampleJob: res.body, loadingJob: false })
+    }, { snapshot: true })
   },
 
   loadLatestJob(appName, status) {

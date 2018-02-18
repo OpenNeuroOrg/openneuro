@@ -79,6 +79,17 @@ let UserStore = Reflux.createStore({
       blacklistError: '',
       eventLogs: [],
       filteredLogs: [],
+      yearOptions: [],
+      uploadedLogs: [],
+      activityLogs: {
+        failed: [],
+        succeeded: [],
+      },
+      monthLogs: {
+        failed: [],
+        succeeded: [],
+      },
+      loadingFilters: true,
       resultsPerPage: 30,
       page: 0,
     }
@@ -172,7 +183,6 @@ let UserStore = Reflux.createStore({
   searchLogs(input) {
     // If the API is unavailable, there are no logs to search
     let eventLogs = this.data.eventLogs || []
-
     for (let log of eventLogs) {
       log.visible = true
       input = input.toLowerCase()
@@ -189,6 +199,100 @@ let UserStore = Reflux.createStore({
       return log.visible
     })
     this.update({ eventLogs, filteredLogs })
+  },
+
+  // ** Filters Eventlog to smaller logs based on job status *
+  // uploading contains all jobs
+  filterLogs() {
+    let eventLogs = this.data.eventLogs
+    let uploadedLogs = []
+    if (!eventLogs.length) {
+      this.getEventLogs()
+      return
+    }
+
+    for (let log of eventLogs) {
+      if (log.type != 'JOB_STARTED') {
+        let eventStatus = log.data.job.status.toLowerCase()
+
+        if (eventStatus === 'failed') {
+          uploadedLogs.push(log)
+        } else if (eventStatus === 'succeeded') {
+          uploadedLogs.push(log)
+        }
+      }
+    }
+
+    this.update({ uploadedLogs }, () => {
+      this.filterYearActivity()
+    })
+  },
+
+  filterYearActivity() {
+    let uploaded = this.data.uploadedLogs
+    let yearArr = this.data.yearOptions
+    let entries = this.data.activityLogs
+    // only want this to run if the logs are empty...
+    if (
+      !this.data.activityLogs.failed.length ||
+      !this.data.activityLogs.succeeded.length
+    ) {
+      for (let job of uploaded) {
+        let status = job.data.job.status.toLowerCase()
+        const dateTime = new Date(job.date).toString()
+        let explode = dateTime.split(' ')
+        let year = explode[3]
+        if (!entries[status][year]) {
+          entries[status][year] = []
+        } else if (entries[status][year]) {
+          entries[status][year].push({ dateTime: dateTime, log: job })
+        }
+        if (!yearArr.includes(year)) {
+          yearArr.push(year)
+        }
+      }
+      this.update({ entries, yearArr }, () => {
+        this._filterMonthActivity()
+      })
+    }
+  },
+
+  _filterMonthActivity() {
+    let logs = this.data.activityLogs
+    let monthLogs = this.data.monthLogs
+    if (!logs) {
+      return
+    }
+
+    for (let year of this.data.yearArr) {
+      Object.keys(logs).map(type => {
+        if (logs[type][year]) {
+          Object.values(logs[type][year]).map(job => {
+            let dateArr = job.dateTime.split(' ')
+            let status = job.log.data.job.status.toLowerCase()
+            let month = dateArr[1]
+
+            if (!monthLogs[status][year]) {
+              monthLogs[status][year] = []
+            }
+
+            if (!monthLogs[status][year][month]) {
+              monthLogs[status][year][month] = []
+              monthLogs[status][year][month].push({
+                date: job.dateTime,
+                status: status,
+              })
+            } else {
+              monthLogs[status][year][month].push({
+                date: job.dateTime,
+                status: status,
+              })
+            }
+          })
+        }
+      })
+    }
+    this.update({ monthLogs, loadingFilters: false })
   },
 
   /**
@@ -558,6 +662,9 @@ let UserStore = Reflux.createStore({
       let eventLogs = res.body
       this.update({ eventLogs }, () => {
         this.searchLogs('')
+        if (eventLogs.length) {
+          this.filterLogs()
+        }
       })
     })
   },

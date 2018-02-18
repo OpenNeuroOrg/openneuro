@@ -50,6 +50,7 @@
     "spark-md5": "^3.0.0",
     "stream-browserify": "^2.0.1",
     "superagent": "^3.6.0",
+    "victory": "^0.23.1",
     "url-search-params-polyfill": "^2.0.1",
     "urlite": "^1.2.8",
     "xmldoc": "^1.1.0"
