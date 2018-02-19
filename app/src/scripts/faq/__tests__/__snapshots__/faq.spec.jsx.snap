@@ -163,6 +163,15 @@ exports[`faq/faq/Faq renders successfully 1`] = `
         >
           bids.neuroimaging.io
         </a>
+        . If you have any questions about organizing your data please post them at
+        <a
+          href="https://neurostars.org/tags/bids"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          neurostars.org
+        </a>
+        .
       </span>
     </div>
   </div>
@@ -190,7 +199,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
         >
           pydeface
         </a>
-        .
+        . Defacing is strongly preffered over skullstripping, because the process is more robust and yields lower chance of accidentally removing brain tissue.
       </span>
     </div>
   </div>
