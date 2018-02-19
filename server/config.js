@@ -82,6 +82,10 @@ let config = {
     DSN: process.env.SENTRY_DSN,
     ENVIRONMENT: process.env.ENVIRONMENT,
   },
+  datalad: {
+    enabled: false,
+    uri: 'localhost:9877',
+  },
 }
 
 let compiledSchema = schema.compileJsonSchema(configSchema)
