@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Input from '../../common/forms/input.jsx'
+import moment from 'moment'
 import actions from '../dataset.actions'
 import datasetStore from '../dataset.store'
 import { Modal } from '../../utils/modal.jsx'
@@ -31,7 +31,7 @@ class Snapshot extends React.Component {
         minor: '0',
         point: '0',
       },
-      lastSnapshotVersion: latestVersion,
+      newSnapshotVersion: latestVersion,
     }
     this._handleChange = this.handleChange.bind(this)
     this._handleVersion = this.handleVersion.bind(this)
@@ -92,10 +92,11 @@ class Snapshot extends React.Component {
             Major
           </label>
           <input
-            placeholder={this.state.lastSnapshotVersion}
+            placeholder={this.state.newSnapshotVersion}
             type="number"
             step="1"
-            min={this.state.lastSnapshotVersion}
+            min={this.state.newSnapshotVersion}
+            max={this.state.newSnapshotVersion}
             value={this.state.currentVersion.major}
             onChange={this._handleVersion}
             name="major"
@@ -224,15 +225,38 @@ class Snapshot extends React.Component {
     })
   }
 
+  joinChangelogs(changesArray, oldChangelog) {
+    let dateString = moment().format('YYYY-MM-DD')
+    let versionString = this._versionString()
+    let headerString = versionString + '\t' + dateString + '\n\n'
+    let changeText = headerString
+    changesArray.forEach(change => {
+      changeText += '\t- ' + change + '\n'
+    })
+    let newChangelog = changeText + '\n' + oldChangelog
+    return newChangelog
+  }
+
   submit() {
-    actions.createSnapshot(this.props.history, res => {
-      if (res && res.error) {
-        this.setState({
-          error: true,
-          message: res.error,
-        })
+    let changes = this.joinChangelogs(
+      this.state.changes,
+      datasetStore.data.dataset.CHANGES,
+    )
+
+    actions.updateCHANGES(changes, (err, res) => {
+      if (err) {
+        return
       } else {
-        this.onHide()
+        actions.createSnapshot(this.props.history, res => {
+          if (res && res.error) {
+            this.setState({
+              error: true,
+              message: res.error,
+            })
+          } else {
+            this.onHide()
+          }
+        })
       }
     })
   }
@@ -249,11 +273,26 @@ class Snapshot extends React.Component {
 
   _submitButton() {
     if (!this.state.error) {
-      return (
-        <button className="btn-modal-submit" onClick={this.submit.bind(this)}>
-          create snapshot
-        </button>
-      )
+      let disabled = this.state.changes.length < 1
+      let buttonTitle = disabled ? 'Please enter at least one change' : 'Submit'
+      if (disabled) {
+        return (
+          <span className="text-danger changelog-length-warning">
+            {' '}
+            * Please enter at least one change to submit this snapshot{' '}
+          </span>
+        )
+      } else {
+        return (
+          <button
+            className="btn-modal-submit"
+            onClick={this.submit.bind(this)}
+            title={buttonTitle}
+            disabled={disabled}>
+            create snapshot
+          </button>
+        )
+      }
     }
   }
 

@@ -54,6 +54,7 @@ var Actions = Reflux.createActions([
   'toggleSidebar',
   'uploadAttachment',
   'updateComment',
+  'updateCHANGES',
   'updateDescription',
   'updateName',
   'updateNote',
