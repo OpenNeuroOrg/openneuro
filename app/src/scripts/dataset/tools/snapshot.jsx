@@ -9,11 +9,29 @@ import { withRouter } from 'react-router-dom'
 class Snapshot extends React.Component {
   constructor(props) {
     super(props)
+    let snapshotVersions =
+      datasetStore.data.snapshots && datasetStore.data.snapshots.length
+        ? datasetStore.data.snapshots
+            .filter(snap => {
+              return typeof snap.snapshot_version !== 'undefined'
+            })
+            .map(snap => {
+              return snap.snapshot_version
+            })
+        : null
+    let latestVersion = snapshotVersions
+      ? Math.max.apply(null, snapshotVersions) + 1
+      : 1
     this.state = {
       show: this.props.show,
       changes: [],
       currentChange: '',
-      currentVersion: '',
+      currentVersion: {
+        major: latestVersion,
+        minor: '0',
+        point: '0',
+      },
+      lastSnapshotVersion: latestVersion,
     }
     this._handleChange = this.handleChange.bind(this)
     this._handleVersion = this.handleVersion.bind(this)
@@ -32,8 +50,11 @@ class Snapshot extends React.Component {
 
   handleVersion(e) {
     let value = e.currentTarget.value
+    let name = e.currentTarget.name
+    let version = this.state.currentVersion
+    version[name] = value
     this.setState({
-      currentVersion: value,
+      currentVersion: version,
     })
   }
 
@@ -50,16 +71,70 @@ class Snapshot extends React.Component {
     }
   }
 
+  _versionString() {
+    return (
+      this.state.currentVersion.major +
+      '.' +
+      this.state.currentVersion.minor +
+      '.' +
+      this.state.currentVersion.point
+    )
+  }
+
   _version() {
     return (
       <div className="snapshot-version col-xs-12">
-        <Input
-          placeholder="1.0.2"
-          type="text"
-          value={this.state.currentVersion}
-          onChange={this._handleVersion}
-          name="version"
-        />
+        <div className="col-xs-12">
+          <h4>Snapshot Version: {this._versionString()}</h4>
+        </div>
+        <div className="snapshot-version-major form-group col-xs-4">
+          <label htmlFor="major" className="control-label">
+            Major
+          </label>
+          <input
+            placeholder={this.state.lastSnapshotVersion}
+            type="number"
+            step="1"
+            min={this.state.lastSnapshotVersion}
+            value={this.state.currentVersion.major}
+            onChange={this._handleVersion}
+            name="major"
+            title="major"
+            className="form-control"
+          />
+        </div>
+        <div className="snapshot-version-minor form-group col-xs-4">
+          <label htmlFor="minor" className="control-label">
+            Minor
+          </label>
+          <input
+            placeholder="0"
+            type="number"
+            step="1"
+            value={this.state.currentVersion.minor}
+            onChange={this._handleVersion}
+            name="minor"
+            title="minor"
+            className="form-control"
+            disabled={true}
+          />
+        </div>
+        <div className="snapshot-version-point form-group col-xs-4">
+          <label htmlFor="point" className="control-label">
+            Point
+          </label>
+          <input
+            placeholder="1"
+            type="number"
+            step="1"
+            value={this.state.currentVersion.point}
+            onChange={this._handleVersion}
+            name="point"
+            title="point"
+            className="form-control"
+            disabled={true}
+          />
+        </div>
       </div>
     )
   }
@@ -68,15 +143,18 @@ class Snapshot extends React.Component {
     let content = []
     // add an input form for a new change
     let input = (
-      <div className="new-change" key="new-change">
-        <Input
-          placeholder="Enter new change here..."
-          type="text"
-          value={this.state.currentChange}
-          onChange={this._handleChange}
-          name="change"
-        />
-        <div className="submit-change">
+      <div className="new-change col-xs-12" key="new-change">
+        <div className="col-xs-9 form-group">
+          <input
+            placeholder="Enter new change here..."
+            type="text"
+            value={this.state.currentChange}
+            onChange={this._handleChange}
+            name="change"
+            className="form-control"
+          />
+        </div>
+        <div className="submit-change col-xs-3">
           <button
             className="submit btn-admin-blue add-btn"
             onClick={this._addChange}>
@@ -104,7 +182,14 @@ class Snapshot extends React.Component {
       )
       content.push(existingChange)
     })
-    return <div className="changes col-xs-12">{content}</div>
+    return (
+      <div className="changes col-xs-12">
+        <div className="col-xs-12">
+          <h4>Changelog</h4>
+        </div>
+        {content}
+      </div>
+    )
   }
 
   _error() {

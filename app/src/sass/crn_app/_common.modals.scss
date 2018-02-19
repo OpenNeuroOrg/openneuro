@@ -603,6 +603,15 @@ div.rt-resizable-header-content {
 
 .snapshot-modal {
 
+    .snapshot-version {
+        div {
+            display: inline-block;
+        }
+        span.version-point {
+            padding: 0px 4px;
+        }
+    }
+
     .changes {
         padding-bottom: 10px;
     }
