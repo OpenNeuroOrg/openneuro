@@ -6,6 +6,7 @@ import request from '../libs/request'
 import notifications from '../libs/notifications'
 import url from 'url'
 import crypto from 'crypto'
+import { getAccessionNumber } from '../libs/dataset'
 import counter from '../libs/counter'
 import bidsId from '../libs/bidsId'
 
@@ -18,27 +19,22 @@ import bidsId from '../libs/bidsId'
  * manipulations beyond what scitran offers directly.
  */
 export default {
-  create(req, res) {
-    counter.getNext('datasets', datasetNumber => {
-      let offset = 1000
-      datasetNumber += offset
-      datasetNumber = 'ds' + ('000000' + datasetNumber).substr(-6, 6)
-      req.body._id = datasetNumber
-      delete req.headers['content-length']
-      delete req.headers['accept-encoding']
-      request.post(
-        config.scitran.url + 'projects',
-        {
-          body: req.body,
-          headers: req.headers,
-          query: req.query,
-          droneRequest: false,
-        },
-        (err, resp) => {
-          res.send(resp.body)
-        },
-      )
-    })
+  async create(req, res) {
+    req.body._id = await getAccessionNumber()
+    delete req.headers['content-length']
+    delete req.headers['accept-encoding']
+    request.post(
+      config.scitran.url + 'projects',
+      {
+        body: req.body,
+        headers: req.headers,
+        query: req.query,
+        droneRequest: false,
+      },
+      (err, resp) => {
+        res.send(resp.body)
+      },
+    )
   },
 
   snapshot(req, res) {
