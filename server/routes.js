@@ -7,6 +7,7 @@ import eventLogs from './handlers/eventLogs'
 import validation from './handlers/validation'
 import datasets from './handlers/datasets'
 import comments from './handlers/comments'
+import subscriptions from './handlers/subscriptions'
 import auth from './libs/auth'
 import scitran from './libs/scitran'
 import schema from './libs/schema'
@@ -234,8 +235,39 @@ const routes = [
     url: '/comments/:commentId',
     middleware: [auth.deleteCommentAccess],
     handler: comments.delete,
-  }
+  },
 
+
+  // subscriptions ----------------------------------------
+
+  {
+    method: 'get',
+    url: '/subscriptions/:datasetId',
+    handler: subscriptions.getSubscriptions
+  },
+  {
+    method: 'get',
+    url: '/subscriptions/:datasetId/:userId',
+    handler: subscriptions.checkUserSubscription
+  },
+  {
+    method: 'post',
+    url: '/subscriptions/:datasetId',
+    middleware: [auth.user],
+    handler: subscriptions.create
+  },
+  {
+    method: 'delete',
+    url: '/subscriptions/:datasetId/:userId',
+    middleware: [auth.user],
+    handler: subscriptions.delete
+  },
+  {
+    method: 'delete',
+    url: '/subscriptions/:datasetId',
+    middleware: [auth.user],
+    handler: subscriptions.deleteAll
+  }
 ]
 
 // initialize routes -------------------------------

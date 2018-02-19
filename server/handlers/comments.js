@@ -1,4 +1,5 @@
 import mongo from '../libs/mongo'
+import notifications from '../libs/notifications.js'
 import { ObjectID } from 'mongodb'
 
 let c = mongo.collections
@@ -26,7 +27,13 @@ export default {
       if (err) {
         return next(err)
       }
-      res.send(response.ops)
+      else {
+        if (response.ops && response.ops.length) {
+          comment = response.ops[0]
+        }
+        notifications.commentCreated(comment)
+        res.send(response.ops)
+      }
     })
   },
 

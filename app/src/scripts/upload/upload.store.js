@@ -7,6 +7,7 @@ import './upload.file.store'
 import fileStore from './upload.file.actions'
 import notifications from '../notification/notification.actions'
 import scitran from '../utils/scitran'
+import crn from '../utils/crn'
 import upload from './upload'
 import userStore from '../user/user.store'
 import datasetsActions from '../dashboard/dashboard.datasets.actions'
@@ -306,6 +307,7 @@ let UploadStore = Reflux.createStore({
         if (progress.total === progress.completed) {
           scitran.removeTag('projects', projectId, 'incomplete').then(() => {
             datasetActions.updateStatus(projectId, { incomplete: false })
+            crn.createSubscription(projectId, userStore.data.profile._id)
             this.uploadComplete(projectId)
           })
         }

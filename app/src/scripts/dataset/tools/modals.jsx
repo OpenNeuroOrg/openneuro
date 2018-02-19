@@ -8,6 +8,7 @@ import Jobs from './jobs'
 import Publish from './publish.jsx'
 import FileDisplay from '../dataset.file-display.jsx'
 import FileEdit from '../dataset.file-edit.jsx'
+import Subscribe from './subscribe.jsx'
 import UpdateWarn from '../dataset.update-warning.jsx'
 import datasetStore from '../dataset.store'
 import datasetActions from '../dataset.actions.js'
@@ -69,6 +70,12 @@ class ToolModals extends Reflux.Component {
           show={this.state.datasets.modals.update}
           onHide={datasetActions.toggleModal.bind(null, 'update')}
           update={this.state.datasets.currentUpdate}
+        />
+        <Subscribe
+          show={this.state.datasets.modals.subscribe}
+          onHide={datasetActions.toggleModal.bind(null, 'subscribe')}
+          subscribed={this.state.datasets.dataset.subscribed}
+          createSubscription={datasetActions.createSubscription}
         />
       </div>
     )

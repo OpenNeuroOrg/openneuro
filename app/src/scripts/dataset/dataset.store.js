@@ -96,6 +96,7 @@ let datasetStore = Reflux.createStore({
         publish: false,
         share: false,
         update: false,
+        subscribe: false,
       },
       redirectUrl: null,
       snapshot: false,
@@ -187,7 +188,9 @@ let datasetStore = Reflux.createStore({
             this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
               this.loadSnapshots(dataset, jobs, () => {
                 this.loadComments(originalId)
-                this.update({ loading: false, snapshot: snapshot })
+                this.checkUserSubscription(() => {
+                  this.update({ loading: false, snapshot: snapshot })
+                })
               })
             })
             if (
@@ -509,6 +512,11 @@ let datasetStore = Reflux.createStore({
     let modals = this.data.modals
     modals[name] = !modals[name]
     update.modals = modals
+
+    // don't display the follow modal if the user is already following
+    if (name === 'subscribe' && this.data.dataset.subscribed) {
+      update.modals[name] = false
+    }
     this.update(update)
 
     // callback
@@ -1870,10 +1878,13 @@ let datasetStore = Reflux.createStore({
       ? this.data.dataset.original
       : this.data.dataset._id
 
+    let datasetLabel = this.data.dataset ? this.data.dataset.label : null
+
     const parentId = typeof parent === 'undefined' ? null : parent
 
     const comment = {
       datasetId: datasetId,
+      datasetLabel: datasetLabel,
       parentId: parentId,
       text: content,
       user: this.data.currentUser.profile,
@@ -1972,6 +1983,92 @@ let datasetStore = Reflux.createStore({
     this.update({
       commentTree: roots,
     })
+  },
+
+  // subscriptions ---------------------------------------------------------------
+  createSubscription(callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    let userId =
+      this.data.currentUser && this.data.currentUser.profile
+        ? this.data.currentUser.profile._id
+        : null
+    crn.createSubscription(datasetId, userId).then(res => {
+      if (res && res.status !== 200) {
+        callback({ error: 'There was an error while following this dataset.' })
+      } else {
+        this.checkUserSubscription(() => {
+          callback()
+        })
+      }
+    })
+  },
+
+  deleteSubscription(callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    let userId =
+      this.data.currentUser && this.data.currentUser.profile
+        ? this.data.currentUser.profile._id
+        : null
+    crn.deleteSubscription(datasetId, userId).then(res => {
+      if (res && res.status !== 200) {
+        callback({
+          error: 'There was an error while unfollowing this dataset.',
+        })
+      } else {
+        this.checkUserSubscription(() => {
+          callback()
+        })
+      }
+    })
+  },
+
+  checkUserSubscription(callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    let userId =
+      this.data.currentUser && this.data.currentUser.profile
+        ? this.data.currentUser.profile._id
+        : null
+    let ownerId = this.data.dataset.group ? this.data.dataset.group : null
+
+    if (datasetId) {
+      // check the owner subscription
+      crn.checkUserSubscription(datasetId, ownerId).then(res => {
+        if (
+          res &&
+          res.status === 200 &&
+          res.body &&
+          res.body.hasOwnProperty('subscribed')
+        ) {
+          let dataset = this.data.dataset
+          dataset.uploaderSubscribed = res.body.subscribed
+          this.update({ dataset })
+        }
+
+        // check the user subscription
+        crn.checkUserSubscription(datasetId, userId).then(res => {
+          if (
+            res &&
+            res.status === 200 &&
+            res.body &&
+            res.body.hasOwnProperty('subscribed')
+          ) {
+            let dataset = this.data.dataset
+            dataset.subscribed = res.body.subscribed
+            this.update({ dataset }, callback())
+          } else {
+            callback()
+          }
+        })
+      })
+    } else {
+      callback()
+    }
   },
 })
 

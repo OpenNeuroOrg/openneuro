@@ -56,6 +56,12 @@ export default class Status extends React.Component {
         tip = minimal ? 'Invalid' : null
         title = 'Invalid'
         iconClass = 'fa fa-exclamation-circle'
+        break
+      case 'monitored':
+        spanClass = 'dataset-status ds-primary'
+        tip = 'Uploader is Following'
+        title = 'Uploader is Following'
+        iconClass = 'fa fa-user'
     }
 
     let content = (

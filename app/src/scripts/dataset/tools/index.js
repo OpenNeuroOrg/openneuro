@@ -34,6 +34,7 @@ class Tools extends React.Component {
       isIncomplete = !!dataset.status.incomplete,
       isInvalid = !!dataset.status.invalid,
       isSnapshot = !!dataset.original,
+      isSubscribed = !!dataset.subscribed,
       isSuperuser =
         window.localStorage.scitran && JSON.parse(window.localStorage.scitran)
           ? JSON.parse(window.localStorage.scitran).root
@@ -51,7 +52,7 @@ class Tools extends React.Component {
         tooltip: 'Download Dataset',
         icon: 'fa-download',
         prepDownload: actions.getDatasetDownloadTicket,
-        action: actions.trackDownload,
+        action: actions.toggleModal.bind(null, 'subscribe'),
         display: !isIncomplete,
         validations: [
           {
@@ -171,6 +172,36 @@ class Tools extends React.Component {
             type: 'Error',
           },
         ],
+      },
+      {
+        tooltip: 'Follow Dataset',
+        icon: 'fa-tag icon-plus',
+        action: actions.createSubscription.bind(this),
+        display: isSignedIn && !isSubscribed,
+        warn: true,
+        validations: [
+          {
+            check: this.props.uploading && !isSnapshot,
+            message: 'You are about to follow a dataset',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
+      },
+      {
+        tooltip: 'Unfollow Dataset',
+        icon: 'fa-tag icon-minus',
+        action: actions.deleteSubscription.bind(this),
+        display: isSignedIn && isSubscribed,
+        warn: true,
+        // validations: [
+        //   {
+        //     check: null,
+        //     message: 'You are about to unfollow a dataset.',
+        //     timeout: 5000,
+        //     type: 'Error',
+        //   },
+        // ],
       },
     ]
 
