@@ -2,6 +2,7 @@ import React from 'react'
 import 'url-search-params-polyfill'
 import { Link } from 'react-router-dom'
 import request from '../utils/request'
+import Spinner from '../common/partials/spinner.jsx'
 import Search from '../common/partials/search.jsx'
 import { withRouter } from 'react-router'
 import urlParse from 'url-parse'
@@ -13,14 +14,30 @@ class SearchResults extends React.Component {
     this.state = {
       results: null,
       query: null,
+      loading: true,
+    }
+    this._requestSearch = this._requestSearch.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // Search again if the query changes
+    if (nextProps.match.params.query !== this.props.match.params.query) {
+      this._requestSearch(nextProps.match.params.query)
     }
   }
 
   componentDidMount() {
-    let searchParams = new URLSearchParams(this.props.location.search)
-    let key = 'AIzaSyB68V4zjGxWpZzTn8-vRuogiRLPmSCmWoo'
-    let cx = '016952313242172063987:retmkn_owto'
-    let query = searchParams.get('q')
+    if (!this.state.results) {
+      this._requestSearch(this.props.match.params.query)
+    }
+  }
+
+  _requestSearch(query) {
+    this.setState({
+      loading: true,
+    })
+    const key = 'AIzaSyB68V4zjGxWpZzTn8-vRuogiRLPmSCmWoo'
+    const cx = '016952313242172063987:retmkn_owto'
     if (query) {
       request
         .get('https://www.googleapis.com/customsearch/v1', {
@@ -30,13 +47,18 @@ class SearchResults extends React.Component {
           this.setState({
             results: res,
             query: query,
+            loading: false,
           }),
         )
     }
   }
 
   render() {
-    let renderedResults = this._results(this.state.results)
+    let renderedResults = this.state.loading ? (
+      <Spinner active={true} />
+    ) : (
+      this._results(this.state.results)
+    )
     return (
       <div className="route-wrapper">
         <div className="fade-in inner-route clearfix">
@@ -114,9 +136,7 @@ class SearchResults extends React.Component {
 }
 
 SearchResults.propTypes = {
-  location: PropTypes.shape({
-    search: PropTypes.string,
-  }),
+  match: PropTypes.object,
 }
 
 export default withRouter(SearchResults)

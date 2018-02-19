@@ -17,13 +17,14 @@ class Search extends React.Component {
     this.setState({ query: event.target.value })
   }
 
-  handleSubmit() {
-    this.props.history
-      .push({
-        pathname: '/search/',
-        search: '?q=' + encodeURIComponent(this.state.query),
-      })
-      .then(this.setState({ query: '' }))
+  handleSubmit(event) {
+    event.preventDefault()
+    this.props.history.push({
+      pathname: `/search/${encodeURIComponent(this.state.query)}`,
+    })
+    this.setState({ query: '' })
+    // Because this is called from a form
+    return false
   }
 
   render() {
