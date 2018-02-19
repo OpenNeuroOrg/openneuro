@@ -111,7 +111,14 @@ class Faq extends React.Component {
               target="_blank"
               rel="noopener noreferrer">
               bids.neuroimaging.io
-            </a>
+            </a>.
+            If you have any questions about organizing your data please post them at
+            <a
+              href="https://neurostars.org/tags/bids"
+              target="_blank"
+              rel="noopener noreferrer">
+              neurostars.org
+            </a>.
           </span>
         ),
       },
@@ -130,7 +137,10 @@ class Faq extends React.Component {
               target="_blank"
               rel="noopener noreferrer">
               pydeface
-            </a>.
+            </a>. 
+            Defacing is strongly preffered over skullstripping, because 
+            the process is more robust and yields lower chance of 
+            accidentally removing brain tissue.
           </span>
         ),
       },
