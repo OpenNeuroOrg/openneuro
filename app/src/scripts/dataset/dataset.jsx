@@ -25,6 +25,7 @@ import Comment from '../common/partials/comment.jsx'
 import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
+import userActions from '../user/user.actions.js'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
@@ -490,13 +491,16 @@ class Dataset extends Reflux.Component {
     let sortBar
     if (this.state.datasets.commentTree.length) {
       sortBar = (
-        <select
-          value={this.state.datasets.commentSortOrder}
-          onChange={actions.sortComments}
-          className="comment-sort-select">
-          <option value="DESC">Date: Oldest First</option>
-          <option value="ASC">Date: Newest First</option>
-        </select>
+        <span className="comment-sort">
+          SORT BY:
+          <select
+            value={this.state.datasets.commentSortOrder}
+            onChange={actions.sortComments}
+            className="comment-sort-select">
+            <option value="ASC">Date: Newest First</option>
+            <option value="DESC">Date: Oldest First</option>
+          </select>
+        </span>
       )
     }
     let uploaderFollowing
@@ -512,7 +516,7 @@ class Dataset extends Reflux.Component {
         <label>COMMENTS</label>
         <div>
           {uploaderFollowing}
-          <span className="comment-sort">SORT BY: {sortBar}</span>
+          {sortBar}
         </div>
       </div>
     )
@@ -542,7 +546,9 @@ class Dataset extends Reflux.Component {
     } else {
       content.push(
         <div key="commentLoginMessage" className="login-for-comments">
-          Please login to contribute to the discussion
+          Please{' '}
+          <a onClick={userActions.toggle.bind(this, 'loginModal')}>sign in</a>{' '}
+          to contribute to the discussion.
         </div>,
       )
     }

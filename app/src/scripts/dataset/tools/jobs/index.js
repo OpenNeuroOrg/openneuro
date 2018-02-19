@@ -9,7 +9,6 @@ import actions from '../../dataset.actions.js'
 import Spinner from '../../../common/partials/spinner.jsx'
 import { Modal } from '../../../utils/modal.jsx'
 import moment from 'moment'
-import scitran from '../../../utils/scitran'
 import Results from '../../../upload/upload.validation-results.jsx'
 import Description from './description.jsx'
 import Parameters from './parameters.jsx'
@@ -41,14 +40,6 @@ class JobMenu extends React.Component {
     }
   }
 
-  componentDidMount() {
-    this.mounted = true
-  }
-
-  componentWillUnmount() {
-    this.mounted = false
-  }
-
   componentWillReceiveProps() {
     // initialize subjects into state
     if (this.state.subjects.length === 0 && this.props.dataset.summary) {
@@ -62,8 +53,9 @@ class JobMenu extends React.Component {
 
     // pre-select snapshots
     if (!this.state.selectedSnapshot) {
-      this.props.snapshots.map(snapshot => {
-        if (snapshot._id == this.props.dataset._id) {
+      for (const snapshotIndex in this.props.snapshots) {
+        const snapshot = this.props.snapshots[snapshotIndex]
+        if (snapshot._id === this.props.dataset._id) {
           if (snapshot.original) {
             this._selectSnapshot({ target: { value: snapshot._id } })
           } else if (this.props.snapshots.length > 1) {
@@ -71,9 +63,8 @@ class JobMenu extends React.Component {
               target: { value: this.props.snapshots[1]._id },
             })
           }
-          return
         }
-      })
+      }
     }
   }
 
@@ -543,33 +534,7 @@ class JobMenu extends React.Component {
    */
   _selectSnapshot(e) {
     let snapshotId = e.target.value
-    let disabledApps = {}
-
-    /**
-     * determine app availability
-     */
-    // load validation data for selected snapshot
-    scitran.getProject(snapshotId, { snapshot: true }).then(async res => {
-      const validate = await import('bids-validator')
-      for (let jobDefinitionName in this.props.apps) {
-        let app = this.props.apps[jobDefinitionName]
-        let validationConfig = app.hasOwnProperty('validationConfig')
-          ? app.validationConfig
-          : { error: [] }
-        let issues = validate.reformat(
-          res.body.metadata.validation || {},
-          res.body.metadata.summary || {},
-          validationConfig,
-        )
-        if (issues.errors.length > 0) {
-          disabledApps[app.id] = { issues }
-        }
-      }
-
-      if (this.mounted) {
-        this.setState({ selectedSnapshot: snapshotId /*, disabledApps*/ })
-      }
-    })
+    this.setState({ selectedSnapshot: snapshotId })
   }
 
   /**

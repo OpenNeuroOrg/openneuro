@@ -118,7 +118,6 @@ class JobAccordion extends React.Component {
         } else {
           value = run.parameters[key].toString()
         }
-
         parameters.push(
           <li key={key}>
             <span className="key">{key}</span>:{' '}

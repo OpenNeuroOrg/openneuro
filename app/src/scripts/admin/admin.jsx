@@ -6,8 +6,10 @@ import Users from './admin.users.jsx'
 import Blacklist from './admin.blacklist.jsx'
 import AppDefinitions from './admin.apps.jsx'
 import EventLogs from './admin.logs.jsx'
+import Graphs from '../admin/admin.graphs.jsx'
 import Datasets from '../dashboard/dashboard.datasets.jsx'
 import Jobs from '../dashboard/dashboard.jobs.jsx'
+
 import BlacklistModal from './admin.blacklist.modal.jsx'
 import actions from './admin.actions'
 
@@ -57,6 +59,11 @@ class Dashboard extends React.Component {
                   All Jobs
                 </NavLink>
               </li>
+              <li>
+                <NavLink to="/admin/job-statistics" className="btn-tab">
+                  Job Stats
+                </NavLink>
+              </li>
             </ul>
             <Switch>
               <Redirect
@@ -95,6 +102,12 @@ class Dashboard extends React.Component {
                 path="/admin/jobs"
                 exact
                 render={props => <Jobs admin {...props} />}
+              />
+              <Route
+                name="admin-jobs-stats"
+                path="/admin/job-statistics"
+                exact
+                component={Graphs}
               />
             </Switch>
           </div>

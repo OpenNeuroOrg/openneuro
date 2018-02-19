@@ -94,7 +94,17 @@ export default {
         if (err) {
           return next(err)
         }
-        res.send(comments)
+        // remove text and user info from deleted comments before sending back to the server
+        let filteredComments = comments.map(comment => {
+          if (comment.deleted) {
+            comment.user = {}
+            comment.text = '[deleted]'
+            return comment
+          } else {
+            return comment
+          }
+        })
+        res.send(filteredComments)
       })
   },
 }

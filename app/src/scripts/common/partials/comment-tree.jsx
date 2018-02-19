@@ -9,7 +9,7 @@ class CommentTree extends React.Component {
   constructor(props) {
     super(props)
 
-    let showSubtree = this.props.showSubtree ? this.props.showSubtree : false
+    let showSubtree = this.props.showSubtree ? this.props.showSubtree : true
 
     this.state = {
       showNewComment: false,
@@ -155,7 +155,7 @@ class CommentTree extends React.Component {
       return (
         <span>
           {' '}
-          <span className="dataset-owner-flag"> Owner</span> -{' '}
+          <span className="dataset-owner-flag"> Dataset Uploader</span> -{' '}
         </span>
       )
     }
@@ -171,7 +171,7 @@ class CommentTree extends React.Component {
 
   _userAvatar() {
     let comment = this.props.node
-    if (!comment.deleted || this.props.isAdmin) {
+    if (!comment.deleted) {
       return (
         <div className="comment-avatar">
           <img src={comment.user.imageUrl} />
