@@ -623,6 +623,10 @@ div.rt-resizable-header-content {
 
     .modal-controls {
         padding-top: 20px;
+
+        .changelog-length-warning {
+            float: right;
+        }
     }
     .change-controls {
         vertical-align: text-top;
