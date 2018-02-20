@@ -121,6 +121,18 @@ export default {
   },
 
   /**
+   * Get File
+   *
+   */
+  getFile(level, id, filename, options, callback) {
+    request.get(
+      config.scitran.url + level + '/' + id + '/files/' + filename,
+      options,
+      callback,
+    )
+  },
+
+  /**
      * Get Project Snapshots
      */
   getProjectSnapshots(projectId, callback) {

@@ -45,6 +45,9 @@
 		border: 1px solid #ccc;
 		padding: 15px;
 	}
+	.changelog {
+		white-space: pre-wrap;
+	}
 	.FAILED {color: #d9534f;}
 	.FINISHED {color: #5cb85c;}
 </style>
@@ -62,6 +65,11 @@
 
 		<div>
 			<a class='dataset-link' href="{{siteUrl}}/datasets/{{datasetId}}/versions/{{versionNumber}}">Click here to view this snapshot on OpenNeuro &raquo;</a>
+		</div>
+
+		<div>
+			<h4>Changelog</h4>
+			<p className="changelog">{{changelog}}</p>
 		</div>
 
 		<p>
