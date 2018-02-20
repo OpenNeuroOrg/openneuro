@@ -38,18 +38,46 @@ class SearchResults extends React.Component {
     })
     const key = 'AIzaSyB68V4zjGxWpZzTn8-vRuogiRLPmSCmWoo'
     const cx = '016952313242172063987:retmkn_owto'
+
     if (query) {
       request
         .get('https://www.googleapis.com/customsearch/v1', {
           query: { key: key, cx: cx, q: query },
         })
-        .then(res =>
+        .then(response => {
+          let parsedResponse
+          let noResults = [{ link: 'No results', snippet: '' }]
+          let searchResults = {}
+          if (!response || !response.text) {
+            searchResults = noResults
+          } else {
+            parsedResponse = JSON.parse(response.text)
+            if (parsedResponse.searchInformation.totalResults < 1) {
+              searchResults = noResults
+            } else {
+              searchResults = parsedResponse.items
+            }
+          }
           this.setState({
-            results: res,
+            results: searchResults,
             query: query,
             loading: false,
-          }),
-        )
+          })
+        })
+        .catch(err => {
+          let failedResponse = [
+            {
+              link: 'https://www.google.com/search?q=' + query,
+              snippet:
+                'Failed to load search results, please try using Google directly.',
+            },
+          ]
+          this.setState({
+            results: failedResponse,
+            query: query,
+            loading: false,
+          })
+        })
     }
   }
 
@@ -81,30 +109,7 @@ class SearchResults extends React.Component {
   }
 
   _results(results) {
-    let parsedResults = {}
-    let noResults = { items: [{ link: 'No results', snippet: '' }] }
-    if (!results || !results.text) {
-      parsedResults = noResults
-    } else if (results.statusCode == 403) {
-      parsedResults = {
-        items: [
-          {
-            link: 'https://www.google.com/search?q=' + this.state.query,
-            snippet:
-              'Failed to load search results, please try using Google directly.',
-          },
-        ],
-      }
-    } else if (results.statusCode != 200) {
-      parsedResults = noResults
-    } else {
-      parsedResults = JSON.parse(results.text)
-      if (parsedResults.searchInformation.totalResults < 1) {
-        parsedResults = noResults
-      }
-    }
-
-    return parsedResults.items.map((result, index) => {
+    return results.map((result, index) => {
       let resultLink = this._resultLink(result)
       return (
         <div key={index} className="fade-in  panel panel-default">
