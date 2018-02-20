@@ -36,6 +36,7 @@ class SearchResults extends React.Component {
     this.setState({
       loading: true,
     })
+
     const key = 'AIzaSyB68V4zjGxWpZzTn8-vRuogiRLPmSCmWoo'
     const cx = '016952313242172063987:retmkn_owto'
 
@@ -64,7 +65,7 @@ class SearchResults extends React.Component {
             loading: false,
           })
         })
-        .catch(err => {
+        .catch(() => {
           let failedResponse = [
             {
               link: 'https://www.google.com/search?q=' + query,
