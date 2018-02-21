@@ -3,6 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Reflux from 'reflux'
+import { withRouter } from 'react-router-dom'
 import Share from './share.jsx'
 import Jobs from './jobs'
 import Publish from './publish.jsx'
@@ -21,6 +22,25 @@ class ToolModals extends Reflux.Component {
   }
 
   // life cycle events --------------------------------------------------
+  componentWillReceiveProps() {
+    const query = new URLSearchParams(this.props.history.location.search)
+    let modal = query.get('modal')
+    let modals = this.state.datasets.modals
+
+    if (modal) {
+      if (!modals[modal]) {
+        datasetActions.toggleModal(modal)
+      }
+    } else {
+      let values = Object.values(modals)
+      if (
+        values.some(item => {
+          return item
+        })
+      )
+        datasetActions.dismissModals()
+    }
+  }
 
   render() {
     let apps = this.state.datasets.apps,
@@ -86,4 +106,4 @@ ToolModals.propTypes = {
   history: PropTypes.object,
 }
 
-export default ToolModals
+export default withRouter(ToolModals)
