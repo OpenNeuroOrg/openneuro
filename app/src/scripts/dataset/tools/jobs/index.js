@@ -4,7 +4,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import actions from '../../dataset.actions.js'
 import Spinner from '../../../common/partials/spinner.jsx'
 import { Modal } from '../../../utils/modal.jsx'
@@ -68,6 +68,17 @@ class JobMenu extends React.Component {
     }
   }
 
+  _closeButton() {
+    return (
+      <Link to={this.props.location.pathname}>
+        <button type="button" className="close">
+          <span aria-hidden="true">×</span>
+          <span className="sr-only">Close</span>
+        </button>
+      </Link>
+    )
+  }
+
   render() {
     let apps = this.props.apps
     let selectedAppKey = this.state.selectedAppKey
@@ -106,9 +117,11 @@ class JobMenu extends React.Component {
           {this.state.error ? <h4 className="danger">Error</h4> : null}
           <h5>{this.state.message}</h5>
         </div>
-        <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
-          OK
-        </button>
+        <Link to={this.props.location.pathname}>
+          <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
+            OK
+          </button>
+        </Link>
       </div>
     )
 
@@ -123,7 +136,8 @@ class JobMenu extends React.Component {
 
     return (
       <Modal show={this.props.show} onHide={this._hide.bind(this)}>
-        <Modal.Header closeButton>
+        <Modal.Header>
+          {this._closeButton()}
           <Modal.Title>Run Analysis</Modal.Title>
         </Modal.Header>
         <hr className="modal-inner" />
@@ -345,9 +359,11 @@ class JobMenu extends React.Component {
           onClick={this._checkSubmitStatus.bind(this)}>
           Start
         </button>
-        <button className="btn-reset" onClick={this._hide.bind(this)}>
-          close
-        </button>
+        <Link to={this.props.location.pathname}>
+          <button className="btn-reset" onClick={this._hide.bind(this)}>
+            close
+          </button>
+        </Link>
       </div>
     )
   }
@@ -433,8 +449,9 @@ class JobMenu extends React.Component {
       }
       return !!requiredParameters[param]
     })
-    this.setState({ submitActive, submitWarning })
-    this.state.submitActive === true ? this._startJob() : null
+    this.setState({ submitActive, submitWarning }, () => {
+      this.state.submitActive === true ? this._startJob() : null
+    })
   }
 
   /**
@@ -583,15 +600,16 @@ class JobMenu extends React.Component {
             let message, error
             if (err) {
               error = true
-              if (res.status === 409) {
+              let response = err.response
+              if (err.status === 409) {
                 message =
                   'This analysis has already been run on this dataset with the same parameters. You can view the results in the Analyses section of the dataset page.'
-              } else if (res.status === 503) {
+              } else if (err.status === 503) {
                 message =
                   'We are temporarily unable to process this analysis. Please try again later. If this issue persists, please contact the site administrator.'
-              } else if (res.status === 403 && res.body.error) {
+              } else if (err.status === 403 && response.body.error) {
                 // If non admins try to run more than 2 jobs at a time, want to display message letting them know they don't have access
-                message = res.body.error
+                message = response.body.error
               } else {
                 message =
                   'There was an issue submitting your analysis. Double check your inputs and try again. If the issue persists, please contact the site administrator.'
@@ -601,7 +619,7 @@ class JobMenu extends React.Component {
                 'Your analysis has been submitted. You will receive a notification by email once the job is complete.'
             }
 
-            if ('jobId' in res.body && res.body.jobId) {
+            if (res && res.body && 'jobId' in res.body && res.body.jobId) {
               this.setState({
                 loading: false,
                 message: message,

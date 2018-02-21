@@ -8,8 +8,9 @@ import userStore from '../../user/user.store'
 import userActions from '../../user/user.actions'
 import datasetActions from '../../dataset/dataset.actions'
 import { Modal } from '../../utils/modal.jsx'
+import { Link, Redirect, withRouter } from 'react-router-dom'
 
-export default class Subscribe extends React.Component {
+class Subscribe extends React.Component {
   // life cycle events --------------------------------------------------
 
   constructor(props) {
@@ -37,12 +38,20 @@ export default class Subscribe extends React.Component {
   }
 
   render() {
+    if (
+      this.props.show &&
+      this.state.hasToken &&
+      this.props.subscribed &&
+      this.props.history.location.search !== ''
+    ) {
+      return <Redirect to={this.props.location.pathname} />
+    }
     return (
       <Modal
         show={this.props.show}
         onHide={this.props.onHide}
         className="download-modal">
-        <Modal.Header closeButton>
+        <Modal.Header>
           <Modal.Title>Follow Dataset</Modal.Title>
         </Modal.Header>
         <hr className="modal-inner" />
@@ -84,11 +93,13 @@ export default class Subscribe extends React.Component {
   _followButton() {
     if (this.state.hasToken && !this.props.subscribed) {
       return (
-        <button
-          className="btn-modal-submit"
-          onClick={this._createSubscription.bind(this)}>
-          follow
-        </button>
+        <Link to={this.props.location.pathname}>
+          <button
+            className="btn-modal-submit"
+            onClick={this._createSubscription.bind(this)}>
+            follow
+          </button>
+        </Link>
       )
     }
   }
@@ -107,9 +118,11 @@ export default class Subscribe extends React.Component {
   _continueButton() {
     if (this.state.hasToken && this.props.subscribed) {
       return (
-        <button className="btn-modal-submit" onClick={this.props.onHide}>
-          got it
-        </button>
+        <Link to={this.props.location.pathname}>
+          <button className="btn-modal-submit" onClick={this.props.onHide}>
+            got it
+          </button>
+        </Link>
       )
     }
   }
@@ -140,9 +153,11 @@ export default class Subscribe extends React.Component {
   _returnButton() {
     if (!this.props.subscribed) {
       return (
-        <button className="btn-reset" onClick={this.props.onHide}>
-          no, thanks
-        </button>
+        <Link to={this.props.location.pathname}>
+          <button className="btn-reset" onClick={this.props.onHide}>
+            no, thanks
+          </button>
+        </Link>
       )
     }
   }
@@ -153,4 +168,8 @@ Subscribe.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
   createSubscription: PropTypes.func,
+  location: PropTypes.object,
+  history: PropTypes.object,
 }
+
+export default withRouter(Subscribe)

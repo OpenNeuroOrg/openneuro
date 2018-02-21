@@ -2,7 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 import actions from '../dataset.actions.js'
 import { Modal } from '../../utils/modal.jsx'
 import moment from 'moment'
@@ -33,6 +33,17 @@ class Publish extends React.Component {
     })
   }
 
+  _closeButton() {
+    return (
+      <Link to={this.props.location.pathname}>
+        <button type="button" className="close">
+          <span aria-hidden="true">×</span>
+          <span className="sr-only">Close</span>
+        </button>
+      </Link>
+    )
+  }
+
   render() {
     let form = (
       <div className="analysis-modal clearfix">
@@ -57,9 +68,11 @@ class Publish extends React.Component {
           {this.state.error ? <h4 className="danger">Error</h4> : null}
           <h5>{this.state.message}</h5>
         </div>
-        <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
-          OK
-        </button>
+        <Link to={this.props.location.pathname}>
+          <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
+            OK
+          </button>
+        </Link>
       </div>
     )
 
@@ -72,7 +85,8 @@ class Publish extends React.Component {
 
     return (
       <Modal show={this.props.show} onHide={this._hide.bind(this)}>
-        <Modal.Header closeButton>
+        <Modal.Header>
+          {this._closeButton()}
           <Modal.Title>Publish</Modal.Title>
         </Modal.Header>
         <hr className="modal-inner" />
@@ -128,11 +142,14 @@ class Publish extends React.Component {
               </select>
             </div>
             <div className="col-xs-6 default-reset">
-              <button
-                className="btn-reset"
-                onClick={this._createSnapshot.bind(this)}>
-                Create New Snapshot
-              </button>
+              <Link to={this.props.location.pathname + '?modal=snapshot'}>
+                <button
+                  className="btn-reset"
+                  // onClick={this._createSnapshot.bind(this)}
+                >
+                  Create New Snapshot
+                </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -149,9 +166,14 @@ class Publish extends React.Component {
             onClick={this._publish.bind(this)}>
             Publish
           </button>
-          <button className="btn-reset" onClick={this._hide.bind(this)}>
-            close
-          </button>
+          <Link to={this.props.location.pathname}>
+            <button
+              className="btn-reset"
+              // onClick={this._hide.bind(this)}
+            >
+              close
+            </button>
+          </Link>
         </div>
       )
     }
@@ -221,6 +243,7 @@ Publish.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
   history: PropTypes.object,
+  location: PropTypes.object,
 }
 
 export default withRouter(Publish)

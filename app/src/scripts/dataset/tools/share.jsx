@@ -4,13 +4,14 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link, withRouter } from 'react-router-dom'
 import bids from '../../utils/bids'
 import Input from '../../common/forms/input.jsx'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import { Modal } from '../../utils/modal.jsx'
 import userStore from '../../user/user.store'
 
-export default class Share extends React.Component {
+class Share extends React.Component {
   // life cycle events --------------------------------------------------
 
   constructor() {
@@ -39,6 +40,17 @@ export default class Share extends React.Component {
     })
   }
 
+  _closeButton() {
+    return (
+      <Link to={this.props.location.pathname}>
+        <button type="button" className="close">
+          <span aria-hidden="true">×</span>
+          <span className="sr-only">Close</span>
+        </button>
+      </Link>
+    )
+  }
+
   render() {
     let instruction =
       "Enter a user's email address and select access level to share"
@@ -48,7 +60,8 @@ export default class Share extends React.Component {
         show={this.props.show}
         onHide={this.props.onHide}
         className="share-modal">
-        <Modal.Header closeButton>
+        <Modal.Header>
+          {this._closeButton()}
           <Modal.Title>Share Dataset</Modal.Title>
         </Modal.Header>
         <hr className="modal-inner" />
@@ -82,9 +95,14 @@ export default class Share extends React.Component {
                 onClick={this._addUser.bind(this)}>
                 share
               </button>
-              <button className="btn-reset" onClick={this.props.onHide}>
-                close
-              </button>
+              <Link to={this.props.location.pathname}>
+                <button
+                  className="btn-reset"
+                  // onClick={this.props.onHide}
+                >
+                  close
+                </button>
+              </Link>
             </div>
           </div>
         </Modal.Body>
@@ -210,4 +228,7 @@ Share.propTypes = {
   dataset: PropTypes.object,
   show: PropTypes.bool,
   onHide: PropTypes.func,
+  location: PropTypes.object,
 }
+
+export default withRouter(Share)
