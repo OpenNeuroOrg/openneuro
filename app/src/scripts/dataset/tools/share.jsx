@@ -96,12 +96,7 @@ class Share extends React.Component {
                 share
               </button>
               <Link to={this.props.location.pathname}>
-                <button
-                  className="btn-reset"
-                  // onClick={this.props.onHide}
-                >
-                  close
-                </button>
+                <button className="btn-reset">close</button>
               </Link>
             </div>
           </div>

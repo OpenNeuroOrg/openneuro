@@ -98,10 +98,6 @@ class ToolModals extends Reflux.Component {
           subscribed={this.state.datasets.dataset.subscribed}
           createSubscription={datasetActions.createSubscription}
         />
-        <Snapshot
-          show={this.state.datasets.modals.snapshot}
-          onHide={datasetActions.toggleModal.bind(null, 'snapshot')}
-        />
       </div>
     )
   }

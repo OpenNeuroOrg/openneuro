@@ -6,6 +6,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import actions from '../../dataset.actions.js'
+import datasetStore from '../../dataset.store.js'
 import Spinner from '../../../common/partials/spinner.jsx'
 import { Modal } from '../../../utils/modal.jsx'
 import moment from 'moment'
@@ -312,15 +313,28 @@ class JobMenu extends React.Component {
 
     let createSnapshot
     if (this.props.dataset.access === 'admin') {
-      createSnapshot = (
-        <div className="col-xs-6 default-reset">
-          <button
-            className="btn-reset"
-            onClick={this._createSnapshot.bind(this)}>
-            Create New Snapshot
-          </button>
-        </div>
+      let dataset = datasetStore.data.dataset
+      let snapshots = datasetStore.data.snapshots
+      let modified = !(
+        snapshots.length > 1 &&
+        moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0
       )
+      if (modified) {
+        let to = {
+          pathname: this.props.location.pathname,
+          search: '?createsnapshot=true',
+          state: {
+            fromModal: 'jobs',
+          },
+        }
+        createSnapshot = (
+          <div className="col-xs-6 default-reset">
+            <Link to={to}>
+              <button className="btn-reset">Create New Snapshot</button>
+            </Link>
+          </div>
+        )
+      }
     }
 
     return (

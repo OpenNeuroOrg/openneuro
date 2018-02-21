@@ -120,7 +120,7 @@ class Tools extends React.Component {
         icon: 'fa-user icon-plus',
         action: actions.toggleModal.bind(null, 'share'),
         display: isAdmin && !isSnapshot && !isIncomplete,
-        warn: true,
+        warn: false,
         modalLink: 'share',
         validations: [
           {
@@ -134,10 +134,10 @@ class Tools extends React.Component {
       {
         tooltip: 'Create Snapshot',
         icon: 'fa-camera-retro icon-plus',
-        action: actions.toggleModal.bind(null, 'snapshot'),
+        // action: actions.toggleModal.bind(null, 'snapshot'),
         display: isAdmin && !isSnapshot && !isIncomplete,
-        warn: false,
-        modalLink: 'snapshot',
+        warn: true,
+        link: this.props.location.pathname + '?createsnapshot=true',
         validations: [
           {
             check: isInvalid,
@@ -275,6 +275,7 @@ Tools.propTypes = {
   snapshots: PropTypes.array.isRequired,
   selectedSnapshot: PropTypes.string.isRequired,
   history: PropTypes.object,
+  location: PropTypes.object,
   uploading: PropTypes.bool,
 }
 
