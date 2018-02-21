@@ -1780,7 +1780,6 @@ let datasetStore = Reflux.createStore({
               'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.',
           })
         } else {
-          console.log('getProject results:', project)
           crn.createSnapshot(datasetId).then(res => {
             let snapshotId = res.body._id
             this.toggleSidebar(true)
