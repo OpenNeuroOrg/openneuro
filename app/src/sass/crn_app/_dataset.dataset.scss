@@ -91,5 +91,31 @@
             }
         }
 
+        .snapshot-form {
+            .snapshot-form-header {
+                label {
+                    font-size: 18px;
+                }
+            }
+            .snapshot-form-controls {
+                margin-top: 20px;
+            }
+
+            .changelog-length-warning, .btn-snapshot-submit {
+                float: right;
+                margin-right: 20px;
+            }
+
+            .change {
+                margin-top: 10px;
+            }
+
+            .change-controls {
+                i {
+                    margin-right: 3px;
+                }
+            }
+        }
+
     }
 }
