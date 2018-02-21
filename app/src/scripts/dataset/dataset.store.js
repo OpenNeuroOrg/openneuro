@@ -513,12 +513,6 @@ let datasetStore = Reflux.createStore({
     modals[name] = !modals[name]
     update.modals = modals
 
-    // don't display the follow modal if the user is already following
-    if (name === 'subscribe' && this.data.dataset.subscribed) {
-      update.modals[name] = false
-    }
-    this.update(update)
-
     // callback
     if (callback && typeof callback === 'function') {
       callback()
