@@ -13,6 +13,7 @@ import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
 import MetaData from './dataset.metadata.jsx'
 import Tools from './tools'
+import CreateSnapshot from './tools/snapshot.jsx'
 import Statuses from './dataset.statuses.jsx'
 import Validation from './dataset.validation.jsx'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
@@ -228,6 +229,22 @@ class Dataset extends Reflux.Component {
           </div>
         </div>
       )
+
+      if (
+        new URLSearchParams(this.props.location.search).get('createsnapshot')
+      ) {
+        content = (
+          <div className="clearfix dataset-wrap">
+            <div className="dataset-annimation">
+              <div className="col-xs-12 dataset-inner">
+                <div className="row">
+                  <CreateSnapshot />
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      }
     } else {
       if (this.state.datasets.redirectUrl) {
         content = <Redirect to={this.state.datasets.redirectUrl} />
