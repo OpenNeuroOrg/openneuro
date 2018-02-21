@@ -19,6 +19,7 @@ var Actions = Reflux.createActions([
   'dismissError',
   'dismissJobsModal',
   'dismissMetadataIssue',
+  'dismissModals',
   'displayFile',
   'downloadLogs',
   'editFile',
