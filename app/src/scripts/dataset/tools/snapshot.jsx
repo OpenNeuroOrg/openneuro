@@ -1,12 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import Reflux from 'reflux'
 import moment from 'moment'
 import actions from '../dataset.actions'
 import datasetStore from '../dataset.store'
-import { Modal } from '../../utils/modal.jsx'
 import { Link, withRouter } from 'react-router-dom'
 
-class Snapshot extends React.Component {
+class Snapshot extends Reflux.Component {
   constructor(props) {
     super(props)
     let snapshotVersions =
@@ -22,6 +22,9 @@ class Snapshot extends React.Component {
     let latestVersion = snapshotVersions
       ? Math.max.apply(null, snapshotVersions) + 1
       : 1
+
+    let datasetPath = this.props.location.pathname.split('/snapshot')[0]
+
     this.state = {
       show: this.props.show,
       changes: [],
@@ -31,6 +34,7 @@ class Snapshot extends React.Component {
         minor: '0',
         point: '0',
       },
+      datasetPath: datasetPath,
       newSnapshotVersion: latestVersion,
     }
     this._handleChange = this.handleChange.bind(this)
@@ -58,10 +62,10 @@ class Snapshot extends React.Component {
     })
   }
 
-  _modalContent() {
+  _formContent() {
     if (!this.state.error) {
       return (
-        <div className="modal-content">
+        <div className="snapshot-form-inner">
           {this._version()}
           {this._changes()}
         </div>
@@ -285,7 +289,7 @@ class Snapshot extends React.Component {
       } else {
         return (
           <button
-            className="btn-modal-submit"
+            className="btn-modal-submit btn-snapshot-submit"
             onClick={this.submit.bind(this)}
             title={buttonTitle}
             disabled={disabled}>
@@ -299,33 +303,38 @@ class Snapshot extends React.Component {
   _returnButton() {
     let buttonText = this.state.error ? 'OK' : 'Cancel'
     let btnClass = this.state.error ? 'btn-admin-blue' : 'btn-reset'
+    let fromModal =
+      this.props.location.state && this.props.location.state.fromModal
+        ? this.props.location.state.fromModal
+        : null
+    let returnLink = fromModal
+      ? this.state.datasetPath + '?modal=' + fromModal
+      : this.state.datasetPath
     return (
-      <Link to={this.props.location.pathname}>
-        <button className={btnClass} onClick={this._onHide.bind(this)}>
-          {buttonText}
-        </button>
+      <Link to={returnLink}>
+        <button className={btnClass}>{buttonText}</button>
       </Link>
     )
   }
 
   render() {
     return (
-      <Modal
-        className="snapshot-modal"
-        show={this.props.show}
-        onHide={this._onHide.bind(this)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create Snapshot</Modal.Title>
-        </Modal.Header>
-        <hr className="modal-inner" />
-        <Modal.Body>
-          <div className="dataset">{this._modalContent()}</div>
-          <div className="modal-controls">
-            {this._submitButton()}
-            {this._returnButton()}
+      <div className="snapshot-form">
+        <div className="col-xs-12 snapshot-form-header">
+          <div className="form-group">
+            <label>Create Snapshot</label>
           </div>
-        </Modal.Body>
-      </Modal>
+        </div>
+        <div className="snapshot-form-body col-xs-12">
+          <div className="snapshot-form-content col-xs-12">
+            {this._formContent()}
+          </div>
+          <div className="snapshot-form-controls col-xs-12">
+            {this._returnButton()}
+            {this._submitButton()}
+          </div>
+        </div>
+      </div>
     )
   }
 }
