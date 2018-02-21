@@ -54,6 +54,8 @@ class Tools extends React.Component {
         prepDownload: actions.getDatasetDownloadTicket,
         action: actions.toggleModal.bind(null, 'subscribe'),
         display: !isIncomplete,
+        warn: false,
+        modalLink: 'subscribe',
         validations: [
           {
             check: this.props.uploading && !isSnapshot,
@@ -69,6 +71,7 @@ class Tools extends React.Component {
         action: actions.toggleModal.bind(null, 'publish'),
         display: isAdmin && !isPublic && !isIncomplete,
         warn: false,
+        modalLink: 'publish',
         validations: [
           {
             check: this.props.uploading && !isSnapshot,
@@ -117,7 +120,8 @@ class Tools extends React.Component {
         icon: 'fa-user icon-plus',
         action: actions.toggleModal.bind(null, 'share'),
         display: isAdmin && !isSnapshot && !isIncomplete,
-        warn: false,
+        warn: true,
+        modalLink: 'share',
         validations: [
           {
             check: this.props.uploading && !isSnapshot,
@@ -132,7 +136,8 @@ class Tools extends React.Component {
         icon: 'fa-camera-retro icon-plus',
         action: actions.createSnapshot.bind(null, this.props.history),
         display: isAdmin && !isSnapshot && !isIncomplete,
-        warn: true,
+        warn: false,
+        modalLink: 'snapshot',
         validations: [
           {
             check: isInvalid,
@@ -164,6 +169,7 @@ class Tools extends React.Component {
         action: actions.toggleModal.bind(null, 'jobs'),
         display: isSignedIn && !isIncomplete,
         warn: false,
+        modalLink: 'jobs',
         validations: [
           {
             check: this.props.uploading && !isSnapshot,
@@ -194,14 +200,6 @@ class Tools extends React.Component {
         action: actions.deleteSubscription.bind(this),
         display: isSignedIn && isSubscribed,
         warn: true,
-        // validations: [
-        //   {
-        //     check: null,
-        //     message: 'You are about to unfollow a dataset.',
-        //     timeout: 5000,
-        //     type: 'Error',
-        //   },
-        // ],
       },
     ]
 
@@ -242,6 +240,7 @@ class Tools extends React.Component {
               action={tool.action}
               warn={tool.warn}
               link={tool.link}
+              modalLink={tool.modalLink}
               validations={tool.validations}
             />
           </div>
