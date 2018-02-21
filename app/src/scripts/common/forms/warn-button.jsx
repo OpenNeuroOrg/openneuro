@@ -4,6 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from '../partials/tooltip.jsx'
 import notifications from '../../notification/notification.actions'
+import { Link } from 'react-router-dom'
 
 export default class WarnButton extends React.Component {
   constructor() {
@@ -74,16 +75,33 @@ export default class WarnButton extends React.Component {
       </span>
     )
 
-    let hideAction = (
-      <span className={disabled ? ' disabled' : ''}>
-        <button
-          className="btn-warn-component warning"
-          onClick={this.toggle.bind(this, this.props.action)}
-          disabled={this.props.lock}>
-          <i className={'fa ' + this.props.icon} /> {message}
-        </button>
-      </span>
-    )
+    let hideAction
+    if (this.props.modalLink) {
+      let url = '?modal=' + this.props.modalLink
+      hideAction = (
+        <Link to={url}>
+          <span className={disabled ? ' disabled' : ''}>
+            <button
+              className="btn-warn-component warning"
+              onClick={this.toggle.bind(this, this.props.action)}
+              disabled={this.props.lock}>
+              <i className={'fa ' + this.props.icon} /> {message}
+            </button>
+          </span>
+        </Link>
+      )
+    } else {
+      hideAction = (
+        <span className={disabled ? ' disabled' : ''}>
+          <button
+            className="btn-warn-component warning"
+            onClick={this.toggle.bind(this, this.props.action)}
+            disabled={this.props.lock}>
+            <i className={'fa ' + this.props.icon} /> {message}
+          </button>
+        </span>
+      )
+    }
 
     let button = showAction ? viewAction : hideAction
     let loading = (
@@ -176,6 +194,7 @@ WarnButton.propTypes = {
   action: PropTypes.func,
   prepDownload: PropTypes.func,
   lock: PropTypes.bool,
+  modalLink: PropTypes.string,
 }
 
 WarnButton.defaultProps = {
