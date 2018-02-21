@@ -4,7 +4,7 @@ import moment from 'moment'
 import actions from '../dataset.actions'
 import datasetStore from '../dataset.store'
 import { Modal } from '../../utils/modal.jsx'
-import { withRouter } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 class Snapshot extends React.Component {
   constructor(props) {
@@ -247,16 +247,16 @@ class Snapshot extends React.Component {
       if (err) {
         return
       } else {
-        actions.createSnapshot(this.props.history, res => {
-          if (res && res.error) {
-            this.setState({
-              error: true,
-              message: res.error,
-            })
-          } else {
-            this.onHide()
-          }
-        })
+        if (res) {
+          actions.createSnapshot(this.props.history, res => {
+            if (res && res.error) {
+              this.setState({
+                error: true,
+                message: res.error,
+              })
+            }
+          })
+        }
       }
     })
   }
@@ -300,9 +300,11 @@ class Snapshot extends React.Component {
     let buttonText = this.state.error ? 'OK' : 'Cancel'
     let btnClass = this.state.error ? 'btn-admin-blue' : 'btn-reset'
     return (
-      <button className={btnClass} onClick={this._onHide.bind(this)}>
-        {buttonText}
-      </button>
+      <Link to={this.props.location.pathname}>
+        <button className={btnClass} onClick={this._onHide.bind(this)}>
+          {buttonText}
+        </button>
+      </Link>
     )
   }
 
@@ -332,6 +334,7 @@ Snapshot.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
   history: PropTypes.object,
+  location: PropTypes.object,
 }
 
 export default withRouter(Snapshot)
