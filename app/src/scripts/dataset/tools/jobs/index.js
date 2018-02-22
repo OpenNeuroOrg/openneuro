@@ -662,6 +662,7 @@ JobMenu.propTypes = {
   show: PropTypes.bool,
   snapshots: PropTypes.array,
   history: PropTypes.object,
+  location: PropTypes.location,
 }
 
 JobMenu.defaultProps = {
