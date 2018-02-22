@@ -59,7 +59,8 @@ export default class Status extends React.Component {
         break
       case 'monitored':
         spanClass = 'dataset-status ds-primary'
-        tip = 'Uploader is Following'
+        tip =
+          'The person who uploaded this dataset will be notified of all new comments posted here.'
         title = 'Uploader is Following'
         iconClass = 'fa fa-user'
     }
