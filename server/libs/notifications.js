@@ -165,32 +165,34 @@ let notifications = {
       subscriptions.forEach(subscription => {
         scitran.getUser(subscription.userId, (err, res) => {
           let user = res.body
-          let emailContent = {
-            _id: datasetId + '_' + subscription._id + '_' + comment._id + '_' + 'comment_created',
-            type: 'email',
-            email: {
-              to: user.email,
-              subject: 'Comment Created',
-              template: 'comment-created',
-              data: {
-                firstName: user.firstname,
-                lastName: user.lastname,
-                datasetName: bidsId.decodeId(datasetId),
-                datasetLabel: datasetLabel,
-                commentUserId: userId,
-                commentId: commentId,
-                dateCreated: moment(comment.createDate).format('MMMM Do'),
-                commentContent: htmlContent,
-                commentStatus: commentStatus,
-                siteUrl:
-                url.parse(config.url).protocol +
-                '//' +
-                url.parse(config.url).hostname,
+          if (user.email !== comment.user.email) {
+            let emailContent = {
+              _id: datasetId + '_' + subscription._id + '_' + comment._id + '_' + 'comment_created',
+              type: 'email',
+              email: {
+                to: user.email,
+                subject: 'Comment Created',
+                template: 'comment-created',
+                data: {
+                  firstName: user.firstname,
+                  lastName: user.lastname,
+                  datasetName: bidsId.decodeId(datasetId),
+                  datasetLabel: datasetLabel,
+                  commentUserId: userId,
+                  commentId: commentId,
+                  dateCreated: moment(comment.createDate).format('MMMM Do'),
+                  commentContent: htmlContent,
+                  commentStatus: commentStatus,
+                  siteUrl:
+                  url.parse(config.url).protocol +
+                  '//' +
+                  url.parse(config.url).hostname,
+                }
               }
             }
+            // send each email to the notification database for distribution
+            notifications.add(emailContent, () => {})
           }
-          // send each email to the notification database for distribution
-          notifications.add(emailContent, () => {})
         })
       })
     })
