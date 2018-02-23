@@ -26,6 +26,7 @@ import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
 import userActions from '../user/user.actions.js'
+import Tooltip from '../common/partials/tooltip.jsx'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
@@ -506,9 +507,11 @@ class Dataset extends Reflux.Component {
     let uploaderFollowing
     if (this.state.datasets.dataset.uploaderSubscribed) {
       uploaderFollowing = (
-        <span className="uploader-following">
-          <i className="fa fa-user" />Uploader is Following
-        </span>
+        <Tooltip tooltip="The person who uploaded this dataset will be notified of all new comments posted here.">
+          <span className="uploader-following">
+            <i className="fa fa-user" />Uploader is Following
+          </span>
+        </Tooltip>
       )
     }
     let content = (
