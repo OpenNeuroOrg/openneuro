@@ -145,11 +145,10 @@ class CommentTree extends React.Component {
     }
   }
 
-  _ownerTag(ownerEmail) {
+  _ownerTag(ownerId) {
     if (
-      this.props.user &&
       this.props.uploadUser &&
-      ownerEmail === this.props.user._id &&
+      ownerId === this.props.uploadUser._id &&
       !this.props.node.deleted
     ) {
       return (
@@ -244,7 +243,7 @@ class CommentTree extends React.Component {
         }}>
         <div className="user-info">
           {this._userTag(comment.user.email)}
-          {this._ownerTag(comment.user.email)}
+          {this._ownerTag(comment.user._id)}
           {this._timestamp(comment.createDate)}
           <a href={`${this.props.location.pathname}#comment-${comment._id}`}>
             <i className="fa fa-link" aria-hidden="true" />
