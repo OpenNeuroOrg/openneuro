@@ -437,6 +437,14 @@ export default {
    */
   formatStatus(project, userAccess) {
     let tags = project.tags ? project.tags : []
+    let currentUser = userStore.data.scitran
+    let userId = currentUser ? currentUser._id : null
+    let hasRoot = currentUser ? currentUser.root : null
+    let permittedUsers = project.permissions.map(user => {
+      return user._id
+    })
+    let adminOnlyAccess = permittedUsers.indexOf(userId) == -1 && hasRoot
+
     let status = {
       incomplete: tags.indexOf('incomplete') > -1,
       validating: tags.indexOf('validating') > -1,
@@ -446,7 +454,8 @@ export default {
       shared:
         userStore.data.scitran &&
         project.group != userStore.data.scitran._id &&
-        !!userAccess,
+        !!userAccess &&
+        !adminOnlyAccess,
     }
     return status
   },
@@ -459,18 +468,22 @@ export default {
    */
   userAccess(project) {
     let access = null
-    const currentUser = userStore.data.scitran
-      ? userStore.data.scitran._id
-      : null
+    const currentUser = userStore.data.scitran ? userStore.data.scitran : null
+
+    const userId = currentUser ? currentUser._id : null
     if (project) {
       if (project.permissions && project.permissions.length > 0) {
         for (let user of project.permissions) {
-          if (currentUser === user._id) {
+          if (userId === user._id) {
             access = user.access
           }
         }
-      } else if (project.group === currentUser) {
+      } else if (project.group === userId) {
         access = 'orphaned'
+      }
+
+      if (currentUser && currentUser.root) {
+        access = 'admin'
       }
     }
     return access
