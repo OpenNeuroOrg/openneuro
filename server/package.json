@@ -58,10 +58,11 @@
     "babel-jest": "^21.0.2",
     "babel-preset-env": "^1.6.0",
     "codecov": "^2.3.0",
-    "eslint": "^3.19.0",
+    "eslint": "^4.18.1",
     "husky": "^0.14.3",
     "jest": "^22.0.0",
     "lint-staged": "^6.0.1",
+    "mongodb-memory-server": "^1.7.0",
     "prettier": "^1.7.0"
   },
   "jest": {
@@ -70,7 +71,10 @@
       "!**/*.spec.js",
       "!**/node_modules/**",
       "!**/vendor/**"
-    ]
+    ],
+    "globalSetup": "./jest-setup.js",
+    "globalTeardown": "./jest-teardown.js",
+    "testEnvironment": "./mongo-environment.js"
   },
   "lint-staged": {
     "linters": {
