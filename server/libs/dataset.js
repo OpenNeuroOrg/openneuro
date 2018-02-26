@@ -1,10 +1,10 @@
-import counter from '../counter'
+import counter from './counter'
 
 /**
  * Returns the next accession number string
  */
 export const getAccessionNumber = () => {
-  new Promise(resolve => {
+  return new Promise(resolve => {
     counter.getNext('datasets', datasetNumber => {
       const offset = 1000
       datasetNumber += offset
