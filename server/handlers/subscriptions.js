@@ -16,10 +16,10 @@ export default {
   // write
 
   /**
-  * Create Subscription
-  *
-  * Creates an entry in the c.crn.subscriptions database
-  */
+   * Create Subscription
+   *
+   * Creates an entry in the c.crn.subscriptions database
+   */
 
   create(req, res, next) {
     let data = req.body
@@ -43,7 +43,7 @@ export default {
 
   /**
    * Delete Subscription
-   * 
+   *
    * Removes an entry in the subscriptions database
    */
 
@@ -74,18 +74,18 @@ export default {
     let datasetId = data.datasetId ? data.datasetId : null
 
     notifications.datasetDeleted(datasetId)
-    c.crn.subscriptions.find(
-      {
-        datasetId: datasetId
-      }).toArray((err, subscriptions) => {
+    c.crn.subscriptions
+      .find({
+        datasetId: datasetId,
+      })
+      .toArray((err, subscriptions) => {
         if (err) {
           return next(err)
         }
-        subscriptions.forEach((subscription) => {
-          c.crn.subscriptions.deleteOne(
-            {
-              _id: ObjectID(subscription._id)
-            })
+        subscriptions.forEach(subscription => {
+          c.crn.subscriptions.deleteOne({
+            _id: ObjectID(subscription._id),
+          })
         })
         return res.send()
       })
@@ -94,10 +94,10 @@ export default {
   // read
 
   /**
-  * Get Subscriptions
-  *
-  * Returns a list of subscriptions that are associated with a dataset
-  */
+   * Get Subscriptions
+   *
+   * Returns a list of subscriptions that are associated with a dataset
+   */
 
   getSubscriptions(req, res, next) {
     let datasetId = req.params.datasetId
@@ -115,10 +115,10 @@ export default {
   },
 
   /**
-  * Check User Subscription
-  *
-  * Checks to see if a user is subscribed to a dataset
-  */
+   * Check User Subscription
+   *
+   * Checks to see if a user is subscribed to a dataset
+   */
 
   checkUserSubscription(req, res) {
     let datasetId = req.params.datasetId
@@ -127,12 +127,13 @@ export default {
     c.crn.subscriptions
       .findOne({
         datasetId: datasetId,
-        userId: userId
-      }).then((resp) => {
+        userId: userId,
+      })
+      .then(resp => {
         if (resp) {
-          return res.send({subscribed: true})
+          return res.send({ subscribed: true })
         } else {
-          return res.send({subscribed: false})
+          return res.send({ subscribed: false })
         }
       })
   },
