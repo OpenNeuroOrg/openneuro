@@ -7,7 +7,7 @@ import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
 import validation from './handlers/validation'
 import datasets from './handlers/datasets'
-import datalad from './handlers/datalad'
+import * as datalad from './handlers/datalad'
 import comments from './handlers/comments'
 import subscriptions from './handlers/subscriptions'
 import auth from './libs/auth'
@@ -280,7 +280,7 @@ const dataladRoutes = [
     handler: datalad.createDataset,
   },
   {
-    method: 'del',
+    method: 'delete',
     url: '/datasets/:datasetId',
     handler: datalad.deleteDataset,
   },
