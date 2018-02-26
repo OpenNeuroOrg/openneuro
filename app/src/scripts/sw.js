@@ -11,6 +11,7 @@ const CACHE_NAME = `openneuro-${packageJson.version}`
 const CACHE_PATHS = serviceWorkerOption.assets
 
 self.addEventListener('install', event => {
+  self.skipWaiting()
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(CACHE_PATHS)
@@ -29,10 +30,10 @@ self.addEventListener('fetch', event => {
       // Respond from the service worker
       const hostname = url.hostname
       const prefix = url.pathname.slice(1)
-      event.respondWith(zipResponse(hostname, prefix))
+      return event.respondWith(zipResponse(hostname, prefix))
     } else {
       // Respond from cache, then the network
-      event.respondWith(
+      return event.respondWith(
         caches.match(event.request).then(function(response) {
           return response || fetch(event.request)
         }),
