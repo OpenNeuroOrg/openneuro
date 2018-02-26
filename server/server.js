@@ -27,7 +27,7 @@ const ravenConfig = {
 }
 Raven.config(config.sentry.DSN, ravenConfig).install()
 
-mongo.connect()
+mongo.connect(config.mongo.url)
 
 const redisConnect = async () => {
   try {

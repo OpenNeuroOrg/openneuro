@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "eslint libs/ handlers/ tests/",
     "start": "node index.js",
-    "test": "jest",
+    "test": "jest --runInBand",
     "coverage": "jest --coverage",
     "codecov": "codecov -p ../ -F server",
     "precommit": "lint-staged"
@@ -72,9 +72,7 @@
       "!**/node_modules/**",
       "!**/vendor/**"
     ],
-    "globalSetup": "./jest-setup.js",
-    "globalTeardown": "./jest-teardown.js",
-    "testEnvironment": "./mongo-environment.js"
+    "globalSetup": "./jest-setup.js"
   },
   "lint-staged": {
     "linters": {

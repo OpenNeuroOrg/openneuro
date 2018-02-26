@@ -8,8 +8,8 @@ class MongoEnvironment extends NodeEnvironment {
   async setup() {
     console.log('Setup MongoDB Test Environment')
 
-    this.global.__MONGO_URI__ = await global.__MONGOD__.getConnectionString()
-    this.global.__MONGO_DB_NAME__ = global.__MONGO_DB_NAME__
+    const port = await global.__MONGOD__.getPort()
+    this.global.__MONGO_URI__ = `mongodb://localhost:${port}/`
 
     await super.setup()
   }
