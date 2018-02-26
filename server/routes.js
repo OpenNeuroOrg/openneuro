@@ -1,11 +1,13 @@
 // dependencies ------------------------------------
 
 import express from 'express'
+import config from './config'
 import users from './handlers/users'
 import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
 import validation from './handlers/validation'
 import datasets from './handlers/datasets'
+import datalad from './handlers/datalad'
 import comments from './handlers/comments'
 import subscriptions from './handlers/subscriptions'
 import auth from './libs/auth'
@@ -15,7 +17,7 @@ import schemas from './schemas'
 
 import fileUpload from 'express-fileupload'
 
-const routes = [
+const baseRoutes = [
   // users ---------------------------------------
 
   {
@@ -61,26 +63,6 @@ const routes = [
     url: '/users/blacklist/:id',
     middleware: [auth.superuser],
     handler: users.unBlacklist,
-  },
-
-  // datasets ------------------------------------
-  // Note: most dataset interactions are sent directly to Scitran.
-  // These manage those that need to be modified or proxied.
-
-  {
-    method: 'post',
-    url: '/datasets',
-    handler: datasets.create,
-  },
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/snapshot',
-    handler: datasets.snapshot,
-  },
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/permissions',
-    handler: datasets.share,
   },
 
   // validation ----------------------------------
@@ -227,9 +209,9 @@ const routes = [
     method: 'post',
     url: '/comments/:datasetId/:commentId',
     middleware: [auth.deleteCommentAccess],
-    handler: comments.update
+    handler: comments.update,
   },
-  
+
   {
     method: 'delete',
     url: '/comments/:commentId',
@@ -237,42 +219,86 @@ const routes = [
     handler: comments.delete,
   },
 
-
   // subscriptions ----------------------------------------
 
   {
     method: 'get',
     url: '/subscriptions/:datasetId',
-    handler: subscriptions.getSubscriptions
+    handler: subscriptions.getSubscriptions,
   },
   {
     method: 'get',
     url: '/subscriptions/:datasetId/:userId',
-    handler: subscriptions.checkUserSubscription
+    handler: subscriptions.checkUserSubscription,
   },
   {
     method: 'post',
     url: '/subscriptions/:datasetId',
     middleware: [auth.user],
-    handler: subscriptions.create
+    handler: subscriptions.create,
   },
   {
     method: 'delete',
     url: '/subscriptions/:datasetId/:userId',
     middleware: [auth.user],
-    handler: subscriptions.delete
+    handler: subscriptions.delete,
   },
   {
     method: 'delete',
     url: '/subscriptions/:datasetId',
     middleware: [auth.user],
-    handler: subscriptions.deleteAll
-  }
+    handler: subscriptions.deleteAll,
+  },
+]
+
+const scitranRoutes = [
+  // datasets ------------------------------------
+  // Note: most dataset interactions are sent directly to Scitran.
+  // These manage those that need to be modified or proxied.
+  {
+    method: 'post',
+    url: '/datasets',
+    handler: datasets.create,
+  },
+  {
+    method: 'post',
+    url: '/datasets/:datasetId/snapshot',
+    handler: datasets.snapshot,
+  },
+  {
+    method: 'post',
+    url: '/datasets/:datasetId/permissions',
+    handler: datasets.share,
+  },
+]
+
+// These routes are enabled with the DataLad backend
+const dataladRoutes = [
+  {
+    method: 'post',
+    url: '/datasets',
+    handler: datalad.createDataset,
+  },
+  {
+    method: 'del',
+    url: '/datasets/:datasetId',
+    handler: datalad.deleteDataset,
+  },
+  {
+    method: 'post',
+    url: '/datasets/:datasetId/snapshot/:snapshotId',
+    handler: datalad.createSnapshot,
+  },
 ]
 
 // initialize routes -------------------------------
 
 const router = express.Router()
+
+// TODO - remove this once SciTran backend is no longer in use
+const routes = config.datalad.enabled
+  ? baseRoutes.concat(scitranRoutes)
+  : baseRoutes.concat(dataladRoutes)
 
 for (const route of routes) {
   let arr = route.hasOwnProperty('middleware') ? route.middleware : []
