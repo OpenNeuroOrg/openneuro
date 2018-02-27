@@ -31,6 +31,12 @@ self.addEventListener('fetch', event => {
       const prefix = url.pathname.slice(1)
       event.respondWith(zipResponse(hostname, prefix))
     } else {
+      // Skip serving from cache for cross origin 'only-if-cached' requests
+      if (
+        event.request.cache === 'only-if-cached' &&
+        event.request.mode !== 'same-origin'
+      )
+        return
       // Respond from cache, then the network
       event.respondWith(
         caches.match(event.request).then(function(response) {
