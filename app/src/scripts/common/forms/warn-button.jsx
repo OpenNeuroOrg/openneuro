@@ -4,9 +4,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from '../partials/tooltip.jsx'
 import notifications from '../../notification/notification.actions'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
-export default class WarnButton extends React.Component {
+class WarnButton extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -87,13 +87,13 @@ export default class WarnButton extends React.Component {
 
     let hideAction
     if (this.props.modalLink) {
-      let url = '?modal=' + this.props.modalLink
+      let url = this.props.modalLink
       hideAction = (
         <Link to={url}>
           <span className={disabled ? ' disabled' : ''}>
             <button
               className="btn-warn-component warning"
-              onClick={this.toggle.bind(this, this.props.action)}
+              // onClick={this.toggle.bind(this, this.props.action)}
               disabled={this.props.lock}>
               <i className={'fa ' + this.props.icon} /> {message}
             </button>
@@ -205,6 +205,7 @@ WarnButton.propTypes = {
   prepDownload: PropTypes.func,
   lock: PropTypes.bool,
   modalLink: PropTypes.string,
+  location: PropTypes.object,
 }
 
 WarnButton.defaultProps = {
@@ -215,3 +216,5 @@ WarnButton.defaultProps = {
   warn: true,
   tooltip: null,
 }
+
+export default withRouter(WarnButton)
