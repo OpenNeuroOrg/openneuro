@@ -1,42 +1,103 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import Reflux from 'reflux'
 import PropTypes from 'prop-types'
+import Spinner from '../../common/partials/spinner.jsx'
+import Timeout from '../../common/partials/timeout.jsx'
+import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import { Link, withRouter } from 'react-router-dom'
 import actions from '../dataset.actions.js'
 import datasetStore from '../dataset.store.js'
-import { Modal } from '../../utils/modal.jsx'
 import moment from 'moment'
+import bids from '../../utils/bids'
+import { refluxConnect } from '../../utils/reflux'
 
-class Publish extends React.Component {
+class Publish extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       loading: false,
       selectedSnapshot: '',
       message: null,
       error: false,
     }
+    refluxConnect(this, datasetStore, 'datasets')
   }
 
-  componentWillReceiveProps() {
-    this.props.snapshots.map(snapshot => {
-      if (snapshot._id == this.props.dataset._id) {
+  componentWillReceiveProps(nextProps) {
+    let reload = false
+    let datasetId = nextProps.match.params.datasetId
+    let snapshotId = nextProps.match.params.snapshotId
+    let snapshots = this.state.datasets.snapshots
+    let dataset = this.state.datasets.dataset
+    if (snapshotId) {
+      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
+      if (snapshotUrl !== this.state.datasets.loadedUrl) {
+        reload = true
+      }
+    } else {
+      const datasetUrl = bids.encodeId(datasetId)
+      if (datasetUrl !== this.state.datasets.loadedUrl) {
+        reload = true
+      }
+    }
+
+    if (reload && !this.state.datasets.dataset) {
+      this._loadData(
+        nextProps.match.params.datasetId,
+        nextProps.match.params.snapshotId,
+      )
+    }
+
+    snapshots.map(snapshot => {
+      if (snapshot._id == dataset._id) {
         if (snapshot.original) {
           this.setState({ selectedSnapshot: snapshot._id })
-        } else if (this.props.snapshots.length > 1) {
-          this.setState({ selectedSnapshot: this.props.snapshots[1]._id })
+        } else if (snapshots.length > 1) {
+          this.setState({ selectedSnapshot: snapshots[1]._id })
         }
         return
       }
     })
   }
 
+  _loadData(datasetId, snapshotId) {
+    const query = new URLSearchParams(this.props.location.search)
+    if (snapshotId) {
+      const app = query.get('app')
+      const version = query.get('version')
+      const job = query.get('job')
+      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
+      actions.trackView(snapshotUrl)
+      actions.loadDataset(snapshotUrl, {
+        snapshot: true,
+        app: app,
+        version: version,
+        job: job,
+        datasetId: bids.encodeId(datasetId),
+      })
+    } else if (
+      (datasetId && !this.state.datasets.dataset) ||
+      (datasetId && datasetId !== this.state.datasets.dataset._id)
+    ) {
+      actions.loadDataset(bids.encodeId(datasetId))
+    }
+  }
+
+  constructReturnUrl(params) {
+    if (params.snapshotId) {
+      return '/datasets/' + params.datasetId + '/versions/' + params.snapshotId
+    } else {
+      return '/datasets/' + params.datasetId
+    }
+  }
+
   _closeButton() {
     return (
-      <Link to={this.props.location.pathname}>
+      <Link to={this.constructReturnUrl(this.props.match.params)}>
         <button type="button" className="close">
           <span aria-hidden="true">×</span>
           <span className="sr-only">Close</span>
@@ -46,22 +107,12 @@ class Publish extends React.Component {
   }
 
   render() {
-    let form = (
-      <div className="analysis-modal clearfix">
-        {this._snapshots()}
-        <p className="text-danger">
-          This snapshot will be released publicly under a
-          <a
-            href="https://wiki.creativecommons.org/wiki/CC0"
-            target="_blank"
-            rel="noopener noreferrer">
-            {' '}
-            CC0 license
-          </a>. This operation cannot be undone.
-        </p>
-        {this._submit()}
-      </div>
-    )
+    let datasets = this.state.datasets
+    let loading = datasets && datasets.loading
+    let loadingText =
+      datasets && typeof datasets.loading == 'string'
+        ? datasets.loading
+        : 'loading'
 
     let message = (
       <div>
@@ -69,11 +120,30 @@ class Publish extends React.Component {
           {this.state.error ? <h4 className="danger">Error</h4> : null}
           <h5>{this.state.message}</h5>
         </div>
-        <Link to={this.props.location.pathname}>
+        <Link to={this.constructReturnUrl(this.props.match.params)}>
           <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
             OK
           </button>
         </Link>
+      </div>
+    )
+
+    let form = (
+      <div className="dataset-form-body col-xs-12">
+        <div className="dataset-form-content col-xs-12">
+          {this._snapshots()}
+          <p className="text-danger">
+            This snapshot will be released publicly under a
+            <a
+              href="https://wiki.creativecommons.org/wiki/CC0"
+              target="_blank"
+              rel="noopener noreferrer">
+              {' '}
+              CC0 license
+            </a>. This operation cannot be undone.
+          </p>
+        </div>
+        <div className="dataset-form-controls col-xs-12">{this._submit()}</div>
       </div>
     )
 
@@ -84,17 +154,31 @@ class Publish extends React.Component {
       body = form
     }
 
+    let content = (
+      <div className="dataset-form">
+        <div className="col-xs-12 dataset-form-header">
+          <div className="form-group">
+            <label>Publish</label>
+          </div>
+          {body}
+        </div>
+      </div>
+    )
+
     return (
-      <Modal show={this.props.show} onHide={this._hide.bind(this)}>
-        <Modal.Header>
-          {this._closeButton()}
-          <Modal.Title>Publish</Modal.Title>
-        </Modal.Header>
-        <hr className="modal-inner" />
-        <Modal.Body>
-          <div className="dataset">{body}</div>
-        </Modal.Body>
-      </Modal>
+      <ErrorBoundary
+        message="The dataset has failed to load in time. Please check your network connection."
+        className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
+        <div className="fade-in inner-route dataset-route light">
+          {loading ? (
+            <Timeout timeout={20000}>
+              <Spinner active={true} text={loadingText} />
+            </Timeout>
+          ) : (
+            content
+          )}
+        </div>
+      </ErrorBoundary>
     )
   }
 
@@ -108,8 +192,9 @@ class Publish extends React.Component {
    */
   _snapshots() {
     let options = []
-    if (this.props.snapshots) {
-      options = this.props.snapshots.map(snapshot => {
+    let snapshots = this.state.datasets.snapshots
+    if (snapshots) {
+      options = snapshots.map(snapshot => {
         if (!snapshot.isOriginal && !snapshot.orphaned) {
           return (
             <option
@@ -160,8 +245,8 @@ class Publish extends React.Component {
     )
     if (modified) {
       let to = {
-        pathname: this.props.location.pathname,
-        search: '?createsnapshot=true',
+        pathname:
+          this.constructReturnUrl(this.props.match.params) + '/create-snapshot',
         state: {
           fromModal: 'publish',
         },
@@ -185,7 +270,7 @@ class Publish extends React.Component {
             onClick={this._publish.bind(this)}>
             Publish
           </button>
-          <Link to={this.props.location.pathname}>
+          <Link to={this.constructReturnUrl(this.props.match.params)}>
             <button
               className="btn-reset"
               // onClick={this._hide.bind(this)}
@@ -210,7 +295,6 @@ class Publish extends React.Component {
       message: null,
       error: false,
     })
-    this.props.onHide()
   }
 
   /**
@@ -263,6 +347,8 @@ Publish.propTypes = {
   onHide: PropTypes.func,
   history: PropTypes.object,
   location: PropTypes.object,
+  match: PropTypes.object,
+  returnUrl: PropTypes.string,
 }
 
 export default withRouter(Publish)

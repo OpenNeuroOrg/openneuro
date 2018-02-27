@@ -1,17 +1,85 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Reflux from 'reflux'
+import Spinner from '../../common/partials/spinner.jsx'
+import Timeout from '../../common/partials/timeout.jsx'
+import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import moment from 'moment'
 import actions from '../dataset.actions'
 import datasetStore from '../dataset.store'
+import bids from '../../utils/bids'
 import { Link, withRouter } from 'react-router-dom'
+import { refluxConnect } from '../../utils/reflux'
 
 class Snapshot extends Reflux.Component {
   constructor(props) {
     super(props)
+    refluxConnect(this, datasetStore, 'datasets')
+
+    let datasetPath = this.props.location.pathname.split('/snapshot')[0]
+
+    this.state = {
+      changes: [],
+      currentChange: '',
+      currentVersion: {
+        major: '',
+        minor: '',
+        point: '',
+      },
+      latestVersion: '',
+      datasetPath: datasetPath,
+    }
+    this._handleChange = this.handleChange.bind(this)
+    this._handleVersion = this.handleVersion.bind(this)
+    this._addChange = this.submitChange.bind(this)
+    this._removeChange = this.removeChange.bind(this)
+    this._submit = this.submit.bind(this)
+    this._onHide = this.onHide.bind(this)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let reload = false
+    let datasetId = nextProps.match.params.datasetId
+    let snapshotId = nextProps.match.params.snapshotId
+    let snapshots = this.state.datasets.snapshots
+    let dataset = this.state.datasets.dataset
+    if (snapshotId) {
+      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
+      if (snapshotUrl !== this.state.datasets.loadedUrl) {
+        reload = true
+      }
+    } else {
+      const datasetUrl = bids.encodeId(datasetId)
+      if (datasetUrl !== this.state.datasets.loadedUrl) {
+        reload = true
+      }
+    }
+
+    if (reload) {
+      this._loadData(
+        nextProps.match.params.datasetId,
+        nextProps.match.params.snapshotId,
+      )
+    }
+
+    snapshots.map(snapshot => {
+      if (snapshot._id == dataset._id) {
+        if (snapshot.original) {
+          this.setState({ selectedSnapshot: snapshot._id })
+        } else if (snapshots.length > 1) {
+          this.setState({ selectedSnapshot: snapshots[1]._id })
+        }
+        return
+      }
+    })
+  }
+
+  componentDidMount() {
     let snapshotVersions =
-      datasetStore.data.snapshots && datasetStore.data.snapshots.length
-        ? datasetStore.data.snapshots
+      this.state.datasets &&
+      this.state.datasets.snapshots &&
+      this.state.datasets.snapshots.length
+        ? this.state.datasets.snapshots
             .filter(snap => {
               return typeof snap.snapshot_version !== 'undefined'
             })
@@ -23,26 +91,40 @@ class Snapshot extends Reflux.Component {
       ? Math.max.apply(null, snapshotVersions) + 1
       : 1
 
-    let datasetPath = this.props.location.pathname.split('/snapshot')[0]
-
-    this.state = {
-      show: this.props.show,
-      changes: [],
-      currentChange: '',
+    this.setState({
       currentVersion: {
         major: latestVersion,
         minor: '0',
         point: '0',
       },
-      datasetPath: datasetPath,
-      newSnapshotVersion: latestVersion,
+      latestVersion: latestVersion,
+    })
+    const datasetId = this.props.match.params.datasetId
+    const snapshotId = this.props.match.params.snapshotId
+    this._loadData(datasetId, snapshotId)
+  }
+
+  _loadData(datasetId, snapshotId) {
+    const query = new URLSearchParams(this.props.location.search)
+    if (snapshotId) {
+      const app = query.get('app')
+      const version = query.get('version')
+      const job = query.get('job')
+      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
+      actions.trackView(snapshotUrl)
+      actions.loadDataset(snapshotUrl, {
+        snapshot: true,
+        app: app,
+        version: version,
+        job: job,
+        datasetId: bids.encodeId(datasetId),
+      })
+    } else if (
+      (datasetId && !this.state.datasets.dataset) ||
+      (datasetId && datasetId !== this.state.datasets.dataset._id)
+    ) {
+      actions.loadDataset(bids.encodeId(datasetId))
     }
-    this._handleChange = this.handleChange.bind(this)
-    this._handleVersion = this.handleVersion.bind(this)
-    this._addChange = this.submitChange.bind(this)
-    this._removeChange = this.removeChange.bind(this)
-    this._submit = this.submit.bind(this)
-    this._onHide = this.onHide.bind(this)
   }
 
   handleChange(e) {
@@ -241,10 +323,18 @@ class Snapshot extends Reflux.Component {
     return newChangelog
   }
 
+  constructReturnUrl(params) {
+    if (params.snapshotId) {
+      return '/datasets/' + params.datasetId + '/versions/' + params.snapshotId
+    } else {
+      return '/datasets/' + params.datasetId
+    }
+  }
+
   submit() {
     let changes = this.joinChangelogs(
       this.state.changes,
-      datasetStore.data.dataset.CHANGES,
+      this.state.datasets.dataset.CHANGES,
     )
 
     actions.updateCHANGES(changes, (err, res) => {
@@ -272,7 +362,6 @@ class Snapshot extends Reflux.Component {
       error: false,
       message: null,
     })
-    this.props.onHide()
   }
 
   _submitButton() {
@@ -289,7 +378,7 @@ class Snapshot extends Reflux.Component {
       } else {
         return (
           <button
-            className="btn-modal-submit btn-snapshot-submit"
+            className="btn-modal-submit btn-dataset-submit"
             onClick={this.submit.bind(this)}
             title={buttonTitle}
             disabled={disabled}>
@@ -307,34 +396,55 @@ class Snapshot extends Reflux.Component {
       this.props.location.state && this.props.location.state.fromModal
         ? this.props.location.state.fromModal
         : null
-    let returnLink = fromModal
-      ? this.state.datasetPath + '?modal=' + fromModal
-      : this.state.datasetPath
+    let returnUrl = fromModal
+      ? this.constructReturnUrl(this.props.match.params) + '/' + fromModal
+      : this.constructReturnUrl(this.props.match.params)
     return (
-      <Link to={returnLink}>
+      <Link to={returnUrl}>
         <button className={btnClass}>{buttonText}</button>
       </Link>
     )
   }
 
   render() {
-    return (
-      <div className="snapshot-form">
-        <div className="col-xs-12 snapshot-form-header">
+    let datasets = this.state.datasets
+    let loading = datasets && datasets.loading
+    let loadingText =
+      datasets && typeof datasets.loading == 'string'
+        ? datasets.loading
+        : 'loading'
+    let content = (
+      <div className="dataset-form">
+        <div className="col-xs-12 dataset-form-header">
           <div className="form-group">
             <label>Create Snapshot</label>
           </div>
         </div>
-        <div className="snapshot-form-body col-xs-12">
-          <div className="snapshot-form-content col-xs-12">
+        <div className="dataset-form-body col-xs-12">
+          <div className="dataset-form-content col-xs-12">
             {this._formContent()}
           </div>
-          <div className="snapshot-form-controls col-xs-12">
+          <div className="dataset-form-controls col-xs-12">
             {this._returnButton()}
             {this._submitButton()}
           </div>
         </div>
       </div>
+    )
+    return (
+      <ErrorBoundary
+        message="The dataset has failed to load in time. Please check your network connection."
+        className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
+        <div className="fade-in inner-route dataset-route light">
+          {loading ? (
+            <Timeout timeout={20000}>
+              <Spinner active={true} text={loadingText} />
+            </Timeout>
+          ) : (
+            content
+          )}
+        </div>
+      </ErrorBoundary>
     )
   }
 }

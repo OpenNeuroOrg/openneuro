@@ -1,29 +1,55 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import moment from 'moment'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
-import ToolModals from './modals.jsx'
+import datasetStore from '../dataset.store.js'
+import { refluxConnect } from '../../utils/reflux'
 
-class Tools extends React.Component {
+class Tools extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, datasetStore, 'datasets')
+  }
+
   // life cycle events --------------------------------------------------
 
   componentDidMount() {
-    let dataset = this.props.dataset
+    let dataset = this.state.datasets.dataset
+
     if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
       actions.loadUsers()
     }
   }
 
-  render() {
-    let dataset = this.props.dataset,
-      snapshots = this.props.snapshots
+  constructReturnUrl() {
+    if (this.state.datasets.dataset) {
+      if (!this.state.datasets.dataset.original) {
+        let datasetId = this.state.datasets.dataset.linkID
+        return '/datasets/' + datasetId
+      } else {
+        let datasetId = this.state.datasets.dataset.linkOriginal
+        let version = this.state.datasets.dataset.linkID
+        return '/datasets/' + datasetId + '/versions/' + version
+      }
+    }
+  }
 
-    let datasetHasJobs = !!this.props.dataset.jobs.length
+  render() {
+    let datasets = this.state.datasets
+    let dataset = datasets ? datasets.dataset : null,
+      snapshots = datasets ? datasets.snapshots : null
+
+    if (!dataset) {
+      return null
+    }
+
+    let datasetHasJobs = !!dataset.jobs.length
 
     // permission check shorthands
     let isAdmin = dataset.access === 'admin',
@@ -58,7 +84,7 @@ class Tools extends React.Component {
         modalLink: 'subscribe',
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -71,10 +97,11 @@ class Tools extends React.Component {
         action: actions.toggleModal.bind(null, 'publish'),
         display: isAdmin && !isPublic && !isIncomplete,
         warn: false,
-        modalLink: 'publish',
+        modalLink:
+          this.constructReturnUrl(this.props.match.params) + '/publish',
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -89,7 +116,7 @@ class Tools extends React.Component {
         warn: true,
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -105,10 +132,10 @@ class Tools extends React.Component {
           this.props.history,
         ),
         display: displayDelete,
-        warn: isSnapshot,
+        warn: true,
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -124,7 +151,7 @@ class Tools extends React.Component {
         modalLink: 'share',
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -136,7 +163,7 @@ class Tools extends React.Component {
         icon: 'fa-camera-retro icon-plus',
         // action: actions.toggleModal.bind(null, 'snapshot'),
         display: isAdmin && !isSnapshot && !isIncomplete,
-        warn: true,
+        confirm: false,
         link: this.props.location.pathname + '?createsnapshot=true',
         validations: [
           {
@@ -156,7 +183,7 @@ class Tools extends React.Component {
             type: 'Error',
           },
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -172,7 +199,7 @@ class Tools extends React.Component {
         modalLink: 'jobs',
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -187,7 +214,7 @@ class Tools extends React.Component {
         warn: true,
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'You are about to follow a dataset',
             timeout: 5000,
             type: 'Error',
@@ -203,13 +230,18 @@ class Tools extends React.Component {
       },
     ]
 
-    return (
-      <div className="tools clearfix">
-        {this._snapshotLabel(dataset)}
-        {this._tools(tools)}
-        <ToolModals />
-      </div>
-    )
+    if (dataset && !datasets.loading) {
+      return (
+        <div className="col-xs-12 dataset-tools-wrap">
+          <div className="tools clearfix">
+            {this._snapshotLabel(dataset)}
+            {this._tools(tools)}
+          </div>
+        </div>
+      )
+    } else {
+      return null
+    }
   }
 
   // template methods ---------------------------------------------------
@@ -271,12 +303,8 @@ class Tools extends React.Component {
 }
 
 Tools.propTypes = {
-  dataset: PropTypes.object.isRequired,
-  snapshots: PropTypes.array.isRequired,
-  selectedSnapshot: PropTypes.string.isRequired,
   history: PropTypes.object,
   location: PropTypes.object,
-  uploading: PropTypes.bool,
 }
 
 export default withRouter(Tools)
