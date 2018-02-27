@@ -87,6 +87,7 @@ let datasetStore = Reflux.createStore({
       loadingApps: false,
       loadingJobs: false,
       loadingTree: false,
+      loadedUrl: null,
       jobs: [],
       metadataIssues: {},
       modals: {
@@ -133,6 +134,17 @@ let datasetStore = Reflux.createStore({
     options = options ? options : {}
     options.isPublic = !userStore.data.token
 
+    // don't reload the current dataset
+    if (!forceReload && dataset && dataset._id === datasetId) {
+      this.update({ loading: false, loadingJobs: false })
+      return
+    }
+
+    // begin loading
+    // if (this.data.loading) {
+    //   return
+    // }
+
     // set active job if passed in query param
     if (options) {
       this.update({
@@ -144,20 +156,17 @@ let datasetStore = Reflux.createStore({
       })
     }
 
-    // update selection & current upload data
+    // update selection & current upload data, as well as loading state
     this.update({
       selectedSnapshot: datasetId,
       currentUploadId: uploadStore.data.projectId,
     })
-
-    // don't reload the current dataset
-    if (!forceReload && dataset && dataset._id === datasetId) {
-      this.update({ loading: false, loadingJobs: false })
-      return
-    }
-
-    // begin loading
-    this.update({ loading: true, loadingJobs: true, datasetTree: null })
+    this.update({
+      loading: true,
+      loadingJobs: true,
+      datasetTree: null,
+      loadedUrl: datasetId,
+    })
     bids.getDataset(
       datasetId,
       res => {
