@@ -91,17 +91,17 @@
             }
         }
 
-        .snapshot-form {
-            .snapshot-form-header {
+        .dataset-form {
+            .dataset-form-header {
                 label {
                     font-size: 18px;
                 }
             }
-            .snapshot-form-controls {
+            .dataset-form-controls {
                 margin-top: 20px;
             }
 
-            .changelog-length-warning, .btn-snapshot-submit {
+            .changelog-length-warning, .btn-dataset-submit {
                 float: right;
                 margin-right: 20px;
             }
