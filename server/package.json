@@ -72,7 +72,8 @@
       "!**/node_modules/**",
       "!**/vendor/**"
     ],
-    "globalSetup": "./jest-setup.js"
+    "globalSetup": "./jest-setup.js",
+    "globalTeardown": "./jest-teardown.js"
   },
   "lint-staged": {
     "linters": {
