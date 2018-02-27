@@ -9,7 +9,7 @@ let worker = null
 
 /* Start a standalone worker */
 const start = () => {
-  mongo.connect()
+  mongo.connect(config.mongo.url)
   redis_connect(config.redis).then(redis => {
     const workerConfig = {
       connection: { redis: redis },

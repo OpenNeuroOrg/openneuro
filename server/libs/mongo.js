@@ -3,28 +3,27 @@
 // dependencies --------------------------------------------------
 
 import { MongoClient } from 'mongodb'
-import config from '../config'
 import async from 'async'
 
 export default {
   /**
-     * DB
-     *
-     * A storage location for a the database instance.
-     * Used to access the native mongo api.
-     */
+   * DB
+   *
+   * A storage location for a the database instance.
+   * Used to access the native mongo api.
+   */
   dbs: {
     crn: null,
     scitran: null,
   },
 
   /**
-     * Collections
-     *
-     * A list of all mongo collections and a simplified
-     * interface for accessing them. Collections start
-     * out null an are initialized after mongo connects.
-     */
+   * Collections
+   *
+   * A list of all mongo collections and a simplified
+   * interface for accessing them. Collections start
+   * out null an are initialized after mongo connects.
+   */
   collections: {
     crn: {
       blacklist: null,
@@ -54,47 +53,60 @@ export default {
   },
 
   /**
-     * Connect
-     *
-     * Makes a connection to mongodbs and creates an accessible
-     * reference to the dbs and collections
-     * takes optional callback (using callback to kick of server side job polling)
-     */
-  connect(callback) {
-    async.each(
-      Object.keys(this.dbs),
-      (dbName, cb) => {
-        MongoClient.connect(config.mongo.url + dbName, (err, db) => {
-          if (err) {
-            console.log(err)
-            process.exit()
-          } else {
-            this.dbs[dbName] = db
-            for (let collectionName in this.collections[dbName]) {
-              if (this.collections[dbName][collectionName] === null) {
-                this.collections[dbName][collectionName] = this.dbs[
-                  dbName
-                ].collection(collectionName)
-                if (
-                  this.indexes[dbName] &&
-                  this.indexes[dbName][collectionName]
-                ) {
-                  this.collections[dbName][collectionName].createIndex(
-                    this.indexes[dbName][collectionName],
-                  )
+   * Connect
+   *
+   * Makes a connection to mongodbs and creates an accessible
+   * reference to the dbs and collections
+   * takes optional callback (using callback to kick of server side job polling)
+   */
+  connect(url, callback) {
+    return new Promise((resolve, reject) => {
+      async.each(
+        Object.keys(this.dbs),
+        (dbName, cb) => {
+          MongoClient.connect(url + dbName, (err, db) => {
+            if (err) {
+              console.log(err)
+              reject(err)
+              process.exit()
+            } else {
+              this.dbs[dbName] = db
+              for (let collectionName in this.collections[dbName]) {
+                if (this.collections[dbName][collectionName] === null) {
+                  this.collections[dbName][collectionName] = this.dbs[
+                    dbName
+                  ].collection(collectionName)
+                  if (
+                    this.indexes[dbName] &&
+                    this.indexes[dbName][collectionName]
+                  ) {
+                    this.collections[dbName][collectionName].createIndex(
+                      this.indexes[dbName][collectionName],
+                    )
+                  }
                 }
               }
+              console.log(url + dbName, ' - db connected')
             }
-            console.log(dbName, ' - db connected')
+            cb()
+          })
+        },
+        () => {
+          if (callback && typeof callback === 'function') {
+            callback()
           }
-          cb()
-        })
-      },
-      () => {
-        if (callback && typeof callback === 'function') {
-          callback()
-        }
-      },
-    )
+          resolve(this.dbs)
+        },
+      )
+    })
+  },
+
+  /**
+   * Shut down all active db connections
+   */
+  async shutdown() {
+    for (const dbName of Object.keys(this.dbs)) {
+      await this.dbs[dbName].close()
+    }
   },
 }

@@ -9,25 +9,24 @@ let c = mongo.collections
 /**
  * Comments
  *
- * Handlers for comment actions. 
+ * Handlers for comment actions.
  */
 
 export default {
   // write
   /**
-  * Create Comment
-  *
-  * Creates an entry in the comments database, 
-  * ** maybe returns the newly created comment id
-  */
+   * Create Comment
+   *
+   * Creates an entry in the comments database,
+   * ** maybe returns the newly created comment id
+   */
   create(req, res, next) {
     let comment = req.body
 
     c.crn.comments.insertOne(comment, (err, response) => {
       if (err) {
         return next(err)
-      }
-      else {
+      } else {
         if (response.ops && response.ops.length) {
           comment = response.ops[0]
         }
@@ -38,18 +37,18 @@ export default {
   },
 
   /**
-  * Update Comment
-  *
-  * Updates an entry in the comments database, 
-  */
+   * Update Comment
+   *
+   * Updates an entry in the comments database,
+   */
   update(req, res, next) {
     let comment = req.body
     let commentId = req.params.commentId
 
     c.crn.comments.updateOne(
       { _id: ObjectID(commentId) },
-      { $set: { text: comment.text, edited: true} },
-      (err) => {
+      { $set: { text: comment.text, edited: true } },
+      err => {
         if (err) {
           return next(err)
         }
@@ -60,29 +59,32 @@ export default {
 
   /**
    * Delete Comment
-   * 
+   *
    * Removes an entry in the comments database, as well as any
    * replies to a comment
    */
   delete(req, res, next) {
     const commentId = req.params.commentId
     // delete the comment in question
-    c.crn.comments.updateOne({ _id: ObjectID(commentId) },
-    { $set: { deleted: true } }, err => {
-      if (err) {
-        return next(err)
-      }
-      return res.send()
-    })
+    c.crn.comments.updateOne(
+      { _id: ObjectID(commentId) },
+      { $set: { deleted: true } },
+      err => {
+        if (err) {
+          return next(err)
+        }
+        return res.send()
+      },
+    )
   },
 
   // read ------------------------------------------
 
   /**
-  * Get Comments
-  *
-  * Returns a list of comments that are associated with a dataset
-  */
+   * Get Comments
+   *
+   * Returns a list of comments that are associated with a dataset
+   */
   getComments(req, res, next) {
     let datasetId = req.params.datasetId
 
