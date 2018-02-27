@@ -7,8 +7,8 @@
   "scripts": {
     "lint": "eslint libs/ handlers/ tests/",
     "start": "node index.js",
-    "test": "jest --maxWorkers=4",
-    "coverage": "jest --runInBand --coverage",
+    "test": "jest",
+    "coverage": "jest --coverage",
     "codecov": "codecov -p ../ -F server",
     "precommit": "lint-staged"
   },
@@ -71,9 +71,7 @@
       "!**/*.spec.js",
       "!**/node_modules/**",
       "!**/vendor/**"
-    ],
-    "globalSetup": "./jest-setup.js",
-    "globalTeardown": "./jest-teardown.js"
+    ]
   },
   "lint-staged": {
     "linters": {
