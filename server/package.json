@@ -7,8 +7,8 @@
   "scripts": {
     "lint": "eslint libs/ handlers/ tests/",
     "start": "node index.js",
-    "test": "jest --runInBand",
-    "coverage": "jest --coverage",
+    "test": "jest --maxWorkers=4",
+    "coverage": "jest --maxWorkers=4 --coverage",
     "codecov": "codecov -p ../ -F server",
     "precommit": "lint-staged"
   },
