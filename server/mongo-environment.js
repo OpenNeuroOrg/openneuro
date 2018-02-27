@@ -17,6 +17,8 @@ class MongoEnvironment extends NodeEnvironment {
   async teardown() {
     console.log('Teardown MongoDB Test Environment')
 
+    global.__MONGOD__.stop()
+
     await super.teardown()
   }
 

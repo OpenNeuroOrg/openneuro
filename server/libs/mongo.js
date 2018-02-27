@@ -4,7 +4,6 @@
 
 import { MongoClient } from 'mongodb'
 import async from 'async'
-import util from 'util'
 
 export default {
   /**
@@ -106,8 +105,8 @@ export default {
    * Shut down all active db connections
    */
   async shutdown() {
-    for (const db in this.dbs) {
-      await util.promisify(db.close)()
+    for (const dbName of Object.keys(this.dbs)) {
+      await this.dbs[dbName].close()
     }
   },
 }
