@@ -10,48 +10,18 @@ import config from './config'
 import routes from './routes'
 import morgan from 'morgan'
 import mongo from './libs/mongo'
-import { connect as redis_connect } from './libs/redis'
-import { connect as resque_connect } from './libs/queue'
-import notifications from './libs/notifications'
-import git from 'git-rev-sync'
-import aws from './libs/aws'
-import schema from './graphql/schema'
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import bodyParser from 'body-parser'
 // import events lib to instantiate CRN Emitter
 import events from './libs/events'
 
-export default async test => {
-  // configuration ---------------------------------------------------
-  const ravenConfig = {
-    release: git.long(),
-    tags: { branch: git.branch() },
-    environment: config.sentry.ENVIRONMENT,
-    autoBreadcrumbs: true,
-  }
-  Raven.config(config.sentry.DSN, ravenConfig).install()
-
-  mongo.connect(config.mongo.url)
-
-  const redisConnect = async () => {
-    try {
-      const redis = await redis_connect(config.redis)
-      await resque_connect(redis)
-      console.log('Resque connected')
-      // start background tasks
-      notifications.initCron()
-      aws.batch.initCron()
-      aws.cloudwatch.initEvents().then(aws.batch.initQueue)
-    } catch (err) {
-      console.error(err)
-      process.exit(1)
-    }
-  }
-
+// test flag disables Raven for tests
+export default test => {
   const app = express()
 
   // Raven must be first to work
-  app.use(Raven.requestHandler())
+  test || app.use(Raven.requestHandler())
+
+  mongo.connect(config.mongo.url)
 
   app.use((req, res, next) => {
     res.set(config.headers)
@@ -65,9 +35,9 @@ export default async test => {
 
   app.use(config.apiPrefix, routes)
 
-  // error handling --------------------------------------------------
+  // error handling --------------------------------------------------\
   // Raven reporting passes to the next step
-  app.use(Raven.errorHandler())
+  test || app.use(Raven.errorHandler())
 
   app.use(function(err, req, res, next) {
     res.header('Content-Type', 'application/json')
@@ -89,11 +59,5 @@ export default async test => {
     res.status(http_code).send(send)
   })
 
-  // start server ----------------------------------------------------
-
-  redisConnect().then(() => {
-    app.listen(config.port, () => {
-      console.log('Server is listening on port ' + config.port)
-    })
-  })
+  return app
 }
