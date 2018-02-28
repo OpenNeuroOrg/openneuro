@@ -69,7 +69,8 @@
     "jest": "^22.0.0",
     "lint-staged": "^6.0.1",
     "mongodb-memory-server": "^1.7.0",
-    "prettier": "^1.7.0"
+    "prettier": "^1.7.0",
+    "supertest": "^3.0.0"
   },
   "jest": {
     "collectCoverageFrom": [
