@@ -3,19 +3,27 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import bids from '../../utils/bids'
 import Input from '../../common/forms/input.jsx'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import { Modal } from '../../utils/modal.jsx'
+import Spinner from '../../common/partials/spinner.jsx'
+import Timeout from '../../common/partials/timeout.jsx'
+import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import userStore from '../../user/user.store'
+import datasetStore from '../dataset.store'
+import actions from '../dataset.actions'
+import { refluxConnect } from '../../utils/reflux'
 
-class Share extends React.Component {
+class Share extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
   constructor() {
     super()
+    refluxConnect(this, datasetStore, 'datasets')
+    actions.loadUsers()
     this.state = {
       edit: true,
       error: null,
@@ -27,81 +35,111 @@ class Share extends React.Component {
   }
 
   componentWillReceiveProps() {
+    let datasets = this.state.datasets
+    let dataset = datasets ? datasets.dataset : null
+
+    let permissions = datasets && dataset ? dataset.permissions : null
+
+    let users = datasets && datasets.users ? datasets.users : null
+
     this.setState({
-      users: this.props.users,
-      permissions: this.props.dataset.permissions,
+      users: users,
+      permissions: permissions,
     })
   }
 
   componentDidMount() {
+    let datasets = this.state.datasets
+    let dataset = datasets ? datasets.dataset : null
+
+    let permissions = datasets && dataset ? dataset.permissions : null
+
+    let users = datasets && datasets.users ? datasets.users : null
+
     this.setState({
-      users: this.props.users,
-      permissions: this.props.dataset.permissions,
+      users: users,
+      permissions: permissions,
     })
   }
 
-  _closeButton() {
-    return (
-      <Link to={this.props.location.pathname}>
-        <button type="button" className="close">
-          <span aria-hidden="true">×</span>
-          <span className="sr-only">Close</span>
-        </button>
-      </Link>
-    )
-  }
-
   render() {
+    let datasets = this.state.datasets
+    let loading = datasets && datasets.loading
+    let loadingText =
+      datasets && typeof datasets.loading == 'string'
+        ? datasets.loading
+        : 'loading'
     let instruction =
       "Enter a user's email address and select access level to share"
+    let returnLink = null
+    if (this.state.datasets.datasetUrl) {
+      returnLink = (
+        <Link to={this.state.datasets.datasetUrl}>
+          <button className="btn-reset">back</button>
+        </Link>
+      )
+    }
 
-    return (
-      <Modal
-        show={this.props.show}
-        onHide={this.props.onHide}
-        className="share-modal">
-        <Modal.Header>
-          {this._closeButton()}
-          <Modal.Title>Share Dataset</Modal.Title>
-        </Modal.Header>
-        <hr className="modal-inner" />
-        <Modal.Body>
-          <div className="dataset">
-            <h5>Dataset shared with:</h5>
-            <div className="cte-array-items">
-              {this._permissions(this.state.permissions)}
+    let content = (
+      <div className="dataset-form">
+        <div className="col-xs-12 dataset-form-header">
+          <div className="form-group">
+            <label>Share Dataset</label>
+          </div>
+          <hr className="modal-inner" />
+          <div className="dataset-form-body col-xs-12">
+            <div className="dataset-form-content col-xs-12">
+              <div className="dataset share-modal">
+                <h5>Dataset shared with:</h5>
+                <div className="cte-array-items">
+                  {this._permissions(this.state.permissions)}
+                </div>
+                <h5 className="add-members">{instruction}</h5>
+                <div>
+                  <div className="text-danger">{this.state.error}</div>
+                  <Input
+                    value={this.state.input}
+                    onChange={this._inputChange.bind(this)}
+                  />
+                  <select
+                    className="select-box-style"
+                    onChange={this._selectChange.bind(this)}
+                    value={this.state.select}>
+                    <option value="" disabled>
+                      access level
+                    </option>
+                    <option value="ro">Can view</option>
+                    <option value="rw">Can edit</option>
+                    <option value="admin">Administrator</option>
+                  </select>
+                  <span className="caret-down" />
+                </div>
+              </div>
             </div>
-            <h5 className="add-members">{instruction}</h5>
-            <div>
-              <div className="text-danger">{this.state.error}</div>
-              <Input
-                value={this.state.input}
-                onChange={this._inputChange.bind(this)}
-              />
-              <select
-                className="select-box-style"
-                onChange={this._selectChange.bind(this)}
-                value={this.state.select}>
-                <option value="" disabled>
-                  access level
-                </option>
-                <option value="ro">Can view</option>
-                <option value="rw">Can edit</option>
-                <option value="admin">Administrator</option>
-              </select>
-              <span className="caret-down" />
+            <div className="dataset-form-controls col-xs-12">
               <button
                 className="btn-modal-submit"
                 onClick={this._addUser.bind(this)}>
                 share
               </button>
-              <Link to={this.props.location.pathname}>
-                <button className="btn-reset">close</button>
-              </Link>
+              {returnLink}
             </div>
           </div>
-        </Modal.Body>
-      </Modal>
+        </div>
+      </div>
+    )
+    return (
+      <ErrorBoundary
+        message="The dataset has failed to load in time. Please check your network connection."
+        className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
+        {loading ? (
+          <Timeout timeout={20000}>
+            <Spinner active={true} text={loadingText} />
+          </Timeout>
+        ) : (
+          content
+        )}
+      </ErrorBoundary>
     )
   }
 
@@ -113,23 +151,26 @@ class Share extends React.Component {
       rw: 'Can edit',
       ro: 'Can view',
     }
-
-    return permissions.map(user => {
-      let remove =
-        userStore.data.profile && userStore.data.profile._id !== user._id ? (
-          <WarnButton
-            message="Remove"
-            action={this._removeUser.bind(this, user._id)}
-          />
-        ) : null
-      return (
-        <div key={user._id} className="cte-array-item">
-          <span className="share-name">{user._id}</span>{' '}
-          <span className="share-access">- {accessKey[user.access]}</span>
-          <div className="btn-wrap">{remove}</div>
-        </div>
-      )
-    })
+    if (permissions) {
+      return permissions.map(user => {
+        let remove =
+          userStore.data.profile && userStore.data.profile._id !== user._id ? (
+            <WarnButton
+              message="Remove"
+              action={this._removeUser.bind(this, user._id)}
+            />
+          ) : null
+        return (
+          <div key={user._id} className="cte-array-item">
+            <span className="share-name">{user._id}</span>{' '}
+            <span className="share-access">- {accessKey[user.access]}</span>
+            <div className="btn-wrap">{remove}</div>
+          </div>
+        )
+      })
+    } else {
+      return null
+    }
   }
 
   // custom methods -----------------------------------------------------
@@ -191,7 +232,7 @@ class Share extends React.Component {
       _id: this.state.input,
       access: this.state.select,
     }
-    bids.addPermission(this.props.dataset._id, role).then(() => {
+    bids.addPermission(this.state.datasets.dataset._id, role).then(() => {
       let permissions = this.state.permissions
       permissions.push(role)
       this.setState({
@@ -204,7 +245,7 @@ class Share extends React.Component {
   }
 
   _removeUser(userId) {
-    bids.removePermission(this.props.dataset._id, userId).then(() => {
+    bids.removePermission(this.state.datasets.dataset._id, userId).then(() => {
       let index
       let permissions = this.state.permissions
       for (let i = 0; i < permissions.length; i++) {
@@ -224,6 +265,7 @@ Share.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
   location: PropTypes.object,
+  match: PropTypes.object,
 }
 
 export default withRouter(Share)
