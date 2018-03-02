@@ -4,13 +4,13 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from '../partials/tooltip.jsx'
 import notifications from '../../notification/notification.actions'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 class WarnButton extends React.Component {
   constructor() {
     super()
     this.state = {
-      showAction: false,
+      displayOptions: false,
       link: null,
       loading: false,
     }
@@ -27,7 +27,7 @@ class WarnButton extends React.Component {
   }
 
   render() {
-    let showAction = this.state.showAction
+    let displayOptions = this.state.displayOptions
     let message = this.props.message
     let cancel = this.props.cancel
     let confirm = this.props.confirm
@@ -55,17 +55,6 @@ class WarnButton extends React.Component {
       )
     }
 
-    if (this.props.link) {
-      link = (
-        <Link
-          className="btn-warn-component success"
-          onClick={this.toggle.bind(this, this.props.action)}
-          to={this.props.link}>
-          {confirm}
-        </Link>
-      )
-    }
-
     let confirmBtn = (
       <button
         className={'btn-warn-component success'}
@@ -86,34 +75,22 @@ class WarnButton extends React.Component {
     )
 
     let hideAction
-    if (this.props.modalLink) {
-      let url = this.props.modalLink
-      hideAction = (
-        <Link to={url}>
-          <span className={disabled ? ' disabled' : ''}>
-            <button
-              className="btn-warn-component warning"
-              // onClick={this.toggle.bind(this, this.props.action)}
-              disabled={this.props.lock}>
-              <i className={'fa ' + this.props.icon} /> {message}
-            </button>
-          </span>
-        </Link>
-      )
-    } else {
-      hideAction = (
-        <span className={disabled ? ' disabled' : ''}>
-          <button
-            className="btn-warn-component warning"
-            onClick={this.toggle.bind(this, this.props.action)}
-            disabled={this.props.lock}>
-            <i className={'fa ' + this.props.icon} /> {message}
-          </button>
-        </span>
-      )
-    }
+    // if (this.props.modalLink) {
+    //   hideAction = this._modalLink(disabled)
+    // } else {
+    hideAction = (
+      <span className={disabled ? ' disabled' : ''}>
+        <button
+          className="btn-warn-component warning"
+          onClick={this.toggle.bind(this, this.props.action)}
+          disabled={this.props.lock}>
+          <i className={'fa ' + this.props.icon} /> {message}
+        </button>
+      </span>
+    )
+    // }
 
-    let button = showAction ? viewAction : hideAction
+    let button = displayOptions ? viewAction : hideAction
     let loading = (
       <span className="btn-warn-load" role="group">
         <span className="warning-loading">
@@ -137,7 +114,7 @@ class WarnButton extends React.Component {
 
   toggle(action) {
     // initial click actions
-    if (this.state.showAction == false) {
+    if (this.state.displayOptions == false) {
       // validate & warn
       if (this.props.validations) {
         for (let i = 0; i < this.props.validations.length; i++) {
@@ -157,7 +134,7 @@ class WarnButton extends React.Component {
       if (this.props.prepDownload) {
         this.setState({ loading: true })
         this.props.prepDownload(link => {
-          this.setState({ showAction: true, link: link, loading: false })
+          this.setState({ displayOptions: true, link: link, loading: false })
         })
         return
       }
@@ -171,7 +148,7 @@ class WarnButton extends React.Component {
         })
         return
       } else {
-        this.setState({ showAction: true })
+        this.setState({ displayOptions: true })
         return
       }
     }
@@ -183,11 +160,14 @@ class WarnButton extends React.Component {
           notifications.createAlert({ type: 'Error', message: e.error })
         }
         if (this._mounted) {
-          this.setState({ loading: false, showAction: !this.state.showAction })
+          this.setState({
+            loading: false,
+            displayOptions: !this.state.displayOptions,
+          })
         }
       })
     } else {
-      this.setState({ showAction: !this.state.showAction })
+      this.setState({ displayOptions: !this.state.displayOptions })
     }
   }
 }
