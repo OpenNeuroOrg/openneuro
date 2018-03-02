@@ -520,22 +520,10 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
         <span
           className="download-all"
         >
-          <WarnButton
-            cancel={
-              <i
-                className="fa fa-times"
-              />
-            }
-            confirm={
-              <i
-                className="fa fa-check"
-              />
-            }
+          <withRouter(WarnButton)
             icon="fa-download"
             message=" DOWNLOAD All LOGS"
             prepDownload={[Function]}
-            tooltip={null}
-            warn={true}
           />
         </span>
         <div
@@ -556,21 +544,10 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
                   className="job-log"
                   key="--participant_label 13"
                 >
-                  <WarnButton
+                  <withRouter(WarnButton)
                     action={[Function]}
-                    cancel={
-                      <i
-                        className="fa fa-times"
-                      />
-                    }
-                    confirm={
-                      <i
-                        className="fa fa-check"
-                      />
-                    }
                     icon="fa-eye"
                     message="--participant_label 13"
-                    tooltip={null}
                     warn={false}
                   />
                   <span
@@ -592,21 +569,10 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
                   className="job-log"
                   key="--participant_label 13"
                 >
-                  <WarnButton
+                  <withRouter(WarnButton)
                     action={[Function]}
-                    cancel={
-                      <i
-                        className="fa fa-times"
-                      />
-                    }
-                    confirm={
-                      <i
-                        className="fa fa-check"
-                      />
-                    }
                     icon="fa-eye"
                     message="--participant_label 13"
-                    tooltip={null}
                     warn={false}
                   />
                   <span
@@ -633,22 +599,10 @@ exports[`dataset/run/DownloadAll should render something 1`] = `
 <span
   className="download-all"
 >
-  <WarnButton
-    cancel={
-      <i
-        className="fa fa-times"
-      />
-    }
-    confirm={
-      <i
-        className="fa fa-check"
-      />
-    }
+  <withRouter(WarnButton)
     icon="fa-download"
     message=" DOWNLOAD All"
     prepDownload={[Function]}
-    tooltip={null}
-    warn={true}
   />
   <DownloadS3
     analysisId="dcedf0c3-4438-466d-9f85-61c75275b355"
