@@ -3,26 +3,29 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import userStore from '../../user/user.store'
 import userActions from '../../user/user.actions'
 import datasetActions from '../../dataset/dataset.actions'
-import { Modal } from '../../utils/modal.jsx'
+import datasetStore from '../dataset.store.js'
 import { Link, Redirect, withRouter } from 'react-router-dom'
+import { refluxConnect } from '../../utils/reflux'
 
-class Subscribe extends React.Component {
+class Subscribe extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
   constructor(props) {
     super(props)
+    refluxConnect(this, datasetStore, 'datasets')
     this.state = {
-      subscribed: this.props.subscribed,
       hasToken: userStore.hasToken(),
       loading: false,
     }
-    this._createSubscription = this.props.createSubscription.bind(this, () => {
-      this.props.onHide()
-    })
+    this._createSubscription = datasetStore.createSubscription.bind(
+      this,
+      () => {},
+    )
   }
 
   componentWillReceiveProps() {
@@ -39,32 +42,31 @@ class Subscribe extends React.Component {
 
   render() {
     if (
-      this.props.show &&
       this.state.hasToken &&
-      this.props.subscribed &&
-      this.props.history.location.search !== ''
+      this.state.datasets &&
+      this.state.datasets.dataset &&
+      this.state.datasets.dataset.subscribed &&
+      this.state.datasets.datasetUrl
     ) {
-      return <Redirect to={this.props.location.pathname} />
+      return <Redirect to={this.state.datasets.datasetUrl} />
     }
     return (
-      <Modal
-        show={this.props.show}
-        onHide={this.props.onHide}
-        className="download-modal">
-        <Modal.Header>
-          <Modal.Title>Follow Dataset</Modal.Title>
-        </Modal.Header>
-        <hr className="modal-inner" />
-        <Modal.Body>
-          <div className="dataset">
-            {this._message()}
-            <div>
-              <span className="caret-down" />
-              {this._controls()}
-            </div>
+      <div className="dataset-form">
+        <div className="col-xs-12 dataset-form-header">
+          <div className="form-group">
+            <label>Follow Dataset</label>
           </div>
-        </Modal.Body>
-      </Modal>
+          <hr className="modal-inner" />
+        </div>
+        <div className="dataset-form-body col-xs-12">
+          <div className="dataset-form-content col-xs-12">
+            <div className="dataset share-modal">{this._message()}</div>
+          </div>
+          <div className="dataset-form-controls col-xs-12">
+            {this._controls()}
+          </div>
+        </div>
+      </div>
     )
   }
 
@@ -91,9 +93,13 @@ class Subscribe extends React.Component {
   }
 
   _followButton() {
-    if (this.state.hasToken && !this.props.subscribed) {
+    if (
+      this.state.hasToken &&
+      !this.state.datasets.subscribed &&
+      this.state.datasets.datasetUrl
+    ) {
       return (
-        <Link to={this.props.location.pathname}>
+        <Link to={this.state.datasets.datasetUrl}>
           <button
             className="btn-modal-submit"
             onClick={this._createSubscription.bind(this)}>
@@ -105,7 +111,7 @@ class Subscribe extends React.Component {
   }
 
   _followText() {
-    if (!this.props.subscribed) {
+    if (!this.state.datasets.subscribed) {
       return (
         <h5>
           If you would like to stay up to date about dataset updates and
@@ -116,7 +122,7 @@ class Subscribe extends React.Component {
   }
 
   _continueButton() {
-    if (this.state.hasToken && this.props.subscribed) {
+    if (this.state.hasToken && this.state.datasets.subscribed) {
       return (
         <Link to={this.props.location.pathname}>
           <button className="btn-modal-submit" onClick={this.props.onHide}>
@@ -128,7 +134,7 @@ class Subscribe extends React.Component {
   }
 
   _continueText() {
-    if (this.state.hasToken && this.props.subscribed) {
+    if (this.state.hasToken && this.state.datasets.subscribed) {
       return (
         <h5>
           You are already following this dataset. You will continue to receive
@@ -151,9 +157,9 @@ class Subscribe extends React.Component {
   }
 
   _returnButton() {
-    if (!this.props.subscribed) {
+    if (!this.state.datasets.subscribed && this.state.datasets.datasetUrl) {
       return (
-        <Link to={this.props.location.pathname}>
+        <Link to={this.state.datasets.datasetUrl}>
           <button className="btn-reset" onClick={this.props.onHide}>
             no, thanks
           </button>
