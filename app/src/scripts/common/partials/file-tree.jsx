@@ -6,7 +6,6 @@ import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
 import config from '../../../../config'
-import { withRouter } from 'react-router-dom'
 
 let uploadBlacklist = config.upload.blacklist
 
