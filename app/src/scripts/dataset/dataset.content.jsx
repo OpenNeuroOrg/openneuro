@@ -64,9 +64,6 @@ class DatasetContent extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
   componentDidMount() {
-    const datasetId = this.props.match.params.datasetId
-    const snapshotId = this.props.match.params.snapshotId
-    this._loadData(datasetId, snapshotId)
     const isDataset = pathname => {
       const slugs = pathname.split('/')
       if (
@@ -92,30 +89,6 @@ class DatasetContent extends Reflux.Component {
     })
   }
 
-  componentWillReceiveProps(nextProps) {
-    let reload = false
-    let datasetId = nextProps.match.params.datasetId
-    let snapshotId = nextProps.match.params.snapshotId
-    if (snapshotId) {
-      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
-      if (snapshotUrl !== this.state.datasets.loadedUrl) {
-        reload = true
-      }
-    } else {
-      const datasetUrl = bids.encodeId(datasetId)
-      if (datasetUrl !== this.state.datasets.loadedUrl) {
-        reload = true
-      }
-    }
-
-    if (reload) {
-      this._loadData(
-        nextProps.match.params.datasetId,
-        nextProps.match.params.snapshotId,
-      )
-    }
-  }
-
   componentWillUpdate() {
     // Prevent navigation away if adding a directory
     if (this.state.datasets.uploading) {
@@ -125,29 +98,6 @@ class DatasetContent extends Reflux.Component {
       }
     } else {
       window.onbeforeunload = () => {}
-    }
-  }
-
-  _loadData(datasetId, snapshotId) {
-    const query = new URLSearchParams(this.props.location.search)
-    if (snapshotId) {
-      const app = query.get('app')
-      const version = query.get('version')
-      const job = query.get('job')
-      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
-      actions.trackView(snapshotUrl)
-      actions.loadDataset(snapshotUrl, {
-        snapshot: true,
-        app: app,
-        version: version,
-        job: job,
-        datasetId: bids.encodeId(datasetId),
-      })
-    } else if (
-      (datasetId && !this.state.datasets.dataset) ||
-      (datasetId && datasetId !== this.state.datasets.dataset._id)
-    ) {
-      actions.loadDataset(bids.encodeId(datasetId))
     }
   }
 
@@ -253,15 +203,13 @@ class DatasetContent extends Reflux.Component {
       <ErrorBoundary
         message="The dataset has failed to load in time. Please check your network connection."
         className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
-        <div className="fade-in inner-route dataset-route light">
-          {this.state.datasets.loading ? (
-            <Timeout timeout={20000}>
-              <Spinner active={true} text={loadingText} />
-            </Timeout>
-          ) : (
-            content
-          )}
-        </div>
+        {this.state.datasets.loading ? (
+          <Timeout timeout={20000}>
+            <Spinner active={true} text={loadingText} />
+          </Timeout>
+        ) : (
+          content
+        )}
       </ErrorBoundary>
     )
   }
@@ -297,6 +245,7 @@ class DatasetContent extends Reflux.Component {
       <FileTree
         tree={[dataset]}
         editable={canEdit}
+        history={this.props.history}
         loading={this.state.datasets.loadingTree}
         dismissError={actions.dismissError}
         deleteFile={actions.deleteFile}
