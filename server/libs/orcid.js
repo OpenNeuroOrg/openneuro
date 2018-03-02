@@ -1,5 +1,6 @@
 import request from 'request'
 import xmldoc from 'xmldoc'
+import Raven from 'raven'
 import config from '../config'
 
 export default {
@@ -18,6 +19,13 @@ export default {
         headers: { Authorization: `Bearer ${accessToken}` },
       },
       (err, res) => {
+        if (err) {
+          callback(
+            'An unexpected ORCID login failure occurred, please try again later.',
+          )
+          Raven.captureMessage('Unexpected ORCID failure', { err })
+          return
+        }
         let doc = new xmldoc.XmlDocument(res.body)
         let firstname = doc.valueWithPath(
           'person:person.person:name.personal-details:given-names',
