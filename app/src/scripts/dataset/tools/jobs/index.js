@@ -3,23 +3,27 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import actions from '../../dataset.actions.js'
 import datasetStore from '../../dataset.store.js'
 import Spinner from '../../../common/partials/spinner.jsx'
-import { Modal } from '../../../utils/modal.jsx'
 import moment from 'moment'
 import Results from '../../../upload/upload.validation-results.jsx'
 import Description from './description.jsx'
 import Parameters from './parameters.jsx'
+import Timeout from '../../../common/partials/timeout.jsx'
+import ErrorBoundary from '../../../errors/errorBoundary.jsx'
 import batch from '../../../utils/batch'
+import { refluxConnect } from '../../../utils/reflux'
 
-class JobMenu extends React.Component {
+class JobMenu extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
   constructor() {
     super()
+    refluxConnect(this, datasetStore, 'datasets')
     this.state = {
       loading: false,
       parameters: {},
@@ -42,73 +46,83 @@ class JobMenu extends React.Component {
   }
 
   componentWillReceiveProps() {
-    // initialize subjects into state
-    if (this.state.subjects.length === 0 && this.props.dataset.summary) {
-      let subjects = []
-      for (let subject of this.props.dataset.summary.subjects) {
-        subjects.push({ label: 'sub-' + subject, value: subject })
-      }
-      subjects.reverse()
-      this.setState({ subjects })
-    }
+    let datasets = this.state.datasets
+    let dataset = datasets ? datasets.dataset : null
+    let summary = dataset ? dataset.summary : null
+    let snapshots = datasets ? datasets.snapshots : null
 
-    // pre-select snapshots
-    if (!this.state.selectedSnapshot) {
-      for (const snapshotIndex in this.props.snapshots) {
-        const snapshot = this.props.snapshots[snapshotIndex]
-        if (snapshot._id === this.props.dataset._id) {
-          if (snapshot.original) {
-            this._selectSnapshot({ target: { value: snapshot._id } })
-          } else if (this.props.snapshots.length > 1) {
-            this._selectSnapshot({
-              target: { value: this.props.snapshots[1]._id },
-            })
+    if (dataset) {
+      // initialize subjects into state
+      if (this.state.subjects.length === 0 && summary) {
+        let subjects = []
+        for (let subject of summary.subjects) {
+          subjects.push({ label: 'sub-' + subject, value: subject })
+        }
+        subjects.reverse()
+        this.setState({ subjects })
+      }
+
+      // pre-select snapshots
+      if (!this.state.selectedSnapshot) {
+        for (const snapshotIndex in snapshots) {
+          const snapshot = snapshots[snapshotIndex]
+          if (snapshot._id === dataset._id) {
+            if (snapshot.original) {
+              this._selectSnapshot({ target: { value: snapshot._id } })
+            } else if (snapshots.length > 1) {
+              this._selectSnapshot({
+                target: { value: snapshots[1]._id },
+              })
+            }
           }
         }
       }
     }
   }
 
-  _closeButton() {
-    return (
-      <Link to={this.props.location.pathname}>
-        <button type="button" className="close">
-          <span aria-hidden="true">×</span>
-          <span className="sr-only">Close</span>
-        </button>
-      </Link>
-    )
-  }
-
   render() {
-    let apps = this.props.apps
+    let datasets = this.state.datasets
+    let apps = datasets.apps
     let selectedAppKey = this.state.selectedAppKey
     let selectedVersionID = this.state.selectedVersionID
-    let loadingText = this.props.loadingApps
+    let loading = datasets && datasets.loading
+    let loadingText = datasets.loadingApps
       ? 'Loading pipelines'
       : 'Starting ' + selectedVersionID
+
+    let returnLink = null
+    if (this.state.datasets.datasetUrl) {
+      returnLink = (
+        <Link to={this.state.datasets.datasetUrl}>
+          <button className="btn-reset">Back</button>
+        </Link>
+      )
+    }
+
     let form = (
-      <div className="analysis-modal clearfix">
-        {this._snapshots()}
-        {this._apps()}
-        {selectedAppKey && selectedVersionID ? (
-          <div>
-            <Description
-              jobDefinition={apps[selectedAppKey][selectedVersionID]}
-            />
-            <Parameters
-              parameters={this.state.parameters}
-              parametersMetadata={this.state.parametersMetadata}
-              subjects={this.state.subjects}
-              onChange={this._updateParameter.bind(this)}
-              onRestoreDefaults={this._restoreDefaultParameters.bind(this)}
-            />
-            <span className="submit-warning">{this.state.submitWarning}</span>
-            {this._submit()}
-          </div>
-        ) : (
-          ''
-        )}
+      <div className=" analysis-modal dataset-form-body col-xs-12">
+        <div className="dataset-form-content col-xs-12">
+          {this._snapshots()}
+          {this._apps()}
+          {selectedAppKey && selectedVersionID ? (
+            <div>
+              <Description
+                jobDefinition={apps[selectedAppKey][selectedVersionID]}
+              />
+              <Parameters
+                parameters={this.state.parameters}
+                parametersMetadata={this.state.parametersMetadata}
+                subjects={this.state.subjects}
+                onChange={this._updateParameter.bind(this)}
+                onRestoreDefaults={this._restoreDefaultParameters.bind(this)}
+              />
+              <span className="submit-warning">{this.state.submitWarning}</span>
+            </div>
+          ) : (
+            ''
+          )}
+          {this._submit()}
+        </div>
       </div>
     )
 
@@ -118,16 +132,12 @@ class JobMenu extends React.Component {
           {this.state.error ? <h4 className="danger">Error</h4> : null}
           <h5>{this.state.message}</h5>
         </div>
-        <Link to={this.props.location.pathname}>
-          <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
-            OK
-          </button>
-        </Link>
+        {returnLink}
       </div>
     )
 
     let body
-    if (this.state.loading || this.props.loadingApps) {
+    if (this.state.loading || datasets.loadingApps) {
       body = <Spinner active={true} text={loadingText} />
     } else if (this.state.message) {
       body = message
@@ -135,17 +145,30 @@ class JobMenu extends React.Component {
       body = form
     }
 
+    let content = (
+      <div className="dataset-form">
+        <div className="col-xs-12 dataset-form-header">
+          <div className="form-group">
+            <label>Run Analysis</label>
+          </div>
+          <hr className="modal-inner" />
+          {body}
+        </div>
+      </div>
+    )
+
     return (
-      <Modal show={this.props.show} onHide={this._hide.bind(this)}>
-        <Modal.Header>
-          {this._closeButton()}
-          <Modal.Title>Run Analysis</Modal.Title>
-        </Modal.Header>
-        <hr className="modal-inner" />
-        <Modal.Body>
-          <div className="dataset">{body}</div>
-        </Modal.Body>
-      </Modal>
+      <ErrorBoundary
+        message="The dataset has failed to load in time. Please check your network connection."
+        className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
+        {loading ? (
+          <Timeout timeout={20000}>
+            <Spinner active={true} text={loadingText} />
+          </Timeout>
+        ) : (
+          content
+        )}
+      </ErrorBoundary>
     )
   }
 
@@ -158,7 +181,7 @@ class JobMenu extends React.Component {
    * analysis application.
    */
   _apps() {
-    const apps = this.props.apps
+    const apps = this.state.datasets ? this.state.datasets.apps : null
     const selectedApp = this.state.selectedAppKey
 
     let validatedApps = batch.filterAppDefinitions(apps).reduce((acc, app) => {
@@ -235,13 +258,13 @@ class JobMenu extends React.Component {
     )
 
     if (this.state.selectedSnapshot) {
+      const datasetName = this.state.datasets.dataset
+        ? this.state.datasets.dataset.name
+        : null
       return (
         <div>
           <hr />
-          <h5>
-            Choose an analysis pipeline to run on dataset{' '}
-            {this.props.dataset.name}
-          </h5>
+          <h5>Choose an analysis pipeline to run on dataset {datasetName}</h5>
           <div className="row">
             <div className="col-xs-12">
               <div className="col-xs-12 task-select">
@@ -294,9 +317,12 @@ class JobMenu extends React.Component {
    * to run analysis on.
    */
   _snapshots() {
+    let datasets = this.state.datasets
+    let dataset = datasets ? datasets.dataset : null
+    let snapshots = datasets ? datasets.snapshots : null
     let options = []
-    if (this.props.snapshots) {
-      options = this.props.snapshots.map(snapshot => {
+    if (snapshots) {
+      options = snapshots.map(snapshot => {
         if (!snapshot.isOriginal && !snapshot.orphaned) {
           return (
             <option key={snapshot._id} value={snapshot._id}>
@@ -312,17 +338,16 @@ class JobMenu extends React.Component {
     }
 
     let createSnapshot
-    if (this.props.dataset.access === 'admin') {
+    if (dataset && dataset.access === 'admin') {
       let dataset = datasetStore.data.dataset
       let snapshots = datasetStore.data.snapshots
       let modified = !(
         snapshots.length > 1 &&
         moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0
       )
-      if (modified) {
+      if (modified && datasets.datasetUrl) {
         let to = {
-          pathname: this.props.location.pathname,
-          search: '?createsnapshot=true',
+          pathname: this.state.datasets.datasetUrl + '/create-snapshot',
           state: {
             fromModal: 'jobs',
           },
@@ -363,21 +388,33 @@ class JobMenu extends React.Component {
   }
 
   _submit() {
+    let selectedAppKey = this.state.selectedAppKey
+    let selectedVersionID = this.state.selectedVersionID
     if (this.state.disabledApps.hasOwnProperty(this.state.selectedVersion.id)) {
       return false
     }
-    return (
-      <div className="col-xs-12 modal-actions">
+
+    let returnLink = this.state.datasets.datasetUrl ? (
+      <Link to={this.state.datasets.datasetUrl}>
+        <button className="btn-reset" onClick={this._hide.bind(this)}>
+          close
+        </button>
+      </Link>
+    ) : null
+
+    let startLink =
+      selectedAppKey && selectedVersionID ? (
         <button
           className="btn-modal-submit"
           onClick={this._checkSubmitStatus.bind(this)}>
           Start
         </button>
-        <Link to={this.props.location.pathname}>
-          <button className="btn-reset" onClick={this._hide.bind(this)}>
-            close
-          </button>
-        </Link>
+      ) : null
+
+    return (
+      <div className="col-xs-12 dataset-form-controls modal-actions">
+        {startLink}
+        {returnLink}
       </div>
     )
   }
@@ -388,22 +425,22 @@ class JobMenu extends React.Component {
    * Hide
    */
   _hide() {
-    const success = this.state.message && !this.state.error
+    // const success = this.state.message && !this.state.error
 
     // on modal close arguments
-    const snapshotId = this.state.selectedSnapshot,
-      appLabel = this.state.selectedAppKey,
-      appVersion = this.state.selectedVersionID,
-      jobId = this.state.jobId
+    // const snapshotId = this.state.selectedSnapshot,
+    //   appLabel = this.state.selectedAppKey,
+    //   appVersion = this.state.selectedVersionID,
+    //   jobId = this.state.jobId
 
-    this.props.onHide(
-      success,
-      snapshotId,
-      appLabel,
-      appVersion,
-      jobId,
-      this.props.history,
-    )
+    // this.props.onHide(
+    //   success,
+    //   snapshotId,
+    //   appLabel,
+    //   appVersion,
+    //   jobId,
+    //   this.props.history,
+    // )
     this.setState({
       loading: false,
       jobId: null,
@@ -511,7 +548,10 @@ class JobMenu extends React.Component {
    */
   _selectApp(e) {
     const selectedAppKey = e.target.value
-    const selectedApp = this.props.apps[selectedAppKey]
+    const selectedApp =
+      this.state.datasets && this.state.datasets.apps
+        ? this.state.datasets.apps[selectedAppKey]
+        : null
     if (this.state.selectedAppKey !== e.target.value) {
       this.setState({
         parameters: [],
@@ -530,9 +570,9 @@ class JobMenu extends React.Component {
    */
   _selectAppVersion(e) {
     const selectedVersionID = e.target.value
-    const selectedDefinition = this.props.apps[this.state.selectedAppKey][
-      selectedVersionID
-    ]
+    const selectedDefinition = this.state.datasets.apps[
+      this.state.selectedAppKey
+    ][selectedVersionID]
     const parametersMetadata = JSON.parse(
       JSON.stringify(selectedDefinition.parametersMetadata),
     )
@@ -594,7 +634,7 @@ class JobMenu extends React.Component {
    */
   _startJob() {
     const selectedSnapshot = this.state.selectedSnapshot
-    const definitions = this.props.apps
+    const definitions = this.state.datasets.apps
     const key = this.state.selectedAppKey
     const revision = this.state.selectedVersionID
     const jobDefinition = definitions[key][revision]
@@ -658,11 +698,10 @@ JobMenu.propTypes = {
   apps: PropTypes.object,
   dataset: PropTypes.object,
   loadingApps: PropTypes.bool,
-  onHide: PropTypes.func.isRequired,
   show: PropTypes.bool,
   snapshots: PropTypes.array,
   history: PropTypes.object,
-  location: PropTypes.location,
+  location: PropTypes.object,
 }
 
 JobMenu.defaultProps = {
