@@ -1,6 +1,5 @@
 import React from 'react'
 import Reflux from 'reflux'
-import PropTypes from 'prop-types'
 import { LeftSidebar, LeftSidebarButton } from './dataset.left-sidebar.jsx'
 import Tools from './tools'
 import datasetStore from './dataset.store.js'
@@ -56,7 +55,5 @@ class Dataset extends Reflux.Component {
     )
   }
 }
-
-Dataset.propTypes = {}
 
 export default withRouter(Dataset)

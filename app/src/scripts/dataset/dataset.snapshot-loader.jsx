@@ -1,4 +1,3 @@
-import React from 'react'
 import Reflux from 'reflux'
 import { withRouter } from 'react-router-dom'
 import datasetStore from './dataset.store'
