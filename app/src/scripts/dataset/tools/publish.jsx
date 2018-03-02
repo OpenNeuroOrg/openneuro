@@ -10,7 +10,6 @@ import { Link, withRouter } from 'react-router-dom'
 import actions from '../dataset.actions.js'
 import datasetStore from '../dataset.store.js'
 import moment from 'moment'
-import bids from '../../utils/bids'
 import { refluxConnect } from '../../utils/reflux'
 
 class Publish extends Reflux.Component {
@@ -18,92 +17,45 @@ class Publish extends Reflux.Component {
 
   constructor(props) {
     super(props)
+    refluxConnect(this, datasetStore, 'datasets')
     this.state = {
       loading: false,
       selectedSnapshot: '',
       message: null,
       error: false,
     }
-    refluxConnect(this, datasetStore, 'datasets')
   }
 
-  componentWillReceiveProps(nextProps) {
-    let reload = false
-    let datasetId = nextProps.match.params.datasetId
-    let snapshotId = nextProps.match.params.snapshotId
+  componentWillReceiveProps() {
     let snapshots = this.state.datasets.snapshots
     let dataset = this.state.datasets.dataset
-    if (snapshotId) {
-      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
-      if (snapshotUrl !== this.state.datasets.loadedUrl) {
-        reload = true
-      }
-    } else {
-      const datasetUrl = bids.encodeId(datasetId)
-      if (datasetUrl !== this.state.datasets.loadedUrl) {
-        reload = true
-      }
-    }
 
-    if (reload && !this.state.datasets.dataset) {
-      this._loadData(
-        nextProps.match.params.datasetId,
-        nextProps.match.params.snapshotId,
-      )
-    }
-
-    snapshots.map(snapshot => {
-      if (snapshot._id == dataset._id) {
-        if (snapshot.original) {
-          this.setState({ selectedSnapshot: snapshot._id })
-        } else if (snapshots.length > 1) {
-          this.setState({ selectedSnapshot: snapshots[1]._id })
+    if (snapshots && dataset) {
+      snapshots.map(snapshot => {
+        if (snapshot._id == dataset._id) {
+          if (snapshot.original) {
+            this.setState({ selectedSnapshot: snapshot._id })
+          } else if (snapshots.length > 1) {
+            this.setState({ selectedSnapshot: snapshots[1]._id })
+          }
+          return
         }
-        return
-      }
-    })
-  }
-
-  _loadData(datasetId, snapshotId) {
-    const query = new URLSearchParams(this.props.location.search)
-    if (snapshotId) {
-      const app = query.get('app')
-      const version = query.get('version')
-      const job = query.get('job')
-      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
-      actions.trackView(snapshotUrl)
-      actions.loadDataset(snapshotUrl, {
-        snapshot: true,
-        app: app,
-        version: version,
-        job: job,
-        datasetId: bids.encodeId(datasetId),
       })
-    } else if (
-      (datasetId && !this.state.datasets.dataset) ||
-      (datasetId && datasetId !== this.state.datasets.dataset._id)
-    ) {
-      actions.loadDataset(bids.encodeId(datasetId))
     }
   }
 
-  constructReturnUrl(params) {
-    if (params.snapshotId) {
-      return '/datasets/' + params.datasetId + '/versions/' + params.snapshotId
+  _datasetLink() {
+    if (this.state.datasets.datasetUrl) {
+      return (
+        <Link to={this.state.datasets.datasetUrl}>
+          <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
+            Return to Dataset
+          </button>
+        </Link>
+      )
     } else {
-      return '/datasets/' + params.datasetId
+      return null
     }
-  }
-
-  _closeButton() {
-    return (
-      <Link to={this.constructReturnUrl(this.props.match.params)}>
-        <button type="button" className="close">
-          <span aria-hidden="true">×</span>
-          <span className="sr-only">Close</span>
-        </button>
-      </Link>
-    )
   }
 
   render() {
@@ -120,11 +72,7 @@ class Publish extends Reflux.Component {
           {this.state.error ? <h4 className="danger">Error</h4> : null}
           <h5>{this.state.message}</h5>
         </div>
-        <Link to={this.constructReturnUrl(this.props.match.params)}>
-          <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
-            OK
-          </button>
-        </Link>
+        {this._datasetLink()}
       </div>
     )
 
@@ -160,6 +108,7 @@ class Publish extends Reflux.Component {
           <div className="form-group">
             <label>Publish</label>
           </div>
+          <hr className="modal-inner" />
           {body}
         </div>
       </div>
@@ -169,15 +118,13 @@ class Publish extends Reflux.Component {
       <ErrorBoundary
         message="The dataset has failed to load in time. Please check your network connection."
         className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
-        <div className="fade-in inner-route dataset-route light">
-          {loading ? (
-            <Timeout timeout={20000}>
-              <Spinner active={true} text={loadingText} />
-            </Timeout>
-          ) : (
-            content
-          )}
-        </div>
+        {loading ? (
+          <Timeout timeout={20000}>
+            <Spinner active={true} text={loadingText} />
+          </Timeout>
+        ) : (
+          content
+        )}
       </ErrorBoundary>
     )
   }
@@ -243,10 +190,9 @@ class Publish extends Reflux.Component {
       snapshots.length > 1 &&
       moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0
     )
-    if (modified) {
+    if (modified && this.state.datasets.datasetUrl) {
       let to = {
-        pathname:
-          this.constructReturnUrl(this.props.match.params) + '/create-snapshot',
+        pathname: this.state.datasets.datasetUrl + '/create-snapshot',
         state: {
           fromModal: 'publish',
         },
@@ -262,25 +208,20 @@ class Publish extends Reflux.Component {
   }
 
   _submit() {
+    let submitButton
     if (this.state.selectedSnapshot) {
-      return (
-        <div className="col-xs-12 modal-actions">
-          <button
-            className="btn-modal-submit"
-            onClick={this._publish.bind(this)}>
-            Publish
-          </button>
-          <Link to={this.constructReturnUrl(this.props.match.params)}>
-            <button
-              className="btn-reset"
-              // onClick={this._hide.bind(this)}
-            >
-              close
-            </button>
-          </Link>
-        </div>
+      submitButton = (
+        <button className="btn-modal-submit" onClick={this._publish.bind(this)}>
+          Publish
+        </button>
       )
     }
+    return (
+      <div className="col-xs-12 modal-actions">
+        {submitButton}
+        {this._datasetLink()}
+      </div>
+    )
   }
 
   // actions ------------------------------------------------------------
