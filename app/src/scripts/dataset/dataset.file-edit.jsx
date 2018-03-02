@@ -3,34 +3,77 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import Reflux from 'reflux'
 import PropTypes from 'prop-types'
-import { Modal } from '../utils/modal.jsx'
 import files from '../utils/files'
 import ReactTable from 'react-table'
+import datasetStore from './dataset.store'
+import actions from './dataset.actions'
 import JsonEditor from './tools/json/jsoneditor.jsx'
+import Spinner from '../common/partials/spinner.jsx'
+import Timeout from '../common/partials/timeout.jsx'
+import ErrorBoundary from '../errors/errorBoundary.jsx'
+import { withRouter } from 'react-router-dom'
+import { refluxConnect } from '../utils/reflux'
 
-export default class FileEdit extends React.Component {
+class FileEdit extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
+  constructor() {
+    super()
+    refluxConnect(this, datasetStore, 'datasets')
+  }
+
   render() {
-    if (!this.props.show) {
-      return false
+    let datasets = this.state.datasets
+
+    const file = datasets ? datasets.editFile : null
+    const fileName = file ? file.name : null
+
+    let loading = datasets && datasets.loading
+    let loadingText =
+      datasets && typeof datasets.loading == 'string'
+        ? datasets.loading
+        : 'loading'
+
+    if (!file) {
+      return null
     }
-    let file = this.props.file
+
+    let content = (
+      <div className={'dataset-form display-file ' + this._extension(fileName)}>
+        <div className="display-file-content">
+          <div className="col-xs-12 dataset-form-header display-file-header">
+            <div className="form-group modal-title">
+              <label>
+                {fileName.split('/')[fileName.split('/').length - 1]}
+              </label>
+            </div>
+            <hr className="modal-inner" />
+          </div>
+          <div className="dataset-form-body display-file-body col-xs-12">
+            <div className="dataset-form-content col-xs-12">
+              <div className="dataset file-display-modal">
+                {this._format(file)}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
 
     return (
-      <Modal
-        show={this.props.show}
-        onHide={this.props.onHide}
-        className={'display-file-modal ' + this._extension(file.name)}>
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {file.name.split('/')[file.name.split('/').length - 1]}
-          </Modal.Title>
-        </Modal.Header>
-        <hr className="modal-inner" />
-        <Modal.Body>{this._format(file)}</Modal.Body>
-      </Modal>
+      <ErrorBoundary
+        message="The file has failed to load in time. Please check your network connection."
+        className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
+        {loading ? (
+          <Timeout timeout={20000}>
+            <Spinner active={true} text={loadingText} />
+          </Timeout>
+        ) : (
+          content
+        )}
+      </ErrorBoundary>
     )
   }
 
@@ -39,14 +82,17 @@ export default class FileEdit extends React.Component {
   _format(file) {
     let name = file.name
     let content = file.text
+    file.history = this.props.history
+
+    let isSnapshot = this.state.datasets ? this.state.datasets.snapshot : null
     if (files.hasExtension(name, ['.json'])) {
       return (
         <div>
           <JsonEditor
             data={content}
             file={file}
-            onSave={this.props.onSave.bind(file)}
-            isSnapshot={this.props.isSnapshot}
+            onSave={actions.updateFile.bind(file)}
+            isSnapshot={isSnapshot}
             editing={true}
           />
         </div>
@@ -140,3 +186,5 @@ FileEdit.propTypes = {
   onSave: PropTypes.func,
   isSnapshot: PropTypes.bool,
 }
+
+export default withRouter(FileEdit)
