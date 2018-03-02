@@ -3,12 +3,7 @@ import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { LeftSidebar, LeftSidebarButton } from './dataset.left-sidebar.jsx'
 import Tools from './tools'
-import ErrorBoundary from '../errors/errorBoundary.jsx'
-import Spinner from '../common/partials/spinner.jsx'
-import Timeout from '../common/partials/timeout.jsx'
 import datasetStore from './dataset.store.js'
-import actions from './dataset.actions'
-import bids from '../utils/bids'
 import DatasetRoutes from './dataset.routes.jsx'
 import Helmet from 'react-helmet'
 import { withRouter } from 'react-router-dom'
@@ -38,18 +33,22 @@ class Dataset extends Reflux.Component {
           className={
             showSidebar ? 'open dataset-container' : 'dataset-container'
           }>
-          <LeftSidebar />
-          <LeftSidebarButton />
-          <Tools />
           <Helmet>
             <title>
               {pageTitle} - {datasetLabel}
             </title>
             <meta name="description" content={description} />
           </Helmet>
-          <div className="dataset-annimation">
-            <div className="clearfix">
-              <div className="col-xs-12 dataset-inner">{DatasetRoutes()}</div>
+          <LeftSidebar />
+          <LeftSidebarButton />
+          <Tools />
+          <div className="fade-in inner-route dataset-route light">
+            <div className="clearfix dataset-wrap">
+              <div className="dataset-annimation">
+                <div className="col-xs-12 dataset-inner">
+                  <DatasetRoutes />
+                </div>
+              </div>
             </div>
           </div>
         </div>
