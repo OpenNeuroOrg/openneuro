@@ -16,8 +16,6 @@ class Snapshot extends Reflux.Component {
     super(props)
     refluxConnect(this, datasetStore, 'datasets')
 
-    let datasetPath = this.props.location.pathname.split('/snapshot')[0]
-
     this.state = {
       changes: [],
       currentChange: '',
@@ -27,7 +25,6 @@ class Snapshot extends Reflux.Component {
         point: '',
       },
       latestVersion: '',
-      datasetPath: datasetPath,
     }
     this._handleChange = this.handleChange.bind(this)
     this._handleVersion = this.handleVersion.bind(this)
@@ -72,33 +69,26 @@ class Snapshot extends Reflux.Component {
         return
       }
     })
-  }
 
-  componentDidMount() {
-    let snapshotVersions =
+    let snapshotVersion =
       this.state.datasets &&
-      this.state.datasets.snapshots &&
-      this.state.datasets.snapshots.length
-        ? this.state.datasets.snapshots
-            .filter(snap => {
-              return typeof snap.snapshot_version !== 'undefined'
-            })
-            .map(snap => {
-              return snap.snapshot_version
-            })
-        : null
-    let latestVersion = snapshotVersions
-      ? Math.max.apply(null, snapshotVersions) + 1
-      : 1
+      this.state.datasets.dataset &&
+      this.state.datasets.dataset.snapshot_version
+        ? this.state.datasets.dataset.snapshot_version + 1
+        : 1
 
     this.setState({
       currentVersion: {
-        major: latestVersion,
+        major: snapshotVersion,
         minor: '0',
         point: '0',
       },
-      latestVersion: latestVersion,
+      latestVersion: snapshotVersion,
+      newSnapshotVersion: snapshotVersion,
     })
+  }
+
+  componentDidMount() {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
     this._loadData(datasetId, snapshotId)
@@ -168,12 +158,15 @@ class Snapshot extends Reflux.Component {
   }
 
   _version() {
+    // TODO: allow the user to select version numbers when we have a
+    // system that has a point system versioning
     return (
       <div className="snapshot-version col-xs-12">
         <div className="col-xs-12">
           <h4>Snapshot Version: {this._versionString()}</h4>
         </div>
-        <div className="snapshot-version-major form-group col-xs-4">
+
+        {/* <div className="snapshot-version-major form-group col-xs-4">
           <label htmlFor="major" className="control-label">
             Major
           </label>
@@ -221,7 +214,7 @@ class Snapshot extends Reflux.Component {
             className="form-control"
             disabled={true}
           />
-        </div>
+        </div> */}
       </div>
     )
   }
@@ -272,7 +265,7 @@ class Snapshot extends Reflux.Component {
     return (
       <div className="changes col-xs-12">
         <div className="col-xs-12">
-          <h4>Changelog</h4>
+          <h4>Generate Changelog:</h4>
         </div>
         {content}
       </div>
@@ -321,14 +314,6 @@ class Snapshot extends Reflux.Component {
     })
     let newChangelog = changeText + '\n' + oldChangelog
     return newChangelog
-  }
-
-  constructReturnUrl(params) {
-    if (params.snapshotId) {
-      return '/datasets/' + params.datasetId + '/versions/' + params.snapshotId
-    } else {
-      return '/datasets/' + params.datasetId
-    }
   }
 
   submit() {
@@ -397,13 +382,17 @@ class Snapshot extends Reflux.Component {
         ? this.props.location.state.fromModal
         : null
     let returnUrl = fromModal
-      ? this.constructReturnUrl(this.props.match.params) + '/' + fromModal
-      : this.constructReturnUrl(this.props.match.params)
-    return (
-      <Link to={returnUrl}>
-        <button className={btnClass}>{buttonText}</button>
-      </Link>
-    )
+      ? this.state.datasets.datasetUrl + '/' + fromModal
+      : this.state.datasets.datasetUrl
+    if (returnUrl) {
+      return (
+        <Link to={returnUrl}>
+          <button className={btnClass}>{buttonText}</button>
+        </Link>
+      )
+    } else {
+      return null
+    }
   }
 
   render() {
@@ -419,6 +408,7 @@ class Snapshot extends Reflux.Component {
           <div className="form-group">
             <label>Create Snapshot</label>
           </div>
+          <hr className="modal-inner" />
         </div>
         <div className="dataset-form-body col-xs-12">
           <div className="dataset-form-content col-xs-12">
@@ -435,15 +425,13 @@ class Snapshot extends Reflux.Component {
       <ErrorBoundary
         message="The dataset has failed to load in time. Please check your network connection."
         className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
-        <div className="fade-in inner-route dataset-route light">
-          {loading ? (
-            <Timeout timeout={20000}>
-              <Spinner active={true} text={loadingText} />
-            </Timeout>
-          ) : (
-            content
-          )}
-        </div>
+        {loading ? (
+          <Timeout timeout={20000}>
+            <Spinner active={true} text={loadingText} />
+          </Timeout>
+        ) : (
+          content
+        )}
       </ErrorBoundary>
     )
   }
