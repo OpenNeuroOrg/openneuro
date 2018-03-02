@@ -27,19 +27,6 @@ class Tools extends Reflux.Component {
     }
   }
 
-  constructReturnUrl() {
-    if (this.state.datasets.dataset) {
-      if (!this.state.datasets.dataset.original) {
-        let datasetId = this.state.datasets.dataset.linkID
-        return '/datasets/' + datasetId
-      } else {
-        let datasetId = this.state.datasets.dataset.linkOriginal
-        let version = this.state.datasets.dataset.linkID
-        return '/datasets/' + datasetId + '/versions/' + version
-      }
-    }
-  }
-
   render() {
     let datasets = this.state.datasets
     let dataset = datasets ? datasets.dataset : null,
@@ -77,11 +64,15 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Download Dataset',
         icon: 'fa-download',
-        prepDownload: actions.getDatasetDownloadTicket,
-        action: actions.toggleModal.bind(null, 'subscribe'),
+        prepDownload: actions.getDatasetDownloadTicket.bind(this),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'subscribe',
+          this.props.history,
+        ),
         display: !isIncomplete,
-        warn: false,
-        modalLink: 'subscribe',
+        warn: true,
+        modalLink: datasets.datasetUrl + '/subscribe',
         validations: [
           {
             check: datasets.uploading && !isSnapshot,
@@ -94,11 +85,14 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Publish Dataset',
         icon: 'fa-globe icon-plus',
-        action: actions.toggleModal.bind(null, 'publish'),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'publish',
+          this.props.history,
+        ),
         display: isAdmin && !isPublic && !isIncomplete,
         warn: false,
-        modalLink:
-          this.constructReturnUrl(this.props.match.params) + '/publish',
+        modalLink: datasets.datasetUrl + '/publish',
         validations: [
           {
             check: datasets.uploading && !isSnapshot,
@@ -145,10 +139,14 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Share Dataset',
         icon: 'fa-user icon-plus',
-        action: actions.toggleModal.bind(null, 'share'),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'share',
+          this.props.history,
+        ),
         display: isAdmin && !isSnapshot && !isIncomplete,
         warn: false,
-        modalLink: 'share',
+        modalLink: datasets.datasetUrl + '/share',
         validations: [
           {
             check: datasets.uploading && !isSnapshot,
@@ -161,10 +159,14 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Create Snapshot',
         icon: 'fa-camera-retro icon-plus',
-        // action: actions.toggleModal.bind(null, 'snapshot'),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'create-snapshot',
+          this.props.history,
+        ),
         display: isAdmin && !isSnapshot && !isIncomplete,
-        confirm: false,
-        link: this.props.location.pathname + '?createsnapshot=true',
+        warn: false,
+        modalLink: datasets.datasetUrl + '/create-snapshot',
         validations: [
           {
             check: isInvalid,
@@ -193,10 +195,14 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Run Analysis',
         icon: 'fa-area-chart icon-plus',
-        action: actions.toggleModal.bind(null, 'jobs'),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'jobs',
+          this.props.history,
+        ),
         display: isSignedIn && !isIncomplete,
         warn: false,
-        modalLink: 'jobs',
+        modalLink: datasets.datasetUrl + '/jobs',
         validations: [
           {
             check: datasets.uploading && !isSnapshot,
@@ -211,7 +217,7 @@ class Tools extends Reflux.Component {
         icon: 'fa-tag icon-plus',
         action: actions.createSubscription.bind(this),
         display: isSignedIn && !isSubscribed,
-        warn: true,
+        warn: false,
         validations: [
           {
             check: datasets.uploading && !isSnapshot,
