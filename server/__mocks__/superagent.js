@@ -1,43 +1,25 @@
-//mock for superagent - __mocks__/superagent.js
+'use strict'
 
 var mockDelay
 var mockError
 var mockResponse = {
-  status() {
+  status: function() {
     return 200
   },
-  ok() {
-    return true
-  },
+  ok: true,
   get: jest.genMockFunction(),
   toError: jest.genMockFunction(),
 }
 
 var Request = {
-  post() {
-    return this
-  },
-  get() {
-    return this
-  },
-  send() {
-    return this
-  },
-  query() {
-    return this
-  },
-  field() {
-    return this
-  },
-  set() {
-    return this
-  },
-  accept() {
-    return this
-  },
-  timeout() {
-    return this
-  },
+  post: jest.genMockFunction().mockReturnThis(),
+  get: jest.genMockFunction().mockReturnThis(),
+  send: jest.genMockFunction().mockReturnThis(),
+  query: jest.genMockFunction().mockReturnThis(),
+  field: jest.genMockFunction().mockReturnThis(),
+  set: jest.genMockFunction().mockReturnThis(),
+  accept: jest.genMockFunction().mockReturnThis(),
+  timeout: jest.genMockFunction().mockReturnThis(),
   end: jest.genMockFunction().mockImplementation(function(callback) {
     if (mockDelay) {
       this.delayTimer = setTimeout(callback, 0, mockError, mockResponse)
@@ -47,15 +29,18 @@ var Request = {
 
     callback(mockError, mockResponse)
   }),
-  //expose helper methods for tests to set
-  __setMockDelay(boolValue) {
+
+  __setMockDelay: function(boolValue) {
     mockDelay = boolValue
   },
-  __setMockResponse(mockRes) {
+  __setMockResponse: function(mockRes) {
     mockResponse = mockRes
   },
-  __setMockError(mockErr) {
+  __setMockError: function(mockErr) {
     mockError = mockErr
+  },
+  __setMockResponseBody: function(body) {
+    mockResponse.body = body
   },
 }
 
