@@ -37,6 +37,8 @@ export default {
       logs: null,
       comments: null,
       subscriptions: null,
+      datasets: null,
+      snapshots: null,
     },
     scitran: {
       projects: null,
