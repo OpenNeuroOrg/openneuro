@@ -21,8 +21,6 @@ export default test => {
   // Raven must be first to work
   test || app.use(Raven.requestHandler())
 
-  mongo.connect(config.mongo.url)
-
   app.use((req, res, next) => {
     res.set(config.headers)
     res.type('application/json')

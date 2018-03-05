@@ -1,5 +1,6 @@
 import Raven from 'raven'
 import git from 'git-rev-sync'
+import mongo from './libs/mongo'
 import { connect as redis_connect } from './libs/redis'
 import { connect as resque_connect } from './libs/queue'
 import notifications from './libs/notifications'
@@ -33,8 +34,10 @@ Raven.config(config.sentry.DSN, ravenConfig).install()
 const app = createApp(false)
 
 // start server ----------------------------------------------------
-redisConnect().then(() => {
-  app.listen(config.port, () => {
-    console.log('Server is listening on port ' + config.port)
+mongo.connect(config.mongo.url).then(() => {
+  redisConnect().then(() => {
+    app.listen(config.port, () => {
+      console.log('Server is listening on port ' + config.port)
+    })
   })
 })
