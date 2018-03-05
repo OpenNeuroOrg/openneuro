@@ -1,5 +1,7 @@
 /**
- * Implementation of dataset models
+ * Implementation of dataset models internal to OpenNeuro's database
+ *
+ * See resolvers for interaction with other data sources.
  */
 import request from 'superagent'
 import config from '../config'
@@ -21,8 +23,7 @@ const uri = config.datalad.uri
 export const createDataset = label => {
   return new Promise(async (resolve, reject) => {
     const datasetId = await getAccessionNumber()
-    const datasetObj = { id: datasetId, label }
-    const dsObj = await c.crn.datasets.insertOne(datasetObj)
+    const dsObj = await createDatasetModel(datasetId, label)
     // If successful, create the repo
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
@@ -32,6 +33,32 @@ export const createDataset = label => {
       reject(Error(`Failed to create ${datasetId} - "${label}"`))
     }
   })
+}
+
+/**
+ * Insert Dataset document
+ *
+ * Exported for tests.
+ */
+export const createDatasetModel = (id, label) => {
+  const datasetObj = { id, label }
+  return c.crn.datasets.insertOne(datasetObj)
+}
+
+/**
+ * Fetch dataset document and related fields
+ */
+export const getDataset = id => {
+  return c.crn.datasets.findOne({ id })
+}
+
+/**
+ * Fetch all datasets
+ *
+ * TODO - Support cursor pagination
+ */
+export const getDatasets = () => {
+  return c.crn.datasets.find()
 }
 
 /**
