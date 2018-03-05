@@ -1,4 +1,4 @@
 .DS_Store
 config.env
 .env
-
+yarn-error.log
