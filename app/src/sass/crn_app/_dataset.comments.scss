@@ -74,6 +74,22 @@
     position: relative;
     top: 10px;
 
+    .user-generic-thumb {
+      width: 60px;
+      height: 60px;
+      overflow: hidden;
+      display: table;
+      background-color: rgb(167, 204, 70);
+
+      .user-generic-thumb-letter {
+          font-size: xx-large;
+          display: table-cell;
+          text-align: center;
+          vertical-align: middle;
+          color: white;
+      }
+    }
+
     img {
       height: 60px;
       width: 60px;
