@@ -1257,7 +1257,6 @@ let datasetStore = Reflux.createStore({
         callback(downloadUrl)
       })
       .catch(err => {
-        console.log(err)
         this.update({
           status: err.status,
         })
