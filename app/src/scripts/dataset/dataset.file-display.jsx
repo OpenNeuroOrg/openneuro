@@ -22,11 +22,42 @@ class FileDisplay extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, datasetStore, 'datasets')
+    this.state = {
+      fileRequested: false,
+    }
+  }
+
+  componentWillReceiveProps() {
+    let datasets = this.state.datasets
+
+    const file = datasets ? datasets.displayFile : null
+    const fileName = file ? file.name : null
+
+    if (!fileName) {
+      let params = new URLSearchParams(this.props.location.search)
+      let fileName = params.get('file')
+      if (
+        fileName &&
+        datasets &&
+        datasets.dataset &&
+        !this.state.fileRequested
+      ) {
+        this.setState({ fileRequested: true })
+        let displayFile = {
+          name: fileName,
+          history: this.props.history,
+        }
+        actions.displayFile(null, null, displayFile, null)
+        // return null
+      }
+      // return null
+    }
   }
 
   render() {
-    let datasets = this.state.datasets
-
+    const datasets = this.state.datasets
+    const dataset = datasets ? datasets.dataset : null
+    const status = datasets ? datasets.status : null
     const file = datasets ? datasets.displayFile : null
     const fileName = file ? file.name : null
     const fileLink = file ? file.link : null
@@ -37,34 +68,76 @@ class FileDisplay extends Reflux.Component {
         ? datasets.loading
         : 'loading'
 
-    if (!file) {
-      return null
+    let content
+    if (dataset) {
+      if (!fileName) {
+        if (status) {
+          let message
+          if (status === 404) {
+            message = 'The file you wish to view does not exist'
+          }
+          if (status === 403) {
+            message = 'You are not authorized to view this file'
+          }
+          content = (
+            <div className="page dataset">
+              <div className="dataset-container">
+                <h2 className="message-4">{message}</h2>
+              </div>
+            </div>
+          )
+        } else {
+          return null
+        }
+      } else {
+        content = (
+          <div
+            className={
+              'dataset-form display-file ' + this._extension(fileName)
+            }>
+            <div className="display-file-content">
+              <div className="col-xs-12 dataset-form-header display-file-header">
+                <div className="form-group modal-title">
+                  <label>
+                    {fileName.split('/')[fileName.split('/').length - 1]}
+                  </label>
+                  <div className="modal-download btn-admin-blue">
+                    {this._download(fileLink)}
+                  </div>
+                </div>
+                <hr className="modal-inner" />
+              </div>
+              <div className="dataset-form-body display-file-body col-xs-12">
+                <div className="dataset-form-content col-xs-12">
+                  <div className="dataset file-display-modal">
+                    {this._format(file)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    } else {
+      if (status) {
+        let message
+        if (status === 404) {
+          message = 'Dataset not found'
+        }
+        if (status === 403) {
+          message = 'You are not authorized to view this dataset'
+        }
+        content = (
+          <div className="page dataset">
+            <div className="dataset-container">
+              <h2 className="message-4">{message}</h2>
+            </div>
+          </div>
+        )
+      } else {
+        return null
+      }
     }
-
-    let content = (
-      <div className={'dataset-form display-file ' + this._extension(fileName)}>
-        <div className="display-file-content">
-          <div className="col-xs-12 dataset-form-header display-file-header">
-            <div className="form-group modal-title">
-              <label>
-                {fileName.split('/')[fileName.split('/').length - 1]}
-              </label>
-              <div className="modal-download btn-admin-blue">
-                {this._download(fileLink)}
-              </div>
-            </div>
-            <hr className="modal-inner" />
-          </div>
-          <div className="dataset-form-body display-file-body col-xs-12">
-            <div className="dataset-form-content col-xs-12">
-              <div className="dataset file-display-modal">
-                {this._format(file)}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
 
     return (
       <ErrorBoundary

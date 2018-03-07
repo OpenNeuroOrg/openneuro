@@ -563,7 +563,16 @@ let datasetStore = Reflux.createStore({
       let redirectUrl = datasetUrl
       if (name !== '') {
         redirectUrl = datasetUrl + '/' + name
+        if (name === 'file-display') {
+          let fileName = this.data.displayFile
+            ? this.data.displayFile.name
+            : null
+          if (fileName) {
+            redirectUrl = redirectUrl + '?file=' + fileName
+          }
+        }
       }
+
       history.push(redirectUrl)
       if (callback) {
         callback()
@@ -1233,14 +1242,26 @@ let datasetStore = Reflux.createStore({
    * direct download url.
    */
   getFileDownloadTicket(file, callback) {
+    let isSnapshot =
+      this.data.dataset && this.data.dataset && this.data.dataset.linkOriginal
+        ? true
+        : false
+
     scitran
       .getDownloadTicket('projects', this.data.dataset._id, file.name, {
-        snapshot: this.data.snapshot,
+        snapshot: isSnapshot,
       })
       .then(res => {
         let ticket = res.body.ticket
         let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
         callback(downloadUrl)
+      })
+      .catch(err => {
+        console.log(err)
+        this.update({
+          status: err.status,
+        })
+        callback()
       })
   },
 
@@ -1677,42 +1698,54 @@ let datasetStore = Reflux.createStore({
    */
   displayFile(snapshotId, jobId, file, history, callback) {
     let requestAndDisplay = link => {
-      if (
-        files.hasExtension(file.name, [
-          '.pdf',
-          '.nii.gz',
-          '.jpg',
-          '.jpeg',
-          '.png',
-          '.gif',
-        ])
-      ) {
-        if (callback) {
-          callback()
-        }
-        this.showDatasetComponent('file-display', file.history)
-        this.update({
-          displayFile: {
-            name: file.name,
-            text: null,
-            link: link,
-          },
-        })
-      } else {
-        request.get(link, {}).then(res => {
+      if (link) {
+        if (
+          files.hasExtension(file.name, [
+            '.pdf',
+            '.nii.gz',
+            '.jpg',
+            '.jpeg',
+            '.png',
+            '.gif',
+          ])
+        ) {
           if (callback) {
             callback()
           }
-          this.showDatasetComponent('file-display', file.history)
-          this.update({
-            displayFile: {
-              name: file.name,
-              text: res.text,
-              link: link,
-              info: file,
+          this.update(
+            {
+              displayFile: {
+                name: file.name,
+                text: null,
+                link: link,
+              },
             },
+            () => {
+              this.showDatasetComponent('file-display', file.history)
+            },
+          )
+        } else {
+          request.get(link, {}).then(res => {
+            if (callback) {
+              callback()
+            }
+            this.update(
+              {
+                displayFile: {
+                  name: file.name,
+                  text: res.text,
+                  link: link,
+                  info: file,
+                },
+              },
+              () => {
+                this.showDatasetComponent('file-display', file.history)
+              },
+            )
           })
-        })
+        }
+      } else {
+        this.showDatasetComponent('file-display', file.history)
       }
     }
 
