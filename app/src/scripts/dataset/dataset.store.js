@@ -109,9 +109,10 @@ let datasetStore = Reflux.createStore({
       uploading: false,
       uploadingCanceled: false,
       uploadingScitranRequests: [],
-      showSidebar: window.localStorage.hasOwnProperty('showSidebar')
-        ? window.localStorage.showSidebar === 'true'
-        : true,
+      showSidebar:
+        window.localStorage && window.localStorage.hasOwnProperty('showSidebar')
+          ? window.localStorage.showSidebar === 'true'
+          : true,
     }
     for (let prop in diffs) {
       data[prop] = diffs[prop]
