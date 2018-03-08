@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import Actions from '../user/user.actions.js'
 import uploadStore from '../upload/upload.store.js'
-import userStore from '../user/user.store.js'
+import Avatar from '../user/avatar.jsx'
 import { DropdownButton } from 'react-bootstrap'
 
 // component setup ---------------------------------------------------------------
@@ -17,13 +17,11 @@ const Usermenu = ({ profile, history }) => {
 
   let username = profile.firstname + ' ' + profile.lastname
 
-  let thumbnail = userStore.generateThumbnail(profile)
-
   let gear = <i className="fa fa-gear" />
 
   return (
     <ul className="clearfix user-wrap">
-      {thumbnail}
+      <Avatar profile={profile} />
       <DropdownButton id="user-menu" title={gear}>
         <li role="presentation" className="dropdown-header">
           Hello <br />

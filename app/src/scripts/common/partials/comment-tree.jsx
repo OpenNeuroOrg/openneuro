@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import userStore from '../../user/user.store.js'
+import Avatar from '../../user/avatar.jsx'
 import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import Comment from './comment.jsx'
@@ -174,8 +174,7 @@ class CommentTree extends React.Component {
     if (!comment.deleted) {
       return (
         <div className="comment-avatar">
-          {userStore.generateThumbnail(comment.user)}
-          {/* <img src={comment.user.imageUrl} /> */}
+          <Avatar profile={comment.user} />
         </div>
       )
     } else {
