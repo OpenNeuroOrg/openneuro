@@ -8,6 +8,7 @@ import url from 'url'
 import crypto from 'crypto'
 import { getAccessionNumber } from '../libs/dataset'
 import counter from '../libs/counter'
+import stars from '../libs/stars'
 import bidsId from '../libs/bidsId'
 
 // handlers ----------------------------------------------------------------
@@ -113,4 +114,18 @@ export default {
       },
     )
   },
+
+  addStar(req, res) {
+    let datasetId = req.params.datasetId
+    stars.addStar(datasetId, (err, starCount) => {
+      res.send(starCount)
+    })
+  },
+
+  removeStar(req, res) {
+    let datasetId = req.params.datasetId
+    stars.removeStar(datasetId, (err, starCount) => {
+      res.send(starCount)
+    })
+  }
 }
