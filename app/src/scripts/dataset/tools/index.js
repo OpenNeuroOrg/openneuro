@@ -1,42 +1,29 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import moment from 'moment'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
-import datasetStore from '../dataset.store.js'
-import { refluxConnect } from '../../utils/reflux'
+import ToolModals from './modals.jsx'
 
-class Tools extends Reflux.Component {
-  constructor() {
-    super()
-    refluxConnect(this, datasetStore, 'datasets')
-  }
-
+class Tools extends React.Component {
   // life cycle events --------------------------------------------------
 
   componentDidMount() {
-    let dataset = this.state.datasets.dataset
-
+    let dataset = this.props.dataset
     if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
       actions.loadUsers()
     }
   }
 
   render() {
-    let datasets = this.state.datasets
-    let dataset = datasets ? datasets.dataset : null,
-      snapshots = datasets ? datasets.snapshots : null
+    let dataset = this.props.dataset,
+      snapshots = this.props.snapshots
 
-    if (!dataset) {
-      return null
-    }
-
-    let datasetHasJobs = !!dataset.jobs.length
+    let datasetHasJobs = !!this.props.dataset.jobs.length
 
     // permission check shorthands
     let isAdmin = dataset.access === 'admin',
@@ -64,18 +51,12 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Download Dataset',
         icon: 'fa-download',
-        prepDownload: actions.getDatasetDownloadTicket.bind(this),
-        action: actions.showDatasetComponent.bind(
-          this,
-          'subscribe',
-          this.props.history,
-        ),
+        prepDownload: actions.getDatasetDownloadTicket,
+        action: actions.toggleModal.bind(null, 'subscribe'),
         display: !isIncomplete,
-        warn: true,
-        modalLink: datasets.datasetUrl + '/subscribe',
         validations: [
           {
-            check: datasets.uploading && !isSnapshot,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -85,17 +66,12 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Publish Dataset',
         icon: 'fa-globe icon-plus',
-        action: actions.showDatasetComponent.bind(
-          this,
-          'publish',
-          this.props.history,
-        ),
+        action: actions.toggleModal.bind(null, 'publish'),
         display: isAdmin && !isPublic && !isIncomplete,
         warn: false,
-        modalLink: datasets.datasetUrl + '/publish',
         validations: [
           {
-            check: datasets.uploading && !isSnapshot,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -110,7 +86,7 @@ class Tools extends Reflux.Component {
         warn: true,
         validations: [
           {
-            check: datasets.uploading && !isSnapshot,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -126,10 +102,10 @@ class Tools extends Reflux.Component {
           this.props.history,
         ),
         display: displayDelete,
-        warn: true,
+        warn: isSnapshot,
         validations: [
           {
-            check: datasets.uploading && !isSnapshot,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -139,17 +115,12 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Share Dataset',
         icon: 'fa-user icon-plus',
-        action: actions.showDatasetComponent.bind(
-          this,
-          'share',
-          this.props.history,
-        ),
+        action: actions.toggleModal.bind(null, 'share'),
         display: isAdmin && !isSnapshot && !isIncomplete,
         warn: false,
-        modalLink: datasets.datasetUrl + '/share',
         validations: [
           {
-            check: datasets.uploading && !isSnapshot,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -159,14 +130,9 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Create Snapshot',
         icon: 'fa-camera-retro icon-plus',
-        action: actions.showDatasetComponent.bind(
-          this,
-          'create-snapshot',
-          this.props.history,
-        ),
+        action: actions.createSnapshot.bind(null, this.props.history),
         display: isAdmin && !isSnapshot && !isIncomplete,
-        warn: false,
-        modalLink: datasets.datasetUrl + '/create-snapshot',
+        warn: true,
         validations: [
           {
             check: isInvalid,
@@ -185,7 +151,7 @@ class Tools extends Reflux.Component {
             type: 'Error',
           },
           {
-            check: datasets.uploading && !isSnapshot,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -195,17 +161,12 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Run Analysis',
         icon: 'fa-area-chart icon-plus',
-        action: actions.showDatasetComponent.bind(
-          this,
-          'jobs',
-          this.props.history,
-        ),
+        action: actions.toggleModal.bind(null, 'jobs'),
         display: isSignedIn && !isIncomplete,
         warn: false,
-        modalLink: datasets.datasetUrl + '/jobs',
         validations: [
           {
-            check: datasets.uploading && !isSnapshot,
+            check: this.props.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -217,10 +178,10 @@ class Tools extends Reflux.Component {
         icon: 'fa-tag icon-plus',
         action: actions.createSubscription.bind(this),
         display: isSignedIn && !isSubscribed,
-        warn: false,
+        warn: true,
         validations: [
           {
-            check: datasets.uploading && !isSnapshot,
+            check: this.props.uploading && !isSnapshot,
             message: 'You are about to follow a dataset',
             timeout: 5000,
             type: 'Error',
@@ -233,21 +194,24 @@ class Tools extends Reflux.Component {
         action: actions.deleteSubscription.bind(this),
         display: isSignedIn && isSubscribed,
         warn: true,
+        // validations: [
+        //   {
+        //     check: null,
+        //     message: 'You are about to unfollow a dataset.',
+        //     timeout: 5000,
+        //     type: 'Error',
+        //   },
+        // ],
       },
     ]
 
-    if (dataset && !datasets.loading) {
-      return (
-        <div className="col-xs-12 dataset-tools-wrap">
-          <div className="tools clearfix">
-            {this._snapshotLabel(dataset)}
-            {this._tools(tools)}
-          </div>
-        </div>
-      )
-    } else {
-      return null
-    }
+    return (
+      <div className="tools clearfix">
+        {this._snapshotLabel(dataset)}
+        {this._tools(tools)}
+        <ToolModals />
+      </div>
+    )
   }
 
   // template methods ---------------------------------------------------
@@ -278,7 +242,6 @@ class Tools extends Reflux.Component {
               action={tool.action}
               warn={tool.warn}
               link={tool.link}
-              modalLink={tool.modalLink}
               validations={tool.validations}
             />
           </div>
@@ -309,8 +272,11 @@ class Tools extends Reflux.Component {
 }
 
 Tools.propTypes = {
+  dataset: PropTypes.object.isRequired,
+  snapshots: PropTypes.array.isRequired,
+  selectedSnapshot: PropTypes.string.isRequired,
   history: PropTypes.object,
-  location: PropTypes.object,
+  uploading: PropTypes.bool,
 }
 
 export default withRouter(Tools)

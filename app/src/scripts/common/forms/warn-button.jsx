@@ -5,11 +5,11 @@ import PropTypes from 'prop-types'
 import Tooltip from '../partials/tooltip.jsx'
 import notifications from '../../notification/notification.actions'
 
-class WarnButton extends React.Component {
+export default class WarnButton extends React.Component {
   constructor() {
     super()
     this.state = {
-      displayOptions: false,
+      showAction: false,
       link: null,
       loading: false,
     }
@@ -26,7 +26,7 @@ class WarnButton extends React.Component {
   }
 
   render() {
-    let displayOptions = this.state.displayOptions
+    let showAction = this.state.showAction
     let message = this.props.message
     let cancel = this.props.cancel
     let confirm = this.props.confirm
@@ -48,7 +48,8 @@ class WarnButton extends React.Component {
         <a
           className="btn-warn-component success"
           onClick={this.toggle.bind(this, this.props.action)}
-          href={this.state.link}>
+          href={this.state.link}
+          download>
           {confirm}
         </a>
       )
@@ -73,8 +74,7 @@ class WarnButton extends React.Component {
       </span>
     )
 
-    let hideAction
-    hideAction = (
+    let hideAction = (
       <span className={disabled ? ' disabled' : ''}>
         <button
           className="btn-warn-component warning"
@@ -85,7 +85,7 @@ class WarnButton extends React.Component {
       </span>
     )
 
-    let button = displayOptions ? viewAction : hideAction
+    let button = showAction ? viewAction : hideAction
     let loading = (
       <span className="btn-warn-load" role="group">
         <span className="warning-loading">
@@ -109,7 +109,7 @@ class WarnButton extends React.Component {
 
   toggle(action) {
     // initial click actions
-    if (this.state.displayOptions == false) {
+    if (this.state.showAction == false) {
       // validate & warn
       if (this.props.validations) {
         for (let i = 0; i < this.props.validations.length; i++) {
@@ -129,7 +129,7 @@ class WarnButton extends React.Component {
       if (this.props.prepDownload) {
         this.setState({ loading: true })
         this.props.prepDownload(link => {
-          this.setState({ displayOptions: true, link: link, loading: false })
+          this.setState({ showAction: true, link: link, loading: false })
         })
         return
       }
@@ -143,7 +143,7 @@ class WarnButton extends React.Component {
         })
         return
       } else {
-        this.setState({ displayOptions: true })
+        this.setState({ showAction: true })
         return
       }
     }
@@ -155,14 +155,11 @@ class WarnButton extends React.Component {
           notifications.createAlert({ type: 'Error', message: e.error })
         }
         if (this._mounted) {
-          this.setState({
-            loading: false,
-            displayOptions: !this.state.displayOptions,
-          })
+          this.setState({ loading: false, showAction: !this.state.showAction })
         }
       })
     } else {
-      this.setState({ displayOptions: !this.state.displayOptions })
+      this.setState({ showAction: !this.state.showAction })
     }
   }
 }
@@ -179,8 +176,6 @@ WarnButton.propTypes = {
   action: PropTypes.func,
   prepDownload: PropTypes.func,
   lock: PropTypes.bool,
-  modalLink: PropTypes.string,
-  location: PropTypes.object,
 }
 
 WarnButton.defaultProps = {
@@ -191,5 +186,3 @@ WarnButton.defaultProps = {
   warn: true,
   tooltip: null,
 }
-
-export default WarnButton

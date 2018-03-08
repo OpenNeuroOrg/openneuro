@@ -187,81 +187,96 @@ body > div:nth-child(9) > div.fade.in.modal > div > div > div.modal-body > div >
     }
 }
 
-.display-file {
+.display-file-modal.modal {
 
-    .display-file-content {
-        background: $transparent;
+    .modal-dialog {
+        width: 100%;
+        color: $black;
+        background: transparentize($white, .2);
         height: 100%;
+        padding: 80px 0 0;
+        .modal-content {
+            background: $transparent;
+            height: 100%;
 
-        .display-file-header,
-        .display-file-body {
-            width: 100%;
-            
-            .modal-preview-image{
+            .modal-header,
+            .modal-body {
                 width: 100%;
-                height: auto;
-                text-align: center;
-                img{
-                    max-width: 100%;
+                padding: 2em;
+                .modal-preview-image{
+                    width: 100%;
                     height: auto;
-                }
-            }
-            .json-editor {
-
-                textarea {
-                    min-height: 500px;
-                    resize: vertical;
-                }
-
-                .json-editor-controls {
-                    span {
-                        padding-right: 15px;
-                        
-                        i {
-                            padding-right: 3px;
-                        }
+                    text-align: center;
+                    img{
+                        max-width: 100%;
+                        height: auto;
                     }
                 }
+                .json-editor {
 
-            }
-        }
+                    textarea {
+                        min-height: 500px;
+                        resize: vertical;
+                    }
 
-        .display-file-header {
-            font-size: 20px;
-            background: $white;
+                    .json-editor-controls {
+                        span {
+                            padding-right: 15px;
+                            
+                            i {
+                                padding-right: 3px;
+                            }
+                        }
+                    }
 
-            .modal-title {
-                color: $black;
-                font-size: 30px;
-                .modal-download {
-                    display: inline;
-                    font-size: 18px;
-                    margin-left: 20px;
-                    position: relative;
                 }
             }
-            .close {
-                color: $transparent3;
-                margin-top: -5px !important;
-                font-size: 50px;
-                &:focus{
-                    border: none;
-                    outline: none;
-                    box-shadow: none;
+
+            .modal-header {
+                font-size: 20px;
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                height: 80px;
+                background: $white;
+
+                .modal-title {
+                    color: $black;
+                    font-size: 30px;
+                    .modal-download {
+                        display: inline;
+                        font-size: 18px;
+                        margin-left: 20px;
+                        position: relative;
+                        top: -3px;
+                    }
+                }
+                .close {
+                    color: $transparent3;
+                    margin-top: -5px !important;
+                    font-size: 50px;
+                    &:focus{
+                        border: none;
+                        outline: none;
+                        box-shadow: none;
+                    }
                 }
             }
-        }
 
-        .display-file-body {
-            padding: 2em;
-            padding: 30px 50px;
-            white-space: pre-wrap;
-            font-family: monospace;
-            // overflow-y: scroll;
-            height: 95%;
-            padding-bottom: 3em;
+            .modal-body {
+                padding: 30px 50px;
+                white-space: pre-wrap;
+                font-family: monospace;
+                overflow-y: scroll;
+                height: 95%;
+                padding-bottom: 3em;
+            }
         }
     }
+
+
 }
 
 .display-file-modal.nii-gz .modal-dialog .modal-content .modal-body {
@@ -584,43 +599,4 @@ div.rt-resizable-header-content {
       }
     }
   }
-}
-
-.snapshot-modal {
-
-    .snapshot-version {
-        div {
-            display: inline-block;
-        }
-        span.version-point {
-            padding: 0px 4px;
-        }
-    }
-
-    .changes {
-        padding-bottom: 10px;
-    }
-
-    .change {
-        padding-top:10px;
-    }
-    
-
-    .modal-controls {
-        padding-top: 20px;
-
-        .changelog-length-warning {
-            float: right;
-        }
-    }
-    .change-controls {
-        vertical-align: text-top;
-        a {
-            padding-right: 10px;
-            i {
-                padding-right: 2px;
-            }
-        }
-
-    }
 }

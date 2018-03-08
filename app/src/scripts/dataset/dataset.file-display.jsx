@@ -3,81 +3,38 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
 import PropTypes from 'prop-types'
+import { Modal } from '../utils/modal.jsx'
 import files from '../utils/files'
 import Papaya from '../common/partials/papaya.jsx'
 import ReactTable from 'react-table'
-import datasetStore from './dataset.store'
-import actions from './dataset.actions'
 import JsonEditor from './tools/json/jsoneditor.jsx'
-import Spinner from '../common/partials/spinner.jsx'
-import Timeout from '../common/partials/timeout.jsx'
-import ErrorBoundary from '../errors/errorBoundary.jsx'
-import { withRouter } from 'react-router-dom'
-import { refluxConnect } from '../utils/reflux'
 
-class FileDisplay extends Reflux.Component {
+export default class FileDisplay extends React.Component {
   // life cycle events --------------------------------------------------
-  constructor() {
-    super()
-    refluxConnect(this, datasetStore, 'datasets')
-  }
 
   render() {
-    let datasets = this.state.datasets
-
-    const file = datasets ? datasets.displayFile : null
-    const fileName = file ? file.name : null
-    const fileLink = file ? file.link : null
-
-    let loading = datasets && datasets.loading
-    let loadingText =
-      datasets && typeof datasets.loading == 'string'
-        ? datasets.loading
-        : 'loading'
-
-    if (!file) {
-      return null
+    if (!this.props.show) {
+      return false
     }
-
-    let content = (
-      <div className={'dataset-form display-file ' + this._extension(fileName)}>
-        <div className="display-file-content">
-          <div className="col-xs-12 dataset-form-header display-file-header">
-            <div className="form-group modal-title">
-              <label>
-                {fileName.split('/')[fileName.split('/').length - 1]}
-              </label>
-              <div className="modal-download btn-admin-blue">
-                {this._download(fileLink)}
-              </div>
-            </div>
-            <hr className="modal-inner" />
-          </div>
-          <div className="dataset-form-body display-file-body col-xs-12">
-            <div className="dataset-form-content col-xs-12">
-              <div className="dataset file-display-modal">
-                {this._format(file)}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+    let file = this.props.file
 
     return (
-      <ErrorBoundary
-        message="The file has failed to load in time. Please check your network connection."
-        className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
-        {loading ? (
-          <Timeout timeout={20000}>
-            <Spinner active={true} text={loadingText} />
-          </Timeout>
-        ) : (
-          content
-        )}
-      </ErrorBoundary>
+      <Modal
+        show={this.props.show}
+        onHide={this.props.onHide}
+        className={'display-file-modal ' + this._extension(file.name)}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            {file.name.split('/')[file.name.split('/').length - 1]}
+            <div className="modal-download btn-admin-blue">
+              {this._download(file.link)}
+            </div>
+          </Modal.Title>
+        </Modal.Header>
+        <hr className="modal-inner" />
+        <Modal.Body>{this._format(file)}</Modal.Body>
+      </Modal>
     )
   }
 
@@ -97,15 +54,14 @@ class FileDisplay extends Reflux.Component {
     let name = file.name
     let link = file.link
     let content = file.text
-    let isSnapshot = this.state.datasets ? this.state.datasets.snapshot : null
     if (files.hasExtension(name, ['.json'])) {
       return (
         <div>
           <JsonEditor
             data={content}
             file={file}
-            onSave={actions.updateFile.bind(file)}
-            isSnapshot={isSnapshot}
+            onSave={this.props.onSave.bind(file)}
+            isSnapshot={this.props.isSnapshot}
           />
         </div>
       )
@@ -222,5 +178,3 @@ FileDisplay.propTypes = {
   onSave: PropTypes.func,
   isSnapshot: PropTypes.bool,
 }
-
-export default withRouter(FileDisplay)

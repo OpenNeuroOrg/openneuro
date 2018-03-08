@@ -1,23 +1,17 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
 import PropTypes from 'prop-types'
-import Spinner from '../../common/partials/spinner.jsx'
-import Timeout from '../../common/partials/timeout.jsx'
-import ErrorBoundary from '../../errors/errorBoundary.jsx'
-import { Link, withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import actions from '../dataset.actions.js'
-import datasetStore from '../dataset.store.js'
+import { Modal } from '../../utils/modal.jsx'
 import moment from 'moment'
-import { refluxConnect } from '../../utils/reflux'
 
-class Publish extends Reflux.Component {
+class Publish extends React.Component {
   // life cycle events --------------------------------------------------
 
-  constructor(props) {
-    super(props)
-    refluxConnect(this, datasetStore, 'datasets')
+  constructor() {
+    super()
     this.state = {
       loading: false,
       selectedSnapshot: '',
@@ -27,44 +21,35 @@ class Publish extends Reflux.Component {
   }
 
   componentWillReceiveProps() {
-    let snapshots = this.state.datasets.snapshots
-    let dataset = this.state.datasets.dataset
-
-    if (snapshots && dataset) {
-      snapshots.map(snapshot => {
-        if (snapshot._id == dataset._id) {
-          if (snapshot.original) {
-            this.setState({ selectedSnapshot: snapshot._id })
-          } else if (snapshots.length > 1) {
-            this.setState({ selectedSnapshot: snapshots[1]._id })
-          }
-          return
+    this.props.snapshots.map(snapshot => {
+      if (snapshot._id == this.props.dataset._id) {
+        if (snapshot.original) {
+          this.setState({ selectedSnapshot: snapshot._id })
+        } else if (this.props.snapshots.length > 1) {
+          this.setState({ selectedSnapshot: this.props.snapshots[1]._id })
         }
-      })
-    }
-  }
-
-  _datasetLink() {
-    if (this.state.datasets.datasetUrl) {
-      return (
-        <Link to={this.state.datasets.datasetUrl}>
-          <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
-            Return to Dataset
-          </button>
-        </Link>
-      )
-    } else {
-      return null
-    }
+        return
+      }
+    })
   }
 
   render() {
-    let datasets = this.state.datasets
-    let loading = datasets && datasets.loading
-    let loadingText =
-      datasets && typeof datasets.loading == 'string'
-        ? datasets.loading
-        : 'loading'
+    let form = (
+      <div className="analysis-modal clearfix">
+        {this._snapshots()}
+        <p className="text-danger">
+          This snapshot will be released publicly under a
+          <a
+            href="https://wiki.creativecommons.org/wiki/CC0"
+            target="_blank"
+            rel="noopener noreferrer">
+            {' '}
+            CC0 license
+          </a>. This operation cannot be undone.
+        </p>
+        {this._submit()}
+      </div>
+    )
 
     let message = (
       <div>
@@ -72,26 +57,9 @@ class Publish extends Reflux.Component {
           {this.state.error ? <h4 className="danger">Error</h4> : null}
           <h5>{this.state.message}</h5>
         </div>
-        {this._datasetLink()}
-      </div>
-    )
-
-    let form = (
-      <div className="dataset-form-body col-xs-12">
-        <div className="dataset-form-content col-xs-12">
-          {this._snapshots()}
-          <p className="text-danger">
-            This snapshot will be released publicly under a
-            <a
-              href="https://wiki.creativecommons.org/wiki/CC0"
-              target="_blank"
-              rel="noopener noreferrer">
-              {' '}
-              CC0 license
-            </a>. This operation cannot be undone.
-          </p>
-        </div>
-        <div className="dataset-form-controls col-xs-12">{this._submit()}</div>
+        <button className="btn-admin-blue" onClick={this._hide.bind(this)}>
+          OK
+        </button>
       </div>
     )
 
@@ -102,30 +70,16 @@ class Publish extends Reflux.Component {
       body = form
     }
 
-    let content = (
-      <div className="dataset-form">
-        <div className="col-xs-12 dataset-form-header">
-          <div className="form-group">
-            <label>Publish</label>
-          </div>
-          <hr className="modal-inner" />
-          {body}
-        </div>
-      </div>
-    )
-
     return (
-      <ErrorBoundary
-        message="The dataset has failed to load in time. Please check your network connection."
-        className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
-        {loading ? (
-          <Timeout timeout={20000}>
-            <Spinner active={true} text={loadingText} />
-          </Timeout>
-        ) : (
-          content
-        )}
-      </ErrorBoundary>
+      <Modal show={this.props.show} onHide={this._hide.bind(this)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Publish</Modal.Title>
+        </Modal.Header>
+        <hr className="modal-inner" />
+        <Modal.Body>
+          <div className="dataset">{body}</div>
+        </Modal.Body>
+      </Modal>
     )
   }
 
@@ -139,9 +93,8 @@ class Publish extends Reflux.Component {
    */
   _snapshots() {
     let options = []
-    let snapshots = this.state.datasets.snapshots
-    if (snapshots) {
-      options = snapshots.map(snapshot => {
+    if (this.props.snapshots) {
+      options = this.props.snapshots.map(snapshot => {
         if (!snapshot.isOriginal && !snapshot.orphaned) {
           return (
             <option
@@ -175,7 +128,11 @@ class Publish extends Reflux.Component {
               </select>
             </div>
             <div className="col-xs-6 default-reset">
-              {this._createNewSnapshot()}
+              <button
+                className="btn-reset"
+                onClick={this._createSnapshot.bind(this)}>
+                Create New Snapshot
+              </button>
             </div>
           </div>
         </div>
@@ -183,45 +140,21 @@ class Publish extends Reflux.Component {
     )
   }
 
-  _createNewSnapshot() {
-    let dataset = datasetStore.data.dataset
-    let snapshots = datasetStore.data.snapshots
-    let modified = !(
-      snapshots.length > 1 &&
-      moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0
-    )
-    if (modified && this.state.datasets.datasetUrl) {
-      let to = {
-        pathname: this.state.datasets.datasetUrl + '/create-snapshot',
-        state: {
-          fromModal: 'publish',
-        },
-      }
-      return (
-        <Link to={to}>
-          <button className="btn-reset">Create New Snapshot</button>
-        </Link>
-      )
-    } else {
-      return null
-    }
-  }
-
   _submit() {
-    let submitButton
     if (this.state.selectedSnapshot) {
-      submitButton = (
-        <button className="btn-modal-submit" onClick={this._publish.bind(this)}>
-          Publish
-        </button>
+      return (
+        <div className="col-xs-12 modal-actions">
+          <button
+            className="btn-modal-submit"
+            onClick={this._publish.bind(this)}>
+            Publish
+          </button>
+          <button className="btn-reset" onClick={this._hide.bind(this)}>
+            close
+          </button>
+        </div>
       )
     }
-    return (
-      <div className="col-xs-12 modal-actions">
-        {submitButton}
-        {this._datasetLink()}
-      </div>
-    )
   }
 
   // actions ------------------------------------------------------------
@@ -236,6 +169,7 @@ class Publish extends Reflux.Component {
       message: null,
       error: false,
     })
+    this.props.onHide()
   }
 
   /**
@@ -287,9 +221,6 @@ Publish.propTypes = {
   show: PropTypes.bool,
   onHide: PropTypes.func,
   history: PropTypes.object,
-  location: PropTypes.object,
-  match: PropTypes.object,
-  returnUrl: PropTypes.string,
 }
 
 export default withRouter(Publish)
