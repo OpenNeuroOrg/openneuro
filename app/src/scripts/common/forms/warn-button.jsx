@@ -4,7 +4,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from '../partials/tooltip.jsx'
 import notifications from '../../notification/notification.actions'
-import { withRouter } from 'react-router-dom'
 
 class WarnButton extends React.Component {
   constructor() {
