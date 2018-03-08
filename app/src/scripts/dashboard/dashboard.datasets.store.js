@@ -32,13 +32,13 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Set Initial State
-     *
-     * Sets the state to the data object defined
-     * inside the function. Also takes a diffs object
-     * which will set the state to the initial state
-     * with any differences passed.
-     */
+   * Set Initial State
+   *
+   * Sets the state to the data object defined
+   * inside the function. Also takes a diffs object
+   * which will set the state to the initial state
+   * with any differences passed.
+   */
   setInitialState(diffs) {
     let data = {
       loading: false,
@@ -68,13 +68,13 @@ let UploadStore = Reflux.createStore({
   // actions ---------------------------------------------------------------------------
 
   /**
-     * Get Datasets
-     *
-     * Takes a boolean representing whether the
-     * request is for public datasets and gets
-     * a list of datasets and sorts by the current
-     * sort setting.
-     */
+   * Get Datasets
+   *
+   * Takes a boolean representing whether the
+   * request is for public datasets and gets
+   * a list of datasets and sorts by the current
+   * sort setting.
+   */
   getDatasets(isPublic, isAdmin) {
     if (typeof isPublic === 'undefined') {
       isPublic = this.data.isPublic
@@ -95,6 +95,15 @@ let UploadStore = Reflux.createStore({
       () => {
         bids.getDatasets(
           datasets => {
+            if (!isAdmin && !isPublic) {
+              datasets = datasets.filter(dataset => {
+                if (dataset.group && userStore.data && userStore.data.profile) {
+                  return dataset.group === userStore.data.profile._id
+                } else {
+                  return false
+                }
+              })
+            }
             if (isPublic === this.data.isPublic) {
               this.sort('created', '+', datasets, true)
             }
@@ -108,11 +117,11 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Filter
-     *
-     * Takes a value and toggles whether datasets
-     * with that value are shown.
-     */
+   * Filter
+   *
+   * Takes a value and toggles whether datasets
+   * with that value are shown.
+   */
   filter(value) {
     // set filters
     let filters = this.data.filters
@@ -161,11 +170,11 @@ let UploadStore = Reflux.createStore({
   },
 
   /**
-     * Sort
-     *
-     * Takes a value and a direction (+ or -) and
-     * sorts the current datasets acordingly.
-     */
+   * Sort
+   *
+   * Takes a value and a direction (+ or -) and
+   * sorts the current datasets acordingly.
+   */
   sort(value, direction, datasets, isTimeStamp) {
     datasets = datasets ? datasets : this.data.datasets
     dashUtils.sort(datasets, value, direction, isTimeStamp)
