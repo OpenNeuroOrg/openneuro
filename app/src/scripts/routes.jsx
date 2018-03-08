@@ -31,6 +31,7 @@ const appRoutes = () => (
     <Route name="public" path="/public" component={PublicDashboard} />
     <Route name="admin" path="/admin" component={requireAuth(Admin, 'admin')} />
     <Route name="dataset" path="/datasets" component={Dataset} />
+    <Route name="search" path="/search/:query" component={SearchResults} />
   </Switch>
 )
 
