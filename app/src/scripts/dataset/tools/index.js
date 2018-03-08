@@ -1,29 +1,42 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import moment from 'moment'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
-import ToolModals from './modals.jsx'
+import datasetStore from '../dataset.store.js'
+import { refluxConnect } from '../../utils/reflux'
 
-class Tools extends React.Component {
+class Tools extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, datasetStore, 'datasets')
+  }
+
   // life cycle events --------------------------------------------------
 
   componentDidMount() {
-    let dataset = this.props.dataset
+    let dataset = this.state.datasets.dataset
+
     if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
       actions.loadUsers()
     }
   }
 
   render() {
-    let dataset = this.props.dataset,
-      snapshots = this.props.snapshots
+    let datasets = this.state.datasets
+    let dataset = datasets ? datasets.dataset : null,
+      snapshots = datasets ? datasets.snapshots : null
 
-    let datasetHasJobs = !!this.props.dataset.jobs.length
+    if (!dataset) {
+      return null
+    }
+
+    let datasetHasJobs = !!dataset.jobs.length
 
     // permission check shorthands
     let isAdmin = dataset.access === 'admin',
@@ -51,12 +64,18 @@ class Tools extends React.Component {
       {
         tooltip: 'Download Dataset',
         icon: 'fa-download',
-        prepDownload: actions.getDatasetDownloadTicket,
-        action: actions.toggleModal.bind(null, 'subscribe'),
+        prepDownload: actions.getDatasetDownloadTicket.bind(this),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'subscribe',
+          this.props.history,
+        ),
         display: !isIncomplete,
+        warn: true,
+        modalLink: datasets.datasetUrl + '/subscribe',
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -66,12 +85,17 @@ class Tools extends React.Component {
       {
         tooltip: 'Publish Dataset',
         icon: 'fa-globe icon-plus',
-        action: actions.toggleModal.bind(null, 'publish'),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'publish',
+          this.props.history,
+        ),
         display: isAdmin && !isPublic && !isIncomplete,
         warn: false,
+        modalLink: datasets.datasetUrl + '/publish',
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -86,7 +110,7 @@ class Tools extends React.Component {
         warn: true,
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -102,10 +126,10 @@ class Tools extends React.Component {
           this.props.history,
         ),
         display: displayDelete,
-        warn: isSnapshot,
+        warn: true,
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -115,12 +139,17 @@ class Tools extends React.Component {
       {
         tooltip: 'Share Dataset',
         icon: 'fa-user icon-plus',
-        action: actions.toggleModal.bind(null, 'share'),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'share',
+          this.props.history,
+        ),
         display: isAdmin && !isSnapshot && !isIncomplete,
         warn: false,
+        modalLink: datasets.datasetUrl + '/share',
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -130,9 +159,14 @@ class Tools extends React.Component {
       {
         tooltip: 'Create Snapshot',
         icon: 'fa-camera-retro icon-plus',
-        action: actions.createSnapshot.bind(null, this.props.history),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'create-snapshot',
+          this.props.history,
+        ),
         display: isAdmin && !isSnapshot && !isIncomplete,
-        warn: true,
+        warn: false,
+        modalLink: datasets.datasetUrl + '/create-snapshot',
         validations: [
           {
             check: isInvalid,
@@ -151,7 +185,7 @@ class Tools extends React.Component {
             type: 'Error',
           },
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -161,12 +195,17 @@ class Tools extends React.Component {
       {
         tooltip: 'Run Analysis',
         icon: 'fa-area-chart icon-plus',
-        action: actions.toggleModal.bind(null, 'jobs'),
+        action: actions.showDatasetComponent.bind(
+          this,
+          'jobs',
+          this.props.history,
+        ),
         display: isSignedIn && !isIncomplete,
         warn: false,
+        modalLink: datasets.datasetUrl + '/jobs',
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'Files are currently uploading',
             timeout: 5000,
             type: 'Error',
@@ -178,10 +217,10 @@ class Tools extends React.Component {
         icon: 'fa-tag icon-plus',
         action: actions.createSubscription.bind(this),
         display: isSignedIn && !isSubscribed,
-        warn: true,
+        warn: false,
         validations: [
           {
-            check: this.props.uploading && !isSnapshot,
+            check: datasets.uploading && !isSnapshot,
             message: 'You are about to follow a dataset',
             timeout: 5000,
             type: 'Error',
@@ -194,24 +233,21 @@ class Tools extends React.Component {
         action: actions.deleteSubscription.bind(this),
         display: isSignedIn && isSubscribed,
         warn: true,
-        // validations: [
-        //   {
-        //     check: null,
-        //     message: 'You are about to unfollow a dataset.',
-        //     timeout: 5000,
-        //     type: 'Error',
-        //   },
-        // ],
       },
     ]
 
-    return (
-      <div className="tools clearfix">
-        {this._snapshotLabel(dataset)}
-        {this._tools(tools)}
-        <ToolModals />
-      </div>
-    )
+    if (dataset && !datasets.loading) {
+      return (
+        <div className="col-xs-12 dataset-tools-wrap">
+          <div className="tools clearfix">
+            {this._snapshotLabel(dataset)}
+            {this._tools(tools)}
+          </div>
+        </div>
+      )
+    } else {
+      return null
+    }
   }
 
   // template methods ---------------------------------------------------
@@ -242,6 +278,7 @@ class Tools extends React.Component {
               action={tool.action}
               warn={tool.warn}
               link={tool.link}
+              modalLink={tool.modalLink}
               validations={tool.validations}
             />
           </div>
@@ -272,11 +309,8 @@ class Tools extends React.Component {
 }
 
 Tools.propTypes = {
-  dataset: PropTypes.object.isRequired,
-  snapshots: PropTypes.array.isRequired,
-  selectedSnapshot: PropTypes.string.isRequired,
   history: PropTypes.object,
-  uploading: PropTypes.bool,
+  location: PropTypes.object,
 }
 
 export default withRouter(Tools)

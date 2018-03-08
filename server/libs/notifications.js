@@ -100,43 +100,55 @@ let notifications = {
    * Includes changelog if available.
    */
   snapshotCreated(datasetId, versionNumber) {
+
+    // get the scitran project
     scitran.getProject(datasetId, (err, resp) => {
       let datasetLabel =
         resp.body && resp.body.label ? resp.body.label : datasetId
 
-      // get all users that are subscribed to the dataset
-      c.crn.subscriptions
-        .find({ datasetId: datasetId })
-        .toArray((err, subscriptions) => {
-          // create the email object for each user
-          subscriptions.forEach(subscription => {
-            scitran.getUser(subscription.userId, (err, res) => {
-              let user = res.body
-              let emailContent = {
-                _id: datasetId + '_' + user._id + '_' + 'snapshot_created',
-                type: 'email',
-                email: {
-                  to: user.email,
-                  subject: 'Snapshot Created',
-                  template: 'snapshot-created',
-                  data: {
-                    firstName: user.firstname,
-                    lastName: user.lastname,
-                    datasetLabel: datasetLabel,
-                    datasetId: bidsId.decodeId(datasetId),
-                    versionNumber: versionNumber,
-                    siteUrl:
-                      url.parse(config.url).protocol +
-                      '//' +
-                      url.parse(config.url).hostname,
+      let filename = 'CHANGES'
+      let project = resp.body ? resp.body : null
+
+      // get the snapshot changelog
+      scitran.getFile('projects', project._id, filename, {}, (err, file) => {
+        let changelog = file.body
+
+        // get all users that are subscribed to the dataset
+        c.crn.subscriptions
+          .find({ datasetId: datasetId })
+          .toArray((err, subscriptions) => {
+
+            // create the email object for each user
+            subscriptions.forEach(subscription => {
+              scitran.getUser(subscription.userId, (err, res) => {
+                let user = res.body
+                let emailContent = {
+                  _id: datasetId + '_' + user._id + '_' + 'snapshot_created',
+                  type: 'email',
+                  email: {
+                    to: user.email,
+                    subject: 'Snapshot Created',
+                    template: 'snapshot-created',
+                    data: {
+                      firstName: user.firstname,
+                      lastName: user.lastname,
+                      datasetLabel: datasetLabel,
+                      datasetId: bidsId.decodeId(datasetId),
+                      versionNumber: versionNumber,
+                      changelog: changelog,
+                      siteUrl:
+                        url.parse(config.url).protocol +
+                        '//' +
+                        url.parse(config.url).hostname,
+                    },
                   },
-                },
-              }
-              // send the email to the notifications database for distribution
-              notifications.add(emailContent, () => {})
+                }
+                // send the email to the notifications database for distribution
+                notifications.add(emailContent, () => {})
+              })
             })
           })
-        })
+      })
     })
   },
 

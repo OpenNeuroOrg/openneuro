@@ -74,18 +74,21 @@ const JobDescription = ({ jobDefinition }) => {
       </div>
     )
   }
-
-  return (
-    <div>
-      <br />
-      <hr />
-      {shortDescription}
-      {description}
-      {acknowledgments}
-      {support}
-      {tags}
-    </div>
-  )
+  if (shortDescription || description || acknowledgments || support || tags) {
+    return (
+      <div>
+        <br />
+        <hr />
+        {shortDescription}
+        {description}
+        {acknowledgments}
+        {support}
+        {tags}
+      </div>
+    )
+  } else {
+    return null
+  }
 }
 
 JobDescription.propTypes = {

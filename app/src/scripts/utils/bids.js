@@ -92,6 +92,9 @@ export default {
         if (file.name === 'README') {
           metadataFiles.push('README')
         }
+        if (file.name === 'CHANGES') {
+          metadataFiles.push('CHANGES')
+        }
         if (file.name === 'dataset_description.json') {
           metadataFiles.push('dataset_description.json')
         }
@@ -156,6 +159,7 @@ export default {
               users,
             )
             dataset.README = metadata.README
+            dataset.CHANGES = metadata.CHANGES
             crn.getDatasetJobs(projectId, options).then(res => {
               dataset.jobs = res.body
               dataset.children = tempFiles

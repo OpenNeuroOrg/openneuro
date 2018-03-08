@@ -87,6 +87,7 @@ let datasetStore = Reflux.createStore({
       loadingApps: false,
       loadingJobs: false,
       loadingTree: false,
+      loadedUrl: null,
       jobs: [],
       metadataIssues: {},
       modals: {
@@ -97,6 +98,7 @@ let datasetStore = Reflux.createStore({
         share: false,
         update: false,
         subscribe: false,
+        snapshot: false,
       },
       redirectUrl: null,
       snapshot: false,
@@ -132,6 +134,17 @@ let datasetStore = Reflux.createStore({
     options = options ? options : {}
     options.isPublic = !userStore.data.token
 
+    // don't reload the current dataset
+    if (!forceReload && dataset && dataset._id === datasetId) {
+      this.update({ loading: false, loadingJobs: false })
+      return
+    }
+
+    // begin loading
+    // if (this.data.loading) {
+    //   return
+    // }
+
     // set active job if passed in query param
     if (options) {
       this.update({
@@ -143,20 +156,15 @@ let datasetStore = Reflux.createStore({
       })
     }
 
-    // update selection & current upload data
+    // update selection & current upload data, as well as loading state
     this.update({
       selectedSnapshot: datasetId,
       currentUploadId: uploadStore.data.projectId,
+      loading: true,
+      loadingJobs: true,
+      datasetTree: null,
+      loadedUrl: datasetId,
     })
-
-    // don't reload the current dataset
-    if (!forceReload && dataset && dataset._id === datasetId) {
-      this.update({ loading: false, loadingJobs: false })
-      return
-    }
-
-    // begin loading
-    this.update({ loading: true, loadingJobs: true, datasetTree: null })
     bids.getDataset(
       datasetId,
       res => {
@@ -174,25 +182,33 @@ let datasetStore = Reflux.createStore({
           let selectedSnapshot = this.data.selectedSnapshot
           if (!selectedSnapshot || selectedSnapshot === datasetId) {
             let dataset = res
-            this.update({
-              dataset,
-              datasetTree: [
-                {
-                  _id: datasetId,
-                  label: dataset.label,
-                  children: dataset.children,
-                },
-              ],
-            })
             let originalId = dataset.original ? dataset.original : datasetId
-            this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
-              this.loadSnapshots(dataset, jobs, () => {
-                this.loadComments(originalId)
-                this.checkUserSubscription(() => {
-                  this.update({ loading: false, snapshot: snapshot })
+            this.update(
+              {
+                dataset,
+                datasetTree: [
+                  {
+                    _id: datasetId,
+                    label: dataset.label,
+                    children: dataset.children,
+                  },
+                ],
+              },
+              this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
+                this.loadSnapshots(dataset, jobs, () => {
+                  this.loadComments(originalId)
+                  this.checkUserSubscription(() => {
+                    let datasetUrl = this.constructDatasetUrl(dataset)
+                    this.update({
+                      loading: false,
+                      snapshot: snapshot,
+                      datasetUrl: datasetUrl,
+                    })
+                  })
                 })
-              })
-            })
+              }),
+            )
+
             if (
               forceReload ||
               (!this.data.uploading && dataset.tags.includes('updating'))
@@ -513,12 +529,6 @@ let datasetStore = Reflux.createStore({
     modals[name] = !modals[name]
     update.modals = modals
 
-    // don't display the follow modal if the user is already following
-    if (name === 'subscribe' && this.data.dataset.subscribed) {
-      update.modals[name] = false
-    }
-    this.update(update)
-
     // callback
     if (callback && typeof callback === 'function') {
       callback()
@@ -544,6 +554,20 @@ let datasetStore = Reflux.createStore({
     this.update(update)
     if (callback && typeof callback === 'function') {
       callback()
+    }
+  },
+
+  showDatasetComponent(name, history, callback) {
+    let datasetUrl = this.data.datasetUrl
+    if (datasetUrl) {
+      let redirectUrl = datasetUrl
+      if (name !== '') {
+        redirectUrl = datasetUrl + '/' + name
+      }
+      history.push(redirectUrl)
+      if (callback) {
+        callback()
+      }
     }
   },
 
@@ -718,6 +742,29 @@ let datasetStore = Reflux.createStore({
       .then(res => {
         callback(null, res)
         dataset.README = value
+        this.update({ dataset })
+        this.updateModified()
+      })
+  },
+
+  /**
+   * Update CHANGES
+   */
+  updateCHANGES(value, callback) {
+    let dataset = this.data.dataset
+
+    scitran
+      .updateFileFromString(
+        'projects',
+        this.data.dataset._id,
+        'CHANGES',
+        value,
+        '',
+        [],
+      )
+      .then(res => {
+        callback(null, res)
+        dataset.CHANGES = value
         this.update({ dataset })
         this.updateModified()
       })
@@ -1136,14 +1183,14 @@ let datasetStore = Reflux.createStore({
           ) {
             this.updateDescriptionFile(file, this.data.dataset._id, () => {
               this.updateFileState(item, { loading: false })
-              this.dismissModals()
+              this.showDatasetComponent('', item.history)
             })
           } else {
             scitran
               .updateFile('projects', this.data.dataset._id, file)
               .then(() => {
                 this.updateFileState(item, { loading: false })
-                this.dismissModals()
+                this.showDatasetComponent('', item.history)
                 this.revalidate()
               })
           }
@@ -1628,10 +1675,8 @@ let datasetStore = Reflux.createStore({
   /**
    * DisplayFile
    */
-  displayFile(snapshotId, jobId, file, callback) {
+  displayFile(snapshotId, jobId, file, history, callback) {
     let requestAndDisplay = link => {
-      let modals = this.data.modals
-      modals.displayFile = true
       if (
         files.hasExtension(file.name, [
           '.pdf',
@@ -1645,19 +1690,20 @@ let datasetStore = Reflux.createStore({
         if (callback) {
           callback()
         }
+        this.showDatasetComponent('file-display', file.history)
         this.update({
           displayFile: {
             name: file.name,
             text: null,
             link: link,
           },
-          modals,
         })
       } else {
         request.get(link, {}).then(res => {
           if (callback) {
             callback()
           }
+          this.showDatasetComponent('file-display', file.history)
           this.update({
             displayFile: {
               name: file.name,
@@ -1665,7 +1711,6 @@ let datasetStore = Reflux.createStore({
               link: link,
               info: file,
             },
-            modals,
           })
         })
       }
@@ -1689,13 +1734,12 @@ let datasetStore = Reflux.createStore({
    */
   editFile(snapshotId, jobId, file, callback) {
     let requestAndDisplay = link => {
-      let modals = this.data.modals
-      modals.editFile = true
       if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
         request.get(link, {}).then(res => {
           if (callback) {
             callback()
           }
+          this.showDatasetComponent('file-edit', file.history)
           this.update({
             editFile: {
               name: file.name,
@@ -1703,7 +1747,6 @@ let datasetStore = Reflux.createStore({
               link: link,
               info: file,
             },
-            modals,
           })
         })
       }
@@ -1831,6 +1874,19 @@ let datasetStore = Reflux.createStore({
         callback()
       }
     })
+  },
+
+  constructDatasetUrl(dataset) {
+    if (dataset) {
+      if (!dataset.original) {
+        let datasetId = dataset.linkID
+        return '/datasets/' + datasetId
+      } else {
+        let datasetId = dataset.linkOriginal
+        let version = dataset.linkID
+        return '/datasets/' + datasetId + '/versions/' + version
+      }
+    }
   },
 
   // usage analytics ---------------------------------------------------------------
