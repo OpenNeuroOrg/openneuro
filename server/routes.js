@@ -266,7 +266,7 @@ const baseRoutes = [
   },
   {
     method: 'delete',
-    url: '/stars/:datasetId',
+    url: '/stars/:datasetId/:userId',
     middleware: [auth.user],
     handler: stars.delete,
   },
