@@ -75,9 +75,6 @@ class WarnButton extends React.Component {
     )
 
     let hideAction
-    // if (this.props.modalLink) {
-    //   hideAction = this._modalLink(disabled)
-    // } else {
     hideAction = (
       <span className={disabled ? ' disabled' : ''}>
         <button
@@ -88,7 +85,6 @@ class WarnButton extends React.Component {
         </button>
       </span>
     )
-    // }
 
     let button = displayOptions ? viewAction : hideAction
     let loading = (
@@ -197,4 +193,4 @@ WarnButton.defaultProps = {
   tooltip: null,
 }
 
-export default withRouter(WarnButton)
+export default WarnButton
