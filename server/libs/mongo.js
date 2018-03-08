@@ -39,6 +39,7 @@ export default {
       subscriptions: null,
       datasets: null,
       snapshots: null,
+      stars: null,
     },
     scitran: {
       projects: null,
