@@ -182,11 +182,31 @@
                 width: 75px;
                 height: auto;
                 overflow: hidden;
-                //box-shadow: 1px 2px 3px -2px rgba(0, 0, 0, 0.5);
                 position: absolute;
                 top: 0;
                 right: 0;
             }
+
+            .user-generic-thumb {
+                width: 75px;
+                height: 75px;
+                overflow: hidden;
+                position: absolute;
+                top: 0;
+                right: 0;
+                display: table;
+                background-color: rgb(167, 204, 70);
+
+                .user-generic-thumb-letter {
+                    font-size: xx-large;
+                    display: table-cell;
+                    text-align: center;
+                    vertical-align: middle;
+                    color: white;
+                }
+            }
+
+
 
 
             .dropdown {
@@ -352,6 +372,9 @@
                 }
 
                 .user-img-thumb{
+                    display: none;
+                }
+                .user-generic-thumb{
                     display: none;
                 }
 
