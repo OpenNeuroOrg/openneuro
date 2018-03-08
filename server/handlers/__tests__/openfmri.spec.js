@@ -7,6 +7,7 @@ import http from 'http'
 import createApp from '../../app.js'
 import { createDatasetModel } from '../../datalad/dataset'
 
+jest.mock('../../config.js')
 jest.mock('../../libs/graphql.client.js')
 // Needed to allow supertest to work with mocking superagent
 jest.unmock('superagent')
