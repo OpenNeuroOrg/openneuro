@@ -520,10 +520,22 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
         <span
           className="download-all"
         >
-          <withRouter(WarnButton)
+          <WarnButton
+            cancel={
+              <i
+                className="fa fa-times"
+              />
+            }
+            confirm={
+              <i
+                className="fa fa-check"
+              />
+            }
             icon="fa-download"
             message=" DOWNLOAD All LOGS"
             prepDownload={[Function]}
+            tooltip={null}
+            warn={true}
           />
         </span>
         <div
@@ -544,10 +556,21 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
                   className="job-log"
                   key="--participant_label 13"
                 >
-                  <withRouter(WarnButton)
+                  <WarnButton
                     action={[Function]}
+                    cancel={
+                      <i
+                        className="fa fa-times"
+                      />
+                    }
+                    confirm={
+                      <i
+                        className="fa fa-check"
+                      />
+                    }
                     icon="fa-eye"
                     message="--participant_label 13"
+                    tooltip={null}
                     warn={false}
                   />
                   <span
@@ -569,10 +592,21 @@ exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
                   className="job-log"
                   key="--participant_label 13"
                 >
-                  <withRouter(WarnButton)
+                  <WarnButton
                     action={[Function]}
+                    cancel={
+                      <i
+                        className="fa fa-times"
+                      />
+                    }
+                    confirm={
+                      <i
+                        className="fa fa-check"
+                      />
+                    }
                     icon="fa-eye"
                     message="--participant_label 13"
+                    tooltip={null}
                     warn={false}
                   />
                   <span
