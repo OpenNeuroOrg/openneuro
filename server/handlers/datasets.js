@@ -115,6 +115,14 @@ export default {
     )
   },
 
+  getStars(req, res) {
+    let datasetId = req.params.datasetId
+
+    stars.getStars(datasetId, (err, starCount) => {
+      res.send(starCount)
+    })
+  },
+
   addStar(req, res) {
     let datasetId = req.params.datasetId
     stars.addStar(datasetId, (err, starCount) => {
