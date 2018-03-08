@@ -16,9 +16,8 @@ class FileTree extends React.Component {
     let editable = this.props.editable
     let tree = this.props.tree
     let topLevel = this.props.topLevel
-    let history = this.props.history
     let nodes = tree.map(item => {
-      item.history = history
+      item.history = this.props.history
       let name = item.label ? item.label : item.name
       return (
         <li className="clearfix" key={name}>
