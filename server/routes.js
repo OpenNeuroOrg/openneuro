@@ -7,6 +7,7 @@ import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
 import validation from './handlers/validation'
 import datasets from './handlers/datasets'
+import stars from './handlers/stars'
 import * as datalad from './handlers/datalad'
 import comments from './handlers/comments'
 import subscriptions from './handlers/subscriptions'
@@ -255,20 +256,19 @@ const baseRoutes = [
   {
     method: 'get',
     url: '/stars/:datasetId',
-    handler: datasets.getStars,
+    handler: stars.getStars,
   },
   {
     method: 'post',
     url: '/stars/:datasetId',
     middleware: [auth.user],
-    handler: datasets.addStar,
+    handler: stars.addStar,
   },
-
   {
     method: 'delete',
     url: '/stars/:datasetId',
     middleware: [auth.user],
-    handler: datasets.removeStar,
+    handler: stars.removeStar,
   },
   
 
