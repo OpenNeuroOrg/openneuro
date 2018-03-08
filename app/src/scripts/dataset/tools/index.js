@@ -48,6 +48,7 @@ class Tools extends Reflux.Component {
       isInvalid = !!dataset.status.invalid,
       isSnapshot = !!dataset.original,
       isSubscribed = !!dataset.subscribed,
+      hasUserStar = !!dataset.hasUserStar,
       isSuperuser =
         window.localStorage.scitran && JSON.parse(window.localStorage.scitran)
           ? JSON.parse(window.localStorage.scitran).root
@@ -237,6 +238,28 @@ class Tools extends Reflux.Component {
         icon: 'fa-tag icon-minus',
         action: actions.deleteSubscription.bind(this),
         display: isSignedIn && isSubscribed,
+        warn: true,
+      },
+      {
+        tooltip: 'Star Dataset',
+        icon: 'far fa-star',
+        action: actions.addStar.bind(this),
+        display: isSignedIn && !hasUserStar,
+        warn: false,
+        validations: [
+          {
+            check: datasets.uploading && !isSnapshot,
+            message: 'You are about to follow a dataset',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
+      },
+      {
+        tooltip: 'Unstar Dataset',
+        icon: 'fas fa-star empty-star',
+        action: actions.removeStar.bind(this),
+        display: isSignedIn && hasUserStar,
         warn: true,
       },
     ]
