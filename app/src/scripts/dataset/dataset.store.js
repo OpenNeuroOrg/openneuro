@@ -2226,7 +2226,7 @@ let datasetStore = Reflux.createStore({
           error: 'There was an error while adding a star to this dataset.',
         })
       } else {
-        let dataset = this.state.dataset
+        let dataset = this.data.dataset
         dataset.hasUserStar = true
         this.update({ dataset })
         callback()
@@ -2248,7 +2248,7 @@ let datasetStore = Reflux.createStore({
           error: 'There was an error while removing a star from this dataset.',
         })
       } else {
-        let dataset = this.state.dataset
+        let dataset = this.data.dataset
         dataset.hasUserStar = false
         this.update({ dataset })
       }
@@ -2256,6 +2256,7 @@ let datasetStore = Reflux.createStore({
   },
 
   getDatasetStars() {
+    let dataset = this.data.dataset
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
@@ -2263,20 +2264,19 @@ let datasetStore = Reflux.createStore({
       this.data.currentUser && this.data.currentUser.profile
         ? this.data.currentUser.profile._id
         : null
-    crn.getStars(datasetId, userId).then(res => {
+    crn.getStars(datasetId).then(res => {
       if (res && res.status !== 200) {
-        let dataset = this.state.dataset
+        let dataset = this.data.dataset
         dataset.stars = []
         dataset.hasUserStar = false
         this.update({ dataset })
       } else {
-        let dataset = this.state.dataset
         dataset.stars = res.body ? res.body : []
 
         if (dataset.stars.length) {
           dataset.hasUserStar =
             dataset.stars.filter(star => {
-              return star.user === this.state.user
+              return star.userId === userId
             }).length > 0
         }
         this.update({ dataset })
