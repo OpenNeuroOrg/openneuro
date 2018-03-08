@@ -262,16 +262,14 @@ const baseRoutes = [
     method: 'post',
     url: '/stars/:datasetId',
     middleware: [auth.user],
-    handler: stars.addStar,
+    handler: stars.add,
   },
   {
     method: 'delete',
     url: '/stars/:datasetId',
     middleware: [auth.user],
-    handler: stars.removeStar,
+    handler: stars.delete,
   },
-  
-
 ]
 
 const scitranRoutes = [
