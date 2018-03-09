@@ -8,7 +8,6 @@ import eventLogs from './handlers/eventLogs'
 import validation from './handlers/validation'
 import datasets from './handlers/datasets'
 import * as datalad from './handlers/datalad'
-import * as openfmri from './handlers/openfmri'
 import comments from './handlers/comments'
 import subscriptions from './handlers/subscriptions'
 import auth from './libs/auth'
@@ -290,12 +289,6 @@ const dataladRoutes = [
     url: '/datasets/:datasetId/snapshot/:snapshotId',
     handler: datalad.createSnapshot,
   },
-  // OpenFMRI API routes
-  {
-    method: 'get',
-    url: '/openfmri/dataset/api/:datasetId',
-    handler: openfmri.getDataset,
-  },
 ]
 
 // initialize routes -------------------------------
@@ -303,7 +296,8 @@ const dataladRoutes = [
 const router = express.Router()
 // TODO - remove this once SciTran backend is no longer in use
 const routes = config.datalad.enabled
-  ? baseRoutes.concat(dataladRoutes) : baseRoutes.concat(scitranRoutes)
+  ? baseRoutes.concat(dataladRoutes)
+  : baseRoutes.concat(scitranRoutes)
 
 for (const route of routes) {
   let arr = route.hasOwnProperty('middleware') ? route.middleware : []
