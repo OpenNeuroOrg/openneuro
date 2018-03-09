@@ -1,25 +1,20 @@
 const MongodbMemoryServer = require('mongodb-memory-server').default
 const NodeEnvironment = require('jest-environment-node')
 
-const mongod = new MongodbMemoryServer()
-
 class MongoEnvironment extends NodeEnvironment {
   constructor(config) {
     super(config)
+    this.mongod = new MongodbMemoryServer()
   }
 
   async setup() {
-    console.log('Setup MongoDB Test Environment')
-
-    this.global.__MONGO_URI__ = `mongodb://localhost:${await mongod.getPort()}/`
+    this.global.__MONGO_URI__ = `mongodb://localhost:${await this.mongod.getPort()}/`
 
     await super.setup()
   }
 
   async teardown() {
-    console.log('Teardown MongoDB Test Environment')
-
-    mongod.stop()
+    this.mongod.stop()
 
     await super.teardown()
   }

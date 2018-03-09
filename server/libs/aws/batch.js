@@ -168,7 +168,7 @@ export default aws => {
     },
 
     /**
-     * Based on a job event, update the batchStatus and trigger 
+     * Based on a job event, update the batchStatus and trigger
      * any analysis updates needed
      */
     _updateJobStatus(job) {
@@ -396,7 +396,6 @@ export default aws => {
               reason:
                 'This analysis task did not complete within 48 hours and has failed due to timeout',
             }
-            console.log('Terminating timed out job:', job.jobId)
             sdk.terminateJob(params, err => {
               if (err) {
                 console.log('Error terminating job:', err)
@@ -408,8 +407,8 @@ export default aws => {
     },
 
     /**
-         * Register a job and store some additional metadata with AWS Batch
-         */
+     * Register a job and store some additional metadata with AWS Batch
+     */
     registerJobDefinition(jobDef, callback) {
       let error = this._validateInputs(jobDef)
       if (error) {
@@ -474,9 +473,9 @@ export default aws => {
     },
 
     /**
-         * Prepare to run a job by downloading the scitran snapshot and
-         * creating a mongo entry for it.
-         */
+     * Prepare to run a job by downloading the scitran snapshot and
+     * creating a mongo entry for it.
+     */
     prepareAnalysis(job, callback) {
       job.uploadSnapshotComplete = !!job.uploadSnapshotComplete
       job.analysis = {
@@ -528,10 +527,10 @@ export default aws => {
     },
 
     /**
-         * Upload any required data and submit jobs to Batch API
-         *
-         * This is called by worker processes and must be process safe.
-         */
+     * Upload any required data and submit jobs to Batch API
+     *
+     * This is called by worker processes and must be process safe.
+     */
     startAnalysis(job, jobId, userId, retry, callback) {
       let hash = job.datasetHash
       s3.uploadSnapshot(hash, err => {
@@ -570,8 +569,8 @@ export default aws => {
     },
 
     /**
-         * Start AWS Batch Jobs for an analysis
-         */
+     * Start AWS Batch Jobs for an analysis
+     */
     startBatchJobs(batchJob, jobId, callback) {
       c.crn.jobDefinitions.findOne(
         { jobDefinitionArn: batchJob.jobDefinition },
@@ -655,10 +654,10 @@ export default aws => {
     },
 
     /**
-        * build out batch job parameters from a job object and an optional snapshotHash
-        * new job submission will pass a snapshotHash whereas retry will use hash on job object
-        * returns batch job parameters
-        */
+     * build out batch job parameters from a job object and an optional snapshotHash
+     * new job submission will pass a snapshotHash whereas retry will use hash on job object
+     * returns batch job parameters
+     */
     buildBatchParams(job, snapshotHash) {
       let hash = snapshotHash || job.datasetHash
       let batchParams = {
@@ -740,9 +739,9 @@ export default aws => {
     },
 
     /**
-         * Update mongo job on successful job submission to AWS Batch.
-         * returns no return. Batch job start is happening after response has been send to client
-         */
+     * Update mongo job on successful job submission to AWS Batch.
+     * returns no return. Batch job start is happening after response has been send to client
+     */
     _updateJobOnSubmitSuccessful(jobId, batchIds) {
       // create initial batchStatus array
       let batchStatus = batchIds.map(id => {
@@ -770,10 +769,10 @@ export default aws => {
     },
 
     /**
-         * Submit parallel jobs to AWS batch
-         * for jobs with a subjectList parameter, we want to start all those jobs in parallel
-         * submits all jobs in parallel and callsback with an array of the AWS batch ids for all the jobs
-         */
+     * Submit parallel jobs to AWS batch
+     * for jobs with a subjectList parameter, we want to start all those jobs in parallel
+     * submits all jobs in parallel and callsback with an array of the AWS batch ids for all the jobs
+     */
     submitParallelJobs(batchJob, deps, callback) {
       let job = (params, callback) => {
         batch.submitJob(params, (err, data) => {
@@ -822,10 +821,10 @@ export default aws => {
     },
 
     /**
-         * Submits a single job to AWS Batch
-         * for jobs without a subjectList parameter we are running all subjects in one job.
-         * callsback with a single element array containing the AWS batch ID.
-         */
+     * Submits a single job to AWS Batch
+     * for jobs without a subjectList parameter we are running all subjects in one job.
+     * callsback with a single element array containing the AWS batch ID.
+     */
     submitSingleJob(batchJob, deps, callback) {
       let singleBatchJob = JSON.parse(JSON.stringify(batchJob))
 
@@ -850,8 +849,8 @@ export default aws => {
     },
 
     /**
-         * returns jobs array for given analysis from Batch
-         */
+     * returns jobs array for given analysis from Batch
+     */
     getAnalysisJobs(job, callback) {
       let jobs = job.analysis.jobs
       let params = {
@@ -867,11 +866,11 @@ export default aws => {
     },
 
     /**
-         * Convert JSON parameters into a string to pass to the bids-app container
-         *
-         * Accepts an array of parameter objects
-         * {key: ...value}
-         */
+     * Convert JSON parameters into a string to pass to the bids-app container
+     *
+     * Accepts an array of parameter objects
+     * {key: ...value}
+     */
     _prepareArguments(parameters) {
       return Object.keys(parameters)
         .filter(key => {
@@ -910,19 +909,19 @@ export default aws => {
     },
 
     /**
-         * If a string argument has any whitespace we need to make sure that we single quote it.
-         * Accepts a string and returns an appropriately formated string
-         */
+     * If a string argument has any whitespace we need to make sure that we single quote it.
+     * Accepts a string and returns an appropriately formated string
+     */
     _formatString(str) {
       let hasSpace = /\s/g.test(str)
       return hasSpace ? "'" + str + "'" : str
     },
 
     /**
-      * For now, we limit parallelization to 20 subjobs
-      *
-      * Takes a list of labels and returns a list of no more than 20 lists.
-      */
+     * For now, we limit parallelization to 20 subjobs
+     *
+     * Takes a list of labels and returns a list of no more than 20 lists.
+     */
     _partitionLabels(labels) {
       // Limit to 20 groups
       let pCount = Math.min(20, labels.length)
@@ -939,9 +938,9 @@ export default aws => {
     },
 
     /**
-         * Convert batchJob.parameters to a BIDS_ARGUMENTS environment var
-         * and add to document to submit the job
-         */
+     * Convert batchJob.parameters to a BIDS_ARGUMENTS environment var
+     * and add to document to submit the job
+     */
     _addJobArguments(batchJob) {
       let env = batchJob.containerOverrides.environment
       let bidsArguments = this._prepareArguments(batchJob.parameters)

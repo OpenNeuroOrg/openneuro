@@ -294,11 +294,10 @@ const dataladRoutes = [
 // initialize routes -------------------------------
 
 const router = express.Router()
-
 // TODO - remove this once SciTran backend is no longer in use
 const routes = config.datalad.enabled
-  ? baseRoutes.concat(scitranRoutes)
-  : baseRoutes.concat(dataladRoutes)
+  ? baseRoutes.concat(dataladRoutes)
+  : baseRoutes.concat(scitranRoutes)
 
 for (const route of routes) {
   let arr = route.hasOwnProperty('middleware') ? route.middleware : []
