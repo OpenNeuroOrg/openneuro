@@ -1,5 +1,6 @@
 import React from 'react'
-import { Route, Switch } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { Route, Switch, Redirect } from 'react-router-dom'
 import DatasetContent from './dataset.content.jsx'
 import CreateSnapshot from './tools/snapshot.jsx'
 import Publish from './tools/publish.jsx'
@@ -11,6 +12,17 @@ import FileEdit from './dataset.file-edit.jsx'
 import FileDisplay from './dataset.file-display.jsx'
 import DatasetLoader from './dataset.dataset-loader.jsx'
 import SnapshotLoader from './dataset.snapshot-loader.jsx'
+
+/**
+ * This redirects old URLs ending in /versions to the first snapshot
+ */
+const SnapshotDefaultRedirect = ({ match }) => {
+  return <Redirect to={`/datasets/${match.params.datasetId}/versions/00001`} />
+}
+
+SnapshotDefaultRedirect.propTypes = {
+  match: PropTypes.object,
+}
 
 export default class DatasetRoutes extends React.Component {
   render() {
@@ -89,6 +101,12 @@ export default class DatasetRoutes extends React.Component {
           />
 
           {/* Snapshot routes */}
+          <Route
+            name="snapshotDefault"
+            exact
+            path="/datasets/:datasetId/versions"
+            component={SnapshotDefaultRedirect}
+          />
           <Route
             name="snapshot"
             exact
