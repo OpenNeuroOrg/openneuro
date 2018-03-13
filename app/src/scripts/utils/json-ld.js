@@ -17,7 +17,9 @@ const schemaGenerator = datasets => {
     let schema = {
       '@context': context,
       '@type': type,
-      '@id': 'linktodoi',
+      // TODO: add @id field to doi reference uri when
+      // added to each dataset
+      // '@id': 'linktodoi',
       name: name,
       author: authors,
       datePublished: datePublished,
