@@ -87,7 +87,7 @@ export class LeftSidebar extends Reflux.Component {
                     : null}
                 </span>
                 <span className="icons">
-                  {snapshot.public && isSignedIn ? (
+                  {snapshot.public ? (
                     <span className="published">
                       <i className="fa fa-globe" />
                     </span>
