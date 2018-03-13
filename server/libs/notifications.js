@@ -108,7 +108,6 @@ let notifications = {
 
       let filename = 'CHANGES'
       let project = resp.body ? resp.body : null
-      console.log('RETURN FROM getProject: ', resp.body)
       // get the snapshot changelog
       scitran.getFile('projects', project._id, filename, {}, (err, file) => {
         let changelog = file.body
