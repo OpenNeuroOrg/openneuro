@@ -83,6 +83,7 @@ let datasetStore = Reflux.createStore({
         link: '',
         info: null,
       },
+      followers: null,
       loading: false,
       loadingApps: false,
       loadingJobs: false,
@@ -197,12 +198,14 @@ let datasetStore = Reflux.createStore({
               this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
                 this.loadSnapshots(dataset, jobs, () => {
                   this.loadComments(originalId)
-                  this.checkUserSubscription(() => {
-                    let datasetUrl = this.constructDatasetUrl(dataset)
-                    this.update({
-                      loading: false,
-                      snapshot: snapshot,
-                      datasetUrl: datasetUrl,
+                  this.checkSubscriptionFollowers(() => {
+                    this.checkUserSubscription(() => {
+                      let datasetUrl = this.constructDatasetUrl(dataset)
+                      this.update({
+                        loading: false,
+                        snapshot: snapshot,
+                        datasetUrl: datasetUrl,
+                      })
                     })
                   })
                 })
@@ -2125,6 +2128,18 @@ let datasetStore = Reflux.createStore({
     } else {
       callback()
     }
+  },
+
+  checkSubscriptionFollowers(callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    crn.getSubscriptions(datasetId).then(res => {
+      if (res.body) {
+        const followers = res.body.length
+        this.update({ followers }, callback())
+      }
+    })
   },
 })
 
