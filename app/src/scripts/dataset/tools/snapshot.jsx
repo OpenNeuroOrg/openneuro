@@ -90,10 +90,6 @@ class Snapshot extends Reflux.Component {
     })
   }
 
-  // componentWillMount() {
-  //   // this._onHide()
-  // }
-
   componentDidMount() {
     const datasetId = this.props.match.params.datasetId
     const snapshotId = this.props.match.params.snapshotId
