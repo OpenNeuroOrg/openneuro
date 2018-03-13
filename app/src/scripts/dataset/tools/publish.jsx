@@ -58,6 +58,23 @@ class Publish extends Reflux.Component {
     }
   }
 
+  _submitButton() {
+    let snapshots = this.state.datasets.snapshots
+    if (snapshots) {
+      let selectedSnapshot = snapshots.filter(snapshot => {
+        return snapshot._id === this.state.selectedSnapshot
+      })
+      if (selectedSnapshot && selectedSnapshot.length) {
+        return selectedSnapshot[0].public ? null : (
+          <div className="dataset-form-controls col-xs-12">
+            {this._submit()}
+          </div>
+        )
+      }
+    }
+    return null
+  }
+
   render() {
     let datasets = this.state.datasets
     let loading = datasets && datasets.loading
@@ -91,7 +108,7 @@ class Publish extends Reflux.Component {
             </a>. This operation cannot be undone.
           </p>
         </div>
-        <div className="dataset-form-controls col-xs-12">{this._submit()}</div>
+        {this._submitButton()}
       </div>
     )
 
