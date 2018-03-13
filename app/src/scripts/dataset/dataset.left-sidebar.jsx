@@ -3,7 +3,6 @@ import Reflux from 'reflux'
 import { Link } from 'react-router-dom'
 import moment from 'moment'
 import bids from '../utils/bids'
-import userStore from '../user/user.store.js'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
 import { refluxConnect } from '../utils/reflux'
@@ -16,7 +15,6 @@ export class LeftSidebar extends Reflux.Component {
 
   render() {
     let snapshots = this.state.datasets.snapshots
-    let isSignedIn = !!userStore.hasToken()
     let snapshotOptions = snapshots.map(snapshot => {
       if (snapshot.orphaned) {
         return (
