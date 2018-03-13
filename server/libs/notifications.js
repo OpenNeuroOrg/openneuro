@@ -108,6 +108,7 @@ let notifications = {
 
       let filename = 'CHANGES'
       let project = resp.body ? resp.body : null
+      let uploaderId = project ? project.group : null
 
       // get the snapshot changelog
       scitran.getFile('projects', project._id, filename, {}, (err, file) => {
@@ -117,34 +118,35 @@ let notifications = {
         c.crn.subscriptions
           .find({ datasetId: datasetId })
           .toArray((err, subscriptions) => {
-
             // create the email object for each user
             subscriptions.forEach(subscription => {
               scitran.getUser(subscription.userId, (err, res) => {
                 let user = res.body
-                let emailContent = {
-                  _id: datasetId + '_' + user._id + '_' + 'snapshot_created',
-                  type: 'email',
-                  email: {
-                    to: user.email,
-                    subject: 'Snapshot Created',
-                    template: 'snapshot-created',
-                    data: {
-                      firstName: user.firstname,
-                      lastName: user.lastname,
-                      datasetLabel: datasetLabel,
-                      datasetId: bidsId.decodeId(datasetId),
-                      versionNumber: versionNumber,
-                      changelog: changelog,
-                      siteUrl:
-                        url.parse(config.url).protocol +
-                        '//' +
-                        url.parse(config.url).hostname,
+                if (user._id !== uploaderId) {
+                  let emailContent = {
+                    _id: datasetId + '_' + user._id + '_' + 'snapshot_created',
+                    type: 'email',
+                    email: {
+                      to: user.email,
+                      subject: 'Snapshot Created',
+                      template: 'snapshot-created',
+                      data: {
+                        firstName: user.firstname,
+                        lastName: user.lastname,
+                        datasetLabel: datasetLabel,
+                        datasetId: bidsId.decodeId(datasetId),
+                        versionNumber: versionNumber,
+                        changelog: changelog,
+                        siteUrl:
+                          url.parse(config.url).protocol +
+                          '//' +
+                          url.parse(config.url).hostname,
+                      },
                     },
-                  },
+                  }
+                  // send the email to the notifications database for distribution
+                  notifications.add(emailContent, () => {})
                 }
-                // send the email to the notifications database for distribution
-                notifications.add(emailContent, () => {})
               })
             })
           })
