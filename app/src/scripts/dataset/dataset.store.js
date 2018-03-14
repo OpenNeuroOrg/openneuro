@@ -424,7 +424,12 @@ let datasetStore = Reflux.createStore({
         if (snapshotId === this.data.dataset._id) {
           dataset.status.public = value
         } else {
-          history.push('/datasets/' + datasetId + '/versions/' + snapshotId)
+          history.push(
+            '/datasets/' +
+              bids.decodeId(datasetId) +
+              '/versions/' +
+              bids.decodeId(snapshotId),
+          )
         }
       } else {
         if (!hasPublic) {
@@ -438,6 +443,15 @@ let datasetStore = Reflux.createStore({
           snapshot.public = value
         }
       }
+
+      // redirect to the snapshot page
+      history.push(
+        '/datasets/' +
+          bids.decodeId(datasetId) +
+          '/versions/' +
+          bids.decodeId(snapshotId),
+      )
+
       this.update({ dataset, snapshots })
     })
   },
