@@ -20,7 +20,8 @@ class Statuses extends Reflux.Component {
       minimal = this.props.minimal,
       status = dataset.status,
       uploading = dataset._id === this.state.upload.projectId,
-      uploaderSubscribed = dataset.uploaderSubscribed
+      uploaderSubscribed = dataset.uploaderSubscribed,
+      stars = dataset.stars ? '' + dataset.stars.length : '0'
 
     return (
       <span className="clearfix status-wrap">
@@ -43,6 +44,7 @@ class Statuses extends Reflux.Component {
           display={status.invalid && minimal}
         />
         <Status type="monitored" display={uploaderSubscribed} />
+        <Status type="stars" title={'' + stars} display={true} />
       </span>
     )
   }
