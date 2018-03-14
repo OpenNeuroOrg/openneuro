@@ -141,6 +141,15 @@ export default {
       // The user request failed
     }
 
+    //Stars
+    let stars = null
+    try {
+      const starRes = await crn.getStars()
+      stars = starRes ? starRes.body : null
+    } catch (err) {
+      // The dataset stars request failed
+    }
+
     // Dataset
     try {
       const projectRes = await scitran.getProject(projectId, options)
@@ -157,6 +166,7 @@ export default {
               project,
               metadata['dataset_description.json'],
               users,
+              stars,
             )
             dataset.README = metadata.README
             dataset.CHANGES = metadata.CHANGES
@@ -313,6 +323,26 @@ export default {
   },
 
   /**
+   * Stars
+   *
+   * Takes a dataset and stars list and returns the
+   * count of stars associated with that dataset.
+   */
+  stars(dataset, stars) {
+    if (stars) {
+      let datasetId = dataset._id
+      let associatedStars = stars.filter(star => {
+        return star.datasetId === datasetId
+      })
+      if (associatedStars.length) {
+        return associatedStars.length
+      }
+    } else {
+      return 0
+    }
+  },
+
+  /**
    * Format Files
    *
    * Sorts files alphabetically and adds parentId
@@ -345,7 +375,7 @@ export default {
    * a formatted top level container of a
    * BIDS dataset.
    */
-  formatDataset(project, description, users) {
+  formatDataset(project, description, users, stars) {
     let files = [],
       attachments = []
     if (project.files) {
@@ -390,6 +420,7 @@ export default {
       (dataset.authors = dataset.description.Authors)
     dataset.referencesAndLinks = dataset.description.ReferencesAndLinks
     dataset.user = this.user(dataset, users)
+    dataset.stars = this.stars(dataset, stars)
     if (project.original) {
       dataset.original = project.original
       dataset.linkOriginal = this.decodeId(project.original)

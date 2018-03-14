@@ -75,15 +75,24 @@ export default {
   getStars(req, res, next) {
     let datasetId = req.params.datasetId
 
-    c.crn.stars
-      .find({
-        datasetId: datasetId,
-      })
-      .toArray((err, stars) => {
+    if (datasetId) {
+      c.crn.stars
+        .find({
+          datasetId: datasetId,
+        })
+        .toArray((err, stars) => {
+          if (err) {
+            return next(err)
+          }
+          res.send(stars)
+        })
+    } else {
+      c.crn.stars.find({}).toArray((err, stars) => {
         if (err) {
           return next(err)
         }
         res.send(stars)
       })
+    }
   },
 }
