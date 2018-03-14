@@ -14,10 +14,31 @@ import JsonEditor from './tools/json/jsoneditor.jsx'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
 import ErrorBoundary from '../errors/errorBoundary.jsx'
-import { withRouter } from 'react-router-dom'
+import { Switch, Route, withRouter } from 'react-router-dom'
 import { refluxConnect } from '../utils/reflux'
 
-class FileDisplay extends Reflux.Component {
+class FileDisplay extends React.Component {
+  render() {
+    return (
+      <Switch>
+        <Route
+          name="dataset-file-display"
+          path="/datasets/:datasetId/file-display/:fileName"
+          exact
+          component={FileContent}
+        />
+        <Route
+          name="snapshot-file-display"
+          path="/datasets/:datasetId/versions/:snapshotId/file-display/:fileName"
+          exact
+          component={FileContent}
+        />
+      </Switch>
+    )
+  }
+}
+
+class FileContent extends Reflux.Component {
   // life cycle events --------------------------------------------------
   constructor() {
     super()
@@ -34,8 +55,7 @@ class FileDisplay extends Reflux.Component {
     const fileName = file ? file.name : null
 
     if (!fileName) {
-      let params = new URLSearchParams(this.props.location.search)
-      let fileName = params.get('file')
+      let fileName = decodeURIComponent(this.props.match.params.fileName)
       if (
         fileName &&
         datasets &&
@@ -48,9 +68,7 @@ class FileDisplay extends Reflux.Component {
           history: this.props.history,
         }
         actions.displayFile(null, null, displayFile, null)
-        // return null
       }
-      // return null
     }
   }
 
@@ -294,6 +312,10 @@ FileDisplay.propTypes = {
   show: PropTypes.bool,
   onSave: PropTypes.func,
   isSnapshot: PropTypes.bool,
+}
+
+FileContent.propTypes = {
+  match: PropTypes.object,
 }
 
 export default withRouter(FileDisplay)
