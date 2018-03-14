@@ -32,12 +32,13 @@ const JobParameters = ({
         // Adapt the Select's onChange call to match the expected input event
         input = (
           <Select
-            multi
-            simpleValue
             value={parameters[parameter]}
             placeholder="Select your subject(s)"
             options={subjects}
             onChange={onSelectChange}
+            multi
+            simpleValue
+            closeOnSelect={false}
           />
         )
       } else {
