@@ -242,18 +242,17 @@ class FileTree extends Reflux.Component {
           </span>
         )
       } else {
-        let to = {
-          pathname: this.state.datasets.datasetUrl + '/file-display',
-          search: '?file=' + item.name,
-        }
+        let itemUrl =
+          this.state.datasets.datasetUrl +
+          '/file-display/' +
+          encodeURIComponent(item.name)
         displayBtn = (
           <span className="view-file">
-            <Link to={to}>
+            <Link to={itemUrl}>
               <WarnButton
                 icon="fa-eye"
                 warn={false}
                 message=" View"
-                // action={this.props.displayFile.bind(this, item)}
                 action={() => {
                   return null
                 }}

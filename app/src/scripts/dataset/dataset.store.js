@@ -569,7 +569,7 @@ let datasetStore = Reflux.createStore({
             ? this.data.displayFile.name
             : null
           if (fileName) {
-            redirectUrl = redirectUrl + '?file=' + fileName
+            redirectUrl = redirectUrl + '/' + encodeURIComponent(fileName)
           }
         }
       }
