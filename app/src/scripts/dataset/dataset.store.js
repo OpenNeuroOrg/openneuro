@@ -2226,10 +2226,9 @@ let datasetStore = Reflux.createStore({
           error: 'There was an error while adding a star to this dataset.',
         })
       } else {
-        let dataset = this.data.dataset
-        dataset.hasUserStar = true
-        this.update({ dataset })
-        callback()
+        this.getDatasetStars(() => {
+          callback()
+        })
       }
     })
   },
@@ -2248,14 +2247,14 @@ let datasetStore = Reflux.createStore({
           error: 'There was an error while removing a star from this dataset.',
         })
       } else {
-        let dataset = this.data.dataset
-        dataset.hasUserStar = false
-        this.update({ dataset })
+        this.getDatasetStars(() => {
+          callback()
+        })
       }
     })
   },
 
-  getDatasetStars() {
+  getDatasetStars(callback) {
     let dataset = this.data.dataset
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
@@ -2269,7 +2268,7 @@ let datasetStore = Reflux.createStore({
         let dataset = this.data.dataset
         dataset.stars = []
         dataset.hasUserStar = false
-        this.update({ dataset })
+        this.update({ dataset }, callback)
       } else {
         dataset.stars = res.body ? res.body : []
 
@@ -2278,8 +2277,10 @@ let datasetStore = Reflux.createStore({
             dataset.stars.filter(star => {
               return star.userId === userId
             }).length > 0
+        } else {
+          dataset.hasUserStar = false
         }
-        this.update({ dataset })
+        this.update({ dataset }, callback)
       }
     })
   },
