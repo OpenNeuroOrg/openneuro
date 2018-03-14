@@ -242,22 +242,14 @@ class Tools extends Reflux.Component {
       },
       {
         tooltip: 'Star Dataset',
-        icon: 'far fa-star',
+        icon: 'fa-star icon-plus',
         action: actions.addStar.bind(this),
         display: isSignedIn && !hasUserStar,
         warn: false,
-        validations: [
-          {
-            check: datasets.uploading && !isSnapshot,
-            message: 'You are about to follow a dataset',
-            timeout: 5000,
-            type: 'Error',
-          },
-        ],
       },
       {
         tooltip: 'Unstar Dataset',
-        icon: 'fas fa-star empty-star',
+        icon: 'fa-star-o icon-minus',
         action: actions.removeStar.bind(this),
         display: isSignedIn && hasUserStar,
         warn: true,
