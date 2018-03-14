@@ -44,7 +44,7 @@ class Statuses extends Reflux.Component {
           display={status.invalid && minimal}
         />
         <Status type="monitored" display={uploaderSubscribed} />
-        <Status type="stars" title={'' + stars} display={true} />
+        <Status type="stars" title={stars} display={true} />
       </span>
     )
   }
