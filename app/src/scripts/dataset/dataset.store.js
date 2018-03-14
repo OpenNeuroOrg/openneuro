@@ -83,6 +83,7 @@ let datasetStore = Reflux.createStore({
         link: '',
         info: null,
       },
+      followers: null,
       loading: false,
       loadingApps: false,
       loadingJobs: false,
@@ -197,12 +198,14 @@ let datasetStore = Reflux.createStore({
               this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
                 this.loadSnapshots(dataset, jobs, () => {
                   this.loadComments(originalId)
-                  this.checkUserSubscription(() => {
-                    let datasetUrl = this.constructDatasetUrl(dataset)
-                    this.update({
-                      loading: false,
-                      snapshot: snapshot,
-                      datasetUrl: datasetUrl,
+                  this.checkSubscriptionFollowers(() => {
+                    this.checkUserSubscription(() => {
+                      let datasetUrl = this.constructDatasetUrl(dataset)
+                      this.update({
+                        loading: false,
+                        snapshot: snapshot,
+                        datasetUrl: datasetUrl,
+                      })
                     })
                   })
                 })
@@ -421,7 +424,12 @@ let datasetStore = Reflux.createStore({
         if (snapshotId === this.data.dataset._id) {
           dataset.status.public = value
         } else {
-          history.push('/datasets/' + datasetId + '/versions/' + snapshotId)
+          history.push(
+            '/datasets/' +
+              bids.decodeId(datasetId) +
+              '/versions/' +
+              bids.decodeId(snapshotId),
+          )
         }
       } else {
         if (!hasPublic) {
@@ -435,6 +443,15 @@ let datasetStore = Reflux.createStore({
           snapshot.public = value
         }
       }
+
+      // redirect to the snapshot page
+      history.push(
+        '/datasets/' +
+          bids.decodeId(datasetId) +
+          '/versions/' +
+          bids.decodeId(snapshotId),
+      )
+
       this.update({ dataset, snapshots })
     })
   },
@@ -1765,7 +1782,7 @@ let datasetStore = Reflux.createStore({
 
   // Snapshots ---------------------------------------------------------------------
 
-  createSnapshot(history, callback, transition) {
+  createSnapshot(changes, history, callback, transition) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
@@ -1805,22 +1822,36 @@ let datasetStore = Reflux.createStore({
               'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.',
           })
         } else {
-          crn.createSnapshot(datasetId).then(res => {
-            let snapshotId = res.body._id
-            this.toggleSidebar(true)
-            if (transition) {
-              const url =
-                '/datasets/' +
-                this.data.dataset.linkID +
-                '/versions/' +
-                snapshotId
-              history.push(url)
-            }
-            this.loadSnapshots(this.data.dataset, [], () => {
-              if (callback) {
-                callback(snapshotId)
+          this.updateCHANGES(changes, err => {
+            if (err) {
+              callback({
+                error: err,
+              })
+            } else {
+              if (!res) {
+                callback({
+                  error:
+                    'There was an error while updating the dataset changelog.',
+                })
               }
-            })
+              crn.createSnapshot(datasetId).then(res => {
+                let snapshotId = res.body._id
+                this.toggleSidebar(true)
+                if (transition) {
+                  const url =
+                    '/datasets/' +
+                    this.data.dataset.linkID +
+                    '/versions/' +
+                    snapshotId
+                  history.push(url)
+                }
+                this.loadSnapshots(this.data.dataset, [], () => {
+                  if (callback) {
+                    callback(snapshotId)
+                  }
+                })
+              })
+            }
           })
         }
       }
@@ -2125,6 +2156,20 @@ let datasetStore = Reflux.createStore({
     } else {
       callback()
     }
+  },
+
+  checkSubscriptionFollowers(callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    crn.getSubscriptions(datasetId).then(res => {
+      if (res.body) {
+        const followers = res.body.length
+        this.update({ followers }, callback())
+      } else {
+        callback()
+      }
+    })
   },
 })
 

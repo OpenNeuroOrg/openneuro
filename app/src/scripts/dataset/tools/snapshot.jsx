@@ -85,6 +85,8 @@ class Snapshot extends Reflux.Component {
       },
       latestVersion: snapshotVersion,
       newSnapshotVersion: snapshotVersion,
+      changes: [],
+      currentChange: '',
     })
   }
 
@@ -321,21 +323,13 @@ class Snapshot extends Reflux.Component {
       this.state.changes,
       this.state.datasets.dataset.CHANGES,
     )
-
-    actions.updateCHANGES(changes, (err, res) => {
-      if (err) {
-        return
-      } else {
-        if (res) {
-          actions.createSnapshot(this.props.history, res => {
-            if (res && res.error) {
-              this.setState({
-                error: true,
-                message: res.error,
-              })
-            }
-          })
-        }
+    actions.createSnapshot(changes, this.props.history, res => {
+      if (res && res.error) {
+        this.setState({
+          changes: [],
+          error: true,
+          message: res.error,
+        })
       }
     })
   }

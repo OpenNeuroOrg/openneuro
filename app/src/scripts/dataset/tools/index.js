@@ -105,7 +105,12 @@ class Tools extends Reflux.Component {
       {
         tooltip: 'Unpublish Dataset',
         icon: 'fa-globe icon-ban',
-        action: actions.publish.bind(this, dataset._id, false),
+        action: actions.publish.bind(
+          this,
+          dataset._id,
+          false,
+          this.props.history,
+        ),
         display: isPublic && isSuperuser,
         warn: true,
         validations: [

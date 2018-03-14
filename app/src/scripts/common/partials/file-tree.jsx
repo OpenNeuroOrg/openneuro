@@ -203,6 +203,7 @@ class FileTree extends React.Component {
       '.tsv',
       '.csv',
       'README',
+      'CHANGES',
       '.nii.gz',
       '.nii',
       '.pdf',
