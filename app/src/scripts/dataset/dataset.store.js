@@ -2138,6 +2138,8 @@ let datasetStore = Reflux.createStore({
       if (res.body) {
         const followers = res.body.length
         this.update({ followers }, callback())
+      } else {
+        callback()
       }
     })
   },
