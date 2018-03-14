@@ -12,7 +12,9 @@ module.exports = merge(common, {
     host: '0.0.0.0',
     port: 9876,
     disableHostCheck: true,
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
   },
   plugins: [new ExtractTextPlugin('style.css'), new Visualizer()],
 })

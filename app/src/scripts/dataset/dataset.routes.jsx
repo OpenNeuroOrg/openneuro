@@ -95,7 +95,6 @@ export default class DatasetRoutes extends React.Component {
           />
           <Route
             name="fileDisplay"
-            exact
             path="/datasets/:datasetId/file-display"
             component={FileDisplay}
           />
@@ -145,7 +144,6 @@ export default class DatasetRoutes extends React.Component {
           />
           <Route
             name="fileDisplay"
-            exact
             path="/datasets/:datasetId/versions/:snapshotId/file-display"
             component={FileDisplay}
           />
