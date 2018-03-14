@@ -8,6 +8,7 @@ import Helmet from 'react-helmet'
 import { withRouter } from 'react-router-dom'
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
+import schemaGenerator from '../utils/json-ld.js'
 
 // let uploadWarning = 'You are currently uploading files. Leaving this page will cancel the upload process.'
 
@@ -20,6 +21,7 @@ class Dataset extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
   render() {
+    let datasets = this.state.datasets
     let showSidebar = this.state.datasets.showSidebar
     let dataset = this.state.datasets.dataset
     let datasetLabel = dataset ? dataset.label : ''
@@ -37,6 +39,9 @@ class Dataset extends Reflux.Component {
               {pageTitle} - {datasetLabel}
             </title>
             <meta name="description" content={description} />
+            <script type="application/ld+json">
+              {schemaGenerator(datasets)}
+            </script>
           </Helmet>
           <LeftSidebar />
           <LeftSidebarButton />
