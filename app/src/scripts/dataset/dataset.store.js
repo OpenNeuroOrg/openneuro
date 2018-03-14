@@ -1765,7 +1765,7 @@ let datasetStore = Reflux.createStore({
 
   // Snapshots ---------------------------------------------------------------------
 
-  createSnapshot(history, callback, transition) {
+  createSnapshot(changes, history, callback, transition) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
@@ -1805,22 +1805,36 @@ let datasetStore = Reflux.createStore({
               'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.',
           })
         } else {
-          crn.createSnapshot(datasetId).then(res => {
-            let snapshotId = res.body._id
-            this.toggleSidebar(true)
-            if (transition) {
-              const url =
-                '/datasets/' +
-                this.data.dataset.linkID +
-                '/versions/' +
-                snapshotId
-              history.push(url)
-            }
-            this.loadSnapshots(this.data.dataset, [], () => {
-              if (callback) {
-                callback(snapshotId)
+          this.updateCHANGES(changes, err => {
+            if (err) {
+              callback({
+                error: err,
+              })
+            } else {
+              if (!res) {
+                callback({
+                  error:
+                    'There was an error while updating the dataset changelog.',
+                })
               }
-            })
+              crn.createSnapshot(datasetId).then(res => {
+                let snapshotId = res.body._id
+                this.toggleSidebar(true)
+                if (transition) {
+                  const url =
+                    '/datasets/' +
+                    this.data.dataset.linkID +
+                    '/versions/' +
+                    snapshotId
+                  history.push(url)
+                }
+                this.loadSnapshots(this.data.dataset, [], () => {
+                  if (callback) {
+                    callback(snapshotId)
+                  }
+                })
+              })
+            }
           })
         }
       }
