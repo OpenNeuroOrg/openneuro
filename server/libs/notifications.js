@@ -108,7 +108,6 @@ let notifications = {
 
       let filename = 'CHANGES'
       let project = resp.body ? resp.body : null
-
       // get the snapshot changelog
       scitran.getFile('projects', project._id, filename, {}, (err, file) => {
         let changelog = file.body
@@ -117,7 +116,6 @@ let notifications = {
         c.crn.subscriptions
           .find({ datasetId: datasetId })
           .toArray((err, subscriptions) => {
-
             // create the email object for each user
             subscriptions.forEach(subscription => {
               scitran.getUser(subscription.userId, (err, res) => {
@@ -183,39 +181,41 @@ let notifications = {
         subscriptions.forEach(subscription => {
           scitran.getUser(subscription.userId, (err, res) => {
             let user = res.body
-            let emailContent = {
-              _id:
-                datasetId +
-                '_' +
-                subscription._id +
-                '_' +
-                comment._id +
-                '_' +
-                'comment_created',
-              type: 'email',
-              email: {
-                to: user.email,
-                subject: 'Comment Created',
-                template: 'comment-created',
-                data: {
-                  firstName: user.firstname,
-                  lastName: user.lastname,
-                  datasetName: bidsId.decodeId(datasetId),
-                  datasetLabel: datasetLabel,
-                  commentUserId: userId,
-                  commentId: commentId,
-                  dateCreated: moment(comment.createDate).format('MMMM Do'),
-                  commentContent: htmlContent,
-                  commentStatus: commentStatus,
-                  siteUrl:
-                    url.parse(config.url).protocol +
-                    '//' +
-                    url.parse(config.url).hostname,
+            if (user.email !== userId) {
+              let emailContent = {
+                _id:
+                  datasetId +
+                  '_' +
+                  subscription._id +
+                  '_' +
+                  comment._id +
+                  '_' +
+                  'comment_created',
+                type: 'email',
+                email: {
+                  to: user.email,
+                  subject: 'Comment Created',
+                  template: 'comment-created',
+                  data: {
+                    firstName: user.firstname,
+                    lastName: user.lastname,
+                    datasetName: bidsId.decodeId(datasetId),
+                    datasetLabel: datasetLabel,
+                    commentUserId: userId,
+                    commentId: commentId,
+                    dateCreated: moment(comment.createDate).format('MMMM Do'),
+                    commentContent: htmlContent,
+                    commentStatus: commentStatus,
+                    siteUrl:
+                      url.parse(config.url).protocol +
+                      '//' +
+                      url.parse(config.url).hostname,
+                  },
                 },
-              },
+              }
+              // send each email to the notification database for distribution
+              notifications.add(emailContent, () => {})
             }
-            // send each email to the notification database for distribution
-            notifications.add(emailContent, () => {})
           })
         })
       })
@@ -241,7 +241,6 @@ let notifications = {
         // create the email object for each user, using subscription userid and scitran
         subscriptions.forEach(subscription => {
           scitran.getUser(subscription.userId, (err, res) => {
-            console.log('scitran user:', res.body)
             let user = res.body
             let emailContent = {
               _id: datasetId + '_' + subscription._id + '_' + 'dataset_deleted',
@@ -288,7 +287,6 @@ let notifications = {
         // create the email object for each user, using subscription userid and scitran
         subscriptions.forEach(subscription => {
           scitran.getUser(subscription.userId, (err, res) => {
-            console.log('scitran user:', res.body)
             let user = res.body
             let emailContent = {
               _id:
