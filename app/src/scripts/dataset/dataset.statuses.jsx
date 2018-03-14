@@ -25,6 +25,7 @@ class Statuses extends Reflux.Component {
 
     return (
       <span className="clearfix status-wrap">
+        <Status type="stars" title={stars} display={true} />
         <Status
           type="public"
           minimal={minimal}
@@ -44,7 +45,6 @@ class Statuses extends Reflux.Component {
           display={status.invalid && minimal}
         />
         <Status type="monitored" display={uploaderSubscribed} />
-        <Status type="stars" title={stars} display={true} />
       </span>
     )
   }
