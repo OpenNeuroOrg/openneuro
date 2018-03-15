@@ -142,15 +142,6 @@ export default {
       // The user request failed
     }
 
-    //Stars
-    let stars = null
-    try {
-      const starRes = await crn.getStars()
-      stars = starRes ? starRes.body : null
-    } catch (err) {
-      // The dataset stars request failed
-    }
-
     // Dataset
     try {
       const projectRes = await scitran.getProject(projectId, options)
@@ -167,7 +158,6 @@ export default {
               project,
               metadata['dataset_description.json'],
               users,
-              stars,
             )
             dataset.README = metadata.README
             dataset.CHANGES = metadata.CHANGES
@@ -331,17 +321,17 @@ export default {
    */
   stars(dataset, stars) {
     if (stars) {
-      let datasetId = dataset._id
+      let datasetId = dataset.original ? dataset.original : dataset._id
       let associatedStars = stars.filter(star => {
         return star.datasetId === datasetId
       })
       if (associatedStars.length) {
-        return associatedStars.length
+        return associatedStars
       } else {
-        return 0
+        return []
       }
     } else {
-      return 0
+      return []
     }
   },
 
@@ -423,7 +413,6 @@ export default {
       (dataset.authors = dataset.description.Authors)
     dataset.referencesAndLinks = dataset.description.ReferencesAndLinks
     dataset.user = this.user(dataset, users)
-    dataset.stars = this.stars(dataset, stars)
     if (project.original) {
       dataset.original = project.original
       dataset.linkOriginal = this.decodeId(project.original)
@@ -431,6 +420,8 @@ export default {
     if (project.snapshot_version) {
       dataset.snapshot_version = project.snapshot_version
     }
+    dataset.stars = this.stars(dataset, stars)
+    dataset.starCount = dataset.stars ? '' + dataset.stars.length : '0'
     return dataset
   },
 
