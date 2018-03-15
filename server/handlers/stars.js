@@ -73,7 +73,7 @@ export default {
    */
 
   getStars(req, res, next) {
-    let datasetId = (typeof(req.params.datasetId) !== undefined) ? null : req.params.datasetId
+    let datasetId = (req.params.datasetId === 'undefined') ? null : req.params.datasetId
     if (datasetId) {
       c.crn.stars
         .find({
