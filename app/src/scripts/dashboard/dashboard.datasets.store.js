@@ -98,7 +98,16 @@ let UploadStore = Reflux.createStore({
             if (!isAdmin && !isPublic) {
               datasets = datasets.filter(dataset => {
                 if (dataset.group && userStore.data && userStore.data.profile) {
-                  return dataset.group === userStore.data.profile._id
+                  let hasPermission
+                  if (dataset.permissions) {
+                    hasPermission = dataset.permissions.filter(permission => {
+                      return permission._id === userStore.data.profile._id
+                    }).length
+                  }
+                  const isUploader =
+                    dataset.group === userStore.data.profile._id
+
+                  return isUploader || hasPermission
                 } else {
                   return false
                 }
