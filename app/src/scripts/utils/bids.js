@@ -47,11 +47,12 @@ export default {
           .then(async pubProjects => {
             projects = projects.concat(pubProjects.body)
             const users = isSignedOut ? null : (await scitran.getUsers()).body
+            const stars = (await crn.getStars()).body
             let resultDict = {}
             // hide other user's projects from admins & filter snapshots to display newest of each dataset
             if (projects) {
               for (let project of projects) {
-                let dataset = this.formatDataset(project, null, users)
+                let dataset = this.formatDataset(project, null, users, stars)
                 let datasetId = dataset.hasOwnProperty('original')
                   ? dataset.original
                   : dataset._id
@@ -336,6 +337,8 @@ export default {
       })
       if (associatedStars.length) {
         return associatedStars.length
+      } else {
+        return 0
       }
     } else {
       return 0
