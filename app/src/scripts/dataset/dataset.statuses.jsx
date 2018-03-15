@@ -20,12 +20,10 @@ class Statuses extends Reflux.Component {
       minimal = this.props.minimal,
       status = dataset.status,
       uploading = dataset._id === this.state.upload.projectId,
-      uploaderSubscribed = dataset.uploaderSubscribed,
-      stars = dataset.stars ? '' + dataset.stars.length : '0'
+      uploaderSubscribed = dataset.uploaderSubscribed
 
     return (
-      <span className="clearfix status-wrap">
-        <Status type="stars" title={stars} display={true} />
+      <span className="status-wrap">
         <Status
           type="public"
           minimal={minimal}

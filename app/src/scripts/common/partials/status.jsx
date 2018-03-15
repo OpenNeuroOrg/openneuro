@@ -65,11 +65,6 @@ export default class Status extends React.Component {
         title = 'Uploader is Following'
         iconClass = 'fa fa-user'
         break
-      case 'stars':
-        spanClass = 'dataset-status ds-primary'
-        iconClass = 'fa fa-star'
-        tip = title + ' users like this dataset'
-        break
     }
 
     let content = (
