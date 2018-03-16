@@ -48,7 +48,6 @@ class Dataset extends Reflux.Component {
           <LeftSidebarButton />
           <UpdateWarn
             show={this.state.datasets.modals.update}
-            // onHide={actions.toggleModal.bind(null, 'update')}
             update={this.state.datasets.currentUpdate}
           />
           <Tools />
