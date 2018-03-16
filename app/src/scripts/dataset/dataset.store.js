@@ -199,6 +199,7 @@ let datasetStore = Reflux.createStore({
               this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
                 this.loadSnapshots(dataset, jobs, () => {
                   this.loadComments(originalId)
+                  this.getDatasetStars()
                   this.checkSubscriptionFollowers(() => {
                     this.checkUserSubscription(() => {
                       let datasetUrl = this.constructDatasetUrl(dataset)
@@ -2206,6 +2207,80 @@ let datasetStore = Reflux.createStore({
         this.update({ followers }, callback())
       } else {
         callback()
+      }
+    })
+  },
+
+  // stars ----------------------------------------------------------------
+  addStar(callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    let userId =
+      this.data.currentUser && this.data.currentUser.profile
+        ? this.data.currentUser.profile._id
+        : null
+    crn.addStar(datasetId, userId).then(res => {
+      if (res && res.status !== 200) {
+        callback({
+          error: 'There was an error while adding a star to this dataset.',
+        })
+      } else {
+        this.getDatasetStars(() => {
+          callback()
+        })
+      }
+    })
+  },
+
+  removeStar(callback) {
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    let userId =
+      this.data.currentUser && this.data.currentUser.profile
+        ? this.data.currentUser.profile._id
+        : null
+    crn.removeStar(datasetId, userId).then(res => {
+      if (res && res.status !== 200) {
+        callback({
+          error: 'There was an error while removing a star from this dataset.',
+        })
+      } else {
+        this.getDatasetStars(() => {
+          callback()
+        })
+      }
+    })
+  },
+
+  getDatasetStars(callback) {
+    let dataset = this.data.dataset
+    let datasetId = this.data.dataset.original
+      ? this.data.dataset.original
+      : this.data.dataset._id
+    let userId =
+      this.data.currentUser && this.data.currentUser.profile
+        ? this.data.currentUser.profile._id
+        : null
+    crn.getStars(datasetId).then(res => {
+      if (res && res.status !== 200) {
+        let dataset = this.data.dataset
+        dataset.stars = []
+        dataset.hasUserStar = false
+        this.update({ dataset }, callback)
+      } else {
+        dataset.stars = res.body ? res.body : []
+
+        if (dataset.stars.length) {
+          dataset.hasUserStar =
+            dataset.stars.filter(star => {
+              return star.userId === userId
+            }).length > 0
+        } else {
+          dataset.hasUserStar = false
+        }
+        this.update({ dataset }, callback)
       }
     })
   },
