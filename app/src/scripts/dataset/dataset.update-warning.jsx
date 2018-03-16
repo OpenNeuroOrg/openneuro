@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import actions from './dataset.actions.js'
 import { Modal } from '../utils/modal.jsx'
 
-export default class Publish extends React.Component {
+export default class UpdateWarn extends React.Component {
   // life cycle events --------------------------------------------------
 
   constructor() {
@@ -93,8 +93,8 @@ export default class Publish extends React.Component {
   // actions ------------------------------------------------------------
 
   /**
-     * Confirm
-     */
+   * Confirm
+   */
   _confirm(action) {
     if (this.state.dontShowAgain) {
       actions.disableUpdateWarn()
@@ -105,21 +105,21 @@ export default class Publish extends React.Component {
   }
 
   /**
-     * Hide
-     */
+   * Hide
+   */
   _hide() {
-    this.props.onHide()
+    actions.toggleModal('update')
   }
 
   /**
-     * On Change
-     */
+   * On Change
+   */
   _onChange() {
     this.setState({ dontShowAgain: !this.state.dontShowAgain })
   }
 }
 
-Publish.propTypes = {
+UpdateWarn.propTypes = {
   show: PropTypes.bool,
   update: PropTypes.object,
   onHide: PropTypes.func,

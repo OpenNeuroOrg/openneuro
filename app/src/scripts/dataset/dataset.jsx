@@ -2,6 +2,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import { LeftSidebar, LeftSidebarButton } from './dataset.left-sidebar.jsx'
 import Tools from './tools'
+import UpdateWarn from './dataset.update-warning.jsx'
 import datasetStore from './dataset.store.js'
 import DatasetRoutes from './dataset.routes.jsx'
 import Helmet from 'react-helmet'
@@ -45,7 +46,12 @@ class Dataset extends Reflux.Component {
           </Helmet>
           <LeftSidebar />
           <LeftSidebarButton />
+          <UpdateWarn
+            show={this.state.datasets.modals.update}
+            update={this.state.datasets.currentUpdate}
+          />
           <Tools />
+
           <div className="fade-in inner-route dataset-route light">
             <div className="clearfix dataset-wrap">
               <div className="dataset-annimation">
