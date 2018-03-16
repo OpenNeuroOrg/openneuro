@@ -21,7 +21,6 @@ import userStore from '../user/user.store.js'
 import Summary from './dataset.summary.jsx'
 import Comment from '../common/partials/comment.jsx'
 import CommentTree from '../common/partials/comment-tree.jsx'
-import UpdateWarn from './dataset.update-warning.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
 import uploadActions from '../upload/upload.actions.js'
 import userActions from '../user/user.actions.js'
@@ -128,11 +127,6 @@ class DatasetContent extends Reflux.Component {
       // meta description is README unless it's empty
       content = (
         <div className="row">
-          <UpdateWarn
-            show={this.state.datasets.modals.update}
-            onHide={actions.toggleModal.bind(null, 'update')}
-            update={this.state.datasets.currentUpdate}
-          />
           <div className="col-xs-6">
             <h1 className="clearfix">
               <ClickToEdit
