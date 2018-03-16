@@ -8,6 +8,7 @@ import WarnButton from '../../common/forms/warn-button.jsx'
 import moment from 'moment'
 import Results from './results.jsx'
 import { Accordion, Panel } from 'react-bootstrap'
+import { withRouter } from 'react-router-dom'
 import markdown from '../../utils/markdown'
 
 class JobAccordion extends React.Component {
@@ -321,7 +322,11 @@ class JobAccordion extends React.Component {
                 icon="fa-eye"
                 message={label}
                 warn={false}
-                action={actions.getLogstream.bind(this, logstream.name)}
+                action={actions.getLogstream.bind(
+                  this,
+                  logstream.name,
+                  this.props.history,
+                )}
               />
               {exitCode != undefined ? (
                 <span className={exitCodeClass}>{exitCodeStatus}</span>
@@ -418,6 +423,7 @@ JobAccordion.propTypes = {
   acknowledgements: PropTypes.string,
   support: PropTypes.string,
   currentUser: PropTypes.object,
+  history: PropTypes.object,
 }
 
-export default JobAccordion
+export default withRouter(JobAccordion)
