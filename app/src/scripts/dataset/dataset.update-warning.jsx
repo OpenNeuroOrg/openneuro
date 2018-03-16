@@ -108,7 +108,6 @@ export default class UpdateWarn extends React.Component {
    * Hide
    */
   _hide() {
-    // this.props.onHide()
     actions.toggleModal('update')
   }
 
