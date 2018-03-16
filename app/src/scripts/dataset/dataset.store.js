@@ -547,6 +547,8 @@ let datasetStore = Reflux.createStore({
     modals[name] = !modals[name]
     update.modals = modals
 
+    this.update({ update })
+
     // callback
     if (callback && typeof callback === 'function') {
       callback()
