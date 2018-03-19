@@ -48,8 +48,10 @@ body,
 
 .dataset-annimation {
     width: 100%;
+    padding-top: 15px;
     -webkit-transition: width .3s;
     transition: width .3s;
+    
 }
 
 .dataset-container {
