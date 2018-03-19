@@ -101,8 +101,23 @@
     margin: 0px 0px 10px 0px;
     .user-info {
       font-size: 13px;
+      
       .username {
         font-weight: bold;
+      }
+
+      .copy-notification-active, .copy-notification {
+        color: $ocean;
+        cursor: default;
+      }
+
+      .copy-notification-active {
+        opacity: 1;
+      }
+
+      .copy-notification {
+        opacity: 0;
+        transition: opacity 1s;
       }
     }
     .comment-actions {
