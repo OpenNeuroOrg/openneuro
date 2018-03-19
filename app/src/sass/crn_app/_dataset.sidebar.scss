@@ -35,15 +35,17 @@ body,
     padding-top: 85px;
 }
 
-.dataset-wrap {
-    overflow-y: scroll;
-    z-index: 100;
-}
-
 .dataset-wrap,
 .dataset-annimation {
     position: relative;
 }
+
+.dataset-wrap {
+    overflow-y: scroll;
+    z-index: 100;
+    margin-top: 45px;
+}
+
 .dataset-annimation {
     width: 100%;
     -webkit-transition: width .3s;
