@@ -220,13 +220,7 @@ class CommentTree extends React.Component {
     let copyClass = this.state.linkCopied
       ? 'copy-notification-active'
       : 'copy-notification'
-    // let copyText = this.state.linkCopied ? 'Copied!' : ''
-    return (
-      <span className={copyClass}>
-        {/* {copyText} */}
-        Copied!
-      </span>
-    )
+    return <span className={copyClass}>Copied!</span>
   }
 
   _actions(comment) {
