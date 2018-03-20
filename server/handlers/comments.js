@@ -1,5 +1,6 @@
 import mongo from '../libs/mongo'
 import notifications from '../libs/notifications.js'
+import moment from 'moment'
 import { ObjectID } from 'mongodb'
 
 let c = mongo.collections
@@ -33,6 +34,68 @@ export default {
         notifications.commentCreated(comment)
         res.send(response.ops)
       }
+    })
+  },
+
+  /**
+   * Reply to Comment via Email
+   *
+   * Creates an entry in the comments database,
+   * ** maybe returns the newly created comment id
+   */
+  async reply(req, res, next) {
+    let comment
+    console.log('req:', req)
+    console.log('res:', res)
+
+    const parentId = req.params.commentId
+    const userId = req.params.userId
+
+    console.log('parentId:', parentId)
+    console.log('userId:', userId)
+
+    const text = req.data['stripped-text']
+    console.log('text:', text)
+
+    c.scitran.users.findOne({_id: userId}).then(user => {
+      console.log('user:', user)
+
+      let originalComment
+      c.crn.comments.findOne({_id: ObjectID(parentId)}).then((err, response) => {
+        if (err) {
+          console.log('there was an error getting the parent comment for this email reply')
+          res.send(404)
+        } else {
+          originalComment = response.body
+        }
+  
+        console.log('original comment:', originalComment)
+  
+        if (user && originalComment) {
+          comment = {
+            datasetId: originalComment.datasetId,
+            datasetLabel: originalComment.datasetLabel,
+            parentId: parentId,
+            text: text,
+            user: user.profile,
+            createDate: moment().format(),
+          }
+  
+          console.log('comment being created...')
+          console.log('comment:', comment)
+          c.crn.comments.insertOne(comment, (err, response) => {
+            if (err) {
+              return next(err)
+            } else {
+              if (response.ops && response.ops.length) {
+                comment = response.ops[0]
+              }
+              notifications.commentCreated(comment)
+              res.send(response.ops)
+            }
+          })
+        }
+      })
     })
   },
 
