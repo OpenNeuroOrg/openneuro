@@ -58,7 +58,7 @@ export const getDataset = id => {
  * TODO - Support cursor pagination
  */
 export const getDatasets = () => {
-  return c.crn.datasets.find()
+  return c.crn.datasets.find().toArray()
 }
 
 /**
