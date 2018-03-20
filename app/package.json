@@ -38,6 +38,7 @@
     "raven-js": "^3.20.1",
     "react": "16",
     "react-bootstrap": "0.31.3",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "16",
     "react-ga": "^2.2.0",
     "react-helmet": "^5.2.0",
@@ -50,9 +51,9 @@
     "spark-md5": "^3.0.0",
     "stream-browserify": "^2.0.1",
     "superagent": "^3.6.0",
-    "victory": "^0.23.1",
     "url-search-params-polyfill": "^2.0.1",
     "urlite": "^1.2.8",
+    "victory": "^0.23.1",
     "xmldoc": "^1.1.0"
   },
   "devDependencies": {

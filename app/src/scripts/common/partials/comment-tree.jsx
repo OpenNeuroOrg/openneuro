@@ -5,6 +5,8 @@ import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import Comment from './comment.jsx'
 import WarnButton from '../forms/warn-button.jsx'
+import Tooltip from '../partials/tooltip.jsx'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 class CommentTree extends React.Component {
   constructor(props) {
@@ -16,6 +18,7 @@ class CommentTree extends React.Component {
       showNewComment: false,
       showSubtree: showSubtree,
       editing: false,
+      linkCopied: false,
     }
     this.handleDelete = this._handleDelete.bind(this)
     this.toggleNewComment = this._toggleNewComment.bind(this)
@@ -74,6 +77,13 @@ class CommentTree extends React.Component {
 
   _cancelEdit() {
     this.setState({ editing: false })
+  }
+
+  _onCopy() {
+    this.setState({ linkCopied: true })
+    setTimeout(() => {
+      this.setState({ linkCopied: false })
+    }, 3000)
   }
 
   _deleteButton(comment) {
@@ -190,6 +200,37 @@ class CommentTree extends React.Component {
     )
   }
 
+  _commentLink(comment) {
+    return (
+      <Tooltip tooltip="Click to save comment link to clipboard.">
+        <CopyToClipboard
+          text={`${window.location.origin}${
+            this.props.location.pathname
+          }#comment-${comment._id}`}
+          onCopy={this._onCopy.bind(this)}>
+          <a
+            href={`${this.props.location.pathname}#comment-${comment._id}`}
+            onClick={e => e.preventDefault()}>
+            <i className="fa fa-link" aria-hidden="true" />{' '}
+            {this._copyNotification()}
+          </a>
+        </CopyToClipboard>
+      </Tooltip>
+    )
+  }
+
+  _copyNotification() {
+    let copyClass = this.state.linkCopied
+      ? 'copy-notification-active copy-notification-copied'
+      : 'copy-notification-active'
+    let copyText = this.state.linkCopied ? 'Copied!' : 'Copy comment link'
+    return (
+      <span>
+        <span className={copyClass}>{copyText}</span>
+      </span>
+    )
+  }
+
   _actions(comment) {
     if ((this.props.user && !this.props.node.deleted) || this.props.isAdmin) {
       return (
@@ -246,9 +287,7 @@ class CommentTree extends React.Component {
           {this._userTag(comment.user.email)}
           {this._ownerTag(comment.user._id)}
           {this._timestamp(comment.createDate)}
-          <a href={`${this.props.location.pathname}#comment-${comment._id}`}>
-            <i className="fa fa-link" aria-hidden="true" />
-          </a>
+          {this._commentLink(comment)}
           {this._showRepliesButton()}
         </div>
         {this._userAvatar()}
