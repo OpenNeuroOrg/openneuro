@@ -47,11 +47,12 @@ export default {
           .then(async pubProjects => {
             projects = projects.concat(pubProjects.body)
             const users = isSignedOut ? null : (await scitran.getUsers()).body
+            const stars = (await crn.getStars()).body
             let resultDict = {}
             // hide other user's projects from admins & filter snapshots to display newest of each dataset
             if (projects) {
               for (let project of projects) {
-                let dataset = this.formatDataset(project, null, users)
+                let dataset = this.formatDataset(project, null, users, stars)
                 let datasetId = dataset.hasOwnProperty('original')
                   ? dataset.original
                   : dataset._id
@@ -313,6 +314,28 @@ export default {
   },
 
   /**
+   * Stars
+   *
+   * Takes a dataset and stars list and returns the
+   * count of stars associated with that dataset.
+   */
+  stars(dataset, stars) {
+    if (stars) {
+      let datasetId = dataset.original ? dataset.original : dataset._id
+      let associatedStars = stars.filter(star => {
+        return star.datasetId === datasetId
+      })
+      if (associatedStars.length) {
+        return associatedStars
+      } else {
+        return []
+      }
+    } else {
+      return []
+    }
+  },
+
+  /**
    * Format Files
    *
    * Sorts files alphabetically and adds parentId
@@ -345,7 +368,7 @@ export default {
    * a formatted top level container of a
    * BIDS dataset.
    */
-  formatDataset(project, description, users) {
+  formatDataset(project, description, users, stars) {
     let files = [],
       attachments = []
     if (project.files) {
@@ -397,6 +420,8 @@ export default {
     if (project.snapshot_version) {
       dataset.snapshot_version = project.snapshot_version
     }
+    dataset.stars = this.stars(dataset, stars)
+    dataset.starCount = dataset.stars ? '' + dataset.stars.length : '0'
     return dataset
   },
 

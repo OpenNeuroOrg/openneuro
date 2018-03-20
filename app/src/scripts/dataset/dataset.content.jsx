@@ -13,6 +13,7 @@ import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
 import MetaData from './dataset.metadata.jsx'
 import Statuses from './dataset.statuses.jsx'
+import Metrics from './dataset.metrics.jsx'
 import Validation from './dataset.validation.jsx'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import FileTree from '../common/partials/file-tree.jsx'
@@ -144,8 +145,9 @@ class DatasetContent extends Reflux.Component {
             {this._followers(followers)}
             {this._downloads(dataset.downloads)}
             <Summary summary={dataset.summary} />
-            <div className="status-container">
+            <div className="clearfix status-container">
               <Statuses dataset={dataset} />
+              <Metrics dataset={dataset} />
             </div>
             <MetaData
               dataset={dataset}

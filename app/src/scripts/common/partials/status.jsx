@@ -15,7 +15,8 @@ export default class Status extends React.Component {
       return false
     }
 
-    let spanClass, tip, iconClass, fileSelect, title
+    let spanClass, tip, iconClass, fileSelect
+    let title = this.props.title ? this.props.title : null
     let minimal = this.props.minimal
 
     switch (this.props.type) {
@@ -63,6 +64,7 @@ export default class Status extends React.Component {
           'The person who uploaded this dataset will be notified of all new comments posted here.'
         title = 'Uploader is Following'
         iconClass = 'fa fa-user'
+        break
     }
 
     let content = (
@@ -98,4 +100,5 @@ Status.propTypes = {
   minimal: PropTypes.bool,
   type: PropTypes.string,
   dataset: PropTypes.object,
+  title: PropTypes.string,
 }

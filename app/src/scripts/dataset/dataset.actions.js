@@ -3,6 +3,7 @@ import Reflux from 'reflux'
 var Actions = Reflux.createActions([
   'addFile',
   'addDirectoryFile',
+  'addStar',
   'checkUserSubscription',
   'createSnapshot',
   'createComment',
@@ -41,6 +42,7 @@ var Actions = Reflux.createActions([
   'publish',
   'retryJob',
   'reloadDataset',
+  'removeStar',
   'saveDescription',
   'selectJob',
   'setInitialState',

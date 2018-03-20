@@ -14,6 +14,7 @@ import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
 import ErrorBoundary from '../errors/errorBoundary.jsx'
 import Statuses from '../dataset/dataset.statuses.jsx'
+import Metrics from '../dataset/dataset.metrics.jsx'
 import Filters from './dashboard.filters.jsx'
 import Sort from './dashboard.sort.jsx'
 import Summary from '../dataset/dataset.summary.jsx'
@@ -161,6 +162,11 @@ class Datasets extends Reflux.Component {
       let fullname = user ? user.firstname + ' ' + user.lastname : ''
       let dateAdded = moment(dataset.created).format('L')
       let timeago = moment(dataset.created).fromNow(true)
+      let metricContainer = (
+        <div className="metric-container">
+          <Metrics dataset={dataset} fromDashboard />
+        </div>
+      )
       let statusContainer = (
         <div className="status-container">
           <Statuses dataset={dataset} minimal={true} />
@@ -183,6 +189,7 @@ class Datasets extends Reflux.Component {
                   </p>
                 </div>
               </Link>
+              {metricContainer}
               {!isPublic ? statusContainer : null}
             </div>
             <Summary summary={dataset.summary} minimal={true} />
