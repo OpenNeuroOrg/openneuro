@@ -215,6 +215,12 @@ const baseRoutes = [
   },
 
   {
+    method: 'post',
+    url: '/comments/reply/:commentId/:userId',
+    handler: comments.reply,
+  },
+
+  {
     method: 'delete',
     url: '/comments/:commentId',
     middleware: [auth.deleteCommentAccess],
