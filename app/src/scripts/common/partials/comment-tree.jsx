@@ -208,7 +208,9 @@ class CommentTree extends React.Component {
             this.props.location.pathname
           }#comment-${comment._id}`}
           onCopy={this._onCopy.bind(this)}>
-          <a href={`${this.props.location.pathname}#comment-${comment._id}`}>
+          <a
+            href={`${this.props.location.pathname}#comment-${comment._id}`}
+            onClick={e => e.preventDefault()}>
             <i className="fa fa-link" aria-hidden="true" />{' '}
             {this._copyNotification()}
           </a>
