@@ -208,8 +208,9 @@ class CommentTree extends React.Component {
             this.props.location.pathname
           }#comment-${comment._id}`}
           onCopy={this._onCopy.bind(this)}>
-          <a>
-            <i className="fa fa-link" aria-hidden="true" />
+          <a href={`${this.props.location.pathname}#comment-${comment._id}`}>
+            <i className="fa fa-link" aria-hidden="true" />{' '}
+            {this._copyNotification()}
           </a>
         </CopyToClipboard>
       </Tooltip>
@@ -218,9 +219,14 @@ class CommentTree extends React.Component {
 
   _copyNotification() {
     let copyClass = this.state.linkCopied
-      ? 'copy-notification-active'
-      : 'copy-notification'
-    return <span className={copyClass}>Copied!</span>
+      ? 'copy-notification-active copy-notification-copied'
+      : 'copy-notification-active'
+    let copyText = this.state.linkCopied ? 'Copied!' : 'Copy comment link'
+    return (
+      <span>
+        <span className={copyClass}>{copyText}</span>
+      </span>
+    )
   }
 
   _actions(comment) {
@@ -280,7 +286,6 @@ class CommentTree extends React.Component {
           {this._ownerTag(comment.user._id)}
           {this._timestamp(comment.createDate)}
           {this._commentLink(comment)}
-          {this._copyNotification()}
           {this._showRepliesButton()}
         </div>
         {this._userAvatar()}

@@ -106,18 +106,24 @@
         font-weight: bold;
       }
 
-      .copy-notification-active, .copy-notification {
+      .copy-notification-active, .copy-notification-hidden {
         color: $ocean;
         cursor: default;
       }
 
       .copy-notification-active {
         opacity: 1;
+        visibility: visible;
+        transition: visibility 1s, opacity 1s;
+        cursor: pointer;
       }
 
-      .copy-notification {
+      .copy-notification-hidden {
         opacity: 0;
-        transition: opacity 1s;
+        height: 0;
+        width: 0;
+        visibility: hidden;
+        transition: visibility 1s, opacity 1s;
       }
     }
     .comment-actions {
