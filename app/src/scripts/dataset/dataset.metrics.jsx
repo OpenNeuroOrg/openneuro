@@ -11,11 +11,16 @@ class Metrics extends React.Component {
     let dataset = this.props.dataset
     let fromDashboard = this.props.fromDashboard
     let stars = dataset.stars ? '' + dataset.stars.length : '0'
+    let downloads = dataset.downloads ? '' + dataset.downloads : '0'
     let displayStars = fromDashboard ? (stars !== '0' ? true : false) : true
+    let displayDownloads = fromDashboard
+      ? downloads !== '0' ? true : false
+      : true
 
     return (
       <span className="metrics-wrap">
         <Metric type="stars" value={stars} display={displayStars} />
+        <Metric type="downloads" value={downloads} display={displayDownloads} />
       </span>
     )
   }
