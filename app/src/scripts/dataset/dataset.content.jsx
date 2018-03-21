@@ -143,7 +143,6 @@ class DatasetContent extends Reflux.Component {
             {this._authors(dataset.authors)}
             {this._views(dataset.views)}
             {this._followers(followers)}
-            {this._downloads(dataset.downloads)}
             <Summary summary={dataset.summary} />
             <div className="clearfix status-container">
               <Statuses dataset={dataset} />
