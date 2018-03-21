@@ -236,12 +236,6 @@ class DatasetContent extends Reflux.Component {
     }
   }
 
-  _downloads(downloads) {
-    if (downloads) {
-      return <h6>downloads: {downloads}</h6>
-    }
-  }
-
   _fileTree(dataset, canEdit) {
     let fileTree = (
       <FileTree
