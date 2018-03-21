@@ -476,6 +476,20 @@ let datasetStore = Reflux.createStore({
   },
 
   /**
+   * Confirm Dataset Download
+   *
+   * Tracks the dataset download and encourages
+   * the user to subscribe to the dataset.
+   */
+  confirmDatasetDownload(history, callback) {
+    this.trackDownload(() => {
+      this.showDatasetComponent('subscribe', history, () => {
+        callback()
+      })
+    })
+  },
+
+  /**
    * Track Download
    *
    * Tracks download and increments download
