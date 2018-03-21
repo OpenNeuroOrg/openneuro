@@ -25,7 +25,7 @@ export default class Metric extends React.Component {
       case 'downloads':
         spanClass = 'dataset-status ds-primary'
         iconClass = 'fa fa-download'
-        tip = 'This dataset has ' + value + ' download.'
+        tip = 'This dataset has ' + value + ' downloads.'
         break
     }
 
