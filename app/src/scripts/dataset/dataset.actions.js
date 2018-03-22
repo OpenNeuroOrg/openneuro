@@ -8,6 +8,7 @@ var Actions = Reflux.createActions([
   'createSnapshot',
   'createComment',
   'cancelDirectoryUpload',
+  'confirmDatasetDownload',
   'constructDatasetUrl',
   'createSubscription',
   'deleteAttachment',

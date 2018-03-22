@@ -37,7 +37,7 @@ export default {
         metadata: metadata,
       })
       .then(res => {
-        let projects = res.body
+        let projects = res.body ? res.body : []
         scitran
           .getProjects({
             authenticate: !isPublic,
@@ -45,12 +45,26 @@ export default {
             metadata: metadata,
           })
           .then(async pubProjects => {
-            projects = projects.concat(pubProjects.body)
+            const publicProjects = pubProjects.body ? pubProjects.body : []
+            projects = projects.concat(publicProjects)
             const users = isSignedOut ? null : (await scitran.getUsers()).body
             const stars = (await crn.getStars()).body
             let resultDict = {}
             // hide other user's projects from admins & filter snapshots to display newest of each dataset
-            if (projects) {
+            const usagePromises = projects.map(project => {
+              let snapshot = project.hasOwnProperty('original') ? true : false
+              return new Promise(resolve => {
+                this.usage(project._id, { snapshot: snapshot }, usage => {
+                  if (usage) {
+                    project.views = usage.views
+                    project.downloads = usage.downloads
+                  }
+                  resolve()
+                })
+              })
+            })
+
+            Promise.all(usagePromises).then(() => {
               for (let project of projects) {
                 let dataset = this.formatDataset(project, null, users, stars)
                 let datasetId = dataset.hasOwnProperty('original')
@@ -69,13 +83,13 @@ export default {
                   }
                 }
               }
-            }
 
-            let results = []
-            for (let key in resultDict) {
-              results.push(resultDict[key])
-            }
-            callback(results)
+              let results = []
+              for (let key in resultDict) {
+                results.push(resultDict[key])
+              }
+              callback(results)
+            })
           })
       })
   },
@@ -391,6 +405,8 @@ export default {
       modified: project.modified,
       permissions: project.permissions,
       public: project.public,
+      downloads: project.downloads,
+      views: project.views,
 
       /** modified for BIDS **/
       validation:
@@ -422,6 +438,7 @@ export default {
     }
     dataset.stars = this.stars(dataset, stars)
     dataset.starCount = dataset.stars ? '' + dataset.stars.length : '0'
+
     return dataset
   },
 
@@ -545,14 +562,17 @@ export default {
           snapshot: true,
         })
         .then(res => {
-          usage.views = res.body.count
+          let viewCount = res.body && res.body.count ? '' + res.body.count : '0'
+          usage.views = viewCount
           scitran
             .getUsage(snapshotId, {
               query: { type: 'download', count: true },
               snapshot: true,
             })
             .then(res => {
-              usage.downloads = res.body.count
+              let dlCount =
+                res.body && res.body.count ? '' + res.body.count : '0'
+              usage.downloads = dlCount
               callback(usage)
             })
         })

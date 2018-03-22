@@ -20,7 +20,12 @@ export default class Metric extends React.Component {
       case 'stars':
         spanClass = 'dataset-status ds-primary'
         iconClass = 'fa fa-star'
-        tip = value + ' users like this dataset'
+        tip = 'This dataset has ' + value + ' likes.'
+        break
+      case 'downloads':
+        spanClass = 'dataset-status ds-primary'
+        iconClass = 'fa fa-download'
+        tip = 'This dataset has ' + value + ' downloads.'
         break
     }
 
@@ -36,7 +41,7 @@ export default class Metric extends React.Component {
     }
 
     return (
-      <span className="clearfix status">
+      <span className="metric">
         <span>
           <span className={spanClass}>{content}</span>
         </span>

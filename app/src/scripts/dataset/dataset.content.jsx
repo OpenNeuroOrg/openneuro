@@ -143,7 +143,6 @@ class DatasetContent extends Reflux.Component {
             {this._authors(dataset.authors)}
             {this._views(dataset.views)}
             {this._followers(followers)}
-            {this._downloads(dataset.downloads)}
             <Summary summary={dataset.summary} />
             <div className="clearfix status-container">
               <Statuses dataset={dataset} />
@@ -233,12 +232,6 @@ class DatasetContent extends Reflux.Component {
         }
       }
       return <h6>{authorString}</h6>
-    }
-  }
-
-  _downloads(downloads) {
-    if (downloads) {
-      return <h6>downloads: {downloads}</h6>
     }
   }
 

@@ -66,11 +66,7 @@ class Tools extends Reflux.Component {
         tooltip: 'Download Dataset',
         icon: 'fa-download',
         prepDownload: actions.getDatasetDownloadTicket.bind(this),
-        action: actions.showDatasetComponent.bind(
-          this,
-          'subscribe',
-          this.props.history,
-        ),
+        action: actions.confirmDatasetDownload.bind(this, this.props.history),
         display: !isIncomplete,
         warn: true,
         modalLink: datasets.datasetUrl + '/subscribe',
