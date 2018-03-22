@@ -162,7 +162,7 @@ export default {
  * item that can be stored as if it came from 
  * a client-side draft.js editor
  */
-let textToDraft = (text) => {
+const textToDraft = (text) => {
   const window = new jsdom.JSDOM('').window
   global.document = window.document
   global.HTMLElement = window.HTMLElement
