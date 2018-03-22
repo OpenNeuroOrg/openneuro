@@ -33,8 +33,8 @@ export default {
     // determine if the main is from a specific sender
     // or the generic email address
     let user = (email && email.data && email.data.from) ? email.data.from : config.notifications.email.user
-    let from = user + config.notifications.email.url
-    
+    let from = user + '@' + config.notifications.email.url
+
     // configure mail options
     var mailOptions = {
       from: from,
