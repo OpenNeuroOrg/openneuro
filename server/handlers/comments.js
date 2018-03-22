@@ -1,7 +1,9 @@
 import mongo from '../libs/mongo'
 import notifications from '../libs/notifications.js'
 import moment from 'moment'
+import jsdom from 'jsdom'
 import { ObjectID } from 'mongodb'
+import {ContentState, convertFromHTML, convertToRaw} from 'draft-js'
 
 let c = mongo.collections
 
@@ -45,58 +47,36 @@ export default {
    */
   async reply(req, res, next) {
     let comment
-    console.log('req:', req)
-    console.log('res:', res)
-
     const parentId = req.params.commentId
     const userId = req.params.userId
-
-    console.log('parentId:', parentId)
-    console.log('userId:', userId)
-
-    const text = req.data['stripped-text']
-    console.log('text:', text)
-
-    c.scitran.users.findOne({_id: userId}).then(user => {
-      console.log('user:', user)
-
-      let originalComment
-      c.crn.comments.findOne({_id: ObjectID(parentId)}).then((err, response) => {
+    const text = textToDraft(req.body['stripped-text'])
+    const user = await c.scitran.users.findOne({ _id: ObjectID(userId) })
+    let originalComment = await c.crn.comments.findOne({
+      _id: ObjectID(parentId),
+    })
+    if (user && originalComment) {
+      comment = {
+        datasetId: originalComment.datasetId,
+        datasetLabel: originalComment.datasetLabel,
+        parentId: parentId,
+        text: text,
+        user: user.profile,
+        createDate: moment().format(),
+      }
+      c.crn.comments.insertOne(comment, (err, response) => {
         if (err) {
-          console.log('there was an error getting the parent comment for this email reply')
-          res.send(404)
+          return next(err)
         } else {
-          originalComment = response.body
-        }
-  
-        console.log('original comment:', originalComment)
-  
-        if (user && originalComment) {
-          comment = {
-            datasetId: originalComment.datasetId,
-            datasetLabel: originalComment.datasetLabel,
-            parentId: parentId,
-            text: text,
-            user: user.profile,
-            createDate: moment().format(),
+          if (response.ops && response.ops.length) {
+            comment = response.ops[0]
           }
-  
-          console.log('comment being created...')
-          console.log('comment:', comment)
-          c.crn.comments.insertOne(comment, (err, response) => {
-            if (err) {
-              return next(err)
-            } else {
-              if (response.ops && response.ops.length) {
-                comment = response.ops[0]
-              }
-              notifications.commentCreated(comment)
-              res.send(response.ops)
-            }
-          })
+          notifications.commentCreated(comment)
+          return res.send(response.ops[0])
         }
       })
-    })
+    } else {
+      return res.sendStatus(404)
+    }
   },
 
   /**
@@ -172,4 +152,20 @@ export default {
         res.send(filteredComments)
       })
   },
+}
+
+// helpers --------------------
+/**
+ * Text to Draft Content
+ * 
+ * Takes a string and returns a stringified json
+ * item that can be stored as if it came from 
+ * a client-side draft.js editor
+ */
+let textToDraft = (text) => {
+  const window = new jsdom.JSDOM('').window
+  global.document = window.document
+  global.HTMLElement = window.HTMLElement
+  global.HTMLAnchorElement = window.HTMLElement
+  return JSON.stringify(convertToRaw(ContentState.createFromBlockArray(convertFromHTML(text))))
 }
