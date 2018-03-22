@@ -32,6 +32,7 @@ export default {
       jobDefinitions: null,
       tickets: null,
       userPreferences: null,
+      mailgunIdentifiers: null,
       notifications: null,
       counters: null,
       logs: null,
