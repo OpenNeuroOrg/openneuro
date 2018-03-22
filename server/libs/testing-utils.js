@@ -1,6 +1,6 @@
 import http from 'http'
 
-module.exports = {
+export default {
   ok(res) {
     if (res.status !== 200) {
       const b = http.STATUS_CODES[res.status]

@@ -5,7 +5,7 @@ import mongo from '../../libs/mongo'
 import request from 'supertest'
 import { ObjectID } from 'mongodb'
 import createApp from '../../app.js'
-import { ok } from '../../libs/testing-utils.js'
+import utils from '../../libs/testing-utils.js'
 
 jest.unmock('superagent')
 
@@ -63,7 +63,7 @@ describe('comments/reply', () => {
       .post(commentReplyUrl)
       .send({ 'stripped-text': 'testing an email reply' })
       .expect('Content-Type', /json/)
-      .expect(ok)
+      .expect(utils.ok)
       .expect(200, done)
   })
 
