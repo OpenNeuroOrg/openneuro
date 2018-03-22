@@ -197,7 +197,7 @@ let notifications = {
                 type: 'email',
                 email: {
                   to: user.email,
-                  from: 'reply-' + comment._id + '-' + user._id,
+                  from: 'reply-' + encodeURIComponent(comment._id) + '-' + encodeURIComponent(user._id),
                   subject: 'Comment Created',
                   template: 'comment-created',
                   data: {
@@ -325,13 +325,16 @@ let notifications = {
       () => {
         c.crn.notifications.find({}).toArray((err, docs) => {
           for (let notification of docs) {
-            notifications.send(notification, err => {
+            notifications.send(notification, (err, response) => {
               if (!err) {
                 c.crn.notifications.removeOne(
                   { _id: notification._id },
                   {},
                   () => {},
                 )
+                if (response && response.messageId) {
+                  c.crn.mailgunIdentifiers.insertOne({ messageId: response.messageId })
+                }
               } else {
                 console.log('NOTIFICATION ERROR ----------')
                 console.log(err)
