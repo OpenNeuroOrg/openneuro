@@ -13,6 +13,9 @@ const app = createApp(true)
 
 const userId = ObjectID()
 const parentId = ObjectID()
+const mailgunId = ObjectID()
+const mailgunMessageId = 'testid@mailguntest.com'
+
 const user = {
   _id: userId,
   profile: {
@@ -25,6 +28,14 @@ const comment = {
   _id: parentId,
   datasetId: '22',
   datasetLabel: 'test_dataset',
+}
+const mailgunIdentifier = {
+  _id: mailgunId,
+  messageId: mailgunMessageId,
+}
+const validReply = {
+  'stripped-text': 'testing an email reply',
+  'In-Reply-To': mailgunMessageId,
 }
 
 const hasParentId = res => {
@@ -46,6 +57,7 @@ const insertedIntoMongo = async res => {
 beforeAll(async () => {
   await mongo.connect(global.__MONGO_URI__)
   await mongo.collections.crn.comments.insertOne(comment)
+  await mongo.collections.crn.mailgunIdentifiers.insertOne(mailgunIdentifier)
   await mongo.collections.scitran.users.insertOne(user)
 })
 
@@ -61,23 +73,32 @@ describe('comments/reply', () => {
   it('sends a response', done => {
     request(app)
       .post(commentReplyUrl)
-      .send({ 'stripped-text': 'testing an email reply' })
+      .send(validReply)
       .expect('Content-Type', /json/)
       .expect(utils.ok)
       .expect(200, done)
+  })
+  it('should return 404 if the email is not in reply to a message we sent', done => {
+    request(app)
+      .post(commentReplyUrl)
+      .send({
+        'stripped-text': 'testing an email reply',
+        'In-Reply-To': 'wrongID!',
+      })
+      .expect(404, done)
   })
 
   it('should return 404 when an invalid userId is provided', done => {
     request(app)
       .post(baseUrl + parentId + '/' + ObjectID())
-      .send({ 'stripped-text': 'testing an email reply' })
+      .send(validReply)
       .expect(404, done)
   })
 
   it('should return the proper newly created comment when provided accurate information', done => {
     request(app)
       .post(commentReplyUrl)
-      .send({ 'stripped-text': 'testing an email reply' })
+      .send(validReply)
       .expect(hasParentId)
       .expect(hasSameUserInfo)
       .expect(insertedIntoMongo)
