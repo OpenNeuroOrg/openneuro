@@ -197,6 +197,7 @@ let notifications = {
                 type: 'email',
                 email: {
                   to: user.email,
+                  from: 'reply-' + comment._id + '-' + user._id,
                   subject: 'Comment Created',
                   template: 'comment-created',
                   data: {
