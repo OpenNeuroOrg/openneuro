@@ -2218,6 +2218,7 @@ let datasetStore = Reflux.createStore({
   },
 
   checkSubscriptionFollowers(callback) {
+    let dataset = this.data.dataset
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
