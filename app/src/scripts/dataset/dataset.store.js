@@ -1736,35 +1736,20 @@ let datasetStore = Reflux.createStore({
    * DisplayFile
    */
   displayFile(snapshotId, jobId, file, history, callback) {
-    let requestAndDisplay = link => {
-      if (link) {
-        if (
-          files.hasExtension(file.name, [
-            '.pdf',
-            '.nii.gz',
-            '.jpg',
-            '.jpeg',
-            '.png',
-            '.gif',
-          ])
-        ) {
-          if (callback) {
-            callback()
-          }
-          this.update(
-            {
-              displayFile: {
-                name: file.name,
-                text: null,
-                link: link,
-              },
-            },
-            () => {
-              this.showDatasetComponent('file-display', file.history)
-            },
-          )
-        } else {
-          request.get(link, {}).then(res => {
+    if (file && file.name) {
+      let displayUrl = file.path ? 'results/' + file.path : 'file-display'
+      let requestAndDisplay = link => {
+        if (link) {
+          if (
+            files.hasExtension(file.name, [
+              '.pdf',
+              '.nii.gz',
+              '.jpg',
+              '.jpeg',
+              '.png',
+              '.gif',
+            ])
+          ) {
             if (callback) {
               callback()
             }
@@ -1772,30 +1757,50 @@ let datasetStore = Reflux.createStore({
               {
                 displayFile: {
                   name: file.name,
-                  text: res.text,
+                  text: null,
                   link: link,
-                  info: file,
                 },
               },
               () => {
-                this.showDatasetComponent('file-display', file.history)
+                this.showDatasetComponent(displayUrl, file.history)
               },
             )
-          })
+          } else {
+            request.get(link, {}).then(res => {
+              if (callback) {
+                callback()
+              }
+              this.update(
+                {
+                  displayFile: {
+                    name: file.name,
+                    text: res.text,
+                    link: link,
+                    info: file,
+                  },
+                },
+                () => {
+                  this.showDatasetComponent(displayUrl, file.history)
+                },
+              )
+            })
+          }
+        } else {
+          this.showDatasetComponent(displayUrl, file.history)
         }
-      } else {
-        this.showDatasetComponent('file-display', file.history)
       }
-    }
 
-    if (jobId) {
-      this.getResultDownloadTicket(snapshotId, jobId, file, link => {
-        requestAndDisplay(link)
-      })
+      if (jobId) {
+        this.getResultDownloadTicket(snapshotId, jobId, file, link => {
+          requestAndDisplay(link)
+        })
+      } else {
+        this.getFileDownloadTicket(file, link => {
+          requestAndDisplay(link)
+        })
+      }
     } else {
-      this.getFileDownloadTicket(file, link => {
-        requestAndDisplay(link)
-      })
+      callback()
     }
   },
 
