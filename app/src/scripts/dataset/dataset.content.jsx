@@ -124,7 +124,6 @@ class DatasetContent extends Reflux.Component {
     if (dataset) {
       let errors = dataset.validation.errors
       let warnings = dataset.validation.warnings
-      let followers = this.state.datasets.followers
       // meta description is README unless it's empty
       content = (
         <div className="row">
@@ -142,7 +141,6 @@ class DatasetContent extends Reflux.Component {
             {this._modified(dataset.modified)}
             {this._authors(dataset.authors)}
             {this._views(dataset.views)}
-            {this._followers(followers)}
             <Summary summary={dataset.summary} />
             <div className="clearfix status-container">
               <Statuses dataset={dataset} />
@@ -447,12 +445,6 @@ class DatasetContent extends Reflux.Component {
   _views(views) {
     if (views) {
       return <h6>views: {views}</h6>
-    }
-  }
-
-  _followers(followers) {
-    if (followers) {
-      return <h6>followers: {followers}</h6>
     }
   }
 

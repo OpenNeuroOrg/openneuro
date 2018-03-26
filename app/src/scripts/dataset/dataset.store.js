@@ -83,7 +83,6 @@ let datasetStore = Reflux.createStore({
         link: '',
         info: null,
       },
-      followers: null,
       loading: false,
       loadingApps: false,
       loadingJobs: false,
@@ -2219,13 +2218,14 @@ let datasetStore = Reflux.createStore({
   },
 
   checkSubscriptionFollowers(callback) {
+    let dataset = this.data.dataset
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
     crn.getSubscriptions(datasetId).then(res => {
       if (res.body) {
-        const followers = res.body.length
-        this.update({ followers }, callback())
+        dataset.followers = res.body.length
+        this.update({ dataset }, callback())
       } else {
         callback()
       }
