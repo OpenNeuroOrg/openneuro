@@ -22,12 +22,17 @@ class Metrics extends React.Component {
     let displayFollowers = fromDashboard
       ? followers !== '0' ? true : false
       : true
-
+    let displayViews = fromDashboard ? false : true
     return (
       <span className="metrics-wrap">
         <Metric type="stars" value={stars} display={displayStars} />
-        <Metric type="downloads" value={downloads} display={displayDownloads} />
         <Metric type="followers" value={followers} display={displayFollowers} />
+        <Metric
+          type="views"
+          value={dataset.views || '0'}
+          display={displayViews}
+        />
+        <Metric type="downloads" value={downloads} display={displayDownloads} />
       </span>
     )
   }
