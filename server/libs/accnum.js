@@ -1,4 +1,4 @@
-/* Scritp to update accession numbers in both scitran and crn databases.
+/* Script to update accession numbers in both scitran and crn databases.
  * Expects first argument passed to the script to be a json file with key 
  * 'accessionNumbers' and value an array of arrays of the form:
  * [["ds000001", "ds000002"],...] where the first element of the inner array 
