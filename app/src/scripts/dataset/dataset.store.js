@@ -200,13 +200,11 @@ let datasetStore = Reflux.createStore({
                   this.loadComments(originalId)
                   this.getDatasetStars()
                   this.checkSubscriptionFollowers(() => {
-                    this.checkUserSubscription(() => {
-                      let datasetUrl = this.constructDatasetUrl(dataset)
-                      this.update({
-                        loading: false,
-                        snapshot: snapshot,
-                        datasetUrl: datasetUrl,
-                      })
+                    let datasetUrl = this.constructDatasetUrl(dataset)
+                    this.update({
+                      loading: false,
+                      snapshot: snapshot,
+                      datasetUrl: datasetUrl,
                     })
                   })
                 })
@@ -2144,7 +2142,7 @@ let datasetStore = Reflux.createStore({
       if (res && res.status !== 200) {
         callback({ error: 'There was an error while following this dataset.' })
       } else {
-        this.checkUserSubscription(() => {
+        this.checkSubscriptionFollowers(() => {
           callback()
         })
       }
@@ -2165,7 +2163,7 @@ let datasetStore = Reflux.createStore({
           error: 'There was an error while unfollowing this dataset.',
         })
       } else {
-        this.checkUserSubscription(() => {
+        this.checkSubscriptionFollowers(() => {
           callback()
         })
       }
@@ -2173,45 +2171,22 @@ let datasetStore = Reflux.createStore({
   },
 
   checkUserSubscription(callback) {
-    let datasetId = this.data.dataset.original
-      ? this.data.dataset.original
-      : this.data.dataset._id
+    let dataset = this.data.dataset
     let userId =
       this.data.currentUser && this.data.currentUser.profile
         ? this.data.currentUser.profile._id
         : null
     let ownerId = this.data.dataset.group ? this.data.dataset.group : null
-
-    if (datasetId) {
-      // check the owner subscription
-      crn.checkUserSubscription(datasetId, ownerId).then(res => {
-        if (
-          res &&
-          res.status === 200 &&
-          res.body &&
-          res.body.hasOwnProperty('subscribed')
-        ) {
-          let dataset = this.data.dataset
-          dataset.uploaderSubscribed = res.body.subscribed
-          this.update({ dataset })
-        }
-
-        // check the user subscription
-        crn.checkUserSubscription(datasetId, userId).then(res => {
-          if (
-            res &&
-            res.status === 200 &&
-            res.body &&
-            res.body.hasOwnProperty('subscribed')
-          ) {
-            let dataset = this.data.dataset
-            dataset.subscribed = res.body.subscribed
-            this.update({ dataset }, callback())
-          } else {
-            callback()
-          }
-        })
+    if (dataset.followersList) {
+      let userSubscription = dataset.followersList.filter(follower => {
+        return follower.userId === userId
       })
+      let ownerSubscription = dataset.followersList.filter(follower => {
+        return follower.userId === ownerId
+      })
+      dataset.subscribed = userSubscription.length ? true : false
+      dataset.uploaderSubscribed = ownerSubscription.length ? true : false
+      this.update({ dataset }, callback())
     } else {
       callback()
     }
@@ -2223,12 +2198,14 @@ let datasetStore = Reflux.createStore({
       ? this.data.dataset.original
       : this.data.dataset._id
     crn.getSubscriptions(datasetId).then(res => {
-      if (res.body) {
-        dataset.followers = res.body.length
-        this.update({ dataset }, callback())
-      } else {
-        callback()
-      }
+      dataset.followersList = res.body || []
+      dataset.followers = res.body ? res.body.length : '0'
+      this.update(
+        { dataset },
+        this.checkUserSubscription(() => {
+          callback()
+        }),
+      )
     })
   },
 

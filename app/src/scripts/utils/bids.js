@@ -49,6 +49,7 @@ export default {
             projects = projects.concat(publicProjects)
             const users = isSignedOut ? null : (await scitran.getUsers()).body
             const stars = (await crn.getStars()).body
+            const followers = (await crn.getSubscriptions()).body
             let resultDict = {}
             // hide other user's projects from admins & filter snapshots to display newest of each dataset
             const usagePromises = projects.map(project => {
@@ -66,7 +67,13 @@ export default {
 
             Promise.all(usagePromises).then(() => {
               for (let project of projects) {
-                let dataset = this.formatDataset(project, null, users, stars)
+                let dataset = this.formatDataset(
+                  project,
+                  null,
+                  users,
+                  stars,
+                  followers,
+                )
                 let datasetId = dataset.hasOwnProperty('original')
                   ? dataset.original
                   : dataset._id
@@ -350,6 +357,24 @@ export default {
   },
 
   /**
+   * Followers
+   *
+   * Takes a dataset and followers array and returns the count of the array associated with that specific dataset.
+   */
+
+  followers(dataset, followers) {
+    if (followers) {
+      let datasetId = dataset.original ? dataset.original : dataset._id
+      let subscriptions = followers.filter(follower => {
+        return follower.datasetId === datasetId
+      })
+      return subscriptions
+    } else {
+      return []
+    }
+  },
+
+  /**
    * Format Files
    *
    * Sorts files alphabetically and adds parentId
@@ -382,7 +407,7 @@ export default {
    * a formatted top level container of a
    * BIDS dataset.
    */
-  formatDataset(project, description, users, stars) {
+  formatDataset(project, description, users, stars, followers) {
     let files = [],
       attachments = []
     if (project.files) {
@@ -438,7 +463,8 @@ export default {
     }
     dataset.stars = this.stars(dataset, stars)
     dataset.starCount = dataset.stars ? '' + dataset.stars.length : '0'
-
+    dataset.followersList = this.followers(dataset, followers)
+    dataset.followers = '' + dataset.followersList.length
     return dataset
   },
 
