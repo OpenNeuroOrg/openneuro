@@ -266,6 +266,13 @@ export default {
     )
   },
 
+  // Analytics
+  getAnalytics(datasetId, userId) {
+    return request.get(config.crn.url + 'analytics/' + datasetId, {
+      query: userId,
+    })
+  },
+
   // Logs ------------------------------------------------------------------------------
 
   getJobLogs(jobId) {
