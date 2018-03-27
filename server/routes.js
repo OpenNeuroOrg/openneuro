@@ -76,6 +76,14 @@ const baseRoutes = [
     handler: validation.validate,
   },
 
+  // analytics -----------------------------------
+
+  {
+    method: 'get',
+    url: '/analytics/:datasetId',
+    handler: datasets.analytics
+  },
+
   // jobs ----------------------------------------
 
   {
