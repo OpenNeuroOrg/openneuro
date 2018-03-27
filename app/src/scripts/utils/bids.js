@@ -463,7 +463,8 @@ export default {
     }
     dataset.stars = this.stars(dataset, stars)
     dataset.starCount = dataset.stars ? '' + dataset.stars.length : '0'
-    dataset.followers = '' + this.followers(dataset, followers).length || '0'
+    dataset.followersList = this.followers(dataset, followers)
+    dataset.followers = '' + dataset.followersList.length
     return dataset
   },
 
