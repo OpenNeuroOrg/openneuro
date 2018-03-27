@@ -37,7 +37,7 @@ export default {
         metadata: metadata,
       })
       .then(res => {
-        let projects = res.body
+        let projects = res.body ? res.body : []
         scitran
           .getProjects({
             authenticate: !isPublic,
@@ -45,13 +45,28 @@ export default {
             metadata: metadata,
           })
           .then(async pubProjects => {
-            projects = projects.concat(pubProjects.body)
+            const publicProjects = pubProjects.body ? pubProjects.body : []
+            projects = projects.concat(publicProjects)
             const users = isSignedOut ? null : (await scitran.getUsers()).body
+            const stars = (await crn.getStars()).body
             let resultDict = {}
             // hide other user's projects from admins & filter snapshots to display newest of each dataset
-            if (projects) {
+            const usagePromises = projects.map(project => {
+              let snapshot = project.hasOwnProperty('original') ? true : false
+              return new Promise(resolve => {
+                this.usage(project._id, { snapshot: snapshot }, usage => {
+                  if (usage) {
+                    project.views = usage.views
+                    project.downloads = usage.downloads
+                  }
+                  resolve()
+                })
+              })
+            })
+
+            Promise.all(usagePromises).then(() => {
               for (let project of projects) {
-                let dataset = this.formatDataset(project, null, users)
+                let dataset = this.formatDataset(project, null, users, stars)
                 let datasetId = dataset.hasOwnProperty('original')
                   ? dataset.original
                   : dataset._id
@@ -68,13 +83,13 @@ export default {
                   }
                 }
               }
-            }
 
-            let results = []
-            for (let key in resultDict) {
-              results.push(resultDict[key])
-            }
-            callback(results)
+              let results = []
+              for (let key in resultDict) {
+                results.push(resultDict[key])
+              }
+              callback(results)
+            })
           })
       })
   },
@@ -313,6 +328,28 @@ export default {
   },
 
   /**
+   * Stars
+   *
+   * Takes a dataset and stars list and returns the
+   * count of stars associated with that dataset.
+   */
+  stars(dataset, stars) {
+    if (stars) {
+      let datasetId = dataset.original ? dataset.original : dataset._id
+      let associatedStars = stars.filter(star => {
+        return star.datasetId === datasetId
+      })
+      if (associatedStars.length) {
+        return associatedStars
+      } else {
+        return []
+      }
+    } else {
+      return []
+    }
+  },
+
+  /**
    * Format Files
    *
    * Sorts files alphabetically and adds parentId
@@ -345,7 +382,7 @@ export default {
    * a formatted top level container of a
    * BIDS dataset.
    */
-  formatDataset(project, description, users) {
+  formatDataset(project, description, users, stars) {
     let files = [],
       attachments = []
     if (project.files) {
@@ -368,6 +405,8 @@ export default {
       modified: project.modified,
       permissions: project.permissions,
       public: project.public,
+      downloads: project.downloads,
+      views: project.views,
 
       /** modified for BIDS **/
       validation:
@@ -397,6 +436,9 @@ export default {
     if (project.snapshot_version) {
       dataset.snapshot_version = project.snapshot_version
     }
+    dataset.stars = this.stars(dataset, stars)
+    dataset.starCount = dataset.stars ? '' + dataset.stars.length : '0'
+
     return dataset
   },
 
@@ -520,14 +562,17 @@ export default {
           snapshot: true,
         })
         .then(res => {
-          usage.views = res.body.count
+          let viewCount = res.body && res.body.count ? '' + res.body.count : '0'
+          usage.views = viewCount
           scitran
             .getUsage(snapshotId, {
               query: { type: 'download', count: true },
               snapshot: true,
             })
             .then(res => {
-              usage.downloads = res.body.count
+              let dlCount =
+                res.body && res.body.count ? '' + res.body.count : '0'
+              usage.downloads = dlCount
               callback(usage)
             })
         })

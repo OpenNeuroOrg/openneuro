@@ -269,18 +269,19 @@
                 background-color: rgba(123, 196, 123, .1);
             }
 
-            .status-container {
-                width: 40%;
-                float: left;
+            .status-container,
+            .metric-container {
+                width: auto;
+                float: right;
                 box-sizing: border-box;
                 padding: 10px 20px;
 
-                .status-wrap {
+                .status-wrap, .metrics-wrap {
                     list-style: none;
                     padding: 0;
                     margin: 0;
 
-                    .status {
+                    .status, .metric {
                         display: inline-block;
                         float: right;
                         margin-right: 0;
@@ -293,7 +294,7 @@
                             width: 80px;
 
                             i {
-                                margin: 0;
+                                margin: 0 5px 0 0;
                             }
                         }
                     }
@@ -309,6 +310,10 @@
                         margin-top: 1px;
                     }
                 }
+            }
+
+            .metric-container {
+                min-width: 5%;
             }
 
             .meta-container {

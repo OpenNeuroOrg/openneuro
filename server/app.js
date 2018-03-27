@@ -9,7 +9,8 @@ import Raven from 'raven'
 import config from './config'
 import routes from './routes'
 import morgan from 'morgan'
-import mongo from './libs/mongo'
+import schema from './graphql/schema'
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import bodyParser from 'body-parser'
 // import events lib to instantiate CRN Emitter
 import events from './libs/events'
@@ -56,6 +57,12 @@ export default test => {
     }
     res.status(http_code).send(send)
   })
+
+  // The GraphQL endpoint
+  app.use('/crn/graphql', bodyParser.json(), graphqlExpress({ schema }))
+
+  // GraphiQL, a visual editor for queries
+  app.use('/crn/graphiql', graphiqlExpress({ endpointURL: '/crn/graphql' }))
 
   return app
 }

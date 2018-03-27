@@ -2,7 +2,6 @@
 .dataset {
 
     .dataset-inner {
-        padding-top: 60px;
         margin-bottom: 15%;
         h1 {
             margin-top: 0;
@@ -114,6 +113,10 @@
                 i {
                     margin-right: 3px;
                 }
+            }
+
+            .alert.alert-danger {
+                position: relative;
             }
         }
 

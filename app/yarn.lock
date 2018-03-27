@@ -1275,9 +1275,9 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bids-validator@^0.25.11:
-  version "0.25.12"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.25.12.tgz#8f71bb38ad1c150e5e5714367a8bdbdd6b01d643"
+bids-validator@^0.26.0:
+  version "0.26.0"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.26.0.tgz#bd7d3b95bab27e9ddcf917503a3e3c7d4fc6d0c4"
   dependencies:
     ajv "^5.2.2"
     async "^2.1.5"
@@ -2143,6 +2143,12 @@ copy-concurrently@^1.0.0:
 copy-descriptor@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/copy-descriptor/-/copy-descriptor-0.1.1.tgz#676f6eb3c39997c2ee1ac3a924fd6124748f578d"
+
+copy-to-clipboard@^3:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/copy-to-clipboard/-/copy-to-clipboard-3.0.8.tgz#f4e82f4a8830dce4666b7eb8ded0c9bcc313aba9"
+  dependencies:
+    toggle-selection "^1.0.3"
 
 copy-webpack-plugin@^4.0.1:
   version "4.3.1"
@@ -6906,6 +6912,13 @@ react-bootstrap@0.31.3:
     uncontrollable "^4.1.0"
     warning "^3.0.0"
 
+react-copy-to-clipboard@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-copy-to-clipboard/-/react-copy-to-clipboard-5.0.1.tgz#8eae107bb400be73132ed3b6a7b4fb156090208e"
+  dependencies:
+    copy-to-clipboard "^3"
+    prop-types "^15.5.8"
+
 react-dom@16:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
@@ -8303,6 +8316,10 @@ to-regex@^3.0.1:
     define-property "^0.2.5"
     extend-shallow "^2.0.1"
     regex-not "^1.0.0"
+
+toggle-selection@^1.0.3:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/toggle-selection/-/toggle-selection-1.0.6.tgz#6e45b1263f2017fa0acc7d89d78b15b8bf77da32"
 
 toposort@^1.0.0:
   version "1.0.6"

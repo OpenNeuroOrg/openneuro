@@ -23,7 +23,7 @@ class Statuses extends Reflux.Component {
       uploaderSubscribed = dataset.uploaderSubscribed
 
     return (
-      <span className="clearfix status-wrap">
+      <span className="status-wrap">
         <Status
           type="public"
           minimal={minimal}

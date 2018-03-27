@@ -2,12 +2,14 @@ import React from 'react'
 import Reflux from 'reflux'
 import { LeftSidebar, LeftSidebarButton } from './dataset.left-sidebar.jsx'
 import Tools from './tools'
+import UpdateWarn from './dataset.update-warning.jsx'
 import datasetStore from './dataset.store.js'
 import DatasetRoutes from './dataset.routes.jsx'
 import Helmet from 'react-helmet'
 import { withRouter } from 'react-router-dom'
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
+import schemaGenerator from '../utils/json-ld.js'
 
 // let uploadWarning = 'You are currently uploading files. Leaving this page will cancel the upload process.'
 
@@ -20,6 +22,7 @@ class Dataset extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
   render() {
+    let datasets = this.state.datasets
     let showSidebar = this.state.datasets.showSidebar
     let dataset = this.state.datasets.dataset
     let datasetLabel = dataset ? dataset.label : ''
@@ -37,10 +40,18 @@ class Dataset extends Reflux.Component {
               {pageTitle} - {datasetLabel}
             </title>
             <meta name="description" content={description} />
+            <script type="application/ld+json">
+              {schemaGenerator(datasets)}
+            </script>
           </Helmet>
           <LeftSidebar />
           <LeftSidebarButton />
+          <UpdateWarn
+            show={this.state.datasets.modals.update}
+            update={this.state.datasets.currentUpdate}
+          />
           <Tools />
+
           <div className="fade-in inner-route dataset-route light">
             <div className="clearfix dataset-wrap">
               <div className="dataset-annimation">

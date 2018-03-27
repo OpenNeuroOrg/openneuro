@@ -56,6 +56,8 @@ let UploadStore = Reflux.createStore({
         { label: 'Name', property: 'label' },
         { label: 'Date', property: 'created', isTimestamp: true },
         { label: 'User', property: 'user.lastname' },
+        { label: 'Stars', property: 'starCount' },
+        { label: 'Downloads', property: 'downloads' },
       ],
       filters: [],
     }
@@ -98,7 +100,16 @@ let UploadStore = Reflux.createStore({
             if (!isAdmin && !isPublic) {
               datasets = datasets.filter(dataset => {
                 if (dataset.group && userStore.data && userStore.data.profile) {
-                  return dataset.group === userStore.data.profile._id
+                  let hasPermission
+                  if (dataset.permissions) {
+                    hasPermission = dataset.permissions.filter(permission => {
+                      return permission._id === userStore.data.profile._id
+                    }).length
+                  }
+                  const isUploader =
+                    dataset.group === userStore.data.profile._id
+
+                  return isUploader || hasPermission
                 } else {
                   return false
                 }
@@ -173,7 +184,7 @@ let UploadStore = Reflux.createStore({
    * Sort
    *
    * Takes a value and a direction (+ or -) and
-   * sorts the current datasets acordingly.
+   * sorts the current datasets accordingly.
    */
   sort(value, direction, datasets, isTimeStamp) {
     datasets = datasets ? datasets : this.data.datasets

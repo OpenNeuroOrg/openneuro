@@ -1,15 +1,22 @@
 // dependencies -------------------------------------------------------
-
 import React from 'react'
+import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
 import config from '../../../../config'
+import datasetStore from '../../dataset/dataset.store.js'
+import { refluxConnect } from '../../utils/reflux'
+import { Link } from 'react-router-dom'
 
 let uploadBlacklist = config.upload.blacklist
 
-class FileTree extends React.Component {
+class FileTree extends Reflux.Component {
+  constructor() {
+    super()
+    refluxConnect(this, datasetStore, 'datasets')
+  }
   // life cycle events --------------------------------------------------
 
   render() {
@@ -203,6 +210,7 @@ class FileTree extends React.Component {
       '.tsv',
       '.csv',
       'README',
+      'CHANGES',
       '.nii.gz',
       '.nii',
       '.pdf',
@@ -235,14 +243,31 @@ class FileTree extends React.Component {
           </span>
         )
       } else {
+        let itemUrl
+        if (item.path) {
+          itemUrl =
+            this.state.datasets.datasetUrl +
+            '/results/' +
+            encodeURIComponent(item.path)
+        } else {
+          itemUrl =
+            this.state.datasets.datasetUrl +
+            '/file-display/' +
+            encodeURIComponent(item.name)
+        }
+
         displayBtn = (
           <span className="view-file">
-            <WarnButton
-              icon="fa-eye"
-              warn={false}
-              message=" View"
-              action={this.props.displayFile.bind(this, item)}
-            />
+            <Link to={itemUrl}>
+              <WarnButton
+                icon="fa-eye"
+                warn={false}
+                message=" View"
+                action={() => {
+                  return null
+                }}
+              />
+            </Link>
           </span>
         )
       }

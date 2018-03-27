@@ -339,4 +339,23 @@ export default {
       {},
     )
   },
+
+  // Stars --------------------------------------------------------------------------
+
+  getStars(datasetId) {
+    return request.get(config.crn.url + 'stars/' + datasetId, {})
+  },
+
+  addStar(datasetId, userId) {
+    return request.post(config.crn.url + 'stars/' + datasetId, {
+      body: {
+        datasetId: datasetId,
+        userId: userId,
+      },
+    })
+  },
+
+  removeStar(datasetId, userId) {
+    return request.del(config.crn.url + 'stars/' + datasetId + '/' + userId, {})
+  },
 }

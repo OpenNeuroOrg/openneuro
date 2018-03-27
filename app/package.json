@@ -1,6 +1,6 @@
 {
   "name": "openneuro-app",
-  "version": "1.8.0",
+  "version": "1.9.1",
   "description": "React JS web frontend for the CRN application.",
   "license": "MIT",
   "main": "app.js",
@@ -21,7 +21,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "babel-runtime": "^6.26.0",
-    "bids-validator": "^0.25.11",
+    "bids-validator": "^0.26.0",
     "bowser": "^1.7.3",
     "bytes": "^3.0.0",
     "downloadjs": "^1.4.7",
@@ -38,6 +38,7 @@
     "raven-js": "^3.20.1",
     "react": "16",
     "react-bootstrap": "0.31.3",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-dom": "16",
     "react-ga": "^2.2.0",
     "react-helmet": "^5.2.0",
@@ -50,9 +51,9 @@
     "spark-md5": "^3.0.0",
     "stream-browserify": "^2.0.1",
     "superagent": "^3.6.0",
-    "victory": "^0.23.1",
     "url-search-params-polyfill": "^2.0.1",
     "urlite": "^1.2.8",
+    "victory": "^0.23.1",
     "xmldoc": "^1.1.0"
   },
   "devDependencies": {
