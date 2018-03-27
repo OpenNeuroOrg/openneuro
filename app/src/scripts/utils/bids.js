@@ -67,7 +67,13 @@ export default {
 
             Promise.all(usagePromises).then(() => {
               for (let project of projects) {
-                let dataset = this.formatDataset(project, null, users, stars, followers)
+                let dataset = this.formatDataset(
+                  project,
+                  null,
+                  users,
+                  stars,
+                  followers,
+                )
                 let datasetId = dataset.hasOwnProperty('original')
                   ? dataset.original
                   : dataset._id
@@ -350,20 +356,21 @@ export default {
     }
   },
 
-/**
- * Followers
- * 
- * Takes a dataset and followers array and returns the count of the array associated with that specific dataset.
- */ 
+  /**
+   * Followers
+   *
+   * Takes a dataset and followers array and returns the count of the array associated with that specific dataset.
+   */
+
   followers(dataset, followers) {
-    if(followers) {
+    if (followers) {
       let datasetId = dataset.original ? dataset.original : dataset._id
       let subscriptions = followers.filter(follower => {
         return follower.datasetId === datasetId
       })
       return subscriptions
     } else {
-      []
+      return []
     }
   },
 
