@@ -268,10 +268,8 @@ export default {
 
   // Analytics ------------------------------------------------------------------------------
 
-  getAnalytics(datasetId, userId) {
-    return request.get(config.crn.url + 'analytics/' + datasetId, {
-      query: userId,
-    })
+  getAnalytics(datasetId) {
+    return request.get(config.crn.url + 'analytics/' + datasetId, {})
   },
 
   // Logs ------------------------------------------------------------------------------
