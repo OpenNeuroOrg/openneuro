@@ -44,6 +44,7 @@ export default {
     scitran: {
       projects: null,
       project_snapshots: null,
+      analytics: null,
     },
   },
 
