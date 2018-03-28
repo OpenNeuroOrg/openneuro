@@ -9,7 +9,9 @@ import crypto from 'crypto'
 import { getAccessionNumber } from '../libs/dataset'
 import counter from '../libs/counter'
 import bidsId from '../libs/bidsId'
+import mongo from '../libs/mongo'
 
+let c = mongo.collections
 // handlers ----------------------------------------------------------------
 
 /**
@@ -113,4 +115,58 @@ export default {
       },
     )
   },
+
+  analytics(req, res, next) {
+    let datasetId = req.params.datasetId === 'undefined' || req.params.datasetId === 'null' ? null : req.params.datasetId
+    if (datasetId) {
+      // dataset page view
+      let datasetQuery = {'container_id': datasetId}
+      c.scitran.analytics.aggregate([
+        {
+          $match: datasetQuery
+        },
+        {
+          $group: {
+            _id: '$container_id',
+            views: {
+              $sum: {
+                $cond: [ {$eq: ['$analytics_type', 'view'] }, 1, 0]
+              }
+            },
+            downloads: {
+              $sum: {
+                $cond: [{ $eq: ['$analytics_type', 'download']}, 1, 0]
+              }
+            }
+          }
+        }
+      ]).toArray((err, results) => {
+        if (err) return next(err)
+        res.send(results)
+      })
+    } else {
+      // dashboard page view
+      // get all the dataset analytics:
+      c.scitran.analytics.aggregate([
+        {
+          $group: {
+            _id: '$container_id',
+            views: {
+              $sum: {
+                $cond: [ {$eq: ['$analytics_type', 'view'] }, 1, 0]
+              }
+            },
+            downloads: {
+              $sum: {
+                $cond: [{ $eq: ['$analytics_type', 'download']}, 1, 0]
+              }
+            }
+          }
+        }
+      ]).toArray((err, results) => {
+        if (err) return next(err)
+        res.send(results)
+      })
+    }
+  }
 }
