@@ -58,6 +58,7 @@ let UploadStore = Reflux.createStore({
         { label: 'User', property: 'user.lastname' },
         { label: 'Stars', property: 'starCount' },
         { label: 'Downloads', property: 'downloads' },
+        { label: 'Followers', property: 'followers' },
       ],
       filters: [],
     }

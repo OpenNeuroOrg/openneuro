@@ -100,18 +100,27 @@ export default {
    */
 
   getSubscriptions(req, res, next) {
-    let datasetId = req.params.datasetId
-
-    c.crn.subscriptions
-      .find({
-        datasetId: datasetId,
-      })
-      .toArray((err, subscriptions) => {
+    let datasetId =
+      req.params.datasetId === 'undefined' ? null : req.params.datasetId
+    if (datasetId) {
+      c.crn.subscriptions
+        .find({
+          datasetId: datasetId,
+        })
+        .toArray((err, subscriptions) => {
+          if (err) {
+            return next(err)
+          }
+          res.send(subscriptions)
+        })
+    } else {
+      c.crn.subscriptions.find().toArray((err, subscriptions) => {
         if (err) {
           return next(err)
         }
         res.send(subscriptions)
       })
+    }
   },
 
   /**
