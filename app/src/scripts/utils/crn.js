@@ -269,7 +269,12 @@ export default {
   // Analytics ------------------------------------------------------------------------------
 
   getAnalytics(datasetId) {
-    return request.get(config.crn.url + 'analytics/' + datasetId, {})
+    const rootUrl = config.crn.url + 'analytics/'
+    let analyticsUrl = rootUrl
+    if (datasetId) {
+      analyticsUrl = rootUrl + datasetId
+    }
+    return request.get(analyticsUrl, {})
   },
 
   // Logs ------------------------------------------------------------------------------
