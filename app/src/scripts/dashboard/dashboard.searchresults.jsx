@@ -101,7 +101,7 @@ class SearchResults extends React.Component {
                   <Search />
                 </div>
               </div>
-              {renderedResults}
+              <div className="panel-group">{renderedResults}</div>
             </div>
           </div>
         </div>
