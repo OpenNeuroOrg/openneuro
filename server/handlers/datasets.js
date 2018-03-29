@@ -117,8 +117,9 @@ export default {
   },
 
   analytics(req, res, next) {
-    let datasetId = req.params.datasetId === 'undefined' || req.params.datasetId === 'null' ? null : req.params.datasetId
+    let datasetId = req.params.datasetId
     if (datasetId) {
+      console.log('there is a datasetId')
       // dataset page view
       let datasetQuery = {'container_id': datasetId}
       c.scitran.analytics.aggregate([
@@ -140,11 +141,14 @@ export default {
             }
           }
         }
-      ]).toArray((err, results) => {
+      ]).toArray((err, analytics) => {
         if (err) return next(err)
-        res.send(results)
+
+        console.log('analytics:', analytics)        
+        res.send(analytics)
       })
     } else {
+      console.log('there is not a datasetId')
       // dashboard page view
       // get all the dataset analytics:
       c.scitran.analytics.aggregate([
@@ -165,7 +169,50 @@ export default {
         }
       ]).toArray((err, results) => {
         if (err) return next(err)
-        res.send(results)
+        
+        if (req.isSuperUser) {
+          // if the user is admin, send all results
+          res.send(results)
+        } else {
+          if (!req.user) {
+            // if there is no user, get a list of public datasets
+            // and send back the results for those
+            c.scitran.project_snapshots.find({public: true}).toArray((err, snapshots) => {
+              if (err) return next(err)
+
+              let projectIds = snapshots.map(snapshot => {
+                return snapshot._id.toString()
+              })
+              let analytics = results.filter((result) => {
+                return projectIds.indexOf(result._id) > -1
+              })           
+              res.send(analytics)
+            })
+          } else {
+            // if there is a user, find all snapshots and projects to which the user
+            // has access and send back results for those
+            c.scitran.project_snapshots.find({'permissions._id': req.user}).toArray((err, snapshots) => {
+              if (err) return next(err)
+
+              const snapshotIds = snapshots.map(snapshot => {
+                return snapshot._id.toString()
+              })
+
+              c.scitran.projects.find({'permissions._id': req.user}).toArray((err, projects) => {
+                if (err) return next(err)
+
+                const projectIds = projects.map(project => {
+                  return project._id.toString()
+                })
+                const datasetIds = projectIds.concat(snapshotIds)
+                const filteredAnalytics = results.filter((result) => {
+                  return datasetIds.indexOf(result._id) > -1
+                })
+                res.send(filteredAnalytics)
+              })
+            })
+          }
+        }
       })
     }
   }
