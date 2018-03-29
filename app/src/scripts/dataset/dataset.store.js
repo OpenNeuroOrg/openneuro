@@ -373,6 +373,9 @@ let datasetStore = Reflux.createStore({
           .join('\n')
       })
       .catch(err => {
+        if (callback) {
+          callback(err)
+        }
         logsText = JSON.stringify(err)
       })
       .finally(() => {
