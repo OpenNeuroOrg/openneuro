@@ -80,7 +80,8 @@ const baseRoutes = [
 
   {
     method: 'get',
-    url: '/analytics/:datasetId',
+    url: '/analytics/:datasetId?',
+    middleware: [auth.optional],
     handler: datasets.analytics
   },
 
