@@ -11,14 +11,20 @@ import bidsId from './bidsId'
 import { ObjectID } from 'mongodb'
 import mongo from './mongo'
 const fs = require('fs')
+const util = require('util')
 
 let c = mongo.collections
 
 async function updateAccessionNumber(oldId, newId) {
   let item = await c.scitran.projects.findOne({ _id: ObjectID(oldId) }, {})
-  updateId(c.scitran.projects, item, { _id: ObjectID(newId) }, ObjectID(oldId))
   let retPromises = []
   retPromises.push(
+    updateId(
+      c.scitran.projects,
+      item,
+      { _id: ObjectID(newId) },
+      ObjectID(oldId),
+    ),
     updateSnapshotsId(oldId, newId),
     updateJobs(oldId, newId),
     updateId(
@@ -27,6 +33,7 @@ async function updateAccessionNumber(oldId, newId) {
       { _id: ObjectID(newId) },
       ObjectID(oldId),
     ),
+    updateAnalytics(oldId, newId),
   )
   return Promise.all(retPromises)
 }
@@ -82,6 +89,32 @@ async function updateJobs(oldId, newId) {
     )
     retPromises.push(jobPromise)
   }
+  return Promise.all(retPromises)
+}
+
+async function updateAnalytics(oldId, newId) {
+  let _oldId = oldId.slice(12)
+  let oldIdRegex = new RegExp(util.format('^%s.*', _oldId))
+  const distinct = await c.scitran.analytics.distinct('container_id', {
+    container_id: oldIdRegex,
+  })
+
+  let retPromises = []
+
+  distinct.forEach(item => {
+    console.log(item)
+    let snapId = item
+    let verId = bidsId.decodeId(snapId)
+    let newSnapId = bidsId.encodeId(
+      bidsId.decodeId(newId).slice(2) + '-' + verId,
+    )
+    retPromises.push(
+      c.scitran.analytics.updateMany(
+        { container_id: snapId },
+        { $set: { container_id: newSnapId } },
+      ),
+    )
+  })
   return Promise.all(retPromises)
 }
 
