@@ -92,7 +92,7 @@ class SearchResults extends React.Component {
       <div className="route-wrapper">
         <div className="fade-in inner-route clearfix">
           <div className="dashboard-dataset-teasers datasets datasets-private">
-            <div className="admin header-wrap clearfix">
+            <div className="admin clearfix">
               <div className="row">
                 <div className="col-md-5">
                   <h2>Search Results</h2>
@@ -110,12 +110,15 @@ class SearchResults extends React.Component {
   }
 
   _results(results) {
+    // console.log(results)
     return results.map((result, index) => {
       let resultLink = this._resultLink(result)
       return (
         <div key={index} className="fade-in  panel panel-default">
-          <div className="panel-heading">
-            <div className="header clearfix">{resultLink}</div>
+          <div className="panel-body">
+            <div className="panel-heading">
+              <div className="header clearfix">{resultLink}</div>
+            </div>
           </div>
         </div>
       )
