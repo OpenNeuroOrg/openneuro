@@ -316,15 +316,16 @@ class JobAccordion extends React.Component {
             )
           }
 
+          let logstreamUrl = 'logs/' + encodeURIComponent(logstream.name)
           return (
             <span className="job-log" key={label}>
               <WarnButton
                 icon="fa-eye"
                 message={label}
                 warn={false}
-                action={actions.getLogstream.bind(
+                action={actions.showDatasetComponent.bind(
                   this,
-                  logstream.name,
+                  logstreamUrl,
                   this.props.history,
                 )}
               />
