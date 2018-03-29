@@ -119,7 +119,6 @@ export default {
   analytics(req, res, next) {
     let datasetId = req.params.datasetId
     if (datasetId) {
-      console.log('there is a datasetId')
       // dataset page view
       let datasetQuery = {'container_id': datasetId}
       c.scitran.analytics.aggregate([
@@ -143,12 +142,10 @@ export default {
         }
       ]).toArray((err, analytics) => {
         if (err) return next(err)
-
-        console.log('analytics:', analytics)        
+             
         res.send(analytics)
       })
     } else {
-      console.log('there is not a datasetId')
       // dashboard page view
       // get all the dataset analytics:
       c.scitran.analytics.aggregate([
@@ -169,7 +166,7 @@ export default {
         }
       ]).toArray((err, results) => {
         if (err) return next(err)
-        
+
         if (req.isSuperUser) {
           // if the user is admin, send all results
           res.send(results)
