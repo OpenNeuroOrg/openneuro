@@ -28,28 +28,17 @@ class LogsDisplay extends Reflux.Component {
     let fileName = file ? file.name : null
 
     if (!fileName) {
-      // file path should be of form analysisbucket/datasethash/jobid/filename
-      let filePath = decodeURIComponent(this.props.match.params.filePath)
-      let snapshotId = datasets.selectedSnapshot
-      let slugs = filePath.split('/')
-      if (slugs.length > 3) {
-        const jobId = slugs[2]
-        const fileSlugs = slugs.slice(3)
-        fileName = fileSlugs.join('/')
-        if (
-          fileName &&
-          datasets &&
-          datasets.dataset &&
-          !this.state.fileRequested
-        ) {
-          this.setState({ fileRequested: true })
-          let displayFile = {
-            name: fileName,
-            history: this.props.history,
-            path: filePath,
-          }
-          actions.displayFile(snapshotId, jobId, displayFile, null)
-        }
+      let fileName = decodeURIComponent(this.props.match.params.filePath)
+      if (
+        fileName &&
+        datasets &&
+        datasets.dataset &&
+        !this.state.fileRequested
+      ) {
+        this.setState({ fileRequested: true })
+        actions.getLogstream(fileName, this.props.history, err => {
+          if (err) throw new Error(err)
+        })
       }
     }
   }
