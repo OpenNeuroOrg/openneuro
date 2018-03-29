@@ -378,11 +378,6 @@ let datasetStore = Reflux.createStore({
         logsText = JSON.stringify(err)
       })
       .finally(() => {
-        history.push(
-          this.data.datasetUrl +
-            '/file-display/' +
-            encodeURIComponent(logstreamName),
-        )
         this.update({
           displayFile: {
             name: 'Logs',
