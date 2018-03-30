@@ -19,6 +19,8 @@ class SearchResults extends React.Component {
     this._requestSearch = this._requestSearch.bind(this)
   }
 
+  // Life Cycle Methods ------------------------------------------------
+
   componentWillReceiveProps(nextProps) {
     // Search again if the query changes
     if (nextProps.match.params.query !== this.props.match.params.query) {
@@ -32,6 +34,48 @@ class SearchResults extends React.Component {
     }
   }
 
+  render() {
+    let query = this.props.match.params.query || this.state.query
+    return (
+      <div className="route-wrapper">
+        <div className="fade-in inner-route clearfix">
+          <div className="dashboard-dataset-teasers datasets datasets-private">
+            <div className="admin clearfix">
+              <div className="row">
+                <div className="col-md-5">
+                  {query && this.state.results ? (
+                    <React.Fragment>
+                      <h2>Search Results</h2>
+                      <span className="sub-title">
+                        showing {this.state.results.length} results for: {query}
+                      </span>
+                    </React.Fragment>
+                  ) : null}
+                </div>
+                <div className="col-md-7">
+                  <Search />
+                </div>
+              </div>
+              <div className="panel-group">
+                {this.state.loading ? (
+                  <Spinner active={true} />
+                ) : query ? (
+                  this._results(this.state.results)
+                ) : (
+                  <h2>
+                    No results found. Please check the url for accuracy and try
+                    again.
+                  </h2>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  // Custom Methods ------------------------------------------------
+
   _requestSearch(query) {
     this.setState({
       loading: true,
@@ -39,7 +83,6 @@ class SearchResults extends React.Component {
 
     const key = 'AIzaSyB68V4zjGxWpZzTn8-vRuogiRLPmSCmWoo'
     const cx = '016952313242172063987:retmkn_owto'
-
     if (query) {
       request
         .get('https://www.googleapis.com/customsearch/v1', {
@@ -79,38 +122,18 @@ class SearchResults extends React.Component {
             loading: false,
           })
         })
+    } else {
+      this.setState({
+        results: '',
+        query: '',
+        loading: false,
+      })
     }
   }
 
-  render() {
-    let renderedResults = this.state.loading ? (
-      <Spinner active={true} />
-    ) : (
-      this._results(this.state.results)
-    )
-    return (
-      <div className="route-wrapper">
-        <div className="fade-in inner-route clearfix">
-          <div className="dashboard-dataset-teasers datasets datasets-private">
-            <div className="admin clearfix">
-              <div className="row">
-                <div className="col-md-5">
-                  <h2>Search Results</h2>
-                </div>
-                <div className="col-md-7">
-                  <Search />
-                </div>
-              </div>
-              <div className="panel-group">{renderedResults}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  // Templating Methods ------------------------------------------------
 
   _results(results) {
-    // console.log(results)
     return results.map((result, index) => {
       let resultLink = this._resultLink(result)
       return (
@@ -128,7 +151,9 @@ class SearchResults extends React.Component {
   _resultLink(result) {
     let innerContent = (
       <div className="meta-container">
-        <h4 className="dataset-name">{result.link}</h4>
+        <a href={result.link}>
+          <h4 className="dataset-name">{result.title}</h4>
+        </a>
         <p className="date">
           <span className="name">{result.snippet}</span>
         </p>
