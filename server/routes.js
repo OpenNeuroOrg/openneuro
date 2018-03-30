@@ -76,6 +76,15 @@ const baseRoutes = [
     handler: validation.validate,
   },
 
+  // analytics -----------------------------------
+
+  {
+    method: 'get',
+    url: '/analytics/:datasetId?',
+    middleware: [auth.optional],
+    handler: datasets.analytics
+  },
+
   // jobs ----------------------------------------
 
   {
@@ -212,6 +221,12 @@ const baseRoutes = [
     url: '/comments/:datasetId/:commentId',
     middleware: [auth.deleteCommentAccess],
     handler: comments.update,
+  },
+
+  {
+    method: 'post',
+    url: '/comments/reply/:commentId/:userId',
+    handler: comments.reply,
   },
 
   {

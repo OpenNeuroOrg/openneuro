@@ -46,6 +46,7 @@ let config = {
     email: {
       service: process.env.CRN_SERVER_MAIL_SERVICE,
       user: process.env.CRN_SERVER_MAIL_USER,
+      url: process.env.CRN_SERVER_MAIL_URL,
       pass: process.env.CRN_SERVER_MAIL_PASS,
     },
   },

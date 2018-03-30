@@ -9,7 +9,7 @@ import juice from 'juice'
 var transporter = nodemailer.createTransport({
   service: config.notifications.email.service,
   auth: {
-    user: config.notifications.email.user,
+    user: config.notifications.email.user + '@' + config.notifications.email.url,
     pass: config.notifications.email.pass,
   },
 })
@@ -30,9 +30,14 @@ export default {
     // inline styles
     html = juice(html)
 
+    // determine if the main is from a specific sender
+    // or the generic email address
+    let user = (email && email.from) ? email.from : config.notifications.email.user
+    let from = user + '@' + config.notifications.email.url
+    
     // configure mail options
     var mailOptions = {
-      from: config.notifications.email.user,
+      from: from,
       to: email.to,
       subject: email.subject,
       html: html,
