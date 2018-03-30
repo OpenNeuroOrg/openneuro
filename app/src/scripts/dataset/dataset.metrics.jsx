@@ -21,8 +21,11 @@ class Metrics extends React.Component {
       : isSnapshot ? true : false // down't display downloads on dataset page if the dataset is a draft
     let displayFollowers = fromDashboard
       ? followers !== '0' ? true : false
-      : true
-    let displayViews = fromDashboard ? false : true
+      : true // don't display followers on dash if the count is 0
+    let displayViews = fromDashboard
+      ? dataset.views !== '0' ? true : false // don't display views on dash if the count is 0
+      : isSnapshot ? true : false // don't display views on the dataset draft page
+
     return (
       <span className="metrics-wrap">
         <Metric type="stars" value={stars} display={displayStars} />
