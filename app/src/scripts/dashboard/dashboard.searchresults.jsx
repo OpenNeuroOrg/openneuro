@@ -165,24 +165,9 @@ class SearchResults extends React.Component {
   }
 
   _resultLink(result) {
-    let type
-    let arr = result.link.split('/')
-    if (arr.includes('file-display')) {
-      type = 'File Display - ' + arr[8]
-    } else if (arr.includes('versions')) {
-      type = 'Dataset - Snapshot'
-    } else if (!arr.includes('public') && arr.includes('datasets')) {
-      type = 'Dataset - Draft'
-    } else if (arr.includes('openneuro.org') && !arr.includes('public')) {
-      type = 'Page - Home'
-    } else {
-      type = 'Page'
-    }
-
     let innerContent = (
       <div className="meta-container">
         <h4 className="dataset-name">{result.title}</h4>
-        <h6>{type}</h6>
         <p className="date">
           <span className="name">{result.snippet}</span>
         </p>
