@@ -43,7 +43,9 @@ class SearchResults extends React.Component {
             <div className="admin clearfix">
               <div className="row">
                 <div className="col-md-5">
-                  {query && this.state.results ? (
+                  {query &&
+                  this.state.results &&
+                  this.state.results[0].link != 'No results' ? (
                     <React.Fragment>
                       <h2>Search Results</h2>
                       <span className="sub-title">
@@ -56,18 +58,11 @@ class SearchResults extends React.Component {
                   <Search />
                 </div>
               </div>
-              <div className="panel-group">
-                {this.state.loading ? (
-                  <Spinner active={true} />
-                ) : query ? (
-                  this._results(this.state.results)
-                ) : (
-                  <h2>
-                    No results found. Please check the url for accuracy and try
-                    again.
-                  </h2>
-                )}
-              </div>
+              {this.state.loading ? (
+                <Spinner active={true} />
+              ) : (
+                this._checkLoadingStatus(this.state.results, this.state.query)
+              )}
             </div>
           </div>
         </div>
@@ -92,7 +87,7 @@ class SearchResults extends React.Component {
           let parsedResponse
           let noResults = [{ link: 'No results', snippet: '' }]
           let searchResults = {}
-          if (!response || !response.text) {
+          if (!response || !response.text || !response.links) {
             searchResults = noResults
           } else {
             parsedResponse = JSON.parse(response.text)
@@ -133,19 +128,40 @@ class SearchResults extends React.Component {
 
   // Templating Methods ------------------------------------------------
 
-  _results(results) {
-    return results.map((result, index) => {
-      let resultLink = this._resultLink(result)
+  _checkLoadingStatus(results, query) {
+    if (!query) {
       return (
-        <div key={index} className="fade-in  panel panel-default">
-          <div className="panel-body">
-            <div className="panel-heading">
-              <div className="header clearfix">{resultLink}</div>
+        <h4>
+          No results found. Please check the url for accuracy and try again.
+        </h4>
+      )
+    } else if (results.length) {
+      return <div className="panel-group">{this._results(results)}</div>
+    }
+  }
+
+  _results(results) {
+    if (results[0].link === 'No results') {
+      return (
+        <h4>
+          No results found for {this.state.query}. If you found this page in
+          error, please try your search again.
+        </h4>
+      )
+    } else {
+      return results.map((result, index) => {
+        let resultLink = this._resultLink(result)
+        return (
+          <div key={index} className="fade-in  panel panel-default">
+            <div className="panel-body">
+              <div className="panel-heading">
+                <div className="header clearfix">{resultLink}</div>
+              </div>
             </div>
           </div>
-        </div>
-      )
-    })
+        )
+      })
+    }
   }
 
   _resultLink(result) {
