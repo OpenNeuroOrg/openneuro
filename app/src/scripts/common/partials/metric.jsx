@@ -30,7 +30,12 @@ export default class Metric extends React.Component {
       case 'followers':
         spanClass = 'dataset-status ds-primary'
         iconClass = 'fa fa-users'
-        tip = 'this dataset has ' + value + ' followers'
+        tip = 'This dataset has ' + value + ' followers.'
+        break
+      case 'views':
+        spanClass = 'dataset-status ds-primary'
+        iconClass = 'fa fa-eye'
+        tip = 'This dataset has ' + value + ' views.'
         break
     }
 

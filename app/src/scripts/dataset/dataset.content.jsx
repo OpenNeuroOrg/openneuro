@@ -140,11 +140,12 @@ class DatasetContent extends Reflux.Component {
             {this._uploaded(dataset)}
             {this._modified(dataset.modified)}
             {this._authors(dataset.authors)}
-            {this._views(dataset.views)}
+            <div className="clearfix status-container">
+              <Metrics dataset={dataset} />
+            </div>
             <Summary summary={dataset.summary} />
             <div className="clearfix status-container">
               <Statuses dataset={dataset} />
-              <Metrics dataset={dataset} />
             </div>
             <MetaData
               dataset={dataset}
@@ -440,12 +441,6 @@ class DatasetContent extends Reflux.Component {
           ' ago'}
       </h6>
     )
-  }
-
-  _views(views) {
-    if (views) {
-      return <h6>views: {views}</h6>
-    }
   }
 
   _onFileSelect(files) {
