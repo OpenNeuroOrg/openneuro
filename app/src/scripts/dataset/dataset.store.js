@@ -357,12 +357,10 @@ let datasetStore = Reflux.createStore({
   getLogstream(logstreamName, history, callback) {
     // Default text in case logs are missing
     let logsText = 'No logs available.'
-    const modals = this.data.modals
     crn
       .getLogstream(logstreamName)
       .then(res => {
         const logs = res.body
-        modals.displayFile = true
         if (callback) {
           callback()
         }
@@ -375,21 +373,18 @@ let datasetStore = Reflux.createStore({
           .join('\n')
       })
       .catch(err => {
+        if (callback) {
+          callback(err)
+        }
         logsText = JSON.stringify(err)
       })
       .finally(() => {
-        history.push(
-          this.data.datasetUrl +
-            '/file-display/' +
-            encodeURIComponent(logstreamName),
-        )
         this.update({
           displayFile: {
             name: 'Logs',
             text: logsText,
             link: config.crn.url + 'logs/' + logstreamName + '/raw',
           },
-          modals,
         })
       })
   },
