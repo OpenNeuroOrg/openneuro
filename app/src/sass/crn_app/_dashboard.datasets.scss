@@ -189,12 +189,20 @@
         border-bottom: 1px solid $e1;
     }
 
-    h2 {
+    h2,
+    span.sub-title {
         margin: 0;
         padding: 20px;
-        font-size: 30px;
         text-transform: uppercase;
+    }
+    
+    h2 {
+        font-size: 30px;
         font-weight: 100;
+    }
+    
+    h6 {
+        color: $c-42;
     }
 
     .panel-group {
