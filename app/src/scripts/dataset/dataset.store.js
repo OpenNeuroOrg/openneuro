@@ -83,7 +83,6 @@ let datasetStore = Reflux.createStore({
         link: '',
         info: null,
       },
-      followers: null,
       loading: false,
       loadingApps: false,
       loadingJobs: false,
@@ -201,13 +200,11 @@ let datasetStore = Reflux.createStore({
                   this.loadComments(originalId)
                   this.getDatasetStars()
                   this.checkSubscriptionFollowers(() => {
-                    this.checkUserSubscription(() => {
-                      let datasetUrl = this.constructDatasetUrl(dataset)
-                      this.update({
-                        loading: false,
-                        snapshot: snapshot,
-                        datasetUrl: datasetUrl,
-                      })
+                    let datasetUrl = this.constructDatasetUrl(dataset)
+                    this.update({
+                      loading: false,
+                      snapshot: snapshot,
+                      datasetUrl: datasetUrl,
                     })
                   })
                 })
@@ -473,6 +470,20 @@ let datasetStore = Reflux.createStore({
         let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
         callback(downloadUrl)
       })
+  },
+
+  /**
+   * Confirm Dataset Download
+   *
+   * Tracks the dataset download and encourages
+   * the user to subscribe to the dataset.
+   */
+  confirmDatasetDownload(history, callback) {
+    this.trackDownload(() => {
+      this.showDatasetComponent('subscribe', history, () => {
+        callback()
+      })
+    })
   },
 
   /**
@@ -1722,35 +1733,20 @@ let datasetStore = Reflux.createStore({
    * DisplayFile
    */
   displayFile(snapshotId, jobId, file, history, callback) {
-    let requestAndDisplay = link => {
-      if (link) {
-        if (
-          files.hasExtension(file.name, [
-            '.pdf',
-            '.nii.gz',
-            '.jpg',
-            '.jpeg',
-            '.png',
-            '.gif',
-          ])
-        ) {
-          if (callback) {
-            callback()
-          }
-          this.update(
-            {
-              displayFile: {
-                name: file.name,
-                text: null,
-                link: link,
-              },
-            },
-            () => {
-              this.showDatasetComponent('file-display', file.history)
-            },
-          )
-        } else {
-          request.get(link, {}).then(res => {
+    if (file && file.name) {
+      let displayUrl = file.path ? 'results/' + file.path : 'file-display'
+      let requestAndDisplay = link => {
+        if (link) {
+          if (
+            files.hasExtension(file.name, [
+              '.pdf',
+              '.nii.gz',
+              '.jpg',
+              '.jpeg',
+              '.png',
+              '.gif',
+            ])
+          ) {
             if (callback) {
               callback()
             }
@@ -1758,30 +1754,50 @@ let datasetStore = Reflux.createStore({
               {
                 displayFile: {
                   name: file.name,
-                  text: res.text,
+                  text: null,
                   link: link,
-                  info: file,
                 },
               },
               () => {
-                this.showDatasetComponent('file-display', file.history)
+                this.showDatasetComponent(displayUrl, file.history)
               },
             )
-          })
+          } else {
+            request.get(link, {}).then(res => {
+              if (callback) {
+                callback()
+              }
+              this.update(
+                {
+                  displayFile: {
+                    name: file.name,
+                    text: res.text,
+                    link: link,
+                    info: file,
+                  },
+                },
+                () => {
+                  this.showDatasetComponent(displayUrl, file.history)
+                },
+              )
+            })
+          }
+        } else {
+          this.showDatasetComponent(displayUrl, file.history)
         }
-      } else {
-        this.showDatasetComponent('file-display', file.history)
       }
-    }
 
-    if (jobId) {
-      this.getResultDownloadTicket(snapshotId, jobId, file, link => {
-        requestAndDisplay(link)
-      })
+      if (jobId) {
+        this.getResultDownloadTicket(snapshotId, jobId, file, link => {
+          requestAndDisplay(link)
+        })
+      } else {
+        this.getFileDownloadTicket(file, link => {
+          requestAndDisplay(link)
+        })
+      }
     } else {
-      this.getFileDownloadTicket(file, link => {
-        requestAndDisplay(link)
-      })
+      callback()
     }
   },
 
@@ -2126,7 +2142,7 @@ let datasetStore = Reflux.createStore({
       if (res && res.status !== 200) {
         callback({ error: 'There was an error while following this dataset.' })
       } else {
-        this.checkUserSubscription(() => {
+        this.checkSubscriptionFollowers(() => {
           callback()
         })
       }
@@ -2147,7 +2163,7 @@ let datasetStore = Reflux.createStore({
           error: 'There was an error while unfollowing this dataset.',
         })
       } else {
-        this.checkUserSubscription(() => {
+        this.checkSubscriptionFollowers(() => {
           callback()
         })
       }
@@ -2155,61 +2171,41 @@ let datasetStore = Reflux.createStore({
   },
 
   checkUserSubscription(callback) {
-    let datasetId = this.data.dataset.original
-      ? this.data.dataset.original
-      : this.data.dataset._id
+    let dataset = this.data.dataset
     let userId =
       this.data.currentUser && this.data.currentUser.profile
         ? this.data.currentUser.profile._id
         : null
     let ownerId = this.data.dataset.group ? this.data.dataset.group : null
-
-    if (datasetId) {
-      // check the owner subscription
-      crn.checkUserSubscription(datasetId, ownerId).then(res => {
-        if (
-          res &&
-          res.status === 200 &&
-          res.body &&
-          res.body.hasOwnProperty('subscribed')
-        ) {
-          let dataset = this.data.dataset
-          dataset.uploaderSubscribed = res.body.subscribed
-          this.update({ dataset })
-        }
-
-        // check the user subscription
-        crn.checkUserSubscription(datasetId, userId).then(res => {
-          if (
-            res &&
-            res.status === 200 &&
-            res.body &&
-            res.body.hasOwnProperty('subscribed')
-          ) {
-            let dataset = this.data.dataset
-            dataset.subscribed = res.body.subscribed
-            this.update({ dataset }, callback())
-          } else {
-            callback()
-          }
-        })
+    if (dataset.followersList) {
+      let userSubscription = dataset.followersList.filter(follower => {
+        return follower.userId === userId
       })
+      let ownerSubscription = dataset.followersList.filter(follower => {
+        return follower.userId === ownerId
+      })
+      dataset.subscribed = userSubscription.length ? true : false
+      dataset.uploaderSubscribed = ownerSubscription.length ? true : false
+      this.update({ dataset }, callback())
     } else {
       callback()
     }
   },
 
   checkSubscriptionFollowers(callback) {
+    let dataset = this.data.dataset
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
     crn.getSubscriptions(datasetId).then(res => {
-      if (res.body) {
-        const followers = res.body.length
-        this.update({ followers }, callback())
-      } else {
-        callback()
-      }
+      dataset.followersList = res.body || []
+      dataset.followers = res.body ? res.body.length : '0'
+      this.update(
+        { dataset },
+        this.checkUserSubscription(() => {
+          callback()
+        }),
+      )
     })
   },
 

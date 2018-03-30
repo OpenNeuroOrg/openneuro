@@ -37,7 +37,7 @@ export default {
         metadata: metadata,
       })
       .then(res => {
-        let projects = res.body
+        let projects = res.body ? res.body : []
         scitran
           .getProjects({
             authenticate: !isPublic,
@@ -45,14 +45,22 @@ export default {
             metadata: metadata,
           })
           .then(async pubProjects => {
-            projects = projects.concat(pubProjects.body)
+            const publicProjects = pubProjects.body ? pubProjects.body : []
+            projects = projects.concat(publicProjects)
             const users = isSignedOut ? null : (await scitran.getUsers()).body
             const stars = (await crn.getStars()).body
-            let resultDict = {}
-            // hide other user's projects from admins & filter snapshots to display newest of each dataset
-            if (projects) {
+            const followers = (await crn.getSubscriptions()).body
+            this.usage(null, usage => {
+              let resultDict = {}
               for (let project of projects) {
-                let dataset = this.formatDataset(project, null, users, stars)
+                let dataset = this.formatDataset(
+                  project,
+                  null,
+                  users,
+                  stars,
+                  followers,
+                  usage,
+                )
                 let datasetId = dataset.hasOwnProperty('original')
                   ? dataset.original
                   : dataset._id
@@ -69,13 +77,13 @@ export default {
                   }
                 }
               }
-            }
 
-            let results = []
-            for (let key in resultDict) {
-              results.push(resultDict[key])
-            }
-            callback(results)
+              let results = []
+              for (let key in resultDict) {
+                results.push(resultDict[key])
+              }
+              callback(results)
+            })
           })
       })
   },
@@ -165,10 +173,10 @@ export default {
               dataset.jobs = res.body
               dataset.children = tempFiles
               dataset.showChildren = true
-              this.usage(projectId, options, usage => {
+              this.usage(projectId, usage => {
                 if (usage) {
-                  dataset.views = usage.views
-                  dataset.downloads = usage.downloads
+                  dataset.views = this.views(dataset, usage)
+                  dataset.downloads = this.downloads(dataset, usage)
                 }
                 callback(dataset)
               })
@@ -336,6 +344,60 @@ export default {
   },
 
   /**
+   * Followers
+   *
+   * Takes a dataset and followers array and returns the count of the array associated with that specific dataset.
+   */
+
+  followers(dataset, followers) {
+    if (followers) {
+      let datasetId = dataset.original ? dataset.original : dataset._id
+      let subscriptions = followers.filter(follower => {
+        return follower.datasetId === datasetId
+      })
+      return subscriptions
+    } else {
+      return []
+    }
+  },
+
+  /**
+   * Downloads
+   *
+   * Takes a dataset and usage array and returns the download count of the dataset
+   */
+  downloads(dataset, usage) {
+    if (usage) {
+      let datasetId = dataset._id
+      let matches = usage.filter(entry => {
+        return entry._id == datasetId
+      })
+      const downloads = matches.length ? '' + matches[0].downloads : '0'
+      return downloads
+    } else {
+      return '0'
+    }
+  },
+
+  /**
+   * Views
+   *
+   * Takes a dataset and usage array and returns the view count of the dataset
+   */
+  views(dataset, usage) {
+    if (usage) {
+      let datasetId = dataset._id
+      let matches = usage.filter(entry => {
+        return entry._id == datasetId
+      })
+      const views = matches.length ? '' + matches[0].views : '0'
+      return views
+    } else {
+      return '0'
+    }
+  },
+
+  /**
    * Format Files
    *
    * Sorts files alphabetically and adds parentId
@@ -368,7 +430,7 @@ export default {
    * a formatted top level container of a
    * BIDS dataset.
    */
-  formatDataset(project, description, users, stars) {
+  formatDataset(project, description, users, stars, followers, usage) {
     let files = [],
       attachments = []
     if (project.files) {
@@ -391,6 +453,8 @@ export default {
       modified: project.modified,
       permissions: project.permissions,
       public: project.public,
+      downloads: project.downloads,
+      views: project.views,
 
       /** modified for BIDS **/
       validation:
@@ -422,6 +486,10 @@ export default {
     }
     dataset.stars = this.stars(dataset, stars)
     dataset.starCount = dataset.stars ? '' + dataset.stars.length : '0'
+    dataset.followersList = this.followers(dataset, followers)
+    dataset.downloads = this.downloads(dataset, usage)
+    dataset.views = this.views(dataset, usage)
+    dataset.followers = '' + dataset.followersList.length
     return dataset
   },
 
@@ -536,28 +604,10 @@ export default {
    * Takes a snapshotId and snapshot boolean and
    * callsback view and download counts for snapshots.
    */
-  usage(snapshotId, options, callback) {
-    if (options && options.snapshot) {
-      let usage = {}
-      scitran
-        .getUsage(snapshotId, {
-          query: { type: 'view', count: true },
-          snapshot: true,
-        })
-        .then(res => {
-          usage.views = res.body.count
-          scitran
-            .getUsage(snapshotId, {
-              query: { type: 'download', count: true },
-              snapshot: true,
-            })
-            .then(res => {
-              usage.downloads = res.body.count
-              callback(usage)
-            })
-        })
-    } else {
-      callback()
-    }
+  usage(datasetId, callback) {
+    crn.getAnalytics(datasetId).then(res => {
+      let usage = res ? res.body : null
+      return callback(usage)
+    })
   },
 }

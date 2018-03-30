@@ -46,6 +46,7 @@ export default {
       projects: null,
       project_snapshots: null,
       users: null,
+      analytics: null,
     },
   },
 

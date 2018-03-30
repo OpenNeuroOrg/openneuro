@@ -12,7 +12,8 @@
             > span {
                 @extend %clearfix;
                 padding: 20px 0 0;
-                display: block;
+                margin-right: 15px;
+                display: inline-block;
             }
 
             .status {

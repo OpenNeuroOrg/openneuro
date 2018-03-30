@@ -57,6 +57,8 @@ let UploadStore = Reflux.createStore({
         { label: 'Date', property: 'created', isTimestamp: true },
         { label: 'User', property: 'user.lastname' },
         { label: 'Stars', property: 'starCount' },
+        { label: 'Downloads', property: 'downloads' },
+        { label: 'Followers', property: 'followers' },
       ],
       filters: [],
     }
@@ -183,7 +185,7 @@ let UploadStore = Reflux.createStore({
    * Sort
    *
    * Takes a value and a direction (+ or -) and
-   * sorts the current datasets acordingly.
+   * sorts the current datasets accordingly.
    */
   sort(value, direction, datasets, isTimeStamp) {
     datasets = datasets ? datasets : this.data.datasets

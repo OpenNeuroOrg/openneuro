@@ -33,7 +33,6 @@ class FrontPage extends Reflux.Component {
 
   // life cycle events --------------------------------------------------
   componentWillMount() {
-    super.componentWillMount()
     FPActions.reset()
   }
 
