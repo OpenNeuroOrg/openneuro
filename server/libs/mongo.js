@@ -32,6 +32,7 @@ export default {
       jobDefinitions: null,
       tickets: null,
       userPreferences: null,
+      mailgunIdentifiers: null,
       notifications: null,
       counters: null,
       logs: null,
@@ -44,6 +45,7 @@ export default {
     scitran: {
       projects: null,
       project_snapshots: null,
+      users: null,
       analytics: null,
     },
   },
