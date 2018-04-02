@@ -18,10 +18,8 @@ const mailgunMessageId = ObjectID().toString()
 
 const user = {
   _id: userId,
-  profile: {
-    email: 'test@test.com',
-    pasture: 'pasture',
-  },
+  email: 'test@test.com',
+  pasture: 'pasture',
 }
 const comment = {
   commentId: parentId,
@@ -43,7 +41,7 @@ const hasParentId = res => {
 }
 
 const hasSameUserInfo = res => {
-  expect(res.body).toHaveProperty('user', user.profile)
+  expect(res.body).toHaveProperty('user', user)
 }
 
 const insertedIntoMongo = async res => {
