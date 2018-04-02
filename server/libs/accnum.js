@@ -34,6 +34,10 @@ async function updateAccessionNumber(oldId, newId) {
       oldId,
     ),
     updateAnalytics(oldId, newId),
+    c.crn.comments.update(
+      { datasetId: bidsId.encodeId(oldId) },
+      { $set: { datasetId: bidsId.encodeId(newId) } },
+    ),
   )
   return Promise.all(retPromises)
 }
