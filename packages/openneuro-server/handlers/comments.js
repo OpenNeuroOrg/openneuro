@@ -76,7 +76,7 @@ export default {
         datasetLabel: originalComment.datasetLabel,
         parentId: parentId,
         text: text,
-        user: user.profile,
+        user: user,
         createDate: moment().format(),
       }
       console.log('got in here!')
