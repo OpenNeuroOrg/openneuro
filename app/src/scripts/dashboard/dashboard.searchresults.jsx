@@ -19,6 +19,8 @@ class SearchResults extends React.Component {
     this._requestSearch = this._requestSearch.bind(this)
   }
 
+  // Life Cycle Methods ------------------------------------------------
+
   componentWillReceiveProps(nextProps) {
     // Search again if the query changes
     if (nextProps.match.params.query !== this.props.match.params.query) {
@@ -32,6 +34,43 @@ class SearchResults extends React.Component {
     }
   }
 
+  render() {
+    let query = this.props.match.params.query || this.state.query
+    return (
+      <div className="route-wrapper">
+        <div className="fade-in inner-route clearfix">
+          <div className="dashboard-dataset-teasers datasets datasets-private">
+            <div className="admin clearfix">
+              <div className="row">
+                <div className="col-md-5">
+                  {query &&
+                  this.state.results &&
+                  this.state.results[0].link != 'No results' ? (
+                    <React.Fragment>
+                      <h2>Search Results</h2>
+                      <span className="sub-title">
+                        showing {this.state.results.length} results for: {query}
+                      </span>
+                    </React.Fragment>
+                  ) : null}
+                </div>
+                <div className="col-md-7">
+                  <Search />
+                </div>
+              </div>
+              {this.state.loading ? (
+                <Spinner active={true} />
+              ) : (
+                this._checkLoadingStatus(this.state.results, this.state.query)
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+  // Custom Methods ------------------------------------------------
+
   _requestSearch(query) {
     this.setState({
       loading: true,
@@ -39,7 +78,6 @@ class SearchResults extends React.Component {
 
     const key = 'AIzaSyB68V4zjGxWpZzTn8-vRuogiRLPmSCmWoo'
     const cx = '016952313242172063987:retmkn_owto'
-
     if (query) {
       request
         .get('https://www.googleapis.com/customsearch/v1', {
@@ -49,7 +87,7 @@ class SearchResults extends React.Component {
           let parsedResponse
           let noResults = [{ link: 'No results', snippet: '' }]
           let searchResults = {}
-          if (!response || !response.text) {
+          if (!response || !response.text || !response.links) {
             searchResults = noResults
           } else {
             parsedResponse = JSON.parse(response.text)
@@ -79,58 +117,63 @@ class SearchResults extends React.Component {
             loading: false,
           })
         })
+    } else {
+      this.setState({
+        results: '',
+        query: '',
+        loading: false,
+      })
     }
   }
 
-  render() {
-    let renderedResults = this.state.loading ? (
-      <Spinner active={true} />
-    ) : (
-      this._results(this.state.results)
-    )
-    return (
-      <div className="route-wrapper">
-        <div className="fade-in inner-route clearfix">
-          <div className="dashboard-dataset-teasers datasets datasets-private">
-            <div className="admin header-wrap clearfix">
-              <div className="row">
-                <div className="col-md-5">
-                  <h2>Search Results</h2>
-                </div>
-                <div className="col-md-7">
-                  <Search />
-                </div>
-              </div>
-              {renderedResults}
-            </div>
-          </div>
-        </div>
-      </div>
-    )
+  // Templating Methods ------------------------------------------------
+
+  _checkLoadingStatus(results, query) {
+    if (!query) {
+      return (
+        <h4>
+          No results found. Please check the url for accuracy and try again.
+        </h4>
+      )
+    } else if (results.length) {
+      return <div className="panel-group">{this._results(results)}</div>
+    }
   }
 
   _results(results) {
-    return results.map((result, index) => {
-      let resultLink = this._resultLink(result)
+    if (results[0].link === 'No results') {
       return (
-        <div key={index} className="fade-in  panel panel-default">
-          <div className="panel-heading">
-            <div className="header clearfix">{resultLink}</div>
-          </div>
-        </div>
+        <h4>
+          No results found for {this.state.query}. If you found this page in
+          error, please try your search again.
+        </h4>
       )
-    })
+    } else {
+      return results.map((result, index) => {
+        let resultLink = this._resultLink(result)
+        return (
+          <div key={index} className="fade-in  panel panel-default">
+            <div className="panel-body">
+              <div className="panel-heading">
+                <div className="header clearfix">{resultLink}</div>
+              </div>
+            </div>
+          </div>
+        )
+      })
+    }
   }
 
   _resultLink(result) {
     let innerContent = (
       <div className="meta-container">
-        <h4 className="dataset-name">{result.link}</h4>
+        <h4 className="dataset-name">{result.title}</h4>
         <p className="date">
           <span className="name">{result.snippet}</span>
         </p>
       </div>
     )
+
     let parsedUrl = urlParse(result.link, true)
     const hostname = parsedUrl.hostname
     if (hostname === window.location.hostname) {

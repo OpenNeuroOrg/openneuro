@@ -189,12 +189,25 @@
         border-bottom: 1px solid $e1;
     }
 
-    h2 {
+    h2,
+    span.sub-title {
         margin: 0;
         padding: 20px;
-        font-size: 30px;
         text-transform: uppercase;
+    }
+    
+    h2 {
+        font-size: 30px;
         font-weight: 100;
+    }
+    
+    h4 {
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .panel-group {
+        margin-bottom: 0;
     }
 
     .panel-group .panel+.panel {
@@ -427,7 +440,10 @@
     float: right;
     padding: 0px 20px;
     .btn-blue {
-        padding: 10px 13px;
+        height: 44px;
         width: auto;
+        padding: 10px 13px;
+        margin-left: 5px;
+        margin-bottom: 1px;
     }
 }

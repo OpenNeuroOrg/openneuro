@@ -76,6 +76,15 @@ const baseRoutes = [
     handler: validation.validate,
   },
 
+  // analytics -----------------------------------
+
+  {
+    method: 'get',
+    url: '/analytics/:datasetId?',
+    middleware: [auth.optional],
+    handler: datasets.analytics,
+  },
+
   // jobs ----------------------------------------
 
   {
@@ -215,6 +224,12 @@ const baseRoutes = [
   },
 
   {
+    method: 'post',
+    url: '/comments/reply/:commentId/:userId',
+    handler: comments.reply,
+  },
+
+  {
     method: 'delete',
     url: '/comments/:commentId',
     middleware: [auth.deleteCommentAccess],
@@ -324,7 +339,8 @@ const dataladRoutes = [
 const router = express.Router()
 // TODO - remove this once SciTran backend is no longer in use
 const routes = config.datalad.enabled
-  ? baseRoutes.concat(dataladRoutes) : baseRoutes.concat(scitranRoutes)
+  ? baseRoutes.concat(dataladRoutes)
+  : baseRoutes.concat(scitranRoutes)
 
 for (const route of routes) {
   let arr = route.hasOwnProperty('middleware') ? route.middleware : []

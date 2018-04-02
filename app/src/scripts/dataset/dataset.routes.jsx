@@ -13,6 +13,7 @@ import FileDisplay from './dataset.file-display.jsx'
 import DatasetLoader from './dataset.dataset-loader.jsx'
 import SnapshotLoader from './dataset.snapshot-loader.jsx'
 import ResultsDisplay from './tools/jobs/results-display.jsx'
+import LogsDisplay from './tools/jobs/logs-display.jsx'
 
 /**
  * This redirects old URLs ending in /versions to the first snapshot
@@ -152,6 +153,11 @@ export default class DatasetRoutes extends React.Component {
             name="resultsDisplay"
             path="/datasets/:datasetId/versions/:snapshotId/results/:filePath"
             component={ResultsDisplay}
+          />
+          <Route
+            name="logsDisplay"
+            path="/datasets/:datasetId/versions/:snapshotId/logs/:filePath"
+            component={LogsDisplay}
           />
         </Switch>
       </div>

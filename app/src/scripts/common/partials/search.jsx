@@ -8,33 +8,41 @@ class Search extends React.Component {
     super()
     this.state = {
       query: '',
+      error: false,
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleChange(event) {
-    this.setState({ query: event.target.value })
+    this.setState({ query: event.target.value, error: false })
   }
 
   handleSubmit(event) {
+    let query = this.state.query
     event.preventDefault()
-    this.props.history.push({
-      pathname: `/search/${encodeURIComponent(this.state.query)}`,
-    })
-    this.setState({ query: '' })
-    // Because this is called from a form
-    return false
+    if (query != '') {
+      this.props.history.push({
+        pathname: `/search/${encodeURIComponent(this.state.query)}`,
+      })
+      this.setState({ query: '', error: false })
+      // Because this is called from a form
+      return false
+    } else {
+      this.setState({ error: true })
+      return false
+    }
   }
 
   render() {
+    let checkClass = this.state.error ? 'search-field error' : 'search-field'
     return (
       <div className="search-group">
         <form className="form-inline" onSubmit={this.handleSubmit}>
           <Input
             placeholder="Search Datasets"
             type="text"
-            className="search-field"
+            className={checkClass}
             name="q"
             value={this.state.query}
             onChange={this.handleChange}
@@ -46,6 +54,11 @@ class Search extends React.Component {
               </span>
             </button>
           </div>
+          {this.state.error && !this.state.query ? (
+            <div className="text-danger">
+              Please enter a valid search parameter
+            </div>
+          ) : null}
         </form>
       </div>
     )

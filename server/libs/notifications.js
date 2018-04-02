@@ -100,7 +100,6 @@ let notifications = {
    * Includes changelog if available.
    */
   snapshotCreated(datasetId, versionNumber) {
-
     // get the scitran project
     scitran.getProject(datasetId, (err, resp) => {
       let datasetLabel =
@@ -197,6 +196,11 @@ let notifications = {
                 type: 'email',
                 email: {
                   to: user.email,
+                  from:
+                    'reply-' +
+                    encodeURIComponent(comment._id) +
+                    '-' +
+                    encodeURIComponent(user._id),
                   subject: 'Comment Created',
                   template: 'comment-created',
                   data: {
@@ -324,13 +328,18 @@ let notifications = {
       () => {
         c.crn.notifications.find({}).toArray((err, docs) => {
           for (let notification of docs) {
-            notifications.send(notification, err => {
+            notifications.send(notification, (err, response) => {
               if (!err) {
                 c.crn.notifications.removeOne(
                   { _id: notification._id },
                   {},
                   () => {},
                 )
+                if (response && response.messageId) {
+                  c.crn.mailgunIdentifiers.insertOne({
+                    messageId: response.messageId,
+                  })
+                }
               } else {
                 console.log('NOTIFICATION ERROR ----------')
                 console.log(err)
