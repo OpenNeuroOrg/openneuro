@@ -14,7 +14,7 @@
     "lint": "eslint --ext .jsx --ext .js src/scripts/",
     "test": "jest",
     "coverage": "jest --coverage",
-    "codecov": "codecov -p ../ -F app"
+    "codecov": "codecov -p ../../ -F app"
   },
   "author": "Squishymedia",
   "dependencies": {
@@ -23,6 +23,7 @@
     "bids-validator": "^0.26.2",
     "bowser": "^1.7.3",
     "bytes": "^3.0.0",
+    "codecov": "^3.0.0",
     "downloadjs": "^1.4.7",
     "draft-js": "^0.10.5",
     "draft-js-prism": "^1.0.6",
@@ -67,7 +68,6 @@
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "clean-webpack-plugin": "^0.1.16",
-    "codecov": "^3.0.0",
     "compression-webpack-plugin": "^1.0.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.28.7",

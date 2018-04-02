@@ -3,6 +3,8 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "test": "lerna run test",
+    "coverage": "lerna run coverage",
+    "codecov": "lerna run codecov",
     "prepare": "lerna run prepare",
     "lint": "eslint --cache --ext .jsx --ext .js packages/",
     "precommit": "lint-staged"

@@ -8,8 +8,8 @@
     "lint": "eslint libs/ handlers/ tests/",
     "start": "node index.js",
     "test": "jest",
-    "coverage": "jest --coverage",
-    "codecov": "codecov -p ../ -F server"
+    "coverage": "jest --coverage --runInBand",
+    "codecov": "codecov -p ../../ -F server"
   },
   "repository": {
     "type": "git",
