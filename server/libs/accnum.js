@@ -29,9 +29,9 @@ async function updateAccessionNumber(oldId, newId) {
     updateJobs(oldId, newId),
     updateId(
       c.crn.counters,
-      await c.crn.counters.findOne({ _id: ObjectID(oldId) }, {}),
-      { _id: ObjectID(newId) },
-      ObjectID(oldId),
+      await c.crn.counters.findOne({ _id: oldId }, {}),
+      { _id: newId },
+      oldId,
     ),
     updateAnalytics(oldId, newId),
   )
@@ -125,10 +125,10 @@ async function updateId(collection, item, updates, delId) {
     })
   }
   Object.keys(updates).map(key => (item[key] = updates[key]))
-  collection
+  return await collection
     .insert(item, {})
     .then(async () => {
-      return await collection.deleteOne({ _id: delId }, {})
+      await collection.deleteOne({ _id: delId }, {})
     })
     .catch(err => {
       if (err) {
