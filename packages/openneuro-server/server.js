@@ -12,12 +12,14 @@ const redisConnect = async () => {
   try {
     const redis = await redis_connect(config.redis)
     await resque_connect(redis)
+    // eslint-disable-next-line no-console
     console.log('Resque connected')
     // start background tasks
     notifications.initCron()
     aws.batch.initCron()
     aws.cloudwatch.initEvents().then(aws.batch.initQueue)
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.error(err)
     process.exit(1)
   }
@@ -36,6 +38,7 @@ const app = createApp(false)
 mongo.connect(config.mongo.url).then(() => {
   redisConnect().then(() => {
     app.listen(config.port, () => {
+      // eslint-disable-next-line no-console
       console.log('Server is listening on port ' + config.port)
     })
   })
