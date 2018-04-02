@@ -102,7 +102,6 @@ async function updateAnalytics(oldId, newId) {
   let retPromises = []
 
   distinct.forEach(item => {
-    console.log(item)
     let snapId = item
     let verId = bidsId.decodeId(snapId)
     let newSnapId = bidsId.encodeId(
