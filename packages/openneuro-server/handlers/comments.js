@@ -62,7 +62,7 @@ export default {
       console.log('no messageId!')
       return res.sendStatus(404)
     }
-    const user = await c.scitran.users.findOne({ _id: ObjectID(userId) })
+    const user = await c.scitran.users.findOne({ _id: userId })
     console.log('user:', user)
     let originalComment = await c.crn.comments.findOne({
       _id: ObjectID(parentId),
