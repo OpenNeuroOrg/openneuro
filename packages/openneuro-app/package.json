@@ -1,22 +1,20 @@
 {
   "name": "openneuro-app",
   "version": "1.10.0",
-  "description": "React JS web frontend for the CRN application.",
+  "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
   "main": "app.js",
   "repository": {
-    "type": "git"
+    "type": "git",
+    "url": "git@github.com:OpenNeuroOrg/openneuro.git"
   },
   "scripts": {
     "start": "webpack-dev-server --config webpack.dev.js --progress --color",
     "build": "webpack --config webpack.prod.js",
     "lint": "eslint --ext .jsx --ext .js src/scripts/",
     "test": "jest",
-    "test:watch": "jest --watch",
     "coverage": "jest --coverage",
-    "codecov": "codecov -p ../ -F app",
-    "precommit": "lint-staged",
-    "configure": "node src/scripts/configure.js"
+    "codecov": "codecov -p ../ -F app"
   },
   "author": "Squishymedia",
   "dependencies": {
@@ -82,13 +80,10 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.6",
     "html-webpack-plugin": "^2.30.1",
-    "husky": "^0.14.3",
     "jest": "^22.0.0",
     "jest-fetch-mock": "^1.4.1",
-    "lint-staged": "^6.0.1",
     "moment-timezone": "^0.5.13",
     "node-sass": "^4.5.3",
-    "prettier": "^1.7.0",
     "react-addons-test-utils": "^15.6.2",
     "react-router-dom": "^4.2.2",
     "react-test-renderer": "^16.0.0",
@@ -115,10 +110,5 @@
       "!**/node_modules/**",
       "!**/vendor/**"
     ]
-  },
-  "lint-staged": {
-    "linters": {
-      "*.{js,jsx,json}": ["prettier --write", "git add"]
-    }
   }
 }

@@ -3,10 +3,19 @@
   "scripts": {
     "bootstrap": "lerna bootstrap",
     "test": "lerna run test",
-    "prepare": "lerna run prepare"
+    "prepare": "lerna run prepare",
+    "precommit": "lint-staged"
   },
   "devDependencies": {
-    "lerna": "^2.9.1"
+    "lerna": "^2.9.1",
+    "lint-staged": "^6.0.1",
+    "husky": "^0.14.3",
+    "prettier": "^1.7.0"
   },
-  "workspaces": ["packages/*"]
+  "workspaces": ["packages/*"],
+  "lint-staged": {
+    "linters": {
+      "*.{js,jsx,json}": ["prettier --write", "git add"]
+    }
+  }
 }
