@@ -34,7 +34,7 @@ async function updateAccessionNumber(oldId, newId) {
       oldId,
     ),
     updateAnalytics(oldId, newId),
-    c.crn.comments.update(
+    c.crn.comments.updateMany(
       { datasetId: bidsId.encodeId(oldId) },
       { $set: { datasetId: bidsId.encodeId(newId) } },
     ),
@@ -82,7 +82,7 @@ async function updateJobs(oldId, newId) {
     let snapId = item['snapshotId']
     let verId = bidsId.decodeId(snapId)
     let newSnapId = bidsId.decodeId(newId).slice(2) + '-' + verId
-    let jobPromise = c.crn.jobs.update(
+    let jobPromise = c.crn.jobs.updateOne(
       { _id: ObjectID(jobId) },
       {
         $set: {
