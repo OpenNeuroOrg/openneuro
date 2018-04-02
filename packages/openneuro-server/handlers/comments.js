@@ -54,8 +54,8 @@ export default {
     console.log('userId:', userId)
     const text = textToDraft(req.body['stripped-text'])
     console.log('text:', text)
-    const inReplyTo = req.body['In-Reply-To']
-    console.log('inReplyTo:', inReplyTo)
+    const inReplyToRaw = req.body['In-Reply-To']
+    const inReplyTo = inReplyToRaw ? inReplyToRaw.replace('<', '').replace('>', '') : null
     const messageId = inReplyTo ? await c.crn.mailgunIdentifiers.findOne({messageId: inReplyTo}) : null
     console.log('messageId:', messageId)
     if (!messageId) {
