@@ -32,7 +32,6 @@
     "draft-js-export-html": "^1.2.0",
     "express": "^4.13.3",
     "express-fileupload": "^0.1.4",
-    "git-rev-sync": "^1.9.1",
     "graphql": "^0.13.1",
     "graphql-iso-date": "^3.5.0",
     "graphql-tag": "^2.8.0",

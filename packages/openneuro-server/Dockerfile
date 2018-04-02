@@ -2,7 +2,7 @@ FROM node:8.9.4-alpine
 
 # install server app
 ADD . /srv
-WORKDIR /srv/server
+WORKDIR /srv
 RUN apk add git --no-cache --update && npm install -g yarn && yarn install
 
 # Reduce the final image size

@@ -10,15 +10,14 @@ services:
   # web app bundle build
   app:
     build:
-      context: .
-      dockerfile: app/Dockerfile
+      context: ./packages/openneuro-app
     command: sh -c "yarn install --pure-lockfile && yarn start --watch --watch-poll ${WEBPACK_POLL_INTERVAL}"
     volumes:
-      - .:/srv
+      - ./packages/openneuro-app:/srv
       - yarn_cache:/root/.cache
-      - project:/srv/app/dist
+      - project:/srv/dist
     tmpfs:
-      - /srv/app/node_modules:exec
+      - /srv/node_modules:exec
 
   # crn core (bids-core)
   core:
@@ -29,31 +28,29 @@ services:
   # crn node server
   server:
     build:
-      context: .
-      dockerfile: server/Dockerfile
-    command: sh -c "yarn install && node /srv/server/index.js"
+      context: ./packages/openneuro-server
+    command: sh -c "yarn install && node /srv/index.js"
     volumes:
-      - .:/srv
+      - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache
-      - ./server/client.config.js:/srv/server/client.config.js:rw
+      - ./server/client.config.js:/srv/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
     tmpfs:
-      - /srv/server/node_modules:exec
+      - /srv/node_modules:exec
 
   worker:
     build:
-      context: .
-      dockerfile: server/Dockerfile
-    command: sh -c "yarn install  && node /srv/server/worker.js"
+      context: ./packages/openneuro-server
+    command: sh -c "yarn install  && node /srv/worker.js"
     volumes:
-      - .:/srv
+      - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache
-      - ./server/client.config.js:/srv/server/client.config.js:rw
+      - ./server/client.config.js:/srv/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
     tmpfs:
-      - /srv/server/node_modules:exec
+      - /srv/node_modules:exec
 
   # nginx - static file serving and service proxy
   nginx:

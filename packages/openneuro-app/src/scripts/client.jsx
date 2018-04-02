@@ -6,10 +6,10 @@ import ReactDOM from 'react-dom'
 import config from '../../config.js'
 import App from './app.jsx'
 import runtime from 'serviceworker-webpack-plugin/lib/runtime'
+import packageJson from '../../package.json'
 
 const ravenConfig = {
-  release: __GIT_HASH__,
-  tags: { branch: __GIT_BRANCH__ },
+  release: packageJson.version,
   environment: config.sentry.environment,
   autoBreadcrumbs: {
     console: false,

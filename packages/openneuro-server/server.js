@@ -1,5 +1,4 @@
 import Raven from 'raven'
-import git from 'git-rev-sync'
 import mongo from './libs/mongo'
 import { connect as redis_connect } from './libs/redis'
 import { connect as resque_connect } from './libs/queue'
@@ -7,6 +6,7 @@ import notifications from './libs/notifications'
 import aws from './libs/aws'
 import config from './config'
 import createApp from './app'
+import packageJson from './package.json'
 
 const redisConnect = async () => {
   try {
@@ -24,8 +24,7 @@ const redisConnect = async () => {
 }
 
 const ravenConfig = {
-  release: git.long(),
-  tags: { branch: git.branch() },
+  release: packageJson.version,
   environment: config.sentry.ENVIRONMENT,
   autoBreadcrumbs: true,
 }

@@ -15,7 +15,8 @@
     "test:watch": "jest --watch",
     "coverage": "jest --coverage",
     "codecov": "codecov -p ../ -F app",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "configure": "node src/scripts/configure.js"
   },
   "author": "Squishymedia",
   "dependencies": {
@@ -80,7 +81,6 @@
     "eslint-plugin-react": "^7.5.1",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.6",
-    "git-rev-sync": "^1.9.1",
     "html-webpack-plugin": "^2.30.1",
     "husky": "^0.14.3",
     "jest": "^22.0.0",
