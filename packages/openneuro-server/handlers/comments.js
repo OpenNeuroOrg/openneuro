@@ -46,6 +46,7 @@ export default {
    * ** maybe returns the newly created comment id
    */
   async reply(req, res, next) {
+    /* eslint-disable no-console */
     let comment
     const parentId = req.params.commentId ? decodeURIComponent(req.params.commentId) : null
     const userId = req.params.userId ? decodeURIComponent(req.params.userId) : null
@@ -95,6 +96,7 @@ export default {
       console.log('there was an error in the reply() function')
       return res.sendStatus(404)
     }
+    /* eslint-enable no-console*/
   },
 
   /**
