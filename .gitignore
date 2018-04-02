@@ -3,3 +3,4 @@ config.env
 .env
 yarn-error.log
 node_modules
+lerna-debug.log
