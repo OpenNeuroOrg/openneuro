@@ -38,6 +38,10 @@ async function updateAccessionNumber(oldId, newId) {
       { datasetId: bidsId.encodeId(oldId) },
       { $set: { datasetId: bidsId.encodeId(newId) } },
     ),
+    c.crn.stars.updateMany(
+      { datasetId: bidsId.encodeId(oldId) },
+      { $set: { datasetId: bidsId.encodeId(newId) } },
+    ),
   )
   return Promise.all(retPromises)
 }
