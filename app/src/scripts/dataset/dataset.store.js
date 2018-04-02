@@ -1206,14 +1206,17 @@ let datasetStore = Reflux.createStore({
    * Update File
    */
   updateFile(item, file) {
-    let filename = item.name
-
-    if (filename !== file.name) {
+    if (!item.name.endsWith(file.name)) {
       this.updateFileState(item, {
         error: 'You must replace a file with a file of the same name.',
       })
     } else {
-      let message = this.updateMessage('update', file)
+      // Handle a subdir file add by prepending directory name
+      if (file.name !== item.name) {
+        // modifiedName is writable and handled in scitran.updateFile
+        file.modifiedName = item.name
+      }
+      const message = this.updateMessage('update', file)
       this.updateWarn({
         message: message,
         action: () => {
