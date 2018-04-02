@@ -11,10 +11,10 @@ jest.unmock('superagent')
 
 const app = createApp(true)
 
-const userId = ObjectID()
+const userId = ObjectID().toString()
 const parentId = ObjectID()
 const mailgunId = ObjectID()
-const mailgunMessageId = 'testid@mailguntest.com'
+const mailgunMessageId = ObjectID().toString()
 
 const user = {
   _id: userId,
