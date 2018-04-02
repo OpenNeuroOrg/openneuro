@@ -28,6 +28,7 @@ export default test => {
     next()
   })
   app.use(morgan('short'))
+  app.use(bodyParser.urlencoded({extended: false}))
   app.use(bodyParser.json())
 
   // routing ---------------------------------------------------------
