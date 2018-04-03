@@ -694,27 +694,39 @@ let datasetStore = Reflux.createStore({
     files.read(file, contents => {
       let description = JSON.parse(contents)
       let authors = []
+      let references = []
       if (description.hasOwnProperty('Authors')) {
         for (let i = 0; i < description.Authors.length; i++) {
           let author = description.Authors[i]
           authors.push({ name: author, ORCIDID: '' })
         }
       }
-      scitran.updateProject(projectId, { metadata: { authors } }).then(() => {
-        file = new File(
-          [JSON.stringify(description)],
-          'dataset_description.json',
-          { type: 'application/json' },
-        )
-        scitran.updateFile('projects', projectId, file).then(() => {
-          description.Authors = authors
-          let dataset = this.data.dataset
-          dataset.description = description
-          this.update({ dataset })
-          this.revalidate()
-          callback()
+      if (description.hasOwnProperty('ReferencesAndLinks')) {
+        for (let i = 0; i < description.ReferencesAndLinks.length; i++) {
+          let reference = description.ReferencesAndLinks[i]
+          references.push(reference)
+        }
+      }
+      scitran
+        .updateProject(projectId, {
+          metadata: { authors: authors, referencesAndLinks: references },
         })
-      })
+        .then(() => {
+          file = new File(
+            [JSON.stringify(description)],
+            'dataset_description.json',
+            { type: 'application/json' },
+          )
+          scitran.updateFile('projects', projectId, file).then(() => {
+            description.Authors = authors
+            description.ReferencesAndLinks = references
+            let dataset = this.data.dataset
+            dataset.description = description
+            this.update({ dataset })
+            this.revalidate()
+            callback()
+          })
+        })
     })
   },
 
