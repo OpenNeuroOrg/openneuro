@@ -18,7 +18,8 @@ const mailgunMessageId = ObjectID().toString()
 
 const user = {
   _id: userId,
-  email: 'test@test.com'
+  email: 'test@test.com',
+  imageUrl: null
 }
 const comment = {
   commentId: parentId,
