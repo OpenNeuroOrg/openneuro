@@ -1201,7 +1201,7 @@ let datasetStore = Reflux.createStore({
                 DatasetDOI: '',
               }
               scitran.updateProject(this.data.dataset._id, {
-                metadata: { authors: [] },
+                metadata: { authors: [], referencesAndLinks: [] },
               })
             }
             this.update({ dataset })
