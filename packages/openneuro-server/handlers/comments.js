@@ -71,12 +71,19 @@ export default {
     })
     console.log('originalComment:', originalComment)
     if (user && originalComment) {
+      let flattenedUser = {
+        _id: user._id,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        imageUrl: user.avatar
+      }
       comment = {
         datasetId: originalComment.datasetId,
         datasetLabel: originalComment.datasetLabel,
         parentId: parentId,
         text: text,
-        user: user,
+        user: flattenedUser,
         createDate: moment().format(),
       }
       console.log('got in here!')
