@@ -50,26 +50,17 @@ export default {
     let comment
     const parentId = req.params.commentId ? decodeURIComponent(req.params.commentId) : null
     const userId = req.params.userId ? decodeURIComponent(req.params.userId) : null
-    console.log('parentId:', parentId)
-    console.log('userId:', userId)
     const text = textToDraft(req.body['stripped-text'])
-    console.log('text:', text)
     const inReplyToRaw = req.body['In-Reply-To']
-    console.log('inReplyToRaw:', inReplyToRaw)
     const inReplyTo = inReplyToRaw ? inReplyToRaw.replace('<', '').replace('>', '') : null
-    console.log('inReplyTo:', inReplyTo)
     const messageId = inReplyTo ? await c.crn.mailgunIdentifiers.findOne({messageId: inReplyTo}) : null
-    console.log('messageId:', messageId)
     if (!messageId) {
-      console.log('no messageId!')
       return res.sendStatus(404)
     }
     const user = await c.scitran.users.findOne({ _id: userId })
-    console.log('user:', user)
     let originalComment = await c.crn.comments.findOne({
       _id: ObjectID(parentId),
     })
-    console.log('originalComment:', originalComment)
     if (user && originalComment) {
       let flattenedUser = {
         _id: user._id,
@@ -86,11 +77,8 @@ export default {
         user: flattenedUser,
         createDate: moment().format(),
       }
-      console.log('got in here!')
-      console.log('comment:', comment)
       c.crn.comments.insertOne(comment, (err, response) => {
         if (err) {
-          console.log('error in insertOne')
           return next(err)
         } else {
           if (response.ops && response.ops.length) {
@@ -102,7 +90,6 @@ export default {
         }
       })
     } else {
-      console.log('there was an error in the reply() function')
       return res.sendStatus(404)
     }
     /* eslint-enable no-console*/
