@@ -76,7 +76,7 @@ export default {
         email: user.email,
         firstname: user.firstname,
         lastname: user.lastname,
-        imageUrl: user.avatar
+        imageUrl: user.avatars ? user.avatars.provider : null
       }
       comment = {
         datasetId: originalComment.datasetId,
