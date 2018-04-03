@@ -35,18 +35,17 @@ async function updateAccessionNumber(oldId, newId) {
     ),
     updateAnalytics(oldId, newId),
     c.crn.comments.updateMany(
-      { datasetId: bidsId.encodeId(oldId) },
-      { $set: { datasetId: bidsId.encodeId(newId) } },
+      { datasetId: oldId },
+      { $set: { datasetId: newId } },
     ),
     c.crn.stars.updateMany(
-      { datasetId: bidsId.encodeId(oldId) },
-      { $set: { datasetId: bidsId.encodeId(newId) } },
+      { datasetId: oldId },
+      { $set: { datasetId: newId } },
     ),
     c.crn.subscriptions.updateMany(
-      { datasetId: bidsId.encodeId(oldId) },
-      { $set: { datasetId: bidsId.encodeId(newId) } },
+      { datasetId: oldId },
+      { $set: { datasetId: newId } },
     ),
-
   )
   return Promise.all(retPromises)
 }
@@ -74,7 +73,21 @@ async function updateSnapshotsId(oldId, newId) {
       },
       snapId,
     )
-    retPromises.push(updatePromise)
+    retPromises.push(
+      updatePromise,
+      c.crn.notifications.updateMany(
+        {
+          'email.data.datasetId': bidsId.decodeId(oldId),
+          'email.data.snapshotId': bidsId.decodeId(snapId)
+        },
+        {
+          $set: {
+            'email.data.datasetId': bidsId.decodeId(newId),
+            'email.data.snapshotId': bidsId.decodeId(snapId)
+          }
+        }
+      )
+    )
   }
   return Promise.all(retPromises)
 }
