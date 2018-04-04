@@ -254,8 +254,14 @@ class ArrayItem extends React.Component {
       error: null,
     }
 
-    for (let field of this.props.model) {
-      initialState[field.id] = this.props.item[field.id]
+    if (this.props.model.length > 1) {
+      for (let field of this.props.model) {
+        initialState[field.id] = this.props.item[field.id]
+      }
+    }
+    if (this.props.model.length == 1) {
+      let model = this.props.model[0]
+      initialState[model.id] = this.props.item
     }
 
     this.state = initialState
