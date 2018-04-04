@@ -1,10 +1,12 @@
 const MongodbMemoryServer = require('mongodb-memory-server').default
 const NodeEnvironment = require('jest-environment-node')
 
+const mongod = new MongodbMemoryServer()
+
 class MongoEnvironment extends NodeEnvironment {
   constructor(config) {
     super(config)
-    this.mongod = new MongodbMemoryServer()
+    this.mongod = mongod
   }
 
   async setup() {
@@ -14,7 +16,7 @@ class MongoEnvironment extends NodeEnvironment {
   }
 
   async teardown() {
-    this.mongod.stop()
+    //this.mongod.stop()
 
     await super.teardown()
   }
