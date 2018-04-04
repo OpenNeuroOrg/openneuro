@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "allowJs": true,
+    "outDir": "./built",
+    "target": "es6"
+  },
+  "include": ["./packages/**/*"]
+}
