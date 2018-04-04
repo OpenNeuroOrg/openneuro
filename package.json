@@ -2,8 +2,8 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "test": "jest --projects packages/*",
-    "coverage": "jest --projects packages/* --coverage",
+    "test": "jest",
+    "coverage": "jest --coverage",
     "codecov": "lerna run codecov",
     "lint": "eslint --cache --ext .jsx --ext .js packages/"
   },
@@ -27,5 +27,8 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
+  },
+  "jest": {
+    "projects": ["packages/*"]
   }
 }
