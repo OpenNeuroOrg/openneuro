@@ -46,26 +46,35 @@ export default {
    * ** maybe returns the newly created comment id
    */
   async reply(req, res, next) {
+    /* eslint-disable no-console */
     let comment
     const parentId = req.params.commentId ? decodeURIComponent(req.params.commentId) : null
     const userId = req.params.userId ? decodeURIComponent(req.params.userId) : null
     const text = textToDraft(req.body['stripped-text'])
-    const inReplyTo = req.body['In-Reply-To']
+    const inReplyToRaw = req.body['In-Reply-To']
+    const inReplyTo = inReplyToRaw ? inReplyToRaw.replace('<', '').replace('>', '') : null
     const messageId = inReplyTo ? await c.crn.mailgunIdentifiers.findOne({messageId: inReplyTo}) : null
     if (!messageId) {
       return res.sendStatus(404)
     }
-    const user = await c.scitran.users.findOne({ _id: ObjectID(userId) })
+    const user = await c.scitran.users.findOne({ _id: userId })
     let originalComment = await c.crn.comments.findOne({
       _id: ObjectID(parentId),
     })
     if (user && originalComment) {
+      let flattenedUser = {
+        _id: user._id,
+        email: user.email,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        imageUrl: user.avatars ? user.avatars.provider : null
+      }
       comment = {
         datasetId: originalComment.datasetId,
         datasetLabel: originalComment.datasetLabel,
         parentId: parentId,
         text: text,
-        user: user.profile,
+        user: flattenedUser,
         createDate: moment().format(),
       }
       c.crn.comments.insertOne(comment, (err, response) => {
@@ -76,12 +85,14 @@ export default {
             comment = response.ops[0]
           }
           notifications.commentCreated(comment)
+          console.log('created comment. sending this back:', response.ops[0])
           return res.send(response.ops[0])
         }
       })
     } else {
       return res.sendStatus(404)
     }
+    /* eslint-enable no-console*/
   },
 
   /**
