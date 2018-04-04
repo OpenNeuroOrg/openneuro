@@ -6,14 +6,13 @@
     "coverage": "jest --projects packages/* --coverage",
     "codecov": "lerna run codecov",
     "prepare": "lerna run prepare",
-    "lint": "eslint --cache --ext .jsx --ext .js packages/",
-    "precommit": "lint-staged"
+    "lint": "eslint --cache --ext .jsx --ext .js packages/"
   },
   "devDependencies": {
     "babel-eslint": "8.2.2",
     "eslint": "4.19.1",
     "eslint-plugin-react": "^7.7.0",
-    "husky": "^0.14.3",
+    "husky": "^0.15.0-rc.13",
     "lerna": "^2.9.1",
     "lint-staged": "^6.0.1",
     "prettier": "^1.7.0"
@@ -22,6 +21,11 @@
   "lint-staged": {
     "linters": {
       "*.{js,jsx,json}": ["prettier --write", "git add"]
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
   }
 }
