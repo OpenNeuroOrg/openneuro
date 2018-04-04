@@ -33,7 +33,6 @@ services:
     volumes:
       - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache
-      - ./client.config.js:/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
       - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
     tmpfs:
@@ -46,7 +45,6 @@ services:
     volumes:
       - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache
-      - ./server/client.config.js:/srv/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
       - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
     tmpfs:

@@ -34,7 +34,6 @@ services:
   server:
     image: openneuro/server:${CRN_SERVER_TAG}
     volumes:
-      - ./client.config.js:/srv/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
       - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
     env_file: ./config.env
@@ -47,7 +46,6 @@ services:
       - node
       - /srv/worker.js
     volumes:
-      - ./client.config.js:/srv/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
       - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
     env_file: ./config.env
