@@ -145,7 +145,7 @@ async function updateAnalytics(oldId, newId) {
 
 async function updateId(collection, item, updates, delId) {
   if (item === null) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       resolve('update id item null')
     })
   }
@@ -157,7 +157,9 @@ async function updateId(collection, item, updates, delId) {
     })
     .catch(err => {
       if (err) {
+        // eslint-disable-next-line no-console
         console.log('update id error')
+        // eslint-disable-next-line no-console
         console.log(err)
       }
     })
