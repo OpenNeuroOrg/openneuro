@@ -2,8 +2,8 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "test": "lerna run test",
-    "coverage": "lerna run coverage",
+    "test": "jest --projects packages/*",
+    "coverage": "jest --projects packages/* --coverage",
     "codecov": "lerna run codecov",
     "prepare": "lerna run prepare",
     "lint": "eslint --cache --ext .jsx --ext .js packages/",
