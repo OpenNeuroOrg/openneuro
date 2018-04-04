@@ -127,6 +127,9 @@ export default {
             }
             cb()
           })
+          .catch(() => {
+            cb()
+          })
       },
       () => {
         callback(metadata)
