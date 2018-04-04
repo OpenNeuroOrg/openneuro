@@ -5,7 +5,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
-const git = require('git-rev-sync')
 
 // prettier-ignore
 const env = {
@@ -16,7 +15,7 @@ const env = {
   SCITRAN_AUTH_ORCID_REDIRECT_URI: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_REDIRECT_URI),
   SCITRAN_AUTH_ORCID_URI: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_URI),
   AWS_S3_ANALYSIS_BUCKET: JSON.stringify(process.env.AWS_S3_ANALYSIS_BUCKET),
-  AWS_S3_DATASET_BUCKET: JSON.stringify(process.env.AWS_S3_DATASET_BUCKET),
+  AWS_S3_DATASET_BUCKET: JSON.stringify(process.env.AWS_S3_DATASET_BUCKET)
 }
 
 module.exports = {
@@ -52,8 +51,6 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'process.env': env,
-      __GIT_HASH__: JSON.stringify(git.long()),
-      __GIT_BRANCH__: JSON.stringify(git.branch()),
     }),
     new ServiceWorkerWebpackPlugin({
       entry: path.join(__dirname, './src/scripts/sw.js'),

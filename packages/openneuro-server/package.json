@@ -1,20 +1,19 @@
 {
   "name": "openneuro-server",
   "version": "1.10.0",
-  "description": "",
+  "description": "Core service for the OpenNeuro platform.",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
     "lint": "eslint libs/ handlers/ tests/",
     "start": "node index.js",
     "test": "jest",
-    "coverage": "jest --coverage",
-    "codecov": "codecov -p ../ -F server",
-    "precommit": "lint-staged"
+    "coverage": "jest --coverage --runInBand",
+    "codecov": "codecov -p ../../ -F server"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:poldracklab/crn_server.git"
+    "url": "git@github.com:OpenNeuroOrg/openneuro.git"
   },
   "author": "Squishymedia",
   "dependencies": {
@@ -32,7 +31,6 @@
     "draft-js-export-html": "^1.2.0",
     "express": "^4.13.3",
     "express-fileupload": "^0.1.4",
-    "git-rev-sync": "^1.9.1",
     "graphql": "^0.13.1",
     "graphql-iso-date": "^3.5.0",
     "graphql-tag": "^2.8.0",
@@ -51,7 +49,8 @@
     "react-dom": "^16.2.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
-    "s3-stream-download": "https://github.com/OpenNeuroOrg/s3-stream-download.git",
+    "s3-stream-download":
+      "https://github.com/OpenNeuroOrg/s3-stream-download.git",
     "superagent": "^3.8.2",
     "tar-fs": "^1.9.0",
     "underscore": "^1.8.3",
@@ -67,11 +66,8 @@
     "babel-preset-env": "^1.6.0",
     "codecov": "^2.3.0",
     "eslint": "^4.18.1",
-    "husky": "^0.14.3",
     "jest": "^22.0.0",
-    "lint-staged": "^6.0.1",
     "mongodb-memory-server": "^1.7.0",
-    "prettier": "^1.7.0",
     "supertest": "^3.0.0"
   },
   "jest": {
@@ -82,13 +78,5 @@
       "!**/node_modules/**",
       "!**/vendor/**"
     ]
-  },
-  "lint-staged": {
-    "linters": {
-      "*.{js,jsx,json}": [
-        "prettier --write",
-        "git add"
-      ]
-    }
   }
 }

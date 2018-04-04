@@ -6,32 +6,30 @@ machine:
   dependencies:
     cache_directories:
       - ~/.cache/yarn
+      - ~/.mongodb-binaries
 
 dependencies:
   override:
-    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn:
-      parallel: true
+    - yarn install
+    - yarn bootstrap
   post: # You would think these are tests but this way the build stops if they fail
     # Lint
-    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run lint:
-        parallel: true
+    - yarn lint
     # Unit Tests
-    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run coverage:
-        parallel: true
+    - yarn coverage
 
 test:
   override:
     # Coverage
-    - case $CIRCLE_NODE_INDEX in 0) cd server;; 1) cd app;; esac && yarn run codecov:
-        parallel: true
+    - yarn run codecov
 
 deployment:
   dev:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker build --pull -t openneuro/server -f server/Dockerfile .
-      - docker build --pull -t openneuro/app -f app/Dockerfile .
+      - docker build --pull -t openneuro/server packages/openneuro-server
+      - docker build --pull -t openneuro/app packages/openneuro-app
       # Update latest tag
       - docker tag -f openneuro/server openneuro/server:latest
       - docker tag -f openneuro/app openneuro/app:latest
@@ -41,8 +39,8 @@ deployment:
     branch: /.*/
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker build --pull -t openneuro/server -f server/Dockerfile .
-      - docker build --pull -t openneuro/app -f app/Dockerfile .
+      - docker build --pull -t openneuro/server packages/openneuro-server
+      - docker build --pull -t openneuro/app packages/openneuro-app
       # Update latest tag
       - docker tag -f openneuro/server openneuro/server:$CIRCLE_BRANCH
       - docker tag -f openneuro/app openneuro/app:$CIRCLE_BRANCH
@@ -52,8 +50,8 @@ deployment:
     tag: /v.*/
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - docker build --pull -t openneuro/server -f server/Dockerfile .
-      - docker build --pull -t openneuro/app -f app/Dockerfile .
+      - docker build --pull -t openneuro/server packages/openneuro-server
+      - docker build --pull -t openneuro/app packages/openneuro-app
       - docker tag openneuro/server openneuro/server:$CIRCLE_TAG
       - docker tag openneuro/app openneuro/app:$CIRCLE_TAG
       - docker push openneuro/server:$CIRCLE_TAG

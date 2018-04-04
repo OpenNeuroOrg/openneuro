@@ -23,5 +23,7 @@ jest.mock('./config.js')
 const fail_test_on_console = message => {
   throw new Error(message)
 }
+// eslint-disable-next-line no-console
 console.error = fail_test_on_console
+// eslint-disable-next-line no-console
 console.warn = fail_test_on_console
