@@ -61,7 +61,6 @@ module.exports = {
         to: './papaya-[hash:8].js',
       },
     ]),
-    new webpack.ExtendedAPIPlugin(),
   ],
   module: {
     rules: [
