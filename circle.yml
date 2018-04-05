@@ -16,7 +16,7 @@ dependencies:
     # Lint
     - yarn lint
     # Unit Tests
-    - yarn coverage
+    - yarn coverage -w 2
 
 test:
   override:
