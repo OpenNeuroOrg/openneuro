@@ -3,11 +3,10 @@
  *
  * Be careful to only include necessary dependencies here
  */
-import packageJson from '../../package.json'
 import { zipResponse } from './serviceworker/s3'
 import config from '../../config'
 
-const CACHE_NAME = `openneuro-${packageJson.version}`
+const CACHE_NAME = 'openneuro'
 const CACHE_PATHS = serviceWorkerOption.assets
 
 self.addEventListener('install', event => {
@@ -39,9 +38,11 @@ self.addEventListener('fetch', event => {
       )
         return
       // Respond from cache, then the network
-      return event.respondWith(
-        caches.match(event.request).then(function(response) {
-          return response || fetch(event.request)
+      event.respondWith(
+        caches.open(CACHE_NAME).then(cache => {
+          return cache.match(event.request).then(response => {
+            return response || fetch(event.request)
+          })
         }),
       )
     }
