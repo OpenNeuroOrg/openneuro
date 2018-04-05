@@ -2,18 +2,18 @@
   "private": true,
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "test": "lerna run test",
-    "coverage": "lerna run coverage",
-    "codecov": "lerna run codecov",
-    "prepare": "lerna run prepare",
-    "lint": "eslint --cache --ext .jsx --ext .js packages/",
-    "precommit": "lint-staged"
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "codecov": "codecov",
+    "lint": "eslint --cache --ext .jsx --ext .js packages/"
   },
   "devDependencies": {
     "babel-eslint": "8.2.2",
+    "codecov": "^3.0.0",
     "eslint": "4.19.1",
     "eslint-plugin-react": "^7.7.0",
-    "husky": "^0.14.3",
+    "husky": "^0.15.0-rc.13",
+    "jest": "^22.4.3",
     "lerna": "^2.9.1",
     "lint-staged": "^6.0.1",
     "prettier": "^1.7.0"
@@ -23,5 +23,19 @@
     "linters": {
       "*.{js,jsx,json}": ["prettier --write", "git add"]
     }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "jest": {
+    "projects": ["packages/*"],
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/*.spec.js",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ]
   }
 }
