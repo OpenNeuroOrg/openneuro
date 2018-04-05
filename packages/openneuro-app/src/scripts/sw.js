@@ -3,11 +3,10 @@
  *
  * Be careful to only include necessary dependencies here
  */
-import packageJson from '../../package.json'
 import { zipResponse } from './serviceworker/s3'
 import config from '../../config'
 
-const CACHE_NAME = `openneuro-${packageJson.version}`
+const CACHE_NAME = 'openneuro'
 const CACHE_PATHS = serviceWorkerOption.assets
 
 self.addEventListener('install', event => {

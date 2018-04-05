@@ -35,7 +35,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].bundle.js',
+    filename: '[name]-[hash:8].bundle.js',
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
@@ -61,6 +61,7 @@ module.exports = {
         to: './papaya-[hash:8].js',
       },
     ]),
+    new webpack.ExtendedAPIPlugin(),
   ],
   module: {
     rules: [

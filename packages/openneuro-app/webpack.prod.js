@@ -21,7 +21,4 @@ module.exports = merge(common, {
       test: /\.(js|html|css)$/,
     }),
   ],
-  output: {
-    filename: '[name]-[hash:8].bundle.js',
-  },
 })
