@@ -30,6 +30,12 @@
     }
   },
   "jest": {
-    "projects": ["packages/*"]
+    "projects": ["packages/*"],
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/*.spec.js",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ]
   }
 }
