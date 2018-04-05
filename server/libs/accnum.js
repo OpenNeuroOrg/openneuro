@@ -19,8 +19,10 @@ async function updateAccessionNumber(oldId, newId) {
   let item = await c.scitran.projects.findOne({ _id: ObjectID(oldId) }, {})
   let newIdItem = await c.scitran.projects.findOne({_id: ObjectID(newId)}, {})
   
-  if (!newIdItem) {
+  if (newIdItem) {
     return new Promise((resolve) => {
+      // eslint-disable-next-line no-console
+      console.log('New Id already in db: ' + bidsId.decodeId(newId))
       resolve('newId found')
     })
   }
