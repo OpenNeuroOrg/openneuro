@@ -12,9 +12,7 @@
     "start": "webpack-dev-server --config webpack.dev.js --progress --color",
     "build": "webpack --config webpack.prod.js",
     "lint": "eslint --ext .jsx --ext .js src/scripts/",
-    "test": "jest",
-    "coverage": "jest --coverage",
-    "codecov": "codecov -p ../../ -F app"
+    "test": "jest"
   },
   "author": "Squishymedia",
   "dependencies": {

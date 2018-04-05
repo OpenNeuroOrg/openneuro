@@ -7,9 +7,7 @@
   "scripts": {
     "lint": "eslint libs/ handlers/ tests/",
     "start": "node index.js",
-    "test": "jest",
-    "coverage": "jest --coverage --runInBand",
-    "codecov": "codecov -p ../../ -F server"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
