@@ -64,7 +64,9 @@ body {
     padding: 0;
 }
 
-.main.view.container {padding-top: 115px;}
+.main.view.container {
+    overflow-y: scroll;
+}
 
 .inner-route {
     &.light {
