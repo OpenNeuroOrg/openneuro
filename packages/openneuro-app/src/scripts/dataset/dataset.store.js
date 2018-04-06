@@ -1492,8 +1492,11 @@ let datasetStore = Reflux.createStore({
           callback(err, null)
         })
       } else if (callback) {
-        callback(res.body)
+        callback(null, res.body)
       }
+    })
+    .catch(err => {
+      callback(err, null)
     })
   },
 
@@ -1581,7 +1584,7 @@ let datasetStore = Reflux.createStore({
             this.data.snapshot,
             datasetId,
             { job: jobId },
-            jobs => {
+            (err, jobs) => {
               this.loadSnapshots(this.data.dataset, jobs)
 
               // start polling job
@@ -1653,7 +1656,7 @@ let datasetStore = Reflux.createStore({
           true,
           this.data.dataset.original,
           {},
-          jobs => {
+          (err, jobs) => {
             this.loadSnapshots(this.data.dataset, jobs)
 
             // start polling job
@@ -1673,7 +1676,7 @@ let datasetStore = Reflux.createStore({
           true,
           this.data.dataset.original,
           {},
-          jobs => {
+          (err, jobs) => {
             this.loadSnapshots(this.data.dataset, jobs)
 
             // start polling job
