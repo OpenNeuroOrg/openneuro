@@ -12,10 +12,9 @@
 
 .clearfix {@extend %clearfix;}
 
-// ::-webkit-scrollbar {
-//     width: 0;
-//     z-index: 100;
-// }
+::-webkit-scrollbar {
+    width: 0;
+}
 
 // /* Track */
 // ::-webkit-scrollbar-track {
