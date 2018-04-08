@@ -7,6 +7,12 @@
   "author": "Squishymedia",
   "license": "MIT",
   "dependencies": {
+    "commander": "^2.15.1",
+    "esm": "^3.0.16",
+    "inquirer": "^5.2.0",
     "openneuro-client": "^1.10.0"
+  },
+  "scripts": {
+    "openneuro": "node src/index.js"
   }
 }
