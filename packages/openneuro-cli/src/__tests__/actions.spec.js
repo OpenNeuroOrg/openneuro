@@ -1,10 +1,15 @@
-import { login, upload, diff } from '../actions.js'
+import { loginAnswers, upload } from '../actions.js'
 
-describe('commands.js', () => {
+describe('actions.js', () => {
   describe('login', () => {
+    const testKey = '123456'
     it('should accept an auth key', () => {
-      const apiKey = '123456'
-      login(apiKey)
+      loginAnswers({ apikey: testKey })
+    })
+  })
+  describe('upload', () => {
+    it('works!', () => {
+      upload()
     })
   })
 })

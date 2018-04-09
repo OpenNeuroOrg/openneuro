@@ -1,4 +1,5 @@
 import inquirer from 'inquirer'
+import { saveConfig } from './config'
 
 const loginQuestions = {
   type: 'input',
@@ -14,9 +15,17 @@ const loginQuestions = {
  * this is a prompted entry
  */
 export const login = () => {
-  inquirer.prompt(loginQuestions).then(answers => {
-    console.log(answers)
-  })
+  return inquirer
+    .prompt(loginQuestions)
+    .then(loginAnswers)
+    .then(saveConfig)
 }
+
+/**
+ * Handle login answers returned by inquirer
+ *
+ * @param {Object} answers
+ */
+export const loginAnswers = answers => answers
 
 export const upload = () => {}
