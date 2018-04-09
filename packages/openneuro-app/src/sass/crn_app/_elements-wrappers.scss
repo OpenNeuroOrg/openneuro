@@ -12,10 +12,9 @@
 
 .clearfix {@extend %clearfix;}
 
-// ::-webkit-scrollbar {
-//     width: 0;
-//     z-index: 100;
-// }
+::-webkit-scrollbar {
+    width: 0;
+}
 
 // /* Track */
 // ::-webkit-scrollbar-track {
@@ -64,7 +63,9 @@ body {
     padding: 0;
 }
 
-.main.view.container {padding-top: 115px;}
+.main.view.container {
+    overflow-y: scroll;
+}
 
 .inner-route {
     &.light {
@@ -111,8 +112,8 @@ h6 {
     background: $e5;
     position: fixed;
     width: 100%;
-    overflow-y: scroll;
-
+    padding-bottom: 85px;
+    
     &.snapshot,
     &.dataset {
         background: $white;
