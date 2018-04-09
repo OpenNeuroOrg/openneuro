@@ -1486,7 +1486,7 @@ let datasetStore = Reflux.createStore({
       // callback with original jobs array
       if (snapshot && callback) {
         crn.getDatasetJobs(originalId, { snapshot: false }).then(res => {
-          callback(null, res)
+          callback(null, res.body)
         })
         .catch(err => {
           callback(err, null)
