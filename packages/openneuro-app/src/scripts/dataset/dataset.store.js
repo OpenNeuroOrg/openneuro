@@ -195,7 +195,7 @@ let datasetStore = Reflux.createStore({
                   },
                 ],
               },
-              this.loadJobs(datasetId, snapshot, originalId, options, jobs => {
+              this.loadJobs(datasetId, snapshot, originalId, options, (err, jobs) => {
                 this.loadSnapshots(dataset, jobs, () => {
                   this.loadComments(originalId)
                   this.getDatasetStars()
@@ -1488,9 +1488,15 @@ let datasetStore = Reflux.createStore({
         crn.getDatasetJobs(originalId, { snapshot: false }).then(res => {
           callback(null, res)
         })
+        .catch(err => {
+          callback(err, null)
+        })
       } else if (callback) {
-        callback(res.body)
+        callback(null, res.body)
       }
+    })
+    .catch(err => {
+      callback(err, null)
     })
   },
 
@@ -1578,7 +1584,7 @@ let datasetStore = Reflux.createStore({
             this.data.snapshot,
             datasetId,
             { job: jobId },
-            jobs => {
+            (err, jobs) => {
               this.loadSnapshots(this.data.dataset, jobs)
 
               // start polling job
@@ -1650,7 +1656,7 @@ let datasetStore = Reflux.createStore({
           true,
           this.data.dataset.original,
           {},
-          jobs => {
+          (err, jobs) => {
             this.loadSnapshots(this.data.dataset, jobs)
 
             // start polling job
@@ -1670,7 +1676,7 @@ let datasetStore = Reflux.createStore({
           true,
           this.data.dataset.original,
           {},
-          jobs => {
+          (err, jobs) => {
             this.loadSnapshots(this.data.dataset, jobs)
 
             // start polling job
@@ -1956,7 +1962,7 @@ let datasetStore = Reflux.createStore({
       }
 
       // add draft is available
-      if (dataset && dataset.access == 'orphaned') {
+      if (dataset && dataset.permissions && !dataset.permissions.length) {
         snapshots.unshift({
           orphaned: true,
         })
