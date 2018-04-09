@@ -137,7 +137,22 @@ let UserStore = Reflux.createStore({
       { persist: true },
     )
 
+    // set a timeout for the entire login process
+    this.loginTimeout = window.setInterval(() => {
+      let message = 'Sign in took longer than we expected. Please try again.'
+      if (!transition) {
+        notifications.createAlert({ type: 'Error', message: message })
+      } else {
+        this.update({
+          loading: false,
+          signinError: message,
+        })
+      }
+      return
+    }, 60000)
+
     this.providers[options.provider].signIn((err, user) => {
+      window.clearInterval(this.loginTimeout)
       if (err) {
         let message = 'We could not sign you in. Please try again later.'
         if (err.response && err.response.body) {
