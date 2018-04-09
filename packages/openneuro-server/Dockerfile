@@ -9,4 +9,4 @@ RUN apk add git --no-cache --update && npm install -g yarn && yarn install
 RUN rm -rf /srv/app
 
 # start server
-CMD ["node", "/srv/server/index.js"]
+CMD ["node", "/srv/index.js"]
