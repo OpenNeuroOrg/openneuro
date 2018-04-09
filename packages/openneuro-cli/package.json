@@ -15,5 +15,14 @@
   },
   "scripts": {
     "openneuro": "node src/index.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/*.spec.js",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ]
   }
 }
