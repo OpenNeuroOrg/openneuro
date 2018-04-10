@@ -23,6 +23,8 @@ const typeDefs = `
     createDataset(label: String!): Dataset
     # Tag the current draft
     createSnapshot(datasetId: ID!): Snapshot
+    # Add or update files in a draft - returns a new Draft
+    updateFiles(datasetId: ID!, files: [Upload!]): Draft
   }
 
   # OpenNeuro user records from all providers
