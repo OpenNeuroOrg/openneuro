@@ -1,15 +1,15 @@
 import gql from 'graphql-tag'
 
-export const getDataset = datasetId => gql`
-  query {
-    dataset(id: "${datasetId}") {
+export const getDataset = gql`
+  query dataset($id: ID!) {
+    dataset(id: $id) {
       id
       label
     }
   }
 `
 
-export const getDatasets = () => gql`
+export const getDatasets = gql`
   query {
     datasets {
       id
@@ -18,9 +18,9 @@ export const getDatasets = () => gql`
   }
 `
 
-export const createDataset = label => gql`
-  mutation {
-    createDataset(label: ${label}) {
+export const createDataset = gql`
+  mutation createDataset($label: String!) {
+    createDataset(label: $label) {
       id
       label
     }
