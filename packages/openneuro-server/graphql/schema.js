@@ -5,6 +5,7 @@ const typeDefs = `
   scalar Date
   scalar DateTime
   scalar Time
+  scalar Upload
 
   type Query {
     # One dataset
