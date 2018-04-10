@@ -38,7 +38,6 @@ export default {
     // configure mail options
     var mailOptions = {
       from: '"OpenNeuro" <notifications@openneuro.org>',
-      // sender: from2,
       replyTo: from,
       to: email.to,
       subject: email.subject,
