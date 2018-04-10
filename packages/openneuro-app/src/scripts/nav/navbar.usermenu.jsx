@@ -29,7 +29,7 @@ const Usermenu = ({ profile, history }) => {
         </li>
         <li role="separator" className="divider" />
         <li>
-         <Link to='/api'> Obtain an API Key </Link>
+         <Link to='/keygen'> Obtain an API Key </Link>
         </li>
         <li role="separator" className="divider" />
         <li>

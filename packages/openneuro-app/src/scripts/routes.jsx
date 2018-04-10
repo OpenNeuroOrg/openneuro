@@ -24,7 +24,7 @@ const appRoutes = () => (
   <Switch>
     <Route name="front-page" exact path="/" component={FrontPage} />
     <Route name="faq" exact path="/faq" component={Faq} />
-    <Route name="api-key" exact path="/api" component={APIKey} />
+    <Route name="api-key" exact path="/keygen" component={APIKey} />
     <Route
       name="dashboard"
       path="/dashboard"
