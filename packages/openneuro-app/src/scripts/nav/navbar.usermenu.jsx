@@ -2,7 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 import Actions from '../user/user.actions.js'
 import uploadStore from '../upload/upload.store.js'
 import Avatar from '../user/avatar.jsx'
@@ -26,6 +26,10 @@ const Usermenu = ({ profile, history }) => {
         <li role="presentation" className="dropdown-header">
           Hello <br />
           {username}
+        </li>
+        <li role="separator" className="divider" />
+        <li>
+         <Link to='/api'> Obtain an API Key </Link>
         </li>
         <li role="separator" className="divider" />
         <li>
