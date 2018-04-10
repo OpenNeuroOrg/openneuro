@@ -2,7 +2,7 @@
   "name": "openneuro-client",
   "version": "1.10.0",
   "description": "OpenNeuro shared client library.",
-  "main": "index.js",
+  "main": "src/index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",
   "license": "MIT",
@@ -11,6 +11,10 @@
     "apollo-link": "^1.2.1",
     "apollo-upload-client": "^8.0.0",
     "esm": "^3.0.16",
-    "graphql": "^0.13.2"
+    "graphql": "^0.13.2",
+    "node-fetch": "^2.1.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
