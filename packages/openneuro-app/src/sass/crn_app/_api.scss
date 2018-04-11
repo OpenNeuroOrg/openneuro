@@ -1,0 +1,60 @@
+.api {
+    max-width: 1000px;
+    margin: 50px auto;
+    width: 100%;
+    color: $ocean;
+
+    h1 {
+        text-align: center;
+        margin: 20px 0px 40px;
+        font-size: 50px;
+    }
+
+    .panel {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+
+        .panel-heading {
+            text-align: center;
+            color: $ocean;
+            font-size: 20px;
+            border-bottom: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+            border-radius: 0;
+        }
+
+        .explanation {
+            padding: 20px;
+        }
+
+        .panel-body {
+            font-size: 16px;
+            color: $ocean;
+
+            .api-key-div {
+                padding: 20px;
+            }
+
+            .api-key {
+                text-align:center;
+                font-size: 25px;
+                padding-bottom: 10px;
+            }
+            .copy-key {
+                text-align: center;
+                font-size: 20px;
+                cursor: pointer;
+            }
+        }
+
+        button {
+            float: none;
+            display: block;
+            margin: auto;
+            background-color: $ocean;
+        }
+    }
+
+    
+}
