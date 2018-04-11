@@ -369,4 +369,9 @@ export default {
   removeStar(datasetId, userId) {
     return request.del(config.crn.url + 'stars/' + datasetId + '/' + userId, {})
   },
+
+  // API Key ----------------------------------------------------------------------
+  createAPIKey() {
+    return request.post(config.crn.url + 'keygen', {})
+  }
 }
