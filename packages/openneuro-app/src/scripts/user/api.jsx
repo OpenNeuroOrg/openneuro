@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import userStore from './user.store'
 import Spinner from '../common/partials/spinner.jsx'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
@@ -17,10 +16,8 @@ export default class APIKeyGen extends React.Component {
     this.setState({ loading: true })
     userStore.createAPIKey((err, key) => {
       if (err) {
-        console.log(err)
         this.setState({ loading: false })
       } else {
-        console.log(key)
         this.setState({ key: key, loading: false })
       }
     })
@@ -111,5 +108,3 @@ export default class APIKeyGen extends React.Component {
     )
   }
 }
-
-APIKeyGen.propTypes = {}
