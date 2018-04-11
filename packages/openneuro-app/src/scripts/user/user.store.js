@@ -448,11 +448,12 @@ let UserStore = Reflux.createStore({
    */
   createAPIKey(callback) {
     crn.createAPIKey()
-      .then((key) => {
-        callback(null, key)
+      .then((res) => {
+        let key = res && res.body ? res.body.key : null
+        return callback(null, key)
       })
       .catch((err) => {
-        callback(err, null)
+        return callback(err, null)
       })
   }
 })
