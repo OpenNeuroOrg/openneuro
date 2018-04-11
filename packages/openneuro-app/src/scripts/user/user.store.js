@@ -438,6 +438,24 @@ let UserStore = Reflux.createStore({
         }
       })
   },
+
+
+  /**
+   * Create API Key
+   * 
+   * Given the current user, creates an api key
+   * for use with the standalone CLI
+   */
+  createAPIKey(callback) {
+    crn.createAPIKey()
+      .then((key) => {
+        callback(null, key)
+      })
+      .catch((err) => {
+        callback(err, null)
+      })
+  }
 })
+
 
 export default UserStore
