@@ -286,6 +286,14 @@ const baseRoutes = [
     middleware: [auth.user],
     handler: stars.delete,
   },
+
+  // generate CLI API keys ------------------------------
+  {
+    method: 'post',
+    url: '/keygen',
+    middleware: [auth.user], 
+    handler: users.createAPIKey
+  }
 ]
 
 const scitranRoutes = [

@@ -14,6 +14,7 @@ const Faq = loadable(() => import('./faq/faq.jsx'))
 const SearchResults = loadable(() =>
   import('./dashboard/dashboard.searchresults.jsx'),
 )
+const APIKey = loadable(() => import('./user/api.jsx'))
 
 // routes ----------------------------------------------------------------
 
@@ -23,6 +24,7 @@ const appRoutes = () => (
   <Switch>
     <Route name="front-page" exact path="/" component={FrontPage} />
     <Route name="faq" exact path="/faq" component={Faq} />
+    <Route name="api-key" exact path="/keygen" component={APIKey} />
     <Route
       name="dashboard"
       path="/dashboard"

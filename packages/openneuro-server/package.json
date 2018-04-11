@@ -22,6 +22,7 @@
     "aws-sdk": "2.50.0",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "bcrypt-nodejs": "^0.0.3",
     "bids-validator": "^0.26.2",
     "body-parser": "^1.18.2",
     "cron": "^1.1.0",
