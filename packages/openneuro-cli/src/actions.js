@@ -5,7 +5,7 @@ const loginQuestions = {
   type: 'input',
   name: 'apikey',
   message:
-    'Enter your API key for OpenNeuro (get an API key from https://openneuro.org/user/key)',
+    'Enter your API key for OpenNeuro (get an API key from https://openneuro.org/keygen)',
 }
 
 /**
