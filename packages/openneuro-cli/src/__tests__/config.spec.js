@@ -1,6 +1,7 @@
 import fs from 'fs'
 import os from 'os'
 import path from 'path'
+import mkdirp from 'mkdirp'
 import { getConfig, saveConfig } from '../config'
 
 const HOME = os.homedir()
@@ -9,8 +10,7 @@ const HOME = os.homedir()
 jest.mock('fs', () => new (require('metro-memory-fs'))())
 beforeEach(() => {
   require('fs').reset()
-  fs.mkdirSync('/home')
-  fs.mkdirSync(HOME)
+  mkdirp.sync(HOME)
 })
 
 describe('config.js', () => {
