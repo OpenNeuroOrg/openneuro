@@ -310,6 +310,12 @@ h6 {
     float: right !important;
 }
 
+.btn-modal-action { @extend %btn-submit-other}
+
+.btn-modal-action { 
+    margin-left: 30px;
+}
+
 .btn-modal-danger{
     border-color: $brand-danger;
     color: $brand-danger;
