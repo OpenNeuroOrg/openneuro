@@ -14,7 +14,7 @@ export default {
   createDOI(accNumber, snapshotId) {
     let doi = config.doi.prefix + '/openneuro.' + accNumber
     if (snapshotId) {
-      doi = doi + '.' + snapshotId
+      doi = doi + '.v' + snapshotId
     }
     return doi
   },
@@ -42,7 +42,7 @@ export default {
       .get(config.scitran.url + 'snapshots/projects/' + datasetId)
       .then(res => {
         let originalId = bidsId.decodeId(res.body.original)
-        let snapId = bidsId.decodeId(datasetId)
+        let snapId = res.body.snapshot_version
         baseDoi = this.createDOI(originalId, snapId)
         url =
           'https://openneuro.org/datasets/' + originalId + '/versions/' + snapId
@@ -53,7 +53,6 @@ export default {
           year: new Date().getFullYear(),
           resourceType: 'fMRI',
         }
-        //if (!res.body.tags.includes('hasPublic')) { return }
         return this.registerMetadata(context)
       })
       .then(async res => {

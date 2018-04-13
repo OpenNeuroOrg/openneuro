@@ -6,24 +6,27 @@ let c = mongo.collections
 
 export default {
   async createSnapshotDoi(req, res) {
+    let doiRes = null
     if (!config.doi.username || !config.doi.password) {
-      return res.send({ doi: null })
+      return res.send({ doiRes: null })
     }
     const datasetId = req.params.datasetId
     let exists = await c.crn.dois.findOne({ datasetId: datasetId })
     if (exists) {
-      let doiRes = exists.doi
+      doiRes = exists.doi
+      return res.send({ doi: doiRes })
     } else {
-      let doiRes = await doi.registerSnapshotDoi(datasetId)
-      if (doiRes) {
-        c.crn.dois.update(
-          { datasetId: datasetId },
-          { $set: { doi: doiRes } },
-          { upsert: true },
-        )
-      }
+      await doi.registerSnapshotDoi(datasetId).then(doiRes => {
+        if (doi) {
+          c.crn.dois.update(
+            { datasetId: datasetId },
+            { $set: { doi: doiRes } },
+            { upsert: true },
+          )
+        }
+        return res.send({ doi: doiRes })
+      })
     }
-    return res.send({ doi: doiRes })
   },
   // Have seperate function to get Doi that does not require any authorization
   async getDoi(req, res) {
