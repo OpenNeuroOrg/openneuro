@@ -443,7 +443,9 @@ let datasetStore = Reflux.createStore({
         dataset.status.public = value
       }
 
-      this.registerDoi.bind(this)()
+      if (!this.dataset.description.DatasetDOI) {
+        this.registerDoi.bind(this)()
+      }
 
       let snapshots = this.data.snapshots
 
@@ -2326,16 +2328,12 @@ let datasetStore = Reflux.createStore({
       }
     }
     let snapshotId = this.data.dataset._id
-    var resp = crn.registerDoi(snapshotId).then(res => {
-      if (!res) {
-        return
+    crn.registerDoi(snapshotId).then(res => {
+      if (!callback && res) {
+        return res.body.doi
       }
-      this.updateDescription('DatasetDOI', res.body.doi)
-      return res.body.doi
+      callback()
     })
-    if (callback) {
-      return callback()
-    }
   },
 })
 
