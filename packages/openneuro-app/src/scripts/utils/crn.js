@@ -369,4 +369,14 @@ export default {
   removeStar(datasetId, userId) {
     return request.del(config.crn.url + 'stars/' + datasetId + '/' + userId, {})
   },
+
+  // Dois --------------------------------------------------------------------------
+
+  registerDoi(datasetId) {
+    return request.post(config.crn.url + 'doi/' + datasetId, {})
+  },
+
+  getDoi(datasetId) {
+    return request.get(config.crn.url + 'doi/' + datasetId, {})
+  },
 }
