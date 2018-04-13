@@ -16,6 +16,7 @@ import files from '../utils/files'
 import request from '../utils/request'
 import moment from 'moment'
 import { stringify as querystring } from 'urlite/querystring'
+import notifications from '../notification/notification.actions'
 
 let datasetStore = Reflux.createStore({
   // store setup -----------------------------------------------------------------------
@@ -195,21 +196,38 @@ let datasetStore = Reflux.createStore({
                   },
                 ],
               },
-              this.loadJobs(datasetId, snapshot, originalId, options, (err, jobs) => {
-                this.loadSnapshots(dataset, jobs, () => {
-                  this.loadComments(originalId)
-                  this.getDatasetStars()
-                  this.checkSubscriptionFollowers(() => {
-                    let datasetUrl = this.constructDatasetUrl(dataset)
-                    this.update({
-                      loading: false,
-                      snapshot: snapshot,
-                      datasetUrl: datasetUrl,
+              this.loadJobs(
+                datasetId,
+                snapshot,
+                originalId,
+                options,
+                (err, jobs) => {
+                  this.loadSnapshots(dataset, jobs, () => {
+                    this.loadComments(originalId)
+                    this.getDatasetStars()
+                    this.checkSubscriptionFollowers(() => {
+                      let datasetUrl = this.constructDatasetUrl(dataset)
+                      this.update({
+                        loading: false,
+                        snapshot: snapshot,
+                        datasetUrl: datasetUrl,
+                      })
                     })
                   })
-                })
-              }),
+                },
+              ),
             )
+
+            if (
+              !dataset.hasOwnProperty('original') &&
+              !dataset.tags.includes('hasPublic')
+            ) {
+              notifications.createAlert({
+                type: 'Warning',
+                message:
+                  'This dataset has not been published. Please use the toolbar to publish this dataset.',
+              })
+            }
 
             if (
               forceReload ||
@@ -1414,90 +1432,97 @@ let datasetStore = Reflux.createStore({
   loadJobs(projectId, snapshot, originalId, options, callback) {
     let jobId = options.job
     this.update({ loadingJobs: true })
-    crn.getDatasetJobs(projectId, { snapshot }).then(res => {
-      let jobs = {}
+    crn
+      .getDatasetJobs(projectId, { snapshot })
+      .then(res => {
+        let jobs = {}
 
-      // iterate jobs
-      for (let job of res.body) {
-        files.sortTree(job.results)
-        files.sortTree(job.logs)
+        // iterate jobs
+        for (let job of res.body) {
+          files.sortTree(job.results)
+          files.sortTree(job.logs)
 
-        // check if job should be polled
-        let status = job.analysis ? job.analysis.status : 'PENDING'
-        let failed = status === 'FAILED'
-        let finished = status === 'SUCCEEDED'
-        let hasResults = job.results && job.results.length > 0
-        if (snapshot && ((!finished && !failed) || (finished && !hasResults))) {
-          this.pollJob(job._id, projectId)
-        }
-
-        if (job.jobId === jobId) {
-          job.active = true
-        }
-
-        // sort jobs by label and version
-        if (!jobs.hasOwnProperty(job.appLabel)) {
-          jobs[job.appLabel] = {}
-          jobs[job.appLabel][job.appVersion] = {
-            appId: job.appId,
-            appLabel: job.appLabel,
-            appVersion: job.appVersion,
-            runs: [job],
+          // check if job should be polled
+          let status = job.analysis ? job.analysis.status : 'PENDING'
+          let failed = status === 'FAILED'
+          let finished = status === 'SUCCEEDED'
+          let hasResults = job.results && job.results.length > 0
+          if (
+            snapshot &&
+            ((!finished && !failed) || (finished && !hasResults))
+          ) {
+            this.pollJob(job._id, projectId)
           }
-        } else if (!jobs[job.appLabel].hasOwnProperty(job.appVersion)) {
-          jobs[job.appLabel][job.appVersion] = {
-            appId: job.appId,
-            appLabel: job.appLabel,
-            appVersion: job.appVersion,
-            runs: [job],
+
+          if (job.jobId === jobId) {
+            job.active = true
           }
-        } else {
-          jobs[job.appLabel][job.appVersion].runs.push(job)
+
+          // sort jobs by label and version
+          if (!jobs.hasOwnProperty(job.appLabel)) {
+            jobs[job.appLabel] = {}
+            jobs[job.appLabel][job.appVersion] = {
+              appId: job.appId,
+              appLabel: job.appLabel,
+              appVersion: job.appVersion,
+              runs: [job],
+            }
+          } else if (!jobs[job.appLabel].hasOwnProperty(job.appVersion)) {
+            jobs[job.appLabel][job.appVersion] = {
+              appId: job.appId,
+              appLabel: job.appLabel,
+              appVersion: job.appVersion,
+              runs: [job],
+            }
+          } else {
+            jobs[job.appLabel][job.appVersion].runs.push(job)
+          }
         }
-      }
 
-      function jobsToArray(jobs) {
-        let arr = []
-        for (let app in jobs) {
-          arr.push({
-            label: app,
-            versions: versionsToArray(jobs[app]),
-          })
+        function jobsToArray(jobs) {
+          let arr = []
+          for (let app in jobs) {
+            arr.push({
+              label: app,
+              versions: versionsToArray(jobs[app]),
+            })
+          }
+          return arr
         }
-        return arr
-      }
 
-      function versionsToArray(versions) {
-        let arr = []
-        for (let version in versions) {
-          arr.push({
-            label: version,
-            runs: versions[version].runs,
-          })
+        function versionsToArray(versions) {
+          let arr = []
+          for (let version in versions) {
+            arr.push({
+              label: version,
+              runs: versions[version].runs,
+            })
+          }
+          return arr
         }
-        return arr
-      }
 
-      let jobArray = jobsToArray(jobs)
+        let jobArray = jobsToArray(jobs)
 
-      // update jobs state
-      this.update({ jobs: jobArray, loadingJobs: false })
+        // update jobs state
+        this.update({ jobs: jobArray, loadingJobs: false })
 
-      // callback with original jobs array
-      if (snapshot && callback) {
-        crn.getDatasetJobs(originalId, { snapshot: false }).then(res => {
+        // callback with original jobs array
+        if (snapshot && callback) {
+          crn
+            .getDatasetJobs(originalId, { snapshot: false })
+            .then(res => {
+              callback(null, res.body)
+            })
+            .catch(err => {
+              callback(err, null)
+            })
+        } else if (callback) {
           callback(null, res.body)
-        })
-        .catch(err => {
-          callback(err, null)
-        })
-      } else if (callback) {
-        callback(null, res.body)
-      }
-    })
-    .catch(err => {
-      callback(err, null)
-    })
+        }
+      })
+      .catch(err => {
+        callback(err, null)
+      })
   },
 
   pollJob(jobId, snapshotId) {
