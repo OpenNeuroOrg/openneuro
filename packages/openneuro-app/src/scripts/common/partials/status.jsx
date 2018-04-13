@@ -26,6 +26,13 @@ export default class Status extends React.Component {
         title = 'Published'
         iconClass = 'fa fa-globe'
         break
+      case 'unpublished':
+        spanClass = 'dataset-status ds-secondary'
+        tip =
+          'This Snapshot has not been published. Use the toolbar above to publish snapshot.'
+        title = 'Unpublished'
+        iconClass = 'fa fa-globe'
+        break
       case 'incomplete':
         spanClass = 'dataset-status ds-warning'
         tip = 'Click resume to try again'
