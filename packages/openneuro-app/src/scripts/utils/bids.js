@@ -479,10 +479,18 @@ export default {
     ;(dataset.status = this.formatStatus(project, dataset.access)),
       (dataset.authors = dataset.description.Authors)
     dataset.referencesAndLinks = dataset.description.ReferencesAndLinks
+
     dataset.user = this.user(dataset, users)
     if (project.original) {
       dataset.original = project.original
       dataset.linkOriginal = this.decodeId(project.original)
+      this.getDoi(project._id, doi => {
+        if (!dataset.description.DatasetDOI) {
+          dataset.description.DatasetDOI = doi
+        } else {
+          dataset.description.DatasetDOI += '\n' + doi
+        }
+      })
     }
     if (project.snapshot_version) {
       dataset.snapshot_version = project.snapshot_version
@@ -612,5 +620,23 @@ export default {
       let usage = res ? res.body : null
       return callback(usage)
     })
+  },
+
+  /**
+   * Doi
+   *
+   * Takes a dataset id returns the minted doi of the dataset if present
+   */
+  getDoi(datasetId, callback) {
+    crn
+      .getDoi(datasetId)
+      .then(res => {
+        let doi = res && res.body ? res.body.doi : ''
+        return callback(doi)
+      })
+      .catch(err => {
+        console.log(err)
+        return callback('')
+      })
   },
 }
