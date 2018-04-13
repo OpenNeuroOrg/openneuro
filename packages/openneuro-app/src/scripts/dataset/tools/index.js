@@ -49,6 +49,9 @@ class Tools extends Reflux.Component {
       isSnapshot = !!dataset.original,
       isSubscribed = !!dataset.subscribed,
       hasUserStar = !!dataset.hasUserStar,
+      hasDoi =
+        dataset.description.DatasetDOI &&
+        dataset.description.DatasetDOI.toLowerCase().indexOf('openneuro') >= 0,
       isSuperuser =
         window.localStorage.scitran && JSON.parse(window.localStorage.scitran)
           ? JSON.parse(window.localStorage.scitran).root
@@ -248,6 +251,13 @@ class Tools extends Reflux.Component {
         icon: 'fa-star-o icon-minus',
         action: actions.removeStar.bind(this),
         display: isSignedIn && hasUserStar,
+        warn: true,
+      },
+      {
+        tooltip: 'Generate DOI',
+        icon: 'fa-gavel icon-plus',
+        action: actions.registerDoi.bind(this),
+        display: isAdmin && isPublic && !hasDoi,
         warn: true,
       },
     ]
