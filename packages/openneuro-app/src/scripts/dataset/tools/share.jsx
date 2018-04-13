@@ -117,12 +117,13 @@ class Share extends Reflux.Component {
               </div>
             </div>
             <div className="dataset-form-controls col-xs-12">
+              {returnLink}
               <button
-                className="btn-modal-submit"
+                className="btn-modal-action"
                 onClick={this._addUser.bind(this)}>
                 share
               </button>
-              {returnLink}
+              
             </div>
           </div>
         </div>
