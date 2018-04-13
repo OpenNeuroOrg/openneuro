@@ -300,6 +300,14 @@ const baseRoutes = [
     url: '/doi/:datasetId',
     handler: doi.getDoi,
   },
+
+  // generate CLI API keys ------------------------------
+  {
+    method: 'post',
+    url: '/keygen',
+    middleware: [auth.user],
+    handler: users.createAPIKey,
+  },
 ]
 
 const scitranRoutes = [

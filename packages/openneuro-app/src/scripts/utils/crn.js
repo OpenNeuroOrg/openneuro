@@ -379,4 +379,8 @@ export default {
   getDoi(datasetId) {
     return request.get(config.crn.url + 'doi/' + datasetId, {})
   },
+  // API Key ----------------------------------------------------------------------
+  createAPIKey() {
+    return request.post(config.crn.url + 'keygen', {})
+  },
 }
