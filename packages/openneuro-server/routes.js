@@ -16,6 +16,7 @@ import auth from './libs/auth'
 import scitran from './libs/scitran'
 import schema from './libs/schema'
 import schemas from './schemas'
+import doi from './handlers/doi'
 
 import fileUpload from 'express-fileupload'
 
@@ -82,7 +83,7 @@ const baseRoutes = [
     method: 'get',
     url: '/analytics/:datasetId?',
     middleware: [auth.optional],
-    handler: datasets.analytics
+    handler: datasets.analytics,
   },
 
   // jobs ----------------------------------------
@@ -286,6 +287,19 @@ const baseRoutes = [
     middleware: [auth.user],
     handler: stars.delete,
   },
+
+  // dataset doi ----------------------------------------
+  {
+    method: 'post',
+    url: '/doi/:datasetId',
+    middleware: [auth.user],
+    handler: doi.createSnapshotDoi,
+  },
+  {
+    method: 'get',
+    url: '/doi/:datasetId',
+    handler: doi.getDoi,
+  },
 ]
 
 const scitranRoutes = [
@@ -339,7 +353,8 @@ const dataladRoutes = [
 const router = express.Router()
 // TODO - remove this once SciTran backend is no longer in use
 const routes = config.datalad.enabled
-  ? baseRoutes.concat(dataladRoutes) : baseRoutes.concat(scitranRoutes)
+  ? baseRoutes.concat(dataladRoutes)
+  : baseRoutes.concat(scitranRoutes)
 
 for (const route of routes) {
   let arr = route.hasOwnProperty('middleware') ? route.middleware : []
