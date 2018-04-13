@@ -20,14 +20,20 @@ class Statuses extends Reflux.Component {
       minimal = this.props.minimal,
       status = dataset.status,
       uploading = dataset._id === this.state.upload.projectId,
-      uploaderSubscribed = dataset.uploaderSubscribed
-
+      uploaderSubscribed = dataset.uploaderSubscribed,
+      isSnapshot = dataset.hasOwnProperty('original')
     return (
       <span className="status-wrap">
         <Status
-          type="public"
+          type={status.public ? 'public' : 'unpublished'}
           minimal={minimal}
-          display={status.public || (status.hasPublic && minimal)}
+          display={
+            isSnapshot
+              ? status.public
+                ? status.public || (status.hasPublic && minimal)
+                : true
+              : false
+          }
         />
         <Status
           type="incomplete"
