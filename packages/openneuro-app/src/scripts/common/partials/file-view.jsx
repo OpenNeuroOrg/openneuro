@@ -149,11 +149,13 @@ class FileView extends Reflux.Component {
       )
     } else if (files.hasExtension(name, ['.pdf'])) {
       return (
-        <iframe
-          src={'http://docs.google.com/gview?url=' + link + '&embedded=true'}
-          className="file-view-iframe"
-          frameBorder="0"
-        />
+        <div className="file-view-iframe-container">
+          <iframe
+            src={'http://docs.google.com/gview?url=' + link + '&embedded=true'}
+            className="file-view-iframe"
+            frameBorder="0"
+          />
+        </div>
       )
     } else if (files.hasExtension(name, ['.tsv', '.csv'])) {
       let tableData = this._parseTabular(name, content)
