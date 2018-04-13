@@ -633,7 +633,7 @@ export default {
         let doi = res && res.body ? res.body.doi : ''
         return callback(doi)
       })
-      .catch(err => {
+      .catch(() => {
         return callback('')
       })
   },
