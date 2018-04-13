@@ -5,7 +5,7 @@ let config = {
   url: process.env.CRN_SERVER_URL,
   port: 8111,
   apiPrefix: '/crn/',
-  location: '/srv/server',
+  location: '/srv',
   headers: {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
