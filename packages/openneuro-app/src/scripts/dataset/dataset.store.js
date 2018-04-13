@@ -2320,7 +2320,8 @@ let datasetStore = Reflux.createStore({
 
   // dois----------------------------------------------------------------
   registerDoi(callback) {
-    if (!this.data.dataset.original) {
+    let dataset = this.data.dataset
+    if (!dataset.original) {
       if (callback) {
         return callback({ error: 'Can not mint DOI for draft.' })
       } else {
@@ -2329,6 +2330,10 @@ let datasetStore = Reflux.createStore({
     }
     let snapshotId = this.data.dataset._id
     crn.registerDoi(snapshotId).then(res => {
+      if (res) {
+        dataset.description.DatasetDOI = res.body.doi
+        this.update({ dataset })
+      }
       if (!callback && res) {
         return res.body.doi
       }
