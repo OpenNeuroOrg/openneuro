@@ -10,6 +10,7 @@ import { withRouter } from 'react-router-dom'
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
 import schemaGenerator from '../utils/json-ld.js'
+import notifications from '../notification/notification.actions'
 
 // let uploadWarning = 'You are currently uploading files. Leaving this page will cancel the upload process.'
 
@@ -20,6 +21,10 @@ class Dataset extends Reflux.Component {
   }
 
   // life cycle events --------------------------------------------------
+  componentWillUnmount() {
+    // Clears the active alert for a dataset
+    notifications.closeAlert()
+  }
 
   render() {
     let datasets = this.state.datasets
