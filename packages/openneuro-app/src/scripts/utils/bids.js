@@ -1,4 +1,3 @@
-import async from 'async'
 import scitran from './scitran'
 import crn from './crn'
 import userStore from '../user/user.store'
@@ -484,16 +483,15 @@ export default {
     if (project.original) {
       dataset.original = project.original
       dataset.linkOriginal = this.decodeId(project.original)
-      this.getDoi(project._id, doi => {
-        if (!dataset.description.DatasetDOI) {
-          dataset.description.DatasetDOI = doi
-        } else {
-          dataset.description.DatasetDOI += '\n' + doi
-        }
-      })
     }
+
     if (project.snapshot_version) {
       dataset.snapshot_version = project.snapshot_version
+      if (!dataset.description.DatasetDOI) {
+        this.getDoi(project._id, doi => {
+          dataset.description.DatasetDOI = doi
+        })
+      }
     }
     dataset.stars = this.stars(dataset, stars)
     dataset.starCount = dataset.stars ? '' + dataset.stars.length : '0'
