@@ -1,3 +1,4 @@
+import async from 'async'
 import scitran from './scitran'
 import crn from './crn'
 import userStore from '../user/user.store'

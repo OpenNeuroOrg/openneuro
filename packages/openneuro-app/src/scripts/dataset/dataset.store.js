@@ -443,7 +443,7 @@ let datasetStore = Reflux.createStore({
         dataset.status.public = value
       }
 
-      if (!this.dataset.description.DatasetDOI) {
+      if (!dataset.description.DatasetDOI) {
         this.registerDoi.bind(this)()
       }
 
