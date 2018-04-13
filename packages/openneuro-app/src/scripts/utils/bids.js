@@ -634,7 +634,6 @@ export default {
         return callback(doi)
       })
       .catch(err => {
-        console.log(err)
         return callback('')
       })
   },

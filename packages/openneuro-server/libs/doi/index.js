@@ -1,8 +1,6 @@
-import scitranRequest from '../request'
 import request from 'superagent'
 import config from '../../config'
 import templates from './templates'
-import scitran from '../scitran'
 import bidsId from '../bidsId'
 
 export default {
@@ -55,13 +53,13 @@ export default {
         }
         return this.registerMetadata(context)
       })
-      .then(async res => {
+      .then(async () => {
         return this.mintDOI(baseDoi, url)
       })
-      .then(async res => {
+      .then(async () => {
         return baseDoi
       })
-      .catch(err => {
+      .catch(() => {
         return null
       })
   },
