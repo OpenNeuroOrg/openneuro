@@ -41,6 +41,7 @@ var Actions = Reflux.createActions([
   'loadUsers',
   'prepareJobSubmission',
   'publish',
+  'registerDoi',
   'retryJob',
   'reloadDataset',
   'removeStar',
