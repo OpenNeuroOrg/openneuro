@@ -1,7 +1,6 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
 import createClient from 'openneuro-client'
-import { files } from 'openneuro-client'
 import { saveConfig } from './config'
 import { validateAndUpload } from './upload'
 
@@ -43,10 +42,12 @@ export const upload = (dir, cmd) => {
     if (!fs.statSync(dir).isDirectory()) {
       throw new Error(`"${dir}" must be a directory`)
     }
+    // eslint-disable-next-line no-console
     if (cmd.dataset) console.log(`Updating ${cmd.dataset}`)
     const client = createClient('http://localhost:9876/graphql')
     return validateAndUpload(client, dir, cmd.datasetId)
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(`"${dir}" does not exist or is not a directory`)
     process.exit(1)
   }

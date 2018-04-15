@@ -1,5 +1,4 @@
 import createClient from '../client'
-import { testDsId } from '../client'
 import * as files from '../files'
 
 jest.mock('../client')
