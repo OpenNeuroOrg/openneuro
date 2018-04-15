@@ -2,6 +2,7 @@ import fetch from 'node-fetch'
 import ApolloClient from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createUploadLink } from 'apollo-upload-client'
+import * as files from './files'
 
 const cache = new InMemoryCache()
 
@@ -19,4 +20,5 @@ const createLink = uri => {
   return createUploadLink({ uri, fetch })
 }
 
+export { files }
 export default createClient
