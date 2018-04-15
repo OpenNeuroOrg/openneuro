@@ -228,15 +228,15 @@ class Publish extends Reflux.Component {
     let submitButton
     if (this.state.selectedSnapshot) {
       submitButton = (
-        <button className="btn-modal-submit" onClick={this._publish.bind(this)}>
+        <button className="btn-modal-action" onClick={this._publish.bind(this)}>
           Publish
         </button>
       )
     }
     return (
       <div className="col-xs-12 modal-actions">
-        {submitButton}
         {this._datasetLink()}
+        {submitButton}
       </div>
     )
   }

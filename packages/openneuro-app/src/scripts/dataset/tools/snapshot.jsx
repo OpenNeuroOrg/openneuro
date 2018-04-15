@@ -357,7 +357,7 @@ class Snapshot extends Reflux.Component {
       } else {
         return (
           <button
-            className="btn-modal-submit btn-dataset-submit"
+            className="btn-modal-action"
             onClick={this.submit.bind(this)}
             title={buttonTitle}
             disabled={disabled}>
