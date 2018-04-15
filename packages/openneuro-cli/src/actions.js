@@ -44,7 +44,8 @@ export const upload = (dir, cmd) => {
     }
     // eslint-disable-next-line no-console
     if (cmd.dataset) console.log(`Updating ${cmd.dataset}`)
-    const client = createClient('http://localhost:9876/graphql')
+    // TODO - This URL (at least the hostname) should be configurable
+    const client = createClient('http://localhost:9876/crn/graphql')
     return validateAndUpload(client, dir, cmd.datasetId)
   } catch (e) {
     // eslint-disable-next-line no-console
