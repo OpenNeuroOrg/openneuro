@@ -11,11 +11,11 @@ import { streamFiles } from './files'
  */
 const validatePromise = (dir, options = {}) => {
   return new Promise((resolve, reject) => {
-    validate.BIDS(dir, options, (errors, warnings) => {
-      if (errors.length + warnings.length === 0) {
-        resolve()
+    validate.BIDS(dir, options, (status, summary) => {
+      if (status.errors.length + status.warnings.length === 0) {
+        resolve({ summary })
       } else {
-        reject({ errors, warnings })
+        reject({ status, summary })
       }
     })
   })

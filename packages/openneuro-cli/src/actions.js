@@ -3,7 +3,7 @@ import inquirer from 'inquirer'
 import createClient from 'openneuro-client'
 import { files } from 'openneuro-client'
 import { saveConfig } from './config'
-import { datasetUpload } from './upload'
+import { validateAndUpload } from './upload'
 
 const loginQuestions = {
   type: 'input',
@@ -45,7 +45,7 @@ export const upload = (dir, cmd) => {
     }
     if (cmd.dataset) console.log(`Updating ${cmd.dataset}`)
     const client = createClient('http://localhost:9876/graphql')
-    return datasetUpload(client, dir, cmd.datasetId)
+    return validateAndUpload(client, dir, cmd.datasetId)
   } catch (e) {
     console.error(`"${dir}" does not exist or is not a directory`)
     process.exit(1)
