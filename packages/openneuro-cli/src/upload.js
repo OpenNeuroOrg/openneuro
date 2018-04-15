@@ -11,14 +11,19 @@ import { streamFiles } from './files'
  */
 const validatePromise = (dir, options = {}) => {
   return new Promise((resolve, reject) => {
-    validate.BIDS(dir, options, (status, summary) => {
-      if (status.errors.length + status.warnings.length === 0) {
+    validate.BIDS(dir, options, ({ errors, warnings }, summary) => {
+      if (errors.length + warnings.length === 0) {
         resolve({ summary })
       } else {
-        reject({ status, summary })
+        reject({ errors, warnings })
       }
     })
   })
+}
+
+const fatalError = err => {
+  console.error(err)
+  process.exit(1)
 }
 
 /**
@@ -30,11 +35,9 @@ const validatePromise = (dir, options = {}) => {
  */
 export const validateAndUpload = (client, dir, datasetId) => {
   return validatePromise(dir)
-    .then(datasetUpload(client, dir, datasetId))
-    .catch(err => {
-      // Validator errors handled here
-      console.log(err)
-    })
+    .catch(fatalError)
+    .then(() => datasetUpload(client, dir, datasetId))
+    .catch(fatalError)
 }
 
 /**
