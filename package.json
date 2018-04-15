@@ -5,7 +5,8 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "codecov": "codecov",
-    "lint": "eslint --cache --ext .jsx --ext .js packages/"
+    "lint": "eslint --cache --ext .jsx --ext .js packages/",
+    "openneuro": "node packages/openneuro-cli/src"
   },
   "devDependencies": {
     "babel-eslint": "8.2.2",
