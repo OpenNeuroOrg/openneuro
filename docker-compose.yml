@@ -51,6 +51,13 @@ services:
     env_file: ./config.env
     restart: always
 
+  # datalad Python backend
+  datalad:
+    image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    volumes:
+      - ${PERSISTENT_DIR}/datalad
+    restart: always
+
   # nginx - static file serving and service proxy
   nginx:
     image: nginx
