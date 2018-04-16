@@ -193,6 +193,13 @@ body > div:nth-child(9) > div.fade.in.modal > div > div > div.modal-body > div >
         background: $transparent;
         height: 100%;
 
+        .display-file-path {
+            font-size: 12px;
+            .display-file:before {
+                content: " -";
+            }
+        }
+
         .display-file-header,
         .display-file-body {
             width: 100%;
