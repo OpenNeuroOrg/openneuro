@@ -13,7 +13,7 @@ pip install -r requirements.txt
 # Running
 
 ```bash
-gunicorn --reload datalad_service.app
+gunicorn --reload datalad_service.app:create_app('/path-to-repos')
 ```
 
 # Tests
