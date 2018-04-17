@@ -1,0 +1,46 @@
+version: 2
+
+jobs:
+  test:
+    docker:
+      - image: circleci/python:3.6.4
+    steps:
+      - checkout
+
+      # get the build-essentials so we can compile
+      - run: sudo apt-get update && sudo apt-get install build-essential
+
+      # create venv and install dependencies
+      - run:
+          name: Install Python deps
+          command: sudo pip install -r requirements.txt
+
+      # install git-annex
+      - run: curl https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz | tar -xvz  && sudo mv git-annex.linux/* /usr/local/bin
+
+      # run unit tests
+      - run: pytest
+
+  deploy:
+    machine:
+      enabled: true
+    steps:
+      - checkout
+      
+      # login
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      
+      # build datalad-service 
+      - run: docker build -t openneuro/datalad-service .
+
+      # push datalad-service
+      - run: docker push openneuro/datalad-service
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - test
+      - deploy:
+          requires: 
+            - test
