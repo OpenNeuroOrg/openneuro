@@ -28,7 +28,7 @@ export const createDataset = label => {
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
       await request.post(url).set('Accept', 'application/json')
-      resolve(datasetId)
+      resolve({ id: datasetId, label })
     } else {
       reject(Error(`Failed to create ${datasetId} - "${label}"`))
     }
