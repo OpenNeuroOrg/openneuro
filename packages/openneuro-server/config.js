@@ -85,7 +85,7 @@ let config = {
   },
   datalad: {
     enabled: false,
-    uri: 'localhost:9877',
+    uri: 'datalad:9877',
   },
 }
 
