@@ -21,3 +21,11 @@ export const createDataset = (obj, { label }) => {
 export const createSnapshot = (obj, { datasetId, tag }) => {
   return datalad.createSnapshot(datasetId, tag)
 }
+
+/**
+ * Add files to a draft
+ */
+export const updateFiles = (obj, { datasetId, uploads }) => {
+  // TODO - Actually upload these!
+  return { id: '1234' }
+}
