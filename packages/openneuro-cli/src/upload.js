@@ -56,6 +56,7 @@ export const uploadStreams = (client, datasetId) => streams => {
       // we need some special error handling any requests with Upload scalars
       if (err.hasOwnProperty('networkError')) {
         for (const message of err.networkError.result.errors) {
+          // eslint-disable-next-line no-console
           console.error(inspect(message))
         }
         process.exit(1)
