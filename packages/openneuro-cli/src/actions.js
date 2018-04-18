@@ -3,6 +3,7 @@ import inquirer from 'inquirer'
 import createClient from 'openneuro-client'
 import { saveConfig } from './config'
 import { validateAndUpload } from './upload'
+import { getOrCreateDataset } from './datasets'
 
 const loginQuestions = {
   type: 'input',
@@ -46,7 +47,9 @@ export const upload = (dir, cmd) => {
     if (cmd.dataset) console.log(`Updating ${cmd.dataset}`)
     // TODO - This URL (at least the hostname) should be configurable
     const client = createClient('http://localhost:9876/crn/graphql')
-    return validateAndUpload(client, dir, cmd.datasetId)
+    return getOrCreateDataset(client, dir, cmd.datasetId).then(
+      validateAndUpload(client, dir),
+    )
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(`"${dir}" does not exist or is not a directory`)

@@ -34,7 +34,7 @@ const fatalError = err => {
  * @param {string} dir - Directory to upload
  * @param {string} datasetId - Optionally update an existing dataset
  */
-export const validateAndUpload = (client, dir, datasetId) => {
+export const validateAndUpload = (client, dir) => datasetId => {
   return validatePromise(dir)
     .catch(fatalError)
     .then(() => datasetUpload(client, dir, datasetId))

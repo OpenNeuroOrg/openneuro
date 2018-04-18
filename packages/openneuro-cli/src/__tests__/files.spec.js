@@ -32,14 +32,12 @@ describe('files.js', () => {
   describe('streamFiles', () => {
     it('creates an array of streams and metadata', done => {
       walk(tmpPath)
-        .then(files.streamFiles(tmpPath))
+        .then(files.streamFiles)
         .then(collected => {
           expect(collected).toHaveLength(5)
-          expect(collected[0]).toHaveProperty('absolutePath')
-          expect(collected[0]).toHaveProperty('relativePath')
           // Check for the expected readable stream
-          expect(typeof collected[0].stream.read).toBe('function')
-          expect(typeof collected[0].stream.on).toBe('function')
+          expect(typeof collected[0].read).toBe('function')
+          expect(typeof collected[0].on).toBe('function')
           done()
         })
     })
