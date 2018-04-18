@@ -71,3 +71,25 @@ export const createSnapshot = async (datasetId, tag) => {
   const url = `${uri}/datasets/${datasetId}/snapshot/${tag}`
   return request.post(url).set('Accept', 'application/json')
 }
+
+/**
+ * Add files to a dataset
+ */
+export const addFile = async (datasetId, filename, stream) => {
+  const url = `${uri}/datasets/${datasetId}/files/${filename}`
+  return request
+    .post(url)
+    .set('Accept', 'application/json')
+    .attach(stream)
+}
+
+/**
+ * Update an existing file
+ */
+export const updateFile = async (datasetId, filename, stream) => {
+  const url = `${uri}/datasets/${datasetId}/files/${filename}`
+  return request
+    .put(url)
+    .set('Accept', 'application/json')
+    .attach(stream)
+}
