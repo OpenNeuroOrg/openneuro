@@ -405,9 +405,9 @@ apollo-tracing@^0.1.0:
   dependencies:
     graphql-extensions "~0.0.9"
 
-apollo-upload-client@^8.0.0:
+"apollo-upload-client@https://github.com/danielmeneses/apollo-upload-client.git":
   version "8.0.0"
-  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-8.0.0.tgz#0067f3b426b3828f971964799bc31f8073bd0607"
+  resolved "https://github.com/danielmeneses/apollo-upload-client.git#42700d8f3037ef19b6b155af6e6fc7cca9319668"
   dependencies:
     "@babel/runtime" "^7.0.0-beta.40"
     apollo-link-http-common "^0.2.3"
@@ -4390,7 +4390,7 @@ forever-agent@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
 
-form-data@^2.3.1, form-data@~2.3.1:
+form-data@^2.3.1, form-data@^2.3.2, form-data@~2.3.1:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-2.3.2.tgz#4970498be604c20c005d4f5c23aecd21d6b49099"
   dependencies:
