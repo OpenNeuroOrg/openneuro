@@ -25,7 +25,10 @@ export const createSnapshot = (obj, { datasetId, tag }) => {
 /**
  * Add files to a draft
  */
-export const updateFiles = (obj, { datasetId, uploads }) => {
-  // TODO - Actually upload these!
-  return { id: '1234' }
+export const updateFiles = (obj, { datasetId, files }) => {
+  // TODO - The id returned here is a placeholder
+  // drafts just need something to invalidate client cache
+  return Promise.all(
+    files.map(async file => datalad.addFile(datasetId, await file)),
+  ).then(() => ({ id: new Date() }))
 }
