@@ -8,9 +8,6 @@ import gql from 'graphql-tag'
 
 export const updateFiles = gql`
   mutation updateFiles($datasetId: ID!, $files: [Upload!]) {
-    updateFiles(datasetId: $datasetId, files: $files) {
-      id
-      files
-    }
+    updateFiles(datasetId: $datasetId, files: $files)
   }
 `
