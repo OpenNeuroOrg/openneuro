@@ -60,6 +60,6 @@ export const uploadStreams = (client, datasetId) => streams => {
  */
 export const datasetUpload = (client, dir, datasetId) => {
   return walk(dir)
-    .then(streamFiles(dir))
+    .then(streamFiles)
     .then(uploadStreams(client, datasetId))
 }
