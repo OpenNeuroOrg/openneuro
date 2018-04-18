@@ -1,3 +1,4 @@
+import { inspect } from 'util'
 import walk from 'walk-promise'
 import { files } from 'openneuro-client'
 import validate from 'bids-validator'
@@ -45,10 +46,21 @@ export const validateAndUpload = (client, dir) => datasetId => {
  * Make an upload request given an array of streams
  */
 export const uploadStreams = (client, datasetId) => streams => {
-  return client.mutate({
-    mutation: files.updateFiles,
-    variables: { datasetId, files: streams },
-  })
+  return client
+    .mutate({
+      mutation: files.updateFiles,
+      variables: { datasetId, files: streams },
+    })
+    .catch(err => {
+      // Since the error response content type does not match the request
+      // we need some special error handling any requests with Upload scalars
+      if (err.hasOwnProperty('networkError')) {
+        for (const message of err.networkError.result.errors) {
+          console.error(inspect(message))
+        }
+        process.exit(1)
+      }
+    })
 }
 
 /**
