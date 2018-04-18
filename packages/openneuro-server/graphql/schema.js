@@ -60,6 +60,7 @@ const typeDefs = `
 
   # Ephemeral draft or working tree for a dataset
   type Draft {
+    id: ID!
     dataset: Dataset
     created: DateTime!
     modified: DateTime!
