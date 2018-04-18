@@ -9,7 +9,7 @@ describe('datasets.js', () => {
         ),
       }
       getOrCreateDataset(client, 'test dataset', undefined)
-        .then(dsId => expect(client.mutate).toHaveBeenCalledTimes(1))
+        .then(() => expect(client.mutate).toHaveBeenCalledTimes(1))
         .then(done)
     })
     it('does not call createDataset when passed a dataset id', done => {
