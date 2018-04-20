@@ -11,7 +11,7 @@ describe('files.js', () => {
       gqlClient
         .mutate({
           mutation: files.updateFiles,
-          variables: { datasetId: 'ds000001', files: [] },
+          variables: { datasetId: 'ds000001', files: { name: '' } },
         })
         .then(({ data: { updateFiles } }) => {
           // Returns a Draft with new files

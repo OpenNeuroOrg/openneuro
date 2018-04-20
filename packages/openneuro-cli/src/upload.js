@@ -1,8 +1,7 @@
 import { inspect } from 'util'
-import walk from 'walk-promise'
 import { files } from 'openneuro-client'
 import validate from 'bids-validator'
-import { streamFiles } from './files'
+import { getFileTree } from './files'
 
 /**
  * BIDS validator promise wrapper
@@ -45,21 +44,27 @@ export const validateAndUpload = (client, dir) => datasetId => {
 /**
  * Make an upload request given an array of streams
  */
-export const uploadStreams = (client, datasetId) => streams => {
+export const uploadTree = (client, datasetId) => tree => {
   return client
     .mutate({
       mutation: files.updateFiles,
-      variables: { datasetId, files: streams },
+      variables: { datasetId, files: tree },
     })
     .catch(err => {
       // Since the error response content type does not match the request
       // we need some special error handling any requests with Upload scalars
-      if (err.hasOwnProperty('networkError')) {
+      if (
+        err.hasOwnProperty('networkError') &&
+        err.networkError &&
+        err.networkError.hasOwnProperty('result')
+      ) {
         for (const message of err.networkError.result.errors) {
           // eslint-disable-next-line no-console
           console.error(inspect(message))
         }
         process.exit(1)
+      } else {
+        throw err
       }
     })
 }
@@ -72,7 +77,5 @@ export const uploadStreams = (client, datasetId) => streams => {
  * @param {string} datasetId - Optionally update an existing dataset
  */
 export const datasetUpload = (client, dir, datasetId) => {
-  return walk(dir)
-    .then(streamFiles)
-    .then(uploadStreams(client, datasetId))
+  return getFileTree(dir, dir).then(uploadTree(client, datasetId))
 }

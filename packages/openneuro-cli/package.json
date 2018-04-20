@@ -13,8 +13,7 @@
     "find-config": "^1.0.0",
     "inquirer": "^5.2.0",
     "mkdirp": "^0.5.1",
-    "openneuro-client": "^1.10.0",
-    "walk-promise": "^0.2.0"
+    "openneuro-client": "^1.10.0"
   },
   "scripts": {
     "openneuro": "node src/index.js"

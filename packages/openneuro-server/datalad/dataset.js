@@ -73,10 +73,19 @@ export const createSnapshot = async (datasetId, tag) => {
 }
 
 /**
+ * Convert to URL compatible path
+ * @param {String} path
+ */
+const encodeFilePath = path => {
+  path.replace(new RegExp('/', 'g'), ':')
+}
+
+/**
  * Add files to a dataset
  */
-export const addFile = async (datasetId, stream) => {
-  const url = `${uri}/datasets/${datasetId}/files/${stream.filename}`
+export const addFile = async (datasetId, path, stream) => {
+  const fileName = encodeFilePath([path, stream.filename].join('/'))
+  const url = `${uri}/datasets/${datasetId}/files/${fileName}`
   return request
     .post(url)
     .set('Accept', 'application/json')
@@ -86,8 +95,8 @@ export const addFile = async (datasetId, stream) => {
 /**
  * Update an existing file
  */
-export const updateFile = async (datasetId, stream) => {
-  const url = `${uri}/datasets/${datasetId}/files/${stream.filename}`
+export const updateFile = async (datasetId, path, stream) => {
+  const url = `${uri}/datasets/${datasetId}/files/${path}`
   return request
     .put(url)
     .set('Accept', 'application/json')
