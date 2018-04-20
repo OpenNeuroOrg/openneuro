@@ -15,7 +15,9 @@ afterAll(async () => {
 describe('dataset resolvers', () => {
   describe('createDataset()', () => {
     it('createDataset mutation succeeds', async done => {
-      const dsId = await ds.createDataset(null, { label: 'testing dataset' })
+      const { id: dsId } = await ds.createDataset(null, {
+        label: 'testing dataset',
+      })
       expect(dsId).toEqual(expect.stringMatching(/^ds[0-9]{6}$/))
       done()
     })

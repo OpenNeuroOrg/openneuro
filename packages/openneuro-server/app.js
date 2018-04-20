@@ -10,6 +10,7 @@ import config from './config'
 import routes from './routes'
 import morgan from 'morgan'
 import schema from './graphql/schema'
+import { apolloUploadExpress } from 'apollo-upload-server'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import bodyParser from 'body-parser'
 // import events lib to instantiate CRN Emitter
@@ -28,7 +29,7 @@ export default test => {
     next()
   })
   app.use(morgan('short'))
-  app.use(bodyParser.urlencoded({extended: false}))
+  app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
 
   // routing ---------------------------------------------------------
@@ -60,7 +61,12 @@ export default test => {
   })
 
   // The GraphQL endpoint
-  app.use('/crn/graphql', bodyParser.json(), graphqlExpress({ schema }))
+  app.use(
+    '/crn/graphql',
+    bodyParser.json(),
+    apolloUploadExpress(),
+    graphqlExpress({ schema }),
+  )
 
   // GraphiQL, a visual editor for queries
   app.use('/crn/graphiql', graphiqlExpress({ endpointURL: '/crn/graphql' }))

@@ -50,6 +50,10 @@ services:
     tmpfs:
       - /srv/node_modules:exec
 
+  datalad:
+    volumes:
+      - ../datalad-service/datalad_service:/datalad_service
+
   # nginx - static file serving and service proxy
   nginx:
     volumes:

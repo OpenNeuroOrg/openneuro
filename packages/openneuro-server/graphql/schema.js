@@ -5,6 +5,7 @@ const typeDefs = `
   scalar Date
   scalar DateTime
   scalar Time
+  scalar Upload
 
   type Query {
     # One dataset
@@ -22,6 +23,15 @@ const typeDefs = `
     createDataset(label: String!): Dataset
     # Tag the current draft
     createSnapshot(datasetId: ID!): Snapshot
+    # Add or update files in a draft - returns a new Draft
+    updateFiles(datasetId: ID!, files: FileTree!): Draft
+  }
+
+  # File tree
+  input FileTree {
+    name: ID! # directory name (or empty string for root)
+    files: [Upload!] # files within the directory
+    directories: [FileTree] # directories within the directory
   }
 
   # OpenNeuro user records from all providers
@@ -57,6 +67,7 @@ const typeDefs = `
 
   # Ephemeral draft or working tree for a dataset
   type Draft {
+    id: ID!
     dataset: Dataset
     created: DateTime!
     modified: DateTime!
@@ -98,7 +109,6 @@ const typeDefs = `
 
   # File metadata and link to contents
   type DatasetFile {
-    id: ID!
     name: String!
     created: DateTime!
     modified: DateTime!

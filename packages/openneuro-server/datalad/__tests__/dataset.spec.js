@@ -20,7 +20,8 @@ afterAll(async () => {
 describe('dataset model operations', () => {
   describe('createDataset()', () => {
     it('resolves to dataset id string', async done => {
-      const dsId = await createDataset('test dataset')
+      const testLabel = 'test dataset'
+      const { id: dsId } = await createDataset(testLabel)
       expect(dsId).toHaveLength(8)
       expect(dsId.slice(0, 2)).toBe('ds')
       done()

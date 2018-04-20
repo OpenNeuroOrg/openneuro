@@ -1,7 +1,10 @@
 import fetch from 'node-fetch'
 import ApolloClient from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
-import { createUploadLink } from 'apollo-upload-client'
+import { createUploadLink } from 'apollo-upload-client/src'
+import FormData from 'form-data'
+import * as files from './files'
+import * as datasets from './datasets'
 
 const cache = new InMemoryCache()
 
@@ -16,7 +19,8 @@ const createClient = uri => {
 }
 
 const createLink = uri => {
-  return createUploadLink({ uri, fetch })
+  return createUploadLink({ uri, fetch, serverFormData: FormData })
 }
 
+export { files, datasets }
 export default createClient
