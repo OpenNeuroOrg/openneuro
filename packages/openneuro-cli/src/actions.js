@@ -48,7 +48,11 @@ export const upload = (dir, cmd) => {
     // TODO - This URL (at least the hostname) should be configurable
     const client = createClient('http://localhost:9876/crn/graphql')
     return getOrCreateDataset(client, dir, cmd.datasetId).then(
-      validateAndUpload(client, dir),
+      validateAndUpload(client, dir, {
+        ignoreWarnings: cmd.ignoreWarnings,
+        ignoreNiftiHeaders: cmd.ignoreNiftiHeaders,
+        verbose: cmd.verbose,
+      }),
     )
   } catch (e) {
     // eslint-disable-next-line no-console
