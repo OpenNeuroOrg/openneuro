@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import commander from 'commander'
+import colors from 'colors'
 import packageJson from '../package.json'
 import { login, upload } from './actions.js'
 
@@ -20,3 +21,11 @@ commander
   .action(upload)
 
 commander.parse(process.argv)
+
+if (!process.argv.slice(2).length) {
+  commander.outputHelp(make_red)
+}
+
+function make_red(txt) {
+  return colors.red(txt) //display the help text in red on the console
+}
