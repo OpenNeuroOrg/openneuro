@@ -34,7 +34,11 @@ class FilesResource(object):
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             try:
-                self._update_file(os.path.join(ds_path, filename), req.stream)
+                # Make any missing parent directories
+                file_path = os.path.join(ds_path, filename)
+                os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                # Begin writing stream to disk
+                self._update_file(file_path, req.stream)
                 # Add to dataset
                 ds = self.store.get_dataset(dataset)
                 ds.add(path=filename)
