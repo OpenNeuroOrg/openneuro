@@ -42,4 +42,29 @@ describe('files.js', () => {
         })
     })
   })
+  describe('getFileTree', () => {
+    it('should return a tree', done => {
+      files
+        .getFileTree(tmpPath, tmpPath)
+        .then(tree => {
+          expect(tree).toHaveProperty('files')
+          expect(tree.files).toHaveLength(2)
+          expect(tree).toHaveProperty('directories')
+          expect(tree.directories).toHaveLength(2)
+          expect(tree.directories[0]).toHaveProperty('directories')
+          expect(tree.directories[0].files).toHaveLength(1)
+        })
+        .then(done)
+    })
+    it('should include relative directory names at each node', done => {
+      files
+        .getFileTree(tmpPath, tmpPath)
+        .then(tree => {
+          expect(tree).toHaveProperty('name')
+          expect(tree.name).toBe('')
+          expect(tree.directories[0].name).toBe('dir')
+        })
+        .then(done)
+    })
+  })
 })
