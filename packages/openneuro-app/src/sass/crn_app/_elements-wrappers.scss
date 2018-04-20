@@ -310,6 +310,12 @@ h6 {
     float: right !important;
 }
 
+.btn-modal-action { @extend %btn-submit-other}
+
+.btn-modal-action { 
+    margin-left: 30px;
+}
+
 .btn-modal-danger{
     border-color: $brand-danger;
     color: $brand-danger;
@@ -732,8 +738,18 @@ select {
 }
 
 .file-view-iframe {
-    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
+    width: 100%;
+}
+
+.file-view-iframe-container {
+    position: relative;
+    padding-bottom: 100%;
+    height: 0;
+    overflow: hidden;
 }
 
 .markdown {

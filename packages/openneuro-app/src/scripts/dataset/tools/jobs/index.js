@@ -405,7 +405,7 @@ class JobMenu extends Reflux.Component {
     let startLink =
       selectedAppKey && selectedVersionID ? (
         <button
-          className="btn-modal-submit"
+          className="btn-modal-action"
           onClick={this._checkSubmitStatus.bind(this)}>
           Start
         </button>
@@ -413,8 +413,8 @@ class JobMenu extends Reflux.Component {
 
     return (
       <div className="col-xs-12 dataset-form-controls modal-actions">
-        {startLink}
         {returnLink}
+        {startLink}
       </div>
     )
   }

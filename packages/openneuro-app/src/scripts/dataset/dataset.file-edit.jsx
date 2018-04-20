@@ -26,9 +26,10 @@ class FileEdit extends Reflux.Component {
 
   render() {
     let datasets = this.state.datasets
-
     const file = datasets ? datasets.editFile : null
     const fileName = file ? file.name : null
+    let datasetLabel = datasets.dataset != null ? datasets.dataset.label : null
+    let path = fileName.split('/')
 
     let loading = datasets && datasets.loading
     let loadingText =
@@ -39,15 +40,16 @@ class FileEdit extends Reflux.Component {
     if (!file) {
       return null
     }
-
     let content = (
       <div className={'dataset-form display-file ' + this._extension(fileName)}>
         <div className="display-file-content">
           <div className="col-xs-12 dataset-form-header display-file-header">
+            <span className="ds-primary display-file-path">
+              {datasetLabel}
+              {this._pathDisplay(path)}
+            </span>
             <div className="form-group modal-title">
-              <label>
-                {fileName.split('/')[fileName.split('/').length - 1]}
-              </label>
+              <label>{path[path.length - 1]}</label>
             </div>
             <hr className="modal-inner" />
           </div>
@@ -116,6 +118,29 @@ class FileEdit extends Reflux.Component {
     } else {
       return content
     }
+  }
+
+  _pathDisplay(arr) {
+    let path = []
+    arr.forEach((el, i) => {
+      if (i < arr.length - 1) {
+        path.push(
+          <span className="display-file" key={i}>
+            {' '}
+            <i className="fa fa-folder-open-o" /> {el}
+          </span>,
+        )
+      } else {
+        path.push(
+          <span className="display-file" key={i}>
+            {' '}
+            <i className="fa fa-file-o" /> {el}
+          </span>,
+        )
+      }
+    })
+
+    return <span>{path}</span>
   }
 
   // custom methods -----------------------------------------------------

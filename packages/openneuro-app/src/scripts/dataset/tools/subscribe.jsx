@@ -84,10 +84,10 @@ class Subscribe extends Reflux.Component {
   _controls() {
     return (
       <div className="follow-controls">
+        {this._returnButton()}
         {this._followButton()}
         {this._signinButton()}
         {this._continueButton()}
-        {this._returnButton()}
       </div>
     )
   }
@@ -101,7 +101,7 @@ class Subscribe extends Reflux.Component {
       return (
         <Link to={this.state.datasets.datasetUrl}>
           <button
-            className="btn-modal-submit"
+            className="btn-modal-action"
             onClick={this._createSubscription.bind(this)}>
             follow
           </button>
@@ -125,7 +125,7 @@ class Subscribe extends Reflux.Component {
     if (this.state.hasToken && this.state.datasets.subscribed) {
       return (
         <Link to={this.props.location.pathname}>
-          <button className="btn-modal-submit" onClick={this.props.onHide}>
+          <button className="btn-modal-action" onClick={this.props.onHide}>
             got it
           </button>
         </Link>
@@ -148,7 +148,7 @@ class Subscribe extends Reflux.Component {
     if (!this.state.hasToken) {
       return (
         <button
-          className="btn-modal-submit"
+          className="btn-modal-action"
           onClick={userActions.toggle.bind(this, 'loginModal')}>
           sign in to follow
         </button>
