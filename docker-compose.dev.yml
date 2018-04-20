@@ -57,6 +57,11 @@ services:
     volumes:
       - ../datalad-service/datalad_service:/datalad_service
 
+  celery:
+    volumes:
+      - ../datalad-service/datalad_service:/datalad_service
+    command: sh -c "celery worker -A datalad_service.s3 -l info -c 5"
+    
   # nginx - static file serving and service proxy
   nginx:
     volumes:

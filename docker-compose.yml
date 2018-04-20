@@ -57,6 +57,14 @@ services:
     volumes:
       - ${PERSISTENT_DIR}/datalad
     restart: always
+  
+  # celery Python backend
+  celery:
+    image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    volumes:
+      - ${PERSISTENT_DIR}/datalad
+    restart: always
+
 
   # nginx - static file serving and service proxy
   nginx:
