@@ -81,13 +81,22 @@ const encodeFilePath = path => {
 }
 
 /**
+ * Generate file URL for DataLad service
+ * @param {String} datasetId
+ * @param {String} path - Relative path for the file
+ * @param {Object} stream - Stream from apollo-upload-server
+ */
+const fileUrl = (datasetId, path, stream) => {
+  const fileName = encodeFilePath([path, stream.filename].join('/'))
+  return `${uri}/datasets/${datasetId}/files/${fileName}`
+}
+
+/**
  * Add files to a dataset
  */
 export const addFile = async (datasetId, path, stream) => {
-  const fileName = encodeFilePath([path, stream.filename].join('/'))
-  const url = `${uri}/datasets/${datasetId}/files/${fileName}`
   return request
-    .post(url)
+    .post(fileUrl(datasetId, path, stream))
     .set('Accept', 'application/json')
     .attach(stream)
 }
@@ -96,9 +105,8 @@ export const addFile = async (datasetId, path, stream) => {
  * Update an existing file
  */
 export const updateFile = async (datasetId, path, stream) => {
-  const url = `${uri}/datasets/${datasetId}/files/${path}`
   return request
-    .put(url)
+    .put(fileUrl(datasetId, path, stream))
     .set('Accept', 'application/json')
     .attach(stream)
 }
