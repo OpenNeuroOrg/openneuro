@@ -4,6 +4,7 @@
  * See resolvers for interaction with other data sources.
  */
 import request from 'superagent'
+import requestNode from 'request'
 import config from '../config'
 import mongo from '../libs/mongo'
 import { getAccessionNumber } from '../libs/dataset'
@@ -84,32 +85,28 @@ const encodeFilePath = path => {
  * Generate file URL for DataLad service
  * @param {String} datasetId
  * @param {String} path - Relative path for the file
- * @param {Object} stream - Stream from apollo-upload-server
+ * @param {String} filename
  */
-const fileUrl = (datasetId, path, stream) => {
+const fileUrl = (datasetId, path, filename) => {
   // If path is provided, this is a subdirectory, otherwise a root level file.
-  const filePath = path ? [path, stream.filename].join('/') : stream.filename
+  const filePath = path ? [path, filename].join('/') : filename
   const fileName = encodeFilePath(filePath)
-  const url = `${uri}/datasets/${datasetId}/files/${fileName}`
+  const url = `http://${uri}/datasets/${datasetId}/files/${fileName}`
   return url
 }
 
 /**
  * Add files to a dataset
  */
-export const addFile = async (datasetId, path, stream) => {
-  return request
-    .post(fileUrl(datasetId, path, stream))
-    .set('Accept', 'application/json')
-    .attach(stream)
+export const addFile = async (datasetId, path, { filename, stream }) => {
+  // Cannot use superagent 'request' due to inability to post streams
+  return stream.pipe(requestNode.post(fileUrl(datasetId, path, filename)))
 }
 
 /**
  * Update an existing file
  */
-export const updateFile = async (datasetId, path, stream) => {
-  return request
-    .put(fileUrl(datasetId, path, stream))
-    .set('Accept', 'application/json')
-    .attach(stream)
+export const updateFile = async (datasetId, path, { filename, stream }) => {
+  // Cannot use superagent 'request' due to inability to post streams
+  return stream.pipe(requestNode.put(fileUrl(datasetId, path, filename)))
 }
