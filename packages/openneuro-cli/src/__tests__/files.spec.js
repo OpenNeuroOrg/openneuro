@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import walk from 'walk-promise'
 import * as files from '../files'
 
 let tmpPath
@@ -29,19 +28,6 @@ beforeEach(() => {
 })
 
 describe('files.js', () => {
-  describe('streamFiles', () => {
-    it('creates an array of streams and metadata', done => {
-      walk(tmpPath)
-        .then(files.streamFiles)
-        .then(collected => {
-          expect(collected).toHaveLength(5)
-          // Check for the expected readable stream
-          expect(typeof collected[0].read).toBe('function')
-          expect(typeof collected[0].on).toBe('function')
-          done()
-        })
-    })
-  })
   describe('getFileTree', () => {
     it('should return a tree', done => {
       files

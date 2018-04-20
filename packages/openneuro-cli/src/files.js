@@ -4,15 +4,6 @@ import { promisify } from 'util'
 
 const readdir = promisify(fs.readdir)
 
-export const streamFiles = files =>
-  Promise.all(
-    files.map(file => {
-      const absolutePath = path.join(file.root, file.name)
-      const stream = fs.createReadStream(absolutePath)
-      return stream
-    }),
-  )
-
 export const getFileTree = (basepath, root) => {
   return readdir(root).then(async contents => {
     // Run stat for each file
