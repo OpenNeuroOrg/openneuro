@@ -52,7 +52,7 @@ services:
 
   datalad:
     volumes:
-      - ../datalad-service:/srv
+      - ../datalad-service/datalad_service:/datalad_service
 
   # nginx - static file serving and service proxy
   nginx:
