@@ -46,6 +46,14 @@ def test_add_existing_file(client):
     assert response.status == falcon.HTTP_CONFLICT
 
 
+def test_add_directory_path(client):
+    ds_id = 'ds000001'
+    file_data = 'complex path test'
+    response = client.simulate_post(
+        '/datasets/{}/files/sub-01:fake-image.nii'.format(ds_id), body=file_data)
+    assert response.status == falcon.HTTP_OK
+
+
 def test_update_file(client, annex_path):
     ds_id = 'ds000001'
     file_data = 'Test dataset LICENSE'
