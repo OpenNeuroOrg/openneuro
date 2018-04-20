@@ -63,7 +63,7 @@ export const getDatasets = () => {
 
 /**
  * Snapshot the current working tree for a dataset
- * @param {String} dsId - Dataset ID string
+ * @param {String} datasetId - Dataset ID string
  * @param {String} tag - Snapshot identifier and git tag
  * @returns {Promise} - resolves when tag is created
  */
@@ -77,7 +77,7 @@ export const createSnapshot = async (datasetId, tag) => {
  * @param {String} path
  */
 const encodeFilePath = path => {
-  path.replace(new RegExp('/', 'g'), ':')
+  return path.replace(new RegExp('/', 'g'), ':')
 }
 
 /**
@@ -87,8 +87,11 @@ const encodeFilePath = path => {
  * @param {Object} stream - Stream from apollo-upload-server
  */
 const fileUrl = (datasetId, path, stream) => {
-  const fileName = encodeFilePath([path, stream.filename].join('/'))
-  return `${uri}/datasets/${datasetId}/files/${fileName}`
+  // If path is provided, this is a subdirectory, otherwise a root level file.
+  const filePath = path ? [path, stream.filename].join('/') : stream.filename
+  const fileName = encodeFilePath(filePath)
+  const url = `${uri}/datasets/${datasetId}/files/${fileName}`
+  return url
 }
 
 /**
