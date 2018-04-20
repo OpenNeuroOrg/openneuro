@@ -17,7 +17,7 @@ export default {
       return res.send({ doi: doiRes })
     } else {
       await doi.registerSnapshotDoi(datasetId).then(doiRes => {
-        if (doi) {
+        if (doiRes) {
           c.crn.dois.update(
             { datasetId: datasetId },
             { $set: { doi: doiRes } },
