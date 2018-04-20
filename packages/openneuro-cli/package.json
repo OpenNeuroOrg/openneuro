@@ -7,12 +7,14 @@
   "author": "Squishymedia",
   "license": "MIT",
   "dependencies": {
+    "bids-validator": "^0.26.2",
     "commander": "^2.15.1",
     "esm": "^3.0.16",
     "find-config": "^1.0.0",
     "inquirer": "^5.2.0",
     "mkdirp": "^0.5.1",
-    "openneuro-client": "^1.10.0"
+    "openneuro-client": "^1.10.0",
+    "progress-stream": "^2.0.0"
   },
   "scripts": {
     "openneuro": "node src/index.js"

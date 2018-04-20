@@ -1,5 +1,9 @@
+import fs from 'fs'
 import inquirer from 'inquirer'
+import createClient from 'openneuro-client'
 import { saveConfig } from './config'
+import { validateAndUpload } from './upload'
+import { getOrCreateDataset } from './datasets'
 
 const loginQuestions = {
   type: 'input',
@@ -28,4 +32,27 @@ export const login = () => {
  */
 export const loginAnswers = answers => answers
 
-export const upload = () => {}
+/**
+ * Upload files to a dataset draft
+ *
+ * @param {string} dir
+ * @param {Object} cmd
+ */
+export const upload = (dir, cmd) => {
+  try {
+    if (!fs.statSync(dir).isDirectory()) {
+      throw new Error(`"${dir}" must be a directory`)
+    }
+    // eslint-disable-next-line no-console
+    if (cmd.dataset) console.log(`Updating ${cmd.dataset}`)
+    // TODO - This URL (at least the hostname) should be configurable
+    const client = createClient('http://localhost:9876/crn/graphql')
+    return getOrCreateDataset(client, dir, cmd.datasetId).then(
+      validateAndUpload(client, dir),
+    )
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error(`"${dir}" does not exist or is not a directory`)
+    process.exit(1)
+  }
+}

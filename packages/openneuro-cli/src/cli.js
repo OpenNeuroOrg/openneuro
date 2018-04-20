@@ -12,10 +12,11 @@ commander
   .action(login)
 
 commander
-  .command('upload')
+  .command('upload <dir>')
   .alias('u')
   .alias('sync')
   .description('Upload or sync a dataset (if a accession number is provided)')
+  .option('-d, --dataset [dsId]', 'Specify the dataset to update')
   .action(upload)
 
 commander.parse(process.argv)
