@@ -24,7 +24,14 @@ const typeDefs = `
     # Tag the current draft
     createSnapshot(datasetId: ID!): Snapshot
     # Add or update files in a draft - returns a new Draft
-    updateFiles(datasetId: ID!, files: [Upload!]): Draft
+    updateFiles(datasetId: ID!, files: FileTree!): Draft
+  }
+
+  # File tree
+  input FileTree {
+    name: ID! # directory name (or empty string for root)
+    files: [Upload!] # files within the directory
+    directories: [FileTree] # directories within the directory
   }
 
   # OpenNeuro user records from all providers
@@ -102,7 +109,6 @@ const typeDefs = `
 
   # File metadata and link to contents
   type DatasetFile {
-    id: ID!
     name: String!
     created: DateTime!
     modified: DateTime!
