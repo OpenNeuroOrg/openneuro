@@ -53,7 +53,7 @@ export const getFileTree = (basepath, root, logging = true) => {
         // This is an array of each promise related to the next level in the tree
         stats
           .filter(({ stat }) => stat.isDirectory())
-          .map(({ filePath }) => getFileTree(basepath, filePath)),
+          .map(({ filePath }) => getFileTree(basepath, filePath, logging)),
       ),
     }
   })
