@@ -32,6 +32,14 @@ export const login = () => {
  */
 export const loginAnswers = answers => answers
 
+const uploadDataset = (dir, datasetId, validatorOptions) => {
+  // TODO - This URL (at least the hostname) should be configurable
+  const client = createClient('http://localhost:9876/crn/graphql')
+  return getOrCreateDataset(client, dir, datasetId).then(
+    validateAndUpload(client, dir, validatorOptions),
+  )
+}
+
 /**
  * Upload files to a dataset draft
  *
@@ -43,17 +51,29 @@ export const upload = (dir, cmd) => {
     if (!fs.statSync(dir).isDirectory()) {
       throw new Error(`"${dir}" must be a directory`)
     }
+    const validatorOptions = {
+      ignoreWarnings: cmd.ignoreWarnings,
+      ignoreNiftiHeaders: cmd.ignoreNiftiHeaders,
+      verbose: cmd.verbose,
+    }
     // eslint-disable-next-line no-console
-    if (cmd.dataset) console.log(`Updating ${cmd.dataset}`)
-    // TODO - This URL (at least the hostname) should be configurable
-    const client = createClient('http://localhost:9876/crn/graphql')
-    return getOrCreateDataset(client, dir, cmd.datasetId).then(
-      validateAndUpload(client, dir, {
-        ignoreWarnings: cmd.ignoreWarnings,
-        ignoreNiftiHeaders: cmd.ignoreNiftiHeaders,
-        verbose: cmd.verbose,
-      }),
-    )
+    if (cmd.dataset) {
+      console.log(`Updating ${cmd.dataset}`)
+      uploadDataset(dir, cmd.dataset, validatorOptions)
+    } else {
+      inquirer
+        .prompt({
+          type: 'confirm',
+          name: 'yes',
+          default: true,
+          message: 'This will create a new dataset, continue?',
+        })
+        .then(({ yes }) => {
+          if (yes) {
+            uploadDataset(dir, cmd.dataset, validatorOptions)
+          }
+        })
+    }
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error(`"${dir}" does not exist or is not a directory`)
