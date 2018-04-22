@@ -73,12 +73,7 @@ describe('files.js', () => {
     })
     it('formats status with all values', () => {
       const mockConsole = { log: jest.fn() }
-      const progress = files.fileProgress(
-        mockConsole,
-        'test',
-        { bytesRead: 100 },
-        200,
-      )()
+      files.fileProgress(mockConsole, 'test', { bytesRead: 100 }, 200)()
       expect(mockConsole.log).toHaveBeenCalled()
       expect(mockConsole.log).toHaveBeenCalledWith(
         'Transferring "test" - 50% complete (100 Bytes) remaining)',
