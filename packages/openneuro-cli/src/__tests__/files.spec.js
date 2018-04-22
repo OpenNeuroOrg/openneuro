@@ -10,7 +10,7 @@ jest.mock('fs', () => new (require('metro-memory-fs'))())
 describe('files.js', () => {
   describe('getFileTree', () => {
     beforeEach(() => {
-      require('fs').reset()
+      fs.reset()
       tmpPath = '/testing'
       // Some directory complexity to test against
       fs.mkdirSync(tmpPath)
@@ -30,7 +30,7 @@ describe('files.js', () => {
     })
     it('should return a tree', done => {
       files
-        .getFileTree(tmpPath, tmpPath)
+        .getFileTree(tmpPath, tmpPath, false)
         .then(tree => {
           expect(tree).toHaveProperty('files')
           expect(tree.files).toHaveLength(2)
@@ -43,7 +43,7 @@ describe('files.js', () => {
     })
     it('should include relative directory names at each node', done => {
       files
-        .getFileTree(tmpPath, tmpPath)
+        .getFileTree(tmpPath, tmpPath, false)
         .then(tree => {
           expect(tree).toHaveProperty('name')
           expect(tree.name).toBe('')
