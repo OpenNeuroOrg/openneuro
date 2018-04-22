@@ -12,12 +12,18 @@ describe('datasets.js', () => {
         .then(() => expect(client.mutate).toHaveBeenCalledTimes(1))
         .then(done)
     })
-    it('does not call createDataset when passed a dataset id', done => {
-      const client = { mutate: jest.fn() }
+    it('queries for a dataset when passed a dataset id', done => {
+      const client = {
+        mutate: jest.fn(),
+        query: jest.fn(() =>
+          Promise.resolve({ data: { createDataset: { id: 'testid' } } }),
+        ),
+      }
       getOrCreateDataset(client, 'test dataset', 'ds42')
         .then(dsId => {
           expect(dsId).toBe('ds42')
           expect(client.mutate).not.toHaveBeenCalled()
+          expect(client.query).toHaveBeenCalled()
         })
         .then(done)
     })
