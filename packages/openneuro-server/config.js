@@ -87,6 +87,12 @@ let config = {
     enabled: false,
     uri: 'datalad:9877',
   },
+  doi: {
+    username: process.env.DOI_USERNAME,
+    password: process.env.DOI_PASSWORD,
+    prefix: process.env.DOI_PREFIX,
+    url: process.env.DOI_URL,
+  },
 }
 
 let compiledSchema = schema.compileJsonSchema(configSchema)

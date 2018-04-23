@@ -57,11 +57,11 @@ export default {
   },
 
   /**
-     * Create User
-     *
-     * Takes a gmail address as an '_id' and a first and last name and
-     * creates a scitran user.
-     */
+   * Create User
+   *
+   * Takes a gmail address as an '_id' and a first and last name and
+   * creates a scitran user.
+   */
   create(req, res) {
     let user = req.body
     c.crn.blacklist.findOne({ _id: user._id }).then(item => {
@@ -89,11 +89,11 @@ export default {
   },
 
   /**
-     * Blacklist User
-     *
-     * Take a gmail address as an '_id' and optionally takes a first name,
-     * lastname and note and sets the user info as blacklisted.
-     */
+   * Blacklist User
+   *
+   * Take a gmail address as an '_id' and optionally takes a first name,
+   * lastname and note and sets the user info as blacklisted.
+   */
   blacklist(req, res, next) {
     let user = req.body
     c.crn.blacklist.findOne({ _id: user._id }).then(item => {
@@ -122,31 +122,31 @@ export default {
     let key = crypto.randomBytes(32).toString('hex')
     let hash = bcrypt.hashSync(key)
     c.crn.keys.updateOne(
-      {_id: userId},
+      { _id: userId },
       {
         $set: {
-          _id: userId, 
-          hash: hash
-        }
+          _id: userId,
+          hash: hash,
+        },
       },
-      {upsert: true},
+      { upsert: true },
       err => {
         if (err) {
           return next(err)
         } else {
-          return res.send({key: key})
+          return res.send({ key: key })
         }
-      }
+      },
     )
   },
 
   // read ----------------------------------------------------------------
 
   /**
-     * Get Blacklist
-     *
-     * Returns a list of blacklisted users.
-     */
+   * Get Blacklist
+   *
+   * Returns a list of blacklisted users.
+   */
   getBlacklist(req, res, next) {
     c.crn.blacklist.find().toArray((err, docs) => {
       if (err) {
@@ -159,12 +159,12 @@ export default {
   // delete --------------------------------------------------------------
 
   /**
-     * UnBlacklist
-     *
-     * Takes a user id (email) as a url parameter
-     * and removes the user from the blacklist
-     * if they were blacklisted.
-     */
+   * UnBlacklist
+   *
+   * Takes a user id (email) as a url parameter
+   * and removes the user from the blacklist
+   * if they were blacklisted.
+   */
   unBlacklist(req, res, next) {
     let userId = req.params.id
     c.crn.blacklist.findAndRemove({ _id: userId }, [], (err, doc) => {

@@ -89,12 +89,14 @@ export default class APIKeyGen extends React.Component {
     return (
       <div className="container api">
         <div className="panel">
-            <div className="panel-heading">
-                CLI API Key Generator
-            </div>
-            <div className="panel-body explanation">
-                Users that wish to use the CLI uploader will be required to authenticate their requests with an API key. Please store your API key in a safe place. If you lose your key, you can obtain a new one on this page. Once a new key is obtained, the previous key will become invalid.
-            </div>
+          <div className="panel-heading">CLI API Key Generator</div>
+          <div className="panel-body explanation">
+            Users that wish to use the CLI uploader will be required to
+            authenticate their requests with an API key. Please store your API
+            key in a safe place. If you lose your key, you can obtain a new one
+            on this page. Once a new key is obtained, the previous key will
+            become invalid.
+          </div>
         </div>
         <div className="panel">
           <div className="panel-heading">{helperText}</div>
