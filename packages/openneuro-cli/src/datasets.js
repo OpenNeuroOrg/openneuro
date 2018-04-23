@@ -7,7 +7,12 @@ import { datasets } from 'openneuro-client'
 export const getOrCreateDataset = (client, dir, datasetId) => {
   const label = path.basename(dir)
   if (datasetId) {
-    return Promise.resolve(datasetId)
+    return client
+      .query({
+        query: datasets.getDataset,
+        variables: { id: datasetId },
+      })
+      .then(() => datasetId)
   } else {
     return client
       .mutate({

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import commander from 'commander'
+import colors from 'colors'
 import packageJson from '../package.json'
 import { login, upload } from './actions.js'
 
@@ -17,6 +18,20 @@ commander
   .alias('sync')
   .description('Upload or sync a dataset (if a accession number is provided)')
   .option('-d, --dataset [dsId]', 'Specify the dataset to update')
+  .option('-i, --ignoreWarnings', 'Ignore validation warnings when uploading')
+  .option(
+    '-n, --ignoreNiftiHeaders',
+    'Disregard NIfTI header content during validation',
+  )
+  .option('-v, --verbose', 'Verbose output')
   .action(upload)
 
 commander.parse(process.argv)
+
+if (!process.argv.slice(2).length) {
+  commander.outputHelp(make_red)
+}
+
+function make_red(txt) {
+  return colors.red(txt) //display the help text in red on the console
+}
