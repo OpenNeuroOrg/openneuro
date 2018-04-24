@@ -184,12 +184,14 @@ class FileView extends Reflux.Component {
       )
     } else if (files.hasExtension(name, ['.html'])) {
       return (
-        <iframe
-          src={link}
-          className="file-view-iframe"
-          frameBorder="0"
-          sandbox="allow-scripts"
-        />
+        <div className="file-view-iframe-container">
+          <iframe
+            src={link}
+            className="file-view-iframe"
+            frameBorder="0"
+            sandbox="allow-scripts"
+          />
+        </div>
       )
     } else {
       return content
