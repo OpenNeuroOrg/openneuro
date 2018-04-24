@@ -1,6 +1,6 @@
 {
   "name": "openneuro-server",
-  "version": "1.11.0",
+  "version": "1.12.0",
   "description": "Core service for the OpenNeuro platform.",
   "license": "MIT",
   "main": "index.js",
@@ -50,8 +50,7 @@
     "react-dom": "^16.2.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
-    "s3-stream-download":
-      "https://github.com/OpenNeuroOrg/s3-stream-download.git",
+    "s3-stream-download": "https://github.com/OpenNeuroOrg/s3-stream-download.git",
     "superagent": "^3.8.2",
     "tar-fs": "^1.9.0",
     "underscore": "^1.8.3",
