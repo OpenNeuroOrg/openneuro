@@ -12,5 +12,6 @@ RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python3
   && pip install -r /requirements.txt \
   && apk del build-dependencies \
   && mkdir /repos
+RUN git config --global user.email "user@default.com" && git config --global user.name "Default User"
 
 CMD ["gunicorn", "--bind", "0.0.0.0:9877", "--reload", "datalad_service.app:create_app('/datalad')", "--workers", "1"]
