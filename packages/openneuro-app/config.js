@@ -61,4 +61,8 @@ export default {
   sentry: {
     environment: process.env.ENVIRONMENT,
   },
+
+  datalad: {
+    enabled: process.env.CRN_SERVER_DATALAD,
+  },
 }
