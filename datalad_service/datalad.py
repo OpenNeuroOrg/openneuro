@@ -19,4 +19,5 @@ class DataladStore(object):
         ConfigManager(dataset).add('user.email', email, 'local')
         ConfigManager(dataset).add('user.name', name, 'local')
         # this adds github remote to config and also creates repo
-        create_sibling_github('datalad', github_organization='', github_passwd='', dataset=dataset)
+        # create_sibling_github('datalad', github_organization='', github_passwd='', dataset=dataset)
+        return
