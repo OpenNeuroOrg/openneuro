@@ -19,7 +19,7 @@ services:
   app:
     image: openneuro/app:${CRN_APP_TAG}
     volumes:
-      - project:/srv/app/dist
+      - project:/srv/dist
     env_file: ./config.env
 
   # crn core (bids-core)
@@ -34,9 +34,8 @@ services:
   server:
     image: openneuro/server:${CRN_SERVER_TAG}
     volumes:
-      - ./server/client.config.js:/srv/server/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
     env_file: ./config.env
     restart: always
 
@@ -45,12 +44,18 @@ services:
     image: openneuro/server:${CRN_SERVER_TAG}
     command:
       - node
-      - /srv/server/worker.js
+      - /srv/worker.js
     volumes:
-      - ./server/client.config.js:/srv/server/client.config.js:rw
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/server/persistent
+      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
     env_file: ./config.env
+    restart: always
+
+  # datalad Python backend
+  datalad:
+    image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    volumes:
+      - ${PERSISTENT_DIR}/datalad
     restart: always
 
   # nginx - static file serving and service proxy

@@ -1,5 +1,0 @@
-app/dist
-app/coverage
-app/node_modules
-server/node_modules
-server/coverage

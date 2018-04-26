@@ -11,7 +11,7 @@
       "port": 9222,
       "url": "http://localhost:9876",
       "urlFilter": "http://localhost:9876*",
-      "webRoot": "${workspaceFolder}/app/src",
+      "webRoot": "${workspaceFolder}/packages/openneuro-app/src"
     }
   ]
 }
