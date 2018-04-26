@@ -21,6 +21,9 @@ services:
     tmpfs:
       - /srv/node_modules:exec
       - /srv/packages/openneuro-app/node_modules:exec
+      - /srv/packages/openneuro-client/node_modules:exec
+      - /srv/packages/openneuro-cli/node_modules:exec
+      - /srv/packages/openneuro-server/node_modules:exec
 
   # crn core (bids-core)
   core:
