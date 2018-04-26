@@ -1,5 +1,12 @@
 import os
+import re
 import falcon
+
+
+def get_from_header(req):
+    """Parse the From header for a request."""
+    matches = re.match(r"\"(.*)\" <(.*?@.*)>", req.headers['FROM'])
+    return matches.group(1), matches.group(2)
 
 
 class FilesResource(object):
@@ -34,6 +41,12 @@ class FilesResource(object):
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             try:
+                media_dict = {'created': filename}
+                # Record if this was done on behalf of a user
+                if 'FROM' in req.headers:
+                    name, email = get_from_header(req)
+                    media_dict['name'] = name
+                    media_dict['email'] = email
                 # Make any missing parent directories
                 file_path = os.path.join(ds_path, filename)
                 os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -42,7 +55,7 @@ class FilesResource(object):
                 # Add to dataset
                 ds = self.store.get_dataset(dataset)
                 ds.add(path=filename)
-                resp.media = {'created': filename}
+                resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             except PermissionError:
                 resp.media = {'error': 'file already exists'}
@@ -57,11 +70,17 @@ class FilesResource(object):
             ds_path = self.store.get_dataset_path(dataset)
             file_path = os.path.join(ds_path, filename)
             if os.path.exists(file_path):
+                media_dict = {'updated': filename}
+                # Record if this was done on behalf of a user
+                if 'FROM' in req.headers:
+                    name, email = get_commit_info(req)
+                    media_dict['name'] = name
+                    media_dict['email'] = email
                 ds = self.store.get_dataset(dataset)
                 ds.unlock(path=filename)
                 self._update_file(file_path, req.stream)
                 ds.add(path=filename)
-                resp.media = {'updated': filename}
+                resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
                 resp.media = {'error': 'no such file'}
