@@ -20,6 +20,7 @@ services:
       - project:/srv/packages/openneuro-app/dist
     tmpfs:
       - /srv/node_modules:exec
+      - /srv/packages/openneuro-app/node_modules:exec
 
   # crn core (bids-core)
   core:
