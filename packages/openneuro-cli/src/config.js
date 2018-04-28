@@ -10,6 +10,10 @@ export const getConfig = () => {
   return findConfig('.openneuro')
 }
 
+export const readConfig = () => {
+  return fs.readFileSync(getConfig())
+}
+
 /**
  * Save a config object to a default location
  *
@@ -21,4 +25,18 @@ export const saveConfig = config => {
   const home = os.homedir()
   const savePath = path.join(home, '.openneuro')
   fs.writeFileSync(savePath, JSON.stringify(config))
+}
+
+/**
+ * Read the current configuration and return the configured token or throw an error
+ */
+export const getToken = () => {
+  const config = JSON.parse(readConfig())
+  if (config.hasOwnProperty('apikey')) {
+    return config.apikey
+  } else {
+    throw new Error(
+      'You must have an API key configured to continue, try `openneuro login` first',
+    )
+  }
 }

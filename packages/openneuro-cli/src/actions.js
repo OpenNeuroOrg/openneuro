@@ -1,7 +1,7 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
 import createClient from 'openneuro-client'
-import { saveConfig } from './config'
+import { saveConfig, getToken } from './config'
 import { validateAndUpload } from './upload'
 import { getOrCreateDataset } from './datasets'
 
@@ -34,7 +34,7 @@ export const loginAnswers = answers => answers
 
 const uploadDataset = (dir, datasetId, validatorOptions) => {
   // TODO - This URL (at least the hostname) should be configurable
-  const client = createClient('http://localhost:9876/crn/graphql')
+  const client = createClient('http://localhost:9876/crn/graphql', getToken)
   return getOrCreateDataset(client, dir, datasetId).then(
     validateAndUpload(client, dir, validatorOptions),
   )
