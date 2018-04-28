@@ -118,7 +118,7 @@ export default {
    */
   createAPIKey(req, res, next) {
     generateApiKey(req.user)
-      .then(key => res.send({ key: key }))
+      .then(key => res.send(key))
       .catch(err => next(err))
   },
 
