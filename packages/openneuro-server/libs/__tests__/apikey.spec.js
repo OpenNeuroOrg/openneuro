@@ -5,11 +5,18 @@ import crypto from 'crypto'
 import mongo from '../mongo'
 import { generateApiKey, getUserIdFromApiKey } from '../apikey.js'
 
-const veryRandomString = '44444444444444444444444444444444'
+const veryRandomByte = '4'
 
 beforeAll(async () => {
   await mongo.connect(global.__MONGO_URI__)
-  crypto.randomBytes = () => veryRandomString
+  crypto.randomBytes = (size, cb) => {
+    const gen = Buffer.from(veryRandomByte.repeat(size))
+    if (cb) {
+      return cb(null, gen)
+    } else {
+      return gen
+    }
+  }
 })
 
 afterAll(async () => {
@@ -20,9 +27,11 @@ describe('util/apikey.js', () => {
   describe('generateApiKey', () => {
     it('returns an API key', async () => {
       const { key, hash } = await generateApiKey('1234-5678')
-      expect(key).toBe(veryRandomString)
+      expect(key).toBe(
+        '3434343434343434343434343434343434343434343434343434343434343434',
+      )
       expect(hash).toBe(
-        '$2a$10$/.OC/.OC/.OC/.OC/.OC/.omYap8w9G1LnHRQvuCZROkPgWNPD96u',
+        '$2b$12$LBOyLBOyLBOyLBOyLBOyL.osyncbUC6tjlS9iEx9l8u9YOFr659J.',
       )
     })
   })
