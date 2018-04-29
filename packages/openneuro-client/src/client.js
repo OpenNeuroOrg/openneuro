@@ -15,8 +15,8 @@ const cache = new InMemoryCache()
  *
  * @param {string} uri
  */
-const createClient = uri => {
-  const link = createLink(uri)
+const createClient = (uri, getAuthorization) => {
+  const link = createLink(uri, getAuthorization)
   return new ApolloClient({ uri, link, cache })
 }
 
