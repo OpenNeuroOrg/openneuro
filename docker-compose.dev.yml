@@ -11,7 +11,8 @@ services:
   app:
     build:
       context: ./packages/openneuro-app
-    command: sh -c "yarn install --pure-lockfile && yarn start --watch --watch-poll ${WEBPACK_POLL_INTERVAL}"
+    working_dir: /srv/packages/openneuro-app
+    command: sh -c "apk add make gcc g++ python && yarn install && yarn start --watch"
     volumes:
       - ./packages/openneuro-app:/srv
       - yarn_cache:/root/.cache
