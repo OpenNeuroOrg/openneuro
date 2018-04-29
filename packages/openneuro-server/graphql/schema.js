@@ -14,6 +14,8 @@ const typeDefs = `
     datasets: [Dataset]
     # Check for server side login status
     whoami: User
+    # Get one user
+    user(id: ID!): User
     # Get a list of users
     users: [User]
   }
@@ -71,6 +73,8 @@ const typeDefs = `
     dataset: Dataset
     created: DateTime!
     modified: DateTime!
+    authors: [Author]
+    summary: Summary
     files: [DatasetFile]
   }
 
@@ -78,17 +82,11 @@ const typeDefs = `
   type Snapshot {
     ref: String!
     dataset: Dataset!
-    metadata: DatasetMetadata
     created: DateTime!
     modified: DateTime!
-    files: [DatasetFile]
-  }
-
-  # Metadata associated with both drafts and snapshots
-  type DatasetMetadata {
-    id: ID!
     authors: [Author]
     summary: Summary
+    files: [DatasetFile]
   }
 
   # Authors of a dataset
@@ -114,8 +112,11 @@ const typeDefs = `
     modified: DateTime!
     size: Int
     hash: String
-    url: String
+    urls: [String]
   }
 `
 
-export default makeExecutableSchema({ typeDefs, resolvers })
+export default makeExecutableSchema({
+  typeDefs,
+  resolvers,
+})
