@@ -28,10 +28,10 @@ describe('util/apikey.js', () => {
     it('returns an API key', async () => {
       const { key, hash } = await generateApiKey('1234-5678')
       expect(key).toBe(
-        '3434343434343434343434343434343434343434343434343434343434343434',
+        'JDJiJDEyJExCT3lMQk95TEJPeUxCT3lMQk95TC46MzQzNDM0MzQtMzQzNC00NDM0LWI0MzQtMzQzNDM0MzQzNDM0',
       )
       expect(hash).toBe(
-        '$2b$12$LBOyLBOyLBOyLBOyLBOyL.osyncbUC6tjlS9iEx9l8u9YOFr659J.',
+        '$2b$12$LBOyLBOyLBOyLBOyLBOyL.Asu7taW81YymSTs8bAUEbuFqliekFEe',
       )
     })
   })
