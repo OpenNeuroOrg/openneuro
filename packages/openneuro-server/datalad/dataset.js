@@ -21,10 +21,10 @@ const uri = config.datalad.uri
  * @param {String} label - descriptive label for this dataset
  * @returns {Promise} - resolves to dataset id of the new dataset
  */
-export const createDataset = label => {
+export const createDataset = (label, uploader) => {
   return new Promise(async (resolve, reject) => {
     const datasetId = await getAccessionNumber()
-    const dsObj = await createDatasetModel(datasetId, label)
+    const dsObj = await createDatasetModel(datasetId, label, uploader)
     // If successful, create the repo
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
@@ -41,8 +41,15 @@ export const createDataset = label => {
  *
  * Exported for tests.
  */
-export const createDatasetModel = (id, label) => {
-  const datasetObj = { id, label }
+export const createDatasetModel = (id, label, uploader) => {
+  const creationTime = new Date()
+  const datasetObj = {
+    id,
+    label,
+    created: creationTime,
+    modified: creationTime,
+    uploader,
+  }
   return c.crn.datasets.insertOne(datasetObj)
 }
 
