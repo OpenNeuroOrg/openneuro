@@ -72,9 +72,8 @@ let auth = {
     ) {
       // Alternate authentication method for API tools
       return getUserIdFromApiKey(extractBearerKey(req.headers.authorization))
-        .then(({ user }) => promisify(scitran.getUser)(user))
+        .then(userId => promisify(scitran.getUser)(userId))
         .then(scitranUser => {
-          console.log(scitranUser)
           req.user = scitranUser.body._id
           req.isSuperUser = scitranUser.body.root
         })
