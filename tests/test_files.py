@@ -98,3 +98,11 @@ def test_add_commit_info(client):
     response_content = json.loads(response.content)
     assert response_content['name'] == name
     assert response_content['email'] == email
+
+
+def test_file_indexing(client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    response = client.simulate_get('/datasets/{}/files'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    response_content = json.loads(response.content)
+    assert response_content['files'] == ['dataset_description.json']
