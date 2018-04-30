@@ -61,6 +61,14 @@ services:
   # celery Python backend
   celery:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    command:
+      - celery
+      - -A
+      - datalad_service.app
+      - worker
+      - --loglevel=DEBUG
+      - -c
+      - "5"
     volumes:
       - ${PERSISTENT_DIR}/datalad
     restart: always
