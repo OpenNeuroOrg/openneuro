@@ -13,7 +13,7 @@ services:
       context: .
       dockerfile: ./packages/openneuro-app/Dockerfile
     working_dir: /srv/packages/openneuro-app
-    command: sh -c "yarn install && yarn start --watch"
+    command: sh -c "apk add make gcc g++ python && yarn install && yarn start --watch"
     volumes:
       - .:/srv
       - yarn_cache:/root/.cache
@@ -32,7 +32,7 @@ services:
   server:
     build:
       context: ./packages/openneuro-server
-    command: sh -c "yarn install && node /srv/index.js"
+    command: sh -c "apk add make gcc g++ python && yarn install && node /srv/index.js"
     volumes:
       - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache
@@ -44,7 +44,7 @@ services:
   worker:
     build:
       context: ./packages/openneuro-server
-    command: sh -c "yarn install  && node /srv/worker.js"
+    command: sh -c "apk add make gcc g++ python && yarn install  && node /srv/worker.js"
     volumes:
       - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache

@@ -3,8 +3,7 @@
 import scitran from '../libs/scitran'
 import mongo from '../libs/mongo'
 import orcid from '../libs/orcid'
-import bcrypt from 'bcrypt-nodejs'
-import crypto from 'crypto'
+import { generateApiKey } from '../libs/apikey'
 
 let c = mongo.collections
 
@@ -118,26 +117,9 @@ export default {
    * Create API Key
    */
   createAPIKey(req, res, next) {
-    let userId = req.user
-    let key = crypto.randomBytes(32).toString('hex')
-    let hash = bcrypt.hashSync(key)
-    c.crn.keys.updateOne(
-      { _id: userId },
-      {
-        $set: {
-          _id: userId,
-          hash: hash,
-        },
-      },
-      { upsert: true },
-      err => {
-        if (err) {
-          return next(err)
-        } else {
-          return res.send({ key: key })
-        }
-      },
-    )
+    generateApiKey(req.user)
+      .then(key => res.send(key))
+      .catch(err => next(err))
   },
 
   // read ----------------------------------------------------------------
