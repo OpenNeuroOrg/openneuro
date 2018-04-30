@@ -8,6 +8,8 @@ ADD . /srv
 WORKDIR /srv
 
 # Build the frontend
-RUN npm install -g yarn && yarn install --pure-lockfile
+RUN npm install -g yarn && yarn install --pure-lockfile && yarn bootstrap
+
+WORKDIR /srv/packages/openneuro-app
 
 CMD yarn build

@@ -19,7 +19,7 @@ services:
   app:
     image: openneuro/app:${CRN_APP_TAG}
     volumes:
-      - project:/srv/dist
+      - project:/srv/packages/openneuro-app/dist
     env_file: ./config.env
 
   # crn core (bids-core)

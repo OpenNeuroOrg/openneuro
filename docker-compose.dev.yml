@@ -10,15 +10,17 @@ services:
   # web app bundle build
   app:
     build:
-      context: ./packages/openneuro-app
+      context: .
+      dockerfile: ./packages/openneuro-app/Dockerfile
     working_dir: /srv/packages/openneuro-app
     command: sh -c "apk add make gcc g++ python && yarn install && yarn start --watch"
     volumes:
-      - ./packages/openneuro-app:/srv
+      - .:/srv
       - yarn_cache:/root/.cache
-      - project:/srv/dist
+      - project:/srv/packages/openneuro-app/dist
     tmpfs:
       - /srv/node_modules:exec
+      - /srv/packages/openneuro-app/node_modules:exec
 
   # crn core (bids-core)
   core:
