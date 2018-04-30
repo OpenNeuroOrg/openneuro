@@ -102,7 +102,11 @@ def test_add_commit_info(client):
 
 def test_file_indexing(client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
+    # First post a file
+    response = client.simulate_post(
+        '/datasets/{}/files/LICENSE'.format(ds_id), body='GPL V3.0')
+    assert response.status == falcon.HTTP_OK
     response = client.simulate_get('/datasets/{}/files'.format(ds_id))
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
-    assert response_content['files'] == ['dataset_description.json']
+    assert response_content['files'] == ['LICENSE', 'dataset_description.json']
