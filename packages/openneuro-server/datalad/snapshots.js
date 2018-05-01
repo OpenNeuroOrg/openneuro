@@ -15,3 +15,13 @@ export const getSnapshots = datasetId => {
       return snapshots
     })
 }
+
+export const getSnapshot = (datasetId, tag) => {
+  const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
+  return request
+    .get(url)
+    .set('Accept', 'application/json')
+    .then(({ body }) => {
+      return body
+    })
+}

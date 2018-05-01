@@ -47,7 +47,7 @@ const DataLadDataset = ({ match }) => (
     variables={{ datasetId: match.params.datasetId }}>
     {({ loading, error, data }) => {
       if (loading) {
-        return <Spinner />
+        return <Spinner text="Loading Dataset" active />
       } else if (error) {
         // TODO - Throw an error for the error boundary
         console.log(error)

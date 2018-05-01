@@ -18,6 +18,8 @@ const typeDefs = `
     user(id: ID!): User
     # Get a list of users
     users: [User]
+    # Request one snapshot
+    snapshot(datasetId: ID!, tag: String!): Snapshot
   }
 
   type Mutation {
