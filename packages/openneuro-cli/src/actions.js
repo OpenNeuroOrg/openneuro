@@ -1,7 +1,7 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
 import createClient from 'openneuro-client'
-import { saveConfig, getToken } from './config'
+import { saveConfig, getToken, getUrl } from './config'
 import { validateAndUpload } from './upload'
 import { getOrCreateDataset } from './datasets'
 
@@ -15,10 +15,10 @@ export const login = () => {
   return inquirer
     .prompt({
       type: 'list',
-      name: 'hostname',
+      name: 'url',
       message: 'Choose an OpenNeuro instance to use.',
-      choices: ['openneuro.org', 'openneuro.dev.sqm.io'],
-      default: 'openneuro.org',
+      choices: ['https://openneuro.org/', 'https://openneuro.dev.sqm.io/'],
+      default: 'https://openneuro.org/',
     })
     .then(async answers =>
       Object.assign(
@@ -27,7 +27,7 @@ export const login = () => {
           type: 'input',
           name: 'apikey',
           message: `Enter your API key for OpenNeuro (get an API key from https://${
-            answers.hostname
+            answers.url
           }/keygen)`,
         }),
       ),
@@ -44,8 +44,8 @@ export const login = () => {
 export const loginAnswers = answers => answers
 
 const uploadDataset = (dir, datasetId, validatorOptions) => {
-  // TODO - This URL (at least the hostname) should be configurable
-  const client = createClient('http://localhost:9876/crn/graphql', getToken)
+  const url = getUrl()
+  const client = createClient(`${url}crn/graphql`, getToken)
   return getOrCreateDataset(client, dir, datasetId).then(
     validateAndUpload(client, dir, validatorOptions),
   )

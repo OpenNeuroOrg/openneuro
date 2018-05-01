@@ -40,3 +40,14 @@ export const getToken = () => {
     )
   }
 }
+
+export const getUrl = () => {
+  const config = JSON.parse(readConfig())
+  if (config.hasOwnProperty('url')) {
+    return config.url
+  } else {
+    throw new Error(
+      'You must have a URL configured to continue, try `openneuro login` first',
+    )
+  }
+}
