@@ -109,4 +109,9 @@ def test_file_indexing(client, new_dataset):
     response = client.simulate_get('/datasets/{}/files'.format(ds_id))
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
-    assert response_content['files'] == ['LICENSE', 'dataset_description.json']
+    assert response_content['files'] == [
+        {'filename': 'LICENSE', 'size': 8,
+            'key': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
+        {'filename': 'dataset_description.json', 'size': 101,
+            'key': 'MD5E-s101--63ef6d26537d770344904ec51d215d60.json'}
+    ]

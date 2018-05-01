@@ -44,8 +44,13 @@ class FilesResource(object):
             # Return a list of file objects
             # {name, path, created, modified, size}
             ds = self.store.get_dataset(dataset)
-            working_tree = ds.repo.get_files()
-            resp.media = {'files': filter_git_files(working_tree)}
+            working_files = filter_git_files(ds.repo.get_files())
+            files = []
+            for filename in working_files:
+                key = ds.repo.get_file_key(filename)
+                size = ds.repo.get_size_from_key(key)
+                files.append({'filename': filename, 'size': size, 'key': key})
+            resp.media = {'files': files}
 
     def on_post(self, req, resp, dataset, filename):
         """Post will only create new files and always adds them to the annex."""
