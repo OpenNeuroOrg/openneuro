@@ -34,7 +34,8 @@ const getDatasetPage = gql`
         }
       }
       snapshots {
-        ref
+        id
+        tag
       }
     }
   }
