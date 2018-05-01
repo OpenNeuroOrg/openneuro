@@ -25,7 +25,7 @@ jobs:
       - run: pytest --cov ./datalad_service
 
       # Report coverage info
-      - run: codecov
+      - run: $(python -c "import site; print(site.USER_BASE)")/bin/codecov
 
   deploy:
     machine:
