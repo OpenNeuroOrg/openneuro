@@ -42,7 +42,7 @@ class FilesResource(object):
         else:
             # Request for index of files
             # Return a list of file objects
-            # {name, path, created, modified, size}
+            # {name, path, size}
             ds = self.store.get_dataset(dataset)
             working_files = filter_git_files(ds.repo.get_files())
             files = []
