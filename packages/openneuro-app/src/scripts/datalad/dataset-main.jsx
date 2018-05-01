@@ -9,9 +9,7 @@ const DatasetMain = ({ dataset }) => (
         value={dataset.label}
         label={dataset.label}
         editable={true}
-        onChange={() => {
-          console.log('this should edit the label!')
-        }}
+        onChange={() => {}}
         type="string"
       />
     </h1>

@@ -49,8 +49,7 @@ const DataLadDataset = ({ match }) => (
       if (loading) {
         return <Spinner text="Loading Dataset" active />
       } else if (error) {
-        // TODO - Throw an error for the error boundary
-        console.log(error)
+        throw new Error(error)
       } else {
         return <DatasetPage dataset={data.dataset} />
       }

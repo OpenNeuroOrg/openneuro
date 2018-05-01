@@ -21,6 +21,6 @@ export const users = () => {
   return []
 }
 
-export const whoami = (obj, { id }) => {
+export const whoami = () => {
   return {}
 }
