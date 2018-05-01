@@ -49,7 +49,7 @@ describe('dataset model operations', () => {
     })
   })
   describe('createSnapshot()', () => {
-    it('posts to the DataLad /datasets/{dsId}/snapshot/{snapshot} endpoint', async done => {
+    it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async done => {
       const tag = 'snapshot'
       const dsId = await createDataset()
       // Reset call count for request.post
@@ -58,7 +58,7 @@ describe('dataset model operations', () => {
       expect(request.post).toHaveBeenCalledTimes(1)
       expect(request.post).toHaveBeenCalledWith(
         expect.stringContaining(
-          `${config.datalad.uri}/datasets/${dsId}/snapshot/${tag}`,
+          `${config.datalad.uri}/datasets/${dsId}/snapshots/${tag}`,
         ),
       )
       done()
