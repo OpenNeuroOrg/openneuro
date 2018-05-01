@@ -79,10 +79,10 @@ const typeDefs = `
 
   # Tagged snapshot of a draft
   type Snapshot {
-    ref: String!
+    id: ID!
+    tag: String!
     dataset: Dataset!
-    created: DateTime!
-    modified: DateTime!
+    created: DateTime
     authors: [Author]
     summary: Summary
     files: [DatasetFile]

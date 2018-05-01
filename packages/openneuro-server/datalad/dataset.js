@@ -77,7 +77,10 @@ export const getDatasets = () => {
  */
 export const createSnapshot = async (datasetId, tag) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
-  return request.post(url).set('Accept', 'application/json')
+  return request
+    .post(url)
+    .set('Accept', 'application/json')
+    .then(({ body }) => body)
 }
 
 /**

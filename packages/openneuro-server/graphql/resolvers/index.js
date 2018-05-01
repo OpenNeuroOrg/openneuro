@@ -8,7 +8,6 @@ import {
   updateFiles,
 } from './dataset.js'
 import { draft, snapshots } from './datalad.js'
-import { summary } from './summary.js'
 import { whoami, user, users } from './user.js'
 
 export default {

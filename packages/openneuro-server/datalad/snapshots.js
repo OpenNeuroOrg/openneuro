@@ -11,5 +11,7 @@ export const getSnapshots = datasetId => {
   return request
     .get(url)
     .set('Accept', 'application/json')
-    .then(({ body: { snapshots } }) => snapshots)
+    .then(({ body: { snapshots } }) => {
+      return snapshots
+    })
 }
