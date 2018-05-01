@@ -71,7 +71,6 @@ const typeDefs = `
   type Draft {
     id: ID!
     dataset: Dataset
-    created: DateTime!
     modified: DateTime!
     authors: [Author]
     summary: Summary
@@ -107,11 +106,9 @@ const typeDefs = `
 
   # File metadata and link to contents
   type DatasetFile {
-    name: String!
-    created: DateTime!
-    modified: DateTime!
+    id: ID!
+    filename: String!
     size: Int
-    hash: String
     urls: [String]
   }
 `

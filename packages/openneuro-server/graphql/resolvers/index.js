@@ -1,6 +1,5 @@
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 import { GraphQLUpload } from 'apollo-upload-server'
-import Dataset from './dataset.js'
 import { dataset, datasets, createDataset, updateFiles } from './dataset.js'
 import { draft, snapshot } from './datalad.js'
 import { summary } from './summary.js'
@@ -25,7 +24,7 @@ export default {
   User: user,
   Dataset: {
     uploader: ds => user(ds, { id: ds.uploader }),
-    draft,
+    draft: ds => draft(ds, { datasetId: ds.id }),
   },
   Draft: draft,
   Snapshot: snapshot,
