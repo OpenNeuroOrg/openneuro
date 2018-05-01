@@ -26,7 +26,7 @@ export const login = () => {
         await inquirer.prompt({
           type: 'input',
           name: 'apikey',
-          message: `Enter your API key for OpenNeuro (get an API key from https://${
+          message: `Enter your API key for OpenNeuro (get an API key from ${
             answers.url
           }/keygen)`,
         }),
