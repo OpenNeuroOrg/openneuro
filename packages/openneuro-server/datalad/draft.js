@@ -6,10 +6,10 @@ import config from '../config.js'
 
 const uri = config.datalad.uri
 
-export const getDraft = datasetId => {
+export const getDraftFiles = datasetId => {
   const filesUrl = `${uri}/datasets/${datasetId}/files`
   return request
     .get(filesUrl)
     .set('Accept', 'application/json')
-    .then(({ body: { files } }) => ({ files }))
+    .then(({ body: { files } }) => files)
 }

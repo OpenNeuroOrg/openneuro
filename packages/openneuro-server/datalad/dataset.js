@@ -76,7 +76,7 @@ export const getDatasets = () => {
  * @returns {Promise} - resolves when tag is created
  */
 export const createSnapshot = async (datasetId, tag) => {
-  const url = `${uri}/datasets/${datasetId}/snapshot/${tag}`
+  const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   return request.post(url).set('Accept', 'application/json')
 }
 

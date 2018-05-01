@@ -24,7 +24,7 @@ const typeDefs = `
     # Create a new dataset container and repository
     createDataset(label: String!): Dataset
     # Tag the current draft
-    createSnapshot(datasetId: ID!): Snapshot
+    createSnapshot(datasetId: ID!, tag: String!): Snapshot
     # Add or update files in a draft - returns a new Draft
     updateFiles(datasetId: ID!, files: FileTree!): Draft
   }
@@ -97,7 +97,7 @@ const typeDefs = `
   # Validator summary from bids-validator
   type Summary {
     modalities: [String]
-    session: [String]
+    sessions: [String]
     subjects: [String]
     tasks: [String]
     size: Int

@@ -1,7 +1,13 @@
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 import { GraphQLUpload } from 'apollo-upload-server'
-import { dataset, datasets, createDataset, updateFiles } from './dataset.js'
-import { draft, snapshot } from './datalad.js'
+import {
+  dataset,
+  datasets,
+  createDataset,
+  createSnapshot,
+  updateFiles,
+} from './dataset.js'
+import { draft, snapshots } from './datalad.js'
 import { summary } from './summary.js'
 import { whoami, user, users } from './user.js'
 
@@ -20,13 +26,12 @@ export default {
   Mutation: {
     createDataset,
     updateFiles,
+    createSnapshot,
   },
   User: user,
   Dataset: {
     uploader: ds => user(ds, { id: ds.uploader }),
-    draft: ds => draft(ds, { datasetId: ds.id }),
+    draft,
+    snapshots,
   },
-  Draft: draft,
-  Snapshot: snapshot,
-  Summary: summary,
 }
