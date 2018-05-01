@@ -1294,7 +1294,7 @@ let datasetStore = Reflux.createStore({
           this.updateModified()
         })
       })
-      .catch(e => {
+      .catch(() => {
         if (dataset.status.validating) {
           scitran.removeTag('projects', dataset._id, 'validating')
           dataset.status.validating = false
