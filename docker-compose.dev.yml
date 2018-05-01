@@ -10,14 +10,17 @@ services:
   # web app bundle build
   app:
     build:
-      context: ./packages/openneuro-app
-    command: sh -c "yarn install --pure-lockfile && yarn start --watch --watch-poll ${WEBPACK_POLL_INTERVAL}"
+      context: .
+      dockerfile: ./packages/openneuro-app/Dockerfile
+    working_dir: /srv/packages/openneuro-app
+    command: sh -c "apk add make gcc g++ python && yarn install && yarn start --watch"
     volumes:
-      - ./packages/openneuro-app:/srv
+      - .:/srv
       - yarn_cache:/root/.cache
-      - project:/srv/dist
+      - project:/srv/packages/openneuro-app/dist
     tmpfs:
       - /srv/node_modules:exec
+      - /srv/packages/openneuro-app/node_modules:exec
 
   # crn core (bids-core)
   core:
@@ -29,7 +32,7 @@ services:
   server:
     build:
       context: ./packages/openneuro-server
-    command: sh -c "yarn install && node /srv/index.js"
+    command: sh -c "apk add make gcc g++ python && yarn install && node /srv/index.js"
     volumes:
       - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache
@@ -41,7 +44,7 @@ services:
   worker:
     build:
       context: ./packages/openneuro-server
-    command: sh -c "yarn install  && node /srv/worker.js"
+    command: sh -c "apk add make gcc g++ python && yarn install  && node /srv/worker.js"
     volumes:
       - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache

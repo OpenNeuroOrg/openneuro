@@ -3,6 +3,7 @@
   "version": "1.12.0",
   "description": "OpenNeuro shared client library.",
   "main": "src/index.js",
+  "browser": "src/client.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",
   "license": "MIT",

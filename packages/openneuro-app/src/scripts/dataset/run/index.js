@@ -174,15 +174,8 @@ class JobAccordion extends React.Component {
     ) {
       let adminMessage = (
         <span>
-          Support information for this app is available below. Please contact
-          the site{' '}
-          <a
-            href="mailto:openfmri@gmail.com?subject=Analysis%20Failure"
-            target="_blank"
-            rel="noopener noreferrer">
-            administrator
-          </a>{' '}
-          if this analysis continues to fail.
+          Support contact information and the logs necessary for debugging 
+          for this app is available below.
         </span>
       )
       let message = run.analysis.message
