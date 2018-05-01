@@ -60,7 +60,7 @@ services:
   celery:
     volumes:
       - ../datalad-service/datalad_service:/datalad_service
-    command: sh -c "celery worker -A datalad_service.s3 -l info -c 5"
+      - ../datalad-service/tests:/tests
     
   # nginx - static file serving and service proxy
   nginx:
