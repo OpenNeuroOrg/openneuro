@@ -15,11 +15,17 @@ jobs:
           name: Install Python deps
           command: sudo pip install -r requirements.txt
 
+      # Install codecov
+      - run: pip install --user codecov
+
       # install git-annex
       - run: curl https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz | tar -xvz  && sudo mv git-annex.linux/* /usr/local/bin
 
       # run unit tests
-      - run: pytest
+      - run: pytest --cov ./datalad_service
+
+      # Report coverage info
+      - run: codecov
 
   deploy:
     machine:
