@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import moment from 'moment'
 
 const DatasetUploaded = ({ uploader, created }) => {
@@ -11,6 +12,11 @@ const DatasetUploaded = ({ uploader, created }) => {
       } on ${dateAdded} - ${difference} ago`}
     </h6>
   )
+}
+
+DatasetUploaded.propTypes = {
+  uploader: PropTypes.string,
+  created: PropTypes.string,
 }
 
 export default DatasetUploaded

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import LeftSidebar from './left-sidebar.jsx'
 import LeftSidebarButton from './left-sidebar-button.jsx'
 import DatasetMain from './dataset-main.jsx'
@@ -44,4 +45,11 @@ export default class DatasetPage extends React.Component {
       </div>
     )
   }
+}
+
+DatasetPage.propTypes = {
+  dataset: PropTypes.shape({
+    id: PropTypes.string,
+    snapshots: PropTypes.array,
+  }),
 }

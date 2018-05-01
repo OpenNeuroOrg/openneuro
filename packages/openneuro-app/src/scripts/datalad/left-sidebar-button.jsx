@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const LeftSidebarButton = ({ toggle, sidebar }) => (
   <span className="show-nav-btn" onClick={toggle}>
@@ -9,5 +10,10 @@ const LeftSidebarButton = ({ toggle, sidebar }) => (
     )}
   </span>
 )
+
+LeftSidebarButton.propTypes = {
+  toggle: PropTypes.func,
+  sidebar: PropTypes.bool,
+}
 
 export default LeftSidebarButton

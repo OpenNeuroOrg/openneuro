@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
 import DatasetModified from '../fragments/dataset-modified.jsx'
 import DatasetAuthors from '../fragments/dataset-authors.jsx'
@@ -18,5 +19,9 @@ const DatasetContent = ({ dataset }) => (
     </div>
   </span>
 )
+
+DatasetContent.propTypes = {
+  dataset: PropTypes.object,
+}
 
 export default DatasetContent

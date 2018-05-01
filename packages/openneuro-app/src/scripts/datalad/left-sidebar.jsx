@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 const SidebarRow = ({ datasetId, id, version, draft = false }) => {
@@ -18,6 +19,13 @@ const SidebarRow = ({ datasetId, id, version, draft = false }) => {
       </Link>
     </li>
   )
+}
+
+SidebarRow.propTypes = {
+  datasetId: PropTypes.string,
+  id: PropTypes.string,
+  version: PropTypes.string,
+  draft: PropTypes.boolean,
 }
 
 const LeftSidebar = ({ datasetId, snapshots }) => (
@@ -49,5 +57,10 @@ const LeftSidebar = ({ datasetId, snapshots }) => (
     </span>
   </div>
 )
+
+LeftSidebar.propTypes = {
+  datasetId: PropTypes.string,
+  snapshots: PropTypes.array,
+}
 
 export default LeftSidebar

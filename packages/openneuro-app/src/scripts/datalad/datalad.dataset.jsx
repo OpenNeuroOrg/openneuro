@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import Spinner from '../common/partials/spinner.jsx'
@@ -56,5 +57,9 @@ const DataLadDataset = ({ match }) => (
     }}
   </Query>
 )
+
+DataLadDataset.propTypes = {
+  match: PropTypes.object,
+}
 
 export default DataLadDataset

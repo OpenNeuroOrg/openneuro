@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import Spinner from '../../common/partials/spinner.jsx'
@@ -41,6 +42,11 @@ const SnapshotContent = ({ dataset, tag }) => (
   </Query>
 )
 
+SnapshotContent.propTypes = {
+  dataset: PropTypes.object,
+  tag: PropTypes.string,
+}
+
 const SnapshotDetails = ({ dataset, snapshot }) => {
   return (
     <span>
@@ -59,6 +65,11 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
       </div>
     </span>
   )
+}
+
+SnapshotDetails.propTypes = {
+  dataset: PropTypes.object,
+  snapshot: PropTypes.object,
 }
 
 export default SnapshotContent

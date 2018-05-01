@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import FileTreeGeneric from '../../common/partials/file-tree-generic.jsx'
 
 const DatasetFiles = ({ files }) => (
@@ -19,5 +20,9 @@ const DatasetFiles = ({ files }) => (
     </div>
   </div>
 )
+
+DatasetFiles.propTypes = {
+  files: PropTypes.array,
+}
 
 export default DatasetFiles

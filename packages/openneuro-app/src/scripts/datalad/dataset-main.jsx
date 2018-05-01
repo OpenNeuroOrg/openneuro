@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import DatasetRoutes from './dataset-routes.jsx'
 
@@ -16,5 +17,9 @@ const DatasetMain = ({ dataset }) => (
     <DatasetRoutes dataset={dataset} />
   </div>
 )
+
+DatasetMain.propTypes = {
+  dataset: PropTypes.object,
+}
 
 export default DatasetMain

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 export default class FileTreeGeneric extends React.Component {
   constructor() {
@@ -12,4 +13,8 @@ export default class FileTreeGeneric extends React.Component {
       </ul>
     ) : null
   }
+}
+
+FileTreeGeneric.propTypes = {
+  files: PropTypes.array,
 }
