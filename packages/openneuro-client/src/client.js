@@ -24,10 +24,12 @@ const authLink = getAuthorization =>
     // Passthrough any headers but add in authorization if set
     const token = getAuthorization ? getAuthorization() : false
     return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : '',
-      },
+      headers: Object.assign(
+        {
+          authorization: token ? `Bearer ${token}` : '',
+        },
+        headers,
+      ),
     }
   })
 
