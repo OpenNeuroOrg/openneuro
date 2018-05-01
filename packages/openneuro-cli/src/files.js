@@ -43,7 +43,7 @@ export const getFileTree = (basepath, root, logging = true) => {
           const stream = fs.createReadStream(filePath)
           if (logging) {
             stream.on(
-              'data',
+              'readable',
               debounce(fileProgress(console, filePath, stream, stat.size), 500),
             )
           }
