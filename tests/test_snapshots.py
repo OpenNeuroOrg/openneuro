@@ -14,7 +14,7 @@ def test_get_snapshot(client):
     result_doc = json.loads(response.content, encoding='utf-8')
 
     assert response.status == falcon.HTTP_OK
-    assert {'files': [{'filename': 'dataset_description.json', 'key': 'MD5E-s97--76dc22875c876b360e7b084fb1219c83.json', 'size': 97}],
+    assert {'files': [{'filename': 'dataset_description.json', 'id': 'MD5E-s97--76dc22875c876b360e7b084fb1219c83.json', 'size': 97}],
             'ref': SNAPSHOT_ID} == result_doc
 
 

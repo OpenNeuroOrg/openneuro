@@ -9,5 +9,5 @@ def get_repo_files(dataset, branch=None):
     for filename in working_files:
         key = dataset.repo.get_file_key(filename)
         size = dataset.repo.get_size_from_key(key)
-        files.append({'filename': filename, 'size': size, 'key': key})
+        files.append({'filename': filename, 'size': size, 'id': key})
     return files
