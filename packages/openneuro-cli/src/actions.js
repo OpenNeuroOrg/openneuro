@@ -5,13 +5,6 @@ import { saveConfig, getToken } from './config'
 import { validateAndUpload } from './upload'
 import { getOrCreateDataset } from './datasets'
 
-const loginQuestions = {
-  type: 'input',
-  name: 'apikey',
-  message:
-    'Enter your API key for OpenNeuro (get an API key from https://openneuro.org/keygen)',
-}
-
 /**
  * Login action to save an auth key locally
  *
@@ -20,7 +13,25 @@ const loginQuestions = {
  */
 export const login = () => {
   return inquirer
-    .prompt(loginQuestions)
+    .prompt({
+      type: 'list',
+      name: 'hostname',
+      message: 'Choose an OpenNeuro instance to use.',
+      choices: ['openneuro.org', 'openneuro.dev.sqm.io'],
+      default: 'openneuro.org',
+    })
+    .then(async answers =>
+      Object.assign(
+        answers,
+        await inquirer.prompt({
+          type: 'input',
+          name: 'apikey',
+          message: `Enter your API key for OpenNeuro (get an API key from https://${
+            answers.hostname
+          }/keygen)`,
+        }),
+      ),
+    )
     .then(loginAnswers)
     .then(saveConfig)
 }
