@@ -28,7 +28,11 @@ class SnapshotResource(object):
         else:
             # Index of all tags
             ds = self.store.get_dataset(dataset)
-            resp.media = {'snapshots': ds.repo.get_tags()}
+            repo_tags = ds.repo.get_tags()
+            # Include an extra id field to uniquely identify snapshots
+            tags = [{'id': '{}:{}'.format(dataset, tag['name']), 'tag': tag['name'], 'hexsha': tag['hexsha']}
+                    for tag in repo_tags]
+            resp.media = {'snapshots': tags}
             resp.status = falcon.HTTP_OK
 
     def on_post(self, req, resp, dataset, snapshot):

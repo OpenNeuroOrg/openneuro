@@ -50,5 +50,6 @@ def test_get_snapshots(client, new_dataset):
     result_doc = json.loads(response.content, encoding='utf-8')
     assert response.status == falcon.HTTP_OK
     assert result_doc['snapshots'][0]['hexsha'] == result_doc['snapshots'][1]['hexsha']
-    assert result_doc['snapshots'][0]['name'] == 'v1.0.0'
-    assert result_doc['snapshots'][1]['name'] == 'v2.0.0'
+    assert result_doc['snapshots'][0]['id'] == '{}:{}'.format(ds_id, 'v1.0.0')
+    assert result_doc['snapshots'][0]['tag'] == 'v1.0.0'
+    assert result_doc['snapshots'][1]['tag'] == 'v2.0.0'
