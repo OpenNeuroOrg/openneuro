@@ -23,7 +23,10 @@ export default class DatasetPage extends React.Component {
           className={
             this.state.sidebar ? 'open dataset-container' : 'dataset-container'
           }>
-          <LeftSidebar snapshots={this.props.dataset.snapshots} />
+          <LeftSidebar
+            datasetId={this.props.dataset.id}
+            snapshots={this.props.dataset.snapshots}
+          />
           <LeftSidebarButton
             sidebar={this.state.sidebar}
             toggle={this.toggleSidebar}
