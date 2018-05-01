@@ -1288,6 +1288,7 @@ let datasetStore = Reflux.createStore({
           dataset.validation = validation
           dataset.summary = res.body && res.body.summary
           dataset.status.invalid =
+            validation &&
             validation.errors &&
             (validation.errors == 'Invalid' || validation.errors.length > 0)
           this.update({ dataset })
