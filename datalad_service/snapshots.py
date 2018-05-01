@@ -15,7 +15,7 @@ class SnapshotResource(object):
     def _get_snapshot(self, dataset, snapshot):
         ds = self.store.get_dataset(dataset)
         files = get_repo_files(ds, branch=snapshot)
-        return {'files': files, 'ref': snapshot}
+        return {'files': files, 'id':'{}:{}'.format(dataset, snapshot), 'tag': snapshot}
 
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
