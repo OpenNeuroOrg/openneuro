@@ -5,9 +5,9 @@ import { Route, Switch } from 'react-router-dom'
 import loadable from 'loadable-components'
 import requireAuth from './utils/requireAuth'
 import Dataset from './dataset/dataset.jsx'
-import DatasetDataLad from './dataset/dataset.datalad.jsx'
+import DataLad from './datalad/datalad.jsx'
 
-const datasetComponent = config.datalad.enabled ? DatasetDataLad : Dataset
+const datasetComponent = config.datalad.enabled ? DataLad : Dataset
 
 // wrap with loadable HOC
 const FrontPage = loadable(() => import('./front-page/front-page.jsx'))
