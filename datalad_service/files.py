@@ -3,7 +3,7 @@ import re
 
 import falcon
 
-from .common.annex import filter_git_files
+from .common.annex import get_repo_files
 
 
 def get_from_header(req):
@@ -43,14 +43,9 @@ class FilesResource(object):
             # Request for index of files
             # Return a list of file objects
             # {name, path, size}
-            ds = self.store.get_dataset(dataset)
-            working_files = filter_git_files(ds.repo.get_files())
-            files = []
-            for filename in working_files:
-                key = ds.repo.get_file_key(filename)
-                size = ds.repo.get_size_from_key(key)
-                files.append({'filename': filename, 'size': size, 'key': key})
+            files = get_repo_files(self.store.get_dataset(dataset))
             resp.media = {'files': files}
+
 
     def on_post(self, req, resp, dataset, filename):
         """Post will only create new files and always adds them to the annex."""
