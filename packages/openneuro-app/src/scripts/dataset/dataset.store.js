@@ -805,10 +805,12 @@ let datasetStore = Reflux.createStore({
         [],
       )
       .then(res => {
-        callback(null, res)
-        dataset.README = value
-        this.update({ dataset })
-        this.updateModified()
+        scitran.updateModified(dataset._id).then(() => {
+          callback(null, res)
+          dataset.README = value
+          this.update({ dataset })
+          this.updateModified()
+        })
       })
   },
 
