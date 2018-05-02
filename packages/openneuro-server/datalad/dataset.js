@@ -110,7 +110,14 @@ const fileUrl = (datasetId, path, filename) => {
  */
 export const addFile = async (datasetId, path, { filename, stream }) => {
   // Cannot use superagent 'request' due to inability to post streams
-  return stream.pipe(requestNode.post(fileUrl(datasetId, path, filename)))
+  return stream
+    .pipe(requestNode.post(fileUrl(datasetId, path, filename)))
+    .on('close', () => {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `A client hung up the connection - ${datasetId}:${path}:${filename}`,
+      )
+    })
 }
 
 /**
@@ -118,5 +125,12 @@ export const addFile = async (datasetId, path, { filename, stream }) => {
  */
 export const updateFile = async (datasetId, path, { filename, stream }) => {
   // Cannot use superagent 'request' due to inability to post streams
-  return stream.pipe(requestNode.put(fileUrl(datasetId, path, filename)))
+  return stream
+    .pipe(requestNode.put(fileUrl(datasetId, path, filename)))
+    .on('close', () => {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `A client hung up the connection - ${datasetId}:${path}:${filename}`,
+      )
+    })
 }
