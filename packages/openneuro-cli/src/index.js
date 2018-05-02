@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // ES6 module shim
 // eslint-disable-next-line no-global-assign
 require = require('esm')(module)
