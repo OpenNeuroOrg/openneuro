@@ -28,7 +28,7 @@ export const login = () => {
           name: 'apikey',
           message: `Enter your API key for OpenNeuro (get an API key from ${
             answers.url
-          }/keygen)`,
+          }keygen)`,
         }),
       ),
     )
