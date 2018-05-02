@@ -805,7 +805,7 @@ let datasetStore = Reflux.createStore({
         [],
       )
       .then(res => {
-        scitran.updateModified(dataset._id).then(() => {
+        scitran.updateProject(dataset._id, {}).then(() => {
           callback(null, res)
           dataset.README = value
           this.update({ dataset })
