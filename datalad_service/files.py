@@ -1,6 +1,9 @@
 import os
 import re
+
 import falcon
+
+from .common.annex import get_repo_files
 
 
 def get_from_header(req):
@@ -25,16 +28,24 @@ class FilesResource(object):
                     break
                 new_file.write(chunk)
 
-    def on_get(self, req, resp, dataset, filename):
+    def on_get(self, req, resp, dataset, filename=None):
         ds_path = self.store.get_dataset_path(dataset)
-        try:
-            fd = open(os.path.join(ds_path, filename), 'rb')
-            resp.stream = fd
-            resp.stream_len = os.fstat(fd.fileno()).st_size
-            resp.status = falcon.HTTP_OK
-        except FileNotFoundError:
-            resp.media = {'error': 'file does not exist'}
-            resp.status = falcon.HTTP_NOT_FOUND
+        if filename:
+            try:
+                fd = open(os.path.join(ds_path, filename), 'rb')
+                resp.stream = fd
+                resp.stream_len = os.fstat(fd.fileno()).st_size
+                resp.status = falcon.HTTP_OK
+            except FileNotFoundError:
+                resp.media = {'error': 'file does not exist'}
+                resp.status = falcon.HTTP_NOT_FOUND
+        else:
+            # Request for index of files
+            # Return a list of file objects
+            # {name, path, size}
+            files = get_repo_files(self.store.get_dataset(dataset))
+            resp.media = {'files': files}
+
 
     def on_post(self, req, resp, dataset, filename):
         """Post will only create new files and always adds them to the annex."""

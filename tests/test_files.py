@@ -98,3 +98,25 @@ def test_add_commit_info(client):
     response_content = json.loads(response.content)
     assert response_content['name'] == name
     assert response_content['email'] == email
+
+
+def test_file_indexing(client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    # First post a file
+    response = client.simulate_post(
+        '/datasets/{}/files/LICENSE'.format(ds_id), body='GPL V3.0')
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post(
+        '/datasets/{}/files/sub-01:anat:sub-01_T1w.nii.gz'.format(ds_id), body='fMRI data goes here')
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_get('/datasets/{}/files'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    response_content = json.loads(response.content)
+    assert response_content['files'] == [
+        {'filename': 'LICENSE', 'size': 8,
+            'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
+        {'filename': 'dataset_description.json', 'size': 101,
+            'id': 'MD5E-s101--63ef6d26537d770344904ec51d215d60.json'},
+        {'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
+            'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19}
+    ]
