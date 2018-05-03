@@ -89,10 +89,12 @@ class FilesResource(object):
                     name, email = get_commit_info(req)
                     media_dict['name'] = name
                     media_dict['email'] = email
+                    self.store.set_config(ds, media_dict['name'], media_dict['email'])
                 ds = self.store.get_dataset(dataset)
                 ds.unlock(path=filename)
                 self._update_file(file_path, req.stream)
                 ds.add(path=filename)
+                ds.publish(to='github')
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
