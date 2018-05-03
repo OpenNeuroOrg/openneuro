@@ -30,7 +30,7 @@ class DatasetResource(object):
         else:
             datalad.create()
             if (datalad.repo):
-                self.store.set_config(datalad, 'jstiehl', 'jstiehl@gmail.com')
+                self.store.create_github_repo(datalad)
                 resp.media = {}
                 resp.status = falcon.HTTP_OK
             else:

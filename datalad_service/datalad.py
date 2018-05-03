@@ -1,6 +1,8 @@
 from datalad.api import Dataset, create_sibling_github
 from datalad.config import ConfigManager
 
+import os
+
 class DataladStore(object):
 
     """Store for Datalad state accessed by resource handlers."""
@@ -16,8 +18,14 @@ class DataladStore(object):
         return '{}/{}'.format(self.annex_path, name)
 
     def set_config(self, dataset, name, email):
-        ConfigManager(dataset).add('user.email', email, 'local')
-        ConfigManager(dataset).add('user.name', name, 'local')
+        ConfigManager(dataset).set('user.email', email, 'local')
+        ConfigManager(dataset).set('user.name', name, 'local')
+        return
+
+    def create_github_repo(self, dataset):
+        dataset_number = dataset.path.split('/')[2]
+        login = os.environ['DATALAD_GITHUB_ORG']
+        password = os.environ['DATALAD_GITHUB_PASS']
         # this adds github remote to config and also creates repo
-        # create_sibling_github('datalad', github_organization='', github_passwd='', dataset=dataset)
+        create_sibling_github(dataset_number, github_login=login, github_passwd=password, dataset=dataset, access_protocol='ssh')
         return

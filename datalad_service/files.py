@@ -52,12 +52,6 @@ class FilesResource(object):
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             try:
-                media_dict = {'created': filename}
-                # Record if this was done on behalf of a user
-                if 'FROM' in req.headers:
-                    name, email = get_from_header(req)
-                    media_dict['name'] = name
-                    media_dict['email'] = email
                 # Make any missing parent directories
                 file_path = os.path.join(ds_path, filename)
                 os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -65,7 +59,15 @@ class FilesResource(object):
                 self._update_file(file_path, req.stream)
                 # Add to dataset
                 ds = self.store.get_dataset(dataset)
+                media_dict = {'created': filename}
+                # Record if this was done on behalf of a user
+                if 'FROM' in req.headers:
+                    name, email = get_from_header(req)
+                    media_dict['name'] = name
+                    media_dict['email'] = email
+                    self.store.set_config(ds, media_dict['name'], media_dict['email'])
                 ds.add(path=filename)
+                ds.publish(to='github')
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             except PermissionError:
