@@ -29,6 +29,9 @@ var Request = {
 
     callback(mockError, mockResponse)
   }),
+  then: jest.genMockFunction().mockImplementation(cb => {
+    cb(mockResponse)
+  }),
 
   __setMockDelay: function(boolValue) {
     mockDelay = boolValue

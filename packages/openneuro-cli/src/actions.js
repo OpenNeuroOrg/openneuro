@@ -1,16 +1,9 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
 import createClient from 'openneuro-client'
-import { saveConfig } from './config'
+import { saveConfig, getToken, getUrl } from './config'
 import { validateAndUpload } from './upload'
 import { getOrCreateDataset } from './datasets'
-
-const loginQuestions = {
-  type: 'input',
-  name: 'apikey',
-  message:
-    'Enter your API key for OpenNeuro (get an API key from https://openneuro.org/keygen)',
-}
 
 /**
  * Login action to save an auth key locally
@@ -20,7 +13,25 @@ const loginQuestions = {
  */
 export const login = () => {
   return inquirer
-    .prompt(loginQuestions)
+    .prompt({
+      type: 'list',
+      name: 'url',
+      message: 'Choose an OpenNeuro instance to use.',
+      choices: ['https://openneuro.org/', 'https://openneuro.dev.sqm.io/'],
+      default: 'https://openneuro.org/',
+    })
+    .then(async answers =>
+      Object.assign(
+        answers,
+        await inquirer.prompt({
+          type: 'input',
+          name: 'apikey',
+          message: `Enter your API key for OpenNeuro (get an API key from ${
+            answers.url
+          }keygen)`,
+        }),
+      ),
+    )
     .then(loginAnswers)
     .then(saveConfig)
 }
@@ -33,8 +44,8 @@ export const login = () => {
 export const loginAnswers = answers => answers
 
 const uploadDataset = (dir, datasetId, validatorOptions) => {
-  // TODO - This URL (at least the hostname) should be configurable
-  const client = createClient('http://localhost:9876/crn/graphql')
+  const url = getUrl()
+  const client = createClient(`${url}crn/graphql`, getToken)
   return getOrCreateDataset(client, dir, datasetId).then(
     validateAndUpload(client, dir, validatorOptions),
   )

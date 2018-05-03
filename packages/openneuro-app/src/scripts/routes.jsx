@@ -1,10 +1,13 @@
 // dependencies ----------------------------------------------------------
-
+import config from '../../config'
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import loadable from 'loadable-components'
 import requireAuth from './utils/requireAuth'
 import Dataset from './dataset/dataset.jsx'
+import DataLad from './datalad/datalad.jsx'
+
+const datasetComponent = config.datalad.enabled ? DataLad : Dataset
 
 // wrap with loadable HOC
 const FrontPage = loadable(() => import('./front-page/front-page.jsx'))
@@ -32,7 +35,7 @@ const appRoutes = () => (
     />
     <Route name="public" path="/public" component={PublicDashboard} />
     <Route name="admin" path="/admin" component={requireAuth(Admin, 'admin')} />
-    <Route name="dataset" path="/datasets" component={Dataset} />
+    <Route name="dataset" path="/datasets" component={datasetComponent} />
     <Route name="search" path="/search/:query?" component={SearchResults} />
   </Switch>
 )

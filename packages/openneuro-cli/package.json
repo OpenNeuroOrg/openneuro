@@ -6,8 +6,11 @@
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
   "author": "Squishymedia",
   "license": "MIT",
+  "bin": {
+    "openneuro": "./src/index.js"
+  },
   "dependencies": {
-    "bids-validator": "^0.26.2",
+    "bids-validator": "^0.26.6",
     "commander": "^2.15.1",
     "esm": "^3.0.16",
     "find-config": "^1.0.0",
