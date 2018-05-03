@@ -27,32 +27,32 @@ deployment:
   dev:
     branch: master
     commands:
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS; fi
       - docker build --pull -t openneuro/server packages/openneuro-server
       - docker build --pull -t openneuro/app -f packages/openneuro-app/Dockerfile .
       # Update latest tag
       - docker tag -f openneuro/server openneuro/server:latest
       - docker tag -f openneuro/app openneuro/app:latest
-      - docker push openneuro/server
-      - docker push openneuro/app
+      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/server; fi
+      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/app; fi
   branches:
     branch: /.*/
     commands:
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS; fi
       - docker build --pull -t openneuro/server packages/openneuro-server
       - docker build --pull -t openneuro/app -f packages/openneuro-app/Dockerfile .
       # Update latest tag
       - docker tag -f openneuro/server openneuro/server:$CIRCLE_BRANCH
       - docker tag -f openneuro/app openneuro/app:$CIRCLE_BRANCH
-      - docker push openneuro/server:$CIRCLE_BRANCH
-      - docker push openneuro/app:$CIRCLE_BRANCH
+      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/server:$CIRCLE_BRANCH; fi
+      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/app:$CIRCLE_BRANCH; fi
   production:
     tag: /v.*/
     commands:
-      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - if [[ -n "$DOCKER_PASS" ]]; then docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS; fi
       - docker build --pull -t openneuro/server packages/openneuro-server
       - docker build --pull -t openneuro/app -f packages/openneuro-app/Dockerfile .
       - docker tag openneuro/server openneuro/server:$CIRCLE_TAG
       - docker tag openneuro/app openneuro/app:$CIRCLE_TAG
-      - docker push openneuro/server:$CIRCLE_TAG
-      - docker push openneuro/app:$CIRCLE_TAG
+      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/server:$CIRCLE_TAG; fi
+      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/app:$CIRCLE_TAG; fi
