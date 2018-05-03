@@ -21,10 +21,10 @@ const uri = config.datalad.uri
  * @param {String} label - descriptive label for this dataset
  * @returns {Promise} - resolves to dataset id of the new dataset
  */
-export const createDataset = label => {
+export const createDataset = (label, uploader) => {
   return new Promise(async (resolve, reject) => {
     const datasetId = await getAccessionNumber()
-    const dsObj = await createDatasetModel(datasetId, label)
+    const dsObj = await createDatasetModel(datasetId, label, uploader)
     // If successful, create the repo
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
@@ -41,8 +41,15 @@ export const createDataset = label => {
  *
  * Exported for tests.
  */
-export const createDatasetModel = (id, label) => {
-  const datasetObj = { id, label }
+export const createDatasetModel = (id, label, uploader) => {
+  const creationTime = new Date()
+  const datasetObj = {
+    id,
+    label,
+    created: creationTime,
+    modified: creationTime,
+    uploader,
+  }
   return c.crn.datasets.insertOne(datasetObj)
 }
 
@@ -69,8 +76,11 @@ export const getDatasets = () => {
  * @returns {Promise} - resolves when tag is created
  */
 export const createSnapshot = async (datasetId, tag) => {
-  const url = `${uri}/datasets/${datasetId}/snapshot/${tag}`
-  return request.post(url).set('Accept', 'application/json')
+  const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
+  return request
+    .post(url)
+    .set('Accept', 'application/json')
+    .then(({ body }) => body)
 }
 
 /**
@@ -100,7 +110,14 @@ const fileUrl = (datasetId, path, filename) => {
  */
 export const addFile = async (datasetId, path, { filename, stream }) => {
   // Cannot use superagent 'request' due to inability to post streams
-  return stream.pipe(requestNode.post(fileUrl(datasetId, path, filename)))
+  return stream
+    .pipe(requestNode.post(fileUrl(datasetId, path, filename)))
+    .on('close', () => {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `A client hung up the connection - ${datasetId}:${path}:${filename}`,
+      )
+    })
 }
 
 /**
@@ -108,5 +125,12 @@ export const addFile = async (datasetId, path, { filename, stream }) => {
  */
 export const updateFile = async (datasetId, path, { filename, stream }) => {
   // Cannot use superagent 'request' due to inability to post streams
-  return stream.pipe(requestNode.put(fileUrl(datasetId, path, filename)))
+  return stream
+    .pipe(requestNode.put(fileUrl(datasetId, path, filename)))
+    .on('close', () => {
+      // eslint-disable-next-line no-console
+      console.warn(
+        `A client hung up the connection - ${datasetId}:${path}:${filename}`,
+      )
+    })
 }

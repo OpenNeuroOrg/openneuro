@@ -11,8 +11,8 @@ export const datasets = () => {
 /**
  * Create an empty dataset (new repo, new accession number)
  */
-export const createDataset = (obj, { label }) => {
-  return datalad.createDataset(label)
+export const createDataset = (obj, { label }, { user }) => {
+  return datalad.createDataset(label, user)
 }
 
 /**
