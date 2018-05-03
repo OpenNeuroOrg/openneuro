@@ -18,7 +18,7 @@
   "dependencies": {
     "async": "^2.6.0",
     "babel-runtime": "^6.26.0",
-    "bids-validator": "^0.26.2",
+    "bids-validator": "^0.26.6",
     "bowser": "^1.7.3",
     "bytes": "^3.0.0",
     "codecov": "^3.0.0",
