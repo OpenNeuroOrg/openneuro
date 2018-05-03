@@ -1587,9 +1587,9 @@ bcrypt@^2.0.1:
     nan "2.10.0"
     node-pre-gyp "0.9.1"
 
-bids-validator@^0.26.2:
-  version "0.26.3"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.26.3.tgz#32156ab2c9e3fbcdec77ff93fde6ad7b2bf45570"
+bids-validator@^0.26.6:
+  version "0.26.6"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.26.6.tgz#bd93c876e11212b9fec6f405612f7a17738104a0"
   dependencies:
     ajv "^5.2.2"
     async "^2.1.5"
