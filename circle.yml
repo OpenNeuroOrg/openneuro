@@ -44,8 +44,8 @@ deployment:
       # Update latest tag
       - docker tag -f openneuro/server openneuro/server:$CIRCLE_BRANCH
       - docker tag -f openneuro/app openneuro/app:$CIRCLE_BRANCH
-      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/server:$CIRCLE_BRANCH; fi
-      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/app:$CIRCLE_BRANCH; fi
+      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/server:${CIRCLE_BRANCH///}; fi
+      - if [[ -n "$DOCKER_PASS" ]]; then docker push openneuro/app:${CIRCLE_BRANCH///}; fi
   production:
     tag: /v.*/
     commands:
