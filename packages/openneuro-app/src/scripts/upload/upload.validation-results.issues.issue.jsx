@@ -36,7 +36,7 @@ export default class Issue extends React.Component {
     if (error.file) {
       fileInfo = (
         <span>
-          {this._fileName(error.file)}
+          {this._location(error.file)}
           {this._fileMetadata(error.file)}
         </span>
       )
@@ -46,7 +46,6 @@ export default class Issue extends React.Component {
       <div className="em-body">
         {fileInfo}
         <span className="e-meta">
-          {this._location(error.file)}
           <label>Reason: </label>
           <p>{error.reason}</p>
         </span>
@@ -57,15 +56,12 @@ export default class Issue extends React.Component {
 
   // custom methods -----------------------------------------------------
 
-  _fileName(file) {
-    let fileName = file.name
-      ? file.name
-      : file.relativePath.split('/')[file.relativePath.split('/').length - 1]
-    if (fileName) {
+  _location(file) {
+    if (file && file.relativePath) {
       return (
-        <span className="e-meta">
-          <label>File Name:</label>
-          <p>{fileName}</p>
+        <span>
+          <label>Location: </label>
+          <p>{file.relativePath}</p>
         </span>
       )
     }
@@ -79,17 +75,6 @@ export default class Issue extends React.Component {
           <p>
             {file.size / 1000} KB | {file.type}
           </p>
-        </span>
-      )
-    }
-  }
-
-  _location(file) {
-    if (file && file.webkitRelativePath) {
-      return (
-        <span>
-          <label>Location: </label>
-          <p>{file.webkitRelativePath}</p>
         </span>
       )
     }
