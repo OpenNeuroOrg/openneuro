@@ -4,6 +4,7 @@ import crn from './crn'
 import userStore from '../user/user.store'
 import fileUtils from './files'
 import hex from './hex'
+import datalad from './datalad'
 
 /**
  * BIDS
@@ -98,13 +99,13 @@ export default {
       metadata = {}
     if (project.files) {
       for (let file of project.files) {
-        if (file.name === 'README') {
+        if (file.filename === 'README') {
           metadataFiles.push('README')
         }
-        if (file.name === 'CHANGES') {
+        if (file.filename === 'CHANGES') {
           metadataFiles.push('CHANGES')
         }
-        if (file.name === 'dataset_description.json') {
+        if (file.filename === 'dataset_description.json') {
           metadataFiles.push('dataset_description.json')
         }
       }
@@ -155,39 +156,49 @@ export default {
 
     // Dataset
     try {
-      const projectRes = await scitran.getProject(projectId, options)
-      if (projectRes.status !== 200) {
-        return callback(projectRes)
-      }
-      const project = projectRes ? projectRes.body : null
-      if (project) {
-        let tempFiles = project.files ? this._formatFiles(project.files) : null
-        this.getMetadata(
-          project,
-          metadata => {
-            let dataset = this.formatDataset(
-              project,
-              metadata['dataset_description.json'],
-              users,
-            )
-            dataset.README = metadata.README
-            dataset.CHANGES = metadata.CHANGES
-            crn.getDatasetJobs(projectId, options).then(res => {
-              dataset.jobs = res.body
+      datalad.getDataset(projectId, options, (projectRes) => {
+        // if (projectRes.status !== 200) {
+        //   return callback(projectRes)
+        // }
+        const data = projectRes ? projectRes.data : null
+        if (data) {
+          let project = data.dataset
+          let draft = project ? project.draft : null
+          let tempFiles = draft.files ? this._formatFiles(draft.files) : null
+          this.getMetadata(
+            project,
+            metadata => {
+              let dataset = this.formatDataset(
+                project,
+                metadata['dataset_description.json'],
+                users,
+              )
+              dataset.README = metadata.README
+              dataset.CHANGES = metadata.CHANGES
               dataset.children = tempFiles
               dataset.showChildren = true
+
+              // get dataset usage stats
               this.usage(projectId, usage => {
                 if (usage) {
                   dataset.views = this.views(dataset, usage)
                   dataset.downloads = this.downloads(dataset, usage)
                 }
-                callback(dataset)
+                crn.getDatasetJobs(projectId, options).then(res => {
+                  dataset.jobs = res.body
+                  return callback(dataset)
+                })
+                .catch(err => {
+                  console.log('error getting jobs:', err)
+                  return callback(dataset)
+                })
               })
-            })
-          },
-          options,
-        )
-      }
+              
+            },
+            options,
+          )
+        }
+      })
     } catch (err) {
       callback(err)
     }
@@ -207,8 +218,8 @@ export default {
 
         if (!file.tags || file.tags.indexOf('attachment') == -1) {
           fileList[i] = {
-            name: file.name.replace(/%2F/g, '/').replace(/%20/g, ' '),
-            webkitRelativePath: file.name
+            name: file.filename.replace(/%2F/g, '/').replace(/%20/g, ' '),
+            webkitRelativePath: file.filename
               .replace(/%2F/g, '/')
               .replace(/%20/g, ' '),
             size: file.size,
@@ -547,7 +558,8 @@ export default {
     let currentUser = userStore.data.scitran
     let userId = currentUser ? currentUser._id : null
     let hasRoot = currentUser ? currentUser.root : null
-    let permittedUsers = project.permissions.map(user => {
+    let permissions = project.permissions ? project.permissions : []
+    let permittedUsers = permissions.map(user => {
       return user._id
     })
     let adminOnlyAccess = permittedUsers.indexOf(userId) == -1 && hasRoot
