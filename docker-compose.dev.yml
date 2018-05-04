@@ -60,6 +60,11 @@ services:
     volumes:
       - ../datalad-service/datalad_service:/datalad_service
 
+  celery:
+    volumes:
+      - ../datalad-service/datalad_service:/datalad_service
+      - ../datalad-service/tests:/tests
+    
   # nginx - static file serving and service proxy
   nginx:
     volumes:
