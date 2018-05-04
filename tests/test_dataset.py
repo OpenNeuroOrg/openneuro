@@ -29,7 +29,6 @@ def test_create_dataset(client, annex_path):
     assert response.status == falcon.HTTP_OK
     assert Dataset(str(annex_path.join(ds_id))).repo is not None
 
-
 def test_create_dataset_duplicate(client, annex_path):
     ds_id = 'ds000003'
     first_response = client.simulate_post('/datasets/{}'.format(ds_id))

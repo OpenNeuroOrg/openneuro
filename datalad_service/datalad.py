@@ -20,6 +20,7 @@ class DataladStore(object):
     def set_config(self, dataset, name, email):
         ConfigManager(dataset).set('user.email', email, 'local')
         ConfigManager(dataset).set('user.name', name, 'local')
+        return None
 
     def create_github_repo(self, dataset):
         dataset_number = dataset.path.split('/')[2]
@@ -27,3 +28,4 @@ class DataladStore(object):
         password = os.environ['DATALAD_GITHUB_PASS']
         # this adds github remote to config and also creates repo
         create_sibling_github(dataset_number, github_login=login, github_passwd=password, dataset=dataset, access_protocol='ssh')
+        return None
