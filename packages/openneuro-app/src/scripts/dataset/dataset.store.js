@@ -194,27 +194,28 @@ let datasetStore = Reflux.createStore({
                     children: dataset.children,
                   },
                 ],
+                loading: false,
               },
-              this.loadJobs(
-                datasetId,
-                snapshot,
-                originalId,
-                options,
-                (err, jobs) => {
-                  this.loadSnapshots(dataset, jobs, () => {
-                    this.loadComments(originalId)
-                    this.getDatasetStars()
-                    this.checkSubscriptionFollowers(() => {
-                      let datasetUrl = this.constructDatasetUrl(dataset)
-                      this.update({
-                        loading: false,
-                        snapshot: snapshot,
-                        datasetUrl: datasetUrl,
-                      })
-                    })
-                  })
-                },
-              ),
+              // this.loadJobs(
+              //   datasetId,
+              //   snapshot,
+              //   originalId,
+              //   options,
+              //   (err, jobs) => {
+              //     this.loadSnapshots(dataset, jobs, () => {
+              //       this.loadComments(originalId)
+              //       this.getDatasetStars()
+              //       this.checkSubscriptionFollowers(() => {
+              //         let datasetUrl = this.constructDatasetUrl(dataset)
+              //         this.update({
+              //           loading: false,
+              //           snapshot: snapshot,
+              //           datasetUrl: datasetUrl,
+              //         })
+              //       })
+              //     })
+              //   },
+              // ),
             )
 
             if (
