@@ -262,7 +262,7 @@ let datasetStore = Reflux.createStore({
             '/datasets/',
             bids.decodeId(datasetId),
             '/versions/',
-            bids.formatVersionNumber(project.snapshot_version),
+            bids.decodeId(project._id),
           )
           this.update({
             redirectUrl: redirectUrl,
