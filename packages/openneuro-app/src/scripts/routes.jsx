@@ -7,7 +7,8 @@ import requireAuth from './utils/requireAuth'
 import Dataset from './dataset/dataset.jsx'
 import DataLad from './datalad/datalad.jsx'
 
-const datasetComponent = config.datalad.enabled ? DataLad : Dataset
+// const datasetComponent = config.datalad.enabled ? DataLad : Dataset
+const datasetComponent = Dataset
 
 // wrap with loadable HOC
 const FrontPage = loadable(() => import('./front-page/front-page.jsx'))
