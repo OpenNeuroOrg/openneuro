@@ -88,7 +88,7 @@ let DashboardJobStore = Reflux.createStore({
           app.value = app.label
         }
         this.update({ apps: res.body.availableApps, appsLoading: false })
-        this.sort('analysis.created', '+', res.body.jobs, true)
+        this.sort('analysis.created', '+', res.body.jobs, 'timestamp')
       })
     })
   },

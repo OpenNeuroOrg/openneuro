@@ -117,7 +117,7 @@ let UploadStore = Reflux.createStore({
               })
             }
             if (isPublic === this.data.isPublic) {
-              this.sort('created', '+', datasets, true)
+              this.sort('created', '+', datasets, 'timestamp')
             }
           },
           isPublic,
