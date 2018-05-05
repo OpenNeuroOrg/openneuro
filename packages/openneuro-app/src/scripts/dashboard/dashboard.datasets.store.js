@@ -53,32 +53,12 @@ let UploadStore = Reflux.createStore({
         direction: '+',
       },
       sortOptions: [
-        { label: 'Name', property: 'label', direction: '-' },
-        {
-          label: 'Date',
-          property: 'created',
-          type: 'timestamp',
-          direction: '-',
-        },
-        { label: 'User', property: 'user.lastname', direction: '-' },
-        {
-          label: 'Stars',
-          property: 'starCount',
-          type: 'number',
-          direction: '-',
-        },
-        {
-          label: 'Downloads',
-          property: 'downloads',
-          type: 'number',
-          direction: '-',
-        },
-        {
-          label: 'Followers',
-          property: 'followers',
-          type: 'number',
-          direction: '-',
-        },
+        { label: 'Name', property: 'label' },
+        { label: 'Date', property: 'created', type: 'timestamp' },
+        { label: 'User', property: 'user.lastname' },
+        { label: 'Stars', property: 'starCount', type: 'number' },
+        { label: 'Downloads', property: 'downloads', type: 'number' },
+        { label: 'Followers', property: 'followers', type: 'number' },
       ],
       filters: [],
     }

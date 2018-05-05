@@ -38,10 +38,10 @@ export default {
     list.sort((a, b) => {
       // format comparison data
       let aVal, bVal
-      if (type == 'timestamp') {
+      if (type === 'timestamp') {
         aVal = -Date.parse(this.propertyOf(a, property))
         bVal = -Date.parse(this.propertyOf(b, property))
-      } else if (type == 'number') {
+      } else if (type === 'number') {
         aVal = parseInt(this.propertyOf(a, property))
         bVal = parseInt(this.propertyOf(b, property))
       } else {
