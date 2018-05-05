@@ -18,8 +18,10 @@ duecredit==0.6.3
 entrypoints==0.2.3
 falcon==1.4.1
 fasteners==0.14.1
+gevent==1.2.2
 gitdb2==2.0.3
 GitPython==2.1.9
+greenlet==0.4.13
 gunicorn==19.7.1
 humanize==0.5.1
 idna==2.6
