@@ -47,6 +47,5 @@ export const updateFilesTree = (datasetId, fileTree) => {
     datalad.addFile(datasetId, name, file),
   )
   const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
-  console.log(filesPromises)
   return filesPromises.concat(...dirPromises)
 }
