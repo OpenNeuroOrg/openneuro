@@ -10,7 +10,7 @@
     "openneuro": "./src/index.js"
   },
   "dependencies": {
-    "bids-validator": "^0.26.6",
+    "bids-validator": "^0.26.10",
     "commander": "^2.15.1",
     "esm": "^3.0.16",
     "find-config": "^1.0.0",
