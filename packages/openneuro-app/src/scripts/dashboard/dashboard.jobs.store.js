@@ -53,11 +53,11 @@ let DashboardJobStore = Reflux.createStore({
       sort: {
         value: 'analysis.created',
         direction: '+',
-        isTimestamp: true,
+        type: 'timestamp',
       },
       sortOptions: [
         { label: 'Name', property: 'jobName' },
-        { label: 'Date', property: 'analysis.created', isTimestamp: true },
+        { label: 'Date', property: 'analysis.created', type: 'timestamp' },
         { label: 'Dataset', property: 'datasetLabel' },
       ],
       appVersionGroup: [],
@@ -99,9 +99,9 @@ let DashboardJobStore = Reflux.createStore({
    * Takes a value and a direction (+ or -) and
    * sorts the current jobs acordingly.
    */
-  sort(value, direction, jobs, isTimestamp) {
+  sort(value, direction, jobs, type) {
     jobs = jobs ? jobs : this.data.jobs
-    let sort = { value, direction, isTimestamp }
+    let sort = { value, direction, type }
     this.filterAndSort(jobs, null, sort)
   },
 
@@ -180,7 +180,7 @@ let DashboardJobStore = Reflux.createStore({
     }
 
     // sort
-    dashUtils.sort(visiblejobs, sort.value, sort.direction, sort.isTimestamp)
+    dashUtils.sort(visiblejobs, sort.value, sort.direction, sort.type)
 
     // update data
     this.update({

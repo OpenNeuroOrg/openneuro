@@ -35,7 +35,12 @@ export default class Sort extends React.Component {
               ? 'btn-sort name active'
               : 'btn-sort name'
           }
-          onClick={this._sort.bind(this, option.property, option.isTimestamp)}>
+          onClick={this._sort.bind(
+            this,
+            option.property,
+            option.type,
+            option.direction,
+          )}>
           {option.label} {sort.value == option.property ? icon : null}
         </a>
       )
@@ -44,16 +49,8 @@ export default class Sort extends React.Component {
 
   // custom methods ---------------------------------------------------------------------
 
-  _sort(value, isTimestamp) {
-    let direction
-    isTimestamp = typeof isTimestamp === 'boolean' && isTimestamp
-
-    if (value == this.props.sort.value) {
-      direction = this.props.sort.direction == '+' ? '-' : '+'
-    } else {
-      direction = '+'
-    }
-    this.props.sortFunc(value, direction, null, isTimestamp)
+  _sort(value, type, direction) {
+    this.props.sortFunc(value, direction, null, type)
   }
 }
 
