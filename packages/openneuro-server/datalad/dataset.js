@@ -108,16 +108,21 @@ const fileUrl = (datasetId, path, filename) => {
 /**
  * Add files to a dataset
  */
-export const addFile = async (datasetId, path, { filename, stream }) => {
+export const addFile = (datasetId, path, file) => {
   // Cannot use superagent 'request' due to inability to post streams
-  return stream
-    .pipe(requestNode.post(fileUrl(datasetId, path, filename)))
-    .on('close', () => {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `A client hung up the connection - ${datasetId}:${path}:${filename}`,
-      )
-    })
+  return new Promise(async (resolve, reject) => {
+    const { filename, stream, mimetype } = await file
+    stream.pipe(
+      requestNode(
+        {
+          url: fileUrl(datasetId, path, filename),
+          method: 'post',
+          headers: { 'Content-Type': mimetype },
+        },
+        err => (err ? reject(err) : resolve()),
+      ),
+    )
+  })
 }
 
 /**

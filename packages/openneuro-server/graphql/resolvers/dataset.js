@@ -27,15 +27,26 @@ export const createSnapshot = (obj, { datasetId, tag }) => {
  */
 export const updateFiles = (obj, { datasetId, files: fileTree }) => {
   // TODO - The id returned here is a placeholder
-  // drafts just need something to invalidate client cache
-  const { name, files, directories } = fileTree
-  const filesPromises = files.map(async file =>
-    datalad.addFile(datasetId, name, await file),
-  )
-  const dirPromises = directories.map(tree =>
-    updateFiles(obj, { datasetId, files: tree }),
-  )
-  return Promise.all([...filesPromises, ...dirPromises]).then(() => ({
+  const promises = updateFilesTree(datasetId, fileTree)
+  return Promise.all(promises).then(() => ({
     id: new Date(),
   }))
+}
+
+/**
+ * Recursively walk an upload tree and return an array of
+ * promises for each forwarded request.
+ *
+ * @param {string} datasetId
+ * @param {object} fileTree
+ */
+export const updateFilesTree = (datasetId, fileTree) => {
+  // drafts just need something to invalidate client cache
+  const { name, files, directories } = fileTree
+  const filesPromises = files.map(file =>
+    datalad.addFile(datasetId, name, file),
+  )
+  const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
+  console.log(filesPromises)
+  return filesPromises.concat(...dirPromises)
 }
