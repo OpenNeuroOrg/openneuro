@@ -56,9 +56,24 @@ let DashboardJobStore = Reflux.createStore({
         type: 'timestamp',
       },
       sortOptions: [
-        { label: 'Name', property: 'jobName' },
-        { label: 'Date', property: 'analysis.created', type: 'timestamp' },
-        { label: 'Dataset', property: 'datasetLabel' },
+        {
+          label: 'Name',
+          property: 'jobName',
+          type: 'string',
+          initSortOrder: '+',
+        },
+        {
+          label: 'Date',
+          property: 'analysis.created',
+          type: 'timestamp',
+          initSortOrder: '+',
+        },
+        {
+          label: 'Dataset',
+          property: 'datasetLabel',
+          type: 'string',
+          initSortOrder: '+',
+        },
       ],
       appVersionGroup: [],
     }

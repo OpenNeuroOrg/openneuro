@@ -35,7 +35,12 @@ export default class Sort extends React.Component {
               ? 'btn-sort name active'
               : 'btn-sort name'
           }
-          onClick={this._sort.bind(this, option.property, option.type)}>
+          onClick={this._sort.bind(
+            this,
+            option.property,
+            option.type,
+            option.initSortOrder,
+          )}>
           {option.label} {sort.value == option.property ? icon : null}
         </a>
       )
@@ -44,13 +49,13 @@ export default class Sort extends React.Component {
 
   // custom methods ---------------------------------------------------------------------
 
-  _sort(value, type) {
+  _sort(value, type, initSortOrder) {
     let direction
 
     if (value == this.props.sort.value) {
       direction = this.props.sort.direction == '+' ? '-' : '+'
     } else {
-      direction = '+'
+      direction = initSortOrder
     }
     this.props.sortFunc(value, direction, null, type)
   }
