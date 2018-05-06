@@ -1983,7 +1983,14 @@ let datasetStore = Reflux.createStore({
       }
 
       // add draft is available
-      if (dataset && dataset.permissions && !dataset.permissions.length) {
+      if (
+        dataset &&
+        this.data.currentUser &&
+        this.data.currentUser.profile &&
+        dataset.user._id === this.data.currentUser.profile._id &&
+        dataset.permissions &&
+        !dataset.permissions.length
+      ) {
         snapshots.unshift({
           orphaned: true,
         })
