@@ -6,7 +6,7 @@ This tool allows you to upload to [OpenNeuro.org](https://openneuro.org) without
 
 Install globally with [yarn](https://yarnpkg.com/):
 
-`yarn global add openneuro cli`
+`yarn global add openneuro-cli`
 
 Or with [npm](https://www.npmjs.com/):
 
