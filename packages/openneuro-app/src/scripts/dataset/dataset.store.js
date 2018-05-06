@@ -1279,21 +1279,31 @@ let datasetStore = Reflux.createStore({
    */
   revalidate() {
     let dataset = this.data.dataset
-    scitran.addTag('projects', dataset._id, 'validating').then(() => {
-      dataset.status.validating = true
-      this.update({ dataset })
-      crn.validate(dataset._id).then(res => {
-        let validation = res.body.validation
-        dataset.status.validating = false
-        dataset.validation = validation
-        dataset.summary = res.body.summary
-        dataset.status.invalid =
-          validation.errors &&
-          (validation.errors == 'Invalid' || validation.errors.length > 0)
+    scitran
+      .addTag('projects', dataset._id, 'validating')
+      .then(() => {
+        dataset.status.validating = true
         this.update({ dataset })
-        this.updateModified()
+        return crn.validate(dataset._id).then(res => {
+          let validation = res.body && res.body.validation
+          dataset.status.validating = false
+          dataset.validation = validation
+          dataset.summary = res.body && res.body.summary
+          dataset.status.invalid =
+            validation &&
+            validation.errors &&
+            (validation.errors == 'Invalid' || validation.errors.length > 0)
+          this.update({ dataset })
+          this.updateModified()
+        })
       })
-    })
+      .catch(() => {
+        if (dataset.status.validating) {
+          scitran.removeTag('projects', dataset._id, 'validating')
+          dataset.status.validating = false
+          this.update({ dataset })
+        }
+      })
   },
 
   /**
