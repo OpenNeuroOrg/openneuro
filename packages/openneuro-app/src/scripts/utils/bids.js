@@ -162,9 +162,10 @@ export default {
         // }
         const data = projectRes ? projectRes.data : null
         if (data) {
-          let project = data.dataset
-          let draft = project ? project.draft : null
-          let tempFiles = draft.files ? this._formatFiles(draft.files) : null
+          // get snapshot or draft, depending on results
+          let project = !options.snapshot ? data.dataset : data.snapshot
+          let draft = !options.snapshot ? project.draft : null
+          let tempFiles = draft ? this._formatFiles(draft.files) : this._formatFiles(project.files)
           this.getMetadata(
             project,
             metadata => {
