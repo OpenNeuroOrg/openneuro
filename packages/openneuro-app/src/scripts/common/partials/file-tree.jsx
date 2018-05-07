@@ -224,6 +224,7 @@ class FileTree extends Reflux.Component {
       '.png',
       '.gif',
       '.html',
+      '.bidsignore',
     ]
 
     if (
