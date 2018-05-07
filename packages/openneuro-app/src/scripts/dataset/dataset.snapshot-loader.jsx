@@ -57,6 +57,7 @@ class SnapshotLoader extends Reflux.Component {
             version: version,
             job: job,
             datasetId: bids.encodeId(datasetId),
+            tag: snapshotId
           })
         }
       }
