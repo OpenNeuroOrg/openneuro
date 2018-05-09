@@ -56,6 +56,8 @@ services:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
+      - ./datalad-key:/datalad-key
+    env_file: ./config.env
     restart: always
   
   # celery Python backend
