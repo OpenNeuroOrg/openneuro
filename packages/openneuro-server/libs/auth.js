@@ -1,8 +1,13 @@
 import scitran from './scitran'
 import { ObjectID } from 'mongodb'
 import mongo from './mongo'
+import { promisify } from 'util'
+import { getUserIdFromApiKey } from './apikey.js'
 
 let c = mongo.collections
+
+const extractBearerKey = authorizationHeader =>
+  authorizationHeader.slice('Bearer '.length)
 
 /**
  * Authorization
@@ -11,12 +16,12 @@ let c = mongo.collections
  */
 let auth = {
   /**
-     * User
-     *
-     * Checks if a request contains an access token
-     * for a valid user. Throws an error or calls next
-     * function.
-     */
+   * User
+   *
+   * Checks if a request contains an access token
+   * for a valid user. Throws an error or calls next
+   * function.
+   */
   user(req, res, next) {
     scitran.getUserByToken(req.headers.authorization, (err, resp) => {
       if (err || resp.body.code === 400 || resp.body.code === 401) {
@@ -30,12 +35,12 @@ let auth = {
   },
 
   /**
-     * Super User
-     *
-     * Checks if a request contains an access token
-     * for a valid superuser. Throws an error or calls next
-     * function.
-     */
+   * Super User
+   *
+   * Checks if a request contains an access token
+   * for a valid superuser. Throws an error or calls next
+   * function.
+   */
   superuser(req, res, next) {
     scitran.getUserByToken(req.headers.authorization, (err, resp) => {
       if (err || !resp.body.root) {
@@ -49,30 +54,48 @@ let auth = {
   },
 
   /**
-     * Optional
-     *
-     * If a request has a valid access token it will
-     * append the user id to the req object. Will
-     * not throw an error. Used for requests that may
-     * work with varying levels of access.
-     */
+   * Optional
+   *
+   * If a request has a valid access token it will
+   * append the user id to the req object. Will
+   * not throw an error. Used for requests that may
+   * work with varying levels of access.
+   *
+   * This mode also supports Bearer auth with an API
+   * key token - used by GraphQL APIs to annotate
+   * with user context if available
+   */
   optional(req, res, next) {
-    scitran.getUserByToken(req.headers.authorization, (err, resp) => {
-      if (resp.body && resp.body._id) {
-        req.user = resp.body._id
-        req.isSuperUser = resp.body.root
-      }
-      return next()
-    })
+    if (
+      req.headers.hasOwnProperty('authorization') &&
+      req.headers.authorization.startsWith('Bearer ')
+    ) {
+      // Alternate authentication method for API tools
+      return getUserIdFromApiKey(extractBearerKey(req.headers.authorization))
+        .then(userId => promisify(scitran.getUser)(userId))
+        .then(scitranUser => {
+          req.user = scitranUser.body._id
+          req.isSuperUser = scitranUser.body.root
+        })
+        .then(() => next())
+    } else {
+      scitran.getUserByToken(req.headers.authorization, (err, resp) => {
+        if (resp.body && resp.body._id) {
+          req.user = resp.body._id
+          req.isSuperUser = resp.body.root
+        }
+        return next()
+      })
+    }
   },
 
   /**
-     * Dataset Access
-     *
-     * Takes in the authorization header and a datasetId as
-     * a url or query param and adds a hasAccess property to
-     * the request object.
-     */
+   * Dataset Access
+   *
+   * Takes in the authorization header and a datasetId as
+   * a url or query param and adds a hasAccess property to
+   * the request object.
+   */
   datasetAccess(options) {
     options = options ? options : { optional: false }
     return function(req, res, next) {
@@ -115,11 +138,11 @@ let auth = {
   },
 
   /**
-     * Delete Comment Access
-     *
-     * Determines whether the user has the right
-     * to delete a comment
-     */
+   * Delete Comment Access
+   *
+   * Determines whether the user has the right
+   * to delete a comment
+   */
   deleteCommentAccess(req, res, next) {
     let commentId = req.params.commentId
     let user = req.user
@@ -147,10 +170,10 @@ let auth = {
   },
 
   /**
-    * Check to see if user is an admin user. If so, just next()
-    * if not, prevent user from having more than 2 jobs running concurrently
-    * NOTE: this middleware function depends on auth middleware that attaches user and isSuperUser to req having already run
-    */
+   * Check to see if user is an admin user. If so, just next()
+   * if not, prevent user from having more than 2 jobs running concurrently
+   * NOTE: this middleware function depends on auth middleware that attaches user and isSuperUser to req having already run
+   */
   submitJobAccess(req, res, next) {
     let user = req.user
     let admin = !!req.isSuperUser
@@ -230,10 +253,10 @@ let auth = {
   },
 
   /**
-     * Ticket
-     *
-     * Checks for a valid ticket parameter
-     */
+   * Ticket
+   *
+   * Checks for a valid ticket parameter
+   */
   ticket(req, res, next) {
     let ticket = req.query.ticket
 

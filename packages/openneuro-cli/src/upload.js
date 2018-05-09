@@ -28,21 +28,12 @@ const fatalError = err => {
 }
 
 /**
- * Validate and upload a dataset
- *
- * @param {Object} client - Initialized Apollo client to upload with
- * @param {string} dir - Directory to upload
- * @param {string} datasetId - Optionally update an existing dataset
+ * Runs validation and exits if an error is encountered
+ * @param {string} dir Directory to validate
+ * @param {object} validatorOptions Options passed to the validator
  */
-export const validateAndUpload = (
-  client,
-  dir,
-  validatorOptions,
-) => datasetId => {
-  return validatePromise(dir, validatorOptions)
-    .catch(fatalError)
-    .then(() => datasetUpload(client, dir, datasetId))
-    .catch(fatalError)
+export const validation = (dir, validatorOptions) => {
+  return validatePromise(dir, validatorOptions).catch(fatalError)
 }
 
 /**
@@ -80,6 +71,6 @@ export const uploadTree = (client, datasetId) => tree => {
  * @param {string} dir - Directory to upload
  * @param {string} datasetId - Optionally update an existing dataset
  */
-export const datasetUpload = (client, dir, datasetId) => {
+export const uploadDirectory = (client, dir, datasetId) => {
   return getFileTree(dir, dir).then(uploadTree(client, datasetId))
 }

@@ -41,6 +41,7 @@ export const getFileTree = (basepath, root, logging = true) => {
         .filter(({ stat }) => stat.isFile())
         .map(({ stat, filePath }) => {
           const stream = fs.createReadStream(filePath)
+          stream.pause()
           if (logging) {
             stream.on(
               'data',

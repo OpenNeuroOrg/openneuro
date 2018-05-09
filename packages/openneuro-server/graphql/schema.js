@@ -14,15 +14,19 @@ const typeDefs = `
     datasets: [Dataset]
     # Check for server side login status
     whoami: User
+    # Get one user
+    user(id: ID!): User
     # Get a list of users
     users: [User]
+    # Request one snapshot
+    snapshot(datasetId: ID!, tag: String!): Snapshot
   }
 
   type Mutation {
     # Create a new dataset container and repository
     createDataset(label: String!): Dataset
     # Tag the current draft
-    createSnapshot(datasetId: ID!): Snapshot
+    createSnapshot(datasetId: ID!, tag: String!): Snapshot
     # Add or update files in a draft - returns a new Draft
     updateFiles(datasetId: ID!, files: FileTree!): Draft
   }
@@ -69,26 +73,21 @@ const typeDefs = `
   type Draft {
     id: ID!
     dataset: Dataset
-    created: DateTime!
     modified: DateTime!
+    authors: [Author]
+    summary: Summary
     files: [DatasetFile]
   }
 
   # Tagged snapshot of a draft
   type Snapshot {
-    ref: String!
-    dataset: Dataset!
-    metadata: DatasetMetadata
-    created: DateTime!
-    modified: DateTime!
-    files: [DatasetFile]
-  }
-
-  # Metadata associated with both drafts and snapshots
-  type DatasetMetadata {
     id: ID!
+    tag: String!
+    dataset: Dataset!
+    created: DateTime
     authors: [Author]
     summary: Summary
+    files: [DatasetFile]
   }
 
   # Authors of a dataset
@@ -100,7 +99,7 @@ const typeDefs = `
   # Validator summary from bids-validator
   type Summary {
     modalities: [String]
-    session: [String]
+    sessions: [String]
     subjects: [String]
     tasks: [String]
     size: Int
@@ -109,13 +108,14 @@ const typeDefs = `
 
   # File metadata and link to contents
   type DatasetFile {
-    name: String!
-    created: DateTime!
-    modified: DateTime!
+    id: ID!
+    filename: String!
     size: Int
-    hash: String
-    url: String
+    urls: [String]
   }
 `
 
-export default makeExecutableSchema({ typeDefs, resolvers })
+export default makeExecutableSchema({
+  typeDefs,
+  resolvers,
+})
