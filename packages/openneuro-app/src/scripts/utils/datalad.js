@@ -25,6 +25,11 @@ export default {
         })
         .then(data => {
             console.log('apollo data:', data)
+            if (options.public) {
+              data = data.data.datasets.filter((dataset) => {
+                return dataset.public
+              })
+            }
             resolve(data)
         })
         .catch(err => {

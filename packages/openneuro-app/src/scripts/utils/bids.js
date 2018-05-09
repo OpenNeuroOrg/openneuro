@@ -33,7 +33,7 @@ export default {
   ) {
     const res = (await datalad
       .getDatasets({
-        authenticate: isAdmin || !isPublic,
+        public: isPublic,
         snapshot: false,
         metadata: metadata,
       })).data
@@ -41,7 +41,6 @@ export default {
       return callback([])
     }
     const projects = res.datasets ? res.datasets : []
-    console.log('projects:', projects)
     const users = isSignedOut ? null : (await scitran.getUsers()).body
     const stars = (await crn.getStars()).body
     const followers = (await crn.getSubscriptions()).body
@@ -459,7 +458,7 @@ export default {
       created: project.created,
       modified: project.modified,
       permissions: project.permissions,
-      public: project.public,
+      public: !!project.public,
       downloads: project.downloads,
       views: project.views,
 
