@@ -58,6 +58,7 @@ export default {
         query ds ($datasetId: ID!) {
           dataset (id: $datasetId) {
             id
+            _id: id
             label
             created
             public
@@ -85,6 +86,7 @@ export default {
             }
             snapshots {
               id
+              _id: id
               tag
             }
           }
@@ -111,6 +113,7 @@ export default {
           query getSnapshot ($datasetId: ID!, $tag: String!) {
             snapshot(datasetId: $datasetId, tag: $tag) {
               id
+              _id: id
               tag
               created
               authors {
@@ -123,6 +126,8 @@ export default {
               }
               files {
                 id
+                _id: id
+                name: filename
                 filename
                 size
               }
