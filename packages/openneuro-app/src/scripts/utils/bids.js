@@ -33,7 +33,7 @@ export default {
   ) {
     const res = (await datalad
       .getDatasets({
-        public: isPublic,
+        authenticate: isAdmin || !isPublic,
         snapshot: false,
         metadata: metadata,
       })).data
@@ -66,7 +66,7 @@ export default {
           (existing.hasOwnProperty('original') &&
             existing.snapshot_version < project.snapshot_version)
         ) {
-          if (isAdmin || isPublic || this.userAccess(project)) {
+          if (isAdmin || project.public || this.userAccess(project)) {
             resultDict[datasetId] = dataset
           }
         }
@@ -169,7 +169,7 @@ export default {
               dataset.CHANGES = metadata.CHANGES
               dataset.children = tempFiles
               dataset.showChildren = true
-
+              dataset.snapshots = project.snapshots
               // get dataset usage stats
               this.usage(projectId, usage => {
                 if (usage) {
