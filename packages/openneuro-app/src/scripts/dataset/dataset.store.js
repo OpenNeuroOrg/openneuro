@@ -183,10 +183,11 @@ let datasetStore = Reflux.createStore({
           let selectedSnapshot = this.data.selectedSnapshot
           if (!selectedSnapshot || selectedSnapshot === datasetId) {
             let dataset = res
+            console.log('dataset:', dataset)
             let originalId = dataset.original ? dataset.original : datasetId
             this.update(
               {
-                dataset,
+                dataset: dataset,
                 datasetTree: [
                   {
                     _id: datasetId,
@@ -195,7 +196,21 @@ let datasetStore = Reflux.createStore({
                   },
                 ],
                 loading: false,
-              },
+              })
+              this.loadSnapshots(dataset, [], () => {
+                console.log('this.data.dataset:', this.data.dataset)
+                this.loadComments(originalId)
+                this.getDatasetStars()
+                this.checkSubscriptionFollowers(() => {
+                  let datasetUrl = this.constructDatasetUrl(dataset)
+                  this.update({
+                    loading: false,
+                    snapshot: snapshot,
+                    datasetUrl: datasetUrl,
+                  })
+                })
+              })
+              
               // this.loadJobs(
               //   datasetId,
               //   snapshot,
@@ -216,7 +231,6 @@ let datasetStore = Reflux.createStore({
               //     })
               //   },
               // ),
-            )
 
             if (
               forceReload ||
@@ -1965,9 +1979,8 @@ let datasetStore = Reflux.createStore({
 
   loadSnapshots(dataset, jobs, callback) {
     let datasetId = dataset.original ? dataset.original : dataset._id
-    scitran.getProjectSnapshots(datasetId).then(res => {
-      let snapshots = res.body
-
+    let snapshots = dataset.snapshots.slice(0)
+    if (snapshots.length) {
       // sort snapshots
       snapshots.sort((a, b) => {
         if (a.snapshot_version < b.snapshot_version) {
@@ -1981,42 +1994,43 @@ let datasetStore = Reflux.createStore({
 
       // add job counts
       for (let snapshot of snapshots) {
-        snapshot.analysisCount = 0
-        snapshot.linkID = bids.decodeId(snapshot._id)
-        snapshot.linkOriginal = bids.decodeId(snapshot.original)
+        let snap = Object.assign({}, snapshot)
+        snap.analysisCount = 0
+        snap.linkID = bids.decodeId(snap._id)
+        snap.linkOriginal = bids.decodeId(snap.original)
         if (jobs && !jobs.error) {
           for (let job of jobs) {
-            if (job.snapshotId == snapshot._id) {
-              snapshot.analysisCount++
+            if (job.snapshotId == snap._id) {
+              snap.analysisCount++
             }
           }
         }
+        snapshot = snap
       }
-
-      // add draft is available
-      if (
-        dataset &&
-        this.data.currentUser &&
-        this.data.currentUser.profile &&
-        dataset.user._id === this.data.currentUser.profile._id &&
-        dataset.permissions &&
-        !dataset.permissions.length
-      ) {
-        snapshots.unshift({
-          orphaned: true,
-        })
-      } else if (dataset && dataset.access !== null) {
-        snapshots.unshift({
-          isOriginal: true,
-          _id: datasetId,
-          linkID: bids.decodeId(datasetId),
-        })
-      }
-      this.update({ snapshots: snapshots })
-      if (callback) {
-        callback()
-      }
-    })
+    }
+    // add draft if available
+    if (
+      dataset &&
+      this.data.currentUser &&
+      this.data.currentUser.profile &&
+      dataset.user._id === this.data.currentUser.profile._id &&
+      dataset.permissions &&
+      !dataset.permissions.length
+    ) {
+      snapshots.unshift({
+        orphaned: true,
+      })
+    } else if (dataset && dataset.access !== null) {
+      snapshots.unshift({
+        isOriginal: true,
+        _id: datasetId,
+        linkID: bids.decodeId(datasetId),
+      })
+    }
+    this.update({ snapshots: snapshots })
+    if (callback) {
+      callback()
+    }
   },
 
   constructDatasetUrl(dataset) {
