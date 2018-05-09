@@ -24,69 +24,61 @@ export default {
    * boolean as second argument to specifiy if request
    * is made with authentication. Defaults to true.
    */
-  getDatasets(
+  async getDatasets(
     callback,
     isPublic,
     isSignedOut,
     isAdmin = false,
     metadata = false,
   ) {
-    scitran
-      .getProjects({
+    const res = (await datalad
+      .getDatasets({
         authenticate: isAdmin || !isPublic,
         snapshot: false,
         metadata: metadata,
-      })
-      .then(res => {
-        let projects = res.body ? res.body : []
-        scitran
-          .getProjects({
-            authenticate: !isPublic,
-            snapshot: true,
-            metadata: metadata,
-          })
-          .then(async pubProjects => {
-            const publicProjects = pubProjects.body ? pubProjects.body : []
-            projects = projects.concat(publicProjects)
-            const users = isSignedOut ? null : (await scitran.getUsers()).body
-            const stars = (await crn.getStars()).body
-            const followers = (await crn.getSubscriptions()).body
-            this.usage(null, usage => {
-              let resultDict = {}
-              for (let project of projects) {
-                let dataset = this.formatDataset(
-                  project,
-                  null,
-                  users,
-                  stars,
-                  followers,
-                  usage,
-                )
-                let datasetId = dataset.hasOwnProperty('original')
-                  ? dataset.original
-                  : dataset._id
-                let existing = resultDict[datasetId]
-                if (
-                  !existing ||
-                  (existing.hasOwnProperty('original') &&
-                    !dataset.hasOwnProperty('original')) ||
-                  (existing.hasOwnProperty('original') &&
-                    existing.snapshot_version < project.snapshot_version)
-                ) {
-                  if (isAdmin || isPublic || this.userAccess(project)) {
-                    resultDict[datasetId] = dataset
-                  }
-                }
-              }
+      })).data
+    if (!res) {
+      return callback([])
+    }
+    const projects = res.datasets ? res.datasets : []
+    console.log('projects:', projects)
+    const users = isSignedOut ? null : (await scitran.getUsers()).body
+    const stars = (await crn.getStars()).body
+    const followers = (await crn.getSubscriptions()).body
+    this.usage(null, usage => {
+      let resultDict = {}
+      for (let project of projects) {
+        let dataset = this.formatDataset(
+          project,
+          null,
+          users,
+          stars,
+          followers,
+          usage,
+        )
+        let datasetId = dataset.hasOwnProperty('original')
+          ? dataset.original
+          : dataset._id
+        let existing = resultDict[datasetId]
+        if (
+          !existing ||
+          (existing.hasOwnProperty('original') &&
+            !dataset.hasOwnProperty('original')) ||
+          (existing.hasOwnProperty('original') &&
+            existing.snapshot_version < project.snapshot_version)
+        ) {
+          if (isAdmin || isPublic || this.userAccess(project)) {
+            resultDict[datasetId] = dataset
+          }
+        }
+      }
 
-              let results = []
-              for (let key in resultDict) {
-                results.push(resultDict[key])
-              }
-              callback(results)
-            })
-          })
-      })
+      let results = []
+      for (let key in resultDict) {
+        results.push(resultDict[key])
+      }
+      callback(results)
+    })
   },
 
   /**
@@ -460,10 +452,10 @@ export default {
 
     let dataset = {
       /** same as original **/
-      _id: project._id,
+      _id: this.encodeId(project._id),
       linkID: this.decodeId(project._id),
       label: project.label,
-      group: project.group,
+      group: project.uploader ? project.uploader.id : null,
       created: project.created,
       modified: project.modified,
       permissions: project.permissions,
