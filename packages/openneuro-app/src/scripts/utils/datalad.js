@@ -4,30 +4,33 @@ import bids from './bids'
 
 const client = getClient('/crn/graphql')
 export default {
-    getDatasets(callback) {
+    async getDatasets(options) {
       const query = gql`
-      query {
-        datasets {
-          id
-          created
-          label
-          uploader {
+        query {
+          datasets {
             id
+            _id: id
+            created
+            label
+            uploader {
+              id
+            }
+            public
           }
-          public
         }
-      }
       `
-      client.query({
-        query: query
-      })
-      .then(data => {
-          console.log('apollo data:', data)
-          return callback(data)
-      })
-      .catch(err => {
-        console.log(err)
-        return callback()
+      return new Promise((resolve, reject) => {
+        client.query({
+          query: query
+        })
+        .then(data => {
+            console.log('apollo data:', data)
+            resolve(data)
+        })
+        .catch(err => {
+          console.log(err)
+          reject()
+        })
       })
     },
 
