@@ -262,7 +262,7 @@ let datasetStore = Reflux.createStore({
             '/datasets/',
             bids.decodeId(datasetId),
             '/versions/',
-            bids.formatVersionNumber(project.snapshot_version),
+            bids.decodeId(project._id),
           )
           this.update({
             redirectUrl: redirectUrl,
@@ -805,10 +805,12 @@ let datasetStore = Reflux.createStore({
         [],
       )
       .then(res => {
-        callback(null, res)
-        dataset.README = value
-        this.update({ dataset })
-        this.updateModified()
+        scitran.updateProject(dataset._id, {}).then(() => {
+          callback(null, res)
+          dataset.README = value
+          this.update({ dataset })
+          this.updateModified()
+        })
       })
   },
 
@@ -1277,21 +1279,31 @@ let datasetStore = Reflux.createStore({
    */
   revalidate() {
     let dataset = this.data.dataset
-    scitran.addTag('projects', dataset._id, 'validating').then(() => {
-      dataset.status.validating = true
-      this.update({ dataset })
-      crn.validate(dataset._id).then(res => {
-        let validation = res.body.validation
-        dataset.status.validating = false
-        dataset.validation = validation
-        dataset.summary = res.body.summary
-        dataset.status.invalid =
-          validation.errors &&
-          (validation.errors == 'Invalid' || validation.errors.length > 0)
+    scitran
+      .addTag('projects', dataset._id, 'validating')
+      .then(() => {
+        dataset.status.validating = true
         this.update({ dataset })
-        this.updateModified()
+        return crn.validate(dataset._id).then(res => {
+          let validation = res.body && res.body.validation
+          dataset.status.validating = false
+          dataset.validation = validation
+          dataset.summary = res.body && res.body.summary
+          dataset.status.invalid =
+            validation &&
+            validation.errors &&
+            (validation.errors == 'Invalid' || validation.errors.length > 0)
+          this.update({ dataset })
+          this.updateModified()
+        })
       })
-    })
+      .catch(() => {
+        if (dataset.status.validating) {
+          scitran.removeTag('projects', dataset._id, 'validating')
+          dataset.status.validating = false
+          this.update({ dataset })
+        }
+      })
   },
 
   /**
@@ -1981,7 +1993,14 @@ let datasetStore = Reflux.createStore({
       }
 
       // add draft is available
-      if (dataset && dataset.permissions && !dataset.permissions.length) {
+      if (
+        dataset &&
+        this.data.currentUser &&
+        this.data.currentUser.profile &&
+        dataset.user._id === this.data.currentUser.profile._id &&
+        dataset.permissions &&
+        !dataset.permissions.length
+      ) {
         snapshots.unshift({
           orphaned: true,
         })

@@ -10,6 +10,7 @@
   "dependencies": {
     "apollo-boost": "^0.1.4",
     "apollo-link": "^1.2.1",
+    "apollo-link-context": "^1.0.8",
     "apollo-upload-client":
       "https://github.com/danielmeneses/apollo-upload-client.git",
     "esm": "^3.0.16",

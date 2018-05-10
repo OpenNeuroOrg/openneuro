@@ -13,6 +13,7 @@ import schema from './graphql/schema'
 import { apolloUploadExpress } from 'apollo-upload-server'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import bodyParser from 'body-parser'
+import auth from './libs/auth.js'
 // import events lib to instantiate CRN Emitter
 import events from './libs/events'
 
@@ -61,11 +62,18 @@ export default test => {
   })
 
   // The GraphQL endpoint
+  // Depends on bodyParser.json() above
   app.use(
     '/crn/graphql',
-    bodyParser.json(),
+    auth.optional,
     apolloUploadExpress(),
-    graphqlExpress({ schema }),
+    graphqlExpress(req => {
+      const { user, isSuperUser } = req
+      return {
+        schema,
+        context: { user, isSuperUser },
+      }
+    }),
   )
 
   // GraphiQL, a visual editor for queries

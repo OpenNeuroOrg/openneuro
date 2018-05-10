@@ -13,7 +13,7 @@ export const updateFiles = gql`
         id
       }
       files {
-        name
+        filename
         size
       }
     }
