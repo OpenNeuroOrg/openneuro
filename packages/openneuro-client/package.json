@@ -12,7 +12,7 @@
     "apollo-link": "^1.2.1",
     "apollo-link-context": "^1.0.8",
     "apollo-upload-client":
-      "https://github.com/danielmeneses/apollo-upload-client.git",
+      "https://github.com/nellh/apollo-upload-client-build.git",
     "esm": "^3.0.16",
     "form-data": "^2.3.2",
     "graphql": "^0.13.2",
