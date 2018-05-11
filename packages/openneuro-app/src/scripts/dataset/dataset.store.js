@@ -5,6 +5,7 @@ import React from 'react'
 import async from 'async'
 import Actions from './dataset.actions.js'
 import scitran from '../utils/scitran'
+import datalad from '../utils/datalad'
 import crn from '../utils/crn'
 import bids from '../utils/bids'
 import userStore from '../user/user.store'
@@ -421,63 +422,19 @@ let datasetStore = Reflux.createStore({
       ? this.data.dataset.original
       : this.data.dataset._id
 
-    // check if public snapshots exist outside of current
-    let hasPublic = false
-    for (let snapshot of this.data.snapshots) {
-      if (snapshot._id === snapshotId) {
-        continue
-      }
-      if (snapshot.public) {
-        hasPublic = true
-      }
-    }
-
-    scitran.updateSnapshotPublic(snapshotId, value).then(() => {
+    datalad.updatePublic(datasetId, value).then(() => {
       if (callback) {
         callback()
       }
       let dataset = this.data.dataset
-      if (value) {
-        if (!hasPublic) {
-          scitran.addTag('projects', datasetId, 'hasPublic')
-        }
-        if (snapshotId === this.data.dataset._id) {
-          dataset.status.public = value
-        } else {
-          history.push(
-            '/datasets/' +
-              bids.decodeId(datasetId) +
-              '/versions/' +
-              bids.decodeId(snapshotId),
-          )
-        }
-      } else {
-        if (!hasPublic) {
-          scitran.removeTag('projects', datasetId, 'hasPublic')
-        }
-        dataset.status.public = value
-      }
-
+      dataset.status.public = value
+      this.data.public = value
       if (!dataset.description.DatasetDOI) {
         this.registerDoi.bind(this)()
       }
-
       let snapshots = this.data.snapshots
 
-      for (let snapshot of snapshots) {
-        if (snapshot._id === snapshotId) {
-          snapshot.public = value
-        }
-      }
-
-      // redirect to the snapshot page
-      history.push(
-        '/datasets/' +
-          bids.decodeId(datasetId) +
-          '/versions/' +
-          bids.decodeId(snapshotId),
-      )
-
+      history.push('/datasets/' + this.data.dataset.linkID)
       this.update({ dataset, snapshots })
     })
   },
