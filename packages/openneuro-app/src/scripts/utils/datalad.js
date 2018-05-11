@@ -1,6 +1,8 @@
 import getClient from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
+import config from '../../../config'
+import clone from 'lodash.clonedeep'
 
 const client = getClient('/crn/graphql')
 export default {
@@ -24,17 +26,19 @@ export default {
           query: query
         })
         .then(data => {
-            console.log('apollo data:', data)
-            if (options.public) {
-              data = data.data.datasets.filter((dataset) => {
+            data = clone(data)
+            let datasets = data.data.datasets
+            if (options.isPublic) {
+              datasets = data.data.datasets.filter((dataset) => {
                 return dataset.public
               })
             }
+            data.data.datasets = datasets
             resolve(data)
         })
         .catch(err => {
           console.log(err)
-          reject()
+          reject(err)
         })
       })
     },
@@ -51,6 +55,7 @@ export default {
         })
       }
     },
+
     queryDataset(datasetId, callback) {
       console.log('datasetId in graphql query:', bids.decodeId(datasetId))
 
@@ -88,6 +93,7 @@ export default {
               id
               _id: id
               tag
+              snapshot_version: tag
             }
           }
         }
@@ -99,7 +105,13 @@ export default {
         }
       })
       .then(data => {
-          console.log('apollo data:', data)
+          data = clone(data)
+          let snapshots = data.data.dataset.snapshots.slice(0)
+          for (let snapshot of snapshots) {
+              let splitId = snapshot.id.split(':')
+              snapshot._id = splitId[splitId.length -1]
+              snapshot.original = splitId[0]
+          }
           return callback(data)
       })
       .catch(err => {
@@ -107,6 +119,7 @@ export default {
         return callback()
       })
     },
+
     querySnapshot(datasetId, tag, callback) {
       client.query({
         query: gql`
@@ -147,5 +160,32 @@ export default {
         console.log('error in snapshot query:', err) 
         return callback(err)
       })
-  }
+    },
+
+    updatePublic(datasetId, publicFlag) {
+      console.log('calling updatePublic mutation with datasetId:', datasetId, 'and publicFlag:', publicFlag)
+      const mutation = gql`
+        mutation ($datasetId: ID!, $publicFlag: Boolean!) {
+          updatePublic(datasetId: $datasetId, publicFlag: $publicFlag)
+        }
+      `
+      return new Promise((resolve, reject) => {
+        client.mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            publicFlag: publicFlag
+          }
+        })
+        .then(data => {
+          console.log('response from updateSnapshotPublic:', data)
+          resolve(data)
+        })
+        .catch(err => {
+          console.log(err)
+          reject(err)
+        })
+      })
+      
+    }
 }
