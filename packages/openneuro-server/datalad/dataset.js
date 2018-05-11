@@ -165,3 +165,18 @@ export const commitFiles = (datasetId, name, email) => {
   setCommitInfo(req, name, email)
   return req
 }
+/**
+ * Update public state
+ */
+export const updatePublic = (datasetId, publicFlag) => {
+  console.log('updating crn dataset', datasetId, 'with publicFlag:', publicFlag)
+  // update mongo
+  return c.crn.datasets.updateOne({id: datasetId}, {$set: {public: publicFlag}}, {upsert: true})
+  
+  // TODO: send request to backend to initiate uplaod to s3 bucket
+  // const url = `${uri}/datasets/${datasetId}/updatePublic/${publicFlag}`
+  // return request
+  //   .post(url)
+  //   .set('Accept', 'application/json')
+  //   .then(({ body }) => body)
+}

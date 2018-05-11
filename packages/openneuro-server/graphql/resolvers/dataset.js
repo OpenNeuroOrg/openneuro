@@ -57,3 +57,11 @@ export const updateFilesTree = (datasetId, fileTree) => {
   const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
   return filesPromises.concat(...dirPromises)
 }
+
+/**
+ * Update the dataset Public status
+ */
+export const updatePublic = (obj, { datasetId, publicFlag}) => {
+  console.log('hit the updatePublic resolver!')
+  return datalad.updatePublic(datasetId, publicFlag)
+}

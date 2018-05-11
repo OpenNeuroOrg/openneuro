@@ -5,6 +5,7 @@ import {
   datasets,
   createDataset,
   createSnapshot,
+  updatePublic,
   updateFiles,
 } from './dataset.js'
 import { draft, snapshot, snapshots } from './datalad.js'
@@ -27,6 +28,7 @@ export default {
     createDataset,
     updateFiles,
     createSnapshot,
+    updatePublic
   },
   User: user,
   Dataset: {

@@ -29,6 +29,8 @@ const typeDefs = `
     createSnapshot(datasetId: ID!, tag: String!): Snapshot
     # Add or update files in a draft - returns a new Draft
     updateFiles(datasetId: ID!, files: FileTree!): Draft
+    # Add or remove the public flag from a dataset
+    updatePublic(datasetId: ID!, publicFlag: Boolean!): Boolean!
   }
 
   # File tree
