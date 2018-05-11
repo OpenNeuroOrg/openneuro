@@ -26,6 +26,12 @@ commander
   .option('-v, --verbose', 'Verbose output')
   .action(upload)
 
+commander.command('*', { noHelp: true, isDefault: true }).action(() => {
+  // eslint-disable-next-line no-console
+  console.log('Unknown command!')
+  commander.outputHelp(make_red)
+})
+
 commander.parse(process.argv)
 
 if (!process.argv.slice(2).length) {
