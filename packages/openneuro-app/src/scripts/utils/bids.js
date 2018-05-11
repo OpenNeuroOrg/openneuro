@@ -36,6 +36,7 @@ export default {
         authenticate: isAdmin || !isPublic,
         snapshot: false,
         metadata: metadata,
+        isPublic: isPublic
       })).data
     if (!res) {
       return callback([])
