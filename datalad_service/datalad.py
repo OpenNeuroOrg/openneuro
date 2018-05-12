@@ -1,7 +1,15 @@
-from datalad.api import Dataset, create_sibling_github
-from datalad.config import ConfigManager
-
+import logging
 import os
+import stat
+import shutil
+from functools import wraps
+
+import falcon
+
+from datalad.api import Dataset, create_sibling_github
+from .common.annex import CommitInfo
+from .common.celery import app
+
 
 class DataladStore(object):
 
@@ -17,15 +25,93 @@ class DataladStore(object):
     def get_dataset_path(self, name):
         return '{}/{}'.format(self.annex_path, name)
 
-    def set_config(self, dataset, name, email):
-        ConfigManager(dataset).set('user.email', email, 'local')
-        ConfigManager(dataset).set('user.name', name, 'local')
-        return None
 
-    def create_github_repo(self, dataset):
-        dataset_number = dataset.path.split('/')[2]
-        login = os.environ['DATALAD_GITHUB_ORG']
+def create_github_repo(dataset):
+    dataset_number = dataset.path.split('/')[2]
+    try:
+        org = os.environ['DATALAD_GITHUB_ORG']
+        login = os.environ['DATALAD_GITHUB_LOGIN']
         password = os.environ['DATALAD_GITHUB_PASS']
         # this adds github remote to config and also creates repo
-        create_sibling_github(dataset_number, github_login=login, github_passwd=password, dataset=dataset, access_protocol='ssh')
-        return None
+        return create_sibling_github(dataset_number, github_login=login,
+                                     github_passwd=password, github_organization=org, dataset=dataset, access_protocol='ssh')
+    except KeyError:
+        raise Exception(
+            'DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS, DATALAD_GITHUB_ORG must be defined to create remote repos')
+
+
+def dataladStore(func):
+    """Decorator to convert the annex path argument to a store"""
+    @wraps(func)
+    def setupStoreWrapper(*args, **kwargs):
+        annex_path = args[0]
+        store = DataladStore(annex_path)
+        return func(store, *args[1:], **kwargs)
+    return setupStoreWrapper
+
+
+@app.task
+@dataladStore
+def create_dataset(store, dataset):
+    ds = store.get_dataset(dataset)
+    ds.create()
+    if (ds.repo):
+        # create_github_repo(ds)
+        pass
+    else:
+        raise Exception('Repo creation failed.')
+
+
+def force_rmtree(root_dir):
+    """Delete a git tree no matter what. Be CAREFUL calling this!"""
+    for root, dirs, files in os.walk(root_dir, topdown=False):
+        for name in files:
+            file_path = os.path.join(root, name)
+            if os.path.isfile(file_path):
+                os.chmod(file_path, stat.S_IWUSR | stat.S_IRUSR)
+                os.chmod(root, stat.S_IWUSR | stat.S_IRUSR | stat.S_IXUSR)
+                os.remove(file_path)
+            elif os.path.islink(file_path):
+                os.unlink(file_path)
+        for name in dirs:
+            dir_path = os.path.join(root, name)
+            os.chmod(dir_path, stat.S_IWUSR)
+            os.rmdir(dir_path)
+    os.rmdir(root_dir)
+
+
+@app.task
+@dataladStore
+def delete_dataset(store, dataset):
+    ds = store.get_dataset(dataset)
+    force_rmtree(ds.path)
+
+
+@app.task
+@dataladStore
+def commit_files(store, dataset, files, email=None, name=None):
+    ds = store.get_dataset(dataset)
+    with CommitInfo(ds, email, name):
+        for filename in files:
+            ds.add(filename)
+
+
+@app.task
+@dataladStore
+def unlock_files(store, dataset, files):
+    ds = store.get_dataset(dataset)
+    for filename in files:
+        ds.unlock(filename)
+
+
+@app.task
+@dataladStore
+def publish_dataset(store, dataset):
+    ds = store.get_dataset(dataset)
+    pass
+
+
+@app.task
+@dataladStore
+def validate_dataset(store, dataset, hook):
+    pass

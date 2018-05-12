@@ -5,8 +5,10 @@ import random
 
 import pytest
 from falcon import testing
+
 from datalad.api import Dataset, create_sibling_github
 from datalad_service.app import create_app
+from datalad_service.common.celery import app as celeryapp
 from datalad_service.datalad import DataladStore
 
 # Test dataset to create
@@ -22,20 +24,6 @@ DATASET_DESCRIPTION = {
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
-@pytest.fixture(autouse=True)
-def no_requests(monkeypatch):
-    def mocksetconfig(self, dataset, name, email):
-        return '/abc'
-
-    def mockcreaterepo(self, dataset):
-        return '/abc'
-
-    def mockpublish(self, to):
-        return '/abc'
-    # We don't want to make calls to GitHub during testing
-    monkeypatch.setattr(DataladStore, "set_config", mocksetconfig)
-    monkeypatch.setattr(DataladStore, "create_github_repo", mockcreaterepo)
-    monkeypatch.setattr(Dataset, "publish", mockpublish)
 
 @pytest.fixture(scope='session')
 def annex_path(tmpdir_factory):
@@ -89,3 +77,10 @@ class FileWrapper(object):
             return data
 
         raise IndexError
+
+
+@pytest.fixture(scope='session')
+def celery_app(request):
+    """Allow celery tasks to run in eager mode for integration tests."""
+    celeryapp.conf.update(task_always_eager=True)
+    return celeryapp

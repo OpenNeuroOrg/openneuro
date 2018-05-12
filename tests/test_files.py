@@ -54,7 +54,7 @@ def test_add_directory_path(client):
     assert response.status == falcon.HTTP_OK
 
 
-def test_update_file(client, annex_path):
+def test_update_file(celery_app, client, annex_path):
     ds_id = 'ds000001'
     file_data = 'Test dataset LICENSE'
     # First post a file
@@ -75,7 +75,7 @@ def test_update_file(client, annex_path):
         assert f.read() == file_data
 
 
-def test_update_missing_file(client):
+def test_update_missing_file(celery_app, client):
     ds_id = 'ds000001'
     file_data = 'File that does not exist'
     # First post a file
@@ -84,7 +84,7 @@ def test_update_missing_file(client):
     assert response.status == falcon.HTTP_NOT_FOUND
 
 
-def test_add_commit_info(client):
+def test_add_commit_info(celery_app, client):
     ds_id = 'ds000001'
     file_data = 'Test annotating requests with user info'
     name = 'Test User'
@@ -100,7 +100,7 @@ def test_add_commit_info(client):
     assert response_content['email'] == email
 
 
-def test_file_indexing(client, new_dataset):
+def test_file_indexing(celery_app, client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # First post a file
     response = client.simulate_post(

@@ -3,13 +3,17 @@ import re
 
 import falcon
 
+from .datalad import unlock_files, commit_files
 from .common.annex import get_repo_files
 
 
 def get_from_header(req):
     """Parse the From header for a request."""
-    matches = re.match(r"\"(.*)\" <(.*?@.*)>", req.headers['FROM'])
-    return matches.group(1), matches.group(2)
+    if 'FROM' in req.headers:
+        matches = re.match(r"\"(.*)\" <(.*?@.*)>", req.headers['FROM'])
+        return matches.group(1), matches.group(2)
+    else:
+        return None, None
 
 
 class FilesResource(object):
@@ -17,6 +21,10 @@ class FilesResource(object):
 
     def __init__(self, store):
         self.store = store
+
+    @property
+    def annex_path(self):
+        return self.store.annex_path
 
     def _update_file(self, path, stream):
         """Update a file on disk with a path and source stream."""
@@ -46,7 +54,6 @@ class FilesResource(object):
             files = get_repo_files(self.store.get_dataset(dataset))
             resp.media = {'files': files}
 
-
     def on_post(self, req, resp, dataset, filename):
         """Post will only create new files and always adds them to the annex."""
         if filename:
@@ -61,15 +68,16 @@ class FilesResource(object):
                 ds = self.store.get_dataset(dataset)
                 media_dict = {'created': filename}
                 # Record if this was done on behalf of a user
-                if 'FROM' in req.headers:
-                    name, email = get_from_header(req)
+                name, email = get_from_header(req)
+                if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                    self.store.set_config(ds, media_dict['name'], media_dict['email'])
-                ds.add(path=filename)
-                ds.publish(to='github')
-                resp.media = media_dict
-                resp.status = falcon.HTTP_OK
+                commit = commit_files.delay(
+                    self.annex_path, dataset, files=[filename], name=name, email=email)
+                commit.wait()
+                if not commit.failed():
+                    resp.media = media_dict
+                    resp.status = falcon.HTTP_OK
             except PermissionError:
                 resp.media = {'error': 'file already exists'}
                 resp.status = falcon.HTTP_CONFLICT
@@ -83,18 +91,22 @@ class FilesResource(object):
             ds_path = self.store.get_dataset_path(dataset)
             file_path = os.path.join(ds_path, filename)
             if os.path.exists(file_path):
+                ds = self.store.get_dataset(dataset)
                 media_dict = {'updated': filename}
                 # Record if this was done on behalf of a user
-                if 'FROM' in req.headers:
-                    name, email = get_commit_info(req)
+                name, email = get_from_header(req)
+                if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                    self.store.set_config(ds, media_dict['name'], media_dict['email'])
-                ds = self.store.get_dataset(dataset)
-                ds.unlock(path=filename)
+                unlock = unlock_files.delay(self.annex_path, dataset, files=[filename])
                 self._update_file(file_path, req.stream)
-                ds.add(path=filename)
-                ds.publish(to='github')
+                commit = commit_files.delay(
+                    self.annex_path, dataset, files=[filename], name=name, email=email)
+                commit.wait()
+                # ds.publish(to='github')
+                if not commit.failed():
+                    resp.media = media_dict
+                    resp.status = falcon.HTTP_OK
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:

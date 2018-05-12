@@ -1,5 +1,7 @@
 import falcon
 
+from .datalad import *
+
 
 class DatasetResource(object):
 
@@ -28,21 +30,21 @@ class DatasetResource(object):
             resp.media = {'error': 'dataset already exists'}
             resp.status = falcon.HTTP_CONFLICT
         else:
-            datalad.create()
-            if (datalad.repo):
-                self.store.create_github_repo(datalad)
-                resp.media = {}
-                resp.status = falcon.HTTP_OK
-            else:
+            created = create_dataset.delay(self.store.annex_path, dataset)
+            created.wait()
+            if created.failed():
                 resp.media = {'error': 'dataset creation failed'}
                 resp.status = falcon.HTTP_500
+            else:
+                resp.media = {}
+                resp.status = falcon.HTTP_OK
 
     def on_delete(self, req, resp, dataset):
-        datalad = self.store.get_dataset(dataset)
-        if (datalad.repo):
-            datalad.remove()
-            resp.media = {}
-            resp.status = falcon.HTTP_OK
-        else:
+        deleted = delete_dataset.delay(self.store.annex_path, dataset)
+        deleted.wait()
+        if deleted.failed():
             resp.media = {'error': 'dataset not found'}
             resp.status = falcon.HTTP_NOT_FOUND
+        else:
+            resp.media = {}
+            resp.status = falcon.HTTP_OK
