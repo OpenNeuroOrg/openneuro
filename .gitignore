@@ -3,3 +3,4 @@
 /.vscode
 *.pyc
 /.coverage
+/node_modules

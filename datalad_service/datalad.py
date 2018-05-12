@@ -109,9 +109,3 @@ def unlock_files(store, dataset, files):
 def publish_dataset(store, dataset):
     ds = store.get_dataset(dataset)
     pass
-
-
-@app.task
-@dataladStore
-def validate_dataset(store, dataset, hook):
-    pass
