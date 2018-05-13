@@ -27,7 +27,8 @@ export default {
   collections: {
     crn: {
       blacklist: null,
-      validationQueue: null,
+      draftValidations: null,
+      snapshotValidations: null,
       jobs: null,
       jobDefinitions: null,
       tickets: null,

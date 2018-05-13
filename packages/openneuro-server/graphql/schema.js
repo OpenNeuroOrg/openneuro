@@ -29,6 +29,8 @@ const typeDefs = `
     createSnapshot(datasetId: ID!, tag: String!): Snapshot
     # Add or update files in a draft - returns a new Draft
     updateFiles(datasetId: ID!, files: FileTree!): Draft
+    # Update a draft with validation results
+    updateValidation(datasetId: ID!, ref: String!, summary: Summary, issues: [ValidationIssue]): Boolean
   }
 
   # File tree
@@ -76,6 +78,7 @@ const typeDefs = `
     modified: DateTime!
     authors: [Author]
     summary: Summary
+    issues: [ValidationIssue]
     files: [DatasetFile]
   }
 
@@ -102,8 +105,39 @@ const typeDefs = `
     sessions: [String]
     subjects: [String]
     tasks: [String]
-    size: Int
-    totalFiles: Int
+    size: Int!
+    totalFiles: Int!
+  }
+
+  enum Severity {
+    error
+    warning
+  }
+
+  type ValidationIssue {
+    severity: Severity!
+    key: String!
+    code: Int!
+    reason: String!
+    files: [ValidationFileIssue]
+    additionalFileCount: Int
+  }
+
+  type ValidationIssueFile {
+    key: String!
+    code: Int!
+    file: ValidationFileDetail
+    evidence: String
+    line: Int
+    character: Int
+    severity: Severity!
+    reason: String
+  }
+
+  type ValidationFileDetail {
+    name: String!
+    path: String!
+    relativePath: String!
   }
 
   # File metadata and link to contents
