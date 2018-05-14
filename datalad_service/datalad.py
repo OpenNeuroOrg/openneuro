@@ -6,13 +6,12 @@ from functools import wraps
 
 import falcon
 
-from datalad.api import Dataset, create_sibling_github
+from datalad.api import Dataset
 from .common.annex import CommitInfo, get_repo_files
 from .common.celery import app
 
 
 class DataladStore(object):
-
     """Store for Datalad state accessed by resource handlers."""
 
     def __init__(self, annex_path):
@@ -24,20 +23,6 @@ class DataladStore(object):
 
     def get_dataset_path(self, name):
         return '{}/{}'.format(self.annex_path, name)
-
-
-def create_github_repo(dataset):
-    dataset_number = dataset.path.split('/')[2]
-    try:
-        org = os.environ['DATALAD_GITHUB_ORG']
-        login = os.environ['DATALAD_GITHUB_LOGIN']
-        password = os.environ['DATALAD_GITHUB_PASS']
-        # this adds github remote to config and also creates repo
-        return create_sibling_github(dataset_number, github_login=login,
-                                     github_passwd=password, github_organization=org, dataset=dataset, access_protocol='ssh')
-    except KeyError:
-        raise Exception(
-            'DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS, DATALAD_GITHUB_ORG must be defined to create remote repos')
 
 
 def dataladStore(func):
@@ -55,10 +40,7 @@ def dataladStore(func):
 def create_dataset(store, dataset):
     ds = store.get_dataset(dataset)
     ds.create()
-    if (ds.repo):
-        # create_github_repo(ds)
-        pass
-    else:
+    if not ds.repo:
         raise Exception('Repo creation failed.')
 
 
@@ -127,10 +109,3 @@ def create_snapshot(store, dataset, snapshot):
     else:
         raise Exception(
             'Tag "{}" already exists, name conflict'.format(snapshot))
-
-
-@app.task
-@dataladStore
-def publish_dataset(store, dataset):
-    ds = store.get_dataset(dataset)
-    pass

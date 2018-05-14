@@ -1,7 +1,9 @@
 import os
 
 import falcon
+
 from .datalad import get_files, create_snapshot
+from .publish import publish_snapshot
 
 
 class SnapshotResource(object):
@@ -40,6 +42,9 @@ class SnapshotResource(object):
         if not created.failed():
             resp.media = self._get_snapshot(dataset, snapshot)
             resp.status = falcon.HTTP_OK
+            # This is async because it can take a very long time
+            published = publish_snapshot.delay(
+                self.store.annex_path, dataset, snapshot)
         else:
             resp.media = {'error': 'tag already exists'}
             resp.status = falcon.HTTP_CONFLICT
