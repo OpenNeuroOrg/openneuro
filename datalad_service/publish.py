@@ -41,6 +41,15 @@ def s3_sibling(siblings):
     return sibling
 
 
+def publish_target(dataset, target):
+    """
+    Publish target of dataset.
+
+    This exists so the actual publish can be easily mocked.
+    """
+    return dataset.publish(to=target)
+
+
 @app.task
 @dataladStore
 def publish_snapshot(store, dataset, snapshot, s3=False, github=False):
@@ -49,8 +58,8 @@ def publish_snapshot(store, dataset, snapshot, s3=False, github=False):
     siblings = ds.siblings()
     if s3:
         s3_remote = s3_sibling(siblings)
-        ds.publish(to='s3')
+        publish_target(ds, 's3')
     if github:
         github_remote = github_sibling(ds, dataset_id, siblings)
-        ds.publish(to='github')
-    return siblings
+        publish_target(ds, 'github')
+
