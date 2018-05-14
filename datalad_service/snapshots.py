@@ -1,8 +1,7 @@
 import os
 
 import falcon
-
-from .common.annex import get_repo_files
+from .datalad import get_files
 
 
 class SnapshotResource(object):
@@ -14,15 +13,14 @@ class SnapshotResource(object):
 
     def _get_snapshot(self, dataset, snapshot):
         ds = self.store.get_dataset(dataset)
-        files = get_repo_files(ds, branch=snapshot)
-        return {'files': files, 'id':'{}:{}'.format(dataset, snapshot), 'tag': snapshot}
+        files = get_files.delay(self.store.annex_path,
+                                dataset, branch=snapshot)
+        return {'files': files.get(), 'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot}
 
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
         if snapshot:
             ds = self.store.get_dataset(dataset)
-            snapshot_tree = ds.repo.get_files(branch=snapshot)
-            files = get_repo_files(ds, branch=snapshot)
             resp.media = self._get_snapshot(dataset, snapshot)
             resp.status = falcon.HTTP_OK
         else:

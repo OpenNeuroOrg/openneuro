@@ -7,7 +7,7 @@ from functools import wraps
 import falcon
 
 from datalad.api import Dataset, create_sibling_github
-from .common.annex import CommitInfo
+from .common.annex import CommitInfo, get_repo_files
 from .common.celery import app
 
 
@@ -102,6 +102,13 @@ def unlock_files(store, dataset, files):
     ds = store.get_dataset(dataset)
     for filename in files:
         ds.unlock(filename)
+
+
+@app.task
+@dataladStore
+def get_files(store, dataset, branch=None):
+    ds = store.get_dataset(dataset)
+    return get_repo_files(ds, branch)
 
 
 @app.task
