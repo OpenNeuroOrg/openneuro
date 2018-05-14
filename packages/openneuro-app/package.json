@@ -1,6 +1,6 @@
 {
   "name": "openneuro-app",
-  "version": "1.12.1",
+  "version": "1.13.0",
   "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
   "main": "app.js",
@@ -30,7 +30,7 @@
     "load-google-api": "^0.1.3",
     "loadable-components": "^0.4.0",
     "moment": "^2.10.3",
-    "openneuro-client": "^1.12.0",
+    "openneuro-client": "^1.13.0",
     "pluralize": "^7.0.0",
     "prismjs": "^1.10.0",
     "prop-types": "^15.6.0",
@@ -94,11 +94,14 @@
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "jest": {
-    "setupFiles": ["./jestsetup.js"],
-    "snapshotSerializers": ["enzyme-to-json/serializer"],
+    "setupFiles": [
+      "./jestsetup.js"
+    ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
-        "<rootDir>/__mocks__/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
     "collectCoverageFrom": [
