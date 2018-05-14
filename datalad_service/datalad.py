@@ -113,6 +113,24 @@ def get_files(store, dataset, branch=None):
 
 @app.task
 @dataladStore
+def create_snapshot(store, dataset, snapshot):
+    """
+    Create a new snapshot (git tag).
+
+    Raises an exception if the tag already exists.
+    """
+    ds = store.get_dataset(dataset)
+    # Search for any existing tags
+    tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
+    if not tagged:
+        ds.save(version_tag=snapshot)
+    else:
+        raise Exception(
+            'Tag "{}" already exists, name conflict'.format(snapshot))
+
+
+@app.task
+@dataladStore
 def publish_dataset(store, dataset):
     ds = store.get_dataset(dataset)
     pass

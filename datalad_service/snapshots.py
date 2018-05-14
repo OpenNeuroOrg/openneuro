@@ -1,7 +1,7 @@
 import os
 
 import falcon
-from .datalad import get_files
+from .datalad import get_files, create_snapshot
 
 
 class SnapshotResource(object):
@@ -35,11 +35,9 @@ class SnapshotResource(object):
 
     def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
-        ds = self.store.get_dataset(dataset)
-        # Search for any existing tags
-        tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
-        if not tagged:
-            ds.save(version_tag=snapshot)
+        created = create_snapshot.delay(
+            self.store.annex_path, dataset, snapshot)
+        if not created.failed():
             resp.media = self._get_snapshot(dataset, snapshot)
             resp.status = falcon.HTTP_OK
         else:
