@@ -7,7 +7,7 @@ from datalad.api import Dataset
 from .dataset_fixtures import *
 
 
-def test_get_file(client):
+def test_get_file(client, celery_app):
     ds_id = 'ds000001'
     result = client.simulate_get(
         '/datasets/{}/files/dataset_description.json'.format(ds_id), file_wrapper=FileWrapper)

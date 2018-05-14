@@ -3,8 +3,7 @@ import re
 
 import falcon
 
-from .datalad import unlock_files, commit_files
-from .common.annex import get_repo_files
+from .datalad import unlock_files, commit_files, get_files
 
 
 def get_from_header(req):
@@ -51,8 +50,8 @@ class FilesResource(object):
             # Request for index of files
             # Return a list of file objects
             # {name, path, size}
-            files = get_repo_files(self.store.get_dataset(dataset))
-            resp.media = {'files': files}
+            files = get_files.delay(self.store.annex_path, dataset)
+            resp.media = {'files': files.get()}
 
     def on_post(self, req, resp, dataset, filename):
         """Post will only create new files and always adds them to the annex."""
@@ -98,7 +97,8 @@ class FilesResource(object):
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                unlock = unlock_files.delay(self.annex_path, dataset, files=[filename])
+                unlock = unlock_files.delay(
+                    self.annex_path, dataset, files=[filename])
                 self._update_file(file_path, req.stream)
                 commit = commit_files.delay(
                     self.annex_path, dataset, files=[filename], name=name, email=email)
