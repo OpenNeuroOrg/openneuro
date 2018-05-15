@@ -1,19 +1,10 @@
 import os
-import re
 
 import falcon
 
+from datalad_service.common.annex import get_from_header
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.files import unlock_files, commit_files, get_files
-
-
-def get_from_header(req):
-    """Parse the From header for a request."""
-    if 'FROM' in req.headers:
-        matches = re.match(r"\"(.*)\" <(.*?@.*)>", req.headers['FROM'])
-        return matches.group(1), matches.group(2)
-    else:
-        return None, None
 
 
 class FilesResource(object):
@@ -70,17 +61,8 @@ class FilesResource(object):
                 # Add to dataset
                 ds = self.store.get_dataset(dataset)
                 media_dict = {'created': filename}
-                # Record if this was done on behalf of a user
-                name, email = get_from_header(req)
-                if name and email:
-                    media_dict['name'] = name
-                    media_dict['email'] = email
-                commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                                                  'files': [filename], 'name': name, 'email': email})
-                commit.wait()
-                if not commit.failed():
-                    resp.media = media_dict
-                    resp.status = falcon.HTTP_OK
+                resp.media = media_dict
+                resp.status = falcon.HTTP_OK
             except PermissionError:
                 resp.media = {'error': 'file already exists'}
                 resp.status = falcon.HTTP_CONFLICT

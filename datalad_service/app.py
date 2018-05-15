@@ -1,6 +1,7 @@
 import falcon
 from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
+from datalad_service.handlers.draft import DraftResource
 from datalad_service.handlers.files import FilesResource
 from datalad_service.handlers.snapshots import SnapshotResource
 from datalad_service.handlers.heartbeat import HeartbeatResource
@@ -21,6 +22,7 @@ def create_app(annex_path):
 
     heartbeat = HeartbeatResource()
     datasets = DatasetResource(store)
+    dataset_draft = DraftResource(store)
     dataset_files = FilesResource(store)
     dataset_snapshots = SnapshotResource(store)
 
@@ -28,6 +30,8 @@ def create_app(annex_path):
 
     api.add_route('/datasets', datasets)
     api.add_route('/datasets/{dataset}', datasets)
+
+    api.add_route('/datasets/{dataset}/draft', dataset_draft)
 
     api.add_route('/datasets/{dataset}/files', dataset_files)
     api.add_route('/datasets/{dataset}/files/{filename:path}', dataset_files)

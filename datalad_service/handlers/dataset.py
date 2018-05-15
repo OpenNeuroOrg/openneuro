@@ -1,5 +1,6 @@
 import falcon
 
+from datalad_service.common.annex import get_from_header
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.dataset import *
 
@@ -32,8 +33,10 @@ class DatasetResource(object):
             resp.status = falcon.HTTP_CONFLICT
         else:
             queue = dataset_queue(dataset)
+            # Record if this was done on behalf of a user
+            name, email = get_from_header(req)
             created = create_dataset.apply_async(
-                queue=queue, args=(self.store.annex_path, dataset))
+                queue=queue, args=(self.store.annex_path, dataset, name, email))
             created.wait()
             if created.failed():
                 resp.media = {'error': 'dataset creation failed'}

@@ -8,16 +8,18 @@ import os
 import stat
 import shutil
 
+from datalad_service.common.annex import CommitInfo
 from datalad_service.common.celery import dataset_task
 
 
 @dataset_task
-def create_dataset(store, dataset):
+def create_dataset(store, dataset, name=None, email=None):
     """Create a DataLad git-annex repo for a new dataset."""
     ds = store.get_dataset(dataset)
-    ds.create()
-    if not ds.repo:
-        raise Exception('Repo creation failed.')
+    with CommitInfo(None, name, email, where='global'):
+        ds.create()
+        if not ds.repo:
+            raise Exception('Repo creation failed.')
 
 
 def force_rmtree(root_dir):

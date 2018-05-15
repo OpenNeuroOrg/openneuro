@@ -4,12 +4,15 @@ from datalad_service.common.celery import app
 
 
 @dataset_task
-def commit_files(store, dataset, files, email=None, name=None):
+def commit_files(store, dataset, files, name=None, email=None):
     """Commit a list of files with the email and name provided."""
     ds = store.get_dataset(dataset)
-    with CommitInfo(ds, email, name):
-        for filename in files:
-            ds.add(filename)
+    with CommitInfo(ds, name, email):
+        if files:
+            for filename in files:
+                ds.add(filename)
+        else:
+            ds.add('.')
 
 
 @dataset_task
