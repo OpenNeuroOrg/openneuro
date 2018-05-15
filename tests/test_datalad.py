@@ -2,9 +2,9 @@
 import os
 from mock import patch
 
+from .dataset_fixtures import *
 from datalad_service.tasks.dataset import *
 from datalad_service.tasks.files import commit_files
-from .dataset_fixtures import *
 
 
 def test_create_dataset(annex_path):

@@ -3,12 +3,10 @@ import os
 import stat
 import shutil
 
-from datalad_service.datalad import dataladStore
-from datalad_service.common.celery import app
+from datalad_service.common.celery import dataset_task
 
 
-@app.task
-@dataladStore
+@dataset_task
 def create_dataset(store, dataset):
     ds = store.get_dataset(dataset)
     ds.create()
@@ -34,15 +32,13 @@ def force_rmtree(root_dir):
     os.rmdir(root_dir)
 
 
-@app.task
-@dataladStore
+@dataset_task
 def delete_dataset(store, dataset):
     ds = store.get_dataset(dataset)
     force_rmtree(ds.path)
 
 
-@app.task
-@dataladStore
+@dataset_task
 def create_snapshot(store, dataset, snapshot):
     """
     Create a new snapshot (git tag).

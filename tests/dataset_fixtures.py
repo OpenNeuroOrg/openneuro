@@ -4,6 +4,7 @@ import json
 import random
 
 import pytest
+import fakeredis
 from falcon import testing
 
 from datalad.api import Dataset
@@ -23,6 +24,12 @@ DATASET_DESCRIPTION = {
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+@pytest.fixture(autouse=True)
+def no_redis(monkeypatch):
+    fake = fakeredis.FakeRedis()
+    monkeypatch.setattr('datalad_service.common.redis.redisClient', fake)
 
 
 @pytest.fixture(scope='session')

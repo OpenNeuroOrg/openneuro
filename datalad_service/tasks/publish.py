@@ -2,8 +2,7 @@ import os
 
 from datalad.api import create_sibling_github
 
-from datalad_service.common.celery import app
-from datalad_service.datalad import dataladStore
+from datalad_service.common.celery import dataset_task
 
 
 def create_github_repo(dataset, repo_name):
@@ -50,8 +49,7 @@ def publish_target(dataset, target):
     return dataset.publish(to=target)
 
 
-@app.task
-@dataladStore
+@dataset_task
 def publish_snapshot(store, dataset, snapshot, s3=False, github=False):
     dataset_id = dataset
     ds = store.get_dataset(dataset)

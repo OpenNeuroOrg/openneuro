@@ -1,8 +1,7 @@
 import json
-from datalad_service.validator import validate_dataset
 
 from .dataset_fixtures import *
-
+from datalad_service.validator import validate_dataset
 
 def test_validator(new_dataset):
     results = json.loads(validate_dataset(new_dataset.path))
