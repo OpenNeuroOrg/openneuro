@@ -16,8 +16,10 @@ class DatasetLockException(Exception):
 def dataset_task(func):
     """
     Decorate tasks with a real DataladStore object and datasetId locking.
+
+    Uses exponential backoff to retry tasks that did not acquire a lock without blocking on them.
     """
-    @app.task
+    @app.task(autoretry_for=(DatasetLockException,), retry_backoff=True, retry_backoff_max=3600)
     @wraps(func)
     def dataset_task_decorator(*args, **kwargs):
         print(args)
