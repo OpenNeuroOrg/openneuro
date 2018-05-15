@@ -354,6 +354,13 @@ const dataladRoutes = [
     url: '/openfmri/dataset/api/:datasetId',
     handler: openfmri.getDataset,
   },
+
+  // file routes
+  {
+    method: 'get',
+    url: '/datasets/:datasetId/files/:filename',
+    handler: datalad.getFile,
+  },
 ]
 
 // initialize routes -------------------------------
