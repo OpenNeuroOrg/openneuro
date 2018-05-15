@@ -8,7 +8,7 @@ jobs:
       - checkout
 
       # get the build-essentials so we can compile
-      - run: sudo apt-get update && sudo apt-get install build-essential
+      - run: sudo apt-get update && sudo apt-get install build-essential redis-server
 
       # install yarn for bids-validator
       - run: curl -o- -L https://yarnpkg.com/install.sh | sudo bash -s -- --version 1.6.0
