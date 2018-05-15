@@ -28,9 +28,11 @@ export const createSnapshot = (obj, { datasetId, tag }) => {
 export const updateFiles = (obj, { datasetId, files: fileTree }) => {
   // TODO - The id returned here is a placeholder
   const promises = updateFilesTree(datasetId, fileTree)
-  return Promise.all(promises).then(() => ({
-    id: new Date(),
-  }))
+  return Promise.all(promises)
+    .then(() => datalad.commitFiles(datasetId))
+    .then(() => ({
+      id: new Date(),
+    }))
 }
 
 /**

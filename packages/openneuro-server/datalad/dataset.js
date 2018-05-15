@@ -139,3 +139,11 @@ export const updateFile = async (datasetId, path, { filename, stream }) => {
       )
     })
 }
+
+/**
+ * Commit a draft
+ */
+export const commitFiles = datasetId => {
+  const url = `${uri}/datasets/${datasetId}/draft`
+  return request.post(url).set('Accept', 'application/json')
+}
