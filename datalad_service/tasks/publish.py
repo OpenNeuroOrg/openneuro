@@ -2,8 +2,8 @@ import os
 
 from datalad.api import create_sibling_github
 
-from .common.celery import app
-from .datalad import dataladStore
+from datalad_service.common.celery import app
+from datalad_service.datalad import dataladStore
 
 
 def create_github_repo(dataset, repo_name):
@@ -62,4 +62,3 @@ def publish_snapshot(store, dataset, snapshot, s3=False, github=False):
     if github:
         github_remote = github_sibling(ds, dataset_id, siblings)
         publish_target(ds, 'github')
-

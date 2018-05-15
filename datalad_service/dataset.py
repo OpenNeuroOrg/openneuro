@@ -1,6 +1,6 @@
 import falcon
 
-from .datalad import *
+from datalad_service.tasks.dataset import *
 
 
 class DatasetResource(object):

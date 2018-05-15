@@ -6,7 +6,7 @@ import random
 import pytest
 from falcon import testing
 
-from datalad.api import Dataset, create_sibling_github
+from datalad.api import Dataset
 from datalad_service.app import create_app
 from datalad_service.common.celery import app as celeryapp
 from datalad_service.datalad import DataladStore

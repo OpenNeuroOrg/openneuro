@@ -2,9 +2,9 @@ import os
 
 from .dataset_fixtures import *
 
-import datalad_service.publish
+import datalad_service.tasks.publish
 from datalad.api import create_sibling_github
-from datalad_service.publish import publish_snapshot, create_github_repo
+from datalad_service.tasks.publish import publish_snapshot, create_github_repo
 
 
 def mock_create_github(dataset, repo_name):
@@ -13,14 +13,14 @@ def mock_create_github(dataset, repo_name):
 
 @pytest.fixture
 def github_dryrun(monkeypatch):
-    monkeypatch.setattr(datalad_service.publish,
+    monkeypatch.setattr(datalad_service.tasks.publish,
                         'create_github_repo',
                         mock_create_github)
 
 
 @pytest.fixture(autouse=True)
 def no_publish(monkeypatch):
-    monkeypatch.setattr(datalad_service.publish,
+    monkeypatch.setattr(datalad_service.tasks.publish,
                         'publish_target', lambda dataset, target: True)
 
 

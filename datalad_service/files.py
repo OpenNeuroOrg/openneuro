@@ -3,7 +3,7 @@ import re
 
 import falcon
 
-from .datalad import unlock_files, commit_files, get_files
+from datalad_service.tasks.files import unlock_files, commit_files, get_files
 
 
 def get_from_header(req):

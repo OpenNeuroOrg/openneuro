@@ -2,7 +2,8 @@
 import os
 from mock import patch
 
-from datalad_service.datalad import *
+from datalad_service.tasks.dataset import *
+from datalad_service.tasks.files import commit_files
 from .dataset_fixtures import *
 
 

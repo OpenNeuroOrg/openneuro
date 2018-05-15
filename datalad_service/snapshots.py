@@ -2,8 +2,9 @@ import os
 
 import falcon
 
-from .datalad import get_files, create_snapshot
-from .publish import publish_snapshot
+from datalad_service.tasks.dataset import create_snapshot
+from datalad_service.tasks.files import get_files
+from datalad_service.tasks.publish import publish_snapshot
 
 
 class SnapshotResource(object):
