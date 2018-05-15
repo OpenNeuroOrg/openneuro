@@ -584,7 +584,7 @@ let datasetStore = Reflux.createStore({
             ? this.data.displayFile.name
             : null
           if (fileName) {
-            redirectUrl = redirectUrl + '/' + encodeURIComponent(fileName)
+            redirectUrl = redirectUrl + '/' + datalad.encodeFilePath(fileName)
           }
         }
       }
@@ -1751,38 +1751,107 @@ let datasetStore = Reflux.createStore({
   /**
    * DisplayFile
    */
+  // displayFile(snapshotId, jobId, file, history, callback) {
+  //   if (file && file.name) {
+  //     let displayUrl = file.path ? 'results/' + file.path : 'file-display'
+  //     let requestAndDisplay = link => {
+  //       if (link) {
+  //         if (
+  //           files.hasExtension(file.name, [
+  //             '.pdf',
+  //             '.nii.gz',
+  //             '.jpg',
+  //             '.jpeg',
+  //             '.png',
+  //             '.gif',
+  //           ])
+  //         ) {
+  //           if (callback) {
+  //             callback()
+  //           }
+  //           this.update(
+  //             {
+  //               displayFile: {
+  //                 name: file.name,
+  //                 text: null,
+  //                 link: link,
+  //               },
+  //             },
+  //             () => {
+  //               this.showDatasetComponent(displayUrl, file.history)
+  //             },
+  //           )
+  //         } else {
+  //           request.get(link, {}).then(res => {
+  //             if (callback) {
+  //               callback()
+  //             }
+  //             this.update(
+  //               {
+  //                 displayFile: {
+  //                   name: file.name,
+  //                   text: res.text,
+  //                   link: link,
+  //                   info: file,
+  //                 },
+  //               },
+  //               () => {
+  //                 this.showDatasetComponent(displayUrl, file.history)
+  //               },
+  //             )
+  //           })
+  //         }
+  //       } else {
+  //         this.showDatasetComponent(displayUrl, file.history)
+  //       }
+  //     }
+
+  //     if (jobId) {
+  //       this.getResultDownloadTicket(snapshotId, jobId, file, link => {
+  //         requestAndDisplay(link)
+  //       })
+  //     } else {
+  //       this.getFileDownloadTicket(file, link => {
+  //         requestAndDisplay(link)
+  //       })
+  //     }
+  //   } else {
+  //     callback()
+  //   }
+  // },
+
   displayFile(snapshotId, jobId, file, history, callback) {
+    console.log('displaying file:', file)
     if (file && file.name) {
       let displayUrl = file.path ? 'results/' + file.path : 'file-display'
-      let requestAndDisplay = link => {
-        if (link) {
-          if (
-            files.hasExtension(file.name, [
-              '.pdf',
-              '.nii.gz',
-              '.jpg',
-              '.jpeg',
-              '.png',
-              '.gif',
-            ])
-          ) {
-            if (callback) {
-              callback()
-            }
-            this.update(
-              {
-                displayFile: {
-                  name: file.name,
-                  text: null,
-                  link: link,
-                },
-              },
-              () => {
-                this.showDatasetComponent(displayUrl, file.history)
-              },
-            )
-          } else {
-            request.get(link, {}).then(res => {
+      let link = 'http://localhost:9876/crn/datasets/' + bids.decodeId(this.data.dataset._id) + '/files/' + datalad.encodeFilePath(file.name)
+        if (
+          files.hasExtension(file.name, [
+          '.pdf',
+          '.nii.gz',
+          '.jpg',
+          '.jpeg',
+          '.png',
+          '.gif',
+        ])
+        ) {
+          let displayFile = {
+            name: file.name,
+            text: null,
+            link: link
+          }
+          console.log('displayFile:', displayFile)          
+          this.update(
+            {
+              displayFile: displayFile,
+            },
+            () => {
+              this.showDatasetComponent(displayUrl, file.history)
+            },
+          )
+        } else {
+          datalad.getFile(bids.decodeId(this.data.dataset._id), file.name)
+            .then(res => {
               if (callback) {
                 callback()
               }
@@ -1792,27 +1861,17 @@ let datasetStore = Reflux.createStore({
                     name: file.name,
                     text: res.text,
                     link: link,
-                    info: file,
+                    info: file
                   },
                 },
                 () => {
                   this.showDatasetComponent(displayUrl, file.history)
                 },
-              )
-            })
+            )
           }
-        } else {
-          this.showDatasetComponent(displayUrl, file.history)
-        }
-      }
-
-      if (jobId) {
-        this.getResultDownloadTicket(snapshotId, jobId, file, link => {
-          requestAndDisplay(link)
-        })
-      } else {
-        this.getFileDownloadTicket(file, link => {
-          requestAndDisplay(link)
+        )
+        .catch(err => {
+          console.log(err)
         })
       }
     } else {
@@ -1864,8 +1923,8 @@ let datasetStore = Reflux.createStore({
       : this.data.dataset._id
     transition = transition == undefined ? true : transition
 
-    scitran.getProject(datasetId).then(res => {
-      let project = res.body
+    bids.getDataset(datasetId, (data) => {
+      let project = data
       if (
         !project.metadata ||
         !project.metadata.authors ||
@@ -1904,14 +1963,14 @@ let datasetStore = Reflux.createStore({
                 error: err,
               })
             } else {
-              if (!res) {
+              if (!data) {
                 callback({
                   error:
                     'There was an error while updating the dataset changelog.',
                 })
               }
-              crn.createSnapshot(datasetId).then(res => {
-                let snapshotId = res.body._id
+              datalad.createSnapshot(datasetId).then(res => {
+                let snapshotId = res.data.snapshot._id
                 this.toggleSidebar(true)
                 if (transition) {
                   const url =
@@ -1931,7 +1990,7 @@ let datasetStore = Reflux.createStore({
           })
         }
       }
-    })
+    }, {})
   },
 
   loadSnapshots(dataset, jobs, callback) {
