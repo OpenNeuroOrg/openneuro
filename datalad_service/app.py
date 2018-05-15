@@ -1,13 +1,14 @@
 import falcon
-from .datalad import DataladStore
-from .dataset import DatasetResource
-from .files import FilesResource
-from .snapshots import SnapshotResource
-from .heartbeat import HeartbeatResource
+from datalad_service.datalad import DataladStore
+from datalad_service.handlers.dataset import DatasetResource
+from datalad_service.handlers.files import FilesResource
+from datalad_service.handlers.snapshots import SnapshotResource
+from datalad_service.handlers.heartbeat import HeartbeatResource
 
 
 class PathConverter(falcon.routing.converters.BaseConverter):
     """: is used because it is human readable as a separator, disallowed in filenames on Windows, and very rare in Unix filenames."""
+
     def convert(self, value):
         return value.replace(':', '/')
 
@@ -32,6 +33,7 @@ def create_app(annex_path):
     api.add_route('/datasets/{dataset}/files/{filename:path}', dataset_files)
 
     api.add_route('/datasets/{dataset}/snapshots', dataset_snapshots)
-    api.add_route('/datasets/{dataset}/snapshots/{snapshot}', dataset_snapshots)
+    api.add_route(
+        '/datasets/{dataset}/snapshots/{snapshot}', dataset_snapshots)
 
     return api
