@@ -119,7 +119,7 @@ const typeDefs = `
     key: String!
     code: Int!
     reason: String!
-    files: [ValidationFileIssue]
+    files: [ValidationIssueFile]
     additionalFileCount: Int
   }
 
