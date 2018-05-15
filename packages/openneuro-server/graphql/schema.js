@@ -29,8 +29,26 @@ const typeDefs = `
     createSnapshot(datasetId: ID!, tag: String!): Snapshot
     # Add or update files in a draft - returns a new Draft
     updateFiles(datasetId: ID!, files: FileTree!): Draft
+    # Update a draft summary
+    updateSummary(summary: SummaryInput!): Summary
     # Update a draft with validation results
-    updateValidation(datasetId: ID!, ref: String!, summary: Summary, issues: [ValidationIssue]): Boolean
+    updateValidation(validation: ValidationInput!): Boolean
+  }
+
+  input SummaryInput {
+    datasetId: ID!
+    modalities: [String]
+    sessions: [String]
+    subjects: [String]
+    tasks: [String]
+    size: Int!
+    totalFiles: Int!
+  }
+
+  input ValidationInput {
+    datasetId: ID!
+    ref: String!
+    issues: [ValidationIssueInput]!
   }
 
   # File tree
@@ -123,10 +141,21 @@ const typeDefs = `
     additionalFileCount: Int
   }
 
+  input ValidationIssueInput {
+    severity: Severity!
+    key: String!
+    code: Int!
+    reason: String!
+    files: [ValidationIssueFileInput]
+    additionalFileCount: Int
+  }
+
   type ValidationIssueFile {
     key: String!
     code: Int!
-    file: ValidationFileDetail
+    filename: String
+    path: String
+    relativePath: String
     evidence: String
     line: Int
     character: Int
@@ -134,10 +163,17 @@ const typeDefs = `
     reason: String
   }
 
-  type ValidationFileDetail {
-    name: String!
-    path: String!
-    relativePath: String!
+  input ValidationIssueFileInput {
+    key: String!
+    code: Int!
+    filename: String
+    path: String
+    relativePath: String
+    evidence: String
+    line: Int
+    character: Int
+    severity: Severity!
+    reason: String
   }
 
   # File metadata and link to contents
