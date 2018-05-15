@@ -15,4 +15,4 @@ RUN apk --update add yarn git python py-pip openssl openssh ca-certificates py-o
   && mkdir /repos \
   && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-CMD ["gunicorn", "--bind", "0.0.0.0:9877", "--reload", "datalad_service.app:create_app('/datalad')", "--workers", "1"]
+CMD ["gunicorn", "--bind", "0.0.0.0:9877", "--reload", "datalad_service.app:create_app('/datalad')", "--workers", "4", "--worker-class", "gevent"]
