@@ -99,6 +99,7 @@ class FilesResource(object):
                     media_dict['email'] = email
                 unlock = unlock_files.delay(
                     self.annex_path, dataset, files=[filename])
+                unlock.wait()
                 self._update_file(file_path, req.stream)
                 commit = commit_files.delay(
                     self.annex_path, dataset, files=[filename], name=name, email=email)
