@@ -38,11 +38,12 @@ export const createDataset = (label, uploader, userInfo) => {
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
       const req = request.post(url).set('Accept', 'application/json')
-      setCommitInfo(
-        req,
-        `${userInfo.firstname} ${userInfo.lastname}`,
-        userInfo.email,
-      )
+      if (userInfo)
+        setCommitInfo(
+          req,
+          `${userInfo.firstname} ${userInfo.lastname}`,
+          userInfo.email,
+        )
       await req
       resolve({ id: datasetId, label })
     } else {
