@@ -66,11 +66,11 @@ services:
     command:
       - celery
       - -A
-      - datalad_service.app
+      - datalad_service.worker
       - worker
       - --loglevel=DEBUG
       - -c
-      - "5"
+      - "4"
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
     restart: always
