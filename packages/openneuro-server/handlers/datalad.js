@@ -43,3 +43,22 @@ export const createSnapshot = (req, res) => {
     res.send()
   })
 }
+
+/**
+ * Get a file from a dataset
+ */
+export const getFile = (req, res) => {
+  console.log('************ SERVER: HIT GETFILE')
+  const datasetId = req.params.datasetId
+  const filename = req.params.filename
+  res.set('Content-Type', 'application/*')
+  const uri = `${URI}/datasets/${datasetId}/files/${filename}`
+  return request.get(uri)
+    .pipe(res)
+    // .then((file) => {
+    //   res.send(file)
+    // })
+    // .catch((err) => {
+    //   res.send(err)
+    // })
+}
