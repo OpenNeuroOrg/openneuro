@@ -68,10 +68,10 @@ export default test => {
     auth.optional,
     apolloUploadExpress(),
     graphqlExpress(req => {
-      const { user, isSuperUser } = req
+      const { user, isSuperUser, userInfo } = req
       return {
         schema,
-        context: { user, isSuperUser },
+        context: { user, isSuperUser, userInfo },
       }
     }),
   )

@@ -75,6 +75,12 @@ let auth = {
         .then(userId => promisify(scitran.getUser)(userId))
         .then(scitranUser => {
           req.user = scitranUser.body._id
+          req.userInfo = {
+            id: req.user,
+            firstname: scitranUser.body.firstname,
+            lastname: scitranUser.body.lastname,
+            email: scitranUser.body.email,
+          }
           req.isSuperUser = scitranUser.body.root
         })
         .then(() => next())
