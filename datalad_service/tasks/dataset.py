@@ -1,3 +1,8 @@
+"""
+Dataset global tasks
+
+Any operations that affect an entire dataset (such as creating snapshots)
+"""
 import logging
 import os
 import stat
@@ -8,6 +13,7 @@ from datalad_service.common.celery import dataset_task
 
 @dataset_task
 def create_dataset(store, dataset):
+    """Create a DataLad git-annex repo for a new dataset."""
     ds = store.get_dataset(dataset)
     ds.create()
     if not ds.repo:
@@ -34,6 +40,7 @@ def force_rmtree(root_dir):
 
 @dataset_task
 def delete_dataset(store, dataset):
+    """Fully delete a given dataset. Removes all snapshots!"""
     ds = store.get_dataset(dataset)
     force_rmtree(ds.path)
 

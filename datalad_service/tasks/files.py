@@ -5,6 +5,7 @@ from datalad_service.common.celery import app
 
 @dataset_task
 def commit_files(store, dataset, files, email=None, name=None):
+    """Commit a list of files with the email and name provided."""
     ds = store.get_dataset(dataset)
     with CommitInfo(ds, email, name):
         for filename in files:
@@ -20,5 +21,6 @@ def unlock_files(store, dataset, files):
 
 @dataset_task
 def get_files(store, dataset, branch=None):
+    """Get the working tree, optionally a branch tree."""
     ds = store.get_dataset(dataset)
     return get_repo_files(ds, branch)

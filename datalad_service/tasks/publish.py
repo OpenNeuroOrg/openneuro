@@ -51,6 +51,7 @@ def publish_target(dataset, target):
 
 @dataset_task
 def publish_snapshot(store, dataset, snapshot, s3=False, github=False):
+    """Publish a snapshot tag to S3, GitHub or both."""
     dataset_id = dataset
     ds = store.get_dataset(dataset)
     siblings = ds.siblings()
