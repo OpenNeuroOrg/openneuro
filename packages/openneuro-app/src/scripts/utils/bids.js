@@ -107,8 +107,8 @@ export default {
     async.each(
       metadataFiles,
       (filename, cb) => {
-        scitran
-          .getFile('projects', project._id, filename, options)
+        datalad
+          .getFile(project._id, filename, options)
           .then(file => {
             let contents
             try {
