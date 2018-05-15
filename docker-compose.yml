@@ -68,9 +68,12 @@ services:
       - -A
       - datalad_service.worker
       - worker
-      - --loglevel=DEBUG
+      - -Q
+      - dataset-worker-0
+      - -l
+      - info
       - -c
-      - "4"
+      - "1"
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
     restart: always
