@@ -19,7 +19,7 @@ def dataset_task(func):
 
     Uses exponential backoff to retry tasks that did not acquire a lock without blocking on them.
     """
-    @app.task(autoretry_for=(DatasetLockException,), retry_backoff=True, retry_backoff_max=3600)
+    @app.task(autoretry_for=(DatasetLockException,), retry_backoff=True, retry_backoff_max=3600, retry_jitter=False)
     @wraps(func)
     def dataset_task_decorator(*args, **kwargs):
         print(args)
