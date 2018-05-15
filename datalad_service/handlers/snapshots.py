@@ -2,6 +2,7 @@ import os
 
 import falcon
 
+from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.dataset import create_snapshot
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.publish import publish_snapshot
@@ -15,9 +16,9 @@ class SnapshotResource(object):
         self.store = store
 
     def _get_snapshot(self, dataset, snapshot):
-        ds = self.store.get_dataset(dataset)
-        files = get_files.delay(self.store.annex_path,
-                                dataset, branch=snapshot)
+        queue = dataset_queue(dataset)
+        files = get_files.apply_async(queue=queue, args=(
+            self.store.annex_path, dataset), kwargs={'branch': snapshot})
         return {'files': files.get(), 'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot}
 
     def on_get(self, req, resp, dataset, snapshot=None):
@@ -38,14 +39,15 @@ class SnapshotResource(object):
 
     def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
-        created = create_snapshot.delay(
-            self.store.annex_path, dataset, snapshot)
+        queue = dataset_queue(dataset)
+        created = create_snapshot.apply_async(
+            queue=queue, args=(self.store.annex_path, dataset, snapshot))
         if not created.failed():
             resp.media = self._get_snapshot(dataset, snapshot)
             resp.status = falcon.HTTP_OK
             # This is async because it can take a very long time
-            published = publish_snapshot.delay(
-                self.store.annex_path, dataset, snapshot)
+            published = publish_snapshot.apply_async(
+                queue=queue, args=(self.store.annex_path, dataset, snapshot))
         else:
             resp.media = {'error': 'tag already exists'}
             resp.status = falcon.HTTP_CONFLICT

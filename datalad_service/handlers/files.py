@@ -3,6 +3,7 @@ import re
 
 import falcon
 
+from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.files import unlock_files, commit_files, get_files
 
 
@@ -50,11 +51,14 @@ class FilesResource(object):
             # Request for index of files
             # Return a list of file objects
             # {name, path, size}
-            files = get_files.delay(self.store.annex_path, dataset)
+            queue = dataset_queue(dataset)
+            files = get_files.apply_async(
+                queue=queue, args=(self.store.annex_path, dataset))
             resp.media = {'files': files.get()}
 
     def on_post(self, req, resp, dataset, filename):
         """Post will only create new files and always adds them to the annex."""
+        queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             try:
@@ -71,8 +75,8 @@ class FilesResource(object):
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                commit = commit_files.delay(
-                    self.annex_path, dataset, files=[filename], name=name, email=email)
+                commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
+                                                  'files': [filename], 'name': name, 'email': email})
                 commit.wait()
                 if not commit.failed():
                     resp.media = media_dict
@@ -86,6 +90,7 @@ class FilesResource(object):
 
     def on_put(self, req, resp, dataset, filename):
         """Put will only update existing files and automatically unlocks them."""
+        queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             file_path = os.path.join(ds_path, filename)
@@ -97,12 +102,12 @@ class FilesResource(object):
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                unlock = unlock_files.delay(
-                    self.annex_path, dataset, files=[filename])
+                unlock = unlock_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
+                                                  'files': [filename]})
                 unlock.wait()
                 self._update_file(file_path, req.stream)
-                commit = commit_files.delay(
-                    self.annex_path, dataset, files=[filename], name=name, email=email)
+                commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
+                                                  'files': [filename], 'name': name, 'email': email})
                 commit.wait()
                 # ds.publish(to='github')
                 if not commit.failed():

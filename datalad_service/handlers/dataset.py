@@ -1,5 +1,6 @@
 import falcon
 
+from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.dataset import *
 
 
@@ -30,7 +31,9 @@ class DatasetResource(object):
             resp.media = {'error': 'dataset already exists'}
             resp.status = falcon.HTTP_CONFLICT
         else:
-            created = create_dataset.delay(self.store.annex_path, dataset)
+            queue = dataset_queue(dataset)
+            created = create_dataset.apply_async(
+                queue=queue, args=(self.store.annex_path, dataset))
             created.wait()
             if created.failed():
                 resp.media = {'error': 'dataset creation failed'}
@@ -40,7 +43,9 @@ class DatasetResource(object):
                 resp.status = falcon.HTTP_OK
 
     def on_delete(self, req, resp, dataset):
-        deleted = delete_dataset.delay(self.store.annex_path, dataset)
+        queue = dataset_queue(dataset)
+        deleted = delete_dataset.apply_async(
+            queue=queue, args=(self.store.annex_path, dataset))
         deleted.wait()
         if deleted.failed():
             resp.media = {'error': 'dataset not found'}
