@@ -5,6 +5,7 @@
 import React from 'react'
 import Reflux from 'reflux'
 import PropTypes from 'prop-types'
+import datalad from '../utils/datalad'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions'
 import FileView from '../common/partials/file-view.jsx'
@@ -49,16 +50,17 @@ class FileContent extends Reflux.Component {
     const fileName = file ? file.name : null
 
     if (!fileName) {
-      let fileName = decodeURIComponent(this.props.match.params.fileName)
+      let fileName = this.props.match.params.fileName
       if (
         fileName &&
         datasets &&
         datasets.dataset &&
         !this.state.fileRequested
       ) {
+        let decodedName = datalad.decodeFilePath(fileName)
         this.setState({ fileRequested: true })
         let displayFile = {
-          name: fileName,
+          name: decodedName,
           history: this.props.history,
         }
         actions.displayFile(null, null, displayFile, null)
