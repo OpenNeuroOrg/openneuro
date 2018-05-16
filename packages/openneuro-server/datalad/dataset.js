@@ -13,6 +13,15 @@ const c = mongo.collections
 const uri = config.datalad.uri
 
 /**
+ * Set commit info on a superagent request
+ */
+const setCommitInfo = (req, name, email) => {
+  if (name && email) {
+    req.set('From', `"${name}" <${email}>`)
+  }
+}
+
+/**
  * Create a new dataset
  *
  * Internally we setup metadata and access
@@ -21,14 +30,21 @@ const uri = config.datalad.uri
  * @param {String} label - descriptive label for this dataset
  * @returns {Promise} - resolves to dataset id of the new dataset
  */
-export const createDataset = (label, uploader) => {
+export const createDataset = (label, uploader, userInfo) => {
   return new Promise(async (resolve, reject) => {
     const datasetId = await getAccessionNumber()
     const dsObj = await createDatasetModel(datasetId, label, uploader)
     // If successful, create the repo
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
-      await request.post(url).set('Accept', 'application/json')
+      const req = request.post(url).set('Accept', 'application/json')
+      if (userInfo)
+        setCommitInfo(
+          req,
+          `${userInfo.firstname} ${userInfo.lastname}`,
+          userInfo.email,
+        )
+      await req
       resolve({ id: datasetId, label })
     } else {
       reject(Error(`Failed to create ${datasetId} - "${label}"`))
@@ -138,4 +154,14 @@ export const updateFile = async (datasetId, path, { filename, stream }) => {
         `A client hung up the connection - ${datasetId}:${path}:${filename}`,
       )
     })
+}
+
+/**
+ * Commit a draft
+ */
+export const commitFiles = (datasetId, name, email) => {
+  const url = `${uri}/datasets/${datasetId}/draft`
+  const req = request.post(url).set('Accept', 'application/json')
+  setCommitInfo(req, name, email)
+  return req
 }

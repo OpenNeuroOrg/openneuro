@@ -11,8 +11,8 @@ export const datasets = () => {
 /**
  * Create an empty dataset (new repo, new accession number)
  */
-export const createDataset = (obj, { label }, { user }) => {
-  return datalad.createDataset(label, user)
+export const createDataset = (obj, { label }, { user, userInfo }) => {
+  return datalad.createDataset(label, user, userInfo)
 }
 
 /**
@@ -25,12 +25,20 @@ export const createSnapshot = (obj, { datasetId, tag }) => {
 /**
  * Add files to a draft
  */
-export const updateFiles = (obj, { datasetId, files: fileTree }) => {
+export const updateFiles = (
+  obj,
+  { datasetId, files: fileTree },
+  { userInfo: { firstname, lastname, email } },
+) => {
   // TODO - The id returned here is a placeholder
   const promises = updateFilesTree(datasetId, fileTree)
-  return Promise.all(promises).then(() => ({
-    id: new Date(),
-  }))
+  return Promise.all(promises)
+    .then(() =>
+      datalad.commitFiles(datasetId, `${firstname} ${lastname}`, email),
+    )
+    .then(() => ({
+      id: new Date(),
+    }))
 }
 
 /**
