@@ -7,7 +7,7 @@ from datalad.api import Dataset
 from .dataset_fixtures import *
 
 
-def test_get_file(client):
+def test_get_file(client, celery_app):
     ds_id = 'ds000001'
     result = client.simulate_get(
         '/datasets/{}/files/dataset_description.json'.format(ds_id), file_wrapper=FileWrapper)
@@ -54,7 +54,7 @@ def test_add_directory_path(client):
     assert response.status == falcon.HTTP_OK
 
 
-def test_update_file(client, annex_path):
+def test_update_file(celery_app, client, annex_path):
     ds_id = 'ds000001'
     file_data = 'Test dataset LICENSE'
     # First post a file
@@ -75,7 +75,7 @@ def test_update_file(client, annex_path):
         assert f.read() == file_data
 
 
-def test_update_missing_file(client):
+def test_update_missing_file(celery_app, client):
     ds_id = 'ds000001'
     file_data = 'File that does not exist'
     # First post a file
@@ -84,31 +84,19 @@ def test_update_missing_file(client):
     assert response.status == falcon.HTTP_NOT_FOUND
 
 
-def test_add_commit_info(client):
-    ds_id = 'ds000001'
-    file_data = 'Test annotating requests with user info'
-    name = 'Test User'
-    email = 'user@example.com'
-    headers = {
-        'From': '"{}" <{}>'.format(name, email)
-    }
-    response = client.simulate_post(
-        '/datasets/{}/files/USER_ADDED_FILE'.format(ds_id), body=file_data, headers=headers)
-    assert response.status == falcon.HTTP_OK
-    response_content = json.loads(response.content)
-    assert response_content['name'] == name
-    assert response_content['email'] == email
-
-
-def test_file_indexing(client, new_dataset):
+def test_file_indexing(celery_app, client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
-    # First post a file
+    # First post a couple test files
     response = client.simulate_post(
         '/datasets/{}/files/LICENSE'.format(ds_id), body='GPL V3.0')
     assert response.status == falcon.HTTP_OK
     response = client.simulate_post(
         '/datasets/{}/files/sub-01:anat:sub-01_T1w.nii.gz'.format(ds_id), body='fMRI data goes here')
     assert response.status == falcon.HTTP_OK
+    # Commit draft
+    response = client.simulate_post('/datasets/{}/draft'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    # Get the files in the committed tree
     response = client.simulate_get('/datasets/{}/files'.format(ds_id))
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)

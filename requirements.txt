@@ -17,6 +17,7 @@ datalad==0.9.3
 duecredit==0.6.3
 entrypoints==0.2.3
 falcon==1.4.1
+fakeredis==0.10.3
 fasteners==0.14.1
 gevent==1.2.2
 gitdb2==2.0.3

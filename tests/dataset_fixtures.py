@@ -4,9 +4,13 @@ import json
 import random
 
 import pytest
+import fakeredis
 from falcon import testing
+
 from datalad.api import Dataset
 from datalad_service.app import create_app
+from datalad_service.common.celery import app as celeryapp
+from datalad_service.datalad import DataladStore
 
 # Test dataset to create
 DATASET_ID = 'ds000001'
@@ -20,6 +24,20 @@ DATASET_DESCRIPTION = {
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+@pytest.fixture(autouse=True)
+def no_redis(monkeypatch):
+    fake = fakeredis.FakeRedis()
+    monkeypatch.setattr('datalad_service.common.redis.redisClient', fake)
+
+
+@pytest.fixture(autouse=True)
+def no_git_config(monkeypatch):
+    monkeypatch.setattr(
+        'datalad_service.common.annex.CommitInfo.__enter__', lambda s: None)
+    monkeypatch.setattr(
+        'datalad_service.common.annex.CommitInfo.__exit__', lambda s, x, y, z: None)
 
 
 @pytest.fixture(scope='session')
@@ -74,3 +92,10 @@ class FileWrapper(object):
             return data
 
         raise IndexError
+
+
+@pytest.fixture(scope='session')
+def celery_app(request):
+    """Allow celery tasks to run in eager mode for integration tests."""
+    celeryapp.conf.update(task_always_eager=True)
+    return celeryapp

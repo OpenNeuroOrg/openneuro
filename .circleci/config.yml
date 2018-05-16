@@ -3,12 +3,15 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/python:3.6.4
+      - image: circleci/python:3.6.5-stretch-node
     steps:
       - checkout
 
       # get the build-essentials so we can compile
-      - run: sudo apt-get update && sudo apt-get install build-essential
+      - run: sudo apt-get update && sudo apt-get install build-essential redis-server
+
+      # install yarn for bids-validator
+      - run: curl -o- -L https://yarnpkg.com/install.sh | sudo bash -s -- --version 1.6.0
 
       # create venv and install dependencies
       - run:

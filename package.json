@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "bids-validator": "^0.26.11"
+  }
+}

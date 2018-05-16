@@ -7,7 +7,7 @@ import pytest
 from .dataset_fixtures import *
 
 
-def test_get_snapshot(client):
+def test_get_snapshot(client, celery_app):
     # The main test dataset has one revision we can fetch
     response = client.simulate_get(
         '/datasets/{}/snapshots/{}'.format(DATASET_ID, SNAPSHOT_ID))
@@ -19,7 +19,7 @@ def test_get_snapshot(client):
             'id': '{}:{}'.format(DATASET_ID, SNAPSHOT_ID)} == result_doc
 
 
-def test_create_snapshot(client, new_dataset):
+def test_create_snapshot(client, new_dataset, celery_app):
     ds_id = os.path.basename(new_dataset.path)
     snapshot_id = '1'
     response = client.simulate_post(
@@ -27,7 +27,7 @@ def test_create_snapshot(client, new_dataset):
     assert response.status == falcon.HTTP_OK
 
 
-def test_duplicate_snapshot(client, new_dataset):
+def test_duplicate_snapshot(client, new_dataset, celery_app):
     ds_id = os.path.basename(new_dataset.path)
     snapshot_id = '1'
     response = client.simulate_post(
@@ -38,7 +38,7 @@ def test_duplicate_snapshot(client, new_dataset):
     assert response.status == falcon.HTTP_CONFLICT
 
 
-def test_get_snapshots(client, new_dataset):
+def test_get_snapshots(client, new_dataset, celery_app):
     ds_id = os.path.basename(new_dataset.path)
     response = client.simulate_post(
         '/datasets/{}/snapshots/{}'.format(ds_id, 'v1.0.0'))

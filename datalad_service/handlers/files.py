@@ -1,15 +1,10 @@
 import os
-import re
 
 import falcon
 
-from .common.annex import get_repo_files
-
-
-def get_from_header(req):
-    """Parse the From header for a request."""
-    matches = re.match(r"\"(.*)\" <(.*?@.*)>", req.headers['FROM'])
-    return matches.group(1), matches.group(2)
+from datalad_service.common.annex import get_from_header
+from datalad_service.common.celery import dataset_queue
+from datalad_service.tasks.files import unlock_files, commit_files, get_files
 
 
 class FilesResource(object):
@@ -17,6 +12,10 @@ class FilesResource(object):
 
     def __init__(self, store):
         self.store = store
+
+    @property
+    def annex_path(self):
+        return self.store.annex_path
 
     def _update_file(self, path, stream):
         """Update a file on disk with a path and source stream."""
@@ -43,21 +42,17 @@ class FilesResource(object):
             # Request for index of files
             # Return a list of file objects
             # {name, path, size}
-            files = get_repo_files(self.store.get_dataset(dataset))
-            resp.media = {'files': files}
-
+            queue = dataset_queue(dataset)
+            files = get_files.apply_async(
+                queue=queue, args=(self.store.annex_path, dataset))
+            resp.media = {'files': files.get()}
 
     def on_post(self, req, resp, dataset, filename):
         """Post will only create new files and always adds them to the annex."""
+        queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             try:
-                media_dict = {'created': filename}
-                # Record if this was done on behalf of a user
-                if 'FROM' in req.headers:
-                    name, email = get_from_header(req)
-                    media_dict['name'] = name
-                    media_dict['email'] = email
                 # Make any missing parent directories
                 file_path = os.path.join(ds_path, filename)
                 os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -65,7 +60,7 @@ class FilesResource(object):
                 self._update_file(file_path, req.stream)
                 # Add to dataset
                 ds = self.store.get_dataset(dataset)
-                ds.add(path=filename)
+                media_dict = {'created': filename}
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             except PermissionError:
@@ -77,20 +72,29 @@ class FilesResource(object):
 
     def on_put(self, req, resp, dataset, filename):
         """Put will only update existing files and automatically unlocks them."""
+        queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
             file_path = os.path.join(ds_path, filename)
             if os.path.exists(file_path):
+                ds = self.store.get_dataset(dataset)
                 media_dict = {'updated': filename}
                 # Record if this was done on behalf of a user
-                if 'FROM' in req.headers:
-                    name, email = get_commit_info(req)
+                name, email = get_from_header(req)
+                if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
-                ds = self.store.get_dataset(dataset)
-                ds.unlock(path=filename)
+                unlock = unlock_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
+                                                  'files': [filename]})
+                unlock.wait()
                 self._update_file(file_path, req.stream)
-                ds.add(path=filename)
+                commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
+                                                  'files': [filename], 'name': name, 'email': email})
+                commit.wait()
+                # ds.publish(to='github')
+                if not commit.failed():
+                    resp.media = media_dict
+                    resp.status = falcon.HTTP_OK
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
