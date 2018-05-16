@@ -19,7 +19,7 @@ def test_delete_dataset(annex_path, new_dataset):
     assert not os.path.exists(new_dataset.path)
 
 
-def test_commit_file(annex_path, new_dataset):
+def test_commit_file(celery_app, annex_path, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # Write some files into the dataset first
     file_path = os.path.join(new_dataset.path, 'LICENSE')
