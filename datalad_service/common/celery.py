@@ -15,9 +15,9 @@ def dataset_queue(dataset):
     return 'dataset-worker-{}'.format(dataset_hash(dataset))
 
 
-def dataset_hash(key, workers=DATALAD_WORKERS):
+def dataset_hash(key):
     """Return which worker for a given task."""
-    return hash(key) % workers
+    return hash(key) % DATALAD_WORKERS
 
 
 def dataset_task(func):
