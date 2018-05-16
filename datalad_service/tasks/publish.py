@@ -3,6 +3,7 @@ from datalad.api import create_sibling_github
 from datalad_service.config import DATALAD_GITHUB_ORG
 from datalad_service.config import DATALAD_GITHUB_LOGIN
 from datalad_service.config import DATALAD_GITHUB_PASS
+from datalad_service.common.s3 import S3Realms, setup_s3_sibling
 from datalad_service.common.celery import dataset_task
 
 
@@ -28,17 +29,24 @@ def get_sibling_by_name(name, siblings):
 
 
 def github_sibling(ds, repo_name, siblings):
+    """
+    Find a GitHub remote or create a new repo and configure the remote.
+    """
     sibling = get_sibling_by_name('github', siblings)
     if not sibling:
         create_github_repo(ds, repo_name)
     return sibling
 
 
-def s3_sibling(siblings):
-    sibling = get_sibling_by_name('s3', siblings)
+def s3_sibling(dataset, siblings, realm=S3Realms.PRIVATE):
+    """
+    Setup a special remote for a versioned S3 remote.
+
+    The bucket must already exist and be configured.
+    """
+    sibling = get_sibling_by_name(realm.remote_name, siblings)
     if not sibling:
-        # TODO - Create the special S3 remote for export
-        pass
+        setup_s3_sibling(dataset, realm)
     return sibling
 
 
@@ -58,7 +66,7 @@ def publish_snapshot(store, dataset, snapshot, s3=False, github=False):
     ds = store.get_dataset(dataset)
     siblings = ds.siblings()
     if s3:
-        s3_remote = s3_sibling(siblings)
+        s3_remote = s3_sibling(ds, siblings)
         publish_target(ds, 's3')
     if github:
         github_remote = github_sibling(ds, dataset_id, siblings)
