@@ -12,7 +12,7 @@ RUN apk --update add yarn git python py-pip openssl openssh ca-certificates py-o
   && apk --update add --virtual build-dependencies libffi-dev openssl-dev python3-dev py3-pip build-base libxml2-dev libxslt-dev \
   && pip install -r /requirements.txt \
   && apk del build-dependencies wget \
-  && mkdir /repos \
+  && mkdir /datalad \
   && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 CMD ["gunicorn", "--bind", "0.0.0.0:9877", "--reload", "datalad_service.app:create_app('/datalad')", "--workers", "4", "--worker-class", "gevent"]
