@@ -6,6 +6,7 @@ import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
 import config from '../../../../config'
+import datalad from '../../utils/datalad'
 import datasetStore from '../../dataset/dataset.store.js'
 import { refluxConnect } from '../../utils/reflux'
 import { Link } from 'react-router-dom'
@@ -178,13 +179,12 @@ class FileTree extends Reflux.Component {
 
     let downloadFile
     if (!item.children) {
+      let link = 'http://localhost:9876/crn/datasets/' + bids.decodeId(this.data.dataset._id) + '/files/' + datalad.encodeFilePath(file.name)
       downloadFile = (
         <span className="download-file">
-          <WarnButton
-            icon="fa-download"
-            message="Download"
-            prepDownload={this.props.getFileDownloadTicket.bind(this, item)}
-          />
+          <a href={link} download>
+            <i className="fa fa-download" /> DOWNLOAD
+          </a>
         </span>
       )
     }
@@ -249,12 +249,12 @@ class FileTree extends Reflux.Component {
           itemUrl =
             this.state.datasets.datasetUrl +
             '/results/' +
-            encodeURIComponent(item.path)
+            datalad.encodeFilePath(item.path)
         } else {
           itemUrl =
             this.state.datasets.datasetUrl +
             '/file-display/' +
-            encodeURIComponent(item.name)
+            datalad.encodeFilePath(item.name)
         }
 
         displayBtn = (
