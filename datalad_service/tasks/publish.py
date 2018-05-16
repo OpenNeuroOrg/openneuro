@@ -1,19 +1,21 @@
-import os
-
 from datalad.api import create_sibling_github
 
+from datalad_service.config import DATALAD_GITHUB_ORG
+from datalad_service.config import DATALAD_GITHUB_LOGIN
+from datalad_service.config import DATALAD_GITHUB_PASS
 from datalad_service.common.celery import dataset_task
 
 
 def create_github_repo(dataset, repo_name):
     """Setup a github sibling / remote."""
     try:
-        org = os.environ['DATALAD_GITHUB_ORG']
-        login = os.environ['DATALAD_GITHUB_LOGIN']
-        password = os.environ['DATALAD_GITHUB_PASS']
         # this adds github remote to config and also creates repo
-        return create_sibling_github(repo_name, github_login=login,
-                                     github_passwd=password, github_organization=org, dataset=dataset, access_protocol='ssh')
+        return create_sibling_github(repo_name,
+                                     github_login=DATALAD_GITHUB_LOGIN,
+                                     github_passwd=DATALAD_GITHUB_PASS,
+                                     github_organization=DATALAD_GITHUB_ORG,
+                                     dataset=dataset,
+                                     access_protocol='ssh')
     except KeyError:
         raise Exception(
             'DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS, DATALAD_GITHUB_ORG must be defined to create remote repos')
