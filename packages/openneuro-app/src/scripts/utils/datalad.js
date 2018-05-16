@@ -1,8 +1,11 @@
 import getClient from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
-import config from '../../../config'
 import clone from 'lodash.clonedeep'
+import request from './request'
+import config from '../../../config'
+
+const URI = config.datalad.uri
 
 const client = getClient('/crn/graphql')
 export default {
@@ -112,6 +115,7 @@ export default {
               snapshot._id = splitId[splitId.length -1]
               snapshot.original = splitId[0]
           }
+          data.data.dataset.files = data.data.dataset.draft ? data.data.dataset.draft.files : []
           return callback(data)
       })
       .catch(err => {
@@ -178,7 +182,7 @@ export default {
           }
         })
         .then(data => {
-          console.log('response from updateSnapshotPublic:', data)
+          console.log('response from updatePublic:', data)
           resolve(data)
         })
         .catch(err => {
@@ -187,5 +191,67 @@ export default {
         })
       })
       
-    }
+    },
+
+    createSnapshot(datasetId, tag) {
+      console.log('calling updatePublic mutation with datasetId:', datasetId, 'and publicFlag:', tag)
+      const mutation = gql`
+        mutation ($datasetId: ID!, $tag: String!) {
+          createSnapshot(datasetId: $datasetId, tag: $tag) {
+            id
+            tag
+          }
+        }
+      `
+      return new Promise((resolve, reject) => {
+        client.mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            tag: tag
+          }
+        })
+        .then(data => {
+          console.log('response from createSnapshot:', data)
+          resolve(data)
+        })
+        .catch(err => {
+          console.log(err)
+          reject(err)
+        })
+      })
+      
+    },
+    
+    getFile(datasetId, filename, options) {
+      filename = this.encodeFilePath(filename)
+      const uri = `/crn/datasets/${datasetId}/files/${filename}`
+      return new Promise((resolve, reject) => {
+        request
+          .get(uri, {
+            headers: {
+              'Content-Type': 'application/*'
+            }
+          })
+          .then((res) => {
+            console.log('res from getFile:', res)
+            console.log('file contents:', res.body)
+            let file = res.body
+            resolve(res)
+          })
+          .catch((err) => {
+            console.log('error in getFile:', err)
+            reject(err)
+          })
+    })
+  },
+
+  encodeFilePath(path) {
+    return path.replace(new RegExp('/', 'g'), ':')
+  },
+  
+  decodeFilePath(path) {
+    return path.replace(new RegExp(':', 'g'), '/')
+  }
+
 }
