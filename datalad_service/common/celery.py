@@ -23,7 +23,7 @@ def dataset_hash(key, workers=WORKER_COUNT):
 
 def dataset_task(func):
     """
-    Decorate tasks with a real DataladStore object and datasetId locking.
+    Decorate tasks with a real DataladStore object and Celery options.
     """
     @app.task
     @wraps(func)
