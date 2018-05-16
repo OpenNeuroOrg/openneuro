@@ -32,6 +32,14 @@ def no_redis(monkeypatch):
     monkeypatch.setattr('datalad_service.common.redis.redisClient', fake)
 
 
+@pytest.fixture(autouse=True)
+def no_git_config(monkeypatch):
+    monkeypatch.setattr(
+        'datalad_service.common.annex.CommitInfo.__enter__', lambda s: None)
+    monkeypatch.setattr(
+        'datalad_service.common.annex.CommitInfo.__exit__', lambda s, x, y, z: None)
+
+
 @pytest.fixture(scope='session')
 def annex_path(tmpdir_factory):
     path = tmpdir_factory.mktemp('annexes')
