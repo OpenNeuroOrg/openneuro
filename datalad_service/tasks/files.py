@@ -20,8 +20,8 @@ def commit_files(store, dataset, files, name=None, email=None, validate=True):
             # If no list of paths, add all untracked files
             ds.add('.')
     ref = ds.repo.get_hexsha()
-    # Run the validator but don't block on the request
     if validate:
+        # Run the validator but don't block on the request
         validate_dataset_async.delay(dataset, ds.path, ref)
     return ref
 

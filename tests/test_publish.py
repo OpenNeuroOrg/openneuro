@@ -39,7 +39,9 @@ def test_publish_github_remote(monkeypatch, github_dryrun, annex_path, new_datas
         annex_path, ds_id, 'test_version', github=True)
 
 
-def test_publish_s3_remote(annex_path, new_dataset):
+def test_publish_s3_remote(monkeypatch, annex_path, new_dataset):
+    monkeypatch.setattr('datalad_service.config.AWS_S3_PUBLIC_BUCKET', 'a-fake-test-public-bucket')
+    monkeypatch.setattr('datalad_service.config.AWS_S3_PRIVATE_BUCKET', 'a-fake-test-private-bucket')
     ds_id = os.path.basename(new_dataset.path)
     published = publish_snapshot.run(
         annex_path, ds_id, 'test_version', s3=True)

@@ -21,7 +21,7 @@ class S3Realms(Enum):
                          'AWS_S3_{realm}_BUCKET'.format(realm=self.name))
         if not bucket:
             raise S3ConfigException('S3 bucket configuration is missing.')
-        return 's3://{}'.format(bucket)
+        return 's3://{bucket}'.format(bucket=bucket)
 
 
 def setup_s3_sibling(dataset, variant):
