@@ -7,6 +7,7 @@ import {
   createSnapshot,
   updatePublic,
   updateFiles,
+  deleteFiles,
 } from './dataset.js'
 import { draft, snapshot, snapshots } from './datalad.js'
 import { whoami, user, users } from './user.js'
@@ -27,6 +28,7 @@ export default {
   Mutation: {
     createDataset,
     updateFiles,
+    deleteFiles,
     createSnapshot,
     updatePublic
   },
