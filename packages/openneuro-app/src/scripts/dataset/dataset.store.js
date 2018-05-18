@@ -184,6 +184,7 @@ let datasetStore = Reflux.createStore({
           let selectedSnapshot = this.data.selectedSnapshot
           if (!selectedSnapshot || selectedSnapshot === datasetId) {
             let dataset = res
+            console.log('project:', this.data)
             console.log('dataset:', dataset)
             let originalId = dataset.original ? dataset.original : datasetId
             this.update(
@@ -634,19 +635,17 @@ let datasetStore = Reflux.createStore({
   },
 
   updateName(value, callback) {
-    scitran.updateProject(this.data.dataset._id, { label: value }).then(() => {
-      // update description
-      this.updateDescription('Name', value, callback)
+    // update description
+    this.updateDescription('Name', value, callback)
 
-      // update filetree
-      let dataset = this.data.dataset
-      let datasetTree = this.data.datasetTree
-      dataset.label = value
-      if (datasetTree && datasetTree[0]) {
-        datasetTree[0].label = value
-      }
-      this.update({ dataset, datasetTree })
-    })
+    // update filetree
+    let dataset = this.data.dataset
+    let datasetTree = this.data.datasetTree
+    dataset.label = value
+    if (datasetTree && datasetTree[0]) {
+      datasetTree[0].label = value
+    }
+    this.update({ dataset, datasetTree })
   },
 
   /**
@@ -690,7 +689,7 @@ let datasetStore = Reflux.createStore({
       if (description.hasOwnProperty('Authors')) {
         for (let i = 0; i < description.Authors.length; i++) {
           let author = description.Authors[i]
-          authors.push({ name: author, ORCIDID: '' })
+          authors.push(author)
         }
       }
       if (description.hasOwnProperty('ReferencesAndLinks')) {
@@ -699,27 +698,21 @@ let datasetStore = Reflux.createStore({
           references.push(reference)
         }
       }
-      scitran
-        .updateProject(projectId, {
-          metadata: { authors: authors, referencesAndLinks: references },
+        file = new File(
+          [JSON.stringify(description)],
+          'dataset_description.json',
+          { type: 'application/json' },
+        )
+        datalad.updateFile(projectId, file).then(() => {
+          description.Authors = authors
+          description.ReferencesAndLinks = references
+          let dataset = this.data.dataset
+          dataset.description = description
+          this.update({ dataset })
+          this.revalidate()
+          callback()
         })
-        .then(() => {
-          file = new File(
-            [JSON.stringify(description)],
-            'dataset_description.json',
-            { type: 'application/json' },
-          )
-          datalad.updateFile(projectId, file).then(() => {
-            description.Authors = authors
-            description.ReferencesAndLinks = references
-            let dataset = this.data.dataset
-            dataset.description = description
-            this.update({ dataset })
-            this.revalidate()
-            callback()
-          })
-        })
-    })
+      })
   },
 
   /**
@@ -731,40 +724,31 @@ let datasetStore = Reflux.createStore({
   saveDescription(description, callback) {
     description = JSON.parse(JSON.stringify(description))
     let datasetId = this.data.dataset._id
-    scitran
-      .updateProject(datasetId, {
-        metadata: {
-          authors: description.Authors,
-          referencesAndLinks: description.ReferencesAndLinks,
-        },
-      })
+    let authors = []
+    let referencesAndLinks = []
+
+    for (let author of description.Authors) {
+      authors.push(author)
+    }
+    description.Authors = authors
+
+    if (description.ReferencesAndLinks) {
+      for (let referencesAndLink of description.ReferencesAndLinks) {
+        referencesAndLinks.push(referencesAndLink)
+      }
+      description.ReferencesAndLinks = referencesAndLinks
+    }
+
+    this.updateModified()
+    datalad
+      .updateFileFromString(
+        datasetId,
+        'dataset_description.json',
+        JSON.stringify(description),
+        'application/json',
+      )
       .then(() => {
-        let authors = []
-        let referencesAndLinks = []
-
-        for (let author of description.Authors) {
-          authors.push(author.name)
-        }
-        description.Authors = authors
-
-        if (description.ReferencesAndLinks) {
-          for (let referencesAndLink of description.ReferencesAndLinks) {
-            referencesAndLinks.push(referencesAndLink)
-          }
-          description.ReferencesAndLinks = referencesAndLinks
-        }
-
-        this.updateModified()
-        datalad
-          .updateFileFromString(
-            datasetId,
-            'dataset_description.json',
-            JSON.stringify(description),
-            'application/json',
-          )
-          .then(() => {
-            callback()
-          })
+        callback()
       })
   },
 
@@ -1849,9 +1833,8 @@ let datasetStore = Reflux.createStore({
     bids.getDataset(datasetId, (data) => {
       let project = data
       if (
-        !project.metadata ||
-        !project.metadata.authors ||
-        project.metadata.authors.length < 1
+        !project.authors ||
+        project.length < 1
       ) {
         let metadataIssues = this.data.metadataIssues
         let message =
