@@ -169,6 +169,8 @@ export default {
 
     },
     
+    // FILE OPERATIONS
+
     getFile(datasetId, filename, options) {
       filename = this.encodeFilePath(filename)
       const uri = `/crn/datasets/${datasetId}/files/${filename}`
@@ -188,7 +190,50 @@ export default {
             console.log('error in getFile:', err)
             reject(err)
           })
-    })
+      })
+    },
+
+    deleteFiles(datasetId, fileTree, options) {
+      let mutation = files.deleteFiles
+
+      return new Promise((resolve, reject) => {
+        client.mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            files: fileTree
+          }
+        })
+        .then(data => {
+          console.log('response from deleteFiles:', data)
+          resolve(data)
+        })
+        .catch(err => {
+          console.log(err)
+          reject(err)
+        })
+      })
+    },
+
+    deleteFile(datasetId, file, options) {
+      // get the file path from the file object
+      let filePath = file.modifiedName ? this.encodeFilePath(file.modifiedName) : this.encodeFilePath(file.name)
+
+      // shape the file into the same shape as accepted by deleteFiles
+      let fileTree = this.constructFileTree(file, filePath)
+
+      // call updateFiles
+      return this.deleteFiles(datasetId, fileTree, {})
+    },
+
+    deleteDirectory(datasetId, pathname, options) {
+      let path = this.encodeFilePath(pathname)
+      let fileTree = {
+        name: path,
+        files: [],
+        directories: []
+      }
+      return this.deleteFiles(datasetId, fileTree, {})
     },
 
     updateFiles(datasetId, fileTree, options) {
