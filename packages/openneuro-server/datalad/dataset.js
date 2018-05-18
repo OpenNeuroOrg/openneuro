@@ -142,18 +142,23 @@ export const addFile = (datasetId, path, file) => {
 }
 
 /**
- * Update an existing file
+ * Update an existing file in a dataset
  */
-export const updateFile = async (datasetId, path, { filename, stream }) => {
+export const updateFile = (datasetId, path, file) => {
   // Cannot use superagent 'request' due to inability to post streams
-  return stream
-    .pipe(requestNode.put(fileUrl(datasetId, path, filename)))
-    .on('close', () => {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `A client hung up the connection - ${datasetId}:${path}:${filename}`,
-      )
-    })
+  return new Promise(async (resolve, reject) => {
+    const { filename, stream, mimetype } = await file
+    stream.pipe(
+      requestNode(
+        {
+          url: fileUrl(datasetId, path, filename),
+          method: 'put',
+          headers: { 'Content-Type': mimetype },
+        },
+        err => (err ? reject(err) : resolve()),
+      ),
+    )
+  })
 }
 
 /**
@@ -169,7 +174,6 @@ export const commitFiles = (datasetId, name, email) => {
  * Update public state
  */
 export const updatePublic = (datasetId, publicFlag) => {
-  console.log('updating crn dataset', datasetId, 'with publicFlag:', publicFlag)
   // update mongo
   return c.crn.datasets.updateOne({id: datasetId}, {$set: {public: publicFlag}}, {upsert: true})
   
