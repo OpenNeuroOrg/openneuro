@@ -30,6 +30,7 @@ var Actions = Reflux.createActions([
   'getAttachmentDownloadTicket',
   'getDatasetDownloadTicket',
   'getFileDownloadTicket',
+  'getFileURL',
   'getResultDownloadTicket',
   'getJobLogs',
   'getLogstream',

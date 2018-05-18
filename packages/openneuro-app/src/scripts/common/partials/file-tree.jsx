@@ -8,6 +8,7 @@ import files from '../../utils/files'
 import config from '../../../../config'
 import datalad from '../../utils/datalad'
 import datasetStore from '../../dataset/dataset.store.js'
+import actions from '../../dataset/dataset.actions.js'
 import { refluxConnect } from '../../utils/reflux'
 import { Link } from 'react-router-dom'
 
@@ -179,26 +180,35 @@ class FileTree extends Reflux.Component {
 
     let downloadFile
     if (!item.children) {
-      let link = 'http://localhost:9876/crn/datasets/' + bids.decodeId(this.data.dataset._id) + '/files/' + datalad.encodeFilePath(file.name)
+      let link = actions.getFileURL(this.state.datasets.dataset._id, item.name)
       downloadFile = (
         <span className="download-file">
-          <a href={link} download>
-            <i className="fa fa-download" /> DOWNLOAD
-          </a>
+          <span>
+            <a className="btn-warn-component warning" href={link} download>
+              <i className="fa fa-download" /> DOWNLOAD
+            </a>
+          </span>
         </span>
       )
     }
 
     if (!item.children) {
       if (this.props.editable && files.hasExtension(item.name, ['.json'])) {
+        let itemUrl =
+        this.state.datasets.datasetUrl +
+        '/file-edit/' +
+        datalad.encodeFilePath(item.name)
+
         editFile = (
           <span className="view-file">
-            <WarnButton
-              icon="fa-pencil"
-              warn={false}
-              message=" Edit"
-              action={this.props.editFile.bind(this, item)}
-            />
+            <Link to={itemUrl}>
+              <WarnButton
+                icon="fa-pencil"
+                warn={false}
+                message=" Edit"
+                action={() => null}
+              />
+            </Link>
           </span>
         )
       }
