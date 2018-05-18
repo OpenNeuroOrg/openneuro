@@ -587,6 +587,14 @@ let datasetStore = Reflux.createStore({
             redirectUrl = redirectUrl + '/' + datalad.encodeFilePath(fileName)
           }
         }
+        if (name === 'file-edit') {
+          let fileName = this.data.editFile
+          ? this.data.editFile.name
+          : null
+          if (fileName) {
+            redirectUrl = redirectUrl + '/' + datalad.encodeFilePath(fileName)
+      }
+        }
       }
 
       history.push(redirectUrl)
@@ -701,7 +709,7 @@ let datasetStore = Reflux.createStore({
             'dataset_description.json',
             { type: 'application/json' },
           )
-          scitran.updateFile('projects', projectId, file).then(() => {
+          datalad.updateFile(projectId, file).then(() => {
             description.Authors = authors
             description.ReferencesAndLinks = references
             let dataset = this.data.dataset
@@ -747,14 +755,12 @@ let datasetStore = Reflux.createStore({
         }
 
         this.updateModified()
-        scitran
+        datalad
           .updateFileFromString(
-            'projects',
             datasetId,
             'dataset_description.json',
             JSON.stringify(description),
             'application/json',
-            ['project'],
           )
           .then(() => {
             callback()
@@ -767,23 +773,19 @@ let datasetStore = Reflux.createStore({
    */
   updateREADME(value, callback) {
     let dataset = this.data.dataset
-    scitran
+    datalad
       .updateFileFromString(
-        'projects',
         this.data.dataset._id,
         'README',
         value,
         '',
-        [],
       )
       .then(res => {
-        scitran.updateProject(dataset._id, {}).then(() => {
           callback(null, res)
           dataset.README = value
           this.update({ dataset })
           this.updateModified()
         })
-      })
   },
 
   /**
@@ -792,14 +794,12 @@ let datasetStore = Reflux.createStore({
   updateCHANGES(value, callback) {
     let dataset = this.data.dataset
 
-    scitran
+    datalad
       .updateFileFromString(
-        'projects',
         this.data.dataset._id,
         'CHANGES',
         value,
         '',
-        [],
       )
       .then(res => {
         callback(null, res)
@@ -1220,16 +1220,15 @@ let datasetStore = Reflux.createStore({
         action: () => {
           this.updateFileState(item, { error: null, loading: true })
           if (
-            file.name === 'dataset_description.json' &&
-            item.parentId == 'root'
+            file.name === 'dataset_description.json'
           ) {
             this.updateDescriptionFile(file, this.data.dataset._id, () => {
               this.updateFileState(item, { loading: false })
               this.showDatasetComponent('', item.history)
             })
           } else {
-            scitran
-              .updateFile('projects', this.data.dataset._id, file)
+            datalad
+              .updateFile(bids.decodeId(this.data.dataset._id), file)
               .then(() => {
                 this.updateFileState(item, { loading: false })
                 this.showDatasetComponent('', item.history)
@@ -1751,80 +1750,10 @@ let datasetStore = Reflux.createStore({
   /**
    * DisplayFile
    */
-  // displayFile(snapshotId, jobId, file, history, callback) {
-  //   if (file && file.name) {
-  //     let displayUrl = file.path ? 'results/' + file.path : 'file-display'
-  //     let requestAndDisplay = link => {
-  //       if (link) {
-  //         if (
-  //           files.hasExtension(file.name, [
-  //             '.pdf',
-  //             '.nii.gz',
-  //             '.jpg',
-  //             '.jpeg',
-  //             '.png',
-  //             '.gif',
-  //           ])
-  //         ) {
-  //           if (callback) {
-  //             callback()
-  //           }
-  //           this.update(
-  //             {
-  //               displayFile: {
-  //                 name: file.name,
-  //                 text: null,
-  //                 link: link,
-  //               },
-  //             },
-  //             () => {
-  //               this.showDatasetComponent(displayUrl, file.history)
-  //             },
-  //           )
-  //         } else {
-  //           request.get(link, {}).then(res => {
-  //             if (callback) {
-  //               callback()
-  //             }
-  //             this.update(
-  //               {
-  //                 displayFile: {
-  //                   name: file.name,
-  //                   text: res.text,
-  //                   link: link,
-  //                   info: file,
-  //                 },
-  //               },
-  //               () => {
-  //                 this.showDatasetComponent(displayUrl, file.history)
-  //               },
-  //             )
-  //           })
-  //         }
-  //       } else {
-  //         this.showDatasetComponent(displayUrl, file.history)
-  //       }
-  //     }
-
-  //     if (jobId) {
-  //       this.getResultDownloadTicket(snapshotId, jobId, file, link => {
-  //         requestAndDisplay(link)
-  //       })
-  //     } else {
-  //       this.getFileDownloadTicket(file, link => {
-  //         requestAndDisplay(link)
-  //       })
-  //     }
-  //   } else {
-  //     callback()
-  //   }
-  // },
-
   displayFile(snapshotId, jobId, file, history, callback) {
-    console.log('displaying file:', file)
     if (file && file.name) {
       let displayUrl = file.path ? 'results/' + file.path : 'file-display'
-      let link = 'http://localhost:9876/crn/datasets/' + bids.decodeId(this.data.dataset._id) + '/files/' + datalad.encodeFilePath(file.name)
+      let link = this.getFileURL(this.data.dataset._id, file.name)
         if (
           files.hasExtension(file.name, [
           '.pdf',
@@ -1840,36 +1769,26 @@ let datasetStore = Reflux.createStore({
             text: null,
             link: link
           }
-          console.log('displayFile:', displayFile)          
-          this.update(
-            {
-              displayFile: displayFile,
-            },
-            () => {
+        this.update({ displayFile: displayFile }, () => {
               this.showDatasetComponent(displayUrl, file.history)
-            },
-          )
+        })
         } else {
-          datalad.getFile(bids.decodeId(this.data.dataset._id), file.name)
+        datalad
+          .getFile(bids.decodeId(this.data.dataset._id), file.name)
             .then(res => {
               if (callback) {
                 callback()
               }
-              this.update(
-                {
-                  displayFile: {
+            let displayFile = {
                     name: file.name,
                     text: res.text,
                     link: link,
                     info: file
-                  },
-                },
-                () => {
+            }
+            this.update({ displayFile: displayFile }, () => {
                   this.showDatasetComponent(displayUrl, file.history)
-                },
-            )
-          }
-        )
+            })
+          })
         .catch(err => {
           console.log(err)
         })
@@ -1885,34 +1804,38 @@ let datasetStore = Reflux.createStore({
    * Toggles the editFile modal for files of type .json, .tsv, .csv
    */
   editFile(snapshotId, jobId, file, callback) {
-    let requestAndDisplay = link => {
+    let link = this.getFileURL(this.data.dataset._id, file.name)
       if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
-        request.get(link, {}).then(res => {
+      datalad.getFile(bids.decodeId(this.data.dataset._id), file.name)
+        .then(res => {
           if (callback) {
             callback()
           }
-          this.showDatasetComponent('file-edit', file.history)
-          this.update({
-            editFile: {
+          let editFile = {
               name: file.name,
               text: res.text,
               link: link,
-              info: file,
-            },
+            info: file
+          }
+          this.update({ editFile: editFile }, () => {
+            this.showDatasetComponent('file-edit', file.history)
           })
+          })
+        .catch(err => {
+          console.log(err)
         })
       }
-    }
+  },
 
-    if (jobId) {
-      this.getResultDownloadTicket(snapshotId, jobId, file, link => {
-        requestAndDisplay(link)
-      })
-    } else {
-      this.getFileDownloadTicket(file, link => {
-        requestAndDisplay(link)
-      })
-    }
+  /**
+   * GetFileURL
+   * 
+   * Returns the uri that points to the location of a dataset file. Useful when serving files that
+   * reside in iframe or papaya viewer
+   */
+  getFileURL(datasetId, fileName) {
+    let link = config.crn.url + '/datasets/' + bids.decodeId(datasetId) + '/files/' + datalad.encodeFilePath(fileName)
+    return link
   },
 
   // Snapshots ---------------------------------------------------------------------
