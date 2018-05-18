@@ -221,7 +221,7 @@ class DatasetContent extends Reflux.Component {
       let authorString = 'authored by '
       for (let i = 0; i < authors.length; i++) {
         let author = authors[i]
-        authorString += author.name
+        authorString += author
         if (authors.length > 1) {
           if (i < authors.length - 2) {
             authorString += ', '
