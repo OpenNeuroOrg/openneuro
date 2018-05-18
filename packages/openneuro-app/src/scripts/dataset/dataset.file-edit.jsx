@@ -9,6 +9,7 @@ import files from '../utils/files'
 import ReactTable from 'react-table'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions'
+import datalad from '../utils/datalad'
 import JsonEditor from './tools/json/jsoneditor.jsx'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
@@ -18,16 +19,41 @@ import { refluxConnect } from '../utils/reflux'
 
 class FileEdit extends Reflux.Component {
   // life cycle events --------------------------------------------------
-
   constructor() {
     super()
     refluxConnect(this, datasetStore, 'datasets')
+    this.state = {
+      fileRequested: false
+    }
+  }
+
+  componentWillReceiveProps() {
+    let datasets = this.state.datasets
+    const file = datasets ? datasets.editFile : null
+    const fileName = file ? file.name : null
+
+    if (!fileName) {
+      let fileName = this.props.match.params.fileName
+      if (fileName &&
+        datasets &&
+        datasets.dataset &&
+        !this.state.fileRequested) {
+          let decodedName = datalad.decodeFilePath(fileName)
+          this.setState({fileRequested: true})
+          let editFile = {
+            name: decodedName,
+            history: this.props.history
+          }
+          actions.editFile(null, null, editFile, null)
+        }
+    }
   }
 
   render() {
     let datasets = this.state.datasets
     const file = datasets ? datasets.editFile : null
     const fileName = file ? file.name : null
+
     let datasetLabel = datasets.dataset != null ? datasets.dataset.label : null
     let path = fileName.split('/')
 
@@ -69,12 +95,12 @@ class FileEdit extends Reflux.Component {
         message="The file has failed to load in time. Please check your network connection."
         className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
         {loading ? (
-          <Timeout timeout={20000}>
+          <Timeout timeout={60000}>
             <Spinner active={true} text={loadingText} />
           </Timeout>
         ) : (
-          content
-        )}
+            content
+          )}
       </ErrorBoundary>
     )
   }
