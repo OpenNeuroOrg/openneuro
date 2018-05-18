@@ -166,6 +166,29 @@ export default {
           reject(err)
         })
       })
+
+    },
+    
+    getFile(datasetId, filename, options) {
+      filename = this.encodeFilePath(filename)
+      const uri = `/crn/datasets/${datasetId}/files/${filename}`
+      return new Promise((resolve, reject) => {
+        request
+          .get(uri, {
+            headers: {
+              'Content-Type': 'application/*'
+            }
+          })
+          .then((res) => {
+            console.log('res from getFile:', res)
+            let file = res.body
+            resolve(res)
+          })
+          .catch((err) => {
+            console.log('error in getFile:', err)
+            reject(err)
+          })
+    })
     },
 
     updateFiles(datasetId, fileTree, options) {
@@ -221,28 +244,6 @@ export default {
         }
         return fileTree
       }
-    },
-    
-    getFile(datasetId, filename, options) {
-      filename = this.encodeFilePath(filename)
-      const uri = `/crn/datasets/${datasetId}/files/${filename}`
-      return new Promise((resolve, reject) => {
-        request
-          .get(uri, {
-            headers: {
-              'Content-Type': 'application/*'
-            }
-          })
-          .then((res) => {
-            console.log('res from getFile:', res)
-            let file = res.body
-            resolve(res)
-          })
-          .catch((err) => {
-            console.log('error in getFile:', err)
-            reject(err)
-          })
-    })
   },
 
   encodeFilePath(path) {
