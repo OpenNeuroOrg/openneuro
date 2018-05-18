@@ -184,7 +184,6 @@ let datasetStore = Reflux.createStore({
           let selectedSnapshot = this.data.selectedSnapshot
           if (!selectedSnapshot || selectedSnapshot === datasetId) {
             let dataset = res
-            console.log('project:', this.data)
             console.log('dataset:', dataset)
             let originalId = dataset.original ? dataset.original : datasetId
             this.update(
@@ -1112,21 +1111,7 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
-          async.eachLimit(
-            fileList,
-            3,
-            (file, cb) => {
-              scitran
-                .deleteFile('projects', this.data.dataset._id, file.name)
-                .then(() => {
-                  cb()
-                })
-            },
-            () => {
-              this.updateFileTreeOnDeleteDir(label)
-              this.revalidate()
-            },
-          )
+          datalad.deleteDirectory(bids.decodeId(this.data.dataset._id), dirTree.dirPath)
         },
       })
     } else {
@@ -1144,12 +1129,18 @@ let datasetStore = Reflux.createStore({
    */
   deleteFile(file, callback) {
     let message = this.updateMessage('delete', file)
+    let modifiedName = file.name
+    let name = file.name.split('/').slice(-1)[0]
+    if (modifiedName !== name) {
+      file.modifiedName = modifiedName
+      file.name = name
+    }
     this.updateWarn({
       message: message,
       action: () => {
         let dataset = this.data.dataset
-        scitran
-          .deleteFile('projects', this.data.dataset._id, file.name)
+        datalad
+          .deleteFile(this.data.dataset._id, file)
           .then(() => {
             let match = files.findInTree([dataset], file.parentId)
             let children = []
@@ -1170,12 +1161,8 @@ let datasetStore = Reflux.createStore({
                 ReferencesAndLinks: [],
                 DatasetDOI: '',
               }
-              scitran.updateProject(this.data.dataset._id, {
-                metadata: { authors: [], referencesAndLinks: [] },
-              })
             }
             this.update({ dataset })
-            this.revalidate()
           })
       },
     })
