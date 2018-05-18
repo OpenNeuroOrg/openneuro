@@ -25,11 +25,15 @@ export const createSnapshot = (obj, { datasetId, tag }) => {
 /**
  * Add files to a draft
  */
+<<<<<<< HEAD
 export const updateFiles = (
   obj,
   { datasetId, files: fileTree },
   { userInfo: { firstname, lastname, email } },
 ) => {
+=======
+export const updateFiles = (obj, { datasetId, files: fileTree }) => {
+>>>>>>> f726408d... remove some debug code from gql dataset resolver
   // TODO - The id returned here is a placeholder
   const promises = updateFilesTree(datasetId, fileTree)
   return Promise.all(promises)
@@ -58,12 +62,9 @@ export const updateFilesTree = (datasetId, fileTree) => {
   return filesPromises.concat(...dirPromises)
 }
 
-
-
 /**
  * Update the dataset Public status
  */
 export const updatePublic = (obj, { datasetId, publicFlag}) => {
-  console.log('hit the updatePublic resolver!')
   return datalad.updatePublic(datasetId, publicFlag)
 }
