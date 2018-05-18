@@ -1,4 +1,5 @@
 import getClient from 'openneuro-client'
+import {datasets, files} from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
 import clone from 'lodash.clonedeep'
@@ -10,20 +11,7 @@ const URI = config.datalad.uri
 const client = getClient('/crn/graphql')
 export default {
     async getDatasets(options) {
-      const query = gql`
-        query {
-          datasets {
-            id
-            _id: id
-            created
-            label
-            uploader {
-              id
-            }
-            public
-          }
-        }
-      `
+      const query = datasets.getDatasets
       return new Promise((resolve, reject) => {
         client.query({
           query: query
@@ -62,49 +50,11 @@ export default {
     queryDataset(datasetId, callback) {
       console.log('datasetId in graphql query:', bids.decodeId(datasetId))
 
-      const query = gql`
-        query ds ($datasetId: ID!) {
-          dataset (id: $datasetId) {
-            id
-            _id: id
-            label
-            created
-            public
-            uploader {
-              id
-              firstName
-              lastName
-              email
-            }
-            draft {
-              modified
-              files {
-                id
-                filename
-                size
-              }
-              summary {
-                modalities
-                sessions
-                subjects
-                tasks
-                size
-                totalFiles
-              }
-            }
-            snapshots {
-              id
-              _id: id
-              tag
-              snapshot_version: tag
-            }
-          }
-        }
-      `
+      const query = datasets.getDataset
       client.query({
         query: query,
         variables: {
-            datasetId: bids.decodeId(datasetId)
+            id: bids.decodeId(datasetId)
         }
       })
       .then(data => {
@@ -167,17 +117,13 @@ export default {
     },
 
     updatePublic(datasetId, publicFlag) {
-      console.log('calling updatePublic mutation with datasetId:', datasetId, 'and publicFlag:', publicFlag)
-      const mutation = gql`
-        mutation ($datasetId: ID!, $publicFlag: Boolean!) {
-          updatePublic(datasetId: $datasetId, publicFlag: $publicFlag)
-        }
-      `
+      console.log('calling updatePublic mutation with id:', datasetId, 'and publicFlag:', publicFlag)
+      const mutation = datasets.updatePublic
       return new Promise((resolve, reject) => {
         client.mutate({
           mutation: mutation,
           variables: {
-            datasetId: bids.decodeId(datasetId),
+            id: bids.decodeId(datasetId),
             publicFlag: publicFlag
           }
         })
@@ -194,7 +140,7 @@ export default {
     },
 
     createSnapshot(datasetId, tag) {
-      console.log('calling updatePublic mutation with datasetId:', datasetId, 'and publicFlag:', tag)
+      console.log('calling createSnapshot mutation with datasetId:', datasetId, 'and publicFlag:', tag)
       const mutation = gql`
         mutation ($datasetId: ID!, $tag: String!) {
           createSnapshot(datasetId: $datasetId, tag: $tag) {
@@ -220,7 +166,61 @@ export default {
           reject(err)
         })
       })
-      
+    },
+
+    updateFiles(datasetId, fileTree, options) {
+      let mutation = files.updateFiles
+
+      return new Promise((resolve, reject) => {
+        client.mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            files: fileTree
+          }
+        })
+        .then(data => {
+          console.log('response from updateFiles:', data)
+          resolve(data)
+        })
+        .catch(err => {
+          console.log(err)
+          reject(err)
+        })
+      })
+    },
+
+    updateFile(datasetId, file, options) {
+      // get the file path from the file object
+      let filePath = file.modifiedName ? this.encodeFilePath(file.modifiedName) : this.encodeFilePath(file.name)
+
+      // shape the file into the same shape as accepted by updateFiles
+      let fileTree = this.constructFileTree(file, filePath)
+
+      // call updateFiles
+      return this.updateFiles(datasetId, fileTree, {})
+    },
+
+    updateFileFromString(datasetId, filename, value, type) {
+      let file = new File([value], filename, { type: type })
+      return this.updateFile(datasetId, file)
+    },
+
+    constructFileTree(file, filePath) {
+      let fileName = filePath.split(':').slice(-1)[0]
+      if (filePath.split(':').length > 0) {
+        let pathComponents = filePath.split(':')
+        let newNode = pathComponents.slice(-1)[0]
+        let newPath = pathComponents.reverse().slice(1).reverse().join(':')
+        let files = (newNode === fileName) ? [file] : []
+        let directories = (newNode === fileName) ? [] : this.constructFileTree(file, newPath)
+        let fileTree = {
+          name: newPath,
+          files: files,
+          directories: directories
+        }
+        return fileTree
+      }
     },
     
     getFile(datasetId, filename, options) {
@@ -235,7 +235,6 @@ export default {
           })
           .then((res) => {
             console.log('res from getFile:', res)
-            console.log('file contents:', res.body)
             let file = res.body
             resolve(res)
           })
