@@ -5,10 +5,16 @@ import bids from './bids'
 import clone from 'lodash.clonedeep'
 import request from './request'
 import config from '../../../config'
+import userStore from '../user/user.store'
 
 const URI = config.datalad.uri
 
-const client = getClient('/crn/graphql')
+function getToken() {
+  let credentials = JSON.parse(window.localStorage.token)
+  return credentials ? credentials.access_token : ''
+}
+
+const client = getClient('/crn/graphql', getToken)
 export default {
     async getDatasets(options) {
       const query = datasets.getDatasets
@@ -28,7 +34,7 @@ export default {
             resolve(data)
         })
         .catch(err => {
-          console.log(err)
+          console.log('error in getDatasets:', err)
           reject(err)
         })
       })
@@ -41,15 +47,12 @@ export default {
         })
       } else {
         this.querySnapshot(options.datasetId, options.tag, (data) => {
-          console.log('getDataset options:', options)
           callback(data)
         })
       }
     },
 
     queryDataset(datasetId, callback) {
-      console.log('datasetId in graphql query:', bids.decodeId(datasetId))
-
       const query = datasets.getDataset
       client.query({
         query: query,
@@ -69,7 +72,7 @@ export default {
           return callback(data)
       })
       .catch(err => {
-        console.log(err)
+        console.log('error in datasetQuery:', err)
         return callback()
       })
     },
@@ -116,8 +119,25 @@ export default {
       })
     },
 
+    deleteDataset(datasetId, options) {
+      let mutation = datasets.deleteDataset
+      return new Promise((resolve, reject) => {
+        client.mutate({
+          mutation: mutation,
+          variables: {
+            label: bids.decodeId(datasetId)
+          }
+        })
+        .then(data => {
+          resolve(data)
+        })
+        .catch(err => {
+          reject(err)
+        })
+      })
+    },
+
     updatePublic(datasetId, publicFlag) {
-      console.log('calling updatePublic mutation with id:', datasetId, 'and publicFlag:', publicFlag)
       const mutation = datasets.updatePublic
       return new Promise((resolve, reject) => {
         client.mutate({
@@ -128,11 +148,10 @@ export default {
           }
         })
         .then(data => {
-          console.log('response from updatePublic:', data)
           resolve(data)
         })
         .catch(err => {
-          console.log(err)
+          console.log('error in updatePublic:', err)
           reject(err)
         })
       })
@@ -140,7 +159,6 @@ export default {
     },
 
     createSnapshot(datasetId, tag) {
-      console.log('calling createSnapshot mutation with datasetId:', datasetId, 'and publicFlag:', tag)
       const mutation = gql`
         mutation ($datasetId: ID!, $tag: String!) {
           createSnapshot(datasetId: $datasetId, tag: $tag) {
@@ -158,11 +176,10 @@ export default {
           }
         })
         .then(data => {
-          console.log('response from createSnapshot:', data)
           resolve(data)
         })
         .catch(err => {
-          console.log(err)
+          console.log('error in createSnapshot:', err)
           reject(err)
         })
       })
@@ -172,8 +189,11 @@ export default {
     // FILE OPERATIONS
 
     getFile(datasetId, filename, options) {
+      let uri = `/crn/datasets/${datasetId}/files/${filename}`
+      if (options && options.snapshot) {
+        uri = `/crn/snapshots/${datasetId}/files/${filename}`
+      }
       filename = this.encodeFilePath(filename)
-      const uri = `/crn/datasets/${datasetId}/files/${filename}`
       return new Promise((resolve, reject) => {
         request
           .get(uri, {
@@ -182,7 +202,6 @@ export default {
             }
           })
           .then((res) => {
-            console.log('res from getFile:', res)
             let file = res.body
             resolve(res)
           })
@@ -205,11 +224,10 @@ export default {
           }
         })
         .then(data => {
-          console.log('response from deleteFiles:', data)
           resolve(data)
         })
         .catch(err => {
-          console.log(err)
+          console.log('error in deleteFiles:', err)
           reject(err)
         })
       })
@@ -248,11 +266,10 @@ export default {
           }
         })
         .then(data => {
-          console.log('response from updateFiles:', data)
           resolve(data)
         })
         .catch(err => {
-          console.log(err)
+          console.log('error in updateFiles:', err)
           reject(err)
         })
       })
