@@ -76,6 +76,7 @@ services:
       - "1"
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
+      - ./datalad-key:/datalad-key
     restart: always
     env_file: ./config.env
 
