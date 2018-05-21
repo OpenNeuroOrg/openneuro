@@ -2,7 +2,6 @@ import Reflux from 'reflux'
 import { withRouter } from 'react-router-dom'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions'
-import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
 
 class SnapshotLoader extends Reflux.Component {

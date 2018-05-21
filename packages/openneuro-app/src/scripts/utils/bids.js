@@ -182,7 +182,7 @@ export default {
                   return callback(dataset)
                 })
                 .catch(err => {
-                  console.log('error getting jobs:', err)
+                  // console.log('error getting jobs:', err)
                   return callback(dataset)
                 })
               })

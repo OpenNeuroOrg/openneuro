@@ -14,7 +14,6 @@ import userActions from '../user/user.actions'
 import upload from '../utils/upload'
 import config from '../../../config'
 import files from '../utils/files'
-import request from '../utils/request'
 import moment from 'moment'
 import { stringify as querystring } from 'urlite/querystring'
 
@@ -184,7 +183,6 @@ let datasetStore = Reflux.createStore({
           let selectedSnapshot = this.data.selectedSnapshot
           if (!selectedSnapshot || selectedSnapshot === datasetId) {
             let dataset = res
-            console.log('dataset:', dataset)
             let originalId = dataset.original ? dataset.original : datasetId
             this.update(
               {
@@ -199,7 +197,6 @@ let datasetStore = Reflux.createStore({
                 loading: false,
               })
               this.loadSnapshots(dataset, [], () => {
-                console.log('this.data.dataset:', this.data.dataset)
                 this.loadComments(originalId)
                 this.getDatasetStars()
                 this.checkSubscriptionFollowers(() => {
@@ -1113,7 +1110,8 @@ let datasetStore = Reflux.createStore({
         action: () => {
           datalad
           .deleteDirectory(bids.decodeId(this.data.dataset._id), dirTree.dirPath)
-          .then(res => {
+          .then(() => {
+            // TODO: ADD FUNCTIONALITY FOR HANDLING SUCCESSFUL DATASET DIRECTORY DELETION
             // this.loadDataset(bids.decodeId(this.data.dataset._id), undefined, true) // reload dataset
           })
         },
@@ -1764,9 +1762,9 @@ let datasetStore = Reflux.createStore({
                   this.showDatasetComponent(displayUrl, file.history)
             })
           })
-        .catch(err => {
-          console.log(err)
-        })
+        // .catch(err => {
+        //   console.log(err)
+        // })
       }
     } else {
       callback()
@@ -1796,9 +1794,9 @@ let datasetStore = Reflux.createStore({
             this.showDatasetComponent('file-edit', file.history)
           })
           })
-        .catch(err => {
-          console.log(err)
-        })
+        // .catch(err => {
+        //   console.log(err)
+        // })
       }
   },
 

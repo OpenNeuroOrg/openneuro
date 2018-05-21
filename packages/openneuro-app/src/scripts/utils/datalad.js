@@ -4,10 +4,6 @@ import gql from 'graphql-tag'
 import bids from './bids'
 import clone from 'lodash.clonedeep'
 import request from './request'
-import config from '../../../config'
-import userStore from '../user/user.store'
-
-const URI = config.datalad.uri
 
 function getToken() {
   let credentials = JSON.parse(window.localStorage.token)
@@ -34,7 +30,7 @@ export default {
             resolve(data)
         })
         .catch(err => {
-          console.log('error in getDatasets:', err)
+          // console.log('error in getDatasets:', err)
           reject(err)
         })
       })
@@ -72,8 +68,8 @@ export default {
           return callback(data)
       })
       .catch(err => {
-        console.log('error in datasetQuery:', err)
-        return callback()
+        // console.log('error in datasetQuery:', err)
+        return callback(err)
       })
     },
 
@@ -110,16 +106,15 @@ export default {
         }
       })
       .then(data => {
-        console.log('apollo data:', data)
         return callback(data)
       })
       .catch(err => {
-        console.log('error in snapshot query:', err) 
+        // console.log('error in snapshot query:', err) 
         return callback(err)
       })
     },
 
-    deleteDataset(datasetId, options) {
+    deleteDataset(datasetId) {
       let mutation = datasets.deleteDataset
       return new Promise((resolve, reject) => {
         client.mutate({
@@ -151,7 +146,7 @@ export default {
           resolve(data)
         })
         .catch(err => {
-          console.log('error in updatePublic:', err)
+          // console.log('error in updatePublic:', err)
           reject(err)
         })
       })
@@ -179,7 +174,7 @@ export default {
           resolve(data)
         })
         .catch(err => {
-          console.log('error in createSnapshot:', err)
+          // console.log('error in createSnapshot:', err)
           reject(err)
         })
       })
@@ -202,17 +197,16 @@ export default {
             }
           })
           .then((res) => {
-            let file = res.body
             resolve(res)
           })
           .catch((err) => {
-            console.log('error in getFile:', err)
+            // console.log('error in getFile:', err)
             reject(err)
           })
       })
     },
 
-    deleteFiles(datasetId, fileTree, options) {
+    deleteFiles(datasetId, fileTree) {
       let mutation = files.deleteFiles
 
       return new Promise((resolve, reject) => {
@@ -227,13 +221,13 @@ export default {
           resolve(data)
         })
         .catch(err => {
-          console.log('error in deleteFiles:', err)
+          // console.log('error in deleteFiles:', err)
           reject(err)
         })
       })
     },
 
-    deleteFile(datasetId, file, options) {
+    deleteFile(datasetId, file) {
       // get the file path from the file object
       let filePath = file.modifiedName ? this.encodeFilePath(file.modifiedName) : this.encodeFilePath(file.name)
 
@@ -241,20 +235,20 @@ export default {
       let fileTree = this.constructFileTree(file, filePath)
 
       // call updateFiles
-      return this.deleteFiles(datasetId, fileTree, {})
+      return this.deleteFiles(datasetId, fileTree)
     },
 
-    deleteDirectory(datasetId, pathname, options) {
+    deleteDirectory(datasetId, pathname) {
       let path = this.encodeFilePath(pathname)
       let fileTree = {
         name: path,
         files: [],
         directories: []
       }
-      return this.deleteFiles(datasetId, fileTree, {})
+      return this.deleteFiles(datasetId, fileTree)
     },
 
-    updateFiles(datasetId, fileTree, options) {
+    updateFiles(datasetId, fileTree) {
       let mutation = files.updateFiles
 
       return new Promise((resolve, reject) => {
@@ -269,13 +263,13 @@ export default {
           resolve(data)
         })
         .catch(err => {
-          console.log('error in updateFiles:', err)
+          // console.log('error in updateFiles:', err)
           reject(err)
         })
       })
     },
 
-    updateFile(datasetId, file, options) {
+    updateFile(datasetId, file) {
       // get the file path from the file object
       let filePath = file.modifiedName ? this.encodeFilePath(file.modifiedName) : this.encodeFilePath(file.name)
 
@@ -283,7 +277,7 @@ export default {
       let fileTree = this.constructFileTree(file, filePath)
 
       // call updateFiles
-      return this.updateFiles(datasetId, fileTree, {})
+      return this.updateFiles(datasetId, fileTree)
     },
 
     updateFileFromString(datasetId, filename, value, type) {

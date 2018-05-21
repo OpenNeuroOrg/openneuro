@@ -1,11 +1,9 @@
 // dependencies ----------------------------------------------------------
-import config from '../../config'
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import loadable from 'loadable-components'
 import requireAuth from './utils/requireAuth'
 import Dataset from './dataset/dataset.jsx'
-import DataLad from './datalad/datalad.jsx'
 
 // const datasetComponent = config.datalad.enabled ? DataLad : Dataset
 const datasetComponent = Dataset

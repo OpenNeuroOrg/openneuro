@@ -4,7 +4,6 @@ import React from 'react'
 import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import moment from 'moment'
 import WarnButton from '../../../common/forms/warn-button.jsx'
 import userStore from '../../../user/user.store.js'
 import actions from '../../../dataset/dataset.actions.js'
@@ -31,14 +30,8 @@ class Tools extends Reflux.Component {
     let dataset = this.props.dataset
     let datasets = this.state.datasets
     let datasetUrl = '/datasets/' + dataset.id
-    console.log('dataset:', dataset)
-    console.log('datasets:', datasets)
-    console.log('datasetUrl:', datasetUrl)
 
     // let dataset = datasets ? datasets.dataset : null,
-    let snapshots = dataset ? dataset.snapshots : null
-    console.log('user:', userStore)
-    console.log('location:', this.props.location)
     if (!dataset) {
       return null
     }

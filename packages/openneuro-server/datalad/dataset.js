@@ -79,10 +79,10 @@ export const getDataset = id => {
 /**
  * Delete dataset and associated documents
  */
-export const deleteDataset= (id, user, userInfo) => {
+export const deleteDataset= (id) => {
   let deleteURI = `${uri}/datasets/${id}`
   request.del(deleteURI)
-    .then(res => {
+    .then(() => {
       return c.crn.datasets.deleteOne({ id })
     })
 }

@@ -9,6 +9,7 @@ import * as datasets from './datasets'
 
 const cache = new InMemoryCache()
 
+/* global window */
 /**
  * Setup a client for working with the OpenNeuro API
  *
