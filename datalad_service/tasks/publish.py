@@ -3,7 +3,7 @@ from datalad.api import create_sibling_github
 from datalad_service.config import DATALAD_GITHUB_ORG
 from datalad_service.config import DATALAD_GITHUB_LOGIN
 from datalad_service.config import DATALAD_GITHUB_PASS
-from datalad_service.common.s3 import S3Realms, setup_s3_sibling
+from datalad_service.common.s3 import DatasetRealm, setup_s3_sibling, s3_export
 from datalad_service.common.celery import dataset_task
 
 
@@ -38,39 +38,40 @@ def github_sibling(ds, repo_name, siblings):
     return sibling
 
 
-def s3_sibling(dataset, siblings, realm=S3Realms.PRIVATE):
+def s3_sibling(dataset, siblings, realm=DatasetRealm.PRIVATE):
     """
     Setup a special remote for a versioned S3 remote.
 
     The bucket must already exist and be configured.
     """
-    sibling = get_sibling_by_name(realm.remote_name, siblings)
+    sibling = get_sibling_by_name(realm.s3_remote, siblings)
     if not sibling:
         setup_s3_sibling(dataset, realm)
     return sibling
 
 
-def publish_target(dataset, target):
+def publish_target(dataset, target, treeish):
     """
     Publish target of dataset.
 
     This exists so the actual publish can be easily mocked.
     """
-    return dataset.publish(to=target)
+    if target == 'github':
+        return dataset.publish(to=target)
+    else:
+        return s3_export(dataset, target, treeish)
 
 
 @dataset_task
-def publish_snapshot(store, dataset, snapshot, s3=False, github=False):
+def publish_snapshot(store, dataset, snapshot, realm='PRIVATE'):
     """Publish a snapshot tag to S3, GitHub or both."""
-    if not s3 or not github:
-        raise Exception(
-            'At least one target must be configured. Pass s3=True or github=True.')
+    realm = DatasetRealm[realm]
     dataset_id = dataset
     ds = store.get_dataset(dataset)
     siblings = ds.siblings()
-    if s3:
-        s3_remote = s3_sibling(ds, siblings)
-        publish_target(ds, 's3')
-    if github:
+    s3_remote = s3_sibling(ds, siblings)
+    publish_target(ds, realm.s3_remote, snapshot)
+    # Public publishes to GitHub
+    if realm == DatasetRealm.PUBLIC:
         github_remote = github_sibling(ds, dataset_id, siblings)
-        publish_target(ds, 'github')
+        publish_target(ds, realm.github_remote, snapshot)

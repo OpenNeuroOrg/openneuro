@@ -9,7 +9,8 @@ import stat
 import shutil
 
 from datalad_service.common.annex import CommitInfo
-from datalad_service.common.celery import dataset_task
+from datalad_service.common.celery import dataset_task, dataset_queue
+from datalad_service.tasks.publish import publish_snapshot
 
 
 @dataset_task
@@ -59,6 +60,10 @@ def create_snapshot(store, dataset, snapshot):
     tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
     if not tagged:
         ds.save(version_tag=snapshot)
+        queue = dataset_queue(dataset)
+        publish = publish_snapshot.s(store.annex_path, dataset,
+                                     snapshot, realm='PRIVATE')
+        publish.apply_async(queue=queue)
     else:
         raise Exception(
             'Tag "{}" already exists, name conflict'.format(snapshot))

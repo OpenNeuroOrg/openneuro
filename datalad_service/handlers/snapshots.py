@@ -42,12 +42,10 @@ class SnapshotResource(object):
         queue = dataset_queue(dataset)
         created = create_snapshot.apply_async(
             queue=queue, args=(self.store.annex_path, dataset, snapshot))
+        created.wait()
         if not created.failed():
             resp.media = self._get_snapshot(dataset, snapshot)
             resp.status = falcon.HTTP_OK
-            # This is async because it can take a very long time
-            published = publish_snapshot.apply_async(
-                queue=queue, args=(self.store.annex_path, dataset, snapshot))
         else:
             resp.media = {'error': 'tag already exists'}
             resp.status = falcon.HTTP_CONFLICT
