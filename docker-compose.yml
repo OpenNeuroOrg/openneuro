@@ -80,6 +80,18 @@ services:
     restart: always
     env_file: ./config.env
 
+  flower:
+    image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    command:
+      - flower
+      - -A
+      - datalad_service.worker
+      - --broker
+      - redis://redis
+    env_file: ./config.env
+    restart: always
+    ports:
+      - "5555:5555"
 
   # nginx - static file serving and service proxy
   nginx:
