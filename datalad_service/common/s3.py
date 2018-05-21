@@ -1,3 +1,4 @@
+import os
 from enum import Enum
 
 import datalad_service.config
@@ -35,6 +36,7 @@ class DatasetRealm(Enum):
 
 def setup_s3_sibling(dataset, realm):
     """Add a sibling for an S3 bucket publish."""
+    dataset_id = os.path.basename(dataset.path)
     # TODO - There may be a better way to do this?
     dataset.repo._run_annex_command(
         'initremote',
@@ -44,7 +46,8 @@ def setup_s3_sibling(dataset, realm):
             'bucket={}'.format(realm.s3_bucket),
             'exporttree=yes',
             'partsize=1GiB',
-            'encryption=none'
+            'encryption=none',
+            'fileprefix={}/'.format(dataset_id)
         ])
 
 
