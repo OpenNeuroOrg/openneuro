@@ -16,6 +16,13 @@ export const createDataset = (obj, { label }, { user, userInfo }) => {
 }
 
 /**
+ * Delete an existing dataset, as well as all snapshots
+ */
+export const deleteDataset = (obj, { label }, { user, userInfo }) => {
+  return datalad.deleteDataset(label, user, userInfo)
+}
+
+/**
  * Tag the working tree for a dataset
  */
 export const createSnapshot = (obj, { datasetId, tag }) => {
@@ -25,15 +32,11 @@ export const createSnapshot = (obj, { datasetId, tag }) => {
 /**
  * Add files to a draft
  */
-<<<<<<< HEAD
 export const updateFiles = (
   obj,
   { datasetId, files: fileTree },
   { userInfo: { firstname, lastname, email } },
 ) => {
-=======
-export const updateFiles = (obj, { datasetId, files: fileTree }) => {
->>>>>>> f726408d... remove some debug code from gql dataset resolver
   // TODO - The id returned here is a placeholder
   const promises = updateFilesTree(datasetId, fileTree)
   return Promise.all(promises)
@@ -56,7 +59,7 @@ export const updateFilesTree = (datasetId, fileTree) => {
   // drafts just need something to invalidate client cache
   const { name, files, directories } = fileTree
   const filesPromises = files.map(file =>
-    datalad.updateFile(datasetId, name, file),
+    datalad.addFile(datasetId, name, file),
   )
   const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
   return filesPromises.concat(...dirPromises)

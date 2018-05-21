@@ -4,6 +4,7 @@ import {
   dataset,
   datasets,
   createDataset,
+  deleteDataset,
   createSnapshot,
   updatePublic,
   updateFiles,
@@ -28,6 +29,7 @@ export default {
   Mutation: {
     createDataset,
     updateFiles,
+    deleteDataset,
     deleteFiles,
     createSnapshot,
     updatePublic

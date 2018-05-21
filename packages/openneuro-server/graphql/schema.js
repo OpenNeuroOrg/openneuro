@@ -25,6 +25,8 @@ const typeDefs = `
   type Mutation {
     # Create a new dataset container and repository
     createDataset(label: String!): Dataset
+    # Deletes a dataset and all associated snapshots
+    deleteDataset(label: String!): Dataset
     # Tag the current draft
     createSnapshot(datasetId: ID!, tag: String!): Snapshot
     # Add or update files in a draft - returns a new Draft
