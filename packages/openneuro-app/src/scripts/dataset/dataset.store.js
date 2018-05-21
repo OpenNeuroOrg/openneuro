@@ -491,8 +491,8 @@ let datasetStore = Reflux.createStore({
    */
   deleteDataset(datasetId, history, callback) {
     if (this.data.snapshot) {
-      bids
-        .deleteDataset(datasetId, { snapshot: this.data.snapshot })
+      datalad
+        .deleteDataset(bids.decodeId(datasetId), { snapshot: this.data.snapshot })
         .then(() => {
           history.push('/dashboard/datasets')
         })
@@ -506,8 +506,8 @@ let datasetStore = Reflux.createStore({
         message: message,
         action: () => {
           this.update({ loading: 'deleting' })
-          bids
-            .deleteDataset(datasetId, { snapshot: this.data.snapshot })
+          datalad
+            .deleteDataset(bids.decodeId(datasetId), { snapshot: this.data.snapshot })
             .then(() => {
               history.push('/dashboard/datasets')
             })
@@ -993,8 +993,8 @@ let datasetStore = Reflux.createStore({
             })
           } else {
             file.modifiedName = (container.dirPath || '') + file.name
-            scitran
-              .updateFile('projects', this.data.dataset._id, file)
+            datalad
+              .updateFile(this.data.dataset._id, file)
               .then(() => {
                 let children = container.children
                 children.unshift({
@@ -1035,7 +1035,7 @@ let datasetStore = Reflux.createStore({
           })
 
           this.updateDirectoryState(datasetId, { loading: true })
-          scitran.addTag('projects', datasetId, 'updating').then(() => {
+          // scitran.addTag('projects', datasetId, 'updating').then(() => {
             async.eachLimit(
               uploads,
               3,
@@ -1047,8 +1047,8 @@ let datasetStore = Reflux.createStore({
                 let file = upload.file
                 let container = upload.container
                 file.modifiedName = (container.dirPath || '') + file.name
-                const scitranReq = scitran
-                  .updateFile('projects', datasetId, file)
+                const dataladReq = datalad
+                  .updateFile(datasetId, file)
                   .then(() => {
                     this.update({
                       uploadingProgress: this.data.uploadingProgress + 1,
@@ -1060,25 +1060,25 @@ let datasetStore = Reflux.createStore({
                   })
                 this.update({
                   uploadingScitranRequests: this.data.uploadingScitranRequests.concat(
-                    [scitranReq],
+                    [dataladReq],
                   ),
                 })
               },
               err => {
-                scitran.removeTag('projects', datasetId, 'updating')
+                // scitran.removeTag('projects', datasetId, 'updating')
                 this.update({ uploading: false })
                 if (err && callback) callback(err)
                 if (err) {
-                  this.loadDataset(bids.encodeId(datasetId), undefined, false)
+                  this.loadDataset(bids.decodeId(datasetId), undefined, false)
                 } else {
-                  this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
+                  this.loadDataset(bids.decodeId(datasetId), undefined, true) // forcing reload
                 }
                 // Reset canceled when an upload is done (canceled or otherwise)
                 this.update({ uploadingCanceled: false })
                 if (callback) callback()
               },
             )
-          })
+          // })
         },
       })
     } else {
@@ -1111,7 +1111,11 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
-          datalad.deleteDirectory(bids.decodeId(this.data.dataset._id), dirTree.dirPath)
+          datalad
+          .deleteDirectory(bids.decodeId(this.data.dataset._id), dirTree.dirPath)
+          .then(res => {
+            // this.loadDataset(bids.decodeId(this.data.dataset._id), undefined, true) // reload dataset
+          })
         },
       })
     } else {
@@ -1811,7 +1815,7 @@ let datasetStore = Reflux.createStore({
 
   // Snapshots ---------------------------------------------------------------------
 
-  createSnapshot(changes, history, callback, transition) {
+  createSnapshot(changes, tag, history, callback, transition) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
@@ -1830,19 +1834,20 @@ let datasetStore = Reflux.createStore({
         this.update({ metadataIssues })
         callback({ error: message })
       } else if (
-        project.metadata.hasOwnProperty('validation') &&
-        project.metadata.validation.errors.length > 0
+        project.hasOwnProperty('validation') &&
+        project.validation.errors.length > 0
       ) {
         callback({
           error:
             'You cannot snapshot an invalid dataset. Please fix the errors and try again.',
         })
       } else {
-        let latestSnapshot = this.data.snapshots[1]
+        let latestSnapshot = this.data.snapshots[0]
         if (
           latestSnapshot &&
+          latestSnapshot.created && 
           moment(this.data.dataset.modified).diff(
-            moment(latestSnapshot.modified),
+            moment(latestSnapshot.created),
           ) <= 0
         ) {
           callback({
@@ -1862,8 +1867,9 @@ let datasetStore = Reflux.createStore({
                     'There was an error while updating the dataset changelog.',
                 })
               }
-              datalad.createSnapshot(datasetId).then(res => {
-                let snapshotId = res.data.snapshot._id
+              let newVersion = tag
+              datalad.createSnapshot(datasetId, newVersion).then(res => {
+                let snapshotId = res.data.createSnapshot.tag
                 this.toggleSidebar(true)
                 if (transition) {
                   const url =
