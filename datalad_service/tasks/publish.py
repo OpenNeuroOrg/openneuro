@@ -3,7 +3,8 @@ from datalad.api import create_sibling_github
 from datalad_service.config import DATALAD_GITHUB_ORG
 from datalad_service.config import DATALAD_GITHUB_LOGIN
 from datalad_service.config import DATALAD_GITHUB_PASS
-from datalad_service.common.s3 import DatasetRealm, setup_s3_sibling, s3_export
+import datalad_service.common.s3
+from datalad_service.common.s3 import DatasetRealm, s3_export
 from datalad_service.common.celery import dataset_task
 
 
@@ -46,7 +47,7 @@ def s3_sibling(dataset, siblings, realm=DatasetRealm.PRIVATE):
     """
     sibling = get_sibling_by_name(realm.s3_remote, siblings)
     if not sibling:
-        setup_s3_sibling(dataset, realm)
+        datalad_service.common.s3.setup_s3_sibling(dataset, realm)
     return sibling
 
 

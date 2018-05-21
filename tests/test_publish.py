@@ -21,27 +21,33 @@ def github_dryrun(monkeypatch):
 @pytest.fixture(autouse=True)
 def no_publish(monkeypatch):
     monkeypatch.setattr(datalad_service.tasks.publish,
-                        'publish_target', lambda dataset, target: True)
+                        'publish_target', lambda dataset, target, treeish: True)
+    monkeypatch.setattr(
+        'datalad_service.common.s3.setup_s3_sibling', lambda dataset, realm: True)
 
 
-def test_publish(annex_path, new_dataset):
+@pytest.fixture
+def s3_creds(monkeypatch):
+    monkeypatch.setenv('AWS_S3_PUBLIC_BUCKET', 'a-fake-test-public-bucket')
+    monkeypatch.setenv('AWS_S3_PRIVATE_BUCKET', 'a-fake-test-private-bucket')
+
+
+def test_publish(s3_creds, annex_path, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     published = publish_snapshot.run(
         annex_path, ds_id, 'test_version')
 
 
-def test_publish_github_remote(monkeypatch, github_dryrun, annex_path, new_dataset):
+def test_publish_private(s3_creds, annex_path, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    published = publish_snapshot.run(
+        annex_path, ds_id, 'test_version', realm='PRIVATE')
+
+
+def test_publish_public(s3_creds, monkeypatch, github_dryrun, annex_path, new_dataset):
     monkeypatch.setenv('DATALAD_GITHUB_ORG', 'test')
     monkeypatch.setenv('DATALAD_GITHUB_LOGIN', 'user')
     monkeypatch.setenv('DATALAD_GITHUB_PASS', 'password')
     ds_id = os.path.basename(new_dataset.path)
     published = publish_snapshot.run(
-        annex_path, ds_id, 'test_version', github=True)
-
-
-def test_publish_s3_remote(monkeypatch, annex_path, new_dataset):
-    monkeypatch.setattr('datalad_service.config.AWS_S3_PUBLIC_BUCKET', 'a-fake-test-public-bucket')
-    monkeypatch.setattr('datalad_service.config.AWS_S3_PRIVATE_BUCKET', 'a-fake-test-private-bucket')
-    ds_id = os.path.basename(new_dataset.path)
-    published = publish_snapshot.run(
-        annex_path, ds_id, 'test_version', s3=True)
+        annex_path, ds_id, 'test_version', realm='PUBLIC')
