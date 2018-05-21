@@ -204,7 +204,7 @@ class DatasetContent extends Reflux.Component {
         message="The dataset has failed to load in time. Please check your network connection."
         className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
         {this.state.datasets.loading ? (
-          <Timeout timeout={30000}>
+          <Timeout timeout={100000}>
             <Spinner active={true} text={loadingText} />
           </Timeout>
         ) : (
