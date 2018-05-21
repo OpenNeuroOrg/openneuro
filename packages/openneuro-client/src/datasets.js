@@ -34,6 +34,7 @@ export const getDataset = gql`
         id
         _id: id
         tag
+        created
         snapshot_version: tag
       }
     }
@@ -60,6 +61,14 @@ export const createDataset = gql`
     createDataset(label: $label) {
       id
       label
+    }
+  }
+`
+
+export const deleteDataset = gql`
+  mutation deleteDataset($label: String!) {
+    deleteDataset(label: $label) {
+      id
     }
   }
 `
