@@ -28,7 +28,6 @@ class FilesResource(object):
                 new_file.write(chunk)
 
     def on_get(self, req, resp, dataset, filename=None):
-        print('dataset:', dataset)
         ds_path = self.store.get_dataset_path(dataset)
         if filename:
             try:
@@ -66,13 +65,7 @@ class FilesResource(object):
                                                   'files': [filename]})
                 unlock.wait()
                 self._update_file(file_path, req.stream)
-                commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                                                  'files': [filename], 'name': name, 'email': email})
-                commit.wait()
                 # ds.publish(to='github')
-                if not commit.failed():
-                    resp.media = media_dict
-                    resp.status = falcon.HTTP_OK
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
@@ -145,7 +138,7 @@ class FilesResource(object):
                 # unlock = unlock_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={'files': [filename]})
                 # unlock.wait()
                 
-                remove = remove_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={'files': [filename]})
+                remove = remove_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={'files': [filename], 'name': name, 'email': email})
                 remove.wait()
                 
                 resp.media = media_dict
