@@ -457,7 +457,7 @@ export default {
       label: project.label,
       group: project.uploader ? project.uploader.id : null,
       created: project.created,
-      modified: project.modified,
+      modified: project.draft ? project.draft.modified : null,
       permissions: project.permissions,
       public: !!project.public,
       downloads: project.downloads,

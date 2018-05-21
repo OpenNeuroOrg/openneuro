@@ -34,7 +34,7 @@ class SnapshotLoader extends Reflux.Component {
       let datasetId = props.match.params.datasetId
       const snapshotId = props.match.params.snapshotId
       if (snapshotId && this.state.datasets) {
-        const datasetUrl = bids.encodeId(datasetId, snapshotId)
+        const datasetUrl = [datasetId, snapshotId].join(':')
         if (
           !this.state.datasets.loading &&
           datasetUrl !== this.state.datasets.loadedUrl
@@ -46,7 +46,7 @@ class SnapshotLoader extends Reflux.Component {
       if (reload) {
         if (snapshotId) {
           const query = new URLSearchParams(props.location.search)
-          const snapshotUrl = bids.encodeId(datasetId, snapshotId)
+          const snapshotUrl = [datasetId, snapshotId].join(':')
           const app = query.get('app')
           const version = query.get('version')
           const job = query.get('job')
@@ -56,7 +56,7 @@ class SnapshotLoader extends Reflux.Component {
             app: app,
             version: version,
             job: job,
-            datasetId: bids.encodeId(datasetId),
+            datasetId: datasetId,
             tag: snapshotId
           })
         }
