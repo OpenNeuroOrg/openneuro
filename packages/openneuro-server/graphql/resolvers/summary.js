@@ -1,4 +1,3 @@
-import mongo from '../../libs/mongo.js'
 /**
  * Summary resolver
  *
