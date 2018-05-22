@@ -35,6 +35,27 @@ const typeDefs = `
     deleteFiles(datasetId: ID!, files: FileTree!): Draft
     # Add or remove the public flag from a dataset
     updatePublic(datasetId: ID!, publicFlag: Boolean!): Boolean!
+    # Update a draft summary
+    updateSummary(summary: SummaryInput!): Summary
+    # Update a draft with validation results
+    updateValidation(validation: ValidationInput!): Boolean
+  }
+
+  input SummaryInput {
+    id: ID! # Git reference for this summary
+    datasetId: ID!
+    modalities: [String]
+    sessions: [String]
+    subjects: [String]
+    tasks: [String]
+    size: Int!
+    totalFiles: Int!
+  }
+
+  input ValidationInput {
+    id: ID! # Git reference for this validation
+    datasetId: ID!
+    issues: [ValidationIssueInput]!
   }
 
   # File tree
@@ -82,6 +103,7 @@ const typeDefs = `
     modified: DateTime!
     authors: [Author]
     summary: Summary
+    issues: [ValidationIssue]
     files: [DatasetFile]
   }
 
@@ -104,12 +126,62 @@ const typeDefs = `
 
   # Validator summary from bids-validator
   type Summary {
+    id: ID!
     modalities: [String]
     sessions: [String]
     subjects: [String]
     tasks: [String]
-    size: Int
-    totalFiles: Int
+    size: Int!
+    totalFiles: Int!
+  }
+
+  enum Severity {
+    error
+    warning
+  }
+
+  type ValidationIssue {
+    severity: Severity!
+    key: String!
+    code: Int!
+    reason: String!
+    files: [ValidationIssueFile]
+    additionalFileCount: Int
+  }
+
+  input ValidationIssueInput {
+    severity: Severity!
+    key: String!
+    code: Int!
+    reason: String!
+    files: [ValidationIssueFileInput]
+    additionalFileCount: Int
+  }
+
+  type ValidationIssueFile {
+    key: String!
+    code: Int!
+    filename: String
+    path: String
+    relativePath: String
+    evidence: String
+    line: Int
+    character: Int
+    severity: Severity!
+    reason: String
+  }
+
+  input ValidationIssueFileInput {
+    key: String!
+    code: Int!
+    filename: String
+    path: String
+    relativePath: String
+    evidence: String
+    line: Int
+    character: Int
+    severity: Severity!
+    reason: String
   }
 
   # File metadata and link to contents
