@@ -7,7 +7,7 @@ import {
   createSnapshot,
   updateFiles,
 } from './dataset.js'
-import { updateValidation } from './validation.js'
+import { updateSummary, updateValidation } from './validation.js'
 import { draft, snapshot, snapshots } from './datalad.js'
 import { whoami, user, users } from './user.js'
 
@@ -28,6 +28,7 @@ export default {
     createDataset,
     updateFiles,
     createSnapshot,
+    updateSummary,
     updateValidation,
   },
   User: user,

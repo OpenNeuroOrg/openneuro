@@ -36,6 +36,7 @@ const typeDefs = `
   }
 
   input SummaryInput {
+    id: ID! # Git reference for this summary
     datasetId: ID!
     modalities: [String]
     sessions: [String]
@@ -46,8 +47,8 @@ const typeDefs = `
   }
 
   input ValidationInput {
+    id: ID! # Git reference for this validation
     datasetId: ID!
-    ref: String!
     issues: [ValidationIssueInput]!
   }
 
@@ -119,6 +120,7 @@ const typeDefs = `
 
   # Validator summary from bids-validator
   type Summary {
+    id: ID!
     modalities: [String]
     sessions: [String]
     subjects: [String]

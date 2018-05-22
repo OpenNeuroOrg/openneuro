@@ -1,17 +1,37 @@
 import mongo from '../../libs/mongo.js'
 
 /**
- * Save validation data returned by the datalad service
+ * Save summary data returned by the datalad service
+ *
+ * Returns the saved summary if successful
+ */
+export const updateSummary = (obj, args) => {
+  const summaries = mongo.collections.crn.summaries
+  return summaries
+    .update(
+      { id: args.summary.id, datasetId: args.summary.datasetId },
+      args.summary,
+      {
+        upsert: true,
+      },
+    )
+    .then(() => args.summary)
+}
+
+/**
+ * Save issues data returned by the datalad service
  *
  * Returns only a boolean if successful or not
- *
- * updateValidation(datasetId: ID!, ref: String!, summary: Summary, issues: [ValidationIssue])
  */
 export const updateValidation = (obj, args) => {
-  const validations = mongo.collections.crn.draftValidations
-  return validations
-    .update({ datasetId: args.datasetId, ref: args.ref }, args, {
-      upsert: true,
-    })
+  const issues = mongo.collections.crn.issues
+  return issues
+    .update(
+      { id: args.validation.id, datasetId: args.validation.datasetId },
+      args.validation,
+      {
+        upsert: true,
+      },
+    )
     .then(() => true)
 }

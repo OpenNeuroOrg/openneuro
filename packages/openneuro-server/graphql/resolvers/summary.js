@@ -1,3 +1,4 @@
+import mongo from '../../libs/mongo.js'
 /**
  * Summary resolver
  *
@@ -8,6 +9,7 @@ export const summary = () => {
   // This needs the remote validator work completed
   // These will be retrieved by index in mongodb after that
   return {
+    id: 'notarealid',
     modalities: ['bold', 'inplaneT2', 'T1w'],
     sessions: ['anat'],
     subjects: ['sub-01', 'sub-02', 'sub-03'],
