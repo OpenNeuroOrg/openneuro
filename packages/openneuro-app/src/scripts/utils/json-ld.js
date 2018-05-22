@@ -39,7 +39,7 @@ const formatAuthors = authorList => {
   if (authorList.length) {
     let authorsArray = []
     for (let author of authorList) {
-      let nameParts = author.name ? author.name.split(' ') : []
+      let nameParts = author? author.split(' ') : []
       let familyName = nameParts.length ? nameParts[nameParts.length - 1] : null
       nameParts.pop()
       let givenName = nameParts.length ? nameParts.join(' ') : null

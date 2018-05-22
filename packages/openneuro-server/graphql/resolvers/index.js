@@ -4,8 +4,11 @@ import {
   dataset,
   datasets,
   createDataset,
+  deleteDataset,
   createSnapshot,
+  updatePublic,
   updateFiles,
+  deleteFiles,
 } from './dataset.js'
 import { updateSummary, updateValidation } from './validation.js'
 import { draft, snapshot, snapshots } from './datalad.js'
@@ -27,9 +30,12 @@ export default {
   Mutation: {
     createDataset,
     updateFiles,
+    deleteDataset,
+    deleteFiles,
     createSnapshot,
     updateSummary,
     updateValidation,
+    updatePublic,
   },
   User: user,
   Dataset: {

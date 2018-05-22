@@ -9,6 +9,7 @@ import * as datasets from './datasets'
 
 const cache = new InMemoryCache()
 
+/* global window */
 /**
  * Setup a client for working with the OpenNeuro API
  *
@@ -23,10 +24,19 @@ const authLink = getAuthorization =>
   setContext((_, { headers }) => {
     // Passthrough any headers but add in authorization if set
     const token = getAuthorization ? getAuthorization() : false
+    let tokenString = ''
+    if (token) {
+      if (typeof(window) !== 'undefined' && window.localStorage && window.localStorage.token) {
+        tokenString = `${token}`
+      } else {
+        tokenString = `Bearer ${token}`
+      }
+    }
+    
     return {
       headers: Object.assign(
         {
-          authorization: token ? `Bearer ${token}` : '',
+          authorization: tokenString,
         },
         headers,
       ),

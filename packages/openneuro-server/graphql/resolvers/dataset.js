@@ -16,6 +16,13 @@ export const createDataset = (obj, { label }, { user, userInfo }) => {
 }
 
 /**
+ * Delete an existing dataset, as well as all snapshots
+ */
+export const deleteDataset = (obj, { label }, { user, userInfo }) => {
+  return datalad.deleteDataset(label, user, userInfo)
+}
+
+/**
  * Tag the working tree for a dataset
  */
 export const createSnapshot = (obj, { datasetId, tag }) => {
@@ -56,4 +63,44 @@ export const updateFilesTree = (datasetId, fileTree) => {
   )
   const dirPromises = directories.map(tree => updateFilesTree(datasetId, tree))
   return filesPromises.concat(...dirPromises)
+}
+
+/**
+ * Delete files from a draft
+ */
+export const deleteFiles = (obj, { datasetId, files: fileTree }) => {
+  // TODO - The id returned here is a placeholder
+  const promises = deleteFilesTree(datasetId, fileTree)
+  return Promise.all(promises).then(() => ({
+    id: new Date(),
+  }))
+}
+
+/**
+ * Recursively walk a delete tree and return an array of
+ * promises for each forwarded request.
+ *
+ * @param {string} datasetId
+ * @param {object} fileTree
+ */
+export const deleteFilesTree = (datasetId, fileTree) => {
+  // drafts just need something to invalidate client cache
+  const { name, files, directories } = fileTree
+  if (files.length) {
+    const filesPromises = files.map(file =>
+      datalad.deleteFile(datasetId, name, file),
+    )
+    const dirPromises = directories.map(tree => deleteFilesTree(datasetId, tree))
+    return filesPromises.concat(...dirPromises)
+  } else {
+    return [datalad.deleteFile(datasetId, name, {name: ''})]
+  }
+  
+}
+
+/**
+ * Update the dataset Public status
+ */
+export const updatePublic = (obj, { datasetId, publicFlag}) => {
+  return datalad.updatePublic(datasetId, publicFlag)
 }

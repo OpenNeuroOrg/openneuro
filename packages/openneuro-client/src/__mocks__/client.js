@@ -28,6 +28,7 @@ addMockFunctionsToSchema({
       created: testTime,
       modified: testTime,
     }),
+    DateTime: () => {return testTime}
   },
 })
 

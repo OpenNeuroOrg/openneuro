@@ -6,7 +6,9 @@ import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
 import config from '../../../../config'
+import datalad from '../../utils/datalad'
 import datasetStore from '../../dataset/dataset.store.js'
+import actions from '../../dataset/dataset.actions.js'
 import { refluxConnect } from '../../utils/reflux'
 import { Link } from 'react-router-dom'
 
@@ -178,27 +180,35 @@ class FileTree extends Reflux.Component {
 
     let downloadFile
     if (!item.children) {
+      let link = actions.getFileURL(this.state.datasets.dataset._id, item.name)
       downloadFile = (
         <span className="download-file">
-          <WarnButton
-            icon="fa-download"
-            message="Download"
-            prepDownload={this.props.getFileDownloadTicket.bind(this, item)}
-          />
+          <span>
+            <a className="btn-warn-component warning" href={link} download>
+              <i className="fa fa-download" /> DOWNLOAD
+            </a>
+          </span>
         </span>
       )
     }
 
     if (!item.children) {
       if (this.props.editable && files.hasExtension(item.name, ['.json'])) {
+        let itemUrl =
+        this.state.datasets.datasetUrl +
+        '/file-edit/' +
+        datalad.encodeFilePath(item.name)
+
         editFile = (
           <span className="view-file">
-            <WarnButton
-              icon="fa-pencil"
-              warn={false}
-              message=" Edit"
-              action={this.props.editFile.bind(this, item)}
-            />
+            <Link to={itemUrl}>
+              <WarnButton
+                icon="fa-pencil"
+                warn={false}
+                message=" Edit"
+                action={() => null}
+              />
+            </Link>
           </span>
         )
       }
@@ -249,12 +259,12 @@ class FileTree extends Reflux.Component {
           itemUrl =
             this.state.datasets.datasetUrl +
             '/results/' +
-            encodeURIComponent(item.path)
+            datalad.encodeFilePath(item.path)
         } else {
           itemUrl =
             this.state.datasets.datasetUrl +
             '/file-display/' +
-            encodeURIComponent(item.name)
+            datalad.encodeFilePath(item.name)
         }
 
         displayBtn = (

@@ -87,8 +87,15 @@ let auth = {
     } else {
       scitran.getUserByToken(req.headers.authorization, (err, resp) => {
         if (resp.body && resp.body._id) {
-          req.user = resp.body._id
-          req.isSuperUser = resp.body.root
+          let scitranUser = resp.body
+          req.user = scitranUser._id
+          req.userInfo = {
+            id: req.user,
+            firstname: scitranUser.firstname,
+            lastname: scitranUser.lastname,
+            email: scitranUser.email,
+          }
+          req.isSuperUser = scitranUser.root
         }
         return next()
       })

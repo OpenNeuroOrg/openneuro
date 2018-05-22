@@ -36,7 +36,7 @@ class Tools extends Reflux.Component {
       return null
     }
 
-    let datasetHasJobs = !!dataset.jobs.length
+    let datasetHasJobs = dataset.jobs ? !!dataset.jobs.length : false
 
     // permission check shorthands
     let isAdmin = dataset.access === 'admin',

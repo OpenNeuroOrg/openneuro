@@ -92,7 +92,7 @@ export default class DatasetRoutes extends React.Component {
           <Route
             name="fileEdit"
             exact
-            path="/datasets/:datasetId/file-edit"
+            path="/datasets/:datasetId/file-edit/:fileName"
             component={FileEdit}
           />
           <Route
