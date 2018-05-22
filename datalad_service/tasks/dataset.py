@@ -9,7 +9,8 @@ import stat
 import shutil
 
 from datalad_service.common.annex import CommitInfo
-from datalad_service.common.celery import dataset_task
+from datalad_service.common.celery import dataset_task, dataset_queue
+from datalad_service.tasks.publish import publish_snapshot
 
 
 @dataset_task

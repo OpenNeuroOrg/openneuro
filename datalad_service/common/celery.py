@@ -4,10 +4,9 @@ from functools import wraps
 import redis
 from celery import Celery
 
+from datalad_service.config import DATALAD_WORKERS
 from datalad_service.datalad import DataladStore
 
-
-WORKER_COUNT = os.environ['DATALAD_WORKERS'] if 'DATALAD_WORKERS' in os.environ else 1
 
 app = Celery('tasks', broker='redis://redis', backend='redis://redis')
 
@@ -16,9 +15,9 @@ def dataset_queue(dataset):
     return 'dataset-worker-{}'.format(dataset_hash(dataset))
 
 
-def dataset_hash(key, workers=WORKER_COUNT):
+def dataset_hash(key):
     """Return which worker for a given task."""
-    return hash(key) % workers
+    return hash(key) % DATALAD_WORKERS
 
 
 def dataset_task(func):
