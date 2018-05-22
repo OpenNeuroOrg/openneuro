@@ -5,6 +5,7 @@ import React from 'react'
 import async from 'async'
 import Actions from './dataset.actions.js'
 import scitran from '../utils/scitran'
+import datalad from '../utils/datalad'
 import crn from '../utils/crn'
 import bids from '../utils/bids'
 import userStore from '../user/user.store'
@@ -13,7 +14,6 @@ import userActions from '../user/user.actions'
 import upload from '../utils/upload'
 import config from '../../../config'
 import files from '../utils/files'
-import request from '../utils/request'
 import moment from 'moment'
 import { stringify as querystring } from 'urlite/querystring'
 
@@ -186,7 +186,7 @@ let datasetStore = Reflux.createStore({
             let originalId = dataset.original ? dataset.original : datasetId
             this.update(
               {
-                dataset,
+                dataset: dataset,
                 datasetTree: [
                   {
                     _id: datasetId,
@@ -194,28 +194,41 @@ let datasetStore = Reflux.createStore({
                     children: dataset.children,
                   },
                 ],
-              },
-              this.loadJobs(
-                datasetId,
-                snapshot,
-                originalId,
-                options,
-                (err, jobs) => {
-                  this.loadSnapshots(dataset, jobs, () => {
-                    this.loadComments(originalId)
-                    this.getDatasetStars()
-                    this.checkSubscriptionFollowers(() => {
-                      let datasetUrl = this.constructDatasetUrl(dataset)
-                      this.update({
-                        loading: false,
-                        snapshot: snapshot,
-                        datasetUrl: datasetUrl,
-                      })
-                    })
+                loading: false,
+              })
+              this.loadSnapshots(dataset, [], () => {
+                this.loadComments(originalId)
+                this.getDatasetStars()
+                this.checkSubscriptionFollowers(() => {
+                  let datasetUrl = this.constructDatasetUrl(dataset)
+                  this.update({
+                    loading: false,
+                    snapshot: snapshot,
+                    datasetUrl: datasetUrl,
                   })
-                },
-              ),
-            )
+                })
+              })
+              
+              // this.loadJobs(
+              //   datasetId,
+              //   snapshot,
+              //   originalId,
+              //   options,
+              //   (err, jobs) => {
+              //     this.loadSnapshots(dataset, jobs, () => {
+              //       this.loadComments(originalId)
+              //       this.getDatasetStars()
+              //       this.checkSubscriptionFollowers(() => {
+              //         let datasetUrl = this.constructDatasetUrl(dataset)
+              //         this.update({
+              //           loading: false,
+              //           snapshot: snapshot,
+              //           datasetUrl: datasetUrl,
+              //         })
+              //       })
+              //     })
+              //   },
+              // ),
 
             if (
               forceReload ||
@@ -406,63 +419,19 @@ let datasetStore = Reflux.createStore({
       ? this.data.dataset.original
       : this.data.dataset._id
 
-    // check if public snapshots exist outside of current
-    let hasPublic = false
-    for (let snapshot of this.data.snapshots) {
-      if (snapshot._id === snapshotId) {
-        continue
-      }
-      if (snapshot.public) {
-        hasPublic = true
-      }
-    }
-
-    scitran.updateSnapshotPublic(snapshotId, value).then(() => {
+    datalad.updatePublic(datasetId, value).then(() => {
       if (callback) {
         callback()
       }
       let dataset = this.data.dataset
-      if (value) {
-        if (!hasPublic) {
-          scitran.addTag('projects', datasetId, 'hasPublic')
-        }
-        if (snapshotId === this.data.dataset._id) {
-          dataset.status.public = value
-        } else {
-          history.push(
-            '/datasets/' +
-              bids.decodeId(datasetId) +
-              '/versions/' +
-              bids.decodeId(snapshotId),
-          )
-        }
-      } else {
-        if (!hasPublic) {
-          scitran.removeTag('projects', datasetId, 'hasPublic')
-        }
-        dataset.status.public = value
-      }
-
+      dataset.status.public = value
+      this.data.public = value
       if (!dataset.description.DatasetDOI) {
         this.registerDoi.bind(this)()
       }
-
       let snapshots = this.data.snapshots
 
-      for (let snapshot of snapshots) {
-        if (snapshot._id === snapshotId) {
-          snapshot.public = value
-        }
-      }
-
-      // redirect to the snapshot page
-      history.push(
-        '/datasets/' +
-          bids.decodeId(datasetId) +
-          '/versions/' +
-          bids.decodeId(snapshotId),
-      )
-
+      history.push('/datasets/' + this.data.dataset.linkID)
       this.update({ dataset, snapshots })
     })
   },
@@ -519,8 +488,8 @@ let datasetStore = Reflux.createStore({
    */
   deleteDataset(datasetId, history, callback) {
     if (this.data.snapshot) {
-      bids
-        .deleteDataset(datasetId, { snapshot: this.data.snapshot })
+      datalad
+        .deleteDataset(bids.decodeId(datasetId), { snapshot: this.data.snapshot })
         .then(() => {
           history.push('/dashboard/datasets')
         })
@@ -534,8 +503,8 @@ let datasetStore = Reflux.createStore({
         message: message,
         action: () => {
           this.update({ loading: 'deleting' })
-          bids
-            .deleteDataset(datasetId, { snapshot: this.data.snapshot })
+          datalad
+            .deleteDataset(bids.decodeId(datasetId), { snapshot: this.data.snapshot })
             .then(() => {
               history.push('/dashboard/datasets')
             })
@@ -612,8 +581,16 @@ let datasetStore = Reflux.createStore({
             ? this.data.displayFile.name
             : null
           if (fileName) {
-            redirectUrl = redirectUrl + '/' + encodeURIComponent(fileName)
+            redirectUrl = redirectUrl + '/' + datalad.encodeFilePath(fileName)
           }
+        }
+        if (name === 'file-edit') {
+          let fileName = this.data.editFile
+          ? this.data.editFile.name
+          : null
+          if (fileName) {
+            redirectUrl = redirectUrl + '/' + datalad.encodeFilePath(fileName)
+      }
         }
       }
 
@@ -654,19 +631,17 @@ let datasetStore = Reflux.createStore({
   },
 
   updateName(value, callback) {
-    scitran.updateProject(this.data.dataset._id, { label: value }).then(() => {
-      // update description
-      this.updateDescription('Name', value, callback)
+    // update description
+    this.updateDescription('Name', value, callback)
 
-      // update filetree
-      let dataset = this.data.dataset
-      let datasetTree = this.data.datasetTree
-      dataset.label = value
-      if (datasetTree && datasetTree[0]) {
-        datasetTree[0].label = value
-      }
-      this.update({ dataset, datasetTree })
-    })
+    // update filetree
+    let dataset = this.data.dataset
+    let datasetTree = this.data.datasetTree
+    dataset.label = value
+    if (datasetTree && datasetTree[0]) {
+      datasetTree[0].label = value
+    }
+    this.update({ dataset, datasetTree })
   },
 
   /**
@@ -710,7 +685,7 @@ let datasetStore = Reflux.createStore({
       if (description.hasOwnProperty('Authors')) {
         for (let i = 0; i < description.Authors.length; i++) {
           let author = description.Authors[i]
-          authors.push({ name: author, ORCIDID: '' })
+          authors.push(author)
         }
       }
       if (description.hasOwnProperty('ReferencesAndLinks')) {
@@ -719,27 +694,21 @@ let datasetStore = Reflux.createStore({
           references.push(reference)
         }
       }
-      scitran
-        .updateProject(projectId, {
-          metadata: { authors: authors, referencesAndLinks: references },
+        file = new File(
+          [JSON.stringify(description)],
+          'dataset_description.json',
+          { type: 'application/json' },
+        )
+        datalad.updateFile(projectId, file).then(() => {
+          description.Authors = authors
+          description.ReferencesAndLinks = references
+          let dataset = this.data.dataset
+          dataset.description = description
+          this.update({ dataset })
+          this.revalidate()
+          callback()
         })
-        .then(() => {
-          file = new File(
-            [JSON.stringify(description)],
-            'dataset_description.json',
-            { type: 'application/json' },
-          )
-          scitran.updateFile('projects', projectId, file).then(() => {
-            description.Authors = authors
-            description.ReferencesAndLinks = references
-            let dataset = this.data.dataset
-            dataset.description = description
-            this.update({ dataset })
-            this.revalidate()
-            callback()
-          })
-        })
-    })
+      })
   },
 
   /**
@@ -751,42 +720,31 @@ let datasetStore = Reflux.createStore({
   saveDescription(description, callback) {
     description = JSON.parse(JSON.stringify(description))
     let datasetId = this.data.dataset._id
-    scitran
-      .updateProject(datasetId, {
-        metadata: {
-          authors: description.Authors,
-          referencesAndLinks: description.ReferencesAndLinks,
-        },
-      })
+    let authors = []
+    let referencesAndLinks = []
+
+    for (let author of description.Authors) {
+      authors.push(author)
+    }
+    description.Authors = authors
+
+    if (description.ReferencesAndLinks) {
+      for (let referencesAndLink of description.ReferencesAndLinks) {
+        referencesAndLinks.push(referencesAndLink)
+      }
+      description.ReferencesAndLinks = referencesAndLinks
+    }
+
+    this.updateModified()
+    datalad
+      .updateFileFromString(
+        datasetId,
+        'dataset_description.json',
+        JSON.stringify(description),
+        'application/json',
+      )
       .then(() => {
-        let authors = []
-        let referencesAndLinks = []
-
-        for (let author of description.Authors) {
-          authors.push(author.name)
-        }
-        description.Authors = authors
-
-        if (description.ReferencesAndLinks) {
-          for (let referencesAndLink of description.ReferencesAndLinks) {
-            referencesAndLinks.push(referencesAndLink)
-          }
-          description.ReferencesAndLinks = referencesAndLinks
-        }
-
-        this.updateModified()
-        scitran
-          .updateFileFromString(
-            'projects',
-            datasetId,
-            'dataset_description.json',
-            JSON.stringify(description),
-            'application/json',
-            ['project'],
-          )
-          .then(() => {
-            callback()
-          })
+        callback()
       })
   },
 
@@ -795,23 +753,19 @@ let datasetStore = Reflux.createStore({
    */
   updateREADME(value, callback) {
     let dataset = this.data.dataset
-    scitran
+    datalad
       .updateFileFromString(
-        'projects',
         this.data.dataset._id,
         'README',
         value,
         '',
-        [],
       )
       .then(res => {
-        scitran.updateProject(dataset._id, {}).then(() => {
           callback(null, res)
           dataset.README = value
           this.update({ dataset })
           this.updateModified()
         })
-      })
   },
 
   /**
@@ -820,14 +774,12 @@ let datasetStore = Reflux.createStore({
   updateCHANGES(value, callback) {
     let dataset = this.data.dataset
 
-    scitran
+    datalad
       .updateFileFromString(
-        'projects',
         this.data.dataset._id,
         'CHANGES',
         value,
         '',
-        [],
       )
       .then(res => {
         callback(null, res)
@@ -1038,8 +990,8 @@ let datasetStore = Reflux.createStore({
             })
           } else {
             file.modifiedName = (container.dirPath || '') + file.name
-            scitran
-              .updateFile('projects', this.data.dataset._id, file)
+            datalad
+              .updateFile(this.data.dataset._id, file)
               .then(() => {
                 let children = container.children
                 children.unshift({
@@ -1080,7 +1032,7 @@ let datasetStore = Reflux.createStore({
           })
 
           this.updateDirectoryState(datasetId, { loading: true })
-          scitran.addTag('projects', datasetId, 'updating').then(() => {
+          // scitran.addTag('projects', datasetId, 'updating').then(() => {
             async.eachLimit(
               uploads,
               3,
@@ -1092,8 +1044,8 @@ let datasetStore = Reflux.createStore({
                 let file = upload.file
                 let container = upload.container
                 file.modifiedName = (container.dirPath || '') + file.name
-                const scitranReq = scitran
-                  .updateFile('projects', datasetId, file)
+                const dataladReq = datalad
+                  .updateFile(datasetId, file)
                   .then(() => {
                     this.update({
                       uploadingProgress: this.data.uploadingProgress + 1,
@@ -1105,25 +1057,25 @@ let datasetStore = Reflux.createStore({
                   })
                 this.update({
                   uploadingScitranRequests: this.data.uploadingScitranRequests.concat(
-                    [scitranReq],
+                    [dataladReq],
                   ),
                 })
               },
               err => {
-                scitran.removeTag('projects', datasetId, 'updating')
+                // scitran.removeTag('projects', datasetId, 'updating')
                 this.update({ uploading: false })
                 if (err && callback) callback(err)
                 if (err) {
-                  this.loadDataset(bids.encodeId(datasetId), undefined, false)
+                  this.loadDataset(bids.decodeId(datasetId), undefined, false)
                 } else {
-                  this.loadDataset(bids.encodeId(datasetId), undefined, true) // forcing reload
+                  this.loadDataset(bids.decodeId(datasetId), undefined, true) // forcing reload
                 }
                 // Reset canceled when an upload is done (canceled or otherwise)
                 this.update({ uploadingCanceled: false })
                 if (callback) callback()
               },
             )
-          })
+          // })
         },
       })
     } else {
@@ -1156,21 +1108,12 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
-          async.eachLimit(
-            fileList,
-            3,
-            (file, cb) => {
-              scitran
-                .deleteFile('projects', this.data.dataset._id, file.name)
-                .then(() => {
-                  cb()
-                })
-            },
-            () => {
-              this.updateFileTreeOnDeleteDir(label)
-              this.revalidate()
-            },
-          )
+          datalad
+          .deleteDirectory(bids.decodeId(this.data.dataset._id), dirTree.dirPath)
+          .then(() => {
+            // TODO: ADD FUNCTIONALITY FOR HANDLING SUCCESSFUL DATASET DIRECTORY DELETION
+            // this.loadDataset(bids.decodeId(this.data.dataset._id), undefined, true) // reload dataset
+          })
         },
       })
     } else {
@@ -1188,12 +1131,18 @@ let datasetStore = Reflux.createStore({
    */
   deleteFile(file, callback) {
     let message = this.updateMessage('delete', file)
+    let modifiedName = file.name
+    let name = file.name.split('/').slice(-1)[0]
+    if (modifiedName !== name) {
+      file.modifiedName = modifiedName
+      file.name = name
+    }
     this.updateWarn({
       message: message,
       action: () => {
         let dataset = this.data.dataset
-        scitran
-          .deleteFile('projects', this.data.dataset._id, file.name)
+        datalad
+          .deleteFile(this.data.dataset._id, file)
           .then(() => {
             let match = files.findInTree([dataset], file.parentId)
             let children = []
@@ -1214,12 +1163,8 @@ let datasetStore = Reflux.createStore({
                 ReferencesAndLinks: [],
                 DatasetDOI: '',
               }
-              scitran.updateProject(this.data.dataset._id, {
-                metadata: { authors: [], referencesAndLinks: [] },
-              })
             }
             this.update({ dataset })
-            this.revalidate()
           })
       },
     })
@@ -1248,16 +1193,15 @@ let datasetStore = Reflux.createStore({
         action: () => {
           this.updateFileState(item, { error: null, loading: true })
           if (
-            file.name === 'dataset_description.json' &&
-            item.parentId == 'root'
+            file.name === 'dataset_description.json'
           ) {
             this.updateDescriptionFile(file, this.data.dataset._id, () => {
               this.updateFileState(item, { loading: false })
               this.showDatasetComponent('', item.history)
             })
           } else {
-            scitran
-              .updateFile('projects', this.data.dataset._id, file)
+            datalad
+              .updateFile(bids.decodeId(this.data.dataset._id), file)
               .then(() => {
                 this.updateFileState(item, { loading: false })
                 this.showDatasetComponent('', item.history)
@@ -1782,66 +1726,45 @@ let datasetStore = Reflux.createStore({
   displayFile(snapshotId, jobId, file, history, callback) {
     if (file && file.name) {
       let displayUrl = file.path ? 'results/' + file.path : 'file-display'
-      let requestAndDisplay = link => {
-        if (link) {
-          if (
-            files.hasExtension(file.name, [
-              '.pdf',
-              '.nii.gz',
-              '.jpg',
-              '.jpeg',
-              '.png',
-              '.gif',
-            ])
-          ) {
-            if (callback) {
-              callback()
-            }
-            this.update(
-              {
-                displayFile: {
-                  name: file.name,
-                  text: null,
-                  link: link,
-                },
-              },
-              () => {
-                this.showDatasetComponent(displayUrl, file.history)
-              },
-            )
-          } else {
-            request.get(link, {}).then(res => {
+      let link = this.getFileURL(this.data.dataset._id, file.name)
+        if (
+          files.hasExtension(file.name, [
+          '.pdf',
+          '.nii.gz',
+          '.jpg',
+          '.jpeg',
+          '.png',
+          '.gif',
+        ])
+        ) {
+          let displayFile = {
+            name: file.name,
+            text: null,
+            link: link
+          }
+        this.update({ displayFile: displayFile }, () => {
+              this.showDatasetComponent(displayUrl, file.history)
+        })
+        } else {
+        datalad
+          .getFile(bids.decodeId(this.data.dataset._id), file.name)
+            .then(res => {
               if (callback) {
                 callback()
               }
-              this.update(
-                {
-                  displayFile: {
+            let displayFile = {
                     name: file.name,
                     text: res.text,
                     link: link,
-                    info: file,
-                  },
-                },
-                () => {
+                    info: file
+            }
+            this.update({ displayFile: displayFile }, () => {
                   this.showDatasetComponent(displayUrl, file.history)
-                },
-              )
             })
-          }
-        } else {
-          this.showDatasetComponent(displayUrl, file.history)
-        }
-      }
-
-      if (jobId) {
-        this.getResultDownloadTicket(snapshotId, jobId, file, link => {
-          requestAndDisplay(link)
-        })
-      } else {
-        this.getFileDownloadTicket(file, link => {
-          requestAndDisplay(link)
-        })
+          })
+        // .catch(err => {
+        //   console.log(err)
+        // })
       }
     } else {
       callback()
@@ -1854,50 +1777,53 @@ let datasetStore = Reflux.createStore({
    * Toggles the editFile modal for files of type .json, .tsv, .csv
    */
   editFile(snapshotId, jobId, file, callback) {
-    let requestAndDisplay = link => {
+    let link = this.getFileURL(this.data.dataset._id, file.name)
       if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
-        request.get(link, {}).then(res => {
+      datalad.getFile(bids.decodeId(this.data.dataset._id), file.name)
+        .then(res => {
           if (callback) {
             callback()
           }
-          this.showDatasetComponent('file-edit', file.history)
-          this.update({
-            editFile: {
+          let editFile = {
               name: file.name,
               text: res.text,
               link: link,
-              info: file,
-            },
+            info: file
+          }
+          this.update({ editFile: editFile }, () => {
+            this.showDatasetComponent('file-edit', file.history)
           })
-        })
+          })
+        // .catch(err => {
+        //   console.log(err)
+        // })
       }
-    }
+  },
 
-    if (jobId) {
-      this.getResultDownloadTicket(snapshotId, jobId, file, link => {
-        requestAndDisplay(link)
-      })
-    } else {
-      this.getFileDownloadTicket(file, link => {
-        requestAndDisplay(link)
-      })
-    }
+  /**
+   * GetFileURL
+   * 
+   * Returns the uri that points to the location of a dataset file. Useful when serving files that
+   * reside in iframe or papaya viewer
+   */
+  getFileURL(datasetId, fileName) {
+    let link = config.crn.url + '/datasets/' + bids.decodeId(datasetId) + '/files/' + datalad.encodeFilePath(fileName)
+    return link
   },
 
   // Snapshots ---------------------------------------------------------------------
 
-  createSnapshot(changes, history, callback, transition) {
+  createSnapshot(changes, tag, history, callback, transition) {
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
     transition = transition == undefined ? true : transition
 
-    scitran.getProject(datasetId).then(res => {
-      let project = res.body
+    bids.getDataset(datasetId, (data) => {
+      let project = data
       if (
-        !project.metadata ||
-        !project.metadata.authors ||
-        project.metadata.authors.length < 1
+        !project.authors ||
+        project.length < 1
       ) {
         let metadataIssues = this.data.metadataIssues
         let message =
@@ -1906,19 +1832,20 @@ let datasetStore = Reflux.createStore({
         this.update({ metadataIssues })
         callback({ error: message })
       } else if (
-        project.metadata.hasOwnProperty('validation') &&
-        project.metadata.validation.errors.length > 0
+        project.hasOwnProperty('validation') &&
+        project.validation.errors.length > 0
       ) {
         callback({
           error:
             'You cannot snapshot an invalid dataset. Please fix the errors and try again.',
         })
       } else {
-        let latestSnapshot = this.data.snapshots[1]
+        let latestSnapshot = this.data.snapshots[0]
         if (
           latestSnapshot &&
+          latestSnapshot.created && 
           moment(this.data.dataset.modified).diff(
-            moment(latestSnapshot.modified),
+            moment(latestSnapshot.created),
           ) <= 0
         ) {
           callback({
@@ -1932,14 +1859,15 @@ let datasetStore = Reflux.createStore({
                 error: err,
               })
             } else {
-              if (!res) {
+              if (!data) {
                 callback({
                   error:
                     'There was an error while updating the dataset changelog.',
                 })
               }
-              crn.createSnapshot(datasetId).then(res => {
-                let snapshotId = res.body._id
+              let newVersion = tag
+              datalad.createSnapshot(datasetId, newVersion).then(res => {
+                let snapshotId = res.data.createSnapshot.tag
                 this.toggleSidebar(true)
                 if (transition) {
                   const url =
@@ -1959,14 +1887,13 @@ let datasetStore = Reflux.createStore({
           })
         }
       }
-    })
+    }, {})
   },
 
   loadSnapshots(dataset, jobs, callback) {
     let datasetId = dataset.original ? dataset.original : dataset._id
-    scitran.getProjectSnapshots(datasetId).then(res => {
-      let snapshots = res.body
-
+    let snapshots = dataset.snapshots.slice(0)
+    if (snapshots.length) {
       // sort snapshots
       snapshots.sort((a, b) => {
         if (a.snapshot_version < b.snapshot_version) {
@@ -1980,42 +1907,43 @@ let datasetStore = Reflux.createStore({
 
       // add job counts
       for (let snapshot of snapshots) {
-        snapshot.analysisCount = 0
-        snapshot.linkID = bids.decodeId(snapshot._id)
-        snapshot.linkOriginal = bids.decodeId(snapshot.original)
+        let snap = Object.assign({}, snapshot)
+        snap.analysisCount = 0
+        snap.linkID = bids.decodeId(snap._id)
+        snap.linkOriginal = bids.decodeId(snap.original)
         if (jobs && !jobs.error) {
           for (let job of jobs) {
-            if (job.snapshotId == snapshot._id) {
-              snapshot.analysisCount++
+            if (job.snapshotId == snap._id) {
+              snap.analysisCount++
             }
           }
         }
+        snapshot = snap
       }
-
-      // add draft is available
-      if (
-        dataset &&
-        this.data.currentUser &&
-        this.data.currentUser.profile &&
-        dataset.user._id === this.data.currentUser.profile._id &&
-        dataset.permissions &&
-        !dataset.permissions.length
-      ) {
-        snapshots.unshift({
-          orphaned: true,
-        })
-      } else if (dataset && dataset.access !== null) {
-        snapshots.unshift({
-          isOriginal: true,
-          _id: datasetId,
-          linkID: bids.decodeId(datasetId),
-        })
-      }
-      this.update({ snapshots: snapshots })
-      if (callback) {
-        callback()
-      }
-    })
+    }
+    // add draft if available
+    if (
+      dataset &&
+      this.data.currentUser &&
+      this.data.currentUser.profile &&
+      dataset.user._id === this.data.currentUser.profile._id &&
+      dataset.permissions &&
+      !dataset.permissions.length
+    ) {
+      snapshots.unshift({
+        orphaned: true,
+      })
+    } else if (dataset && dataset.access !== null) {
+      snapshots.unshift({
+        isOriginal: true,
+        _id: datasetId,
+        linkID: bids.decodeId(datasetId),
+      })
+    }
+    this.update({ snapshots: snapshots })
+    if (callback) {
+      callback()
+    }
   },
 
   constructDatasetUrl(dataset) {

@@ -77,6 +77,17 @@ export const getDataset = id => {
 }
 
 /**
+ * Delete dataset and associated documents
+ */
+export const deleteDataset= (id) => {
+  let deleteURI = `${uri}/datasets/${id}`
+  request.del(deleteURI)
+    .then(() => {
+      return c.crn.datasets.deleteOne({ id })
+    })
+}
+
+/**
  * Fetch all datasets
  *
  * TODO - Support cursor pagination
@@ -116,7 +127,7 @@ const encodeFilePath = path => {
 const fileUrl = (datasetId, path, filename) => {
   // If path is provided, this is a subdirectory, otherwise a root level file.
   const filePath = path ? [path, filename].join('/') : filename
-  const fileName = encodeFilePath(filePath)
+  const fileName = filename ? encodeFilePath(filePath) : encodeFilePath(path)
   const url = `http://${uri}/datasets/${datasetId}/files/${fileName}`
   return url
 }
@@ -142,18 +153,23 @@ export const addFile = (datasetId, path, file) => {
 }
 
 /**
- * Update an existing file
+ * Update an existing file in a dataset
  */
-export const updateFile = async (datasetId, path, { filename, stream }) => {
+export const updateFile = (datasetId, path, file) => {
   // Cannot use superagent 'request' due to inability to post streams
-  return stream
-    .pipe(requestNode.put(fileUrl(datasetId, path, filename)))
-    .on('close', () => {
-      // eslint-disable-next-line no-console
-      console.warn(
-        `A client hung up the connection - ${datasetId}:${path}:${filename}`,
-      )
-    })
+  return new Promise(async (resolve, reject) => {
+    const { filename, stream, mimetype } = await file
+    stream.pipe(
+      requestNode(
+        {
+          url: fileUrl(datasetId, path, filename),
+          method: 'put',
+          headers: { 'Content-Type': mimetype },
+        },
+        err => (err ? reject(err) : resolve()),
+      ),
+    )
+  })
 }
 
 /**
@@ -164,4 +180,27 @@ export const commitFiles = (datasetId, name, email) => {
   const req = request.post(url).set('Accept', 'application/json')
   setCommitInfo(req, name, email)
   return req
+}
+/** 
+ * Delete an existing file in a dataset
+ */
+export const deleteFile = (datasetId, path, file) => {
+  // Cannot use superagent 'request' due to inability to post streams
+  let url = fileUrl(datasetId, path, file.name)
+  return request.del(url)
+}
+
+/**
+ * Update public state
+ */
+export const updatePublic = (datasetId, publicFlag) => {
+  // update mongo
+  return c.crn.datasets.updateOne({id: datasetId}, {$set: {public: publicFlag}}, {upsert: true})
+  
+  // TODO: send request to backend to initiate uplaod to s3 bucket
+  // const url = `${uri}/datasets/${datasetId}/updatePublic/${publicFlag}`
+  // return request
+  //   .post(url)
+  //   .set('Accept', 'application/json')
+  //   .then(({ body }) => body)
 }

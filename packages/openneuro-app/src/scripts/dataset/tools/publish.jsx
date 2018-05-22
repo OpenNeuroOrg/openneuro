@@ -26,24 +26,6 @@ class Publish extends Reflux.Component {
     }
   }
 
-  componentWillReceiveProps() {
-    let snapshots = this.state.datasets.snapshots
-    let dataset = this.state.datasets.dataset
-
-    if (snapshots && dataset) {
-      snapshots.map(snapshot => {
-        if (snapshot._id == dataset._id) {
-          if (snapshot.original) {
-            this.setState({ selectedSnapshot: snapshot._id })
-          } else if (snapshots.length > 1) {
-            this.setState({ selectedSnapshot: snapshots[1]._id })
-          }
-          return
-        }
-      })
-    }
-  }
-
   _datasetLink() {
     if (this.state.datasets.datasetUrl) {
       return (
@@ -60,18 +42,13 @@ class Publish extends Reflux.Component {
 
   _submitButton() {
     let snapshots = this.state.datasets.snapshots
-    if (snapshots) {
-      let selectedSnapshot = snapshots.filter(snapshot => {
-        return snapshot._id === this.state.selectedSnapshot
-      })
-      if (selectedSnapshot && selectedSnapshot.length) {
-        return selectedSnapshot[0].public ? null : (
-          <div className="dataset-form-controls col-xs-12">
-            {this._submit()}
-          </div>
+    if (snapshots && snapshots.length) {
+      return (
+            <div className="dataset-form-controls col-xs-12">
+              {this._submit()}
+            </div>
         )
       }
-    }
     return null
   }
 
@@ -96,18 +73,22 @@ class Publish extends Reflux.Component {
     let form = (
       <div className="dataset-form-body col-xs-12">
         <div className="dataset-form-content col-xs-12">
-          {this._snapshots()}
+          {/* {this._snapshots()} */}
           <p className="text-danger">
-            This snapshot will be released publicly under a
+            All existing and future snapshots of this dataset will be released publicly under a
             <a
               href="https://wiki.creativecommons.org/wiki/CC0"
               target="_blank"
               rel="noopener noreferrer">
               {' '}
               CC0 license
-            </a>. This operation cannot be undone.
+            </a>. 
+            {/* TODO: can this operation REALLY not be undone? */}
+            {/* This operation cannot be undone. */}
           </p>
         </div>
+        {/* TODO: add create snapshot function if there is ever a case where a snapshot will not exist */}
+        {/* {this._createNewSnapshot()} */}
         {this._submitButton()}
       </div>
     )
@@ -204,8 +185,8 @@ class Publish extends Reflux.Component {
     let dataset = datasetStore.data.dataset
     let snapshots = datasetStore.data.snapshots
     let modified = !(
-      snapshots.length > 1 &&
-      moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0
+      snapshots.length > 0 &&
+      moment(dataset.modified).diff(moment(snapshots[0].modified)) <= 0
     )
     if (modified && this.state.datasets.datasetUrl) {
       let to = {
@@ -226,7 +207,7 @@ class Publish extends Reflux.Component {
 
   _submit() {
     let submitButton
-    if (this.state.selectedSnapshot) {
+    if (this.state.datasets.snapshots && this.state.datasets.snapshots.length) {
       submitButton = (
         <button className="btn-modal-action" onClick={this._publish.bind(this)}>
           Publish

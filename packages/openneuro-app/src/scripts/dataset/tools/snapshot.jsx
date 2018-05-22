@@ -102,7 +102,7 @@ class Snapshot extends Reflux.Component {
       const app = query.get('app')
       const version = query.get('version')
       const job = query.get('job')
-      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
+      const snapshotUrl = datasetId.join(snapshotId, ':')
       actions.trackView(snapshotUrl)
       actions.loadDataset(snapshotUrl, {
         snapshot: true,
@@ -168,7 +168,7 @@ class Snapshot extends Reflux.Component {
           <h4>Snapshot Version: {this._versionString()}</h4>
         </div>
 
-        {/* <div className="snapshot-version-major form-group col-xs-4">
+        <div className="snapshot-version-major form-group col-xs-4">
           <label htmlFor="major" className="control-label">
             Major
           </label>
@@ -177,7 +177,6 @@ class Snapshot extends Reflux.Component {
             type="number"
             step="1"
             min={this.state.newSnapshotVersion}
-            max={this.state.newSnapshotVersion}
             value={this.state.currentVersion.major}
             onChange={this._handleVersion}
             name="major"
@@ -198,7 +197,6 @@ class Snapshot extends Reflux.Component {
             name="minor"
             title="minor"
             className="form-control"
-            disabled={true}
           />
         </div>
         <div className="snapshot-version-point form-group col-xs-4">
@@ -214,9 +212,8 @@ class Snapshot extends Reflux.Component {
             name="point"
             title="point"
             className="form-control"
-            disabled={true}
           />
-        </div> */}
+        </div>
       </div>
     )
   }
@@ -323,7 +320,7 @@ class Snapshot extends Reflux.Component {
       this.state.changes,
       this.state.datasets.dataset.CHANGES,
     )
-    actions.createSnapshot(changes, this.props.history, res => {
+    actions.createSnapshot(changes, this._versionString(), this.props.history, res => {
       if (res && res.error) {
         this.setState({
           changes: [],

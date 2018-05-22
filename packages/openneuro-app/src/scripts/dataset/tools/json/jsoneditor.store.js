@@ -110,7 +110,11 @@ let JsonEditorStore = Reflux.createStore({
           let file = new File([jsonContent], fileName, {
             type: 'application/json',
           })
-          file.parentId = this.data.originalFile.parentId
+          let hasParentId = this.data.originalFile.parentId
+          let parentId = hasParentId ? this.data.originalFile.parentId : 'root'
+          this.data.originalFile.parentId = parentId
+          file.parentId = parentId
+          
 
           this.data.onSave(this.data.originalFile, file)
 
