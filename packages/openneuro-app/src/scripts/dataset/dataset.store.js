@@ -16,6 +16,7 @@ import files from '../utils/files'
 import request from '../utils/request'
 import moment from 'moment'
 import { stringify as querystring } from 'urlite/querystring'
+import notifications from '../notification/notification.actions'
 
 let datasetStore = Reflux.createStore({
   // store setup -----------------------------------------------------------------------
@@ -216,6 +217,17 @@ let datasetStore = Reflux.createStore({
                 },
               ),
             )
+
+            if (
+              !dataset.hasOwnProperty('original') &&
+              !dataset.tags.includes('hasPublic')
+            ) {
+              notifications.createAlert({
+                type: 'Warning',
+                message:
+                  'This dataset has not been published. Please use the toolbar to publish this dataset.',
+              })
+            }
 
             if (
               forceReload ||
