@@ -21,6 +21,7 @@
     "apollo-upload-server": "^5.0.0",
     "async": "^2.4.1",
     "aws-sdk": "2.50.0",
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "base64url": "^2.0.0",

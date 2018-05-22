@@ -3,7 +3,7 @@ import notifications from '../libs/notifications.js'
 import moment from 'moment'
 import jsdom from 'jsdom'
 import { ObjectID } from 'mongodb'
-import {ContentState, convertFromHTML, convertToRaw} from 'draft-js'
+import { ContentState, convertFromHTML, convertToRaw } from 'draft-js'
 
 let c = mongo.collections
 
@@ -48,8 +48,12 @@ export default {
   async reply(req, res, next) {
     /* eslint-disable no-console */
     let comment
-    const parentId = req.params.commentId ? decodeURIComponent(req.params.commentId) : null
-    const userId = req.params.userId ? decodeURIComponent(req.params.userId) : null
+    const parentId = req.params.commentId
+      ? decodeURIComponent(req.params.commentId)
+      : null
+    const userId = req.params.userId
+      ? decodeURIComponent(req.params.userId)
+      : null
     const text = textToDraft(req.body['stripped-text'])
     const inReplyToRaw = req.body['In-Reply-To']
     const inReplyTo = inReplyToRaw ? inReplyToRaw.replace('<', '').replace('>', '') : null
@@ -173,15 +177,17 @@ export default {
 // helpers --------------------
 /**
  * Text to Draft Content
- * 
+ *
  * Takes a string and returns a stringified json
- * item that can be stored as if it came from 
+ * item that can be stored as if it came from
  * a client-side draft.js editor
  */
-const textToDraft = (text) => {
+const textToDraft = text => {
   const window = new jsdom.JSDOM('').window
   global.document = window.document
   global.HTMLElement = window.HTMLElement
   global.HTMLAnchorElement = window.HTMLElement
-  return JSON.stringify(convertToRaw(ContentState.createFromBlockArray(convertFromHTML(text))))
+  return JSON.stringify(
+    convertToRaw(ContentState.createFromBlockArray(convertFromHTML(text))),
+  )
 }
