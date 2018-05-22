@@ -1,5 +1,6 @@
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date'
 import { GraphQLUpload } from 'apollo-upload-server'
+import GraphQLBigInt from 'graphql-bigint'
 import {
   dataset,
   datasets,
@@ -19,6 +20,7 @@ export default {
   Time: GraphQLTime,
   DateTime: GraphQLDateTime,
   Upload: GraphQLUpload,
+  BigInt: GraphQLBigInt,
   Query: {
     dataset,
     datasets,
