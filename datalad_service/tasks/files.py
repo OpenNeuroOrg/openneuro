@@ -1,7 +1,8 @@
 from datalad_service.common.annex import CommitInfo, get_repo_files
-from datalad_service.common.celery import dataset_task
 from datalad_service.common.celery import app
-from datalad_service.tasks.validator import validate_dataset_async
+from datalad_service.common.celery import dataset_task
+from datalad_service.common.celery import dataset_queue
+from datalad_service.tasks.validator import validate_dataset
 
 
 @dataset_task
@@ -22,7 +23,8 @@ def commit_files(store, dataset, files, name=None, email=None, validate=True):
     ref = ds.repo.get_hexsha()
     if validate:
         # Run the validator but don't block on the request
-        validate_dataset_async.delay(dataset, ds.path, ref)
+        queue = dataset_queue(dataset)
+        validate_dataset.s(dataset, ds.path, ref).apply_async(queue=queue)
     return ref
 
 

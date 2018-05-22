@@ -7,7 +7,7 @@ from datalad_service.common.celery import app
 
 # TODO - This is hardcoded because it is internal
 # for docker-compose. May change for other deployment methods
-GRAPHQL_ENDPOINT = 'http://server/crn/graphql'
+GRAPHQL_ENDPOINT = 'http://server:8111/crn/graphql'
 
 
 def setup_validator():
@@ -16,9 +16,9 @@ def setup_validator():
         subprocess.run(['yarn'])
 
 
-def validate_dataset(dataset_path):
+def validate_dataset_sync(dataset_path):
     """
-    Synchrounous dataset validation.
+    Synchronous dataset validation.
 
     Runs the bids-validator process and installs node dependencies if needed.
     """
@@ -32,10 +32,16 @@ def summary_mutation(dataset_id, ref, validator_output):
     """
     Return the OpenNeuro mutation to update a dataset summary.
     """
+    summary = validator_output['summary']
+    summary['datasetId'] = dataset_id
+    # Set the object id to the git sha256 ref
+    summary['id'] = ref
     return {
-        'datasetId': dataset_id,
-        'ref': ref,
-        'summary': validator_output.summary
+        'query': 'mutation ($summaryInput: SummaryInput!) { updateSummary(summary: $summaryInput) { id } }',
+        'variables':
+            {
+                'summaryInput': summary
+            }
     }
 
 
@@ -43,25 +49,33 @@ def issues_mutation(dataset_id, ref, validator_output):
     """
     Return the OpenNeuro mutation to update any validation issues.
     """
-    issues = validator_output.warnings + validator_output.errors
+    issues = {
+        'datasetId': dataset_id,
+        'id': ref,
+        'issues': validator_output['issues']['warnings'] + validator_output['issues']['errors']
+    }
     return {
-        'issues': {
-            'datasetId': dataset_id,
-            'ref': ref,
-            'issues': issues
-        }
+        'query': 'mutation ($issues: ValidationInput!) { updateValidation(validation: $issues) }',
+        'variables':
+            {
+                'issues': issues
+            }
     }
 
 
 @app.task
-def validate_dataset_async(dataset_id, dataset_path, ref):
-    validator_output = validate_dataset(dataset_path)
+def validate_dataset(dataset_id, dataset_path, ref):
+    validator_output = validate_dataset_sync(dataset_path)
     if validator_output:
-        if 'errors' in validator_output or 'warnings' in validator_output:
-            requests.post(
+        if 'issues' in validator_output:
+            r = requests.post(
                 url=GRAPHQL_ENDPOINT, json=issues_mutation(dataset_id, ref, validator_output))
+            if r.status_code != 200:
+                raise Exception(r.text)
         if 'summary' in validator_output:
-            requests.post(
+            r = requests.post(
                 url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output))
+            if r.status_code != 200:
+                raise Exception(r.text)
     else:
         raise Exception('Validation failed unexpectedly')
