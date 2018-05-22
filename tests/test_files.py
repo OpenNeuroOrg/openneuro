@@ -40,10 +40,10 @@ def test_add_file(client, annex_path):
 
 def test_add_existing_file(client):
     ds_id = 'ds000001'
-    file_data = 'should not update'
+    file_data = 'should update'
     response = client.simulate_post(
         '/datasets/{}/files/dataset_description.json'.format(ds_id), body=file_data)
-    assert response.status == falcon.HTTP_CONFLICT
+    assert response.status == falcon.HTTP_OK
 
 
 def test_add_directory_path(client):

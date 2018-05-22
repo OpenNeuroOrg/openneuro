@@ -4,7 +4,7 @@ import falcon
 
 from datalad_service.common.annex import get_from_header
 from datalad_service.common.celery import dataset_queue
-from datalad_service.tasks.files import unlock_files, commit_files, get_files
+from datalad_service.tasks.files import unlock_files, commit_files, get_files, remove_files
 
 
 class FilesResource(object):
@@ -48,24 +48,41 @@ class FilesResource(object):
             resp.media = {'files': files.get()}
 
     def on_post(self, req, resp, dataset, filename):
-        """Post will only create new files and always adds them to the annex."""
+        """Post will create new files and adds them to the annex if they do not exist, else update existing files."""
         queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
-            try:
-                # Make any missing parent directories
-                file_path = os.path.join(ds_path, filename)
-                os.makedirs(os.path.dirname(file_path), exist_ok=True)
-                # Begin writing stream to disk
-                self._update_file(file_path, req.stream)
-                # Add to dataset
+            file_path = os.path.join(ds_path, filename)
+            if os.path.exists(file_path):
                 ds = self.store.get_dataset(dataset)
-                media_dict = {'created': filename}
+                media_dict = {'updated': filename}
+                # Record if this was done on behalf of a user
+                name, email = get_from_header(req)
+                if name and email:
+                    media_dict['name'] = name
+                    media_dict['email'] = email
+                unlock = unlock_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
+                                                  'files': [filename]})
+                unlock.wait()
+                self._update_file(file_path, req.stream)
+                # ds.publish(to='github')
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
-            except PermissionError:
-                resp.media = {'error': 'file already exists'}
-                resp.status = falcon.HTTP_CONFLICT
+            else:
+                try:
+                    # Make any missing parent directories
+                    
+                    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                    # Begin writing stream to disk
+                    self._update_file(file_path, req.stream)
+                    # Add to dataset
+                    ds = self.store.get_dataset(dataset)
+                    media_dict = {'created': filename}
+                    resp.media = media_dict
+                    resp.status = falcon.HTTP_OK
+                except PermissionError:
+                    resp.media = {'error': 'file already exists'}
+                    resp.status = falcon.HTTP_CONFLICT
         else:
             resp.media = {'error': 'filename is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST
@@ -100,6 +117,35 @@ class FilesResource(object):
             else:
                 resp.media = {'error': 'no such file'}
                 resp.status = falcon.HTTP_NOT_FOUND
+        else:
+            resp.media = {'error': 'filename is missing'}
+            resp.status = falcon.HTTP_BAD_REQUEST
+
+    def on_delete(self, req, resp, dataset, filename):
+        """Delete an existing file from a dataset"""
+        queue = dataset_queue(dataset)
+        if filename:
+            ds_path = self.store.get_dataset_path(dataset)
+            file_path = os.path.join(ds_path, filename)    
+            if os.path.exists(file_path):
+                ds = self.store.get_dataset(dataset)
+                media_dict = {'deleted': filename}
+                name, email = get_from_header(req)
+                if name and email:
+                    media_dict['name'] = name
+                    media_dict['email'] = email
+
+                # unlock = unlock_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={'files': [filename]})
+                # unlock.wait()
+                
+                remove = remove_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={'files': [filename], 'name': name, 'email': email})
+                remove.wait()
+                
+                resp.media = media_dict
+                resp.status = falcon.HTTP_OK
+            else:
+                resp.media = {'error': 'no such file'}
+                resp.status = falcon.HTTP_NOT_FOUND          
         else:
             resp.media = {'error': 'filename is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST

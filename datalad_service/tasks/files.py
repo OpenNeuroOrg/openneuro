@@ -27,3 +27,10 @@ def get_files(store, dataset, branch=None):
     """Get the working tree, optionally a branch tree."""
     ds = store.get_dataset(dataset)
     return get_repo_files(ds, branch)
+
+@dataset_task
+def remove_files(store, dataset, files, name=None, email=None):
+    ds = store.get_dataset(dataset)
+    with CommitInfo(ds, name, email):
+        for filename in files:
+            ds.remove(filename, check=False)
