@@ -31,6 +31,8 @@ class DraftResource(object):
                 'files': None, 'name': name, 'email': email})
             commit.wait()
             if not commit.failed():
+                # Attach the commit hash to response
+                media_dict['ref'] = commit.get()
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
         else:
