@@ -60,10 +60,6 @@ def create_snapshot(store, dataset, snapshot):
     tagged = [tag for tag in ds.repo.get_tags() if tag['name'] == snapshot]
     if not tagged:
         ds.save(version_tag=snapshot)
-        queue = dataset_queue(dataset)
-        publish = publish_snapshot.s(store.annex_path, dataset,
-                                     snapshot, realm='PRIVATE')
-        publish.apply_async(queue=queue)
     else:
         raise Exception(
             'Tag "{}" already exists, name conflict'.format(snapshot))
