@@ -2,9 +2,10 @@
  * @jest-environment ./mongo-environment.js
  */
 import request from 'superagent'
-import mongo from '../../libs/mongo'
-import { createDataset, createSnapshot } from '../dataset'
-import config from '../../config'
+import mongo from '../../libs/mongo.js'
+import { createDataset } from '../dataset.js'
+import { createSnapshot } from '../snapshots.js'
+import config from '../../config.js'
 
 // Mock requests to Datalad service
 jest.mock('superagent')
