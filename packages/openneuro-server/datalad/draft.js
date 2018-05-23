@@ -3,16 +3,29 @@
  */
 import request from 'superagent'
 import mongo from '../libs/mongo.js'
+import { redis } from '../libs/redis.js'
 import config from '../config.js'
 
 const uri = config.datalad.uri
 
-export const getDraftFiles = datasetId => {
+const draftFilesKey = (datasetId, revision) => {
+  return `openneuro:draftFiles:${datasetId}:${revision}`
+}
+
+export const getDraftFiles = (datasetId, revision) => {
   const filesUrl = `${uri}/datasets/${datasetId}/files`
-  return request
-    .get(filesUrl)
-    .set('Accept', 'application/json')
-    .then(({ body: { files } }) => files)
+  const key = draftFilesKey(datasetId, revision)
+  return redis.get(key).then(data => {
+    if (data) return JSON.parse(data)
+    else
+      return request
+        .get(filesUrl)
+        .set('Accept', 'application/json')
+        .then(({ body: { files } }) => {
+          redis.set(key, JSON.stringify(files))
+          return files
+        })
+  })
 }
 
 export const updateDatasetRevision = datasetId => gitRef => {
