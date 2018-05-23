@@ -16,13 +16,15 @@ const getDatasetIssues = gql`
           code
           reason
           files {
-            filename
-            path
-            relativePath
             evidence
             line
             character
             reason
+            file {
+              name
+              path
+              relativePath
+            }
           }
           additionalFileCount
         }

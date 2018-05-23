@@ -116,6 +116,7 @@ const typeDefs = `
     created: DateTime
     authors: [Author]
     summary: Summary
+    issues: [ValidationIssue]
     files: [DatasetFile]
   }
 
@@ -162,9 +163,7 @@ const typeDefs = `
   type ValidationIssueFile {
     key: String!
     code: Int!
-    filename: String
-    path: String
-    relativePath: String
+    file: ValidationIssueFileDetail
     evidence: String
     line: Int
     character: Int
@@ -175,14 +174,24 @@ const typeDefs = `
   input ValidationIssueFileInput {
     key: String!
     code: Int!
-    filename: String
-    path: String
-    relativePath: String
+    file: ValidationIssueFileDetailInput
     evidence: String
     line: Int
     character: Int
     severity: Severity!
     reason: String
+  }
+
+  type ValidationIssueFileDetail {
+    name: String
+    path: String
+    relativePath: String
+  }
+
+  input ValidationIssueFileDetailInput {
+    name: String
+    path: String
+    relativePath: String
   }
 
   # File metadata and link to contents
