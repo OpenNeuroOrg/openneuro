@@ -11,6 +11,13 @@ const snapshotKey = (datasetId, tag) => {
   return `openneuro:snapshot:${datasetId}:${tag}`
 }
 
+/**
+ * Get a list of all snapshot tags available for a dataset
+ *
+ * This is equivalent to `git tag` on the repository
+ *
+ * @param {string} datasetId Dataset accession number
+ */
 export const getSnapshots = datasetId => {
   const url = `${uri}/datasets/${datasetId}/snapshots`
   return request
@@ -21,6 +28,11 @@ export const getSnapshots = datasetId => {
     })
 }
 
+/**
+ * Get the contents of a snapshot (files, git metadata) from datalad-service
+ * @param {string} datasetId Dataset accession number
+ * @param {string} tag Tag name to retrieve
+ */
 export const getSnapshot = (datasetId, tag) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const key = snapshotKey(datasetId, tag)
