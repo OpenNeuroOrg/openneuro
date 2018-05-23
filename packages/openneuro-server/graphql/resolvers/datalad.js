@@ -1,4 +1,5 @@
 import { summary } from './summary.js'
+import { issues } from './issues.js'
 import { getDraftFiles } from '../../datalad/draft.js'
 import { getSnapshot, getSnapshots } from '../../datalad/snapshots.js'
 
@@ -10,6 +11,7 @@ export const draft = obj => {
     id: obj.revision,
     files,
     summary: () => summary(obj),
+    issues: () => issues(obj),
     modified: new Date(), // TODO - Return cache age here
   }))
 }
