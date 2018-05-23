@@ -9,6 +9,7 @@ import {
   updatePublic,
   updateFiles,
   deleteFiles,
+  updateSnapshotFileUrls,
 } from './dataset.js'
 import { updateSummary, updateValidation } from './validation.js'
 import { draft, snapshot, snapshots } from './datalad.js'
@@ -35,6 +36,7 @@ export default {
     createSnapshot,
     updateSummary,
     updateValidation,
+    updateSnapshotFileUrls,
     updatePublic,
   },
   User: user,
