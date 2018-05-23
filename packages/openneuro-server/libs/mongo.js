@@ -44,6 +44,7 @@ export default {
       stars: null,
       dois: null,
       keys: null,
+      files: null,
     },
     scitran: {
       projects: null,
