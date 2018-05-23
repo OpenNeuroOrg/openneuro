@@ -39,5 +39,9 @@ def create_app(annex_path):
     api.add_route('/datasets/{dataset}/snapshots', dataset_snapshots)
     api.add_route(
         '/datasets/{dataset}/snapshots/{snapshot}', dataset_snapshots)
+    api.add_route(
+        '/datasets/{dataset}/snapshots/{snapshot}/files', dataset_files)
+    api.add_route(
+        '/datasets/{dataset}/snapshots/{snapshot}/files/{filename:path}', dataset_files)
 
     return api
