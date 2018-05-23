@@ -6,7 +6,7 @@ class ValidationPanel extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      activeKey: null,
+      activeKey: '2',
     }
     this.togglePanel = this.togglePanel.bind(this)
   }
@@ -36,7 +36,7 @@ class ValidationPanel extends React.Component {
 
 ValidationPanel.propTypes = {
   heading: PropTypes.object,
-  children: PropTypes.array,
+  children: PropTypes.node,
 }
 
 export default ValidationPanel
