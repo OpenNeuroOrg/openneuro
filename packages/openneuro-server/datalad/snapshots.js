@@ -7,9 +7,41 @@ import config from '../config.js'
 
 const uri = config.datalad.uri
 
-const snapshotKey = (datasetId, tag) => {
-  return `openneuro:snapshot:${datasetId}:${tag}`
+/**
+ * Index of snapshots
+ *
+ * This should get cleared when snapshots are added or removed
+ * @param {string} datasetId
+ */
+const snapshotIndexKey = datasetId => {
+  return `openneuro:snapshot-index:${datasetId}`
 }
+
+/**
+ * Snapshot the current working tree for a dataset
+ * @param {String} datasetId - Dataset ID string
+ * @param {String} tag - Snapshot identifier and git tag
+ * @returns {Promise} - resolves when tag is created
+ */
+export const createSnapshot = async (datasetId, tag) => {
+  const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
+  const indexKey = snapshotIndexKey(datasetId)
+  const sKey = snapshotKey(datasetId, tag)
+  // Only create after the key is deleted to prevent race condition
+  redis.del(indexKey).then(() =>
+    request
+      .post(url)
+      .set('Accept', 'application/json')
+      .then(({ body }) =>
+        // Eager caching for snapshots
+        // Set the key and after resolve to body
+        redis.set(sKey, JSON.stringify(body)).then(() => body),
+      ),
+  )
+}
+
+// TODO - deleteSnapshot
+// It should delete the index redis key
 
 /**
  * Get a list of all snapshot tags available for a dataset
@@ -20,12 +52,30 @@ const snapshotKey = (datasetId, tag) => {
  */
 export const getSnapshots = datasetId => {
   const url = `${uri}/datasets/${datasetId}/snapshots`
-  return request
-    .get(url)
-    .set('Accept', 'application/json')
-    .then(({ body: { snapshots } }) => {
-      return snapshots
-    })
+  const key = snapshotIndexKey(datasetId)
+  return redis.get(key).then(data => {
+    if (data) return JSON.parse(data)
+    else
+      return request
+        .get(url)
+        .set('Accept', 'application/json')
+        .then(({ body: { snapshots } }) => {
+          redis.set(key, JSON.stringify(snapshots))
+          return snapshots
+        })
+  })
+}
+
+/**
+ * Snapshot contents key
+ *
+ * Immutable data
+ *
+ * @param {string} datasetId
+ * @param {string} tag
+ */
+const snapshotKey = (datasetId, tag) => {
+  return `openneuro:snapshot:${datasetId}:${tag}`
 }
 
 /**

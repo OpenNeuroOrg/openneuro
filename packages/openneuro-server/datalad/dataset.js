@@ -98,20 +98,6 @@ export const getDatasets = () => {
 }
 
 /**
- * Snapshot the current working tree for a dataset
- * @param {String} datasetId - Dataset ID string
- * @param {String} tag - Snapshot identifier and git tag
- * @returns {Promise} - resolves when tag is created
- */
-export const createSnapshot = async (datasetId, tag) => {
-  const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
-  return request
-    .post(url)
-    .set('Accept', 'application/json')
-    .then(({ body }) => body)
-}
-
-/**
  * Convert to URL compatible path
  * @param {String} path
  */

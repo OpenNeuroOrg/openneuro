@@ -1,5 +1,6 @@
-import * as datalad from '../../datalad/dataset'
-import { updateDatasetRevision } from '../../datalad/draft'
+import * as datalad from '../../datalad/dataset.js'
+import * as snapshots from '../../datalad/snapshots.js'
+import { updateDatasetRevision } from '../../datalad/draft.js'
 
 export const dataset = (obj, { id }) => {
   return datalad.getDataset(id)
@@ -27,7 +28,7 @@ export const deleteDataset = (obj, { label }, { user, userInfo }) => {
  * Tag the working tree for a dataset
  */
 export const createSnapshot = (obj, { datasetId, tag }) => {
-  return datalad.createSnapshot(datasetId, tag)
+  return snapshots.createSnapshot(datasetId, tag)
 }
 
 /**
