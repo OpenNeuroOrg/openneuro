@@ -52,13 +52,10 @@ def issues_mutation(dataset_id, ref, validator_output):
     all_issues = validator_output['issues']['warnings'] + \
         validator_output['issues']['errors']
     for issue in all_issues:
-        # Flatten the returned file objects to useful metadata
+        # Remove extra stats to keep collection size down
         if 'files' in issue:
             for f in issue['files']:
-                f['filename'] = f['file']['name']
-                f['path'] = f['file']['path']
-                f['relativePath'] = f['file']['relativePath']
-                del f['file']
+                del f['file']['stats']
     issues = {
         'datasetId': dataset_id,
         'id': ref,
