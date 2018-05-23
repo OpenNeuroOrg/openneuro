@@ -50,7 +50,7 @@ class FilesResource(object):
                     resp.stream = fd
                     resp.stream_len = os.fstat(fd.fileno()).st_size
                     resp.status = falcon.HTTP_OK
-            except FileNotFoundError:
+            except:
                 resp.media = {'error': 'file does not exist'}
                 resp.status = falcon.HTTP_NOT_FOUND
         else:
