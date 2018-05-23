@@ -28,7 +28,7 @@ export const createSnapshot = async (datasetId, tag) => {
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
   // Only create after the key is deleted to prevent race condition
-  redis.del(indexKey).then(() =>
+  return redis.del(indexKey).then(() =>
     request
       .post(url)
       .set('Accept', 'application/json')
