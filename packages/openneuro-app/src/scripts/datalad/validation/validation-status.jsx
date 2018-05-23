@@ -99,6 +99,11 @@ const Warnings = ({ errors, warnings }) => (
   </ValidationPanel>
 )
 
+Warnings.propTypes = {
+  errors: PropTypes.array,
+  warnings: PropTypes.array,
+}
+
 const Errors = ({ errors, warnings }) => (
   <ValidationPanel heading={errorHeader(errors.length)}>
     <span className="message error fade-in">
@@ -111,6 +116,11 @@ const Errors = ({ errors, warnings }) => (
   </ValidationPanel>
 )
 
+Errors.propTypes = {
+  errors: PropTypes.array,
+  warnings: PropTypes.array,
+}
+
 const ValidationStatus = ({ issues }) => {
   const warnings = issues.filter(issue => issue.severity === 'warning')
   const errors = issues.filter(issue => issue.severity === 'error')
@@ -121,6 +131,10 @@ const ValidationStatus = ({ issues }) => {
   } else {
     return <Valid />
   }
+}
+
+ValidationStatus.propTypes = {
+  issues: PropTypes.array,
 }
 
 export default ValidationStatus

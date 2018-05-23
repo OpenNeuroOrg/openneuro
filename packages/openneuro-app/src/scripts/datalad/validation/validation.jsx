@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ValidationQuery from './validation-query.jsx'
 
 const Validation = ({ datasetId }) => (
@@ -7,5 +8,9 @@ const Validation = ({ datasetId }) => (
     <ValidationQuery datasetId={datasetId} />
   </div>
 )
+
+Validation.propTypes = {
+  datasetId: PropTypes.string,
+}
 
 export default Validation

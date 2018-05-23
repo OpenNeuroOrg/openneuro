@@ -122,8 +122,6 @@ class DatasetContent extends Reflux.Component {
     let content
 
     if (dataset) {
-      let errors = dataset.validation.errors
-      let warnings = dataset.validation.warnings
       // meta description is README unless it's empty
       content = (
         <div className="row">
