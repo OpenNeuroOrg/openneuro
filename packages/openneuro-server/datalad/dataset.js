@@ -210,3 +210,22 @@ export const updatePublic = (datasetId, publicFlag) => {
   //   .set('Accept', 'application/json')
   //   .then(({ body }) => body)
 }
+
+export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
+  //insert the file url data into mongo
+  return c.crn.files.updateOne(
+    {
+      datasetId: datasetId, 
+      tag: snapshotTag
+    },
+    {
+      $set: {
+        datasetId: datasetId, 
+        tag: snapshotTag, 
+        files: files
+      }
+    },
+    {
+      upsert: true
+    })
+}
