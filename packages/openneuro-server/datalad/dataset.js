@@ -146,16 +146,18 @@ export const updateFile = (datasetId, path, file) => {
   // Cannot use superagent 'request' due to inability to post streams
   return new Promise(async (resolve, reject) => {
     const { filename, stream, mimetype } = await file
-    stream.pipe(
-      requestNode(
-        {
-          url: fileUrl(datasetId, path, filename),
-          method: 'put',
-          headers: { 'Content-Type': mimetype },
-        },
-        err => (err ? reject(err) : resolve()),
-      ),
-    )
+    stream
+      .pipe(
+        requestNode(
+          {
+            url: fileUrl(datasetId, path, filename),
+            method: 'put',
+            headers: { 'Content-Type': mimetype },
+          },
+          err => (err ? reject(err) : resolve()),
+        ),
+      )
+      .on('error', err => reject(err))
   })
 }
 
@@ -201,17 +203,18 @@ export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
   //insert the file url data into mongo
   return c.crn.files.updateOne(
     {
-      datasetId: datasetId, 
-      tag: snapshotTag
+      datasetId: datasetId,
+      tag: snapshotTag,
     },
     {
       $set: {
-        datasetId: datasetId, 
-        tag: snapshotTag, 
-        files: files
-      }
+        datasetId: datasetId,
+        tag: snapshotTag,
+        files: files,
+      },
     },
     {
-      upsert: true
-    })
+      upsert: true,
+    },
+  )
 }
