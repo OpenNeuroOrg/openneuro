@@ -110,3 +110,13 @@ export const deleteFilesTree = (datasetId, fileTree) => {
 export const updatePublic = (obj, { datasetId, publicFlag }) => {
   return datalad.updatePublic(datasetId, publicFlag)
 }
+
+/**
+ * Update the file urls within a snapshot
+ */
+export const updateSnapshotFileUrls = (obj, {fileUrls}) => {
+  let datasetId = fileUrls.datasetId
+  let snapshotTag = fileUrls.tag
+  let files = fileUrls.files
+  return datalad.updateSnapshotFileUrls(datasetId, snapshotTag, files)
+}
