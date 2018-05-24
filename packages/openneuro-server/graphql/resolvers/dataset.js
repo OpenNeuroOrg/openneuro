@@ -1,4 +1,6 @@
-import * as datalad from '../../datalad/dataset'
+import * as datalad from '../../datalad/dataset.js'
+import * as snapshots from '../../datalad/snapshots.js'
+import { updateDatasetRevision } from '../../datalad/draft.js'
 
 export const dataset = (obj, { id }) => {
   return datalad.getDataset(id)
@@ -26,7 +28,7 @@ export const deleteDataset = (obj, { label }, { user, userInfo }) => {
  * Tag the working tree for a dataset
  */
 export const createSnapshot = (obj, { datasetId, tag }) => {
-  return datalad.createSnapshot(datasetId, tag)
+  return snapshots.createSnapshot(datasetId, tag)
 }
 
 /**
@@ -41,7 +43,10 @@ export const updateFiles = (
   const promises = updateFilesTree(datasetId, fileTree)
   return Promise.all(promises)
     .then(() =>
-      datalad.commitFiles(datasetId, `${firstname} ${lastname}`, email),
+      datalad
+        .commitFiles(datasetId, `${firstname} ${lastname}`, email)
+        .then(res => res.body.ref)
+        .then(updateDatasetRevision(datasetId)),
     )
     .then(() => ({
       id: new Date(),
@@ -90,18 +95,19 @@ export const deleteFilesTree = (datasetId, fileTree) => {
     const filesPromises = files.map(file =>
       datalad.deleteFile(datasetId, name, file),
     )
-    const dirPromises = directories.map(tree => deleteFilesTree(datasetId, tree))
+    const dirPromises = directories.map(tree =>
+      deleteFilesTree(datasetId, tree),
+    )
     return filesPromises.concat(...dirPromises)
   } else {
-    return [datalad.deleteFile(datasetId, name, {name: ''})]
+    return [datalad.deleteFile(datasetId, name, { name: '' })]
   }
-  
 }
 
 /**
  * Update the dataset Public status
  */
-export const updatePublic = (obj, { datasetId, publicFlag}) => {
+export const updatePublic = (obj, { datasetId, publicFlag }) => {
   return datalad.updatePublic(datasetId, publicFlag)
 }
 

@@ -6,6 +6,7 @@ const typeDefs = `
   scalar DateTime
   scalar Time
   scalar Upload
+  scalar BigInt
 
   type Query {
     # One dataset
@@ -50,7 +51,7 @@ const typeDefs = `
     sessions: [String]
     subjects: [String]
     tasks: [String]
-    size: Int!
+    size: BigInt!
     totalFiles: Int!
   }
 
@@ -123,6 +124,7 @@ const typeDefs = `
     created: DateTime
     authors: [Author]
     summary: Summary
+    issues: [ValidationIssue]
     files: [DatasetFile]
   }
 
@@ -139,7 +141,7 @@ const typeDefs = `
     sessions: [String]
     subjects: [String]
     tasks: [String]
-    size: Int!
+    size: BigInt!
     totalFiles: Int!
   }
 
@@ -169,9 +171,7 @@ const typeDefs = `
   type ValidationIssueFile {
     key: String!
     code: Int!
-    filename: String
-    path: String
-    relativePath: String
+    file: ValidationIssueFileDetail
     evidence: String
     line: Int
     character: Int
@@ -182,9 +182,7 @@ const typeDefs = `
   input ValidationIssueFileInput {
     key: String!
     code: Int!
-    filename: String
-    path: String
-    relativePath: String
+    file: ValidationIssueFileDetailInput
     evidence: String
     line: Int
     character: Int
@@ -192,11 +190,23 @@ const typeDefs = `
     reason: String
   }
 
+  type ValidationIssueFileDetail {
+    name: String
+    path: String
+    relativePath: String
+  }
+
+  input ValidationIssueFileDetailInput {
+    name: String
+    path: String
+    relativePath: String
+  }
+
   # File metadata and link to contents
   type DatasetFile {
     id: ID!
     filename: String!
-    size: Int
+    size: BigInt
     urls: [String]
   }
 

@@ -2,12 +2,14 @@
  * @jest-environment ./mongo-environment.js
  */
 import request from 'superagent'
-import mongo from '../../libs/mongo'
-import { createDataset, createSnapshot } from '../dataset'
-import config from '../../config'
+import mongo from '../../libs/mongo.js'
+import { createDataset } from '../dataset.js'
+import { createSnapshot } from '../snapshots.js'
+import config from '../../config.js'
 
 // Mock requests to Datalad service
 jest.mock('superagent')
+jest.mock('../../libs/redis.js')
 
 beforeAll(async () => {
   await mongo.connect(global.__MONGO_URI__)
@@ -54,7 +56,8 @@ describe('dataset model operations', () => {
       const dsId = await createDataset('a label')
       // Reset call count for request.post
       request.post.mockClear()
-      await createSnapshot(dsId, tag)
+      request.__setMockResponseBody({})
+      await createSnapshot(dsId, tag, false)
       expect(request.post).toHaveBeenCalledTimes(1)
       expect(request.post).toHaveBeenCalledWith(
         expect.stringContaining(

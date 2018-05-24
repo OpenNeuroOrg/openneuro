@@ -14,7 +14,7 @@ import actions from './dataset.actions.js'
 import MetaData from './dataset.metadata.jsx'
 import Statuses from './dataset.statuses.jsx'
 import Metrics from './dataset.metrics.jsx'
-import Validation from './dataset.validation.jsx'
+import Validation from '../datalad/validation/validation.jsx'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import FileTree from '../common/partials/file-tree.jsx'
 import Jobs from './dataset.jobs.jsx'
@@ -122,8 +122,6 @@ class DatasetContent extends Reflux.Component {
     let content
 
     if (dataset) {
-      let errors = dataset.validation.errors
-      let warnings = dataset.validation.warnings
       // meta description is README unless it's empty
       content = (
         <div className="row">
@@ -156,14 +154,7 @@ class DatasetContent extends Reflux.Component {
           </div>
           <div className="col-xs-6">
             <div>
-              <Validation
-                errors={errors}
-                warnings={warnings}
-                validating={dataset.status.validating}
-                display={
-                  !dataset.status.incomplete && !this.state.datasets.uploading
-                }
-              />
+              <Validation datasetId={dataset.linkID} />
               <div className="fade-in col-xs-12">
                 <ErrorBoundary message="The server failed to provide OpenNeuro with a list of jobs.">
                   <Jobs />

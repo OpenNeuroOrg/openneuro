@@ -1,4 +1,5 @@
 import { summary } from './summary.js'
+import { issues } from './issues.js'
 import { getDraftFiles } from '../../datalad/draft.js'
 import { getSnapshot, getSnapshots } from '../../datalad/snapshots.js'
 
@@ -6,9 +7,11 @@ import { getSnapshot, getSnapshots } from '../../datalad/snapshots.js'
  * Resolvers for state held by the datalad service
  */
 export const draft = obj => {
-  return getDraftFiles(obj.id).then(files => ({
+  return getDraftFiles(obj.id, obj.revision).then(files => ({
+    id: obj.revision,
     files,
-    summary,
+    summary: () => summary(obj),
+    issues: () => issues(obj),
     modified: new Date(), // TODO - Return cache age here
   }))
 }
