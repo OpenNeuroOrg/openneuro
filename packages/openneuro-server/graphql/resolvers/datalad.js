@@ -7,9 +7,8 @@ import { getSnapshot, getSnapshots } from '../../datalad/snapshots.js'
  */
 export const draft = obj => {
   return getDraftFiles(obj.id).then(files => ({
-    id: obj.revision,
     files,
-    summary: () => summary(obj),
+    summary,
     modified: new Date(), // TODO - Return cache age here
   }))
 }

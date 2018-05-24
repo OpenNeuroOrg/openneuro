@@ -1,5 +1,4 @@
 import * as datalad from '../../datalad/dataset'
-import { updateDatasetRevision } from '../../datalad/draft'
 
 export const dataset = (obj, { id }) => {
   return datalad.getDataset(id)
@@ -42,10 +41,7 @@ export const updateFiles = (
   const promises = updateFilesTree(datasetId, fileTree)
   return Promise.all(promises)
     .then(() =>
-      datalad
-        .commitFiles(datasetId, `${firstname} ${lastname}`, email)
-        .then(res => res.body.ref)
-        .then(updateDatasetRevision(datasetId)),
+      datalad.commitFiles(datasetId, `${firstname} ${lastname}`, email),
     )
     .then(() => ({
       id: new Date(),
@@ -94,19 +90,18 @@ export const deleteFilesTree = (datasetId, fileTree) => {
     const filesPromises = files.map(file =>
       datalad.deleteFile(datasetId, name, file),
     )
-    const dirPromises = directories.map(tree =>
-      deleteFilesTree(datasetId, tree),
-    )
+    const dirPromises = directories.map(tree => deleteFilesTree(datasetId, tree))
     return filesPromises.concat(...dirPromises)
   } else {
-    return [datalad.deleteFile(datasetId, name, { name: '' })]
+    return [datalad.deleteFile(datasetId, name, {name: ''})]
   }
+  
 }
 
 /**
  * Update the dataset Public status
  */
-export const updatePublic = (obj, { datasetId, publicFlag }) => {
+export const updatePublic = (obj, { datasetId, publicFlag}) => {
   return datalad.updatePublic(datasetId, publicFlag)
 }
 

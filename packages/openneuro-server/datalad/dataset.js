@@ -59,14 +59,12 @@ export const createDataset = (label, uploader, userInfo) => {
  */
 export const createDatasetModel = (id, label, uploader) => {
   const creationTime = new Date()
-  const revision = null // Empty repo has no hash yet
   const datasetObj = {
     id,
     label,
     created: creationTime,
     modified: creationTime,
     uploader,
-    revision,
   }
   return c.crn.datasets.insertOne(datasetObj)
 }
@@ -81,11 +79,12 @@ export const getDataset = id => {
 /**
  * Delete dataset and associated documents
  */
-export const deleteDataset = id => {
+export const deleteDataset= (id) => {
   let deleteURI = `${uri}/datasets/${id}`
-  request.del(deleteURI).then(() => {
-    return c.crn.datasets.deleteOne({ id })
-  })
+  request.del(deleteURI)
+    .then(() => {
+      return c.crn.datasets.deleteOne({ id })
+    })
 }
 
 /**
@@ -182,8 +181,7 @@ export const commitFiles = (datasetId, name, email) => {
   setCommitInfo(req, name, email)
   return req
 }
-
-/**
+/** 
  * Delete an existing file in a dataset
  */
 export const deleteFile = (datasetId, path, file) => {
@@ -197,12 +195,8 @@ export const deleteFile = (datasetId, path, file) => {
  */
 export const updatePublic = (datasetId, publicFlag) => {
   // update mongo
-  return c.crn.datasets.updateOne(
-    { id: datasetId },
-    { $set: { public: publicFlag } },
-    { upsert: true },
-  )
-
+  return c.crn.datasets.updateOne({id: datasetId}, {$set: {public: publicFlag}}, {upsert: true})
+  
   // TODO: send request to backend to initiate uplaod to s3 bucket
   // const url = `${uri}/datasets/${datasetId}/updatePublic/${publicFlag}`
   // return request

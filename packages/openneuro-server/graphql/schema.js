@@ -6,7 +6,6 @@ const typeDefs = `
   scalar DateTime
   scalar Time
   scalar Upload
-  scalar BigInt
 
   type Query {
     # One dataset
@@ -51,7 +50,7 @@ const typeDefs = `
     sessions: [String]
     subjects: [String]
     tasks: [String]
-    size: BigInt!
+    size: Int!
     totalFiles: Int!
   }
 
@@ -140,7 +139,7 @@ const typeDefs = `
     sessions: [String]
     subjects: [String]
     tasks: [String]
-    size: BigInt!
+    size: Int!
     totalFiles: Int!
   }
 
@@ -197,7 +196,7 @@ const typeDefs = `
   type DatasetFile {
     id: ID!
     filename: String!
-    size: BigInt
+    size: Int
     urls: [String]
   }
 
