@@ -39,6 +39,8 @@ const typeDefs = `
     updateSummary(summary: SummaryInput!): Summary
     # Update a draft with validation results
     updateValidation(validation: ValidationInput!): Boolean
+    # Update a snapshot with a list of file urls
+    updateSnapshotFileUrls(fileUrls: FileUrls!): Boolean
   }
 
   input SummaryInput {
@@ -56,6 +58,12 @@ const typeDefs = `
     id: ID! # Git reference for this validation
     datasetId: ID!
     issues: [ValidationIssueInput]!
+  }
+
+  input FileUrls {
+    datasetId: ID!
+    tag: String! # reference to the snapshot tag
+    files: [UpdateFileUrlInput]
   }
 
   # File tree
@@ -189,6 +197,12 @@ const typeDefs = `
     id: ID!
     filename: String!
     size: Int
+    urls: [String]
+  }
+
+  # Update file object
+  input UpdateFileUrlInput {
+    filename: String!
     urls: [String]
   }
 `
