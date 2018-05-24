@@ -27,15 +27,30 @@ class FilesResource(object):
                     break
                 new_file.write(chunk)
 
-    def on_get(self, req, resp, dataset, filename=None):
+    def on_get(self, req, resp, dataset, filename=None, snapshot='HEAD'):
         ds_path = self.store.get_dataset_path(dataset)
+        ds = self.store.get_dataset(dataset)
         if filename:
             try:
-                fd = open(os.path.join(ds_path, filename), 'rb')
-                resp.stream = fd
-                resp.stream_len = os.fstat(fd.fileno()).st_size
-                resp.status = falcon.HTTP_OK
-            except FileNotFoundError:
+                # get the reference to the file object location, or the file itself if its stored locally
+                fd = ds.repo.repo.git.show(snapshot + ':' + filename)
+
+                # if fd is a reference to the git annex file location, try to open that file. otherwise,
+                # it is a file to be returned
+                if fd.find('.git/annex') >= 0:
+                    fd = fd[fd.find('.git/annex'):] # remove leading relative folder paths
+
+                    # if fd fails, that means the file is not present in the annex and we need to get it from s3
+                    # so we send the client a 404 to indicate the file was not found locally.
+                    fd = open(os.path.join(ds_path, fd), 'rb')
+                    resp.stream = fd
+                    resp.stream_len = os.fstat(fd.fileno()).st_size
+                    resp.status = falcon.HTTP_OK
+                else:
+                    resp.stream = fd
+                    resp.stream_len = os.fstat(fd.fileno()).st_size
+                    resp.status = falcon.HTTP_OK
+            except:
                 resp.media = {'error': 'file does not exist'}
                 resp.status = falcon.HTTP_NOT_FOUND
         else:
@@ -44,7 +59,7 @@ class FilesResource(object):
             # {name, path, size}
             queue = dataset_queue(dataset)
             files = get_files.apply_async(
-                queue=queue, args=(self.store.annex_path, dataset))
+                queue=queue, args=(self.store.annex_path, dataset, snapshot))
             resp.media = {'files': files.get()}
 
     def on_post(self, req, resp, dataset, filename):

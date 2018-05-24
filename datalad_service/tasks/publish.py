@@ -4,9 +4,12 @@ from datalad_service.config import DATALAD_GITHUB_ORG
 from datalad_service.config import DATALAD_GITHUB_LOGIN
 from datalad_service.config import DATALAD_GITHUB_PASS
 import datalad_service.common.s3
-from datalad_service.common.s3 import DatasetRealm, s3_export
+from datalad_service.common.s3 import DatasetRealm, s3_export, s3_versions
 from datalad_service.common.celery import dataset_task
 
+import requests
+
+GRAPHQL_ENDPOINT = 'http://server:8111/crn/graphql'
 
 def create_github_repo(dataset, repo_name):
     """Setup a github sibling / remote."""
@@ -72,7 +75,30 @@ def publish_snapshot(store, dataset, snapshot, realm='PRIVATE'):
     siblings = ds.siblings()
     s3_remote = s3_sibling(ds, siblings)
     publish_target(ds, realm.s3_remote, snapshot)
+    versions = s3_versions(ds, realm, snapshot)
+    if (len(versions)):
+        r = requests.post(
+            url=GRAPHQL_ENDPOINT, json=file_urls_mutation(dataset_id, snapshot, versions))
+        if r.status_code != 200:
+            raise Exception(r.text)
     # Public publishes to GitHub
     if realm == DatasetRealm.PUBLIC:
         github_remote = github_sibling(ds, dataset_id, siblings)
         publish_target(ds, realm.github_remote, snapshot)
+
+def file_urls_mutation(dataset_id, snapshot_tag, file_urls):
+    """
+    Return the OpenNeuro mutation to update the file urls of a snapshot filetree
+    """
+    file_update = {
+        'datasetId': dataset_id,
+        'tag': snapshot_tag,
+        'files': file_urls
+    }
+    return {
+        'query': 'mutation ($files: FileUrls!) { updateSnapshotFileUrls(fileUrls: $files)}',
+        'variables': 
+        {
+            'files': file_update
+        }
+    }
