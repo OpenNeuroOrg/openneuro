@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import Usermenu from './navbar.usermenu.jsx'
-import UploadBtn from './navbar.upload-button.jsx'
+import Uploader from '../uploader/uploader.jsx'
 import actions from '../user/user.actions.js'
 import { Navbar } from 'react-bootstrap'
 
@@ -73,7 +73,7 @@ const NavMenu = ({ profile, scitran, isLoggedIn, loading }) => {
       <li className="link-admin">
         {scitran && scitran.root ? adminLink : null}
       </li>
-      <li className="link-dashboard">{isLoggedIn ? <UploadBtn /> : null}</li>
+      <li className="link-dashboard">{isLoggedIn ? <Uploader /> : null}</li>
       <li>
         <Navbar.Collapse>{loginButton}</Navbar.Collapse>
       </li>
