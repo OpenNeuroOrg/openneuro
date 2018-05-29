@@ -1,5 +1,8 @@
 import React from 'react'
+import UploaderContext from './uploader-context.js'
 
-const UploadStatus = () => <div>In progress upload status goes here.</div>
+const UploadStatus = () => (
+  <UploaderContext.Consumer>{uploader => null}</UploaderContext.Consumer>
+)
 
 export default UploadStatus
