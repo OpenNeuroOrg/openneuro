@@ -4,7 +4,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from './tooltip.jsx'
 import FileSelect from '../forms/file-select.jsx'
-import actions from '../../upload/upload.actions'
 
 // component setup -----------------------------------------------------------
 
@@ -91,7 +90,7 @@ export default class Status extends React.Component {
   // custom methods ------------------------------------------------------------
 
   _onFileSelect(files) {
-    actions.onResume(files, this.props.dataset.label)
+    // TODO - Fix on resume here...
   }
 }
 

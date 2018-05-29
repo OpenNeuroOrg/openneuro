@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import validate from 'bids-validator'
 import Spinner from '../common/partials/spinner.jsx'
-import Results from '../upload/upload.validation-results.jsx'
+import Results from '../validation/validation-results.jsx'
 import UploaderContext from './uploader-context.js'
 
 const UploadValidatorStatus = ({ issues, next }) => {

@@ -23,7 +23,6 @@ import Summary from './dataset.summary.jsx'
 import Comment from '../common/partials/comment.jsx'
 import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
-import uploadActions from '../upload/upload.actions.js'
 import userActions from '../user/user.actions.js'
 import { refluxConnect } from '../utils/reflux'
 
@@ -435,7 +434,7 @@ class DatasetContent extends Reflux.Component {
   }
 
   _onFileSelect(files) {
-    uploadActions.onResume(files, this.state.datasets.dataset.label)
+    // TODO - Re-enable resume here
   }
 }
 

@@ -2,17 +2,13 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import Reflux from 'reflux'
 import fileUtils from '../../utils/files'
 import bowser from 'bowser'
 import notifications from '../../notification/notification.actions'
-import UploadStore from '../../upload/upload.store.js'
-import { refluxConnect } from '../../utils/reflux'
 
-class Upload extends Reflux.Component {
+class Upload extends React.Component {
   constructor() {
     super()
-    refluxConnect(this, UploadStore, 'upload')
   }
 
   // life cycle events --------------------------------------------------
@@ -62,14 +58,6 @@ class Upload extends Reflux.Component {
       notifications.createAlert({
         type: 'Error',
         message: chromeMessage,
-      })
-    }
-    if (this.state.upload.uploadStatus === 'uploading') {
-      e.preventDefault()
-      notifications.createAlert({
-        type: 'Warning',
-        message:
-          'You may only upload one dataset at a time. Please wait for the current upload to finish, then try resuming again.',
       })
     }
     if (this.props.onClick) {

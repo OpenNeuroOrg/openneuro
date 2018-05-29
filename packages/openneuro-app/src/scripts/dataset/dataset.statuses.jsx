@@ -4,22 +4,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import Status from '../common/partials/status.jsx'
-import UploadStore from '../upload/upload.store.js'
 import { refluxConnect } from '../utils/reflux'
 
 class Statuses extends Reflux.Component {
   constructor() {
     super()
-    refluxConnect(this, UploadStore, 'upload')
   }
 
   // life cycle events --------------------------------------------------
 
   render() {
+    const uploading = false
     let dataset = this.props.dataset,
       minimal = this.props.minimal,
       status = dataset.status,
-      uploading = dataset._id === this.state.upload.projectId,
       uploaderSubscribed = dataset.uploaderSubscribed
 
     return (
