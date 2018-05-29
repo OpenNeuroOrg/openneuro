@@ -1,9 +1,11 @@
 import React from 'react'
+import { ApolloConsumer } from 'react-apollo'
+import { datasets, files } from 'openneuro-client'
 import UploaderContext from './uploader-context.js'
 import UploaderSetupRoutes from './uploader-setup-routes.jsx'
 import UploaderStatusRoutes from './uploader-status-routes.jsx'
 import UploadButton from './upload-button.jsx'
-import UploadProgressButton from './upload-button-progress.jsx'
+import UploadProgressButton from './upload-progress-button.jsx'
 import { locationFactory } from './uploader-location.js'
 
 /**
@@ -12,7 +14,7 @@ import { locationFactory } from './uploader-location.js'
  * Usable from anywhere, so this button sets up a modal and
  * virtual router to navigate within it.
  */
-class Uploader extends React.Component {
+class UploadClient extends React.Component {
   constructor(props) {
     super(props)
 
@@ -29,7 +31,8 @@ class Uploader extends React.Component {
       location: locationFactory('/hidden'), // Which step in the modal
       tree: {},
       list: [],
-      name: '',
+      name: '', // Relabel dataset during upload
+      resume: null, // Resume an existing dataset
       setLocation: this.setLocation, // Allow context consumers to change routes
       setName: this.setName, // Rename on upload (optionally)
       selectFiles: this.selectFiles, // Get files from the browser
@@ -39,6 +42,9 @@ class Uploader extends React.Component {
     }
   }
 
+  /**
+   * Initiate the upload workflow
+   */
   start() {
     this.setState({ location: locationFactory('/upload') })
   }
@@ -78,6 +84,28 @@ class Uploader extends React.Component {
 
   upload() {
     this.setState({ uploading: true, location: locationFactory('/upload') })
+    const client = this.props.client
+    if (this.state.resume) {
+      // Diff and add files
+    } else {
+      // Create dataset and then add files
+      client
+        .mutate({
+          mutation: datasets.createDataset,
+          variables: { label: this.state.name },
+        })
+        .then(({ data }) => data.createDataset.id)
+        .then(datasetId => {
+          client.mutate.updateFiles({
+            mutation: files.updateFiles,
+            variables: { datasetId, files: this.state.tree },
+          })
+        })
+        .catch(err => {
+          this.setState({ uploading: false })
+          throw err
+        })
+    }
   }
 
   render() {
@@ -98,5 +126,9 @@ class Uploader extends React.Component {
     }
   }
 }
+
+const Uploader = () => (
+  <ApolloConsumer>{client => <UploadClient client={client} />}</ApolloConsumer>
+)
 
 export default Uploader
