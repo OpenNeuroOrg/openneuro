@@ -1,12 +1,12 @@
 import React from 'react'
 import { ApolloConsumer } from 'react-apollo'
-import { datasets, files } from 'openneuro-client'
 import UploaderContext from './uploader-context.js'
 import UploaderSetupRoutes from './uploader-setup-routes.jsx'
 import UploaderStatusRoutes from './uploader-status-routes.jsx'
 import UploadButton from './upload-button.jsx'
 import UploadProgressButton from './upload-progress-button.jsx'
 import { locationFactory } from './uploader-location.js'
+import * as mutation from './upload-mutation.js'
 
 /**
  * Stateful uploader workflow and status
@@ -29,8 +29,7 @@ class UploadClient extends React.Component {
     this.state = {
       uploading: false, // An upload is processing
       location: locationFactory('/hidden'), // Which step in the modal
-      tree: {},
-      list: [],
+      files: [], // List of files being uploaded
       name: '', // Relabel dataset during upload
       resume: null, // Resume an existing dataset
       setLocation: this.setLocation, // Allow context consumers to change routes
@@ -61,13 +60,12 @@ class UploadClient extends React.Component {
    * Select the files for upload
    * @param {object} event onChange event from multi file select
    */
-  selectFiles({ tree, list }) {
-    if (list.length > 0) {
+  selectFiles({ files }) {
+    if (files.length > 0) {
       this.setState({
-        tree,
-        list,
+        files,
         location: locationFactory('/upload/rename'),
-        name: tree[0].name,
+        name: files[0].webkitRelativePath.split('/')[0],
       })
     } else {
       throw new Error('No files selected')
@@ -83,24 +81,17 @@ class UploadClient extends React.Component {
   }
 
   upload() {
-    this.setState({ uploading: true, location: locationFactory('/upload') })
+    this.setState({ uploading: true, location: locationFactory('/hidden') })
     const client = this.props.client
     if (this.state.resume) {
       // Diff and add files
     } else {
       // Create dataset and then add files
-      client
-        .mutate({
-          mutation: datasets.createDataset,
-          variables: { label: this.state.name },
-        })
-        .then(({ data }) => data.createDataset.id)
-        .then(datasetId => {
-          client.mutate.updateFiles({
-            mutation: files.updateFiles,
-            variables: { datasetId, files: this.state.tree },
-          })
-        })
+      mutation
+        .createDataset(client)(this.state.name)
+        .then(datasetId =>
+          mutation.updateFiles(client)(datasetId, this.state.files),
+        )
         .catch(err => {
           this.setState({ uploading: false })
           throw err
@@ -128,7 +119,13 @@ class UploadClient extends React.Component {
 }
 
 const Uploader = () => (
-  <ApolloConsumer>{client => <UploadClient client={client} />}</ApolloConsumer>
+  <ApolloConsumer>
+    {client => (
+      <div className="uploader">
+        <UploadClient client={client} />
+      </div>
+    )}
+  </ApolloConsumer>
 )
 
 export default Uploader

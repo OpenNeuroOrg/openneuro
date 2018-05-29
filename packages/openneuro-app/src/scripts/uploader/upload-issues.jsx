@@ -79,7 +79,7 @@ class UploadValidator extends React.Component {
 const UploadIssues = () => (
   <UploaderContext.Consumer>
     {uploader => (
-      <UploadValidator files={uploader.list} next={uploader.disclaimer} />
+      <UploadValidator files={uploader.files} next={uploader.disclaimer} />
     )}
   </UploaderContext.Consumer>
 )
