@@ -36,7 +36,7 @@ const mkLevels = (file, parent, tokens) => {
     } else {
       // Create directory
       const newDir = {
-        name: dirName,
+        name: parent.name ? `${parent.name}/${dirName}` : dirName,
         files: [],
         directories: [],
       }

@@ -92,6 +92,9 @@ class UploadClient extends React.Component {
         .then(datasetId =>
           mutation.updateFiles(client)(datasetId, this.state.files),
         )
+        .then(() => {
+          this.setState({ uploading: false })
+        })
         .catch(err => {
           this.setState({ uploading: false })
           throw err
