@@ -184,11 +184,11 @@ export default {
     // FILE OPERATIONS
 
     getFile(datasetId, filename, options) {
+      filename = this.encodeFilePath(filename)
       let uri = `/crn/datasets/${datasetId}/files/${filename}`
       if (options && options.snapshot) {
         uri = `/crn/snapshots/${datasetId}/files/${filename}`
       }
-      filename = this.encodeFilePath(filename)
       return new Promise((resolve, reject) => {
         request
           .get(uri, {
