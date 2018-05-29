@@ -67,10 +67,8 @@ class Upload extends React.Component {
 
   _onFileSelect(e) {
     if (e.target && e.target.files.length > 0) {
-      let files = e.target.files
-      let dirTree = fileUtils.generateTree(files)
-      let results = { tree: dirTree, list: files }
-      this.props.onChange(results)
+      const files = e.target.files
+      this.props.onChange({ files })
     }
   }
 
