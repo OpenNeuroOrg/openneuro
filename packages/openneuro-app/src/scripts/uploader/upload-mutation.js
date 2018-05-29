@@ -29,7 +29,9 @@ const mkLevels = (file, parent, tokens) => {
   } else {
     // Nodes are directories
     const dirName = tokens.shift()
-    const dirIndex = parent.directories.find(dir => dir.name === dirName)
+    const dirIndex = parent.directories.find(
+      dir => dir.name === `${parent.name}/${dirName}`,
+    )
     if (dirIndex) {
       // Directory exists
       mkLevels(file, parent.directories[dirIndex], tokens)
