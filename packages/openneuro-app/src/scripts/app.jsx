@@ -7,9 +7,17 @@ import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
 
+const getAuth = () => {
+  try {
+    return JSON.parse(localStorage.token).access_token
+  } catch (_) {
+    return null
+  }
+}
+
 const App = () => {
   return (
-    <ApolloProvider client={getClient('/crn/graphql')}>
+    <ApolloProvider client={getClient('/crn/graphql', getAuth)}>
       <div>
         <Helmet>
           <title>{pageTitle}</title>
