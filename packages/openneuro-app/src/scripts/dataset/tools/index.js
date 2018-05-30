@@ -215,6 +215,13 @@ class Tools extends Reflux.Component {
             timeout: 5000,
             type: 'Error',
           },
+          {
+            check: !isAdmin,
+            message:
+              'You can only run analyses on datasests you have uploaded or that you have been given admin access to',
+            timeout: 5000,
+            type: 'Error',
+          },
         ],
       },
       {

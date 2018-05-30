@@ -162,7 +162,11 @@ class JobAccordion extends React.Component {
   }
 
   _failedMessage(run) {
-    let userCanChange =
+    let userCanRerun =
+      this.props.currentUser && this.props.currentUser.scitran
+        ? this.props.currentUser.scitran.root
+        : false
+    let userCanDelete =
       this.props.currentUser && this.props.currentUser.scitran
         ? this.props.currentUser.scitran.root ||
           this.props.currentUser.scitran._id === run.userId
@@ -174,8 +178,8 @@ class JobAccordion extends React.Component {
     ) {
       let adminMessage = (
         <span>
-          Support contact information and the logs necessary for debugging 
-          for this app is available below.
+          Support contact information and the logs necessary for debugging for
+          this app are available below.
         </span>
       )
       let message = run.analysis.message
@@ -186,7 +190,7 @@ class JobAccordion extends React.Component {
           <h5 className="text-danger">
             {message} {adminMessage}
           </h5>
-          {userCanChange ? (
+          {userCanRerun ? (
             <WarnButton
               icon="fa fa-repeat"
               message="re-run"
@@ -194,7 +198,7 @@ class JobAccordion extends React.Component {
               action={actions.retryJob.bind(this, run._id)}
             />
           ) : null}
-          {userCanChange ? (
+          {userCanDelete ? (
             <span className="btn-small">
               <WarnButton
                 icon="fa fa-trash-o"
