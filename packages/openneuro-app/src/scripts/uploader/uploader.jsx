@@ -4,7 +4,7 @@ import UploaderContext from './uploader-context.js'
 import UploaderSetupRoutes from './uploader-setup-routes.jsx'
 import UploaderStatusRoutes from './uploader-status-routes.jsx'
 import UploadButton from './upload-button.jsx'
-import UploadProgressButton from './upload-progress-button.jsx'
+import UploadProgress from './upload-progress.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import getClient from 'openneuro-client'
@@ -87,6 +87,8 @@ class UploadClient extends React.Component {
 
   upload() {
     this.setState({ uploading: true, location: locationFactory('/hidden') })
+    // This is an upload specific apollo client to record progress
+    // Uses XHR since Fetch does not provide the required interface
     const uploadClient = getClient(
       '/crn/graphql',
       getAuth,
@@ -112,15 +114,23 @@ class UploadClient extends React.Component {
   }
 
   uploadProgress(e) {
-    console.log(e.loaded / e.total)
-    this.setState({ progress: e.loaded / e.total })
+    this.setState({
+      progress: e.total > 0 ? Math.floor(e.loaded / e.total * 100) : 0,
+    })
   }
 
   render() {
     if (this.state.uploading) {
       return (
         <UploaderContext.Provider value={this.state}>
-          <UploadProgressButton />
+          <span className="upload-btn-wrap">
+            <a
+              className="nav-link nl-upload nl-progress"
+              onClick={() => this.setLocation('/upload')}>
+              <span className="link-name">view details</span>
+              <UploadProgress progress={this.state.progress} />
+            </a>
+          </span>
           <UploaderStatusRoutes location={this.state.location} />
         </UploaderContext.Provider>
       )
