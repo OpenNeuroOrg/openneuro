@@ -22,7 +22,7 @@ const UploadRename = () => (
         <button
           className="btn-blue"
           disabled={false}
-          onClick={uploader.validate}>
+          onClick={() => uploader.setLocation('/upload/issues')}>
           Continue
         </button>
       </div>

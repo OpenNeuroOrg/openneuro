@@ -22,12 +22,9 @@ class UploadClient extends React.Component {
   constructor(props) {
     super(props)
 
-    this.start = this.start.bind(this)
     this.setLocation = this.setLocation.bind(this)
     this.setName = this.setName.bind(this)
     this.selectFiles = this.selectFiles.bind(this)
-    this.validate = this.validate.bind(this)
-    this.disclaimer = this.disclaimer.bind(this)
     this.upload = this.upload.bind(this)
     this.uploadProgress = this.uploadProgress.bind(this)
 
@@ -41,23 +38,23 @@ class UploadClient extends React.Component {
       setLocation: this.setLocation, // Allow context consumers to change routes
       setName: this.setName, // Rename on upload (optionally)
       selectFiles: this.selectFiles, // Get files from the browser
-      validate: this.validate, // Continue to validate step
-      disclaimer: this.disclaimer, // Continue to disclaimer
       upload: this.upload, // Start an upload
     }
   }
 
   /**
-   * Initiate the upload workflow
+   * Change to a new step in upload setup
+   *
+   * @param {string} path Virtual router path for upload modal
    */
-  start() {
-    this.setState({ location: locationFactory('/upload') })
-  }
-
   setLocation(path) {
     this.setState({ location: locationFactory(path) })
   }
 
+  /**
+   * Change the dataset name/label on upload
+   * @param {string} name
+   */
   setName(name) {
     this.setState({ name })
   }
@@ -76,14 +73,6 @@ class UploadClient extends React.Component {
     } else {
       throw new Error('No files selected')
     }
-  }
-
-  validate() {
-    this.setState({ location: locationFactory('/upload/issues') })
-  }
-
-  disclaimer() {
-    this.setState({ location: locationFactory('/upload/disclaimer') })
   }
 
   upload() {
@@ -141,7 +130,7 @@ class UploadClient extends React.Component {
     } else {
       return (
         <UploaderContext.Provider value={this.state}>
-          <UploadButton onClick={this.start} />
+          <UploadButton onClick={() => this.setLocation('/upload')} />
           <UploaderSetupRoutes
             setLocation={this.setLocation}
             location={this.state.location}

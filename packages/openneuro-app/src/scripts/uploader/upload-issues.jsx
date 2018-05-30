@@ -104,7 +104,10 @@ UploadValidator.propTypes = {
 const UploadIssues = () => (
   <UploaderContext.Consumer>
     {uploader => (
-      <UploadValidator files={uploader.files} next={uploader.disclaimer} />
+      <UploadValidator
+        files={uploader.files}
+        next={() => uploader.setLocation('/upload/disclaimer')}
+      />
     )}
   </UploaderContext.Consumer>
 )
