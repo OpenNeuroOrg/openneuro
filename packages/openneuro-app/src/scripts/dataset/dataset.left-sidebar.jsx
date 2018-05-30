@@ -68,7 +68,7 @@ export class LeftSidebar extends Reflux.Component {
           <Link
             to={snapshotUrl}
             className={
-              this.state.datasets.selectedSnapshot == snapshot._id
+              this.state.datasets.dataset.snapshot_version == snapshot.tag
                 ? 'active'
                 : null
             }>
@@ -80,8 +80,8 @@ export class LeftSidebar extends Reflux.Component {
                     : 'v' + snapshot.snapshot_version}
                 </span>
                 <span className="date-modified">
-                  {snapshot.modified
-                    ? moment(snapshot.modified).format('ll')
+                  {snapshot.created
+                    ? moment(snapshot.created).format('ll')
                     : null}
                 </span>
                 <span className="icons">
