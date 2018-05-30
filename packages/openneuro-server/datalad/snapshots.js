@@ -2,9 +2,11 @@
  * Get snapshots from datalad-service tags
  */
 import request from 'superagent'
+import mongo from '../libs/mongo'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
 
+const c = mongo.collections
 const uri = config.datalad.uri
 
 /**
@@ -15,6 +17,32 @@ const uri = config.datalad.uri
  */
 const snapshotIndexKey = datasetId => {
   return `openneuro:snapshot-index:${datasetId}`
+}
+
+const createSnapshotMetadata = (datasetId, tag, hexsha, created) => {
+  return c.crn.snapshots.update(
+    {datasetId: datasetId, tag: tag}, 
+    {$set: 
+      {datasetId: datasetId, tag: tag, hexsha: hexsha, created: created}
+    }, 
+    {upsert: true}
+  )
+}
+
+const getSnapshotMetadata = (datasetId, snapshots) => {
+  let tags = snapshots.map(s => s.tag)
+  return new Promise((resolve, reject) => {
+    c.crn.snapshots.find({datasetId: datasetId, tag: {$in: tags}})
+      .toArray((err, metadata) => {
+        if (err) reject(err)
+        snapshots = snapshots.map(s => {
+          const match_metadata = metadata.find(m => (m.tag == s.tag))
+          s.created = match_metadata ? match_metadata.created : null
+          return s
+        })
+        resolve(snapshots)
+      })
+  })
 }
 
 /**
@@ -32,11 +60,17 @@ export const createSnapshot = async (datasetId, tag) => {
     request
       .post(url)
       .set('Accept', 'application/json')
-      .then(({ body }) =>
+      .then(({ body }) => {
+        body.created = new Date()
         // Eager caching for snapshots
         // Set the key and after resolve to body
-        redis.set(sKey, JSON.stringify(body)).then(() => body),
-      ),
+        return redis.set(sKey, JSON.stringify(body))
+          // Metadata for snapshots
+          .then(() =>
+            createSnapshotMetadata(datasetId, tag, body.hexsha, body.created)
+              .then(() => body)
+          )
+      }),
   )
 }
 
@@ -59,7 +93,8 @@ export const getSnapshots = datasetId => {
       return request
         .get(url)
         .set('Accept', 'application/json')
-        .then(({ body: { snapshots } }) => {
+        .then(async ({ body: { snapshots } }) => {
+          snapshots = (await getSnapshotMetadata(datasetId, snapshots))
           redis.set(key, JSON.stringify(snapshots))
           return snapshots
         })
