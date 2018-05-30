@@ -1901,9 +1901,9 @@ let datasetStore = Reflux.createStore({
     if (snapshots.length) {
       // sort snapshots
       snapshots.sort((a, b) => {
-        if (a.snapshot_version < b.snapshot_version) {
+        if (a.created< b.created) {
           return 1
-        } else if (a.snapshot_version > b.snapshot_version) {
+        } else if (a.created > b.created) {
           return -1
         } else {
           return 0
@@ -2193,7 +2193,7 @@ let datasetStore = Reflux.createStore({
           callback()
         }),
       )
-    }).catch(() => {callback()})
+    })
   },
 
   // stars ----------------------------------------------------------------
