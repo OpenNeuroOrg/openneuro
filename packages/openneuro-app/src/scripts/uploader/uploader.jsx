@@ -132,14 +132,20 @@ class UploadClient extends React.Component {
               <UploadProgress progress={this.state.progress} />
             </a>
           </span>
-          <UploaderStatusRoutes location={this.state.location} />
+          <UploaderStatusRoutes
+            setLocation={this.setLocation}
+            location={this.state.location}
+          />
         </UploaderContext.Provider>
       )
     } else {
       return (
         <UploaderContext.Provider value={this.state}>
           <UploadButton onClick={this.start} />
-          <UploaderSetupRoutes location={this.state.location} />
+          <UploaderSetupRoutes
+            setLocation={this.setLocation}
+            location={this.state.location}
+          />
         </UploaderContext.Provider>
       )
     }

@@ -7,9 +7,9 @@ import UploadRename from './upload-rename.jsx'
 import UploadIssues from './upload-issues.jsx'
 import UploadDisclaimer from './upload-disclaimer.jsx'
 
-const SetupModal = ({ location }) => (
-  <UploaderModal>
-    <Switch location={location}>
+const UploaderSetupRoutes = props => (
+  <UploaderModal {...props}>
+    <Switch location={props.location}>
       <Route
         name="upload-select"
         path="/upload"
@@ -36,21 +36,6 @@ const SetupModal = ({ location }) => (
       />
     </Switch>
   </UploaderModal>
-)
-
-SetupModal.propTypes = {
-  location: PropTypes.object,
-}
-
-const UploaderSetupRoutes = ({ location }) => (
-  <Switch location={location}>
-    <Route name="upload-hidden" path="/hidden" exact component={() => null} />
-    <Route
-      name="upload-modal"
-      path="/upload"
-      component={() => <SetupModal location={location} />}
-    />
-  </Switch>
 )
 
 UploaderSetupRoutes.propTypes = {
