@@ -55,8 +55,8 @@ class UploadClient extends React.Component {
    * Change the dataset name/label on upload
    * @param {string} name
    */
-  setName(name) {
-    this.setState({ name })
+  setName(e) {
+    this.setState({ name: e.target.value })
   }
 
   /**
