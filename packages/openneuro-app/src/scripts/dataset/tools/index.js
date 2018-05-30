@@ -46,7 +46,7 @@ class Tools extends Reflux.Component {
       isPublic = !!dataset.status.public,
       isIncomplete = !!dataset.status.incomplete,
       isInvalid = !!dataset.status.invalid,
-      isSnapshot = !!dataset.original,
+      isSnapshot = !!dataset.snapshot_version,
       isSubscribed = !!dataset.subscribed,
       hasUserStar = !!dataset.hasUserStar,
       hasDoi =
@@ -90,7 +90,7 @@ class Tools extends Reflux.Component {
           'publish',
           this.props.history,
         ),
-        display: isAdmin && !isPublic && !isIncomplete,
+        display: isAdmin && !isPublic && !isIncomplete && !isSnapshot,
         warn: false,
         modalLink: datasets.datasetUrl + '/publish',
         validations: [
@@ -111,7 +111,7 @@ class Tools extends Reflux.Component {
           false,
           this.props.history,
         ),
-        display: isPublic && isSuperuser,
+        display: isPublic && isSuperuser && !isSnapshot,
         warn: true,
         validations: [
           {
@@ -181,9 +181,9 @@ class Tools extends Reflux.Component {
             type: 'Error',
           },
           {
-            check:
+            check: 
               snapshots.length > 1 &&
-              moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0,
+              moment(dataset.modified).diff(moment(snapshots[1].created)) <= 0,
             message:
               'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.',
             timeout: 6000,
