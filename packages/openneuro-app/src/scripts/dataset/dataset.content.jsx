@@ -113,7 +113,7 @@ class DatasetContent extends Reflux.Component {
     let canEdit =
       dataset &&
       (dataset.access === 'rw' || dataset.access == 'admin') &&
-      !dataset.original
+      !dataset.snapshot_version
     let loadingText =
       typeof this.state.datasets.loading == 'string'
         ? this.state.datasets.loading
