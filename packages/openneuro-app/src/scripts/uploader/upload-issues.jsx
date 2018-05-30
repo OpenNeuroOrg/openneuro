@@ -6,7 +6,7 @@ import Spinner from '../common/partials/spinner.jsx'
 import Results from '../validation/validation-results.jsx'
 import UploaderContext from './uploader-context.js'
 
-const UploadValidatorStatus = ({ issues, next }) => {
+const UploadValidatorStatus = ({ issues, next, reset }) => {
   const errorCount = issues.errors.length
   const warnCount = issues.warnings.length
   const issuesCount = errorCount + warnCount
@@ -38,7 +38,10 @@ const UploadValidatorStatus = ({ issues, next }) => {
         <strong>
           {errorCount} {pluralize('error', errorCount)}
         </strong>{' '}
-        and select your folder again.
+        and{' '}
+        <a href="#" onClick={reset}>
+          select your folder again.
+        </a>{' '}
       </div>
     )
   }
@@ -76,6 +79,7 @@ class UploadValidator extends React.Component {
           <UploadValidatorStatus
             issues={this.state.issues}
             next={this.props.next}
+            reset={this.props.reset}
           />
           <Results
             errors={this.state.issues.errors}
@@ -99,6 +103,7 @@ class UploadValidator extends React.Component {
 UploadValidator.propTypes = {
   files: PropTypes.object,
   next: PropTypes.func,
+  reset: PropTypes.func,
 }
 
 const UploadIssues = () => (
@@ -107,6 +112,7 @@ const UploadIssues = () => (
       <UploadValidator
         files={uploader.files}
         next={() => uploader.setLocation('/upload/disclaimer')}
+        reset={() => uploader.setLocation('/upload')}
       />
     )}
   </UploaderContext.Consumer>
