@@ -1,5 +1,4 @@
 import { datasets, files } from 'openneuro-client'
-import extractFiles from 'extract-files'
 
 /**
  * Create a dataset and update the label
@@ -71,7 +70,6 @@ const treeFromList = fileList => {
  */
 export const updateFiles = client => (datasetId, fileList) => {
   const tree = treeFromList(fileList)
-  //console.log(extractFiles(tree))
   return client.mutate({
     mutation: files.updateFiles,
     variables: { datasetId, files: tree },

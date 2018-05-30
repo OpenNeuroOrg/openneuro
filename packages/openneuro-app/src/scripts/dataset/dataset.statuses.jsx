@@ -2,11 +2,9 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import Reflux from 'reflux'
 import Status from '../common/partials/status.jsx'
-import { refluxConnect } from '../utils/reflux'
 
-class Statuses extends Reflux.Component {
+class Statuses extends React.Component {
   constructor() {
     super()
   }

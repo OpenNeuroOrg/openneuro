@@ -8,4 +8,8 @@ const UploadProgress = ({ progress }) => (
   </div>
 )
 
+UploadProgress.propTypes = {
+  progress: PropTypes.number,
+}
+
 export default UploadProgress

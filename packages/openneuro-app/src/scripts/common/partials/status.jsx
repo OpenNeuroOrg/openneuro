@@ -89,7 +89,7 @@ export default class Status extends React.Component {
 
   // custom methods ------------------------------------------------------------
 
-  _onFileSelect(files) {
+  _onFileSelect() {
     // TODO - Fix on resume here...
   }
 }

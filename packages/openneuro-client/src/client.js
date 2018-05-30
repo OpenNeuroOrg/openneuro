@@ -27,8 +27,8 @@ const authLink = getAuthorization =>
     if (token) {
       if (
         typeof window !== 'undefined' &&
-        window.localStorage &&
-        window.localStorage.token
+        global.localStorage &&
+        global.localStorage.token
       ) {
         tokenString = `${token}`
       } else {

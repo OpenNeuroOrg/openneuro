@@ -96,6 +96,11 @@ class UploadValidator extends React.Component {
   }
 }
 
+UploadValidator.propTypes = {
+  files: PropTypes.array,
+  next: PropTypes.func,
+}
+
 const UploadIssues = () => (
   <UploaderContext.Consumer>
     {uploader => (

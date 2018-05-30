@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Route, Switch } from 'react-router-dom'
 import UploaderModal from './uploader-modal.jsx'
 import UploadSelect from './upload-select.jsx'
@@ -37,6 +38,10 @@ const SetupModal = ({ location }) => (
   </UploaderModal>
 )
 
+SetupModal.propTypes = {
+  location: PropTypes.object,
+}
+
 const UploaderSetupRoutes = ({ location }) => (
   <Switch location={location}>
     <Route name="upload-hidden" path="/hidden" exact component={() => null} />
@@ -47,5 +52,9 @@ const UploaderSetupRoutes = ({ location }) => (
     />
   </Switch>
 )
+
+UploaderSetupRoutes.propTypes = {
+  location: PropTypes.object,
+}
 
 export default UploaderSetupRoutes

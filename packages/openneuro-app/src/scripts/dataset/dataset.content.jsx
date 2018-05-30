@@ -433,7 +433,7 @@ class DatasetContent extends Reflux.Component {
     )
   }
 
-  _onFileSelect(files) {
+  _onFileSelect() {
     // TODO - Re-enable resume here
   }
 }

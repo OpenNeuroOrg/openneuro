@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { ApolloConsumer } from 'react-apollo'
 import UploaderContext from './uploader-context.js'
 import UploaderSetupRoutes from './uploader-setup-routes.jsx'
@@ -143,6 +144,10 @@ class UploadClient extends React.Component {
       )
     }
   }
+}
+
+UploadClient.propTypes = {
+  client: PropTypes.object,
 }
 
 const Uploader = () => (

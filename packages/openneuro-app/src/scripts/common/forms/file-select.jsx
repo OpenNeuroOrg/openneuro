@@ -2,7 +2,6 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import fileUtils from '../../utils/files'
 import bowser from 'bowser'
 import notifications from '../../notification/notification.actions'
 
