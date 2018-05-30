@@ -30,7 +30,7 @@ export default {
     isSignedOut,
     isAdmin = false,
     metadata = false,
-  ) {
+    ) {
     const res = (await datalad
       .getDatasets({
         authenticate: isAdmin || !isPublic,
@@ -148,16 +148,15 @@ export default {
 
     // Dataset
     try {
-      datalad.getDataset(projectId, options, (projectRes) => {
-        // if (projectRes.status !== 200) {
-        //   return callback(projectRes)
-        // }
+      datalad.getDataset(projectId).then(async (projectRes) => {
         const data = projectRes ? projectRes.data : null
         if (data) {
           // get snapshot or draft, depending on results
-          let project = !options.snapshot ? data.dataset : data.snapshot
-          let draft = !options.snapshot ? project.draft : null
-          let tempFiles = draft ? this._formatFiles(draft.files) : this._formatFiles(project.files)
+          let project = data.dataset
+          let draft = project.draft
+          let snapshot = options.snapshot ? (await datalad.getSnapshot(projectId, options)).data.snapshot : null
+          let tempFiles = !snapshot ? this._formatFiles(draft.files) : this._formatFiles(snapshot.files)
+          project.snapshot_version = snapshot ? snapshot.tag : null
           this.getMetadata(
             project,
             metadata => {
@@ -454,7 +453,7 @@ export default {
       /** same as original **/
       _id: this.encodeId(project._id),
       linkID: this.decodeId(project._id),
-      label: project.label,
+      label: description ? description.Name : project.label,
       group: project.uploader ? project.uploader.id : null,
       created: project.created,
       modified: project.draft ? project.draft.modified : null,
