@@ -39,6 +39,7 @@ export default {
       subscriptions: null,
       datasets: null,
       summaries: null,
+      snapshots: null,
       issues: null,
       snapshots: null,
       stars: null,
