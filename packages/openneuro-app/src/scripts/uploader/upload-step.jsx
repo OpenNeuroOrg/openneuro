@@ -14,8 +14,8 @@ const UploadStepCol = ({ active, text }) => {
 }
 
 UploadStepCol.propTypes = {
-  active: PropTypes.boolean,
-  text: PropTypes.text,
+  active: PropTypes.bool,
+  text: PropTypes.string,
 }
 
 const UploadStep = ({ location }) => (
