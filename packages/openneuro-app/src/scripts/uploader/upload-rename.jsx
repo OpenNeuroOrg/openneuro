@@ -5,8 +5,8 @@ import UploaderContext from './uploader-context.js'
 const UploadRename = () => (
   <UploaderContext.Consumer>
     {uploader => (
-      <div>
-        <span className="message fade-in">Rename your dataset (optional)</span>
+      <div className="message fade-in">
+        Rename your dataset (optional)
         <div className="dir-name has-input clearfix fade-in">
           <label className="add-name">
             <i className="folderIcon fa fa-folder-open" />
@@ -20,7 +20,7 @@ const UploadRename = () => (
         </div>
         <br />
         <button
-          className="btn-blue"
+          className="fileupload-btn btn-blue"
           disabled={false}
           onClick={() => uploader.setLocation('/upload/issues')}>
           Continue

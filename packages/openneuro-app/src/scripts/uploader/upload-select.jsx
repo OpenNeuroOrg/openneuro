@@ -5,17 +5,15 @@ import UploaderContext from './uploader-context.js'
 const UploadSelect = () => (
   <UploaderContext.Consumer>
     {uploader => (
-      <div>
-        <span className="message fade-in">
-          Select a{' '}
-          <a
-            href="http://bids.neuroimaging.io"
-            target="_blank"
-            rel="noopener noreferrer">
-            BIDS dataset
-          </a>{' '}
-          to upload
-        </span>
+      <div className="message fade-in">
+        Select a{' '}
+        <a
+          href="http://bids.neuroimaging.io"
+          target="_blank"
+          rel="noopener noreferrer">
+          BIDS dataset
+        </a>{' '}
+        to upload
         <FileSelect onChange={uploader.selectFiles} />
       </div>
     )}

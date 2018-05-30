@@ -12,34 +12,34 @@ const UploadValidatorStatus = ({ issues, next }) => {
   const issuesCount = errorCount + warnCount
   if (issuesCount === 0) {
     return (
-      <span className="message error fade-in">
+      <div className="message fade-in">
         This dataset has no issues.
-        <button className="btn-blue" onClick={next}>
+        <button className="fileupload-btn btn-blue" onClick={next}>
           Continue
         </button>
-      </span>
+      </div>
     )
   } else if (errorCount === 0 && warnCount > 0) {
     return (
-      <span className="message error fade-in">
+      <div className="message warn fade-in">
         We found {warnCount} {pluralize('warning', warnCount)} in your dataset.
         You are not required to fix warnings, but doing so will make your
         dataset more BIDS compliant. Continue or fix the issues and select
         folder again.
-        <button className="btn-blue" onClick={next}>
+        <button className="fileupload-btn btn-blue" onClick={next}>
           Continue
         </button>
-      </span>
+      </div>
     )
   } else {
     return (
-      <span className="message error fade-in">
+      <div className="message error fade-in">
         Your dataset is not a valid BIDS dataset. Fix the{' '}
         <strong>
           {errorCount} {pluralize('error', errorCount)}
         </strong>{' '}
         and select your folder again.
-      </span>
+      </div>
     )
   }
 }

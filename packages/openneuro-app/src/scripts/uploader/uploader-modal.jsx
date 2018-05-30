@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import UploadStep from './upload-step.jsx'
 import { Modal } from '../utils/modal.jsx'
 
 // Show is always {true} because the router unmounts this otherwise
@@ -14,7 +15,8 @@ const UploaderModal = ({ setLocation, location, children }) => (
     <hr className="modal-inner" />
     <Modal.Body>
       <div className="tasks-col fade-in">
-        <div id="upload-tabs" className="uploader">
+        <UploadStep location={location} />
+        <div id="upload-tabs" className="uploader container">
           {children}
         </div>
       </div>
