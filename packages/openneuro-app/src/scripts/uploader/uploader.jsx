@@ -7,6 +7,9 @@ import UploadButton from './upload-button.jsx'
 import UploadProgressButton from './upload-progress-button.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
+import getClient from 'openneuro-client'
+import getAuth from '../utils/getAuth.js'
+import { xhrFetch } from './xhrfetch.js'
 
 /**
  * Stateful uploader workflow and status
@@ -25,12 +28,14 @@ class UploadClient extends React.Component {
     this.validate = this.validate.bind(this)
     this.disclaimer = this.disclaimer.bind(this)
     this.upload = this.upload.bind(this)
+    this.uploadProgress = this.uploadProgress.bind(this)
 
     this.state = {
       uploading: false, // An upload is processing
       location: locationFactory('/hidden'), // Which step in the modal
       files: [], // List of files being uploaded
       name: '', // Relabel dataset during upload
+      progress: 0,
       resume: null, // Resume an existing dataset
       setLocation: this.setLocation, // Allow context consumers to change routes
       setName: this.setName, // Rename on upload (optionally)
@@ -82,15 +87,19 @@ class UploadClient extends React.Component {
 
   upload() {
     this.setState({ uploading: true, location: locationFactory('/hidden') })
-    const client = this.props.client
+    const uploadClient = getClient(
+      '/crn/graphql',
+      getAuth,
+      xhrFetch(this.uploadProgress),
+    )
     if (this.state.resume) {
       // Diff and add files
     } else {
       // Create dataset and then add files
       mutation
-        .createDataset(client)(this.state.name)
+        .createDataset(this.props.client)(this.state.name)
         .then(datasetId =>
-          mutation.updateFiles(client)(datasetId, this.state.files),
+          mutation.updateFiles(uploadClient)(datasetId, this.state.files),
         )
         .then(() => {
           this.setState({ uploading: false })
@@ -100,6 +109,11 @@ class UploadClient extends React.Component {
           throw err
         })
     }
+  }
+
+  uploadProgress(e) {
+    console.log(e.loaded / e.total)
+    this.setState({ progress: e.loaded / e.total })
   }
 
   render() {

@@ -6,14 +6,7 @@ import { pageTitle, pageDescription } from './resources/strings.js'
 import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
-
-const getAuth = () => {
-  try {
-    return JSON.parse(localStorage.token).access_token
-  } catch (_) {
-    return null
-  }
-}
+import getAuth from './utils/getAuth.js'
 
 const App = () => {
   return (

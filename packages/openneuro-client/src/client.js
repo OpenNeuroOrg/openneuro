@@ -14,8 +14,8 @@ const cache = new InMemoryCache()
  *
  * @param {string} uri
  */
-const createClient = (uri, getAuthorization) => {
-  const link = createLink(uri, getAuthorization)
+const createClient = (uri, getAuthorization, fetch) => {
+  const link = createLink(uri, getAuthorization, fetch)
   return new ApolloClient({ uri, link, cache })
 }
 
@@ -46,10 +46,11 @@ const authLink = getAuthorization =>
     }
   })
 
-const createLink = (uri, getAuthorization) => {
+const createLink = (uri, getAuthorization, fetch) => {
   // We have to setup authLink to inject credentials here
   const httpUploadLink = createUploadLink({
     uri,
+    fetch,
     serverFormData: FormData,
   })
   return authLink(getAuthorization).concat(httpUploadLink)
