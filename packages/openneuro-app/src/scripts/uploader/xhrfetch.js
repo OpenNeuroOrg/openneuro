@@ -1,4 +1,4 @@
-export const xhrFetch = onProgress => (url, opts = {}) => {
+export const xhrFetch = uploader => (url, opts = {}) => {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
 
@@ -15,7 +15,10 @@ export const xhrFetch = onProgress => (url, opts = {}) => {
 
     xhr.onerror = reject
 
-    if (xhr.upload) xhr.upload.onprogress = onProgress
+    if (xhr.upload) {
+      xhr.upload.onprogress = uploader.uploadProgress
+      uploader.setState({ xhr })
+    }
 
     xhr.send(opts.body)
   })

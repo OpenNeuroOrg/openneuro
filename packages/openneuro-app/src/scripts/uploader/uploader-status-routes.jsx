@@ -6,14 +6,18 @@ import UploadStatus from './upload-status.jsx'
 
 const UploaderStatusRoutes = props => (
   <UploaderModal {...props}>
-    <Switch location={props.location}>
-      <Route
-        name="upload-status"
-        path="/upload"
-        exact
-        component={UploadStatus}
-      />
-    </Switch>
+    <div className="tasks-col fade-in">
+      <div id="upload-tabs" className="uploader container">
+        <Switch location={props.location}>
+          <Route
+            name="upload-status"
+            path="/upload"
+            exact
+            component={UploadStatus}
+          />
+        </Switch>
+      </div>
+    </div>
   </UploaderModal>
 )
 

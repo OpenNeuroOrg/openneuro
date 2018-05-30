@@ -1,10 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import UploadStep from './upload-step.jsx'
 import { Modal } from '../utils/modal.jsx'
 
 // Show is always {true} because the router unmounts this otherwise
-const UploaderModal = ({ setLocation, location, children }) => (
+const UploaderModal = ({ setLocation, location, children, footer }) => (
   <Modal
     show={location.pathname !== '/hidden'}
     onHide={() => setLocation('/hidden')}
@@ -13,20 +12,15 @@ const UploaderModal = ({ setLocation, location, children }) => (
       <Modal.Title>Upload Dataset</Modal.Title>
     </Modal.Header>
     <hr className="modal-inner" />
-    <Modal.Body>
-      <div className="tasks-col fade-in">
-        <UploadStep location={location} />
-        <div id="upload-tabs" className="uploader container">
-          {children}
-        </div>
-      </div>
-    </Modal.Body>
+    <Modal.Body>{children}</Modal.Body>
+    {footer ? <Modal.Footer>{footer}</Modal.Footer> : null}
   </Modal>
 )
 
 UploaderModal.propTypes = {
   location: PropTypes.object,
   children: PropTypes.node,
+  footer: PropTypes.node,
   setLocation: PropTypes.func,
 }
 

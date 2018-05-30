@@ -27,6 +27,7 @@ class UploadClient extends React.Component {
     this.selectFiles = this.selectFiles.bind(this)
     this.upload = this.upload.bind(this)
     this.uploadProgress = this.uploadProgress.bind(this)
+    this.cancel = this.cancel.bind(this)
 
     this.state = {
       uploading: false, // An upload is processing
@@ -39,6 +40,7 @@ class UploadClient extends React.Component {
       setName: this.setName, // Rename on upload (optionally)
       selectFiles: this.selectFiles, // Get files from the browser
       upload: this.upload, // Start an upload
+      xhr: null, // Upload XHR request
     }
   }
 
@@ -76,14 +78,13 @@ class UploadClient extends React.Component {
   }
 
   upload() {
-    this.setState({ uploading: true, location: locationFactory('/hidden') })
+    this.setState({
+      uploading: true,
+      location: locationFactory('/hidden'),
+    })
     // This is an upload specific apollo client to record progress
     // Uses XHR since Fetch does not provide the required interface
-    const uploadClient = getClient(
-      '/crn/graphql',
-      getAuth,
-      xhrFetch(this.uploadProgress),
-    )
+    const uploadClient = getClient('/crn/graphql', getAuth, xhrFetch(this))
     if (this.state.resume) {
       // Diff and add files
     } else {
@@ -109,6 +110,11 @@ class UploadClient extends React.Component {
     })
   }
 
+  cancel() {
+    this.state.xhr.abort()
+    this.setState({ uploading: false, progress: 0 })
+  }
+
   render() {
     if (this.state.uploading) {
       return (
@@ -124,6 +130,11 @@ class UploadClient extends React.Component {
           <UploaderStatusRoutes
             setLocation={this.setLocation}
             location={this.state.location}
+            footer={
+              <button className="btn-reset" onClick={this.cancel}>
+                Cancel Upload
+              </button>
+            }
           />
         </UploaderContext.Provider>
       )
