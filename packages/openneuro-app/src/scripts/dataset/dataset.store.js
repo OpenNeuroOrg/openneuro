@@ -152,13 +152,14 @@ let datasetStore = Reflux.createStore({
     }
 
     // update selection & current upload data, as well as loading state
+    let loadedUrl = !options.snapshot ? datasetId : [datasetId, options.tag].join(':')
     this.update({
       selectedSnapshot: datasetId,
       currentUploadId: null,
       loading: true,
       loadingJobs: true,
       datasetTree: null,
-      loadedUrl: datasetId,
+      loadedUrl: loadedUrl,
     })
     bids.getDataset(
       datasetId,
@@ -177,30 +178,30 @@ let datasetStore = Reflux.createStore({
           let selectedSnapshot = this.data.selectedSnapshot
           if (!selectedSnapshot || selectedSnapshot === datasetId) {
             let dataset = res
-            let originalId = dataset.original ? dataset.original : datasetId
-            this.update({
-              dataset: dataset,
-              datasetTree: [
-                {
-                  _id: datasetId,
-                  label: dataset.label,
-                  children: dataset.children,
-                },
-              ],
-              loading: false,
-            })
-            this.loadSnapshots(dataset, [], () => {
-              this.loadComments(originalId)
-              this.getDatasetStars()
-              this.checkSubscriptionFollowers(() => {
-                let datasetUrl = this.constructDatasetUrl(dataset)
-                this.update({
-                  loading: false,
-                  snapshot: snapshot,
-                  datasetUrl: datasetUrl,
+            this.update(
+              {
+                dataset: dataset,
+                datasetTree: [
+                  {
+                    _id: datasetId,
+                    label: dataset.label,
+                    children: dataset.children,
+                  },
+                ],
+                loading: false,
+              })
+              this.loadSnapshots(dataset, [], () => {
+                this.loadComments(datasetId)
+                this.getDatasetStars()
+                this.checkSubscriptionFollowers(() => {
+                  let datasetUrl = this.constructDatasetUrl(dataset)
+                  this.update({
+                    loading: false,
+                    snapshot: snapshot,
+                    datasetUrl: datasetUrl,
+                  })
                 })
               })
-            })
 
             // this.loadJobs(
             //   datasetId,
@@ -1708,9 +1709,15 @@ let datasetStore = Reflux.createStore({
   displayFile(snapshotId, jobId, file, history, callback) {
     if (file && file.name) {
       let displayUrl = file.path ? 'results/' + file.path : 'file-display'
+<<<<<<< HEAD
       let link = this.getFileURL(this.data.dataset._id, file.name)
       if (
         files.hasExtension(file.name, [
+=======
+      let link = files.getFileURL(this.data.dataset, file.name)
+        if (
+          files.hasExtension(file.name, [
+>>>>>>> bdee6cfb... dataset.store: this.getFileURL -> files.getFileURL; change datasetId references to new snapshot structure
           '.pdf',
           '.nii.gz',
           '.jpg',
@@ -1759,10 +1766,16 @@ let datasetStore = Reflux.createStore({
    * Toggles the editFile modal for files of type .json, .tsv, .csv
    */
   editFile(snapshotId, jobId, file, callback) {
+<<<<<<< HEAD
     let link = this.getFileURL(this.data.dataset._id, file.name)
     if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
       datalad
         .getFile(bids.decodeId(this.data.dataset._id), file.name)
+=======
+    let link = files.getFileURL(this.data.dataset, file.name)
+      if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
+      datalad.getFile(bids.decodeId(this.data.dataset._id), file.name)
+>>>>>>> bdee6cfb... dataset.store: this.getFileURL -> files.getFileURL; change datasetId references to new snapshot structure
         .then(res => {
           if (callback) {
             callback()
@@ -1783,6 +1796,7 @@ let datasetStore = Reflux.createStore({
     }
   },
 
+<<<<<<< HEAD
   /**
    * GetFileURL
    *
@@ -1799,6 +1813,8 @@ let datasetStore = Reflux.createStore({
     return link
   },
 
+=======
+>>>>>>> bdee6cfb... dataset.store: this.getFileURL -> files.getFileURL; change datasetId references to new snapshot structure
   // Snapshots ---------------------------------------------------------------------
 
   createSnapshot(changes, tag, history, callback, transition) {
@@ -1881,7 +1897,7 @@ let datasetStore = Reflux.createStore({
 
   loadSnapshots(dataset, jobs, callback) {
     let datasetId = dataset.original ? dataset.original : dataset._id
-    let snapshots = dataset.snapshots.slice(0)
+    let snapshots = dataset.snapshots ? dataset.snapshots.slice(0) : []
     if (snapshots.length) {
       // sort snapshots
       snapshots.sort((a, b) => {
@@ -1915,6 +1931,7 @@ let datasetStore = Reflux.createStore({
       dataset &&
       this.data.currentUser &&
       this.data.currentUser.profile &&
+      dataset.user &&
       dataset.user._id === this.data.currentUser.profile._id &&
       dataset.permissions &&
       !dataset.permissions.length
@@ -1937,12 +1954,11 @@ let datasetStore = Reflux.createStore({
 
   constructDatasetUrl(dataset) {
     if (dataset) {
-      if (!dataset.original) {
-        let datasetId = dataset.linkID
+      let datasetId = bids.decodeId(dataset._id)
+      if (!dataset.snapshot_version) {
         return '/datasets/' + datasetId
       } else {
-        let datasetId = dataset.linkOriginal
-        let version = dataset.linkID
+        let version = dataset.snapshot_version
         return '/datasets/' + datasetId + '/versions/' + version
       }
     }
@@ -2177,7 +2193,7 @@ let datasetStore = Reflux.createStore({
           callback()
         }),
       )
-    })
+    }).catch(() => {callback()})
   },
 
   // stars ----------------------------------------------------------------
