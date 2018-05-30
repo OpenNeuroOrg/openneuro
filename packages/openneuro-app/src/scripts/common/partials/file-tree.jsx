@@ -180,11 +180,10 @@ class FileTree extends Reflux.Component {
 
     let downloadFile
     if (!item.children) {
-      let link = actions.getFileURL(this.state.datasets.dataset._id, item.name)
       downloadFile = (
         <span className="download-file">
           <span>
-            <a className="btn-warn-component warning" href={link} download>
+            <a className="btn-warn-component warning" href={files.getFileURL(this.state.datasets.dataset, item.name)} download>
               <i className="fa fa-download" /> DOWNLOAD
             </a>
           </span>
