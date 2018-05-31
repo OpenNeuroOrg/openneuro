@@ -31,7 +31,7 @@ class UploadClient extends React.Component {
     this.cancel = this.cancel.bind(this)
 
     this.state = {
-      uploading: true, // An upload is processing
+      uploading: false, // An upload is processing
       location: locationFactory('/hidden'), // Which step in the modal
       files: {}, // List of files being uploaded
       name: '', // Relabel dataset during upload
