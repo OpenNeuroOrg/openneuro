@@ -13,12 +13,25 @@ from datalad_service.common.celery import dataset_task, dataset_queue
 from datalad_service.tasks.publish import publish_snapshot
 
 
+# A list of patterns to avoid annexing in BIDS datasets
+BIDS_NO_ANNEX = [
+    '*.tsv',
+    '*.json',
+    '*.bvec',
+    '*.bval',
+    'README',
+    'CHANGES',
+    '.bidsignore'
+]
+
+
 @dataset_task
 def create_dataset(store, dataset, name=None, email=None):
     """Create a DataLad git-annex repo for a new dataset."""
     ds = store.get_dataset(dataset)
     with CommitInfo(None, name, email, where='global'):
         ds.create()
+        ds.no_annex(BIDS_NO_ANNEX)
         if not ds.repo:
             raise Exception('Repo creation failed.')
 
