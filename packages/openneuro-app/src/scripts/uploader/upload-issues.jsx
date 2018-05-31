@@ -39,7 +39,12 @@ const UploadValidatorStatus = ({ issues, next, reset }) => {
           {errorCount} {pluralize('error', errorCount)}
         </strong>{' '}
         and{' '}
-        <a href="#" onClick={reset}>
+        <a
+          href="#"
+          onClick={e => {
+            e.preventDefault()
+            reset()
+          }}>
           select your folder again.
         </a>{' '}
       </div>
