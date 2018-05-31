@@ -114,6 +114,8 @@ const typeDefs = `
     summary: Summary
     issues: [ValidationIssue]
     files: [DatasetFile]
+    # Flag if a dataset operation is incomplete (and may be reverted or resumed)
+    partial: Boolean
   }
 
   # Tagged snapshot of a draft
