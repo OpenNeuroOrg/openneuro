@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloConsumer } from 'react-apollo'
+import BlockNavigation from '../common/partials/block-navigation.jsx'
 import UploaderContext from './uploader-context.js'
 import UploaderSetupRoutes from './uploader-setup-routes.jsx'
 import UploaderStatusRoutes from './uploader-status-routes.jsx'
@@ -127,6 +128,11 @@ class UploadClient extends React.Component {
               <button className="btn-reset" onClick={this.cancel}>
                 Cancel Upload
               </button>
+            }
+          />
+          <BlockNavigation
+            message={
+              'An upload is in progress and will be interrupted, continue?'
             }
           />
         </UploaderContext.Provider>
