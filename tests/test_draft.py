@@ -20,3 +20,21 @@ def test_add_commit_info(celery_app, client):
     response_content = json.loads(response.content)
     assert response_content['name'] == name
     assert response_content['email'] == email
+
+
+def test_is_dirty(celery_app, client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    # Check if new_dataset is not dirty
+    response = client.simulate_get(
+        '/datasets/{}/draft'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    assert json.loads(response.content)['partial'] == False
+    # Make the dataset dirty
+    response = client.simulate_post(
+        '/datasets/{}/files/NEW_FILE'.format(ds_id), body='some file data')
+    assert response.status == falcon.HTTP_OK
+    # Check if partial state is now true
+    response = client.simulate_get(
+        '/datasets/{}/draft'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    assert json.loads(response.content)['partial'] == True

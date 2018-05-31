@@ -3,6 +3,7 @@ import falcon
 from datalad_service.common.annex import get_from_header
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.files import commit_files
+from datalad_service.tasks.draft import is_dirty
 
 
 class DraftResource(object):
@@ -12,6 +13,19 @@ class DraftResource(object):
     @property
     def annex_path(self):
         return self.store.annex_path
+
+    def on_get(self, req, resp, dataset):
+        """
+        Return draft state (other than files).
+        """
+        if dataset:
+            queue = dataset_queue(dataset)
+            # Maybe turn this into status?
+            partial = is_dirty.apply_async(
+                queue=queue, args=(self.annex_path, dataset))
+            partial.wait()
+            resp.media = {'partial': partial.get()}
+            resp.status = falcon.HTTP_OK
 
     def on_post(self, req, resp, dataset):
         """
