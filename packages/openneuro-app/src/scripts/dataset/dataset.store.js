@@ -129,17 +129,6 @@ let datasetStore = Reflux.createStore({
     options = options ? options : {}
     options.isPublic = !userStore.data.token
 
-    // don't reload the current dataset
-    if (!forceReload && dataset && dataset._id === datasetId) {
-      this.update({ loading: false, loadingJobs: false })
-      return
-    }
-
-    // begin loading
-    // if (this.data.loading) {
-    //   return
-    // }
-
     // set active job if passed in query param
     if (options) {
       this.update({
