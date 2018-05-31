@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import { Accordion, Panel } from 'react-bootstrap'
-import Issues from './upload.validation-results.issues.jsx'
+import Issues from './validation-results.issues.jsx'
 
 // component setup --------------------------------------------------------
 

@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+import 'cross-fetch/polyfill'
 import ApolloClient from 'apollo-client'
 import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
@@ -9,14 +9,13 @@ import * as datasets from './datasets'
 
 const cache = new InMemoryCache()
 
-/* global window */
 /**
  * Setup a client for working with the OpenNeuro API
  *
  * @param {string} uri
  */
-const createClient = (uri, getAuthorization) => {
-  const link = createLink(uri, getAuthorization)
+const createClient = (uri, getAuthorization, fetch) => {
+  const link = createLink(uri, getAuthorization, fetch)
   return new ApolloClient({ uri, link, cache })
 }
 
@@ -26,13 +25,17 @@ const authLink = getAuthorization =>
     const token = getAuthorization ? getAuthorization() : false
     let tokenString = ''
     if (token) {
-      if (typeof(window) !== 'undefined' && window.localStorage && window.localStorage.token) {
+      if (
+        typeof window !== 'undefined' &&
+        global.localStorage &&
+        global.localStorage.token
+      ) {
         tokenString = `${token}`
       } else {
         tokenString = `Bearer ${token}`
       }
     }
-    
+
     return {
       headers: Object.assign(
         {
@@ -43,7 +46,7 @@ const authLink = getAuthorization =>
     }
   })
 
-const createLink = (uri, getAuthorization) => {
+const createLink = (uri, getAuthorization, fetch) => {
   // We have to setup authLink to inject credentials here
   const httpUploadLink = createUploadLink({
     uri,
