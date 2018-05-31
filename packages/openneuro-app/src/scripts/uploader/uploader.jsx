@@ -5,7 +5,7 @@ import UploaderContext from './uploader-context.js'
 import UploaderSetupRoutes from './uploader-setup-routes.jsx'
 import UploaderStatusRoutes from './uploader-status-routes.jsx'
 import UploadButton from './upload-button.jsx'
-import UploadProgress from './upload-progress.jsx'
+import UploadProgressButton from './upload-progress-button.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import getClient from 'openneuro-client'
@@ -30,7 +30,7 @@ class UploadClient extends React.Component {
     this.cancel = this.cancel.bind(this)
 
     this.state = {
-      uploading: false, // An upload is processing
+      uploading: true, // An upload is processing
       location: locationFactory('/hidden'), // Which step in the modal
       files: {}, // List of files being uploaded
       name: '', // Relabel dataset during upload
@@ -119,14 +119,7 @@ class UploadClient extends React.Component {
     if (this.state.uploading) {
       return (
         <UploaderContext.Provider value={this.state}>
-          <span className="upload-btn-wrap">
-            <a
-              className="nav-link nl-upload nl-progress"
-              onClick={() => this.setLocation('/upload')}>
-              <span className="link-name">view details</span>
-              <UploadProgress progress={this.state.progress} />
-            </a>
-          </span>
+          <UploadProgressButton />
           <UploaderStatusRoutes
             setLocation={this.setLocation}
             location={this.state.location}
