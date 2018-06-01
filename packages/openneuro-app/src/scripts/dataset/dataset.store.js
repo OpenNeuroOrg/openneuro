@@ -471,13 +471,22 @@ let datasetStore = Reflux.createStore({
    */
   deleteDataset(datasetId, history, callback) {
     if (this.data.snapshot) {
-      datalad
-        .deleteDataset(bids.decodeId(datasetId), {
-          snapshot: this.data.snapshot,
-        })
-        .then(() => {
-          history.push('/dashboard/datasets')
-        })
+      let message = 'You are about to delete this snapshot.'
+      this.updateWarn({
+        alwaysWarn: true,
+        confirmTxt: 'Delete',
+        hideDontShow: true,
+        message: message,
+        action: () => {
+          this.update({ loading: 'deleting' })
+          datalad
+            .deleteDataset(bids.decodeId(datasetId), { snapshot: this.data.snapshot, tag: this.data.dataset.snapshot_version })
+            .then(() => {
+              this.update({ loading: false })
+              history.push('/datasets/' + bids.decodeId(datasetId))
+            })
+        },
+      })
     } else {
       let message =
         'You are about to delete this dataset. This will delete your draft and any unpublished snapshots. Any published snapshots for this dataset will remain publicly accessible. To remove public snapshots please contact the site administrator.'
@@ -1698,15 +1707,9 @@ let datasetStore = Reflux.createStore({
   displayFile(snapshotId, jobId, file, history, callback) {
     if (file && file.name) {
       let displayUrl = file.path ? 'results/' + file.path : 'file-display'
-<<<<<<< HEAD
-      let link = this.getFileURL(this.data.dataset._id, file.name)
-      if (
-        files.hasExtension(file.name, [
-=======
       let link = files.getFileURL(this.data.dataset, file.name)
         if (
           files.hasExtension(file.name, [
->>>>>>> bdee6cfb... dataset.store: this.getFileURL -> files.getFileURL; change datasetId references to new snapshot structure
           '.pdf',
           '.nii.gz',
           '.jpg',
@@ -1755,16 +1758,9 @@ let datasetStore = Reflux.createStore({
    * Toggles the editFile modal for files of type .json, .tsv, .csv
    */
   editFile(snapshotId, jobId, file, callback) {
-<<<<<<< HEAD
-    let link = this.getFileURL(this.data.dataset._id, file.name)
-    if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
-      datalad
-        .getFile(bids.decodeId(this.data.dataset._id), file.name)
-=======
     let link = files.getFileURL(this.data.dataset, file.name)
       if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
       datalad.getFile(bids.decodeId(this.data.dataset._id), file.name)
->>>>>>> bdee6cfb... dataset.store: this.getFileURL -> files.getFileURL; change datasetId references to new snapshot structure
         .then(res => {
           if (callback) {
             callback()
@@ -1785,25 +1781,6 @@ let datasetStore = Reflux.createStore({
     }
   },
 
-<<<<<<< HEAD
-  /**
-   * GetFileURL
-   *
-   * Returns the uri that points to the location of a dataset file. Useful when serving files that
-   * reside in iframe or papaya viewer
-   */
-  getFileURL(datasetId, fileName) {
-    let link =
-      config.crn.url +
-      '/datasets/' +
-      bids.decodeId(datasetId) +
-      '/files/' +
-      datalad.encodeFilePath(fileName)
-    return link
-  },
-
-=======
->>>>>>> bdee6cfb... dataset.store: this.getFileURL -> files.getFileURL; change datasetId references to new snapshot structure
   // Snapshots ---------------------------------------------------------------------
 
   createSnapshot(changes, tag, history, callback, transition) {
