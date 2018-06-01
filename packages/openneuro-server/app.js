@@ -77,7 +77,15 @@ export default test => {
   )
 
   // GraphiQL, a visual editor for queries
-  app.use('/crn/graphiql', graphiqlExpress({ endpointURL: '/crn/graphql' }))
+  app.use(
+    '/crn/graphiql',
+    graphiqlExpress({
+      endpointURL: '/crn/graphql',
+      subscriptionsEndpoint: `ws://localhost:${
+        config.port
+      }/graphql-subscriptions`,
+    }),
+  )
 
   return app
 }
