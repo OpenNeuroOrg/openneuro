@@ -55,7 +55,8 @@ def issues_mutation(dataset_id, ref, validator_output):
         # Remove extra stats to keep collection size down
         if 'files' in issue:
             for f in issue['files']:
-                del f['file']['stats']
+                if f['file'].get('stats'):
+                    del f['file']['stats']
     issues = {
         'datasetId': dataset_id,
         'id': ref,
