@@ -8,7 +8,6 @@ import files from '../../utils/files'
 import config from '../../../../config'
 import datalad from '../../utils/datalad'
 import datasetStore from '../../dataset/dataset.store.js'
-import actions from '../../dataset/dataset.actions.js'
 import { refluxConnect } from '../../utils/reflux'
 import { Link } from 'react-router-dom'
 

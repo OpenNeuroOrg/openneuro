@@ -124,8 +124,7 @@ let datasetStore = Reflux.createStore({
    * Takes a datasetId and loads the dataset.
    */
   loadDataset(datasetId, options, forceReload) {
-    let snapshot = !!(options && options.snapshot),
-      dataset = this.data.dataset
+    let snapshot = !!(options && options.snapshot)
     options = options ? options : {}
     options.isPublic = !userStore.data.token
 

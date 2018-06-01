@@ -41,7 +41,6 @@ export default {
       summaries: null,
       snapshots: null,
       issues: null,
-      snapshots: null,
       stars: null,
       dois: null,
       keys: null,
