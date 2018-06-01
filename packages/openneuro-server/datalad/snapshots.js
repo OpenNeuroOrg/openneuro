@@ -76,6 +76,15 @@ export const createSnapshot = async (datasetId, tag) => {
 
 // TODO - deleteSnapshot
 // It should delete the index redis key
+export const deleteSnapshot = (datasetId, tag) => {
+  const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
+  const indexKey = snapshotIndexKey(datasetId)
+  const sKey = snapshotKey(datasetId, tag)
+
+  return request.del(url).then(({body}) => 
+    redis.del(indexKey).then(() => 
+      redis.del(sKey)).then(() => body))
+}
 
 /**
  * Get a list of all snapshot tags available for a dataset
