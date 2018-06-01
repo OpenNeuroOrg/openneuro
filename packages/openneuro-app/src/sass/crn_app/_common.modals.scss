@@ -591,10 +591,20 @@ div.rt-resizable-header-content {
 }
 
 .snapshot-modal {
+    
 
     .snapshot-version {
         div {
             display: inline-block;
+
+            input {
+                margin-left: 15px;
+            }
+            label {
+                font-size: 15px;
+                font-weight: lighter;
+                color: $ocean;
+            }
         }
         span.version-point {
             padding: 0px 4px;
