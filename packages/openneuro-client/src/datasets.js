@@ -29,6 +29,10 @@ export const getDataset = gql`
           size
           totalFiles
         }
+        issues {
+          key
+          severity
+        }
       }
       snapshots {
         id
@@ -70,6 +74,12 @@ export const deleteDataset = gql`
     deleteDataset(label: $label) {
       id
     }
+  }
+`
+
+export const deleteSnapshot = gql`
+  mutation deleteSnapshot($datasetId: ID!, $tag: String!) {
+    deleteSnapshot(datasetId: $datasetId, tag: $tag)
   }
 `
 
