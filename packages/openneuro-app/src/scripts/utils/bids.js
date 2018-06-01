@@ -546,6 +546,7 @@ export default {
    * to any statuses set in the notes.
    */
   formatStatus(project, userAccess) {
+    let validationIssues = project.draft ? project.draft.issues : []
     let tags = project.tags ? project.tags : []
     let currentUser = userStore.data.scitran
     let userId = currentUser ? currentUser._id : null
@@ -559,7 +560,7 @@ export default {
     let status = {
       incomplete: tags.indexOf('incomplete') > -1,
       validating: tags.indexOf('validating') > -1,
-      invalid: tags.indexOf('invalid') > -1,
+      invalid: !!validationIssues.find(i => i.severity == 'error'), // dataset is invalid if there are any issues with 'error' level severity
       public: !!project.public,
       hasPublic: tags.indexOf('hasPublic') > -1,
       shared:
