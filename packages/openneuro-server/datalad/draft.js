@@ -34,6 +34,6 @@ export const updateDatasetRevision = datasetId => gitRef => {
    */
   return mongo.collections.crn.datasets.update(
     { id: datasetId },
-    { $set: { revision: gitRef } },
+    { $set: { revision: gitRef, modified: new Date() } },
   )
 }
