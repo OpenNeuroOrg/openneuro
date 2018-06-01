@@ -124,22 +124,41 @@ export default {
       })
     },
 
-    deleteDataset(datasetId) {
-      let mutation = datasets.deleteDataset
-      return new Promise((resolve, reject) => {
-        client.mutate({
-          mutation: mutation,
-          variables: {
-            label: bids.decodeId(datasetId)
-          }
+    deleteDataset(datasetId, options) {
+      if (options.snapshot && options.tag) {
+        let mutation = datasets.deleteSnapshot
+        return new Promise((resolve, reject) => {
+          client.mutate({
+            mutation: mutation,
+            variables: {
+              datasetId: bids.decodeId(datasetId),
+              tag: options.tag
+            }
+          })
+          .then(data => {
+            resolve(data)
+          })
+          .catch(err => {
+            reject(err)
+          })
         })
-        .then(data => {
-          resolve(data)
+      } else {
+        let mutation = datasets.deleteDataset
+        return new Promise((resolve, reject) => {
+          client.mutate({
+            mutation: mutation,
+            variables: {
+              label: bids.decodeId(datasetId)
+            }
+          })
+          .then(data => {
+            resolve(data)
+          })
+          .catch(err => {
+            reject(err)
+          })
         })
-        .catch(err => {
-          reject(err)
-        })
-      })
+      }
     },
 
     updatePublic(datasetId, publicFlag) {
