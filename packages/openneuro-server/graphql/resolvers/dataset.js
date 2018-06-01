@@ -32,6 +32,13 @@ export const createSnapshot = (obj, { datasetId, tag }) => {
 }
 
 /**
+ * Remove a tag from a dataset
+ */
+export const deleteSnapshot = (obj, {datasetId, tag}) => {
+  return snapshots.deleteSnapshot(datasetId, tag)
+}
+
+/**
  * Add files to a draft
  */
 export const updateFiles = (
@@ -73,12 +80,20 @@ export const updateFilesTree = (datasetId, fileTree) => {
 /**
  * Delete files from a draft
  */
-export const deleteFiles = (obj, { datasetId, files: fileTree }) => {
+export const deleteFiles = (obj, 
+  { datasetId, files: fileTree },
+  {userInfo: {firstname, lastname, email}}) => {
   // TODO - The id returned here is a placeholder
   const promises = deleteFilesTree(datasetId, fileTree)
-  return Promise.all(promises).then(() => ({
-    id: new Date(),
-  }))
+  return Promise.all(promises)
+    .then(() =>
+      datalad
+        .commitFiles(datasetId, `${firstname} ${lastname}`, email)
+        .then(res => res.body.ref)
+        .then(updateDatasetRevision(datasetId)),
+    ).then(() => ({
+      id: new Date(),
+    }))
 }
 
 /**
