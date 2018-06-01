@@ -1726,8 +1726,11 @@ let datasetStore = Reflux.createStore({
           this.showDatasetComponent(displayUrl, file.history)
         })
       } else {
+        let options = {}
+        options.snapshot = this.data.dataset.snapshot_version ? true : false
+        options.tag = options.snapshot ? this.data.dataset.snapshot_version : null
         datalad
-          .getFile(bids.decodeId(this.data.dataset._id), file.name)
+          .getFile(bids.decodeId(this.data.dataset._id), file.name, options)
           .then(res => {
             if (callback) {
               callback()
