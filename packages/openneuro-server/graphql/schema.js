@@ -44,6 +44,11 @@ const typeDefs = `
     updateSnapshotFileUrls(fileUrls: FileUrls!): Boolean
   }
 
+  type Subscription {
+    # Publishes when the set of datasets changes
+    datasetAdded: Dataset
+  }
+
   input SummaryInput {
     id: ID! # Git reference for this summary
     datasetId: ID!
