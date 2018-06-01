@@ -15,6 +15,7 @@ export const getDataset = gql`
         email
       }
       draft {
+        id
         modified
         files {
           id
