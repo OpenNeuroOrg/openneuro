@@ -17,7 +17,11 @@ class SnapshotResource(object):
         self.store = store
 
     def _get_snapshot(self, dataset, snapshot, files):
-        return {'files': files, 'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot}
+        # get the hash associated with the commit
+        ds = self.store.get_dataset(dataset)
+        commit_data = ds.repo.repo.commit(snapshot)
+        hexsha = commit_data.hexsha
+        return {'files': files, 'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha}
 
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
@@ -55,3 +59,13 @@ class SnapshotResource(object):
         else:
             resp.media = {'error': 'tag already exists'}
             resp.status = falcon.HTTP_CONFLICT
+
+    def on_delete(self, req, resp, dataset, snapshot):
+        """Remove a tag on the dataset, which is equivalent to deleting a snapshot"""
+        if snapshot:
+            ds = self.store.get_dataset(dataset)
+            ds.repo.repo.delete_tag(snapshot)
+            resp.media = {}
+            resp.status = falcon.HTTP_OK
+        else:
+            resp.media = {'error': 'no snapshot tag specified'}
