@@ -36,16 +36,26 @@ export default {
       })
     },
 
-    getDataset(datasetId, options, callback) {
-      if (!options.snapshot) {
-        this.queryDataset(datasetId, (data) => {
-          callback(data)
+    async getDataset(datasetId) {
+      return new Promise((resolve, reject) => {
+        this.queryDataset(datasetId, (err, data) => {
+          if (err) reject(err)
+          resolve(data)
         })
-      } else {
-        this.querySnapshot(options.datasetId, options.tag, (data) => {
-          callback(data)
+      })
+       
+    },
+
+    async getSnapshot(datasetId, options) {
+      return new Promise((resolve, reject) => {
+        this.querySnapshot(datasetId, options.tag, (err, data) => {
+          if (err) reject(err)
+          data = clone(data)
+          data.data.snapshot._id = options.datasetId
+          resolve(data)
         })
-      }
+      })
+      
     },
 
     queryDataset(datasetId, callback) {
@@ -65,11 +75,11 @@ export default {
               snapshot.original = splitId[0]
           }
           data.data.dataset.files = data.data.dataset.draft ? data.data.dataset.draft.files : []
-          return callback(data)
+          return callback(null, data)
       })
       .catch(err => {
         // console.log('error in datasetQuery:', err)
-        return callback(err)
+        return callback(err, null)
       })
     },
 
@@ -106,30 +116,49 @@ export default {
         }
       })
       .then(data => {
-        return callback(data)
+        return callback(null, data)
       })
       .catch(err => {
         // console.log('error in snapshot query:', err) 
-        return callback(err)
+        return callback(err, null)
       })
     },
 
-    deleteDataset(datasetId) {
-      let mutation = datasets.deleteDataset
-      return new Promise((resolve, reject) => {
-        client.mutate({
-          mutation: mutation,
-          variables: {
-            label: bids.decodeId(datasetId)
-          }
+    deleteDataset(datasetId, options) {
+      if (options.snapshot && options.tag) {
+        let mutation = datasets.deleteSnapshot
+        return new Promise((resolve, reject) => {
+          client.mutate({
+            mutation: mutation,
+            variables: {
+              datasetId: bids.decodeId(datasetId),
+              tag: options.tag
+            }
+          })
+          .then(data => {
+            resolve(data)
+          })
+          .catch(err => {
+            reject(err)
+          })
         })
-        .then(data => {
-          resolve(data)
+      } else {
+        let mutation = datasets.deleteDataset
+        return new Promise((resolve, reject) => {
+          client.mutate({
+            mutation: mutation,
+            variables: {
+              label: bids.decodeId(datasetId)
+            }
+          })
+          .then(data => {
+            resolve(data)
+          })
+          .catch(err => {
+            reject(err)
+          })
         })
-        .catch(err => {
-          reject(err)
-        })
-      })
+      }
     },
 
     updatePublic(datasetId, publicFlag) {
@@ -184,11 +213,11 @@ export default {
     // FILE OPERATIONS
 
     getFile(datasetId, filename, options) {
+      filename = this.encodeFilePath(filename)
       let uri = `/crn/datasets/${datasetId}/files/${filename}`
       if (options && options.snapshot) {
-        uri = `/crn/snapshots/${datasetId}/files/${filename}`
+        uri = `/crn/datasets/${datasetId}/snapshots/${options.tag}/files/${filename}`
       }
-      filename = this.encodeFilePath(filename)
       return new Promise((resolve, reject) => {
         request
           .get(uri, {

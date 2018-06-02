@@ -30,6 +30,8 @@ const typeDefs = `
     deleteDataset(label: String!): Dataset
     # Tag the current draft
     createSnapshot(datasetId: ID!, tag: String!): Snapshot
+    # Remove a tag from the dataset
+    deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
     # Add or update files in a draft - returns a new Draft
     updateFiles(datasetId: ID!, files: FileTree!): Draft
     # delete files in a draft - returns a new Draft

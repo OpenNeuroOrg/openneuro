@@ -50,7 +50,7 @@ class SnapshotLoader extends Reflux.Component {
           const version = query.get('version')
           const job = query.get('job')
           actions.trackView(snapshotUrl)
-          actions.loadDataset(snapshotUrl, {
+          actions.loadDataset(datasetId, {
             snapshot: true,
             app: app,
             version: version,

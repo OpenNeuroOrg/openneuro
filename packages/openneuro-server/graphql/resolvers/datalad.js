@@ -12,7 +12,7 @@ export const draft = obj => {
     files,
     summary: () => summary(obj),
     issues: () => issues(obj),
-    modified: new Date(), // TODO - Return cache age here
+    modified: obj.modified,
     partial: () => partial(obj),
   }))
 }
