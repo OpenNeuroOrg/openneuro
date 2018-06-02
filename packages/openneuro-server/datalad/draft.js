@@ -37,3 +37,11 @@ export const updateDatasetRevision = datasetId => gitRef => {
     { $set: { revision: gitRef } },
   )
 }
+
+export const getPartialStatus = datasetId => {
+  const partialUrl = `${uri}/datasets/${datasetId}/draft`
+  return request
+    .get(partialUrl)
+    .set('Accept', 'application/json')
+    .then(({ body: { partial } }) => partial)
+}
