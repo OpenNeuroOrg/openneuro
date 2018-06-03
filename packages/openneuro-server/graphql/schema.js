@@ -47,6 +47,7 @@ const typeDefs = `
   type Subscription {
     # Publishes when the set of datasets changes
     datasetAdded: Dataset
+    datasetDeleted: ID
   }
 
   input SummaryInput {
