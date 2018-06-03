@@ -25,7 +25,7 @@ class Dataset extends Reflux.Component {
     let datasets = this.state.datasets
     let showSidebar = this.state.datasets.showSidebar
     let dataset = this.state.datasets.dataset
-    let datasetLabel = dataset ? dataset.label : ''
+    let datasetLabel = (dataset && dataset.label) ? dataset.label : ''
     const description = dataset
       ? dataset.README ? dataset.README : dataset.label
       : null

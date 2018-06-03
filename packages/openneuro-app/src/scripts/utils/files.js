@@ -1,6 +1,10 @@
 // dependencies -------------------------------------------------------------------
 
 import newId from './newid'
+import bids from './bids'
+import config from '../../../config'
+import datalad from './datalad'
+
 
 // public API ---------------------------------------------------------------------
 
@@ -11,6 +15,7 @@ let fileUtils = {
   hasExtension,
   sortTree,
   findFiles,
+  getFileURL,
 }
 
 export default fileUtils
@@ -216,4 +221,24 @@ function findFiles(container, fileList = []) {
   })
 
   return fileList
+}
+
+/**
+ * Get File URL
+ * 
+ * takes a dataset, as well as a filename, and constructs the url for 
+ * that file for access via crn server
+ *
+ * Returns the uri that points to the location of a dataset file. Useful when serving files that
+ * reside in iframe or papaya viewer
+*/
+function getFileURL(dataset, fileName) {
+  let datasetId = dataset._id
+  let link = config.crn.url + 'datasets/' + bids.decodeId(datasetId) + '/files/' + datalad.encodeFilePath(fileName)
+  if (dataset.snapshot_version) {
+    let snapshotId = dataset.snapshot_version
+    link = config.crn.url + 'datasets/' + bids.decodeId(datasetId) + '/snapshots/' + bids.decodeId(snapshotId) + '/files/' + datalad.encodeFilePath(fileName)
+  }
+  
+  return link
 }

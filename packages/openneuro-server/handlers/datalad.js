@@ -49,9 +49,14 @@ export const createSnapshot = (req, res) => {
  */
 export const getFile = (req, res) => {
   const datasetId = req.params.datasetId
+  const snapshotId = req.params.snapshotId
   const filename = req.params.filename
   res.set('Content-Type', 'application/*')
-  const uri = `${URI}/datasets/${datasetId}/files/${filename}`
+  let uri = `${URI}/datasets/${datasetId}/files/${filename}`
+  if (snapshotId) {
+    uri = `${URI}/datasets/${datasetId}/snapshots/${snapshotId}/files/${filename}`
+  }
+  
   return request.get(uri)
     .pipe(res)
 }

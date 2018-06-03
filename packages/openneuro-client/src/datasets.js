@@ -15,6 +15,7 @@ export const getDataset = gql`
         email
       }
       draft {
+        id
         modified
         files {
           id
@@ -28,6 +29,10 @@ export const getDataset = gql`
           tasks
           size
           totalFiles
+        }
+        issues {
+          key
+          severity
         }
       }
       snapshots {
@@ -70,6 +75,12 @@ export const deleteDataset = gql`
     deleteDataset(label: $label) {
       id
     }
+  }
+`
+
+export const deleteSnapshot = gql`
+  mutation deleteSnapshot($datasetId: ID!, $tag: String!) {
+    deleteSnapshot(datasetId: $datasetId, tag: $tag)
   }
 `
 

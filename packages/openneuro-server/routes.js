@@ -345,7 +345,7 @@ const dataladRoutes = [
   },
   {
     method: 'post',
-    url: '/datasets/:datasetId/snapshot/:snapshotId',
+    url: '/datasets/:datasetId/snapshots/:snapshotId',
     handler: datalad.createSnapshot,
   },
   // OpenFMRI API routes
@@ -359,6 +359,11 @@ const dataladRoutes = [
   {
     method: 'get',
     url: '/datasets/:datasetId/files/:filename',
+    handler: datalad.getFile,
+  },
+  {
+    method: 'get',
+    url: '/datasets/:datasetId/snapshots/:snapshotId/files/:filename',
     handler: datalad.getFile,
   },
 ]

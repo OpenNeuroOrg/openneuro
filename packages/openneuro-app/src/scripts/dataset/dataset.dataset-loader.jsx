@@ -34,19 +34,13 @@ class DatasetLoader extends Reflux.Component {
       let datasetId = props.match.params.datasetId
       if (datasetId && this.state.datasets) {
         const datasetUrl = bids.encodeId(datasetId)
-        if (datasetUrl !== this.state.datasets.loadedUrl) {
+        if (datasetUrl !== this.state.datasets.loadedUrl && !this.state.datasets.loading) {
           reload = true
         }
       }
 
       if (reload) {
-        if (
-          (datasetId && this.state.datasets && !this.state.datasets.dataset) ||
-          (datasetId &&
-            this.state.datasets &&
-            this.state.datasets.dataset &&
-            bids.encodeId(datasetId) !== this.state.datasets.dataset._id)
-        ) {
+        if (datasetId) {
           actions.loadDataset(bids.encodeId(datasetId))
         }
       }
