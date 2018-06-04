@@ -1,4 +1,4 @@
-import { datasets, files } from 'openneuro-client'
+import { datasets, files, snapshots } from 'openneuro-client'
 
 /**
  * Create a dataset and update the label
@@ -11,6 +11,22 @@ export const createDataset = client => label => {
       variables: { label },
     })
     .then(({ data }) => data.createDataset.id)
+}
+
+/**
+ * Create a dataset and update the label
+ * @param {object} client Apollo client
+ * @param {string} datasetId Id of the dataset to snapshot
+ */
+export const createSnapshot = (client, datasetId)=> {
+  return client
+    .mutate({
+      mutation: snapshots.createSnapshot,
+      variables: { 
+        datasetId: datasetId,
+        tag: '1.0.0' 
+      },
+    })
 }
 
 /**
