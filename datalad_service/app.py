@@ -5,6 +5,7 @@ from datalad_service.handlers.draft import DraftResource
 from datalad_service.handlers.files import FilesResource
 from datalad_service.handlers.snapshots import SnapshotResource
 from datalad_service.handlers.heartbeat import HeartbeatResource
+from datalad_service.handlers.publish import PublishResource
 
 
 class PathConverter(falcon.routing.converters.BaseConverter):
@@ -24,6 +25,7 @@ def create_app(annex_path):
     datasets = DatasetResource(store)
     dataset_draft = DraftResource(store)
     dataset_files = FilesResource(store)
+    dataset_publish = PublishResource(store)
     dataset_snapshots = SnapshotResource(store)
 
     api.add_route('/heartbeat', heartbeat)
@@ -44,4 +46,7 @@ def create_app(annex_path):
     api.add_route(
         '/datasets/{dataset}/snapshots/{snapshot}/files/{filename:path}', dataset_files)
 
+    api.add_route(
+        '/datasets/{dataset}/publish', dataset_publish
+    )
     return api
