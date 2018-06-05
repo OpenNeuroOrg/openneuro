@@ -67,12 +67,43 @@ def publish_target(dataset, target, treeish):
 
 
 @dataset_task
-def publish_snapshot(store, dataset, snapshot, realm='PRIVATE'):
-    """Publish a snapshot tag to S3, GitHub or both."""
+def migrate_to_bucket(store, dataset, realm='PUBLIC'):
+    """Migrate a dataset and all snapshots to an S3 bucket"""
     realm = DatasetRealm[realm]
     dataset_id = dataset
     ds = store.get_dataset(dataset)
+    tags = [tag['name'] for tag in ds.repo.get_tags()]
     siblings = ds.siblings()
+    s3_remote = s3_sibling(ds, siblings, realm=realm)
+    for tag in tags:
+        publish_target(ds, realm.s3_remote, tag)
+        versions = s3_versions(ds, realm, tag)
+        if (len(versions)):
+            r = requests.post(
+                url=GRAPHQL_ENDPOINT, json=file_urls_mutation(dataset_id, tag, versions))
+            if r.status_code != 200:
+                raise Exception(r.text)
+        # Public publishes to GitHub
+        if realm == DatasetRealm.PUBLIC:
+            github_remote = github_sibling(ds, dataset_id, siblings)
+            publish_target(ds, realm.github_remote, tag)
+
+@dataset_task
+def publish_snapshot(store, dataset, snapshot):
+    """Publish a snapshot tag to S3, GitHub or both."""
+    dataset_id = dataset
+    ds = store.get_dataset(dataset)
+    siblings = ds.siblings()
+
+    # if the dataset has a public sibling, use this as the export target
+    # otherwise, use the private as the export target
+    public_bucket_name = DatasetRealm(DatasetRealm.PUBLIC).s3_remote
+    has_public_bucket = get_sibling_by_name(public_bucket_name, siblings)
+    if has_public_bucket:
+        realm = DatasetRealm(DatasetRealm.PUBLIC)
+    else:
+        realm = DatasetRealm(DatasetRealm.PRIVATE)
+
     s3_remote = s3_sibling(ds, siblings)
     publish_target(ds, realm.s3_remote, snapshot)
     versions = s3_versions(ds, realm, snapshot)
