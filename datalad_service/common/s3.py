@@ -65,7 +65,7 @@ def s3_export(dataset, target, treeish='HEAD'):
 
 
 def s3_versions(dataset, realm=DatasetRealm.PRIVATE, snapshot='HEAD'):
-    realm = DatasetRealm.PRIVATE # TODO: FIX WHEN PUBLIC BUCKETS ARE ACTIVATED
+    realm = realm
     dataset_id = os.path.basename(dataset.path)
     bucket_name = '{}'.format(realm.s3_bucket)
 
