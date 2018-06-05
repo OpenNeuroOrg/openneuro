@@ -162,6 +162,7 @@ export default {
     },
 
     updatePublic(datasetId, publicFlag) {
+      datasetId = bids.decodeId(datasetId)
       const mutation = datasets.updatePublic
       return new Promise((resolve, reject) => {
         client.mutate({
@@ -172,7 +173,18 @@ export default {
           }
         })
         .then(data => {
-          resolve(data)
+          let uri = `/crn/datasets/${datasetId}/publish`
+          // if now public, initialize migration to a public s3 bucket
+          // otherwise, initialize migration to a private s3 bucket          
+          if (publicFlag) {
+            request.post(uri)
+            .then(() => resolve(data))
+            .catch(err => reject(err))
+          } else {
+            request.del(uri)
+            .then(() => resolve(data))
+            .catch(err => reject(err))
+          }
         })
         .catch(err => {
           // console.log('error in updatePublic:', err)
