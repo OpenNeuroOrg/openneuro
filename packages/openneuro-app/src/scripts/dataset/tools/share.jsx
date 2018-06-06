@@ -249,17 +249,17 @@ class Share extends Reflux.Component {
   }
 
   _removeUser(userId) {
-    // datalad.removePermission(this.state.datasets.dataset._id, userId).then(() => {
-    //   let index
-    //   let permissions = this.state.permissions
-    //   for (let i = 0; i < permissions.length; i++) {
-    //     if (permissions[i]._id === userId) {
-    //       index = i
-    //     }
-    //   }
-    //   permissions.splice(index, 1)
-    //   this.setState({ permissions })
-    // })
+    datalad.removePermissions(this.state.datasets.dataset._id, userId).then(() => {
+      let index
+      let permissions = this.state.permissions
+      for (let i = 0; i < permissions.length; i++) {
+        if (permissions[i]._id === userId) {
+          index = i
+        }
+      }
+      permissions.splice(index, 1)
+      this.setState({ permissions })
+    })
   }
 }
 
