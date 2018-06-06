@@ -349,6 +349,25 @@ export default {
   
   decodeFilePath(path) {
     return path.replace(new RegExp(':', 'g'), '/')
-  }
+  },
 
+
+  // PERMISSIONS OPERATIONS
+  updatePermissions(datasetId, userId, level) {
+    let mutation = datasets.updatePermissions
+    datasetId = bids.decodeId(datasetId)
+    return new Promise((resolve, reject) => {
+      client.mutate({
+        mutation: mutation,
+        variables: {
+          datasetId, userId, level
+        }
+      }).then(() => {
+        resolve()
+      })
+      .catch(err => {
+        reject(err)
+      })
+    })
+  },
 }
