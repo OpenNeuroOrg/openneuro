@@ -75,7 +75,7 @@ export const createDatasetModel = (id, label, uploader) => {
 export const giveUploaderPermission = (id, uploader) => {
   const datasetId = id
   const userId = uploader
-  const level = 'rw'
+  const level = 'admin'
   return c.crn.permissions.insertOne({datasetId, userId, level})
 }
 
