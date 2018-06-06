@@ -6,6 +6,7 @@ import { createUploadLink } from 'apollo-upload-client'
 import FormData from 'form-data'
 import * as files from './files'
 import * as datasets from './datasets'
+import * as snapshots from './snapshots'
 
 const cache = new InMemoryCache()
 
@@ -56,5 +57,5 @@ const createLink = (uri, getAuthorization, fetch) => {
   return authLink(getAuthorization).concat(httpUploadLink)
 }
 
-export { files, datasets }
+export { files, datasets, snapshots }
 export default createClient

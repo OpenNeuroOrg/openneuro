@@ -92,15 +92,18 @@ class UploadClient extends React.Component {
       // Create dataset and then add files
       mutation
         .createDataset(this.props.client)(this.state.name)
-        .then(datasetId =>
-          mutation.updateFiles(uploadClient)(datasetId, this.state.files),
-        )
-        .then(() => {
-          this.setState({ uploading: false })
-        })
-        .catch(err => {
-          this.setState({ uploading: false })
-          throw err
+        .then(datasetId => {
+          mutation.updateFiles(uploadClient)(datasetId, this.state.files)
+            .then(() => {
+              mutation.createSnapshot(this.props.client, datasetId)
+                .then(() => {
+                  this.setState({ uploading: false })
+                })
+                .catch(err => {
+                  this.setState({ uploading: false })
+                  throw err
+                })
+            })
         })
     }
   }

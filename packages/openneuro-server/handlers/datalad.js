@@ -44,6 +44,24 @@ export const createSnapshot = (req, res) => {
   })
 }
 
+/** Migrate a dataset from the private to public aws bucket */
+export const publishDataset = (req, res) => {
+  const datasetId = req.params.datasetId
+  const uri = `${URI}/datasets/${datasetId}/publish`
+  request.post(uri).then(() => {
+    res.send()
+  })
+}
+
+/** Migrate a dataset from the private to public aws bucket */
+export const unpublishDataset = (req, res) => {
+  const datasetId = req.params.datasetId
+  const uri = `${URI}/datasets/${datasetId}/publish`
+  request.del(uri).then(() => {
+    res.send()
+  })
+}
+
 /**
  * Get a file from a dataset
  */
