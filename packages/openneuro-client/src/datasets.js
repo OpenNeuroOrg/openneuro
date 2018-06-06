@@ -42,6 +42,12 @@ export const getDataset = gql`
         created
         snapshot_version: tag
       }
+      permissions {
+        userId
+        _id: userId
+        level
+        access: level
+      }
     }
   }
 `
@@ -57,6 +63,12 @@ export const getDatasets = gql`
         id
       }
       public
+      permissions {
+        userId
+        _id: userId
+        level
+        access: level
+      }
     }
   }
 `
@@ -87,5 +99,11 @@ export const deleteSnapshot = gql`
 export const updatePublic = gql`
   mutation ($id: ID!, $publicFlag: Boolean!) {
     updatePublic(datasetId: $id, publicFlag: $publicFlag)
+  }
+`
+
+export const updatePermissions = gql`
+  mutation ($datasetId: ID!, $userId: String!, $level: String) {
+    updatePermissions(datasetId: $datasetId, userId: $userId, level: $level)
   }
 `
