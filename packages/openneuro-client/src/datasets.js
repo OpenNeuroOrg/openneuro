@@ -107,3 +107,9 @@ export const updatePermissions = gql`
     updatePermissions(datasetId: $datasetId, userId: $userId, level: $level)
   }
 `
+
+export const removePermissions = gql`
+  mutation ($datasetId: ID!, $userId: String!) {
+    removePermissions(datasetId: $datasetId, userId: $userId)
+  }
+`
