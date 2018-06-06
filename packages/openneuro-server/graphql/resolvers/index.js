@@ -16,7 +16,7 @@ import {
 import { updateSummary, updateValidation } from './validation.js'
 import { draft, snapshot, snapshots } from './datalad.js'
 import { whoami, user, users } from './user.js'
-import { permissions, updatePermissions } from './permissions.js'
+import { permissions, updatePermissions, removePermissions } from './permissions.js'
 
 export default {
   Date: GraphQLDate,
@@ -44,6 +44,7 @@ export default {
     updateSnapshotFileUrls,
     updatePublic,
     updatePermissions,
+    removePermissions,
   },
   User: user,
   Dataset: {

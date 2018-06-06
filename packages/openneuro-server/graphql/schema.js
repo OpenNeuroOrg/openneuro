@@ -46,6 +46,8 @@ const typeDefs = `
     updateSnapshotFileUrls(fileUrls: FileUrls!): Boolean
     # Update a users's permissions on a dataset
     updatePermissions(datasetId: ID!, userId: String!, level: String): Boolean
+    # Remove a users's permissions on a dataset
+    removePermissions(datasetId: ID!, userId: String!): Boolean
   }
 
   input SummaryInput {
