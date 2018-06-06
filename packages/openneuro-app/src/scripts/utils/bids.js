@@ -549,6 +549,7 @@ export default {
     let validationIssues = project.draft ? project.draft.issues : []
     let tags = project.tags ? project.tags : []
     let currentUser = userStore.data.scitran
+    let uploader = project.uploader ? project.uploader.id : null
     let userId = currentUser ? currentUser._id : null
     let hasRoot = currentUser ? currentUser.root : null
     let permissions = project.permissions ? project.permissions : []
@@ -565,7 +566,7 @@ export default {
       hasPublic: tags.indexOf('hasPublic') > -1,
       shared:
         userStore.data.scitran &&
-        project.group != userStore.data.scitran._id &&
+        uploader != userStore.data.scitran._id &&
         !!userAccess &&
         !adminOnlyAccess,
     }
