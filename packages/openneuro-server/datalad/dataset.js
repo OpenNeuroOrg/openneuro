@@ -34,6 +34,7 @@ export const createDataset = (label, uploader, userInfo) => {
   return new Promise(async (resolve, reject) => {
     const datasetId = await getAccessionNumber()
     const dsObj = await createDatasetModel(datasetId, label, uploader)
+    await giveUploaderPermission(datasetId, uploader)
     // If successful, create the repo
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
@@ -69,6 +70,13 @@ export const createDatasetModel = (id, label, uploader) => {
     revision,
   }
   return c.crn.datasets.insertOne(datasetObj)
+}
+
+export const giveUploaderPermission = (id, uploader) => {
+  const datasetId = id
+  const userId = uploader
+  const level = 'rw'
+  return c.crn.permissions.insertOne({datasetId, userId, level})
 }
 
 /**
