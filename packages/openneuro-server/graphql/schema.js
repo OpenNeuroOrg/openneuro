@@ -44,6 +44,8 @@ const typeDefs = `
     updateValidation(validation: ValidationInput!): Boolean
     # Update a snapshot with a list of file urls
     updateSnapshotFileUrls(fileUrls: FileUrls!): Boolean
+    # Update a users's permissions on a dataset
+    updatePermissions(datasetId: ID!, userId: String!, level: String): Boolean
   }
 
   input SummaryInput {
@@ -105,6 +107,7 @@ const typeDefs = `
     public: Boolean
     draft: Draft
     snapshots: [Snapshot]
+    permissions: [Permission]
   }
 
   # Ephemeral draft or working tree for a dataset
@@ -130,6 +133,13 @@ const typeDefs = `
     summary: Summary
     issues: [ValidationIssue]
     files: [DatasetFile]
+  }
+
+  #User permissions on a dataset
+  type Permission {
+    datasetId: ID!
+    userId: String!
+    level: String!
   }
 
   # Authors of a dataset
@@ -219,6 +229,7 @@ const typeDefs = `
     filename: String!
     urls: [String]
   }
+
 `
 
 export default makeExecutableSchema({
