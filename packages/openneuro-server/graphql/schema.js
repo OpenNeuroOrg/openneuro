@@ -21,6 +21,8 @@ const typeDefs = `
     users: [User]
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
+    # Determine if a dataset is partially uploaded
+    partial(datasetId: ID!): Boolean
   }
 
   type Mutation {
@@ -116,13 +118,14 @@ const typeDefs = `
     draft: Draft
     snapshots: [Snapshot]
     permissions: [Permission]
+    partial: Boolean
   }
 
   # Ephemeral draft or working tree for a dataset
   type Draft {
-    id: ID!
+    id: ID
     dataset: Dataset
-    modified: DateTime!
+    modified: DateTime
     authors: [Author]
     summary: Summary
     issues: [ValidationIssue]
