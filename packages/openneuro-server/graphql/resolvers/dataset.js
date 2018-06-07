@@ -16,7 +16,6 @@ export const datasets = () => {
  */
 export const createDataset = (obj, { label }, { user, userInfo }) => {
   return datalad.createDataset(label, user, userInfo).then(dataset => {
-    pubsub.publish('datasetAdded', { datasetId: dataset.id })
     return dataset
   })
 }
@@ -24,9 +23,9 @@ export const createDataset = (obj, { label }, { user, userInfo }) => {
 /**
  * Delete an existing dataset, as well as all snapshots
  */
-export const deleteDataset = (obj, { label }, { user, userInfo }) => {
-  return datalad.deleteDataset(label, user, userInfo).then(deleted => {
-    pubsub.publish('datasetDeleted', { datasetId: obj.id })
+export const deleteDataset = (obj, { label }) => {
+  return datalad.deleteDataset(label).then(deleted => {
+    pubsub.publish('datasetDeleted', {id: label})
     return deleted
   })
 }
