@@ -1,4 +1,5 @@
 import getClient from 'openneuro-client'
+import config from '../../../config'
 import {datasets, files} from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
@@ -10,13 +11,14 @@ function getToken() {
   return credentials ? credentials.access_token : ''
 }
 
-const client = getClient('/crn/graphql', getToken)
+const client = getClient(`${config.url}/crn/graphql`, getToken)
 export default {
     async getDatasets(options) {
       const query = datasets.getDatasets
       return new Promise((resolve, reject) => {
         client.query({
-          query: query
+          query: query,
+          fetchPolicy: 'network-only'
         })
         .then(data => {
             data = clone(data)
