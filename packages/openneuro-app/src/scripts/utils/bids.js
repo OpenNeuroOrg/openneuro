@@ -156,7 +156,9 @@ export default {
           let draft = project ? project.draft : null
           let snapshotQuery = options.snapshot ? (await datalad.getSnapshot(projectId, options)).data : null
           let snapshot = snapshotQuery ? snapshotQuery.dataset : null
-          let tempFiles = !snapshot ? this._formatFiles(draft.files) : this._formatFiles(snapshot.files)
+          let draftFiles = draft ? draft.files : []
+          let snapshotFiles = snapshot ? snapshot.files : []
+          let tempFiles = !snapshot ? this._formatFiles(draftFiles) : this._formatFiles(snapshotFiles)
           project.snapshot_version = snapshot ? snapshot.tag : null
           this.getMetadata(
             project,
@@ -560,7 +562,7 @@ export default {
     let adminOnlyAccess = permittedUsers.indexOf(userId) == -1 && hasRoot
 
     let status = {
-      incomplete: tags.indexOf('incomplete') > -1,
+      incomplete: tags.indexOf('incomplete') > -1 || project.partial,
       validating: tags.indexOf('validating') > -1,
       invalid: !!validationIssues.find(i => i.severity == 'error'), // dataset is invalid if there are any issues with 'error' level severity
       public: !!project.public,
