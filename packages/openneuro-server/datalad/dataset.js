@@ -63,6 +63,7 @@ export const createDataset = (label, uploader, userInfo) => {
 export const createDatasetModel = (id, label, uploader) => {
   const creationTime = new Date()
   const revision = null // Empty repo has no hash yet
+  const partial = true // until files are committed, the dataset is partial
   const datasetObj = {
     id,
     label,
@@ -70,6 +71,7 @@ export const createDatasetModel = (id, label, uploader) => {
     modified: creationTime,
     uploader,
     revision,
+    partial
   }
   return c.crn.datasets.insertOne(datasetObj)
 }
