@@ -8,6 +8,7 @@ export const getDataset = gql`
       label
       created
       public
+      partial
       uploader {
         id
         firstName
@@ -69,6 +70,26 @@ export const getDatasets = gql`
         level
         access: level
       }
+      partial
+    }
+  }
+`
+
+export const getPartialDataset = gql`
+  query dataset($id: ID!) {
+    dataset(id: $id) {
+      id
+      _id: id
+      label
+      created
+      public
+      partial
+      uploader {
+        id
+        firstName
+        lastName
+        email
+      }
     }
   }
 `
@@ -111,5 +132,10 @@ export const updatePermissions = gql`
 export const removePermissions = gql`
   mutation ($datasetId: ID!, $userId: String!) {
     removePermissions(datasetId: $datasetId, userId: $userId)
+  }
+`
+export const checkPartial = gql`
+  query partial($datasetId: ID!) {
+    partial (datasetId: $datasetId)
   }
 `
