@@ -1,7 +1,7 @@
 import * as datalad from '../../datalad/dataset.js'
 import * as snapshots from '../../datalad/snapshots.js'
-import { updateDatasetRevision } from '../../datalad/draft.js'
 import pubsub from '../pubsub.js'
+import { updateDatasetRevision, getPartialStatus } from '../../datalad/draft.js'
 
 export const dataset = (obj, { id }) => {
   return datalad.getDataset(id)
@@ -140,4 +140,11 @@ export const updateSnapshotFileUrls = (obj, { fileUrls }) => {
   let snapshotTag = fileUrls.tag
   let files = fileUrls.files
   return datalad.updateSnapshotFileUrls(datasetId, snapshotTag, files)
+}
+
+/**
+ * Check if a dataset draft is partially uploaded
+ */
+export const partial = (obj, { datasetId }) => {
+  return getPartialStatus(datasetId)
 }
