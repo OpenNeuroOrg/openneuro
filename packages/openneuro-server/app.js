@@ -76,14 +76,14 @@ export default test => {
     }),
   )
 
-  const websocketUrl = config.url.replace('http', 'ws')
-
+  const websocketUrl = process.browser ? config.url.replace('http', 'ws') : null
+  const subscriptionUrl = websocketUrl ? `${websocketUrl}/graphql-subscriptions` : null
   // GraphiQL, a visual editor for queries
   app.use(
     '/crn/graphiql',
     graphiqlExpress({
       endpointURL: '/crn/graphql',
-      subscriptionsEndpoint: `${websocketUrl}/graphql-subscriptions`,
+      subscriptionsEndpoint: subscriptionUrl,
     }),
   )
 

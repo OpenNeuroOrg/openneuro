@@ -74,14 +74,23 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
 
 const createLink = (uri, getAuthorization, fetch) => {
   // We have to setup authLink to inject credentials here
-  const link = split(
-    ({ query }) => {
-      const { kind, operation } = getMainDefinition(query)
-      return kind === 'OperationDefinition' && operation === 'subscription'
-    },
-    wsLink(uri),
-    middlewareAuthLink(uri, getAuthorization, fetch)
-  )
+
+  // server-side link
+  let link = middlewareAuthLink(uri, getAuthorization, fetch)
+
+  // browser-side link
+  const ws = process.browser ? wsLink(uri) : null
+  if (ws) {
+    link = split(
+      ({ query }) => {
+        const { kind, operation } = getMainDefinition(query)
+        return kind === 'OperationDefinition' && operation === 'subscription'
+      },
+      ws,
+      middlewareAuthLink(uri, getAuthorization, fetch)
+    )
+  }
+  
   return link
 }
 
