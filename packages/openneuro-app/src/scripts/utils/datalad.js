@@ -68,13 +68,16 @@ export default {
       })
       .then(data => {
           data = clone(data)
-          let snapshots = data.data.dataset.snapshots.slice(0)
-          for (let snapshot of snapshots) {
-              let splitId = snapshot.id.split(':')
-              snapshot._id = splitId[splitId.length -1]
-              snapshot.original = splitId[0]
+          if (data.data.dataset) {
+            let snapshots = data.data.dataset.snapshots ? data.data.dataset.snapshots.slice(0) : []
+            for (let snapshot of snapshots) {
+                let splitId = snapshot.id.split(':')
+                snapshot._id = splitId[splitId.length -1]
+                snapshot.original = splitId[0]
+            }
+            data.data.dataset.files = data.data.dataset.draft ? data.data.dataset.draft.files : []
           }
-          data.data.dataset.files = data.data.dataset.draft ? data.data.dataset.draft.files : []
+          
           return callback(null, data)
       })
       .catch(err => {
