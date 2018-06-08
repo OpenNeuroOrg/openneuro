@@ -1,6 +1,6 @@
 import getClient from 'openneuro-client'
 import config from '../../../config'
-import {datasets, files} from 'openneuro-client'
+import { datasets, files } from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
 import clone from 'lodash.clonedeep'
@@ -13,13 +13,13 @@ function getToken() {
 
 const client = getClient(`${config.url}/crn/graphql`, getToken)
 export default {
-    async getDatasets(options) {
-      const query = datasets.getDatasets
-      return new Promise((resolve, reject) => {
-        client.query({
-          query: query,
-          fetchPolicy: 'network-only'
-        })
+  async getDatasets(options) {
+    const query = datasets.getDatasets
+    return new Promise((resolve, reject) => {
+      client.query({
+        query: query,
+        fetchPolicy: 'network-only'
+      })
         .then(data => {
           data = clone(data)
           let datasets = data.data.datasets
@@ -127,6 +127,23 @@ export default {
         // console.log('error in snapshot query:', err) 
         return callback(err, null)
       })
+  },
+
+  getDatasetIssues(datasetId) {
+    let query = datasets.getDatasetIssues
+    return new Promise((resolve, reject) => {
+      client.query({
+        query: query,
+        fetchPolicy: 'network-only',
+        variables: {
+          datasetId: datasetId
+        }
+      }).then(data => {
+        resolve(data)
+      }).catch(err => {
+        reject(err)
+      })
+    })
   },
 
   deleteDataset(datasetId, options) {

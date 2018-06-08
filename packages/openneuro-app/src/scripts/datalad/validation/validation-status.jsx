@@ -1,13 +1,44 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
+import datalad from '../../utils/datalad'
 import ValidationPanel from './validation-panel.jsx'
 import Results from '../../validation/validation-results.jsx'
-
+import {graphql} from 'react-apollo'
+import gql from 'graphql-tag'
+import {datasets} from 'openneuro-client'
 /**
  * These can't be React components due to legacy react-bootstrap
  * validHeader, warningHeader, errorHeader
  */
+
+const getDatasetIssues = gql`
+  query dataset($datasetId: ID!) {
+    dataset(id: $datasetId) {
+      id
+      draft {
+        id
+        issues {
+          severity
+          code
+          reason
+          files {
+            evidence
+            line
+            character
+            reason
+            file {
+              name
+              path
+              relativePath
+            }
+          }
+          additionalFileCount
+        }
+      }
+    }
+  }
+`
 
 const validHeader = () => (
   <div className="super-valid">
@@ -84,20 +115,60 @@ Errors.propTypes = {
   warnings: PropTypes.array,
 }
 
-const ValidationStatus = ({ issues }) => {
-  const warnings = issues.filter(issue => issue.severity === 'warning')
-  const errors = issues.filter(issue => issue.severity === 'error')
-  if (errors.length) {
-    return <Errors errors={errors} warnings={warnings} />
-  } else if (warnings.length) {
-    return <Warnings errors={errors} warnings={warnings} />
-  } else {
-    return <Valid />
+class ValidationStatus extends React.Component {
+  constructor(props) {
+    super(props)
+    let issues = this.props.issues
+    this.state = {
+      warnings: issues.filter(issue => issue.severity === 'warning'),
+      errors: issues.filter(issue => issue.severity === 'error')
+    }
   }
+  componentDidMount() {
+    this._subscribeToValidationUpdates()
+  }
+
+  _subscribeToValidationUpdates() {
+    this.props.getDatasetIssues.subscribeToMore({
+      document: gql`
+        subscription {
+          datasetValidationUpdated
+        }
+      `,
+      updateQuery: async () => {
+        let issuesQuery = (await datalad.getDatasetIssues(this.props.datasetId))
+        let issues = issuesQuery.data.dataset.draft.issues
+        this.setState({
+          warnings: issues.filter(issue => issue.severity === 'warning'),
+          errors: issues.filter(issue => issue.severity === 'error')
+        })
+      }
+    })
+  }
+
+  render() {
+    const warnings = this.state.warnings
+    const errors = this.state.errors
+    if (errors.length) {
+      return <Errors errors={errors} warnings={warnings} />
+    } else if (warnings.length) {
+      return <Warnings errors={errors} warnings={warnings} />
+    } else {
+      return <Valid />
+    }
+  }
+
 }
 
 ValidationStatus.propTypes = {
   issues: PropTypes.array,
 }
 
-export default ValidationStatus
+export default graphql(getDatasetIssues, {
+  name: 'getDatasetIssues',
+  options: (props) => ({
+    variables: {
+      datasetId: props.datasetId
+    }
+    })
+  })(ValidationStatus)

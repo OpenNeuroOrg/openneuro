@@ -73,6 +73,42 @@ export const getDatasets = gql`
   }
 `
 
+export const getDatasetIssues = gql`
+  query dataset($datasetId: ID!) {
+    dataset(id: $datasetId) {
+      id
+      draft {
+        id
+        issues {
+          severity
+          code
+          reason
+          files {
+            evidence
+            line
+            character
+            reason
+            file {
+              name
+              path
+              relativePath
+            }
+          }
+          additionalFileCount
+        }
+      }
+    }
+  }
+`
+
+export const validationSubscription = gql`
+subscription {
+  datasetValidationUpdated {
+   id 
+  }
+}
+`
+
 export const createDataset = gql`
   mutation createDataset($label: String!) {
     createDataset(label: $label) {

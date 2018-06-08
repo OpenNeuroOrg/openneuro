@@ -7,3 +7,7 @@ export const datasetAdded = {
 export const datasetDeleted = {
   subscribe: () => pubsub.asyncIterator('datasetDeleted'),
 }
+
+export const datasetValidationUpdated = {
+  subscribe: () => pubsub.asyncIterator('datasetValidationUpdated'),
+}

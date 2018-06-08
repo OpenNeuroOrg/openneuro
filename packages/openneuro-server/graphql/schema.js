@@ -54,6 +54,7 @@ const typeDefs = `
     # Publishes when the set of datasets changes
     datasetAdded: Dataset
     datasetDeleted: ID
+    datasetValidationUpdated: ID
   }
 
   input SummaryInput {
@@ -222,6 +223,7 @@ const typeDefs = `
     name: String
     path: String
     relativePath: String
+    webkitRelativePath: String
   }
 
   # File metadata and link to contents
