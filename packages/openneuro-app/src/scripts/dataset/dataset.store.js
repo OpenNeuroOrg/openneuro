@@ -1837,6 +1837,9 @@ let datasetStore = Reflux.createStore({
                   })
                 }
                 let newVersion = tag
+                this.setState({
+                  loading: true
+                })
                 datalad.createSnapshot(datasetId, newVersion).then(res => {
                   let snapshotId = res.data.createSnapshot.tag
                   this.toggleSidebar(true)
