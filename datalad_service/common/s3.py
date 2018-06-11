@@ -8,6 +8,12 @@ import datalad_service.config
 class S3ConfigException(Exception):
     pass
 
+def get_s3_realm(realm):
+        if realm == 'PUBLIC':
+            realm = DatasetRealm.PUBLIC
+        else:
+            realm = DatasetRealm.PRIVATE
+        return realm
 
 class DatasetRealm(Enum):
     PRIVATE = 1
@@ -65,7 +71,7 @@ def s3_export(dataset, target, treeish='HEAD'):
 
 
 def s3_versions(dataset, realm=DatasetRealm.PRIVATE, snapshot='HEAD'):
-    realm = DatasetRealm.PRIVATE # TODO: FIX WHEN PUBLIC BUCKETS ARE ACTIVATED
+    realm = realm
     dataset_id = os.path.basename(dataset.path)
     bucket_name = '{}'.format(realm.s3_bucket)
 
