@@ -348,6 +348,17 @@ const dataladRoutes = [
     url: '/datasets/:datasetId/snapshots/:snapshotId',
     handler: datalad.createSnapshot,
   },
+  {
+    method: 'post',
+    url: '/datasets/:datasetId/publish',
+    handler: datalad.publishDataset,
+  },
+  {
+    method: 'delete',
+    url: '/datasets/:datasetId/publish',
+    handler: datalad.unpublishDataset,
+  },
+
   // OpenFMRI API routes
   {
     method: 'get',
