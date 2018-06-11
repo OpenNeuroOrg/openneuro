@@ -23,6 +23,10 @@ import Search from '../common/partials/search.jsx'
 import { refluxConnect } from '../utils/reflux'
 import { pageTitle } from '../resources/strings'
 
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+import {datasets} from 'openneuro-client'
+
 // component setup ---------------------------------------------------------------------------
 
 class Datasets extends Reflux.Component {
@@ -43,6 +47,8 @@ class Datasets extends Reflux.Component {
     const isAdmin = this.props.admin
     Actions.update({ isPublic, isAdmin })
     Actions.getDatasets(isPublic, isAdmin)
+    this._subscribeToNewDatasets(isPublic, isAdmin)
+    this._subscribeToDeletedDatasets(isPublic, isAdmin)
   }
 
   componentWillReceiveProps() {
@@ -50,6 +56,32 @@ class Datasets extends Reflux.Component {
     const isAdmin = this.props.admin
     Actions.update({ isPublic, isAdmin })
     Actions.getDatasets(isPublic, isAdmin)
+  }
+
+  _subscribeToNewDatasets(isPublic, isAdmin) {
+    this.props.datasetsQuery.subscribeToMore({
+      document: gql`
+        subscription {
+          datasetAdded {
+            id
+          }
+        }`,
+        updateQuery: () => {
+          Actions.getDatasets(isPublic, isAdmin)
+        }
+    })
+  }
+
+  _subscribeToDeletedDatasets(isPublic, isAdmin) {
+    this.props.datasetsQuery.subscribeToMore({
+      document: gql`
+        subscription {
+          datasetDeleted
+        }`,
+        updateQuery: () => {
+          Actions.getDatasets(isPublic, isAdmin)
+        }
+    })
   }
 
   render() {
@@ -238,4 +270,6 @@ Datasets.propTypes = {
   admin: PropTypes.bool,
 }
 
-export default Datasets
+export default graphql(datasets.getDatasets, {
+  name: 'datasetsQuery'
+})(Datasets)
