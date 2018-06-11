@@ -1,6 +1,6 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
-import createClient from 'openneuro-client'
+import createClient, {snapshots} from 'openneuro-client'
 import { saveConfig, getToken, getUrl } from './config'
 import { validation, uploadDirectory } from './upload'
 import { getDataset, createDataset } from './datasets'
@@ -55,7 +55,18 @@ const uploadDataset = (dir, datasetId, validatorOptions) => {
     // Validation -> create dataset -> upload
     return validation(dir, validatorOptions)
       .then(() => createDataset(client, dir))
-      .then(dsId => uploadDirectory(client, dir, dsId))
+      .then(dsId =>
+        uploadDirectory(client, dir, dsId).then(() => {
+          // create a snapshot of the freshly uploaded dataset
+          client.mutate({
+            mutation: snapshots.createSnapshot,
+            variables: {
+              datasetId: dsId,
+              tag: '1.0.0',
+            },
+          })
+        }),
+      )
   }
 }
 
