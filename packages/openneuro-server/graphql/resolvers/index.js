@@ -16,6 +16,7 @@ import {
 import { updateSummary, updateValidation } from './validation.js'
 import { draft, snapshot, snapshots } from './datalad.js'
 import { whoami, user, users } from './user.js'
+import { datasetAdded, datasetDeleted } from './subscriptions.js'
 
 export default {
   Date: GraphQLDate,
@@ -42,6 +43,10 @@ export default {
     updateValidation,
     updateSnapshotFileUrls,
     updatePublic,
+  },
+  Subscription: {
+    datasetAdded,
+    datasetDeleted,
   },
   User: user,
   Dataset: {
