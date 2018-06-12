@@ -1,4 +1,5 @@
 import mongo from '../../libs/mongo.js'
+import pubsub from '../pubsub'
 
 /**
  * Save summary data returned by the datalad service
@@ -33,5 +34,8 @@ export const updateValidation = (obj, args) => {
         upsert: true,
       },
     )
-    .then(() => true)
+    .then(() => {
+      pubsub.publish('datasetValidationUpdated', {})
+      return true
+    })
 }

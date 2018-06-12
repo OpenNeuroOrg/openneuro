@@ -25,7 +25,7 @@ export const createDataset = (obj, { label }, { user, userInfo }) => {
  */
 export const deleteDataset = (obj, { label }) => {
   return datalad.deleteDataset(label).then(deleted => {
-    pubsub.publish('datasetDeleted', {id: label})
+    pubsub.publish('datasetDeleted', { id: label })
     return deleted
   })
 }
@@ -40,7 +40,7 @@ export const createSnapshot = (obj, { datasetId, tag }) => {
 /**
  * Remove a tag from a dataset
  */
-export const deleteSnapshot = (obj, {datasetId, tag}) => {
+export const deleteSnapshot = (obj, { datasetId, tag }) => {
   return snapshots.deleteSnapshot(datasetId, tag)
 }
 
@@ -59,7 +59,6 @@ export const updateFiles = (
       datalad
         .commitFiles(datasetId, `${firstname} ${lastname}`, email)
         .then(res => {
-          pubsub.publish('datasetValidationUpdated', {})
           return res.body.ref
         })
         .then(updateDatasetRevision(datasetId)),
@@ -89,9 +88,11 @@ export const updateFilesTree = (datasetId, fileTree) => {
 /**
  * Delete files from a draft
  */
-export const deleteFiles = (obj, 
+export const deleteFiles = (
+  obj,
   { datasetId, files: fileTree },
-  {userInfo: {firstname, lastname, email}}) => {
+  { userInfo: { firstname, lastname, email } },
+) => {
   // TODO - The id returned here is a placeholder
   const promises = deleteFilesTree(datasetId, fileTree)
   return Promise.all(promises)
@@ -99,11 +100,11 @@ export const deleteFiles = (obj,
       datalad
         .commitFiles(datasetId, `${firstname} ${lastname}`, email)
         .then(res => {
-          pubsub.publish('datasetValidationUpdated', {})
           return res.body.ref
         })
         .then(updateDatasetRevision(datasetId)),
-    ).then(() => ({
+    )
+    .then(() => ({
       id: new Date(),
     }))
 }
