@@ -6,7 +6,7 @@ import React from 'react'
 import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
-import bids from '../../utils/bids'
+import datalad from '../../utils/datalad'
 import Input from '../../common/forms/input.jsx'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import Spinner from '../../common/partials/spinner.jsx'
@@ -190,10 +190,12 @@ class Share extends Reflux.Component {
   }
 
   _addUser() {
+    let userId = this.state.input
+    let level = this.state.select
     this.setState({ error: null })
 
     // check name and access level are selected
-    if (this.state.input.length < 1 || this.state.select.length < 1) {
+    if (userId.length < 1 || level.length < 1) {
       this.setState({
         error:
           'You must enter a valid email address and select an access level',
@@ -204,7 +206,7 @@ class Share extends Reflux.Component {
     // check if user is already a member
     let isMember = false
     for (let user of this.state.permissions) {
-      if (this.state.input === user._id) {
+      if (userId === user._id) {
         isMember = true
       }
     }
@@ -216,7 +218,7 @@ class Share extends Reflux.Component {
     // check if user exists
     let userExists = false
     for (let user of this.state.users) {
-      if (this.state.input === user._id) {
+      if (userId === user._id) {
         userExists = true
       }
     }
@@ -230,10 +232,11 @@ class Share extends Reflux.Component {
 
     // add member
     let role = {
-      _id: this.state.input,
-      access: this.state.select,
+      _id: userId,
+      access: level,
     }
-    bids.addPermission(this.state.datasets.dataset._id, role).then(() => {
+
+    datalad.updatePermissions(this.state.datasets.dataset._id, userId, level).then(() => {
       let permissions = this.state.permissions
       permissions.push(role)
       this.setState({
@@ -246,7 +249,7 @@ class Share extends Reflux.Component {
   }
 
   _removeUser(userId) {
-    bids.removePermission(this.state.datasets.dataset._id, userId).then(() => {
+    datalad.removePermissions(this.state.datasets.dataset._id, userId).then(() => {
       let index
       let permissions = this.state.permissions
       for (let i = 0; i < permissions.length; i++) {

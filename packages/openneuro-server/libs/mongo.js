@@ -45,6 +45,7 @@ export default {
       dois: null,
       keys: null,
       files: null,
+      permissions: null,
     },
     scitran: {
       projects: null,
