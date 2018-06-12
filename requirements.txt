@@ -8,6 +8,7 @@ Babel==2.5.3
 billiard==3.5.0.3
 boto==2.48.0
 boto3==1.7.25
+botocore==1.10.31
 celery==4.1.0
 certifi==2018.1.18
 cffi==1.11.5
@@ -15,7 +16,8 @@ chardet==3.0.4
 citeproc-py==0.4.0
 coverage==4.5.1
 cryptography==2.2.2
-datalad==0.9.3
+datalad==0.10.0
+docutils==0.14
 duecredit==0.6.3
 entrypoints==0.2.3
 fakeredis==0.10.3
@@ -31,6 +33,7 @@ humanize==0.5.1
 idna==2.6
 iso8601==0.1.12
 isort==4.3.4
+jmespath==0.9.3
 jsmin==2.2.2
 keyring==12.0.1
 keyrings.alt==3.0
@@ -54,10 +57,12 @@ PyLD==1.0.3
 pylint==1.8.4
 pytest==3.5.0
 pytest-cov==2.5.1
+python-dateutil==2.7.3
 python-mimeparse==1.6.0
 pytz==2018.4
 redis==2.10.6
 requests==2.18.4
+s3transfer==0.1.13
 SecretStorage==2.3.1
 simplejson==3.13.2
 six==1.11.0
@@ -66,4 +71,5 @@ tornado==5.0.2
 tqdm==4.23.0
 urllib3==1.22
 vine==1.1.4
+Whoosh==2.7.4
 wrapt==1.10.11
