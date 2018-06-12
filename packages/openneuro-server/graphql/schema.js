@@ -50,6 +50,12 @@ const typeDefs = `
     removePermissions(datasetId: ID!, userId: String!): Boolean
   }
 
+  type Subscription {
+    # Publishes when the set of datasets changes
+    datasetAdded: Dataset
+    datasetDeleted: ID
+  }
+
   input SummaryInput {
     id: ID! # Git reference for this summary
     datasetId: ID!

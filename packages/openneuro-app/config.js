@@ -5,6 +5,8 @@ export default {
   /**
    * Scitran
    */
+  url: process.env.CRN_SERVER_URL,
+
   scitran: {
     url: process.env.CRN_SERVER_URL + '/api/',
   },

@@ -1,6 +1,7 @@
 import * as datalad from '../../datalad/dataset.js'
 import * as snapshots from '../../datalad/snapshots.js'
 import { updateDatasetRevision } from '../../datalad/draft.js'
+import pubsub from '../pubsub.js'
 
 export const dataset = (obj, { id }) => {
   return datalad.getDataset(id)
@@ -14,14 +15,19 @@ export const datasets = () => {
  * Create an empty dataset (new repo, new accession number)
  */
 export const createDataset = (obj, { label }, { user, userInfo }) => {
-  return datalad.createDataset(label, user, userInfo)
+  return datalad.createDataset(label, user, userInfo).then(dataset => {
+    return dataset
+  })
 }
 
 /**
  * Delete an existing dataset, as well as all snapshots
  */
-export const deleteDataset = (obj, { label }, { user, userInfo }) => {
-  return datalad.deleteDataset(label, user, userInfo)
+export const deleteDataset = (obj, { label }) => {
+  return datalad.deleteDataset(label).then(deleted => {
+    pubsub.publish('datasetDeleted', {id: label})
+    return deleted
+  })
 }
 
 /**
@@ -129,7 +135,7 @@ export const updatePublic = (obj, { datasetId, publicFlag }) => {
 /**
  * Update the file urls within a snapshot
  */
-export const updateSnapshotFileUrls = (obj, {fileUrls}) => {
+export const updateSnapshotFileUrls = (obj, { fileUrls }) => {
   let datasetId = fileUrls.datasetId
   let snapshotTag = fileUrls.tag
   let files = fileUrls.files

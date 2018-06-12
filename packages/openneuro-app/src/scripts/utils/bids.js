@@ -153,8 +153,9 @@ export default {
         if (data) {
           // get snapshot or draft, depending on results
           let project = data.dataset
-          let draft = project.draft
-          let snapshot = options.snapshot ? (await datalad.getSnapshot(projectId, options)).data.snapshot : null
+          let draft = project ? project.draft : null
+          let snapshotQuery = options.snapshot ? (await datalad.getSnapshot(projectId, options)).data : null
+          let snapshot = snapshotQuery ? snapshotQuery.dataset : null
           let tempFiles = !snapshot ? this._formatFiles(draft.files) : this._formatFiles(snapshot.files)
           project.snapshot_version = snapshot ? snapshot.tag : null
           this.getMetadata(

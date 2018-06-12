@@ -10,6 +10,7 @@ import UploadProgressButton from './upload-progress-button.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import getClient from 'openneuro-client'
+import config from '../../../config'
 import getAuth from '../utils/getAuth.js'
 import { xhrFetch } from './xhrfetch.js'
 
@@ -85,7 +86,7 @@ class UploadClient extends React.Component {
     })
     // This is an upload specific apollo client to record progress
     // Uses XHR since Fetch does not provide the required interface
-    const uploadClient = getClient('/crn/graphql', getAuth, xhrFetch(this))
+    const uploadClient = getClient(`${config.url}/crn/graphql`, getAuth, xhrFetch(this))
     if (this.state.resume) {
       // Diff and add files
     } else {

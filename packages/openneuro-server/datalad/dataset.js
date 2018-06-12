@@ -7,6 +7,7 @@ import request from 'superagent'
 import requestNode from 'request'
 import config from '../config'
 import mongo from '../libs/mongo'
+import pubsub from '../graphql/pubsub.js'
 import { getAccessionNumber } from '../libs/dataset'
 
 const c = mongo.collections
@@ -46,6 +47,7 @@ export const createDataset = (label, uploader, userInfo) => {
           userInfo.email,
         )
       await req
+      pubsub.publish('datasetAdded', { id: datasetId })
       resolve({ id: datasetId, label })
     } else {
       reject(Error(`Failed to create ${datasetId} - "${label}"`))
@@ -91,8 +93,13 @@ export const getDataset = id => {
  */
 export const deleteDataset = id => {
   let deleteURI = `${uri}/datasets/${id}`
-  request.del(deleteURI).then(() => {
-    return c.crn.datasets.deleteOne({ id })
+  return new Promise((resolve, reject) => {
+    request.del(deleteURI).then(() => {
+      c.crn.datasets
+        .deleteOne({ id })
+        .then(() => resolve())
+        .catch(err => reject(err))
+    })
   })
 }
 
