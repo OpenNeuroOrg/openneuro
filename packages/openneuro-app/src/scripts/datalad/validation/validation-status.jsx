@@ -4,9 +4,9 @@ import pluralize from 'pluralize'
 import datalad from '../../utils/datalad'
 import ValidationPanel from './validation-panel.jsx'
 import Results from '../../validation/validation-results.jsx'
-import {graphql} from 'react-apollo'
+import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import {datasets} from 'openneuro-client'
+import { datasets } from 'openneuro-client'
 /**
  * These can't be React components due to legacy react-bootstrap
  * validHeader, warningHeader, errorHeader
@@ -119,13 +119,17 @@ class ValidationStatus extends React.Component {
   constructor(props) {
     super(props)
     let issues = this.props.issues
-    this.state = {
-      warnings: issues.filter(issue => issue.severity === 'warning'),
-      errors: issues.filter(issue => issue.severity === 'error')
-    }
+    this.state = this._getWarningsAndErrors(issues)
   }
   componentDidMount() {
     this._subscribeToValidationUpdates()
+  }
+
+  _getWarningsAndErrors(issues) {
+    return {
+      warnings: issues.filter(issue => issue.severity === 'warning'),
+      errors: issues.filter(issue => issue.severity === 'error'),
+    }
   }
 
   _subscribeToValidationUpdates() {
@@ -135,14 +139,11 @@ class ValidationStatus extends React.Component {
           datasetValidationUpdated
         }
       `,
-      updateQuery: async () => {
-        let issuesQuery = (await datalad.getDatasetIssues(this.props.datasetId))
-        let issues = issuesQuery.data.dataset.draft.issues
-        this.setState({
-          warnings: issues.filter(issue => issue.severity === 'warning'),
-          errors: issues.filter(issue => issue.severity === 'error')
+      updateQuery: () => {
+        this.props.getDatasetIssues.refetch().then(() => {
+          this.setState(this._getWarningsAndErrors(this.props.issues))
         })
-      }
+      },
     })
   }
 
@@ -157,7 +158,6 @@ class ValidationStatus extends React.Component {
       return <Valid />
     }
   }
-
 }
 
 ValidationStatus.propTypes = {
@@ -166,9 +166,9 @@ ValidationStatus.propTypes = {
 
 export default graphql(getDatasetIssues, {
   name: 'getDatasetIssues',
-  options: (props) => ({
+  options: props => ({
     variables: {
-      datasetId: props.datasetId
-    }
-    })
-  })(ValidationStatus)
+      datasetId: props.datasetId,
+    },
+  }),
+})(ValidationStatus)

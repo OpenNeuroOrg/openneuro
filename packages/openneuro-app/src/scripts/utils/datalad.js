@@ -16,15 +16,15 @@ export default {
   async getDatasets(options) {
     const query = datasets.getDatasets
     return new Promise((resolve, reject) => {
-      client.query({
-        query: query,
-        fetchPolicy: 'network-only'
-      })
+      client
+        .query({
+          query: query,
+        })
         .then(data => {
           data = clone(data)
           let datasets = data.data.datasets
           if (options.isPublic) {
-            datasets = data.data.datasets.filter((dataset) => {
+            datasets = data.data.datasets.filter(dataset => {
               return dataset.public
             })
           }
@@ -45,7 +45,6 @@ export default {
         resolve(data)
       })
     })
-
   },
 
   async getSnapshot(datasetId, options) {
@@ -57,18 +56,19 @@ export default {
         resolve(data)
       })
     })
-
   },
 
   queryDataset(datasetId, callback) {
     const query = datasets.getDataset
-    client.query({
-      query: query,
-      variables: {
-        id: bids.decodeId(datasetId)
-      }
-    })
+    client
+      .query({
+        query: query,
+        variables: {
+          id: bids.decodeId(datasetId),
+        },
+      })
       .then(data => {
+<<<<<<< HEAD
           data = clone(data)
           if (data.data.dataset) {
             let snapshots = data.data.dataset.snapshots ? data.data.dataset.snapshots.slice(0) : []
@@ -81,6 +81,19 @@ export default {
           }
           
           return callback(null, data)
+=======
+        data = clone(data)
+        let snapshots = data.data.dataset.snapshots.slice(0)
+        for (let snapshot of snapshots) {
+          let splitId = snapshot.id.split(':')
+          snapshot._id = splitId[splitId.length - 1]
+          snapshot.original = splitId[0]
+        }
+        data.data.dataset.files = data.data.dataset.draft
+          ? data.data.dataset.draft.files
+          : []
+        return callback(null, data)
+>>>>>>> a70b54e3... use refetch() in component instead of network-only request policy
       })
       .catch(err => {
         // console.log('error in datasetQuery:', err)
@@ -89,9 +102,10 @@ export default {
   },
 
   querySnapshot(datasetId, tag, callback) {
-    client.query({
-      query: gql`
-          query getSnapshot ($datasetId: ID!, $tag: String!) {
+    client
+      .query({
+        query: gql`
+          query getSnapshot($datasetId: ID!, $tag: String!) {
             snapshot(datasetId: $datasetId, tag: $tag) {
               id
               _id: id
@@ -115,16 +129,16 @@ export default {
             }
           }
         `,
-      variables: {
-        datasetId: bids.decodeId(datasetId),
-        tag: tag
-      }
-    })
+        variables: {
+          datasetId: bids.decodeId(datasetId),
+          tag: tag,
+        },
+      })
       .then(data => {
         return callback(null, data)
       })
       .catch(err => {
-        // console.log('error in snapshot query:', err) 
+        // console.log('error in snapshot query:', err)
         return callback(err, null)
       })
   },
@@ -132,17 +146,19 @@ export default {
   getDatasetIssues(datasetId) {
     let query = datasets.getDatasetIssues
     return new Promise((resolve, reject) => {
-      client.query({
-        query: query,
-        fetchPolicy: 'network-only',
-        variables: {
-          datasetId: datasetId
-        }
-      }).then(data => {
-        resolve(data)
-      }).catch(err => {
-        reject(err)
-      })
+      client
+        .query({
+          query: query,
+          variables: {
+            datasetId: datasetId,
+          },
+        })
+        .then(data => {
+          resolve(data)
+        })
+        .catch(err => {
+          reject(err)
+        })
     })
   },
 
@@ -150,13 +166,14 @@ export default {
     if (options.snapshot && options.tag) {
       let mutation = datasets.deleteSnapshot
       return new Promise((resolve, reject) => {
-        client.mutate({
-          mutation: mutation,
-          variables: {
-            datasetId: bids.decodeId(datasetId),
-            tag: options.tag
-          }
-        })
+        client
+          .mutate({
+            mutation: mutation,
+            variables: {
+              datasetId: bids.decodeId(datasetId),
+              tag: options.tag,
+            },
+          })
           .then(data => {
             resolve(data)
           })
@@ -167,12 +184,13 @@ export default {
     } else {
       let mutation = datasets.deleteDataset
       return new Promise((resolve, reject) => {
-        client.mutate({
-          mutation: mutation,
-          variables: {
-            label: bids.decodeId(datasetId)
-          }
-        })
+        client
+          .mutate({
+            mutation: mutation,
+            variables: {
+              label: bids.decodeId(datasetId),
+            },
+          })
           .then(data => {
             resolve(data)
           })
@@ -187,13 +205,14 @@ export default {
     datasetId = bids.decodeId(datasetId)
     const mutation = datasets.updatePublic
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          id: bids.decodeId(datasetId),
-          publicFlag: publicFlag
-        }
-      })
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            id: bids.decodeId(datasetId),
+            publicFlag: publicFlag,
+          },
+        })
         .then(data => {
           let uri = `/crn/datasets/${datasetId}/publish`
           // if now public, initialize migration to a public s3 bucket
@@ -213,26 +232,26 @@ export default {
           reject(err)
         })
     })
-
   },
 
   createSnapshot(datasetId, tag) {
     const mutation = gql`
-        mutation ($datasetId: ID!, $tag: String!) {
-          createSnapshot(datasetId: $datasetId, tag: $tag) {
-            id
-            tag
-          }
+      mutation($datasetId: ID!, $tag: String!) {
+        createSnapshot(datasetId: $datasetId, tag: $tag) {
+          id
+          tag
         }
-      `
+      }
+    `
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId: bids.decodeId(datasetId),
-          tag: tag
-        }
-      })
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            tag: tag,
+          },
+        })
         .then(data => {
           resolve(data)
         })
@@ -241,7 +260,6 @@ export default {
           reject(err)
         })
     })
-
   },
 
   // FILE OPERATIONS
@@ -250,19 +268,21 @@ export default {
     filename = this.encodeFilePath(filename)
     let uri = `/crn/datasets/${datasetId}/files/${filename}`
     if (options && options.snapshot) {
-      uri = `/crn/datasets/${datasetId}/snapshots/${options.tag}/files/${filename}`
+      uri = `/crn/datasets/${datasetId}/snapshots/${
+        options.tag
+      }/files/${filename}`
     }
     return new Promise((resolve, reject) => {
       request
         .get(uri, {
           headers: {
-            'Content-Type': 'application/*'
-          }
+            'Content-Type': 'application/*',
+          },
         })
-        .then((res) => {
+        .then(res => {
           resolve(res)
         })
-        .catch((err) => {
+        .catch(err => {
           // console.log('error in getFile:', err)
           reject(err)
         })
@@ -273,13 +293,14 @@ export default {
     let mutation = files.deleteFiles
 
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId: bids.decodeId(datasetId),
-          files: fileTree
-        }
-      })
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            files: fileTree,
+          },
+        })
         .then(data => {
           resolve(data)
         })
@@ -292,7 +313,9 @@ export default {
 
   deleteFile(datasetId, file) {
     // get the file path from the file object
-    let filePath = file.modifiedName ? this.encodeFilePath(file.modifiedName) : this.encodeFilePath(file.name)
+    let filePath = file.modifiedName
+      ? this.encodeFilePath(file.modifiedName)
+      : this.encodeFilePath(file.name)
 
     // shape the file into the same shape as accepted by deleteFiles
     let fileTree = this.constructFileTree(file, filePath)
@@ -306,7 +329,7 @@ export default {
     let fileTree = {
       name: path,
       files: [],
-      directories: []
+      directories: [],
     }
     return this.deleteFiles(datasetId, fileTree)
   },
@@ -315,13 +338,14 @@ export default {
     let mutation = files.updateFiles
 
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId: bids.decodeId(datasetId),
-          files: fileTree
-        }
-      })
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            files: fileTree,
+          },
+        })
         .then(data => {
           resolve(data)
         })
@@ -334,7 +358,9 @@ export default {
 
   updateFile(datasetId, file) {
     // get the file path from the file object
-    let filePath = file.modifiedName ? this.encodeFilePath(file.modifiedName) : this.encodeFilePath(file.name)
+    let filePath = file.modifiedName
+      ? this.encodeFilePath(file.modifiedName)
+      : this.encodeFilePath(file.name)
 
     // shape the file into the same shape as accepted by updateFiles
     let fileTree = this.constructFileTree(file, filePath)
@@ -353,13 +379,18 @@ export default {
     if (filePath.split(':').length > 0) {
       let pathComponents = filePath.split(':')
       let newNode = pathComponents.slice(-1)[0]
-      let newPath = pathComponents.reverse().slice(1).reverse().join(':')
-      let files = (newNode === fileName) ? [file] : []
-      let directories = (newNode === fileName) ? [] : this.constructFileTree(file, newPath)
+      let newPath = pathComponents
+        .reverse()
+        .slice(1)
+        .reverse()
+        .join(':')
+      let files = newNode === fileName ? [file] : []
+      let directories =
+        newNode === fileName ? [] : this.constructFileTree(file, newPath)
       let fileTree = {
         name: newPath,
         files: files,
-        directories: directories
+        directories: directories,
       }
       return fileTree
     }
@@ -372,6 +403,7 @@ export default {
   decodeFilePath(path) {
     return path.replace(new RegExp(':', 'g'), '/')
   },
+<<<<<<< HEAD
 
 
   // PERMISSIONS OPERATIONS
@@ -419,3 +451,6 @@ export default {
     })
   }
 }
+=======
+}
+>>>>>>> a70b54e3... use refetch() in component instead of network-only request policy
