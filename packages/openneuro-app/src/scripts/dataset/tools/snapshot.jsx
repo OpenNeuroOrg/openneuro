@@ -11,6 +11,8 @@ import datasetStore from '../dataset.store'
 import bids from '../../utils/bids'
 import { Link, withRouter } from 'react-router-dom'
 import { refluxConnect } from '../../utils/reflux'
+import { graphql } from 'react-apollo'
+import { datasets } from 'openneuro-client'
 
 class Snapshot extends Reflux.Component {
   constructor(props) {
@@ -44,7 +46,9 @@ class Snapshot extends Reflux.Component {
     let semverTags = snapshots.filter(s => semver.valid(s.tag))
 
     // get the highest version
-    let highestVersionedSnapshot = semverTags.sort((a,b) => semver.lt(a.tag, b.tag))[0]
+    let highestVersionedSnapshot = semverTags.sort((a, b) =>
+      semver.lt(a.tag, b.tag),
+    )[0]
 
     // set the major, minor, and breaking version numbers
     // if this is the first version, all of them are 1.0.0
@@ -78,7 +82,7 @@ class Snapshot extends Reflux.Component {
 
     this.setState({
       selectedVersion: patch,
-      major: major, 
+      major: major,
       patch: patch,
       minor: minor,
       changes: [],
@@ -182,7 +186,9 @@ class Snapshot extends Reflux.Component {
           </label>
           <input
             type="radio"
-            checked={this.state.selectedVersion == this.state.patch ? 'checked' : ''}
+            checked={
+              this.state.selectedVersion == this.state.patch ? 'checked' : ''
+            }
             value={this.state.patch}
             onChange={this._handleVersion}
             name="version"
@@ -296,15 +302,29 @@ class Snapshot extends Reflux.Component {
       this.state.changes,
       this.state.datasets.dataset.CHANGES,
     )
-    actions.createSnapshot(changes, this.state.selectedVersion, this.props.history, res => {
-      if (res && res.error) {
-        this.setState({
-          changes: [],
-          error: true,
-          message: res.error,
-        })
-      }
-    })
+    actions.createSnapshot(
+      changes,
+      this.state.selectedVersion,
+      this.props.history,
+      res => {
+        if (res && res.error) {
+          this.setState({
+            changes: [],
+            error: true,
+            message: res.error,
+          })
+        } else {
+          this.props.getDataset.refetch().then(() => {
+            const url =
+              '/datasets/' +
+              this.state.datasets.dataset.linkID +
+              '/versions/' +
+              this.state.selectedVersion
+            this.props.history.push(url)
+          })
+        }
+      },
+    )
   }
 
   onHide() {
@@ -393,7 +413,7 @@ class Snapshot extends Reflux.Component {
         message="The dataset has failed to load in time. Please check your network connection."
         className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
         {loading ? (
-          <Timeout timeout={20000}>
+          <Timeout timeout={100000}>
             <Spinner active={true} text={loadingText} />
           </Timeout>
         ) : (
@@ -411,4 +431,11 @@ Snapshot.propTypes = {
   location: PropTypes.object,
 }
 
-export default withRouter(Snapshot)
+export default graphql(datasets.getDataset, {
+  name: 'getDataset',
+  options: props => ({
+    variables: {
+      id: props.match.params.datasetId,
+    },
+  }),
+})(withRouter(Snapshot))

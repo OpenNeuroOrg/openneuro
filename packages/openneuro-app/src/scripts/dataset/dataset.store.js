@@ -140,7 +140,9 @@ let datasetStore = Reflux.createStore({
     }
 
     // update selection & current upload data, as well as loading state
-    let loadedUrl = !options.snapshot ? datasetId : [datasetId, options.tag].join(':')
+    let loadedUrl = !options.snapshot
+      ? datasetId
+      : [datasetId, options.tag].join(':')
     this.update({
       selectedSnapshot: datasetId,
       currentUploadId: null,
@@ -166,30 +168,29 @@ let datasetStore = Reflux.createStore({
           let selectedSnapshot = this.data.selectedSnapshot
           if (!selectedSnapshot || selectedSnapshot === datasetId) {
             let dataset = res
-            this.update(
-              {
-                dataset: dataset,
-                datasetTree: [
-                  {
-                    _id: datasetId,
-                    label: dataset.label,
-                    children: dataset.children,
-                  },
-                ],
-                loading: false,
-              })
-              this.loadSnapshots(dataset, [], () => {
-                this.loadComments(datasetId)
-                this.getDatasetStars()
-                this.checkSubscriptionFollowers(() => {
-                  let datasetUrl = this.constructDatasetUrl(dataset)
-                  this.update({
-                    loading: false,
-                    snapshot: snapshot,
-                    datasetUrl: datasetUrl,
-                  })
+            this.update({
+              dataset: dataset,
+              datasetTree: [
+                {
+                  _id: datasetId,
+                  label: dataset.label,
+                  children: dataset.children,
+                },
+              ],
+              loading: false,
+            })
+            this.loadSnapshots(dataset, [], () => {
+              this.loadComments(datasetId)
+              this.getDatasetStars()
+              this.checkSubscriptionFollowers(() => {
+                let datasetUrl = this.constructDatasetUrl(dataset)
+                this.update({
+                  loading: false,
+                  snapshot: snapshot,
+                  datasetUrl: datasetUrl,
                 })
               })
+            })
 
             // this.loadJobs(
             //   datasetId,
@@ -479,7 +480,10 @@ let datasetStore = Reflux.createStore({
         action: () => {
           this.update({ loading: 'deleting' })
           datalad
-            .deleteDataset(bids.decodeId(datasetId), { snapshot: this.data.snapshot, tag: this.data.dataset.snapshot_version })
+            .deleteDataset(bids.decodeId(datasetId), {
+              snapshot: this.data.snapshot,
+              tag: this.data.dataset.snapshot_version,
+            })
             .then(() => {
               this.update({ loading: false })
               history.push('/datasets/' + bids.decodeId(datasetId))
@@ -1707,8 +1711,8 @@ let datasetStore = Reflux.createStore({
     if (file && file.name) {
       let displayUrl = file.path ? 'results/' + file.path : 'file-display'
       let link = files.getFileURL(this.data.dataset, file.name)
-        if (
-          files.hasExtension(file.name, [
+      if (
+        files.hasExtension(file.name, [
           '.pdf',
           '.nii.gz',
           '.jpg',
@@ -1728,7 +1732,9 @@ let datasetStore = Reflux.createStore({
       } else {
         let options = {}
         options.snapshot = this.data.dataset.snapshot_version ? true : false
-        options.tag = options.snapshot ? this.data.dataset.snapshot_version : null
+        options.tag = options.snapshot
+          ? this.data.dataset.snapshot_version
+          : null
         datalad
           .getFile(bids.decodeId(this.data.dataset._id), file.name, options)
           .then(res => {
@@ -1761,8 +1767,9 @@ let datasetStore = Reflux.createStore({
    */
   editFile(snapshotId, jobId, file, callback) {
     let link = files.getFileURL(this.data.dataset, file.name)
-      if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
-      datalad.getFile(bids.decodeId(this.data.dataset._id), file.name)
+    if (files.hasExtension(file.name, ['.json', '.csv', '.tsv'])) {
+      datalad
+        .getFile(bids.decodeId(this.data.dataset._id), file.name)
         .then(res => {
           if (callback) {
             callback()
@@ -1837,20 +1844,21 @@ let datasetStore = Reflux.createStore({
                   })
                 }
                 let newVersion = tag
-                this.setState({
-                  loading: true
+                this.update({
+                  loading: true,
                 })
                 datalad.createSnapshot(datasetId, newVersion).then(res => {
                   let snapshotId = res.data.createSnapshot.tag
                   this.toggleSidebar(true)
-                  if (transition) {
-                    const url =
-                      '/datasets/' +
-                      this.data.dataset.linkID +
-                      '/versions/' +
-                      snapshotId
-                    history.push(url)
-                  }
+                  // if (transition) {
+                  //   const url =
+                  //     '/datasets/' +
+                  //     this.data.dataset.linkID
+                  //   history.push(url)
+                  // }
+                  this.update({
+                    loading: false,
+                  })
                   this.loadSnapshots(this.data.dataset, [], () => {
                     if (callback) {
                       callback(snapshotId)
@@ -1872,7 +1880,7 @@ let datasetStore = Reflux.createStore({
     if (snapshots.length) {
       // sort snapshots
       snapshots.sort((a, b) => {
-        if (a.created< b.created) {
+        if (a.created < b.created) {
           return 1
         } else if (a.created > b.created) {
           return -1
