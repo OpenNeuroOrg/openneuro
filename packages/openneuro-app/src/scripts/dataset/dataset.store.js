@@ -1009,58 +1009,20 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
-          this.update({
-            uploading: true,
-            uploadingFileCount: uploads.length,
-            uploadingProgress: 0,
-            uploadingScitranRequests: [],
-          })
-
           this.updateDirectoryState(datasetId, { loading: true })
-          // scitran.addTag('projects', datasetId, 'updating').then(() => {
-          async.eachLimit(
-            uploads,
-            3,
-            (upload, cb) => {
-              // Cancel adding files if navigated away
-              if (this.data.uploadingCanceled) {
-                return cb(new Error('Add directory interrupted'))
-              }
-              let file = upload.file
-              let container = upload.container
-              file.modifiedName = (container.dirPath || '') + file.name
-              const dataladReq = datalad
-                .updateFile(datasetId, file)
-                .then(() => {
-                  this.update({
-                    uploadingProgress: this.data.uploadingProgress + 1,
-                  })
-                  cb()
-                })
-                .catch(err => {
-                  cb(err)
-                })
-              this.update({
-                uploadingScitranRequests: this.data.uploadingScitranRequests.concat(
-                  [dataladReq],
-                ),
-              })
-            },
-            err => {
-              // scitran.removeTag('projects', datasetId, 'updating')
+          datalad
+            .addDirectory(datasetId, uploads)
+            .then(() => {
               this.update({ uploading: false })
-              if (err && callback) callback(err)
-              if (err) {
-                this.loadDataset(bids.decodeId(datasetId), undefined, false)
-              } else {
-                this.loadDataset(bids.decodeId(datasetId), undefined, true) // forcing reload
-              }
               // Reset canceled when an upload is done (canceled or otherwise)
               this.update({ uploadingCanceled: false })
               if (callback) callback()
-            },
-          )
-          // })
+            })
+            .catch(err => {
+              if (callback) {
+                callback(err)
+              }
+            })
         },
       })
     } else {
@@ -1093,6 +1055,7 @@ let datasetStore = Reflux.createStore({
       this.updateWarn({
         message: message,
         action: () => {
+          this.updateDirectoryState(this.data.dataset._id, { loading: true })
           datalad
             .deleteDirectory(
               bids.decodeId(this.data.dataset._id),
@@ -1129,6 +1092,7 @@ let datasetStore = Reflux.createStore({
       message: message,
       action: () => {
         let dataset = this.data.dataset
+        this.updateDirectoryState(this.data.dataset._id, { loading: true })
         datalad.deleteFile(this.data.dataset._id, file).then(() => {
           let match = files.findInTree([dataset], file.parentId)
           let children = []
@@ -1850,15 +1814,15 @@ let datasetStore = Reflux.createStore({
                 datalad.createSnapshot(datasetId, newVersion).then(res => {
                   let snapshotId = res.data.createSnapshot.tag
                   this.toggleSidebar(true)
-                  // if (transition) {
-                  //   const url =
-                  //     '/datasets/' +
-                  //     this.data.dataset.linkID
-                  //   history.push(url)
-                  // }
                   this.update({
                     loading: false,
                   })
+                  if (transition) {
+                    const url =
+                      '/datasets/' + bids.decodeId(this.data.dataset._id)
+                    history.push(url)
+                  }
+
                   this.loadSnapshots(this.data.dataset, [], () => {
                     if (callback) {
                       callback(snapshotId)

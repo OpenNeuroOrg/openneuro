@@ -315,11 +315,7 @@ class Snapshot extends Reflux.Component {
           })
         } else {
           this.props.getDataset.refetch().then(() => {
-            const url =
-              '/datasets/' +
-              this.state.datasets.dataset.linkID +
-              '/versions/' +
-              this.state.selectedVersion
+            const url = '/datasets/' + this.state.datasets.dataset.linkID
             this.props.history.push(url)
           })
         }
