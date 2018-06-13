@@ -334,6 +334,65 @@ export default {
     return this.deleteFiles(datasetId, fileTree)
   },
 
+  addDirectory(datasetId, uploads) {
+    uploads = uploads.map(u => {
+      let file = u.file
+      let container = u.container
+      file.modifiedName = (container.dirPath || '') + file.name
+      // get the file path from the file object
+      file.filePath = file.modifiedName
+        ? this.encodeFilePath(file.modifiedName)
+        : this.encodeFilePath(file.name)
+      file.container = container
+      return file
+    })
+    let fileTree = this.constructDirectoryTree(uploads)
+    return new Promise((resolve, reject) => {
+      this.updateFiles(datasetId, fileTree)
+        .then(() => resolve())
+        .catch(err => reject(err))
+    })
+  },
+
+  constructDirectoryTree(files) {
+    let name = this.encodeFilePath(files[0].container.dirPath.slice(0, -1))
+    let trimmed = files.map(f => {
+      let pathComponents = f.filePath.split(':')
+      let trimmedPathComponents = pathComponents.slice(1)
+      let trimmedPath = trimmedPathComponents.join(':')
+      f.filePath = trimmedPath
+      f.thisLevel = trimmedPathComponents.length == 1
+      return f
+    })
+    let filesOnThisLevel = trimmed.filter(f => {
+      return f.thisLevel
+    })
+    let filesInOtherDirectory = trimmed.filter(f => {
+      return !f.thisLevel
+    })
+    let otherDirectories = filesInOtherDirectory
+      .map(f => {
+        return f.filePath.split(':')[0]
+      })
+      .filter((v, i, s) => {
+        return s.indexOf(v) === i
+      })
+
+    let directories = []
+    for (let directory of otherDirectories) {
+      let associatedFiles = filesInOtherDirectory.filter(f => {
+        return f.filePath.split(':')[0] == directory
+      })
+      directories.push(this.constructDirectoryTree(associatedFiles))
+    }
+    let fileTree = {
+      name: name,
+      files: filesOnThisLevel,
+      directories: directories,
+    }
+    return fileTree
+  },
+
   updateFiles(datasetId, fileTree) {
     let mutation = files.updateFiles
 
