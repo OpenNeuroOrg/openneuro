@@ -41,7 +41,10 @@ const ValidationQuery = ({ datasetId }) => (
       } else if (error) {
         throw new Error(error)
       } else {
-        return <ValidationStatus issues={data.dataset.draft.issues} datasetId={data.dataset.id}/>
+        let issues =
+          data.dataset && data.dataset.draft ? data.dataset.draft.issues : []
+        let datasetId = data.dataset ? data.dataset.id : null
+        return <ValidationStatus issues={issues} datasetId={datasetId} />
       }
     }}
   </Query>
