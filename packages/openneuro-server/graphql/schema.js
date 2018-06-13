@@ -55,6 +55,7 @@ const typeDefs = `
     datasetAdded: Dataset
     datasetDeleted: ID
     datasetValidationUpdated: ID
+    draftFilesUpdated: ID
   }
 
   input SummaryInput {

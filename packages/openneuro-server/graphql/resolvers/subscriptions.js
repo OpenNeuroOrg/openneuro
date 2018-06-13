@@ -11,3 +11,7 @@ export const datasetDeleted = {
 export const datasetValidationUpdated = {
   subscribe: () => pubsub.asyncIterator('datasetValidationUpdated'),
 }
+
+export const draftFilesUpdated = {
+  subscribe: () => pubsub.asyncIterator('draftFilesUpdated'),
+}
