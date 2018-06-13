@@ -68,32 +68,22 @@ export default {
         },
       })
       .then(data => {
-<<<<<<< HEAD
-          data = clone(data)
-          if (data.data.dataset) {
-            let snapshots = data.data.dataset.snapshots ? data.data.dataset.snapshots.slice(0) : []
-            for (let snapshot of snapshots) {
-                let splitId = snapshot.id.split(':')
-                snapshot._id = splitId[splitId.length -1]
-                snapshot.original = splitId[0]
-            }
-            data.data.dataset.files = data.data.dataset.draft ? data.data.dataset.draft.files : []
-          }
-          
-          return callback(null, data)
-=======
         data = clone(data)
-        let snapshots = data.data.dataset.snapshots.slice(0)
-        for (let snapshot of snapshots) {
-          let splitId = snapshot.id.split(':')
-          snapshot._id = splitId[splitId.length - 1]
-          snapshot.original = splitId[0]
+        if (data.data.dataset) {
+          let snapshots = data.data.dataset.snapshots
+            ? data.data.dataset.snapshots.slice(0)
+            : []
+          for (let snapshot of snapshots) {
+            let splitId = snapshot.id.split(':')
+            snapshot._id = splitId[splitId.length - 1]
+            snapshot.original = splitId[0]
+          }
+          data.data.dataset.files = data.data.dataset.draft
+            ? data.data.dataset.draft.files
+            : []
         }
-        data.data.dataset.files = data.data.dataset.draft
-          ? data.data.dataset.draft.files
-          : []
+
         return callback(null, data)
->>>>>>> a70b54e3... use refetch() in component instead of network-only request policy
       })
       .catch(err => {
         // console.log('error in datasetQuery:', err)
@@ -216,13 +206,15 @@ export default {
         .then(data => {
           let uri = `/crn/datasets/${datasetId}/publish`
           // if now public, initialize migration to a public s3 bucket
-          // otherwise, initialize migration to a private s3 bucket          
+          // otherwise, initialize migration to a private s3 bucket
           if (publicFlag) {
-            request.post(uri)
+            request
+              .post(uri)
               .then(() => resolve(data))
               .catch(err => reject(err))
           } else {
-            request.del(uri)
+            request
+              .del(uri)
               .then(() => resolve(data))
               .catch(err => reject(err))
           }
@@ -462,14 +454,12 @@ export default {
   decodeFilePath(path) {
     return path.replace(new RegExp(':', 'g'), '/')
   },
-<<<<<<< HEAD
-
 
   // PERMISSIONS OPERATIONS
 
   /**
    * Update Permissions
-   * 
+   *
    * adds / updates a user's role on a dataset
    * @param {*} datasetId id of dataset that requires permissions update
    * @param {*} userId permissions will be changed for user with this id
@@ -479,19 +469,23 @@ export default {
     let mutation = datasets.updatePermissions
     datasetId = bids.decodeId(datasetId)
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId, userId, level
-        }
-      }).then(() => resolve())
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId,
+            userId,
+            level,
+          },
+        })
+        .then(() => resolve())
         .catch(err => reject(err))
     })
   },
 
   /**
    * Remove Permissions
-   * 
+   *
    * removes a user's role on a dataset
    * @param {*} datasetId id of dataset that requires permission removal
    * @param {*} userId permissions will be removed for the user with this id
@@ -500,16 +494,16 @@ export default {
     let mutation = datasets.removePermissions
     datasetId = bids.decodeId(datasetId)
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId, userId
-        }
-      }).then(() => resolve())
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId,
+            userId,
+          },
+        })
+        .then(() => resolve())
         .catch(err => reject(err))
     })
-  }
+  },
 }
-=======
-}
->>>>>>> a70b54e3... use refetch() in component instead of network-only request policy
