@@ -61,7 +61,8 @@ export const updateFiles = (
         .then(res => {
           return res.body.ref
         })
-        .then(updateDatasetRevision(datasetId)),
+        .then(updateDatasetRevision(datasetId))
+        .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
     )
     .then(() => ({
       id: new Date(),
@@ -102,7 +103,8 @@ export const deleteFiles = (
         .then(res => {
           return res.body.ref
         })
-        .then(updateDatasetRevision(datasetId)),
+        .then(updateDatasetRevision(datasetId))
+        .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
     )
     .then(() => ({
       id: new Date(),
