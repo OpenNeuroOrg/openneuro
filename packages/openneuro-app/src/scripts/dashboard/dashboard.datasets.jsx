@@ -26,7 +26,6 @@ import { pageTitle } from '../resources/strings'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { datasets } from 'openneuro-client'
-import datalad from '../utils/datalad'
 
 // component setup ---------------------------------------------------------------------------
 
