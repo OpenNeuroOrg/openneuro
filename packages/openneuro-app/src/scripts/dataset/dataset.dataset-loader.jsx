@@ -4,6 +4,9 @@ import datasetStore from './dataset.store'
 import actions from './dataset.actions'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
+import { graphql } from 'react-apollo'
+import gql from 'graphql-tag'
+import { datasets } from 'openneuro-client'
 
 class DatasetLoader extends Reflux.Component {
   constructor(props) {
@@ -17,6 +20,22 @@ class DatasetLoader extends Reflux.Component {
 
   componentDidMount() {
     this._loadData(this.props)
+    this._subscribeToFileUpdates(this.props)
+  }
+
+  _subscribeToFileUpdates(props) {
+    props.getDataset.subscribeToMore({
+      document: gql`
+        subscription {
+          draftFilesUpdated
+        }
+      `,
+      updateQuery: () => {
+        props.getDataset.refetch().then(() => {
+          this._loadData(props, true)
+        })
+      },
+    })
   }
 
   isSnapshot(props) {
@@ -28,13 +47,17 @@ class DatasetLoader extends Reflux.Component {
     }
   }
 
-  _loadData(props) {
+  _loadData(props, forceRefresh) {
     if (!this.isSnapshot(props)) {
       let reload = false
       let datasetId = props.match.params.datasetId
       if (datasetId && this.state.datasets) {
         const datasetUrl = bids.encodeId(datasetId)
-        if (datasetUrl !== this.state.datasets.loadedUrl && !this.state.datasets.loading) {
+        const needsRefresh =
+          datasetUrl !== this.state.datasets.loadedUrl &&
+          !this.state.datasets.loading
+        const refresh = needsRefresh || forceRefresh
+        if (refresh) {
           reload = true
         }
       }
@@ -52,4 +75,11 @@ class DatasetLoader extends Reflux.Component {
   }
 }
 
-export default withRouter(DatasetLoader)
+export default graphql(datasets.getDataset, {
+  name: 'getDataset',
+  options: props => ({
+    variables: {
+      id: bids.decodeId(props.match.params.datasetId),
+    },
+  }),
+})(withRouter(DatasetLoader))
