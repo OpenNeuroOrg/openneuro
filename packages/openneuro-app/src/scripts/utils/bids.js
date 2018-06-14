@@ -554,7 +554,6 @@ export default {
    * to any statuses set in the notes.
    */
   formatStatus(project, userAccess) {
-    console.log('project:', project)
     let validationIssues =
       project.draft && project.draft.issues ? project.draft.issues : []
     let tags = project.tags ? project.tags : []
