@@ -486,7 +486,6 @@ let datasetStore = Reflux.createStore({
             })
             .then(() => {
               this.update({ loading: false })
-              history.push('/datasets/' + bids.decodeId(datasetId))
             })
         },
       })

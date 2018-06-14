@@ -30,14 +30,13 @@ export default {
     isSignedOut,
     isAdmin = false,
     metadata = false,
-    ) {
-    const res = (await datalad
-      .getDatasets({
-        authenticate: isAdmin || !isPublic,
-        snapshot: false,
-        metadata: metadata,
-        isPublic: isPublic
-      })).data
+  ) {
+    const res = (await datalad.getDatasets({
+      authenticate: isAdmin || !isPublic,
+      snapshot: false,
+      metadata: metadata,
+      isPublic: isPublic,
+    })).data
     if (!res) {
       return callback([])
     }
@@ -148,15 +147,19 @@ export default {
 
     // Dataset
     try {
-      datalad.getDataset(projectId).then(async (projectRes) => {
+      datalad.getDataset(projectId).then(async projectRes => {
         const data = projectRes ? projectRes.data : null
         if (data) {
           // get snapshot or draft, depending on results
           let project = data.dataset
           let draft = project ? project.draft : null
-          let snapshotQuery = options.snapshot ? (await datalad.getSnapshot(projectId, options)).data : null
-          let snapshot = snapshotQuery ? snapshotQuery.dataset : null
-          let tempFiles = !snapshot ? this._formatFiles(draft.files) : this._formatFiles(snapshot.files)
+          let snapshotQuery = options.snapshot
+            ? (await datalad.getSnapshot(projectId, options)).data
+            : null
+          let snapshot = snapshotQuery ? snapshotQuery.snapshot : null
+          let tempFiles = !snapshot
+            ? this._formatFiles(draft.files)
+            : this._formatFiles(snapshot.files)
           project.snapshot_version = snapshot ? snapshot.tag : null
           this.getMetadata(
             project,
@@ -177,16 +180,17 @@ export default {
                   dataset.views = this.views(dataset, usage)
                   dataset.downloads = this.downloads(dataset, usage)
                 }
-                crn.getDatasetJobs(projectId, options).then(res => {
-                  dataset.jobs = res.body
-                  return callback(dataset)
-                })
-                .catch(err => {
-                  // console.log('error getting jobs:', err)
-                  return callback(dataset, err)
-                })
+                crn
+                  .getDatasetJobs(projectId, options)
+                  .then(res => {
+                    dataset.jobs = res.body
+                    return callback(dataset)
+                  })
+                  .catch(err => {
+                    // console.log('error getting jobs:', err)
+                    return callback(dataset, err)
+                  })
               })
-              
             },
             options,
           )

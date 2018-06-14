@@ -65,7 +65,7 @@ class DatasetLoader extends Reflux.Component {
       updateQuery: () => {
         props.getDataset.refetch().then(() => {
           props.history.push(
-            '/datasets/' + bids.decodeId(this.state.datasets._id),
+            '/datasets/' + bids.decodeId(this.state.datasets.dataset._id),
           )
         })
       },
