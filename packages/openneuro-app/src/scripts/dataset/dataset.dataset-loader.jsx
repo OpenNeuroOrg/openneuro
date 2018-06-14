@@ -21,6 +21,8 @@ class DatasetLoader extends Reflux.Component {
   componentDidMount() {
     this._loadData(this.props)
     this._subscribeToFileUpdates(this.props)
+    this._subscribeToSnapshotCreation(this.props)
+    this._subscribeToSnapshotDeletion(this.props)
   }
 
   _subscribeToFileUpdates(props) {
@@ -33,6 +35,38 @@ class DatasetLoader extends Reflux.Component {
       updateQuery: () => {
         props.getDataset.refetch().then(() => {
           this._loadData(props, true)
+        })
+      },
+    })
+  }
+
+  _subscribeToSnapshotCreation(props) {
+    props.getDataset.subscribeToMore({
+      document: gql`
+        subscription {
+          snapshotAdded
+        }
+      `,
+      updateQuery: () => {
+        props.getDataset.refetch().then(() => {
+          this._loadData(props, true)
+        })
+      },
+    })
+  }
+
+  _subscribeToSnapshotDeletion(props) {
+    props.getDataset.subscribeToMore({
+      document: gql`
+        subscription {
+          snapshotDeleted
+        }
+      `,
+      updateQuery: () => {
+        props.getDataset.refetch().then(() => {
+          props.history.push(
+            '/datasets/' + bids.decodeId(this.state.datasets._id),
+          )
         })
       },
     })

@@ -16,12 +16,18 @@ import {
 import { updateSummary, updateValidation } from './validation.js'
 import { draft, snapshot, snapshots } from './datalad.js'
 import { whoami, user, users } from './user.js'
-import { permissions, updatePermissions, removePermissions } from './permissions.js'
+import {
+  permissions,
+  updatePermissions,
+  removePermissions,
+} from './permissions.js'
 import {
   datasetAdded,
   datasetDeleted,
   datasetValidationUpdated,
   draftFilesUpdated,
+  snapshotAdded,
+  snapshotDeleted,
 } from './subscriptions.js'
 
 export default {
@@ -57,12 +63,14 @@ export default {
     datasetDeleted,
     datasetValidationUpdated,
     draftFilesUpdated,
+    snapshotAdded,
+    snapshotDeleted,
   },
   User: user,
   Dataset: {
     uploader: ds => user(ds, { id: ds.uploader }),
     draft,
     snapshots,
-    permissions: ds => permissions(ds)
+    permissions: ds => permissions(ds),
   },
 }

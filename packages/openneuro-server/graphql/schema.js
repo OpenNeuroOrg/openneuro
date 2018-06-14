@@ -54,6 +54,8 @@ const typeDefs = `
     # Publishes when the set of datasets changes
     datasetAdded: Dataset
     datasetDeleted: ID
+    snapshotAdded: ID
+    snapshotDeleted: ID
     datasetValidationUpdated: ID
     draftFilesUpdated: ID
   }
