@@ -30,14 +30,13 @@ export default {
     isSignedOut,
     isAdmin = false,
     metadata = false,
-    ) {
-    const res = (await datalad
-      .getDatasets({
-        authenticate: isAdmin || !isPublic,
-        snapshot: false,
-        metadata: metadata,
-        isPublic: isPublic
-      })).data
+  ) {
+    const res = (await datalad.getDatasets({
+      authenticate: isAdmin || !isPublic,
+      snapshot: false,
+      metadata: metadata,
+      isPublic: isPublic,
+    })).data
     if (!res) {
       return callback([])
     }
@@ -148,17 +147,21 @@ export default {
 
     // Dataset
     try {
-      datalad.getDataset(projectId).then(async (projectRes) => {
+      datalad.getDataset(projectId).then(async projectRes => {
         const data = projectRes ? projectRes.data : null
         if (data) {
           // get snapshot or draft, depending on results
           let project = data.dataset
           let draft = project ? project.draft : null
-          let snapshotQuery = options.snapshot ? (await datalad.getSnapshot(projectId, options)).data : null
+          let snapshotQuery = options.snapshot
+            ? (await datalad.getSnapshot(projectId, options)).data
+            : null
           let snapshot = snapshotQuery ? snapshotQuery.dataset : null
-          let draftFiles = draft ? draft.files : []
+          let draftFiles = draft && draft.files ? draft.files : []
           let snapshotFiles = snapshot ? snapshot.files : []
-          let tempFiles = !snapshot ? this._formatFiles(draftFiles) : this._formatFiles(snapshotFiles)
+          let tempFiles = !snapshot
+            ? this._formatFiles(draftFiles)
+            : this._formatFiles(snapshotFiles)
           project.snapshot_version = snapshot ? snapshot.tag : null
           this.getMetadata(
             project,
@@ -179,16 +182,17 @@ export default {
                   dataset.views = this.views(dataset, usage)
                   dataset.downloads = this.downloads(dataset, usage)
                 }
-                crn.getDatasetJobs(projectId, options).then(res => {
-                  dataset.jobs = res.body
-                  return callback(dataset)
-                })
-                .catch(err => {
-                  // console.log('error getting jobs:', err)
-                  return callback(dataset, err)
-                })
+                crn
+                  .getDatasetJobs(projectId, options)
+                  .then(res => {
+                    dataset.jobs = res.body
+                    return callback(dataset)
+                  })
+                  .catch(err => {
+                    // console.log('error getting jobs:', err)
+                    return callback(dataset, err)
+                  })
               })
-              
             },
             options,
           )
@@ -459,7 +463,8 @@ export default {
       label: description ? description.Name : project.label,
       group: project.uploader ? project.uploader.id : null,
       created: project.created,
-      modified: project.draft ? project.draft.modified : null,
+      modified:
+        project.draft && project.draft.modified ? project.draft.modified : null,
       permissions: project.permissions,
       public: !!project.public,
       downloads: project.downloads,
@@ -549,7 +554,9 @@ export default {
    * to any statuses set in the notes.
    */
   formatStatus(project, userAccess) {
-    let validationIssues = project.draft ? project.draft.issues : []
+    console.log('project:', project)
+    let validationIssues =
+      project.draft && project.draft.issues ? project.draft.issues : []
     let tags = project.tags ? project.tags : []
     let currentUser = userStore.data.scitran
     let uploader = project.uploader ? project.uploader.id : null
@@ -562,7 +569,7 @@ export default {
     let adminOnlyAccess = permittedUsers.indexOf(userId) == -1 && hasRoot
 
     let status = {
-      incomplete: tags.indexOf('incomplete') > -1 || project.partial,
+      incomplete: tags.indexOf('incomplete') > -1 || project.draft.partial,
       validating: tags.indexOf('validating') > -1,
       invalid: !!validationIssues.find(i => i.severity == 'error'), // dataset is invalid if there are any issues with 'error' level severity
       public: !!project.public,

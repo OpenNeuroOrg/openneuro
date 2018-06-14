@@ -118,7 +118,6 @@ const typeDefs = `
     draft: Draft
     snapshots: [Snapshot]
     permissions: [Permission]
-    partial: Boolean
   }
 
   # Ephemeral draft or working tree for a dataset
