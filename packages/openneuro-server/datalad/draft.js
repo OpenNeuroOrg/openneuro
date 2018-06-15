@@ -13,7 +13,7 @@ const draftFilesKey = (datasetId, revision) => {
   return `openneuro:draftFiles:${datasetId}:${revision}`
 }
 
-export const getDraftFiles = (datasetId, revision) => {
+export const getDraftFiles = async (datasetId, revision) => {
   const filesUrl = `${uri}/datasets/${datasetId}/files`
   const key = draftFilesKey(datasetId, revision)
   return redis.get(key).then(data => {
@@ -42,6 +42,18 @@ export const updateDatasetRevision = datasetId => gitRef => {
 
 export const draftPartialKey = datasetId => {
   return `openneuro:partialDraft:${datasetId}`
+}
+
+export const getDatasetRevision = async datasetId => {
+  return new Promise((resolve, reject) => {
+    mongo.collections.crn.datasets.findOne({ id: datasetId }).then(obj => {
+      if (obj) {
+        resolve(obj.revision)
+      } else {
+        reject(null)
+      }
+    })
+  })
 }
 
 export const getPartialStatus = datasetId => {
