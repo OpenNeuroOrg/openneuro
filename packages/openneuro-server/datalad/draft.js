@@ -12,6 +12,15 @@ const draftFilesKey = (datasetId, revision) => {
   return `openneuro:draftFiles:${datasetId}:${revision}`
 }
 
+const addFileUrl = datasetId => file => {
+  // This is a draft, files are local
+  const filePath = file.filename.replace(/\//g, ':')
+  const fileUrl = `${config.url}${
+    config.apiPrefix
+  }datasets/${datasetId}/files/${filePath}`
+  return { ...file, urls: [fileUrl] }
+}
+
 export const getDraftFiles = (datasetId, revision) => {
   const filesUrl = `${uri}/datasets/${datasetId}/files`
   const key = draftFilesKey(datasetId, revision)
@@ -22,8 +31,9 @@ export const getDraftFiles = (datasetId, revision) => {
         .get(filesUrl)
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {
-          redis.set(key, JSON.stringify(files))
-          return files
+          const filesWithUrls = files.map(addFileUrl(datasetId))
+          redis.set(key, JSON.stringify(filesWithUrls))
+          return filesWithUrls
         })
   })
 }
