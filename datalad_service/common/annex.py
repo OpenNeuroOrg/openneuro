@@ -15,6 +15,8 @@ def filter_git_files(files):
 
 
 def get_repo_files(dataset, branch=None):
+    if branch is None:
+        branch = 'HEAD'
     working_files = filter_git_files(dataset.repo.get_files(branch=branch))
     files = []
     for filename in working_files:
@@ -22,11 +24,12 @@ def get_repo_files(dataset, branch=None):
             # Annexed file
             key = dataset.repo.get_file_key(filename)
             size = dataset.repo.get_size_from_key(key)
+            fd = dataset.repo.repo.git.show(branch + ':' + filename)
         except FileInGitError:
             # Regular git file
             key = filename
             size = os.path.getsize(os.path.join(dataset.path, filename))
-        files.append({'filename': filename, 'size': size, 'id': key})
+        files.append({'filename': filename, 'size': size, 'id': key, 'objectpath': fd})
     return files
 
 
