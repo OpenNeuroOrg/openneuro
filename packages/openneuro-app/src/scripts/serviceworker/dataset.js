@@ -50,7 +50,9 @@ export const zipFiles = ({ files }) => {
 const fetchAlternates = urls => {
   if (urls.length > 0) {
     const fileUrl = urls.shift()
-    return fetch(fileUrl).catch(() => fetchAlternates(urls))
+    return fetch(fileUrl, { method: 'HEAD' }).then(
+      response => (response.ok ? fetch(fileUrl) : fetchAlternates(urls)),
+    )
   } else {
     throw new Error('All file URLs failed.')
   }
