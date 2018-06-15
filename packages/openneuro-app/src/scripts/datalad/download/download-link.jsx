@@ -15,7 +15,7 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
     : `${config.crn.url}datasets/${datasetId}/download`
   // Check that a service worker is registered
   const serviceWorker = global.navigator.serviceWorker.controller
-  if (serviceWorker && serviceWorker.scriptURL.startsWith(config.crn.url)) {
+  if (serviceWorker && serviceWorker.scriptURL.startsWith(config.url)) {
     global.open(uri, `${datasetId} download`)
   } else {
     // Something has gone wrong with the service worker
