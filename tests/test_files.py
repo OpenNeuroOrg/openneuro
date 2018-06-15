@@ -10,7 +10,7 @@ from .dataset_fixtures import *
 def test_get_file(client, celery_app):
     ds_id = 'ds000001'
     result = client.simulate_get(
-        '/datasets/{}/files/dataset_description.json'.format(ds_id), file_wrapper=FileWrapper)
+        '/datasets/{}/files/.git:annex:objects:p8:GK:MD5E-s101--63ef6d26537d770344904ec51d215d60.json:MD5E-s101--63ef6d26537d770344904ec51d215d60.json'.format(ds_id), file_wrapper=FileWrapper)
     content_len = int(result.headers['content-length'])
     assert content_len == len(result.content)
     assert json.loads(result.content)['BIDSVersion'] == '1.0.2'
@@ -105,7 +105,8 @@ def test_file_indexing(celery_app, client, new_dataset):
             'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27', 
             'objectpath': '.git/annex/objects/Xz/gq/MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27/MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
         {'filename': 'dataset_description.json', 'size': 101,
-            'id': 'MD5E-s101--63ef6d26537d770344904ec51d215d60.json'},
+            'id': 'MD5E-s101--63ef6d26537d770344904ec51d215d60.json', 
+            'objectpath': '.git/annex/objects/p8/GK/MD5E-s101--63ef6d26537d770344904ec51d215d60.json/MD5E-s101--63ef6d26537d770344904ec51d215d60.json'},
         {'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
             'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19}
     ]
