@@ -41,8 +41,11 @@ def test_add_file(client, annex_path):
 def test_add_existing_file(client):
     ds_id = 'ds000001'
     file_data = 'should update'
+    response2 = client.simulate_get('/datasets/{}/files'.format(ds_id))
+    print('response2:', response2)
     response = client.simulate_post(
         '/datasets/{}/files/dataset_description.json'.format(ds_id), body=file_data)
+    
     assert response.status == falcon.HTTP_OK
 
 
@@ -108,5 +111,6 @@ def test_file_indexing(celery_app, client, new_dataset):
             'id': 'MD5E-s101--63ef6d26537d770344904ec51d215d60.json', 
             'objectpath': '.git/annex/objects/p8/GK/MD5E-s101--63ef6d26537d770344904ec51d215d60.json/MD5E-s101--63ef6d26537d770344904ec51d215d60.json'},
         {'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
-            'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19}
+            'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19, 
+            'objectpath': '../../.git/annex/objects/5p/Vk/MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz/MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz'}
     ]
