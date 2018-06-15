@@ -118,8 +118,16 @@ export const getDatasets = () => {
  * Convert to URL compatible path
  * @param {String} path
  */
-const encodeFilePath = path => {
+export const encodeFilePath = path => {
   return path.replace(new RegExp('/', 'g'), ':')
+}
+
+/**
+ * Convert to from URL compatible path fo filepath
+ * @param {String} path
+ */
+export const decodeFilePath = path => {
+  return path.replace(new RegExp(':', 'g'), '/')
 }
 
 /**
