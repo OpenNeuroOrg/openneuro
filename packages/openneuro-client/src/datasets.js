@@ -21,6 +21,7 @@ export const getDataset = gql`
           id
           filename
           size
+          objectpath
         }
         summary {
           modalities

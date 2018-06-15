@@ -237,6 +237,7 @@ const typeDefs = `
     filename: String!
     size: BigInt
     urls: [String]
+    objectpath: String
   }
 
   # Update file object
