@@ -20,7 +20,7 @@ const DRAFT_FILES = `
 
 const SNAPSHOT_FILES = `
   query snapshot($datasetId: ID!, $tag: String!) {
-    snapshot(id: $datasetId) {
+    snapshot(datasetId: $datasetId, tag: $tag) {
       id
       files {
         id
