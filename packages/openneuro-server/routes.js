@@ -388,7 +388,7 @@ const dataladRoutes = [
   {
     method: 'get',
     url: '/datasets/:datasetId/snapshots/:snapshotId/download',
-    handler: download.datasetDownload,
+    handler: download.snapshotDownload,
   },
 ]
 

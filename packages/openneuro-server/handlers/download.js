@@ -18,6 +18,20 @@ const DRAFT_FILES = `
   }
 `
 
+const SNAPSHOT_FILES = `
+  query snapshot($datasetId: ID!, $tag: String!) {
+    snapshot(id: $datasetId) {
+      id
+      files {
+        id
+        filename
+        size
+        urls
+      }
+    }
+  }
+`
+
 export const datasetDownload = (req, res) => {
   const datasetId = req.params.datasetId
   graphql(schema, DRAFT_FILES, null, null, { datasetId })
@@ -31,4 +45,16 @@ export const datasetDownload = (req, res) => {
     })
 }
 
-export const snapshotDownload = (req, res) => {}
+export const snapshotDownload = (req, res) => {
+  const datasetId = req.params.datasetId
+  const tag = req.params.snapshotId
+  graphql(schema, SNAPSHOT_FILES, null, null, { datasetId, tag })
+    .then(({ data }) => {
+      res.send({ files: data.snapshot.files, datasetId, tag })
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500)
+      res.send(err)
+    })
+}
