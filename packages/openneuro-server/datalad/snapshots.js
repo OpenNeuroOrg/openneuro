@@ -154,9 +154,18 @@ export const getSnapshot = (datasetId, tag) => {
         .get(url)
         .set('Accept', 'application/json')
         .then(async ({ body }) => {
-          const externalFiles = await c.crn.files
-            .findOne({ datasetId, tag }, { files: true })
-            .then(result => result.files)
+          // Only add S3 URLs for public datasets
+          const dataset = await c.crn.datasets.findOne(
+            { id: datasetId },
+            { public: true },
+          )
+          let externalFiles
+          if (dataset.public) {
+            externalFiles = await c.crn.files
+              .findOne({ datasetId, tag }, { files: true })
+              .then(result => result.files)
+          }
+          // If not public, fallback URLs are used
           const filesWithUrls = body.files.map(
             addFileUrl(datasetId, tag, externalFiles),
           )
