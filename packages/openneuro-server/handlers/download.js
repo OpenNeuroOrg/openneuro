@@ -39,7 +39,6 @@ export const datasetDownload = (req, res) => {
       res.send({ files: data.dataset.draft.files, datasetId })
     })
     .catch(err => {
-      console.log(err)
       res.status(500)
       res.send(err)
     })
@@ -53,7 +52,6 @@ export const snapshotDownload = (req, res) => {
       res.send({ files: data.snapshot.files, datasetId, tag })
     })
     .catch(err => {
-      console.log(err)
       res.status(500)
       res.send(err)
     })
