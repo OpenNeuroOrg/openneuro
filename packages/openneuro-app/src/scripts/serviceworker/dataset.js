@@ -34,6 +34,7 @@ export const zipFiles = ({ files }) => {
           controller.enqueue(data)
         })
         .on('error', err => {
+          // eslint-disable-next-line no-console
           console.log(err)
         })
         .on('end', () => controller.close())
