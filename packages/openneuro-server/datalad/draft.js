@@ -5,20 +5,12 @@ import request from 'superagent'
 import mongo from '../libs/mongo.js'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
+import { addFileUrl } from './utils.js'
 
 const uri = config.datalad.uri
 
 const draftFilesKey = (datasetId, revision) => {
   return `openneuro:draftFiles:${datasetId}:${revision}`
-}
-
-const addFileUrl = datasetId => file => {
-  // This is a draft, files are local
-  const filePath = file.filename.replace(/\//g, ':')
-  const fileUrl = `${config.url}${
-    config.apiPrefix
-  }datasets/${datasetId}/files/${filePath}`
-  return { ...file, urls: [fileUrl] }
 }
 
 export const getDraftFiles = (datasetId, revision) => {
