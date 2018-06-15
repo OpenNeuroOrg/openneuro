@@ -14,15 +14,21 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
     ? `${config.crn.url}datasets/${datasetId}/snapshots/${snapshotTag}/download`
     : `${config.crn.url}datasets/${datasetId}/download`
   // Check that a service worker is registered
-  const serviceWorker = global.navigator.serviceWorker.controller
-  if (serviceWorker && serviceWorker.scriptURL.startsWith(config.url)) {
-    global.open(uri, `${datasetId} download`)
-  } else {
-    // Something has gone wrong with the service worker
-    // or the browser does not support it
+  if (!global.navigator.serviceWorker) {
     global.alert(
-      'An error was encountered with this download. Please try again or upgrade to a newer supported browser.',
+      'Your browser is out of date, please upgrade to a newer supported browser to download.',
     )
+  } else {
+    const serviceWorker = global.navigator.serviceWorker.controller
+    if (serviceWorker && serviceWorker.scriptURL.startsWith(config.url)) {
+      global.open(uri, `${datasetId} download`)
+    } else {
+      // Something has gone wrong with the service worker
+      // or the browser does not support it
+      console.log('An unexpected issue occurred downloading.')
+      console.log(serviceWorker)
+      // TODO Maybe re-register here?
+    }
   }
   // Finish the WarnButton loading state.
   callback()
