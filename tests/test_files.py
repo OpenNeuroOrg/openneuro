@@ -9,15 +9,8 @@ from .dataset_fixtures import *
 
 def test_get_file(client, celery_app):
     ds_id = 'ds000001'
-    response2 = client.simulate_get('/datasets/{}/files'.format(ds_id))
-    response_content = json.loads(response2.content)
-    assert response_content['files'] == [
-        {'filename': 'dataset_description.json', 'size': 101,
-            'id': 'MD5E-s101--63ef6d26537d770344904ec51d215d60.json', 
-            'objectpath': '.git/annex/objects/p8/GK/MD5E-s101--63ef6d26537d770344904ec51d215d60.json/MD5E-s101--63ef6d26537d770344904ec51d215d60.json'},
-    ]
     result = client.simulate_get(
-        '/datasets/{}/files/.git:annex:objects:p8:GK:MD5E-s101--63ef6d26537d770344904ec51d215d60.json:MD5E-s101--63ef6d26537d770344904ec51d215d60.json'.format(ds_id), file_wrapper=FileWrapper)
+        '/datasets/{}/files/.git:annex:objects:mW:MZ:MD5E-s97--76dc22875c876b360e7b084fb1219c83.json:MD5E-s97--76dc22875c876b360e7b084fb1219c83.json'.format(ds_id), file_wrapper=FileWrapper)
     content_len = int(result.headers['content-length'])
     assert content_len == len(result.content)
     assert json.loads(result.content)['BIDSVersion'] == '1.0.2'
