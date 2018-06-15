@@ -151,7 +151,7 @@ const snapshotKey = (datasetId, tag) => {
  * @param {string} datasetId Dataset accession number
  * @param {string} tag Tag name to retrieve
  */
-export const getSnapshot = (datasetId, tag) => {
+export const getSnapshot = async (datasetId, tag) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const key = snapshotKey(datasetId, tag)
   return redis.get(key).then(data => {
