@@ -4,6 +4,10 @@ import PropTypes from 'prop-types'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import config from '../../../../config.js'
 
+const startDownload = (uri, datasetId) => {
+  global.open(uri, `${datasetId} download`)
+}
+
 /**
  * Event handler for initiating dataset or snapshot downloads
  * @param {string} datasetId Accession number string for a dataset
@@ -19,22 +23,34 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
     global.alert(
       'Your browser is out of date, please upgrade to a newer supported browser to download.',
     )
+    callback()
   } else {
-    const serviceWorker = global.navigator.serviceWorker.controller
-    if (serviceWorker && serviceWorker.scriptURL.startsWith(config.url)) {
-      global.open(uri, `${datasetId} download`)
-    } else {
-      // Something has gone wrong with the service worker
-      // or the browser does not support it
-      console.error('An unexpected issue occurred downloading.', serviceWorker)
-      global.alert(
-        'Download failed to start. Please wait a few moments and try again.',
-      )
-      // TODO Maybe re-register here?
-    }
+    // Check for a running service worker
+    global.navigator.serviceWorker.getRegistration().then(registration => {
+      if (registration.active) {
+        // Service worker is already running as expected
+        startDownload(uri, datasetId)
+        callback()
+      } else {
+        // Waiting on the service worker
+        if (registration.installing || registration.waiting) {
+          serviceWorker.addEventListener('statechange', function(e) {
+            if (e.target.state === 'active') {
+              // Worker ready, start downloading
+              serviceWorker.removeEventListener('statechange', this, true)
+              startDownload(uri, datasetId)
+              callback()
+            }
+          })
+        } else {
+          global.alert(
+            'Download failed, please refresh and try again in a few moments.',
+          )
+          callback()
+        }
+      }
+    })
   }
-  // Finish the WarnButton loading state.
-  callback()
 }
 
 /**
