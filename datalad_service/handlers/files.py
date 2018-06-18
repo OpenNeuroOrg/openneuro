@@ -1,3 +1,4 @@
+import logging
 import os
 
 import falcon
@@ -13,6 +14,7 @@ class FilesResource(object):
 
     def __init__(self, store):
         self.store = store
+        self.logger = logging.getLogger('datalad_service.' + __name__)
 
     @property
     def annex_path(self):
@@ -56,6 +58,13 @@ class FilesResource(object):
                 # File is not kept locally
                 resp.media = {'error': 'file not found'}
                 resp.status = falcon.HTTP_NOT_FOUND
+            except:
+                # Some unknown error
+                resp.media = {
+                    'error': 'an unknown error occurred accessing this file'}
+                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
+                self.logger.exception(
+                    'An unknown error processing file "{}"'.format(filename))
         else:
             # Request for index of files
             # Return a list of file objects
