@@ -63,21 +63,25 @@ const fetchAlternates = urls => {
  * @param {URL} index The URL for a file index (s3 and other files)
  */
 export const bundleResponse = async index => {
-  let filename = 'archive.zip'
+  let filename = 'archive'
   const tokens = index.pathname.split('/')
+  const tl = tokens.length
   // If this is a draft download
-  if (tokens[-3] === 'dataset') {
+  if (tokens[tl - 3] === 'datasets') {
     // Set filename to the accession number
-    filename = tokens[-2]
+    filename = tokens[tl - 2]
+  } else if (tokens[tl - 3] === 'snapshots') {
+    // Accession number + snapshot
+    filename = `${tokens[tl - 4]}-${tokens[tl - 2]}`
   }
-  const header = {
+  const headers = {
     'Content-Type': 'application/zip',
-    'Content-Disposition': `attachment; filename=${filename}.zip`,
+    'Content-Disposition': `attachment; filename="${filename}.zip"`,
   }
   return new Response(
     await fetch(index)
       .then(resp => resp.json())
       .then(zipFiles),
-    header,
+    { headers },
   )
 }
