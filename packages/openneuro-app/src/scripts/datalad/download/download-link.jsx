@@ -26,8 +26,10 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
     } else {
       // Something has gone wrong with the service worker
       // or the browser does not support it
-      console.log('An unexpected issue occurred downloading.')
-      console.log(serviceWorker)
+      console.error('An unexpected issue occurred downloading.', serviceWorker)
+      global.alert(
+        'Download failed to start. Please wait a few moments and try again.',
+      )
       // TODO Maybe re-register here?
     }
   }
