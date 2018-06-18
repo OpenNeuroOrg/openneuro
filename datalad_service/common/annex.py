@@ -1,6 +1,8 @@
+import os
 import re
 
 from datalad.config import ConfigManager
+from datalad.support.exceptions import FileInGitError
 
 
 SERVICE_EMAIL = 'git@openneuro.org'
@@ -16,8 +18,14 @@ def get_repo_files(dataset, branch=None):
     working_files = filter_git_files(dataset.repo.get_files(branch=branch))
     files = []
     for filename in working_files:
-        key = dataset.repo.get_file_key(filename)
-        size = dataset.repo.get_size_from_key(key)
+        try:
+            # Annexed file
+            key = dataset.repo.get_file_key(filename)
+            size = dataset.repo.get_size_from_key(key)
+        except FileInGitError:
+            # Regular git file
+            key = filename
+            size = os.path.getsize(os.path.join(dataset.path, filename))
         files.append({'filename': filename, 'size': size, 'id': key})
     return files
 
