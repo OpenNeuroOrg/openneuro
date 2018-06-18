@@ -2,6 +2,7 @@ import os
 
 import falcon
 
+import git
 from datalad_service.common.annex import get_from_header
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.files import unlock_files, commit_files, get_files, remove_files
@@ -37,8 +38,9 @@ class FilesResource(object):
 
                 # if fd is a reference to the git annex file location, try to open that file. otherwise,
                 # it is a file to be returned
-                if fd.find('.git/annex') >= 0:
-                    fd = fd[fd.find('.git/annex'):] # remove leading relative folder paths
+                if fd.startswith('.git/annex'):
+                    # remove leading relative folder paths
+                    fd = fd[fd.find('.git/annex'):]
 
                     # if fd fails, that means the file is not present in the annex and we need to get it from s3
                     # so we send the client a 404 to indicate the file was not found locally.
@@ -47,11 +49,11 @@ class FilesResource(object):
                     resp.stream_len = os.fstat(fd.fileno()).st_size
                     resp.status = falcon.HTTP_OK
                 else:
-                    resp.stream = fd
-                    resp.stream_len = os.fstat(fd.fileno()).st_size
+                    resp.body = fd
                     resp.status = falcon.HTTP_OK
-            except:
-                resp.media = {'error': 'file does not exist'}
+            except git.exc.GitCommandError:
+                # File is not present in tree
+                resp.media = {'error': 'file not found in git tree'}
                 resp.status = falcon.HTTP_NOT_FOUND
         else:
             # Request for index of files
@@ -86,7 +88,7 @@ class FilesResource(object):
             else:
                 try:
                     # Make any missing parent directories
-                    
+
                     os.makedirs(os.path.dirname(file_path), exist_ok=True)
                     # Begin writing stream to disk
                     self._update_file(file_path, req.stream)
@@ -141,7 +143,7 @@ class FilesResource(object):
         queue = dataset_queue(dataset)
         if filename:
             ds_path = self.store.get_dataset_path(dataset)
-            file_path = os.path.join(ds_path, filename)    
+            file_path = os.path.join(ds_path, filename)
             if os.path.exists(file_path):
                 ds = self.store.get_dataset(dataset)
                 media_dict = {'deleted': filename}
@@ -152,15 +154,16 @@ class FilesResource(object):
 
                 # unlock = unlock_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={'files': [filename]})
                 # unlock.wait()
-                
-                remove = remove_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={'files': [filename], 'name': name, 'email': email})
+
+                remove = remove_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
+                                                  'files': [filename], 'name': name, 'email': email})
                 remove.wait()
-                
+
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
                 resp.media = {'error': 'no such file'}
-                resp.status = falcon.HTTP_NOT_FOUND          
+                resp.status = falcon.HTTP_NOT_FOUND
         else:
             resp.media = {'error': 'filename is missing'}
             resp.status = falcon.HTTP_BAD_REQUEST
