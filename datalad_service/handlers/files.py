@@ -52,6 +52,10 @@ class FilesResource(object):
                 # File is not present in tree
                 resp.media = {'error': 'file not found in git tree'}
                 resp.status = falcon.HTTP_NOT_FOUND
+            except IOError:
+                # File is not kept locally
+                resp.media = {'error': 'file not found'}
+                resp.status = falcon.HTTP_NOT_FOUND
         else:
             # Request for index of files
             # Return a list of file objects
