@@ -14,9 +14,7 @@ def filter_git_files(files):
     return [f for f in files if not (f.startswith('.datalad/') or f == '.gitattributes')]
 
 
-def get_repo_files(dataset, branch=None):
-    if branch is None:
-        branch = 'HEAD'
+def get_repo_files(dataset, branch='HEAD'):
     working_files = filter_git_files(dataset.repo.get_files(branch=branch))
     files = []
     for filename in working_files:
