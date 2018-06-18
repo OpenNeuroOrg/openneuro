@@ -111,8 +111,8 @@ class Faq extends React.Component {
               target="_blank"
               rel="noopener noreferrer">
               bids.neuroimaging.io
-            </a>.
-            If you have any questions about organizing your data please post them at
+            </a>. If you have any questions about organizing your data please
+            post them at
             <a
               href="https://neurostars.org/tags/bids"
               target="_blank"
@@ -137,10 +137,43 @@ class Faq extends React.Component {
               target="_blank"
               rel="noopener noreferrer">
               pydeface
-            </a>. 
-            Defacing is strongly preffered over skullstripping, because 
-            the process is more robust and yields lower chance of 
-            accidentally removing brain tissue.
+            </a>. Defacing is strongly preffered over skullstripping, because
+            the process is more robust and yields lower chance of accidentally
+            removing brain tissue.
+          </span>
+        ),
+      },
+      {
+        faq: (
+          <span>
+            I'm having trouble downloading with Firefox, what can I do?
+          </span>
+        ),
+        faq_answer: (
+          <span>
+            <p>
+              Firefox is working to support the APIs used by downloads but as of
+              Firefox 60, these features are hidden behind experimental
+              configuration flags. Chrome is recommended for dataset or snapshot
+              downloads, but you can try out Firefox support by enabling three{' '}
+              <q>about:config</q> flags.
+            </p>
+            <ul>
+              <li>dom.streams.enabled - enables web streams.</li>
+              <li>
+                javascript.options.streams - allows Javascript to use the API.
+              </li>
+              <li>
+                dom.ipc.multiOptOut - works around thread bugs, this may not be
+                needed but improves reliablity on some platforms.
+              </li>
+            </ul>
+            <p>
+              You can find out more about{' '}
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Streams_API">
+                web streams on MDN.
+              </a>
+            </p>
           </span>
         ),
       },
