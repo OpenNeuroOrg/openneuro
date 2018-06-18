@@ -24,6 +24,12 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
       'Your browser is out of date, please upgrade to a newer supported browser to download.',
     )
     callback()
+  } else if (typeof global.ReadableStream === 'undefined') {
+    // This is likely Firefox with flags disabled
+    global.alert(
+      'Web streams are required to download. Try a recent version of Chrome or enable "dom.streams.enabled" and "javascript.options.streams" in Firefox about:config',
+    )
+    callback()
   } else {
     // Check for a running service worker
     global.navigator.serviceWorker.getRegistration().then(registration => {
