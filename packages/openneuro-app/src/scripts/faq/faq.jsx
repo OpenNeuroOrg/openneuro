@@ -146,7 +146,7 @@ class Faq extends React.Component {
       {
         faq: (
           <span>
-            I'm having trouble downloading with Firefox, what can I do?
+            I am having trouble downloading with Firefox, what can I do?
           </span>
         ),
         faq_answer: (

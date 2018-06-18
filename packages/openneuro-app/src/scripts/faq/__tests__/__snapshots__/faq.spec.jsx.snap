@@ -211,7 +211,7 @@ exports[`faq/faq/Faq renders successfully 1`] = `
       className="panel-heading"
     >
       <span>
-        I'm having trouble downloading with Firefox, what can I do?
+        I am having trouble downloading with Firefox, what can I do?
       </span>
     </div>
     <div

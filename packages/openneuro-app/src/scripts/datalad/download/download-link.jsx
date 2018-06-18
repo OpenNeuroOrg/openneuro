@@ -40,14 +40,21 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
       } else {
         // Waiting on the service worker
         if (registration.installing || registration.waiting) {
-          serviceWorker.addEventListener('statechange', function(e) {
-            if (e.target.state === 'active') {
-              // Worker ready, start downloading
-              serviceWorker.removeEventListener('statechange', this, true)
-              startDownload(uri, datasetId)
-              callback()
-            }
-          })
+          global.navigator.serviceWorker.addEventListener(
+            'statechange',
+            function(e) {
+              if (e.target.state === 'active') {
+                // Worker ready, start downloading
+                global.navigator.serviceWorker.removeEventListener(
+                  'statechange',
+                  this,
+                  true,
+                )
+                startDownload(uri, datasetId)
+                callback()
+              }
+            },
+          )
         } else {
           global.alert(
             'Download failed, please refresh and try again in a few moments.',
