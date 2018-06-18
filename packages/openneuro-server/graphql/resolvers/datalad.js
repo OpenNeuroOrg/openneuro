@@ -14,12 +14,8 @@ export const draft = obj => {
     summary: () => summary(obj),
     issues: () => issues(obj),
     modified: obj.modified,
-    partial: () => partial(obj),
+    partial: () => partial(obj, { datasetId: obj.id }),
   }))
-}
-
-export const partial = obj => {
-  return getPartialStatus(obj.id)
 }
 
 export const snapshots = obj => {
@@ -31,4 +27,8 @@ export const snapshot = (obj, { datasetId, tag }) => {
     ...snapshot,
     dataset: () => dataset(snapshot, { id: datasetId }),
   }))
+}
+
+export const partial = (obj, { datasetId }) => {
+  return getPartialStatus(datasetId)
 }

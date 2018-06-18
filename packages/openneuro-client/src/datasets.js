@@ -34,6 +34,7 @@ export const getDataset = gql`
           key
           severity
         }
+        partial
       }
       snapshots {
         id
@@ -69,6 +70,32 @@ export const getDatasets = gql`
         level
         access: level
       }
+      draft {
+        id
+        partial
+      }
+    }
+  }
+`
+
+export const getPartialDataset = gql`
+  query dataset($id: ID!) {
+    dataset(id: $id) {
+      id
+      _id: id
+      label
+      created
+      public
+      uploader {
+        id
+        firstName
+        lastName
+        email
+      }
+      draft {
+        id
+        partial
+      }
     }
   }
 `
@@ -97,19 +124,24 @@ export const deleteSnapshot = gql`
 `
 
 export const updatePublic = gql`
-  mutation ($id: ID!, $publicFlag: Boolean!) {
+  mutation($id: ID!, $publicFlag: Boolean!) {
     updatePublic(datasetId: $id, publicFlag: $publicFlag)
   }
 `
 
 export const updatePermissions = gql`
-  mutation ($datasetId: ID!, $userId: String!, $level: String) {
+  mutation($datasetId: ID!, $userId: String!, $level: String) {
     updatePermissions(datasetId: $datasetId, userId: $userId, level: $level)
   }
 `
 
 export const removePermissions = gql`
-  mutation ($datasetId: ID!, $userId: String!) {
+  mutation($datasetId: ID!, $userId: String!) {
     removePermissions(datasetId: $datasetId, userId: $userId)
+  }
+`
+export const checkPartial = gql`
+  query partial($datasetId: ID!) {
+    partial(datasetId: $datasetId)
   }
 `
