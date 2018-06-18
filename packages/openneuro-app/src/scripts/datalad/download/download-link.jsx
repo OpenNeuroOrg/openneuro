@@ -27,7 +27,7 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
   } else if (typeof global.ReadableStream === 'undefined') {
     // This is likely Firefox with flags disabled
     global.alert(
-      'Web streams are required to download. Try a recent version of Chrome or enable "dom.streams.enabled",  "javascript.options.streams", and "dom.ipc.multiOptOut" in Firefox about:config',
+      'Web streams are required to download. Try a recent version of Chrome or see the FAQ for how to enable these features on Firefox.',
     )
     callback()
   } else {
