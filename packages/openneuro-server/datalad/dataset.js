@@ -78,7 +78,7 @@ export const giveUploaderPermission = (id, uploader) => {
   const datasetId = id
   const userId = uploader
   const level = 'admin'
-  return c.crn.permissions.insertOne({datasetId, userId, level})
+  return c.crn.permissions.insertOne({ datasetId, userId, level })
 }
 
 /**
@@ -212,24 +212,4 @@ export const updatePublic = (datasetId, publicFlag) => {
   //   .post(url)
   //   .set('Accept', 'application/json')
   //   .then(({ body }) => body)
-}
-
-export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
-  //insert the file url data into mongo
-  return c.crn.files.updateOne(
-    {
-      datasetId: datasetId,
-      tag: snapshotTag,
-    },
-    {
-      $set: {
-        datasetId: datasetId,
-        tag: snapshotTag,
-        files: files,
-      },
-    },
-    {
-      upsert: true,
-    },
-  )
 }

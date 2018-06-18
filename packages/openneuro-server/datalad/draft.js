@@ -5,6 +5,7 @@ import request from 'superagent'
 import mongo from '../libs/mongo.js'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
+import { addFileUrl } from './utils.js'
 
 const uri = config.datalad.uri
 
@@ -22,8 +23,9 @@ export const getDraftFiles = (datasetId, revision) => {
         .get(filesUrl)
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {
-          redis.set(key, JSON.stringify(files))
-          return files
+          const filesWithUrls = files.map(addFileUrl(datasetId))
+          redis.set(key, JSON.stringify(filesWithUrls))
+          return filesWithUrls
         })
   })
 }

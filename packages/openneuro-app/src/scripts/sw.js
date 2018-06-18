@@ -3,8 +3,9 @@
  *
  * Be careful to only include necessary dependencies here
  */
-import { zipResponse } from './serviceworker/s3'
-import config from '../../config'
+import { zipResponse } from './serviceworker/s3.js'
+import { bundleResponse } from './serviceworker/dataset.js'
+import config from '../../config.js'
 
 const CACHE_NAME = 'openneuro'
 const CACHE_PATHS = serviceWorkerOption.assets
@@ -16,6 +17,10 @@ self.addEventListener('install', event => {
       return cache.addAll(CACHE_PATHS)
     }),
   )
+})
+
+self.addEventListener('activate', event => {
+  event.waitUntil(self.clients.claim())
 })
 
 self.addEventListener('fetch', event => {
@@ -30,6 +35,9 @@ self.addEventListener('fetch', event => {
       const hostname = url.hostname
       const prefix = url.pathname.slice(1)
       return event.respondWith(zipResponse(hostname, prefix))
+    } else if (url.pathname.endsWith('download')) {
+      // Catch any aggregate download requests
+      return event.respondWith(bundleResponse(url))
     } else {
       // Skip serving from cache for cross origin 'only-if-cached' requests
       if (

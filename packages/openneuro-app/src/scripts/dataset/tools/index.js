@@ -5,6 +5,7 @@ import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import moment from 'moment'
+import DownloadLink from '../../datalad/download/download-link.jsx'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
@@ -65,23 +66,6 @@ class Tools extends Reflux.Component {
     )
 
     let tools = [
-      {
-        tooltip: 'Download Dataset',
-        icon: 'fa-download',
-        prepDownload: actions.getDatasetDownloadTicket.bind(this),
-        action: actions.confirmDatasetDownload.bind(this, this.props.history),
-        display: !isIncomplete,
-        warn: true,
-        modalLink: datasets.datasetUrl + '/subscribe',
-        validations: [
-          {
-            check: datasets.uploading && !isSnapshot,
-            message: 'Files are currently uploading',
-            timeout: 5000,
-            type: 'Error',
-          },
-        ],
-      },
       {
         tooltip: 'Publish Dataset',
         icon: 'fa-globe icon-plus',
@@ -181,7 +165,7 @@ class Tools extends Reflux.Component {
             type: 'Error',
           },
           {
-            check: 
+            check:
               snapshots.length > 1 &&
               moment(dataset.modified).diff(moment(snapshots[1].created)) <= 0,
             message:
@@ -267,6 +251,14 @@ class Tools extends Reflux.Component {
         <div className="col-xs-12 dataset-tools-wrap">
           <div className="tools clearfix">
             {this._snapshotLabel(dataset)}
+            {isSnapshot ? (
+              <DownloadLink
+                datasetId={dataset.linkID}
+                snapshotTag={dataset.snapshot_version}
+              />
+            ) : (
+              <DownloadLink datasetId={dataset.linkID} />
+            )}
             {this._tools(tools)}
           </div>
         </div>
