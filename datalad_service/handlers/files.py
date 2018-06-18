@@ -33,14 +33,10 @@ class FilesResource(object):
         ds = self.store.get_dataset(dataset)
         if filename:
             try:
-                # get the reference to the file object location, or the file itself if its stored locally
-                fd = ds.repo.repo.git.show(snapshot + ':' + filename)
-
-                # if fd is a reference to the git annex file location, try to open that file. otherwise,
-                # it is a file to be returned
-                if fd.startswith('.git/annex'):
+                if ds.repo.is_under_annex([filename])[0]:
+                    path = ds.repo.repo.git.show(snapshot + ':' + filename)
                     # remove leading relative folder paths
-                    fd = fd[fd.find('.git/annex'):]
+                    fd = path[path.find('.git/annex'):]
 
                     # if fd fails, that means the file is not present in the annex and we need to get it from s3
                     # so we send the client a 404 to indicate the file was not found locally.
@@ -49,7 +45,8 @@ class FilesResource(object):
                     resp.stream_len = os.fstat(fd.fileno()).st_size
                     resp.status = falcon.HTTP_OK
                 else:
-                    resp.body = fd
+                    resp.body = ds.repo.repo.git.show(
+                        snapshot + ':' + filename)
                     resp.status = falcon.HTTP_OK
             except git.exc.GitCommandError:
                 # File is not present in tree
