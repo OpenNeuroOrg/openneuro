@@ -10,7 +10,7 @@ from .dataset_fixtures import *
 def test_get_file(client, celery_app):
     ds_id = 'ds000001'
     result = client.simulate_get(
-        '/datasets/{}/files/.git:annex:objects:mW:MZ:MD5E-s97--76dc22875c876b360e7b084fb1219c83.json:MD5E-s97--76dc22875c876b360e7b084fb1219c83.json'.format(ds_id), file_wrapper=FileWrapper)
+        '/datasets/{}/files/dataset_description.json'.format(ds_id), file_wrapper=FileWrapper)
     content_len = int(result.headers['content-length'])
     assert content_len == len(result.content)
     assert json.loads(result.content)['BIDSVersion'] == '1.0.2'
@@ -102,14 +102,13 @@ def test_file_indexing(celery_app, client, new_dataset):
     response = client.simulate_get('/datasets/{}/files'.format(ds_id))
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
+    print('response content:', response_content['files'])
+    print('not annexed files:',new_dataset.repo.is_under_annex(['dataset_description.json']))
     assert response_content['files'] == [
         {'filename': 'LICENSE', 'size': 8,
-            'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27', 
-            'objectpath': '.git/annex/objects/Xz/gq/MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27/MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
+            'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
         {'filename': 'dataset_description.json', 'size': 101,
-            'id': 'MD5E-s101--63ef6d26537d770344904ec51d215d60.json', 
-            'objectpath': '.git/annex/objects/p8/GK/MD5E-s101--63ef6d26537d770344904ec51d215d60.json/MD5E-s101--63ef6d26537d770344904ec51d215d60.json'},
+            'id': '838d19644b3296cf32637bbdf9ae5c87db34842f'},
         {'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
-            'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19, 
-            'objectpath': '../../.git/annex/objects/5p/Vk/MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz/MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz'}
+            'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19}
     ]
