@@ -9,7 +9,7 @@ import UploadButton from './upload-button.jsx'
 import UploadProgressButton from './upload-progress-button.jsx'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
-import getClient from 'openneuro-client'
+import getClient, { datasets } from 'openneuro-client'
 import config from '../../../config'
 import getAuth from '../utils/getAuth.js'
 import { xhrFetch } from './xhrfetch.js'
@@ -86,23 +86,39 @@ class UploadClient extends React.Component {
     })
     // This is an upload specific apollo client to record progress
     // Uses XHR since Fetch does not provide the required interface
-    const uploadClient = getClient(`${config.url}/crn/graphql`, getAuth, xhrFetch(this))
+    const uploadClient = getClient(
+      `${config.url}/crn/graphql`,
+      getAuth,
+      xhrFetch(this),
+    )
     if (this.state.resume) {
       // Diff and add files
     } else {
+      let client = this.props.client
       // Create dataset and then add files
       mutation
-        .createDataset(this.props.client)(this.state.name)
+        .createDataset(client)(this.state.name)
         .then(datasetId => {
-          mutation.updateFiles(uploadClient)(datasetId, this.state.files)
+          mutation
+            .updateFiles(uploadClient)(datasetId, this.state.files)
             .then(() => {
-              mutation.createSnapshot(this.props.client, datasetId)
-                .then(() => {
-                  this.setState({ uploading: false })
+              client
+                .query({
+                  query: datasets.getDataset,
+                  variables: {
+                    id: datasetId,
+                  },
                 })
-                .catch(err => {
-                  this.setState({ uploading: false })
-                  throw err
+                .then(() => {
+                  mutation
+                    .createSnapshot(client, datasetId)
+                    .then(() => {
+                      this.setState({ uploading: false })
+                    })
+                    .catch(err => {
+                      this.setState({ uploading: false })
+                      throw err
+                    })
                 })
             })
         })

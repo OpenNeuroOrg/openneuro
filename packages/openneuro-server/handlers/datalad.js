@@ -1,6 +1,9 @@
 import config from '../config'
 import request from 'superagent'
 import { getAccessionNumber } from '../libs/dataset'
+import { getDraftFiles, getDatasetRevision } from '../datalad/draft'
+import { getSnapshot } from '../datalad/snapshots'
+import { encodeFilePath, decodeFilePath } from '../datalad/dataset.js'
 
 /**
  * Handlers for datalad dataset manipulation
@@ -65,16 +68,27 @@ export const unpublishDataset = (req, res) => {
 /**
  * Get a file from a dataset
  */
-export const getFile = (req, res) => {
+export const getFile = async (req, res) => {
   const datasetId = req.params.datasetId
   const snapshotId = req.params.snapshotId
   const filename = req.params.filename
-  res.set('Content-Type', 'application/*')
-  let uri = `${URI}/datasets/${datasetId}/files/${filename}`
+  const decodedFilename = decodeFilePath(filename)
+  let fileList = []
+  let data
   if (snapshotId) {
-    uri = `${URI}/datasets/${datasetId}/snapshots/${snapshotId}/files/${filename}`
+    data = await getSnapshot(datasetId, snapshotId)
+    fileList = data ? data.files : []
+  } else {
+    let currentRevision = await getDatasetRevision(datasetId)
+    if (currentRevision) {
+      fileList = await getDraftFiles(datasetId, currentRevision)
+    }
   }
-  
-  return request.get(uri)
-    .pipe(res)
+  let file = fileList.find(f => {
+    return f.filename == decodedFilename
+  })
+  let filepath = file ? encodeFilePath(file.id) : null
+  res.set('Content-Type', 'application/*')
+  let uri = `${URI}/datasets/${datasetId}/objects/${filepath}`
+  return request.get(uri).pipe(res)
 }
