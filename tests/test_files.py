@@ -41,8 +41,10 @@ def test_add_file(client, annex_path):
 def test_add_existing_file(client):
     ds_id = 'ds000001'
     file_data = 'should update'
+
     response = client.simulate_post(
         '/datasets/{}/files/dataset_description.json'.format(ds_id), body=file_data)
+    
     assert response.status == falcon.HTTP_OK
 
 
@@ -100,11 +102,13 @@ def test_file_indexing(celery_app, client, new_dataset):
     response = client.simulate_get('/datasets/{}/files'.format(ds_id))
     assert response.status == falcon.HTTP_OK
     response_content = json.loads(response.content)
+    print('response content:', response_content['files'])
+    print('not annexed files:',new_dataset.repo.is_under_annex(['dataset_description.json']))
     assert response_content['files'] == [
         {'filename': 'LICENSE', 'size': 8,
             'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
         {'filename': 'dataset_description.json', 'size': 101,
-            'id': 'MD5E-s101--63ef6d26537d770344904ec51d215d60.json'},
+            'id': '838d19644b3296cf32637bbdf9ae5c87db34842f'},
         {'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
             'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19}
     ]

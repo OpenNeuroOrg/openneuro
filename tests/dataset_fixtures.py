@@ -21,6 +21,17 @@ DATASET_DESCRIPTION = {
     'Name': 'Test fixture dataset',
 }
 
+# A list of patterns to avoid annexing in BIDS datasets
+BIDS_NO_ANNEX = [
+    '*.tsv',
+    '*.json',
+    '*.bvec',
+    '*.bval',
+    'README',
+    'CHANGES',
+    '.bidsignore'
+]
+
 
 def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -47,6 +58,7 @@ def annex_path(tmpdir_factory):
     # Create an empty dataset for testing
     ds = Dataset(ds_path)
     ds.create()
+    ds.no_annex(BIDS_NO_ANNEX)
     json_path = os.path.join(ds_path, 'dataset_description.json')
     with open(json_path, 'w') as f:
         json.dump(DATASET_DESCRIPTION, f, ensure_ascii=False)
@@ -63,6 +75,7 @@ def new_dataset(annex_path):
     ds_path = str(annex_path.join(id_generator()))
     ds = Dataset(ds_path)
     ds.create()
+    ds.no_annex(BIDS_NO_ANNEX)
     json_path = os.path.join(ds_path, 'dataset_description.json')
     dsdesc = {
         'BIDSVersion': '1.0.2',

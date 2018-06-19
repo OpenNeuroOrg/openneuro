@@ -8,13 +8,12 @@ from datalad.support.exceptions import FileInGitError
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
 
-
 def filter_git_files(files):
     """Remove any git/datalad files from a list of files."""
     return [f for f in files if not (f.startswith('.datalad/') or f == '.gitattributes')]
 
 
-def get_repo_files(dataset, branch=None):
+def get_repo_files(dataset, branch='HEAD'):
     working_files = filter_git_files(dataset.repo.get_files(branch=branch))
     files = []
     for filename in working_files:
@@ -24,7 +23,8 @@ def get_repo_files(dataset, branch=None):
             size = dataset.repo.get_size_from_key(key)
         except FileInGitError:
             # Regular git file
-            key = filename
+            key = dataset.repo.repo.commit(branch).tree[filename].hexsha
+            # get file object id here and use as fd
             size = os.path.getsize(os.path.join(dataset.path, filename))
         files.append({'filename': filename, 'size': size, 'id': key})
     return files

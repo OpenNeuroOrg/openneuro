@@ -14,7 +14,7 @@ def test_get_snapshot(client, celery_app):
     result_doc = json.loads(response.content, encoding='utf-8')
 
     assert response.status == falcon.HTTP_OK
-    assert result_doc['files'] == [{'filename': 'dataset_description.json', 'id': 'MD5E-s97--76dc22875c876b360e7b084fb1219c83.json', 'size': 97}] and \
+    assert result_doc['files'] == [{'filename': 'dataset_description.json', 'id': '85b9ddf2bfaf1d9300d612dc29774a98cc1d5e25', 'size': 97}] and \
             result_doc['tag'] == SNAPSHOT_ID and \
             result_doc['id'] ==  '{}:{}'.format(DATASET_ID, SNAPSHOT_ID)
 
