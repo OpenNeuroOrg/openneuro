@@ -3,6 +3,7 @@ from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
 from datalad_service.handlers.draft import DraftResource
 from datalad_service.handlers.files import FilesResource
+from datalad_service.handlers.objects import ObjectsResource
 from datalad_service.handlers.snapshots import SnapshotResource
 from datalad_service.handlers.heartbeat import HeartbeatResource
 from datalad_service.handlers.publish import PublishResource
@@ -25,6 +26,7 @@ def create_app(annex_path):
     datasets = DatasetResource(store)
     dataset_draft = DraftResource(store)
     dataset_files = FilesResource(store)
+    dataset_objects = ObjectsResource(store)
     dataset_publish = PublishResource(store)
     dataset_snapshots = SnapshotResource(store)
 
@@ -37,6 +39,9 @@ def create_app(annex_path):
 
     api.add_route('/datasets/{dataset}/files', dataset_files)
     api.add_route('/datasets/{dataset}/files/{filename:path}', dataset_files)
+
+    api.add_route('/datasets/{dataset}/objects', dataset_objects)
+    api.add_route('/datasets/{dataset}/objects/{filekey:path}', dataset_objects)
 
     api.add_route('/datasets/{dataset}/snapshots', dataset_snapshots)
     api.add_route(
