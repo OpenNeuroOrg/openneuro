@@ -20,7 +20,7 @@ class ObjectsResource(object):
         self.logger = logging.getLogger('datalad_service.' + __name__)
 
     def annex_key_to_path(self, annex_key):
-        word = struct.unpack('<I', hashlib.md5(annex_key).digest()[:4])[0]
+        word = struct.unpack('<I', hashlib.md5(str(annex_key).encode('utf-8')).digest()[:4])[0]
         integer_encoding = [word >> (6 * x) & 31 for x in range(4)]
         values = ['0123456789zqjxkmvwgpfZQJXKMVWGPF'[x] for x in integer_encoding]
         return '{}{}/{}{}'.format(values[1], values[0], values[3], values[2])
@@ -47,7 +47,9 @@ class ObjectsResource(object):
                     filepath = '.git/objects/{}/{}'.format(dir, remaining_hex)
                     path = '{}/{}'.format(ds_path, filepath)
                     compressed_contents = open(path, 'rb').read()
-                    contents = zlib.decompress(compressed_contents)
+                    decompressed_contents = zlib.decompress(compressed_contents)
+                    split_char = b'\x00'
+                    contents = decompressed_contents[decompressed_contents.index(split_char) + len(split_char):]
                     resp.body = contents
                     resp.status = falcon.HTTP_OK
             except git.exc.GitCommandError:
