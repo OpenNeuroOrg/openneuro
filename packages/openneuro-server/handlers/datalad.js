@@ -87,11 +87,8 @@ export const getFile = async (req, res) => {
   let file = fileList.find(f => {
     return f.filename == decodedFilename
   })
-  let filepath = file ? encodeFilePath(file.objectpath) : null
+  let filepath = file ? encodeFilePath(file.id) : null
   res.set('Content-Type', 'application/*')
-  let uri = `${URI}/datasets/${datasetId}/files/${filepath}`
-  if (snapshotId) {
-    uri = `${URI}/datasets/${datasetId}/snapshots/${snapshotId}/files/${filepath}`
-  }
+  let uri = `${URI}/datasets/${datasetId}/objects/${filepath}`
   return request.get(uri).pipe(res)
 }
