@@ -8,7 +8,9 @@ import requestNode from 'request'
 import config from '../config'
 import mongo from '../libs/mongo'
 import pubsub from '../graphql/pubsub.js'
+import { redis } from '../libs/redis.js'
 import { getAccessionNumber } from '../libs/dataset'
+import { draftPartialKey } from './draft.js'
 
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -151,6 +153,8 @@ export const addFile = (datasetId, path, file) => {
         err => (err ? reject(err) : resolve()),
       ),
     )
+  }).then(data => {
+    return redis.del(draftPartialKey(datasetId)).then(() => data)
   })
 }
 
@@ -173,6 +177,8 @@ export const updateFile = (datasetId, path, file) => {
         ),
       )
       .on('error', err => reject(err))
+  }).then(data => {
+    return redis.del(draftPartialKey(datasetId)).then(() => data)
   })
 }
 

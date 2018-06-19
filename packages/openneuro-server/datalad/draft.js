@@ -40,10 +40,22 @@ export const updateDatasetRevision = datasetId => gitRef => {
   )
 }
 
+export const draftPartialKey = datasetId => {
+  return `openneuro:partialDraft:${datasetId}`
+}
+
 export const getPartialStatus = datasetId => {
   const partialUrl = `${uri}/datasets/${datasetId}/draft`
-  return request
-    .get(partialUrl)
-    .set('Accept', 'application/json')
-    .then(({ body: { partial } }) => partial)
+  const key = draftPartialKey(datasetId)
+  return redis.get(key).then(data => {
+    if (data) return JSON.parse(data)
+    else
+      return request
+        .get(partialUrl)
+        .set('Accept', 'application/json')
+        .then(({ body: { partial } }) => {
+          redis.set(key, JSON.stringify(partial))
+          return partial
+        })
+  })
 }
