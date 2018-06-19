@@ -49,10 +49,6 @@ class ObjectsResource(object):
                     contents = decompressed_contents[decompressed_contents.index(split_char) + len(split_char):]
                     resp.body = contents
                     resp.status = falcon.HTTP_OK
-            except git.exc.GitCommandError:
-                # File is not present in tree
-                resp.media = {'error': 'file not found in git tree'}
-                resp.status = falcon.HTTP_NOT_FOUND
             except IOError:
                 # File is not kept locally
                 resp.media = {'error': 'file not found'}
