@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import ValidationStatus from './validation-status.jsx'
 
@@ -41,7 +41,10 @@ const ValidationQuery = ({ datasetId }) => (
       } else if (error) {
         throw new Error(error)
       } else {
-        return <ValidationStatus issues={data.dataset.draft.issues} />
+        let issues =
+          data.dataset && data.dataset.draft ? data.dataset.draft.issues : []
+        let datasetId = data.dataset ? data.dataset.id : null
+        return <ValidationStatus issues={issues} datasetId={datasetId} />
       }
     }}
   </Query>

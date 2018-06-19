@@ -1,6 +1,6 @@
 import getClient from 'openneuro-client'
 import config from '../../../config'
-import {datasets, files} from 'openneuro-client'
+import { datasets, files } from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
 import clone from 'lodash.clonedeep'
@@ -13,18 +13,18 @@ function getToken() {
 
 const client = getClient(`${config.url}/crn/graphql`, getToken)
 export default {
-    async getDatasets(options) {
-      const query = datasets.getDatasets
-      return new Promise((resolve, reject) => {
-        client.query({
+  async getDatasets(options) {
+    const query = datasets.getDatasets
+    return new Promise((resolve, reject) => {
+      client
+        .query({
           query: query,
-          fetchPolicy: 'network-only'
         })
         .then(data => {
           data = clone(data)
           let datasets = data.data.datasets
           if (options.isPublic) {
-            datasets = data.data.datasets.filter((dataset) => {
+            datasets = data.data.datasets.filter(dataset => {
               return dataset.public
             })
           }
@@ -67,30 +67,34 @@ export default {
         resolve(data)
       })
     })
-
   },
 
   queryDataset(datasetId, callback) {
     const query = datasets.getDataset
-    client.query({
-      query: query,
-      variables: {
-        id: bids.decodeId(datasetId)
-      }
-    })
+    client
+      .query({
+        query: query,
+        variables: {
+          id: bids.decodeId(datasetId),
+        },
+      })
       .then(data => {
-          data = clone(data)
-          if (data.data.dataset) {
-            let snapshots = data.data.dataset.snapshots ? data.data.dataset.snapshots.slice(0) : []
-            for (let snapshot of snapshots) {
-                let splitId = snapshot.id.split(':')
-                snapshot._id = splitId[splitId.length -1]
-                snapshot.original = splitId[0]
-            }
-            data.data.dataset.files = data.data.dataset.draft ? data.data.dataset.draft.files : []
+        data = clone(data)
+        if (data.data.dataset) {
+          let snapshots = data.data.dataset.snapshots
+            ? data.data.dataset.snapshots.slice(0)
+            : []
+          for (let snapshot of snapshots) {
+            let splitId = snapshot.id.split(':')
+            snapshot._id = splitId[splitId.length - 1]
+            snapshot.original = splitId[0]
           }
-          
-          return callback(null, data)
+          data.data.dataset.files = data.data.dataset.draft
+            ? data.data.dataset.draft.files
+            : []
+        }
+
+        return callback(null, data)
       })
       .catch(err => {
         // console.log('error in datasetQuery:', err)
@@ -150,31 +154,51 @@ export default {
             }
           }
         `,
-      variables: {
-        datasetId: bids.decodeId(datasetId),
-        tag: tag
-      }
-    })
+        variables: {
+          datasetId: bids.decodeId(datasetId),
+          tag: tag,
+        },
+      })
       .then(data => {
         return callback(null, data)
       })
       .catch(err => {
-        // console.log('error in snapshot query:', err) 
+        // console.log('error in snapshot query:', err)
         return callback(err, null)
       })
+  },
+
+  getDatasetIssues(datasetId) {
+    let query = datasets.getDatasetIssues
+    return new Promise((resolve, reject) => {
+      client
+        .query({
+          query: query,
+          variables: {
+            datasetId: datasetId,
+          },
+        })
+        .then(data => {
+          resolve(data)
+        })
+        .catch(err => {
+          reject(err)
+        })
+    })
   },
 
   deleteDataset(datasetId, options) {
     if (options.snapshot && options.tag) {
       let mutation = datasets.deleteSnapshot
       return new Promise((resolve, reject) => {
-        client.mutate({
-          mutation: mutation,
-          variables: {
-            datasetId: bids.decodeId(datasetId),
-            tag: options.tag
-          }
-        })
+        client
+          .mutate({
+            mutation: mutation,
+            variables: {
+              datasetId: bids.decodeId(datasetId),
+              tag: options.tag,
+            },
+          })
           .then(data => {
             resolve(data)
           })
@@ -185,12 +209,13 @@ export default {
     } else {
       let mutation = datasets.deleteDataset
       return new Promise((resolve, reject) => {
-        client.mutate({
-          mutation: mutation,
-          variables: {
-            label: bids.decodeId(datasetId)
-          }
-        })
+        client
+          .mutate({
+            mutation: mutation,
+            variables: {
+              label: bids.decodeId(datasetId),
+            },
+          })
           .then(data => {
             resolve(data)
           })
@@ -205,23 +230,26 @@ export default {
     datasetId = bids.decodeId(datasetId)
     const mutation = datasets.updatePublic
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          id: bids.decodeId(datasetId),
-          publicFlag: publicFlag
-        }
-      })
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            id: bids.decodeId(datasetId),
+            publicFlag: publicFlag,
+          },
+        })
         .then(data => {
           let uri = `/crn/datasets/${datasetId}/publish`
           // if now public, initialize migration to a public s3 bucket
-          // otherwise, initialize migration to a private s3 bucket          
+          // otherwise, initialize migration to a private s3 bucket
           if (publicFlag) {
-            request.post(uri)
+            request
+              .post(uri)
               .then(() => resolve(data))
               .catch(err => reject(err))
           } else {
-            request.del(uri)
+            request
+              .del(uri)
               .then(() => resolve(data))
               .catch(err => reject(err))
           }
@@ -231,26 +259,26 @@ export default {
           reject(err)
         })
     })
-
   },
 
   createSnapshot(datasetId, tag) {
     const mutation = gql`
-        mutation ($datasetId: ID!, $tag: String!) {
-          createSnapshot(datasetId: $datasetId, tag: $tag) {
-            id
-            tag
-          }
+      mutation($datasetId: ID!, $tag: String!) {
+        createSnapshot(datasetId: $datasetId, tag: $tag) {
+          id
+          tag
         }
-      `
+      }
+    `
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId: bids.decodeId(datasetId),
-          tag: tag
-        }
-      })
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            tag: tag,
+          },
+        })
         .then(data => {
           resolve(data)
         })
@@ -259,7 +287,6 @@ export default {
           reject(err)
         })
     })
-
   },
 
   // FILE OPERATIONS
@@ -268,19 +295,21 @@ export default {
     filename = this.encodeFilePath(filename)
     let uri = `/crn/datasets/${datasetId}/files/${filename}`
     if (options && options.snapshot) {
-      uri = `/crn/datasets/${datasetId}/snapshots/${options.tag}/files/${filename}`
+      uri = `/crn/datasets/${datasetId}/snapshots/${
+        options.tag
+      }/files/${filename}`
     }
     return new Promise((resolve, reject) => {
       request
         .get(uri, {
           headers: {
-            'Content-Type': 'application/*'
-          }
+            'Content-Type': 'application/*',
+          },
         })
-        .then((res) => {
+        .then(res => {
           resolve(res)
         })
-        .catch((err) => {
+        .catch(err => {
           // console.log('error in getFile:', err)
           reject(err)
         })
@@ -291,13 +320,14 @@ export default {
     let mutation = files.deleteFiles
 
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId: bids.decodeId(datasetId),
-          files: fileTree
-        }
-      })
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            files: fileTree,
+          },
+        })
         .then(data => {
           resolve(data)
         })
@@ -310,7 +340,9 @@ export default {
 
   deleteFile(datasetId, file) {
     // get the file path from the file object
-    let filePath = file.modifiedName ? this.encodeFilePath(file.modifiedName) : this.encodeFilePath(file.name)
+    let filePath = file.modifiedName
+      ? this.encodeFilePath(file.modifiedName)
+      : this.encodeFilePath(file.name)
 
     // shape the file into the same shape as accepted by deleteFiles
     let fileTree = this.constructFileTree(file, filePath)
@@ -324,22 +356,82 @@ export default {
     let fileTree = {
       name: path,
       files: [],
-      directories: []
+      directories: [],
     }
     return this.deleteFiles(datasetId, fileTree)
+  },
+
+  addDirectory(datasetId, uploads) {
+    uploads = uploads.map(u => {
+      let file = u.file
+      let container = u.container
+      file.modifiedName = (container.dirPath || '') + file.name
+      // get the file path from the file object
+      file.filePath = file.modifiedName
+        ? this.encodeFilePath(file.modifiedName)
+        : this.encodeFilePath(file.name)
+      file.container = container
+      return file
+    })
+    let fileTree = this.constructDirectoryTree(uploads)
+    return new Promise((resolve, reject) => {
+      this.updateFiles(datasetId, fileTree)
+        .then(() => resolve())
+        .catch(err => reject(err))
+    })
+  },
+
+  constructDirectoryTree(files) {
+    let name = this.encodeFilePath(files[0].container.dirPath.slice(0, -1))
+    let trimmed = files.map(f => {
+      let pathComponents = f.filePath.split(':')
+      let trimmedPathComponents = pathComponents.slice(1)
+      let trimmedPath = trimmedPathComponents.join(':')
+      f.filePath = trimmedPath
+      f.thisLevel = trimmedPathComponents.length == 1
+      return f
+    })
+    let filesOnThisLevel = trimmed.filter(f => {
+      return f.thisLevel
+    })
+    let filesInOtherDirectory = trimmed.filter(f => {
+      return !f.thisLevel
+    })
+    let otherDirectories = filesInOtherDirectory
+      .map(f => {
+        return f.filePath.split(':')[0]
+      })
+      .filter((v, i, s) => {
+        return s.indexOf(v) === i
+      })
+
+    let directories = []
+    for (let directory of otherDirectories) {
+      let associatedFiles = filesInOtherDirectory.filter(f => {
+        return f.filePath.split(':')[0] == directory
+      })
+      directories.push(this.constructDirectoryTree(associatedFiles))
+    }
+    let fileTree = {
+      name: name,
+      files: filesOnThisLevel,
+      directories: directories,
+    }
+    return fileTree
   },
 
   updateFiles(datasetId, fileTree) {
     let mutation = files.updateFiles
 
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId: bids.decodeId(datasetId),
-          files: fileTree
-        }
-      })
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId: bids.decodeId(datasetId),
+            files: fileTree,
+          },
+        })
         .then(data => {
           resolve(data)
         })
@@ -352,7 +444,9 @@ export default {
 
   updateFile(datasetId, file) {
     // get the file path from the file object
-    let filePath = file.modifiedName ? this.encodeFilePath(file.modifiedName) : this.encodeFilePath(file.name)
+    let filePath = file.modifiedName
+      ? this.encodeFilePath(file.modifiedName)
+      : this.encodeFilePath(file.name)
 
     // shape the file into the same shape as accepted by updateFiles
     let fileTree = this.constructFileTree(file, filePath)
@@ -371,13 +465,18 @@ export default {
     if (filePath.split(':').length > 0) {
       let pathComponents = filePath.split(':')
       let newNode = pathComponents.slice(-1)[0]
-      let newPath = pathComponents.reverse().slice(1).reverse().join(':')
-      let files = (newNode === fileName) ? [file] : []
-      let directories = (newNode === fileName) ? [] : this.constructFileTree(file, newPath)
+      let newPath = pathComponents
+        .reverse()
+        .slice(1)
+        .reverse()
+        .join(':')
+      let files = newNode === fileName ? [file] : []
+      let directories =
+        newNode === fileName ? [] : this.constructFileTree(file, newPath)
       let fileTree = {
         name: newPath,
         files: files,
-        directories: directories
+        directories: directories,
       }
       return fileTree
     }
@@ -391,12 +490,11 @@ export default {
     return path.replace(new RegExp(':', 'g'), '/')
   },
 
-
   // PERMISSIONS OPERATIONS
 
   /**
    * Update Permissions
-   * 
+   *
    * adds / updates a user's role on a dataset
    * @param {*} datasetId id of dataset that requires permissions update
    * @param {*} userId permissions will be changed for user with this id
@@ -406,19 +504,23 @@ export default {
     let mutation = datasets.updatePermissions
     datasetId = bids.decodeId(datasetId)
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId, userId, level
-        }
-      }).then(() => resolve())
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId,
+            userId,
+            level,
+          },
+        })
+        .then(() => resolve())
         .catch(err => reject(err))
     })
   },
 
   /**
    * Remove Permissions
-   * 
+   *
    * removes a user's role on a dataset
    * @param {*} datasetId id of dataset that requires permission removal
    * @param {*} userId permissions will be removed for the user with this id
@@ -427,13 +529,16 @@ export default {
     let mutation = datasets.removePermissions
     datasetId = bids.decodeId(datasetId)
     return new Promise((resolve, reject) => {
-      client.mutate({
-        mutation: mutation,
-        variables: {
-          datasetId, userId
-        }
-      }).then(() => resolve())
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            datasetId,
+            userId,
+          },
+        })
+        .then(() => resolve())
         .catch(err => reject(err))
     })
-  }
+  },
 }

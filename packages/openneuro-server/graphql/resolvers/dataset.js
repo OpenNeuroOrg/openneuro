@@ -58,8 +58,11 @@ export const updateFiles = (
     .then(() =>
       datalad
         .commitFiles(datasetId, `${firstname} ${lastname}`, email)
-        .then(res => res.body.ref)
-        .then(updateDatasetRevision(datasetId)),
+        .then(res => {
+          return res.body.ref
+        })
+        .then(updateDatasetRevision(datasetId))
+        .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
     )
     .then(() => ({
       id: new Date(),
@@ -97,8 +100,11 @@ export const deleteFiles = (
     .then(() =>
       datalad
         .commitFiles(datasetId, `${firstname} ${lastname}`, email)
-        .then(res => res.body.ref)
-        .then(updateDatasetRevision(datasetId)),
+        .then(res => {
+          return res.body.ref
+        })
+        .then(updateDatasetRevision(datasetId))
+        .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
     )
     .then(() => ({
       id: new Date(),

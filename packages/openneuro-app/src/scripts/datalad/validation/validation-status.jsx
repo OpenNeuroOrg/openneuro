@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import ValidationPanel from './validation-panel.jsx'
 import Results from '../../validation/validation-results.jsx'
-
 /**
  * These can't be React components due to legacy react-bootstrap
  * validHeader, warningHeader, errorHeader
@@ -84,15 +83,30 @@ Errors.propTypes = {
   warnings: PropTypes.array,
 }
 
-const ValidationStatus = ({ issues }) => {
-  const warnings = issues.filter(issue => issue.severity === 'warning')
-  const errors = issues.filter(issue => issue.severity === 'error')
-  if (errors.length) {
-    return <Errors errors={errors} warnings={warnings} />
-  } else if (warnings.length) {
-    return <Warnings errors={errors} warnings={warnings} />
-  } else {
-    return <Valid />
+class ValidationStatus extends React.Component {
+  constructor(props) {
+    super(props)
+    let issues = this.props.issues
+    this.state = this._getWarningsAndErrors(issues)
+  }
+
+  _getWarningsAndErrors(issues) {
+    return {
+      warnings: issues.filter(issue => issue.severity === 'warning'),
+      errors: issues.filter(issue => issue.severity === 'error'),
+    }
+  }
+
+  render() {
+    const warnings = this.state.warnings
+    const errors = this.state.errors
+    if (errors.length) {
+      return <Errors errors={errors} warnings={warnings} />
+    } else if (warnings.length) {
+      return <Warnings errors={errors} warnings={warnings} />
+    } else {
+      return <Valid />
+    }
   }
 }
 

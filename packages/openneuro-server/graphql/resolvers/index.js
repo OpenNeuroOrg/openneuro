@@ -16,8 +16,19 @@ import {
 import { updateSummary, updateValidation } from './validation.js'
 import { draft, snapshot, snapshots, partial } from './datalad.js'
 import { whoami, user, users } from './user.js'
-import { permissions, updatePermissions, removePermissions } from './permissions.js'
-import { datasetAdded, datasetDeleted } from './subscriptions.js'
+import {
+  permissions,
+  updatePermissions,
+  removePermissions,
+} from './permissions.js'
+import {
+  datasetAdded,
+  datasetDeleted,
+  datasetValidationUpdated,
+  draftFilesUpdated,
+  snapshotAdded,
+  snapshotDeleted,
+} from './subscriptions.js'
 
 export default {
   Date: GraphQLDate,
@@ -51,12 +62,16 @@ export default {
   Subscription: {
     datasetAdded,
     datasetDeleted,
+    datasetValidationUpdated,
+    draftFilesUpdated,
+    snapshotAdded,
+    snapshotDeleted,
   },
   User: user,
   Dataset: {
     uploader: ds => user(ds, { id: ds.uploader }),
     draft,
     snapshots,
-    permissions: ds => permissions(ds)
+    permissions: ds => permissions(ds),
   },
 }

@@ -25,7 +25,7 @@ import { pageTitle } from '../resources/strings'
 
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import {datasets} from 'openneuro-client'
+import { datasets } from 'openneuro-client'
 
 // component setup ---------------------------------------------------------------------------
 
@@ -65,10 +65,13 @@ class Datasets extends Reflux.Component {
           datasetAdded {
             id
           }
-        }`,
-        updateQuery: () => {
-          Actions.getDatasets(isPublic, isAdmin)
         }
+      `,
+      updateQuery: () => {
+        this.props.datasetsQuery
+          .refetch()
+          .then(() => Actions.getDatasets(isPublic, isAdmin))
+      },
     })
   }
 
@@ -77,10 +80,13 @@ class Datasets extends Reflux.Component {
       document: gql`
         subscription {
           datasetDeleted
-        }`,
-        updateQuery: () => {
-          Actions.getDatasets(isPublic, isAdmin)
         }
+      `,
+      updateQuery: () => {
+        this.props.datasetsQuery
+          .refetch()
+          .then(() => Actions.getDatasets(isPublic, isAdmin))
+      },
     })
   }
 
@@ -271,5 +277,5 @@ Datasets.propTypes = {
 }
 
 export default graphql(datasets.getDatasets, {
-  name: 'datasetsQuery'
+  name: 'datasetsQuery',
 })(Datasets)

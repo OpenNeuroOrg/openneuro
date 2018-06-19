@@ -5,6 +5,7 @@ import request from 'superagent'
 import mongo from '../libs/mongo'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
+import pubsub from '../graphql/pubsub.js'
 import { addFileUrl } from './utils.js'
 
 const c = mongo.collections
@@ -81,7 +82,10 @@ export const createSnapshot = async (datasetId, tag) => {
                 tag,
                 body.hexsha,
                 body.created,
-              ).then(() => body),
+              ).then(() => {
+                pubsub.publish('snapshotAdded', { id: datasetId })
+                return body
+              }),
             )
         )
       }),
@@ -99,7 +103,10 @@ export const deleteSnapshot = (datasetId, tag) => {
     redis
       .del(indexKey)
       .then(() => redis.del(sKey))
-      .then(() => body),
+      .then(() => {
+        pubsub.publish('snapshotDeleted', { id: datasetId })
+        return body
+      }),
   )
 }
 
