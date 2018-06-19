@@ -7,6 +7,7 @@ import UploaderSetupRoutes from './uploader-setup-routes.jsx'
 import UploaderStatusRoutes from './uploader-status-routes.jsx'
 import UploadButton from './upload-button.jsx'
 import UploadProgressButton from './upload-progress-button.jsx'
+import notifications from '../notification/notification.actions'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import getClient, { datasets } from 'openneuro-client'
@@ -30,7 +31,7 @@ class UploadClient extends React.Component {
     this.selectFiles = this.selectFiles.bind(this)
     this.upload = this.upload.bind(this)
     this.uploadProgress = this.uploadProgress.bind(this)
-    this.showDataset = this.showDataset.bind(this)
+    this.uploadCompleteAction = this.uploadCompleteAction.bind(this)
     this.cancel = this.cancel.bind(this)
 
     this.state = {
@@ -118,7 +119,7 @@ class UploadClient extends React.Component {
                     .createSnapshot(client, datasetId)
                     .then(() => {
                       this.setState({ uploading: false })
-                      this.showDataset()
+                      this.uploadCompleteAction()
                     })
                     .catch(err => {
                       this.setState({ uploading: false })
@@ -130,10 +131,22 @@ class UploadClient extends React.Component {
     }
   }
 
-  showDataset() {
-    if (this.state.location !== locationFactory('/hidden')) {
-      this.props.history.push(`/datasets/${this.state.datasetId}`)
+  uploadCompleteAction() {
+    let datasetURL = `/datasets/${this.state.datasetId}`
+    if (this.state.location.pathname !== locationFactory('/hidden').pathname) {
+      this.props.history.push(datasetURL)
       this.setLocation('/hidden')
+    } else {
+      notifications.createAlert({
+        type: 'Success',
+        message: (
+          <span>
+            {' '}
+            Dataset successfully uploaded.{' '}
+            <a href={datasetURL}>Click here to browse your dataset.</a>
+          </span>
+        ),
+      })
     }
   }
 
