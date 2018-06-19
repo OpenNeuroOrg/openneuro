@@ -156,7 +156,7 @@ export default {
           let snapshotQuery = options.snapshot
             ? (await datalad.getSnapshot(projectId, options)).data
             : null
-          let snapshot = snapshotQuery ? snapshotQuery.dataset : null
+          let snapshot = snapshotQuery ? snapshotQuery.snapshot : null
           let draftFiles = draft && draft.files ? draft.files : []
           let snapshotFiles = snapshot ? snapshot.files : []
           let tempFiles = !snapshot
