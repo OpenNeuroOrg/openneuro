@@ -156,10 +156,12 @@ export default {
           let snapshotQuery = options.snapshot
             ? (await datalad.getSnapshot(projectId, options)).data
             : null
-          let snapshot = snapshotQuery ? snapshotQuery.snapshot : null
+          let snapshot = snapshotQuery ? snapshotQuery.dataset : null
+          let draftFiles = draft && draft.files ? draft.files : []
+          let snapshotFiles = snapshot ? snapshot.files : []
           let tempFiles = !snapshot
-            ? this._formatFiles(draft.files)
-            : this._formatFiles(snapshot.files)
+            ? this._formatFiles(draftFiles)
+            : this._formatFiles(snapshotFiles)
           project.snapshot_version = snapshot ? snapshot.tag : null
           this.getMetadata(
             project,
@@ -461,7 +463,8 @@ export default {
       label: description ? description.Name : project.label,
       group: project.uploader ? project.uploader.id : null,
       created: project.created,
-      modified: project.draft ? project.draft.modified : null,
+      modified:
+        project.draft && project.draft.modified ? project.draft.modified : null,
       permissions: project.permissions,
       public: !!project.public,
       downloads: project.downloads,
@@ -551,7 +554,8 @@ export default {
    * to any statuses set in the notes.
    */
   formatStatus(project, userAccess) {
-    let validationIssues = project.draft ? project.draft.issues : []
+    let validationIssues =
+      project.draft && project.draft.issues ? project.draft.issues : []
     let tags = project.tags ? project.tags : []
     let currentUser = userStore.data.scitran
     let uploader = project.uploader ? project.uploader.id : null
@@ -564,7 +568,7 @@ export default {
     let adminOnlyAccess = permittedUsers.indexOf(userId) == -1 && hasRoot
 
     let status = {
-      incomplete: tags.indexOf('incomplete') > -1,
+      incomplete: tags.indexOf('incomplete') > -1 || project.draft.partial,
       validating: tags.indexOf('validating') > -1,
       invalid: !!validationIssues.find(i => i.severity == 'error'), // dataset is invalid if there are any issues with 'error' level severity
       public: !!project.public,

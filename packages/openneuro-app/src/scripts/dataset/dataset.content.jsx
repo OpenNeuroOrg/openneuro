@@ -153,7 +153,7 @@ class DatasetContent extends Reflux.Component {
           </div>
           <div className="col-xs-6">
             <div>
-              <Validation datasetId={dataset.linkID} />
+              {this._validation(dataset)}
               <div className="fade-in col-xs-12">
                 <ErrorBoundary message="The server failed to provide OpenNeuro with a list of jobs.">
                   <Jobs />
@@ -222,6 +222,13 @@ class DatasetContent extends Reflux.Component {
       }
       return <h6>{authorString}</h6>
     }
+  }
+
+  _validation(dataset) {
+    if (dataset.linkID && !dataset.status.incomplete) {
+      return (<Validation datasetId={dataset.linkID} />)
+    }
+    return null 
   }
 
   _fileTree(dataset, canEdit) {

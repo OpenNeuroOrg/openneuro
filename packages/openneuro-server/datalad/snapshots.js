@@ -6,6 +6,7 @@ import mongo from '../libs/mongo'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
+import { addFileUrl } from './utils.js'
 
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -159,9 +160,50 @@ export const getSnapshot = (datasetId, tag) => {
       return request
         .get(url)
         .set('Accept', 'application/json')
-        .then(({ body }) => {
-          redis.set(key, JSON.stringify(body))
-          return body
+        .then(async ({ body }) => {
+          // Only add S3 URLs for public datasets
+          const dataset = await c.crn.datasets.findOne(
+            { id: datasetId },
+            { public: true },
+          )
+          let externalFiles
+          if (dataset.public) {
+            externalFiles = await c.crn.files
+              .findOne({ datasetId, tag }, { files: true })
+              .then(result => result.files)
+          }
+          // If not public, fallback URLs are used
+          const filesWithUrls = body.files.map(
+            addFileUrl(datasetId, tag, externalFiles),
+          )
+          const snapshot = { ...body, files: filesWithUrls }
+          redis.set(key, JSON.stringify(snapshot))
+          return snapshot
         })
   })
+}
+
+export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
+  //insert the file url data into mongo
+  return c.crn.files
+    .updateOne(
+      {
+        datasetId: datasetId,
+        tag: snapshotTag,
+      },
+      {
+        $set: {
+          datasetId: datasetId,
+          tag: snapshotTag,
+          files: files,
+        },
+      },
+      {
+        upsert: true,
+      },
+    )
+    .then(data => {
+      // Clear snapshot cache when we get new URLs
+      return redis.del(snapshotKey(datasetId, snapshotTag)).then(() => data)
+    })
 }

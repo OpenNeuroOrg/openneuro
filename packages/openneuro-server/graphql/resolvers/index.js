@@ -14,7 +14,7 @@ import {
   updateSnapshotFileUrls,
 } from './dataset.js'
 import { updateSummary, updateValidation } from './validation.js'
-import { draft, snapshot, snapshots } from './datalad.js'
+import { draft, snapshot, snapshots, partial } from './datalad.js'
 import { whoami, user, users } from './user.js'
 import {
   permissions,
@@ -43,6 +43,7 @@ export default {
     user,
     users,
     snapshot,
+    partial,
   },
   Mutation: {
     createDataset,
