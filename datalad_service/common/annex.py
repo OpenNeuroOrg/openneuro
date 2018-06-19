@@ -23,7 +23,7 @@ def get_repo_files(dataset, branch='HEAD'):
             size = dataset.repo.get_size_from_key(key)
         except FileInGitError:
             # Regular git file
-            key = dataset.repo.commit(branch).tree[filename].hexsha
+            key = dataset.repo.repo.commit(branch).tree[filename].hexsha
             # get file object id here and use as fd
             size = os.path.getsize(os.path.join(dataset.path, filename))
         files.append({'filename': filename, 'size': size, 'id': key})
