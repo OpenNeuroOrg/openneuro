@@ -1,6 +1,4 @@
-This provides HTTP interfaces for creating, updating, and exporting DataLad datasets, used by [OpenNeuro](https://openneuro.org).
-
-Higher level APIs are provided as part of [OpenNeuro server](https://github.com/OpenNeuroOrg/openneuro/tree/master/server).
+This provides HTTP interfaces for creating, updating, and exporting DataLad datasets, used by [OpenNeuro](https://openneuro.org). Underlying Git / DataLad APIs do not allow for concurrent operations in many cases, to solve this each repo is assigned to an exclusive-read queue. Multiple clients accessing one repo requires a higher level API, such as the one implemented in OpenNeuro.
 
 # Setup
 
