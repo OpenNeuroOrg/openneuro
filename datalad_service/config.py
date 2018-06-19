@@ -9,7 +9,7 @@ def get_environ(key, fallback=None):
 
 
 # Configuration specific to the datalad-service
-DATALAD_WORKERS = get_environ('DATALAD_WORKERS', 1)
+DATALAD_WORKERS = int(get_environ('DATALAD_WORKERS', 1))
 DATALAD_GITHUB_ORG = get_environ('DATALAD_GITHUB_ORG')
 DATALAD_GITHUB_LOGIN = get_environ('DATALAD_GITHUB_LOGIN')
 DATALAD_GITHUB_PASS = get_environ('DATALAD_GITHUB_PASS')
