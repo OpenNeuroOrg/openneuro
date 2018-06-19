@@ -7,9 +7,6 @@ import zlib
 import falcon
 
 import git
-from datalad_service.common.annex import get_from_header
-from datalad_service.common.celery import dataset_queue
-from datalad_service.tasks.files import unlock_files, commit_files, get_files, remove_files
 
 
 class ObjectsResource(object):
