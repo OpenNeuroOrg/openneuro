@@ -13,6 +13,7 @@ import getClient, { datasets } from 'openneuro-client'
 import config from '../../../config'
 import getAuth from '../utils/getAuth.js'
 import { xhrFetch } from './xhrfetch.js'
+import { withRouter } from 'react-router-dom'
 
 /**
  * Stateful uploader workflow and status
@@ -29,6 +30,7 @@ class UploadClient extends React.Component {
     this.selectFiles = this.selectFiles.bind(this)
     this.upload = this.upload.bind(this)
     this.uploadProgress = this.uploadProgress.bind(this)
+    this.showDataset = this.showDataset.bind(this)
     this.cancel = this.cancel.bind(this)
 
     this.state = {
@@ -43,6 +45,7 @@ class UploadClient extends React.Component {
       selectFiles: this.selectFiles, // Get files from the browser
       upload: this.upload, // Start an upload
       xhr: null, // Upload XHR request
+      datasetId: null, // Id of the uploaded dataset
     }
   }
 
@@ -102,6 +105,7 @@ class UploadClient extends React.Component {
           mutation
             .updateFiles(uploadClient)(datasetId, this.state.files)
             .then(() => {
+              this.setState({ datasetId })
               client
                 .query({
                   query: datasets.getDataset,
@@ -114,6 +118,7 @@ class UploadClient extends React.Component {
                     .createSnapshot(client, datasetId)
                     .then(() => {
                       this.setState({ uploading: false })
+                      this.showDataset()
                     })
                     .catch(err => {
                       this.setState({ uploading: false })
@@ -122,6 +127,13 @@ class UploadClient extends React.Component {
                 })
             })
         })
+    }
+  }
+
+  showDataset() {
+    if (this.state.location !== locationFactory('/hidden')) {
+      this.props.history.push(`/datasets/${this.state.datasetId}`)
+      this.setLocation('/hidden')
     }
   }
 
@@ -173,13 +185,16 @@ class UploadClient extends React.Component {
 
 UploadClient.propTypes = {
   client: PropTypes.object,
+  history: PropTypes.object,
 }
+
+const UploadClientWithRouter = withRouter(UploadClient)
 
 const Uploader = () => (
   <ApolloConsumer>
     {client => (
       <div className="uploader">
-        <UploadClient client={client} />
+        <UploadClientWithRouter client={client} />
       </div>
     )}
   </ApolloConsumer>
