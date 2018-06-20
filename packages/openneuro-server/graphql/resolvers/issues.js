@@ -9,5 +9,5 @@ export const issues = dataset => {
       id: dataset.revision,
       datasetId: dataset.id,
     })
-    .then(({ issues }) => issues)
+    .then(data => (data ? data.issues : []))
 }
