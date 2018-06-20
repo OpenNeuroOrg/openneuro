@@ -16,7 +16,8 @@ const env = {
   SCITRAN_AUTH_ORCID_URI: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_URI),
   AWS_S3_ANALYSIS_BUCKET: JSON.stringify(process.env.AWS_S3_ANALYSIS_BUCKET),
   AWS_S3_DATASET_BUCKET: JSON.stringify(process.env.AWS_S3_DATASET_BUCKET),
-  CRN_SERVER_DATALAD: JSON.stringify(process.env.CRN_SERVER_DATALAD)
+  CRN_SERVER_DATALAD: JSON.stringify(process.env.CRN_SERVER_DATALAD) == 'true',
+  ANALYSIS_ENABLED: JSON.stringify(process.env.ANALYSIS_ENABLED) == 'true',
 }
 
 module.exports = {
