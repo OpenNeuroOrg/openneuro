@@ -92,7 +92,7 @@ class FilesResource(object):
                                                   'files': [filename]})
                 unlock.wait()
                 self._update_file(file_path, req.stream)
-                # ds.publish(to='github')
+                ds.publish(to='github')
                 resp.media = media_dict
                 resp.status = falcon.HTTP_OK
             else:
@@ -135,7 +135,7 @@ class FilesResource(object):
                 commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
                                                   'files': [filename], 'name': name, 'email': email})
                 commit.wait()
-                # ds.publish(to='github')
+                ds.publish(to='github')
                 if not commit.failed():
                     resp.media = media_dict
                     resp.status = falcon.HTTP_OK

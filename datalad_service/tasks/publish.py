@@ -84,9 +84,9 @@ def migrate_to_bucket(store, dataset, realm='PUBLIC'):
             if r.status_code != 200:
                 raise Exception(r.text)
         # Public publishes to GitHub
-        # if realm == DatasetRealm.PUBLIC:
-        #     github_remote = github_sibling(ds, dataset_id, siblings)
-        #     publish_target(ds, realm.github_remote, tag)
+        if realm == DatasetRealm.PUBLIC:
+            github_remote = github_sibling(ds, dataset_id, siblings)
+            publish_target(ds, realm.github_remote, tag)
 
 @dataset_task
 def publish_snapshot(store, dataset, snapshot, realm=None):
