@@ -4,8 +4,8 @@ import PropTypes from 'prop-types'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import config from '../../../../config.js'
 
-const startDownload = (uri, datasetId) => {
-  global.open(uri, `${datasetId} download`)
+const startDownload = uri => {
+  global.location.assign(uri)
 }
 
 /**
@@ -35,7 +35,7 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
     global.navigator.serviceWorker.getRegistration().then(registration => {
       if (registration.active) {
         // Service worker is already running as expected
-        startDownload(uri, datasetId)
+        startDownload(uri)
         callback()
       } else {
         // Waiting on the service worker
@@ -50,7 +50,7 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
                   this,
                   true,
                 )
-                startDownload(uri, datasetId)
+                startDownload(uri)
                 callback()
               }
             },
