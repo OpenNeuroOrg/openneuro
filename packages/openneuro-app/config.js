@@ -72,5 +72,7 @@ export default {
     uri: 'datalad:9877',
   },
 
-  analysis: process.env.ENABLE_ANALYSIS,
+  analysis: {
+    enabled: process.env.ANALYSIS_ENABLED,
+  },
 }
