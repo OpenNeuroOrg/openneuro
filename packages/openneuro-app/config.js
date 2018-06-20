@@ -66,6 +66,8 @@ export default {
 
   datalad: {
     enabled: process.env.CRN_SERVER_DATALAD,
-    uri: 'datalad:9877'
+    uri: 'datalad:9877',
   },
+
+  analysis: process.env.ENABLE_ANALYSIS,
 }
