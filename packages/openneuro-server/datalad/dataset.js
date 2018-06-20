@@ -8,6 +8,7 @@ import requestNode from 'request'
 import config from '../config'
 import mongo from '../libs/mongo'
 import pubsub from '../graphql/pubsub.js'
+import subscriptions from '../handlers/subscriptions.js'
 import { redis } from '../libs/redis.js'
 import { getAccessionNumber } from '../libs/dataset'
 import { draftPartialKey } from './draft.js'
@@ -50,7 +51,11 @@ export const createDataset = (label, uploader, userInfo) => {
         )
       await req
       pubsub.publish('datasetAdded', { id: datasetId })
-      resolve({ id: datasetId, label })
+      subscriptions
+        .subscribe(datasetId, uploader)
+        .then(() => resolve({ id: datasetId, label }))
+        .catch(err => reject(err))
+      // resolve({ id: datasetId, label })
     } else {
       reject(Error(`Failed to create ${datasetId} - "${label}"`))
     }

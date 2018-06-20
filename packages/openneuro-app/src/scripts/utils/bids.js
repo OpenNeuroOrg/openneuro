@@ -344,7 +344,7 @@ export default {
     if (stars) {
       let datasetId = dataset.original ? dataset.original : dataset._id
       let associatedStars = stars.filter(star => {
-        return star.datasetId === datasetId
+        return star.datasetId === this.decodeId(datasetId)
       })
       if (associatedStars.length) {
         return associatedStars
@@ -366,7 +366,7 @@ export default {
     if (followers) {
       let datasetId = dataset.original ? dataset.original : dataset._id
       let subscriptions = followers.filter(follower => {
-        return follower.datasetId === datasetId
+        return follower.datasetId === this.decodeId(datasetId)
       })
       return subscriptions
     } else {
@@ -383,7 +383,7 @@ export default {
     if (usage) {
       let datasetId = dataset._id
       let matches = usage.filter(entry => {
-        return entry._id == datasetId
+        return entry._id == this.decodeId(datasetId)
       })
       const downloads = matches.length ? '' + matches[0].downloads : '0'
       return downloads
@@ -401,7 +401,7 @@ export default {
     if (usage) {
       let datasetId = dataset._id
       let matches = usage.filter(entry => {
-        return entry._id == datasetId
+        return entry._id == this.decodeId(datasetId)
       })
       const views = matches.length ? '' + matches[0].views : '0'
       return views

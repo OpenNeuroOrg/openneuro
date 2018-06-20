@@ -1928,7 +1928,7 @@ let datasetStore = Reflux.createStore({
   // Comments  ----------------------------------------------------------------
 
   loadComments(datasetId) {
-    crn.getComments(datasetId).then(res => {
+    crn.getComments(bids.decodeId(datasetId)).then(res => {
       if (res && (res.status === 404 || res.status === 403)) {
         this.update({
           commentTree: [],
@@ -1956,7 +1956,7 @@ let datasetStore = Reflux.createStore({
     const parentId = typeof parent === 'undefined' ? null : parent
 
     const comment = {
-      datasetId: datasetId,
+      datasetId: bids.decodeId(datasetId),
       datasetLabel: datasetLabel,
       parentId: parentId,
       text: content,
@@ -1964,10 +1964,10 @@ let datasetStore = Reflux.createStore({
       createDate: moment().format(),
     }
 
-    crn.createComment(datasetId, comment).then(res => {
+    crn.createComment(bids.decodeId(datasetId), comment).then(res => {
       if (res) {
         if (res.status === 200 && res.ok) {
-          this.loadComments(datasetId)
+          this.loadComments(bids.decodeId(datasetId))
         }
       }
     })
@@ -1982,13 +1982,15 @@ let datasetStore = Reflux.createStore({
       commentId: commentId,
       text: content,
     }
-    crn.updateComment(datasetId, commentId, comment).then(res => {
-      if (res) {
-        if (res.status === 200 && res.ok) {
-          this.loadComments(datasetId)
+    crn
+      .updateComment(bids.decodeId(datasetId), commentId, comment)
+      .then(res => {
+        if (res) {
+          if (res.status === 200 && res.ok) {
+            this.loadComments(datasetId)
+          }
         }
-      }
-    })
+      })
   },
 
   deleteComment(commentId, parent, callback) {
@@ -2005,7 +2007,7 @@ let datasetStore = Reflux.createStore({
     crn.deleteComment(comment).then(res => {
       if (res) {
         if (res.status === 200 && res.ok) {
-          this.loadComments(datasetId)
+          this.loadComments(bids.decodeId(datasetId))
           if (callback) {
             callback()
           }
@@ -2067,7 +2069,7 @@ let datasetStore = Reflux.createStore({
       this.data.currentUser && this.data.currentUser.profile
         ? this.data.currentUser.profile._id
         : null
-    crn.createSubscription(datasetId, userId).then(res => {
+    crn.createSubscription(bids.decodeId(datasetId), userId).then(res => {
       if (res && res.status !== 200) {
         callback({ error: 'There was an error while following this dataset.' })
       } else {
@@ -2086,7 +2088,7 @@ let datasetStore = Reflux.createStore({
       this.data.currentUser && this.data.currentUser.profile
         ? this.data.currentUser.profile._id
         : null
-    crn.deleteSubscription(datasetId, userId).then(res => {
+    crn.deleteSubscription(bids.decodeId(datasetId), userId).then(res => {
       if (res && res.status !== 200) {
         callback({
           error: 'There was an error while unfollowing this dataset.',
@@ -2126,7 +2128,7 @@ let datasetStore = Reflux.createStore({
     let datasetId = this.data.dataset.original
       ? this.data.dataset.original
       : this.data.dataset._id
-    crn.getSubscriptions(datasetId).then(res => {
+    crn.getSubscriptions(bids.decodeId(datasetId)).then(res => {
       dataset.followersList = res.body || []
       dataset.followers = res.body ? res.body.length : '0'
       this.update(
@@ -2147,7 +2149,7 @@ let datasetStore = Reflux.createStore({
       this.data.currentUser && this.data.currentUser.profile
         ? this.data.currentUser.profile._id
         : null
-    crn.addStar(datasetId, userId).then(res => {
+    crn.addStar(bids.decodeId(datasetId), userId).then(res => {
       if (res && res.status !== 200) {
         callback({
           error: 'There was an error while adding a star to this dataset.',
@@ -2168,7 +2170,7 @@ let datasetStore = Reflux.createStore({
       this.data.currentUser && this.data.currentUser.profile
         ? this.data.currentUser.profile._id
         : null
-    crn.removeStar(datasetId, userId).then(res => {
+    crn.removeStar(bids.decodeId(datasetId), userId).then(res => {
       if (res && res.status !== 200) {
         callback({
           error: 'There was an error while removing a star from this dataset.',
@@ -2190,7 +2192,7 @@ let datasetStore = Reflux.createStore({
       this.data.currentUser && this.data.currentUser.profile
         ? this.data.currentUser.profile._id
         : null
-    crn.getStars(datasetId).then(res => {
+    crn.getStars(bids.decodeId(datasetId)).then(res => {
       if (res && res.status !== 200) {
         let dataset = this.data.dataset
         dataset.stars = []
