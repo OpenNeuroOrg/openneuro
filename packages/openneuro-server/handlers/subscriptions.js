@@ -20,25 +20,31 @@ export default {
    *
    * Creates an entry in the c.crn.subscriptions database
    */
-
   create(req, res, next) {
     let data = req.body
     let datasetId = data.datasetId
     let userId = data.userId
 
-    c.crn.subscriptions.insertOne(
-      {
-        datasetId: datasetId,
-        userId: userId,
-      },
-      (err, response) => {
-        if (err) {
-          return next(err)
-        } else {
-          return res.send(response.ops)
-        }
-      },
-    )
+    this.subscribe(datasetId, userId)
+      .then(response => res.send(response.ops))
+      .catch(err => next(err))
+  },
+
+  subscribe(datasetId, userId) {
+    return new Promise((resolve, reject) => {
+      c.crn.subscriptions.insertOne(
+        {
+          datasetId: datasetId,
+          userId: userId,
+        },
+        (err, response) => {
+          if (err) {
+            reject(err)
+          }
+          resolve(response)
+        },
+      )
+    })
   },
 
   /**
