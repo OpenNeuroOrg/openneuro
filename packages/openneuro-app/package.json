@@ -71,6 +71,7 @@
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "cache-loader": "^1.2.2",
     "clean-webpack-plugin": "^0.1.16",
     "compression-webpack-plugin": "^1.0.0",
     "copy-webpack-plugin": "^4.0.1",
@@ -98,14 +99,11 @@
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "jest": {
-    "setupFiles": [
-      "./jestsetup.js"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ],
+    "setupFiles": ["./jestsetup.js"],
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+        "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
     },
     "collectCoverageFrom": [

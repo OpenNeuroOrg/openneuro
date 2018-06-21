@@ -4,3 +4,4 @@ dist/
 npm-debug.log
 yarn-error.log
 /coverage
+.cache-loader
