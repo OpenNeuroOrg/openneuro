@@ -11,7 +11,7 @@ import * as datalad from './handlers/datalad'
 import * as openfmri from './handlers/openfmri'
 import * as download from './handlers/download.js'
 import comments from './handlers/comments'
-import subscriptions from './handlers/subscriptions'
+import * as subscriptions from './handlers/subscriptions'
 import verifyUser from './libs/authentication/verifyUser.js'
 import * as google from './libs/authentication/google.js'
 import * as orcid from './libs/authentication/orcid.js'
@@ -259,7 +259,7 @@ const routes = [
     method: 'delete',
     url: '/subscriptions/:datasetId/:userId',
     middleware: [auth.user],
-    handler: subscriptions.delete,
+    handler: subscriptions.deleteSubscription,
   },
   {
     method: 'delete',
