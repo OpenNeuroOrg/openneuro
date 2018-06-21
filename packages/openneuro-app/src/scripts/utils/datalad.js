@@ -19,6 +19,7 @@ export default {
       client
         .query({
           query: query,
+          fetchPolicy: 'no-cache',
         })
         .then(data => {
           data = clone(data)
@@ -38,25 +39,25 @@ export default {
     })
   },
 
-    async getDataset(datasetId) {
-      const partialQuery = (await this.checkPartial(datasetId)).data
-      const partial = partialQuery ? partialQuery.partial : null
-      if (!partial) {
-        return new Promise((resolve, reject) => {
-          this.queryDataset(datasetId, (err, data) => {
-            if (err) reject(err)
-            resolve(data)
-          })
+  async getDataset(datasetId) {
+    const partialQuery = (await this.checkPartial(datasetId)).data
+    const partial = partialQuery ? partialQuery.partial : null
+    if (!partial) {
+      return new Promise((resolve, reject) => {
+        this.queryDataset(datasetId, (err, data) => {
+          if (err) reject(err)
+          resolve(data)
         })
-      } else {
-        return new Promise((resolve, reject) => {
-          this.queryPartialDataset(datasetId, (err, data) => {
-            if (err) reject(err)
-            resolve(data)
-          })
+      })
+    } else {
+      return new Promise((resolve, reject) => {
+        this.queryPartialDataset(datasetId, (err, data) => {
+          if (err) reject(err)
+          resolve(data)
         })
-      }
-    },
+      })
+    }
+  },
 
   async getSnapshot(datasetId, options) {
     return new Promise((resolve, reject) => {
@@ -102,35 +103,37 @@ export default {
       })
   },
 
-    queryPartialDataset(datasetId, callback) {
-      const query = datasets.getPartialDataset
-      client.query({
+  queryPartialDataset(datasetId, callback) {
+    const query = datasets.getPartialDataset
+    client
+      .query({
         query: query,
         variables: {
-            id: bids.decodeId(datasetId)
-        }
+          id: bids.decodeId(datasetId),
+        },
       })
       .then(data => {
-          data = clone(data)
-          return callback(null, data)
+        data = clone(data)
+        return callback(null, data)
       })
       .catch(err => {
         // console.log('error in datasetQuery:', err)
         return callback(err, null)
       })
-    },
+  },
 
-    async checkPartial(datasetId) {
-      return client.query({
-        query: datasets.checkPartial,
-        variables: {datasetId: bids.decodeId(datasetId)}
-      })
-    },
+  async checkPartial(datasetId) {
+    return client.query({
+      query: datasets.checkPartial,
+      variables: { datasetId: bids.decodeId(datasetId) },
+    })
+  },
 
-    querySnapshot(datasetId, tag, callback) {
-      client.query({
+  querySnapshot(datasetId, tag, callback) {
+    client
+      .query({
         query: gql`
-          query getSnapshot ($datasetId: ID!, $tag: String!) {
+          query getSnapshot($datasetId: ID!, $tag: String!) {
             snapshot(datasetId: $datasetId, tag: $tag) {
               id
               _id: id
