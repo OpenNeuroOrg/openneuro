@@ -14,12 +14,15 @@ import { apolloUploadExpress } from 'apollo-upload-server'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import bodyParser from 'body-parser'
 import auth from './libs/auth.js'
+import { setupPassportAuth } from './libs/authentication/passport.js'
 // import events lib to instantiate CRN Emitter
 import events from './libs/events'
 
 // test flag disables Raven for tests
 export default test => {
   const app = express()
+
+  setupPassportAuth()
 
   // Raven must be first to work
   test || app.use(Raven.requestHandler())
@@ -77,7 +80,9 @@ export default test => {
   )
 
   const websocketUrl = process.browser ? config.url.replace('http', 'ws') : null
-  const subscriptionUrl = websocketUrl ? `${websocketUrl}/graphql-subscriptions` : null
+  const subscriptionUrl = websocketUrl
+    ? `${websocketUrl}/graphql-subscriptions`
+    : null
   // GraphiQL, a visual editor for queries
   app.use(
     '/crn/graphiql',

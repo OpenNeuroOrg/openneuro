@@ -13,6 +13,7 @@ import * as openfmri from './handlers/openfmri'
 import * as download from './handlers/download.js'
 import comments from './handlers/comments'
 import subscriptions from './handlers/subscriptions'
+import * as google from './libs/authentication/google.js'
 import auth from './libs/auth'
 import scitran from './libs/scitran'
 import schema from './libs/schema'
@@ -389,6 +390,18 @@ const dataladRoutes = [
     method: 'get',
     url: '/datasets/:datasetId/snapshots/:snapshotId/download',
     handler: download.snapshotDownload,
+  },
+
+  // Authentication routes
+  {
+    method: 'get',
+    url: '/auth/google',
+    handler: google.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/auth/google/callback',
+    handler: google.authCallback,
   },
 ]
 
