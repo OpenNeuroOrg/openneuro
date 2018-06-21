@@ -9,7 +9,7 @@ const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 // prettier-ignore
 const env = {
   CRN_SERVER_URL: JSON.stringify(process.env.CRN_SERVER_URL),
-  SCITRAN_AUTH_GOOGLE_CLIENT_ID: JSON.stringify(process.env.SCITRAN_AUTH_GOOGLE_CLIENT_ID),
+  GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID),
   GOOGLE_TRACKING_ID: JSON.stringify(process.env.GOOGLE_TRACKING_ID),
   SCITRAN_AUTH_ORCID_CLIENT_ID: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_CLIENT_ID),
   SCITRAN_AUTH_ORCID_REDIRECT_URI: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_REDIRECT_URI),
