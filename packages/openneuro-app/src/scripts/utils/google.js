@@ -90,7 +90,6 @@ let google = {
         email: basicProfile.getEmail(),
         firstname: basicProfile.getGivenName(),
         lastname: basicProfile.getFamilyName(),
-        imageUrl: basicProfile.getImageUrl(),
       }
     }
 
