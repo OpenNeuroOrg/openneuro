@@ -10,10 +10,12 @@ services:
   # mongodb
   mongo:
     image: mongo
+    restart: always
 
   # Redis
   redis:
     image: redis:alpine
+    restart: always
 
   # web app bundle build
   app:
@@ -37,6 +39,10 @@ services:
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
       - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
     env_file: ./config.env
+    depends_on:
+      - redis
+      - mongo
+      - datalad
     restart: always
 
   # worker
@@ -58,6 +64,8 @@ services:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ./datalad-key:/datalad-key
     env_file: ./config.env
+    depends_on:
+      - celery
     restart: always
   
   # celery Python backend
