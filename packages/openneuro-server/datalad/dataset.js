@@ -154,19 +154,43 @@ const fileUrl = (datasetId, path, filename) => {
  */
 export const addFile = (datasetId, path, file) => {
   // Cannot use superagent 'request' due to inability to post streams
-  return new Promise(async (resolve, reject) => {
-    const { filename, stream, mimetype } = await file
-    stream.pipe(
-      requestNode(
-        {
-          url: fileUrl(datasetId, path, filename),
-          method: 'post',
-          headers: { 'Content-Type': mimetype },
-        },
-        err => (err ? reject(err) : resolve()),
-      ),
-    )
-  }).then(data => {
+  return new Promise((resolve, reject) =>
+    file
+      .then(({ filename, stream, mimetype }) => {
+        stream
+          .on('error', err => {
+            if (err.constructor.name === 'FileStreamDisconnectUploadError') {
+              // Catch client disconnects.
+              // eslint-disable-next-line no-console
+              console.warn(
+                `Client disconnected during upload for dataset "${datasetId}".`,
+              )
+            } else {
+              // Unknown error, log it at least.
+              // eslint-disable-next-line no-console
+              console.error(err)
+            }
+          })
+          .pipe(
+            requestNode(
+              {
+                url: fileUrl(datasetId, path, filename),
+                method: 'post',
+                headers: { 'Content-Type': mimetype },
+              },
+              err => (err ? reject(err) : resolve()),
+            ),
+          )
+      })
+      .catch(err => {
+        if (err.constructor.name === 'UploadPromiseDisconnectUploadError') {
+          // Catch client aborts silently
+        } else {
+          // Raise other errors
+          throw err
+        }
+      }),
+  ).then(data => {
     return redis.del(draftPartialKey(datasetId)).then(() => data)
   })
 }
