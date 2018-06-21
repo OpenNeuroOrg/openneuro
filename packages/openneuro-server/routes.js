@@ -1,7 +1,6 @@
 // dependencies ------------------------------------
 
 import express from 'express'
-import config from './config'
 import users from './handlers/users'
 import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
@@ -13,22 +12,21 @@ import * as openfmri from './handlers/openfmri'
 import * as download from './handlers/download.js'
 import comments from './handlers/comments'
 import subscriptions from './handlers/subscriptions'
+import verifyUser from './libs/authentication/verifyUser.js'
 import * as google from './libs/authentication/google.js'
 import auth from './libs/auth'
-import scitran from './libs/scitran'
 import schema from './libs/schema'
 import schemas from './schemas'
 import doi from './handlers/doi'
 
 import fileUpload from 'express-fileupload'
 
-const baseRoutes = [
+const routes = [
   // users ---------------------------------------
-
   {
     method: 'get',
     url: '/users/self',
-    handler: scitran.verifyUser,
+    handler: verifyUser,
   },
   {
     method: 'get',
@@ -310,31 +308,8 @@ const baseRoutes = [
     middleware: [auth.user],
     handler: users.createAPIKey,
   },
-]
 
-const scitranRoutes = [
-  // datasets ------------------------------------
-  // Note: most dataset interactions are sent directly to Scitran.
-  // These manage those that need to be modified or proxied.
-  {
-    method: 'post',
-    url: '/datasets',
-    handler: datasets.create,
-  },
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/snapshot',
-    handler: datasets.snapshot,
-  },
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/permissions',
-    handler: datasets.share,
-  },
-]
-
-// These routes are enabled with the DataLad backend
-const dataladRoutes = [
+  // DataLad dataset routes
   {
     method: 'post',
     url: '/datasets',
@@ -408,10 +383,6 @@ const dataladRoutes = [
 // initialize routes -------------------------------
 
 const router = express.Router()
-// TODO - remove this once SciTran backend is no longer in use
-const routes = config.datalad.enabled
-  ? baseRoutes.concat(dataladRoutes)
-  : baseRoutes.concat(scitranRoutes)
 
 for (const route of routes) {
   let arr = route.hasOwnProperty('middleware') ? route.middleware : []
