@@ -69,15 +69,15 @@ export default class MetaData extends React.Component {
           'referencesAndLinks',
         ),
       },
-      {
-        key: 'DigitalDocuments',
-        label: 'Digital Documents',
-        type: 'fileArray',
-        value: dataset.attachments,
-        onChange: actions.uploadAttachment,
-        onDelete: actions.deleteAttachment,
-        onFileClick: actions.getAttachmentDownloadTicket,
-      },
+      // {
+      //   key: 'DigitalDocuments',
+      //   label: 'Digital Documents',
+      //   type: 'fileArray',
+      //   value: dataset.attachments,
+      //   onChange: actions.uploadAttachment,
+      //   onDelete: actions.deleteAttachment,
+      //   onFileClick: actions.getAttachmentDownloadTicket,
+      // },
     ]
 
     let fields = metadata.map(item => {

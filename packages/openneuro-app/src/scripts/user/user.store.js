@@ -11,7 +11,6 @@ import scitran from '../utils/scitran'
 import notifications from '../notification/notification.actions'
 import dashboardActions from '../dashboard/dashboard.datasets.actions'
 import datasetActions from '../dataset/dataset.actions'
-import upload from '../upload/upload.actions'
 
 // store setup -----------------------------------------------------------------------
 
@@ -284,7 +283,6 @@ let UserStore = Reflux.createStore({
     }
     if (signout) {
       this.providers[this.data.provider].signOut(() => {
-        upload.setInitialState()
         this.clearAuth()
         history.push('/')
       })

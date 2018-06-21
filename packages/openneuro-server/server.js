@@ -1,4 +1,6 @@
 import Raven from 'raven'
+import { createServer } from 'http'
+import subscriptionServerFactory from './libs/subscription-server.js'
 import mongo from './libs/mongo'
 import { connect as redis_connect } from './libs/redis'
 import { connect as resque_connect } from './libs/queue'
@@ -37,9 +39,12 @@ const app = createApp(false)
 // start server ----------------------------------------------------
 mongo.connect(config.mongo.url).then(() => {
   redisConnect().then(() => {
-    app.listen(config.port, () => {
+    const server = createServer(app)
+    server.listen(config.port, () => {
       // eslint-disable-next-line no-console
       console.log('Server is listening on port ' + config.port)
+      // Setup GraphQL subscription transport
+      subscriptionServerFactory(server)
     })
   })
 })

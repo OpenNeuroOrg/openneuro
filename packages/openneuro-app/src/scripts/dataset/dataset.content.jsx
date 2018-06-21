@@ -14,7 +14,7 @@ import actions from './dataset.actions.js'
 import MetaData from './dataset.metadata.jsx'
 import Statuses from './dataset.statuses.jsx'
 import Metrics from './dataset.metrics.jsx'
-import Validation from './dataset.validation.jsx'
+import Validation from '../datalad/validation/validation.jsx'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import FileTree from '../common/partials/file-tree.jsx'
 import Jobs from './dataset.jobs.jsx'
@@ -23,7 +23,6 @@ import Summary from './dataset.summary.jsx'
 import Comment from '../common/partials/comment.jsx'
 import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
-import uploadActions from '../upload/upload.actions.js'
 import userActions from '../user/user.actions.js'
 import { refluxConnect } from '../utils/reflux'
 
@@ -114,7 +113,7 @@ class DatasetContent extends Reflux.Component {
     let canEdit =
       dataset &&
       (dataset.access === 'rw' || dataset.access == 'admin') &&
-      !dataset.original
+      !dataset.snapshot_version
     let loadingText =
       typeof this.state.datasets.loading == 'string'
         ? this.state.datasets.loading
@@ -122,8 +121,6 @@ class DatasetContent extends Reflux.Component {
     let content
 
     if (dataset) {
-      let errors = dataset.validation.errors
-      let warnings = dataset.validation.warnings
       // meta description is README unless it's empty
       content = (
         <div className="row">
@@ -156,14 +153,7 @@ class DatasetContent extends Reflux.Component {
           </div>
           <div className="col-xs-6">
             <div>
-              <Validation
-                errors={errors}
-                warnings={warnings}
-                validating={dataset.status.validating}
-                display={
-                  !dataset.status.incomplete && !this.state.datasets.uploading
-                }
-              />
+              {this._validation(dataset)}
               <div className="fade-in col-xs-12">
                 <ErrorBoundary message="The server failed to provide OpenNeuro with a list of jobs.">
                   <Jobs />
@@ -204,7 +194,7 @@ class DatasetContent extends Reflux.Component {
         message="The dataset has failed to load in time. Please check your network connection."
         className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
         {this.state.datasets.loading ? (
-          <Timeout timeout={20000}>
+          <Timeout timeout={100000}>
             <Spinner active={true} text={loadingText} />
           </Timeout>
         ) : (
@@ -221,7 +211,7 @@ class DatasetContent extends Reflux.Component {
       let authorString = 'authored by '
       for (let i = 0; i < authors.length; i++) {
         let author = authors[i]
-        authorString += author.name
+        authorString += author
         if (authors.length > 1) {
           if (i < authors.length - 2) {
             authorString += ', '
@@ -232,6 +222,13 @@ class DatasetContent extends Reflux.Component {
       }
       return <h6>{authorString}</h6>
     }
+  }
+
+  _validation(dataset) {
+    if (dataset.linkID && !dataset.status.incomplete) {
+      return (<Validation datasetId={dataset.linkID} />)
+    }
+    return null 
   }
 
   _fileTree(dataset, canEdit) {
@@ -443,8 +440,8 @@ class DatasetContent extends Reflux.Component {
     )
   }
 
-  _onFileSelect(files) {
-    uploadActions.onResume(files, this.state.datasets.dataset.label)
+  _onFileSelect() {
+    // TODO - Re-enable resume here
   }
 }
 

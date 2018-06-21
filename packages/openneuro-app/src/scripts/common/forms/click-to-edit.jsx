@@ -93,8 +93,7 @@ class ClickToEdit extends React.Component {
         input = (
           <ArrayInput
             model={[
-              { id: 'name', placeholder: 'Name', required: true },
-              { id: 'ORCIDID', placeholder: 'ORCID ID' },
+              { id: 'name', placeholder: 'Name', required: true }
             ]}
             value={value}
             onChange={this._handleChange.bind(this, type)}
@@ -125,9 +124,9 @@ class ClickToEdit extends React.Component {
         input = (
           <FileArrayInput
             value={this.props.value}
-            onChange={this._handleFile}
-            onDelete={this._handleDelete}
-            onFileClick={this._download}
+            onChange={this._handleFile.bind(this)}
+            onDelete={this._handleDelete.bind(this)}
+            onFileClick={this._download.bind(this)}
           />
         )
         display = (
@@ -161,7 +160,7 @@ class ClickToEdit extends React.Component {
       return (
         <div className="fade-in" key={index}>
           <span>
-            {item.name} {item.ORCIDID ? '-' : null} {item.ORCIDID}
+            {item}
           </span>
         </div>
       )

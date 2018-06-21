@@ -388,6 +388,10 @@ array-flatten@1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/array-flatten/-/array-flatten-1.1.1.tgz#9a5f699051b1e7073328f2a008968b64ea2955d2"
 
+array-from@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/array-from/-/array-from-2.1.1.tgz#cfe9d8c26628b9dc5aecc62a9f5d8f1f352c1195"
+
 array-union@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/array-union/-/array-union-1.0.2.tgz#9a34410e4f4e3da23dea375be5be70f24778ec39"
@@ -1025,6 +1029,10 @@ babylon@^6.18.0:
   version "6.18.0"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.18.0.tgz#af2f3b88fa6f5c1e4c634d1a0f8eac4f55b395e3"
 
+backo2@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/backo2/-/backo2-1.0.2.tgz#31ab1ac8b129363463e35b3ebb69f4dfcfba7947"
+
 balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
@@ -1101,7 +1109,7 @@ bl@^1.0.0:
     readable-stream "^2.3.5"
     safe-buffer "^5.1.1"
 
-bluebird@^3.3.4, bluebird@^3.5.0:
+bluebird@^3.3.4, bluebird@^3.5.0, bluebird@^3.5.1:
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
@@ -2109,7 +2117,7 @@ es6-iterator@~0.1.3:
     es5-ext "~0.10.5"
     es6-symbol "~2.0.1"
 
-es6-iterator@~2.0.3:
+es6-iterator@~2.0.1, es6-iterator@~2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/es6-iterator/-/es6-iterator-2.0.3.tgz#a7de889141a05a94b0854403b2d0a0fbfa98f3b7"
   dependencies:
@@ -2117,11 +2125,32 @@ es6-iterator@~2.0.3:
     es5-ext "^0.10.35"
     es6-symbol "^3.1.1"
 
+es6-map@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/es6-map/-/es6-map-0.1.5.tgz#9136e0503dcc06a301690f0bb14ff4e364e949f0"
+  dependencies:
+    d "1"
+    es5-ext "~0.10.14"
+    es6-iterator "~2.0.1"
+    es6-set "~0.1.5"
+    es6-symbol "~3.1.1"
+    event-emitter "~0.3.5"
+
 es6-promise@3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-3.2.1.tgz#ec56233868032909207170c39448e24449dd1fc4"
 
-es6-symbol@^3.1.1, es6-symbol@~3.1.1:
+es6-set@^0.1.5, es6-set@~0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/es6-set/-/es6-set-0.1.5.tgz#d2b3ec5d4d800ced818db538d28974db0a73ccb1"
+  dependencies:
+    d "1"
+    es5-ext "~0.10.14"
+    es6-iterator "~2.0.1"
+    es6-symbol "3.1.1"
+    event-emitter "~0.3.5"
+
+es6-symbol@3.1.1, es6-symbol@^3.1.1, es6-symbol@~3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/es6-symbol/-/es6-symbol-3.1.1.tgz#bf00ef4fdab6ba1b46ecb7b629b4c7ed5715cc77"
   dependencies:
@@ -2256,12 +2285,16 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
 
-event-emitter@~0.3.4:
+event-emitter@~0.3.4, event-emitter@~0.3.5:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/event-emitter/-/event-emitter-0.3.5.tgz#df8c69eef1647923c7157b9ce83840610b02cc39"
   dependencies:
     d "1"
     es5-ext "~0.10.14"
+
+eventemitter3@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-2.0.3.tgz#b5e1079b59fb5e1ba2771c0a993be060a58c99ba"
 
 exec-sh@^0.2.0:
   version "0.2.1"
@@ -2760,6 +2793,10 @@ graphql-anywhere@^4.1.9:
   dependencies:
     apollo-utilities "^1.0.12"
 
+graphql-bigint@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/graphql-bigint/-/graphql-bigint-1.0.0.tgz#b2909be9c9970a9a7697273c27d0ea47a146a19c"
+
 graphql-extensions@^0.0.x, graphql-extensions@~0.0.9:
   version "0.0.10"
   resolved "https://registry.yarnpkg.com/graphql-extensions/-/graphql-extensions-0.0.10.tgz#34bdb2546d43f6a5bc89ab23c295ec0466c6843d"
@@ -2770,6 +2807,21 @@ graphql-extensions@^0.0.x, graphql-extensions@~0.0.9:
 graphql-iso-date@^3.5.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.5.0.tgz#55a1be0efa8d28c1453afd2eb5ce1d052189a513"
+
+graphql-redis-subscriptions@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/graphql-redis-subscriptions/-/graphql-redis-subscriptions-1.5.0.tgz#53c9be28ee69f61ffbfe808f8f82f7e718254acf"
+  dependencies:
+    graphql-subscriptions "^0.5.6"
+    iterall "^1.1.3"
+  optionalDependencies:
+    ioredis "^3.1.2"
+
+graphql-subscriptions@^0.5.6:
+  version "0.5.8"
+  resolved "https://registry.yarnpkg.com/graphql-subscriptions/-/graphql-subscriptions-0.5.8.tgz#13a6143c546bce390404657dc73ca501def30aa7"
+  dependencies:
+    iterall "^1.2.1"
 
 graphql-tag@^2.4.2, graphql-tag@^2.8.0:
   version "2.9.2"
@@ -3080,7 +3132,19 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
-ioredis@^3.0.0, ioredis@^3.1.1:
+ioredis-mock@^3.8.1:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/ioredis-mock/-/ioredis-mock-3.8.3.tgz#8adc5660f88c15d654ac79437154002416488602"
+  dependencies:
+    array-from "^2.1.1"
+    bluebird "^3.5.1"
+    es6-map "^0.1.5"
+    es6-set "^0.1.5"
+    lodash "^4.17.4"
+    minimatch "^3.0.4"
+    object-assign "^4.1.1"
+
+ioredis@^3.0.0, ioredis@^3.1.1, ioredis@^3.1.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/ioredis/-/ioredis-3.2.2.tgz#b7d5ff3afd77bb9718bb2821329b894b9a44c00b"
   dependencies:
@@ -3994,6 +4058,14 @@ lodash.foreach@^4.5.0:
 lodash.isempty@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.isempty/-/lodash.isempty-4.4.0.tgz#6f86cbedd8be4ec987be9aaf33c9684db1b31e7e"
+
+lodash.isobject@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/lodash.isobject/-/lodash.isobject-3.0.2.tgz#3c8fb8d5b5bf4bf90ae06e14f2a530a4ed935e1d"
+
+lodash.isstring@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/lodash.isstring/-/lodash.isstring-4.0.1.tgz#d527dfb5456eca7cc9bb95d5daeaf88ba54a5451"
 
 lodash.keys@^4.2.0:
   version "4.2.0"
@@ -5674,6 +5746,19 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
+subscriptions-transport-ws@^0.9.9:
+  version "0.9.9"
+  resolved "https://registry.yarnpkg.com/subscriptions-transport-ws/-/subscriptions-transport-ws-0.9.9.tgz#8a0bdc4c31df2e90e92901047fd8961deb138acc"
+  dependencies:
+    backo2 "^1.0.2"
+    eventemitter3 "^2.0.3"
+    iterall "^1.2.1"
+    lodash.assign "^4.2.0"
+    lodash.isobject "^3.0.2"
+    lodash.isstring "^4.0.1"
+    symbol-observable "^1.0.4"
+    ws "^3.0.0"
+
 superagent@^3.0.0, superagent@^3.8.2:
   version "3.8.3"
   resolved "https://registry.yarnpkg.com/superagent/-/superagent-3.8.3.tgz#460ea0dbdb7d5b11bc4f78deba565f86a178e128"
@@ -5712,7 +5797,7 @@ supports-color@^5.3.0:
   dependencies:
     has-flag "^3.0.0"
 
-symbol-observable@^1.0.2:
+symbol-observable@^1.0.2, symbol-observable@^1.0.4:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
 
@@ -5912,6 +5997,10 @@ uglify-js@^2.4.1, uglify-js@^2.6:
 uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
+
+ultron@~1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.1.tgz#9fe1536a10a664a65266a1e3ccf85fd36302bc9c"
 
 unbzip2-stream@^1.0.9:
   version "1.2.5"
@@ -6216,6 +6305,14 @@ write@^0.2.1:
   resolved "https://registry.yarnpkg.com/write/-/write-0.2.1.tgz#5fc03828e264cea3fe91455476f7a3c566cb0757"
   dependencies:
     mkdirp "^0.5.1"
+
+ws@^3.0.0:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-3.3.3.tgz#f1cf84fe2d5e901ebce94efaece785f187a228f2"
+  dependencies:
+    async-limiter "~1.0.0"
+    safe-buffer "~5.1.0"
+    ultron "~1.1.0"
 
 ws@^4.0.0:
   version "4.1.0"

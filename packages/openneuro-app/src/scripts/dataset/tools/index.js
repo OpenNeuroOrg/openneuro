@@ -5,6 +5,7 @@ import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import moment from 'moment'
+import DownloadLink from '../../datalad/download/download-link.jsx'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
@@ -36,7 +37,7 @@ class Tools extends Reflux.Component {
       return null
     }
 
-    let datasetHasJobs = !!dataset.jobs.length
+    let datasetHasJobs = dataset.jobs ? !!dataset.jobs.length : false
 
     // permission check shorthands
     let isAdmin = dataset.access === 'admin',
@@ -46,7 +47,7 @@ class Tools extends Reflux.Component {
       isPublic = !!dataset.status.public,
       isIncomplete = !!dataset.status.incomplete,
       isInvalid = !!dataset.status.invalid,
-      isSnapshot = !!dataset.original,
+      isSnapshot = !!dataset.snapshot_version,
       isSubscribed = !!dataset.subscribed,
       hasUserStar = !!dataset.hasUserStar,
       hasDoi =
@@ -66,23 +67,6 @@ class Tools extends Reflux.Component {
 
     let tools = [
       {
-        tooltip: 'Download Dataset',
-        icon: 'fa-download',
-        prepDownload: actions.getDatasetDownloadTicket.bind(this),
-        action: actions.confirmDatasetDownload.bind(this, this.props.history),
-        display: !isIncomplete,
-        warn: true,
-        modalLink: datasets.datasetUrl + '/subscribe',
-        validations: [
-          {
-            check: datasets.uploading && !isSnapshot,
-            message: 'Files are currently uploading',
-            timeout: 5000,
-            type: 'Error',
-          },
-        ],
-      },
-      {
         tooltip: 'Publish Dataset',
         icon: 'fa-globe icon-plus',
         action: actions.showDatasetComponent.bind(
@@ -90,7 +74,7 @@ class Tools extends Reflux.Component {
           'publish',
           this.props.history,
         ),
-        display: isAdmin && !isPublic && !isIncomplete,
+        display: isAdmin && !isPublic && !isIncomplete && !isSnapshot,
         warn: false,
         modalLink: datasets.datasetUrl + '/publish',
         validations: [
@@ -111,7 +95,7 @@ class Tools extends Reflux.Component {
           false,
           this.props.history,
         ),
-        display: isPublic && isSuperuser,
+        display: isPublic && isSuperuser && !isSnapshot,
         warn: true,
         validations: [
           {
@@ -183,7 +167,7 @@ class Tools extends Reflux.Component {
           {
             check:
               snapshots.length > 1 &&
-              moment(dataset.modified).diff(moment(snapshots[1].modified)) <= 0,
+              moment(dataset.modified).diff(moment(snapshots[1].created)) <= 0,
             message:
               'No modifications have been made since the last snapshot was created. Please use the most recent snapshot.',
             timeout: 6000,
@@ -267,6 +251,14 @@ class Tools extends Reflux.Component {
         <div className="col-xs-12 dataset-tools-wrap">
           <div className="tools clearfix">
             {this._snapshotLabel(dataset)}
+            {isSnapshot ? (
+              <DownloadLink
+                datasetId={dataset.linkID}
+                snapshotTag={dataset.snapshot_version}
+              />
+            ) : (
+              <DownloadLink datasetId={dataset.linkID} />
+            )}
             {this._tools(tools)}
           </div>
         </div>

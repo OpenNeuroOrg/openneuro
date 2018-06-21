@@ -4,6 +4,7 @@ import crn from './crn'
 import userStore from '../user/user.store'
 import fileUtils from './files'
 import hex from './hex'
+import datalad from './datalad'
 
 /**
  * BIDS
@@ -23,69 +24,60 @@ export default {
    * boolean as second argument to specifiy if request
    * is made with authentication. Defaults to true.
    */
-  getDatasets(
+  async getDatasets(
     callback,
     isPublic,
     isSignedOut,
     isAdmin = false,
     metadata = false,
   ) {
-    scitran
-      .getProjects({
-        authenticate: isAdmin || !isPublic,
-        snapshot: false,
-        metadata: metadata,
-      })
-      .then(res => {
-        let projects = res.body ? res.body : []
-        scitran
-          .getProjects({
-            authenticate: !isPublic,
-            snapshot: true,
-            metadata: metadata,
-          })
-          .then(async pubProjects => {
-            const publicProjects = pubProjects.body ? pubProjects.body : []
-            projects = projects.concat(publicProjects)
-            const users = isSignedOut ? null : (await scitran.getUsers()).body
-            const stars = (await crn.getStars()).body
-            const followers = (await crn.getSubscriptions()).body
-            this.usage(null, usage => {
-              let resultDict = {}
-              for (let project of projects) {
-                let dataset = this.formatDataset(
-                  project,
-                  null,
-                  users,
-                  stars,
-                  followers,
-                  usage,
-                )
-                let datasetId = dataset.hasOwnProperty('original')
-                  ? dataset.original
-                  : dataset._id
-                let existing = resultDict[datasetId]
-                if (
-                  !existing ||
-                  (existing.hasOwnProperty('original') &&
-                    !dataset.hasOwnProperty('original')) ||
-                  (existing.hasOwnProperty('original') &&
-                    existing.snapshot_version < project.snapshot_version)
-                ) {
-                  if (isAdmin || isPublic || this.userAccess(project)) {
-                    resultDict[datasetId] = dataset
-                  }
-                }
-              }
+    const res = (await datalad.getDatasets({
+      authenticate: isAdmin || !isPublic,
+      snapshot: false,
+      metadata: metadata,
+      isPublic: isPublic,
+    })).data
+    if (!res) {
+      return callback([])
+    }
+    const projects = res.datasets ? res.datasets : []
+    const users = isSignedOut ? null : (await scitran.getUsers()).body
+    const stars = (await crn.getStars()).body
+    const followers = (await crn.getSubscriptions()).body
+    this.usage(null, usage => {
+      let resultDict = {}
+      for (let project of projects) {
+        let dataset = this.formatDataset(
+          project,
+          null,
+          users,
+          stars,
+          followers,
+          usage,
+        )
+        let datasetId = dataset.hasOwnProperty('original')
+          ? dataset.original
+          : dataset._id
+        let existing = resultDict[datasetId]
+        if (
+          !existing ||
+          (existing.hasOwnProperty('original') &&
+            !dataset.hasOwnProperty('original')) ||
+          (existing.hasOwnProperty('original') &&
+            existing.snapshot_version < project.snapshot_version)
+        ) {
+          if (isAdmin || project.public || this.userAccess(project)) {
+            resultDict[datasetId] = dataset
+          }
+        }
+      }
 
-              let results = []
-              for (let key in resultDict) {
-                results.push(resultDict[key])
-              }
-              callback(results)
-            })
-          })
-      })
+      let results = []
+      for (let key in resultDict) {
+        results.push(resultDict[key])
+      }
+      callback(results)
+    })
   },
 
   /**
@@ -98,13 +90,13 @@ export default {
       metadata = {}
     if (project.files) {
       for (let file of project.files) {
-        if (file.name === 'README') {
+        if (file.filename === 'README') {
           metadataFiles.push('README')
         }
-        if (file.name === 'CHANGES') {
+        if (file.filename === 'CHANGES') {
           metadataFiles.push('CHANGES')
         }
-        if (file.name === 'dataset_description.json') {
+        if (file.filename === 'dataset_description.json') {
           metadataFiles.push('dataset_description.json')
         }
       }
@@ -114,8 +106,8 @@ export default {
     async.each(
       metadataFiles,
       (filename, cb) => {
-        scitran
-          .getFile('projects', project._id, filename, options)
+        datalad
+          .getFile(project._id, filename, options)
           .then(file => {
             let contents
             try {
@@ -155,39 +147,57 @@ export default {
 
     // Dataset
     try {
-      const projectRes = await scitran.getProject(projectId, options)
-      if (projectRes.status !== 200) {
-        return callback(projectRes)
-      }
-      const project = projectRes ? projectRes.body : null
-      if (project) {
-        let tempFiles = project.files ? this._formatFiles(project.files) : null
-        this.getMetadata(
-          project,
-          metadata => {
-            let dataset = this.formatDataset(
-              project,
-              metadata['dataset_description.json'],
-              users,
-            )
-            dataset.README = metadata.README
-            dataset.CHANGES = metadata.CHANGES
-            crn.getDatasetJobs(projectId, options).then(res => {
-              dataset.jobs = res.body
+      datalad.getDataset(projectId).then(async projectRes => {
+        const data = projectRes ? projectRes.data : null
+        if (data) {
+          // get snapshot or draft, depending on results
+          let project = data.dataset
+          let draft = project ? project.draft : null
+          let snapshotQuery = options.snapshot
+            ? (await datalad.getSnapshot(projectId, options)).data
+            : null
+          let snapshot = snapshotQuery ? snapshotQuery.snapshot : null
+          let draftFiles = draft && draft.files ? draft.files : []
+          let snapshotFiles = snapshot ? snapshot.files : []
+          let tempFiles = !snapshot
+            ? this._formatFiles(draftFiles)
+            : this._formatFiles(snapshotFiles)
+          project.snapshot_version = snapshot ? snapshot.tag : null
+          this.getMetadata(
+            project,
+            metadata => {
+              let dataset = this.formatDataset(
+                project,
+                metadata['dataset_description.json'],
+                users,
+              )
+              dataset.README = metadata.README
+              dataset.CHANGES = metadata.CHANGES
               dataset.children = tempFiles
               dataset.showChildren = true
+              dataset.snapshots = project.snapshots
+              // get dataset usage stats
               this.usage(projectId, usage => {
                 if (usage) {
                   dataset.views = this.views(dataset, usage)
                   dataset.downloads = this.downloads(dataset, usage)
                 }
-                callback(dataset)
+                crn
+                  .getDatasetJobs(projectId, options)
+                  .then(res => {
+                    dataset.jobs = res.body
+                    return callback(dataset)
+                  })
+                  .catch(err => {
+                    // console.log('error getting jobs:', err)
+                    return callback(dataset, err)
+                  })
               })
-            })
-          },
-          options,
-        )
-      }
+            },
+            options,
+          )
+        }
+      })
     } catch (err) {
       callback(err)
     }
@@ -207,8 +217,8 @@ export default {
 
         if (!file.tags || file.tags.indexOf('attachment') == -1) {
           fileList[i] = {
-            name: file.name.replace(/%2F/g, '/').replace(/%20/g, ' '),
-            webkitRelativePath: file.name
+            name: file.filename.replace(/%2F/g, '/').replace(/%20/g, ' '),
+            webkitRelativePath: file.filename
               .replace(/%2F/g, '/')
               .replace(/%20/g, ' '),
             size: file.size,
@@ -334,7 +344,7 @@ export default {
     if (stars) {
       let datasetId = dataset.original ? dataset.original : dataset._id
       let associatedStars = stars.filter(star => {
-        return star.datasetId === datasetId
+        return star.datasetId === this.decodeId(datasetId)
       })
       if (associatedStars.length) {
         return associatedStars
@@ -356,7 +366,7 @@ export default {
     if (followers) {
       let datasetId = dataset.original ? dataset.original : dataset._id
       let subscriptions = followers.filter(follower => {
-        return follower.datasetId === datasetId
+        return follower.datasetId === this.decodeId(datasetId)
       })
       return subscriptions
     } else {
@@ -373,7 +383,7 @@ export default {
     if (usage) {
       let datasetId = dataset._id
       let matches = usage.filter(entry => {
-        return entry._id == datasetId
+        return entry._id == this.decodeId(datasetId)
       })
       const downloads = matches.length ? '' + matches[0].downloads : '0'
       return downloads
@@ -391,7 +401,7 @@ export default {
     if (usage) {
       let datasetId = dataset._id
       let matches = usage.filter(entry => {
-        return entry._id == datasetId
+        return entry._id == this.decodeId(datasetId)
       })
       const views = matches.length ? '' + matches[0].views : '0'
       return views
@@ -448,14 +458,15 @@ export default {
 
     let dataset = {
       /** same as original **/
-      _id: project._id,
+      _id: this.encodeId(project._id),
       linkID: this.decodeId(project._id),
-      label: project.label,
-      group: project.group,
+      label: description ? description.Name : project.label,
+      group: project.uploader ? project.uploader.id : null,
       created: project.created,
-      modified: project.modified,
+      modified:
+        project.draft && project.draft.modified ? project.draft.modified : null,
       permissions: project.permissions,
-      public: project.public,
+      public: !!project.public,
       downloads: project.downloads,
       views: project.views,
 
@@ -543,24 +554,28 @@ export default {
    * to any statuses set in the notes.
    */
   formatStatus(project, userAccess) {
+    let validationIssues =
+      project.draft && project.draft.issues ? project.draft.issues : []
     let tags = project.tags ? project.tags : []
     let currentUser = userStore.data.scitran
+    let uploader = project.uploader ? project.uploader.id : null
     let userId = currentUser ? currentUser._id : null
     let hasRoot = currentUser ? currentUser.root : null
-    let permittedUsers = project.permissions.map(user => {
+    let permissions = project.permissions ? project.permissions : []
+    let permittedUsers = permissions.map(user => {
       return user._id
     })
     let adminOnlyAccess = permittedUsers.indexOf(userId) == -1 && hasRoot
 
     let status = {
-      incomplete: tags.indexOf('incomplete') > -1,
+      incomplete: tags.indexOf('incomplete') > -1 || project.draft.partial,
       validating: tags.indexOf('validating') > -1,
-      invalid: tags.indexOf('invalid') > -1,
+      invalid: !!validationIssues.find(i => i.severity == 'error'), // dataset is invalid if there are any issues with 'error' level severity
       public: !!project.public,
       hasPublic: tags.indexOf('hasPublic') > -1,
       shared:
         userStore.data.scitran &&
-        project.group != userStore.data.scitran._id &&
+        uploader != userStore.data.scitran._id &&
         !!userAccess &&
         !adminOnlyAccess,
     }

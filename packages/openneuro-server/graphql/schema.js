@@ -6,6 +6,7 @@ const typeDefs = `
   scalar DateTime
   scalar Time
   scalar Upload
+  scalar BigInt
 
   type Query {
     # One dataset
@@ -20,15 +21,68 @@ const typeDefs = `
     users: [User]
     # Request one snapshot
     snapshot(datasetId: ID!, tag: String!): Snapshot
+    # Determine if a dataset is partially uploaded
+    partial(datasetId: ID!): Boolean
   }
 
   type Mutation {
     # Create a new dataset container and repository
     createDataset(label: String!): Dataset
+    # Deletes a dataset and all associated snapshots
+    deleteDataset(label: String!): Dataset
     # Tag the current draft
     createSnapshot(datasetId: ID!, tag: String!): Snapshot
+    # Remove a tag from the dataset
+    deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
     # Add or update files in a draft - returns a new Draft
     updateFiles(datasetId: ID!, files: FileTree!): Draft
+    # delete files in a draft - returns a new Draft
+    deleteFiles(datasetId: ID!, files: FileTree!): Draft
+    # Add or remove the public flag from a dataset
+    updatePublic(datasetId: ID!, publicFlag: Boolean!): Boolean!
+    # Update a draft summary
+    updateSummary(summary: SummaryInput!): Summary
+    # Update a draft with validation results
+    updateValidation(validation: ValidationInput!): Boolean
+    # Update a snapshot with a list of file urls
+    updateSnapshotFileUrls(fileUrls: FileUrls!): Boolean
+    # Update a users's permissions on a dataset
+    updatePermissions(datasetId: ID!, userId: String!, level: String): Boolean
+    # Remove a users's permissions on a dataset
+    removePermissions(datasetId: ID!, userId: String!): Boolean
+  }
+
+  type Subscription {
+    # Publishes when the set of datasets changes
+    datasetAdded: Dataset
+    datasetDeleted: ID
+    snapshotAdded: ID
+    snapshotDeleted: ID
+    datasetValidationUpdated: ID
+    draftFilesUpdated: ID
+  }
+
+  input SummaryInput {
+    id: ID! # Git reference for this summary
+    datasetId: ID!
+    modalities: [String]
+    sessions: [String]
+    subjects: [String]
+    tasks: [String]
+    size: BigInt!
+    totalFiles: Int!
+  }
+
+  input ValidationInput {
+    id: ID! # Git reference for this validation
+    datasetId: ID!
+    issues: [ValidationIssueInput]!
+  }
+
+  input FileUrls {
+    datasetId: ID!
+    tag: String! # reference to the snapshot tag
+    files: [UpdateFileUrlInput]
   }
 
   # File tree
@@ -67,16 +121,20 @@ const typeDefs = `
     public: Boolean
     draft: Draft
     snapshots: [Snapshot]
+    permissions: [Permission]
   }
 
   # Ephemeral draft or working tree for a dataset
   type Draft {
-    id: ID!
+    id: ID
     dataset: Dataset
-    modified: DateTime!
+    modified: DateTime
     authors: [Author]
     summary: Summary
+    issues: [ValidationIssue]
     files: [DatasetFile]
+    # Flag if a dataset operation is incomplete (and may be reverted or resumed)
+    partial: Boolean
   }
 
   # Tagged snapshot of a draft
@@ -87,7 +145,15 @@ const typeDefs = `
     created: DateTime
     authors: [Author]
     summary: Summary
+    issues: [ValidationIssue]
     files: [DatasetFile]
+  }
+
+  #User permissions on a dataset
+  type Permission {
+    datasetId: ID!
+    userId: String!
+    level: String!
   }
 
   # Authors of a dataset
@@ -98,21 +164,88 @@ const typeDefs = `
 
   # Validator summary from bids-validator
   type Summary {
+    id: ID!
     modalities: [String]
     sessions: [String]
     subjects: [String]
     tasks: [String]
-    size: Int
-    totalFiles: Int
+    size: BigInt!
+    totalFiles: Int!
+  }
+
+  enum Severity {
+    error
+    warning
+  }
+
+  type ValidationIssue {
+    severity: Severity!
+    key: String!
+    code: Int!
+    reason: String!
+    files: [ValidationIssueFile]
+    additionalFileCount: Int
+  }
+
+  input ValidationIssueInput {
+    severity: Severity!
+    key: String!
+    code: Int!
+    reason: String!
+    files: [ValidationIssueFileInput]
+    additionalFileCount: Int
+  }
+
+  type ValidationIssueFile {
+    key: String!
+    code: Int!
+    file: ValidationIssueFileDetail
+    evidence: String
+    line: Int
+    character: Int
+    severity: Severity!
+    reason: String
+  }
+
+  input ValidationIssueFileInput {
+    key: String!
+    code: Int!
+    file: ValidationIssueFileDetailInput
+    evidence: String
+    line: Int
+    character: Int
+    severity: Severity!
+    reason: String
+  }
+
+  type ValidationIssueFileDetail {
+    name: String
+    path: String
+    relativePath: String
+  }
+
+  input ValidationIssueFileDetailInput {
+    name: String
+    path: String
+    relativePath: String
+    webkitRelativePath: String
   }
 
   # File metadata and link to contents
   type DatasetFile {
     id: ID!
     filename: String!
-    size: Int
+    size: BigInt
+    urls: [String]
+    objectpath: String
+  }
+
+  # Update file object
+  input UpdateFileUrlInput {
+    filename: String!
     urls: [String]
   }
+
 `
 
 export default makeExecutableSchema({

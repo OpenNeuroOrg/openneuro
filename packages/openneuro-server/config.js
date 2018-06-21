@@ -84,7 +84,7 @@ let config = {
     ENVIRONMENT: process.env.ENVIRONMENT,
   },
   datalad: {
-    enabled: false,
+    enabled: true,
     uri: 'datalad:9877',
   },
   doi: {

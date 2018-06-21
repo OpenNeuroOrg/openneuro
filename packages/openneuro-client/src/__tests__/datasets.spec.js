@@ -1,5 +1,5 @@
 import createClient from '../client'
-import { testDsId } from '../client'
+import { testDsId} from '../client'
 import { getDataset, getDatasets, createDataset } from '../datasets'
 
 jest.mock('../client')
@@ -13,14 +13,6 @@ describe('datasets.js', () => {
         .query({ query: getDataset, variables: { id: testDsId } })
         .then(({ data: { dataset } }) => {
           expect(dataset.id).toBe(testDsId)
-        })
-        .then(done)
-    })
-    it('does not return extra data', done => {
-      gqlClient
-        .query({ query: getDataset, variables: { id: testDsId } })
-        .then(({ data: { dataset } }) => {
-          expect(dataset.created).toBeUndefined()
         })
         .then(done)
     })

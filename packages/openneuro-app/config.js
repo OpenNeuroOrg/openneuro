@@ -5,6 +5,8 @@ export default {
   /**
    * Scitran
    */
+  url: process.env.CRN_SERVER_URL,
+
   scitran: {
     url: process.env.CRN_SERVER_URL + '/api/',
   },
@@ -64,5 +66,6 @@ export default {
 
   datalad: {
     enabled: process.env.CRN_SERVER_DATALAD,
+    uri: 'datalad:9877'
   },
 }

@@ -27,7 +27,6 @@ export default {
   collections: {
     crn: {
       blacklist: null,
-      validationQueue: null,
       jobs: null,
       jobDefinitions: null,
       tickets: null,
@@ -39,10 +38,14 @@ export default {
       comments: null,
       subscriptions: null,
       datasets: null,
+      summaries: null,
       snapshots: null,
+      issues: null,
       stars: null,
       dois: null,
       keys: null,
+      files: null,
+      permissions: null,
     },
     scitran: {
       projects: null,

@@ -28,6 +28,12 @@ addMockFunctionsToSchema({
       created: testTime,
       modified: testTime,
     }),
+    DateTime: () => {
+      return testTime
+    },
+    BigInt: () => {
+      return 8589934592
+    },
   },
 })
 

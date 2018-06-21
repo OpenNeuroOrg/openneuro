@@ -6,10 +6,12 @@ import { pageTitle, pageDescription } from './resources/strings.js'
 import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
+import getAuth from './utils/getAuth.js'
+import config from '../../config'
 
 const App = () => {
   return (
-    <ApolloProvider client={getClient('/crn/graphql')}>
+    <ApolloProvider client={getClient(`${config.url}/crn/graphql`, getAuth)}>
       <div>
         <Helmet>
           <title>{pageTitle}</title>

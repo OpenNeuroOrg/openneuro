@@ -10,6 +10,7 @@ import datasets from './handlers/datasets'
 import stars from './handlers/stars'
 import * as datalad from './handlers/datalad'
 import * as openfmri from './handlers/openfmri'
+import * as download from './handlers/download.js'
 import comments from './handlers/comments'
 import subscriptions from './handlers/subscriptions'
 import auth from './libs/auth'
@@ -345,14 +346,49 @@ const dataladRoutes = [
   },
   {
     method: 'post',
-    url: '/datasets/:datasetId/snapshot/:snapshotId',
+    url: '/datasets/:datasetId/snapshots/:snapshotId',
     handler: datalad.createSnapshot,
   },
+  {
+    method: 'post',
+    url: '/datasets/:datasetId/publish',
+    handler: datalad.publishDataset,
+  },
+  {
+    method: 'delete',
+    url: '/datasets/:datasetId/publish',
+    handler: datalad.unpublishDataset,
+  },
+
   // OpenFMRI API routes
   {
     method: 'get',
     url: '/openfmri/dataset/api/:datasetId',
     handler: openfmri.getDataset,
+  },
+
+  // file routes
+  {
+    method: 'get',
+    url: '/datasets/:datasetId/files/:filename',
+    handler: datalad.getFile,
+  },
+  {
+    method: 'get',
+    url: '/datasets/:datasetId/snapshots/:snapshotId/files/:filename',
+    handler: datalad.getFile,
+  },
+
+  // Download routes
+  {
+    method: 'get',
+    url: '/datasets/:datasetId/download',
+    handler: download.datasetDownload,
+  },
+  {
+    method: 'get',
+    url: '/datasets/:datasetId/snapshots/:snapshotId/download',
+    handler: download.snapshotDownload,
   },
 ]
 

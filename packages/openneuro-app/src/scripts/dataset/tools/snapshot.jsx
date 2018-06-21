@@ -5,11 +5,14 @@ import Spinner from '../../common/partials/spinner.jsx'
 import Timeout from '../../common/partials/timeout.jsx'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import moment from 'moment'
+import semver from 'semver'
 import actions from '../dataset.actions'
 import datasetStore from '../dataset.store'
 import bids from '../../utils/bids'
 import { Link, withRouter } from 'react-router-dom'
 import { refluxConnect } from '../../utils/reflux'
+import { graphql } from 'react-apollo'
+import { datasets } from 'openneuro-client'
 
 class Snapshot extends Reflux.Component {
   constructor(props) {
@@ -19,11 +22,10 @@ class Snapshot extends Reflux.Component {
     this.state = {
       changes: [],
       currentChange: '',
-      currentVersion: {
-        major: '',
-        minor: '',
-        point: '',
-      },
+      selectedVersion: '1.0.0',
+      minor: '1.0.0',
+      major: '1.0.0',
+      patch: '1.0.0',
       latestVersion: '',
     }
     this._handleChange = this.handleChange.bind(this)
@@ -39,7 +41,26 @@ class Snapshot extends Reflux.Component {
     let datasetId = nextProps.match.params.datasetId
     let snapshotId = nextProps.match.params.snapshotId
     let snapshots = this.state.datasets.snapshots
-    let dataset = this.state.datasets.dataset
+
+    // get the tags that have semantic versions
+    let semverTags = snapshots.filter(s => semver.valid(s.tag))
+
+    // get the highest version
+    let highestVersionedSnapshot = semverTags.sort((a, b) =>
+      semver.lt(a.tag, b.tag),
+    )[0]
+
+    // set the major, minor, and breaking version numbers
+    // if this is the first version, all of them are 1.0.0
+    let major, minor, patch
+    if (semverTags.length) {
+      minor = semver.inc(highestVersionedSnapshot.tag, 'minor')
+      patch = semver.inc(highestVersionedSnapshot.tag, 'patch')
+      major = semver.inc(highestVersionedSnapshot.tag, 'major')
+    } else {
+      major = minor = patch = '1.0.0'
+    }
+
     if (snapshotId) {
       const snapshotUrl = bids.encodeId(datasetId, snapshotId)
       if (snapshotUrl !== this.state.datasets.loadedUrl) {
@@ -59,32 +80,11 @@ class Snapshot extends Reflux.Component {
       )
     }
 
-    snapshots.map(snapshot => {
-      if (snapshot._id == dataset._id) {
-        if (snapshot.original) {
-          this.setState({ selectedSnapshot: snapshot._id })
-        } else if (snapshots.length > 1) {
-          this.setState({ selectedSnapshot: snapshots[1]._id })
-        }
-        return
-      }
-    })
-
-    let snapshotVersion =
-      this.state.datasets &&
-      this.state.datasets.dataset &&
-      this.state.datasets.dataset.snapshot_version
-        ? this.state.datasets.dataset.snapshot_version + 1
-        : 1
-
     this.setState({
-      currentVersion: {
-        major: snapshotVersion,
-        minor: '0',
-        point: '0',
-      },
-      latestVersion: snapshotVersion,
-      newSnapshotVersion: snapshotVersion,
+      selectedVersion: patch,
+      major: major,
+      patch: patch,
+      minor: minor,
       changes: [],
       currentChange: '',
     })
@@ -102,7 +102,7 @@ class Snapshot extends Reflux.Component {
       const app = query.get('app')
       const version = query.get('version')
       const job = query.get('job')
-      const snapshotUrl = bids.encodeId(datasetId, snapshotId)
+      const snapshotUrl = datasetId.join(snapshotId, ':')
       actions.trackView(snapshotUrl)
       actions.loadDataset(snapshotUrl, {
         snapshot: true,
@@ -128,18 +128,15 @@ class Snapshot extends Reflux.Component {
 
   handleVersion(e) {
     let value = e.currentTarget.value
-    let name = e.currentTarget.name
-    let version = this.state.currentVersion
-    version[name] = value
     this.setState({
-      currentVersion: version,
+      selectedVersion: value,
     })
   }
 
   _formContent() {
     if (!this.state.error) {
       return (
-        <div className="snapshot-form-inner">
+        <div className="snapshot-form-inner snapshot-modal">
           {this._version()}
           {this._changes()}
         </div>
@@ -149,74 +146,56 @@ class Snapshot extends Reflux.Component {
     }
   }
 
-  _versionString() {
-    return (
-      this.state.currentVersion.major +
-      '.' +
-      this.state.currentVersion.minor +
-      '.' +
-      this.state.currentVersion.point
-    )
-  }
-
   _version() {
     // TODO: allow the user to select version numbers when we have a
     // system that has a point system versioning
     return (
       <div className="snapshot-version col-xs-12">
         <div className="col-xs-12">
-          <h4>Snapshot Version: {this._versionString()}</h4>
+          <h4>Snapshot Version: {this.state.selectedVersion}</h4>
         </div>
-
-        {/* <div className="snapshot-version-major form-group col-xs-4">
-          <label htmlFor="major" className="control-label">
+        <div className="snapshot-version-major col-xs-4">
+          <label htmlFor="major" className="snapshot-version-label">
             Major
           </label>
           <input
-            placeholder={this.state.newSnapshotVersion}
-            type="number"
-            step="1"
-            min={this.state.newSnapshotVersion}
-            max={this.state.newSnapshotVersion}
-            value={this.state.currentVersion.major}
+            type="radio"
+            value={this.state.major}
             onChange={this._handleVersion}
-            name="major"
+            name="version"
             title="major"
-            className="form-control"
+            className="snapshot-radio-button"
           />
         </div>
-        <div className="snapshot-version-minor form-group col-xs-4">
-          <label htmlFor="minor" className="control-label">
+        <div className="snapshot-version-minor col-xs-4">
+          <label htmlFor="minor" className="snapshot-version-label">
             Minor
           </label>
           <input
-            placeholder="0"
-            type="number"
-            step="1"
-            value={this.state.currentVersion.minor}
+            type="radio"
+            value={this.state.minor}
             onChange={this._handleVersion}
-            name="minor"
+            name="version"
             title="minor"
-            className="form-control"
-            disabled={true}
+            className="snapshot-radio-button"
           />
         </div>
-        <div className="snapshot-version-point form-group col-xs-4">
-          <label htmlFor="point" className="control-label">
-            Point
+        <div className="snapshot-version-point col-xs-4">
+          <label htmlFor="patch" className="snapshot-version-label">
+            Patch
           </label>
           <input
-            placeholder="1"
-            type="number"
-            step="1"
-            value={this.state.currentVersion.point}
+            type="radio"
+            checked={
+              this.state.selectedVersion == this.state.patch ? 'checked' : ''
+            }
+            value={this.state.patch}
             onChange={this._handleVersion}
-            name="point"
-            title="point"
-            className="form-control"
-            disabled={true}
+            name="version"
+            title="patch"
+            className="snapshot-radio-button"
           />
-        </div> */}
+        </div>
       </div>
     )
   }
@@ -308,7 +287,7 @@ class Snapshot extends Reflux.Component {
 
   joinChangelogs(changesArray, oldChangelog) {
     let dateString = moment().format('YYYY-MM-DD')
-    let versionString = this._versionString()
+    let versionString = this.state.selectedVersion
     let headerString = versionString + '\t' + dateString + '\n\n'
     let changeText = headerString
     changesArray.forEach(change => {
@@ -323,15 +302,25 @@ class Snapshot extends Reflux.Component {
       this.state.changes,
       this.state.datasets.dataset.CHANGES,
     )
-    actions.createSnapshot(changes, this.props.history, res => {
-      if (res && res.error) {
-        this.setState({
-          changes: [],
-          error: true,
-          message: res.error,
-        })
-      }
-    })
+    actions.createSnapshot(
+      changes,
+      this.state.selectedVersion,
+      this.props.history,
+      res => {
+        if (res && res.error) {
+          this.setState({
+            changes: [],
+            error: true,
+            message: res.error,
+          })
+        } else {
+          this.props.getDataset.refetch().then(() => {
+            const url = '/datasets/' + this.state.datasets.dataset.linkID
+            this.props.history.push(url)
+          })
+        }
+      },
+    )
   }
 
   onHide() {
@@ -420,7 +409,7 @@ class Snapshot extends Reflux.Component {
         message="The dataset has failed to load in time. Please check your network connection."
         className="col-xs-12 dataset-inner dataset-route dataset-wrap inner-route light text-center">
         {loading ? (
-          <Timeout timeout={20000}>
+          <Timeout timeout={100000}>
             <Spinner active={true} text={loadingText} />
           </Timeout>
         ) : (
@@ -438,4 +427,11 @@ Snapshot.propTypes = {
   location: PropTypes.object,
 }
 
-export default withRouter(Snapshot)
+export default graphql(datasets.getDataset, {
+  name: 'getDataset',
+  options: props => ({
+    variables: {
+      id: props.match.params.datasetId,
+    },
+  }),
+})(withRouter(Snapshot))

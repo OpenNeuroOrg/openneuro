@@ -4,7 +4,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import Actions from '../user/user.actions.js'
-import uploadStore from '../upload/upload.store.js'
 import Avatar from '../user/avatar.jsx'
 import { DropdownButton } from 'react-bootstrap'
 
@@ -43,7 +42,7 @@ const Usermenu = ({ profile, history }) => {
 }
 
 const _signOut = history => {
-  return () => Actions.signOut(uploadStore.data.uploadStatus, history)
+  return () => Actions.signOut({}, history)
 }
 
 Usermenu.propTypes = {
