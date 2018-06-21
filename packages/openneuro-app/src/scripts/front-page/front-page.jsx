@@ -214,6 +214,52 @@ class FrontPage extends Reflux.Component {
               </div>
             </div>
           </span>
+          <span class="datalad-more">
+            <div class="col-xs-12">
+              <h3>DataLad</h3>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <p>
+                  A data management solution built on
+                  <a
+                    target="_blank"
+                    href="https://git-scm.com"
+                    rel="noopener noreferrer">
+                    Git
+                  </a>
+                  and
+                  <a
+                    target="_blank"
+                    href="https://git-annex.branchable.com"
+                    rel="noopener noreferrer">
+                    Git-annex
+                  </a>
+                  <br>
+                  Read more about
+                  <a
+                    target="_blank"
+                    href="http://datalad.org"
+                    rel="noopener noreferrer">
+                    DataLad
+                  </a>
+                </p>
+              </div>
+              <div class="col-sm-6">
+                <p>
+                  Want to access OpenNeuro datasets with DataLad?
+                  <br>
+                  Visit the
+                  <a
+                    target="_blank"
+                    href="https://github.com/OpenNeuroDatasets"
+                    rel="noopener noreferrer">
+                    dataset collection on GitHub
+                  </a>.
+                </p>
+              </div>
+            </div>
+          </span>
           <div className="support-more">
             <h4>Support for OpenNeuro provided by</h4>
             <div className="row">
