@@ -25,12 +25,6 @@ services:
       - /srv/packages/openneuro-cli/node_modules:exec
       - /srv/packages/openneuro-server/node_modules:exec
 
-  # crn core (bids-core)
-  core:
-    volumes:
-      - ../bids-core:/srv/bids-core
-      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-
   # crn node server
   server:
     build:
