@@ -7,7 +7,8 @@ export const requestAuth = passport.authenticate('google', {
 export const authCallback = passport.authenticate(
   'google',
   { failureRedirect: '/' },
-  (req, res) => {
+  () => {
+    // eslint-disable-next-line no-console
     console.log('Auth callback ran.')
   },
 )
