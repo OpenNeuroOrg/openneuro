@@ -27,6 +27,10 @@ let config = {
     storage: process.env.CRN_SERVER_AGAVE_STORAGE,
   },
   auth: {
+    google: {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
     orcid: {
       clientID: process.env.SCITRAN_AUTH_ORCID_CLIENT_ID,
       clientSecret: process.env.SCITRAN_AUTH_ORCID_CLIENT_SECRET,
