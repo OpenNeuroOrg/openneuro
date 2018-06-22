@@ -1,16 +1,29 @@
 import passport from 'passport'
 
 export const requestAuth = passport.authenticate('google', {
-  scope: ['https://www.googleapis.com/auth/plus.login'],
+  scope: [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+  ],
   session: false,
 })
 
-export const authCallback = passport.authenticate(
-  'google',
-  { failureRedirect: '/' },
-  (req, res) => {
-    // eslint-disable-next-line no-console
-    console.log('Auth callback ran.')
-    res.redirect('/')
-  },
-)
+export const authCallback = (req, res, next) => {
+  return new Promise((resolve, reject) => {
+    passport.authenticate(
+      'google',
+      { failureRedirect: '/' },
+      (err, user, info) => {
+        if (err) return reject(err)
+        if (!user) return reject(info)
+        req.logIn(user, err => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(user)
+          }
+        })
+      },
+    )(req, res, next)
+  })
+}
