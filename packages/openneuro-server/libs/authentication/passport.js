@@ -29,7 +29,12 @@ export const setupPassportAuth = () => {
 }
 
 export const registerUser = (accessToken, refreshToken, profile, done) => {
-  User.findOrCreate({ id: profile.id }, function(err, user) {
-    return done(err, addJWT(config)(user))
-  }).catch(done)
+  User.findOneAndUpdate(
+    { id: profile.id },
+    { id: profile.id, email: profile.email },
+    { upsert: true },
+    function(err, user) {
+      return done(err, addJWT(config)(user))
+    },
+  ).catch(done)
 }
