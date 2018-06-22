@@ -1,5 +1,9 @@
-export default (req, res) => {
+export default (req, res, next) => {
   // Verify an authenticated user
-  const user = req.session.passport
-  res.json(user)
+  if (req.user) {
+    res.json(req.user)
+  } else {
+    res.status(401)
+  }
+  return next()
 }
