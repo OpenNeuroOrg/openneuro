@@ -28,11 +28,31 @@ export const setupPassportAuth = () => {
   // TODO: Globus
 }
 
+const loadProfile = profile => {
+  if (profile.provider === 'google') {
+    // Get the account email from Google profile
+    const primaryEmail = profile.emails
+      .filter(email => email.type === 'account')
+      .shift()
+    return {
+      id: profile.id,
+      email: primaryEmail.value,
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
+      provider: profile.provider,
+    }
+  } else {
+    // Some unknown profile type
+    throw new Error('Unhandled profile type.')
+  }
+}
+
 export const registerUser = (accessToken, refreshToken, profile, done) => {
+  const profileUpdate = loadProfile(profile)
   User.findOneAndUpdate(
     { id: profile.id },
-    { id: profile.id, email: profile.email },
-    { upsert: true },
+    profileUpdate,
+    { upsert: true, new: true },
     function(err, user) {
       return done(err, addJWT(config)(user))
     },
