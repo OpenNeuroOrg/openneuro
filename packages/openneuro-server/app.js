@@ -14,6 +14,7 @@ import schema from './graphql/schema'
 import { apolloUploadExpress } from 'apollo-upload-server'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import auth from './libs/auth.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
 // import events lib to instantiate CRN Emitter
@@ -36,6 +37,7 @@ export default test => {
     next()
   })
   app.use(morgan('short'))
+  app.use(cookieParser())
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
 
