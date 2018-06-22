@@ -1,11 +1,19 @@
+import passport from 'passport'
 import jwt from 'jsonwebtoken'
 
+// Helper to generate a JWT containing user info
 export const addJWT = config => user => {
-  const token = jwt.sign({ email: user.email }, config.auth.jwt.secret, {
-    expiresIn: 60000,
-  })
+  const token = jwt.sign(
+    { sub: user.id, email: user.email, provider: user.provider },
+    config.auth.jwt.secret,
+    {
+      expiresIn: 60000,
+    },
+  )
   return Object.assign({}, user.toJSON(), { token })
 }
+
+export const authenticate = passport.authenticate('jwt', { session: false })
 
 export const authSuccessHandler = (req, res, next) => {
   if (req.user) {
