@@ -38,6 +38,9 @@ let config = {
       apiURI: process.env.SCITRAN_AUTH_ORCID_API_ENDPOINT,
       URI: process.env.SCITRAN_AUTH_ORCID_URI,
     },
+    jwt: {
+      secret: process.env.JWT_SECRET,
+    },
   },
   mongo: {
     url: 'mongodb://mongo:27017/',
