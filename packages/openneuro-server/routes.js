@@ -28,7 +28,7 @@ const routes = [
   {
     method: 'get',
     url: '/users/self',
-    middleware: [authenticated],
+    middleware: [jwt.authenticate, authenticated],
     handler: verifyUser,
   },
   {
