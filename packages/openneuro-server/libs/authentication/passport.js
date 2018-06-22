@@ -2,6 +2,7 @@ import passport from 'passport'
 import passportGoogleOauth from 'passport-google-oauth'
 import config from '../../config.js'
 import User from '../../models/user.js'
+import { addJWT } from './jwt.js'
 
 const GoogleStrategy = passportGoogleOauth.OAuth2Strategy
 
@@ -29,6 +30,6 @@ export const setupPassportAuth = () => {
 
 export const registerUser = (accessToken, refreshToken, profile, done) => {
   User.findOrCreate({ id: profile.id }, function(err, user) {
-    return done(err, user)
-  })
+    return done(err, addJWT(config)(user))
+  }).catch(done)
 }
