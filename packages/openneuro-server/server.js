@@ -1,5 +1,6 @@
 import Raven from 'raven'
 import { createServer } from 'http'
+import mongoose from 'mongoose'
 import subscriptionServerFactory from './libs/subscription-server.js'
 import mongo from './libs/mongo'
 import { connect as redis_connect } from './libs/redis'
@@ -35,6 +36,9 @@ const ravenConfig = {
 Raven.config(config.sentry.DSN, ravenConfig).install()
 
 const app = createApp(false)
+
+// Setup mongoose next to our old mongo lib
+mongoose.connect(`${config.mongo.url}crn`)
 
 // start server ----------------------------------------------------
 mongo.connect(config.mongo.url).then(() => {
