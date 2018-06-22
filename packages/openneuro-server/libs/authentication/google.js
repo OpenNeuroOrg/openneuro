@@ -10,6 +10,5 @@ export const requestAuth = passport.authenticate('google', {
 
 export const authCallback = passport.authenticate('google', {
   failureRedirect: '/',
-  successRedirect: '/',
   session: false,
 })

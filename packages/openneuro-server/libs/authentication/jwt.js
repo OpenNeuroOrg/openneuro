@@ -6,3 +6,14 @@ export const addJWT = config => user => {
   })
   return Object.assign({}, user.toJSON(), { token })
 }
+
+export const authSuccessHandler = (req, res, next) => {
+  if (req.user) {
+    // Set the JWT associated with this login on a cookie
+    res.cookie('accessToken', req.user.token)
+    res.redirect('/')
+  } else {
+    res.status(401)
+  }
+  return next()
+}

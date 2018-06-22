@@ -14,6 +14,7 @@ import comments from './handlers/comments'
 import subscriptions from './handlers/subscriptions'
 import verifyUser from './libs/authentication/verifyUser.js'
 import * as google from './libs/authentication/google.js'
+import * as jwt from './libs/authentication/jwt.js'
 import { authenticated } from './libs/authentication/states.js'
 import auth from './libs/auth.js'
 import schema from './libs/schema'
@@ -378,7 +379,8 @@ const routes = [
   {
     method: 'get',
     url: '/auth/google/callback',
-    handler: google.authCallback,
+    middleware: [google.authCallback],
+    handler: jwt.authSuccessHandler,
   },
 ]
 
