@@ -6,6 +6,7 @@
  */
 import express from 'express'
 import Raven from 'raven'
+import passport from 'passport'
 import config from './config'
 import routes from './routes'
 import morgan from 'morgan'
@@ -26,6 +27,8 @@ export default test => {
 
   // Raven must be first to work
   test || app.use(Raven.requestHandler())
+
+  app.use(passport.initialize())
 
   app.use((req, res, next) => {
     res.set(config.headers)
