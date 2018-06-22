@@ -8,22 +8,8 @@ export const requestAuth = passport.authenticate('google', {
   session: false,
 })
 
-export const authCallback = (req, res, next) => {
-  return new Promise((resolve, reject) => {
-    passport.authenticate(
-      'google',
-      { failureRedirect: '/' },
-      (err, user, info) => {
-        if (err) return reject(err)
-        if (!user) return reject(info)
-        req.logIn(user, err => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve(user)
-          }
-        })
-      },
-    )(req, res, next)
-  })
-}
+export const authCallback = passport.authenticate('google', {
+  failureRedirect: '/',
+  successRedirect: '/',
+  session: false,
+})
