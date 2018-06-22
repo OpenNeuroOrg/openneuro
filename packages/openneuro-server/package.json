@@ -27,6 +27,7 @@
     "bcrypt": "^2.0.1",
     "bids-validator": "^0.26.10",
     "body-parser": "^1.18.2",
+    "cookie-parser": "^1.4.3",
     "cron": "^1.1.0",
     "draft-js": "^0.10.5",
     "draft-js-export-html": "^1.2.0",
