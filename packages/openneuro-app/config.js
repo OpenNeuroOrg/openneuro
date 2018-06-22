@@ -26,9 +26,9 @@ export default {
       clientID: process.env.GOOGLE_CLIENT_ID,
     },
     orcid: {
-      clientID: process.env.SCITRAN_AUTH_ORCID_CLIENT_ID,
-      redirectURI: process.env.SCITRAN_AUTH_ORCID_REDIRECT_URI,
-      URI: process.env.SCITRAN_AUTH_ORCID_URI,
+      clientID: process.env.ORCID_CLIENT_ID,
+      redirectURI: process.env.ORCID_REDIRECT_URI,
+      URI: process.env.ORCID_URI,
     },
   },
 

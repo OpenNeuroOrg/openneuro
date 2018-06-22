@@ -32,11 +32,11 @@ let config = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     },
     orcid: {
-      clientID: process.env.SCITRAN_AUTH_ORCID_CLIENT_ID,
-      clientSecret: process.env.SCITRAN_AUTH_ORCID_CLIENT_SECRET,
-      redirectURI: process.env.SCITRAN_AUTH_ORCID_REDIRECT_URI,
-      apiURI: process.env.SCITRAN_AUTH_ORCID_API_ENDPOINT,
-      URI: process.env.SCITRAN_AUTH_ORCID_URI,
+      clientID: process.env.ORCID_CLIENT_ID,
+      clientSecret: process.env.ORCID_CLIENT_SECRET,
+      redirectURI: process.env.ORCID_REDIRECT_URI,
+      apiURI: process.env.ORCID_API_ENDPOINT,
+      URI: process.env.ORCID_URI,
     },
     jwt: {
       secret: process.env.JWT_SECRET,
