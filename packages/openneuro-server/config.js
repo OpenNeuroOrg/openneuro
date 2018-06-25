@@ -37,6 +37,7 @@ let config = {
       redirectURI: process.env.ORCID_REDIRECT_URI,
       apiURI: process.env.ORCID_API_ENDPOINT,
       URI: process.env.ORCID_URI,
+      sandbox: process.env.ORCID_SANDBOX,
     },
     jwt: {
       secret: process.env.JWT_SECRET,
