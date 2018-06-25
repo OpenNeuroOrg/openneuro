@@ -15,6 +15,7 @@ import Spinner from '../common/partials/spinner.jsx'
 import markdown from '../utils/markdown'
 import bids from '../utils/bids'
 import { refluxConnect } from '../utils/reflux'
+import config from '../../../config'
 
 // component setup ----------------------------------------------------
 
@@ -26,22 +27,26 @@ class Pipelines extends Reflux.Component {
   // life cycle events --------------------------------------------------
 
   render() {
-    return (
-      <span>
-        <div className="browse-pipelines">
-          <h3 className="browse-pipeline-header">Check Out Our Pipelines</h3>
-          <div className="container">{this._pipelines()}</div>
-        </div>
-        {!this.state.frontpage.selectedPipeline.jobDefinitionName
-          ? null
-          : this._pipelineDetail(this.state.frontpage.selectedPipeline)}
-        <FileDisplay
-          file={this.state.frontpage.displayFile}
-          show={this.state.frontpage.displayFile.show}
-          onHide={FPActions.hideFileDisplay}
-        />
-      </span>
-    )
+    if (config.analysis.enabled) {
+      return (
+        <span>
+          <div className="browse-pipelines">
+            <h3 className="browse-pipeline-header">Check Out Our Pipelines</h3>
+            <div className="container">{this._pipelines()}</div>
+          </div>
+          {!this.state.frontpage.selectedPipeline.jobDefinitionName
+            ? null
+            : this._pipelineDetail(this.state.frontpage.selectedPipeline)}
+          <FileDisplay
+            file={this.state.frontpage.displayFile}
+            show={this.state.frontpage.displayFile.show}
+            onHide={FPActions.hideFileDisplay}
+          />
+        </span>
+      )
+    } else {
+      return null
+    }
   }
 
   // template methods ---------------------------------------------------
