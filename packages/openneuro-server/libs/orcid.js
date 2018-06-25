@@ -4,67 +4,64 @@ import Raven from 'raven'
 import config from '../config'
 
 export default {
-  getProfile(token, callback) {
-    let data = token.split(':')
-    if (data.length != 2) {
-      callback('Invalid token')
-    }
+  getProfile(token) {
+    return new Promise((resolve, reject) => {
+      let data = token.split(':')
+      if (data.length != 2) {
+        reject('Invalid token')
+      }
+      let orcid = data[0]
+      let accessToken = data[1]
 
-    let orcid = data[0]
-    let accessToken = data[1]
-
-    request.get(
-      `${config.auth.orcid.apiURI}/v2.0/${orcid}/record`,
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      },
-      (err, res) => {
-        if (err) {
-          callback(
-            'An unexpected ORCID login failure occurred, please try again later.',
+      request.get(
+        `${config.auth.orcid.apiURI}/v2.0/${orcid}/record`,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        },
+        (err, res) => {
+          if (err) {
+            Raven.captureMessage('Unexpected ORCID failure', { err })
+            reject(
+              'An unexpected ORCID login failure occurred, please try again later.',
+            )
+          }
+          let doc = new xmldoc.XmlDocument(res.body)
+          let firstname = doc.valueWithPath(
+            'person:person.person:name.personal-details:given-names',
           )
-          Raven.captureMessage('Unexpected ORCID failure', { err })
-          return
-        }
-        let doc = new xmldoc.XmlDocument(res.body)
-        let firstname = doc.valueWithPath(
-          'person:person.person:name.personal-details:given-names',
-        )
-        let lastname = doc.valueWithPath(
-          'person:person.person:name.personal-details:family-name',
-        )
-        let email = doc.valueWithPath(
-          'person:person.email:emails.email:email.email:email',
-        )
-
-        if (!firstname) {
-          callback(
-            'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
+          let lastname = doc.valueWithPath(
+            'person:person.person:name.personal-details:family-name',
           )
-          return
-        }
-
-        if (!lastname) {
-          callback(
-            'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
+          let email = doc.valueWithPath(
+            'person:person.email:emails.email:email.email:email',
           )
-          return
-        }
 
-        if (!email) {
-          callback(
-            'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.',
-          )
-          return
-        }
+          if (!firstname) {
+            reject(
+              'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
+            )
+          }
 
-        callback(err, {
-          firstname,
-          lastname,
-          email,
-        })
-      },
-    )
+          if (!lastname) {
+            reject(
+              'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
+            )
+          }
+
+          if (!email) {
+            reject(
+              'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.',
+            )
+          }
+
+          resolve({
+            firstname,
+            lastname,
+            email,
+          })
+        },
+      )
+    })
   },
 
   refreshToken(refreshToken, callback) {

@@ -1,9 +1,11 @@
 import passport from 'passport'
 import { Strategy as JwtStrategy } from 'passport-jwt'
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth'
+import { Strategy as ORCIDStrategy } from 'passport-orcid'
 import config from '../../config.js'
 import User from '../../models/user.js'
 import { addJWT } from './jwt.js'
+import orcid from '../orcid.js'
 
 /**
  * Extract the JWT from a cookie
@@ -54,8 +56,20 @@ export const setupPassportAuth = () => {
     )
   }
 
-  // TODO: ORCID
-
+  // then ORCID
+  if (config.auth.orcid.clientID && config.auth.orcid.clientSecret) {
+    passport.use(
+      new ORCIDStrategy(
+        {
+          sandbox: !!config.auth.orcid.sandbox,
+          clientID: config.auth.orcid.clientID,
+          clientSecret: config.auth.orcid.clientSecret,
+          callbackURL: `${config.url + config.apiPrefix}users/signin/orcid`,
+        },
+        verifyORCIDUser,
+      ),
+    )
+  }
   // TODO: Globus
 }
 
@@ -72,9 +86,17 @@ const loadProfile = profile => {
       lastName: profile.name.familyName,
       provider: profile.provider,
     }
+  } else if (profile.orcid) {
+    return {
+      id: profile.orcid,
+      email: profile.info.email,
+      firstName: profile.info.firstname,
+      lastName: profile.info.lastname,
+      provider: 'orcid',
+    }
   } else {
     // Some unknown profile type
-    throw new Error('Unhandled profile type.')
+    return new Error('Unhandled profile type.')
   }
 }
 
@@ -84,8 +106,29 @@ export const verifyOauthUser = (accessToken, refreshToken, profile, done) => {
     { id: profile.id, provider: profile.provider },
     profileUpdate,
     { upsert: true, new: true },
-    function(err, user) {
-      return done(err, addJWT(config)(user))
-    },
-  ).catch(done)
+  )
+    .then(user => done(null, addJWT(config)(user)))
+    .catch(err => done(err, null))
+}
+
+export const verifyORCIDUser = (
+  accessToken,
+  refreshToken,
+  profile,
+  params,
+  done,
+) => {
+  const token = `${profile.orcid}:${profile.access_token}`
+  orcid
+    .getProfile(token)
+    .then(info => {
+      profile.info = info
+      const profileUpdate = loadProfile(profile)
+      User.findOneAndUpdate(
+        { id: profile.id, provider: profile.provider },
+        profileUpdate,
+        { upsert: true, new: true },
+      ).then(user => done(null, addJWT(config)(user)))
+    })
+    .catch(err => done(err, null))
 }

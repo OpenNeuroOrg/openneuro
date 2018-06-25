@@ -12,6 +12,8 @@ import { Panel } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
 import { refluxConnect } from '../utils/reflux'
 import brand_mark from './assets/brand_mark.png'
+import OrcidButton from '../authentication/orcid-button.jsx'
+import GoogleButton from '../authentication/google-button.jsx'
 
 // component setup ---------------------------------------------------------------
 
@@ -129,27 +131,10 @@ class BSNavbar extends Reflux.Component {
           <hr className="spacer" />
           <div className="login-modal">
             <div className="login-btns">
-              <button
-                className="btn-blue"
-                onClick={userStore.googleSignIn.bind(null)}>
-                <i className="fa fa-google" />
-                <span> Google</span>
-              </button>
+              <GoogleButton min={true} />
             </div>
             <div className="login-btns">
-              <button
-                className="btn-blue"
-                onClick={userStore.orcidSignIn.bind(null)}>
-                <span className="icon">
-                  <img
-                    alt="ORCID"
-                    width="16"
-                    height="16"
-                    src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
-                  />
-                </span>
-                <span> ORCID</span>
-              </button>
+              <OrcidButton min={true} />
               <div className="info-panel">
                 <span
                   className="help-info"
