@@ -54,6 +54,7 @@
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0",
     "passport-jwt": "^4.0.0",
+    "passport-orcid": "^0.0.3",
     "raven": "^2.2.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
