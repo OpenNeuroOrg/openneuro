@@ -14,6 +14,7 @@ import { refluxConnect } from '../utils/reflux'
 import brand_mark from './assets/brand_mark.png'
 import OrcidButton from '../authentication/orcid-button.jsx'
 import GoogleButton from '../authentication/google-button.jsx'
+import GlobusButton from '../authentication/globus-button.jsx'
 
 // component setup ---------------------------------------------------------------
 
@@ -132,6 +133,9 @@ class BSNavbar extends Reflux.Component {
           <div className="login-modal">
             <div className="login-btns">
               <GoogleButton min={true} />
+            </div>
+            <div className="login-btns">
+              <GlobusButton min={true} />
             </div>
             <div className="login-btns">
               <OrcidButton min={true} />

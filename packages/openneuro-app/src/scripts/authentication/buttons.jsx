@@ -1,6 +1,7 @@
 import React from 'react'
 import GoogleButton from './google-button.jsx'
 import OrcidButton from './orcid-button.jsx'
+import GlobusButton from './globus-button.jsx'
 import config from '../../../config'
 
 /**
@@ -8,6 +9,8 @@ import config from '../../../config'
  */
 const googleConfigured = config.auth.google.clientID
 const orcidConfigured = config.auth.orcid.clientID
+const globusConfigured = config.auth.globus.clientID
+console.log('globusConfigured on app side? ', globusConfigured)
 
 /**
  * Display a button for each enabled authentication mechanism
@@ -18,6 +21,7 @@ const AuthenticationButtons = () => {
     <span>
       {googleConfigured ? <GoogleButton /> : null}
       {orcidConfigured ? <OrcidButton /> : null}
+      {globusConfigured ? <GlobusButton /> : null}
     </span>
   )
 }
