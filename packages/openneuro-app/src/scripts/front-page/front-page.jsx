@@ -1,15 +1,13 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
 import { Link } from 'react-router-dom'
 import FrontPageTabs from './front-page-tabs.jsx'
-import userStore from '../user/user.store.js'
 import Spinner from '../common/partials/spinner.jsx'
 import Footer from '../common/partials/footer.jsx'
 import Pipelines from './front-page.pipelines.jsx'
-import FPActions from './front-page.actions.js'
-import { refluxConnect } from '../utils/reflux'
+import LoggedOut from '../authentication/logged-out.jsx'
+import AuthenticationButtons from '../authentication/buttons.jsx'
 
 // assets -------------------------------------------------------------
 import { pageDescription } from '../resources/strings.js'
@@ -22,21 +20,15 @@ import nih from './assets/nih.png'
 import nsf from './assets/nsf.png'
 import squishymedia from './assets/squishymedia.png'
 import stanford from './assets/stanford.png'
-import AuthenticationButtons from '../authentication/buttons.jsx'
 
 // component setup ----------------------------------------------------
 
-class FrontPage extends Reflux.Component {
-  constructor() {
-    super()
-    refluxConnect(this, userStore, 'users')
+class FrontPage extends React.Component {
+  constructor(props) {
+    super(props)
   }
 
   // life cycle events --------------------------------------------------
-  componentWillMount() {
-    super.componentWillMount()
-    FPActions.reset()
-  }
 
   render() {
     return (
@@ -71,17 +63,11 @@ class FrontPage extends Reflux.Component {
                   Open<span className="logo-end">Neuro</span>
                 </div>
                 <h1>{pageDescription}</h1>
-                <div className="sign-in-block fade-in">
-                  {this._error(
-                    this.state.users.signinError,
-                    this.state.users.loading,
-                  )}
-                  {this._signinForm(this.state.users.loading)}
-                  <Spinner
-                    text="Signing in..."
-                    active={this.state.users.loading}
-                  />
-                </div>
+                <LoggedOut>
+                  <div className="sign-in-block fade-in">
+                    <AuthenticationButtons />
+                  </div>
+                </LoggedOut>
                 <div className="browse-publicly">
                   <Link to="/public/datasets">
                     <span>Browse Public Datasets</span>

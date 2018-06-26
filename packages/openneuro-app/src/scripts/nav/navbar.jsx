@@ -2,51 +2,65 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import Reflux from 'reflux'
 import { withRouter, Link } from 'react-router-dom'
 import NavMenu from './navbar.navmenu.jsx'
-import userStore from '../user/user.store.js'
 import actions from '../user/user.actions.js'
 import { Navbar } from 'react-bootstrap'
 import { Panel } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
-import { refluxConnect } from '../utils/reflux'
+import withProfile from '../authentication/withProfile.js'
 import brand_mark from './assets/brand_mark.png'
 import OrcidButton from '../authentication/orcid-button.jsx'
 import GoogleButton from '../authentication/google-button.jsx'
 import GlobusButton from '../authentication/globus-button.jsx'
 
 // component setup ---------------------------------------------------------------
+const OpenNeuroBrand = () => (
+  <Link to="/" className="navbar-brand">
+    <img
+      src={brand_mark}
+      alt="OpenNeuro Logo"
+      title="OpenNeuro Link To Home Page"
+    />
+    <div className="logo-text">
+      Open<span className="logo-end">Neuro</span>
+    </div>
+  </Link>
+)
 
-class BSNavbar extends Reflux.Component {
-  constructor() {
-    super()
-    refluxConnect(this, userStore, 'users')
+class BSNavbar extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { supportModal: false, loginModal: false, infoPanel: false }
+    this.loginModal = this.loginModal.bind(this)
+    this.supportModal = this.supportModal.bind(this)
+  }
 
-    this.state = {
-      login: true,
-    }
+  loginModal(open = true) {
+    this.setState({ loginModal: open })
+  }
+
+  supportModal(open = true) {
+    this.setState({ supportModal: open })
   }
 
   // life cycle methods ------------------------------------------------------------
   render() {
-    const profile = this.state.users.profile
-    const scitran = this.state.users.scitran
-    const isLoggedIn = !!this.state.users.token && profile && scitran
-    const loading = this.state.users.loading
+    const profile = this.props.profile
     return (
       <span>
         <Navbar collapseOnSelect>
           <Navbar.Header>
-            <Navbar.Brand>{this._brand()}</Navbar.Brand>
+            <Navbar.Brand>
+              <OpenNeuroBrand />
+            </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <NavMenu
               profile={profile}
-              scitran={scitran}
-              isLoggedIn={isLoggedIn}
-              loading={loading}
+              loginModal={this.loginModal}
+              supportModal={this.supportModal}
             />
           </Navbar.Collapse>
         </Navbar>
@@ -76,8 +90,8 @@ class BSNavbar extends Reflux.Component {
   _supportModal() {
     return (
       <Modal
-        show={this.state.users.supportModal}
-        onHide={actions.toggle.bind(this, 'supportModal')}>
+        show={this.state.supportModal}
+        onHide={() => this.setState({ supportModal: false })}>
         <Modal.Header closeButton>
           <Modal.Title>Support</Modal.Title>
         </Modal.Header>
@@ -113,8 +127,8 @@ class BSNavbar extends Reflux.Component {
   _loginModal() {
     return (
       <Modal
-        show={this.state.users.loginModal}
-        onHide={actions.toggle.bind(this, 'loginModal')}
+        show={this.state.loginModal}
+        onHide={() => this.loginModal(false)}
         className="login-modal">
         <Modal.Header closeButton>
           <Modal.Title>
@@ -145,7 +159,7 @@ class BSNavbar extends Reflux.Component {
                   onClick={actions.toggle.bind(this, 'infoPanel')}>
                   What is this?
                 </span>
-                {this.state.users.infoPanel && this._infoPanel()}
+                {this.state.infoPanel && this._infoPanel()}
               </div>
             </div>
             <a onClick={actions.toggle.bind(this, 'loginModal')}>Close</a>
@@ -180,4 +194,4 @@ BSNavbar.propTypes = {
   location: PropTypes.object,
 }
 
-export default withRouter(BSNavbar)
+export default withRouter(withProfile(BSNavbar))
