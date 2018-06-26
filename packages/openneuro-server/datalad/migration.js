@@ -34,6 +34,12 @@ const migrateAll = () => {
     })
 }
 
+const createScitranSnapshot = datasetId => {
+  return request.post(config.scitran.url + 'snapshots', {
+    query: { project: bids.encodeId(datasetId) },
+  })
+}
+
 const migrate = (datasetId, uploader, label, created) => {
   return new Promise((resolve, reject) => {
     console.log(
@@ -42,28 +48,34 @@ const migrate = (datasetId, uploader, label, created) => {
     scitran.getProjectSnapshots(datasetId, async (err, snapshots) => {
       console.log(`Found ${snapshots.body.length} snapshots.`)
       if (snapshots.body.length === 0) {
-        console.log(`WARNING: ${datasetId} has no snapshots`)
-      }
-      try {
-        // This will throw an exception for a dataset that already exists
-        const url = `${config.datalad.uri}/datasets/${datasetId}`
-        await request
-          .post(url)
-          .set('Accept', 'application/json')
-          .set('From', '"OpenNeuro Importer" <no-reply@openneuro.org>')
-        await dataset.createDatasetModel(datasetId, label, uploader)
-        const chronological = snapshots.body.sort(
-          (a, b) => new Date(b.created) - new Date(a.created),
+        console.log(
+          `WARNING: ${datasetId} has no snapshots - creating SciTran snapshot`,
         )
-        for (const snapshot of chronological) {
-          const snapshotId = bids.decodeId(snapshot._id)
-          await migrateSnapshot(datasetId, snapshotId)
+        await createScitranSnapshot(datasetId)
+        console.log(`${datasetId} snapshot created - rerunning migration`)
+        migrate(datasetId, uploader, label, created)
+      } else {
+        try {
+          // This will throw an exception for a dataset that already exists
+          const url = `${config.datalad.uri}/datasets/${datasetId}`
+          await request
+            .post(url)
+            .set('Accept', 'application/json')
+            .set('From', '"OpenNeuro Importer" <no-reply@openneuro.org>')
+          await dataset.createDatasetModel(datasetId, label, uploader)
+          const chronological = snapshots.body.sort(
+            (a, b) => new Date(b.created) - new Date(a.created),
+          )
+          for (const snapshot of chronological) {
+            const snapshotId = bids.decodeId(snapshot._id)
+            await migrateSnapshot(datasetId, snapshotId)
+          }
+          resolve()
+        } catch (e) {
+          console.log(e)
+          console.log(`"${datasetId}" has been imported, skipping`)
+          resolve()
         }
-        resolve()
-      } catch (e) {
-        console.log(e)
-        console.log(`"${datasetId}" has been imported, skipping`)
-        resolve()
       }
     })
   })
