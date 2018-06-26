@@ -57,10 +57,9 @@ const migrate = (datasetId, uploader, label, created) => {
         )
         for (const snapshot of chronological) {
           const snapshotId = bids.decodeId(snapshot._id)
-          console.log(`Migrating snapshot "${snapshotId}"`)
           await migrateSnapshot(datasetId, snapshotId)
-          resolve()
         }
+        resolve()
       } catch (e) {
         console.log(e)
         console.log(`"${datasetId}" has been imported, skipping`)
