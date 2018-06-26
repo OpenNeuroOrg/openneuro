@@ -37,7 +37,10 @@ let config = {
       redirectURI: process.env.ORCID_REDIRECT_URI,
       apiURI: process.env.ORCID_API_ENDPOINT,
       URI: process.env.ORCID_URI,
-      sandbox: process.env.ORCID_SANDBOX,
+    },
+    globus: {
+      clientID: process.env.GLOBUS_CLIENT_ID,
+      clientSecret: process.env.GLOBUS_CLIENT_SECRET,
     },
     jwt: {
       secret: process.env.JWT_SECRET,

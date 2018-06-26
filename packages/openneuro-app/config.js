@@ -30,6 +30,9 @@ export default {
       redirectURI: process.env.ORCID_REDIRECT_URI,
       URI: process.env.ORCID_URI,
     },
+    globus: {
+      clientID: process.env.GLOBUS_CLIENT_ID,
+    },
   },
 
   /**
