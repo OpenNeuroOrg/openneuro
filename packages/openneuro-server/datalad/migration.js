@@ -1,7 +1,8 @@
 /* eslint-disable */
 import fs from 'fs'
 import path from 'path'
-import request from 'superagent'
+import superagent from 'superagent'
+import request from '../libs/request.js'
 import mongo from '../libs/mongo.js'
 import { connect as redis_connect } from '../libs/redis.js'
 import scitran from '../libs/scitran.js'
@@ -21,6 +22,11 @@ const migrateAll = () => {
   c.scitran.projects
     .find({})
     .toArray()
+    .then(projects =>
+      projects.filter(project =>
+        bids.decodeId(project._id.toString()).startsWith('ds'),
+      ),
+    )
     .then(async projects => {
       for (const dataset of projects) {
         // Migrate each dataset in order
@@ -35,8 +41,21 @@ const migrateAll = () => {
 }
 
 const createScitranSnapshot = datasetId => {
-  return request.post(config.scitran.url + 'snapshots', {
-    query: { project: bids.encodeId(datasetId) },
+  return new Promise((resolve, reject) => {
+    request.post(
+      config.scitran.url + 'snapshots',
+      {
+        query: { project: bids.encodeId(datasetId) },
+      },
+      err => {
+        if (err) {
+          console.log(err)
+          reject(err)
+        } else {
+          resolve()
+        }
+      },
+    )
   })
 }
 
@@ -58,7 +77,7 @@ const migrate = (datasetId, uploader, label, created) => {
         try {
           // This will throw an exception for a dataset that already exists
           const url = `${config.datalad.uri}/datasets/${datasetId}`
-          await request
+          await superagent
             .post(url)
             .set('Accept', 'application/json')
             .set('From', '"OpenNeuro Importer" <no-reply@openneuro.org>')
