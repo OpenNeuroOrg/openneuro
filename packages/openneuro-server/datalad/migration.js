@@ -11,8 +11,6 @@ import bids from '../libs/bidsId.js'
 import config from '../config.js'
 import files from '../libs/files.js'
 
-const DRY_RUN = false
-
 // Make the migration easier to debug when things go badly
 process.on('unhandledRejection', error => {
   console.log('unhandledRejection', error)
@@ -48,18 +46,20 @@ const migrate = (datasetId, uploader, label, created) => {
       }
       try {
         // This will throw an exception for a dataset that already exists
-        if (!DRY_RUN) {
-          const url = `${config.datalad.uri}/datasets/${datasetId}`
-          await request
-            .post(url)
-            .set('Accept', 'application/json')
-            .set('From', '"OpenNeuro Importer" <no-reply@openneuro.org>')
-          await dataset.createDatasetModel(datasetId, label, uploader)
-        }
-        for (const snapshot of snapshots.body) {
+        const url = `${config.datalad.uri}/datasets/${datasetId}`
+        await request
+          .post(url)
+          .set('Accept', 'application/json')
+          .set('From', '"OpenNeuro Importer" <no-reply@openneuro.org>')
+        await dataset.createDatasetModel(datasetId, label, uploader)
+        const chronological = snapshots.body.sort(
+          (a, b) => new Date(b.created) - new Date(a.created),
+        )
+        for (const snapshot of chronological) {
           const snapshotId = bids.decodeId(snapshot._id)
           console.log(`Migrating snapshot "${snapshotId}"`)
           await migrateSnapshot(datasetId, snapshotId)
+          resolve()
         }
       } catch (e) {
         console.log(e)
@@ -72,20 +72,18 @@ const migrate = (datasetId, uploader, label, created) => {
 
 const migrateSnapshot = (datasetId, snapshotId) => {
   console.log(`Snapshot migration of "${datasetId}-${snapshotId}"`)
-  if (!DRY_RUN) {
-    return new Promise((resolve, reject) => {
-      scitran.downloadSymlinkDataset(
-        bids.encodeId(snapshotId),
-        (err, hash) => {
-          const snapshotDir = config.location + '/persistent/datasets/' + hash
-          uploadSnapshotContent(datasetId, snapshotId, snapshotDir).then(() =>
-            resolve(),
-          )
-        },
-        { snapshot: true },
-      )
-    })
-  }
+  return new Promise((resolve, reject) => {
+    scitran.downloadSymlinkDataset(
+      bids.encodeId(snapshotId),
+      (err, hash) => {
+        const snapshotDir = config.location + '/persistent/datasets/' + hash
+        uploadSnapshotContent(datasetId, snapshotId, snapshotDir).then(() =>
+          resolve(),
+        )
+      },
+      { snapshot: true },
+    )
+  })
 }
 
 const deleteFolderRecursive = path => {
@@ -108,33 +106,45 @@ const deleteFolderRecursive = path => {
   }
 }
 
-const uploadSnapshotContent = async (datasetId, snapshotId, snapshotDir) => {
-  deleteFolderRecursive(`/data/datalad/${datasetId}`)
-  files.getFiles(snapshotDir, async snapshotFiles => {
-    for (const filePath of snapshotFiles) {
-      const relativePath = path.relative(snapshotDir, filePath)
-      const file = {
-        filename: relativePath,
-        stream: fs.createReadStream(filePath),
-        mimetype: 'application/octet-stream',
+const uploadSnapshotContent = (datasetId, snapshotId, snapshotDir) => {
+  return new Promise((resolve, reject) => {
+    files.getFiles(snapshotDir, async snapshotFiles => {
+      deleteFolderRecursive(`/data/datalad/${datasetId}`)
+      for (const filePath of snapshotFiles) {
+        const relativePath = path.relative(snapshotDir, filePath)
+        const readStream = fs.createReadStream(filePath)
+        // Setup a promise that waits for the file
+        const readStreamPromise = new Promise(resolve => {
+          readStream.on('end', () => {
+            resolve()
+          })
+        })
+        // Create a dummy file object to send
+        const file = {
+          filename: relativePath,
+          stream: readStream,
+          mimetype: 'application/octet-stream',
+        }
+        dataset.addFile(
+          datasetId,
+          path.dirname(relativePath) === '.' ? '' : path.dirname(relativePath),
+          Promise.resolve(file),
+        )
+        console.log(`Writing file "${datasetId}/${snapshotId}/${relativePath}"`)
+        // Block until this file is done
+        await readStreamPromise
       }
-      await dataset.addFile(
+      console.log(`Files for "${datasetId}-${snapshotId}" transferred.`)
+      await dataset.commitFiles(
         datasetId,
-        path.dirname(relativePath) === '.' ? '' : path.dirname(relativePath),
-        Promise.resolve(file),
+        'DataLad Importer',
+        'no-reply@openneuro.org',
       )
-      process.stdout.write('.')
-    }
+      await snapshots.createSnapshot(datasetId, snapshotId)
+      console.log(`Snapshot "${snapshotId}" created.`)
+      resolve()
+    })
   })
-  console.log('\n')
-  console.log(`Files for "${datasetId}-${snapshotId}" transferred.`)
-  await dataset.commitFiles(
-    datasetId,
-    'DataLad Importer',
-    'no-reply@openneuro.org',
-  )
-  await snapshots.createSnapshot(datasetId, snapshotId)
-  console.log(`Snapshot "${snapshotId}" created.`)
 }
 
 mongo.connect(config.mongo.url).then(() => {
