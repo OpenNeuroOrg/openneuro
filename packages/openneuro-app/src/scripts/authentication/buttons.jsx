@@ -10,7 +10,6 @@ import config from '../../../config'
 const googleConfigured = config.auth.google.clientID
 const orcidConfigured = config.auth.orcid.clientID
 const globusConfigured = config.auth.globus.clientID
-console.log('globusConfigured on app side? ', globusConfigured)
 
 /**
  * Display a button for each enabled authentication mechanism
