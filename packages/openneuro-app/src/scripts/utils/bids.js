@@ -5,6 +5,7 @@ import userStore from '../user/user.store'
 import fileUtils from './files'
 import hex from './hex'
 import datalad from './datalad'
+import config from '../../../config.js'
 
 /**
  * BIDS
@@ -182,16 +183,21 @@ export default {
                   dataset.views = this.views(dataset, usage)
                   dataset.downloads = this.downloads(dataset, usage)
                 }
-                crn
-                  .getDatasetJobs(projectId, options)
-                  .then(res => {
-                    dataset.jobs = res.body
-                    return callback(dataset)
-                  })
-                  .catch(err => {
-                    // console.log('error getting jobs:', err)
-                    return callback(dataset, err)
-                  })
+                if (config.analysis.enabled) {
+                  crn
+                    .getDatasetJobs(projectId, options)
+                    .then(res => {
+                      dataset.jobs = res.body
+                      return callback(dataset)
+                    })
+                    .catch(err => {
+                      // console.log('error getting jobs:', err)
+                      return callback(dataset, err)
+                    })
+                } else {
+                  dataset.jobs = []
+                  return callback(dataset)
+                }
               })
             },
             options,

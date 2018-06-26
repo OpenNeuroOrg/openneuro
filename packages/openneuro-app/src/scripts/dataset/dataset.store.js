@@ -179,39 +179,26 @@ let datasetStore = Reflux.createStore({
               ],
               loading: false,
             })
-            this.loadSnapshots(dataset, [], () => {
-              this.loadComments(datasetId)
-              this.getDatasetStars()
-              this.checkSubscriptionFollowers(() => {
-                let datasetUrl = this.constructDatasetUrl(dataset)
-                this.update({
-                  loading: false,
-                  snapshot: snapshot,
-                  datasetUrl: datasetUrl,
+            this.loadJobs(
+              bids.decodeId(datasetId),
+              selectedSnapshot,
+              bids.decodeId(datasetId),
+              options,
+              (err, jobs) => {
+                this.loadSnapshots(dataset, jobs, () => {
+                  this.loadComments(datasetId)
+                  this.getDatasetStars()
+                  this.checkSubscriptionFollowers(() => {
+                    let datasetUrl = this.constructDatasetUrl(dataset)
+                    this.update({
+                      loading: false,
+                      snapshot: snapshot,
+                      datasetUrl: datasetUrl,
+                    })
+                  })
                 })
-              })
-            })
-
-            // this.loadJobs(
-            //   datasetId,
-            //   snapshot,
-            //   originalId,
-            //   options,
-            //   (err, jobs) => {
-            //     this.loadSnapshots(dataset, jobs, () => {
-            //       this.loadComments(originalId)
-            //       this.getDatasetStars()
-            //       this.checkSubscriptionFollowers(() => {
-            //         let datasetUrl = this.constructDatasetUrl(dataset)
-            //         this.update({
-            //           loading: false,
-            //           snapshot: snapshot,
-            //           datasetUrl: datasetUrl,
-            //         })
-            //       })
-            //     })
-            //   },
-            // ),
+              },
+            )
 
             if (
               forceReload ||
@@ -1327,6 +1314,9 @@ let datasetStore = Reflux.createStore({
    * Load Jobs
    */
   loadJobs(projectId, snapshot, originalId, options, callback) {
+    if (!config.analysis.enabled) {
+      return callback(null, [])
+    }
     let jobId = options.job
     this.update({ loadingJobs: true })
     crn
