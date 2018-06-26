@@ -7,7 +7,6 @@ import config from '../../config.js'
 import User from '../../models/user.js'
 import { addJWT, decodeJWT } from './jwt.js'
 import orcid from '../orcid.js'
-import { ObjectID } from 'mongodb'
 
 /**
  * Extract the JWT from a cookie
