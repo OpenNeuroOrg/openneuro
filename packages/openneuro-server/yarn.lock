@@ -4922,6 +4922,12 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
 
+passport-globus@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/passport-globus/-/passport-globus-0.0.1.tgz#487e6117395cd5e51eb5d1d8945d0a033cb59a74"
+  dependencies:
+    passport-oauth2 "^1.4.0"
+
 passport-google-oauth1@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-google-oauth1/-/passport-google-oauth1-1.0.0.tgz#af74a803df51ec646f66a44d82282be6f108e0cc"
