@@ -52,6 +52,7 @@
     "node-resque": "^4.0.7",
     "nodemailer": "^2.5.0",
     "passport": "^0.4.0",
+    "passport-globus": "^0.0.1",
     "passport-google-oauth": "^1.0.0",
     "passport-jwt": "^4.0.0",
     "passport-orcid": "^0.0.3",
