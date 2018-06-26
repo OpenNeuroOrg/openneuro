@@ -25,3 +25,7 @@ export const authSuccessHandler = (req, res, next) => {
   }
   return next()
 }
+
+export const decodeJWT = token => {
+  return jwt.decode(token)
+}

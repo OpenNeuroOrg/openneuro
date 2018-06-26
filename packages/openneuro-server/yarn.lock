@@ -4922,6 +4922,12 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
 
+passport-globus@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/passport-globus/-/passport-globus-0.0.1.tgz#487e6117395cd5e51eb5d1d8945d0a033cb59a74"
+  dependencies:
+    passport-oauth2 "^1.4.0"
+
 passport-google-oauth1@1.x.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/passport-google-oauth1/-/passport-google-oauth1-1.0.0.tgz#af74a803df51ec646f66a44d82282be6f108e0cc"
@@ -4956,7 +4962,7 @@ passport-oauth1@1.x.x:
     passport-strategy "1.x.x"
     utils-merge "1.x.x"
 
-passport-oauth2@1.x.x:
+passport-oauth2@1.x.x, passport-oauth2@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/passport-oauth2/-/passport-oauth2-1.4.0.tgz#f62f81583cbe12609be7ce6f160b9395a27b86ad"
   dependencies:
@@ -4964,6 +4970,12 @@ passport-oauth2@1.x.x:
     passport-strategy "1.x.x"
     uid2 "0.0.x"
     utils-merge "1.x.x"
+
+passport-orcid@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/passport-orcid/-/passport-orcid-0.0.3.tgz#802126a4e0dac0dc1406b9521b29b0dd13644ec4"
+  dependencies:
+    passport-oauth2 "^1.4.0"
 
 passport-strategy@1.x.x, passport-strategy@^1.0.0:
   version "1.0.0"

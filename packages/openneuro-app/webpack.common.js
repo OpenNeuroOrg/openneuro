@@ -11,12 +11,13 @@ const env = {
   CRN_SERVER_URL: JSON.stringify(process.env.CRN_SERVER_URL),
   GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID),
   GOOGLE_TRACKING_ID: JSON.stringify(process.env.GOOGLE_TRACKING_ID),
-  SCITRAN_AUTH_ORCID_CLIENT_ID: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_CLIENT_ID),
-  SCITRAN_AUTH_ORCID_REDIRECT_URI: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_REDIRECT_URI),
-  SCITRAN_AUTH_ORCID_URI: JSON.stringify(process.env.SCITRAN_AUTH_ORCID_URI),
+  GLOBUS_CLIENT_ID: JSON.stringify(process.env.GLOBUS_CLIENT_ID),
+  ORCID_CLIENT_ID: JSON.stringify(process.env.ORCID_CLIENT_ID),
+  ORCID_REDIRECT_URI: JSON.stringify(process.env.ORCID_REDIRECT_URI),
+  ORCID_URI: JSON.stringify(process.env.ORCID_URI),
   AWS_S3_ANALYSIS_BUCKET: JSON.stringify(process.env.AWS_S3_ANALYSIS_BUCKET),
   AWS_S3_DATASET_BUCKET: JSON.stringify(process.env.AWS_S3_DATASET_BUCKET),
-  CRN_SERVER_DATALAD: JSON.stringify(process.env.CRN_SERVER_DATALAD)
+  CRN_SERVER_DATALAD: JSON.stringify(process.env.CRN_SERVER_DATALAD),
 }
 
 module.exports = {

@@ -1,9 +1,13 @@
 import passport from 'passport'
 import { Strategy as JwtStrategy } from 'passport-jwt'
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth'
+import { Strategy as ORCIDStrategy } from 'passport-orcid'
+import { Strategy as GlobusStrategy } from 'passport-globus'
 import config from '../../config.js'
 import User from '../../models/user.js'
-import { addJWT } from './jwt.js'
+import { addJWT, decodeJWT } from './jwt.js'
+import orcid from '../orcid.js'
+import { ObjectID } from 'mongodb'
 
 /**
  * Extract the JWT from a cookie
@@ -54,9 +58,33 @@ export const setupPassportAuth = () => {
     )
   }
 
-  // TODO: ORCID
-
-  // TODO: Globus
+  // then ORCID
+  if (config.auth.orcid.clientID && config.auth.orcid.clientSecret) {
+    passport.use(
+      new ORCIDStrategy(
+        {
+          sandbox: !!config.auth.orcid.apiURI,
+          clientID: config.auth.orcid.clientID,
+          clientSecret: config.auth.orcid.clientSecret,
+          callbackURL: `${config.url + config.apiPrefix}users/signin/orcid`,
+        },
+        verifyORCIDUser,
+      ),
+    )
+  }
+  // finally globus
+  if (config.auth.globus.clientID && config.auth.globus.clientSecret) {
+    passport.use(
+      new GlobusStrategy(
+        {
+          clientID: config.auth.globus.clientID,
+          clientSecret: config.auth.globus.clientSecret,
+          callbackURL: `${config.url + config.apiPrefix}auth/globus/callback`,
+        },
+        verifyGlobusUser,
+      ),
+    )
+  }
 }
 
 const loadProfile = profile => {
@@ -72,9 +100,30 @@ const loadProfile = profile => {
       lastName: profile.name.familyName,
       provider: profile.provider,
     }
+  } else if (profile.provider === 'orcid') {
+    return {
+      id: profile.orcid,
+      email: profile.info.email,
+      firstName: profile.info.firstname,
+      lastName: profile.info.lastname,
+      provider: profile.provider,
+    }
+  } else if (profile.provider === 'globus') {
+    const firstName = profile.name.split(' ')[0]
+    const lastName = profile.name
+      .split(' ')
+      .slice(1)
+      .join(' ')
+    return {
+      id: profile.sub,
+      email: profile.email,
+      firstName: firstName,
+      lastName: lastName,
+      provider: profile.provider,
+    }
   } else {
     // Some unknown profile type
-    throw new Error('Unhandled profile type.')
+    return new Error('Unhandled profile type.')
   }
 }
 
@@ -84,8 +133,49 @@ export const verifyOauthUser = (accessToken, refreshToken, profile, done) => {
     { id: profile.id, provider: profile.provider },
     profileUpdate,
     { upsert: true, new: true },
-    function(err, user) {
-      return done(err, addJWT(config)(user))
-    },
-  ).catch(done)
+  )
+    .then(user => done(null, addJWT(config)(user)))
+    .catch(err => done(err, null))
+}
+
+export const verifyORCIDUser = (
+  accessToken,
+  refreshToken,
+  profile,
+  params,
+  done,
+) => {
+  const token = `${profile.orcid}:${profile.access_token}`
+  orcid
+    .getProfile(token)
+    .then(info => {
+      profile.info = info
+      profile.provider = 'orcid'
+      const profileUpdate = loadProfile(profile)
+      User.findOneAndUpdate(
+        { id: profile.orcid, provider: profile.provider },
+        profileUpdate,
+        { upsert: true, new: true },
+      ).then(user => done(null, addJWT(config)(user)))
+    })
+    .catch(err => done(err, null))
+}
+
+export const verifyGlobusUser = (
+  accessToken,
+  refreshToken,
+  profile,
+  params,
+  done,
+) => {
+  const decodedProfile = decodeJWT(profile.id_token)
+  decodedProfile.provider = 'globus'
+  const profileUpdate = loadProfile(decodedProfile)
+  User.findOneAndUpdate(
+    { id: decodedProfile.sub, provider: decodedProfile.provider },
+    profileUpdate,
+    { upsert: true, new: true },
+  )
+    .then(user => done(null, addJWT(config)(user)))
+    .catch(err => done(err, null))
 }

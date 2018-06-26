@@ -14,6 +14,8 @@ import comments from './handlers/comments'
 import subscriptions from './handlers/subscriptions'
 import verifyUser from './libs/authentication/verifyUser.js'
 import * as google from './libs/authentication/google.js'
+import * as orcid from './libs/authentication/orcid.js'
+import * as globus from './libs/authentication/globus.js'
 import * as jwt from './libs/authentication/jwt.js'
 import { authenticated } from './libs/authentication/states.js'
 import auth from './libs/auth.js'
@@ -30,11 +32,6 @@ const routes = [
     url: '/users/self',
     middleware: [jwt.authenticate, authenticated],
     handler: verifyUser,
-  },
-  {
-    method: 'get',
-    url: '/users/signin/orcid',
-    handler: users.validateORCIDToken,
   },
   {
     method: 'get',
@@ -371,6 +368,8 @@ const routes = [
   },
 
   // Authentication routes
+
+  // google
   {
     method: 'get',
     url: '/auth/google',
@@ -380,6 +379,32 @@ const routes = [
     method: 'get',
     url: '/auth/google/callback',
     middleware: [google.authCallback],
+    handler: jwt.authSuccessHandler,
+  },
+
+  // orcid
+  {
+    method: 'get',
+    url: '/auth/orcid',
+    handler: orcid.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/users/signin/orcid',
+    middleware: [orcid.authCallback],
+    handler: jwt.authSuccessHandler,
+  },
+
+  // globus
+  {
+    method: 'get',
+    url: '/auth/globus',
+    handler: globus.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/auth/globus/callback',
+    middleware: [globus.authCallback],
     handler: jwt.authSuccessHandler,
   },
 ]

@@ -535,9 +535,23 @@ div.rt-resizable-header-content {
       font-size: 14px;
     }
 
-    button {
-      margin: 10px;
+    i {
+        margin: 0px 4px;
     }
+
+    img {
+        margin: 0px 4px 2px 4px;
+    }
+
+    a {
+      position: inherit;
+    }
+
+    button {
+        margin: 10px;
+    }
+
+
   }
 
   a {
