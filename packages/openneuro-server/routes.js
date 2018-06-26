@@ -15,6 +15,7 @@ import subscriptions from './handlers/subscriptions'
 import verifyUser from './libs/authentication/verifyUser.js'
 import * as google from './libs/authentication/google.js'
 import * as orcid from './libs/authentication/orcid.js'
+import * as globus from './libs/authentication/globus.js'
 import * as jwt from './libs/authentication/jwt.js'
 import { authenticated } from './libs/authentication/states.js'
 import auth from './libs/auth.js'
@@ -391,6 +392,19 @@ const routes = [
     method: 'get',
     url: '/users/signin/orcid',
     middleware: [orcid.authCallback],
+    handler: jwt.authSuccessHandler,
+  },
+
+  // globus
+  {
+    method: 'get',
+    url: '/auth/globus',
+    handler: globus.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/auth/globus/callback',
+    middleware: [globus.authCallback],
     handler: jwt.authSuccessHandler,
   },
 ]
