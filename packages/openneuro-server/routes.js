@@ -242,7 +242,7 @@ const routes = [
   {
     method: 'get',
     url: '/subscriptions/:datasetId',
-    handler: getSubscriptions,
+    handler: subscriptions.getSubscriptions,
   },
   {
     method: 'get',
