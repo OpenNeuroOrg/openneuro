@@ -27,9 +27,7 @@ const appRoutes = () => (
     <Route name="front-page" exact path="/" component={FrontPage} />
     <Route name="faq" exact path="/faq" component={Faq} />
     <Route name="api-key" exact path="/keygen" component={APIKey} />
-    <LoggedIn>
-      <Route name="dashboard" path="/dashboard" component={Dashboard} />
-    </LoggedIn>
+    <Route name="dashboard" path="/dashboard" component={Dashboard} />
     <Route name="public" path="/public" component={PublicDashboard} />
     <LoggedIn>
       <Route name="admin" path="/admin" component={Admin} />
