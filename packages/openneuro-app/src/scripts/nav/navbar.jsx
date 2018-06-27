@@ -4,7 +4,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import NavMenu from './navbar.navmenu.jsx'
-import actions from '../user/user.actions.js'
 import { Navbar } from 'react-bootstrap'
 import { Panel } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
@@ -13,6 +12,11 @@ import brand_mark from './assets/brand_mark.png'
 import OrcidButton from '../authentication/orcid-button.jsx'
 import GoogleButton from '../authentication/google-button.jsx'
 import GlobusButton from '../authentication/globus-button.jsx'
+
+const toggleInfo = () => {
+  // TODO - Implement this
+  console.error('toggleInfo not implemented')
+}
 
 // component setup ---------------------------------------------------------------
 const OpenNeuroBrand = () => (
@@ -152,15 +156,13 @@ class BSNavbar extends React.Component {
             <div className="login-btns">
               <OrcidButton min={true} />
               <div className="info-panel">
-                <span
-                  className="help-info"
-                  onClick={actions.toggle.bind(this, 'infoPanel')}>
+                <span className="help-info" onClick={toggleInfo}>
                   What is this?
                 </span>
                 {this.state.infoPanel && this._infoPanel()}
               </div>
             </div>
-            <a onClick={actions.toggle.bind(this, 'loginModal')}>Close</a>
+            <a onClick={() => this.loginModal(false)}>Close</a>
           </div>
         </Modal.Body>
       </Modal>
@@ -170,9 +172,7 @@ class BSNavbar extends React.Component {
   _infoPanel() {
     return (
       <Panel className="fade-in panel">
-        <button
-          className="close"
-          onClick={actions.toggle.bind(this, 'infoPanel')}>
+        <button className="close" onClick={toggleInfo}>
           <span className="close-sym" />
           <span className="sr-only">close</span>
         </button>

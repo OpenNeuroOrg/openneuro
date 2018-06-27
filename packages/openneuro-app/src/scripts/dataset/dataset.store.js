@@ -25,7 +25,9 @@ let datasetStore = Reflux.createStore({
     this.loadApps()
     const userObj = { profile: getProfile() }
     // sub -> _id for Compatibility with old stores
-    userObj.profile._id = userObj.profile.sub
+    if (userObj.profile) {
+      userObj.profile._id = userObj.profile.sub
+    }
     this.update({ currentUser: userObj })
   },
 

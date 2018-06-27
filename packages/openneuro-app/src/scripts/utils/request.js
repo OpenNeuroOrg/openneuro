@@ -1,6 +1,5 @@
 import request from 'superagent'
 import config from '../../../config'
-import checkAuth from './checkAuth.js'
 
 /*
  * Upload retries limit
@@ -89,29 +88,7 @@ async function handleRequest(url, options, callback) {
   // normalize options to play nice with superagent requests
   options = normalizeOptions(options)
 
-  // add snapshot url param to scitran requests
-  if (options.snapshot && url.indexOf(config.scitran.url) > -1) {
-    url =
-      config.scitran.url + 'snapshots/' + url.slice(config.scitran.url.length)
-  }
-
-  // verify access token before authenticated requests
-  if (
-    options.auth &&
-    hasToken() &&
-    (url.indexOf(config.scitran.url) > -1 || url.indexOf(config.crn.url) > -1)
-  ) {
-    return await checkAuth((provider, token, root) => {
-      if (root) {
-        options.query.root = true
-      }
-      options.headers['Authorization-Provider'] = provider
-      options.headers.Authorization = token
-      return callback(url, options)
-    })
-  } else {
-    return callback(url, options)
-  }
+  return callback(url, options)
 }
 
 /**
@@ -132,18 +109,6 @@ function normalizeOptions(options) {
     options.auth = true
   }
   return options
-}
-
-function hasToken() {
-  if (!window.localStorage.token) {
-    return false
-  }
-  let credentials = JSON.parse(window.localStorage.token)
-  return (
-    credentials &&
-    credentials.hasOwnProperty('access_token') &&
-    credentials.access_token
-  )
 }
 
 export default Request

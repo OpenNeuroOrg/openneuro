@@ -3,7 +3,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
-import Actions from '../user/user.actions.js'
 import Avatar from '../user/avatar.jsx'
 import { DropdownButton } from 'react-bootstrap'
 import withProfile from '../authentication/withProfile.js'
