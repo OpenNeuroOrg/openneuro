@@ -6,12 +6,7 @@ import bids from './bids'
 import clone from 'lodash.clonedeep'
 import request from './request'
 
-function getToken() {
-  let credentials = JSON.parse(window.localStorage.token)
-  return credentials ? credentials.access_token : ''
-}
-
-const client = getClient(`${config.url}/crn/graphql`, getToken)
+const client = getClient(`${config.url}/crn/graphql`)
 export default {
   async getDatasets(options) {
     const query = datasets.getDatasets

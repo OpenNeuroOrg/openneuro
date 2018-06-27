@@ -20,7 +20,7 @@ const cache = new InMemoryCache()
  */
 const createClient = (uri, getAuthorization, fetch) => {
   const link = createLink(uri, getAuthorization, fetch)
-  return new ApolloClient({ uri, link, cache})
+  return new ApolloClient({ uri, link, cache })
 }
 
 const authLink = getAuthorization =>
@@ -38,15 +38,16 @@ const authLink = getAuthorization =>
       } else {
         tokenString = `Bearer ${token}`
       }
-    }
-
-    return {
-      headers: Object.assign(
-        {
-          authorization: tokenString,
-        },
-        headers,
-      ),
+      return {
+        headers: Object.assign(
+          {
+            authorization: tokenString,
+          },
+          headers,
+        ),
+      }
+    } else {
+      return headers
     }
   })
 
@@ -58,8 +59,7 @@ const wsLink = uri => {
     uri: link,
     options: {
       reconnect: true,
-
-    }
+    },
   })
 }
 
@@ -88,10 +88,10 @@ const createLink = (uri, getAuthorization, fetch) => {
         return kind === 'OperationDefinition' && operation === 'subscription'
       },
       ws,
-      middlewareAuthLink(uri, getAuthorization, fetch)
+      middlewareAuthLink(uri, getAuthorization, fetch),
     )
   }
-  
+
   return link
 }
 
