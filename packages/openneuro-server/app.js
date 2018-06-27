@@ -15,7 +15,8 @@ import { apolloUploadExpress } from 'apollo-upload-server'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import * as auth from './libs/authentication/states'
+import * as jwt from './libs/authentication/jwt.js'
+import * as auth from './libs/authentication/states.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
 // import events lib to instantiate CRN Emitter
 import events from './libs/events'
@@ -73,16 +74,22 @@ export default test => {
   // Depends on bodyParser.json() above
   app.use(
     '/crn/graphql',
+    jwt.authenticate,
     auth.optional,
     apolloUploadExpress(),
     graphqlExpress(req => {
-      const { user } = req
-      const userId = user ? user.id : null
-      const isSuperUser = user ? user.admin : null
-      const userInfo = user
-      return {
-        schema,
-        context: { user: userId, isSuperUser: isSuperUser, userInfo: userInfo },
+      if (req.isAuthenticated()) {
+        const user = req.user.id
+        const isSuperUser = req.user.admin
+        const userInfo = req.user
+        return {
+          schema,
+          context: { user, isSuperUser, userInfo },
+        }
+      } else {
+        return {
+          schema,
+        }
       }
     }),
   )
