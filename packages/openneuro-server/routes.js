@@ -17,8 +17,7 @@ import * as google from './libs/authentication/google.js'
 import * as orcid from './libs/authentication/orcid.js'
 import * as globus from './libs/authentication/globus.js'
 import * as jwt from './libs/authentication/jwt.js'
-import { authenticated } from './libs/authentication/states.js'
-import auth from './libs/auth.js'
+import * as auth from './libs/authentication/states.js'
 import schema from './libs/schema'
 import schemas from './schemas'
 import doi from './handlers/doi'
@@ -30,7 +29,7 @@ const routes = [
   {
     method: 'get',
     url: '/users/self',
-    middleware: [jwt.authenticate, authenticated],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: verifyUser,
   },
   {
@@ -52,19 +51,23 @@ const routes = [
   {
     method: 'post',
     url: '/users/blacklist',
-    middleware: [schema.validateBody(schemas.user.blacklisted), auth.superuser],
+    middleware: [
+      schema.validateBody(schemas.user.blacklisted),
+      jwt.authenticate,
+      auth.superuser,
+    ],
     handler: users.blacklist,
   },
   {
     method: 'get',
     url: '/users/blacklist',
-    middleware: [auth.superuser],
+    middleware: [jwt.authenticate, auth.superuser],
     handler: users.getBlacklist,
   },
   {
     method: 'delete',
     url: '/users/blacklist/:id',
-    middleware: [auth.superuser],
+    middleware: [jwt.authenticate, auth.superuser],
     handler: users.unBlacklist,
   },
 
@@ -73,7 +76,7 @@ const routes = [
   {
     method: 'post',
     url: '/datasets/:datasetId/validate',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: validation.validate,
   },
 
@@ -82,7 +85,7 @@ const routes = [
   {
     method: 'get',
     url: '/analytics/:datasetId?',
-    middleware: [auth.optional],
+    middleware: [jwt.authenticate, auth.optional],
     handler: datasets.analytics,
   },
 
@@ -96,20 +99,26 @@ const routes = [
   {
     method: 'post',
     url: '/jobs/definitions',
-    middleware: [auth.superuser, schema.validateBody(schemas.job.definition)],
+    middleware: [
+      jwt.authenticate,
+      auth.superuser,
+      schema.validateBody(schemas.job.definition),
+    ],
     handler: awsJobs.createJobDefinition,
   },
   {
     method: 'delete',
     url: '/jobs/definitions/:appId',
-    middleware: [auth.superuser],
+    middleware: [jwt.authenticate, auth.superuser],
     handler: awsJobs.deleteJobDefinition,
   },
   {
     method: 'post',
     url: '/datasets/:datasetId/jobs',
     middleware: [
-      auth.datasetAccess(),
+      jwt.authenticate,
+      auth.authenticated,
+      auth.datasetAccess,
       auth.submitJobAccess,
       schema.validateBody(schemas.job.submit),
     ],
@@ -118,44 +127,51 @@ const routes = [
   {
     method: 'post',
     url: '/datasets/jobsupload',
-    middleware: [fileUpload(), auth.optional],
+    middleware: [fileUpload(), jwt.authenticate, auth.optional],
     handler: awsJobs.parameterFileUpload,
   },
   {
     method: 'get',
     url: '/datasets/:datasetId/jobs',
-    middleware: [auth.datasetAccess({ optional: true })],
+    middleware: [jwt.authenticate, auth.optional, auth.datasetAccess],
     handler: awsJobs.getDatasetJobs,
   },
   {
     method: 'delete',
     url: '/datasets/:datasetId/jobs',
-    middleware: [auth.datasetAccess()],
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: awsJobs.deleteDatasetJobs,
   },
   {
     method: 'get',
     url: '/datasets/:datasetId/jobs/:jobId',
-    middleware: [auth.datasetAccess()],
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: awsJobs.getJob,
   },
   {
     method: 'delete',
     url: '/datasets/:datasetId/jobs/:jobId',
-    middleware: [auth.datasetAccess(), auth.deleteJobAccess],
+    middleware: [
+      jwt.authenticate,
+      auth.authenticated,
+      auth.datasetAccess,
+      auth.deleteJobAccess,
+    ],
     handler: awsJobs.deleteJob,
   },
   {
     method: 'put',
     url: '/datasets/:datasetId/jobs/:jobId',
-    middleware: [auth.datasetAccess()],
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: awsJobs.cancelJob,
   },
   {
     method: 'post',
     url: '/datasets/:datasetId/jobs/:jobId/retry',
     middleware: [
-      auth.datasetAccess(),
+      jwt.authenticate,
+      auth.authenticated,
+      auth.datasetAccess,
       auth.rerunJobAccess,
       auth.submitJobAccess,
     ],
@@ -164,13 +180,13 @@ const routes = [
   {
     method: 'get',
     url: '/datasets/:datasetId/jobs/:jobId/results/ticket',
-    middleware: [auth.datasetAccess()],
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: awsJobs.getDownloadTicket,
   },
   {
     method: 'get',
     url: '/jobs',
-    middleware: [auth.optional],
+    middleware: [jwt.authenticate, auth.optional],
     handler: awsJobs.getJobs,
   },
   {
@@ -199,7 +215,7 @@ const routes = [
   {
     method: 'get',
     url: '/eventlogs',
-    middleware: [auth.superuser],
+    middleware: [jwt.authenticate, auth.superuser],
     handler: eventLogs.getEventLogs,
   },
 
@@ -213,14 +229,14 @@ const routes = [
   {
     method: 'post',
     url: '/comments/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: comments.create,
   },
 
   {
     method: 'post',
     url: '/comments/:datasetId/:commentId',
-    middleware: [auth.deleteCommentAccess],
+    middleware: [jwt.authenticate, auth.authenticated, auth.commentAccess],
     handler: comments.update,
   },
 
@@ -233,7 +249,7 @@ const routes = [
   {
     method: 'delete',
     url: '/comments/:commentId',
-    middleware: [auth.deleteCommentAccess],
+    middleware: [jwt.authenticate, auth.authenticated, auth.commentAccess],
     handler: comments.delete,
   },
 
@@ -252,19 +268,19 @@ const routes = [
   {
     method: 'post',
     url: '/subscriptions/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: subscriptions.create,
   },
   {
     method: 'delete',
     url: '/subscriptions/:datasetId/:userId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: subscriptions.deleteSubscription,
   },
   {
     method: 'delete',
     url: '/subscriptions/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: subscriptions.deleteAll,
   },
 
@@ -278,13 +294,13 @@ const routes = [
   {
     method: 'post',
     url: '/stars/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: stars.add,
   },
   {
     method: 'delete',
     url: '/stars/:datasetId/:userId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: stars.delete,
   },
 
@@ -292,7 +308,7 @@ const routes = [
   {
     method: 'post',
     url: '/doi/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: doi.createSnapshotDoi,
   },
   {
@@ -305,7 +321,7 @@ const routes = [
   {
     method: 'post',
     url: '/keygen',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: users.createAPIKey,
   },
 
