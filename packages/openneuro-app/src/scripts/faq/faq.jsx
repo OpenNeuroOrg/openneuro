@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Markdown from 'react-markdown'
-import faqsList from '../../assets/configuration/faqs.js'
+import faqsList from './faqs-config'
 
 class Faq extends React.Component {
   render() {
