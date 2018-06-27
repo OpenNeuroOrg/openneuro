@@ -1,6 +1,7 @@
 // dependencies ----------------------------------------------------------------------
 
 import Reflux from 'reflux'
+import { getProfile } from '../authentication/profile.js'
 import Actions from './dashboard.datasets.actions.js'
 import bids from '../utils/bids'
 import dashUtils from './dashboard.utils.js'

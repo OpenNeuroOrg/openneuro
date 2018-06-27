@@ -16,5 +16,5 @@ export const parseJwt = token => {
 export const getProfile = () => {
   const cookies = new Cookies()
   const accessToken = cookies.get('accessToken')
-  return accessToken ? parseJwt(cookies.get(accessToken)) : null
+  return accessToken ? parseJwt(accessToken) : null
 }
