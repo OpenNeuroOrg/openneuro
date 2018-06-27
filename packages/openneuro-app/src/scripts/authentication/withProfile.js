@@ -11,10 +11,11 @@ const parseJwt = token => {
 const withProfile = WrappedComponent => {
   const ProfileComponent = class extends React.Component {
     render() {
+      const accessToken = this.props.cookies.get('accessToken')
       return (
         <LoggedIn>
           <WrappedComponent
-            profile={parseJwt(this.props.cookies.get('accessToken'))}
+            profile={accessToken ? parseJwt(accessToken) : null}
             {...this.props}
           />
         </LoggedIn>
