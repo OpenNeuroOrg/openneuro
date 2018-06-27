@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import userStore from '../user/user.store'
 import Input from '../common/forms/input.jsx'
 import Spinner from '../common/partials/spinner.jsx'
 import adminStore from './admin.store'
@@ -10,8 +9,9 @@ import actions from './admin.actions'
 import WarnButton from '../common/forms/warn-button.jsx'
 import moment from 'moment'
 import { refluxConnect } from '../utils/reflux'
+import { getProfile } from '../authentication/profile.js'
 
-class users extends Reflux.Component {
+class Users extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, adminStore, 'admin')
@@ -140,7 +140,7 @@ class users extends Reflux.Component {
   _userTools(user) {
     let adminIcon = user.root ? 'fa-check-square-o' : 'fa-square-o'
 
-    if (user._id !== userStore.data.scitran._id) {
+    if (user._id !== getProfile().sub) {
       return (
         <div className="col-xs-4 last dataset-tools-wrap-admin">
           <div className="tools clearfix">
@@ -180,4 +180,4 @@ class users extends Reflux.Component {
   }
 }
 
-export default users
+export default Users

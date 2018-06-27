@@ -1,7 +1,17 @@
 import React from 'react'
-import userStore from './user.store'
 import Spinner from '../common/partials/spinner.jsx'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import crn from '../utils/crn.js'
+
+/**
+ * Create API Key
+ *
+ * Given the current user, creates an api key
+ * for use with the standalone CLI
+ */
+const createAPIKey = () => {
+  return crn.createAPIKey().then(res => (res && res.body ? res.body.key : null))
+}
 
 export default class APIKeyGen extends React.Component {
   constructor(props) {
@@ -12,15 +22,16 @@ export default class APIKeyGen extends React.Component {
       key: null,
     }
   }
+
   _requestKey() {
     this.setState({ loading: true })
-    userStore.createAPIKey((err, key) => {
-      if (err) {
+    createAPIKey()
+      .then(key => {
+        this.setState({ key, loading: false })
+      })
+      .catch(err => {
         this.setState({ loading: false })
-      } else {
-        this.setState({ key: key, loading: false })
-      }
-    })
+      })
   }
 
   _requestButton() {

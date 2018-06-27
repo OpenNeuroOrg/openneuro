@@ -12,10 +12,10 @@ import WarnButton from '../../common/forms/warn-button.jsx'
 import Spinner from '../../common/partials/spinner.jsx'
 import Timeout from '../../common/partials/timeout.jsx'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
-import userStore from '../../user/user.store'
 import datasetStore from '../dataset.store'
 import actions from '../dataset.actions'
 import { refluxConnect } from '../../utils/reflux'
+import { getProfile } from '../../authentication/profile.js'
 
 class Share extends Reflux.Component {
   // life cycle events --------------------------------------------------
@@ -123,7 +123,6 @@ class Share extends Reflux.Component {
                 onClick={this._addUser.bind(this)}>
                 share
               </button>
-              
             </div>
           </div>
         </div>
@@ -154,8 +153,9 @@ class Share extends Reflux.Component {
     }
     if (permissions) {
       return permissions.map(user => {
+        const userProfile = getProfile()
         let remove =
-          userStore.data.profile && userStore.data.profile._id !== user._id ? (
+          userProfile && userProfile.sub !== user._id ? (
             <WarnButton
               message="Remove"
               action={this._removeUser.bind(this, user._id)}
@@ -236,30 +236,34 @@ class Share extends Reflux.Component {
       access: level,
     }
 
-    datalad.updatePermissions(this.state.datasets.dataset._id, userId, level).then(() => {
-      let permissions = this.state.permissions
-      permissions.push(role)
-      this.setState({
-        input: '',
-        select: '',
-        permissions: permissions,
-        error: null,
+    datalad
+      .updatePermissions(this.state.datasets.dataset._id, userId, level)
+      .then(() => {
+        let permissions = this.state.permissions
+        permissions.push(role)
+        this.setState({
+          input: '',
+          select: '',
+          permissions: permissions,
+          error: null,
+        })
       })
-    })
   }
 
   _removeUser(userId) {
-    datalad.removePermissions(this.state.datasets.dataset._id, userId).then(() => {
-      let index
-      let permissions = this.state.permissions
-      for (let i = 0; i < permissions.length; i++) {
-        if (permissions[i]._id === userId) {
-          index = i
+    datalad
+      .removePermissions(this.state.datasets.dataset._id, userId)
+      .then(() => {
+        let index
+        let permissions = this.state.permissions
+        for (let i = 0; i < permissions.length; i++) {
+          if (permissions[i]._id === userId) {
+            index = i
+          }
         }
-      }
-      permissions.splice(index, 1)
-      this.setState({ permissions })
-    })
+        permissions.splice(index, 1)
+        this.setState({ permissions })
+      })
   }
 }
 
