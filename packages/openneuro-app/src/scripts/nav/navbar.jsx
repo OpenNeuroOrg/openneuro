@@ -46,7 +46,6 @@ class BSNavbar extends React.Component {
 
   // life cycle methods ------------------------------------------------------------
   render() {
-    const profile = this.props.profile
     return (
       <span>
         <Navbar collapseOnSelect>
@@ -58,7 +57,6 @@ class BSNavbar extends React.Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <NavMenu
-              profile={profile}
               loginModal={this.loginModal}
               supportModal={this.supportModal}
             />
@@ -118,7 +116,7 @@ class BSNavbar extends React.Component {
           />
         </Modal.Body>
         <Modal.Footer>
-          <a onClick={actions.toggle.bind(this, 'supportModal')}>Close</a>
+          <a onClick={() => this.setState({ supportModal: false })}>Close</a>
         </Modal.Footer>
       </Modal>
     )
@@ -194,4 +192,4 @@ BSNavbar.propTypes = {
   location: PropTypes.object,
 }
 
-export default withRouter(withProfile(BSNavbar))
+export default withRouter(BSNavbar)

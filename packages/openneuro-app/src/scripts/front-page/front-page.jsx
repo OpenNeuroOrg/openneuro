@@ -3,7 +3,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import FrontPageTabs from './front-page-tabs.jsx'
-import Spinner from '../common/partials/spinner.jsx'
 import Footer from '../common/partials/footer.jsx'
 import Pipelines from './front-page.pipelines.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
@@ -86,14 +85,6 @@ class FrontPage extends React.Component {
   }
 
   // custom methods -------------------------------------------------------
-
-  _signinForm(loadingState) {
-    if (!loadingState) {
-      if (!this.state.users.token) {
-        return <AuthenticationButtons />
-      }
-    }
-  }
 
   _error(signinError, loadingState) {
     if (signinError && !loadingState) {

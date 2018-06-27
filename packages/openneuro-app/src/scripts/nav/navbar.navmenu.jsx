@@ -4,10 +4,23 @@ import { NavLink } from 'react-router-dom'
 import Usermenu from './navbar.usermenu.jsx'
 import Uploader from '../uploader/uploader.jsx'
 import { Navbar } from 'react-bootstrap'
+import withProfile from '../authentication/withProfile.js'
 import LoggedIn from '../authentication/logged-in.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
 
-const NavMenu = ({ profile, supportModal, loginModal }) => {
+const AdminLinkContent = ({ profile }) => {
+  if (profile.superuser) {
+    return (
+      <NavLink className="nav-link" to="/admin">
+        <span className="link-name">admin</span>
+      </NavLink>
+    )
+  }
+  return null
+}
+const AdminLink = withProfile(AdminLinkContent)
+
+const NavMenu = ({ supportModal, loginModal }) => {
   const adminLink = (
     <NavLink className="nav-link" to="/admin">
       <span className="link-name">admin</span>
@@ -37,7 +50,9 @@ const NavMenu = ({ profile, supportModal, loginModal }) => {
           <span className="link-name">faq</span>
         </NavLink>
       </li>
-      <li className="link-admin">{profile.superuser ? adminLink : null}</li>
+      <li className="link-admin">
+        <AdminLink />
+      </li>
       <li className="link-dashboard">
         <LoggedIn>
           <Uploader />
@@ -45,9 +60,7 @@ const NavMenu = ({ profile, supportModal, loginModal }) => {
       </li>
       <li>
         <Navbar.Collapse>
-          <LoggedIn>
-            <Usermenu profile={profile} />
-          </LoggedIn>
+          <Usermenu />
           <LoggedOut>
             <div className="navbar-right sign-in-nav-btn">
               <button className="btn-blue" onClick={() => loginModal()}>
