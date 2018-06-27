@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import user from '../utils/user.js'
 
 export default class Avatar extends React.Component {
   constructor(props) {
@@ -12,20 +13,16 @@ export default class Avatar extends React.Component {
     if (!profile) {
       return null
     }
-
-    let thumbnail, thumbnailUrl
-    if (profile.imageUrl) {
-      let username =
-        profile && profile.firstName && profile.lastName
-          ? profile.firstName + ' ' + profile.lastName
-          : null
-      thumbnailUrl = profile.imageUrl.replace('sz=50', 'sz=200')
+    let imageUrl = user.generateGravatarUrl(profile)
+    let thumbnail
+    if (imageUrl) {
+      let username = profile && profile.name ? profile.name : null
       thumbnail = (
-        <img src={thumbnailUrl} alt={username} className="user-img-thumb" />
+        <img src={imageUrl} alt={username} className="user-img-thumb" />
       )
     } else {
       let firstLetter =
-        profile && profile.firstname ? profile.firstname.slice(0, 1) : null
+        profile && profile.name ? profile.name.slice(0, 1) : null
       thumbnail = (
         <div className="user-generic-thumb">
           <div className="user-generic-thumb-letter">{firstLetter}</div>

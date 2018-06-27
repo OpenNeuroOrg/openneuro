@@ -226,9 +226,9 @@ class DatasetContent extends Reflux.Component {
 
   _validation(dataset) {
     if (dataset.linkID && !dataset.status.incomplete) {
-      return (<Validation datasetId={dataset.linkID} />)
+      return <Validation datasetId={dataset.linkID} />
     }
-    return null 
+    return null
   }
 
   _fileTree(dataset, canEdit) {
@@ -430,7 +430,7 @@ class DatasetContent extends Reflux.Component {
     return (
       <h6>
         {'uploaded ' +
-          (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +
+          (user ? 'by ' + user.name : '') +
           ' on ' +
           dateAdded +
           ' - ' +

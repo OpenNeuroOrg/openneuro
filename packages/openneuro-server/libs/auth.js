@@ -77,28 +77,34 @@ let auth = {
           req.user = scitranUser.body._id
           req.userInfo = {
             id: req.user,
-            firstname: scitranUser.body.firstname,
-            lastname: scitranUser.body.lastname,
+            name: scitranUser.body.name,
             email: scitranUser.body.email,
           }
           req.isSuperUser = scitranUser.body.root
         })
         .then(() => next())
     } else {
-      scitran.getUserByToken(req.headers.authorization, (err, resp) => {
-        if (resp.body && resp.body._id) {
-          let scitranUser = resp.body
-          req.user = scitranUser._id
-          req.userInfo = {
-            id: req.user,
-            firstname: scitranUser.firstname,
-            lastname: scitranUser.lastname,
-            email: scitranUser.email,
+      if (req.headers.authorization) {
+        scitran.getUserByToken(req.headers.authorization, (err, resp) => {
+          if (resp.body && resp.body._id) {
+            let scitranUser = resp.body
+            req.user = scitranUser._id
+            req.userInfo = {
+              id: req.user,
+              name: scitranUser.name,
+              email: scitranUser.email,
+            }
+            req.isSuperUser = scitranUser.root
           }
-          req.isSuperUser = scitranUser.root
-        }
+          return next()
+        })
+      } else {
+        // Anonymous request for optional auth
+        req.user = null
+        req.userInfo = null
+        req.isSuperUser = false
         return next()
-      })
+      }
     }
   },
 

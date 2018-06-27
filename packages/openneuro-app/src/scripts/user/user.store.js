@@ -320,9 +320,6 @@ let UserStore = Reflux.createStore({
    * Handles necessary action after a signin has been completed.
    */
   handleSignIn(transition, scitran, profile) {
-    if (!profile.imageUrl) {
-      profile.imageUrl = scitran.avatar
-    }
     this.update({ loading: false })
     this.update({ scitran, profile }, { persist: true })
     datasetActions.reloadDataset()

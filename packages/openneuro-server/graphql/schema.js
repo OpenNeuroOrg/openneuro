@@ -102,8 +102,7 @@ const typeDefs = `
     email: String!
     firstLogin: DateTime
     lastLogin: DateTime
-    firstName: String!
-    lastName: String!
+    name: String!
   }
   
   # Which provider a user login comes from

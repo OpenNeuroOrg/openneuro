@@ -181,26 +181,27 @@ class Tools extends Reflux.Component {
           },
         ],
       },
-      {
-        tooltip: 'Run Analysis',
-        icon: 'fa-area-chart icon-plus',
-        action: actions.showDatasetComponent.bind(
-          this,
-          'jobs',
-          this.props.history,
-        ),
-        display: isSignedIn && !isIncomplete,
-        warn: false,
-        modalLink: datasets.datasetUrl + '/jobs',
-        validations: [
-          {
-            check: datasets.uploading && !isSnapshot,
-            message: 'Files are currently uploading',
-            timeout: 5000,
-            type: 'Error',
-          },
-        ],
-      },
+      // TODO: TURN THIS BACK ON WHEN WE WANT TO ENABLE ANALYSES
+      // {
+      //   tooltip: 'Run Analysis',
+      //   icon: 'fa-area-chart icon-plus',
+      //   action: actions.showDatasetComponent.bind(
+      //     this,
+      //     'jobs',
+      //     this.props.history,
+      //   ),
+      //   display: isSignedIn && !isIncomplete,
+      //   warn: false,
+      //   modalLink: datasets.datasetUrl + '/jobs',
+      //   validations: [
+      //     {
+      //       check: datasets.uploading && !isSnapshot,
+      //       message: 'Files are currently uploading',
+      //       timeout: 5000,
+      //       type: 'Error',
+      //     },
+      //   ],
+      // },
       {
         tooltip: 'Follow Dataset',
         icon: 'fa-tag icon-plus',

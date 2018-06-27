@@ -14,7 +14,7 @@ const Usermenu = ({ profile, history }) => {
     return false
   }
 
-  let username = profile.firstname + ' ' + profile.lastname
+  let username = profile.name
 
   let gear = <i className="fa fa-gear" />
 
