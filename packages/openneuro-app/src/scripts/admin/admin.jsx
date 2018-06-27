@@ -12,6 +12,14 @@ import Jobs from '../dashboard/dashboard.jobs.jsx'
 
 import BlacklistModal from './admin.blacklist.modal.jsx'
 import actions from './admin.actions'
+import config from '../../../config'
+import {
+  AdminJobLink,
+  JobStatsLink,
+  JobAppDefinitionsLink,
+} from '../common/partials/jobs.jsx'
+
+const analysisEnabled = config.analysis.enabled
 
 class Dashboard extends React.Component {
   // life cycle events --------------------------------------------------
@@ -40,9 +48,7 @@ class Dashboard extends React.Component {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/admin/app-definitions" className="btn-tab">
-                  App Definitions
-                </NavLink>
+                <JobAppDefinitionsLink enabled={analysisEnabled} />
               </li>
               <li>
                 <NavLink to="/admin/event-logs" className="btn-tab">
@@ -55,14 +61,10 @@ class Dashboard extends React.Component {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/admin/jobs" className="btn-tab">
-                  All Jobs
-                </NavLink>
+                <AdminJobLink enabled={analysisEnabled} />
               </li>
               <li>
-                <NavLink to="/admin/job-statistics" className="btn-tab">
-                  Job Stats
-                </NavLink>
+                <JobStatsLink enabled={analysisEnabled} />
               </li>
             </ul>
             <Switch>

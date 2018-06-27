@@ -242,7 +242,8 @@ const routes = [
   {
     method: 'get',
     url: '/subscriptions/:datasetId',
-    handler: subscriptions.getSubscriptions,
+    handler: 
+    getSubscriptions,
   },
   {
     method: 'get',
@@ -259,7 +260,7 @@ const routes = [
     method: 'delete',
     url: '/subscriptions/:datasetId/:userId',
     middleware: [auth.user],
-    handler: subscriptions.delete,
+    handler: subscriptions.deleteSubscription,
   },
   {
     method: 'delete',
