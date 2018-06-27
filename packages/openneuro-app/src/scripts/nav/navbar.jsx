@@ -154,7 +154,7 @@ class BSNavbar extends React.Component {
             <div className="login-btns">
               <OrcidButton min={true} />
               <div className="info-panel">
-                <span className="help-info" onClick={() => infoModal()}>
+                <span className="help-info" onClick={() => this.infoModal()}>
                   What is this?
                 </span>
                 {this.state.infoPanel && this._infoPanel()}
@@ -170,7 +170,7 @@ class BSNavbar extends React.Component {
   _infoPanel() {
     return (
       <Panel className="fade-in panel">
-        <button className="close" onClick={() => infoModal(false)}>
+        <button className="close" onClick={() => this.infoModal(false)}>
           <span className="close-sym" />
           <span className="sr-only">close</span>
         </button>
