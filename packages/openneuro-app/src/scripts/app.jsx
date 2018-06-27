@@ -6,14 +6,13 @@ import { pageTitle, pageDescription } from './resources/strings.js'
 import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
-import getAuth from './utils/getAuth.js'
 import config from '../../config'
 import { CookiesProvider } from 'react-cookie'
 
 const App = () => {
   return (
     <CookiesProvider>
-      <ApolloProvider client={getClient(`${config.url}/crn/graphql`, getAuth)}>
+      <ApolloProvider client={getClient(`${config.url}/crn/graphql`)}>
         <div>
           <Helmet>
             <title>{pageTitle}</title>
