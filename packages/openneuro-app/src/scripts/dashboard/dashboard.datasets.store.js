@@ -1,9 +1,9 @@
 // dependencies ----------------------------------------------------------------------
 
 import Reflux from 'reflux'
+import { getProfile } from '../authentication/profile.js'
 import Actions from './dashboard.datasets.actions.js'
 import bids from '../utils/bids'
-import userStore from '../user/user.store.js'
 import dashUtils from './dashboard.utils.js'
 
 // store setup -----------------------------------------------------------------------
@@ -115,7 +115,8 @@ let UploadStore = Reflux.createStore({
     if (typeof isAdmin === 'undefined') {
       isAdmin = false
     }
-    let isSignedOut = !userStore.data.token
+    const userProfile = getProfile()
+    const isSignedOut = userProfile === null
     this.update(
       {
         loading: true,
@@ -130,15 +131,14 @@ let UploadStore = Reflux.createStore({
           datasets => {
             if (!isAdmin && !isPublic) {
               datasets = datasets.filter(dataset => {
-                if (dataset.group && userStore.data && userStore.data.profile) {
+                if (dataset.group && userProfile) {
                   let hasPermission
                   if (dataset.permissions) {
                     hasPermission = dataset.permissions.filter(permission => {
-                      return permission._id === userStore.data.profile._id
+                      return permission._id === userProfile.sub
                     }).length
                   }
-                  const isUploader =
-                    dataset.group === userStore.data.profile._id
+                  const isUploader = dataset.group === userProfile.sub
 
                   return isUploader || hasPermission
                 } else {

@@ -5,12 +5,16 @@
 import React from 'react'
 import Reflux from 'reflux'
 import PropTypes from 'prop-types'
-import userStore from '../../user/user.store'
-import userActions from '../../user/user.actions'
 import datasetActions from '../../dataset/dataset.actions'
 import datasetStore from '../dataset.store.js'
 import { Link, Redirect, withRouter } from 'react-router-dom'
 import { refluxConnect } from '../../utils/reflux'
+import { getProfile } from '../../authentication/profile.js'
+
+const openLoginModal = () => {
+  // TODO - fix this
+  console.error('Login modal unimplemented')
+}
 
 class Subscribe extends Reflux.Component {
   // life cycle events --------------------------------------------------
@@ -19,7 +23,7 @@ class Subscribe extends Reflux.Component {
     super(props)
     refluxConnect(this, datasetStore, 'datasets')
     this.state = {
-      hasToken: userStore.hasToken(),
+      hasToken: getProfile(),
       loading: false,
     }
     this._createSubscription = datasetStore.createSubscription.bind(
@@ -29,11 +33,11 @@ class Subscribe extends Reflux.Component {
   }
 
   componentWillReceiveProps() {
-    if (userStore.hasToken() !== this.state.hasToken && !this.state.loading) {
+    if (getProfile() !== this.state.hasToken && !this.state.loading) {
       this.setState({ loading: true })
       datasetActions.checkUserSubscription(() => {
         this.setState({
-          hasToken: userStore.hasToken(),
+          hasToken: getProfile(),
           loading: false,
         })
       })
@@ -149,7 +153,9 @@ class Subscribe extends Reflux.Component {
       return (
         <button
           className="btn-modal-action"
-          onClick={userActions.toggle.bind(this, 'loginModal')}>
+          onClick={() => {
+            openLoginModal()
+          }}>
           sign in to follow
         </button>
       )

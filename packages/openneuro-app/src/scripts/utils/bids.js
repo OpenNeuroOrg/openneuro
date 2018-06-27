@@ -1,11 +1,11 @@
 import async from 'async'
 import scitran from './scitran'
 import crn from './crn'
-import userStore from '../user/user.store'
 import fileUtils from './files'
 import hex from './hex'
 import datalad from './datalad'
 import config from '../../../config.js'
+import getProfile from '../authentication/profile.js'
 
 /**
  * BIDS
@@ -563,7 +563,7 @@ export default {
     let validationIssues =
       project.draft && project.draft.issues ? project.draft.issues : []
     let tags = project.tags ? project.tags : []
-    let currentUser = userStore.data.scitran
+    let currentUser = getProfile()
     let uploader = project.uploader ? project.uploader.id : null
     let userId = currentUser ? currentUser._id : null
     let hasRoot = currentUser ? currentUser.root : null
@@ -580,8 +580,8 @@ export default {
       public: !!project.public,
       hasPublic: tags.indexOf('hasPublic') > -1,
       shared:
-        userStore.data.scitran &&
-        uploader != userStore.data.scitran._id &&
+        currentUser &&
+        uploader !== currentUser.sub &&
         !!userAccess &&
         !adminOnlyAccess,
     }
@@ -596,7 +596,7 @@ export default {
    */
   userAccess(project) {
     let access = null
-    const currentUser = userStore.data.scitran ? userStore.data.scitran : null
+    const currentUser = getProfile()
 
     const userId = currentUser ? currentUser._id : null
     if (project) {
@@ -624,10 +624,11 @@ export default {
    * whether the current user created the project.
    */
   userCreated(project) {
-    if (!userStore.data.scitran) {
+    const userProfile = getProfile()
+    if (userProfile === null) {
       return false
     }
-    return project.group === userStore.data.scitran._id
+    return project.group === userProfile.sub
   },
 
   /**

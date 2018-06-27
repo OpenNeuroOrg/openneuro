@@ -2,51 +2,65 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import Reflux from 'reflux'
 import { withRouter, Link } from 'react-router-dom'
 import NavMenu from './navbar.navmenu.jsx'
-import userStore from '../user/user.store.js'
-import actions from '../user/user.actions.js'
 import { Navbar } from 'react-bootstrap'
 import { Panel } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
-import { refluxConnect } from '../utils/reflux'
 import brand_mark from './assets/brand_mark.png'
 import OrcidButton from '../authentication/orcid-button.jsx'
 import GoogleButton from '../authentication/google-button.jsx'
 import GlobusButton from '../authentication/globus-button.jsx'
 
 // component setup ---------------------------------------------------------------
+const OpenNeuroBrand = () => (
+  <Link to="/" className="navbar-brand">
+    <img
+      src={brand_mark}
+      alt="OpenNeuro Logo"
+      title="OpenNeuro Link To Home Page"
+    />
+    <div className="logo-text">
+      Open<span className="logo-end">Neuro</span>
+    </div>
+  </Link>
+)
 
-class BSNavbar extends Reflux.Component {
-  constructor() {
-    super()
-    refluxConnect(this, userStore, 'users')
+class BSNavbar extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { supportModal: false, loginModal: false, infoPanel: false }
+    this.loginModal = this.loginModal.bind(this)
+    this.supportModal = this.supportModal.bind(this)
+  }
 
-    this.state = {
-      login: true,
-    }
+  loginModal(open = true) {
+    this.setState({ loginModal: open })
+  }
+
+  supportModal(open = true) {
+    this.setState({ supportModal: open })
+  }
+
+  infoModal(open = true) {
+    this.setState({ infoPanel: open })
   }
 
   // life cycle methods ------------------------------------------------------------
   render() {
-    const profile = this.state.users.profile
-    const scitran = this.state.users.scitran
-    const isLoggedIn = !!this.state.users.token && profile && scitran
-    const loading = this.state.users.loading
     return (
       <span>
         <Navbar collapseOnSelect>
           <Navbar.Header>
-            <Navbar.Brand>{this._brand()}</Navbar.Brand>
+            <Navbar.Brand>
+              <OpenNeuroBrand />
+            </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <NavMenu
-              profile={profile}
-              scitran={scitran}
-              isLoggedIn={isLoggedIn}
-              loading={loading}
+              loginModal={this.loginModal}
+              supportModal={this.supportModal}
             />
           </Navbar.Collapse>
         </Navbar>
@@ -76,8 +90,8 @@ class BSNavbar extends Reflux.Component {
   _supportModal() {
     return (
       <Modal
-        show={this.state.users.supportModal}
-        onHide={actions.toggle.bind(this, 'supportModal')}>
+        show={this.state.supportModal}
+        onHide={() => this.setState({ supportModal: false })}>
         <Modal.Header closeButton>
           <Modal.Title>Support</Modal.Title>
         </Modal.Header>
@@ -104,7 +118,7 @@ class BSNavbar extends Reflux.Component {
           />
         </Modal.Body>
         <Modal.Footer>
-          <a onClick={actions.toggle.bind(this, 'supportModal')}>Close</a>
+          <a onClick={() => this.setState({ supportModal: false })}>Close</a>
         </Modal.Footer>
       </Modal>
     )
@@ -113,8 +127,8 @@ class BSNavbar extends Reflux.Component {
   _loginModal() {
     return (
       <Modal
-        show={this.state.users.loginModal}
-        onHide={actions.toggle.bind(this, 'loginModal')}
+        show={this.state.loginModal}
+        onHide={() => this.loginModal(false)}
         className="login-modal">
         <Modal.Header closeButton>
           <Modal.Title>
@@ -140,15 +154,13 @@ class BSNavbar extends Reflux.Component {
             <div className="login-btns">
               <OrcidButton min={true} />
               <div className="info-panel">
-                <span
-                  className="help-info"
-                  onClick={actions.toggle.bind(this, 'infoPanel')}>
+                <span className="help-info" onClick={() => infoModal()}>
                   What is this?
                 </span>
-                {this.state.users.infoPanel && this._infoPanel()}
+                {this.state.infoPanel && this._infoPanel()}
               </div>
             </div>
-            <a onClick={actions.toggle.bind(this, 'loginModal')}>Close</a>
+            <a onClick={() => this.loginModal(false)}>Close</a>
           </div>
         </Modal.Body>
       </Modal>
@@ -158,9 +170,7 @@ class BSNavbar extends Reflux.Component {
   _infoPanel() {
     return (
       <Panel className="fade-in panel">
-        <button
-          className="close"
-          onClick={actions.toggle.bind(this, 'infoPanel')}>
+        <button className="close" onClick={() => infoModal(false)}>
           <span className="close-sym" />
           <span className="sr-only">close</span>
         </button>

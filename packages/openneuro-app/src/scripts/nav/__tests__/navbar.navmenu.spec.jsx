@@ -2,7 +2,6 @@ import React from 'react'
 import { shallow, mount } from 'enzyme'
 import NavMenu from '../navbar.navmenu.jsx'
 
-jest.mock('../../user/user.store.js')
 // Need to mock the router because of withRouter in these components
 jest.mock('react-router-dom', () => {
   return {

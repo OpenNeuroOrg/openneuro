@@ -2,8 +2,8 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import loadable from 'loadable-components'
-import requireAuth from './utils/requireAuth'
 import Dataset from './dataset/dataset.jsx'
+import LoggedIn from './authentication/logged-in.jsx'
 
 // const datasetComponent = config.datalad.enabled ? DataLad : Dataset
 const datasetComponent = Dataset
@@ -27,13 +27,13 @@ const appRoutes = () => (
     <Route name="front-page" exact path="/" component={FrontPage} />
     <Route name="faq" exact path="/faq" component={Faq} />
     <Route name="api-key" exact path="/keygen" component={APIKey} />
-    <Route
-      name="dashboard"
-      path="/dashboard"
-      component={requireAuth(Dashboard)}
-    />
+    <LoggedIn>
+      <Route name="dashboard" path="/dashboard" component={Dashboard} />
+    </LoggedIn>
     <Route name="public" path="/public" component={PublicDashboard} />
-    <Route name="admin" path="/admin" component={requireAuth(Admin, 'admin')} />
+    <LoggedIn>
+      <Route name="admin" path="/admin" component={Admin} />
+    </LoggedIn>
     <Route name="dataset" path="/datasets" component={datasetComponent} />
     <Route name="search" path="/search/:query?" component={SearchResults} />
   </Switch>

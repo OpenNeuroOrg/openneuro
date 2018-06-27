@@ -8,12 +8,11 @@ import scitran from '../utils/scitran'
 import datalad from '../utils/datalad'
 import crn from '../utils/crn'
 import bids from '../utils/bids'
-import userStore from '../user/user.store'
-import userActions from '../user/user.actions'
 import upload from '../utils/upload'
 import config from '../../../config'
 import files from '../utils/files'
 import moment from 'moment'
+import { getProfile } from '../authentication/profile.js'
 import { stringify as querystring } from 'urlite/querystring'
 
 let datasetStore = Reflux.createStore({
@@ -24,7 +23,12 @@ let datasetStore = Reflux.createStore({
   init: function() {
     this.setInitialState()
     this.loadApps()
-    this.update({ currentUser: userStore.data })
+    const userObj = { profile: getProfile() }
+    // sub -> _id for Compatibility with old stores
+    if (userObj.profile) {
+      userObj.profile._id = userObj.profile.sub
+    }
+    this.update({ currentUser: userObj })
   },
 
   getInitialState: function() {
@@ -126,7 +130,7 @@ let datasetStore = Reflux.createStore({
   loadDataset(datasetId, options, forceReload) {
     let snapshot = !!(options && options.snapshot)
     options = options ? options : {}
-    options.isPublic = !userStore.data.token
+    options.isPublic = getProfile() === null
 
     // set active job if passed in query param
     if (options) {
@@ -876,27 +880,25 @@ let datasetStore = Reflux.createStore({
    * dataset modifications.
    */
   updateWarn(options) {
-    userActions.getPreferences(preferences => {
-      if (
-        preferences &&
-        preferences.ignoreUpdateWarnings &&
-        !options.alwaysWarn
-      ) {
-        options.action()
-      } else {
-        let modals = this.data.modals
-        modals.update = true
-        this.update({
-          currentUpdate: {
-            action: options.action,
-            hideDontShow: options.hideDontShow,
-            message: options.message,
-            confirmTxt: options.confirmTxt,
-          },
-          modals,
-        })
-      }
-    })
+    const localStorageValue = localStorage.getItem('ignoreUpdateWarnings')
+    const ignoreUpdateWarnings = localStorageValue
+      ? JSON.parse(localStorageValue)
+      : false
+    if (ignoreUpdateWarnings && !options.alwaysWarn) {
+      options.action()
+    } else {
+      let modals = this.data.modals
+      modals.update = true
+      this.update({
+        currentUpdate: {
+          action: options.action,
+          hideDontShow: options.hideDontShow,
+          message: options.message,
+          confirmTxt: options.confirmTxt,
+        },
+        modals,
+      })
+    }
   },
 
   updateMessage(type, file) {
@@ -916,7 +918,10 @@ let datasetStore = Reflux.createStore({
    * Disables the update warning modal
    */
   disableUpdateWarn(callback) {
-    userActions.updatePreferences({ ignoreUpdateWarnings: true }, callback)
+    localStorage.setItem('ignoreUpdateWarnings', JSON.stringify(true))
+    if (callback) {
+      callback()
+    }
   },
 
   /**
@@ -1485,7 +1490,7 @@ let datasetStore = Reflux.createStore({
         jobName: jobDefinition.jobDefinitionName,
         parameters: parameters,
         snapshotId: snapshotId,
-        userId: userStore.data.scitran._id,
+        userId: getProfile().sub,
       })
       .then(res => {
         // reload jobs

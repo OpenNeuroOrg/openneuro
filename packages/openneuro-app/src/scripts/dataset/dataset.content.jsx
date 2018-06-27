@@ -18,13 +18,12 @@ import Validation from '../datalad/validation/validation.jsx'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import FileTree from '../common/partials/file-tree.jsx'
 import Jobs from './dataset.jobs.jsx'
-import userStore from '../user/user.store.js'
 import Summary from './dataset.summary.jsx'
 import Comment from '../common/partials/comment.jsx'
 import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
-import userActions from '../user/user.actions.js'
 import { refluxConnect } from '../utils/reflux'
+import { getProfile } from '../authentication/profile.js'
 
 let uploadWarning =
   'You are currently uploading files. Leaving this page will cancel the upload process.'
@@ -226,9 +225,9 @@ class DatasetContent extends Reflux.Component {
 
   _validation(dataset) {
     if (dataset.linkID && !dataset.status.incomplete) {
-      return (<Validation datasetId={dataset.linkID} />)
+      return <Validation datasetId={dataset.linkID} />
     }
-    return null 
+    return null
   }
 
   _fileTree(dataset, canEdit) {
@@ -327,7 +326,7 @@ class DatasetContent extends Reflux.Component {
   }
   _commentTree() {
     // add a top level comment box to the dataset if user is logged in
-    let loggedIn = !!userStore.hasToken()
+    let loggedIn = getProfile() !== null
     let isAdmin =
       loggedIn && this.state.datasets.currentUser
         ? this.state.datasets.currentUser.scitran.root

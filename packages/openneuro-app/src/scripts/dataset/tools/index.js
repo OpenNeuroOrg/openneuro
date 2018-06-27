@@ -7,10 +7,10 @@ import { withRouter } from 'react-router-dom'
 import moment from 'moment'
 import DownloadLink from '../../datalad/download/download-link.jsx'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
 import datasetStore from '../dataset.store.js'
 import { refluxConnect } from '../../utils/reflux'
+import { getProfile } from '../../authentication/profile.js'
 
 class Tools extends Reflux.Component {
   constructor() {
@@ -43,7 +43,7 @@ class Tools extends Reflux.Component {
     let isAdmin = dataset.access === 'admin',
       // isEditor     = dataset.access === 'rw',
       // isViewer     = dataset.access === 'ro',
-      isSignedIn = !!userStore.hasToken(),
+      isSignedIn = getProfile() !== null,
       isPublic = !!dataset.status.public,
       isIncomplete = !!dataset.status.incomplete,
       isInvalid = !!dataset.status.invalid,
@@ -206,7 +206,7 @@ class Tools extends Reflux.Component {
         tooltip: 'Follow Dataset',
         icon: 'fa-tag icon-plus',
         action: actions.createSubscription.bind(this),
-        display: isSignedIn && !isSubscribed,
+        display: 1 && !isSubscribed,
         warn: false,
         validations: [
           {
