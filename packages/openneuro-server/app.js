@@ -15,7 +15,7 @@ import { apolloUploadExpress } from 'apollo-upload-server'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
-import auth from './libs/auth.js'
+import * as auth from './libs/authentication/states'
 import { setupPassportAuth } from './libs/authentication/passport.js'
 // import events lib to instantiate CRN Emitter
 import events from './libs/events'
@@ -76,10 +76,13 @@ export default test => {
     auth.optional,
     apolloUploadExpress(),
     graphqlExpress(req => {
-      const { user, isSuperUser, userInfo } = req
+      const { user } = req
+      const userId = user ? user.id : null
+      const isSuperUser = user ? user.admin : null
+      const userInfo = user
       return {
         schema,
-        context: { user, isSuperUser, userInfo },
+        context: { user: userId, isSuperUser: isSuperUser, userInfo: userInfo },
       }
     }),
   )
