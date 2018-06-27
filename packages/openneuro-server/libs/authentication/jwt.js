@@ -4,7 +4,13 @@ import jwt from 'jsonwebtoken'
 // Helper to generate a JWT containing user info
 export const addJWT = config => user => {
   const token = jwt.sign(
-    { sub: user.id, email: user.email, provider: user.provider },
+    {
+      sub: user.id,
+      email: user.email,
+      provider: user.provider,
+      name: user.name,
+      admin: user.admin,
+    },
     config.auth.jwt.secret,
     {
       expiresIn: 60000,
