@@ -1,12 +1,7 @@
 import React from 'react'
 import { withCookies } from 'react-cookie'
 import LoggedIn from './logged-in.jsx'
-
-const parseJwt = token => {
-  var base64Url = token.split('.')[1]
-  var base64 = base64Url.replace('-', '+').replace('_', '/')
-  return JSON.parse(global.atob(base64))
-}
+import { parseJwt } from './profile.js'
 
 const withProfile = WrappedComponent => {
   const ProfileComponent = class extends React.Component {
