@@ -5,7 +5,7 @@ import fileUtils from './files'
 import hex from './hex'
 import datalad from './datalad'
 import config from '../../../config.js'
-import getProfile from '../authentication/profile.js'
+import { getProfile } from '../authentication/profile.js'
 
 /**
  * BIDS
