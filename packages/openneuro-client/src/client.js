@@ -26,28 +26,15 @@ const createClient = (uri, getAuthorization, fetch) => {
 const authLink = getAuthorization =>
   setContext((_, { headers }) => {
     // Passthrough any headers but add in authorization if set
-    const token = getAuthorization ? getAuthorization() : false
-    let tokenString = ''
-    if (token) {
-      if (
-        typeof window !== 'undefined' &&
-        global.localStorage &&
-        global.localStorage.token
-      ) {
-        tokenString = `${token}`
-      } else {
-        tokenString = `Bearer ${token}`
-      }
-      return {
-        headers: Object.assign(
-          {
-            authorization: tokenString,
-          },
-          headers,
-        ),
-      }
-    } else {
-      return headers
+    const token = getAuthorization()
+    const tokenString = `Bearer ${token}`
+    return {
+      headers: Object.assign(
+        {
+          authorization: tokenString,
+        },
+        headers,
+      ),
     }
   })
 
@@ -71,7 +58,11 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
     serverFormData: FormData,
     credentials: 'same-origin',
   })
-  return authLink(getAuthorization).concat(httpUploadLink)
+  if (getAuthorization) {
+    return authLink(getAuthorization).concat(httpUploadLink)
+  } else {
+    return httpUploadLink
+  }
 }
 
 const createLink = (uri, getAuthorization, fetch) => {
