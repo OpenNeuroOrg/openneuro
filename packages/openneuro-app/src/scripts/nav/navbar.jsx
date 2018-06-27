@@ -7,16 +7,10 @@ import NavMenu from './navbar.navmenu.jsx'
 import { Navbar } from 'react-bootstrap'
 import { Panel } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
-import withProfile from '../authentication/withProfile.js'
 import brand_mark from './assets/brand_mark.png'
 import OrcidButton from '../authentication/orcid-button.jsx'
 import GoogleButton from '../authentication/google-button.jsx'
 import GlobusButton from '../authentication/globus-button.jsx'
-
-const toggleInfo = () => {
-  // TODO - Implement this
-  console.error('toggleInfo not implemented')
-}
 
 // component setup ---------------------------------------------------------------
 const OpenNeuroBrand = () => (
@@ -46,6 +40,10 @@ class BSNavbar extends React.Component {
 
   supportModal(open = true) {
     this.setState({ supportModal: open })
+  }
+
+  infoModal(open = true) {
+    this.setState({ infoPanel: open })
   }
 
   // life cycle methods ------------------------------------------------------------
@@ -156,7 +154,7 @@ class BSNavbar extends React.Component {
             <div className="login-btns">
               <OrcidButton min={true} />
               <div className="info-panel">
-                <span className="help-info" onClick={toggleInfo}>
+                <span className="help-info" onClick={() => infoModal()}>
                   What is this?
                 </span>
                 {this.state.infoPanel && this._infoPanel()}
@@ -172,7 +170,7 @@ class BSNavbar extends React.Component {
   _infoPanel() {
     return (
       <Panel className="fade-in panel">
-        <button className="close" onClick={toggleInfo}>
+        <button className="close" onClick={() => infoModal(false)}>
           <span className="close-sym" />
           <span className="sr-only">close</span>
         </button>
