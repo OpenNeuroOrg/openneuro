@@ -69,6 +69,7 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
     uri,
     fetch,
     serverFormData: FormData,
+    credentials: 'same-origin',
   })
   return authLink(getAuthorization).concat(httpUploadLink)
 }
