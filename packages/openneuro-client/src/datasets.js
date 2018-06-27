@@ -10,8 +10,7 @@ export const getDataset = gql`
       public
       uploader {
         id
-        firstName
-        lastName
+        name
         email
       }
       draft {
@@ -89,8 +88,7 @@ export const getPartialDataset = gql`
       public
       uploader {
         id
-        firstName
-        lastName
+        name
         email
       }
       draft {
@@ -130,11 +128,11 @@ export const getDatasetIssues = gql`
 `
 
 export const validationSubscription = gql`
-subscription {
-  datasetValidationUpdated {
-   id 
+  subscription {
+    datasetValidationUpdated {
+      id
+    }
   }
-}
 `
 
 export const createDataset = gql`

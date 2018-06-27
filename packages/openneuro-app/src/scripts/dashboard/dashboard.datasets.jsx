@@ -197,7 +197,7 @@ class Datasets extends Reflux.Component {
   _datasets(paginatedResults, isPublic) {
     return paginatedResults.map(dataset => {
       let user = dataset.user
-      let fullname = user ? user.firstname + ' ' + user.lastname : ''
+      let fullname = user ? user.name : ''
       let dateAdded = moment(dataset.created).format('L')
       let timeago = moment(dataset.created).fromNow(true)
       let metricContainer = (

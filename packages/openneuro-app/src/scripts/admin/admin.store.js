@@ -54,8 +54,7 @@ let UserStore = Reflux.createStore({
       },
       blacklistForm: {
         _id: '',
-        firstname: '',
-        lastname: '',
+        name: '',
         note: '',
       },
       jobDefinitionForm: {
@@ -157,9 +156,7 @@ let UserStore = Reflux.createStore({
       searchInput = searchInput.toLowerCase()
 
       let admin = user.root === true,
-        lastName = user.lastname,
-        firstName = user.firstname,
-        userName = firstName + ' ' + lastName,
+        userName = user.name,
         userSearchStrings =
           user.email.toLowerCase().includes(searchInput) ||
           userName.toLowerCase().includes(searchInput)
@@ -309,8 +306,7 @@ let UserStore = Reflux.createStore({
         blacklist: blacklist,
         blacklistForm: {
           _id: '',
-          firstname: '',
-          lastname: '',
+          name: '',
           note: '',
         },
         showBlacklistModal: false,
@@ -332,8 +328,7 @@ let UserStore = Reflux.createStore({
       blacklistError: '',
       blacklistForm: {
         _id: user._id ? user._id : '',
-        firstname: user.firstname ? user.firstname : '',
-        lastname: user.lastname ? user.lastname : '',
+        name: user.name,
         note: '',
       },
     })

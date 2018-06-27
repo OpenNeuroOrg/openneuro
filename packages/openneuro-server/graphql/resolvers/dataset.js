@@ -50,14 +50,14 @@ export const deleteSnapshot = (obj, { datasetId, tag }) => {
 export const updateFiles = (
   obj,
   { datasetId, files: fileTree },
-  { userInfo: { firstname, lastname, email } },
+  { userInfo: { name, email } },
 ) => {
   // TODO - The id returned here is a placeholder
   const promises = updateFilesTree(datasetId, fileTree)
   return Promise.all(promises)
     .then(() =>
       datalad
-        .commitFiles(datasetId, `${firstname} ${lastname}`, email)
+        .commitFiles(datasetId, name, email)
         .then(res => {
           return res.body.ref
         })
@@ -92,14 +92,14 @@ export const updateFilesTree = (datasetId, fileTree) => {
 export const deleteFiles = (
   obj,
   { datasetId, files: fileTree },
-  { userInfo: { firstname, lastname, email } },
+  { userInfo: { name, email } },
 ) => {
   // TODO - The id returned here is a placeholder
   const promises = deleteFilesTree(datasetId, fileTree)
   return Promise.all(promises)
     .then(() =>
       datalad
-        .commitFiles(datasetId, `${firstname} ${lastname}`, email)
+        .commitFiles(datasetId, name, email)
         .then(res => {
           return res.body.ref
         })

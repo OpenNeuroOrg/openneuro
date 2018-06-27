@@ -73,8 +73,7 @@ export default {
       let flattenedUser = {
         _id: user._id,
         email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
+        name: user.name,
       }
       comment = {
         datasetId: originalComment.datasetId,

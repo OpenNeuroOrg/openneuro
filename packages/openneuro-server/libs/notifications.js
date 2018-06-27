@@ -67,8 +67,7 @@ let notifications = {
               job.analysis.status,
             template: 'job-complete',
             data: {
-              firstName: user.firstname,
-              lastName: user.lastname,
+              name: user.name,
               appName: job.appLabel,
               appLabel: job.appLabel,
               appVersion: job.appVersion,
@@ -100,7 +99,6 @@ let notifications = {
    * Includes changelog if available.
    */
   snapshotCreated(datasetId, versionNumber) {
-
     // get the scitran project
     scitran.getProject(datasetId, (err, resp) => {
       let datasetLabel =
@@ -130,8 +128,7 @@ let notifications = {
                       subject: 'Snapshot Created',
                       template: 'snapshot-created',
                       data: {
-                        firstName: user.firstname,
-                        lastName: user.lastname,
+                        name: user.name,
                         datasetLabel: datasetLabel,
                         datasetId: bidsId.decodeId(datasetId),
                         versionNumber: versionNumber,
@@ -197,11 +194,15 @@ let notifications = {
                 type: 'email',
                 email: {
                   to: user.email,
-                  from: 'reply-' + encodeURIComponent(comment._id) + '-' + encodeURIComponent(user._id),
+                  from:
+                    'reply-' +
+                    encodeURIComponent(comment._id) +
+                    '-' +
+                    encodeURIComponent(user._id),
                   subject: 'Comment Created',
                   template: 'comment-created',
                   data: {
-                    firstName: user.firstname,
+                    name: user.name,
                     lastName: user.lastname,
                     datasetName: bidsId.decodeId(datasetId),
                     datasetLabel: datasetLabel,
@@ -254,8 +255,7 @@ let notifications = {
                 subject: 'Dataset Deleted',
                 template: 'dataset-deleted',
                 data: {
-                  firstName: user.firstname,
-                  lastName: user.lastname,
+                  name: user.name,
                   datasetName: bidsId.decodeId(datasetId),
                   siteUrl:
                     url.parse(config.url).protocol +
@@ -301,8 +301,7 @@ let notifications = {
                 subject: 'Owner Unsubscribed',
                 template: 'owner-unsubscribed',
                 data: {
-                  firstName: user.firstname,
-                  lastName: user.lastname,
+                  name: user.name,
                   datasetName: bidsId.decodeId(datasetId),
                   siteUrl:
                     url.parse(config.url).protocol +
@@ -333,7 +332,9 @@ let notifications = {
                   () => {},
                 )
                 if (response && response.messageId) {
-                  c.crn.mailgunIdentifiers.insertOne({ messageId: response.messageId })
+                  c.crn.mailgunIdentifiers.insertOne({
+                    messageId: response.messageId,
+                  })
                 }
               } else {
                 console.log('NOTIFICATION ERROR ----------')

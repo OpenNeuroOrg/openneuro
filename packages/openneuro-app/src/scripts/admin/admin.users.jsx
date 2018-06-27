@@ -31,8 +31,7 @@ class users extends Reflux.Component {
             <div className="col-xs-4 user-col">
               <h3>
                 <div className="userName">
-                  <span>{user.firstname}</span> &nbsp;
-                  <span>{user.lastname}</span>
+                  <span>{user.name}</span>
                   <div className="badge">{adminBadge}</div>
                 </div>
               </h3>

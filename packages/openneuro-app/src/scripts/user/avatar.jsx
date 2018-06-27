@@ -16,16 +16,13 @@ export default class Avatar extends React.Component {
     let imageUrl = user.generateGravatarUrl(profile)
     let thumbnail
     if (imageUrl) {
-      let username =
-        profile && profile.firstName && profile.lastName
-          ? profile.firstName + ' ' + profile.lastName
-          : null
+      let username = profile && profile.name ? profile.name : null
       thumbnail = (
         <img src={imageUrl} alt={username} className="user-img-thumb" />
       )
     } else {
       let firstLetter =
-        profile && profile.firstname ? profile.firstname.slice(0, 1) : null
+        profile && profile.name ? profile.name.slice(0, 1) : null
       thumbnail = (
         <div className="user-generic-thumb">
           <div className="user-generic-thumb-letter">{firstLetter}</div>

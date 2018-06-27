@@ -14,8 +14,7 @@ const getDatasetPage = gql`
       public
       uploader {
         id
-        firstName
-        lastName
+        name
         email
       }
       draft {
