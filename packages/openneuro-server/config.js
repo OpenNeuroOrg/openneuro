@@ -27,12 +27,23 @@ let config = {
     storage: process.env.CRN_SERVER_AGAVE_STORAGE,
   },
   auth: {
+    google: {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    },
     orcid: {
-      clientID: process.env.SCITRAN_AUTH_ORCID_CLIENT_ID,
-      clientSecret: process.env.SCITRAN_AUTH_ORCID_CLIENT_SECRET,
-      redirectURI: process.env.SCITRAN_AUTH_ORCID_REDIRECT_URI,
-      apiURI: process.env.SCITRAN_AUTH_ORCID_API_ENDPOINT,
-      URI: process.env.SCITRAN_AUTH_ORCID_URI,
+      clientID: process.env.ORCID_CLIENT_ID,
+      clientSecret: process.env.ORCID_CLIENT_SECRET,
+      redirectURI: process.env.ORCID_REDIRECT_URI,
+      apiURI: process.env.ORCID_API_ENDPOINT,
+      URI: process.env.ORCID_URI,
+    },
+    globus: {
+      clientID: process.env.GLOBUS_CLIENT_ID,
+      clientSecret: process.env.GLOBUS_CLIENT_SECRET,
+    },
+    jwt: {
+      secret: process.env.JWT_SECRET,
     },
   },
   mongo: {

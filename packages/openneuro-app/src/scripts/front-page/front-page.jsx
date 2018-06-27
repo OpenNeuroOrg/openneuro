@@ -22,6 +22,7 @@ import nih from './assets/nih.png'
 import nsf from './assets/nsf.png'
 import squishymedia from './assets/squishymedia.png'
 import stanford from './assets/stanford.png'
+import AuthenticationButtons from '../authentication/buttons.jsx'
 
 // component setup ----------------------------------------------------
 
@@ -103,25 +104,7 @@ class FrontPage extends Reflux.Component {
   _signinForm(loadingState) {
     if (!loadingState) {
       if (!this.state.users.token) {
-        return (
-          <span>
-            <button className="btn-admin" onClick={userStore.googleSignIn}>
-              <i className="icon fa fa-google" />
-              Sign in with Google
-            </button>
-            <button className="btn-admin" onClick={userStore.orcidSignIn}>
-              <span className="icon">
-                <img
-                  alt="ORCID"
-                  width="20"
-                  height="20"
-                  src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
-                />
-              </span>
-              Sign in with ORCID
-            </button>
-          </span>
-        )
+        return <AuthenticationButtons />
       }
     }
   }

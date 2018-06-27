@@ -1,7 +1,6 @@
 // dependencies ------------------------------------
 
 import express from 'express'
-import config from './config'
 import users from './handlers/users'
 import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
@@ -12,27 +11,27 @@ import * as datalad from './handlers/datalad'
 import * as openfmri from './handlers/openfmri'
 import * as download from './handlers/download.js'
 import comments from './handlers/comments'
-import * as subscriptions from './handlers/subscriptions'
-import auth from './libs/auth'
-import scitran from './libs/scitran'
+import subscriptions from './handlers/subscriptions'
+import verifyUser from './libs/authentication/verifyUser.js'
+import * as google from './libs/authentication/google.js'
+import * as orcid from './libs/authentication/orcid.js'
+import * as globus from './libs/authentication/globus.js'
+import * as jwt from './libs/authentication/jwt.js'
+import { authenticated } from './libs/authentication/states.js'
+import auth from './libs/auth.js'
 import schema from './libs/schema'
 import schemas from './schemas'
 import doi from './handlers/doi'
 
 import fileUpload from 'express-fileupload'
 
-const baseRoutes = [
+const routes = [
   // users ---------------------------------------
-
   {
     method: 'get',
     url: '/users/self',
-    handler: scitran.verifyUser,
-  },
-  {
-    method: 'get',
-    url: '/users/signin/orcid',
-    handler: users.validateORCIDToken,
+    middleware: [jwt.authenticate, authenticated],
+    handler: verifyUser,
   },
   {
     method: 'get',
@@ -243,7 +242,8 @@ const baseRoutes = [
   {
     method: 'get',
     url: '/subscriptions/:datasetId',
-    handler: subscriptions.getSubscriptions,
+    handler: 
+    getSubscriptions,
   },
   {
     method: 'get',
@@ -309,31 +309,8 @@ const baseRoutes = [
     middleware: [auth.user],
     handler: users.createAPIKey,
   },
-]
 
-const scitranRoutes = [
-  // datasets ------------------------------------
-  // Note: most dataset interactions are sent directly to Scitran.
-  // These manage those that need to be modified or proxied.
-  {
-    method: 'post',
-    url: '/datasets',
-    handler: datasets.create,
-  },
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/snapshot',
-    handler: datasets.snapshot,
-  },
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/permissions',
-    handler: datasets.share,
-  },
-]
-
-// These routes are enabled with the DataLad backend
-const dataladRoutes = [
+  // DataLad dataset routes
   {
     method: 'post',
     url: '/datasets',
@@ -390,15 +367,52 @@ const dataladRoutes = [
     url: '/datasets/:datasetId/snapshots/:snapshotId/download',
     handler: download.snapshotDownload,
   },
+
+  // Authentication routes
+
+  // google
+  {
+    method: 'get',
+    url: '/auth/google',
+    handler: google.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/auth/google/callback',
+    middleware: [google.authCallback],
+    handler: jwt.authSuccessHandler,
+  },
+
+  // orcid
+  {
+    method: 'get',
+    url: '/auth/orcid',
+    handler: orcid.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/users/signin/orcid',
+    middleware: [orcid.authCallback],
+    handler: jwt.authSuccessHandler,
+  },
+
+  // globus
+  {
+    method: 'get',
+    url: '/auth/globus',
+    handler: globus.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/auth/globus/callback',
+    middleware: [globus.authCallback],
+    handler: jwt.authSuccessHandler,
+  },
 ]
 
 // initialize routes -------------------------------
 
 const router = express.Router()
-// TODO - remove this once SciTran backend is no longer in use
-const routes = config.datalad.enabled
-  ? baseRoutes.concat(dataladRoutes)
-  : baseRoutes.concat(scitranRoutes)
 
 for (const route of routes) {
   let arr = route.hasOwnProperty('middleware') ? route.middleware : []
