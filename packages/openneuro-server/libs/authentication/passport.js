@@ -95,29 +95,21 @@ const loadProfile = profile => {
     return {
       id: profile.id,
       email: primaryEmail.value,
-      firstName: profile.name.givenName,
-      lastName: profile.name.familyName,
+      name: profile.displayName,
       provider: profile.provider,
     }
   } else if (profile.provider === 'orcid') {
     return {
       id: profile.orcid,
       email: profile.info.email,
-      firstName: profile.info.firstname,
-      lastName: profile.info.lastname,
+      name: `${profile.info.firstname} ${profile.info.lastname}`,
       provider: profile.provider,
     }
   } else if (profile.provider === 'globus') {
-    const firstName = profile.name.split(' ')[0]
-    const lastName = profile.name
-      .split(' ')
-      .slice(1)
-      .join(' ')
     return {
       id: profile.sub,
       email: profile.email,
-      firstName: firstName,
-      lastName: lastName,
+      name: profile.name,
       provider: profile.provider,
     }
   } else {
