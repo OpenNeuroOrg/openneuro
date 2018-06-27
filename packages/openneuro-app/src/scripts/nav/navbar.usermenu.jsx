@@ -16,7 +16,7 @@ const signOutAndRedirect = history => {
 // component setup ---------------------------------------------------------------
 
 const Usermenu = ({ profile, history }) => {
-  let username = profile.firstname + ' ' + profile.lastname
+  let username = profile.name
 
   let gear = <i className="fa fa-gear" />
 

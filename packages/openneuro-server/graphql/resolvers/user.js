@@ -10,8 +10,7 @@ export const user = (obj, { id }) => {
   return promisify(scitran.getUser)(id).then(({ body }) => {
     return {
       id: body._id,
-      firstName: body.firstname,
-      lastName: body.lastname,
+      name: body.name,
       email: body.email,
     }
   })

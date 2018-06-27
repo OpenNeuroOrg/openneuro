@@ -35,17 +35,10 @@ class BlacklistModal extends Reflux.Component {
               onChange={this._inputChange}
             />
             <Input
-              placeholder="First Name"
+              placeholder="Name"
               type="text"
-              value={blacklistForm.firstname}
-              name={'firstname'}
-              onChange={this._inputChange}
-            />
-            <Input
-              placeholder="Last Name"
-              type="text"
-              value={blacklistForm.lastname}
-              name={'lastname'}
+              value={blacklistForm.name}
+              name={'name'}
               onChange={this._inputChange}
             />
             <Input

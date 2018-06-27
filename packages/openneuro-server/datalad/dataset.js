@@ -43,12 +43,7 @@ export const createDataset = (label, uploader, userInfo) => {
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
       const req = request.post(url).set('Accept', 'application/json')
-      if (userInfo)
-        setCommitInfo(
-          req,
-          `${userInfo.firstname} ${userInfo.lastname}`,
-          userInfo.email,
-        )
+      if (userInfo) setCommitInfo(req, userInfo.name, userInfo.email)
       await req
       pubsub.publish('datasetAdded', { id: datasetId })
       subscriptions

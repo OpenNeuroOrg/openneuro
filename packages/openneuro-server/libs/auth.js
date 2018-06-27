@@ -77,8 +77,7 @@ let auth = {
           req.user = scitranUser.body._id
           req.userInfo = {
             id: req.user,
-            firstname: scitranUser.body.firstname,
-            lastname: scitranUser.body.lastname,
+            name: scitranUser.body.name,
             email: scitranUser.body.email,
           }
           req.isSuperUser = scitranUser.body.root
@@ -92,8 +91,7 @@ let auth = {
             req.user = scitranUser._id
             req.userInfo = {
               id: req.user,
-              firstname: scitranUser.firstname,
-              lastname: scitranUser.lastname,
+              name: scitranUser.name,
               email: scitranUser.email,
             }
             req.isSuperUser = scitranUser.root

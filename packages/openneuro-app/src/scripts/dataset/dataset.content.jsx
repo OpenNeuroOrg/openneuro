@@ -429,7 +429,7 @@ class DatasetContent extends Reflux.Component {
     return (
       <h6>
         {'uploaded ' +
-          (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +
+          (user ? 'by ' + user.name : '') +
           ' on ' +
           dateAdded +
           ' - ' +
