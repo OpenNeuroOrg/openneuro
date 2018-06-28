@@ -67,7 +67,7 @@ def publish_target(dataset, target, treeish):
 
 
 @dataset_task
-def migrate_to_bucket(store, dataset, realm='PUBLIC'):
+def migrate_to_bucket(store, dataset, cookies=None, realm='PUBLIC'):
     """Migrate a dataset and all snapshots to an S3 bucket"""
     realm = get_s3_realm(realm=realm)
     dataset_id = dataset
@@ -80,7 +80,7 @@ def migrate_to_bucket(store, dataset, realm='PUBLIC'):
         versions = s3_versions(ds, realm, tag)
         if (len(versions)):
             r = requests.post(
-                url=GRAPHQL_ENDPOINT, json=file_urls_mutation(dataset_id, tag, versions))
+                url=GRAPHQL_ENDPOINT, json=file_urls_mutation(dataset_id, tag, versions), cookies=cookies)
             if r.status_code != 200:
                 raise Exception(r.text)
         # Public publishes to GitHub
@@ -89,7 +89,7 @@ def migrate_to_bucket(store, dataset, realm='PUBLIC'):
             publish_target(ds, realm.github_remote, tag)
 
 @dataset_task
-def publish_snapshot(store, dataset, snapshot, realm=None):
+def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
     """Publish a snapshot tag to S3, GitHub or both."""
     dataset_id = dataset
     ds = store.get_dataset(dataset)
@@ -113,7 +113,7 @@ def publish_snapshot(store, dataset, snapshot, realm=None):
     versions = s3_versions(ds, realm, snapshot)
     if (len(versions)):
         r = requests.post(
-            url=GRAPHQL_ENDPOINT, json=file_urls_mutation(dataset_id, snapshot, versions))
+            url=GRAPHQL_ENDPOINT, json=file_urls_mutation(dataset_id, snapshot, versions), cookies=cookies)
         if r.status_code != 200:
             raise Exception(r.text)
     # Public publishes to GitHub

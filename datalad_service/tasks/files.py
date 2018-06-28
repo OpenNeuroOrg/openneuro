@@ -6,7 +6,7 @@ from datalad_service.tasks.validator import validate_dataset
 
 
 @dataset_task
-def commit_files(store, dataset, files, name=None, email=None, validate=True):
+def commit_files(store, dataset, files, name=None, email=None, validate=True, cookies=None):
     """
     Commit a list of files with the email and name provided.
 
@@ -24,7 +24,7 @@ def commit_files(store, dataset, files, name=None, email=None, validate=True):
     if validate:
         # Run the validator but don't block on the request
         queue = dataset_queue(dataset)
-        validate_dataset.s(dataset, ds.path, ref).apply_async(queue=queue)
+        validate_dataset.s(dataset, ds.path, ref, cookies).apply_async(queue=queue)
     return ref
 
 

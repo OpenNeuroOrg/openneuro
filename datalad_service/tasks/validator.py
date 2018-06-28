@@ -73,17 +73,17 @@ def issues_mutation(dataset_id, ref, validator_output):
 
 
 @app.task
-def validate_dataset(dataset_id, dataset_path, ref):
+def validate_dataset(dataset_id, dataset_path, ref, cookies=None):
     validator_output = validate_dataset_sync(dataset_path)
     if validator_output:
         if 'issues' in validator_output:
             r = requests.post(
-                url=GRAPHQL_ENDPOINT, json=issues_mutation(dataset_id, ref, validator_output))
+                url=GRAPHQL_ENDPOINT, json=issues_mutation(dataset_id, ref, validator_output), cookies=cookies)
             if r.status_code != 200:
                 raise Exception(r.text)
         if 'summary' in validator_output:
             r = requests.post(
-                url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output))
+                url=GRAPHQL_ENDPOINT, json=summary_mutation(dataset_id, ref, validator_output), cookies=cookies)
             if r.status_code != 200:
                 raise Exception(r.text)
     else:

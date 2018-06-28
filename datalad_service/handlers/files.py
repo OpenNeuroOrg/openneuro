@@ -4,7 +4,7 @@ import os
 import falcon
 
 import git
-from datalad_service.common.annex import get_from_header
+from datalad_service.common.annex import get_user_info
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.files import unlock_files, commit_files, get_files, remove_files
 
@@ -84,7 +84,7 @@ class FilesResource(object):
                 ds = self.store.get_dataset(dataset)
                 media_dict = {'updated': filename}
                 # Record if this was done on behalf of a user
-                name, email = get_from_header(req)
+                name, email = get_user_info(req)
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
@@ -124,7 +124,7 @@ class FilesResource(object):
                 ds = self.store.get_dataset(dataset)
                 media_dict = {'updated': filename}
                 # Record if this was done on behalf of a user
-                name, email = get_from_header(req)
+                name, email = get_user_info(req)
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email
@@ -133,7 +133,7 @@ class FilesResource(object):
                 unlock.wait()
                 self._update_file(file_path, req.stream)
                 commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                                                  'files': [filename], 'name': name, 'email': email})
+                                                  'files': [filename], 'name': name, 'email': email, 'cookies': req.cookies})
                 commit.wait()
                 # ds.publish(to='github')
                 if not commit.failed():
@@ -157,7 +157,7 @@ class FilesResource(object):
             if os.path.exists(file_path):
                 ds = self.store.get_dataset(dataset)
                 media_dict = {'deleted': filename}
-                name, email = get_from_header(req)
+                name, email = get_user_info(req)
                 if name and email:
                     media_dict['name'] = name
                     media_dict['email'] = email

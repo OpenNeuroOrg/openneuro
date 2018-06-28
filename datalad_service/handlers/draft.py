@@ -1,6 +1,6 @@
 import falcon
 
-from datalad_service.common.annex import get_from_header
+from datalad_service.common.annex import get_user_info
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.files import commit_files
 from datalad_service.tasks.draft import is_dirty
@@ -36,13 +36,13 @@ class DraftResource(object):
         if dataset:
             queue = dataset_queue(dataset)
             # Record if this was done on behalf of a user
-            name, email = get_from_header(req)
+            name, email = get_user_info(req)
             media_dict = {}
             if name and email:
                 media_dict['name'] = name
                 media_dict['email'] = email
             commit = commit_files.apply_async(queue=queue, args=(self.annex_path, dataset), kwargs={
-                'files': None, 'name': name, 'email': email})
+                'files': None, 'name': name, 'email': email, 'cookies':req.cookies})
             commit.wait()
             if not commit.failed():
                 # Attach the commit hash to response
