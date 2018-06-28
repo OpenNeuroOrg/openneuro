@@ -17,6 +17,7 @@ process.on('unhandledRejection', error => {
   console.log('unhandledRejection', error)
 })
 
+// Setup a migration of all SciTran datasets
 const migrateAll = () => {
   const c = mongo.collections
   c.scitran.projects
@@ -40,6 +41,7 @@ const migrateAll = () => {
     })
 }
 
+// Promise wrapper for SciTran project snapshots request
 const createScitranSnapshot = datasetId => {
   return new Promise((resolve, reject) => {
     request.post(
@@ -59,6 +61,7 @@ const createScitranSnapshot = datasetId => {
   })
 }
 
+// Migrate a dataset to the new backend
 const migrate = (datasetId, uploader, label, created) => {
   return new Promise((resolve, reject) => {
     console.log(
@@ -67,12 +70,13 @@ const migrate = (datasetId, uploader, label, created) => {
     scitran.getProjectSnapshots(datasetId, async (err, snapshots) => {
       console.log(`Found ${snapshots.body.length} snapshots.`)
       if (snapshots.body.length === 0) {
+        // Create at least one private snapshot if none exist
         console.log(
           `WARNING: ${datasetId} has no snapshots - creating SciTran snapshot`,
         )
         await createScitranSnapshot(datasetId)
         console.log(`${datasetId} snapshot created - rerunning migration`)
-        migrate(datasetId, uploader, label, created)
+        await migrate(datasetId, uploader, label, created)
       } else {
         try {
           // This will throw an exception for a dataset that already exists
