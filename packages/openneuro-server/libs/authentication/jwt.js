@@ -37,21 +37,5 @@ export const decodeJWT = token => {
 }
 
 export const generateDataladCookie = config => user => {
-  let token = null
-  if (user) {
-    token = jwt.sign(
-      {
-        sub: user.id,
-        email: user.email,
-        provider: user.provider,
-        name: user.name,
-        admin: user.admin,
-      },
-      config.auth.jwt.secret,
-      {
-        expiresIn: 60000,
-      },
-    )
-  }
-  return token ? `accessToken=${token}` : ''
+  return user ? `accessToken=${addJWT(config)(user).token}` : ''
 }
