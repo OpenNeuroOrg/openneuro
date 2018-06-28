@@ -1,5 +1,6 @@
 import config from '../config'
 import request from 'superagent'
+import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getAccessionNumber } from '../libs/dataset'
 import { getDraftFiles, getDatasetRevision } from '../datalad/draft'
 import { getSnapshot } from '../datalad/snapshots'
@@ -42,27 +43,36 @@ export const createSnapshot = (req, res) => {
   const datasetId = req.params.datasetId
   const snapshotId = req.params.snapshotId
   const uri = `${URI}/datasets/${datasetId}/snapshots/${snapshotId}`
-  request.post(uri).then(() => {
-    res.send()
-  })
+  request
+    .post(uri)
+    .set('Cookie', generateDataladCookie(config)(req.user))
+    .then(() => {
+      res.send()
+    })
 }
 
 /** Migrate a dataset from the private to public aws bucket */
 export const publishDataset = (req, res) => {
   const datasetId = req.params.datasetId
   const uri = `${URI}/datasets/${datasetId}/publish`
-  request.post(uri).then(() => {
-    res.send()
-  })
+  request
+    .post(uri)
+    .set('Cookie', generateDataladCookie(config)(req.user))
+    .then(() => {
+      res.send()
+    })
 }
 
 /** Migrate a dataset from the private to public aws bucket */
 export const unpublishDataset = (req, res) => {
   const datasetId = req.params.datasetId
   const uri = `${URI}/datasets/${datasetId}/publish`
-  request.del(uri).then(() => {
-    res.send()
-  })
+  request
+    .del(uri)
+    .set('Cookie', generateDataladCookie(config)(req.user))
+    .then(() => {
+      res.send()
+    })
 }
 
 /**

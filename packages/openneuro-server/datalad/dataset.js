@@ -9,6 +9,7 @@ import config from '../config'
 import mongo from '../libs/mongo'
 import pubsub from '../graphql/pubsub.js'
 import * as subscriptions from '../handlers/subscriptions.js'
+import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
 import { getAccessionNumber } from '../libs/dataset'
 import { draftPartialKey } from './draft.js'
@@ -217,10 +218,13 @@ export const updateFile = (datasetId, path, file) => {
 /**
  * Commit a draft
  */
-export const commitFiles = (datasetId, name, email) => {
+export const commitFiles = (datasetId, user) => {
   const url = `${uri}/datasets/${datasetId}/draft`
-  const req = request.post(url).set('Accept', 'application/json')
-  setCommitInfo(req, name, email)
+  const req = request
+    .post(url)
+    .set('Cookie', generateDataladCookie(config)(user))
+    .set('Accept', 'application/json')
+  setCommitInfo(req, user.name, user.email)
   return req
 }
 
