@@ -329,26 +329,31 @@ const routes = [
   {
     method: 'post',
     url: '/datasets',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.createDataset,
   },
   {
     method: 'delete',
     url: '/datasets/:datasetId',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.deleteDataset,
   },
   {
     method: 'post',
     url: '/datasets/:datasetId/snapshots/:snapshotId',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.createSnapshot,
   },
   {
     method: 'post',
     url: '/datasets/:datasetId/publish',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.publishDataset,
   },
   {
     method: 'delete',
     url: '/datasets/:datasetId/publish',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.unpublishDataset,
   },
 
