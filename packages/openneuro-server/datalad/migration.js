@@ -82,6 +82,10 @@ const migrate = (datasetId, uploader, label, created) => {
             .set('Accept', 'application/json')
             .set('From', '"OpenNeuro Importer" <no-reply@openneuro.org>')
           await dataset.createDatasetModel(datasetId, label, uploader)
+          // If all snapshots are public, the dataset is now public
+          if (snapshots.body.filter(snapshot => snapshot.public).length > 0) {
+            await dataset.updatePublic(datasetId, true)
+          }
           const chronological = snapshots.body.sort(
             (a, b) => new Date(b.created) - new Date(a.created),
           )
