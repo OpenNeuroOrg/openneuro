@@ -8,6 +8,7 @@ from datalad.support.exceptions import FileInGitError
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
 
+
 def filter_git_files(files):
     """Remove any git/datalad files from a list of files."""
     return [f for f in files if not (f.startswith('.datalad/') or f == '.gitattributes')]
@@ -30,13 +31,15 @@ def get_repo_files(dataset, branch='HEAD'):
     return files
 
 
-def get_from_header(req):
-    """Parse the From header for a request."""
-    if 'FROM' in req.headers:
-        matches = re.match(r"\"(.*)\" <(.*?@.*)>", req.headers['FROM'])
-        return matches.group(1), matches.group(2)
-    else:
-        return None, None
+def get_user_info(req):
+    """Parse the name, email fields from a request."""
+    name = None
+    email = None
+    if 'user' in req.context:
+        user = req.context['user']
+        name = user['name']
+        email = user['email']
+    return name, email
 
 
 class CommitInfo():
