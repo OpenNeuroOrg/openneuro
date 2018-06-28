@@ -77,6 +77,7 @@ const migrate = (datasetId, uploader, label, created) => {
         await createScitranSnapshot(datasetId)
         console.log(`${datasetId} snapshot created - rerunning migration`)
         await migrate(datasetId, uploader, label, created)
+        resolve()
       } else {
         try {
           // This will throw an exception for a dataset that already exists
