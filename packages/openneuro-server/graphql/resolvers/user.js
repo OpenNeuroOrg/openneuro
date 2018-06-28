@@ -3,16 +3,17 @@
  *
  * These are passthroughs to SciTran until we have authentication working internally
  */
-import { promisify } from 'util'
-import scitran from '../../libs/scitran.js'
+import User from '../../models/user'
 
 export const user = (obj, { id }) => {
-  return promisify(scitran.getUser)(id).then(({ body }) => {
-    return {
-      id: body._id,
-      name: body.name,
-      email: body.email,
-    }
+  return new Promise((resolve, reject) => {
+    User.findOne({ id: id }, (err, data) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(data)
+      }
+    })
   })
 }
 
