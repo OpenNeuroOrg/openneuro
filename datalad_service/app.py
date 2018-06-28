@@ -7,6 +7,7 @@ from datalad_service.handlers.objects import ObjectsResource
 from datalad_service.handlers.snapshots import SnapshotResource
 from datalad_service.handlers.heartbeat import HeartbeatResource
 from datalad_service.handlers.publish import PublishResource
+from datalad_service.middleware.auth import AuthenticateMiddleware
 
 
 class PathConverter(falcon.routing.converters.BaseConverter):
@@ -17,7 +18,7 @@ class PathConverter(falcon.routing.converters.BaseConverter):
 
 
 def create_app(annex_path):
-    api = application = falcon.API()
+    api = application = falcon.API(middleware=AuthenticateMiddleware())
     api.router_options.converters['path'] = PathConverter
 
     store = DataladStore(annex_path)
