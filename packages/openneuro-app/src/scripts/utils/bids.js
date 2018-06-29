@@ -259,20 +259,6 @@ export default {
     return scitran.removePermission('projects', projectId, userId)
   },
 
-  // Delete ---------------------------------------------------------------------------------
-
-  /**
-   * Delete Dataset
-   *
-   * Takes a projectId and delete the project
-   * after recursing and removing all sub
-   * containers.
-   */
-  deleteDataset(projectId, options) {
-    options.query = { purge: true }
-    return scitran.deleteContainer('projects', projectId, options)
-  },
-
   // Dataset Format Helpers -----------------------------------------------------------------
 
   /**
@@ -450,17 +436,7 @@ export default {
    * BIDS dataset.
    */
   formatDataset(project, description, users, stars, followers, usage) {
-    let files = [],
-      attachments = []
-    if (project.files) {
-      for (let file of project.files) {
-        if (file.tags && file.tags.indexOf('attachment') > -1) {
-          attachments.push(file)
-        } else {
-          files.push(file)
-        }
-      }
-    }
+    let files = project.files
 
     let dataset = {
       /** same as original **/
@@ -485,7 +461,6 @@ export default {
       type: 'folder',
       children: files,
       description: this.formatDescription(project.metadata, description),
-      attachments: attachments,
       userCreated: this.userCreated(project),
       access: this.userAccess(project),
       summary:
@@ -565,11 +540,11 @@ export default {
     let tags = project.tags ? project.tags : []
     let currentUser = getProfile()
     let uploader = project.uploader ? project.uploader.id : null
-    let userId = currentUser ? currentUser._id : null
-    let hasRoot = currentUser ? currentUser.root : null
+    let userId = currentUser ? currentUser.id : null
+    let hasRoot = currentUser ? currentUser.admin : null
     let permissions = project.permissions ? project.permissions : []
     let permittedUsers = permissions.map(user => {
-      return user._id
+      return user.userId
     })
     let adminOnlyAccess = permittedUsers.indexOf(userId) == -1 && hasRoot
 
@@ -598,19 +573,17 @@ export default {
     let access = null
     const currentUser = getProfile()
 
-    const userId = currentUser ? currentUser._id : null
+    const userId = currentUser ? currentUser.sub : null
     if (project) {
       if (project.permissions && project.permissions.length > 0) {
         for (let user of project.permissions) {
-          if (userId === user._id) {
+          if (userId === user.userId) {
             access = user.access
           }
         }
-      } else if (project.group === userId) {
-        access = 'orphaned'
       }
 
-      if (currentUser && currentUser.root) {
+      if (currentUser && currentUser.admin) {
         access = 'admin'
       }
     }
@@ -628,7 +601,7 @@ export default {
     if (userProfile === null) {
       return false
     }
-    return project.group === userProfile.sub
+    return project.uploader ? project.uploader.id === userProfile.sub : false
   },
 
   /**
