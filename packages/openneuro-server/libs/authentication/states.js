@@ -2,6 +2,7 @@
 
 import mongo from '../mongo'
 import { ObjectID } from 'mongodb'
+import bidsId from '../bidsId'
 let c = mongo.collections
 
 /**
@@ -14,8 +15,7 @@ export const authenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next()
   } else {
-    res.status(401).send({ error: 'Not logged in.' })
-    return next()
+    return res.status(401).send({ error: 'Not logged in.' })
   }
 }
 
@@ -44,12 +44,10 @@ export const superuser = (req, res, next) => {
     if (req.user.admin) {
       return next()
     } else {
-      res.status(401).send({ error: 'You do not have admin access.' })
-      return next()
+      return res.status(401).send({ error: 'You do not have admin access.' })
     }
   } else {
-    res.status(401).send({ error: 'Not logged in.' })
-    return next()
+    return res.status(401).send({ error: 'Not logged in.' })
   }
 }
 
@@ -61,22 +59,21 @@ export const superuser = (req, res, next) => {
  * the request object.
  */
 export const datasetAccess = (req, res, next) => {
-  const datasetId = req.params.datasetId
+  let datasetId = req.params.datasetId
     ? req.params.datasetId
     : req.query.datasetId
+
+  datasetId = bidsId.decodeId(datasetId) // handle old dataset request methods that encode ids
 
   // check to make sure that the dataset exists
   return c.crn.datasets
     .findOne({ id: datasetId })
-    .then(data => {
-      console.log('dataset data:', data)
-
+    .then(dataset => {
       // if dataset does not exist, return 404 error
-      if (!data.dataset.length) {
-        res
+      if (!dataset) {
+        return res
           .status(404)
           .send({ error: 'The dataset you have requested does not exist.' })
-        return next()
       }
 
       // if there is no user option on the request,
@@ -85,33 +82,25 @@ export const datasetAccess = (req, res, next) => {
       // if the dataset is public, then thereare no restrictions on
       // the permissions either. if the user is superuser, then additionally
       // the user has access
-      if (!req.user || data.dataset.public || req.user.admin) {
+      if (!req.user || dataset.public || req.user.admin) {
         return next()
       }
 
       // find permissions information for this user & dataset
       c.crn.permissions
         .findOne({ datasetId: datasetId, userId: req.user.id })
-        .then(data => {
-          console.log('permissions data:', data)
-          if (data && data.permissions) {
+        .then(permission => {
+          if (permission) {
             return next()
           } else {
-            res
+            return res
               .status(401)
               .send({ error: 'You do not have access to this dataset.' })
-            return next()
           }
         })
-        .catch(err => {
-          res.status(404).send(err)
-          return next()
-        })
+        .catch(err => res.status(404).send(err))
     })
-    .catch(err => {
-      res.status(404).send(err)
-      return next()
-    })
+    .catch(err => res.status(404).send(err))
 }
 
 /**
@@ -160,18 +149,16 @@ export const submitJobAccess = (req, res, next) => {
     })
     .toArray((err, jobs) => {
       if (err) {
-        res.status(404).send(err)
-        return next()
+        return res.status(404).send(err)
       }
       let totalRunningJobs = jobs.length
       if (totalRunningJobs < 2) {
         return next()
       }
 
-      res
+      return res
         .status(403)
         .send({ error: 'You only have access to run 2 concurrent jobs.' })
-      return next()
     })
 }
 
@@ -195,12 +182,8 @@ export const rerunJobAccess = (req, res, next) => {
       res
         .status(401)
         .send({ error: 'You do not have access to rerun this job.' })
-      return next()
     })
-    .catch(err => {
-      res.status(404).send(err)
-      return next()
-    })
+    .catch(err => res.status(404).send(err))
 }
 
 export const deleteJobAccess = (req, res, next) => {
@@ -220,14 +203,9 @@ export const deleteJobAccess = (req, res, next) => {
         return next()
       }
 
-      res
+      return res
         .status(401)
         .send({ error: 'You do not have access to delete this job.' })
-
-      return next()
     })
-    .catch(err => {
-      res.status(404).send(err)
-      return next()
-    })
+    .catch(err => res.status(404).send(err))
 }
