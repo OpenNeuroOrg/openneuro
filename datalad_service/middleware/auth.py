@@ -12,7 +12,5 @@ class AuthenticateMiddleware(object):
                 the on_* responder.
         """
         cookies = req.cookies
-        print('cookies:', cookies)
         if 'accessToken' in cookies:
             req.context['user'] = jwt.decode(cookies['accessToken'], key=os.environ['JWT_SECRET'])
-            print('found accessToken with user info:', req.context['user'])
