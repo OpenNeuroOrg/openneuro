@@ -42,7 +42,7 @@ export default {
       return callback([])
     }
     const projects = res.datasets ? res.datasets : []
-    const users = isSignedOut ? null : (await scitran.getUsers()).body
+    const users = isSignedOut ? null : await datalad.getUsers()
     const stars = (await crn.getStars()).body
     const followers = (await crn.getSubscriptions()).body
     this.usage(null, usage => {
@@ -140,8 +140,8 @@ export default {
     // Users
     let users = null
     try {
-      const userRes = await scitran.getUsers()
-      users = !options.isPublic && userRes ? userRes.body : null
+      const userRes = await datalad.getUsers()
+      users = !options.isPublic && userRes ? userRes : null
     } catch (err) {
       // The user request failed
     }
@@ -249,16 +249,6 @@ export default {
     return crn.addPermission('projects', projectId, permission)
   },
 
-  /**
-   * Remove Permission
-   *
-   * Takes a projectId and a userId and removes
-   * the user if they were a member of the project.
-   */
-  removePermission(projectId, userId) {
-    return scitran.removePermission('projects', projectId, userId)
-  },
-
   // Dataset Format Helpers -----------------------------------------------------------------
 
   /**
@@ -317,7 +307,7 @@ export default {
   user(dataset, users) {
     if (users) {
       for (let user of users) {
-        if (user._id === dataset.group) {
+        if (user.id === dataset.group) {
           return user
         }
       }
