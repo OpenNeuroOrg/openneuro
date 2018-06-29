@@ -301,8 +301,8 @@ let datasetStore = Reflux.createStore({
    * Loads a list of all users.
    */
   loadUsers() {
-    scitran.getUsers().then(res => {
-      this.update({ users: res.body })
+    datalad.getUsers().then(res => {
+      this.update({ users: res })
     })
   },
 

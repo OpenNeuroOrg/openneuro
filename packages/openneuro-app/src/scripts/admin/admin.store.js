@@ -2,7 +2,7 @@
 
 import Reflux from 'reflux'
 import Actions from './admin.actions.js'
-import scitran from '../utils/scitran'
+import datalad from '../utils/datalad'
 import crn from '../utils/crn'
 import batch from '../utils/batch'
 import notifications from '../notification/notification.actions'
@@ -344,8 +344,8 @@ let UserStore = Reflux.createStore({
    * admin store state.
    */
   getUsers() {
-    scitran.getUsers().then(res => {
-      this.update({ users: res.body }, () => {
+    datalad.getUsers().then(res => {
+      this.update({ users: res }, () => {
         this.searchUser('')
       })
     })
@@ -383,7 +383,7 @@ let UserStore = Reflux.createStore({
    * Takes a userId and removes the user.
    */
   removeUser(userId, index, callback) {
-    scitran.removeUser(userId).then(() => {
+    datalad.removeUser(userId).then(() => {
       let users = this.data.users
       users.splice(index, 1)
       this.update({ users })
@@ -615,14 +615,14 @@ let UserStore = Reflux.createStore({
   },
 
   /**
-   * Toggle Super User
+   * Set Admin
    */
   toggleSuperUser(user, callback) {
-    scitran.updateUser(user._id, { root: !user.root }).then(() => {
+    datalad.setAdmin(user._id, !user.admin).then(() => {
       let users = this.data.users
       for (let existingUser of users) {
         if (existingUser._id === user._id) {
-          user.root = !user.root
+          user.admin = !user.admin
         }
       }
       this.update({ users: users })
