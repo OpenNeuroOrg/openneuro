@@ -208,7 +208,6 @@ let datasetStore = Reflux.createStore({
               forceReload ||
               (!this.data.uploading && dataset.tags.includes('updating'))
             ) {
-              this.revalidate()
               if (dataset.tags.includes('updating')) {
                 scitran.removeTag('projects', datasetId, 'updating')
               }
@@ -408,18 +407,6 @@ let datasetStore = Reflux.createStore({
       history.push('/datasets/' + this.data.dataset.linkID)
       this.update({ dataset, snapshots })
     })
-  },
-
-  getDatasetDownloadTicket(callback) {
-    scitran
-      .getBIDSDownloadTicket(this.data.dataset._id, {
-        snapshot: !!this.data.snapshot,
-      })
-      .then(res => {
-        let ticket = res.body.ticket
-        let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
-        callback(downloadUrl)
-      })
   },
 
   /**
@@ -692,7 +679,6 @@ let datasetStore = Reflux.createStore({
         let dataset = this.data.dataset
         dataset.description = description
         this.update({ dataset })
-        this.revalidate()
         callback()
       })
     })
@@ -773,102 +759,6 @@ let datasetStore = Reflux.createStore({
     let metadataIssues = this.data.metadataIssues
     metadataIssues[key] = null
     this.update({ metadataIssues })
-  },
-
-  // Attachments -------------------------------------------------------------------
-
-  /**
-   * Upload Attachment
-   *
-   * Takes a file and a callback and uploads
-   * the file to the current dataset.
-   */
-  uploadAttachment(file, callback) {
-    let attachmentExists, fileExists
-    for (let attachment of this.data.dataset.attachments) {
-      if (attachment.name === file.name) {
-        attachmentExists = true
-      }
-    }
-
-    for (let existingFile of this.data.dataset.children) {
-      if (existingFile.name === file.name) {
-        fileExists = true
-      }
-    }
-
-    if (attachmentExists) {
-      callback({
-        error:
-          '"' +
-          file.name +
-          '" has already been uploaded. Multiple attachments with the same name are not allowed.',
-      })
-    } else if (fileExists) {
-      callback({
-        error:
-          'You cannot upload a file named "' +
-          file.name +
-          '" as an attachment because it already exists in the dataset.',
-      })
-    } else {
-      let request = {
-        url:
-          config.scitran.url + 'projects/' + this.data.dataset._id + '/files',
-        file: file,
-        tags: ['attachment'],
-        progressStart: () => {},
-        progressEnd: () => {
-          bids.getDataset(this.data.dataset._id, res => {
-            let dataset = this.data.dataset
-            dataset.attachments = res.attachments
-            this.update({ dataset: dataset })
-            callback()
-          })
-        },
-        error: () => {
-          callback({
-            error:
-              'There was an error uploading your attachment. Please try again and contact the site administrator if the issue persists.',
-          })
-        },
-      }
-      upload.add(request)
-      this.updateModified()
-    }
-  },
-
-  /**
-   * Delete Attachment
-   *
-   * Takes a filename and index and deletes
-   * the attachment from the current dataset.
-   */
-  deleteAttachment(filename, index) {
-    scitran.deleteFile('projects', this.data.dataset._id, filename).then(() => {
-      let dataset = this.data.dataset
-      dataset.attachments.splice(index, 1)
-      this.update({ dataset })
-      this.updateModified()
-    })
-  },
-
-  /**
-   * Get Attachment Download Ticket
-   *
-   * Takes a filename and callsback with a direct
-   * download url for an attachment.
-   */
-  getAttachmentDownloadTicket(filename, callback) {
-    scitran
-      .getDownloadTicket('projects', this.data.dataset._id, filename, {
-        snapshot: !!this.data.snapshot,
-      })
-      .then(res => {
-        let ticket = res.body.ticket
-        let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
-        callback(downloadUrl)
-      })
   },
 
   // File Structure ----------------------------------------------------------------
@@ -978,7 +868,6 @@ let datasetStore = Reflux.createStore({
                 children: children,
                 loading: false,
               })
-              this.revalidate()
             })
           }
         },
@@ -1144,78 +1033,11 @@ let datasetStore = Reflux.createStore({
               .then(() => {
                 this.updateFileState(item, { loading: false })
                 this.showDatasetComponent('', item.history)
-                this.revalidate()
               })
           }
         },
       })
     }
-  },
-
-  /**
-   * Re Validate
-   *
-   * Used after any modification and must be run
-   * only after the modification is complete. Downloads
-   * and validates the dataset server side. Updates status
-   * tags and validation results on dataset.
-   */
-  revalidate() {
-    let dataset = this.data.dataset
-    scitran
-      .addTag('projects', dataset._id, 'validating')
-      .then(() => {
-        dataset.status.validating = true
-        this.update({ dataset })
-        return crn.validate(dataset._id).then(res => {
-          let validation = res.body && res.body.validation
-          dataset.status.validating = false
-          dataset.validation = validation
-          dataset.summary = res.body && res.body.summary
-          dataset.status.invalid =
-            validation &&
-            validation.errors &&
-            (validation.errors == 'Invalid' || validation.errors.length > 0)
-          this.update({ dataset })
-          this.updateModified()
-        })
-      })
-      .catch(() => {
-        if (dataset.status.validating) {
-          scitran.removeTag('projects', dataset._id, 'validating')
-          dataset.status.validating = false
-          this.update({ dataset })
-        }
-      })
-  },
-
-  /**
-   * Get File Download Ticket
-   *
-   * Takes a filename and callsback with a
-   * direct download url.
-   */
-  getFileDownloadTicket(file, callback) {
-    let isSnapshot =
-      this.data.dataset && this.data.dataset && this.data.dataset.linkOriginal
-        ? true
-        : false
-
-    scitran
-      .getDownloadTicket('projects', this.data.dataset._id, file.name, {
-        snapshot: isSnapshot,
-      })
-      .then(res => {
-        let ticket = res.body.ticket
-        let downloadUrl = res.req.url.split('?')[0] + '?ticket=' + ticket
-        callback(downloadUrl)
-      })
-      .catch(err => {
-        this.update({
-          status: err.status,
-        })
-        callback()
-      })
   },
 
   /**
