@@ -112,9 +112,17 @@ const migrate = (datasetId, uploader, label, created) => {
 const migrateSnapshot = (datasetId, snapshotId) => {
   console.log(`Snapshot migration of "${datasetId}-${snapshotId}"`)
   return new Promise((resolve, reject) => {
+    const scitranSnapshotId =
+      snapshotId.length === 5
+        ? bids.encodeId(`${datasetId.slice(2)}-${snapshotId}`)
+        : snapshotId
+    console.log(`Getting files for snapshot: "${scitranSnapshotId}"`)
     scitran.downloadSymlinkDataset(
-      bids.encodeId(snapshotId),
+      bids.encodeId(scitranSnapshotId),
       (err, hash) => {
+        if (err) {
+          console.log(err)
+        }
         const snapshotDir = config.location + '/persistent/datasets/' + hash
         uploadSnapshotContent(datasetId, snapshotId, snapshotDir).then(() =>
           resolve(),
