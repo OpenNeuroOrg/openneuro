@@ -16,9 +16,9 @@ export default {
     })
   },
 
-  /** 
+  /**
    * GET CACHE
-   * 
+   *
    * Functions the same as request but takes a
    * cache function, checks to see if the response is
    * already cached. If so, responds with the cached data.
@@ -61,12 +61,12 @@ export default {
   },
 
   /**
-     * GET PROXY
-     *
-     * Functions the same as a get request but takes a
-     * response object instead of a callback and pipes
-     * the request response to the response object.
-     */
+   * GET PROXY
+   *
+   * Functions the same as a get request but takes a
+   * response object instead of a callback and pipes
+   * the request response to the response object.
+   */
   getProxy(url, options, res) {
     handleRequest(url, options, req => {
       request
@@ -146,16 +146,6 @@ function parseOptions(req, options) {
   }
   if (options.hasOwnProperty('encoding')) {
     req.encoding = options.encoding
-  }
-  if (
-    req.url &&
-    req.url.indexOf(config.scitran.url) > -1 &&
-    options.droneRequest !== false
-  ) {
-    req.headers = {
-      'X-SciTran-Auth': config.scitran.secret,
-      'User-Agent': 'SciTran Drone CRN Server',
-    }
   }
   if (options.headers) {
     for (let key in options.headers) {
