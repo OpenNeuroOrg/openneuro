@@ -155,7 +155,7 @@ let UserStore = Reflux.createStore({
       user.visible = true
       searchInput = searchInput.toLowerCase()
 
-      let admin = user.root === true,
+      let admin = user.admin === true,
         userName = user.name,
         userSearchStrings =
           user.email.toLowerCase().includes(searchInput) ||

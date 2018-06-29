@@ -329,7 +329,7 @@ class DatasetContent extends Reflux.Component {
     let loggedIn = getProfile() !== null
     let isAdmin =
       loggedIn && this.state.datasets.currentUser
-        ? this.state.datasets.currentUser.scitran.root
+        ? this.state.datasets.currentUser.admin
         : false
 
     let content = []

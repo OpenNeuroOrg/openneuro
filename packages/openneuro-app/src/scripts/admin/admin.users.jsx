@@ -21,9 +21,9 @@ class Users extends Reflux.Component {
   render() {
     let users = []
     this.state.admin.users.map(user => {
-      let adminBadge = user.root ? 'Admin' : null
+      let adminBadge = user.admin ? 'Admin' : null
       if (user.visible) {
-        let userEmail = user.hasOwnProperty('email') ? user.email : user._id
+        let userEmail = user.hasOwnProperty('email') ? user.email : user.id
         users.push(
           <div
             className="fade-in user-panel clearfix panel panel-default"
@@ -137,9 +137,9 @@ class Users extends Reflux.Component {
   }
 
   _userTools(user) {
-    let adminIcon = user.root ? 'fa-check-square-o' : 'fa-square-o'
+    let adminIcon = user.admin ? 'fa-check-square-o' : 'fa-square-o'
 
-    if (user._id !== getProfile().sub) {
+    if (user.id !== getProfile().sub) {
       return (
         <div className="col-xs-4 last dataset-tools-wrap-admin">
           <div className="tools clearfix">

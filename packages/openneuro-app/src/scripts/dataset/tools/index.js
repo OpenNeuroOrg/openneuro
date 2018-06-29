@@ -38,12 +38,12 @@ class Tools extends Reflux.Component {
     }
 
     let datasetHasJobs = dataset.jobs ? !!dataset.jobs.length : false
-
+    let user = getProfile()
     // permission check shorthands
     let isAdmin = dataset.access === 'admin',
       // isEditor     = dataset.access === 'rw',
       // isViewer     = dataset.access === 'ro',
-      isSignedIn = getProfile() !== null,
+      isSignedIn = user !== null,
       isPublic = !!dataset.status.public,
       isIncomplete = !!dataset.status.incomplete,
       isInvalid = !!dataset.status.invalid,
@@ -53,10 +53,7 @@ class Tools extends Reflux.Component {
       hasDoi =
         dataset.description.DatasetDOI &&
         dataset.description.DatasetDOI.toLowerCase().indexOf('openneuro') >= 0,
-      isSuperuser =
-        window.localStorage.scitran && JSON.parse(window.localStorage.scitran)
-          ? JSON.parse(window.localStorage.scitran).root
-          : null
+      isSuperuser = user ? user.admin : false
 
     let displayDelete = this._deleteDataset(
       isAdmin,
