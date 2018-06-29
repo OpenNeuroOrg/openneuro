@@ -24,6 +24,7 @@ class Users extends Reflux.Component {
       let adminBadge = user.admin ? 'Admin' : null
       if (user.visible) {
         let userEmail = user.hasOwnProperty('email') ? user.email : user.id
+        let userProvider = user.provider
         users.push(
           <div
             className="fade-in user-panel clearfix panel panel-default"
@@ -36,8 +37,11 @@ class Users extends Reflux.Component {
                 </div>
               </h3>
             </div>
-            <div className="col-xs-4 user-col middle">
+            <div className="col-xs-3 user-col middle">
               <h3 className="user-email">{userEmail}</h3>
+            </div>
+            <div className="col-xs-2 user-col middle">
+              <h3 className="user-provider">{userProvider}</h3>
             </div>
             {this._userTools(user)}
             {this._userSummary(user)}
@@ -89,10 +93,13 @@ class Users extends Reflux.Component {
               <div className="col-xs-4 user-col">
                 <label>User</label>
               </div>
-              <div className="col-xs-4 user-col">
+              <div className="col-xs-3 user-col">
                 <label>Email</label>
               </div>
-              <div className="col-xs-4 user-col">
+              <div className="col-xs-2 user-col">
+                <label>Provider</label>
+              </div>
+              <div className="col-xs-3 user-col">
                 <label>Actions</label>
               </div>
             </div>
@@ -141,13 +148,13 @@ class Users extends Reflux.Component {
 
     if (user.id !== getProfile().sub) {
       return (
-        <div className="col-xs-4 last dataset-tools-wrap-admin">
+        <div className="col-xs-3 last dataset-tools-wrap-admin">
           <div className="tools clearfix">
             <div className="tool">
               <WarnButton
                 message="Admin"
                 icon={adminIcon}
-                action={actions.toggleSuperUser.bind(this, user)}
+                action={actions.setAdmin.bind(this, user)}
               />
             </div>
             <div className="tool">

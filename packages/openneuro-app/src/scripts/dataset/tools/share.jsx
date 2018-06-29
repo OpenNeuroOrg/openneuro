@@ -152,19 +152,23 @@ class Share extends Reflux.Component {
       ro: 'Can view',
     }
     if (permissions) {
-      return permissions.map(user => {
+      return permissions.map(permission => {
+        let user = permission.user
         const userProfile = getProfile()
         let remove =
-          userProfile && userProfile.sub !== user._id ? (
+          userProfile && userProfile.sub !== user.id ? (
             <WarnButton
               message="Remove"
-              action={this._removeUser.bind(this, user._id)}
+              action={this._removeUser.bind(this, user.id)}
             />
           ) : null
         return (
-          <div key={user._id} className="cte-array-item">
-            <span className="share-name">{user._id}</span>{' '}
-            <span className="share-access">- {accessKey[user.access]}</span>
+          <div key={user.id} className="cte-array-item">
+            <span className="share-name">{user.email}</span>{' '}
+            <span className="share-access">({user.provider})</span>{' '}
+            <span className="share-access">
+              - {accessKey[permission.access]}
+            </span>
             <div className="btn-wrap">{remove}</div>
           </div>
         )
@@ -205,8 +209,8 @@ class Share extends Reflux.Component {
 
     // check if user is already a member
     let isMember = false
-    for (let user of this.state.permissions) {
-      if (userId === user._id) {
+    for (let permission of this.state.permissions) {
+      if (userId === permission.userId) {
         isMember = true
       }
     }
@@ -218,7 +222,7 @@ class Share extends Reflux.Component {
     // check if user exists
     let userExists = false
     for (let user of this.state.users) {
-      if (userId === user._id) {
+      if (userId === user.email) {
         userExists = true
       }
     }
@@ -230,39 +234,16 @@ class Share extends Reflux.Component {
       return
     }
 
-    // add member
-    let role = {
-      _id: userId,
-      access: level,
-    }
-
     datalad
       .updatePermissions(this.state.datasets.dataset._id, userId, level)
-      .then(() => {
-        let permissions = this.state.permissions
-        permissions.push(role)
-        this.setState({
-          input: '',
-          select: '',
-          permissions: permissions,
-          error: null,
-        })
-      })
+      .then(() => this.setState({ input: '' }))
   }
 
   _removeUser(userId) {
     datalad
       .removePermissions(this.state.datasets.dataset._id, userId)
       .then(() => {
-        let index
-        let permissions = this.state.permissions
-        for (let i = 0; i < permissions.length; i++) {
-          if (permissions[i]._id === userId) {
-            index = i
-          }
-        }
-        permissions.splice(index, 1)
-        this.setState({ permissions })
+        this.setState({ input: '' })
       })
   }
 }

@@ -9,7 +9,7 @@ import LoggedIn from '../authentication/logged-in.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
 
 const AdminLinkContent = ({ profile }) => {
-  if (profile.superuser) {
+  if (profile.admin) {
     return (
       <NavLink className="nav-link" to="/admin">
         <span className="link-name">admin</span>
