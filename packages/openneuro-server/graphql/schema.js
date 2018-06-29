@@ -47,9 +47,13 @@ const typeDefs = `
     # Update a snapshot with a list of file urls
     updateSnapshotFileUrls(fileUrls: FileUrls!): Boolean
     # Update a users's permissions on a dataset
-    updatePermissions(datasetId: ID!, userId: String!, level: String): Boolean
+    updatePermissions(datasetId: ID!, userEmail: String!, level: String): Boolean
     # Remove a users's permissions on a dataset
     removePermissions(datasetId: ID!, userId: String!): Boolean
+    # Remove a user
+    removeUser(id: ID!): Boolean
+    # Sets a users admin status
+    setAdmin(id: ID!, admin: Boolean!): Boolean
   }
 
   type Subscription {
@@ -60,6 +64,7 @@ const typeDefs = `
     snapshotDeleted: ID
     datasetValidationUpdated: ID
     draftFilesUpdated: ID
+    permissionsUpdated: ID
   }
 
   input SummaryInput {
@@ -103,12 +108,14 @@ const typeDefs = `
     firstLogin: DateTime
     lastLogin: DateTime
     name: String!
+    admin: Boolean
   }
   
   # Which provider a user login comes from
   enum UserProvider {
-    Google
-    ORCID
+    google
+    orcid
+    globus
   }
 
   # Top level dataset, one draft and many snapshots
@@ -153,6 +160,7 @@ const typeDefs = `
     datasetId: ID!
     userId: String!
     level: String!
+    user: User
   }
 
   # Authors of a dataset

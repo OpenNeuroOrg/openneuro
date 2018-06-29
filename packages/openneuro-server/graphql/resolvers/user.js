@@ -6,21 +6,21 @@
 import User from '../../models/user'
 
 export const user = (obj, { id }) => {
-  return new Promise((resolve, reject) => {
-    User.findOne({ id: id }, (err, data) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(data)
-      }
-    })
-  })
+  return User.findOne({ id }).exec()
 }
 
 export const users = () => {
-  return []
+  return User.find().exec()
 }
 
 export const whoami = () => {
   return {}
+}
+
+export const removeUser = (obj, { id }) => {
+  return User.removeOne({ id }).exec()
+}
+
+export const setAdmin = (obj, { id, admin }) => {
+  return User.findOneAndUpdate({ id }, { admin }).exec()
 }

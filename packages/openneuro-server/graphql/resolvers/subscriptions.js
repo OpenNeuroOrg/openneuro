@@ -23,3 +23,7 @@ export const datasetValidationUpdated = {
 export const draftFilesUpdated = {
   subscribe: () => pubsub.asyncIterator('draftFilesUpdated'),
 }
+
+export const permissionsUpdated = {
+  subscribe: () => pubsub.asyncIterator('permissionsUpdated'),
+}
