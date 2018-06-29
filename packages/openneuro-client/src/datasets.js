@@ -48,6 +48,12 @@ export const getDataset = gql`
         _id: userId
         level
         access: level
+        user {
+          id
+          name
+          email
+          provider
+        }
       }
     }
   }
@@ -69,6 +75,12 @@ export const getDatasets = gql`
         _id: userId
         level
         access: level
+        user {
+          id
+          name
+          email
+          provider
+        }
       }
       draft {
         id
@@ -165,8 +177,12 @@ export const updatePublic = gql`
 `
 
 export const updatePermissions = gql`
-  mutation($datasetId: ID!, $userId: String!, $level: String) {
-    updatePermissions(datasetId: $datasetId, userId: $userId, level: $level)
+  mutation($datasetId: ID!, $userEmail: String!, $level: String) {
+    updatePermissions(
+      datasetId: $datasetId
+      userEmail: $userEmail
+      level: $level
+    )
   }
 `
 

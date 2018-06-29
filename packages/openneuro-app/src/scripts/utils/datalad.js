@@ -1,6 +1,6 @@
 import getClient from 'openneuro-client'
 import config from '../../../config'
-import { datasets, files } from 'openneuro-client'
+import { datasets, files, users } from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
 import clone from 'lodash.clonedeep'
@@ -495,10 +495,10 @@ export default {
    *
    * adds / updates a user's role on a dataset
    * @param {*} datasetId id of dataset that requires permissions update
-   * @param {*} userId permissions will be changed for user with this id
+   * @param {*} userEmail permissions will be changed for all users with this email
    * @param {*} level the access level we wish to grant the user, 'r' = read, 'rw' = read / write, 'admin' = all access
    */
-  updatePermissions(datasetId, userId, level) {
+  updatePermissions(datasetId, userEmail, level) {
     let mutation = datasets.updatePermissions
     datasetId = bids.decodeId(datasetId)
     return new Promise((resolve, reject) => {
@@ -507,7 +507,7 @@ export default {
           mutation: mutation,
           variables: {
             datasetId,
-            userId,
+            userEmail,
             level,
           },
         })
@@ -533,6 +533,67 @@ export default {
           variables: {
             datasetId,
             userId,
+          },
+        })
+        .then(() => resolve())
+        .catch(err => reject(err))
+    })
+  },
+
+  // Users
+  /**
+   * Get Users
+   *
+   * gets a list of all users
+   *
+   */
+  getUsers() {
+    const query = users.getUsers
+    return new Promise((resolve, reject) => {
+      client
+        .query({
+          query: query,
+        })
+        .then(data => {
+          let users = data.data ? data.data.users : []
+          resolve(clone(users))
+        })
+        .catch(err => reject(err))
+    })
+  },
+
+  /**
+   * Remove User
+   */
+  removeUser(id) {
+    const mutation = users.removeUser
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            id: id,
+          },
+        })
+        .then(() => resolve())
+        .catch(err => reject(err))
+    })
+  },
+
+  /**
+   * Toggle Admin
+   *
+   * Takes a user id and updates the user's admin prop
+   */
+  setAdmin(id, admin) {
+    const mutation = users.setAdmin
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: mutation,
+          variables: {
+            id: id,
+            admin: admin,
           },
         })
         .then(() => resolve())
