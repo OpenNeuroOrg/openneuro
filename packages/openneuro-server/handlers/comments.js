@@ -65,13 +65,13 @@ export default {
     if (!messageId) {
       return res.sendStatus(404)
     }
-    const user = await c.scitran.users.findOne({ _id: userId })
+    const user = await c.crn.users.findOne({ id: userId })
     let originalComment = await c.crn.comments.findOne({
       _id: ObjectID(parentId),
     })
     if (user && originalComment) {
       let flattenedUser = {
-        _id: user._id,
+        id: user.id,
         email: user.email,
         name: user.name,
       }
