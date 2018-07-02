@@ -6,7 +6,20 @@ exports[`NavMenu renders successfully 1`] = `
 >
   <li
     className="link-dashboard"
-  />
+  >
+    <withCookies(Component)>
+      <NavLink
+        className="nav-link"
+        to="/dashboard"
+      >
+        <span
+          className="link-name"
+        >
+          my dashboard
+        </span>
+      </NavLink>
+    </withCookies(Component)>
+  </li>
   <li
     className="link-public"
   >
@@ -51,15 +64,33 @@ exports[`NavMenu renders successfully 1`] = `
   </li>
   <li
     className="link-admin"
-  />
+  >
+    <withCookies(Component) />
+  </li>
   <li
     className="link-dashboard"
-  />
+  >
+    <withCookies(Component)>
+      <Uploader />
+    </withCookies(Component)>
+  </li>
   <li>
     <NavbarCollapse>
-      <SignIn
-        loading={false}
-      />
+      <withCookies(Component) />
+      <withCookies(Component)>
+        <div
+          className="navbar-right sign-in-nav-btn"
+        >
+          <button
+            className="btn-blue"
+            onClick={[Function]}
+          >
+            <span>
+              Sign in
+            </span>
+          </button>
+        </div>
+      </withCookies(Component)>
     </NavbarCollapse>
   </li>
 </ul>

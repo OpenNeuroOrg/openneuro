@@ -7,16 +7,13 @@ jest.mock('react-router-dom', () => {
   return {
     NavLink: () => '',
     withRouter: component => component,
+    withCookie: component => component,
   }
 })
 
 describe('NavMenu', () => {
   it('renders successfully', () => {
-    const wrapper = shallow(<NavMenu isLoggedIn={null} loading={false} />)
+    const wrapper = shallow(<NavMenu />)
     expect(wrapper).toMatchSnapshot()
-  })
-  it('renders without "eventKey" warnings', () => {
-    const component = mount(<NavMenu isLoggedIn={null} loading={false} />)
-    expect(component).toMatchSnapshot()
   })
 })
