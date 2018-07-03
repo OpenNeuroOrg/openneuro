@@ -1,5 +1,5 @@
 # docker compose versions
-version: '2'
+version: '2.2'
 
 # shared volumes
 volumes:
@@ -67,6 +67,7 @@ services:
     depends_on:
       - celery
     restart: always
+    init: true
   
   # celery Python backend
   celery:
@@ -87,6 +88,7 @@ services:
       - ./datalad-key:/datalad-key
     restart: always
     env_file: ./config.env
+    init: true
 
   flower:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
