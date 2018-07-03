@@ -19,7 +19,13 @@ export const addJWT = config => user => {
   return Object.assign({}, user.toJSON(), { token })
 }
 
-export const authenticate = passport.authenticate('jwt', { session: false })
+// attach user obj to request based on jwt
+// if user does not exist, continue
+export const authenticate = (req, res, next) => {
+  passport.authenticate('jwt', { session: false }, (err, user) =>
+    req.login(user, { session: false }, () => next()),
+  )(req, res, next)
+}
 
 export const authSuccessHandler = (req, res, next) => {
   if (req.user) {
