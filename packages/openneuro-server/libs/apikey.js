@@ -56,7 +56,7 @@ export const getUserIdFromApiKey = key => {
   return bcrypt
     .hash(baseKey, salt)
     .then(hash => {
-      return c.crn.keys.findOne({ hash }, { id: true })
+      return c.crn.keys.findOne({ hash })
     })
     .then(data => {
       return data.id

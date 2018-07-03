@@ -1,6 +1,3 @@
-/**
- * @jest-environment ./mongo-environment.js
- */
 import mongo from '../../libs/mongo'
 import request from 'supertest'
 import { ObjectID } from 'mongodb'

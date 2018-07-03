@@ -1,6 +1,3 @@
-/**
- * @jest-environment ./mongo-environment.js
- */
 import crypto from 'crypto'
 import mongo from '../mongo'
 import { generateApiKey, getUserIdFromApiKey } from '../apikey.js'
@@ -8,7 +5,10 @@ import { generateApiKey, getUserIdFromApiKey } from '../apikey.js'
 const veryRandomByte = '4'
 
 beforeAll(async () => {
-  await mongo.connect(global.__MONGO_URI__)
+  await mongo.connect()
+  mongo.collections.crn.keys.insertMany([
+    { id: '1234-5678', hash: 'workaround-upsert-empty-mock' },
+  ])
   crypto.randomBytes = (size, cb) => {
     const gen = Buffer.from(veryRandomByte.repeat(size))
     if (cb) {

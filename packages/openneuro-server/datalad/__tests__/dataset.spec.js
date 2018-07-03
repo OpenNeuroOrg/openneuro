@@ -1,6 +1,3 @@
-/**
- * @jest-environment ./mongo-environment.js
- */
 import request from 'superagent'
 import mongo from '../../libs/mongo.js'
 import { createDataset } from '../dataset.js'
@@ -12,11 +9,10 @@ jest.mock('superagent')
 jest.mock('../../libs/redis.js')
 
 beforeAll(async () => {
-  await mongo.connect(global.__MONGO_URI__)
-})
-
-afterAll(async () => {
-  await mongo.shutdown()
+  await mongo.connect()
+  await mongo.collections.crn.counters.insertMany([
+    { _id: 'datasets', sequence_value: 1 },
+  ])
 })
 
 describe('dataset model operations', () => {

@@ -1,15 +1,16 @@
-/**
- * @jest-environment ./mongo-environment.js
- */
 import mongo from '../mongo'
 import { getAccessionNumber } from '../dataset'
 
 beforeAll(async () => {
-  await mongo.connect(global.__MONGO_URI__)
+  await mongo.connect()
+  await mongo.collections.crn.counters.insertMany([
+    { _id: 'datasets', sequence_value: 1 },
+  ])
 })
 
 afterAll(async () => {
-  await mongo.shutdown()
+  // Reset
+  mongo.collections.crn.counters.length = 0
 })
 
 describe('util/dataset.js', () => {
