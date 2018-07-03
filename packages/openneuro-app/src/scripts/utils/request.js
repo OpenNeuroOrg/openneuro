@@ -1,5 +1,4 @@
 import request from 'superagent'
-import config from '../../../config'
 
 /*
  * Upload retries limit

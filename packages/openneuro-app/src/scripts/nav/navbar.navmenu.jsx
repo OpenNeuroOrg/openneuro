@@ -18,67 +18,63 @@ const AdminLinkContent = ({ profile }) => {
   }
   return null
 }
-const AdminLink = withProfile(AdminLinkContent)
 
-const NavMenu = ({ supportModal, loginModal }) => {
-  const adminLink = (
-    <NavLink className="nav-link" to="/admin">
-      <span className="link-name">admin</span>
-    </NavLink>
-  )
-  return (
-    <ul className="nav navbar-nav main-nav">
-      <li className="link-dashboard">
-        <LoggedIn>
-          <NavLink className="nav-link" to="/dashboard">
-            <span className="link-name">my dashboard</span>
-          </NavLink>
-        </LoggedIn>
-      </li>
-      <li className="link-public">
-        <NavLink className="nav-link" to="/public/datasets">
-          <span className="link-name">Public Dashboard</span>
-        </NavLink>
-      </li>
-      <li className="link-support">
-        <a className="nav-link" onClick={() => supportModal()}>
-          <span className="link-name">Support</span>
-        </a>
-      </li>
-      <li className="link-faq">
-        <NavLink className="nav-link" to="/faq">
-          <span className="link-name">faq</span>
-        </NavLink>
-      </li>
-      <li className="link-admin">
-        <AdminLink />
-      </li>
-      <li className="link-dashboard">
-        <LoggedIn>
-          <Uploader />
-        </LoggedIn>
-      </li>
-      <li>
-        <Navbar.Collapse>
-          <Usermenu />
-          <LoggedOut>
-            <div className="navbar-right sign-in-nav-btn">
-              <button className="btn-blue" onClick={() => loginModal()}>
-                <span>Sign in</span>
-              </button>
-            </div>
-          </LoggedOut>
-        </Navbar.Collapse>
-      </li>
-    </ul>
-  )
+AdminLinkContent.propTypes = {
+  profile: PropTypes.object,
 }
 
+const AdminLink = withProfile(AdminLinkContent)
+
+const NavMenu = ({ supportModal, loginModal }) => (
+  <ul className="nav navbar-nav main-nav">
+    <li className="link-dashboard">
+      <LoggedIn>
+        <NavLink className="nav-link" to="/dashboard">
+          <span className="link-name">my dashboard</span>
+        </NavLink>
+      </LoggedIn>
+    </li>
+    <li className="link-public">
+      <NavLink className="nav-link" to="/public/datasets">
+        <span className="link-name">Public Dashboard</span>
+      </NavLink>
+    </li>
+    <li className="link-support">
+      <a className="nav-link" onClick={() => supportModal()}>
+        <span className="link-name">Support</span>
+      </a>
+    </li>
+    <li className="link-faq">
+      <NavLink className="nav-link" to="/faq">
+        <span className="link-name">faq</span>
+      </NavLink>
+    </li>
+    <li className="link-admin">
+      <AdminLink />
+    </li>
+    <li className="link-dashboard">
+      <LoggedIn>
+        <Uploader />
+      </LoggedIn>
+    </li>
+    <li>
+      <Navbar.Collapse>
+        <Usermenu />
+        <LoggedOut>
+          <div className="navbar-right sign-in-nav-btn">
+            <button className="btn-blue" onClick={() => loginModal()}>
+              <span>Sign in</span>
+            </button>
+          </div>
+        </LoggedOut>
+      </Navbar.Collapse>
+    </li>
+  </ul>
+)
+
 NavMenu.propTypes = {
-  profile: PropTypes.object,
-  scitran: PropTypes.object,
-  isLoggedIn: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
-  loading: PropTypes.bool,
+  supportModal: PropTypes.func,
+  loginModal: PropTypes.func,
 }
 
 export default NavMenu

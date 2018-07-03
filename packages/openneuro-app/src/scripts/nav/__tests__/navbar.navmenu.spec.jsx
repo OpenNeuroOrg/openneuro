@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import NavMenu from '../navbar.navmenu.jsx'
 
 // Need to mock the router because of withRouter in these components

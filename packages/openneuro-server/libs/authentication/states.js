@@ -69,8 +69,6 @@ export const datasetAccess = (req, res, next) => {
   return c.crn.datasets
     .findOne({ id: datasetId })
     .then(data => {
-      console.log('dataset data:', data)
-
       // if dataset does not exist, return 404 error
       if (!data.dataset.length) {
         res
@@ -93,7 +91,6 @@ export const datasetAccess = (req, res, next) => {
       c.crn.permissions
         .findOne({ datasetId: datasetId, userId: req.user.id })
         .then(data => {
-          console.log('permissions data:', data)
           if (data && data.permissions) {
             return next()
           } else {
