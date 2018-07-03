@@ -31,47 +31,66 @@ InfoPanel.propTypes = {
   toggle: PropTypes.func,
 }
 
-const Login = ({ show, modalToggle, min, infoPanel, infoToggle }) => {
-  return (
-    <Modal
-      show={show}
-      onHide={() => modalToggle(false)}
-      className="login-modal">
-      <Modal.Header closeButton>
-        <Modal.Title>
-          <div className="logo-text">
-            <span>
-              Open<span className="logo-end">Neuro</span>
-            </span>
-          </div>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className="login-btns">
-          <span className="dropdown-header">Sign in with:</span>
-        </div>
-        <hr className="spacer" />
-        <div className="login-modal">
-          <div className="login-btns">
-            <GoogleButton min={min} />
-          </div>
-          <div className="login-btns">
-            <GlobusButton min={min} />
-          </div>
-          <div className="login-btns">
-            <OrcidButton min={min} />
-            <div className="info-panel">
-              <span className="help-info" onClick={() => infoToggle()}>
-                What is this?
+class Login extends React.Component {
+  constructor() {
+    super()
+    this.state = { infoPanel: false }
+    this.toggleInfoPanel = this._toggleInfoPanel.bind(this)
+  }
+
+  _toggleInfoPanel(val) {
+    this.setState({ infoPanel: val })
+  }
+
+  render() {
+    return (
+      <Modal
+        show={this.props.show}
+        onHide={() => this.props.modalToggle(false)}
+        className="login-modal">
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <div className="logo-text">
+              <span>
+                Open<span className="logo-end">Neuro</span>
               </span>
-              <InfoPanel show={infoPanel} toggle={infoToggle} />
             </div>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="login-btns">
+            <span className="dropdown-header">Sign in with:</span>
           </div>
-          <a onClick={() => modalToggle(false)}>Close</a>
-        </div>
-      </Modal.Body>
-    </Modal>
-  )
+          <hr className="spacer" />
+          <div className="login-modal">
+            <div className="login-btns">
+              <GoogleButton min={this.props.min} />
+            </div>
+            <div className="login-btns">
+              <GlobusButton min={this.props.min} />
+            </div>
+            <div className="login-btns">
+              <OrcidButton min={this.props.min} />
+              <div className="info-panel">
+                <span
+                  className="help-info"
+                  onClick={() => {
+                    this.toggleInfoPanel(true)
+                  }}>
+                  What is this?
+                </span>
+                <InfoPanel
+                  show={this.state.infoPanel}
+                  toggle={this.toggleInfoPanel.bind(this)}
+                />
+              </div>
+            </div>
+            <a onClick={() => this.props.modalToggle(false)}>Close</a>
+          </div>
+        </Modal.Body>
+      </Modal>
+    )
+  }
 }
 
 Login.propTypes = {

@@ -62,7 +62,11 @@ class BSNavbar extends React.Component {
           </Navbar.Collapse>
         </Navbar>
         {this._supportModal()}
-        {this._loginModal()}
+        <LoginModal
+          show={this.state.loginModal}
+          modalToggle={this.loginModal.bind(this)}
+          min={true}
+        />
       </span>
     )
   }
@@ -118,18 +122,6 @@ class BSNavbar extends React.Component {
           <a onClick={() => this.setState({ supportModal: false })}>Close</a>
         </Modal.Footer>
       </Modal>
-    )
-  }
-
-  _loginModal() {
-    return (
-      <LoginModal
-        show={this.state.loginModal}
-        modalToggle={this.loginModal.bind(this)}
-        min={true}
-        infoPanel={this.state.infoPanel}
-        infoToggle={this.infoModal.bind(this)}
-      />
     )
   }
 }
