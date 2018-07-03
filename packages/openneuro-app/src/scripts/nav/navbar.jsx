@@ -5,12 +5,9 @@ import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
 import NavMenu from './navbar.navmenu.jsx'
 import { Navbar } from 'react-bootstrap'
-import { Panel } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
+import LoginModal from '../common/partials/login.jsx'
 import brand_mark from './assets/brand_mark.png'
-import OrcidButton from '../authentication/orcid-button.jsx'
-import GoogleButton from '../authentication/google-button.jsx'
-import GlobusButton from '../authentication/globus-button.jsx'
 
 // component setup ---------------------------------------------------------------
 const OpenNeuroBrand = () => (
@@ -126,61 +123,13 @@ class BSNavbar extends React.Component {
 
   _loginModal() {
     return (
-      <Modal
+      <LoginModal
         show={this.state.loginModal}
-        onHide={() => this.loginModal(false)}
-        className="login-modal">
-        <Modal.Header closeButton>
-          <Modal.Title>
-            <div className="logo-text">
-              <span>
-                Open<span className="logo-end">Neuro</span>
-              </span>
-            </div>
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div className="login-btns">
-            <span className="dropdown-header">Sign in with:</span>
-          </div>
-          <hr className="spacer" />
-          <div className="login-modal">
-            <div className="login-btns">
-              <GoogleButton min={true} />
-            </div>
-            <div className="login-btns">
-              <GlobusButton min={true} />
-            </div>
-            <div className="login-btns">
-              <OrcidButton min={true} />
-              <div className="info-panel">
-                <span className="help-info" onClick={() => this.infoModal()}>
-                  What is this?
-                </span>
-                {this.state.infoPanel && this._infoPanel()}
-              </div>
-            </div>
-            <a onClick={() => this.loginModal(false)}>Close</a>
-          </div>
-        </Modal.Body>
-      </Modal>
-    )
-  }
-
-  _infoPanel() {
-    return (
-      <Panel className="fade-in panel">
-        <button className="close" onClick={() => this.infoModal(false)}>
-          <span className="close-sym" />
-          <span className="sr-only">close</span>
-        </button>
-        <span className="info">
-          {' '}
-          ORCID users are identified and connected to their contributions and
-          affiliations, across disciplines, borders, and time.{' '}
-          <a href="https://orcid.org/content/about-orcid">Learn more</a>
-        </span>
-      </Panel>
+        modalToggle={this.loginModal.bind(this)}
+        min={true}
+        infoPanel={this.state.infoPanel}
+        infoToggle={this.infoModal.bind(this)}
+      />
     )
   }
 }

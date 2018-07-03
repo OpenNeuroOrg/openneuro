@@ -348,7 +348,7 @@ class DatasetContent extends Reflux.Component {
       content.push(
         <div key="commentLoginMessage" className="login-for-comments">
           Please{' '}
-          <a onClick={userActions.toggle.bind(this, 'loginModal')}>sign in</a>{' '}
+          {/* <a onClick={userActions.toggle.bind(this, 'loginModal')}>sign in</a>{' '} */}
           to contribute to the discussion.
         </div>,
       )
