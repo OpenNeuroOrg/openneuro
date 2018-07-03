@@ -22,6 +22,7 @@ import Summary from './dataset.summary.jsx'
 import Comment from '../common/partials/comment.jsx'
 import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
+import LoginModal from '../common/partials/login.jsx'
 import { refluxConnect } from '../utils/reflux'
 import { getProfile } from '../authentication/profile.js'
 
@@ -56,7 +57,8 @@ class DatasetContent extends Reflux.Component {
         return uploadWarning
       }
     })
-    this.state = { unblock }
+    this.state = { unblock, loginModal: false }
+    this.toggleModal = this._toggleModal.bind(this)
   }
   // life cycle events --------------------------------------------------
 
@@ -133,6 +135,7 @@ class DatasetContent extends Reflux.Component {
                 type="string"
               />
             </h1>
+            <LoginModal show={this.state.loginModal} min={true} />
             {this._uploaded(dataset)}
             {this._modified(dataset.modified)}
             {this._authors(dataset.authors)}
@@ -201,6 +204,14 @@ class DatasetContent extends Reflux.Component {
         )}
       </ErrorBoundary>
     )
+  }
+
+  // functions -------------------------------------
+  _toggleModal(prop, value) {
+    console.log('this.state:', this.state)
+    let state = this.state
+    state[prop] = value
+    this.setState(state)
   }
 
   // template methods ---------------------------------------------------
@@ -348,7 +359,12 @@ class DatasetContent extends Reflux.Component {
       content.push(
         <div key="commentLoginMessage" className="login-for-comments">
           Please{' '}
-          {/* <a onClick={userActions.toggle.bind(this, 'loginModal')}>sign in</a>{' '} */}
+          <a
+            onClick={() => {
+              this.toggleModal('loginModal', true)
+            }}>
+            sign in
+          </a>{' '}
           to contribute to the discussion.
         </div>,
       )
