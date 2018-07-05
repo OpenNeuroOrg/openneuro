@@ -2,7 +2,7 @@ import passport from 'passport'
 import jwt from 'jsonwebtoken'
 
 // Helper to generate a JWT containing user info
-export const addJWT = config => user => {
+export const addJWT = config => (user, expiration = 60000) => {
   const token = jwt.sign(
     {
       sub: user.id,
@@ -13,7 +13,7 @@ export const addJWT = config => user => {
     },
     config.auth.jwt.secret,
     {
-      expiresIn: 60000,
+      expiresIn: expiration,
     },
   )
   return Object.assign({}, user.toJSON(), { token })
