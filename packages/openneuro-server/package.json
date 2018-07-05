@@ -45,7 +45,6 @@
     "jsonwebtoken": "^8.3.0",
     "juice": "^2.0.0",
     "moment": "^2.14.1",
-    "mongo-mock": "https://github.com/williamkapke/mongo-mock",
     "mongodb": "^2.2.34",
     "mongoose": "^5.1.6",
     "morgan": "^1.6.1",
@@ -83,7 +82,7 @@
     "ioredis-mock": "^3.8.1",
     "jest": "^22.4.3",
     "mockingoose": "^2.10.1",
-    "mongo-mock": "^3.1.0",
+    "mongo-mock": "https://github.com/williamkapke/mongo-mock",
     "supertest": "^3.0.0"
   },
   "jest": {
