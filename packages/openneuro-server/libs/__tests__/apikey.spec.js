@@ -1,8 +1,17 @@
 import crypto from 'crypto'
 import mongo from '../mongo'
-import { generateApiKey, getUserIdFromApiKey } from '../apikey.js'
+import { generateApiKey } from '../apikey.js'
+
+jest.mock('../../config.js')
 
 const veryRandomByte = '4'
+const userMock = {
+  id: '1337',
+  name: 'Total Poser',
+  email: 'porkchopsandwich@gijoe.com',
+  admin: true,
+  provider: 'google',
+}
 
 beforeAll(async () => {
   await mongo.connect()
@@ -26,21 +35,8 @@ afterAll(async () => {
 describe('util/apikey.js', () => {
   describe('generateApiKey', () => {
     it('returns an API key', async () => {
-      const { key, hash } = await generateApiKey('1234-5678')
-      expect(key).toBe(
-        'JDJiJDEyJExCT3lMQk95TEJPeUxCT3lMQk95TC46MzQzNDM0MzQtMzQzNC00NDM0LWI0MzQtMzQzNDM0MzQzNDM0',
-      )
-      expect(hash).toBe(
-        '$2b$12$LBOyLBOyLBOyLBOyLBOyL.Asu7taW81YymSTs8bAUEbuFqliekFEe',
-      )
-    })
-  })
-  describe('getUserIdFromApiKey', () => {
-    it('returns the right user id', async () => {
-      const userId = '1234-5678'
-      const { key } = await generateApiKey(userId)
-      const fromApiKey = await getUserIdFromApiKey(key)
-      expect(fromApiKey).toBe(userId)
+      const { key } = await generateApiKey(userMock)
+      expect(key)
     })
   })
 })
