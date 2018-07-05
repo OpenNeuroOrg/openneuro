@@ -28,14 +28,15 @@ const authLink = getAuthorization =>
   setContext((_, { headers }) => {
     // Passthrough any headers but add in authorization if set
     const token = getAuthorization()
-    const tokenString = `Bearer ${token}`
+    let cookie = {}
+    if (token) {
+      const tokenString = `accessToken=${token}`
+      cookie = {
+        cookie: tokenString,
+      }
+    }
     return {
-      headers: Object.assign(
-        {
-          authorization: tokenString,
-        },
-        headers,
-      ),
+      headers: Object.assign(cookie, headers),
     }
   })
 
