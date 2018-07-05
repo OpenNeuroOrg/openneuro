@@ -62,7 +62,7 @@ class FrontPage extends Reflux.Component {
                   <span>
                     <a href={configurables.titlePanel.privacyLink}>
                       Click here for more information about{' '}
-                      {configurables.pageTitle}'s privacy policy.
+                      {configurables.pageTitle}&#39;s privacy policy.
                     </a>
                   </span>
                 </div>
