@@ -42,6 +42,7 @@ export default {
     ],
     logoText: true,
     privacyDetail: '',
+    privacyLink: 'https://www.stanford.edu/site/privacy/',
   },
   frontPageExtras: false,
   collaborators: false,
