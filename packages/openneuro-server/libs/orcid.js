@@ -25,27 +25,32 @@ export default {
               'An unexpected ORCID login failure occurred, please try again later.',
             )
           }
-          let doc = new xmldoc.XmlDocument(res.body)
-          let firstname = doc.valueWithPath(
+          const doc = new xmldoc.XmlDocument(res.body)
+          let name = doc.valueWithPath(
+            'person:person.person:name.personal-details:credit-name',
+          )
+          const firstname = doc.valueWithPath(
             'person:person.person:name.personal-details:given-names',
           )
-          let lastname = doc.valueWithPath(
+          const lastname = doc.valueWithPath(
             'person:person.person:name.personal-details:family-name',
           )
-          let email = doc.valueWithPath(
+          const email = doc.valueWithPath(
             'person:person.email:emails.email:email.email:email',
           )
 
-          if (!firstname) {
-            reject(
-              'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
-            )
-          }
-
-          if (!lastname) {
-            reject(
-              'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
-            )
+          if (!name) {
+            if (!firstname) {
+              reject(
+                'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
+              )
+            } else if (!lastname) {
+              reject(
+                'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
+              )
+            } else {
+              name = `${firstname} ${lastname}`
+            }
           }
 
           if (!email) {
@@ -55,8 +60,7 @@ export default {
           }
 
           resolve({
-            firstname,
-            lastname,
+            name,
             email,
           })
         },
