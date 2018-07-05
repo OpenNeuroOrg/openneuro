@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import { withCookies } from 'react-cookie'
 import LoggedIn from './logged-in.jsx'

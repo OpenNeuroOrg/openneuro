@@ -1,12 +1,10 @@
-/**
- * @jest-environment ./mongo-environment.js
- */
 import mongo from '../../libs/mongo'
 import request from 'supertest'
 import { ObjectID } from 'mongodb'
 import createApp from '../../app.js'
 import utils from '../../libs/testing-utils.js'
 
+jest.mock('../../config.js')
 jest.unmock('superagent')
 
 const app = createApp(true)

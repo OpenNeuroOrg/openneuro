@@ -13,6 +13,7 @@ import { getProfile } from '../../authentication/profile.js'
 
 const openLoginModal = () => {
   // TODO - fix this
+  // eslint-disable-next-line no-console
   console.error('Login modal unimplemented')
 }
 

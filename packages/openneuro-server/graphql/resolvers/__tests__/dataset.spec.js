@@ -1,15 +1,11 @@
-/**
- * @jest-environment ./mongo-environment.js
- */
 import mongo from '../../../libs/mongo'
 import * as ds from '../dataset'
 
 beforeAll(async () => {
-  await mongo.connect(global.__MONGO_URI__)
-})
-
-afterAll(async () => {
-  await mongo.shutdown()
+  await mongo.connect()
+  await mongo.collections.crn.counters.insertMany([
+    { _id: 'datasets', sequence_value: 1 },
+  ])
 })
 
 describe('dataset resolvers', () => {

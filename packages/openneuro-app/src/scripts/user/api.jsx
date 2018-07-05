@@ -29,7 +29,7 @@ export default class APIKeyGen extends React.Component {
       .then(key => {
         this.setState({ key, loading: false })
       })
-      .catch(err => {
+      .catch(() => {
         this.setState({ loading: false })
       })
   }
