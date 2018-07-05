@@ -499,20 +499,14 @@ export default {
    * @param {*} level the access level we wish to grant the user, 'r' = read, 'rw' = read / write, 'admin' = all access
    */
   updatePermissions(datasetId, userEmail, level) {
-    let mutation = datasets.updatePermissions
     datasetId = bids.decodeId(datasetId)
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: mutation,
-          variables: {
-            datasetId,
-            userEmail,
-            level,
-          },
-        })
-        .then(() => resolve())
-        .catch(err => reject(err))
+    return client.mutate({
+      mutation: datasets.updatePermissions,
+      variables: {
+        datasetId,
+        userEmail,
+        level,
+      },
     })
   },
 
@@ -526,17 +520,12 @@ export default {
   removePermissions(datasetId, userId) {
     let mutation = datasets.removePermissions
     datasetId = bids.decodeId(datasetId)
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: mutation,
-          variables: {
-            datasetId,
-            userId,
-          },
-        })
-        .then(() => resolve())
-        .catch(err => reject(err))
+    return client.mutate({
+      mutation: mutation,
+      variables: {
+        datasetId,
+        userId,
+      },
     })
   },
 
@@ -566,17 +555,11 @@ export default {
    * Remove User
    */
   removeUser(id) {
-    const mutation = users.removeUser
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: mutation,
-          variables: {
-            id: id,
-          },
-        })
-        .then(() => resolve())
-        .catch(err => reject(err))
+    return client.mutate({
+      mutation: users.removeUser,
+      variables: {
+        id: id,
+      },
     })
   },
 
@@ -586,18 +569,12 @@ export default {
    * Takes a user id and updates the user's admin prop
    */
   setAdmin(id, admin) {
-    const mutation = users.setAdmin
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: mutation,
-          variables: {
-            id: id,
-            admin: admin,
-          },
-        })
-        .then(() => resolve())
-        .catch(err => reject(err))
+    return client.mutate({
+      mutation: users.setAdmin,
+      variables: {
+        id: id,
+        admin: admin,
+      },
     })
   },
 }
