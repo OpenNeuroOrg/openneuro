@@ -154,7 +154,7 @@ class Users extends Reflux.Component {
               <WarnButton
                 message="Admin"
                 icon={adminIcon}
-                action={actions.setAdmin.bind(this, user)}
+                action={actions.toggleSuperUser.bind(this, user)}
               />
             </div>
             <div className="tool">
