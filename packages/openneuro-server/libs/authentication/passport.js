@@ -102,7 +102,7 @@ const loadProfile = profile => {
     return {
       id: profile.orcid,
       email: profile.info.email,
-      name: `${profile.info.firstname} ${profile.info.lastname}`,
+      name: profile.info.name,
       provider: profile.provider,
     }
   } else if (profile.provider === 'globus') {
