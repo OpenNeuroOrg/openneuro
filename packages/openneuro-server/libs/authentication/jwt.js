@@ -16,7 +16,7 @@ export const addJWT = config => (user, expiration = 60000) => {
       expiresIn: expiration,
     },
   )
-  return Object.assign({}, user.toJSON(), { token })
+  return Object.assign({}, user, { token })
 }
 
 // attach user obj to request based on jwt
