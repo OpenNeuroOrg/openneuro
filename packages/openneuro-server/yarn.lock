@@ -4076,7 +4076,7 @@ lodash@3.7.x:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.7.0.tgz#3678bd8ab995057c07ade836ed2ef087da811d45"
 
-lodash@^3.10.1, lodash@^3.6.0:
+lodash@^3.10.1:
   version "3.10.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
 
@@ -4311,13 +4311,13 @@ moment-timezone@^0.5.x:
   version "2.22.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.22.1.tgz#529a2e9bf973f259c9643d237fda84de3a26e8ad"
 
-mongo-mock@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/mongo-mock/-/mongo-mock-3.1.0.tgz#6979477ac45348036823a83ac02cdbe460b9515e"
+"mongo-mock@https://github.com/williamkapke/mongo-mock":
+  version "3.3.0"
+  resolved "https://github.com/williamkapke/mongo-mock#085f83bf0333149e856f9a0d130bb2dedbc40fa7"
   dependencies:
     bson-objectid "^1.1.4"
     debug "^2.1.3"
-    lodash "^3.6.0"
+    lodash "^4.17.10"
     modifyjs "^0.3.1"
     sift "^3.1.1"
 

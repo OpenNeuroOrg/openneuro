@@ -1,5 +1,4 @@
 import async from 'async'
-import scitran from './scitran'
 import crn from './crn'
 import fileUtils from './files'
 import hex from './hex'

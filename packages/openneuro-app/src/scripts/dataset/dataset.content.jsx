@@ -208,7 +208,6 @@ class DatasetContent extends Reflux.Component {
 
   // functions -------------------------------------
   _toggleModal(prop, value) {
-    console.log('this.state:', this.state)
     let state = this.state
     state[prop] = value
     this.setState(state)
