@@ -91,7 +91,6 @@ export default {
             comment = response.ops[0]
           }
           notifications.commentCreated(comment)
-          console.log('created comment. sending this back:', response.ops[0])
           return res.send(response.ops[0])
         }
       })
