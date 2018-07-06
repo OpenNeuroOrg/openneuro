@@ -1,0 +1,43 @@
+//THEME
+
+// Changes the theme (colors, font, etc) of the openneuro instance.
+// Color variables are inherited from src/scss/_colors.scss.
+
+// Colors
+$primary: $ocean;
+$primary-hover: lighten($ocean, 15%);
+
+$secondary: $sky;
+
+$tertiary: $turquoise;
+
+// Fonts
+$font-family-open: 'Open Sans', sans-serif;
+$font-family-cabin: 'Cabin', sans-serif;
+
+// Shadows
+$btn-shadow: 1px 1px 3px -1px $transparent7;
+
+// Navbar
+$navbar-top-border-color: $stanford-red;
+$navbar-background-color: $c-33;
+$navbar-btn-text-color: $misty;
+$navbar-btn-text-underline-color: $transparent1-w;
+$navbar-btn-active-background-color: $transparent05-w;
+$navbar-btn-active-text-color: $white; 
+$navbar-upload-btn-background-color: $transparent3;
+$navbar-upload-btn-active-background-color: $secondary;
+
+// Footer
+$footer-background-color: $c-33;
+$footer-text-color: $white;
+
+// Dashboard
+$dashboard-tab-text-color: $primary;
+
+// Charts
+$chart-success-color: $turquoise;
+$chart-failed-color: $coral;
+
+// Misc
+$spinner-color: $turquoise; // color of the loading spinner

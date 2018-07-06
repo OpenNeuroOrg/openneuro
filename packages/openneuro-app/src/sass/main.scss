@@ -23,8 +23,10 @@ $bootstrap-sass-asset-helper: true;
 @import 'animate/_attention-seekers/flash';
 
 
-//crn SASS ================================================================
-@import './crn_app/variables';
+//openneuro SASS ================================================================
+@import './crn_app/colors';
+@import './crn_app/theme';
+@import './crn_app/bootstrap.overrides';
 @import './crn_app/elements-wrappers';
 
 // react-select
