@@ -431,7 +431,7 @@
     .logo-text{
         display: block;
         font-size: 38px;
-        color: #fff;
+        color: $white;
         margin: 12px 10px;
         float: left;
 
@@ -445,7 +445,7 @@
         }
         &:hover{
             .logo-end{
-                color: #fff;
+                color: $white;
             }
         }
     }
