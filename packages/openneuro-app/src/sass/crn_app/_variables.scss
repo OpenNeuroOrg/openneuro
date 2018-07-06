@@ -34,15 +34,6 @@ $honey: #fffcee;
 
 $notification-green: #77e6a3;
 
-.color-green{
-    color: $brand-success;
-}
-
-
-.color-warning{
-    color: $coral;
-}
-
 // Gray
 
 $c-9e: #9e9e9e;
@@ -80,9 +71,10 @@ $warning-orange: #df7600;
 
 
 $primary: $ocean;
-$primary-hover: lighten($primary, 15%);
-$secondary: $sky;
+$primary-hover: lighten($ocean, 15%);
 
+$secondary: $sky;
+$tertiary: $turquoise;
 
 // Navbar
 $navbar-top-border-color: $stanford-red;
