@@ -441,7 +441,7 @@
 
         .logo-end{
             transition: color 0.3s;
-            color: lighten($ocean, 12%);
+            color: lighten($primary, 12%);
         }
         &:hover{
             .logo-end{
