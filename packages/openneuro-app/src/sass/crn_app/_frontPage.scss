@@ -487,9 +487,9 @@
 }
 
 footer {
-    background: #333;
+    background: $footer-background-color;
     padding: 10px 20px;
-    color: $white;
+    color: $footer-text-color;
     display: block;
     .version{
 
@@ -507,7 +507,7 @@ footer {
                 text-align: center;
                 list-style: none;
                 a{
-                    color: $white;
+                    color: $footer-text-color;
                     &:hover{
                         text-decoration: underline;
                         color: lighten($secondary, 15%);
