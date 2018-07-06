@@ -60,7 +60,7 @@
             .panel-body {
                 border-top: 1px solid transparent;
                 color: $c-56;
-                font-family: 'Cabin', sans-serif;
+                font-family: $font-family-cabin;
                 font-size: 11px;
 
                 >ul {
@@ -129,7 +129,7 @@
                         display: inline-block;
                         max-width: 100%;
                         margin-bottom: 5px;
-                        font-family: 'Cabin', sans-serif;
+                        font-family: $font-family-cabin;
                     }
 
                     .panel-body {
