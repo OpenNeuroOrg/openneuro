@@ -5,9 +5,9 @@
     width: 100%;
     padding: 15px 10px;
     font-size: 21px;
-    background: #00b489;
+    background: $persian-green;
     &:hover{
-        background: lighten(#00b489, 5%);
+        background: lighten($persian-green, 5%);
         color: $white;
     }
 }
@@ -232,7 +232,7 @@
             border: 1px solid $ccc;
             img{
                 margin: 0 0 0 -5px;
-                border: 2px solid #eee;
+                border: 2px solid $eee;
                 width: 450px;
                 height: auto;
                 &.snapshot{
@@ -293,7 +293,7 @@
             }
             .col-sm-6{
                 padding: 10px 30px 30px;
-                color: #4b4b4b;
+                color: $c-4b;
                 font-weight: 200;
                 p{
                     max-width: 450px;
@@ -309,7 +309,7 @@
             h3{
                 font-size: 25px;
                 font-weight: 200;
-                color: #4b4b4b;
+                color: $c-4b;
             }
         }
         .support-more{
@@ -332,9 +332,9 @@
 
 .browse-pipelines {
     @extend .clearfix;
-    @include gradient-vertical($start-color: #009b76, $end-color: #00ad84);
+    @include gradient-vertical($start-color: $turquoise , $end-color: $persian-green);
     .browse-pipeline-header{
-        background: #00b489;
+        background: $persian-green;
         color: $white;
         font-weight: 200;
         font-size: 34px;
@@ -368,7 +368,7 @@
                 li{
                     margin: 0 0 15px;
                     padding: 10px;
-                    border: 1px dashed lighten(#00b489, 5%);
+                    border: 1px dashed lighten($persian-green, 5%);
                     flex-basis: 49%;
                     button{
                         @extend %btn-dash;
@@ -379,7 +379,7 @@
                 background: $white;
             }
             &.browse {
-                border-left: 2px solid #00b489;
+                border-left: 2px solid $persian-green;
                 label{
                     font-size: 20px;
                     color: $white;
@@ -406,7 +406,7 @@
                 }
 
                 .select-pipeline option {
-                    color: black;
+                    color: $black;
                 }
 
                 .select-pipeline-arrow{
@@ -475,7 +475,7 @@
     }
 
     .active-pipeline-arrow{
-        border-color: #00ad84 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+        border-color: $persian-green rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
         border-style: solid;
         border-width: 17px 25px 2.5px;
         display: inline-block;
