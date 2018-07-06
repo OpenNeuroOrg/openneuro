@@ -1,5 +1,5 @@
 # docker compose versions
-version: '2'
+version: '2.2'
 
 # shared volumes
 volumes:
