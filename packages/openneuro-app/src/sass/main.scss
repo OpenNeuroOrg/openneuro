@@ -226,12 +226,12 @@ $bootstrap-sass-asset-helper: true;
     }
     button{
         @extend %btn-admin;
-        border-color: $sky;
-        color: $sky;
+        border-color: $secondary;
+        color: $secondary;
         padding: 5px 2px;
         height: auto;
         &:hover{
-            background:transparentize($sky, .5);
+            background:transparentize($secondary, .5);
             color:$white;
         }
     }

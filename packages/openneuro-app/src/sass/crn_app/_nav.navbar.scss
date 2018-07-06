@@ -143,7 +143,7 @@
                     width: 180px;
                     padding: 0 15px;
                     background: $navbar-upload-btn-background-color;
-                    color: lighten($sky, 10%);
+                    color: lighten($secondary, 10%);
 
                     .link-name {
                         border-color: $transparent;
@@ -290,13 +290,13 @@
 
                     .btn-submit-other {
                         margin-bottom: 15px;
-                        color: $sky;
+                        color: $secondary;
                         border-color: $transparent;
 
                         &:hover,
                         &.active {
                             border-color: $transparent;
-                            color: darken($sky, 10%);
+                            color: darken($secondary, 10%);
                             background: $eee;
                         }
                     }

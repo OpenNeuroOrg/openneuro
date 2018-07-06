@@ -134,7 +134,7 @@
         text-transform: uppercase;
         color: $primary;
         &:hover {
-          color: $sky;
+          color: $secondary;
         }
       }
       .reply-div {
@@ -214,9 +214,9 @@
     outline: none !important;
   }
   &:hover {
-    background-color: $sky;
+    background-color: $secondary;
     color: $white;
-    border: 2px solid $sky;
+    border: 2px solid $secondary;
   }
 }
 

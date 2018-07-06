@@ -170,7 +170,7 @@
                 .more{
                     border-bottom: 5px solid transparent;
                     font-size: 22px;
-                    color: $sky;
+                    color: $secondary;
                     text-transform: uppercase;
                     text-align: center;
                     padding: 20px;
@@ -183,7 +183,7 @@
                     &:before{
                         content: '+';
                         font-size: 25px;
-                        border: 1px solid $sky;
+                        border: 1px solid $secondary;
                         border-radius: 100%;
                         height: 38px;
                         width: 38px;
@@ -203,7 +203,7 @@
 
                 &.active{
                     .more{
-                        border-color: $sky;
+                        border-color: $secondary;
                         &:before{
                             -ms-transform: rotate(135deg);
                             -webkit-transform: rotate(135deg);
@@ -299,7 +299,7 @@
                     max-width: 450px;
                 }
                 a{
-                    color: $sky;
+                    color: $secondary;
                     font-weight: 400;
                     &:hover{
                         color: $primary;
@@ -510,7 +510,7 @@ footer {
                     color: $white;
                     &:hover{
                         text-decoration: underline;
-                        color: lighten($sky, 15%);
+                        color: lighten($secondary, 15%);
                     }
                 }
             }
