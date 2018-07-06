@@ -7,15 +7,7 @@ $bootstrap-sass-asset-helper: true;
 //font  //=================================================================
 @import './font-awesome/font-awesome';
 
-// draft.js
-@import './draft/draft';
-@import './draft/rich-editor';
-@import '../../node_modules/prismjs/themes/prism-coy';
-
-// papaya asset default
-@import './crn_app/_common.papaya';
-
-// annimations ============================================================
+// animations ============================================================
 @import 'animate/_fading-entrances/fading-entrances';
 @import 'animate/_sliding-entrances/sliding-entrances';
 @import 'animate/_sliding-exits/sliding-exits';
@@ -28,6 +20,15 @@ $bootstrap-sass-asset-helper: true;
 @import './crn_app/theme';
 @import './crn_app/bootstrap.overrides';
 @import './crn_app/elements-wrappers';
+
+
+// draft.js
+@import './draft/draft';
+@import './draft/rich-editor';
+@import '../../node_modules/prismjs/themes/prism-coy';
+
+// papaya asset default
+@import './crn_app/_common.papaya';
 
 // react-select
 @import './react-select';
