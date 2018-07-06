@@ -1,6 +1,6 @@
 %btn-dash {
     @extend %btn-admin;
-    color: $white;
+    color: #fff;
     border: 0;
     width: 100%;
     padding: 15px 10px;
@@ -18,7 +18,7 @@
     .intro {
         display: block;
         width: 100%;
-        background-color: $white;
+        background-color: #fff;
     }
 }
 
@@ -83,7 +83,7 @@
         text-transform: none;
         .icon {
             float: left;
-            border-right: 1px solid $white;
+            border-right: 1px solid #fff;
             padding: 10px;
             margin: -10px;
         }
@@ -335,7 +335,7 @@
     @include gradient-vertical($start-color: #009b76, $end-color: #00ad84);
     .browse-pipeline-header{
         background: #00b489;
-        color: $white;
+        color: #fff;
         font-weight: 200;
         font-size: 34px;
         margin: 0;
@@ -350,7 +350,7 @@
             padding: 40px 50px 50px;
 
             h4{
-                color: $white;
+                color: #fff;
                 font-weight: 200;
                 font-size: 24px;
                 margin: 0 0 35px;
@@ -376,13 +376,13 @@
                 }
             }
             &.loading-browse{
-                background: $white;
+                background: #fff;
             }
             &.browse {
                 border-left: 2px solid #00b489;
                 label{
                     font-size: 20px;
-                    color: $white;
+                    color: #fff;
                     font-weight: 300;
                     font-family: $font-family-open;
                 }
@@ -424,7 +424,7 @@
                 .Select-control{
                     background: none;
                     border: none;
-                    color: $white;
+                    color: #fff;
                     border-bottom: 1px solid $white;
                     border-radius: 0;
 
@@ -438,7 +438,7 @@
                     }
 
                     .Select-value{
-                        color: $white;
+                        color: #fff;
                         border-color: $white;
                         background: rgba(0, 0, 0, 0);
 
