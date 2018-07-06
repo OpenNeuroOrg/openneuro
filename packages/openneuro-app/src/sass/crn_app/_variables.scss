@@ -82,6 +82,16 @@ $warning-orange: #df7600;
 $primary: $ocean;
 $primary-hover: lighten($ocean, 15%);
 
+// Navbar
+$navbar-top-border-color: $stanford-red;
+$navbar-background-color: $c-33;
+$navbar-btn-text-color: $misty;
+$navbar-btn-text-underline-color: $transparent1-w;
+$navbar-btn-active-background-color: $transparent05-w;
+$navbar-btn-active-text-color: $white; 
+$navbar-upload-btn-background-color: $transparent3;
+$navbar-upload-btn-active-background-color: $sky;
+
 // BS overrides
 $brand-primary:         $primary;
 $brand-success:         #24c85e !default;
