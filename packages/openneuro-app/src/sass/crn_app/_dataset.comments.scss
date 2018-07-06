@@ -86,7 +86,7 @@
           display: table-cell;
           text-align: center;
           vertical-align: middle;
-          color: white;
+          color: $white;
       }
     }
 
@@ -231,7 +231,7 @@
 .dataset-owner-flag {
   padding: 0px 2px;
   background-color: $primary;
-  color: white;
+  color: $white;
 }
 
 .login-for-comments {
