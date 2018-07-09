@@ -1,4 +1,6 @@
 import falcon
+import jwt
+import os
 
 from .dataset_fixtures import *
 
@@ -8,8 +10,16 @@ def test_add_commit_info(celery_app, client):
     file_data = 'Test annotating requests with user info'
     name = 'Test User'
     email = 'user@example.com'
+    user = {
+        'name': name,
+        'email': email
+    }
+    jwt_secret = 'shhhhh'
+    os.environ['JWT_SECRET'] = jwt_secret
+    access_token = jwt.encode(user, jwt_secret).decode('utf-8')
+    cookie = 'accessToken={}'.format(access_token)
     headers = {
-        'From': '"{}" <{}>'.format(name, email)
+        'Cookie': cookie
     }
     response = client.simulate_post(
         '/datasets/{}/files/USER_ADDED_FILE'.format(ds_id), body=file_data, headers=headers)

@@ -54,7 +54,7 @@ class SnapshotResource(object):
             resp.status = falcon.HTTP_OK
             # Publish after response
             publish = publish_snapshot.s(
-                self.store.annex_path, dataset, snapshot)
+                self.store.annex_path, dataset, snapshot, req.cookies)
             publish.apply_async(queue=queue)
         else:
             resp.media = {'error': 'tag already exists'}
