@@ -20,14 +20,14 @@
             text-align: center;
             width: 17px;
             height: 17px;
-            color: $ocean;
+            color: $primary;
             font-weight: 600;
         }
     }
 
     &.navbar-right {
         a {
-            color: $night;
+            color: $dashboard-tab-text-color;
             padding: 5px;
             background: none;
             font-size: 12px;

@@ -158,7 +158,7 @@
           display: block;
           padding: 18px;
           background-color: $f4;
-          color: $ocean;
+          color: $primary;
           font-family: $font-family-open;
           font-weight: 400;
           text-decoration: none;
@@ -208,7 +208,7 @@
   background: $bbb;
   transition: margin-left 0.3s ease;
   margin-top: -40px;
-  border-bottom: 5px solid $sky;
+  border-bottom: 5px solid $secondary;
 
   @media (max-width: 1428px) {
     margin-top: -60px;
@@ -246,7 +246,7 @@
       a {
         border-radius: 0;
         background-color: transparent;
-        color: lighten($ocean, 10%);
+        color: lighten($primary, 10%);
         font-size: 14px;
         border-right: 1px solid $transparent1;
         letter-spacing: 0;
@@ -254,7 +254,7 @@
 
         &:hover {
           background-color: $transparent;
-          color: $ocean;
+          color: $primary;
         }
 
         @media (max-width: 1428px) {
@@ -345,7 +345,7 @@
 .uploading.right-sidebar {
   .message {
     text-align: left;
-    color: $turquoise;
+    color: $tertiary;
     text-transform: lowercase;
     font-size: 12px;
     margin: 5px 0;
@@ -367,7 +367,7 @@
 }
 
 .upload-step-active {
-  background-color: $ocean;
+  background-color: $primary;
   color: $white;
 }
 

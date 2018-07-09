@@ -9,7 +9,7 @@
     outline: none;
   }
   blockquote.RichEditor-blockquote {
-    border-left: 5px solid $ocean;
+    border-left: 5px solid $primary;
   }
   .comment-header {
     label {
@@ -31,7 +31,7 @@
       .uploader-following {
         float: left;
         padding-top: 6px;
-        color: $ocean;
+        color: $primary;
       }
     }
   }
@@ -86,7 +86,7 @@
           display: table-cell;
           text-align: center;
           vertical-align: middle;
-          color: white;
+          color: $white;
       }
     }
 
@@ -107,7 +107,7 @@
       }
 
       .copy-notification-active, .copy-notification-hidden {
-        color: $ocean;
+        color: $primary;
         cursor: default;
       }
 
@@ -132,9 +132,9 @@
       font-size: 12px;
       a {
         text-transform: uppercase;
-        color: $ocean;
+        color: $primary;
         &:hover {
-          color: $sky;
+          color: $secondary;
         }
       }
       .reply-div {
@@ -205,18 +205,18 @@
 
 .comment-submit {
   background: $white;
-  color: $ocean;
+  color: $primary;
   width: 90%;
-  border: 2px solid $ocean;
+  border: 2px solid $primary;
   border-radius: 0px;
   margin-left: 4%;
   &:focus {
     outline: none !important;
   }
   &:hover {
-    background-color: $sky;
+    background-color: $secondary;
     color: $white;
-    border: 2px solid $sky;
+    border: 2px solid $secondary;
   }
 }
 
@@ -230,8 +230,8 @@
 
 .dataset-owner-flag {
   padding: 0px 2px;
-  background-color: $ocean;
-  color: white;
+  background-color: $primary;
+  color: $white;
 }
 
 .login-for-comments {

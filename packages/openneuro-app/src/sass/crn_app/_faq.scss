@@ -17,8 +17,8 @@
         .panel-heading {
             color: $c-33;
             font-size: 20px;
-            border-bottom: 1px solid #ddd;
-            border-top: 1px solid #ddd;
+            border-bottom: 1px solid $ddd;
+            border-top: 1px solid $ddd;
             border-radius: 0;
             &:before {
                 content: '» ';

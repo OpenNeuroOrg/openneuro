@@ -1,0 +1,53 @@
+// BS overrides
+
+// Overrides a subset of the theme supplied with bootstrap. Colors are
+// inherited from src/sass/_colors.scss
+
+// Colors variables
+$brand-primary:         $primary;
+$brand-success:         $success !default;
+$brand-info:            $info !default;
+$brand-warning:         $warning !default;
+$brand-danger:          $danger !default;
+
+$text-primary:         $primary;
+$text-success:         $brand-success;
+$text-info:            $brand-info;
+$text-warning:         $brand-warning;
+$text-danger:          $brand-danger;
+
+
+// Text color class overrides
+.text-primary {
+    color: $primary;
+}
+
+.text-success {
+    color: $text-success;
+}
+
+.text-info {
+    color: $text-info;
+}
+
+.text-warning {
+    color: $text-warning;
+}
+
+.text-danger {
+    color: $text-danger;
+}
+
+// Mixin overrides
+@mixin blur($radius) {
+    -webkit-filter: blur($radius);
+    -moz-filter: blur($radius);
+    -ms-filter: blur($radius);
+    filter: blur($radius);
+}
+
+@mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    border-radius: $radius;
+}

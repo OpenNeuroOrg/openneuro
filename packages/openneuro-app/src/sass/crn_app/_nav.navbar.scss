@@ -11,7 +11,7 @@
         top: 0;
         left: 0;
         z-index: 1300;
-        border-top: 10px solid $stanford-red;
+        border-top: 10px solid $navbar-top-border-color;
     }
 }
 
@@ -32,8 +32,8 @@
 
 
 .navbar-default {
-    background: $c-33;
-    color: $misty;
+    background: $navbar-background-color;
+    color: $navbar-btn-text-color;
     margin: 0;
     padding: 0;
     border-radius: 0;
@@ -54,7 +54,7 @@
             > .link {
                 border: 1px solid transparent;
                 padding: 10px;
-                color: $misty;
+                color: $navbar-btn-text-color;
                 margin: 17px 0;
                 border-radius: 2px;
                 transition: border .5s ease;
@@ -66,8 +66,8 @@
                 }
 
                 &.active {
-                    color: $misty;
-                    border-color: $misty;
+                    color: $navbar-btn-text-color;
+                    border-color: $navbar-btn-text-color;
                 }
             }
         }
@@ -82,7 +82,7 @@
                 text-align: center;
                 display: block;
                 padding: 0 10px;
-                color: $misty;
+                color: $navbar-btn-text-color;
                 background: $transparent;
                 -webkit-transition: all .5s;
                 transition: all .5s;
@@ -100,14 +100,14 @@
                 &:focus,
                 &:active,
                 &.active {
-                    color: $white;
-                    background: $transparent05-w;
+                    color: $navbar-btn-active-text-color;
+                    background: $navbar-btn-active-background-color;
                 }
 
                 &:hover {
 
                     .link-name {
-                        border-color: $transparent1-w;
+                        border-color: $navbar-btn-text-underline-color;
                     }
                  }
             }
@@ -142,8 +142,8 @@
                 .nav-link.nl-upload {
                     width: 180px;
                     padding: 0 15px;
-                    background: $transparent3;
-                    color: lighten($sky, 10%);
+                    background: $navbar-upload-btn-background-color;
+                    color: lighten($secondary, 10%);
 
                     .link-name {
                         border-color: $transparent;
@@ -170,7 +170,7 @@
                     &:active,
                     &.active {
                         color: $white;
-                        background: $sky;
+                        background: $navbar-upload-btn-active-background-color;
 
                     }
                 }
@@ -202,7 +202,7 @@
                     display: table-cell;
                     text-align: center;
                     vertical-align: middle;
-                    color: white;
+                    color: $white;
                 }
             }
 
@@ -290,13 +290,13 @@
 
                     .btn-submit-other {
                         margin-bottom: 15px;
-                        color: $sky;
+                        color: $secondary;
                         border-color: $transparent;
 
                         &:hover,
                         &.active {
                             border-color: $transparent;
-                            color: darken($sky, 10%);
+                            color: darken($secondary, 10%);
                             background: $eee;
                         }
                     }
@@ -431,7 +431,7 @@
     .logo-text{
         display: block;
         font-size: 38px;
-        color: #fff;
+        color: $white;
         margin: 12px 10px;
         float: left;
 
@@ -441,11 +441,11 @@
 
         .logo-end{
             transition: color 0.3s;
-            color: lighten($ocean, 12%);
+            color: lighten($primary, 12%);
         }
         &:hover{
             .logo-end{
-                color: #fff;
+                color: $white;
             }
         }
     }

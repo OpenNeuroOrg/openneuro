@@ -2,7 +2,7 @@
     width:90%;
     height:90%;
     margin:25px auto;
-    background-color:black;
+    background-color:$black;
     font-family:sans-serif;
 }
 .papaya:before {
@@ -147,11 +147,11 @@
     background-color:lightgray
 }
 .papaya-controlbar-label {
-    color:#000
+    color:$black;
 }
 .papaya-menu {
     width:220px;
-    background:#222;
+    background:$mine-shaft;
     z-index:100;
     position:absolute;
     border:solid 2px darkgray;
@@ -163,7 +163,7 @@
     font-size:12px;
     font-family:sans-serif;
     padding:4px 2px;
-    color:#b5cbd3;
+    color:$jungle-mist;
     cursor:pointer;
     list-style-type:none
 }
@@ -181,7 +181,7 @@
     padding:3px 8px 0 8px;
     cursor:default;
     vertical-align:text-bottom;
-    color:white
+    color:$white;
 }
 .papaya-menu-icon {
     margin-left:5px
@@ -190,7 +190,7 @@
     box-sizing:content-box
 }
 .papaya-menu-hovering {
-    background-color:#444
+    background-color:$c-44;
 }
 .papaya-menu-spacer {
     height:8px
@@ -205,7 +205,7 @@
     user-drag:none
 }
 .papaya-menu-button-hovering {
-    background-color:#DDD
+    background-color:$ddd
 }
 .papaya-menu-filechooser {
     cursor:pointer;
@@ -230,21 +230,21 @@ li .papaya-menu-slider {
     min-width:400px;
     max-width:500px;
     height:500px;
-    background:#222;
+    background:$mine-shaft;
     position:absolute;
     z-index:100;
     border:solid 2px darkgray;
     padding:6px;
     font-size:14px;
     font-family:sans-serif;
-    color:#b5cbd3;
+    color: $jungle-mist;
     box-sizing:content-box;
     line-height:1.45
 }
 .papaya-dialog-content {
     margin:20px;
     height:415px;
-    color:#dedede;
+    color:$de;
     overflow:auto;
     -ms-overflow-style:-ms-autohiding-scrollbar
 }
@@ -257,7 +257,7 @@ li .papaya-menu-slider {
 .papaya-dialog-content-label {
     text-align:right;
     padding:5px;
-    color:#b5cbd3
+    color:$jungle-mist
 }
 .papaya-dialog-content-control {
     text-align:left;
@@ -270,7 +270,7 @@ li .papaya-menu-slider {
     font-size:12px
 }
 .papaya-dialog-title {
-    color:#b5cbd3;
+    color:$jungle-mist;
     font-weight:bold;
     font-size:16px
 }
@@ -288,7 +288,7 @@ li .papaya-menu-slider {
     position:fixed;
     top:0;
     left:0;
-    background-color:#fff;
+    background-color:$white;
     width:100%;
     height:100%;
     opacity:.5
@@ -301,7 +301,7 @@ li .papaya-menu-slider {
     width:90%;
     height:90%;
     margin:25px auto;
-    background-color:black
+    background-color:$black;
 }
 .checkForJS:before {
     position:relative;
@@ -318,7 +318,7 @@ li .papaya-menu-slider {
     width:90%;
     height:90%;
     margin:25px auto;
-    background-color:black
+    background-color:$black;
 }
 .papaya-utils-unsupported-message {
     position:relative;

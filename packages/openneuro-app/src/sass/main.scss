@@ -7,15 +7,7 @@ $bootstrap-sass-asset-helper: true;
 //font  //=================================================================
 @import './font-awesome/font-awesome';
 
-// draft.js
-@import './draft/draft';
-@import './draft/rich-editor';
-@import '../../node_modules/prismjs/themes/prism-coy';
-
-// papaya asset default
-@import './crn_app/_common.papaya';
-
-// annimations ============================================================
+// animations ============================================================
 @import 'animate/_fading-entrances/fading-entrances';
 @import 'animate/_sliding-entrances/sliding-entrances';
 @import 'animate/_sliding-exits/sliding-exits';
@@ -23,9 +15,20 @@ $bootstrap-sass-asset-helper: true;
 @import 'animate/_attention-seekers/flash';
 
 
-//crn SASS ================================================================
-@import './crn_app/variables';
+//openneuro SASS ================================================================
+@import './crn_app/colors';
+@import './crn_app/theme';
+@import './crn_app/bootstrap.overrides';
 @import './crn_app/elements-wrappers';
+
+
+// draft.js
+@import './draft/draft';
+@import './draft/rich-editor';
+@import '../../node_modules/prismjs/themes/prism-coy';
+
+// papaya asset default
+@import './crn_app/_common.papaya';
 
 // react-select
 @import './react-select';
@@ -73,7 +76,7 @@ $bootstrap-sass-asset-helper: true;
     .logo-end{
         font-size: 75%;
         text-transform: uppercase;
-        color: $ocean;
+        color: $primary;
         font-weight: 400;
     }
 }
@@ -226,12 +229,12 @@ $bootstrap-sass-asset-helper: true;
     }
     button{
         @extend %btn-admin;
-        border-color: $sky;
-        color: $sky;
+        border-color: $secondary;
+        color: $secondary;
         padding: 5px 2px;
         height: auto;
         &:hover{
-            background:transparentize($sky, .5);
+            background:transparentize($secondary, .5);
             color:$white;
         }
     }

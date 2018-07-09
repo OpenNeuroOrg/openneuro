@@ -1,13 +1,13 @@
 %btn-dash {
     @extend %btn-admin;
-    color: #fff;
+    color: $white;
     border: 0;
     width: 100%;
     padding: 15px 10px;
     font-size: 21px;
-    background: #00b489;
+    background: $persian-green;
     &:hover{
-        background: lighten(#00b489, 5%);
+        background: lighten($persian-green, 5%);
         color: $white;
     }
 }
@@ -18,7 +18,7 @@
     .intro {
         display: block;
         width: 100%;
-        background-color: #fff;
+        background-color: $white;
     }
 }
 
@@ -83,7 +83,7 @@
         text-transform: none;
         .icon {
             float: left;
-            border-right: 1px solid #fff;
+            border-right: 1px solid $white;
             padding: 10px;
             margin: -10px;
         }
@@ -170,7 +170,7 @@
                 .more{
                     border-bottom: 5px solid transparent;
                     font-size: 22px;
-                    color: $sky;
+                    color: $secondary;
                     text-transform: uppercase;
                     text-align: center;
                     padding: 20px;
@@ -183,7 +183,7 @@
                     &:before{
                         content: '+';
                         font-size: 25px;
-                        border: 1px solid $sky;
+                        border: 1px solid $secondary;
                         border-radius: 100%;
                         height: 38px;
                         width: 38px;
@@ -203,7 +203,7 @@
 
                 &.active{
                     .more{
-                        border-color: $sky;
+                        border-color: $secondary;
                         &:before{
                             -ms-transform: rotate(135deg);
                             -webkit-transform: rotate(135deg);
@@ -232,7 +232,7 @@
             border: 1px solid $ccc;
             img{
                 margin: 0 0 0 -5px;
-                border: 2px solid #eee;
+                border: 2px solid $eee;
                 width: 450px;
                 height: auto;
                 &.snapshot{
@@ -289,17 +289,17 @@
             font-weight: 200;
             .logo-text{
                  font-size: 50px;
-                font-family: 'Cabin';
+                font-family: $font-family-cabin;
             }
             .col-sm-6{
                 padding: 10px 30px 30px;
-                color: #4b4b4b;
+                color: $c-4b;
                 font-weight: 200;
                 p{
                     max-width: 450px;
                 }
                 a{
-                    color: $sky;
+                    color: $secondary;
                     font-weight: 400;
                     &:hover{
                         color: $primary;
@@ -309,7 +309,7 @@
             h3{
                 font-size: 25px;
                 font-weight: 200;
-                color: #4b4b4b;
+                color: $c-4b;
             }
         }
         .support-more{
@@ -332,10 +332,10 @@
 
 .browse-pipelines {
     @extend .clearfix;
-    @include gradient-vertical($start-color: #009b76, $end-color: #00ad84);
+    @include gradient-vertical($start-color: $turquoise , $end-color: $persian-green);
     .browse-pipeline-header{
-        background: #00b489;
-        color: #fff;
+        background: $persian-green;
+        color: $white;
         font-weight: 200;
         font-size: 34px;
         margin: 0;
@@ -350,7 +350,7 @@
             padding: 40px 50px 50px;
 
             h4{
-                color: #fff;
+                color: $white;
                 font-weight: 200;
                 font-size: 24px;
                 margin: 0 0 35px;
@@ -368,7 +368,7 @@
                 li{
                     margin: 0 0 15px;
                     padding: 10px;
-                    border: 1px dashed lighten(#00b489, 5%);
+                    border: 1px dashed lighten($persian-green, 5%);
                     flex-basis: 49%;
                     button{
                         @extend %btn-dash;
@@ -376,13 +376,13 @@
                 }
             }
             &.loading-browse{
-                background: #fff;
+                background: $white;
             }
             &.browse {
-                border-left: 2px solid #00b489;
+                border-left: 2px solid $persian-green;
                 label{
                     font-size: 20px;
-                    color: #fff;
+                    color: $white;
                     font-weight: 300;
                     font-family: $font-family-open;
                 }
@@ -406,7 +406,7 @@
                 }
 
                 .select-pipeline option {
-                    color: black;
+                    color: $black;
                 }
 
                 .select-pipeline-arrow{
@@ -424,7 +424,7 @@
                 .Select-control{
                     background: none;
                     border: none;
-                    color: #fff;
+                    color: $white;
                     border-bottom: 1px solid $white;
                     border-radius: 0;
 
@@ -438,7 +438,7 @@
                     }
 
                     .Select-value{
-                        color: #fff;
+                        color: $white;
                         border-color: $white;
                         background: rgba(0, 0, 0, 0);
 
@@ -475,7 +475,7 @@
     }
 
     .active-pipeline-arrow{
-        border-color: #00ad84 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
+        border-color: $persian-green rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
         border-style: solid;
         border-width: 17px 25px 2.5px;
         display: inline-block;
@@ -487,9 +487,9 @@
 }
 
 footer {
-    background: #333;
+    background: $footer-background-color;
     padding: 10px 20px;
-    color: $white;
+    color: $footer-text-color;
     display: block;
     .version{
 
@@ -507,10 +507,10 @@ footer {
                 text-align: center;
                 list-style: none;
                 a{
-                    color: $white;
+                    color: $footer-text-color;
                     &:hover{
                         text-decoration: underline;
-                        color: lighten($sky, 15%);
+                        color: lighten($secondary, 15%);
                     }
                 }
             }
