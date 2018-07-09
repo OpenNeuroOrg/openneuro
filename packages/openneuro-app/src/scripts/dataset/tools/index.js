@@ -7,10 +7,10 @@ import { withRouter } from 'react-router-dom'
 import moment from 'moment'
 import DownloadLink from '../../datalad/download/download-link.jsx'
 import WarnButton from '../../common/forms/warn-button.jsx'
-import userStore from '../../user/user.store.js'
 import actions from '../dataset.actions.js'
 import datasetStore from '../dataset.store.js'
 import { refluxConnect } from '../../utils/reflux'
+import { getProfile } from '../../authentication/profile.js'
 
 class Tools extends Reflux.Component {
   constructor() {
@@ -38,12 +38,12 @@ class Tools extends Reflux.Component {
     }
 
     let datasetHasJobs = dataset.jobs ? !!dataset.jobs.length : false
-
+    let user = getProfile()
     // permission check shorthands
     let isAdmin = dataset.access === 'admin',
       // isEditor     = dataset.access === 'rw',
       // isViewer     = dataset.access === 'ro',
-      isSignedIn = !!userStore.hasToken(),
+      isSignedIn = user !== null,
       isPublic = !!dataset.status.public,
       isIncomplete = !!dataset.status.incomplete,
       isInvalid = !!dataset.status.invalid,
@@ -53,10 +53,7 @@ class Tools extends Reflux.Component {
       hasDoi =
         dataset.description.DatasetDOI &&
         dataset.description.DatasetDOI.toLowerCase().indexOf('openneuro') >= 0,
-      isSuperuser =
-        window.localStorage.scitran && JSON.parse(window.localStorage.scitran)
-          ? JSON.parse(window.localStorage.scitran).root
-          : null
+      isSuperuser = user ? user.admin : false
 
     let displayDelete = this._deleteDataset(
       isAdmin,
@@ -206,7 +203,7 @@ class Tools extends Reflux.Component {
         tooltip: 'Follow Dataset',
         icon: 'fa-tag icon-plus',
         action: actions.createSubscription.bind(this),
-        display: isSignedIn && !isSubscribed,
+        display: 1 && !isSubscribed,
         warn: false,
         validations: [
           {

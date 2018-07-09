@@ -23,12 +23,15 @@ export default {
    */
   auth: {
     google: {
-      clientID: process.env.SCITRAN_AUTH_GOOGLE_CLIENT_ID,
+      clientID: process.env.GOOGLE_CLIENT_ID,
     },
     orcid: {
-      clientID: process.env.SCITRAN_AUTH_ORCID_CLIENT_ID,
-      redirectURI: process.env.SCITRAN_AUTH_ORCID_REDIRECT_URI,
-      URI: process.env.SCITRAN_AUTH_ORCID_URI,
+      clientID: process.env.ORCID_CLIENT_ID,
+      redirectURI: process.env.ORCID_REDIRECT_URI,
+      URI: process.env.ORCID_URI,
+    },
+    globus: {
+      clientID: process.env.GLOBUS_CLIENT_ID,
     },
   },
 

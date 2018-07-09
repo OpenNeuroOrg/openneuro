@@ -2,7 +2,6 @@
 
 import React from 'react'
 import Reflux from 'reflux'
-import userStore from '../user/user.store'
 import Input from '../common/forms/input.jsx'
 import Spinner from '../common/partials/spinner.jsx'
 import adminStore from './admin.store'
@@ -10,8 +9,9 @@ import actions from './admin.actions'
 import WarnButton from '../common/forms/warn-button.jsx'
 import moment from 'moment'
 import { refluxConnect } from '../utils/reflux'
+import { getProfile } from '../authentication/profile.js'
 
-class users extends Reflux.Component {
+class Users extends Reflux.Component {
   constructor() {
     super()
     refluxConnect(this, adminStore, 'admin')
@@ -21,9 +21,10 @@ class users extends Reflux.Component {
   render() {
     let users = []
     this.state.admin.users.map(user => {
-      let adminBadge = user.root ? 'Admin' : null
+      let adminBadge = user.admin ? 'Admin' : null
       if (user.visible) {
-        let userEmail = user.hasOwnProperty('email') ? user.email : user._id
+        let userEmail = user.hasOwnProperty('email') ? user.email : user.id
+        let userProvider = user.provider
         users.push(
           <div
             className="fade-in user-panel clearfix panel panel-default"
@@ -31,14 +32,16 @@ class users extends Reflux.Component {
             <div className="col-xs-4 user-col">
               <h3>
                 <div className="userName">
-                  <span>{user.firstname}</span> &nbsp;
-                  <span>{user.lastname}</span>
+                  <span>{user.name}</span>
                   <div className="badge">{adminBadge}</div>
                 </div>
               </h3>
             </div>
-            <div className="col-xs-4 user-col middle">
+            <div className="col-xs-3 user-col middle">
               <h3 className="user-email">{userEmail}</h3>
+            </div>
+            <div className="col-xs-2 user-col middle">
+              <h3 className="user-provider">{userProvider}</h3>
             </div>
             {this._userTools(user)}
             {this._userSummary(user)}
@@ -90,10 +93,13 @@ class users extends Reflux.Component {
               <div className="col-xs-4 user-col">
                 <label>User</label>
               </div>
-              <div className="col-xs-4 user-col">
+              <div className="col-xs-3 user-col">
                 <label>Email</label>
               </div>
-              <div className="col-xs-4 user-col">
+              <div className="col-xs-2 user-col">
+                <label>Provider</label>
+              </div>
+              <div className="col-xs-3 user-col">
                 <label>Actions</label>
               </div>
             </div>
@@ -138,11 +144,11 @@ class users extends Reflux.Component {
   }
 
   _userTools(user) {
-    let adminIcon = user.root ? 'fa-check-square-o' : 'fa-square-o'
+    let adminIcon = user.admin ? 'fa-check-square-o' : 'fa-square-o'
 
-    if (user._id !== userStore.data.scitran._id) {
+    if (user.id !== getProfile().sub) {
       return (
-        <div className="col-xs-4 last dataset-tools-wrap-admin">
+        <div className="col-xs-3 last dataset-tools-wrap-admin">
           <div className="tools clearfix">
             <div className="tool">
               <WarnButton
@@ -180,4 +186,4 @@ class users extends Reflux.Component {
   }
 }
 
-export default users
+export default Users

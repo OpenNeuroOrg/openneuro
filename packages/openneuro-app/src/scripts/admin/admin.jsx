@@ -18,6 +18,7 @@ import {
   JobStatsLink,
   JobAppDefinitionsLink,
 } from '../common/partials/jobs.jsx'
+import LoggedIn from '../authentication/logged-in.jsx'
 
 const analysisEnabled = config.analysis.enabled
 
@@ -33,89 +34,96 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div className="admin route-wrapper">
-        <div className="inner-route clearfix">
-          <div className="col-xs-12">
-            <ul className="nav nav-pills tabs">
-              <li>
-                <NavLink to="/admin/users" className="btn-tab">
-                  Users
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/admin/blacklist" className="btn-tab">
-                  Blocked Users
-                </NavLink>
-              </li>
-              <li>
-                <JobAppDefinitionsLink enabled={analysisEnabled} />
-              </li>
-              <li>
-                <NavLink to="/admin/event-logs" className="btn-tab">
-                  Event Logs
-                </NavLink>
-              </li>
-              <li>
-                <NavLink to="/admin/datasets" className="btn-tab">
-                  All Datasets
-                </NavLink>
-              </li>
-              <li>
-                <AdminJobLink enabled={analysisEnabled} />
-              </li>
-              <li>
-                <JobStatsLink enabled={analysisEnabled} />
-              </li>
-            </ul>
-            <Switch>
-              <Redirect
-                name="defaultPath"
-                path="/admin"
-                to="/admin/users"
-                exact
-              />
-              <Route name="users" path="/admin/users" exact component={Users} />
-              <Route
-                name="blacklist"
-                path="/admin/blacklist"
-                exact
-                component={Blacklist}
-              />
-              <Route
-                name="app-definitions"
-                path="/admin/app-definitions"
-                exact
-                component={AppDefinitions}
-              />
-              <Route
-                name="event-logs"
-                path="/admin/event-logs"
-                exact
-                component={EventLogs}
-              />
-              <Route
-                name="admin-datasets"
-                path="/admin/datasets"
-                exact
-                render={props => <Datasets admin {...props} />}
-              />
-              <Route
-                name="admin-jobs"
-                path="/admin/jobs"
-                exact
-                render={props => <Jobs admin {...props} />}
-              />
-              <Route
-                name="admin-jobs-stats"
-                path="/admin/job-statistics"
-                exact
-                component={Graphs}
-              />
-            </Switch>
+      <LoggedIn>
+        <div className="admin route-wrapper">
+          <div className="inner-route clearfix">
+            <div className="col-xs-12">
+              <ul className="nav nav-pills tabs">
+                <li>
+                  <NavLink to="/admin/users" className="btn-tab">
+                    Users
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/admin/blacklist" className="btn-tab">
+                    Blocked Users
+                  </NavLink>
+                </li>
+                <li>
+                  <JobAppDefinitionsLink enabled={analysisEnabled} />
+                </li>
+                <li>
+                  <NavLink to="/admin/event-logs" className="btn-tab">
+                    Event Logs
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/admin/datasets" className="btn-tab">
+                    All Datasets
+                  </NavLink>
+                </li>
+                <li>
+                  <AdminJobLink enabled={analysisEnabled} />
+                </li>
+                <li>
+                  <JobStatsLink enabled={analysisEnabled} />
+                </li>
+              </ul>
+              <Switch>
+                <Redirect
+                  name="defaultPath"
+                  path="/admin"
+                  to="/admin/users"
+                  exact
+                />
+                <Route
+                  name="users"
+                  path="/admin/users"
+                  exact
+                  component={Users}
+                />
+                <Route
+                  name="blacklist"
+                  path="/admin/blacklist"
+                  exact
+                  component={Blacklist}
+                />
+                <Route
+                  name="app-definitions"
+                  path="/admin/app-definitions"
+                  exact
+                  component={AppDefinitions}
+                />
+                <Route
+                  name="event-logs"
+                  path="/admin/event-logs"
+                  exact
+                  component={EventLogs}
+                />
+                <Route
+                  name="admin-datasets"
+                  path="/admin/datasets"
+                  exact
+                  render={props => <Datasets admin {...props} />}
+                />
+                <Route
+                  name="admin-jobs"
+                  path="/admin/jobs"
+                  exact
+                  render={props => <Jobs admin {...props} />}
+                />
+                <Route
+                  name="admin-jobs-stats"
+                  path="/admin/job-statistics"
+                  exact
+                  component={Graphs}
+                />
+              </Switch>
+            </div>
+            <BlacklistModal />
           </div>
-          <BlacklistModal />
         </div>
-      </div>
+      </LoggedIn>
     )
   }
 }

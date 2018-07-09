@@ -4,19 +4,17 @@ const user = {
     type: 'object',
     properties: {
       _id: { type: 'string' },
-      firstname: { type: 'string' },
-      lastname: { type: 'string' },
+      name: { type: 'string' },
       email: { type: 'string' },
     },
-    required: ['_id', 'firstname', 'lastname'],
+    required: ['_id', 'name'],
   },
   blacklisted: {
     title: 'new user',
     type: 'object',
     properties: {
       _id: { type: 'string' },
-      firstname: { type: 'string' },
-      lastname: { type: 'string' },
+      name: { type: 'string' },
       note: { type: 'string' },
     },
     required: ['_id'],

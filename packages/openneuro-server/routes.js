@@ -1,7 +1,6 @@
 // dependencies ------------------------------------
 
 import express from 'express'
-import config from './config'
 import users from './handlers/users'
 import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
@@ -13,26 +12,25 @@ import * as openfmri from './handlers/openfmri'
 import * as download from './handlers/download.js'
 import comments from './handlers/comments'
 import * as subscriptions from './handlers/subscriptions'
-import auth from './libs/auth'
-import scitran from './libs/scitran'
+import verifyUser from './libs/authentication/verifyUser.js'
+import * as google from './libs/authentication/google.js'
+import * as orcid from './libs/authentication/orcid.js'
+import * as globus from './libs/authentication/globus.js'
+import * as jwt from './libs/authentication/jwt.js'
+import * as auth from './libs/authentication/states.js'
 import schema from './libs/schema'
 import schemas from './schemas'
 import doi from './handlers/doi'
 
 import fileUpload from 'express-fileupload'
 
-const baseRoutes = [
+const routes = [
   // users ---------------------------------------
-
   {
     method: 'get',
     url: '/users/self',
-    handler: scitran.verifyUser,
-  },
-  {
-    method: 'get',
-    url: '/users/signin/orcid',
-    handler: users.validateORCIDToken,
+    middleware: [jwt.authenticate, auth.authenticated],
+    handler: verifyUser,
   },
   {
     method: 'get',
@@ -53,19 +51,23 @@ const baseRoutes = [
   {
     method: 'post',
     url: '/users/blacklist',
-    middleware: [schema.validateBody(schemas.user.blacklisted), auth.superuser],
+    middleware: [
+      schema.validateBody(schemas.user.blacklisted),
+      jwt.authenticate,
+      auth.superuser,
+    ],
     handler: users.blacklist,
   },
   {
     method: 'get',
     url: '/users/blacklist',
-    middleware: [auth.superuser],
+    middleware: [jwt.authenticate, auth.superuser],
     handler: users.getBlacklist,
   },
   {
     method: 'delete',
     url: '/users/blacklist/:id',
-    middleware: [auth.superuser],
+    middleware: [jwt.authenticate, auth.superuser],
     handler: users.unBlacklist,
   },
 
@@ -74,7 +76,7 @@ const baseRoutes = [
   {
     method: 'post',
     url: '/datasets/:datasetId/validate',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: validation.validate,
   },
 
@@ -83,7 +85,7 @@ const baseRoutes = [
   {
     method: 'get',
     url: '/analytics/:datasetId?',
-    middleware: [auth.optional],
+    middleware: [jwt.authenticate, auth.optional],
     handler: datasets.analytics,
   },
 
@@ -97,20 +99,26 @@ const baseRoutes = [
   {
     method: 'post',
     url: '/jobs/definitions',
-    middleware: [auth.superuser, schema.validateBody(schemas.job.definition)],
+    middleware: [
+      jwt.authenticate,
+      auth.superuser,
+      schema.validateBody(schemas.job.definition),
+    ],
     handler: awsJobs.createJobDefinition,
   },
   {
     method: 'delete',
     url: '/jobs/definitions/:appId',
-    middleware: [auth.superuser],
+    middleware: [jwt.authenticate, auth.superuser],
     handler: awsJobs.deleteJobDefinition,
   },
   {
     method: 'post',
     url: '/datasets/:datasetId/jobs',
     middleware: [
-      auth.datasetAccess(),
+      jwt.authenticate,
+      auth.authenticated,
+      auth.datasetAccess,
       auth.submitJobAccess,
       schema.validateBody(schemas.job.submit),
     ],
@@ -119,44 +127,51 @@ const baseRoutes = [
   {
     method: 'post',
     url: '/datasets/jobsupload',
-    middleware: [fileUpload(), auth.optional],
+    middleware: [fileUpload(), jwt.authenticate, auth.optional],
     handler: awsJobs.parameterFileUpload,
   },
   {
     method: 'get',
     url: '/datasets/:datasetId/jobs',
-    middleware: [auth.datasetAccess({ optional: true })],
+    middleware: [jwt.authenticate, auth.optional, auth.datasetAccess],
     handler: awsJobs.getDatasetJobs,
   },
   {
     method: 'delete',
     url: '/datasets/:datasetId/jobs',
-    middleware: [auth.datasetAccess()],
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: awsJobs.deleteDatasetJobs,
   },
   {
     method: 'get',
     url: '/datasets/:datasetId/jobs/:jobId',
-    middleware: [auth.datasetAccess()],
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: awsJobs.getJob,
   },
   {
     method: 'delete',
     url: '/datasets/:datasetId/jobs/:jobId',
-    middleware: [auth.datasetAccess(), auth.deleteJobAccess],
+    middleware: [
+      jwt.authenticate,
+      auth.authenticated,
+      auth.datasetAccess,
+      auth.deleteJobAccess,
+    ],
     handler: awsJobs.deleteJob,
   },
   {
     method: 'put',
     url: '/datasets/:datasetId/jobs/:jobId',
-    middleware: [auth.datasetAccess()],
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: awsJobs.cancelJob,
   },
   {
     method: 'post',
     url: '/datasets/:datasetId/jobs/:jobId/retry',
     middleware: [
-      auth.datasetAccess(),
+      jwt.authenticate,
+      auth.authenticated,
+      auth.datasetAccess,
       auth.rerunJobAccess,
       auth.submitJobAccess,
     ],
@@ -165,13 +180,13 @@ const baseRoutes = [
   {
     method: 'get',
     url: '/datasets/:datasetId/jobs/:jobId/results/ticket',
-    middleware: [auth.datasetAccess()],
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: awsJobs.getDownloadTicket,
   },
   {
     method: 'get',
     url: '/jobs',
-    middleware: [auth.optional],
+    middleware: [jwt.authenticate, auth.optional],
     handler: awsJobs.getJobs,
   },
   {
@@ -200,7 +215,7 @@ const baseRoutes = [
   {
     method: 'get',
     url: '/eventlogs',
-    middleware: [auth.superuser],
+    middleware: [jwt.authenticate, auth.superuser],
     handler: eventLogs.getEventLogs,
   },
 
@@ -214,14 +229,14 @@ const baseRoutes = [
   {
     method: 'post',
     url: '/comments/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: comments.create,
   },
 
   {
     method: 'post',
     url: '/comments/:datasetId/:commentId',
-    middleware: [auth.deleteCommentAccess],
+    middleware: [jwt.authenticate, auth.authenticated, auth.commentAccess],
     handler: comments.update,
   },
 
@@ -234,7 +249,7 @@ const baseRoutes = [
   {
     method: 'delete',
     url: '/comments/:commentId',
-    middleware: [auth.deleteCommentAccess],
+    middleware: [jwt.authenticate, auth.authenticated, auth.commentAccess],
     handler: comments.delete,
   },
 
@@ -253,19 +268,19 @@ const baseRoutes = [
   {
     method: 'post',
     url: '/subscriptions/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: subscriptions.create,
   },
   {
     method: 'delete',
     url: '/subscriptions/:datasetId/:userId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: subscriptions.deleteSubscription,
   },
   {
     method: 'delete',
     url: '/subscriptions/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: subscriptions.deleteAll,
   },
 
@@ -279,13 +294,13 @@ const baseRoutes = [
   {
     method: 'post',
     url: '/stars/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: stars.add,
   },
   {
     method: 'delete',
     url: '/stars/:datasetId/:userId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: stars.delete,
   },
 
@@ -293,7 +308,7 @@ const baseRoutes = [
   {
     method: 'post',
     url: '/doi/:datasetId',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: doi.createSnapshotDoi,
   },
   {
@@ -306,57 +321,39 @@ const baseRoutes = [
   {
     method: 'post',
     url: '/keygen',
-    middleware: [auth.user],
+    middleware: [jwt.authenticate, auth.authenticated],
     handler: users.createAPIKey,
   },
-]
 
-const scitranRoutes = [
-  // datasets ------------------------------------
-  // Note: most dataset interactions are sent directly to Scitran.
-  // These manage those that need to be modified or proxied.
+  // DataLad dataset routes
   {
     method: 'post',
     url: '/datasets',
-    handler: datasets.create,
-  },
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/snapshot',
-    handler: datasets.snapshot,
-  },
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/permissions',
-    handler: datasets.share,
-  },
-]
-
-// These routes are enabled with the DataLad backend
-const dataladRoutes = [
-  {
-    method: 'post',
-    url: '/datasets',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.createDataset,
   },
   {
     method: 'delete',
     url: '/datasets/:datasetId',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.deleteDataset,
   },
   {
     method: 'post',
     url: '/datasets/:datasetId/snapshots/:snapshotId',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.createSnapshot,
   },
   {
     method: 'post',
     url: '/datasets/:datasetId/publish',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.publishDataset,
   },
   {
     method: 'delete',
     url: '/datasets/:datasetId/publish',
+    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.unpublishDataset,
   },
 
@@ -390,15 +387,52 @@ const dataladRoutes = [
     url: '/datasets/:datasetId/snapshots/:snapshotId/download',
     handler: download.snapshotDownload,
   },
+
+  // Authentication routes
+
+  // google
+  {
+    method: 'get',
+    url: '/auth/google',
+    handler: google.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/auth/google/callback',
+    middleware: [google.authCallback],
+    handler: jwt.authSuccessHandler,
+  },
+
+  // orcid
+  {
+    method: 'get',
+    url: '/auth/orcid',
+    handler: orcid.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/users/signin/orcid',
+    middleware: [orcid.authCallback],
+    handler: jwt.authSuccessHandler,
+  },
+
+  // globus
+  {
+    method: 'get',
+    url: '/auth/globus',
+    handler: globus.requestAuth,
+  },
+  {
+    method: 'get',
+    url: '/auth/globus/callback',
+    middleware: [globus.authCallback],
+    handler: jwt.authSuccessHandler,
+  },
 ]
 
 // initialize routes -------------------------------
 
 const router = express.Router()
-// TODO - remove this once SciTran backend is no longer in use
-const routes = config.datalad.enabled
-  ? baseRoutes.concat(dataladRoutes)
-  : baseRoutes.concat(scitranRoutes)
 
 for (const route of routes) {
   let arr = route.hasOwnProperty('middleware') ? route.middleware : []

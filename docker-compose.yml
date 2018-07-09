@@ -24,14 +24,6 @@ services:
       - project:/srv/packages/openneuro-app/dist
     env_file: ./config.env
 
-  # crn core (bids-core)
-  core:
-    image: poldracklab/bids-core:${BIDS_CORE_TAG}
-    volumes:
-      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-    env_file: ./config.env
-    restart: always
-
   # crn node server
   server:
     image: openneuro/server:${CRN_SERVER_TAG}
@@ -118,4 +110,4 @@ services:
       - "443:443"
     depends_on:
       - server
-      - core
+      - datalad

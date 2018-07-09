@@ -6,22 +6,24 @@ import { pageTitle, pageDescription } from './resources/strings.js'
 import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
-import getAuth from './utils/getAuth.js'
 import config from '../../config'
+import { CookiesProvider } from 'react-cookie'
 
 const App = () => {
   return (
-    <ApolloProvider client={getClient(`${config.url}/crn/graphql`, getAuth)}>
-      <div>
-        <Helmet>
-          <title>{pageTitle}</title>
-          <meta name="description" content={pageDescription} />
-        </Helmet>
-        <Router>
-          <Route component={analyticsWrapper(Index)} />
-        </Router>
-      </div>
-    </ApolloProvider>
+    <CookiesProvider>
+      <ApolloProvider client={getClient(`${config.url}/crn/graphql`)}>
+        <div>
+          <Helmet>
+            <title>{pageTitle}</title>
+            <meta name="description" content={pageDescription} />
+          </Helmet>
+          <Router>
+            <Route component={analyticsWrapper(Index)} />
+          </Router>
+        </div>
+      </ApolloProvider>
+    </CookiesProvider>
   )
 }
 

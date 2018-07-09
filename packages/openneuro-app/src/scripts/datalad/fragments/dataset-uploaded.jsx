@@ -7,9 +7,7 @@ const DatasetUploaded = ({ uploader, created }) => {
   const difference = moment(created).fromNow(true)
   return (
     <h6>
-      {`uploaded by ${uploader.firstName} ${
-        uploader.lastName
-      } on ${dateAdded} - ${difference} ago`}
+      {`uploaded by ${uploader.name} on ${dateAdded} - ${difference} ago`}
     </h6>
   )
 }

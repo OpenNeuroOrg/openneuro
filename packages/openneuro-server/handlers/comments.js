@@ -65,16 +65,15 @@ export default {
     if (!messageId) {
       return res.sendStatus(404)
     }
-    const user = await c.scitran.users.findOne({ _id: userId })
+    const user = await c.crn.users.findOne({ id: userId })
     let originalComment = await c.crn.comments.findOne({
       _id: ObjectID(parentId),
     })
     if (user && originalComment) {
       let flattenedUser = {
-        _id: user._id,
+        id: user.id,
         email: user.email,
-        firstname: user.firstname,
-        lastname: user.lastname,
+        name: user.name,
       }
       comment = {
         datasetId: originalComment.datasetId,
@@ -92,7 +91,6 @@ export default {
             comment = response.ops[0]
           }
           notifications.commentCreated(comment)
-          console.log('created comment. sending this back:', response.ops[0])
           return res.send(response.ops[0])
         }
       })

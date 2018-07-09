@@ -1,15 +1,12 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
-import Reflux from 'reflux'
 import { Link } from 'react-router-dom'
 import FrontPageTabs from './front-page-tabs.jsx'
-import userStore from '../user/user.store.js'
-import Spinner from '../common/partials/spinner.jsx'
 import Footer from '../common/partials/footer.jsx'
 import Pipelines from './front-page.pipelines.jsx'
-import FPActions from './front-page.actions.js'
-import { refluxConnect } from '../utils/reflux'
+import LoggedOut from '../authentication/logged-out.jsx'
+import AuthenticationButtons from '../authentication/buttons.jsx'
 
 // assets -------------------------------------------------------------
 import { pageDescription } from '../resources/strings.js'
@@ -25,17 +22,12 @@ import stanford from './assets/stanford.png'
 
 // component setup ----------------------------------------------------
 
-class FrontPage extends Reflux.Component {
-  constructor() {
-    super()
-    refluxConnect(this, userStore, 'users')
+class FrontPage extends React.Component {
+  constructor(props) {
+    super(props)
   }
 
   // life cycle events --------------------------------------------------
-  componentWillMount() {
-    super.componentWillMount()
-    FPActions.reset()
-  }
 
   render() {
     return (
@@ -70,17 +62,11 @@ class FrontPage extends Reflux.Component {
                   Open<span className="logo-end">Neuro</span>
                 </div>
                 <h1>{pageDescription}</h1>
-                <div className="sign-in-block fade-in">
-                  {this._error(
-                    this.state.users.signinError,
-                    this.state.users.loading,
-                  )}
-                  {this._signinForm(this.state.users.loading)}
-                  <Spinner
-                    text="Signing in..."
-                    active={this.state.users.loading}
-                  />
-                </div>
+                <LoggedOut>
+                  <div className="sign-in-block fade-in">
+                    <AuthenticationButtons />
+                  </div>
+                </LoggedOut>
                 <div className="browse-publicly">
                   <Link to="/public/datasets">
                     <span>Browse Public Datasets</span>
@@ -99,32 +85,6 @@ class FrontPage extends Reflux.Component {
   }
 
   // custom methods -------------------------------------------------------
-
-  _signinForm(loadingState) {
-    if (!loadingState) {
-      if (!this.state.users.token) {
-        return (
-          <span>
-            <button className="btn-admin" onClick={userStore.googleSignIn}>
-              <i className="icon fa fa-google" />
-              Sign in with Google
-            </button>
-            <button className="btn-admin" onClick={userStore.orcidSignIn}>
-              <span className="icon">
-                <img
-                  alt="ORCID"
-                  width="20"
-                  height="20"
-                  src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
-                />
-              </span>
-              Sign in with ORCID
-            </button>
-          </span>
-        )
-      }
-    }
-  }
 
   _error(signinError, loadingState) {
     if (signinError && !loadingState) {

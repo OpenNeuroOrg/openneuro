@@ -38,9 +38,10 @@ let orcid = {
       .getORCIDProfile(access_token)
       .then(res => {
         let { firstname, lastname, email } = res.body
+        let name = firstname + ' ' + lastname
         callback(null, {
           token: this.token,
-          profile: { _id: orcid, firstname, lastname, email },
+          profile: { _id: orcid, name, email },
           isSignedIn: orcid,
         })
       })

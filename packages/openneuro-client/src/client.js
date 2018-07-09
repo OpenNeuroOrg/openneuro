@@ -10,6 +10,7 @@ import FormData from 'form-data'
 import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
+import * as users from './users'
 
 const cache = new InMemoryCache()
 
@@ -20,33 +21,22 @@ const cache = new InMemoryCache()
  */
 const createClient = (uri, getAuthorization, fetch) => {
   const link = createLink(uri, getAuthorization, fetch)
-  return new ApolloClient({ uri, link, cache})
+  return new ApolloClient({ uri, link, cache })
 }
 
 const authLink = getAuthorization =>
   setContext((_, { headers }) => {
     // Passthrough any headers but add in authorization if set
-    const token = getAuthorization ? getAuthorization() : false
-    let tokenString = ''
+    const token = getAuthorization()
+    let cookie = {}
     if (token) {
-      if (
-        typeof window !== 'undefined' &&
-        global.localStorage &&
-        global.localStorage.token
-      ) {
-        tokenString = `${token}`
-      } else {
-        tokenString = `Bearer ${token}`
+      const tokenString = `accessToken=${token}`
+      cookie = {
+        cookie: tokenString,
       }
     }
-
     return {
-      headers: Object.assign(
-        {
-          authorization: tokenString,
-        },
-        headers,
-      ),
+      headers: Object.assign(cookie, headers),
     }
   })
 
@@ -58,8 +48,7 @@ const wsLink = uri => {
     uri: link,
     options: {
       reconnect: true,
-
-    }
+    },
   })
 }
 
@@ -69,8 +58,13 @@ const middlewareAuthLink = (uri, getAuthorization, fetch) => {
     uri,
     fetch,
     serverFormData: FormData,
+    credentials: 'same-origin',
   })
-  return authLink(getAuthorization).concat(httpUploadLink)
+  if (getAuthorization) {
+    return authLink(getAuthorization).concat(httpUploadLink)
+  } else {
+    return httpUploadLink
+  }
 }
 
 const createLink = (uri, getAuthorization, fetch) => {
@@ -88,12 +82,12 @@ const createLink = (uri, getAuthorization, fetch) => {
         return kind === 'OperationDefinition' && operation === 'subscription'
       },
       ws,
-      middlewareAuthLink(uri, getAuthorization, fetch)
+      middlewareAuthLink(uri, getAuthorization, fetch),
     )
   }
-  
+
   return link
 }
 
-export { files, datasets, snapshots }
+export { files, datasets, snapshots, users }
 export default createClient

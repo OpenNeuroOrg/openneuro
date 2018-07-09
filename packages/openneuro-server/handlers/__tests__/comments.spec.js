@@ -1,12 +1,10 @@
-/**
- * @jest-environment ./mongo-environment.js
- */
 import mongo from '../../libs/mongo'
 import request from 'supertest'
 import { ObjectID } from 'mongodb'
 import createApp from '../../app.js'
 import utils from '../../libs/testing-utils.js'
 
+jest.mock('../../config.js')
 jest.unmock('superagent')
 
 const app = createApp(true)
@@ -17,7 +15,7 @@ const mailgunId = ObjectID()
 const mailgunMessageId = ObjectID().toString()
 
 const user = {
-  _id: userId,
+  id: userId,
   email: 'test@test.com',
 }
 const comment = {
@@ -55,7 +53,7 @@ beforeAll(async () => {
   await mongo.connect(global.__MONGO_URI__)
   await mongo.collections.crn.comments.insertOne(comment)
   await mongo.collections.crn.mailgunIdentifiers.insertOne(mailgunIdentifier)
-  await mongo.collections.scitran.users.insertOne(user)
+  await mongo.collections.crn.users.insertOne(user)
 })
 
 afterAll(async () => {
