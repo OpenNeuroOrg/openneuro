@@ -16,7 +16,7 @@ def filter_git_files(files):
 
 def get_repo_files(dataset, branch=None):
     # If we're on the right branch, use the fast path with branch=None
-    if branch == dataset.repo.get_active_branch():
+    if branch == 'HEAD' or branch == dataset.repo.get_active_branch():
         branch = None
     working_files = filter_git_files(dataset.repo.get_files(branch=branch))
     files = []
