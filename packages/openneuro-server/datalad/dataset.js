@@ -63,14 +63,18 @@ export const createDataset = (label, uploader, userInfo) => {
  *
  * Exported for tests.
  */
-export const createDatasetModel = (id, label, uploader) => {
-  const creationTime = new Date()
+export const createDatasetModel = (
+  id,
+  label,
+  uploader,
+  created = new Date(),
+) => {
   const revision = null // Empty repo has no hash yet
   const datasetObj = {
     id,
     label,
-    created: creationTime,
-    modified: creationTime,
+    created,
+    modified: created,
     uploader,
     revision,
   }

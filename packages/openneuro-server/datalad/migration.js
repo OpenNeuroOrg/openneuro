@@ -86,7 +86,7 @@ const migrate = (datasetId, uploader, label, created) => {
             .post(url)
             .set('Accept', 'application/json')
             .set('From', '"OpenNeuro Importer" <no-reply@openneuro.org>')
-          await dataset.createDatasetModel(datasetId, label, uploader)
+          await dataset.createDatasetModel(datasetId, label, uploader, created)
           // If all snapshots are public, the dataset is now public
           if (snapshots.body.filter(snapshot => snapshot.public).length > 0) {
             await dataset.updatePublic(datasetId, true)
