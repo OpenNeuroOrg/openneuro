@@ -9,7 +9,7 @@ services:
 
   # mongodb
   mongo:
-    image: mongo
+    image: mongo:3.6
     restart: always
 
   # Redis
