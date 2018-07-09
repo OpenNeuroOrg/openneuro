@@ -14,7 +14,7 @@ def filter_git_files(files):
     return [f for f in files if not (f.startswith('.datalad/') or f == '.gitattributes')]
 
 
-def get_repo_files(dataset, branch='HEAD'):
+def get_repo_files(dataset, branch=None):
     # If we're on the right branch, use the fast path with branch=None
     if branch == dataset.repo.get_active_branch():
         branch = None
