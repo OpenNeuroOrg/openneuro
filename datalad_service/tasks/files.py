@@ -36,7 +36,7 @@ def unlock_files(store, dataset, files):
 
 
 @dataset_task
-def get_files(store, dataset, branch='HEAD'):
+def get_files(store, dataset, branch=None):
     """Get the working tree, optionally a branch tree."""
     ds = store.get_dataset(dataset)
     return get_repo_files(ds, branch)
