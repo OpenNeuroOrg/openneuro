@@ -7,16 +7,14 @@ import { dataset } from './dataset.js'
 /**
  * Resolvers for state held by the datalad service
  */
-export const draft = obj => {
-  return getDraftFiles(obj.id, obj.revision).then(files => ({
-    id: obj.revision,
-    files,
-    summary: () => summary(obj),
-    issues: () => issues(obj),
-    modified: obj.modified,
-    partial: () => partial(obj, { datasetId: obj.id }),
-  }))
-}
+export const draft = obj => ({
+  id: obj.revision,
+  files: () => getDraftFiles(obj.id, obj.revision),
+  summary: () => summary(obj),
+  issues: () => issues(obj),
+  modified: obj.modified,
+  partial: () => partial(obj, { datasetId: obj.id }),
+})
 
 export const snapshots = obj => {
   return getSnapshots(obj.id)
