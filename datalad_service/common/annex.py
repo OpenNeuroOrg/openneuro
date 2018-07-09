@@ -8,12 +8,16 @@ from datalad.support.exceptions import FileInGitError
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
 
+
 def filter_git_files(files):
     """Remove any git/datalad files from a list of files."""
     return [f for f in files if not (f.startswith('.datalad/') or f == '.gitattributes')]
 
 
 def get_repo_files(dataset, branch='HEAD'):
+    # If we're on the right branch, use the fast path with branch=None
+    if branch == dataset.repo.get_active_branch():
+        branch = None
     working_files = filter_git_files(dataset.repo.get_files(branch=branch))
     files = []
     for filename in working_files:
