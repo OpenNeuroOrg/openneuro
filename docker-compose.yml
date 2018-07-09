@@ -1,5 +1,5 @@
 # docker compose versions
-version: '2'
+version: '2.2'
 
 # shared volumes
 volumes:
@@ -9,7 +9,7 @@ services:
 
   # mongodb
   mongo:
-    image: mongo
+    image: mongo:3.6
     restart: always
 
   # Redis
@@ -23,14 +23,6 @@ services:
     volumes:
       - project:/srv/packages/openneuro-app/dist
     env_file: ./config.env
-
-  # crn core (bids-core)
-  core:
-    image: poldracklab/bids-core:${BIDS_CORE_TAG}
-    volumes:
-      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-    env_file: ./config.env
-    restart: always
 
   # crn node server
   server:
@@ -67,6 +59,7 @@ services:
     depends_on:
       - celery
     restart: always
+    init: true
   
   # celery Python backend
   celery:
@@ -87,6 +80,7 @@ services:
       - ./datalad-key:/datalad-key
     restart: always
     env_file: ./config.env
+    init: true
 
   flower:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
@@ -116,4 +110,4 @@ services:
       - "443:443"
     depends_on:
       - server
-      - core
+      - datalad

@@ -23,6 +23,7 @@ class DatasetLoader extends Reflux.Component {
     this._subscribeToFileUpdates(this.props)
     this._subscribeToSnapshotCreation(this.props)
     this._subscribeToSnapshotDeletion(this.props)
+    this._subscribeToPermissionsUpdates(this.props)
   }
 
   _subscribeToFileUpdates(props) {
@@ -30,6 +31,21 @@ class DatasetLoader extends Reflux.Component {
       document: gql`
         subscription {
           draftFilesUpdated
+        }
+      `,
+      updateQuery: () => {
+        props.getDataset.refetch().then(() => {
+          this._loadData(props, true)
+        })
+      },
+    })
+  }
+
+  _subscribeToPermissionsUpdates(props) {
+    props.getDataset.subscribeToMore({
+      document: gql`
+        subscription {
+          permissionsUpdated
         }
       `,
       updateQuery: () => {

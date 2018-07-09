@@ -15,7 +15,7 @@ import {
 } from './dataset.js'
 import { updateSummary, updateValidation } from './validation.js'
 import { draft, snapshot, snapshots, partial } from './datalad.js'
-import { whoami, user, users } from './user.js'
+import { whoami, user, users, removeUser, setAdmin } from './user.js'
 import {
   permissions,
   updatePermissions,
@@ -28,6 +28,7 @@ import {
   draftFilesUpdated,
   snapshotAdded,
   snapshotDeleted,
+  permissionsUpdated,
 } from './subscriptions.js'
 
 export default {
@@ -58,6 +59,8 @@ export default {
     updatePublic,
     updatePermissions,
     removePermissions,
+    removeUser,
+    setAdmin,
   },
   Subscription: {
     datasetAdded,
@@ -66,12 +69,20 @@ export default {
     draftFilesUpdated,
     snapshotAdded,
     snapshotDeleted,
+    permissionsUpdated,
   },
   User: user,
   Dataset: {
     uploader: ds => user(ds, { id: ds.uploader }),
     draft,
     snapshots,
-    permissions: ds => permissions(ds),
+    permissions: ds =>
+      permissions(ds).then(p =>
+        p.map(permission =>
+          Object.assign(permission, {
+            user: user(ds, { id: permission.userId }),
+          }),
+        ),
+      ),
   },
 }

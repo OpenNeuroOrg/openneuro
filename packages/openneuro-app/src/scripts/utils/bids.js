@@ -1,10 +1,10 @@
 import async from 'async'
-import scitran from './scitran'
 import crn from './crn'
-import userStore from '../user/user.store'
 import fileUtils from './files'
 import hex from './hex'
 import datalad from './datalad'
+import config from '../../../config.js'
+import { getProfile } from '../authentication/profile.js'
 
 /**
  * BIDS
@@ -41,7 +41,7 @@ export default {
       return callback([])
     }
     const projects = res.datasets ? res.datasets : []
-    const users = isSignedOut ? null : (await scitran.getUsers()).body
+    const users = isSignedOut ? null : await datalad.getUsers()
     const stars = (await crn.getStars()).body
     const followers = (await crn.getSubscriptions()).body
     this.usage(null, usage => {
@@ -139,8 +139,8 @@ export default {
     // Users
     let users = null
     try {
-      const userRes = await scitran.getUsers()
-      users = !options.isPublic && userRes ? userRes.body : null
+      const userRes = await datalad.getUsers()
+      users = !options.isPublic && userRes ? userRes : null
     } catch (err) {
       // The user request failed
     }
@@ -182,16 +182,21 @@ export default {
                   dataset.views = this.views(dataset, usage)
                   dataset.downloads = this.downloads(dataset, usage)
                 }
-                crn
-                  .getDatasetJobs(projectId, options)
-                  .then(res => {
-                    dataset.jobs = res.body
-                    return callback(dataset)
-                  })
-                  .catch(err => {
-                    // console.log('error getting jobs:', err)
-                    return callback(dataset, err)
-                  })
+                if (config.analysis.enabled) {
+                  crn
+                    .getDatasetJobs(projectId, options)
+                    .then(res => {
+                      dataset.jobs = res.body
+                      return callback(dataset)
+                    })
+                    .catch(err => {
+                      // console.log('error getting jobs:', err)
+                      return callback(dataset, err)
+                    })
+                } else {
+                  dataset.jobs = []
+                  return callback(dataset)
+                }
               })
             },
             options,
@@ -241,30 +246,6 @@ export default {
    */
   addPermission(projectId, permission) {
     return crn.addPermission('projects', projectId, permission)
-  },
-
-  /**
-   * Remove Permission
-   *
-   * Takes a projectId and a userId and removes
-   * the user if they were a member of the project.
-   */
-  removePermission(projectId, userId) {
-    return scitran.removePermission('projects', projectId, userId)
-  },
-
-  // Delete ---------------------------------------------------------------------------------
-
-  /**
-   * Delete Dataset
-   *
-   * Takes a projectId and delete the project
-   * after recursing and removing all sub
-   * containers.
-   */
-  deleteDataset(projectId, options) {
-    options.query = { purge: true }
-    return scitran.deleteContainer('projects', projectId, options)
   },
 
   // Dataset Format Helpers -----------------------------------------------------------------
@@ -325,7 +306,7 @@ export default {
   user(dataset, users) {
     if (users) {
       for (let user of users) {
-        if (user._id === dataset.group) {
+        if (user.id === dataset.group) {
           return user
         }
       }
@@ -444,17 +425,7 @@ export default {
    * BIDS dataset.
    */
   formatDataset(project, description, users, stars, followers, usage) {
-    let files = [],
-      attachments = []
-    if (project.files) {
-      for (let file of project.files) {
-        if (file.tags && file.tags.indexOf('attachment') > -1) {
-          attachments.push(file)
-        } else {
-          files.push(file)
-        }
-      }
-    }
+    let files = project.files
 
     let dataset = {
       /** same as original **/
@@ -479,7 +450,6 @@ export default {
       type: 'folder',
       children: files,
       description: this.formatDescription(project.metadata, description),
-      attachments: attachments,
       userCreated: this.userCreated(project),
       access: this.userAccess(project),
       summary:
@@ -557,13 +527,13 @@ export default {
     let validationIssues =
       project.draft && project.draft.issues ? project.draft.issues : []
     let tags = project.tags ? project.tags : []
-    let currentUser = userStore.data.scitran
+    let currentUser = getProfile()
     let uploader = project.uploader ? project.uploader.id : null
-    let userId = currentUser ? currentUser._id : null
-    let hasRoot = currentUser ? currentUser.root : null
+    let userId = currentUser ? currentUser.id : null
+    let hasRoot = currentUser ? currentUser.admin : null
     let permissions = project.permissions ? project.permissions : []
     let permittedUsers = permissions.map(user => {
-      return user._id
+      return user.userId
     })
     let adminOnlyAccess = permittedUsers.indexOf(userId) == -1 && hasRoot
 
@@ -574,8 +544,8 @@ export default {
       public: !!project.public,
       hasPublic: tags.indexOf('hasPublic') > -1,
       shared:
-        userStore.data.scitran &&
-        uploader != userStore.data.scitran._id &&
+        currentUser &&
+        uploader !== currentUser.sub &&
         !!userAccess &&
         !adminOnlyAccess,
     }
@@ -590,21 +560,19 @@ export default {
    */
   userAccess(project) {
     let access = null
-    const currentUser = userStore.data.scitran ? userStore.data.scitran : null
+    const currentUser = getProfile()
 
-    const userId = currentUser ? currentUser._id : null
+    const userId = currentUser ? currentUser.sub : null
     if (project) {
       if (project.permissions && project.permissions.length > 0) {
         for (let user of project.permissions) {
-          if (userId === user._id) {
+          if (userId === user.userId) {
             access = user.access
           }
         }
-      } else if (project.group === userId) {
-        access = 'orphaned'
       }
 
-      if (currentUser && currentUser.root) {
+      if (currentUser && currentUser.admin) {
         access = 'admin'
       }
     }
@@ -618,10 +586,11 @@ export default {
    * whether the current user created the project.
    */
   userCreated(project) {
-    if (!userStore.data.scitran) {
+    const userProfile = getProfile()
+    if (userProfile === null) {
       return false
     }
-    return project.group === userStore.data.scitran._id
+    return project.uploader ? project.uploader.id === userProfile.sub : false
   },
 
   /**

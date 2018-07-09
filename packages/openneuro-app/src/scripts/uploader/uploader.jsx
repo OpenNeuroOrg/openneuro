@@ -12,7 +12,6 @@ import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import getClient, { datasets } from 'openneuro-client'
 import config from '../../../config'
-import getAuth from '../utils/getAuth.js'
 import { xhrFetch } from './xhrfetch.js'
 import { withRouter } from 'react-router-dom'
 
@@ -92,7 +91,7 @@ class UploadClient extends React.Component {
     // Uses XHR since Fetch does not provide the required interface
     const uploadClient = getClient(
       `${config.url}/crn/graphql`,
-      getAuth,
+      null,
       xhrFetch(this),
     )
     if (this.state.resume) {

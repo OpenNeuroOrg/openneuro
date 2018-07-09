@@ -57,9 +57,9 @@ class JobAccordion extends React.Component {
       </span>
     ) : null
     let userCanCancel =
-      this.props.currentUser && this.props.currentUser.scitran
-        ? this.props.currentUser.scitran.root ||
-          this.props.currentUser.scitran._id === run.userId
+      this.props.currentUser && this.props.currentUser.admin
+        ? this.props.currentUser.admin ||
+          this.props.currentUser.id === run.userId
         : false
     return (
       <div
@@ -162,11 +162,9 @@ class JobAccordion extends React.Component {
   }
 
   _failedMessage(run) {
-    let userCanChange =
-      this.props.currentUser && this.props.currentUser.scitran
-        ? this.props.currentUser.scitran.root ||
-          this.props.currentUser.scitran._id === run.userId
-        : false
+    let userCanChange = this.props.currentUser
+      ? this.props.currentUser.admin || this.props.currentUser.id === run.userId
+      : false
 
     if (
       run.analysis.status === 'FAILED' ||
@@ -174,8 +172,8 @@ class JobAccordion extends React.Component {
     ) {
       let adminMessage = (
         <span>
-          Support contact information and the logs necessary for debugging 
-          for this app is available below.
+          Support contact information and the logs necessary for debugging for
+          this app is available below.
         </span>
       )
       let message = run.analysis.message

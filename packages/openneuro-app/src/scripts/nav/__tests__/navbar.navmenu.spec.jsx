@@ -1,23 +1,19 @@
 import React from 'react'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import NavMenu from '../navbar.navmenu.jsx'
 
-jest.mock('../../user/user.store.js')
 // Need to mock the router because of withRouter in these components
 jest.mock('react-router-dom', () => {
   return {
     NavLink: () => '',
     withRouter: component => component,
+    withCookie: component => component,
   }
 })
 
 describe('NavMenu', () => {
   it('renders successfully', () => {
-    const wrapper = shallow(<NavMenu isLoggedIn={null} loading={false} />)
+    const wrapper = shallow(<NavMenu />)
     expect(wrapper).toMatchSnapshot()
-  })
-  it('renders without "eventKey" warnings', () => {
-    const component = mount(<NavMenu isLoggedIn={null} loading={false} />)
-    expect(component).toMatchSnapshot()
   })
 })

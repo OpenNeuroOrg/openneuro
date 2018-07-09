@@ -26,8 +26,7 @@ class Blacklist extends Reflux.Component {
           <div className="col-xs-5 user-col">
             <h3>
               <div className="userName">
-                <span>{user.firstname}</span> &nbsp;
-                <span>{user.lastname}</span>
+                <span>{user.name}</span>
               </div>
             </h3>
             <h3 className="user-email">{userEmail}</h3>

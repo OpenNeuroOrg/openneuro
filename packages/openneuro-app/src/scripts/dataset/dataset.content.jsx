@@ -18,13 +18,13 @@ import Validation from '../datalad/validation/validation.jsx'
 import ClickToEdit from '../common/forms/click-to-edit.jsx'
 import FileTree from '../common/partials/file-tree.jsx'
 import Jobs from './dataset.jobs.jsx'
-import userStore from '../user/user.store.js'
 import Summary from './dataset.summary.jsx'
 import Comment from '../common/partials/comment.jsx'
 import CommentTree from '../common/partials/comment-tree.jsx'
 import FileSelect from '../common/forms/file-select.jsx'
-import userActions from '../user/user.actions.js'
+import LoginModal from '../common/partials/login.jsx'
 import { refluxConnect } from '../utils/reflux'
+import { getProfile } from '../authentication/profile.js'
 
 let uploadWarning =
   'You are currently uploading files. Leaving this page will cancel the upload process.'
@@ -57,7 +57,8 @@ class DatasetContent extends Reflux.Component {
         return uploadWarning
       }
     })
-    this.state = { unblock }
+    this.state = { unblock, loginModal: false }
+    this.toggleModal = this._toggleModal.bind(this)
   }
   // life cycle events --------------------------------------------------
 
@@ -134,6 +135,7 @@ class DatasetContent extends Reflux.Component {
                 type="string"
               />
             </h1>
+            <LoginModal show={this.state.loginModal} min={true} />
             {this._uploaded(dataset)}
             {this._modified(dataset.modified)}
             {this._authors(dataset.authors)}
@@ -204,6 +206,13 @@ class DatasetContent extends Reflux.Component {
     )
   }
 
+  // functions -------------------------------------
+  _toggleModal(prop, value) {
+    let state = this.state
+    state[prop] = value
+    this.setState(state)
+  }
+
   // template methods ---------------------------------------------------
 
   _authors(authors) {
@@ -226,9 +235,9 @@ class DatasetContent extends Reflux.Component {
 
   _validation(dataset) {
     if (dataset.linkID && !dataset.status.incomplete) {
-      return (<Validation datasetId={dataset.linkID} />)
+      return <Validation datasetId={dataset.linkID} />
     }
-    return null 
+    return null
   }
 
   _fileTree(dataset, canEdit) {
@@ -327,10 +336,10 @@ class DatasetContent extends Reflux.Component {
   }
   _commentTree() {
     // add a top level comment box to the dataset if user is logged in
-    let loggedIn = !!userStore.hasToken()
+    let loggedIn = getProfile() !== null
     let isAdmin =
       loggedIn && this.state.datasets.currentUser
-        ? this.state.datasets.currentUser.scitran.root
+        ? this.state.datasets.currentUser.admin
         : false
 
     let content = []
@@ -349,7 +358,12 @@ class DatasetContent extends Reflux.Component {
       content.push(
         <div key="commentLoginMessage" className="login-for-comments">
           Please{' '}
-          <a onClick={userActions.toggle.bind(this, 'loginModal')}>sign in</a>{' '}
+          <a
+            onClick={() => {
+              this.toggleModal('loginModal', true)
+            }}>
+            sign in
+          </a>{' '}
           to contribute to the discussion.
         </div>,
       )
@@ -430,7 +444,7 @@ class DatasetContent extends Reflux.Component {
     return (
       <h6>
         {'uploaded ' +
-          (user ? 'by ' + user.firstname + ' ' + user.lastname : '') +
+          (user ? 'by ' + user.name : '') +
           ' on ' +
           dateAdded +
           ' - ' +

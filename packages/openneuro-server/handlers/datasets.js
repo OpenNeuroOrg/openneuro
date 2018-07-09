@@ -84,8 +84,7 @@ export default {
           scitran.getUser(req.body._id, (err1, resp1) => {
             scitran.getProject(req.params.datasetId, (err2, resp2) => {
               let data = {
-                firstName: resp1.body.firstname,
-                lastName: resp1.body.lastname,
+                name: resp1.body.name,
                 email: resp1.body.email,
                 datasetId: req.params.datasetId,
                 datasetName: resp2.body.label,

@@ -33,7 +33,7 @@ export default {
   /**
    * Add User
    *
-   * Takes an email, first name, and last name
+   * Takes an email and name
    * add adds the user.
    */
   addUser(userData) {

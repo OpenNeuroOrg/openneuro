@@ -6,6 +6,7 @@
  */
 import express from 'express'
 import Raven from 'raven'
+import passport from 'passport'
 import config from './config'
 import routes from './routes'
 import morgan from 'morgan'
@@ -13,7 +14,10 @@ import schema from './graphql/schema'
 import { apolloUploadExpress } from 'apollo-upload-server'
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
 import bodyParser from 'body-parser'
-import auth from './libs/auth.js'
+import cookieParser from 'cookie-parser'
+import * as jwt from './libs/authentication/jwt.js'
+import * as auth from './libs/authentication/states.js'
+import { setupPassportAuth } from './libs/authentication/passport.js'
 // import events lib to instantiate CRN Emitter
 import events from './libs/events'
 
@@ -21,8 +25,12 @@ import events from './libs/events'
 export default test => {
   const app = express()
 
+  setupPassportAuth()
+
   // Raven must be first to work
   test || app.use(Raven.requestHandler())
+
+  app.use(passport.initialize())
 
   app.use((req, res, next) => {
     res.set(config.headers)
@@ -30,6 +38,7 @@ export default test => {
     next()
   })
   app.use(morgan('short'))
+  app.use(cookieParser())
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(bodyParser.json())
 
@@ -65,19 +74,30 @@ export default test => {
   // Depends on bodyParser.json() above
   app.use(
     '/crn/graphql',
+    jwt.authenticate,
     auth.optional,
     apolloUploadExpress(),
     graphqlExpress(req => {
-      const { user, isSuperUser, userInfo } = req
-      return {
-        schema,
-        context: { user, isSuperUser, userInfo },
+      if (req.isAuthenticated()) {
+        const user = req.user.id
+        const isSuperUser = req.user.admin
+        const userInfo = req.user
+        return {
+          schema,
+          context: { user, isSuperUser, userInfo },
+        }
+      } else {
+        return {
+          schema,
+        }
       }
     }),
   )
 
   const websocketUrl = process.browser ? config.url.replace('http', 'ws') : null
-  const subscriptionUrl = websocketUrl ? `${websocketUrl}/graphql-subscriptions` : null
+  const subscriptionUrl = websocketUrl
+    ? `${websocketUrl}/graphql-subscriptions`
+    : null
   // GraphiQL, a visual editor for queries
   app.use(
     '/crn/graphiql',

@@ -1,17 +1,12 @@
 import getClient from 'openneuro-client'
 import config from '../../../config'
-import { datasets, files } from 'openneuro-client'
+import { datasets, files, users } from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
 import clone from 'lodash.clonedeep'
 import request from './request'
 
-function getToken() {
-  let credentials = JSON.parse(window.localStorage.token)
-  return credentials ? credentials.access_token : ''
-}
-
-const client = getClient(`${config.url}/crn/graphql`, getToken)
+const client = getClient(`${config.url}/crn/graphql`)
 export default {
   async getDatasets(options) {
     const query = datasets.getDatasets
@@ -500,24 +495,18 @@ export default {
    *
    * adds / updates a user's role on a dataset
    * @param {*} datasetId id of dataset that requires permissions update
-   * @param {*} userId permissions will be changed for user with this id
+   * @param {*} userEmail permissions will be changed for all users with this email
    * @param {*} level the access level we wish to grant the user, 'r' = read, 'rw' = read / write, 'admin' = all access
    */
-  updatePermissions(datasetId, userId, level) {
-    let mutation = datasets.updatePermissions
+  updatePermissions(datasetId, userEmail, level) {
     datasetId = bids.decodeId(datasetId)
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: mutation,
-          variables: {
-            datasetId,
-            userId,
-            level,
-          },
-        })
-        .then(() => resolve())
-        .catch(err => reject(err))
+    return client.mutate({
+      mutation: datasets.updatePermissions,
+      variables: {
+        datasetId,
+        userEmail,
+        level,
+      },
     })
   },
 
@@ -531,17 +520,61 @@ export default {
   removePermissions(datasetId, userId) {
     let mutation = datasets.removePermissions
     datasetId = bids.decodeId(datasetId)
+    return client.mutate({
+      mutation: mutation,
+      variables: {
+        datasetId,
+        userId,
+      },
+    })
+  },
+
+  // Users
+  /**
+   * Get Users
+   *
+   * gets a list of all users
+   *
+   */
+  getUsers() {
+    const query = users.getUsers
     return new Promise((resolve, reject) => {
       client
-        .mutate({
-          mutation: mutation,
-          variables: {
-            datasetId,
-            userId,
-          },
+        .query({
+          query: query,
         })
-        .then(() => resolve())
+        .then(data => {
+          let users = data.data ? data.data.users : []
+          resolve(clone(users))
+        })
         .catch(err => reject(err))
+    })
+  },
+
+  /**
+   * Remove User
+   */
+  removeUser(id) {
+    return client.mutate({
+      mutation: users.removeUser,
+      variables: {
+        id: id,
+      },
+    })
+  },
+
+  /**
+   * Toggle Admin
+   *
+   * Takes a user id and updates the user's admin prop
+   */
+  setAdmin(id, admin) {
+    return client.mutate({
+      mutation: users.setAdmin,
+      variables: {
+        id: id,
+        admin: admin,
+      },
     })
   },
 }

@@ -7,6 +7,7 @@ import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
 import { addFileUrl } from './utils.js'
+import { generateDataladCookie } from '../libs/authentication/jwt'
 
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -57,9 +58,10 @@ const getSnapshotMetadata = (datasetId, snapshots) => {
  * Snapshot the current working tree for a dataset
  * @param {String} datasetId - Dataset ID string
  * @param {String} tag - Snapshot identifier and git tag
+ * @param {Object} user - User object that has made the snapshot request
  * @returns {Promise} - resolves when tag is created
  */
-export const createSnapshot = async (datasetId, tag) => {
+export const createSnapshot = async (datasetId, tag, user) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
@@ -68,6 +70,7 @@ export const createSnapshot = async (datasetId, tag) => {
     request
       .post(url)
       .set('Accept', 'application/json')
+      .set('Cookie', generateDataladCookie(config)(user))
       .then(({ body }) => {
         body.created = new Date()
         // Eager caching for snapshots
@@ -172,11 +175,15 @@ export const getSnapshot = async (datasetId, tag) => {
               .findOne({ datasetId, tag }, { files: true })
               .then(result => result.files)
           }
+          let created = await c.crn.snapshots
+            .findOne({ datasetId, tag })
+            .then(result => result.created)
+
           // If not public, fallback URLs are used
           const filesWithUrls = body.files.map(
             addFileUrl(datasetId, tag, externalFiles),
           )
-          const snapshot = { ...body, files: filesWithUrls }
+          const snapshot = { ...body, created, files: filesWithUrls }
           redis.set(key, JSON.stringify(snapshot))
           return snapshot
         })

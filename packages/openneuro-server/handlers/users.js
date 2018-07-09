@@ -58,7 +58,7 @@ export default {
   /**
    * Create User
    *
-   * Takes a gmail address as an '_id' and a first and last name and
+   * Takes a gmail address as an '_id' and a name and
    * creates a scitran user.
    */
   create(req, res) {
@@ -74,8 +74,7 @@ export default {
         // Only pass on scitran's required user fields
         let scitranUser = {
           _id: user._id,
-          firstname: user.firstname,
-          lastname: user.lastname,
+          name: user.name,
           email: user.email,
         }
         scitran.createUser(scitranUser, (err, resp) => {
@@ -90,8 +89,7 @@ export default {
   /**
    * Blacklist User
    *
-   * Take a gmail address as an '_id' and optionally takes a first name,
-   * lastname and note and sets the user info as blacklisted.
+   * Take a gmail address as an '_id' and optionally takes a name and note and sets the user info as blacklisted.
    */
   blacklist(req, res, next) {
     let user = req.body

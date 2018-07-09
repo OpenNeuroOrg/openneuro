@@ -3,18 +3,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter, Link } from 'react-router-dom'
-import Actions from '../user/user.actions.js'
 import Avatar from '../user/avatar.jsx'
 import { DropdownButton } from 'react-bootstrap'
+import withProfile from '../authentication/withProfile.js'
+import signOut from '../authentication/signOut.js'
+
+const signOutAndRedirect = history => {
+  signOut()
+  history.push('/')
+}
 
 // component setup ---------------------------------------------------------------
 
 const Usermenu = ({ profile, history }) => {
-  if (!profile) {
-    return false
-  }
-
-  let username = profile.firstname + ' ' + profile.lastname
+  let username = profile.name
 
   let gear = <i className="fa fa-gear" />
 
@@ -32,7 +34,9 @@ const Usermenu = ({ profile, history }) => {
         </li>
         <li role="separator" className="divider" />
         <li>
-          <a onClick={_signOut(history)} className="btn-submit-other">
+          <a
+            onClick={() => signOutAndRedirect(history)}
+            className="btn-submit-other">
             Sign Out
           </a>
         </li>
@@ -41,13 +45,9 @@ const Usermenu = ({ profile, history }) => {
   )
 }
 
-const _signOut = history => {
-  return () => Actions.signOut({}, history)
-}
-
 Usermenu.propTypes = {
   profile: PropTypes.object,
   history: PropTypes.object,
 }
 
-export default withRouter(Usermenu)
+export default withRouter(withProfile(Usermenu))
