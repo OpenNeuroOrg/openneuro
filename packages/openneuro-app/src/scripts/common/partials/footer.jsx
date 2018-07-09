@@ -3,6 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import packageJson from '../../../../package.json'
+import configurables from '../../front-page/front-page-config'
 
 const Footer = props => {
   let version = props.version ? props.version : packageJson.version
@@ -16,7 +17,8 @@ const Footer = props => {
           <div className="col-xs-12 col-md-4 footer-menu" />
           <div className="col-xs-12 col-md-4 copy">
             <span>
-              &copy; 2017 Stanford Center for Reproducible Neuroscience
+              &copy; {configurables.copyright.year}{' '}
+              {configurables.copyright.holder}
             </span>
           </div>
         </div>

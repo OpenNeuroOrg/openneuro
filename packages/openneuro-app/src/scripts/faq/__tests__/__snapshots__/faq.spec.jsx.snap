@@ -11,25 +11,33 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     className="panel"
     key="0"
   >
-    <div
+    <ReactMarkdown
+      astPlugins={Array []}
       className="panel-heading"
-    >
-      <span>
-        How do I get started?
-      </span>
-    </div>
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="How do I get started?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
     <div
       className="panel-body"
     >
       <span>
-        Check out our
-         
-        <a
-          href="https://www.youtube.com/playlist?list=PLU-IMZq18nDsf6VpCrLezLgylfAbRPPV8"
-        >
-          video tutorial
-        </a>
-        .
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="Check out our [video tutorial](https://www.youtube.com/playlist?list=PLU-IMZq18nDsf6VpCrLezLgylfAbRPPV8)."
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
       </span>
     </div>
   </div>
@@ -37,18 +45,33 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     className="panel"
     key="1"
   >
-    <div
+    <ReactMarkdown
+      astPlugins={Array []}
       className="panel-heading"
-    >
-      <span>
-        Is this service free to use?
-      </span>
-    </div>
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="Is this service free to use?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
     <div
       className="panel-body"
     >
       <span>
-        Yes!
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="Yes!"
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
       </span>
     </div>
   </div>
@@ -56,18 +79,33 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     className="panel"
     key="2"
   >
-    <div
+    <ReactMarkdown
+      astPlugins={Array []}
       className="panel-heading"
-    >
-      <span>
-        Can I restrict access to my data and analysis results on OpenNeuro?
-      </span>
-    </div>
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="Can I restrict access to my data and analysis results on OpenNeuro?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
     <div
       className="panel-body"
     >
       <span>
-        Yes, but only for a period of 36 months counted from first successful analysis of data from more than one participant. After this period the dataset and related analysis results will be made publicly available.
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="Yes, but only for a period of 36 months counted from first successful analysis of data from more than one participant. After this period the dataset and related analysis results will be made publicly available."
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
       </span>
     </div>
   </div>
@@ -75,29 +113,36 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     className="panel"
     key="3"
   >
-    <div
+    <ReactMarkdown
+      astPlugins={Array []}
       className="panel-heading"
-    >
-      <span>
-        Are there any restrictions on the uploaded data?
-      </span>
-    </div>
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="Are there any restrictions on the uploaded data?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
     <div
       className="panel-body"
     >
       <span>
-        Yes. By uploading this dataset to OpenNeuro you have to agree to the following conditions:
-        <ul>
-          <li>
-            you are the owner of this dataset and have any necessary ethics permissions to share the data publicly.
-          </li>
-          <li>
-            This dataset does not include any identifiable personal health information as defined by the Health Insurance Portability and Accountability Act of 1996 (including names, zip codes, dates of birth, acquisition dates, facial features on structural scans etc.).
-          </li>
-          <li>
-            You agree that this dataset and results of all analyses performed on it using the OpenNeuro platform will become publicly available under a Creative Commons CC0 or CC-BY license after a grace period of 36 months counted from first successful analysis of data from more than one participant.
-          </li>
-        </ul>
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="Yes. By uploading this dataset to OpenNeuro you have to agree to the  following conditions: 
+* You are the owner of this dataset and have any necessary ethicspermissions to share the data publicly.
+* This dataset does not include any identifiable personal healthinformation as defined by the Health Insurance Portability andAccountability Act of 1996 (including names, zip codes, dates ofbirth, acquisition dates, facial features on structural scansetc.).
+* You agree that this dataset and results of all analysesperformed on it using the OpenNeuro platform will becomepublicly available under a Creative Commons CC0 or CC-BY licenseafter a grace period of 36 months counted from first successfulanalysis of data from more than one participant."
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
       </span>
     </div>
   </div>
@@ -105,18 +150,33 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     className="panel"
     key="4"
   >
-    <div
+    <ReactMarkdown
+      astPlugins={Array []}
       className="panel-heading"
-    >
-      <span>
-        What if I will not be able to publish my paper in 36 months?
-      </span>
-    </div>
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="What if I will not be able to publish my paper in 36 months?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
     <div
       className="panel-body"
     >
       <span>
-        You can apply for up to two 6 month long extensions of the grace period. To apply please contact support. We encourage you to publish a preprint of your work to reduce the uncertainty of the publishing pipeline.
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="You can apply for up to two 6 month long extensions of the graceperiod. To apply please contact support. We encourage you to publisha preprint of your work to reduce the uncertainty of the publishingpipeline."
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
       </span>
     </div>
   </div>
@@ -124,18 +184,33 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     className="panel"
     key="5"
   >
-    <div
+    <ReactMarkdown
+      astPlugins={Array []}
       className="panel-heading"
-    >
-      <span>
-        Can I upload and analyze a publicly available dataset from another repository?
-      </span>
-    </div>
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="Can I upload and analyze a publicly available dataset from another repository?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
     <div
       className="panel-body"
     >
       <span>
-        The mission of OpenNeuro is to incentivize data sharing via providing data analysis service. Thus we discourage using it to analyze already publicly available datasets. This policy might change in the future depending on improvements in analysis cost.
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="The mission of OpenNeuro is to incentivize data sharing viaproviding data analysis service. Thus we discourage using it toanalyze already publicly available datasets. This policy mightchange in the future depending on improvements in analysis cost."
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
       </span>
     </div>
   </div>
@@ -143,35 +218,33 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     className="panel"
     key="6"
   >
-    <div
+    <ReactMarkdown
+      astPlugins={Array []}
       className="panel-heading"
-    >
-      <span>
-        Do I need to format my data in some special way before uploading it to OpenNeuro?
-      </span>
-    </div>
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="Do I need to format my data in some special way before uploading it to OpenNeuro?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
     <div
       className="panel-body"
     >
       <span>
-        Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure (BIDS) format. You can read about it more at
-         
-        <a
-          href="http://bids.neuroimaging.io/"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          bids.neuroimaging.io
-        </a>
-        . If you have any questions about organizing your data please post them at
-        <a
-          href="https://neurostars.org/tags/bids"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          neurostars.org
-        </a>
-        .
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="Yes! OpenNeuro only accepts data in the Brain Imaging Data Structure(BIDS) format. You can read about it more at [bids.neuroimaging.io](http://bids.neuroimaging.io/). If you have any questions about organizing your data pleasepost them at [neurostars.org](https://neurostars.org/tags/bids)."
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
       </span>
     </div>
   </div>
@@ -179,27 +252,33 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     className="panel"
     key="7"
   >
-    <div
+    <ReactMarkdown
+      astPlugins={Array []}
       className="panel-heading"
-    >
-      <span>
-        Do I need to remove facial features from structural images before uploading the data?
-      </span>
-    </div>
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="Do I need to remove facial features from structural images before uploading the data?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
     <div
       className="panel-body"
     >
       <span>
-        Yes. We recommend using
-         
-        <a
-          href="https://pypi.python.org/pypi/pydeface"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          pydeface
-        </a>
-        . Defacing is strongly preffered over skullstripping, because the process is more robust and yields lower chance of accidentally removing brain tissue.
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="Yes. We recommend using [pydeface](https://pypi.python.org/pypi/pydeface). Defacing is strongly preffered over skullstripping, becausethe process is more robust and yields lower chance of accidentallyremoving brain tissue."
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
       </span>
     </div>
   </div>
@@ -207,45 +286,38 @@ exports[`faq/faq/Faq renders successfully 1`] = `
     className="panel"
     key="8"
   >
-    <div
+    <ReactMarkdown
+      astPlugins={Array []}
       className="panel-heading"
-    >
-      <span>
-        I am having trouble downloading with Firefox, what can I do?
-      </span>
-    </div>
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      source="I am having trouble downloading with Firefox, what can I do?"
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    />
     <div
       className="panel-body"
     >
       <span>
-        <p>
-          Firefox is working to support the APIs used by downloads but as of Firefox 60, these features are hidden behind experimental configuration flags. Chrome is recommended for dataset or snapshot downloads, but you can try out Firefox support by enabling three
-           
-          <q>
-            about:config
-          </q>
-           flags.
-        </p>
-        <ul>
-          <li>
-            dom.streams.enabled - enables web streams.
-          </li>
-          <li>
-            javascript.options.streams - allows Javascript to use the API.
-          </li>
-          <li>
-            dom.ipc.multiOptOut - works around thread bugs, this may not be needed but improves reliablity on some platforms.
-          </li>
-        </ul>
-        <p>
-          You can find out more about
-           
-          <a
-            href="https://developer.mozilla.org/en-US/docs/Web/API/Streams_API"
-          >
-            web streams on MDN.
-          </a>
-        </p>
+        <ReactMarkdown
+          astPlugins={Array []}
+          escapeHtml={true}
+          plugins={Array []}
+          rawSourcePos={false}
+          renderers={Object {}}
+          skipHtml={false}
+          source="Firefox is working to support the APIs used by downloads but as ofFirefox 60, these features are hidden behind experimentalconfiguration flags. Chrome is recommended for dataset or snapshotdownloads, but you can try out Firefox support by enabling three \`about:config\` flags.
+* \`dom.streams.enabled\` - enables web streams.
+* \`javascript.options.streams\` - allows Javascript to use the API.
+ * \`dom.ipc.multiOptOut\` - works around thread bugs, this may not beneeded but improves reliablity on some platforms. 
+
+You can find out more about [web streams on MDN](https://developer.mozilla.org/en-US/docs/Web/API/Streams_API)."
+          sourcePos={false}
+          transformLinkUri={[Function]}
+        />
       </span>
     </div>
   </div>

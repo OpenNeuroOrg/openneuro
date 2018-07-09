@@ -21,7 +21,10 @@ exports[`common/partials/footer renders successfully 1`] = `
         className="col-xs-12 col-md-4 copy"
       >
         <span>
-          © 2017 Stanford Center for Reproducible Neuroscience
+          © 
+          2017
+           
+          Stanford Center for Reproducible Neuroscience
         </span>
       </div>
     </div>
