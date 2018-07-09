@@ -21,7 +21,7 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
   // Check that a service worker is registered
   if (!global.navigator.serviceWorker) {
     global.alert(
-      'Your browser is out of date, please upgrade to a newer supported browser to download.',
+      'Your browser must support service workers to download. See the FAQ for supported browsers.',
     )
     callback()
   } else if (typeof global.ReadableStream === 'undefined') {
