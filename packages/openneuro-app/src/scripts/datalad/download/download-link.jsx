@@ -19,7 +19,7 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
     ? `${config.crn.url}datasets/${datasetId}/snapshots/${snapshotTag}/download`
     : `${config.crn.url}datasets/${datasetId}/download`
   // Check that a service worker is registered
-  if (!global.navigator.serviceWorker) {
+  if (!('serviceWorker' in global.navigator)) {
     global.alert(
       'Your browser must support service workers to download. See the FAQ for supported browsers.',
     )
