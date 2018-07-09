@@ -13,4 +13,7 @@ class AuthenticateMiddleware(object):
         """
         cookies = req.cookies
         if 'accessToken' in cookies:
-            req.context['user'] = jwt.decode(cookies['accessToken'], key=os.environ['JWT_SECRET'])
+            try:
+                req.context['user'] = jwt.decode(cookies['accessToken'], key=os.environ['JWT_SECRET'])
+            except:
+                req.context['user'] = None
