@@ -45,12 +45,6 @@ class FrontPage extends React.Component {
                 </div>
                 <div className="privacy-detail">
                   <span>{configurables.titlePanel.privacyDetail}</span>
-                  <span>
-                    <a href={configurables.titlePanel.privacyLink}>
-                      Click here for more information about{' '}
-                      {configurables.pageTitle}&#39;s privacy policy.
-                    </a>
-                  </span>
                 </div>
               </div>
             </div>

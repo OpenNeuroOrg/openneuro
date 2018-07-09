@@ -14,7 +14,13 @@ const Footer = props => {
           <div className="col-xs-12 col-md-4 version">
             <span>OpenNeuro v{version}</span>
           </div>
-          <div className="col-xs-12 col-md-4 footer-menu" />
+          <div className="col-xs-12 col-md-4 privacy-policy">
+            <span>
+              <a href={configurables.titlePanel.privacyLink}>
+                {configurables.pageTitle}&#39;s privacy policy
+              </a>
+            </span>
+          </div>
           <div className="col-xs-12 col-md-4 copy">
             <span>
               &copy; {configurables.copyright.year}{' '}
