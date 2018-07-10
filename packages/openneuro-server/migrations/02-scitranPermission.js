@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Migrate permissions from SciTran datasets to new db
  */

@@ -1,4 +1,4 @@
-/*eslint no-console: "error"*/
+/* eslint-disable no-console */
 // Run all pending migrations
 import config from '../config.js'
 import mongo from '../libs/mongo.js'

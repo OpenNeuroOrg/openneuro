@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Migration from old SciTran user format to our own user database
  */
