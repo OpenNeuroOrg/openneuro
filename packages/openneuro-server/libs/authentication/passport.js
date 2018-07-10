@@ -93,7 +93,7 @@ const loadProfile = profile => {
       .filter(email => email.type === 'account')
       .shift()
     return {
-      id: profile.id,
+      id: primaryEmail.value,
       email: primaryEmail.value,
       name: profile.displayName,
       provider: profile.provider,
