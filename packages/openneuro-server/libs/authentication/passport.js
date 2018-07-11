@@ -52,7 +52,7 @@ export const setupPassportAuth = () => {
           clientSecret: config.auth.google.clientSecret,
           callbackURL: `${config.url + config.apiPrefix}auth/google/callback`,
         },
-        verifyOauthUser,
+        verifyGoogleUser,
       ),
     )
   }
@@ -93,24 +93,24 @@ const loadProfile = profile => {
       .filter(email => email.type === 'account')
       .shift()
     return {
-      id: profile.id,
       email: primaryEmail.value,
       name: profile.displayName,
       provider: profile.provider,
+      providerId: profile.id,
     }
   } else if (profile.provider === 'orcid') {
     return {
-      id: profile.orcid,
       email: profile.info.email,
       name: profile.info.name,
       provider: profile.provider,
+      providerId: profile.orcid,
     }
   } else if (profile.provider === 'globus') {
     return {
-      id: profile.sub,
       email: profile.email,
       name: profile.name,
       provider: profile.provider,
+      providerId: profile.sub,
     }
   } else {
     // Some unknown profile type
@@ -118,10 +118,19 @@ const loadProfile = profile => {
   }
 }
 
-export const verifyOauthUser = (accessToken, refreshToken, profile, done) => {
+export const verifyGoogleUser = async (
+  accessToken,
+  refreshToken,
+  profile,
+  done,
+) => {
   const profileUpdate = loadProfile(profile)
+  // Look for an existing user
   User.findOneAndUpdate(
-    { id: profile.id, provider: profile.provider },
+    {
+      provider: profile.provider,
+      $or: [{ providerId: profile.id }, { providerId: profileUpdate.email }],
+    },
     profileUpdate,
     { upsert: true, new: true },
   )
