@@ -24,8 +24,8 @@ let c = mongo.collections
  */
 let handlers = {
   /**
-     * Create Job Definition
-     */
+   * Create Job Definition
+   */
   createJobDefinition(req, res, next) {
     let jobDef = Object.assign({}, req.body)
 
@@ -51,8 +51,8 @@ let handlers = {
   },
 
   /**
-    * Delete App Definition
-    */
+   * Delete App Definition
+   */
   deleteJobDefinition(req, res, next) {
     let appId = req.params.appId
     let appKeys = appId.split(':')
@@ -73,8 +73,8 @@ let handlers = {
   },
 
   /**
-     * Describe Job Definitions
-     */
+   * Describe Job Definitions
+   */
   describeJobDefinitions(req, res, next) {
     //recursive function to handle grabbing all job definitions if more than 100 exist on batch
     let getJobDefinitions = (params, jobDefs, callback) => {
@@ -168,10 +168,10 @@ let handlers = {
   },
 
   /**
-     * Submit Job
-     * Inserts a job document into mongo and starts snapshot upload
-     * returns job to client
-     */
+   * Submit Job
+   * Inserts a job document into mongo and starts snapshot upload
+   * returns job to client
+   */
   submitJob(req, res, next) {
     let userId = req.user
     let job = req.body
@@ -249,8 +249,8 @@ let handlers = {
   },
 
   /**
-     * GET Job
-     */
+   * GET Job
+   */
   getJob(req, res, next) {
     let jobId = req.params.jobId //this is the mongo id for the job.
 
@@ -305,10 +305,10 @@ let handlers = {
   },
 
   /**
-     * GET File
-     * listObjects to find everything in the s3 bucket for a given job
-     * stream all files in series(?) to zip
-     */
+   * GET File
+   * listObjects to find everything in the s3 bucket for a given job
+   * stream all files in series(?) to zip
+   */
   downloadAllS3(req, res) {
     let jobId = req.params.jobId
 
@@ -468,8 +468,8 @@ let handlers = {
   },
 
   /**
-     * Retry a job using existing parameters
-     */
+   * Retry a job using existing parameters
+   */
   retry(req, res, next) {
     let userId = req.user
     let jobId = req.params.jobId
@@ -530,8 +530,8 @@ let handlers = {
   },
 
   /**
-     *  GET Dataset Jobs
-     */
+   *  GET Dataset Jobs
+   */
   getDatasetJobs(req, res, next) {
     let snapshot =
       req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true'
@@ -548,11 +548,8 @@ let handlers = {
 
       const userPromises = jobs.map(job => {
         return new Promise(resolve => {
-          scitran.getUser(job.userId, (err, response) => {
-            job.userMetadata = {}
-            if (response && response.statusCode === 200) {
-              job.userMetadata = response.body
-            }
+          c.crn.users.findOne({ id: job.userId }).then(user => {
+            job.userMetadata = user
             resolve()
           })
         })
@@ -571,41 +568,20 @@ let handlers = {
             })
           }
         }
-        if (snapshot) {
-          if (!hasAccess) {
-            let error = new Error(
-              'You do not have access to view jobs for this dataset.',
-            )
-            error.http_code = 403
-            return next(error)
-          }
-          // remove user ID on public requests
-          if (!user) {
-            for (let job of jobs) {
-              delete job.userId
-            }
-          }
-          res.send(jobs)
-        } else {
-          scitran.getProjectSnapshots(datasetId, (err, resp) => {
-            let snapshots = resp.body
-            let filteredJobs = []
-            for (let job of jobs) {
-              for (let snapshot of snapshots) {
-                if (
-                  (snapshot.public || hasAccess) &&
-                  snapshot._id === job.snapshotId
-                ) {
-                  if (!user) {
-                    delete job.userId
-                  }
-                  filteredJobs.push(job)
-                }
-              }
-            }
-            res.send(filteredJobs)
-          })
+        if (!hasAccess) {
+          let error = new Error(
+            'You do not have access to view jobs for this dataset.',
+          )
+          error.http_code = 403
+          return next(error)
         }
+        // remove user ID on public requests
+        if (!user) {
+          for (let job of jobs) {
+            delete job.userId
+          }
+        }
+        res.send(jobs)
       })
     })
   },
@@ -648,11 +624,8 @@ let handlers = {
       // tie user metadata to the jobs
       const userPromises = jobs.map(job => {
         return new Promise(resolve => {
-          scitran.getUser(job.userId, (err, response) => {
-            job.userMetadata = {}
-            if (response && response.statusCode === 200) {
-              job.userMetadata = response.body
-            }
+          c.crn.users.findOne({ id: job.userId }).then(user => {
+            job.userMetadata = user
             resolve()
           })
         })
@@ -668,19 +641,9 @@ let handlers = {
           async.each(
             jobs,
             (job, cb) => {
-              c.scitran.project_snapshots.findOne(
-                { _id: ObjectID(job.snapshotId) },
-                {},
-                (err, snapshot) => {
-                  if (snapshot && snapshot.public === true) {
-                    buildMetadata(job)
-                    filteredJobs.push(job)
-                    cb()
-                  } else {
-                    cb()
-                  }
-                },
-              )
+              buildMetadata(job)
+              filteredJobs.push(job)
+              cb()
             },
             () => {
               res.send({
@@ -732,8 +695,8 @@ let handlers = {
   },
 
   /**
-       * GET Download Ticket
-       */
+   * GET Download Ticket
+   */
   getDownloadTicket(req, res) {
     let jobId = req.params.jobId
     // form ticket
@@ -749,10 +712,10 @@ let handlers = {
   },
 
   /**
-       * DELETE Dataset Jobs
-       *
-       * Takes a dataset ID url parameter and deletes all jobs for that dataset.
-       */
+   * DELETE Dataset Jobs
+   *
+   * Takes a dataset ID url parameter and deletes all jobs for that dataset.
+   */
   deleteDatasetJobs(req, res, next) {
     let datasetId = req.params.datasetId
 
