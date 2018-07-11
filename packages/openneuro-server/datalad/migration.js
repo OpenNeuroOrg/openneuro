@@ -11,7 +11,6 @@ import * as snapshots from '../datalad/snapshots.js'
 import bids from '../libs/bidsId.js'
 import config from '../config.js'
 import files from '../libs/files.js'
-import { generateDataladCookie } from '../libs/authentication/jwt'
 
 // Make the migration easier to debug when things go badly
 process.on('unhandledRejection', error => {
