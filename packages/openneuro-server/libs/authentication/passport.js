@@ -132,7 +132,7 @@ export const verifyGoogleUser = async (
       $or: [{ providerId: profile.id }, { providerId: profileUpdate.email }],
     },
     profileUpdate,
-    { upsert: true, new: true },
+    { upsert: true, new: true, setDefaultsOnInsert: true },
   )
     .then(user => done(null, addJWT(config)(user)))
     .catch(err => done(err, null))
@@ -155,7 +155,7 @@ export const verifyORCIDUser = (
       User.findOneAndUpdate(
         { id: profile.orcid, provider: profile.provider },
         profileUpdate,
-        { upsert: true, new: true },
+        { upsert: true, new: true, setDefaultsOnInsert: true },
       ).then(user => done(null, addJWT(config)(user)))
     })
     .catch(err => done(err, null))
@@ -174,7 +174,7 @@ export const verifyGlobusUser = (
   User.findOneAndUpdate(
     { id: decodedProfile.sub, provider: decodedProfile.provider },
     profileUpdate,
-    { upsert: true, new: true },
+    { upsert: true, new: true, setDefaultsOnInsert: true },
   )
     .then(user => done(null, addJWT(config)(user)))
     .catch(err => done(err, null))
