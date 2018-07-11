@@ -334,14 +334,6 @@ const routes = [
     handler: datalad.unpublishDataset,
   },
 
-  // OpenFMRI API routes
-  /*
-  {
-    method: 'get',
-    url: '/openfmri/dataset/api/:datasetId',
-    handler: openfmri.getDataset,
-  },*/
-
   // file routes
   {
     method: 'get',
