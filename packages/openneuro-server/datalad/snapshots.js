@@ -173,7 +173,7 @@ export const getSnapshot = async (datasetId, tag) => {
           if (dataset.public) {
             externalFiles = await c.crn.files
               .findOne({ datasetId, tag }, { files: true })
-              .then(result => (result ? result.files : []))
+              .then(result => (result ? result.files : false))
           }
           let created = await c.crn.snapshots
             .findOne({ datasetId, tag })
