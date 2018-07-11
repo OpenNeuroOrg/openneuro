@@ -1,7 +1,7 @@
 import * as datalad from '../../datalad/dataset.js'
 import * as snapshots from '../../datalad/snapshots.js'
 import pubsub from '../pubsub.js'
-import { updateDatasetRevision, getPartialStatus } from '../../datalad/draft.js'
+import { getPartialStatus } from '../../datalad/draft.js'
 
 export const dataset = (obj, { id }) => {
   return datalad.getDataset(id)
@@ -58,10 +58,6 @@ export const updateFiles = (
     .then(() =>
       datalad
         .commitFiles(datasetId, userInfo)
-        .then(res => {
-          return res.body.ref
-        })
-        .then(updateDatasetRevision(datasetId))
         .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
     )
     .then(() => ({
@@ -100,10 +96,6 @@ export const deleteFiles = (
     .then(() =>
       datalad
         .commitFiles(datasetId, userInfo)
-        .then(res => {
-          return res.body.ref
-        })
-        .then(updateDatasetRevision(datasetId))
         .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
     )
     .then(() => ({

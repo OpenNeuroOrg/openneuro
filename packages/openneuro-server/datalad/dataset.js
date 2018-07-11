@@ -12,8 +12,7 @@ import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
 import { getAccessionNumber } from '../libs/dataset'
-import { draftPartialKey } from './draft.js'
-
+import { updateDatasetRevision, draftPartialKey } from './draft.js'
 const c = mongo.collections
 const uri = config.datalad.uri
 
@@ -228,6 +227,10 @@ export const commitFiles = (datasetId, user) => {
     .post(url)
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
+    .then(res => {
+      return res.body.ref
+    })
+    .then(updateDatasetRevision(datasetId))
   setCommitInfo(req, user.name, user.email)
   return req
 }
