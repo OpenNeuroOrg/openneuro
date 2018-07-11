@@ -11,6 +11,7 @@ import * as snapshots from '../datalad/snapshots.js'
 import bids from '../libs/bidsId.js'
 import config from '../config.js'
 import files from '../libs/files.js'
+import { generateDataladCookie } from '../libs/authentication/jwt'
 
 // Make the migration easier to debug when things go badly
 process.on('unhandledRejection', error => {
@@ -172,21 +173,16 @@ const uploadSnapshotContent = (datasetId, snapshotId, snapshotDir) => {
           stream: readStream,
           mimetype: 'application/octet-stream',
         }
-        dataset.addFile(
-          datasetId,
-          path.dirname(relativePath) === '.' ? '' : path.dirname(relativePath),
-          Promise.resolve(file),
-        )
+        dataset.addFile(datasetId, '', Promise.resolve(file))
         console.log(`Writing file "${datasetId}/${snapshotId}/${relativePath}"`)
         // Block until this file is done
         await readStreamPromise
       }
       console.log(`Files for "${datasetId}-${snapshotId}" transferred.`)
-      await dataset.commitFiles(
-        datasetId,
-        'DataLad Importer',
-        'no-reply@openneuro.org',
-      )
+      await dataset.commitFiles(datasetId, {
+        email: 'no-reply@openneuro.org',
+        name: 'DataLad Importer',
+      })
       await snapshots.createSnapshot(datasetId, snapshotId)
       console.log(`Snapshot "${snapshotId}" created.`)
       resolve()
