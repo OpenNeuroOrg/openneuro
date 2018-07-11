@@ -1,7 +1,6 @@
 import config from '../config'
 import request from 'superagent'
 import { generateDataladCookie } from '../libs/authentication/jwt'
-import { getAccessionNumber } from '../libs/dataset'
 import { getDraftFiles, getDatasetRevision } from '../datalad/draft'
 import { getSnapshot } from '../datalad/snapshots'
 import { encodeFilePath, decodeFilePath } from '../datalad/dataset.js'
