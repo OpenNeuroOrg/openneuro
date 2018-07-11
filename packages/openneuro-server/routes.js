@@ -349,11 +349,12 @@ const routes = [
   },
 
   // OpenFMRI API routes
+  /*
   {
     method: 'get',
     url: '/openfmri/dataset/api/:datasetId',
     handler: openfmri.getDataset,
-  },
+  },*/
 
   // file routes
   {
