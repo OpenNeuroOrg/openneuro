@@ -4,11 +4,9 @@ import express from 'express'
 import users from './handlers/users'
 import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
-import validation from './handlers/validation'
 import datasets from './handlers/datasets'
 import stars from './handlers/stars'
 import * as datalad from './handlers/datalad'
-import * as openfmri from './handlers/openfmri'
 import * as download from './handlers/download.js'
 import comments from './handlers/comments'
 import * as subscriptions from './handlers/subscriptions'
@@ -69,15 +67,6 @@ const routes = [
     url: '/users/blacklist/:id',
     middleware: [jwt.authenticate, auth.superuser],
     handler: users.unBlacklist,
-  },
-
-  // validation ----------------------------------
-
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/validate',
-    middleware: [jwt.authenticate, auth.authenticated],
-    handler: validation.validate,
   },
 
   // analytics -----------------------------------
@@ -328,18 +317,6 @@ const routes = [
   // DataLad dataset routes
   {
     method: 'post',
-    url: '/datasets',
-    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
-    handler: datalad.createDataset,
-  },
-  {
-    method: 'delete',
-    url: '/datasets/:datasetId',
-    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
-    handler: datalad.deleteDataset,
-  },
-  {
-    method: 'post',
     url: '/datasets/:datasetId/snapshots/:snapshotId',
     middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.createSnapshot,
@@ -355,13 +332,6 @@ const routes = [
     url: '/datasets/:datasetId/publish',
     middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.unpublishDataset,
-  },
-
-  // OpenFMRI API routes
-  {
-    method: 'get',
-    url: '/openfmri/dataset/api/:datasetId',
-    handler: openfmri.getDataset,
   },
 
   // file routes

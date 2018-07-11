@@ -1,6 +1,8 @@
 import mongo from '../../../libs/mongo'
 import * as ds from '../dataset'
 
+jest.mock('../../../config.js')
+
 beforeAll(async () => {
   await mongo.connect()
   await mongo.collections.crn.counters.insertMany([
@@ -16,7 +18,7 @@ describe('dataset resolvers', () => {
         {
           label: 'testing dataset',
         },
-        { user: {}, userInfo: { name: 'test' } },
+        { user: { accessToken: '123456' } },
       )
       expect(dsId).toEqual(expect.stringMatching(/^ds[0-9]{6}$/))
       done()

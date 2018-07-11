@@ -1,7 +1,6 @@
 import config from '../config'
 import request from 'superagent'
 import { generateDataladCookie } from '../libs/authentication/jwt'
-import { getAccessionNumber } from '../libs/dataset'
 import { getDraftFiles, getDatasetRevision } from '../datalad/draft'
 import { getSnapshot } from '../datalad/snapshots'
 import { encodeFilePath, decodeFilePath } from '../datalad/dataset.js'
@@ -16,25 +15,6 @@ import { encodeFilePath, decodeFilePath } from '../datalad/dataset.js'
  */
 
 const URI = config.datalad.uri
-
-/**
- * Create a DataLad repo
- */
-export const createDataset = async (req, res) => {
-  const accessionNumber = await getAccessionNumber()
-  const uri = `${URI}/datasets/${accessionNumber}`
-  request.post(uri).then(() => {
-    res.send()
-  })
-}
-
-export const deleteDataset = (req, res) => {
-  const datasetId = req.params.datasetId
-  const uri = `${URI}/datasets/${datasetId}`
-  request.del(uri).then(() => {
-    res.send()
-  })
-}
 
 /**
  * Create a git tag representing a snapshot

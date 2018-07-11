@@ -12,19 +12,9 @@ import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
 import { getAccessionNumber } from '../libs/dataset'
-import { draftPartialKey } from './draft.js'
-
+import { updateDatasetRevision, draftPartialKey } from './draft.js'
 const c = mongo.collections
 const uri = config.datalad.uri
-
-/**
- * Set commit info on a superagent request
- */
-const setCommitInfo = (req, name, email) => {
-  if (name && email) {
-    req.set('From', `"${name}" <${email}>`)
-  }
-}
 
 /**
  * Create a new dataset
@@ -43,8 +33,10 @@ export const createDataset = (label, uploader, userInfo) => {
     // If successful, create the repo
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
-      const req = request.post(url).set('Accept', 'application/json')
-      if (userInfo) setCommitInfo(req, userInfo.name, userInfo.email)
+      const req = request
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Cookie', generateDataladCookie(config)(userInfo))
       await req
       pubsub.publish('datasetAdded', { id: datasetId })
       subscriptions
@@ -228,7 +220,10 @@ export const commitFiles = (datasetId, user) => {
     .post(url)
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
-  setCommitInfo(req, user.name, user.email)
+    .then(res => {
+      return res.body.ref
+    })
+    .then(updateDatasetRevision(datasetId))
   return req
 }
 
