@@ -71,15 +71,6 @@ const routes = [
     handler: users.unBlacklist,
   },
 
-  // validation ----------------------------------
-
-  {
-    method: 'post',
-    url: '/datasets/:datasetId/validate',
-    middleware: [jwt.authenticate, auth.authenticated],
-    handler: validation.validate,
-  },
-
   // analytics -----------------------------------
 
   {
