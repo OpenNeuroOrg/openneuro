@@ -7,7 +7,6 @@ import request from 'superagent'
 import requestNode from 'request'
 import config from '../config'
 import mongo from '../libs/mongo'
-import pubsub from '../graphql/pubsub.js'
 import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
@@ -38,7 +37,6 @@ export const createDataset = (label, uploader, userInfo) => {
         .set('Accept', 'application/json')
         .set('Cookie', generateDataladCookie(config)(userInfo))
       await req
-      pubsub.publish('datasetAdded', { id: datasetId })
       subscriptions
         .subscribe(datasetId, uploader)
         .then(() => resolve({ id: datasetId, label }))
