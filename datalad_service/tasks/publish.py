@@ -3,6 +3,7 @@ from datalad.api import create_sibling_github
 from datalad_service.config import DATALAD_GITHUB_ORG
 from datalad_service.config import DATALAD_GITHUB_LOGIN
 from datalad_service.config import DATALAD_GITHUB_PASS
+from datalad_service.config import DATALAD_GITHUB_EXPORTS_ENABLED
 import datalad_service.common.s3
 from datalad_service.common.s3 import DatasetRealm, s3_export, s3_versions, get_s3_realm
 from datalad_service.common.celery import dataset_task
@@ -14,6 +15,10 @@ GRAPHQL_ENDPOINT = 'http://server:8111/crn/graphql'
 def create_github_repo(dataset, repo_name):
     """Setup a github sibling / remote."""
     try:
+        # raise exception if github exports are not enabled
+        if not DATALAD_GITHUB_EXPORTS_ENABLED:
+            raise Exception('DATALAD_GITHUB_EXPORTS_ENABLED must be defined to create remote repos')
+
         # this adds github remote to config and also creates repo
         return create_sibling_github(repo_name,
                                      github_login=DATALAD_GITHUB_LOGIN,
@@ -23,7 +28,7 @@ def create_github_repo(dataset, repo_name):
                                      access_protocol='ssh')
     except KeyError:
         raise Exception(
-            'DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS, DATALAD_GITHUB_ORG must be defined to create remote repos')
+            'DATALAD_GITHUB_LOGIN, DATALAD_GITHUB_PASS, and DATALAD_GITHUB_ORG must be defined to create remote repos')
 
 
 def get_sibling_by_name(name, siblings):
@@ -84,7 +89,7 @@ def migrate_to_bucket(store, dataset, cookies=None, realm='PUBLIC'):
             if r.status_code != 200:
                 raise Exception(r.text)
         # Public publishes to GitHub
-        if realm == DatasetRealm.PUBLIC:
+        if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
             github_remote = github_sibling(ds, dataset_id, siblings)
             publish_target(ds, realm.github_remote, tag)
 
@@ -117,7 +122,7 @@ def publish_snapshot(store, dataset, snapshot, cookies=None, realm=None):
         if r.status_code != 200:
             raise Exception(r.text)
     # Public publishes to GitHub
-    if realm == DatasetRealm.PUBLIC:
+    if realm == DatasetRealm.PUBLIC and DATALAD_GITHUB_EXPORTS_ENABLED:
         github_remote = github_sibling(ds, dataset_id, siblings)
         publish_target(ds, realm.github_remote, snapshot)
 
