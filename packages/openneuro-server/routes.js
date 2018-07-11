@@ -319,18 +319,6 @@ const routes = [
   // DataLad dataset routes
   {
     method: 'post',
-    url: '/datasets',
-    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
-    handler: datalad.createDataset,
-  },
-  {
-    method: 'delete',
-    url: '/datasets/:datasetId',
-    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
-    handler: datalad.deleteDataset,
-  },
-  {
-    method: 'post',
     url: '/datasets/:datasetId/snapshots/:snapshotId',
     middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.createSnapshot,
