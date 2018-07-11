@@ -153,7 +153,7 @@ export const verifyORCIDUser = (
       profile.provider = 'orcid'
       const profileUpdate = loadProfile(profile)
       User.findOneAndUpdate(
-        { id: profile.orcid, provider: profile.provider },
+        { providerId: profile.orcid, provider: profile.provider },
         profileUpdate,
         { upsert: true, new: true, setDefaultsOnInsert: true },
       ).then(user => done(null, addJWT(config)(user)))
@@ -172,7 +172,7 @@ export const verifyGlobusUser = (
   decodedProfile.provider = 'globus'
   const profileUpdate = loadProfile(decodedProfile)
   User.findOneAndUpdate(
-    { id: decodedProfile.sub, provider: decodedProfile.provider },
+    { providerId: decodedProfile.sub, provider: decodedProfile.provider },
     profileUpdate,
     { upsert: true, new: true, setDefaultsOnInsert: true },
   )
