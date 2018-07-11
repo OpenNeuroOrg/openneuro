@@ -83,6 +83,7 @@ export const datasetAccess = (req, res, next) => {
       // the permissions either. if the user is superuser, then additionally
       // the user has access
       if (!req.user || dataset.public || req.user.admin) {
+        req.hasAccess = true
         return next()
       }
 
@@ -91,6 +92,7 @@ export const datasetAccess = (req, res, next) => {
         .findOne({ datasetId: datasetId, userId: req.user.id })
         .then(permission => {
           if (permission) {
+            req.hasAccess = true
             return next()
           } else {
             return res
