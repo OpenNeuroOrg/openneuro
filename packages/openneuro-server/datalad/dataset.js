@@ -17,15 +17,6 @@ const c = mongo.collections
 const uri = config.datalad.uri
 
 /**
- * Set commit info on a superagent request
- */
-const setCommitInfo = (req, name, email) => {
-  if (name && email) {
-    req.set('From', `"${name}" <${email}>`)
-  }
-}
-
-/**
  * Create a new dataset
  *
  * Internally we setup metadata and access
@@ -34,7 +25,7 @@ const setCommitInfo = (req, name, email) => {
  * @param {String} label - descriptive label for this dataset
  * @returns {Promise} - resolves to dataset id of the new dataset
  */
-export const createDataset = (label, uploader, userInfo) => {
+export const createDataset = (label, uploader) => {
   return new Promise(async (resolve, reject) => {
     const datasetId = await getAccessionNumber()
     const dsObj = await createDatasetModel(datasetId, label, uploader)
@@ -42,8 +33,10 @@ export const createDataset = (label, uploader, userInfo) => {
     // If successful, create the repo
     const url = `${uri}/datasets/${datasetId}`
     if (dsObj) {
-      const req = request.post(url).set('Accept', 'application/json')
-      if (userInfo) setCommitInfo(req, userInfo.name, userInfo.email)
+      const req = request
+        .post(url)
+        .set('Accept', 'application/json')
+        .set('Cookie', generateDataladCookie(config)(uploader))
       await req
       pubsub.publish('datasetAdded', { id: datasetId })
       subscriptions
@@ -231,7 +224,6 @@ export const commitFiles = (datasetId, user) => {
       return res.body.ref
     })
     .then(updateDatasetRevision(datasetId))
-  setCommitInfo(req, user.name, user.email)
   return req
 }
 
