@@ -25,7 +25,7 @@ const uri = config.datalad.uri
  * @param {String} label - descriptive label for this dataset
  * @returns {Promise} - resolves to dataset id of the new dataset
  */
-export const createDataset = (label, uploader) => {
+export const createDataset = (label, uploader, userInfo) => {
   return new Promise(async (resolve, reject) => {
     const datasetId = await getAccessionNumber()
     const dsObj = await createDatasetModel(datasetId, label, uploader)
@@ -36,7 +36,7 @@ export const createDataset = (label, uploader) => {
       const req = request
         .post(url)
         .set('Accept', 'application/json')
-        .set('Cookie', generateDataladCookie(config)(uploader))
+        .set('Cookie', generateDataladCookie(config)(userInfo))
       await req
       pubsub.publish('datasetAdded', { id: datasetId })
       subscriptions
