@@ -430,14 +430,17 @@ let datasetStore = Reflux.createStore({
    * download feedback.
    */
   trackDownload(callback) {
-    scitran
-      .trackUsage(this.data.dataset._id, 'download', { snapshot: true })
-      .then(() => {
-        let dataset = this.data.dataset
-        dataset.downloads++
-        this.update({ dataset })
-        callback()
-      })
+    let options = {
+      snapshot: true,
+      tag: this.data.dataset.tag,
+      type: 'download',
+    }
+    datalad.trackAnalytics(this.data.dataset._id, options).then(() => {
+      let dataset = this.data.dataset
+      dataset.downloads++
+      this.update({ dataset })
+      callback()
+    })
   },
 
   /**
@@ -1724,8 +1727,9 @@ let datasetStore = Reflux.createStore({
 
   // usage analytics ---------------------------------------------------------------
 
-  trackView(snapshotId) {
-    scitran.trackUsage(snapshotId, 'view', { snapshot: true })
+  trackView(datasetId, tag) {
+    let options = { snapshot: true, tag: tag, type: 'view' }
+    datalad.trackAnalytics(datasetId, options)
   },
 
   toggleSidebar(value) {
