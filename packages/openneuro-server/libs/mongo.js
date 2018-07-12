@@ -47,12 +47,12 @@ export default {
       files: null,
       permissions: null,
       users: null,
+      analytics: null,
     },
     scitran: {
       projects: null,
       project_snapshots: null,
       users: null,
-      analytics: null,
     },
   },
 
