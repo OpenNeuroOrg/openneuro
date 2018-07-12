@@ -1,6 +1,6 @@
 import getClient from 'openneuro-client'
 import config from '../../../config'
-import { datasets, files, users } from 'openneuro-client'
+import { datasets, files, users, snapshots } from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
 import clone from 'lodash.clonedeep'
@@ -127,31 +127,7 @@ export default {
   querySnapshot(datasetId, tag, callback) {
     client
       .query({
-        query: gql`
-          query getSnapshot($datasetId: ID!, $tag: String!) {
-            snapshot(datasetId: $datasetId, tag: $tag) {
-              id
-              _id: id
-              tag
-              created
-              authors {
-                ORCID
-                name
-              }
-              summary {
-                size
-                totalFiles
-              }
-              files {
-                id
-                _id: id
-                name: filename
-                filename
-                size
-              }
-            }
-          }
-        `,
+        query: snapshots.getSnapshot,
         variables: {
           datasetId: bids.decodeId(datasetId),
           tag: tag,
@@ -574,6 +550,24 @@ export default {
       variables: {
         id: id,
         admin: admin,
+      },
+    })
+  },
+
+  //Analytics
+  /**
+   * Track Analytics
+   *
+   * Adds a 'view' or 'download' type entry to the analytics for a specific dataset
+   */
+  trackAnalytics(datasetId, options) {
+    options = options || {}
+    return client.mutate({
+      mutation: datasets.trackAnalytics,
+      variables: {
+        datasetId: datasetId,
+        tag: options.tag,
+        type: options.type,
       },
     })
   },
