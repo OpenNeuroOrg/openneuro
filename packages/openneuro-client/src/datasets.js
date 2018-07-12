@@ -59,6 +59,23 @@ export const getDataset = gql`
   }
 `
 
+export const getDatasetFiles = gql`
+  query dataset($id: ID!) {
+    dataset(id: $id) {
+      id
+      draft {
+        id
+        files {
+          id
+          filename
+          size
+          objectpath
+        }
+      }
+    }
+  }
+`
+
 export const getDatasets = gql`
   query {
     datasets {
