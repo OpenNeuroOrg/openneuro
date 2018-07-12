@@ -1,9 +1,9 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
-import createClient, {snapshots} from 'openneuro-client'
+import createClient, { snapshots } from 'openneuro-client'
 import { saveConfig, getToken, getUrl } from './config'
 import { validation, uploadDirectory } from './upload'
-import { getDataset, createDataset } from './datasets'
+import { getDataset, getDatasetFiles, createDataset } from './datasets'
 
 /**
  * Login action to save an auth key locally
@@ -43,20 +43,34 @@ export const login = () => {
  */
 export const loginAnswers = answers => answers
 
-const uploadDataset = (dir, datasetId, validatorOptions) => {
+const uploadDataset = (dir, datasetId, validatorOptions, uploadOptions) => {
   const url = getUrl()
   const client = createClient(`${url}crn/graphql`, getToken)
   if (datasetId) {
     // Check for dataset -> validation -> upload
-    return getDataset(client, dir, datasetId)
-      .then(() => validation(dir, validatorOptions))
-      .then(() => uploadDirectory(client, dir, datasetId))
+    if (uploadOptions.resume) {
+      // Get remote files and filter successful files out
+      return getDatasetFiles(client, dir, datasetId)
+        .then(queryData =>
+          validation(dir, validatorOptions).then(
+            () => queryData.dataset.draft.files,
+          ),
+        )
+        .then(files =>
+          uploadDirectory(client, dir, { datasetId, files, remove: false }),
+        )
+    } else {
+      // Upload all files regardless of remote state
+      return getDataset(client, dir, datasetId)
+        .then(() => validation(dir, validatorOptions))
+        .then(() => uploadDirectory(client, dir, { datasetId }))
+    }
   } else {
     // Validation -> create dataset -> upload
     return validation(dir, validatorOptions)
       .then(() => createDataset(client, dir))
       .then(dsId =>
-        uploadDirectory(client, dir, dsId).then(() => {
+        uploadDirectory(client, dir, { datasetId: dsId }).then(() => {
           // create a snapshot of the freshly uploaded dataset
           client.mutate({
             mutation: snapshots.createSnapshot,
@@ -89,7 +103,7 @@ export const upload = (dir, cmd) => {
     if (cmd.dataset) {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
-      uploadDataset(dir, cmd.dataset, validatorOptions)
+      uploadDataset(dir, cmd.dataset, validatorOptions, { resume: cmd.resume })
     } else {
       inquirer
         .prompt({
