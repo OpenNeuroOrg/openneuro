@@ -12,6 +12,8 @@ import {
   updateFiles,
   deleteFiles,
   updateSnapshotFileUrls,
+  analytics,
+  trackAnalytics,
 } from './dataset.js'
 import { updateSummary, updateValidation } from './validation.js'
 import { draft, snapshot, snapshots, partial } from './datalad.js'
@@ -61,6 +63,7 @@ export default {
     removePermissions,
     removeUser,
     setAdmin,
+    trackAnalytics,
   },
   Subscription: {
     datasetAdded,
@@ -76,6 +79,7 @@ export default {
     uploader: ds => user(ds, { id: ds.uploader }),
     draft,
     snapshots,
+    analytics: ds => analytics(ds),
     permissions: ds =>
       permissions(ds).then(p =>
         p.map(permission =>
@@ -84,5 +88,8 @@ export default {
           }),
         ),
       ),
+  },
+  Snapshot: {
+    analytics: snapshot => analytics(snapshot),
   },
 }

@@ -86,6 +86,10 @@ export const getDatasets = gql`
         id
         partial
       }
+      analytics {
+        views
+        downloads
+      }
     }
   }
 `
@@ -194,5 +198,11 @@ export const removePermissions = gql`
 export const checkPartial = gql`
   query partial($datasetId: ID!) {
     partial(datasetId: $datasetId)
+  }
+`
+
+export const trackAnalytics = gql`
+  mutation($datasetId: ID!, $tag: String, $type: AnalyticTypes!) {
+    trackAnalytics(datasetId: $datasetId, tag: $tag, type: $type)
   }
 `
