@@ -6,7 +6,7 @@ COPY datalad_service /datalad_service
 COPY dataset-worker /dataset-worker
 COPY ./ssh_config /root/.ssh/config
 
-RUN apk --update add yarn git python py-pip openssl openssh ca-certificates py-openssl wget \
+RUN apk --update add bash yarn git python py-pip openssl openssh ca-certificates py-openssl wget \
   && wget https://downloads.kitenet.net/git-annex/linux/current/git-annex-standalone-amd64.tar.gz \
   && tar -xvf git-annex-standalone-amd64.tar.gz \
   && rm git-annex-standalone-amd64.tar.gz \
