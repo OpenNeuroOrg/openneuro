@@ -1,0 +1,4 @@
+#!/bin/bash
+# Example worker script for docker-compose (e.g. HOSTNAME=openneuro_celery_1)
+celery -A datalad_service.worker worker -Q dataset-worker-${HOSTNAME##*_} -l info -c 1
+
