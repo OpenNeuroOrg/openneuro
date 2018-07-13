@@ -11,6 +11,7 @@ import * as snapshots from '../datalad/snapshots.js'
 import bids from '../libs/bidsId.js'
 import config from '../config.js'
 import files from '../libs/files.js'
+import { generateDataladCookie } from '../libs/authentication/jwt.js'
 
 // Make the migration easier to debug when things go badly
 process.on('unhandledRejection', error => {
@@ -85,11 +86,28 @@ const migrate = (datasetId, uploader, label, created) => {
           await superagent
             .post(url)
             .set('Accept', 'application/json')
-            .set('From', '"OpenNeuro Importer" <no-reply@openneuro.org>')
+            .set(
+              'Cookie',
+              generateDataladCookie(config)({
+                name: 'OpenNeuro Importer',
+                email: 'no-reply@openneuro.org',
+              }),
+            )
           await dataset.createDatasetModel(datasetId, label, uploader, created)
           // If all snapshots are public, the dataset is now public
           if (snapshots.body.filter(snapshot => snapshot.public).length > 0) {
+            // Mark as public
             await dataset.updatePublic(datasetId, true)
+            // Setup remotes and publish the empty dataset - this marks later snapshots as public as well
+            await superagent
+              .post(`${config.datalad.uri}/datasets/${datasetId}/publish`)
+              .set(
+                'Cookie',
+                generateDataladCookie(config)({
+                  name: 'OpenNeuro Importer',
+                  email: 'no-reply@openneuro.org',
+                }),
+              )
           }
           const chronological = snapshots.body.sort(
             (a, b) => new Date(b.created) - new Date(a.created),
