@@ -3,6 +3,7 @@ FROM python:3.6.4-alpine3.7
 COPY package.json /package.json
 COPY requirements.txt /requirements.txt
 COPY datalad_service /datalad_service
+COPY dataset-worker /dataset-worker
 COPY ./ssh_config /root/.ssh/config
 
 RUN apk --update add yarn git python py-pip openssl openssh ca-certificates py-openssl wget \
