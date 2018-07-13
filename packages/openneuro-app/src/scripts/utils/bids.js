@@ -394,7 +394,7 @@ export default {
    * a formatted top level container of a
    * BIDS dataset.
    */
-  formatDataset(project, description, users, stars, followers, usage) {
+  formatDataset(project, description, users, stars, followers) {
     let files = project.files
 
     let dataset = {
