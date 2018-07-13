@@ -4,6 +4,7 @@ COPY package.json /package.json
 COPY requirements.txt /requirements.txt
 COPY datalad_service /datalad_service
 COPY dataset-worker /dataset-worker
+COPY get_docker_scale.py /get_docker_scale.py
 COPY ./ssh_config /root/.ssh/config
 
 RUN apk --update add bash yarn git python py-pip openssl openssh ca-certificates py-openssl wget \
