@@ -1,11 +1,10 @@
 /* eslint-disable */
+import crypto from 'crypto'
 import fs from 'fs'
 import path from 'path'
 import superagent from 'superagent'
-import request from '../libs/request.js'
 import mongo from '../libs/mongo.js'
 import { connect as redis_connect } from '../libs/redis.js'
-import scitran from '../libs/scitran.js'
 import * as dataset from '../datalad/dataset.js'
 import * as snapshots from '../datalad/snapshots.js'
 import bids from '../libs/bidsId.js'
@@ -42,24 +41,72 @@ const migrateAll = () => {
     })
 }
 
+const getProjectSnapshots = (projectId, callback) => {
+  return superagent
+    .get(`${config.scitran.url}projects/${projectId}/snapshots`)
+    .set('X-SciTran-Auth', config.scitran.secret)
+    .set('User-Agent', 'SciTran Drone CRN Server')
+    .query({ public: true })
+    .then(data => callback(null, data))
+}
+
 // Promise wrapper for SciTran project snapshots request
 const createScitranSnapshot = datasetId => {
-  return new Promise((resolve, reject) => {
-    request.post(
-      config.scitran.url + 'snapshots',
-      {
-        query: { project: bids.encodeId(datasetId) },
-      },
-      err => {
-        if (err) {
-          console.log(err)
-          reject(err)
-        } else {
-          resolve()
-        }
-      },
-    )
-  })
+  return superagent
+    .post(`${config.scitran.url}snapshots`)
+    .set('X-SciTran-Auth', config.scitran.secret)
+    .set('User-Agent', 'SciTran Drone CRN Server')
+    .query({ project: bids.encodeId(datasetId) })
+}
+
+function downloadSymlinkDataset(datasetId, callback, options) {
+  let modifier = options && options.snapshot ? 'snapshots/' : ''
+  superagent
+    .post(config.scitran.url + modifier + 'download')
+    .set('X-SciTran-Auth', config.scitran.secret)
+    .set('User-Agent', 'SciTran Drone CRN Server')
+    .query({ format: 'bids', query: true })
+    .send({
+      nodes: [
+        {
+          _id: datasetId,
+          level: 'project',
+        },
+      ],
+      optional: false,
+    })
+    .then(res => {
+      if (!res.body.ticket) {
+        callback({ status: 404, message: 'Dataset not found.' })
+        return
+      }
+      let ticket = res.body.ticket
+      superagent
+        .get(config.scitran.url + 'download')
+        .buffer(true)
+        .parse(superagent.parse.image)
+        .set('X-SciTran-Auth', config.scitran.secret)
+        .set('User-Agent', 'SciTran Drone CRN Server')
+        .query({ symlinks: true, ticket: ticket })
+        .then(res2 => {
+          let hash = crypto
+            .createHash('md5')
+            .update(res2.body)
+            .digest('hex')
+          fs.readdir(
+            config.location + '/persistent/datasets/',
+            (err3, contents) => {
+              if (contents && contents.indexOf(hash) > -1) {
+                callback(null, hash)
+              } else {
+                files.saveSymlinks(hash, res2.body, () => {
+                  callback(null, hash)
+                })
+              }
+            },
+          )
+        })
+    })
 }
 
 // Migrate a dataset to the new backend
@@ -68,7 +115,7 @@ const migrate = (datasetId, uploader, label, created) => {
     console.log(
       `Dataset "${datasetId}"/"${label}" uploaded by "${uploader}" on ${created}`,
     )
-    scitran.getProjectSnapshots(datasetId, async (err, snapshots) => {
+    getProjectSnapshots(datasetId, async (err, snapshots) => {
       console.log(`Found ${snapshots.body.length} snapshots.`)
       if (snapshots.body.length === 0) {
         // Create at least one private snapshot if none exist
@@ -135,7 +182,7 @@ const migrateSnapshot = (datasetId, snapshotId) => {
         ? bids.encodeId(`${datasetId.slice(2)}-${snapshotId}`)
         : snapshotId
     console.log(`Getting files for snapshot: "${scitranSnapshotId}"`)
-    scitran.downloadSymlinkDataset(
+    downloadSymlinkDataset(
       bids.encodeId(scitranSnapshotId),
       (err, hash) => {
         if (err) {
@@ -177,6 +224,9 @@ const uploadSnapshotContent = (datasetId, snapshotId, snapshotDir) => {
       deleteFolderRecursive(`/data/datalad/${datasetId}`)
       for (const filePath of snapshotFiles) {
         const relativePath = path.relative(snapshotDir, filePath)
+        if (relativePath.startsWith('.git') || relativePath.startsWith('.datalad') || relativePath.startsWith('.gitattributes')) {
+          continue
+        }
         const readStream = fs.createReadStream(filePath)
         // Setup a promise that waits for the file
         const readStreamPromise = new Promise(resolve => {
