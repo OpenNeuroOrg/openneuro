@@ -60,21 +60,13 @@ services:
       - celery
     restart: always
     init: true
-  
+
   # celery Python backend
   celery:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
     command:
-      - celery
-      - -A
-      - datalad_service.worker
-      - worker
-      - -Q
-      - dataset-worker-0
-      - -l
-      - info
-      - -c
-      - "1"
+      - /dataset-worker
+    scale: 4
     volumes:
       - ${PERSISTENT_DIR}/datalad:/datalad
       - ./datalad-key:/datalad-key
