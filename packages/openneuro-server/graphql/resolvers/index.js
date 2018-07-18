@@ -22,7 +22,6 @@ import {
   removePermissions,
 } from './permissions.js'
 import {
-  datasetAdded,
   datasetDeleted,
   datasetValidationUpdated,
   draftFilesUpdated,
@@ -63,7 +62,6 @@ export default {
     setAdmin,
   },
   Subscription: {
-    datasetAdded,
     datasetDeleted,
     datasetValidationUpdated,
     draftFilesUpdated,

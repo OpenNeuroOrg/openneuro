@@ -62,7 +62,7 @@ class Datasets extends Reflux.Component {
     this.props.datasetsQuery.subscribeToMore({
       document: gql`
         subscription {
-          datasetAdded {
+          draftFilesUpdated {
             id
           }
         }
