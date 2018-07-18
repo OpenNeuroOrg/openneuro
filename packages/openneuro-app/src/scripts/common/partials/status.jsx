@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from './tooltip.jsx'
-import FileSelect from '../forms/file-select.jsx'
+// import FileSelect from '../forms/file-select.jsx'
 
 // component setup -----------------------------------------------------------
 
@@ -32,10 +32,11 @@ export default class Status extends React.Component {
         iconClass = 'fa fa-warning'
         fileSelect = minimal ? (
           <span className="file-wrap clearfix">
-            <FileSelect
+            {/* TODO: ENABLE RESUME UPLOAD BUTTON HERE */}
+            {/* <FileSelect
               resume={true}
               onChange={this._onFileSelect.bind(this)}
-            />
+            /> */}
           </span>
         ) : null
         break
