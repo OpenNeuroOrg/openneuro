@@ -133,10 +133,10 @@ body,
                 &.active {
                     background-color:  $white;
                     box-shadow: inset 0 0 2px $transparent1;
-                    color: $secondary;
+                    color: --secondary;
 
                     .date-modified {
-                        color: $secondary;
+                        color: --secondary;
                     }
                 }
 

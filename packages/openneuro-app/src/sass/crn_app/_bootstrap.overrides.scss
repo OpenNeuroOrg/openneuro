@@ -4,13 +4,13 @@
 // inherited from src/sass/_colors.scss
 
 // Colors variables
-$brand-primary:         $primary;
+$brand-primary:         --primary;
 $brand-success:         $success !default;
 $brand-info:            $info !default;
 $brand-warning:         $warning !default;
 $brand-danger:          $danger !default;
 
-$text-primary:         $primary;
+$text-primary:         --primary;
 $text-success:         $brand-success;
 $text-info:            $brand-info;
 $text-warning:         $brand-warning;
@@ -19,7 +19,7 @@ $text-danger:          $brand-danger;
 
 // Text color class overrides
 .text-primary {
-    color: $primary;
+    color: --primary;
 }
 
 .text-success {

@@ -20,14 +20,14 @@
             text-align: center;
             width: 17px;
             height: 17px;
-            color: $primary;
+            color: --primary;
             font-weight: 600;
         }
     }
 
     &.navbar-right {
         a {
-            color: $dashboard-tab-text-color;
+            color: --dashboard-tab-text-color;
             padding: 5px;
             background: none;
             font-size: 12px;
@@ -35,7 +35,7 @@
 
             &:hover {
                 background: none;
-                color: $primary;
+                color: --primary;
             }
         }
 
@@ -93,7 +93,7 @@
             &.active,
             &:hover {
                 background: $eee;
-                color: $primary;
+                color: --primary;
 
                 &.filter-shared {
                     color: $brand-info;
@@ -233,7 +233,7 @@
                 display: block;
                 padding: 10px 20px;
                 transition: background 1s ease;
-                color: $primary;
+                color: --primary;
                 width: 60%;
                 float: left;
 
@@ -262,7 +262,7 @@
                 }
 
                 &:hover {
-                    color: $primary-hover;
+                    color: --primary-hover;
                 }
 
 

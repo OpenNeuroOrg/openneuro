@@ -12,10 +12,10 @@ div.chart {
     margin-left: 20px;
     text-align: left;
     .success {
-      color: $chart-success-color;
+      color: --chart-success-color;
     }
     .failed {
-      color: $chart-failed-color;
+      color: --chart-failed-color;
     }
   }
   .filtering {

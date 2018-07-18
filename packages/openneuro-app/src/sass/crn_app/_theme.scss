@@ -3,41 +3,45 @@
 // Changes the theme (colors, font, etc) of the openneuro instance.
 // Color variables are inherited from src/scss/_colors.scss.
 
-// Colors
-$primary: $ocean;
-$primary-hover: lighten($ocean, 15%);
+:root {
 
-$secondary: $sky;
+  // Colors
+  --primary: $ocean;
+  --primary-hover: lighten($ocean, 15%);
 
-$tertiary: $turquoise;
+  --secondary: $sky;
 
-// Fonts
-$font-family-open: 'Open Sans', sans-serif;
-$font-family-cabin: 'Cabin', sans-serif;
+  --tertiary: $turquoise;
 
-// Shadows
-$btn-shadow: 1px 1px 3px -1px $transparent7;
+  // Fonts
+  --font-family-open: 'Open Sans', sans-serif;
+  --font-family-cabin: 'Cabin', sans-serif;
 
-// Navbar
-$navbar-top-border-color: $stanford-red;
-$navbar-background-color: $c-33;
-$navbar-btn-text-color: $misty;
-$navbar-btn-text-underline-color: $transparent1-w;
-$navbar-btn-active-background-color: $transparent05-w;
-$navbar-btn-active-text-color: $white; 
-$navbar-upload-btn-background-color: $transparent3;
-$navbar-upload-btn-active-background-color: $secondary;
+  // Shadows
+  --btn-shadow: 1px 1px 3px -1px $transparent7;
 
-// Footer
-$footer-background-color: $c-33;
-$footer-text-color: $white;
+  // Navbar
+  --navbar-top-border-color: $stanford-red;
+  --navbar-background-color: $c-33;
+  --navbar-btn-text-color: $misty;
+  --navbar-btn-text-underline-color: $transparent1-w;
+  --navbar-btn-active-background-color: $transparent05-w;
+  --navbar-btn-active-text-color: $white; 
+  --navbar-upload-btn-background-color: $transparent3;
+  --navbar-upload-btn-active-background-color: --secondary;
 
-// Dashboard
-$dashboard-tab-text-color: $primary;
+  // Footer
+  --footer-background-color: $c-33;
+  --footer-text-color: $white;
 
-// Charts
-$chart-success-color: $turquoise;
-$chart-failed-color: $coral;
+  // Dashboard
+  --dashboard-tab-text-color: --primary;
 
-// Misc
-$spinner-color: $turquoise; // color of the loading spinner
+  // Charts
+  --chart-success-color: $turquoise;
+  --chart-failed-color: $coral;
+
+  // Misc
+  --spinner-color: $turquoise; // color of the loading spinner
+
+}

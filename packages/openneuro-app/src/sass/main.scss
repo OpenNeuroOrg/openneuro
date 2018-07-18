@@ -76,7 +76,7 @@ $bootstrap-sass-asset-helper: true;
     .logo-end{
         font-size: 75%;
         text-transform: uppercase;
-        color: $primary;
+        color: --primary;
         font-weight: 400;
     }
 }
@@ -229,12 +229,12 @@ $bootstrap-sass-asset-helper: true;
     }
     button{
         @extend %btn-admin;
-        border-color: $secondary;
-        color: $secondary;
+        border-color: --secondary;
+        color: --secondary;
         padding: 5px 2px;
         height: auto;
         &:hover{
-            background:transparentize($secondary, .5);
+            background:transparentize(--secondary, .5);
             color:$white;
         }
     }

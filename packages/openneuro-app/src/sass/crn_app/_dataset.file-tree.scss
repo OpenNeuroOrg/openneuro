@@ -37,7 +37,7 @@
 
                 a {
                     text-decoration: none;
-                    color: $primary;
+                    color: --primary;
                     background: none;
                     margin: 0;
                     padding: 0 0 20px;
@@ -48,7 +48,7 @@
 
                     &:hover {
                         text-decoration: none;
-                        color: $primary-hover;
+                        color: --primary-hover;
                     }
                 }
             }
@@ -60,7 +60,7 @@
             .panel-body {
                 border-top: 1px solid transparent;
                 color: $c-56;
-                font-family: $font-family-cabin;
+                font-family: --font-family-cabin;
                 font-size: 11px;
 
                 >ul {
@@ -129,7 +129,7 @@
                         display: inline-block;
                         max-width: 100%;
                         margin-bottom: 5px;
-                        font-family: $font-family-cabin;
+                        font-family: --font-family-cabin;
                     }
 
                     .panel-body {
