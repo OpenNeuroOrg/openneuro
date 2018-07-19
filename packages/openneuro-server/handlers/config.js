@@ -66,10 +66,6 @@ const config = {
     environment: process.env.ENVIRONMENT,
   },
 
-  datalad: {
-    enabled: true,
-  },
-
   analysis: {
     enabled: process.env.ANALYSIS_ENABLED,
   },
