@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import GoogleAnalytics from 'react-ga'
-import config from '../../../config'
-
-GoogleAnalytics.initialize(config.analytics.trackingId)
 
 const analyticsWrapper = (WrappedComponent, options = {}) => {
   const trackPage = page => {

@@ -3,9 +3,7 @@
  *
  * Be careful to only include necessary dependencies here
  */
-import { zipResponse } from './serviceworker/s3.js'
 import { bundleResponse } from './serviceworker/dataset.js'
-import config from '../../config.js'
 
 const CACHE_NAME = 'openneuro'
 const CACHE_PATHS = serviceWorkerOption.assets
@@ -28,14 +26,7 @@ self.addEventListener('fetch', event => {
   // for non-GET requests.
   if (event.request.method === 'GET') {
     const url = new URL(event.request.url)
-    const bucket = config.aws.s3.datasetBucket
-    const bucketHostname = `${bucket}.s3.amazonaws.com`
-    if (url.hostname.endsWith(bucketHostname)) {
-      // Respond from the service worker
-      const hostname = url.hostname
-      const prefix = url.pathname.slice(1)
-      return event.respondWith(zipResponse(hostname, prefix))
-    } else if (url.pathname.endsWith('download')) {
+    if (url.pathname.endsWith('download')) {
       // Catch any aggregate download requests
       return event.respondWith(bundleResponse(url))
     } else {

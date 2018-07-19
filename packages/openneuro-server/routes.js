@@ -9,6 +9,7 @@ import stars from './handlers/stars'
 import * as datalad from './handlers/datalad'
 import * as download from './handlers/download.js'
 import comments from './handlers/comments'
+import { clientConfig } from './handlers/config.js'
 import * as subscriptions from './handlers/subscriptions'
 import verifyUser from './libs/authentication/verifyUser.js'
 import * as google from './libs/authentication/google.js'
@@ -23,6 +24,12 @@ import doi from './handlers/doi'
 import fileUpload from 'express-fileupload'
 
 const routes = [
+  // React config --------------------------------
+  {
+    method: 'get',
+    url: '/config.json',
+    handler: clientConfig,
+  },
   // users ---------------------------------------
   {
     method: 'get',
