@@ -15,7 +15,7 @@ class Metrics extends React.Component {
     let followers = dataset.followers ? '' + dataset.followers : '0'
     let displayStars = fromDashboard ? (stars !== '0' ? true : false) : true
     let hasDownloads = downloads !== '0'
-    let isSnapshot = dataset.hasOwnProperty('original')
+    let isSnapshot = dataset.hasOwnProperty('snapshot_version')
     let displayDownloads = fromDashboard
       ? hasDownloads ? true : false // don't display downloads on dash if the count is 0
       : isSnapshot ? true : false // down't display downloads on dataset page if the dataset is a draft
@@ -25,7 +25,6 @@ class Metrics extends React.Component {
     let displayViews = fromDashboard
       ? dataset.views !== '0' ? true : false // don't display views on dash if the count is 0
       : isSnapshot ? true : false // don't display views on the dataset draft page
-
     return (
       <span className="metrics-wrap">
         <Metric type="stars" value={stars} display={displayStars} />

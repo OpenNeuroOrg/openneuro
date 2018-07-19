@@ -103,7 +103,7 @@ class Snapshot extends Reflux.Component {
       const version = query.get('version')
       const job = query.get('job')
       const snapshotUrl = datasetId.join(snapshotId, ':')
-      actions.trackView(snapshotUrl)
+      actions.trackView(bids.decodeId(datasetId), bids.decodeId(snapshotId))
       actions.loadDataset(snapshotUrl, {
         snapshot: true,
         app: app,

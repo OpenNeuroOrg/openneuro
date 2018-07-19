@@ -149,3 +149,24 @@ export const updateSnapshotFileUrls = (obj, { fileUrls }) => {
 export const partial = (obj, { datasetId }) => {
   return getPartialStatus(datasetId)
 }
+
+/**
+ * Get analytics for a dataset or snapshot
+ */
+export const analytics = async obj => {
+  // if the dataset field exists, the request is from a snapshot, and
+  // we resolve the datasetId from the dataset snapshot field of context.
+  // otherwise, just use the id field because the object is a dataset
+  const datasetId = obj && obj.dataset ? (await obj.dataset()).id : obj.id
+
+  // if the object is a snapshot, grab the tag. otherwise, tag is null
+  const tag = obj && obj.tag ? obj.tag : null
+  return datalad.getDatasetAnalytics(datasetId, tag)
+}
+
+/**
+ * Track analytic of type 'view' or 'download' for a dataset / snapshot
+ */
+export const trackAnalytics = (obj, { datasetId, tag, type }) => {
+  return datalad.trackAnalytics(datasetId, tag, type)
+}

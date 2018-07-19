@@ -44,40 +44,31 @@ export default {
     const users = isSignedOut ? null : await datalad.getUsers()
     const stars = (await crn.getStars()).body
     const followers = (await crn.getSubscriptions()).body
-    this.usage(null, usage => {
-      let resultDict = {}
-      for (let project of projects) {
-        let dataset = this.formatDataset(
-          project,
-          null,
-          users,
-          stars,
-          followers,
-          usage,
-        )
-        let datasetId = dataset.hasOwnProperty('original')
-          ? dataset.original
-          : dataset._id
-        let existing = resultDict[datasetId]
-        if (
-          !existing ||
-          (existing.hasOwnProperty('original') &&
-            !dataset.hasOwnProperty('original')) ||
-          (existing.hasOwnProperty('original') &&
-            existing.snapshot_version < project.snapshot_version)
-        ) {
-          if (isAdmin || project.public || this.userAccess(project)) {
-            resultDict[datasetId] = dataset
-          }
+    let resultDict = {}
+    for (let project of projects) {
+      let dataset = this.formatDataset(project, null, users, stars, followers)
+      let datasetId = dataset.hasOwnProperty('original')
+        ? dataset.original
+        : dataset._id
+      let existing = resultDict[datasetId]
+      if (
+        !existing ||
+        (existing.hasOwnProperty('original') &&
+          !dataset.hasOwnProperty('original')) ||
+        (existing.hasOwnProperty('original') &&
+          existing.snapshot_version < project.snapshot_version)
+      ) {
+        if (isAdmin || project.public || this.userAccess(project)) {
+          resultDict[datasetId] = dataset
         }
       }
+    }
 
-      let results = []
-      for (let key in resultDict) {
-        results.push(resultDict[key])
-      }
-      callback(results)
-    })
+    let results = []
+    for (let key in resultDict) {
+      results.push(resultDict[key])
+    }
+    callback(results)
   },
 
   /**
@@ -117,10 +108,10 @@ export default {
             } finally {
               metadata[filename] = contents
             }
-            cb()
+            return cb()
           })
           .catch(() => {
-            cb()
+            return cb()
           })
       },
       () => {
@@ -163,6 +154,7 @@ export default {
             ? this._formatFiles(draftFiles)
             : this._formatFiles(snapshotFiles)
           project.snapshot_version = snapshot ? snapshot.tag : null
+          project.analytics = snapshot ? snapshot.analytics : project.analytics
           this.getMetadata(
             project,
             metadata => {
@@ -176,28 +168,20 @@ export default {
               dataset.children = tempFiles
               dataset.showChildren = true
               dataset.snapshots = project.snapshots
-              // get dataset usage stats
-              this.usage(projectId, usage => {
-                if (usage) {
-                  dataset.views = this.views(dataset, usage)
-                  dataset.downloads = this.downloads(dataset, usage)
-                }
-                if (config.analysis.enabled) {
-                  crn
-                    .getDatasetJobs(projectId, options)
-                    .then(res => {
-                      dataset.jobs = res.body
-                      return callback(dataset)
-                    })
-                    .catch(err => {
-                      // console.log('error getting jobs:', err)
-                      return callback(dataset, err)
-                    })
-                } else {
-                  dataset.jobs = []
-                  return callback(dataset)
-                }
-              })
+              if (config.analysis.enabled) {
+                crn
+                  .getDatasetJobs(projectId, options)
+                  .then(res => {
+                    dataset.jobs = res.body
+                    return callback(dataset)
+                  })
+                  .catch(err => {
+                    return callback(dataset, err)
+                  })
+              } else {
+                dataset.jobs = []
+                return callback(dataset)
+              }
             },
             options,
           )
@@ -360,17 +344,10 @@ export default {
    *
    * Takes a dataset and usage array and returns the download count of the dataset
    */
-  downloads(dataset, usage) {
-    if (usage) {
-      let datasetId = dataset._id
-      let matches = usage.filter(entry => {
-        return entry._id == this.decodeId(datasetId)
-      })
-      const downloads = matches.length ? '' + matches[0].downloads : '0'
-      return downloads
-    } else {
-      return '0'
-    }
+  downloads(dataset) {
+    return dataset.analytics && dataset.analytics.downloads
+      ? '' + dataset.analytics.downloads
+      : '0'
   },
 
   /**
@@ -378,17 +355,10 @@ export default {
    *
    * Takes a dataset and usage array and returns the view count of the dataset
    */
-  views(dataset, usage) {
-    if (usage) {
-      let datasetId = dataset._id
-      let matches = usage.filter(entry => {
-        return entry._id == this.decodeId(datasetId)
-      })
-      const views = matches.length ? '' + matches[0].views : '0'
-      return views
-    } else {
-      return '0'
-    }
+  views(dataset) {
+    return dataset.analytics && dataset.analytics.views
+      ? '' + dataset.analytics.views
+      : '0'
   },
 
   /**
@@ -424,7 +394,7 @@ export default {
    * a formatted top level container of a
    * BIDS dataset.
    */
-  formatDataset(project, description, users, stars, followers, usage) {
+  formatDataset(project, description, users, stars, followers) {
     let files = project.files
 
     let dataset = {
@@ -438,8 +408,8 @@ export default {
         project.draft && project.draft.modified ? project.draft.modified : null,
       permissions: project.permissions,
       public: !!project.public,
-      downloads: project.downloads,
-      views: project.views,
+      downloads: this.downloads(project),
+      views: this.views(project),
 
       /** modified for BIDS **/
       validation:
@@ -478,8 +448,6 @@ export default {
     dataset.stars = this.stars(dataset, stars)
     dataset.starCount = dataset.stars ? '' + dataset.stars.length : '0'
     dataset.followersList = this.followers(dataset, followers)
-    dataset.downloads = this.downloads(dataset, usage)
-    dataset.views = this.views(dataset, usage)
     dataset.followers = '' + dataset.followersList.length
     return dataset
   },
@@ -591,18 +559,6 @@ export default {
       return false
     }
     return project.uploader ? project.uploader.id === userProfile.sub : false
-  },
-
-  /**
-   * Usage
-   * Takes a snapshotId and snapshot boolean and
-   * callsback view and download counts for snapshots.
-   */
-  usage(datasetId, callback) {
-    crn.getAnalytics(datasetId).then(res => {
-      let usage = res ? res.body : null
-      return callback(usage)
-    })
   },
 
   /**

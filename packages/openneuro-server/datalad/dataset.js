@@ -252,3 +252,57 @@ export const updatePublic = (datasetId, publicFlag) => {
   //   .set('Accept', 'application/json')
   //   .then(({ body }) => body)
 }
+
+export const getDatasetAnalytics = (datasetId, tag) => {
+  return new Promise((resolve, reject) => {
+    let datasetQuery = tag
+      ? { datasetId: datasetId, tag: tag }
+      : { datasetId: datasetId }
+    c.crn.analytics
+      .aggregate([
+        {
+          $match: datasetQuery,
+        },
+        {
+          $group: {
+            _id: '$datasetId',
+            tag: { $first: '$tag' },
+            views: {
+              $sum: {
+                $cond: [{ $eq: ['$type', 'view'] }, 1, 0],
+              },
+            },
+            downloads: {
+              $sum: {
+                $cond: [{ $eq: ['$type', 'download'] }, 1, 0],
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            datasetId: '$_id',
+            tag: 1,
+            views: 1,
+            downloads: 1,
+          },
+        },
+      ])
+      .toArray((err, results) => {
+        if (err) {
+          return reject(err)
+        }
+        results = results.length ? results[0] : {}
+        return resolve(results)
+      })
+  })
+}
+
+export const trackAnalytics = (datasetId, tag, type) => {
+  return c.crn.analytics.insertOne({
+    datasetId: datasetId,
+    tag: tag,
+    type: type,
+  })
+}
