@@ -234,7 +234,7 @@ $bootstrap-sass-asset-helper: true;
         padding: 5px 2px;
         height: auto;
         &:hover{
-            background:transparentize(--secondary, .5);
+            background: --secondary-hover;
             color:$white;
         }
     }

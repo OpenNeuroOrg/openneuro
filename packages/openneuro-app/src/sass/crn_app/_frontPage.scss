@@ -510,7 +510,7 @@ footer {
                     color: --footer-text-color;
                     &:hover{
                         text-decoration: underline;
-                        color: lighten(--secondary, 15%);
+                        color: --secondary;
                     }
                 }
             }

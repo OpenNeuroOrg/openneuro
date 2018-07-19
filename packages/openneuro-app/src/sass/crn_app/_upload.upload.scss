@@ -246,7 +246,7 @@
       a {
         border-radius: 0;
         background-color: transparent;
-        color: lighten(--primary, 10%);
+        color: --primary-hover;
         font-size: 14px;
         border-right: 1px solid $transparent1;
         letter-spacing: 0;

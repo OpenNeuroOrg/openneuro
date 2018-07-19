@@ -143,7 +143,7 @@
                     width: 180px;
                     padding: 0 15px;
                     background: --navbar-upload-btn-background-color;
-                    color: lighten(--secondary, 10%);
+                    color: --secondary;
 
                     .link-name {
                         border-color: $transparent;
@@ -296,7 +296,7 @@
                         &:hover,
                         &.active {
                             border-color: $transparent;
-                            color: darken(--secondary, 10%);
+                            color: --secondary-darken;
                             background: $eee;
                         }
                     }
@@ -441,7 +441,7 @@
 
         .logo-end{
             transition: color 0.3s;
-            color: lighten(--primary, 12%);
+            color: --primary-hover;
         }
         &:hover{
             .logo-end{

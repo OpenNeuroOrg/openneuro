@@ -83,7 +83,7 @@ a {
 
 a:hover,
 a:focus {
-    color: lighten(--primary , 15%);
+    color: --primary-hover;
     text-decoration: none;
 }
 
@@ -187,7 +187,7 @@ h6 {
     &.hover,
     &.active,
     &:focus {
-        background: darken(--secondary, 10%);
+        background: --secondary-darken;
         transition: all .3s ease-out;
         color: $white;
         outline: none;
@@ -287,7 +287,7 @@ h6 {
     &.hover,
     &:focus,
     &.active {
-        color: darken(--secondary, 10%);
+        color: --secondary-darken;
         background: $eee;
     }
 }
@@ -296,7 +296,7 @@ h6 {
 
 %btn-submit-other {
     @extend %btn-admin-blue;
-    border: 2px solid lighten(--secondary, 5%);
+    border: 2px solid --secondary;
 
     &:active,
     &:focus {

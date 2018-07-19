@@ -24,12 +24,12 @@
             a,
             span {
                 @include transition(all .3s ease-out);
-                background: darken(--secondary, 10%);
+                background: --secondary-darken;
                 color: $white;
 
                 &:hover {
                     @include transition(all .3s ease-out);
-                    background: darken(--secondary, 10%);
+                    background: --secondary-darken;
                     color: $white;
                 }
             }

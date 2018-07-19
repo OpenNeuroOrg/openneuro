@@ -10,6 +10,8 @@
   --primary-hover: lighten($ocean, 15%);
 
   --secondary: $sky;
+  --secondary-hover: lighten($sky, 50%);
+  --secondary-darken: darken($sky, 10%);
 
   --tertiary: $turquoise;
 
