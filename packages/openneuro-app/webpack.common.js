@@ -6,21 +6,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 
-// prettier-ignore
-const env = {
-  CRN_SERVER_URL: JSON.stringify(process.env.CRN_SERVER_URL),
-  GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID),
-  GOOGLE_TRACKING_ID: JSON.stringify(process.env.GOOGLE_TRACKING_ID),
-  GLOBUS_CLIENT_ID: JSON.stringify(process.env.GLOBUS_CLIENT_ID),
-  ORCID_CLIENT_ID: JSON.stringify(process.env.ORCID_CLIENT_ID),
-  ORCID_REDIRECT_URI: JSON.stringify(process.env.ORCID_REDIRECT_URI),
-  ORCID_URI: JSON.stringify(process.env.ORCID_URI),
-  AWS_S3_ANALYSIS_BUCKET: JSON.stringify(process.env.AWS_S3_ANALYSIS_BUCKET),
-  AWS_S3_DATASET_BUCKET: JSON.stringify(process.env.AWS_S3_DATASET_BUCKET),
-  CRN_SERVER_DATALAD: JSON.stringify(process.env.CRN_SERVER_DATALAD) == '"true"',
-  ANALYSIS_ENABLED: JSON.stringify(process.env.ANALYSIS_ENABLED) == '"true"',
-}
-
 module.exports = {
   context: path.resolve(__dirname, 'src'),
   entry: {
@@ -51,9 +36,6 @@ module.exports = {
       title: 'OpenNeuro',
       template: path.resolve(__dirname, 'src/index.html'),
       favicon: './assets/favicon.ico',
-    }),
-    new webpack.DefinePlugin({
-      'process.env': env,
     }),
     new ServiceWorkerWebpackPlugin({
       entry: path.join(__dirname, './src/scripts/sw.js'),
