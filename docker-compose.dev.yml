@@ -1,5 +1,5 @@
 # docker compose versions
-version: '2.2'
+version: '2.3'
 
 # shared volumes
 volumes:
@@ -12,6 +12,7 @@ services:
     build:
       context: .
       dockerfile: ./packages/openneuro-app/Dockerfile
+      target: app
     working_dir: /srv/packages/openneuro-app
     command: sh -c "apk add make gcc g++ python && yarn install && yarn start --watch"
     volumes:
@@ -60,7 +61,10 @@ services:
       - ../datalad-service/tests:/tests
     
   # nginx - static file serving and service proxy
-  nginx:
+  web:
+    build:
+      context: .
+      dockerfile: ./packages/openneuro-app/Dockerfile
     volumes:
       - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
     ports:

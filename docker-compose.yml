@@ -1,5 +1,5 @@
 # docker compose versions
-version: '2.2'
+version: '2.3'
 
 # shared volumes
 volumes:
@@ -16,13 +16,6 @@ services:
   redis:
     image: redis:alpine
     restart: always
-
-  # web app bundle build
-  app:
-    image: openneuro/app:${CRN_APP_TAG}
-    volumes:
-      - project:/srv/packages/openneuro-app/dist
-    env_file: ./config.env
 
   # crn node server
   server:
@@ -87,9 +80,9 @@ services:
     ports:
       - "5555:5555"
 
-  # nginx - static file serving and service proxy
-  nginx:
-    image: nginx
+  # nginx + app
+  web:
+    image: openneuro/app:${CRN_APP_TAG}
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - ./nginx/.htpasswd:/etc/nginx/.htpasswd:ro

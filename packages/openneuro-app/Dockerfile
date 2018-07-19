@@ -1,4 +1,4 @@
-FROM node:8.9.4-alpine
+FROM node:8.11.3-alpine AS app
 
 RUN apk --no-cache --update add git make gcc g++ python
 
@@ -12,4 +12,10 @@ RUN npm install -g yarn && yarn install --pure-lockfile && yarn bootstrap && apk
 
 WORKDIR /srv/packages/openneuro-app
 
-CMD yarn build
+RUN yarn build
+
+
+FROM nginx:alpine AS web
+
+COPY --from=app /srv/packages/openneuro-app/dist /srv/app/dist
+
