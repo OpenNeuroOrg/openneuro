@@ -1,6 +1,7 @@
 /**
  * Provide a configuration object to the React app
  */
+import fs from 'fs'
 
 // These are public, take care with secrets
 const config = {
@@ -69,7 +70,18 @@ const config = {
   analysis: {
     enabled: process.env.ANALYSIS_ENABLED,
   },
+
+  theme: {},
 }
+
+const loadOverrides = () => {
+  const themeOverride = JSON.parse(
+    fs.readFileSync('content/theme.json', 'utf8'),
+  )
+  Object.assign(config.theme, themeOverride)
+}
+
+loadOverrides()
 
 // Provide some environment variables to the client
 export const clientConfig = (req, res) => {

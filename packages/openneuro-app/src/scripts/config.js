@@ -5,9 +5,11 @@
 // Apply any loaded CSS variables
 const loadTheme = config => {
   const root = document.querySelector(':root')
-  if (config.theme && config.theme.variables) {
-    for (const override of config.theme.variables) {
-      root.style.setProperty(override.key, override.value)
+  if (config.theme) {
+    for (const override in config.theme) {
+      if (config.theme.hasOwnProperty(override)) {
+        root.style.setProperty(override, config.theme[override])
+      }
     }
   }
 }

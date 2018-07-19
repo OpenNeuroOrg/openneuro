@@ -23,6 +23,7 @@ services:
     volumes:
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
       - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
+      - ./content:/srv/content
     env_file: ./config.env
     depends_on:
       - redis
