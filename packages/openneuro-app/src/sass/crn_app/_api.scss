@@ -2,7 +2,7 @@
     max-width: 1000px;
     margin: 50px auto;
     width: 100%;
-    color: --primary;
+    color: var(--primary);
 
     h1 {
         text-align: center;
@@ -17,7 +17,7 @@
 
         .panel-heading {
             text-align: center;
-            color: --primary;
+            color: var(--primary);
             font-size: 20px;
             border-bottom: 1px solid $ddd;
             border-top: 1px solid $ddd;
@@ -30,7 +30,7 @@
 
         .panel-body {
             font-size: 16px;
-            color: --primary;
+            color: var(--primary);
 
             .api-key-div {
                 padding: 20px;
@@ -53,7 +53,7 @@
             float: none;
             display: block;
             margin: auto;
-            background-color: --primary;
+            background-color: var(--primary);
         }
     }
 

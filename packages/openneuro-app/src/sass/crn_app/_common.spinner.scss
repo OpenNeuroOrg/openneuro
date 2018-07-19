@@ -9,7 +9,7 @@
         margin-top: 5px;
         display: block;
         font-size: 12px;
-        color: --spinner-color;
+        color: var(--spinner-color);
     }
 
     .spinner,
@@ -17,8 +17,8 @@
         @include border-radius(50%);
         @include box-sizing(border-box);
         position: relative;
-        border: 4px solid --spinner-color;
-        border-color: transparent --spinner-color;
+        border: 4px solid var(--spinner-color);
+        border-color: transparent var(--spinner-color);
         width: 45px;
         height: 45px;
         padding: 0;
