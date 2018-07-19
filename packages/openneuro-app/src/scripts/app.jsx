@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { ApolloProvider } from 'react-apollo'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
@@ -24,6 +25,10 @@ const App = ({ config }) => {
       </ApolloProvider>
     </CookiesProvider>
   )
+}
+
+App.propTypes = {
+  config: PropTypes.object,
 }
 
 export default App
