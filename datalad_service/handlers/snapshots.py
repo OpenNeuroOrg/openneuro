@@ -5,6 +5,7 @@ from celery import chain
 
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.dataset import create_snapshot
+from datalad_service.tasks.snapshots import get_snapshots
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.publish import publish_snapshot
 
@@ -33,20 +34,20 @@ class SnapshotResource(object):
             resp.media = self._get_snapshot(dataset, snapshot, files.get())
             resp.status = falcon.HTTP_OK
         else:
+            tags = get_snapshots.s(self.store.annex_path,
+                                   dataset).apply_async(queue=queue)
             # Index of all tags
             ds = self.store.get_dataset(dataset)
-            repo_tags = ds.repo.get_tags()
-            # Include an extra id field to uniquely identify snapshots
-            tags = [{'id': '{}:{}'.format(dataset, tag['name']), 'tag': tag['name'], 'hexsha': tag['hexsha']}
-                    for tag in repo_tags]
-            resp.media = {'snapshots': tags}
+            resp.media = {'snapshots': tags.get()}
             resp.status = falcon.HTTP_OK
 
     def on_post(self, req, resp, dataset, snapshot):
         """Commit a revision (snapshot) from the working tree."""
         queue = dataset_queue(dataset)
-        create = create_snapshot.si(self.store.annex_path, dataset, snapshot).set(queue=queue)
-        get = get_files.si(self.store.annex_path, dataset, branch=snapshot).set(queue=queue)
+        create = create_snapshot.si(
+            self.store.annex_path, dataset, snapshot).set(queue=queue)
+        get = get_files.si(self.store.annex_path, dataset,
+                           branch=snapshot).set(queue=queue)
         created = chain(create, get)()
         # created.wait()
         if not created.failed():
