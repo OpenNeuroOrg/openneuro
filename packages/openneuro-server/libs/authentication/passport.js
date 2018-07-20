@@ -65,7 +65,7 @@ export const setupPassportAuth = () => {
           sandbox: !!config.auth.orcid.apiURI,
           clientID: config.auth.orcid.clientID,
           clientSecret: config.auth.orcid.clientSecret,
-          callbackURL: `${config.url + config.apiPrefix}users/signin/orcid`,
+          callbackURL: `${config.url + config.apiPrefix}auth/orcid/callback`,
         },
         verifyORCIDUser,
       ),

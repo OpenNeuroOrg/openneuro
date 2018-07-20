@@ -381,7 +381,7 @@ const routes = [
   },
   {
     method: 'get',
-    url: '/users/signin/orcid',
+    url: '/auth/orcid/callback',
     middleware: [orcid.authCallback],
     handler: jwt.authSuccessHandler,
   },
