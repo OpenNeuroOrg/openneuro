@@ -12,7 +12,7 @@ const trackDownload = (datasetId, snapshotTag) => {
   datalad.trackAnalytics(datasetId, {
     snapshot: true,
     tag: snapshotTag,
-    type: 'download',
+    type: 'downloads',
   })
 }
 

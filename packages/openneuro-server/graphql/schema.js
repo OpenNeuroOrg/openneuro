@@ -266,8 +266,8 @@ const typeDefs = `
 
   # Types of analytics
   enum AnalyticTypes {
-    download
-    view
+    downloads
+    views
   }
 
 `

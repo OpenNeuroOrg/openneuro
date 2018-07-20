@@ -268,14 +268,10 @@ export const getDatasetAnalytics = (datasetId, tag) => {
             _id: '$datasetId',
             tag: { $first: '$tag' },
             views: {
-              $sum: {
-                $cond: [{ $eq: ['$type', 'view'] }, 1, 0],
-              },
+              $sum: '$views',
             },
             downloads: {
-              $sum: {
-                $cond: [{ $eq: ['$type', 'download'] }, 1, 0],
-              },
+              $sum: '$downloads',
             },
           },
         },
@@ -300,9 +296,18 @@ export const getDatasetAnalytics = (datasetId, tag) => {
 }
 
 export const trackAnalytics = (datasetId, tag, type) => {
-  return c.crn.analytics.insertOne({
-    datasetId: datasetId,
-    tag: tag,
-    type: type,
-  })
+  return c.crn.analytics.updateOne(
+    {
+      datasetId: datasetId,
+      tag: tag,
+    },
+    {
+      $inc: {
+        [type]: 1,
+      },
+    },
+    {
+      upsert: true,
+    },
+  )
 }
