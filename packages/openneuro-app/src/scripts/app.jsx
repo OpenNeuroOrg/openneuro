@@ -8,7 +8,6 @@ import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
 import { CookiesProvider } from 'react-cookie'
-console.log('frontPage:', frontPage)
 
 const App = ({ config }) => {
   return (
