@@ -13,9 +13,8 @@ class DatasetResource(object):
         self.store = store
 
     def on_get(self, req, resp, dataset):
-        datalad = self.store.get_dataset(dataset)
-        # repo will only be defined if it already exists
-        if (datalad.repo):
+        ds_path = self.store.get_dataset_path(dataset)
+        if (os.path.isdir(ds_path)):
             dataset_description = {
                 'accession_number': dataset,
             }
