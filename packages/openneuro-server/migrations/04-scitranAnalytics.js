@@ -17,22 +17,18 @@ export default {
     for (const analytic of analytics) {
       let { datasetId, tag } = bidsId.decode(analytic.container_id)
       let type = analytic.analytics_type + 's' //convert 'view' -> 'views' and 'download' -> 'downloads'
-      try {
-        await Analytics.collection.updateOne(
-          {
-            datasetId,
-            tag,
-          },
-          {
-            $inc: { [type]: 1 },
-          },
-          {
-            upsert: true,
-          },
-        )
-      } catch (e) {
-        throw e
-      }
+      await Analytics.collection.updateOne(
+        {
+          datasetId,
+          tag,
+        },
+        {
+          $inc: { [type]: 1 },
+        },
+        {
+          upsert: true,
+        },
+      )
     }
   },
 }
