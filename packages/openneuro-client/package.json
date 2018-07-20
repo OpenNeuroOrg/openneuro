@@ -1,6 +1,6 @@
 {
   "name": "openneuro-client",
-  "version": "1.13.0",
+  "version": "2.0.0",
   "description": "OpenNeuro shared client library.",
   "main": "src/index.js",
   "browser": "src/client.js",
@@ -11,8 +11,7 @@
     "apollo-boost": "^0.1.4",
     "apollo-link": "^1.2.1",
     "apollo-link-context": "^1.0.8",
-    "apollo-upload-client":
-      "https://github.com/nellh/apollo-upload-client-build.git",
+    "apollo-upload-client": "https://github.com/nellh/apollo-upload-client-build.git",
     "cross-fetch": "^2.2.0",
     "esm": "^3.0.16",
     "form-data": "^2.3.2",
