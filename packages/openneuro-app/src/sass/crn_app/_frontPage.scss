@@ -491,8 +491,17 @@ footer {
     padding: 10px 20px;
     color: var(--footer-text-color);
     display: block;
-    .version{
 
+    .privacy-policy {
+        text-align:center;
+        span {
+            a {
+                color: var(--footer-text-color);
+                &:hover{
+                    color: var(--primary);
+                }
+            }
+        }
     }
     .copy{
         text-align: right;
