@@ -14,17 +14,25 @@ export default {
   update: async () => {
     const analytics = await scitran.analytics.find({}).toArray()
     // console.log('analytics:', analytics)
-    const newAnalytics = []
     for (const analytic of analytics) {
       let { datasetId, tag } = bidsId.decode(analytic.container_id)
-      newAnalytics.push({
-        datasetId,
-        tag,
-        type: analytic.analytics_type,
-      })
+      let type = analytic.analytics_type + 's' //convert 'view' -> 'views' and 'download' -> 'downloads'
+      try {
+        await Analytics.collection.updateOne(
+          {
+            datasetId,
+            tag,
+          },
+          {
+            $inc: { [type]: 1 },
+          },
+          {
+            upsert: true,
+          },
+        )
+      } catch (e) {
+        throw e
+      }
     }
-    Analytics.collection.insert(newAnalytics).catch(e => {
-      throw e
-    })
   },
 }
