@@ -7,6 +7,11 @@ volumes:
 
 services:
 
+  content:
+    image: ${CONTENT_IMAGE}
+    volumes:
+      - /content
+
   # mongodb
   mongo:
     image: mongo:3.6
@@ -23,7 +28,6 @@ services:
     volumes:
       - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
       - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
-      - ./content:/srv/content
     env_file: ./config.env
     depends_on:
       - redis
@@ -90,6 +94,8 @@ services:
       - project:/srv/app/dist
       - ./acme:/acme
       - ${SSL_DIR}:/etc/nginx/ssl
+    volumes_from:
+      - content
     ports:
       - "80:80"
       - "8110:8110"

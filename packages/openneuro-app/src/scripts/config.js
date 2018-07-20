@@ -1,14 +1,15 @@
 /**
  * Dynamically loaded runtime configuration
  */
+import { theme } from 'openneuro-content'
 
 // Apply any loaded CSS variables
-const loadTheme = config => {
+const loadTheme = () => {
   const root = document.querySelector(':root')
-  if (config.theme) {
-    for (const override in config.theme) {
-      if (config.theme.hasOwnProperty(override)) {
-        root.style.setProperty(override, config.theme[override])
+  if (theme) {
+    for (const override in theme) {
+      if (theme.hasOwnProperty(override)) {
+        root.style.setProperty(override, theme[override])
       }
     }
   }
@@ -25,7 +26,7 @@ export const loadConfig = () => {
         .then(res => res.json())
         .then(config => {
           Object.assign(loadedConfiguration, config)
-          loadTheme(config)
+          loadTheme()
           loaded = true
           return config
         })

@@ -7,6 +7,7 @@ import Footer from '../common/partials/footer.jsx'
 import Pipelines from './front-page.pipelines.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
 import AuthenticationButtons from '../authentication/buttons.jsx'
+//import frontPage from 'openneuro-content'
 
 // assets -------------------------------------------------------------
 import { pageDescription } from '../resources/strings.js'

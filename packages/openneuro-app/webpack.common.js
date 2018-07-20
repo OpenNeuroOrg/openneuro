@@ -79,4 +79,5 @@ module.exports = {
   node: {
     fs: 'empty',
   },
+  externals: { 'openneuro-content': 'window["openneuro-content"]' },
 }
