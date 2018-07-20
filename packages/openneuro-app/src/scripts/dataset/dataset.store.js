@@ -433,7 +433,7 @@ let datasetStore = Reflux.createStore({
     let options = {
       snapshot: true,
       tag: this.data.dataset.tag,
-      type: 'download',
+      type: 'downloads',
     }
     datalad.trackAnalytics(this.data.dataset._id, options).then(() => {
       let dataset = this.data.dataset
@@ -1728,7 +1728,7 @@ let datasetStore = Reflux.createStore({
   // usage analytics ---------------------------------------------------------------
 
   trackView(datasetId, tag) {
-    let options = { snapshot: true, tag: tag, type: 'view' }
+    let options = { snapshot: true, tag: tag, type: 'views' }
     datalad.trackAnalytics(datasetId, options)
   },
 
