@@ -28,7 +28,6 @@ You can run tests with `yarn test` at the top level of the project. For each pac
 
 * [OpenNeuro app](packages/openneuro-app) - React frontend.
 * [OpenNeuro server](packages/openneuro-server) - Node.js web backend.
-* [OpenNeuro deployment scripts](https://github.com/poldracklab/crn_deploy) - Docker-compose scripts and configuration to deploy the system.
-* [SciTran](https://github.com/poldracklab/bids-core) - Dataset management backend.
+* [DataLad service](https://OpenNeuroOrg/datalad-service) - [DataLad](http://datalad.org/) microservice.
 * [bids-app-host](https://github.com/OpenNeuroOrg/bids-app-host) - Docker wrapper for cloud hosted job execution.
 * [bids-validator](https://github.com/INCF/bids-validator) - BIDS validation library.
