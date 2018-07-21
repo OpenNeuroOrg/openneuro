@@ -12,7 +12,7 @@ import routes from './routes'
 import morgan from 'morgan'
 import schema from './graphql/schema'
 import { apolloUploadExpress } from 'apollo-upload-server'
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import * as jwt from './libs/authentication/jwt.js'
@@ -70,29 +70,31 @@ export default test => {
     res.status(http_code).send(send)
   })
 
-  // The GraphQL endpoint
-  // Depends on bodyParser.json() above
+  // Apollo server setup
+  const apolloServer = new ApolloServer({
+    schema,
+    context: req => {
+      if (req.isAuthenticated()) {
+        return {
+          user: req.user.id,
+          isSuperUser: req.user.admin,
+          userInfo: req.user,
+        }
+      }
+    },
+    engine: true,
+  })
+
+  // Setup pre-GraphQL middleware
   app.use(
     '/crn/graphql',
     jwt.authenticate,
     auth.optional,
     apolloUploadExpress(),
-    graphqlExpress(req => {
-      if (req.isAuthenticated()) {
-        const user = req.user.id
-        const isSuperUser = req.user.admin
-        const userInfo = req.user
-        return {
-          schema,
-          context: { user, isSuperUser, userInfo },
-        }
-      } else {
-        return {
-          schema,
-        }
-      }
-    }),
   )
+
+  // Inject Apollo Server
+  apolloServer.applyMiddleware({ app })
 
   const websocketUrl = process.browser ? config.url.replace('http', 'ws') : null
   const subscriptionUrl = websocketUrl
