@@ -11,7 +11,6 @@ import config from './config'
 import routes from './routes'
 import morgan from 'morgan'
 import schema from './graphql/schema'
-import { apolloUploadExpress } from 'apollo-upload-server'
 import { ApolloServer } from 'apollo-server-express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
@@ -86,12 +85,7 @@ export default test => {
   })
 
   // Setup pre-GraphQL middleware
-  app.use(
-    '/crn/graphql',
-    jwt.authenticate,
-    auth.optional,
-    apolloUploadExpress(),
-  )
+  app.use('/crn/graphql', jwt.authenticate, auth.optional)
 
   // Inject Apollo Server
   apolloServer.applyMiddleware({ app })
