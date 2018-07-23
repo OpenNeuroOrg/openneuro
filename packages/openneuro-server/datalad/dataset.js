@@ -105,10 +105,10 @@ export const deleteDataset = id => {
  *
  * TODO - Support cursor pagination
  */
-export const getDatasets = ({ userId }) => {
-  if (userId) {
+export const getDatasets = options => {
+  if (options && 'userId' in options) {
     return c.crn.permissions
-      .find({ userId })
+      .find({ userId: options.userId })
       .toArray()
       .then(datasetsAllowed => {
         const datasetIds = datasetsAllowed.map(
