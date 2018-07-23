@@ -9,6 +9,8 @@ export const getUsers = gql`
       email
       provider
       admin
+      created
+      lastSeen
     }
   }
 `
