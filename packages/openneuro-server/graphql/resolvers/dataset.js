@@ -1,10 +1,13 @@
 import * as datalad from '../../datalad/dataset.js'
 import * as snapshots from '../../datalad/snapshots.js'
 import pubsub from '../pubsub.js'
+import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { getPartialStatus } from '../../datalad/draft.js'
 
-export const dataset = (obj, { id }) => {
-  return datalad.getDataset(id)
+export const dataset = (obj, { id }, { user }) => {
+  return checkDatasetRead(obj.id, user).then(() => {
+    return datalad.getDataset(id)
+  })
 }
 
 export const datasets = () => {
@@ -15,33 +18,42 @@ export const datasets = () => {
  * Create an empty dataset (new repo, new accession number)
  */
 export const createDataset = (obj, { label }, { user, userInfo }) => {
-  return datalad.createDataset(label, user, userInfo).then(dataset => {
-    return dataset
-  })
+  // Check for a valid login
+  if (user) {
+    return datalad.createDataset(label, user, userInfo)
+  } else {
+    throw new Error('You must be logged in to create a dataset.')
+  }
 }
 
 /**
  * Delete an existing dataset, as well as all snapshots
  */
-export const deleteDataset = (obj, { label }) => {
-  return datalad.deleteDataset(label).then(deleted => {
-    pubsub.publish('datasetDeleted', { id: label })
-    return deleted
+export const deleteDataset = (obj, { label }, { user }) => {
+  return checkDatasetWrite(obj.id, user).then(() => {
+    return datalad.deleteDataset(label).then(deleted => {
+      pubsub.publish('datasetDeleted', { id: label })
+      return deleted
+    })
   })
 }
 
 /**
  * Tag the working tree for a dataset
  */
-export const createSnapshot = (obj, { datasetId, tag }, { userInfo }) => {
-  return snapshots.createSnapshot(datasetId, tag, userInfo)
+export const createSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
+  return checkDatasetWrite(datasetId, user).then(() => {
+    return snapshots.createSnapshot(datasetId, tag, userInfo)
+  })
 }
 
 /**
  * Remove a tag from a dataset
  */
-export const deleteSnapshot = (obj, { datasetId, tag }) => {
-  return snapshots.deleteSnapshot(datasetId, tag)
+export const deleteSnapshot = (obj, { datasetId, tag }, { user }) => {
+  return checkDatasetWrite(datasetId, user).then(() => {
+    return snapshots.deleteSnapshot(datasetId, tag)
+  })
 }
 
 /**
@@ -50,19 +62,20 @@ export const deleteSnapshot = (obj, { datasetId, tag }) => {
 export const updateFiles = (
   obj,
   { datasetId, files: fileTree },
-  { userInfo },
+  { user, userInfo },
 ) => {
-  // TODO - The id returned here is a placeholder
-  const promises = updateFilesTree(datasetId, fileTree)
-  return Promise.all(promises)
-    .then(() =>
-      datalad
-        .commitFiles(datasetId, userInfo)
-        .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
-    )
-    .then(() => ({
-      id: new Date(),
-    }))
+  return checkDatasetWrite(datasetId, user).then(() => {
+    const promises = updateFilesTree(datasetId, fileTree)
+    return Promise.all(promises)
+      .then(() =>
+        datalad
+          .commitFiles(datasetId, userInfo)
+          .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
+      )
+      .then(() => ({
+        id: new Date(),
+      }))
+  })
 }
 
 /**
@@ -88,19 +101,21 @@ export const updateFilesTree = (datasetId, fileTree) => {
 export const deleteFiles = (
   obj,
   { datasetId, files: fileTree },
-  { userInfo },
+  { user, userInfo },
 ) => {
-  // TODO - The id returned here is a placeholder
-  const promises = deleteFilesTree(datasetId, fileTree)
-  return Promise.all(promises)
-    .then(() =>
-      datalad
-        .commitFiles(datasetId, userInfo)
-        .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
-    )
-    .then(() => ({
-      id: new Date(),
-    }))
+  return checkDatasetWrite(datasetId, user).then(() => {
+    // TODO - The id returned here is a placeholder
+    const promises = deleteFilesTree(datasetId, fileTree)
+    return Promise.all(promises)
+      .then(() =>
+        datalad
+          .commitFiles(datasetId, userInfo)
+          .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
+      )
+      .then(() => ({
+        id: new Date(),
+      }))
+  })
 }
 
 /**
@@ -129,8 +144,10 @@ export const deleteFilesTree = (datasetId, fileTree) => {
 /**
  * Update the dataset Public status
  */
-export const updatePublic = (obj, { datasetId, publicFlag }) => {
-  return datalad.updatePublic(datasetId, publicFlag)
+export const updatePublic = (obj, { datasetId, publicFlag }, { user }) => {
+  return checkDatasetWrite(datasetId, user).then(() => {
+    return datalad.updatePublic(datasetId, publicFlag)
+  })
 }
 
 /**
