@@ -12,9 +12,10 @@ export const checkDatasetRead = (datasetId, userId) => {
       } else {
         return Permission.findOne({ datasetId, userId }).then(permission => {
           if (
-            permission.level === 'admin' ||
-            permission.level === 'rw' ||
-            permission.level === 'ro'
+            permission &&
+            (permission.level === 'admin' ||
+              permission.level === 'rw' ||
+              permission.level === 'ro')
           ) {
             return true
           } else {
@@ -33,7 +34,10 @@ export const checkDatasetWrite = (datasetId, userId) => {
     return Promise.reject(writeErrorMessage)
   }
   return Permission.findOne({ datasetId, userId }).then(permission => {
-    if (permission.level === 'admin' || permission.level === 'rw') {
+    if (
+      permission &&
+      (permission.level === 'admin' || permission.level === 'rw')
+    ) {
       return true
     } else {
       throw new Error(writeErrorMessage)
