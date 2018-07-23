@@ -105,8 +105,26 @@ export const deleteDataset = id => {
  *
  * TODO - Support cursor pagination
  */
-export const getDatasets = () => {
-  return c.crn.datasets.find().toArray()
+export const getDatasets = options => {
+  if (options && 'admin' in options) {
+    // Admins can see all datasets
+    return c.crn.datasets.find().toArray()
+  }
+  if (options && 'userId' in options) {
+    return c.crn.permissions
+      .find({ userId: options.userId })
+      .toArray()
+      .then(datasetsAllowed => {
+        const datasetIds = datasetsAllowed.map(
+          permission => permission.datasetId,
+        )
+        return c.crn.datasets
+          .find({ $or: [{ id: { $in: datasetIds } }, { public: true }] })
+          .toArray()
+      })
+  } else {
+    return c.crn.datasets.find({ public: true }).toArray()
+  }
 }
 
 /**
