@@ -28,10 +28,14 @@ export const checkDatasetRead = (datasetId, userId) => {
 
 const writeErrorMessage = 'You do not have access to modify this dataset.'
 
-export const checkDatasetWrite = (datasetId, userId) => {
+export const checkDatasetWrite = (datasetId, userId, userInfo) => {
   if (!userId) {
     // Quick path for anonymous writes
     return Promise.reject(writeErrorMessage)
+  }
+  if (userId && userInfo.admin) {
+    // Always allow admins
+    return Promise.resolve(true)
   }
   return Permission.findOne({ datasetId, userId }).then(permission => {
     if (

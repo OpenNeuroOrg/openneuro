@@ -4,8 +4,8 @@ import pubsub from '../pubsub.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { getPartialStatus } from '../../datalad/draft.js'
 
-export const dataset = (obj, { id }, { user }) => {
-  return checkDatasetRead(id, user).then(() => {
+export const dataset = (obj, { id }, { user, userInfo }) => {
+  return checkDatasetRead(id, user, userInfo).then(() => {
     return datalad.getDataset(id)
   })
 }
@@ -33,8 +33,8 @@ export const createDataset = (obj, { label }, { user, userInfo }) => {
 /**
  * Delete an existing dataset, as well as all snapshots
  */
-export const deleteDataset = (obj, { label }, { user }) => {
-  return checkDatasetWrite(obj.id, user).then(() => {
+export const deleteDataset = (obj, { label }, { user, userInfo }) => {
+  return checkDatasetWrite(obj.id, user, userInfo).then(() => {
     return datalad.deleteDataset(label).then(deleted => {
       pubsub.publish('datasetDeleted', { id: label })
       return deleted
@@ -46,7 +46,7 @@ export const deleteDataset = (obj, { label }, { user }) => {
  * Tag the working tree for a dataset
  */
 export const createSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
-  return checkDatasetWrite(datasetId, user).then(() => {
+  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     return snapshots.createSnapshot(datasetId, tag, userInfo)
   })
 }
@@ -55,7 +55,7 @@ export const createSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
  * Remove a tag from a dataset
  */
 export const deleteSnapshot = (obj, { datasetId, tag }, { user }) => {
-  return checkDatasetWrite(datasetId, user).then(() => {
+  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     return snapshots.deleteSnapshot(datasetId, tag)
   })
 }
@@ -68,7 +68,7 @@ export const updateFiles = (
   { datasetId, files: fileTree },
   { user, userInfo },
 ) => {
-  return checkDatasetWrite(datasetId, user).then(() => {
+  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     const promises = updateFilesTree(datasetId, fileTree)
     return Promise.all(promises)
       .then(() =>
@@ -107,7 +107,7 @@ export const deleteFiles = (
   { datasetId, files: fileTree },
   { user, userInfo },
 ) => {
-  return checkDatasetWrite(datasetId, user).then(() => {
+  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     // TODO - The id returned here is a placeholder
     const promises = deleteFilesTree(datasetId, fileTree)
     return Promise.all(promises)
@@ -148,8 +148,12 @@ export const deleteFilesTree = (datasetId, fileTree) => {
 /**
  * Update the dataset Public status
  */
-export const updatePublic = (obj, { datasetId, publicFlag }, { user }) => {
-  return checkDatasetWrite(datasetId, user).then(() => {
+export const updatePublic = (
+  obj,
+  { datasetId, publicFlag },
+  { user, userInfo },
+) => {
+  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     return datalad.updatePublic(datasetId, publicFlag)
   })
 }
