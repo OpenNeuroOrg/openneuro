@@ -105,9 +105,8 @@ const typeDefs = `
     avatar: String
     created: DateTime!
     modified: DateTime
+    lastSeen: DateTime
     email: String!
-    firstLogin: DateTime
-    lastLogin: DateTime
     name: String!
     admin: Boolean
   }
