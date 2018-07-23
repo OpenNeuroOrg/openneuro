@@ -62,7 +62,9 @@ export const setupPassportAuth = () => {
     passport.use(
       new ORCIDStrategy(
         {
-          sandbox: !!config.auth.orcid.apiURI,
+          sandbox:
+            config.auth.orcid.apiURI &&
+            config.auth.orcid.apiURI.indexOf('sandbox') >= 0,
           clientID: config.auth.orcid.clientID,
           clientSecret: config.auth.orcid.clientSecret,
           callbackURL: `${config.url + config.apiPrefix}auth/orcid/callback`,
