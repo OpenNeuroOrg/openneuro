@@ -54,7 +54,7 @@ export const createSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
 /**
  * Remove a tag from a dataset
  */
-export const deleteSnapshot = (obj, { datasetId, tag }, { user }) => {
+export const deleteSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
   return checkDatasetWrite(datasetId, user, userInfo).then(() => {
     return snapshots.deleteSnapshot(datasetId, tag)
   })
