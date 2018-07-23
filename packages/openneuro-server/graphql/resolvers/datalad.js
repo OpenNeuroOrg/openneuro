@@ -20,10 +20,10 @@ export const snapshots = obj => {
   return getSnapshots(obj.id)
 }
 
-export const snapshot = (obj, { datasetId, tag }) => {
+export const snapshot = (obj, { datasetId, tag }, context) => {
   return getSnapshot(datasetId, tag).then(snapshot => ({
     ...snapshot,
-    dataset: () => dataset(snapshot, { id: datasetId }),
+    dataset: () => dataset(snapshot, { id: datasetId }, context),
   }))
 }
 
