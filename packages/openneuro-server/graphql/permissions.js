@@ -4,27 +4,28 @@ import mongo from '../libs/mongo.js'
 const c = mongo.collections
 
 export const checkDatasetRead = (datasetId, userId, userInfo) => {
-  const publicOnly = userInfo.admin ? false : true
-  return c.crn.datasets
-    .findOne({ id: datasetId, public: publicOnly })
-    .then(datasetFound => {
-      if (datasetFound) {
-        return true
-      } else {
-        return Permission.findOne({ datasetId, userId }).then(permission => {
-          if (
-            permission &&
-            (permission.level === 'admin' ||
-              permission.level === 'rw' ||
-              permission.level === 'ro')
-          ) {
-            return true
-          } else {
-            throw new Error('You do not have access to read this dataset.')
-          }
-        })
-      }
-    })
+  const query = { id: datasetId }
+  if (!userInfo.admin) {
+    query.public = true
+  }
+  return c.crn.datasets.findOne(query).then(datasetFound => {
+    if (datasetFound) {
+      return true
+    } else {
+      return Permission.findOne({ datasetId, userId }).then(permission => {
+        if (
+          permission &&
+          (permission.level === 'admin' ||
+            permission.level === 'rw' ||
+            permission.level === 'ro')
+        ) {
+          return true
+        } else {
+          throw new Error('You do not have access to read this dataset.')
+        }
+      })
+    }
+  })
 }
 
 const writeErrorMessage = 'You do not have access to modify this dataset.'
