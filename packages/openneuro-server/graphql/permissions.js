@@ -5,7 +5,7 @@ const c = mongo.collections
 
 export const checkDatasetRead = (datasetId, userId, userInfo) => {
   const query = { id: datasetId }
-  if (!userInfo.admin) {
+  if (userId && !userInfo.admin) {
     query.public = true
   }
   return c.crn.datasets.findOne(query).then(datasetFound => {
