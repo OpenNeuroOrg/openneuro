@@ -3,9 +3,10 @@ import mongo from '../libs/mongo.js'
 
 const c = mongo.collections
 
-export const checkDatasetRead = (datasetId, userId) => {
+export const checkDatasetRead = (datasetId, userId, userInfo) => {
+  const publicOnly = userInfo.admin ? false : true
   return c.crn.datasets
-    .findOne({ id: datasetId, public: true })
+    .findOne({ id: datasetId, public: publicOnly })
     .then(datasetFound => {
       if (datasetFound) {
         return true

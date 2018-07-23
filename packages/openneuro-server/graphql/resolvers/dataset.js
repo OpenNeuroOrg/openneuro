@@ -10,9 +10,9 @@ export const dataset = (obj, { id }, { user, userInfo }) => {
   })
 }
 
-export const datasets = (parent, args, { user }) => {
+export const datasets = (parent, args, { user, userInfo }) => {
   if (user) {
-    return datalad.getDatasets({ userId: user })
+    return datalad.getDatasets({ userId: user, admin: userInfo.admin })
   } else {
     return datalad.getDatasets()
   }
