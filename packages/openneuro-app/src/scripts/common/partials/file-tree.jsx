@@ -240,7 +240,8 @@ class FileTree extends Reflux.Component {
 
     if (
       !item.children &&
-      this.state.datasets._id &&
+      this.state.datasets &&
+      this.state.datasets.datasetUrl &&
       this.props.displayFile &&
       files.hasExtension(item.name, allowedFiles)
     ) {
