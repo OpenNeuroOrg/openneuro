@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import GoogleButton from './google-button.jsx'
 import OrcidButton from './orcid-button.jsx'
 import GlobusButton from './globus-button.jsx'
@@ -15,14 +16,18 @@ const globusConfigured = config.auth.globus.clientID
  * Display a button for each enabled authentication mechanism
  */
 
-const AuthenticationButtons = () => {
+const AuthenticationButtons = ({ min }) => {
   return (
     <span>
-      {googleConfigured ? <GoogleButton /> : null}
-      {orcidConfigured ? <OrcidButton /> : null}
-      {globusConfigured ? <GlobusButton /> : null}
+      {googleConfigured ? <GoogleButton min={min} /> : null}
+      {globusConfigured ? <GlobusButton min={min} /> : null}
+      {orcidConfigured ? <OrcidButton min={min} /> : null}
     </span>
   )
+}
+
+AuthenticationButtons.propTypes = {
+  min: PropTypes.bool,
 }
 
 export default AuthenticationButtons

@@ -10,12 +10,14 @@ const GoogleButton = ({ min }) => {
   const iconClass = min ? 'fa fa-google' : 'icon fa fa-google'
   const btnText = min ? 'Google' : 'Sign in with Google'
   return (
-    <a href={config.crn.url + 'auth/google'}>
-      <button className={btnClass}>
-        <i className={iconClass} />
-        <span>{btnText}</span>
-      </button>
-    </a>
+    <div className="login-btns">
+      <a href={config.crn.url + 'auth/google'}>
+        <button className={btnClass}>
+          <i className={iconClass} />
+          <span>{btnText}</span>
+        </button>
+      </a>
+    </div>
   )
 }
 
