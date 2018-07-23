@@ -10,19 +10,21 @@ const GlobusButton = ({ min }) => {
   const size = min ? '16' : '20'
   const btnText = min ? 'Globus' : 'Sign in with Globus'
   return (
-    <a href={config.crn.url + 'auth/globus'}>
-      <button className={btnClass}>
-        <span className="icon">
-          <img
-            alt="GLOBUS"
-            width={size}
-            height={size}
-            src="https://www.globus.org/sites/all/themes/globus_bootstrap_theme/favicon.ico"
-          />
-        </span>
-        <span>{btnText}</span>
-      </button>
-    </a>
+    <div className="login-btns">
+      <a href={config.crn.url + 'auth/globus'}>
+        <button className={btnClass}>
+          <span className="icon">
+            <img
+              alt="GLOBUS"
+              width={size}
+              height={size}
+              src="https://www.globus.org/sites/all/themes/globus_bootstrap_theme/favicon.ico"
+            />
+          </span>
+          <span>{btnText}</span>
+        </button>
+      </a>
+    </div>
   )
 }
 
