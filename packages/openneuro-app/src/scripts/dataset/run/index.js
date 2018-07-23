@@ -308,7 +308,14 @@ class JobAccordion extends React.Component {
           }
 
           let logstreamUrl = 'logs/' + encodeURIComponent(logstream.name)
-          return (
+          return this.props.fromPipelines ? (
+            <span className="job-log" key={label}>
+              <span>{label}</span>
+              {exitCode != undefined ? (
+                <span className={exitCodeClass}>{exitCodeStatus}</span>
+              ) : null}
+            </span>
+          ) : (
             <span className="job-log" key={label}>
               <WarnButton
                 icon="fa-eye"
@@ -416,6 +423,7 @@ JobAccordion.propTypes = {
   support: PropTypes.string,
   currentUser: PropTypes.object,
   history: PropTypes.object,
+  fromPipelines: PropTypes.bool,
 }
 
 export default withRouter(JobAccordion)
