@@ -139,6 +139,9 @@ const fileUrl = (datasetId, path, filename) => {
   return url
 }
 
+// Files to skip in uploads
+const blacklist = ['.DS_Store', 'Icon\r', '.git', '.gitattributes', '.datalad']
+
 /**
  * Add files to a dataset
  */
@@ -147,6 +150,10 @@ export const addFile = (datasetId, path, file) => {
   return new Promise((resolve, reject) =>
     file
       .then(({ filename, stream, mimetype }) => {
+        // Skip any blacklisted files
+        if (blacklist.includes(filename)) {
+          return resolve()
+        }
         stream
           .on('error', err => {
             if (err.constructor.name === 'FileStreamDisconnectUploadError') {
