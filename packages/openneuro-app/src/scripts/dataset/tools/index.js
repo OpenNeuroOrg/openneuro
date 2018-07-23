@@ -203,7 +203,7 @@ class Tools extends Reflux.Component {
         tooltip: 'Follow Dataset',
         icon: 'fa-tag icon-plus',
         action: actions.createSubscription.bind(this),
-        display: 1 && !isSubscribed,
+        display: isSignedIn && !isSubscribed,
         warn: false,
         validations: [
           {
