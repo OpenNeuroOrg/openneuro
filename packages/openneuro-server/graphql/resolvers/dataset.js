@@ -5,13 +5,17 @@ import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { getPartialStatus } from '../../datalad/draft.js'
 
 export const dataset = (obj, { id }, { user }) => {
-  return checkDatasetRead(obj.id, user).then(() => {
+  return checkDatasetRead(id, user).then(() => {
     return datalad.getDataset(id)
   })
 }
 
-export const datasets = () => {
-  return datalad.getDatasets()
+export const datasets = (parent, args, { user }) => {
+  if (user) {
+    return datalad.getDatasets({ userId: user })
+  } else {
+    return datalad.getDatasets()
+  }
 }
 
 /**
