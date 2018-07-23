@@ -178,11 +178,14 @@ class FileTree extends Reflux.Component {
     }
 
     let downloadFile
-    if (!item.children) {
+    if (!item.children && this.state.datasets.dataset) {
       downloadFile = (
         <span className="download-file">
           <span>
-            <a className="btn-warn-component warning" href={files.getFileURL(this.state.datasets.dataset, item.name)} download>
+            <a
+              className="btn-warn-component warning"
+              href={files.getFileURL(this.state.datasets.dataset, item.name)}
+              download>
               <i className="fa fa-download" /> DOWNLOAD
             </a>
           </span>
@@ -190,12 +193,12 @@ class FileTree extends Reflux.Component {
       )
     }
 
-    if (!item.children) {
+    if (!item.children && this.state.datasets.dataset) {
       if (this.props.editable && files.hasExtension(item.name, ['.json'])) {
         let itemUrl =
-        this.state.datasets.datasetUrl +
-        '/file-edit/' +
-        datalad.encodeFilePath(item.name)
+          this.state.datasets.datasetUrl +
+          '/file-edit/' +
+          datalad.encodeFilePath(item.name)
 
         editFile = (
           <span className="view-file">
@@ -237,6 +240,7 @@ class FileTree extends Reflux.Component {
 
     if (
       !item.children &&
+      this.state.datasets._id &&
       this.props.displayFile &&
       files.hasExtension(item.name, allowedFiles)
     ) {

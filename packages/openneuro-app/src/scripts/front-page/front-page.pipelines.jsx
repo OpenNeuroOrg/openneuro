@@ -210,11 +210,9 @@ class Pipelines extends Reflux.Component {
     let analysisLink = (
       <span>
         <Link
-          to="snapshot"
-          params={{
-            datasetId: bids.decodeId(exampleJob.datasetId),
-            snapshotId: exampleJob.snapshotId,
-          }}
+          to={`datasets/${bids.decodeId(
+            exampleJob.datasetId,
+          )}/version/${bids.decodeId(exampleJob.snapshotId)}`}
           query={{
             app: exampleJob.appLabel,
             version: exampleJob.appVersion,
@@ -234,7 +232,7 @@ class Pipelines extends Reflux.Component {
           </div>
           <div className="col-sm-6 ">
             <Link
-              to="publicJobs"
+              to="public/jobs"
               className="explore-more pull-right"
               query={{ pipeline: exampleJob.appLabel }}>
               <i className="fa fa-area-chart" /> Explore More
@@ -247,6 +245,7 @@ class Pipelines extends Reflux.Component {
           eventKey={exampleJob.appId}>
           <Run
             run={exampleJob}
+            fromPipelines={true}
             toggleFolder={FPActions.toggleFolder}
             displayFile={FPActions.displayFile}
           />
