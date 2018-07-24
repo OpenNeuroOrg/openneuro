@@ -5,6 +5,7 @@ import { Panel } from 'react-bootstrap'
 import OrcidButton from '../../authentication/orcid-button.jsx'
 import GoogleButton from '../../authentication/google-button.jsx'
 import GlobusButton from '../../authentication/globus-button.jsx'
+import { frontPage } from 'openneuro-content'
 
 const InfoPanel = ({ show, toggle }) => {
   if (!show) {
@@ -52,7 +53,10 @@ class Login extends React.Component {
           <Modal.Title>
             <div className="logo-text">
               <span>
-                Open<span className="logo-end">Neuro</span>
+                {frontPage.navBar.brand.text.first}
+                <span className="logo-end">
+                  {frontPage.navBar.brand.text.second}
+                </span>
               </span>
             </div>
           </Modal.Title>
