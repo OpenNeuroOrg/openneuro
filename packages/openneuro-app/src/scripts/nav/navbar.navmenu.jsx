@@ -33,6 +33,8 @@ const FaqLink = ({ faq }) => {
         <span className="link-name">faq</span>
       </NavLink>
     )
+  } else {
+    return null
   }
 }
 
