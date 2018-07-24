@@ -84,13 +84,30 @@ class FrontPage extends React.Component {
   // template functions ----------------------------------------------------
 
   _logoLayers() {
-    let logoLayers = frontPage.titlePanel.logos.map((item, index) => {
-      return (
-        <img key={index} className={item.class} src={item.src} alt={item.alt} />
-      )
-    })
-
-    return <div className="logo-layers">{logoLayers}</div>
+    if (
+      frontPage.titlePanel &&
+      frontPage.titlePanel.logos &&
+      frontPage.titlePanel.logos.length
+    ) {
+      if (frontPage.titlePanel.logos.length > 1) {
+        let logoLayers = frontPage.titlePanel.logos.map((item, index) => {
+          return (
+            <img
+              key={index}
+              className={item.class}
+              src={item.src}
+              alt={item.alt}
+            />
+          )
+        })
+        return <div className="logo-layers">{logoLayers}</div>
+      } else {
+        let logo = frontPage.titlePanel.logos[0]
+        return <img className={logo.class} src={logo.src} alt={logo.alt} />
+      }
+    } else {
+      return null
+    }
   }
 
   _logoText() {
