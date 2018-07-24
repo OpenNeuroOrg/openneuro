@@ -29,7 +29,7 @@ const typeDefs = `
     # Create a new dataset container and repository
     createDataset(label: String!): Dataset
     # Deletes a dataset and all associated snapshots
-    deleteDataset(label: String!): Dataset
+    deleteDataset(id: ID!): Dataset
     # Tag the current draft
     createSnapshot(datasetId: ID!, tag: String!): Snapshot
     # Remove a tag from the dataset

@@ -187,7 +187,7 @@ export default {
           .mutate({
             mutation: mutation,
             variables: {
-              label: bids.decodeId(datasetId),
+              id: bids.decodeId(datasetId),
             },
           })
           .then(data => {

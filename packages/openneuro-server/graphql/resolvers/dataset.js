@@ -33,10 +33,10 @@ export const createDataset = (obj, { label }, { user, userInfo }) => {
 /**
  * Delete an existing dataset, as well as all snapshots
  */
-export const deleteDataset = (obj, { label }, { user, userInfo }) => {
-  return checkDatasetWrite(obj.id, user, userInfo).then(() => {
-    return datalad.deleteDataset(label).then(deleted => {
-      pubsub.publish('datasetDeleted', { id: label })
+export const deleteDataset = (obj, { id }, { user, userInfo }) => {
+  return checkDatasetWrite(id, user, userInfo).then(() => {
+    return datalad.deleteDataset(id).then(deleted => {
+      pubsub.publish('datasetDeleted', { id })
       return deleted
     })
   })
