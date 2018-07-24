@@ -184,7 +184,7 @@ let datasetStore = Reflux.createStore({
             })
             this.loadJobs(
               bids.decodeId(datasetId),
-              selectedSnapshot,
+              this.data.dataset.snapshot_version,
               bids.decodeId(datasetId),
               options,
               (err, jobs) => {

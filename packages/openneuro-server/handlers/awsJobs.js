@@ -9,6 +9,7 @@ import yazl from 'yazl'
 import S3StreamDownload from 's3-stream-download'
 import config from '../config'
 import async from 'async'
+import bidsId from '../libs/bidsId.js'
 import { queue } from '../libs/queue'
 
 let c = mongo.collections
@@ -533,9 +534,10 @@ let handlers = {
    *  GET Dataset Jobs
    */
   getDatasetJobs(req, res, next) {
-    let snapshot =
-      req.query.hasOwnProperty('snapshot') && req.query.snapshot == 'true'
-    let datasetId = req.params.datasetId
+    let snapshot = req.query.hasOwnProperty('snapshot') && req.query.snapshot
+    let datasetId = snapshot
+      ? bidsId.encodeId(`${req.params.datasetId}-${req.query.snapshot}`)
+      : bidsId.encodeId(req.params.datasetId)
     let user = req.user
     let hasAccess = req.hasAccess
 
