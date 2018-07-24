@@ -8,7 +8,7 @@ ADD . /srv
 WORKDIR /srv
 
 # Build the frontend
-RUN npm install -g yarn && yarn install --pure-lockfile && yarn bootstrap && apk del make gcc g++ python
+RUN yarn install --pure-lockfile && yarn bootstrap && apk del make gcc g++ python
 
 WORKDIR /srv/packages/openneuro-app
 
