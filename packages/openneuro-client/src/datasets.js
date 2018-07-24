@@ -161,7 +161,7 @@ export const createDataset = gql`
 `
 
 export const deleteDataset = gql`
-  mutation deleteDataset($id: String!) {
+  mutation deleteDataset($id: ID!) {
     deleteDataset(id: $id) {
       id
     }
