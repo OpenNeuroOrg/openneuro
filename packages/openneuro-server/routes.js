@@ -350,11 +350,13 @@ const routes = [
   {
     method: 'get',
     url: '/datasets/:datasetId/download',
+    middleware: [jwt.authenticate, auth.optional],
     handler: download.datasetDownload,
   },
   {
     method: 'get',
     url: '/datasets/:datasetId/snapshots/:snapshotId/download',
+    middleware: [jwt.authenticate, auth.optional],
     handler: download.snapshotDownload,
   },
 
