@@ -35,7 +35,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'OpenNeuro',
       template: path.resolve(__dirname, 'src/index.html'),
-      favicon: './assets/favicon.ico',
     }),
     new ServiceWorkerWebpackPlugin({
       entry: path.join(__dirname, './src/scripts/sw.js'),
@@ -68,7 +67,7 @@ module.exports = {
         }),
       },
       {
-        test: /\.(jpg|png|svg|ico)$/,
+        test: /\.(jpg|png|svg)$/,
         loader: 'file-loader',
         options: {
           name: './img/[name].[hash:8].[ext]',
