@@ -2,7 +2,7 @@ import os
 import re
 
 from datalad.config import ConfigManager
-from datalad.support.exceptions import FileInGitError
+from datalad.support.exceptions import FileInGitError, FileNotInAnnexError
 
 
 SERVICE_EMAIL = 'git@openneuro.org'
@@ -25,7 +25,7 @@ def get_repo_files(dataset, branch=None):
             # Annexed file
             key = dataset.repo.get_file_key(filename)
             size = dataset.repo.get_size_from_key(key)
-        except FileInGitError:
+        except (FileInGitError, FileNotInAnnexError):
             # Regular git file
             key = dataset.repo.repo.commit(branch).tree[filename].hexsha
             # get file object id here and use as fd
