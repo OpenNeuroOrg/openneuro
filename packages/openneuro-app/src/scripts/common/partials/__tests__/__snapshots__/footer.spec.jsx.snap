@@ -15,13 +15,25 @@ exports[`common/partials/footer renders successfully 1`] = `
         </span>
       </div>
       <div
-        className="col-xs-12 col-md-4 footer-menu"
-      />
+        className="col-xs-12 col-md-4 privacy-policy"
+      >
+        <span>
+          <a
+            href="nutsaboutbrains.org"
+          >
+            Testing
+            's Privacy Policy
+          </a>
+        </span>
+      </div>
       <div
         className="col-xs-12 col-md-4 copy"
       >
         <span>
-          © 2017 Stanford Center for Reproducible Neuroscience
+          © 
+          2018
+           
+          squirrels
         </span>
       </div>
     </div>

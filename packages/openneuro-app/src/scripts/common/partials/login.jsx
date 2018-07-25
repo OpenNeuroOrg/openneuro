@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Modal } from '../../utils/modal.jsx'
 import { Panel } from 'react-bootstrap'
 import AuthenticationButtons from '../../authentication/buttons.jsx'
+import { frontPage } from 'openneuro-content'
 
 const InfoPanel = ({ show, toggle }) => {
   if (!show) {
@@ -50,7 +51,10 @@ class Login extends React.Component {
           <Modal.Title>
             <div className="logo-text">
               <span>
-                Open<span className="logo-end">Neuro</span>
+                {frontPage.navBar.brand.text.first}
+                <span className="logo-end">
+                  {frontPage.navBar.brand.text.second}
+                </span>
               </span>
             </div>
           </Modal.Title>

@@ -7,6 +7,7 @@ import { Navbar } from 'react-bootstrap'
 import withProfile from '../authentication/withProfile.js'
 import LoggedIn from '../authentication/logged-in.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
+import { faq } from 'openneuro-content'
 
 const AdminLinkContent = ({ profile }) => {
   if (profile.admin) {
@@ -24,6 +25,22 @@ AdminLinkContent.propTypes = {
 }
 
 const AdminLink = withProfile(AdminLinkContent)
+
+const FaqLink = ({ faq }) => {
+  if (faq && faq.length) {
+    return (
+      <NavLink className="nav-link" to="/faq">
+        <span className="link-name">faq</span>
+      </NavLink>
+    )
+  } else {
+    return null
+  }
+}
+
+FaqLink.propTypes = {
+  faq: PropTypes.array,
+}
 
 const NavMenu = ({ supportModal, loginModal }) => (
   <ul className="nav navbar-nav main-nav">
@@ -45,9 +62,7 @@ const NavMenu = ({ supportModal, loginModal }) => (
       </a>
     </li>
     <li className="link-faq">
-      <NavLink className="nav-link" to="/faq">
-        <span className="link-name">faq</span>
-      </NavLink>
+      <FaqLink faq={faq} />
     </li>
     <li className="link-admin">
       <AdminLink />
