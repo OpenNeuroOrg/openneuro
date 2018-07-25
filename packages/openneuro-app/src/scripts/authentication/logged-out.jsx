@@ -1,9 +1,9 @@
 import { withCookies } from 'react-cookie'
+import { loginCheck } from './loginCheck.js'
 
 /**
- * Render children if logged in
+ * Render children if logged out
  */
-const LoggedOut = ({ cookies, children }) =>
-  cookies.get('accessToken') ? null : children
+const LoggedOut = ({ children }) => (loginCheck() ? null : children)
 
 export default withCookies(LoggedOut)
