@@ -14,7 +14,7 @@ services:
 
   # mongodb
   mongo:
-    image: mongo:3.6
+    image: mongo:4.0
     restart: always
 
   # Redis

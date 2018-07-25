@@ -1,11 +1,15 @@
 {
   "name": "openneuro-cli",
-  "version": "1.13.0",
+  "version": "2.0.2",
   "description": "OpenNeuro command line uploader / editor.",
   "main": "index.js",
   "repository": "git@github.com:OpenNeuroOrg/openneuro.git",
-  "engines": { "node": ">=8.0.0" },
-  "os": ["!win32"],
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "os": [
+    "!win32"
+  ],
   "author": "Squishymedia",
   "license": "MIT",
   "bin": {
@@ -18,7 +22,7 @@
     "find-config": "^1.0.0",
     "inquirer": "^5.2.0",
     "mkdirp": "^0.5.1",
-    "openneuro-client": "^1.13.0"
+    "openneuro-client": "^2.0.2"
   },
   "scripts": {
     "openneuro": "node src/index.js"

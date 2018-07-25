@@ -6,7 +6,6 @@ import WarnButton from '../forms/warn-button.jsx'
 import Spinner from './spinner.jsx'
 import files from '../../utils/files'
 import config from '../../../../config'
-import datalad from '../../utils/datalad'
 import datasetStore from '../../dataset/dataset.store.js'
 import { refluxConnect } from '../../utils/reflux'
 import { Link } from 'react-router-dom'
@@ -178,38 +177,28 @@ class FileTree extends Reflux.Component {
     }
 
     let downloadFile
-    if (!item.children && this.state.datasets.dataset) {
+    if (!item.children) {
       downloadFile = (
         <span className="download-file">
-          <span>
-            <a
-              className="btn-warn-component warning"
-              href={files.getFileURL(this.state.datasets.dataset, item.name)}
-              download>
-              <i className="fa fa-download" /> DOWNLOAD
-            </a>
-          </span>
+          <WarnButton
+            icon="fa-download"
+            message="Download"
+            prepDownload={this.props.getFileDownloadTicket.bind(this, item)}
+          />
         </span>
       )
     }
 
-    if (!item.children && this.state.datasets.dataset) {
+    if (!item.children) {
       if (this.props.editable && files.hasExtension(item.name, ['.json'])) {
-        let itemUrl =
-          this.state.datasets.datasetUrl +
-          '/file-edit/' +
-          datalad.encodeFilePath(item.name)
-
         editFile = (
           <span className="view-file">
-            <Link to={itemUrl}>
-              <WarnButton
-                icon="fa-pencil"
-                warn={false}
-                message=" Edit"
-                action={() => null}
-              />
-            </Link>
+            <WarnButton
+              icon="fa-pencil"
+              warn={false}
+              message=" Edit"
+              action={this.props.editFile.bind(this, item)}
+            />
           </span>
         )
       }
@@ -240,8 +229,6 @@ class FileTree extends Reflux.Component {
 
     if (
       !item.children &&
-      this.state.datasets &&
-      this.state.datasets.datasetUrl &&
       this.props.displayFile &&
       files.hasExtension(item.name, allowedFiles)
     ) {
@@ -262,12 +249,12 @@ class FileTree extends Reflux.Component {
           itemUrl =
             this.state.datasets.datasetUrl +
             '/results/' +
-            datalad.encodeFilePath(item.path)
+            encodeURIComponent(item.path)
         } else {
           itemUrl =
             this.state.datasets.datasetUrl +
             '/file-display/' +
-            datalad.encodeFilePath(item.name)
+            encodeURIComponent(item.name)
         }
 
         displayBtn = (

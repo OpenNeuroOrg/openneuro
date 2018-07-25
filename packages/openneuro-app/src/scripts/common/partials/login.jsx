@@ -2,9 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from '../../utils/modal.jsx'
 import { Panel } from 'react-bootstrap'
-import OrcidButton from '../../authentication/orcid-button.jsx'
-import GoogleButton from '../../authentication/google-button.jsx'
-import GlobusButton from '../../authentication/globus-button.jsx'
+import AuthenticationButtons from '../../authentication/buttons.jsx'
 import { frontPage } from 'openneuro-content'
 
 const InfoPanel = ({ show, toggle }) => {
@@ -67,14 +65,8 @@ class Login extends React.Component {
           </div>
           <hr className="spacer" />
           <div className="login-modal">
+            <AuthenticationButtons min={true} />
             <div className="login-btns">
-              <GoogleButton min={this.props.min} />
-            </div>
-            <div className="login-btns">
-              <GlobusButton min={this.props.min} />
-            </div>
-            <div className="login-btns">
-              <OrcidButton min={this.props.min} />
               <div className="info-panel">
                 <span
                   className="help-info"

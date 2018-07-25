@@ -3,9 +3,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import config from '../../../../config.js'
+import datalad from '../../utils/datalad'
 
 const startDownload = uri => {
   global.location.assign(uri)
+}
+const trackDownload = (datasetId, snapshotTag) => {
+  datalad.trackAnalytics(datasetId, {
+    snapshot: true,
+    tag: snapshotTag,
+    type: 'downloads',
+  })
 }
 
 /**
@@ -36,6 +44,7 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
       if (registration.active) {
         // Service worker is already running as expected
         startDownload(uri)
+        trackDownload(datasetId, snapshotTag)
         callback()
       } else {
         // Waiting on the service worker
@@ -51,6 +60,7 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
                   true,
                 )
                 startDownload(uri)
+                trackDownload(datasetId, snapshotTag)
                 callback()
               }
             },

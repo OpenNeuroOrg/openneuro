@@ -1,6 +1,7 @@
 import Reflux from 'reflux'
 import { withRouter } from 'react-router-dom'
 import datasetStore from './dataset.store'
+import bids from '../utils/bids'
 import actions from './dataset.actions'
 import { refluxConnect } from '../utils/reflux'
 
@@ -45,18 +46,17 @@ class SnapshotLoader extends Reflux.Component {
       if (reload) {
         if (snapshotId) {
           const query = new URLSearchParams(props.location.search)
-          const snapshotUrl = [datasetId, snapshotId].join(':')
           const app = query.get('app')
           const version = query.get('version')
           const job = query.get('job')
-          actions.trackView(snapshotUrl)
+          actions.trackView(bids.decodeId(datasetId), bids.decodeId(snapshotId))
           actions.loadDataset(datasetId, {
             snapshot: true,
             app: app,
             version: version,
             job: job,
             datasetId: datasetId,
-            tag: snapshotId
+            tag: snapshotId,
           })
         }
       }

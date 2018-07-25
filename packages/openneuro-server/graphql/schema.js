@@ -29,7 +29,7 @@ const typeDefs = `
     # Create a new dataset container and repository
     createDataset(label: String!): Dataset
     # Deletes a dataset and all associated snapshots
-    deleteDataset(label: String!): Dataset
+    deleteDataset(id: ID!): Dataset
     # Tag the current draft
     createSnapshot(datasetId: ID!, tag: String!): Snapshot
     # Remove a tag from the dataset
@@ -54,6 +54,8 @@ const typeDefs = `
     removeUser(id: ID!): Boolean
     # Sets a users admin status
     setAdmin(id: ID!, admin: Boolean!): Boolean
+    # Tracks a view or download for a dataset
+    trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
   }
 
   type Subscription {
@@ -103,9 +105,8 @@ const typeDefs = `
     avatar: String
     created: DateTime!
     modified: DateTime
+    lastSeen: DateTime
     email: String!
-    firstLogin: DateTime
-    lastLogin: DateTime
     name: String!
     admin: Boolean
   }
@@ -127,6 +128,7 @@ const typeDefs = `
     draft: Draft
     snapshots: [Snapshot]
     permissions: [Permission]
+    analytics: Analytic
   }
 
   # Ephemeral draft or working tree for a dataset
@@ -152,6 +154,7 @@ const typeDefs = `
     summary: Summary
     issues: [ValidationIssue]
     files: [DatasetFile]
+    analytics: Analytic
   }
 
   #User permissions on a dataset
@@ -250,6 +253,20 @@ const typeDefs = `
   input UpdateFileUrlInput {
     filename: String!
     urls: [String]
+  }
+
+  # Analytics for a dataset
+  type Analytic {
+    datasetId: ID!
+    tag: String
+    views: Int
+    downloads: Int
+  }
+
+  # Types of analytics
+  enum AnalyticTypes {
+    downloads
+    views
   }
 
 `

@@ -34,7 +34,13 @@ const SNAPSHOT_FILES = `
 
 export const datasetDownload = (req, res) => {
   const datasetId = req.params.datasetId
-  graphql(schema, DRAFT_FILES, null, null, { datasetId })
+  graphql(
+    schema,
+    DRAFT_FILES,
+    null,
+    { user: req.user, userInfo: req.userInfo },
+    { datasetId },
+  )
     .then(({ data }) => {
       res.send({ files: data.dataset.draft.files, datasetId })
     })
@@ -47,7 +53,13 @@ export const datasetDownload = (req, res) => {
 export const snapshotDownload = (req, res) => {
   const datasetId = req.params.datasetId
   const tag = req.params.snapshotId
-  graphql(schema, SNAPSHOT_FILES, null, null, { datasetId, tag })
+  graphql(
+    schema,
+    SNAPSHOT_FILES,
+    null,
+    { user: req.user, userInfo: req.userInfo },
+    { datasetId, tag },
+  )
     .then(({ data }) => {
       res.send({ files: data.snapshot.files, datasetId, tag })
     })

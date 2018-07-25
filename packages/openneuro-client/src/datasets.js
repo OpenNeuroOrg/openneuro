@@ -86,6 +86,10 @@ export const getDatasets = gql`
         id
         partial
       }
+      analytics {
+        views
+        downloads
+      }
     }
   }
 `
@@ -157,8 +161,8 @@ export const createDataset = gql`
 `
 
 export const deleteDataset = gql`
-  mutation deleteDataset($label: String!) {
-    deleteDataset(label: $label) {
+  mutation deleteDataset($id: ID!) {
+    deleteDataset(id: $id) {
       id
     }
   }
@@ -194,5 +198,11 @@ export const removePermissions = gql`
 export const checkPartial = gql`
   query partial($datasetId: ID!) {
     partial(datasetId: $datasetId)
+  }
+`
+
+export const trackAnalytics = gql`
+  mutation($datasetId: ID!, $tag: String, $type: AnalyticTypes!) {
+    trackAnalytics(datasetId: $datasetId, tag: $tag, type: $type)
   }
 `

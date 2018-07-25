@@ -184,7 +184,7 @@ let datasetStore = Reflux.createStore({
             })
             this.loadJobs(
               bids.decodeId(datasetId),
-              selectedSnapshot,
+              this.data.dataset.snapshot_version,
               bids.decodeId(datasetId),
               options,
               (err, jobs) => {
@@ -430,14 +430,17 @@ let datasetStore = Reflux.createStore({
    * download feedback.
    */
   trackDownload(callback) {
-    scitran
-      .trackUsage(this.data.dataset._id, 'download', { snapshot: true })
-      .then(() => {
-        let dataset = this.data.dataset
-        dataset.downloads++
-        this.update({ dataset })
-        callback()
-      })
+    let options = {
+      snapshot: true,
+      tag: this.data.dataset.tag,
+      type: 'downloads',
+    }
+    datalad.trackAnalytics(this.data.dataset._id, options).then(() => {
+      let dataset = this.data.dataset
+      dataset.downloads++
+      this.update({ dataset })
+      callback()
+    })
   },
 
   /**
@@ -1149,7 +1152,6 @@ let datasetStore = Reflux.createStore({
       .getDatasetJobs(projectId, { snapshot })
       .then(res => {
         let jobs = {}
-
         // iterate jobs
         for (let job of res.body) {
           files.sortTree(job.results)
@@ -1164,7 +1166,7 @@ let datasetStore = Reflux.createStore({
             snapshot &&
             ((!finished && !failed) || (finished && !hasResults))
           ) {
-            this.pollJob(job._id, projectId)
+            //this.pollJob(job._id, projectId)
           }
 
           if (job.jobId === jobId) {
@@ -1215,7 +1217,6 @@ let datasetStore = Reflux.createStore({
         }
 
         let jobArray = jobsToArray(jobs)
-
         // update jobs state
         this.update({ jobs: jobArray, loadingJobs: false })
 
@@ -1724,8 +1725,9 @@ let datasetStore = Reflux.createStore({
 
   // usage analytics ---------------------------------------------------------------
 
-  trackView(snapshotId) {
-    scitran.trackUsage(snapshotId, 'view', { snapshot: true })
+  trackView(datasetId, tag) {
+    let options = { snapshot: true, tag: tag, type: 'views' }
+    datalad.trackAnalytics(datasetId, options)
   },
 
   toggleSidebar(value) {

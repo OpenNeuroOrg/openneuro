@@ -7,19 +7,21 @@ const OrcidButton = ({ min }) => {
   const size = min ? '16' : '20'
   const btnText = min ? 'ORCID' : 'Sign in with ORCID'
   return (
-    <a href={config.crn.url + 'auth/orcid'}>
-      <button className={btnClass}>
-        <span className="icon">
-          <img
-            alt="ORCID"
-            width={size}
-            height={size}
-            src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
-          />
-        </span>
-        <span>{btnText}</span>
-      </button>
-    </a>
+    <div className="login-btns">
+      <a href={config.crn.url + 'auth/orcid'}>
+        <button className={btnClass}>
+          <span className="icon">
+            <img
+              alt="ORCID"
+              width={size}
+              height={size}
+              src="https://orcid.org/sites/default/files/images/orcid_24x24.png"
+            />
+          </span>
+          <span>{btnText}</span>
+        </button>
+      </a>
+    </div>
   )
 }
 

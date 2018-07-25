@@ -105,8 +105,26 @@ export const deleteDataset = id => {
  *
  * TODO - Support cursor pagination
  */
-export const getDatasets = () => {
-  return c.crn.datasets.find().toArray()
+export const getDatasets = options => {
+  if (options && 'admin' in options) {
+    // Admins can see all datasets
+    return c.crn.datasets.find().toArray()
+  }
+  if (options && 'userId' in options) {
+    return c.crn.permissions
+      .find({ userId: options.userId })
+      .toArray()
+      .then(datasetsAllowed => {
+        const datasetIds = datasetsAllowed.map(
+          permission => permission.datasetId,
+        )
+        return c.crn.datasets
+          .find({ $or: [{ id: { $in: datasetIds } }, { public: true }] })
+          .toArray()
+      })
+  } else {
+    return c.crn.datasets.find({ public: true }).toArray()
+  }
 }
 
 /**
@@ -139,6 +157,9 @@ const fileUrl = (datasetId, path, filename) => {
   return url
 }
 
+// Files to skip in uploads
+const blacklist = ['.DS_Store', 'Icon\r', '.git', '.gitattributes', '.datalad']
+
 /**
  * Add files to a dataset
  */
@@ -147,6 +168,10 @@ export const addFile = (datasetId, path, file) => {
   return new Promise((resolve, reject) =>
     file
       .then(({ filename, stream, mimetype }) => {
+        // Skip any blacklisted files
+        if (blacklist.includes(filename)) {
+          return resolve()
+        }
         stream
           .on('error', err => {
             if (err.constructor.name === 'FileStreamDisconnectUploadError') {
@@ -251,4 +276,63 @@ export const updatePublic = (datasetId, publicFlag) => {
   //   .post(url)
   //   .set('Accept', 'application/json')
   //   .then(({ body }) => body)
+}
+
+export const getDatasetAnalytics = (datasetId, tag) => {
+  return new Promise((resolve, reject) => {
+    let datasetQuery = tag
+      ? { datasetId: datasetId, tag: tag }
+      : { datasetId: datasetId }
+    c.crn.analytics
+      .aggregate([
+        {
+          $match: datasetQuery,
+        },
+        {
+          $group: {
+            _id: '$datasetId',
+            tag: { $first: '$tag' },
+            views: {
+              $sum: '$views',
+            },
+            downloads: {
+              $sum: '$downloads',
+            },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            datasetId: '$_id',
+            tag: 1,
+            views: 1,
+            downloads: 1,
+          },
+        },
+      ])
+      .toArray((err, results) => {
+        if (err) {
+          return reject(err)
+        }
+        results = results.length ? results[0] : {}
+        return resolve(results)
+      })
+  })
+}
+
+export const trackAnalytics = (datasetId, tag, type) => {
+  return c.crn.analytics.updateOne(
+    {
+      datasetId: datasetId,
+      tag: tag,
+    },
+    {
+      $inc: {
+        [type]: 1,
+      },
+    },
+    {
+      upsert: true,
+    },
+  )
 }

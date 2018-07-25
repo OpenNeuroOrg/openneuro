@@ -392,37 +392,4 @@ export default {
       },
     )
   },
-
-  // usage analytics ------------------------------------------------------------------------
-
-  /**
-   * Track Usage
-   *
-   * - type ('view' or 'download')
-   */
-  trackUsage(snapshotId, type, options) {
-    options.query = { type }
-    return request.post(
-      config.scitran.url + 'projects/' + snapshotId + '/analytics',
-      options,
-    )
-  },
-
-  /**
-   * Get Usage Analytics
-   *
-   * options
-   * - type       ('view' or 'download')
-   * - user_id    (string)
-   * - start_date (date) year-month-day
-   * - end_date   (date) year-month-day
-   * - count      (boolean)
-   * - limit      (integer)
-   */
-  getUsage(snapshotId, options) {
-    return request.get(
-      config.scitran.url + 'projects/' + snapshotId + '/analytics',
-      options,
-    )
-  },
 }

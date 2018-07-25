@@ -41,4 +41,28 @@ export default {
     }
     return id
   },
+
+  decode(id) {
+    let decodedId = this.hexToASCII(id)
+    let datasetId = null
+    let tag = null
+    // decodes the two different formats of storing dataset + snapshot tag
+    if (/\s{4}ds\d{6}/.test(decodedId)) {
+      datasetId = decodedId.slice(4)
+    } else if (/\d{6}-\d{5}/.test(decodedId)) {
+      tag = decodedId.slice(7)
+      datasetId = 'ds' + decodedId.slice(0, 6)
+    } else {
+      // handles all these old dataset ids that start with 57 or 58
+      if (id.startsWith('57') || id.startsWith('58')) {
+        datasetId = id
+      } else {
+        // if the id is of the proper length but has no ds, add ds.
+        // otherwise, add it is short and needs a 0 as well
+        const beginning = id.length == 6 ? 'ds' : 'ds0'
+        datasetId = beginning + id
+      }
+    }
+    return { datasetId, tag }
+  },
 }
