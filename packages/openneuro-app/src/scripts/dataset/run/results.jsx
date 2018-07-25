@@ -3,7 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import actions from '../dataset.actions'
 import { Accordion, Panel } from 'react-bootstrap'
-import FileTree from '../../common/partials/file-tree.jsx'
+import FileTree from '../../common/partials/file-tree-old.jsx'
 import DownloadAll from './download-all.jsx'
 import markdown from '../../utils/markdown'
 

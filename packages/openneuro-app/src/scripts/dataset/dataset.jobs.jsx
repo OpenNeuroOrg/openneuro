@@ -27,7 +27,7 @@ class Jobs extends Reflux.Component {
   render() {
     let version
 
-    if (!this.state.datasets.dataset.original) {
+    if (!this.state.datasets.dataset.snapshot_version) {
       return false
     }
 

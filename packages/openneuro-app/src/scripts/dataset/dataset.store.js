@@ -1152,7 +1152,6 @@ let datasetStore = Reflux.createStore({
       .getDatasetJobs(projectId, { snapshot })
       .then(res => {
         let jobs = {}
-
         // iterate jobs
         for (let job of res.body) {
           files.sortTree(job.results)
@@ -1167,7 +1166,7 @@ let datasetStore = Reflux.createStore({
             snapshot &&
             ((!finished && !failed) || (finished && !hasResults))
           ) {
-            this.pollJob(job._id, projectId)
+            //this.pollJob(job._id, projectId)
           }
 
           if (job.jobId === jobId) {
@@ -1218,7 +1217,6 @@ let datasetStore = Reflux.createStore({
         }
 
         let jobArray = jobsToArray(jobs)
-
         // update jobs state
         this.update({ jobs: jobArray, loadingJobs: false })
 
