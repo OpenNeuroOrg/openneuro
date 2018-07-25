@@ -536,7 +536,9 @@ let handlers = {
   getDatasetJobs(req, res, next) {
     let snapshot = req.query.hasOwnProperty('snapshot') && req.query.snapshot
     let datasetId = snapshot
-      ? bidsId.encodeId(`${req.params.datasetId}-${req.query.snapshot}`)
+      ? bidsId.hexFromASCII(
+          `${req.params.datasetId.slice(2)}-${req.query.snapshot}`,
+        )
       : bidsId.encodeId(req.params.datasetId)
     let user = req.user
     let hasAccess = req.hasAccess
