@@ -7,6 +7,7 @@ import actions from './dataset.actions'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
 import Run from './run'
+import config from '../../../config'
 import { Accordion, Panel } from 'react-bootstrap'
 import { refluxConnect } from '../utils/reflux'
 
@@ -29,6 +30,10 @@ class Jobs extends Reflux.Component {
 
     if (!this.state.datasets.dataset.snapshot_version) {
       return false
+    }
+
+    if (config.analysis && !config.analysis.enabled) {
+      return null
     }
 
     let appTree = []
