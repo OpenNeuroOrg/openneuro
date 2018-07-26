@@ -8,7 +8,7 @@ import { JobLink, JobRoute } from '../common/partials/jobs.jsx'
 import Jobs from './dashboard.jobs.jsx'
 import config from '../../../config'
 
-const analysisEnabled = config.analysis.enabled
+const analysisEnabled = !!config.analysis.enabled
 
 const publicDatasets = () => <Datasets public />
 const publicJobs = () => <Jobs public />
