@@ -6,22 +6,15 @@ import GlobusButton from './globus-button.jsx'
 import config from '../../../config'
 
 /**
- * get config flags for each auth mechanism
- */
-const googleConfigured = config.auth.google.clientID
-const orcidConfigured = config.auth.orcid.clientID
-const globusConfigured = config.auth.globus.clientID
-
-/**
  * Display a button for each enabled authentication mechanism
  */
 
 const AuthenticationButtons = ({ min }) => {
   return (
     <span>
-      {googleConfigured ? <GoogleButton min={min} /> : null}
-      {globusConfigured ? <GlobusButton min={min} /> : null}
-      {orcidConfigured ? <OrcidButton min={min} /> : null}
+      {config.auth.google.clientID ? <GoogleButton min={min} /> : null}
+      {config.auth.globus.clientID ? <GlobusButton min={min} /> : null}
+      {config.auth.orcid.clientID ? <OrcidButton min={min} /> : null}
     </span>
   )
 }
