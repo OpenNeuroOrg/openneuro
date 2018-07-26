@@ -597,7 +597,7 @@ let handlers = {
     let reqAll = false
     let reqPublic = req.query.public === 'true'
     const includeResults = req.query.results === 'true'
-    if (req.isSuperUser) {
+    if (req.user.admin) {
       reqAll = req.query.all === 'true'
       // If all jobs are requested, skip the public query
       if (reqAll) {
