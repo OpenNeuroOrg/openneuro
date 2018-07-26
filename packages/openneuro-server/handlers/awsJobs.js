@@ -648,9 +648,18 @@ let handlers = {
           async.each(
             jobs,
             (job, cb) => {
-              buildMetadata(job)
-              filteredJobs.push(job)
-              cb()
+              // Check the dataset is public
+              c.crn.datasets
+                .findOne({
+                  datasetId: bidsId.decodeId(job.datasetId),
+                })
+                .then(dataset => {
+                  if (dataset.public) {
+                    buildMetadata(job)
+                    filteredJobs.push(job)
+                  }
+                  cb()
+                })
             },
             () => {
               res.send({
