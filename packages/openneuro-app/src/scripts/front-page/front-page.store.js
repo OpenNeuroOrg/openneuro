@@ -7,6 +7,7 @@ import bids from '../utils/bids'
 import files from '../utils/files'
 import datasetActions from '../dataset/dataset.actions'
 import request from '../utils/request'
+import config from '../../../config'
 
 // store setup -----------------------------------------------------------------------
 
@@ -24,9 +25,11 @@ let FrontPageStore = Reflux.createStore({
       true,
     )
     // Load apps
-    crn.getApps().then(res => {
-      this.setApps(res.body)
-    })
+    if (config.analysis && config.analysis.enabled) {
+      crn.getApps().then(res => {
+        this.setApps(res.body)
+      })
+    }
   },
 
   getInitialState: function() {
@@ -146,9 +149,12 @@ let FrontPageStore = Reflux.createStore({
    * Load Job
    */
   loadJob(snapshotId, jobId) {
-    crn.getJob(snapshotId, jobId).then(res => {
-      this.update({ exampleJob: res.body, loadingJob: false })
-    }, { snapshot: true })
+    crn.getJob(snapshotId, jobId).then(
+      res => {
+        this.update({ exampleJob: res.body, loadingJob: false })
+      },
+      { snapshot: true },
+    )
   },
 
   loadLatestJob(appName, status) {
