@@ -309,7 +309,7 @@ let datasetStore = Reflux.createStore({
    * Load Apps
    */
   loadApps() {
-    if (config.analysis.enabled) {
+    if (config.analysis && config.analysis.enabled) {
       this.update({ loadingApps: true })
       crn.getApps().then(res => {
         this.update({ apps: res.body, loadingApps: false })
