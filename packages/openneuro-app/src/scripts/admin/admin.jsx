@@ -20,7 +20,7 @@ import {
 } from '../common/partials/jobs.jsx'
 import LoggedIn from '../authentication/logged-in.jsx'
 
-const analysisEnabled = config.analysis.enabled
+const analysisEnabled = !!config.analysis.enabled
 
 class Dashboard extends React.Component {
   // life cycle events --------------------------------------------------
