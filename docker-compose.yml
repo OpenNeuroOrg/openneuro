@@ -91,7 +91,6 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - ./nginx/.htpasswd:/etc/nginx/.htpasswd:ro
-      - project:/srv/app/dist
       - ./acme:/acme
       - ${SSL_DIR}:/etc/nginx/ssl
     volumes_from:
