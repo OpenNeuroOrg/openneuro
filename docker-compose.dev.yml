@@ -52,6 +52,17 @@ services:
       - /srv/node_modules:exec
 
   datalad:
+    image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
+    command:
+      - gunicorn
+      - --bind
+      - 0.0.0.0:9877
+      - --reload
+      - datalad_service.app:create_app('/datalad')
+      - --workers
+      - "8"
+      - --worker-class
+      - gevent
     volumes:
       - ../datalad-service/datalad_service:/datalad_service
 
