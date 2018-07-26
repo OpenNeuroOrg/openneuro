@@ -11,6 +11,9 @@ let config = {
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, PATCH, DELETE',
     'Access-Control-Allow-Headers': 'content-type, Authorization',
   },
+  analysis: {
+    enabled: process.env.ANALYSIS_ENABLED,
+  },
   scitran: {
     url: process.env.SCITRAN_SITE_URL,
     secret: process.env.SCITRAN_CORE_DRONE_SECRET,

@@ -19,8 +19,10 @@ const redisConnect = async () => {
     console.log('Resque connected')
     // start background tasks
     notifications.initCron()
-    aws.batch.initCron()
-    aws.cloudwatch.initEvents().then(aws.batch.initQueue)
+    if (config.analysis.enabled) {
+      aws.batch.initCron()
+      aws.cloudwatch.initEvents().then(aws.batch.initQueue)
+    }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err)
