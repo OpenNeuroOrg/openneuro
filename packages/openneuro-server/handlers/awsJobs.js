@@ -651,10 +651,10 @@ let handlers = {
               // Check the dataset is public
               c.crn.datasets
                 .findOne({
-                  datasetId: bidsId.decodeId(job.datasetId),
+                  id: bidsId.decodeId(job.datasetId),
                 })
                 .then(dataset => {
-                  if (dataset.public) {
+                  if (dataset && dataset.public) {
                     buildMetadata(job)
                     filteredJobs.push(job)
                   }
