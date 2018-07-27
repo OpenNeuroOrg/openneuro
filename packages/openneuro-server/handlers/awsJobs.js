@@ -597,7 +597,7 @@ let handlers = {
     let reqAll = false
     let reqPublic = req.query.public === 'true'
     const includeResults = req.query.results === 'true'
-    if (req.isSuperUser) {
+    if (req.user.admin) {
       reqAll = req.query.all === 'true'
       // If all jobs are requested, skip the public query
       if (reqAll) {
@@ -648,9 +648,18 @@ let handlers = {
           async.each(
             jobs,
             (job, cb) => {
-              buildMetadata(job)
-              filteredJobs.push(job)
-              cb()
+              // Check the dataset is public
+              c.crn.datasets
+                .findOne({
+                  id: bidsId.decodeId(job.datasetId),
+                })
+                .then(dataset => {
+                  if (dataset && dataset.public) {
+                    buildMetadata(job)
+                    filteredJobs.push(job)
+                  }
+                  cb()
+                })
             },
             () => {
               res.send({
