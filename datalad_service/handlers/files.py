@@ -6,7 +6,11 @@ import falcon
 import git
 from datalad_service.common.annex import get_user_info
 from datalad_service.common.celery import dataset_queue
-from datalad_service.tasks.files import unlock_files, commit_files, get_files, remove_files
+from datalad_service.tasks.files import commit_files
+from datalad_service.tasks.files import get_files
+from datalad_service.tasks.files import get_untracked_files
+from datalad_service.tasks.files import remove_files
+from datalad_service.tasks.files import unlock_files
 
 
 class FilesResource(object):
@@ -32,9 +36,9 @@ class FilesResource(object):
 
     def on_get(self, req, resp, dataset, filename=None, snapshot='HEAD'):
         ds_path = self.store.get_dataset_path(dataset)
-        ds = self.store.get_dataset(dataset)
         if filename:
             try:
+                ds = self.store.get_dataset(dataset)
                 if ds.repo.is_under_annex([filename])[0]:
                     path = ds.repo.repo.git.show(snapshot + ':' + filename)
                     # remove leading relative folder paths
@@ -70,9 +74,15 @@ class FilesResource(object):
             # Return a list of file objects
             # {name, path, size}
             queue = dataset_queue(dataset)
-            files = get_files.apply_async(
-                queue=queue, args=(self.store.annex_path, dataset, snapshot))
-            resp.media = {'files': files.get()}
+            if "untracked" in req.params:
+                files = get_untracked_files.apply_async(
+                    queue=queue, args=(self.store.annex_path, dataset)
+                )
+                resp.media = {'files': files.get()}
+            else:
+                files = get_files.apply_async(
+                    queue=queue, args=(self.store.annex_path, dataset, snapshot))
+                resp.media = {'files': files.get()}
 
     def on_post(self, req, resp, dataset, filename):
         """Post will create new files and adds them to the annex if they do not exist, else update existing files."""
