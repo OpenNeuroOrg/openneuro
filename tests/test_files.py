@@ -125,10 +125,15 @@ def test_untracked_file_index(celery_app, client, new_dataset):
     response = client.simulate_get(
         '/datasets/{}/files'.format(ds_id), params={"untracked": True})
     assert response.status == falcon.HTTP_OK
-    assert response.json == {'files': [{'filename': 'dataset_description.json',
-                                        'size': 101},
-                                       {'filename': 'LICENSE',
-                                        'size': 8}]}
+    assert 'files' in response.json
+    assert len(response.json['files']) == 2
+    for f in response.json['files']:
+        if f['filename'] == 'dataset_description.json':
+            assert f['size'] == 101
+        elif f['filename'] == 'LICENSE':
+            assert f['size'] == 8
+        else:
+            assert False
 
 
 def test_untracked_dir_index(celery_app, client, new_dataset):
@@ -144,8 +149,14 @@ def test_untracked_dir_index(celery_app, client, new_dataset):
     response = client.simulate_get(
         '/datasets/{}/files'.format(ds_id), params={"untracked": True})
     assert response.status == falcon.HTTP_OK
-    assert response.json == {'files': [{'filename': 'dataset_description.json',
-                                        'size': 101},
-                                       {'filename': 'LICENSE',
-                                        'size': 8},
-                                       {'filename': 'sub-01/anat/sub-01_T1w.nii.gz', 'size': 19}]}
+    assert 'files' in response.json
+    assert len(response.json['files']) == 3
+    for f in response.json['files']:
+        if f['filename'] == 'dataset_description.json':
+            assert f['size'] == 101
+        elif f['filename'] == 'LICENSE':
+            assert f['size'] == 8
+        elif f['filename'] == 'sub-01/anat/sub-01_T1w.nii.gz':
+            assert f['size'] == 19
+        else:
+            assert False
