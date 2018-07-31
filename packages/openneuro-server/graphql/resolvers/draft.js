@@ -2,9 +2,13 @@ import { summary } from './summary.js'
 import { issues } from './issues.js'
 import { getDraftFiles, getPartialStatus } from '../../datalad/draft.js'
 
+// A draft must have a dataset parent
+const draftFiles = dataset => (_, { untracked }) =>
+  getDraftFiles(dataset.id, dataset.revision, { untracked })
+
 export const draft = obj => ({
   id: obj.revision,
-  files: () => getDraftFiles(obj.id, obj.revision),
+  files: draftFiles(obj),
   summary: () => summary(obj),
   issues: () => issues(obj),
   modified: obj.modified,
