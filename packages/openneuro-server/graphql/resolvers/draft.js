@@ -1,12 +1,7 @@
 import { summary } from './summary.js'
 import { issues } from './issues.js'
 import { getDraftFiles, getPartialStatus } from '../../datalad/draft.js'
-import { getSnapshot, getSnapshots } from '../../datalad/snapshots.js'
-import { dataset } from './dataset.js'
 
-/**
- * Resolvers for state held by the datalad service
- */
 export const draft = obj => ({
   id: obj.revision,
   files: () => getDraftFiles(obj.id, obj.revision),
@@ -16,17 +11,9 @@ export const draft = obj => ({
   partial: () => partial(obj, { datasetId: obj.id }),
 })
 
-export const snapshots = obj => {
-  return getSnapshots(obj.id)
-}
-
-export const snapshot = (obj, { datasetId, tag }, context) => {
-  return getSnapshot(datasetId, tag).then(snapshot => ({
-    ...snapshot,
-    dataset: () => dataset(snapshot, { id: datasetId }, context),
-  }))
-}
-
+/**
+ * Check if a dataset draft is partially uploaded
+ */
 export const partial = (obj, { datasetId }) => {
   return getPartialStatus(datasetId)
 }

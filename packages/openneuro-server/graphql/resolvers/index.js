@@ -15,8 +15,9 @@ import {
   analytics,
   trackAnalytics,
 } from './dataset.js'
+import { draft, partial } from './draft.js'
 import { updateSummary, updateValidation } from './validation.js'
-import { draft, snapshot, snapshots, partial } from './datalad.js'
+import { snapshot, snapshots } from './snapshots.js'
 import { whoami, user, users, removeUser, setAdmin } from './user.js'
 import {
   permissions,
