@@ -1,3 +1,5 @@
+import os
+
 from datalad_service.common.annex import CommitInfo, get_repo_files
 from datalad_service.common.celery import app
 from datalad_service.common.celery import dataset_task
@@ -24,7 +26,8 @@ def commit_files(store, dataset, files, name=None, email=None, validate=True, co
     if validate:
         # Run the validator but don't block on the request
         queue = dataset_queue(dataset)
-        validate_dataset.s(dataset, ds.path, ref, cookies).apply_async(queue=queue)
+        validate_dataset.s(dataset, ds.path, ref,
+                           cookies).apply_async(queue=queue)
     return ref
 
 
@@ -40,6 +43,33 @@ def get_files(store, dataset, branch=None):
     """Get the working tree, optionally a branch tree."""
     ds = store.get_dataset(dataset)
     return get_repo_files(ds, branch)
+
+
+@dataset_task
+def get_untracked_files(store, dataset):
+    """Get file listing and size metadata for all files in the working tree."""
+    ds_path = store.get_dataset_path(dataset)
+    fileMeta = []
+    for root, dirs, files in os.walk(ds_path):
+        if '.git' in dirs:
+            dirs.remove('.git')
+        if '.datalad' in dirs:
+            dirs.remove('.datalad')
+        if '.gitattributes' in files:
+            files.remove('.gitattributes')
+        for filename in files:
+            path = os.path.join(root, filename)
+            rel_path = os.path.relpath(root, ds_path)
+            if (rel_path != '.'):
+                file_path = os.path.join(rel_path, filename)
+            else:
+                file_path = filename
+            # Get file size for the uploader
+            size = os.path.getsize(path)
+            fileMeta.append(
+                {'filename': file_path, 'size': size})
+    return fileMeta
+
 
 @dataset_task
 def remove_files(store, dataset, files, name=None, email=None):
