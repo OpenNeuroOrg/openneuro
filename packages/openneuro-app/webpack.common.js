@@ -26,13 +26,15 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name]-[hash:8].bundle.js',
   },
+  optimization: {
+    splitChunks: {
+      name: 'vendor',
+      minChunks: Infinity,
+    },
+  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-    }),
     new HtmlWebpackPlugin({
       title: 'OpenNeuro',
       template: path.resolve(__dirname, 'src/index.html'),
