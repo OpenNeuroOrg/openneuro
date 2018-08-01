@@ -12,6 +12,7 @@ module.exports = {
     app: './scripts/client.jsx',
     css: './sass/main.scss',
     vendor: [
+      'es6-shim',
       'react',
       'react-dom',
       'react-router-dom',
