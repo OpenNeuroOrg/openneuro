@@ -45,7 +45,7 @@ def setup_s3_sibling(dataset, realm):
     """Add a sibling for an S3 bucket publish."""
     dataset_id = os.path.basename(dataset.path)
 
-    if (realm == DatasetRealm.PUBLIC.name):
+    if (realm == DatasetRealm.PUBLIC):
         public = getattr(datalad_service.config, 'DATALAD_S3_PUBLIC_ON_EXPORT')
     else:
         public = 'no'
