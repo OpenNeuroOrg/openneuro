@@ -1,20 +1,22 @@
 const path = require('path')
 const merge = require('webpack-merge')
 const common = require('./webpack.common.js')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const Visualizer = require('webpack-visualizer-plugin')
+const history = require('connect-history-api-fallback')
+const convert = require('koa-connect')
 
 module.exports = merge(common, {
+  mode: 'development',
   devtool: 'inline-source-map',
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    compress: true,
+  serve: {
+    hotClient: false,
+    content: path.join(__dirname, 'dist'),
     host: '0.0.0.0',
     port: 9876,
-    disableHostCheck: true,
-    historyApiFallback: {
-      disableDotRule: true,
+    add: app => {
+      const historyOptions = {}
+      app.use(convert(history(historyOptions)))
     },
   },
-  plugins: [new ExtractTextPlugin('style.css'), new Visualizer()],
+  plugins: [new Visualizer()],
 })

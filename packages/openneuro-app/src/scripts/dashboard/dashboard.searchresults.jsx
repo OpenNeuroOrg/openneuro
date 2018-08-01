@@ -5,7 +5,6 @@ import request from '../utils/request'
 import Spinner from '../common/partials/spinner.jsx'
 import Search from '../common/partials/search.jsx'
 import { withRouter } from 'react-router'
-import urlParse from 'url-parse'
 import PropTypes from 'prop-types'
 
 class SearchResults extends React.Component {
@@ -174,10 +173,10 @@ class SearchResults extends React.Component {
       </div>
     )
 
-    let parsedUrl = urlParse(result.link, true)
-    const hostname = parsedUrl.hostname
+    let parsedUrl = new URLSearchParams(result.link)
+    const hostname = parsedUrl.get('hostname')
     if (hostname === window.location.hostname) {
-      return <Link to={parsedUrl.pathname}>{innerContent}</Link>
+      return <Link to={parsedUrl.get('pathname')}>{innerContent}</Link>
     } else {
       return <a href={result.link}>{innerContent}</a>
     }

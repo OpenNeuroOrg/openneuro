@@ -2,7 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin')
 
@@ -26,13 +26,15 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name]-[hash:8].bundle.js',
   },
+  optimization: {
+    splitChunks: {
+      name: 'vendor',
+      minChunks: Infinity,
+    },
+  },
   plugins: [
     new CleanWebpackPlugin(['dist']),
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-    }),
     new HtmlWebpackPlugin({
       title: 'OpenNeuro',
       template: path.resolve(__dirname, 'src/index.html'),
@@ -46,6 +48,9 @@ module.exports = {
         to: './papaya-[hash:8].js',
       },
     ]),
+    new MiniCssExtractPlugin({
+      filename: 'style.css',
+    }),
   ],
   module: {
     rules: [
@@ -61,11 +66,17 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          //resolve-url-loader may be chained before sass-loader if necessary
-          use: ['cache-loader', 'css-loader', 'sass-loader'],
-        }),
+        use: [
+          {
+            loader: 'style-loader', // creates style nodes from JS strings
+          },
+          {
+            loader: 'css-loader', // translates CSS into CommonJS
+          },
+          {
+            loader: 'sass-loader', // compiles Sass to CSS
+          },
+        ],
       },
       {
         test: /\.(jpg|png|svg)$/,
