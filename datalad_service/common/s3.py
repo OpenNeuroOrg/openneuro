@@ -44,7 +44,12 @@ class DatasetRealm(Enum):
 def setup_s3_sibling(dataset, realm):
     """Add a sibling for an S3 bucket publish."""
     dataset_id = os.path.basename(dataset.path)
-    public = getattr(datalad_service.config, 'DATALAD_S3_PUBLIC_ON_EXPORT')
+
+    if (realm == DatasetRealm.PUBLIC.name):
+        public = getattr(datalad_service.config, 'DATALAD_S3_PUBLIC_ON_EXPORT')
+    else:
+        public = 'no'
+
     # TODO - There may be a better way to do this?
     dataset.repo._run_annex_command(
         'initremote',
