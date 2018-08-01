@@ -21,8 +21,16 @@ You can run tests with `yarn test` at the top level of the project. For each pac
 [docker-compose](https://docs.docker.com/compose/overview/) is used to run a local copy of all required services together. Copy the example `.env.example` file to `.env` and `config.env.example` to `config.env` and start with the script.
 
 ```shell
-./start-dev
+./bin/start-dev
 ```
+
+To run docker-compose commands with the dev environment, a wrapper script is provided.
+
+```shell
+./bin/dev-compose [docker-compose options]
+```
+
+You can add this to your shell path to quickly run dev commands like `dev-compose restart` or `dev-compose logs -f --tail=10 server`.
 
 ## Components
 
