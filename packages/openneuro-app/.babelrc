@@ -1,5 +1,5 @@
 {
-  "plugins": ["transform-object-rest-spread", "dynamic-import-webpack", "transform-runtime"],
+  "plugins": ["transform-object-rest-spread", "transform-runtime", "syntax-dynamic-import"],
   "presets": [
     "react",
     [

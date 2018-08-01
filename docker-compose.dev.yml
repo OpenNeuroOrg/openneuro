@@ -14,11 +14,13 @@ services:
       dockerfile: ./packages/openneuro-app/Dockerfile
       target: app
     working_dir: /srv/packages/openneuro-app
-    command: sh -c "apk add make gcc g++ python && yarn install && yarn start --watch"
+    command: sh -c "apk add make gcc g++ python && yarn install && yarn start"
     volumes:
       - .:/srv
       - yarn_cache:/root/.cache
       - project:/srv/packages/openneuro-app/dist
+    ports:
+      - "8145:8145"
     tmpfs:
       - /srv/node_modules:exec
       - /srv/packages/openneuro-app/node_modules:exec
