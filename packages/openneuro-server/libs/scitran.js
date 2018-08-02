@@ -3,6 +3,7 @@ import config from '../config'
 import fs from 'fs'
 import crypto from 'crypto'
 import files from './files'
+import User from '../models/user.js'
 import userCache from '../libs/cache/userCache.js'
 
 /**
@@ -13,12 +14,12 @@ import userCache from '../libs/cache/userCache.js'
  */
 export default {
   /**
-     * Verify User
-     *
-     * Checks if the currently logged in users
-     * in in the scitran system and returns a
-     * user object.
-     */
+   * Verify User
+   *
+   * Checks if the currently logged in users
+   * in in the scitran system and returns a
+   * user object.
+   */
   verifyUser(req, res) {
     request.getProxy(
       config.scitran.url + 'users/self',
@@ -28,8 +29,8 @@ export default {
   },
 
   /**
-     * Is Super User
-     */
+   * Is Super User
+   */
   isSuperUser(accessToken, callback) {
     request.get(
       config.scitran.url + 'users/self',
@@ -45,20 +46,24 @@ export default {
   },
 
   /**
-     * Get User
-     */
+   * Get User
+   */
   getUser(userId, callback) {
-    request.getCache(
-      config.scitran.url + 'users/' + userId,
-      userCache,
-      { body: { userId: userId } },
-      callback,
-    )
+    // Updated to use internal authentication
+    User.findOne({ id: userId })
+      .then(user => {
+        // Mock the SciTran response
+        const userResponse = { body: { ...user, _id: user.id } }
+        callback(null, { body: userResponse })
+      })
+      .catch(err => {
+        callback(err)
+      })
   },
 
   /**
-     * Get User by Token
-     */
+   * Get User by Token
+   */
   getUserByToken(accessToken, callback) {
     request.get(
       config.scitran.url + 'users/self',
@@ -72,8 +77,8 @@ export default {
   },
 
   /**
-     * Create User
-     */
+   * Create User
+   */
   createUser(user, callback) {
     request.postCache(
       config.scitran.url + 'users',
@@ -86,12 +91,12 @@ export default {
   },
 
   /**
-     * Create Group
-     *
-     * Takes a groupName and a userId and
-     * creates a group with that user as the
-     * admin.
-     */
+   * Create Group
+   *
+   * Takes a groupName and a userId and
+   * creates a group with that user as the
+   * admin.
+   */
   createGroup(groupName, userId, callback) {
     let body = {
       _id: groupName,
@@ -108,9 +113,9 @@ export default {
   },
 
   /**
-     * Get Project
-     *
-     */
+   * Get Project
+   *
+   */
   getProject(projectId, callback, options) {
     let modifier = options && options.snapshot ? 'snapshots/' : ''
     request.get(
@@ -133,8 +138,8 @@ export default {
   },
 
   /**
-     * Get Project Snapshots
-     */
+   * Get Project Snapshots
+   */
   getProjectSnapshots(projectId, callback) {
     request.get(
       config.scitran.url + 'projects/' + projectId + '/snapshots',
@@ -146,9 +151,9 @@ export default {
   },
 
   /**
-     * Update Project
-     *
-     */
+   * Update Project
+   *
+   */
   updateProject(projectId, body, callback) {
     request.put(
       config.scitran.url + 'projects/' + projectId,
@@ -160,8 +165,8 @@ export default {
   },
 
   /**
-     * Add Tag
-     */
+   * Add Tag
+   */
   addTag(containerType, containerId, tag, callback) {
     request.post(
       config.scitran.url + containerType + '/' + containerId + '/tags',
@@ -173,8 +178,8 @@ export default {
   },
 
   /**
-     * Remove Tag
-     */
+   * Remove Tag
+   */
   removeTag(containerType, containerId, tag, callback) {
     request.del(
       config.scitran.url + containerType + '/' + containerId + '/tags/' + tag,
@@ -184,8 +189,8 @@ export default {
   },
 
   /**
-     * Add Role
-     */
+   * Add Role
+   */
   addRole(container, id, role, callback) {
     request.post(
       config.scitran.url + container + '/' + id + '/roles',
@@ -195,13 +200,13 @@ export default {
   },
 
   /**
-     * Download Symlink Dataset
-     *
-     * Downloads a tar archive of symlinks to reconstruct a
-     * BIDS dataset. Stores it under a hash id in a local
-     * file store and updates all symlinks to point to the
-     * correct files in scitran's file store.
-     */
+   * Download Symlink Dataset
+   *
+   * Downloads a tar archive of symlinks to reconstruct a
+   * BIDS dataset. Stores it under a hash id in a local
+   * file store and updates all symlinks to point to the
+   * correct files in scitran's file store.
+   */
   downloadSymlinkDataset(datasetId, callback, options) {
     let modifier = options && options.snapshot ? 'snapshots/' : ''
     request.post(
