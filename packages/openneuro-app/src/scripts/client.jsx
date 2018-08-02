@@ -10,6 +10,8 @@ import packageJson from '../../package.json'
 import { loadConfig } from './config.js'
 import GoogleAnalytics from 'react-ga'
 
+if (module.hot) module.hot.accept()
+
 loadConfig().then(config => {
   GoogleAnalytics.initialize(config.analytics.trackingId)
 
