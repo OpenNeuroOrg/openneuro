@@ -1,16 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `
-<Route
-  render={[Function]}
-/>
-`;
+exports[`dataset/dataset/run/JobAccordion renders a failed run 1`] = `<Route />`;
 
-exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `
-<Route
-  render={[Function]}
-/>
-`;
+exports[`dataset/dataset/run/JobAccordion renders a successful run 1`] = `<Route />`;
 
 exports[`dataset/run/DownloadAll should render something 1`] = `
 <span
