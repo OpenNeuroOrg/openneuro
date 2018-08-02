@@ -475,7 +475,7 @@ export default {
       ReferencesAndLinks: [],
       DatasetDOI: '',
     }
-    description = description ? description : defaultDescription
+    description = Object.assign(defaultDescription, description)
 
     if (metadata && metadata.authors) {
       description.Authors = metadata.authors
