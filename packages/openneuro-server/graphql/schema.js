@@ -146,7 +146,7 @@ const typeDefs = `
     # Validator issues
     issues: [ValidationIssue]
     # Committed files in the working tree
-    files: [DatasetFile]
+    files(untracked: Boolean): [DatasetFile]
     # Flag if a dataset operation is incomplete (and may be reverted or resumed)
     partial: Boolean
   }

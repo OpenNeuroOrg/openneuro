@@ -27,11 +27,11 @@ export const getDraftFiles = async (datasetId, revision, { untracked }) => {
     else
       return request
         .get(filesUrl)
-        .query(untracked ? 'untracked' : null)
+        .query({ untracked })
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {
           const filesWithUrls = files.map(addFileUrl(datasetId))
-          if (untracked) {
+          if (!untracked) {
             redis.set(key, JSON.stringify(filesWithUrls))
           }
           return filesWithUrls
