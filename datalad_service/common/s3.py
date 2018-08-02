@@ -61,7 +61,9 @@ def setup_s3_sibling(dataset, realm):
             'partsize=1GiB',
             'encryption=none',
             'fileprefix={}/'.format(dataset_id),
-            'public={}'.format(public)
+            'public={}'.format(public),
+            'publicurl={}'.format(public),
+            'autoenable=true'
         ])
 
 
