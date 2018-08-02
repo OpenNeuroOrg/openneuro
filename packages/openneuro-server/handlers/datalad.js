@@ -1,5 +1,6 @@
 import config from '../config'
 import request from 'superagent'
+import mime from 'mime-types'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDraftFiles, getDatasetRevision } from '../datalad/draft'
 import { getSnapshot } from '../datalad/snapshots'
@@ -78,7 +79,7 @@ export const getFile = async (req, res) => {
     return f.filename == decodedFilename
   })
   let filepath = file ? encodeFilePath(file.id) : null
-  res.set('Content-Type', 'application/*')
+  res.set('Content-Type', mime.lookup(filename) || 'application/octet-stream')
   let uri = `${URI}/datasets/${datasetId}/objects/${filepath}`
   return request.get(uri).pipe(res)
 }

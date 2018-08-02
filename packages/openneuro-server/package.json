@@ -44,6 +44,7 @@
     "jsdom": "^11.6.2",
     "jsonwebtoken": "^8.3.0",
     "juice": "^2.0.0",
+    "mime-types": "^2.1.19",
     "moment": "^2.14.1",
     "mongodb": "^2.2.34",
     "mongoose": "^5.1.6",
@@ -61,7 +62,8 @@
     "react-dom": "^16.2.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
-    "s3-stream-download": "https://github.com/OpenNeuroOrg/s3-stream-download.git",
+    "s3-stream-download":
+      "https://github.com/OpenNeuroOrg/s3-stream-download.git",
     "subscriptions-transport-ws": "^0.9.9",
     "superagent": "^3.8.2",
     "tar-fs": "^1.9.0",
