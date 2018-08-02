@@ -133,12 +133,19 @@ const typeDefs = `
 
   # Ephemeral draft or working tree for a dataset
   type Draft {
+    # The draft id is the git hexsha of the most recent committed draft
     id: ID
+    # Which dataset this draft is related to
     dataset: Dataset
+    # Last edit timestamp
     modified: DateTime
+    # Draft copy of authors list
     authors: [Author]
+    # Validator summary
     summary: Summary
+    # Validator issues
     issues: [ValidationIssue]
+    # Committed files in the working tree
     files: [DatasetFile]
     # Flag if a dataset operation is incomplete (and may be reverted or resumed)
     partial: Boolean
@@ -146,12 +153,17 @@ const typeDefs = `
 
   # Tagged snapshot of a draft
   type Snapshot {
+    # Snapshot ids are dataset:tag values
     id: ID!
+    # Git tag of this snapshot
     tag: String!
+    # The parent dataset for this snapshot
     dataset: Dataset!
     created: DateTime
     authors: [Author]
+    # bids-validator summary of this snapshot
     summary: Summary
+    # bids-validator issues for this snapshot
     issues: [ValidationIssue]
     files: [DatasetFile]
     analytics: Analytic

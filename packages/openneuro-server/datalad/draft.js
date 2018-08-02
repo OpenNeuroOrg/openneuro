@@ -13,18 +13,27 @@ const draftFilesKey = (datasetId, revision) => {
   return `openneuro:draftFiles:${datasetId}:${revision}`
 }
 
-export const getDraftFiles = async (datasetId, revision) => {
+/**
+ * Retrieve draft files from cache or the datalad-service backend
+ * @param {string} datasetId Accession number string
+ * @param {string} revision Git hexsha to get files, does not apply to untracked
+ * @param {object} options { untracked: true } - ignores the git index
+ */
+export const getDraftFiles = async (datasetId, revision, { untracked }) => {
   const filesUrl = `${uri}/datasets/${datasetId}/files`
   const key = draftFilesKey(datasetId, revision)
   return redis.get(key).then(data => {
-    if (data) return JSON.parse(data)
+    if (!untracked && data) return JSON.parse(data)
     else
       return request
         .get(filesUrl)
+        .query(untracked ? 'untracked' : null)
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {
           const filesWithUrls = files.map(addFileUrl(datasetId))
-          redis.set(key, JSON.stringify(filesWithUrls))
+          if (untracked) {
+            redis.set(key, JSON.stringify(filesWithUrls))
+          }
           return filesWithUrls
         })
   })
