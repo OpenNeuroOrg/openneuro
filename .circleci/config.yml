@@ -11,7 +11,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install build-essential redis-server
 
       # install yarn for bids-validator
-      - run: curl -o- -L https://yarnpkg.com/install.sh | sudo bash -s -- --version 1.6.0
+      - run: curl -o- -L https://yarnpkg.com/install.sh | sudo bash -s -- --version 1.9.2
 
       # create venv and install dependencies
       - run:
