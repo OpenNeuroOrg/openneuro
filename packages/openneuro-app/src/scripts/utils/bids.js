@@ -435,8 +435,8 @@ export default {
           ? project.metadata.summary
           : null,
     }
-    ;(dataset.status = this.formatStatus(project, dataset.access)),
-      (dataset.authors = dataset.description.Authors)
+    dataset.status = this.formatStatus(project, dataset.access)
+    dataset.authors = dataset.description.Authors
     dataset.referencesAndLinks = dataset.description.ReferencesAndLinks
 
     dataset.user = this.user(dataset, users)
@@ -475,7 +475,7 @@ export default {
       ReferencesAndLinks: [],
       DatasetDOI: '',
     }
-    description = description ? description : defaultDescription
+    description = Object.assign(defaultDescription, description)
 
     if (metadata && metadata.authors) {
       description.Authors = metadata.authors
