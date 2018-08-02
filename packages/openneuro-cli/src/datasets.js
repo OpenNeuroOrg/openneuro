@@ -23,7 +23,7 @@ export const getDataset = (client, dir, datasetId) => {
  */
 export const getDatasetFiles = (client, datasetId) => {
   return client.query({
-    query: datasets.getDatasetFiles,
+    query: datasets.getUntrackedFiles,
     variables: { id: datasetId },
   })
 }
