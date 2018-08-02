@@ -1,5 +1,6 @@
+import React from 'react'
 import Reflux from 'reflux'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions'
 import bids from '../utils/bids'
@@ -7,6 +8,7 @@ import { refluxConnect } from '../utils/reflux'
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
 import { datasets } from 'openneuro-client'
+import LoggedOut from '../authentication/logged-out.jsx'
 
 class DatasetLoader extends Reflux.Component {
   constructor(props) {
@@ -121,7 +123,29 @@ class DatasetLoader extends Reflux.Component {
   }
 
   render() {
-    return null
+    // Restore redirect functionality if anonymous users end up on a draft page
+    if (
+      !this.state.datasets.loading &&
+      this.state.datasets.snapshots.length > 0 &&
+      this.props.location.pathname.indexOf('versions') === -1
+    ) {
+      // Copy array to avoid messing with the store
+      const snapshots = this.state.datasets.snapshots.slice()
+      // Sort by creation time
+      snapshots.sort((a, b) => {
+        return new Date(b.created) - new Date(a.created)
+      })
+      const newestSnapshot = snapshots[0].tag
+      const currentPath = this.props.location.pathname
+      const newestSnapshotUrl = `${currentPath}/versions/${newestSnapshot}`
+      return (
+        <LoggedOut>
+          <Redirect to={newestSnapshotUrl} />
+        </LoggedOut>
+      )
+    } else {
+      return null
+    }
   }
 }
 
