@@ -435,8 +435,8 @@ export default {
           ? project.metadata.summary
           : null,
     }
-    ;(dataset.status = this.formatStatus(project, dataset.access)),
-      (dataset.authors = dataset.description.Authors)
+    dataset.status = this.formatStatus(project, dataset.access)
+    dataset.authors = dataset.description.Authors
     dataset.referencesAndLinks = dataset.description.ReferencesAndLinks
 
     dataset.user = this.user(dataset, users)
