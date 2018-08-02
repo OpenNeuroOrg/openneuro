@@ -55,6 +55,7 @@ export const getFileTree = (
                 // File is the same size
                 if (remoteFile.size === stat.size) {
                   if (logging) {
+                    // eslint-disable-next-line no-console
                     console.log(`Skipping existing file - "${filePath}"`)
                   }
                   // Skip existing files
