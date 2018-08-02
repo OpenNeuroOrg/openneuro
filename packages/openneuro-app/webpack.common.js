@@ -11,16 +11,6 @@ module.exports = {
   entry: {
     app: './scripts/client.jsx',
     css: './sass/main.scss',
-    vendor: [
-      'es6-shim',
-      'react',
-      'react-dom',
-      'react-router-dom',
-      'react-select',
-      'react-bootstrap',
-      'moment',
-      'remarkable',
-    ],
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -28,8 +18,18 @@ module.exports = {
   },
   optimization: {
     splitChunks: {
-      name: 'vendor',
       minChunks: Infinity,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+        },
+        default: {
+          minChunks: Infinity,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
     },
   },
   plugins: [

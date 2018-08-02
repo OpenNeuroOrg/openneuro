@@ -9,7 +9,10 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
   serve: {
-    hotClient: false,
+    hotClient: {
+      host: { client: 'localhost', server: '0.0.0.0' },
+      port: 8145,
+    },
     content: path.join(__dirname, 'dist'),
     host: '0.0.0.0',
     port: 9876,

@@ -4,15 +4,27 @@ import { Route, Switch } from 'react-router-dom'
 import loadable from 'loadable-components'
 
 // wrap with loadable HOC
-const Dataset = loadable(() => import('./dataset/dataset.jsx'))
-const FrontPage = loadable(() => import('./front-page/front-page.jsx'))
-const Admin = loadable(() => import('./admin/admin.jsx'))
-const Dashboard = loadable(() => import('./dashboard/dashboard.jsx'))
-const Faq = loadable(() => import('./faq/faq.jsx'))
-const SearchResults = loadable(() =>
-  import('./dashboard/dashboard.searchresults.jsx'),
+const Dataset = loadable(() =>
+  import(/* webpackChunkName: 'Dataset' */ './dataset/dataset.jsx'),
 )
-const APIKey = loadable(() => import('./user/api.jsx'))
+const FrontPage = loadable(() =>
+  import(/* webpackChunkName: 'FrontPage' */ './front-page/front-page.jsx'),
+)
+const Admin = loadable(() =>
+  import(/* webpackChunkName: 'Admin' */ './admin/admin.jsx'),
+)
+const Dashboard = loadable(() =>
+  import(/* webpackChunkName: 'Dashboard' */ './dashboard/dashboard.jsx'),
+)
+const Faq = loadable(() =>
+  import(/* webpackChunkName: 'Faq' */ './faq/faq.jsx'),
+)
+const SearchResults = loadable(() =>
+  import(/* webpackChunkName: 'SearchResults' */ './dashboard/dashboard.searchresults.jsx'),
+)
+const APIKey = loadable(() =>
+  import(/* webpackChunkName: 'APIKey' */ './user/api.jsx'),
+)
 
 // routes ----------------------------------------------------------------
 

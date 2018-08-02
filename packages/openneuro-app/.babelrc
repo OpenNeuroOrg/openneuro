@@ -1,5 +1,5 @@
 {
-  "plugins": ["transform-object-rest-spread", "transform-runtime", "syntax-dynamic-import"],
+  "plugins": ["loadable-components/babel", "transform-object-rest-spread", "transform-runtime", "syntax-dynamic-import"],
   "presets": [
     "react",
     [
