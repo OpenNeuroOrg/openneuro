@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from './tooltip.jsx'
-// import FileSelect from '../forms/file-select.jsx'
+import FileSelect from '../forms/file-select.jsx'
 
 // component setup -----------------------------------------------------------
 
