@@ -50,14 +50,18 @@ const uploadDataset = (dir, datasetId, validatorOptions, uploadOptions) => {
     // Check for dataset -> validation -> upload
     if (uploadOptions.resume) {
       // Get remote files and filter successful files out
-      return getDatasetFiles(client, dir, datasetId)
-        .then(queryData =>
+      return getDatasetFiles(client, datasetId)
+        .then(({ data }) =>
           validation(dir, validatorOptions).then(
-            () => queryData.dataset.draft.files,
+            () => data.dataset.draft.files,
           ),
         )
-        .then(files =>
-          uploadDirectory(client, dir, { datasetId, files, remove: false }),
+        .then(remoteFiles =>
+          uploadDirectory(client, dir, {
+            datasetId,
+            remoteFiles,
+            remove: false,
+          }),
         )
     } else {
       // Upload all files regardless of remote state

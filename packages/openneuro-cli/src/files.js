@@ -13,14 +13,14 @@ const bytesToSize = bytes => {
   return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`
 }
 
-export const fileProgress = (console, filename, stream, size) => () => {
+export const fileProgress = (console, relativePath, stream, size) => () => {
   const percentage = Math.round(100 * (stream.bytesRead / size))
   const remainingBytes = size - stream.bytesRead
   const remaining = remainingBytes
     ? `(${bytesToSize(remainingBytes)} remaining)`
     : ''
   console.log(
-    `Transferring "${filename}" - ${percentage}% complete ${remaining}`,
+    `Transferring "${relativePath}" - ${percentage}% complete ${remaining}`,
   )
   return { percentage, remainingBytes }
 }
@@ -34,6 +34,7 @@ export const getFileTree = (
     // Run stat for each file
     const stats = contents.map(filePath => ({
       filePath: path.join(root, filePath),
+      relativePath: path.join(path.relative(basepath, root), filePath),
       stat: fs.statSync(path.join(root, filePath)),
     }))
     // Divide into files and directories
@@ -42,13 +43,13 @@ export const getFileTree = (
     return {
       name: path.relative(basepath, root),
       files: stats
-        .filter(({ stat, filePath }) => {
+        .filter(({ stat, relativePath }) => {
           // Only include files
           if (stat.isFile()) {
             // Remote file check enabled
             if (remoteFiles) {
               const remoteFile = remoteFiles.find(
-                rFile => rFile.filename === filePath,
+                rFile => rFile.filename === relativePath,
               )
               // File exists remotely
               if (remoteFile) {
@@ -56,7 +57,7 @@ export const getFileTree = (
                 if (remoteFile.size === stat.size) {
                   if (logging) {
                     // eslint-disable-next-line no-console
-                    console.log(`Skipping existing file - "${filePath}"`)
+                    console.log(`Skipping existing file - "${relativePath}"`)
                   }
                   // Skip existing files
                   return false
@@ -70,13 +71,16 @@ export const getFileTree = (
             return false
           }
         })
-        .map(({ stat, filePath }) => {
+        .map(({ stat, filePath, relativePath }) => {
           const stream = fs.createReadStream(filePath)
           stream.pause()
           if (logging) {
             stream.on(
               'data',
-              debounce(fileProgress(console, filePath, stream, stat.size), 500),
+              debounce(
+                fileProgress(console, relativePath, stream, stat.size),
+                500,
+              ),
             )
           }
           return stream
@@ -85,7 +89,9 @@ export const getFileTree = (
         // This is an array of each promise related to the next level in the tree
         stats
           .filter(({ stat }) => stat.isDirectory())
-          .map(({ filePath }) => getFileTree(basepath, filePath, { logging })),
+          .map(({ filePath }) =>
+            getFileTree(basepath, filePath, { logging, remoteFiles }),
+          ),
       ),
     }
   })

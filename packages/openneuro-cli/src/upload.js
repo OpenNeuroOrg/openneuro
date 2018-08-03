@@ -71,6 +71,8 @@ export const uploadTree = (client, datasetId) => tree => {
  * @param {string} dir - Directory to upload
  * @param {Object} options - {datasetId: 'ds000001', delete: false, files: [paths, to, exclude]}
  */
-export const uploadDirectory = (client, dir, { datasetId, files }) => {
-  return getFileTree(dir, dir, { files }).then(uploadTree(client, datasetId))
+export const uploadDirectory = (client, dir, { datasetId, remoteFiles }) => {
+  return getFileTree(dir, dir, { remoteFiles }).then(
+    uploadTree(client, datasetId),
+  )
 }
