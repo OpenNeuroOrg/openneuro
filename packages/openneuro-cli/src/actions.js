@@ -3,7 +3,7 @@ import inquirer from 'inquirer'
 import createClient, { snapshots } from 'openneuro-client'
 import { saveConfig, getToken, getUrl } from './config'
 import { validation, uploadDirectory } from './upload'
-import { getDataset, getDatasetFiles, createDataset } from './datasets'
+import { getDatasetFiles, createDataset } from './datasets'
 
 /**
  * Login action to save an auth key locally
