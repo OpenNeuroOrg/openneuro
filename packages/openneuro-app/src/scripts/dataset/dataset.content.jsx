@@ -409,18 +409,16 @@ class DatasetContent extends Reflux.Component {
                   <span className="dataset-status ds-warning">
                     <i className="fa fa-warning" /> Incomplete
                   </span>
-                  {/* TODO: ENABLE RESUME UPLOAD BUTTON HERE */}
-                  {/* <FileSelect
+                  <FileSelect
                     resume={true}
                     onChange={this._onFileSelect.bind(this)}
-                  /> */}
+                  />
                 </h4>
               </div>
               <div className="panel-collapse" aria-expanded="false">
                 <div className="panel-body">
                   You will have limited functionality on this dataset until it
-                  is completed. Please attempt to upload this dataset again.
-                  {/* Please click resume to finish uploading. */}
+                  is completed. Please click resume to finish uploading.
                 </div>
               </div>
             </div>

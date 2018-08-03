@@ -32,11 +32,10 @@ export default class Status extends React.Component {
         iconClass = 'fa fa-warning'
         fileSelect = minimal ? (
           <span className="file-wrap clearfix">
-            {/* TODO: ENABLE RESUME UPLOAD BUTTON HERE */}
-            {/* <FileSelect
+            <FileSelect
               resume={true}
               onChange={this._onFileSelect.bind(this)}
-            /> */}
+            />
           </span>
         ) : null
         break
