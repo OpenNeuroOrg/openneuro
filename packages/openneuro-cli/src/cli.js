@@ -16,12 +16,11 @@ commander
   .command('upload <dir>')
   .alias('u')
   .description('Upload or sync a dataset (if a accession number is provided)')
-  .option('-d, --dataset [dsId]', 'Specify the dataset to update')
-  .option('-i, --ignoreWarnings', 'Ignore validation warnings when uploading')
   .option(
-    '-r, --resume',
-    'Sync local content with remote, requires --dataset, does NOT remove remote files',
+    '-d, --dataset [dsId]',
+    'Specify the dataset to update, use this to resume uploads or add new files',
   )
+  .option('-i, --ignoreWarnings', 'Ignore validation warnings when uploading')
   .option(
     '-n, --ignoreNiftiHeaders',
     'Disregard NIfTI header content during validation',

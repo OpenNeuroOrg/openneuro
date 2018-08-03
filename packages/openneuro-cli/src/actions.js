@@ -43,32 +43,23 @@ export const login = () => {
  */
 export const loginAnswers = answers => answers
 
-const uploadDataset = (dir, datasetId, validatorOptions, uploadOptions) => {
+const uploadDataset = (dir, datasetId, validatorOptions) => {
   const url = getUrl()
   const client = createClient(`${url}crn/graphql`, getToken)
   if (datasetId) {
     // Check for dataset -> validation -> upload
-    if (uploadOptions.resume) {
-      // Get remote files and filter successful files out
-      return getDatasetFiles(client, datasetId)
-        .then(({ data }) =>
-          validation(dir, validatorOptions).then(
-            () => data.dataset.draft.files,
-          ),
-        )
-        .then(remoteFiles =>
-          uploadDirectory(client, dir, {
-            datasetId,
-            remoteFiles,
-            remove: false,
-          }),
-        )
-    } else {
-      // Upload all files regardless of remote state
-      return getDataset(client, dir, datasetId)
-        .then(() => validation(dir, validatorOptions))
-        .then(() => uploadDirectory(client, dir, { datasetId }))
-    }
+    // Get remote files and filter successful files out
+    return getDatasetFiles(client, datasetId)
+      .then(({ data }) =>
+        validation(dir, validatorOptions).then(() => data.dataset.draft.files),
+      )
+      .then(remoteFiles =>
+        uploadDirectory(client, dir, {
+          datasetId,
+          remoteFiles,
+          remove: false,
+        }),
+      )
   } else {
     // Validation -> create dataset -> upload
     return validation(dir, validatorOptions)
@@ -107,7 +98,7 @@ export const upload = (dir, cmd) => {
     if (cmd.dataset) {
       // eslint-disable-next-line no-console
       console.log(`Adding files to "${cmd.dataset}"`)
-      uploadDataset(dir, cmd.dataset, validatorOptions, { resume: cmd.resume })
+      uploadDataset(dir, cmd.dataset, validatorOptions)
     } else {
       inquirer
         .prompt({
