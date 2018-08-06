@@ -46,6 +46,7 @@ export default {
     const followers = (await crn.getSubscriptions()).body
     let resultDict = {}
     for (let project of projects) {
+      project.summary = project.draft ? project.draft.summary : null
       let dataset = this.formatDataset(project, null, users, stars, followers)
       let datasetId = dataset.hasOwnProperty('original')
         ? dataset.original
@@ -159,6 +160,12 @@ export default {
             project.analytics = snapshot
               ? snapshot.analytics
               : project.analytics
+
+            // get draft or snapshot summary
+            let draftSummary = draft ? draft.summary : null
+            let snapshotSummary = snapshot ? snapshot.summary : null
+            project.summary = snapshot ? snapshotSummary : draftSummary
+
             this.getMetadata(
               project,
               metadata => {
@@ -430,10 +437,7 @@ export default {
       description: this.formatDescription(project.metadata, description),
       userCreated: this.userCreated(project),
       access: this.userAccess(project),
-      summary:
-        project.metadata && project.metadata.summary
-          ? project.metadata.summary
-          : null,
+      summary: project.summary,
     }
     dataset.status = this.formatStatus(project, dataset.access)
     dataset.authors = dataset.description.Authors
