@@ -26,8 +26,8 @@ To upload a new dataset:
 
 Your dataset must pass validation to upload but warnings can be skipped with `openneuro upload -i <dataset directory>`. A default label is set using the directory name.
 
-To add files to an existing dataset:
+To resume an interrupted upload or add files to an existing dataset:
 
-`openneuro upload --dataset <accession number> <dataset directory>` 
+`openneuro upload --dataset <accession number> <dataset directory>`
 
 This will add or replace any files in the dataset but does not delete any files that are only present in the server copy of the dataset.

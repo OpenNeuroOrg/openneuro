@@ -1,9 +1,9 @@
 import fs from 'fs'
 import inquirer from 'inquirer'
-import createClient, {snapshots} from 'openneuro-client'
+import createClient, { snapshots } from 'openneuro-client'
 import { saveConfig, getToken, getUrl } from './config'
 import { validation, uploadDirectory } from './upload'
-import { getDataset, createDataset } from './datasets'
+import { getDatasetFiles, createDataset } from './datasets'
 
 /**
  * Login action to save an auth key locally
@@ -48,15 +48,33 @@ const uploadDataset = (dir, datasetId, validatorOptions) => {
   const client = createClient(`${url}crn/graphql`, getToken)
   if (datasetId) {
     // Check for dataset -> validation -> upload
-    return getDataset(client, dir, datasetId)
-      .then(() => validation(dir, validatorOptions))
-      .then(() => uploadDirectory(client, dir, datasetId))
+    // Get remote files and filter successful files out
+    return getDatasetFiles(client, datasetId)
+      .then(({ data }) =>
+        validation(dir, validatorOptions).then(() => data.dataset.draft.files),
+      )
+      .then(remoteFiles =>
+        uploadDirectory(client, dir, {
+          datasetId,
+          remoteFiles,
+          remove: false,
+        }).then(() => {
+          // create a snapshot of the freshly uploaded dataset
+          client.mutate({
+            mutation: snapshots.createSnapshot,
+            variables: {
+              datasetId,
+              tag: '1.0.0',
+            },
+          })
+        }),
+      )
   } else {
     // Validation -> create dataset -> upload
     return validation(dir, validatorOptions)
       .then(() => createDataset(client, dir))
       .then(dsId =>
-        uploadDirectory(client, dir, dsId).then(() => {
+        uploadDirectory(client, dir, { datasetId: dsId }).then(() => {
           // create a snapshot of the freshly uploaded dataset
           client.mutate({
             mutation: snapshots.createSnapshot,

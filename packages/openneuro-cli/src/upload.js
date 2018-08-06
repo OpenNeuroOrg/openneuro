@@ -69,8 +69,10 @@ export const uploadTree = (client, datasetId) => tree => {
  *
  * @param {Object} client - Initialized Apollo client to upload with
  * @param {string} dir - Directory to upload
- * @param {string} datasetId - Optionally update an existing dataset
+ * @param {Object} options - {datasetId: 'ds000001', delete: false, files: [paths, to, exclude]}
  */
-export const uploadDirectory = (client, dir, datasetId) => {
-  return getFileTree(dir, dir).then(uploadTree(client, datasetId))
+export const uploadDirectory = (client, dir, { datasetId, remoteFiles }) => {
+  return getFileTree(dir, dir, { remoteFiles }).then(
+    uploadTree(client, datasetId),
+  )
 }

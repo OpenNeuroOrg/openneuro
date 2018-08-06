@@ -17,6 +17,18 @@ export const getDataset = (client, dir, datasetId) => {
 }
 
 /**
+ * Get an existing dataset's files
+ * @param {object} client GraphQL client
+ * @param {*} datasetId
+ */
+export const getDatasetFiles = (client, datasetId) => {
+  return client.query({
+    query: datasets.getUntrackedFiles,
+    variables: { id: datasetId },
+  })
+}
+
+/**
  * Create a dataset and return the new accession number
  * @param {object} client
  * @param {string} dir

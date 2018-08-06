@@ -3,8 +3,9 @@ import { issues } from './issues.js'
 import { getDraftFiles, getPartialStatus } from '../../datalad/draft.js'
 
 // A draft must have a dataset parent
-const draftFiles = dataset => (_, { untracked }) =>
-  getDraftFiles(dataset.id, dataset.revision, { untracked })
+const draftFiles = dataset => args => {
+  return getDraftFiles(dataset.id, dataset.revision, args)
+}
 
 export const draft = obj => ({
   id: obj.revision,
