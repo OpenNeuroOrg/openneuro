@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 import Usermenu from './navbar.usermenu.jsx'
-import Uploader from '../uploader/uploader.jsx'
+import UploaderView from '../uploader/uploader-view.jsx'
 import { Navbar } from 'react-bootstrap'
 import withProfile from '../authentication/withProfile.js'
 import LoggedIn from '../authentication/logged-in.jsx'
@@ -69,7 +69,7 @@ const NavMenu = ({ supportModal, loginModal }) => (
     </li>
     <li className="link-dashboard">
       <LoggedIn>
-        <Uploader />
+        <UploaderView />
       </LoggedIn>
     </li>
     <li>

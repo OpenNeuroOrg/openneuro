@@ -1,12 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloConsumer } from 'react-apollo'
-import BlockNavigation from '../common/partials/block-navigation.jsx'
 import UploaderContext from './uploader-context.js'
-import UploaderSetupRoutes from './uploader-setup-routes.jsx'
-import UploaderStatusRoutes from './uploader-status-routes.jsx'
-import UploadButton from './upload-button.jsx'
-import UploadProgressButton from './upload-progress-button.jsx'
 import notifications from '../notification/notification.actions'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
@@ -27,6 +22,7 @@ class UploadClient extends React.Component {
 
     this.setLocation = this.setLocation.bind(this)
     this.setName = this.setName.bind(this)
+    this.resumeDataset = this.resumeDataset.bind(this)
     this.selectFiles = this.selectFiles.bind(this)
     this.upload = this.upload.bind(this)
     this.uploadProgress = this.uploadProgress.bind(this)
@@ -34,18 +30,35 @@ class UploadClient extends React.Component {
     this.cancel = this.cancel.bind(this)
 
     this.state = {
-      uploading: false, // An upload is processing
-      location: locationFactory('/hidden'), // Which step in the modal
-      files: {}, // List of files being uploaded
-      name: '', // Relabel dataset during upload
+      // An upload is processing
+      uploading: false,
+      // Which step in the modal
+      location: locationFactory('/hidden'),
+      // List of files being uploaded
+      files: {},
+      // Files selected, regardless of if they will be uploaded
+      selectedFiles: {},
+      // Relabel dataset during upload
+      name: '',
       progress: 0,
-      resume: null, // Resume an existing dataset
-      setLocation: this.setLocation, // Allow context consumers to change routes
-      setName: this.setName, // Rename on upload (optionally)
-      selectFiles: this.selectFiles, // Get files from the browser
-      upload: this.upload, // Start an upload
-      xhr: null, // Upload XHR request
-      datasetId: null, // Id of the uploaded dataset
+      // Resume an existing dataset
+      resume: null,
+      // Allow context consumers to change routes
+      setLocation: this.setLocation,
+      // Rename on upload (optionally)
+      setName: this.setName,
+      // Set a dataset to resume upload for
+      resumeDataset: this.resumeDataset,
+      // Get files from the browser
+      selectFiles: this.selectFiles,
+      // Start an upload
+      upload: this.upload,
+      // Upload XHR request
+      xhr: null,
+      // Id of the uploaded dataset
+      datasetId: null,
+      // Cancel current upload
+      cancel: this.cancel,
     }
   }
 
@@ -67,6 +80,46 @@ class UploadClient extends React.Component {
   }
 
   /**
+   * Specify a dataset to resume upload for
+   * @param {string} datasetId
+   */
+  resumeDataset(datasetId) {
+    return ({ files }) => {
+      this.props.client
+        .query({
+          query: datasets.getUntrackedFiles,
+          variables: { id: datasetId },
+        })
+        .then(({ data }) => {
+          // Create a new array of files to upload
+          const filesToUpload = []
+          // Create hashmap of filename -> size
+          const existingFiles = data.dataset.draft.files.reduce(
+            (existingFiles, f) => {
+              existingFiles[f.filename] = f.size
+              return existingFiles
+            },
+            {},
+          )
+          for (const newFile of files) {
+            const newFilePath = newFile.webkitRelativePath.split(/\/(.*)/)[1]
+            // Skip any existing files
+            if (existingFiles[newFilePath] !== newFile.size) {
+              filesToUpload.push(newFile)
+            }
+          }
+          this.setState({
+            datasetId,
+            resume: true,
+            files: filesToUpload,
+            selectedFiles: files,
+            location: locationFactory('/upload/issues'),
+          })
+        })
+    }
+  }
+
+  /**
    * Select the files for upload
    * @param {object} event onChange event from multi file select
    */
@@ -74,6 +127,7 @@ class UploadClient extends React.Component {
     if (files.length > 0) {
       this.setState({
         files,
+        selectedFiles: files,
         location: locationFactory('/upload/rename'),
         name: files[0].webkitRelativePath.split('/')[0],
       })
@@ -87,6 +141,24 @@ class UploadClient extends React.Component {
       uploading: true,
       location: locationFactory('/hidden'),
     })
+    if (this.state.resume && this.state.datasetId) {
+      // Just add files since this is an existing dataset
+      this._addFiles()
+    } else {
+      // Create dataset and then add files
+      mutation
+        .createDataset(this.props.client)(this.state.name)
+        .then(datasetId => {
+          // Note chain to this._addFiles
+          this.setState({ datasetId }, this._addFiles)
+        })
+    }
+  }
+
+  /**
+   * Do the actual upload
+   */
+  _addFiles() {
     // This is an upload specific apollo client to record progress
     // Uses XHR since Fetch does not provide the required interface
     const uploadClient = getClient(
@@ -94,40 +166,29 @@ class UploadClient extends React.Component {
       null,
       xhrFetch(this),
     )
-    if (this.state.resume) {
-      // Diff and add files
-    } else {
-      let client = this.props.client
-      // Create dataset and then add files
-      mutation
-        .createDataset(client)(this.state.name)
-        .then(datasetId => {
-          mutation
-            .updateFiles(uploadClient)(datasetId, this.state.files)
-            .then(() => {
-              this.setState({ datasetId })
-              client
-                .query({
-                  query: datasets.getDataset,
-                  variables: {
-                    id: datasetId,
-                  },
-                })
-                .then(() => {
-                  mutation
-                    .createSnapshot(client, datasetId)
-                    .then(() => {
-                      this.setState({ uploading: false })
-                      this.uploadCompleteAction()
-                    })
-                    .catch(err => {
-                      this.setState({ uploading: false })
-                      throw err
-                    })
-                })
-            })
-        })
-    }
+    return mutation
+      .updateFiles(uploadClient)(this.state.datasetId, this.state.files)
+      .then(() => {
+        this.props.client
+          .query({
+            query: datasets.getDataset,
+            variables: {
+              id: this.state.datasetId,
+            },
+          })
+          .then(() => {
+            mutation
+              .createSnapshot(this.props.client, this.state.datasetId)
+              .then(() => {
+                this.setState({ uploading: false })
+                this.uploadCompleteAction()
+              })
+              .catch(err => {
+                this.setState({ uploading: false })
+                throw err
+              })
+          })
+      })
   }
 
   uploadCompleteAction() {
@@ -161,55 +222,36 @@ class UploadClient extends React.Component {
   }
 
   render() {
-    if (this.state.uploading) {
-      return (
-        <UploaderContext.Provider value={this.state}>
-          <UploadProgressButton />
-          <UploaderStatusRoutes
-            setLocation={this.setLocation}
-            location={this.state.location}
-            footer={
-              <button className="btn-reset" onClick={this.cancel}>
-                Cancel Upload
-              </button>
-            }
-          />
-          <BlockNavigation
-            message={
-              'An upload is in progress and will be interrupted, continue?'
-            }
-          />
-        </UploaderContext.Provider>
-      )
-    } else {
-      return (
-        <UploaderContext.Provider value={this.state}>
-          <UploadButton onClick={() => this.setLocation('/upload')} />
-          <UploaderSetupRoutes
-            setLocation={this.setLocation}
-            location={this.state.location}
-          />
-        </UploaderContext.Provider>
-      )
-    }
+    return (
+      <UploaderContext.Provider value={this.state}>
+        {this.props.children}
+      </UploaderContext.Provider>
+    )
   }
 }
 
 UploadClient.propTypes = {
   client: PropTypes.object,
   history: PropTypes.object,
+  children: PropTypes.element,
 }
 
 const UploadClientWithRouter = withRouter(UploadClient)
 
-const Uploader = () => (
+const Uploader = ({ children }) => (
   <ApolloConsumer>
     {client => (
       <div className="uploader">
-        <UploadClientWithRouter client={client} />
+        <UploadClientWithRouter client={client}>
+          {children}
+        </UploadClientWithRouter>
       </div>
     )}
   </ApolloConsumer>
 )
+
+Uploader.propTypes = {
+  children: PropTypes.element,
+}
 
 export default Uploader

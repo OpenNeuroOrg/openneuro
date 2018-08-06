@@ -106,7 +106,8 @@ class UploadValidator extends React.Component {
 }
 
 UploadValidator.propTypes = {
-  files: PropTypes.object,
+  // Files can be an FileList object or an array of File objects
+  files: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   next: PropTypes.func,
   reset: PropTypes.func,
 }
@@ -115,7 +116,7 @@ const UploadIssues = () => (
   <UploaderContext.Consumer>
     {uploader => (
       <UploadValidator
-        files={uploader.files}
+        files={uploader.selectedFiles}
         next={() => uploader.setLocation('/upload/disclaimer')}
         reset={() => uploader.setLocation('/upload')}
       />

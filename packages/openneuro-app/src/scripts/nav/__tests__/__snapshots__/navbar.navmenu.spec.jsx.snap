@@ -71,7 +71,7 @@ exports[`NavMenu renders successfully 1`] = `
     className="link-dashboard"
   >
     <withCookies(Component)>
-      <Uploader />
+      <UploaderViewContainer />
     </withCookies(Component)>
   </li>
   <li>
