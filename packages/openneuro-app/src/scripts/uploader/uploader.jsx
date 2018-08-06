@@ -57,6 +57,8 @@ class UploadClient extends React.Component {
       xhr: null,
       // Id of the uploaded dataset
       datasetId: null,
+      // Cancel current upload
+      cancel: this.cancel,
     }
   }
 
