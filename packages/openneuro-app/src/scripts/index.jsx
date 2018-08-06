@@ -6,6 +6,7 @@ import Navbar from './nav/navbar.jsx'
 import Happybrowser from './common/partials/happybrowser.jsx'
 import Routes from './routes.jsx'
 import Alert from './notification/notification.alert.jsx'
+import Uploader from './uploader/uploader.jsx'
 import notificationStore from './notification/notification.store'
 import { refluxConnect } from './utils/reflux'
 
@@ -19,7 +20,7 @@ class Index extends Reflux.Component {
   render() {
     let alertState = this.state.notification.showAlert
     return (
-      <span>
+      <Uploader>
         <div className="page">
           <Happybrowser />
           <span className={'nav-alert-state-' + alertState}>
@@ -32,7 +33,7 @@ class Index extends Reflux.Component {
             </div>
           </div>
         </div>
-      </span>
+      </Uploader>
     )
   }
 }

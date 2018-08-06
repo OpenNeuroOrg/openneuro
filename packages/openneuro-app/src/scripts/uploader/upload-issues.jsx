@@ -106,7 +106,8 @@ class UploadValidator extends React.Component {
 }
 
 UploadValidator.propTypes = {
-  files: PropTypes.object,
+  // Files can be an FileList object or an array of File objects
+  files: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   next: PropTypes.func,
   reset: PropTypes.func,
 }

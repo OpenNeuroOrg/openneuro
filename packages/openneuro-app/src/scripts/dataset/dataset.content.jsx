@@ -21,7 +21,7 @@ import Jobs from './dataset.jobs.jsx'
 import Summary from './dataset.summary.jsx'
 import Comment from '../common/partials/comment.jsx'
 import CommentTree from '../common/partials/comment-tree.jsx'
-import FileSelect from '../common/forms/file-select.jsx'
+import UploadResume from '../uploader/upload-resume.jsx'
 import LoginModal from '../common/partials/login.jsx'
 import { refluxConnect } from '../utils/reflux'
 import { getProfile } from '../authentication/profile.js'
@@ -409,10 +409,7 @@ class DatasetContent extends Reflux.Component {
                   <span className="dataset-status ds-warning">
                     <i className="fa fa-warning" /> Incomplete
                   </span>
-                  <FileSelect
-                    resume={true}
-                    onChange={this._onFileSelect.bind(this)}
-                  />
+                  <UploadResume datasetId={dataset.linkID} />
                 </h4>
               </div>
               <div className="panel-collapse" aria-expanded="false">
