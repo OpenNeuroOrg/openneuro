@@ -100,7 +100,7 @@ class UploadClient extends React.Component {
             {},
           )
           for (const newFile of files) {
-            const newFilePath = newFile.webkitRelativePath.split('/')[1]
+            const newFilePath = newFile.webkitRelativePath.split(/\/(.*)/)[1]
             // Skip any existing files
             if (existingFiles[newFilePath] !== newFile.size) {
               filesToUpload.push(newFile)
