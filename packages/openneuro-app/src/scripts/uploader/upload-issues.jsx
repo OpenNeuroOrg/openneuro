@@ -116,7 +116,7 @@ const UploadIssues = () => (
   <UploaderContext.Consumer>
     {uploader => (
       <UploadValidator
-        files={uploader.files}
+        files={uploader.selectedFiles}
         next={() => uploader.setLocation('/upload/disclaimer')}
         reset={() => uploader.setLocation('/upload')}
       />

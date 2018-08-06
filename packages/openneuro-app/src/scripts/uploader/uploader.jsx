@@ -30,10 +30,16 @@ class UploadClient extends React.Component {
     this.cancel = this.cancel.bind(this)
 
     this.state = {
-      uploading: false, // An upload is processing
-      location: locationFactory('/hidden'), // Which step in the modal
-      files: {}, // List of files being uploaded
-      name: '', // Relabel dataset during upload
+      // An upload is processing
+      uploading: false,
+      // Which step in the modal
+      location: locationFactory('/hidden'),
+      // List of files being uploaded
+      files: {},
+      // Files selected, regardless of if they will be uploaded
+      selectedFiles: {},
+      // Relabel dataset during upload
+      name: '',
       progress: 0,
       // Resume an existing dataset
       resume: null,
@@ -104,6 +110,7 @@ class UploadClient extends React.Component {
             datasetId,
             resume: true,
             files: filesToUpload,
+            selectedFiles: files,
             location: locationFactory('/upload/issues'),
           })
         })
@@ -118,6 +125,7 @@ class UploadClient extends React.Component {
     if (files.length > 0) {
       this.setState({
         files,
+        selectedFiles: files,
         location: locationFactory('/upload/rename'),
         name: files[0].webkitRelativePath.split('/')[0],
       })
