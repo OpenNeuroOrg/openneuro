@@ -58,6 +58,15 @@ const uploadDataset = (dir, datasetId, validatorOptions) => {
           datasetId,
           remoteFiles,
           remove: false,
+        }).then(() => {
+          // create a snapshot of the freshly uploaded dataset
+          client.mutate({
+            mutation: snapshots.createSnapshot,
+            variables: {
+              datasetId,
+              tag: '1.0.0',
+            },
+          })
         }),
       )
   } else {
