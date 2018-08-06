@@ -85,6 +85,14 @@ export const getDatasets = gql`
       draft {
         id
         partial
+        summary {
+          modalities
+          sessions
+          subjects
+          tasks
+          size
+          totalFiles
+        }
       }
       analytics {
         views
