@@ -3,7 +3,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from './tooltip.jsx'
-import FileSelect from '../forms/file-select.jsx'
+import UploadResume from '../../uploader/upload-resume.jsx'
 
 // component setup -----------------------------------------------------------
 
@@ -32,10 +32,7 @@ export default class Status extends React.Component {
         iconClass = 'fa fa-warning'
         fileSelect = minimal ? (
           <span className="file-wrap clearfix">
-            <FileSelect
-              resume={true}
-              onChange={this._onFileSelect.bind(this)}
-            />
+            <UploadResume datasetId={this.props.dataset.linkID} />
           </span>
         ) : null
         break
@@ -85,12 +82,6 @@ export default class Status extends React.Component {
         </span>
       </span>
     )
-  }
-
-  // custom methods ------------------------------------------------------------
-
-  _onFileSelect() {
-    // TODO - Fix on resume here...
   }
 }
 
