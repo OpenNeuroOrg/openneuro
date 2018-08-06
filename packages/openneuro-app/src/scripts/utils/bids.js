@@ -159,7 +159,7 @@ export default {
             project.snapshot_version = snapshot ? snapshot.tag : null
             project.analytics = snapshot
               ? snapshot.analytics
-              : project.analyticsa
+              : project.analytics
 
             // get draft or snapshot summary
             let draftSummary = draft ? draft.summary : null
