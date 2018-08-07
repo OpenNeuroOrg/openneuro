@@ -23,7 +23,7 @@ class Tools extends Reflux.Component {
   componentDidMount() {
     let dataset = this.state.datasets.dataset
 
-    if (dataset && (dataset.access === 'rw' || dataset.access == 'admin')) {
+    if (dataset && (dataset.access === 'rw' || dataset.access === 'admin')) {
       actions.loadUsers()
     }
   }
@@ -40,7 +40,8 @@ class Tools extends Reflux.Component {
     let datasetHasJobs = dataset.jobs ? !!dataset.jobs.length : false
     let user = getProfile()
     // permission check shorthands
-    let isAdmin = dataset.access === 'admin',
+    let isAdmin =
+        (user && dataset.group === user.sub) || dataset.access === 'admin',
       // isEditor     = dataset.access === 'rw',
       // isViewer     = dataset.access === 'ro',
       isSignedIn = user !== null,
