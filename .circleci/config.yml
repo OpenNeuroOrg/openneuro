@@ -102,10 +102,19 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            tags:
+              only: /v.*/
       - app-build:
           requires:
             - build
+          filters:
+            tags:
+              only: /v.*/
       - server-build:
           requires:
             - build
+          filters:
+            tags:
+              only: /v.*/
