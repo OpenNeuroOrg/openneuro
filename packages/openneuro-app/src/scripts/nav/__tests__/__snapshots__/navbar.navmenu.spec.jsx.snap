@@ -34,20 +34,7 @@ exports[`NavMenu renders successfully 1`] = `
       </span>
     </NavLink>
   </li>
-  <li
-    className="link-support"
-  >
-    <a
-      className="nav-link"
-      onClick={[Function]}
-    >
-      <span
-        className="link-name"
-      >
-        Support
-      </span>
-    </a>
-  </li>
+  <SupportLink />
   <li
     className="link-faq"
   >
