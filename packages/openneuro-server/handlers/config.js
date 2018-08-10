@@ -66,6 +66,10 @@ const config = {
     environment: process.env.ENVIRONMENT,
   },
 
+  support: {
+    url: process.env.FRESH_DESK_URL,
+  },
+
   analysis: {
     enabled: process.env.ANALYSIS_ENABLED,
   },
