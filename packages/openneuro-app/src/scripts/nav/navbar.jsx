@@ -7,6 +7,7 @@ import NavMenu from './navbar.navmenu.jsx'
 import { Navbar } from 'react-bootstrap'
 import { Modal } from '../utils/modal.jsx'
 import LoginModal from '../common/partials/login.jsx'
+import config from '../../../config'
 import { frontPage } from 'openneuro-content'
 
 // component setup ---------------------------------------------------------------
@@ -101,7 +102,7 @@ class BSNavbar extends React.Component {
             title="Feedback Form"
             className="freshwidget-embedded-form"
             id="freshwidget-embedded-form"
-            src="https://openneuro.freshdesk.com/widgets/feedback_widget/new?&widgetType=embedded&screenshot=no"
+            src={config.support.url}
             scrolling="no"
             height="500px"
             width="100%"
