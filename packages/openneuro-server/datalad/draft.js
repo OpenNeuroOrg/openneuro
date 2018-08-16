@@ -22,6 +22,7 @@ const draftFilesKey = (datasetId, revision) => {
 export const getDraftFiles = async (datasetId, revision, options = {}) => {
   // If untracked is set and true
   const untracked = 'untracked' in options && options.untracked
+  const query = untracked ? { untracked: true } : {}
   const filesUrl = `${uri}/datasets/${datasetId}/files`
   const key = draftFilesKey(datasetId, revision)
   return redis.get(key).then(data => {
@@ -29,7 +30,7 @@ export const getDraftFiles = async (datasetId, revision, options = {}) => {
     else
       return request
         .get(filesUrl)
-        .query({ untracked })
+        .query(query)
         .set('Accept', 'application/json')
         .then(({ body: { files } }) => {
           const filesWithUrls = files.map(addFileUrl(datasetId))
