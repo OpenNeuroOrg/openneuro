@@ -66,8 +66,9 @@ def get_untracked_files(store, dataset):
                 file_path = filename
             # Get file size for the uploader
             size = os.path.getsize(path)
-            fileMeta.append(
-                {'filename': file_path, 'size': size})
+            # The id is just a composite of path/size for untracked files
+            file_id = '{}:{}'.format(file_path, size)
+            fileMeta.append({'filename': file_path, 'size': size, 'id': file_id})
     return fileMeta
 
 
