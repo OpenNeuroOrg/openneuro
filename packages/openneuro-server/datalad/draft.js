@@ -19,8 +19,9 @@ const draftFilesKey = (datasetId, revision) => {
  * @param {string} revision Git hexsha to get files, does not apply to untracked
  * @param {object} options { untracked: true } - ignores the git index
  */
-export const getDraftFiles = async (datasetId, revision, options) => {
-  const untracked = options ? options.untracked : false
+export const getDraftFiles = async (datasetId, revision, options = {}) => {
+  // If untracked is set and true
+  const untracked = 'untracked' in options && options.untracked
   const filesUrl = `${uri}/datasets/${datasetId}/files`
   const key = draftFilesKey(datasetId, revision)
   return redis.get(key).then(data => {
