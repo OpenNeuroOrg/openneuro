@@ -1530,9 +1530,9 @@ let datasetStore = Reflux.createStore({
               this.showDatasetComponent(displayUrl, file.history)
             })
           })
-          .catch(err => {
-            console.log(err)
-          })
+        // .catch(err => {
+        //   console.log(err)
+        // })
       }
     } else {
       callback()
