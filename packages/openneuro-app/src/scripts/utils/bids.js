@@ -452,7 +452,7 @@ export default {
     if (project.snapshot_version) {
       dataset.snapshot_version = project.snapshot_version
       if (!dataset.description.DatasetDOI) {
-        this.getDoi(project._id, doi => {
+        this.getDoi(project.linkId, project.snapshot_version, doi => {
           dataset.description.DatasetDOI = doi
         })
       }
@@ -578,9 +578,9 @@ export default {
    *
    * Takes a dataset id returns the minted doi of the dataset if present
    */
-  getDoi(datasetId, callback) {
+  getDoi(datasetId, snapshotId, callback) {
     crn
-      .getDoi(datasetId)
+      .getDoi(datasetId, snapshotId)
       .then(res => {
         let doi = res && res.body ? res.body.doi : ''
         return callback(doi)

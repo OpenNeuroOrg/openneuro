@@ -400,9 +400,6 @@ let datasetStore = Reflux.createStore({
       let dataset = this.data.dataset
       dataset.status.public = value
       this.data.public = value
-      if (!dataset.description.DatasetDOI) {
-        this.registerDoi.bind(this)()
-      }
       let snapshots = this.data.snapshots
 
       history.push('/datasets/' + this.data.dataset.linkID)
@@ -1533,9 +1530,9 @@ let datasetStore = Reflux.createStore({
               this.showDatasetComponent(displayUrl, file.history)
             })
           })
-        // .catch(err => {
-        //   console.log(err)
-        // })
+          .catch(err => {
+            console.log(err)
+          })
       }
     } else {
       callback()
@@ -1629,22 +1626,25 @@ let datasetStore = Reflux.createStore({
                 this.update({
                   loading: true,
                 })
-                datalad.createSnapshot(datasetId, newVersion).then(res => {
-                  let snapshotId = res.data.createSnapshot.tag
-                  this.toggleSidebar(true)
-                  this.update({
-                    loading: false,
-                  })
-                  if (transition) {
-                    const url =
-                      '/datasets/' + bids.decodeId(this.data.dataset._id)
-                    history.push(url)
-                  }
 
-                  this.loadSnapshots(this.data.dataset, [], () => {
-                    if (callback) {
-                      callback(snapshotId)
+                this.registerDoi(newVersion, () => {
+                  datalad.createSnapshot(datasetId, newVersion).then(res => {
+                    let snapshotId = res.data.createSnapshot.tag
+                    this.toggleSidebar(true)
+                    this.update({
+                      loading: false,
+                    })
+                    if (transition) {
+                      const url =
+                        '/datasets/' + bids.decodeId(this.data.dataset._id)
+                      history.push(url)
                     }
+
+                    this.loadSnapshots(this.data.dataset, [], () => {
+                      if (callback) {
+                        callback(snapshotId)
+                      }
+                    })
                   })
                 })
               }
@@ -2035,26 +2035,24 @@ let datasetStore = Reflux.createStore({
   },
 
   // dois----------------------------------------------------------------
-  registerDoi(callback) {
+  /* Currently does nothing with caught error. How this is called in 
+   * createSnapshot we can't throw an error without causing problems 
+   * for finishing snapshot creation
+   */
+  registerDoi(version, callback) {
     let dataset = this.data.dataset
-    if (!dataset.original) {
-      if (callback) {
-        return callback({ error: 'Can not mint DOI for draft.' })
-      } else {
-        return
-      }
-    }
-    let snapshotId = this.data.dataset._id
-    crn.registerDoi(snapshotId).then(res => {
-      if (res) {
-        dataset.description.DatasetDOI = res.body.doi
-        this.update({ dataset })
-      }
-      if (!callback && res) {
-        return res.body.doi
-      }
-      callback()
-    })
+
+    crn
+      .registerDoi(dataset.linkID, version, dataset.description)
+      .then(res => {
+        if (res && res.body.doi) {
+          dataset.description.DatasetDOI = res.body.doi
+          this.updateDescription('DatasetDOI', res.body.doi, callback)
+        }
+      })
+      .catch(err => {
+        callback()
+      })
   },
 })
 
