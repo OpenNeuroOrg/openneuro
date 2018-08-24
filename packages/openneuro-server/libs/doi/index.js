@@ -51,7 +51,7 @@ export default {
       .then(async () => {
         return baseDoi
       })
-      .catch(err => {
+      .catch(() => {
         return null
       })
   },

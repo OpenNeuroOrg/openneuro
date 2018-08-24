@@ -18,7 +18,7 @@ export default {
       snapshotId: snapshotId,
     })
     if (doi_exists) {
-      doiRes = exists.doi
+      doiRes = doi_exists.doi
       return res.send({ doi: doiRes })
     } else {
       let snap_exists = c.crn.snapshots.findOne({

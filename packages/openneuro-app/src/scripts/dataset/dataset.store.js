@@ -2050,7 +2050,7 @@ let datasetStore = Reflux.createStore({
           this.updateDescription('DatasetDOI', res.body.doi, callback)
         }
       })
-      .catch(err => {
+      .catch(() => {
         callback()
       })
   },
