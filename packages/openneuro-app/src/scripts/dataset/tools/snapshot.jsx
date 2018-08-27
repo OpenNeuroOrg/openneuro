@@ -306,20 +306,7 @@ class Snapshot extends Reflux.Component {
       changes,
       this.state.selectedVersion,
       this.props.history,
-      res => {
-        if (res && res.error) {
-          this.setState({
-            changes: [],
-            error: true,
-            message: res.error,
-          })
-        } else {
-          this.props.getDataset.refetch().then(() => {
-            const url = '/datasets/' + this.state.datasets.dataset.linkID
-            this.props.history.push(url)
-          })
-        }
-      },
+      actions.createSnapshotCallback.bind(this),
     )
   }
 

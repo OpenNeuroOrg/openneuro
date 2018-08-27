@@ -51,7 +51,10 @@ class Tools extends Reflux.Component {
       isSnapshot = !!dataset.snapshot_version,
       isSubscribed = !!dataset.subscribed,
       hasUserStar = !!dataset.hasUserStar,
-      isSuperuser = user ? user.admin : false
+      isSuperuser = user ? user.admin : false,
+      hasDoi =
+        dataset.description.DatasetDOI &&
+        dataset.description.DatasetDOI.toLowerCase().indexOf('openneuro') >= 0
 
     let displayDelete = this._deleteDataset(
       isAdmin,
@@ -232,6 +235,37 @@ class Tools extends Reflux.Component {
         action: actions.removeStar.bind(this),
         display: isSignedIn && hasUserStar,
         warn: true,
+      },
+      {
+        tooltip: 'Generate DOI',
+        icon: 'fa-gavel icon-plus',
+        action: actions.createDoiSnapshot.bind(this, []),
+        display: isAdmin && isPublic && !isSnapshot && !hasDoi,
+        warn: true,
+        validations: [
+          {
+            check: isInvalid,
+            message:
+              'You cannot snapshot an invalid dataset. Please fix the errors and try again.',
+            timeout: 5000,
+            type: 'Error',
+          },
+          {
+            check:
+              snapshots.length > 1 &&
+              moment(dataset.modified).diff(moment(snapshots[1].created)) > 0,
+            message:
+              'Changes have been made to the dataset, please create a snapshot to log these changes, DOI will be automatically generated on snapshot creation.',
+            timeout: 6000,
+            type: 'Error',
+          },
+          {
+            check: datasets.uploading && !isSnapshot,
+            message: 'Files are currently uploading',
+            timeout: 5000,
+            type: 'Error',
+          },
+        ],
       },
     ]
 
