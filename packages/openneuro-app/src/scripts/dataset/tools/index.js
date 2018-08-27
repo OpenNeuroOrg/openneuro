@@ -51,10 +51,7 @@ class Tools extends Reflux.Component {
       isSnapshot = !!dataset.snapshot_version,
       isSubscribed = !!dataset.subscribed,
       hasUserStar = !!dataset.hasUserStar,
-      isSuperuser = user ? user.admin : false,
-      hasDoi =
-        dataset.description.DatasetDOI &&
-        dataset.description.DatasetDOI.toLowerCase().indexOf('openneuro') >= 0
+      isSuperuser = user ? user.admin : false
 
     let displayDelete = this._deleteDataset(
       isAdmin,
@@ -240,7 +237,7 @@ class Tools extends Reflux.Component {
         tooltip: 'Generate DOI',
         icon: 'fa-gavel icon-plus',
         action: actions.createDoiSnapshot.bind(this, []),
-        display: isAdmin && isPublic && !isSnapshot && !hasDoi,
+        display: isAdmin && isPublic && !isSnapshot,
         warn: true,
         validations: [
           {
