@@ -303,13 +303,13 @@ const routes = [
   // dataset doi ----------------------------------------
   {
     method: 'post',
-    url: '/doi/:datasetId',
+    url: '/doi/:datasetId/:snapshotId',
     middleware: [jwt.authenticate, auth.authenticated],
     handler: doi.createSnapshotDoi,
   },
   {
     method: 'get',
-    url: '/doi/:datasetId',
+    url: '/doi/:datasetId/:snapshotId',
     handler: doi.getDoi,
   },
 

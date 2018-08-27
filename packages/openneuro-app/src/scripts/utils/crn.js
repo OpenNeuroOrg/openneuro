@@ -372,13 +372,20 @@ export default {
 
   // Dois --------------------------------------------------------------------------
 
-  registerDoi(datasetId) {
-    return request.post(config.crn.url + 'doi/' + datasetId, {})
+  registerDoi(datasetId, snapshotId, oldDesc) {
+    return request.post(
+      config.crn.url + 'doi/' + datasetId + '/' + snapshotId,
+      { body: oldDesc },
+    )
   },
 
-  getDoi(datasetId) {
-    return request.get(config.crn.url + 'doi/' + datasetId, {})
+  getDoi(datasetId, snapshotId) {
+    return request.get(
+      config.crn.url + 'doi/' + datasetId + '/' + snapshotId,
+      {},
+    )
   },
+
   // API Key ----------------------------------------------------------------------
   createAPIKey() {
     return request.post(config.crn.url + 'keygen', {})

@@ -1,7 +1,6 @@
 import request from 'superagent'
 import config from '../../config'
 import templates from './templates'
-import bidsId from '../bidsId'
 
 export default {
   auth:
@@ -34,25 +33,18 @@ export default {
       .send(xml)
   },
 
-  async registerSnapshotDoi(datasetId) {
-    let baseDoi, url, context
-    return request
-      .get(config.scitran.url + 'snapshots/projects/' + datasetId)
-      .then(res => {
-        let originalId = bidsId.decodeId(res.body.original)
-        let snapId = res.body.snapshot_version
-        baseDoi = this.createDOI(originalId, snapId)
-        url =
-          'https://openneuro.org/datasets/' + originalId + '/versions/' + snapId
-        context = {
-          doi: baseDoi,
-          creators: res.body.metadata.authors.map(x => x.name),
-          title: res.body.label,
-          year: new Date().getFullYear(),
-          resourceType: 'fMRI',
-        }
-        return this.registerMetadata(context)
-      })
+  async registerSnapshotDoi(datasetId, snapshotId, oldDesc) {
+    let url, context
+    let baseDoi = this.createDOI(datasetId, snapshotId)
+    url = `https://openneuro.org/datasets/${datasetId}/versions/${snapshotId}`
+    context = {
+      doi: baseDoi,
+      creators: oldDesc.Authors.filter(x => x),
+      title: oldDesc.Name,
+      year: new Date().getFullYear(),
+      resourceType: 'fMRI',
+    }
+    return this.registerMetadata(context)
       .then(async () => {
         return this.mintDOI(baseDoi, url)
       })
