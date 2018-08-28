@@ -1,18 +1,20 @@
 // dependencies ----------------------------------------------------------------------
 
-import Reflux from 'reflux'
-import React from 'react'
 import async from 'async'
-import Actions from './dataset.actions.js'
-import scitran from '../utils/scitran'
-import datalad from '../utils/datalad'
-import crn from '../utils/crn'
-import bids from '../utils/bids'
-import config from '../../../config'
-import files from '../utils/files'
+import React from 'react'
+import Reflux from 'reflux'
 import moment from 'moment'
+import semver from 'semver'
+
 import { getProfile } from '../authentication/profile.js'
 import { stringify as querystring } from 'urlite/querystring'
+import Actions from './dataset.actions.js'
+import bids from '../utils/bids'
+import config from '../../../config'
+import crn from '../utils/crn'
+import datalad from '../utils/datalad'
+import files from '../utils/files'
+import scitran from '../utils/scitran'
 
 let datasetStore = Reflux.createStore({
   // store setup -----------------------------------------------------------------------
@@ -2048,11 +2050,43 @@ let datasetStore = Reflux.createStore({
         if (res && res.body.doi) {
           dataset.description.DatasetDOI = res.body.doi
           this.updateDescription('DatasetDOI', res.body.doi, callback)
+        } else {
+          callback()
         }
       })
-      .catch(() => {
+      .catch(err => {
+        if (err) {
+          this.setState({ message: 'Doi minting failed.' })
+        }
         callback()
       })
+  },
+
+  createDoiSnapshot() {
+    let snapshots = this.data.dataset.snapshots
+    let semverTags = snapshots.filter(s => semver.valid(s.tag))
+    let highestVersionedSnapshot = semverTags.sort((a, b) =>
+      semver.lt(a.tag, b.tag),
+    )[0]
+    let newSemVer = semver.inc(highestVersionedSnapshot.tag, 'patch')
+    let oldChanges = this.data.dataset.CHANGES ? this.data.dataset.CHANGES : []
+    let dateString = moment().format('YYYY-MM-DD')
+    let newChanges = `${newSemVer}\t${dateString}\n\n\t- Adding DOI\n`
+    let changes = `${newChanges}\n${oldChanges}`
+    this.createSnapshot(changes, newSemVer, [], res => {
+      if (res && res.error) {
+        this.setState({
+          changes: [],
+          error: true,
+          message: res.error,
+        })
+      } else {
+        this.update({ dataset: this.data.dataset }, () => {
+          const url = '/datasets/' + this.state.datasets.dataset.linkID
+          this.props.history.push(url)
+        })
+      }
+    })
   },
 })
 
