@@ -19,7 +19,7 @@
     "apollo-link-ws": "^1.0.8",
     "async": "^2.6.0",
     "babel-runtime": "^6.26.0",
-    "bids-validator": "^0.26.10",
+    "bids-validator": "0.26.10",
     "bowser": "^1.7.3",
     "bytes": "^3.0.0",
     "codecov": "^3.0.0",
@@ -104,14 +104,11 @@
     "webpack-visualizer-plugin": "^0.1.11"
   },
   "jest": {
-    "setupFiles": [
-      "./jestsetup.js"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ],
+    "setupFiles": ["./jestsetup.js"],
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
+        "<rootDir>/__mocks__/fileMock.js",
       "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js",
       "openneuro-content": "<rootDir>/__mocks__/contentMock.js"
     },

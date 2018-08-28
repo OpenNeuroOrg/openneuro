@@ -25,7 +25,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "base64url": "^2.0.0",
     "bcrypt": "^2.0.1",
-    "bids-validator": "^0.26.10",
+    "bids-validator": "0.26.10",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cron": "^1.1.0",
@@ -62,7 +62,8 @@
     "react-dom": "^16.2.0",
     "redis": "^2.8.0",
     "request": "^2.83.0",
-    "s3-stream-download": "https://github.com/OpenNeuroOrg/s3-stream-download.git",
+    "s3-stream-download":
+      "https://github.com/OpenNeuroOrg/s3-stream-download.git",
     "subscriptions-transport-ws": "^0.9.9",
     "superagent": "^3.8.2",
     "tar-fs": "^1.9.0",
