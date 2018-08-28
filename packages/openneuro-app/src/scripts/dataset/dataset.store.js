@@ -15,7 +15,6 @@ import crn from '../utils/crn'
 import datalad from '../utils/datalad'
 import files from '../utils/files'
 import scitran from '../utils/scitran'
-import joinChangeLogs from './tools/snapshot.jsx'
 
 let datasetStore = Reflux.createStore({
   // store setup -----------------------------------------------------------------------
@@ -1659,21 +1658,6 @@ let datasetStore = Reflux.createStore({
     )
   },
 
-  createSnapshotCallback(res) {
-    if (res && res.error) {
-      this.setState({
-        changes: [],
-        error: true,
-        message: res.error,
-      })
-    } else {
-      this.props.getDataset.refetch().then(() => {
-        const url = '/datasets/' + this.state.datasets.dataset.linkID
-        this.props.history.push(url)
-      })
-    }
-  },
-
   loadSnapshots(dataset, jobs, callback) {
     let datasetId = dataset.original ? dataset.original : dataset._id
     let snapshots = dataset.snapshots ? dataset.snapshots.slice(0) : []
@@ -2066,9 +2050,14 @@ let datasetStore = Reflux.createStore({
         if (res && res.body.doi) {
           dataset.description.DatasetDOI = res.body.doi
           this.updateDescription('DatasetDOI', res.body.doi, callback)
+        } else {
+          callback()
         }
       })
-      .catch(() => {
+      .catch(err => {
+        if (err) {
+          this.setState({ message: 'Doi minting failed.' })
+        }
         callback()
       })
   },
@@ -2080,8 +2069,24 @@ let datasetStore = Reflux.createStore({
       semver.lt(a.tag, b.tag),
     )[0]
     let newSemVer = semver.inc(highestVersionedSnapshot.tag, 'patch')
-    let changes = joinChangeLogs(['Adding DOI'])
-    this.createSnapshot(changes, newSemVer, [], this.createSnapshotCallback)
+    let oldChanges = this.data.dataset.CHANGES ? this.data.dataset.CHANGES : []
+    let dateString = moment().format('YYYY-MM-DD')
+    let newChanges = `${newSemVer}\t${dateString}\n\n\t- Adding DOI\n`
+    let changes = `${newChanges}\n${oldChanges}`
+    this.createSnapshot(changes, newSemVer, [], res => {
+      if (res && res.error) {
+        this.setState({
+          changes: [],
+          error: true,
+          message: res.error,
+        })
+      } else {
+        this.update({ dataset: this.data.dataset }, () => {
+          const url = '/datasets/' + this.state.datasets.dataset.linkID
+          this.props.history.push(url)
+        })
+      }
+    })
   },
 })
 
