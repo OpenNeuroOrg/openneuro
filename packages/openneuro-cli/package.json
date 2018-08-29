@@ -7,16 +7,14 @@
   "engines": {
     "node": ">=8.0.0"
   },
-  "os": [
-    "!win32"
-  ],
+  "os": ["!win32"],
   "author": "Squishymedia",
   "license": "MIT",
   "bin": {
     "openneuro": "./src/index.js"
   },
   "dependencies": {
-    "bids-validator": "0.26.10",
+    "bids-validator": "0.27.2",
     "commander": "^2.15.1",
     "esm": "^3.0.16",
     "find-config": "^1.0.0",
