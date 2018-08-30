@@ -61,6 +61,7 @@ pytest-cov==2.5.1
 python-dateutil==2.7.3
 python-mimeparse==1.6.0
 pytz==2018.4
+raven==6.9.0
 redis==2.10.6
 requests==2.18.4
 s3transfer==0.1.13

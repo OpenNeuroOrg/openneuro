@@ -1,4 +1,6 @@
 import falcon
+
+from datalad_service.common import raven
 from datalad_service.datalad import DataladStore
 from datalad_service.handlers.dataset import DatasetResource
 from datalad_service.handlers.draft import DraftResource
@@ -18,8 +20,12 @@ class PathConverter(falcon.routing.converters.BaseConverter):
 
 
 def create_app(annex_path):
+    raven.setup()
+
     api = application = falcon.API(middleware=AuthenticateMiddleware())
     api.router_options.converters['path'] = PathConverter
+
+    raven.falcon_handler(api)
 
     store = DataladStore(annex_path)
 
@@ -42,7 +48,8 @@ def create_app(annex_path):
     api.add_route('/datasets/{dataset}/files/{filename:path}', dataset_files)
 
     api.add_route('/datasets/{dataset}/objects', dataset_objects)
-    api.add_route('/datasets/{dataset}/objects/{filekey:path}', dataset_objects)
+    api.add_route(
+        '/datasets/{dataset}/objects/{filekey:path}', dataset_objects)
 
     api.add_route('/datasets/{dataset}/snapshots', dataset_snapshots)
     api.add_route(
