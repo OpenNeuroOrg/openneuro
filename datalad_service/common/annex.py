@@ -20,6 +20,7 @@ def get_repo_files(dataset, branch=None):
         branch = None
     working_files = filter_git_files(dataset.repo.get_files(branch=branch))
     files = []
+    tree = dataset.repo.repo.commit(branch).tree
     for filename in working_files:
         try:
             # Annexed file
@@ -27,7 +28,7 @@ def get_repo_files(dataset, branch=None):
             size = dataset.repo.get_size_from_key(key)
         except (FileInGitError, FileNotInAnnexError):
             # Regular git file
-            key = dataset.repo.repo.commit(branch).tree[filename].hexsha
+            key = tree[filename].hexsha
             # get file object id here and use as fd
             size = os.path.getsize(os.path.join(dataset.path, filename))
         files.append({'filename': filename, 'size': size, 'id': key})
