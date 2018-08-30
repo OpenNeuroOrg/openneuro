@@ -46,10 +46,9 @@ class SnapshotResource(object):
         queue = dataset_queue(dataset)
         create = create_snapshot.si(
             self.store.annex_path, dataset, snapshot).set(queue=queue)
-        get = get_files.si(self.store.annex_path, dataset,
-                           branch=snapshot).set(queue=queue)
+        # We don't need to include the branch in get_files, it is inherent in snapshot_creation
+        get = get_files.si(self.store.annex_path, dataset).set(queue=queue)
         created = chain(create, get)()
-        # created.wait()
         if not created.failed():
             resp.media = self._get_snapshot(dataset, snapshot, created.get())
             resp.status = falcon.HTTP_OK
