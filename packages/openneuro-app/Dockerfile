@@ -1,4 +1,4 @@
-FROM node:8.11.3-alpine AS app
+FROM node:8.11.4-alpine AS app
 
 RUN apk --no-cache --update add git make gcc g++ python
 
