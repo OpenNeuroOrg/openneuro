@@ -7,20 +7,20 @@ var mockResponse = {
     return 200
   },
   ok: true,
-  get: jest.genMockFunction(),
-  toError: jest.genMockFunction(),
+  get: jest.fn(),
+  toError: jest.fn(),
 }
 
 var Request = {
-  post: jest.genMockFunction().mockReturnThis(),
-  get: jest.genMockFunction().mockReturnThis(),
-  send: jest.genMockFunction().mockReturnThis(),
-  query: jest.genMockFunction().mockReturnThis(),
-  field: jest.genMockFunction().mockReturnThis(),
-  set: jest.genMockFunction().mockReturnThis(),
-  accept: jest.genMockFunction().mockReturnThis(),
-  timeout: jest.genMockFunction().mockReturnThis(),
-  end: jest.genMockFunction().mockImplementation(function(callback) {
+  post: jest.fn().mockReturnThis(),
+  get: jest.fn().mockReturnThis(),
+  send: jest.fn().mockReturnThis(),
+  query: jest.fn().mockReturnThis(),
+  field: jest.fn().mockReturnThis(),
+  set: jest.fn().mockReturnThis(),
+  accept: jest.fn().mockReturnThis(),
+  timeout: jest.fn().mockReturnThis(),
+  end: jest.fn().mockImplementation(function(callback) {
     if (mockDelay) {
       this.delayTimer = setTimeout(callback, 0, mockError, mockResponse)
 
@@ -29,7 +29,7 @@ var Request = {
 
     callback(mockError, mockResponse)
   }),
-  then: jest.genMockFunction().mockImplementation(cb => {
+  then: jest.fn().mockImplementation(cb => {
     cb(mockResponse)
   }),
 
