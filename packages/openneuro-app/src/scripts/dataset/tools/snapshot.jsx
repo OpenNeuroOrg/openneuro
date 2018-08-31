@@ -12,7 +12,7 @@ import bids from '../../utils/bids'
 import { Link, withRouter } from 'react-router-dom'
 import { refluxConnect } from '../../utils/reflux'
 import { graphql } from 'react-apollo'
-import { datasets } from 'openneuro-client'
+import { datasets as openneuroDatasets } from 'openneuro-client'
 
 class Snapshot extends Reflux.Component {
   constructor(props) {
@@ -219,7 +219,8 @@ class Snapshot extends Reflux.Component {
           <button
             className="submit btn-admin-blue add-btn"
             onClick={this._addChange}>
-            <i className="fa fa-plus" />Add
+            <i className="fa fa-plus" />
+            Add
           </button>
         </div>
       </div>
@@ -236,7 +237,8 @@ class Snapshot extends Reflux.Component {
           <div className="change-text col-xs-8">{change}</div>
           <div className="col-xs-3 change-controls">
             <a className="" onClick={this._removeChange.bind(this, change)}>
-              <i className="fa fa-times" />Remove
+              <i className="fa fa-times" />
+              Remove
             </a>
           </div>
         </div>
@@ -427,7 +429,7 @@ Snapshot.propTypes = {
   location: PropTypes.object,
 }
 
-export default graphql(datasets.getDataset, {
+export default graphql(openneuroDatasets.getDataset, {
   name: 'getDataset',
   options: props => ({
     variables: {

@@ -21,5 +21,8 @@
     "quotes": ["error", "single", { "avoidEscape": true }],
     "semi": ["error", "never"]
   },
-  "plugins": ["import"]
+  "plugins": ["import"],
+  "settings": {
+    "import/core-modules": ["openneuro-content"]
+  }
 }
