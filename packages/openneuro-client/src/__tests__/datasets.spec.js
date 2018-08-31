@@ -1,5 +1,4 @@
-import createClient from '../client'
-import { testDsId} from '../client'
+import createClient, { testDsId } from '../client'
 import { getDataset, getDatasets, createDataset } from '../datasets'
 
 jest.mock('../client')
