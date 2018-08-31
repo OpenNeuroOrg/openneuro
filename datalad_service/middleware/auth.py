@@ -1,6 +1,9 @@
 import jwt
 import os
 
+from datalad_service.common.raven import set_user_context
+
+
 class AuthenticateMiddleware(object):
     def process_request(self, req, resp):
         """Process the request before routing it.
@@ -14,6 +17,11 @@ class AuthenticateMiddleware(object):
         cookies = req.cookies
         if 'accessToken' in cookies:
             try:
-                req.context['user'] = jwt.decode(cookies['accessToken'], key=os.environ['JWT_SECRET'])
+                req.context['user'] = jwt.decode(
+                    cookies['accessToken'], key=os.environ['JWT_SECRET'])
+                set_user_context(req.context['user'])
             except:
                 req.context['user'] = None
+                set_user_context(None)
+        else:
+            set_user_context(None)
