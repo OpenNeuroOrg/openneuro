@@ -4,7 +4,11 @@
     "node": true,
     "jest": true
   },
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/warnings",
+    "plugin:import/errors"
+  ],
   "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module",
@@ -16,5 +20,6 @@
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single", { "avoidEscape": true }],
     "semi": ["error", "never"]
-  }
+  },
+  "plugins": ["import"]
 }
