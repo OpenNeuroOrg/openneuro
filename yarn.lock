@@ -767,11 +767,10 @@ apollo-tracing@^0.1.0:
   dependencies:
     graphql-extensions "~0.0.9"
 
-"apollo-upload-client@https://github.com/nellh/apollo-upload-client-build.git":
-  version "8.0.1"
-  resolved "https://github.com/nellh/apollo-upload-client-build.git#ee7f20a68a0816cbb337874698d445a59ab858f4"
+"apollo-upload-client@https://github.com/nellh/apollo-upload-client-build.git#4e36ae10c866b421881df8b05ba5b4516fe12628":
+  version "8.0.2"
+  resolved "https://github.com/nellh/apollo-upload-client-build.git#4e36ae10c866b421881df8b05ba5b4516fe12628"
   dependencies:
-    "@babel/runtime" "^7.0.0-beta.40"
     apollo-link-http-common "^0.2.3"
     extract-files "^3.1.0"
 
