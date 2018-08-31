@@ -11,6 +11,7 @@
     "apollo-boost": "^0.1.4",
     "apollo-link": "^1.2.1",
     "apollo-link-context": "^1.0.8",
+    "apollo-link-ws": "^1.0.8",
     "apollo-upload-client": "https://github.com/nellh/apollo-upload-client-build.git",
     "cross-fetch": "^2.2.0",
     "esm": "^3.0.16",
