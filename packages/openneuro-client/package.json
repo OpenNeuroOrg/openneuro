@@ -12,7 +12,7 @@
     "apollo-link": "^1.2.1",
     "apollo-link-context": "^1.0.8",
     "apollo-link-ws": "^1.0.8",
-    "apollo-upload-client": "https://github.com/nellh/apollo-upload-client-build.git#4e36ae10c866b421881df8b05ba5b4516fe12628",
+    "apollo-upload-client": "https://github.com/nellh/apollo-upload-client-build.git#62d69f757edc9faad7120cb27f168e3cb2e1f49d",
     "cross-fetch": "^2.2.0",
     "esm": "^3.0.16",
     "form-data": "^2.3.2",
