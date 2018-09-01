@@ -35,17 +35,6 @@ def get_repo_files(dataset, branch=None):
     return files
 
 
-def get_user_info(req):
-    """Parse the name, email fields from a request."""
-    name = None
-    email = None
-    if 'user' in req.context:
-        user = req.context['user']
-        name = user['name']
-        email = user['email']
-    return name, email
-
-
 class CommitInfo():
     """Context manager for setting commit info on datalad operations that use it."""
 
