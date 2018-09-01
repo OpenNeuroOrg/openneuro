@@ -28,7 +28,6 @@ class ObjectsResource(object):
 
     def on_get(self, req, resp, dataset, filekey=None):
         ds_path = self.store.get_dataset_path(dataset)
-        ds = self.store.get_dataset(dataset)
         if filekey:
             try:
                 if filekey.startswith('MD5E'):
