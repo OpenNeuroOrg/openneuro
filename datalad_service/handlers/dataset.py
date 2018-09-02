@@ -1,6 +1,6 @@
 import falcon
 
-from datalad_service.common.annex import get_user_info
+from datalad_service.common.user import get_user_info
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.dataset import *
 
@@ -26,8 +26,8 @@ class DatasetResource(object):
             resp.status = falcon.HTTP_NOT_FOUND
 
     def on_post(self, req, resp, dataset):
-        datalad = self.store.get_dataset(dataset)
-        if (datalad.repo):
+        ds_path = self.store.get_dataset_path(dataset)
+        if (os.path.isdir(ds_path)):
             resp.media = {'error': 'dataset already exists'}
             resp.status = falcon.HTTP_CONFLICT
         else:

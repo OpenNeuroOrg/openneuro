@@ -4,7 +4,7 @@ import os
 import falcon
 
 import git
-from datalad_service.common.annex import get_user_info
+from datalad_service.common.user import get_user_info
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.files import commit_files
 from datalad_service.tasks.files import get_files
