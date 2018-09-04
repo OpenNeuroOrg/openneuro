@@ -22,11 +22,15 @@ export default class JsonEditor extends Reflux.Component {
 
   componentDidMount() {
     let editing = this.props.editing ? this.props.editing : false
+    let originalFile = {
+      ...this.props.file.info,
+      relativePath: this.props.file.info.name,
+    }
     let data = {
       isSnapshot: this.props.isSnapshot,
       onSave: this.props.onSave,
       originalData: this.props.data,
-      originalFile: this.props.file.info,
+      originalFile,
       editing: editing,
       editable: !this.props.isSnapshot,
     }
