@@ -13,6 +13,33 @@ const draftFilesKey = (datasetId, revision) => {
   return `openneuro:draftFiles:${datasetId}:${revision}`
 }
 
+// Track any waiting requests for files
+const fileReqInFlight = {}
+
+/**
+ * Avoid duplicating requests to get files from datalad-service
+ *
+ * There's no synchronization between multiple processes
+ * @param {string} filesUrl
+ */
+const dataladGetFiles = (filesUrl, query) => {
+  // Key on anything that makes the request unique
+  const reqKey = `${filesUrl}:${JSON.stringify(query)}`
+  if (!(reqKey in fileReqInFlight)) {
+    fileReqInFlight[reqKey] = request
+      .get(filesUrl)
+      .query(query)
+      .set('Accept', 'application/json')
+      .then(res => {
+        // Remove the key and continue chain
+        delete fileReqInFlight[reqKey]
+        return res
+      })
+  }
+  // Promise will always exist at this point
+  return fileReqInFlight[reqKey]
+}
+
 /**
  * Retrieve draft files from cache or the datalad-service backend
  * @param {string} datasetId Accession number string
@@ -28,17 +55,13 @@ export const getDraftFiles = async (datasetId, revision, options = {}) => {
   return redis.get(key).then(data => {
     if (!untracked && data) return JSON.parse(data)
     else
-      return request
-        .get(filesUrl)
-        .query(query)
-        .set('Accept', 'application/json')
-        .then(({ body: { files } }) => {
-          const filesWithUrls = files.map(addFileUrl(datasetId))
-          if (!untracked) {
-            redis.set(key, JSON.stringify(filesWithUrls))
-          }
-          return filesWithUrls
-        })
+      return dataladGetFiles(filesUrl, query).then(({ body: { files } }) => {
+        const filesWithUrls = files.map(addFileUrl(datasetId))
+        if (!untracked) {
+          redis.set(key, JSON.stringify(filesWithUrls))
+        }
+        return filesWithUrls
+      })
   })
 }
 
