@@ -9,18 +9,21 @@ import falcon
 import git
 
 
+def annex_key_to_path(annex_key):
+    word = struct.unpack('<I', hashlib.md5(
+        str(annex_key).encode('utf-8')).digest()[:4])[0]
+    integer_encoding = [word >> (6 * x) & 31 for x in range(4)]
+    values = ['0123456789zqjxkmvwgpfZQJXKMVWGPF'[x]
+              for x in integer_encoding]
+    return '{}{}/{}{}'.format(values[1], values[0], values[3], values[2])
+
+
 class ObjectsResource(object):
     _CHUNK_SIZE_BYTES = 4096
 
     def __init__(self, store):
         self.store = store
         self.logger = logging.getLogger('datalad_service.' + __name__)
-
-    def annex_key_to_path(self, annex_key):
-        word = struct.unpack('<I', hashlib.md5(str(annex_key).encode('utf-8')).digest()[:4])[0]
-        integer_encoding = [word >> (6 * x) & 31 for x in range(4)]
-        values = ['0123456789zqjxkmvwgpfZQJXKMVWGPF'[x] for x in integer_encoding]
-        return '{}{}/{}{}'.format(values[1], values[0], values[3], values[2])
 
     @property
     def annex_path(self):
@@ -31,7 +34,8 @@ class ObjectsResource(object):
         if filekey:
             try:
                 if filekey.startswith('MD5E'):
-                    filepath = '.git/annex/objects/{}/{}/{}'.format(self.annex_key_to_path(filekey), filekey, filekey)
+                    filepath = '.git/annex/objects/{}/{}/{}'.format(
+                        annex_key_to_path(filekey), filekey, filekey)
                     path = '{}/{}'.format(ds_path, filepath)
                     fd = open(path, 'rb')
                     resp.stream = fd
@@ -43,9 +47,11 @@ class ObjectsResource(object):
                     filepath = '.git/objects/{}/{}'.format(dir, remaining_hex)
                     path = '{}/{}'.format(ds_path, filepath)
                     compressed_contents = open(path, 'rb').read()
-                    decompressed_contents = zlib.decompress(compressed_contents)
+                    decompressed_contents = zlib.decompress(
+                        compressed_contents)
                     split_char = b'\x00'
-                    contents = decompressed_contents[decompressed_contents.index(split_char) + len(split_char):]
+                    contents = decompressed_contents[decompressed_contents.index(
+                        split_char) + len(split_char):]
                     resp.body = contents
                     resp.status = falcon.HTTP_OK
             except IOError:

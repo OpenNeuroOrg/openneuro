@@ -5,6 +5,12 @@ import pytest
 from datalad.api import Dataset
 
 from .dataset_fixtures import *
+from datalad_service.handlers.objects import annex_key_to_path
+
+
+def test_annex_key_to_path():
+    key = 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz'
+    assert annex_key_to_path(key) == '5p/Vk'
 
 
 def test_get_git_object(client, celery_app):
