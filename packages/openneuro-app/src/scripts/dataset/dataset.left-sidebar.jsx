@@ -68,6 +68,7 @@ export class LeftSidebar extends Reflux.Component {
           <Link
             to={snapshotUrl}
             className={
+              this.state.datasets.dataset &&
               this.state.datasets.dataset.snapshot_version == snapshot.tag
                 ? 'active'
                 : null
