@@ -87,7 +87,16 @@ export default test => {
       }
     },
     // Disable engine in test suite
-    engine: test ? false : engineConfig,
+    engine: test || !process.env.ENGINE_API_KEY ? false : engineConfig,
+    // Always allow introspection - our schema is public
+    introspection: true,
+    // Enable authenticated queries in playground
+    // Note - buggy at the moment
+    playground: {
+      settings: {
+        'request.credentials': 'same-origin',
+      },
+    },
   })
 
   // Setup pre-GraphQL middleware
