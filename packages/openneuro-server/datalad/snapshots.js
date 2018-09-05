@@ -6,6 +6,7 @@ import mongo from '../libs/mongo'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
+import { commitFilesKey } from './files.js'
 import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 
@@ -71,8 +72,18 @@ export const createSnapshot = async (datasetId, tag, user) => {
       .post(url)
       .set('Accept', 'application/json')
       .set('Cookie', generateDataladCookie(config)(user))
-      .then(({ body }) => {
+      .then(async ({ body }) => {
         body.created = new Date()
+
+        // We should almost always get the fast path here
+        const fKey = commitFilesKey(datasetId, body.hexsha)
+        const filesFromCache = await redis.get(fKey)
+        if (filesFromCache) body.files = filesFromCache
+        else
+          body.files = (await request
+            .get(url)
+            .set('Accept', 'application/json')).files
+
         // Eager caching for snapshots
         // Set the key and after resolve to body
         return (
