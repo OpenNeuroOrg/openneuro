@@ -17,12 +17,12 @@ class SnapshotResource(object):
     def __init__(self, store):
         self.store = store
 
-    def _get_snapshot(self, dataset, snapshot, files):
+    def _get_snapshot(self, dataset, snapshot):
         # get the hash associated with the commit
         ds = self.store.get_dataset(dataset)
         commit_data = ds.repo.repo.commit(snapshot)
         hexsha = commit_data.hexsha
-        return {'files': files, 'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha}
+        return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha}
 
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
@@ -31,7 +31,9 @@ class SnapshotResource(object):
             ds = self.store.get_dataset(dataset)
             files = get_files.s(self.store.annex_path, dataset,
                                 branch=snapshot).apply_async(queue=queue)
-            resp.media = self._get_snapshot(dataset, snapshot, files.get())
+            response = self._get_snapshot(dataset, snapshot)
+            response['files'] = files.get()
+            resp.media = response
             resp.status = falcon.HTTP_OK
         else:
             tags = get_snapshots.s(self.store.annex_path,
@@ -46,11 +48,9 @@ class SnapshotResource(object):
         queue = dataset_queue(dataset)
         create = create_snapshot.si(
             self.store.annex_path, dataset, snapshot).set(queue=queue)
-        # We don't need to include the branch in get_files, it is inherent in snapshot_creation
-        get = get_files.si(self.store.annex_path, dataset).set(queue=queue)
-        created = chain(create, get)()
+        created = create.apply_async()
         if not created.failed():
-            resp.media = self._get_snapshot(dataset, snapshot, created.get())
+            resp.media = self._get_snapshot(dataset, snapshot)
             resp.status = falcon.HTTP_OK
             # Publish after response
             publish = publish_snapshot.s(
