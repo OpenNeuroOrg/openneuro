@@ -72,7 +72,7 @@ export default test => {
   // Apollo server setup
   const apolloServer = new ApolloServer({
     schema,
-    context: req => {
+    context: ({ req }) => {
       if (req.isAuthenticated()) {
         return {
           user: req.user.id,
@@ -88,20 +88,7 @@ export default test => {
   app.use('/crn/graphql', jwt.authenticate, auth.optional)
 
   // Inject Apollo Server
-  apolloServer.applyMiddleware({ app })
-
-  const websocketUrl = process.browser ? config.url.replace('http', 'ws') : null
-  const subscriptionUrl = websocketUrl
-    ? `${websocketUrl}/graphql-subscriptions`
-    : null
-  // GraphiQL, a visual editor for queries
-  app.use(
-    '/crn/graphiql',
-    graphiqlExpress({
-      endpointURL: '/crn/graphql',
-      subscriptionsEndpoint: subscriptionUrl,
-    }),
-  )
+  apolloServer.applyMiddleware({ app, path: '/crn/graphql' })
 
   return app
 }
