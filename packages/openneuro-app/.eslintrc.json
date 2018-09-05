@@ -29,6 +29,9 @@
     "react": {
       "pragma": "React",
       "version": "0.13.3"
+    },
+    "import/resolver": {
+      "webpack": { "config": { "resolve": { "extensions": [".js", ".jsx"] } } }
     }
   }
 }

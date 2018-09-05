@@ -1,6 +1,5 @@
-import getClient from 'openneuro-client'
 import config from '../../../config'
-import { datasets, files, users, snapshots } from 'openneuro-client'
+import getClient, { datasets, files, users, snapshots } from 'openneuro-client'
 import gql from 'graphql-tag'
 import bids from './bids'
 import clone from 'lodash.clonedeep'
@@ -355,9 +354,9 @@ export default {
     })
   },
 
-  constructDirectoryTree(files) {
-    let name = this.encodeFilePath(files[0].container.dirPath.slice(0, -1))
-    let trimmed = files.map(f => {
+  constructDirectoryTree(dirFiles) {
+    let name = this.encodeFilePath(dirFiles[0].container.dirPath.slice(0, -1))
+    let trimmed = dirFiles.map(f => {
       let pathComponents = f.filePath.split(':')
       let trimmedPathComponents = pathComponents.slice(1)
       let trimmedPath = trimmedPathComponents.join(':')

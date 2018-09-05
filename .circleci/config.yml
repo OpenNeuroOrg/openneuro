@@ -4,29 +4,38 @@ jobs:
   build:
     working_directory: ~/OpenNeuroOrg/openneuro
     docker:
-    - image: circleci/node:8.11-jessie-browsers
+      - image: circleci/node:8.11-jessie-browsers
     steps:
-    - checkout
-    - save_cache:
-        key: dependency-cache
-        paths:
-          - ~/.cache/yarn
-          - ~/.mongodb-binaries
-    - run:
-        name: yarn install
-        command: yarn install
-    - run:
-        name: lerna bootstrap
-        command: yarn bootstrap
-    - run: 
-        name: eslint
-        command: yarn lint
-    - run: 
-        name: jest unit coverage
-        command: yarn coverage -w 2
-    - run:
-        name: codecov
-        command: yarn run codecov
+      - checkout
+      - save_cache:
+          key: dependency-cache
+          paths:
+            - ~/.cache/yarn
+            - ~/.mongodb-binaries
+      - run:
+          name: yarn install
+          command: yarn install
+      - run:
+          name: lerna bootstrap
+          command: yarn bootstrap
+      - run:
+          name: eslint
+          command: yarn lint
+      - run:
+          name: jest unit coverage
+          command: yarn coverage -w 2
+      - run:
+          name: codecov
+          command: yarn run codecov
+
+  cli-install-test:
+    working_directory: ~/OpenNeuroOrg/openneuro/packages/openneuro-cli
+    docker:
+      - image: circleci/node:8.11-jessie-browsers
+    steps:
+      - checkout
+      - run: yarn
+      - run: yarn openneuro
 
   app-build:
     working_directory: ~/OpenNeuroOrg/openneuro
@@ -41,14 +50,14 @@ jobs:
           name: build openneuro-app
           command: docker build --pull -t openneuro/app -f packages/openneuro-app/Dockerfile .
       - run:
-          name: docker tag + push (master) 
+          name: docker tag + push (master)
           command: |
             if [ -z "${CIRCLE_TAG}" ] && [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker tag openneuro/app openneuro/app:latest
               docker push openneuro/app
             fi
       - run:
-          name: docker tag + push (branch) 
+          name: docker tag + push (branch)
           command: |
             if [ -z "${CIRCLE_TAG}" ] && [ "${CIRCLE_BRANCH}" != "master" ]; then
               docker tag openneuro/app "openneuro/app:${CIRCLE_BRANCH}"
@@ -75,14 +84,14 @@ jobs:
           name: build openneuro-server
           command: docker build --pull -t openneuro/server packages/openneuro-server
       - run:
-          name: docker tag + push (master) 
+          name: docker tag + push (master)
           command: |
             if [ -z "${CIRCLE_TAG}" ] && [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker tag openneuro/server openneuro/server:latest
               docker push openneuro/server
             fi
       - run:
-          name: docker tag + push (branch) 
+          name: docker tag + push (branch)
           command: |
             if [ -z "${CIRCLE_TAG}" ] && [ "${CIRCLE_BRANCH}" != "master" ]; then
               docker tag openneuro/server "openneuro/server:${CIRCLE_BRANCH}"
@@ -96,8 +105,6 @@ jobs:
               docker push "openneuro/server:${CIRCLE_TAG}"
             fi
 
-    
-
 workflows:
   version: 2
   build-and-deploy:
@@ -106,15 +113,21 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+      - cli-install-test:
+          filters:
+            tags:
+              only: /^v.*/
       - app-build:
           requires:
             - build
+            - cli-install-test
           filters:
             tags:
               only: /^v.*/
       - server-build:
           requires:
             - build
+            - cli-install-test
           filters:
             tags:
               only: /^v.*/

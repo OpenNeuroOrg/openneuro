@@ -25,7 +25,7 @@ import { pageTitle } from '../resources/strings'
 
 import { graphql } from 'react-apollo'
 import gql from 'graphql-tag'
-import { datasets } from 'openneuro-client'
+import { datasets as openneuroDatasets } from 'openneuro-client'
 
 // component setup ---------------------------------------------------------------------------
 
@@ -274,6 +274,6 @@ Datasets.propTypes = {
   admin: PropTypes.bool,
 }
 
-export default graphql(datasets.getDatasets, {
+export default graphql(openneuroDatasets.getDatasets, {
   name: 'datasetsQuery',
 })(Datasets)
