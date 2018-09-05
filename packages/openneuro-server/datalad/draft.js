@@ -23,21 +23,32 @@ const fileReqInFlight = {}
  * @param {string} filesUrl
  */
 const dataladGetFiles = (filesUrl, query) => {
-  // Key on anything that makes the request unique
-  const reqKey = `${filesUrl}:${JSON.stringify(query)}`
-  if (!(reqKey in fileReqInFlight)) {
-    fileReqInFlight[reqKey] = request
-      .get(filesUrl)
-      .query(query)
-      .set('Accept', 'application/json')
-      .then(res => {
-        // Remove the key and continue chain
+  return new Promise((resolve, reject) => {
+    // Key on anything that makes the request unique
+    const reqKey = `${filesUrl}:${JSON.stringify(query)}`
+    if (!(reqKey in fileReqInFlight)) {
+      // No native finally in Node 8
+      const final = res => {
+        // Remove the key
         delete fileReqInFlight[reqKey]
         return res
-      })
-  }
-  // Promise will always exist at this point
-  return fileReqInFlight[reqKey]
+      }
+      fileReqInFlight[reqKey] = request
+        .get(filesUrl)
+        .query(query)
+        .set('Accept', 'application/json')
+        .then(
+          res => final(res),
+          err => {
+            throw final(err)
+          },
+        )
+    }
+    // Request will always exist at this point
+    fileReqInFlight[reqKey]
+      .then(res => resolve(res) && res)
+      .catch(err => reject(err) && err)
+  })
 }
 
 /**
