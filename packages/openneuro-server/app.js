@@ -11,8 +11,7 @@ import config from './config'
 import routes from './routes'
 import morgan from 'morgan'
 import schema from './graphql/schema'
-import { apolloUploadExpress } from 'apollo-upload-server'
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express'
+import { ApolloServer } from 'apollo-server-express'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import * as jwt from './libs/authentication/jwt.js'
@@ -70,42 +69,41 @@ export default test => {
     res.status(http_code).send(send)
   })
 
-  // The GraphQL endpoint
-  // Depends on bodyParser.json() above
-  app.use(
-    '/crn/graphql',
-    jwt.authenticate,
-    auth.optional,
-    apolloUploadExpress(),
-    graphqlExpress(req => {
+  // Apollo engine setup
+  const engineConfig = {
+    privateVariables: ['files'],
+  }
+
+  // Apollo server setup
+  const apolloServer = new ApolloServer({
+    schema,
+    context: ({ req }) => {
       if (req.isAuthenticated()) {
-        const user = req.user.id
-        const isSuperUser = req.user.admin
-        const userInfo = req.user
         return {
-          schema,
-          context: { user, isSuperUser, userInfo },
-        }
-      } else {
-        return {
-          schema,
+          user: req.user.id,
+          isSuperUser: req.user.admin,
+          userInfo: req.user,
         }
       }
-    }),
-  )
+    },
+    // Disable engine in test suite
+    engine: test || !process.env.ENGINE_API_KEY ? false : engineConfig,
+    // Always allow introspection - our schema is public
+    introspection: true,
+    // Enable authenticated queries in playground
+    // Note - buggy at the moment
+    playground: {
+      settings: {
+        'request.credentials': 'same-origin',
+      },
+    },
+  })
 
-  const websocketUrl = process.browser ? config.url.replace('http', 'ws') : null
-  const subscriptionUrl = websocketUrl
-    ? `${websocketUrl}/graphql-subscriptions`
-    : null
-  // GraphiQL, a visual editor for queries
-  app.use(
-    '/crn/graphiql',
-    graphiqlExpress({
-      endpointURL: '/crn/graphql',
-      subscriptionsEndpoint: subscriptionUrl,
-    }),
-  )
+  // Setup pre-GraphQL middleware
+  app.use('/crn/graphql', jwt.authenticate, auth.optional)
+
+  // Inject Apollo Server
+  apolloServer.applyMiddleware({ app, path: '/crn/graphql' })
 
   return app
 }
