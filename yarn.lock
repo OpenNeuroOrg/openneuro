@@ -1195,7 +1195,7 @@ apollo-server-errors@2.0.2:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/apollo-server-errors/-/apollo-server-errors-2.0.2.tgz#e9cbb1b74d2cd78aed23cd886ca2d0c186323b2b"
 
-apollo-server-express@^2.0.0:
+apollo-server-express@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/apollo-server-express/-/apollo-server-express-2.0.6.tgz#31288f47479e4f18828823f46e059218e5e12203"
   dependencies:
