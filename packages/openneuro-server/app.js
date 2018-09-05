@@ -81,7 +81,9 @@ export default test => {
         }
       }
     },
-    engine: true,
+    engine: {
+      privateVariables: ['files'],
+    },
   })
 
   // Setup pre-GraphQL middleware
