@@ -8,30 +8,32 @@ from datalad.support.exceptions import FileInGitError, FileNotInAnnexError
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
 
-
-def filter_git_files(files):
-    """Remove any git/datalad files from a list of files."""
-    return [f for f in files if not (f.startswith('.datalad/') or f == '.gitattributes')]
+def create_file_obj(dataset, tree, file_key):
+    filename, key = file_key
+    # Annexed file
+    if key:
+        size = dataset.repo.get_size_from_key(key)
+    # Regular
+    if not key:
+        key = tree[filename].hexsha
+        size = os.path.getsize(os.path.join(dataset.path, filename))
+    return {'filename': filename,
+            'size': size,
+            'id': key}
 
 
 def get_repo_files(dataset, branch=None):
     # If we're on the right branch, use the fast path with branch=None
     if branch == 'HEAD' or branch == dataset.repo.get_active_branch():
         branch = None
-    working_files = filter_git_files(dataset.repo.get_files(branch=branch))
-    files = []
+    working_files = dataset.repo.get_files(branch=branch)
+    # Do the tree lookup only once
     tree = dataset.repo.repo.commit(branch).tree
-    for filename in working_files:
-        try:
-            # Annexed file
-            key = dataset.repo.get_file_key(filename)
-            size = dataset.repo.get_size_from_key(key)
-        except (FileInGitError, FileNotInAnnexError):
-            # Regular git file
-            key = tree[filename].hexsha
-            # get file object id here and use as fd
-            size = os.path.getsize(os.path.join(dataset.path, filename))
-        files.append({'filename': filename, 'size': size, 'id': key})
+    # Zip up array of (filename, key) tuples
+    file_keys = zip(working_files, dataset.repo.get_file_key(working_files))
+    # Produce JSON results and lookup any missing non-annex file sizes
+    files = [create_file_obj(dataset, tree, file_key)
+             for file_key in file_keys if not (file_key[0].startswith('.datalad/') or file_key[0] == '.gitattributes')]
     return files
 
 
