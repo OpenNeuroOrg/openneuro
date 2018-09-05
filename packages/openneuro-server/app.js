@@ -69,6 +69,11 @@ export default test => {
     res.status(http_code).send(send)
   })
 
+  // Apollo engine setup
+  const engineConfig = {
+    privateVariables: ['files'],
+  }
+
   // Apollo server setup
   const apolloServer = new ApolloServer({
     schema,
@@ -81,9 +86,8 @@ export default test => {
         }
       }
     },
-    engine: {
-      privateVariables: ['files'],
-    },
+    // Disable engine in test suite
+    engine: test ? false : engineConfig,
   })
 
   // Setup pre-GraphQL middleware
