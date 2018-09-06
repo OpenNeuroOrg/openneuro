@@ -9,6 +9,7 @@ import pubsub from '../graphql/pubsub.js'
 import { commitFilesKey } from './files.js'
 import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
+import { getDraftFiles } from './draft'
 
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -79,10 +80,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
         const fKey = commitFilesKey(datasetId, body.hexsha)
         const filesFromCache = await redis.get(fKey)
         if (filesFromCache) body.files = filesFromCache
-        else
-          body.files = (await request
-            .get(url)
-            .set('Accept', 'application/json')).files
+        else body.files = getDraftFiles(datasetId, body.hexsha)
 
         // Eager caching for snapshots
         // Set the key and after resolve to body
