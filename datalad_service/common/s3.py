@@ -79,10 +79,8 @@ def s3_export(dataset, target, treeish='HEAD'):
     )
 
 
-def s3_versions(dataset, realm=DatasetRealm.PRIVATE, snapshot='HEAD'):
-    realm = realm
+def s3_versions(dataset, bucket_name, snapshot='HEAD'):
     dataset_id = os.path.basename(dataset.path)
-    bucket_name = '{}'.format(realm.s3_bucket)
 
     # get s3 bucket
     s3 = boto3.resource('s3')
@@ -105,7 +103,6 @@ def s3_versions(dataset, realm=DatasetRealm.PRIVATE, snapshot='HEAD'):
                 'filename': key.split(dataset_id + '/')[-1],
                 'urls': [url.format(bucket_name, key, version), rel.format(dataset_id, snapshot, filename.replace('/', ':'))]
             })
-    except:
+    finally:
         return versions
-    
-    return versions
+
