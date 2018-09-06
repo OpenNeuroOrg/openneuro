@@ -250,7 +250,7 @@ export const commitFiles = (datasetId, user) => {
     .then(updateDatasetRevision(datasetId))
     .then(() =>
       // Check if this is the first data commit and no snapshots exist
-      c.crn.snapshots.findOne({ datasetId: 'datasetId' }).then(snapshot => {
+      c.crn.snapshots.findOne({ datasetId }).then(snapshot => {
         if (!snapshot) {
           return createSnapshot(datasetId, '1.0.0', user)
         }
