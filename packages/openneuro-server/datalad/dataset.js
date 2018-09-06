@@ -12,6 +12,7 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
 import { getAccessionNumber } from '../libs/dataset'
 import { updateDatasetRevision, draftPartialKey } from './draft.js'
+import { createSnapshot } from './snapshots.js'
 const c = mongo.collections
 const uri = config.datalad.uri
 
@@ -247,6 +248,14 @@ export const commitFiles = (datasetId, user) => {
       return res.body.ref
     })
     .then(updateDatasetRevision(datasetId))
+    .then(() =>
+      // Check if this is the first data commit and no snapshots exist
+      c.crn.snapshots.findOne({ datasetId: 'datasetId' }).then(snapshot => {
+        if (!snapshot) {
+          return createSnapshot(datasetId, '1.0.0', user)
+        }
+      }),
+    )
   return req
 }
 

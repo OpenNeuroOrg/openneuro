@@ -177,16 +177,11 @@ class UploadClient extends React.Component {
             },
           })
           .then(() => {
-            mutation
-              .createSnapshot(this.props.client, this.state.datasetId)
-              .then(() => {
-                this.setState({ uploading: false })
-                this.uploadCompleteAction()
-              })
-              .catch(err => {
-                this.setState({ uploading: false })
-                throw err
-              })
+            this.setState({ uploading: false })
+            this.uploadCompleteAction()
+          })
+          .catch(() => {
+            this.setState({ uploading: false })
           })
       })
   }
@@ -212,7 +207,7 @@ class UploadClient extends React.Component {
 
   uploadProgress(e) {
     this.setState({
-      progress: e.total > 0 ? Math.floor(e.loaded / e.total * 100) : 0,
+      progress: e.total > 0 ? Math.floor((e.loaded / e.total) * 100) : 0,
     })
   }
 
