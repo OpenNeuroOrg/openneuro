@@ -80,7 +80,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
         const fKey = commitFilesKey(datasetId, body.hexsha)
         const filesFromCache = await redis.get(fKey)
         if (filesFromCache) body.files = filesFromCache
-        else body.files = getDraftFiles(datasetId, body.hexsha)
+        else body.files = await getDraftFiles(datasetId, body.hexsha)
 
         // Eager caching for snapshots
         // Set the key and after resolve to body
