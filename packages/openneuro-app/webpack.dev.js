@@ -17,7 +17,20 @@ module.exports = merge(common, {
     host: '0.0.0.0',
     port: 9876,
     add: app => {
-      const historyOptions = {}
+      const historyOptions = {
+        disableDotRule: true,
+        // Needed to allow dots in virtual paths
+        rewrites: [
+          {
+            from: /.*\.(js|css|html)$/,
+            to: context => context.parsedUrl.pathname,
+          },
+          {
+            from: /.*/,
+            to: '/index.html',
+          },
+        ],
+      }
       app.use(convert(history(historyOptions)))
     },
   },
