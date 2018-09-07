@@ -79,7 +79,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
         // We should almost always get the fast path here
         const fKey = commitFilesKey(datasetId, body.hexsha)
         const filesFromCache = await redis.get(fKey)
-        if (filesFromCache) body.files = filesFromCache
+        if (filesFromCache) body.files = JSON.parse(filesFromCache)
         else body.files = await getDraftFiles(datasetId, body.hexsha)
 
         // Eager caching for snapshots
