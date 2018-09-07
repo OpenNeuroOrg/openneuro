@@ -56,7 +56,7 @@ export default {
   async getSnapshot(datasetId, options) {
     return new Promise((resolve, reject) => {
       this.querySnapshot(datasetId, options.tag, (err, data) => {
-        if (err) reject(err)
+        if (err) return reject(err)
         data = clone(data)
         data.data.snapshot._id = options.datasetId
         resolve(data)
