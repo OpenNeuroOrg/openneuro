@@ -21,9 +21,10 @@ export default {
         (err, res) => {
           if (err) {
             Raven.captureMessage('Unexpected ORCID failure', { err })
-            reject(
-              'An unexpected ORCID login failure occurred, please try again later.',
-            )
+            reject({
+              message:
+                'An unexpected ORCID login failure occurred, please try again later.',
+            })
           }
           const doc = new xmldoc.XmlDocument(res.body)
           let name = doc.valueWithPath(
@@ -41,22 +42,28 @@ export default {
 
           if (!name) {
             if (!firstname) {
-              reject(
-                'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
-              )
+              reject({
+                url: 'given',
+                message:
+                  'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
+              })
             } else if (!lastname) {
-              reject(
-                'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
-              )
+              reject({
+                type: 'family',
+                message:
+                  'Your ORCID account does not have a family name, or it is not public. Please fix your account before continuing.',
+              })
             } else {
               name = `${firstname} ${lastname}`
             }
           }
 
           if (!email) {
-            reject(
-              'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.',
-            )
+            reject({
+              type: 'email',
+              message:
+                'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.',
+            })
           }
 
           resolve({
