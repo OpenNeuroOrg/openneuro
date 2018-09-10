@@ -206,8 +206,8 @@ export const addFile = (datasetId, path, file) => {
           throw err
         }
       }),
-  ).then(data => {
-    return redis.del(draftPartialKey(datasetId)).then(() => data)
+  ).finally(() => {
+    return redis.del(draftPartialKey(datasetId))
   })
 }
 
@@ -230,8 +230,8 @@ export const updateFile = (datasetId, path, file) => {
         ),
       )
       .on('error', err => reject(err))
-  }).then(data => {
-    return redis.del(draftPartialKey(datasetId)).then(() => data)
+  }).finally(() => {
+    return redis.del(draftPartialKey(datasetId))
   })
 }
 
