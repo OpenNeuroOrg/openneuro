@@ -8,16 +8,15 @@ export const authCallback = (req, res, next) =>
   passport.authenticate('orcid', (err, user) => {
     if (err) {
       if (err.type) {
-        res.redirect(`/error/orcid/${err.type}`)
+        return res.redirect(`/error/orcid/${err.type}`)
       } else {
-        res.redirect('/error/orcid/unknown')
+        return res.redirect('/error/orcid/unknown')
       }
     }
     if (!user) {
-      res.redirect('/')
+      return res.redirect('/')
     }
     req.logIn(user, { session: false }, err => {
-      if (err) return next(err)
-      return res.redirect('/')
+      return next(err)
     })
   })(req, res, next)
