@@ -16,7 +16,7 @@ export const authCallback = (req, res, next) =>
     if (!user) {
       res.redirect('/')
     }
-    req.logIn(user, err => {
+    req.logIn(user, { session: false }, err => {
       if (err) return next(err)
       return res.redirect('/')
     })
