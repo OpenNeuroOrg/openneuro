@@ -79,27 +79,24 @@ export const createSnapshot = async (datasetId, tag, user) => {
         // We should almost always get the fast path here
         const fKey = commitFilesKey(datasetId, body.hexsha)
         const filesFromCache = await redis.get(fKey)
-        if (filesFromCache) body.files = JSON.parse(filesFromCache)
-        else body.files = await getDraftFiles(datasetId, body.hexsha)
+        if (filesFromCache) {
+          body.files = JSON.parse(filesFromCache)
+          // Eager caching for snapshots if all data is available
+          redis.set(sKey, JSON.stringify(body))
+        } else {
+          // Return the promise so queries won't block
+          body.files = getDraftFiles(datasetId, body.hexsha)
+        }
 
-        // Eager caching for snapshots
-        // Set the key and after resolve to body
-        return (
-          redis
-            .set(sKey, JSON.stringify(body))
-            // Metadata for snapshots
-            .then(() =>
-              createSnapshotMetadata(
-                datasetId,
-                tag,
-                body.hexsha,
-                body.created,
-              ).then(() => {
-                pubsub.publish('snapshotAdded', { id: datasetId })
-                return body
-              }),
-            )
-        )
+        return createSnapshotMetadata(
+          datasetId,
+          tag,
+          body.hexsha,
+          body.created,
+        ).then(() => {
+          pubsub.publish('snapshotAdded', { id: datasetId })
+          return body
+        })
       }),
   )
 }
