@@ -82,7 +82,7 @@ let JsonEditorStore = Reflux.createStore({
   saveFile: async function() {
     let jsonContent
     try {
-      jsonContent = JSON.stringify(JSON.parse(this.data.data), null, '\t')
+      jsonContent = JSON.stringify(JSON.parse(this.data.data), null, 4)
       const fileName = this.data.originalFile.name
 
       // make url match webkitURL for dataset_description.json
@@ -114,7 +114,6 @@ let JsonEditorStore = Reflux.createStore({
           let parentId = hasParentId ? this.data.originalFile.parentId : 'root'
           this.data.originalFile.parentId = parentId
           file.parentId = parentId
-          
 
           this.data.onSave(this.data.originalFile, file)
 
@@ -182,7 +181,7 @@ let JsonEditorStore = Reflux.createStore({
   setJsonContent: function(content) {
     let jsonContent
     try {
-      jsonContent = JSON.stringify(JSON.parse(content), null, '\t')
+      jsonContent = JSON.stringify(JSON.parse(content), null, 4)
     } catch (e) {
       jsonContent = content
     }
