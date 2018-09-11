@@ -43,7 +43,7 @@ export default {
           if (!name) {
             if (!firstname) {
               reject({
-                url: 'given',
+                type: 'given',
                 message:
                   'Your ORCID account does not have a given name, or it is not public. Please fix your account before continuing.',
               })
