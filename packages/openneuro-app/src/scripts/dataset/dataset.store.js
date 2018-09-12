@@ -672,7 +672,7 @@ let datasetStore = Reflux.createStore({
         }
       }
       file = new File(
-        [JSON.stringify(description)],
+        [JSON.stringify(description, null, 4)],
         'dataset_description.json',
         { type: 'application/json' },
       )
@@ -716,7 +716,7 @@ let datasetStore = Reflux.createStore({
       .updateFileFromString(
         datasetId,
         'dataset_description.json',
-        JSON.stringify(description),
+        JSON.stringify(description, null, 4),
         'application/json',
       )
       .then(() => {
@@ -799,8 +799,9 @@ let datasetStore = Reflux.createStore({
       <span>
         <span className="text-danger">
           You are about to {type} {file.name}
-        </span>. This action will run validation again. As a result, your
-        dataset could become invalid. Do you want to continue?
+        </span>
+        . This action will run validation again. As a result, your dataset could
+        become invalid. Do you want to continue?
       </span>
     )
   },
