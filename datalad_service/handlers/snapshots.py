@@ -5,7 +5,7 @@ from celery import chain
 
 from datalad_service.common.celery import dataset_queue
 from datalad_service.tasks.dataset import create_snapshot
-from datalad_service.tasks.snapshots import get_snapshots
+from datalad_service.tasks.snapshots import get_snapshot, get_snapshots
 from datalad_service.tasks.files import get_files
 from datalad_service.tasks.publish import publish_snapshot
 
@@ -17,13 +17,6 @@ class SnapshotResource(object):
     def __init__(self, store):
         self.store = store
 
-    def _get_snapshot(self, dataset, snapshot):
-        # get the hash associated with the commit
-        ds = self.store.get_dataset(dataset)
-        commit_data = ds.repo.repo.commit(snapshot)
-        hexsha = commit_data.hexsha
-        return {'id': '{}:{}'.format(dataset, snapshot), 'tag': snapshot, 'hexsha': hexsha}
-
     def on_get(self, req, resp, dataset, snapshot=None):
         """Get the tree of files for a snapshot."""
         queue = dataset_queue(dataset)
@@ -31,7 +24,8 @@ class SnapshotResource(object):
             ds = self.store.get_dataset(dataset)
             files = get_files.s(self.store.annex_path, dataset,
                                 branch=snapshot).apply_async(queue=queue)
-            response = self._get_snapshot(dataset, snapshot)
+            response = get_snapshot.s(
+                self.store.annex_path, dataset, snapshot).apply_async(queue=queue).get()
             response['files'] = files.get()
             resp.media = response
             resp.status = falcon.HTTP_OK
@@ -51,7 +45,8 @@ class SnapshotResource(object):
         created = create.apply_async()
         created.wait()
         if not created.failed():
-            resp.media = self._get_snapshot(dataset, snapshot)
+            resp.media = get_snapshot.s(
+                self.store.annex_path, dataset, snapshot).apply_async(queue=queue).get()
             resp.status = falcon.HTTP_OK
             # Publish after response
             publish = publish_snapshot.s(
