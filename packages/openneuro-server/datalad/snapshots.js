@@ -67,38 +67,35 @@ export const createSnapshot = async (datasetId, tag, user) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const indexKey = snapshotIndexKey(datasetId)
   const sKey = snapshotKey(datasetId, tag)
-  // Only create after the key is deleted to prevent race condition
-  return redis.del(indexKey).then(() =>
-    request
-      .post(url)
-      .set('Accept', 'application/json')
-      .set('Cookie', generateDataladCookie(config)(user))
-      .then(async ({ body }) => {
-        body.created = new Date()
+  return request
+    .post(url)
+    .set('Accept', 'application/json')
+    .set('Cookie', generateDataladCookie(config)(user))
+    .then(async ({ body }) => {
+      body.created = new Date()
 
-        // We should almost always get the fast path here
-        const fKey = commitFilesKey(datasetId, body.hexsha)
-        const filesFromCache = await redis.get(fKey)
-        if (filesFromCache) {
-          body.files = JSON.parse(filesFromCache)
-          // Eager caching for snapshots if all data is available
-          redis.set(sKey, JSON.stringify(body))
-        } else {
-          // Return the promise so queries won't block
-          body.files = getDraftFiles(datasetId, body.hexsha)
-        }
+      // We should almost always get the fast path here
+      const fKey = commitFilesKey(datasetId, body.hexsha)
+      const filesFromCache = await redis.get(fKey)
+      if (filesFromCache) {
+        body.files = JSON.parse(filesFromCache)
+        // Eager caching for snapshots if all data is available
+        redis.set(sKey, JSON.stringify(body))
+      } else {
+        // Return the promise so queries won't block
+        body.files = getDraftFiles(datasetId, body.hexsha)
+      }
 
-        return createSnapshotMetadata(
-          datasetId,
-          tag,
-          body.hexsha,
-          body.created,
-        ).then(() => {
-          pubsub.publish('snapshotAdded', { id: datasetId })
-          return body
-        })
-      }),
-  )
+      return (
+        createSnapshotMetadata(datasetId, tag, body.hexsha, body.created)
+          // Clear the index now that the new snapshot is ready
+          .then(() => redis.del(indexKey))
+          .then(() => {
+            pubsub.publish('snapshotAdded', { id: datasetId })
+            return body
+          })
+      )
+    })
 }
 
 // TODO - deleteSnapshot
