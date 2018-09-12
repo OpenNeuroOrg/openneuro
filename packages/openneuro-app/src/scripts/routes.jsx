@@ -25,6 +25,9 @@ const SearchResults = loadable(() =>
 const APIKey = loadable(() =>
   import(/* webpackChunkName: 'APIKey' */ './user/api.jsx'),
 )
+const ErrorRoute = loadable(() =>
+  import(/* webpackChunkName: 'Errors' */ './errors/errorRoute.jsx'),
+)
 
 // routes ----------------------------------------------------------------
 
@@ -40,6 +43,7 @@ const appRoutes = () => (
     <Route name="dataset" path="/datasets" component={Dataset} />
     <Route name="search" path="/search/:query?" component={SearchResults} />
     <Route name="admin" path="/admin" component={Admin} />
+    <Route name="error" path="/error" component={ErrorRoute} />
   </Switch>
 )
 
