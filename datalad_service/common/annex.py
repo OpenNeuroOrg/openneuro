@@ -12,6 +12,7 @@ SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
 
 def create_file_obj(dataset, tree, file_key):
+    """For the DataLad fallback, create one row in the files results."""
     filename, key = file_key
     # Annexed file
     if key:
@@ -26,8 +27,11 @@ def create_file_obj(dataset, tree, file_key):
 
 
 def compute_git_hash(path, size):
+    """Given a path and size, generate the git blob hash for a file."""
     git_obj_header = 'blob {}'.format(size).encode() + b'\x00'
     with open(path, 'r+b') as fd:
+        # Maybe we don't need mmap here?
+        # It profiles marginally faster with large json files
         with mmap(fd.fileno(), 0) as mm:
             blob_hash = hashlib.sha1()
             blob_hash.update(git_obj_header)
@@ -40,8 +44,11 @@ def get_repo_files(dataset, branch=None):
     if branch == None or branch == 'HEAD' or branch == dataset.repo.get_active_branch():
         files = []
         for dirpath, dirnames, filenames in os.walk(dataset.path, topdown=True):
+            # Filter out the '.'git' and '.datalad' dirs
+            # topdown=True lets us do this during the loop
             dirnames[:] = [d for d in dirnames if not (d == '.git' or d == '.datalad')]
             for f_name in filenames:
+                # Skip any .gitattributes
                 if f_name == '.gitattributes':
                     continue
                 f_path = os.path.join(dirpath, f_name)
@@ -58,6 +65,8 @@ def get_repo_files(dataset, branch=None):
                     # Regular git file
                     size = f_stat.st_size
                     # Compute git hash
+                    # An alternative would be to switch away from hashing
+                    # but this is pretty efficient since it only looks at non-annex files
                     blob_hash = compute_git_hash(f_path, size)
                     files.append({'filename': rel_path, 'size': size,
                                   'id': blob_hash})
