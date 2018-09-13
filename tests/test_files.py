@@ -106,10 +106,10 @@ def test_file_indexing(celery_app, client, new_dataset):
     print('not annexed files:', new_dataset.repo.is_under_annex(
         ['dataset_description.json']))
     assert response_content['files'] == [
-        {'filename': 'LICENSE', 'size': 8,
-            'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
         {'filename': 'dataset_description.json', 'size': 101,
             'id': '838d19644b3296cf32637bbdf9ae5c87db34842f'},
+        {'filename': 'LICENSE', 'size': 8,
+         'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
         {'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
             'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19}
     ]
