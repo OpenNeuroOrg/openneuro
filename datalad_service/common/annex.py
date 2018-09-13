@@ -31,7 +31,7 @@ def compute_git_hash(path, size):
     git_obj_header = 'blob {}'.format(size).encode() + b'\x00'
     with open(path, 'r+b') as fd:
         # Maybe we don't need mmap here?
-        # It profiles marginally faster with large json files
+        # It profiles marginally faster with contrived large files
         with mmap(fd.fileno(), 0) as mm:
             blob_hash = hashlib.sha1()
             blob_hash.update(git_obj_header)
@@ -44,7 +44,7 @@ def get_repo_files(dataset, branch=None):
     if branch == None or branch == 'HEAD' or branch == dataset.repo.get_active_branch():
         files = []
         for dirpath, dirnames, filenames in os.walk(dataset.path, topdown=True):
-            # Filter out the '.'git' and '.datalad' dirs
+            # Filter out the '.git' and '.datalad' dirs
             # topdown=True lets us do this during the loop
             dirnames[:] = [d for d in dirnames if not (d == '.git' or d == '.datalad')]
             for f_name in filenames:
