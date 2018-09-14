@@ -29,14 +29,16 @@ def create_file_obj(dataset, tree, file_key):
 def compute_git_hash(path, size):
     """Given a path and size, generate the git blob hash for a file."""
     git_obj_header = 'blob {}'.format(size).encode() + b'\x00'
-    with open(path, 'r+b') as fd:
-        # Maybe we don't need mmap here?
-        # It profiles marginally faster with contrived large files
-        with mmap(fd.fileno(), 0) as mm:
-            blob_hash = hashlib.sha1()
-            blob_hash.update(git_obj_header)
-            blob_hash.update(mm)
-            return blob_hash.hexdigest()
+    blob_hash = hashlib.sha1()
+    blob_hash.update(git_obj_header)
+    # If size is zero, skip opening and mmap
+    if size > 0:
+        with open(path, 'r+b') as fd:
+            # Maybe we don't need mmap here?
+            # It profiles marginally faster with contrived large files
+            with mmap(fd.fileno(), 0) as mm:
+                blob_hash.update(mm)
+    return blob_hash.hexdigest()
 
 
 def get_repo_files(dataset, branch=None):
