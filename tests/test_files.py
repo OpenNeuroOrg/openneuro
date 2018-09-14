@@ -115,6 +115,21 @@ def test_file_indexing(celery_app, client, new_dataset):
     ]
 
 
+def test_empty_file(celery_app, client, new_dataset):
+    """Catch any regressions for 0 length files."""
+    ds_id = os.path.basename(new_dataset.path)
+    # Post an empty file
+    response = client.simulate_post(
+        '/datasets/{}/files/LICENSE'.format(ds_id), body='')
+    assert response.status == falcon.HTTP_OK
+    # Get the files in the committed tree
+    response = client.simulate_get('/datasets/{}/files'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    response_content = json.loads(response.content)
+    assert response_content['files'] == [{'filename': 'dataset_description.json', 'id': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'size': 101}, {
+        'filename': 'LICENSE', 'id': 'e69de29bb2d1d6434b8b29ae775ad8c2e48c5391', 'size': 0}]
+
+
 def test_untracked_file_index(celery_app, client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # Post test file
