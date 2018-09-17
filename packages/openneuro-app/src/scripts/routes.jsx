@@ -28,6 +28,9 @@ const APIKey = loadable(() =>
 const ErrorRoute = loadable(() =>
   import(/* webpackChunkName: 'Errors' */ './errors/errorRoute.jsx'),
 )
+const PETDummy = loadable(() =>
+  import(/* webpackChunkName: 'PET' */ './pet/dummy.jsx'),
+)
 
 // routes ----------------------------------------------------------------
 
@@ -44,6 +47,7 @@ const appRoutes = () => (
     <Route name="search" path="/search/:query?" component={SearchResults} />
     <Route name="admin" path="/admin" component={Admin} />
     <Route name="error" path="/error" component={ErrorRoute} />
+    <Route name="pet-landing" path="/pet" component={PETDummy} />
   </Switch>
 )
 

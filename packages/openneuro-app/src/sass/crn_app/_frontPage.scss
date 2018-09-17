@@ -29,6 +29,9 @@
     margin: 20px 0 0;
 }
 
+.pet-block {
+    height: 97%;
+}
 .welcome-block {
     padding: 0;
     position: relative;
@@ -65,7 +68,10 @@
         font-weight: 100;
         margin: 0 0 15px;
     }
-
+    h1.pet-header {
+        margin-top: 165px;
+    }
+ 
     p {
         font-size: 22px;
         font-weight: 100;
