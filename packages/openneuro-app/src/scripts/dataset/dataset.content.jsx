@@ -280,7 +280,7 @@ class DatasetContent extends Reflux.Component {
       )
     }
 
-    if (!dataset.status.incomplete) {
+    if (!dataset.status.incomplete || 'snapshot_version' in dataset) {
       return (
         <div className="col-xs-12">
           <div className="file-structure fade-in panel-group">
@@ -318,7 +318,8 @@ class DatasetContent extends Reflux.Component {
     if (this.state.datasets.dataset.uploaderSubscribed) {
       uploaderFollowing = (
         <span className="uploader-following">
-          <i className="fa fa-user" />Uploader is Following
+          <i className="fa fa-user" />
+          Uploader is Following
         </span>
       )
     }
@@ -398,7 +399,8 @@ class DatasetContent extends Reflux.Component {
   _incompleteMessage(dataset) {
     if (
       dataset.status.incomplete &&
-      this.state.datasets.currentUploadId !== dataset._id
+      this.state.datasets.currentUploadId !== dataset._id &&
+      !('snapshot_version' in dataset)
     ) {
       return (
         <div className="col-xs-12 incomplete-dataset">
