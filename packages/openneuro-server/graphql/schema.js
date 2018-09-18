@@ -13,8 +13,6 @@ const typeDefs = `
     dataset(id: ID!): Dataset
     # All datasets
     datasets: [Dataset]
-    # Check for server side login status
-    whoami: User
     # Get one user
     user(id: ID!): User
     # Get a list of users
@@ -149,6 +147,8 @@ const typeDefs = `
     files(untracked: Boolean): [DatasetFile]
     # Flag if a dataset operation is incomplete (and may be reverted or resumed)
     partial: Boolean
+    # dataset_description.json fields
+    description: Description
   }
 
   # Tagged snapshot of a draft
@@ -165,8 +165,34 @@ const typeDefs = `
     summary: Summary
     # bids-validator issues for this snapshot
     issues: [ValidationIssue]
+    # Snapshot files
     files: [DatasetFile]
+    # dataset_description.json fields
+    description: Description
+    # Snapshot usage and download statistics
     analytics: Analytic
+  }
+
+  # Contents of dataset_description.json
+  type Description {
+    # Name of the dataset
+    Name: String!
+    # The version of the BIDS standard that was used
+    BIDSVersion: String!
+    # License for distribution - see BIDS specification (https://bids.neuroimaging.io) appendix II for recommended values
+    License: String
+    # List of individuals who contributed to the creation/curation of the dataset
+    Authors: [Author]
+    # Text acknowledging contributions of individuals or institutions beyond those listed in Authors or Funding.
+    Acknowledgements: [String]
+    # Instructions how researchers using this dataset should acknowledge the original authors. This field can also be used to define a publication that should be cited in publications that use the dataset.
+    HowToAcknowledge: String
+    # List of sources of funding (grant numbers)
+    Funding: [String]
+    # List of references to publication that contain information on the dataset, or links
+    ReferencesAndLinks: [String]
+    # The Document Object Identifier of the dataset (not the corresponding paper).
+    DatasetDOI: String
   }
 
   #User permissions on a dataset
