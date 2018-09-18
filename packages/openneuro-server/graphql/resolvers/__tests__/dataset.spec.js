@@ -18,7 +18,7 @@ describe('dataset resolvers', () => {
         {
           label: 'testing dataset',
         },
-        { user: { accessToken: '123456' } },
+        { user: { accessToken: '123456' }, userInfo: {} },
       )
       expect(dsId).toEqual(expect.stringMatching(/^ds[0-9]{6}$/))
       done()
