@@ -13,6 +13,7 @@ import { redis } from '../libs/redis.js'
 import { getAccessionNumber } from '../libs/dataset'
 import { updateDatasetRevision, draftPartialKey } from './draft.js'
 import { createSnapshot } from './snapshots.js'
+import { fileUrl } from './files.js'
 const c = mongo.collections
 const uri = config.datalad.uri
 
@@ -126,36 +127,6 @@ export const getDatasets = options => {
   } else {
     return c.crn.datasets.find({ public: true }).toArray()
   }
-}
-
-/**
- * Convert to URL compatible path
- * @param {String} path
- */
-export const encodeFilePath = path => {
-  return path.replace(new RegExp('/', 'g'), ':')
-}
-
-/**
- * Convert to from URL compatible path fo filepath
- * @param {String} path
- */
-export const decodeFilePath = path => {
-  return path.replace(new RegExp(':', 'g'), '/')
-}
-
-/**
- * Generate file URL for DataLad service
- * @param {String} datasetId
- * @param {String} path - Relative path for the file
- * @param {String} filename
- */
-const fileUrl = (datasetId, path, filename) => {
-  // If path is provided, this is a subdirectory, otherwise a root level file.
-  const filePath = path ? [path, filename].join('/') : filename
-  const fileName = filename ? encodeFilePath(filePath) : encodeFilePath(path)
-  const url = `http://${uri}/datasets/${datasetId}/files/${fileName}`
-  return url
 }
 
 // Files to skip in uploads
@@ -278,13 +249,6 @@ export const updatePublic = (datasetId, publicFlag) => {
     { $set: { public: publicFlag } },
     { upsert: true },
   )
-
-  // TODO: send request to backend to initiate uplaod to s3 bucket
-  // const url = `${uri}/datasets/${datasetId}/updatePublic/${publicFlag}`
-  // return request
-  //   .post(url)
-  //   .set('Accept', 'application/json')
-  //   .then(({ body }) => body)
 }
 
 export const getDatasetAnalytics = (datasetId, tag) => {
