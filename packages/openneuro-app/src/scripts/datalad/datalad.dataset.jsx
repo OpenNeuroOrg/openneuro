@@ -18,6 +18,7 @@ const getDatasetPage = gql`
         email
       }
       draft {
+        id
         modified
         files {
           id
