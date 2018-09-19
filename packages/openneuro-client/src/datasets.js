@@ -5,7 +5,6 @@ export const getDataset = gql`
     dataset(id: $id) {
       id
       _id: id
-      label
       created
       public
       uploader {
@@ -15,6 +14,9 @@ export const getDataset = gql`
       }
       draft {
         id
+        description {
+          Name
+        }
         modified
         files {
           id
@@ -81,7 +83,6 @@ export const getDatasets = gql`
       id
       _id: id
       created
-      label
       uploader {
         id
       }
@@ -108,6 +109,9 @@ export const getDatasets = gql`
           tasks
           size
           totalFiles
+        }
+        description {
+          Name
         }
       }
       analytics {
