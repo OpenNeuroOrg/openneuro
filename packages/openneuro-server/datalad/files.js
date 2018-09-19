@@ -1,4 +1,6 @@
+import request from 'superagent'
 import config from '../config.js'
+import { getDraftFiles } from './draft.js'
 
 /**
  * Hexsha files cache
@@ -37,4 +39,15 @@ export const fileUrl = (datasetId, path, filename) => {
     config.datalad.uri
   }/datasets/${datasetId}/files/${fileName}`
   return url
+}
+
+/**
+ * Get the faster object URL for a file
+ * @param {string} datasetId - Dataset accession number
+ * @param {string} objectId - Git object id, a sha1 hash for git objects or key for annexed files
+ */
+export const objectUrl = (datasetId, objectId) => {
+  return `http://${
+    config.datalad.uri
+  }/datasets/${datasetId}/objects/${objectId}`
 }
