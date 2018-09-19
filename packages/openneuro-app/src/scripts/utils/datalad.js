@@ -33,24 +33,13 @@ export default {
     })
   },
 
-  async getDataset(datasetId) {
-    const partialQuery = (await this.checkPartial(datasetId)).data
-    const partial = partialQuery ? partialQuery.partial : null
-    if (!partial) {
-      return new Promise((resolve, reject) => {
-        this.queryDataset(datasetId, (err, data) => {
-          if (err) reject(err)
-          resolve(data)
-        })
+  getDataset(datasetId) {
+    return new Promise((resolve, reject) => {
+      this.queryDataset(datasetId, (err, data) => {
+        if (err) reject(err)
+        resolve(data)
       })
-    } else {
-      return new Promise((resolve, reject) => {
-        this.queryPartialDataset(datasetId, (err, data) => {
-          if (err) reject(err)
-          resolve(data)
-        })
-      })
-    }
+    })
   },
 
   async getSnapshot(datasetId, options) {
@@ -66,7 +55,7 @@ export default {
 
   queryDataset(datasetId, callback) {
     const query = datasets.getDataset
-    client
+    return client
       .query({
         query: query,
         variables: {
@@ -89,25 +78,6 @@ export default {
             : []
         }
 
-        return callback(null, data)
-      })
-      .catch(err => {
-        // console.log('error in datasetQuery:', err)
-        return callback(err, null)
-      })
-  },
-
-  queryPartialDataset(datasetId, callback) {
-    const query = datasets.getPartialDataset
-    client
-      .query({
-        query: query,
-        variables: {
-          id: bids.decodeId(datasetId),
-        },
-      })
-      .then(data => {
-        data = clone(data)
         return callback(null, data)
       })
       .catch(err => {
