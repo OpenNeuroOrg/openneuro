@@ -1,6 +1,7 @@
 import * as datalad from '../../datalad/snapshots.js'
 import { dataset, analytics } from './dataset.js'
 import { checkDatasetWrite } from '../permissions.js'
+import { description } from './description.js'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -10,6 +11,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
   return datalad.getSnapshot(datasetId, tag).then(snapshot => ({
     ...snapshot,
     dataset: () => dataset(snapshot, { id: datasetId }, context),
+    description: () => description(obj, { datasetId, revision: tag }),
   }))
 }
 

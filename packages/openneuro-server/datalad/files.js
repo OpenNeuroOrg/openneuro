@@ -1,6 +1,4 @@
-import request from 'superagent'
 import config from '../config.js'
-import { getDraftFiles } from './draft.js'
 
 /**
  * Hexsha files cache
