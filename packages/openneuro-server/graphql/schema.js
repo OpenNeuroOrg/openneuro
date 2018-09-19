@@ -120,7 +120,6 @@ const typeDefs = `
   type Dataset { 
     id: ID!
     created: DateTime!
-    label: String!
     uploader: User
     public: Boolean
     draft: Draft
@@ -137,8 +136,6 @@ const typeDefs = `
     dataset: Dataset
     # Last edit timestamp
     modified: DateTime
-    # Draft copy of authors list
-    authors: [Author]
     # Validator summary
     summary: Summary
     # Validator issues
@@ -160,7 +157,6 @@ const typeDefs = `
     # The parent dataset for this snapshot
     dataset: Dataset!
     created: DateTime
-    authors: [Author]
     # bids-validator summary of this snapshot
     summary: Summary
     # bids-validator issues for this snapshot
@@ -182,7 +178,7 @@ const typeDefs = `
     # License for distribution - see BIDS specification (https://bids.neuroimaging.io) appendix II for recommended values
     License: String
     # List of individuals who contributed to the creation/curation of the dataset
-    Authors: [Author]
+    Authors: [String]
     # Text acknowledging contributions of individuals or institutions beyond those listed in Authors or Funding.
     Acknowledgements: [String]
     # Instructions how researchers using this dataset should acknowledge the original authors. This field can also be used to define a publication that should be cited in publications that use the dataset.
