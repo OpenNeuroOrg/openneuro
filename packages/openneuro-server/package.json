@@ -87,12 +87,6 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "globalSetup": "./jestSetup.js",
-    "collectCoverageFrom": [
-      "**/*.js",
-      "!**/*.spec.js",
-      "!**/node_modules/**",
-      "!**/vendor/**"
-    ]
+    "globalSetup": "./jestSetup.js"
   }
 }

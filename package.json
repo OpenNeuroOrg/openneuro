@@ -42,6 +42,7 @@
     ],
     "collectCoverageFrom": [
       "**/*.{js,jsx}",
+      "!**/papaya.js",
       "!**/*.spec.js",
       "!**/node_modules/**",
       "!**/vendor/**"
