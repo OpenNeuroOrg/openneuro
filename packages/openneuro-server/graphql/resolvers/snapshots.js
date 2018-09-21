@@ -11,7 +11,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
   return datalad.getSnapshot(datasetId, tag).then(snapshot => ({
     ...snapshot,
     dataset: () => dataset(snapshot, { id: datasetId }, context),
-    description: () => description(obj, { datasetId, revision: tag }),
+    description: () => description(obj, { datasetId, tag }),
   }))
 }
 

@@ -193,6 +193,20 @@ export const getSnapshot = async (datasetId, tag) => {
   })
 }
 
+/**
+ * Get the hexsha for a snapshot from the datasetId and tag
+ *
+ * Returns null for snapshots which do not exist
+ *
+ * @param {string} datasetId
+ * @param {string} tag
+ */
+export const getSnapshotHexsha = (datasetId, tag) => {
+  return c.crn.snapshots
+    .findOne({ datasetId, tag }, { revision: true })
+    .then(result => (result ? result.hexsha : null))
+}
+
 export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
   //insert the file url data into mongo
   return c.crn.files
