@@ -1,5 +1,5 @@
 import request from 'superagent'
-import { getDescriptionObject } from '../description.js'
+import { getDescriptionObject, defaultDescription } from '../description.js'
 
 // Mock requests to Datalad service
 jest.mock('superagent')
@@ -9,6 +9,7 @@ describe('datalad dataset descriptions', () => {
     request.post.mockClear()
     request.__setMockResponse({
       body: { Name: 'Balloon Analog Risk-taking Task' },
+      type: 'application/json',
     })
     getDescriptionObject('ds000001')([
       { filename: 'dataset_description.json', id: '12345' },
@@ -17,5 +18,16 @@ describe('datalad dataset descriptions', () => {
       end()
     })
   })
-  it('handles a corrupted response', () => {})
+  it('handles a corrupted response', end => {
+    request.post.mockClear()
+    request.__setMockResponse({
+      body: Buffer.from('0x5f3759df', 'hex'),
+    })
+    getDescriptionObject('ds000001')([
+      { filename: 'dataset_description.json', id: '12345' },
+    ]).then(description => {
+      expect(description).toEqual(defaultDescription)
+      end()
+    })
+  })
 })

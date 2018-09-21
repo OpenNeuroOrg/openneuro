@@ -6,6 +6,11 @@ import { objectUrl } from './files.js'
 import { getDraftFiles } from './draft.js'
 import { getSnapshotHexsha } from './snapshots.js'
 
+export const defaultDescription = {
+  Name: 'Unnamed Dataset',
+  BIDSVersion: '1.1.1',
+}
+
 /**
  * Find dataset_description.json id and fetch description object
  * @param {string} datasetId
@@ -13,12 +18,17 @@ import { getSnapshotHexsha } from './snapshots.js'
  */
 export const getDescriptionObject = datasetId => files => {
   const file = files.find(f => f.filename === 'dataset_description.json')
-  try {
-    return request.get(objectUrl(datasetId, file.id)).then(({ body }) => body)
-  } catch (e) {
-    // dataset_description does not exist or is not JSON, return null fields
-    return Promise.resolve(null)
-  }
+  return request
+    .get(objectUrl(datasetId, file.id))
+    .then(({ body, type }) => {
+      // Guard against non-JSON responses
+      if (type === 'application/json') return body
+      else throw new Error('dataset_description.json is not JSON')
+    })
+    .catch(() => {
+      // dataset_description does not exist or is not JSON, return default fields
+      return defaultDescription
+    })
 }
 
 /**
