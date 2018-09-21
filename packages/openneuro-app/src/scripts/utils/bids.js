@@ -451,6 +451,7 @@ export default {
 
     if (project.snapshot_version) {
       dataset.snapshot_version = project.snapshot_version
+      dataset.label = dataset.description.Name
       if (!dataset.description.DatasetDOI) {
         this.getDoi(project.linkId, project.snapshot_version, doi => {
           dataset.description.DatasetDOI = doi
