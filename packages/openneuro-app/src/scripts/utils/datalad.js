@@ -8,11 +8,10 @@ import request from './request'
 const client = getClient(`${config.url}/crn/graphql`)
 export default {
   async getDatasets(options) {
-    const query = datasets.getDatasets
     return new Promise((resolve, reject) => {
       client
         .query({
-          query: query,
+          query: datasets.getDatasets,
           fetchPolicy: 'no-cache',
         })
         .then(data => {
