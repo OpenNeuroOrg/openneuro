@@ -122,27 +122,6 @@ export const getDatasets = gql`
   }
 `
 
-export const getPartialDataset = gql`
-  query dataset($id: ID!) {
-    dataset(id: $id) {
-      id
-      _id: id
-      label
-      created
-      public
-      uploader {
-        id
-        name
-        email
-      }
-      draft {
-        id
-        partial
-      }
-    }
-  }
-`
-
 export const getDatasetIssues = gql`
   query dataset($datasetId: ID!) {
     dataset(id: $datasetId) {
@@ -183,7 +162,6 @@ export const createDataset = gql`
   mutation createDataset($label: String!) {
     createDataset(label: $label) {
       id
-      label
     }
   }
 `
