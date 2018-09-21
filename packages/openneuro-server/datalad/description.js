@@ -14,21 +14,25 @@ export const defaultDescription = {
 /**
  * Find dataset_description.json id and fetch description object
  * @param {string} datasetId
- * @param {array[object]} files
+ * @returns {(files: [Object]) => Promise} Promise resolving to dataset_description.json contents or defaults
  */
 export const getDescriptionObject = datasetId => files => {
   const file = files.find(f => f.filename === 'dataset_description.json')
-  return request
-    .get(objectUrl(datasetId, file.id))
-    .then(({ body, type }) => {
-      // Guard against non-JSON responses
-      if (type === 'application/json') return body
-      else throw new Error('dataset_description.json is not JSON')
-    })
-    .catch(() => {
-      // dataset_description does not exist or is not JSON, return default fields
-      return defaultDescription
-    })
+  if (file) {
+    return request
+      .get(objectUrl(datasetId, file.id))
+      .then(({ body, type }) => {
+        // Guard against non-JSON responses
+        if (type === 'application/json') return body
+        else throw new Error('dataset_description.json is not JSON')
+      })
+      .catch(() => {
+        // dataset_description does not exist or is not JSON, return default fields
+        return defaultDescription
+      })
+  } else {
+    return Promise.resolve(defaultDescription)
+  }
 }
 
 /**

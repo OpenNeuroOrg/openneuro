@@ -30,4 +30,12 @@ describe('datalad dataset descriptions', () => {
       end()
     })
   })
+  it('works without a dataset_description.json being present', end => {
+    getDescriptionObject('ds000001')([
+      { filename: 'LICENSE', id: '12345' },
+    ]).then(description => {
+      expect(description).toEqual(defaultDescription)
+      end()
+    })
+  })
 })
