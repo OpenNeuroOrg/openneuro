@@ -16,9 +16,8 @@ export const getSnapshot = gql`
       _id: id
       tag
       created
-      authors {
-        ORCID
-        name
+      description {
+        Name
       }
       summary {
         size
