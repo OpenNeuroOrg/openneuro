@@ -24,7 +24,6 @@ addMockFunctionsToSchema({
   mocks: {
     Dataset: (root, { id }) => ({
       id: () => (id ? id : datasetIds.next().value),
-      label: 'Test Dataset',
       created: testTime,
       modified: testTime,
     }),
