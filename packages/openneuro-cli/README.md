@@ -8,7 +8,7 @@ Install globally with [yarn](https://yarnpkg.com/):
 
 `yarn global add openneuro-cli`
 
-(make sure the installtion folder is part of your `PATH` by adding `export PATH="$(yarn global bin):$PATH"` to `~/.bashrc`)
+(make sure the installation folder is part of your `PATH` by adding `export PATH="$(yarn global bin):$PATH"` to `~/.bashrc`)
 
 Or with [npm](https://www.npmjs.com/):
 
