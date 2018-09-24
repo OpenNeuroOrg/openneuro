@@ -16,7 +16,7 @@ import { withRouter } from 'react-router-dom'
  * Usable from anywhere, so this button sets up a modal and
  * virtual router to navigate within it.
  */
-class UploadClient extends React.Component {
+export class UploadClient extends React.Component {
   constructor(props) {
     super(props)
 
@@ -127,7 +127,7 @@ class UploadClient extends React.Component {
    */
   selectFiles({ files }) {
     // First get the name from dataset_description.json
-    new Promise(resolve => {
+    return new Promise(resolve => {
       const descriptionFile = [...files].find(
         f => f.name === 'dataset_description.json',
       )
@@ -185,7 +185,7 @@ class UploadClient extends React.Component {
   /**
    * Replace Name in dataset_description and return a new file list
    * @param {string} Name - the new value for dataset Name field
-   * @returns {[File|Blob]} - New list of files with a replaced dataset_description.json
+   * @returns {File[]} - New list of files with a replaced dataset_description.json
    */
   _editName(Name) {
     // Merge in the new name for a new dataset_description object
