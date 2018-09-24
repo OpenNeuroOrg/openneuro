@@ -1,7 +1,10 @@
 import * as datalad from '../../datalad/dataset.js'
-import * as snapshots from '../../datalad/snapshots.js'
 import pubsub from '../pubsub.js'
+import { snapshots } from './snapshots.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
+import { user } from './user.js'
+import { draft } from './draft.js'
+import { permissions } from './permissions.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
@@ -38,24 +41,6 @@ export const deleteDataset = (obj, { id }, { user, userInfo }) => {
       pubsub.publish('datasetDeleted', { id })
       return deleted
     })
-  })
-}
-
-/**
- * Tag the working tree for a dataset
- */
-export const createSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
-  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
-    return snapshots.createSnapshot(datasetId, tag, userInfo)
-  })
-}
-
-/**
- * Remove a tag from a dataset
- */
-export const deleteSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
-  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
-    return snapshots.deleteSnapshot(datasetId, tag)
   })
 }
 
@@ -158,16 +143,6 @@ export const updatePublic = (
 }
 
 /**
- * Update the file urls within a snapshot
- */
-export const updateSnapshotFileUrls = (obj, { fileUrls }) => {
-  const datasetId = fileUrls.datasetId
-  const snapshotTag = fileUrls.tag
-  const files = fileUrls.files
-  return snapshots.updateSnapshotFileUrls(datasetId, snapshotTag, files)
-}
-
-/**
  * Get analytics for a dataset or snapshot
  */
 export const analytics = async obj => {
@@ -187,3 +162,23 @@ export const analytics = async obj => {
 export const trackAnalytics = (obj, { datasetId, tag, type }) => {
   return datalad.trackAnalytics(datasetId, tag, type)
 }
+
+/**
+ * Dataset object
+ */
+const Dataset = {
+  uploader: ds => user(ds, { id: ds.uploader }),
+  draft,
+  snapshots,
+  analytics: ds => analytics(ds),
+  permissions: ds =>
+    permissions(ds).then(p =>
+      p.map(permission =>
+        Object.assign(permission, {
+          user: user(ds, { id: permission.userId }),
+        }),
+      ),
+    ),
+}
+
+export default Dataset

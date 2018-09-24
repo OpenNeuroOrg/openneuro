@@ -9,7 +9,6 @@ const getDatasetPage = gql`
   query dataset($datasetId: ID!) {
     dataset(id: $datasetId) {
       id
-      label
       created
       public
       uploader {
@@ -18,7 +17,12 @@ const getDatasetPage = gql`
         email
       }
       draft {
+        id
         modified
+        description {
+          Name
+          Authors
+        }
         files {
           id
           filename

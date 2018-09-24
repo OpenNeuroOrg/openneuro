@@ -5,7 +5,6 @@ export const getDataset = gql`
     dataset(id: $id) {
       id
       _id: id
-      label
       created
       public
       uploader {
@@ -15,6 +14,9 @@ export const getDataset = gql`
       }
       draft {
         id
+        description {
+          Name
+        }
         modified
         files {
           id
@@ -81,7 +83,6 @@ export const getDatasets = gql`
       id
       _id: id
       created
-      label
       uploader {
         id
       }
@@ -109,31 +110,13 @@ export const getDatasets = gql`
           size
           totalFiles
         }
+        description {
+          Name
+        }
       }
       analytics {
         views
         downloads
-      }
-    }
-  }
-`
-
-export const getPartialDataset = gql`
-  query dataset($id: ID!) {
-    dataset(id: $id) {
-      id
-      _id: id
-      label
-      created
-      public
-      uploader {
-        id
-        name
-        email
-      }
-      draft {
-        id
-        partial
       }
     }
   }
@@ -179,7 +162,6 @@ export const createDataset = gql`
   mutation createDataset($label: String!) {
     createDataset(label: $label) {
       id
-      label
     }
   }
 `

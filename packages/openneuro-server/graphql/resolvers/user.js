@@ -13,10 +13,6 @@ export const users = () => {
   return User.find().exec()
 }
 
-export const whoami = () => {
-  return {}
-}
-
 export const removeUser = (obj, { id }) => {
   return User.removeOne({ id }).exec()
 }
@@ -24,3 +20,5 @@ export const removeUser = (obj, { id }) => {
 export const setAdmin = (obj, { id, admin }) => {
   return User.findOneAndUpdate({ id }, { admin }).exec()
 }
+
+export default user

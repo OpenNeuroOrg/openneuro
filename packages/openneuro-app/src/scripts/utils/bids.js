@@ -416,7 +416,7 @@ export default {
       /** same as original **/
       _id: this.encodeId(project._id),
       linkID: this.decodeId(project._id),
-      label: description ? description.Name : project.label,
+      label: project.draft.description ? project.draft.description.Name : null,
       group: project.uploader ? project.uploader.id : null,
       created: project.created,
       modified:
@@ -451,6 +451,7 @@ export default {
 
     if (project.snapshot_version) {
       dataset.snapshot_version = project.snapshot_version
+      dataset.label = dataset.description.Name
       if (!dataset.description.DatasetDOI) {
         this.getDoi(project.linkId, project.snapshot_version, doi => {
           dataset.description.DatasetDOI = doi

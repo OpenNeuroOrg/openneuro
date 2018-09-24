@@ -1,50 +1,67 @@
-'use strict'
+// mock for superagent - __mocks__/superagent.js
 
-var mockDelay
-var mockError
-var mockResponse = {
-  status: function() {
+let mockDelay
+let mockError
+let mockResponse = {
+  status() {
     return 200
   },
-  ok: true,
+  ok() {
+    return true
+  },
+  body: {},
   get: jest.fn(),
   toError: jest.fn(),
 }
 
-var Request = {
-  post: jest.fn().mockReturnThis(),
-  get: jest.fn().mockReturnThis(),
-  send: jest.fn().mockReturnThis(),
-  query: jest.fn().mockReturnThis(),
-  field: jest.fn().mockReturnThis(),
-  set: jest.fn().mockReturnThis(),
-  accept: jest.fn().mockReturnThis(),
-  timeout: jest.fn().mockReturnThis(),
-  end: jest.fn().mockImplementation(function(callback) {
-    if (mockDelay) {
-      this.delayTimer = setTimeout(callback, 0, mockError, mockResponse)
+const createRequestStub = obj => jest.fn(() => obj)
+
+function Request() {
+  let self = this
+  self.mockResponse = mockResponse
+  self.mockDelay = mockDelay
+  self.mockError = mockError
+
+  self.post = createRequestStub(self)
+  self.get = createRequestStub(self)
+  self.send = createRequestStub(self)
+  self.query = createRequestStub(self)
+  self.field = createRequestStub(self)
+  self.set = createRequestStub(self)
+  self.accept = createRequestStub(self)
+  self.timeout = createRequestStub(self)
+  self.then = cb => {
+    return new Promise((resolve, reject) => {
+      if (self.mockError) {
+        return reject(self.mockError)
+      }
+      return resolve(cb(self.mockResponse))
+    })
+  }
+  self.end = jest.fn().mockImplementation(function(callback) {
+    if (self.mockDelay) {
+      this.delayTimer = setTimeout(
+        callback,
+        0,
+        self.mockError,
+        self.mockResponse,
+      )
 
       return
     }
 
-    callback(mockError, mockResponse)
-  }),
-  then: jest.fn().mockImplementation(cb => {
-    cb(mockResponse)
-  }),
-
-  __setMockDelay: function(boolValue) {
-    mockDelay = boolValue
-  },
-  __setMockResponse: function(mockRes) {
-    mockResponse = mockRes
-  },
-  __setMockError: function(mockErr) {
-    mockError = mockErr
-  },
-  __setMockResponseBody: function(body) {
-    mockResponse.body = body
-  },
+    callback(self.mockError, self.mockResponse)
+  })
+  //expose helper methods for tests to set
+  self.__setMockDelay = boolValue => {
+    self.mockDelay = boolValue
+  }
+  self.__setMockResponse = mockRes => {
+    self.mockResponse = mockRes
+  }
+  self.__setMockError = mockErr => {
+    self.mockError = mockErr
+  }
 }
 
-module.exports = Request
+module.exports = new Request()

@@ -23,3 +23,14 @@ export const draftFilesUpdated = {
 export const permissionsUpdated = {
   subscribe: () => pubsub.asyncIterator('permissionsUpdated'),
 }
+
+const Subscription = {
+  datasetDeleted,
+  datasetValidationUpdated,
+  draftFilesUpdated,
+  snapshotAdded,
+  snapshotDeleted,
+  permissionsUpdated,
+}
+
+export default Subscription

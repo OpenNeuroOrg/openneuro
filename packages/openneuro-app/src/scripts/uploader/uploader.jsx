@@ -16,7 +16,7 @@ import { withRouter } from 'react-router-dom'
  * Usable from anywhere, so this button sets up a modal and
  * virtual router to navigate within it.
  */
-class UploadClient extends React.Component {
+export class UploadClient extends React.Component {
   constructor(props) {
     super(props)
 
@@ -40,6 +40,8 @@ class UploadClient extends React.Component {
       selectedFiles: {},
       // Relabel dataset during upload
       name: '',
+      // Dataset description - null if it doesn't exist
+      description: null,
       progress: 0,
       // Resume an existing dataset
       resume: null,
@@ -124,16 +126,41 @@ class UploadClient extends React.Component {
    * @param {object} event onChange event from multi file select
    */
   selectFiles({ files }) {
-    if (files.length > 0) {
-      this.setState({
-        files,
-        selectedFiles: files,
-        location: locationFactory('/upload/rename'),
-        name: files[0].webkitRelativePath.split('/')[0],
-      })
-    } else {
-      throw new Error('No files selected')
-    }
+    // First get the name from dataset_description.json
+    return new Promise(resolve => {
+      const descriptionFile = [...files].find(
+        f => f.name === 'dataset_description.json',
+      )
+      if (!descriptionFile) {
+        // Use directory name if no dataset_description
+        resolve(files[0].webkitRelativePath.split('/')[0])
+      }
+      const descriptionReader = new FileReader()
+      descriptionReader.onload = event => {
+        try {
+          // Read Name field from dataset_description.json
+          const description = JSON.parse(event.target.result)
+          // Save description to state for writing later
+          this.setState({ description })
+          resolve(description.Name)
+        } catch (e) {
+          // Fallback to directory name if JSON parse failed
+          resolve(files[0].webkitRelativePath.split('/')[0])
+        }
+      }
+      descriptionReader.readAsText(descriptionFile)
+    }).then(name => {
+      if (files.length > 0) {
+        this.setState({
+          files,
+          selectedFiles: files,
+          location: locationFactory('/upload/rename'),
+          name,
+        })
+      } else {
+        throw new Error('No files selected')
+      }
+    })
   }
 
   upload() {
@@ -156,6 +183,33 @@ class UploadClient extends React.Component {
   }
 
   /**
+   * Replace Name in dataset_description and return a new file list
+   * @param {string} Name - the new value for dataset Name field
+   * @returns {File[]} - New list of files with a replaced dataset_description.json
+   */
+  _editName(Name) {
+    // Merge in the new name for a new dataset_description object
+    const description = {
+      ...this.state.description,
+      Name,
+    }
+    // Don't mutate this.state.files
+    const updatedFiles = [...this.state.files]
+    const fileIndex = updatedFiles.findIndex(
+      f => f.name === 'dataset_description.json',
+    )
+    // Hold onto webkitRelativePath for the new file
+    const webkitRelativePath = updatedFiles[fileIndex].webkitRelativePath
+    // Must be a Blob since File has immutable properties
+    updatedFiles[fileIndex] = new Blob([JSON.stringify(description, null, 4)], {
+      type: 'application/json',
+    })
+    updatedFiles[fileIndex].name = 'dataset_description.json'
+    updatedFiles[fileIndex].webkitRelativePath = webkitRelativePath
+    return updatedFiles
+  }
+
+  /**
    * Do the actual upload
    */
   _addFiles() {
@@ -166,8 +220,10 @@ class UploadClient extends React.Component {
       null,
       xhrFetch(this),
     )
+    // Uploads the version of files with dataset_description formatted and Name updated
+    const filesToUpload = this._editName(this.state.name)
     return mutation
-      .updateFiles(uploadClient)(this.state.datasetId, this.state.files)
+      .updateFiles(uploadClient)(this.state.datasetId, filesToUpload)
       .then(() => {
         this.props.client
           .query({
@@ -187,7 +243,7 @@ class UploadClient extends React.Component {
   }
 
   uploadCompleteAction() {
-    let datasetURL = `/datasets/${this.state.datasetId}`
+    const datasetURL = `/datasets/${this.state.datasetId}`
     if (this.state.location.pathname !== locationFactory('/hidden').pathname) {
       this.props.history.push(datasetURL)
       this.setLocation('/hidden')
