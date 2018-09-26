@@ -9,6 +9,7 @@ import getClient, { datasets } from 'openneuro-client'
 import config from '../../../config'
 import { xhrFetch } from './xhrfetch.js'
 import { withRouter } from 'react-router-dom'
+import moment from 'moment'
 
 /**
  * Stateful uploader workflow and status
@@ -210,6 +211,33 @@ export class UploadClient extends React.Component {
   }
 
   /**
+   * Check for CHANGES file and add if it does not exist
+   */
+  _includeChanges() {
+    // Don't mutate this.state.files
+    const updatedFiles = [...this.state.files]
+
+    // Determine if the files list has a CHANGES file already
+    const hasChanges = updatedFiles.some(f => f.name === 'CHANGES')
+
+    // Do nothing if the file already exists
+    if (hasChanges) return updatedFiles
+
+    // Construct the initial CHANGES file and add to the files array
+    const snapshotText = 'Initial snapshot'
+    const date = moment().format('YYYY-MM-DD')
+    const versionString = '1.0.0'
+    const initialChangesContent = `\n${versionString}\t${date}\n\n\t- ${snapshotText}`
+    const initialChangesFile = new Blob([initialChangesContent], {
+      type: 'text/plain',
+    })
+    initialChangesFile.name = 'CHANGES'
+    initialChangesFile.webkitRelativePath = '/'
+    updatedFiles.push(initialChangesFile)
+    return updatedFiles
+  }
+
+  /**
    * Do the actual upload
    */
   _addFiles() {
@@ -221,7 +249,11 @@ export class UploadClient extends React.Component {
       xhrFetch(this),
     )
     // Uploads the version of files with dataset_description formatted and Name updated
-    const filesToUpload = this._editName(this.state.name)
+    let filesToUpload = this._editName(this.state.name)
+
+    // Create and include a CHANGES file if it does not exist
+    filesToUpload = this._includeChanges()
+
     return mutation
       .updateFiles(uploadClient)(this.state.datasetId, filesToUpload)
       .then(() => {
