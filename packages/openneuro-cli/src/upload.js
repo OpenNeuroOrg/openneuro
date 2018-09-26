@@ -1,7 +1,7 @@
 import { inspect } from 'util'
 import { files } from 'openneuro-client'
 import validate from 'bids-validator'
-import { getFileTree } from './files'
+import { getFileTree, generateChanges } from './files'
 
 /**
  * BIDS validator promise wrapper
@@ -72,7 +72,8 @@ export const uploadTree = (client, datasetId) => tree => {
  * @param {Object} options - {datasetId: 'ds000001', delete: false, files: [paths, to, exclude]}
  */
 export const uploadDirectory = (client, dir, { datasetId, remoteFiles }) => {
-  return getFileTree(dir, dir, { remoteFiles }).then(
-    uploadTree(client, datasetId),
-  )
+  return getFileTree(dir, dir, { remoteFiles }).then(tree => {
+    tree = generateChanges(tree)
+    return uploadTree(client, datasetId)(tree)
+  })
 }

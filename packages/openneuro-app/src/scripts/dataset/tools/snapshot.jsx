@@ -288,6 +288,7 @@ class Snapshot extends Reflux.Component {
   }
 
   joinChangelogs(changesArray, oldChangelog) {
+    let existingText = oldChangelog ? '\n' + oldChangelog : ''
     let dateString = moment().format('YYYY-MM-DD')
     let versionString = this.state.selectedVersion
     let headerString = versionString + '\t' + dateString + '\n\n'
@@ -295,7 +296,7 @@ class Snapshot extends Reflux.Component {
     changesArray.forEach(change => {
       changeText += '\t- ' + change + '\n'
     })
-    let newChangelog = changeText + '\n' + oldChangelog
+    let newChangelog = changeText + existingText
     return newChangelog
   }
 

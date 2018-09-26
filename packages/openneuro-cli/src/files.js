@@ -1,5 +1,7 @@
 import fs from 'fs'
 import path from 'path'
+import moment from 'moment'
+import stream from 'stream'
 import { promisify } from 'util'
 import { debounce } from './utils'
 
@@ -95,4 +97,28 @@ export const getFileTree = (
       ),
     }
   })
+}
+
+export const generateChanges = tree => {
+  // Determine if the files list has a CHANGES file already
+  const hasChanges =
+    tree.files && tree.files.some(f => f.path.endsWith('CHANGES'))
+
+  // Do nothing if the file already exists
+  if (hasChanges) return tree
+
+  // Construct the initial content of the CHANGES file
+  const snapshotText = 'Initial snapshot'
+  const date = moment().format('YYYY-MM-DD')
+  const versionString = '1.0.0'
+  const initialChangesContent = `\n${versionString}\t${date}\n\n\t- ${snapshotText}`
+
+  // Create readable stream from the CHANGES file we have
+  const initialChangesStream = new stream.PassThrough()
+  initialChangesStream.end(new Buffer(initialChangesContent, 'utf-8'))
+  initialChangesStream.path = 'CHANGES'
+
+  // Add the readable stream to the root level files list (tree.files)
+  tree.files.push(initialChangesStream)
+  return tree
 }
