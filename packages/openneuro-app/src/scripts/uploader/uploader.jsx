@@ -213,15 +213,12 @@ export class UploadClient extends React.Component {
   /**
    * Check for CHANGES file and add if it does not exist
    */
-  _includeChanges() {
-    // Don't mutate this.state.files
-    const updatedFiles = [...this.state.files]
-
+  _includeChanges(files) {
     // Determine if the files list has a CHANGES file already
-    const hasChanges = updatedFiles.some(f => f.name === 'CHANGES')
+    const hasChanges = files.some(f => f.name === 'CHANGES')
 
     // Do nothing if the file already exists
-    if (hasChanges) return updatedFiles
+    if (hasChanges) return files
 
     // Construct the initial CHANGES file and add to the files array
     const snapshotText = 'Initial snapshot'
@@ -233,8 +230,8 @@ export class UploadClient extends React.Component {
     })
     initialChangesFile.name = 'CHANGES'
     initialChangesFile.webkitRelativePath = '/'
-    updatedFiles.push(initialChangesFile)
-    return updatedFiles
+    files.push(initialChangesFile)
+    return files
   }
 
   /**
@@ -249,10 +246,8 @@ export class UploadClient extends React.Component {
       xhrFetch(this),
     )
     // Uploads the version of files with dataset_description formatted and Name updated
-    let filesToUpload = this._editName(this.state.name)
-
-    // Create and include a CHANGES file if it does not exist
-    filesToUpload = this._includeChanges()
+    // Adds a CHANGES file if it is not present
+    let filesToUpload = this._includeChanges(this._editName(this.state.name))
 
     return mutation
       .updateFiles(uploadClient)(this.state.datasetId, filesToUpload)
