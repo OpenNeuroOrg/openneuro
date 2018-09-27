@@ -25,7 +25,7 @@ jobs:
           name: jest unit coverage
           # Workaround https://github.com/facebook/jest/issues/6506
           # TODO: Switch back to -w 2 after upstream fix
-          command: yarn coverage -i --no-cache
+          command: yarn coverage -i --no-cache --forceExit
       - run:
           name: codecov
           command: yarn run codecov
