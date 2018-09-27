@@ -14,7 +14,7 @@ const Admin = loadable(() =>
   import(/* webpackChunkName: 'Admin' */ './admin/admin.jsx'),
 )
 const Dashboard = loadable(() =>
-  import(/* webpackChunkName: 'Dashboard' */ './dashboard/dashboard.jsx'),
+  import(/* webpackChunkName: 'Dashboard' */ './datalad/dashboard/datalad.dashboard.jsx'),
 )
 const Faq = loadable(() =>
   import(/* webpackChunkName: 'Faq' */ './faq/faq.jsx'),

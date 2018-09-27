@@ -85,6 +85,7 @@ export const getDatasets = gql`
       created
       uploader {
         id
+        name
       }
       public
       permissions {
