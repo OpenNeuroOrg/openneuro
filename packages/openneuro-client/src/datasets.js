@@ -111,6 +111,9 @@ export const getDatasets = gql`
           size
           totalFiles
         }
+        issues {
+          severity
+        }
         description {
           Name
         }
