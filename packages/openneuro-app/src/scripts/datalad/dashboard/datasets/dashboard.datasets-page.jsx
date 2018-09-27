@@ -36,7 +36,10 @@ export default class DashboardDatasetsPage extends React.Component {
                   created={dataset.created}
                 />
               </Link>
-              {/* {metricContainer}
+              <div className="metric-container">
+                <Metrics dataset={dataset} fromDashboard />
+              </div>
+              {/*
                 {!isPublic ? statusContainer : null} */}
             </div>
             <Summary summary={dataset.draft.summary} minimal={true} />
