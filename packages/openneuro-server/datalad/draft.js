@@ -18,7 +18,7 @@ const uri = config.datalad.uri
  */
 export const getDraftFiles = async (datasetId, revision, options = {}) => {
   // If untracked is set and true
-  const untracked = 'untracked' in options && options.untracked
+  const untracked = ('untracked' in options && options.untracked) || !revision
   const query = untracked ? { untracked: true } : {}
   const filesUrl = `${uri}/datasets/${datasetId}/files`
   const key = commitFilesKey(datasetId, revision)
