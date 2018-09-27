@@ -10,7 +10,7 @@ import Uploaded from './uploaded.jsx'
 // filter
 // sort
 import Summary from '../../fragments/dataset-summary.jsx'
-// search
+import Search from '../../../common/partials/search.jsx'
 
 import { pageTitle } from '../../../resources/strings'
 
@@ -70,7 +70,9 @@ export default class DashboardDatasetsPage extends React.Component {
                 <div className="col-md-5">
                   <h2>{this.state.title}</h2>
                 </div>
-                <div className="col-md-7">{/* <Search /> */}</div>
+                <div className="col-md-7">
+                  <Search />
+                </div>
               </div>
             </div>
             <div className="filters-sort-wrap clearfix" />
