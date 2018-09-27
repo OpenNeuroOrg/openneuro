@@ -96,6 +96,14 @@ export const createSnapshot = async (datasetId, tag, user) => {
           })
       )
     })
+    .catch(err => {
+      // Also delete the keys if any step fails to trigger a recheck
+      // this avoids inconsistent cache state after failures
+      redis.del(sKey)
+      redis.del(indexKey)
+      // Pass the actual error back to caller
+      throw err
+    })
 }
 
 // TODO - deleteSnapshot

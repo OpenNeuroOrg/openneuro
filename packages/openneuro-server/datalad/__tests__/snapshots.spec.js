@@ -7,6 +7,8 @@ import config from '../../config.js'
 // Mock requests to Datalad service
 jest.mock('superagent')
 jest.mock('../../libs/redis.js')
+// Mock draft files calls
+jest.mock('../draft.js')
 
 beforeAll(async () => {
   await mongo.connect()
@@ -31,6 +33,20 @@ describe('snapshot model operations', () => {
         ),
       )
       done()
+    })
+    it('throws an exception if backend errors', async done => {
+      const tag = 'snapshot'
+      const dsId = await createDataset('a label 2')
+      // Reset call count for request.post
+      request.post.mockClear()
+      request.__setMockError({ error: 'something went wrong' })
+      try {
+        await createSnapshot(dsId, tag, false)
+        done.fail(new Error('Failed request did not throw exception'))
+      } catch (e) {
+        expect(request.post).toHaveBeenCalledTimes(1)
+        done()
+      }
     })
   })
 })

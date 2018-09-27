@@ -43,7 +43,6 @@ export const createDataset = (label, uploader, userInfo) => {
         .subscribe(datasetId, uploader)
         .then(() => resolve({ id: datasetId, label }))
         .catch(err => reject(err))
-      // resolve({ id: datasetId, label })
     } else {
       reject(Error(`Failed to create ${datasetId} - "${label}"`))
     }
