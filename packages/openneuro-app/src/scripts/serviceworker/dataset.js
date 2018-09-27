@@ -47,7 +47,7 @@ export const zipFiles = ({ files }) => {
  * Check each URL provided
  * @param {Array} urls
  */
-const fetchAlternates = urls => {
+export const fetchAlternates = urls => {
   if (urls.length > 0) {
     const fileUrl = urls.shift()
     return fetch(fileUrl, { method: 'HEAD' }).then(
