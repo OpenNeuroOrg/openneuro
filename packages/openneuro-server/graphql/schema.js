@@ -126,6 +126,8 @@ const typeDefs = `
     snapshots: [Snapshot]
     permissions: [Permission]
     analytics: Analytic
+    stars: [Star]
+    followers: [Follower]
   }
 
   # Ephemeral draft or working tree for a dataset
@@ -214,6 +216,18 @@ const typeDefs = `
     tasks: [String]
     size: BigInt!
     totalFiles: Int!
+  }
+
+  # Dataset Followers
+  type Follower {
+    userId: String
+    datasetId: String
+  }
+
+  # Dataset Stars
+  type Star {
+    userId: String
+    datasetId: String
   }
 
   enum Severity {

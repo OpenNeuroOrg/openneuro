@@ -119,6 +119,14 @@ export const getDatasets = gql`
         views
         downloads
       }
+      stars {
+        userId
+        datasetId
+      }
+      followers {
+        userId
+        datasetId
+      }
     }
   }
 `

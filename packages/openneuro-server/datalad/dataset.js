@@ -308,3 +308,19 @@ export const trackAnalytics = (datasetId, tag, type) => {
     },
   )
 }
+
+export const getStars = datasetId => {
+  return c.crn.stars
+    .find({
+      datasetId: datasetId,
+    })
+    .toArray()
+}
+
+export const getFollowers = datasetId => {
+  return c.crn.subscriptions
+    .find({
+      datasetId: datasetId,
+    })
+    .toArray()
+}

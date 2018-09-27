@@ -164,6 +164,22 @@ export const trackAnalytics = (obj, { datasetId, tag, type }) => {
 }
 
 /**
+ * Get the star count for the dataset
+ */
+export const stars = async obj => {
+  const datasetId = obj && obj.dataset ? (await obj.dataset()).id : obj.id
+  return datalad.getStars(datasetId)
+}
+
+/**
+ * Get the follower count for the dataset
+ */
+export const followers = async obj => {
+  const datasetId = obj && obj.dataset ? (await obj.dataset()).id : obj.id
+  return datalad.getFollowers(datasetId)
+}
+
+/**
  * Dataset object
  */
 const Dataset = {
@@ -171,6 +187,8 @@ const Dataset = {
   draft,
   snapshots,
   analytics: ds => analytics(ds),
+  stars: ds => stars(ds),
+  followers: ds => followers(ds),
   permissions: ds =>
     permissions(ds).then(p =>
       p.map(permission =>
