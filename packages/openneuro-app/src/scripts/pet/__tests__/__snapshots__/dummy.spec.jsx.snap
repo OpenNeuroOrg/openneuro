@@ -1,0 +1,74 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pet/dummy.jsx renders successfully 1`] = `
+<span
+  className="front-page is-front"
+>
+  <div
+    className="intro pet-block"
+  >
+    <div
+      className="container"
+    >
+      <div
+        className="intro-inner fade-in clearfix"
+      >
+        <div
+          className="clearfix welcome-block"
+        >
+          <h1
+            className="pet-header"
+          >
+            Coming soon!
+          </h1>
+          <h2>
+            A section of OpenNeuro dedicated entirely to PET scans is currently under development.
+             
+          </h2>
+          <h3>
+            In the meantime, feel free to explore
+             
+            <Link
+              replace={false}
+              to="/"
+            >
+              OpenNeuro
+            </Link>
+             or visit existing hosted PET datasets
+             
+            <Link
+              replace={false}
+              to="/datasets/ds001421"
+            >
+              [11C]SB207145 PET Cimbi database example
+            </Link>
+            ,
+             
+            <Link
+              replace={false}
+              to="/datasets/ds001420"
+            >
+              [11C]DASB PET Cimbi database example
+            </Link>
+            , or
+             
+            <Link
+              replace={false}
+              to="/datasets/ds000204"
+            >
+              Imaging [18F]AV-1451 and [18F]AV-45 in acute and chronic traumatic brain injury
+            </Link>
+            .
+          </h3>
+          <div
+            className="privacy-detail"
+          >
+            <span />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <Footer />
+</span>
+`;
