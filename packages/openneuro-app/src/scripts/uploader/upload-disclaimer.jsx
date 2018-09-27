@@ -37,6 +37,12 @@ const UploadDisclaimer = () => (
           <a href="/faq">FAQ</a> for details.
         </p>
         <p>
+          In order for the data to be considered anonymized, which is required
+          for OpenNeuro, you must agree to destroy any key linking the personal
+          identity of research participants to the subject codes using the BIDS
+          dataset.
+        </p>
+        <p>
           Please refrain from uploading datasets already publicly available in
           other repositories.
         </p>
