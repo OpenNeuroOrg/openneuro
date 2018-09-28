@@ -17,7 +17,9 @@ const UploadDisclaimer = () => (
             Health Insurance Portability and Accountability Act of 1996
           </a>{' '}
           (including names, zip codes, dates of birth, acquisition dates, facial
-          features on structural scans etc.).
+          features on structural scans etc.). I agree to destroy any key linking
+          the personal identity of research participants to the subject codes
+          used in the dataset.
         </p>
         <p>
           I agree that this dataset and results of all analyses performed on it
@@ -35,12 +37,6 @@ const UploadDisclaimer = () => (
           extensions to increase the grace period in case the publication of a
           corresponding paper takes longer than expected. See{' '}
           <a href="/faq">FAQ</a> for details.
-        </p>
-        <p>
-          In order for the data to be considered anonymized, which is required
-          for OpenNeuro, you must agree to destroy any key linking the personal
-          identity of research participants to the subject codes using the BIDS
-          dataset.
         </p>
         <p>
           Please refrain from uploading datasets already publicly available in
