@@ -1,11 +1,12 @@
 import {
   datasetReadQuery,
   checkReadPermissionLevel,
+  checkWritePermissionLevel,
   checkDatasetWrite,
 } from '../permissions.js'
 
 describe('resolver permissions helpers', () => {
-  describe('datasetReadQuery', () => {
+  describe('datasetReadQuery()', () => {
     it('returns public for anonymous users', () => {
       expect(datasetReadQuery('ds000001', null, null)).toHaveProperty(
         'public',
@@ -23,7 +24,7 @@ describe('resolver permissions helpers', () => {
       ).toHaveProperty('public', true)
     })
   })
-  describe('checkReadPermissionLevel', () => {
+  describe('checkReadPermissionLevel()', () => {
     it('returns false if no permission passed in', () => {
       expect(checkReadPermissionLevel(null)).toBe(false)
     })
@@ -35,7 +36,21 @@ describe('resolver permissions helpers', () => {
       expect(checkReadPermissionLevel({ level: 'not-real' })).toBe(false)
     })
   })
-  describe('checkDatasetWrite', () => {
+  describe('checkWritePermissionLevel()', () => {
+    it('returns false if no permission passed in', () => {
+      expect(checkWritePermissionLevel(null)).toBe(false)
+    })
+    it('returns true for admin', () => {
+      expect(checkWritePermissionLevel({ level: 'admin' })).toBe(true)
+    })
+    it('returns false for read only access', () => {
+      expect(checkWritePermissionLevel({ level: 'ro' })).toBe(false)
+    })
+    it('returns false if an unexpected level is present', () => {
+      expect(checkWritePermissionLevel({ level: 'not-real' })).toBe(false)
+    })
+  })
+  describe('checkDatasetWrite()', () => {
     it('resolves to false for anonymous users', () => {
       return expect(
         checkDatasetWrite('ds000001', null, null),

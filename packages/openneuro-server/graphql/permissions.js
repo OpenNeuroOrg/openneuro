@@ -54,6 +54,19 @@ export const checkDatasetRead = (datasetId, userId, userInfo) => {
 
 const writeErrorMessage = 'You do not have access to modify this dataset.'
 
+/**
+ * Return true on matching permission level
+ * @param {object} permission
+ * @returns {boolean} read access
+ */
+export const checkWritePermissionLevel = permission => {
+  if (permission && ['admin', 'rw'].includes(permission.level)) {
+    return true
+  } else {
+    return false
+  }
+}
+
 export const checkDatasetWrite = (datasetId, userId, userInfo) => {
   if (!userId) {
     // Quick path for anonymous writes
@@ -64,10 +77,7 @@ export const checkDatasetWrite = (datasetId, userId, userInfo) => {
     return Promise.resolve(true)
   }
   return Permission.findOne({ datasetId, userId }).then(permission => {
-    if (
-      permission &&
-      (permission.level === 'admin' || permission.level === 'rw')
-    ) {
+    if (checkWritePermissionLevel(permission)) {
       return true
     } else {
       throw new Error(writeErrorMessage)
