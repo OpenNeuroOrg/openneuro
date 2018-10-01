@@ -44,27 +44,27 @@ class DatasetRealm(Enum):
 def setup_s3_sibling(dataset, realm):
     """Add a sibling for an S3 bucket publish."""
     dataset_id = os.path.basename(dataset.path)
-
-    if (realm == DatasetRealm.PUBLIC):
+    annex_options = [
+        'type=S3',
+        'bucket={}'.format(realm.s3_bucket),
+        'exporttree=yes',
+        'partsize=1GiB',
+        'encryption=none',
+        'fileprefix={}/'.format(dataset_id),
+    ]
+    if realm == DatasetRealm.PUBLIC:
         public = getattr(datalad_service.config, 'DATALAD_S3_PUBLIC_ON_EXPORT')
+        if public == 'yes':
+            annex_options += [
+                'autoenable=true',
+                'publicurl=http://{}.s3.amazonaws.com/'.format(realm.s3_bucket),
+            ]
     else:
         public = 'no'
 
-    # TODO - There may be a better way to do this?
-    dataset.repo._run_annex_command(
-        'initremote',
-        annex_options=[
-            realm.s3_remote,
-            'type=S3',
-            'bucket={}'.format(realm.s3_bucket),
-            'exporttree=yes',
-            'partsize=1GiB',
-            'encryption=none',
-            'fileprefix={}/'.format(dataset_id),
-            'public={}'.format(public),
-            'publicurl={}'.format(public),
-            'autoenable=true'
-        ])
+    annex_options.append('public={}'.format(public))
+
+    dataset.repo.init_remote(realm.s3_remote, options=annex_options)
 
 
 def s3_export(dataset, target, treeish='HEAD'):
