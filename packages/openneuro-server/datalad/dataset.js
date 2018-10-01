@@ -107,7 +107,7 @@ export const deleteDataset = id => {
  * TODO - Support cursor pagination
  */
 export const getDatasets = options => {
-  if (options && 'admin' in options) {
+  if (options && 'admin' in options && options.admin) {
     // Admins can see all datasets
     return c.crn.datasets.find().toArray()
   }
