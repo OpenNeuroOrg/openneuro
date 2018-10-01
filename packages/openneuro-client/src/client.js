@@ -11,6 +11,7 @@ import * as files from './files'
 import * as datasets from './datasets'
 import * as snapshots from './snapshots'
 import * as users from './users'
+import * as dashboard from './dashboard'
 
 const cache = new InMemoryCache()
 
@@ -94,5 +95,5 @@ const createLink = (uri, getAuthorization, fetch) => {
   return link
 }
 
-export { files, datasets, snapshots, users }
+export { files, datasets, snapshots, users, dashboard }
 export default createClient
