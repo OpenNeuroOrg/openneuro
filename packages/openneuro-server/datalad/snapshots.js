@@ -243,3 +243,30 @@ export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
       return redis.del(snapshotKey(datasetId, snapshotTag)).then(() => data)
     })
 }
+
+/**
+ * Get Public Snapshots
+ *
+ * Returns the most recent snapshots of all publicly available datasets
+ */
+export const getPublicSnapshots = () => {
+  // query all publicly available dataset
+  return c.crn.datasets.find({ public: true }, { id: 1 }).toArray(datasets => {
+    const datasetIds = datasets.map(dataset => dataset.id)
+    return c.crn.snapshots.aggregate([
+      { $match: { datasetId: { $in: datasetIds } } },
+      { $sort: { created: -1 } },
+      {
+        $group: {
+          _id: '$datasetId',
+          snapshots: { $push: '$$ROOT' },
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: { $arrayElemAt: ['$snapshots', 0] },
+        },
+      },
+    ])
+  })
+}
