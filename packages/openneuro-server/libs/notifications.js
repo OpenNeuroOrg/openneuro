@@ -5,6 +5,7 @@ import cron from 'cron'
 import mongo from './mongo'
 import email from './email'
 import scitran from './scitran'
+import User from '../models/user'
 import moment from 'moment'
 import url from 'url'
 import bidsId from './bidsId'
@@ -179,49 +180,54 @@ let notifications = {
       .toArray((err, subscriptions) => {
         // create the email object for each user, using subscription userid and scitran
         subscriptions.forEach(subscription => {
-          scitran.getUser(subscription.userId, (err, res) => {
-            let user = res.body
-            if (user.email !== userId) {
-              let emailContent = {
-                _id:
-                  datasetId +
-                  '_' +
-                  subscription._id +
-                  '_' +
-                  comment._id +
-                  '_' +
-                  'comment_created',
-                type: 'email',
-                email: {
-                  to: user.email,
-                  from:
-                    'reply-' +
-                    encodeURIComponent(comment._id) +
-                    '-' +
-                    encodeURIComponent(user._id),
-                  subject: 'Comment Created',
-                  template: 'comment-created',
-                  data: {
-                    name: user.name,
-                    lastName: user.lastname,
-                    datasetName: bidsId.decodeId(datasetId),
-                    datasetLabel: datasetLabel,
-                    commentUserId: userId,
-                    commentId: commentId,
-                    dateCreated: moment(comment.createDate).format('MMMM Do'),
-                    commentContent: htmlContent,
-                    commentStatus: commentStatus,
-                    siteUrl:
-                      url.parse(config.url).protocol +
-                      '//' +
-                      url.parse(config.url).hostname,
-                  },
-                },
+          User.findOne({ id: subscription.userId })
+            .exec()
+            .then(user => {
+              if (user) {
+                if (user.email !== userId) {
+                  let emailContent = {
+                    _id:
+                      datasetId +
+                      '_' +
+                      subscription._id +
+                      '_' +
+                      comment._id +
+                      '_' +
+                      'comment_created',
+                    type: 'email',
+                    email: {
+                      to: user.email,
+                      from:
+                        'reply-' +
+                        encodeURIComponent(comment._id) +
+                        '-' +
+                        encodeURIComponent(user._id),
+                      subject: 'Comment Created',
+                      template: 'comment-created',
+                      data: {
+                        name: user.name,
+                        lastName: user.lastname,
+                        datasetName: bidsId.decodeId(datasetId),
+                        datasetLabel: datasetLabel,
+                        commentUserId: userId,
+                        commentId: commentId,
+                        dateCreated: moment(comment.createDate).format(
+                          'MMMM Do',
+                        ),
+                        commentContent: htmlContent,
+                        commentStatus: commentStatus,
+                        siteUrl:
+                          url.parse(config.url).protocol +
+                          '//' +
+                          url.parse(config.url).hostname,
+                      },
+                    },
+                  }
+                  // send each email to the notification database for distribution
+                  notifications.add(emailContent, () => {})
+                }
               }
-              // send each email to the notification database for distribution
-              notifications.add(emailContent, () => {})
-            }
-          })
+            })
         })
       })
   },
@@ -245,28 +251,36 @@ let notifications = {
       .toArray((err, subscriptions) => {
         // create the email object for each user, using subscription userid and scitran
         subscriptions.forEach(subscription => {
-          scitran.getUser(subscription.userId, (err, res) => {
-            let user = res.body
-            let emailContent = {
-              _id: datasetId + '_' + subscription._id + '_' + 'dataset_deleted',
-              type: 'email',
-              email: {
-                to: user.email,
-                subject: 'Dataset Deleted',
-                template: 'dataset-deleted',
-                data: {
-                  name: user.name,
-                  datasetName: bidsId.decodeId(datasetId),
-                  siteUrl:
-                    url.parse(config.url).protocol +
-                    '//' +
-                    url.parse(config.url).hostname,
-                },
-              },
-            }
-            // send each email to the notification database for distribution
-            notifications.add(emailContent, () => {})
-          })
+          User.findOne({ id: subscription.userId })
+            .exec()
+            .then(user => {
+              if (user) {
+                let emailContent = {
+                  _id:
+                    datasetId +
+                    '_' +
+                    subscription._id +
+                    '_' +
+                    'dataset_deleted',
+                  type: 'email',
+                  email: {
+                    to: user.email,
+                    subject: 'Dataset Deleted',
+                    template: 'dataset-deleted',
+                    data: {
+                      name: user.name,
+                      datasetName: bidsId.decodeId(datasetId),
+                      siteUrl:
+                        url.parse(config.url).protocol +
+                        '//' +
+                        url.parse(config.url).hostname,
+                    },
+                  },
+                }
+                // send each email to the notification database for distribution
+                notifications.add(emailContent, () => {})
+              }
+            })
         })
       })
   },
@@ -290,29 +304,36 @@ let notifications = {
       .toArray((err, subscriptions) => {
         // create the email object for each user, using subscription userid and scitran
         subscriptions.forEach(subscription => {
-          scitran.getUser(subscription.userId, (err, res) => {
-            let user = res.body
-            let emailContent = {
-              _id:
-                datasetId + '_' + subscription._id + '_' + 'owner_unsubscribed',
-              type: 'email',
-              email: {
-                to: user.email,
-                subject: 'Owner Unsubscribed',
-                template: 'owner-unsubscribed',
-                data: {
-                  name: user.name,
-                  datasetName: bidsId.decodeId(datasetId),
-                  siteUrl:
-                    url.parse(config.url).protocol +
-                    '//' +
-                    url.parse(config.url).hostname,
-                },
-              },
-            }
-            // send each email to the notification database for distribution
-            notifications.add(emailContent, () => {})
-          })
+          User.findOne({ id: subscription.userId })
+            .exec()
+            .then(user => {
+              if (user) {
+                let emailContent = {
+                  _id:
+                    datasetId +
+                    '_' +
+                    subscription._id +
+                    '_' +
+                    'owner_unsubscribed',
+                  type: 'email',
+                  email: {
+                    to: user.email,
+                    subject: 'Owner Unsubscribed',
+                    template: 'owner-unsubscribed',
+                    data: {
+                      name: user.name,
+                      datasetName: bidsId.decodeId(datasetId),
+                      siteUrl:
+                        url.parse(config.url).protocol +
+                        '//' +
+                        url.parse(config.url).hostname,
+                    },
+                  },
+                }
+                // send each email to the notification database for distribution
+                notifications.add(emailContent, () => {})
+              }
+            })
         })
       })
   },
