@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "bids-validator": "0.27.2"
+    "bids-validator": "1.0.0"
   }
 }
