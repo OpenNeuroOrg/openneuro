@@ -92,7 +92,9 @@ export const createSnapshot = async (datasetId, tag, user) => {
           // Clear the index now that the new snapshot is ready
           .then(() => redis.del(indexKey))
           .then(() => {
-            notifications.snapshotCreated(datasetId, body, user)
+            if (body.files) {
+              notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
+            }
             pubsub.publish('snapshotAdded', { id: datasetId })
             return body
           })

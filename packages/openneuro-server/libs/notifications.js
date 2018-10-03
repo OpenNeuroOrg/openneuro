@@ -104,7 +104,6 @@ let notifications = {
   snapshotCreated(datasetId, body, uploader) {
     const tag = body.tag
     let uploaderId = uploader ? uploader.id : null
-
     const datasetDescription = body.files.find(
       file => file.filename == 'dataset_description.json',
     )
@@ -120,11 +119,9 @@ let notifications = {
     // get the dataset description
     request.get(datasetDescriptionUrl).then(({ body }) => {
       const description = body
-      console.log('description:', description)
       const datasetLabel = description.Name
         ? description.Name
         : 'Unnamed Dataset'
-      console.log('datasetLabel:', datasetLabel)
 
       // get the snapshot changelog
       request
