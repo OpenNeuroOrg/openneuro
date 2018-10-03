@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`resolver permissions helpers checkDatasetWrite() resolves to false for anonymous users 1`] = `"You do not have access to modify this dataset."`;
