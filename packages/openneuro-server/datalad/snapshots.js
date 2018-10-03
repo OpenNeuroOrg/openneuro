@@ -10,6 +10,7 @@ import { commitFilesKey } from './files.js'
 import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDraftFiles } from './draft'
+import notifications from '../libs/notifications'
 
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -91,6 +92,9 @@ export const createSnapshot = async (datasetId, tag, user) => {
           // Clear the index now that the new snapshot is ready
           .then(() => redis.del(indexKey))
           .then(() => {
+            if (body.files) {
+              notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
+            }
             pubsub.publish('snapshotAdded', { id: datasetId })
             return body
           })
