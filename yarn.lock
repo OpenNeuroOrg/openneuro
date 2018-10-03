@@ -1699,7 +1699,7 @@ async@0.2.x:
   resolved "https://registry.yarnpkg.com/async/-/async-0.2.10.tgz#b6bbe0b0674b9d719708ca38de8c237cb526c3d1"
   integrity sha1-trvgsGdLnXGXCMo43owjfLUmw9E=
 
-async@2.6.1, async@^2.0.1, async@^2.1.4, async@^2.4.1, async@^2.5.0, async@^2.6.0, async@^2.6.1:
+async@2.6.1, async@^2.0.1, async@^2.1.4, async@^2.4.1, async@^2.5.0, async@^2.6.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/async/-/async-2.6.1.tgz#b245a23ca71930044ec53fa46aa00a3e87c6a610"
   integrity sha512-fNEiL2+AZt6AlAw/29Cr0UDe4sRAHCpEHh54WMz+Bb7QfNcFw4h3loofyJpLeQs4Yx7yuqu/2dLgM5hKOs6HlQ==
@@ -2605,13 +2605,12 @@ bcrypt@^2.0.1:
     nan "2.10.0"
     node-pre-gyp "0.9.1"
 
-bids-validator@0.27.2:
-  version "0.27.2"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-0.27.2.tgz#95f48fc34800fc300bc41eecf32dacd66bf8f71f"
-  integrity sha512-LTHt6T3hReOoepQ9ZVemYSZ3/VS+z5rFOpCNCYBrwas7ezu7w15hMsbqJT/NZDgV+hZGI+cZjo8BQmk+X21ipw==
+bids-validator@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.0.0.tgz#f3a74de07e9647d9b4db4745fd8ff5612ed820e1"
+  integrity sha512-62piCIdKdLlS5YS0BqkP8RjOmYyE9yMr8vpXGVmNisNgOiOq/i2D+ruYicH27sM15IFBd28tXEa9w1yaWh+QAg==
   dependencies:
     ajv "^6.5.2"
-    async "^2.6.1"
     bytes "^3.0.0"
     cliff "^0.1.10"
     colors "^1.3.1"
