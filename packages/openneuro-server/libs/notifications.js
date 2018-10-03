@@ -4,7 +4,7 @@ import config from '../config'
 import cron from 'cron'
 import mongo from './mongo'
 import email from './email'
-import scitran from './scitran'
+import request from 'superagent'
 import User from '../models/user'
 import moment from 'moment'
 import url from 'url'
@@ -13,6 +13,7 @@ import { convertFromRaw, EditorState } from 'draft-js'
 import { stateToHTML } from 'draft-js-export-html'
 
 let c = mongo.collections
+const URI = config.datalad.uri
 
 // public api ---------------------------------------------
 
@@ -51,44 +52,45 @@ let notifications = {
    * with the status of their job.
    */
   jobComplete(job) {
-    scitran.getUser(job.userId, (err, res) => {
-      let user = res.body
-      notifications.add(
-        {
-          _id: job.snapshotId + '_' + job.appId + '_' + job.analysis.created,
-          type: 'email',
-          email: {
-            to: user.email,
-            subject:
-              'Analysis - ' +
-              job.appLabel +
-              ' on ' +
-              job.datasetLabel +
-              ' - ' +
-              job.analysis.status,
-            template: 'job-complete',
-            data: {
-              name: user.name,
-              appName: job.appLabel,
-              appLabel: job.appLabel,
-              appVersion: job.appVersion,
-              jobId: job.analysis.analysisId,
-              startDate: moment(job.analysis.created).format('MMMM Do'),
-              datasetName: job.datasetLabel,
-              status: job.analysis.status,
-              siteUrl:
-                url.parse(config.url).protocol +
-                '//' +
-                url.parse(config.url).hostname,
-              datasetId: bidsId.decodeId(job.datasetId),
-              snapshotId: bidsId.decodeId(job.snapshotId),
-              unsubscribeLink: '',
+    User.findOne({ id: job.userId })
+      .exec()
+      .then(user => {
+        notifications.add(
+          {
+            _id: job.snapshotId + '_' + job.appId + '_' + job.analysis.created,
+            type: 'email',
+            email: {
+              to: user.email,
+              subject:
+                'Analysis - ' +
+                job.appLabel +
+                ' on ' +
+                job.datasetLabel +
+                ' - ' +
+                job.analysis.status,
+              template: 'job-complete',
+              data: {
+                name: user.name,
+                appName: job.appLabel,
+                appLabel: job.appLabel,
+                appVersion: job.appVersion,
+                jobId: job.analysis.analysisId,
+                startDate: moment(job.analysis.created).format('MMMM Do'),
+                datasetName: job.datasetLabel,
+                status: job.analysis.status,
+                siteUrl:
+                  url.parse(config.url).protocol +
+                  '//' +
+                  url.parse(config.url).hostname,
+                datasetId: bidsId.decodeId(job.datasetId),
+                snapshotId: bidsId.decodeId(job.snapshotId),
+                unsubscribeLink: '',
+              },
             },
           },
-        },
-        () => {},
-      )
-    })
+          () => {},
+        )
+      })
   },
 
   /**
@@ -99,55 +101,75 @@ let notifications = {
    * them that a new snapshot has been created.
    * Includes changelog if available.
    */
-  snapshotCreated(datasetId, versionNumber) {
-    // get the scitran project
-    scitran.getProject(datasetId, (err, resp) => {
-      let datasetLabel =
-        resp.body && resp.body.label ? resp.body.label : datasetId
+  snapshotCreated(datasetId, body, uploader) {
+    const tag = body.tag
+    let uploaderId = uploader ? uploader.id : null
 
-      let filename = 'CHANGES'
-      let project = resp.body ? resp.body : null
-      let uploaderId = project ? project.group : null
+    const datasetDescription = body.files.find(
+      file => file.filename == 'dataset_description.json',
+    )
+    const datasetDescriptionId = datasetDescription
+      ? datasetDescription.id
+      : null
+    const datasetDescriptionUrl = `${URI}/datasets/${datasetId}/objects/${datasetDescriptionId}`
+
+    const changesFile = body.files.find(file => file.filename == 'CHANGES')
+    const changesId = changesFile ? changesFile.id : null
+    const changesUrl = `${URI}/datasets/${datasetId}/objects/${changesId}`
+
+    // get the dataset description
+    request.get(datasetDescriptionUrl).then(({ body }) => {
+      const description = body
+      console.log('description:', description)
+      const datasetLabel = description.Name
+        ? description.Name
+        : 'Unnamed Dataset'
+      console.log('datasetLabel:', datasetLabel)
+
       // get the snapshot changelog
-      scitran.getFile('projects', project._id, filename, {}, (err, file) => {
-        let changelog = file.body
-
-        // get all users that are subscribed to the dataset
-        c.crn.subscriptions
-          .find({ datasetId: datasetId })
-          .toArray((err, subscriptions) => {
-            // create the email object for each user
-            subscriptions.forEach(subscription => {
-              scitran.getUser(subscription.userId, (err, res) => {
-                let user = res.body
-                if (user._id !== uploaderId) {
-                  let emailContent = {
-                    _id: datasetId + '_' + user._id + '_' + 'snapshot_created',
-                    type: 'email',
-                    email: {
-                      to: user.email,
-                      subject: 'Snapshot Created',
-                      template: 'snapshot-created',
-                      data: {
-                        name: user.name,
-                        datasetLabel: datasetLabel,
-                        datasetId: bidsId.decodeId(datasetId),
-                        versionNumber: versionNumber,
-                        changelog: changelog,
-                        siteUrl:
-                          url.parse(config.url).protocol +
-                          '//' +
-                          url.parse(config.url).hostname,
-                      },
-                    },
-                  }
-                  // send the email to the notifications database for distribution
-                  notifications.add(emailContent, () => {})
-                }
+      request
+        .get(changesUrl)
+        .responseType('application/octet-stream')
+        .then(({ body }) => {
+          const changelog = body ? body.toString() : null
+          // get all users that are subscribed to the dataset
+          c.crn.subscriptions
+            .find({ datasetId: datasetId })
+            .toArray((err, subscriptions) => {
+              // create the email object for each user
+              subscriptions.forEach(subscription => {
+                User.findOne({ id: subscription.userId })
+                  .exec()
+                  .then(user => {
+                    if (user && user.id !== uploaderId) {
+                      let emailContent = {
+                        _id:
+                          datasetId + '_' + user._id + '_' + 'snapshot_created',
+                        type: 'email',
+                        email: {
+                          to: user.email,
+                          subject: 'Snapshot Created',
+                          template: 'snapshot-created',
+                          data: {
+                            name: user.name,
+                            datasetLabel: datasetLabel,
+                            datasetId: bidsId.decodeId(datasetId),
+                            versionNumber: tag,
+                            changelog: changelog,
+                            siteUrl:
+                              url.parse(config.url).protocol +
+                              '//' +
+                              url.parse(config.url).hostname,
+                          },
+                        },
+                      }
+                      // send the email to the notifications database for distribution
+                      notifications.add(emailContent, () => {})
+                    }
+                  })
               })
             })
-          })
-      })
+        })
     })
   },
 
@@ -183,49 +205,45 @@ let notifications = {
           User.findOne({ id: subscription.userId })
             .exec()
             .then(user => {
-              if (user) {
-                if (user.email !== userId) {
-                  let emailContent = {
-                    _id:
-                      datasetId +
-                      '_' +
-                      subscription._id +
-                      '_' +
-                      comment._id +
-                      '_' +
-                      'comment_created',
-                    type: 'email',
-                    email: {
-                      to: user.email,
-                      from:
-                        'reply-' +
-                        encodeURIComponent(comment._id) +
-                        '-' +
-                        encodeURIComponent(user._id),
-                      subject: 'Comment Created',
-                      template: 'comment-created',
-                      data: {
-                        name: user.name,
-                        lastName: user.lastname,
-                        datasetName: bidsId.decodeId(datasetId),
-                        datasetLabel: datasetLabel,
-                        commentUserId: userId,
-                        commentId: commentId,
-                        dateCreated: moment(comment.createDate).format(
-                          'MMMM Do',
-                        ),
-                        commentContent: htmlContent,
-                        commentStatus: commentStatus,
-                        siteUrl:
-                          url.parse(config.url).protocol +
-                          '//' +
-                          url.parse(config.url).hostname,
-                      },
+              if (user && user.email !== userId) {
+                let emailContent = {
+                  _id:
+                    datasetId +
+                    '_' +
+                    subscription._id +
+                    '_' +
+                    comment._id +
+                    '_' +
+                    'comment_created',
+                  type: 'email',
+                  email: {
+                    to: user.email,
+                    from:
+                      'reply-' +
+                      encodeURIComponent(comment._id) +
+                      '-' +
+                      encodeURIComponent(user._id),
+                    subject: 'Comment Created',
+                    template: 'comment-created',
+                    data: {
+                      name: user.name,
+                      lastName: user.lastname,
+                      datasetName: bidsId.decodeId(datasetId),
+                      datasetLabel: datasetLabel,
+                      commentUserId: userId,
+                      commentId: commentId,
+                      dateCreated: moment(comment.createDate).format('MMMM Do'),
+                      commentContent: htmlContent,
+                      commentStatus: commentStatus,
+                      siteUrl:
+                        url.parse(config.url).protocol +
+                        '//' +
+                        url.parse(config.url).hostname,
                     },
-                  }
-                  // send each email to the notification database for distribution
-                  notifications.add(emailContent, () => {})
+                  },
                 }
+                // send each email to the notification database for distribution
+                notifications.add(emailContent, () => {})
               }
             })
         })
