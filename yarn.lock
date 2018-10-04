@@ -2605,10 +2605,10 @@ bcrypt@^2.0.1:
     nan "2.10.0"
     node-pre-gyp "0.9.1"
 
-bids-validator@1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.0.0.tgz#f3a74de07e9647d9b4db4745fd8ff5612ed820e1"
-  integrity sha512-62piCIdKdLlS5YS0BqkP8RjOmYyE9yMr8vpXGVmNisNgOiOq/i2D+ruYicH27sM15IFBd28tXEa9w1yaWh+QAg==
+bids-validator@1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.0.3.tgz#d689e54db7fd31b1109bb06af6e4250da701b962"
+  integrity sha512-s6bcAJ8hLR6YmklyUa/b6mg6J64BBR/QCUxSXF9b5PBVwCy1gE7HSYeVAJIFYk+LdK7gVEKpyydiex8XGeahAw==
   dependencies:
     ajv "^6.5.2"
     bytes "^3.0.0"
