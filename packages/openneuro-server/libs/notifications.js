@@ -101,10 +101,12 @@ let notifications = {
    * them that a new snapshot has been created.
    * Includes changelog if available.
    */
-  snapshotCreated(datasetId, body, uploader) {
+  async snapshotCreated(datasetId, body, uploader) {
     const tag = body.tag
+    // if we still have a promise for the body files, await it
+    const files = await body.files
     let uploaderId = uploader ? uploader.id : null
-    const datasetDescription = body.files.find(
+    const datasetDescription = files.find(
       file => file.filename == 'dataset_description.json',
     )
     const datasetDescriptionId = datasetDescription
@@ -112,7 +114,7 @@ let notifications = {
       : null
     const datasetDescriptionUrl = `${URI}/datasets/${datasetId}/objects/${datasetDescriptionId}`
 
-    const changesFile = body.files.find(file => file.filename == 'CHANGES')
+    const changesFile = files.find(file => file.filename == 'CHANGES')
     const changesId = changesFile ? changesFile.id : null
     const changesUrl = `${URI}/datasets/${datasetId}/objects/${changesId}`
 
