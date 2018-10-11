@@ -48,6 +48,7 @@ def setup_s3_sibling(dataset, realm):
         'type=S3',
         'bucket={}'.format(realm.s3_bucket),
         'exporttree=yes',
+        'versioning=yes',
         'partsize=1GiB',
         'encryption=none',
         'fileprefix={}/'.format(dataset_id),
