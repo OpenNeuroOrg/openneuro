@@ -38,8 +38,8 @@ export default test => {
   })
   app.use(morgan('short'))
   app.use(cookieParser())
-  app.use(bodyParser.urlencoded({ extended: false }))
-  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: false, limit: '50mb' }))
+  app.use(bodyParser.json({ limit: '50mb' }))
 
   // routing ---------------------------------------------------------
 
