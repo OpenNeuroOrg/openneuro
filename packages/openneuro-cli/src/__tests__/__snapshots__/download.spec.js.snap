@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`download.js checkDestination() throws an error on existing directories 1`] = `"received is not a function"`;
