@@ -18,15 +18,14 @@ export const createDataset = client => label => {
  * @param {object} client Apollo client
  * @param {string} datasetId Id of the dataset to snapshot
  */
-export const createSnapshot = (client, datasetId)=> {
-  return client
-    .mutate({
-      mutation: snapshots.createSnapshot,
-      variables: { 
-        datasetId: datasetId,
-        tag: '1.0.0' 
-      },
-    })
+export const createSnapshot = (client, datasetId) => {
+  return client.mutate({
+    mutation: snapshots.createSnapshot,
+    variables: {
+      datasetId: datasetId,
+      tag: '1.0.0',
+    },
+  })
 }
 
 /**
@@ -86,6 +85,8 @@ const treeFromList = fileList => {
  */
 export const updateFiles = client => (datasetId, fileList) => {
   const tree = treeFromList(fileList)
+  // Upload dataset_description.json first
+  tree.files = files.sortFiles(tree.files)
   return client.mutate({
     mutation: files.updateFiles,
     variables: { datasetId, files: tree },
