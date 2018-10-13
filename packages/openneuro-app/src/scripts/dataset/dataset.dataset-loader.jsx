@@ -136,7 +136,8 @@ class DatasetLoader extends Reflux.Component {
         return new Date(b.created) - new Date(a.created)
       })
       const newestSnapshot = snapshots[0].tag
-      const currentPath = this.props.location.pathname
+      // Trim trailing slash if needed
+      const currentPath = this.props.location.pathname.replace(/\/$/, '')
       const newestSnapshotUrl = `${currentPath}/versions/${newestSnapshot}`
       return (
         <LoggedOut>
