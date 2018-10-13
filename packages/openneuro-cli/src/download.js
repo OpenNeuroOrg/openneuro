@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import mkdirp from 'mkdirp'
 import request from 'superagent'
-import { getUrl } from './config'
+import { getToken, getUrl } from './config.js'
 
 export const downloadUrl = (datasetId, tag) =>
   tag
@@ -37,17 +37,22 @@ export const testFile = (destination, filename, size) => {
 }
 
 export const getDownloadMetadata = (datasetId, tag) =>
-  request.get(downloadUrl(datasetId, tag))
+  request
+    .get(downloadUrl(datasetId, tag))
+    .set('Cookie', `accessToken=${getToken()}`)
 
 export const downloadFile = async (destination, filename, fileUrl) => {
   const fullPath = path.join(destination, filename)
   // Create any needed parent dirs
   mkdirp.sync(path.dirname(fullPath))
   const writeStream = fs.createWriteStream(fullPath)
-  await request.get(fileUrl).pipe(writeStream)
+  await request
+    .get(fileUrl)
+    .set('Cookie', `accessToken=${getToken()}`)
+    .pipe(writeStream)
 }
 
-export const getDownload = (datasetId, tag, destination) =>
+export const getDownload = (destination, datasetId, tag) =>
   getDownloadMetadata(datasetId, tag).then(async ({ body }) => {
     checkDestination(destination)
     for (let file of body.files) {

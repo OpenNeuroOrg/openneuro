@@ -129,15 +129,19 @@ const promptTags = snapshots =>
  * @param {Object} cmd
  */
 export const download = (datasetId, destination, cmd) => {
-  if (!cmd.draft || !cmd.snapshot) {
+  if (!cmd.draft && !cmd.snapshot) {
     const client = configuredClient()
     return getSnapshots(client)(datasetId).then(({ data }) => {
       if (data.dataset && data.dataset.snapshots) {
         const tags = data.dataset.snapshots.map(snap => snap.tag)
         return promptTags(tags).then(choices =>
-          getDownload(datasetId, choices.tag, destination),
+          getDownload(destination, datasetId, choices.tag),
         )
       }
     })
+  } else if (cmd.snapshot) {
+    getDownload(destination, datasetId, cmd.snapshot)
+  } else {
+    getDownload(destination, datasetId)
   }
 }
