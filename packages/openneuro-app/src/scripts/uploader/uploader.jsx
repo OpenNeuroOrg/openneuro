@@ -189,6 +189,10 @@ export class UploadClient extends React.Component {
    * @returns {File[]} - New list of files with a replaced dataset_description.json
    */
   _editName(Name) {
+    if (!Name) {
+      // Return files if no name provided
+      return this.state.files
+    }
     // Merge in the new name for a new dataset_description object
     const description = {
       ...this.state.description,
