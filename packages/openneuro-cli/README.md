@@ -22,6 +22,8 @@ You can manually configure custom servers by editing this file.
 
 # Usage
 
+## Uploading datasets
+
 To upload a new dataset:
 
 `openneuro upload <dataset directory>`
@@ -33,3 +35,15 @@ To resume an interrupted upload or add files to an existing dataset:
 `openneuro upload --dataset <accession number> <dataset directory>`
 
 This will add or replace any files in the dataset but does not delete any files that are only present in the server copy of the dataset.
+
+## Downloading datasets
+
+To download a snapshot:
+
+`openneuro download <accession number> <destination directory>`
+
+To download the current draft files:
+
+`openneuro download --draft <accession number> <destination directory>`
+
+If the destination directory does not exist, it will be created. Any files from the dataset that are already present in the directory will be skipped, allowing you to resume an interrupted download.
