@@ -4,10 +4,10 @@ import mkdirp from 'mkdirp'
 import request from 'superagent'
 import { getToken, getUrl } from './config.js'
 
-export const downloadUrl = (datasetId, tag) =>
+export const downloadUrl = (baseUrl, datasetId, tag) =>
   tag
-    ? `${getUrl()}crn/datasets/${datasetId}/snapshots/${tag}/download`
-    : `${getUrl()}crn/datasets/${datasetId}/download`
+    ? `${baseUrl}crn/datasets/${datasetId}/snapshots/${tag}/download`
+    : `${baseUrl}crn/datasets/${datasetId}/download`
 
 export const checkDestination = destination => {
   if (fs.existsSync(destination)) {
@@ -38,7 +38,7 @@ export const testFile = (destination, filename, size) => {
 
 export const getDownloadMetadata = (datasetId, tag) =>
   request
-    .get(downloadUrl(datasetId, tag))
+    .get(downloadUrl(getUrl(), datasetId, tag))
     .set('Cookie', `accessToken=${getToken()}`)
 
 export const downloadFile = async (destination, filename, fileUrl) => {
