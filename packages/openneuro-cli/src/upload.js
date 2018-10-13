@@ -65,6 +65,21 @@ export const uploadTree = (client, datasetId) => tree => {
 }
 
 /**
+ * Sort file streams so that dataset_description.json is first in the list
+ *
+ * We do this at the top level so that it is uploaded first
+ * @param {Array} files
+ */
+export const sortFiles = files =>
+  files.sort((x, y) => {
+    return x.path.endsWith('dataset_description.json')
+      ? -1
+      : y.path.endsWith('dataset_description.json')
+        ? 1
+        : 0
+  })
+
+/**
  * Read and upload a dataset directory
  *
  * @param {Object} client - Initialized Apollo client to upload with
@@ -74,6 +89,7 @@ export const uploadTree = (client, datasetId) => tree => {
 export const uploadDirectory = (client, dir, { datasetId, remoteFiles }) => {
   return getFileTree(dir, dir, { remoteFiles }).then(tree => {
     tree = generateChanges(tree)
+    tree.files = sortFiles(tree.files)
     return uploadTree(client, datasetId)(tree)
   })
 }
