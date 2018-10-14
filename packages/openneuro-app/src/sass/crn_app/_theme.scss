@@ -54,9 +54,9 @@ $spinner-color: $turquoise;
   --tertiary: #{$turquoise};
 
   // Fonts
-  --font-family-open: $font-family-open;
+  --font-family-open: 'Open Sans', sans-serif;
 
-  --font-family-cabin: $font-family-cabin;
+  --font-family-cabin: 'Cabin', sans-serif;
 
   // Shadows
   --btn-shadow: 1px 1px 3px -1px #{$transparent7};
