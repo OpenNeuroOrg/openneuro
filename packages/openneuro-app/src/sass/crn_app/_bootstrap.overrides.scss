@@ -19,6 +19,7 @@ $text-danger:          $brand-danger;
 
 // Text color class overrides
 .text-primary {
+    color: $primary;
     color: var(--primary);
 }
 

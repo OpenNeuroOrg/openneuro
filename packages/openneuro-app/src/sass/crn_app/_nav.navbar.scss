@@ -11,6 +11,7 @@
         top: 0;
         left: 0;
         z-index: 1300;
+        border-top: 10px solid $navbar-top-border-color;
         border-top: 10px solid var(--navbar-top-border-color);
     }
 }
@@ -32,7 +33,9 @@
 
 
 .navbar-default {
+    background: $navbar-background-color;
     background: var(--navbar-background-color);
+    color: $navbar-btn-text-color;
     color: var(--navbar-btn-text-color);
     margin: 0;
     padding: 0;
@@ -54,6 +57,7 @@
             > .link {
                 border: 1px solid transparent;
                 padding: 10px;
+                color: $navbar-btn-text-color;
                 color: var(--navbar-btn-text-color);
                 margin: 17px 0;
                 border-radius: 2px;
@@ -66,7 +70,9 @@
                 }
 
                 &.active {
+                    color: $navbar-btn-text-color;
                     color: var(--navbar-btn-text-color);
+                    border-color: $navbar-btn-text-color;
                     border-color: var(--navbar-btn-text-color);
                 }
             }
@@ -82,6 +88,7 @@
                 text-align: center;
                 display: block;
                 padding: 0 10px;
+                color: $navbar-btn-text-color;
                 color: var(--navbar-btn-text-color);
                 background: $transparent;
                 -webkit-transition: all .5s;
@@ -100,13 +107,16 @@
                 &:focus,
                 &:active,
                 &.active {
+                    color: $navbar-btn-text-color;
                     color: var(--navbar-btn-active-text-color);
+                    background: $navbar-btn-active-background-color;
                     background: var(--navbar-btn-active-background-color);
                 }
 
                 &:hover {
 
                     .link-name {
+                        border-color: $navbar-btn-text-underline-color;
                         border-color: var(--navbar-btn-text-underline-color);
                     }
                  }
@@ -142,7 +152,9 @@
                 .nav-link.nl-upload {
                     width: 180px;
                     padding: 0 15px;
+                    background: $navbar-upload-btn-background-color;
                     background: var(--navbar-upload-btn-background-color);
+                    color: $secondary;
                     color: var(--secondary);
 
                     .link-name {
@@ -170,8 +182,8 @@
                     &:active,
                     &.active {
                         color: $white;
+                        background: $navbar-upload-btn-active-background-color;
                         background: var(--navbar-upload-btn-active-background-color);
-
                     }
                 }
 
@@ -290,46 +302,18 @@
 
                     .btn-submit-other {
                         margin-bottom: 15px;
+                        color: $secondary;
                         color: var(--secondary);
                         border-color: $transparent;
 
                         &:hover,
                         &.active {
                             border-color: $transparent;
+                            color: $secondary-darken;
                             color: var(--secondary-darken);
                             background: $eee;
                         }
                     }
-                    // .um-sign-out {
-                    //     width: auto;
-                    //     margin: 0;
-                    //     display: block;
-                    //     text-align: center;
-                    //     font-size: 12px;
-                    //     border: 0;
-                    //     padding: 0;
-                    //     color: var(--primary);
-                    // }
-
-                    // .um-icon {
-                    //     font-size: 20px;
-                    //     background-color: $transparent;
-                    //     margin: 2px 0 10px;
-                    //     padding: 0;
-                    //     float: left;
-
-                    //     a {
-                    //         display: inline;
-                    //         padding: 3px;
-                    //         margin: 0;
-                    //         background-color: $transparent;
-                    //         color: $c-77;
-
-                    //         &:hover {color: var(--primary);}
-
-                    //         &.active {color: darken($c-77, 5%);}
-                    //     }
-                    // }
                 }
             }
 
@@ -441,6 +425,7 @@
 
         .logo-end{
             transition: color 0.3s;
+            color: $primary-hover;
             color: var(--primary-hover);
         }
         &:hover{

@@ -3,47 +3,85 @@
 // Changes the theme (colors, font, etc) of the openneuro instance.
 // Color variables are inherited from src/scss/_colors.scss.
 
-:root {
+$primary: $ocean;
+$primary-hover: lighten($ocean, 15%);
 
-  // Colors
+$secondary: $sky;
+$secondary-hover: #{lighten($sky, 50%)};
+$secondary-darken: darken($sky, 10%);
+
+$tertiary: $turquoise;
+
+// Fonts
+$font-family-open: 'Open Sans', sans-serif;
+$font-family-cabin: 'Cabin', sans-serif;
+
+// Shadows
+$btn-shadow: 1px 1px 3px -1px #{$transparent7};
+
+// Navbar
+$navbar-top-border-color: $stanford-red;
+$navbar-background-color: $c-33;
+$navbar-btn-text-color: $misty;
+$navbar-btn-text-underline-color: $transparent1-w;
+$navbar-btn-active-background-color: $transparent05-w;
+$navbar-btn-active-text-color: $white;
+$navbar-upload-btn-background-color: $transparent3;
+$navbar-upload-btn-active-background-color: $secondary;
+
+// Footer
+$footer-background-color: $c-33;
+$footer-text-color: $white;
+
+// Dashboard
+$dashboard-tab-text-color: $primary;
+
+// Charts
+$chart-success-color: $turquoise;
+$chart-failed-color: $coral;
+
+// Misc
+$spinner-color: $turquoise;
+
+:root {
   --primary: #{$ocean};
   --primary-hover: #{lighten($ocean, 15%)};
 
-  --secondary: #{$sky};
+  --secondary: #{$secondary};
   --secondary-hover: #{lighten($sky, 50%)};
   --secondary-darken: #{darken($sky, 10%)};
 
   --tertiary: #{$turquoise};
 
   // Fonts
-  --font-family-open: 'Open Sans', sans-serif;
-  --font-family-cabin: 'Cabin', sans-serif;
+  --font-family-open: $font-family-open;
+
+  --font-family-cabin: $font-family-cabin;
 
   // Shadows
   --btn-shadow: 1px 1px 3px -1px #{$transparent7};
 
   // Navbar
-  --navbar-top-border-color: #{$stanford-red};
-  --navbar-background-color: #{$c-33};
-  --navbar-btn-text-color: #{$misty};
-  --navbar-btn-text-underline-color: #{$transparent1-w};
-  --navbar-btn-active-background-color: #{$transparent05-w};
-  --navbar-btn-active-text-color: #{$white}; 
-  --navbar-upload-btn-background-color: #{$transparent3};
+  --navbar-top-border-color: #{$navbar-top-border-color};
+  --navbar-background-color: #{$navbar-background-color};
+  --navbar-btn-text-color: #{$navbar-btn-text-color};
+  --navbar-btn-text-underline-color: #{$navbar-btn-text-underline-color};
+  --navbar-btn-active-background-color: #{$navbar-btn-active-background-color};
+  --navbar-btn-active-text-color: #{$navbar-btn-active-text-color};
+  --navbar-upload-btn-background-color: #{$navbar-upload-btn-background-color};
   --navbar-upload-btn-active-background-color: var(--secondary);
 
   // Footer
-  --footer-background-color: #{$c-33};
-  --footer-text-color: #{$white};
+  --footer-background-color: #{$footer-background-color};
+  --footer-text-color: #{$footer-text-color};
 
   // Dashboard
   --dashboard-tab-text-color: var(--primary);
 
   // Charts
-  --chart-success-color: #{$turquoise};
-  --chart-failed-color: #{$coral};
+  --chart-success-color: #{$chart-success-color};
+  --chart-failed-color: #{$chart-failed-color};
 
   // Misc
-  --spinner-color: #{$turquoise}; // color of the loading spinner
-
+  --spinner-color: #{$spinner-color}; // color of the loading spinner
 }

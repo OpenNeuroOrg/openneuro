@@ -77,12 +77,14 @@ body {
 }
 
 a {
+    color: $primary;
     color: var(--primary);
     cursor: pointer;
 }
 
 a:hover,
 a:focus {
+    color: $primary-hover;
     color: var(--primary-hover);
     text-decoration: none;
 }
@@ -99,11 +101,13 @@ h3,
 h4,
 h5,
 h6 {
+    font-family: $font-family-open;
     font-family: var(--font-family-open);
     font-weight: 400;
 }
 
 .href-font {
+    font-family: $font-family-open;
     font-family: var(--font-family-open);
 }
 
@@ -154,10 +158,12 @@ h6 {
     cursor: pointer;
     font-weight: 400;
     font-size: 12pt;
+    color: $primary;
     color: var(--primary);
     text-align: center;
     padding: 8px 13px;
     width: 100%;
+    border: 1px solid $primary;
     border: 1px solid var(--primary);
     text-transform: uppercase;
     margin: 0 0 10px;
@@ -167,8 +173,10 @@ h6 {
     &:active,
     &.hover,
     &.active {
+        border-color: $primary-hover;
         border-color: var(--primary-hover);
         background: $fa;
+        color: $primary-hover;
         color: var(--primary-hover);
     }
 }
@@ -177,6 +185,7 @@ h6 {
 
 %btn-blue {
     @extend %btn-basic;
+    background-color: $secondary;
     background-color: var(--secondary);
     color: $white;
     margin: 0;
@@ -187,6 +196,7 @@ h6 {
     &.hover,
     &.active,
     &:focus {
+        backgorund: $secondary-darken;
         background: var(--secondary-darken);
         transition: all .3s ease-out;
         color: $white;
@@ -262,10 +272,12 @@ h6 {
 
     &.warning {
         border: 0;
+        color: $primary;
         color: var(--primary);
         background: none;
 
         &:hover {
+            color: $primary-hover;
             color: var(--primary-hover);
         }
 
@@ -277,6 +289,7 @@ h6 {
 
 %btn-admin-blue {
     @extend %btn-admin;
+    color: $secondary;
     color: var(--secondary);
     border: 0;
     text-transform: uppercase;
@@ -287,6 +300,7 @@ h6 {
     &.hover,
     &:focus,
     &.active {
+        color: $secondary-darken;
         color: var(--secondary-darken);
         background: $eee;
     }
@@ -296,10 +310,12 @@ h6 {
 
 %btn-submit-other {
     @extend %btn-admin-blue;
+    border: 2px solid $secondary;
     border: 2px solid var(--secondary);
 
     &:active,
     &:focus {
+        border: 2px solid $secondary;
         border: 2px solid var(--secondary);
     }
 }
@@ -354,6 +370,7 @@ h6 {
     text-transform: none;
 
     &:hover {
+        color: $primary;
         color: var(--primary);
         background: none;
     }
@@ -374,6 +391,7 @@ h6 {
     &.active {
         outline: 0;
         background: $eee;
+        color: $primary;
         color: var(--primary);
         box-sizing: border-box;
     }
@@ -386,6 +404,7 @@ h6 {
     background: $f8;
     border: 1px solid $eee;
     box-shadow: 1px -1px 3px -1px $transparent1;
+    color: $primary;
     color: var(--primary);
     margin-left: 15px;
 
@@ -394,17 +413,20 @@ h6 {
         border-color: $white;
         border-left: 1px solid $f4;
         border-bottom-color: $white;
+        color: $primary;
         color: var(--primary);
         box-shadow: 0 -1px 1px -1px $transparent5;
     }
 
     &:hover {
         background: $white;
+        color: $secondary;
         color: var(--secondary);
     }
 
     &.active:hover {
         background: $white;
+        color: $primary;
         color: var(--primary);
         cursor: normal;
         outline: none;
@@ -480,6 +502,7 @@ h6 {
             margin: 0;
             background: none;
             border: 0;
+            color: $secondary;
             color: var(--secondary);
 
             i {
@@ -548,6 +571,7 @@ h6 {
         position: relative;
         padding: 3px 5px;
         border: 0;
+        color: $secondary;
         color: var(--secondary);
 
         i {
@@ -575,6 +599,7 @@ h6 {
     width: 72px;
     display: block;
     overflow: hidden;
+    background: $primary-hover;
     background: var(--primary-hover);
     color: $white;
 
@@ -582,6 +607,7 @@ h6 {
     &:hover,
     &:active {
         color: $white;
+        background: $primary;
         background: var(--primary);
     }
 
@@ -627,6 +653,7 @@ h6 {
     width: 100%;
     height: auto;
     font-size: 18px;
+    font-family: $font-family-open;
     font-family: var(--font-family-open);
     font-weight: lighter;
     border: 0;

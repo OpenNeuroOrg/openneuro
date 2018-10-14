@@ -345,6 +345,7 @@ body > div:nth-child(9) > div.fade.in.modal > div > div > div.modal-body > div >
         text-align: right;
 
         button{
+            color: $primary;
             color: var(--primary);
         }
     }
@@ -468,6 +469,7 @@ body > div:nth-child(9) > div.fade.in.modal > div > div > div.modal-body > div >
 }
 
 div.rt-resizable-header-content {
+    color: $primary;
     color: var(--primary);
     padding: 5px 0px;
     padding-right: 50px !important;
@@ -567,9 +569,11 @@ div.rt-resizable-header-content {
     .help-info {
       float: right;
       font-size: 10px;
+      color: $primary;
       color: var(--primary);
 
       &:hover {
+        color: $primary-hover;
         color: var(--primary-hover);
         cursor: pointer;
       }
@@ -617,6 +621,7 @@ div.rt-resizable-header-content {
             label {
                 font-size: 15px;
                 font-weight: lighter;
+                color: $primary;
                 color: var(--primary);
             }
         }

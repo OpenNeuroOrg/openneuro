@@ -33,10 +33,12 @@
 
     .upload-reset-link,
     .rename-tab-link {
+      color: $primary;
       color: var(--primary);
       cursor: pointer;
 
       &:hover {
+        color: $primary-hover;
         color: var(--primary-hover);
       }
     }
@@ -99,12 +101,14 @@
         font-size: 12px;
         background-color: $transparent;
         border: 0;
+        color: $primary;
         color: var(--primary);
         margin: 0 0 0 20px;
         vertical-align: middle;
         height: 30px;
 
         &:hover {
+          color: $primary-hover;
           color: var(--primary-hover);
         }
       }
@@ -158,7 +162,9 @@
           display: block;
           padding: 18px;
           background-color: $f4;
+          color: $primary;
           color: var(--primary);
+          font-family: $font-family-open;
           font-family: var(--font-family-open);
           font-weight: 400;
           text-decoration: none;
@@ -208,6 +214,7 @@
   background: $bbb;
   transition: margin-left 0.3s ease;
   margin-top: -40px;
+  border-bottom: 5px solid $secondary;
   border-bottom: 5px solid var(--secondary);
 
   @media (max-width: 1428px) {
@@ -246,6 +253,7 @@
       a {
         border-radius: 0;
         background-color: transparent;
+        color: $primary-hover;
         color: var(--primary-hover);
         font-size: 14px;
         border-right: 1px solid $transparent1;
@@ -254,6 +262,7 @@
 
         &:hover {
           background-color: $transparent;
+          color: $primary;
           color: var(--primary);
         }
 
@@ -324,9 +333,11 @@
   font-size: 12px;
   text-align: center;
   display: block;
+  color: $primary;
   color: var(--primary);
   background-color: $transparent;
   &:hover {
+    color: $primary-hover;
     color: var(--primary-hover);
   }
 }
@@ -345,6 +356,7 @@
 .uploading.right-sidebar {
   .message {
     text-align: left;
+    color: $tertiary;
     color: var(--tertiary);
     text-transform: lowercase;
     font-size: 12px;
@@ -367,6 +379,7 @@
 }
 
 .upload-step-active {
+  background-color: $primary;
   background-color: var(--primary);
   color: $white;
 }
