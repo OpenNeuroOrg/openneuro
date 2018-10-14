@@ -2428,9 +2428,9 @@ apollo-tracing@^0.2.5:
     apollo-server-env "^2.0.3"
     graphql-extensions "^0.2.1"
 
-"apollo-upload-client@https://github.com/nellh/apollo-upload-client-build.git#c28ffcd2d8effefb94f811776a2bd1282e672027":
+"apollo-upload-client@https://github.com/nellh/apollo-upload-client-build.git#d7d4cd0d630bd5a8eee4bb2257d1cb267c797185":
   version "8.0.4"
-  resolved "https://github.com/nellh/apollo-upload-client-build.git#c28ffcd2d8effefb94f811776a2bd1282e672027"
+  resolved "https://github.com/nellh/apollo-upload-client-build.git#d7d4cd0d630bd5a8eee4bb2257d1cb267c797185"
   dependencies:
     apollo-link-http-common "^0.2.3"
     extract-files "^4.0.0"
