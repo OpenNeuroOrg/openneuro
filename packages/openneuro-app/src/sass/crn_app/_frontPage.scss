@@ -75,6 +75,7 @@
     p {
         font-size: 22px;
         font-weight: 100;
+        font-family: $font-family-open;
         font-family: var(--font-family-open);
     }
 }
@@ -166,6 +167,7 @@
                     margin: 0 auto;
                     height: 180px;
                     h3{
+                        font-family: $font-family-open;
                         font-family: var(--font-family-open);
                         font-weight: 200;
                         font-size: 40px;
@@ -179,6 +181,7 @@
                 .more{
                     border-bottom: 5px solid transparent;
                     font-size: 22px;
+                    color: $secondary;
                     color: var(--secondary);
                     text-transform: uppercase;
                     text-align: center;
@@ -192,6 +195,7 @@
                     &:before{
                         content: '+';
                         font-size: 25px;
+                        border: 1px solid $secondary;
                         border: 1px solid var(--secondary);
                         border-radius: 100%;
                         height: 38px;
@@ -199,6 +203,7 @@
                         display: inline-block;
                         line-height: 34px;
                         text-align: center;
+                        font-family: $font-family-open;
                         font-family: var(--font-family-open);
                         font-weight: 200;
                         margin-right: 7px;
@@ -206,12 +211,14 @@
                     }
                     &:hover{
                         border-color: $eee;
+                        color: $primary;
                         color: var(--primary);
                     }
                 }
 
                 &.active{
                     .more{
+                        border-color: $secondary;
                         border-color: var(--secondary);
                         &:before{
                             -ms-transform: rotate(135deg);
@@ -268,6 +275,7 @@
             }
         }
         .caption {
+            font-family: $font-family-open;
             font-family: var(--font-family-open);
             font-size: 18px;
             padding: 10px;
@@ -293,11 +301,13 @@
         .bids-more,
         .openneuro-more{
             text-align: left;
+            font-family: $font-family-open;
             font-family: var(--font-family-open);
             margin: 0;
             font-weight: 200;
             .logo-text{
                  font-size: 50px;
+                 font-family: $font-family-cabin;
                 font-family: var(--font-family-cabin);
             }
             .col-sm-6{
@@ -308,9 +318,11 @@
                     max-width: 450px;
                 }
                 a{
+                    color: $secondary;
                     color: var(--secondary);
                     font-weight: 400;
                     &:hover{
+                        color: $primary;
                         color: var(--primary);
                     }
                 }
@@ -393,6 +405,7 @@
                     font-size: 20px;
                     color: $white;
                     font-weight: 300;
+                    font-family: $font-family-open;
                     font-family: var(--font-family-open);
                 }
 
@@ -496,8 +509,10 @@
 }
 
 footer {
+    background: $footer-background-color;
     background: var(--footer-background-color);
     padding: 10px 20px;
+    color: $footer-text-color;
     color: var(--footer-text-color);
     display: block;
 
@@ -505,8 +520,10 @@ footer {
         text-align:center;
         span {
             a {
+                color: $footer-text-color;
                 color: var(--footer-text-color);
                 &:hover{
+                    color: $primary;
                     color: var(--primary);
                 }
             }
@@ -525,9 +542,11 @@ footer {
                 text-align: center;
                 list-style: none;
                 a{
+                    color: $footer-text-color;
                     color: var(--footer-text-color);
                     &:hover{
                         text-decoration: underline;
+                        color: $secondary;
                         color: var(--secondary);
                     }
                 }

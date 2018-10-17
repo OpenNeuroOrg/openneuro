@@ -24,6 +24,7 @@
         max-width: 800px;
         color: $c-56;
         font-size: 16px;
+        font-family: $font-family-open;
         font-family: var(--font-family-open);
     }
 }
@@ -56,6 +57,7 @@
     padding: 0 30px;
     line-height: 100px;
     font-size: 20px;
+    font-family: $font-family-open;
     font-family: var(--font-family-open);
     border-left: 2px solid $ddd;
     color: $c-56;

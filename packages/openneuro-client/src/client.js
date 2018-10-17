@@ -72,9 +72,14 @@ const createLink = (uri, getAuthorization, fetch) => {
 
   // server-side link
   let link = middlewareAuthLink(uri, getAuthorization, fetch)
+  let ws
 
-  // browser-side link
-  const ws = process.browser ? wsLink(uri) : null
+  try {
+    // browser-side link
+    ws = process.browser ? wsLink(uri) : null
+  } catch (e) {
+    // Don't die when websocket setup fails
+  }
   if (ws) {
     link = split(
       ({ query }) => {
