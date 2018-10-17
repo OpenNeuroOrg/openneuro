@@ -1,6 +1,6 @@
 {
   "name": "openneuro-app",
-  "version": "2.3.2",
+  "version": "2.4.0",
   "description": "React JS web frontend for the OpenNeuro platform.",
   "license": "MIT",
   "main": "app.js",
@@ -41,7 +41,7 @@
     "loadable-components": "^2.2.2",
     "lodash.clonedeep": "^4.5.0",
     "moment": "^2.10.3",
-    "openneuro-client": "^2.3.0",
+    "openneuro-client": "^2.4.0",
     "pluralize": "^7.0.0",
     "prettier": "^1.14.3",
     "prismjs": "^1.10.0",
