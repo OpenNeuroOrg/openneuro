@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dataset/download DownloadSampleCommand component renders successfully 1`] = `
+<styled.pre>
+  # openneuro download 
+  ds000001
+   
+  ds000001
+  -download/ 
+  --draft
+</styled.pre>
+`;

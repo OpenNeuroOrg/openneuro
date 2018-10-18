@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dataset/download/DownloadLink checkBrowserEnvironment should throw an error for no ReadableStream 1`] = `"Web streams are required to download. Try a recent version of Chrome or see the FAQ for how to enable these features on Firefox."`;
+
+exports[`dataset/download/DownloadLink checkBrowserEnvironment should throw an error for no service worker 1`] = `"Your browser must support service workers to download. See the FAQ for supported browsers."`;
+
+exports[`dataset/download/DownloadLink renders successfully 1`] = `
+<div>
+  <h4>
+    Download in your browser
+  </h4>
+  <p>
+    This method is convenient and best for smaller datasets and with a good internet connection.
+  </p>
+  <button
+    className="btn-warn-component warning"
+    onClick={[Function]}
+  >
+    <i
+      className="fa fa-download"
+    />
+     Click to Download
+  </button>
+</div>
+`;
