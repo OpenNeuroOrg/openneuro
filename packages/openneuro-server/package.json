@@ -60,6 +60,7 @@
     "redis": "^2.8.0",
     "request": "^2.83.0",
     "s3-stream-download": "https://github.com/OpenNeuroOrg/s3-stream-download.git",
+    "sitemap": "^2.1.0",
     "subscriptions-transport-ws": "^0.9.9",
     "superagent": "^3.8.2",
     "tar-fs": "^1.9.0",
