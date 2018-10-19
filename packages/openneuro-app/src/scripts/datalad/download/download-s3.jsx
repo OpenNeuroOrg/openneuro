@@ -5,7 +5,7 @@ import { getConfig } from '../../config.js'
 
 export const DownloadSampleS3 = ({ datasetId, s3Bucket }) => (
   <ShellExample>
-    # aws s3 sync --no-sign-request s3://
+    aws s3 sync --no-sign-request s3://
     {s3Bucket}/{datasetId} {datasetId}
     -download/
   </ShellExample>
@@ -20,7 +20,7 @@ const DownloadS3Instructions = ({ datasetId, s3Bucket }) => (
   <div>
     <h4>Download from S3</h4>
     <p>
-      Public snapshots are stored on S3 and the most recent snapshot is
+      Public snapshots are stored on AWS S3 and the most recent snapshot is
       downloadable with standard S3 tools. This method is best for larger
       datasets or unstable connections. This example uses{' '}
       <a href="https://aws.amazon.com/cli/">AWS CLI.</a>

@@ -107,15 +107,15 @@ const downloadClick = (datasetId, snapshotTag) => callback => {
  */
 const DownloadLink = ({ datasetId, snapshotTag }) => (
   <div>
-    <h4>Download in your browser</h4>
+    <h4>Download with your browser</h4>
     <p>
       This method is convenient and best for smaller datasets and with a good
       internet connection.
     </p>
     <button
-      className="btn-warn-component warning"
+      className="btn-blue"
       onClick={downloadClick(datasetId, snapshotTag)}>
-      <i className={'fa fa-download'} /> Click to Download
+      <i className={'fa fa-download'} /> Download
     </button>
   </div>
 )

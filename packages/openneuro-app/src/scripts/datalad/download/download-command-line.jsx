@@ -4,8 +4,9 @@ import ShellExample from './shell-example.jsx'
 
 export const DownloadSampleCommand = ({ datasetId, snapshotTag }) => (
   <ShellExample>
-    # openneuro download {datasetId} {datasetId}
-    -download/ {snapshotTag ? `--snapshot ${snapshotTag}` : '--draft'}
+    openneuro download {datasetId}{' '}
+    {snapshotTag ? `--snapshot ${snapshotTag}` : '--draft'} {datasetId}
+    -download/
   </ShellExample>
 )
 

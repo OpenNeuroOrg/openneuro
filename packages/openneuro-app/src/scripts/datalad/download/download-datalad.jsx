@@ -5,7 +5,7 @@ import ShellExample from './shell-example.jsx'
 
 const DownloadDataladExample = ({ datasetId, githubOrganization }) => (
   <ShellExample>
-    # datalad install https://github.com/
+    datalad install https://github.com/
     {githubOrganization}/{datasetId}
     .git
   </ShellExample>

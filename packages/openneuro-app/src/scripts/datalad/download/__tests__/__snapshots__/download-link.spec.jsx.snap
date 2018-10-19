@@ -7,19 +7,19 @@ exports[`dataset/download/DownloadLink checkBrowserEnvironment should throw an e
 exports[`dataset/download/DownloadLink renders successfully 1`] = `
 <div>
   <h4>
-    Download in your browser
+    Download with your browser
   </h4>
   <p>
     This method is convenient and best for smaller datasets and with a good internet connection.
   </p>
   <button
-    className="btn-warn-component warning"
+    className="btn-blue"
     onClick={[Function]}
   >
     <i
       className="fa fa-download"
     />
-     Click to Download
+     Download
   </button>
 </div>
 `;

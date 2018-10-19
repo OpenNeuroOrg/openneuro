@@ -13,6 +13,7 @@ exports[`dataset/download/ShellExample renders successfully 1`] = `
           "
   max-width: 80em;
   white-space: pre-wrap;
+  word-break: keep-all;
 ",
         ],
       },

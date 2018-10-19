@@ -2,11 +2,12 @@
 
 exports[`dataset/download DownloadSampleCommand component renders successfully 1`] = `
 <styled.pre>
-  # openneuro download 
+  openneuro download 
   ds000001
    
-  ds000001
-  -download/ 
   --draft
+   
+  ds000001
+  -download/
 </styled.pre>
 `;

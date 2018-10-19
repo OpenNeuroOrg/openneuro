@@ -2,10 +2,19 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import { Panel } from 'react-bootstrap'
+import styled from 'styled-components'
 import DownloadLink from './download-link.jsx'
 import DownloadS3 from './download-s3.jsx'
 import DownloadCommandLine from './download-command-line.jsx'
 import DownloadDatalad from './download-datalad.jsx'
+
+const PaddedDiv = styled.div`
+  padding: 1em;
+`
+
+const ExtraPaddedDiv = styled.div`
+  padding: 3em;
+`
 
 const DownloadDataset = ({
   match: {
@@ -13,28 +22,36 @@ const DownloadDataset = ({
     params: { datasetId, snapshotId: snapshotTag },
   },
 }) => (
-  <div className="dataset-form">
-    <div className="col-xs-12 dataset-form-header">
-      <div className="form-group">
-        <label>How to Download</label>
-      </div>
+  <div>
+    <div className="col-xs-12">
+      <h3>How to Download</h3>
       <hr className="modal-inner" />
     </div>
-    <div className="dataset-form-body col-xs-12">
-      <div className="dataset-form-content col-xs-12">
+    <div className="col-xs-12">
+      <PaddedDiv className="col-xs-6">
         <DownloadLink datasetId={datasetId} snapshotTag={snapshotTag} />
-        <hr className="modal-inner" />
+      </PaddedDiv>
+      <PaddedDiv className="col-xs-6">
         <DownloadS3 datasetId={datasetId} />
-        <hr className="modal-inner" />
-        <Panel header="Advanced Methods" collapsible>
+      </PaddedDiv>
+    </div>
+    <ExtraPaddedDiv className="col-xs-12">
+      <p>
+        If neither of the above methods meet your needs, try an advanced method
+        below.
+      </p>
+      <Panel header="Advanced Methods" collapsible>
+        <PaddedDiv className="col-xs-6">
           <DownloadCommandLine
             datasetId={datasetId}
             snapshotTag={snapshotTag}
           />
+        </PaddedDiv>
+        <PaddedDiv className="col-xs-6">
           <DownloadDatalad datasetId={datasetId} />
-        </Panel>
-      </div>
-    </div>
+        </PaddedDiv>
+      </Panel>
+    </ExtraPaddedDiv>
   </div>
 )
 
