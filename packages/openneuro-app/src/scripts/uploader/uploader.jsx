@@ -1,3 +1,5 @@
+import Raven from 'raven-js'
+import { toast } from 'react-toastify'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloConsumer } from 'react-apollo'
@@ -180,6 +182,17 @@ export class UploadClient extends React.Component {
           // Note chain to this._addFiles
           this.setState({ datasetId }, this._addFiles)
         })
+        .catch(error => {
+          Raven.captureException(error)
+          toast.error(
+            <span>
+              <h3>Dataset creation failed</h3>
+              <p>Please check your connection</p>
+            </span>,
+            { autoClose: false },
+          )
+          this.setState({ error, uploading: false })
+        })
     }
   }
 
@@ -267,8 +280,23 @@ export class UploadClient extends React.Component {
             this.setState({ uploading: false })
             this.uploadCompleteAction()
           })
-          .catch(() => {
-            this.setState({ uploading: false })
+          .catch(error => {
+            Raven.captureException(error)
+            toast.error(
+              <span>
+                <h3>Dataset upload failed</h3>
+                <p>Please check your connection</p>
+              </span>,
+              { autoClose: false },
+            )
+            this.setState({ error, uploading: false })
+            if (this.state.xhr) {
+              try {
+                this.state.xhr.abort()
+              } catch (e) {
+                Raven.captureException(e)
+              }
+            }
           })
       })
   }
