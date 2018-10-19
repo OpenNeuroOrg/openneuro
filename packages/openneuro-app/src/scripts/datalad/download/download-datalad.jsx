@@ -31,6 +31,13 @@ const DownloadDataladInstructions = ({ datasetId, githubOrganization }) => (
       datasetId={datasetId}
       githubOrganization={githubOrganization}
     />
+    <p>
+      Check out{' '}
+      <a href="http://docs.datalad.org/en/latest/gettingstarted.html">
+        getting started with DataLad
+      </a>{' '}
+      for more on how to use this download method.
+    </p>
   </div>
 )
 
