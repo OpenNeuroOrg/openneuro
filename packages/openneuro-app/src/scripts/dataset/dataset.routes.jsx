@@ -14,6 +14,7 @@ import DatasetLoader from './dataset.dataset-loader.jsx'
 import SnapshotLoader from './dataset.snapshot-loader.jsx'
 import ResultsDisplay from './tools/jobs/results-display.jsx'
 import LogsDisplay from './tools/jobs/logs-display.jsx'
+import DownloadDataset from '../datalad/download/download-dataset.jsx'
 
 /**
  * This redirects old URLs ending in /versions to the first snapshot
@@ -52,6 +53,12 @@ export default class DatasetRoutes extends React.Component {
             exact
             path="/datasets/:datasetId"
             component={DatasetContent}
+          />
+          <Route
+            name="download"
+            exact
+            path="/datasets/:datasetId/download"
+            component={DownloadDataset}
           />
           <Route
             name="snapshot-create"
@@ -107,6 +114,12 @@ export default class DatasetRoutes extends React.Component {
             exact
             path="/datasets/:datasetId/versions"
             component={SnapshotDefaultRedirect}
+          />
+          <Route
+            name="download"
+            exact
+            path="/datasets/:datasetId/versions/:snapshotId/download"
+            component={DownloadDataset}
           />
           <Route
             name="snapshot"

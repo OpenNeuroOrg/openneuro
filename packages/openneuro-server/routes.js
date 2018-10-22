@@ -20,6 +20,7 @@ import * as auth from './libs/authentication/states.js'
 import schema from './libs/schema'
 import schemas from './schemas'
 import doi from './handlers/doi'
+import { sitemapHandler}  from './handlers/sitemap.js'
 
 import fileUpload from 'express-fileupload'
 
@@ -406,6 +407,12 @@ const routes = [
     url: '/auth/globus/callback',
     middleware: [globus.authCallback],
     handler: jwt.authSuccessHandler,
+  },
+  // sitemap
+  {
+    method: 'get',
+    url: '/sitemap',
+    handler: sitemapHandler,
   },
 ]
 

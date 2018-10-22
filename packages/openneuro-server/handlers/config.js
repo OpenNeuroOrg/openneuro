@@ -74,6 +74,10 @@ const config = {
     enabled: process.env.ANALYSIS_ENABLED,
   },
 
+  github: process.env.DATALAD_GITHUB_ORG,
+
+  publicBucket: process.env.AWS_S3_PUBLIC_BUCKET,
+
   theme: {},
 }
 

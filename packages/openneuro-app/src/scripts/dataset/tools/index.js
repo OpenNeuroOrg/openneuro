@@ -5,7 +5,7 @@ import Reflux from 'reflux'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import moment from 'moment'
-import DownloadLink from '../../datalad/download/download-link.jsx'
+import DownloadTool from '../../datalad/download/download-tool.jsx'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import actions from '../dataset.actions.js'
 import datasetStore from '../dataset.store.js'
@@ -272,12 +272,12 @@ class Tools extends Reflux.Component {
           <div className="tools clearfix">
             {this._snapshotLabel(dataset)}
             {isSnapshot ? (
-              <DownloadLink
+              <DownloadTool
                 datasetId={dataset.linkID}
                 snapshotTag={dataset.snapshot_version}
               />
             ) : (
-              <DownloadLink datasetId={dataset.linkID} />
+              <DownloadTool datasetId={dataset.linkID} />
             )}
             {this._tools(tools)}
           </div>
