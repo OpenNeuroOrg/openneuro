@@ -36,10 +36,6 @@ const DownloadDataset = ({
       </PaddedDiv>
     </div>
     <ExtraPaddedDiv className="col-xs-12">
-      <p>
-        If neither of the above methods meet your needs, try an advanced method
-        below.
-      </p>
       <Panel header="Advanced Methods" collapsible>
         <PaddedDiv className="col-xs-6">
           <DownloadCommandLine

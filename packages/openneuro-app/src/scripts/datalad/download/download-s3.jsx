@@ -20,12 +20,15 @@ const DownloadS3Instructions = ({ datasetId, s3Bucket }) => (
   <div>
     <h4>Download from S3</h4>
     <p>
-      Public snapshots are stored on AWS S3 and the most recent snapshot is
-      downloadable with standard S3 tools. This method is best for larger
-      datasets or unstable connections. This example uses{' '}
-      <a href="https://aws.amazon.com/cli/">AWS CLI.</a>
+      The most recently published snapshot can be downloaded from S3. This
+      method is best for larger datasets or unstable connections. This example
+      uses <a href="https://aws.amazon.com/cli/">AWS CLI.</a>
     </p>
     <DownloadSampleS3 datasetId={datasetId} s3Bucket={s3Bucket} />
+    <p>
+      To download unpublished datasets or older snapshots, see advanced methods
+      below.
+    </p>
   </div>
 )
 
