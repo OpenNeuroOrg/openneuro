@@ -8,6 +8,7 @@ import Index from './index.jsx'
 import analyticsWrapper from './utils/analytics.js'
 import getClient from 'openneuro-client'
 import { CookiesProvider } from 'react-cookie'
+import { ToastContainer } from 'react-toastify'
 
 const App = ({ config }) => {
   return (
@@ -21,6 +22,7 @@ const App = ({ config }) => {
           <Router>
             <Route component={analyticsWrapper(Index)} />
           </Router>
+          <ToastContainer position="bottom-right" />
         </div>
       </ApolloProvider>
     </CookiesProvider>

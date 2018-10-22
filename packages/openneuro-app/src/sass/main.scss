@@ -4,6 +4,9 @@ $bootstrap-sass-asset-helper: true;
 // Always required /_properties if not importing all animate/animate.scss
 @import 'animate/properties';
 
+// react-toastify
+@import '~react-toastify/dist/ReactToastify.css';
+
 //font  //=================================================================
 @import './font-awesome/font-awesome';
 
