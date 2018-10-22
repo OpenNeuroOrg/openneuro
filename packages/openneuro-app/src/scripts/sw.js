@@ -26,7 +26,7 @@ self.addEventListener('fetch', event => {
   // for non-GET requests.
   if (event.request.method === 'GET') {
     const url = new URL(event.request.url)
-    if (url.pathname.endsWith('download')) {
+    if (url.pathname.startsWith('/crn') && url.pathname.endsWith('download')) {
       // Catch any aggregate download requests
       return event.respondWith(bundleResponse(url))
     } else {
