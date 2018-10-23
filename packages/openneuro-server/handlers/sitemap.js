@@ -33,7 +33,9 @@ export const sitemapDynamicUrls = () =>
           url: {
             $concat: ['/datasets/', '$id', '/versions/', '$snapshots.tag'],
           },
-          lastmodISO: '$snapshots.created',
+          lastmodISO: {
+            $dateToString: { date: '$snapshots.created' },
+          },
           priority: 0.8,
           changefreq: 'daily', // To make sure new comments are indexed
         },
