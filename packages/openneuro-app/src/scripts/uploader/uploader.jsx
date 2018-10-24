@@ -280,24 +280,24 @@ export class UploadClient extends React.Component {
             this.setState({ uploading: false })
             this.uploadCompleteAction()
           })
-          .catch(error => {
-            Raven.captureException(error)
-            toast.error(
-              <span>
-                <h3>Dataset upload failed</h3>
-                <p>Please check your connection</p>
-              </span>,
-              { autoClose: false },
-            )
-            this.setState({ error, uploading: false })
-            if (this.state.xhr) {
-              try {
-                this.state.xhr.abort()
-              } catch (e) {
-                Raven.captureException(e)
-              }
-            }
-          })
+      })
+      .catch(error => {
+        Raven.captureException(error)
+        toast.error(
+          <span>
+            <h3>Dataset upload failed</h3>
+            <p>Please check your connection</p>
+          </span>,
+          { autoClose: false },
+        )
+        this.setState({ error, uploading: false })
+        if (this.state.xhr) {
+          try {
+            this.state.xhr.abort()
+          } catch (e) {
+            Raven.captureException(e)
+          }
+        }
       })
   }
 
