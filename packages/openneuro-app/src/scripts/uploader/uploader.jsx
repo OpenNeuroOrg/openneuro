@@ -295,7 +295,7 @@ export class UploadClient extends React.Component {
             <FileSelect
               onChange={() => {
                 toast.dismiss(toastId)
-                this.resumeDataset(this.state.datasetId)
+                this.resumeDataset(this.state.datasetId)()
               }}
               resume
             />
