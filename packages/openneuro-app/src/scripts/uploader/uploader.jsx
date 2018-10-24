@@ -191,7 +191,11 @@ export class UploadClient extends React.Component {
             </span>,
             { autoClose: false },
           )
-          this.setState({ error, uploading: false })
+          this.setState({
+            error,
+            uploading: false,
+            location: locationFactory('/hidden'),
+          })
         })
     }
   }
@@ -290,7 +294,11 @@ export class UploadClient extends React.Component {
           </span>,
           { autoClose: false },
         )
-        this.setState({ error, uploading: false })
+        this.setState({
+          error,
+          uploading: false,
+          location: locationFactory('/hidden'),
+        })
         if (this.state.xhr) {
           try {
             this.state.xhr.abort()
