@@ -293,9 +293,9 @@ export class UploadClient extends React.Component {
             <h3>Dataset upload failed</h3>
             <h4>Please check your connection</h4>
             <FileSelect
-              onChange={() => {
+              onChange={event => {
                 toast.dismiss(toastId)
-                this.resumeDataset(this.state.datasetId)()
+                this.resumeDataset(this.state.datasetId)(event)
               }}
               resume
             />
