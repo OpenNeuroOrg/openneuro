@@ -647,6 +647,26 @@ h6 {
     }
 }
 
+// Toasts
+
+.Toastify__toast {
+    text-align: center;
+    background: $white;
+    color: $black;
+    padding: 1em;
+    .Toastify__close-button--error {
+        color: $black;
+    }
+}
+
+.Toastify__toast--warning {
+    border-top: 4px solid $warning;
+}
+
+.Toastify__toast--error {
+    border-top: 4px solid $danger;
+}
+
 //form ========================
 
 %form-field {

@@ -4,6 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloConsumer } from 'react-apollo'
 import UploaderContext from './uploader-context.js'
+import FileSelect from '../common/forms/file-select.jsx'
 import notifications from '../notification/notification.actions'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
@@ -187,7 +188,7 @@ export class UploadClient extends React.Component {
           toast.error(
             <span>
               <h3>Dataset creation failed</h3>
-              <p>Please check your connection</p>
+              <h4>Please check your connection</h4>
             </span>,
             { autoClose: false },
           )
@@ -287,10 +288,17 @@ export class UploadClient extends React.Component {
       })
       .catch(error => {
         Raven.captureException(error)
-        toast.error(
+        const toastId = toast.error(
           <span>
             <h3>Dataset upload failed</h3>
-            <p>Please check your connection</p>
+            <h4>Please check your connection</h4>
+            <FileSelect
+              onChange={event => {
+                toast.dismiss(toastId)
+                this.resumeDataset(this.state.datasetId)(event)
+              }}
+              resume
+            />
           </span>,
           { autoClose: false },
         )
