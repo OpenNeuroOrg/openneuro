@@ -74,31 +74,24 @@ export const awaitRegistration = (next, environment) => registration =>
  * Event handler for initiating dataset or snapshot downloads
  * @param {string} datasetId Accession number string for a dataset
  */
-const downloadClick = (datasetId, snapshotTag) => callback => {
+const downloadClick = (datasetId, snapshotTag) => () => {
   // Check that a service worker is registered
   try {
     checkBrowserEnvironment(global)
   } catch (e) {
     global.alert(e.message)
-    return callback()
   }
   // Create a closure for download path, datasetId, and optional tag
   const next = () => {
     startDownload(downloadUri(datasetId, snapshotTag))
     trackDownload(datasetId, snapshotTag)
-    callback()
   }
   // Check for a running service worker
   global.navigator.serviceWorker
     .getRegistration()
     .then(awaitRegistration(next, global))
-    .then(() => {
-      // Download is going as expected
-      callback()
-    })
     .catch(err => {
       Raven.captureException(err)
-      callback()
     })
 }
 
