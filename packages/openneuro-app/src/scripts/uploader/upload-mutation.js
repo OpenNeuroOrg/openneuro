@@ -1,4 +1,4 @@
-import { datasets, files, snapshots } from 'openneuro-client'
+import { datasets, files } from 'openneuro-client'
 
 /**
  * Create a dataset and update the label
@@ -9,24 +9,9 @@ export const createDataset = client => label => {
     .mutate({
       mutation: datasets.createDataset,
       variables: { label },
+      errorPolicy: 'all',
     })
     .then(({ data }) => data.createDataset.id)
-}
-
-/**
- * Create a dataset and update the label
- * @param {object} client Apollo client
- * @param {string} datasetId Id of the dataset to snapshot
- */
-export const createSnapshot = (client, datasetId)=> {
-  return client
-    .mutate({
-      mutation: snapshots.createSnapshot,
-      variables: { 
-        datasetId: datasetId,
-        tag: '1.0.0' 
-      },
-    })
 }
 
 /**
@@ -89,5 +74,6 @@ export const updateFiles = client => (datasetId, fileList) => {
   return client.mutate({
     mutation: files.updateFiles,
     variables: { datasetId, files: tree },
+    errorPolicy: 'all',
   })
 }
