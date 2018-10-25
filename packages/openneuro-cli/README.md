@@ -1,6 +1,6 @@
 # OpenNeuro command line interface
 
-This tool allows you to upload and download [OpenNeuro.org](https://openneuro.org) dataset without a browser.
+This tool allows you to upload and download [OpenNeuro.org](https://openneuro.org) datasets without a browser.
 
 # Install
 
