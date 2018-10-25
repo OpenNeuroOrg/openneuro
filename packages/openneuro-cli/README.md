@@ -30,7 +30,9 @@ To resume an interrupted upload or add files to an existing dataset:
 
 `openneuro upload --dataset <accession number> <dataset directory>`
 
-This will add or replace any files in the dataset but does not delete any files that are only present in the server copy of the dataset.
+where <accession_number> is a unique dataset identifier that can be found in the URL. For example accession number for `https://openneuro.org/datasets/ds001555` is `ds001555`.
+
+This command will add or replace any files in the dataset but does not delete any files that are only present in the server copy of the dataset.
 
 ## Downloading datasets
 
