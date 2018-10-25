@@ -1,18 +1,14 @@
 # OpenNeuro command line interface
 
-This tool allows you to upload to [OpenNeuro.org](https://openneuro.org) without a browser.
+This tool allows you to upload and download [OpenNeuro.org](https://openneuro.org) dataset without a browser.
 
 # Install
 
-Install globally with [yarn](https://yarnpkg.com/):
+1. Install [Node.js](https://nodejs.org)
+2. In a terminal type: `npm install -g openneuro-cli`
 
-`yarn global add openneuro-cli`
-
+If you are using [yarn](https://yarnpkg.com/) you can also perform the installation with `yarn global add openneuro-cli`
 (make sure the installation folder is part of your `PATH` by adding `export PATH="$(yarn global bin):$PATH"` to `~/.bashrc`)
-
-Or with [npm](https://www.npmjs.com/):
-
-`npm install -g openneuro-cli`
 
 # Setup
 
