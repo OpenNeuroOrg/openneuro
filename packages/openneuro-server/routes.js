@@ -4,7 +4,6 @@ import express from 'express'
 import users from './handlers/users'
 import awsJobs from './handlers/awsJobs'
 import eventLogs from './handlers/eventLogs'
-import datasets from './handlers/datasets'
 import stars from './handlers/stars'
 import * as datalad from './handlers/datalad'
 import * as download from './handlers/download.js'
@@ -20,7 +19,7 @@ import * as auth from './libs/authentication/states.js'
 import schema from './libs/schema'
 import schemas from './schemas'
 import doi from './handlers/doi'
-import { sitemapHandler}  from './handlers/sitemap.js'
+import { sitemapHandler } from './handlers/sitemap.js'
 
 import fileUpload from 'express-fileupload'
 
@@ -37,22 +36,6 @@ const routes = [
     url: '/users/self',
     middleware: [jwt.authenticate, auth.authenticated],
     handler: verifyUser,
-  },
-  {
-    method: 'get',
-    url: '/users/orcid/refresh',
-    handler: users.refreshORCIDToken,
-  },
-  {
-    method: 'get',
-    url: '/users/orcid',
-    handler: users.getORCIDProfile,
-  },
-  {
-    method: 'post',
-    url: '/users',
-    middleware: [schema.validateBody(schemas.user.new)],
-    handler: users.create,
   },
   {
     method: 'post',
@@ -75,15 +58,6 @@ const routes = [
     url: '/users/blacklist/:id',
     middleware: [jwt.authenticate, auth.superuser],
     handler: users.unBlacklist,
-  },
-
-  // analytics -----------------------------------
-
-  {
-    method: 'get',
-    url: '/analytics/:datasetId?',
-    middleware: [jwt.authenticate, auth.optional],
-    handler: datasets.analytics,
   },
 
   // jobs ----------------------------------------
