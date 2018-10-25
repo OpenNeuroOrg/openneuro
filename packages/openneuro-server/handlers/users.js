@@ -1,11 +1,8 @@
 // dependencies ------------------------------------------------------------
-
-import scitran from '../libs/scitran'
 import mongo from '../libs/mongo'
-import orcid from '../libs/orcid'
 import { generateApiKey } from '../libs/apikey'
 
-let c = mongo.collections
+const c = mongo.collections
 
 // handlers ----------------------------------------------------------------
 
