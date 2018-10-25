@@ -37,7 +37,6 @@
     "jwt-decode": "^2.2.0",
     "lerna": "^3.4.3",
     "lint-staged": "^7.3.0",
-    "load-google-api": "^0.1.3",
     "loadable-components": "^2.2.2",
     "lodash.clonedeep": "^4.5.0",
     "moment": "^2.10.3",
