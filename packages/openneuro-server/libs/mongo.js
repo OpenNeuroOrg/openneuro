@@ -14,7 +14,6 @@ export default {
    */
   dbs: {
     crn: null,
-    scitran: null,
   },
 
   /**
@@ -49,12 +48,6 @@ export default {
       users: null,
       analytics: null,
     },
-    scitran: {
-      projects: null,
-      project_snapshots: null,
-      users: null,
-      analytics: null,
-    },
   },
 
   /** Index definitions **/
@@ -77,31 +70,34 @@ export default {
       async.each(
         Object.keys(this.dbs),
         (dbName, cb) => {
-          MongoClient.connect(url + dbName, (err, db) => {
-            if (err) {
-              console.log(err)
-              reject(err)
-              process.exit()
-            } else {
-              this.dbs[dbName] = db
-              for (let collectionName in this.collections[dbName]) {
-                if (this.collections[dbName][collectionName] === null) {
-                  this.collections[dbName][collectionName] = this.dbs[
-                    dbName
-                  ].collection(collectionName)
-                  if (
-                    this.indexes[dbName] &&
-                    this.indexes[dbName][collectionName]
-                  ) {
-                    this.collections[dbName][collectionName].createIndex(
-                      this.indexes[dbName][collectionName],
-                    )
+          MongoClient.connect(
+            url + dbName,
+            (err, db) => {
+              if (err) {
+                console.log(err)
+                reject(err)
+                process.exit()
+              } else {
+                this.dbs[dbName] = db
+                for (let collectionName in this.collections[dbName]) {
+                  if (this.collections[dbName][collectionName] === null) {
+                    this.collections[dbName][collectionName] = this.dbs[
+                      dbName
+                    ].collection(collectionName)
+                    if (
+                      this.indexes[dbName] &&
+                      this.indexes[dbName][collectionName]
+                    ) {
+                      this.collections[dbName][collectionName].createIndex(
+                        this.indexes[dbName][collectionName],
+                      )
+                    }
                   }
                 }
               }
-            }
-            cb()
-          })
+              cb()
+            },
+          )
         },
         () => {
           if (callback && typeof callback === 'function') {

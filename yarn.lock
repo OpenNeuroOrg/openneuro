@@ -9611,11 +9611,6 @@ listr@^0.14.1:
     p-map "^1.1.1"
     rxjs "^6.1.0"
 
-load-google-api@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/load-google-api/-/load-google-api-0.1.3.tgz#fca317900e414231af85722844f4ee8e93a8e8ca"
-  integrity sha1-/KMXkA5BQjGvhXIoRPTujpOo6Mo=
-
 load-json-file@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/load-json-file/-/load-json-file-1.1.0.tgz#956905708d58b4bab4c2261b04f59f31c99374c0"
