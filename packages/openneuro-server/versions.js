@@ -1,2 +1,2 @@
-require('babel-core/register')
+require('@babel/register')
 require('./migrations/s3-versioning')
