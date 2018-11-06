@@ -35,19 +35,17 @@ const DownloadDataset = ({
         <DownloadS3 datasetId={datasetId} />
       </PaddedDiv>
     </div>
-    <ExtraPaddedDiv className="col-xs-12">
-      <Panel header="Advanced Methods" collapsible>
-        <PaddedDiv className="col-xs-6">
-          <DownloadCommandLine
-            datasetId={datasetId}
-            snapshotTag={snapshotTag}
-          />
-        </PaddedDiv>
-        <PaddedDiv className="col-xs-6">
-          <DownloadDatalad datasetId={datasetId} />
-        </PaddedDiv>
-      </Panel>
-    </ExtraPaddedDiv>
+    <Panel header="Advanced Methods" collapsible>
+      <PaddedDiv className="col-xs-7">
+        <DownloadCommandLine
+          datasetId={datasetId}
+          snapshotTag={snapshotTag}
+        />
+      </PaddedDiv>
+      <PaddedDiv className="col-xs-7">
+        <DownloadDatalad datasetId={datasetId} />
+      </PaddedDiv>
+    </Panel>
   </div>
 )
 
