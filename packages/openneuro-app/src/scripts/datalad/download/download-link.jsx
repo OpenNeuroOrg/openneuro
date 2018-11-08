@@ -2,10 +2,16 @@
 import Raven from 'raven-js'
 import React from 'react'
 import PropTypes from 'prop-types'
+import ReactGA from 'react-ga'
 import config from '../../../../config.js'
 import datalad from '../../utils/datalad'
 
 const startDownload = uri => {
+  ReactGA.event({
+    category: 'Download',
+    action: 'Started web download',
+    label: `${uri}`,
+  })
   global.location.assign(uri)
 }
 
