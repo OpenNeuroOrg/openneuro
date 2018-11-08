@@ -7,15 +7,15 @@ import config from '../../../../config.js'
 import datalad from '../../utils/datalad'
 
 const startDownload = uri => {
-  ReactGA.event({
-    category: 'Download',
-    action: 'Started web download',
-    label: `${uri}`,
-  })
   global.location.assign(uri)
 }
 
 const trackDownload = (datasetId, snapshotTag) => {
+  ReactGA.event({
+    category: 'Download',
+    action: 'Started web download',
+    label: snapshotTag ? `${datasetId}:${snapshotTag}` : datasetId,
+  })
   datalad.trackAnalytics(datasetId, {
     snapshot: true,
     tag: snapshotTag,
