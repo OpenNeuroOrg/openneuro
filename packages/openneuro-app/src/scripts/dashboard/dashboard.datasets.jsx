@@ -48,7 +48,7 @@ class Datasets extends Reflux.Component {
     Actions.update({ isPublic, isAdmin })
     Actions.getDatasets(isPublic, isAdmin)
     this._subscribeToNewDatasets(isPublic, isAdmin)
-    this._subscribeToDeletedDatasets(isPublic, isAdmin)
+    this._subscribeToDeletedDatasets()
   }
 
   componentWillReceiveProps() {
@@ -75,7 +75,7 @@ class Datasets extends Reflux.Component {
     })
   }
 
-  _subscribeToDeletedDatasets(isPublic, isAdmin) {
+  _subscribeToDeletedDatasets() {
     this.props.datasetsQuery.subscribeToMore({
       document: gql`
         subscription onDatasetDeleted {
