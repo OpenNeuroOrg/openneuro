@@ -214,24 +214,18 @@ export default {
    * the file tree using file paths.
    */
   _formatFiles(files) {
-    let fileList = []
+    const fileList = []
     if (files && files.length > 0) {
       for (let i = 0; i < files.length; i++) {
-        let file = files[i]
-
-        if (!file.tags || file.tags.indexOf('attachment') == -1) {
-          fileList[i] = {
-            name: file.filename.replace(/%2F/g, '/').replace(/%20/g, ' '),
-            webkitRelativePath: file.filename
-              .replace(/%2F/g, '/')
-              .replace(/%20/g, ' '),
-            size: file.size,
-          }
+        const file = files[i]
+        fileList[i] = {
+          name: file.filename,
+          webkitRelativePath: file.filename,
+          size: file.size,
         }
       }
     }
-    let fileTree = fileUtils.generateTree(fileList)
-    return fileTree
+    return fileUtils.generateTree(fileList)
   },
 
   // Update ---------------------------------------------------------------------------------
