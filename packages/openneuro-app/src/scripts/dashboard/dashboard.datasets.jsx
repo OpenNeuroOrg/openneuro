@@ -62,7 +62,9 @@ class Datasets extends Reflux.Component {
     this.props.datasetsQuery.subscribeToMore({
       document: gql`
         subscription {
-          draftFilesUpdated
+          datasetCreated {
+            id
+          }
         }
       `,
       updateQuery: () => {
@@ -76,14 +78,30 @@ class Datasets extends Reflux.Component {
   _subscribeToDeletedDatasets(isPublic, isAdmin) {
     this.props.datasetsQuery.subscribeToMore({
       document: gql`
-        subscription {
+        subscription onDatasetDeleted {
           datasetDeleted
         }
       `,
-      updateQuery: () => {
-        this.props.datasetsQuery
-          .refetch()
-          .then(() => Actions.getDatasets(isPublic, isAdmin))
+      update: (store, { subscriptionData }) => {
+        const data = store.readQuery({
+          query: gql`
+          datasets {
+            id
+          }
+        `,
+        })
+        const index = data.datasets.indexOf({
+          datasetId: subscriptionData.datasetId,
+        })
+        // Delete from Apollo cache
+        if (index) {
+          const newDatasets = data.datasets.splice(index, 1)
+          store.writeQuery({
+            data: {
+              datasets: newDatasets,
+            },
+          })
+        }
       },
     })
   }

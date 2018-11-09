@@ -31,10 +31,15 @@ class DatasetLoader extends Reflux.Component {
   _subscribeToFileUpdates(props) {
     props.getDataset.subscribeToMore({
       document: gql`
-        subscription {
-          draftFilesUpdated
+        subscription onDraftFilesUpdated($datasetId: ID!) {
+          draftFilesUpdated(datasetId: $datasetId) {
+            id
+          }
         }
       `,
+      variables: {
+        datasetId: props.match.params.datasetId,
+      },
       updateQuery: () => {
         props.getDataset.refetch().then(() => {
           this._loadData(props, true)
@@ -46,10 +51,15 @@ class DatasetLoader extends Reflux.Component {
   _subscribeToPermissionsUpdates(props) {
     props.getDataset.subscribeToMore({
       document: gql`
-        subscription {
-          permissionsUpdated
+        subscription onPermissionsUpdated($datasetId: ID!) {
+          permissionsUpdated(datasetId: $datasetId) {
+            datasetId
+          }
         }
       `,
+      variables: {
+        datasetId: props.match.params.datasetId,
+      },
       updateQuery: () => {
         props.getDataset.refetch().then(() => {
           this._loadData(props, true)
@@ -61,10 +71,15 @@ class DatasetLoader extends Reflux.Component {
   _subscribeToSnapshotCreation(props) {
     props.getDataset.subscribeToMore({
       document: gql`
-        subscription {
-          snapshotAdded
+        subscription onSnapshotAdded($datasetId: ID!) {
+          snapshotAdded(datasetId: $datasetId) {
+            id
+          }
         }
       `,
+      variables: {
+        datasetId: props.match.params.datasetId,
+      },
       updateQuery: () => {
         props.getDataset.refetch().then(() => {
           this._loadData(props, true)
@@ -76,10 +91,13 @@ class DatasetLoader extends Reflux.Component {
   _subscribeToSnapshotDeletion(props) {
     props.getDataset.subscribeToMore({
       document: gql`
-        subscription {
-          snapshotDeleted
+        subscription onSnapshotDeleted($datasetId: ID!) {
+          snapshotDeleted(datasetId: $datasetId)
         }
       `,
+      variables: {
+        datasetId: props.match.params.datasetId,
+      },
       updateQuery: () => {
         props.getDataset.refetch().then(() => {
           props.history.push(
