@@ -107,7 +107,7 @@ def test_file_indexing(celery_app, client, new_dataset):
         ['dataset_description.json']))
     assert all(f in response_content['files'] for f in [
         {'filename': 'dataset_description.json', 'size': 101,
-            'id': '838d19644b3296cf32637bbdf9ae5c87db34842f'},
+            'id': '838d19644b3296cf32637bbdf9ae5c87db34842f:dataset_description.json'},
         {'filename': 'LICENSE', 'size': 8,
             'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
         {'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
@@ -129,9 +129,9 @@ def test_empty_file(celery_app, client, new_dataset):
     # Check that all elements exist in both lists
     assert all(f in response_content['files'] for f in [
         {'filename': 'dataset_description.json',
-            'id': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'size': 101},
+            'id': '838d19644b3296cf32637bbdf9ae5c87db34842f:dataset_description.json', 'size': 101},
         {'filename': 'LICENSE',
-            'id': 'e69de29bb2d1d6434b8b29ae775ad8c2e48c5391', 'size': 0}
+            'id': 'e69de29bb2d1d6434b8b29ae775ad8c2e48c5391:LICENSE', 'size': 0}
     ])
 
 
