@@ -11,6 +11,7 @@ from datalad.support.exceptions import FileInGitError, FileNotInAnnexError
 SERVICE_EMAIL = 'git@openneuro.org'
 SERVICE_USER = 'Git Worker'
 
+
 def create_file_obj(dataset, tree, file_key):
     """For the DataLad fallback, create one row in the files results."""
     filename, key = file_key
@@ -41,6 +42,11 @@ def compute_git_hash(path, size):
     return blob_hash.hexdigest()
 
 
+def compute_file_hash(git_hash, path):
+    """Computes a unique hash for a given git path, based on the git hash and path values."""
+    return hashlib.sha1('{}:{}'.format(git_hash, path).encode()).hexdigest()
+
+
 def get_repo_files(dataset, branch=None):
     # If we're on the right branch, use the fast path with branch=None
     if branch == None or branch == 'HEAD' or branch == dataset.repo.get_active_branch():
@@ -48,7 +54,8 @@ def get_repo_files(dataset, branch=None):
         for dirpath, dirnames, filenames in os.walk(dataset.path, topdown=True):
             # Filter out the '.git' and '.datalad' dirs
             # topdown=True lets us do this during the loop
-            dirnames[:] = [d for d in dirnames if not (d == '.git' or d == '.datalad')]
+            dirnames[:] = [d for d in dirnames if not (
+                d == '.git' or d == '.datalad')]
             for f_name in filenames:
                 # Skip any .gitattributes
                 if f_name == '.gitattributes':
@@ -62,7 +69,9 @@ def get_repo_files(dataset, branch=None):
                     key = l_path.split('/')[-1]
                     # Get the size from key
                     size = int(key.split('-', 2)[1].lstrip('s'))
-                    files.append({'filename': rel_path, 'size': size, 'id': key})
+                    file_id = compute_file_hash(key, rel_path)
+                    files.append(
+                        {'filename': rel_path, 'size': size, 'id': file_id, 'key': key})
                 else:
                     # Regular git file
                     size = f_stat.st_size
@@ -70,8 +79,9 @@ def get_repo_files(dataset, branch=None):
                     # An alternative would be to switch away from hashing
                     # but this is pretty efficient since it only looks at non-annex files
                     blob_hash = compute_git_hash(f_path, size)
+                    file_id = compute_file_hash(blob_hash, rel_path)
                     files.append({'filename': rel_path, 'size': size,
-                                  'id': '{}:{}'.format(blob_hash, rel_path)})
+                                  'id': file_id, 'key': blob_hash})
         return files
     else:
         working_files = dataset.repo.get_files(branch=branch)
