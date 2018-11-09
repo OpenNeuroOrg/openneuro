@@ -135,6 +135,26 @@ def test_empty_file(celery_app, client, new_dataset):
     ])
 
 
+def test_duplicate_file_id(celery_app, client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    file_body = '{}'
+    # Post the same file in two paths
+    response = client.simulate_post(
+        '/datasets/{}/files/derivatives:one.json'.format(ds_id), body=file_body)
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post(
+        '/datasets/{}/files/derivatives:two.json'.format(ds_id), body=file_body)
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_get('/datasets/{}/files'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    response_content = json.loads(response.content)
+    # Find each file in the results
+    file_one = next((f for f in response_content['files'] if f['filename'] == 'derivatives/one.json'), None)
+    file_two = next((f for f in response_content['files'] if f['filename'] == 'derivatives/two.json'), None)
+    # Validate they have differing ids
+    assert file_one['id'] != file_two['id']
+
+
 def test_untracked_file_index(celery_app, client, new_dataset):
     ds_id = os.path.basename(new_dataset.path)
     # Post test file
