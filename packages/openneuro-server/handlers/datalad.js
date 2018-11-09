@@ -4,7 +4,7 @@ import mime from 'mime-types'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDraftFiles, getDatasetRevision } from '../datalad/draft'
 import { getSnapshot } from '../datalad/snapshots'
-import { encodeFilePath, decodeFilePath } from '../datalad/files.js'
+import { decodeFilePath } from '../datalad/files.js'
 
 /**
  * Handlers for datalad dataset manipulation
