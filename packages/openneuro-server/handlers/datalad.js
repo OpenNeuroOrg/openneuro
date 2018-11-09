@@ -75,11 +75,11 @@ export const getFile = async (req, res) => {
       fileList = await getDraftFiles(datasetId, currentRevision)
     }
   }
-  let file = fileList.find(f => {
+  const file = fileList.find(f => {
     return f.filename == decodedFilename
   })
-  let filepath = file ? encodeFilePath(file.id) : null
+  const filepath = file ? file.key : null
   res.set('Content-Type', mime.lookup(filename) || 'application/octet-stream')
-  let uri = `${URI}/datasets/${datasetId}/objects/${filepath}`
+  const uri = `${URI}/datasets/${datasetId}/objects/${filepath}`
   return request.get(uri).pipe(res)
 }
