@@ -58,7 +58,7 @@ export const updateFiles = (
       .then(() =>
         datalad
           .commitFiles(datasetId, userInfo)
-          .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
+          .then(() => pubsub.publish('draftFilesUpdated', { datasetId })),
       )
       .then(() => ({
         id: new Date(),
@@ -98,7 +98,7 @@ export const deleteFiles = (
       .then(() =>
         datalad
           .commitFiles(datasetId, userInfo)
-          .then(() => pubsub.publish('draftFilesUpdated', { id: datasetId })),
+          .then(() => pubsub.publish('draftFilesUpdated', { datasetId })),
       )
       .then(() => ({
         id: new Date(),
