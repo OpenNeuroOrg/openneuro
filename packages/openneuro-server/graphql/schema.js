@@ -57,13 +57,13 @@ const typeDefs = `
   }
 
   type Subscription {
-    # Publishes when the set of datasets changes
+    datasetCreated: Dataset
     datasetDeleted: ID
-    snapshotAdded: ID
-    snapshotDeleted: ID
-    datasetValidationUpdated: ID
-    draftFilesUpdated: ID
-    permissionsUpdated: ID
+    snapshotAdded(datasetId: ID!): Snapshot
+    snapshotDeleted(datasetId: ID!): ID
+    datasetValidationUpdated(datasetId: ID!, hash: String!): [ValidationIssue]
+    draftFilesUpdated(datasetId: ID!): [DatasetFile]
+    permissionsUpdated(datasetId: ID!): [Permission]
   }
 
   input SummaryInput {
