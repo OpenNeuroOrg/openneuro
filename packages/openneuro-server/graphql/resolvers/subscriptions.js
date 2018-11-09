@@ -1,5 +1,9 @@
 import pubsub from '../pubsub.js'
 
+export const datasetCreated = {
+  subscribe: () => pubsub.asyncIterator('datasetCreated'),
+}
+
 export const datasetDeleted = {
   subscribe: () => pubsub.asyncIterator('datasetDeleted'),
 }
@@ -25,6 +29,7 @@ export const permissionsUpdated = {
 }
 
 const Subscription = {
+  datasetCreated,
   datasetDeleted,
   datasetValidationUpdated,
   draftFilesUpdated,
