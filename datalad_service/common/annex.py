@@ -71,7 +71,7 @@ def get_repo_files(dataset, branch=None):
                     # but this is pretty efficient since it only looks at non-annex files
                     blob_hash = compute_git_hash(f_path, size)
                     files.append({'filename': rel_path, 'size': size,
-                                  'id': blob_hash})
+                                  'id': '{}:{}'.format(blob_hash, rel_path)})
         return files
     else:
         working_files = dataset.repo.get_files(branch=branch)
