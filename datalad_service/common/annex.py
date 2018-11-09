@@ -15,16 +15,20 @@ SERVICE_USER = 'Git Worker'
 def create_file_obj(dataset, tree, file_key):
     """For the DataLad fallback, create one row in the files results."""
     filename, key = file_key
+    file_path = os.path.join(dataset.path, filename)
+    rel_path = os.path.relpath(file_path, dataset.path)
     # Annexed file
     if key:
         size = dataset.repo.get_size_from_key(key)
     # Regular
     if not key:
         key = tree[filename].hexsha
-        size = os.path.getsize(os.path.join(dataset.path, filename))
+        size = os.path.getsize(file_path)
+    file_id = compute_file_hash(key, rel_path)
     return {'filename': filename,
             'size': size,
-            'id': key}
+            'id': file_id,
+            'key': key}
 
 
 def compute_git_hash(path, size):
