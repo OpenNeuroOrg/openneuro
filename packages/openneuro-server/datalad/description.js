@@ -20,7 +20,7 @@ export const getDescriptionObject = datasetId => files => {
   const file = files.find(f => f.filename === 'dataset_description.json')
   if (file) {
     return request
-      .get(objectUrl(datasetId, file.id))
+      .get(objectUrl(datasetId, file.key))
       .then(({ body, type }) => {
         // Guard against non-JSON responses
         if (type === 'application/json') return body
