@@ -107,11 +107,14 @@ def test_file_indexing(celery_app, client, new_dataset):
         ['dataset_description.json']))
     assert all(f in response_content['files'] for f in [
         {'filename': 'dataset_description.json', 'size': 101,
-            'id': '838d19644b3296cf32637bbdf9ae5c87db34842f'},
+            'id': '43502da40903d08b18b533f8897330badd6e1da3',
+            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f'},
         {'filename': 'LICENSE', 'size': 8,
-            'id': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
+            'id': '8a6f5281317d8a8fb695d12c940b0ff7a7dee435',
+            'key': 'MD5E-s8--4d87586dfb83dc4a5d15c6cfa6f61e27'},
         {'filename': 'sub-01/anat/sub-01_T1w.nii.gz',
-            'id': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19}
+            'id': '7fa0e07afaec0ff2cdf1bfc783596b4472df9b12',
+            'key': 'MD5E-s19--8149926e49b677a5ccecf1ad565acccf.nii.gz', 'size': 19}
     ])
 
 
@@ -129,10 +132,34 @@ def test_empty_file(celery_app, client, new_dataset):
     # Check that all elements exist in both lists
     assert all(f in response_content['files'] for f in [
         {'filename': 'dataset_description.json',
-            'id': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'size': 101},
+            'id': '43502da40903d08b18b533f8897330badd6e1da3',
+            'key': '838d19644b3296cf32637bbdf9ae5c87db34842f', 'size': 101},
         {'filename': 'LICENSE',
-            'id': 'e69de29bb2d1d6434b8b29ae775ad8c2e48c5391', 'size': 0}
+            'id': '5af11155317983632abdedd93b5be63ae98dae6f',
+            'key': 'e69de29bb2d1d6434b8b29ae775ad8c2e48c5391', 'size': 0}
     ])
+
+
+def test_duplicate_file_id(celery_app, client, new_dataset):
+    ds_id = os.path.basename(new_dataset.path)
+    file_body = '{}'
+    # Post the same file in two paths
+    response = client.simulate_post(
+        '/datasets/{}/files/derivatives:one.json'.format(ds_id), body=file_body)
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_post(
+        '/datasets/{}/files/derivatives:two.json'.format(ds_id), body=file_body)
+    assert response.status == falcon.HTTP_OK
+    response = client.simulate_get('/datasets/{}/files'.format(ds_id))
+    assert response.status == falcon.HTTP_OK
+    response_content = json.loads(response.content)
+    # Find each file in the results
+    file_one = next(
+        (f for f in response_content['files'] if f['filename'] == 'derivatives/one.json'), None)
+    file_two = next(
+        (f for f in response_content['files'] if f['filename'] == 'derivatives/two.json'), None)
+    # Validate they have differing ids
+    assert file_one['id'] != file_two['id']
 
 
 def test_untracked_file_index(celery_app, client, new_dataset):
