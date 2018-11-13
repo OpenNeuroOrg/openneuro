@@ -3,6 +3,7 @@ import { toast } from 'react-toastify'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloConsumer } from 'react-apollo'
+import ReactGA from 'react-ga'
 import UploaderContext from './uploader-context.js'
 import FileSelect from '../common/forms/file-select.jsx'
 import notifications from '../notification/notification.actions'
@@ -168,6 +169,12 @@ export class UploadClient extends React.Component {
   }
 
   upload() {
+    // Track the start of uploads
+    ReactGA.event({
+      category: 'Upload',
+      action: 'Started web upload',
+      label: this.state.datasetId,
+    })
     this.setState({
       uploading: true,
       location: locationFactory('/hidden'),
@@ -318,6 +325,12 @@ export class UploadClient extends React.Component {
   }
 
   uploadCompleteAction() {
+    // Record upload finished successfully with Google Analytics
+    ReactGA.event({
+      category: 'Upload',
+      action: 'Finished web upload',
+      label: this.state.datasetId,
+    })
     const datasetURL = `/datasets/${this.state.datasetId}`
     if (this.state.location.pathname !== locationFactory('/hidden').pathname) {
       this.props.history.push(datasetURL)

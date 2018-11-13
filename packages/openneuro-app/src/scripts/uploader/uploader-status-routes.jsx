@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import analyticsWrapper from '../utils/analytics.js'
 import { Route, Switch } from 'react-router-dom'
 import UploaderModal from './uploader-modal.jsx'
 import UploadStatus from './upload-status.jsx'
@@ -13,7 +14,7 @@ const UploaderStatusRoutes = props => (
             name="upload-status"
             path="/upload"
             exact
-            component={UploadStatus}
+            component={analyticsWrapper(UploadStatus)}
           />
         </Switch>
       </div>
