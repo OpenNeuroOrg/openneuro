@@ -34,7 +34,7 @@ export const updatePermissions = async (obj, args) => {
     })
   })
   return Promise.all(userPromises).then(() => {
-    return pubsub.publish('permissionsUpdated')
+    return pubsub.publish('permissionsUpdated', { datasetId: args.datasetId })
   })
 }
 
@@ -48,6 +48,6 @@ export const removePermissions = (obj, args) => {
       userId: args.userId,
     })
     .then(() => {
-      return pubsub.publish('permissionsUpdated')
+      return pubsub.publish('permissionsUpdated', { datasetId: args.datasetId })
     })
 }

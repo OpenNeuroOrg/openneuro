@@ -95,7 +95,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
             if (body.files) {
               notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
             }
-            pubsub.publish('snapshotAdded', { id: datasetId })
+            pubsub.publish('snapshotAdded', { datasetId })
             return body
           })
       )
@@ -122,7 +122,7 @@ export const deleteSnapshot = (datasetId, tag) => {
       .del(indexKey)
       .then(() => redis.del(sKey))
       .then(() => {
-        pubsub.publish('snapshotDeleted', { id: datasetId })
+        pubsub.publish('snapshotDeleted', { datasetId })
         return body
       }),
   )
