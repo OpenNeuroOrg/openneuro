@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch } from 'react-router-dom'
+import analyticsWrapper from '../utils/analytics.js'
 import UploaderModal from './uploader-modal.jsx'
 import UploadStep from './upload-step.jsx'
 import UploadSelect from './upload-select.jsx'
@@ -18,25 +19,25 @@ const UploaderSetupRoutes = props => (
             name="upload-select"
             path="/upload"
             exact
-            component={UploadSelect}
+            component={analyticsWrapper(UploadSelect)}
           />
           <Route
             name="upload-rename"
             path="/upload/rename"
             exact
-            component={UploadRename}
+            component={analyticsWrapper(UploadRename)}
           />
           <Route
             name="upload-issues"
             path="/upload/issues"
             exact
-            component={UploadIssues}
+            component={analyticsWrapper(UploadIssues)}
           />
           <Route
             name="upload-disclaimer"
             path="/upload/disclaimer"
             exact
-            component={UploadDisclaimer}
+            component={analyticsWrapper(UploadDisclaimer)}
           />
         </Switch>
       </div>
