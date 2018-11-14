@@ -2,6 +2,8 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import { UploadClient } from '../uploader.jsx'
 
+jest.mock('react-ga')
+
 // Stub constructor for File-like objects with webkitRelativePath
 const TestFile = (body, name, webkitRelativePath) => {
   const file = new Blob(body)
