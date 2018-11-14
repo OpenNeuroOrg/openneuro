@@ -75,6 +75,7 @@ export class UploadClient extends React.Component {
    * @param {string} path Virtual router path for upload modal
    */
   setLocation(path) {
+    ReactGA.pageview(path)
     this.setState({ location: locationFactory(path) })
   }
 
@@ -120,8 +121,8 @@ export class UploadClient extends React.Component {
             resume: true,
             files: filesToUpload,
             selectedFiles: files,
-            location: locationFactory('/upload/issues'),
           })
+          this.setLocation('/upload/issues')
         })
     }
   }
@@ -159,9 +160,9 @@ export class UploadClient extends React.Component {
         this.setState({
           files,
           selectedFiles: files,
-          location: locationFactory('/upload/rename'),
           name,
         })
+        this.setLocation('/upload/rename')
       } else {
         throw new Error('No files selected')
       }
@@ -177,8 +178,8 @@ export class UploadClient extends React.Component {
     })
     this.setState({
       uploading: true,
-      location: locationFactory('/hidden'),
     })
+    this.setLocation('/hidden')
     if (this.state.resume && this.state.datasetId) {
       // Just add files since this is an existing dataset
       this._addFiles()
@@ -202,8 +203,8 @@ export class UploadClient extends React.Component {
           this.setState({
             error,
             uploading: false,
-            location: locationFactory('/hidden'),
           })
+          this.setLocation('/hidden')
         })
     }
   }
@@ -312,8 +313,8 @@ export class UploadClient extends React.Component {
         this.setState({
           error,
           uploading: false,
-          location: locationFactory('/hidden'),
         })
+        this.setLocation('/hidden')
         if (this.state.xhr) {
           try {
             this.state.xhr.abort()
