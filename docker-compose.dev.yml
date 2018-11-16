@@ -82,5 +82,3 @@ services:
       - ./nginx/nginx.dev.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
       - "9876:80"
-      - "8110:8110"
-      - "8443:443"
