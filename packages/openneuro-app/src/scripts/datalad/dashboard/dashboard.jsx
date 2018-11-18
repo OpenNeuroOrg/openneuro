@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Switch, NavLink, Redirect, Route, withRouter } from 'react-router-dom'
-import DataladDashboardDatasets from './datasets/datalad.dashboard.datasets.jsx'
+import DatasetQuery from './datasets/dataset-query.jsx'
 
 const Dashboard = ({ public: isPublic }) => {
   const prefix = isPublic ? '/public' : '/dashboard'
@@ -28,7 +28,7 @@ const Dashboard = ({ public: isPublic }) => {
             <Route
               name="datalad-datasets-dashboard"
               path={prefix + '/datasets'}
-              component={DataladDashboardDatasets}
+              component={DatasetQuery}
             />
             {/* <Route
                 name="datalad-jobs-dashboard"
