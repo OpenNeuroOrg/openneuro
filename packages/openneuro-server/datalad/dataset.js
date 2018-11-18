@@ -113,7 +113,7 @@ const getPublicDatasets = limit => {
  */
 export const getDatasets = options => {
   // Limit to 100 datasets
-  const limit = Math.max(options.first, 100)
+  const limit = Math.min(options.first, 100)
   if (options && 'public' in options && options.public) {
     // If only public datasets are requested, immediately return them
     return getPublicDatasets(limit)
