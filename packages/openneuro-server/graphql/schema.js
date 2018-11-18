@@ -12,7 +12,7 @@ const typeDefs = `
     # One dataset
     dataset(id: ID!): Dataset
     # All datasets
-    datasets(first: Int = 25, after: String, public: Boolean = false): [Dataset]
+    datasets(first: Int = 25, after: String, public: Boolean = false, sort: DatasetSort): [Dataset]
     # Get one user
     user(id: ID!): User
     # Get a list of users
@@ -128,6 +128,22 @@ const typeDefs = `
     analytics: Analytic
     stars: [Star]
     followers: [Follower]
+  }
+
+  # Sorting order for datasets, all fields are -1 for descending and 1 for ascending
+  input DatasetSort {
+    # Dataset created time
+    created: Int
+    # Alphanumeric sort of dataset name
+    name: Int
+    # Alphanumeric sort of user names
+    user: Int
+    # Order by star count
+    stars: Int
+    # Order by download count
+    downloads: Int
+    # Order by count of dataset followers
+    followers: Int
   }
 
   # Ephemeral draft or working tree for a dataset
