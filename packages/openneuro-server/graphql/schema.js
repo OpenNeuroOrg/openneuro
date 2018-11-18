@@ -12,13 +12,7 @@ const typeDefs = `
     # One dataset
     dataset(id: ID!): Dataset
     # All datasets
-    datasets: [Dataset]
-    # My Datasets
-    myDatasets: [Dataset]
-    # Admin Datasets
-    adminDatasets: [Dataset]
-    # Public Datasets
-    publicDatasets: [Dataset]
+    datasets(first: Int = 25, after: String, public: Boolean = false): [Dataset]
     # Get one user
     user(id: ID!): User
     # Get a list of users

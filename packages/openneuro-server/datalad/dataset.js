@@ -101,17 +101,26 @@ export const deleteDataset = id => {
   })
 }
 
+const getPublicDatasets = limit => {
+  return c.crn.datasets
+    .find({ public: true })
+    .limit(limit)
+    .toArray()
+}
+
 /**
  * Fetch all datasets
- *
- * TODO - Support cursor pagination
  */
 export const getDatasets = options => {
-  if (options && 'admin' in options && options.admin) {
+  // Limit to 100 datasets
+  const limit = Math.max(options.first, 100)
+  if (options && 'public' in options && options.public) {
+    // If only public datasets are requested, immediately return them
+    return getPublicDatasets(limit)
+  } else if (options && 'admin' in options && options.admin) {
     // Admins can see all datasets
     return c.crn.datasets.find().toArray()
-  }
-  if (options && 'userId' in options) {
+  } else if (options && 'userId' in options) {
     return c.crn.permissions
       .find({ userId: options.userId })
       .toArray()
@@ -121,10 +130,12 @@ export const getDatasets = options => {
         )
         return c.crn.datasets
           .find({ $or: [{ id: { $in: datasetIds } }, { public: true }] })
+          .limit(limit)
           .toArray()
       })
   } else {
-    return c.crn.datasets.find({ public: true }).toArray()
+    // If no permissions, anonymous requests always get public datasets
+    return getPublicDatasets(limit)
   }
 }
 
