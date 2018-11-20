@@ -61,8 +61,8 @@ const NavMenu = ({ supportModal, loginModal }) => (
   <ul className="nav navbar-nav main-nav">
     <li className="link-dashboard">
       <LoggedIn>
-        <NavLink className="nav-link" to="/dashboard">
-          <span className="link-name">my dashboard</span>
+        <NavLink className="nav-link" to="/dashboard/datasets">
+          <span className="link-name">My Dashboard</span>
         </NavLink>
       </LoggedIn>
     </li>
