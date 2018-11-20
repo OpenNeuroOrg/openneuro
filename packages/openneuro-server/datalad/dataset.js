@@ -119,7 +119,7 @@ export const getDatasets = options => {
     return getPublicDatasets(limit)
   } else if (options && 'admin' in options && options.admin) {
     // Admins can see all datasets
-    return c.crn.datasets.find().toArray()
+    return c.crn.datasets.find().limit(limit).toArray()
   } else if (options && 'userId' in options) {
     return c.crn.permissions
       .find({ userId: options.userId })
