@@ -28,7 +28,7 @@ const Dashboard = ({ public: isPublic }) => {
             <Route
               name="datalad-datasets-dashboard"
               path={prefix + '/datasets'}
-              component={DatasetQuery}
+              component={() => <DatasetQuery public={isPublic} />}
             />
             {/* <Route
                 name="datalad-jobs-dashboard"
