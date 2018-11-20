@@ -11,8 +11,17 @@ const typeDefs = `
   type Query {
     # One dataset
     dataset(id: ID!): Dataset
-    # All datasets
-    datasets(first: Int = 25, after: String, public: Boolean = false, sort: DatasetSort): [Dataset]
+    # Get all datasets
+    datasets(
+      "Limit results, default 25, max 100"
+      first: Int = 25
+      "Cursor key used to fetch remaining results"
+      after: String
+      "Limit to datasets available publicly"
+      public: Boolean = false
+      "Sorting fields"
+      orderBy: DatasetSort
+    ): [Dataset]
     # Get one user
     user(id: ID!): User
     # Get a list of users
@@ -130,20 +139,25 @@ const typeDefs = `
     followers: [Follower]
   }
 
-  # Sorting order for datasets, all fields are -1 for descending and 1 for ascending
+  enum SortOrdering {
+    ascending
+    descending
+  }
+
+  # Sorting order for datasets
   input DatasetSort {
     # Dataset created time
-    created: Int
+    created: SortOrdering
     # Alphanumeric sort of dataset name
-    name: Int
+    name: SortOrdering
     # Alphanumeric sort of user names
-    user: Int
+    user: SortOrdering
     # Order by star count
-    stars: Int
+    stars: SortOrdering
     # Order by download count
-    downloads: Int
+    downloads: SortOrdering
     # Order by count of dataset followers
-    followers: Int
+    followers: SortOrdering
   }
 
   # Ephemeral draft or working tree for a dataset
