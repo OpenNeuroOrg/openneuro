@@ -10,12 +10,12 @@ exports[`NavMenu renders successfully 1`] = `
     <withCookies(Component)>
       <NavLink
         className="nav-link"
-        to="/dashboard"
+        to="/dashboard/datasets"
       >
         <span
           className="link-name"
         >
-          my dashboard
+          My Dashboard
         </span>
       </NavLink>
     </withCookies(Component)>
