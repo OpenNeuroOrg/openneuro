@@ -16,6 +16,10 @@ const DatasetPanels = ({ datasets }) => (
   </PanelGroup>
 )
 
+DatasetPanels.propTypes = {
+  datasets: PropTypes.array,
+}
+
 const DatasetTab = ({ datasets, title }) => (
   <div>
     <div className="dashboard-dataset-teasers datasets datasets-private">

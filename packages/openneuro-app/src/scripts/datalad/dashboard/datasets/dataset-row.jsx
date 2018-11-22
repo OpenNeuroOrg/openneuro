@@ -1,5 +1,5 @@
 import React from 'react'
-import moment from 'moment'
+import PropTypes from 'prop-types'
 import Statuses from '../../../dataset/dataset.statuses.jsx'
 import Metrics from '../../../dataset/dataset.metrics.jsx'
 import Uploaded from './uploaded.jsx'
@@ -25,5 +25,9 @@ const DatasetRow = ({ dataset }) => (
     </div>
   </div>
 )
+
+DatasetRow.propTypes = {
+  dataset: PropTypes.object,
+}
 
 export default DatasetRow

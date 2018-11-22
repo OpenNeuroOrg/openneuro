@@ -49,6 +49,7 @@ Statuses.defaultProps = {
 
 Statuses.propTypes = {
   dataset: PropTypes.object,
+  profile: PropTypes.object,
   minimal: PropTypes.bool,
 }
 
