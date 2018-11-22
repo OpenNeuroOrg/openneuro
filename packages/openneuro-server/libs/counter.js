@@ -1,4 +1,4 @@
-import mongo from './mongo'
+import Counter from '../models/counter.js'
 
 /**
  * Counter
@@ -13,12 +13,15 @@ export default {
    * sequential integer for that type starting with 1.
    */
   getNext(type, callback) {
-    mongo.collections.crn.counters.findOneAndUpdate(
+    Counter.findOneAndUpdate(
       { _id: type },
-      { $inc: { sequence_value: 1 } },
-      { returnOriginal: false, upsert: true },
+      {
+        $inc: { sequence_value: 1 },
+        $setOnInsert: { _id: type, sequence_value: 1 },
+      },
+      { new: true, upsert: true },
       (err, doc) => {
-        callback(doc.value.sequence_value)
+        callback(doc.sequence_value)
       },
     )
   },

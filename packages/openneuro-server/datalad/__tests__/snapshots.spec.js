@@ -1,5 +1,5 @@
+import mockingoose from 'mockingoose'
 import request from 'superagent'
-import mongo from '../../libs/mongo.js'
 import { createDataset } from '../dataset.js'
 import { createSnapshot } from '../snapshots.js'
 import config from '../../config.js'
@@ -10,18 +10,19 @@ jest.mock('../../libs/redis.js')
 // Mock draft files calls
 jest.mock('../draft.js')
 
-beforeAll(async () => {
-  await mongo.connect()
-  await mongo.collections.crn.counters.insertMany([
-    { _id: 'datasets', sequence_value: 1 },
-  ])
-})
-
 describe('snapshot model operations', () => {
   describe('createSnapshot()', () => {
+    beforeEach(() => {
+      mockingoose.resetAll()
+      // Setup a default sequence value to return for each test
+      mockingoose.Counter.toReturn(
+        { _id: 'dataset', sequence_value: 1 },
+        'findOneAndUpdate',
+      )
+    })
     it('posts to the DataLad /datasets/{dsId}/snapshots/{snapshot} endpoint', async done => {
       const tag = 'snapshot'
-      const dsId = await createDataset('a label')
+      const dsId = await createDataset()
       // Reset call count for request.post
       request.post.mockClear()
       request.__setMockResponse({ body: {} })
@@ -36,7 +37,7 @@ describe('snapshot model operations', () => {
     })
     it('throws an exception if backend errors', async done => {
       const tag = 'snapshot'
-      const dsId = await createDataset('a label 2')
+      const dsId = await createDataset()
       // Reset call count for request.post
       request.post.mockClear()
       request.__setMockError({ error: 'something went wrong' })

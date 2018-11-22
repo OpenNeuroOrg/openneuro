@@ -11,6 +11,7 @@ import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDraftFiles } from './draft'
 import notifications from '../libs/notifications'
+import Snapshot from '../models/snapshot.js'
 
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -26,7 +27,7 @@ const snapshotIndexKey = datasetId => {
 }
 
 const createSnapshotMetadata = (datasetId, tag, hexsha, created) => {
-  return c.crn.snapshots.update(
+  return Snapshot.update(
     { datasetId: datasetId, tag: tag },
     {
       $set: {

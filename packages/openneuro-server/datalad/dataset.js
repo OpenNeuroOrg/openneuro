@@ -10,10 +10,12 @@ import mongo from '../libs/mongo'
 import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
-import { getAccessionNumber } from '../libs/dataset'
 import { updateDatasetRevision, draftPartialKey } from './draft.js'
 import { createSnapshot } from './snapshots.js'
 import { fileUrl } from './files.js'
+import { getAccessionNumber } from '../libs/dataset.js'
+import Dataset from '../models/dataset.js'
+import Permission from '../models/permission.js'
 const c = mongo.collections
 const uri = config.datalad.uri
 
@@ -23,60 +25,34 @@ const uri = config.datalad.uri
  * Internally we setup metadata and access
  * then create a new DataLad repo
  *
- * @param {String} label - descriptive label for this dataset
- * @returns {Promise} - resolves to dataset id of the new dataset
+ * @param {string} uploader Id for user creating this dataset
+ * @param {Object} userInfo User metadata
+ * @returns {Promise} Resolves to {id: accessionNumber} for the new dataset
  */
-export const createDataset = (label, uploader, userInfo) => {
-  return new Promise(async (resolve, reject) => {
-    const datasetId = await getAccessionNumber()
-    const dsObj = await createDatasetModel(datasetId, label, uploader)
+export const createDataset = async (uploader, userInfo) => {
+  // Obtain an accession number
+  const datasetId = await getAccessionNumber()
+  try {
+    const ds = new Dataset({ id: datasetId, uploader })
+    await request
+      .post(`${uri}/datasets/${datasetId}`)
+      .set('Accept', 'application/json')
+      .set('Cookie', generateDataladCookie(config)(userInfo))
+    // Write the new dataset to mongo after creation
+    await ds.save()
     await giveUploaderPermission(datasetId, uploader)
-    // If successful, create the repo
-    const url = `${uri}/datasets/${datasetId}`
-    if (dsObj) {
-      const req = request
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Cookie', generateDataladCookie(config)(userInfo))
-      await req
-      subscriptions
-        .subscribe(datasetId, uploader)
-        .then(() => resolve({ id: datasetId, label }))
-        .catch(err => reject(err))
-    } else {
-      reject(Error(`Failed to create ${datasetId} - "${label}"`))
-    }
-  })
-}
-
-/**
- * Insert Dataset document
- *
- * Exported for tests.
- */
-export const createDatasetModel = (
-  id,
-  label,
-  uploader,
-  created = new Date(),
-) => {
-  const revision = null // Empty repo has no hash yet
-  const datasetObj = {
-    id,
-    label,
-    created,
-    modified: created,
-    uploader,
-    revision,
+    await subscriptions.subscribe(datasetId, uploader)
+    return ds
+  } catch (e) {
+    // eslint-disable-next-line
+    console.error(`Failed to create ${datasetId}`)
+    throw e
   }
-  return c.crn.datasets.insertOne(datasetObj)
 }
 
-export const giveUploaderPermission = (id, uploader) => {
-  const datasetId = id
-  const userId = uploader
-  const level = 'admin'
-  return c.crn.permissions.insertOne({ datasetId, userId, level })
+export const giveUploaderPermission = (datasetId, userId) => {
+  const permission = new Permission({ datasetId, userId, level: 'admin' })
+  return permission.save()
 }
 
 /**
@@ -109,6 +85,17 @@ const getPublicDatasets = limit => {
 }
 
 /**
+ * Takes an API sort request and converts it to MongoDB
+ * @param {object} sortOptions {created: 'ascending'}
+ * @returns {object} Mongo suitable sort arguments {created: 1}
+ */
+export const enumToMongoSort = sortOptions =>
+  Object.keys(sortOptions).reduce((mongoSort, val) => {
+    mongoSort[val] = sortOptions[val] === 'ascending' ? 1 : -1
+    return mongoSort
+  }, {})
+
+/**
  * Fetch all datasets
  */
 export const getDatasets = options => {
@@ -119,7 +106,10 @@ export const getDatasets = options => {
     return getPublicDatasets(limit)
   } else if (options && 'admin' in options && options.admin) {
     // Admins can see all datasets
-    return c.crn.datasets.find().limit(limit).toArray()
+    return c.crn.datasets
+      .find()
+      .limit(limit)
+      .toArray()
   } else if (options && 'userId' in options) {
     return c.crn.permissions
       .find({ userId: options.userId })
