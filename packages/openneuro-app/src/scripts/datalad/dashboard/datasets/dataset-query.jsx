@@ -80,7 +80,7 @@ const DatasetQuery = ({ public: isPublic }) => (
 )
 
 DatasetQuery.propTypes = {
-  public: PropTypes.boolean,
+  public: PropTypes.bool,
 }
 
 export default DatasetQuery
