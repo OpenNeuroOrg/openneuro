@@ -21,7 +21,7 @@ const typeDefs = `
       public: Boolean = false
       "Sorting fields"
       orderBy: DatasetSort
-    ): [Dataset]
+    ): DatasetConnection
     # Get one user
     user(id: ID!): User
     # Get a list of users
@@ -105,6 +105,18 @@ const typeDefs = `
     directories: [FileTree] # directories within the directory
   }
 
+  # Information for pagination in a connection.
+  type PageInfo {
+    # When paginating forwards, are there more items?
+    hasNextPage: Boolean!
+    # When paginating backwards, are there more items?
+    hasPreviousPage: Boolean!
+    # When paginating backwards, the cursor to continue.
+    startCursor: String
+    # When paginating forwards, the cursor to continue.
+    endCursor: String
+  }
+
   # OpenNeuro user records from all providers
   type User {
     id: ID!
@@ -123,6 +135,22 @@ const typeDefs = `
     google
     orcid
     globus
+  }
+
+  # Connection for a list of datasets
+  type DatasetConnection {
+    # A list of dataset edges
+    edges: [DatasetEdge]
+    # Pagination metadata
+    pageInfo: PageInfo!
+  }
+
+  # One connected dataset
+  type DatasetEdge {
+    # Connected dataset
+    node: Dataset
+    # Pagination cursor
+    cursor: String!
   }
 
   # Top level dataset, one draft and many snapshots
