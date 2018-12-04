@@ -15,13 +15,6 @@ const Dashboard = ({ public: isPublic }) => {
                 {isPublic ? 'Public' : 'My'} Datasets
               </NavLink>
             </li>
-            <li>
-              {/* <JobLink
-                  prefix={prefix}
-                  isPublic={isPublic}
-                  enabled={analysisEnabled}
-                /> */}
-            </li>
           </ul>
           <Switch>
             <Redirect path="/dashboard" to="/dashboard/datasets" exact />
@@ -30,11 +23,6 @@ const Dashboard = ({ public: isPublic }) => {
               path={prefix + '/datasets'}
               component={() => <DatasetQuery public={isPublic} />}
             />
-            {/* <Route
-                name="datalad-jobs-dashboard"
-                path="/dashboard/jobs"
-                component={DataladDashboardJobs}
-            /> */}
           </Switch>
         </div>
       </div>
