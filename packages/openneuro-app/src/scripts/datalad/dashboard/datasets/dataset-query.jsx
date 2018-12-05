@@ -8,53 +8,61 @@ import DatasetTab from './dataset-tab.jsx'
 const getDatasets = gql`
   query getDatasets($cursor: String, $public: Boolean) {
     datasets(first: 25, after: $cursor, public: $public) {
-      id
-      created
-      uploader {
-        id
-        name
-      }
-      public
-      permissions {
-        userId
-        level
-        access: level
-        user {
+      edges {
+        node {
           id
-          name
-          email
-          provider
+          created
+          uploader {
+            id
+            name
+          }
+          public
+          permissions {
+            userId
+            level
+            access: level
+            user {
+              id
+              name
+              email
+              provider
+            }
+          }
+          draft {
+            id
+            partial
+            summary {
+              modalities
+              sessions
+              subjects
+              tasks
+              size
+              totalFiles
+            }
+            issues {
+              severity
+            }
+            description {
+              Name
+            }
+          }
+          analytics {
+            views
+            downloads
+          }
+          stars {
+            userId
+            datasetId
+          }
+          followers {
+            userId
+            datasetId
+          }
         }
       }
-      draft {
-        id
-        partial
-        summary {
-          modalities
-          sessions
-          subjects
-          tasks
-          size
-          totalFiles
-        }
-        issues {
-          severity
-        }
-        description {
-          Name
-        }
-      }
-      analytics {
-        views
-        downloads
-      }
-      stars {
-        userId
-        datasetId
-      }
-      followers {
-        userId
-        datasetId
+      pageInfo {
+        endCursor
+        hasNextPage
       }
     }
   }
@@ -62,7 +70,7 @@ const getDatasets = gql`
 
 const DatasetQuery = ({ public: isPublic }) => (
   <Query query={getDatasets} variables={{ public: isPublic }}>
-    {({ loading, error, data }) => {
+    {({ loading, error, data: { datasets }, fetchMore }) => {
       if (loading) {
         return <Spinner text="Loading Datasets" active />
       } else if (error) {
@@ -70,8 +78,18 @@ const DatasetQuery = ({ public: isPublic }) => (
       } else {
         return (
           <DatasetTab
-            datasets={data.datasets}
+            datasets={datasets}
             title={isPublic ? 'Public Datasets' : 'My Datasets'}
+            onLoadMore={() =>
+              fetchMore({
+                variables: {
+                  cursor: datasets.pageInfo.endCursor,
+                },
+                updateQuery: (previousResult, { fetchMoreResult }) => {
+                  console.log(fetchmoreResult)
+                },
+              })
+            }
           />
         )
       }
