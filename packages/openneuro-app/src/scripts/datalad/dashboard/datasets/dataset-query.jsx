@@ -70,7 +70,7 @@ const getDatasets = gql`
 
 const DatasetQuery = ({ public: isPublic }) => (
   <Query query={getDatasets} variables={{ public: isPublic }}>
-    {({ loading, error, data: { datasets }, fetchMore }) => {
+    {({ loading, error, data, fetchMore }) => {
       if (loading) {
         return <Spinner text="Loading Datasets" active />
       } else if (error) {
@@ -78,12 +78,12 @@ const DatasetQuery = ({ public: isPublic }) => (
       } else {
         return (
           <DatasetTab
-            datasets={datasets}
+            datasets={data.datasets}
             title={isPublic ? 'Public Datasets' : 'My Datasets'}
             onLoadMore={() =>
               fetchMore({
                 variables: {
-                  cursor: datasets.pageInfo.endCursor,
+                  cursor: data.datasets.pageInfo.endCursor,
                 },
                 updateQuery: (previousResult, { fetchMoreResult }) => {
                   console.log(fetchmoreResult)
