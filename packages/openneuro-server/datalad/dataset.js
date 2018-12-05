@@ -16,6 +16,7 @@ import { fileUrl } from './files.js'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset.js'
 import Permission from '../models/permission.js'
+import { cursorTo } from 'readline'
 const c = mongo.collections
 const uri = config.datalad.uri
 
@@ -96,6 +97,9 @@ const apiCursor = id => {
   return Buffer.from(id.toString()).toString('hex')
 }
 
+const applyCursorToEdges = edges =>
+  edges.map(edge => ({ cursor: apiCursor(edge._id), node: edge }))
+
 /**
  * Dataset pagination wrapper
  * @param {object} query MongoDB query to apply pagination to
@@ -106,9 +110,7 @@ export const datasetsConnection = (query, limit) => {
   return query()
     .limit(limit)
     .then(datasets => ({
-      edges: {
-        node: datasets,
-      },
+      edges: applyCursorToEdges(datasets),
       pageInfo: {
         // True if there are no results before this
         hasPreviousPage: () => isFirst(query, datasets[0]),
