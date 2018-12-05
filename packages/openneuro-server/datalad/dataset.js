@@ -77,13 +77,6 @@ export const deleteDataset = id => {
   })
 }
 
-const getPublicDatasets = limit => {
-  return c.crn.datasets
-    .find({ public: true })
-    .limit(limit)
-    .toArray()
-}
-
 /**
  * Takes an API sort request and converts it to MongoDB
  * @param {object} sortOptions {created: 'ascending'}
@@ -96,20 +89,70 @@ export const enumToMongoSort = sortOptions =>
   }, {})
 
 /**
+ * Encode a cursor offset in a mongodb collection
+ * @param {string} id Object _id
+ */
+const apiCursor = id => {
+  return Buffer.from(id.toString()).toString('hex')
+}
+
+/**
+ * Dataset pagination wrapper
+ * @param {object} query MongoDB query to apply pagination to
+ * @param {number} limit The number of results
+ */
+export const datasetsConnection = (query, limit) => {
+  // Wait for the limited query to finish
+  return query()
+    .limit(limit)
+    .then(datasets => ({
+      edges: {
+        node: datasets,
+      },
+      pageInfo: {
+        // True if there are no results before this
+        hasPreviousPage: () => isFirst(query, datasets[0]),
+        // First ordered object id in the limited set
+        startCursor: apiCursor(datasets[0]._id),
+        // True if there are no results after this
+        hasNextPage: () => isLast(query, datasets.slice(-1).pop()),
+        // Last ordered object id in the limited set
+        endCursor: apiCursor(datasets.slice(-1).pop()._id),
+      },
+    }))
+}
+
+// Helper for public datasets
+const getPublicDatasets = () => {
+  return Dataset.find({ public: true })
+}
+
+// Check if this is the first element in the full query
+const isFirst = (query, first) => {
+  return query()
+    .limit(1)
+    .then(r => r._id === first._id)
+}
+
+// Check if this is the last element in the full query
+const isLast = (query, last) => {
+  return query()
+    .limit(1)
+    .then(r => r._id === last._id)
+}
+
+/**
  * Fetch all datasets
  */
 export const getDatasets = options => {
-  // Limit to 100 datasets
+  // Limit to options.first or 100 datasets
   const limit = Math.min(options.first, 100)
   if (options && 'public' in options && options.public) {
     // If only public datasets are requested, immediately return them
-    return getPublicDatasets(limit)
+    return datasetsConnection(getPublicDatasets, limit)
   } else if (options && 'admin' in options && options.admin) {
     // Admins can see all datasets
-    return c.crn.datasets
-      .find()
-      .limit(limit)
-      .toArray()
+    return datasetsConnection(() => Dataset.find(), limit)
   } else if (options && 'userId' in options) {
     return c.crn.permissions
       .find({ userId: options.userId })
@@ -118,14 +161,17 @@ export const getDatasets = options => {
         const datasetIds = datasetsAllowed.map(
           permission => permission.datasetId,
         )
-        return c.crn.datasets
-          .find({ $or: [{ id: { $in: datasetIds } }, { public: true }] })
-          .limit(limit)
-          .toArray()
+        return datasetsConnection(
+          () =>
+            Dataset.find({
+              $or: [{ id: { $in: datasetIds } }, { public: true }],
+            }),
+          limit,
+        )
       })
   } else {
     // If no permissions, anonymous requests always get public datasets
-    return getPublicDatasets(limit)
+    return datasetsConnection(getPublicDatasets, limit)
   }
 }
 
