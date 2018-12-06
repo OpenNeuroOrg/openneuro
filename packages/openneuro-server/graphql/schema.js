@@ -185,7 +185,7 @@ const typeDefs = `
     # Order by download count
     downloads: SortOrdering
     # Order by count of dataset followers
-    followers: SortOrdering
+    subscriptions: SortOrdering
   }
 
   # Ephemeral draft or working tree for a dataset
