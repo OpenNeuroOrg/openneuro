@@ -16,8 +16,7 @@ import { fileUrl } from './files.js'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset.js'
 import Permission from '../models/permission.js'
-import Star from '../models/stars.js'
-import { cursorTo } from 'readline'
+import { datasetsConnection } from './pagination.js'
 const c = mongo.collections
 const uri = config.datalad.uri
 
@@ -80,112 +79,15 @@ export const deleteDataset = id => {
 }
 
 /**
- * Takes an API sort request and converts it to MongoDB
- * @param {object} sortOptions {created: 'ascending'}
- * @returns {object} Mongo suitable sort arguments {created: 1}
- */
-export const enumToMongoSort = sortOptions =>
-  Object.keys(sortOptions).reduce((mongoSort, val) => {
-    mongoSort[val] = sortOptions[val] === 'ascending' ? 1 : -1
-    return mongoSort
-  }, {})
-
-/**
- * Encode a cursor offset in a mongodb collection
- * @param {string} id Object _id
- */
-const apiCursor = id => {
-  return Buffer.from(id.toString()).toString('hex')
-}
-
-const applyCursorToEdges = edges => {
-  console.log(edges)
-  return edges.map(edge => ({ cursor: apiCursor(edge._id), node: edge }))
-}
-
-/**
- * Dataset pagination wrapper
- * @param {object} query MongoDB query to apply pagination to
- * @param {number} limit The number of results
- */
-export const datasetsConnection = (query, sorter, limit) => {
-  // Wait for the limited query to finish
-  return sorter(query())
-    .limit(limit)
-    .then(datasets => ({
-      edges: applyCursorToEdges(datasets),
-      pageInfo: {
-        // True if there are no results before this
-        hasPreviousPage: () => isFirst(query, datasets[0]),
-        // First ordered object id in the limited set
-        startCursor: apiCursor(datasets[0]._id),
-        // True if there are no results after this
-        hasNextPage: () => isLast(query, datasets.slice(-1).pop()),
-        // Last ordered object id in the limited set
-        endCursor: apiCursor(datasets.slice(-1).pop()._id),
-      },
-    }))
-}
-
-// Helper for public datasets
-const getPublicDatasets = () => {
-  return Dataset.find({ public: true })
-}
-
-// Check if this is the first element in the full query
-const isFirst = (query, first) => {
-  return query()
-    .limit(1)
-    .then(r => r._id === first._id)
-}
-
-// Check if this is the last element in the full query
-const isLast = (query, last) => {
-  return query()
-    .limit(1)
-    .then(r => r._id === last._id)
-}
-
-const paginationWindow = (query, before, after) => {
-  if (before) {
-    query.where()
-  }
-  if (after) {
-    query.where()
-  }
-}
-
-// Populate foreign keys based on sort options
-const sortQuery = options => query => {
-  let sort = {}
-  if (options.orderBy.created) {
-    sort['created'] = options.orderBy.created === 'ascending' ? 1 : -1
-  }
-  if (options.orderBy.uploader) {
-    query.populate('uploader')
-    sort['uploader.name'] = options.orderBy.uploader === 'ascending' ? 1 : -1
-  }
-  query.sort(sort)
-  return query
-}
-
-/**
  * Fetch all datasets
  */
 export const getDatasets = options => {
-  const sorter = sortQuery(options)
-  // Limit to options.first or 100 datasets
-  const limit = Math.min(options.first, 100)
   if (options && 'public' in options && options.public) {
     // If only public datasets are requested, immediately return them
-    return datasetsConnection(
-      () => Dataset.find({ public: true }),
-      sorter,
-      limit,
-    )
+    return datasetsConnection(() => Dataset.find({ public: true }), options)
   } else if (options && 'admin' in options && options.admin) {
     // Admins can see all datasets
-    return datasetsConnection(() => Dataset.find(), sorter, limit)
+    return datasetsConnection(() => Dataset.find(), options)
   } else if (options && 'userId' in options) {
     return c.crn.permissions
       .find({ userId: options.userId })
@@ -199,13 +101,12 @@ export const getDatasets = options => {
             Dataset.find({
               $or: [{ id: { $in: datasetIds } }, { public: true }],
             }),
-          sorter,
-          limit,
+          options,
         )
       })
   } else {
     // If no permissions, anonymous requests always get public datasets
-    return datasetsConnection(Dataset.find({ public: true }), sorter, limit)
+    return datasetsConnection(Dataset.find({ public: true }), options)
   }
 }
 

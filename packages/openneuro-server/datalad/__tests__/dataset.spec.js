@@ -1,6 +1,6 @@
 import mockingoose from 'mockingoose'
 import request from 'superagent'
-import { createDataset, enumToMongoSort } from '../dataset.js'
+import { createDataset } from '../dataset.js'
 import config from '../../config.js'
 
 // Mock requests to Datalad service
@@ -32,13 +32,6 @@ describe('dataset model operations', () => {
         expect.stringContaining(`${config.datalad.uri}/datasets/`),
       )
       done()
-    })
-  })
-  describe('enumToMongoSort', () => {
-    it('should convert enum strings to -1 or 1 values', () => {
-      expect(
-        enumToMongoSort({ created: 'descending', name: 'ascending' }),
-      ).toEqual({ created: -1, name: 1 })
     })
   })
 })
