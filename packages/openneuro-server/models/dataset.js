@@ -8,6 +8,13 @@ const datasetSchema = new mongoose.Schema({
   revision: String,
 })
 
+datasetSchema.virtual('uploader', {
+  ref: 'User',
+  localField: 'uploader',
+  foreignField: 'id',
+  justOne: true,
+})
+
 const Dataset = mongoose.model('Dataset', datasetSchema)
 
 export default Dataset

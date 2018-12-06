@@ -61,7 +61,9 @@ const getDatasets = gql`
         }
       }
       pageInfo {
+        startCursor
         endCursor
+        hasPreviousPage
         hasNextPage
       }
     }

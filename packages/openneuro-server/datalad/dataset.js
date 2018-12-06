@@ -97,8 +97,10 @@ const apiCursor = id => {
   return Buffer.from(id.toString()).toString('hex')
 }
 
-const applyCursorToEdges = edges =>
-  edges.map(edge => ({ cursor: apiCursor(edge._id), node: edge }))
+const applyCursorToEdges = edges => {
+  console.log(edges)
+  return edges.map(edge => ({ cursor: apiCursor(edge._id), node: edge }))
+}
 
 /**
  * Dataset pagination wrapper
@@ -108,6 +110,7 @@ const applyCursorToEdges = edges =>
 export const datasetsConnection = (query, limit) => {
   // Wait for the limited query to finish
   return query()
+    .populate('uploader')
     .limit(limit)
     .then(datasets => ({
       edges: applyCursorToEdges(datasets),
@@ -141,6 +144,12 @@ const isLast = (query, last) => {
   return query()
     .limit(1)
     .then(r => r._id === last._id)
+}
+
+const paginationWindow = (query, before, after) => {
+  if (before) {
+    query.where()
+  }
 }
 
 /**
