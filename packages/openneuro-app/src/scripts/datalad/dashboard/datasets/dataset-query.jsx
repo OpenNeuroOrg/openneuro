@@ -7,7 +7,7 @@ import DatasetTab from './dataset-tab.jsx'
 
 const getDatasets = gql`
   query getDatasets($cursor: String, $public: Boolean) {
-    datasets(first: 5, after: $cursor, public: $public) {
+    datasets(first: 20, after: $cursor, public: $public) {
       edges {
         node {
           id
@@ -73,13 +73,13 @@ const getDatasets = gql`
 
 /**
  * Load additional datasets based on next data cursor
- * @param {string} after Next data cursor
+ * @param {string} cursor Next data cursor
  * @param {function} fetchMore Apollo fetchMore function from the original query
  */
-const loadMoreRows = (after, fetchMore) => () => {
+const loadMoreRows = (cursor, fetchMore) => () => {
   fetchMore({
     variables: {
-      after,
+      cursor,
     },
     updateQuery: (previousResult, { fetchMoreResult }) => {
       const newEdges = fetchMoreResult.datasets.edges
