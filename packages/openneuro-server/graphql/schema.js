@@ -15,8 +15,10 @@ const typeDefs = `
     datasets(
       "Limit results, default 25, max 100"
       first: Int = 25
-      "Cursor key used to fetch remaining results"
+      "Cursor key used to fetch later results"
       after: String
+      "Cursor key used to fetch earlier results"
+      before: String
       "Limit to datasets available publicly"
       public: Boolean = false
       "Sorting fields"

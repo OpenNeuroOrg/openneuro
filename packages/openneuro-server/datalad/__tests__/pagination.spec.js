@@ -24,15 +24,14 @@ describe('pagination model operations', () => {
   })
   describe('applyCursorToEdges()', () => {
     it('returns the correct shape matching Relay connections', () => {
-      const res = pagination.applyCursorToEdges([
-        { _id: '123' },
-        { _id: '234' },
-        { _id: '345' },
-      ])
+      const res = pagination.applyCursorToEdges(
+        [{ _id: '123' }, { _id: '234' }, { _id: '345' }],
+        0,
+      )
       expect(res).toEqual([
-        { cursor: 'MTIz', node: { _id: '123' } },
-        { cursor: 'MjM0', node: { _id: '234' } },
-        { cursor: 'MzQ1', node: { _id: '345' } },
+        { cursor: 'eyJvZmZzZXQiOjB9', node: { _id: '123' } },
+        { cursor: 'eyJvZmZzZXQiOjF9', node: { _id: '234' } },
+        { cursor: 'eyJvZmZzZXQiOjJ9', node: { _id: '345' } },
       ])
     })
   })
