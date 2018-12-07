@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { PanelGroup, Panel } from 'react-bootstrap'
 import { InfiniteLoader, List, AutoSizer } from 'react-virtualized'
 import DatasetRow from './dataset-row.jsx'
 import styled from 'styled-components'
@@ -47,7 +46,7 @@ const DatasetVirtualScroller = ({ datasets, pageInfo, loadMoreRows }) => {
             rowCount={pageInfo.count}>
             {({ onRowsRendered, registerChild }) => (
               <AutoSizer>
-                {({ height, width }) => (
+                {() => (
                   <List
                     height={250}
                     onRowsRendered={onRowsRendered}
