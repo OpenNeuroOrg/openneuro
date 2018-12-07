@@ -14,7 +14,7 @@ const App = ({ config }) => {
   return (
     <CookiesProvider>
       <ApolloProvider client={getClient(`${config.url}/crn/graphql`)}>
-        <div>
+        <>
           <Helmet>
             <title>{frontPage.pageTitle}</title>
             <meta name="description" content={frontPage.pageDescription} />
@@ -23,7 +23,7 @@ const App = ({ config }) => {
             <Route component={analyticsWrapper(Index)} />
           </Router>
           <ToastContainer position="bottom-right" />
-        </div>
+        </>
       </ApolloProvider>
     </CookiesProvider>
   )

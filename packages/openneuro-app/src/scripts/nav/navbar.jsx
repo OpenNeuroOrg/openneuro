@@ -52,7 +52,7 @@ class BSNavbar extends React.Component {
   // life cycle methods ------------------------------------------------------------
   render() {
     return (
-      <span>
+      <>
         <Navbar collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
@@ -73,7 +73,7 @@ class BSNavbar extends React.Component {
           modalToggle={this.loginModal.bind(this)}
           min={true}
         />
-      </span>
+      </>
     )
   }
 
@@ -89,10 +89,11 @@ class BSNavbar extends React.Component {
         </Modal.Header>
         <hr className="modal-inner" />
         <Modal.Body>
-          If you have a question about details of a particular dataset (clarifying the design, 
-          asking for additional metadata etc.) please post it as a comment underneath the 
-          dataset. If you would like to suggest a new feature please post it at 
-          <a href='https://openneuro.featureupvote.com/'>
+          If you have a question about details of a particular dataset
+          (clarifying the design, asking for additional metadata etc.) please
+          post it as a comment underneath the dataset. If you would like to
+          suggest a new feature please post it at
+          <a href="https://openneuro.featureupvote.com/">
             https://openneuro.featureupvote.com/
           </a>
           <script
