@@ -6,31 +6,29 @@ import Search from '../../../common/partials/search.jsx'
 import DatasetVirtualScroller from './dataset-virtual-scroller.jsx'
 
 const DatasetTab = ({ datasets, title, pageInfo, loadMoreRows }) => (
-  <div>
+  <div className="dashboard-dataset-teasers datasets datasets-private">
     <Helmet>
       <title>
         {pageTitle} - {title}
       </title>
     </Helmet>
-    <div className="dashboard-dataset-teasers datasets datasets-private">
-      <div className="header-filter-sort clearfix">
-        <div className="admin header-wrap clearfix">
-          <div className="row">
-            <div className="col-md-5">
-              <h2>{title}</h2>
-            </div>
-            <div className="col-md-7">
-              <Search />
-            </div>
+    <div className="header-filter-sort clearfix">
+      <div className="admin header-wrap clearfix">
+        <div className="row">
+          <div className="col-md-5">
+            <h2>{title}</h2>
+          </div>
+          <div className="col-md-7">
+            <Search />
           </div>
         </div>
-        <div className="filters-sort-wrap clearfix" />
-        <DatasetVirtualScroller
-          datasets={datasets}
-          pageInfo={pageInfo}
-          loadMoreRows={loadMoreRows}
-        />
       </div>
+      <div className="filters-sort-wrap clearfix" />
+      <DatasetVirtualScroller
+        datasets={datasets}
+        pageInfo={pageInfo}
+        loadMoreRows={loadMoreRows}
+      />
     </div>
   </div>
 )
