@@ -7,7 +7,7 @@ import DatasetTab from './dataset-tab.jsx'
 
 const getDatasets = gql`
   query getDatasets($cursor: String, $public: Boolean) {
-    datasets(first: 25, after: $cursor, public: $public) {
+    datasets(first: 3, after: $cursor, public: $public) {
       edges {
         node {
           id
@@ -65,10 +65,29 @@ const getDatasets = gql`
         endCursor
         hasPreviousPage
         hasNextPage
+        count
       }
     }
   }
 `
+
+const loadMoreRows = (after, fetchMore) => () => {
+  fetchMore({
+    variables: {
+      after,
+    },
+    updateQuery: (previousResult, { fetchMoreResult }) => {
+      const newEdges = fetchMoreResult.datasets.edges
+      const pageInfo = fetchMoreResult.datasets.pageInfo
+      return {
+        datasets: {
+          edges: [...previousResult.datasets.edges, ...newEdges],
+          pageInfo,
+        },
+      }
+    },
+  })
+}
 
 const DatasetQuery = ({ public: isPublic }) => (
   <Query query={getDatasets} variables={{ public: isPublic }}>
@@ -76,22 +95,17 @@ const DatasetQuery = ({ public: isPublic }) => (
       if (loading) {
         return <Spinner text="Loading Datasets" active />
       } else if (error) {
-        throw new Error(error)
+        throw error
       } else {
         return (
           <DatasetTab
-            datasets={data.datasets}
+            datasets={data.datasets.edges}
             title={isPublic ? 'Public Datasets' : 'My Datasets'}
-            onLoadMore={() =>
-              fetchMore({
-                variables: {
-                  cursor: data.datasets.pageInfo.endCursor,
-                },
-                updateQuery: (previousResult, { fetchMoreResult }) => {
-                  console.log(fetchmoreResult)
-                },
-              })
-            }
+            pageInfo={data.datasets.pageInfo}
+            loadMoreRows={loadMoreRows(
+              data.datasets.pageInfo.endCursor,
+              fetchMore,
+            )}
           />
         )
       }

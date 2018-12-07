@@ -60,6 +60,7 @@
     "react-select": "^1.0.0-rc.5",
     "react-table": "^6.7.6",
     "react-toastify": "^4.4.0",
+    "react-virtualized": "^9.21.0",
     "reflux": "6.4.1",
     "remarkable": "1.7.1",
     "semver": "^5.5.0",
