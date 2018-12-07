@@ -4,12 +4,8 @@
     100% {transform: translateY(0);}
 }
 
-.full-col {
+.main-parent {
     .navbar {
-        position: fixed;
-        width: 100%;
-        top: 0;
-        left: 0;
         z-index: 1300;
         border-top: 10px solid $navbar-top-border-color;
         border-top: 10px solid var(--navbar-top-border-color);
