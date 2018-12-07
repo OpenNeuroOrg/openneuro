@@ -46,15 +46,15 @@ const DatasetVirtualScroller = ({ datasets, pageInfo, loadMoreRows }) => {
             rowCount={pageInfo.count}>
             {({ onRowsRendered, registerChild }) => (
               <AutoSizer>
-                {() => (
+                {({ width, height }) => (
                   <List
-                    height={250}
+                    height={height}
                     onRowsRendered={onRowsRendered}
                     ref={registerChild}
                     rowCount={pageInfo.count}
                     rowHeight={92}
                     rowRenderer={rowRenderer}
-                    width={1000}
+                    width={width}
                   />
                 )}
               </AutoSizer>
