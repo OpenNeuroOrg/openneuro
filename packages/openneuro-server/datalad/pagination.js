@@ -35,25 +35,22 @@ export const applyCursorToEdges = (edges, offset) => {
   }))
 }
 
-// Decode a cursor from an options object
-export const getCursor = options => {
+// Decode cursor from options object
+export const getOffsetFromCursor = options => {
   if (options.hasOwnProperty('after') && options.after) {
-    return decodeCursor(options.after)
+    return decodeCursor(options.after).offset
   }
   if (options.hasOwnProperty('before') && options.before) {
-    return decodeCursor(options.before)
+    return (
+      decodeCursor(options.before).offset - Math.max(maxLimit(options.first), 0)
+    )
   }
-  return null
+  // Default to zero if no cursor
+  return 0
 }
 
-// Default to zero if no cursor
-export const getOffsetFromCursor = options => {
-  const cursor = getCursor(options)
-  return cursor ? cursor.offset : 0
-}
-
-// Limit to options.first or 100 datasets
-export const maxLimit = limit => Math.min(limit, 100)
+// Limit to options.first in range 1 <= limit <= 100
+export const maxLimit = limit => Math.max(Math.min(limit, 100), 1)
 
 /**
  * Dataset pagination wrapper
@@ -64,19 +61,21 @@ export const datasetsConnection = (query, options) => {
   const offset = getOffsetFromCursor(options)
   const realLimit = maxLimit(options.first)
   return query()
-    .count()
+    .countDocuments()
     .then(count =>
       pagingBound(sortQuery(query(), options), options).then(datasets => ({
         edges: applyCursorToEdges(datasets, offset),
         pageInfo: {
           // True if there are no results before this
-          hasPreviousPage: offset - realLimit > 0,
+          hasPreviousPage: offset > 0,
           // First ordered object id in the limited set
           startCursor: apiCursor({ offset }),
           // True if there are no results after this
           hasNextPage: offset + realLimit < count,
           // Last ordered object id in the limited set
           endCursor: apiCursor({ offset: offset + realLimit }),
+          // Count of all documents in this query
+          count,
         },
       })),
     )
@@ -89,14 +88,11 @@ export const datasetsConnection = (query, options) => {
  */
 export const sortQuery = (query, options) => {
   let sort = {}
-  if (options.orderBy) {
-    if (options.orderBy.hasOwnProperty('created') && options.orderBy.created) {
+  if (options.hasOwnProperty('orderBy')) {
+    if ('created' in options.orderBy && options.orderBy.created) {
       sort['_id'] = options.orderBy.created === 'ascending' ? 1 : -1
     }
-    if (
-      options.orderBy.hasOwnProperty('uploader') &&
-      options.orderBy.uploader
-    ) {
+    if ('uploader' in options.orderBy && options.orderBy.uploader) {
       query.populate('uploader')
       sort['uploader.name'] = options.orderBy.uploader === 'ascending' ? 1 : -1
     }
@@ -107,6 +103,6 @@ export const sortQuery = (query, options) => {
 
 // Apply range bounds based on after/before arguments to query
 export const pagingBound = (query, options) => {
-  const offset = getOffsetFromCursor(options)
+  const offset = Math.max(getOffsetFromCursor(options), 0)
   return query.skip(offset).limit(maxLimit(options.first))
 }

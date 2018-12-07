@@ -117,6 +117,8 @@ const typeDefs = `
     startCursor: String
     # When paginating forwards, the cursor to continue.
     endCursor: String
+    # Total results
+    count: Int
   }
 
   # OpenNeuro user records from all providers
