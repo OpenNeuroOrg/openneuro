@@ -28,6 +28,7 @@ const FlexParent = styled.div`
   display: flex;
   flex-flow: column;
   height: 100%;
+  flex: 1 1 auto;
 `
 
 const FlexFullHeight = styled.div`
@@ -39,28 +40,26 @@ const DatasetVirtualScroller = ({ datasets, pageInfo, loadMoreRows }) => {
   return (
     <FlexParent>
       <FlexFullHeight>
-        <div>
-          <InfiniteLoader
-            isRowLoaded={isRowLoaded}
-            loadMoreRows={loadMoreRows}
-            rowCount={pageInfo.count}>
-            {({ onRowsRendered, registerChild }) => (
-              <AutoSizer>
-                {({ width, height }) => (
-                  <List
-                    height={height}
-                    onRowsRendered={onRowsRendered}
-                    ref={registerChild}
-                    rowCount={pageInfo.count}
-                    rowHeight={92}
-                    rowRenderer={rowRenderer}
-                    width={width}
-                  />
-                )}
-              </AutoSizer>
-            )}
-          </InfiniteLoader>
-        </div>
+        <InfiniteLoader
+          isRowLoaded={isRowLoaded}
+          loadMoreRows={loadMoreRows}
+          rowCount={pageInfo.count}>
+          {({ onRowsRendered, registerChild }) => (
+            <AutoSizer>
+              {({ width, height }) => (
+                <List
+                  height={height}
+                  onRowsRendered={onRowsRendered}
+                  ref={registerChild}
+                  rowCount={pageInfo.count}
+                  rowHeight={94}
+                  rowRenderer={rowRenderer}
+                  width={width}
+                />
+              )}
+            </AutoSizer>
+          )}
+        </InfiniteLoader>
       </FlexFullHeight>
     </FlexParent>
   )

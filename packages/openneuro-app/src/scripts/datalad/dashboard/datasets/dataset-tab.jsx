@@ -4,9 +4,16 @@ import Helmet from 'react-helmet'
 import { pageTitle } from '../../../resources/strings'
 import Search from '../../../common/partials/search.jsx'
 import DatasetVirtualScroller from './dataset-virtual-scroller.jsx'
+import styled from 'styled-components'
+
+const FullHeightFlexDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+`
 
 const DatasetTab = ({ datasets, title, pageInfo, loadMoreRows }) => (
-  <div className="dashboard-dataset-teasers datasets datasets-private">
+  <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
     <Helmet>
       <title>
         {pageTitle} - {title}
@@ -24,13 +31,13 @@ const DatasetTab = ({ datasets, title, pageInfo, loadMoreRows }) => (
         </div>
       </div>
       <div className="filters-sort-wrap clearfix" />
-      <DatasetVirtualScroller
-        datasets={datasets}
-        pageInfo={pageInfo}
-        loadMoreRows={loadMoreRows}
-      />
     </div>
-  </div>
+    <DatasetVirtualScroller
+      datasets={datasets}
+      pageInfo={pageInfo}
+      loadMoreRows={loadMoreRows}
+    />
+  </FullHeightFlexDiv>
 )
 
 DatasetTab.propTypes = {

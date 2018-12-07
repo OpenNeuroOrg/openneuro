@@ -4,12 +4,10 @@
     100% {transform: translateY(0);}
 }
 
-.main-parent {
-    .navbar {
-        z-index: 1300;
-        border-top: 10px solid $navbar-top-border-color;
-        border-top: 10px solid var(--navbar-top-border-color);
-    }
+.navbar {
+    z-index: 1300;
+    border-top: 10px solid $navbar-top-border-color;
+    border-top: 10px solid var(--navbar-top-border-color);
 }
 
 .alert-state-true {

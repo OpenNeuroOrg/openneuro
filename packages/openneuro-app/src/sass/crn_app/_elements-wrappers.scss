@@ -50,6 +50,11 @@ body {
     letter-spacing: .03em;
 }
 
+.main {
+    display: flex;
+    flex-direction: column;
+}
+
 .container {
     width: 100%;
 

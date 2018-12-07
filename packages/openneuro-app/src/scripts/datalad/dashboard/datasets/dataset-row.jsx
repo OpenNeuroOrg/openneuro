@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 
 const DatasetRow = ({ dataset }) => {
   return (
-    <div className="fade-in  panel panel-default" key={dataset._id}>
+    <div className="fade-in panel panel-default" key={dataset._id}>
       <div className="panel-heading">
         <div className="header clearfix">
           <Link to={'/datasets/' + dataset.id}>
