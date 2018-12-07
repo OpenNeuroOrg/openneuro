@@ -25,12 +25,12 @@ const DatasetTab = ({ datasets, title, pageInfo, loadMoreRows }) => (
           </div>
         </div>
         <div className="filters-sort-wrap clearfix" />
+        <DatasetVirtualScroller
+          datasets={datasets}
+          pageInfo={pageInfo}
+          loadMoreRows={loadMoreRows}
+        />
       </div>
-      <DatasetVirtualScroller
-        datasets={datasets}
-        pageInfo={pageInfo}
-        loadMoreRows={loadMoreRows}
-      />
     </div>
   </div>
 )
