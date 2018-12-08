@@ -1,8 +1,3 @@
-import json
-
-import falcon
-import pytest
-
 from .dataset_fixtures import *
 from datalad_service.common.annex import create_file_obj
 
