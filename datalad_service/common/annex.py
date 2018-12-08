@@ -23,7 +23,7 @@ def create_file_obj(dataset, tree, file_key):
     # Regular
     if not key:
         key = tree[filename].hexsha
-        size = os.path.getsize(file_path)
+        size = tree[filename].size
     file_id = compute_file_hash(key, rel_path)
     return {'filename': filename,
             'size': size,
