@@ -8,6 +8,7 @@
     z-index: 1300;
     border-top: 10px solid $navbar-top-border-color;
     border-top: 10px solid var(--navbar-top-border-color);
+    min-height: initial;
 }
 
 .alert-state-true {
