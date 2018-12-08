@@ -182,8 +182,8 @@ const typeDefs = `
     created: SortOrdering
     # Alphanumeric sort of dataset name
     name: SortOrdering
-    # Alphanumeric sort of user names
-    user: SortOrdering
+    # Alphanumeric sort of uploader name
+    uploader: SortOrdering
     # Order by star count
     stars: SortOrdering
     # Order by download count

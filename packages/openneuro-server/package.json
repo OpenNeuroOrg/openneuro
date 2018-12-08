@@ -44,7 +44,7 @@
     "mime-types": "^2.1.19",
     "moment": "^2.14.1",
     "mongodb": "^2.2.34",
-    "mongoose": "^5.1.6",
+    "mongoose": "https://github.com/Automattic/mongoose.git#89bcfcf24e5dc78c4542d2319bf63923e970a542",
     "morgan": "^1.6.1",
     "node-fetch": "^2.0.0",
     "node-resque": "^4.0.7",

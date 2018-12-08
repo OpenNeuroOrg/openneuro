@@ -1,5 +1,7 @@
 // Helpers for pagination
 
+const sortEnumToInt = val => (val === 'ascending' ? 1 : -1)
+
 /**
  * Takes an API sort request and converts it to MongoDB
  * @param {object} sortOptions {created: 'ascending'}
@@ -7,7 +9,7 @@
  */
 export const enumToMongoSort = sortOptions =>
   Object.keys(sortOptions).reduce((mongoSort, val) => {
-    mongoSort[val] = sortOptions[val] === 'ascending' ? 1 : -1
+    mongoSort[val] = sortEnumToInt(sortOptions[val])
     return mongoSort
   }, {})
 
@@ -87,14 +89,27 @@ export const datasetsConnection = (query, options) => {
  * @param {object} options Query parameters
  */
 export const sortQuery = (query, options) => {
-  let sort = {}
+  // Default to natural descending
+  let sort = { _id: -1 }
   if (options.hasOwnProperty('orderBy')) {
     if ('created' in options.orderBy && options.orderBy.created) {
-      sort['_id'] = options.orderBy.created === 'ascending' ? 1 : -1
+      sort['_id'] = sortEnumToInt(options.orderBy.created)
     }
     if ('uploader' in options.orderBy && options.orderBy.uploader) {
       query.populate('uploader')
-      sort['uploader.name'] = options.orderBy.uploader === 'ascending' ? 1 : -1
+      sort['uploader.name'] = sortEnumToInt(options.orderBy.uploader)
+    }
+    if ('stars' in options.orderBy && options.orderBy.stars) {
+      query.populate('stars')
+      sort['stars'] = sortEnumToInt(options.orderBy.stars)
+    }
+    if ('downloads' in options.orderBy && options.orderBy.downloads) {
+      query.populate('analytics')
+      sort['analytics.downloads'] = sortEnumToInt(options.orderBy.downloads)
+    }
+    if ('subscriptions' in options.orderBy && options.orderBy.subscriptions) {
+      query.populate('subscriptions')
+      sort['subscriptions'] = sortEnumToInt(options.orderBy.subscriptions)
     }
     query.sort(sort)
   }

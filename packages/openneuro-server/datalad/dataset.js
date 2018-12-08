@@ -17,6 +17,7 @@ import { fileUrl } from './files.js'
 import { getAccessionNumber } from '../libs/dataset.js'
 import Dataset from '../models/dataset.js'
 import Permission from '../models/permission.js'
+import Star from '../models/stars.js'
 import { datasetsConnection } from './pagination.js'
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -90,11 +91,12 @@ export const getPublicDatasets = options => {
     if (data) {
       return JSON.parse(data)
     } else {
-      return datasetsConnection(() => Dataset.find({ public: true }), options).then(
-        connection => {
-          redis.setex(redisKey, expirationTime, JSON.stringify(connection))
-        },
-      )
+      return datasetsConnection(
+        () => Dataset.find({ public: true }),
+        options,
+      ).then(connection => {
+        redis.setex(redisKey, expirationTime, JSON.stringify(connection))
+      })
     }
   })
 }
@@ -313,13 +315,7 @@ export const trackAnalytics = (datasetId, tag, type) => {
   )
 }
 
-export const getStars = datasetId => {
-  return c.crn.stars
-    .find({
-      datasetId: datasetId,
-    })
-    .toArray()
-}
+export const getStars = datasetId => Star.find({ datasetId })
 
 export const getFollowers = datasetId => {
   return c.crn.subscriptions
