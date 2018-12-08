@@ -5,6 +5,7 @@
  */
 import request from 'superagent'
 import requestNode from 'request'
+import objectHash from 'object-hash'
 import config from '../config'
 import mongo from '../libs/mongo'
 import * as subscriptions from '../handlers/subscriptions.js'
@@ -79,12 +80,33 @@ export const deleteDataset = id => {
 }
 
 /**
+ * For public datasets, cache combinations of sorts/limits/cursors to speed responses
+ * @param {object} options getDatasets options object
+ */
+export const getPublicDatasets = options => {
+  const redisKey = `openneuro:publicDatasetsConnection:${objectHash(options)}`
+  const expirationTime = 300
+  return redis.get(redisKey).then(data => {
+    if (data) {
+      return JSON.parse(data)
+    } else {
+      return datasetsConnection(() => Dataset.find({ public: true }), options).then(
+        connection => {
+          redis.setex(redisKey, expirationTime, JSON.stringify(connection))
+        },
+      )
+    }
+  })
+}
+
+/**
  * Fetch all datasets
+ * @param {object} options {public: true, admin: false, orderBy: {created: 'ascending'}}
  */
 export const getDatasets = options => {
   if (options && 'public' in options && options.public) {
     // If only public datasets are requested, immediately return them
-    return datasetsConnection(() => Dataset.find({ public: true }), options)
+    return getPublicDatasets(options)
   } else if (options && 'admin' in options && options.admin) {
     // Admins can see all datasets
     return datasetsConnection(() => Dataset.find(), options)
@@ -106,7 +128,7 @@ export const getDatasets = options => {
       })
   } else {
     // If no permissions, anonymous requests always get public datasets
-    return datasetsConnection(Dataset.find({ public: true }), options)
+    return getPublicDatasets(options)
   }
 }
 
