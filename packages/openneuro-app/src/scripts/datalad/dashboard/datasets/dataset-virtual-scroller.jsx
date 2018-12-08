@@ -1,6 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { InfiniteLoader, List, AutoSizer } from 'react-virtualized'
+import {
+  InfiniteLoader,
+  List,
+  AutoSizer,
+  WindowScroller,
+} from 'react-virtualized'
 import DatasetRow from './dataset-row.jsx'
 import styled from 'styled-components'
 
@@ -33,6 +38,7 @@ const FlexParent = styled.div`
 
 const FlexFullHeight = styled.div`
   flex: 1 1 auto;
+  white-space: nowrap;
 `
 
 const DatasetVirtualScroller = ({ datasets, pageInfo, loadMoreRows }) => {
@@ -45,19 +51,25 @@ const DatasetVirtualScroller = ({ datasets, pageInfo, loadMoreRows }) => {
           loadMoreRows={loadMoreRows}
           rowCount={pageInfo.count}>
           {({ onRowsRendered, registerChild }) => (
-            <AutoSizer>
-              {({ width, height }) => (
-                <List
-                  height={height}
-                  onRowsRendered={onRowsRendered}
-                  ref={registerChild}
-                  rowCount={pageInfo.count}
-                  rowHeight={94}
-                  rowRenderer={rowRenderer}
-                  width={width}
-                />
+            <WindowScroller>
+              {({ height, scrollTop }) => (
+                <AutoSizer disableHeight>
+                  {({ width }) => (
+                    <List
+                      autoHeight
+                      height={height}
+                      onRowsRendered={onRowsRendered}
+                      ref={registerChild}
+                      rowCount={pageInfo.count}
+                      rowHeight={94}
+                      rowRenderer={rowRenderer}
+                      width={width}
+                      scrollTop={scrollTop}
+                    />
+                  )}
+                </AutoSizer>
               )}
-            </AutoSizer>
+            </WindowScroller>
           )}
         </InfiniteLoader>
       </FlexFullHeight>

@@ -8,7 +8,11 @@
     z-index: 1300;
     border-top: 10px solid $navbar-top-border-color;
     border-top: 10px solid var(--navbar-top-border-color);
-    min-height: initial;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: auto;
+    width: 100%;
 }
 
 .alert-state-true {
