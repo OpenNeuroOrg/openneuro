@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Statuses from '../../../dataset/dataset.statuses.jsx'
+import Statuses from './dataset-statuses.jsx'
 import Metrics from '../../../dataset/dataset.metrics.jsx'
 import Uploaded from './uploaded.jsx'
 import Summary from '../../fragments/dataset-summary.jsx'
