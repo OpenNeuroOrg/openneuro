@@ -100,7 +100,10 @@ const loadMoreRows = (cursor, fetchMore) => () => {
 }
 
 const DatasetQuery = ({ public: isPublic }) => (
-  <Query query={getDatasets} variables={{ public: isPublic }}>
+  <Query
+    query={getDatasets}
+    variables={{ public: isPublic }}
+    notifyOnNetworkStatusChange>
     {({ loading, error, data, fetchMore, refetch, variables }) => {
       if (loading) {
         return <Spinner text="Loading Datasets" active />
