@@ -4,69 +4,14 @@ import Helmet from 'react-helmet'
 import { pageTitle } from '../../../resources/strings'
 import Search from '../../../common/partials/search.jsx'
 import DatasetVirtualScroller from './dataset-virtual-scroller.jsx'
+import DatasetSorter from './dataset-sorter.jsx'
 import styled from 'styled-components'
-
-const sortFields = [
-  'created',
-  'name',
-  'uploader',
-  'stars',
-  'downloads',
-  'subscriptions',
-]
-
-const Capitalized = styled.span`
-  text-transform: capitalize;
-`
 
 const FullHeightFlexDiv = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
 `
-
-const SortField = ({ field, queryVariables, refetch }) => {
-  const fieldValue =
-    field in queryVariables.orderBy && queryVariables.orderBy[field]
-  let icon
-  if (fieldValue) {
-    if (fieldValue === 'ascending') {
-      icon = <i className="fa fa-sort-asc" />
-    } else {
-      icon = <i className="fa fa-sort-desc" />
-    }
-  }
-  const sortBy = () => {
-    const newQueryVariables = { ...queryVariables }
-    newQueryVariables.orderBy[field] =
-      queryVariables.orderBy[field] === 'descending'
-        ? 'ascending'
-        : 'descending'
-    refetch(queryVariables)
-  }
-  return (
-    <a
-      key={field}
-      className={fieldValue ? 'btn-sort name active' : 'btn-sort name'}
-      onClick={sortBy}>
-      <Capitalized>{field}</Capitalized> {icon}
-    </a>
-  )
-}
-
-const DatasetSorter = ({ refetch, queryVariables }) => (
-  <>
-    {sortFields.map(field => (
-      <SortField
-        field={field}
-        queryVariables={queryVariables}
-        refetch={refetch}
-        key={field}
-      />
-    ))}
-  </>
-)
-
 const DatasetTab = ({
   datasets,
   title,
