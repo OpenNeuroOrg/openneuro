@@ -12,7 +12,7 @@ const datasetSchema = new mongoose.Schema(
 
 // Foreign key virtuals for sorting
 
-datasetSchema.virtual('uploader', {
+datasetSchema.virtual('uploadUser', {
   ref: 'User',
   localField: 'uploader',
   foreignField: 'id',

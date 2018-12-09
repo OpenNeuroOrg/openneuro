@@ -96,8 +96,8 @@ export const sortQuery = (query, options) => {
       sort['_id'] = sortEnumToInt(options.orderBy.created)
     }
     if ('uploader' in options.orderBy && options.orderBy.uploader) {
-      query.populate('uploader')
-      sort['uploader.name'] = sortEnumToInt(options.orderBy.uploader)
+      query.populate('uploadUser')
+      sort['uploadUser.name'] = sortEnumToInt(options.orderBy.uploader)
     }
     if ('stars' in options.orderBy && options.orderBy.stars) {
       query.populate('stars')
