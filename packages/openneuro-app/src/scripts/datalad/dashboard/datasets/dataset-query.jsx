@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
-import Spinner from '../../../common/partials/spinner.jsx'
 import DatasetTab from './dataset-tab.jsx'
 
 const getDatasets = gql`
@@ -105,20 +104,18 @@ const DatasetQuery = ({ public: isPublic }) => (
     variables={{ public: isPublic }}
     notifyOnNetworkStatusChange>
     {({ loading, error, data, fetchMore, refetch, variables }) => {
-      if (loading) {
-        return <Spinner text="Loading Datasets" active />
-      } else if (error) {
+      if (error) {
         throw error
       } else {
         return (
           <DatasetTab
-            datasets={data.datasets.edges}
-            title={isPublic ? 'Public Datasets' : 'My Datasets'}
-            pageInfo={data.datasets.pageInfo}
-            loadMoreRows={loadMoreRows(
-              data.datasets.pageInfo.endCursor,
-              fetchMore,
-            )}
+            loading={loading}
+            data={data}
+            loadMoreRows={
+              loading
+                ? () => {}
+                : loadMoreRows(data.datasets.pageInfo.endCursor, fetchMore)
+            }
             refetch={refetch}
             queryVariables={variables}
           />
