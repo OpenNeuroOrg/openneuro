@@ -22,7 +22,7 @@ const typeDefs = `
       "Limit to datasets available publicly"
       public: Boolean = false
       "Sorting fields"
-      orderBy: DatasetSort
+      orderBy: DatasetSort = {created: ascending}
     ): DatasetConnection
     # Get one user
     user(id: ID!): User

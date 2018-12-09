@@ -6,8 +6,12 @@ import Spinner from '../../../common/partials/spinner.jsx'
 import DatasetTab from './dataset-tab.jsx'
 
 const getDatasets = gql`
-  query getDatasets($cursor: String, $public: Boolean) {
-    datasets(first: 20, after: $cursor, public: $public) {
+  query getDatasets(
+    $cursor: String
+    $public: Boolean
+    $orderBy: DatasetSort = { created: ascending }
+  ) {
+    datasets(first: 20, after: $cursor, public: $public, orderBy: $orderBy) {
       edges {
         node {
           id
@@ -97,7 +101,7 @@ const loadMoreRows = (cursor, fetchMore) => () => {
 
 const DatasetQuery = ({ public: isPublic }) => (
   <Query query={getDatasets} variables={{ public: isPublic }}>
-    {({ loading, error, data, fetchMore }) => {
+    {({ loading, error, data, fetchMore, refetch, variables }) => {
       if (loading) {
         return <Spinner text="Loading Datasets" active />
       } else if (error) {
@@ -112,6 +116,8 @@ const DatasetQuery = ({ public: isPublic }) => (
               data.datasets.pageInfo.endCursor,
               fetchMore,
             )}
+            refetch={refetch}
+            queryVariables={variables}
           />
         )
       }
