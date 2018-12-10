@@ -15,6 +15,7 @@ import styled from 'styled-components'
 const NavbarSpacer = styled.div`
   width: 100%;
   height: 85px;
+  min-height: 85px;
 `
 
 const OpenNeuroBrand = () => (
