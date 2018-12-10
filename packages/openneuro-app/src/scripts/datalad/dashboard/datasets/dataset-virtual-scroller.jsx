@@ -7,6 +7,7 @@ import {
   WindowScroller,
 } from 'react-virtualized'
 import DatasetRow from './dataset-row.jsx'
+import DatasetRowSkeleton from './dataset-row-skeleton.jsx'
 import styled from '@emotion/styled'
 
 let datasetVirtualList = []
@@ -23,7 +24,7 @@ const rowRenderer = ({ key, index, style }) => {
   } else {
     return (
       <div key={key} style={style}>
-        Loading datasets...
+        <DatasetRowSkeleton />
       </div>
     )
   }
@@ -84,7 +85,9 @@ class DatasetVirtualScroller extends React.Component {
           <InfiniteLoader
             isRowLoaded={isRowLoaded}
             loadMoreRows={this.props.loadMoreRows}
-            rowCount={this.props.pageInfo.count}>
+            rowCount={this.props.pageInfo.count}
+            minimumBatchSize={20}
+            threshold={10}>
             {this._loaderRender}
           </InfiniteLoader>
         </FlexFullHeight>
