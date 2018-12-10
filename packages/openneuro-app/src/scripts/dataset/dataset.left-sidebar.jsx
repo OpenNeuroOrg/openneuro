@@ -1,10 +1,10 @@
 import React from 'react'
 import Reflux from 'reflux'
 import { Link } from 'react-router-dom'
-import moment from 'moment'
 import bids from '../utils/bids'
 import datasetStore from './dataset.store'
 import actions from './dataset.actions.js'
+import { formatDate } from '../utils/date.js'
 import { refluxConnect } from '../utils/reflux'
 
 export class LeftSidebar extends Reflux.Component {
@@ -81,9 +81,7 @@ export class LeftSidebar extends Reflux.Component {
                     : 'v' + snapshot.snapshot_version}
                 </span>
                 <span className="date-modified">
-                  {snapshot.created
-                    ? moment(snapshot.created).format('ll')
-                    : null}
+                  {snapshot.created ? formatDate(snapshot.created) : null}
                 </span>
                 <span className="icons">
                   {snapshot.public ? (

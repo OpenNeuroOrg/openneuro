@@ -4,7 +4,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Reflux from 'reflux'
 import { Redirect, withRouter } from 'react-router-dom'
-import moment from 'moment'
 import { ProgressBar } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
@@ -25,6 +24,8 @@ import UploadResume from '../uploader/upload-resume.jsx'
 import LoginModal from '../common/partials/login.jsx'
 import { refluxConnect } from '../utils/reflux'
 import { getProfile } from '../authentication/profile.js'
+import { formatDate } from '../utils/date.js'
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 
 let uploadWarning =
   'You are currently uploading files. Leaving this page will cancel the upload process.'
@@ -430,16 +431,16 @@ class DatasetContent extends Reflux.Component {
   // custom methods -----------------------------------------------------
 
   _modified(modified) {
-    let dateModified = moment(modified).format('L')
-    let timeago = moment(modified).fromNow(true)
+    const dateModified = formatDate(modified)
+    const timeago = distanceInWordsToNow(modified)
     return <h6>{'last modified ' + dateModified + ' - ' + timeago + ' ago'}</h6>
   }
 
   _uploaded(dataset) {
     let user = dataset ? dataset.user : null
-    let dateCreated = dataset.created
-    let dateAdded = moment(dateCreated).format('L')
-    let timeago = moment(dateCreated).fromNow(true)
+    const dateCreated = dataset.created
+    const dateAdded = formatDate(dateCreated)
+    const timeago = distanceInWordsToNow(dateCreated)
     return (
       <h6>
         {'uploaded ' +

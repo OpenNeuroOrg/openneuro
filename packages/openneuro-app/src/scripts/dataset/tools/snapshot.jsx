@@ -4,7 +4,6 @@ import Reflux from 'reflux'
 import Spinner from '../../common/partials/spinner.jsx'
 import Timeout from '../../common/partials/timeout.jsx'
 import ErrorBoundary from '../../errors/errorBoundary.jsx'
-import moment from 'moment'
 import semver from 'semver'
 import actions from '../dataset.actions'
 import datasetStore from '../dataset.store'
@@ -289,7 +288,7 @@ class Snapshot extends Reflux.Component {
 
   joinChangelogs(changesArray, oldChangelog) {
     let existingText = oldChangelog ? '\n' + oldChangelog : ''
-    let dateString = moment().format('YYYY-MM-DD')
+    let dateString = new Date().toISOString().split('T')[0]
     let versionString = this.state.selectedVersion
     let headerString = versionString + '\t' + dateString + '\n\n'
     let changeText = headerString
