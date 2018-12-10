@@ -92,13 +92,12 @@ export const getPublicDatasets = options => {
     if (data) {
       return JSON.parse(data)
     } else {
-      return datasetsConnection(
-        () => Dataset.find({ public: true }),
-        options,
-      ).then(connection => {
-        redis.setex(redisKey, expirationTime, JSON.stringify(connection))
-        return connection
-      })
+      return datasetsConnection([{ $match: { public: true } }], options).then(
+        connection => {
+          redis.setex(redisKey, expirationTime, JSON.stringify(connection))
+          return connection
+        },
+      )
     }
   })
 }
@@ -113,7 +112,7 @@ export const getDatasets = options => {
     return getPublicDatasets(options)
   } else if (options && 'admin' in options && options.admin) {
     // Admins can see all datasets
-    return datasetsConnection(() => Dataset.find(), options)
+    return datasetsConnection([], options)
   } else if (options && 'userId' in options) {
     return c.crn.permissions
       .find({ userId: options.userId })
@@ -123,10 +122,7 @@ export const getDatasets = options => {
           permission => permission.datasetId,
         )
         return datasetsConnection(
-          () =>
-            Dataset.find({
-              $or: [{ id: { $in: datasetIds } }, { public: true }],
-            }),
+          [{$match: {$or: [{ id: { $in: datasetIds } }, { public: true }]}}],
           options,
         )
       })

@@ -25,6 +25,7 @@ datasetSchema.virtual('stars', {
   localField: 'id',
   foreignField: 'datasetId',
   count: true,
+  justOne: true,
 })
 
 datasetSchema.virtual('analytics', {
@@ -38,6 +39,7 @@ datasetSchema.virtual('subscriptions', {
   localField: 'id',
   foreignField: 'datasetId',
   count: true,
+  justOne: true,
 })
 
 const Dataset = mongoose.model('Dataset', datasetSchema)

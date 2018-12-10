@@ -1,4 +1,5 @@
 // Helpers for pagination
+import Dataset from '../models/dataset.js'
 
 const sortEnumToInt = val => (val === 'ascending' ? 1 : -1)
 
@@ -30,12 +31,11 @@ export const decodeCursor = cursor => {
  * @param {array[object]} edges
  * @param {number} offset The leading edge of the pagination window as an offset
  */
-export const applyCursorToEdges = (edges, offset) => {
-  return edges.map((edge, n) => ({
+export const applyCursorToEdges = (edges, offset) =>
+  edges.map((edge, n) => ({
     cursor: apiCursor({ offset: offset + n }),
     node: edge,
   }))
-}
 
 // Decode cursor from options object
 export const getOffsetFromCursor = options => {
@@ -56,16 +56,30 @@ export const maxLimit = limit => Math.max(Math.min(limit, 100), 1)
 
 /**
  * Dataset pagination wrapper
- * @param {function} query Function returning MongoDB query to apply pagination to
+ * @param {array} presortAggregate Any presorting / pagination constraints
  * @param {object} options Query options such as {limit: 5, orderBy: {creation: 'descending'}}
  */
-export const datasetsConnection = (query, options) => {
+export const datasetsConnection = (presortAggregate, options) => {
   const offset = getOffsetFromCursor(options)
   const realLimit = maxLimit(options.first)
-  return query()
-    .countDocuments()
-    .then(count =>
-      pagingBound(sortQuery(query(), options), options).then(datasets => ({
+  // One query for match -> sort ->
+  return Dataset.aggregate([
+    ...presortAggregate,
+    ...sortAggregate(options),
+    {
+      $group: { _id: null, count: { $sum: 1 }, datasets: { $push: '$$ROOT' } },
+    },
+    {
+      $project: {
+        count: 1,
+        datasets: { $slice: ['$datasets', offset, realLimit] },
+      },
+    },
+  ])
+    .exec()
+    .then(results => {
+      const { datasets, count } = results.pop()
+      return {
         edges: applyCursorToEdges(datasets, offset),
         pageInfo: {
           // True if there are no results before this
@@ -79,41 +93,86 @@ export const datasetsConnection = (query, options) => {
           // Count of all documents in this query
           count,
         },
-      })),
-    )
+      }
+    })
 }
 
 /**
- * Apply any needed sorts to a query
- * @param {object} query Mongoose query object
+ * Apply any needed sorts to an aggregation pipeline
  * @param {object} options Query parameters
+ * @returns {array} Steps required to sort any specified fields
  */
-export const sortQuery = (query, options) => {
-  // Default to natural descending
-  let sort = { _id: -1 }
+export const sortAggregate = options => {
+  const sortingStages = []
+  const finalSort = {}
   if (options.hasOwnProperty('orderBy')) {
     if ('created' in options.orderBy && options.orderBy.created) {
-      sort['_id'] = sortEnumToInt(options.orderBy.created)
+      finalSort['_id'] = sortEnumToInt(options.orderBy.created)
     }
     if ('uploader' in options.orderBy && options.orderBy.uploader) {
-      query.populate('uploadUser')
-      sort['uploadUser.name'] = sortEnumToInt(options.orderBy.uploader)
+      sortingStages.push({
+        $lookup: {
+          from: 'users',
+          localField: 'uploader',
+          foreignField: 'id',
+          as: 'uploadUser',
+        },
+      })
+      finalSort['uploadUser.name'] = sortEnumToInt(options.orderBy.uploader)
     }
     if ('stars' in options.orderBy && options.orderBy.stars) {
-      query.populate('stars')
-      sort['stars'] = sortEnumToInt(options.orderBy.stars)
+      // Lookup related collection values
+      sortingStages.push({
+        $lookup: {
+          from: 'stars',
+          localField: 'id',
+          foreignField: 'datasetId',
+          as: 'stars',
+        },
+      })
+      // Count stars
+      sortingStages.push({
+        $addFields: {
+          starsCount: { $size: '$stars' },
+        },
+      })
+      finalSort['starsCount'] = sortEnumToInt(options.orderBy.stars)
     }
     if ('downloads' in options.orderBy && options.orderBy.downloads) {
-      query.populate('analytics')
-      sort['analytics.downloads'] = sortEnumToInt(options.orderBy.downloads)
+      sortingStages.push({
+        $lookup: {
+          from: 'analytics',
+          localField: 'id',
+          foreignField: 'datasetId',
+          as: 'analytics',
+        },
+      })
+      finalSort['analytics.downloads'] = sortEnumToInt(
+        options.orderBy.downloads,
+      )
     }
     if ('subscriptions' in options.orderBy && options.orderBy.subscriptions) {
-      query.populate('subscriptions')
-      sort['subscriptions'] = sortEnumToInt(options.orderBy.subscriptions)
+      sortingStages.push({
+        $lookup: {
+          from: 'subscriptions',
+          localField: 'id',
+          foreignField: 'datasetId',
+          as: 'subscriptions',
+        },
+      })
+      // Count stars
+      sortingStages.push({
+        $addFields: {
+          subscriptionsCount: { $size: '$subscriptions' },
+        },
+      })
+      finalSort['subscriptionsCount'] = sortEnumToInt(
+        options.orderBy.subscriptions,
+      )
     }
-    query.sort(sort)
+    sortingStages.push({ $sort: finalSort })
   }
-  return query
+  return sortingStages
 }
 
 // Apply range bounds based on after/before arguments to query
