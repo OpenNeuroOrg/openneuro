@@ -87,7 +87,7 @@ export const deleteDataset = id => {
  */
 export const getPublicDatasets = options => {
   const redisKey = `openneuro:publicDatasetsConnection:${objectHash(options)}`
-  const expirationTime = 300
+  const expirationTime = 60
   return redis.get(redisKey).then(data => {
     if (data) {
       return JSON.parse(data)
