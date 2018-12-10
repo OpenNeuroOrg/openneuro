@@ -11,7 +11,7 @@ import styled from '@emotion/styled'
 const FullHeightFlexDiv = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  flex: 0 1 auto;
 `
 
 const title = isPublic => (isPublic ? 'Public Datasets' : 'My Datasets')
