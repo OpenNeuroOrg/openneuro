@@ -98,30 +98,39 @@ const loadMoreRows = (cursor, fetchMore) => () => {
   })
 }
 
+const datasetQueryDisplay = ({
+  loading,
+  error,
+  data,
+  fetchMore,
+  refetch,
+  variables,
+}) => {
+  if (error) {
+    throw error
+  } else {
+    return (
+      <DatasetTab
+        loading={loading}
+        data={data}
+        loadMoreRows={
+          loading
+            ? () => {}
+            : loadMoreRows(data.datasets.pageInfo.endCursor, fetchMore)
+        }
+        refetch={refetch}
+        queryVariables={variables}
+      />
+    )
+  }
+}
+
 const DatasetQuery = ({ public: isPublic }) => (
   <Query
     query={getDatasets}
     variables={{ public: isPublic }}
     notifyOnNetworkStatusChange>
-    {({ loading, error, data, fetchMore, refetch, variables }) => {
-      if (error) {
-        throw error
-      } else {
-        return (
-          <DatasetTab
-            loading={loading}
-            data={data}
-            loadMoreRows={
-              loading
-                ? () => {}
-                : loadMoreRows(data.datasets.pageInfo.endCursor, fetchMore)
-            }
-            refetch={refetch}
-            queryVariables={variables}
-          />
-        )
-      }
-    }}
+    {datasetQueryDisplay}
   </Query>
 )
 

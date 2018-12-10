@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Metric from '../common/partials/metric.jsx'
 
-class Metrics extends React.Component {
+class Metrics extends React.PureComponent {
   // life cycle events --------------------------------------------------
 
   render() {

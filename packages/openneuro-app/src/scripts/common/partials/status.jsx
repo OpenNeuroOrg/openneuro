@@ -7,7 +7,7 @@ import UploadResume from '../../uploader/upload-resume.jsx'
 
 // component setup -----------------------------------------------------------
 
-export default class Status extends React.Component {
+export default class Status extends React.PureComponent {
   // lifecycle events ----------------------------------------------------------
   render() {
     if (!this.props.display) {

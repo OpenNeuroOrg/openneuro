@@ -41,40 +41,55 @@ const FlexFullHeight = styled.div`
   white-space: nowrap;
 `
 
-const DatasetVirtualScroller = ({ datasets, pageInfo, loadMoreRows }) => {
-  datasetVirtualList = datasets
-  return (
-    <FlexParent>
-      <FlexFullHeight>
-        <InfiniteLoader
-          isRowLoaded={isRowLoaded}
-          loadMoreRows={loadMoreRows}
-          rowCount={pageInfo.count}>
-          {({ onRowsRendered, registerChild }) => (
-            <WindowScroller>
-              {({ height, scrollTop }) => (
-                <AutoSizer disableHeight>
-                  {({ width }) => (
-                    <List
-                      autoHeight
-                      height={height}
-                      onRowsRendered={onRowsRendered}
-                      ref={registerChild}
-                      rowCount={pageInfo.count}
-                      rowHeight={94}
-                      rowRenderer={rowRenderer}
-                      width={width}
-                      scrollTop={scrollTop}
-                    />
-                  )}
-                </AutoSizer>
-              )}
-            </WindowScroller>
-          )}
-        </InfiniteLoader>
-      </FlexFullHeight>
-    </FlexParent>
+class DatasetVirtualScroller extends React.Component {
+  _autosizeRender = (onRowsRendered, registerChild, height, scrollTop) => ({
+    width,
+  }) => (
+    <List
+      autoHeight
+      height={height}
+      onRowsRendered={onRowsRendered}
+      ref={registerChild}
+      rowCount={this.props.pageInfo.count}
+      rowHeight={94}
+      rowRenderer={rowRenderer}
+      width={width}
+      scrollTop={scrollTop}
+    />
   )
+
+  _windowScrollerRender = (onRowsRendered, registerChild) => ({
+    height,
+    scrollTop,
+  }) => (
+    <AutoSizer disableHeight>
+      {this._autosizeRender(onRowsRendered, registerChild, height, scrollTop)}
+    </AutoSizer>
+  )
+
+  _loaderRender = ({ onRowsRendered, registerChild }) => (
+    <WindowScroller>
+      {this._windowScrollerRender(onRowsRendered, registerChild)}
+    </WindowScroller>
+  )
+
+  shouldComponentUpdate = () => false
+
+  render() {
+    datasetVirtualList = this.props.datasets
+    return (
+      <FlexParent>
+        <FlexFullHeight>
+          <InfiniteLoader
+            isRowLoaded={isRowLoaded}
+            loadMoreRows={this.props.loadMoreRows}
+            rowCount={this.props.pageInfo.count}>
+            {this._loaderRender}
+          </InfiniteLoader>
+        </FlexFullHeight>
+      </FlexParent>
+    )
+  }
 }
 
 DatasetVirtualScroller.propTypes = {
