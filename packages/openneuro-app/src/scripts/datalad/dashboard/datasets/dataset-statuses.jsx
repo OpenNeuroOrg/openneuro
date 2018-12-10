@@ -17,13 +17,12 @@ class Statuses extends React.Component {
     const minimal = this.props.minimal
     const profile = this.props.profile
     const uploaderSubscribed = dataset.followers.some(
-      follower => follower.userId === dataset.uploader,
+      follower => follower.userId === dataset.uploader.id,
     )
     const invalid = dataset.draft.issues.some(
       issue => issue.severity === 'error',
     )
-    const shared = dataset.uploader !== profile.sub
-
+    const shared = dataset.uploader.id !== profile.sub
     return (
       <span className="status-wrap">
         <Status type="public" minimal={minimal} display={dataset.public} />

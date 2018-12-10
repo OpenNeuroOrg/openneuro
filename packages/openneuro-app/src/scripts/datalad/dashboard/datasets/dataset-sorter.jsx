@@ -29,11 +29,14 @@ const SortField = ({ field, queryVariables, refetch }) => {
   }
   const sortBy = () => {
     const newQueryVariables = { ...queryVariables }
+    // Clear existing sorts
+    newQueryVariables.orderBy = {}
+    // Apply (or toggle) based on previous sort
     newQueryVariables.orderBy[field] =
       queryVariables.orderBy[field] === 'descending'
         ? 'ascending'
         : 'descending'
-    refetch(queryVariables)
+    refetch(newQueryVariables)
   }
   return (
     <a
