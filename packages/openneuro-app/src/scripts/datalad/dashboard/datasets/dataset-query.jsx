@@ -10,7 +10,7 @@ const getDatasets = gql`
     $public: Boolean
     $orderBy: DatasetSort = { created: ascending }
   ) {
-    datasets(first: 20, after: $cursor, public: $public, orderBy: $orderBy) {
+    datasets(first: 25, after: $cursor, public: $public, orderBy: $orderBy) {
       edges {
         node {
           id
@@ -126,10 +126,7 @@ const datasetQueryDisplay = ({
 }
 
 const DatasetQuery = ({ public: isPublic }) => (
-  <Query
-    query={getDatasets}
-    variables={{ public: isPublic }}
-    notifyOnNetworkStatusChange>
+  <Query query={getDatasets} variables={{ public: isPublic }}>
     {datasetQueryDisplay}
   </Query>
 )

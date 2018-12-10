@@ -10,26 +10,6 @@ import DatasetRow from './dataset-row.jsx'
 import DatasetRowSkeleton from './dataset-row-skeleton.jsx'
 import styled from '@emotion/styled'
 
-let datasetVirtualList = []
-
-const isRowLoaded = ({ index }) => !!datasetVirtualList[index]
-
-const rowRenderer = ({ key, index, style }) => {
-  if (index < datasetVirtualList.length) {
-    return (
-      <div key={key} style={style}>
-        <DatasetRow dataset={datasetVirtualList[index].node} />
-      </div>
-    )
-  } else {
-    return (
-      <div key={key} style={style}>
-        <DatasetRowSkeleton />
-      </div>
-    )
-  }
-}
-
 const FlexParent = styled.div`
   display: flex;
   flex-flow: column;
@@ -43,6 +23,26 @@ const FlexFullHeight = styled.div`
 `
 
 class DatasetVirtualScroller extends React.Component {
+  _isRowLoaded = ({ index }) => {
+    return index < this.props.datasets.length
+  }
+
+  _rowRender = ({ key, index, style }) => {
+    if (this._isRowLoaded({ index })) {
+      return (
+        <div key={key} style={style}>
+          <DatasetRow dataset={this.props.datasets[index].node} />
+        </div>
+      )
+    } else {
+      return (
+        <div key={key} style={style}>
+          <DatasetRowSkeleton />
+        </div>
+      )
+    }
+  }
+
   _autosizeRender = (onRowsRendered, registerChild, height, scrollTop) => ({
     width,
   }) => (
@@ -54,7 +54,7 @@ class DatasetVirtualScroller extends React.Component {
       ref={registerChild}
       rowCount={this.props.pageInfo.count}
       rowHeight={94}
-      rowRenderer={rowRenderer}
+      rowRenderer={this._rowRender}
       width={width}
       scrollTop={scrollTop}
     />
@@ -75,19 +75,29 @@ class DatasetVirtualScroller extends React.Component {
     </WindowScroller>
   )
 
-  shouldComponentUpdate = () => false
+  shouldComponentUpdate(nextProps) {
+    if (this.props.datasets.length !== nextProps.datasets.length) {
+      return true
+    }
+    if (
+      this.props.datasets[0].id !== nextProps.datasets[0].id ||
+      this.props.datasets.slice(-1)[0].id !== nextProps.datasets.slice(-1)[0].id
+    ) {
+      return true
+    }
+    return false
+  }
 
   render() {
-    datasetVirtualList = this.props.datasets
     return (
       <FlexParent>
         <FlexFullHeight>
           <InfiniteLoader
-            isRowLoaded={isRowLoaded}
+            isRowLoaded={this._isRowLoaded}
             loadMoreRows={this.props.loadMoreRows}
             rowCount={this.props.pageInfo.count}
-            minimumBatchSize={20}
-            threshold={10}>
+            minimumBatchSize={25}
+            threshold={7}>
             {this._loaderRender}
           </InfiniteLoader>
         </FlexFullHeight>
