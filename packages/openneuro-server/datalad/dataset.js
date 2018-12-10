@@ -62,24 +62,15 @@ export const giveUploaderPermission = (datasetId, userId) => {
 /**
  * Fetch dataset document and related fields
  */
-export const getDataset = id => {
-  return c.crn.datasets.findOne({ id })
-}
+export const getDataset = id => Dataset.findOne({ id }).exec()
 
 /**
  * Delete dataset and associated documents
  */
-export const deleteDataset = id => {
-  let deleteURI = `${uri}/datasets/${id}`
-  return new Promise((resolve, reject) => {
-    request.del(deleteURI).then(() => {
-      c.crn.datasets
-        .deleteOne({ id })
-        .then(() => resolve())
-        .catch(err => reject(err))
-    })
-  })
-}
+export const deleteDataset = id =>
+  request
+    .del(`${uri}/datasets/${id}`)
+    .then(() => Dataset.deleteOne({ id }).exec())
 
 /**
  * For public datasets, cache combinations of sorts/limits/cursors to speed responses
@@ -122,7 +113,11 @@ export const getDatasets = options => {
           permission => permission.datasetId,
         )
         return datasetsConnection(
-          [{$match: {$or: [{ id: { $in: datasetIds } }, { public: true }]}}],
+          [
+            {
+              $match: { $or: [{ id: { $in: datasetIds } }, { public: true }] },
+            },
+          ],
           options,
         )
       })
@@ -245,14 +240,12 @@ export const deleteFile = (datasetId, path, file) => {
 /**
  * Update public state
  */
-export const updatePublic = (datasetId, publicFlag) => {
-  // update mongo
-  return c.crn.datasets.updateOne(
+export const updatePublic = (datasetId, publicFlag) =>
+  Dataset.updateOne(
     { id: datasetId },
     { $set: { public: publicFlag } },
     { upsert: true },
-  )
-}
+  ).exec()
 
 export const getDatasetAnalytics = (datasetId, tag) => {
   let datasetQuery = tag
