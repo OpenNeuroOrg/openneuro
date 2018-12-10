@@ -20,7 +20,7 @@ const Faq = loadable(() =>
   import(/* webpackChunkName: 'Faq' */ './faq/faq.jsx'),
 )
 const SearchResults = loadable(() =>
-  import(/* webpackChunkName: 'SearchResults' */ './dashboard/dashboard.searchresults.jsx'),
+  import(/* webpackChunkName: 'SearchResults' */ './datalad/dashboard/search-results.jsx'),
 )
 const APIKey = loadable(() =>
   import(/* webpackChunkName: 'APIKey' */ './user/api.jsx'),
