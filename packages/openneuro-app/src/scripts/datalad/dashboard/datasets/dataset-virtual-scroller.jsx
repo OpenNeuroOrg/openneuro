@@ -46,6 +46,7 @@ class DatasetVirtualScroller extends React.Component {
     width,
   }) => (
     <List
+      className="fade-in"
       autoHeight
       height={height}
       onRowsRendered={onRowsRendered}
