@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 
 const Uploaded = ({ uploader, created }) => {
   const fullname = uploader ? uploader.name : ''
-  const dateAdded = created ? moment(created).format('L') : ''
-  const timeago = created ? moment(created).fromNow(true) : ''
+  const dateAdded = created ? new Date(created).toISOString().split('T')[0] : ''
+  const timeago = created ? distanceInWordsToNow(created) : ''
   return (
     <div className="meta-container">
       <p className="date">
