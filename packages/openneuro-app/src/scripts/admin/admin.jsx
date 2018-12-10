@@ -7,17 +7,12 @@ import Blacklist from './admin.blacklist.jsx'
 import AppDefinitions from './admin.apps.jsx'
 import EventLogs from './admin.logs.jsx'
 import Graphs from '../admin/admin.graphs.jsx'
-import Datasets from '../dashboard/dashboard.datasets.jsx'
-import Jobs from '../dashboard/dashboard.jobs.jsx'
+//import Datasets from '../dashboard/dashboard.datasets.jsx'
 
 import BlacklistModal from './admin.blacklist.modal.jsx'
 import actions from './admin.actions'
 import config from '../../../config'
-import {
-  AdminJobLink,
-  JobStatsLink,
-  JobAppDefinitionsLink,
-} from '../common/partials/jobs.jsx'
+import { JobAppDefinitionsLink } from '../common/partials/jobs.jsx'
 import LoggedIn from '../authentication/logged-in.jsx'
 
 const analysisEnabled = !!config.analysis.enabled
@@ -62,12 +57,6 @@ class Dashboard extends React.Component {
                     All Datasets
                   </NavLink>
                 </li>
-                <li>
-                  <AdminJobLink enabled={analysisEnabled} />
-                </li>
-                <li>
-                  <JobStatsLink enabled={analysisEnabled} />
-                </li>
               </ul>
               <Switch>
                 <Redirect
@@ -104,13 +93,7 @@ class Dashboard extends React.Component {
                   name="admin-datasets"
                   path="/admin/datasets"
                   exact
-                  render={props => <Datasets admin {...props} />}
-                />
-                <Route
-                  name="admin-jobs"
-                  path="/admin/jobs"
-                  exact
-                  render={props => <Jobs admin {...props} />}
+                  render={() => null /*<Datasets admin {...props} />*/}
                 />
                 <Route
                   name="admin-jobs-stats"
