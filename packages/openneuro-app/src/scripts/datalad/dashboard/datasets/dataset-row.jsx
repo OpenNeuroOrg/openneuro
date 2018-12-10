@@ -5,10 +5,15 @@ import Metrics from '../../../dataset/dataset.metrics.jsx'
 import Uploaded from './uploaded.jsx'
 import Summary from '../../fragments/dataset-summary.jsx'
 import { Link } from 'react-router-dom'
+import styled from '@emotion/styled'
+
+const RowHeight = styled.div`
+  height: 93px;
+`
 
 const DatasetRow = ({ dataset }) => (
   <div className="panel panel-default">
-    <div className="panel-heading">
+    <RowHeight className="panel-heading">
       <div className="header clearfix">
         <Link to={'/datasets/' + dataset.id}>
           <h4 className="dataset-name">{dataset.draft.description.Name}</h4>
@@ -22,7 +27,7 @@ const DatasetRow = ({ dataset }) => (
         </div>
       </div>
       <Summary summary={dataset.draft.summary} minimal={true} />
-    </div>
+    </RowHeight>
   </div>
 )
 
