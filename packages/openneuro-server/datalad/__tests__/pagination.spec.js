@@ -40,20 +40,24 @@ describe('pagination model operations', () => {
       mockingoose.Dataset.toReturn(
         [
           {
-            _id: ObjectID('5bef51a1ed211400c08e5524'),
-            id: 'ds001001',
-            created: new Date('2018-11-16T23:24:17.203Z'),
-            modified: new Date('2018-11-16T23:24:25.050Z'),
-            uploader: 'f8d5a57c-879a-40e6-b151-e34c4a28ff70',
-            revision: '262a8e610e32b5766cbf669acc71911c1ece7126',
+            datasets: [
+              {
+                _id: ObjectID('5bef51a1ed211400c08e5524'),
+                id: 'ds001001',
+                created: new Date('2018-11-16T23:24:17.203Z'),
+                modified: new Date('2018-11-16T23:24:25.050Z'),
+                uploader: 'f8d5a57c-879a-40e6-b151-e34c4a28ff70',
+                revision: '262a8e610e32b5766cbf669acc71911c1ece7126',
+              },
+            ],
+            count: 1,
           },
         ],
-        'find',
+        'aggregate',
       )
     })
     it('returns a connection shaped result', async done => {
-      const query = () => Dataset.find()
-      const res = await pagination.datasetsConnection(query, {
+      const res = await pagination.datasetsConnection([], {
         orderBy: { created: 'ascending' },
         limit: 5,
       })

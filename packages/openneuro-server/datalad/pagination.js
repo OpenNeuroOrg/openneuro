@@ -62,7 +62,7 @@ export const maxLimit = limit => Math.max(Math.min(limit, 100), 1)
 export const datasetsConnection = (presortAggregate, options) => {
   const offset = getOffsetFromCursor(options)
   const realLimit = maxLimit(options.first)
-  // One query for match -> sort ->
+  // One query for match -> count -> sort -> skip -> limit
   return Dataset.aggregate([
     ...presortAggregate,
     ...sortAggregate(options),
