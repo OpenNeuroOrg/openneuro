@@ -16,6 +16,8 @@
   },
   "author": "Squishymedia",
   "dependencies": {
+    "@emotion/core": "^10.0.4",
+    "@emotion/styled": "^10.0.4",
     "@types/jasmine": "^2.8.9",
     "apollo-client": "^2.4.7",
     "apollo-link-ws": "^1.0.9",
@@ -69,7 +71,6 @@
     "serviceworker-webpack-plugin": "^1.0.1",
     "spark-md5": "^3.0.0",
     "stream-browserify": "^2.0.1",
-    "styled-components": "^4.0.0",
     "subscriptions-transport-ws": "^0.9.9",
     "superagent": "^3.6.0",
     "url-search-params-polyfill": "^2.0.1",

@@ -6,7 +6,7 @@ import Spinner from '../../../common/partials/spinner.jsx'
 import Search from '../../../common/partials/search.jsx'
 import DatasetVirtualScroller from './dataset-virtual-scroller.jsx'
 import DatasetSorter from './dataset-sorter.jsx'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const FullHeightFlexDiv = styled.div`
   display: flex;

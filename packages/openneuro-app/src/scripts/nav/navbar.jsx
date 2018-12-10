@@ -9,7 +9,7 @@ import { Modal } from '../utils/modal.jsx'
 import LoginModal from '../common/partials/login.jsx'
 import config from '../../../config'
 import { frontPage } from 'openneuro-content'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 // component setup ---------------------------------------------------------------
 const NavbarSpacer = styled.div`

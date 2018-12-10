@@ -7,7 +7,7 @@ import {
   WindowScroller,
 } from 'react-virtualized'
 import DatasetRow from './dataset-row.jsx'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 let datasetVirtualList = []
 

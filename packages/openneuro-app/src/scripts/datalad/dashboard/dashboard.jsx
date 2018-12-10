@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Switch, NavLink, Redirect, Route, withRouter } from 'react-router-dom'
 import DatasetQuery from './datasets/dataset-query.jsx'
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const DashboardWrapper = styled.div`
   display: flex;

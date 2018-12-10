@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from '@emotion/styled'
 
 const ShellExample = styled.pre`
   max-width: 80em;
