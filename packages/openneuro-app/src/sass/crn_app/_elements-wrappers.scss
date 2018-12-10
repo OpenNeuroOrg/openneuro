@@ -117,9 +117,7 @@ h6 {
 
 .page {
     background: $e5;
-    position: fixed;
     width: 100%;
-    overflow-y: scroll;
 
     &.snapshot,
     &.dataset {
