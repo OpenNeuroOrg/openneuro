@@ -115,8 +115,11 @@ h6 {
     font-family: var(--font-family-open);
 }
 
-.page {
+#main {
     background: $e5;
+}
+
+.page {
     width: 100%;
 
     &.snapshot,
