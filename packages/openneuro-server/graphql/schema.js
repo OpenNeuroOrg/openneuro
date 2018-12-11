@@ -21,6 +21,12 @@ const typeDefs = `
       before: String
       "Limit to datasets available publicly"
       public: Boolean = false
+      "Return only partially uploaded datasets"
+      incomplete: Boolean
+      "Return only datasets that are shared with the user"
+      shared: Boolean
+      "Return only datasets with an invalid Draft"
+      invalid: Boolean
       "Sorting fields"
       orderBy: DatasetSort = {created: ascending}
     ): DatasetConnection
