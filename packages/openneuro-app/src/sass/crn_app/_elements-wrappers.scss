@@ -48,6 +48,7 @@ body {
     font-family: $font-family-cabin;
     font-family: var(--font-family-cabin);
     letter-spacing: .03em;
+    background: $e5;
 }
 
 .main {
@@ -113,10 +114,6 @@ h6 {
 .href-font {
     font-family: $font-family-open;
     font-family: var(--font-family-open);
-}
-
-#main {
-    background: $e5;
 }
 
 .page {
