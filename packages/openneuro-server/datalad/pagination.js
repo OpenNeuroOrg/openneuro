@@ -78,21 +78,26 @@ export const datasetsConnection = (presortAggregate, options) => {
   ])
     .exec()
     .then(results => {
-      const { datasets, count } = results.pop()
-      return {
-        edges: applyCursorToEdges(datasets, offset),
-        pageInfo: {
-          // True if there are no results before this
-          hasPreviousPage: offset > 0,
-          // First ordered object id in the limited set
-          startCursor: apiCursor({ offset }),
-          // True if there are no results after this
-          hasNextPage: offset + realLimit < count,
-          // Last ordered object id in the limited set
-          endCursor: apiCursor({ offset: offset + realLimit }),
-          // Count of all documents in this query
-          count,
-        },
+      const result = results.pop()
+      if (result) {
+        const { datasets, count } = result
+        return {
+          edges: applyCursorToEdges(datasets, offset),
+          pageInfo: {
+            // True if there are no results before this
+            hasPreviousPage: offset > 0,
+            // First ordered object id in the limited set
+            startCursor: apiCursor({ offset }),
+            // True if there are no results after this
+            hasNextPage: offset + realLimit < count,
+            // Last ordered object id in the limited set
+            endCursor: apiCursor({ offset: offset + realLimit }),
+            // Count of all documents in this query
+            count,
+          },
+        }
+      } else {
+        return null
       }
     })
 }
