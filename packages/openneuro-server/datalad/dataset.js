@@ -112,14 +112,18 @@ export const getDatasets = options => {
         const datasetIds = datasetsAllowed.map(
           permission => permission.datasetId,
         )
-        return datasetsConnection(
-          [
-            {
-              $match: { $or: [{ id: { $in: datasetIds } }, { public: true }] },
-            },
-          ],
-          options,
-        )
+        // Match accessible datasets
+        const $match = { id: { $in: datasetIds } }
+        // Skip datasets where the user is the uploader for shared only datasets
+        if ('shared' in options && options.shared) {
+          $match.uploader = { uploader: { $ne: options.userId } }
+        }
+        const aggregates = [
+          {
+            $match,
+          },
+        ]
+        return datasetsConnection(aggregates, options)
       })
   } else {
     // If no permissions, anonymous requests always get public datasets
