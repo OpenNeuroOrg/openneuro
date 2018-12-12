@@ -22,12 +22,12 @@ const FilterField = ({ field, queryVariables, refetch }) => {
     refetch(newQueryVariables)
   }
   return (
-    <a
+    <button
       key={field}
       className={fieldValue ? 'btn-filter name active' : 'btn-filter name'}
       onClick={filterBy}>
       <Capitalized>{field}</Capitalized>
-    </a>
+    </button>
   )
 }
 
