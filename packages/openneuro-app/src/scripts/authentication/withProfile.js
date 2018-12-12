@@ -1,6 +1,6 @@
 /* eslint-disable */
 import React from 'react'
-import { getProfile, parseJwt } from './profile.js'
+import { getProfile } from './profile.js'
 
 const withProfile = WrappedComponent => {
   const profile = getProfile()
