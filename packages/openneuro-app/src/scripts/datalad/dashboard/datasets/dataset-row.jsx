@@ -5,11 +5,7 @@ import Metrics from '../../../dataset/dataset.metrics.jsx'
 import Uploaded from './uploaded.jsx'
 import Summary from '../../fragments/dataset-summary.jsx'
 import { Link } from 'react-router-dom'
-import styled from '@emotion/styled'
-
-const RowHeight = styled.div`
-  height: 93px;
-`
+import RowHeight from './row-height.jsx'
 
 class DatasetRow extends React.Component {
   shouldComponentUpdate(nextProps) {
