@@ -76,15 +76,15 @@ export const deleteDataset = id =>
  * For public datasets, cache combinations of sorts/limits/cursors to speed responses
  * @param {object} options getDatasets options object
  */
-export const getPublicDatasets = options => {
-  const redisKey = `openneuro:publicDatasetsConnection:${objectHash(options)}`
+export const cacheDatasetConnection = options => connectionArguments => {
+  const connection = datasetsConnection(options)
+  const redisKey = `openneuro:datasetsConnection:${objectHash(options)}`
   const expirationTime = 60
   return redis.get(redisKey).then(data => {
     if (data) {
       return JSON.parse(data)
     } else {
-      const aggregates = applyDatasetFilter(options, [])
-      return datasetsConnection(aggregates, options).then(connection => {
+      return connection(connectionArguments).then(connection => {
         redis.setex(redisKey, expirationTime, JSON.stringify(connection))
         return connection
       })
@@ -167,7 +167,9 @@ export const getDatasets = options => {
   } else {
     // Anonymous request implies public datasets only
     const match = { public: true }
-    return connection(filter(match))
+    // Anonymous requests can be cached
+    const cachedConnection = cacheDatasetConnection(options)
+    return cachedConnection(filter(match))
   }
 }
 
