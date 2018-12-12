@@ -56,10 +56,10 @@ export const maxLimit = limit => Math.max(Math.min(limit, 100), 1)
 
 /**
  * Dataset pagination wrapper
- * @param {array} presortAggregate Any presorting / pagination constraints
  * @param {object} options Query options such as {limit: 5, orderBy: {creation: 'descending'}}
+ * @returns {(presortAggregate: array) => object} presortAggregate Any presorting / pagination constraints
  */
-export const datasetsConnection = (presortAggregate, options) => {
+export const datasetsConnection = options => presortAggregate => {
   const offset = getOffsetFromCursor(options)
   const realLimit = maxLimit(options.first)
   // One query for match -> count -> sort -> skip -> limit

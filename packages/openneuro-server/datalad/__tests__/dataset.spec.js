@@ -1,6 +1,6 @@
 import mockingoose from 'mockingoose'
 import request from 'superagent'
-import { createDataset } from '../dataset.js'
+import { createDataset, datasetsFilter } from '../dataset.js'
 import config from '../../config.js'
 
 // Mock requests to Datalad service
@@ -32,6 +32,52 @@ describe('dataset model operations', () => {
         expect.stringContaining(`${config.datalad.uri}/datasets/`),
       )
       done()
+    })
+  })
+  describe('datasetsFilter()', () => {
+    describe('filterBy: {all: true} ', () => {
+      it('returns the specified match for regular users', () => {
+        const testMatch = { test: 'match' }
+        expect(
+          datasetsFilter({
+            userId: '1234',
+            admin: false,
+            filterBy: { all: true },
+          })(testMatch)[0].$match,
+        ).toBe(testMatch)
+      })
+      it('excludes match argument for admins', () => {
+        const testMatch = { test: 'match' }
+        expect(
+          datasetsFilter({
+            userId: '5678',
+            admin: true,
+            filterBy: { all: true },
+          })(testMatch),
+        ).not.toBe(testMatch)
+      })
+    })
+    describe('filterBy: {invalid: true}', () => {
+      it('returns the correct number of stages', () => {
+        expect(
+          datasetsFilter({ filterBy: { invalid: true } })({}),
+        ).toHaveLength(4)
+      })
+    })
+    describe('filterBy: {invalid: true, public: true}', () => {
+      it('returns the same number of stages as invalid: true', () => {
+        expect(
+          datasetsFilter({ filterBy: { invalid: true, public: true } })({}),
+        ).toHaveLength(4)
+      })
+      it('returns one less stage for admins with all', () => {
+        expect(
+          datasetsFilter({
+            admin: true,
+            filterBy: { invalid: true, public: true, all: true },
+          })({}),
+        ).toHaveLength(3)
+      })
     })
   })
 })

@@ -83,28 +83,76 @@ export const getPublicDatasets = options => {
     if (data) {
       return JSON.parse(data)
     } else {
-      return datasetsConnection([{ $match: { public: true } }], options).then(
-        connection => {
-          redis.setex(redisKey, expirationTime, JSON.stringify(connection))
-          return connection
-        },
-      )
+      const aggregates = applyDatasetFilter(options, [])
+      return datasetsConnection(aggregates, options).then(connection => {
+        redis.setex(redisKey, expirationTime, JSON.stringify(connection))
+        return connection
+      })
     }
   })
 }
 
 /**
+ * Add any filter steps based on the filterBy options provided
+ * @param {object} options GraphQL query parameters
+ * @returns {(match: object) => array} Array of aggregate stages
+ */
+export const datasetsFilter = options => match => {
+  const aggregates = [{ $match: match }]
+  const filterMatch = {}
+  if ('filterBy' in options) {
+    const filters = options.filterBy
+
+    if (
+      'admin' in options &&
+      options.admin &&
+      'all' in filters &&
+      filters.all
+    ) {
+      // For admins and {filterBy: all}, ignore any passed in matches
+      aggregates.length = 0
+    }
+
+    // Apply any filters as needed
+    if ('public' in filters && filters.public) {
+      filterMatch.public = true
+    }
+    if ('incomplete' in filters && filters.incomplete) {
+      // TODO - incomplete is incomplete
+    }
+    if ('userId' in options && 'shared' in filters && filters.shared) {
+      filterMatch.uploader = { $ne: options.userId }
+    }
+    if ('invalid' in filters && filters.invalid) {
+      aggregates.push({
+        $lookup: {
+          from: 'issues',
+          localField: 'revision',
+          foreignField: 'id',
+          as: 'issues',
+        },
+      })
+      aggregates.push({
+        $addFields: {
+          errorCount: { $size: '$issues' },
+        },
+      })
+      filterMatch.errorCount = { $gt: 0 }
+    }
+    aggregates.push({ $match: filterMatch })
+  }
+  return aggregates
+}
+
+/**
  * Fetch all datasets
- * @param {object} options {public: true, admin: false, orderBy: {created: 'ascending'}}
+ * @param {object} options {orderBy: {created: 'ascending'}, filterBy: {public: true}}
  */
 export const getDatasets = options => {
-  if (options && 'public' in options && options.public) {
-    // If only public datasets are requested, immediately return them
-    return getPublicDatasets(options)
-  } else if (options && 'admin' in options && options.admin) {
-    // Admins can see all datasets
-    return datasetsConnection([], options)
-  } else if (options && 'userId' in options) {
+  const filter = datasetsFilter(options)
+  const connection = datasetsConnection(options)
+  if (options && 'userId' in options) {
+    // Authenticated request
     return c.crn.permissions
       .find({ userId: options.userId })
       .toArray()
@@ -113,21 +161,13 @@ export const getDatasets = options => {
           permission => permission.datasetId,
         )
         // Match accessible datasets
-        const $match = { id: { $in: datasetIds } }
-        // Skip datasets where the user is the uploader for shared only datasets
-        if ('shared' in options && options.shared) {
-          $match.uploader = { uploader: { $ne: options.userId } }
-        }
-        const aggregates = [
-          {
-            $match,
-          },
-        ]
-        return datasetsConnection(aggregates, options)
+        const match = { id: { $in: datasetIds } }
+        return connection(filter(match))
       })
   } else {
-    // If no permissions, anonymous requests always get public datasets
-    return getPublicDatasets(options)
+    // Anonymous request implies public datasets only
+    const match = { public: true }
+    return connection(filter(match))
   }
 }
 

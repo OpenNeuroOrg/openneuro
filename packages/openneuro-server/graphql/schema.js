@@ -19,16 +19,10 @@ const typeDefs = `
       after: String
       "Cursor key used to fetch earlier results"
       before: String
-      "Limit to datasets available publicly"
-      public: Boolean = false
-      "Return only partially uploaded datasets"
-      incomplete: Boolean
-      "Return only datasets that are shared with the user"
-      shared: Boolean
-      "Return only datasets with an invalid Draft"
-      invalid: Boolean
       "Sorting fields"
       orderBy: DatasetSort = {created: ascending}
+      "Filtering fields"
+      filterBy: DatasetFilter = {}
     ): DatasetConnection
     # Get one user
     user(id: ID!): User
@@ -196,6 +190,20 @@ const typeDefs = `
     downloads: SortOrdering
     # Order by count of dataset followers
     subscriptions: SortOrdering
+  }
+
+  # Dataset query filter flags
+  input DatasetFilter {
+    "Limit to datasets available publicly"
+    public: Boolean
+    "Return only partially uploaded datasets"
+    incomplete: Boolean
+    "Return only datasets that are shared with the user"
+    shared: Boolean
+    "Return only datasets with an invalid Draft"
+    invalid: Boolean
+    "Return all datasets, ignores any other constraints but not sorts"
+    all: Boolean
   }
 
   # Ephemeral draft or working tree for a dataset

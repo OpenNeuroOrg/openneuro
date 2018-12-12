@@ -56,10 +56,10 @@ describe('pagination model operations', () => {
       )
     })
     it('returns a connection shaped result', async done => {
-      const res = await pagination.datasetsConnection([], {
+      const res = await pagination.datasetsConnection({
         orderBy: { created: 'ascending' },
         limit: 5,
-      })
+      })([])
       expect(res).toHaveProperty('pageInfo')
       expect(res).toHaveProperty('edges')
       done()

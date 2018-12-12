@@ -7,10 +7,15 @@ import DatasetTab from './dataset-tab.jsx'
 const getDatasets = gql`
   query getDatasets(
     $cursor: String
-    $public: Boolean
     $orderBy: DatasetSort = { created: ascending }
+    $filterBy: DatasetFilter = {}
   ) {
-    datasets(first: 25, after: $cursor, public: $public, orderBy: $orderBy) {
+    datasets(
+      first: 25
+      after: $cursor
+      orderBy: $orderBy
+      filterBy: $filterBy
+    ) {
       edges {
         node {
           id
@@ -126,7 +131,7 @@ const datasetQueryDisplay = ({
 }
 
 const DatasetQuery = ({ public: isPublic }) => (
-  <Query query={getDatasets} variables={{ public: isPublic }}>
+  <Query query={getDatasets} variables={{ filterBy: { public: isPublic } }}>
     {datasetQueryDisplay}
   </Query>
 )
