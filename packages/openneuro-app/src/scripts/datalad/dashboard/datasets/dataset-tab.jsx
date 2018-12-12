@@ -6,6 +6,7 @@ import Spinner from '../../../common/partials/spinner.jsx'
 import Search from '../../../common/partials/search.jsx'
 import DatasetVirtualScroller from './dataset-virtual-scroller.jsx'
 import DatasetSorter from './dataset-sorter.jsx'
+import DatasetFilter from './dataset-filter.jsx'
 import styled from '@emotion/styled'
 
 const FullHeightFlexDiv = styled.div`
@@ -44,6 +45,10 @@ const DatasetTab = ({
         <div className="sort clearfix">
           <label>Sort by:</label>
           <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
+        </div>
+        <div className="filters">
+          <label>Filter by:</label>
+          <DatasetFilter refetch={refetch} queryVariables={queryVariables} />
         </div>
       </div>
     </div>
