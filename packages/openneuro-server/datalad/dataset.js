@@ -118,7 +118,7 @@ export const datasetsFilter = options => match => {
       filterMatch.public = true
     }
     if ('incomplete' in filters && filters.incomplete) {
-      // TODO - incomplete is incomplete
+      filterMatch.revision = null
     }
     if ('userId' in options && 'shared' in filters && filters.shared) {
       filterMatch.uploader = { $ne: options.userId }
