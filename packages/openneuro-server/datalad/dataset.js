@@ -127,8 +127,20 @@ export const datasetsFilter = options => match => {
       aggregates.push({
         $lookup: {
           from: 'issues',
-          localField: 'revision',
-          foreignField: 'id',
+          let: { revision: '$revision' },
+          pipeline: [
+            { $unwind: '$issues' },
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$revision'] },
+                    { $eq: ['$issues.severity', 'error'] },
+                  ],
+                },
+              },
+            },
+          ],
           as: 'issues',
         },
       })
