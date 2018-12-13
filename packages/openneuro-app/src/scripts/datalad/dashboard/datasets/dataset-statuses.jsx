@@ -18,7 +18,7 @@ class Statuses extends React.PureComponent {
     const invalid = dataset.draft.issues.some(
       issue => issue.severity === 'error',
     )
-    const shared = dataset.uploader.id !== profile.sub
+    const shared = !dataset.public && dataset.uploader.id !== profile.sub
     return (
       <span className="status-wrap">
         <Status type="public" minimal={minimal} display={dataset.public} />
