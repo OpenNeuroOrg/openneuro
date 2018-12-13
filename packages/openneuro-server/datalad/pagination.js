@@ -114,6 +114,9 @@ export const sortAggregate = options => {
     if ('created' in options.orderBy && options.orderBy.created) {
       finalSort['_id'] = sortEnumToInt(options.orderBy.created)
     }
+    if ('name' in options.orderBy && options.orderBy.name) {
+      finalSort['name'] = sortEnumToInt(options.orderBy.name)
+    }
     if ('uploader' in options.orderBy && options.orderBy.uploader) {
       sortingStages.push({
         $lookup: {
