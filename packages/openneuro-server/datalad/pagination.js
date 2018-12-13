@@ -182,9 +182,3 @@ export const sortAggregate = options => {
   }
   return sortingStages
 }
-
-// Apply range bounds based on after/before arguments to query
-export const pagingBound = (query, options) => {
-  const offset = Math.max(getOffsetFromCursor(options), 0)
-  return query.skip(offset).limit(maxLimit(options.first))
-}
