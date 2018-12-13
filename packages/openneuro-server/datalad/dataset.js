@@ -309,11 +309,11 @@ export const deleteFile = (datasetId, path, file) => {
  * Update public state
  */
 export const updatePublic = (datasetId, publicFlag) =>
-  Dataset.updateOne(
+  c.crn.datasets.updateOne(
     { id: datasetId },
     { $set: { public: publicFlag } },
     { upsert: true },
-  ).exec()
+  )
 
 export const getDatasetAnalytics = (datasetId, tag) => {
   let datasetQuery = tag
