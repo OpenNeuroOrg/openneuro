@@ -124,6 +124,7 @@ export const datasetsFilter = options => match => {
       filterMatch.uploader = { $ne: options.userId }
     }
     if ('invalid' in filters && filters.invalid) {
+      // SELECT * FROM datasets JOIN issues ON datasets.revision = issues.id WHERE ...
       aggregates.push({
         $lookup: {
           from: 'issues',
@@ -134,8 +135,8 @@ export const datasetsFilter = options => match => {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ['$id', '$$revision'] },
-                    { $eq: ['$issues.severity', 'error'] },
+                    { $eq: ['$id', '$$revision'] }, // JOIN CONSTRAINT
+                    { $eq: ['$issues.severity', 'error'] }, // WHERE severity = 'error'
                   ],
                 },
               },
@@ -144,11 +145,13 @@ export const datasetsFilter = options => match => {
           as: 'issues',
         },
       })
+      // Count how many error fields matched in previous step
       aggregates.push({
         $addFields: {
           errorCount: { $size: '$issues' },
         },
       })
+      // Filter any datasets with no errors
       filterMatch.errorCount = { $gt: 0 }
     }
     aggregates.push({ $match: filterMatch })
