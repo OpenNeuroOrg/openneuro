@@ -176,7 +176,7 @@ export const getDatasets = options => {
           permission => permission.datasetId,
         )
         // Match allowed datasets
-        if ('myDatasets' in options) {
+        if ('myDatasets' in options && options.myDatasets) {
           // Exclude other users public datasets even though we have access to those
           return connection(filter({ id: { $in: datasetIds } }))
         } else {
