@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
+import { getProfile } from '../../../authentication/profile.js'
 
 // DatasetFilter GraphQL fields
-const filterFields = ['public', 'incomplete', 'shared', 'invalid', 'all']
+const filterFields = ['public', 'incomplete', 'shared', 'invalid']
 const filterIcons = {
   public: 'fa-globe',
   incomplete: 'fa-warning',
@@ -52,18 +53,24 @@ FilterField.propTypes = {
   refetch: PropTypes.func,
 }
 
-const DatasetFilter = ({ queryVariables, refetch }) => (
-  <>
-    {filterFields.map(field => (
-      <FilterField
-        field={field}
-        queryVariables={queryVariables}
-        refetch={refetch}
-        key={field}
-      />
-    ))}
-  </>
-)
+const DatasetFilter = ({ queryVariables, refetch }) => {
+  const profile = getProfile()
+  if ('admin' in profile && profile.admin) {
+    filterFields.push('all')
+  }
+  return (
+    <>
+      {filterFields.map(field => (
+        <FilterField
+          field={field}
+          queryVariables={queryVariables}
+          refetch={refetch}
+          key={field}
+        />
+      ))}
+    </>
+  )
+}
 
 DatasetFilter.propTypes = {
   queryVariables: PropTypes.object,
