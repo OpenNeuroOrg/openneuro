@@ -7,7 +7,6 @@ import Blacklist from './admin.blacklist.jsx'
 import AppDefinitions from './admin.apps.jsx'
 import EventLogs from './admin.logs.jsx'
 import Graphs from '../admin/admin.graphs.jsx'
-//import Datasets from '../dashboard/dashboard.datasets.jsx'
 
 import BlacklistModal from './admin.blacklist.modal.jsx'
 import actions from './admin.actions'
@@ -83,12 +82,6 @@ class Dashboard extends React.Component {
                   path="/admin/event-logs"
                   exact
                   component={EventLogs}
-                />
-                <Route
-                  name="admin-datasets"
-                  path="/admin/datasets"
-                  exact
-                  render={() => null /*<Datasets admin {...props} />*/}
                 />
                 <Route
                   name="admin-jobs-stats"
