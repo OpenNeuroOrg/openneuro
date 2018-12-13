@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
+import Capitalized from '../../../styles/capitalized.jsx'
 import { getProfile } from '../../../authentication/profile.js'
 
 // DatasetFilter GraphQL fields
@@ -12,10 +12,6 @@ const filterIcons = {
   invalid: 'fa-exclamation-circle',
   all: 'fa-magic',
 }
-
-const Capitalized = styled.span`
-  text-transform: capitalize;
-`
 
 const FilterField = ({ field, queryVariables, refetch }) => {
   const fieldValue =
