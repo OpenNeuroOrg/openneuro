@@ -19,7 +19,7 @@ export default {
           callback(found.sequence_value + 1),
         )
       } else {
-        Counter.insert({ _id: type, sequence_value: 1 }).then(callback(1))
+        Counter.create({ _id: type, sequence_value: 1 }).then(callback(1))
       }
     })
   },
