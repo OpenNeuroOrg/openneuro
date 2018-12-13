@@ -23,6 +23,8 @@ const typeDefs = `
       orderBy: DatasetSort = {created: ascending}
       "Filtering fields"
       filterBy: DatasetFilter = {}
+      "Query user's datasets only - excludes public datasets from other filters"
+      myDatasets: Boolean
     ): DatasetConnection
     # Get one user
     user(id: ID!): User

@@ -175,9 +175,16 @@ export const getDatasets = options => {
         const datasetIds = datasetsAllowed.map(
           permission => permission.datasetId,
         )
-        // Match accessible datasets
-        const match = { id: { $in: datasetIds } }
-        return connection(filter(match))
+        // Match allowed datasets
+        if ('myDatasets' in options) {
+          // Exclude other users public datasets even though we have access to those
+          return connection(filter({ id: { $in: datasetIds } }))
+        } else {
+          // Include your own or public datasets
+          return connection(
+            filter({ $or: [{ id: { $in: datasetIds } }, { public: true }] }),
+          )
+        }
       })
   } else {
     // Anonymous request implies public datasets only

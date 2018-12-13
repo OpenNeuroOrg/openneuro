@@ -9,12 +9,14 @@ const getDatasets = gql`
     $cursor: String
     $orderBy: DatasetSort = { created: ascending }
     $filterBy: DatasetFilter = {}
+    $myDatasets: Boolean = false
   ) {
     datasets(
       first: 25
       after: $cursor
       orderBy: $orderBy
       filterBy: $filterBy
+      myDatasets: $myDatasets
     ) {
       edges {
         node {
@@ -128,7 +130,9 @@ const datasetQueryDisplay = isPublic => ({
 }
 
 const DatasetQuery = ({ public: isPublic }) => (
-  <Query query={getDatasets} variables={{ filterBy: { public: isPublic } }}>
+  <Query
+    query={getDatasets}
+    variables={{ filterBy: { public: isPublic }, myDatasets: !isPublic }}>
     {datasetQueryDisplay(isPublic)}
   </Query>
 )
