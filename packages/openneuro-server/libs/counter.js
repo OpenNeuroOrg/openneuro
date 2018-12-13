@@ -13,16 +13,14 @@ export default {
    * sequential integer for that type starting with 1.
    */
   getNext(type, callback) {
-    Counter.findOneAndUpdate(
-      { _id: type },
-      {
-        $inc: { sequence_value: 1 },
-        $setOnInsert: { _id: type, sequence_value: 1 },
-      },
-      { new: true, upsert: true },
-      (err, doc) => {
-        callback(doc.sequence_value)
-      },
-    )
+    Counter.findOne({ _id: type }).then(found => {
+      if (found) {
+        Counter.update({ _id: type }, { $inc: { sequence_value: 1 } }).then(
+          callback(found.sequence_value + 1),
+        )
+      } else {
+        Counter.insert({ _id: type, sequence_value: 1 }).then(callback(1))
+      }
+    })
   },
 }
