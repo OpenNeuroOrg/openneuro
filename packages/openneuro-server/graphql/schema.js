@@ -229,7 +229,7 @@ const typeDefs = `
   }
 
   # Tagged snapshot of a draft
-  type Snapshot {
+  type Snapshot @cacheControl(maxAge: 3600, scope: PUBLIC) {
     # Snapshot ids are dataset:tag values
     id: ID!
     # Git tag of this snapshot
@@ -250,7 +250,7 @@ const typeDefs = `
   }
 
   # Contents of dataset_description.json
-  type Description {
+  type Description @cacheControl(maxAge: 30, scope: PUBLIC) {
     # Name of the dataset
     Name: String!
     # The version of the BIDS standard that was used
@@ -303,7 +303,7 @@ const typeDefs = `
   }
 
   # Dataset Stars
-  type Star {
+  type Star @cacheControl(maxAge: 300, scope: PUBLIC) {
     userId: String
     datasetId: String
   }
@@ -382,7 +382,7 @@ const typeDefs = `
   }
 
   # Analytics for a dataset
-  type Analytic {
+  type Analytic @cacheControl(maxAge: 300, scope: PUBLIC) {
     datasetId: ID!
     tag: String
     views: Int
