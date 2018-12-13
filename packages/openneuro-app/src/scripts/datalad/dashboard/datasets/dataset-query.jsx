@@ -81,13 +81,13 @@ const getDatasets = gql`
 
 /**
  * Load additional datasets based on next data cursor
- * @param {string} cursor Next data cursor
+ * @param {string} data Next data cursor
  * @param {function} fetchMore Apollo fetchMore function from the original query
  */
-const loadMoreRows = (cursor, fetchMore) => () => {
+const loadMoreRows = (data, fetchMore) => () => {
   fetchMore({
     variables: {
-      cursor,
+      cursor: data.datasets.pageInfo.endCursor,
     },
     updateQuery: (previousResult, { fetchMoreResult }) => {
       const newEdges = fetchMoreResult.datasets.edges
@@ -103,7 +103,7 @@ const loadMoreRows = (cursor, fetchMore) => () => {
   })
 }
 
-const datasetQueryDisplay = ({
+const datasetQueryDisplay = isPublic => ({
   loading,
   error,
   data,
@@ -118,13 +118,10 @@ const datasetQueryDisplay = ({
       <DatasetTab
         loading={loading}
         data={data}
-        loadMoreRows={
-          loading
-            ? () => {}
-            : loadMoreRows(data.datasets.pageInfo.endCursor, fetchMore)
-        }
+        loadMoreRows={loading ? () => {} : loadMoreRows(data, fetchMore)}
         refetch={refetch}
         queryVariables={variables}
+        publicDashboard={isPublic}
       />
     )
   }
@@ -132,7 +129,7 @@ const datasetQueryDisplay = ({
 
 const DatasetQuery = ({ public: isPublic }) => (
   <Query query={getDatasets} variables={{ filterBy: { public: isPublic } }}>
-    {datasetQueryDisplay}
+    {datasetQueryDisplay(isPublic)}
   </Query>
 )
 

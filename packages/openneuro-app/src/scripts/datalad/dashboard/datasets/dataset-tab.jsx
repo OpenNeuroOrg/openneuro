@@ -23,18 +23,19 @@ const DatasetTab = ({
   refetch,
   queryVariables,
   loading,
+  publicDashboard,
 }) => (
   <FullHeightFlexDiv className="dashboard-dataset-teasers datasets datasets-private">
     <Helmet>
       <title>
-        {pageTitle} - {title(queryVariables.public)}
+        {pageTitle} - {title(publicDashboard)}
       </title>
     </Helmet>
     <div className="header-filter-sort clearfix">
       <div className="admin header-wrap clearfix">
         <div className="row">
           <div className="col-md-5">
-            <h2>{title(queryVariables.public)}</h2>
+            <h2>{title(publicDashboard)}</h2>
           </div>
           <div className="col-md-7">
             <Search />
@@ -46,10 +47,12 @@ const DatasetTab = ({
           <label>Sort by:</label>
           <DatasetSorter refetch={refetch} queryVariables={queryVariables} />
         </div>
-        <div className="filters">
-          <label>Filter by:</label>
-          <DatasetFilter refetch={refetch} queryVariables={queryVariables} />
-        </div>
+        {publicDashboard ? null : (
+          <div className="filters">
+            <label>Filter by:</label>
+            <DatasetFilter refetch={refetch} queryVariables={queryVariables} />
+          </div>
+        )}
       </div>
     </div>
     {loading ? (
@@ -70,6 +73,7 @@ DatasetTab.propTypes = {
   refetch: PropTypes.func,
   queryVariables: PropTypes.object,
   loading: PropTypes.bool,
+  publicDashboard: PropTypes.bool,
 }
 
 export default DatasetTab

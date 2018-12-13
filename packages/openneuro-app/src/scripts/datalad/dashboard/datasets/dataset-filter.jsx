@@ -4,6 +4,13 @@ import styled from '@emotion/styled'
 
 // DatasetFilter GraphQL fields
 const filterFields = ['public', 'incomplete', 'shared', 'invalid', 'all']
+const filterIcons = {
+  public: 'fa-globe',
+  incomplete: 'fa-warning',
+  shared: 'fa-user',
+  invalid: 'fa-exclamation-circle',
+  all: 'fa-magic',
+}
 
 const Capitalized = styled.span`
   text-transform: capitalize;
@@ -21,12 +28,20 @@ const FilterField = ({ field, queryVariables, refetch }) => {
       queryVariables.filterBy[field] === true ? false : true
     refetch(newQueryVariables)
   }
+  const icon = filterIcons[field]
   return (
     <button
       key={field}
-      className={fieldValue ? 'btn-filter name active' : 'btn-filter name'}
+      className={
+        fieldValue
+          ? `btn-filter name active filter-${field}`
+          : `btn-filter name filter-${field}`
+      }
       onClick={filterBy}>
-      <Capitalized>{field}</Capitalized>
+      <Capitalized>
+        <i className={`fa ${icon}`} />
+        <span className="filter-text">{field}</span>
+      </Capitalized>
     </button>
   )
 }
