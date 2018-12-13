@@ -52,11 +52,6 @@ class Dashboard extends React.Component {
                     Event Logs
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink to="/admin/datasets" className="btn-tab">
-                    All Datasets
-                  </NavLink>
-                </li>
               </ul>
               <Switch>
                 <Redirect
