@@ -17,6 +17,30 @@ const FullHeightFlexDiv = styled.div`
 
 const title = isPublic => (isPublic ? 'Public Datasets' : 'My Datasets')
 
+const DatasetTabLoaded = ({ data, loadMoreRows }) => {
+  if (
+    data &&
+    data.datasets &&
+    data.datasets.edges &&
+    data.datasets.edges.length
+  ) {
+    return (
+      <DatasetVirtualScroller
+        datasets={data.datasets.edges}
+        pageInfo={data.datasets.pageInfo}
+        loadMoreRows={loadMoreRows}
+      />
+    )
+  } else {
+    return (
+      <div className="panel panel-heading text-center">
+        <h4>Zero datasets found</h4>
+        No datasets match your current filters.
+      </div>
+    )
+  }
+}
+
 const DatasetTab = ({
   data,
   loadMoreRows,
@@ -58,11 +82,7 @@ const DatasetTab = ({
     {loading ? (
       <Spinner text="Loading Datasets" active />
     ) : (
-      <DatasetVirtualScroller
-        datasets={data.datasets.edges}
-        pageInfo={data.datasets.pageInfo}
-        loadMoreRows={loadMoreRows}
-      />
+      <DatasetTabLoaded data={data} loadMoreRows={loadMoreRows} />
     )}
   </FullHeightFlexDiv>
 )
