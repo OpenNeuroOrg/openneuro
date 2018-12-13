@@ -55,12 +55,13 @@ FilterField.propTypes = {
 
 const DatasetFilter = ({ queryVariables, refetch }) => {
   const profile = getProfile()
+  let fields = filterFields
   if ('admin' in profile && profile.admin) {
-    filterFields.push('all')
+    fields = [...filterFields, 'all']
   }
   return (
     <>
-      {filterFields.map(field => (
+      {fields.map(field => (
         <FilterField
           field={field}
           queryVariables={queryVariables}
