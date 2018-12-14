@@ -376,3 +376,11 @@ export const getFollowers = datasetId => {
     })
     .toArray()
 }
+
+/**
+ * Save the most relevant dataset name for efficient sorting
+ * @param {string} id Accession number
+ * @param {string} name dataset_description.json label
+ */
+export const saveDatasetName = (id, name) =>
+  Dataset.update({ id }, { $set: { name } }).exec()
