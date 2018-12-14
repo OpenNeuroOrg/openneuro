@@ -216,7 +216,7 @@ export const getSnapshot = async (datasetId, tag) => {
  */
 export const getSnapshotHexsha = (datasetId, tag) => {
   return c.crn.snapshots
-    .findOne({ datasetId, tag }, { revision: true })
+    .findOne({ datasetId, tag }, { hexsha: true })
     .then(result => (result ? result.hexsha : null))
 }
 
