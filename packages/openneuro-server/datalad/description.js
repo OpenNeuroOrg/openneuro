@@ -7,6 +7,7 @@ import { objectUrl } from './files.js'
 import { saveDatasetName } from './dataset.js'
 import { getDraftFiles } from './draft.js'
 import { getSnapshotHexsha } from './snapshots.js'
+import Snapshot from '../models/snapshot.js'
 
 export const defaultDescription = {
   Name: 'Unnamed Dataset',
@@ -59,7 +60,14 @@ export const description = (obj, { datasetId, revision, tag }) => {
         .then(uncachedDescription => {
           // Hook to save the name whenever we build the cache for a description
           if (tag) {
-            saveDatasetName(datasetId, uncachedDescription.Name)
+            Snapshot.find({ datasetId: 'ds001001' })
+              .sort({ _id: -1 })
+              .limit(1)
+              .then(snapshots => {
+                if (snapshots.length && snapshots[0].tag === tag) {
+                  saveDatasetName(datasetId, uncachedDescription.Name)
+                }
+              })
           }
           redis.set(redisKey, JSON.stringify(uncachedDescription))
           return uncachedDescription
