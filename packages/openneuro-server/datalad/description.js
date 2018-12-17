@@ -58,17 +58,6 @@ export const description = (obj, { datasetId, revision, tag }) => {
       )
         .then(getDescriptionObject(datasetId))
         .then(uncachedDescription => {
-          // Hook to save the name whenever we build the cache for a description
-          if (tag) {
-            Snapshot.find({ datasetId: 'ds001001' })
-              .sort({ _id: -1 })
-              .limit(1)
-              .then(snapshots => {
-                if (snapshots.length && snapshots[0].tag === tag) {
-                  saveDatasetName(datasetId, uncachedDescription.Name)
-                }
-              })
-          }
           redis.set(redisKey, JSON.stringify(uncachedDescription))
           return uncachedDescription
         })
