@@ -155,9 +155,21 @@ export const sortAggregate = options => {
           as: 'analytics',
         },
       })
-      finalSort['analytics.downloads'] = sortEnumToInt(
-        options.orderBy.downloads,
-      )
+      sortingStages.push({ $unwind: '$analytics' })
+      // TODO - fields are repeated here and they will become stale if Datasets model changes
+      sortingStages.push({
+        $group: {
+          _id: '$_id',
+          id: { $first: '$id' },
+          created: { $first: '$created' },
+          modified: { $first: '$modified' },
+          uploader: { $first: '$uploader' },
+          revision: { $first: '$revision' },
+          name: { $first: '$name' },
+          downloads: { $sum: '$analytics.downloads' },
+        },
+      })
+      finalSort['downloads'] = sortEnumToInt(options.orderBy.downloads)
     }
     if ('subscriptions' in options.orderBy && options.orderBy.subscriptions) {
       sortingStages.push({
