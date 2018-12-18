@@ -6,7 +6,6 @@ import { redis } from '../libs/redis.js'
 import { objectUrl } from './files.js'
 import { getDraftFiles } from './draft.js'
 import { getSnapshotHexsha } from './snapshots.js'
-import Snapshot from '../models/snapshot.js'
 
 export const defaultDescription = {
   Name: 'Unnamed Dataset',
