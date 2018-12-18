@@ -6,6 +6,7 @@ import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { user } from './user.js'
 import { draft } from './draft.js'
 import { permissions } from './permissions.js'
+import DatasetModel from '../../models/dataset.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
   return checkDatasetRead(id, user, userInfo).then(() => {
