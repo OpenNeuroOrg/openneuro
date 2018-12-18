@@ -34,13 +34,13 @@ export const datasetName = obj => {
     if (results) {
       // Return the latest snapshot name
       const sortedSnapshots = results.sort(snapshotCreationComparison)
-      return description(null, {
+      return description(obj, {
         datasetId: obj.id,
         revision: sortedSnapshots[0].hexsha,
       }).then(desc => desc.Name)
     } else if (obj.revision) {
       // Return the draft name or null
-      description(null, {
+      description(obj, {
         datasetId: obj.id,
         revision: obj.revision,
       }).then(desc => desc.Name)
