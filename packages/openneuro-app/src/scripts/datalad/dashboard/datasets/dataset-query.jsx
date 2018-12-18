@@ -81,6 +81,18 @@ const getDatasets = gql`
   }
 `
 
+export const updateQuery = (previousResult, { fetchMoreResult }) => {
+  const newEdges = fetchMoreResult.datasets.edges
+  const pageInfo = fetchMoreResult.datasets.pageInfo
+  return {
+    datasets: {
+      __typename: previousResult.datasets.__typename,
+      edges: [...previousResult.datasets.edges, ...newEdges],
+      pageInfo,
+    },
+  }
+}
+
 /**
  * Load additional datasets based on next data cursor
  * @param {string} data Next data cursor
@@ -91,17 +103,7 @@ const loadMoreRows = (data, fetchMore) => () => {
     variables: {
       cursor: data.datasets.pageInfo.endCursor,
     },
-    updateQuery: (previousResult, { fetchMoreResult }) => {
-      const newEdges = fetchMoreResult.datasets.edges
-      const pageInfo = fetchMoreResult.datasets.pageInfo
-      return {
-        datasets: {
-          __typename: previousResult.datasets.__typename,
-          edges: [...previousResult.datasets.edges, ...newEdges],
-          pageInfo,
-        },
-      }
-    },
+    updateQuery,
   })
 }
 

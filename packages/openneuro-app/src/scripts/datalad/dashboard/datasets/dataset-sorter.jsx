@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from '@emotion/styled'
+import Capitalized from '../../../styles/capitalized.jsx'
 
 // DatasetSort GraphQL fields
 const sortFields = [
@@ -12,11 +12,7 @@ const sortFields = [
   'subscriptions',
 ]
 
-const Capitalized = styled.span`
-  text-transform: capitalize;
-`
-
-const SortField = ({ field, queryVariables, refetch }) => {
+export const SortField = ({ field, queryVariables, refetch }) => {
   const fieldValue =
     field in queryVariables.orderBy && queryVariables.orderBy[field]
   let icon

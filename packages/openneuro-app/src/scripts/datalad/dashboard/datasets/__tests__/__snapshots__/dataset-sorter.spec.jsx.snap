@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboard/datasets/DatasetSorter SortField renders successfully 1`] = `
+<a
+  className="btn-sort name"
+  key="created"
+  onClick={[Function]}
+>
+  <Styled(span)>
+    created
+  </Styled(span)>
+   
+</a>
+`;

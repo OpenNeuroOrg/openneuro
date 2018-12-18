@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboard/datasets/DatasetFilter FilterField renders successfully 1`] = `
+<button
+  className="btn-filter name filter-all"
+  key="all"
+  onClick={[Function]}
+>
+  <Styled(span)>
+    <i
+      className="fa fa-magic"
+    />
+    <span
+      className="filter-text"
+    >
+      all
+    </span>
+  </Styled(span)>
+</button>
+`;

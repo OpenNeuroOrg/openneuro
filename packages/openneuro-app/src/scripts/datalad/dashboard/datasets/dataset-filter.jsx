@@ -13,7 +13,7 @@ const filterIcons = {
   all: 'fa-magic',
 }
 
-const FilterField = ({ field, queryVariables, refetch }) => {
+export const FilterField = ({ field, queryVariables, refetch }) => {
   const fieldValue =
     field in queryVariables.filterBy && queryVariables.filterBy[field]
   const filterBy = () => {
