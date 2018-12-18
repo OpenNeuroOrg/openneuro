@@ -30,24 +30,30 @@ export const snapshotCreationComparison = ({ created: x }, { created: y }) => {
  * @param {object} obj Dataset object (at least {id: "datasetId"})
  */
 export const datasetName = obj => {
-  return snapshots(obj).then(results => {
-    if (results) {
-      // Return the latest snapshot name
-      const sortedSnapshots = results.sort(snapshotCreationComparison)
-      return description(obj, {
-        datasetId: obj.id,
-        revision: sortedSnapshots[0].hexsha,
-      }).then(desc => desc.Name)
-    } else if (obj.revision) {
-      // Return the draft name or null
-      description(obj, {
-        datasetId: obj.id,
-        revision: obj.revision,
-      }).then(desc => desc.Name)
-    } else {
-      return null
-    }
-  })
+  return snapshots(obj)
+    .then(results => {
+      if (results) {
+        // Return the latest snapshot name
+        const sortedSnapshots = results.sort(snapshotCreationComparison)
+        return description(obj, {
+          datasetId: obj.id,
+          revision: sortedSnapshots[0].hexsha,
+        }).then(desc => desc.Name)
+      } else if (obj.revision) {
+        // Return the draft name or null
+        return description(obj, {
+          datasetId: obj.id,
+          revision: obj.revision,
+        }).then(desc => desc.Name)
+      } else {
+        return null
+      }
+    })
+    .then(name => {
+      // TODO - save this on edits, needs #911 first
+      datalad.saveDatasetName(obj.id, name)
+      return name
+    })
 }
 
 /**
