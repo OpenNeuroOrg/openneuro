@@ -65,4 +65,73 @@ describe('pagination model operations', () => {
       done()
     })
   })
+  describe('maxLimit()', () => {
+    it('should be within range 1-100', () => {
+      expect(pagination.maxLimit(0)).toBe(1)
+      expect(pagination.maxLimit(101)).toBe(100)
+    })
+    it('does not error with negative values', () => {
+      expect(pagination.maxLimit(-10)).toBe(1)
+    })
+  })
+  describe('sortAggregate()', () => {
+    it('should return natural sort for orderBy: created', () => {
+      expect(
+        pagination.sortAggregate({ orderBy: { created: 'ascending' } }),
+      ).toEqual([{ $sort: { _id: 1 } }])
+    })
+    it('does not throw an error with no orderBy', () => {
+      expect(pagination.sortAggregate({})).toEqual([])
+    })
+    it('should return -1 for descending sorts', () => {
+      expect(
+        pagination.sortAggregate({ orderBy: { created: 'descending' } }),
+      ).toEqual([{ $sort: { _id: -1 } }])
+    })
+    it('includes "name" for name sorts', () => {
+      expect(
+        pagination.sortAggregate({ orderBy: { name: 'descending' } }),
+      ).toEqual([{ $sort: { name: -1 } }])
+    })
+    it('returns a lookup and count stage for stars', () => {
+      const agg = pagination.sortAggregate({ orderBy: { stars: 'ascending' } })
+      expect(agg[0]).toHaveProperty('$lookup')
+      expect(agg[1]).toHaveProperty('$addFields')
+      // Ends with count sort
+      expect(agg.slice(-1)).toEqual([{ $sort: { starsCount: 1 } }])
+    })
+    it('returns a lookup and count stage for subscriptions', () => {
+      const agg = pagination.sortAggregate({
+        orderBy: { subscriptions: 'descending' },
+      })
+      expect(agg[0]).toHaveProperty('$lookup')
+      expect(agg[1]).toHaveProperty('$addFields')
+      // Ends with count sort
+      expect(agg.slice(-1)).toEqual([{ $sort: { subscriptionsCount: -1 } }])
+    })
+    it('returns a lookup and no count stage for downloads', () => {
+      const agg = pagination.sortAggregate({
+        orderBy: { downloads: 'ascending' },
+      })
+      expect(agg[0]).toHaveProperty('$lookup')
+      expect(agg[1]).not.toHaveProperty('$addFields')
+      // Ends with count sort
+      expect(agg.slice(-1)).toEqual([{ $sort: { 'analytics.downloads': 1 } }])
+    })
+    it('does not explode with all sorts', () => {
+      const agg = pagination.sortAggregate({
+        orderBy: {
+          created: 'ascending',
+          name: 'ascending',
+          uploader: 'ascending',
+          stars: 'ascending',
+          downloads: 'ascending',
+          subscriptions: 'ascending',
+        },
+      })
+      expect(agg).toHaveLength(7)
+      // Final stage should always be a sort
+      expect(agg.slice(-1)[0]).toHaveProperty('$sort')
+    })
+  })
 })
