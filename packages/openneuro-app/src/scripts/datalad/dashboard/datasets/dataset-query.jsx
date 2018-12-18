@@ -7,7 +7,7 @@ import DatasetTab from './dataset-tab.jsx'
 const getDatasets = gql`
   query getDatasets(
     $cursor: String
-    $orderBy: DatasetSort = { created: ascending }
+    $orderBy: DatasetSort = { created: descending }
     $filterBy: DatasetFilter = {}
     $myDatasets: Boolean = false
   ) {
