@@ -6,6 +6,7 @@ import mongo from '../libs/mongo'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
+import { updateDatasetName } from '../graphql/resolvers/dataset.js'
 import { commitFilesKey } from './files.js'
 import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
@@ -93,6 +94,8 @@ export const createSnapshot = async (datasetId, tag, user) => {
           // Clear the index now that the new snapshot is ready
           .then(() => redis.del(indexKey))
           .then(() => {
+            // Trigger an async update for the name field (cache for sorting)
+            updateDatasetName(datasetId)
             if (body.files) {
               notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
             }

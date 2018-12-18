@@ -1,5 +1,4 @@
-import genericAccounts from './03-genericAccounts.js'
-import scitranAnalytics from './04-scitranAnalytics.js'
+import nameField from './05-nameField.js'
 
 // Ordered list should match a sort of the filenames
-export default [genericAccounts, scitranAnalytics]
+export default [nameField]

@@ -21,8 +21,8 @@ export const datasets = (parent, args, { user, userInfo }) => {
   }
 }
 
-export const snapshotCreationComparison = ({ created: x }, { created: y }) => {
-  return x.localeCompare(y)
+export const snapshotCreationComparison = ({ created: a }, { created: b }) => {
+  return a.getTime() - b.getTime()
 }
 
 /**
@@ -30,31 +30,34 @@ export const snapshotCreationComparison = ({ created: x }, { created: y }) => {
  * @param {object} obj Dataset object (at least {id: "datasetId"})
  */
 export const datasetName = obj => {
-  return snapshots(obj)
-    .then(results => {
-      if (results) {
-        // Return the latest snapshot name
-        const sortedSnapshots = results.sort(snapshotCreationComparison)
-        return description(obj, {
-          datasetId: obj.id,
-          revision: sortedSnapshots[0].hexsha,
-        }).then(desc => desc.Name)
-      } else if (obj.revision) {
-        // Return the draft name or null
-        return description(obj, {
-          datasetId: obj.id,
-          revision: obj.revision,
-        }).then(desc => desc.Name)
-      } else {
-        return null
-      }
-    })
-    .then(name => {
-      // TODO - save this on edits, needs #911 first
-      datalad.saveDatasetName(obj.id, name)
-      return name
-    })
+  return snapshots(obj).then(results => {
+    if (results) {
+      // Return the latest snapshot name
+      const sortedSnapshots = results.sort(snapshotCreationComparison)
+      return description(obj, {
+        datasetId: obj.id,
+        revision: sortedSnapshots[0].hexsha,
+      }).then(desc => desc.Name)
+    } else if (obj.revision) {
+      // Return the draft name or null
+      return description(obj, {
+        datasetId: obj.id,
+        revision: obj.revision,
+      }).then(desc => desc.Name)
+    } else {
+      return null
+    }
+  })
 }
+
+/**
+ * Resolve the best dataset name and cache in mongodb
+ * @param {string} datasetId
+ */
+export const updateDatasetName = datasetId =>
+  datasetName({ id: datasetId }).then(name =>
+    DatasetModel.update({ id: datasetId }, { $set: { name } }).exec(),
+  )
 
 /**
  * Create an empty dataset (new repo, new accession number)

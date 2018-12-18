@@ -249,30 +249,6 @@ export const addFile = (datasetId, path, file) => {
 }
 
 /**
- * Update an existing file in a dataset
- */
-export const updateFile = (datasetId, path, file) => {
-  // Cannot use superagent 'request' due to inability to post streams
-  return new Promise(async (resolve, reject) => {
-    const { filename, stream, mimetype } = await file
-    stream
-      .pipe(
-        requestNode(
-          {
-            url: fileUrl(datasetId, path, filename),
-            method: 'put',
-            headers: { 'Content-Type': mimetype },
-          },
-          err => (err ? reject(err) : resolve()),
-        ),
-      )
-      .on('error', err => reject(err))
-  }).finally(() => {
-    return redis.del(draftPartialKey(datasetId))
-  })
-}
-
-/**
  * Commit a draft
  */
 export const commitFiles = (datasetId, user) => {
@@ -376,11 +352,3 @@ export const getFollowers = datasetId => {
     })
     .toArray()
 }
-
-/**
- * Save the most relevant dataset name for efficient sorting
- * @param {string} id Accession number
- * @param {string} name dataset_description.json label
- */
-export const saveDatasetName = (id, name) =>
-  Dataset.update({ id }, { $set: { name } }).exec()
