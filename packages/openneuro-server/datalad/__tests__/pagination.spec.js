@@ -116,7 +116,7 @@ describe('pagination model operations', () => {
       expect(agg[0]).toHaveProperty('$lookup')
       expect(agg[1]).not.toHaveProperty('$addFields')
       // Ends with count sort
-      expect(agg.slice(-1)).toEqual([{ $sort: { 'analytics.downloads': 1 } }])
+      expect(agg.slice(-1)).toEqual([{ $sort: { 'downloads': 1 } }])
     })
     it('does not explode with all sorts', () => {
       const agg = pagination.sortAggregate({
@@ -129,7 +129,7 @@ describe('pagination model operations', () => {
           subscriptions: 'ascending',
         },
       })
-      expect(agg).toHaveLength(7)
+      expect(agg).toHaveLength(9)
       // Final stage should always be a sort
       expect(agg.slice(-1)[0]).toHaveProperty('$sort')
     })
