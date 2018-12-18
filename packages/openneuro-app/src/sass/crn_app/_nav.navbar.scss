@@ -5,7 +5,7 @@
 }
 
 .navbar {
-    z-index: 1300;
+    z-index: 250;
     border-left: 0;
     border-right: 0;
     border-top: 10px solid $navbar-top-border-color;
@@ -36,7 +36,7 @@
     color: var(--navbar-btn-text-color);
     margin: 0;
     padding: 0;
-    z-index: 1300;
+    z-index: 250;
     .container{
         padding: 0;
         .navbar-collapse{
