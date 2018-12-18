@@ -44,6 +44,10 @@ body,
 .uploader,
 .route-wrapper{height: 100%;}
 
+.page.dataset, .dataset-container {
+    min-height: calc(100vh - 85px);
+}
+
 body {
     font-family: $font-family-cabin;
     font-family: var(--font-family-cabin);
