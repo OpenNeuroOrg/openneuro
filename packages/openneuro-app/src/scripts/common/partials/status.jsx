@@ -32,7 +32,7 @@ export default class Status extends React.PureComponent {
         iconClass = 'fa fa-warning'
         fileSelect = minimal ? (
           <span className="file-wrap clearfix">
-            <UploadResume datasetId={this.props.dataset.linkID} />
+            <UploadResume datasetId={this.props.dataset.id} />
           </span>
         ) : null
         break
