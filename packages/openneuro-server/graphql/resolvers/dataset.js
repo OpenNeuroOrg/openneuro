@@ -23,7 +23,7 @@ export const datasets = (parent, args, { user, userInfo }) => {
 }
 
 export const snapshotCreationComparison = ({ created: a }, { created: b }) => {
-  return a.getTime() - b.getTime()
+  return new Date(a).getTime() - new Date(b).getTime()
 }
 
 /**
