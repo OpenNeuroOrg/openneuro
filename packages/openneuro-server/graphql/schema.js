@@ -171,6 +171,8 @@ const typeDefs = `
     analytics: Analytic
     stars: [Star]
     followers: [Follower]
+    # Canonical name, latest snapshot or draft if no snapshot or default if neither
+    name: String
   }
 
   enum SortOrdering {

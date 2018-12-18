@@ -1,6 +1,7 @@
 import * as datalad from '../../datalad/dataset.js'
 import pubsub from '../pubsub.js'
 import { snapshots } from './snapshots.js'
+import { description } from './description.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { user } from './user.js'
 import { draft } from './draft.js'
@@ -18,6 +19,35 @@ export const datasets = (parent, args, { user, userInfo }) => {
   } else {
     return datalad.getDatasets(args)
   }
+}
+
+export const snapshotCreationComparison = ({ created: x }, { created: y }) => {
+  return x.localeCompare(y)
+}
+
+/**
+ * Find the canonical name for a dataset from snapshots and drafts
+ * @param {object} obj Dataset object (at least {id: "datasetId"})
+ */
+export const datasetName = obj => {
+  return snapshots(obj).then(results => {
+    if (results) {
+      // Return the latest snapshot name
+      const sortedSnapshots = results.sort(snapshotCreationComparison)
+      return description(null, {
+        datasetId: obj.id,
+        revision: sortedSnapshots[0].hexsha,
+      }).then(desc => desc.Name)
+    } else if (obj.revision) {
+      // Return the draft name or null
+      description(null, {
+        datasetId: obj.id,
+        revision: obj.revision,
+      }).then(desc => desc.Name)
+    } else {
+      return null
+    }
+  })
 }
 
 /**
@@ -197,6 +227,7 @@ const Dataset = {
         }),
       ),
     ),
+  name: datasetName,
 }
 
 export default Dataset
