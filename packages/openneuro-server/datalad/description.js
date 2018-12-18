@@ -4,7 +4,6 @@
 import request from 'superagent'
 import { redis } from '../libs/redis.js'
 import { objectUrl } from './files.js'
-import { saveDatasetName } from './dataset.js'
 import { getDraftFiles } from './draft.js'
 import { getSnapshotHexsha } from './snapshots.js'
 import Snapshot from '../models/snapshot.js'
@@ -52,7 +51,7 @@ export const description = (obj, { datasetId, revision, tag }) => {
     if (cachedDescription) {
       return JSON.parse(cachedDescription)
     } else {
-      getDraftFiles(
+      return getDraftFiles(
         datasetId,
         revision ? revision : await getSnapshotHexsha(datasetId, tag),
       )
