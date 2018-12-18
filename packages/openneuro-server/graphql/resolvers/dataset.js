@@ -32,7 +32,7 @@ export const snapshotCreationComparison = ({ created: a }, { created: b }) => {
  */
 export const datasetName = obj => {
   return snapshots(obj).then(results => {
-    if (results) {
+    if (results && results.length) {
       // Return the latest snapshot name
       const sortedSnapshots = results.sort(snapshotCreationComparison)
       return description(obj, {
