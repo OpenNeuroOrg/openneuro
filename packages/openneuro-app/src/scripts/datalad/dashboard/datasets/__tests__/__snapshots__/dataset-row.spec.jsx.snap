@@ -41,7 +41,7 @@ exports[`dashboard/datasets/DatasetRow renders successfully 1`] = `
       <div
         className="status-container"
       >
-        <Component
+        <ProfileComponent
           dataset={
             Object {
               "draft": Object {

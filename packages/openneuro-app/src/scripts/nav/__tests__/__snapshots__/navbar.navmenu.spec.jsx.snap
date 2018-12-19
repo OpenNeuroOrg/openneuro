@@ -52,7 +52,7 @@ exports[`NavMenu renders successfully 1`] = `
   <li
     className="link-admin"
   >
-    <Component />
+    <ProfileComponent />
   </li>
   <li
     className="link-dashboard"
@@ -63,7 +63,7 @@ exports[`NavMenu renders successfully 1`] = `
   </li>
   <li>
     <NavbarCollapse>
-      <Component />
+      <ProfileComponent />
       <withCookies(Component)>
         <div
           className="navbar-right sign-in-nav-btn"
