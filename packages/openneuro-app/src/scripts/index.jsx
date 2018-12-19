@@ -26,11 +26,9 @@ class Index extends Reflux.Component {
           <span className={'nav-alert-state-' + alertState}>
             <Alert />
           </span>
-          <div className={'full-col alert-state-' + alertState}>
+          <div className={'main alert-state-' + alertState}>
             <Navbar />
-            <div className="main view container">
-              <Routes />
-            </div>
+            <Routes />
           </div>
         </div>
       </Uploader>

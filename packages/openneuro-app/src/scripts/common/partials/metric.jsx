@@ -6,7 +6,7 @@ import Tooltip from './tooltip.jsx'
 
 // component setup -----------------------------------------------------------
 
-export default class Metric extends React.Component {
+export default class Metric extends React.PureComponent {
   // lifecycle events ----------------------------------------------------------
   render() {
     if (!this.props.display) {

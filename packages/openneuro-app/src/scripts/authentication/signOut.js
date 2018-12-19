@@ -1,7 +1,6 @@
-import Cookies from 'universal-cookie'
+import cookies from '../utils/cookies.js'
 
 const signOut = () => {
-  const cookies = new Cookies()
   // Delete the token will reset client login state
   cookies.remove('accessToken')
 }

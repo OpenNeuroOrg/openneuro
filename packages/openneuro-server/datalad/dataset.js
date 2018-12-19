@@ -5,15 +5,21 @@
  */
 import request from 'superagent'
 import requestNode from 'request'
+import objectHash from 'object-hash'
 import config from '../config'
 import mongo from '../libs/mongo'
 import * as subscriptions from '../handlers/subscriptions.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { redis } from '../libs/redis.js'
-import { getAccessionNumber } from '../libs/dataset'
 import { updateDatasetRevision, draftPartialKey } from './draft.js'
 import { createSnapshot } from './snapshots.js'
 import { fileUrl } from './files.js'
+import { getAccessionNumber } from '../libs/dataset.js'
+import Dataset from '../models/dataset.js'
+import Permission from '../models/permission.js'
+import Star from '../models/stars.js'
+import Analytics from '../models/analytics.js'
+import { datasetsConnection } from './pagination.js'
 const c = mongo.collections
 const uri = config.datalad.uri
 
@@ -23,95 +29,145 @@ const uri = config.datalad.uri
  * Internally we setup metadata and access
  * then create a new DataLad repo
  *
- * @param {String} label - descriptive label for this dataset
- * @returns {Promise} - resolves to dataset id of the new dataset
+ * @param {string} uploader Id for user creating this dataset
+ * @param {Object} userInfo User metadata
+ * @returns {Promise} Resolves to {id: accessionNumber} for the new dataset
  */
-export const createDataset = (label, uploader, userInfo) => {
-  return new Promise(async (resolve, reject) => {
-    const datasetId = await getAccessionNumber()
-    const dsObj = await createDatasetModel(datasetId, label, uploader)
+export const createDataset = async (uploader, userInfo) => {
+  // Obtain an accession number
+  const datasetId = await getAccessionNumber()
+  try {
+    const ds = new Dataset({ id: datasetId, uploader })
+    await request
+      .post(`${uri}/datasets/${datasetId}`)
+      .set('Accept', 'application/json')
+      .set('Cookie', generateDataladCookie(config)(userInfo))
+    // Write the new dataset to mongo after creation
+    await ds.save()
     await giveUploaderPermission(datasetId, uploader)
-    // If successful, create the repo
-    const url = `${uri}/datasets/${datasetId}`
-    if (dsObj) {
-      const req = request
-        .post(url)
-        .set('Accept', 'application/json')
-        .set('Cookie', generateDataladCookie(config)(userInfo))
-      await req
-      subscriptions
-        .subscribe(datasetId, uploader)
-        .then(() => resolve({ id: datasetId, label }))
-        .catch(err => reject(err))
-    } else {
-      reject(Error(`Failed to create ${datasetId} - "${label}"`))
-    }
-  })
-}
-
-/**
- * Insert Dataset document
- *
- * Exported for tests.
- */
-export const createDatasetModel = (
-  id,
-  label,
-  uploader,
-  created = new Date(),
-) => {
-  const revision = null // Empty repo has no hash yet
-  const datasetObj = {
-    id,
-    label,
-    created,
-    modified: created,
-    uploader,
-    revision,
+    await subscriptions.subscribe(datasetId, uploader)
+    return ds
+  } catch (e) {
+    // eslint-disable-next-line
+    console.error(`Failed to create ${datasetId}`)
+    throw e
   }
-  return c.crn.datasets.insertOne(datasetObj)
 }
 
-export const giveUploaderPermission = (id, uploader) => {
-  const datasetId = id
-  const userId = uploader
-  const level = 'admin'
-  return c.crn.permissions.insertOne({ datasetId, userId, level })
+export const giveUploaderPermission = (datasetId, userId) => {
+  const permission = new Permission({ datasetId, userId, level: 'admin' })
+  return permission.save()
 }
 
 /**
  * Fetch dataset document and related fields
  */
-export const getDataset = id => {
-  return c.crn.datasets.findOne({ id })
-}
+export const getDataset = id => Dataset.findOne({ id }).exec()
 
 /**
  * Delete dataset and associated documents
  */
-export const deleteDataset = id => {
-  let deleteURI = `${uri}/datasets/${id}`
-  return new Promise((resolve, reject) => {
-    request.del(deleteURI).then(() => {
-      c.crn.datasets
-        .deleteOne({ id })
-        .then(() => resolve())
-        .catch(err => reject(err))
-    })
+export const deleteDataset = id =>
+  request
+    .del(`${uri}/datasets/${id}`)
+    .then(() => Dataset.deleteOne({ id }).exec())
+
+/**
+ * For public datasets, cache combinations of sorts/limits/cursors to speed responses
+ * @param {object} options getDatasets options object
+ */
+export const cacheDatasetConnection = options => connectionArguments => {
+  const connection = datasetsConnection(options)
+  const redisKey = `openneuro:datasetsConnection:${objectHash(options)}`
+  const expirationTime = 60
+  return redis.get(redisKey).then(data => {
+    if (data) {
+      return JSON.parse(data)
+    } else {
+      return connection(connectionArguments).then(connection => {
+        redis.setex(redisKey, expirationTime, JSON.stringify(connection))
+        return connection
+      })
+    }
   })
 }
 
 /**
+ * Add any filter steps based on the filterBy options provided
+ * @param {object} options GraphQL query parameters
+ * @returns {(match: object) => array} Array of aggregate stages
+ */
+export const datasetsFilter = options => match => {
+  const aggregates = [{ $match: match }]
+  const filterMatch = {}
+  if ('filterBy' in options) {
+    const filters = options.filterBy
+
+    if (
+      'admin' in options &&
+      options.admin &&
+      'all' in filters &&
+      filters.all
+    ) {
+      // For admins and {filterBy: all}, ignore any passed in matches
+      aggregates.length = 0
+    }
+
+    // Apply any filters as needed
+    if ('public' in filters && filters.public) {
+      filterMatch.public = true
+    }
+    if ('incomplete' in filters && filters.incomplete) {
+      filterMatch.revision = null
+    }
+    if ('userId' in options && 'shared' in filters && filters.shared) {
+      filterMatch.uploader = { $ne: options.userId }
+    }
+    if ('invalid' in filters && filters.invalid) {
+      // SELECT * FROM datasets JOIN issues ON datasets.revision = issues.id WHERE ...
+      aggregates.push({
+        $lookup: {
+          from: 'issues',
+          let: { revision: '$revision' },
+          pipeline: [
+            { $unwind: '$issues' },
+            {
+              $match: {
+                $expr: {
+                  $and: [
+                    { $eq: ['$id', '$$revision'] }, // JOIN CONSTRAINT
+                    { $eq: ['$issues.severity', 'error'] }, // WHERE severity = 'error'
+                  ],
+                },
+              },
+            },
+          ],
+          as: 'issues',
+        },
+      })
+      // Count how many error fields matched in previous step
+      aggregates.push({
+        $addFields: {
+          errorCount: { $size: '$issues' },
+        },
+      })
+      // Filter any datasets with no errors
+      filterMatch.errorCount = { $gt: 0 }
+    }
+    aggregates.push({ $match: filterMatch })
+  }
+  return aggregates
+}
+
+/**
  * Fetch all datasets
- *
- * TODO - Support cursor pagination
+ * @param {object} options {orderBy: {created: 'ascending'}, filterBy: {public: true}}
  */
 export const getDatasets = options => {
-  if (options && 'admin' in options) {
-    // Admins can see all datasets
-    return c.crn.datasets.find().toArray()
-  }
+  const filter = datasetsFilter(options)
+  const connection = datasetsConnection(options)
   if (options && 'userId' in options) {
+    // Authenticated request
     return c.crn.permissions
       .find({ userId: options.userId })
       .toArray()
@@ -119,12 +175,23 @@ export const getDatasets = options => {
         const datasetIds = datasetsAllowed.map(
           permission => permission.datasetId,
         )
-        return c.crn.datasets
-          .find({ $or: [{ id: { $in: datasetIds } }, { public: true }] })
-          .toArray()
+        // Match allowed datasets
+        if ('myDatasets' in options && options.myDatasets) {
+          // Exclude other users public datasets even though we have access to those
+          return connection(filter({ id: { $in: datasetIds } }))
+        } else {
+          // Include your own or public datasets
+          return connection(
+            filter({ $or: [{ id: { $in: datasetIds } }, { public: true }] }),
+          )
+        }
       })
   } else {
-    return c.crn.datasets.find({ public: true }).toArray()
+    // Anonymous request implies public datasets only
+    const match = { public: true }
+    // Anonymous requests can be cached
+    const cachedConnection = cacheDatasetConnection(options)
+    return cachedConnection(filter(match))
   }
 }
 
@@ -182,30 +249,6 @@ export const addFile = (datasetId, path, file) => {
 }
 
 /**
- * Update an existing file in a dataset
- */
-export const updateFile = (datasetId, path, file) => {
-  // Cannot use superagent 'request' due to inability to post streams
-  return new Promise(async (resolve, reject) => {
-    const { filename, stream, mimetype } = await file
-    stream
-      .pipe(
-        requestNode(
-          {
-            url: fileUrl(datasetId, path, filename),
-            method: 'put',
-            headers: { 'Content-Type': mimetype },
-          },
-          err => (err ? reject(err) : resolve()),
-        ),
-      )
-      .on('error', err => reject(err))
-  }).finally(() => {
-    return redis.del(draftPartialKey(datasetId))
-  })
-}
-
-/**
  * Commit a draft
  */
 export const commitFiles = (datasetId, user) => {
@@ -241,54 +284,45 @@ export const deleteFile = (datasetId, path, file) => {
 /**
  * Update public state
  */
-export const updatePublic = (datasetId, publicFlag) => {
-  // update mongo
-  return c.crn.datasets.updateOne(
+export const updatePublic = (datasetId, publicFlag) =>
+  c.crn.datasets.updateOne(
     { id: datasetId },
     { $set: { public: publicFlag } },
     { upsert: true },
   )
-}
 
 export const getDatasetAnalytics = (datasetId, tag) => {
-  return new Promise((resolve, reject) => {
-    let datasetQuery = tag
-      ? { datasetId: datasetId, tag: tag }
-      : { datasetId: datasetId }
-    c.crn.analytics
-      .aggregate([
-        {
-          $match: datasetQuery,
+  let datasetQuery = tag
+    ? { datasetId: datasetId, tag: tag }
+    : { datasetId: datasetId }
+  return Analytics.aggregate([
+    {
+      $match: datasetQuery,
+    },
+    {
+      $group: {
+        _id: '$datasetId',
+        tag: { $first: '$tag' },
+        views: {
+          $sum: '$views',
         },
-        {
-          $group: {
-            _id: '$datasetId',
-            tag: { $first: '$tag' },
-            views: {
-              $sum: '$views',
-            },
-            downloads: {
-              $sum: '$downloads',
-            },
-          },
+        downloads: {
+          $sum: '$downloads',
         },
-        {
-          $project: {
-            _id: 0,
-            datasetId: '$_id',
-            tag: 1,
-            views: 1,
-            downloads: 1,
-          },
-        },
-      ])
-      .toArray((err, results) => {
-        if (err) {
-          return reject(err)
-        }
-        results = results.length ? results[0] : {}
-        return resolve(results)
-      })
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        datasetId: '$_id',
+        tag: 1,
+        views: 1,
+        downloads: 1,
+      },
+    },
+  ]).then(results => {
+    results = results.length ? results[0] : {}
+    return results
   })
 }
 
@@ -307,4 +341,14 @@ export const trackAnalytics = (datasetId, tag, type) => {
       upsert: true,
     },
   )
+}
+
+export const getStars = datasetId => Star.find({ datasetId })
+
+export const getFollowers = datasetId => {
+  return c.crn.subscriptions
+    .find({
+      datasetId: datasetId,
+    })
+    .toArray()
 }

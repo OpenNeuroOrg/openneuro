@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`dashboard/datasets/Uploaded renders successfully 1`] = `
+<div
+  className="meta-container"
+>
+  <p
+    className="date"
+  >
+    uploaded 
+    by 
+    <span
+      className="name"
+    >
+      A User
+    </span>
+     on
+     
+    <span
+      className="time-ago"
+    >
+       - 
+       ago
+    </span>
+  </p>
+</div>
+`;

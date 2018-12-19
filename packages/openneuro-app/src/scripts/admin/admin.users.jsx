@@ -7,9 +7,10 @@ import Spinner from '../common/partials/spinner.jsx'
 import adminStore from './admin.store'
 import actions from './admin.actions'
 import WarnButton from '../common/forms/warn-button.jsx'
-import moment from 'moment'
 import { refluxConnect } from '../utils/reflux'
 import { getProfile } from '../authentication/profile.js'
+import { formatDate } from '../utils/date.js'
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 
 class Users extends Reflux.Component {
   constructor() {
@@ -121,21 +122,21 @@ class Users extends Reflux.Component {
   }
 
   _userSummary(user) {
-    const lastLogin = moment(user.lastlogin ? user.lastlogin : user.created)
-    const created = moment(user.created)
+    const lastLogin = user.lastlogin ? user.lastlogin : user.created
+    const created = user.created
     return (
       <div className="panel-heading">
         <div className="minimal-summary">
           <div className="summary-data">
             <span>
-              <b>Signed Up:</b> {created.format('L')} - {created.fromNow(true)}{' '}
-              ago
+              <b>Signed Up:</b> {formatDate(created)} -{' '}
+              {distanceInWordsToNow(created)} ago
             </span>
           </div>
           <div className="summary-data">
             <span>
-              <b>Last Signed In:</b> {lastLogin.format('L')} -{' '}
-              {lastLogin.fromNow(true)} ago
+              <b>Last Signed In:</b> {formatDate(lastLogin)} -{' '}
+              {distanceInWordsToNow(lastLogin)} ago
             </span>
           </div>
         </div>

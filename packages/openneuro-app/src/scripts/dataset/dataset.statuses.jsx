@@ -1,5 +1,5 @@
-// dependencies -------------------------------------------------------
-
+// This is a legacy version of datalad/dashboard/datasets/dataset-statuses.jsx
+// TODO - Remove this after dataset page refactor
 import React from 'react'
 import PropTypes from 'prop-types'
 import Status from '../common/partials/status.jsx'

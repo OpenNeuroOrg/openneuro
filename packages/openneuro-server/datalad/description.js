@@ -2,6 +2,7 @@
  * Get description data from backend
  */
 import request from 'superagent'
+import { redis } from '../libs/redis.js'
 import { objectUrl } from './files.js'
 import { getDraftFiles } from './draft.js'
 import { getSnapshotHexsha } from './snapshots.js'
@@ -35,12 +36,29 @@ export const getDescriptionObject = datasetId => files => {
   }
 }
 
+export const descriptionCacheKey = (datasetId, revision) => {
+  return `openneuro:dataset_description.json:${datasetId}:${revision}`
+}
+
 /**
  * Get a parsed dataset_description.json
  * @param {string} datasetId - dataset or snapshot object
  */
-export const description = async (obj, { datasetId, revision, tag }) =>
-  getDraftFiles(
-    datasetId,
-    revision ? revision : await getSnapshotHexsha(datasetId, tag),
-  ).then(getDescriptionObject(datasetId))
+export const description = (obj, { datasetId, revision, tag }) => {
+  const redisKey = descriptionCacheKey(datasetId, revision || tag)
+  return redis.get(redisKey).then(async cachedDescription => {
+    if (cachedDescription) {
+      return JSON.parse(cachedDescription)
+    } else {
+      return getDraftFiles(
+        datasetId,
+        revision ? revision : await getSnapshotHexsha(datasetId, tag),
+      )
+        .then(getDescriptionObject(datasetId))
+        .then(uncachedDescription => {
+          redis.set(redisKey, JSON.stringify(uncachedDescription))
+          return uncachedDescription
+        })
+    }
+  })
+}

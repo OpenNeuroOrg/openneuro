@@ -1,32 +1,39 @@
-import mongo from '../mongo'
-import { getAccessionNumber } from '../dataset'
+import mockingoose from 'mockingoose'
+import { getAccessionNumber } from '../dataset.js'
 
-beforeAll(async () => {
-  await mongo.connect()
-  await mongo.collections.crn.counters.insertMany([
-    { _id: 'datasets', sequence_value: 1 },
-  ])
-})
-
-afterAll(async () => {
-  // Reset
-  mongo.collections.crn.counters.length = 0
-})
-
-describe('util/dataset.js', () => {
+describe('libs/dataset.js', () => {
   describe('getAccessionNumber', () => {
+    beforeEach(() => {
+      mockingoose.resetAll()
+    })
     it('returns strings starting with "ds"', async () => {
+      mockingoose.Counter.toReturn(
+        { _id: 'dataset', sequence_value: 2 },
+        'findOne',
+      )
       const ds = await getAccessionNumber()
       expect(ds.slice(0, 2)).toEqual('ds')
     })
     it('generates sequential numbers', async () => {
+      mockingoose.Counter.toReturn(
+        { _id: 'dataset', sequence_value: 2 },
+        'findOne',
+      )
       const first = await getAccessionNumber()
+      mockingoose.Counter.toReturn(
+        { _id: 'dataset', sequence_value: 3 },
+        'findOne',
+      )
       const second = await getAccessionNumber()
       const fNum = parseInt(first.slice(2))
       const sNum = parseInt(second.slice(2))
       expect(fNum).toBeLessThan(sNum)
     })
     it('returns 6 digits for ds ids', async () => {
+      mockingoose.Counter.toReturn(
+        { _id: 'dataset', sequence_value: 2 },
+        'findOne',
+      )
       const ds = await getAccessionNumber()
       const num = ds.slice(2)
       expect(num).toHaveLength(6)

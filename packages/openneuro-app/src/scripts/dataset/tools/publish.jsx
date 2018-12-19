@@ -9,7 +9,8 @@ import ErrorBoundary from '../../errors/errorBoundary.jsx'
 import { Link, withRouter } from 'react-router-dom'
 import actions from '../dataset.actions.js'
 import datasetStore from '../dataset.store.js'
-import moment from 'moment'
+import { formatDate } from '../../utils/date.js'
+import differenceInMilliseconds from 'date-fns/difference_in_milliseconds'
 import { refluxConnect } from '../../utils/reflux'
 
 class Publish extends Reflux.Component {
@@ -44,11 +45,9 @@ class Publish extends Reflux.Component {
     let snapshots = this.state.datasets.snapshots
     if (snapshots && snapshots.length) {
       return (
-            <div className="dataset-form-controls col-xs-12">
-              {this._submit()}
-            </div>
-        )
-      }
+        <div className="dataset-form-controls col-xs-12">{this._submit()}</div>
+      )
+    }
     return null
   }
 
@@ -75,15 +74,16 @@ class Publish extends Reflux.Component {
         <div className="dataset-form-content col-xs-12">
           {/* {this._snapshots()} */}
           <p className="text-danger">
-            All existing and future snapshots of this dataset will be released publicly under a
+            All existing and future snapshots of this dataset will be released
+            publicly under a
             <a
               href="https://wiki.creativecommons.org/wiki/CC0"
               target="_blank"
               rel="noopener noreferrer">
               {' '}
               CC0 license
-            </a>. 
-            {/* TODO: can this operation REALLY not be undone? */}
+            </a>
+            .{/* TODO: can this operation REALLY not be undone? */}
             {/* This operation cannot be undone. */}
           </p>
         </div>
@@ -149,7 +149,7 @@ class Publish extends Reflux.Component {
               {'v' +
                 snapshot.snapshot_version +
                 ' (' +
-                moment(snapshot.modified).format('lll') +
+                formatDate(snapshot.modified) +
                 ')'}
               {snapshot.public ? '- published' : null}
             </option>
@@ -186,7 +186,7 @@ class Publish extends Reflux.Component {
     let snapshots = datasetStore.data.snapshots
     let modified = !(
       snapshots.length > 0 &&
-      moment(dataset.modified).diff(moment(snapshots[0].modified)) <= 0
+      differenceInMilliseconds(dataset.modified, snapshots[0].modified) <= 0
     )
     if (modified && this.state.datasets.datasetUrl) {
       let to = {

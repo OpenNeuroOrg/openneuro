@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import bytes from 'bytes'
 
-export default class Summary extends React.Component {
+export default class Summary extends React.PureComponent {
   // life cycle events --------------------------------------------------
 
   render() {

@@ -11,8 +11,21 @@ const typeDefs = `
   type Query {
     # One dataset
     dataset(id: ID!): Dataset
-    # All datasets
-    datasets: [Dataset]
+    # Get all datasets
+    datasets(
+      "Limit results, default 25, max 100"
+      first: Int = 25
+      "Cursor key used to fetch later results"
+      after: String
+      "Cursor key used to fetch earlier results"
+      before: String
+      "Sorting fields"
+      orderBy: DatasetSort = {created: ascending}
+      "Filtering fields"
+      filterBy: DatasetFilter = {}
+      "Query user's datasets only - excludes public datasets from other filters"
+      myDatasets: Boolean
+    ): DatasetConnection
     # Get one user
     user(id: ID!): User
     # Get a list of users
@@ -96,6 +109,20 @@ const typeDefs = `
     directories: [FileTree] # directories within the directory
   }
 
+  # Information for pagination in a connection.
+  type PageInfo {
+    # When paginating forwards, are there more items?
+    hasNextPage: Boolean!
+    # When paginating backwards, are there more items?
+    hasPreviousPage: Boolean!
+    # When paginating backwards, the cursor to continue.
+    startCursor: String
+    # When paginating forwards, the cursor to continue.
+    endCursor: String
+    # Total results
+    count: Int
+  }
+
   # OpenNeuro user records from all providers
   type User {
     id: ID!
@@ -116,6 +143,22 @@ const typeDefs = `
     globus
   }
 
+  # Connection for a list of datasets
+  type DatasetConnection {
+    # A list of dataset edges
+    edges: [DatasetEdge]
+    # Pagination metadata
+    pageInfo: PageInfo!
+  }
+
+  # One connected dataset
+  type DatasetEdge {
+    # Connected dataset
+    node: Dataset
+    # Pagination cursor
+    cursor: String!
+  }
+
   # Top level dataset, one draft and many snapshots
   type Dataset { 
     id: ID!
@@ -126,6 +169,45 @@ const typeDefs = `
     snapshots: [Snapshot]
     permissions: [Permission]
     analytics: Analytic
+    stars: [Star]
+    followers: [Follower]
+    # Canonical name, latest snapshot or draft if no snapshot or default if neither
+    name: String
+  }
+
+  enum SortOrdering {
+    ascending
+    descending
+  }
+
+  # Sorting order for datasets
+  input DatasetSort {
+    # Dataset created time
+    created: SortOrdering
+    # Alphanumeric sort of dataset name
+    name: SortOrdering
+    # Alphanumeric sort of uploader name
+    uploader: SortOrdering
+    # Order by star count
+    stars: SortOrdering
+    # Order by download count
+    downloads: SortOrdering
+    # Order by count of dataset followers
+    subscriptions: SortOrdering
+  }
+
+  # Dataset query filter flags
+  input DatasetFilter {
+    "Limit to datasets available publicly"
+    public: Boolean
+    "Return only partially uploaded datasets"
+    incomplete: Boolean
+    "Return only datasets that are shared with the user"
+    shared: Boolean
+    "Return only datasets with an invalid Draft"
+    invalid: Boolean
+    "Return all datasets, ignores any other constraints but not sorts"
+    all: Boolean
   }
 
   # Ephemeral draft or working tree for a dataset
@@ -149,7 +231,7 @@ const typeDefs = `
   }
 
   # Tagged snapshot of a draft
-  type Snapshot {
+  type Snapshot @cacheControl(maxAge: 3600, scope: PUBLIC) {
     # Snapshot ids are dataset:tag values
     id: ID!
     # Git tag of this snapshot
@@ -170,7 +252,7 @@ const typeDefs = `
   }
 
   # Contents of dataset_description.json
-  type Description {
+  type Description @cacheControl(maxAge: 30, scope: PUBLIC) {
     # Name of the dataset
     Name: String!
     # The version of the BIDS standard that was used
@@ -214,6 +296,18 @@ const typeDefs = `
     tasks: [String]
     size: BigInt!
     totalFiles: Int!
+  }
+
+  # Dataset Followers
+  type Follower {
+    userId: String
+    datasetId: String
+  }
+
+  # Dataset Stars
+  type Star @cacheControl(maxAge: 300, scope: PUBLIC) {
+    userId: String
+    datasetId: String
   }
 
   enum Severity {
@@ -290,7 +384,7 @@ const typeDefs = `
   }
 
   # Analytics for a dataset
-  type Analytic {
+  type Analytic @cacheControl(maxAge: 300, scope: PUBLIC) {
     datasetId: ID!
     tag: String
     views: Int

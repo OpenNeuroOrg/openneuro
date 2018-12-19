@@ -1,4 +1,3 @@
-import { withCookies } from 'react-cookie'
 import { loginCheck } from './loginCheck.js'
 
 /**
@@ -6,4 +5,4 @@ import { loginCheck } from './loginCheck.js'
  */
 const LoggedIn = ({ children }) => (loginCheck() ? children : null)
 
-export default withCookies(LoggedIn)
+export default LoggedIn

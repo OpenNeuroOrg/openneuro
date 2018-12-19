@@ -13,7 +13,6 @@ import getClient, { datasets } from 'openneuro-client'
 import config from '../../../config'
 import { xhrFetch } from './xhrfetch.js'
 import { withRouter } from 'react-router-dom'
-import moment from 'moment'
 
 /**
  * Stateful uploader workflow and status
@@ -252,7 +251,7 @@ export class UploadClient extends React.Component {
 
     // Construct the initial CHANGES file and add to the files array
     const snapshotText = 'Initial snapshot'
-    const date = moment().format('YYYY-MM-DD')
+    const date = new Date().toISOString().split('T')[0]
     const versionString = '1.0.0'
     const initialChangesContent = `\n${versionString}\t${date}\n\n\t- ${snapshotText}`
     const initialChangesFile = new Blob([initialChangesContent], {

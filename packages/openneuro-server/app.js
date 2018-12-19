@@ -77,6 +77,9 @@ export default test => {
         'request.credentials': 'same-origin',
       },
     },
+    // Enable cache options
+    tracing: true,
+    cacheControl: true,
   })
 
   // Setup pre-GraphQL middleware

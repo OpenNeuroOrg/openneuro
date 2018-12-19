@@ -2,6 +2,7 @@
 import mongo from '../libs/mongo'
 import { ObjectID } from 'mongodb'
 import notifications from '../libs/notifications'
+import Subscription from '../models/subscription.js'
 
 let c = mongo.collections
 
@@ -31,20 +32,8 @@ export const create = (req, res, next) => {
 }
 
 export const subscribe = (datasetId, userId) => {
-  return new Promise((resolve, reject) => {
-    c.crn.subscriptions.insertOne(
-      {
-        datasetId: datasetId,
-        userId: userId,
-      },
-      (err, response) => {
-        if (err) {
-          reject(err)
-        }
-        resolve(response)
-      },
-    )
-  })
+  const subscription = new Subscription({ datasetId, userId })
+  return subscription.save()
 }
 
 /**

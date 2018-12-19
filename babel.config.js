@@ -4,6 +4,7 @@ module.exports = function(api) {
     plugins: [
       'loadable-components/babel',
       '@babel/plugin-proposal-object-rest-spread',
+      '@babel/plugin-proposal-class-properties',
       '@babel/syntax-dynamic-import',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-transform-runtime',

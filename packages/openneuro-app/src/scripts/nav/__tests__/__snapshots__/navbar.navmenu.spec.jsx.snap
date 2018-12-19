@@ -7,18 +7,18 @@ exports[`NavMenu renders successfully 1`] = `
   <li
     className="link-dashboard"
   >
-    <withCookies(Component)>
+    <LoggedIn>
       <NavLink
         className="nav-link"
-        to="/dashboard"
+        to="/dashboard/datasets"
       >
         <span
           className="link-name"
         >
-          my dashboard
+          My Dashboard
         </span>
       </NavLink>
-    </withCookies(Component)>
+    </LoggedIn>
   </li>
   <li
     className="link-public"
@@ -52,18 +52,18 @@ exports[`NavMenu renders successfully 1`] = `
   <li
     className="link-admin"
   >
-    <withCookies(Component) />
+    <ProfileComponent />
   </li>
   <li
     className="link-dashboard"
   >
-    <withCookies(Component)>
+    <LoggedIn>
       <UploaderViewContainer />
-    </withCookies(Component)>
+    </LoggedIn>
   </li>
   <li>
     <NavbarCollapse>
-      <withCookies(Component) />
+      <ProfileComponent />
       <withCookies(Component)>
         <div
           className="navbar-right sign-in-nav-btn"

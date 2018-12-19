@@ -60,6 +60,7 @@ export default {
         variables: {
           id: bids.decodeId(datasetId),
         },
+        fetchPolicy: 'no-cache',
       })
       .then(data => {
         data = clone(data)

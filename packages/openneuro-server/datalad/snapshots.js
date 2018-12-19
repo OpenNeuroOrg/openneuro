@@ -6,11 +6,13 @@ import mongo from '../libs/mongo'
 import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
+import { updateDatasetName } from '../graphql/resolvers/dataset.js'
 import { commitFilesKey } from './files.js'
 import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDraftFiles } from './draft'
 import notifications from '../libs/notifications'
+import Snapshot from '../models/snapshot.js'
 
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -26,7 +28,7 @@ const snapshotIndexKey = datasetId => {
 }
 
 const createSnapshotMetadata = (datasetId, tag, hexsha, created) => {
-  return c.crn.snapshots.update(
+  return Snapshot.update(
     { datasetId: datasetId, tag: tag },
     {
       $set: {
@@ -92,6 +94,8 @@ export const createSnapshot = async (datasetId, tag, user) => {
           // Clear the index now that the new snapshot is ready
           .then(() => redis.del(indexKey))
           .then(() => {
+            // Trigger an async update for the name field (cache for sorting)
+            updateDatasetName(datasetId)
             if (body.files) {
               notifications.snapshotCreated(datasetId, body, user) // send snapshot notification to subscribers
             }
@@ -215,7 +219,7 @@ export const getSnapshot = async (datasetId, tag) => {
  */
 export const getSnapshotHexsha = (datasetId, tag) => {
   return c.crn.snapshots
-    .findOne({ datasetId, tag }, { revision: true })
+    .findOne({ datasetId, tag }, { hexsha: true })
     .then(result => (result ? result.hexsha : null))
 }
 
@@ -242,4 +246,31 @@ export const updateSnapshotFileUrls = (datasetId, snapshotTag, files) => {
       // Clear snapshot cache when we get new URLs
       return redis.del(snapshotKey(datasetId, snapshotTag)).then(() => data)
     })
+}
+
+/**
+ * Get Public Snapshots
+ *
+ * Returns the most recent snapshots of all publicly available datasets
+ */
+export const getPublicSnapshots = () => {
+  // query all publicly available dataset
+  return c.crn.datasets.find({ public: true }, { id: 1 }).toArray(datasets => {
+    const datasetIds = datasets.map(dataset => dataset.id)
+    return c.crn.snapshots.aggregate([
+      { $match: { datasetId: { $in: datasetIds } } },
+      { $sort: { created: -1 } },
+      {
+        $group: {
+          _id: '$datasetId',
+          snapshots: { $push: '$$ROOT' },
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: { $arrayElemAt: ['$snapshots', 0] },
+        },
+      },
+    ])
+  })
 }

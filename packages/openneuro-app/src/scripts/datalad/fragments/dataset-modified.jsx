@@ -1,10 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
+import { formatDate } from '../../utils/date.js'
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 
 const DatasetModified = ({ modified }) => {
-  const dateAdded = moment(modified).format('L')
-  const difference = moment(modified).fromNow(true)
+  const dateAdded = formatDate(modified)
+  const difference = distanceInWordsToNow(modified)
   return <h6>{`last modified on ${dateAdded} - ${difference} ago`}</h6>
 }
 

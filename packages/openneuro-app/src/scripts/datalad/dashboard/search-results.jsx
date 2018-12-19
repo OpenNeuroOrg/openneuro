@@ -1,11 +1,11 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import 'url-search-params-polyfill'
 import { Link } from 'react-router-dom'
-import request from '../utils/request'
-import Spinner from '../common/partials/spinner.jsx'
-import Search from '../common/partials/search.jsx'
+import request from '../../utils/request'
+import Spinner from '../../common/partials/spinner.jsx'
+import Search from '../../common/partials/search.jsx'
 import { withRouter } from 'react-router'
-import PropTypes from 'prop-types'
 
 class SearchResults extends React.Component {
   constructor() {

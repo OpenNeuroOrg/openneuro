@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 // Run all pending migrations
 import config from '../config.js'
+import { connect as redis_connect } from '../libs/redis.js'
 import mongo from '../libs/mongo.js'
 import mongoose from 'mongoose'
 import Migration from '../models/migration.js'
@@ -18,6 +19,7 @@ mongoose.connect(`${config.mongo.url}crn`)
  * Runs manually for now but could run at startup.
  */
 const upgradeAll = async () => {
+  await redis_connect(config.redis)
   // Connect to old database(s)
   await mongo.connect(config.mongo.url)
   for (const migrationDefinition of migrations) {
@@ -45,7 +47,7 @@ const upgradeAll = async () => {
 
 // Entrypoint
 upgradeAll().then(() => {
-  mongo.dbs.scitran.close()
   mongo.dbs.crn.close()
   mongoose.connection.close()
+  process.exit(0)
 })

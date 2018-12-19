@@ -78,45 +78,61 @@ export const getUntrackedFiles = gql`
 `
 
 export const getDatasets = gql`
-  query {
-    datasets {
-      id
-      _id: id
-      created
-      uploader {
-        id
-      }
-      public
-      permissions {
-        userId
-        _id: userId
-        level
-        access: level
-        user {
+  query getDatasets {
+    datasets(first: 5) {
+      edges {
+        node {
           id
-          name
-          email
-          provider
+          _id: id
+          created
+          uploader {
+            id
+            name
+          }
+          public
+          permissions {
+            userId
+            _id: userId
+            level
+            access: level
+            user {
+              id
+              name
+              email
+              provider
+            }
+          }
+          draft {
+            id
+            partial
+            summary {
+              modalities
+              sessions
+              subjects
+              tasks
+              size
+              totalFiles
+            }
+            issues {
+              severity
+            }
+            description {
+              Name
+            }
+          }
+          analytics {
+            views
+            downloads
+          }
+          stars {
+            userId
+            datasetId
+          }
+          followers {
+            userId
+            datasetId
+          }
         }
-      }
-      draft {
-        id
-        partial
-        summary {
-          modalities
-          sessions
-          subjects
-          tasks
-          size
-          totalFiles
-        }
-        description {
-          Name
-        }
-      }
-      analytics {
-        views
-        downloads
       }
     }
   }

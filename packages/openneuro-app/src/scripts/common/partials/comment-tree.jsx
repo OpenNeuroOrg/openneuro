@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
 import Avatar from '../../user/avatar.jsx'
-import moment from 'moment'
 import { withRouter } from 'react-router-dom'
 import Comment from './comment.jsx'
 import WarnButton from '../forms/warn-button.jsx'
@@ -195,7 +195,7 @@ class CommentTree extends React.Component {
   _timestamp(createDate) {
     return (
       <span className="time-elapsed">
-        {moment.duration(moment().diff(createDate)).humanize()} ago
+        {distanceInWordsToNow(createDate)} ago
       </span>
     )
   }

@@ -14,13 +14,13 @@ const Admin = loadable(() =>
   import(/* webpackChunkName: 'Admin' */ './admin/admin.jsx'),
 )
 const Dashboard = loadable(() =>
-  import(/* webpackChunkName: 'Dashboard' */ './dashboard/dashboard.jsx'),
+  import(/* webpackChunkName: 'Dashboard' */ './datalad/dashboard/dashboard.jsx'),
 )
 const Faq = loadable(() =>
   import(/* webpackChunkName: 'Faq' */ './faq/faq.jsx'),
 )
 const SearchResults = loadable(() =>
-  import(/* webpackChunkName: 'SearchResults' */ './dashboard/dashboard.searchresults.jsx'),
+  import(/* webpackChunkName: 'SearchResults' */ './datalad/dashboard/search-results.jsx'),
 )
 const APIKey = loadable(() =>
   import(/* webpackChunkName: 'APIKey' */ './user/api.jsx'),
