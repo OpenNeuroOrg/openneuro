@@ -13,65 +13,6 @@ import { getProfile } from '../authentication/profile.js'
  * scitran service through BIDS concepts.
  */
 export default {
-  // Read -----------------------------------------------------------------------------------
-
-  /**
-   * Get Datasets
-   *
-   * Returns a list of datasets including any
-   * derived statuses and notes on each. Only returns
-   * the top level 'project' container. Takes an optional
-   * boolean as second argument to specifiy if request
-   * is made with authentication. Defaults to true.
-   */
-  async getDatasets(
-    callback,
-    isPublic,
-    isSignedOut,
-    isAdmin = false,
-    metadata = false,
-  ) {
-    const res = (await datalad.getDatasets({
-      authenticate: isAdmin || !isPublic,
-      snapshot: false,
-      metadata: metadata,
-      isPublic: isPublic,
-    })).data
-    if (!res) {
-      return callback([])
-    }
-    const projects = res.datasets ? res.datasets : []
-    const users = isSignedOut ? null : await datalad.getUsers()
-    const stars = (await crn.getStars()).body
-    const followers = (await crn.getSubscriptions()).body
-    let resultDict = {}
-    for (let project of projects) {
-      project.summary = project.draft ? project.draft.summary : null
-      let dataset = this.formatDataset(project, null, users, stars, followers)
-      let datasetId = dataset.hasOwnProperty('original')
-        ? dataset.original
-        : dataset._id
-      let existing = resultDict[datasetId]
-      if (
-        !existing ||
-        (existing.hasOwnProperty('original') &&
-          !dataset.hasOwnProperty('original')) ||
-        (existing.hasOwnProperty('original') &&
-          existing.snapshot_version < project.snapshot_version)
-      ) {
-        if (isAdmin || project.public || this.userAccess(project)) {
-          resultDict[datasetId] = dataset
-        }
-      }
-    }
-
-    let results = []
-    for (let key in resultDict) {
-      results.push(resultDict[key])
-    }
-    callback(results)
-  },
-
   /**
    * Get Metadata
    *
