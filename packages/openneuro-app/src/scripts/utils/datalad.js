@@ -7,31 +7,6 @@ import request from './request'
 
 const client = getClient(`${config.url}/crn/graphql`)
 export default {
-  async getDatasets(options) {
-    return new Promise((resolve, reject) => {
-      client
-        .query({
-          query: datasets.getDatasets,
-          fetchPolicy: 'no-cache',
-        })
-        .then(data => {
-          data = clone(data)
-          let datasets = data.data.datasets
-          if (options.isPublic) {
-            datasets = data.data.datasets.filter(dataset => {
-              return dataset.public
-            })
-          }
-          data.data.datasets = datasets
-          resolve(data)
-        })
-        .catch(err => {
-          // console.log('error in getDatasets:', err)
-          reject(err)
-        })
-    })
-  },
-
   getDataset(datasetId) {
     return new Promise((resolve, reject) => {
       this.queryDataset(datasetId, (err, data) => {

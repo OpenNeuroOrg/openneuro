@@ -3,7 +3,6 @@
 import Reflux from 'reflux'
 import actions from './front-page.actions'
 import crn from '../utils/crn'
-import bids from '../utils/bids'
 import files from '../utils/files'
 import datasetActions from '../dataset/dataset.actions'
 import request from '../utils/request'
@@ -16,14 +15,6 @@ let FrontPageStore = Reflux.createStore({
 
   init: function() {
     this.setInitialState()
-    bids.getDatasets(
-      datasets => {
-        const totalDatasets = datasets ? datasets.length : 0
-        this.update({ datasetCount: totalDatasets })
-      },
-      true,
-      true,
-    )
     // Load apps
     if (config.analysis && config.analysis.enabled) {
       crn.getApps().then(res => {
