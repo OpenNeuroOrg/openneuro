@@ -98,14 +98,13 @@ export const updateQuery = (previousResult, { fetchMoreResult }) => {
  * @param {string} data Next data cursor
  * @param {function} fetchMore Apollo fetchMore function from the original query
  */
-const loadMoreRows = (data, fetchMore) => () => {
+const loadMoreRows = (data, fetchMore) => () =>
   fetchMore({
     variables: {
       cursor: data.datasets.pageInfo.endCursor,
     },
     updateQuery,
   })
-}
 
 const datasetQueryDisplay = isPublic => ({
   loading,
