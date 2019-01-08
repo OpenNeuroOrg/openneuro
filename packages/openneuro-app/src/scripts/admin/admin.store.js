@@ -1,5 +1,5 @@
 // dependencies ----------------------------------------------------------------------
-
+import React from 'react'
 import Reflux from 'reflux'
 import Actions from './admin.actions.js'
 import datalad from '../utils/datalad'
