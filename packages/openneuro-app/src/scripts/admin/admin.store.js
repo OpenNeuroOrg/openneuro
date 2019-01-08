@@ -5,8 +5,9 @@ import Actions from './admin.actions.js'
 import datalad from '../utils/datalad'
 import crn from '../utils/crn'
 import batch from '../utils/batch'
-import notifications from '../notification/notification.actions'
 import datasetActions from '../dataset/dataset.actions'
+import { toast } from 'react-toastify'
+import ToastContent from '../common/partials/toast-content.jsx'
 
 let UserStore = Reflux.createStore({
   // store setup -----------------------------------------------------------------------
@@ -461,10 +462,12 @@ let UserStore = Reflux.createStore({
     crn
       .defineJob(jobDefinition)
       .then(() => {
-        notifications.createAlert({
-          type: 'Success',
-          message: 'Job Definition Submission Successful!',
-        })
+        toast.success(
+          <ToastContent
+            title="Job defined"
+            body="Job definition submitted successfully"
+          />,
+        )
 
         //toggle modal once response comes bacn from server.
         this.toggleModal('defineJob')
@@ -475,15 +478,19 @@ let UserStore = Reflux.createStore({
       .catch(err => {
         // server is returning 400 for invalid inputs for vcpus and memory
         if (err.status === 400) {
-          notifications.createAlert({
-            type: 'Error',
-            message: 'Invalid job definition inputs for vCPUs and/or Memory.',
-          })
+          toast.error(
+            <ToastContent
+              title="Error"
+              body="Invalid job defined inputs for vCPUs and/or Memory."
+            />,
+          )
         } else {
-          notifications.createAlert({
-            type: 'Error',
-            message: 'There was an error submitting job definition.',
-          })
+          toast.error(
+            <ToastContent
+              title="Error"
+              body="There was an unexpected error submitting job definition."
+            />,
+          )
         }
       })
   },

@@ -1,12 +1,12 @@
 import Raven from 'raven-js'
 import { toast } from 'react-toastify'
+import ToastContent from '../common/partials/toast-content.jsx'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloConsumer } from 'react-apollo'
 import ReactGA from 'react-ga'
 import UploaderContext from './uploader-context.js'
 import FileSelect from '../common/forms/file-select.jsx'
-import notifications from '../notification/notification.actions'
 import { locationFactory } from './uploader-location.js'
 import * as mutation from './upload-mutation.js'
 import getClient, { datasets } from 'openneuro-client'
@@ -193,10 +193,10 @@ export class UploadClient extends React.Component {
         .catch(error => {
           Raven.captureException(error)
           toast.error(
-            <span>
-              <h3>Dataset creation failed</h3>
-              <h4>Please check your connection</h4>
-            </span>,
+            <ToastContent
+              title="Dataset creation failed"
+              body="Please check your connection"
+            />,
             { autoClose: false },
           )
           this.setState({
@@ -296,9 +296,9 @@ export class UploadClient extends React.Component {
       .catch(error => {
         Raven.captureException(error)
         const toastId = toast.error(
-          <span>
-            <h3>Dataset upload failed</h3>
-            <h4>Please check your connection</h4>
+          <ToastContent
+            title="Dataset upload failed"
+            body="Please check your connection">
             <FileSelect
               onChange={event => {
                 toast.dismiss(toastId)
@@ -306,7 +306,7 @@ export class UploadClient extends React.Component {
               }}
               resume
             />
-          </span>,
+          </ToastContent>,
           { autoClose: false },
         )
         this.setState({
@@ -336,16 +336,14 @@ export class UploadClient extends React.Component {
       this.props.history.push(datasetURL)
       this.setLocation('/hidden')
     } else {
-      notifications.createAlert({
-        type: 'Success',
-        message: (
-          <span>
-            {' '}
-            Dataset successfully uploaded.{' '}
-            <a href={datasetURL}>Click here to browse your dataset.</a>
-          </span>
-        ),
-      })
+      toast.success(
+        <ToastContent
+          title="Upload complete"
+          body="Dataset successfully uploaded">
+          <a href={datasetURL}>Click here to browse your dataset.</a>
+        </ToastContent>,
+        { autoClose: false },
+      )
     }
   }
 
