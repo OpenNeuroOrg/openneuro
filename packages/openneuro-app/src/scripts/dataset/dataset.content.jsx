@@ -123,9 +123,33 @@ class DatasetContent extends Reflux.Component {
     let content
 
     if (dataset) {
+      let alert
+      // For drafts only
+      if (!('snapshot_version' in dataset)) {
+        if (dataset.public) {
+          alert = (
+            <div className="col-xs-12">
+              <div className="alert alert-success">
+                <strong>This dataset has been published!</strong> Create a new
+                snapshot to make changes available
+              </div>
+            </div>
+          )
+        } else {
+          alert = (
+            <div className="col-xs-12">
+              <div className="alert alert-danger">
+                <strong>This dataset has not been published!</strong> Publish
+                this dataset to make snapshots available publicly
+              </div>
+            </div>
+          )
+        }
+      }
       // meta description is README unless it's empty
       content = (
         <div className="row">
+          {alert}
           <div className="col-xs-6">
             <h1 className="clearfix">
               <ClickToEdit
