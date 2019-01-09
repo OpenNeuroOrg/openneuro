@@ -119,7 +119,7 @@ class WarnButton extends React.Component {
             toast.error(
               <ToastContent
                 title={validation.type}
-                message={validation.message}
+                body={validation.message}
               />,
               { autoClose: validation.timeout ? validation.timeout : 5000 },
             )
@@ -155,7 +155,7 @@ class WarnButton extends React.Component {
       this.setState({ loading: true })
       action(e => {
         if (e && e.error) {
-          toast.error(<ToastContent title="Error" message={e.error} />)
+          toast.error(<ToastContent title="Error" body={e.error} />)
         }
         if (this._mounted) {
           this.setState({
