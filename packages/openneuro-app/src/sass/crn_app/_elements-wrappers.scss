@@ -664,6 +664,10 @@ h6 {
     }
 }
 
+.Toastify__toast--success {
+    border-top: 4px solid $success;
+}
+
 .Toastify__toast--warning {
     border-top: 4px solid $warning;
 }

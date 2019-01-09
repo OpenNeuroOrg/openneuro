@@ -3,7 +3,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Tooltip from '../partials/tooltip.jsx'
-import notifications from '../../notification/notification.actions'
+import { toast } from 'react-toastify'
+import ToastContent from '../partials/toast-content.jsx'
 
 class WarnButton extends React.Component {
   constructor() {
@@ -115,11 +116,13 @@ class WarnButton extends React.Component {
         for (let i = 0; i < this.props.validations.length; i++) {
           let validation = this.props.validations[i]
           if (validation.check) {
-            notifications.createAlert({
-              type: validation.type,
-              message: validation.message,
-              timeout: validation.timeout,
-            })
+            toast.error(
+              <ToastContent
+                title={validation.type}
+                body={validation.message}
+              />,
+              { autoClose: validation.timeout ? validation.timeout : 5000 },
+            )
             return
           }
         }
@@ -152,7 +155,7 @@ class WarnButton extends React.Component {
       this.setState({ loading: true })
       action(e => {
         if (e && e.error) {
-          notifications.createAlert({ type: 'Error', message: e.error })
+          toast.error(<ToastContent title="Error" body={e.error} />)
         }
         if (this._mounted) {
           this.setState({

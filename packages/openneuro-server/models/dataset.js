@@ -5,6 +5,7 @@ const datasetSchema = new mongoose.Schema(
     id: { type: String, unique: true }, // Accession number
     created: { type: Date, default: Date.now },
     modified: { type: Date, default: Date.now },
+    public: Boolean,
     uploader: String,
     revision: String,
     name: String,
