@@ -2,6 +2,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import Reflux from 'reflux'
 import { Redirect, withRouter } from 'react-router-dom'
 import { ProgressBar } from 'react-bootstrap'
@@ -139,8 +140,11 @@ class DatasetContent extends Reflux.Component {
           alert = (
             <div className="col-xs-12">
               <div className="alert alert-warning">
-                <strong>This dataset has not been published!</strong> Publish
-                this dataset to make all snapshots available publicly
+                <strong>This dataset has not been published!</strong>{' '}
+                <Link to={`/datasets/${dataset.linkID}/publish`}>
+                  Publish this dataset
+                </Link>{' '}
+                to make all snapshots available publicly
               </div>
             </div>
           )
