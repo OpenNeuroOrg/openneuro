@@ -138,9 +138,9 @@ class DatasetContent extends Reflux.Component {
         } else {
           alert = (
             <div className="col-xs-12">
-              <div className="alert alert-danger">
+              <div className="alert alert-warning">
                 <strong>This dataset has not been published!</strong> Publish
-                this dataset to make snapshots available publicly
+                this dataset to make all snapshots available publicly
               </div>
             </div>
           )
