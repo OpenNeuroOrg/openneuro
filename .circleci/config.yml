@@ -115,7 +115,7 @@ jobs:
       - checkout
       - run:
           name: Install sentry-cli
-          command: yarn add -D sentry-cli
+          command: yarn install
       - run:
           name: Create sentry release
           command: yarn sentry-cli releases new -p openneuro $(jq -r .version lerna.json)
