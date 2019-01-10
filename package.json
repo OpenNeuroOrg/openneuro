@@ -9,7 +9,7 @@
     "openneuro": "node packages/openneuro-cli/src"
   },
   "devDependencies": {
-    "@sentry/cli": "^1.37.2",
+    "@sentry/cli": "https://github.com/getsentry/sentry-cli.git#ea1433357fafd252076f838bbf51fa27e133a417",
     "@types/jasmine": "^2.8.8",
     "babel-eslint": "8.2.2",
     "codecov": "^3.0.0",
