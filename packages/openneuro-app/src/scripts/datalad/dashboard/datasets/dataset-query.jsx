@@ -87,7 +87,13 @@ export const updateQuery = (previousResult, { fetchMoreResult }) => {
   return {
     datasets: {
       __typename: previousResult.datasets.__typename,
-      edges: [...previousResult.datasets.edges, ...newEdges],
+      edges: [
+        ...previousResult.datasets.edges,
+        ...newEdges.filter(
+          n =>
+            !previousResult.datasets.edges.some(e => e.node.id === n.node.id),
+        ),
+      ],
       pageInfo,
     },
   }
