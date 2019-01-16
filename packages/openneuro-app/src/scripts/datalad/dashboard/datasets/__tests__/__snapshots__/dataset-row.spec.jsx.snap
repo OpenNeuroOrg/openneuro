@@ -33,6 +33,7 @@ exports[`dashboard/datasets/DatasetRow renders successfully 1`] = `
                 },
               },
               "id": "ds000001",
+              "snapshots": Array [],
             }
           }
           fromDashboard={true}
@@ -50,6 +51,7 @@ exports[`dashboard/datasets/DatasetRow renders successfully 1`] = `
                 },
               },
               "id": "ds000001",
+              "snapshots": Array [],
             }
           }
           minimal={true}

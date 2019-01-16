@@ -31,7 +31,10 @@ class DatasetVirtualScroller extends React.Component {
     if (this._isRowLoaded({ index })) {
       return (
         <div key={key} style={style}>
-          <DatasetRow dataset={this.props.datasets[index].node} />
+          <DatasetRow
+            dataset={this.props.datasets[index].node}
+            publicDashboard={this.props.publicDashboard}
+          />
         </div>
       )
     } else {
@@ -110,6 +113,7 @@ DatasetVirtualScroller.propTypes = {
   datasets: PropTypes.array,
   pageInfo: PropTypes.object,
   loadMoreRows: PropTypes.func,
+  publicDashboard: PropTypes.bool,
 }
 
 export default DatasetVirtualScroller

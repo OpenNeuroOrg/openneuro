@@ -68,6 +68,11 @@ const getDatasets = gql`
             userId
             datasetId
           }
+          snapshots {
+            id
+            created
+            tag
+          }
         }
       }
       pageInfo {
