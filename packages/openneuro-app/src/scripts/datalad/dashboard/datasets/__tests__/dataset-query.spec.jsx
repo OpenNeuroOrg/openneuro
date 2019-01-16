@@ -48,5 +48,25 @@ describe('dashboard/datasets/DatasetQuery', () => {
         { node: { id: 4 } },
       ])
     })
+    it('does not produce duplicate ids after merge', () => {
+      expect(
+        updateQuery(
+          {
+            datasets: {
+              __typename: 'testType',
+              edges: [{ node: { id: 1 } }, { node: { id: 3 } }],
+            },
+          },
+          {
+            fetchMoreResult: {
+              datasets: {
+                edges: [{ node: { id: 3 } }, { node: { id: 4 } }],
+                pageInfo: {},
+              },
+            },
+          },
+        ).datasets.edges,
+      ).toEqual([{ node: { id: 1 } }, { node: { id: 3 } }, { node: { id: 4 } }])
+    })
   })
 })
