@@ -2,9 +2,8 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
 import Reflux from 'reflux'
-import { Redirect, withRouter } from 'react-router-dom'
+import { Link, Redirect, withRouter } from 'react-router-dom'
 import { ProgressBar } from 'react-bootstrap'
 import Spinner from '../common/partials/spinner.jsx'
 import Timeout from '../common/partials/timeout.jsx'
