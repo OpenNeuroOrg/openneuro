@@ -104,13 +104,32 @@ export const updateQuery = (previousResult, { fetchMoreResult }) => {
  * @param {string} data Next data cursor
  * @param {function} fetchMore Apollo fetchMore function from the original query
  */
-const loadMoreRows = (data, fetchMore) => () =>
-  fetchMore({
-    variables: {
-      cursor: data.datasets.pageInfo.endCursor,
-    },
-    updateQuery,
-  })
+const loadMoreRows = (data, fetchMore) => {
+  // Last cursor loaded (the pending promise)
+  let loadingCursor
+  // Pending promise to chain to if we need to delay a load
+  let loadingPromise
+  const loadMoreInner = cursor => {
+    // Is an update fetch in progress?
+    if (loadingCursor !== cursor) {
+      // No, start a new fetch
+      loadingPromise = fetchMore({
+        variables: {
+          cursor,
+        },
+        updateQuery,
+      })
+      loadingCursor = cursor
+      return loadingPromise
+    } else {
+      // Yes, wait for the previous request to continue
+      return loadingPromise.then(({ data }) =>
+        loadMoreInner(data.datasets.pageInfo.endCursor),
+      )
+    }
+  }
+  return () => loadMoreInner(data.datasets.pageInfo.endCursor)
+}
 
 const datasetQueryDisplay = isPublic => ({
   loading,
