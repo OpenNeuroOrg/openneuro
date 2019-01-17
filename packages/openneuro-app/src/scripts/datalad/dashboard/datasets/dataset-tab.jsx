@@ -17,7 +17,7 @@ const FullHeightFlexDiv = styled.div`
 
 const title = isPublic => (isPublic ? 'Public Datasets' : 'My Datasets')
 
-const DatasetTabLoaded = ({ data, loadMoreRows }) => {
+const DatasetTabLoaded = ({ data, loadMoreRows, publicDashboard }) => {
   if (
     data &&
     data.datasets &&
@@ -29,6 +29,7 @@ const DatasetTabLoaded = ({ data, loadMoreRows }) => {
         datasets={data.datasets.edges}
         pageInfo={data.datasets.pageInfo}
         loadMoreRows={loadMoreRows}
+        publicDashboard={publicDashboard}
       />
     )
   } else {
@@ -82,7 +83,11 @@ const DatasetTab = ({
     {loading ? (
       <Spinner text="Loading Datasets" active />
     ) : (
-      <DatasetTabLoaded data={data} loadMoreRows={loadMoreRows} />
+      <DatasetTabLoaded
+        data={data}
+        loadMoreRows={loadMoreRows}
+        publicDashboard={publicDashboard}
+      />
     )}
   </FullHeightFlexDiv>
 )
