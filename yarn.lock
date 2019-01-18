@@ -3360,10 +3360,10 @@ bcrypt@^2.0.1:
     nan "2.10.0"
     node-pre-gyp "0.9.1"
 
-bids-validator@1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.1.1.tgz#bd01f9eb003ce8e8bfc4181682c2f5f696cdd20e"
-  integrity sha512-eSxwz7tM1ucv2r+3Lsg8wOXa5yuMWr9TuKH0x107epK3kiiQBm8C9DyIYzVclyYYzB0GdsMXI1n7HVR+RZFYVQ==
+bids-validator@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.1.2.tgz#7bb895bb68941267ebd3982c612825cab1ae9f62"
+  integrity sha512-SAHgaheqvvsKpOWZZwTpQt8CTF+HbxyzKzNX5THaXEBFWcc+hbeySFVJlyEYp1GrHQ5sVfL6nqAEPBa6fdEDZA==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"
@@ -3376,6 +3376,7 @@ bids-validator@1.1.1:
     jshint "^2.9.6"
     minimatch "3.0.4"
     nifti-js "^1.0.1"
+    p-limit "^2.1.0"
     pako "^1.0.6"
     path "^0.12.7"
     pluralize "^7.0.0"
@@ -11693,6 +11694,13 @@ p-limit@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.0.0.tgz#e624ed54ee8c460a778b3c9f3670496ff8a57aec"
   integrity sha512-fl5s52lI5ahKCernzzIyAP0QAZbGIovtVHGwpcu1Jr/EpzLVDI2myISHwGqK7m8uQFugVWSrbxH7XnhGtvEc+A==
+  dependencies:
+    p-try "^2.0.0"
+
+p-limit@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.1.0.tgz#1d5a0d20fb12707c758a655f6bbc4386b5930d68"
+  integrity sha512-NhURkNcrVB+8hNfLuysU8enY5xn2KXphsHBaC2YmRNTZRc7RWusw6apSpdEj3jo4CMb6W9nrF6tTnsJsJeyu6g==
   dependencies:
     p-try "^2.0.0"
 

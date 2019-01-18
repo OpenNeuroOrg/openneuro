@@ -22,7 +22,7 @@
     "aws-sdk": "2.50.0",
     "base64url": "^2.0.0",
     "bcrypt": "^2.0.1",
-    "bids-validator": "1.1.1",
+    "bids-validator": "1.1.2",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
     "cron": "^1.1.0",
