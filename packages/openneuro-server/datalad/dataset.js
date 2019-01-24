@@ -201,51 +201,53 @@ const blacklist = ['.DS_Store', 'Icon\r', '.git', '.gitattributes', '.datalad']
 /**
  * Add files to a dataset
  */
-export const addFile = (datasetId, path, file) => {
-  // Cannot use superagent 'request' due to inability to post streams
-  return new Promise((resolve, reject) =>
-    file
-      .then(({ filename, stream, mimetype }) => {
-        // Skip any blacklisted files
-        if (blacklist.includes(filename)) {
-          return resolve()
-        }
-        stream
-          .on('error', err => {
-            if (err.constructor.name === 'FileStreamDisconnectUploadError') {
-              // Catch client disconnects.
-              // eslint-disable-next-line no-console
-              console.warn(
-                `Client disconnected during upload for dataset "${datasetId}".`,
-              )
-            } else {
-              // Unknown error, log it at least.
-              // eslint-disable-next-line no-console
-              console.error(err)
-            }
-          })
-          .pipe(
-            requestNode(
-              {
-                url: fileUrl(datasetId, path, filename),
-                method: 'post',
-                headers: { 'Content-Type': mimetype },
-              },
-              err => (err ? reject(err) : resolve()),
-            ),
-          )
-      })
-      .catch(err => {
-        if (err.constructor.name === 'UploadPromiseDisconnectUploadError') {
-          // Catch client aborts silently
-        } else {
-          // Raise other errors
-          throw err
-        }
-      }),
-  ).finally(() => {
-    return redis.del(draftPartialKey(datasetId))
-  })
+export const addFile = async (datasetId, path, file) => {
+  try {
+    const { filename, mimetype, createReadStream } = await file
+    await redis.del(draftPartialKey(datasetId))
+
+    // Skip any blacklisted files
+    if (blacklist.includes(filename)) {
+      return true
+    }
+
+    const stream = createReadStream()
+
+    // Start request to backend
+    return new Promise((resolve, reject) => {
+      const downstreamRequest = requestNode(
+        {
+          url: fileUrl(datasetId, path, filename),
+          method: 'post',
+          headers: { 'Content-Type': mimetype },
+        },
+        err => (err ? reject(err) : resolve()),
+      )
+      // Attach error handler for incoming request and start feeding downstream
+      stream
+        .on('error', err => {
+          if (err.constructor.name === 'FileStreamDisconnectUploadError') {
+            // Catch client disconnects.
+            // eslint-disable-next-line no-console
+            console.warn(
+              `Client disconnected during upload for dataset "${datasetId}".`,
+            )
+          } else {
+            // Unknown error, log it at least.
+            // eslint-disable-next-line no-console
+            console.error(err)
+          }
+        })
+        .pipe(downstreamRequest)
+    })
+  } catch (err) {
+    if (err.constructor.name === 'UploadPromiseDisconnectUploadError') {
+      // Catch client aborts silently
+    } else {
+      // Raise any unknown errors
+      throw err
+    }
+  }
 }
 
 /**
