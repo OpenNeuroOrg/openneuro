@@ -8,3 +8,4 @@ lerna-debug.log
 coverage
 datalad-key
 content
+packages/openneuro-server/yarn.lock
