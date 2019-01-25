@@ -1,7 +1,7 @@
 // dependencies ---------------------------------------------------------
 import 'url-search-params-polyfill'
 import 'es6-shim'
-import Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/browser'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './app.jsx'
@@ -15,7 +15,7 @@ if (module.hot) module.hot.accept()
 loadConfig().then(config => {
   GoogleAnalytics.initialize(config.analytics.trackingId)
 
-  Sentry.config({
+  Sentry.init({
     dsn: 'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',
     release: packageJson.version,
     environment: config.sentry.environment,

@@ -1,6 +1,6 @@
 import request from 'request'
 import xmldoc from 'xmldoc'
-import Sentry from '@sentry/node'
+import * as Sentry from '@sentry/node'
 import config from '../config'
 
 export default {

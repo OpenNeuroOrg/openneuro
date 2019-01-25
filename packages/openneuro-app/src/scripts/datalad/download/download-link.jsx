@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
 import ReactGA from 'react-ga'

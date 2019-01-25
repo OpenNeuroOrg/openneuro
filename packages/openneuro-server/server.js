@@ -1,4 +1,4 @@
-import Sentry from '@sentry/node'
+import * as Sentry from '@sentry/node'
 import { createServer } from 'http'
 import mongoose from 'mongoose'
 import subscriptionServerFactory from './libs/subscription-server.js'

@@ -1,4 +1,4 @@
-import Sentry from '@sentry/browser'
+import * as Sentry from '@sentry/browser'
 import { toast } from 'react-toastify'
 import ToastContent from '../common/partials/toast-content.jsx'
 import React from 'react'

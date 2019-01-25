@@ -5,7 +5,7 @@
  * Express app setup
  */
 import express from 'express'
-import Sentry from '@sentry/node'
+import * as Sentry from '@sentry/node'
 import passport from 'passport'
 import config from './config'
 import routes from './routes'
