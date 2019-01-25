@@ -15,6 +15,7 @@
   },
   "author": "Squishymedia",
   "dependencies": {
+    "@sentry/node": "^4.5.3",
     "ajv": "4.9.0",
     "apollo-client-preset": "^1.0.8",
     "apollo-server-express": "2.3.1",

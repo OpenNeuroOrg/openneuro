@@ -1,4 +1,4 @@
-import Raven from 'raven'
+import Sentry from '@sentry/node'
 import { createServer } from 'http'
 import mongoose from 'mongoose'
 import subscriptionServerFactory from './libs/subscription-server.js'
@@ -30,12 +30,11 @@ const redisConnect = async () => {
   }
 }
 
-const ravenConfig = {
+Sentry.init({
+  dsn: config.sentry.DSN,
   release: packageJson.version,
   environment: config.sentry.ENVIRONMENT,
-  autoBreadcrumbs: true,
-}
-Raven.config(config.sentry.DSN, ravenConfig).install()
+})
 
 const app = createApp(false)
 

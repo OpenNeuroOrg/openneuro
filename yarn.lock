@@ -1680,6 +1680,65 @@
     progress "2.0.0"
     proxy-from-env "^1.0.0"
 
+"@sentry/core@4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@sentry/core/-/core-4.5.3.tgz#e55a42c694deec903aec2479e4a282d5a7a43878"
+  integrity sha512-off7XkyyiPXJTQ1XYPzxsY3zLHztMdK1kuIeHzyoIzu4kvs8H75eqou+fADo04JmfaMNy+OZSoW+5Aq2SZR2Ng==
+  dependencies:
+    "@sentry/hub" "4.5.3"
+    "@sentry/minimal" "4.5.3"
+    "@sentry/types" "4.5.3"
+    "@sentry/utils" "4.5.3"
+    tslib "^1.9.3"
+
+"@sentry/hub@4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@sentry/hub/-/hub-4.5.3.tgz#54ce5988ac6dedbe9bba99e2c00f8f26eb677dfe"
+  integrity sha512-4b8oPVAGw/hf11CQN9J7hAk2wzD2HIZsQBl/PcB/p5r1UyHw8cibpVobJulkHJMBJMiZ/twIBGZ1G1qK3LJdhw==
+  dependencies:
+    "@sentry/types" "4.5.3"
+    "@sentry/utils" "4.5.3"
+    tslib "^1.9.3"
+
+"@sentry/minimal@4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@sentry/minimal/-/minimal-4.5.3.tgz#7b69481df2d61e4b935d067be62a52824190f616"
+  integrity sha512-W9+eEZosoDKTAJkab/bxsSRim7I4lqeWHLhmCchDimKcdmpBzC+gOCT0PywwOWRLW08LhTHfmnNSAJv6PaZiCA==
+  dependencies:
+    "@sentry/hub" "4.5.3"
+    "@sentry/types" "4.5.3"
+    tslib "^1.9.3"
+
+"@sentry/node@^4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@sentry/node/-/node-4.5.3.tgz#f6b57747991c300d4f5f70add673ea3d1e78c873"
+  integrity sha512-glBIGsoYDcUEjZWDjbkDWt87cmuO/lcxpfz4zfTq9JfIfzI3WunJqABhFDc8tQSqUdHOlWb2QKvoNPvz+0EDfg==
+  dependencies:
+    "@sentry/core" "4.5.3"
+    "@sentry/hub" "4.5.3"
+    "@sentry/types" "4.5.3"
+    "@sentry/utils" "4.5.3"
+    "@types/stack-trace" "0.0.29"
+    cookie "0.3.1"
+    https-proxy-agent "2.2.1"
+    lru_map "0.3.3"
+    lsmod "1.0.0"
+    stack-trace "0.0.10"
+    tslib "^1.9.3"
+
+"@sentry/types@4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@sentry/types/-/types-4.5.3.tgz#3350dce2b7f9b936a8c327891c12e3aef7bd8852"
+  integrity sha512-7ll1PAFNjrBNX9rzy3P2qAQrpQwHaDO3uKj735qsnGw34OtAS8Xr8WYrjI14f9fMPa/XIeWvMPb4GMic28V/ag==
+
+"@sentry/utils@4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@sentry/utils/-/utils-4.5.3.tgz#6893fca9fde230b230360779362752e9b5570852"
+  integrity sha512-yIYqnuq9cd9nAUJ2MPmq++Mgy81qB2fglsDB8TiBfk2eaba79qFcKp8xg3w3EMDHZMlfmlx4fkTmZJ/+V02oWQ==
+  dependencies:
+    "@sentry/types" "4.5.3"
+    tslib "^1.9.3"
+
 "@sindresorhus/is@^0.7.0":
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
@@ -1835,6 +1894,11 @@
   dependencies:
     "@types/express-serve-static-core" "*"
     "@types/mime" "*"
+
+"@types/stack-trace@0.0.29":
+  version "0.0.29"
+  resolved "https://registry.yarnpkg.com/@types/stack-trace/-/stack-trace-0.0.29.tgz#eb7a7c60098edb35630ed900742a5ecb20cfcb4d"
+  integrity sha512-TgfOX+mGY/NyNxJLIbDWrO9DjGoVSW9+aB8H2yy1fy32jsvxijhmyJI9fDFgvz3YP4lvJaq9DzdR/M1bOgVc9g==
 
 "@types/ws@^6.0.0":
   version "6.0.1"
@@ -8115,7 +8179,7 @@ https-browserify@^1.0.0:
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-https-proxy-agent@^2.2.1:
+https-proxy-agent@2.2.1, https-proxy-agent@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/https-proxy-agent/-/https-proxy-agent-2.2.1.tgz#51552970fa04d723e04c56d04178c3f92592bbc0"
   integrity sha512-HPCTS1LW51bcyMYbxUIOO4HEOlQ1/1qRaFWcyxvwaqUS9TY88aoEuHUY33kuAh1YhVVaDQhLZsnPd+XNARWZlQ==
@@ -10370,6 +10434,16 @@ lru-queue@0.1:
   integrity sha1-Jzi9nw089PhEkMVzbEhpmsYyzaM=
   dependencies:
     es5-ext "~0.10.2"
+
+lru_map@0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/lru_map/-/lru_map-0.3.3.tgz#b5c8351b9464cbd750335a79650a0ec0e56118dd"
+  integrity sha1-tcg1G5Rky9dQM1p5ZQoOwOVhGN0=
+
+lsmod@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/lsmod/-/lsmod-1.0.0.tgz#9a00f76dca36eb23fa05350afe1b585d4299e64b"
+  integrity sha1-mgD3bco26yP6BTUK/htYXUKZ5ks=
 
 mailcomposer@4.0.1:
   version "4.0.1"
