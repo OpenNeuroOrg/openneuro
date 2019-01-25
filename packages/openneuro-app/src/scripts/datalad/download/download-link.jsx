@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import Raven from 'raven-js'
+import Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
 import ReactGA from 'react-ga'
@@ -97,7 +97,7 @@ const downloadClick = (datasetId, snapshotTag) => () => {
     .getRegistration()
     .then(awaitRegistration(next, global))
     .catch(err => {
-      Raven.captureException(err)
+      Sentry.captureException(err)
     })
 }
 

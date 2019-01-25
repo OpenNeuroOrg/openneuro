@@ -1,7 +1,7 @@
 // dependencies ---------------------------------------------------------
 import 'url-search-params-polyfill'
 import 'es6-shim'
-import Raven from 'raven-js'
+import Sentry from '@sentry/browser'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './app.jsx'
@@ -15,26 +15,18 @@ if (module.hot) module.hot.accept()
 loadConfig().then(config => {
   GoogleAnalytics.initialize(config.analytics.trackingId)
 
-  const ravenConfig = {
+  Sentry.config({
+    dsn: 'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',
     release: packageJson.version,
     environment: config.sentry.environment,
-    autoBreadcrumbs: {
-      console: false,
-    },
-  }
+  })
 
   // Setup the service worker
   if ('serviceWorker' in navigator) {
     runtime.register()
   } else {
-    Raven.captureMessage('Service worker registration failed.')
+    Sentry.captureMessage('Service worker registration failed.')
   }
-
-  // Uses the public DSN here - private should not be used in the client app
-  Raven.config(
-    'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',
-    ravenConfig,
-  ).install()
 
   ReactDOM.render(<App config={config} />, document.getElementById('main'))
 })

@@ -1,4 +1,4 @@
-import Raven from 'raven-js'
+import Sentry from '@sentry/browser'
 import { toast } from 'react-toastify'
 import ToastContent from '../common/partials/toast-content.jsx'
 import React from 'react'
@@ -191,7 +191,7 @@ export class UploadClient extends React.Component {
           this.setState({ datasetId }, this._addFiles)
         })
         .catch(error => {
-          Raven.captureException(error)
+          Sentry.captureException(error)
           toast.error(
             <ToastContent
               title="Dataset creation failed"
@@ -294,7 +294,7 @@ export class UploadClient extends React.Component {
           })
       })
       .catch(error => {
-        Raven.captureException(error)
+        Sentry.captureException(error)
         const toastId = toast.error(
           <ToastContent
             title="Dataset upload failed"
@@ -318,7 +318,7 @@ export class UploadClient extends React.Component {
           try {
             this.state.xhr.abort()
           } catch (e) {
-            Raven.captureException(e)
+            Sentry.captureException(e)
           }
         }
       })

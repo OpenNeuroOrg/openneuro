@@ -31,7 +31,7 @@ const redisConnect = async () => {
 }
 
 Sentry.init({
-  dsn: config.sentry.DSN,
+  dsn: 'https://ba0c58863b3e40a2a412132bfd2711ea@sentry.io/251076',
   release: packageJson.version,
   environment: config.sentry.ENVIRONMENT,
 })
