@@ -51,6 +51,7 @@ export const setupPassportAuth = () => {
           clientID: config.auth.google.clientID,
           clientSecret: config.auth.google.clientSecret,
           callbackURL: `${config.url + config.apiPrefix}auth/google/callback`,
+          userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
         },
         verifyGoogleUser,
       ),
