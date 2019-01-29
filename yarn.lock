@@ -2583,12 +2583,19 @@ apollo-link-error@^1.0.3:
   dependencies:
     apollo-link "^1.2.3"
 
-apollo-link-http-common@^0.2.3, apollo-link-http-common@^0.2.5:
+apollo-link-http-common@^0.2.5:
   version "0.2.5"
   resolved "https://registry.yarnpkg.com/apollo-link-http-common/-/apollo-link-http-common-0.2.5.tgz#d094beb7971523203359bf830bfbfa7b4e7c30ed"
   integrity sha512-6FV1wr5AqAyJ64Em1dq5hhGgiyxZE383VJQmhIoDVc3MyNcFL92TkhxREOs4rnH2a9X2iJMko7nodHSGLC6d8w==
   dependencies:
     apollo-link "^1.2.3"
+
+apollo-link-http-common@^0.2.8:
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/apollo-link-http-common/-/apollo-link-http-common-0.2.8.tgz#c6deedfc2739db8b11013c3c2d2ccd657152941f"
+  integrity sha512-gGmXZN8mr7e9zjopzKQfZ7IKnh8H12NxBDzvp9nXI3U82aCVb72p+plgoYLcpMY8w6krvoYjgicFmf8LO20TCQ==
+  dependencies:
+    apollo-link "^1.2.6"
 
 apollo-link-http@^1.3.1, apollo-link-http@^1.5.4:
   version "1.5.5"
@@ -2642,6 +2649,14 @@ apollo-link@^1.2.4:
   dependencies:
     apollo-utilities "^1.0.0"
     zen-observable-ts "^0.8.11"
+
+apollo-link@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/apollo-link/-/apollo-link-1.2.6.tgz#d9b5676d79c01eb4e424b95c7171697f6ad2b8da"
+  integrity sha512-sUNlA20nqIF3gG3F8eyMD+mO80fmf3dPZX+GUOs3MI9oZR8ug09H3F0UsWJMcpEg6h55Yy5wZ+BMmAjrbenF/Q==
+  dependencies:
+    apollo-utilities "^1.0.0"
+    zen-observable-ts "^0.8.13"
 
 apollo-server-caching@0.2.1:
   version "0.2.1"
@@ -2728,12 +2743,14 @@ apollo-tracing@0.4.0:
     apollo-server-env "2.2.0"
     graphql-extensions "0.4.0"
 
-"apollo-upload-client@https://github.com/nellh/apollo-upload-client-build.git#d7d4cd0d630bd5a8eee4bb2257d1cb267c797185":
-  version "8.0.4"
-  resolved "https://github.com/nellh/apollo-upload-client-build.git#d7d4cd0d630bd5a8eee4bb2257d1cb267c797185"
+apollo-upload-client@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.yarnpkg.com/apollo-upload-client/-/apollo-upload-client-10.0.0.tgz#6cc3d0ea2aef40bc237b655f5042809cacee1859"
+  integrity sha512-N0SENiEkZXoY4nl9xxrXFcj/cL0AVkSNQ4aYXSaruCBWE0aKpK6aCe4DBmiEHrK3FAsMxZPEJxBRIWNbsXT8dw==
   dependencies:
-    apollo-link-http-common "^0.2.3"
-    extract-files "^4.0.0"
+    apollo-link "^1.2.6"
+    apollo-link-http-common "^0.2.8"
+    extract-files "^5.0.0"
 
 apollo-utilities@1.0.22:
   version "1.0.22"
@@ -6800,10 +6817,10 @@ extglob@^2.0.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-extract-files@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/extract-files/-/extract-files-4.0.0.tgz#a5bbcac16d753a7b7c74fbda1d4992424bfa5fa4"
-  integrity sha512-beLL9RAMrdAU1myviggeJH6nlsfLS5Ei1fUX7ETw8GUsr6VHtZVW8stz686ConpZzncFitbDG1II/m32gc3sXQ==
+extract-files@^5.0.0:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/extract-files/-/extract-files-5.0.1.tgz#c9492a8410be643e260a376f0151361993d5f659"
+  integrity sha512-qRW6y9eKF0VbCyOoOEtFhzJ3uykAw8GKwQVXyAIqwocyEWW4m+v+evec34RwtUkkxxHh7NKBLJ6AnXM8W4dH5w==
 
 extract-stack@^1.0.0:
   version "1.0.0"
@@ -16403,6 +16420,13 @@ zen-observable-ts@^0.8.11:
   version "0.8.11"
   resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.8.11.tgz#d54a27cd17dc4b4bb6bd008e5c096af7fcb068a9"
   integrity sha512-8bs7rgGV4kz5iTb9isudkuQjtWwPnQ8lXq6/T76vrepYZVMsDEv6BXaEA+DHdJSK3KVLduagi9jSpSAJ5NgKHw==
+  dependencies:
+    zen-observable "^0.8.0"
+
+zen-observable-ts@^0.8.13:
+  version "0.8.13"
+  resolved "https://registry.yarnpkg.com/zen-observable-ts/-/zen-observable-ts-0.8.13.tgz#ae1fd77c84ef95510188b1f8bca579d7a5448fc2"
+  integrity sha512-WDb8SM0tHCb6c0l1k60qXWlm1ok3zN9U4VkLdnBKQwIYwUoB9psH7LIFgR+JVCCMmBxUgOjskIid8/N02k/2Bg==
   dependencies:
     zen-observable "^0.8.0"
 
