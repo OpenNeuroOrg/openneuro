@@ -1,6 +1,6 @@
 import passport from 'passport'
 import { Strategy as JwtStrategy } from 'passport-jwt'
-import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth'
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 import { Strategy as ORCIDStrategy } from 'passport-orcid'
 import { Strategy as GlobusStrategy } from 'passport-globus'
 import config from '../../config.js'
@@ -93,7 +93,7 @@ const loadProfile = profile => {
   if (profile.provider === 'google') {
     // Get the account email from Google profile
     const primaryEmail = profile.emails
-      .filter(email => email.type === 'account')
+      .filter(email => email.verified === true)
       .shift()
     return {
       email: primaryEmail.value,
