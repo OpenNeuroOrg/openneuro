@@ -3,6 +3,7 @@ import os
 import subprocess
 import requests
 
+from datalad_service.common.raven import client
 from datalad_service.common.celery import app
 
 # TODO - This is hardcoded because it is internal
@@ -23,9 +24,12 @@ def validate_dataset_sync(dataset_path):
     Runs the bids-validator process and installs node dependencies if needed.
     """
     setup_validator()
-    process = subprocess.run(
-        ['./node_modules/.bin/bids-validator', '--json', dataset_path], stdout=subprocess.PIPE)
-    return json.loads(process.stdout)
+    try:
+        process = subprocess.run(
+            ['./node_modules/.bin/bids-validator', '--json', dataset_path], stdout=subprocess.PIPE, timeout=60)
+        return json.loads(process.stdout)
+    except subprocess.TimeoutExpired:
+        client.captureException()
 
 
 def summary_mutation(dataset_id, ref, validator_output):
