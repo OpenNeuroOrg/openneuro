@@ -1,4 +1,5 @@
 import fs from 'fs'
+import { createLazyReadStream } from './lazyReadStream.js'
 import path from 'path'
 import moment from 'moment'
 import stream from 'stream'
@@ -74,7 +75,7 @@ export const getFileTree = (
           }
         })
         .map(({ stat, filePath, relativePath }) => {
-          const stream = fs.createReadStream(filePath)
+          const stream = createLazyReadStream(filePath)
           stream.pause()
           if (logging) {
             stream.on(
