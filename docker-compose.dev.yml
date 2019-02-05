@@ -32,7 +32,7 @@ services:
   server:
     build:
       context: ./packages/openneuro-server
-    command: sh -c "apk add make gcc g++ python && yarn install && node /srv/index.js"
+    command: sh -c "apk add make gcc g++ python && yarn install && node --trace-warnings /srv/index.js"
     volumes:
       - ./packages/openneuro-server:/srv
       - yarn_cache:/root/.cache
