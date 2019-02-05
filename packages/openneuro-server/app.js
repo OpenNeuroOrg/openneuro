@@ -80,6 +80,8 @@ export default test => {
     // Enable cache options
     tracing: true,
     cacheControl: true,
+    // Don't limit the max size for dataset uploads
+    uploads: { maxFieldSize: Infinity },
   })
 
   // Setup pre-GraphQL middleware
