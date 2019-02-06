@@ -6,7 +6,6 @@ volumes:
   project:
 
 services:
-
   content:
     image: ${CONTENT_IMAGE}
     volumes:
@@ -15,11 +14,15 @@ services:
   # mongodb
   mongo:
     image: mongo:4.0
+    volumes:
+      - ${PERSISTENT_DIR}/mongo:/data/db
     restart: always
 
   # Redis
   redis:
     image: redis:alpine
+    volumes:
+      - ${PERSISTENT_DIR}/redis:/data
     restart: always
 
   # crn node server
@@ -95,7 +98,7 @@ services:
     env_file: ./config.env
     restart: always
     ports:
-      - "5555:5555"
+      - '5555:5555'
 
   # nginx + app
   web:
@@ -108,9 +111,9 @@ services:
     volumes_from:
       - content
     ports:
-      - "80:80"
-      - "8110:8110"
-      - "443:443"
+      - '80:80'
+      - '8110:8110'
+      - '443:443'
     depends_on:
       - server
       - datalad
