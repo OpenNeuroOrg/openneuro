@@ -203,7 +203,7 @@ const blacklist = ['.DS_Store', 'Icon\r', '.git', '.gitattributes', '.datalad']
  */
 export const addFile = async (datasetId, path, file) => {
   try {
-    const { filename, mimetype, createReadStream } = await file
+    const { filename, mimetype, createReadStream, capacitor } = await file
     await redis.del(draftPartialKey(datasetId))
 
     // Skip any blacklisted files
@@ -212,6 +212,10 @@ export const addFile = async (datasetId, path, file) => {
     }
 
     const stream = createReadStream()
+
+    // This does not close the fs-capacitor stream until downstreamRequest has finished
+    // but it does prevent new readers and allows for cleanup of the temp file buffer
+    capacitor.destroy()
 
     // Start request to backend
     return new Promise((resolve, reject) => {
