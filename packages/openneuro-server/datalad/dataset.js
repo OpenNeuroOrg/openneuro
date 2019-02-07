@@ -213,7 +213,7 @@ export const addFile = async (datasetId, path, file) => {
 
     const stream = createReadStream()
 
-    // This does not close the fs-capacitor stream until downstreamRequest has finished
+    // This does not close the fs-capacitor stream until the stream has finished
     // but it does prevent new readers and allows for cleanup of the temp file buffer
     capacitor.destroy()
 
