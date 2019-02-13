@@ -8,6 +8,16 @@ const typeDefs = `
   scalar Upload
   scalar BigInt
 
+  directive @cacheControl(
+    maxAge: Int,
+    scope: CacheControlScope
+  ) on OBJECT | FIELD_DEFINITION
+
+  enum CacheControlScope {
+    PUBLIC
+    PRIVATE
+  }
+
   type Query {
     # One dataset
     dataset(id: ID!): Dataset
