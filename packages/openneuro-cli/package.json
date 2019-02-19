@@ -23,7 +23,8 @@
     "inquirer": "^5.2.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.22.2",
-    "openneuro-client": "^2.6.0"
+    "openneuro-client": "^2.6.0",
+    "superagent": "^4.1.0"
   },
   "scripts": {
     "openneuro": "node src/index.js"
