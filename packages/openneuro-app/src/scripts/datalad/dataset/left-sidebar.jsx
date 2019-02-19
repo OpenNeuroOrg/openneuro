@@ -25,7 +25,7 @@ SidebarRow.propTypes = {
   datasetId: PropTypes.string,
   id: PropTypes.string,
   version: PropTypes.string,
-  draft: PropTypes.boolean,
+  draft: PropTypes.bool,
 }
 
 const LeftSidebar = ({ datasetId, snapshots }) => (

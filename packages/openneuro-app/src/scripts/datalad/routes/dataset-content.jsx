@@ -10,7 +10,7 @@ const DatasetContent = ({ dataset }) => (
   <span>
     <div className="col-xs-6">
       <DatasetUploaded uploader={dataset.uploader} created={dataset.created} />
-      <DatasetModified modified={dataset.modified} />
+      <DatasetModified modified={dataset.draft.modified} />
       <DatasetAuthors authors={['J. Doe', 'J. Doe']} />
       <DatasetSummary summary={dataset.draft.summary} />
     </div>

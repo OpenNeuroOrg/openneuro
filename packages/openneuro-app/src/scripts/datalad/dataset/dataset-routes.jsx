@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch } from 'react-router-dom'
-import DatasetContent from './routes/dataset-content.jsx'
-import SnapshotContent from './routes/snapshot-content.jsx'
+import DatasetContent from '../routes/dataset-content.jsx'
+import SnapshotContent from '../routes/snapshot-content.jsx'
 
 const stubComponent = () => null
 
@@ -66,7 +66,11 @@ const DatasetRoutes = ({ dataset }) => (
       name="snapshot"
       exact
       path="/datasets/:datasetId/versions/:tag"
-      render={({ match: { params: { tag } } }) => {
+      render={({
+        match: {
+          params: { tag },
+        },
+      }) => {
         return <SnapshotContent dataset={dataset} tag={tag} />
       }}
     />

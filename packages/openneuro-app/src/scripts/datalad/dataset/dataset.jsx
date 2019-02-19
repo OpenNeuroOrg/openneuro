@@ -1,22 +1,22 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import DataLadDataset from './datalad.dataset.jsx'
+import DatasetQuery from './dataset-query.jsx'
 
-const DataLad = () => {
+const Dataset = () => {
   return (
     <div>
       <Route
         name="datalad-dataset"
         path="/datasets/:datasetId"
-        component={DataLadDataset}
+        component={DatasetQuery}
       />
       <Route
         name="datalad-snapshot"
         path="/datasets/:datasetId/version/:snapshotId"
-        component={DataLadDataset}
+        component={DatasetQuery}
       />
     </div>
   )
 }
 
-export default DataLad
+export default Dataset

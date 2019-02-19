@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
-import Spinner from '../common/partials/spinner.jsx'
+import Spinner from '../../common/partials/spinner.jsx'
 import DatasetPage from './dataset-page.jsx'
 
 const getDatasetPage = gql`
@@ -45,7 +45,7 @@ const getDatasetPage = gql`
   }
 `
 
-const DataLadDataset = ({ match }) => (
+const DatasetQuery = ({ match }) => (
   <Query
     query={getDatasetPage}
     variables={{ datasetId: match.params.datasetId }}>
@@ -61,8 +61,8 @@ const DataLadDataset = ({ match }) => (
   </Query>
 )
 
-DataLadDataset.propTypes = {
+DatasetQuery.propTypes = {
   match: PropTypes.object,
 }
 
-export default DataLadDataset
+export default DatasetQuery
