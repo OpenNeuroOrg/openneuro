@@ -14,7 +14,7 @@ const DatasetUploaded = ({ uploader, created }) => {
 }
 
 DatasetUploaded.propTypes = {
-  uploader: PropTypes.string,
+  uploader: PropTypes.object,
   created: PropTypes.string,
 }
 
