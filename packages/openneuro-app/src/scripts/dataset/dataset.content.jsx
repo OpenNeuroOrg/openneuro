@@ -124,8 +124,11 @@ class DatasetContent extends Reflux.Component {
 
     if (dataset) {
       let alert
-      // For drafts only
-      if (!('snapshot_version' in dataset)) {
+      // For drafts only and if the user has write access
+      if (
+        !('snapshot_version' in dataset) &&
+        (dataset.access === 'rw' || dataset.access == 'admin')
+      ) {
         if (dataset.public) {
           alert = (
             <div className="col-xs-12">
