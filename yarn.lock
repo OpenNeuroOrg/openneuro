@@ -3136,9 +3136,9 @@ aws-sdk@2.50.0:
     xmlbuilder "4.2.1"
 
 aws-sdk@^2.327.0:
-  version "2.413.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.413.0.tgz#65c2dbe53ecb3f964fd9f18a850f8f1adc55f598"
-  integrity sha512-0KwDyjEwyXkItCy8kk9k2nBLGvhB1LzgTglsP80P+/6P6LdH0I47OG9wTXBsOGWqziG2Hp3gs1TxNrISf851Vw==
+  version "2.414.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.414.0.tgz#38f43a536fc47ecd407049565737a0fb009d4cc9"
+  integrity sha512-ZJvZei479gJdp0N2MKb1I0COcowNIN5L5cllooMV0RPztrianR72SyE1gquPeT7TA37l/fVuSmYat2dh4C2GTg==
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -3505,10 +3505,10 @@ bcrypt@^2.0.1:
     nan "2.10.0"
     node-pre-gyp "0.9.1"
 
-bids-validator@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.2.0.tgz#10de4586e74f7aedc9efe974d50b382096ce38b9"
-  integrity sha512-U/yRz/b3ccf8Sk0NlkbU/haKRdquGmJIklYBKEQwJIgmhMSDcv4GKGq6tmWVUb1MaGuVRZJjUwCzTtKnH0A+Yw==
+bids-validator@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.2.1.tgz#d8b6415184d8172ee6dd84ae2cadda4a18d20725"
+  integrity sha512-tvdKdHF2BPfyXub4QH0ZDcYr7kB40ixUDAwAuf6iznZGr48YWLv/DboLna2q869Nj2cHcaWT1nBJxIAew7oDjQ==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"
@@ -4039,9 +4039,9 @@ camelcase@^4.1.0:
   integrity sha1-1UVjW+HjPFQmScaRc+Xeas+uNN0=
 
 camelcase@^5.0.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.1.0.tgz#29e83b9cfaf7ad478f401a187ae089cf83c257ea"
-  integrity sha512-WP9f9OBL/TAbwOFBJL79FoS9UKUmnp82RWnhlwTgrAJeMq7lytHhe0Jzc6/P7Zq0+2oviXJuPlvkZalWUug9gg==
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-5.2.0.tgz#e7522abda5ed94cc0489e1b8466610e88404cf45"
+  integrity sha512-IXFsBS2pC+X0j0N/GE7Dm7j3bsEBp+oTpb7F50dwEVX7rf3IgwO9XatnegTsDtniKCUtEJH4fSU6Asw7uoVLfQ==
 
 caniuse-lite@^1.0.30000898:
   version "1.0.30000898"
