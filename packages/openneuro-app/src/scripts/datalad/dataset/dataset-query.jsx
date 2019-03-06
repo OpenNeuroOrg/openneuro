@@ -16,6 +16,10 @@ const getDatasetPage = gql`
         name
         email
       }
+      analytics {
+        downloads
+        views
+      }
       draft {
         id
         modified

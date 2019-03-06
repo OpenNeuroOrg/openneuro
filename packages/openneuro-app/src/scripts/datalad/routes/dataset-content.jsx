@@ -5,6 +5,7 @@ import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
 import DatasetModified from '../fragments/dataset-modified.jsx'
 import DatasetAuthors from '../fragments/dataset-authors.jsx'
 import DatasetSummary from '../fragments/dataset-summary.jsx'
+import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
 
 const DatasetContent = ({ dataset }) => (
@@ -14,6 +15,7 @@ const DatasetContent = ({ dataset }) => (
       <DatasetUploaded uploader={dataset.uploader} created={dataset.created} />
       <DatasetModified modified={dataset.draft.modified} />
       <DatasetAuthors authors={dataset.draft.description.Authors} />
+      <DatasetAnalytics downloads={dataset.downloads} views={dataset.views} />
       <DatasetSummary summary={dataset.draft.summary} />
     </div>
     <div className="col-xs-6">
