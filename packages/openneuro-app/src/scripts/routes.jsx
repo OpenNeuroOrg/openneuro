@@ -5,7 +5,7 @@ import loadable from 'loadable-components'
 
 // wrap with loadable HOC
 const Dataset = loadable(() =>
-  import(/* webpackChunkName: 'Dataset' */ './dataset/dataset.jsx'),
+  import(/* webpackChunkName: 'Dataset' */ './datalad/dataset/dataset.jsx'),
 )
 const FrontPage = loadable(() =>
   import(/* webpackChunkName: 'FrontPage' */ './front-page/front-page.jsx'),
