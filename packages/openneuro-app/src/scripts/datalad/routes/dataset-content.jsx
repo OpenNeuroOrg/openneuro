@@ -13,7 +13,7 @@ const DatasetContent = ({ dataset }) => (
       <DatasetTitle title={dataset.draft.description.Name} />
       <DatasetUploaded uploader={dataset.uploader} created={dataset.created} />
       <DatasetModified modified={dataset.draft.modified} />
-      <DatasetAuthors authors={['J. Doe', 'J. Doe']} />
+      <DatasetAuthors authors={dataset.draft.description.Authors} />
       <DatasetSummary summary={dataset.draft.summary} />
     </div>
     <div className="col-xs-6">
