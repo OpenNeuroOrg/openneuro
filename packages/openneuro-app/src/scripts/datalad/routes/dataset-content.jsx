@@ -8,6 +8,7 @@ import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
+import DatasetDescription from '../dataset/dataset-description.jsx'
 import Validation from '../validation/validation.jsx'
 
 /**
@@ -23,6 +24,7 @@ const DatasetContent = ({ dataset }) => (
       <DatasetAnalytics downloads={dataset.downloads} views={dataset.views} />
       <DatasetSummary summary={dataset.draft.summary} />
       <DatasetReadme content={dataset.draft.readme} />
+      <DatasetDescription description={dataset.draft.description} />
     </div>
     <div className="col-xs-6">
       <Validation datasetId={dataset.id} />

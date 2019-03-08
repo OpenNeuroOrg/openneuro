@@ -27,6 +27,12 @@ const getDatasetPage = gql`
         description {
           Name
           Authors
+          DatasetDOI
+          License
+          Acknowledgements
+          HowToAcknowledge
+          Funding
+          ReferencesAndLinks
         }
         files {
           id
