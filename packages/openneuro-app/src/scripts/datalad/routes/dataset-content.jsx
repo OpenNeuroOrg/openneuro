@@ -8,6 +8,7 @@ import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
+import Validation from '../validation/validation.jsx'
 
 /**
  * Data routing for the main dataset query to display/edit components
@@ -24,6 +25,7 @@ const DatasetContent = ({ dataset }) => (
       <DatasetReadme content={dataset.draft.readme} />
     </div>
     <div className="col-xs-6">
+      <Validation datasetId={dataset.id} />
       <DatasetFiles files={dataset.draft.files} />
     </div>
   </span>
