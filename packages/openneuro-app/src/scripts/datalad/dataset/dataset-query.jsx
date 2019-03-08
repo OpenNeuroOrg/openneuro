@@ -23,6 +23,7 @@ const getDatasetPage = gql`
       draft {
         id
         modified
+        readme
         description {
           Name
           Authors

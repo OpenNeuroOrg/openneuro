@@ -7,7 +7,11 @@ import DatasetAuthors from '../fragments/dataset-authors.jsx'
 import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
+import DatasetReadme from '../fragments/dataset-readme.jsx'
 
+/**
+ * Data routing for the main dataset query to display/edit components
+ */
 const DatasetContent = ({ dataset }) => (
   <span>
     <div className="col-xs-6">
@@ -17,6 +21,7 @@ const DatasetContent = ({ dataset }) => (
       <DatasetAuthors authors={dataset.draft.description.Authors} />
       <DatasetAnalytics downloads={dataset.downloads} views={dataset.views} />
       <DatasetSummary summary={dataset.draft.summary} />
+      <DatasetReadme content={dataset.draft.readme} />
     </div>
     <div className="col-xs-6">
       <DatasetFiles files={dataset.draft.files} />
