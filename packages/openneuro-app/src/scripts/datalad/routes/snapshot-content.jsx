@@ -3,10 +3,12 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
 import Spinner from '../../common/partials/spinner.jsx'
+import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
 import DatasetModified from '../fragments/dataset-modified.jsx'
 import DatasetAuthors from '../fragments/dataset-authors.jsx'
 import DatasetSummary from '../fragments/dataset-summary.jsx'
+import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
@@ -33,6 +35,10 @@ const getSnapshotDetails = gql`
         id
         filename
         size
+      }
+      analytics {
+        downloads
+        views
       }
     }
   }
@@ -66,12 +72,17 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
   return (
     <span>
       <div className="col-xs-6">
+        <DatasetTitle title={snapshot.description.Name} />
         <DatasetUploaded
           uploader={dataset.uploader}
           created={dataset.created}
         />
         <DatasetModified modified={snapshot.created} />
         <DatasetAuthors authors={snapshot.description.Authors} />
+        <DatasetAnalytics
+          downloads={snapshot.downloads}
+          views={snapshot.views}
+        />
         <DatasetSummary summary={snapshot.summary} />
         <h6>{`snapshot tag: ${snapshot.tag}`}</h6>
         <DatasetReadme content={snapshot.readme} />
