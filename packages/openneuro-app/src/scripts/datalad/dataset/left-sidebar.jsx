@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
 
 const SidebarRow = ({ datasetId, id, version, draft = false, active }) => {
   const url = draft
@@ -31,37 +31,45 @@ SidebarRow.propTypes = {
   draft: PropTypes.bool,
 }
 
-const LeftSidebar = ({ datasetId, snapshots, active }) => (
-  <div className="left-sidebar">
-    <span className="slide">
-      <div role="presentation" className="snapshot-select">
-        <span>
-          <h3>Versions</h3>
-          <ul>
-            <SidebarRow
-              key={'Draft'}
-              id={datasetId}
-              datasetId={datasetId}
-              version={'Draft'}
-              draft
-              active={active}
-            />
-            {snapshots.map(snapshot => (
+export const snapshotVersion = location => {
+  const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
+  return matches && matches[1]
+}
+
+const LeftSidebar = ({ datasetId, snapshots, location }) => {
+  const active = snapshotVersion(location) || 'draft'
+  return (
+    <div className="left-sidebar">
+      <span className="slide">
+        <div role="presentation" className="snapshot-select">
+          <span>
+            <h3>Versions</h3>
+            <ul>
               <SidebarRow
-                key={snapshot.id}
-                id={snapshot.id}
+                key={'Draft'}
+                id={datasetId}
                 datasetId={datasetId}
-                version={snapshot.tag}
-                modified={snapshot.created}
+                version={'Draft'}
+                draft
                 active={active}
               />
-            ))}
-          </ul>
-        </span>
-      </div>
-    </span>
-  </div>
-)
+              {snapshots.map(snapshot => (
+                <SidebarRow
+                  key={snapshot.id}
+                  id={snapshot.id}
+                  datasetId={datasetId}
+                  version={snapshot.tag}
+                  modified={snapshot.created}
+                  active={active}
+                />
+              ))}
+            </ul>
+          </span>
+        </div>
+      </span>
+    </div>
+  )
+}
 
 LeftSidebar.propTypes = {
   active: PropTypes.string,
@@ -69,4 +77,4 @@ LeftSidebar.propTypes = {
   snapshots: PropTypes.array,
 }
 
-export default LeftSidebar
+export default withRouter(LeftSidebar)

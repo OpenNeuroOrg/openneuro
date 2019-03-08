@@ -8,12 +8,27 @@ import DatasetModified from '../fragments/dataset-modified.jsx'
 import DatasetAuthors from '../fragments/dataset-authors.jsx'
 import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
+import DatasetReadme from '../fragments/dataset-readme.jsx'
+import DatasetDescription from '../dataset/dataset-description.jsx'
+import Validation from '../validation/validation.jsx'
 
 const getSnapshotDetails = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
     snapshot(datasetId: $datasetId, tag: $tag) {
       id
       tag
+      created
+      readme
+      description {
+        Name
+        Authors
+        DatasetDOI
+        License
+        Acknowledgements
+        HowToAcknowledge
+        Funding
+        ReferencesAndLinks
+      }
       files {
         id
         filename
@@ -55,12 +70,15 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           uploader={dataset.uploader}
           created={dataset.created}
         />
-        <DatasetModified modified={snapshot.modified} />
-        <DatasetAuthors authors={['J. Doe', 'J. Doe']} />
+        <DatasetModified modified={snapshot.created} />
+        <DatasetAuthors authors={snapshot.description.Authors} />
         <DatasetSummary summary={snapshot.summary} />
         <h6>{`snapshot tag: ${snapshot.tag}`}</h6>
+        <DatasetReadme content={snapshot.readme} />
+        <DatasetDescription description={snapshot.description} />
       </div>
       <div className="col-xs-6">
+        <Validation datasetId={dataset.id} />
         <DatasetFiles files={snapshot.files} />
       </div>
     </span>
