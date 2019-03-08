@@ -8,7 +8,7 @@ const DatasetReadme = ({ content }) => {
   return (
     <div>
       <h2>README</h2>
-      <span>{content}</span>
+      <pre>{content}</pre>
     </div>
   )
 }
