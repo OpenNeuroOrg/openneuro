@@ -1,6 +1,7 @@
 import { summary } from './summary.js'
 import { issues } from './issues.js'
 import { description } from './description.js'
+import { readme } from './readme.js'
 import { getDraftFiles, getPartialStatus } from '../../datalad/draft.js'
 
 // A draft must have a dataset parent
@@ -17,6 +18,7 @@ export const draft = obj => ({
   partial: () => partial(obj, { datasetId: obj.id }),
   description: () =>
     description(obj, { datasetId: obj.id, revision: obj.revision }),
+  readme: () => readme(obj, { datasetId: obj.id, revision: obj.revision }),
 })
 
 /**

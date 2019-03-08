@@ -1,6 +1,7 @@
 import * as datalad from '../../datalad/snapshots.js'
 import { dataset, analytics } from './dataset.js'
 import { checkDatasetWrite } from '../permissions.js'
+import { readme } from './readme.js'
 import { description } from './description.js'
 
 export const snapshots = obj => {
@@ -12,6 +13,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     ...snapshot,
     dataset: () => dataset(snapshot, { id: datasetId }, context),
     description: () => description(obj, { datasetId, tag }),
+    readme: () => readme(obj, { datasetId, revision: tag }),
   }))
 }
 

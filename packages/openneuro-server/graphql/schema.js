@@ -238,6 +238,8 @@ const typeDefs = `
     partial: Boolean
     # dataset_description.json fields
     description: Description
+    # Dataset README
+    readme: String
   }
 
   # Tagged snapshot of a draft
@@ -259,6 +261,8 @@ const typeDefs = `
     description: Description
     # Snapshot usage and download statistics
     analytics: Analytic
+    # Dataset README
+    readme: String @cacheControl(maxAge: 31536000, scope: PUBLIC)
   }
 
   # Contents of dataset_description.json
