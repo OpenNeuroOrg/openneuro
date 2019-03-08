@@ -51,6 +51,7 @@ const getDatasetPage = gql`
       snapshots {
         id
         tag
+        created
       }
     }
   }

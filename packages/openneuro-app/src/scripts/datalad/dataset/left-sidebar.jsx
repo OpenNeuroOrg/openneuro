@@ -2,13 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
-const SidebarRow = ({ datasetId, id, version, draft = false }) => {
+const SidebarRow = ({ datasetId, id, version, draft = false, active }) => {
   const url = draft
     ? `/datasets/${datasetId}`
     : `/datasets/${datasetId}/versions/${version}`
+  const activeClass = draft
+    ? (active === 'draft' && 'active') || ''
+    : (active === version && 'active') || ''
   return (
     <li key={id}>
-      <Link to={url}>
+      <Link to={url} className={activeClass}>
         <div className="clearfix">
           <div className=" col-xs-12">
             <span className="dataset-type">{version}</span>
@@ -28,7 +31,7 @@ SidebarRow.propTypes = {
   draft: PropTypes.bool,
 }
 
-const LeftSidebar = ({ datasetId, snapshots }) => (
+const LeftSidebar = ({ datasetId, snapshots, active }) => (
   <div className="left-sidebar">
     <span className="slide">
       <div role="presentation" className="snapshot-select">
@@ -41,6 +44,7 @@ const LeftSidebar = ({ datasetId, snapshots }) => (
               datasetId={datasetId}
               version={'Draft'}
               draft
+              active={active}
             />
             {snapshots.map(snapshot => (
               <SidebarRow
@@ -48,7 +52,8 @@ const LeftSidebar = ({ datasetId, snapshots }) => (
                 id={snapshot.id}
                 datasetId={datasetId}
                 version={snapshot.tag}
-                modified={new Date()}
+                modified={snapshot.created}
+                active={active}
               />
             ))}
           </ul>
@@ -59,6 +64,7 @@ const LeftSidebar = ({ datasetId, snapshots }) => (
 )
 
 LeftSidebar.propTypes = {
+  active: PropTypes.string,
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
 }
