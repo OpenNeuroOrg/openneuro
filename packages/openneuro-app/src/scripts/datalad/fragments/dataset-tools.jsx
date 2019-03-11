@@ -22,9 +22,33 @@ const toolConfig = [
     write: true,
   },
   {
+    tooltip: 'Delete Dataset',
+    icon: 'fa-trash',
+    link: 'delete',
+    write: true,
+  },
+  {
+    tooltip: 'Share Dataset',
+    icon: 'fa-user icon-plus',
+    link: 'share',
+    write: false,
+  },
+  {
+    tooltip: 'Create Snapshot',
+    icon: 'fa-camera-retro icon-plus',
+    link: 'snapshot',
+    write: true,
+  },
+  {
     tooptip: 'Follow Dataset',
     icon: 'fa-tag icon-plus',
     link: 'follow',
+    write: false,
+  },
+  {
+    tooptip: 'Star Dataset',
+    icon: 'fa-star icon-plus',
+    link: 'star',
     write: false,
   },
 ]
@@ -34,12 +58,8 @@ const DatasetToolButton = ({ tool }) => (
     <WarnButton
       tooltip={tool.tooltip}
       icon={tool.icon}
-      prepDownload={tool.prepDownload}
-      action={tool.action}
+      modalLink={tool.link}
       warn={tool.write}
-      link={tool.link}
-      modalLink={tool.modalLink}
-      validations={tool.validations}
     />
   </div>
 )
