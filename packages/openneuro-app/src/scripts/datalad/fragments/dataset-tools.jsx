@@ -36,7 +36,7 @@ const DatasetToolButton = ({ tool }) => (
       icon={tool.icon}
       prepDownload={tool.prepDownload}
       action={tool.action}
-      warn={tool.warn}
+      warn={tool.write}
       link={tool.link}
       modalLink={tool.modalLink}
       validations={tool.validations}
