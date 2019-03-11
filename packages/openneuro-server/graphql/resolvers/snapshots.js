@@ -3,6 +3,7 @@ import { dataset, analytics } from './dataset.js'
 import { checkDatasetWrite } from '../permissions.js'
 import { readme } from './readme.js'
 import { description } from './description.js'
+import { summary } from './summary.js'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -14,6 +15,7 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     dataset: () => dataset(snapshot, { id: datasetId }, context),
     description: () => description(obj, { datasetId, tag }),
     readme: () => readme(obj, { datasetId, revision: tag }),
+    summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
   }))
 }
 

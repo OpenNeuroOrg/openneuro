@@ -36,6 +36,14 @@ const getSnapshotDetails = gql`
         filename
         size
       }
+      summary {
+        modalities
+        sessions
+        subjects
+        tasks
+        size
+        totalFiles
+      }
       analytics {
         downloads
         views
@@ -79,12 +87,12 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
         />
         <DatasetModified modified={snapshot.created} />
         <DatasetAuthors authors={snapshot.description.Authors} />
+        <h6>{`snapshot tag: ${snapshot.tag}`}</h6>
         <DatasetAnalytics
           downloads={snapshot.downloads}
           views={snapshot.views}
         />
         <DatasetSummary summary={snapshot.summary} />
-        <h6>{`snapshot tag: ${snapshot.tag}`}</h6>
         <DatasetReadme content={snapshot.readme} />
         <DatasetDescription description={snapshot.description} />
       </div>

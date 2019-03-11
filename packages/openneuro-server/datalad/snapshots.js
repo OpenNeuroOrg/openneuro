@@ -194,15 +194,16 @@ export const getSnapshot = async (datasetId, tag) => {
               .findOne({ datasetId, tag }, { files: true })
               .then(result => (result ? result.files : false))
           }
-          let created = await c.crn.snapshots
-            .findOne({ datasetId, tag })
-            .then(result => result.created)
+          const { created, hexsha } = await c.crn.snapshots.findOne({
+            datasetId,
+            tag,
+          })
 
           // If not public, fallback URLs are used
           const filesWithUrls = body.files.map(
             addFileUrl(datasetId, tag, externalFiles),
           )
-          const snapshot = { ...body, created, files: filesWithUrls }
+          const snapshot = { ...body, created, files: filesWithUrls, hexsha }
           redis.set(key, JSON.stringify(snapshot))
           return snapshot
         })
