@@ -263,6 +263,8 @@ const typeDefs = `
     analytics: Analytic
     # Dataset README
     readme: String @cacheControl(maxAge: 31536000, scope: PUBLIC)
+    # The git hash associated with this snapshot
+    hexsha: String
   }
 
   # Contents of dataset_description.json
