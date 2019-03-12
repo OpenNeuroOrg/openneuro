@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
+import snapshotVersion from '../snapshotVersion.js'
 
 const SidebarRow = ({ datasetId, id, version, draft = false, active }) => {
   const url = draft
@@ -29,11 +30,6 @@ SidebarRow.propTypes = {
   id: PropTypes.string,
   version: PropTypes.string,
   draft: PropTypes.bool,
-}
-
-export const snapshotVersion = location => {
-  const matches = location.pathname.match(/versions\/(.*?)(\/|$)/)
-  return matches && matches[1]
 }
 
 const LeftSidebar = ({ datasetId, snapshots, location }) => {
