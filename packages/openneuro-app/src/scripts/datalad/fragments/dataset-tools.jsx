@@ -1,81 +1,90 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import WarnButton from '../../common/forms/warn-button.jsx'
+import snapshotVersion from '../snapshotVersion.js'
+import DownloadButton from './tools/download-button.jsx'
+import * as actions from './dataset-tools-actions.js'
 
 /**
  * tooltip: text for tooltip
  * icon: fa-icon for this button
- * link: the route associated with the button
+ * action: the action function associated with this
  * write: is this a mutation?
  */
 const toolConfig = [
   {
     tooltip: 'Download Dataset',
     icon: 'fa-download',
-    link: 'download',
+    action: actions.download,
     write: false,
   },
   {
     tooltip: 'Publish Dataset',
     icon: 'fa-globe icon-plus',
-    link: 'publish',
+    action: actions.publish,
     write: true,
   },
   {
     tooltip: 'Delete Dataset',
     icon: 'fa-trash',
-    link: 'delete',
+    action: actions.del,
     write: true,
   },
   {
     tooltip: 'Share Dataset',
     icon: 'fa-user icon-plus',
-    link: 'share',
+    action: actions.share,
     write: false,
   },
   {
     tooltip: 'Create Snapshot',
     icon: 'fa-camera-retro icon-plus',
-    link: 'snapshot',
+    action: actions.snapshot,
     write: true,
   },
   {
     tooptip: 'Follow Dataset',
     icon: 'fa-tag icon-plus',
-    link: 'follow',
+    action: actions.follow,
     write: false,
   },
   {
     tooptip: 'Star Dataset',
     icon: 'fa-star icon-plus',
-    link: 'star',
+    action: actions.star,
     write: false,
   },
 ]
 
-const DatasetToolButton = ({ tool }) => (
-  <div role="presentation" className="tool">
-    <WarnButton
-      tooltip={tool.tooltip}
-      icon={tool.icon}
-      modalLink={tool.link}
-      warn={tool.write}
-    />
-  </div>
-)
-
-const DatasetTools = ({ edit }) => (
-  <div className="col-xs-12 dataset-tools-wrap">
-    <div className="tools clearfix">
-      {toolConfig.map(tool => (
-        <DatasetToolButton tool={tool} key={tool.link} />
-      ))}
-    </div>
-  </div>
-)
-
-DatasetTools.propTypes = {
-  title: PropTypes.string,
+const toolRedirect = (history, rootPath, path) => {
+  history.push(`${rootPath}/${path}`)
 }
 
-export default DatasetTools
+const DatasetTools = ({ dataset, edit, location, history }) => {
+  const snapshot = snapshotVersion(location)
+  const rootPath = snapshot
+    ? `/datasets/${dataset.id}/versions/${snapshot}`
+    : `/datasets/${dataset.id}`
+  return (
+    <div className="col-xs-12 dataset-tools-wrap">
+      <div className="tools clearfix">
+        <div role="presentation" className="tool">
+          <DownloadButton
+            action={cb => {
+              toolRedirect(history, rootPath, 'download')
+              cb()
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+DatasetTools.propTypes = {
+  dataset: PropTypes.object,
+  edit: PropTypes.bool,
+  location: PropTypes.object,
+  history: PropTypes.object,
+}
+
+export default withRouter(DatasetTools)
