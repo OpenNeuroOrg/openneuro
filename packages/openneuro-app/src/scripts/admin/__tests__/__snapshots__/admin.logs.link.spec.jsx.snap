@@ -2,7 +2,6 @@
 
 exports[`admin/LogLink links to datasets 1`] = `
 <Link
-  replace={false}
   to="/datasets/someid"
 >
   somedataset
@@ -11,7 +10,6 @@ exports[`admin/LogLink links to datasets 1`] = `
 
 exports[`admin/LogLink links to jobs 1`] = `
 <Link
-  replace={false}
   to="/datasets/someid/versions/anotherid"
 >
   somedataset
