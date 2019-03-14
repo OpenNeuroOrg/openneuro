@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import DatasetRoutes from './dataset-routes.jsx'
+import DatasetRoutes from '../routes/dataset-routes.jsx'
 import DatasetComments from './dataset-comments.jsx'
 
 const DatasetMain = ({ dataset }) => (
