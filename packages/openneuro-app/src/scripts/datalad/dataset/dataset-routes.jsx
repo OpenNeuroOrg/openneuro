@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Route, Switch } from 'react-router-dom'
 import DatasetContent from '../routes/dataset-content.jsx'
 import SnapshotContent from '../routes/snapshot-content.jsx'
+import DownloadDataset from '../download/download-dataset.jsx'
 
 const stubComponent = () => null
 
@@ -13,6 +14,12 @@ const DatasetRoutes = ({ dataset }) => (
       exact
       path="/datasets/:datasetId"
       render={() => <DatasetContent dataset={dataset} />}
+    />
+    <Route
+      name="publish"
+      exact
+      path="/datasets/:datasetId/download"
+      component={DownloadDataset}
     />
     <Route
       name="snapshot-create"
@@ -73,6 +80,12 @@ const DatasetRoutes = ({ dataset }) => (
       }) => {
         return <SnapshotContent dataset={dataset} tag={tag} />
       }}
+    />
+    <Route
+      name="publish"
+      exact
+      path="/datasets/:datasetId/versions/:snapshotId/download"
+      component={DownloadDataset}
     />
   </Switch>
 )
