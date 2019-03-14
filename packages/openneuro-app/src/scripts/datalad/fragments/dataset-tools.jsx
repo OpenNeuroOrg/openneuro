@@ -47,10 +47,22 @@ const toolConfig = [
   },
 ]
 
+/**
+ * Immediate redirect to a dataset or snapshot route
+ * @param {object} history react-router-dom history
+ * @param {*} rootPath base path for relative redirects
+ * @param {*} path target path for redirect
+ */
 const toolRedirect = (history, rootPath, path) => {
   history.push(`${rootPath}/${path}`)
 }
 
+/**
+ * Toolbar parent component
+ *
+ * Dataset is the API object for the context (dataset or snapshot)
+ * Edit boolean controls if the user should see write actions
+ */
 const DatasetTools = ({ dataset, edit, location, history }) => {
   const snapshot = snapshotVersion(location)
   const rootPath = snapshot
