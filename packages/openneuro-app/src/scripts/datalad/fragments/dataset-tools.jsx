@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion.js'
-import DownloadButton from './tools/download-button.jsx'
+import WarnButton from '../../common/forms/warn-button.jsx'
 
 /**
  * tooltip: text for tooltip
@@ -62,23 +62,68 @@ const toolRedirect = (history, rootPath, path) => {
  * Toolbar parent component
  *
  * Dataset is the API object for the context (dataset or snapshot)
- * Edit boolean controls if the user should see write actions
  */
-const DatasetTools = ({ dataset, edit, location, history }) => {
+const DatasetTools = ({ dataset, location, history }) => {
   const snapshot = snapshotVersion(location)
   const rootPath = snapshot
     ? `/datasets/${dataset.id}/versions/${snapshot}`
     : `/datasets/${dataset.id}`
+  // TODO - disable if you lack write access to the draft
+  const edit = snapshot ? false : true
   return (
     <div className="col-xs-12 dataset-tools-wrap">
       <div className="tools clearfix">
         <div role="presentation" className="tool">
-          <DownloadButton
+          <WarnButton
+            tooltip="Download Dataset"
+            icon="fa-download"
+            warn={false}
             action={cb => {
               toolRedirect(history, rootPath, 'download')
               cb()
             }}
           />
+        </div>
+        <div role="presentation" className="tool">
+          {edit && (
+            <WarnButton
+              tooltip="Publish Dataset"
+              icon="fa-globe icon-plus"
+              warn={false}
+              action={cb => {
+                toolRedirect(history, rootPath, 'publish')
+                cb()
+              }}
+            />
+          )}
+        </div>
+        <div role="presentation" className="tool">
+          {edit && (
+            <WarnButton
+              tooltip="Delete Dataset"
+              icon="fa-trash"
+              warn={true}
+              display={edit}
+              action={cb => {
+                toolRedirect(history, rootPath, 'delete')
+                cb()
+              }}
+            />
+          )}
+        </div>
+        <div role="presentation" className="tool">
+          {edit && (
+            <WarnButton
+              tooltip="Share Dataset"
+              icon="fa-user icon-plus"
+              warn={false}
+              display={edit}
+              action={cb => {
+                toolRedirect(history, rootPath, 'share')
+                cb()
+              }}
+            />
+          )}
         </div>
       </div>
     </div>

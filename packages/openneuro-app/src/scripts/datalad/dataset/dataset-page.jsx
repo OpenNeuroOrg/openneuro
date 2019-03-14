@@ -33,7 +33,7 @@ export default class DatasetPage extends React.Component {
             sidebar={this.state.sidebar}
             toggle={this.toggleSidebar}
           />
-          <DatasetTools dataset={this.props.dataset} edit={true} />
+          <DatasetTools dataset={this.props.dataset} />
           <div className="fade-in inner-route dataset-route light">
             <div className="clearfix dataset-wrap">
               <div className="dataset-animation">
