@@ -18,6 +18,7 @@
   "dependencies": {
     "@emotion/core": "^10.0.4",
     "@emotion/styled": "^10.0.4",
+    "@loadable/component": "^5.7.0",
     "@sentry/browser": "^4.5.3",
     "@types/jasmine": "^2.8.9",
     "apollo-client": "^2.4.7",
@@ -43,7 +44,6 @@
     "jwt-decode": "^2.2.0",
     "lerna": "^3.4.3",
     "lint-staged": "^7.3.0",
-    "loadable-components": "^2.2.2",
     "lodash.clonedeep": "^4.5.0",
     "openneuro-client": "^2.6.0",
     "pluralize": "^7.0.0",
@@ -88,6 +88,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/runtime": "^7.1.2",
+    "@loadable/babel-plugin": "^5.7.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",

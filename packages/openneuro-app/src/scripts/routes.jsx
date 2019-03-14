@@ -1,7 +1,7 @@
 // dependencies ----------------------------------------------------------
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import loadable from 'loadable-components'
+import loadable from '@loadable/component'
 
 // wrap with loadable HOC
 const Dataset = loadable(() =>
