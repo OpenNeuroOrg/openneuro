@@ -30,7 +30,7 @@ SidebarRow.propTypes = {
   id: PropTypes.string,
   version: PropTypes.string,
   draft: PropTypes.bool,
-  active: PropTypes.bool,
+  active: PropTypes.string,
 }
 
 const LeftSidebar = ({ datasetId, snapshots, location }) => {
