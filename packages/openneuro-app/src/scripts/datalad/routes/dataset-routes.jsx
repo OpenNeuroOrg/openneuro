@@ -26,7 +26,7 @@ const DatasetRoutes = ({ dataset }) => (
       name="publish"
       exact
       path="/datasets/:datasetId/publish"
-      component={Publish}
+      component={() => <Publish datasetId={dataset.id} />}
     />
     <Route
       name="snapshot-create"
