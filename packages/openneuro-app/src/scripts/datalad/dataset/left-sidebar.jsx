@@ -30,6 +30,7 @@ SidebarRow.propTypes = {
   id: PropTypes.string,
   version: PropTypes.string,
   draft: PropTypes.bool,
+  active: PropTypes.bool,
 }
 
 const LeftSidebar = ({ datasetId, snapshots, location }) => {
@@ -71,6 +72,7 @@ LeftSidebar.propTypes = {
   active: PropTypes.string,
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
+  location: PropTypes.object,
 }
 
 export default withRouter(LeftSidebar)

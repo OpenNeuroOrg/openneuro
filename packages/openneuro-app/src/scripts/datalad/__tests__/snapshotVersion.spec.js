@@ -1,4 +1,4 @@
-import snapshotVersion from './snapshotVersion.js'
+import snapshotVersion from '../snapshotVersion.js'
 
 describe('LeftSidebar', () => {
   describe('snapshotVersion', () => {

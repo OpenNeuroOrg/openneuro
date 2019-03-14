@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import WarnButton from '../../../common/forms/warn-button.jsx'
 
@@ -15,6 +15,7 @@ const DownloadButton = ({ action }) => {
 
 DownloadButton.propTypes = {
   title: PropTypes.string,
+  action: PropTypes.func,
 }
 
 export default DownloadButton
