@@ -7,8 +7,8 @@ const DatasetDescription = ({ description }) => (
       <h2>Authors</h2>
       <span>
         {description.Authors &&
-          description.Authors.map(author => (
-            <div className="row" key={author}>
+          description.Authors.map((author, index) => (
+            <div className="row" key={index}>
               {author}
             </div>
           ))}
