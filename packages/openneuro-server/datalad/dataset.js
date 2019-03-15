@@ -71,6 +71,7 @@ export const deleteDataset = id =>
   request
     .del(`${uri}/datasets/${id}`)
     .then(() => Dataset.deleteOne({ id }).exec())
+    .then(() => true)
 
 /**
  * For public datasets, cache combinations of sorts/limits/cursors to speed responses

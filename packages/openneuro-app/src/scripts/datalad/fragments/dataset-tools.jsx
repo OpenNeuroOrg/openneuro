@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion.js'
 import WarnButton from '../../common/forms/warn-button.jsx'
+import DeleteDataset from '../mutations/delete.jsx'
 
 /**
  * Immediate redirect to a dataset or snapshot route
@@ -54,17 +55,7 @@ const DatasetTools = ({ dataset, location, history }) => {
           )}
         </div>
         <div role="presentation" className="tool">
-          {edit && (
-            <WarnButton
-              tooltip="Delete Dataset"
-              icon="fa-trash"
-              warn={true}
-              action={cb => {
-                console.log('Delete dataset')
-                cb()
-              }}
-            />
-          )}
+          {edit && <DeleteDataset datasetId={dataset.id} />}
         </div>
         <div role="presentation" className="tool">
           {edit && (
