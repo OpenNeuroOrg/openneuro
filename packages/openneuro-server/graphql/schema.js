@@ -170,7 +170,7 @@ const typeDefs = `
   }
 
   # Top level dataset, one draft and many snapshots
-  type Dataset { 
+  type Dataset {
     id: ID!
     created: DateTime!
     uploader: User
@@ -183,6 +183,8 @@ const typeDefs = `
     followers: [Follower]
     # Canonical name, latest snapshot or draft if no snapshot or default if neither
     name: String
+    # User comments on this dataset
+    comments: [Comment]
   }
 
   enum SortOrdering {
@@ -405,6 +407,20 @@ const typeDefs = `
     tag: String
     views: Int
     downloads: Int
+  }
+
+  type Comment {
+    id: ID!
+    # Comment draft.js body
+    text: String!
+    # User posting the comment
+    user: User
+    # Comment creation time
+    created: DateTime!
+    # Any comment this is a reply to
+    parent: Comment
+    # Any replies to this comment
+    replies: [Comment]
   }
 
   # Types of analytics

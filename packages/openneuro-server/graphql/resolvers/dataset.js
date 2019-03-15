@@ -6,6 +6,7 @@ import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { user } from './user.js'
 import { draft } from './draft.js'
 import { permissions } from './permissions.js'
+import { datasetComments } from './comment.js'
 import DatasetModel from '../../models/dataset.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
@@ -238,6 +239,7 @@ const Dataset = {
       ),
     ),
   name: datasetName,
+  comments: datasetComments,
 }
 
 export default Dataset
