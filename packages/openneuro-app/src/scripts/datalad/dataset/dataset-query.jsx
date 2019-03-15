@@ -53,6 +53,41 @@ const getDatasetPage = gql`
         tag
         created
       }
+      comments {
+        id
+        text
+        user {
+          email
+        }
+        replies {
+          id
+          text
+          user {
+            email
+          }
+          replies {
+            id
+            text
+            user {
+              email
+            }
+            replies {
+              id
+              text
+              user {
+                email
+              }
+              replies {
+                id
+                text
+                user {
+                  email
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 `

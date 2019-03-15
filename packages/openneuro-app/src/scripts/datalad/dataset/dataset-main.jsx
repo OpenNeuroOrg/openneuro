@@ -9,7 +9,10 @@ const DatasetMain = ({ dataset }) => (
       <DatasetRoutes dataset={dataset} />
     </div>
     <div className="row">
-      <DatasetComments datasetId={dataset.id} />
+      <DatasetComments
+        uploader={dataset.uploader}
+        comments={dataset.comments}
+      />
     </div>
   </>
 )
