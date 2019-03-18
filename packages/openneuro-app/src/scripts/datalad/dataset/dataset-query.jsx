@@ -56,30 +56,35 @@ const getDatasetPage = gql`
       comments {
         id
         text
+        createDate
         user {
           email
         }
         replies {
           id
           text
+          createDate
           user {
             email
           }
           replies {
             id
             text
+            createDate
             user {
               email
             }
             replies {
               id
               text
+              createDate
               user {
                 email
               }
               replies {
                 id
                 text
+                createDate
                 user {
                   email
                 }

@@ -416,7 +416,7 @@ const typeDefs = `
     # User posting the comment
     user: User
     # Comment creation time
-    created: DateTime!
+    createDate: DateTime!
     # Any comment this is a reply to
     parent: Comment
     # Any replies to this comment
