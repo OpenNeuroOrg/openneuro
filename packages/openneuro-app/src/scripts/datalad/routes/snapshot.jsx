@@ -62,7 +62,7 @@ const Snapshot = ({ datasetId, snapshots }) => {
                 className="form-control"
                 placeholder="Enter new changes here..."
                 value={newChange}
-                onInput={e => updateNewChange(e.target.value)}
+                onChange={e => updateNewChange(e.target.value)}
               />
               <span className="input-group-btn">
                 <button
@@ -88,7 +88,7 @@ const Snapshot = ({ datasetId, snapshots }) => {
             <button className="btn-modal-action">Create Snapshot</button>
           ) : (
             <span className="text-danger">
-              You must add at least one change to create a new snapshot
+              You must add at least one change message to create a new snapshot
             </span>
           )}
         </div>
