@@ -11,6 +11,8 @@ const getDatasetPage = gql`
       id
       created
       public
+      following
+      starred
       uploader {
         id
         name

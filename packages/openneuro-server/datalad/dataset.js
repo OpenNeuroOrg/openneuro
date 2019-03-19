@@ -352,6 +352,9 @@ export const trackAnalytics = (datasetId, tag, type) => {
 
 export const getStars = datasetId => Star.find({ datasetId })
 
+export const getUserStarred = (datasetId, userId) =>
+  Star.count({ datasetId, userId }).exec()
+
 export const getFollowers = datasetId => {
   return c.crn.subscriptions
     .find({
@@ -359,3 +362,9 @@ export const getFollowers = datasetId => {
     })
     .toArray()
 }
+
+export const getUserFollowed = (datasetId, userId) =>
+  c.crn.subscriptions.findOne({
+    datasetId,
+    userId,
+  })

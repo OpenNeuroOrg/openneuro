@@ -221,6 +221,26 @@ export const followers = async obj => {
 }
 
 /**
+ * Is this user following?
+ *
+ * Returns null for anonymous users
+ */
+export const following = (obj, _, { user }) =>
+  user
+    ? datalad.getUserFollowed(obj.id, user).then(res => (res ? true : false))
+    : null
+
+/**
+ * Has the user starred this dataset?
+ *
+ * Returns null for anonymous users
+ */
+export const starred = (obj, _, { user }) =>
+  user
+    ? datalad.getUserStarred(obj.id, user).then(res => (res ? true : false))
+    : null
+
+/**
  * Dataset object
  */
 const Dataset = {
@@ -240,6 +260,8 @@ const Dataset = {
     ),
   name: datasetName,
   comments: datasetComments,
+  following,
+  starred,
 }
 
 export default Dataset

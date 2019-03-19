@@ -27,6 +27,12 @@ const DatasetTools = ({ dataset, location, history }) => {
     : `/datasets/${dataset.id}`
   // TODO - disable if you lack write access to the draft
   const edit = snapshot ? false : true
+  const followingIcon = dataset.following
+    ? 'fa-tag icon-minus'
+    : 'fa-tag icon-plus'
+  const starredIcon = dataset.starred
+    ? 'fa-star icon-minus'
+    : 'fa-star icon-plus'
   return (
     <div className="col-xs-12 dataset-tools-wrap">
       <div className="tools clearfix">
@@ -86,7 +92,7 @@ const DatasetTools = ({ dataset, location, history }) => {
         <div role="presentation" className="tool">
           <WarnButton
             tooltip="Follow Dataset"
-            icon="fa-tag icon-plus"
+            icon={followingIcon}
             warn={false}
             action={cb => {
               console.log('Follow dataset')
@@ -97,7 +103,7 @@ const DatasetTools = ({ dataset, location, history }) => {
         <div role="presentation" className="tool">
           <WarnButton
             tooltip="Star Dataset"
-            icon="fa-star icon-plus"
+            icon={starredIcon}
             warn={false}
             action={cb => {
               console.log('Star dataset')

@@ -185,6 +185,10 @@ const typeDefs = `
     name: String
     # User comments on this dataset
     comments: [Comment]
+    # Am I following this dataset?
+    following: Boolean
+    # Have I starred this dataset?
+    starred: Boolean
   }
 
   enum SortOrdering {
