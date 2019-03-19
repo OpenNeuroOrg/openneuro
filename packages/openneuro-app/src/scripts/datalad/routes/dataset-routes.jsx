@@ -5,6 +5,7 @@ import DatasetContent from './dataset-content.jsx'
 import SnapshotContent from './snapshot-content.jsx'
 import DownloadDataset from '../download/download-dataset.jsx'
 import Publish from './publish.jsx'
+import Snapshot from './snapshot.jsx'
 
 const stubComponent = () => null
 
@@ -31,8 +32,10 @@ const DatasetRoutes = ({ dataset }) => (
     <Route
       name="snapshot-create"
       exact
-      path="/datasets/:datasetId/create-snapshot"
-      component={stubComponent}
+      path="/datasets/:datasetId/snapshot"
+      component={() => (
+        <Snapshot datasetId={dataset.id} snapshots={dataset.snapshots} />
+      )}
     />
     <Route
       name="share"
