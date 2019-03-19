@@ -5,6 +5,7 @@ import DatasetContent from './dataset-content.jsx'
 import SnapshotContent from './snapshot-content.jsx'
 import DownloadDataset from '../download/download-dataset.jsx'
 import Publish from './publish.jsx'
+import Share from './share.jsx'
 import Snapshot from './snapshot.jsx'
 
 const stubComponent = () => null
@@ -41,25 +42,7 @@ const DatasetRoutes = ({ dataset }) => (
       name="share"
       exact
       path="/datasets/:datasetId/share"
-      component={stubComponent}
-    />
-    <Route
-      name="jobs"
-      exact
-      path="/datasets/:datasetId/jobs"
-      component={stubComponent}
-    />
-    <Route
-      name="subscribe"
-      exact
-      path="/datasets/:datasetId/subscribe"
-      component={stubComponent}
-    />
-    <Route
-      name="warn"
-      exact
-      path="/datasets/:datasetId/update-warn"
-      component={stubComponent}
+      component={() => <Share datasetId={dataset.id} />}
     />
     <Route
       name="fileEdit"
