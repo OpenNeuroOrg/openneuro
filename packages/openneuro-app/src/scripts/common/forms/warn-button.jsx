@@ -138,8 +138,12 @@ class WarnButton extends React.Component {
       }
 
       if (!this.props.warn) {
-        this.setState({ loading: true })
+        // Wait 250ms before bothering to render loading
+        const waitLoading = setTimeout(() => {
+          this.setState({ loading: true })
+        }, 250)
         action(() => {
+          clearTimeout(waitLoading)
           if (this._mounted) {
             this.setState({ loading: false })
           }
