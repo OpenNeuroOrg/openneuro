@@ -21,6 +21,7 @@ import { updatePermissions, removePermissions } from './permissions.js'
 import { followDataset } from './follow.js'
 import { starDataset } from './stars.js'
 import { publishDataset } from './publish.js'
+import { updateDescription } from './description.js'
 
 const Mutation = {
   createDataset,
@@ -41,6 +42,7 @@ const Mutation = {
   followDataset,
   starDataset,
   publishDataset,
+  updateDescription,
 }
 
 export default Mutation

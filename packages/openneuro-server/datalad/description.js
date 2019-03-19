@@ -1,9 +1,11 @@
 /**
  * Get description data from backend
  */
+import { Readable } from 'stream'
 import request from 'superagent'
 import { redis } from '../libs/redis.js'
-import { objectUrl } from './files.js'
+import { addFile, commitFiles } from './dataset.js'
+import { fileUrl, objectUrl } from './files.js'
 import { getDraftFiles } from './draft.js'
 import { getSnapshotHexsha } from './snapshots.js'
 
@@ -61,4 +63,23 @@ export const description = (obj, { datasetId, revision, tag }) => {
         })
     }
   })
+}
+
+export const setDescription = (datasetId, description, user) => {
+  return addFile(datasetId, '', {
+    filename: 'dataset_description.json',
+    mimetype: 'application/json',
+    // Mock a stream so we can reuse addFile
+    createReadStream: () => {
+      const stream = new Readable()
+      stream._read = () => {}
+      stream.push(JSON.stringify(description, null, 4))
+      stream.push(null)
+      return stream
+    },
+    // Mock capacitor
+    capacitor: {
+      destroy: () => {},
+    },
+  }).then(() => commitFiles(datasetId, user))
 }
