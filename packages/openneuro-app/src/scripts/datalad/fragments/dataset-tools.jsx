@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion.js'
 import WarnButton from '../../common/forms/warn-button.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
+import FollowDataset from '../mutations/follow.jsx'
+import StarDataset from '../mutations/star.jsx'
 
 /**
  * Immediate redirect to a dataset or snapshot route
@@ -27,12 +29,6 @@ const DatasetTools = ({ dataset, location, history }) => {
     : `/datasets/${dataset.id}`
   // TODO - disable if you lack write access to the draft
   const edit = snapshot ? false : true
-  const followingIcon = dataset.following
-    ? 'fa-tag icon-minus'
-    : 'fa-tag icon-plus'
-  const starredIcon = dataset.starred
-    ? 'fa-star icon-minus'
-    : 'fa-star icon-plus'
   return (
     <div className="col-xs-12 dataset-tools-wrap">
       <div className="tools clearfix">
@@ -90,26 +86,10 @@ const DatasetTools = ({ dataset, location, history }) => {
           )}
         </div>
         <div role="presentation" className="tool">
-          <WarnButton
-            tooltip="Follow Dataset"
-            icon={followingIcon}
-            warn={false}
-            action={cb => {
-              console.log('Follow dataset')
-              cb()
-            }}
-          />
+          <FollowDataset datasetId={dataset.id} following={dataset.following} />
         </div>
         <div role="presentation" className="tool">
-          <WarnButton
-            tooltip="Star Dataset"
-            icon={starredIcon}
-            warn={false}
-            action={cb => {
-              console.log('Star dataset')
-              cb()
-            }}
-          />
+          <StarDataset datasetId={dataset.id} starred={dataset.starred} />
         </div>
       </div>
     </div>

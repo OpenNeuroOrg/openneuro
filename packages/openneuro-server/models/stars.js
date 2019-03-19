@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 
 const starSchema = new mongoose.Schema({
   datasetId: { type: String, required: true },
+  userId: { type: String, required: true },
 })
 
 starSchema.virtual('user', {

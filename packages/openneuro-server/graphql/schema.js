@@ -77,6 +77,10 @@ const typeDefs = `
     setAdmin(id: ID!, admin: Boolean!): Boolean
     # Tracks a view or download for a dataset
     trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
+    # Follow dataset
+    followDataset(datasetId: ID!): Boolean
+    # Star dataset
+    starDataset(datasetId: ID!): Boolean
   }
 
   type Subscription {

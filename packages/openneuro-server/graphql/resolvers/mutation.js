@@ -18,6 +18,8 @@ import { removeUser, setAdmin } from './user.js'
 import { updateSummary } from './summary.js'
 import { updateValidation } from './validation.js'
 import { updatePermissions, removePermissions } from './permissions.js'
+import { followDataset } from './follow.js'
+import { starDataset } from './stars.js'
 
 const Mutation = {
   createDataset,
@@ -35,6 +37,8 @@ const Mutation = {
   removeUser,
   setAdmin,
   trackAnalytics,
+  followDataset,
+  starDataset,
 }
 
 export default Mutation
