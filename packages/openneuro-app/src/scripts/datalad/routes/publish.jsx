@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import PublishDataset from '../mutations/publish.jsx'
 
 const Publish = ({ datasetId }) => (
   <div className="dataset-form">
@@ -21,11 +22,15 @@ const Publish = ({ datasetId }) => (
           <Link to={`/datasets/${datasetId}`}>
             <button className="btn-admin-blue">Return to Dataset</button>
           </Link>
-          <button className="btn-modal-action">Publish</button>
+          <PublishDataset datasetId={datasetId} />
         </div>
       </div>
     </div>
   </div>
 )
+
+Publish.propTypes = {
+  datasetId: PropTypes.string,
+}
 
 export default Publish
