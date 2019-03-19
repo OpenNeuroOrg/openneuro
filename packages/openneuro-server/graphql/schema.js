@@ -83,8 +83,10 @@ const typeDefs = `
     starDataset(datasetId: ID!): Boolean
     # Make a dataset public
     publishDataset(datasetId: ID!): Boolean
-    # Update dataset_description.json
+    # Update dataset_description.json scalar fields
     updateDescription(datasetId: ID!, field: String!, value: String!): Description
+    # Update dataset_description.json list fields
+    updateDescriptionList(datasetId: ID!, field: String!, value: [String!]): Description
   }
 
   type Subscription {

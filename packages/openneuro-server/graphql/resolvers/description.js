@@ -25,3 +25,5 @@ export const updateDescription = (
     )
   })
 }
+
+export const updateDescriptionList = updateDescription

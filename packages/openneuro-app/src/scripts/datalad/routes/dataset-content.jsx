@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import EditDescriptionField from '../fragments/edit-description-field.jsx'
 import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
 import DatasetModified from '../fragments/dataset-modified.jsx'
@@ -27,7 +28,7 @@ const HasBeenPublished = ({ isPublic, datasetId }) =>
   )
 
 HasBeenPublished.propTypes = {
-  public: PropTypes.boolean,
+  public: PropTypes.bool,
   datasetId: PropTypes.string,
 }
 
@@ -40,14 +41,22 @@ const DatasetContent = ({ dataset }) => (
       <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
     </div>
     <div className="col-xs-6">
-      <DatasetTitle title={dataset.draft.description.Name} />
+      <EditDescriptionField
+        datasetId={dataset.id}
+        field="Name"
+        description={dataset.draft.description}>
+        <DatasetTitle title={dataset.draft.description.Name} />
+      </EditDescriptionField>
       <DatasetUploaded uploader={dataset.uploader} created={dataset.created} />
       <DatasetModified modified={dataset.draft.modified} />
       <DatasetAuthors authors={dataset.draft.description.Authors} />
       <DatasetAnalytics downloads={dataset.downloads} views={dataset.views} />
       <DatasetSummary summary={dataset.draft.summary} />
       <DatasetReadme content={dataset.draft.readme} />
-      <DatasetDescription description={dataset.draft.description} />
+      <DatasetDescription
+        datasetId={dataset.id}
+        description={dataset.draft.description}
+      />
     </div>
     <div className="col-xs-6">
       <Validation datasetId={dataset.id} />
