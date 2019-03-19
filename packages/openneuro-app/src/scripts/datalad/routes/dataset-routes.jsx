@@ -42,7 +42,9 @@ const DatasetRoutes = ({ dataset }) => (
       name="share"
       exact
       path="/datasets/:datasetId/share"
-      component={() => <Share datasetId={dataset.id} />}
+      component={() => (
+        <Share datasetId={dataset.id} permissions={dataset.permissions} />
+      )}
     />
     <Route
       name="fileEdit"
