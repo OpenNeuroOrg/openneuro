@@ -70,7 +70,7 @@ const Snapshot = ({ datasetId, snapshots }) => {
                   className="btn btn-default"
                   type="button"
                   onClick={() => {
-                    changes.push(newChange)
+                    setChanges([...changes, newChange])
                     updateNewChange('')
                   }}>
                   Add
