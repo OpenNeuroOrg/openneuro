@@ -22,6 +22,13 @@ const getDatasetPage = gql`
         downloads
         views
       }
+      permissions {
+        user {
+          id
+          email
+        }
+        level
+      }
       draft {
         id
         modified
