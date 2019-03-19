@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import semver from 'semver'
 import { Link } from 'react-router-dom'
+import SnapshotDataset from '../mutations/snapshot.jsx'
 
 const Snapshot = ({ datasetId, snapshots }) => {
   const [changes, setChanges] = useState([])
@@ -85,7 +86,7 @@ const Snapshot = ({ datasetId, snapshots }) => {
             <button className="btn-admin-blue">Return to Dataset</button>
           </Link>
           {changes.length ? (
-            <button className="btn-modal-action">Create Snapshot</button>
+            <SnapshotDataset datasetId={datasetId} tag={newVersion} />
           ) : (
             <span className="text-danger">
               You must add at least one change message to create a new snapshot
