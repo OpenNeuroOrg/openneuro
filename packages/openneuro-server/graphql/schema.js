@@ -81,6 +81,8 @@ const typeDefs = `
     followDataset(datasetId: ID!): Boolean
     # Star dataset
     starDataset(datasetId: ID!): Boolean
+    # Make a dataset public
+    publishDataset(datasetId: ID!): Boolean
   }
 
   type Subscription {

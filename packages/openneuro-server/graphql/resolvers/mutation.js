@@ -20,6 +20,7 @@ import { updateValidation } from './validation.js'
 import { updatePermissions, removePermissions } from './permissions.js'
 import { followDataset } from './follow.js'
 import { starDataset } from './stars.js'
+import { publishDataset } from './publish.js'
 
 const Mutation = {
   createDataset,
@@ -39,6 +40,7 @@ const Mutation = {
   trackAnalytics,
   followDataset,
   starDataset,
+  publishDataset,
 }
 
 export default Mutation

@@ -44,18 +44,6 @@ export const publishDataset = (req, res) => {
     })
 }
 
-/** Migrate a dataset from the private to public aws bucket */
-export const unpublishDataset = (req, res) => {
-  const datasetId = req.params.datasetId
-  const uri = `${URI}/datasets/${datasetId}/publish`
-  request
-    .del(uri)
-    .set('Cookie', generateDataladCookie(config)(req.user))
-    .then(() => {
-      res.send()
-    })
-}
-
 /**
  * Get a file from a dataset
  */
