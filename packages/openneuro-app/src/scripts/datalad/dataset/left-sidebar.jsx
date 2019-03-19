@@ -2,8 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion.js'
+import format from 'date-fns/format'
 
-const SidebarRow = ({ datasetId, id, version, draft = false, active }) => {
+const SidebarRow = ({
+  datasetId,
+  id,
+  version,
+  modified,
+  draft = false,
+  active,
+}) => {
   const url = draft
     ? `/datasets/${datasetId}`
     : `/datasets/${datasetId}/versions/${version}`
@@ -16,7 +24,9 @@ const SidebarRow = ({ datasetId, id, version, draft = false, active }) => {
         <div className="clearfix">
           <div className=" col-xs-12">
             <span className="dataset-type">{version}</span>
-            <span className="date-modified" />
+            <span className="date-modified">
+              {format(modified, 'YYYY-MM-DD')}
+            </span>
             <span className="icons" />
           </div>
         </div>
@@ -33,7 +43,7 @@ SidebarRow.propTypes = {
   active: PropTypes.string,
 }
 
-const LeftSidebar = ({ datasetId, snapshots, location }) => {
+const LeftSidebar = ({ datasetId, draftModified, snapshots, location }) => {
   const active = snapshotVersion(location) || 'draft'
   return (
     <div className="left-sidebar">
@@ -47,6 +57,7 @@ const LeftSidebar = ({ datasetId, snapshots, location }) => {
                 id={datasetId}
                 datasetId={datasetId}
                 version={'Draft'}
+                modified={draftModified}
                 draft
                 active={active}
               />
@@ -73,6 +84,7 @@ LeftSidebar.propTypes = {
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
   location: PropTypes.object,
+  draftModified: PropTypes.instanceOf(Date),
 }
 
 export default withRouter(LeftSidebar)

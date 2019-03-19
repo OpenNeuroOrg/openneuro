@@ -28,6 +28,7 @@ export default class DatasetPage extends React.Component {
           <LeftSidebar
             datasetId={this.props.dataset.id}
             snapshots={this.props.dataset.snapshots}
+            draftModified={this.props.dataset.draft.modified}
           />
           <LeftSidebarButton
             sidebar={this.state.sidebar}
