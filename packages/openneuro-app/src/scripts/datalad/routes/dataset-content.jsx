@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
 import DatasetModified from '../fragments/dataset-modified.jsx'
@@ -11,11 +12,33 @@ import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import Validation from '../validation/validation.jsx'
 
+const HasBeenPublished = ({ isPublic, datasetId }) =>
+  isPublic ? (
+    <div className="alert alert-success">
+      <strong>This dataset has been published!</strong> Create a new snapshot to
+      make changes available
+    </div>
+  ) : (
+    <div className="alert alert-warning">
+      <strong>This dataset has not been published!</strong>{' '}
+      <Link to={`/datasets/${datasetId}/publish`}>Publish this dataset</Link> to
+      make all snapshots available publicly
+    </div>
+  )
+
+HasBeenPublished.propTypes = {
+  public: PropTypes.boolean,
+  datasetId: PropTypes.string,
+}
+
 /**
  * Data routing for the main dataset query to display/edit components
  */
 const DatasetContent = ({ dataset }) => (
-  <span>
+  <>
+    <div className="col-xs-12">
+      <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
+    </div>
     <div className="col-xs-6">
       <DatasetTitle title={dataset.draft.description.Name} />
       <DatasetUploaded uploader={dataset.uploader} created={dataset.created} />
@@ -30,7 +53,7 @@ const DatasetContent = ({ dataset }) => (
       <Validation datasetId={dataset.id} />
       <DatasetFiles files={dataset.draft.files} />
     </div>
-  </span>
+  </>
 )
 
 DatasetContent.propTypes = {
