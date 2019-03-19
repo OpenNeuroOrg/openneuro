@@ -44,17 +44,18 @@ const DatasetTools = ({ dataset, location, history }) => {
           />
         </div>
         <div role="presentation" className="tool">
-          {edit && (
-            <WarnButton
-              tooltip="Publish Dataset"
-              icon="fa-globe icon-plus"
-              warn={false}
-              action={cb => {
-                toolRedirect(history, rootPath, 'publish')
-                cb()
-              }}
-            />
-          )}
+          {!dataset.public &&
+            edit && (
+              <WarnButton
+                tooltip="Publish Dataset"
+                icon="fa-globe icon-plus"
+                warn={false}
+                action={cb => {
+                  toolRedirect(history, rootPath, 'publish')
+                  cb()
+                }}
+              />
+            )}
         </div>
         <div role="presentation" className="tool">
           {edit && <DeleteDataset datasetId={dataset.id} />}
