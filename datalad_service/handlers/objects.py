@@ -2,11 +2,9 @@ import logging
 import os
 import hashlib
 import struct
-import zlib
+import subprocess
 
 import falcon
-
-import git
 
 
 def annex_key_to_path(annex_key):
@@ -33,6 +31,7 @@ class ObjectsResource(object):
         ds_path = self.store.get_dataset_path(dataset)
         if filekey:
             try:
+                # Annexed files
                 if filekey.startswith('MD5E'):
                     filepath = '.git/annex/objects/{}/{}/{}'.format(
                         annex_key_to_path(filekey), filekey, filekey)
@@ -41,23 +40,24 @@ class ObjectsResource(object):
                     resp.stream = fd
                     resp.stream_len = os.fstat(fd.fileno()).st_size
                     resp.status = falcon.HTTP_OK
+                # Git objects
                 else:
-                    dir = filekey[:2]
-                    remaining_hex = filekey[2:]
-                    filepath = '.git/objects/{}/{}'.format(dir, remaining_hex)
-                    path = '{}/{}'.format(ds_path, filepath)
-                    compressed_contents = open(path, 'rb').read()
-                    decompressed_contents = zlib.decompress(
-                        compressed_contents)
-                    split_char = b'\x00'
-                    contents = decompressed_contents[decompressed_contents.index(
-                        split_char) + len(split_char):]
-                    resp.body = contents
-                    resp.status = falcon.HTTP_OK
-            except IOError:
-                # File is not kept locally
-                resp.media = {'error': 'file not found'}
-                resp.status = falcon.HTTP_NOT_FOUND
+                    gitCommand = subprocess.run(
+                        ['git', '-C', ds_path, 'cat-file', 'blob', filekey], stdout=subprocess.PIPE)
+                    if (gitCommand.returncode == 0):
+                        resp.body = gitCommand.stdout
+                        resp.status = falcon.HTTP_OK
+                    elif (gitCommand.returncode == 128):
+                        # File is not kept locally
+                        resp.media = {'error': 'file not found'}
+                        resp.status = falcon.HTTP_NOT_FOUND
+                    else:
+                        resp.media = {
+                            'error': 'git object command exited with non-zero'}
+                        resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
+            except subprocess.CalledProcessError as err:
+                resp.media = {'error': 'git cat-file failed to run'}
+                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
             except:
                 # Some unknown error
                 resp.media = {
