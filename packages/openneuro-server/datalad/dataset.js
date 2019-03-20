@@ -6,6 +6,7 @@
 import request from 'superagent'
 import requestNode from 'request'
 import objectHash from 'object-hash'
+import { Readable } from 'stream'
 import config from '../config'
 import mongo from '../libs/mongo'
 import * as subscriptions from '../handlers/subscriptions.js'
@@ -254,6 +255,29 @@ export const addFile = async (datasetId, path, file) => {
     }
   }
 }
+
+/**
+ * Add file using a string and path
+ *
+ * Used to mock the stream interface in addFile
+ */
+export const addFileString = (datasetId, filename, mimetype, content) =>
+  addFile(datasetId, '', {
+    filename,
+    mimetype,
+    // Mock a stream so we can reuse addFile
+    createReadStream: () => {
+      const stream = new Readable()
+      stream._read = () => {}
+      stream.push(content)
+      stream.push(null)
+      return stream
+    },
+    // Mock capacitor
+    capacitor: {
+      destroy: () => {},
+    },
+  })
 
 /**
  * Commit a draft

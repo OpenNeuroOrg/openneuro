@@ -87,6 +87,8 @@ const typeDefs = `
     updateDescription(datasetId: ID!, field: String!, value: String!): Description
     # Update dataset_description.json list fields
     updateDescriptionList(datasetId: ID!, field: String!, value: [String!]): Description
+    # Update dataset README file
+    updateReadme(datasetId: ID!, value: String!): Boolean
   }
 
   type Subscription {

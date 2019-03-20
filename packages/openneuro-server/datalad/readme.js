@@ -1,5 +1,6 @@
 import config from '../config.js'
 import fetch from 'node-fetch'
+import { addFileString, commitFiles } from './dataset.js'
 
 export const readmeUrl = (datasetId, revision) => {
   return `http://${
@@ -15,4 +16,10 @@ export const readme = (obj, { datasetId, revision }) => {
    * We may want to use less superagent anyways just to avoid library weight
    */
   return fetch(readmeUrl(datasetId, revision)).then(res => res.text())
+}
+
+export const setReadme = (datasetId, readme, user) => {
+  return addFileString(datasetId, 'README', 'text/plain', readme).then(() =>
+    commitFiles(datasetId, user),
+  )
 }
