@@ -96,11 +96,6 @@ export default class Summary extends React.PureComponent {
   }
 }
 
-Summary.props = {
-  summary: null,
-  minimal: false,
-}
-
 Summary.propTypes = {
   summary: PropTypes.object,
   minimal: PropTypes.bool,
