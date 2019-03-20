@@ -24,13 +24,7 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
     </div>
     <div className="description-item">
       <h2>Dataset DOI</h2>
-      <EditDescriptionField
-        datasetId={datasetId}
-        field="DatasetDOI"
-        description={description}
-        editable={editable}>
-        <span>{description.DatasetDOI}</span>
-      </EditDescriptionField>
+      <span>{description.DatasetDOI}</span>
     </div>
     <div className="description-item">
       <h2>License</h2>
