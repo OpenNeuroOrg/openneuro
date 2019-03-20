@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
 import UpdateDescription from '../mutations/description.jsx'
-import WarnButton from '../../common/forms/warn-button.jsx'
+import EditButton from './edit-button.jsx'
 
-const EditDescriptionList = ({ datasetId, description, field, children }) => {
+const EditDescriptionList = ({
+  datasetId,
+  description,
+  field,
+  children,
+  editable,
+}) => {
   const [editing, setEditing] = useState(false)
   const [rows, setRows] = useState(description[field] || [])
   const [value, setValue] = useState('')
@@ -39,15 +45,7 @@ const EditDescriptionList = ({ datasetId, description, field, children }) => {
     return (
       <>
         {children}
-        <WarnButton
-          message="Edit"
-          icon="fa-edit"
-          warn={false}
-          action={cb => {
-            setEditing(true)
-            cb()
-          }}
-        />
+        {editable ? <EditButton action={() => setEditing(true)} /> : null}
       </>
     )
   }

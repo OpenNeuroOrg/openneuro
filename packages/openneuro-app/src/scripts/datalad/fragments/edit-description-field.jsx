@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import UpdateDescription from '../mutations/description.jsx'
-import WarnButton from '../../common/forms/warn-button.jsx'
+import EditButton from './edit-button.jsx'
 
 /**
  * This is a hopefully less confusing click-to-edit component
@@ -12,6 +12,7 @@ const EditDescriptionField = ({
   description,
   field,
   children,
+  editable,
   rows = 1,
 }) => {
   const [editing, setEditing] = useState(false)
@@ -20,8 +21,7 @@ const EditDescriptionField = ({
   if (editing) {
     return (
       <>
-        <input
-          type="textarea"
+        <textarea
           rows={rows}
           onChange={e => setValue(e.target.value)}
           value={value}
@@ -38,15 +38,7 @@ const EditDescriptionField = ({
     return (
       <>
         {children}
-        <WarnButton
-          message="Edit"
-          icon="fa-edit"
-          warn={false}
-          action={cb => {
-            setEditing(true)
-            cb()
-          }}
-        />
+        {editable ? <EditButton action={() => setEditing(true)} /> : null}
       </>
     )
   }

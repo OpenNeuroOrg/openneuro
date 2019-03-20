@@ -1,7 +1,7 @@
 import React from 'react'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
-import WarnButton from '../../common/forms/warn-button.jsx'
+import SaveButton from '../fragments/save-button.jsx'
 
 const UPDATE_DESCRIPTION = gql`
   mutation updateDescription(
@@ -53,17 +53,10 @@ const UpdateDescription = ({ datasetId, field, value, done }) => {
   return (
     <Mutation mutation={mutation}>
       {updateDescription => (
-        <WarnButton
-          message="Save"
-          icon="fa-save"
-          warn={false}
-          action={cb => {
-            updateDescription({ variables: { datasetId, field, value } }).then(
-              () => {
-                cb()
-                done()
-              },
-            )
+        <SaveButton
+          action={async () => {
+            await updateDescription({ variables: { datasetId, field, value } })
+            done()
           }}
         />
       )}

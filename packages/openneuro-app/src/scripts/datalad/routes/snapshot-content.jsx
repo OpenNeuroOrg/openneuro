@@ -87,14 +87,17 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
         />
         <DatasetModified modified={snapshot.created} />
         <DatasetAuthors authors={snapshot.description.Authors} />
-        <h6>{`snapshot tag: ${snapshot.tag}`}</h6>
         <DatasetAnalytics
           downloads={snapshot.downloads}
           views={snapshot.views}
         />
         <DatasetSummary summary={snapshot.summary} />
         <DatasetReadme content={snapshot.readme} />
-        <DatasetDescription description={snapshot.description} />
+        <DatasetDescription
+          datasetId={dataset.id}
+          description={snapshot.description}
+          editable={false}
+        />
       </div>
       <div className="col-xs-6">
         <Validation datasetId={dataset.id} />

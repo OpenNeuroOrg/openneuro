@@ -12,6 +12,7 @@ import DatasetFiles from '../fragments/dataset-files.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import Validation from '../validation/validation.jsx'
+import EditReadme from '../fragments/edit-readme.jsx'
 
 const HasBeenPublished = ({ isPublic, datasetId }) =>
   isPublic ? (
@@ -52,10 +53,13 @@ const DatasetContent = ({ dataset }) => (
       <DatasetAuthors authors={dataset.draft.description.Authors} />
       <DatasetAnalytics downloads={dataset.downloads} views={dataset.views} />
       <DatasetSummary summary={dataset.draft.summary} />
-      <DatasetReadme content={dataset.draft.readme} />
+      <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
+        <DatasetReadme content={dataset.draft.readme} />
+      </EditReadme>
       <DatasetDescription
         datasetId={dataset.id}
         description={dataset.draft.description}
+        editable={true}
       />
     </div>
     <div className="col-xs-6">
