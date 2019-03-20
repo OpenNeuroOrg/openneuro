@@ -42,22 +42,19 @@ class ObjectsResource(object):
                     resp.status = falcon.HTTP_OK
                 # Git objects
                 else:
-                    gitCommand = subprocess.run(
+                    git_command = subprocess.run(
                         ['git', '-C', ds_path, 'cat-file', 'blob', filekey], stdout=subprocess.PIPE)
-                    if (gitCommand.returncode == 0):
-                        resp.body = gitCommand.stdout
+                    if (git_command.returncode == 0):
+                        resp.body = git_command.stdout
                         resp.status = falcon.HTTP_OK
-                    elif (gitCommand.returncode == 128):
+                    elif (git_command.returncode == 128):
                         # File is not kept locally
                         resp.media = {'error': 'file not found'}
                         resp.status = falcon.HTTP_NOT_FOUND
                     else:
                         resp.media = {
-                            'error': 'git object command exited with non-zero'}
+                            'error': 'git object command exited with non-zero return code ({})'.format(git_command.returncode)}
                         resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
-            except subprocess.CalledProcessError as err:
-                resp.media = {'error': 'git cat-file failed to run'}
-                resp.status = falcon.HTTP_INTERNAL_SERVER_ERROR
             except:
                 # Some unknown error
                 resp.media = {
