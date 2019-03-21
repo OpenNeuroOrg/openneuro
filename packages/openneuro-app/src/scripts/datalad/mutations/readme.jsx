@@ -5,7 +5,7 @@ import SaveButton from '../fragments/save-button.jsx'
 
 const UPDATE_README = gql`
   mutation updateReadme($datasetId: ID!, $value: String!) {
-    updateReadme(datasetId: $datasetId, field: $field, value: $value)
+    updateReadme(datasetId: $datasetId, value: $value)
   }
 `
 
