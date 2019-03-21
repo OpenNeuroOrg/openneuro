@@ -9,6 +9,10 @@ const Snapshot = ({ datasetId, snapshots }) => {
   const [semanticLevel, setSemanticLevel] = useState('patch')
   const [newChange, updateNewChange] = useState('')
 
+  /**
+   * Remove one changelog entry
+   * @param {number} index Which entry to remove
+   */
   const removeChange = index => () => {
     // Avoid mutating changes array directly
     const newChanges = [...changes]
@@ -114,6 +118,11 @@ const Snapshot = ({ datasetId, snapshots }) => {
       </div>
     </div>
   )
+}
+
+Snapshot.propTypes = {
+  datasetId: PropTypes.string,
+  snapshots: PropTypes.array,
 }
 
 export default Snapshot
