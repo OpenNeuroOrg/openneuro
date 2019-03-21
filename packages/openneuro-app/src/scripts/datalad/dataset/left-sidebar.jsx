@@ -84,7 +84,7 @@ LeftSidebar.propTypes = {
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
   location: PropTypes.object,
-  draftModified: PropTypes.instanceOf(Date),
+  draftModified: PropTypes.string,
 }
 
 export default withRouter(LeftSidebar)
