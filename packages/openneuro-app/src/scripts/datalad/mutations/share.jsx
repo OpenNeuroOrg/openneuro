@@ -23,7 +23,7 @@ const ShareDataset = ({ datasetId, userEmail, access }) => (
       <button
         className="btn-modal-action"
         onClick={() =>
-          shareDataset({ variables: { datasetId, userEmail, access } })
+          shareDataset({ variables: { datasetId, userEmail, level: access } })
         }>
         Share
       </button>
