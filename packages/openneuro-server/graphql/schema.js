@@ -296,7 +296,7 @@ const typeDefs = `
     # List of individuals who contributed to the creation/curation of the dataset
     Authors: [String]
     # Text acknowledging contributions of individuals or institutions beyond those listed in Authors or Funding.
-    Acknowledgements: [String]
+    Acknowledgements: String
     # Instructions how researchers using this dataset should acknowledge the original authors. This field can also be used to define a publication that should be cited in publications that use the dataset.
     HowToAcknowledge: String
     # List of sources of funding (grant numbers)
