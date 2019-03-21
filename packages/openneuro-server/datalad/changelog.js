@@ -1,3 +1,8 @@
+import config from '../config.js'
+import fetch from 'node-fetch'
+import format from 'date-fns/format'
+import { addFileString, commitFiles } from './dataset.js'
+
 /**
  * Matches a CPAN changelog version line
  * @param {string} line
@@ -62,13 +67,32 @@ export const spliceChangelog = (changelog, tag, date, changes) => {
 }
 
 /**
+ * Format a URL to GET or POST to the CHANGES file
+ * @param {string} datasetId Accession number string
+ * @param {string} revision Git name for the requested ref
+ */
+export const changesUrl = (datasetId, revision) => {
+  return `http://${
+    config.datalad.uri
+  }/datasets/${datasetId}/snapshots/${revision}/files/CHANGES`
+}
+
+/**
  * Edit the CHANGES file with a new set of changes and commit to backend
  * @param {string} datasetId
  * @param {string[]} changes
  */
-export const updateChanges = (datasetId, tag, changes) => {
-  const currentChangesFile = '1.0.0 2011-10-06'
-  const changelogLines = currentChangesFile.split(/\r?\n/)
-  const [start, length] = findVersion(changelogLines)
-  changelogLines.splice(start, length, changes)
+export const updateChanges = async (datasetId, tag, changes, user) => {
+  const currentChangesReq = await fetch(changesUrl(datasetId, 'HEAD'))
+  const currentChanges = await currentChangesReq.text()
+  const changeLogDate = format(new Date(), 'YYYY-MM-DD')
+  const updatedChangelog = spliceChangelog(
+    currentChanges,
+    tag,
+    changeLogDate,
+    changes,
+  )
+  updatedChangelog
+  await addFileString(datasetId, 'CHANGES', 'text/plain', updatedChangelog)
+  return commitFiles(datasetId, user)
 }

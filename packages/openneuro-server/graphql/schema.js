@@ -52,7 +52,7 @@ const typeDefs = `
     # Deletes a dataset and all associated snapshots
     deleteDataset(id: ID!): Boolean
     # Tag the current draft
-    createSnapshot(datasetId: ID!, tag: String!): Snapshot
+    createSnapshot(datasetId: ID!, tag: String!, changes: [String!]): Snapshot
     # Remove a tag from the dataset
     deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
     # Add or update files in a draft - returns a new Draft

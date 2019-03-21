@@ -5,8 +5,8 @@ import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
 
 const CREATE_SNAPSHOT = gql`
-  mutation createSnapshot($datasetId: ID!, $tag: String!) {
-    createSnapshot(datasetId: $datasetId, tag: $tag) {
+  mutation createSnapshot($datasetId: ID!, $tag: String!, $changes: [String!]) {
+    createSnapshot(datasetId: $datasetId, tag: $tag, changes: $changes) {
       id
       tag
       created
@@ -26,7 +26,7 @@ const SNAPSHOT_CREATED = gql`
   }
 `
 
-const SnapshotDataset = ({ history, datasetId, tag }) => (
+const SnapshotDataset = ({ history, datasetId, tag, changes }) => (
   <Mutation
     mutation={CREATE_SNAPSHOT}
     update={(cache, { data: { createSnapshot } }) => {
@@ -50,9 +50,11 @@ const SnapshotDataset = ({ history, datasetId, tag }) => (
       <button
         className="btn-modal-action"
         onClick={() =>
-          snapshotDataset({ variables: { datasetId, tag } }).then(() => {
-            history.push(`/datasets/${datasetId}/versions/${tag}`)
-          })
+          snapshotDataset({ variables: { datasetId, tag, changes } }).then(
+            () => {
+              history.push(`/datasets/${datasetId}/versions/${tag}`)
+            },
+          )
         }>
         Create Snapshot
       </button>

@@ -108,7 +108,11 @@ const Snapshot = ({ datasetId, snapshots }) => {
             <button className="btn-admin-blue">Return to Dataset</button>
           </Link>
           {changes.length ? (
-            <SnapshotDataset datasetId={datasetId} tag={newVersion} />
+            <SnapshotDataset
+              datasetId={datasetId}
+              tag={newVersion}
+              changes={changes}
+            />
           ) : (
             <span className="text-danger">
               You must add at least one change message to create a new snapshot
