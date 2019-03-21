@@ -9,6 +9,13 @@ const Snapshot = ({ datasetId, snapshots }) => {
   const [semanticLevel, setSemanticLevel] = useState('patch')
   const [newChange, updateNewChange] = useState('')
 
+  const removeChange = index => () => {
+    // Avoid mutating changes array directly
+    const newChanges = [...changes]
+    newChanges.splice(index, 1)
+    setChanges(newChanges)
+  }
+
   const latestSnapshot = snapshots.length && snapshots[snapshots.length - 1]
   const newVersion =
     snapshots.length && semver.valid(latestSnapshot.tag)
@@ -51,7 +58,18 @@ const Snapshot = ({ datasetId, snapshots }) => {
         <div className="row">
           <ul>
             {changes.map((change, index) => (
-              <li key={index}>{change}</li>
+              <div className="change col-xs-12" key={index}>
+                <div className="change-list-icon col-xs-1">
+                  <i className="fa fa-minus" />
+                </div>
+                <div className="change-text col-xs-8">{change}</div>
+                <div className="col-xs-3 change-controls">
+                  <a className="" onClick={removeChange(index)}>
+                    <i className="fa fa-times" />
+                    Remove
+                  </a>
+                </div>
+              </div>
             ))}
           </ul>
         </div>
