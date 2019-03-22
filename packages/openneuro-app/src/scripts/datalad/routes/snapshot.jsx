@@ -3,22 +3,11 @@ import PropTypes from 'prop-types'
 import semver from 'semver'
 import { Link } from 'react-router-dom'
 import SnapshotDataset from '../mutations/snapshot.jsx'
+import EditList from '../fragments/edit-list.jsx'
 
 const Snapshot = ({ datasetId, snapshots }) => {
   const [changes, setChanges] = useState([])
   const [semanticLevel, setSemanticLevel] = useState('patch')
-  const [newChange, updateNewChange] = useState('')
-
-  /**
-   * Remove one changelog entry
-   * @param {number} index Which entry to remove
-   */
-  const removeChange = index => () => {
-    // Avoid mutating changes array directly
-    const newChanges = [...changes]
-    newChanges.splice(index, 1)
-    setChanges(newChanges)
-  }
 
   const latestSnapshot = snapshots.length && snapshots[snapshots.length - 1]
   const newVersion =
@@ -59,48 +48,11 @@ const Snapshot = ({ datasetId, snapshots }) => {
             Patch
           </button>
         </div>
-        <div className="row">
-          <ul>
-            {changes.map((change, index) => (
-              <div className="change col-xs-12" key={index}>
-                <div className="change-list-icon col-xs-1">
-                  <i className="fa fa-minus" />
-                </div>
-                <div className="change-text col-xs-8">{change}</div>
-                <div className="col-xs-3 change-controls">
-                  <a className="" onClick={removeChange(index)}>
-                    <i className="fa fa-times" />
-                    Remove
-                  </a>
-                </div>
-              </div>
-            ))}
-          </ul>
-        </div>
-        <div className="row">
-          <div className="col-xs-8">
-            <div className="input-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Enter new changes here..."
-                value={newChange}
-                onChange={e => updateNewChange(e.target.value)}
-              />
-              <span className="input-group-btn">
-                <button
-                  className="btn btn-default"
-                  type="button"
-                  onClick={() => {
-                    setChanges([...changes, newChange])
-                    updateNewChange('')
-                  }}>
-                  Add
-                </button>
-              </span>
-            </div>
-          </div>
-        </div>
+        <EditList
+          placeholder="Enter new changes here..."
+          elements={changes}
+          setElements={setChanges}
+        />
       </div>
       <div className="col-xs-12 dataset-form-controls">
         <div className="col-xs-12 modal-actions">
