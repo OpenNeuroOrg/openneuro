@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import UpdateDescription from '../mutations/description.jsx'
 import EditButton from './edit-button.jsx'
+import EditList from './edit-list.jsx'
 
 const EditDescriptionList = ({
   datasetId,
@@ -11,28 +12,15 @@ const EditDescriptionList = ({
 }) => {
   const [editing, setEditing] = useState(false)
   const [rows, setRows] = useState(description[field] || [])
-  const [value, setValue] = useState('')
 
   if (editing) {
     return (
       <>
-        <ul>
-          {rows.map((row, index) => (
-            <li key={index}>{row}</li>
-          ))}
-        </ul>
-        <input
-          type="text"
-          onChange={e => setValue(e.target.value)}
-          value={value}
+        <EditList
+          placeholder="Add new item"
+          elements={rows}
+          setElements={setRows}
         />
-        <button
-          onClick={() => {
-            setRows([...rows, value])
-            setValue('')
-          }}>
-          Add Item
-        </button>
         <UpdateDescription
           datasetId={datasetId}
           field={field}

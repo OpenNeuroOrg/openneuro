@@ -24,9 +24,6 @@ const EditList = ({ placeholder, elements, setElements }) => {
         <ul>
           {elements.map((element, index) => (
             <div className="change col-xs-12" key={index}>
-              <div className="change-list-icon col-xs-1">
-                <i className="fa fa-minus" />
-              </div>
               <div className="change-text col-xs-8">{element}</div>
               <div className="col-xs-3 change-controls">
                 <a className="" onClick={removeElement(index)}>
