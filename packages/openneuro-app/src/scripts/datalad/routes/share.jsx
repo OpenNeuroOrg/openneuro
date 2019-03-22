@@ -25,19 +25,23 @@ const Share = ({ datasetId, permissions }) => {
         <div className="col-xs-12 dataset-form-body">
           <p>Dataset shared with:</p>
           <table className="table">
-            <tr>
-              <th>Email</th>
-              <th>Access</th>
-              <th>Remove</th>
-            </tr>
-            {permissions.map((perm, index) => (
-              <PermissionRow
-                userId={perm.user.id}
-                email={perm.user.email}
-                access={perm.level}
-                key={index}
-              />
-            ))}
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Access</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              {permissions.map((perm, index) => (
+                <PermissionRow
+                  userId={perm.user.id}
+                  email={perm.user.email}
+                  access={perm.level}
+                  key={index}
+                />
+              ))}
+            </tbody>
           </table>
           <p>
             Enter a user&#39;s email address and select access level to share
