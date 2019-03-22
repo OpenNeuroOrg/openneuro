@@ -2,6 +2,7 @@ import React from 'react'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import SaveButton from '../fragments/save-button.jsx'
+import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 const UPDATE_DESCRIPTION = gql`
   mutation updateDescription(
@@ -10,6 +11,7 @@ const UPDATE_DESCRIPTION = gql`
     $value: String!
   ) {
     updateDescription(datasetId: $datasetId, field: $field, value: $value) {
+      id
       Name
       BIDSVersion
       License
@@ -30,6 +32,7 @@ const UPDATE_DESCRIPTION_LIST = gql`
     $value: [String!]
   ) {
     updateDescriptionList(datasetId: $datasetId, field: $field, value: $value) {
+      id
       Name
       BIDSVersion
       License
@@ -43,15 +46,41 @@ const UPDATE_DESCRIPTION_LIST = gql`
   }
 `
 
+/**
+ * Update dataset_description.json on the draft
+ */
 const UpdateDescription = ({ datasetId, field, value, done }) => {
-  let mutation
-  if (Array.isArray(value)) {
-    mutation = UPDATE_DESCRIPTION_LIST
-  } else {
-    mutation = UPDATE_DESCRIPTION
-  }
+  const mutation = Array.isArray(value)
+    ? UPDATE_DESCRIPTION_LIST
+    : UPDATE_DESCRIPTION
   return (
-    <Mutation mutation={mutation}>
+    <Mutation
+      mutation={mutation}
+      update={(
+        cache,
+        { data: { updateDescription, updateDescriptionList } },
+      ) => {
+        const datasetCacheId = `Dataset:${datasetId}`
+        const { draft } = cache.readFragment({
+          id: datasetCacheId,
+          fragment: DRAFT_FRAGMENT,
+        })
+        cache.writeFragment({
+          id: datasetCacheId,
+          fragment: DRAFT_FRAGMENT,
+          data: {
+            __typename: 'Dataset',
+            id: datasetId,
+            draft: {
+              ...draft,
+              description: {
+                ...updateDescription,
+                ...updateDescriptionList,
+              },
+            },
+          },
+        })
+      }}>
       {updateDescription => (
         <SaveButton
           action={async () => {

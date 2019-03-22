@@ -283,24 +283,26 @@ export const addFileString = (datasetId, filename, mimetype, content) =>
  * Commit a draft
  */
 export const commitFiles = (datasetId, user) => {
+  let gitRef
   const url = `${uri}/datasets/${datasetId}/draft`
-  const req = request
+  return request
     .post(url)
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
     .then(res => {
-      return res.body.ref
+      gitRef = res.body.ref
+      return gitRef
     })
     .then(updateDatasetRevision(datasetId))
     .then(() =>
       // Check if this is the first data commit and no snapshots exist
-      c.crn.snapshots.findOne({ datasetId }).then(snapshot => {
+      c.crn.snapshots.findOne({ datasetId }).then(async snapshot => {
         if (!snapshot) {
-          return createSnapshot(datasetId, '1.0.0', user)
+          await createSnapshot(datasetId, '1.0.0', user)
         }
+        return gitRef
       }),
     )
-  return req
 }
 
 /**

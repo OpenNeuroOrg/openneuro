@@ -51,14 +51,14 @@ export const description = (obj, { datasetId, revision, tag }) => {
     if (cachedDescription) {
       return JSON.parse(cachedDescription)
     } else {
-      return getDraftFiles(
-        datasetId,
-        revision ? revision : await getSnapshotHexsha(datasetId, tag),
-      )
+      const gitRef = revision
+        ? revision
+        : await getSnapshotHexsha(datasetId, tag)
+      return getDraftFiles(datasetId, gitRef)
         .then(getDescriptionObject(datasetId))
         .then(uncachedDescription => {
           redis.set(redisKey, JSON.stringify(uncachedDescription))
-          return uncachedDescription
+          return { id: gitRef, ...uncachedDescription }
         })
     }
   })

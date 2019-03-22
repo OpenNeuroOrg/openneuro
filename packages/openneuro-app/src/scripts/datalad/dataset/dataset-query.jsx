@@ -4,6 +4,7 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetPage from './dataset-page.jsx'
+import * as DatasetQueryFragments from './dataset-query-fragments.js'
 
 const getDatasetPage = gql`
   query dataset($datasetId: ID!) {
@@ -13,6 +14,7 @@ const getDatasetPage = gql`
       public
       following
       starred
+      ...DatasetDraft
       uploader {
         id
         name
@@ -28,34 +30,6 @@ const getDatasetPage = gql`
           email
         }
         level
-      }
-      draft {
-        id
-        modified
-        readme
-        description {
-          Name
-          Authors
-          DatasetDOI
-          License
-          Acknowledgements
-          HowToAcknowledge
-          Funding
-          ReferencesAndLinks
-        }
-        files {
-          id
-          filename
-          size
-        }
-        summary {
-          modalities
-          sessions
-          subjects
-          tasks
-          size
-          totalFiles
-        }
       }
       snapshots {
         id
@@ -104,6 +78,7 @@ const getDatasetPage = gql`
       }
     }
   }
+  ${DatasetQueryFragments.DRAFT_FRAGMENT}
 `
 
 const DatasetQuery = ({ match }) => (

@@ -19,7 +19,10 @@ export const updateDescription = (
         newDescription[field] = value
         // Save to backend
         return setDescription(datasetId, newDescription, userInfo).then(
-          () => newDescription,
+          gitRef => ({
+            id: gitRef,
+            ...newDescription,
+          }),
         )
       },
     )

@@ -287,6 +287,8 @@ const typeDefs = `
 
   # Contents of dataset_description.json
   type Description @cacheControl(maxAge: 30, scope: PUBLIC) {
+    # Draft id for this description
+    id: ID!
     # Name of the dataset
     Name: String!
     # The version of the BIDS standard that was used
