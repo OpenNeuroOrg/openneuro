@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
+import WarnButton from '../../common/forms/warn-button.jsx'
 
 const REMOVE_PERMISSION = gql`
   mutation removePermission($datasetId: ID!, $userId: String!) {
@@ -12,11 +13,15 @@ const REMOVE_PERMISSION = gql`
 const RemovePermission = ({ datasetId, userId }) => (
   <Mutation mutation={REMOVE_PERMISSION}>
     {removePermission => (
-      <button
-        className="btn"
-        onClick={() => removePermission({ variables: { datasetId, userId } })}>
-        Remove Permission
-      </button>
+      <WarnButton
+        message="Remove Permission"
+        icon="fa-trash"
+        warn={true}
+        action={async cb => {
+          await removePermission({ variables: { datasetId, userId } })
+          cb()
+        }}
+      />
     )}
   </Mutation>
 )
