@@ -33,7 +33,8 @@ const ShareDataset = ({ datasetId, userEmail, access }) => (
 
 ShareDataset.propTypes = {
   datasetId: PropTypes.string,
-  tag: PropTypes.string,
+  userEmail: PropTypes.string,
+  access: PropTypes.oneOf(['read', 'write', 'admin']),
 }
 
 export default ShareDataset

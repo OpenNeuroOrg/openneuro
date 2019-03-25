@@ -26,7 +26,7 @@ const EditList = ({ placeholder, elements, setElements }) => {
             <div className="change col-xs-12" key={index}>
               <div className="change-text col-xs-8">{element}</div>
               <div className="col-xs-3 change-controls">
-                <a className="" onClick={removeElement(index)}>
+                <a onClick={removeElement(index)}>
                   <i className="fa fa-times" />
                   Remove
                 </a>

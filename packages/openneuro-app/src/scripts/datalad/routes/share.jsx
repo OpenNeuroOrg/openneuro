@@ -2,14 +2,24 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import ShareDataset from '../mutations/share.jsx'
+import RemovePermission from '../mutations/remove-permission.jsx'
 
-const PermissionRow = ({ userId, email, access }) => (
+const PermissionRow = ({ datasetId, userId, email, access }) => (
   <tr>
-    <td>{email}</td>
-    <td>{access}</td>
-    <td>Remove {userId}</td>
+    <td className="col-xs-4">{email}</td>
+    <td className="col-xs-2">{access}</td>
+    <td className="col-xs-2">
+      <RemovePermission datasetId={datasetId} userId={userId} />
+    </td>
   </tr>
 )
+
+PermissionRow.propTypes = {
+  datasetId: PropTypes.string,
+  userId: PropTypes.string,
+  userEmail: PropTypes.string,
+  access: PropTypes.oneOf(['read', 'write', 'admin']),
+}
 
 const Share = ({ datasetId, permissions }) => {
   const [userEmail, setUserEmail] = useState('')
@@ -33,12 +43,13 @@ const Share = ({ datasetId, permissions }) => {
               <tr>
                 <th>Email</th>
                 <th>Access</th>
-                <th>Remove</th>
+                <th>Edit</th>
               </tr>
             </thead>
             <tbody>
               {permissions.map((perm, index) => (
                 <PermissionRow
+                  datasetId={datasetId}
                   userId={perm.user.id}
                   email={perm.user.email}
                   access={perm.level}
