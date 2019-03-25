@@ -15,6 +15,10 @@ const Share = ({ datasetId, permissions }) => {
   const [userEmail, setUserEmail] = useState('')
   const [access, setAccess] = useState('read')
 
+  const readActive = access === 'read' && 'active'
+  const writeActive = access === 'write' && 'active'
+  const adminActive = access === 'admin' && 'active'
+
   return (
     <div className="dataset-form">
       <div className="col-xs-12 dataset-form-header">
@@ -43,14 +47,33 @@ const Share = ({ datasetId, permissions }) => {
               ))}
             </tbody>
           </table>
-          <p>
-            Enter a user&#39;s email address and select access level to share
-          </p>
-          <input
-            type="email"
-            value={userEmail}
-            onChange={e => setUserEmail(e.target.value)}
-          />
+          <div className="row">
+            <p>
+              Enter a user&#39;s email address and select access level to share
+            </p>
+            <input
+              type="email"
+              value={userEmail}
+              onChange={e => setUserEmail(e.target.value)}
+            />
+          </div>
+          <div className="row btn-group">
+            <button
+              className={`btn btn-default btn-lg ${readActive}`}
+              onClick={() => setAccess('read')}>
+              Read
+            </button>
+            <button
+              className={`btn btn-default btn-lg ${writeActive}`}
+              onClick={() => setAccess('write')}>
+              Write
+            </button>
+            <button
+              className={`btn btn-default btn-lg ${adminActive}`}
+              onClick={() => setAccess('admin')}>
+              Admin
+            </button>
+          </div>
         </div>
         <div className="col-xs-12 dataset-form-controls">
           <div className="col-xs-12 modal-actions">
@@ -67,6 +90,11 @@ const Share = ({ datasetId, permissions }) => {
       </div>
     </div>
   )
+}
+
+Share.propTypes = {
+  datasetId: PropTypes.string,
+  permissions: PropTypes.array,
 }
 
 export default Share
