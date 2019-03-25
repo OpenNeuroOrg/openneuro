@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 import ShareDataset from '../mutations/share.jsx'
 import RemovePermission from '../mutations/remove-permission.jsx'
 
-const PermissionRow = ({ datasetId, userId, email, access }) => (
+const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
   <tr>
-    <td className="col-xs-4">{email}</td>
+    <td className="col-xs-4">{userEmail}</td>
     <td className="col-xs-2">{access}</td>
     <td className="col-xs-2">
       <RemovePermission datasetId={datasetId} userId={userId} />
@@ -51,7 +51,7 @@ const Share = ({ datasetId, permissions }) => {
                 <PermissionRow
                   datasetId={datasetId}
                   userId={perm.user.id}
-                  email={perm.user.email}
+                  userEmail={perm.user.email}
                   access={perm.level}
                   key={index}
                 />
