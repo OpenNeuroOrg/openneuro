@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Editor, EditorState, RichUtils, convertToRaw } from 'draft-js'
+import { Editor, EditorState, RichUtils } from 'draft-js'
 import CommentMutation from '../mutations/comment.jsx'
 import BlockStyleControls from './block-style-controls.jsx'
 import InlineStyleControls from './inline-style-controls.jsx'
@@ -29,14 +29,14 @@ const CommentEditor = ({ datasetId, parentId = null }) => {
           blockStyleFn={getBlockStyle}
           editorState={editorState}
           onChange={setEditorState}
+          placeholder="Type your comment here..."
           spellCheck={true}
         />
         <CommentMutation
           datasetId={datasetId}
           parentId={parentId}
-          comment={JSON.stringify(
-            convertToRaw(editorState.getCurrentContent()),
-          )}
+          comment={editorState.getCurrentContent()}
+          disabled={editorState.getUndoStack().size === 0}
         />
       </div>
     </div>

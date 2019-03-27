@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
+import { convertToRaw } from 'draft-js'
 
 const NEW_COMMENT = gql`
   mutation newComment($datasetId: ID!, $parentId: ID, $comment: String!) {
@@ -9,16 +10,18 @@ const NEW_COMMENT = gql`
   }
 `
 
-const CommentMutation = ({ datasetId, parentId, comment }) => {
+const CommentMutation = ({ datasetId, parentId, comment, disabled }) => {
   return (
     <Mutation mutation={NEW_COMMENT}>
       {newComment => (
         <button
           className="btn-modal-action"
-          onClick={
-            () => console.log(datasetId, parentId, comment)
+          disabled={disabled}
+          onClick={() => {
+            const serializedComment = JSON.stringify(convertToRaw(comment))
+            console.log(datasetId, parentId, serializedComment)
             //newComment({ variables: { datasetId, parentId, comment } })
-          }>
+          }}>
           Submit Comment
         </button>
       )}
@@ -29,7 +32,8 @@ const CommentMutation = ({ datasetId, parentId, comment }) => {
 CommentMutation.propTypes = {
   datasetId: PropTypes.string,
   parentId: PropTypes.string,
-  comment: PropTypes.string,
+  comment: PropTypes.object,
+  disabled: PropTypes.bool,
 }
 
 export default CommentMutation
