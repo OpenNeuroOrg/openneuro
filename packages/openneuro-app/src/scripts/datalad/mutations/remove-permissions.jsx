@@ -11,6 +11,14 @@ const REMOVE_PERMISSION = gql`
   }
 `
 
+/**
+ * Remove any permissions matching the user
+ * @param {array} permissions
+ * @param {string} userId
+ */
+export const permissionsFilter = (permissions, userId) =>
+  permissions.filter(permission => permission.user.id !== userId)
+
 const RemovePermissions = ({ datasetId, userId }) => (
   <Mutation
     mutation={REMOVE_PERMISSION}
@@ -20,16 +28,13 @@ const RemovePermissions = ({ datasetId, userId }) => (
         id: datasetCacheId,
         fragment: PERMISSION_FRAGMENT,
       })
-      const newPermissions = permissions.filter(
-        permission => permission.user.id !== userId,
-      )
       cache.writeFragment({
         id: datasetCacheId,
         fragment: PERMISSION_FRAGMENT,
         data: {
           __typename: 'Dataset',
           id: datasetId,
-          permissions: newPermissions,
+          permissions: permissionsFilter(permissions, userId),
         },
       })
     }}>
