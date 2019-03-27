@@ -15,6 +15,7 @@ const getDatasetPage = gql`
       following
       starred
       ...DatasetDraft
+      ...DatasetPermissions
       uploader {
         id
         name
@@ -23,13 +24,6 @@ const getDatasetPage = gql`
       analytics {
         downloads
         views
-      }
-      permissions {
-        user {
-          id
-          email
-        }
-        level
       }
       snapshots {
         id
@@ -79,6 +73,7 @@ const getDatasetPage = gql`
     }
   }
   ${DatasetQueryFragments.DRAFT_FRAGMENT}
+  ${DatasetQueryFragments.PERMISSION_FRAGMENT}
 `
 
 const DatasetQuery = ({ match }) => (

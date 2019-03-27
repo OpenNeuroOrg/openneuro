@@ -5,20 +5,20 @@ import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
 
 const REMOVE_PERMISSION = gql`
-  mutation removePermission($datasetId: ID!, $userId: String!) {
-    removePermission(datasetId: $datasetId, userId: $userId)
+  mutation removePermissions($datasetId: ID!, $userId: String!) {
+    removePermissions(datasetId: $datasetId, userId: $userId)
   }
 `
 
-const RemovePermission = ({ datasetId, userId }) => (
+const RemovePermissions = ({ datasetId, userId }) => (
   <Mutation mutation={REMOVE_PERMISSION}>
-    {removePermission => (
+    {removePermissions => (
       <WarnButton
         message="Remove Permission"
         icon="fa-trash"
         warn={true}
         action={async cb => {
-          await removePermission({ variables: { datasetId, userId } })
+          await removePermissions({ variables: { datasetId, userId } })
           cb()
         }}
       />
@@ -26,9 +26,9 @@ const RemovePermission = ({ datasetId, userId }) => (
   </Mutation>
 )
 
-RemovePermission.propTypes = {
+RemovePermissions.propTypes = {
   datasetId: PropTypes.string,
   userId: PropTypes.string,
 }
 
-export default RemovePermission
+export default RemovePermissions

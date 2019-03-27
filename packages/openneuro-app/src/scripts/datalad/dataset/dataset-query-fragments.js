@@ -33,3 +33,16 @@ export const DRAFT_FRAGMENT = gql`
     }
   }
 `
+
+export const PERMISSION_FRAGMENT = gql`
+  fragment DatasetPermissions on Dataset {
+    id
+    permissions {
+      user {
+        id
+        email
+      }
+      level
+    }
+  }
+`

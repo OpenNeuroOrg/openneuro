@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import ShareDataset from '../mutations/share.jsx'
-import RemovePermission from '../mutations/remove-permission.jsx'
+import RemovePermissions from '../mutations/remove-permissions.jsx'
 
 const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
   <tr>
     <td className="col-xs-4">{userEmail}</td>
     <td className="col-xs-2">{access}</td>
     <td className="col-xs-2">
-      <RemovePermission datasetId={datasetId} userId={userId} />
+      <RemovePermissions datasetId={datasetId} userId={userId} />
     </td>
   </tr>
 )
@@ -18,15 +18,15 @@ PermissionRow.propTypes = {
   datasetId: PropTypes.string,
   userId: PropTypes.string,
   userEmail: PropTypes.string,
-  access: PropTypes.oneOf(['read', 'write', 'admin']),
+  access: PropTypes.oneOf(['ro', 'rw', 'admin']),
 }
 
 const Share = ({ datasetId, permissions }) => {
   const [userEmail, setUserEmail] = useState('')
-  const [access, setAccess] = useState('read')
+  const [access, setAccess] = useState('ro')
 
-  const readActive = access === 'read' && 'active'
-  const writeActive = access === 'write' && 'active'
+  const readActive = access === 'ro' && 'active'
+  const writeActive = access === 'rw' && 'active'
   const adminActive = access === 'admin' && 'active'
 
   return (
@@ -71,13 +71,13 @@ const Share = ({ datasetId, permissions }) => {
           <div className="row btn-group">
             <button
               className={`btn btn-default btn-lg ${readActive}`}
-              onClick={() => setAccess('read')}>
+              onClick={() => setAccess('ro')}>
               Read
             </button>
             <button
               className={`btn btn-default btn-lg ${writeActive}`}
-              onClick={() => setAccess('write')}>
-              Write
+              onClick={() => setAccess('rw')}>
+              Read and Write
             </button>
             <button
               className={`btn btn-default btn-lg ${adminActive}`}
@@ -95,6 +95,7 @@ const Share = ({ datasetId, permissions }) => {
               datasetId={datasetId}
               userEmail={userEmail}
               access={access}
+              done={() => setUserEmail('')}
             />
           </div>
         </div>
