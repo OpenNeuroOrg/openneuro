@@ -11,7 +11,11 @@ const CommentTree = ({ datasetId, uploader, comments }) => (
         uploader={uploader}
         data={comment}>
         {comments ? (
-          <CommentTree uploader={uploader} comments={comment.replies} />
+          <CommentTree
+            datasetId={datasetId}
+            uploader={uploader}
+            comments={comment.replies}
+          />
         ) : null}
       </Comment>
     ))}
