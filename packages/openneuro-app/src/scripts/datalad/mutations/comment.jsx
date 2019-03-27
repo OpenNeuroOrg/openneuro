@@ -5,8 +5,8 @@ import { Mutation } from 'react-apollo'
 import { convertToRaw } from 'draft-js'
 
 const NEW_COMMENT = gql`
-  mutation newComment($datasetId: ID!, $parentId: ID, $comment: String!) {
-    newComment(datasetId: $datasetId, parentId: $parentId)
+  mutation addComment($datasetId: ID!, $parentId: ID, $comment: String!) {
+    addComment(datasetId: $datasetId, parentId: $parentId, comment: $comment)
   }
 `
 
@@ -17,11 +17,15 @@ const CommentMutation = ({ datasetId, parentId, comment, disabled }) => {
         <button
           className="btn-modal-action"
           disabled={disabled}
-          onClick={() => {
-            const serializedComment = JSON.stringify(convertToRaw(comment))
-            console.log(datasetId, parentId, serializedComment)
-            //newComment({ variables: { datasetId, parentId, comment } })
-          }}>
+          onClick={() =>
+            newComment({
+              variables: {
+                datasetId,
+                parentId,
+                comment: JSON.stringify(convertToRaw(comment)),
+              },
+            }).then(newCommentId => console.log(newCommentId))
+          }>
           Submit Comment
         </button>
       )}

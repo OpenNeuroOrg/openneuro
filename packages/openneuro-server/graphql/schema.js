@@ -89,6 +89,8 @@ const typeDefs = `
     updateDescriptionList(datasetId: ID!, field: String!, value: [String!]): Description
     # Update dataset README file
     updateReadme(datasetId: ID!, value: String!): Boolean
+    # Submits a new comment and returns the comment ID for replies
+    addComment(datasetId: ID!, parentId: ID, comment: String!): ID
   }
 
   type Subscription {
