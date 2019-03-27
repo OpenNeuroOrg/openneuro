@@ -16,6 +16,8 @@ const getDatasetPage = gql`
       starred
       ...DatasetDraft
       ...DatasetPermissions
+      ...DatasetSnapshots
+      ...DatasetComments
       uploader {
         id
         name
@@ -25,55 +27,12 @@ const getDatasetPage = gql`
         downloads
         views
       }
-      snapshots {
-        id
-        tag
-        created
-      }
-      comments {
-        id
-        text
-        createDate
-        user {
-          email
-        }
-        replies {
-          id
-          text
-          createDate
-          user {
-            email
-          }
-          replies {
-            id
-            text
-            createDate
-            user {
-              email
-            }
-            replies {
-              id
-              text
-              createDate
-              user {
-                email
-              }
-              replies {
-                id
-                text
-                createDate
-                user {
-                  email
-                }
-              }
-            }
-          }
-        }
-      }
     }
   }
   ${DatasetQueryFragments.DRAFT_FRAGMENT}
   ${DatasetQueryFragments.PERMISSION_FRAGMENT}
+  ${DatasetQueryFragments.DATASET_SNAPSHOTS}
+  ${DatasetQueryFragments.DATASET_COMMENTS}
 `
 
 const DatasetQuery = ({ match }) => (

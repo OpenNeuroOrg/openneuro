@@ -46,3 +46,60 @@ export const PERMISSION_FRAGMENT = gql`
     }
   }
 `
+
+export const DATASET_SNAPSHOTS = gql`
+  fragment DatasetSnapshots on Dataset {
+    id
+    snapshots {
+      id
+      tag
+      created
+    }
+  }
+`
+
+export const DATASET_COMMENTS = gql`
+  fragment DatasetComments on Dataset {
+    id
+    comments {
+      id
+      text
+      createDate
+      user {
+        email
+      }
+      replies {
+        id
+        text
+        createDate
+        user {
+          email
+        }
+        replies {
+          id
+          text
+          createDate
+          user {
+            email
+          }
+          replies {
+            id
+            text
+            createDate
+            user {
+              email
+            }
+            replies {
+              id
+              text
+              createDate
+              user {
+                email
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`

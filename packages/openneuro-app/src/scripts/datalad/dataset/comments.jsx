@@ -4,21 +4,24 @@ import CommentEditor from '../comments/comment-editor.jsx'
 
 const CommentTree = ({ datasetId, uploader, comments }) => (
   <>
-    {comments.map(comment => (
-      <Comment
-        key={comment.id}
-        datasetId={datasetId}
-        uploader={uploader}
-        data={comment}>
-        {comments ? (
-          <CommentTree
-            datasetId={datasetId}
-            uploader={uploader}
-            comments={comment.replies}
-          />
-        ) : null}
-      </Comment>
-    ))}
+    {comments.map(comment => {
+      const nextLevel = comment.hasOwnProperty('replies') ? comment.replies : []
+      return (
+        <Comment
+          key={comment.id}
+          datasetId={datasetId}
+          uploader={uploader}
+          data={comment}>
+          {nextLevel.length ? (
+            <CommentTree
+              datasetId={datasetId}
+              uploader={uploader}
+              comments={nextLevel}
+            />
+          ) : null}
+        </Comment>
+      )
+    })}
   </>
 )
 
