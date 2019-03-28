@@ -51,7 +51,10 @@ const DatasetContent = ({ dataset }) => (
       <DatasetUploaded uploader={dataset.uploader} created={dataset.created} />
       <DatasetModified modified={dataset.draft.modified} />
       <DatasetAuthors authors={dataset.draft.description.Authors} />
-      <DatasetAnalytics downloads={dataset.downloads} views={dataset.views} />
+      <DatasetAnalytics
+        downloads={dataset.analytics.downloads}
+        views={dataset.analytics.views}
+      />
       <DatasetSummary summary={dataset.draft.summary} />
       <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
         <DatasetReadme content={dataset.draft.readme} />

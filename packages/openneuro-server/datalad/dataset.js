@@ -20,6 +20,7 @@ import Dataset from '../models/dataset.js'
 import Permission from '../models/permission.js'
 import Star from '../models/stars.js'
 import Analytics from '../models/analytics.js'
+import { trackAnalytics } from './analytics.js'
 import { datasetsConnection } from './pagination.js'
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -63,7 +64,11 @@ export const giveUploaderPermission = (datasetId, userId) => {
 /**
  * Fetch dataset document and related fields
  */
-export const getDataset = id => Dataset.findOne({ id }).exec()
+export const getDataset = id => {
+  // Track any queries for one dataset as a view
+  trackAnalytics(id, null, 'views')
+  return Dataset.findOne({ id }).exec()
+}
 
 /**
  * Delete dataset and associated documents
@@ -357,23 +362,6 @@ export const getDatasetAnalytics = (datasetId, tag) => {
     results = results.length ? results[0] : {}
     return results
   })
-}
-
-export const trackAnalytics = (datasetId, tag, type) => {
-  return c.crn.analytics.updateOne(
-    {
-      datasetId: datasetId,
-      tag: tag,
-    },
-    {
-      $inc: {
-        [type]: 1,
-      },
-    },
-    {
-      upsert: true,
-    },
-  )
 }
 
 export const getStars = datasetId => Star.find({ datasetId })

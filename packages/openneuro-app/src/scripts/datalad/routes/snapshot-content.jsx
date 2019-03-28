@@ -88,8 +88,9 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
         <DatasetModified modified={snapshot.created} />
         <DatasetAuthors authors={snapshot.description.Authors} />
         <DatasetAnalytics
-          downloads={snapshot.downloads}
-          views={snapshot.views}
+          downloads={snapshot.analytics.downloads}
+          views={snapshot.analytics.views}
+          snapshot
         />
         <DatasetSummary summary={snapshot.summary} />
         <DatasetReadme content={snapshot.readme} />

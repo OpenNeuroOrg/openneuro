@@ -13,6 +13,7 @@ import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDraftFiles } from './draft'
 import notifications from '../libs/notifications'
 import Snapshot from '../models/snapshot.js'
+import { trackAnalytics } from './analytics.js'
 
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -176,6 +177,8 @@ const snapshotKey = (datasetId, tag) => {
 export const getSnapshot = async (datasetId, tag) => {
   const url = `${uri}/datasets/${datasetId}/snapshots/${tag}`
   const key = snapshotKey(datasetId, tag)
+  // Track a view for each snapshot query
+  trackAnalytics(datasetId, tag, 'views')
   return redis.get(key).then(data => {
     if (data) return JSON.parse(data)
     else

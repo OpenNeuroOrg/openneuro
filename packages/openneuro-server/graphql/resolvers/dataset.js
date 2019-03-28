@@ -7,6 +7,7 @@ import { user } from './user.js'
 import { draft } from './draft.js'
 import { permissions } from './permissions.js'
 import { datasetComments } from './comment.js'
+import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
@@ -201,7 +202,7 @@ export const analytics = async obj => {
  * Track analytic of type 'view' or 'download' for a dataset / snapshot
  */
 export const trackAnalytics = (obj, { datasetId, tag, type }) => {
-  return datalad.trackAnalytics(datasetId, tag, type)
+  return dataladAnalytics.trackAnalytics(datasetId, tag, type)
 }
 
 /**

@@ -4,6 +4,7 @@ import LeftSidebar from './left-sidebar.jsx'
 import LeftSidebarButton from './left-sidebar-button.jsx'
 import DatasetMain from './dataset-main.jsx'
 import DatasetTools from '../fragments/dataset-tools.jsx'
+import datalad from '../../utils/datalad.js'
 
 export default class DatasetPage extends React.Component {
   constructor(props) {
