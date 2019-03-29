@@ -11,29 +11,34 @@ const Comment = ({ datasetId, uploader, data, children }) => {
   const editorState = EditorState.createWithContent(convertFromRaw(parsedText))
   return (
     <>
-      <div className="row">
-        {`By ${data.user.email} - ${distanceInWordsToNow(data.createDate)} ago`}
-      </div>
-      <div className="row">
-        <div className="col-xs-1">
+      <div className="comment">
+        <div className="row comment-header">
+          {`By ${data.user.email} - ${distanceInWordsToNow(
+            data.createDate,
+          )} ago`}
+        </div>
+        <div className="row comment-body">
           <img
             src={userUtil.generateGravatarUrl(data.user)}
-            width={60}
-            height={60}
+            className="comment-avatar"
           />
-        </div>
-        <div className="col-xs-11">
           <Editor editorState={editorState} />
+        </div>
+        <div className="row comment-controls">
           <a className="reply" onClick={() => setReplyMode(!replyMode)}>
             <i className="fa fa-comment" />
             {replyMode ? 'Hide' : 'Reply'}
           </a>
+        </div>
+      </div>
+      <div className="row replies">
+        <div className="comment-reply">
           {replyMode ? (
             <CommentEditor datasetId={datasetId} parentId={data.id} />
           ) : null}
         </div>
+        {children}
       </div>
-      <div className="row replies">{children}</div>
     </>
   )
 }
