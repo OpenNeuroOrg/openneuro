@@ -6,12 +6,6 @@ import { convertToRaw } from 'draft-js'
 import withProfile from '../../authentication/withProfile.js'
 import { DATASET_COMMENTS } from '../dataset/dataset-query-fragments.js'
 
-const NEW_COMMENT = gql`
-  mutation addComment($datasetId: ID!, $parentId: ID, $comment: String!) {
-    addComment(datasetId: $datasetId, parentId: $parentId, comment: $comment)
-  }
-`
-
 const EDIT_COMMENT = gql`
   mutation editComment($datasetId: ID!, $commentId: ID, $comment: String!) {
     editComment(datasetId: $datasetId, commentId: $parentId, comment: $comment)
@@ -44,9 +38,8 @@ export const appendCommentToTree = (tree, newComment) => {
   }
 }
 
-const CommentMutation = ({
+const CommentEditMutation = ({
   datasetId,
-  parentId,
   commentId,
   comment,
   disabled,
@@ -54,7 +47,7 @@ const CommentMutation = ({
 }) => {
   return (
     <Mutation
-      mutation={commentId ? EDIT_COMMENT : NEW_COMMENT}
+      mutation={EDIT_COMMENT}
       update={(cache, { data: { addComment } }) => {
         const datasetCacheId = `Dataset:${datasetId}`
         const { comments } = cache.readFragment({
@@ -64,7 +57,6 @@ const CommentMutation = ({
         // Create a mock comment
         const newComment = {
           id: addComment,
-          parentId,
           text: JSON.stringify(convertToRaw(comment)),
           createDate: new Date().toISOString(),
           user: { __typename: 'User', ...profile },
@@ -90,26 +82,24 @@ const CommentMutation = ({
             newComment({
               variables: {
                 datasetId,
-                parentId,
                 commentId,
                 comment: JSON.stringify(convertToRaw(comment)),
               },
             })
           }>
-          Submit Comment
+          Save
         </button>
       )}
     </Mutation>
   )
 }
 
-CommentMutation.propTypes = {
+CommentEditMutation.propTypes = {
   datasetId: PropTypes.string,
-  parentId: PropTypes.string,
   commentId: PropTypes.string,
   comment: PropTypes.object,
   disabled: PropTypes.bool,
   profile: PropTypes.object,
 }
 
-export default withProfile(CommentMutation)
+export default withProfile(CommentEditMutation)
