@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import EditDescriptionField from '../fragments/edit-description-field.jsx'
 import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
@@ -13,6 +13,8 @@ import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import Validation from '../validation/validation.jsx'
 import EditReadme from '../fragments/edit-readme.jsx'
+import LoggedIn from '../../authentication/logged-in.jsx'
+import LoggedOut from '../../authentication/logged-out.jsx'
 
 const HasBeenPublished = ({ isPublic, datasetId }) =>
   isPublic ? (
@@ -38,37 +40,47 @@ HasBeenPublished.propTypes = {
  */
 const DatasetContent = ({ dataset }) => (
   <>
-    <div className="col-xs-12">
-      <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
-    </div>
-    <div className="col-xs-6">
-      <EditDescriptionField
-        datasetId={dataset.id}
-        field="Name"
-        description={dataset.draft.description}>
-        <DatasetTitle title={dataset.draft.description.Name} />
-      </EditDescriptionField>
-      <DatasetUploaded uploader={dataset.uploader} created={dataset.created} />
-      <DatasetModified modified={dataset.draft.modified} />
-      <DatasetAuthors authors={dataset.draft.description.Authors} />
-      <DatasetAnalytics
-        downloads={dataset.analytics.downloads}
-        views={dataset.analytics.views}
+    <LoggedIn>
+      <div className="col-xs-12">
+        <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
+      </div>
+      <div className="col-xs-6">
+        <EditDescriptionField
+          datasetId={dataset.id}
+          field="Name"
+          description={dataset.draft.description}>
+          <DatasetTitle title={dataset.draft.description.Name} />
+        </EditDescriptionField>
+        <DatasetUploaded
+          uploader={dataset.uploader}
+          created={dataset.created}
+        />
+        <DatasetModified modified={dataset.draft.modified} />
+        <DatasetAuthors authors={dataset.draft.description.Authors} />
+        <DatasetAnalytics
+          downloads={dataset.analytics.downloads}
+          views={dataset.analytics.views}
+        />
+        <DatasetSummary summary={dataset.draft.summary} />
+        <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
+          <DatasetReadme content={dataset.draft.readme} />
+        </EditReadme>
+        <DatasetDescription
+          datasetId={dataset.id}
+          description={dataset.draft.description}
+          editable={true}
+        />
+      </div>
+      <div className="col-xs-6">
+        <Validation datasetId={dataset.id} />
+        <DatasetFiles files={dataset.draft.files} />
+      </div>
+    </LoggedIn>
+    <LoggedOut>
+      <Redirect
+        to={`/datasets/${dataset.id}/versions/${dataset.snapshots[0].tag}`}
       />
-      <DatasetSummary summary={dataset.draft.summary} />
-      <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
-        <DatasetReadme content={dataset.draft.readme} />
-      </EditReadme>
-      <DatasetDescription
-        datasetId={dataset.id}
-        description={dataset.draft.description}
-        editable={true}
-      />
-    </div>
-    <div className="col-xs-6">
-      <Validation datasetId={dataset.id} />
-      <DatasetFiles files={dataset.draft.files} />
-    </div>
+    </LoggedOut>
   </>
 )
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link, withRouter } from 'react-router-dom'
 import snapshotVersion from '../snapshotVersion.js'
 import format from 'date-fns/format'
-import withProfile from '../../authentication/withProfile.js'
+import LoggedIn from '../../authentication/logged-in.jsx'
 
 const SidebarRow = ({
   datasetId,
@@ -42,15 +42,10 @@ SidebarRow.propTypes = {
   version: PropTypes.string,
   draft: PropTypes.bool,
   active: PropTypes.string,
+  modified: PropTypes.object,
 }
 
-const LeftSidebar = ({
-  datasetId,
-  draftModified,
-  snapshots,
-  location,
-  profile,
-}) => {
+const LeftSidebar = ({ datasetId, draftModified, snapshots, location }) => {
   const active = snapshotVersion(location) || 'draft'
   return (
     <div className="left-sidebar">
@@ -59,7 +54,7 @@ const LeftSidebar = ({
           <span>
             <h3>Versions</h3>
             <ul>
-              {profile ? (
+              <LoggedIn>
                 <SidebarRow
                   key={'Draft'}
                   id={datasetId}
@@ -69,7 +64,7 @@ const LeftSidebar = ({
                   draft
                   active={active}
                 />
-              ) : null}
+              </LoggedIn>
               {snapshots.map(snapshot => (
                 <SidebarRow
                   key={snapshot.id}
@@ -93,8 +88,7 @@ LeftSidebar.propTypes = {
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
   location: PropTypes.object,
-  profile: PropTypes.object,
   draftModified: PropTypes.string,
 }
 
-export default withRouter(withProfile(LeftSidebar))
+export default withRouter(LeftSidebar)
