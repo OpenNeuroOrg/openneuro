@@ -4,10 +4,16 @@ import { Link } from 'react-router-dom'
 import ShareDataset from '../mutations/share.jsx'
 import RemovePermissions from '../mutations/remove-permissions.jsx'
 
+const description = {
+  admin: 'Edit dataset and edit permissions',
+  rw: 'Edit dataset',
+  ro: 'View dataset',
+}
+
 const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
   <tr>
     <td className="col-xs-4">{userEmail}</td>
-    <td className="col-xs-2">{access}</td>
+    <td className="col-xs-2">{description[access]}</td>
     <td className="col-xs-2">
       <RemovePermissions datasetId={datasetId} userId={userId} />
     </td>
@@ -58,32 +64,33 @@ const Share = ({ datasetId, permissions }) => {
               ))}
             </tbody>
           </table>
-          <div className="row">
-            <p>
-              Enter a user&#39;s email address and select access level to share
-            </p>
+          <p>
+            Enter a user&#39;s email address and select access level to share
+          </p>
+          <div className="input-group">
             <input
+              className="form-control"
               type="email"
               value={userEmail}
               onChange={e => setUserEmail(e.target.value)}
             />
-          </div>
-          <div className="row btn-group">
-            <button
-              className={`btn btn-default btn-lg ${readActive}`}
-              onClick={() => setAccess('ro')}>
-              Read
-            </button>
-            <button
-              className={`btn btn-default btn-lg ${writeActive}`}
-              onClick={() => setAccess('rw')}>
-              Read and Write
-            </button>
-            <button
-              className={`btn btn-default btn-lg ${adminActive}`}
-              onClick={() => setAccess('admin')}>
-              Admin
-            </button>
+            <div className="input-group-btn">
+              <button
+                className={`btn btn-default ${readActive}`}
+                onClick={() => setAccess('ro')}>
+                Read
+              </button>
+              <button
+                className={`btn btn-default ${writeActive}`}
+                onClick={() => setAccess('rw')}>
+                Read and Write
+              </button>
+              <button
+                className={`btn btn-default ${adminActive}`}
+                onClick={() => setAccess('admin')}>
+                Admin
+              </button>
+            </div>
           </div>
         </div>
         <div className="col-xs-12 dataset-form-controls">
