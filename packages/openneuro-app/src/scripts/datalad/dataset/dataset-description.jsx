@@ -1,7 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import markdown from '../../utils/markdown'
 import EditDescriptionField from '../fragments/edit-description-field.jsx'
 import EditDescriptionList from '../fragments/edit-description-list.jsx'
+
+const arrayToMarkdown = arr => {
+  return arr ? arr.map(element => ` * ${element}\n`).join('') : ''
+}
 
 const DatasetDescription = ({ datasetId, description, editable = true }) => (
   <>
@@ -12,19 +17,20 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         description={description}
         field="Authors"
         editable={editable}>
-        <span>
-          {description.Authors &&
-            description.Authors.map((author, index) => (
-              <div className="row" key={index}>
-                {author}
-              </div>
-            ))}
-        </span>
+        <div
+          className="cte-display fade-in"
+          dangerouslySetInnerHTML={markdown.format(
+            arrayToMarkdown(description.Authors),
+          )}
+        />
       </EditDescriptionList>
     </div>
     <div className="description-item">
       <h2>Dataset DOI</h2>
-      <span>{description.DatasetDOI}</span>
+      <span>
+        {description.DatasetDOI ||
+          'Create a new snapshot to obtain a DOI for the snapshot.'}
+      </span>
     </div>
     <div className="description-item">
       <h2>License</h2>
@@ -33,7 +39,10 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         field="License"
         description={description}
         editable={editable}>
-        <span>{description.License}</span>
+        <div
+          className="cte-display fade-in"
+          dangerouslySetInnerHTML={markdown.format(description.License || '')}
+        />
       </EditDescriptionField>
     </div>
     <div className="description-item">
@@ -43,7 +52,12 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         field="Acknowledgements"
         description={description}
         editable={editable}>
-        <span>{description.Acknowledgements}</span>
+        <div
+          className="cte-display fade-in"
+          dangerouslySetInnerHTML={markdown.format(
+            description.Acknowledgements || '',
+          )}
+        />
       </EditDescriptionField>
     </div>
     <div className="description-item">
@@ -53,7 +67,12 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         field="HowToAcknowledge"
         description={description}
         editable={editable}>
-        <span>{description.HowToAcknowledge}</span>
+        <div
+          className="cte-display fade-in"
+          dangerouslySetInnerHTML={markdown.format(
+            description.HowToAcknowledge || '',
+          )}
+        />
       </EditDescriptionField>
     </div>
     <div className="description-item">
@@ -63,7 +82,12 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         description={description}
         field="Funding"
         editable={editable}>
-        <span>{description.Funding}</span>
+        <div
+          className="cte-display fade-in"
+          dangerouslySetInnerHTML={markdown.format(
+            arrayToMarkdown(description.Funding),
+          )}
+        />
       </EditDescriptionList>
     </div>
     <div className="description-item">
@@ -73,12 +97,12 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         description={description}
         field="ReferencesAndLinks"
         editable={editable}>
-        {description.ReferencesAndLinks &&
-          description.ReferencesAndLinks.map(link => (
-            <div className="row" key={link}>
-              {link}
-            </div>
-          ))}
+        <div
+          className="cte-display fade-in"
+          dangerouslySetInnerHTML={markdown.format(
+            arrayToMarkdown(description.ReferencesAndLinks),
+          )}
+        />
       </EditDescriptionList>
     </div>
   </>

@@ -21,19 +21,19 @@ const EditList = ({ placeholder, elements, setElements }) => {
   return (
     <>
       <div className="row">
-        <ul>
-          {elements.map((element, index) => (
-            <div className="change col-xs-12" key={index}>
-              <div className="change-text col-xs-8">{element}</div>
-              <div className="col-xs-3 change-controls">
-                <a onClick={removeElement(index)}>
-                  <i className="fa fa-times" />
-                  Remove
-                </a>
-              </div>
+        {elements.map((element, index) => (
+          <>
+            <div className="change-text col-xs-8" key={index}>
+              {element}
             </div>
-          ))}
-        </ul>
+            <div className="col-xs-3 change-controls">
+              <a onClick={removeElement(index)}>
+                <i className="fa fa-times" />
+                Remove
+              </a>
+            </div>
+          </>
+        ))}
       </div>
       <div className="row">
         <div className="col-xs-8">
