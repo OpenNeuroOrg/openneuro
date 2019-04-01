@@ -6,6 +6,7 @@ import WarnButton from '../../common/forms/warn-button.jsx'
 import DeleteDataset from '../mutations/delete.jsx'
 import FollowDataset from '../mutations/follow.jsx'
 import StarDataset from '../mutations/star.jsx'
+import LoggedIn from '../../authentication/logged-in.jsx'
 
 /**
  * Immediate redirect to a dataset or snapshot route
@@ -43,55 +44,60 @@ const DatasetTools = ({ dataset, location, history }) => {
             }}
           />
         </div>
-        <div role="presentation" className="tool">
-          {!dataset.public &&
-            edit && (
+        <LoggedIn>
+          <div role="presentation" className="tool">
+            {!dataset.public &&
+              edit && (
+                <WarnButton
+                  tooltip="Publish Dataset"
+                  icon="fa-globe icon-plus"
+                  warn={false}
+                  action={cb => {
+                    toolRedirect(history, rootPath, 'publish')
+                    cb()
+                  }}
+                />
+              )}
+          </div>
+          <div role="presentation" className="tool">
+            {edit && <DeleteDataset datasetId={dataset.id} />}
+          </div>
+          <div role="presentation" className="tool">
+            {edit && (
               <WarnButton
-                tooltip="Publish Dataset"
-                icon="fa-globe icon-plus"
+                tooltip="Share Dataset"
+                icon="fa-user icon-plus"
                 warn={false}
                 action={cb => {
-                  toolRedirect(history, rootPath, 'publish')
+                  toolRedirect(history, rootPath, 'share')
                   cb()
                 }}
               />
             )}
-        </div>
-        <div role="presentation" className="tool">
-          {edit && <DeleteDataset datasetId={dataset.id} />}
-        </div>
-        <div role="presentation" className="tool">
-          {edit && (
-            <WarnButton
-              tooltip="Share Dataset"
-              icon="fa-user icon-plus"
-              warn={false}
-              action={cb => {
-                toolRedirect(history, rootPath, 'share')
-                cb()
-              }}
+          </div>
+          <div role="presentation" className="tool">
+            {edit && (
+              <WarnButton
+                tooltip="Create Snapshot"
+                icon="fa-camera-retro icon-plus"
+                warn={false}
+                action={cb => {
+                  toolRedirect(history, rootPath, 'snapshot')
+                  cb()
+                }}
+              />
+            )}
+          </div>
+          <div role="presentation" className="tool">
+            <FollowDataset
+              datasetId={dataset.id}
+              following={dataset.following}
             />
-          )}
-        </div>
-        <div role="presentation" className="tool">
-          {edit && (
-            <WarnButton
-              tooltip="Create Snapshot"
-              icon="fa-camera-retro icon-plus"
-              warn={false}
-              action={cb => {
-                toolRedirect(history, rootPath, 'snapshot')
-                cb()
-              }}
-            />
-          )}
-        </div>
-        <div role="presentation" className="tool">
-          <FollowDataset datasetId={dataset.id} following={dataset.following} />
-        </div>
-        <div role="presentation" className="tool">
-          <StarDataset datasetId={dataset.id} starred={dataset.starred} />
-        </div>
+          </div>
+          <div role="presentation" className="tool">
+            <StarDataset datasetId={dataset.id} starred={dataset.starred} />
+          </div>
+        </LoggedIn>
       </div>
     </div>
   )
