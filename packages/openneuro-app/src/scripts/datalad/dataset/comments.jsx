@@ -1,6 +1,8 @@
 import React from 'react'
 import Comment from './comment.jsx'
 import CommentEditor from '../comments/comment-editor.jsx'
+import LoggedIn from '../../authentication/logged-in.jsx'
+import LoggedOut from '../../authentication/logged-out.jsx'
 
 const CommentTree = ({ datasetId, uploader, comments }) => (
   <>
@@ -31,7 +33,12 @@ const Comments = ({ datasetId, uploader, comments }) => {
       <hr />
       <div className="dataset-comments">
         <h2>Comments</h2>
-        <CommentEditor datasetId={datasetId} />
+        <LoggedIn>
+          <CommentEditor datasetId={datasetId} />
+        </LoggedIn>
+        <LoggedOut>
+          <div>Please sign in to contribute to the discussion.</div>
+        </LoggedOut>
         <CommentTree
           datasetId={datasetId}
           uploader={uploader}
