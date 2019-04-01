@@ -29,7 +29,7 @@ const HasBeenPublished = ({ isPublic, datasetId }) =>
   )
 
 HasBeenPublished.propTypes = {
-  public: PropTypes.bool,
+  isPublic: PropTypes.bool,
   datasetId: PropTypes.string,
 }
 
