@@ -16,7 +16,7 @@ import EditReadme from '../fragments/edit-readme.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import LoggedOut from '../../authentication/logged-out.jsx'
 
-const HasBeenPublished = ({ isPublic, datasetId }) =>
+export const HasBeenPublished = ({ isPublic, datasetId }) =>
   isPublic ? (
     <div className="alert alert-success">
       <strong>This dataset has been published!</strong> Create a new snapshot to
