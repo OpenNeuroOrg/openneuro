@@ -20,44 +20,38 @@ const EditList = ({ placeholder, elements, setElements }) => {
 
   return (
     <>
+      <div className="input-group">
+        <input
+          type="text"
+          className="form-control"
+          placeholder={placeholder}
+          value={newElement}
+          onChange={e => updateNewElement(e.target.value)}
+        />
+        <span className="input-group-btn">
+          <button
+            className="btn btn-default"
+            type="button"
+            onClick={() => {
+              setElements([...elements, newElement])
+              updateNewElement('')
+            }}>
+            Add
+          </button>
+        </span>
+      </div>
       <div className="row">
         {elements.map((element, index) => (
-          <>
-            <div className="change-text col-xs-8" key={index}>
-              {element}
-            </div>
+          <span key={index}>
+            <div className="change-text col-xs-8">{element}</div>
             <div className="col-xs-3 change-controls">
               <a onClick={removeElement(index)}>
                 <i className="fa fa-times" />
                 Remove
               </a>
             </div>
-          </>
+          </span>
         ))}
-      </div>
-      <div className="row">
-        <div className="col-xs-8">
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder={placeholder}
-              value={newElement}
-              onChange={e => updateNewElement(e.target.value)}
-            />
-            <span className="input-group-btn">
-              <button
-                className="btn btn-default"
-                type="button"
-                onClick={() => {
-                  setElements([...elements, newElement])
-                  updateNewElement('')
-                }}>
-                Add
-              </button>
-            </span>
-          </div>
-        </div>
       </div>
     </>
   )

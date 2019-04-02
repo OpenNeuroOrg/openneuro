@@ -22,32 +22,34 @@ const Snapshot = ({ datasetId, snapshots }) => {
   return (
     <div className="dataset-form">
       <div className="col-xs-12 dataset-form-header">
-        <div className="form-group">
-          <label>Create Snapshot</label>
-        </div>
+        <h2>Create Snapshot</h2>
         <hr />
       </div>
-      <div className="col-xs-12 dataset-form-body">
-        <div className="row">
-          <h3>Snapshot Version {newVersion}</h3>
+      <div className="col-xs-4 dataset-form-body">
+        <h4>Version</h4>
+        <div className="input-group">
+          <span className="input-group-addon" id="sizing-addon1">
+            {newVersion}
+          </span>
+          <div className="input-group-btn">
+            <button
+              className={`btn btn-default ${majorActive}`}
+              onClick={() => setSemanticLevel('major')}>
+              Major
+            </button>
+            <button
+              className={`btn btn-default ${minorActive}`}
+              onClick={() => setSemanticLevel('minor')}>
+              Minor
+            </button>
+            <button
+              className={`btn btn-default ${patchActive}`}
+              onClick={() => setSemanticLevel('patch')}>
+              Patch
+            </button>
+          </div>
         </div>
-        <div className="row btn-group">
-          <button
-            className={`btn btn-default btn-lg ${majorActive}`}
-            onClick={() => setSemanticLevel('major')}>
-            Major
-          </button>
-          <button
-            className={`btn btn-default btn-lg ${minorActive}`}
-            onClick={() => setSemanticLevel('minor')}>
-            Minor
-          </button>
-          <button
-            className={`btn btn-default btn-lg ${patchActive}`}
-            onClick={() => setSemanticLevel('patch')}>
-            Patch
-          </button>
-        </div>
+        <h4>Changelog</h4>
         <EditList
           placeholder="Enter new changes here..."
           elements={changes}
