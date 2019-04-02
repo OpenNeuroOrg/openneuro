@@ -65,4 +65,5 @@ Metric.propTypes = {
   type: PropTypes.string,
   value: PropTypes.number,
   display: PropTypes.bool,
+  snapshot: PropTypes.bool,
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import SaveButton from '../fragments/save-button.jsx'
@@ -91,6 +92,23 @@ const UpdateDescription = ({ datasetId, field, value, done }) => {
       )}
     </Mutation>
   )
+}
+
+UpdateDescription.propTypes = {
+  datasetId: PropTypes.string,
+  field: PropTypes.oneOf([
+    'Name',
+    'BIDSVersion',
+    'License',
+    'Authors',
+    'Acknowledgements',
+    'HowToAcknowledge',
+    'Funding',
+    'ReferencesAndLinks',
+    'DatasetDOI',
+  ]),
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  done: PropTypes.func,
 }
 
 export default UpdateDescription

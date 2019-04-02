@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Comment from './comment.jsx'
 import CommentEditor from '../comments/comment-editor.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
@@ -27,6 +28,12 @@ const CommentTree = ({ datasetId, uploader, comments }) => (
   </>
 )
 
+CommentTree.propTypes = {
+  datasetId: PropTypes.string,
+  uploader: PropTypes.object,
+  comments: PropTypes.array,
+}
+
 const Comments = ({ datasetId, uploader, comments }) => {
   return (
     <div className="col-xs-12 dataset-inner">
@@ -47,6 +54,12 @@ const Comments = ({ datasetId, uploader, comments }) => {
       </div>
     </div>
   )
+}
+
+Comments.propTypes = {
+  datasetId: PropTypes.string,
+  uploader: PropTypes.object,
+  comments: PropTypes.array,
 }
 
 export default Comments

@@ -61,4 +61,11 @@ const CommentEditor = ({
   )
 }
 
+CommentEditor.propTypes = {
+  datasetId: PropTypes.string,
+  parentId: PropTypes.string,
+  commentId: PropTypes.string,
+  state: PropTypes.object,
+}
+
 export default CommentEditor

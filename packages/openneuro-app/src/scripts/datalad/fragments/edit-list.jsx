@@ -73,4 +73,10 @@ const EditList = ({ placeholder, elements, setElements }) => {
   )
 }
 
+EditList.propTypes = {
+  placeholder: PropTypes.string,
+  elements: PropTypes.array,
+  setElements: PropTypes.func,
+}
+
 export default EditList

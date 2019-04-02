@@ -55,6 +55,7 @@ SnapshotDataset.propTypes = {
   datasetId: PropTypes.string,
   tag: PropTypes.string,
   history: PropTypes.object,
+  changes: PropTypes.array,
 }
 
 export default withRouter(SnapshotDataset)

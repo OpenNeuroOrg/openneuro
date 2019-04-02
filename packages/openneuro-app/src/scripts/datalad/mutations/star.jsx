@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
@@ -42,5 +43,10 @@ const StarDataset = ({ datasetId, starred }) => (
     )}
   </Mutation>
 )
+
+StarDataset.propTypes = {
+  datasetId: PropTypes.string,
+  starred: PropTypes.bool,
+}
 
 export default StarDataset

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import SaveButton from '../fragments/save-button.jsx'
@@ -42,5 +43,11 @@ const UpdateReadme = ({ datasetId, value, done }) => (
     )}
   </Mutation>
 )
+
+UpdateReadme.propTypes = {
+  datasetId: PropTypes.string,
+  value: PropTypes.string,
+  done: PropTypes.func,
+}
 
 export default UpdateReadme

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
@@ -27,5 +28,10 @@ const DeleteDataset = ({ history, datasetId }) => (
     )}
   </Mutation>
 )
+
+DeleteDataset.propTypes = {
+  history: PropTypes.object,
+  datasetId: PropTypes.string,
+}
 
 export default withRouter(DeleteDataset)

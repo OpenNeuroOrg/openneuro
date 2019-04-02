@@ -7,7 +7,7 @@ import CommentEditor from '../comments/comment-editor.jsx'
 import AdminUser from '../../authentication/admin-user.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 
-const Comment = ({ datasetId, uploader, data, children, profile }) => {
+const Comment = ({ datasetId, data, children }) => {
   const [replyMode, setReplyMode] = useState(false)
   const [editMode, setEditMode] = useState(false)
   const parsedText = JSON.parse(data.text)
@@ -64,6 +64,12 @@ const Comment = ({ datasetId, uploader, data, children, profile }) => {
       </div>
     </>
   )
+}
+
+Comment.propTypes = {
+  datasetId: PropTypes.string,
+  data: PropTypes.object,
+  children: PropTypes.object,
 }
 
 export default Comment

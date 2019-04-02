@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
@@ -42,5 +43,10 @@ const FollowDataset = ({ datasetId, following }) => (
     )}
   </Mutation>
 )
+
+FollowDataset.propTypes = {
+  datasetId: PropTypes.string,
+  following: PropTypes.bool,
+}
 
 export default FollowDataset

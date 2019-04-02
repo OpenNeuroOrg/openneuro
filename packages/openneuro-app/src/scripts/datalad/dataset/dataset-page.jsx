@@ -53,6 +53,7 @@ class DatasetPage extends React.Component {
 DatasetPage.propTypes = {
   dataset: PropTypes.shape({
     id: PropTypes.string,
+    draft: PropTypes.object,
     snapshots: PropTypes.array,
   }),
 }
