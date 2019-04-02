@@ -32,7 +32,7 @@ const Comment = ({ datasetId, data, children }) => {
               state={editorState}
             />
           ) : (
-            <Editor editorState={editorState} />
+            <Editor editorKey={data.id} editorState={editorState} />
           )}
         </div>
         <LoggedIn>

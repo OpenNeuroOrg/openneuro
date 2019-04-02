@@ -64,7 +64,7 @@ exports[`NavMenu renders successfully 1`] = `
   <li>
     <NavbarCollapse>
       <ProfileComponent />
-      <withCookies(Component)>
+      <LoggedOut>
         <div
           className="navbar-right sign-in-nav-btn"
         >
@@ -77,7 +77,7 @@ exports[`NavMenu renders successfully 1`] = `
             </span>
           </button>
         </div>
-      </withCookies(Component)>
+      </LoggedOut>
     </NavbarCollapse>
   </li>
 </ul>

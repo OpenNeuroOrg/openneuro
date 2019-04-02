@@ -35,6 +35,7 @@ const CommentEditor = ({
       />
       <div className="RichEditor-editor">
         <Editor
+          editorKey={commentId}
           blockStyleFn={getBlockStyle}
           editorState={editorState}
           onChange={setEditorState}
