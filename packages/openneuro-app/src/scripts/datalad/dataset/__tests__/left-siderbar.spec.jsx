@@ -1,5 +1,5 @@
 import React from 'react'
-import { mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import LeftSidebar, { SidebarRow } from '../left-sidebar.jsx'
 
 const fixedDate = new Date('2019-04-02T19:56:41.222Z')
