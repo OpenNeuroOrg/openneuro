@@ -14,7 +14,7 @@ const EditListRow = styled.div`
 /**
  * Generic add/remove strings from an Array list
  */
-const EditList = ({ placeholder, elements, setElements }) => {
+const EditList = ({ placeholder, elements = [], setElements }) => {
   const [newElement, updateNewElement] = useState('')
 
   /**

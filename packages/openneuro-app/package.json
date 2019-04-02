@@ -34,7 +34,7 @@
     "downloadjs": "^1.4.7",
     "draft-js": "^0.10.5",
     "draft-js-prism": "^1.0.6",
-    "enzyme-to-json": "^3.3.4",
+    "enzyme-to-json": "^3.3.5",
     "es6-shim": "^0.35.3",
     "eslint": "^5.7.0",
     "favico.js": "git://github.com/ejci/favico.js#0.3.10",

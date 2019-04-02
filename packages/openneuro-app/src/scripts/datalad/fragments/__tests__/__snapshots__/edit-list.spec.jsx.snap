@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditList component renders with default props 1`] = `
+<EditList>
+  <div
+    className="input-group"
+  >
+    <input
+      className="form-control"
+      onChange={[Function]}
+      type="text"
+      value=""
+    />
+    <span
+      className="input-group-btn"
+    >
+      <Styled(button)
+        className="btn btn-default"
+        onClick={[Function]}
+        type="button"
+      >
+        <button
+          className="btn btn-default css-dhocte"
+          onClick={[Function]}
+          type="button"
+        >
+          Add
+        </button>
+      </Styled(button)>
+    </span>
+  </div>
+  <div />
+</EditList>
+`;
