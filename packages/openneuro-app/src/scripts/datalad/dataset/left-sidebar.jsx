@@ -5,7 +5,7 @@ import snapshotVersion from '../snapshotVersion.js'
 import format from 'date-fns/format'
 import LoggedIn from '../../authentication/logged-in.jsx'
 
-const SidebarRow = ({
+export const SidebarRow = ({
   datasetId,
   id,
   version,

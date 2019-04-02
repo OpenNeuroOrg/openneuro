@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LeftSidebar component SidebarRow renders draft version correctly 1`] = `undefined`;
+
+exports[`LeftSidebar component SidebarRow renders snapshot version correctly 1`] = `undefined`;
+
+exports[`LeftSidebar component renders with basic props 1`] = `
+<Route>
+  <Component />
+</Route>
+`;
