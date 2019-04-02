@@ -22,13 +22,15 @@ const Snapshot = ({ datasetId, snapshots }) => {
   return (
     <div className="dataset-form">
       <div className="col-xs-12 dataset-form-header">
-        <h2>Create Snapshot</h2>
+        <div className="form-group">
+          <label>Create Snapshot</label>
+        </div>
         <hr />
       </div>
-      <div className="col-xs-4 dataset-form-body">
+      <div className="col-xs-12 dataset-form-body">
         <h4>Version</h4>
         <div className="input-group">
-          <span className="input-group-addon" id="sizing-addon1">
+          <span className="input-group-addon" style={{ width: '100%' }}>
             {newVersion}
           </span>
           <div className="input-group-btn">
