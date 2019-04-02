@@ -20,8 +20,7 @@ describe('Comments component', () => {
   })
   it('recursively renders a tree of comments', () => {
     const comments = [{ ...exampleComment, replies: [exampleComment] }]
-    const wrapper = mount(
-      <Comments datasetId="ds000001" comments={[exampleComment]} />,
-    )
+    const wrapper = mount(<Comments datasetId="ds000001" comments={comments} />)
+    expect(wrapper).toMatchSnapshot()
   })
 })
