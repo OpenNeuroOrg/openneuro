@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatasetUploaded component renders with common props 1`] = `
+<h6>
+  uploaded by Tester on 2016-11-06 - over 2 years ago
+</h6>
+`;
