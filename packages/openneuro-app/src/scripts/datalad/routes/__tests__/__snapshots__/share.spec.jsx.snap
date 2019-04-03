@@ -68,3 +68,92 @@ exports[`Share dataset route PermissionRow renders for rw permissions 1`] = `
   </td>
 </tr>
 `;
+
+exports[`Share dataset route ShareTable renders with many permissions 1`] = `
+<table
+  className="table"
+>
+  <thead>
+    <tr>
+      <th>
+        Email
+      </th>
+      <th>
+        Access
+      </th>
+      <th>
+        Edit
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <PermissionRow
+      datasetId="ds001"
+      key="0"
+      userEmail="test@example.com"
+      userId="1234"
+    />
+    <PermissionRow
+      datasetId="ds001"
+      key="1"
+      userEmail="tester@example.com"
+      userId="5678"
+    />
+    <PermissionRow
+      datasetId="ds001"
+      key="2"
+      userEmail="testr@example.com"
+      userId="91011"
+    />
+  </tbody>
+</table>
+`;
+
+exports[`Share dataset route ShareTable renders with no permissions 1`] = `
+<table
+  className="table"
+>
+  <thead>
+    <tr>
+      <th>
+        Email
+      </th>
+      <th>
+        Access
+      </th>
+      <th>
+        Edit
+      </th>
+    </tr>
+  </thead>
+  <tbody />
+</table>
+`;
+
+exports[`Share dataset route ShareTable renders with one permission 1`] = `
+<table
+  className="table"
+>
+  <thead>
+    <tr>
+      <th>
+        Email
+      </th>
+      <th>
+        Access
+      </th>
+      <th>
+        Edit
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <PermissionRow
+      datasetId="ds001"
+      key="0"
+      userEmail="test@example.com"
+      userId="1234"
+    />
+  </tbody>
+</table>
+`;

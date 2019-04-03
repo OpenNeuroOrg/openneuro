@@ -27,6 +27,34 @@ PermissionRow.propTypes = {
   access: PropTypes.oneOf(['ro', 'rw', 'admin']),
 }
 
+export const ShareTable = ({ datasetId, permissions }) => (
+  <table className="table">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Access</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {permissions.map((perm, index) => (
+        <PermissionRow
+          datasetId={datasetId}
+          userId={perm.user.id}
+          userEmail={perm.user.email}
+          access={perm.level}
+          key={index}
+        />
+      ))}
+    </tbody>
+  </table>
+)
+
+ShareTable.propTypes = {
+  datasetId: PropTypes.string,
+  permissions: PropTypes.array,
+}
+
 const Share = ({ datasetId, permissions }) => {
   const [userEmail, setUserEmail] = useState('')
   const [access, setAccess] = useState('ro')
@@ -44,26 +72,7 @@ const Share = ({ datasetId, permissions }) => {
         <hr />
         <div className="col-xs-12 dataset-form-body">
           <p>Dataset shared with:</p>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Email</th>
-                <th>Access</th>
-                <th>Edit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {permissions.map((perm, index) => (
-                <PermissionRow
-                  datasetId={datasetId}
-                  userId={perm.user.id}
-                  userEmail={perm.user.email}
-                  access={perm.level}
-                  key={index}
-                />
-              ))}
-            </tbody>
-          </table>
+          <ShareTable datasetId={datasetId} permissions={permissions} />
           <p>
             Enter a user&#39;s email address and select access level to share
           </p>
