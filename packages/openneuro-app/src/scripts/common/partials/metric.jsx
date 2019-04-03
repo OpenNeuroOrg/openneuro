@@ -38,6 +38,8 @@ export default class Metric extends React.PureComponent {
         iconClass = 'fa fa-eye'
         tip = `This ${noun} has ${value} views.`
         break
+      default:
+        throw new Error('Invalid type provided')
     }
 
     let content = (
