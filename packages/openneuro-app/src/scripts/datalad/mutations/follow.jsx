@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
+import { datasetCacheId } from './cache-id.js'
 
 const FOLLOW_DATASET = gql`
   mutation followDataset($datasetId: ID!) {
@@ -22,7 +23,7 @@ const FollowDataset = ({ datasetId, following }) => (
     mutation={FOLLOW_DATASET}
     update={(cache, { data: { followDataset } }) => {
       cache.writeFragment({
-        id: `Dataset:${datasetId}`,
+        id: datasetCacheId(datasetId),
         fragment: USER_FOLLOWING,
         data: {
           __typename: 'Dataset',

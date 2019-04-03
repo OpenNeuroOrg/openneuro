@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
+import { datasetCacheId } from './cache-id.js'
 
 const STAR_DATASET = gql`
   mutation starDataset($datasetId: ID!) {
@@ -22,7 +23,7 @@ const StarDataset = ({ datasetId, starred }) => (
     mutation={STAR_DATASET}
     update={(cache, { data: { starDataset } }) => {
       cache.writeFragment({
-        id: `Dataset:${datasetId}`,
+        id: datasetCacheId(datasetId),
         fragment: USER_STARRED,
         data: {
           __typename: 'Dataset',

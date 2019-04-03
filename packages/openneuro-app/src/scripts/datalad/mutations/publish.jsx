@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
+import { datasetCacheId } from './cache-id.js'
 
 const PUBLISH_DATASET = gql`
   mutation publishDataset($datasetId: ID!) {
@@ -22,7 +23,7 @@ const PublishDataset = ({ history, datasetId }) => (
     mutation={PUBLISH_DATASET}
     update={cache => {
       cache.writeFragment({
-        id: `Dataset:${datasetId}`,
+        id: datasetCacheId(datasetId),
         fragment: DATASET_PUBLISHED,
         data: {
           __typename: 'Dataset',

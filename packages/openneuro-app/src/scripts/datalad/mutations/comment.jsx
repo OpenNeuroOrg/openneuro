@@ -5,6 +5,7 @@ import { Mutation } from 'react-apollo'
 import { convertToRaw } from 'draft-js'
 import withProfile from '../../authentication/withProfile.js'
 import { DATASET_COMMENTS } from '../dataset/dataset-query-fragments.js'
+import { datasetCacheId } from './cache-id.js'
 
 const NEW_COMMENT = gql`
   mutation addComment($datasetId: ID!, $parentId: ID, $comment: String!) {
@@ -56,9 +57,8 @@ const CommentMutation = ({
     <Mutation
       mutation={commentId ? EDIT_COMMENT : NEW_COMMENT}
       update={(cache, { data: { addComment } }) => {
-        const datasetCacheId = `Dataset:${datasetId}`
         const { comments } = cache.readFragment({
-          id: datasetCacheId,
+          id: datasetCacheId(datasetId),
           fragment: DATASET_COMMENTS,
         })
         // Create a mock comment
@@ -73,7 +73,7 @@ const CommentMutation = ({
         }
         const newTree = appendCommentToTree(comments, newComment)
         cache.writeFragment({
-          id: datasetCacheId,
+          id: datasetCacheId(datasetId),
           fragment: DATASET_COMMENTS,
           data: {
             __typename: 'Dataset',

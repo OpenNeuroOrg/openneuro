@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
 import { DATASET_SNAPSHOTS } from '../dataset/dataset-query-fragments.js'
+import { datasetCacheId } from './cache-id.js'
 
 const CREATE_SNAPSHOT = gql`
   mutation createSnapshot($datasetId: ID!, $tag: String!, $changes: [String!]) {
@@ -19,14 +20,13 @@ const SnapshotDataset = ({ history, datasetId, tag, changes }) => (
   <Mutation
     mutation={CREATE_SNAPSHOT}
     update={(cache, { data: { createSnapshot } }) => {
-      const datasetCacheId = `Dataset:${datasetId}`
       // Fetch known snapshots
       const { snapshots } = cache.readFragment({
-        id: datasetCacheId,
+        id: datasetCacheId(datasetId),
         fragment: DATASET_SNAPSHOTS,
       })
       cache.writeFragment({
-        id: datasetCacheId,
+        id: datasetCacheId(datasetId),
         fragment: DATASET_SNAPSHOTS,
         data: {
           __typename: 'Dataset',

@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import { PERMISSION_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 import WarnButton from '../../common/forms/warn-button.jsx'
+import { datasetCacheId } from './cache-id.js'
 
 const REMOVE_PERMISSION = gql`
   mutation removePermissions($datasetId: ID!, $userId: String!) {
@@ -23,13 +24,12 @@ const RemovePermissions = ({ datasetId, userId }) => (
   <Mutation
     mutation={REMOVE_PERMISSION}
     update={cache => {
-      const datasetCacheId = `Dataset:${datasetId}`
       const { permissions } = cache.readFragment({
-        id: datasetCacheId,
+        id: datasetCacheId(datasetId),
         fragment: PERMISSION_FRAGMENT,
       })
       cache.writeFragment({
-        id: datasetCacheId,
+        id: datasetCacheId(datasetId),
         fragment: PERMISSION_FRAGMENT,
         data: {
           __typename: 'Dataset',

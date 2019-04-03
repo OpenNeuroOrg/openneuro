@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import SaveButton from '../fragments/save-button.jsx'
 import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
+import { datasetCacheId } from './cache-id.js'
 
 const UPDATE_README = gql`
   mutation updateReadme($datasetId: ID!, $value: String!) {
@@ -15,13 +16,12 @@ const UpdateReadme = ({ datasetId, value, done }) => (
   <Mutation
     mutation={UPDATE_README}
     update={cache => {
-      const datasetCacheId = `Dataset:${datasetId}`
       const { draft } = cache.readFragment({
-        id: datasetCacheId,
+        id: datasetCacheId(datasetId),
         fragment: DRAFT_FRAGMENT,
       })
       cache.writeFragment({
-        id: datasetCacheId,
+        id: datasetCacheId(datasetId),
         fragment: DRAFT_FRAGMENT,
         data: {
           __typename: 'Dataset',
