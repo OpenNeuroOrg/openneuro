@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Share dataset route PermissionRow renders for admin permissions 1`] = `
+<tr>
+  <td
+    className="col-xs-4"
+  >
+    tester@example.com
+  </td>
+  <td
+    className="col-xs-2"
+  >
+    Edit dataset and edit permissions
+  </td>
+  <td
+    className="col-xs-2"
+  >
+    <RemovePermissions
+      datasetId="ds00001"
+      userId="1234"
+    />
+  </td>
+</tr>
+`;
+
+exports[`Share dataset route PermissionRow renders for ro permissions 1`] = `
+<tr>
+  <td
+    className="col-xs-4"
+  >
+    tester@example.com
+  </td>
+  <td
+    className="col-xs-2"
+  >
+    View dataset
+  </td>
+  <td
+    className="col-xs-2"
+  >
+    <RemovePermissions
+      datasetId="ds00001"
+      userId="1234"
+    />
+  </td>
+</tr>
+`;
+
+exports[`Share dataset route PermissionRow renders for rw permissions 1`] = `
+<tr>
+  <td
+    className="col-xs-4"
+  >
+    tester@example.com
+  </td>
+  <td
+    className="col-xs-2"
+  >
+    Edit dataset
+  </td>
+  <td
+    className="col-xs-2"
+  >
+    <RemovePermissions
+      datasetId="ds00001"
+      userId="1234"
+    />
+  </td>
+</tr>
+`;

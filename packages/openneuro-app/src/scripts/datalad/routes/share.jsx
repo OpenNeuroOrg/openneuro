@@ -10,7 +10,7 @@ const description = {
   ro: 'View dataset',
 }
 
-const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
+export const PermissionRow = ({ datasetId, userId, userEmail, access }) => (
   <tr>
     <td className="col-xs-4">{userEmail}</td>
     <td className="col-xs-2">{description[access]}</td>
