@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FileTreeGeneric from '../../common/partials/file-tree-generic.jsx'
+import Files from '../../file-tree/files.jsx'
 
 const DatasetFiles = ({ files }) => (
   <div className="dataset-files">
@@ -12,7 +12,7 @@ const DatasetFiles = ({ files }) => (
           </div>
           <div className="panel-collapse" aria-expanded="false">
             <div className="panel-body">
-              <FileTreeGeneric files={files} />
+              <Files files={files} />
             </div>
           </div>
         </div>
