@@ -6,7 +6,7 @@ import SaveButton from '../fragments/save-button.jsx'
 import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 import { datasetCacheId } from './cache-id.js'
 
-const UPDATE_DESCRIPTION = gql`
+export const UPDATE_DESCRIPTION = gql`
   mutation updateDescription(
     $datasetId: ID!
     $field: String!
@@ -27,7 +27,7 @@ const UPDATE_DESCRIPTION = gql`
   }
 `
 
-const UPDATE_DESCRIPTION_LIST = gql`
+export const UPDATE_DESCRIPTION_LIST = gql`
   mutation updateDescriptionList(
     $datasetId: ID!
     $field: String!
@@ -47,6 +47,23 @@ const UPDATE_DESCRIPTION_LIST = gql`
     }
   }
 `
+
+export const mergeFieldValue = (
+  datasetId,
+  draft,
+  updateDescription,
+  updateDescriptionList,
+) => ({
+  __typename: 'Dataset',
+  id: datasetId,
+  draft: {
+    ...draft,
+    description: {
+      ...updateDescription,
+      ...updateDescriptionList,
+    },
+  },
+})
 
 /**
  * Update dataset_description.json on the draft
@@ -69,17 +86,12 @@ const UpdateDescription = ({ datasetId, field, value, done }) => {
         cache.writeFragment({
           id: datasetCacheId(datasetId),
           fragment: DRAFT_FRAGMENT,
-          data: {
-            __typename: 'Dataset',
-            id: datasetId,
-            draft: {
-              ...draft,
-              description: {
-                ...updateDescription,
-                ...updateDescriptionList,
-              },
-            },
-          },
+          data: mergeFieldValue(
+            datasetId,
+            draft,
+            updateDescription,
+            updateDescriptionList,
+          ),
         })
       }}>
       {updateDescription => (
