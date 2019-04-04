@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import File from './file.jsx'
 
-const FileTree = ({ name, files, directories }) => {
+const FileTree = ({ name = '', files = [], directories = [] }) => {
   return (
     <>
       <div>{name}</div>
