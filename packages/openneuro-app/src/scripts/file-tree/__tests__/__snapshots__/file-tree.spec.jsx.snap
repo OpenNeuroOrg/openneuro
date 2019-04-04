@@ -1,7 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FileTree component renders with default props 1`] = `
-<Fragment>
-  <div />
-</Fragment>
+<FileTree>
+  <button
+    className="btn-file-folder"
+    onClick={[Function]}
+  >
+    <i
+      className="type-icon fa fa-folder"
+    />
+  </button>
+  <ul
+    className="child-files"
+  />
+</FileTree>
 `;

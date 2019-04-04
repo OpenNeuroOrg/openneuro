@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Files from '../../file-tree/files.jsx'
 
-const DatasetFiles = ({ files }) => (
+const DatasetFiles = ({ datasetName, files }) => (
   <div className="dataset-files">
     <div className="col-xs-12">
       <div className="file-structure fade-in panel-group">
@@ -12,7 +12,7 @@ const DatasetFiles = ({ files }) => (
           </div>
           <div className="panel-collapse" aria-expanded="false">
             <div className="panel-body">
-              <Files files={files} />
+              <Files datasetName={datasetName} files={files} />
             </div>
           </div>
         </div>
