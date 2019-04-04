@@ -28,7 +28,8 @@ export const flatToTree = files => {
           } else {
             // Create the missing directory
             const createDir = {
-              name: `${directory.name}/${token}`,
+              name: token,
+              path: `${directory.path || ''}/${token}`,
               files: [],
               directories: [],
             }

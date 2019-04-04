@@ -9,6 +9,9 @@ exports[`FileTree component renders with default props 1`] = `
     <i
       className="type-icon fa fa-folder"
     />
+    <i
+      className="accordion-icon fa fa-caret-down"
+    />
   </button>
   <ul
     className="child-files"

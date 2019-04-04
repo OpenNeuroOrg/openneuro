@@ -12,6 +12,9 @@ const FileTree = ({ name = '', files = [], directories = [] }) => {
         onClick={() => setExpanded(!expanded)}>
         <i className={`type-icon fa fa-folder${expanded ? '-open' : ''}`} />
         {name}
+        <i
+          className={`accordion-icon fa fa-caret${expanded ? '-up' : '-down'}`}
+        />
       </button>
       <ul className="child-files">
         {expanded &&
