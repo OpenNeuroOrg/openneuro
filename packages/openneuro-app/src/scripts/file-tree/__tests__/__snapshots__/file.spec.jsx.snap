@@ -1,0 +1,51 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`File component renders for dataset snapshots 1`] = `
+<Fragment>
+  README
+  <span
+    className="filetree-editfile"
+  >
+    <span
+      className="download-file"
+    >
+      <a
+        download={true}
+        href="/crn/datasets/ds001/snapshots/1.0.0/files/README"
+      >
+        Download
+      </a>
+    </span>
+    <span
+      className="view-file"
+    >
+      View
+    </span>
+  </span>
+</Fragment>
+`;
+
+exports[`File component renders with common props 1`] = `
+<Fragment>
+  README
+  <span
+    className="filetree-editfile"
+  >
+    <span
+      className="download-file"
+    >
+      <a
+        download={true}
+        href="/crn/datasets/ds001/files/README"
+      >
+        Download
+      </a>
+    </span>
+    <span
+      className="view-file"
+    >
+      View
+    </span>
+  </span>
+</Fragment>
+`;
