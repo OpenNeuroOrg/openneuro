@@ -26,24 +26,22 @@ const FileTree = ({
       <ul className="child-files">
         {expanded &&
           files.map((file, index) => (
-            <li className="clearfix">
+            <li className="clearfix" key={index}>
               <File
                 datasetId={datasetId}
                 snapshotTag={snapshotTag}
                 path={path}
                 {...file}
-                key={index}
               />
             </li>
           ))}
         {expanded &&
           directories.map((dir, index) => (
-            <li className="clearfix">
+            <li className="clearfix" key={index}>
               <FileTree
                 datasetId={datasetId}
                 snapshotTag={snapshotTag}
                 {...dir}
-                key={index}
               />
             </li>
           ))}
