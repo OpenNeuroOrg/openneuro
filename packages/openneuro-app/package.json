@@ -58,6 +58,7 @@
     "react-dom": "16.8.6",
     "react-ga": "^2.2.0",
     "react-helmet": "^5.2.0",
+    "react-json-tree": "^0.11.2",
     "react-markdown": "^3.3.4",
     "react-router": "^4.4.0-beta.7",
     "react-router-dom": "^4.4.0-beta.7",

@@ -26,7 +26,7 @@ const FileView = ({ datasetId, snapshotTag, path }) => {
       <div className="dataset-form-body display-file-body col-xs-12">
         <div className="dataset-form-content col-xs-12">
           <div className="dataset file-display-modal">
-            <FileViewerType path={path} data={data} />
+            <FileViewerType path={path} url={url} data={data} />
           </div>
         </div>
       </div>
