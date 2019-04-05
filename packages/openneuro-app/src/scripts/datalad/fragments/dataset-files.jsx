@@ -32,6 +32,9 @@ const DatasetFiles = ({
 )
 
 DatasetFiles.propTypes = {
+  datasetId: PropTypes.string,
+  snapshotTag: PropTypes.string,
+  datasetName: PropTypes.string,
   files: PropTypes.array,
 }
 
