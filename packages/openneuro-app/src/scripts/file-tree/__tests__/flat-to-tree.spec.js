@@ -23,12 +23,12 @@ describe('FileTree', () => {
         directories: [
           {
             name: 'sub-01',
-            path: '/sub-01',
+            path: 'sub-01',
             files: [],
             directories: [
               {
                 name: 'anat',
-                path: '/sub-01/anat',
+                path: 'sub-01:anat',
                 files: [{ ...nifti, filename: 'sub-01_T1w.nii.gz' }],
                 directories: [],
               },
