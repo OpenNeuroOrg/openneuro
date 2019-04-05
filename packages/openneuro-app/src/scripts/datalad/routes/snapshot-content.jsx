@@ -103,6 +103,8 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
       <div className="col-xs-6">
         <Validation datasetId={dataset.id} />
         <DatasetFiles
+          datasetId={dataset.id}
+          snapshotTag={snapshot.tag}
           datasetName={snapshot.description.Name}
           files={snapshot.files}
         />

@@ -74,6 +74,7 @@ const DatasetContent = ({ dataset }) => (
       <div className="col-xs-6">
         <Validation datasetId={dataset.id} />
         <DatasetFiles
+          datasetId={dataset.id}
           datasetName={dataset.draft.description.Name}
           files={dataset.draft.files}
         />

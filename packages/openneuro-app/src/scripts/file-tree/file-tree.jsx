@@ -2,15 +2,22 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import File from './file.jsx'
 
-const FileTree = ({ name = '', files = [], directories = [] }) => {
-  const [expanded, setExpanded] = useState(false)
-
+const FileTree = ({
+  datasetId,
+  snapshotTag = null,
+  path = '',
+  name = '',
+  files = [],
+  directories = [],
+  defaultExpanded = false,
+}) => {
+  const [expanded, setExpanded] = useState(defaultExpanded)
   return (
     <>
       <button
         className="btn-file-folder"
         onClick={() => setExpanded(!expanded)}>
-        <i className={`type-icon fa fa-folder${expanded ? '-open' : ''}`} />
+        <i className={`type-icon fa fa-folder${expanded ? '-open' : ''}`} />{' '}
         {name}
         <i
           className={`accordion-icon fa fa-caret${expanded ? '-up' : '-down'}`}
@@ -20,13 +27,24 @@ const FileTree = ({ name = '', files = [], directories = [] }) => {
         {expanded &&
           files.map((file, index) => (
             <li className="clearfix">
-              <File {...file} key={index} />
+              <File
+                datasetId={datasetId}
+                snapshotTag={snapshotTag}
+                path={path}
+                {...file}
+                key={index}
+              />
             </li>
           ))}
         {expanded &&
           directories.map((dir, index) => (
             <li className="clearfix">
-              <FileTree {...dir} key={index} />
+              <FileTree
+                datasetId={datasetId}
+                snapshotTag={snapshotTag}
+                {...dir}
+                key={index}
+              />
             </li>
           ))}
       </ul>
