@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 const File = ({ datasetId, path, filename, snapshotTag = null }) => {
   const snapshotPath = snapshotTag ? `/snapshots/${snapshotTag}` : ''
@@ -19,6 +20,13 @@ const File = ({ datasetId, path, filename, snapshotTag = null }) => {
       </span>
     </>
   )
+}
+
+File.propTypes = {
+  datasetId: PropTypes.string,
+  path: PropTypes.string,
+  filename: PropTypes.string,
+  snapshotTag: PropTypes.string,
 }
 
 export default File
