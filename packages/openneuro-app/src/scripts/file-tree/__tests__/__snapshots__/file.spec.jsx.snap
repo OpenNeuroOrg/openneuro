@@ -19,7 +19,11 @@ exports[`File component renders for dataset snapshots 1`] = `
     <span
       className="view-file"
     >
-      View
+      <Link
+        to="/datasets/ds001/versions/1.0.0/file-display/README"
+      >
+        View
+      </Link>
     </span>
   </span>
 </Fragment>
@@ -44,7 +48,11 @@ exports[`File component renders with common props 1`] = `
     <span
       className="view-file"
     >
-      View
+      <Link
+        to="/datasets/ds001/file-display/README"
+      >
+        View
+      </Link>
     </span>
   </span>
 </Fragment>
