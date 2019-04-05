@@ -309,12 +309,6 @@ const routes = [
     middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
     handler: datalad.publishDataset,
   },
-  {
-    method: 'delete',
-    url: '/datasets/:datasetId/publish',
-    middleware: [jwt.authenticate, auth.authenticated, auth.datasetAccess],
-    handler: datalad.unpublishDataset,
-  },
 
   // file routes
   {

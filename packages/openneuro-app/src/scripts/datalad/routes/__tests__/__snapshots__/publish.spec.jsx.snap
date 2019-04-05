@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Publish dataset route renders with common props 1`] = `
+<div
+  className="dataset-form"
+>
+  <div
+    className="col-xs-12 dataset-form-header"
+  >
+    <div
+      className="form-group"
+    >
+      <label>
+        Publish
+      </label>
+    </div>
+    <hr />
+    <div
+      className="col-xs-12 dataset-form-body"
+    >
+      <p
+        className="text-danger"
+      >
+        All existing and future snapshots of this dataset will be released publicly under a
+         
+        <a
+          href="https://wiki.creativecommons.org/wiki/CC0"
+        >
+          CC0 license
+        </a>
+        .
+      </p>
+    </div>
+    <div
+      className="col-xs-12 dataset-form-controls"
+    >
+      <div
+        className="col-xs-12 modal-actions"
+      >
+        <Link
+          to="/datasets/ds00001"
+        >
+          <button
+            className="btn-admin-blue"
+          >
+            Return to Dataset
+          </button>
+        </Link>
+        <withRouter(PublishDataset)
+          datasetId="ds00001"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+`;

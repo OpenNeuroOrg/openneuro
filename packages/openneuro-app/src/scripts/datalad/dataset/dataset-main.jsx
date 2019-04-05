@@ -1,21 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import ClickToEdit from '../../common/forms/click-to-edit.jsx'
-import DatasetRoutes from './dataset-routes.jsx'
+import DatasetRoutes from '../routes/dataset-routes.jsx'
+import Comments from './comments.jsx'
 
 const DatasetMain = ({ dataset }) => (
-  <div className="row">
-    <h1 className="clearfix">
-      <ClickToEdit
-        value={dataset.label}
-        label={dataset.label}
-        editable={true}
-        onChange={() => {}}
-        type="string"
+  <>
+    <div className="row">
+      <DatasetRoutes dataset={dataset} />
+    </div>
+    <div className="row">
+      <Comments
+        datasetId={dataset.id}
+        uploader={dataset.uploader}
+        comments={dataset.comments}
       />
-    </h1>
-    <DatasetRoutes dataset={dataset} />
-  </div>
+    </div>
+  </>
 )
 
 DatasetMain.propTypes = {

@@ -21,7 +21,7 @@ const cache = new InMemoryCache()
  */
 const createClient = (uri, getAuthorization, fetch) => {
   const link = createLink(uri, getAuthorization, fetch)
-  return new ApolloClient({ uri, link, cache })
+  return new ApolloClient({ uri, link, cache, connectToDevTools: true })
 }
 
 const authLink = getAuthorization =>

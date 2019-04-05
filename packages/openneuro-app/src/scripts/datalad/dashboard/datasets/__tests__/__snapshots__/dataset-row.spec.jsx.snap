@@ -11,7 +11,6 @@ exports[`dashboard/datasets/DatasetRow renders successfully 1`] = `
       className="header clearfix"
     >
       <Link
-        replace={false}
         to="/datasets/ds000001"
       >
         <h4

@@ -1,8 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Switch } from 'react-router-dom'
-import DatasetContent from '../routes/dataset-content.jsx'
-import SnapshotContent from '../routes/snapshot-content.jsx'
+import DatasetContent from './dataset-content.jsx'
+import SnapshotContent from './snapshot-content.jsx'
+import DownloadDataset from '../download/download-dataset.jsx'
+import Publish from './publish.jsx'
+import Share from './share.jsx'
+import Snapshot from './snapshot.jsx'
 
 const stubComponent = () => null
 
@@ -15,40 +19,32 @@ const DatasetRoutes = ({ dataset }) => (
       render={() => <DatasetContent dataset={dataset} />}
     />
     <Route
-      name="snapshot-create"
+      name="download"
       exact
-      path="/datasets/:datasetId/create-snapshot"
-      component={stubComponent}
+      path="/datasets/:datasetId/download"
+      component={DownloadDataset}
     />
     <Route
       name="publish"
       exact
       path="/datasets/:datasetId/publish"
-      component={stubComponent}
+      component={() => <Publish datasetId={dataset.id} />}
+    />
+    <Route
+      name="snapshot-create"
+      exact
+      path="/datasets/:datasetId/snapshot"
+      component={() => (
+        <Snapshot datasetId={dataset.id} snapshots={dataset.snapshots} />
+      )}
     />
     <Route
       name="share"
       exact
       path="/datasets/:datasetId/share"
-      component={stubComponent}
-    />
-    <Route
-      name="jobs"
-      exact
-      path="/datasets/:datasetId/jobs"
-      component={stubComponent}
-    />
-    <Route
-      name="subscribe"
-      exact
-      path="/datasets/:datasetId/subscribe"
-      component={stubComponent}
-    />
-    <Route
-      name="warn"
-      exact
-      path="/datasets/:datasetId/update-warn"
-      component={stubComponent}
+      component={() => (
+        <Share datasetId={dataset.id} permissions={dataset.permissions} />
+      )}
     />
     <Route
       name="fileEdit"
@@ -73,6 +69,12 @@ const DatasetRoutes = ({ dataset }) => (
       }) => {
         return <SnapshotContent dataset={dataset} tag={tag} />
       }}
+    />
+    <Route
+      name="snapshot-download"
+      exact
+      path="/datasets/:datasetId/versions/:snapshotId/download"
+      component={DownloadDataset}
     />
   </Switch>
 )

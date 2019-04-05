@@ -3,6 +3,7 @@
  */
 import request from 'superagent'
 import { redis } from '../libs/redis.js'
+import { addFileString, commitFiles } from './dataset.js'
 import { objectUrl } from './files.js'
 import { getDraftFiles } from './draft.js'
 import { getSnapshotHexsha } from './snapshots.js'
@@ -50,15 +51,24 @@ export const description = (obj, { datasetId, revision, tag }) => {
     if (cachedDescription) {
       return JSON.parse(cachedDescription)
     } else {
-      return getDraftFiles(
-        datasetId,
-        revision ? revision : await getSnapshotHexsha(datasetId, tag),
-      )
+      const gitRef = revision
+        ? revision
+        : await getSnapshotHexsha(datasetId, tag)
+      return getDraftFiles(datasetId, gitRef)
         .then(getDescriptionObject(datasetId))
         .then(uncachedDescription => {
           redis.set(redisKey, JSON.stringify(uncachedDescription))
-          return uncachedDescription
+          return { id: gitRef, ...uncachedDescription }
         })
     }
   })
+}
+
+export const setDescription = (datasetId, description, user) => {
+  return addFileString(
+    datasetId,
+    'dataset_description.json',
+    'application/json',
+    JSON.stringify(description, null, 4),
+  ).then(() => commitFiles(datasetId, user))
 }

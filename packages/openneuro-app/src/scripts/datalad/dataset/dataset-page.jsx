@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import LeftSidebar from './left-sidebar.jsx'
-import LeftSidebarButton from './left-sidebar-button.jsx'
 import DatasetMain from './dataset-main.jsx'
-import Tools from '../fragments/tools/dataset-toolbar.jsx'
+import DatasetTools from '../fragments/dataset-tools.jsx'
 
-export default class DatasetPage extends React.Component {
+class DatasetPage extends React.Component {
   constructor(props) {
     super(props)
     this.toggleSidebar = this.toggleSidebar.bind(this)
@@ -28,12 +27,16 @@ export default class DatasetPage extends React.Component {
           <LeftSidebar
             datasetId={this.props.dataset.id}
             snapshots={this.props.dataset.snapshots}
+            draftModified={this.props.dataset.draft.modified}
           />
-          <LeftSidebarButton
-            sidebar={this.state.sidebar}
-            toggle={this.toggleSidebar}
-          />
-          <Tools dataset={this.props.dataset} />
+          <span className="show-nav-btn" onClick={this.toggleSidebar}>
+            {this.state.sidebar ? (
+              <i className="fa fa-angle-double-left" aria-hidden="true" />
+            ) : (
+              <i className="fa fa-angle-double-right" aria-hidden="true" />
+            )}
+          </span>
+          <DatasetTools dataset={this.props.dataset} />
           <div className="fade-in inner-route dataset-route light">
             <div className="clearfix dataset-wrap">
               <div className="dataset-animation">
@@ -52,6 +55,9 @@ export default class DatasetPage extends React.Component {
 DatasetPage.propTypes = {
   dataset: PropTypes.shape({
     id: PropTypes.string,
+    draft: PropTypes.object,
     snapshots: PropTypes.array,
   }),
 }
+
+export default DatasetPage

@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DatasetAnalytics component renders for snapshots 1`] = `
+<Fragment>
+  <Styled(span)>
+    <Metric
+      display={true}
+      snapshot={true}
+      type="downloads"
+      value={5}
+    />
+  </Styled(span)>
+  <Styled(span)>
+    <Metric
+      display={true}
+      snapshot={true}
+      type="views"
+      value={50}
+    />
+  </Styled(span)>
+</Fragment>
+`;
+
+exports[`DatasetAnalytics component renders with common props 1`] = `
+<Fragment>
+  <Styled(span)>
+    <Metric
+      display={true}
+      type="downloads"
+      value={5}
+    />
+  </Styled(span)>
+  <Styled(span)>
+    <Metric
+      display={true}
+      type="views"
+      value={50}
+    />
+  </Styled(span)>
+</Fragment>
+`;

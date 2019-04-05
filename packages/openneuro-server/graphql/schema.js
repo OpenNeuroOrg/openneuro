@@ -50,9 +50,9 @@ const typeDefs = `
     # Create a new dataset container and repository
     createDataset(label: String!): Dataset
     # Deletes a dataset and all associated snapshots
-    deleteDataset(id: ID!): Dataset
+    deleteDataset(id: ID!): Boolean
     # Tag the current draft
-    createSnapshot(datasetId: ID!, tag: String!): Snapshot
+    createSnapshot(datasetId: ID!, tag: String!, changes: [String!]): Snapshot
     # Remove a tag from the dataset
     deleteSnapshot(datasetId: ID!, tag: String!): Boolean!
     # Add or update files in a draft - returns a new Draft
@@ -68,7 +68,7 @@ const typeDefs = `
     # Update a snapshot with a list of file urls
     updateSnapshotFileUrls(fileUrls: FileUrls!): Boolean
     # Update a users's permissions on a dataset
-    updatePermissions(datasetId: ID!, userEmail: String!, level: String): Boolean
+    updatePermissions(datasetId: ID!, userEmail: String!, level: String): User
     # Remove a users's permissions on a dataset
     removePermissions(datasetId: ID!, userId: String!): Boolean
     # Remove a user
@@ -77,6 +77,20 @@ const typeDefs = `
     setAdmin(id: ID!, admin: Boolean!): Boolean
     # Tracks a view or download for a dataset
     trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
+    # Follow dataset
+    followDataset(datasetId: ID!): Boolean
+    # Star dataset
+    starDataset(datasetId: ID!): Boolean
+    # Make a dataset public
+    publishDataset(datasetId: ID!): Boolean
+    # Update dataset_description.json scalar fields
+    updateDescription(datasetId: ID!, field: String!, value: String!): Description
+    # Update dataset_description.json list fields
+    updateDescriptionList(datasetId: ID!, field: String!, value: [String!]): Description
+    # Update dataset README file
+    updateReadme(datasetId: ID!, value: String!): Boolean
+    # Submits a new comment and returns the comment ID for replies
+    addComment(datasetId: ID!, parentId: ID, comment: String!): ID
   }
 
   type Subscription {
@@ -170,7 +184,7 @@ const typeDefs = `
   }
 
   # Top level dataset, one draft and many snapshots
-  type Dataset { 
+  type Dataset {
     id: ID!
     created: DateTime!
     uploader: User
@@ -183,6 +197,12 @@ const typeDefs = `
     followers: [Follower]
     # Canonical name, latest snapshot or draft if no snapshot or default if neither
     name: String
+    # User comments on this dataset
+    comments: [Comment]
+    # Am I following this dataset?
+    following: Boolean
+    # Have I starred this dataset?
+    starred: Boolean
   }
 
   enum SortOrdering {
@@ -238,6 +258,8 @@ const typeDefs = `
     partial: Boolean
     # dataset_description.json fields
     description: Description
+    # Dataset README
+    readme: String
   }
 
   # Tagged snapshot of a draft
@@ -259,10 +281,16 @@ const typeDefs = `
     description: Description
     # Snapshot usage and download statistics
     analytics: Analytic
+    # Dataset README
+    readme: String @cacheControl(maxAge: 31536000, scope: PUBLIC)
+    # The git hash associated with this snapshot
+    hexsha: String
   }
 
   # Contents of dataset_description.json
   type Description @cacheControl(maxAge: 30, scope: PUBLIC) {
+    # Draft id for this description
+    id: ID!
     # Name of the dataset
     Name: String!
     # The version of the BIDS standard that was used
@@ -272,7 +300,7 @@ const typeDefs = `
     # List of individuals who contributed to the creation/curation of the dataset
     Authors: [String]
     # Text acknowledging contributions of individuals or institutions beyond those listed in Authors or Funding.
-    Acknowledgements: [String]
+    Acknowledgements: String
     # Instructions how researchers using this dataset should acknowledge the original authors. This field can also be used to define a publication that should be cited in publications that use the dataset.
     HowToAcknowledge: String
     # List of sources of funding (grant numbers)
@@ -399,6 +427,20 @@ const typeDefs = `
     tag: String
     views: Int
     downloads: Int
+  }
+
+  type Comment {
+    id: ID!
+    # Comment draft.js body
+    text: String!
+    # User posting the comment
+    user: User
+    # Comment creation time
+    createDate: DateTime!
+    # Any comment this is a reply to
+    parent: Comment
+    # Any replies to this comment
+    replies: [Comment]
   }
 
   # Types of analytics

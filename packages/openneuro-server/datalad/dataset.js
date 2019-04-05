@@ -6,6 +6,7 @@
 import request from 'superagent'
 import requestNode from 'request'
 import objectHash from 'object-hash'
+import { Readable } from 'stream'
 import config from '../config'
 import mongo from '../libs/mongo'
 import * as subscriptions from '../handlers/subscriptions.js'
@@ -19,6 +20,7 @@ import Dataset from '../models/dataset.js'
 import Permission from '../models/permission.js'
 import Star from '../models/stars.js'
 import Analytics from '../models/analytics.js'
+import { trackAnalytics } from './analytics.js'
 import { datasetsConnection } from './pagination.js'
 const c = mongo.collections
 const uri = config.datalad.uri
@@ -62,7 +64,11 @@ export const giveUploaderPermission = (datasetId, userId) => {
 /**
  * Fetch dataset document and related fields
  */
-export const getDataset = id => Dataset.findOne({ id }).exec()
+export const getDataset = id => {
+  // Track any queries for one dataset as a view
+  trackAnalytics(id, null, 'views')
+  return Dataset.findOne({ id }).exec()
+}
 
 /**
  * Delete dataset and associated documents
@@ -71,6 +77,7 @@ export const deleteDataset = id =>
   request
     .del(`${uri}/datasets/${id}`)
     .then(() => Dataset.deleteOne({ id }).exec())
+    .then(() => true)
 
 /**
  * For public datasets, cache combinations of sorts/limits/cursors to speed responses
@@ -255,27 +262,52 @@ export const addFile = async (datasetId, path, file) => {
 }
 
 /**
+ * Add file using a string and path
+ *
+ * Used to mock the stream interface in addFile
+ */
+export const addFileString = (datasetId, filename, mimetype, content) =>
+  addFile(datasetId, '', {
+    filename,
+    mimetype,
+    // Mock a stream so we can reuse addFile
+    createReadStream: () => {
+      const stream = new Readable()
+      stream._read = () => {}
+      stream.push(content)
+      stream.push(null)
+      return stream
+    },
+    // Mock capacitor
+    capacitor: {
+      destroy: () => {},
+    },
+  })
+
+/**
  * Commit a draft
  */
 export const commitFiles = (datasetId, user) => {
+  let gitRef
   const url = `${uri}/datasets/${datasetId}/draft`
-  const req = request
+  return request
     .post(url)
     .set('Cookie', generateDataladCookie(config)(user))
     .set('Accept', 'application/json')
     .then(res => {
-      return res.body.ref
+      gitRef = res.body.ref
+      return gitRef
     })
     .then(updateDatasetRevision(datasetId))
     .then(() =>
       // Check if this is the first data commit and no snapshots exist
-      c.crn.snapshots.findOne({ datasetId }).then(snapshot => {
+      c.crn.snapshots.findOne({ datasetId }).then(async snapshot => {
         if (!snapshot) {
-          return createSnapshot(datasetId, '1.0.0', user)
+          await createSnapshot(datasetId, '1.0.0', user)
         }
+        return gitRef
       }),
     )
-  return req
 }
 
 /**
@@ -332,24 +364,10 @@ export const getDatasetAnalytics = (datasetId, tag) => {
   })
 }
 
-export const trackAnalytics = (datasetId, tag, type) => {
-  return c.crn.analytics.updateOne(
-    {
-      datasetId: datasetId,
-      tag: tag,
-    },
-    {
-      $inc: {
-        [type]: 1,
-      },
-    },
-    {
-      upsert: true,
-    },
-  )
-}
-
 export const getStars = datasetId => Star.find({ datasetId })
+
+export const getUserStarred = (datasetId, userId) =>
+  Star.count({ datasetId, userId }).exec()
 
 export const getFollowers = datasetId => {
   return c.crn.subscriptions
@@ -358,3 +376,9 @@ export const getFollowers = datasetId => {
     })
     .toArray()
 }
+
+export const getUserFollowed = (datasetId, userId) =>
+  c.crn.subscriptions.findOne({
+    datasetId,
+    userId,
+  })

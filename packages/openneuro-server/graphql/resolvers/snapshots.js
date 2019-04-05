@@ -1,7 +1,10 @@
 import * as datalad from '../../datalad/snapshots.js'
+import { updateChanges } from '../../datalad/changelog.js'
 import { dataset, analytics } from './dataset.js'
 import { checkDatasetWrite } from '../permissions.js'
+import { readme } from './readme.js'
 import { description } from './description.js'
+import { summary } from './summary.js'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -12,14 +15,21 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
     ...snapshot,
     dataset: () => dataset(snapshot, { id: datasetId }, context),
     description: () => description(obj, { datasetId, tag }),
+    readme: () => readme(obj, { datasetId, revision: tag }),
+    summary: () => summary({ id: datasetId, revision: snapshot.hexsha }),
   }))
 }
 
 /**
  * Tag the working tree for a dataset
  */
-export const createSnapshot = (obj, { datasetId, tag }, { user, userInfo }) => {
-  return checkDatasetWrite(datasetId, user, userInfo).then(() => {
+export const createSnapshot = (
+  obj,
+  { datasetId, tag, changes },
+  { user, userInfo },
+) => {
+  return checkDatasetWrite(datasetId, user, userInfo).then(async () => {
+    await updateChanges(datasetId, tag, changes)
     return datalad.createSnapshot(datasetId, tag, userInfo)
   })
 }

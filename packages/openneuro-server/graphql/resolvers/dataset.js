@@ -6,6 +6,8 @@ import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { user } from './user.js'
 import { draft } from './draft.js'
 import { permissions } from './permissions.js'
+import { datasetComments } from './comment.js'
+import * as dataladAnalytics from '../../datalad/analytics.js'
 import DatasetModel from '../../models/dataset.js'
 
 export const dataset = (obj, { id }, { user, userInfo }) => {
@@ -200,7 +202,7 @@ export const analytics = async obj => {
  * Track analytic of type 'view' or 'download' for a dataset / snapshot
  */
 export const trackAnalytics = (obj, { datasetId, tag, type }) => {
-  return datalad.trackAnalytics(datasetId, tag, type)
+  return dataladAnalytics.trackAnalytics(datasetId, tag, type)
 }
 
 /**
@@ -218,6 +220,26 @@ export const followers = async obj => {
   const datasetId = obj && obj.dataset ? (await obj.dataset()).id : obj.id
   return datalad.getFollowers(datasetId)
 }
+
+/**
+ * Is this user following?
+ *
+ * Returns null for anonymous users
+ */
+export const following = (obj, _, { user }) =>
+  user
+    ? datalad.getUserFollowed(obj.id, user).then(res => (res ? true : false))
+    : null
+
+/**
+ * Has the user starred this dataset?
+ *
+ * Returns null for anonymous users
+ */
+export const starred = (obj, _, { user }) =>
+  user
+    ? datalad.getUserStarred(obj.id, user).then(res => (res ? true : false))
+    : null
 
 /**
  * Dataset object
@@ -238,6 +260,9 @@ const Dataset = {
       ),
     ),
   name: datasetName,
+  comments: datasetComments,
+  following,
+  starred,
 }
 
 export default Dataset

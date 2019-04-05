@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Metric component renders for downloads 1`] = `
+<span
+  className="metric"
+>
+  <span>
+    <span
+      className="dataset-status ds-primary"
+    >
+      <TooltipTop
+        tooltip="This dataset has 15 downloads."
+      >
+        <span
+          className="icon-wrap"
+        >
+          <i
+            className="fa fa-download"
+          />
+          15
+        </span>
+      </TooltipTop>
+    </span>
+  </span>
+</span>
+`;
+
+exports[`Metric component renders for followers 1`] = `
+<span
+  className="metric"
+>
+  <span>
+    <span
+      className="dataset-status ds-primary"
+    >
+      <TooltipTop
+        tooltip="This dataset has 15 followers."
+      >
+        <span
+          className="icon-wrap"
+        >
+          <i
+            className="fa fa-users"
+          />
+          15
+        </span>
+      </TooltipTop>
+    </span>
+  </span>
+</span>
+`;
+
+exports[`Metric component renders for views 1`] = `
+<span
+  className="metric"
+>
+  <span>
+    <span
+      className="dataset-status ds-primary"
+    >
+      <TooltipTop
+        tooltip="This dataset has 15 views."
+      >
+        <span
+          className="icon-wrap"
+        >
+          <i
+            className="fa fa-eye"
+          />
+          15
+        </span>
+      </TooltipTop>
+    </span>
+  </span>
+</span>
+`;
+
+exports[`Metric component renders with common props 1`] = `
+<span
+  className="metric"
+>
+  <span>
+    <span
+      className="dataset-status ds-primary"
+    >
+      <TooltipTop
+        tooltip="This snapshot has 15 likes."
+      >
+        <span
+          className="icon-wrap"
+        >
+          <i
+            className="fa fa-star"
+          />
+          15
+        </span>
+      </TooltipTop>
+    </span>
+  </span>
+</span>
+`;
