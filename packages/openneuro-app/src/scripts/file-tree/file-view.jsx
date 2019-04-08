@@ -22,15 +22,7 @@ const FileView = ({ datasetId, snapshotTag, path }) => {
   if (loading) {
     return <Spinner active text="Loading File" />
   } else {
-    return (
-      <div className="dataset-form-body display-file-body col-xs-12">
-        <div className="dataset-form-content col-xs-12">
-          <div className="dataset file-display-modal">
-            <FileViewerType path={path} url={url} data={data} />
-          </div>
-        </div>
-      </div>
-    )
+    return <FileViewerType path={path} url={url} data={data} />
   }
 }
 
