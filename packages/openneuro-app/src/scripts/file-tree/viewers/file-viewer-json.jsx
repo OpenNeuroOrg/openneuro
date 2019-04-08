@@ -1,6 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import JSONTree from 'react-json-tree'
+import styled from '@emotion/styled'
+
+const WrappedPre = styled.pre`
+  white-space: pre-wrap;
+`
 
 const jsonTheme = {
   scheme: 'bright',
@@ -23,9 +28,41 @@ const jsonTheme = {
   base0F: '#be643c',
 }
 
+export const FileViewerJsonRaw = ({ jsonRaw }) => {
+  let jsonViewer
+  try {
+    jsonViewer = <JSONTree data={JSON.parse(jsonRaw)} theme={jsonTheme} />
+  } catch (e) {
+    jsonViewer = (
+      <>
+        <p>JSON failed to parse</p>
+        <pre>{e.message}</pre>
+      </>
+    )
+  }
+  return (
+    <>
+      <div className="col-xs-6">
+        <h3>Tree</h3>
+        <hr />
+        {jsonViewer}
+      </div>
+      <div className="col-xs-6">
+        <h3>Raw</h3>
+        <hr />
+        <WrappedPre>{jsonRaw}</WrappedPre>
+      </div>
+    </>
+  )
+}
+
+FileViewerJsonRaw.propTypes = {
+  jsonRaw: PropTypes.string,
+}
+
 const FileViewerJson = ({ data }) => {
   const decoder = new TextDecoder()
-  return <JSONTree data={JSON.parse(decoder.decode(data))} theme={jsonTheme} />
+  return <FileViewerJsonRaw jsonRaw={decoder.decode(data)} />
 }
 
 FileViewerJson.propTypes = {
