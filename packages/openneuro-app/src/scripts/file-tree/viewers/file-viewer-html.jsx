@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const FileViewerHtml = ({ data }) => {
   const decoder = new TextDecoder()
-  return <iframe srcdoc={decoder.decode(data)} />
+  return <iframe srcDoc={decoder.decode(data)} />
 }
 
 FileViewerHtml.propTypes = {

@@ -28,7 +28,7 @@ const FileViewerTable = ({ tableData }) => (
 )
 
 FileViewerTable.propTypes = {
-  data: PropTypes.object,
+  tableData: PropTypes.object,
 }
 
 export default FileViewerTable
