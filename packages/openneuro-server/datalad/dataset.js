@@ -315,7 +315,7 @@ export const commitFiles = (datasetId, user) => {
  */
 export const deleteFile = (datasetId, path, file) => {
   // Cannot use superagent 'request' due to inability to post streams
-  let url = fileUrl(datasetId, path, file.name)
+  const url = fileUrl(datasetId, path, file.name)
   return request.del(url)
 }
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import File from './file.jsx'
-import styled from '@emotion/styled'
 
 const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 

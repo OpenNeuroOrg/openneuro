@@ -16,7 +16,9 @@ const FileView = ({ datasetId, snapshotTag, path }) => {
   }
 
   useEffect(() => {
-    fetchUrl()
+    if (loading) {
+      fetchUrl()
+    }
   })
 
   if (loading) {

@@ -148,6 +148,16 @@ export const deleteFiles = (
   })
 }
 
+export const deleteFile = async (
+  obj,
+  { datasetId, path, filename },
+  { user, userInfo },
+) => {
+  await checkDatasetWrite(datasetId, user, userInfo)
+  await datalad.deleteFile(datasetId, path, { name: filename })
+  return datalad.commitFiles(datasetId, userInfo).then(() => true)
+}
+
 /**
  * Recursively walk a delete tree and return an array of
  * promises for each forwarded request.

@@ -59,6 +59,8 @@ const typeDefs = `
     updateFiles(datasetId: ID!, files: FileTree!): Draft
     # delete files in a draft - returns a new Draft
     deleteFiles(datasetId: ID!, files: FileTree!): Draft
+    # delete one file based on path
+    deleteFile(datasetId: ID!, path: String!, filename: String!): Boolean
     # Add or remove the public flag from a dataset
     updatePublic(datasetId: ID!, publicFlag: Boolean!): Boolean!
     # Update a draft summary
