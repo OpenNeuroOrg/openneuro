@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import File from './file.jsx'
 
+const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
+
+const sortByName = (a, b) => a.name.localeCompare(b.name)
+
 const FileTree = ({
   datasetId,
   snapshotTag = null,
@@ -25,7 +29,7 @@ const FileTree = ({
       </button>
       <ul className="child-files">
         {expanded &&
-          files.map((file, index) => (
+          files.sort(sortByFilename).map((file, index) => (
             <li className="clearfix" key={index}>
               <File
                 datasetId={datasetId}
@@ -36,7 +40,7 @@ const FileTree = ({
             </li>
           ))}
         {expanded &&
-          directories.map((dir, index) => (
+          directories.sort(sortByName).map((dir, index) => (
             <li className="clearfix" key={index}>
               <FileTree
                 datasetId={datasetId}
