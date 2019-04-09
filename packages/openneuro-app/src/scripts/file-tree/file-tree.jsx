@@ -3,11 +3,6 @@ import PropTypes from 'prop-types'
 import File from './file.jsx'
 import styled from '@emotion/styled'
 
-// Show the right cursor style for file inputs
-const InputFile = styled.input`
-  cursor: pointer;
-`
-
 const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
 const sortByName = (a, b) => a.name.localeCompare(b.name)
@@ -38,11 +33,11 @@ const FileTree = ({
           <span className="filetree-editfile">
             <div className="edit-file">
               <i className="fa fa-plus" /> Add File
-              <InputFile type="file" className="add-files" />
+              <input type="file" className="add-files" />
             </div>
             <div className="edit-file">
               <i className="fa fa-plus" /> Add Directory
-              <InputFile
+              <input
                 type="file"
                 className="add-files"
                 directory="true"
