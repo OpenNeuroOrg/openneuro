@@ -5,6 +5,7 @@ import FileViewerNifti from './viewers/file-viewer-nifti.jsx'
 import FileViewerJson from './viewers/file-viewer-tsv.jsx'
 import FileViewerTsv from './viewers/file-viewer-tsv.jsx'
 import FileViewerCsv from './viewers/file-viewer-csv.jsx'
+import FileViewerHtml from './viewers/file-viewer-html.jsx'
 
 /**
  * Choose the right viewer for each file type
@@ -24,6 +25,8 @@ const FileViewerType = ({ path, url, data }) => {
     return <FileViewerTsv data={data} />
   } else if (path.endsWith('.csv')) {
     return <FileViewerCsv data={data} />
+  } else if (path.endsWith('.html')) {
+    return <FileViewerHtml data={data} />
   } else {
     return (
       <div className="file-viewer-fallback">
