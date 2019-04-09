@@ -21,26 +21,26 @@ const File = ({ datasetId, path, filename, snapshotTag = null }) => {
     <>
       {filename}
       <span className="filetree-editfile">
-        <span className="edit-file">
+        <span className="edit-file download-file">
           <a
             href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
             download>
             <i className="fa fa-download" /> Download
           </a>
         </span>
-        <span className="edit-file">
+        <span className="edit-file view-file">
           <Link to={viewerPath}>
             <i className="fa fa-eye" /> View
           </Link>
         </span>
-        <span className="edit-file">
+        <span className="edit-file update-file">
           <a
             href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
             download>
             <i className="fa fa-file-o" /> Update
           </a>
         </span>
-        <span className="edit-file">
+        <span className="edit-file delete-file">
           <DeleteFile datasetId={datasetId} path={path} filename={filename} />
         </span>
       </span>

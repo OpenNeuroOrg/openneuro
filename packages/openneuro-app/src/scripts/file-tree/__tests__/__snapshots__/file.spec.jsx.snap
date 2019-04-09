@@ -7,23 +7,51 @@ exports[`File component renders for dataset snapshots 1`] = `
     className="filetree-editfile"
   >
     <span
-      className="download-file"
+      className="edit-file download-file"
     >
       <a
         download={true}
         href="/crn/datasets/ds001/snapshots/1.0.0/files/README"
       >
-        Download
+        <i
+          className="fa fa-download"
+        />
+         Download
       </a>
     </span>
     <span
-      className="view-file"
+      className="edit-file view-file"
     >
       <Link
         to="/datasets/ds001/versions/1.0.0/file-display/README"
       >
-        View
+        <i
+          className="fa fa-eye"
+        />
+         View
       </Link>
+    </span>
+    <span
+      className="edit-file update-file"
+    >
+      <a
+        download={true}
+        href="/crn/datasets/ds001/snapshots/1.0.0/files/README"
+      >
+        <i
+          className="fa fa-file-o"
+        />
+         Update
+      </a>
+    </span>
+    <span
+      className="edit-file delete-file"
+    >
+      <DeleteFile
+        datasetId="ds001"
+        filename="README"
+        path=""
+      />
     </span>
   </span>
 </Fragment>
@@ -36,23 +64,51 @@ exports[`File component renders with common props 1`] = `
     className="filetree-editfile"
   >
     <span
-      className="download-file"
+      className="edit-file download-file"
     >
       <a
         download={true}
         href="/crn/datasets/ds001/files/README"
       >
-        Download
+        <i
+          className="fa fa-download"
+        />
+         Download
       </a>
     </span>
     <span
-      className="view-file"
+      className="edit-file view-file"
     >
       <Link
         to="/datasets/ds001/file-display/README"
       >
-        View
+        <i
+          className="fa fa-eye"
+        />
+         View
       </Link>
+    </span>
+    <span
+      className="edit-file update-file"
+    >
+      <a
+        download={true}
+        href="/crn/datasets/ds001/files/README"
+      >
+        <i
+          className="fa fa-file-o"
+        />
+         Update
+      </a>
+    </span>
+    <span
+      className="edit-file delete-file"
+    >
+      <DeleteFile
+        datasetId="ds001"
+        filename="README"
+        path=""
+      />
     </span>
   </span>
 </Fragment>
