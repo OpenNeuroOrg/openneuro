@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import File from './file.jsx'
+import styled from '@emotion/styled'
+
+// Show the right cursor style for file inputs
+const InputFile = styled.input`
+  cursor: pointer;
+`
 
 const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
@@ -27,29 +33,46 @@ const FileTree = ({
           className={`accordion-icon fa fa-caret${expanded ? '-up' : '-down'}`}
         />
       </button>
-      <ul className="child-files">
-        {expanded &&
-          files.sort(sortByFilename).map((file, index) => (
-            <li className="clearfix" key={index}>
-              <File
-                datasetId={datasetId}
-                snapshotTag={snapshotTag}
-                path={path}
-                {...file}
+      {expanded && (
+        <>
+          <span className="filetree-editfile">
+            <div className="edit-file">
+              <i className="fa fa-plus" /> Add File
+              <InputFile type="file" className="add-files" />
+            </div>
+            <div className="edit-file">
+              <i className="fa fa-plus" /> Add Directory
+              <InputFile
+                type="file"
+                className="add-files"
+                directory="true"
+                webkitdirectory="true"
               />
-            </li>
-          ))}
-        {expanded &&
-          directories.sort(sortByName).map((dir, index) => (
-            <li className="clearfix" key={index}>
-              <FileTree
-                datasetId={datasetId}
-                snapshotTag={snapshotTag}
-                {...dir}
-              />
-            </li>
-          ))}
-      </ul>
+            </div>
+          </span>
+          <ul className="child-files">
+            {files.sort(sortByFilename).map((file, index) => (
+              <li className="clearfix" key={index}>
+                <File
+                  datasetId={datasetId}
+                  snapshotTag={snapshotTag}
+                  path={path}
+                  {...file}
+                />
+              </li>
+            ))}
+            {directories.sort(sortByName).map((dir, index) => (
+              <li className="clearfix" key={index}>
+                <FileTree
+                  datasetId={datasetId}
+                  snapshotTag={snapshotTag}
+                  {...dir}
+                />
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </>
   )
 }
