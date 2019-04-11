@@ -20,7 +20,7 @@ export const createDataset = client => label => {
  * @param {Object} parent
  * @param {Array} tokens
  */
-const mkLevels = (file, parent, tokens) => {
+export const mkLevels = (file, parent, tokens) => {
   if (tokens.length === 1) {
     // Leafs are files
     //file.path = `${parent.path}${file.name}`
@@ -52,14 +52,19 @@ const mkLevels = (file, parent, tokens) => {
  * Convert from an file input list to a FileTreeInput object
  * @param {object} fileList Browser FileList from file input
  */
-const treeFromList = fileList => {
+export const treeFromList = fileList => {
   const tree = { name: '', files: [], directories: [] }
 
   for (const file of fileList) {
-    const tokens = file.webkitRelativePath.split('/')
-    // Skip the top level, it is created above
-    tokens.shift()
-    mkLevels(file, tree, tokens)
+    if (file.webkitRelativePath) {
+      const tokens = file.webkitRelativePath.split('/')
+      // Skip the top level, it is created above
+      tokens.shift()
+      mkLevels(file, tree, tokens)
+    } else {
+      // Single file case
+      tree.files = [...fileList]
+    }
   }
 
   return tree

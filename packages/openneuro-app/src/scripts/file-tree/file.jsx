@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
+import UpdateFile from '../datalad/mutations/update-file.jsx'
 import DeleteFile from '../datalad/mutations/delete-file.jsx'
 
 const filePath = (path, filename) => `${(path && path + ':') || ''}${filename}`
@@ -34,11 +35,7 @@ const File = ({ datasetId, path, filename, snapshotTag = null }) => {
           </Link>
         </span>
         <span className="edit-file update-file">
-          <a
-            href={apiPath(datasetId, snapshotTag, filePath(path, filename))}
-            download>
-            <i className="fa fa-file-o" /> Update
-          </a>
+          <UpdateFile datasetId={datasetId} path={path} filename={filename} />
         </span>
         <span className="edit-file delete-file">
           <DeleteFile datasetId={datasetId} path={path} filename={filename} />
