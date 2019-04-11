@@ -35,7 +35,9 @@ const File = ({ datasetId, path, filename, snapshotTag = null }) => {
           </Link>
         </span>
         <span className="edit-file update-file">
-          <UpdateFile datasetId={datasetId} path={path} filename={filename} />
+          <UpdateFile datasetId={datasetId} path={path} filename={filename}>
+            <i className="fa fa-file-o" /> Update
+          </UpdateFile>
         </span>
         <span className="edit-file delete-file">
           <DeleteFile datasetId={datasetId} path={path} filename={filename} />

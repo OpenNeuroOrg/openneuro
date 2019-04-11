@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import File from './file.jsx'
+import UpdateFile from '../datalad/mutations/update-file.jsx'
 
 const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
@@ -30,19 +31,12 @@ const FileTree = ({
       {expanded && (
         <>
           <span className="filetree-editfile">
-            <div className="edit-file">
+            <UpdateFile datasetId={datasetId}>
               <i className="fa fa-plus" /> Add File
-              <input type="file" className="add-files" />
-            </div>
-            <div className="edit-file">
+            </UpdateFile>
+            <UpdateFile datasetId={datasetId} multiple>
               <i className="fa fa-plus" /> Add Directory
-              <input
-                type="file"
-                className="add-files"
-                directory="true"
-                webkitdirectory="true"
-              />
-            </div>
+            </UpdateFile>
           </span>
           <ul className="child-files">
             {files.sort(sortByFilename).map((file, index) => (
