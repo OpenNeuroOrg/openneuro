@@ -38,7 +38,12 @@ exports[`File component renders for dataset snapshots 1`] = `
         datasetId="ds001"
         filename="README"
         path=""
-      />
+      >
+        <i
+          className="fa fa-file-o"
+        />
+         Update
+      </withApollo(UpdateFile)>
     </span>
     <span
       className="edit-file delete-file"
@@ -91,7 +96,12 @@ exports[`File component renders with common props 1`] = `
         datasetId="ds001"
         filename="README"
         path=""
-      />
+      >
+        <i
+          className="fa fa-file-o"
+        />
+         Update
+      </withApollo(UpdateFile)>
     </span>
     <span
       className="edit-file delete-file"

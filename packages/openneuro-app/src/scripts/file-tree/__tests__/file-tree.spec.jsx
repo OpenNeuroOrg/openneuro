@@ -1,5 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
+import { ApolloProvider } from 'react-apollo'
 import FileTree from '../file-tree.jsx'
 
 describe('FileTree component', () => {
@@ -7,7 +8,13 @@ describe('FileTree component', () => {
     expect(mount(<FileTree />)).toMatchSnapshot()
   })
   it('expands and closes when clicked', () => {
-    const wrapper = mount(<FileTree name="Top Level" />)
+    // ApolloProvider isn't used in this test but must exist
+    // When enzyme supports hooks, this can be simplified
+    const wrapper = mount(
+      <ApolloProvider client={{}}>
+        <FileTree name="Top Level" />
+      </ApolloProvider>,
+    )
     expect(
       wrapper
         .find('button.btn-file-folder > i.type-icon')
