@@ -32,7 +32,7 @@ describe('UpdateFile mutation', () => {
       const mockFileList = fileListFactory()
       const result = addPathToFiles(mockFileList, 'derivatives')
       expect(result).toHaveLength(2)
-      expect(result[0].webkitRelativePath).toBe('derivatives/sub-01/one.txt')
+      expect(result[0].webkitRelativePath).toBe('/derivatives/sub-01/one.txt')
     })
     it('returns the original FileList if path is falsy', () => {
       const mockFileList = fileListFactory()
