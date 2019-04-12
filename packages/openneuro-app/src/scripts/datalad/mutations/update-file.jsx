@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import * as Sentry from '@sentry/browser'
-import { updateFiles } from '../../uploader/upload-mutation.js'
 import { withApollo } from 'react-apollo'
+import { updateFiles } from '../../uploader/upload-mutation.js'
+import DatasetQueryContext from '../dataset/dataset-query-context.js'
 
 /**
  * Prefix all files with a path
@@ -61,26 +62,32 @@ const UpdateFile = ({
     return (
       <div className="edit-file">
         {children}
-        <input
-          type="file"
-          className="update-file"
-          name={filename}
-          multiple={multiple}
-          webkitdirectory={multiple ? '' : null}
-          onChange={async e => {
-            setUploading(true)
-            try {
-              await updateFiles(client)(
-                datasetId,
-                addPathToFiles(e.target.files, path),
-              )
-            } catch (err) {
-              Sentry.captureException(err)
-            } finally {
-              setUploading(false)
-            }
-          }}
-        />
+        <DatasetQueryContext.Consumer>
+          {context => (
+            <input
+              type="file"
+              className="update-file"
+              name={filename}
+              multiple={multiple}
+              webkitdirectory={multiple ? '' : null}
+              onChange={async e => {
+                setUploading(true)
+                try {
+                  await updateFiles(client)(
+                    datasetId,
+                    addPathToFiles(e.target.files, path),
+                  )
+                  // Reload the dataset once the mutation is done
+                  context.refetch()
+                } catch (err) {
+                  Sentry.captureException(err)
+                } finally {
+                  setUploading(false)
+                }
+              }}
+            />
+          )}
+        </DatasetQueryContext.Consumer>
       </div>
     )
   }
