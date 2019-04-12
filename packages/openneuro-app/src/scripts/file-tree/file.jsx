@@ -39,9 +39,11 @@ const File = ({ datasetId, path, filename, snapshotTag = null }) => {
             <i className="fa fa-file-o" /> Update
           </UpdateFile>
         </span>
-        <span className="edit-file delete-file">
-          <DeleteFile datasetId={datasetId} path={path} filename={filename} />
-        </span>
+        {filename !== 'dataset_description.json' && (
+          <span className="edit-file delete-file">
+            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
+          </span>
+        )}
       </span>
     </>
   )
