@@ -16,19 +16,24 @@ import EditReadme from '../fragments/edit-readme.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import LoggedOut from '../../authentication/logged-out.jsx'
 import { getProfile } from '../../authentication/profile.js'
+import styled from '@emotion/styled'
+
+const MarginBottomDiv = styled.div`
+  margin-bottom: 0.5em;
+`
 
 export const HasBeenPublished = ({ isPublic, datasetId }) =>
   isPublic ? (
-    <div className="alert alert-success">
+    <MarginBottomDiv className="alert alert-success">
       <strong>This dataset has been published!</strong> Create a new snapshot to
       make changes available
-    </div>
+    </MarginBottomDiv>
   ) : (
-    <div className="alert alert-warning">
+    <MarginBottomDiv className="alert alert-warning">
       <strong>This dataset has not been published!</strong>{' '}
       <Link to={`/datasets/${datasetId}/publish`}>Publish this dataset</Link> to
       make all snapshots available publicly
-    </div>
+    </MarginBottomDiv>
   )
 
 HasBeenPublished.propTypes = {

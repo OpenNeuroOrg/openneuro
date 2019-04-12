@@ -1,22 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`DatasetReadme component renders with common props 1`] = `
-<div>
-  <h2>
-    README
-  </h2>
+<div
+  className="cte-display"
+>
   <div
-    className="cte-display"
-  >
-    <div
-      className="fade-in"
-      dangerouslySetInnerHTML={
-        Object {
-          "__html": "<p>markdown goes here</p>
+    className="fade-in"
+    dangerouslySetInnerHTML={
+      Object {
+        "__html": "<p>markdown goes here</p>
 ",
-        }
       }
-    />
-  </div>
+    }
+  />
 </div>
 `;
