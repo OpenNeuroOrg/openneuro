@@ -1,10 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { ApolloProvider } from 'react-apollo'
-import UpdateFile, {
-  addPathToFiles,
-  overrideFilename,
-} from '../update-file.jsx'
+import UpdateFile, { addPathToFiles } from '../update-file.jsx'
 
 const fileListFactory = () => {
   const mockFileA = new Blob(['file one'], { type: 'text/plain' })
