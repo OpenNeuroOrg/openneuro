@@ -4,7 +4,6 @@ import React from 'react'
 import { Redirect, Switch, Route, NavLink } from 'react-router-dom'
 import Users from './admin.users.jsx'
 import Blacklist from './admin.blacklist.jsx'
-import EventLogs from './admin.logs.jsx'
 
 import BlacklistModal from './admin.blacklist.modal.jsx'
 import actions from './admin.actions'
@@ -37,11 +36,6 @@ class Dashboard extends React.Component {
                     Blocked Users
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink to="/admin/event-logs" className="btn-tab">
-                    Event Logs
-                  </NavLink>
-                </li>
               </ul>
               <Switch>
                 <Redirect
@@ -61,12 +55,6 @@ class Dashboard extends React.Component {
                   path="/admin/blacklist"
                   exact
                   component={Blacklist}
-                />
-                <Route
-                  name="event-logs"
-                  path="/admin/event-logs"
-                  exact
-                  component={EventLogs}
                 />
               </Switch>
             </div>
