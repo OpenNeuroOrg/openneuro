@@ -11,7 +11,13 @@ export const apiPath = (datasetId, snapshotTag, filePath) => {
   return `/crn/datasets/${datasetId}${snapshotPath}/files/${filePath}`
 }
 
-const File = ({ datasetId, path, filename, snapshotTag = null }) => {
+const File = ({
+  datasetId,
+  path,
+  filename,
+  snapshotTag = null,
+  editMode = false,
+}) => {
   const snapshotVersionPath = snapshotTag ? `/versions/${snapshotTag}` : ''
   // React route to display the file
   const viewerPath = `/datasets/${datasetId}${snapshotVersionPath}/file-display/${filePath(
@@ -34,16 +40,23 @@ const File = ({ datasetId, path, filename, snapshotTag = null }) => {
             <i className="fa fa-eye" /> View
           </Link>
         </span>
-        <span className="edit-file update-file">
-          <UpdateFile datasetId={datasetId} path={path} filename={filename}>
-            <i className="fa fa-file-o" /> Update
-          </UpdateFile>
-        </span>
-        {filename !== 'dataset_description.json' && (
-          <span className="edit-file delete-file">
-            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
+        {editMode && (
+          <span className="edit-file update-file">
+            <UpdateFile datasetId={datasetId} path={path} filename={filename}>
+              <i className="fa fa-file-o" /> Update
+            </UpdateFile>
           </span>
         )}
+        {editMode &&
+          filename !== 'dataset_description.json' && (
+            <span className="edit-file delete-file">
+              <DeleteFile
+                datasetId={datasetId}
+                path={path}
+                filename={filename}
+              />
+            </span>
+          )}
       </span>
     </>
   )

@@ -31,29 +31,6 @@ exports[`File component renders for dataset snapshots 1`] = `
          View
       </Link>
     </span>
-    <span
-      className="edit-file update-file"
-    >
-      <withApollo(UpdateFile)
-        datasetId="ds001"
-        filename="README"
-        path=""
-      >
-        <i
-          className="fa fa-file-o"
-        />
-         Update
-      </withApollo(UpdateFile)>
-    </span>
-    <span
-      className="edit-file delete-file"
-    >
-      <DeleteFile
-        datasetId="ds001"
-        filename="README"
-        path=""
-      />
-    </span>
   </span>
 </Fragment>
 `;
@@ -88,29 +65,6 @@ exports[`File component renders with common props 1`] = `
         />
          View
       </Link>
-    </span>
-    <span
-      className="edit-file update-file"
-    >
-      <withApollo(UpdateFile)
-        datasetId="ds001"
-        filename="README"
-        path=""
-      >
-        <i
-          className="fa fa-file-o"
-        />
-         Update
-      </withApollo(UpdateFile)>
-    </span>
-    <span
-      className="edit-file delete-file"
-    >
-      <DeleteFile
-        datasetId="ds001"
-        filename="README"
-        path=""
-      />
     </span>
   </span>
 </Fragment>

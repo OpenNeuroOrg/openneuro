@@ -8,7 +8,7 @@ const EditDescriptionList = ({
   description,
   field,
   children,
-  editable,
+  editMode,
 }) => {
   const [editing, setEditing] = useState(false)
   const [rows, setRows] = useState(description[field] || [])
@@ -33,7 +33,7 @@ const EditDescriptionList = ({
     return (
       <>
         {children}
-        {editable ? <EditButton action={() => setEditing(true)} /> : null}
+        {editMode ? <EditButton action={() => setEditing(true)} /> : null}
       </>
     )
   }

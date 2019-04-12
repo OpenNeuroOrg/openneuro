@@ -7,6 +7,7 @@ const DatasetFiles = ({
   snapshotTag = null,
   datasetName,
   files,
+  editMode,
 }) => (
   <div className="dataset-files">
     <div className="col-xs-12">
@@ -22,6 +23,7 @@ const DatasetFiles = ({
                 snapshotTag={snapshotTag}
                 datasetName={datasetName}
                 files={files}
+                editMode={editMode}
               />
             </div>
           </div>

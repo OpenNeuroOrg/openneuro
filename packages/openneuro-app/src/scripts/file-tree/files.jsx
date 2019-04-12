@@ -3,7 +3,13 @@ import PropTypes from 'prop-types'
 import { flatToTree } from './flat-to-tree.js'
 import FileTree from './file-tree.jsx'
 
-const Files = ({ datasetId, snapshotTag, datasetName, files }) => {
+const Files = ({
+  datasetId,
+  snapshotTag,
+  datasetName,
+  files,
+  editMode = false,
+}) => {
   const fileTree = flatToTree(files)
   return (
     <ul className="top-level-item">
@@ -14,6 +20,7 @@ const Files = ({ datasetId, snapshotTag, datasetName, files }) => {
           path={''}
           {...fileTree}
           name={datasetName}
+          editMode={editMode}
           defaultExpanded={true}
         />
       </li>

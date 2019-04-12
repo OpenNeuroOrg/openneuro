@@ -8,7 +8,7 @@ const arrayToMarkdown = arr => {
   return arr ? arr.map(element => ` * ${element}\n`).join('') : ''
 }
 
-const DatasetDescription = ({ datasetId, description, editable = true }) => (
+const DatasetDescription = ({ datasetId, description, editMode = true }) => (
   <>
     <div className="description-item">
       <h2>Authors</h2>
@@ -16,7 +16,7 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         datasetId={datasetId}
         description={description}
         field="Authors"
-        editable={editable}>
+        editMode={editMode}>
         <div
           className="cte-display fade-in"
           dangerouslySetInnerHTML={markdown.format(
@@ -38,7 +38,7 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         datasetId={datasetId}
         field="License"
         description={description}
-        editable={editable}>
+        editMode={editMode}>
         <div
           className="cte-display fade-in"
           dangerouslySetInnerHTML={markdown.format(description.License || '')}
@@ -51,7 +51,7 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         datasetId={datasetId}
         field="Acknowledgements"
         description={description}
-        editable={editable}>
+        editMode={editMode}>
         <div
           className="cte-display fade-in"
           dangerouslySetInnerHTML={markdown.format(
@@ -66,7 +66,7 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         datasetId={datasetId}
         field="HowToAcknowledge"
         description={description}
-        editable={editable}>
+        editMode={editMode}>
         <div
           className="cte-display fade-in"
           dangerouslySetInnerHTML={markdown.format(
@@ -81,7 +81,7 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         datasetId={datasetId}
         description={description}
         field="Funding"
-        editable={editable}>
+        editMode={editMode}>
         <div
           className="cte-display fade-in"
           dangerouslySetInnerHTML={markdown.format(
@@ -96,7 +96,7 @@ const DatasetDescription = ({ datasetId, description, editable = true }) => (
         datasetId={datasetId}
         description={description}
         field="ReferencesAndLinks"
-        editable={editable}>
+        editMode={editMode}>
         <div
           className="cte-display fade-in"
           dangerouslySetInnerHTML={markdown.format(

@@ -16,6 +16,7 @@ const FileTree = ({
   name = '',
   files = [],
   directories = [],
+  editMode = false,
   defaultExpanded = false,
 }) => {
   const [expanded, setExpanded] = useState(defaultExpanded)
@@ -32,17 +33,19 @@ const FileTree = ({
       </button>
       {expanded && (
         <>
-          <span className="filetree-editfile">
-            <UpdateFile datasetId={datasetId} path={unescapePath(path)}>
-              <i className="fa fa-plus" /> Add File
-            </UpdateFile>
-            <UpdateFile
-              datasetId={datasetId}
-              path={unescapePath(path)}
-              multiple>
-              <i className="fa fa-plus" /> Add Directory
-            </UpdateFile>
-          </span>
+          {editMode && (
+            <span className="filetree-editfile">
+              <UpdateFile datasetId={datasetId} path={unescapePath(path)}>
+                <i className="fa fa-plus" /> Add File
+              </UpdateFile>
+              <UpdateFile
+                datasetId={datasetId}
+                path={unescapePath(path)}
+                multiple>
+                <i className="fa fa-plus" /> Add Directory
+              </UpdateFile>
+            </span>
+          )}
           <ul className="child-files">
             {files.sort(sortByFilename).map((file, index) => (
               <li className="clearfix" key={index}>
@@ -50,6 +53,7 @@ const FileTree = ({
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
                   path={path}
+                  editMode={editMode}
                   {...file}
                 />
               </li>
