@@ -22,7 +22,7 @@ describe('Uploader mutations', () => {
       const file = new Blob(['{}'], { type: 'application/json' })
       const parent = {
         files: [],
-        directories: [{ name: 'derivatives', files: [], directories: [] }],
+        directories: [{ name: '/derivatives', files: [], directories: [] }],
         name: '',
       }
       mkLevels(file, parent, ['derivatives', 'data.json'])
