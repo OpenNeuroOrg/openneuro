@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UpdateFile mutation renders with default props 1`] = `
+<ApolloProvider
+  client={
+    Object {
+      "__operations_cache__": Map {},
+    }
+  }
+>
+  <withApollo(UpdateFile)>
+    <ApolloConsumer>
+      <UpdateFile
+        client={
+          Object {
+            "__operations_cache__": Map {},
+          }
+        }
+      >
+        <div
+          className="edit-file"
+        >
+          <input
+            className="update-file"
+            multiple={false}
+            onChange={[Function]}
+            type="file"
+            webkitdirectory={null}
+          />
+        </div>
+      </UpdateFile>
+    </ApolloConsumer>
+  </withApollo(UpdateFile)>
+</ApolloProvider>
+`;

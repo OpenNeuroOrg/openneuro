@@ -34,7 +34,7 @@ const FileTree = ({
             <UpdateFile datasetId={datasetId}>
               <i className="fa fa-plus" /> Add File
             </UpdateFile>
-            <UpdateFile datasetId={datasetId} multiple>
+            <UpdateFile datasetId={datasetId} path={path} multiple>
               <i className="fa fa-plus" /> Add Directory
             </UpdateFile>
           </span>
