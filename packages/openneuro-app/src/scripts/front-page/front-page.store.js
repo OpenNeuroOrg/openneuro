@@ -4,7 +4,6 @@ import Reflux from 'reflux'
 import actions from './front-page.actions'
 import crn from '../utils/crn'
 import files from '../utils/files'
-import datasetActions from '../dataset/dataset.actions'
 import request from '../utils/request'
 import config from '../../../config'
 

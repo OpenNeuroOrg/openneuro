@@ -5,7 +5,6 @@ import Actions from './admin.actions.js'
 import datalad from '../utils/datalad'
 import crn from '../utils/crn'
 import batch from '../utils/batch'
-import datasetActions from '../dataset/dataset.actions'
 import { toast } from 'react-toastify'
 import ToastContent from '../common/partials/toast-content.jsx'
 
@@ -471,9 +470,6 @@ let UserStore = Reflux.createStore({
 
         //toggle modal once response comes bacn from server.
         this.toggleModal('defineJob')
-
-        // TODO - error handling
-        datasetActions.loadApps() //this does not seem like the right way to do this.
       })
       .catch(err => {
         // server is returning 400 for invalid inputs for vcpus and memory
@@ -498,7 +494,6 @@ let UserStore = Reflux.createStore({
   deleteJobDefinition(jobDefinition, callback) {
     let appId = jobDefinition.jobDefinitionName + ':' + jobDefinition.revision
     crn.deleteJobDefinition(appId).then(() => {
-      datasetActions.loadApps() //need to reload apps for UI to update with Inactive status on delete
       if (callback) {
         callback()
       }
