@@ -5,14 +5,10 @@ import { Redirect, Switch, Route, NavLink } from 'react-router-dom'
 import Users from './admin.users.jsx'
 import Blacklist from './admin.blacklist.jsx'
 import EventLogs from './admin.logs.jsx'
-import Graphs from '../admin/admin.graphs.jsx'
 
 import BlacklistModal from './admin.blacklist.modal.jsx'
 import actions from './admin.actions'
-import config from '../../../config'
 import LoggedIn from '../authentication/logged-in.jsx'
-
-const analysisEnabled = !!config.analysis.enabled
 
 class Dashboard extends React.Component {
   // life cycle events --------------------------------------------------
@@ -71,12 +67,6 @@ class Dashboard extends React.Component {
                   path="/admin/event-logs"
                   exact
                   component={EventLogs}
-                />
-                <Route
-                  name="admin-jobs-stats"
-                  path="/admin/job-statistics"
-                  exact
-                  component={Graphs}
                 />
               </Switch>
             </div>
