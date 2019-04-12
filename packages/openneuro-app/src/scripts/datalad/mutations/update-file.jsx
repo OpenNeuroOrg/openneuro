@@ -29,7 +29,10 @@ export const addPathToFiles = (fileList, path) => {
 export const overrideFilename = (fileList, name) => {
   if (name) {
     const newFile = { ...fileList[0], name }
-    return [newFile, ...fileList.slice(1)]
+    // We have to spread FileList -> Array to modify it
+    const fileArray = [...fileList]
+    fileArray[0] = newFile
+    return fileArray
   } else {
     return fileList
   }
