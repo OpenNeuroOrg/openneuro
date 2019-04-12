@@ -83,6 +83,23 @@ const DatasetRoutes = ({ dataset }) => (
       path="/datasets/:datasetId/versions/:snapshotId/download"
       component={DownloadDataset}
     />
+    <Route
+      name="snapshot-fileDisplay"
+      path="/datasets/:datasetId/versions/:snapshotTag/file-display/:filePath"
+      render={({
+        match: {
+          params: { datasetId, filePath, snapshotTag },
+        },
+      }) => {
+        return (
+          <FileDisplay
+            datasetId={datasetId}
+            snapshotTag={snapshotTag}
+            filePath={filePath}
+          />
+        )
+      }}
+    />
   </Switch>
 )
 
