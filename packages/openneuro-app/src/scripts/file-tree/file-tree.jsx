@@ -7,7 +7,7 @@ export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
 export const sortByName = (a, b) => a.name.localeCompare(b.name)
 
-export const unescapePath = path => path.replace(/\:/g, '/')
+export const unescapePath = path => path.replace(/:/g, '/')
 
 const FileTree = ({
   datasetId,
