@@ -43,16 +43,4 @@ describe('UpdateFile mutation', () => {
       expect(result).toBe(mockFileList)
     })
   })
-  describe('overrideFilename()', () => {
-    it('returns the original FileList if no new filename is provided', () => {
-      const fileList = []
-      expect(overrideFilename(fileList)).toBe(fileList)
-    })
-    it('overrides the filename for the first file in a multi item FileList ', () => {
-      const mockFileList = [{ name: 'README' }, { name: 'CHANGES' }]
-      expect(
-        overrideFilename(mockFileList, 'dataset_description.json'),
-      ).toEqual([{ name: 'dataset_description.json' }, { name: 'CHANGES' }])
-    })
-  })
 })

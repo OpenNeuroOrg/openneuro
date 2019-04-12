@@ -23,6 +23,7 @@ exports[`UpdateFile mutation renders with default props 1`] = `
           <input
             className="update-file"
             multiple={false}
+            name={null}
             onChange={[Function]}
             type="file"
             webkitdirectory={null}

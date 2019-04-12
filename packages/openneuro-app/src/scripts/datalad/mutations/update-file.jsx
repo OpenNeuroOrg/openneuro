@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import * as Sentry from '@sentry/browser'
 import { updateFiles } from '../../uploader/upload-mutation.js'
 import { withApollo } from 'react-apollo'
+import { datasetCacheId } from './cache-id.js'
+import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 /**
  * Prefix all files with a path
@@ -28,10 +30,9 @@ export const addPathToFiles = (fileList, path) => {
  */
 export const overrideFilename = (fileList, name) => {
   if (name) {
-    const newFile = { ...fileList[0], name }
     // We have to spread FileList -> Array to modify it
     const fileArray = [...fileList]
-    fileArray[0] = newFile
+    fileArray[0].name = name
     return fileArray
   } else {
     return fileList
@@ -61,14 +62,16 @@ const UpdateFile = ({
         <input
           type="file"
           className="update-file"
+          name={filename}
           multiple={multiple}
           webkitdirectory={multiple ? '' : null}
           onChange={async e => {
             setUploading(true)
             try {
-              // The filename prop overrides the first filename
-              const files = overrideFilename(e.target.files, filename)
-              await updateFiles(client)(datasetId, addPathToFiles(files, path))
+              await updateFiles(client)(
+                datasetId,
+                addPathToFiles(e.target.files, path),
+              )
             } catch (err) {
               Sentry.captureException(err)
             } finally {

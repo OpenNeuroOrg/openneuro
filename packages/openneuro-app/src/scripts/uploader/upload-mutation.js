@@ -1,4 +1,5 @@
 import { datasets, files } from 'openneuro-client'
+import { getDatasetPage } from '../datalad/dataset/dataset-query.jsx'
 
 /**
  * Create a dataset and update the label
@@ -80,5 +81,6 @@ export const updateFiles = client => (datasetId, fileList) => {
     mutation: files.updateFiles,
     variables: { datasetId, files: tree },
     errorPolicy: 'all',
+    refetchQueries: [{ query: getDatasetPage, variables: { datasetId } }],
   })
 }
