@@ -20,14 +20,31 @@ export const addPathToFiles = (fileList, path) => {
     : fileList
 }
 
+/**
+ * Allow the first filename to be overriden
+ * Mostly useful for "replace" of an existing file
+ * @param {*} fileList
+ * @param {*} name New filename
+ */
+export const overrideFilename = (fileList, name) => {
+  if (name) {
+    const newFile = { ...fileList[0], name }
+    return [newFile, ...fileList.slice(1)]
+  } else {
+    return fileList
+  }
+}
+
 const UpdateFile = ({
   client,
   datasetId,
   multiple = false,
   path = null,
+  filename = null,
   children,
 }) => {
   const [uploading, setUploading] = useState(false)
+
   if (uploading) {
     return (
       <div className="edit-file">
@@ -46,10 +63,9 @@ const UpdateFile = ({
           onChange={async e => {
             setUploading(true)
             try {
-              await updateFiles(client)(
-                datasetId,
-                addPathToFiles(e.target.files, path),
-              )
+              // The filename prop overrides the first filename
+              const files = overrideFilename(e.target.files, filename)
+              await updateFiles(client)(datasetId, addPathToFiles(files, path))
             } catch (err) {
               Sentry.captureException(err)
             } finally {

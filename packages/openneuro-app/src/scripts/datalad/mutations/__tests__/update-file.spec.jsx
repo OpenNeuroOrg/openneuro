@@ -1,7 +1,10 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { ApolloProvider } from 'react-apollo'
-import UpdateFile, { addPathToFiles } from '../update-file.jsx'
+import UpdateFile, {
+  addPathToFiles,
+  overrideFilename,
+} from '../update-file.jsx'
 
 const fileListFactory = () => {
   const mockFileA = new Blob(['file one'], { type: 'text/plain' })
@@ -38,6 +41,18 @@ describe('UpdateFile mutation', () => {
       const mockFileList = fileListFactory()
       const result = addPathToFiles(mockFileList)
       expect(result).toBe(mockFileList)
+    })
+  })
+  describe('overrideFilename()', () => {
+    it('returns the original FileList if no new filename is provided', () => {
+      const fileList = []
+      expect(overrideFilename(fileList)).toBe(fileList)
+    })
+    it('overrides the filename for the first file in a multi item FileList ', () => {
+      const mockFileList = [{ name: 'README' }, { name: 'CHANGES' }]
+      expect(
+        overrideFilename(mockFileList, 'dataset_description.json'),
+      ).toEqual([{ name: 'dataset_description.json' }, { name: 'CHANGES' }])
     })
   })
 })
