@@ -7,6 +7,7 @@ import DownloadDataset from '../download/download-dataset.jsx'
 import Publish from './publish.jsx'
 import Share from './share.jsx'
 import Snapshot from './snapshot.jsx'
+import FileDisplay from './file-display.jsx'
 
 const stubComponent = () => null
 
@@ -54,8 +55,14 @@ const DatasetRoutes = ({ dataset }) => (
     />
     <Route
       name="fileDisplay"
-      path="/datasets/:datasetId/file-display"
-      component={stubComponent}
+      path="/datasets/:datasetId/file-display/:filePath"
+      render={({
+        match: {
+          params: { datasetId, filePath },
+        },
+      }) => {
+        return <FileDisplay datasetId={datasetId} filePath={filePath} />
+      }}
     />
     {/* Snapshot routes */}
     <Route
@@ -75,6 +82,23 @@ const DatasetRoutes = ({ dataset }) => (
       exact
       path="/datasets/:datasetId/versions/:snapshotId/download"
       component={DownloadDataset}
+    />
+    <Route
+      name="snapshot-fileDisplay"
+      path="/datasets/:datasetId/versions/:snapshotTag/file-display/:filePath"
+      render={({
+        match: {
+          params: { datasetId, filePath, snapshotTag },
+        },
+      }) => {
+        return (
+          <FileDisplay
+            datasetId={datasetId}
+            snapshotTag={snapshotTag}
+            filePath={filePath}
+          />
+        )
+      }}
     />
   </Switch>
 )

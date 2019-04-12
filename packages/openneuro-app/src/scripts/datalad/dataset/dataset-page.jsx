@@ -39,10 +39,8 @@ class DatasetPage extends React.Component {
           <DatasetTools dataset={this.props.dataset} />
           <div className="fade-in inner-route dataset-route light">
             <div className="clearfix dataset-wrap">
-              <div className="dataset-animation">
-                <div className="col-xs-12 dataset-inner">
-                  <DatasetMain dataset={this.props.dataset} />
-                </div>
+              <div className="dataset-animation dataset-inner">
+                <DatasetMain dataset={this.props.dataset} />
               </div>
             </div>
           </div>

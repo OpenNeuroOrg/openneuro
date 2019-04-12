@@ -28,9 +28,8 @@ exports[`Comments component recursively renders a tree of comments 1`] = `
   datasetId="ds000001"
 >
   <div
-    className="col-xs-12 dataset-inner"
+    className="col-xs-12"
   >
-    <hr />
     <div
       className="dataset-comments"
     >
@@ -1204,9 +1203,8 @@ exports[`Comments component renders one top level comment 1`] = `
   datasetId="ds000001"
 >
   <div
-    className="col-xs-12 dataset-inner"
+    className="col-xs-12"
   >
-    <hr />
     <div
       className="dataset-comments"
     >

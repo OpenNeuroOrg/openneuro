@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FileTree component renders with default props 1`] = `
+<FileTree>
+  <button
+    className="btn-file-folder"
+    onClick={[Function]}
+  >
+    <i
+      className="type-icon fa fa-folder"
+    />
+     
+    <i
+      className="accordion-icon fa fa-caret-down"
+    />
+  </button>
+</FileTree>
+`;

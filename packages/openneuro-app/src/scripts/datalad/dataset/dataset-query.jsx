@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
@@ -39,6 +40,7 @@ export const DatasetQueryRender = ({ loading, error, data }) => {
   if (loading) {
     return <Spinner text="Loading Dataset" active />
   } else if (error) {
+    Sentry.captureException(error)
     throw new Error(error)
   } else {
     return <DatasetPage dataset={data.dataset} />

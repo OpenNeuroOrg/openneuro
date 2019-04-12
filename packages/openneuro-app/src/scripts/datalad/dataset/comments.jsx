@@ -36,8 +36,7 @@ CommentTree.propTypes = {
 
 const Comments = ({ datasetId, uploader, comments }) => {
   return (
-    <div className="col-xs-12 dataset-inner">
-      <hr />
+    <div className="col-xs-12">
       <div className="dataset-comments">
         <h2>Comments</h2>
         <LoggedIn>

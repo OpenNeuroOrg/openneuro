@@ -1,8 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import FileTreeGeneric from '../../common/partials/file-tree-generic.jsx'
+import Files from '../../file-tree/files.jsx'
 
-const DatasetFiles = ({ files }) => (
+const DatasetFiles = ({
+  datasetId,
+  snapshotTag = null,
+  datasetName,
+  files,
+  editMode,
+}) => (
   <div className="dataset-files">
     <div className="col-xs-12">
       <div className="file-structure fade-in panel-group">
@@ -12,7 +18,13 @@ const DatasetFiles = ({ files }) => (
           </div>
           <div className="panel-collapse" aria-expanded="false">
             <div className="panel-body">
-              <FileTreeGeneric files={files} />
+              <Files
+                datasetId={datasetId}
+                snapshotTag={snapshotTag}
+                datasetName={datasetName}
+                files={files}
+                editMode={editMode}
+              />
             </div>
           </div>
         </div>
@@ -22,7 +34,11 @@ const DatasetFiles = ({ files }) => (
 )
 
 DatasetFiles.propTypes = {
+  datasetId: PropTypes.string,
+  snapshotTag: PropTypes.string,
+  datasetName: PropTypes.string,
   files: PropTypes.array,
+  editMode: PropTypes.bool,
 }
 
 export default DatasetFiles

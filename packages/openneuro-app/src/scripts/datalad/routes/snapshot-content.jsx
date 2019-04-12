@@ -93,6 +93,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           snapshot
         />
         <DatasetSummary summary={snapshot.summary} />
+        <h2>README</h2>
         <DatasetReadme content={snapshot.readme} />
         <DatasetDescription
           datasetId={dataset.id}
@@ -102,7 +103,12 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
       </div>
       <div className="col-xs-6">
         <Validation datasetId={dataset.id} />
-        <DatasetFiles files={snapshot.files} />
+        <DatasetFiles
+          datasetId={dataset.id}
+          snapshotTag={snapshot.tag}
+          datasetName={snapshot.description.Name}
+          files={snapshot.files}
+        />
       </div>
     </span>
   )

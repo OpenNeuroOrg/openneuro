@@ -7,14 +7,11 @@ import markdown from '../../utils/markdown'
  */
 const DatasetReadme = ({ content }) => {
   return (
-    <div>
-      <h2>README</h2>
-      <div className="cte-display">
-        <div
-          className="fade-in"
-          dangerouslySetInnerHTML={markdown.format(content)}
-        />
-      </div>
+    <div className="cte-display">
+      <div
+        className="fade-in"
+        dangerouslySetInnerHTML={markdown.format(content)}
+      />
     </div>
   )
 }

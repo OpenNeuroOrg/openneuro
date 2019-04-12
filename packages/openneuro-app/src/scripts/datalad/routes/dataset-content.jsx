@@ -15,19 +15,25 @@ import Validation from '../validation/validation.jsx'
 import EditReadme from '../fragments/edit-readme.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import LoggedOut from '../../authentication/logged-out.jsx'
+import { getProfile } from '../../authentication/profile.js'
+import styled from '@emotion/styled'
+
+const MarginBottomDiv = styled.div`
+  margin-bottom: 0.5em;
+`
 
 export const HasBeenPublished = ({ isPublic, datasetId }) =>
   isPublic ? (
-    <div className="alert alert-success">
+    <MarginBottomDiv className="alert alert-success">
       <strong>This dataset has been published!</strong> Create a new snapshot to
       make changes available
-    </div>
+    </MarginBottomDiv>
   ) : (
-    <div className="alert alert-warning">
+    <MarginBottomDiv className="alert alert-warning">
       <strong>This dataset has not been published!</strong>{' '}
       <Link to={`/datasets/${datasetId}/publish`}>Publish this dataset</Link> to
       make all snapshots available publicly
-    </div>
+    </MarginBottomDiv>
   )
 
 HasBeenPublished.propTypes = {
@@ -35,54 +41,80 @@ HasBeenPublished.propTypes = {
   datasetId: PropTypes.string,
 }
 
+// Return true if the active user has write permission
+export const hasEditPermissions = (permissions, userId) => {
+  if (userId) {
+    const permission = permissions.find(perm => perm.user.id === userId)
+    return (
+      (permission &&
+        (permission.level === 'admin' || permission.level === 'rw')) ||
+      false
+    )
+  }
+  return false
+}
+
 /**
  * Data routing for the main dataset query to display/edit components
  */
-const DatasetContent = ({ dataset }) => (
-  <>
-    <LoggedIn>
-      <div className="col-xs-12">
-        <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
-      </div>
-      <div className="col-xs-6">
-        <EditDescriptionField
-          datasetId={dataset.id}
-          field="Name"
-          description={dataset.draft.description}>
-          <DatasetTitle title={dataset.draft.description.Name} />
-        </EditDescriptionField>
-        <DatasetUploaded
-          uploader={dataset.uploader}
-          created={dataset.created}
+const DatasetContent = ({ dataset }) => {
+  const user = getProfile()
+  const hasEdit =
+    (user && user.admin) ||
+    hasEditPermissions(dataset.permissions, user && user.sub)
+  return (
+    <>
+      <LoggedIn>
+        <div className="col-xs-12">
+          <HasBeenPublished isPublic={dataset.public} datasetId={dataset.id} />
+        </div>
+        <div className="col-xs-6">
+          <EditDescriptionField
+            datasetId={dataset.id}
+            field="Name"
+            description={dataset.draft.description}
+            editMode={hasEdit}>
+            <DatasetTitle title={dataset.draft.description.Name} />
+          </EditDescriptionField>
+          <DatasetUploaded
+            uploader={dataset.uploader}
+            created={dataset.created}
+          />
+          <DatasetModified modified={dataset.draft.modified} />
+          <DatasetAuthors authors={dataset.draft.description.Authors} />
+          <DatasetAnalytics
+            downloads={dataset.analytics.downloads}
+            views={dataset.analytics.views}
+          />
+          <DatasetSummary summary={dataset.draft.summary} />
+          <h2>README</h2>
+          <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
+            <DatasetReadme content={dataset.draft.readme} />
+          </EditReadme>
+          <DatasetDescription
+            datasetId={dataset.id}
+            description={dataset.draft.description}
+            editMode={hasEdit}
+          />
+        </div>
+        <div className="col-xs-6">
+          <Validation datasetId={dataset.id} />
+          <DatasetFiles
+            datasetId={dataset.id}
+            datasetName={dataset.draft.description.Name}
+            files={dataset.draft.files}
+            editMode={hasEdit}
+          />
+        </div>
+      </LoggedIn>
+      <LoggedOut>
+        <Redirect
+          to={`/datasets/${dataset.id}/versions/${dataset.snapshots[0].tag}`}
         />
-        <DatasetModified modified={dataset.draft.modified} />
-        <DatasetAuthors authors={dataset.draft.description.Authors} />
-        <DatasetAnalytics
-          downloads={dataset.analytics.downloads}
-          views={dataset.analytics.views}
-        />
-        <DatasetSummary summary={dataset.draft.summary} />
-        <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
-          <DatasetReadme content={dataset.draft.readme} />
-        </EditReadme>
-        <DatasetDescription
-          datasetId={dataset.id}
-          description={dataset.draft.description}
-          editable={true}
-        />
-      </div>
-      <div className="col-xs-6">
-        <Validation datasetId={dataset.id} />
-        <DatasetFiles files={dataset.draft.files} />
-      </div>
-    </LoggedIn>
-    <LoggedOut>
-      <Redirect
-        to={`/datasets/${dataset.id}/versions/${dataset.snapshots[0].tag}`}
-      />
-    </LoggedOut>
-  </>
-)
+      </LoggedOut>
+    </>
+  )
+}
 
 DatasetContent.propTypes = {
   dataset: PropTypes.object,

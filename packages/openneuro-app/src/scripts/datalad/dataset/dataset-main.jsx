@@ -5,16 +5,12 @@ import Comments from './comments.jsx'
 
 const DatasetMain = ({ dataset }) => (
   <>
-    <div className="row">
-      <DatasetRoutes dataset={dataset} />
-    </div>
-    <div className="row">
-      <Comments
-        datasetId={dataset.id}
-        uploader={dataset.uploader}
-        comments={dataset.comments}
-      />
-    </div>
+    <DatasetRoutes dataset={dataset} />
+    <Comments
+      datasetId={dataset.id}
+      uploader={dataset.uploader}
+      comments={dataset.comments}
+    />
   </>
 )
 
