@@ -57,7 +57,6 @@ const DatasetContent = ({ dataset }) => {
   const hasEdit =
     (user && user.admin) ||
     hasEditPermissions(dataset.permissions, user && user.sub)
-  console.log(user, dataset.permissions, hasEdit)
   return (
     <>
       <LoggedIn>
