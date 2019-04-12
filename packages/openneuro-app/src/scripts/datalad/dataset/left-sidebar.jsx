@@ -42,7 +42,7 @@ SidebarRow.propTypes = {
   version: PropTypes.string,
   draft: PropTypes.bool,
   active: PropTypes.string,
-  modified: PropTypes.object,
+  modified: PropTypes.string,
 }
 
 const LeftSidebar = ({ datasetId, draftModified, snapshots, location }) => {
