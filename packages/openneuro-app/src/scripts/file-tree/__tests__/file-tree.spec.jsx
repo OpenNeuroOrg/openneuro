@@ -1,7 +1,11 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { ApolloProvider } from 'react-apollo'
-import FileTree from '../file-tree.jsx'
+import FileTree, {
+  sortByFilename,
+  sortByName,
+  unescapePath,
+} from '../file-tree.jsx'
 
 describe('FileTree component', () => {
   it('renders with default props', () => {
@@ -32,5 +36,38 @@ describe('FileTree component', () => {
         .find('button.btn-file-folder > i.type-icon')
         .hasClass('fa-folder-open'),
     ).toBe(false)
+  })
+  describe('sortByFilename()', () => {
+    it('sorts the expected filename properties', () => {
+      expect(
+        sortByFilename(
+          { name: 'abc', filename: 'xyz' },
+          { name: 'xyz', filename: 'abc' },
+        ),
+      ).toBe(1)
+    })
+  })
+  describe('sortByName()', () => {
+    it('sorts the expected name properties', () => {
+      expect(
+        sortByName(
+          { name: 'abc', filename: 'xyz' },
+          { name: 'xyz', filename: 'abc' },
+        ),
+      ).toBe(-1)
+    })
+  })
+  describe('unescapePath()', () => {
+    it('does not alter an already escaped path', () => {
+      expect(unescapePath('sub-01/anat')).toBe('sub-01/anat')
+    })
+    it('does unescapes any : characters', () => {
+      expect(unescapePath('sub-01:anat')).toBe('sub-01/anat')
+    })
+    it('unescapes multiple : characters', () => {
+      expect(unescapePath('sub-01:anat:image.nii.gz')).toBe(
+        'sub-01/anat/image.nii.gz',
+      )
+    })
   })
 })

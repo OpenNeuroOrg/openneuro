@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import File from './file.jsx'
 import UpdateFile from '../datalad/mutations/update-file.jsx'
 
-const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
+export const sortByFilename = (a, b) => a.filename.localeCompare(b.filename)
 
-const sortByName = (a, b) => a.name.localeCompare(b.name)
+export const sortByName = (a, b) => a.name.localeCompare(b.name)
+
+export const unescapePath = path => path.replace(/\:/g, '/')
 
 const FileTree = ({
   datasetId,
@@ -31,10 +33,13 @@ const FileTree = ({
       {expanded && (
         <>
           <span className="filetree-editfile">
-            <UpdateFile datasetId={datasetId}>
+            <UpdateFile datasetId={datasetId} path={unescapePath(path)}>
               <i className="fa fa-plus" /> Add File
             </UpdateFile>
-            <UpdateFile datasetId={datasetId} path={path} multiple>
+            <UpdateFile
+              datasetId={datasetId}
+              path={unescapePath(path)}
+              multiple>
               <i className="fa fa-plus" /> Add Directory
             </UpdateFile>
           </span>
