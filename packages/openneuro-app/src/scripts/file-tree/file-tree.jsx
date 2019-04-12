@@ -63,6 +63,7 @@ const FileTree = ({
                 <FileTree
                   datasetId={datasetId}
                   snapshotTag={snapshotTag}
+                  editMode={editMode}
                   {...dir}
                 />
               </li>
