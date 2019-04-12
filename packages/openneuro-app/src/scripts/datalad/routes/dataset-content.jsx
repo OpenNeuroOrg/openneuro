@@ -82,6 +82,7 @@ const DatasetContent = ({ dataset }) => {
             views={dataset.analytics.views}
           />
           <DatasetSummary summary={dataset.draft.summary} />
+          <h2>README</h2>
           <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
             <DatasetReadme content={dataset.draft.readme} />
           </EditReadme>

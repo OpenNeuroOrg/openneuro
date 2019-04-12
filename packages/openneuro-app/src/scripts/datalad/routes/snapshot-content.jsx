@@ -93,6 +93,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           snapshot
         />
         <DatasetSummary summary={snapshot.summary} />
+        <h2>README</h2>
         <DatasetReadme content={snapshot.readme} />
         <DatasetDescription
           datasetId={dataset.id}
