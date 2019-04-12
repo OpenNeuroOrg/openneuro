@@ -8,7 +8,7 @@ const arrayToMarkdown = arr => {
   return arr ? arr.map(element => ` * ${element}\n`).join('') : ''
 }
 
-const DatasetDescription = ({ datasetId, description, editMode = true }) => (
+const DatasetDescription = ({ datasetId, description, editMode = false }) => (
   <>
     <div className="description-item">
       <h2>Authors</h2>
