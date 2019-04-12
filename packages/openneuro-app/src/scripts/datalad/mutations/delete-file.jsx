@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Mutation } from 'react-apollo'
 import WarnButton from '../../common/forms/warn-button.jsx'
+import { datasetQueryRefetch } from '../dataset/dataset-query-refetch.js'
 
 const DELETE_FILE = gql`
   mutation deleteFile($datasetId: ID!, $path: String!, $filename: String!) {
@@ -11,7 +12,9 @@ const DELETE_FILE = gql`
 `
 
 const DeleteFile = ({ datasetId, path, filename }) => (
-  <Mutation mutation={DELETE_FILE}>
+  <Mutation
+    mutation={DELETE_FILE}
+    refetchQueries={datasetQueryRefetch(datasetId)}>
     {deleteFile => (
       <WarnButton
         message="Delete"

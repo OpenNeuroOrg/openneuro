@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import * as Sentry from '@sentry/browser'
 import { updateFiles } from '../../uploader/upload-mutation.js'
 import { withApollo } from 'react-apollo'
-import { datasetCacheId } from './cache-id.js'
-import { DRAFT_FRAGMENT } from '../dataset/dataset-query-fragments.js'
 
 /**
  * Prefix all files with a path
