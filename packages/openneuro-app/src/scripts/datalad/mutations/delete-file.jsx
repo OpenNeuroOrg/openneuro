@@ -16,16 +16,21 @@ const DeleteFile = ({ datasetId, path, filename }) => (
     mutation={DELETE_FILE}
     refetchQueries={datasetQueryRefetch(datasetId)}>
     {deleteFile => (
-      <WarnButton
-        message="Delete"
-        icon="fa-trash"
-        warn={true}
-        action={cb => {
-          deleteFile({ variables: { datasetId, path, filename } }).then(() => {
-            cb()
-          })
-        }}
-      />
+      <span className="delete-file">
+        <WarnButton
+          message="Delete"
+          icon="fa-trash"
+          warn={true}
+          className="edit-file"
+          action={cb => {
+            deleteFile({ variables: { datasetId, path, filename } }).then(
+              () => {
+                cb()
+              },
+            )
+          }}
+        />
+      </span>
     )}
   </Mutation>
 )

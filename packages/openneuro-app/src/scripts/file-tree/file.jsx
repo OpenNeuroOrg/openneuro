@@ -41,21 +41,13 @@ const File = ({
           </Link>
         </span>
         {editMode && (
-          <span className="edit-file update-file">
-            <UpdateFile datasetId={datasetId} path={path} filename={filename}>
-              <i className="fa fa-file-o" /> Update
-            </UpdateFile>
-          </span>
+          <UpdateFile datasetId={datasetId} path={path} filename={filename}>
+            <i className="fa fa-file-o" /> Update
+          </UpdateFile>
         )}
         {editMode &&
           filename !== 'dataset_description.json' && (
-            <span className="edit-file delete-file">
-              <DeleteFile
-                datasetId={datasetId}
-                path={path}
-                filename={filename}
-              />
-            </span>
+            <DeleteFile datasetId={datasetId} path={path} filename={filename} />
           )}
       </span>
     </>
