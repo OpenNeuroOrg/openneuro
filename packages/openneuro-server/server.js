@@ -4,19 +4,14 @@ import mongoose from 'mongoose'
 import subscriptionServerFactory from './libs/subscription-server.js'
 import mongo from './libs/mongo'
 import { connect as redis_connect } from './libs/redis'
-import { connect as resque_connect } from './libs/queue'
 import notifications from './libs/notifications'
-import aws from './libs/aws'
 import config from './config'
 import createApp from './app'
 import packageJson from './package.json'
 
 const redisConnect = async () => {
   try {
-    const redis = await redis_connect(config.redis)
-    await resque_connect(redis)
-    // eslint-disable-next-line no-console
-    console.log('Resque connected')
+    await redis_connect(config.redis)
     // start background tasks
     notifications.initCron()
     if (config.analysis.enabled) {

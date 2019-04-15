@@ -17,8 +17,6 @@ import cookieParser from 'cookie-parser'
 import * as jwt from './libs/authentication/jwt.js'
 import * as auth from './libs/authentication/states.js'
 import { setupPassportAuth } from './libs/authentication/passport.js'
-// import events lib to instantiate CRN Emitter
-import events from './libs/events'
 
 // test flag disables Sentry for tests
 export default test => {
