@@ -22,11 +22,6 @@ class Dashboard extends React.Component {
                     Users
                   </NavLink>
                 </li>
-                <li>
-                  <NavLink to="/admin/blacklist" className="btn-tab">
-                    Blocked Users
-                  </NavLink>
-                </li>
               </ul>
               <Switch>
                 <Redirect
@@ -40,12 +35,6 @@ class Dashboard extends React.Component {
                   path="/admin/users"
                   exact
                   component={Users}
-                />
-                <Route
-                  name="blacklist"
-                  path="/admin/blacklist"
-                  exact
-                  component={Blacklist}
                 />
               </Switch>
             </div>
