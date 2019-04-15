@@ -4,20 +4,11 @@ import React from 'react'
 import { Redirect, Switch, Route, NavLink } from 'react-router-dom'
 import Users from './admin.users.jsx'
 import Blacklist from './admin.blacklist.jsx'
-
 import BlacklistModal from './admin.blacklist.modal.jsx'
-import actions from './admin.actions'
 import LoggedIn from '../authentication/logged-in.jsx'
 
 class Dashboard extends React.Component {
   // life cycle events --------------------------------------------------
-
-  componentDidMount() {
-    actions.getBlacklist()
-    actions.getUsers()
-    actions.update({ showBlacklistModal: false })
-    actions.getEventLogs()
-  }
 
   render() {
     return (
