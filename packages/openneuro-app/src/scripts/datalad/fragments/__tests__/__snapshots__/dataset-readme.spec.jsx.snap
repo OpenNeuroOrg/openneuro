@@ -6,12 +6,19 @@ exports[`DatasetReadme component renders with common props 1`] = `
 >
   <div
     className="fade-in"
-    dangerouslySetInnerHTML={
-      Object {
-        "__html": "<p>markdown goes here</p>
-",
-      }
-    }
-  />
+  >
+    <ReactMarkdown
+      astPlugins={Array []}
+      escapeHtml={true}
+      plugins={Array []}
+      rawSourcePos={false}
+      renderers={Object {}}
+      skipHtml={false}
+      sourcePos={false}
+      transformLinkUri={[Function]}
+    >
+      markdown goes here
+    </ReactMarkdown>
+  </div>
 </div>
 `;

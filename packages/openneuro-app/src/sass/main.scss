@@ -36,12 +36,6 @@ $bootstrap-sass-asset-helper: true;
 // papaya asset default
 @import './crn_app/_common.papaya';
 
-// react-select
-@import './react-select';
-
-// react-table
-@import './react-table';
-
 //component common
 @import './crn_app/common.spinner';
 @import './crn_app/common.pagination';

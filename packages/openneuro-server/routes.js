@@ -2,7 +2,6 @@
 
 import express from 'express'
 import users from './handlers/users'
-import stars from './handlers/stars'
 import * as datalad from './handlers/datalad'
 import * as download from './handlers/download.js'
 import comments from './handlers/comments'

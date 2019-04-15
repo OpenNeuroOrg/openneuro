@@ -14,10 +14,6 @@ const redisConnect = async () => {
     await redis_connect(config.redis)
     // start background tasks
     notifications.initCron()
-    if (config.analysis.enabled) {
-      aws.batch.initCron()
-      aws.cloudwatch.initEvents().then(aws.batch.initQueue)
-    }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err)
