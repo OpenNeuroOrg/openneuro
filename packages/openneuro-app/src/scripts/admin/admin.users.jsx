@@ -1,6 +1,7 @@
 // dependencies -------------------------------------------------------
 
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Query, Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import distanceInWordsToNow from 'date-fns/distance_in_words_to_now'
@@ -52,8 +53,14 @@ export const SET_BLOCKED = gql`
 
 const UsersQuery = () => <Query query={GET_USERS}>{UsersQueryResult}</Query>
 
-const UsersQueryResult = ({ loading, error, data, refetch }) => {
+const UsersQueryResult = ({ loading, data, refetch }) => {
   return <Users loading={loading} users={data.users || []} refetch={refetch} />
+}
+
+UsersQueryResult.propTypes = {
+  loading: PropTypes.bool,
+  data: PropTypes.object,
+  refetch: PropTypes.function,
 }
 
 class Users extends React.Component {
@@ -274,6 +281,10 @@ class Users extends React.Component {
   }
 }
 
-const blacklistModal = () => {}
+Users.propTypes = {
+  users: PropTypes.array,
+  loading: PropTypes.bool,
+  refetch: PropTypes.function,
+}
 
 export default UsersQuery
