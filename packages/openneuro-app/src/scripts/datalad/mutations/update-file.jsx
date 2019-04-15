@@ -13,10 +13,14 @@ import { withApollo } from 'react-apollo'
  */
 export const addPathToFiles = (fileList, path) => {
   return path
-    ? fileList.map(file => ({
-        ...file,
-        webkitRelativePath: `${path}/${file.webkitRelativePath}`,
-      }))
+    ? Array.prototype.map.call(fileList, file => {
+        // Override webkitRelativePath with a new property
+        Object.defineProperty(file, 'webkitRelativePath', {
+          value: `/${path}/${file.webkitRelativePath}`,
+          writable: false,
+        })
+        return file
+      })
     : fileList
 }
 
