@@ -1,7 +1,6 @@
 import config from '../config'
 import request from 'superagent'
 import mime from 'mime-types'
-import { generateDataladCookie } from '../libs/authentication/jwt'
 import { getDraftFiles, getDatasetRevision } from '../datalad/draft'
 import { getSnapshot } from '../datalad/snapshots'
 import { decodeFilePath } from '../datalad/files.js'
@@ -16,33 +15,6 @@ import { decodeFilePath } from '../datalad/files.js'
  */
 
 const URI = config.datalad.uri
-
-/**
- * Create a git tag representing a snapshot
- */
-export const createSnapshot = (req, res) => {
-  const datasetId = req.params.datasetId
-  const snapshotId = req.params.snapshotId
-  const uri = `${URI}/datasets/${datasetId}/snapshots/${snapshotId}`
-  request
-    .post(uri)
-    .set('Cookie', generateDataladCookie(config)(req.user))
-    .then(() => {
-      res.send()
-    })
-}
-
-/** Migrate a dataset from the private to public aws bucket */
-export const publishDataset = (req, res) => {
-  const datasetId = req.params.datasetId
-  const uri = `${URI}/datasets/${datasetId}/publish`
-  request
-    .post(uri)
-    .set('Cookie', generateDataladCookie(config)(req.user))
-    .then(() => {
-      res.send()
-    })
-}
 
 /**
  * Get a file from a dataset

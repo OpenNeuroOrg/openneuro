@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
   provider: String, // Login provider
   providerId: String, // Login provider unique id
   admin: { type: Boolean, default: false },
-  blacklist: { type: Boolean, default: false },
+  blocked: { type: Boolean, default: false },
   created: { type: Date, default: Date.now },
   lastSeen: { type: Date, default: Date.now },
 })

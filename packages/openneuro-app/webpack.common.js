@@ -56,6 +56,10 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
+        include: [
+          path.resolve(__dirname, './src/scripts/'),
+          path.resolve(__dirname, './node_modules/bids-validator'),
+        ],
         use: [
           {
             loader: 'babel-loader',

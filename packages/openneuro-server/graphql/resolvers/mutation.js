@@ -15,7 +15,7 @@ import {
   deleteSnapshot,
   updateSnapshotFileUrls,
 } from './snapshots.js'
-import { removeUser, setAdmin } from './user.js'
+import { removeUser, setAdmin, setBlocked } from './user.js'
 import { updateSummary } from './summary.js'
 import { updateValidation } from './validation.js'
 import { updatePermissions, removePermissions } from './permissions.js'
@@ -42,6 +42,7 @@ const Mutation = {
   removePermissions,
   removeUser,
   setAdmin,
+  setBlocked,
   trackAnalytics,
   followDataset,
   starDataset,

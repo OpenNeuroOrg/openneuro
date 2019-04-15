@@ -76,7 +76,9 @@ const typeDefs = `
     # Remove a user
     removeUser(id: ID!): Boolean
     # Sets a users admin status
-    setAdmin(id: ID!, admin: Boolean!): Boolean
+    setAdmin(id: ID!, admin: Boolean!): User
+    # Sets a users admin status
+    setBlocked(id: ID!, blocked: Boolean!): User
     # Tracks a view or download for a dataset
     trackAnalytics(datasetId: ID!, tag: String, type: AnalyticTypes): Boolean
     # Follow dataset
@@ -160,6 +162,7 @@ const typeDefs = `
     email: String!
     name: String!
     admin: Boolean
+    blocked: Boolean
   }
   
   # Which provider a user login comes from

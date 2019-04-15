@@ -24,33 +24,14 @@ export const addPathToFiles = (fileList, path) => {
     : fileList
 }
 
-/**
- * Allow the first filename to be overriden
- * Mostly useful for "replace" of an existing file
- * @param {*} fileList
- * @param {*} name New filename
- */
-export const overrideFilename = (fileList, name) => {
-  if (name) {
-    // We have to spread FileList -> Array to modify it
-    const fileArray = [...fileList]
-    fileArray[0].name = name
-    return fileArray
-  } else {
-    return fileList
-  }
-}
-
 const UpdateFile = ({
   client,
   datasetId,
   multiple = false,
   path = null,
-  filename = null,
   children,
 }) => {
   const [uploading, setUploading] = useState(false)
-
   if (uploading) {
     return (
       <div className="edit-file">
@@ -64,7 +45,6 @@ const UpdateFile = ({
         <input
           type="file"
           className="update-file"
-          name={filename}
           multiple={multiple}
           webkitdirectory={multiple ? '' : null}
           onChange={async e => {

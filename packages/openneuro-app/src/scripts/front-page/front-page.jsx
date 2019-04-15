@@ -4,7 +4,6 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import FrontPageTabs from './front-page-tabs.jsx'
 import Footer from '../common/partials/footer.jsx'
-import Pipelines from './front-page.pipelines.jsx'
 import AdditionalInfo from './front-page-additional-info.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
 import AuthenticationButtons from '../authentication/buttons.jsx'
@@ -48,38 +47,11 @@ class FrontPage extends React.Component {
           </div>
         </div>
         {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
-        <Pipelines />
         <AdditionalInfo />
         <Footer />
       </span>
     )
   }
-
-  // custom methods -------------------------------------------------------
-
-  // _error(signinError, loadingState) {
-  //   if (signinError && !loadingState) {
-  //     const errMessage = this.state.users.signinError
-  //     // This special case is fairly common and needs to return a richer error
-  //     if (
-  //       errMessage ===
-  //       'Your ORCID account does not have an e-mail, or your e-mail is not public. Please fix your account before continuing.'
-  //     ) {
-  //       return (
-  //         <div className="alert alert-danger">
-  //           <span>
-  //             Your ORCID account does not have an e-mail, or your e-mail is not
-  //             public. Visit your{' '}
-  //             <a href="https://orcid.org/my-orcid">ORCID profile</a> and verify
-  //             your primary email privacy is set to public.
-  //           </span>
-  //         </div>
-  //       )
-  //     } else {
-  //       return <div className="alert alert-danger">{errMessage}</div>
-  //     }
-  //   }
-  // }
 
   // template functions ----------------------------------------------------
 
@@ -113,7 +85,8 @@ class FrontPage extends React.Component {
   _logoText() {
     return (
       <div className="logo-text">
-        Open<span className="logo-end">Neuro</span>
+        Open
+        <span className="logo-end">Neuro</span>
       </div>
     )
   }

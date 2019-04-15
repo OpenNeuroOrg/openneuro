@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import markdown from '../../utils/markdown'
+import Markdown from 'react-markdown'
 
 /**
  * README file contents
@@ -8,10 +8,9 @@ import markdown from '../../utils/markdown'
 const DatasetReadme = ({ content }) => {
   return (
     <div className="cte-display">
-      <div
-        className="fade-in"
-        dangerouslySetInnerHTML={markdown.format(content)}
-      />
+      <div className="fade-in">
+        <Markdown>{content}</Markdown>
+      </div>
     </div>
   )
 }
