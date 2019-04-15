@@ -146,22 +146,6 @@ class FrontPageTabs extends React.Component {
         secondImage: share_data_publish,
         secondImageClass: 'publish',
       },
-      {
-        header: 'Use Data',
-        abstract:
-          'Use our available pipelines to process any data on the site.',
-        icon: tab_use_data,
-        firstHeader: 'Snapshot',
-        firstDescription:
-          'Create snapshots of your datasets to ensure past analyses remain reproducible as your datasets grow and change. Publish any of your snapshots while you continue work on your original data behind the scenes.',
-        firstImage: use_data_snapshot,
-        firstImageClass: 'snapshot',
-        secondHeader: 'Analyze',
-        secondDescription:
-          "Use our simple web interface to run your analysis on a super computer. We'll notify you when it's complete so you can return to review the results.",
-        secondImage: use_data_analyze,
-        secondImageClass: 'analyze',
-      },
     ]
   }
 }
