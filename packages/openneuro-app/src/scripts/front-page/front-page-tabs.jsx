@@ -8,9 +8,6 @@ import get_data_download from './assets/get_data_download.png'
 import tab_share_data from './assets/tab-share_data.png'
 import share_data_collaborate from './assets/share_data_collaborate.png'
 import share_data_publish from './assets/share_data_publish.png'
-import tab_use_data from './assets/tab-use_data.png'
-import use_data_snapshot from './assets/use_data_snapshot.png'
-import use_data_analyze from './assets/use_data_analyze.png'
 
 class FrontPageTabs extends React.Component {
   constructor() {
