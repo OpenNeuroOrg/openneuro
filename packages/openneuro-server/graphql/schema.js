@@ -95,6 +95,8 @@ const typeDefs = `
     updateReadme(datasetId: ID!, value: String!): Boolean
     # Submits a new comment and returns the comment ID for replies
     addComment(datasetId: ID!, parentId: ID, comment: String!): ID
+    # Edits an existing comment
+    editComment(commentId: ID!, comment: String!): Boolean
   }
 
   type Subscription {

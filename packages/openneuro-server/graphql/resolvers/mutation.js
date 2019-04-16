@@ -24,7 +24,7 @@ import { starDataset } from './stars.js'
 import { publishDataset } from './publish.js'
 import { updateDescription, updateDescriptionList } from './description.js'
 import { updateReadme } from './readme.js'
-import { addComment } from './comment.js'
+import { addComment, editComment } from './comment.js'
 
 const Mutation = {
   createDataset,
@@ -51,6 +51,7 @@ const Mutation = {
   updateDescriptionList,
   updateReadme,
   addComment,
+  editComment,
 }
 
 export default Mutation
