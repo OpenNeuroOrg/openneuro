@@ -5,18 +5,21 @@ const Collaborators = () => (
     <span className="openneuro-more">
       <div className="col-xs-12">
         <div className="logo-text">
-          Open<span className="logo-end">Neuro</span>
+          Open
+          <span className="logo-end">Neuro</span>
         </div>
       </div>
       <div className="row">
         <div className="col-sm-6">
           <p>
-            A free and open platform for analyzing and sharing neuroimaging data
+            A free and open platform for sharing MRI, MEG, EEG, iEEG, and ECoG
+            data
           </p>
         </div>
         <div className="col-sm-6">
           <p>
-            View more information about<br />
+            View more information about
+            <br />
             <a
               target="_blank"
               href="http://reproducibility.stanford.edu/"
@@ -34,7 +37,8 @@ const Collaborators = () => (
       <div className="row">
         <div className="col-sm-6">
           <p>
-            A Validator for the Brain Imaging Data Structure<br />
+            A Validator for the Brain Imaging Data Structure
+            <br />
             Read more about the{' '}
             <a
               target="_blank"
@@ -46,7 +50,8 @@ const Collaborators = () => (
         </div>
         <div className="col-sm-6">
           <p>
-            Want to contribute to BIDS?<br />
+            Want to contribute to BIDS?
+            <br />
             Visit the{' '}
             <a
               target="_blank"
@@ -100,7 +105,8 @@ const Collaborators = () => (
               href="https://github.com/OpenNeuroDatasets"
               rel="noopener noreferrer">
               dataset collection on GitHub
-            </a>.
+            </a>
+            .
           </p>
         </div>
       </div>
