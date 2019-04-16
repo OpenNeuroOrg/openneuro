@@ -52,6 +52,7 @@ const CommentMutation = ({
   comment,
   disabled,
   profile,
+  done = () => {},
 }) => {
   return (
     <Mutation
@@ -86,8 +87,8 @@ const CommentMutation = ({
         <button
           className="btn-modal-action"
           disabled={disabled}
-          onClick={() =>
-            newComment({
+          onClick={async () => {
+            await newComment({
               variables: {
                 datasetId,
                 parentId,
@@ -95,7 +96,8 @@ const CommentMutation = ({
                 comment: JSON.stringify(convertToRaw(comment)),
               },
             })
-          }>
+            done()
+          }}>
           Submit Comment
         </button>
       )}
@@ -110,6 +112,7 @@ CommentMutation.propTypes = {
   comment: PropTypes.object,
   disabled: PropTypes.bool,
   profile: PropTypes.object,
+  done: PropTypes.func,
 }
 
 export default withProfile(CommentMutation)

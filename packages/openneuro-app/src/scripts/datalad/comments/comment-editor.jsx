@@ -14,6 +14,7 @@ const CommentEditor = ({
   parentId = null,
   commentId = null,
   state = null,
+  done,
 }) => {
   const [editorState, setEditorState] = useState(
     state || EditorState.createEmpty(),
@@ -48,6 +49,7 @@ const CommentEditor = ({
             commentId={commentId}
             comment={editorState.getCurrentContent()}
             disabled={disabled}
+            done={done}
           />
         ) : (
           <CommentMutation
@@ -55,6 +57,7 @@ const CommentEditor = ({
             parentId={parentId}
             comment={editorState.getCurrentContent()}
             disabled={disabled}
+            done={done}
           />
         )}
       </div>
@@ -67,6 +70,7 @@ CommentEditor.propTypes = {
   parentId: PropTypes.string,
   commentId: PropTypes.string,
   state: PropTypes.object,
+  done: PropTypes.func,
 }
 
 export default CommentEditor
