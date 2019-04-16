@@ -1,6 +1,6 @@
 import * as datalad from '../../datalad/dataset.js'
 import pubsub from '../pubsub.js'
-import { snapshots } from './snapshots.js'
+import { snapshots, latestSnapshot } from './snapshots.js'
 import { description } from './description.js'
 import { checkDatasetRead, checkDatasetWrite } from '../permissions.js'
 import { user } from './user.js'
@@ -258,6 +258,7 @@ const Dataset = {
   uploader: ds => user(ds, { id: ds.uploader }),
   draft,
   snapshots,
+  latestSnapshot,
   analytics: ds => analytics(ds),
   stars: ds => stars(ds),
   followers: ds => followers(ds),

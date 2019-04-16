@@ -7,6 +7,7 @@ import Footer from '../common/partials/footer.jsx'
 import AdditionalInfo from './front-page-additional-info.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
 import AuthenticationButtons from '../authentication/buttons.jsx'
+import FrontPageTopDatasets from './front-page-top-datasets.jsx'
 //configurables
 import { frontPage } from 'openneuro-content'
 
@@ -47,6 +48,7 @@ class FrontPage extends React.Component {
           </div>
         </div>
         {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
+        <FrontPageTopDatasets />
         <AdditionalInfo />
         <Footer />
       </span>

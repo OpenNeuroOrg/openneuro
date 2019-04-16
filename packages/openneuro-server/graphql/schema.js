@@ -198,6 +198,8 @@ const typeDefs = `
     public: Boolean
     draft: Draft
     snapshots: [Snapshot]
+    # Newest snapshot
+    latestSnapshot: Snapshot
     permissions: [Permission]
     analytics: Analytic
     stars: [Star]
@@ -210,6 +212,8 @@ const typeDefs = `
     following: Boolean
     # Have I starred this dataset?
     starred: Boolean
+    # When was this dataset first made public?
+    datePublished: DateTime
   }
 
   enum SortOrdering {
@@ -229,8 +233,12 @@ const typeDefs = `
     stars: SortOrdering
     # Order by download count
     downloads: SortOrdering
+    # Order by dataset views
+    views: SortOrdering
     # Order by count of dataset followers
     subscriptions: SortOrdering
+    # Order by publish date
+    publishDate: SortOrdering
   }
 
   # Dataset query filter flags
