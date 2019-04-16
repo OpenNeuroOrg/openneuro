@@ -116,7 +116,16 @@ describe('pagination model operations', () => {
       expect(agg[0]).toHaveProperty('$lookup')
       expect(agg[1]).not.toHaveProperty('$addFields')
       // Ends with count sort
-      expect(agg.slice(-1)).toEqual([{ $sort: { 'downloads': 1 } }])
+      expect(agg.slice(-1)).toEqual([{ $sort: { downloads: 1 } }])
+    })
+    it('returns a lookup and no count stage for views', () => {
+      const agg = pagination.sortAggregate({
+        orderBy: { views: 'ascending' },
+      })
+      expect(agg[0]).toHaveProperty('$lookup')
+      expect(agg[1]).not.toHaveProperty('$addFields')
+      // Ends with count sort
+      expect(agg.slice(-1)).toEqual([{ $sort: { views: 1 } }])
     })
     it('does not explode with all sorts', () => {
       const agg = pagination.sortAggregate({
