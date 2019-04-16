@@ -15,7 +15,7 @@ const FontWeight600 = styled.span`
 
 const WhiteText = styled.div`
   color: #fff;
-  font-size: 20px;
+  font-size: 16px;
   a {
     color: #fff;
     bottom-border: 1px dashed var(--tertiary);
