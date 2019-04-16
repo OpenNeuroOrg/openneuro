@@ -30,6 +30,7 @@ const Comment = ({ datasetId, data, children }) => {
               datasetId={datasetId}
               commentId={data.id}
               state={editorState}
+              done={() => setEditMode(false)}
             />
           ) : (
             <Editor editorKey={data.id} editorState={editorState} />
@@ -57,7 +58,11 @@ const Comment = ({ datasetId, data, children }) => {
       <div className="row replies">
         <div className="comment-reply">
           {replyMode ? (
-            <CommentEditor datasetId={datasetId} parentId={data.id} />
+            <CommentEditor
+              datasetId={datasetId}
+              parentId={data.id}
+              done={() => setReplyMode(false)}
+            />
           ) : null}
         </div>
         {children}
