@@ -103,6 +103,37 @@ export const datasetsConnection = options => presortAggregate => {
 }
 
 /**
+ * Modify sortingStages with aggregates required for dataset analytics field
+ */
+export const sortByAnalytics = (aggregateType, sortingStages) => {
+  sortingStages.push({
+    $lookup: {
+      from: 'analytics',
+      localField: 'id',
+      foreignField: 'datasetId',
+      as: 'analytics',
+    },
+  })
+  sortingStages.push({ $unwind: '$analytics' })
+  // TODO - fields are repeated here and they will become stale if Datasets model changes
+  const groupOperation = {
+    $group: {
+      _id: '$_id',
+      id: { $first: '$id' },
+      created: { $first: '$created' },
+      modified: { $first: '$modified' },
+      uploader: { $first: '$uploader' },
+      revision: { $first: '$revision' },
+      name: { $first: '$name' },
+    },
+  }
+  groupOperation['$group'][aggregateType] = {
+    $sum: `$analytics.${aggregateType}`,
+  }
+  sortingStages.push(groupOperation)
+}
+
+/**
  * Apply any needed sorts to an aggregation pipeline
  * @param {object} options Query parameters
  * @returns {array} Steps required to sort any specified fields
@@ -147,29 +178,12 @@ export const sortAggregate = options => {
       finalSort['starsCount'] = sortEnumToInt(options.orderBy.stars)
     }
     if ('downloads' in options.orderBy && options.orderBy.downloads) {
-      sortingStages.push({
-        $lookup: {
-          from: 'analytics',
-          localField: 'id',
-          foreignField: 'datasetId',
-          as: 'analytics',
-        },
-      })
-      sortingStages.push({ $unwind: '$analytics' })
-      // TODO - fields are repeated here and they will become stale if Datasets model changes
-      sortingStages.push({
-        $group: {
-          _id: '$_id',
-          id: { $first: '$id' },
-          created: { $first: '$created' },
-          modified: { $first: '$modified' },
-          uploader: { $first: '$uploader' },
-          revision: { $first: '$revision' },
-          name: { $first: '$name' },
-          downloads: { $sum: '$analytics.downloads' },
-        },
-      })
+      sortByAnalytics('downloads', sortingStages)
       finalSort['downloads'] = sortEnumToInt(options.orderBy.downloads)
+    }
+    if ('views' in options.orderBy && options.orderBy.views) {
+      sortByAnalytics('views', sortingStages)
+      finalSort['views'] = sortEnumToInt(options.orderBy.views)
     }
     if ('subscriptions' in options.orderBy && options.orderBy.subscriptions) {
       sortingStages.push({
@@ -189,6 +203,9 @@ export const sortAggregate = options => {
       finalSort['subscriptionsCount'] = sortEnumToInt(
         options.orderBy.subscriptions,
       )
+    }
+    if ('publishDate' in options.orderBy && options.orderBy.publishDate) {
+      finalSort['publishDate'] = sortEnumToInt(options.orderBy.publishDate)
     }
     sortingStages.push({ $sort: finalSort })
   }

@@ -20,6 +20,19 @@ export const snapshot = (obj, { datasetId, tag }, context) => {
   }))
 }
 
+const sortSnapshots = (a, b) => new Date(b.created) - new Date(a.created)
+
+export const latestSnapshot = (obj, _, context) => {
+  return datalad.getSnapshots(obj.id).then(snapshots => {
+    const sortedSnapshots = Array.prototype.sort.call(snapshots, sortSnapshots)
+    return snapshot(
+      obj,
+      { datasetId: obj.id, tag: sortedSnapshots[0].tag },
+      context,
+    )
+  })
+}
+
 /**
  * Tag the working tree for a dataset
  */

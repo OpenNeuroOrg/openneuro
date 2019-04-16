@@ -6,6 +6,7 @@ const datasetSchema = new mongoose.Schema(
     created: { type: Date, default: Date.now },
     modified: { type: Date, default: Date.now },
     public: Boolean,
+    publishDate: { type: Date, default: null },
     uploader: String,
     revision: String,
     name: String,
