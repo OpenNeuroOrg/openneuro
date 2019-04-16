@@ -58,13 +58,13 @@ const RECENTLY_PUBLISHED = gql`
   query recently_published_datasets {
     datasets(
       first: 5
-      orderBy: { publishDate: ascending }
+      orderBy: { publishDate: descending }
       filterBy: { public: true }
     ) {
       edges {
         node {
           id
-          datePublished
+          publishDate
           latestSnapshot {
             tag
             description {
@@ -118,7 +118,7 @@ const FrontPageTopActive = ({ datasets }) => {
 const FrontPageTopRecent = ({ datasets }) => {
   return (
     <>
-      {datasets.reverse().map(({ node }, index) => (
+      {datasets.map(({ node }, index) => (
         <PaddedRow className="row" key={index}>
           <div className="col-sm-8">
             <DatasetLink node={node} />
@@ -126,7 +126,7 @@ const FrontPageTopRecent = ({ datasets }) => {
           <div className="col-sm-4">
             <FontWeight600>
               <Uppercase>
-                {distanceInWordsToNow(node.datePublished)} ago
+                {distanceInWordsToNow(node.publishDate)} ago
               </Uppercase>
             </FontWeight600>
           </div>

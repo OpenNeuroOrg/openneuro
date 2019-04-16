@@ -213,7 +213,7 @@ const typeDefs = `
     # Have I starred this dataset?
     starred: Boolean
     # When was this dataset first made public?
-    datePublished: DateTime
+    publishDate: DateTime
   }
 
   enum SortOrdering {

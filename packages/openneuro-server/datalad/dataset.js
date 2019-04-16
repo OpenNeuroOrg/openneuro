@@ -325,7 +325,7 @@ export const deleteFile = (datasetId, path, file) => {
 export const updatePublic = (datasetId, publicFlag) =>
   c.crn.datasets.updateOne(
     { id: datasetId },
-    { $set: { public: publicFlag } },
+    { $set: { public: publicFlag, publishDate: new Date() } },
     { upsert: true },
   )
 
