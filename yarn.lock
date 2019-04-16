@@ -111,10 +111,10 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
-bids-validator@1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.2.1.tgz#d8b6415184d8172ee6dd84ae2cadda4a18d20725"
-  integrity sha512-tvdKdHF2BPfyXub4QH0ZDcYr7kB40ixUDAwAuf6iznZGr48YWLv/DboLna2q869Nj2cHcaWT1nBJxIAew7oDjQ==
+bids-validator@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.2.2.tgz#ca84cc876b40494bf93ff17300b0d195259ca3c5"
+  integrity sha512-5cDiJtIQG5yAPhIBvzIiOh1b6wSPta0H3CGMlgbTR23pveupB7lwcoT1J9HPnpqasi2x3j/YRWACbwv+vl4PuQ==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"
