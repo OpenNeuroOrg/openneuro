@@ -42,6 +42,22 @@ export const addComment = (
     return commentInsert._id
   })
 }
+
+export const editComment = async (
+  obj,
+  { commentId, comment: text },
+  { user },
+) => {
+  const existingComment = await Comment.findById(commentId).exec()
+  // You may only edit your own comments
+  if (existingComment.user._id === user) {
+    existingComment.text = text
+    return existingComment.save().then(() => true)
+  } else {
+    return Promise.reject(new Error('You may only edit your own comments.'))
+  }
+}
+
 //"5c9bf7e3088cea6fa775c42a"
 const CommentFields = {
   parent: obj => comment(obj, { id: obj.parentId }),

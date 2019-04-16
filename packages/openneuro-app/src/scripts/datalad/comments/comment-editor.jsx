@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Editor, EditorState, RichUtils } from 'draft-js'
 import CommentMutation from '../mutations/comment.jsx'
-import CommentEditMutation from '../mutations/edit-comment.jsx'
 import BlockStyleControls from './block-style-controls.jsx'
 import InlineStyleControls from './inline-style-controls.jsx'
 
@@ -44,7 +43,7 @@ const CommentEditor = ({
           spellCheck={true}
         />
         {commentId ? (
-          <CommentEditMutation
+          <CommentMutation
             datasetId={datasetId}
             commentId={commentId}
             comment={editorState.getCurrentContent()}

@@ -14,8 +14,8 @@ const NEW_COMMENT = gql`
 `
 
 const EDIT_COMMENT = gql`
-  mutation editComment($datasetId: ID!, $commentId: ID, $comment: String!) {
-    editComment(datasetId: $datasetId, commentId: $parentId, comment: $comment)
+  mutation editComment($commentId: ID!, $comment: String!) {
+    editComment(commentId: $commentId, comment: $comment)
   }
 `
 
@@ -64,7 +64,7 @@ const CommentMutation = ({
         })
         // Create a mock comment
         const newComment = {
-          id: addComment,
+          id: addComment || commentId,
           parentId,
           text: JSON.stringify(convertToRaw(comment)),
           createDate: new Date().toISOString(),
