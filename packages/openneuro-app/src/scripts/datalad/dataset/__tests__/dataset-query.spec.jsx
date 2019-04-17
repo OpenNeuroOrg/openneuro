@@ -28,7 +28,10 @@ describe('DatasetQuery', () => {
     })
     it('shows renders DatasetPage once done', () => {
       const wrapper = shallow(
-        <DatasetQueryRender loading={false} data={{ dataset: {} }} />,
+        <DatasetQueryRender
+          loading={false}
+          data={{ dataset: { draft: { issues: [] } } }}
+        />,
       )
       expect(wrapper.find('Spinner')).toHaveLength(0)
       expect(wrapper.find('DatasetPage')).toHaveLength(1)
