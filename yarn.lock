@@ -3226,10 +3226,10 @@ bcrypt@^2.0.1:
     nan "2.10.0"
     node-pre-gyp "0.9.1"
 
-bids-validator@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.2.2.tgz#ca84cc876b40494bf93ff17300b0d195259ca3c5"
-  integrity sha512-5cDiJtIQG5yAPhIBvzIiOh1b6wSPta0H3CGMlgbTR23pveupB7lwcoT1J9HPnpqasi2x3j/YRWACbwv+vl4PuQ==
+bids-validator@1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/bids-validator/-/bids-validator-1.2.3.tgz#f8ebe82e9c9e52860f636fa06e56d37459b65be4"
+  integrity sha512-Q5QaAL7l0BMi5uhp0JukmdAPGGKmlTd8biUK++l5WtB/0HU16T9w9TOQe0mlQkCS19U8MjssCa6SZh+aqpU7Jg==
   dependencies:
     ajv "^6.5.2"
     aws-sdk "^2.327.0"

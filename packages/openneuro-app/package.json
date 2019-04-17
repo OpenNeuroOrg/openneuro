@@ -23,7 +23,7 @@
     "apollo-client": "^2.4.7",
     "apollo-link-ws": "^1.0.9",
     "babel-runtime": "^6.26.0",
-    "bids-validator": "1.2.2",
+    "bids-validator": "1.2.3",
     "bowser": "^1.7.3",
     "bytes": "^3.0.0",
     "date-fns": "^1.29.0",
