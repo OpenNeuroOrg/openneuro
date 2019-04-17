@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
-import { Subscription } from 'react-apollo'
 import ValidationPanel from './validation-panel.jsx'
 import Results from '../../validation/validation-results.jsx'
 

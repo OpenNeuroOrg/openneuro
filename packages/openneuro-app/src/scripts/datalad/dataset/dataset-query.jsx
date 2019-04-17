@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query, Subscription } from 'react-apollo'
+import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetPage from './dataset-page.jsx'
