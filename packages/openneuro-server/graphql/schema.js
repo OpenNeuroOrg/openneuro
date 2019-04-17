@@ -104,7 +104,7 @@ const typeDefs = `
     datasetDeleted: ID
     snapshotAdded(datasetId: ID!): Snapshot
     snapshotDeleted(datasetId: ID!): ID
-    datasetValidationUpdated(datasetId: ID!, hash: String!): [ValidationIssue]
+    datasetValidationUpdated(id: ID!, datasetId: ID!): Boolean
     draftFilesUpdated(datasetId: ID!): [DatasetFile]
     permissionsUpdated(datasetId: ID!): [Permission]
   }

@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/browser'
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Query } from 'react-apollo'
+import { Query, Subscription } from 'react-apollo'
 import gql from 'graphql-tag'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetPage from './dataset-page.jsx'
@@ -38,13 +38,19 @@ export const getDatasetPage = gql`
   ${DatasetQueryFragments.DATASET_ISSUES}
 `
 
-export const DatasetQueryRender = ({ loading, error, data }) => {
+export const DatasetQueryRender = ({ loading, error, data, refetch }) => {
   if (loading) {
     return <Spinner text="Loading Dataset" active />
   } else if (error) {
     Sentry.captureException(error)
     throw new Error(error)
   } else {
+    // Temporary refetch for validation
+    if (data.dataset.draft.issues === null) {
+      setTimeout(() => {
+        refetch()
+      }, 5000)
+    }
     return <DatasetPage dataset={data.dataset} />
   }
 }
