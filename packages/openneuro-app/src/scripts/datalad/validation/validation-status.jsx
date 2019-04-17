@@ -100,7 +100,7 @@ const ValidationStatus = ({ issues }) => {
       <ValidationPanel
         heading={
           <div>
-            <span className="dataset-status ds-info">
+            <span className="dataset-status ds-warning">
               <i className="fa fa-circle-o-notch fa-spin" />
               Validation Pending
             </span>
