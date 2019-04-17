@@ -83,23 +83,10 @@ Errors.propTypes = {
   warnings: PropTypes.array,
 }
 
-class ValidationStatus extends React.Component {
-  constructor(props) {
-    super(props)
-    let issues = this.props.issues
-    this.state = this._getWarningsAndErrors(issues)
-  }
-
-  _getWarningsAndErrors(issues) {
-    return {
-      warnings: issues.filter(issue => issue.severity === 'warning'),
-      errors: issues.filter(issue => issue.severity === 'error'),
-    }
-  }
-
-  render() {
-    const warnings = this.state.warnings
-    const errors = this.state.errors
+const ValidationStatus = ({ issues }) => {
+  if (issues) {
+    const warnings = issues.filter(issue => issue.severity === 'warning')
+    const errors = issues.filter(issue => issue.severity === 'error')
     if (errors.length) {
       return <Errors errors={errors} warnings={warnings} />
     } else if (warnings.length) {
@@ -107,6 +94,23 @@ class ValidationStatus extends React.Component {
     } else {
       return <Valid />
     }
+  } else {
+    return (
+      <ValidationPanel
+        heading={
+          <div>
+            <span className="dataset-status ds-danger">
+              <i className="fa fa-exclamation-circle" /> Validation Incomplete
+            </span>
+          </div>
+        }>
+        <br />
+        <p>
+          A server error occurred while running validation. Please try
+          refreshing and contact support if this error persists.
+        </p>
+      </ValidationPanel>
+    )
   }
 }
 

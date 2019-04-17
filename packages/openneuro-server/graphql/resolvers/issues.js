@@ -9,5 +9,18 @@ export const issues = dataset => {
       id: dataset.revision,
       datasetId: dataset.id,
     })
-    .then(data => (data ? data.issues : []))
+    .then(data => (data ? data.issues : null))
+}
+
+/**
+ * Snapshot issues resolver
+ */
+export const snapshotIssues = snapshot => {
+  const datasetId = snapshot.id.split(':')[0]
+  return mongo.collections.crn.issues
+    .findOne({
+      id: snapshot.hexsha,
+      datasetId,
+    })
+    .then(data => (data ? data.issues : null))
 }

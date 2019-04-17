@@ -15,9 +15,9 @@ class Statuses extends React.PureComponent {
     const uploaderSubscribed = dataset.followers.some(
       follower => follower.userId === dataset.uploader.id,
     )
-    const invalid = dataset.draft.issues.some(
-      issue => issue.severity === 'error',
-    )
+    const invalid =
+      !dataset.draft.issues ||
+      dataset.draft.issues.some(issue => issue.severity === 'error')
     const shared = !dataset.public && dataset.uploader.id !== profile.sub
     return (
       <span className="status-wrap">

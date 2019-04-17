@@ -27,6 +27,7 @@ const EditDescriptionList = ({
           value={rows}
           done={() => setEditing(false)}
         />
+        <EditButton action={() => setEditing(false)} message="Hide" />
       </>
     )
   } else {

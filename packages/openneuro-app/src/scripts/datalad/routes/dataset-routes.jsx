@@ -36,7 +36,11 @@ const DatasetRoutes = ({ dataset }) => (
       exact
       path="/datasets/:datasetId/snapshot"
       component={() => (
-        <Snapshot datasetId={dataset.id} snapshots={dataset.snapshots} />
+        <Snapshot
+          datasetId={dataset.id}
+          snapshots={dataset.snapshots}
+          issues={dataset.draft.issues}
+        />
       )}
     />
     <Route

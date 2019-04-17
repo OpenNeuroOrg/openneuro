@@ -5,6 +5,7 @@ import { checkDatasetWrite } from '../permissions.js'
 import { readme } from './readme.js'
 import { description } from './description.js'
 import { summary } from './summary.js'
+import { snapshotIssues } from './issues.js'
 
 export const snapshots = obj => {
   return datalad.getSnapshots(obj.id)
@@ -68,6 +69,7 @@ export const updateSnapshotFileUrls = (obj, { fileUrls }) => {
 
 const Snapshot = {
   analytics: snapshot => analytics(snapshot),
+  issues: snapshot => snapshotIssues(snapshot),
 }
 
 export default Snapshot

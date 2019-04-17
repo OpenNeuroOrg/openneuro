@@ -3,9 +3,26 @@ import PropTypes from 'prop-types'
 import semver from 'semver'
 import { Link } from 'react-router-dom'
 import SnapshotDataset from '../mutations/snapshot.jsx'
+import ValidationStatus from '../validation/validation-status.jsx'
 import EditList from '../fragments/edit-list.jsx'
 
-const Snapshot = ({ datasetId, snapshots }) => {
+const NoErrors = ({ issues, children }) => {
+  if (
+    issues &&
+    issues.filter(issue => issue.severity === 'error').length === 0
+  ) {
+    return children
+  } else {
+    return (
+      <span className="text-danger">
+        Your dataset has not passed BIDS validation, correct any errors before
+        creating a snapshot
+      </span>
+    )
+  }
+}
+
+const SnapshotRoute = ({ datasetId, snapshots, issues }) => {
   const [changes, setChanges] = useState([])
   const [semanticLevel, setSemanticLevel] = useState('patch')
 
@@ -28,6 +45,8 @@ const Snapshot = ({ datasetId, snapshots }) => {
         <hr />
       </div>
       <div className="col-xs-12 dataset-form-body">
+        <h4>BIDS Validation</h4>
+        <ValidationStatus datasetId={datasetId} issues={issues} />
         <h4>Version</h4>
         <div className="input-group">
           <span className="input-group-addon" style={{ width: '100%' }}>
@@ -63,26 +82,30 @@ const Snapshot = ({ datasetId, snapshots }) => {
           <Link to={`/datasets/${datasetId}`}>
             <button className="btn-admin-blue">Return to Dataset</button>
           </Link>
-          {changes.length ? (
-            <SnapshotDataset
-              datasetId={datasetId}
-              tag={newVersion}
-              changes={changes}
-            />
-          ) : (
-            <span className="text-danger">
-              You must add at least one change message to create a new snapshot
-            </span>
-          )}
+          <NoErrors issues={issues}>
+            {changes.length ? (
+              <SnapshotDataset
+                datasetId={datasetId}
+                tag={newVersion}
+                changes={changes}
+              />
+            ) : (
+              <span className="text-danger">
+                You must add at least one change message to create a new
+                snapshot
+              </span>
+            )}
+          </NoErrors>
         </div>
       </div>
     </div>
   )
 }
 
-Snapshot.propTypes = {
+SnapshotRoute.propTypes = {
   datasetId: PropTypes.string,
   snapshots: PropTypes.array,
+  issues: PropTypes.array,
 }
 
-export default Snapshot
+export default SnapshotRoute

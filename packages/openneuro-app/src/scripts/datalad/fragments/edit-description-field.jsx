@@ -32,6 +32,7 @@ const EditDescriptionField = ({
           value={value}
           done={() => setEditing(false)}
         />
+        <EditButton action={() => setEditing(false)} message="Hide" />
       </>
     )
   } else {

@@ -98,7 +98,7 @@ const DatasetContent = ({ dataset }) => {
           />
         </div>
         <div className="col-xs-6">
-          <Validation datasetId={dataset.id} />
+          <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
           <DatasetFiles
             datasetId={dataset.id}
             datasetName={dataset.draft.description.Name}
