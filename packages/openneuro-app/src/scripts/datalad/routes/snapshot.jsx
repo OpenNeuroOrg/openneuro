@@ -15,8 +15,8 @@ const NoErrors = ({ issues, children }) => {
   } else {
     return (
       <span className="text-danger">
-        Your dataset has not passed BIDS validation, correct any errors before
-        creating a snapshot
+        BIDS validation must be complete and all errors corrected to create a
+        snapshot
       </span>
     )
   }
