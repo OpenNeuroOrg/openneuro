@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import UpdateDescription from '../mutations/description.jsx'
+import CancelButton from './cancel-button.jsx'
 import EditButton from './edit-button.jsx'
 
 /**
@@ -32,7 +33,7 @@ const EditDescriptionField = ({
           value={value}
           done={() => setEditing(false)}
         />
-        <EditButton action={() => setEditing(false)} message="Hide" />
+        <CancelButton action={() => setEditing(false)} />
       </>
     )
   } else {

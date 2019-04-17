@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import pluralize from 'pluralize'
 import ValidationPanel from './validation-panel.jsx'
 import Results from '../../validation/validation-results.jsx'
+
 /**
  * These can't be React components due to legacy react-bootstrap
  * validHeader, warningHeader, errorHeader
@@ -99,16 +100,14 @@ const ValidationStatus = ({ issues }) => {
       <ValidationPanel
         heading={
           <div>
-            <span className="dataset-status ds-danger">
-              <i className="fa fa-exclamation-circle" /> Validation Incomplete
+            <span className="dataset-status ds-info">
+              <i className="fa fa-circle-o-notch fa-spin" />
+              Validation Pending
             </span>
           </div>
         }>
         <br />
-        <p>
-          A server error occurred while running validation. Please try
-          refreshing and contact support if this error persists.
-        </p>
+        <p>The BIDS validator is running. This may take several minutes.</p>
       </ValidationPanel>
     )
   }
