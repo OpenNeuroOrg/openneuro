@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const DatasetAuthors = ({ authors }) => (
+const DatasetAuthors = ({ authors = [] }) => (
   <h6>{`authored by ${authors.join(', ')}`}</h6>
 )
 
