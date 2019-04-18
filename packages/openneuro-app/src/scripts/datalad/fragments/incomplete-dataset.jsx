@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Panel, PanelGroup } from 'react-bootstrap'
 import UploadResume from '../../uploader/upload-resume.jsx'
 
-const IncompleteDataset = ({ datasetId, issues }) => (
+const IncompleteDataset = ({ datasetId }) => (
   <div className="fade-in col-xs-12 validation">
     <h3 className="metaheader">Incomplete Upload or Edit</h3>
     <PanelGroup accordion className="validation-wrap">
