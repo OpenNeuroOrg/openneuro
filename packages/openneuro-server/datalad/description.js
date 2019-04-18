@@ -47,21 +47,35 @@ export const descriptionCacheKey = (datasetId, revision) => {
  */
 export const description = (obj, { datasetId, revision, tag }) => {
   const redisKey = descriptionCacheKey(datasetId, revision || tag)
-  return redis.get(redisKey).then(async cachedDescription => {
-    if (cachedDescription) {
-      return JSON.parse(cachedDescription)
-    } else {
-      const gitRef = revision
-        ? revision
-        : await getSnapshotHexsha(datasetId, tag)
-      return getDraftFiles(datasetId, gitRef)
-        .then(getDescriptionObject(datasetId))
-        .then(uncachedDescription => {
-          redis.set(redisKey, JSON.stringify(uncachedDescription))
-          return { id: gitRef, ...uncachedDescription }
-        })
-    }
-  })
+  return redis
+    .get(redisKey)
+    .then(async cachedDescription => {
+      if (cachedDescription) {
+        return JSON.parse(cachedDescription)
+      } else {
+        const gitRef = revision
+          ? revision
+          : await getSnapshotHexsha(datasetId, tag)
+        return getDraftFiles(datasetId, gitRef)
+          .then(getDescriptionObject(datasetId))
+          .then(uncachedDescription => {
+            redis.set(redisKey, JSON.stringify(uncachedDescription))
+            return { id: gitRef, ...uncachedDescription }
+          })
+      }
+    })
+    .then(description => {
+      if (typeof description.Authors === 'string') {
+        description.Authors = [description.Authors]
+      }
+      if (typeof description.ReferencesAndLinks === 'string') {
+        description.ReferencesAndLinks = [description.ReferencesAndLinks]
+      }
+      if (typeof description.Funding === 'string') {
+        description.Funding = [description.Funding]
+      }
+      return description
+    })
 }
 
 export const setDescription = (datasetId, description, user) => {
