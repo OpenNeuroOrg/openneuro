@@ -13,6 +13,7 @@ import DatasetFiles from '../fragments/dataset-files.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import Validation from '../validation/validation.jsx'
+import { SNAPSHOT_ISSUES } from '../dataset/dataset-query-fragments.js'
 
 const getSnapshotDetails = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
@@ -48,8 +49,10 @@ const getSnapshotDetails = gql`
         downloads
         views
       }
+      ...SnapshotIssues
     }
   }
+  ${SNAPSHOT_ISSUES}
 `
 
 const SnapshotContent = ({ dataset, tag }) => (
@@ -102,7 +105,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
         />
       </div>
       <div className="col-xs-6">
-        <Validation datasetId={dataset.id} />
+        <Validation datasetId={dataset.id} issues={snapshot.issues} />
         <DatasetFiles
           datasetId={dataset.id}
           snapshotTag={snapshot.tag}

@@ -104,7 +104,7 @@ const typeDefs = `
     datasetDeleted: ID
     snapshotAdded(datasetId: ID!): Snapshot
     snapshotDeleted(datasetId: ID!): ID
-    datasetValidationUpdated(datasetId: ID!, hash: String!): [ValidationIssue]
+    datasetValidationUpdated(id: ID!, datasetId: ID!): Boolean
     draftFilesUpdated(datasetId: ID!): [DatasetFile]
     permissionsUpdated(datasetId: ID!): [Permission]
   }
@@ -375,6 +375,7 @@ const typeDefs = `
     reason: String!
     files: [ValidationIssueFile]
     additionalFileCount: Int
+    helpUrl: String
   }
 
   input ValidationIssueInput {
@@ -384,6 +385,7 @@ const typeDefs = `
     reason: String!
     files: [ValidationIssueFileInput]
     additionalFileCount: Int
+    helpUrl: String
   }
 
   type ValidationIssueFile {
@@ -395,6 +397,7 @@ const typeDefs = `
     character: Int
     severity: Severity!
     reason: String
+    helpUrl: String
   }
 
   input ValidationIssueFileInput {
@@ -406,6 +409,7 @@ const typeDefs = `
     character: Int
     severity: Severity!
     reason: String
+    helpUrl: String
   }
 
   type ValidationIssueFileDetail {

@@ -19,6 +19,7 @@ export const getDatasetPage = gql`
       ...DatasetPermissions
       ...DatasetSnapshots
       ...DatasetComments
+      ...DatasetIssues
       uploader {
         id
         name
@@ -34,15 +35,22 @@ export const getDatasetPage = gql`
   ${DatasetQueryFragments.PERMISSION_FRAGMENT}
   ${DatasetQueryFragments.DATASET_SNAPSHOTS}
   ${DatasetQueryFragments.DATASET_COMMENTS}
+  ${DatasetQueryFragments.DATASET_ISSUES}
 `
 
-export const DatasetQueryRender = ({ loading, error, data }) => {
+export const DatasetQueryRender = ({ loading, error, data, refetch }) => {
   if (loading) {
     return <Spinner text="Loading Dataset" active />
   } else if (error) {
     Sentry.captureException(error)
     throw new Error(error)
   } else {
+    // Temporary refetch for validation
+    if (data.dataset.draft.issues === null) {
+      setTimeout(() => {
+        refetch()
+      }, 5000)
+    }
     return <DatasetPage dataset={data.dataset} />
   }
 }

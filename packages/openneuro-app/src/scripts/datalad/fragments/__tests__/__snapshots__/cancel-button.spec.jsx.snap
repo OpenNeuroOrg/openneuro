@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CancelButton component renders with default props 1`] = `
+<WarnButton
+  action={[Function]}
+  cancel={
+    <i
+      className="fa fa-times"
+    />
+  }
+  confirm={
+    <i
+      className="fa fa-check"
+    />
+  }
+  icon="fa-close"
+  message="Cancel"
+  tooltip={null}
+  warn={false}
+/>
+`;

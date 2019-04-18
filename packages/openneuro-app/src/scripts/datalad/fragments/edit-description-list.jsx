@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import UpdateDescription from '../mutations/description.jsx'
+import CancelButton from './cancel-button.jsx'
 import EditButton from './edit-button.jsx'
 import EditList from './edit-list.jsx'
 
@@ -27,6 +28,7 @@ const EditDescriptionList = ({
           value={rows}
           done={() => setEditing(false)}
         />
+        <CancelButton action={() => setEditing(false)} />
       </>
     )
   } else {

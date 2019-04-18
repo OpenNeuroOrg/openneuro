@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import UpdateReadme from '../mutations/readme.jsx'
 import EditButton from './edit-button.jsx'
+import CancelButton from './cancel-button.jsx'
 
 /**
  * This extends EditDescriptionField with Markdown display and a custom mutation
@@ -22,6 +23,7 @@ const EditReadme = ({ datasetId, content, children }) => {
           value={value}
           done={() => setEditing(false)}
         />
+        <CancelButton action={() => setEditing(false)} />
       </>
     )
   } else {

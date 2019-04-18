@@ -7,6 +7,7 @@ export const DRAFT_FRAGMENT = gql`
       id
       modified
       readme
+      partial
       description {
         Name
         Authors
@@ -101,5 +102,40 @@ export const DATASET_COMMENTS = gql`
         }
       }
     }
+  }
+`
+
+const ISSUE_FIELDS = `issues {
+  severity
+  code
+  reason
+  files {
+    evidence
+    line
+    character
+    reason
+    file {
+      name
+      path
+      relativePath
+    }
+  }
+  additionalFileCount
+}`
+
+export const DATASET_ISSUES = gql`
+  fragment DatasetIssues on Dataset {
+    id
+    draft {
+      id
+      ${ISSUE_FIELDS}
+    }
+  }
+`
+
+export const SNAPSHOT_ISSUES = gql`
+  fragment SnapshotIssues on Snapshot {
+    id
+    ${ISSUE_FIELDS}
   }
 `

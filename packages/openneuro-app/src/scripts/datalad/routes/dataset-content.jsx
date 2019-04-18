@@ -13,6 +13,7 @@ import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
 import Validation from '../validation/validation.jsx'
 import EditReadme from '../fragments/edit-readme.jsx'
+import IncompleteDataset from '../fragments/incomplete-dataset.jsx'
 import LoggedIn from '../../authentication/logged-in.jsx'
 import LoggedOut from '../../authentication/logged-out.jsx'
 import { getProfile } from '../../authentication/profile.js'
@@ -60,8 +61,9 @@ export const hasEditPermissions = (permissions, userId) => {
 const DatasetContent = ({ dataset }) => {
   const user = getProfile()
   const hasEdit =
-    (user && user.admin) ||
-    hasEditPermissions(dataset.permissions, user && user.sub)
+    ((user && user.admin) ||
+      hasEditPermissions(dataset.permissions, user && user.sub)) &&
+    dataset.id.draft
   return (
     <>
       <LoggedIn>
@@ -81,7 +83,9 @@ const DatasetContent = ({ dataset }) => {
             created={dataset.created}
           />
           <DatasetModified modified={dataset.draft.modified} />
-          <DatasetAuthors authors={dataset.draft.description.Authors} />
+          {dataset.draft.id && (
+            <DatasetAuthors authors={dataset.draft.description.Authors} />
+          )}
           <DatasetAnalytics
             downloads={dataset.analytics.downloads}
             views={dataset.analytics.views}
@@ -98,7 +102,9 @@ const DatasetContent = ({ dataset }) => {
           />
         </div>
         <div className="col-xs-6">
-          <Validation datasetId={dataset.id} />
+          {(dataset.draft.id && (
+            <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
+          )) || <IncompleteDataset datasetId={dataset.id} />}
           <DatasetFiles
             datasetId={dataset.id}
             datasetName={dataset.draft.description.Name}
@@ -108,9 +114,12 @@ const DatasetContent = ({ dataset }) => {
         </div>
       </LoggedIn>
       <LoggedOut>
-        <Redirect
-          to={`/datasets/${dataset.id}/versions/${dataset.snapshots[0].tag}`}
-        />
+        {dataset.snapshots && (
+          <Redirect
+            to={`/datasets/${dataset.id}/versions/${dataset.snapshots.length &&
+              dataset.snapshots[0].tag}`}
+          />
+        )}
       </LoggedOut>
     </>
   )
