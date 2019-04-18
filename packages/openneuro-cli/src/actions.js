@@ -108,7 +108,9 @@ export const upload = (dir, cmd) => {
     }
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.error(`"${dir}" does not exist or is not a directory`)
+    console.error(e)
+    // eslint-disable-next-line no-console
+    console.error(`"${dir}" may not exist or is inaccessible`)
     process.exit(1)
   }
 }
