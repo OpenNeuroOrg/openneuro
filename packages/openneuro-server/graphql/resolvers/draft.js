@@ -6,7 +6,7 @@ import { getDraftFiles, getPartialStatus } from '../../datalad/draft.js'
 
 // A draft must have a dataset parent
 const draftFiles = dataset => args => {
-  return getDraftFiles(dataset.id, dataset.revision, args)
+  return getDraftFiles(dataset.id, args)
 }
 
 export const draft = obj => ({

@@ -7,10 +7,9 @@ import { redis } from '../libs/redis.js'
 import config from '../config.js'
 import pubsub from '../graphql/pubsub.js'
 import { updateDatasetName } from '../graphql/resolvers/dataset.js'
-import { commitFilesKey } from './files.js'
+import { filesKey, getFiles } from './files.js'
 import { addFileUrl } from './utils.js'
 import { generateDataladCookie } from '../libs/authentication/jwt'
-import { getDraftFiles } from './draft'
 import notifications from '../libs/notifications'
 import Snapshot from '../models/snapshot.js'
 import { trackAnalytics } from './analytics.js'
@@ -79,7 +78,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
       body.created = new Date()
 
       // We should almost always get the fast path here
-      const fKey = commitFilesKey(datasetId, body.hexsha)
+      const fKey = filesKey(datasetId, body.hexsha)
       const filesFromCache = await redis.get(fKey)
       if (filesFromCache) {
         body.files = JSON.parse(filesFromCache)
@@ -87,7 +86,7 @@ export const createSnapshot = async (datasetId, tag, user) => {
         redis.set(sKey, JSON.stringify(body))
       } else {
         // Return the promise so queries won't block
-        body.files = getDraftFiles(datasetId, body.hexsha)
+        body.files = getFiles(datasetId, body.hexsha)
       }
 
       return (
