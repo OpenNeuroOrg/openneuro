@@ -8,6 +8,7 @@ import AdditionalInfo from './front-page-additional-info.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
 import AuthenticationButtons from '../authentication/buttons.jsx'
 import FrontPageTopDatasets from './front-page-top-datasets.jsx'
+import DatasetCount from './dataset-count.jsx'
 //configurables
 import { frontPage } from 'openneuro-content'
 
@@ -37,7 +38,9 @@ class FrontPage extends React.Component {
                 </LoggedOut>
                 <div className="browse-publicly">
                   <Link to="/public/datasets">
-                    <span>Browse Public Datasets</span>
+                    <span>
+                      Browse <DatasetCount /> Public Datasets
+                    </span>
                   </Link>
                 </div>
                 <div className="privacy-detail">
