@@ -1,10 +1,13 @@
+import request from 'superagent'
 import config from '../config.js'
+import { addFileUrl } from './utils.js'
+import { redis } from '../libs/redis.js'
 
 /**
  * Hexsha files cache
  */
-export const commitFilesKey = (datasetId, revision) => {
-  return `openneuro:draftFiles:${datasetId}:${revision}`
+export const filesKey = (datasetId, revision) => {
+  return `openneuro:files:${datasetId}:${revision}`
 }
 
 /**
@@ -48,4 +51,30 @@ export const objectUrl = (datasetId, objectId) => {
   return `http://${
     config.datalad.uri
   }/datasets/${datasetId}/objects/${objectId}`
+}
+
+/**
+ * Get files for a specific revision
+ * Similar to getDraftFiles but different cache key and fixed revisions
+ * @param {string} datasetId - Dataset accession number
+ * @param {string} hexsha - Git treeish hexsha
+ */
+export const getFiles = async (datasetId, hexsha) => {
+  const key = filesKey(datasetId, hexsha)
+  return redis.get(key).then(data => {
+    if (data) return JSON.parse(data)
+    else
+      return request
+        .get(
+          `${
+            config.datalad.uri
+          }/datasets/${datasetId}/snapshots/${hexsha}/files`,
+        )
+        .set('Accept', 'application/json')
+        .then(({ body: { files } }) => {
+          const filesWithUrls = files.map(addFileUrl(datasetId))
+          redis.set(key, JSON.stringify(filesWithUrls))
+          return filesWithUrls
+        })
+  })
 }

@@ -1,5 +1,5 @@
 import {
-  commitFilesKey,
+  filesKey,
   encodeFilePath,
   decodeFilePath,
   fileUrl,
@@ -11,12 +11,12 @@ jest.mock('../../config.js')
 const filename = 'sub-01/anat/sub-01_T1w.nii.gz'
 
 describe('datalad files', () => {
-  describe('commitFilesKey()', () => {
+  describe('filesKey()', () => {
     it('encodes a valid cache key', () => {
       expect(
-        commitFilesKey('ds000001', '13582a0b2dc82b3644431ba54fd38926a5d2238f'),
+        filesKey('ds000001', '13582a0b2dc82b3644431ba54fd38926a5d2238f'),
       ).toBe(
-        'openneuro:draftFiles:ds000001:13582a0b2dc82b3644431ba54fd38926a5d2238f',
+        'openneuro:files:ds000001:13582a0b2dc82b3644431ba54fd38926a5d2238f',
       )
     })
   })

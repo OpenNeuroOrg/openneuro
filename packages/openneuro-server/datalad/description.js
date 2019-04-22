@@ -4,8 +4,7 @@
 import request from 'superagent'
 import { redis } from '../libs/redis.js'
 import { addFileString, commitFiles } from './dataset.js'
-import { objectUrl } from './files.js'
-import { getDraftFiles } from './draft.js'
+import { objectUrl, getFiles } from './files.js'
 import { getSnapshotHexsha } from './snapshots.js'
 
 export const defaultDescription = {
@@ -56,7 +55,7 @@ export const description = (obj, { datasetId, revision, tag }) => {
         const gitRef = revision
           ? revision
           : await getSnapshotHexsha(datasetId, tag)
-        return getDraftFiles(datasetId, gitRef)
+        return getFiles(datasetId, gitRef)
           .then(getDescriptionObject(datasetId))
           .then(uncachedDescription => {
             redis.set(redisKey, JSON.stringify(uncachedDescription))

@@ -1,9 +1,9 @@
 import config from '../config'
 import request from 'superagent'
 import mime from 'mime-types'
-import { getDraftFiles, getDatasetRevision } from '../datalad/draft'
+import { getDatasetRevision } from '../datalad/draft'
 import { getSnapshot } from '../datalad/snapshots'
-import { decodeFilePath } from '../datalad/files.js'
+import { decodeFilePath, getFiles } from '../datalad/files.js'
 
 /**
  * Handlers for datalad dataset manipulation
@@ -32,7 +32,7 @@ export const getFile = async (req, res) => {
   } else {
     let currentRevision = await getDatasetRevision(datasetId)
     if (currentRevision) {
-      fileList = await getDraftFiles(datasetId, currentRevision)
+      fileList = await getFiles(datasetId, currentRevision)
     }
   }
   const file = fileList.find(f => {
