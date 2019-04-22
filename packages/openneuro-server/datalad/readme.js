@@ -15,7 +15,9 @@ export const readme = (obj, { datasetId, revision }) => {
    *
    * We may want to use less superagent anyways just to avoid library weight
    */
-  return fetch(readmeUrl(datasetId, revision)).then(res => res.text())
+  return fetch(readmeUrl(datasetId, revision)).then(
+    res => (res.status === 200 ? res.text() : null),
+  )
 }
 
 export const setReadme = (datasetId, readme, user) => {
