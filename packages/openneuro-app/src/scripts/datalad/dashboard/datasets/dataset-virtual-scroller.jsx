@@ -8,6 +8,7 @@ import {
 } from 'react-virtualized'
 import DatasetRow from './dataset-row.jsx'
 import DatasetRowSkeleton from './dataset-row-skeleton.jsx'
+import DatasetRowErrorBoundary from './dataset-row-error-boundary.jsx'
 import styled from '@emotion/styled'
 
 const FlexParent = styled.div`
@@ -31,10 +32,13 @@ class DatasetVirtualScroller extends React.Component {
     if (this._isRowLoaded({ index })) {
       return (
         <div key={key} style={style}>
-          <DatasetRow
-            dataset={this.props.datasets[index].node}
-            publicDashboard={this.props.publicDashboard}
-          />
+          <DatasetRowErrorBoundary
+            datasetId={this.props.datasets[index].node.id}>
+            <DatasetRow
+              dataset={this.props.datasets[index].node}
+              publicDashboard={this.props.publicDashboard}
+            />
+          </DatasetRowErrorBoundary>
         </div>
       )
     } else {
