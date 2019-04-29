@@ -63,7 +63,7 @@ const DatasetContent = ({ dataset }) => {
   const hasEdit =
     ((user && user.admin) ||
       hasEditPermissions(dataset.permissions, user && user.sub)) &&
-    dataset.draft.id
+    !dataset.draft.partial
   return (
     <>
       <LoggedIn>
