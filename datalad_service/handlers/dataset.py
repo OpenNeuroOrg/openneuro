@@ -42,7 +42,7 @@ class DatasetResource(object):
                 resp.media = {'error': 'dataset creation failed'}
                 resp.status = falcon.HTTP_500
             else:
-                resp.media = {}
+                resp.media = {'hexsha': created.get()}
                 resp.status = falcon.HTTP_OK
 
     def on_delete(self, req, resp, dataset):

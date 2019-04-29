@@ -34,6 +34,7 @@ def create_dataset(store, dataset, name=None, email=None):
         ds.no_annex(BIDS_NO_ANNEX)
         if not ds.repo:
             raise Exception('Repo creation failed.')
+        return ds.repo.get_hexsha()
 
 
 def force_rmtree(root_dir):
