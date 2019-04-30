@@ -24,6 +24,7 @@ class DatasetRow extends React.Component {
   shouldComponentUpdate(nextProps) {
     return this.props.dataset.id !== nextProps.dataset.id
   }
+
   render() {
     const dataset = this.props.dataset
     return (
