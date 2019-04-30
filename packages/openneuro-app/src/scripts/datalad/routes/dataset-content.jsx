@@ -63,7 +63,7 @@ const DatasetContent = ({ dataset }) => {
   const hasEdit =
     ((user && user.admin) ||
       hasEditPermissions(dataset.permissions, user && user.sub)) &&
-    dataset.draft.id
+    !dataset.draft.partial
   return (
     <>
       <LoggedIn>
@@ -102,9 +102,11 @@ const DatasetContent = ({ dataset }) => {
           />
         </div>
         <div className="col-xs-6">
-          {(dataset.draft.id && (
+          {dataset.draft.partial || dataset.draft.files.length === 0 ? (
+            <IncompleteDataset datasetId={dataset.id} />
+          ) : (
             <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
-          )) || <IncompleteDataset datasetId={dataset.id} />}
+          )}
           <DatasetFiles
             datasetId={dataset.id}
             datasetName={dataset.draft.description.Name}
