@@ -21,7 +21,9 @@ export const DatasetCountDisplay = ({ loading, data }) => {
 }
 
 const DatasetCount = () => (
-  <Query query={PUBLIC_DATASET_COUNT}>{DatasetCountDisplay}</Query>
+  <Query query={PUBLIC_DATASET_COUNT} errorPolicy="ignore">
+    {DatasetCountDisplay}
+  </Query>
 )
 
 export default DatasetCount
