@@ -1,0 +1,11 @@
+import mongoose from 'mongoose'
+
+/* Newsletter email listing */
+const newsletterSchema = new mongoose.Schema({
+  created: { type: Date, default: Date.now },
+  email: String,
+})
+
+const Newsletter = mongoose.model('Newsletter', newsletterSchema)
+
+export default Newsletter
