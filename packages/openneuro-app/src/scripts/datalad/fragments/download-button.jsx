@@ -7,16 +7,61 @@ import styled from '@emotion/styled'
 const PaddedDiv = styled.div`
   padding: 1.5em 0 0.5em;
 `
-const ButtonText = styled.div`
-  display: inline-block;
-  height: 3rem;
-  vertical-align: middle;
+const LinkButton = styled.button`
+  border: none;
+  border-radius: 0.5rem;
+  background: #377881;
+  background: -moz-linear-gradient(
+    top,
+    hsl(187, 40%, 36%) 0%,
+    hsl(191, 56%, 26%) 100%
+  );
+  background: -webkit-linear-gradient(
+    top,
+    hsl(187, 40%, 36%) 0%,
+    hsl(191, 56%, 26%) 100%
+  );
+  background: linear-gradient(
+    to bottom,
+    hsl(187, 40%, 36%) 0%,
+    hsl(191, 56%, 26%) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#377881', endColorstr='#1d5967',GradientType=0 );
+  display: flex;
+  align-items: center;
+  padding: 0.2em 1.33em;
+  font-family: sans-serif;
+  font-weight: 100;
+  color: white;
+
+  &:hover,
+  &:active,
+  &.hover,
+  &.active,
+  &:focus {
+    background: #377881;
+    background: -moz-linear-gradient(
+      top,
+      hsl(187, 40%, 24%) 0%,
+      hsl(191, 56%, 18%) 100%
+    );
+    background: -webkit-linear-gradient(
+      top,
+      hsl(187, 40%, 24%) 0%,
+      hsl(191, 56%, 18%) 100%
+    );
+    background: linear-gradient(
+      to bottom,
+      hsl(187, 40%, 24%) 0%,
+      hsl(191, 56%, 18%) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#377881', endColorstr='#1d5967',GradientType=0 );
+  }
 `
+const ButtonText = styled.div``
 const LeftPadIconContainer = styled.div`
-  display: inline-block;
-  height: 3rem;
-  padding-left: 0.5em;
-  font-size: 1.5em;
+  padding-left: 0.67em;
+  font-size: 1.25em;
 `
 
 /**
@@ -38,14 +83,12 @@ const DownloadButton = ({ dataset, location, history }) => {
 
   return (
     <PaddedDiv>
-      <button
-        className="btn-blue"
-        onClick={() => redirect(history, rootPath, 'download')}>
+      <LinkButton onClick={() => redirect(history, rootPath, 'download')}>
         <ButtonText>Download</ButtonText>
         <LeftPadIconContainer>
           <i className={'fa fa-arrow-circle-right align-middle'} />
         </LeftPadIconContainer>
-      </button>
+      </LinkButton>
     </PaddedDiv>
   )
 }
