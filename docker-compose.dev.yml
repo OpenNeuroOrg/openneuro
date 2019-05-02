@@ -41,18 +41,6 @@ services:
     tmpfs:
       - /srv/node_modules:exec
 
-  worker:
-    build:
-      context: ./packages/openneuro-server
-    command: sh -c "apk add make gcc g++ python && yarn install  && node /srv/worker.js"
-    volumes:
-      - ./packages/openneuro-server:/srv
-      - yarn_cache:/root/.cache
-      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
-    tmpfs:
-      - /srv/node_modules:exec
-
   datalad:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}
     command:
