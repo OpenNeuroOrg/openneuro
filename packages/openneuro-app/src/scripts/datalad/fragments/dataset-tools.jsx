@@ -33,17 +33,6 @@ const DatasetTools = ({ dataset, location, history }) => {
   return (
     <div className="col-xs-12 dataset-tools-wrap">
       <div className="tools clearfix">
-        <div role="presentation" className="tool">
-          <WarnButton
-            tooltip="Download Dataset"
-            icon="fa-download"
-            warn={false}
-            action={cb => {
-              toolRedirect(history, rootPath, 'download')
-              cb()
-            }}
-          />
-        </div>
         <LoggedIn>
           <div role="presentation" className="tool">
             {!dataset.public &&
