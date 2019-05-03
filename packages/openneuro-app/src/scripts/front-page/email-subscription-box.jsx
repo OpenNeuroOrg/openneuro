@@ -23,7 +23,7 @@ const Prompt = styled.h3`
   font-weight: 200;
 `
 const Message = styled.p`
-  padding: 1.1em 0;
+  padding: 1.2em 0;
 `
 const InputWrap = styled.div`
   margin: 1.5rem 0;
