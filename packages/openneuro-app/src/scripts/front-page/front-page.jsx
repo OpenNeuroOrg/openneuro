@@ -7,7 +7,7 @@ import Footer from '../common/partials/footer.jsx'
 import AdditionalInfo from './front-page-additional-info.jsx'
 import LoggedOut from '../authentication/logged-out.jsx'
 import AuthenticationButtons from '../authentication/buttons.jsx'
-import EmailSubscriptionForm from './email-subscription-form.jsx'
+import SubscribeToNewsletter from '../datalad/mutations/subscribe-to-newsletter.jsx'
 import FrontPageTopDatasets from './front-page-top-datasets.jsx'
 import DatasetCount from './dataset-count.jsx'
 //configurables
@@ -52,7 +52,7 @@ class FrontPage extends React.Component {
           </div>
         </div>
         {frontPage.frontPageExtras ? <FrontPageTabs /> : null}
-        <EmailSubscriptionForm />
+        <SubscribeToNewsletter />
         <FrontPageTopDatasets />
         <AdditionalInfo />
         <Footer />

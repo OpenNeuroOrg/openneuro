@@ -168,7 +168,7 @@ const typeDefs = `
     admin: Boolean
     blocked: Boolean
   }
-  
+
   # Which provider a user login comes from
   enum UserProvider {
     google
