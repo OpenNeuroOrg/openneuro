@@ -22,12 +22,10 @@ export const subscribeToNewsletter = async (obj, { email }) => {
     return true
   } else {
     // if new email, add to collection
-    return await new Promise(resolve => {
-      Newsletter.create({ email }, (err, subscriber) => {
-        if (subscriber) resolve(Boolean(subscriber))
-        else if (err) resolve(false)
-      })
-    })
+    return Newsletter.create({ email })
+      .exec()
+      .then(subscriber => Boolean(subscriber))
+      .catch(() => false)
   }
 }
 
