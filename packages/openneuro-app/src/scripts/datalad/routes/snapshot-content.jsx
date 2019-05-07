@@ -12,6 +12,7 @@ import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
+import DownloadButton from '../fragments/download-button.jsx'
 import Validation from '../validation/validation.jsx'
 import { SNAPSHOT_ISSUES } from '../dataset/dataset-query-fragments.js'
 
@@ -95,6 +96,7 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
           views={snapshot.analytics.views}
           snapshot
         />
+        <DownloadButton dataset={dataset} />
         <DatasetSummary summary={snapshot.summary} />
         <h2>README</h2>
         <DatasetReadme content={snapshot.readme} />
