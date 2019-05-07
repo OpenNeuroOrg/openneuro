@@ -102,9 +102,9 @@ const EmailSubscriptionBox = ({ subscribe }) => {
           <InputWrap className="has-float-label">
             <input
               name="email"
+              type="email"
               className="form-control"
               id="email"
-              type="text"
               placeholder=" "
             />
             <label htmlFor="email">E-mail Address</label>
