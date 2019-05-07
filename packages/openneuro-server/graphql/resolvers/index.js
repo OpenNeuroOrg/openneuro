@@ -7,7 +7,6 @@ import Dataset from './dataset.js'
 import Snapshot from './snapshots.js'
 import User from './user.js'
 import Comment from './comment.js'
-import Newsletter from './newsletter'
 
 export default {
   // Scalars

@@ -2,7 +2,6 @@ import React from 'react'
 import { mount } from 'enzyme'
 import EmailSubscriptionBox, {
   modes,
-  getText,
   submitHandler,
 } from '../email-subscription-box.jsx'
 
