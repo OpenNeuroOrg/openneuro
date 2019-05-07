@@ -34,7 +34,7 @@ const ButtonWrap = styled.div`
   width: 10em;
 `
 
-const modes = {
+export const modes = {
   // display prompt / email input / submit button
   GET: Symbol('get'),
   // display success message / done
@@ -43,7 +43,7 @@ const modes = {
   ERROR: Symbol('error'),
 }
 
-const submitHandler = (subscribe, mode, setMode) => e => {
+export const submitHandler = (subscribe, mode, setMode) => e => {
   e.preventDefault()
   switch (mode) {
     case modes.SUCCESS:
@@ -64,7 +64,7 @@ const submitHandler = (subscribe, mode, setMode) => e => {
   }
 }
 
-const getText = mode => {
+export const getText = mode => {
   switch (mode) {
     case modes.ERROR:
       return {
@@ -88,9 +88,9 @@ const getText = mode => {
   }
 }
 
-const EmailSubscriptionBox = ({ subscribe }) => {
+const EmailSubscriptionBox = ({ subscribe, initialMode = modes.GET }) => {
   // determines state of display (input/success/error)
-  const [mode, setMode] = useState(modes.GET)
+  const [mode, setMode] = useState(initialMode)
   const { headingText, messageText, buttonText } = getText(mode)
   return (
     <Container>
@@ -125,6 +125,7 @@ const EmailSubscriptionBox = ({ subscribe }) => {
 
 EmailSubscriptionBox.propTypes = {
   subscribe: PropTypes.func,
+  initialMode: PropTypes.symbol,
 }
 
 export default EmailSubscriptionBox
