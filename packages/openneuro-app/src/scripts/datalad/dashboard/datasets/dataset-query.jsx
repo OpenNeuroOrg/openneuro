@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0, react/display-name: 0 */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Query } from 'react-apollo'
@@ -138,32 +139,28 @@ const loadMoreRows = (data, fetchMore) => {
 
 const datasetQueryDisplay = isPublic => ({
   loading,
-  error,
   data,
   fetchMore,
   refetch,
   variables,
 }) => {
-  if (error) {
-    throw error
-  } else {
-    return (
-      <DatasetTab
-        loading={loading}
-        data={data}
-        loadMoreRows={loading ? () => {} : loadMoreRows(data, fetchMore)}
-        refetch={refetch}
-        queryVariables={variables}
-        publicDashboard={isPublic}
-      />
-    )
-  }
+  return (
+    <DatasetTab
+      loading={loading}
+      data={data}
+      loadMoreRows={loading ? () => {} : loadMoreRows(data, fetchMore)}
+      refetch={refetch}
+      queryVariables={variables}
+      publicDashboard={isPublic}
+    />
+  )
 }
 
 const DatasetQuery = ({ public: isPublic }) => (
   <Query
     query={getDatasets}
-    variables={{ filterBy: { public: isPublic }, myDatasets: !isPublic }}>
+    variables={{ filterBy: { public: isPublic }, myDatasets: !isPublic }}
+    errorPolicy="all">
     {datasetQueryDisplay(isPublic)}
   </Query>
 )

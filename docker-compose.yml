@@ -38,18 +38,6 @@ services:
       - datalad
     restart: always
 
-  # worker
-  worker:
-    image: openneuro/server:${CRN_SERVER_TAG}
-    command:
-      - node
-      - /srv/worker.js
-    volumes:
-      - ${PERSISTENT_DIR}/bids-core/persistent/data:/srv/bids-core/persistent/data
-      - ${PERSISTENT_DIR}/crn-server/persistent:/srv/persistent
-    env_file: ./config.env
-    restart: always
-
   # datalad Python backend
   datalad:
     image: openneuro/datalad-service:${DATALAD_SERVICE_TAG}

@@ -40,10 +40,12 @@ export const createDataset = async (uploader, userInfo) => {
   const datasetId = await getAccessionNumber()
   try {
     const ds = new Dataset({ id: datasetId, uploader })
-    await request
+    const req = await request
       .post(`${uri}/datasets/${datasetId}`)
       .set('Accept', 'application/json')
       .set('Cookie', generateDataladCookie(config)(userInfo))
+    // Record and initial revision (usually empty but could be a DataLad upload)
+    ds.revision = req.body.hexsha
     // Write the new dataset to mongo after creation
     await ds.save()
     await giveUploaderPermission(datasetId, uploader)

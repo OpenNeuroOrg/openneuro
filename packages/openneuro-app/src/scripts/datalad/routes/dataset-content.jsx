@@ -8,6 +8,7 @@ import DatasetModified from '../fragments/dataset-modified.jsx'
 import DatasetAuthors from '../fragments/dataset-authors.jsx'
 import DatasetSummary from '../fragments/dataset-summary.jsx'
 import DatasetAnalytics from '../fragments/dataset-analytics.jsx'
+import DownloadButton from '../fragments/download-button.jsx'
 import DatasetFiles from '../fragments/dataset-files.jsx'
 import DatasetReadme from '../fragments/dataset-readme.jsx'
 import DatasetDescription from '../dataset/dataset-description.jsx'
@@ -63,7 +64,7 @@ const DatasetContent = ({ dataset }) => {
   const hasEdit =
     ((user && user.admin) ||
       hasEditPermissions(dataset.permissions, user && user.sub)) &&
-    dataset.draft.id
+    !dataset.draft.partial
   return (
     <>
       <LoggedIn>
@@ -90,6 +91,7 @@ const DatasetContent = ({ dataset }) => {
             downloads={dataset.analytics.downloads}
             views={dataset.analytics.views}
           />
+          <DownloadButton dataset={dataset} />
           <DatasetSummary summary={dataset.draft.summary} />
           <h2>README</h2>
           <EditReadme datasetId={dataset.id} content={dataset.draft.readme}>
@@ -102,9 +104,11 @@ const DatasetContent = ({ dataset }) => {
           />
         </div>
         <div className="col-xs-6">
-          {(dataset.draft.id && (
+          {dataset.draft.partial || dataset.draft.files.length === 0 ? (
+            <IncompleteDataset datasetId={dataset.id} />
+          ) : (
             <Validation datasetId={dataset.id} issues={dataset.draft.issues} />
-          )) || <IncompleteDataset datasetId={dataset.id} />}
+          )}
           <DatasetFiles
             datasetId={dataset.id}
             datasetName={dataset.draft.description.Name}
