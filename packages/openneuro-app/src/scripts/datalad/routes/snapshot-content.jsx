@@ -2,6 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import gql from 'graphql-tag'
 import { Query } from 'react-apollo'
+import Helmet from 'react-helmet'
+import { pageTitle } from '../../resources/strings'
 import Spinner from '../../common/partials/spinner.jsx'
 import DatasetTitle from '../fragments/dataset-title.jsx'
 import DatasetUploaded from '../fragments/dataset-uploaded.jsx'
@@ -15,6 +17,7 @@ import DatasetDescription from '../dataset/dataset-description.jsx'
 import DownloadButton from '../fragments/download-button.jsx'
 import Validation from '../validation/validation.jsx'
 import { SNAPSHOT_ISSUES } from '../dataset/dataset-query-fragments.js'
+import schemaGenerator from '../../utils/json-ld.js'
 
 const getSnapshotDetails = gql`
   query snapshot($datasetId: ID!, $tag: String!) {
@@ -84,6 +87,15 @@ const SnapshotDetails = ({ dataset, snapshot }) => {
   return (
     <span>
       <div className="col-xs-6">
+        <Helmet>
+          <title>
+            {pageTitle} - {snapshot.description.Name}
+          </title>
+          <meta name="description" content={snapshot.readme} />
+          <script type="application/ld+json">
+            {schemaGenerator(snapshot)}
+          </script>
+        </Helmet>
         <DatasetTitle title={snapshot.description.Name} />
         <DatasetUploaded
           uploader={dataset.uploader}
